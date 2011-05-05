@@ -1,0 +1,15 @@
+<div class="box">
+	<% form_tag({:controller => "dmsf_state", :action => "user_pref", :id => @project, :current => URI.escape(request.url)},
+		:method=>:post) do %>
+	<div style="padding-top: 0px; float: right;">
+		<%= submit_tag("Save", :title => "Save preferences", :style => "font-size: 0.9em;", :tabindex => 10) %>
+	</div>
+	<h3>Your <%= l(:dmsf) %> preferences for project</h3>
+	<div>
+		Notifications: 
+		<%= select_tag("email_notify", 
+				options_for_select([["Default", nil], ["Activated", true], ["Deactivated", false]], 
+					:selected => DmsfUserPref.for(@project, User.current).email_notify), :tabindex => 1) %>
+	</div>
+	<% end %>
+</div>

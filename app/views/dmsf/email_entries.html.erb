@@ -1,0 +1,43 @@
+<% html_title("DMSF") %>
+
+<div class="contextual">
+</div>
+
+<% path = @folder.nil? ? [] : @folder.dmsf_path %>
+<h2>
+<%= render(:partial => 'path', :locals => {:path => path}) %>
+</h2>
+
+<h3>Send documents by email</h3>
+
+<% form_tag({:action => "email_entries_send", :id => @project, :folder_id => @folder},
+	{ :method=>:post, :class => "tabular"}) do %>
+<div class="box">
+	<p>
+		<%= label_tag("", "From:") %>
+		<%= h(User.current.mail) %>
+	</p>
+	<p>
+		<%= label_tag("email[to]", "To:") %>
+		<%= text_field_tag("email[to]", @email_params["to"], :style => "width: 90%;") %>
+	</p>
+	<p>
+		<%= label_tag("email[cc]", "CC:") %>
+		<%= text_field_tag("email[cc]", @email_params["cc"], :style => "width: 90%;") %>
+	</p>
+	<p>
+		<%= label_tag("email[subject]", "Subject:") %>
+		<%= text_field_tag("email[subject]", @email_params["subject"], :style => "width: 90%;") %>
+	</p>
+	<p>
+		<%= label_tag("", "Documents:") %>
+		<strong>Documents.zip</strong>
+		<%= hidden_field_tag("email[zipped_content]", @email_params["zipped_content"]) %>
+	</p>
+	<p>
+		<%= label_tag("email[body]", "Body:") %>
+		<%= text_area_tag("email[body]", @email_params["body"], :rows=> "20", :style => "width: 90%;") %>
+	</p>
+	<p><%= submit_tag("Send") %></p>
+</div>
+<% end %>

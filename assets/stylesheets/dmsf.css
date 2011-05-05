@@ -1,0 +1,119 @@
+table.list tbody td, table.list tbody tr:hover td {
+	border: solid 1px #D7D7D7;
+}
+
+#sidebar h3 {
+	border: none;
+}
+
+button {
+	vertical-align: middle;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
+form.dmfs_entries {
+	margin-bottom: 10px;
+	display: block;
+}
+
+form.dmfs_entries div.controls {
+	float: right;
+	font-size: 0.9em;
+}
+
+form.dmfs_entries div.controls input, form.dmfs_entries div.controls button {
+	font-size: 0.9em;
+}
+
+div.filename {
+	padding: 0 10px 0 10px; float: right; font-size: 0.8em;
+	white-space: nowrap;
+}
+
+td.size {
+	font-size: 0.8em;
+	white-space: nowrap;
+}
+
+td.modified {
+	font-size: 0.8em;
+}
+
+td.modified img {
+	vertical-align:text-top;
+}
+
+td.author {
+	font-size: 0.8em;
+}
+
+td.version {
+	font-size: 0.8em;
+	white-space: nowrap;
+}
+
+td.version img {
+	vertical-align:text-top;
+}
+
+div.right_icon_box {
+	float: right;
+	white-space: nowrap; 
+	padding: 0 5px 0 5px;
+}
+
+.dmsf_upload textarea {
+	width: 90%;
+}
+
+.dmsf_upload legend {
+	font-weight: bold;
+}
+
+.dmsf_upload .warning {
+	padding: 4px 4px 4px 30px;
+}
+
+.dmsf_detail textarea {
+	width: 90%;
+}
+
+.dmsf_detail legend {
+	font-weight: bold;
+}
+
+.dmsf_detail .warning {
+	padding: 4px 4px 4px 30px;
+}
+
+fieldset {
+	padding-top: 4px;
+	padding-right: 8px;
+	padding-bottom: 8px;
+	padding-left: 8px;
+}
+
+#uploader div.flash {
+	border: none;
+}
+
+.hidden {
+	display: none;
+}
+
+div.upload_select {
+	float: right;
+	white-space: nowrap;
+	line-height: 1.4em;
+	padding-left: 10px;
+	font-size: 0.9em;
+}
+
+div.upload_select input, div.upload_select select {
+	font-size: 0.9em;
+}
+
+input[type="checkbox"] {
+	margin: 1px;
+}

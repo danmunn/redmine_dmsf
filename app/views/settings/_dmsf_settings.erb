@@ -1,0 +1,42 @@
+<p>
+  <%=content_tag(:label, "Maximum files download:") %>
+  <%=text_field_tag "settings[dmsf_max_file_download]", @settings["dmsf_max_file_download"], :size=>10 %><br/>
+  (<%=l(:label_default)%>: 0)
+  <br/>
+  Limits maximum number of files downloaded in zip or sent via email. "0" means unlimited.
+</p>
+
+<p>
+  <%=content_tag(:label, "File storage directory:") %>
+  <%=text_field_tag "settings[dmsf_storage_directory]", @settings["dmsf_storage_directory"], :size=>50 %><br/>
+  (<%=l(:label_default)%>: <%="#{RAILS_ROOT}/files/dmsf"%>)
+</p>
+
+<p>
+  <%=content_tag(:label, "Index database:") %>
+  <%=text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], :size=>50 %><br/>
+  (<%=l(:label_default)%>: <%="#{RAILS_ROOT}/files/dmsf_index"%>)
+</p>
+
+<p>
+  <%=content_tag(:label, "Stemming Language:") %>
+  <%=text_field_tag 'settings[dmsf_stemming_lang]', @settings['dmsf_stemming_lang'] %><br/>
+  (<%=l(:label_default)%>: english )<br/>
+  <br/>
+  Possible values: danish dutch english finnish french german german2 hungarian italian kraaij_pohlmann lovins norwegian porter portuguese romanian russian spanish swedish turkish (pass 'none' to disable stemming)
+</p>
+
+<p>
+  <%=content_tag(:label, "Stem strategy:")%>
+  <%=radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_NONE', @settings['dmsf_stemming_strategy'] == 'STEM_NONE', :checked=>true  %> Stem none (default)<br>
+  <%=radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_SOME', @settings['dmsf_stemming_strategy'] == 'STEM_SOME'  %> Stem some<br>
+  <%=radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_ALL', @settings['dmsf_stemming_strategy'] == 'STEM_ALL'  %> Stem all <br>
+  <br/>
+  This controls how the query parser will apply the stemming algorithm. The default value is STEM_NONE. The possible values are:
+  <br>
+    * STEM_NONE: Don't perform any stemming.<br>
+    * STEM_SOME: Search for stemmed forms of terms except for those which start with a capital letter, or are followed by certain characters (currently: (/@\<\>=*[{\" ), or are used with operators which need positional information. Stemmed terms are prefixed with 'Z'.<br>
+    * STEM_ALL: Search for stemmed forms of all words (note: no 'Z' prefix is added).<br>
+  <br/>
+  Note that the stemming algorithm is only applied to words in probabilistic fields - boolean filter terms are never stemmed.<br>
+</p>

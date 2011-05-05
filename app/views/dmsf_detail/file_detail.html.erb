@@ -1,0 +1,114 @@
+<% html_title("DMSF") %>
+
+<div class="contextual">
+</div>
+
+<% path = @file.folder.nil? ? [] : @file.folder.dmsf_path %>
+<h2>
+<%= render(:partial => "/dmsf/path", :locals => {:path => path}) %>
+/ 
+<%= h(@file.last_revision.title) %> <div style="float: right"><%= h(@file.name) %></div>
+<% if @file.notification %>
+	<%= image_tag("notify.png", :plugin => "redmine_dmsf", :alt => "Not. act.",
+		:title => "Notifications active") %>
+<% end %>
+</h2>
+
+<% if User.current.allowed_to?(:file_manipulation, @file.project) %>
+	<% if @file.locked_for_user? %>
+		<%= render(:partial => 'file_locked') %>
+	<% else %>
+		<%= render(:partial => 'file_new_revision') %>
+	<% end %>
+<% end %>
+
+<h3>Revisions</h3>
+<% @file.revisions.each do |revision| %>
+<div class="box dmsf_detail">
+	<fieldset class="tabular">
+		<legend>
+			<%= revision.source_revision.nil? ? "Created:" : "Changed:" %>
+			<%= revision.updated_at.strftime("%Y-%m-%d %H:%M:%S") %>
+			by
+			<%= h(revision.user) %>
+		</legend>
+		<div class="splitcontentleft">
+			<p>
+				<%= label_tag("", "Title:") %>
+				<%= h(revision.title) %>
+			</p>
+			<p>
+				<%= label_tag("", "Description:") %>
+				<%= h(revision.description) %>
+			</p>
+			<p>
+				<%= label_tag("", "Version:") %>
+				<%= revision.major_version %>.<%= revision.minor_version %>
+			</p>
+			<p>
+				<%= label_tag("", "Workflow:") %>
+				<%= case revision.workflow
+						when 1 then "Waiting for approval"
+						when 2 then "Approved"
+						else "None" 
+					end %>
+			</p>
+		</div>
+		<div class="splitcontentright">
+			<p>
+				<%= label_tag("", "Comment:") %>
+				<%= h(revision.comment) %>
+			</p>
+			<p>
+				<%= label_tag("", "Mime:") %>
+				<%= h(revision.mime_type) %>
+			</p>
+			<p>
+				<%= label_tag("", "Size:") %>
+				<%= number_to_human_size(revision.size) %>
+			</p>
+		</div>
+		<br style="clear: both;" />
+		<div>
+			<%=  link_to("Download",
+	          {:controller=>"dmsf", :action => "download_revision", :id => @project, :revision_id => revision}) %>
+			<% if User.current.allowed_to?(:file_approval, @project) %>
+				| <%=  link_to("Delete",
+		          {:action => "delete_revision", :id => @project, :revision_id => revision},
+				  :class => "delete-link", :title => "Delete revision") %>
+			<% end %>
+		</div>
+	</fieldset>
+</div>
+<% end %>
+
+<% content_for :header_tags do %>
+	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
+	<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
+	<script type="text/javascript">
+		jQuery.noConflict();
+		
+		jQuery(document).ready(function() {
+			jQuery("a.delete-link").click(function(event) {
+				if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_revision) %>")) event.preventDefault();
+			})
+			
+			jQuery("#fileFileUpload").change(function() {
+				if(jQuery("input[name=\"file[version]\"]:checked").val() == "same") {
+					jQuery("#fileMinorVersionRadio").attr("checked", true); 
+				}
+				jQuery("#fileSameVersionRadio").attr("disabled", "disabled"); 
+			});
+			
+			jQuery("#newRevisionFormContentToggle").toggle(function() {
+				jQuery("#newRevisionFormContentToggle").text("[-]");
+				jQuery("#newRevisionFormContent").show();
+			}, function() {
+				jQuery("#newRevisionFormContentToggle").text("[+]");
+				jQuery("#newRevisionFormContent").hide();
+			});
+			jQuery("#newRevisionFormContentToggle").text("[+]");
+			jQuery("#newRevisionFormContent").hide();
+		});
+	</script>
+<% end %>

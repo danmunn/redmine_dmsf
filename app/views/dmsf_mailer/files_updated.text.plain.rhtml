@@ -1,0 +1,7 @@
+User <%= @user %> actualized following files in project <%= @project.name %>:
+<% @files.each do |file| %>
+	<%= file.dmsf_path_str %> (<%= number_to_human_size(file.last_revision.size) %>), version: <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>
+	<%= url_for({:only_path => false, :controller => "dmsf_detail", :action => "file_detail", :id => file.project,
+		:file_id => file }) %>
+	
+<% end %>

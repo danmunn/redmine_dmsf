@@ -1,0 +1,29 @@
+<% html_title("DMSF") %>
+
+<div class="contextual">
+</div>
+
+<h2>
+<%= render(:partial => "/dmsf/path", :locals => {:path => @folder.dmsf_path}) %>
+</h2>
+
+<% form_tag({:action => "save_folder", :id => @project, :folder_id => @folder},
+	:method=>:post, :multipart => true, :class => "tabular") do %>
+	<div class="box">
+		<p>
+			<%= label_tag("title", "Title:") %>
+			<%= text_field_tag("title", @folder.name, :size => "32") %>
+		</p>
+		<p>
+			<%= label_tag("description", "Description:") %>
+			<%= text_area_tag("description", @folder.description, :rows => 15, :class => "wiki-edit") %>
+		</p>
+	</div>
+	<%= submit_tag("Save") %>
+<% end %>
+
+<%= wikitoolbar_for "description" %>
+
+<% content_for :header_tags do %>
+	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
+<% end %>

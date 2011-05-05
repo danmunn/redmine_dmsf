@@ -1,0 +1,68 @@
+<%
+disabled_workflow = []
+selected_workflow = nil
+if !User.current.allowed_to?(:file_approval, @project)
+	disabled_workflow << 2
+	current_workflow = @file.last_revision.workflow
+	if current_workflow == 1 || current_workflow == 2
+		disabled_workflow << nil
+		selected_workflow = 1
+	end
+else
+	selected_workflow = @file.last_revision.workflow
+end
+
+form_tag({:action => "save_file", :id => @project, :file_id => @file},
+	:method=>:post, :multipart => true, :class => "tabular") do 
+%>
+<div class="box dmsf_detail">
+	<fieldset class="tabular">
+		<legend>Create New Revision <a href="#" id="newRevisionFormContentToggle">[-]</a></legend>
+		<div id="newRevisionFormContent">
+		    <div class="splitcontentleft">
+				<p>
+					<%= label_tag("file[title]", "Title:") %>
+					<%= text_field_tag("file[title]", @file.last_revision.title, :size => "32") %>
+				</p>
+				<p>
+					<%= label_tag("file[description]", "Description:") %>
+					<%= text_area_tag("file[description]", @file.last_revision.description, :rows=> "6") %>
+				</p>
+				
+				<p>
+					<%= label_tag("file[file]", "New content:") %>
+					<%= file_field_tag("file[file]", :size => 30, :id => "fileFileUpload") %>
+					<br />
+					<small>
+						(<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
+					</small>
+				</p>
+				<p>
+					<%= label_tag("file[version]_minor", "Version:") %>
+					<%= radio_button_tag("file[version]", "same", true, :id => "fileSameVersionRadio") %>
+					<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version %> Same<br /> 
+					<%= radio_button_tag("file[version]", "minor", false, :id => "fileMinorVersionRadio") %> 
+					<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version + 1 %> Minor<br />
+					<%= radio_button_tag("file[version]", "major") %> 
+					<%= @file.last_revision.major_version + 1 %>.0 Major<br />
+				</p>
+				<p>
+					<%= label_tag("file[workflow]", "Workflow:") %>
+					<%= select_tag("file[workflow]", 
+							options_for_select([["None", nil], ["Waiting for approval", 1], ["Approved", 2]], 
+								:selected => selected_workflow, :disabled => disabled_workflow)) %>
+				</p>
+			</div>
+			<div class="splitcontentright">
+				<p>
+					<%= label_tag("file[comment]", "Comment:") %>
+					<%= text_area_tag("file[comment]", "", :rows=> "2") %>
+				</p>
+			</div>
+			<br style="clear: both;"/>
+			<br />
+			<%= submit_tag("Create") %>
+		</div>
+    </fieldset>
+</div>
+<% end %>

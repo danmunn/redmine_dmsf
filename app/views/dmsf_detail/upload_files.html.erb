@@ -1,0 +1,41 @@
+<% html_title("DMSF") %>
+
+<div class="contextual">
+</div>
+
+<% path = @folder.nil? ? [] : @folder.dmsf_path %>
+<h2>
+	<%= render(:partial => '/dmsf/path', :locals => {:path => path}) %>
+</h2>
+
+<div class="wiki">
+<%= textilizable(@folder.description) unless @folder.nil? %>
+</div>
+
+<h3>Uploaded Files</h3>
+<%
+i = 1
+form_tag({:action => "commit_files", :id => @project, :folder_id => @folder},
+	:method=>:post, :class => "tabular") do 
+%>
+	<% @uploads.each do |upload| %>
+		<% if upload.locked %>
+			<%= render(:partial => 'upload_file_locked', :locals => {:upload => upload, :i => i}) %>
+		<% else %>
+			<%= render(:partial => 'upload_file', :locals => {:upload => upload, :i => i}) %>
+		<% end %>
+		<% i += 1 %>
+	<% end %>
+	<%= submit_tag("Commit") %>
+<% end %>
+
+<% content_for :header_tags do %>
+	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
+	<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
+	<script type="text/javascript">
+		jQuery.noConflict();
+		
+		jQuery(document).ready(function() {
+		});
+	</script>
+<% end %>

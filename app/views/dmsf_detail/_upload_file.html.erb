@@ -1,0 +1,38 @@
+<div class="box dmsf_upload">
+	<%= hidden_field_tag("commited_files[#{i}][disk_filename]", upload.disk_filename) %>
+	<fieldset class="tabular">
+		<legend><%= h(upload.name) %></legend>
+		<%= hidden_field_tag("commited_files[#{i}][name]", upload.name) %>
+		<div class="splitcontentleft">
+			<p>
+				<%= label_tag("commited_files[#{i}][title]", "Title:") %>
+				<%= text_field_tag("commited_files[#{i}][title]", upload.title, :size => "32") %>
+			</p>
+			<p>
+				<%= label_tag("commited_files[#{i}][description]", "Description:") %>
+				<%= text_area_tag("commited_files[#{i}][description]", upload.description, :rows=> "6") %>
+			</p>
+			<p>
+				<%= label_tag("commited_files[#{i}][version]_minor", "Version:") %>
+				<%= radio_button_tag("commited_files[#{i}][version]", "minor", true) %> 
+				<%= upload.major_version %>.<%= upload.minor_version + 1 %><br />
+				<%= radio_button_tag("commited_files[#{i}][version]", "major") %>
+				<%= upload.major_version + 1 %>.0<br /> 
+			</p>
+		</div>
+		<div class="splitcontentright">
+			<p>
+				<%= label_tag("commited_files[#{i}][comment]", "Comment:") %>
+				<%= text_area_tag("commited_files[#{i}][comment]", upload.comment, :rows=> "2") %>
+			</p>
+			<p>
+				<%= label_tag("", "Mime:") %>
+				<%= h(upload.mime_type) %>
+			</p>
+			<p>
+				<%= label_tag("", "Size:") %>
+				<%= number_to_human_size(upload.size) %>
+			</p>
+		</div>
+    </fieldset>
+</div>

@@ -1,0 +1,3 @@
+class DmsfContentError < StandardError
+   
+end
