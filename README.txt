@@ -1,6 +1,12 @@
-1 Installation and Setup
+1 License
 
-1.1. Required packages
+Redmine Document Management System "Features" plugin is distributed under GNU GPL version 2.
+
+License itself is here: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1
+
+2 Installation and Setup
+
+2.1. Required packages
 
 For zipped content download you must have rubyzip gem installed.
 
@@ -35,7 +41,7 @@ apt-get install xapian-ruby1.8 xapian-omega libxapian-dev xpdf antiword unzip an
 In case of package shortage it is possible to use:
 gem install xapian-full rubyzip
 
-1.2. Plugin installation
+2.2. Plugin installation
 
 Install redmine_dmsf into vendor/plugins directory with:
 * Put redmine_dmsf plugin content into vendor/plugins
@@ -45,6 +51,8 @@ Install redmine_dmsf into vendor/plugins directory with:
     Example:
     chown -R www-data:www-data /opt/redmine/vendor/plugins/redmine_dmsf
 * Restart web server
+
+2.3. Setup
 
 Then you must configure plugin in Administration -> Plugins -> DMSF -> Configure
 
@@ -65,8 +73,6 @@ To include Wiki DMSF link help:
         DMSF file id can be found in link for file download
     </li>
 </ul>
-
-1.3. Setup
 
 It is necessary to index DMSF files with omega before searching attemts to recieve some output:
 
