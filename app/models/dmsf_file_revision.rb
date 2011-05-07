@@ -108,6 +108,8 @@ class DmsfFileRevision < ActiveRecord::Base
     
     self.file = file
     self.source_revision = source_revision
+    self.name = self.file.name
+    self.folder = self.file.folder
     
     if source_revision.nil?
       from_form_post_create(posted)
@@ -222,10 +224,6 @@ class DmsfFileRevision < ActiveRecord::Base
     end
     self.mime_type = posted["mime_type"]
     self.size = File.size(self.disk_file)
-    
-    #TODO: move this to better place
-    self.name = self.file.name
-    self.folder = self.file.folder
   end
   
 end
