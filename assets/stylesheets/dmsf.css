@@ -117,3 +117,12 @@ div.upload_select input, div.upload_select select {
 input[type="checkbox"] {
 	margin: 1px;
 }
+
+.plupload_scroll {
+	max-height: 1000px;
+	min-height: 175px;
+}
+
+.ui-resizable-s {
+	bottom: 0px;
+}

@@ -33,7 +33,6 @@ function renderUI(obj) {
 		'<div class="plupload_wrapper">' +
 			'<div class="ui-widget-content plupload_container">' +
 				'<div class="plupload">' +
-
 					'<div class="plupload_content">' +
 						'<table class="plupload_filelist">' +
 						'<tr class="ui-widget-header plupload_filelist_header">' +
@@ -332,37 +331,39 @@ $.widget("ui.plupload", {
 				}
 				
 				self._notify('error', message);
+				self._trigger('error', null, { up: up, file: file, error: message } );
 			}
 		});
 	},
 	
 	_setOption: function(key, value) {
-				
+		var self = this;
+
 		if (key == 'buttons' && typeof(value) == 'object') {	
-			value = $.extend(this.options.buttons, value);
+			value = $.extend(self.options.buttons, value);
 			
 			if (!value.browse) {
-				this.browse_button.button('disable').hide();
-				$('#' + this.id + self.runtime + '_container').hide();
+				self.browse_button.button('disable').hide();
+				$('#' + self.id + self.runtime + '_container').hide();
 			} else {
-				this.browse_button.button('enable').show();
-				$('#' + this.id + self.runtime + '_container').show();
+				self.browse_button.button('enable').show();
+				$('#' + self.id + self.runtime + '_container').show();
 			}
 			
 			if (!value.start) {
-				this.start_button.button('disable').hide();
+				self.start_button.button('disable').hide();
 			} else {
-				this.start_button.button('enable').show();
+				self.start_button.button('enable').show();
 			}
 			
 			if (!value.stop) {
-				this.stop_button.button('disable').hide();
+				self.stop_button.button('disable').hide();
 			} else {
-				this.start_button.button('enable').show();	
+				self.start_button.button('enable').show();	
 			}
 		}
 		
-		this.uploader.settings[key] = value;	
+		self.uploader.settings[key] = value;	
 	},
 	
 	
@@ -496,11 +497,6 @@ $.widget("ui.plupload", {
 		$('.plupload_upload_status', this.element).text(
 			_('Uploaded %d/%d files').replace('%d/%d', uploader.total.uploaded+'/'+uploader.files.length)
 		);
-
-		// All files are uploaded
-		if (uploader.total.uploaded === uploader.files.length) {
-			uploader.stop();
-		}
 	},
 	
 	

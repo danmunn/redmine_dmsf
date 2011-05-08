@@ -4,15 +4,21 @@ Redmine Document Management System "Features" plugin is distributed under GNU GP
 
 License itself is here: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1
 
-2 Installation and Setup
+2 Installation
 
-2.1. Required packages
+2.1. Prerequisities
 
-For zipped content download you must have rubyzip gem installed.
+* Redmine 1.1.x
+* Ruby Zip library - rubyzip gem
 
-To use file/document search capabilities you must install xapian (http://xapian.org) search engine. 
-That means libxapian-ruby1.8 and xapian-omega packages. To index some files with omega you may have to install some other 
-packages like xpdf, antiword, ...
+2.1.1 Fulltext search (optional) 
+
+If you want to use fulltext search abilities:
+* Xapian (http://xapian.org) search engine
+* Xapian Omega indexing tool
+* Xapian ruby bindings - xapian or xapian-full gem
+ 
+To index some files with omega you may have to install some other packages like xpdf, antiword, ...
 
 From Omega documentation:
 
@@ -36,34 +42,45 @@ From Omega documentation:
 
 On Debinan (Squeeze) use:
 apt-get install xapian-ruby1.8 xapian-omega libxapian-dev xpdf antiword unzip antiword\
-  catdoc libwpd8c2a libwps-0.1-1 gzip unrtf catdvi djview djview3 libzip-ruby1.8
+  catdoc libwpd8c2a libwps-0.1-1 gzip unrtf catdvi djview djview3
 
-In case of package shortage it is possible to use:
-gem install xapian-full rubyzip
+2.2. Setup
 
-2.2. Plugin installation
-
-Install redmine_dmsf into vendor/plugins directory with:
-* Put redmine_dmsf plugin content into vendor/plugins
+* Put redmine_dmsf plugin directory into vendor/plugins
 * Initialize database:
-	rake db:migrate:plugins RAILS_ENV="production"
-* The access rights must be set for web server 
-    Example:
+    rake db:migrate:plugins RAILS_ENV="production"
+* The access rights must be set for web server, example: 
     chown -R www-data:www-data /opt/redmine/vendor/plugins/redmine_dmsf
 * Restart web server
+* You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
+* Assign DMSF permissions to appropriate roles
 
-2.3. Setup
+2.2.1 Fulltext search (optional)
 
-Then you must configure plugin in Administration -> Plugins -> DMSF -> Configure
+If you want to use fulltext search features, you must setup file content indexing.
 
-It is also neccessary to assign DMSF permissions to appropriate roles.
+It is necessary to index DMSF files with omega before searching attemts to recieve some output:
+    omindex -s english -l 1 --db {path to index database from  configuration} {path to storage from configuration}
+
+This command must be run on regular basis (e.g. from cron)
+
+Example of cron job (once per hour at 8th minute):
+    * 8 * * * root /usr/bin/omindex -s english -l 1 --db /opt/redmine/files/dmsf_index /opt/redmine/files/dmsf
+
+Use omindex -h for help.
+
+2.3 Usage
 
 DMSF act as project module so you must check DMSF in project settings.
 
 Search options will now contain "Dmsf files" check, that allows you to search DMSF content.
 
-To include Wiki DMSF link help:
-* In file public/help/wiki_syntax_detailed.html include after document link description:
+There is possibility to link DMSF files from Wiki entries:
+    {{dmsf(17)}} link to file with id 17
+DMSF file id can be found in link for file download.
+
+You can also publish Wiki help description. 
+In file <redmine_root>/public/help/wiki_syntax_detailed.html include after document link description:
 <ul>
     <li>
     	DMSF:
@@ -73,14 +90,3 @@ To include Wiki DMSF link help:
         DMSF file id can be found in link for file download
     </li>
 </ul>
-
-It is necessary to index DMSF files with omega before searching attemts to recieve some output:
-
-omindex -s english -l 1 --db {path to index database from plugin configuration} {path to storage from plugin configuration}
-
-This command must be run on regular basis (e.g. from cron)
-
-Example of cron job (once per hour at 8th minute):
-* 8 * * * root /usr/bin/omindex -s english -l 1 --db /opt/redmine/files/dmsf_index /opt/redmine/files/dmsf
-
-Use omindex -h for help.

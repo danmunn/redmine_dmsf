@@ -22,12 +22,13 @@ Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
   author "Vít Jonáš"
   description "Document Management System Features for Redmine"
-  version "0.5.1"
+  version "0.6.0"
   url "https://code.google.com/p/redmine-dmsf/"
   author_url "mailto:vit.jonas@kontron-czech.com"
   
   settings  :partial => 'settings/dmsf_settings',
             :default => {
+              "dmsf_max_file_upload" => "0",
               "dmsf_max_file_download" => "0",
               "dmsf_storage_directory" => "#{RAILS_ROOT}/files/dmsf",
               "dmsf_index_database" => "#{RAILS_ROOT}/files/dmsf_index",

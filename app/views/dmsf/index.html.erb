@@ -163,12 +163,17 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 <h3>File Upload</h3>
 <% form_tag({:controller => "dmsf_detail", :action => "upload_files", :id => @project, :folder_id => @folder},
 	:id => "uploadform", :method=>:post, :multipart => true) do %>
-<div style="padding-bottom: 6px; line-height: 1.4em; font-size: 0.9em;"> 
-<div class="upload_select">
-	File size: <select id="uploader_select"><option value="1">&lt; 100 MB</option><option value="2">> 100 MB</option></select>
-</div>
-<span>There can be uploaded maximum of 20 files at once. To upload files greater than 2GB you must have 64b browser.</span>
-<br style="clear: both" />
+<div style="padding-bottom: 6px; line-height: 1.4em; font-size: 0.9em;">
+<% if Setting.attachment_max_size.to_i >= 102400 %> 
+	<div class="upload_select">
+		File size: <select id="uploader_select"><option value="1">&lt; 100 MB</option><option value="2">> 100 MB</option></select>
+	</div>
+	<br style="clear: both" />
+<% end %>
+<span>
+	<% if Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i > 0 %>There can be uploaded maximum of <%= Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i %> files at once.<% end %>
+	<% if Setting.attachment_max_size.to_i >= 2097151 %>To upload files greater than 2GB you must have 64b browser.<% end %>
+</span>
 </div>
 <div id="uploader">
 <p>
@@ -188,14 +193,18 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 <%= render(:partial => 'user_pref') %>
 
 <% content_for :header_tags do %>
-	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
 	<%= stylesheet_link_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/base/jquery-ui.css" %>
 	<%= stylesheet_link_tag "plupload/jquery.ui.plupload.css", :plugin => "redmine_dmsf" %>
-	<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
-	<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js" %>
-	<%= javascript_include_tag "plupload/gears_init.js", :plugin => "redmine_dmsf" %>
-	<%= javascript_include_tag "plupload/plupload.full.min.js", :plugin => "redmine_dmsf" %>
-	<%= javascript_include_tag "plupload/jquery.ui.plupload.js", :plugin => "redmine_dmsf" %>
+	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
+	
+	<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
+	<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" %>
+	<%= javascript_include_tag "plupload/plupload.js", :plugin => "redmine_dmsf" %>
+	<%= javascript_include_tag "plupload/plupload.flash.js", :plugin => "redmine_dmsf" %>
+	<%= javascript_include_tag "plupload/plupload.gears.js", :plugin => "redmine_dmsf" %>
+	<%= javascript_include_tag "plupload/plupload.html5.js", :plugin => "redmine_dmsf" %>
+	<%= javascript_include_tag "plupload/plupload.html4.js", :plugin => "redmine_dmsf" %>
+	<%= javascript_include_tag "plupload/jquery.ui.plupload/jquery.ui.plupload.js", :plugin => "redmine_dmsf" %>
 	<script type="text/javascript">
 		jQuery.noConflict();
 		
@@ -250,7 +259,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				runtimes : 'gears,html5,flash,html4',
 				url : '<%= url_for({:controller => "dmsf_detail", :action => "upload_file", :id => @project, :folder_id => @folder}) %>',
 				max_file_size : '100mb',
-				max_file_count: 20, // user can add no more then 20 files at a time
+				max_file_count: <%= Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i %>,
 				multipart: true,
 				multipart_params : {authenticity_token : jQuery("input[name=authenticity_token]").val()},
 		

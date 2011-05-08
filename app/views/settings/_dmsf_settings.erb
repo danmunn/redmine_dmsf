@@ -1,4 +1,12 @@
 <p>
+  <%=content_tag(:label, "Maximum files upload:") %>
+  <%=text_field_tag "settings[dmsf_max_file_upload]", @settings["dmsf_max_file_upload"], :size=>10 %><br/>
+  (<%=l(:label_default)%>: 0)
+  <br/>
+  Limits maximum number of files uploaded at once. "0" means unlimited.
+</p>
+
+<p>
   <%=content_tag(:label, "Maximum files download:") %>
   <%=text_field_tag "settings[dmsf_max_file_download]", @settings["dmsf_max_file_download"], :size=>10 %><br/>
   (<%=l(:label_default)%>: 0)
