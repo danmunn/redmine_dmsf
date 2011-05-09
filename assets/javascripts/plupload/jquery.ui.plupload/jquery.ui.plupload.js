@@ -33,6 +33,11 @@ function renderUI(obj) {
 		'<div class="plupload_wrapper">' +
 			'<div class="ui-widget-content plupload_container">' +
 				'<div class="plupload">' +
+					'<div class="ui-state-default ui-widget-header plupload_header">' +
+						'<div class="plupload_header_content">' +
+						'</div>' +
+					'</div>' +
+					
 					'<div class="plupload_content">' +
 						'<table class="plupload_filelist">' +
 						'<tr class="ui-widget-header plupload_filelist_header">' +
@@ -214,9 +219,10 @@ $.widget("ui.plupload", {
 		if (self.options.max_file_count) {
 			uploader.bind('FilesAdded', function(up, files) {
 				var length = files.length, removed = [];
+				length += up.files.length;
 				
 				if (length > self.options.max_file_count) {
-					removed = files.splice(self.options.max_file_count);
+					removed = files.splice(self.options.max_file_count - up.files.length);
 					
 					up.trigger('Error', {
 						code : self.FILE_COUNT_ERROR,

@@ -13,20 +13,23 @@
 .plupload .plupload_filelist_footer {border-width: 1px 0 0 0}
 .plupload .plupload_filelist_header {border-width: 0 0 1px 0}
 div.plupload .plupload_file {border-width: 0 0 1px 0}
-div.plupload div.plupload_header {border-width: 0 0 1px 0; position: relative;}
+/* div.plupload div.plupload_header {border-width: 0 0 1px 0; position: relative;} */
 
 .plupload_file .ui-icon {
 	cursor:pointer;	
 }
 
+/*
 .plupload_header_content {
 	background-image: url('../img/plupload.png');
 	background-repeat: no-repeat;
 	background-position: 8px center;
-	min-height: 56px;
+	min-height: 56px; 
 	padding-left: 60px;
-	position:relative;
+	position:relative; 
 }
+*/
+
 .plupload_header_content_bw {background-image: url('../img/plupload-bw.png');}
 .plupload_header_title {
 	font: normal 18px sans-serif;
@@ -96,6 +99,7 @@ div.plupload div.plupload_header {border-width: 0 0 1px 0; position: relative;}
 
 .plupload_buttons, .plupload_upload_status {float: left}
 
+/*
 .plupload_message {
 	position: absolute;
 	top: 0px;
@@ -103,6 +107,7 @@ div.plupload div.plupload_header {border-width: 0 0 1px 0; position: relative;}
 	height: 100%;
 	width: 100%;
 }
+*/
 
 .plupload_message p {
 	padding:0.7em;
@@ -127,10 +132,11 @@ plupload_message i {
 	border:none;	
 }
 
+/* updated by evilcroco */
 .plupload_message_close {
-	position:absolute;
-	top:5px;
-	right:5px;
+	float:right;
+	margin-top:5px;
+	margin-right:5px;
 	cursor:pointer;	
 }
 
