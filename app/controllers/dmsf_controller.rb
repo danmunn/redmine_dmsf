@@ -98,7 +98,7 @@ class DmsfController < ApplicationController
       download_entries(selected_folders, selected_files)
     end
   rescue ZipMaxFilesError
-    flash[:error] = l(:error_max_files_exceeded) + Setting.plugin_redmine_dmsf["dmsf_max_file_download"].to_i.to_s
+    flash[:error] = l(:error_max_files_exceeded, :number => Setting.plugin_redmine_dmsf["dmsf_max_file_download"].to_i.to_s)
     redirect_to({:controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder})
   rescue DmsfAccessError
     render_403

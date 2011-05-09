@@ -3,11 +3,11 @@
 <div class="contextual">
 	<% if User.current.allowed_to?(:folder_manipulation, @project) %>
 		<% unless @folder.nil? %>
-			<%= link_to("Details",
+			<%= link_to(l(:link_details),
 		          {:controller => "dmsf_detail", :action => "folder_detail", :id => @project, :folder_id => @folder}) %> |
 		<% end %>
 		<% form_for(DmsfFolder.new, :url => {:controller => "dmsf_detail", :action => "create_folder", :id => @project, :folder_id => @folder}, :html => {:method=>:post}) do |f| %>
-			Title: <%= f.text_field(:name) %><%= f.submit("Create folder") %>
+			Title: <%= f.text_field(:name) %><%= f.submit(l(:submit_create_folder)) %>
 		<% end %>
 	<% end %>
 </div>
@@ -30,20 +30,20 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 		<thead>
 			<tr id="root">
 				<th style="width: 17px; padding: 2px; text-align: left;">
-					<input id="check_all_entries" title="Check/Uncheck all for zip download or email" type="checkbox" />
+					<input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
 				</th>
-				<%= sort_header_tag("title", :caption => "Title") %>
-				<%= sort_header_tag("size", :caption => "Size") %>
-				<%= sort_header_tag("modified", :caption => "Modified") %>
-				<%= sort_header_tag("version", :caption => "Ver.") %>
-				<%= sort_header_tag("author", :caption => "Author") %>
+				<%= sort_header_tag("title", :caption => l(:link_title)) %>
+				<%= sort_header_tag("size", :caption => l(:link_size)) %>
+				<%= sort_header_tag("modified", :caption => l(:link_modified)) %>
+				<%= sort_header_tag("version", :caption => l(:link_ver)) %>
+				<%= sort_header_tag("author", :caption => l(:link_author)) %>
 				<th></th>
 			</tr>
 		</thead>
 	<tbody>
 	<% @subfolders.each do |subfolder| %>
 		<tr class="dir">
-			<td class="size"><%= check_box_tag("subfolders[]", subfolder.id, false, :title => "Check for multi download or email") %></td>
+			<td class="size"><%= check_box_tag("subfolders[]", subfolder.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
 			<td class="filename">
 				<%= link_to(h(subfolder.name),
 		          {:action => "index", :folder_id => subfolder},
@@ -59,17 +59,17 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 						<%= link_to(image_tag("delete.png", :plugin => "redmine_dmsf"), 
 							{:controller => "dmsf_detail", :action => "delete_folder", :id => @project, 
 							:folder_id => @folder, :delete_folder_id => subfolder}, :class => "delete-link",
-							:title => "Delete") %>
+							:title => l(:title_delete)) %>
 					<% end %>
 					<% if User.current.allowed_to?(:file_approval, @project) %>
 						<% if subfolder.notification %>
 							<%= link_to(image_tag("notify.png", :plugin => "redmine_dmsf"),
 				        		{:controller => "dmsf_state", :action => "folder_notify_deactivate", :id => @project,
-								:folder_id => subfolder}, :title => "Notifications active: Deactivate") %>
+								:folder_id => subfolder}, :title => l(:title_notifications_active_deactivate)) %>
 						<% else %>
 							<%= link_to(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
 				        		{:controller => "dmsf_state", :action => "folder_notify_activate", :id => @project, 
-								:folder_id => subfolder}, :title => "Notifications not active: Activate") %>
+								:folder_id => subfolder}, :title => l(:title_notifications_not_active_activate)) %>
 						<% end %>
 					<% end %>
 				</div><br class="clear" />
@@ -78,12 +78,12 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 	<% end %>
 	<% @files.each do |file| %>
 		<tr class="file">
-			<td class="size"><%= check_box_tag("files[]", file.id, false, :title => "Check for zip download or email") %></td>
+			<td class="size"><%= check_box_tag("files[]", file.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
 			<td class="filename">
 				<%= link_to(h(file.last_revision.display_title),
 		        	{:action => "download_file", :id => @project, :file_id => file},
 		        	:class => "icon icon-file #{Redmine::MimeType.css_class_of(file.name)}",
-					:title => "#{h(file.last_revision.title)} version #{file.last_revision.version} download") %>
+					:title => l(:title_title_version_version_download, :title => h(file.last_revision.title), :version => file.last_revision.version)) %>
 				<div class="filename">
 					(<%= h(file.display_name) %>)</div><br class="clear" />
 			</td>
@@ -205,6 +205,10 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 	<%= javascript_include_tag "plupload/plupload.html5.js", :plugin => "redmine_dmsf" %>
 	<%= javascript_include_tag "plupload/plupload.html4.js", :plugin => "redmine_dmsf" %>
 	<%= javascript_include_tag "plupload/jquery.ui.plupload/jquery.ui.plupload.js", :plugin => "redmine_dmsf" %>
+	<% if I18n.locale && !I18n.locale.to_s.match(/^en.*/) %>
+		<%= javascript_include_tag "plupload/i18n/#{I18n.locale.to_s.downcase}.js", :plugin => "redmine_dmsf" %>
+	<% end %>
+	
 	<script type="text/javascript">
 		jQuery.noConflict();
 		
