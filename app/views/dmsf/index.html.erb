@@ -3,8 +3,9 @@
 <div class="contextual">
 	<% if User.current.allowed_to?(:folder_manipulation, @project) %>
 		<% unless @folder.nil? %>
-			<%= link_to(l(:link_details),
-		          {:controller => "dmsf_detail", :action => "folder_detail", :id => @project, :folder_id => @folder}) %> |
+			<%= link_to(image_tag("filedetails.png", :plugin => "redmine_dmsf", :style => "vertical-align: text-top;"), 
+						{:controller => "dmsf_detail", :action => "folder_detail", :id => @project, :folder_id => @folder },
+						:title => l(:link_details, :title => h(@folder.name))) %> | 
 		<% end %>
 		<% form_for(DmsfFolder.new, :url => {:controller => "dmsf_detail", :action => "create_folder", :id => @project, :folder_id => @folder}, :html => {:method=>:post}) do |f| %>
 			Title: <%= f.text_field(:name) %><%= f.submit(l(:submit_create_folder)) %>
@@ -32,7 +33,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				<th style="width: 17px; padding: 2px; text-align: left;">
 					<input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
 				</th>
-				<%= sort_header_tag("title", :caption => l(:link_title)) %>
+				<%= sort_header_tag("title", :caption => l(:link_title), :style => "width: 50%") %>
 				<%= sort_header_tag("size", :caption => l(:link_size)) %>
 				<%= sort_header_tag("modified", :caption => l(:link_modified)) %>
 				<%= sort_header_tag("version", :caption => l(:link_ver)) %>
@@ -84,8 +85,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 		        	{:action => "download_file", :id => @project, :file_id => file},
 		        	:class => "icon icon-file #{Redmine::MimeType.css_class_of(file.name)}",
 					:title => l(:title_title_version_version_download, :title => h(file.last_revision.title), :version => file.last_revision.version)) %>
-				<div class="filename">
-					(<%= h(file.display_name) %>)</div><br class="clear" />
+				<div class="filename"><%= h(file.display_name) %></div><br class="clear" />
 			</td>
 			<td class="size"><%= number_to_human_size(file.last_revision.size) unless file.last_revision.nil?  %></td>
 			<td class="modified">
@@ -115,7 +115,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				<div class="right_icon_box">
 					<%= link_to(image_tag("filedetails.png", :plugin => "redmine_dmsf"), 
 						{:controller => "dmsf_detail", :action => "file_detail", :id => @project, :file_id => file },
-						:title => "#{h(file.last_revision.title)} details") %>
+						:title => l(:link_details, :title =>h(file.last_revision.title))) %>
 					&nbsp;	
 					<% unless file.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, @project)%>
 						<% 	if file.locked? %>
@@ -156,20 +156,19 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 		<!-- <button type="button" id="EntriesDeleteButton" title="Delete checked">Delete</button> -->
 		<%= submit_tag("Email", :title => "Send checked by email", :name => "email_entries") %>
 	</div>
-	<br style="clear: both"/>
+	<br />
 <% end %>
 
 <div class="box">
-<h3>File Upload</h3>
-<% form_tag({:controller => "dmsf_detail", :action => "upload_files", :id => @project, :folder_id => @folder},
-	:id => "uploadform", :method=>:post, :multipart => true) do %>
-<div style="padding-bottom: 6px; line-height: 1.4em; font-size: 0.9em;">
+	<% form_tag({:controller => "dmsf_detail", :action => "upload_files", :id => @project, :folder_id => @folder},
+		:id => "uploadform", :method=>:post, :multipart => true) do %>
 <% if Setting.attachment_max_size.to_i >= 102400 %> 
 	<div class="upload_select">
 		File size: <select id="uploader_select"><option value="1">&lt; 100 MB</option><option value="2">> 100 MB</option></select>
 	</div>
-	<br style="clear: both" />
 <% end %>
+<h3>File Upload</h3>
+<div style="padding-bottom: 6px; line-height: 1.4em; font-size: 0.9em;">
 <span>
 	<% if Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i > 0 %>There can be uploaded maximum of <%= Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i %> files at once.<% end %>
 	<% if Setting.attachment_max_size.to_i >= 2097151 %>To upload files greater than 2GB you must have 64b browser.<% end %>
@@ -189,6 +188,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 </div>
 <% end %>
 </div> 
+<br />
 
 <%= render(:partial => 'user_pref') %>
 
@@ -221,10 +221,10 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 			
 			jQuery("#check_all_entries").click(function(event) {
 				var $this = jQuery(this);
-				if($this.attr("checked")) {
-					jQuery("input[type=checkbox]", jQuery("#browser > tbody")).attr("checked", true);
+				if($this.prop("checked")) {
+					jQuery("input[type=checkbox]", jQuery("#browser > tbody")).prop("checked", true);
 				} else {
-					jQuery("input[type=checkbox]", jQuery("#browser > tbody")).attr("checked", false);
+					jQuery("input[type=checkbox]", jQuery("#browser > tbody")).prop("checked", false);
 				}
 			})
 			

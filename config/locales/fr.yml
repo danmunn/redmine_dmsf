@@ -36,7 +36,7 @@ fr:
   :notice_file_notifications_activated: "File notifications activated"
   :warning_file_notifications_already_deactivated: "File notifications already deactivated"
   :notice_file_notifications_deactivated: "File notifications deactivated"
-  :link_details: "Details"
+  :link_details: "%{title} details"
   :submit_create_folder: "Create folder"
   :title_check_uncheck_all_for_zip_download_or_email: "Check/Uncheck all for zip download or email"
   :link_title: "Title"

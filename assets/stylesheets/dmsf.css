@@ -1,5 +1,9 @@
-table.list tbody td, table.list tbody tr:hover td {
+table.entries tbody td, table.entries tbody tr:hover td {
 	border: solid 1px #D7D7D7;
+}
+
+table.entries  {
+	margin-bottom: 10px;
 }
 
 #sidebar h3 {
@@ -18,7 +22,6 @@ form.dmfs_entries {
 }
 
 form.dmfs_entries div.controls {
-	float: right;
 	font-size: 0.9em;
 }
 
