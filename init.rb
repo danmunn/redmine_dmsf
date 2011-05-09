@@ -22,7 +22,7 @@ Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
   author "Vít Jonáš"
   description "Document Management System Features for Redmine"
-  version "0.6.0"
+  version "0.5.2"
   url "https://code.google.com/p/redmine-dmsf/"
   author_url "mailto:vit.jonas@kontron-czech.com"
   

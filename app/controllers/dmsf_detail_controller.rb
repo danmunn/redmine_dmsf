@@ -173,7 +173,7 @@ class DmsfDetailController < ApplicationController
       Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} uploaded for project #{@project.identifier}:"
       files.each {|file| Rails.logger.info "\t#{file.dmsf_path_str}:"}
       begin 
-        DmsfMailer.deliver_files_updated(User.current, files)
+        DmsfMailer.deliver_files_updated(User.current, files) unless files.empty?
       rescue ActionView::MissingTemplate => e
         Rails.logger.error "Could not send email notifications: " + e
       end
