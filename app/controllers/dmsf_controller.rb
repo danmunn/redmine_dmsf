@@ -211,7 +211,7 @@ class DmsfController < ApplicationController
 
   def check_project(entry)
     if !entry.nil? && entry.project != @project
-      raise DmsfAccessError, "Entry project doesn't match current project" 
+      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
   end
 

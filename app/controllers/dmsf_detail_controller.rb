@@ -28,10 +28,10 @@ class DmsfDetailController < ApplicationController
   def create_folder
     @new_folder = DmsfFolder.create_from_params(@project, @folder, params[:dmsf_folder])
     if @new_folder.valid?
-      flash[:notice] = "Folder created"
+      flash[:notice] = l(:notice_folder_created)
       Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} created folder #{@project.identifier}://#{@new_folder.dmsf_path_str}"
     else
-      flash[:error] = "Folder creation failed: Title must be entered"
+      flash[:error] = l(:error_folder_creation_failed) + ": " + l(:error_folder_title_must_be_entered)
     end
 
     redirect_to({:controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder})
@@ -42,10 +42,10 @@ class DmsfDetailController < ApplicationController
     if !@delete_folder.nil?
       if @delete_folder.subfolders.empty? && @delete_folder.files.empty?
         @delete_folder.destroy
-        flash[:notice] = "Folder deleted"
+        flash[:notice] = l(:notice_folder_deleted)
         Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted folder #{@project.identifier}://#{@delete_folder.dmsf_path_str}"
       else
-        flash[:error] = "Folder is not empty"
+        flash[:error] = l(:error_folder_is_not_empty)
       end
     end
     
@@ -61,7 +61,7 @@ class DmsfDetailController < ApplicationController
     @folder.description = params[:description]
     
     if params[:title].blank?
-      flash.now[:error] = "Title must be entered"
+      flash.now[:error] = l(:error_folder_title_must_be_entered)
       render "folder_detail"
       return
     end
@@ -69,14 +69,14 @@ class DmsfDetailController < ApplicationController
     @folder.name = params[:title]
     
     if !@folder.valid?
-      flash.now[:error] = "Title is already used"
+      flash.now[:error] = l(:error_folder_title_is_already_used)
       render "folder_detail"
       return
     end
 
     @folder.save!
     Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} updated folder #{@project.identifier}://#{@folder.dmsf_path_str}"
-    flash[:notice] = "Folder details were saved"
+    flash[:notice] = l(:notice_folder_details_were_saved)
     redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder
   end
 
@@ -87,12 +87,12 @@ class DmsfDetailController < ApplicationController
   def delete_file
     if !@file.nil?
       if @file.locked_for_user?
-        flash[:error] = "File is locked"
+        flash[:error] = l(:error_file_is_locked)
       else
         @file.deleted = true
         @file.deleted_by_user = User.current
         @file.save
-        flash[:notice] = "File deleted"
+        flash[:notice] = l(:notice_file_deleted)
         Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted file #{@project.identifier}://#{@file.dmsf_path_str}"
         DmsfMailer.deliver_files_deleted(User.current, [@file])
       end
@@ -104,16 +104,16 @@ class DmsfDetailController < ApplicationController
     @revision = DmsfFileRevision.find(params[:revision_id])
     check_project(@revision.file)
     if @revision.file.locked_for_user?
-      flash[:error] = "File is locked"
+      flash[:error] = l(:error_file_is_locked)
     else
       if !@revision.nil? && !@revision.deleted
         if @revision.file.revisions.size <= 1
-          flash[:error] = "At least one revision must be present"
+          flash[:error] = l(:error_at_least_one_revision_must_be_present)
         else
           @revision.deleted = true
           @revision.deleted_by_user = User.current
           @revision.save
-          flash[:notice] = "Revision deleted"
+          flash[:notice] = l(:notice_revision_deleted)
           Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted revision #{@project.identifier}://#{@revision.file.dmsf_path_str}/#{@revision.id}"
         end
       end
@@ -162,7 +162,7 @@ class DmsfDetailController < ApplicationController
       commited_files.each_value do |commited_file|
         file = DmsfFile.from_commited_file(@project, @folder, commited_file)
         if file.locked_for_user?
-          flash[:error] = "One of files locked"
+          flash[:warning] = l(:warning_one_of_files_locked)
         else
           revision = DmsfFileRevision.from_commited_file(file, commited_file)
           file.unlock if file.locked?
@@ -185,16 +185,16 @@ class DmsfDetailController < ApplicationController
   #TODO: don't create revision if nothing change
   def save_file
     if @file.locked_for_user?
-      flash[:error] = "File locked"
+      flash[:error] = l(:error_file_is_locked)
     else
       saved_file = params[:file]
       DmsfFileRevision.from_saved_file(@file, saved_file)
       if @file.locked?
         @file.unlock
-        flash[:notice] = "File unlocked, "
+        flash[:notice] = l(:notice_file_unlocked) + ", "
       end
       @file.reload
-      flash[:notice] = (flash[:notice].nil? ? "" : flash[:notice]) + "File revision created"
+      flash[:notice] = (flash[:notice].nil? ? "" : flash[:notice]) + l(:notice_file_revision_created)
       Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} created new revision of file #{@project.identifier}://#{@file.dmsf_path_str}"
       begin
         DmsfMailer.deliver_files_updated(User.current, [@file])
@@ -226,7 +226,7 @@ class DmsfDetailController < ApplicationController
 
   def check_project(entry)
     if !entry.nil? && entry.project != @project
-      raise DmsfAccessError, "Entry project doesn't match current project" 
+      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
   end
   

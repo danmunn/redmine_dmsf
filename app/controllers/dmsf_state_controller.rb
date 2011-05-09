@@ -52,46 +52,46 @@ class DmsfStateController < ApplicationController
     @user_pref = DmsfUserPref.for(@project, User.current)
     @user_pref.email_notify = params[:email_notify];
     @user_pref.save
-    flash[:notice] = "Your preferences was saved"
+    flash[:notice] = l(:notice_your_preferences_were_saved)
     redirect_to URI.unescape(params[:current])
   end
 
   def folder_notify_activate
     if @folder.notification
-      flash[:warning] = "Folder notifications already activated"
+      flash[:warning] = l(:warning_folder_notifications_already_activated)
     else
       @folder.notify_activate
-      flash[:notice] = "Folder notifications activated"
+      flash[:notice] = l(:notice_folder_notifications_activated)
     end
     redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder.folder
   end
   
   def folder_notify_deactivate
     if !@folder.notification
-      flash[:warning] = "Folder notifications already deactivated"
+      flash[:warning] = l(:warning_folder_notifications_already_deactivated)
     else
       @folder.notify_deactivate
-      flash[:notice] = "Folder notifications deactivated"
+      flash[:notice] = l(:notice_folder_notifications_deactivated)
     end
     redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder.folder
   end
   
   def file_notify_activate
     if @file.notification
-      flash[:warning] = "File notifications already activated"
+      flash[:warning] = l(:warning_file_notifications_already_activated)
     else
       @file.notify_activate
-      flash[:notice] = "File notifications activated"
+      flash[:notice] = l(:notice_file_notifications_activated)
     end
     redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @file.folder
   end
   
   def file_notify_deactivate
     if !@file.notification
-      flash[:warning] = "File notifications already deactivated"
+      flash[:warning] = l(:warning_file_notifications_already_deactivated)
     else
       @file.notify_deactivate
-      flash[:notice] = "File notifications deactivated"
+      flash[:notice] = l(:notice_file_notifications_deactivated)
     end
     redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @file.folder
   end
@@ -117,7 +117,7 @@ class DmsfStateController < ApplicationController
 
   def check_project(entry)
     if !entry.nil? && entry.project != @project
-      raise DmsfAccessError, "Entry project doesn't match current project" 
+      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
   end
   

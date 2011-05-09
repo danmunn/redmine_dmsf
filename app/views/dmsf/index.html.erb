@@ -259,7 +259,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				runtimes : 'gears,html5,flash,html4',
 				url : '<%= url_for({:controller => "dmsf_detail", :action => "upload_file", :id => @project, :folder_id => @folder}) %>',
 				max_file_size : "100mb",
-				max_file_count: <%= Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i %>,
+				max_file_count: '<%= Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i %>',
 				multipart: true,
 				multipart_params : {authenticity_token : jQuery("input[name=authenticity_token]").val()},
 		
