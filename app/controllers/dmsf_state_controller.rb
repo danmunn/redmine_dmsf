@@ -49,11 +49,14 @@ class DmsfStateController < ApplicationController
   end
 
   def user_pref
+  end
+
+  def user_pref_save
     @user_pref = DmsfUserPref.for(@project, User.current)
     @user_pref.email_notify = params[:email_notify];
     @user_pref.save
     flash[:notice] = l(:notice_your_preferences_were_saved)
-    redirect_to URI.unescape(params[:current])
+    redirect_to :action => "user_pref", :id => @project
   end
 
   def folder_notify_activate

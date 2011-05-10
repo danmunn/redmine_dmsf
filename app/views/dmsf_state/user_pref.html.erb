@@ -1,7 +1,13 @@
+<% html_title(l(:dmsf)) %>
+
+<div class="contextual">
+</div>
+
+<h2><%= l(:link_user_preferences) %></h2>
+
 <div class="box">
-	<% form_tag({:controller => "dmsf_state", :action => "user_pref", :id => @project, :current => URI.escape(request.url)},
+	<% form_tag({:controller => "dmsf_state", :action => "user_pref_save", :id => @project},
 		:method=>:post) do %>
-	<h3>Your <%= l(:dmsf) %> preferences for project</h3>
 	<div>
 		Notifications: 
 		<%= select_tag("email_notify", 
@@ -11,3 +17,7 @@
 	</div>
 	<% end %>
 </div>
+
+<% content_for :header_tags do %>
+	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
+<% end %>

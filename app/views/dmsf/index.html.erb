@@ -1,4 +1,4 @@
-<% html_title("DMSF") %>
+<% html_title(l(:dmsf)) %>
 
 <div class="contextual">
 	<% if User.current.allowed_to?(:folder_manipulation, @project) %>
@@ -162,7 +162,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 <%= render(:partial => "multi_upload") %>
 <br />
 
-<%= render(:partial => "user_pref") %>
+<%= link_to(l(:link_user_preferences), {:controller => "dmsf_state", :action => "user_pref", :id => @project}) %>
 
 <% content_for :header_tags do %>
 	<script type="text/javascript">

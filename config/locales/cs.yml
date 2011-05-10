@@ -49,7 +49,6 @@ cs:
   :title_notifications_active_deactivate: "Notifications active: Deactivate"
   :title_notifications_not_active_activate: "Notifications not active: Activate"
   :title_title_version_version_download: "%{title} version %{version} download"
-  
   :title_locked_by_user: "Locked by %{user}"
   :title_locked_by_you: "Locked by you"
   :title_waiting_for_approval: "Waiting for Approval"
@@ -60,3 +59,6 @@ cs:
   :title_download_checked: "Download checked in Zip archive"
   :submit_email: "Email"
   :title_send_checked_by_email: "Send checked by email"
+
+  :link_user_preferences: "Your DMSF project preferences"
+  

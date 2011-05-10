@@ -43,7 +43,7 @@ Redmine::Plugin.register :redmine_dmsf do
   
   project_module :dmsf do
     permission :browse_documents, {:dmsf => [:index]}
-    permission :user_preferences, {:dmsf_state => [:user_pref]}
+    permission :user_preferences, {:dmsf_state => [:user_pref, :user_pref_save]}
     permission :view_dmsf_files, {:dmsf => [:download_file, :download_revision, :entries_operation, :email_entries_send],
       :dmsf_detail => [:file_detail]}
     permission :folder_manipulation, {:dmsf_detail => [:create_folder, :delete_folder, :folder_detail, :save_folder]}
