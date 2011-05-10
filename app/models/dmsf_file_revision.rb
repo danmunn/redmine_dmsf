@@ -142,6 +142,14 @@ class DmsfFileRevision < ActiveRecord::Base
     return new_revision
   end
   
+  def workflow_str
+    case workflow
+      when 1 then l(:title_waiting_for_approval)
+      when 2 then l(:title_approved)
+      else nil
+    end
+  end
+  
   def set_workflow(workflow)
     if User.current.allowed_to?(:file_approval, self.file.project)
       self.workflow = workflow

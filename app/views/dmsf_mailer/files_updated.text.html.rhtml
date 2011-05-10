@@ -4,17 +4,22 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-  	User <%= @user %> actualized following files in project <%= @project.name %>:
+  	User <%= link_to(h(@user), {:only_path => false, :controller => "users", :action => "show", :id => @user }) %>
+	actualized DMSF files in project <%= @project.name %>: 
   	<% @files.each do |file| %>
 	<p>
 		<%= link_to(h(file.dmsf_path_str),
 	        	{:only_path => false, :controller => "dmsf", :action => "download_file", :id => file.project,
-				:file_id => file}) %>
-		(<%= number_to_human_size(file.last_revision.size) %>),
+				:file_id => file}) %>,
+		<%= number_to_human_size(file.last_revision.size) %>,
 		version: <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>,
+		<%= "#{file.last_revision.workflow_str}," unless file.last_revision.workflow_str.blank? %>
 		<%= link_to("Details",
 	        {:only_path => false, :controller => "dmsf_detail", :action => "file_detail", :id => file.project,
 			:file_id => file }) %>
+		<% unless file.last_revision.comment.blank? %>
+			<br /><span style="font-size: 0.9em">&nbsp;&nbsp;&nbsp;&nbsp;<em><%= h(file.last_revision.comment) %></em></span>
+		<% end %>
 	</p>
 	<% end %>
   </body>

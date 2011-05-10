@@ -4,11 +4,12 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-  	User <%= @user %> deleted following files in project <%= @project.name %>:
+  	User <%= link_to(h(@user), {:only_path => false, :controller => "users", :action => "show", :id => @user }) %>
+	deleted DMSF files in project <%= @project.name %>:
   	<% @files.each do |file| %>
 	<p>
-		<%= h(file.dmsf_path_str) %>
-		(<%= number_to_human_size(file.last_revision.size) %>),
+		<%= h(file.dmsf_path_str) %>,
+		<%= number_to_human_size(file.last_revision.size) %>,
 		version: <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>
 	</p>
 	<% end %>
