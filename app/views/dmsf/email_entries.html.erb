@@ -1,4 +1,4 @@
-<% html_title("DMSF") %>
+<% html_title(l(:dmsf)) %>
 
 <div class="contextual">
 </div>
@@ -8,36 +8,36 @@
 <%= render(:partial => 'path', :locals => {:path => path}) %>
 </h2>
 
-<h3>Send documents by email</h3>
+<h3><%= l(:heading_send_documents_by_email) %></h3>
 
 <% form_tag({:action => "email_entries_send", :id => @project, :folder_id => @folder},
 	{ :method=>:post, :class => "tabular"}) do %>
 <div class="box">
 	<p>
-		<%= label_tag("", "From:") %>
+		<%= label_tag("", l(:label_email_from) + ":") %>
 		<%= h(User.current.mail) %>
 	</p>
 	<p>
-		<%= label_tag("email[to]", "To:") %>
+		<%= label_tag("email[to]", l(:label_email_to) + ":") %>
 		<%= text_field_tag("email[to]", @email_params["to"], :style => "width: 90%;") %>
 	</p>
 	<p>
-		<%= label_tag("email[cc]", "CC:") %>
+		<%= label_tag("email[cc]", l(:label_email_cc) + ":") %>
 		<%= text_field_tag("email[cc]", @email_params["cc"], :style => "width: 90%;") %>
 	</p>
 	<p>
-		<%= label_tag("email[subject]", "Subject:") %>
+		<%= label_tag("email[subject]", l(:label_email_subject) + ":") %>
 		<%= text_field_tag("email[subject]", @email_params["subject"], :style => "width: 90%;") %>
 	</p>
 	<p>
-		<%= label_tag("", "Documents:") %>
+		<%= label_tag("", l(:label_email_documents) + ":") %>
 		<strong>Documents.zip</strong>
 		<%= hidden_field_tag("email[zipped_content]", @email_params["zipped_content"]) %>
 	</p>
 	<p>
-		<%= label_tag("email[body]", "Body:") %>
+		<%= label_tag("email[body]", l(:label_email_body) + ":") %>
 		<%= text_area_tag("email[body]", @email_params["body"], :rows=> "20", :style => "width: 90%;") %>
 	</p>
-	<p><%= submit_tag("Send") %></p>
+	<p><%= submit_tag(l(:label_email_send)) %></p>
 </div>
 <% end %>

@@ -60,4 +60,12 @@ ru:
   :submit_email: "Email"
   :title_send_checked_by_email: "Send checked by email"
   :link_user_preferences: "Your DMSF project preferences"
+  :heading_send_documents_by_email: "Send documents by email"
+  :label_email_from: "From"
+  :label_email_to: "To"
+  :label_email_cc: "CC"
+  :label_email_subject: "Subject"
+  :label_email_documents: "Documents"
+  :label_email_body: "Body"
+  :label_email_send: "Send"
   
