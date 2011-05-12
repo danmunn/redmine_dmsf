@@ -30,10 +30,10 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 	<table class="list entries" id="browser">
 		<thead>
 			<tr id="root">
-				<th style="width: 17px; padding: 2px; text-align: left;">
+				<th class="check">
 					<input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
 				</th>
-				<%= sort_header_tag("title", :caption => l(:link_title), :style => "width: 50%") %>
+				<%= sort_header_tag("title", :caption => l(:link_title)) %>
 				<%= sort_header_tag("size", :caption => l(:link_size)) %>
 				<%= sort_header_tag("modified", :caption => l(:link_modified)) %>
 				<%= sort_header_tag("version", :caption => l(:link_ver)) %>
@@ -44,8 +44,8 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 	<tbody>
 	<% @subfolders.each do |subfolder| %>
 		<tr class="dir">
-			<td class="size"><%= check_box_tag("subfolders[]", subfolder.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
-			<td class="filename">
+			<td class="check"><%= check_box_tag("subfolders[]", subfolder.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
+			<td class="title">
 				<%= link_to(h(subfolder.name),
 		          {:action => "index", :folder_id => subfolder},
 		          :class => "icon icon-folder") %>
@@ -55,32 +55,42 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 			<td class="version">-</td>
 			<td class="author">-</td>
 			<td class="actions">
-				<div class="right_icon_box">
+				<% if User.current.allowed_to?(:file_approval, @project) %>
+					<div class="right_icon_box">
+					<% if subfolder.notification %>
+						<%= link_to(image_tag("notify.png", :plugin => "redmine_dmsf"),
+			        		{:controller => "dmsf_state", :action => "folder_notify_deactivate", :id => @project,
+							:folder_id => subfolder}, :title => l(:title_notifications_active_deactivate)) %>
+					<% else %>
+						<%= link_to(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
+			        		{:controller => "dmsf_state", :action => "folder_notify_activate", :id => @project, 
+							:folder_id => subfolder}, :title => l(:title_notifications_not_active_activate)) %>
+					<% end %>
+					</div>
+				<% end %>
+				<div class="right_icon_box" style="width: 70px;">
 					<% if User.current.allowed_to?(:folder_manipulation, @project) %>
+					<div style="float: left">
+						<%= link_to(image_tag("filedetails.png", :plugin => "redmine_dmsf", :class =>"detail_icon"), 
+							{:controller => "dmsf_detail", :action => "folder_detail", :id => @project, :folder_id => subfolder },
+							:title => l(:link_details, :title => h(subfolder.name))) %>
+ 					</div>
+					<% end %>
+					<div style="float: right">
 						<%= link_to(image_tag("delete.png", :plugin => "redmine_dmsf"), 
 							{:controller => "dmsf_detail", :action => "delete_folder", :id => @project, 
 							:folder_id => @folder, :delete_folder_id => subfolder}, :class => "delete-link",
-							:title => l(:title_delete)) %>
-					<% end %>
-					<% if User.current.allowed_to?(:file_approval, @project) %>
-						<% if subfolder.notification %>
-							<%= link_to(image_tag("notify.png", :plugin => "redmine_dmsf"),
-				        		{:controller => "dmsf_state", :action => "folder_notify_deactivate", :id => @project,
-								:folder_id => subfolder}, :title => l(:title_notifications_active_deactivate)) %>
-						<% else %>
-							<%= link_to(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
-				        		{:controller => "dmsf_state", :action => "folder_notify_activate", :id => @project, 
-								:folder_id => subfolder}, :title => l(:title_notifications_not_active_activate)) %>
-						<% end %>
-					<% end %>
-				</div><br class="clear" />
+							:title => l(:title_delete)) if User.current.allowed_to?(:folder_manipulation, @project) %>
+					</div>
+				</div>
+				<br class="clear" />
 			</td>
 		</tr>
 	<% end %>
 	<% @files.each do |file| %>
 		<tr class="file">
-			<td class="size"><%= check_box_tag("files[]", file.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
-			<td class="filename">
+			<td class="check"><%= check_box_tag("files[]", file.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
+			<td class="title">
 				<%= link_to(h(file.last_revision.display_title),
 		        	{:action => "download_file", :id => @project, :file_id => file},
 		        	:class => "icon icon-file #{Redmine::MimeType.css_class_of(file.name)}",
@@ -112,11 +122,26 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 			</td>
 			<td class="author"><%= h(file.last_revision.user) unless file.last_revision.nil? %></td>
 			<td class="actions">
-				<div class="right_icon_box">
-					<%= link_to(image_tag("filedetails.png", :plugin => "redmine_dmsf"), 
+				<% if User.current.allowed_to?(:file_approval, @project) %>
+					<div class="right_icon_box">
+					<% if file.notification %>
+						<%= link_to(image_tag("notify.png", :plugin => "redmine_dmsf"),
+			        		{:controller => "dmsf_state", :action => "file_notify_deactivate", :id => @project, 
+							:file_id => file}, :title => l(:title_notifications_active_deactivate)) %>
+					<% else %>
+						<%= link_to(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
+			        		{:controller => "dmsf_state", :action => "file_notify_activate", :id => @project, 
+							:file_id => file}, :title => l(:title_notifications_not_active_activate)) %>
+					<% end %>
+					</div>
+				<% end %>
+				<div class="right_icon_box" style="width: 70px;">
+					<div style="float: left">
+					<%= link_to(image_tag("filedetails.png", :plugin => "redmine_dmsf", :class =>"detail_icon"), 
 						{:controller => "dmsf_detail", :action => "file_detail", :id => @project, :file_id => file },
 						:title => l(:link_details, :title =>h(file.last_revision.title))) %>
-					&nbsp;	
+					</div>
+					<div style="float: right">
 					<% unless file.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, @project)%>
 						<% 	if file.locked? %>
 							<%= link_to(image_tag("unlock.png", :plugin => "redmine_dmsf"),
@@ -134,18 +159,9 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 							{:controller => "dmsf_detail", :action => "delete_file", :id => @project, 
 							:file_id => file}, :class => "delete-link", :title => l(:title_delete)) %>
 					<% end %>
-					<% if User.current.allowed_to?(:file_approval, @project) %>
-						<% if file.notification %>
-							<%= link_to(image_tag("notify.png", :plugin => "redmine_dmsf"),
-				        		{:controller => "dmsf_state", :action => "file_notify_deactivate", :id => @project, 
-								:file_id => file}, :title => l(:title_notifications_active_deactivate)) %>
-						<% else %>
-							<%= link_to(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
-				        		{:controller => "dmsf_state", :action => "file_notify_activate", :id => @project, 
-								:file_id => file}, :title => l(:title_notifications_not_active_activate)) %>
-						<% end %>
-					<% end %>
-				</div><br class="clear" />
+					</div>
+				</div>
+				<br class="clear" />
 			</td>
 		</tr>
 	<% end %>

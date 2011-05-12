@@ -6,6 +6,24 @@ table.entries  {
 	margin-bottom: 10px;
 }
 
+table.entries td.modified {
+	width: 120px;
+}
+
+table.entries td.actions {
+	width: 108px;
+}
+
+table.entries td.title {
+	width: 50%;
+}
+
+table.entries th.check {
+	width: 17px; 
+	padding: 2px; 
+	text-align: left;
+}
+
 #sidebar h3 {
 	border: none;
 }
@@ -65,6 +83,11 @@ div.right_icon_box {
 	white-space: nowrap; 
 	padding: 0 5px 0 5px;
 }
+
+div.right_icon_box img.detail_icon {
+	padding-top: 2px;
+}
+
 
 .dmsf_upload textarea {
 	width: 90%;
@@ -129,3 +152,4 @@ input[type="checkbox"] {
 .ui-resizable-s {
 	bottom: 0px;
 }
+
