@@ -3,14 +3,15 @@
 		:id => "uploadform", :method=>:post, :multipart => true) do %>
 <% if Setting.attachment_max_size.to_i >= 102400 %> 
 	<div class="upload_select">
-		File size: <select id="uploader_select"><option value="1">&lt; 100 MB</option><option value="2">> 100 MB</option></select>
+		<%= l(:label_file_size) %>: <select id="uploader_select"><option value="1">&lt; 100 MB</option><option value="2">> 100 MB</option></select>
 	</div>
 <% end %>
-<h3>File Upload</h3>
+<h3><%= l(:heading_file_upload) %></h3>
 <div style="padding-bottom: 6px; line-height: 1.4em; font-size: 0.9em;">
 <span>
-	<% if Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i > 0 %>There can be uploaded maximum of <%= Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i %> files at once.<% end %>
-	<% if Setting.attachment_max_size.to_i >= 2097151 %>To upload files greater than 2GB you must have 64b browser.<% end %>
+	<% max_file_upload = Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i %>
+	<%= l(:note_uploaded_maximum_files_at_once, :number => max_file_upload) if max_file_upload > 0 %>
+	<%= l(:note_upload_files_greater_than_two_gb) if Setting.attachment_max_size.to_i >= 2097151 %>
 </span>
 </div>
 <div id="uploader">
@@ -23,7 +24,7 @@
 (<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
 </small>
 </p>
-<%= submit_tag("Upload") %>
+<%= submit_tag(l(:submit_upload_files)) %>
 </div>
 <% end %>
 </div>

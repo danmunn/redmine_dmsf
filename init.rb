@@ -26,6 +26,8 @@ Redmine::Plugin.register :redmine_dmsf do
   url "https://code.google.com/p/redmine-dmsf/"
   author_url "mailto:vit.jonas@kontron-czech.com"
   
+  requires_redmine :version_or_higher => '1.1.0'
+  
   settings  :partial => 'settings/dmsf_settings',
             :default => {
               "dmsf_max_file_upload" => "0",
