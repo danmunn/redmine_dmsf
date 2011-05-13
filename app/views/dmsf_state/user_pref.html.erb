@@ -9,11 +9,12 @@
 	<% form_tag({:controller => "dmsf_state", :action => "user_pref_save", :id => @project},
 		:method=>:post) do %>
 	<div>
-		Notifications: 
+		<%= l(:label_notifications) %>: 
 		<%= select_tag("email_notify", 
-				options_for_select([["Default", nil], ["Activated", true], ["Deactivated", false]], 
+				options_for_select([[l(:select_option_default), nil], 
+					[l(:select_option_activated), true], [l(:select_option_deactivated), false]], 
 					:selected => DmsfUserPref.for(@project, User.current).email_notify)) %>
-		<%= submit_tag("Save", :title => "Save preferences") %>
+		<%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
 	</div>
 	<% end %>
 </div>

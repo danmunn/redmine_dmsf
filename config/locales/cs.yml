@@ -80,4 +80,10 @@ cs:
   :label_title: "Title"
   :label_description: "Description"
   :submit_save: "Save"
+  :info_file_locked: "File locked!"
+  :label_notifications: "Notifications"
+  :select_option_default: "Default"
+  :select_option_deactivated: "Deactivated"
+  :select_option_activated: "Activated"
+  :title_save_preferences: "Save preferences"
   

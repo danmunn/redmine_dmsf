@@ -76,4 +76,11 @@ ru:
   :note_uploaded_maximum_files_at_once: "There can be uploaded maximum of %{number} files at once."
   :note_upload_files_greater_than_two_gb: "To upload files greater than 2GB you must have 64b browser."
   :submit_upload_files: "Upload"
+  :info_file_locked: "File locked!"
+  :label_notifications: "Notifications"
+  :select_option_default: "Default"
+  :select_option_deactivated: "Deactivated"
+  :select_option_activated: "Activated"
+  :title_save_preferences: "Save preferences"
+  
   
