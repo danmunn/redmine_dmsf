@@ -37,7 +37,9 @@ cs:
   :warning_file_notifications_already_deactivated: "File notifications already deactivated"
   :notice_file_notifications_deactivated: "File notifications deactivated"
   :link_details: "%{title} details"
-  :submit_create_folder: "Create folder"
+  :link_edit: "Edit %{title}"
+  :submit_create: "Create"
+  :link_create_folder: "Create folder"
   :title_check_uncheck_all_for_zip_download_or_email: "Check/Uncheck all for zip download or email"
   :link_title: "Title"
   :link_size: "Size"
@@ -68,7 +70,6 @@ cs:
   :label_email_documents: "Documents"
   :label_email_body: "Body"
   :label_email_send: "Send"
-
   :title_notifications_active: "Notifications active"
   :label_file_size: "File size"
   :heading_file_upload: "Upload"

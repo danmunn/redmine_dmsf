@@ -3,13 +3,13 @@
 <div class="contextual">
 	<% if User.current.allowed_to?(:folder_manipulation, @project) %>
 		<% unless @folder.nil? %>
-			<%= link_to(image_tag("filedetails.png", :plugin => "redmine_dmsf", :style => "vertical-align: text-top;"), 
+			<%= link_to(image_tag("edit.png", :style => "vertical-align: text-top;"), 
 						{:controller => "dmsf_detail", :action => "folder_detail", :id => @project, :folder_id => @folder },
-						:title => l(:link_details, :title => h(@folder.name))) %> | 
+						:title => l(:link_edit, :title => h(@folder.name))) %> &nbsp; 
 		<% end %>
-		<% form_for(DmsfFolder.new, :url => {:controller => "dmsf_detail", :action => "create_folder", :id => @project, :folder_id => @folder}, :html => {:method=>:post}) do |f| %>
-			Title: <%= f.text_field(:name) %><%= f.submit(l(:submit_create_folder)) %>
-		<% end %>
+		<%= link_to(image_tag("add.png", :style => "vertical-align: text-top;"), 
+				{:controller => "dmsf_detail", :action => "folder_new", :id => @project, :parent_id => @folder },
+				:title => l(:link_create_folder)) %>
 	<% end %>
 </div>
 
@@ -71,9 +71,9 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				<div class="right_icon_box" style="width: 70px;">
 					<% if User.current.allowed_to?(:folder_manipulation, @project) %>
 					<div style="float: left">
-						<%= link_to(image_tag("filedetails.png", :plugin => "redmine_dmsf", :class =>"detail_icon"), 
+						<%= link_to(image_tag("edit.png", :class =>"detail_icon"), 
 							{:controller => "dmsf_detail", :action => "folder_detail", :id => @project, :folder_id => subfolder },
-							:title => l(:link_details, :title => h(subfolder.name))) %>
+							:title => l(:link_edit, :title => h(subfolder.name))) %>
  					</div>
 					<% end %>
 					<div style="float: right">

@@ -33,16 +33,7 @@ class DmsfFolder < ActiveRecord::Base
         ["dmsf_folder_id is NULL and project_id = :project_id", {:project_id => project.id}], :order => "name ASC")
   end
   
-  def self.create_from_params(project, parent_folder, params)
-    new_folder = DmsfFolder.new(params)
-    new_folder.project = project
-    new_folder.folder = parent_folder
-    new_folder.user = User.current
-    new_folder.save
-    new_folder
-  end
-  
-  def dmsf_path
+   def dmsf_path
     folder = self
     path = []
     while !folder.nil?

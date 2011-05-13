@@ -2,27 +2,29 @@
 
 <div class="contextual">
 </div>
-
+<% create = @pathfolder == @parent %>
 <h2>
-<%= render(:partial => "/dmsf/path", :locals => {:path => @folder.dmsf_path}) %>
+<%= render(:partial => "/dmsf/path", :locals => {:path => @pathfolder.dmsf_path}) %>
+<%= "/ New Folder" if create %>
 </h2>
 
-<% form_tag({:action => "save_folder", :id => @project, :folder_id => @folder},
-	:method=>:post, :multipart => true, :class => "tabular") do %>
+<% form_for(:dmsf_folder, @folder, :url => {:action => create ? "create_folder" : "save_folder", :id => @project, :folder_id => @folder, :parent_id => @parent},
+	:html => {:method=>:post, :class => "tabular"}) do |f| %>
+	<%= error_messages_for("folder") %>
 	<div class="box">
 		<p>
-			<%= label_tag("title", "Title:") %>
-			<%= text_field_tag("title", @folder.name, :size => "32") %>
+			<%= label_tag("dmsf_folder_name", "Title:") %>
+			<%= f.text_field(:name, :size => "32") %>
 		</p>
 		<p>
-			<%= label_tag("description", "Description:") %>
-			<%= text_area_tag("description", @folder.description, :rows => 15, :class => "wiki-edit") %>
+			<%= label_tag("dmsf_folder_description", "Description:") %>
+			<%= f.text_area(:description, :rows => 15, :class => "wiki-edit") %>
 		</p>
 	</div>
-	<%= submit_tag("Save") %>
+	<%= submit_tag(create ? "Create" : "Save") %>
 <% end %>
 
-<%= wikitoolbar_for "description" %>
+<%= wikitoolbar_for "dmsf_folder_description" %>
 
 <% content_for :header_tags do %>
 	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>

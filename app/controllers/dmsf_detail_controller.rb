@@ -21,22 +21,47 @@ class DmsfDetailController < ApplicationController
   
   before_filter :find_project
   before_filter :authorize
-  before_filter :find_folder, :only => [:create_folder, :delete_folder, :save_folder,
+  before_filter :find_parent, :only => [:folder_new, :create_folder, :save_folder, :folder_detail]
+  before_filter :find_folder, :only => [:delete_folder, :save_folder,
     :upload_files, :commit_files, :folder_detail]
   before_filter :find_file, :only => [:save_file, :delete_file, :file_detail]
-  
-  def create_folder
-    @new_folder = DmsfFolder.create_from_params(@project, @folder, params[:dmsf_folder])
-    if @new_folder.valid?
-      flash[:notice] = l(:notice_folder_created)
-      Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} created folder #{@project.identifier}://#{@new_folder.dmsf_path_str}"
-    else
-      flash[:error] = l(:error_folder_creation_failed) + ": " + l(:error_folder_title_must_be_entered)
-    end
 
-    redirect_to({:controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder})
+  def folder_new
+    @pathfolder = @parent
+    render :action => "folder_detail"
   end
-  
+
+  def create_folder
+    @folder = DmsfFolder.new(params[:dmsf_folder])
+    @folder.project = @project
+    @folder.folder = @parent
+    @folder.user = User.current
+    if @folder.save
+      flash[:notice] = l(:notice_folder_created)
+      Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} created folder #{@project.identifier}://#{@folder.dmsf_path_str}"
+      redirect_to({:controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder})
+    else
+      @pathfolder = @parent
+      render :action => "folder_detail"
+    end
+  end
+
+  def folder_detail
+    @pathfolder = copy_folder(@folder)
+  end
+
+  def save_folder
+    @pathfolder = copy_folder(@folder)
+    @folder.attributes = params[:dmsf_folder]
+    if @folder.save
+      Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} updated folder #{@project.identifier}://#{@folder.dmsf_path_str}"
+      flash[:notice] = l(:notice_folder_details_were_saved)
+      redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder
+    else
+      render :action => "folder_detail"
+    end
+  end
+
   def delete_folder
     check_project(@delete_folder = DmsfFolder.find(params[:delete_folder_id]))
     if !@delete_folder.nil?
@@ -52,32 +77,6 @@ class DmsfDetailController < ApplicationController
     redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder
   rescue DmsfAccessError
     render_403  
-  end
-
-  def folder_detail
-  end
-
-  def save_folder
-    @folder.description = params[:description]
-    
-    if params[:title].blank?
-      flash.now[:error] = l(:error_folder_title_must_be_entered)
-      render "folder_detail"
-      return
-    end
-    
-    @folder.name = params[:title]
-    
-    if !@folder.valid?
-      flash.now[:error] = l(:error_folder_title_is_already_used)
-      render "folder_detail"
-      return
-    end
-
-    @folder.save!
-    Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} updated folder #{@project.identifier}://#{@folder.dmsf_path_str}"
-    flash[:notice] = l(:notice_folder_details_were_saved)
-    redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder
   end
 
   #TODO: show lock/unlock history
@@ -207,6 +206,12 @@ class DmsfDetailController < ApplicationController
 
   private
   
+  def copy_folder(folder)
+    copy = folder.clone
+    copy.id = folder.id
+    copy
+  end
+  
   def find_project
     @project = Project.find(params[:id])
   end
@@ -214,6 +219,13 @@ class DmsfDetailController < ApplicationController
   def find_folder
     @folder = DmsfFolder.find(params[:folder_id]) if params.keys.include?("folder_id")
     check_project(@folder)
+  rescue DmsfAccessError
+    render_403
+  end
+
+  def find_parent
+    @parent = DmsfFolder.find(params[:parent_id]) if params.keys.include?("parent_id")
+    check_project(@parent)
   rescue DmsfAccessError
     render_403
   end
