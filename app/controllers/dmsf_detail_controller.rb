@@ -21,7 +21,7 @@ class DmsfDetailController < ApplicationController
   
   before_filter :find_project
   before_filter :authorize
-  before_filter :find_parent, :only => [:folder_new, :create_folder, :save_folder, :folder_detail]
+  before_filter :find_parent, :only => [:folder_new, :create_folder, :save_folder]
   before_filter :find_folder, :only => [:delete_folder, :save_folder,
     :upload_files, :commit_files, :folder_detail]
   before_filter :find_file, :only => [:save_file, :delete_file, :file_detail]
@@ -47,6 +47,7 @@ class DmsfDetailController < ApplicationController
   end
 
   def folder_detail
+    @parent = @folder.folder
     @pathfolder = copy_folder(@folder)
   end
 

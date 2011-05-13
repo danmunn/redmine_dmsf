@@ -1,11 +1,11 @@
-<% html_title("DMSF") %>
+<% html_title(l(:dmsf)) %>
 
 <div class="contextual">
 </div>
 <% create = @pathfolder == @parent %>
 <h2>
-<%= render(:partial => "/dmsf/path", :locals => {:path => @pathfolder.dmsf_path}) %>
-<%= "/ New Folder" if create %>
+<%= render(:partial => "/dmsf/path", :locals => {:path => @pathfolder.nil? ? [] : @pathfolder.dmsf_path}) %>
+<%= ("/ " + l(:heading_new_folder)) if create %>
 </h2>
 
 <% form_for(:dmsf_folder, @folder, :url => {:action => create ? "create_folder" : "save_folder", :id => @project, :folder_id => @folder, :parent_id => @parent},
@@ -13,15 +13,15 @@
 	<%= error_messages_for("folder") %>
 	<div class="box">
 		<p>
-			<%= label_tag("dmsf_folder_name", "Title:") %>
-			<%= f.text_field(:name, :size => "32") %>
+			<%= label_tag("dmsf_folder_name", l(:label_title) + ":") %>
+			<%= f.text_field(:name, :size => "32", :required => true) %>
 		</p>
 		<p>
-			<%= label_tag("dmsf_folder_description", "Description:") %>
+			<%= label_tag("dmsf_folder_description", l(:label_description) + ":") %>
 			<%= f.text_area(:description, :rows => 15, :class => "wiki-edit") %>
 		</p>
 	</div>
-	<%= submit_tag(create ? "Create" : "Save") %>
+	<%= submit_tag(create ? l(:submit_create) : l(:submit_save)) %>
 <% end %>
 
 <%= wikitoolbar_for "dmsf_folder_description" %>
