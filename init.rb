@@ -38,7 +38,7 @@ Redmine::Plugin.register :redmine_dmsf do
               "dmsf_stemming_strategy" => "STEM_NONE"
             }
   
-  menu :project_menu, :dmsf, { :controller => 'dmsf', :action => 'index' }, :caption => 'DMSF', :after => :activity, :param => :id
+  menu :project_menu, :dmsf, { :controller => "dmsf", :action => "index" }, :caption => :dmsf, :after => :activity, :param => :id
   #delete_menu_item :project_menu, :documents
   
   activity_provider :dmsf_files, :class_name => "DmsfFileRevision", :default => true

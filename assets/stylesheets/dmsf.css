@@ -113,6 +113,23 @@ div.right_icon_box img.detail_icon {
 	padding: 4px 4px 4px 30px;
 }
 
+.dmsf_detail label {
+	font-weight: bold;
+	width: 100px;
+	float: left;
+}
+
+.dmsf_detail .wiki {
+	background-color: white;
+	border: 1px solid #E4E4E4;
+	padding-left: 5px;
+}
+
+p.no-ident {
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
 fieldset {
 	padding-top: 4px;
 	padding-right: 8px;

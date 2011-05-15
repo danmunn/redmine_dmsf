@@ -1,4 +1,4 @@
-<% html_title("DMSF") %>
+<% html_title(l(:dmsf)) %>
 
 <div class="contextual">
 </div>
@@ -25,22 +25,35 @@
 <h3>Revisions</h3>
 <% @file.revisions.each do |revision| %>
 <div class="box dmsf_detail">
-	<fieldset class="tabular">
+	<fieldset>
 		<legend>
 			<%= revision.source_revision.nil? ? "Created:" : "Changed:" %>
 			<%= revision.updated_at.strftime("%Y-%m-%d %H:%M:%S") %>
 			by
 			<%= h(revision.user) %>
 		</legend>
+		<div class="clear">
+			<div class="splitcontentleft">
+				<p>
+					<%= label_tag("", "Title:") %>
+					<%= h(revision.title) %>
+				</p>
+			</div>
+			<div class="splitcontentright">
+				<p>
+					<%= label_tag("", "Filename:") %>
+					<%= h(revision.name) %>
+				</p>
+			</div>
+		</div>
+		<p class="no-ident">
+			<%= label_tag("", "Description:") %><br class="clear" />
+		</p>
+		<div class="wiki">
+			<%= textilizable(revision.description) %>
+		</div>
+		
 		<div class="splitcontentleft">
-			<p>
-				<%= label_tag("", "Title:") %>
-				<%= h(revision.title) %>
-			</p>
-			<p>
-				<%= label_tag("", "Description:") %>
-				<%= h(revision.description) %>
-			</p>
 			<p>
 				<%= label_tag("", "Version:") %>
 				<%= revision.major_version %>.<%= revision.minor_version %>
@@ -54,11 +67,7 @@
 					end %>
 			</p>
 		</div>
-		<div class="splitcontentright">
-			<p>
-				<%= label_tag("", "Comment:") %>
-				<%= h(revision.comment) %>
-			</p>
+		<div class="splitcontentright clear">
 			<p>
 				<%= label_tag("", "Mime:") %>
 				<%= h(revision.mime_type) %>
@@ -68,7 +77,10 @@
 				<%= number_to_human_size(revision.size) %>
 			</p>
 		</div>
-		<br style="clear: both;" />
+		<p class="clear">
+			<%= label_tag("", "Comment:") %>
+			<%= h(revision.comment) %>
+		</p>
 		<div>
 			<%=  link_to("Download",
 	          {:controller=>"dmsf", :action => "download_revision", :id => @project, :revision_id => revision}) %>
@@ -84,7 +96,7 @@
 
 <% content_for :header_tags do %>
 	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
-	<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" %>
+	<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
 	<script type="text/javascript">
 		jQuery.noConflict();
 		
@@ -95,9 +107,9 @@
 			
 			jQuery("#fileFileUpload").change(function() {
 				if(jQuery("input[name=\"file[version]\"]:checked").val() == "same") {
-					jQuery("#fileMinorVersionRadio").attr("checked", true); 
+					jQuery("#fileMinorVersionRadio").prop("checked", true); 
 				}
-				jQuery("#fileSameVersionRadio").attr("disabled", "disabled"); 
+				jQuery("#fileSameVersionRadio").prop("disabled", true); 
 			});
 			
 			jQuery("#newRevisionFormContentToggle").toggle(function() {
