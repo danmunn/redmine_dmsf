@@ -15,23 +15,25 @@
 </h2>
 
 <% if User.current.allowed_to?(:file_manipulation, @file.project) %>
-	<% if @file.locked_for_user? %>
-		<%= render(:partial => 'file_locked') %>
-	<% else %>
-		<%= render(:partial => 'file_new_revision') %>
-	<% end %>
+	<%= render(:partial => 'file_new_revision') %>
 <% end %>
 
 <h3>Revisions</h3>
 <% @file.revisions.each do |revision| %>
-<div class="box dmsf_detail">
-	<fieldset>
-		<legend>
-			<%= revision.source_revision.nil? ? "Created:" : "Changed:" %>
-			<%= revision.updated_at.strftime("%Y-%m-%d %H:%M:%S") %>
-			by
-			<%= h(revision.user) %>
-		</legend>
+<div class="box dmsf_detail dmsf_revision">
+	<div style="float:right">
+		<%=  link_to("Download",
+          {:controller=>"dmsf", :action => "download_revision", :id => @project, :revision_id => revision}) %>
+		<% if User.current.allowed_to?(:file_approval, @project) %>
+			| <%=  link_to("Delete",
+	          {:action => "delete_revision", :id => @project, :revision_id => revision},
+			  :class => "delete-link", :title => "Delete revision") %>
+		<% end %>
+	</div>
+		<p class="no-ident">
+			<%= label_tag("", revision.source_revision.nil? ? "Created:" : "Changed:") %>
+			<%= revision.updated_at.strftime("%Y-%m-%d %H:%M:%S") %> by <%= h(revision.user) %>
+		</p>
 		<div class="clear">
 			<div class="splitcontentleft">
 				<p>
@@ -47,9 +49,9 @@
 			</div>
 		</div>
 		<p class="no-ident">
-			<%= label_tag("", "Description:") %><br class="clear" />
+			<%= label_tag("", "Description:") %>
 		</p>
-		<div class="wiki">
+		<div class="wiki clear" style="margin-left: 110px">
 			<%= textilizable(revision.description) %>
 		</div>
 		
@@ -81,16 +83,6 @@
 			<%= label_tag("", "Comment:") %>
 			<%= h(revision.comment) %>
 		</p>
-		<div>
-			<%=  link_to("Download",
-	          {:controller=>"dmsf", :action => "download_revision", :id => @project, :revision_id => revision}) %>
-			<% if User.current.allowed_to?(:file_approval, @project) %>
-				| <%=  link_to("Delete",
-		          {:action => "delete_revision", :id => @project, :revision_id => revision},
-				  :class => "delete-link", :title => "Delete revision") %>
-			<% end %>
-		</div>
-	</fieldset>
 </div>
 <% end %>
 

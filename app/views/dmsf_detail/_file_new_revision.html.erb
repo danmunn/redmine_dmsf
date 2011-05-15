@@ -1,3 +1,9 @@
+<div class="box dmsf_detail dmsf_revision">
+	<strong>Create New Revision <a href="#" id="newRevisionFormContentToggle">[-]</a></strong>
+		<div id="newRevisionFormContent">
+			<% if @file.locked_for_user? %>
+				<p class="warning"><%= l(:info_file_locked) %></p>
+			<% else %>
 <%
 disabled_workflow = []
 selected_workflow = nil
@@ -12,57 +18,70 @@ else
 	selected_workflow = @file.last_revision.workflow
 end
 
-form_tag({:action => "save_file", :id => @project, :file_id => @file},
-	:method=>:post, :multipart => true, :class => "tabular") do 
+form_for(:dmsf_file_revision, @revision, :url => {:action => "save_file", :id => @project, :file_id => @file},
+	:html => {:method=>:post, :multipart => true}) do |f|
 %>
-<div class="box dmsf_detail">
-	<fieldset class="tabular">
-		<legend>Create New Revision <a href="#" id="newRevisionFormContentToggle">[-]</a></legend>
-		<div id="newRevisionFormContent">
-		    <div class="splitcontentleft">
-				<p>
-					<%= label_tag("file[title]", "Title:") %>
-					<%= text_field_tag("file[title]", @file.last_revision.title, :size => "32") %>
+				<div class="clear">
+					<div class="splitcontentleft">
+						<p>
+							<%= label_tag("dmsf_file_revision_title", "Title:") %>
+							<%= f.text_field(:title, :size => "32") %>
+						</p>
+					</div>
+					<div class="splitcontentright">
+						<p>
+							<%= label_tag("", "Filename:") %>
+							<%= h(@revision.name) %>
+						</p>
+					</div>
+				</div>
+				<p class="no-ident">
+					<%= label_tag("dmsf_file_revision_description", "Description:") %>
 				</p>
+				<div class="wiki clear" style="margin-left: 110px">
+					<%= f.text_area(:description, :rows=> "6", :class => "wiki-edit") %>
+				</div>
+				<div class="splitcontentleft">
+					<p>
+						<%= label_tag("fileMinorVersionRadio", "Version:") %>
+					</p>
+					<div class="wiki clear" style="margin-left: 110px">
+						<%= radio_button_tag("dmsf_file_revision[version]", "same", @revision.version == @file.last_revision.version, :id => "fileSameVersionRadio") %>
+						<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version %> Same<br /> 
+						<%= radio_button_tag("dmsf_file_revision[version]", "minor", 
+								@revision.major_version == @file.last_revision.major_version && @revision.minor_version != @file.last_revision.minor_version,
+								:id => "fileMinorVersionRadio") %> 
+						<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version + 1 %> Minor<br />
+						<%= radio_button_tag("dmsf_file_revision[version]", "major", @revision.major_version != @file.last_revision.major_version) %> 
+						<%= @file.last_revision.major_version + 1 %>.0 Major<br />
+					</div>
+					<p>
+						<%= label_tag("dmsf_file_revision_workflow", "Workflow:") %>
+						<%= f.select(:workflow, 
+								options_for_select([["None", nil], ["Waiting for approval", 1], ["Approved", 2]], 
+									:selected => selected_workflow, :disabled => disabled_workflow)) %>
+					</p>
+				</div>
+				<div class="splitcontentright clear">
+					<p>
+						<%= label_tag("fileFileUpload", "New content:") %>
+						<%= file_field_tag("dmsf_file_revision[file]", :size => 30, :id => "fileFileUpload") %>
+						<br />
+						<small>
+							(<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
+						</small>
+					</p>
+				</div>
+				<br style="clear: both"/>
 				<p>
-					<%= label_tag("file[description]", "Description:") %>
-					<%= text_area_tag("file[description]", @file.last_revision.description, :rows=> "6") %>
+					<%= label_tag("dmsf_file_revision_comment", "Comment:") %>
+					<%= f.text_area(:comment, :rows=> "2", :style => "width: 99%;") %>
 				</p>
-				
-				<p>
-					<%= label_tag("file[file]", "New content:") %>
-					<%= file_field_tag("file[file]", :size => 30, :id => "fileFileUpload") %>
-					<br />
-					<small>
-						(<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
-					</small>
-				</p>
-				<p>
-					<%= label_tag("file[version]_minor", "Version:") %>
-					<%= radio_button_tag("file[version]", "same", true, :id => "fileSameVersionRadio") %>
-					<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version %> Same<br /> 
-					<%= radio_button_tag("file[version]", "minor", false, :id => "fileMinorVersionRadio") %> 
-					<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version + 1 %> Minor<br />
-					<%= radio_button_tag("file[version]", "major") %> 
-					<%= @file.last_revision.major_version + 1 %>.0 Major<br />
-				</p>
-				<p>
-					<%= label_tag("file[workflow]", "Workflow:") %>
-					<%= select_tag("file[workflow]", 
-							options_for_select([["None", nil], ["Waiting for approval", 1], ["Approved", 2]], 
-								:selected => selected_workflow, :disabled => disabled_workflow)) %>
-				</p>
-			</div>
-			<div class="splitcontentright">
-				<p>
-					<%= label_tag("file[comment]", "Comment:") %>
-					<%= text_area_tag("file[comment]", "", :rows=> "2") %>
-				</p>
-			</div>
-			<br style="clear: both;"/>
-			<br />
-			<%= submit_tag("Create") %>
-		</div>
-    </fieldset>
-</div>
+				<br />
+				<%= submit_tag("Create") %>
 <% end %>
+			<% end %>
+		</div>
+</div>
+
+<%= wikitoolbar_for "dmsf_file_revision_description" %>

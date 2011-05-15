@@ -101,10 +101,6 @@ div.right_icon_box img.detail_icon {
 	padding: 4px 4px 4px 30px;
 }
 
-.dmsf_detail textarea {
-	width: 90%;
-}
-
 .dmsf_detail legend {
 	font-weight: bold;
 }
@@ -113,16 +109,12 @@ div.right_icon_box img.detail_icon {
 	padding: 4px 4px 4px 30px;
 }
 
-.dmsf_detail label {
+.dmsf_revision label {
 	font-weight: bold;
 	width: 100px;
 	float: left;
-}
-
-.dmsf_detail .wiki {
-	background-color: white;
-	border: 1px solid #E4E4E4;
-	padding-left: 5px;
+	text-align: right;
+	padding-right: 10px;
 }
 
 p.no-ident {

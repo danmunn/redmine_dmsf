@@ -80,8 +80,34 @@ class DmsfDetailController < ApplicationController
     render_403  
   end
 
-  #TODO: show lock/unlock history
   def file_detail
+    @revision = @file.last_revision.clone
+    @revision.comment = ""
+  end
+
+  #TODO: separate control for approval
+  #TODO: don't create revision if nothing change
+  def save_file
+    if @file.locked_for_user?
+      flash[:error] = l(:error_file_is_locked)
+      redirect_to :action => "file_detail", :id => @project, :file_id => @file
+    else
+      new_revision = params[:dmsf_file_revision]
+      DmsfFileRevision.from_saved_file(@file, new_revision)
+      if @file.locked?
+        @file.unlock
+        flash[:notice] = l(:notice_file_unlocked) + ", "
+      end
+      @file.reload
+      flash[:notice] = (flash[:notice].nil? ? "" : flash[:notice]) + l(:notice_file_revision_created)
+      Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} created new revision of file #{@project.identifier}://#{@file.dmsf_path_str}"
+      begin
+        DmsfMailer.deliver_files_updated(User.current, [@file])
+      rescue ActionView::MissingTemplate => e
+        Rails.logger.error "Could not send email notifications: " + e
+      end
+    end
+    redirect_to :action => "file_detail", :id => @project, :file_id => @file
   end
 
   def delete_file
@@ -179,30 +205,6 @@ class DmsfDetailController < ApplicationController
       end
     end
     redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder
-  end
-
-  #TODO: separate control for approval
-  #TODO: don't create revision if nothing change
-  def save_file
-    if @file.locked_for_user?
-      flash[:error] = l(:error_file_is_locked)
-    else
-      saved_file = params[:file]
-      DmsfFileRevision.from_saved_file(@file, saved_file)
-      if @file.locked?
-        @file.unlock
-        flash[:notice] = l(:notice_file_unlocked) + ", "
-      end
-      @file.reload
-      flash[:notice] = (flash[:notice].nil? ? "" : flash[:notice]) + l(:notice_file_revision_created)
-      Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} created new revision of file #{@project.identifier}://#{@file.dmsf_path_str}"
-      begin
-        DmsfMailer.deliver_files_updated(User.current, [@file])
-      rescue ActionView::MissingTemplate => e
-        Rails.logger.error "Could not send email notifications: " + e
-      end
-    end
-    redirect_to :action => "file_detail", :id => @project, :file_id => @file
   end
 
   private
