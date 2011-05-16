@@ -1,5 +1,5 @@
-<div class="box dmsf_detail dmsf_revision">
-	<strong>New Revision <a href="#" id="newRevisionFormContentToggle">[-]</a></strong>
+<div class="box dmsf_detail">
+	<strong><%= l(:heading_new_revision) %> <a href="#" id="newRevisionFormContentToggle">[-]</a></strong>
 		<div id="newRevisionFormContent">
 			<% if @file.locked_for_user? %>
 				<p class="warning"><%= l(:info_file_locked) %></p>
@@ -24,47 +24,50 @@ form_for(:dmsf_file_revision, @revision, :url => {:action => "save_file", :id =>
 				<div class="clear">
 					<div class="splitcontentleft">
 						<p>
-							<%= label_tag("dmsf_file_revision_title", "Title:") %>
+							<%= label_tag("dmsf_file_revision_title", l(:label_title) + ":") %>
 							<%= f.text_field(:title, :size => "32") %>
 						</p>
 					</div>
 					<div class="splitcontentright">
 						<p>
-							<%= label_tag("", "Filename:") %>
+							<%= label_tag("", l(:label_filename) + ":") %>
 							<%= h(@revision.name) %>
 						</p>
 					</div>
 				</div>
 				<p class="no-ident">
-					<%= label_tag("dmsf_file_revision_description", "Description:") %>
+					<%= label_tag("dmsf_file_revision_description", l(:label_description) + ":") %>
 				</p>
 				<div class="wiki data clear">
 					<%= f.text_area(:description, :rows=> "6", :class => "wiki-edit") %>
 				</div>
 				<div class="splitcontentleft">
 					<p>
-						<%= label_tag("fileMinorVersionRadio", "Version:") %>
+						<%= label_tag("fileMinorVersionRadio", l(:label_version) + ":") %>
 					</p>
 					<div class="data clear">
 						<%= radio_button_tag("dmsf_file_revision[version]", "same", @revision.version == @file.last_revision.version, :id => "fileSameVersionRadio") %>
-						<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version %> Same<br /> 
+						<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version %> <%= l(:option_version_same) %><br /> 
 						<%= radio_button_tag("dmsf_file_revision[version]", "minor", 
 								@revision.major_version == @file.last_revision.major_version && @revision.minor_version != @file.last_revision.minor_version,
 								:id => "fileMinorVersionRadio") %> 
-						<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version + 1 %> Minor<br />
+						<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version + 1 %> <%= l(:option_version_minor) %><br />
 						<%= radio_button_tag("dmsf_file_revision[version]", "major", @revision.major_version != @file.last_revision.major_version) %> 
-						<%= @file.last_revision.major_version + 1 %>.0 Major<br />
+						<%= @file.last_revision.major_version + 1 %>.0 <%= l(:option_version_major) %><br />
 					</div>
 					<p>
-						<%= label_tag("dmsf_file_revision_workflow", "Workflow:") %>
+						<%= label_tag("dmsf_file_revision_workflow", l(:label_workflow) + ":") %>
 						<%= f.select(:workflow, 
-								options_for_select([["None", nil], ["Waiting for approval", 1], ["Approved", 2]], 
+								options_for_select([
+										[l(:option_workflow_none), nil], 
+										[l(:option_workflow_waiting_for_approval), 1],
+										[l(:option_workflow_approved), 2]], 
 									:selected => selected_workflow, :disabled => disabled_workflow)) %>
 					</p>
 				</div>
 				<div class="splitcontentright clear">
 					<p>
-						<%= label_tag("fileFileUpload", "New content:") %>
+						<%= label_tag("fileFileUpload", l(:label_new_content) + ":") %>
 						<div class="data">
 							<%= file_field_tag("dmsf_file_revision[file]", :size => 30, :id => "fileFileUpload") %>
 							<br />
@@ -76,13 +79,13 @@ form_for(:dmsf_file_revision, @revision, :url => {:action => "save_file", :id =>
 				</div>
 				<br style="clear: both"/>
 				<p>
-					<%= label_tag("dmsf_file_revision_comment", "Comment:") %>
+					<%= label_tag("dmsf_file_revision_comment", l(:label_comment) + ":") %>
 					<div class="data">
 						<%= f.text_area(:comment, :rows=> "2", :style => "width: 99%;") %>
 					</div>
 				</p>
 				<br />
-				<%= submit_tag("Create") %>
+				<%= submit_tag(l(:submit_create)) %>
 <% end %>
 			<% end %>
 		</div>

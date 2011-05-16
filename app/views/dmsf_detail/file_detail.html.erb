@@ -9,8 +9,8 @@
 / 
 <%= h(@file.last_revision.title) %> <div style="float: right"><%= h(@file.name) %></div>
 <% if @file.notification %>
-	<%= image_tag("notify.png", :plugin => "redmine_dmsf", :alt => "Not. act.",
-		:title => "Notifications active") %>
+	<%= image_tag("notify.png", :plugin => "redmine_dmsf",
+		:title => l(:title_notifications_active)) %>
 <% end %>
 </h2>
 
@@ -18,38 +18,38 @@
 	<%= render(:partial => 'file_new_revision') %>
 <% end %>
 
-<h3>Revisions</h3>
+<h3><%= l(:heading_revisions) %></h3>
 <% @file.revisions.each do |revision| %>
-<div class="box dmsf_detail dmsf_revision">
+<div class="box dmsf_detail">
 	<div style="float:right">
-		<%=  link_to("Download",
+		<%=  link_to(l(:title_download),
           {:controller=>"dmsf", :action => "download_revision", :id => @project, :revision_id => revision}) %>
 		<% if User.current.allowed_to?(:file_approval, @project) %>
-			| <%=  link_to("Delete",
+			| <%=  link_to(l(:title_delete),
 	          {:action => "delete_revision", :id => @project, :revision_id => revision},
-			  :class => "delete-link", :title => "Delete revision") %>
+			  :class => "delete-link", :title => l(:title_delete_revision)) %>
 		<% end %>
 	</div>
 		<p class="no-ident">
-			<%= label_tag("", revision.source_revision.nil? ? "Created:" : "Changed:") %>
-			<%= revision.updated_at.strftime("%Y-%m-%d %H:%M:%S") %> by <%= h(revision.user) %>
+			<%= label_tag("", (revision.source_revision.nil? ? l(:label_created) : l(:label_changed))  + ":") %>
+			<%= l(:info_changed_by_user, :changed => revision.updated_at.strftime("%Y-%m-%d %H:%M:%S"), :user => h(revision.user)) %>
 		</p>
 		<div class="clear">
 			<div class="splitcontentleft">
 				<p>
-					<%= label_tag("", "Title:") %>
+					<%= label_tag("", l(:label_title) + ":") %>
 					<%= h(revision.title) %>
 				</p>
 			</div>
 			<div class="splitcontentright">
 				<p>
-					<%= label_tag("", "Filename:") %>
+					<%= label_tag("", l(:label_filename) + ":") %>
 					<%= h(revision.name) %>
 				</p>
 			</div>
 		</div>
 		<p class="no-ident">
-			<%= label_tag("", "Description:") %>
+			<%= label_tag("", l(:label_description) + ":") %>
 		</p>
 		<div class="wiki clear" style="margin-left: 110px">
 			<%= textilizable(revision.description) %>
@@ -57,31 +57,31 @@
 		
 		<div class="splitcontentleft">
 			<p>
-				<%= label_tag("", "Version:") %>
+				<%= label_tag("", l(:label_version) + ":") %>
 				<%= revision.major_version %>.<%= revision.minor_version %>
 			</p>
 			<p>
-				<%= label_tag("", "Workflow:") %>
+				<%= label_tag("", l(:label_workflow) + ":") %>
 				<%= case revision.workflow
-						when 1 then "Waiting for approval"
-						when 2 then "Approved"
-						else "None" 
+						when 1 then l(:option_workflow_waiting_for_approval)
+						when 2 then l(:option_workflow_approved)
+						else l(:option_workflow_none) 
 					end %>
 			</p>
 		</div>
 		<div class="splitcontentright clear">
 			<p>
-				<%= label_tag("", "Mime:") %>
+				<%= label_tag("", l(:label_mime) + ":") %>
 				<%= h(revision.mime_type) %>&nbsp;
 			</p>
 			<p>
-				<%= label_tag("", "Size:") %>
+				<%= label_tag("", l(:label_size) + ":") %>
 				<%= number_to_human_size(revision.size) %>
 			</p>
 		</div>
 		<br style="clear: both"/>
 		<p class="no-ident clear">
-			<%= label_tag("", "Comment:") %>
+			<%= label_tag("", l(:label_comment) + ":") %>
 			<%= h(revision.comment) %>
 		</p>
 </div>

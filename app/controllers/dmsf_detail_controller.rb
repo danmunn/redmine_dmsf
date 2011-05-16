@@ -82,7 +82,6 @@ class DmsfDetailController < ApplicationController
 
   def file_detail
     @revision = @file.last_revision.clone
-    @revision.comment = ""
   end
 
   #TODO: separate control for approval
