@@ -44,7 +44,7 @@ On Debinan (Squeeze) use:
 apt-get install xapian-ruby1.8 xapian-omega libxapian-dev xpdf antiword unzip antiword\
   catdoc libwpd8c2a libwps-0.1-1 gzip unrtf catdvi djview djview3
 
-2.2. Setup
+2.2. Setup/Upgrade
 
 * Put redmine_dmsf plugin directory into vendor/plugins
 * Initialize database:
