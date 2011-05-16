@@ -109,6 +109,10 @@ div.right_icon_box img.detail_icon {
 	padding: 4px 4px 4px 30px;
 }
 
+.dmsf_detail div.data {
+	margin-left: 110px;
+}
+
 .dmsf_revision label {
 	font-weight: bold;
 	width: 100px;

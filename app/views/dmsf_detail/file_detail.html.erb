@@ -72,14 +72,15 @@
 		<div class="splitcontentright clear">
 			<p>
 				<%= label_tag("", "Mime:") %>
-				<%= h(revision.mime_type) %>
+				<%= h(revision.mime_type) %>&nbsp;
 			</p>
 			<p>
 				<%= label_tag("", "Size:") %>
 				<%= number_to_human_size(revision.size) %>
 			</p>
 		</div>
-		<p class="clear">
+		<br style="clear: both"/>
+		<p class="no-ident clear">
 			<%= label_tag("", "Comment:") %>
 			<%= h(revision.comment) %>
 		</p>

@@ -139,6 +139,10 @@ class DmsfFileRevision < ActiveRecord::Base
     
     new_revision.source_revision = self
     new_revision.user = User.current
+    
+    new_revision.name = self.name
+    new_revision.folder = self.folder
+    
     return new_revision
   end
   

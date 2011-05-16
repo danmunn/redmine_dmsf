@@ -1,5 +1,5 @@
 <div class="box dmsf_detail dmsf_revision">
-	<strong>Create New Revision <a href="#" id="newRevisionFormContentToggle">[-]</a></strong>
+	<strong>New Revision <a href="#" id="newRevisionFormContentToggle">[-]</a></strong>
 		<div id="newRevisionFormContent">
 			<% if @file.locked_for_user? %>
 				<p class="warning"><%= l(:info_file_locked) %></p>
@@ -38,14 +38,14 @@ form_for(:dmsf_file_revision, @revision, :url => {:action => "save_file", :id =>
 				<p class="no-ident">
 					<%= label_tag("dmsf_file_revision_description", "Description:") %>
 				</p>
-				<div class="wiki clear" style="margin-left: 110px">
+				<div class="wiki data clear">
 					<%= f.text_area(:description, :rows=> "6", :class => "wiki-edit") %>
 				</div>
 				<div class="splitcontentleft">
 					<p>
 						<%= label_tag("fileMinorVersionRadio", "Version:") %>
 					</p>
-					<div class="wiki clear" style="margin-left: 110px">
+					<div class="data clear">
 						<%= radio_button_tag("dmsf_file_revision[version]", "same", @revision.version == @file.last_revision.version, :id => "fileSameVersionRadio") %>
 						<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version %> Same<br /> 
 						<%= radio_button_tag("dmsf_file_revision[version]", "minor", 
@@ -65,17 +65,21 @@ form_for(:dmsf_file_revision, @revision, :url => {:action => "save_file", :id =>
 				<div class="splitcontentright clear">
 					<p>
 						<%= label_tag("fileFileUpload", "New content:") %>
-						<%= file_field_tag("dmsf_file_revision[file]", :size => 30, :id => "fileFileUpload") %>
-						<br />
-						<small>
-							(<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
-						</small>
+						<div class="data">
+							<%= file_field_tag("dmsf_file_revision[file]", :size => 30, :id => "fileFileUpload") %>
+							<br />
+							<small>
+								(<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
+							</small>
+						</div>
 					</p>
 				</div>
 				<br style="clear: both"/>
 				<p>
 					<%= label_tag("dmsf_file_revision_comment", "Comment:") %>
-					<%= f.text_area(:comment, :rows=> "2", :style => "width: 99%;") %>
+					<div class="data">
+						<%= f.text_area(:comment, :rows=> "2", :style => "width: 99%;") %>
+					</div>
 				</p>
 				<br />
 				<%= submit_tag("Create") %>
