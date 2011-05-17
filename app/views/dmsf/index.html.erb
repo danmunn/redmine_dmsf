@@ -141,7 +141,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 						{:controller => "dmsf_detail", :action => "file_detail", :id => @project, :file_id => file },
 						:title => l(:link_details, :title =>h(file.last_revision.title))) %>
 					</div>
-					<div style="float: right">
+					<div style="float: right; width: 44px;">
 					<% unless file.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, @project)%>
 						<% 	if file.locked? %>
 							<%= link_to(image_tag("unlock.png", :plugin => "redmine_dmsf"),
@@ -154,7 +154,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 						<% 	end %> 
 						&nbsp;
 					<% end %>
-					<% if User.current.allowed_to?(:file_manipulation, @project) %>
+					<% if User.current.allowed_to?(:file_manipulation, @project) && !file.locked_for_user? %>
 						<%= link_to(image_tag("delete.png", :plugin => "redmine_dmsf"), 
 							{:controller => "dmsf_detail", :action => "delete_file", :id => @project, 
 							:file_id => file}, :class => "delete-link", :title => l(:title_delete)) %>

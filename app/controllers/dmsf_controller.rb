@@ -187,7 +187,7 @@ class DmsfController < ApplicationController
   
   def send_revision
     send_file(@revision.disk_file, 
-      :filename => filename_for_content_disposition(@revision.file.name),
+      :filename => filename_for_content_disposition(@revision.name),
       :type => @revision.detect_content_type, 
       :disposition => "attachment")
   end

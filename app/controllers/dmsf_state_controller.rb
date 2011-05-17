@@ -31,7 +31,8 @@ class DmsfStateController < ApplicationController
       @file.lock
       flash[:notice] = l(:notice_file_locked)
     end
-    redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @file.folder
+      redirect_to params[:current] ? params[:current] : 
+        {:controller => "dmsf", :action => "index", :id => @project, :folder_id => @file.folder}
   end
   
   def unlock_file
@@ -45,7 +46,8 @@ class DmsfStateController < ApplicationController
         flash[:error] = l(:error_only_user_that_locked_file_can_unlock_it)
       end
     end
-    redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @file.folder
+    redirect_to params[:current] ? params[:current] : 
+        {:controller => "dmsf", :action => "index", :id => @project, :folder_id => @file.folder}
   end
 
   def user_pref
@@ -66,7 +68,8 @@ class DmsfStateController < ApplicationController
       @folder.notify_activate
       flash[:notice] = l(:notice_folder_notifications_activated)
     end
-    redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder.folder
+    redirect_to params[:current] ? params[:current] : 
+      {:controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder.folder}
   end
   
   def folder_notify_deactivate
@@ -76,7 +79,8 @@ class DmsfStateController < ApplicationController
       @folder.notify_deactivate
       flash[:notice] = l(:notice_folder_notifications_deactivated)
     end
-    redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder.folder
+    redirect_to params[:current] ? params[:current] : 
+      {:controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder.folder}
   end
   
   def file_notify_activate
@@ -86,7 +90,8 @@ class DmsfStateController < ApplicationController
       @file.notify_activate
       flash[:notice] = l(:notice_file_notifications_activated)
     end
-    redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @file.folder
+    redirect_to params[:current] ? params[:current] :
+      {:controller => "dmsf", :action => "index", :id => @project, :folder_id => @file.folder}
   end
   
   def file_notify_deactivate
@@ -96,7 +101,8 @@ class DmsfStateController < ApplicationController
       @file.notify_deactivate
       flash[:notice] = l(:notice_file_notifications_deactivated)
     end
-    redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @file.folder
+    redirect_to params[:current] ? params[:current] :
+      {:controller => "dmsf", :action => "index", :id => @project, :folder_id => @file.folder}
   end
 
   private
