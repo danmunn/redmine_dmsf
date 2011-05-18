@@ -3,7 +3,7 @@
 <div class="contextual">
 	<% if User.current.allowed_to?(:file_manipulation, @project) %>
 		<% unless @file.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, @project)%>
-			<% 	if @file.locked? %>
+			<% if @file.locked? %>
 				<%= link_to(image_tag("unlock.png", :plugin => "redmine_dmsf"),
 		        	{:controller => "dmsf_state", :action => "unlock_file", :id => @project, :file_id => @file,
 						:current => request.url },
@@ -65,60 +65,60 @@
 				:class => "delete-revision", :title => l(:title_delete_revision)) %>
 		<% end %>
 	</div>
-		<p class="no-ident">
-			<%=label_tag("", (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)) + ":")%>
-			<%= l(:info_changed_by_user, :changed => revision.updated_at.strftime("%Y-%m-%d %H:%M:%S"), :user => h(revision.user)) %>
-		</p>
-		<div class="clear">
-			<div class="splitcontentleft">
-				<p>
-					<%= label_tag("", l(:label_title) + ":") %>
-					<%= h(revision.title) %>
-				</p>
-			</div>
-			<div class="splitcontentright">
-				<p>
-					<%= label_tag("", l(:label_filename) + ":") %>
-					<%= h(revision.name) %>
-				</p>
-			</div>
-		</div>
-		<p class="no-ident">
-			<%= label_tag("", l(:label_description) + ":") %>
-		</p>
-		<div class="wiki clear" style="margin-left: 110px">
-			<%= textilizable(revision.description) %>
-		</div>
-		
+	<p class="no-ident">
+		<%=label_tag("", (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)) + ":")%>
+		<%= l(:info_changed_by_user, :changed => revision.updated_at.strftime("%Y-%m-%d %H:%M:%S"), :user => h(revision.user)) %>
+	</p>
+	<div class="clear">
 		<div class="splitcontentleft">
 			<p>
-				<%= label_tag("", l(:label_version) + ":") %>
-				<%= revision.major_version %>.<%= revision.minor_version %>
-			</p>
-			<p>
-				<%= label_tag("", l(:label_workflow) + ":") %>
-				<%= case revision.workflow
-						when 1 then l(:option_workflow_waiting_for_approval)
-						when 2 then l(:option_workflow_approved)
-						else l(:option_workflow_none) 
-					end %>
+				<%= label_tag("", l(:label_title) + ":") %>
+				<%= h(revision.title) %>
 			</p>
 		</div>
-		<div class="splitcontentright clear">
+		<div class="splitcontentright">
 			<p>
-				<%= label_tag("", l(:label_mime) + ":") %>
-				<%= h(revision.mime_type) %>&nbsp;
-			</p>
-			<p>
-				<%= label_tag("", l(:label_size) + ":") %>
-				<%= number_to_human_size(revision.size) %>
+				<%= label_tag("", l(:label_filename) + ":") %>
+				<%= h(revision.name) %>
 			</p>
 		</div>
-		<br style="clear: both"/>
-		<p class="no-ident clear">
-			<%= label_tag("", l(:label_comment) + ":") %>
-			<%= h(revision.comment) %>
+	</div>
+	<p class="no-ident">
+		<%= label_tag("", l(:label_description) + ":") %>
+	</p>
+	<div class="wiki clear" style="margin-left: 110px">
+		<%= textilizable(revision.description) %>
+	</div>
+	
+	<div class="splitcontentleft">
+		<p>
+			<%= label_tag("", l(:label_version) + ":") %>
+			<%= revision.major_version %>.<%= revision.minor_version %>
 		</p>
+		<p>
+			<%= label_tag("", l(:label_workflow) + ":") %>
+			<%= case revision.workflow
+					when 1 then l(:option_workflow_waiting_for_approval)
+					when 2 then l(:option_workflow_approved)
+					else l(:option_workflow_none) 
+				end %>
+		</p>
+	</div>
+	<div class="splitcontentright clear">
+		<p>
+			<%= label_tag("", l(:label_mime) + ":") %>
+			<%= h(revision.mime_type) %>&nbsp;
+		</p>
+		<p>
+			<%= label_tag("", l(:label_size) + ":") %>
+			<%= number_to_human_size(revision.size) %>
+		</p>
+	</div>
+	<br style="clear: both"/>
+	<p class="no-ident clear">
+		<%= label_tag("", l(:label_comment) + ":") %>
+		<%= h(revision.comment) %>
+	</p>
 </div>
 <% end %>
 

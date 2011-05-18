@@ -188,6 +188,7 @@ class DmsfFile < ActiveRecord::Base
       file.project = project
       file.folder = folder
       file.name = commited_file["name"]
+      file.notification = !Setting.plugin_redmine_dmsf["dmsf_default_notifications"].blank? 
       file.save      
     end
     

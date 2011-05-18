@@ -21,6 +21,16 @@
 </p>
 
 <p>
+  <%=content_tag(:label, l(:label_default_notifications) + ":") %>
+  <%=select_tag("settings[dmsf_default_notifications]", 
+		options_for_select([
+				[l(:select_option_deactivated), nil], 
+				[l(:select_option_activated), "1"]], 
+				:selected => @settings["dmsf_default_notifications"])) %><br/>
+  (<%=l(:label_default)%>: <%=l(:select_option_deactivated)%>)
+</p>
+<hr />
+<p>
   <%=content_tag(:label, l(:label_index_database) + ":") %>
   <%=text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], :size=>50 %><br/>
   (<%=l(:label_default)%>: <%="#{RAILS_ROOT}/files/dmsf_index"%>)
