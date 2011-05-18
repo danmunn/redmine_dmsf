@@ -120,4 +120,5 @@ ru:
   :note_stem_some: "Search for stemmed forms of terms except for those which start with a capital letter, or are followed by certain characters, or are used with operators which need positional information. Stemmed terms are prefixed with 'Z'."
   :note_stem_all: "Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   :note_stemming_applied: "Note that the stemming algorithm is only applied to words in probabilistic fields - boolean filter terms are never stemmed."
+  :label_default_notifications: "File default notifications"
   
