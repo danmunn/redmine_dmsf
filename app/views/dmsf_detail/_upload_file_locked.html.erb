@@ -1,32 +1,51 @@
-<div class="box dmsf_upload">
+<div class="box dmsf_detail">
 	<%= hidden_field_tag("commited_files[#{i}][disk_filename]", upload.disk_filename) %>
 	<%= hidden_field_tag("commited_files[#{i}][name]", upload.name) %>
-	<fieldset class="tabular">
-		<legend><%= h(upload.name) %></legend>
-		<p class="warning">File locked!</p>
-	    <div class="splitcontentleft">
+	<p class="warning"><%= l(:info_file_locked) %></p>
+	
+	<div class="clear">
+		<div class="splitcontentleft">
 			<p>
-				<%= label_tag("", "Title:") %>
+				<%= label_tag("", l(:label_title) + ":") %>
 				<%= h(upload.title) %>
-			</p>
-			<p>
-				<%= label_tag("", "Description:") %>
-				<%= h(upload.description) %>
-			</p>
-			<p>
-				<%= label_tag("", "Version:") %>
-				<%= upload.major_version %>.<%= upload.minor_version %>
 			</p>
 		</div>
 		<div class="splitcontentright">
 			<p>
-				<%= label_tag("", "Mime:") %>
-				<%= h(upload.mime_type) %>
-			</p>
-			<p>
-				<%= label_tag("", "Size:") %>
-				<%= number_to_human_size(upload.size) %>
+				<%= label_tag("", l(:label_filename) + ":") %>
+				<%= h(upload.name) %>
 			</p>
 		</div>
-    </fieldset>
+	</div>
+	<p class="no-ident">
+		<%= label_tag("", l(:label_description) + ":") %>
+	</p>
+	<div class="wiki data clear">
+		<%= textilizable(upload.description) %>
+	</div>
+	<div class="splitcontentleft">
+		<p>
+			<%= label_tag("", l(:label_version) + ":") %>
+			<%= upload.major_version %>.<%= upload.minor_version %>
+		</p>
+		<p>
+			<%= label_tag("", l(:label_workflow) + ":") %>
+			<%= case upload.workflow
+					when 1 then l(:option_workflow_waiting_for_approval)
+					when 2 then l(:option_workflow_approved)
+					else l(:option_workflow_none) 
+				end %>
+		</p>
+	</div>
+	<div class="splitcontentright clear">
+		<p>
+			<%= label_tag("", l(:label_mime) + ":") %>
+			<%= h(upload.mime_type) %>
+		</p>
+		<p>
+			<%= label_tag("", l(:label_size) + ":") %>
+			<%= number_to_human_size(upload.size) %>
+		</p>
+	</div>
+	<br style="clear: both"/>
 </div>
