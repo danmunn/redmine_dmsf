@@ -1,17 +1,25 @@
-1 License
+Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system.
+
+It is aimed to replace current Redmine's Documents module.
+
+Initial development was for Kontron AG R&D department and it is released as open source thanks to their generosity.
+
+Project home: http://code.google.com/p/redmine-dmsf/
+
+1. License
 
 Redmine Document Management System "Features" plugin is distributed under GNU GPL version 2.
 
 License itself is here: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1
 
-2 Installation
+2. Installation
 
 2.1. Prerequisities
 
 * Redmine 1.1.x
 * Ruby Zip library - rubyzip gem
 
-2.1.1 Fulltext search (optional) 
+2.1.1. Fulltext search (optional) 
 
 If you want to use fulltext search abilities:
 * Xapian (http://xapian.org) search engine
@@ -55,7 +63,7 @@ apt-get install xapian-ruby1.8 xapian-omega libxapian-dev xpdf antiword unzip an
 * You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
 * Assign DMSF permissions to appropriate roles
 
-2.2.1 Fulltext search (optional)
+2.2.1. Fulltext search (optional)
 
 If you want to use fulltext search features, you must setup file content indexing.
 
@@ -69,7 +77,7 @@ Example of cron job (once per hour at 8th minute):
 
 Use omindex -h for help.
 
-2.3 Usage
+2.3. Usage
 
 DMSF act as project module so you must check DMSF in project settings.
 
