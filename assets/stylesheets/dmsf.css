@@ -1,3 +1,4 @@
+/* DMSF entries list */
 table.entries tbody td, table.entries tbody tr:hover td {
 	border: solid 1px #D7D7D7;
 }
@@ -24,14 +25,40 @@ table.entries th.check {
 	text-align: left;
 }
 
-#sidebar h3 {
-	border: none;
+.icon-file.filetype-doc, .icon-file.filetype-docx {
+	background-image: url(../images/filetypes/doc.png);
 }
 
-button {
-	vertical-align: middle;
-	margin-top: 1px;
-	margin-bottom: 1px;
+.icon-file.filetype-xls, .icon-file.filetype-xlsx {
+	background-image: url(../images/filetypes/xls.png);
+}
+
+.icon-file.filetype-ppt, .icon-file.filetype-pptx {
+	background-image: url(../images/filetypes/ppt.png);
+}
+
+.icon-file.filetype-vsd, .icon-file.filetype-vsdx {
+	background-image: url(../images/filetypes/vsd.png);
+}
+
+.icon-file.filetype-mpp {
+	background-image: url(../images/filetypes/mpp.png);
+}
+
+.icon-file.filetype-odt {
+	background-image: url(../images/filetypes/odt.png);
+}
+
+.icon-file.filetype-ods {
+	background-image: url(../images/filetypes/ods.png);
+}
+
+.icon-file.filetype-odp {
+	background-image: url(../images/filetypes/odp.png);
+}
+
+.icon-file.filetype-odg {
+	background-image: url(../images/filetypes/odg.png);
 }
 
 form.dmfs_entries {
@@ -45,6 +72,10 @@ form.dmfs_entries div.controls {
 
 form.dmfs_entries div.controls input, form.dmfs_entries div.controls button {
 	font-size: 0.9em;
+}
+
+input[type="checkbox"] {
+	margin: 1px;
 }
 
 div.filename {
@@ -78,6 +109,8 @@ td.version img {
 	vertical-align:text-top;
 }
 
+/* DMSF entries list icons */
+
 div.right_icon_box {
 	float: right;
 	white-space: nowrap; 
@@ -88,6 +121,7 @@ div.right_icon_box img.detail_icon {
 	padding-top: 2px;
 }
 
+/* DMSF entries upload control */
 
 .dmsf_upload textarea {
 	width: 90%;
@@ -99,38 +133,6 @@ div.right_icon_box img.detail_icon {
 
 .dmsf_upload .warning {
 	padding: 4px 4px 4px 30px;
-}
-
-.dmsf_detail legend {
-	font-weight: bold;
-}
-
-.dmsf_detail .warning {
-	padding: 4px 4px 4px 30px;
-}
-
-.dmsf_detail div.data {
-	margin-left: 110px;
-}
-
-.dmsf_detail label {
-	font-weight: bold;
-	width: 100px;
-	float: left;
-	text-align: right;
-	padding-right: 10px;
-}
-
-p.no-ident {
-	margin-bottom: 0;
-	margin-top: 0;
-}
-
-fieldset {
-	padding-top: 4px;
-	padding-right: 8px;
-	padding-bottom: 8px;
-	padding-left: 8px;
 }
 
 #uploader div.flash {
@@ -153,10 +155,6 @@ div.upload_select input, div.upload_select select {
 	font-size: 0.9em;
 }
 
-input[type="checkbox"] {
-	margin: 1px;
-}
-
 .plupload_scroll {
 	max-height: 1000px;
 	min-height: 175px;
@@ -166,3 +164,25 @@ input[type="checkbox"] {
 	bottom: 0px;
 }
 
+/* DMSF detail/commit page */
+
+.dmsf_detail .warning {
+	padding: 4px 4px 4px 30px;
+}
+
+.dmsf_detail div.data {
+	margin-left: 110px;
+}
+
+.dmsf_detail label {
+	font-weight: bold;
+	width: 100px;
+	float: left;
+	text-align: right;
+	padding-right: 10px;
+}
+
+p.no-ident {
+	margin-bottom: 0;
+	margin-top: 0;
+}

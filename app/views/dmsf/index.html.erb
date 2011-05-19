@@ -93,7 +93,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 			<td class="title">
 				<%= link_to(h(file.last_revision.display_title),
 		        	{:action => "download_file", :id => @project, :file_id => file},
-		        	:class => "icon icon-file #{Redmine::MimeType.css_class_of(file.name)}",
+		        	:class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}",
 					:title => l(:title_title_version_version_download, :title => h(file.last_revision.title), :version => file.last_revision.version)) %>
 				<div class="filename"><%= h(file.display_name) %></div>
 			</td>

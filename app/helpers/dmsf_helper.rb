@@ -41,4 +41,14 @@ module DmsfHelper
     just_filename.gsub(/[^\w\.\-]/,'_') 
   end
   
+  def self.filetype_css(filename)
+    extension = File.extname(filename)
+    extension = extension[1, extension.length-1]
+    if File.exists?("#{File.dirname(__FILE__)}/../../assets/images/filetypes/#{extension}.png")
+      return "filetype-#{extension}";
+    else
+      return Redmine::MimeType.css_class_of(filename)
+    end
+  end
+  
 end
