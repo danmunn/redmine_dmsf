@@ -1,4 +1,4 @@
-<%= link_to("Documents", {:controller => "dmsf", :action => "index", :id=> @project }) %>
+<%= link_to(l(:link_documents), {:controller => "dmsf", :action => "index", :id=> @project }) %>
 <% path.each do |path_element| %>
  / 
  <%= link_to(h(path_element.name), {:controller => "dmsf", :action => "index", :id=> @project, :folder_id => path_element}) %>

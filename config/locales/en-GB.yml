@@ -123,4 +123,12 @@ en-GB:
   :label_default_notifications: "File default notifications"
   :heading_uploaded_files: "Uploaded Files"
   :submit_commit: "Commit"
+  :link_documents: "Documents"
+  :permission_browse_documents: "Browse documents"
+  :permission_user_preferences: "User preferences"
+  :permission_view_dmsf_files: "View documents"
+  :permission_folder_manipulation: "Folder manipulation"
+  :permission_file_manipulation: "File manipulation"
+  :permission_file_approval: "File approval"
+  :permission_force_file_unlock: "Force file unlock"
   
