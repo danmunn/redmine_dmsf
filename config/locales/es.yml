@@ -23,7 +23,7 @@ es:
   :error_file_is_locked: "Archivo bloqueado"
   :notice_file_deleted: "Archivo borrado"
   :error_at_least_one_revision_must_be_present: "al menos una revisión debe estar presente"
-  :notice_revision_deleted: "Revision eliminada correctamente "
+  :notice_revision_deleted: "Revision eliminada correctamente"
   :warning_one_of_files_locked: "Uno de los archivos está bloqueado"
   :notice_file_unlocked: "Archivo desbloqueado"
   :notice_file_revision_created: "Revision de archivos creada correctamente"
@@ -34,7 +34,7 @@ es:
   :notice_folder_notifications_deactivated: "Notificaciones de carpeta desactivadas"
   :warning_file_notifications_already_activated: "Las notificaciones del archivo seleccionado ya estaban activadas previamente"
   :notice_file_notifications_activated: "Notificación de archivo activado"
-  :warning_file_notifications_already_deactivated: "Las notificaciones del archivo seleccionado ya estaban desactivadas previamente""
+  :warning_file_notifications_already_deactivated: "Las notificaciones del archivo seleccionado ya estaban desactivadas previamente"
   :notice_file_notifications_deactivated: "Notificación de archivo desactivada"
   
  # Not translated

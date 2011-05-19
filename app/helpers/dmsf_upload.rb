@@ -30,6 +30,8 @@ class DmsfUpload
   attr_accessor :minor_version
   attr_accessor :locked
   
+  attr_accessor :workflow
+  
   def disk_file
     "#{DmsfHelper.temp_dir}/#{self.disk_filename}"
   end
@@ -63,12 +65,14 @@ class DmsfUpload
       @description = nil
       @major_version = 0
       @minor_version = 0
+      @workflow = nil
     else
       last_revision = dmsf_file.last_revision 
       @title = last_revision.title
       @description = last_revision.description
       @major_version = last_revision.major_version
       @minor_version = last_revision.minor_version
+      @workflow = last_revision.workflow
     end
     
     @locked = !dmsf_file.nil? && dmsf_file.locked_for_user?

@@ -16,7 +16,7 @@
 <%
 i = 1
 form_tag({:action => "commit_files", :id => @project, :folder_id => @folder},
-	:method=>:post, :class => "tabular") do 
+	:method=>:post) do 
 %>
 	<% @uploads.each do |upload| %>
 		<% if upload.locked %>
