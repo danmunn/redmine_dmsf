@@ -9,17 +9,31 @@
 </h2>
 
 <% form_for(:dmsf_folder, @folder, :url => {:action => create ? "create_folder" : "save_folder", :id => @project, :folder_id => @folder, :parent_id => @parent},
-	:html => {:method=>:post, :class => "tabular"}) do |f| %>
+	:html => {:method=>:post}) do |f| %>
 	<%= error_messages_for("folder") %>
-	<div class="box">
-		<p>
-			<%= label_tag("dmsf_folder_name", l(:label_title) + ":") %>
-			<%= f.text_field(:name, :size => "32", :required => true) %>
-		</p>
-		<p>
+	<div class="box dmsf_detail">
+		<div class="clear">
+			<div class="splitcontentleft">
+				<p>
+					<%= label_tag("dmsf_folder_name", l(:label_title) + ":") %>
+					<%= f.text_field(:name, :size => "32", :required => true) %>
+				</p>
+			</div>
+			<div class="splitcontentright">
+				<p>
+					<%= label_tag("", l(:label_folder) + ":") %>
+					<%= f.select(:folder, 
+						options_for_select(DmsfHelper.directory_tree(@project), 
+							:selected => (@folder.folder.id unless @folder.folder.nil?))) %>
+				</p>
+			</div>
+		</div>
+		<p class="no-ident">
 			<%= label_tag("dmsf_folder_description", l(:label_description) + ":") %>
-			<%= f.text_area(:description, :rows => 15, :class => "wiki-edit") %>
 		</p>
+		<div class="wiki data clear">
+			<%= f.text_area(:description, :rows => 15, :class => "wiki-edit") %>
+		</div>
 	</div>
 	<%= submit_tag(create ? l(:submit_create) : l(:submit_save)) %>
 <% end %>

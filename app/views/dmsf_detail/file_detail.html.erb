@@ -78,8 +78,8 @@
 		</div>
 		<div class="splitcontentright">
 			<p>
-				<%= label_tag("", l(:label_filename) + ":") %>
-				<%= h(revision.name) %>
+				<%= label_tag("", l(:label_file) + ":") %>
+				<%= (h(revision.folder.dmsf_path_str) + " / ") unless revision.folder.nil? %><%= h(revision.name) %>
 			</p>
 		</div>
 	</div>
