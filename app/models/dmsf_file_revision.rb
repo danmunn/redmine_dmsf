@@ -95,9 +95,8 @@ class DmsfFileRevision < ActiveRecord::Base
   
   def detect_content_type
     content_type = self.mime_type
-    if content_type.blank?
-      content_type = Redmine::MimeType.of(self.disk_filename)
-    end
+    content_type = Redmine::MimeType.of(self.disk_filename) if content_type.blank?
+    content_type = "application/octet-stream" if content_type.blank?
     content_type.to_s
   end
   
