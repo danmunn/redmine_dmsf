@@ -54,6 +54,7 @@ apt-get install xapian-ruby1.8 xapian-omega libxapian-dev xpdf antiword unzip an
 
 2.2. Setup/Upgrade
 
+* In case of upgrade BACKUP YOUR DATABASE first
 * Put redmine_dmsf plugin directory into vendor/plugins
 * Initialize database:
     rake db:migrate:plugins RAILS_ENV="production"
