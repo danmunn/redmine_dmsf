@@ -65,5 +65,27 @@ class DmsfFolder < ActiveRecord::Base
     self.save!
   end
   
+  def self.directory_tree(project, current_folder = nil)
+    tree = [["Documents", nil]]
+    DmsfFolder.project_root_folders(project).each do |folder|
+      unless folder == current_folder
+        tree.push(["...#{folder.name}", folder.id])
+        directory_subtree(tree, folder, 2, current_folder)
+      end
+    end
+    return tree
+  end
+
+  private
+  
+  def self.directory_subtree(tree, folder, level, current_folder)
+    folder.subfolders.each do |subfolder|
+      unless subfolder == current_folder
+        tree.push(["#{"..." * level}#{subfolder.name}", subfolder.id])
+        directory_subtree(tree, subfolder, level + 1, current_folder)
+      end
+    end
+  end
+  
 end
 

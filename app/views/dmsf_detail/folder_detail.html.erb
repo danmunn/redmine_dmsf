@@ -22,9 +22,9 @@
 			<div class="splitcontentright">
 				<p>
 					<%= label_tag("", l(:label_folder) + ":") %>
-					<%= f.select(:folder, 
-						options_for_select(DmsfHelper.directory_tree(@project), 
-							:selected => (@folder.folder.id unless @folder.folder.nil?))) %>
+					<%= f.select(:dmsf_folder_id, 
+						options_for_select(DmsfFolder.directory_tree(@project, @folder), 
+							:selected => @folder.nil? ? (@pathfolder.id unless @pathfolder.nil?) : (@folder.folder.id unless @folder.folder.nil?))) %>
 				</p>
 			</div>
 		</div>

@@ -135,4 +135,6 @@ cs:
   :permission_file_manipulation: "File manipulation"
   :permission_file_approval: "File approval"
   :permission_force_file_unlock: "Force file unlock"
+  :label_file: "File"
+  :label_folder: "Folder"
   

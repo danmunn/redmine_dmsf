@@ -108,8 +108,8 @@ class DmsfFileRevision < ActiveRecord::Base
     
     self.name = posted.has_key?("name") ? posted["name"] : self.file.name 
     
-    if posted.has_key?("folder")
-      self.folder = posted["folder"].blank? ? nil : DmsfFolder.find(posted["folder"])
+    if posted.has_key?("dmsf_folder_id")
+      self.folder = posted["dmsf_folder_id"].blank? ? nil : DmsfFolder.find(posted["dmsf_folder_id"])
     else
       self.folder = self.file.folder
     end
