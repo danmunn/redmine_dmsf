@@ -51,4 +51,22 @@ module DmsfHelper
     end
   end
   
+  def self.directory_tree(project)
+    tree = [["Documents", nil]]
+    DmsfFolder.project_root_folders(project).each do |folder|
+      tree.push(["...#{folder.name}", folder.id])
+      directory_subtree(tree, folder, 2)
+    end
+    return tree
+  end
+  
+  private
+  
+  def self.directory_subtree(tree, folder, level)
+    folder.subfolders.each do |subfolder|
+      tree.push(["#{"..." * level}#{subfolder.name}", subfolder.id])
+      directory_subtree(tree, subfolder, level + 1)
+    end
+  end
+  
 end

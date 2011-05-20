@@ -79,8 +79,6 @@ class DmsfFileRevision < ActiveRecord::Base
     end
     
     revision.from_form_post(dmsf_file, saved_file)
-    
-    revision.save!
   end
 
   def version
@@ -108,8 +106,14 @@ class DmsfFileRevision < ActiveRecord::Base
     
     self.file = file
     self.source_revision = source_revision
-    self.name = self.file.name
-    self.folder = self.file.folder
+    
+    self.name = posted.has_key?("name") ? posted["name"] : self.file.name 
+    
+    if posted.has_key?("folder")
+      self.folder = posted["folder"].blank? ? nil : DmsfFolder.find(posted["folder"])
+    else
+      self.folder = self.file.folder
+    end
     
     if source_revision.nil?
       from_form_post_create(posted)
@@ -122,6 +126,10 @@ class DmsfFileRevision < ActiveRecord::Base
     self.description = posted["description"]
     self.comment = posted["comment"]
     
+    unless posted["file"].nil?
+      copy_file_content(posted)
+    end
+
     self
   end
   
@@ -179,12 +187,12 @@ class DmsfFileRevision < ActiveRecord::Base
   end
   
   private
-  
+
+  #FIXME: put file uploaded check to standard validation
   def from_form_post_create(posted)
     if posted["file"].nil?
       raise DmsfContentError, "First revision require uploaded file"
     else
-      copy_file_content(posted)
       self.major_version = case posted["version"] 
         when "major" then 1
         else 0
@@ -211,7 +219,6 @@ class DmsfFileRevision < ActiveRecord::Base
       self.mime_type = source_revision.mime_type
       self.size = source_revision.size
     else
-      copy_file_content(posted)
       self.minor_version = case posted["version"] 
         when "major" then 0
         else self.minor_version + 1

@@ -84,15 +84,19 @@ class DmsfDetailController < ApplicationController
     @revision = @file.last_revision.clone
   end
 
-  #TODO: separate control for approval
   #TODO: don't create revision if nothing change
   def save_file
     if @file.locked_for_user?
       flash[:error] = l(:error_file_is_locked)
       redirect_to :action => "file_detail", :id => @project, :file_id => @file
     else
-      new_revision = params[:dmsf_file_revision]
-      DmsfFileRevision.from_saved_file(@file, new_revision)
+      new_revision = DmsfFileRevision.from_saved_file(@file, params[:dmsf_file_revision])
+      new_revision.save
+      
+      @file.name = new_revision.name
+      @file.folder = new_revision.folder
+      @file.save
+      
       if @file.locked?
         @file.unlock
         flash[:notice] = l(:notice_file_unlocked) + ", "
