@@ -36,6 +36,9 @@ class DmsfFile < ActiveRecord::Base
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
   
   validates_presence_of :name
+  validates_format_of :name, :with => DmsfFolder.invalid_characters,
+    :message => "contains invalid character(s)"
+  
   validate_on_create :validates_name_uniqueness 
   
   def validates_name_uniqueness

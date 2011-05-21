@@ -19,6 +19,8 @@
 class DmsfStateController < ApplicationController
   unloadable
   
+  menu_item :dmsf
+  
   before_filter :find_project
   before_filter :authorize
   before_filter :find_folder, :only => [:folder_notify_activate, :folder_notify_deactivate]

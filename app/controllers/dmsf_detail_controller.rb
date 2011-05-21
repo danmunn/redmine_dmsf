@@ -19,6 +19,8 @@
 class DmsfDetailController < ApplicationController
   unloadable
   
+  menu_item :dmsf
+  
   before_filter :find_project
   before_filter :authorize
   before_filter :find_parent, :only => [:folder_new, :create_folder, :save_folder]
@@ -52,6 +54,10 @@ class DmsfDetailController < ApplicationController
   end
 
   def save_folder
+    unless params[:dmsf_folder]
+      redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder
+      return
+    end
     @pathfolder = copy_folder(@folder)
     @folder.attributes = params[:dmsf_folder]
     if @folder.save

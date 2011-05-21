@@ -18,6 +18,10 @@
 
 class DmsfFolder < ActiveRecord::Base
   unloadable
+  
+  cattr_reader :invalid_characters
+  @@invalid_characters = /\A[^\/\\\?":<>]*\z/
+  
   belongs_to :project
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
   has_many :subfolders, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id", :order => "name ASC"
@@ -27,6 +31,9 @@ class DmsfFolder < ActiveRecord::Base
   
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:dmsf_folder_id, :project_id]
+  
+  validates_format_of :name, :with => @@invalid_characters,
+    :message => "contains invalid character(s)"
   
   validate :check_cycle
   
