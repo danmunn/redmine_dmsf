@@ -33,7 +33,7 @@ class DmsfFolder < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => [:dmsf_folder_id, :project_id]
   
   validates_format_of :name, :with => @@invalid_characters,
-    :message => "contains invalid character(s)"
+    :message => l(:error_contains_invalid_character)
   
   validate :check_cycle
   

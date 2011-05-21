@@ -19,10 +19,11 @@
 class CreateHierarchy < ActiveRecord::Migration
   def self.up
     create_table :dmsf_folders do |t|
-      t.string :name, :null => false
-      t.text :description
       t.references :project, :null => false
       t.references :dmsf_folder
+      
+      t.string :name, :null => false
+      t.text :description
       
       t.boolean :notification, :default => false, :null => false
       
@@ -31,9 +32,10 @@ class CreateHierarchy < ActiveRecord::Migration
     end
     
     create_table :dmsf_files do |t|
-      t.string :name, :null => false
       t.references :project, :null => false
       t.references :dmsf_folder
+      
+      t.string :name, :null => false
 
       t.boolean :notification, :default => false, :null => false
       
@@ -92,5 +94,7 @@ class CreateHierarchy < ActiveRecord::Migration
     drop_table :dmsf_file_revisions
     drop_table :dmsf_files
     drop_table :dmsf_folders
+    drop_table :dmsf_file_locks
+    drop_table :dmsf_user_prefs
   end
 end

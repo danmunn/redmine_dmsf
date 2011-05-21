@@ -136,4 +136,5 @@ es:
   :label_file: "File"
   :field_folder: "Folder"
   :error_create_cycle_in_folder_dependency: "create cycle in folder dependency"
+  :error_contains_invalid_character: "contains invalid character(s)"
   

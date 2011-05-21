@@ -37,7 +37,7 @@ class DmsfFile < ActiveRecord::Base
   
   validates_presence_of :name
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
-    :message => "contains invalid character(s)"
+    :message => l(:error_contains_invalid_character)
   
   validate_on_create :validates_name_uniqueness 
   
