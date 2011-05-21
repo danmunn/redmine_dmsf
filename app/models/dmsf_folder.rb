@@ -28,6 +28,21 @@ class DmsfFolder < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:dmsf_folder_id, :project_id]
   
+  validate :check_cycle
+  
+  def check_cycle
+    folders = []
+    self.subfolders.each {|f| folders.push(f)}
+    folders.each do |folder|
+      if folder == self.folder
+        errors.add(:folder, l(:error_create_cycle_in_folder_dependency))
+        return false 
+      end
+      folder.subfolders.each {|f| folders.push(f)}
+    end
+    return true
+  end
+  
   def self.project_root_folders(project)
     find(:all, :conditions => 
         ["dmsf_folder_id is NULL and project_id = :project_id", {:project_id => project.id}], :order => "name ASC")
