@@ -52,6 +52,7 @@ class DmsfFile < ActiveRecord::Base
                 :datetime => Proc.new {|o| o.updated_at },
                 :author => Proc.new {|o| o.last_revision.user }
   
+  #TODO: place into better place
   def self.storage_path
     storage_dir = Setting.plugin_redmine_dmsf["dmsf_storage_directory"].strip
     if !File.exists?(storage_dir)
@@ -59,7 +60,131 @@ class DmsfFile < ActiveRecord::Base
     end
     storage_dir
   end
-
+  
+  def self.project_root_files(project)
+    find(:all, :conditions => 
+      ["dmsf_folder_id is NULL and project_id = :project_id and deleted = :deleted",
+        {:project_id => project.id, :deleted => false}], :order => "name ASC")
+  end
+  
+  def self.find_file_by_name(project, folder, name)
+    if folder.nil?
+      find(:first, :conditions => 
+        ["dmsf_folder_id is NULL and project_id = :project_id and name = :name and deleted = :deleted", 
+          {:project_id => project.id, :name => name, :deleted => false}])
+    else
+      find(:first, :conditions => 
+        ["dmsf_folder_id = :folder_id and project_id = :project_id and name = :name and deleted = :deleted", 
+          {:project_id => project.id, :folder_id => folder.id, :name => name, :deleted => false}])
+    end
+  end
+  
+  def self.from_commited_file(project, folder, commited_file)
+    file = find_file_by_name(project, folder, commited_file["name"])
+    
+    if file.nil?
+      file = DmsfFile.new
+      file.project = project
+      file.folder = folder
+      file.name = commited_file["name"]
+      file.notification = !Setting.plugin_redmine_dmsf["dmsf_default_notifications"].blank? 
+      file.save      
+    end
+    
+    return file
+  end
+  
+  def new_storage_filename
+    filename = DmsfHelper.sanitize_filename(self.name)
+    timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
+    while File.exist?(File.join(DmsfFile.storage_path, "#{timestamp}_#{self.id}_#{filename}"))
+      timestamp.succ!
+    end
+    "#{timestamp}_#{id}_#{filename}"
+  end
+  
+  def locked?
+    self.locks.empty? ? false : self.locks[0].locked
+  end
+  
+  def locked_for_user?
+    self.locked? && self.locks[0].user != User.current
+  end
+  
+  def lock
+    lock = DmsfFileLock.new
+    lock.file = self
+    lock.user = User.current
+    lock.locked = true
+    lock.save
+    self.reload
+    return lock
+  end
+  
+  def unlock
+    lock = DmsfFileLock.new
+    lock.file = self
+    lock.user = User.current
+    lock.locked = false
+    lock.save
+    self.reload
+    return lock
+  end
+  
+  def last_revision
+    self.revisions.empty? ? nil : self.revisions[0]
+  end
+  
+  def title
+    self.last_revision.title
+  end
+  
+  def version
+    self.last_revision.version
+  end
+  
+  def workflow
+    self.last_revision.workflow
+  end
+  
+  def dmsf_path
+    path = self.folder.nil? ? [] : self.folder.dmsf_path
+    path.push(self)
+    path
+  end
+  
+  def dmsf_path_str
+    path = self.dmsf_path
+    string_path = path.map { |element| element.title }
+    string_path.join("/")
+  end
+  
+  def notify?
+    return true if self.notification
+    return true if folder && folder.notify?
+    return false
+  end
+  
+  def notify_deactivate
+    self.notification = false
+    self.save!
+  end
+  
+  def notify_activate
+    self.notification = true
+    self.save!
+  end
+  
+  def display_name
+    #if self.name.length > 33
+    #  extension = File.extname(self.name)
+    #  return self.name[0, self.name.length - extension.length][0, 25] + "..." + extension
+    #else 
+      return self.name
+    #end
+  end
+  
+  # to fullfill searchable module expectations
   def self.search(tokens, projects=nil, options={})
     tokens = [] << tokens unless tokens.is_a?(Array)
     projects = [] << projects unless projects.nil? || projects.is_a?(Array)
@@ -163,117 +288,6 @@ class DmsfFile < ActiveRecord::Base
     end
     
     [results, results_count]
-  end
-  
-  def self.project_root_files(project)
-    find(:all, :conditions => 
-      ["dmsf_folder_id is NULL and project_id = :project_id and deleted = :deleted",
-        {:project_id => project.id, :deleted => false}], :order => "name ASC")
-  end
-  
-  def self.find_file_by_name(project, folder, name)
-    if folder.nil?
-      find(:first, :conditions => 
-        ["dmsf_folder_id is NULL and project_id = :project_id and name = :name and deleted = :deleted", 
-          {:project_id => project.id, :name => name, :deleted => false}])
-    else
-      find(:first, :conditions => 
-        ["dmsf_folder_id = :folder_id and project_id = :project_id and name = :name and deleted = :deleted", 
-          {:project_id => project.id, :folder_id => folder.id, :name => name, :deleted => false}])
-    end
-  end
-  
-  def self.from_commited_file(project, folder, commited_file)
-    file = find_file_by_name(project, folder, commited_file["name"])
-    
-    if file.nil?
-      file = DmsfFile.new
-      file.project = project
-      file.folder = folder
-      file.name = commited_file["name"]
-      file.notification = !Setting.plugin_redmine_dmsf["dmsf_default_notifications"].blank? 
-      file.save      
-    end
-    
-    return file
-  end
-  
-  def new_storage_filename
-    filename = DmsfHelper.sanitize_filename(self.name)
-    timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
-    while File.exist?(File.join(DmsfFile.storage_path, "#{timestamp}_#{self.id}_#{filename}"))
-      timestamp.succ!
-    end
-    "#{timestamp}_#{id}_#{filename}"
-  end
-  
-  def locked?
-    self.locks.empty? ? false : self.locks[0].locked
-  end
-  
-  def locked_for_user?
-    self.locked? && self.locks[0].user != User.current
-  end
-  
-  def lock
-    lock = DmsfFileLock.new
-    lock.file = self
-    lock.user = User.current
-    lock.locked = true
-    lock.save
-    self.reload
-    return lock
-  end
-  
-  def unlock
-    lock = DmsfFileLock.new
-    lock.file = self
-    lock.user = User.current
-    lock.locked = false
-    lock.save
-    self.reload
-    return lock
-  end
-  
-  def last_revision
-    self.revisions.empty? ? nil : self.revisions[0]
-  end
-  
-  def dmsf_path
-    path = self.folder.nil? ? [] : self.folder.dmsf_path
-    path.push(self)
-    path
-  end
-  
-  def dmsf_path_str
-    path = self.dmsf_path
-    string_path = path.map { |element| element.name }
-    string_path.join("/")
-  end
-  
-  def notify?
-    return true if self.notification
-    return true if folder && folder.notify?
-    return false
-  end
-  
-  def notify_deactivate
-    self.notification = false
-    self.save!
-  end
-  
-  def notify_activate
-    self.notification = true
-    self.save!
-  end
-  
-  def display_name
-    #if self.name.length > 33
-    #  extension = File.extname(self.name)
-    #  return self.name[0, self.name.length - extension.length][0, 25] + "..." + extension
-    #else 
-      return self.name
-    #end
   end
   
 end

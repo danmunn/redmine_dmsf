@@ -5,7 +5,7 @@
 		<% unless @folder.nil? %>
 			<%= link_to(image_tag("edit.png", :style => "vertical-align: text-top;"), 
 						{:controller => "dmsf_detail", :action => "folder_detail", :id => @project, :folder_id => @folder },
-						:title => l(:link_edit, :title => h(@folder.name))) %> &nbsp; 
+						:title => l(:link_edit, :title => h(@folder.title))) %> &nbsp; 
 		<% end %>
 		<%= link_to(image_tag("add.png", :style => "vertical-align: text-top;"), 
 				{:controller => "dmsf_detail", :action => "folder_new", :id => @project, :parent_id => @folder },
@@ -46,7 +46,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 		<tr class="dir">
 			<td class="check"><%= check_box_tag("subfolders[]", subfolder.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
 			<td class="title">
-				<%= link_to(h(subfolder.name),
+				<%= link_to(h(subfolder.title),
 		          {:action => "index", :folder_id => subfolder},
 		          :class => "icon icon-folder") %>
 			</td>
@@ -73,7 +73,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 					<div style="float: left">
 						<%= link_to(image_tag("edit.png", :class =>"detail_icon"), 
 							{:controller => "dmsf_detail", :action => "folder_detail", :id => @project, :folder_id => subfolder },
-							:title => l(:link_edit, :title => h(subfolder.name))) %>
+							:title => l(:link_edit, :title => h(subfolder.title))) %>
  					</div>
 					<% end %>
 					<div style="float: right">
@@ -94,7 +94,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				<%= link_to(h(file.last_revision.display_title),
 		        	{:action => "download_file", :id => @project, :file_id => file},
 		        	:class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}",
-					:title => l(:title_title_version_version_download, :title => h(file.last_revision.title), :version => file.last_revision.version)) %>
+					:title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version)) %>
 				<div class="filename"><%= h(file.display_name) %></div>
 			</td>
 			<td class="size"><%= number_to_human_size(file.last_revision.size) unless file.last_revision.nil?  %></td>
