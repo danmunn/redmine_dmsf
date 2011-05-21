@@ -57,18 +57,39 @@ Redmine::Plugin.register :redmine_dmsf do
   end
   
   Redmine::WikiFormatting::Macros.register do
-    desc "Wiki link to DMSF content:\n\n" +
-             "  File: !{{dmsf(file_id)}}\n\n" +
-         "_file_id_ can be found in link for file download"
+    desc "Wiki link to DMSF file:\n\n" +
+             "!{{dmsf(file_id)}}\n\n" +
+         "_file_id_ can be found in link for file download."
          
     macro :dmsf do |obj, args|
       return nil if args.length < 1 # require file id
       return nil if @project == nil
       entry_id = args[0].strip
-      file = DmsfFile.find(entry_id)
-      unless file.nil? || file.deleted
-        return nil if file.project != @project
-        return link_to "#{file.last_revision.title}", :controller => "dmsf", :action => "download_file", :id => @project, :file_id => file
+      entry = DmsfFile.find(entry_id)
+      unless entry.nil? || entry.deleted
+        return nil if entry.project != @project
+        return link_to "#{entry.title}", :controller => "dmsf", :action => "download_file", :id => @project, :file_id => entry
+      end
+      nil
+    end
+  end
+  
+  Redmine::WikiFormatting::Macros.register do
+    desc "Wiki link to DMSF folder:\n\n" +
+             "!{{dmsff(folder_id)}}\n\n" +
+         "_folder_id_ may be missing. _folder_id_ can be found in link for folder opening."
+         
+    macro :dmsff do |obj, args|
+      return nil if @project == nil
+      if args.length < 1
+        return link_to l(:link_documents), :controller => "dmsf", :action => "index", :id => @project
+      else
+        entry_id = args[0].strip
+        entry = DmsfFolder.find(entry_id)
+        unless entry.nil?
+          return nil if entry.project != @project
+          return link_to "#{entry.title}", :controller => "dmsf", :action => "index", :id => @project, :folder_id => entry
+        end
       end
       nil
     end
