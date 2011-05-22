@@ -96,18 +96,42 @@ class DmsfDetailController < ApplicationController
       flash[:error] = l(:error_file_is_locked)
       redirect_to :action => "file_detail", :id => @project, :file_id => @file
     else
-      new_revision = DmsfFileRevision.from_saved_file(@file, params[:dmsf_file_revision])
+      #TODO: validate folder_id
+      new_revision = DmsfFileRevision.new(params[:dmsf_file_revision])
+      
+      new_revision.file = @file
+      last_revision = @file.last_revision
+      new_revision.source_revision = last_revision
+      new_revision.user = User.current
+      
+      new_revision.major_version = last_revision.major_version
+      new_revision.minor_version = last_revision.minor_version
+      new_revision.workflow = last_revision.workflow
+      version = params[:version].to_i
+      file_upload = params[:file_upload]
+      if file_upload.nil?
+        new_revision.disk_filename = last_revision.disk_filename
+        new_revision.increase_version(version, false)
+        new_revision.mime_type = last_revision.mime_type
+        new_revision.size = last_revision.size
+      else
+        new_revision.increase_version(version, true)
+        new_revision.copy_file_content(file_upload)
+        new_revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
+      end
+      new_revision.set_workflow(params[:workflow])
+      
       new_revision.save
       
       @file.name = new_revision.name
       @file.folder = new_revision.folder
-      @file.save
-      
       if @file.locked?
-        @file.unlock
+        DmsfFileLock.file_lock_state(@file, false)
         flash[:notice] = l(:notice_file_unlocked) + ", "
       end
+      @file.save
       @file.reload
+      
       flash[:notice] = (flash[:notice].nil? ? "" : flash[:notice]) + l(:notice_file_revision_created)
       Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} created new revision of file #{@project.identifier}://#{@file.dmsf_path_str}"
       begin
@@ -195,15 +219,63 @@ class DmsfDetailController < ApplicationController
     if commited_files && commited_files.is_a?(Hash)
       files = []
       commited_files.each_value do |commited_file|
-        file = DmsfFile.from_commited_file(@project, @folder, commited_file)
-        if file.locked_for_user?
-          flash[:warning] = l(:warning_one_of_files_locked)
+        name = commited_file["name"];
+        
+        new_revision = DmsfFileRevision.new
+        file = DmsfFile.find_file_by_name(@project, @folder, name)
+        if file.nil?
+          file = DmsfFile.new
+          file.project = @project
+          file.name = name
+          file.folder = @folder
+          file.notification = !Setting.plugin_redmine_dmsf["dmsf_default_notifications"].blank?
+          
+          new_revision.minor_version = 0
+          new_revision.major_version = 0
         else
-          revision = DmsfFileRevision.from_commited_file(file, commited_file)
-          file.unlock if file.locked?
-          file.reload
-          files.push(file)
+          if file.locked_for_user?
+            flash[:error] = l(:error_file_is_locked)
+            next
+          end
+          last_revision = file.last_revision
+          new_revision.source_revision = last_revision
+          new_revision.major_version = last_revision.major_version
+          new_revision.minor_version = last_revision.minor_version
+          new_revision.workflow = last_revision.workflow
         end
+        
+        commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file["disk_filename"]}"
+        file_upload = File.new(commited_disk_filepath, "rb")
+        if file_upload.nil?
+          flash[:error] = l(:error_file_commit_require_uploaded_file)
+          next
+        end
+        
+        new_revision.folder = @folder
+        new_revision.file = file
+        new_revision.user = User.current
+        new_revision.name = name
+        new_revision.title = commited_file["title"]
+        new_revision.description = commited_file["description"]
+        new_revision.comment = commited_file["comment"]
+        new_revision.increase_version(commited_file["version"].to_i, true)
+        new_revision.set_workflow(commited_file["workflow"])
+        new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
+        
+        new_revision.copy_file_content(file_upload)
+        file_upload.close
+        File.delete(commited_disk_filepath)
+        
+        new_revision.save
+        
+        if file.locked?
+          DmsfFileLock.file_lock_state(file, false)
+          flash[:notice] = l(:notice_file_unlocked)
+        end
+        file.save
+        file.reload
+        
+        files.push(file)
       end
       Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} uploaded for project #{@project.identifier}:"
       files.each {|file| Rails.logger.info "\t#{file.dmsf_path_str}:"}

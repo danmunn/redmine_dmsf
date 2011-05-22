@@ -79,30 +79,6 @@ class DmsfFile < ActiveRecord::Base
     end
   end
   
-  def self.from_commited_file(project, folder, commited_file)
-    file = find_file_by_name(project, folder, commited_file["name"])
-    
-    if file.nil?
-      file = DmsfFile.new
-      file.project = project
-      file.folder = folder
-      file.name = commited_file["name"]
-      file.notification = !Setting.plugin_redmine_dmsf["dmsf_default_notifications"].blank? 
-      file.save      
-    end
-    
-    return file
-  end
-  
-  def new_storage_filename
-    filename = DmsfHelper.sanitize_filename(self.name)
-    timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
-    while File.exist?(File.join(DmsfFile.storage_path, "#{timestamp}_#{self.id}_#{filename}"))
-      timestamp.succ!
-    end
-    "#{timestamp}_#{id}_#{filename}"
-  end
-  
   def locked?
     self.locks.empty? ? false : self.locks[0].locked
   end
@@ -112,23 +88,15 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def lock
-    lock = DmsfFileLock.new
-    lock.file = self
-    lock.user = User.current
-    lock.locked = true
-    lock.save
+    l = DmsfFileLock.file_lock_state(self, true)
     self.reload
-    return lock
+    return l
   end
   
   def unlock
-    lock = DmsfFileLock.new
-    lock.file = self
-    lock.user = User.current
-    lock.locked = false
-    lock.save
+    l = DmsfFileLock.file_lock_state(self, false)
     self.reload
-    return lock
+    return l
   end
   
   def last_revision
@@ -184,7 +152,7 @@ class DmsfFile < ActiveRecord::Base
     #end
   end
   
-  # to fullfill searchable module expectations
+  # To fullfill searchable module expectations
   def self.search(tokens, projects=nil, options={})
     tokens = [] << tokens unless tokens.is_a?(Array)
     projects = [] << projects unless projects.nil? || projects.is_a?(Array)

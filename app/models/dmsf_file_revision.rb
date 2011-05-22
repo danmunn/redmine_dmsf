@@ -45,42 +45,11 @@ class DmsfFileRevision < ActiveRecord::Base
     filename[0, (filename.length - File.extname(filename).length)]
   end
   
+  #TODO: check if better to move to dmsf_upload class
   def self.filename_to_title(filename)
     remove_extension(filename).gsub(/_+/, " ");
   end
   
-  def self.from_commited_file(dmsf_file, commited_file)
-    revision = DmsfFileRevision.new
-    
-    commited_disk_filename = commited_file["disk_filename"]
-    commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_disk_filename}"
-    commited_file["file"] = File.new(commited_disk_filepath, "rb")
-    commited_file["mime_type"] = Redmine::MimeType.of(commited_disk_filepath)
-    
-    begin
-      revision.from_form_post(dmsf_file, commited_file)
-    ensure
-      commited_file["file"].close
-    end
-
-    revision.save
-    File.delete(commited_disk_filepath)
-    revision
-  end
-  
-  def self.from_saved_file(dmsf_file, saved_file)
-    revision = DmsfFileRevision.new
-    
-    if !saved_file["file"].nil?
-      #TODO: complete this for file renaming
-      #dmsf_file.name = saved_file["file"].original_filename
-      #dmsf_file.save
-      saved_file["mime_type"] = Redmine::MimeType.of(saved_file["file"].original_filename)
-    end
-    
-    revision.from_form_post(dmsf_file, saved_file)
-  end
-
   def version
     "#{self.major_version}.#{self.minor_version}"
   end
@@ -132,6 +101,7 @@ class DmsfFileRevision < ActiveRecord::Base
     self
   end
   
+  #TODO: use standard clone method
   def clone
     new_revision = DmsfFileRevision.new
     new_revision.file = self.file
@@ -153,6 +123,7 @@ class DmsfFileRevision < ActiveRecord::Base
     return new_revision
   end
   
+  #TODO: validate if it isn't doubled or move it to view
   def workflow_str
     case workflow
       when 1 then l(:title_waiting_for_approval)
@@ -177,6 +148,26 @@ class DmsfFileRevision < ActiveRecord::Base
     end
   end
   
+  def increase_version(version_to_increase, new_content)
+    if new_content
+      self.minor_version = case version_to_increase 
+        when 2 then 0
+        else self.minor_version + 1
+      end
+    else
+      self.minor_version = case version_to_increase 
+        when 1 then self.minor_version + 1
+        when 2 then 0
+        else self.minor_version
+      end
+    end
+
+    self.major_version = case version_to_increase 
+      when 2 then self.major_version + 1
+      else self.major_version
+    end
+  end
+  
   def display_title
     #if self.title.length > 35
     #  return self.title[0, 30] + "..."
@@ -185,63 +176,23 @@ class DmsfFileRevision < ActiveRecord::Base
     #end
   end
   
-  private
-
-  #FIXME: put file uploaded check to standard validation
-  def from_form_post_create(posted)
-    if posted["file"].nil?
-      raise DmsfContentError, "First revision require uploaded file"
-    else
-      self.major_version = case posted["version"] 
-        when "major" then 1
-        else 0
-      end
-      self.minor_version = case posted["version"] 
-        when "major" then 0
-        else 1
-      end
+  def new_storage_filename
+    filename = DmsfHelper.sanitize_filename(self.name)
+    timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
+    while File.exist?(File.join(DmsfFile.storage_path, "#{timestamp}_#{self.id}_#{filename}"))
+      timestamp.succ!
     end
-    
-    set_workflow(posted["workflow"])
+    "#{timestamp}_#{id}_#{filename}"
   end
   
-  def from_form_post_existing(posted, source_revision)
-    self.major_version = source_revision.major_version
-    self.minor_version = source_revision.minor_version
-    if posted["file"].nil?
-      self.disk_filename = source_revision.disk_filename
-      self.minor_version = case posted["version"] 
-        when "same" then self.minor_version
-        when "major" then 0
-        else self.minor_version + 1
-      end
-      self.mime_type = source_revision.mime_type
-      self.size = source_revision.size
-    else
-      self.minor_version = case posted["version"] 
-        when "major" then 0
-        else self.minor_version + 1
-      end
-    end
-    
-    self.major_version = case posted["version"] 
-      when "major" then self.major_version + 1
-      else self.major_version
-    end
-    
-    set_workflow(posted["workflow"])
-  end
-  
-  def copy_file_content(posted)
-    self.disk_filename = self.file.new_storage_filename
+  def copy_file_content(file_upload)
+    self.disk_filename = self.new_storage_filename
     File.open(self.disk_file, "wb") do |f| 
-      buffer = ""
-      while (buffer = posted["file"].read(8192))
+      while (buffer = file_upload.read(8192))
         f.write(buffer)
       end
     end
-    self.mime_type = posted["mime_type"]
     self.size = File.size(self.disk_file)
   end
-  
+     
 end

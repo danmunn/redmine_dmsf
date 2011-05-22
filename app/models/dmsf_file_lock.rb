@@ -20,4 +20,13 @@ class DmsfFileLock < ActiveRecord::Base
   unloadable
   belongs_to :file, :class_name => "DmsfFile", :foreign_key => "dmsf_file_id"
   belongs_to :user  
+  
+  def self.file_lock_state(file, locked)
+    lock = DmsfFileLock.new
+    lock.file = file
+    lock.user = User.current
+    lock.locked = locked
+    lock.save!
+  end
+  
 end

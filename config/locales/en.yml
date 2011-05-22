@@ -139,4 +139,5 @@ en:
   :field_folder: "Folder"
   :error_create_cycle_in_folder_dependency: "create cycle in folder dependency"
   :error_contains_invalid_character: "contains invalid character(s)"
+  :error_file_commit_require_uploaded_file: "File commit require uploaded file"
   

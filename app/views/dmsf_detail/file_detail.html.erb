@@ -137,8 +137,8 @@
 				if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_entry) %>")) event.preventDefault();
 			})
 			
-			jQuery("#fileFileUpload").change(function() {
-				if(jQuery("input[name=\"file[version]\"]:checked").val() == "same") {
+			jQuery("#file_upload").change(function() {
+				if(jQuery("input[name=\"version\"]:checked").val() == "0") {
 					jQuery("#fileMinorVersionRadio").prop("checked", true); 
 				}
 				jQuery("#fileSameVersionRadio").prop("disabled", true); 
