@@ -29,6 +29,41 @@
 <% end %>
 </div>
 
+<script type="text/javascript">
+	var originalUploaderContent;
+	
+	var uploader = jQuery('#uploader');
+	
+	originalUploaderContent = uploader.html();
+	
+	jQuery('#uploader_select').change(function() {
+		if(jQuery(this).val() == 2) {
+			uploader.html(originalUploaderContent);
+		} else {
+			initPlUploader(uploader);
+		}
+	});
+	
+	initPlUploader(uploader);
+	
+	var dmsfFileFieldCount = 1;
+
+	function dmsfAddFileField() {
+	    if (dmsfFileFieldCount >= 10) return false
+	    dmsfFileFieldCount++;
+
+	    var f = document.createElement("input");
+	    f.type = "file";
+	    f.name = "uploaded_files[" + dmsfFileFieldCount + "]";
+	    f.size = 30;
+	
+	    var p = document.getElementById("uploaded_files_fields");
+	    p.appendChild(document.createElement("br"));
+	    p.appendChild(f);
+	}
+
+</script>
+
 <% content_for :header_tags do %>
 	<%= stylesheet_link_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/base/jquery-ui.css" %>
 	<%= stylesheet_link_tag "plupload/jquery.ui.plupload.css", :plugin => "redmine_dmsf" %>
@@ -48,24 +83,6 @@
 	
 	<script type="text/javascript">
 		jQuery.noConflict();
-		
-		var originalUploaderContent;
-		
-		jQuery(document).ready(function() {
-			var uploader = jQuery('#uploader');
-			
-			originalUploaderContent = uploader.html();
-			
-			jQuery('#uploader_select').change(function() {
-				if(jQuery(this).val() == 2) {
-					uploader.html(originalUploaderContent);
-				} else {
-					initPlUploader(uploader);
-				}
-			});
-			
-			initPlUploader(uploader);
-		});
 		
 		function initPlUploader(uploader) {
 			uploader.html("<div></div>");
@@ -108,22 +125,5 @@
 				else dmsfFileFieldCount++;
 			});
 		}
-		
-		var dmsfFileFieldCount = 1;
-
-		function dmsfAddFileField() {
-		    if (dmsfFileFieldCount >= 10) return false
-		    dmsfFileFieldCount++;
-
-		    var f = document.createElement("input");
-		    f.type = "file";
-		    f.name = "uploaded_files[" + dmsfFileFieldCount + "]";
-		    f.size = 30;
-		
-		    var p = document.getElementById("uploaded_files_fields");
-		    p.appendChild(document.createElement("br"));
-		    p.appendChild(f);
-		}
-
 	</script>
 <% end %>
