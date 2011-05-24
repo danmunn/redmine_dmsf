@@ -189,70 +189,78 @@ class DmsfFile < ActiveRecord::Base
     end
     
     if !options[:titles_only] && $xapian_bindings_available
-      database = Xapian::Database.new(Setting.plugin_redmine_dmsf["dmsf_index_database"].strip)
-      enquire = Xapian::Enquire.new(database)
-      
-      queryString = tokens.join(' ')
-      qp = Xapian::QueryParser.new()
-      stemmer = Xapian::Stem.new(Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].strip)
-      qp.stemmer = stemmer
-      qp.database = database
-      
-      case Setting.plugin_redmine_dmsf['dmsf_stemming_strategy'].strip
-        when "STEM_NONE" then qp.stemming_strategy = Xapian::QueryParser::STEM_NONE
-        when "STEM_SOME" then qp.stemming_strategy = Xapian::QueryParser::STEM_SOME
-        when "STEM_ALL" then qp.stemming_strategy = Xapian::QueryParser::STEM_ALL
+      database = nil
+      begin
+        database = Xapian::Database.new(Setting.plugin_redmine_dmsf["dmsf_index_database"].strip)
+      rescue
+        Rails.logger.warn "REDMAIN_XAPIAN ERROR: Xapian database is not properly set or initiated or is corrupted."
       end
-    
-      if options[:all_words]
-        qp.default_op = Xapian::Query::OP_AND
-      else  
-        qp.default_op = Xapian::Query::OP_OR
-      end
-      
-      query = qp.parse_query(queryString)
 
-      enquire.query = query
-      matchset = enquire.mset(0, 1000)
+      unless database.nil?
+        enquire = Xapian::Enquire.new(database)
+        
+        queryString = tokens.join(' ')
+        qp = Xapian::QueryParser.new()
+        stemmer = Xapian::Stem.new(Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].strip)
+        qp.stemmer = stemmer
+        qp.database = database
+        
+        case Setting.plugin_redmine_dmsf['dmsf_stemming_strategy'].strip
+          when "STEM_NONE" then qp.stemming_strategy = Xapian::QueryParser::STEM_NONE
+          when "STEM_SOME" then qp.stemming_strategy = Xapian::QueryParser::STEM_SOME
+          when "STEM_ALL" then qp.stemming_strategy = Xapian::QueryParser::STEM_ALL
+        end
+      
+        if options[:all_words]
+          qp.default_op = Xapian::Query::OP_AND
+        else  
+          qp.default_op = Xapian::Query::OP_OR
+        end
+        
+        query = qp.parse_query(queryString)
   
-      if !matchset.nil?
-        matchset.matches.each {|m|
-          docdata = m.document.data{url}
-          dochash = Hash[*docdata.scan(/(url|sample|modtime|type|size)=\/?([^\n\]]+)/).flatten]
-          filename = dochash["url"]
-          if !filename.nil?
-            dmsf_attrs = filename.split("_")
-            next unless results.select{|f| f.id.to_s == dmsf_attrs[1]}.empty?
-            
-            find_conditions =  DmsfFile.merge_conditions(limit_options[:conditions], :id => dmsf_attrs[1] )
-            dmsf_file = DmsfFile.find(:first, :conditions =>  find_conditions  )
+        enquire.query = query
+        matchset = enquire.mset(0, 1000)
+    
+        unless matchset.nil?
+          matchset.matches.each {|m|
+            docdata = m.document.data{url}
+            dochash = Hash[*docdata.scan(/(url|sample|modtime|type|size)=\/?([^\n\]]+)/).flatten]
+            filename = dochash["url"]
+            if !filename.nil?
+              dmsf_attrs = filename.split("_")
+              next unless results.select{|f| f.id.to_s == dmsf_attrs[1]}.empty?
+              
+              find_conditions =  DmsfFile.merge_conditions(limit_options[:conditions], :id => dmsf_attrs[1], :deleted => false )
+              dmsf_file = DmsfFile.find(:first, :conditions =>  find_conditions  )
+    
+              if !dmsf_file.nil?
+                if options[:offset]
+                  if options[:before]
+                    next if dmsf_file.updated_at < options[:offset]
+                  else
+                    next if dmsf_file.updated_at > options[:offset]
+                  end
+                end
+              
+                allowed = User.current.allowed_to?(:view_dmsf_files, dmsf_file.project)
+                project_included = false
+                project_included = true if projects.nil?
+                if !project_included
+                  projects.each {|x| 
+                    project_included = true if x[:id] == dmsf_file.project.id
+                  }
+                end
   
-            if !dmsf_file.nil?
-              if options[:offset]
-                if options[:before]
-                  next if dmsf_file.updated_at < options[:offset]
-                else
-                  next if dmsf_file.updated_at > options[:offset]
+                if (allowed && project_included)
+                  results.push(dmsf_file)
+                  results_count += 1
                 end
               end
-            
-              allowed = User.current.allowed_to?(:view_dmsf_files, dmsf_file.project)
-              project_included = false
-              project_included = true if projects.nil?
-              if !project_included
-                projects.each {|x| 
-                  project_included = true if x[:id] == dmsf_file.project.id
-                }
-              end
-
-              if (allowed && project_included)
-                results.push(dmsf_file)
-                results_count += 1
-              end
             end
-          end
-        }
-      end
+          }
+        end
+      end    
     end
     
     [results, results_count]

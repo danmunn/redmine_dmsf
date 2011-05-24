@@ -278,16 +278,18 @@ class DmsfDetailController < ApplicationController
         end
         
         if new_revision.save
-          new_revision.copy_file_content(file_upload)
-          file_upload.close
-          File.delete(commited_disk_filepath)
-          
           if file.locked?
             DmsfFileLock.file_lock_state(file, false)
             flash[:notice] = l(:notice_file_unlocked)
           end
-          file.save
+          file.save!
           file.reload
+          
+          # Need to save file first to generate id for it in case of creation. 
+          # File id is needed to properly generate revision disk filename
+          new_revision.copy_file_content(file_upload)
+          file_upload.close
+          File.delete(commited_disk_filepath)
           
           files.push(file)
         else

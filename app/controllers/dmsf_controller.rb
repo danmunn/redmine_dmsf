@@ -64,9 +64,13 @@ class DmsfController < ApplicationController
   end
 
   def download_file
-    @revision = @file.last_revision
-    Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} downloaded #{@project.identifier}://#{@file.dmsf_path_str} revision #{@revision.id}"
-    send_revision
+    if @file.deleted
+      render_404
+    else
+      @revision = @file.last_revision
+      Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} downloaded #{@project.identifier}://#{@file.dmsf_path_str} revision #{@revision.id}"
+      send_revision
+    end
   end
 
   def download_revision

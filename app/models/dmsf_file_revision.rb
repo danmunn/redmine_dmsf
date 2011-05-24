@@ -155,7 +155,7 @@ class DmsfFileRevision < ActiveRecord::Base
     while File.exist?(File.join(DmsfFile.storage_path, "#{timestamp}_#{self.id}_#{filename}"))
       timestamp.succ!
     end
-    "#{timestamp}_#{id}_#{filename}"
+    "#{timestamp}_#{file.id}_#{filename}"
   end
   
   def copy_file_content(open_file)
