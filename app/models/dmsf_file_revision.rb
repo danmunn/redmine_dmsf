@@ -41,6 +41,11 @@ class DmsfFileRevision < ActiveRecord::Base
                                               :conditions => ["#{DmsfFile.table_name}.deleted = :false", {:false => false}]
                                              }
   
+  validates_presence_of :title
+  validates_presence_of :name
+  validates_format_of :name, :with => DmsfFolder.invalid_characters,
+    :message => l(:error_contains_invalid_character)
+  
   def self.remove_extension(filename)
     filename[0, (filename.length - File.extname(filename).length)]
   end
@@ -67,38 +72,6 @@ class DmsfFileRevision < ActiveRecord::Base
     content_type = Redmine::MimeType.of(self.disk_filename) if content_type.blank?
     content_type = "application/octet-stream" if content_type.blank?
     content_type.to_s
-  end
-  
-  def from_form_post(file, posted, source_revision = nil)
-    source_revision = file.last_revision if source_revision.nil?
-    
-    self.file = file
-    self.source_revision = source_revision
-    
-    self.name = posted.has_key?("name") ? posted["name"] : self.file.name 
-    
-    if posted.has_key?("dmsf_folder_id")
-      self.folder = posted["dmsf_folder_id"].blank? ? nil : DmsfFolder.find(posted["dmsf_folder_id"])
-    else
-      self.folder = self.file.folder
-    end
-    
-    if source_revision.nil?
-      from_form_post_create(posted)
-    else
-      from_form_post_existing(posted, source_revision)
-    end
-    
-    self.user = User.current
-    self.title = posted["title"]
-    self.description = posted["description"]
-    self.comment = posted["comment"]
-    
-    unless posted["file"].nil?
-      copy_file_content(posted)
-    end
-
-    self
   end
   
   #TODO: use standard clone method
@@ -185,14 +158,12 @@ class DmsfFileRevision < ActiveRecord::Base
     "#{timestamp}_#{id}_#{filename}"
   end
   
-  def copy_file_content(file_upload)
-    self.disk_filename = self.new_storage_filename
+  def copy_file_content(open_file)
     File.open(self.disk_file, "wb") do |f| 
-      while (buffer = file_upload.read(8192))
+      while (buffer = open_file.read(8192))
         f.write(buffer)
       end
     end
-    self.size = File.size(self.disk_file)
   end
      
 end

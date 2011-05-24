@@ -151,8 +151,10 @@
 				jQuery("#newRevisionFormContentToggle").text("[+]");
 				jQuery("#newRevisionFormContent").hide();
 			});
-			jQuery("#newRevisionFormContentToggle").text("[+]");
-			jQuery("#newRevisionFormContent").hide();
+			<% if @revision.valid? %>
+				jQuery("#newRevisionFormContentToggle").text("[+]");
+				jQuery("#newRevisionFormContent").hide();
+			<% end %>
 		});
 	</script>
 <% end %>

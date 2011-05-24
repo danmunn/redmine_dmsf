@@ -87,60 +87,71 @@ class DmsfDetailController < ApplicationController
   end
 
   def file_detail
-    @revision = @file.last_revision.clone
+    @revision = @file.last_revision
   end
 
   #TODO: don't create revision if nothing change
   def save_file
+    unless params[:dmsf_file_revision]
+      redirect_to :action => "file_detail", :id => @project, :file_id => @file
+      return
+    end
     if @file.locked_for_user?
       flash[:error] = l(:error_file_is_locked)
       redirect_to :action => "file_detail", :id => @project, :file_id => @file
     else
       #TODO: validate folder_id
-      new_revision = DmsfFileRevision.new(params[:dmsf_file_revision])
+      @revision = DmsfFileRevision.new(params[:dmsf_file_revision])
       
-      new_revision.file = @file
+      @revision.file = @file
       last_revision = @file.last_revision
-      new_revision.source_revision = last_revision
-      new_revision.user = User.current
+      @revision.source_revision = last_revision
+      @revision.user = User.current
       
-      new_revision.major_version = last_revision.major_version
-      new_revision.minor_version = last_revision.minor_version
-      new_revision.workflow = last_revision.workflow
+      @revision.major_version = last_revision.major_version
+      @revision.minor_version = last_revision.minor_version
+      @revision.workflow = last_revision.workflow
       version = params[:version].to_i
       file_upload = params[:file_upload]
       if file_upload.nil?
-        new_revision.disk_filename = last_revision.disk_filename
-        new_revision.increase_version(version, false)
-        new_revision.mime_type = last_revision.mime_type
-        new_revision.size = last_revision.size
+        @revision.disk_filename = last_revision.disk_filename
+        @revision.increase_version(version, false)
+        @revision.mime_type = last_revision.mime_type
+        @revision.size = last_revision.size
       else
-        new_revision.increase_version(version, true)
-        new_revision.copy_file_content(file_upload)
-        new_revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
+        @revision.increase_version(version, true)
+        @revision.size = file_upload.size
+        @revision.disk_filename = @revision.new_storage_filename
+        @revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
       end
-      new_revision.set_workflow(params[:workflow])
+      @revision.set_workflow(params[:workflow])
       
-      new_revision.save
-      
-      @file.name = new_revision.name
-      @file.folder = new_revision.folder
-      if @file.locked?
-        DmsfFileLock.file_lock_state(@file, false)
-        flash[:notice] = l(:notice_file_unlocked) + ", "
-      end
-      @file.save
-      @file.reload
-      
-      flash[:notice] = (flash[:notice].nil? ? "" : flash[:notice]) + l(:notice_file_revision_created)
-      Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} created new revision of file #{@project.identifier}://#{@file.dmsf_path_str}"
-      begin
-        DmsfMailer.deliver_files_updated(User.current, [@file])
-      rescue ActionView::MissingTemplate => e
-        Rails.logger.error "Could not send email notifications: " + e
+      if @revision.save
+        unless file_upload.nil?
+          @revision.copy_file_content(file_upload)
+        end
+        
+        @file.name = @revision.name
+        @file.folder = @revision.folder
+        if @file.locked?
+          DmsfFileLock.file_lock_state(@file, false)
+          flash[:notice] = l(:notice_file_unlocked) + ", "
+        end
+        @file.save!
+        @file.reload
+        
+        flash[:notice] = (flash[:notice].nil? ? "" : flash[:notice]) + l(:notice_file_revision_created)
+        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} created new revision of file #{@project.identifier}://#{@file.dmsf_path_str}"
+        begin
+          DmsfMailer.deliver_files_updated(User.current, [@file])
+        rescue ActionView::MissingTemplate => e
+          Rails.logger.error "Could not send email notifications: " + e
+        end
+        redirect_to :action => "file_detail", :id => @project, :file_id => @file
+      else
+        render :action => "file_detail"
       end
     end
-    redirect_to :action => "file_detail", :id => @project, :file_id => @file
   end
 
   def delete_file
@@ -245,11 +256,6 @@ class DmsfDetailController < ApplicationController
         end
         
         commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file["disk_filename"]}"
-        file_upload = File.new(commited_disk_filepath, "rb")
-        if file_upload.nil?
-          flash[:error] = l(:error_file_commit_require_uploaded_file)
-          next
-        end
         
         new_revision.folder = @folder
         new_revision.file = file
@@ -261,12 +267,20 @@ class DmsfDetailController < ApplicationController
         new_revision.increase_version(commited_file["version"].to_i, true)
         new_revision.set_workflow(commited_file["workflow"])
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
+        new_revision.size = File.size(commited_disk_filepath)
+        new_revision.disk_filename = new_revision.new_storage_filename
+
+        file_upload = File.new(commited_disk_filepath, "rb")
+        if file_upload.nil?
+          flash[:error] = l(:error_file_commit_require_uploaded_file)
+          next
+        end
+        
+        new_revision.save
         
         new_revision.copy_file_content(file_upload)
         file_upload.close
         File.delete(commited_disk_filepath)
-        
-        new_revision.save
         
         if file.locked?
           DmsfFileLock.file_lock_state(file, false)
