@@ -246,7 +246,7 @@ class DmsfDetailController < ApplicationController
           new_revision.major_version = 0
         else
           if file.locked_for_user?
-            flash[:error] = l(:error_file_is_locked)
+            failed_uploads.push(commited_file)
             next
           end
           last_revision = file.last_revision
@@ -273,6 +273,7 @@ class DmsfDetailController < ApplicationController
 
         file_upload = File.new(commited_disk_filepath, "rb")
         if file_upload.nil?
+          failed_uploads.push(commited_file)
           flash[:error] = l(:error_file_commit_require_uploaded_file)
           next
         end
@@ -304,6 +305,9 @@ class DmsfDetailController < ApplicationController
         rescue ActionView::MissingTemplate => e
           Rails.logger.error "Could not send email notifications: " + e
         end
+      end
+      unless failed_uploads.empty?
+        flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u["name"]}.join(", "))
       end
     end
     redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder
