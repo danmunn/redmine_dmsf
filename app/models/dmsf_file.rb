@@ -43,7 +43,7 @@ class DmsfFile < ActiveRecord::Base
   
   def validates_name_uniqueness
     existing_file = DmsfFile.find_file_by_name(self.project, self.folder, self.name)
-    errors.add(:name, "has already been taken") unless
+    errors.add(:name, l("activerecord.errors.messages.taken")) unless
       existing_file.nil? || existing_file.id == self.id
   end
   

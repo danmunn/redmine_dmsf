@@ -129,7 +129,8 @@ class DmsfDetailController < ApplicationController
       @file.name = @revision.name
       @file.folder = @revision.folder
       
-      if @revision.save && @file.valid?
+      if @revision.valid? && @file.valid?
+        @revision.save!
         unless file_upload.nil?
           @revision.copy_file_content(file_upload)
         end
