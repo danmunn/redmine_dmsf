@@ -21,7 +21,6 @@ end
 form_for(:dmsf_file_revision, @revision, :url => {:action => "save_file", :id => @project, :file_id => @file},
 	:html => {:method=>:post, :multipart => true}) do |f|
 %>
-				<%= error_messages_for("revision") %>
 				<div class="clear">
 					<div class="splitcontentleft">
 						<p>

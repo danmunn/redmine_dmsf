@@ -229,6 +229,7 @@ class DmsfDetailController < ApplicationController
     commited_files = params[:commited_files]
     if commited_files && commited_files.is_a?(Hash)
       files = []
+      failed_uploads = []
       commited_files.each_value do |commited_file|
         name = commited_file["name"];
         
@@ -276,27 +277,31 @@ class DmsfDetailController < ApplicationController
           next
         end
         
-        new_revision.save
-        
-        new_revision.copy_file_content(file_upload)
-        file_upload.close
-        File.delete(commited_disk_filepath)
-        
-        if file.locked?
-          DmsfFileLock.file_lock_state(file, false)
-          flash[:notice] = l(:notice_file_unlocked)
+        if new_revision.save
+          new_revision.copy_file_content(file_upload)
+          file_upload.close
+          File.delete(commited_disk_filepath)
+          
+          if file.locked?
+            DmsfFileLock.file_lock_state(file, false)
+            flash[:notice] = l(:notice_file_unlocked)
+          end
+          file.save
+          file.reload
+          
+          files.push(file)
+        else
+          failed_uploads.push(commited_file)
         end
-        file.save
-        file.reload
-        
-        files.push(file)
       end
-      Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} uploaded for project #{@project.identifier}:"
-      files.each {|file| Rails.logger.info "\t#{file.dmsf_path_str}:"}
-      begin 
-        DmsfMailer.deliver_files_updated(User.current, files) unless files.empty?
-      rescue ActionView::MissingTemplate => e
-        Rails.logger.error "Could not send email notifications: " + e
+      unless files.empty?
+        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} uploaded for project #{@project.identifier}:"
+        files.each {|file| Rails.logger.info "\t#{file.dmsf_path_str}:"}
+        begin 
+          DmsfMailer.deliver_files_updated(User.current, files)
+        rescue ActionView::MissingTemplate => e
+          Rails.logger.error "Could not send email notifications: " + e
+        end
       end
     end
     redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder

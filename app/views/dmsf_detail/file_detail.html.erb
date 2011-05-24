@@ -47,6 +47,8 @@
 <% end %>
 </h2>
 
+<%= error_messages_for("revision") %>
+
 <% if User.current.allowed_to?(:file_manipulation, @file.project) %>
 	<%= render(:partial => 'file_new_revision') %>
 <% end %>
@@ -151,10 +153,14 @@
 				jQuery("#newRevisionFormContentToggle").text("[+]");
 				jQuery("#newRevisionFormContent").hide();
 			});
-			<% if @revision.valid? %>
-				jQuery("#newRevisionFormContentToggle").text("[+]");
-				jQuery("#newRevisionFormContent").hide();
-			<% end %>
 		});
 	</script>
+	<% if @revision.valid? %>
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			jQuery("#newRevisionFormContentToggle").text("[+]");
+			jQuery("#newRevisionFormContent").hide();
+		});
+	</script>
+	<% end %>
 <% end %>
