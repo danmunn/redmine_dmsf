@@ -126,13 +126,14 @@ class DmsfDetailController < ApplicationController
       end
       @revision.set_workflow(params[:workflow])
       
-      if @revision.save
+      @file.name = @revision.name
+      @file.folder = @revision.folder
+      
+      if @revision.save && @file.valid?
         unless file_upload.nil?
           @revision.copy_file_content(file_upload)
         end
         
-        @file.name = @revision.name
-        @file.folder = @revision.folder
         if @file.locked?
           DmsfFileLock.file_lock_state(@file, false)
           flash[:notice] = l(:notice_file_unlocked) + ", "

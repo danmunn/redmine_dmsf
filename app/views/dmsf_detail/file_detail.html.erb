@@ -47,6 +47,7 @@
 <% end %>
 </h2>
 
+<%= error_messages_for("file") %>
 <%= error_messages_for("revision") %>
 
 <% if User.current.allowed_to?(:file_manipulation, @file.project) %>
@@ -155,7 +156,7 @@
 			});
 		});
 	</script>
-	<% if @revision.valid? %>
+	<% if @revision.valid? && @file.valid? %>
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
 			jQuery("#newRevisionFormContentToggle").text("[+]");

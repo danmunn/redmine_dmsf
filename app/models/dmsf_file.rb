@@ -39,11 +39,12 @@ class DmsfFile < ActiveRecord::Base
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
     :message => l(:error_contains_invalid_character)
   
-  validate_on_create :validates_name_uniqueness 
+  validate :validates_name_uniqueness 
   
   def validates_name_uniqueness
-    errors.add(:name, "has already been taken") if
-      !DmsfFile.find_file_by_name(self.project, self.folder, self.name).nil?
+    existing_file = DmsfFile.find_file_by_name(self.project, self.folder, self.name)
+    errors.add(:name, "has already been taken") unless
+      existing_file.nil? || existing_file.id == self.id
   end
   
   acts_as_event :title => Proc.new {|o| "#{o.name}"},
