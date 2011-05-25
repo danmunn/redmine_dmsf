@@ -36,15 +36,20 @@ class DmsfDetailController < ApplicationController
     else
       failed_entries = []
       deleted_files = []
+      deleted_folders = []
       unless selected_folders.nil?
         if User.current.allowed_to?(:folder_manipulation, @project)
           selected_folders.each do |subfolderid|
             subfolder = DmsfFolder.find(subfolderid)
             next if subfolder.nil?
-            failed_entries.push(subfolder) if subfolder.project != @project || !subfolder.delete
+            if subfolder.project != @project || !subfolder.delete
+              failed_entries.push(subfolder) 
+            else
+              deleted_folders.push(subfolder)
+            end
           end
         else
-          flash[:error] = l(:error_user_has_no_rights_delete_folder)
+          flash[:error] = l(:error_user_has_not_right_delete_folder)
         end
       end
       unless selected_files.nil?
@@ -59,12 +64,16 @@ class DmsfDetailController < ApplicationController
             end
           end
         else
-          flash[:error] = l(:error_user_has_no_rights_delete_file)
+          flash[:error] = l(:error_user_has_not_right_delete_file)
         end
       end
+      unless deleted_folders.empty?
+        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted folders from project #{@project.identifier}:"
+        deleted_folders.each {|f| Rails.logger.info "\t#{f.dmsf_path_str}:"}
+      end
       unless deleted_files.empty?
-        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted from project #{@project.identifier}:"
-        deleted_files.each {|file| Rails.logger.info "\t#{file.dmsf_path_str}:"}
+        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted files from project #{@project.identifier}:"
+        deleted_files.each {|f| Rails.logger.info "\t#{f.dmsf_path_str}:"}
         DmsfMailer.deliver_files_deleted(User.current, deleted_files)
       end
       if failed_entries.empty?
@@ -121,8 +130,7 @@ class DmsfDetailController < ApplicationController
   def delete_folder
     check_project(@delete_folder = DmsfFolder.find(params[:delete_folder_id]))
     if !@delete_folder.nil?
-      if @delete_folder.subfolders.empty? && @delete_folder.files.empty?
-        @delete_folder.destroy
+      if @delete_folder.delete
         flash[:notice] = l(:notice_folder_deleted)
         Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted folder #{@project.identifier}://#{@delete_folder.dmsf_path_str}"
       else

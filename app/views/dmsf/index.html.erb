@@ -190,7 +190,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 			})
 			
 			jQuery("#entries_delete_button").click(function(event) {
-				if(window.confirm("<%= l(:question_do_you_really_want_to_delete_these_entries) %>")) {
+				if(window.confirm("<%= l(:question_do_you_really_want_to_delete_entries) %>")) {
 					jQuery("#entries_form").attr("action", "<%= url_for(:controller => 'dmsf_detail', :action => 'delete_entries', :id => @project, :folder_id => @folder) %>");
 					jQuery("#entries_form").submit();
 				}

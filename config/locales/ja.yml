@@ -141,4 +141,10 @@ en:
   :error_contains_invalid_character: "contains invalid character(s)"
   :error_file_commit_require_uploaded_file: "File commit require uploaded file"
   :warning_some_files_were_not_commited: "Some files were not commited due to validation errors: %{files}"
+  :error_user_has_not_right_delete_folder: "User hasn't right to delete forders"
+  :error_user_has_not_right_delete_file: "User hasn't right to delete file"
+  :notice_entries_deleted: "Entries deleted"
+  :warning_some_entries_were_not_deleted: "Some entries weren't deleted: %{entries}"
+  :question_do_you_really_want_to_delete_entries: "Do you really want to delete checked entries?"
+  :title_delete_checked: "Delete checked"
   
