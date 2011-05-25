@@ -22,11 +22,60 @@ class DmsfDetailController < ApplicationController
   menu_item :dmsf
   
   before_filter :find_project
-  before_filter :authorize
+  before_filter :authorize, :except => [:delete_entries]
   before_filter :find_parent, :only => [:folder_new, :create_folder, :save_folder]
   before_filter :find_folder, :only => [:delete_folder, :save_folder,
-    :upload_files, :commit_files, :folder_detail]
+    :upload_files, :commit_files, :folder_detail, :delete_entries]
   before_filter :find_file, :only => [:save_file, :delete_file, :file_detail]
+
+  def delete_entries
+    selected_folders = params[:subfolders]
+    selected_files = params[:files]
+    if selected_folders.nil? && selected_files.nil?
+      flash[:warning] = l(:warning_no_entries_selected)
+    else
+      failed_entries = []
+      deleted_files = []
+      unless selected_folders.nil?
+        if User.current.allowed_to?(:folder_manipulation, @project)
+          selected_folders.each do |subfolderid|
+            subfolder = DmsfFolder.find(subfolderid)
+            next if subfolder.nil?
+            failed_entries.push(subfolder) if subfolder.project != @project || !subfolder.delete
+          end
+        else
+          flash[:error] = l(:error_user_has_no_rights_delete_folder)
+        end
+      end
+      unless selected_files.nil?
+        if User.current.allowed_to?(:file_manipulation, @project)
+          selected_files.each do |fileid|
+            file = DmsfFile.find(fileid)
+            next if file.nil?
+            if file.project != @project || !file.delete
+              failed_entries.push(file)
+            else
+              deleted_files.push(file)
+            end
+          end
+        else
+          flash[:error] = l(:error_user_has_no_rights_delete_file)
+        end
+      end
+      unless deleted_files.empty?
+        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted from project #{@project.identifier}:"
+        deleted_files.each {|file| Rails.logger.info "\t#{file.dmsf_path_str}:"}
+        DmsfMailer.deliver_files_deleted(User.current, deleted_files)
+      end
+      if failed_entries.empty?
+        flash[:notice] = l(:notice_entries_deleted)
+      else
+        flash[:warning] = l(:warning_some_entries_were_not_deleted, :entries => failed_entries.map{|e| e.title}.join(", "))
+      end
+    end
+    
+    redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder
+  end
 
   def folder_new
     @pathfolder = @parent
@@ -88,6 +137,8 @@ class DmsfDetailController < ApplicationController
 
   def file_detail
     @revision = @file.last_revision
+    # TODO: line bellow is to handle old instalations with errors in data handling
+    @revision.name = @file.name
   end
 
   #TODO: don't create revision if nothing change
@@ -158,15 +209,12 @@ class DmsfDetailController < ApplicationController
 
   def delete_file
     if !@file.nil?
-      if @file.locked_for_user?
-        flash[:error] = l(:error_file_is_locked)
-      else
-        @file.deleted = true
-        @file.deleted_by_user = User.current
-        @file.save
+      if @file.delete
         flash[:notice] = l(:notice_file_deleted)
         Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted file #{@project.identifier}://#{@file.dmsf_path_str}"
         DmsfMailer.deliver_files_deleted(User.current, [@file])
+      else
+        flash[:error] = l(:error_file_is_locked)
       end
     end
     redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @file.folder

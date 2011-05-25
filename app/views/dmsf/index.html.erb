@@ -24,7 +24,7 @@
 
 <%
 form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder}, :method => :post, 
-	:class => "dmfs_entries", :id => "Entries") do
+	:class => "dmfs_entries", :id => "entries_form") do
 %>
 	<%= hidden_field_tag("action") %> 
 	<table class="list entries" id="browser">
@@ -169,8 +169,8 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 	</table>
 	<div class="controls">
 		<%= submit_tag(l(:submit_download), :title => l(:title_download_checked), :name => "download_entries") %>
-		<!-- <button type="button" id="EntriesDeleteButton" title="Delete checked">Delete</button> -->
 		<%= submit_tag(l(:submit_email), :title => l(:title_send_checked_by_email), :name => "email_entries") %>
+		<button type="button" id="entries_delete_button" title="<%=l(:title_delete_checked)%>"><%=l(:button_delete)%></button>
 	</div>
 	<br />
 <% end %>
@@ -187,6 +187,13 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 		jQuery(document).ready(function() {
 			jQuery("a.delete-link").click(function(event) {
 				if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_entry) %>")) event.preventDefault();
+			})
+			
+			jQuery("#entries_delete_button").click(function(event) {
+				if(window.confirm("<%= l(:question_do_you_really_want_to_delete_these_entries) %>")) {
+					jQuery("#entries_form").attr("action", "<%= url_for(:controller => 'dmsf_detail', :action => 'delete_entries', :id => @project, :folder_id => @folder) %>");
+					jQuery("#entries_form").submit();
+				}
 			})
 			
 			jQuery("#check_all_entries").click(function(event) {

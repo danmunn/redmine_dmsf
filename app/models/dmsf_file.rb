@@ -80,6 +80,13 @@ class DmsfFile < ActiveRecord::Base
     end
   end
   
+  def delete
+    return false if locked_for_user?
+    self.deleted = true
+    self.deleted_by_user = User.current
+    save
+  end
+  
   def locked?
     self.locks.empty? ? false : self.locks[0].locked
   end

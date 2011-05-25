@@ -55,6 +55,11 @@ class DmsfFolder < ActiveRecord::Base
         ["dmsf_folder_id is NULL and project_id = :project_id", {:project_id => project.id}], :order => "title ASC")
   end
   
+  def delete
+    return false if !self.subfolders.empty? || !self.files.empty?
+    destroy
+  end
+  
   def dmsf_path
     folder = self
     path = []
