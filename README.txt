@@ -89,7 +89,7 @@ There is possibility to link DMSF files from Wiki entries:
 DMSF file id can be found in link for file download.
 
 There is possibility to link DMSF folders from Wiki entries:
-    {{dmsff(17)}} link to folder with id 5
+    {{dmsff(5)}} link to folder with id 5
 DMSF folder id can be found in link for folder opening.
 
 You can also publish Wiki help description. 

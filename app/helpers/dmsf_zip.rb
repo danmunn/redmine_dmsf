@@ -40,7 +40,9 @@ class DmsfZip
   end
   
   def add_file(file)
-    @zip_file.put_next_entry(file.dmsf_path_str)
+    string_path = file.folder.nil? ? "" : file.folder.dmsf_path_str + "/"
+    string_path += file.name
+    @zip_file.put_next_entry(string_path)
     File.open(file.last_revision.disk_file, "rb") do |f| 
       buffer = ""
       while (buffer = f.read(8192))
