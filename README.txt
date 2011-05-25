@@ -56,7 +56,7 @@ apt-get install xapian-ruby1.8 xapian-omega libxapian-dev xpdf antiword unzip an
 
 * In case of upgrade BACKUP YOUR DATABASE first
 * Put redmine_dmsf plugin directory into vendor/plugins
-* Initialize database:
+* Initialize/Update database:
     rake db:migrate:plugins RAILS_ENV="production"
 * The access rights must be set for web server, example: 
     chown -R www-data:www-data /opt/redmine/vendor/plugins/redmine_dmsf
@@ -88,6 +88,10 @@ There is possibility to link DMSF files from Wiki entries:
     {{dmsf(17)}} link to file with id 17
 DMSF file id can be found in link for file download.
 
+There is possibility to link DMSF folders from Wiki entries:
+    {{dmsff(17)}} link to folder with id 5
+DMSF folder id can be found in link for folder opening.
+
 You can also publish Wiki help description. 
 In file <redmine_root>/public/help/wiki_syntax_detailed.html include after document link description:
 <ul>
@@ -95,7 +99,9 @@ In file <redmine_root>/public/help/wiki_syntax_detailed.html include after docum
     	DMSF:
         <ul>
             <li><strong>{{dmsf(17)}}</strong> (link to file with id 17)</li>
+            <li><strong>{{dmsff(5)}}</strong> (link to folder with id 5)</li>
         </ul>
-        DMSF file id can be found in link for file download
+        DMSF file id can be found in link for file download.<br />
+        DMSF folder id can be found in link for folder opening.
     </li>
 </ul>
