@@ -178,8 +178,6 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 <%= render(:partial => "multi_upload") %>
 <br />
 
-<%= link_to(l(:link_user_preferences), {:controller => "dmsf_state", :action => "user_pref", :id => @project}) %>
-
 <% content_for :header_tags do %>
 	<script type="text/javascript">
 		jQuery.noConflict();

@@ -1,10 +1,4 @@
-<% html_title(l(:dmsf)) %>
-
-<div class="contextual">
-</div>
-
-<h2><%= l(:link_user_preferences) %></h2>
-
+<p><strong><%=l(:link_user_preferences)%></strong></p>
 <div class="box">
 	<% form_tag({:controller => "dmsf_state", :action => "user_pref_save", :id => @project},
 		:method=>:post) do %>

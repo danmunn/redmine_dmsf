@@ -17,6 +17,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'redmine'
+require 'dispatcher'
+  
+Dispatcher.to_prepare :redmine_dmsf do
+    unless ProjectsHelper.included_modules.include?(ProjectTabsExtended)
+        ProjectsHelper.send(:include, ProjectTabsExtended)
+    end
+end
 
 Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
@@ -45,7 +52,7 @@ Redmine::Plugin.register :redmine_dmsf do
   
   project_module :dmsf do
     permission :browse_documents, {:dmsf => [:index]}
-    permission :user_preferences, {:dmsf_state => [:user_pref, :user_pref_save]}
+    permission :user_preferences, {:dmsf_state => [:user_pref_save]}
     permission :view_dmsf_files, {:dmsf => [:download_file, :download_revision, :entries_operation, :email_entries_send],
       :dmsf_detail => [:file_detail]}
     permission :folder_manipulation, {:dmsf_detail => [:folder_new, :create_folder, :delete_folder, :folder_detail, :save_folder]}
