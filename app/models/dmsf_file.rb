@@ -28,9 +28,6 @@ class DmsfFile < ActiveRecord::Base
   unloadable
   belongs_to :project
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
-  has_many :revisions, :class_name => "DmsfFileRevision", :foreign_key => "dmsf_file_id", 
-    :order => "major_version DESC, minor_version DESC, updated_at DESC", 
-    :conditions => { :deleted => false }
   has_many :locks, :class_name => "DmsfFileLock", :foreign_key => "dmsf_file_id", 
     :order => "updated_at DESC"
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
@@ -79,7 +76,30 @@ class DmsfFile < ActiveRecord::Base
           {:project_id => project.id, :folder_id => folder.id, :name => name, :deleted => false}])
     end
   end
+
+  def last_revision
+    if @last_revision.nil?
+      @last_revision = DmsfFileRevision.find(:first, :conditions => 
+        ["dmsf_file_id = :file_id and deleted = :deleted", 
+          {:file_id => self.id, :deleted => false}], 
+          :order => "major_version DESC, minor_version DESC, updated_at DESC")
+    end
+    @last_revision
+  end
   
+  def reload
+    @last_revision = nil
+    super
+  end
+
+  def revisions(offset = nil, limit = nil)
+    DmsfFileRevision.find(:all, :conditions => 
+        ["dmsf_file_id = :file_id and deleted = :deleted", 
+          {:file_id => self.id, :deleted => false}], 
+          :order => "major_version DESC, minor_version DESC, updated_at DESC",
+          :limit => limit, :offset => offset)
+  end
+
   def delete
     return false if locked_for_user?
     self.deleted = true
@@ -105,10 +125,6 @@ class DmsfFile < ActiveRecord::Base
     l = DmsfFileLock.file_lock_state(self, false)
     self.reload
     return l
-  end
-  
-  def last_revision
-    self.revisions.empty? ? nil : self.revisions[0]
   end
   
   def title
