@@ -34,7 +34,7 @@ form_for(:dmsf_file_revision, @revision, :url => {:action => "save_file", :id =>
 							<%= f.select(:dmsf_folder_id, 
 								options_for_select(DmsfFolder.directory_tree(@project), 
 									:selected => (@revision.folder.id unless @revision.folder.nil?))) %> /
-							<%= f.text_field(:name, :size => "24") %>
+							<%= f.text_field(:name, :size => "22") %>
 						</p>
 					</div>
 				</div>
