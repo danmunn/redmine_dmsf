@@ -24,8 +24,7 @@ class DmsfDetailController < ApplicationController
   before_filter :find_project
   before_filter :authorize, :except => [:delete_entries]
   before_filter :find_parent, :only => [:folder_new, :create_folder, :save_folder]
-  before_filter :find_folder, :only => [:delete_folder, :save_folder,
-    :upload_files, :commit_files, :folder_detail, :delete_entries]
+  before_filter :find_folder, :only => [:delete_folder, :save_folder, :folder_detail, :delete_entries]
   before_filter :find_file, :only => [:save_file, :delete_file, :file_detail]
 
   def delete_entries
@@ -247,128 +246,6 @@ class DmsfDetailController < ApplicationController
       end
     end
     redirect_to :action => "file_detail", :id => @project, :file_id => @revision.file
-  end
-
-  def upload_files
-    uploaded_files = params[:uploaded_files]
-    @uploads = []
-    if uploaded_files && uploaded_files.is_a?(Hash)
-      # standard file input uploads
-      uploaded_files.each_value do |uploaded_file|
-        @uploads.push(DmsfUpload.create_from_uploaded_file(@project, @folder, uploaded_file))
-      end
-    else
-      # plupload multi upload completed
-      uploaded = params[:uploaded]
-      if uploaded && uploaded.is_a?(Hash)
-        uploaded.each_value do |uploaded_file|
-          @uploads.push(DmsfUpload.new(@project, @folder, uploaded_file))
-        end
-      end
-    end
-  end
-
-  # plupload single file multi upload handling 
-  def upload_file
-    @tempfile = params[:file]
-    @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
-    File.open("#{DmsfHelper.temp_dir}/#{@disk_filename}", "wb") do |f| 
-      while (buffer = @tempfile.read(8192))
-        f.write(buffer)
-      end
-    end
-    
-    render :layout => false
-  end
-
-  #TODO: flash notice when files saved and unlocked
-  #TODO: separate control for approval
-  def commit_files
-    commited_files = params[:commited_files]
-    if commited_files && commited_files.is_a?(Hash)
-      files = []
-      failed_uploads = []
-      commited_files.each_value do |commited_file|
-        name = commited_file["name"];
-        
-        new_revision = DmsfFileRevision.new
-        file = DmsfFile.find_file_by_name(@project, @folder, name)
-        if file.nil?
-          file = DmsfFile.new
-          file.project = @project
-          file.name = name
-          file.folder = @folder
-          file.notification = !Setting.plugin_redmine_dmsf["dmsf_default_notifications"].blank?
-          
-          new_revision.minor_version = 0
-          new_revision.major_version = 0
-        else
-          if file.locked_for_user?
-            failed_uploads.push(commited_file)
-            next
-          end
-          last_revision = file.last_revision
-          new_revision.source_revision = last_revision
-          new_revision.major_version = last_revision.major_version
-          new_revision.minor_version = last_revision.minor_version
-          new_revision.workflow = last_revision.workflow
-        end
-        
-        commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file["disk_filename"]}"
-        
-        new_revision.folder = @folder
-        new_revision.file = file
-        new_revision.user = User.current
-        new_revision.name = name
-        new_revision.title = commited_file["title"]
-        new_revision.description = commited_file["description"]
-        new_revision.comment = commited_file["comment"]
-        new_revision.increase_version(commited_file["version"].to_i, true)
-        new_revision.set_workflow(commited_file["workflow"])
-        new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
-        new_revision.size = File.size(commited_disk_filepath)
-        new_revision.disk_filename = new_revision.new_storage_filename
-
-        file_upload = File.new(commited_disk_filepath, "rb")
-        if file_upload.nil?
-          failed_uploads.push(commited_file)
-          flash[:error] = l(:error_file_commit_require_uploaded_file)
-          next
-        end
-        
-        if new_revision.save
-          if file.locked?
-            DmsfFileLock.file_lock_state(file, false)
-            flash[:notice] = l(:notice_file_unlocked)
-          end
-          file.save!
-          file.reload
-          
-          # Need to save file first to generate id for it in case of creation. 
-          # File id is needed to properly generate revision disk filename
-          new_revision.copy_file_content(file_upload)
-          file_upload.close
-          File.delete(commited_disk_filepath)
-          
-          files.push(file)
-        else
-          failed_uploads.push(commited_file)
-        end
-      end
-      unless files.empty?
-        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} uploaded for project #{@project.identifier}:"
-        files.each {|file| Rails.logger.info "\t#{file.dmsf_path_str}:"}
-        begin 
-          DmsfMailer.deliver_files_updated(User.current, files)
-        rescue ActionView::MissingTemplate => e
-          Rails.logger.error "Could not send email notifications: " + e
-        end
-      end
-      unless failed_uploads.empty?
-        flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u["name"]}.join(", "))
-      end
-    end
-    redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder
   end
 
   private
