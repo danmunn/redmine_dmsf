@@ -144,7 +144,7 @@ class DmsfUploadController < ApplicationController
         flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u["name"]}.join(", "))
       end
     end
-    redirect_to :controller => "dmsf", :action => "index", :id => @project, :folder_id => @folder
+    redirect_to :controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder
   end
 
   private

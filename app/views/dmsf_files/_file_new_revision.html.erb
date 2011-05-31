@@ -18,7 +18,7 @@ else
 	selected_workflow = @file.last_revision.workflow
 end
 
-form_for(:dmsf_file_revision, @revision, :url => {:action => "save_file", :id => @project, :file_id => @file},
+form_for(:dmsf_file_revision, @revision, :url => {:action => "create_revision", :id => @file},
 	:html => {:method=>:post, :multipart => true}) do |f|
 %>
 				<div class="clear">

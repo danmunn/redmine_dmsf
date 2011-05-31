@@ -8,7 +8,7 @@
 <%= ("/ " + l(:heading_new_folder)) if create %>
 </h2>
 
-<% form_for(:dmsf_folder, @folder, :url => {:action => create ? "create_folder" : "save_folder", :id => @project, :folder_id => @folder, :parent_id => @parent},
+<% form_for(:dmsf_folder, @folder, :url => {:action => create ? "create" : "save", :id => @project, :folder_id => @folder, :parent_id => @parent},
 	:html => {:method=>:post}) do |f| %>
 	<%= error_messages_for("folder") %>
 	<div class="box dmsf_detail">

@@ -10,7 +10,7 @@
 
 <h3><%= l(:heading_send_documents_by_email) %></h3>
 
-<% form_tag({:action => "email_entries_send", :id => @project, :folder_id => @folder},
+<% form_tag({:action => "entries_email", :id => @project, :folder_id => @folder},
 	{ :method=>:post, :class => "tabular"}) do %>
 <div class="box">
 	<p>

@@ -46,7 +46,7 @@ class DmsfFile < ActiveRecord::Base
   
   acts_as_event :title => Proc.new {|o| "#{o.name}"},
                 :description => Proc.new {|o| "#{o.last_revision.title} - #{o.last_revision.description}" },
-                :url => Proc.new {|o| {:controller => "dmsf", :action => "download_file", :id => o.project, :file_id => o}},
+                :url => Proc.new {|o| {:controller => "dmsf_files", :action => "show", :id => o, :download => ""}},
                 :datetime => Proc.new {|o| o.updated_at },
                 :author => Proc.new {|o| o.last_revision.user }
   

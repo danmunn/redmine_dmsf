@@ -28,8 +28,8 @@ end
 Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
   author "Vít Jonáš"
-  description "Document Management System Features for Redmine"
-  version "0.8.0"
+  description "Document Management System Features"
+  version "0.8.0 beta"
   url "https://code.google.com/p/redmine-dmsf/"
   author_url "mailto:vit.jonas@gmail.com"
   
@@ -45,22 +45,22 @@ Redmine::Plugin.register :redmine_dmsf do
               "dmsf_stemming_strategy" => "STEM_NONE"
             }
   
-  menu :project_menu, :dmsf, { :controller => "dmsf", :action => "index" }, :caption => :dmsf, :after => :activity, :param => :id
+  menu :project_menu, :dmsf, { :controller => "dmsf", :action => "show" }, :caption => :dmsf, :after => :activity, :param => :id
   #delete_menu_item :project_menu, :documents
   
   activity_provider :dmsf_files, :class_name => "DmsfFileRevision", :default => true
   
   project_module :dmsf do
-    permission :browse_documents, {:dmsf => [:index]}
+    permission :browse_documents, {:dmsf => [:show]}
     permission :user_preferences, {:dmsf_state => [:user_pref_save]}
-    permission :view_dmsf_files, {:dmsf => [:download_file, :download_revision, :entries_operation, :email_entries_send],
-      :dmsf_detail => [:file_detail]}
-    permission :folder_manipulation, {:dmsf_detail => [:folder_new, :create_folder, :delete_folder, :folder_detail, :save_folder]}
-    permission :file_manipulation, {:dmsf_detail => [:save_file, :delete_file],
-      :dmsf_state => [:lock_file, :unlock_file], :dmsf_upload => [:upload_files, :upload_file, :commit_files]}
-    permission :file_approval, {:dmsf_detail => [:approve_file, :delete_revision], 
-      :dmsf_state => [:file_notify_activate, :file_notify_deactivate, :folder_notify_activate, :folder_notify_deactivate]}
-    permission :force_file_unlock, {:dmsf_state => [:force_file_unlock]}
+    permission :view_dmsf_files, {:dmsf => [:entries_operation, :entries_email],
+      :dmsf_files => [:show]}
+    permission :folder_manipulation, {:dmsf => [:new, :create, :delete, :edit, :save]}
+    permission :file_manipulation, {:dmsf_files => [:create_revision, :delete, :lock, :unlock],
+      :dmsf_upload => [:upload_files, :upload_file, :commit_files]}
+    permission :file_approval, {:dmsf_files => [:delete_revision, :notify_activate, :notify_deactivate], 
+      :dmsf => [:notify_activate, :notify_deactivate]}
+    permission :force_file_unlock, {}
   end
   
   Redmine::WikiFormatting::Macros.register do
@@ -70,12 +70,10 @@ Redmine::Plugin.register :redmine_dmsf do
          
     macro :dmsf do |obj, args|
       return nil if args.length < 1 # require file id
-      return nil if @project == nil
       entry_id = args[0].strip
       entry = DmsfFile.find(entry_id)
       unless entry.nil? || entry.deleted
-        return nil if entry.project != @project
-        return link_to "#{entry.title}", :controller => "dmsf", :action => "download_file", :id => @project, :file_id => entry
+        return link_to "#{entry.title}", :controller => "dmsf_files", :action => "show", :id => entry, :download => ""
       end
       nil
     end
@@ -87,15 +85,13 @@ Redmine::Plugin.register :redmine_dmsf do
          "_folder_id_ may be missing. _folder_id_ can be found in link for folder opening."
          
     macro :dmsff do |obj, args|
-      return nil if @project == nil
       if args.length < 1
-        return link_to l(:link_documents), :controller => "dmsf", :action => "index", :id => @project
+        return link_to l(:link_documents), :controller => "dmsf", :action => "show", :id => @project
       else
         entry_id = args[0].strip
         entry = DmsfFolder.find(entry_id)
         unless entry.nil?
-          return nil if entry.project != @project
-          return link_to "#{entry.title}", :controller => "dmsf", :action => "index", :id => @project, :folder_id => entry
+          return link_to "#{entry.title}", :controller => "dmsf", :action => "show", :id => @project, :folder_id => entry
         end
       end
       nil

@@ -9,14 +9,13 @@
   	<% @files.each do |file| %>
 	<p>
 		<%= link_to(h(file.dmsf_path_str),
-	        	{:only_path => false, :controller => "dmsf", :action => "download_file", :id => file.project,
-				:file_id => file}) %>,
+	        	{:only_path => false, :controller => "dmsf_files", :action => "show", :id => file,
+				:download => ""}) %> (<%= file.name %>),
 		<%= number_to_human_size(file.last_revision.size) %>,
 		version: <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>,
 		<%= "#{file.last_revision.workflow_str}," unless file.last_revision.workflow_str.blank? %>
 		<%= link_to("Details",
-	        {:only_path => false, :controller => "dmsf_detail", :action => "file_detail", :id => file.project,
-			:file_id => file }) %>
+	        {:only_path => false, :controller => "dmsf_files", :action => "show", :id => file}) %>
 		<% unless file.last_revision.comment.blank? %>
 			<br /><span style="font-size: 0.9em">&nbsp;&nbsp;&nbsp;&nbsp;<em><%= h(file.last_revision.comment) %></em></span>
 		<% end %>

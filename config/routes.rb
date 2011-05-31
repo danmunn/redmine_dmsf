@@ -16,9 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#ActionController::Routing::Routes.draw do |map|
-#  map.resource :dmsf, :member => {:sync => :put} do |dmsf|
-#    dmsf.resource :dmsf_detail, :as => 'detail'
-#    dmsf.resource :dmsf_state, :as => 'state'
-#  end
-#end
+ActionController::Routing::Routes.draw do |map|
+  map.resources :dmsf
+  map.resources :dmsf_files
+end

@@ -5,32 +5,29 @@
 		<% unless @file.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, @project)%>
 			<% if @file.locked? %>
 				<%= link_to(image_tag("unlock.png", :plugin => "redmine_dmsf"),
-		        	{:controller => "dmsf_state", :action => "unlock_file", :id => @project, :file_id => @file,
-						:current => request.url },
-					:title => l(:title_unlock_file)) %>
+		        		{:action => "unlock", :id => @file, :current => request.url },
+						:title => l(:title_unlock_file)) %>
 			<% 	else %>
 				<%= link_to(image_tag("lock.png", :plugin => "redmine_dmsf"),
-		        	{:controller => "dmsf_state", :action => "lock_file", :id => @project, :file_id => @file,
-						:current => request.url },
-					:title => l(:title_lock_file)) %>
+		        		{:action => "lock", :id => @file, :current => request.url },
+						:title => l(:title_lock_file)) %>
 			<% 	end %> 
 		<% end %>
 		<% if User.current.allowed_to?(:file_manipulation, @project) && !@file.locked_for_user? %>
 			&nbsp;
 			<%= link_to(image_tag("delete.png", :plugin => "redmine_dmsf"), 
-				{:controller => "dmsf_detail", :action => "delete_file", :id => @project, 
-				:file_id => @file}, :class => "delete-entry", :title => l(:title_delete)) %>
+					{:action => "delete", :id => @file}, :class => "delete-entry", :title => l(:title_delete)) %>
 		<% end %>
 		<% if User.current.allowed_to?(:file_approval, @project) %>
 			&nbsp;
 			<% if @file.notification %>
 				<%= link_to(image_tag("notify.png", :plugin => "redmine_dmsf"),
-	        		{:controller => "dmsf_state", :action => "file_notify_deactivate", :id => @project, 
-					:file_id => @file, :current => request.url }, :title => l(:title_notifications_active_deactivate)) %>
+	        			{:action => "notify_deactivate", :id => @file, :current => request.url }, 
+						:title => l(:title_notifications_active_deactivate)) %>
 			<% else %>
 				<%= link_to(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
-	        		{:controller => "dmsf_state", :action => "file_notify_activate", :id => @project, 
-					:file_id => @file, :current => request.url}, :title => l(:title_notifications_not_active_activate)) %>
+	        			{:action => "notify_activate", :id => @file, :current => request.url}, 
+						:title => l(:title_notifications_not_active_activate)) %>
 			<% end %>
 		<% end %>
 	<% end %>
@@ -41,30 +38,25 @@
 <%= render(:partial => "/dmsf/path", :locals => {:path => path}) %>
 / 
 <%= h(@file.last_revision.title) %>
-<% if @file.notification %>
-	<%= image_tag("notify.png", :plugin => "redmine_dmsf",
-		:title => l(:title_notifications_active)) %>
-<% end %>
+<%= image_tag("notify.png", :plugin => "redmine_dmsf", :title => l(:title_notifications_active)) if @file.notification %>
 </h2>
 
 <%= error_messages_for("file") %>
 <%= error_messages_for("revision") %>
 
-<% if User.current.allowed_to?(:file_manipulation, @file.project) %>
-	<%= render(:partial => 'file_new_revision') %>
-<% end %>
+<%= render(:partial => "file_new_revision") if User.current.allowed_to?(:file_manipulation, @file.project) %>
 
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.revisions.each do |revision| %>
 <div class="box dmsf_detail">
 	<div style="float:right">
 		<%= link_to(image_tag("download.png", :plugin => "redmine_dmsf"),
-	        {:controller=>"dmsf", :action => "download_revision", :id => @project, :revision_id => revision},
+	        {:action => "show", :id => @file, :download => revision},
 			:title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version)) %>
 		<% if User.current.allowed_to?(:file_approval, @project) %>
 			&nbsp;
 			<%= link_to(image_tag("delete.png", :plugin => "redmine_dmsf"),
-		        {:action => "delete_revision", :id => @project, :revision_id => revision},
+		        {:action => "delete_revision", :id => revision},
 				:class => "delete-revision", :title => l(:title_delete_revision)) %>
 		<% end %>
 	</div>
