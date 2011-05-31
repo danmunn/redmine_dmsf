@@ -47,7 +47,7 @@
 <%= render(:partial => "file_new_revision") if User.current.allowed_to?(:file_manipulation, @file.project) %>
 
 <h3><%= l(:heading_revisions) %></h3>
-<% @file.revisions.each do |revision| %>
+<% @file.revisions[@revision_pages.current.offset,@revision_pages.items_per_page].each do |revision| %>
 <div class="box dmsf_detail">
 	<div style="float:right">
 		<%= link_to(image_tag("download.png", :plugin => "redmine_dmsf"),
@@ -116,6 +116,8 @@
 	</p>
 </div>
 <% end %>
+
+<p class="pagination"><%= pagination_links_full @revision_pages, @file.revisions.count %></p>
 
 <% content_for :header_tags do %>
 	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
