@@ -2,7 +2,11 @@
 
 <div class="contextual">
 	<% if User.current.allowed_to?(:folder_manipulation, @project) %>
-		<% unless @folder.nil? %>
+		<% if @folder.nil? %>
+			<%= link_to(image_tag("edit.png", :style => "vertical-align: text-top;"), 
+					{:action => "edit_root", :id => @project},
+					:title => l(:link_edit, :title => l(:link_documents))) %> &nbsp;
+		<% else @folder.nil? %>
 			<%= link_to(image_tag("edit.png", :style => "vertical-align: text-top;"), 
 					{:action => "edit", :id => @project, :folder_id => @folder },
 					:title => l(:link_edit, :title => h(@folder.title))) %> &nbsp; 
@@ -19,7 +23,7 @@
 </h2>
 
 <div class="wiki">
-<%= textilizable(@folder.description) unless @folder.nil? %>
+<%= textilizable(@folder.nil? ? @project.dmsf_description : @folder.description) %>
 </div>
 
 <%

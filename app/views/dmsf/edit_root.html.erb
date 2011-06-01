@@ -1,0 +1,25 @@
+<% html_title(l(:dmsf)) %>
+
+<div class="contextual">
+</div>
+
+<h2><%= render(:partial => "path", :locals => {:path => []}) %></h2>
+
+<% form_for(:project, @project, :url => {:action => "save_root", :id => @project},
+	:html => {:method=>:post}) do |f| %>
+	<div class="box dmsf_detail">
+		<p class="no-ident">
+			<%= label_tag("project_dmsf_description", l(:label_description) + ":") %>
+		</p>
+		<div class="wiki data clear">
+			<%= f.text_area(:dmsf_description, :rows => 15, :class => "wiki-edit") %>
+		</div>
+	</div>
+	<%= submit_tag(l(:submit_save)) %>
+<% end %>
+
+<%= wikitoolbar_for "dmsf_folder_description" %>
+
+<% content_for :header_tags do %>
+	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
+<% end %>

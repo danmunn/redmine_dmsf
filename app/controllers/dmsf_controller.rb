@@ -21,7 +21,7 @@ class DmsfController < ApplicationController
   
   before_filter :find_project
   before_filter :authorize, :except => [:delete_entries]
-  before_filter :find_folder, :except => [:new, :create]
+  before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
   before_filter :find_parent, :only => [:new, :create]
   
   helper :sort
@@ -216,6 +216,16 @@ class DmsfController < ApplicationController
     redirect_to :controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder
   rescue DmsfAccessError
     render_403  
+  end
+
+  def edit_root
+  end
+
+  def save_root
+    @project.dmsf_description = params[:project][:dmsf_description]
+    @project.save!
+    flash[:notice] = l(:notice_folder_details_were_saved)
+    redirect_to :controller => "dmsf", :action => "show", :id => @project
   end
 
   def notify_activate

@@ -4,7 +4,7 @@
 </div>
 <% create = @pathfolder == @parent %>
 <h2>
-<%= render(:partial => "/dmsf/path", :locals => {:path => @pathfolder.nil? ? [] : @pathfolder.dmsf_path}) %>
+<%= render(:partial => "path", :locals => {:path => @pathfolder.nil? ? [] : @pathfolder.dmsf_path}) %>
 <%= ("/ " + l(:heading_new_folder)) if create %>
 </h2>
 
