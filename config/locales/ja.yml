@@ -147,4 +147,8 @@ en:
   :warning_some_entries_were_not_deleted: "Some entries weren't deleted: %{entries}"
   :question_do_you_really_want_to_delete_entries: "Do you really want to delete checked entries?"
   :title_delete_checked: "Delete checked"
+  :title_number_of_files_in_directory: "Number of files in directory"
+  :title_filename_for_download: "Filename used for download or in Zip archive"
+  :label_number_of_folders: "Folders"
+  :label_number_of_files: "Files"
   
