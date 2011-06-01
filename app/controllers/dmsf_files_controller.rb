@@ -55,7 +55,9 @@ class DmsfFilesController < ApplicationController
     # TODO: line bellow is to handle old instalations with errors in data handling
     @revision.name = @file.name
     
-    @revision_pages = Paginator.new self, @file.revisions.count, 25, params["page"]
+    @revision_pages = Paginator.new self, @file.revisions.count, params["per_page"] ? params["per_page"].to_i : 25, params["page"]
+    
+    render :layout => !request.xhr?
   end
 
   #TODO: don't create revision if nothing change

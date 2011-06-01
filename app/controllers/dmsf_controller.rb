@@ -56,10 +56,7 @@ class DmsfController < ApplicationController
       @files.reverse!
     end
     
-    respond_to do |format|
-      format.html { render :layout => !request.xhr? }
-      format.api
-    end 
+    render :layout => !request.xhr?
     
   end
 
