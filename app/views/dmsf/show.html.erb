@@ -3,17 +3,14 @@
 <div class="contextual">
 	<% if User.current.allowed_to?(:folder_manipulation, @project) %>
 		<% if @folder.nil? %>
-			<%= link_to(image_tag("edit.png", :style => "vertical-align: text-top;"), 
-					{:action => "edit_root", :id => @project},
-					:title => l(:link_edit, :title => l(:link_documents))) %> &nbsp;
+			<%= link_to("", {:action => "edit_root", :id => @project},
+					:title => l(:link_edit, :title => l(:link_documents)), :class => "icon icon-edit") %> &nbsp;
 		<% else @folder.nil? %>
-			<%= link_to(image_tag("edit.png", :style => "vertical-align: text-top;"), 
-					{:action => "edit", :id => @project, :folder_id => @folder },
-					:title => l(:link_edit, :title => h(@folder.title))) %> &nbsp; 
+			<%= link_to("", {:action => "edit", :id => @project, :folder_id => @folder },
+					:title => l(:link_edit, :title => h(@folder.title)), :class => "icon icon-edit") %> &nbsp; 
 		<% end %>
-		<%= link_to(image_tag("add.png", :style => "vertical-align: text-top;"), 
-				{:action => "new", :id => @project, :parent_id => @folder },
-				:title => l(:link_create_folder)) %>
+		<%= link_to("", {:action => "new", :id => @project, :parent_id => @folder },
+				:title => l(:link_create_folder), :class => "icon icon-add") %>
 	<% end %>
 </div>
 
@@ -53,6 +50,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				<%= link_to(h(subfolder.title),
 		          {:action => "show", :id => @project, :folder_id => subfolder},
 		          :class => "icon icon-folder") %>
+				<div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.count %>]</div>
 			</td>
 			<td class="size">-</td>
 			<td class="modified">-</td>
@@ -99,7 +97,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 		        		{:controller => :dmsf_files, :action => "show", :id => file, :download => ""},
 		        		:class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}",
 						:title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version)) %>
-				<div class="filename"><%= h(file.display_name) %></div>
+				<div class="filename" title="<%= l(:title_filename_for_download)%>"><%= h(file.display_name) %></div>
 			</td>
 			<td class="size"><%= number_to_human_size(file.last_revision.size) unless file.last_revision.nil?  %></td>
 			<td class="modified">
@@ -176,6 +174,9 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 		<% if User.current.allowed_to?(:file_manipulation, @project) %>
 			<button type="button" id="entries_delete_button" title="<%=l(:title_delete_checked)%>"><%=l(:button_delete)%></button>
 		<% end %>
+		<div style="float: right;">
+			<%= l(:label_number_of_folders)%>: <%= @subfolders.count %>, <%= l(:label_number_of_files)%>: <%= @files.count %>
+		</div>
 	</div>
 	<br />
 <% end %>
