@@ -40,9 +40,9 @@ end
 			<%= label_tag("commited_files[#{i}][version]_minor", l(:label_version) + ":") %>
 		</p>
 		<div class="data clear">
-			<%= radio_button_tag("commited_files[#{i}][version]", "minor", true) %> 
+			<%= radio_button_tag("commited_files[#{i}][version]", 1, true) %> 
 			<%= upload.major_version %>.<%= upload.minor_version + 1 %> <%= l(:option_version_minor) %><br />
-			<%= radio_button_tag("commited_files[#{i}][version]", "major") %> 
+			<%= radio_button_tag("commited_files[#{i}][version]", 2) %> 
 			<%= upload.major_version + 1 %>.0 <%= l(:option_version_major) %><br />
 		</div>
 		<p>
