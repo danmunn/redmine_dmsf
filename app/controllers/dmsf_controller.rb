@@ -66,7 +66,7 @@ class DmsfController < ApplicationController
     
     if selected_folders.nil? && selected_files.nil?
       flash[:warning] = l(:warning_no_entries_selected)
-      redirect_to :action => "index", :id => @project, :folder_id => @folder
+      redirect_to :action => "show", :id => @project, :folder_id => @folder
       return
     end
     

@@ -18,6 +18,7 @@
 
 require 'zip/zip'
 require 'zip/zipfilesystem'
+require 'iconv'
 
 class DmsfZip
   
@@ -42,6 +43,11 @@ class DmsfZip
   def add_file(file)
     string_path = file.folder.nil? ? "" : file.folder.dmsf_path_str + "/"
     string_path += file.name
+    #TODO: somewhat ugly conversion problems handling bellow
+    begin
+      string_path = Iconv.conv(Setting.plugin_redmine_dmsf["dmsf_zip_encoding"], "utf-8", string_path)
+    rescue
+    end
     @zip_file.put_next_entry(string_path)
     File.open(file.last_revision.disk_file, "rb") do |f| 
       buffer = ""
@@ -53,7 +59,13 @@ class DmsfZip
   end
   
   def add_folder(folder)
-    @zip_file.put_next_entry(folder.dmsf_path_str + "/")
+    string_path = folder.dmsf_path_str + "/"
+    #TODO: somewhat ugly conversion problems handling bellow
+    begin
+      string_path = Iconv.conv(Setting.plugin_redmine_dmsf["dmsf_zip_encoding"], "utf-8", string_path)
+    rescue
+    end
+    @zip_file.put_next_entry(string_path)
     folder.subfolders.each { |subfolder| self.add_folder(subfolder) }
     folder.files.each { |file| self.add_file(file) }
   end

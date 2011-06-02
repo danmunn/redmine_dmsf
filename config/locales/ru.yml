@@ -147,4 +147,6 @@ ru:
   :title_filename_for_download: "Filename used for download or in Zip archive"
   :label_number_of_folders: "Folders"
   :label_number_of_documents: "Documents"
+  :label_zip_names_encoding: "Zip names encoding"
+  :note_zip_names_encoding_iconv: "Iconv is used for charset conversion from utf-8 to target encoding"
   

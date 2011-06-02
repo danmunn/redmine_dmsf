@@ -29,6 +29,15 @@
 				:selected => @settings["dmsf_default_notifications"])) %><br/>
   (<%=l(:label_default)%>: <%=l(:select_option_deactivated)%>)
 </p>
+
+<p>
+  <%=content_tag(:label, l(:label_zip_names_encoding) + ":") %>
+  <%=text_field_tag "settings[dmsf_zip_encoding]", @settings["dmsf_zip_encoding"], :size=>50 %><br/>
+  (<%=l(:label_default)%>: utf-8)
+  <br/>
+  <%= l(:note_zip_names_encoding_iconv) %>
+</p>
+
 <hr />
 <p>
   <%=content_tag(:label, l(:label_index_database) + ":") %>
