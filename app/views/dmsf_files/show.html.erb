@@ -119,43 +119,41 @@
 
 <p class="pagination"><%= pagination_links_full @revision_pages, @file.revisions.count %></p>
 
+<script type="text/javascript">
+	jQuery("a.delete-revision").click(function(event) {
+		if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_revision) %>")) event.preventDefault();
+	})
+	
+	jQuery("a.delete-entry").click(function(event) {
+		if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_entry) %>")) event.preventDefault();
+	})
+	
+	jQuery("#file_upload").change(function() {
+		if(jQuery("input[name=\"version\"]:checked").val() == "0") {
+			jQuery("#fileMinorVersionRadio").prop("checked", true); 
+		}
+		jQuery("#fileSameVersionRadio").prop("disabled", true); 
+	});
+	
+	jQuery("#newRevisionFormContentToggle").toggle(function() {
+		jQuery("#newRevisionFormContentToggle").text("[-]");
+		jQuery("#newRevisionFormContent").show();
+	}, function() {
+		jQuery("#newRevisionFormContentToggle").text("[+]");
+		jQuery("#newRevisionFormContent").hide();
+	});
+</script>
+<% if @revision.valid? && @file.valid? %>
+<script type="text/javascript">
+	jQuery("#newRevisionFormContentToggle").text("[+]");
+	jQuery("#newRevisionFormContent").hide();
+</script>
+<% end %>
+
 <% content_for :header_tags do %>
 	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
 	<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
 	<script type="text/javascript">
 		jQuery.noConflict();
-		
-		jQuery(document).ready(function() {
-			jQuery("a.delete-revision").click(function(event) {
-				if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_revision) %>")) event.preventDefault();
-			})
-			
-			jQuery("a.delete-entry").click(function(event) {
-				if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_entry) %>")) event.preventDefault();
-			})
-			
-			jQuery("#file_upload").change(function() {
-				if(jQuery("input[name=\"version\"]:checked").val() == "0") {
-					jQuery("#fileMinorVersionRadio").prop("checked", true); 
-				}
-				jQuery("#fileSameVersionRadio").prop("disabled", true); 
-			});
-			
-			jQuery("#newRevisionFormContentToggle").toggle(function() {
-				jQuery("#newRevisionFormContentToggle").text("[-]");
-				jQuery("#newRevisionFormContent").show();
-			}, function() {
-				jQuery("#newRevisionFormContentToggle").text("[+]");
-				jQuery("#newRevisionFormContent").hide();
-			});
-		});
 	</script>
-	<% if @revision.valid? && @file.valid? %>
-	<script type="text/javascript">
-		jQuery(document).ready(function() {
-			jQuery("#newRevisionFormContentToggle").text("[+]");
-			jQuery("#newRevisionFormContent").hide();
-		});
-	</script>
-	<% end %>
 <% end %>

@@ -175,11 +175,33 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 			<button type="button" id="entries_delete_button" title="<%=l(:title_delete_checked)%>"><%=l(:button_delete)%></button>
 		<% end %>
 		<div style="float: right;">
-			<%= l(:label_number_of_folders)%>: <%= @subfolders.count %>, <%= l(:label_number_of_files)%>: <%= @files.count %>
+			<%= l(:label_number_of_folders)%>: <%= @subfolders.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count %>
 		</div>
 	</div>
 	<br />
 <% end %>
+
+<script type="text/javascript">
+	jQuery("a.delete-link").click(function(event) {
+		if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_entry) %>")) event.preventDefault();
+	})
+	
+	jQuery("#entries_delete_button").click(function(event) {
+		if(window.confirm("<%= l(:question_do_you_really_want_to_delete_entries) %>")) {
+			jQuery("#entries_form").attr("action", "<%= url_for(:action => 'delete_entries', :id => @project, :folder_id => @folder) %>");
+			jQuery("#entries_form").submit();
+		}
+	})
+	
+	jQuery("#check_all_entries").click(function(event) {
+		var $this = jQuery(this);
+		if($this.prop("checked")) {
+			jQuery("input[type=checkbox]", jQuery("#browser > tbody")).prop("checked", true);
+		} else {
+			jQuery("input[type=checkbox]", jQuery("#browser > tbody")).prop("checked", false);
+		}
+	})			
+</script>
 
 <% content_for :header_tags do %>
 	<%= stylesheet_link_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/base/jquery-ui.css" %>
@@ -187,35 +209,10 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
 	
 	<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js" %>
+	<script type="text/javascript">
+		jQuery.noConflict();
+	</script>
 <% end %>
 
 <%= render(:partial => "multi_upload") if User.current.allowed_to?(:file_manipulation, @project) %>
 <br />
-
-<% content_for :header_tags do %>
-	<script type="text/javascript">
-		jQuery.noConflict();
-		
-		jQuery(document).ready(function() {
-			jQuery("a.delete-link").click(function(event) {
-				if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_entry) %>")) event.preventDefault();
-			})
-			
-			jQuery("#entries_delete_button").click(function(event) {
-				if(window.confirm("<%= l(:question_do_you_really_want_to_delete_entries) %>")) {
-					jQuery("#entries_form").attr("action", "<%= url_for(:action => 'delete_entries', :id => @project, :folder_id => @folder) %>");
-					jQuery("#entries_form").submit();
-				}
-			})
-			
-			jQuery("#check_all_entries").click(function(event) {
-				var $this = jQuery(this);
-				if($this.prop("checked")) {
-					jQuery("input[type=checkbox]", jQuery("#browser > tbody")).prop("checked", true);
-				} else {
-					jQuery("input[type=checkbox]", jQuery("#browser > tbody")).prop("checked", false);
-				}
-			})			
-		});
-	</script>
-<% end %>
