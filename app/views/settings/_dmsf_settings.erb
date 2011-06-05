@@ -16,9 +16,28 @@
 
 <p>
   <%=content_tag(:label, l(:label_file_storage_directory) + ":") %>
-  <%=text_field_tag "settings[dmsf_storage_directory]", @settings["dmsf_storage_directory"], :size=>50 %><br/>
+  <% storage_dir = @settings["dmsf_storage_directory"].strip %>
+  <%=text_field_tag "settings[dmsf_storage_directory]", storage_dir, :size=>50 %><br/>
   (<%=l(:label_default)%>: <%="#{RAILS_ROOT}/files/dmsf"%>)
 </p>
+<% unless File.exists?(storage_dir)
+	begin
+  		Dir.mkdir(storage_dir)
+   	rescue %>
+		<p class="warning"><%= l(:error_file_storage_directory_does_not_exist) %></p> 
+<%	end 
+   end %>
+<% testfilename = "#{storage_dir}/test.test"
+   if File.exists?(storage_dir)
+	begin
+		File.open(testfilename, "wb") do |file|
+		end
+   	rescue %>
+		<p class="warning"><%= l(:error_file_can_not_be_created) %></p>
+<%	ensure
+		File.delete(testfilename) if File.exists?(testfilename)
+	end 
+   end %>
 
 <p>
   <%=content_tag(:label, l(:label_default_notifications) + ":") %>
@@ -37,17 +56,32 @@
   <br/>
   <%= l(:note_zip_names_encoding_iconv) %>
 </p>
+<% unless @settings["dmsf_zip_encoding"].blank? || @settings["dmsf_zip_encoding"].downcase == "utf-8"
+	begin
+  		Iconv.conv(@settings["dmsf_zip_encoding"], "utf-8", "test")
+   	rescue %>
+		<p class="warning"><%= l(:error_wrong_zip_encoding) %></p> 
+<%	end 
+   end %>
 
 <hr />
+<% begin
+  	require 'xapian'
+  	xapian_disabled = false
+   rescue LoadError	%>
+	<p class="warning"><%= l(:warning_xapian_not_available) %></p> 
+<% 	xapian_disabled = true
+   end %>
+
 <p>
   <%=content_tag(:label, l(:label_index_database) + ":") %>
-  <%=text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], :size=>50 %><br/>
+  <%=text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], :disabled => xapian_disabled, :size=>50 %><br/>
   (<%=l(:label_default)%>: <%="#{RAILS_ROOT}/files/dmsf_index"%>)
 </p>
 
 <p>
   <%=content_tag(:label, l(:label_stemming_language) + ":") %>
-  <%=text_field_tag 'settings[dmsf_stemming_lang]', @settings['dmsf_stemming_lang'] %><br/>
+  <%=text_field_tag 'settings[dmsf_stemming_lang]', @settings['dmsf_stemming_lang'], :disabled => xapian_disabled %><br/>
   (<%=l(:label_default)%>: english )<br/>
   <br/>
   <%=l(:note_possible_values)%>: danish dutch english finnish french german german2 hungarian italian kraaij_pohlmann lovins norwegian porter portuguese romanian russian spanish swedish turkish (<%=l(:note_pass_none_to_disable_stemming)%>)
@@ -55,9 +89,9 @@
 
 <p>
   <%=content_tag(:label, l(:label_stem_strategy) + ":")%>
-  <%=radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_NONE', @settings['dmsf_stemming_strategy'] == 'STEM_NONE', :checked=>true  %> <%=l(:option_stem_none)%><br>
-  <%=radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_SOME', @settings['dmsf_stemming_strategy'] == 'STEM_SOME'  %> <%=l(:option_stem_some)%><br>
-  <%=radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_ALL', @settings['dmsf_stemming_strategy'] == 'STEM_ALL'  %> <%=l(:option_stem_all)%><br>
+  <%=radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_NONE', @settings['dmsf_stemming_strategy'] == 'STEM_NONE', :disabled => xapian_disabled, :checked=>true  %> <%=l(:option_stem_none)%><br>
+  <%=radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_SOME', @settings['dmsf_stemming_strategy'] == 'STEM_SOME', :disabled => xapian_disabled  %> <%=l(:option_stem_some)%><br>
+  <%=radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_ALL', @settings['dmsf_stemming_strategy'] == 'STEM_ALL', :disabled => xapian_disabled  %> <%=l(:option_stem_all)%><br>
   <br/>
   <%=l(:label_stemming_description)%>:
   <br>
