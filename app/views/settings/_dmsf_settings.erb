@@ -16,7 +16,10 @@
 
 <p>
   <%=content_tag(:label, l(:label_file_storage_directory) + ":") %>
-  <% storage_dir = @settings["dmsf_storage_directory"].strip %>
+  <% 
+	storage_dir = @settings["dmsf_storage_directory"].strip
+	storage_dir = "#{RAILS_ROOT}/files/dmsf" if storage_dir.blank?
+  %>
   <%=text_field_tag "settings[dmsf_storage_directory]", storage_dir, :size=>50 %><br/>
   (<%=l(:label_default)%>: <%="#{RAILS_ROOT}/files/dmsf"%>)
 </p>
