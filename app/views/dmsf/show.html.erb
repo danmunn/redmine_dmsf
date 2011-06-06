@@ -175,7 +175,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 			<button type="button" id="entries_delete_button" title="<%=l(:title_delete_checked)%>"><%=l(:button_delete)%></button>
 		<% end %>
 		<div style="float: right;">
-			<%= l(:label_number_of_folders)%>: <%= @subfolders.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count %>
+			<%= l(:label_number_of_folders)%>: <%= @subfolders.length %>, <%= l(:label_number_of_documents)%>: <%= @files.length %>
 		</div>
 	</div>
 	<br />
