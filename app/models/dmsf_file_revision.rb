@@ -25,7 +25,7 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
   
   acts_as_event :title => Proc.new {|o| "DMSF updated: #{o.file.dmsf_path_str}"},
-                :url => Proc.new {|o| {:controller => 'dmsf_detail', :action => 'file_detail', :id => o.file.project, :file_id => o.file}},
+                :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.file}},
                 :datetime => Proc.new {|o| o.updated_at },
                 :description => Proc.new {|o| o.comment },
                 :author => Proc.new {|o| o.user }
