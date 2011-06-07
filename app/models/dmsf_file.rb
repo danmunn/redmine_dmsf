@@ -245,6 +245,7 @@ class DmsfFile < ActiveRecord::Base
             filename = dochash["url"]
             if !filename.nil?
               dmsf_attrs = filename.split("_")
+              next if dmsf_attrs[1].blank?
               next unless results.select{|f| f.id.to_s == dmsf_attrs[1]}.empty?
               
               find_conditions =  DmsfFile.merge_conditions(limit_options[:conditions], :id => dmsf_attrs[1], :deleted => false )
