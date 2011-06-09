@@ -13,6 +13,11 @@
 
 (function(window, document, plupload, undef) {
 	var fakeSafariDragDrop;
+
+  if ((typeof File !== 'undefined') && !File.prototype.slice) {
+    if (File.prototype.webkitSlice) File.prototype.slice = File.prototype.webkitSlice;
+    if (File.prototype.mozSlice) File.prototype.slice = File.prototype.mozSlice;
+  }
 	
 	/* Introduce sendAsBinary for latest WebKits having support for BlobBuilder and typed arrays:
 	credits: http://javascript0.org/wiki/Portable_sendAsBinary, 
