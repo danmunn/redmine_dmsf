@@ -153,9 +153,9 @@ en:
   :label_number_of_documents: "Documents"
   :label_zip_names_encoding: "Zip names encoding"
   :note_zip_names_encoding_iconv: "Iconv is used for charset conversion from utf-8 to target encoding"
-  
   :error_file_storage_directory_does_not_exist: "File storage directory doesn't exist and can't be created"
   :error_file_can_not_be_created: "File can't be created in storage directory"
   :error_wrong_zip_encoding: "Wrong Zip encoding"
   :warning_xapian_not_available: "Xapian not available"
+  :menu_dmsf: "DMSF"
   

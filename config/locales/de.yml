@@ -159,4 +159,5 @@ de:
   :error_file_can_not_be_created: "File can't be created in storage directory"
   :error_wrong_zip_encoding: "Wrong Zip encoding"
   :warning_xapian_not_available: "Xapian not available"
+  :menu_dmsf: "DMSF"
   
