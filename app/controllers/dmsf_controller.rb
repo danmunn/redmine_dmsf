@@ -292,13 +292,13 @@ class DmsfController < ApplicationController
     if selected_folders && selected_folders.is_a?(Array)
       selected_folders.each do |selected_folder_id|
         check_project(folder = DmsfFolder.find(selected_folder_id))
-        zip.add_folder(folder) unless folder.nil?
+        zip.add_folder(folder, (@folder.dmsf_path_str unless @folder.nil?)) unless folder.nil?
       end
     end
     if selected_files && selected_files.is_a?(Array)
       selected_files.each do |selected_file_id|
         check_project(file = DmsfFile.find(selected_file_id))
-        zip.add_file(file) unless file.nil?
+        zip.add_file(file, (@folder.dmsf_path_str unless @folder.nil?)) unless file.nil?
       end
     end
     

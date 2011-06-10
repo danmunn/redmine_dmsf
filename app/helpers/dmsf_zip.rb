@@ -40,8 +40,9 @@ class DmsfZip
     @zip.close unless @zip.nil?
   end
   
-  def add_file(file)
+  def add_file(file, root_path = nil)
     string_path = file.folder.nil? ? "" : file.folder.dmsf_path_str + "/"
+    string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
     string_path += file.name
     #TODO: somewhat ugly conversion problems handling bellow
     begin
@@ -58,16 +59,17 @@ class DmsfZip
     @file_count += 1
   end
   
-  def add_folder(folder)
+  def add_folder(folder, root_path = nil)
     string_path = folder.dmsf_path_str + "/"
+    string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
     #TODO: somewhat ugly conversion problems handling bellow
     begin
       string_path = Iconv.conv(Setting.plugin_redmine_dmsf["dmsf_zip_encoding"], "utf-8", string_path)
     rescue
     end
     @zip_file.put_next_entry(string_path)
-    folder.subfolders.each { |subfolder| self.add_folder(subfolder) }
-    folder.files.each { |file| self.add_file(file) }
+    folder.subfolders.each { |subfolder| self.add_folder(subfolder, root_path) }
+    folder.files.each { |file| self.add_file(file, root_path) }
   end
   
 end
