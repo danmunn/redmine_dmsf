@@ -43,6 +43,12 @@
    end %>
 
 <p>
+  <%=content_tag(:label, l(:label_really_delete_files) + ":") %>
+  <%= check_box_tag("settings[dmsf_really_delete_files]", true, @settings["dmsf_really_delete_files"]) %><br/>
+  (<%=l(:label_default)%>: <%=l(:general_text_No)%>)
+</p>
+
+<p>
   <%=content_tag(:label, l(:label_default_notifications) + ":") %>
   <%=select_tag("settings[dmsf_default_notifications]", 
 		options_for_select([
