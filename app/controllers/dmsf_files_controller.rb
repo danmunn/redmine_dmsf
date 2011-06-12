@@ -140,19 +140,13 @@ class DmsfFilesController < ApplicationController
   end
 
   def delete_revision
-    if @revision.file.locked_for_user?
-      flash[:error] = l(:error_file_is_locked)
-    else
-      if !@revision.nil? && !@revision.deleted
-        if @revision.file.revisions.size <= 1
-          flash[:error] = l(:error_at_least_one_revision_must_be_present)
-        else
-          @revision.deleted = true
-          @revision.deleted_by_user = User.current
-          @revision.save
-          flash[:notice] = l(:notice_revision_deleted)
-          Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted revision #{@project.identifier}://#{@revision.file.dmsf_path_str}/#{@revision.id}"
-        end
+    if !@revision.nil? && !@revision.deleted
+      if @revision.delete
+        flash[:notice] = l(:notice_revision_deleted)
+        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted revision #{@project.identifier}://#{@revision.file.dmsf_path_str}/#{@revision.id}"
+      else
+        # TODO: check this error handling
+        @revision.errors.each {|e| flash[:error] = e[1]}
       end
     end
     redirect_to :action => "show", :id => @file

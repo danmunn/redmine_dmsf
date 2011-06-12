@@ -55,6 +55,25 @@ class DmsfFileRevision < ActiveRecord::Base
     remove_extension(filename).gsub(/_+/, " ");
   end
   
+  def delete
+    if self.file.locked_for_user?
+      errors.add_to_base(l(:error_file_is_locked))
+      return false 
+    end
+    if self.file.revisions.size <= 1
+      errors.add_to_base(l(:error_at_least_one_revision_must_be_present))
+      return false
+    end
+    if Setting.plugin_redmine_dmsf["dmsf_really_delete_files"]
+      File.delete(self.disk_file)
+      self.destroy
+    else
+      self.deleted = true
+      self.deleted_by_user = User.current
+      save
+    end
+  end
+  
   def version
     "#{self.major_version}.#{self.minor_version}"
   end
