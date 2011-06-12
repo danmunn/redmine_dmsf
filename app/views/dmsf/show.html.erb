@@ -50,7 +50,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				<%= link_to(h(subfolder.title),
 		          {:action => "show", :id => @project, :folder_id => subfolder},
 		          :class => "icon icon-folder") %>
-				<div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.count %>]</div>
+				<div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.deep_file_count %>]</div>
 			</td>
 			<td class="size">-</td>
 			<td class="modified">-</td>
