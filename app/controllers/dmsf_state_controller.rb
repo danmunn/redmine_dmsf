@@ -25,9 +25,9 @@ class DmsfStateController < ApplicationController
   before_filter :authorize
 
   def user_pref_save
-    @user_pref = DmsfUserPref.for(@project, User.current)
-    @user_pref.email_notify = params[:email_notify];
-    @user_pref.save
+    member = @project.members.find(:first, :conditions => {:user_id => User.current.id})
+    member.dmsf_mail_notification = params[:email_notify];
+    member.save!
     flash[:notice] = l(:notice_your_preferences_were_saved)
     redirect_to :controller => "projects", :action => 'settings', :tab => 'dmsf', :id => @project
   end

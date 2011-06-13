@@ -79,8 +79,7 @@ class DmsfMailer < Mailer
       if notify_user.pref[:no_self_notified] && notify_user == user
         false
       else
-        dmsf_user_prefs = DmsfUserPref.for(project, notify_user)
-        if dmsf_user_prefs.email_notify.nil?
+        if notify_member.dmsf_mail_notification.nil?
           case notify_user.mail_notification
           when 'all'
             true
@@ -93,7 +92,7 @@ class DmsfMailer < Mailer
           else
             false
           end
-        else            dmsf_user_prefs.email_notify
+        else            notify_member.dmsf_mail_notification
         end
       end
     end      

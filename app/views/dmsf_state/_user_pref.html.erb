@@ -7,7 +7,7 @@
 		<%= select_tag("email_notify", 
 				options_for_select([[l(:select_option_default), nil], 
 					[l(:select_option_activated), true], [l(:select_option_deactivated), false]], 
-					:selected => DmsfUserPref.for(@project, User.current).email_notify)) %>
+					:selected => @project.members.find(:first, :conditions => {:user_id => User.current.id}).dmsf_mail_notification)) %>
 		<%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
 	</div>
 	<% end %>

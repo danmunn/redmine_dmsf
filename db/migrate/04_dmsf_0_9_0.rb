@@ -16,22 +16,23 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfUserPref < ActiveRecord::Base
-  unloadable
-  belongs_to :project
-  belongs_to :user
-  
-  validates_presence_of :project, :user
-  validates_uniqueness_of :user_id, :scope => [:project_id]  
-  
-  def self.for(project, user)
-    user_pref = find(:first, :conditions => 
-      ["project_id = :project_id and user_id = :user_id", 
-        {:project_id => project.id, :user_id => user.id}])
-    user_pref = DmsfUserPref.new({:project_id => project.id, :user_id => user.id,
-      :email_notify => nil}) if user_pref.nil?
-    return user_pref
+class Dmsf090 < ActiveRecord::Migration
+  def self.up
+    add_column :members, :dmsf_mail_notification, :boolean
+    drop_table :dmsf_user_prefs
   end
-  
-end
 
+  def self.down
+    remove_column :members, :dmsf_mail_notification
+    
+    create_table :dmsf_user_prefs do |t|
+      t.references :project, :null => false
+      t.references :user, :null => false
+      
+      t.boolean :email_notify
+      
+      t.timestamps
+    end
+  end
+
+end
