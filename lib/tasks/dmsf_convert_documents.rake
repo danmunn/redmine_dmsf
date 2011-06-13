@@ -51,23 +51,23 @@ class DmsfConvertDocuments
           folder.project = project
           folder.user = (a = document.attachments.find(:first, :order => "created_on ASC")) ? a.author : User.find(:first)
           
-          folder.name = document.title
+          folder.title = document.title
           
           i = 1
           suffix = ""
-          while folders.index{|f| f.name == (folder.name + suffix)}
+          while folders.index{|f| f.title == (folder.title + suffix)}
             i+=1
             suffix = "_#{i}"
           end
           
-          folder.name = folder.name + suffix
+          folder.title = folder.title + suffix
           
           folder.description = document.description
           
           folder.save!
           folders << folder;
           
-          puts "Created folder: " + folder.name
+          puts "Created folder: " + folder.title
           
           files = []
           document.attachments.each do |attachment|
@@ -84,7 +84,10 @@ class DmsfConvertDocuments
                 suffix = "_#{i}"
               end
               
+              # Need to save file first to generate id for it in case of creation. 
+              # File id is needed to properly generate revision disk filename
               file.name = DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name)
+              file.save!
               
               revision = DmsfFileRevision.new
               revision.file = file
@@ -100,7 +103,7 @@ class DmsfConvertDocuments
               revision.comment = "Converted from documents"
               revision.mime_type = attachment.content_type
               
-              revision.disk_filename = file.new_storage_filename
+              revision.disk_filename = revision.new_storage_filename
               attachment_file = File.open(attachment.diskfile, "rb")
               File.open(revision.disk_file, "wb") do |f| 
                 while (buffer = attachment_file.read(8192))
@@ -111,7 +114,6 @@ class DmsfConvertDocuments
               
               revision.size = File.size(revision.disk_file)
   
-              file.save!
               revision.save!
   
               files << file
@@ -121,6 +123,7 @@ class DmsfConvertDocuments
               puts "Created file: " + file.name
             rescue Exception => e
               puts "Creating file: " + attachment.filename + " failed"
+              puts e
             end
           end
           
