@@ -158,4 +158,5 @@ en:
   :error_wrong_zip_encoding: "Wrong Zip encoding"
   :warning_xapian_not_available: "Xapian not available"
   :menu_dmsf: "DMSF"
+  :label_physical_file_delete: "Physical file delete"
   

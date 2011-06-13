@@ -43,7 +43,7 @@
    end %>
 
 <p>
-  <%=content_tag(:label, l(:label_really_delete_files) + ":") %>
+  <%=content_tag(:label, l(:label_physical_file_delete) + ":") %>
   <%= check_box_tag("settings[dmsf_really_delete_files]", true, @settings["dmsf_really_delete_files"]) %><br/>
   (<%=l(:label_default)%>: <%=l(:general_text_No)%>)
 </p>

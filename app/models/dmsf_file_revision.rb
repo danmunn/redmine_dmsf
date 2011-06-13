@@ -55,12 +55,12 @@ class DmsfFileRevision < ActiveRecord::Base
     remove_extension(filename).gsub(/_+/, " ");
   end
   
-  def delete
+  def delete(delete_all = false)
     if self.file.locked_for_user?
       errors.add_to_base(l(:error_file_is_locked))
       return false 
     end
-    if self.file.revisions.size <= 1
+    if !delete_all && self.file.revisions.length <= 1
       errors.add_to_base(l(:error_at_least_one_revision_must_be_present))
       return false
     end
