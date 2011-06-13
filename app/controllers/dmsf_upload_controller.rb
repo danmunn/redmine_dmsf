@@ -103,7 +103,6 @@ class DmsfUploadController < ApplicationController
         new_revision.set_workflow(commited_file["workflow"])
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         new_revision.size = File.size(commited_disk_filepath)
-        new_revision.disk_filename = new_revision.new_storage_filename
 
         file_upload = File.new(commited_disk_filepath, "rb")
         if file_upload.nil?
@@ -112,16 +111,23 @@ class DmsfUploadController < ApplicationController
           next
         end
         
+        if file.locked?
+          DmsfFileLock.file_lock_state(file, false)
+          flash[:notice] = l(:notice_file_unlocked)
+        end
+        
+        # Need to save file first to generate id for it in case of creation. 
+        # File id is needed to properly generate revision disk filename
+        if file.save
+          new_revision.disk_filename = new_revision.new_storage_filename
+        else
+          failed_uploads.push(commited_file)
+          next
+        end
+        
         if new_revision.save
-          if file.locked?
-            DmsfFileLock.file_lock_state(file, false)
-            flash[:notice] = l(:notice_file_unlocked)
-          end
-          file.save!
           file.reload
           
-          # Need to save file first to generate id for it in case of creation. 
-          # File id is needed to properly generate revision disk filename
           new_revision.copy_file_content(file_upload)
           file_upload.close
           File.delete(commited_disk_filepath)
