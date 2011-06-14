@@ -23,7 +23,8 @@ Converted project must have documents and may not have DMSF active!
 
 Available options:
   * project  => id or identifier of project (defaults to all projects)
-  * dry  => true or false (default false) to perform just check
+  * dry  => true or false (default false) to perform just check without any conversion
+  * invalid=replace  => to perform document title invalid characters replacement for '-'
 
 Example:
   rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
@@ -34,6 +35,7 @@ class DmsfConvertDocuments
   
   def self.convert(options={})
     dry = options[:dry] ? options[:dry] == "true" : false
+    replace = options[:invalid] ? options[:invalid] == "replace" : false
     
     projects = options[:project] ? [Project.find(options[:project])] : Project.find(:all)
     
@@ -57,6 +59,7 @@ class DmsfConvertDocuments
           folder.user = (a = document.attachments.find(:first, :order => "created_on ASC")) ? a.author : User.find(:first)
           
           folder.title = document.title
+          folder.title.gsub!(/[\/\\\?":<>]/,"-") if replace
           
           i = 1
           suffix = ""
@@ -178,6 +181,7 @@ namespace :redmine do
     options = {}
     options[:project] = ENV['project'] if ENV['project']
     options[:dry] = ENV['dry'] if ENV['dry']
+    options[:invalid] = ENV['invalid'] if ENV['invalid']
 
     DmsfConvertDocuments.convert(options)
   end
