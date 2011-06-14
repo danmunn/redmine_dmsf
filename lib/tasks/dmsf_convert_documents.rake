@@ -49,6 +49,7 @@ class DmsfConvertDocuments
         project.enabled_module_names = (project.enabled_module_names << "dmsf").uniq unless dry
         project.save! unless dry
 
+        fail = false
         folders = []
         project.documents.each do |document|
           puts "Processing document: " + document.title
@@ -83,6 +84,7 @@ class DmsfConvertDocuments
             rescue Exception => e
               puts "Creating folder: " + folder.title + " failed"
               puts e
+              fail = true
               next
             end
           end
@@ -90,6 +92,7 @@ class DmsfConvertDocuments
           folders << folder;
           
           files = []
+          failed_files = []
           document.attachments.each do |attachment|
             begin
               file = DmsfFile.new
@@ -107,6 +110,12 @@ class DmsfConvertDocuments
               # Need to save file first to generate id for it in case of creation. 
               # File id is needed to properly generate revision disk filename
               file.name = DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name)
+              
+              unless File.exist?(attachment.diskfile)
+                puts "Creating file: " + attachment.filename + " failed, attachment file doesn't exist"
+                fail = true
+                next
+              end
               
               if dry
                 puts "Dry check file: " + file.name
@@ -162,13 +171,14 @@ class DmsfConvertDocuments
             rescue Exception => e
               puts "Creating file: " + attachment.filename + " failed"
               puts e
+              fail = true
             end
           end
           
-          document.destroy unless dry
+          document.destroy unless dry || fail
           
         end
-        project.enabled_module_names = project.enabled_module_names.reject {|mod| mod == "documents"} unless dry
+        project.enabled_module_names = project.enabled_module_names.reject {|mod| mod == "documents"} unless dry || fail
         project.save! unless dry
       end
     end
