@@ -23,6 +23,7 @@ Converted project must have documents and may not have DMSF active!
 
 Available options:
   * project  => id or identifier of project (defaults to all projects)
+  * dry  => true or false (default false) to perform just check
 
 Example:
   rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
@@ -32,6 +33,8 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../../../config/enviro
 class DmsfConvertDocuments
   
   def self.convert(options={})
+    dry = options[:dry] ? options[:dry] == "true" : false
+    
     projects = options[:project] ? [Project.find(options[:project])] : Project.find(:all)
     
     projects.reject! {|project| !project.enabled_modules.index{|mod| mod.name == "dmsf"}.nil? }
@@ -41,11 +44,13 @@ class DmsfConvertDocuments
       projects.each do |project|
         puts "Processing project: " + project.identifier
         
-        project.enabled_module_names = (project.enabled_module_names << "dmsf").uniq
-        project.save!
+        project.enabled_module_names = (project.enabled_module_names << "dmsf").uniq unless dry
+        project.save! unless dry
 
         folders = []
         project.documents.each do |document|
+          puts "Processing document: " + document.title
+          
           folder = DmsfFolder.new
           
           folder.project = project
@@ -61,13 +66,25 @@ class DmsfConvertDocuments
           end
           
           folder.title = folder.title + suffix
-          
           folder.description = document.description
+
+          if dry
+            puts "Dry check folder: " + folder.title
+            if folder.invalid?
+              folder.errors.each {|e| puts "#{e[0]}: #{e[1]}"}
+            end
+          else
+            begin
+              folder.save!
+              puts "Created folder: " + folder.title
+            rescue Exception => e
+              puts "Creating folder: " + folder.title + " failed"
+              puts e
+              next
+            end
+          end
           
-          folder.save!
           folders << folder;
-          
-          puts "Created folder: " + folder.title
           
           files = []
           document.attachments.each do |attachment|
@@ -87,7 +104,15 @@ class DmsfConvertDocuments
               # Need to save file first to generate id for it in case of creation. 
               # File id is needed to properly generate revision disk filename
               file.name = DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name)
-              file.save!
+              
+              if dry
+                puts "Dry check file: " + file.name
+                if file.invalid?
+                  file.errors.each {|e| puts "#{e[0]}: #{e[1]}"}
+                end
+              else
+                file.save!
+              end
               
               revision = DmsfFileRevision.new
               revision.file = file
@@ -105,33 +130,43 @@ class DmsfConvertDocuments
               
               revision.disk_filename = revision.new_storage_filename
               attachment_file = File.open(attachment.diskfile, "rb")
-              File.open(revision.disk_file, "wb") do |f| 
-                while (buffer = attachment_file.read(8192))
-                  f.write(buffer)
+              
+              unless dry
+                File.open(revision.disk_file, "wb") do |f| 
+                  while (buffer = attachment_file.read(8192))
+                    f.write(buffer)
+                  end
                 end
+                revision.size = File.size(revision.disk_file)
               end
+
               attachment_file.close
               
-              revision.size = File.size(revision.disk_file)
-  
-              revision.save!
+              if dry
+                puts "Dry check revision: " + revision.title
+                if revision.invalid?
+                  revision.errors.each {|e| puts "#{e[0]}: #{e[1]}"}
+                end
+              else
+                revision.save!
+              end
   
               files << file
 
-              attachment.destroy
+              attachment.destroy unless dry
               
-              puts "Created file: " + file.name
+              puts "Created file: " + file.name unless dry
             rescue Exception => e
               puts "Creating file: " + attachment.filename + " failed"
               puts e
             end
           end
           
-          document.destroy
+          document.destroy unless dry
           
         end
-        project.enabled_module_names = project.enabled_module_names.reject {|mod| mod == "documents"}
-        project.save!
+        project.enabled_module_names = project.enabled_module_names.reject {|mod| mod == "documents"} unless dry
+        project.save! unless dry
       end
     end
     
@@ -142,6 +177,7 @@ namespace :redmine do
   task :dmsf_convert_documents => :environment do
     options = {}
     options[:project] = ENV['project'] if ENV['project']
+    options[:dry] = ENV['dry'] if ENV['dry']
 
     DmsfConvertDocuments.convert(options)
   end
