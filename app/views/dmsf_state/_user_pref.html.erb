@@ -3,11 +3,15 @@
 	<% form_tag({:controller => "dmsf_state", :action => "user_pref_save", :id => @project},
 		:method=>:post) do %>
 	<div>
+		<% 
+			member = @project.members.find(:first, :conditions => {:user_id => User.current.id})
+			mail_notification = member ? member.dmsf_mail_notification : nil
+		%>
 		<%= l(:label_notifications) %>: 
 		<%= select_tag("email_notify", 
 				options_for_select([[l(:select_option_default), nil], 
 					[l(:select_option_activated), true], [l(:select_option_deactivated), false]], 
-					:selected => @project.members.find(:first, :conditions => {:user_id => User.current.id}).dmsf_mail_notification)) %>
+					:selected => mail_notification)) %>
 		<%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
 	</div>
 	<% end %>
