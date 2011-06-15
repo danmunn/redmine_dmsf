@@ -158,4 +158,7 @@ es:
   :menu_dmsf: "DMSF"
   :label_physical_file_delete: "Physical file delete"
   :user_is_not_project_member: "You are not member of the project"
+  :heading_access_downloads_emails: "Downloads/Emails"
+  :heading_access_first: "First"
+  :heading_access_last: "Last"
   

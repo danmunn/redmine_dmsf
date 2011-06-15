@@ -114,10 +114,16 @@
 		<%= label_tag("", l(:label_comment) + ":") %>
 		<%= h(revision.comment) %>
 	</p>
+	<%= render(:partial => "revision_access", :locals => {:revision => revision}) if User.current.allowed_to?(:file_approval, @file.project) %>
 </div>
 <% end %>
 
 <p class="pagination"><%= pagination_links_full @revision_pages, @file.revisions.count %></p>
+
+<%
+sUrl = "jquery.dataTables/en.json"
+sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !I18n.locale.to_s.match(/^en.*/)
+%>
 
 <script type="text/javascript">
 	jQuery("a.delete-revision").click(function(event) {
@@ -142,6 +148,14 @@
 		jQuery("#newRevisionFormContentToggle").text("[+]");
 		jQuery("#newRevisionFormContent").hide();
 	});
+	
+	jQuery(".access-table").dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"oLanguage": {
+			'sUrl': '<%= Engines::RailsExtensions::AssetHelpers.plugin_asset_path("redmine_dmsf", "javascripts", sUrl) %>'	
+		}
+	});
 </script>
 <% if @revision.valid? && @file.valid? %>
 <script type="text/javascript">
@@ -151,8 +165,12 @@
 <% end %>
 
 <% content_for :header_tags do %>
+	<%= stylesheet_link_tag "jquery-ui/jquery-ui-1.8.13.css", :plugin => "redmine_dmsf" %>
+	<%= stylesheet_link_tag "jquery.dataTables/jquery-ui.dataTables.css", :plugin => "redmine_dmsf" %>
 	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
 	<%= javascript_include_tag "jquery-1.6.1.min.js", :plugin => "redmine_dmsf" %>
+	<%= javascript_include_tag "jquery-ui-1.8.13.min.js", :plugin => "redmine_dmsf" %>
+	<%= javascript_include_tag "jquery.dataTables/jquery.dataTables.min.js", :plugin => "redmine_dmsf" %>
 	<script type="text/javascript">
 		jQuery.noConflict();
 	</script>
