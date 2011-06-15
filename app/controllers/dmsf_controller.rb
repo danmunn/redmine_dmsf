@@ -138,13 +138,8 @@ class DmsfController < ApplicationController
           flash[:error] = l(:error_user_has_not_right_delete_file)
         end
       end
-      unless deleted_folders.empty?
-        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted folders from project #{@project.identifier}:"
-        deleted_folders.each {|f| Rails.logger.info "\t#{f.dmsf_path_str}:"}
-      end
       unless deleted_files.empty?
-        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted files from project #{@project.identifier}:"
-        deleted_files.each {|f| Rails.logger.info "\t#{f.dmsf_path_str}:"}
+        deleted_files.each {|f| log_activity(f, "deleted")}
         DmsfMailer.deliver_files_deleted(User.current, deleted_files)
       end
       if failed_entries.empty?
@@ -171,7 +166,6 @@ class DmsfController < ApplicationController
     @folder.user = User.current
     if @folder.save
       flash[:notice] = l(:notice_folder_created)
-      Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} created folder #{@project.identifier}://#{@folder.dmsf_path_str}"
       redirect_to({:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder})
     else
       @pathfolder = @parent
@@ -192,7 +186,6 @@ class DmsfController < ApplicationController
     @pathfolder = copy_folder(@folder)
     @folder.attributes = params[:dmsf_folder]
     if @folder.save
-      Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} updated folder #{@project.identifier}://#{@folder.dmsf_path_str}"
       flash[:notice] = l(:notice_folder_details_were_saved)
       redirect_to :controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder
     else
@@ -205,7 +198,6 @@ class DmsfController < ApplicationController
     if !@delete_folder.nil?
       if @delete_folder.delete
         flash[:notice] = l(:notice_folder_deleted)
-        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted folder #{@project.identifier}://#{@delete_folder.dmsf_path_str}"
       else
         flash[:error] = l(:error_folder_is_not_empty)
       end
@@ -249,6 +241,10 @@ class DmsfController < ApplicationController
 
   private
 
+  def log_activity(file, action)
+    Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{file.project.identifier}/#{file.id}"
+  end
+
   def email_entries(selected_folders, selected_files)
     zip = DmsfZip.new
     zip_entries(zip, selected_folders, selected_files)
@@ -262,9 +258,12 @@ class DmsfController < ApplicationController
       end
     end
     
-    Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} emailed from project #{@project.identifier}:"
-    selected_folders.each {|folder| Rails.logger.info "\tFolder #{folder}"} unless selected_folders.nil?
-    selected_files.each {|file| Rails.logger.info "\tFile #{file}"} unless selected_files.nil?
+    zip.files.each do |f| 
+      log_activity(f,"emailing zip")
+      audit = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => f.last_revision.id, 
+        :action => DmsfFileRevisionAccess::EmailAction)
+      audit.save!
+    end
     
     @email_params = {"zipped_content" => ziped_content}
     render :action => "email_entries"
@@ -276,9 +275,12 @@ class DmsfController < ApplicationController
     zip = DmsfZip.new
     zip_entries(zip, selected_folders, selected_files)
     
-    Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} downloaded from project #{@project.identifier}:"
-    selected_folders.each {|folder| Rails.logger.info "\tFolder #{folder}"} unless selected_folders.nil?
-    selected_files.each {|file| Rails.logger.info "\tFile #{file}"} unless selected_files.nil?
+    zip.files.each do |f| 
+      log_activity(f,"download zip")
+      audit = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => f.last_revision.id, 
+        :action => DmsfFileRevisionAccess::DownloadAction)
+      audit.save!
+    end
     
     send_file(zip.finish, 
       :filename => filename_for_content_disposition(@project.name + "-" + DateTime.now.strftime("%y%m%d%H%M%S") + ".zip"),
@@ -304,8 +306,8 @@ class DmsfController < ApplicationController
     
     max_files = 0
     max_files = Setting.plugin_redmine_dmsf["dmsf_max_file_download"].to_i
-    if max_files > 0 && zip.file_count > max_files
-      raise ZipMaxFilesError, zip.file_count
+    if max_files > 0 && zip.files.length > max_files
+      raise ZipMaxFilesError, zip.files.length
     end
     
     zip

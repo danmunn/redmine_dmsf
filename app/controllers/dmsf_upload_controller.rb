@@ -138,8 +138,7 @@ class DmsfUploadController < ApplicationController
         end
       end
       unless files.empty?
-        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} uploaded for project #{@project.identifier}:"
-        files.each {|file| Rails.logger.info "\t#{file.dmsf_path_str}:"}
+        files.each {|file| log_activity(file, "uploaded")}
         begin 
           DmsfMailer.deliver_files_updated(User.current, files)
         rescue ActionView::MissingTemplate => e
@@ -154,6 +153,10 @@ class DmsfUploadController < ApplicationController
   end
 
   private
+  
+  def log_activity(file, action)
+    Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{file.project.identifier}/#{file.id}/#{file.last_revision.id}"
+  end
   
   def find_project
     @project = Project.find(params[:id])

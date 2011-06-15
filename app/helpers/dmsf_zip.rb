@@ -22,12 +22,12 @@ require 'iconv'
 
 class DmsfZip
   
-  attr_reader :file_count
+  attr_reader :files
   
   def initialize()
     @zip = Tempfile.new(["dmsf_zip",".zip"])
     @zip_file = Zip::ZipOutputStream.new(@zip.path)
-    @file_count = 0
+    @files = []
   end
   
   def finish
@@ -56,7 +56,7 @@ class DmsfZip
         @zip_file.write(buffer)
       end
     end
-    @file_count += 1
+    @files << file
   end
   
   def add_folder(folder, root_path = nil)

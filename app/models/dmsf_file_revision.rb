@@ -74,7 +74,8 @@ class DmsfFileRevision < ActiveRecord::Base
     if Setting.plugin_redmine_dmsf["dmsf_really_delete_files"]
       dependent = DmsfFileRevision.find(:all, :conditions => 
         ["disk_filename = :filename", {:filename => self.disk_filename}])
-      File.delete(self.disk_file) if dependent.length <= 1
+      File.delete(self.disk_file) if dependent.length <= 1 && File.exist?(self.disk_file) 
+      DmsfFileRevisionAccess.find(:all, :conditions => ["dmsf_file_revision_id = ?", self.id]).each {|a| a.destroy}
       self.destroy
     else
       self.deleted = true

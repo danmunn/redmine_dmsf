@@ -45,7 +45,6 @@ class DmsfFilesController < ApplicationController
           return
         end
       end
-      Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} downloaded #{@project.identifier}://#{@file.dmsf_path_str} revision #{@revision.id}"
       check_project(@revision.file)
       send_revision
       return
@@ -113,7 +112,7 @@ class DmsfFilesController < ApplicationController
         @file.reload
         
         flash[:notice] = (flash[:notice].nil? ? "" : flash[:notice]) + l(:notice_file_revision_created)
-        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} created new revision of file #{@project.identifier}://#{@file.dmsf_path_str}"
+        log_activity("new revision")
         begin
           DmsfMailer.deliver_files_updated(User.current, [@file])
         rescue ActionView::MissingTemplate => e
@@ -130,7 +129,7 @@ class DmsfFilesController < ApplicationController
     if !@file.nil?
       if @file.delete
         flash[:notice] = l(:notice_file_deleted)
-        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted file #{@project.identifier}://#{@file.dmsf_path_str}"
+        log_activity("deleted")
         DmsfMailer.deliver_files_deleted(User.current, [@file])
       else
         flash[:error] = l(:error_file_is_locked)
@@ -143,7 +142,7 @@ class DmsfFilesController < ApplicationController
     if !@revision.nil? && !@revision.deleted
       if @revision.delete
         flash[:notice] = l(:notice_revision_deleted)
-        Rails.logger.info "#{Time.now} from #{request.remote_ip}/#{request.env["HTTP_X_FORWARDED_FOR"]}: #{User.current.login} deleted revision #{@project.identifier}://#{@revision.file.dmsf_path_str}/#{@revision.id}"
+        log_activity("deleted")
       else
         # TODO: check this error handling
         @revision.errors.each {|e| flash[:error] = e[1]}
@@ -202,7 +201,15 @@ class DmsfFilesController < ApplicationController
 
   private
 
+  def log_activity(action)
+    Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{@file.project.identifier}/#{@file.id}/#{@revision.id if @revision}"
+  end
+
   def send_revision
+    log_activity("downloaded")
+    access = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => @revision.id, 
+      :action => DmsfFileRevisionAccess::DownloadAction)
+    access.save!
     send_file(@revision.disk_file, 
       :filename => filename_for_content_disposition(@revision.name),
       :type => @revision.detect_content_type, 

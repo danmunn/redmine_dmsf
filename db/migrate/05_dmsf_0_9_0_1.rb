@@ -16,13 +16,18 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfNormalization < ActiveRecord::Migration
+class Dmsf0901 < ActiveRecord::Migration
   def self.up
-    rename_column :dmsf_folders, :name, :title
+    create_table :dmsf_file_revision_accesses do |t|
+      t.references :dmsf_file_revision, :null => false
+      t.integer :action, :default => 0, :null => false  # 0 ... download, 1 ... email
+      t.references :user, :null => false
+      t.timestamps
+    end
   end
 
   def self.down
-    rename_column :dmsf_folders, :title, :name 
+    drop_table :dmsf_file_revision_accesses
   end
 
 end
