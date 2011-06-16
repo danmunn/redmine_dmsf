@@ -9,18 +9,14 @@
 			</tr>
 		</thead>
 		<tbody>
+<% @revision.access_grouped.each do |access| %>
 			<tr>
-				<td>Row 1 Data 1</td>
-				<td>Row 1 Data 2</td>
-				<td>qqq</td>
-				<td>www</td>
+				<td><%=h(User.find(access[0]))%></td>
+				<td><%=access[1]%></td>
+				<td><%=Time.parse(access[2]).to_s(:db)%></td>
+				<td><%=Time.parse(access[3]).to_s(:db)%></td>
 			</tr>
-			<tr>
-				<td>Row 2 Data 1</td>
-				<td>Row 2 Data 2</td>
-				<td>aaa</td>
-				<td>sss</td>
-			</tr>
+<% end %>
 		</tbody>
 	</table>
 </p>
