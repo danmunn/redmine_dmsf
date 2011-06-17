@@ -13,6 +13,7 @@ table.entries  {
 }
 
 table.entries td.modified {
+	min-width: 120px;
 	width: 120px;
 }
 
@@ -31,13 +32,23 @@ table.entries th.check, table.entries td.check {
 	text-align: left;
 }
 
+table.entries th.check div.DataTables_sort_wrapper {
+	padding: 0;
+}
+
 table.display th {
 	font-size: 1.2em;
 }
 
-table.entries th.check div.DataTables_sort_wrapper {
-	padding: 0;
+table.display tbody tr.even {
+	background-color: #F8F8F8;
 }
+
+table.display tbody tr.odd {
+	background-color: #FFFFFF;
+}
+
+table.display tbody tr:hover { background-color:#ffffdd; }
 
 .icon-file.filetype-doc, .icon-file.filetype-docx {
 	background-image: url(../images/filetypes/doc.png);
