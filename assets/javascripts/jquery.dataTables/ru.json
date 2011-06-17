@@ -6,7 +6,7 @@
 	"sInfoEmpty":    "Записи с 0 до 0 из 0 записей",
 	"sInfoFiltered": "(отфильтровано из _MAX_ записей)",
 	"sInfoPostFix":  "",
-	"sSearch":       "Поиск:",
+	"sSearch":       "Фильтр:",
 	"sUrl":          "",
 	"oPaginate": {
 		"sFirst": "Первая",

@@ -6,7 +6,7 @@
 	"sInfoEmpty":    "Zobrazuji 0 až 0 z 0 záznamů",
 	"sInfoFiltered": "(filtrováno z celkem _MAX_ záznamů)",
 	"sInfoPostFix":  "",
-	"sSearch":       "Hledat:",
+	"sSearch":       "Filtrovat:",
 	"sUrl":          "",
 	"oPaginate": {
 	   "sFirst":    "První",

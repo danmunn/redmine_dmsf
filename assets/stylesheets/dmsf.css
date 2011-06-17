@@ -17,6 +17,7 @@ table.entries td.modified {
 }
 
 table.entries td.actions {
+	min-width: 108px;
 	width: 108px;
 }
 
@@ -28,6 +29,10 @@ table.entries th.check, table.entries td.check {
 	width: 17px; 
 	padding: 2px; 
 	text-align: left;
+}
+
+table.display th {
+	font-size: 1.2em;
 }
 
 table.entries th.check div.DataTables_sort_wrapper {
@@ -75,11 +80,12 @@ form.dmfs_entries {
 	display: block;
 }
 
-form.dmfs_entries div.controls {
+div.dataTables_wrapper div.fg-toolbar {
 	font-size: 0.9em;
 }
 
-form.dmfs_entries div.controls input, form.dmfs_entries div.controls button {
+div.dataTables_wrapper div.fg-toolbar input, div.dataTables_wrapper div.fg-toolbar button,
+div.dataTables_wrapper div.fg-toolbar select {
 	font-size: 0.9em;
 }
 
