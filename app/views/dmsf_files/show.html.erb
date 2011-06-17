@@ -151,7 +151,6 @@ sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !
 	
 	jQuery(".access-table").dataTable({
 		"bJQueryUI": true,
-		"sPaginationType": "full_numbers",
 		"oLanguage": {
 			'sUrl': '<%= Engines::RailsExtensions::AssetHelpers.plugin_asset_path("redmine_dmsf", "javascripts", sUrl) %>'	
 		}

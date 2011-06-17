@@ -28,18 +28,20 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 	:class => "dmfs_entries", :id => "entries_form") do
 %>
 	<%= hidden_field_tag("action") %> 
-	<table class="list entries" id="browser">
+	<table class="display entries list" id="browser">
 		<thead>
 			<tr id="root">
 				<th class="check">
 					<input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
 				</th>
-				<%= sort_header_tag("title", :caption => l(:link_title)) %>
-				<%= sort_header_tag("size", :caption => l(:link_size)) %>
-				<%= sort_header_tag("modified", :caption => l(:link_modified)) %>
-				<%= sort_header_tag("version", :caption => l(:link_ver)) %>
-				<%= sort_header_tag("author", :caption => l(:link_author)) %>
+				<th><%= l(:link_title) %></th>
+				<th><%= l(:link_size) %></th>
+				<th><%= l(:link_modified) %></th>
+				<th><%= l(:link_ver) %></th>
+				<th><%= l(:link_author) %></th>
 				<th></th>
+				<th class="hidden"></th>
+				<th class="hidden"></th>
 			</tr>
 		</thead>
 	<tbody>
@@ -87,6 +89,8 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				</div>
 				<br class="clear" />
 			</td>
+			<td class="hidden">0</td>
+			<td class="hidden"><%= subfolder.deep_file_count %></td>
 		</tr>
 	<% end %>
 	<% @files.each do |file| %>
@@ -164,19 +168,18 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				</div>
 				<br class="clear" />
 			</td>
+			<td class="hidden">1</td>
+			<td class="hidden"><%=file.last_revision.size%></td>
 		</tr>
 	<% end %>
 	</tbody>
 	</table>
-	<div class="controls">
+	<div class="controls" style="float: left">
 		<%= submit_tag(l(:submit_download), :title => l(:title_download_checked), :name => "download_entries") %>
 		<%= submit_tag(l(:submit_email), :title => l(:title_send_checked_by_email), :name => "email_entries") %>
 		<% if User.current.allowed_to?(:file_manipulation, @project) %>
 			<button type="button" id="entries_delete_button" title="<%=l(:title_delete_checked)%>"><%=l(:button_delete)%></button>
 		<% end %>
-		<div style="float: right;">
-			<%= l(:label_number_of_folders)%>: <%= @subfolders.length %>, <%= l(:label_number_of_documents)%>: <%= @files.length %>
-		</div>
 	</div>
 	<br />
 <% end %>
@@ -203,14 +206,45 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 	})			
 </script>
 
+<%
+sUrl = "jquery.dataTables/en.json"
+sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !I18n.locale.to_s.match(/^en.*/)
+%>
+
 <% content_for :header_tags do %>
 	<%= stylesheet_link_tag "jquery-ui/jquery-ui-1.8.13.css", :plugin => "redmine_dmsf" %>
 	<%= stylesheet_link_tag "plupload/jquery.ui.plupload.css", :plugin => "redmine_dmsf" %>
+	<%= stylesheet_link_tag "jquery.dataTables/jquery-ui.dataTables.css", :plugin => "redmine_dmsf" %>
 	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
 	
 	<%= javascript_include_tag "jquery-1.6.1.min.js", :plugin => "redmine_dmsf" %>
+	<%= javascript_include_tag "jquery-ui-1.8.13.min.js", :plugin => "redmine_dmsf" %>
+	<%= javascript_include_tag "jquery.dataTables/jquery.dataTables.min.js", :plugin => "redmine_dmsf" %>
 	<script type="text/javascript">
 		jQuery.noConflict();
+		jQuery(document).ready(function() {
+			jQuery("#browser").dataTable({
+				"bJQueryUI": true,
+				"oLanguage": {
+					'sUrl': '<%= Engines::RailsExtensions::AssetHelpers.plugin_asset_path("redmine_dmsf", "javascripts", sUrl) %>'	
+				},
+				"bAutoWidth": false,
+				"bPaginate": false,
+				"aaSorting": [[1,'asc']],
+				"aaSortingFixed": [[7,'asc']],
+				"aoColumnDefs": [
+					{ "bSearchable": false, "aTargets": [0, 6, 7, 8] },
+					{ "bSortable": false, "aTargets": [0, 6, 7] },
+					{ "iDataSort": 8, "aTargets": [ 2 ] }
+				],
+				"fnInitComplete": function() {
+					jQuery("div.controls").prependTo(jQuery("#browser_wrapper div.fg-toolbar")[0]);
+				},
+				"fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+					return "<%= l(:label_number_of_folders)%>: <%= @subfolders.length %>, <%= l(:label_number_of_documents)%>: <%= @files.length %>";
+				}
+			});
+		});
 	</script>
 <% end %>
 

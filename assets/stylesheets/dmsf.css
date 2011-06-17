@@ -10,7 +10,6 @@ table.entries tbody td, table.entries tbody tr:hover td {
 }
 
 table.entries  {
-	margin-bottom: 10px;
 }
 
 table.entries td.modified {
@@ -25,10 +24,14 @@ table.entries td.title {
 	width: 50%;
 }
 
-table.entries th.check {
+table.entries th.check, table.entries td.check {
 	width: 17px; 
 	padding: 2px; 
 	text-align: left;
+}
+
+table.entries th.check div.DataTables_sort_wrapper {
+	padding: 0;
 }
 
 .icon-file.filetype-doc, .icon-file.filetype-docx {
@@ -191,4 +194,8 @@ div.upload_select input, div.upload_select select {
 p.no-ident {
 	margin-bottom: 0;
 	margin-top: 0;
+}
+
+table.access-table tbody td, table.access-table tbody tr:hover td {
+	border: solid 1px #D7D7D7;
 }
