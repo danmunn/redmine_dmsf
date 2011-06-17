@@ -9,7 +9,7 @@
 			</tr>
 		</thead>
 		<tbody>
-<% @revision.access_grouped.each do |access| %>
+<% revision.access_grouped.each do |access| %>
 			<tr>
 				<td><%=h(User.find(access[0]))%></td>
 				<td><%=access[1]%></td>
