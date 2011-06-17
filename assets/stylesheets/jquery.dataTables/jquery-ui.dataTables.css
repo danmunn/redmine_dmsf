@@ -332,25 +332,25 @@ table.display tr.odd.row_selected td {
  */
 /* For the standard odd/even */
 tr.odd td.sorting_1 {
-	background: url('images/highlight.png?2') repeat;
+	background: url('images/highlight.png') repeat;
 }
 
 tr.odd td.sorting_2 {
-	background: url('images/highlight.png?5') repeat;
+	background: url('images/highlight.png') repeat;
 }
 
 tr.odd td.sorting_3 {
-	background: url('images/highlight.png?5') repeat;
+	background: url('images/highlight.png') repeat;
 }
 
 tr.even td.sorting_1 {
-	background: url('images/highlight.png?5') repeat;
+	background: url('images/highlight.png') repeat;
 }
 
 tr.even td.sorting_2 {
-	background: url('images/highlight.png?5') repeat;
+	background: url('images/highlight.png') repeat;
 }
 
 tr.even td.sorting_3 {
-	background: url('images/highlight.png?5') repeat;
+	background: url('images/highlight.png') repeat;
 }
