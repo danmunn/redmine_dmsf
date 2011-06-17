@@ -24,13 +24,7 @@ class DmsfController < ApplicationController
   before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
   before_filter :find_parent, :only => [:new, :create]
   
-  helper :sort
-  include SortHelper
-  
   def show
-    sort_init ["title", "asc"]
-    sort_update ["title", "size", "modified", "version", "author"]
-    
     if @folder.nil?
       @subfolders = DmsfFolder.project_root_folders(@project)
       @files = DmsfFile.project_root_files(@project)
@@ -40,24 +34,8 @@ class DmsfController < ApplicationController
     end
     
     @files.sort! do |a,b|
-      case @sort_criteria.first_key
-        when "size" then a.last_revision.size <=> b.last_revision.size
-        when "modified" then a.last_revision.updated_at <=> b.last_revision.updated_at
-        when "version" then
-          result = a.last_revision.major_version <=> b.last_revision.major_version
-          result == 0 ? a.last_revision.minor_version <=> b.last_revision.minor_version : result
-        when "author" then a.last_revision.user <=> b.last_revision.user
-        else a.last_revision.title <=> b.last_revision.title
-      end
+      a.last_revision.title <=> b.last_revision.title
     end
-    
-    if !@sort_criteria.first_asc?
-      @subfolders.reverse!  
-      @files.reverse!
-    end
-    
-    render :layout => !request.xhr?
-    
   end
 
   def entries_operation
