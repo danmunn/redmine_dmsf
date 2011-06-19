@@ -11,10 +11,10 @@
 		<tbody>
 <% revision.access_grouped.each do |access| %>
 			<tr>
-				<td><%=h(User.find(access[0]))%></td>
-				<td><%=access[1]%></td>
-				<td><%=Time.parse(access[2]).to_s(:db)%></td>
-				<td><%=Time.parse(access[3]).to_s(:db)%></td>
+				<td><%=h(User.find(access["user_id"]))%></td>
+				<td><%=access["count"]%></td>
+				<td><%=Time.parse(access["min"]).to_s(:db)%></td>
+				<td><%=Time.parse(access["max"]).to_s(:db)%></td>
 			</tr>
 <% end %>
 		</tbody>

@@ -85,7 +85,7 @@ class DmsfFileRevision < ActiveRecord::Base
   end
   
   def self.access_grouped(revision_id)
-    sql = "select user_id, count(*), min(created_at), max(created_at) from #{DmsfFileRevisionAccess.table_name} where dmsf_file_revision_id = ? group by user_id"
+    sql = "select user_id, count(*) as count, min(created_at) as min, max(created_at) as max from #{DmsfFileRevisionAccess.table_name} where dmsf_file_revision_id = ? group by user_id"
     self.connection.execute(self.sanitize_sql_array([sql, revision_id]))
   end
   
