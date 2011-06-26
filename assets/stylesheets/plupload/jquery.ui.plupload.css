@@ -5,7 +5,7 @@
 .plupload_button {cursor: pointer;}
 
 .plupload_wrapper {
-	font: normal 11px Verdana,sans-serif;
+/*	font: normal 11px Verdana,sans-serif; */
 	width: 100%;
 }
 
@@ -33,10 +33,11 @@ div.plupload .plupload_file {border-width: 0 0 1px 0}
 */
 
 .plupload_header_title {
-	font: normal 18px sans-serif;
+	font-size: 1.2em;
 	padding: 6px 0 3px;
 }
-.plupload_header_text {font: normal 12px sans-serif;}
+.plupload_header_text {
+}
 
 .plupload_filelist,
 .plupload_filelist_content {

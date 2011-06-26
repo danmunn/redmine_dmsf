@@ -37,7 +37,7 @@ table.entries th.check div.DataTables_sort_wrapper {
 }
 
 table.display th {
-	font-size: 1.2em;
+	font-weight: bold;
 }
 
 table.display tbody tr.even {
