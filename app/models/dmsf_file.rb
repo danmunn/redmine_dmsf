@@ -47,8 +47,8 @@ class DmsfFile < ActiveRecord::Base
       existing_file.nil? || existing_file.id == self.id
   end
   
-  acts_as_event :title => Proc.new {|o| "#{o.name}"},
-                :description => Proc.new {|o| "#{o.last_revision.title} - #{o.last_revision.description}" },
+  acts_as_event :title => Proc.new {|o| "#{o.title} - #{o.name}"},
+                :description => Proc.new {|o| o.description },
                 :url => Proc.new {|o| {:controller => "dmsf_files", :action => "show", :id => o, :download => ""}},
                 :datetime => Proc.new {|o| o.updated_at },
                 :author => Proc.new {|o| o.last_revision.user }
@@ -129,6 +129,10 @@ class DmsfFile < ActiveRecord::Base
   
   def title
     self.last_revision.title
+  end
+  
+  def description
+    self.last_revision.description
   end
   
   def version

@@ -3,7 +3,6 @@ cs:
   :label_dmsf_file_plural: "Dmsf soubory"
   :warning_no_entries_selected: "Není nic vybráno"
   :error_email_to_must_be_entered: "Musí být zadán adresát"
-
   :notice_email_sent: "Email byl odeslán"
   :warning_file_already_locked: "Soubor už je zamčen"
   :notice_file_locked: "Soubor byl zamčen"
@@ -164,4 +163,7 @@ cs:
   :heading_access_downloads_emails: "Stažené/Emaily"
   :heading_access_first: "První"
   :heading_access_last: "Poslední"
+
+# Not translated
+  :label_dmsf_updated: "DMSF updated"
   

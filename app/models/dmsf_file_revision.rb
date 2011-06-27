@@ -24,7 +24,7 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
   
-  acts_as_event :title => Proc.new {|o| "DMSF updated: #{o.file.dmsf_path_str}"},
+  acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.file.dmsf_path_str}"},
                 :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.file}},
                 :datetime => Proc.new {|o| o.updated_at },
                 :description => Proc.new {|o| o.comment },
