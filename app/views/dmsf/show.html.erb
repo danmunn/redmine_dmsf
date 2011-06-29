@@ -27,7 +27,14 @@
 form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder}, :method => :post, 
 	:class => "dmfs_entries", :id => "entries_form") do
 %>
-	<%= hidden_field_tag("action") %> 
+	<%= hidden_field_tag("action") %>
+	<div class="controls" style="float: left">
+		<%= submit_tag(l(:submit_download), :title => l(:title_download_checked), :name => "download_entries") %>
+		<%= submit_tag(l(:submit_email), :title => l(:title_send_checked_by_email), :name => "email_entries") %>
+		<% if User.current.allowed_to?(:file_manipulation, @project) %>
+			<button type="button" id="entries_delete_button" title="<%=l(:title_delete_checked)%>"><%=l(:button_delete)%></button>
+		<% end %>
+	</div> 
 	<table class="display entries" id="browser">
 		<thead>
 			<tr id="root">
@@ -174,13 +181,6 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 	<% end %>
 	</tbody>
 	</table>
-	<div class="controls" style="float: left">
-		<%= submit_tag(l(:submit_download), :title => l(:title_download_checked), :name => "download_entries") %>
-		<%= submit_tag(l(:submit_email), :title => l(:title_send_checked_by_email), :name => "email_entries") %>
-		<% if User.current.allowed_to?(:file_manipulation, @project) %>
-			<button type="button" id="entries_delete_button" title="<%=l(:title_delete_checked)%>"><%=l(:button_delete)%></button>
-		<% end %>
-	</div>
 	<br />
 <% end %>
 
