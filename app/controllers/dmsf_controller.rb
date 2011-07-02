@@ -140,7 +140,6 @@ class DmsfController < ApplicationController
   def create
     @folder = DmsfFolder.new(params[:dmsf_folder])
     @folder.project = @project
-    @folder.folder = @parent
     @folder.user = User.current
     if @folder.save
       flash[:notice] = l(:notice_folder_created)
