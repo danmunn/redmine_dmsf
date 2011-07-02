@@ -93,7 +93,7 @@ class DmsfFolder < ActiveRecord::Base
   end
   
   def self.directory_tree(project, current_folder = nil)
-    tree = [["Documents", nil]]
+    tree = [[l(:link_documents), nil]]
     DmsfFolder.project_root_folders(project).each do |folder|
       unless folder == current_folder
         tree.push(["...#{folder.title}", folder.id])
