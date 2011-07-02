@@ -36,7 +36,9 @@ module ProjectTabsExtended
 
         def project_settings_tabs_with_dmsf
             tabs = project_settings_tabs_without_dmsf
-            tabs.push({:name => 'dmsf', :controller => :dmsf_state, :action => :user_pref_save, :partial => 'dmsf_state/user_pref', :label => :dmsf})
+            unless @project.enabled_modules.index{|mod| mod.name == "dmsf"}.nil?
+              tabs.push({:name => 'dmsf', :controller => :dmsf_state, :action => :user_pref_save, :partial => 'dmsf_state/user_pref', :label => :dmsf})
+            end
             return tabs
         end
 
