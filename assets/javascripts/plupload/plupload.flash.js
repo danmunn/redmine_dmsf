@@ -90,6 +90,11 @@
 		init : function(uploader, callback) {
 			var browseButton, flashContainer, flashVars, waitCount = 0, container = document.body;
 
+			if (bowser.opera) {
+				callback({success : false});
+				return;
+			} 
+
 			if (getFlashVersion() < 10) {
 				callback({success : false});
 				return;
