@@ -52,6 +52,10 @@ On Debinan (Squeeze) use:
 apt-get install libxapian-ruby1.8 xapian-omega libxapian-dev xpdf antiword unzip\
   catdoc libwpd8c2a libwps-0.1-1 gzip unrtf catdvi djview djview3
 
+On Ubuntu use:
+sudo apt-get install libxapian-ruby1.8 xapian-omega libxapian-dev xpdf antiword unzip\
+  catdoc libwpd-0.9-9 libwps-0.2-2 gzip unrtf catdvi djview djview3
+
 2.2. Setup/Upgrade
 
 * In case of upgrade BACKUP YOUR DATABASE first
