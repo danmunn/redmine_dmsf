@@ -6,7 +6,8 @@ button {
 
 /* DMSF entries list */
 table.entries tbody td, table.entries tbody tr:hover td {
-	border: solid 1px #D7D7D7;
+	border-left: solid 1px #D7D7D7;
+	border-right: solid 1px #D7D7D7;
 }
 
 table.entries  {
