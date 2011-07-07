@@ -163,3 +163,7 @@ ja:
   :heading_access_downloads_emails: "ダウンロード/電子メール"
   :heading_access_first: "初回アクセス"
   :heading_access_last: "最終アクセス"
+
+#Not translated
+  :title_total_size_of_all_files: "Total size of all files under this folder"
+  

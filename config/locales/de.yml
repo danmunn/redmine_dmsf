@@ -163,4 +163,6 @@ de:
   :heading_access_downloads_emails: "Herunterladene/Emails"
   :heading_access_first: "Erste"
   :heading_access_last: "Letzte"
-  
+
+#Not translated
+  :title_total_size_of_all_files: "Total size of all files under this folder"  

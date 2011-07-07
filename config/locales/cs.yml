@@ -166,4 +166,5 @@ cs:
 
 # Not translated
   :label_dmsf_updated: "DMSF updated"
+  :title_total_size_of_all_files: "Total size of all files under this folder"
   

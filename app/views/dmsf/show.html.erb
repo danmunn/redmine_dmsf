@@ -61,10 +61,10 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 		          :class => "icon icon-folder") %>
 				<div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.deep_file_count %>]</div>
 			</td>
-			<td class="size"><%= number_to_human_size(subfolder.deep_size) %></td>
-			<td class="modified"></td>
+			<td class="size" title="<%= l(:title_total_size_of_all_files)%>"><%= number_to_human_size(subfolder.deep_size) %></td>
+			<td class="modified"><%= subfolder.updated_at.strftime("%Y-%m-%d %H:%M") %></td>
 			<td class="version"></td>
-			<td class="author"></td>
+			<td class="author"><%= h(subfolder.user) %></td>
 			<td class="actions">
 				<% if User.current.allowed_to?(:file_approval, @project) %>
 					<div class="right_icon_box">
@@ -124,7 +124,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				<% end %>
 			</td>
 			<td class="version">
-				<%= file.last_revision.version unless file.last_revision.nil? %>
+				<%= file.last_revision.version %>
 				<% case file.last_revision.workflow
         				when 1 then %><%= image_tag("waitingforapproval.png", :title => l(:title_waiting_for_approval),
 											:plugin => "redmine_dmsf") %>
@@ -132,7 +132,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 											:plugin => "redmine_dmsf") %>
 				<% end %>
 			</td>
-			<td class="author"><%= h(file.last_revision.user) unless file.last_revision.nil? %></td>
+			<td class="author"><%= h(file.last_revision.user) %></td>
 			<td class="actions">
 				<% if User.current.allowed_to?(:file_approval, @project) %>
 					<div class="right_icon_box">
