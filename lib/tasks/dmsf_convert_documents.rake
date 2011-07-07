@@ -39,8 +39,8 @@ class DmsfConvertDocuments
     
     projects = options[:project] ? [Project.find(options[:project])] : Project.find(:all)
     
-    projects.reject! {|project| !project.enabled_modules.index{|mod| mod.name == "dmsf"}.nil? }
-    projects.reject! {|project| project.enabled_modules.index{|mod| mod.name == "documents"}.nil? }
+    projects.reject! {|project| project.module_enabled?("dmsf") }
+    projects.reject! {|project| !project.module_enabled?("documents") }
     
     unless projects.nil? || projects.empty?
       projects.each do |project|
