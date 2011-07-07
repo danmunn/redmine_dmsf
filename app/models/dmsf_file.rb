@@ -143,6 +143,10 @@ class DmsfFile < ActiveRecord::Base
     self.last_revision.workflow
   end
   
+  def size
+    self.last_revision.size
+  end
+  
   def dmsf_path
     path = self.folder.nil? ? [] : self.folder.dmsf_path
     path.push(self)

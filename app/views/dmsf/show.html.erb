@@ -61,7 +61,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 		          :class => "icon icon-folder") %>
 				<div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.deep_file_count %>]</div>
 			</td>
-			<td class="size"></td>
+			<td class="size"><%= number_to_human_size(subfolder.deep_size) %></td>
 			<td class="modified"></td>
 			<td class="version"></td>
 			<td class="author"></td>
@@ -97,7 +97,7 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				<br class="clear" />
 			</td>
 			<td class="hidden">0</td>
-			<td class="hidden"><%= subfolder.deep_file_count %></td>
+			<td class="hidden"><%= subfolder.deep_size %></td>
 		</tr>
 	<% end %>
 	<% @files.each do |file| %>
@@ -110,9 +110,9 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 						:title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version)) %>
 				<div class="filename" title="<%= l(:title_filename_for_download)%>"><%= h(file.display_name) %></div>
 			</td>
-			<td class="size"><%= number_to_human_size(file.last_revision.size) unless file.last_revision.nil?  %></td>
+			<td class="size"><%= number_to_human_size(file.last_revision.size) %></td>
 			<td class="modified">
-				<%= file.last_revision.updated_at.strftime("%Y-%m-%d %H:%M") unless file.last_revision.nil? %>
+				<%= file.last_revision.updated_at.strftime("%Y-%m-%d %H:%M") %>
 				<% if file.locked_for_user? %>
 					<%= link_to(image_tag("locked.png", :plugin => "redmine_dmsf"), 
 							{:controller => "users", :action => "show", :id => file.locks[0].user },

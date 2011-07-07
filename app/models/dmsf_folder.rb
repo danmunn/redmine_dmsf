@@ -109,6 +109,13 @@ class DmsfFolder < ActiveRecord::Base
     file_count
   end
 
+  def deep_size
+    size = 0
+    self.files.each {|file| size += file.size}
+    self.subfolders.each {|subfolder| size += subfolder.deep_size}
+    size
+  end
+
   private
   
   def self.directory_subtree(tree, folder, level, current_folder)
