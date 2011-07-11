@@ -74,7 +74,9 @@ Redmine::Plugin.register :redmine_dmsf do
       entry_id = args[0].strip
       entry = DmsfFile.find(entry_id)
       unless entry.nil? || entry.deleted
-        return link_to "#{entry.title}", :controller => "dmsf_files", :action => "show", :id => entry, :download => ""
+        title = args[1] ? args[1] : entry.title
+        revision = args[2] ? args[2] : ""
+        return link_to "#{title}", :controller => "dmsf_files", :action => "show", :id => entry, :download => revision
       end
       nil
     end
@@ -92,7 +94,8 @@ Redmine::Plugin.register :redmine_dmsf do
         entry_id = args[0].strip
         entry = DmsfFolder.find(entry_id)
         unless entry.nil?
-          return link_to "#{entry.title}", :controller => "dmsf", :action => "show", :id => @project, :folder_id => entry
+          title = args[1] ? args[1] : entry.title
+          return link_to "#{title}", :controller => "dmsf", :action => "show", :id => @project, :folder_id => entry
         end
       end
       nil
