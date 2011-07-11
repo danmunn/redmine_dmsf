@@ -90,10 +90,13 @@ Search options will now contain "Dmsf files" check, that allows you to search DM
 
 There is possibility to link DMSF files from Wiki entries:
     {{dmsf(17)}} link to file with id 17
-DMSF file id can be found in link for file download.
+    {{dmsf(17,File)}} link to file with id 17 with link text "File"
+    {{dmsf(17,File,10)}} link to file with id 17 with link text "File" and link pointing to revision 10
+DMSF file/revision id can be found in link for file/revision download.
 
 There is possibility to link DMSF folders from Wiki entries:
     {{dmsff(5)}} link to folder with id 5
+    {{dmsff(5,Folder)}} link to folder with id 5 with link text "Folder"
 DMSF folder id can be found in link for folder opening.
 
 You can also publish Wiki help description. 
@@ -103,9 +106,12 @@ In file <redmine_root>/public/help/wiki_syntax_detailed.html include after docum
     	DMSF:
         <ul>
             <li><strong>{{dmsf(17)}}</strong> (link to file with id 17)</li>
+            <li><strong>{{dmsf(17,File)}}</strong> (link to file with id 17 with link text "File")</li>
+            <li><strong>{{dmsf(17,File,10)}}</strong> (link to file with id 17 with link text "File" and link pointing to revision 10)</li>
             <li><strong>{{dmsff(5)}}</strong> (link to folder with id 5)</li>
+            <li><strong>{{dmsff(5,Folder)}}</strong> (link to folder with id 5 with link text "Folder")</li>
         </ul>
-        DMSF file id can be found in link for file download.<br />
+        DMSF file/revision id can be found in link for file/revision download.<br />
         DMSF folder id can be found in link for folder opening.
     </li>
 </ul>
