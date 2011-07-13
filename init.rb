@@ -52,7 +52,7 @@ Redmine::Plugin.register :redmine_dmsf do
   activity_provider :dmsf_files, :class_name => "DmsfFileRevision", :default => true
   
   project_module :dmsf do
-    permission :browse_documents, {:dmsf => [:show]}
+    permission :view_dmsf_folders, {:dmsf => [:show]}
     permission :user_preferences, {:dmsf_state => [:user_pref_save]}
     permission :view_dmsf_files, {:dmsf => [:entries_operation, :entries_email],
       :dmsf_files => [:show]}
@@ -106,4 +106,5 @@ end
 
 Redmine::Search.map do |search|
   search.register :dmsf_files
+  search.register :dmsf_folders
 end

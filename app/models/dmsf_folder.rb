@@ -37,6 +37,12 @@ class DmsfFolder < ActiveRecord::Base
   
   validate :check_cycle
   
+  acts_as_event :title => Proc.new {|o| o.title},
+                :description => Proc.new {|o| o.description },
+                :url => Proc.new {|o| {:controller => "dmsf", :action => "show", :folder_id => o}},
+                :datetime => Proc.new {|o| o.updated_at },
+                :author => Proc.new {|o| o.user }
+  
   def check_cycle
     folders = []
     self.subfolders.each {|f| folders.push(f)}
@@ -114,6 +120,44 @@ class DmsfFolder < ActiveRecord::Base
     self.files.each {|file| size += file.size}
     self.subfolders.each {|subfolder| size += subfolder.deep_size}
     size
+  end
+
+  # To fullfill searchable module expectations
+  def self.search(tokens, projects=nil, options={})
+    tokens = [] << tokens unless tokens.is_a?(Array)
+    projects = [] << projects unless projects.nil? || projects.is_a?(Array)
+    
+    find_options = {:include => [:project]}
+    find_options[:order] = "dmsf_folders.updated_at " + (options[:before] ? 'DESC' : 'ASC')
+    
+    limit_options = {}
+    limit_options[:limit] = options[:limit] if options[:limit]
+    if options[:offset]
+      limit_options[:conditions] = "(dmsf_folders.updated_at " + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
+    end
+    
+    columns = options[:titles_only] ? ["dmsf_folders.title"] : ["dmsf_folders.title", "dmsf_folders.description"]
+            
+    token_clauses = columns.collect {|column| "(LOWER(#{column}) LIKE ?)"}
+    
+    sql = (['(' + token_clauses.join(' OR ') + ')'] * tokens.size).join(options[:all_words] ? ' AND ' : ' OR ')
+    find_options[:conditions] = [sql, * (tokens.collect {|w| "%#{w.downcase}%"} * token_clauses.size).sort]
+    
+    project_conditions = []
+    project_conditions << (Project.allowed_to_condition(User.current, :view_dmsf_files))
+    project_conditions << "project_id IN (#{projects.collect(&:id).join(',')})" unless projects.nil?
+    
+    results = []
+    results_count = 0
+    
+    with_scope(:find => {:conditions => [project_conditions.join(' AND ')]}) do
+      with_scope(:find => find_options) do
+        results_count = count(:all)
+        results = find(:all, limit_options)
+      end
+    end
+    
+    [results, results_count]
   end
 
   private
