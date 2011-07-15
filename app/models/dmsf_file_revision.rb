@@ -188,12 +188,13 @@ class DmsfFileRevision < ActiveRecord::Base
   end
   
   def new_storage_filename
+    raise DmsfAccessError, "File id is not set" unless self.file.id
     filename = DmsfHelper.sanitize_filename(self.name)
     timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
-    while File.exist?(File.join(DmsfFile.storage_path, "#{timestamp}_#{self.id}_#{filename}"))
+    while File.exist?(File.join(DmsfFile.storage_path, "#{timestamp}_#{self.file.id}_#{filename}"))
       timestamp.succ!
     end
-    "#{timestamp}_#{file.id}_#{filename}"
+    "#{timestamp}_#{self.file.id}_#{filename}"
   end
   
   def copy_file_content(open_file)

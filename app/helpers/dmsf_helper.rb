@@ -17,6 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require "tmpdir"
+require "digest/md5"
 
 module DmsfHelper
 
@@ -37,8 +38,16 @@ module DmsfHelper
     # get only the filename, not the whole path
     just_filename = File.basename(filename.gsub('\\\\', '/'))
 
-    # Finally, replace all non alphanumeric, hyphens or periods with underscore
-    just_filename.gsub(/[^\w\.\-]/,'_') 
+    # replace all non alphanumeric, hyphens or periods with underscore
+    just_filename = just_filename.gsub(/[^\w\.\-]/,'_')
+
+    unless just_filename =~ %r{^[a-zA-Z0-9_\.\-]*$}
+      # keep the extension if any
+      extension = $1 if just_filename =~ %r{(\.[a-zA-Z0-9]+)$}
+      just_filename = Digest::MD5.hexdigest(just_filename) << extension
+    end
+    
+    just_filename
   end
   
   def self.filetype_css(filename)
