@@ -122,7 +122,7 @@ class DmsfUploadController < ApplicationController
         
         # Need to save file first to generate id for it in case of creation. 
         # File id is needed to properly generate revision disk filename
-        if file.save
+        if new_revision.valid? && file.save
           new_revision.disk_filename = new_revision.new_storage_filename
         else
           failed_uploads.push(commited_file)
