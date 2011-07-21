@@ -30,7 +30,7 @@ Redmine::Plugin.register :redmine_dmsf do
   author "Vít Jonáš"
   description "Document Management System Features"
   version "1.0.0 dev"
-  url "https://code.google.com/p/redmine-dmsf/"
+  url "http://code.google.com/p/redmine-dmsf/"
   author_url "mailto:vit.jonas@gmail.com"
   
   requires_redmine :version_or_higher => '1.1.0'

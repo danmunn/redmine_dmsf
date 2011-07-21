@@ -47,6 +47,10 @@ class DmsfUploadController < ApplicationController
   # async single file upload handling 
   def upload_file
     @tempfile = params[:file]
+    unless @tempfile.original_filename
+      render_404
+      return
+    end
     @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
     File.open("#{DmsfHelper.temp_dir}/#{@disk_filename}", "wb") do |f| 
       while (buffer = @tempfile.read(8192))
