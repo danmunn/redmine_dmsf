@@ -164,7 +164,5 @@ ru:
   :heading_access_first: "Первый"
   :heading_access_last: "Последний"
   :label_dmsf_updated: "Модуль Документооборота обновлен"
-
-# Not translated
-  :title_total_size_of_all_files: "Total size of all files under this folder"
+  :title_total_size_of_all_files: "Суммарный объем файлов в каталоге"
    
