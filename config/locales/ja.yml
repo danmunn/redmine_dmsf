@@ -128,7 +128,7 @@ ja:
   :heading_uploaded_files: "アップロードされたファイル"
   :submit_commit: "コミット"
   :link_documents: "文書"
-  :permission_browse_documents: "文書の検索"
+  :permission_view_dmsf_folders: "文書の検索"
   :permission_user_preferences: "ユーザ設定"
   :permission_view_dmsf_files: "文書の表示"
   :permission_folder_manipulation: "フォルダの操作"

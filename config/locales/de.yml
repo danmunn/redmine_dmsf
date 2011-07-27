@@ -128,7 +128,7 @@ de:
   :heading_uploaded_files: "Hochgeladene Dateien"
   :submit_commit: "OK"
   :link_documents: "Dateien"
-  :permission_browse_documents: "Durchforste Dateien"
+  :permission_view_dmsf_folders: "Durchforste Dateien"
   :permission_user_preferences: "Benutzereinstellungen"
   :permission_view_dmsf_files: "Betrachte Dateien"
   :permission_folder_manipulation: "Ordner manipulation"

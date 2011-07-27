@@ -126,7 +126,7 @@ es:
   :heading_uploaded_files: "Uploaded Files"
   :submit_commit: "Commit"
   :link_documents: "Documents"
-  :permission_browse_documents: "Browse documents"
+  :permission_view_dmsf_folders: "Browse documents"
   :permission_user_preferences: "User preferences"
   :permission_view_dmsf_files: "View documents"
   :permission_folder_manipulation: "Folder manipulation"

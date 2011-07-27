@@ -129,7 +129,7 @@ zh:
   :heading_uploaded_files: "上传文件"
   :submit_commit: "提交"
   :link_documents: "文档"
-  :permission_browse_documents: "浏览文档"
+  :permission_view_dmsf_folders: "浏览文档"
   :permission_user_preferences: "用户偏好设定"
   :permission_view_dmsf_files: "查看文档"
   :permission_folder_manipulation: "文件夹操作"

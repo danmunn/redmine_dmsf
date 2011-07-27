@@ -128,7 +128,7 @@ cs:
   :heading_uploaded_files: "Nahrané soubory"
   :submit_commit: "Potvrdit"
   :link_documents: "Dokumenty"
-  :permission_browse_documents: "Projcházet dokumenty"
+  :permission_view_dmsf_folders: "Procházet dokumenty"
   :permission_user_preferences: "Nastavení uživatele"
   :permission_view_dmsf_files: "Zobrazit dokumnety"
   :permission_folder_manipulation: "Přesun složky"

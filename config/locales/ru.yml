@@ -128,7 +128,7 @@ ru:
   :heading_uploaded_files: "Загруженные файлы"
   :submit_commit: "Отправить"
   :link_documents: "Документы"
-  :permission_browse_documents: "Список документов"
+  :permission_view_dmsf_folders: "Список документов"
   :permission_user_preferences: "Настроки пользователя"
   :permission_view_dmsf_files: "Просмотр документов"
   :permission_folder_manipulation: "Управление каталогами"
