@@ -163,8 +163,6 @@ cs:
   :heading_access_downloads_emails: "Stažené/Emaily"
   :heading_access_first: "První"
   :heading_access_last: "Poslední"
-
-# Not translated
-  :label_dmsf_updated: "DMSF updated"
-  :title_total_size_of_all_files: "Total size of all files under this folder"
-  
+  :label_dmsf_updated: "DMSF změněno"
+  :title_total_size_of_all_files: "Celková velikost všech souborů v adresáři"
+  :project_module_dmsf: "DMSF"

@@ -163,4 +163,5 @@ es:
   :heading_access_last: "Last"
   :label_dmsf_updated: "DMSF updated"
   :title_total_size_of_all_files: "Total size of all files under this folder"
+  :project_module_dmsf: "DMSF"
   

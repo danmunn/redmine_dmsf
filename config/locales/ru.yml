@@ -165,4 +165,5 @@ ru:
   :heading_access_last: "Последний"
   :label_dmsf_updated: "Модуль Документооборота обновлен"
   :title_total_size_of_all_files: "Суммарный объем файлов в каталоге"
-   
+  :project_module_dmsf: "Документооборот"
+  

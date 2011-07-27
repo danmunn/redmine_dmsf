@@ -164,3 +164,5 @@ ja:
   :heading_access_first: "初回アクセス"
   :heading_access_last: "最終アクセス"
   :title_total_size_of_all_files: "このフォルダにある全ファイルの合計サイズ"
+  :project_module_dmsf: "DMSF"
+  
