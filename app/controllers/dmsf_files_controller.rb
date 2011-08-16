@@ -219,6 +219,7 @@ class DmsfFilesController < ApplicationController
   def find_file
     @file = DmsfFile.find(params[:id])
     @project = @file.project
+  rescue
   end
 
   def find_revision

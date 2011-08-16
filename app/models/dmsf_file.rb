@@ -184,6 +184,17 @@ class DmsfFile < ActiveRecord::Base
     #end
   end
   
+  # Returns an array of projects that current user can copy file to
+  def self.allowed_target_projects_on_copy
+    projects = []
+    if User.current.admin?
+      projects = Project.visible.all
+    elsif User.current.logged?
+      User.current.memberships.each {|m| projects << m.project if m.roles.detect {|r| r.allowed_to?(:file_manipulation)}}
+    end
+    projects
+  end
+  
   # To fullfill searchable module expectations
   def self.search(tokens, projects=nil, options={})
     tokens = [] << tokens unless tokens.is_a?(Array)

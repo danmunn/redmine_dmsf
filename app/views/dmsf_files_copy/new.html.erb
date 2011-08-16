@@ -1,0 +1,47 @@
+<% html_title(l(:dmsf)) %>
+
+<div class="contextual">
+</div>
+
+<% path = @file.folder.nil? ? [] : @file.folder.dmsf_path %>
+<h2>
+<%= render(:partial => "/dmsf/path", :locals => {:path => path}) %>
+/
+<%= link_to(h(@file.title), {:controller => "dmsf_files", :action => "show", :id=> @file}) %> 
+<%= image_tag("notify.png", :plugin => "redmine_dmsf", :title => l(:title_notifications_active)) if @file.notification %>
+</h2>
+
+<% unless DmsfFile.allowed_target_projects_on_copy.blank?
+	form_tag({:action => "create", :id => @file}, :id => "copyForm") do |f| %>
+		<div class="box dmsf_detail">
+			<%= error_messages_for("file") %>
+			<p>
+				<label for="target_project_id"><%=l(:label_target_project)%>:</label>
+				<%= select_tag("target_project_id",
+			               project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy, :selected => @target_project),
+			               :onchange => remote_function(:url => { :action => 'new' },
+			                                            :method => :get,
+			                                            :update => 'content',
+			                                            :with => "Form.serialize('copyForm')")) %>
+			</p>
+			<p>
+				<%= label_tag("target_folder_id", l(:label_target_folder) + ":") %>
+				<%= select_tag("target_folder_id", 
+					options_for_select(DmsfFolder.directory_tree(@target_project), 
+						:selected => (@target_folder.id unless @target_folder.nil?))) %>
+			</p>
+		</div>
+		
+		<%= submit_tag(l(:button_copy)) %>
+		<%= submit_tag(l(:button_move), :name => 'move') if User.current.allowed_to?(:file_manipulation, @project) %>
+	<% end %>
+<% end %>
+
+<% content_for :header_tags do %>
+	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
+	<%= robot_exclusion_tag %>
+	<%= javascript_include_tag "jquery-1.6.1.min.js", :plugin => "redmine_dmsf" %>
+	<script type="text/javascript">
+		jQuery.noConflict();
+	</script>
+<% end %>

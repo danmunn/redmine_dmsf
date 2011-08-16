@@ -165,4 +165,13 @@ ja:
   :heading_access_last: "最終アクセス"
   :title_total_size_of_all_files: "このフォルダにある全ファイルの合計サイズ"
   :project_module_dmsf: "DMSF"
+
+# Not translated
+  :warning_no_project_to_copy_file_to: "No project to copy file to"
+  :comment_copied_from: "Copied from %{source}"
+  :notice_file_copied: "File copied"
+  :notice_file_moved: "File moved"
+  :label_target_project: "Target project"
+  :label_target_folder: "Target folder"
+  :title_copy_or_move: "Copy/Move"
   

@@ -166,3 +166,11 @@ cs:
   :label_dmsf_updated: "DMSF změněno"
   :title_total_size_of_all_files: "Celková velikost všech souborů v adresáři"
   :project_module_dmsf: "DMSF"
+  :warning_no_project_to_copy_file_to: "Neexistuje projekt, do kterého můžete kopírovat"
+  :comment_copied_from: "Zkopírováno z %{source}"
+  :notice_file_copied: "Soubor zkopírován"
+  :notice_file_moved: "Soubor přesunut"
+  :label_target_project: "Cílový projekt"
+  :label_target_folder: "Cílový adresář"
+  :title_copy_or_move: "Kopírovat/Přesunout"
+  
