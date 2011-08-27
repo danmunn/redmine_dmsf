@@ -37,7 +37,7 @@ es:
   :warning_file_notifications_already_deactivated: "Las notificaciones del archivo seleccionado ya estaban desactivadas previamente"
   :notice_file_notifications_deactivated: "Notificación de archivo desactivada"
   
- # Not translated
+# Not translated
   :link_details: "%{title} details"
   :link_edit: "Edit %{title}"
   :submit_create: "Create"
@@ -171,4 +171,5 @@ es:
   :label_target_project: "Target project"
   :label_target_folder: "Target folder"
   :title_copy_or_move: "Copy/Move"
+  :label_dmsf_folder_plural: "Dmsf folders"
   
