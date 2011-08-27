@@ -29,7 +29,7 @@ form_for(:dmsf_file_revision, @revision, :url => {:action => "create_revision", 
 						</p>
 					</div>
 					<div class="splitcontentright">
-						<p>
+						<p style="white-space: nowrap;">
 							<%= label_tag("", l(:label_file) + ":") %>
 							<%= f.select(:dmsf_folder_id, 
 								options_for_select(DmsfFolder.directory_tree(@project), 
