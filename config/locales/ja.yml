@@ -172,7 +172,5 @@ ja:
   :label_target_project: "ターゲットプロジェクト"
   :label_target_folder: "ターゲットフォルダ"
   :title_copy_or_move: "コピー/移動"
-
-# Not translated
-  :label_dmsf_folder_plural: "Dmsf folders"
+  :label_dmsf_folder_plural: "Dmsf フォルダ"
   
