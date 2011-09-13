@@ -39,7 +39,7 @@ class DmsfFolder < ActiveRecord::Base
   
   acts_as_event :title => Proc.new {|o| o.title},
                 :description => Proc.new {|o| o.description },
-                :url => Proc.new {|o| {:controller => "dmsf", :action => "show", :folder_id => o}},
+                :url => Proc.new {|o| {:controller => "dmsf", :action => "show", :id => o.project, :folder_id => o}},
                 :datetime => Proc.new {|o| o.updated_at },
                 :author => Proc.new {|o| o.user }
   
