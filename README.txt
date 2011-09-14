@@ -73,7 +73,7 @@ sudo apt-get install libxapian-ruby1.8 xapian-omega libxapian-dev xpdf antiword 
 If you want to use fulltext search features, you must setup file content indexing.
 
 It is necessary to index DMSF files with omega before searching attemts to recieve some output:
-    omindex -s english -l 1 --db {path to index database from configuration} {path to storage from configuration}
+    omindex -s english -l 1 -U / --db {path to index database from configuration} {path to storage from configuration}
 
 This command must be run on regular basis (e.g. from cron)
 
