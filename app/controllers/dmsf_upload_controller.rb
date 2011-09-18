@@ -93,8 +93,8 @@ class DmsfUploadController < ApplicationController
           new_revision.minor_version = last_revision.minor_version
           new_revision.workflow = last_revision.workflow
         end
-        
-        commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file["disk_filename"]}"
+
+        commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file["disk_filename"].gsub(/[\/\\]/,'')}"
         
         new_revision.folder = @folder
         new_revision.file = file
