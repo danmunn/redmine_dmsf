@@ -69,13 +69,13 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				<% if User.current.allowed_to?(:file_approval, @project) %>
 					<div class="right_icon_box">
 					<% if subfolder.notification %>
-						<%= link_to(image_tag("notify.png", :plugin => "redmine_dmsf"),
-			        			{:action => "notify_deactivate", :id => @project,
-								:folder_id => subfolder}, :title => l(:title_notifications_active_deactivate)) %>
+						<%= link_to_function(image_tag("notify.png", :plugin => "redmine_dmsf"),
+			        			"manipulation_link('#{url_for(:action => 'notify_deactivate', :id => @project, :folder_id => subfolder)}')",
+								 :title => l(:title_notifications_active_deactivate)) %>
 					<% else %>
-						<%= link_to(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
-			        			{:action => "notify_activate", :id => @project, 
-								:folder_id => subfolder}, :title => l(:title_notifications_not_active_activate)) %>
+						<%= link_to_function(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
+			        			"manipulation_link('#{url_for(:action => 'notify_activate', :id => @project, :folder_id => subfolder)}')", 
+								:title => l(:title_notifications_not_active_activate)) %>
 					<% end %>
 					</div>
 				<% end %>
@@ -188,7 +188,10 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 
 <script type="text/javascript">
 	jQuery("a.delete-link").click(function(event) {
-		if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_entry) %>")) event.preventDefault();
+		event.preventDefault();
+		if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_entry) %>")) return;
+		jQuery("#entries_form").attr("action", jQuery(this).attr("href"));
+		jQuery("#entries_form").submit();
 	})
 	
 	jQuery("#entries_delete_button").click(function(event) {
@@ -258,6 +261,17 @@ sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !
 		        }
 	      	});
 		});
+		
+		function manipulation_link(action) {
+			jQuery("#entries_form").attr("action", action);
+			jQuery("#entries_form").submit();
+		};
+		
+		function confirmation_link(action) {
+			if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_entry) %>")) return;
+			jQuery("#entries_form").attr("action", action);
+			jQuery("#entries_form").submit();
+		};
 	</script>
 <% end %>
 
