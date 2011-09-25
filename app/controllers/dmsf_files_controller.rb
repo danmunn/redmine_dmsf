@@ -25,6 +25,9 @@ class DmsfFilesController < ApplicationController
   before_filter :find_revision, :only => [:delete_revision]
   before_filter :authorize
 
+  verify :method => :post, :only => [:create_revision, :delete_revision, :delete, :lock, :unlock, :notify_activate, :notify_deactivate], 
+    :render => { :nothing => true, :status => :method_not_allowed }
+
   def show
     # download is put here to provide more clear and usable links
     if params.has_key?(:download)

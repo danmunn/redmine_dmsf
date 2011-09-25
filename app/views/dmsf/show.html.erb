@@ -88,10 +88,9 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
  					</div>
 					<% end %>
 					<div style="float: right">
-						<%= link_to(image_tag("delete.png", :plugin => "redmine_dmsf"), 
-								{:action => "delete", :id => @project, 
-								:folder_id => @folder, :delete_folder_id => subfolder}, :class => "delete-link",
-								:title => l(:title_delete)) if User.current.allowed_to?(:folder_manipulation, @project) %>
+						<%= link_to_function(image_tag("delete.png", :plugin => "redmine_dmsf"),
+								"confirmation_link('#{url_for(:action => 'delete', :id => @project, :folder_id => @folder, :delete_folder_id => subfolder)}')", 
+								:title => l(:title_delete))%>
 					</div>
 				</div>
 				<br class="clear" />
@@ -139,12 +138,12 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 				<% if User.current.allowed_to?(:file_approval, @project) %>
 					<div class="right_icon_box">
 					<% if file.notification %>
-						<%= link_to(image_tag("notify.png", :plugin => "redmine_dmsf"),
-			        			{:controller => "dmsf_files", :action => "notify_deactivate", :id => file},
+						<%= link_to_function(image_tag("notify.png", :plugin => "redmine_dmsf"),
+								"manipulation_link('#{url_for(:controller => "dmsf_files", :action => 'notify_deactivate', :id => file)}')",
 								:title => l(:title_notifications_active_deactivate)) %>
 					<% else %>
-						<%= link_to(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
-			        			{:controller => "dmsf_files", :action => "notify_activate", :id => file},
+						<%= link_to_function(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
+								"manipulation_link('#{url_for(:controller => "dmsf_files", :action => 'notify_activate', :id => file)}')",
 								:title => l(:title_notifications_not_active_activate)) %>
 					<% end %>
 					</div>
@@ -158,20 +157,20 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 					<div style="float: right; width: 44px;">
 					<% unless file.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, @project)%>
 						<% 	if file.locked? %>
-							<%= link_to(image_tag("unlock.png", :plugin => "redmine_dmsf"),
-					        		{:controller => "dmsf_files", :action => "unlock", :id => file },
+							<%= link_to_function(image_tag("unlock.png", :plugin => "redmine_dmsf"),
+									"manipulation_link('#{url_for(:controller => "dmsf_files", :action => 'unlock', :id => file)}')",
 									:title => l(:title_unlock_file)) %>
 						<% 	else %>
-							<%= link_to(image_tag("lock.png", :plugin => "redmine_dmsf"),
-					        		{:controller => "dmsf_files", :action => "lock", :id => file },
+							<%= link_to_function(image_tag("lock.png", :plugin => "redmine_dmsf"),
+									"manipulation_link('#{url_for(:controller => "dmsf_files", :action => 'lock', :id => file)}')",
 									:title => l(:title_lock_file)) %>
 						<% 	end %> 
 						&nbsp;
 					<% end %>
 					<% if User.current.allowed_to?(:file_manipulation, @project) && !file.locked_for_user? %>
-						<%= link_to(image_tag("delete.png", :plugin => "redmine_dmsf"), 
-								{:controller => "dmsf_files", :action => "delete", :id => file}, 
-								:class => "delete-link", :title => l(:title_delete)) %>
+						<%= link_to_function(image_tag("delete.png", :plugin => "redmine_dmsf"),
+								"confirmation_link('#{url_for(:controller => "dmsf_files", :action => 'delete', :id => file)}')",
+								:title => l(:title_delete)) %>
 					<% end %>
 					</div>
 				</div>
@@ -187,13 +186,6 @@ form_tag({:action => "entries_operation", :id => @project, :folder_id => @folder
 <% end %>
 
 <script type="text/javascript">
-	jQuery("a.delete-link").click(function(event) {
-		event.preventDefault();
-		if(!window.confirm("<%= l(:question_do_you_really_want_to_delete_this_entry) %>")) return;
-		jQuery("#entries_form").attr("action", jQuery(this).attr("href"));
-		jQuery("#entries_form").submit();
-	})
-	
 	jQuery("#entries_delete_button").click(function(event) {
 		if(window.confirm("<%= l(:question_do_you_really_want_to_delete_entries) %>")) {
 			jQuery("#entries_form").attr("action", "<%= url_for(:action => 'delete_entries', :id => @project, :folder_id => @folder) %>");

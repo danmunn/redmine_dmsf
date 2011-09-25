@@ -4,7 +4,7 @@
 	<% if User.current.allowed_to?(:file_manipulation, @project) %>
 		<% unless @file.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, @project)%>
 			<% if @file.locked? %>
-				<%= link_to(image_tag("unlock.png", :plugin => "redmine_dmsf"),
+				<%= link_to_function(image_tag("unlock.png", :plugin => "redmine_dmsf"),
 		        		{:action => "unlock", :id => @file, :current => request.url },
 						:title => l(:title_unlock_file)) %>
 			<% 	else %>
@@ -175,14 +175,15 @@ sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !
 	<script type="text/javascript">
 		jQuery.noConflict();
 		
-		function copyFile() {
-			var $copyDialog = jQuery('#copyDialog');
-			$copyDialog.dialog({ 
-				autoOpen: false,
-				title: "Copy file" 
-			});
-			$copyDialog.dialog('open')
-		}
+		function manipulation_link(action) {
+			jQuery("#new_revision_form").attr("action", action);
+			jQuery("#new_revision_form").submit();
+		};
 		
+		function confirmation_link(action, question) {
+			if(!window.confirm(question)) return;
+			jQuery("#new_revision_form").attr("action", action);
+			jQuery("#new_revision_form").submit();
+		};
 	</script>
 <% end %>

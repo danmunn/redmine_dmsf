@@ -19,7 +19,7 @@ else
 end
 
 form_for(:dmsf_file_revision, @revision, :url => {:action => "create_revision", :id => @file},
-	:html => {:method=>:post, :multipart => true}) do |f|
+	:html => {:method=>:post, :multipart => true, :id => "new_revision_form"}) do |f|
 %>
 				<div class="clear">
 					<div class="splitcontentleft">
