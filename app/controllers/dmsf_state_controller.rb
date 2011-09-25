@@ -24,6 +24,8 @@ class DmsfStateController < ApplicationController
   before_filter :find_project
   before_filter :authorize
 
+  verify :method => :post, :only => [:user_pref_save], :render => { :nothing => true, :status => :method_not_allowed }
+
   def user_pref_save
     member = @project.members.find(:first, :conditions => {:user_id => User.current.id})
     if member

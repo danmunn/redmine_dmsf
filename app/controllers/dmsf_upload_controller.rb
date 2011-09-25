@@ -25,6 +25,9 @@ class DmsfUploadController < ApplicationController
   before_filter :authorize
   before_filter :find_folder, :except => [:upload_file]
   
+  verify :method => :post, :only => [:upload_files, :upload_file, :commit_files], 
+    :render => { :nothing => true, :status => :method_not_allowed }
+  
   def upload_files
     uploaded_files = params[:uploaded_files]
     @uploads = []

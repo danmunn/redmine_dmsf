@@ -5,28 +5,29 @@
 		<% unless @file.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, @project)%>
 			<% if @file.locked? %>
 				<%= link_to_function(image_tag("unlock.png", :plugin => "redmine_dmsf"),
-		        		{:action => "unlock", :id => @file, :current => request.url },
+						"manipulation_link('#{url_for(:action => 'unlock', :id => @file, :current => request.url)}')",
 						:title => l(:title_unlock_file)) %>
 			<% 	else %>
-				<%= link_to(image_tag("lock.png", :plugin => "redmine_dmsf"),
-		        		{:action => "lock", :id => @file, :current => request.url },
+				<%= link_to_function(image_tag("lock.png", :plugin => "redmine_dmsf"),
+						"manipulation_link('#{url_for(:action => 'lock', :id => @file, :current => request.url)}')",
 						:title => l(:title_lock_file)) %>
 			<% 	end %> 
 		<% end %>
 		<% if User.current.allowed_to?(:file_manipulation, @project) && !@file.locked_for_user? %>
 			&nbsp;
-			<%= link_to(image_tag("delete.png", :plugin => "redmine_dmsf"), 
-					{:action => "delete", :id => @file}, :class => "delete-entry", :title => l(:title_delete)) %>
+			<%= link_to_function(image_tag("delete.png", :plugin => "redmine_dmsf"),
+					"confirmation_link('#{url_for(:action => 'delete', :id => @file)}', '#{l(:question_do_you_really_want_to_delete_this_entry)}')", 
+					:title => l(:title_delete)) %>
 		<% end %>
 		<% if User.current.allowed_to?(:file_approval, @project) %>
 			&nbsp;
 			<% if @file.notification %>
-				<%= link_to(image_tag("notify.png", :plugin => "redmine_dmsf"),
-	        			{:action => "notify_deactivate", :id => @file, :current => request.url }, 
+				<%= link_to_function(image_tag("notify.png", :plugin => "redmine_dmsf"),
+						"manipulation_link('#{url_for(:action => 'notify_deactivate', :id => @file, :current => request.url)}')",
 						:title => l(:title_notifications_active_deactivate)) %>
 			<% else %>
-				<%= link_to(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
-	        			{:action => "notify_activate", :id => @file, :current => request.url}, 
+				<%= link_to_function(image_tag("notifynot.png", :plugin => "redmine_dmsf"),
+						"manipulation_link('#{url_for(:action => 'notify_activate', :id => @file, :current => request.url)}')",
 						:title => l(:title_notifications_not_active_activate)) %>
 			<% end %>
 		<% end %>
@@ -48,6 +49,10 @@
 
 <%= render(:partial => "file_new_revision") if User.current.allowed_to?(:file_manipulation, @file.project) %>
 
+<% form_tag({}, :id => "manipulation_form") do |f| %>
+<% end %>
+
+
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.revisions[@revision_pages.current.offset,@revision_pages.items_per_page].each do |revision| %>
 <div class="box dmsf_detail">
@@ -57,9 +62,9 @@
 			:title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version)) %>
 		<% if User.current.allowed_to?(:file_approval, @project) %>
 			&nbsp;
-			<%= link_to(image_tag("delete.png", :plugin => "redmine_dmsf"),
-		        {:action => "delete_revision", :id => revision},
-				:class => "delete-revision", :title => l(:title_delete_revision)) %>
+			<%= link_to_function(image_tag("delete.png", :plugin => "redmine_dmsf"),
+				"confirmation_link('#{url_for(:action => 'delete_revision', :id => revision)}', '#{l(:question_do_you_really_want_to_delete_this_revision)}')",
+				:title => l(:title_delete_revision)) %>
 		<% end %>
 	</div>
 	<p class="no-ident">
@@ -176,14 +181,14 @@ sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !
 		jQuery.noConflict();
 		
 		function manipulation_link(action) {
-			jQuery("#new_revision_form").attr("action", action);
-			jQuery("#new_revision_form").submit();
+			jQuery("#manipulation_form").attr("action", action);
+			jQuery("#manipulation_form").submit();
 		};
 		
 		function confirmation_link(action, question) {
 			if(!window.confirm(question)) return;
-			jQuery("#new_revision_form").attr("action", action);
-			jQuery("#new_revision_form").submit();
+			jQuery("#manipulation_form").attr("action", action);
+			jQuery("#manipulation_form").submit();
 		};
 	</script>
 <% end %>
