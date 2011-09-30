@@ -166,14 +166,12 @@ ru:
   :label_dmsf_updated: "Модуль Документооборота обновлен"
   :title_total_size_of_all_files: "Суммарный объем файлов в каталоге"
   :project_module_dmsf: "Документооборот"
-
-# Not translated
-  :warning_no_project_to_copy_file_to: "No project to copy file to"
-  :comment_copied_from: "Copied from %{source}"
-  :notice_file_copied: "File copied"
-  :notice_file_moved: "File moved"
-  :label_target_project: "Target project"
-  :label_target_folder: "Target folder"
-  :title_copy_or_move: "Copy/Move"
-  :label_dmsf_folder_plural: "Dmsf folders"
+  :warning_no_project_to_copy_file_to: "Для копируемого файла не указан проект назначения"
+  :comment_copied_from: "Скопировано из %{source}"
+  :notice_file_copied: "Файл скопирован"
+  :notice_file_moved: "Файл перемещен"
+  :label_target_project: "Проект назначения"
+  :label_target_folder: "Каталог назначения"
+  :title_copy_or_move: "Скопировать/Переместить"
+  :label_dmsf_folder_plural: "Каталоги документооборота"
   
