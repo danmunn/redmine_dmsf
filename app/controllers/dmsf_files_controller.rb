@@ -76,6 +76,7 @@ class DmsfFilesController < ApplicationController
       @revision = DmsfFileRevision.new(params[:dmsf_file_revision])
       
       @revision.file = @file
+      @revision.project = @file.project
       last_revision = @file.last_revision
       @revision.source_revision = last_revision
       @revision.user = User.current

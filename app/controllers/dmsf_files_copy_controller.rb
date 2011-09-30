@@ -75,6 +75,7 @@ class DmsfFilesCopyController < ApplicationController
       new_revision = DmsfFileRevision.new
       new_revision.folder = @target_folder
       new_revision.file = file
+      new_revision.project = file.project
       new_revision.user = User.current
       new_revision.name = name
       new_revision.title = @file.title

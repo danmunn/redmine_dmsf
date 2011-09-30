@@ -23,6 +23,7 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :user
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
+  belongs_to :project
   
   acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.file.dmsf_path_str}"},
                 :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.file}},
@@ -97,10 +98,6 @@ class DmsfFileRevision < ActiveRecord::Base
     "#{self.major_version}.#{self.minor_version}"
   end
 
-  def project
-    self.file.project
-  end
-
   def disk_file
     "#{DmsfFile.storage_path}/#{self.disk_filename}"
   end
@@ -116,6 +113,7 @@ class DmsfFileRevision < ActiveRecord::Base
   def clone
     new_revision = DmsfFileRevision.new
     new_revision.file = self.file
+    new_revision.project = self.project
     new_revision.disk_filename = self.disk_filename
     new_revision.size = self.size
     new_revision.mime_type = self.mime_type
