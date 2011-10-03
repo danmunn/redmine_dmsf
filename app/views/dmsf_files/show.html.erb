@@ -49,7 +49,7 @@
 
 <%= render(:partial => "file_new_revision") if User.current.allowed_to?(:file_manipulation, @file.project) %>
 
-<% form_tag({}, :id => "manipulation_form") do |f| %>
+<% form_tag("", :id => "manipulation_form") do %>
 <% end %>
 
 
