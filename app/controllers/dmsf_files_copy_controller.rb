@@ -99,21 +99,50 @@ class DmsfFilesCopyController < ApplicationController
     flash[:notice] = l(:notice_file_copied)
     log_activity(file, "was copied (is copy)")
     
-    if params[:move]
-      if User.current.allowed_to?(:file_manipulation, @project)
-        if @file.delete
-          flash[:notice] = l(:notice_file_moved)
-          log_activity(@file, "was deleted")
-          DmsfMailer.deliver_files_deleted(User.current, [@file])
-        else
-          flash[:error] = l(:error_file_is_locked)
-        end
-      else
-        flash[:error] = l(:error_user_has_not_right_delete_file)
-      end
-    end
-    
     redirect_to :controller => "dmsf_files", :action => "show", :id => file
+  end
+
+  def move
+    @target_project = DmsfFile.allowed_target_projects_on_copy.detect {|p| p.id.to_s == params[:target_project_id]} if params[:target_project_id]
+    unless @target_project && User.current.allowed_to?(:file_manipulation, @target_project) && User.current.allowed_to?(:file_manipulation, @project)
+      render_403
+      return
+    end
+    @target_folder = DmsfFolder.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
+    if !@target_folder.nil? && @target_folder.project != @target_project
+      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
+    end
+
+    if @file.locked_for_user?
+      flash[:error] = l(:error_file_is_locked)
+      redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
+      return
+    end
+
+    new_revision = @file.last_revision.clone
+    
+    new_revision.folder = @target_folder
+    new_revision.project = @target_project
+    new_revision.comment = l(:comment_moved_from, :source => "#{@project.identifier}:#{@file.dmsf_path_str}") 
+
+    @file.folder = @target_folder
+    @file.project = @target_project
+
+    if @file.save && new_revision.save
+      @file.reload
+    else
+      flash[:error] = error_messages_for(@file)
+      redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
+      return
+    end
+
+    flash[:notice] = l(:notice_file_moved)
+    log_activity(@file, "was moved (is copy)")
+    
+    # TODO: implement proper mail notification
+    #DmsfMailer.deliver_files_deleted(User.current, [@file])
+    
+    redirect_to :controller => "dmsf_files", :action => "show", :id => @file
   end
 
   private
