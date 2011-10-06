@@ -58,6 +58,7 @@
 		"image/bmp,bmp," +
 		"image/gif,gif," +
 		"image/jpeg,jpeg jpg jpe," +
+		"image/photoshop,psd," +
 		"image/png,png," +
 		"image/svg+xml,svg svgz," +
 		"image/tiff,tiff tif," +
@@ -68,7 +69,11 @@
 		"video/mp4,mp4," +
 		"video/x-m4v,m4v," +
 		"video/x-flv,flv," +
+		"video/x-ms-wmv,wmv," +
+		"video/avi,avi," +
+		"video/webm,webm," +
 		"video/vnd.rn-realvideo,rv," +
+		"text/csv,csv," +
 		"text/plain,asc txt text diff log," +
 		"application/octet-stream,exe"
 	);
@@ -183,7 +188,7 @@
 		INIT_ERROR : -500,
 
 		/**
-		 * File size error. If the user selects a file that is to large it will be blocked and an error of this type will be triggered.
+		 * File size error. If the user selects a file that is too large it will be blocked and an error of this type will be triggered.
 		 *
 		 * @property FILE_SIZE_ERROR
 		 * @final
@@ -231,6 +236,26 @@
 		 * @final
 		 */
 		mimeTypes : mimes,
+		
+		/**
+		 * In some cases sniffing is the only way around :(
+		 */
+		ua: (function() {
+			var nav = navigator, userAgent = nav.userAgent, vendor = nav.vendor, webkit, opera, safari;
+			
+			webkit = /WebKit/.test(userAgent);
+			safari = webkit && vendor.indexOf('Apple') !== -1;
+			opera = window.opera && window.opera.buildNumber;
+			
+			return {
+				windows: navigator.platform.indexOf('Win') !== -1,
+				ie: !webkit && !opera && (/MSIE/gi).test(userAgent) && (/Explorer/gi).test(nav.appName),
+				webkit: webkit,
+				gecko: !webkit && /Gecko/.test(userAgent),
+				safari: safari,
+				opera: !!opera
+			};
+		}()),
 
 		/**
 		 * Extends the specified object with another object.
@@ -491,7 +516,7 @@
 			var mul;
 
 			if (typeof(size) == 'string') {
-				size = /^([0-9]+)([mgk]+)$/.exec(size.toLowerCase().replace(/[^0-9mkg]/g, ''));
+				size = /^([0-9]+)([mgk]?)$/.exec(size.toLowerCase().replace(/[^0-9mkg]/g, ''));
 				mul = size[2];
 				size = +size[1];
 
@@ -657,7 +682,11 @@
 			}
 
 			// Add event listener
-			if (obj.attachEvent) {
+			if (obj.addEventListener) {
+				func = callback;
+				
+				obj.addEventListener(name, func, false);
+			} else if (obj.attachEvent) {
 				
 				func = function() {
 					var evt = window.event;
@@ -672,12 +701,7 @@
 					callback(evt);
 				};
 				obj.attachEvent('on' + name, func);
-				
-			} else if (obj.addEventListener) {
-				func = callback;
-				
-				obj.addEventListener(name, func, false);
-			}
+			} 
 			
 			// Log event handler to objects internal Plupload registry
 			if (obj[uid] === undef) {
@@ -786,7 +810,7 @@
 			plupload.each(eventhash[obj[uid]], function(events, name) {
 				plupload.removeEvent(obj, name, key);
 			});		
-		}		
+		}
 	};
 	
 
@@ -848,8 +872,9 @@
 					if (!file && files[i].status == plupload.QUEUED) {
 						file = files[i];
 						file.status = plupload.UPLOADING;
-						this.trigger("BeforeUpload", file);
-						this.trigger("UploadFile", file);
+						if (this.trigger("BeforeUpload", file)) {
+							this.trigger("UploadFile", file);
+						}
 					} else {
 						count++;
 					}
@@ -857,8 +882,8 @@
 
 				// All files are DONE or FAILED
 				if (count == files.length) {
-					this.trigger("UploadComplete", files);
 					this.stop();
+					this.trigger("UploadComplete", files);
 				}
 			}
 		}
@@ -1301,6 +1326,16 @@
 				}
 
 				return true;
+			},
+			
+			/**
+			 * Check whether uploader has any listeners to the specified event.
+			 *
+			 * @method hasEventListener
+			 * @param {String} name Event name to check for.
+			 */
+			hasEventListener : function(name) {
+				return !!events[name.toLowerCase()];
 			},
 
 			/**

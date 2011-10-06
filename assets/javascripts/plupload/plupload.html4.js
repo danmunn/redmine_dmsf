@@ -30,15 +30,13 @@
 		 *
 		 * @return {Object} Name/value object with supported features.
 		 */
-		getFeatures : function() {
+		getFeatures : function() {			
 			// Only multipart feature
 			return {
 				multipart: true,
 				
-				/* WebKit let you trigger file dialog programmatically while FF and Opera - do not, so we
-				sniff for it here... probably not that good idea, but impossibillity of controlling cursor style 
-				on top of add files button obviously feels even worse */
-				canOpenDialog: navigator.userAgent.indexOf('WebKit') !== -1
+				// WebKit and Gecko 2+ can trigger file dialog progrmmatically
+				triggerDialog: (plupload.ua.gecko && window.FormData || plupload.ua.webkit) 
 			};
 		},
 
@@ -106,7 +104,7 @@
 					browseButton = getById(up.settings.browse_button);
 					
 					// Route click event to input element programmatically, if possible
-					if (up.features.canOpenDialog && browseButton) {
+					if (up.features.triggerDialog && browseButton) {
 						plupload.addEvent(getById(up.settings.browse_button), 'click', function(e) {
 							input.click();
 							e.preventDefault();
@@ -118,7 +116,7 @@
 						width : '100%',
 						height : '100%',
 						opacity : 0,
-						fontSize: '99px' // force input element to be bigger then needed to occupy whole space
+						fontSize: '999px' // force input element to be bigger then needed to occupy whole space
 					});
 					
 					plupload.extend(form.style, {
@@ -153,7 +151,7 @@
 							files.push(new plupload.File(currentFileId, name));
 							
 							// Clean-up events - they won't be needed anymore
-							if (!up.features.canOpenDialog) {
+							if (!up.features.triggerDialog) {
 								plupload.removeAllEvents(form, up.id);								
 							} else {
 								plupload.removeEvent(browseButton, 'click', up.id);	
@@ -209,8 +207,8 @@
 						}
 
 						// Get result
-						result = el.documentElement.innerText || el.documentElement.textContent;
-
+						result = el.body.innerHTML;
+						
 						// Assume no error
 						if (result) {
 							currentFile.status = plupload.DONE;
@@ -287,14 +285,16 @@
 					if (up.state == plupload.STOPPED) {
 						window.setTimeout(function() {
 							plupload.removeEvent(iframe, 'load', up.id);
-							iframe.parentNode.removeChild(iframe);
+							if (iframe.parentNode) { // #382
+								iframe.parentNode.removeChild(iframe);
+							}
 						}, 0);
 					}
 				});
 
 				// Refresh button, will reposition the input form
 				up.bind("Refresh", function(up) {
-					var browseButton, topElement, hoverClass, activeClass, browsePos, browseSize, inputContainer, inputFile, pzIndex;
+					var browseButton, topElement, hoverClass, activeClass, browsePos, browseSize, inputContainer, inputFile, zIndex;
 
 					browseButton = getById(up.settings.browse_button);
 					if (browseButton) {
@@ -312,25 +312,25 @@
 						
 						// for IE and WebKit place input element underneath the browse button and route onclick event 
 						// TODO: revise when browser support for this feature will change
-						if (up.features.canOpenDialog) {
-							pzIndex = parseInt(browseButton.parentNode.style.zIndex, 10);
-
-							if (isNaN(pzIndex)) {
-								pzIndex = 0;
-							}
-
-							plupload.extend(browseButton.style, {
-								zIndex : pzIndex
-							});
-				
+						if (up.features.triggerDialog) {
 							if (plupload.getStyle(browseButton, 'position') === 'static') {
 								plupload.extend(browseButton.style, {
 									position : 'relative'
 								});
 							}
+							
+							zIndex = parseInt(browseButton.style.zIndex, 10);
+
+							if (isNaN(zIndex)) {
+								zIndex = 0;
+							}
+
+							plupload.extend(browseButton.style, {
+								zIndex : zIndex
+							});							
 
 							plupload.extend(inputContainer.style, {
-								zIndex : pzIndex - 1
+								zIndex : zIndex - 1
 							});
 						}
 
@@ -340,7 +340,7 @@
 						TODO: needs to be revised as things will change */
 						hoverClass = up.settings.browse_button_hover;
 						activeClass = up.settings.browse_button_active;
-						topElement = up.features.canOpenDialog ? browseButton : inputContainer;
+						topElement = up.features.triggerDialog ? browseButton : inputContainer;
 						
 						if (hoverClass) {
 							plupload.addEvent(topElement, 'mouseover', function() {
