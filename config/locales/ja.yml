@@ -174,3 +174,6 @@ ja:
   :title_copy_or_move: "コピー/移動"
   :label_dmsf_folder_plural: "Dmsf フォルダ"
   
+#Not translated
+  :comment_moved_from: "Moved from %{source}"
+  

@@ -174,4 +174,7 @@ ru:
   :label_target_folder: "Каталог назначения"
   :title_copy_or_move: "Скопировать/Переместить"
   :label_dmsf_folder_plural: "Каталоги документооборота"
+
+#Not translated
+  :comment_moved_from: "Moved from %{source}"
   

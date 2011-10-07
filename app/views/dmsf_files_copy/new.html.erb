@@ -33,9 +33,18 @@
 		</div>
 		
 		<%= submit_tag(l(:button_copy)) %>
-		<%= submit_tag(l(:button_move), :name => 'move') if User.current.allowed_to?(:file_manipulation, @project) %>
+		<% if User.current.allowed_to?(:file_manipulation, @project) %>
+			<button type="button" id="move_button" title="<%=l(:button_move)%>"><%=l(:button_move)%></button>
+		<% end %>
 	<% end %>
 <% end %>
+
+<script type="text/javascript">
+	jQuery("#move_button").click(function(event) {
+		jQuery("#copyForm").attr("action", "<%= url_for(:action => 'move', :id => @file) %>");
+		jQuery("#copyForm").submit();
+	});
+</script>
 
 <% content_for :header_tags do %>
 	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
