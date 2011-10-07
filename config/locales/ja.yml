@@ -176,4 +176,5 @@ ja:
   
 #Not translated
   :comment_moved_from: "Moved from %{source}"
+  :error_target_folder_same: "Target folder and project are the same as current"
   

@@ -52,6 +52,13 @@ class DmsfFilesCopyController < ApplicationController
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
 
+    if (!@target_folder.nil? && @target_folder == @file.folder) || 
+        (@target_folder.nil? && @file.folder.nil? && @target_project == @file.project)
+      flash[:error] = l(:error_target_folder_same)
+      redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
+      return
+    end
+
     name = @file.name
     
     file = DmsfFile.find_file_by_name(@target_project, @target_folder, name)
@@ -116,6 +123,13 @@ class DmsfFilesCopyController < ApplicationController
     @target_folder = DmsfFolder.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
     if !@target_folder.nil? && @target_folder.project != @target_project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
+    end
+
+    if (!@target_folder.nil? && @target_folder == @file.folder) || 
+        (@target_folder.nil? && @file.folder.nil? && @target_project == @file.project)
+      flash[:error] = l(:error_target_folder_same)
+      redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
+      return
     end
 
     if @file.locked_for_user?

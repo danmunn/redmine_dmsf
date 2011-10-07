@@ -175,4 +175,5 @@ cs:
   :title_copy_or_move: "Kopírovat/Přesunout"
   :label_dmsf_folder_plural: "Dmsf složky"
   :comment_moved_from: "Přesunuto z %{source}"
+  :error_target_folder_same: "Cílový adresář a projekt jsou stejné jako aktuální"
   
