@@ -176,4 +176,6 @@ cs:
   :label_dmsf_folder_plural: "Dmsf složky"
   :comment_moved_from: "Přesunuto z %{source}"
   :error_target_folder_same: "Cílový adresář a projekt jsou stejné jako aktuální"
+  :error_file_cannot_be_moved: "Soubor nemůže být přesunut"
+  :error_file_cannot_be_copied: "Soubor nemůže být zkopírován"
   

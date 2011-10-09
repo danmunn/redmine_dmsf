@@ -83,14 +83,6 @@ class DmsfFile < ActiveRecord::Base
   def last_revision
     self.revisions.first
   end
-  
-  #def revisions(offset = nil, limit = nil)
-  #  DmsfFileRevision.find(:all, :conditions => 
-  #      ["dmsf_file_id = :file_id and deleted = :deleted", 
-  #        {:file_id => self.id, :deleted => false}], 
-  #        :order => "major_version DESC, minor_version DESC, updated_at DESC",
-  #        :limit => limit, :offset => offset)
-  #end
 
   def delete
     if locked_for_user?
@@ -193,6 +185,43 @@ class DmsfFile < ActiveRecord::Base
       User.current.memberships.each {|m| projects << m.project if m.roles.detect {|r| r.allowed_to?(:file_manipulation)}}
     end
     projects
+  end
+  
+  def move_to(project, folder)
+    if self.locked_for_user?
+      errors.add_to_base(l(:error_file_is_locked))
+      return false 
+    end
+    
+    new_revision = self.last_revision.clone
+    
+    new_revision.folder = folder ? folder : nil
+    new_revision.project = folder ? folder.project : project
+    new_revision.comment = l(:comment_moved_from, :source => "#{self.project.identifier}:#{self.dmsf_path_str}") 
+
+    self.folder = new_revision.folder
+    self.project = new_revision.project
+
+    return self.save && new_revision.save
+  end
+  
+  def copy_to(project, folder)
+    file = DmsfFile.new
+    file.folder = folder ? folder : nil
+    file.project = folder ? folder.project : project
+    file.name = self.name
+    file.notification = !Setting.plugin_redmine_dmsf["dmsf_default_notifications"].blank?
+
+    new_revision = self.last_revision.clone
+    
+    new_revision.file = file
+    new_revision.folder = folder ? folder : nil
+    new_revision.project = folder ? folder.project : project
+    new_revision.comment = l(:comment_copied_from, :source => "#{self.project.identifier}:#{self.dmsf_path_str}")
+    
+    new_revision.save if file.save  
+    
+    return file
   end
   
   # To fullfill searchable module expectations

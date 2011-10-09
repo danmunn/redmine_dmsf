@@ -176,4 +176,6 @@ en:
   :label_dmsf_folder_plural: "Dmsf folders"
   :comment_moved_from: "Moved from %{source}"
   :error_target_folder_same: "Target folder and project are the same as current"
+  :error_file_cannot_be_moved: "File can't be moved"
+  :error_file_cannot_be_copied: "File can't be copied"
   

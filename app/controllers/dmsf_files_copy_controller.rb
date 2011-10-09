@@ -59,59 +59,23 @@ class DmsfFilesCopyController < ApplicationController
       return
     end
 
-    name = @file.name
+    new_file = @file.copy_to(@target_project, @target_folder)
     
-    file = DmsfFile.find_file_by_name(@target_project, @target_folder, name)
-    if file.nil?
-      file = DmsfFile.new
-      file.project = @target_project
-      file.name = name
-      file.folder = @target_folder
-      file.notification = !Setting.plugin_redmine_dmsf["dmsf_default_notifications"].blank?
-    else
-      if file.locked_for_user?
-        flash[:error] = l(:error_file_is_locked)
-        redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
-        return
-      end
-    end
-
-    last_revision = @file.last_revision
-    
-    new_revision = DmsfFileRevision.new
-    new_revision.folder = @target_folder
-    new_revision.file = file
-    new_revision.project = file.project
-    new_revision.user = User.current
-    new_revision.name = name
-    new_revision.title = @file.title
-    new_revision.description = @file.description
-    new_revision.comment = l(:comment_copied_from, :source => "#{@project.identifier}:#{@file.dmsf_path_str}") 
-    new_revision.source_revision = last_revision
-    new_revision.major_version = last_revision.major_version
-    new_revision.minor_version = last_revision.minor_version
-    new_revision.workflow = last_revision.workflow
-    new_revision.mime_type = last_revision.mime_type
-    new_revision.size = last_revision.size
-    new_revision.disk_filename = last_revision.disk_filename
-
-    if file.save && new_revision.save
-      file.reload
-    else
-      flash[:error] = error_messages_for(file)
+    unless new_file.errors.empty?
+      flash[:error] = "#{l(:error_file_cannot_be_copied)}: #{new_file.errors.full_messages.join(", ")}"
       redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
 
     flash[:notice] = l(:notice_file_copied)
-    log_activity(file, "was copied (is copy)")
+    log_activity(new_file, "was copied (is copy)")
     begin 
-      DmsfMailer.deliver_files_updated(User.current, [file])
+      DmsfMailer.deliver_files_updated(User.current, [new_file])
     rescue ActionView::MissingTemplate => e
       Rails.logger.error "Could not send email notifications: " + e
     end
     
-    redirect_to :controller => "dmsf_files", :action => "show", :id => file
+    redirect_to :controller => "dmsf_files", :action => "show", :id => new_file
   end
 
   def move
@@ -132,38 +96,22 @@ class DmsfFilesCopyController < ApplicationController
       return
     end
 
-    if @file.locked_for_user?
-      flash[:error] = l(:error_file_is_locked)
+    unless @file.move_to(@target_project, @target_folder)
+      flash[:error] = "#{l(:error_file_cannot_be_moved)}: #{@file.errors.full_messages.join(", ")}"
       redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
 
-    new_revision = @file.last_revision.clone
+    @file.reload
     
-    new_revision.folder = @target_folder
-    new_revision.project = @target_project
-    new_revision.comment = l(:comment_moved_from, :source => "#{@project.identifier}:#{@file.dmsf_path_str}") 
-
-    @file.folder = @target_folder
-    @file.project = @target_project
-
-    if @file.save && new_revision.save
-      @file.reload
-    else
-      flash[:error] = error_messages_for(@file)
-      redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
-      return
-    end
-
     flash[:notice] = l(:notice_file_moved)
     log_activity(@file, "was moved (is copy)")
-    begin 
+    begin
+      # TODO: implement proper mail notification
       DmsfMailer.deliver_files_updated(User.current, [@file])
     rescue ActionView::MissingTemplate => e
       Rails.logger.error "Could not send email notifications: " + e
     end
-    
-    # TODO: implement proper mail notification
     
     redirect_to :controller => "dmsf_files", :action => "show", :id => @file
   end
