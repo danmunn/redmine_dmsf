@@ -1,7 +1,9 @@
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
+	<%= link_to(image_tag("copy.png"), {:controller => :dmsf_folders_copy, :action => "new", :id => @folder }, :title => l(:title_copy)) %>
 </div>
+
 <% create = @pathfolder == @parent %>
 <h2>
 <%= render(:partial => "path", :locals => {:path => @pathfolder.nil? ? [] : @pathfolder.dmsf_path}) %>

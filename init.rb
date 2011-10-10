@@ -52,7 +52,7 @@ Redmine::Plugin.register :redmine_dmsf do
   activity_provider :dmsf_files, :class_name => "DmsfFileRevision", :default => true
   
   project_module :dmsf do
-    permission :view_dmsf_folders, {:dmsf => [:show]}
+    permission :view_dmsf_folders, {:dmsf => [:show], :dmsf_folders_copy => [:new, :copy_to, :move_to]}
     permission :user_preferences, {:dmsf_state => [:user_pref_save]}
     permission :view_dmsf_files, {:dmsf => [:entries_operation, :entries_email],
       :dmsf_files => [:show], :dmsf_files_copy => [:new, :create, :move]}

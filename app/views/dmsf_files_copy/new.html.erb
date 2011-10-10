@@ -14,7 +14,6 @@
 <% unless DmsfFile.allowed_target_projects_on_copy.blank?
 	form_tag({:action => "create", :id => @file}, :id => "copyForm") do |f| %>
 		<div class="box dmsf_detail">
-			<%= error_messages_for("file") %>
 			<p>
 				<label for="target_project_id"><%=l(:label_target_project)%>:</label>
 				<%= select_tag("target_project_id",

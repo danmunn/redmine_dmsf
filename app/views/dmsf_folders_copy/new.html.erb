@@ -1,0 +1,39 @@
+<% html_title(l(:dmsf)) %>
+
+<div class="contextual">
+</div>
+
+<h2><%= render(:partial => "/dmsf/path", :locals => {:path => @folder.dmsf_path}) %></h2>
+
+<% unless DmsfFolder.allowed_target_projects_on_copy.blank?
+	form_tag({:action => "copy_to", :id => @folder}, :id => "copyForm") do |f| %>
+		<div class="box dmsf_detail">
+			<p>
+				<label for="target_project_id"><%=l(:label_target_project)%>:</label>
+				<%= select_tag("target_project_id",
+			               project_tree_options_for_select(DmsfFolder.allowed_target_projects_on_copy, :selected => @target_project),
+			               :onchange => remote_function(:url => { :action => 'new' },
+			                                            :method => :get,
+			                                            :update => 'content',
+			                                            :with => "Form.serialize('copyForm')")) %>
+			</p>
+			<p>
+				<%= label_tag("target_folder_id", l(:label_target_folder) + ":") %>
+				<%= select_tag("target_folder_id", 
+					options_for_select(DmsfFolder.directory_tree(@target_project, @folder), 
+						:selected => (@target_folder.id unless @target_folder.nil?))) %>
+			</p>
+		</div>
+		
+		<%= submit_tag(l(:button_copy)) %>
+	<% end %>
+<% end %>
+
+<% content_for :header_tags do %>
+	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
+	<%= robot_exclusion_tag %>
+	<%= javascript_include_tag "jquery-1.6.1.min.js", :plugin => "redmine_dmsf" %>
+	<script type="text/javascript">
+		jQuery.noConflict();
+	</script>
+<% end %>
