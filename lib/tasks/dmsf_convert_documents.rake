@@ -130,6 +130,7 @@ class DmsfConvertDocuments
               revision.file = file
               revision.name = file.name
               revision.folder = file.folder
+              revision.project = file.project
               revision.title = DmsfFileRevision.filename_to_title(attachment.filename)
               revision.description = attachment.description
               revision.user = attachment.author
