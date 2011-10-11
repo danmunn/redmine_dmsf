@@ -175,12 +175,12 @@ ja:
   :label_dmsf_folder_plural: "Dmsf フォルダ"
   
 #Not translated
-  :comment_moved_from: "Moved from %{source}"
-  :error_target_folder_same: "Target folder and project are the same as current"
-  :error_file_cannot_be_moved: "File can't be moved"
-  :error_file_cannot_be_copied: "File can't be copied"
-  :warning_no_project_to_copy_folder_to: "No project to copy folder to"
-  :title_copy: "Copy"
-  :error_folder_cannot_be_copied: "Folder can't be copied"
-  :notice_folder_copied: "Folder copied"
+  :comment_moved_from: "%{source} から移動しました"
+  :error_target_folder_same: "コピー/移動先のフォルダとプロジェクトが現在と同じです"
+  :error_file_cannot_be_moved: "ファイルを移動できません"
+  :error_file_cannot_be_copied: "ファイルをコピーできません"
+  :warning_no_project_to_copy_folder_to: "フォルダをコピーするプロジェクトがありません"
+  :title_copy: "コピー"
+  :error_folder_cannot_be_copied: "フォルダをコピーできません"
+  :notice_folder_copied: "フォルダをコピーしました"
   
