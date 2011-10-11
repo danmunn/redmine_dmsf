@@ -178,4 +178,8 @@ cs:
   :error_target_folder_same: "Cílový adresář a projekt jsou stejné jako aktuální"
   :error_file_cannot_be_moved: "Soubor nemůže být přesunut"
   :error_file_cannot_be_copied: "Soubor nemůže být zkopírován"
+  :warning_no_project_to_copy_folder_to: "Neexistuje projekt, do kterého můžete kopírovat"
+  :title_copy: "Kopírovat"
+  :error_folder_cannot_be_copied: "Složka nemůže být zkopírována"
+  :notice_folder_copied: "Složka zkopírována"
   

@@ -61,6 +61,18 @@ class DmsfFolder < ActiveRecord::Base
         ["dmsf_folder_id is NULL and project_id = :project_id", {:project_id => project.id}], :order => "title ASC")
   end
   
+  def self.find_by_title(project, folder, title)
+    if folder.nil?
+      find(:first, :conditions => 
+        ["dmsf_folder_id is NULL and project_id = :project_id and title = :title", 
+          {:project_id => project.id, :title => title}])
+    else
+      find(:first, :conditions => 
+        ["dmsf_folder_id = :folder_id and title = :title", 
+          {:project_id => project.id, :folder_id => folder.id, :title => title}])
+    end
+  end
+  
   def delete
     return false if !self.subfolders.empty? || !self.files.empty?
     destroy
@@ -131,6 +143,27 @@ class DmsfFolder < ActiveRecord::Base
       User.current.memberships.each {|m| projects << m.project if m.roles.detect {|r| r.allowed_to?(:folder_manipulation) && r.allowed_to?(:file_manipulation)}}
     end
     projects
+  end
+
+  def copy_to(project, folder)
+    new_folder = DmsfFolder.new
+    new_folder.folder = folder ? folder : nil
+    new_folder.project = folder ? folder.project : project
+    new_folder.title = self.title
+    new_folder.description = self.description
+    new_folder.user = User.current
+
+    return new_folder unless new_folder.save
+    
+    self.files.each do |f|
+      f.copy_to(project, new_folder)
+    end
+    
+    self.subfolders.each do |s|
+      s.copy_to(project, new_folder)
+    end
+    
+    return new_folder
   end
 
   # To fullfill searchable module expectations

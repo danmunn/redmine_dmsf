@@ -174,4 +174,8 @@ fr:
   :error_target_folder_same: "Target folder and project are the same as current"
   :error_file_cannot_be_moved: "File can't be moved"
   :error_file_cannot_be_copied: "File can't be copied"
+  :warning_no_project_to_copy_folder_to: "No project to copy folder to"
+  :title_copy: "Copy"
+  :error_folder_cannot_be_copied: "Folder can't be copied"
+  :notice_folder_copied: "Folder copied"
   

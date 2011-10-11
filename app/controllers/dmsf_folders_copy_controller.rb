@@ -52,10 +52,10 @@ class DmsfFoldersCopyController < ApplicationController
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
 
-    if (!@target_folder.nil? && @target_folder == @file.folder) || 
-        (@target_folder.nil? && @file.folder.nil? && @target_project == @file.project)
+    if (!@target_folder.nil? && @target_folder == @folder.folder) || 
+        (@target_folder.nil? && @folder.folder.nil? && @target_project == @folder.project)
       flash[:error] = l(:error_target_folder_same)
-      redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
+      redirect_to :action => "new", :id => @folder, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
 
@@ -63,25 +63,29 @@ class DmsfFoldersCopyController < ApplicationController
     
     unless new_folder.errors.empty?
       flash[:error] = "#{l(:error_folder_cannot_be_copied)}: #{new_folder.errors.full_messages.join(", ")}"
-      redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
+      redirect_to :action => "new", :id => @folder, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
 
+    new_folder.reload
+    
     flash[:notice] = l(:notice_folder_copied)
     log_activity(new_folder, "was copied (is copy)")
-    begin 
-      DmsfMailer.deliver_files_updated(User.current, [new_file])
-    rescue ActionView::MissingTemplate => e
-      Rails.logger.error "Could not send email notifications: " + e
-    end
     
-    redirect_to :controller => "dmsf_files", :action => "show", :id => new_file
+    #TODO: implement proper notification for all new files
+    #begin 
+    #  DmsfMailer.deliver_files_updated(User.current, [new_file])
+    #rescue ActionView::MissingTemplate => e
+    #  Rails.logger.error "Could not send email notifications: " + e
+    #end
+    
+    redirect_to :controller => "dmsf", :action => "show", :id => @target_project, :folder_id => new_folder
   end
 
   private
 
   def log_activity(folder, action)
-    Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{file.project.identifier}/#{file.id}/#{file.last_revision.id}"
+    Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{folder.project.identifier}/#{folder.id}"
   end
 
   def find_folder
