@@ -248,7 +248,7 @@ class DmsfFile < ActiveRecord::Base
     
     project_conditions = []
     project_conditions << (Project.allowed_to_condition(User.current, :view_dmsf_files))
-    project_conditions << "project_id IN (#{projects.collect(&:id).join(',')})" unless projects.nil?
+    project_conditions << "#{DmsfFile.table_name}.project_id IN (#{projects.collect(&:id).join(',')})" unless projects.nil?
     
     results = []
     results_count = 0
@@ -305,7 +305,7 @@ class DmsfFile < ActiveRecord::Base
               next unless results.select{|f| f.id.to_s == dmsf_attrs[1]}.empty?
               
               find_conditions =  DmsfFile.merge_conditions(limit_options[:conditions], :id => dmsf_attrs[1], :deleted => false )
-              dmsf_file = DmsfFile.find(:first, :conditions =>  find_conditions  )
+              dmsf_file = DmsfFile.find(:first, :conditions => find_conditions )
     
               if !dmsf_file.nil?
                 if options[:offset]
