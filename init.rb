@@ -95,7 +95,7 @@ Redmine::Plugin.register :redmine_dmsf do
         entry = DmsfFolder.find(entry_id)
         unless entry.nil?
           title = args[1] ? args[1] : entry.title
-          return link_to "#{title}", :controller => "dmsf", :action => "show", :id => @project, :folder_id => entry
+          return link_to "#{title}", :controller => "dmsf", :action => "show", :id => entry.project, :folder_id => entry
         end
       end
       nil
