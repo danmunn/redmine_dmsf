@@ -182,4 +182,7 @@ cs:
   :title_copy: "Kopírovat"
   :error_folder_cannot_be_copied: "Složka nemůže být zkopírována"
   :notice_folder_copied: "Složka zkopírována"
+  :error_max_email_filesize_exceeded: "Přesáhli jste maximální velikost souboru, který lze poslat emailem. (%{number} MB)"
+  :note_maximum_email_filesize: "Omezí se maximální velikost souboru, který může být poslán emailem. 0 znamená neomezený. Číslo je v MB."
+  :label_maximum_email_filesize: "Maximální velikost souboru emailu"
   

@@ -178,4 +178,7 @@ en-GB:
   :title_copy: "Copy"
   :error_folder_cannot_be_copied: "Folder can't be copied"
   :notice_folder_copied: "Folder copied"
+  :error_max_email_filesize_exceeded: "You've exceeded the maximum filesize for sending via email. (%{number} MB)"
+  :note_maximum_email_filesize: "Limits maximum filesize that can be sent via email. 0 means unlimited. Number is in MB."
+  :label_maximum_email_filesize: "Maximum email attachment size"
   

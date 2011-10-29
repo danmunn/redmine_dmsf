@@ -59,6 +59,9 @@ class DmsfController < ApplicationController
   rescue ZipMaxFilesError
     flash[:error] = l(:error_max_files_exceeded, :number => Setting.plugin_redmine_dmsf["dmsf_max_file_download"].to_i.to_s)
     redirect_to({:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder})
+  rescue EmailMaxFileSize
+    flash[:error] = l(:error_max_email_filesize_exceeded, :number => Setting.plugin_redmine_dmsf["dmsf_max_email_filesize"].to_s)
+    redirect_to({:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder})
   rescue DmsfAccessError
     render_403
   end
@@ -78,6 +81,9 @@ class DmsfController < ApplicationController
   end
 
   class ZipMaxFilesError < StandardError
+  end
+
+  class EmailMaxFileSize < StandardError
   end
 
   def delete_entries
@@ -236,6 +242,11 @@ class DmsfController < ApplicationController
       while (buffer = zip_file.read(8192))
         f.write(buffer)
       end
+    end
+
+    max_filesize = Setting.plugin_redmine_dmsf["dmsf_max_email_filesize"].to_f
+    if max_filesize > 0 && File.size(ziped_content) > max_filesize * 1048576
+      raise EmailMaxFileSize
     end
     
     zip.files.each do |f| 

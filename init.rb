@@ -39,6 +39,7 @@ Redmine::Plugin.register :redmine_dmsf do
             :default => {
               "dmsf_max_file_upload" => "0",
               "dmsf_max_file_download" => "0",
+              "dmsf_max_email_filesize" => "0",
               "dmsf_storage_directory" => "#{RAILS_ROOT}/files/dmsf",
               "dmsf_zip_encoding" => "utf-8",
               "dmsf_index_database" => "#{RAILS_ROOT}/files/dmsf_index",
