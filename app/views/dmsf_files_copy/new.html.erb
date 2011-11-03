@@ -31,6 +31,7 @@
 			</p>
 		</div>
 		
+		
 		<%= submit_tag(l(:button_copy)) %>
 		<% if User.current.allowed_to?(:file_manipulation, @project) %>
 			<button type="button" id="move_button" title="<%=l(:button_move)%>"><%=l(:button_move)%></button>
@@ -47,7 +48,6 @@
 
 <% content_for :header_tags do %>
 	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
-	<%= robot_exclusion_tag %>
 	<%= javascript_include_tag "jquery-1.6.1.min.js", :plugin => "redmine_dmsf" %>
 	<script type="text/javascript">
 		jQuery.noConflict();
