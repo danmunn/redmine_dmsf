@@ -133,7 +133,7 @@
 				html = '<object id="' + uploader.id + '_flash" type="application/x-shockwave-flash" data="' + uploader.settings.flash_swf_url + '" ';
 				
 				if (plupload.ua.ie) {
-					html += 'classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" '
+					html += 'classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" ';
 				}
 
 				html += 'width="100%" height="100%" style="outline:0">'  +
@@ -205,6 +205,10 @@
 						urlstream_upload : settings.urlstream_upload
 					});
 				});
+				
+				uploader.bind("CancelUpload", function() {
+					getFlashObj().cancelUpload();
+				});
 
 
 				uploader.bind("Flash:UploadProcess", function(up, flash_file) {
@@ -230,7 +234,7 @@
 					up.trigger('ChunkUploaded', file, chunkArgs);
 
 					// Stop upload if file is maked as failed
-					if (file.status != plupload.FAILED) {
+					if (file.status !== plupload.FAILED && up.state !== plupload.STOPPED) {
 						getFlashObj().uploadNextChunk();
 					}
 
@@ -395,6 +399,11 @@
 						});
 					}
 				});
+				
+				uploader.bind("DisableBrowse", function(up, disabled) {
+					getFlashObj().disableBrowse(disabled);
+				});
+			
 				
 				uploader.bind("Destroy", function(up) {
 					var flashContainer;

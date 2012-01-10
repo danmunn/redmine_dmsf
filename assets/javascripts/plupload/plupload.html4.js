@@ -68,7 +68,7 @@
 						
 						type = plupload.mimeTypes[ext[y]];
 
-						if (type) {
+						if (type && plupload.inArray(type, mimes) === -1) {
 							mimes.push(type);
 						}
 					}
@@ -106,7 +106,9 @@
 					// Route click event to input element programmatically, if possible
 					if (up.features.triggerDialog && browseButton) {
 						plupload.addEvent(getById(up.settings.browse_button), 'click', function(e) {
-							input.click();
+							if (!input.disabled) {
+								input.click();
+							}
 							e.preventDefault();
 						}, up.id);
 					}
@@ -116,7 +118,7 @@
 						width : '100%',
 						height : '100%',
 						opacity : 0,
-						fontSize: '999px' // force input element to be bigger then needed to occupy whole space
+						fontSize: '99px' // force input element to be bigger then needed to occupy whole space
 					});
 					
 					plupload.extend(form.style, {
@@ -371,6 +373,13 @@
 						if (n) {
 							n.parentNode.removeChild(n);
 						}
+					}
+				});
+				
+				uploader.bind("DisableBrowse", function(up, disabled) {
+					var input = document.getElementById('input_' + currentFileId);
+					if (input) {
+						input.disabled = disabled;	
 					}
 				});
 				
