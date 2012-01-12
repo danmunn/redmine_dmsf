@@ -103,6 +103,23 @@ Redmine::Plugin.register :redmine_dmsf do
     end
   end
   
+  Redmine::WikiFormatting::Macros.register do
+    desc "Wiki link to DMSF document description:\n\n" +
+             "{{dmsfd(file_id [, title])}}\n\n" +
+         "_file_id_ / _revision_id_ can be found in link for file/revision download." 
+
+    macro :dmsfd do |obj, args|
+      return nil if args.length < 1 # require file id
+      entry_id = args[0].strip
+      entry = DmsfFile.find(entry_id)
+      unless entry.nil? || entry.deleted
+        title = args[1] ? args[1] : entry.title
+        return link_to "#{title}", :controller => "dmsf_files", :action => "show", :id => entry
+      end
+      nil
+    end
+  end
+  
 end
 
 Redmine::Search.map do |search|
