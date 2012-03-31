@@ -217,3 +217,19 @@ p.no-ident {
 table.access-table tbody td, table.access-table tbody tr:hover td {
 	border: solid 1px #D7D7D7;
 }
+
+/* Custom field */
+.dmsf-customfields {
+	margin: 5px 0 5px 25px;
+}
+
+.dmsf-customfields .customfield {
+
+}
+
+.dmsf-customfields .customfield label {
+	font-weight: bold;
+	width: 100px;
+	display: block;
+	float: left;
+}

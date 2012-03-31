@@ -24,7 +24,9 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
   belongs_to :project
-  
+
+  acts_as_customizable
+
   acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.file.dmsf_path_str}"},
                 :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.file}},
                 :datetime => Proc.new {|o| o.updated_at },
@@ -77,6 +79,9 @@ class DmsfFileRevision < ActiveRecord::Base
         ["disk_filename = :filename", {:filename => self.disk_filename}])
       File.delete(self.disk_file) if dependent.length <= 1 && File.exist?(self.disk_file) 
       DmsfFileRevisionAccess.find(:all, :conditions => ["dmsf_file_revision_id = ?", self.id]).each {|a| a.destroy}
+      CustomValue.find(:all, :conditions => "customized_id = " + self.id.to_s).each do |v|
+        v.destroy
+      end
       self.destroy
     else
       self.deleted = true
@@ -128,7 +133,9 @@ class DmsfFileRevision < ActiveRecord::Base
     
     new_revision.name = self.name
     new_revision.folder = self.folder
-    
+
+    new_revision.custom_values = self.custom_values.map(&:clone)
+
     return new_revision
   end
   
@@ -202,5 +209,20 @@ class DmsfFileRevision < ActiveRecord::Base
       end
     end
   end
-     
+
+  # Overrides Redmine::Acts::Customizable::InstanceMethods#available_custom_fields
+  def available_custom_fields
+    search_project = nil
+    if self.project.present?
+      search_project = self.project
+    elsif self.project_id.present?
+      search_project = Project.find(self.project_id)
+    end
+    if search_project
+      search_project.all_dmsf_custom_fields
+    else
+      DmsfFileRevisionCustomField.all
+    end
+  end
+
 end

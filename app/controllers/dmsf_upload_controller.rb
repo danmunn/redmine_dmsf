@@ -27,7 +27,9 @@ class DmsfUploadController < ApplicationController
   
   verify :method => :post, :only => [:upload_files, :upload_file, :commit_files], 
     :render => { :nothing => true, :status => :method_not_allowed }
-  
+
+  helper :all
+
   def upload_files
     uploaded_files = params[:uploaded_files]
     @uploads = []
@@ -141,6 +143,14 @@ class DmsfUploadController < ApplicationController
           File.delete(commited_disk_filepath)
           
           files.push(file)
+
+          unless commited_file["dmsf_file_revision"].blank?
+            commited_file["dmsf_file_revision"]["custom_field_values"].each do |v|
+              cv = CustomValue.find(:first, :conditions => ["customized_id = " + new_revision.id.to_s + " AND custom_field_id = " + v[0]])
+              cv.value = v[1]
+              cv.save
+            end
+          end
         else
           failed_uploads.push(commited_file)
         end

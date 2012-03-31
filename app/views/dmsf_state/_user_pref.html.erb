@@ -15,6 +15,24 @@
 		<%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
 	</div>
 	<% end %>
+
+	<% form_for :project, @project, :url => project_path(@project), :html => {:method=>:post} do %>
+		<% custom_fields = DmsfFileRevisionCustomField.find(:all) %>
+		<% unless custom_fields.empty? %>
+		<fieldset id="project_issue_custom_fields"><legend><%=l(:label_custom_field_plural)%></legend>
+			<% custom_fields.each do |custom_field| %>
+			<label class="floating">
+				<%= check_box_tag 'project[dmsf_file_revision_custom_field_ids][]', custom_field.id, (@project.all_dmsf_custom_fields.include? custom_field), (custom_field.is_for_all? ? {:disabled => "disabled"} : {}) %>
+				<%= custom_field.name %>
+			</label>
+		<% end %>
+		<%= hidden_field_tag 'project[dmsf_file_revision_custom_field_ids][]', '' %>
+		<%= hidden_field_tag '_method', 'put' %>
+		</fieldset>
+	<% end %>
+
+	<%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
+	<% end %>
 </div>
 
 <% content_for :header_tags do %>

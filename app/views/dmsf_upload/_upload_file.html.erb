@@ -66,6 +66,11 @@ end
 		</p>
 	</div>
 	<br style="clear: both"/>
+	<% @folder ? folder_exists = true : folder_exists = false %>
+	<% values = folder_exists ? @folder.custom_field_values : DmsfFileRevision.new(:file => DmsfFile.new(:project => @project)).custom_field_values %>
+	<% values.each do |value| %>
+		<p><%= custom_field_tag_with_label("commited_files[#{i}][dmsf_file_revision]", value) %></p>
+	<% end %>
 	<p>
 		<%= label_tag("commited_files[#{i}][comment]", l(:label_comment) + ":") %>
 		<div class="data">

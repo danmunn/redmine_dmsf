@@ -26,7 +26,9 @@ class DmsfController < ApplicationController
   
   verify :method => :post, :only => [:delete_entries, :create, :save, :delete, :save_root, :notify_activate, :notify_deactivate], 
     :render => { :nothing => true, :status => :method_not_allowed }
-  
+
+  helper :all
+
   def show
     if @folder.nil?
       @subfolders = DmsfFolder.project_root_folders(@project)

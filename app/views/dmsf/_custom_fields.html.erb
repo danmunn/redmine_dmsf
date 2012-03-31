@@ -1,0 +1,9 @@
+<% unless object.nil? %>
+<div class="dmsf-customfields">
+	<% object.show_custom_field_values.each do |custom_value| %>
+		<div class="dmsf-customfield-<%= custom_value.custom_field.id %> dmsf-customfield customfield">
+			<%= label_tag("", h(custom_value.custom_field.name) + ":") %> <%= show_value(custom_value) %>
+		</div>
+	<% end %>
+</div>
+<% end %>

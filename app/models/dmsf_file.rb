@@ -90,6 +90,9 @@ class DmsfFile < ActiveRecord::Base
       return false 
     end
     if Setting.plugin_redmine_dmsf["dmsf_really_delete_files"]
+      CustomValue.find(:all, :conditions => "customized_id = " + self.id.to_s).each do |v|
+        v.destroy
+      end
       self.revisions.each {|r| r.delete(true)}
       self.destroy
     else
@@ -186,7 +189,22 @@ class DmsfFile < ActiveRecord::Base
     end
     projects
   end
-  
+
+  # Overrides Redmine::Acts::Customizable::InstanceMethods#available_custom_fields
+  def available_custom_fields
+    search_project = nil
+    if self.project.present?
+      search_project = self.project
+    elsif self.project_id.present?
+      search_project = Project.find(self.project_id)
+    end
+    if search_project
+      search_project.all_dmsf_custom_fields
+    else
+      DmsfFileRevisionCustomField.all
+    end
+  end
+
   def move_to(project, folder)
     if self.locked_for_user?
       errors.add_to_base(l(:error_file_is_locked))
@@ -198,6 +216,18 @@ class DmsfFile < ActiveRecord::Base
     new_revision.folder = folder ? folder : nil
     new_revision.project = folder ? folder.project : project
     new_revision.comment = l(:comment_moved_from, :source => "#{self.project.identifier}:#{self.dmsf_path_str}") 
+
+    new_revision.custom_values = []
+    temp_custom_values = self.last_revision.custom_values.select{|cv| new_revision.project.all_dmsf_custom_fields.include?(cv.custom_field)}.map(&:clone)
+    new_revision.custom_values = temp_custom_values
+
+    #add default value for CFs not existing
+    present_custom_fields = new_revision.custom_values.collect(&:custom_field).uniq
+    Project.find(new_revision.project_id).all_dmsf_custom_fields.each do |cf|
+      unless present_custom_fields.include?(cf)
+        new_revision.custom_values << CustomValue.new({:custom_field => cf, :value => cf.default_value})
+      end
+    end
 
     self.folder = new_revision.folder
     self.project = new_revision.project
@@ -212,14 +242,30 @@ class DmsfFile < ActiveRecord::Base
     file.name = self.name
     file.notification = !Setting.plugin_redmine_dmsf["dmsf_default_notifications"].blank?
 
-    new_revision = self.last_revision.clone
-    
-    new_revision.file = file
-    new_revision.folder = folder ? folder : nil
-    new_revision.project = folder ? folder.project : project
-    new_revision.comment = l(:comment_copied_from, :source => "#{self.project.identifier}:#{self.dmsf_path_str}")
-    
-    new_revision.save if file.save  
+    if file.save
+      new_revision = self.last_revision.clone
+
+      new_revision.file = file
+      new_revision.folder = folder ? folder : nil
+      new_revision.project = folder ? folder.project : project
+      new_revision.comment = l(:comment_copied_from, :source => "#{self.project.identifier}: #{self.dmsf_path_str}")
+
+      new_revision.custom_values = []
+      temp_custom_values = self.last_revision.custom_values.select{|cv| new_revision.project.all_dmsf_custom_fields.include?(cv.custom_field)}.map(&:clone)
+      new_revision.custom_values = temp_custom_values
+
+      #add default value for CFs not existing
+      present_custom_fields = new_revision.custom_values.collect(&:custom_field).uniq
+      new_revision.project.all_dmsf_custom_fields.each do |cf|
+        unless present_custom_fields.include?(cf)
+          new_revision.custom_values << CustomValue.new({:custom_field => cf, :value => cf.default_value})
+        end
+      end
+
+      unless new_revision.save
+        file.delete
+      end
+    end
     
     return file
   end

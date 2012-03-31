@@ -117,6 +117,9 @@
 		</p>
 	</div>
 	<br style="clear: both"/>
+	<div class="no-ident clear">
+		<%= render "dmsf/custom_fields", :object => revision %>
+	</div>
 	<p class="no-ident clear">
 		<%= label_tag("", l(:label_comment) + ":") %>
 		<%= h(revision.comment) %>

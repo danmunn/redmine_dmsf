@@ -26,6 +26,8 @@ class DmsfFilesCopyController < ApplicationController
 
   verify :method => :post, :only => [:create, :move], :render => { :nothing => true, :status => :method_not_allowed }
 
+  helper :all
+
   def new
     @target_project = DmsfFile.allowed_target_projects_on_copy.detect {|p| p.id.to_s == params[:target_project_id]} if params[:target_project_id]
     @target_project ||= @project if User.current.allowed_to?(:file_manipulation, @project)

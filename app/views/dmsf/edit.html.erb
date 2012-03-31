@@ -36,6 +36,10 @@
 		<div class="wiki data clear">
 			<%= f.text_area(:description, :rows => 15, :class => "wiki-edit") %>
 		</div>
+		<% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
+		<% values.each do |value| %>
+			<p><%= custom_field_tag_with_label(:dmsf_folder, value) %></p>
+		<% end %>
 	</div>
 	<%= submit_tag(create ? l(:submit_create) : l(:submit_save)) %>
 <% end %>

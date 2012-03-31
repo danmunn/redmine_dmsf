@@ -81,12 +81,19 @@ form_for(:dmsf_file_revision, @revision, :url => {:action => "create_revision", 
 					</p>
 				</div>
 				<br style="clear: both"/>
-				<p>
-					<%= label_tag("dmsf_file_revision_comment", l(:label_comment) + ":") %>
-					<div class="data">
-						<%= f.text_area(:comment, :rows=> "2", :style => "width: 99%;") %>
-					</div>
-				</p>
+				<div class="custom_fields">
+					<% @revision.custom_field_values.each do |value| %>
+						<p><%= custom_field_tag_with_label(:dmsf_file_revision, value) %></p>
+					<% end %>
+				</div>
+				<div class="comment">
+					<p>
+						<%= label_tag("dmsf_file_revision_comment", l(:label_comment) + ":") %>
+						<div class="data">
+							<%= f.text_area(:comment, :rows=> "2", :style => "width: 99%;") %>
+						</div>
+					</p>
+				</div>
 				<br />
 				<%= submit_tag(l(:submit_create)) %>
 <% end %>

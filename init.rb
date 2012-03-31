@@ -23,6 +23,12 @@ Dispatcher.to_prepare :redmine_dmsf do
     unless ProjectsHelper.included_modules.include?(ProjectTabsExtended)
         ProjectsHelper.send(:include, ProjectTabsExtended)
     end
+
+    unless CustomFieldsHelper.included_modules.include?(CustomFieldsHelper)
+        CustomFieldsHelper.send(:include, RedmineDmsf::Patches::CustomFieldsHelper)
+    end
+
+    Project.send(:include, RedmineDmsf::Patches::ProjectPatch)
 end
 
 Redmine::Plugin.register :redmine_dmsf do

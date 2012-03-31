@@ -28,6 +28,8 @@ class DmsfFolder < ActiveRecord::Base
   has_many :files, :class_name => "DmsfFile", :foreign_key => "dmsf_folder_id",
            :conditions => { :deleted => false }
   belongs_to :user
+
+  acts_as_customizable
   
   validates_presence_of :title
   validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id]
@@ -153,6 +155,19 @@ class DmsfFolder < ActiveRecord::Base
     new_folder.description = self.description
     new_folder.user = User.current
 
+    #copy only cfs present in destination project
+    temp_custom_values = self.custom_values.select{|cv| new_folder.project.all_dmsf_custom_fields.include?(cv.custom_field)}.map(&:clone)
+    
+    new_folder.custom_values = temp_custom_values
+
+    #add default value for CFs not existing
+    present_custom_fields = new_folder.custom_values.collect(&:custom_field).uniq
+    new_folder.project.all_dmsf_custom_fields.each do |cf|
+      unless present_custom_fields.include?(cf)
+        new_folder.custom_values << CustomValue.new({:custom_field => cf, :value => cf.default_value})
+      end
+    end
+
     return new_folder unless new_folder.save
     
     self.files.each do |f|
@@ -164,6 +179,21 @@ class DmsfFolder < ActiveRecord::Base
     end
     
     return new_folder
+  end
+
+  # Overrides Redmine::Acts::Customizable::InstanceMethods#available_custom_fields
+  def available_custom_fields
+    search_project = nil
+    if self.project.present?
+      search_project = self.project
+    elsif self.project_id.present?
+      search_project = Project.find(self.project_id)
+    end
+    if search_project
+      search_project.all_dmsf_custom_fields
+    else
+      DmsfFileRevisionCustomField.all
+    end
   end
 
   # To fullfill searchable module expectations
