@@ -16,16 +16,18 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#ActionController::Routing::Routes.draw do |map|
 RedmineApp::Application.routes.draw do
-#  map.resources :dmsf
-#  map.resources :dmsf_files
   resources :dmsf
-#  resources :dmsf_files
 
-  post '/dmsf/:id/upload/files', :controller => 'dmsf_upload', :action => 'upload_files'
-  post '/dmsf/:id/upload/file', :controller => 'dmsf_upload', :action => 'upload_file'
-  post '/dmsf/:id/upload/commit', :controller => 'dmsf_upload', :action => 'commit_files'
+  #/projects/<project>/dmsf/state - dmsf_state controller
+  post '/projects/:id/dmsf/state', :controller => 'dmsf_state', :action => 'user_pref_save'
+
+
+  #/projects/<project>/dmsf/upload - dmsf_upload controller
+
+  post '/projects/:id/dmsf/upload/files', :controller => 'dmsf_upload', :action => 'upload_files'
+  post '/projects/:id/dmsf/upload/file', :controller => 'dmsf_upload', :action => 'upload_file'
+  post '/projects/:id/dmsf/upload/commit', :controller => 'dmsf_upload', :action => 'commit_files'
   
   #/dmsf/files - dmsf_files controller
   post '/dmsf/files/:id/notify/activate', :controller => 'dmsf_files', :action => 'notify_activate'
@@ -34,18 +36,17 @@ RedmineApp::Application.routes.draw do
   post '/dmsf/files/:id/unlock', :controller => 'dmsf_files', :action => 'unlock'
   post '/dmsf/files/:id/delete', :controller => 'dmsf_files', :action => 'delete'
   post '/dmsf/files/:id/revision/create', :controller => 'dmsf_files', :action => 'create_revision'
-  post '/dmsf/files/revision/:id/delete', :controller => 'dmsf_files', :action => 'delete_revision'
+  post '/dmsf/files/:id/revision/delete', :controller => 'dmsf_files', :action => 'delete_revision'
 
-  get '/dmsf/files/:id/download', :controller => 'dmsf_files', :action => 'show', :download => ''
-  get '/dmsf/files/:id/revision/:download/download', :controller => 'dmsf_files', :action => 'show', :download => /\d*/
+  get '/dmsf/files/:id/download', :controller => 'dmsf_files', :action => 'show'
   get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show'
-#  post '/dmsf/files/:id/revision/delete'
 
 
   #
   # files_copy controller
   ##
-##### POST :create, :move
+  post '/dmsf/files/:id/copy/create', :controller => 'dmsf_files_copy', :action => 'create'
+  post '/dmsf/files/:id/copy/move', :controller => 'dmsf_files_copy', :action => 'move'
   get '/dmsf/files/:id/copy', :controller => 'dmsf_files_copy', :action => 'new'
 
 end

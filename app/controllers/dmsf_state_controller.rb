@@ -24,7 +24,7 @@ class DmsfStateController < ApplicationController
   before_filter :find_project
   before_filter :authorize
 
-  verify :method => :post, :only => [:user_pref_save], :render => { :nothing => true, :status => :method_not_allowed }
+#  verify :method => :post, :only => [:user_pref_save], :render => { :nothing => true, :status => :method_not_allowed }
 
   helper :all
 

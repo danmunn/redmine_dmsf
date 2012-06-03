@@ -16,7 +16,7 @@
 	</div>
 	<% end %>
 
-	<% form_for :project, @project, :url => project_path(@project), :html => {:method=>:post} do %>
+	<%= form_for @project, :url => project_path(@project), :html => {:method=>:post} do %>
 		<% custom_fields = DmsfFileRevisionCustomField.find(:all) %>
 		<% unless custom_fields.empty? %>
 		<fieldset id="project_issue_custom_fields"><legend><%=l(:label_custom_field_plural)%></legend>

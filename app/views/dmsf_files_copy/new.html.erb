@@ -11,8 +11,8 @@
 <%= image_tag("notify.png", :plugin => "redmine_dmsf", :title => l(:title_notifications_active)) if @file.notification %>
 </h2>
 
-<% unless DmsfFile.allowed_target_projects_on_copy.blank?
-	form_tag({:action => "create", :id => @file}, :id => "copyForm") do |f| %>
+<% unless DmsfFile.allowed_target_projects_on_copy.blank? %>
+	<%= form_tag({:action => "create", :id => @file}, :id => "copyForm") do |f| %>
 		<div class="box dmsf_detail">
 			<p>
 				<label for="target_project_id"><%=l(:label_target_project)%>:</label>
