@@ -59,5 +59,9 @@ module DmsfHelper
       return Redmine::MimeType.css_class_of(filename)
     end
   end
+
+  def plugin_asset_path(plugin, asset_type, source)
+    return "/plugin_assets/#{plugin}/#{asset_type}/#{source}"
+  end
   
 end

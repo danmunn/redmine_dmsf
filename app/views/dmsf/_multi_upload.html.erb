@@ -1,5 +1,5 @@
 <div class="box">
-	<% form_tag({:controller => "dmsf_upload", :action => "upload_files", :id => @project, :folder_id => @folder},
+	<%= form_tag({:controller => "dmsf_upload", :action => "upload_files", :id => @project},
 		:id => "uploadform", :method=>:post, :multipart => true) do %>
 <% if Setting.attachment_max_size.to_i >= 102400 %> 
 	<div class="upload_select">
@@ -79,7 +79,7 @@
 			uploader = jQuery("div",uploader);
 			uploader.plupload({
 				runtimes : 'html5,flash,html4',
-				url : '<%= url_for({:controller => "dmsf_upload", :action => "upload_file", :id => @project, :folder_id => @folder}) %>',
+				url : '<%= url_for({:controller => "dmsf_upload", :action => "upload_file", :id => @project}) %>',
 				max_file_size : "100mb",
 				max_file_count: '<%= Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i if Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i > 0 %>',
 				multipart: true,
@@ -89,7 +89,7 @@
 				rename: true,
 		
 				// Flash settings
-				flash_swf_url : '<%= Engines::RailsExtensions::AssetHelpers.plugin_asset_path("redmine_dmsf", "javascripts", "plupload/plupload.flash.swf") %>'
+				flash_swf_url : '<%= plugin_asset_path(:redmine_dmsf, "javascripts", "plupload/plupload.flash.swf") %>'
 			});
 			jQuery(".plupload_scroll",uploader).resizable({
 				handles: "s"

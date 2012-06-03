@@ -17,9 +17,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'redmine'
-require 'dispatcher'
+#require 'dispatcher'
   
-Dispatcher.to_prepare :redmine_dmsf do
+#Dispatcher.to_prepare :redmine_dmsf do
+Rails.configuration.to_prepare do
     unless ProjectsHelper.included_modules.include?(ProjectTabsExtended)
         ProjectsHelper.send(:include, ProjectTabsExtended)
     end
@@ -29,6 +30,8 @@ Dispatcher.to_prepare :redmine_dmsf do
     end
 
     Project.send(:include, RedmineDmsf::Patches::ProjectPatch)
+    STDOUT.puts "PATCHES SENT\n"
+    STDOUT.flush
 end
 
 Redmine::Plugin.register :redmine_dmsf do
@@ -46,9 +49,9 @@ Redmine::Plugin.register :redmine_dmsf do
               "dmsf_max_file_upload" => "0",
               "dmsf_max_file_download" => "0",
               "dmsf_max_email_filesize" => "0",
-              "dmsf_storage_directory" => "#{RAILS_ROOT}/files/dmsf",
+              "dmsf_storage_directory" => Rails.root.join('files/dmsf').to_s, #{RAILS_ROOT}/files/dmsf",
               "dmsf_zip_encoding" => "utf-8",
-              "dmsf_index_database" => "#{RAILS_ROOT}/files/dmsf_index",
+              "dmsf_index_database" => Rails.root.join("files/dmsf_index").to_s,
               "dmsf_stemming_lang" => "english",
               "dmsf_stemming_strategy" => "STEM_NONE"
             }

@@ -13,11 +13,9 @@
 </div>
 
 <h3><%=l(:heading_uploaded_files)%></h3>
-<%
-i = 1
-form_tag({:action => "commit_files", :id => @project, :folder_id => @folder},
-	:method=>:post) do 
-%>
+<% i = 1 %>
+<%= form_tag({:action => "commit_files", :id => @project, :folder_id => @folder},
+	:method=>:post) do %>
 	<% @uploads.each do |upload| %>
 		<% if upload.locked %>
 			<%= render(:partial => 'upload_file_locked', :locals => {:upload => upload, :i => i}) %>

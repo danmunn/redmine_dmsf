@@ -17,10 +17,10 @@ if !User.current.allowed_to?(:file_approval, @project)
 else
 	selected_workflow = @file.last_revision.workflow
 end
-
-form_for(:dmsf_file_revision, @revision, :url => {:action => "create_revision", :id => @file},
-	:html => {:method=>:post, :multipart => true, :id => "new_revision_form"}) do |f|
 %>
+
+<%= form_for(@revision, :url => {:action => "create_revision", :id => @file},
+	:html => {:method=>:post, :multipart => true, :id => "new_revision_form"}) do |f| %>
 				<div class="clear">
 					<div class="splitcontentleft">
 						<p>
