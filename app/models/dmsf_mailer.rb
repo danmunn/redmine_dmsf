@@ -25,11 +25,13 @@ class DmsfMailer < Mailer
     files = files.select { |file| file.notify? }
     
     redmine_headers "Project" => project.identifier
-    recipients get_notify_user_emails(user, files)
-    subject project.name + ": Dmsf files updated"
-    body :user => user, :files => files, :project => project
-    # TODO: correct way should be  render_multipart("files_updated", body), but other plugin broke it
-    render_multipart(File.expand_path(File.dirname(__FILE__) + "/../views/dmsf_mailer/" + "files_updated"), body)
+
+    @user = user
+    @files = files
+    @project = project
+
+    mail :to => get_notify_user_emails(user, files),
+      :subject =>  project.name + ": Dmsf files updated"
   end
   
   def files_deleted(user, files)
@@ -37,31 +39,23 @@ class DmsfMailer < Mailer
     files = files.select { |file| file.notify? }
     
     redmine_headers "Project" => project.identifier
-    recipients get_notify_user_emails(user, files)
-    subject project.name + ": Dmsf files deleted"
-    body :user => user, :files => files, :project => project
-    # TODO: correct way should be  render_multipart("files_updated", body), but other plugin broke it
-    render_multipart(File.expand_path(File.dirname(__FILE__) + "/../views/dmsf_mailer/" + "files_deleted"), body)
+
+    @user = user
+    @files = files
+    @project = project
+
+    mail :to => get_notify_user_emails(user, files),
+      :subject => project.name + ": Dmsf files deleted"
   end
   
   def send_documents(user, email_to, email_cc, email_subject, zipped_content, email_plain_body)
-    recipients      email_to
-    if !email_cc.strip.blank?
-      cc              email_cc
-    end
-    subject         email_subject
-    from            user.mail
-    content_type    "multipart/mixed"
-
-    part "text/plain" do |p|
-      p.body = email_plain_body
-    end
-  
+debugger
     zipped_content_data = open(zipped_content, "rb") {|io| io.read }
 
-    attachment :content_type => "application/zip",
-             :filename => "Documents.zip",
-             :body => zipped_content_data
+    @body = email_plain_body
+
+    attachments['Documents.zip'] = {:content_type => "application/zip", :content => zipped_content_data}
+    mail(:to => email_to, :cc => email_cc, :subject => email_subject, :from => user.mail)
   end
   
   private
@@ -92,7 +86,8 @@ class DmsfMailer < Mailer
           else
             false
           end
-        else            notify_member.dmsf_mail_notification
+        else  
+          notify_member.dmsf_mail_notification
         end
       end
     end      

@@ -75,8 +75,8 @@ class DmsfController < ApplicationController
       render :action => "email_entries"
       return
     end
-    DmsfMailer.deliver_send_documents(User.current, @email_params["to"], @email_params["cc"],
-      @email_params["subject"], @email_params["zipped_content"], @email_params["body"])
+    DmsfMailer.send_documents(User.current, @email_params["to"], @email_params["cc"],
+      @email_params["subject"], @email_params["zipped_content"], @email_params["body"]).deliver
     File.delete(@email_params["zipped_content"])
     flash[:notice] = l(:notice_email_sent)
     redirect_to({:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder})
@@ -129,7 +129,7 @@ class DmsfController < ApplicationController
       end
       unless deleted_files.empty?
         deleted_files.each {|f| log_activity(f, "deleted")}
-        DmsfMailer.deliver_files_deleted(User.current, deleted_files)
+        DmsfMailer.files_deleted(User.current, deleted_files).deliver
       end
       if failed_entries.empty?
         flash[:notice] = l(:notice_entries_deleted)

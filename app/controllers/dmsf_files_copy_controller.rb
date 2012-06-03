@@ -72,7 +72,7 @@ class DmsfFilesCopyController < ApplicationController
     flash[:notice] = l(:notice_file_copied)
     log_activity(new_file, "was copied (is copy)")
     begin 
-      DmsfMailer.deliver_files_updated(User.current, [new_file])
+      DmsfMailer.files_updated(User.current, [new_file]).deliver
     rescue ActionView::MissingTemplate => e
       Rails.logger.error "Could not send email notifications: " + e
     end
@@ -110,7 +110,7 @@ class DmsfFilesCopyController < ApplicationController
     log_activity(@file, "was moved (is copy)")
     begin
       # TODO: implement proper mail notification
-      DmsfMailer.deliver_files_updated(User.current, [@file])
+      DmsfMailer.files_updated(User.current, [@file]).deliver
     rescue ActionView::MissingTemplate => e
       Rails.logger.error "Could not send email notifications: " + e
     end

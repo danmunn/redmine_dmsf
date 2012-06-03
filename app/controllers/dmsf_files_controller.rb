@@ -120,7 +120,7 @@ class DmsfFilesController < ApplicationController
         flash[:notice] = (flash[:notice].nil? ? "" : flash[:notice]) + l(:notice_file_revision_created)
         log_activity("new revision")
         begin
-          DmsfMailer.deliver_files_updated(User.current, [@file])
+          DmsfMailer.files_updated(User.current, [@file]).deliver
         rescue ActionView::MissingTemplate => e
           Rails.logger.error "Could not send email notifications: " + e
         end
@@ -136,7 +136,7 @@ class DmsfFilesController < ApplicationController
       if @file.delete
         flash[:notice] = l(:notice_file_deleted)
         log_activity("deleted")
-        DmsfMailer.deliver_files_deleted(User.current, [@file])
+        DmsfMailer.files_deleted(User.current, [@file]).deliver
       else
         flash[:error] = l(:error_file_is_locked)
       end

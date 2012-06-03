@@ -74,7 +74,7 @@ class DmsfFoldersCopyController < ApplicationController
     
     #TODO: implement proper notification for all new files
     #begin 
-    #  DmsfMailer.deliver_files_updated(User.current, [new_file])
+    #  DmsfMailer.files_updated(User.current, [new_file]).deliver
     #rescue ActionView::MissingTemplate => e
     #  Rails.logger.error "Could not send email notifications: " + e
     #end
