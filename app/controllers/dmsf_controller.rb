@@ -144,6 +144,7 @@ class DmsfController < ApplicationController
   # Folder manipulation
 
   def new
+    @folder = DmsfFolder.new #Bugfix form error
     @pathfolder = @parent
     render :action => "edit"
   end

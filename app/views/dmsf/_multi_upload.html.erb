@@ -1,5 +1,5 @@
 <div class="box">
-	<%= form_tag({:controller => "dmsf_upload", :action => "upload_files", :id => @project},
+	<%= form_tag({:controller => "dmsf_upload", :action => "upload_files", :id => @project, :folder_id => @folder},
 		:id => "uploadform", :method=>:post, :multipart => true) do %>
 <% if Setting.attachment_max_size.to_i >= 102400 %> 
 	<div class="upload_select">

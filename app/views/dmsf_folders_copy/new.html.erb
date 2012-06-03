@@ -5,8 +5,8 @@
 
 <h2><%= render(:partial => "/dmsf/path", :locals => {:path => @folder.dmsf_path}) %></h2>
 
-<% unless DmsfFolder.allowed_target_projects_on_copy.blank?
-	form_tag({:action => "copy_to", :id => @folder}, :id => "copyForm") do |f| %>
+<% unless DmsfFolder.allowed_target_projects_on_copy.blank? %>
+	<%= form_tag({:action => "copy_to", :id => @folder}, :id => "copyForm") do |f| %>
 		<div class="box dmsf_detail">
 			<p>
 				<label for="target_project_id"><%=l(:label_target_project)%>:</label>

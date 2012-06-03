@@ -24,7 +24,7 @@ class DmsfFoldersCopyController < ApplicationController
   before_filter :find_folder
   before_filter :authorize
 
-  verify :method => :post, :only => [:copy_to], :render => { :nothing => true, :status => :method_not_allowed }
+#  verify :method => :post, :only => [:copy_to], :render => { :nothing => true, :status => :method_not_allowed }
 
   def new
     @target_project = DmsfFolder.allowed_target_projects_on_copy.detect {|p| p.id.to_s == params[:target_project_id]} if params[:target_project_id]

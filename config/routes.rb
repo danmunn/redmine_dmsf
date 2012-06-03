@@ -17,9 +17,35 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 RedmineApp::Application.routes.draw do
-  resources :dmsf
+#  resources :dmsf
 
-  #/projects/<project>/dmsf/state - dmsf_state controller
+
+  #
+  # dmsf controller
+  #   /projects/<project>/dmsf
+  ##
+
+  #  verify :method => :post, :only => [:delete_entries, :create, :save, :delete, :save_root, :notify_activate, :notify_deactivate],
+  #    :render => { :nothing => true, :status => :method_not_allowed }
+  post '/projects/:id/dmsf/create', :controller => 'dmsf', :action => 'create'
+  post '/projects/:id/dmsf/notify/activate', :controller => 'dmsf', :action => 'notify_activate'
+  post '/projects/:id/dmsf/notify/deactivate', :controller => 'dmsf', :action => 'notify_deactivate'
+  post '/projects/:id/dmsf/delete', :controller => 'dmsf', :action => 'delete'
+  post '/projects/:id/dmsf/save', :controller => 'dmsf', :action => 'save'
+  post '/projects/:id/dmsf/save/root', :controller => 'dmsf', :action => 'save_root'
+  post '/projects/:id/dmsf/entries', :controller => 'dmsf', :action => 'entries_operation'
+  post '/projects/:id/dmsf/entries/delete', :controller => 'dmsf', :action => 'delete_entries'
+  get '/projects/:id/dmsf/', :controller => 'dmsf', :action => 'show'
+  get '/projects/:id/dmsf/new', :controller => 'dmsf', :action => 'new'
+  get '/projects/:id/dmsf/edit', :controller=> 'dmsf', :action => 'edit'
+  get '/projects/:id/dmsf/edit/root', :controller=> 'dmsf', :action => 'edit_root'
+
+
+
+  #
+  # dmsf_state controller
+  #   /projects/<project>/dmsf/state
+  ##
   post '/projects/:id/dmsf/state', :controller => 'dmsf_state', :action => 'user_pref_save'
 
 
@@ -38,7 +64,8 @@ RedmineApp::Application.routes.draw do
   post '/dmsf/files/:id/revision/create', :controller => 'dmsf_files', :action => 'create_revision'
   post '/dmsf/files/:id/revision/delete', :controller => 'dmsf_files', :action => 'delete_revision'
 
-  get '/dmsf/files/:id/download', :controller => 'dmsf_files', :action => 'show'
+  get '/dmsf/files/:id/download', :controller => 'dmsf_files', :action => 'show', :download => '' #Otherwise will not route nil download param
+  get '/dmsf/files/:id/download/:download', :controller => 'dmsf_files', :action => 'show'
   get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show'
 
 
@@ -48,5 +75,14 @@ RedmineApp::Application.routes.draw do
   post '/dmsf/files/:id/copy/create', :controller => 'dmsf_files_copy', :action => 'create'
   post '/dmsf/files/:id/copy/move', :controller => 'dmsf_files_copy', :action => 'move'
   get '/dmsf/files/:id/copy', :controller => 'dmsf_files_copy', :action => 'new'
+
+  #
+  # folders_copy controller
+  ##
+  #verify :method => :post, :only => [:copy_to], :render => { :nothing => true, :status => :method_not_allowed }
+  post '/dmsf/folders/:id/copy/to', :controller => 'dmsf_folders_copy', :action => 'copy_to'
+  get '/dmsf/folders/:id/copy', :controller => 'dmsf_folders_copy', :action => 'new'
+
+
 
 end

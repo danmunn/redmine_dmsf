@@ -3,9 +3,8 @@
 <div class="contextual">
 	<% if User.current.allowed_to?(:folder_manipulation, @project) %>
 		<% if @folder.nil? %>
-                        <%= link_to("", :method => :edit_root, :title => l(:link_edit, :title => l(:link_documents)), :class => "icon icon-edit") %> &nbsp;
-			<!-- = link_to("", {:resources => :dmsf, :action => "edit_root", :id => @project},
-					:title => l(:link_edit, :title => l(:link_documents)), :class => "icon icon-edit") --> &nbsp;
+			<%= link_to("", {:action => "edit_root", :id => @project},
+					:title => l(:link_edit, :title => l(:link_documents)), :class => "icon icon-edit") %> &nbsp;
 		<% else @folder.nil? %>
 			<%= link_to("", {:action => "edit", :id => @project, :folder_id => @folder },
 					:title => l(:link_edit, :title => h(@folder.title)), :class => "icon icon-edit") %> &nbsp; 
@@ -26,7 +25,7 @@
 	</div>
 	<%= render "custom_fields", :object => @folder %>
 </div>
-<%= form_tag({:method => :entries_operation, :id => @project, :folder_id => @folder}, :method => :post, 
+<%= form_tag({:action => :entries_operation, :id => @project, :folder_id => @folder}, :method => :post, 
 	:class => "dmfs_entries", :id => "entries_form") do %>
 	<%= hidden_field_tag("action") %>
 	<div class="controls" style="float: left">
@@ -191,7 +190,7 @@
 <script type="text/javascript">
 	jQuery("#entries_delete_button").click(function(event) {
 		if(window.confirm("<%= l(:question_do_you_really_want_to_delete_entries) %>")) {
-			jQuery("#entries_form").attr("action", "<%= url_for(:method => :delete_entries, :id => @project, :folder_id => @folder) %>");
+			jQuery("#entries_form").attr("action", "<%= url_for(:action => :delete_entries, :id => @project, :folder_id => @folder) %>");
 			jQuery("#entries_form").submit();
 		}
 	})
