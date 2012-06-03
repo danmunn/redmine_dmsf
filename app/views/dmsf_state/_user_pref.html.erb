@@ -1,6 +1,6 @@
 <p><strong><%=l(:link_user_preferences)%></strong></p>
 <div class="box">
-	<% form_tag({:controller => "dmsf_state", :action => "user_pref_save", :id => @project},
+	<%= form_tag({:controller => "dmsf_state", :action => "user_pref_save", :id => @project},
 		:method=>:post) do %>
 	<div>
 		<% 
