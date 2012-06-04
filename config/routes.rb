@@ -17,16 +17,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 RedmineApp::Application.routes.draw do
-#  resources :dmsf
-
 
   #
   # dmsf controller
   #   /projects/<project>/dmsf
+  #   [As this controller also processes 'folders' it maybe better to branch into a folder route rather than leaving it as is]
   ##
-
-  #  verify :method => :post, :only => [:delete_entries, :create, :save, :delete, :save_root, :notify_activate, :notify_deactivate],
-  #    :render => { :nothing => true, :status => :method_not_allowed }
   post '/projects/:id/dmsf/create', :controller => 'dmsf', :action => 'create'
   post '/projects/:id/dmsf/notify/activate', :controller => 'dmsf', :action => 'notify_activate'
   post '/projects/:id/dmsf/notify/deactivate', :controller => 'dmsf', :action => 'notify_deactivate'
@@ -50,13 +46,19 @@ RedmineApp::Application.routes.draw do
   post '/projects/:id/dmsf/state', :controller => 'dmsf_state', :action => 'user_pref_save'
 
 
-  #/projects/<project>/dmsf/upload - dmsf_upload controller
+  #
+  #  dmsf_upload controller
+  #   /projects/<project>/dmsf/upload - dmsf_upload controller
+  ##
 
   post '/projects/:id/dmsf/upload/files', :controller => 'dmsf_upload', :action => 'upload_files'
   post '/projects/:id/dmsf/upload/file', :controller => 'dmsf_upload', :action => 'upload_file'
   post '/projects/:id/dmsf/upload/commit', :controller => 'dmsf_upload', :action => 'commit_files'
   
-  #/dmsf/files - dmsf_files controller
+  #
+  # dmsf_files controller
+  #   /dmsf/files/<file id>
+  ##
   post '/dmsf/files/:id/notify/activate', :controller => 'dmsf_files', :action => 'notify_activate'
   post '/dmsf/files/:id/notify/deactivate', :controller => 'dmsf_files', :action => 'notify_deactivate'
   post '/dmsf/files/:id/lock', :controller => 'dmsf_files', :action => 'lock'
@@ -72,6 +74,7 @@ RedmineApp::Application.routes.draw do
 
   #
   # files_copy controller
+  #   /dmsf/files/<file id>/copy
   ##
   post '/dmsf/files/:id/copy/create', :controller => 'dmsf_files_copy', :action => 'create'
   post '/dmsf/files/:id/copy/move', :controller => 'dmsf_files_copy', :action => 'move'
@@ -79,6 +82,7 @@ RedmineApp::Application.routes.draw do
 
   #
   # folders_copy controller
+  #   /dmsf/folders/<folder id>/copy
   ##
   #verify :method => :post, :only => [:copy_to], :render => { :nothing => true, :status => :method_not_allowed }
   post '/dmsf/folders/:id/copy/to', :controller => 'dmsf_folders_copy', :action => 'copy_to'

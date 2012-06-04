@@ -30,19 +30,17 @@ Rails.configuration.to_prepare do
     end
 
     Project.send(:include, RedmineDmsf::Patches::ProjectPatch)
-    STDOUT.puts "PATCHES SENT\n"
-    STDOUT.flush
 end
 
 Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
   author "Vít Jonáš"
   description "Document Management System Features"
-  version "1.3.0 devel"
+  version "1.4.0 devel"
   url "http://code.google.com/p/redmine-dmsf/"
   author_url "mailto:vit.jonas@gmail.com"
   
-  requires_redmine :version_or_higher => '1.1.0'
+  requires_redmine :version_or_higher => '2.0.0'
   
   settings  :partial => 'settings/dmsf_settings',
             :default => {

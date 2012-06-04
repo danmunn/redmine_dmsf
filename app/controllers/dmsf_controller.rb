@@ -24,9 +24,6 @@ class DmsfController < ApplicationController
   before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
   before_filter :find_parent, :only => [:new, :create]
   
-#  verify :method => :post, :only => [:delete_entries, :create, :save, :delete, :save_root, :notify_activate, :notify_deactivate], 
-#    :render => { :nothing => true, :status => :method_not_allowed }
-
   helper :all
 
   def show
