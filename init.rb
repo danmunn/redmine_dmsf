@@ -34,7 +34,7 @@ end
 
 Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
-  author "Vít Jonáš"
+  author "Vit Jonas"
   description "Document Management System Features"
   version "1.4.0 devel"
   url "http://code.google.com/p/redmine-dmsf/"
