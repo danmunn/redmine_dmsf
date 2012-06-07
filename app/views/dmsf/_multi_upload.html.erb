@@ -98,6 +98,11 @@
 			
 			pluploader.bind('FileUploaded', function(pluploader, file, response) {
 				var responseObject = jQuery.parseJSON(response.response);
+				if (responseObject == null) { //Bug: on Firefox folders entries act unexpectedly.
+					file.status = plupload.FAILED;
+					return;
+				}
+					
 				if (responseObject.error == null) {
 					var disk_filename_input = jQuery("<input/>").attr("type","hidden")
 						.attr("name","uploaded[" + dmsfFileFieldCount + "][disk_filename]")
