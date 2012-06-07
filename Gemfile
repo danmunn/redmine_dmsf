@@ -1,4 +1,8 @@
 source "https://rubygems.org"
 
 gem "zip"
-gem "xapian-full", :optional => true, :require => false
+
+#Allows --without=xapian
+group :xapian do
+  gem "xapian-full", :require => false
+end
