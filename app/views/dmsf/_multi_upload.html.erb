@@ -118,7 +118,7 @@
 				}
 				
 				if(pluploader.total.uploaded == pluploader.files.length) jQuery('#uploadform').submit();
-				else if(pluploader.total.uploaded + pluploader.total.failed == pluploader.files.length) setTimeout(2000, function() {jQuery('#uploadform').submit();})
+				else if(pluploader.total.uploaded + pluploader.total.failed == pluploader.files.length) setTimeout(function() {jQuery('#uploadform').submit();}, 2000)
 				else dmsfFileFieldCount++;
 			});
 		}
