@@ -100,31 +100,40 @@
 				var responseObject = jQuery.parseJSON(response.response);
 				if (responseObject == null) { //Bug: on Firefox folders entries act unexpectedly.
 					file.status = plupload.FAILED;
-					return;
-				}
-					
-				if (responseObject.error == null) {
-					var disk_filename_input = jQuery("<input/>").attr("type","hidden")
-						.attr("name","uploaded[" + dmsfFileFieldCount + "][disk_filename]")
-						.val(responseObject.disk_filename);
-					uploader.append(disk_filename_input);
-					var content_type_input = jQuery("<input/>").attr("type","hidden")
-						.attr("name","uploaded[" + dmsfFileFieldCount + "][content_type]")
-						.val(responseObject.content_type);
-					uploader.append(content_type_input);
-					var original_filename_input = jQuery("<input/>").attr("type","hidden")
-						.attr("name","uploaded[" + dmsfFileFieldCount + "][original_filename]")
-						.val(responseObject.original_filename);
-					uploader.append(original_filename_input);
+					pluploader.trigger('UploadProgress', file);
+					pluploader.trigger('QueueChanged');
 				} else {
-					file.status = plupload.FAILED;
-					responseObject.error.file = file;
-					pluploader.trigger('Error', responseObject.error);
+					if (responseObject.error == null) {
+						var disk_filename_input = jQuery("<input/>").attr("type","hidden")
+							.attr("name","uploaded[" + dmsfFileFieldCount + "][disk_filename]")
+							.val(responseObject.disk_filename);
+						uploader.append(disk_filename_input);
+						var content_type_input = jQuery("<input/>").attr("type","hidden")
+							.attr("name","uploaded[" + dmsfFileFieldCount + "][content_type]")
+							.val(responseObject.content_type);
+						uploader.append(content_type_input);
+						var original_filename_input = jQuery("<input/>").attr("type","hidden")
+							.attr("name","uploaded[" + dmsfFileFieldCount + "][original_filename]")
+							.val(responseObject.original_filename);
+						uploader.append(original_filename_input);
+					} else {
+						file.status = plupload.FAILED;
+//						responseObject.error.file = file;
+//						pluploader.trigger('Error', responseObject.error); 
+						pluploader.trigger('UploadProgress', file);
+						pluploader.trigger('QueueChanged');
+						/*
+							To-do: Though this is the documented method of reporting an error, on chrome this seems
+							to result in a bug, where the file afterwards seems to be out of sync and fired at the same
+							time as another, however this will only process one return from this. If I notify of a file fault, but don't
+							trigger a message, all seems to work as indtended.
+						*/
+					}
 				}
-				
 				if(pluploader.total.uploaded == pluploader.files.length) jQuery('#uploadform').submit();
 				else if(pluploader.total.uploaded + pluploader.total.failed == pluploader.files.length) setTimeout(function() {jQuery('#uploadform').submit();}, 2000)
 				else dmsfFileFieldCount++;
+				return true;
 			});
 		}
 	</script>
