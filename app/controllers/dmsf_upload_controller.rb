@@ -62,8 +62,22 @@ class DmsfUploadController < ApplicationController
         f.write(buffer)
       end
     end
-    
-    render :layout => false
+    if File.size("#{DmsfHelper.temp_dir}/#{@disk_filename}") <= 0
+      begin
+        File.delete("#{DmsfHelper.temp_dir}/#{@disk_filename}")
+      rescue
+      end
+      render :layout => nil, :json => { :jsonrpc => "2.0", 
+        :error => { 
+          :code => 103, 
+          :message => l(:header_minimum_filesize), 
+          :details => l(:error_minimum_filesize, 
+          :file => @tempfile.original_filename.to_s) 
+        }
+      }
+    else
+      render :layout => false
+    end
   end
 
   #TODO: flash notice when files saved and unlocked

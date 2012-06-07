@@ -186,4 +186,6 @@ en:
   :error_max_email_filesize_exceeded: "You've exceeded the maximum filesize for sending via email. (%{number} MB)"
   :note_maximum_email_filesize: "Limits maximum filesize that can be sent via email. 0 means unlimited. Number is in MB."
   :label_maximum_email_filesize: "Maximum email attachment size"
+  :header_minimum_filesize: "File Error."
+  :error_minimum_filesize: "The file %{file} is 0 bytes and will not be attached."
   

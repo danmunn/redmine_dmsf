@@ -49,7 +49,6 @@ class DmsfMailer < Mailer
   end
   
   def send_documents(user, email_to, email_cc, email_subject, zipped_content, email_plain_body)
-debugger
     zipped_content_data = open(zipped_content, "rb") {|io| io.read }
 
     @body = email_plain_body
