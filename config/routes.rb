@@ -91,6 +91,6 @@ RedmineApp::Application.routes.draw do
   mount DAV4Rack::Handler.new(
 #    :root => Rails.root.to_s,
     :root_uri_path => "/dmsf/webdav",
-    :resource_class => RedmineDmsf::Webdav::ResourceFactory
+    :resource_class => RedmineDmsf::Webdav::ResourceProxy,
   ), :at => "/dmsf/webdav"
 end
