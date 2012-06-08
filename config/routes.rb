@@ -88,6 +88,9 @@ RedmineApp::Application.routes.draw do
   post '/dmsf/folders/:id/copy/to', :controller => 'dmsf_folders_copy', :action => 'copy_to'
   get '/dmsf/folders/:id/copy', :controller => 'dmsf_folders_copy', :action => 'new'
 
-
-
+  mount DAV4Rack::Handler.new(
+#    :root => Rails.root.to_s,
+    :root_uri_path => "/dmsf/webdav",
+    :resource_class => RedmineDmsf::Webdav::ResourceFactory
+  ), :at => "/dmsf/webdav"
 end

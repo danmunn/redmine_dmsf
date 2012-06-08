@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
 gem "zip"
+gem "dav4rack"
 
 #Allows --without=xapian
 group :xapian do
