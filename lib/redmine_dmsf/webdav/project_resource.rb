@@ -2,32 +2,70 @@ module RedmineDmsf
   module Webdav
     class ProjectResource < BaseResource
 
+      def initialize(public_path, path, request, response, options)
+        super(public_path, path, request, response, options)
+      end
+
+      def children
+        #caching for repeat usage
+        return @children unless @children.nil?
+        DmsfFolder.project_root_folders(self.Project).map do |p|
+          child p.title, p
+        end
+        DmsfFile.project_root_files(self.Project).map do |p|
+          child p.display_name, p
+        end
+      end
+
+
       def name
-        @project.name
+        self.Project.name unless self.Project.nil?
       end
 
       def exist?
-        !@Project.nil?
+        !self.Project.nil?
       end
 
       def collection?
         exist?
       end
 
+      def creation_date
+        self.Project.created_on unless self.Project.nil?
+      end
+
       def last_modified
-        @project.updated_on unless @project.nil?
+        self.Project.updated_on unless self.Project.nil?
+      end
+
+      def etag
+        sprintf('%x-%x-%x', 0, 4096, last_modified.to_i)
       end
 
       def name
-        @project.identifier unless @project.nil?
+        self.Project.identifier unless self.Project.nil?
       end
 
       def long_name
-        @project.name unless @project.nil?
+        self.Project.name unless self.Project.nil?
       end
 
       def content_type
-        "Project" #l(:field_project)
+        "inode/directory" #l(:field_project)
+      end
+
+      def special_type
+        "Project"
+      end
+
+      def content_length
+        4096
+      end
+
+      def get(request, response)
+        html_display
+        response['Content-Length'] = response.body.bytesize.to_s
+        OK
       end
 
     end

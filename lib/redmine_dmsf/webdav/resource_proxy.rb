@@ -1,10 +1,6 @@
-require 'webrick/httputils'
-
 module RedmineDmsf
   module Webdav
     class ResourceProxy < DAV4Rack::Resource
-
-      include WEBrick::HTTPUtils
 
       def initialize(public_path, path, request, response, options)
         super(public_path, path, request, response, options)
@@ -14,6 +10,7 @@ module RedmineDmsf
         elsif (pinfo.length == 1) #This is first level, and as such, project path
           @resource_c = ProjectResource.new(public_path, path, request, response, options)
         else #We made it all the way to DMSF Data
+          @resource_c = DmsfResource.new(public_path, path, request, response, options)
         end
 
         @resource_c.accessor= self unless @resource_c.nil?
@@ -21,7 +18,8 @@ module RedmineDmsf
 
       def authenticate(username, password)
         User.current = User.try_to_login(username, password) || nil
-        !User.current.nil?
+        return !User.current.anonymous? unless User.current.nil?
+        return false
       end
 
       def children
@@ -70,6 +68,10 @@ module RedmineDmsf
 
       def long_name
         @resource_c.long_name
+      end
+
+      def special_type
+        @resource_c.special_type
       end
     end
   end
