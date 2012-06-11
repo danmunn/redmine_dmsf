@@ -1,6 +1,9 @@
 module RedmineDmsf
   module Webdav
     class BaseResource < DAV4Rack::Resource
+      include Redmine::I18n
+      include ActionView::Helpers::NumberHelper
+
 
       DIR_FILE = "<tr><td class=\"name\"><a href=\"%s\">%s</a></td><td class=\"size\">%s</td><td class=\"type\">%s</td><td class=\"mtime\">%s</td></tr>"
 
@@ -24,7 +27,15 @@ module RedmineDmsf
 
         @response.body = ""
         Confict unless collection?
-        entities = children.map{|child| DIR_FILE % [child.public_path.html_safe, child.long_name || child.name, "-", child.special_type || child.content_type, child.last_modified]} * "\n"
+        entities = children.map{|child| 
+          DIR_FILE % [
+            child.public_path, 
+            child.long_name || child.name, 
+            child.collection? ? '-' : number_to_human_size(child.content_length),
+            child.special_type || child.content_type, 
+            child.last_modified
+          ]
+        } * "\n"
         @response.body << index_page % [ path.empty? ? "/" : path, path.empty? ? "/" : path , entities ]
       end
 
@@ -62,6 +73,12 @@ table { width:100%%; }
       end
 
       protected
+      def basename
+        File.basename(path)
+      end
+      def dirname
+        File.dirname(path)
+      end
       def Project
         return @Project unless @Project.nil?
         pinfo = @path.split('/').drop(1)
@@ -71,6 +88,9 @@ table { width:100%%; }
           rescue
           end
         end
+      end
+      def projectless_path
+        '/'+path.split('/').drop(2).join('/')
       end
     end
   end

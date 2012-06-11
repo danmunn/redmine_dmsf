@@ -9,21 +9,18 @@ module RedmineDmsf
       def children
         #caching for repeat usage
         return @children unless @children.nil?
+        @children = []
         DmsfFolder.project_root_folders(self.Project).map do |p|
-          child p.title, p
+          @children.push child(p.title, p)
         end
         DmsfFile.project_root_files(self.Project).map do |p|
-          child p.display_name, p
+          @children.push child(p.name, p)
         end
-      end
-
-
-      def name
-        self.Project.name unless self.Project.nil?
+        @children
       end
 
       def exist?
-        !self.Project.nil?
+        !(self.Project.nil? || User.current.anonymous?)
       end
 
       def collection?
@@ -55,7 +52,7 @@ module RedmineDmsf
       end
 
       def special_type
-        "Project"
+        l(:field_project)
       end
 
       def content_length
