@@ -112,6 +112,39 @@ module RedmineDmsf
         OK
       end
 
+      def make_collection
+        debugger
+        if (request.body.read.to_s == '')
+
+          _folder = false
+          if (File.basename(File.dirname(projectless_path)) != "/")
+            folders = DmsfFolder.find(:all, :conditions => ["project_id = :project_id AND title = :title", {:project_id => self.Project.id, :title => File.basename(File.dirname(path))}], :order => "title ASC")
+            if (folders.length > 1) then
+              folders.delete_if {|x| x.dmsf_path_str != File.dirname(projectless_path)}
+              return false unless folders.length > 0
+              _folder=true
+              _folderdata = folders[0]
+            elsif (folders.length == 1)
+              if ('/'+folders[0].dmsf_path_str == File.dirname(projectless_path)) then
+                _folder=true
+                _folderdata = folders[0]
+              else
+                _folder= false
+              end
+            end
+            return MethodNotAllowed unless _folder
+            folder = DmsfFolder.new({:title => basename, :dmsf_folder_id => _folderdata.id, :description => 'Folder created from WebDav'})
+          else
+            folder = DmsfFolder.new({:title => basename, :dmsf_folder_id => nil, :description => 'Folder created from WebDav'})
+          end
+          folder.project = self.Project
+          folder.user = User.current
+          folder.save ? OK : MethodNotAllowed
+        else
+          UnsupportedMediaType
+        end
+      end
+
       protected 
       def download
         raise NotFound unless file?

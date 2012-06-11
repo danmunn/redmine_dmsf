@@ -70,6 +70,10 @@ module RedmineDmsf
         @resource_c.long_name
       end
 
+      def make_collection
+        @resource_c.make_collection
+      end
+
       def special_type
         @resource_c.special_type
       end
