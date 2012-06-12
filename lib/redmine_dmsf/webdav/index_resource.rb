@@ -12,7 +12,7 @@ module RedmineDmsf
           @Projects = Project.visible.find(:all, :order => 'lft')
           @Projects.delete_if { |node| node.module_enabled?('dmsf').nil? }
         end 
-        return nil if @Projects.nil? || @Projects.empty?
+        return [] if @Projects.nil? || @Projects.empty?
         @Projects.map do |p|
           child p.identifier
         end

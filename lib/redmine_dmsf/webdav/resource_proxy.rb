@@ -74,8 +74,30 @@ module RedmineDmsf
         @resource_c.make_collection
       end
 
+      def delete
+        @resource_c.delete
+      end
+
       def special_type
         @resource_c.special_type
+      end
+
+      def move(dest, overwrite)
+        @resource_c.move(dest, overwrite)
+      end
+
+      def lock(*args)
+        debugger
+        @resource_c.lock(*args)
+      end
+
+      def check_lock(*args)
+        debugger
+        @resource_c.check_lock(*args)
+      end
+
+      def Resource
+        @resource_c
       end
     end
   end

@@ -27,11 +27,10 @@ module RedmineDmsf
       def folder?
         return @_folder unless @_folder.nil?
         @_folder = false
-        folders = DmsfFolder.find(:all, :conditions => ["project_id = :project_id", {:project_id => self.Project.id}], :order => "title ASC")
-        folders.delete_if {|x| x.title != basename}
+        folders = DmsfFolder.find(:all, :conditions => ["project_id = :project_id AND title = :title", {:project_id => self.Project.id, :title => basename}], :order => "title ASC")
         return false unless folders.length > 0
         if (folders.length > 1) then
-          folders.delete_if {|x| x.dmsf_path_str != projectless_path}
+          folders.delete_if {|x| '/'+x.dmsf_path_str != projectless_path}
           return false unless folders.length > 0
           @_folder=true
           @_folderdata = folders[0]
@@ -113,7 +112,6 @@ module RedmineDmsf
       end
 
       def make_collection
-        debugger
         if (request.body.read.to_s == '')
 
           _folder = false
@@ -133,16 +131,60 @@ module RedmineDmsf
               end
             end
             return MethodNotAllowed unless _folder
-            folder = DmsfFolder.new({:title => basename, :dmsf_folder_id => _folderdata.id, :description => 'Folder created from WebDav'})
+            f = DmsfFolder.new({:title => basename, :dmsf_folder_id => _folderdata.id, :description => 'Folder created from WebDav'})
           else
-            folder = DmsfFolder.new({:title => basename, :dmsf_folder_id => nil, :description => 'Folder created from WebDav'})
+            f = DmsfFolder.new({:title => basename, :dmsf_folder_id => nil, :description => 'Folder created from WebDav'})
           end
-          folder.project = self.Project
-          folder.user = User.current
-          folder.save ? OK : MethodNotAllowed
+          f.project = self.Project
+          f.user = User.current
+          f.save ? OK : MethodNotAllowed
         else
           UnsupportedMediaType
         end
+      end
+
+      def delete
+        if(file?) then
+          @_filedata.delete ? NoContent : Conflict
+        elsif (folder?) then
+          @_folderdata.delete ? NoContent : Conflict
+        else
+          NotFound
+        end
+      end
+
+      def move(dest, overwrite)
+        return PreconditionFailed if !dest.Resource.is_a?(DmsfResource) || dest.Resource.Project.nil? || dest.Resource.Project.id == 0
+        if (collection?)
+          #Current object is a folder, so now we need to figure out information about Destination
+          if(dest.exist?) then
+            STDOUT.puts "Exist?"
+          else
+            if(File.basename(File.dirname(dest.Resource.projectless_path)) == "/") #Project root
+              if(self.Project.id != dest.Resource.Project.id) then
+                return MethodNotImplemented
+              end
+              folder.dmsf_folder_id = nil
+            else
+              parent = dest.Resource.parent #Grab parent Resource
+              return PreconditionFailed unless parent.exist? && parent.folder?
+              folder.dmsf_folder_id = parent.folder.id             
+            end
+              folder.title = dest.Resource.basename
+            folder.save ? Created : PreconditionFailed
+          end
+        else
+          STDOUT.puts "Not a col"
+        end
+      end
+
+
+      def folder
+        return @_folderdata if folder?
+      end
+
+      def file
+        return @_filedata if file?
       end
 
       protected 
