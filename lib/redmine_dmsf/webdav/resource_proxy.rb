@@ -95,11 +95,19 @@ module RedmineDmsf
       end
 
       def lock_check(*args)
-        @resource_c.check_lock(*args)
+        @resource_c.lock_check(*args)
       end
 
       def unlock(*args)
         @resource_c.unlock(*args)
+      end
+
+      def put(*args)
+        @resource_c.put(*args)
+      end
+
+      def post(*args)
+        @resource_c.post(*args)
       end
 
       def resource

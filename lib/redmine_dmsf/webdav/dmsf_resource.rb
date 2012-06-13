@@ -169,13 +169,13 @@ module RedmineDmsf
           return MethodNotAllowed if exist? #If we already exist, why waste the time trying to save?
           parent_folder = nil
           if (parent.projectless_path != "/")
-            return MethodNotAllowed unless parent.folder?
+            return Conflict unless parent.folder?
             parent_folder = parent.folder.id
           end
           f = DmsfFolder.new({:title => basename, :dmsf_folder_id => parent_folder, :description => 'Folder created from WebDav'})
           f.project = project
           f.user = User.current
-          f.save ? OK : MethodNotAllowed
+          f.save ? OK : Conflict
         else
           UnsupportedMediaType
         end
@@ -334,6 +334,8 @@ module RedmineDmsf
         end
       end
 
+      # Lock
+      # Locks a file entity only (DMSF Folders do not support locking)
       def lock(args)
         return Conflict unless (parent.projectless_path == "/" || parent_exists?) && !collection? && file?
         token = UUIDTools::UUID.md5_create(UUIDTools::UUID_URL_NAMESPACE, projectless_path).to_s
@@ -348,10 +350,13 @@ module RedmineDmsf
         end
       end
 
+      # Unlock
+      # Token based unlock (authenticated) will ensure that a correct token is sent, further ensuring
+      # ownership of token before permitting unlock
       def unlock(token)
         return NoContent unless file?
         token=token.slice(1, token.length - 2)
-        if (token.nil? || token.empty?)
+        if (token.nil? || token.empty? || User.current.anonymous?)
           BadRequest
         else
           _token = UUIDTools::UUID.md5_create(UUIDTools::UUID_URL_NAMESPACE, projectless_path).to_s
@@ -362,6 +367,61 @@ module RedmineDmsf
             NoContent
           end
         end
+      end
+
+      # HTTP POST request.
+      #
+      # Forbidden, as method should not be utilised.
+      def post(request, response)
+        raise Forbidden
+      end
+
+      #
+      #
+      def put(request, response)
+        filename = DmsfHelper.temp_dir+'/'+DmsfHelper.temp_filename(basename).gsub(/[\/\\]/,'')
+        raise BadRequest unless (!collection?)
+        new_revision = DmsfFileRevision.new
+        if (exist? && file?) #We're over-writing something, so ultimately a new revision
+          f = file
+          last_revision = file.last_revision
+          new_revision.source_revision = last_revision
+          new_revision.major_version = last_revision.major_version
+          new_revision.minor_version = last_revision.minor_version
+          new_revision.workflow = last_revision.workflow
+        else
+          raise BadRequest unless ( parent.projectless_path == "/" || (parent.exist? && parent.folder?) )
+          f = DmsfFile.new
+          f.project = project
+          f.name = basename
+          f.folder = parent.folder
+          f.notification = !Setting.plugin_redmine_dmsf["dmsf_default_notifications"].blank?
+          new_revision.minor_version = 0
+          new_revision.major_version = 0
+        end
+
+        new_revision.project = project
+        new_revision.folder = parent.folder
+        new_revision.file = f
+        new_revision.user = User.current
+        new_revision.name = basename
+        new_revision.title = DmsfFileRevision.filename_to_title(basename)
+        new_revision.description = nil
+        new_revision.comment = nil
+        new_revision.increase_version(2, true)
+        new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
+        new_revision.size = request.body.length
+        raise InternalServerError unless new_revision.valid? && f.save
+        new_revision.disk_filename = new_revision.new_storage_filename
+
+        if new_revision.save
+          f.reload
+          new_revision.copy_file_content(request.body)
+        else
+          raise InternalServerError
+        end
+
+        Created
       end
 
       private
