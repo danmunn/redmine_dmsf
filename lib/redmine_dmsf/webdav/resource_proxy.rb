@@ -86,6 +86,10 @@ module RedmineDmsf
         @resource_c.move(dest, overwrite)
       end
 
+      def copy(dest, overwrite)
+        @resource_c.copy(dest, overwrite)
+      end
+
       def lock(*args)
         debugger
         @resource_c.lock(*args)

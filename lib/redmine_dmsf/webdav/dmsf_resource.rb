@@ -210,14 +210,17 @@ module RedmineDmsf
 
         return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil? || resource.project.id == 0
 
-        #At the moment we don't support cross project destinations
-        return MethodNotImplemented unless project.id == resource.project.id
-
         parent = resource.parent
         if (collection?)
+
+          #At the moment we don't support cross project destinations
+          return MethodNotImplemented unless project.id == resource.project.id
+
           #Current object is a folder, so now we need to figure out information about Destination
           if(dest.exist?) then
-            STDOUT.puts "Exist?"
+
+            MethodNotAllowed
+
           else
 
             if(parent.projectless_path == "/") #Project root
@@ -226,12 +229,17 @@ module RedmineDmsf
               return PreconditionFailed unless parent.exist? && parent.folder?
               folder.dmsf_folder_id = parent.folder.id             
             end
-              folder.title = resource.basename
+            folder.title = resource.basename
             folder.save ? Created : PreconditionFailed
 
           end
         else
           if(dest.exist?) then
+
+            methodNotAllowed 
+         
+            # Files cannot be merged at this point, until a decision is made on how to merge them
+            # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
             
           else
 
@@ -242,7 +250,7 @@ module RedmineDmsf
               f = parent.folder
             end
             return PreconditionFailed unless exist? && file?
-            return InternalServerError unless file.move_to(project, f)
+            return InternalServerError unless file.move_to(resource.project, f)
 
             #Update Revision and names of file [We can link to old physical resource, as it's not changed]
             rev = file.last_revision
@@ -255,6 +263,65 @@ module RedmineDmsf
           end
         end
       end
+
+      # Process incoming COPY request
+      #
+      # Behavioural differences between collection and single entity
+      # Todo: Support overwrite between both types of entity, and an integrative copy where destination exists for collections
+      def copy(dest, overwrite)
+
+        # All of this should carry accrross the ResourceProxy frontend, we ensure this to
+        # prevent unexpected errors
+        if dest.is_a? (ResourceProxy)
+          resource = dest.resource
+        else
+          resource = dest
+        end
+
+        return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil? || resource.project.id == 0
+
+        parent = resource.parent
+        if (collection?)
+
+          #Current object is a folder, so now we need to figure out information about Destination
+          return MethodNotAllowed if(dest.exist?)
+
+          return PreconditionFailed if (parent.projectless_path != "/" && !parent.folder?)
+          folder.title = resource.basename
+          new_folder = folder.copy_to(resource.project, parent.folder)
+          return PreconditionFailed if new_folder.nil? || new_folder.id.nil?
+          Created
+        else
+          if(dest.exist?) then
+
+            methodNotAllowed
+
+            # Files cannot be merged at this point, until a decision is made on how to merge them
+            # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
+
+          else
+
+            if(parent.projectless_path == "/") #Project root
+              f = nil
+            else
+              return PreconditionFailed unless parent.exist? && parent.folder?
+              f = parent.folder
+            end
+            return PreconditionFailed unless exist? && file?
+            return InternalServerError unless file.copy_to(resource.project, f)
+
+            #Update Revision and names of file [We can link to old physical resource, as it's not changed]
+            rev = file.last_revision
+            rev.name = resource.basename
+            file.name = resource.basename
+
+            #Save Changes
+            (rev.save! && file.save!) ? Created : PreconditionFailed
+
+          end
+        end
+      end
+
 
       private
       # Prepare file for download using Rack functionality:
