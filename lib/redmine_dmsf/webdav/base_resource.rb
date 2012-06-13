@@ -79,16 +79,18 @@ table { width:100%%; }
       def dirname
         File.dirname(path)
       end
-      def Project
+      def project
         return @Project unless @Project.nil?
         pinfo = @path.split('/').drop(1)
         if pinfo.length > 0
           begin
-            @project = Project.find(pinfo.first)
+            @Project = Project.find(pinfo.first)
           rescue
           end
         end
       end
+
+      #Make it easy to find the path without project in it.
       def projectless_path
         '/'+path.split('/').drop(2).join('/')
       end

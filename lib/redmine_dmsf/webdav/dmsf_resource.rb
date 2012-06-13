@@ -27,7 +27,7 @@ module RedmineDmsf
       def folder?
         return @_folder unless @_folder.nil?
         @_folder = false
-        folders = DmsfFolder.find(:all, :conditions => ["project_id = :project_id AND title = :title", {:project_id => self.Project.id, :title => basename}], :order => "title ASC")
+        folders = DmsfFolder.find(:all, :conditions => ["project_id = :project_id AND title = :title", {:project_id => project.id, :title => basename}], :order => "title ASC")
         return false unless folders.length > 0
         if (folders.length > 1) then
           folders.delete_if {|x| '/'+x.dmsf_path_str != projectless_path}
@@ -48,11 +48,33 @@ module RedmineDmsf
       def file?
         return @_file unless @_file.nil?
         @_file = false
-        files = DmsfFile.find(:all, :conditions => ["project_id = :project_id AND name = :file_name AND deleted = :deleted", {:project_id => self.Project.id, :file_name => basename, :deleted => false}], :order => "name ASC")
-        files.delete_if {|x| File.dirname('/'+x.dmsf_path_str) != File.dirname(projectless_path)}
-        if files.length > 0
-          @_filedata = files[0]
-          @_file = true
+
+        #
+        # Hunt for files parent path
+        f = false
+        if (parent.projectless_path != "/")
+          if parent.folder?
+            f = parent.folder
+          end
+        else
+          f = nil
+        end
+
+        if f || f.nil? then
+          # f has a value other than false? - lets use traditional
+          # DMSF file search by name.
+          @_filedata = DmsfFile.find_file_by_name(project, f, basename)
+          @_file = !@_filedata.nil?
+        else
+          # If folder is false, means it couldn't pick up parent, 
+          # as such its probably fine to bail out, however we'll 
+          # perform a search in this scenario
+          files = DmsfFile.find(:all, :conditions => ["project_id = :project_id AND name = :file_name AND deleted = :deleted", {:project_id => project.id, :file_name => basename, :deleted => false}], :order => "name ASC")
+          files.delete_if {|x| File.dirname('/'+x.dmsf_path_str) != File.dirname(projectless_path)}
+          if files.length > 0
+            @_filedata = files[0]
+            @_file = true
+          end
         end
       end
 
@@ -115,27 +137,17 @@ module RedmineDmsf
         if (request.body.read.to_s == '')
 
           _folder = false
-          if (File.basename(File.dirname(projectless_path)) != "/")
-            folders = DmsfFolder.find(:all, :conditions => ["project_id = :project_id AND title = :title", {:project_id => self.Project.id, :title => File.basename(File.dirname(path))}], :order => "title ASC")
-            if (folders.length > 1) then
-              folders.delete_if {|x| x.dmsf_path_str != File.dirname(projectless_path)}
-              return false unless folders.length > 0
-              _folder=true
-              _folderdata = folders[0]
-            elsif (folders.length == 1)
-              if ('/'+folders[0].dmsf_path_str == File.dirname(projectless_path)) then
-                _folder=true
-                _folderdata = folders[0]
-              else
-                _folder= false
-              end
+          _folderid = nil
+          if (parent.projectless_path != "/")
+            if parent.folder? then
+              _folderdata = parent.folder
+              _folder = true
             end
             return MethodNotAllowed unless _folder
-            f = DmsfFolder.new({:title => basename, :dmsf_folder_id => _folderdata.id, :description => 'Folder created from WebDav'})
-          else
-            f = DmsfFolder.new({:title => basename, :dmsf_folder_id => nil, :description => 'Folder created from WebDav'})
+            _folderid = _folderdata.id
           end
-          f.project = self.Project
+          f = DmsfFolder.new({:title => basename, :dmsf_folder_id => _folderid, :description => 'Folder created from WebDav'})
+          f.project = project
           f.user = User.current
           f.save ? OK : MethodNotAllowed
         else
@@ -154,27 +166,51 @@ module RedmineDmsf
       end
 
       def move(dest, overwrite)
-        return PreconditionFailed if !dest.Resource.is_a?(DmsfResource) || dest.Resource.Project.nil? || dest.Resource.Project.id == 0
+        return PreconditionFailed if !dest.Resource.is_a?(DmsfResource) || dest.Resource.project.nil? || dest.Resource.project.id == 0
+
+        #At the moment we don't support cross project destinations
+        return MethodNotImplemented unless project.id == dest.Resource.project.id
+
+        parent = dest.Resource.parent
         if (collection?)
           #Current object is a folder, so now we need to figure out information about Destination
           if(dest.exist?) then
             STDOUT.puts "Exist?"
           else
-            if(File.basename(File.dirname(dest.Resource.projectless_path)) == "/") #Project root
-              if(self.Project.id != dest.Resource.Project.id) then
-                return MethodNotImplemented
-              end
+
+            if(parent.projectless_path == "/") #Project root
               folder.dmsf_folder_id = nil
             else
-              parent = dest.Resource.parent #Grab parent Resource
               return PreconditionFailed unless parent.exist? && parent.folder?
               folder.dmsf_folder_id = parent.folder.id             
             end
               folder.title = dest.Resource.basename
             folder.save ? Created : PreconditionFailed
+
           end
         else
-          STDOUT.puts "Not a col"
+          if(dest.exist?) then
+            STDOUT.puts "Exist?"
+          else
+
+            if(parent.projectless_path == "/") #Project root
+              f = nil
+            else
+              return PreconditionFailed unless parent.exist? && parent.folder?
+              f = parent.folder
+            end
+            return PreconditionFailed unless exist? && file?
+            return InternalServerError unless file.move_to(project, f)
+
+            #Update Revision and names of file [We can link to old physical resource, as it's not changed]
+            rev = file.last_revision
+            rev.name = dest.Resource.basename
+            file.name = dest.Resource.basename
+
+            #Save Changes
+            (rev.save! && file.save!) ? Created : PreconditionFailed
+
+          end
         end
       end
 

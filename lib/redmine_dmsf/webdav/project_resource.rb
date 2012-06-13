@@ -10,17 +10,17 @@ module RedmineDmsf
         #caching for repeat usage
         return @children unless @children.nil?
         @children = []
-        DmsfFolder.project_root_folders(self.Project).map do |p|
+        DmsfFolder.project_root_folders(project).map do |p|
           @children.push child(p.title, p)
         end
-        DmsfFile.project_root_files(self.Project).map do |p|
+        DmsfFile.project_root_files(project).map do |p|
           @children.push child(p.name, p)
         end
         @children
       end
 
       def exist?
-        !(self.Project.nil? || User.current.anonymous?)
+        !(project.nil? || User.current.anonymous?)
       end
 
       def collection?
@@ -28,11 +28,11 @@ module RedmineDmsf
       end
 
       def creation_date
-        self.Project.created_on unless self.Project.nil?
+        project.created_on unless project.nil?
       end
 
       def last_modified
-        self.Project.updated_on unless self.Project.nil?
+        project.updated_on unless project.nil?
       end
 
       def etag
@@ -40,11 +40,11 @@ module RedmineDmsf
       end
 
       def name
-        self.Project.identifier unless self.Project.nil?
+        project.identifier unless project.nil?
       end
 
       def long_name
-        self.Project.name unless self.Project.nil?
+        project.name unless project.nil?
       end
 
       def content_type

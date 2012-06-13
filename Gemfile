@@ -7,3 +7,5 @@ gem "dav4rack"
 group :xapian do
   gem "xapian-full", :require => false
 end
+
+gem "ruby-debug19"
