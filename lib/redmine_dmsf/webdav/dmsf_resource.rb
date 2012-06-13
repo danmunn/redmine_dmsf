@@ -1,7 +1,8 @@
+require 'uuidtools'
+
 module RedmineDmsf
   module Webdav
     class DmsfResource < BaseResource
-
       def initialize(*args)
         super(*args)
         @file = false
@@ -322,6 +323,46 @@ module RedmineDmsf
         end
       end
 
+      # Lock Check
+      # Check for the existance of locks of files (Folders unsupported)
+      # At present as deletions of folders are not recursive, we do not need to extend 
+      # this to cover every file, just queried
+      # TODO: Allow recursive deletions and update lock code appropriately
+      def lock_check(lock_scope=nil)
+        if file?
+          raise Locked if file.locked_for_user?
+        end
+      end
+
+      def lock(args)
+        return Conflict unless (parent.projectless_path == "/" || parent_exists?) && !collection? && file?
+        token = UUIDTools::UUID.md5_create(UUIDTools::UUID_URL_NAMESPACE, projectless_path).to_s
+        lock_check(args[:scope])
+        if (file.locked? && file.locked_for_user?)
+          raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
+        else
+          file.lock unless file.locked?
+          @response['Lock-Token'] = token
+          Locked
+          [8600, token]
+        end
+      end
+
+      def unlock(token)
+        return NoContent unless file?
+        token=token.slice(1, token.length - 2)
+        if (token.nil? || token.empty?)
+          BadRequest
+        else
+          _token = UUIDTools::UUID.md5_create(UUIDTools::UUID_URL_NAMESPACE, projectless_path).to_s
+          if (!file.locked? || file.locked_for_user? || token != _token)
+            Forbidden
+          else
+            file.unlock
+            NoContent
+          end
+        end
+      end
 
       private
       # Prepare file for download using Rack functionality:

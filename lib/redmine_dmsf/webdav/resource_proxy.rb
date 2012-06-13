@@ -2,15 +2,15 @@ module RedmineDmsf
   module Webdav
     class ResourceProxy < DAV4Rack::Resource
 
-      def initialize(public_path, path, request, response, options)
-        super(public_path, path, request, response, options)
+      def initialize(*args)
+        super(*args)
         pinfo = path.split('/').drop(1)
         if (pinfo.length == 0) #If this is the base_path, we're at root
-          @resource_c = IndexResource.new(public_path, path, request, response, options)
+          @resource_c = IndexResource.new(*args)
         elsif (pinfo.length == 1) #This is first level, and as such, project path
-          @resource_c = ProjectResource.new(public_path, path, request, response, options)
+          @resource_c = ProjectResource.new(*args)
         else #We made it all the way to DMSF Data
-          @resource_c = DmsfResource.new(public_path, path, request, response, options)
+          @resource_c = DmsfResource.new(*args)
         end
 
         @resource_c.accessor= self unless @resource_c.nil?
@@ -91,13 +91,15 @@ module RedmineDmsf
       end
 
       def lock(*args)
-        debugger
         @resource_c.lock(*args)
       end
 
-      def check_lock(*args)
-        debugger
+      def lock_check(*args)
         @resource_c.check_lock(*args)
+      end
+
+      def unlock(*args)
+        @resource_c.unlock(*args)
       end
 
       def resource
