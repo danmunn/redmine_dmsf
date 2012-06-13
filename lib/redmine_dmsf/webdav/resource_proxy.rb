@@ -96,7 +96,7 @@ module RedmineDmsf
         @resource_c.check_lock(*args)
       end
 
-      def Resource
+      def resource
         @resource_c
       end
     end

@@ -188,4 +188,5 @@ en:
   :label_maximum_email_filesize: "Maximum email attachment size"
   :header_minimum_filesize: "File Error."
   :error_minimum_filesize: "The file %{file} is 0 bytes and will not be attached."
+  :parent_directory: "Parent Directory"
   

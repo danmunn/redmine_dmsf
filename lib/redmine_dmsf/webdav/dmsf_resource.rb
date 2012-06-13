@@ -2,54 +2,76 @@ module RedmineDmsf
   module Webdav
     class DmsfResource < BaseResource
 
-      def children
-        NotFound unless exist? && folder?
-        return @children unless @children.nil?
-        @children = []
-        @_folderdata.subfolders.map do |p|
-          @children.push child(p.title, p)
-        end
-        @_folderdata.files.map do |p|
-          @children.push child(p.name, p)
-        end
-        @children
-        
+      def initialize(*args)
+        super(*args)
+        @file = false
+        @folder = false
       end
 
+
+      # Gather collection of objects that denote current entities child entities
+      # Used for listing directories etc, implemented basic caching because otherwise
+      # Our already quite heavy usage of DB would just get silly every time we called
+      # this method.
+      def children
+        MethodNotAllowed unless collection?
+        return @children unless @children.nil?
+        @children = []
+        folder.subfolders.map do |p|
+          @children.push child(p.title, p)
+        end
+        folder.files.map do |p|
+          @children.push child(p.name, p)
+        end
+        @children        
+      end
+
+      # Does the object exist?
+      # If it is either a folder or a file, then it exists
       def exist?
         folder? || file?
       end
 
+      # is this entity a folder?
       def collection?
-        exist? && folder?
+        folder? #no need to check if entity exists, as false is returned if entity does not exist anyways
       end
 
-      def folder?
-        return @_folder unless @_folder.nil?
-        @_folder = false
+      # Check if current entity is a folder and return DmsfFolder object if found (nil if not)
+      # Todo: Move folder data retrieval into folder function, and use folder method to determine existence
+      def folder
+        return @folder unless @folder == false
+        @folder = nil
+        # Note: Folder is searched for as a generic search to prevent SQL queries being generated:
+        # if we were to look within parent, we'd have to go all the way up the chain as part of the 
+        # existence check, and although I'm sure we'd love to access the heirarchy, I can't yet
+        # see a practical need for it
         folders = DmsfFolder.find(:all, :conditions => ["project_id = :project_id AND title = :title", {:project_id => project.id, :title => basename}], :order => "title ASC")
-        return false unless folders.length > 0
+        return nil unless folders.length > 0
         if (folders.length > 1) then
           folders.delete_if {|x| '/'+x.dmsf_path_str != projectless_path}
-          return false unless folders.length > 0
-          @_folder=true
-          @_folderdata = folders[0]
+          return nil unless folders.length > 0
+          @folder = folders[0]
         else
           if ('/'+folders[0].dmsf_path_str == projectless_path) then
-            @_folder=true
-            @_folderdata = folders[0]
-          else
-            @_folder= false
+            @folder = folders[0]
           end
         end
-        @_folder
+        @folder
       end
 
-      def file?
-        return @_file unless @_file.nil?
-        @_file = false
+      # return boolean to determine if entity is a folder or not
+      def folder?
+        return !folder.nil?
+      end
 
-        #
+      # Check if current entity exists as a file (DmsfFile), and returns corresponding object if found (nil otherwise)
+      # Currently has a dual search approach (depending on if parent can be determined)
+      # Todo: Move file data retrieval into folder function, and use file method to determine existence
+      def file
+        return @file unless @file == false
+        @file = nil
+
         # Hunt for files parent path
         f = false
         if (parent.projectless_path != "/")
@@ -63,8 +85,7 @@ module RedmineDmsf
         if f || f.nil? then
           # f has a value other than false? - lets use traditional
           # DMSF file search by name.
-          @_filedata = DmsfFile.find_file_by_name(project, f, basename)
-          @_file = !@_filedata.nil?
+          @file = DmsfFile.find_file_by_name(project, f, basename)
         else
           # If folder is false, means it couldn't pick up parent, 
           # as such its probably fine to bail out, however we'll 
@@ -72,17 +93,23 @@ module RedmineDmsf
           files = DmsfFile.find(:all, :conditions => ["project_id = :project_id AND name = :file_name AND deleted = :deleted", {:project_id => project.id, :file_name => basename, :deleted => false}], :order => "name ASC")
           files.delete_if {|x| File.dirname('/'+x.dmsf_path_str) != File.dirname(projectless_path)}
           if files.length > 0
-            @_filedata = files[0]
-            @_file = true
+            @file = files[0]
           end
         end
       end
 
+      # return boolean to determine if entity is a file or not
+      def file?
+        return !file.nil?
+      end
+
+      # Return the content type of file
+      # will return inode/directory for any collections, and appropriate for File entities
       def content_type
         if folder? then
           "inode/directory"
         elsif file?
-          @_filedata.last_revision.detect_content_type
+          file.last_revision.detect_content_type
         else
           NotFound
         end
@@ -90,9 +117,9 @@ module RedmineDmsf
 
       def creation_date
         if folder?
-          @_folderdata.created_at
+          folder.created_at
         elsif file?
-          @_filedata.created_at
+          file.created_at
         else
           NotFound
         end
@@ -100,22 +127,22 @@ module RedmineDmsf
 
       def last_modified
         if folder?
-          @_folderdata.updated_at
+          folder.updated_at
         elsif file?
-          @_filedata.updated_at
+          file.updated_at
         else
           NotFound
         end
       end
 
       def etag
-        filesize = file? ? @_filedata.size : 4096;
-        fileino = file? ? File.stat(@_filedata.last_revision.disk_file).ino : 2;
+        filesize = file? ? file.size : 4096;
+        fileino = file? ? File.stat(file.last_revision.disk_file).ino : 2;
         sprintf('%x-%x-%x', fileino, filesize, last_modified.to_i)
       end
 
       def content_length
-        file? ? @_filedata.size : 4096;
+        file? ? file.size : 4096;
       end
 
       def special_type
@@ -128,25 +155,23 @@ module RedmineDmsf
           html_display
           response['Content-Length'] = response.body.bytesize.to_s
         else
-          response.body = download
+          response.body = download #Rack based provider
         end
         OK
       end
 
+      # Process incoming MKCOL request
+      #
+      # Create a DmsfFolder at location requested, only if parent is a folder (or root)
       def make_collection
         if (request.body.read.to_s == '')
-
-          _folder = false
-          _folderid = nil
+          return MethodNotAllowed if exist? #If we already exist, why waste the time trying to save?
+          parent_folder = nil
           if (parent.projectless_path != "/")
-            if parent.folder? then
-              _folderdata = parent.folder
-              _folder = true
-            end
-            return MethodNotAllowed unless _folder
-            _folderid = _folderdata.id
+            return MethodNotAllowed unless parent.folder?
+            parent_folder = parent.folder.id
           end
-          f = DmsfFolder.new({:title => basename, :dmsf_folder_id => _folderid, :description => 'Folder created from WebDav'})
+          f = DmsfFolder.new({:title => basename, :dmsf_folder_id => parent_folder, :description => 'Folder created from WebDav'})
           f.project = project
           f.user = User.current
           f.save ? OK : MethodNotAllowed
@@ -155,23 +180,40 @@ module RedmineDmsf
         end
       end
 
+      # Process incoming DELETE request
+      #
+      # <instance> should be of entity to be deleted, we simply follow the Dmsf entity method
+      # for deletion and return of appropriate status based on outcome.
       def delete
         if(file?) then
-          @_filedata.delete ? NoContent : Conflict
+          file.delete ? NoContent : Conflict
         elsif (folder?) then
-          @_folderdata.delete ? NoContent : Conflict
+          folder.delete ? NoContent : Conflict
         else
-          NotFound
+          MethodNotAllowed
         end
       end
 
+      # Process incoming MOVE request
+      #
+      # Behavioural differences between collection and single entity
+      # Todo: Support overwrite between both types of entity, and implement better checking
       def move(dest, overwrite)
-        return PreconditionFailed if !dest.Resource.is_a?(DmsfResource) || dest.Resource.project.nil? || dest.Resource.project.id == 0
+
+        # All of this should carry accrross the ResourceProxy frontend, we ensure this to
+        # prevent unexpected errors
+        if dest.is_a? (ResourceProxy)
+          resource = dest.resource
+        else
+          resource = dest
+        end
+
+        return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil? || resource.project.id == 0
 
         #At the moment we don't support cross project destinations
-        return MethodNotImplemented unless project.id == dest.Resource.project.id
+        return MethodNotImplemented unless project.id == resource.project.id
 
-        parent = dest.Resource.parent
+        parent = resource.parent
         if (collection?)
           #Current object is a folder, so now we need to figure out information about Destination
           if(dest.exist?) then
@@ -184,13 +226,13 @@ module RedmineDmsf
               return PreconditionFailed unless parent.exist? && parent.folder?
               folder.dmsf_folder_id = parent.folder.id             
             end
-              folder.title = dest.Resource.basename
+              folder.title = resource.basename
             folder.save ? Created : PreconditionFailed
 
           end
         else
           if(dest.exist?) then
-            STDOUT.puts "Exist?"
+            
           else
 
             if(parent.projectless_path == "/") #Project root
@@ -204,8 +246,8 @@ module RedmineDmsf
 
             #Update Revision and names of file [We can link to old physical resource, as it's not changed]
             rev = file.last_revision
-            rev.name = dest.Resource.basename
-            file.name = dest.Resource.basename
+            rev.name = resource.basename
+            file.name = resource.basename
 
             #Save Changes
             (rev.save! && file.save!) ? Created : PreconditionFailed
@@ -214,30 +256,23 @@ module RedmineDmsf
         end
       end
 
-
-      def folder
-        return @_folderdata if folder?
-      end
-
-      def file
-        return @_filedata if file?
-      end
-
-      protected 
+      private
+      # Prepare file for download using Rack functionality:
+      # Download (see RedmineDmsf::Webdav::Download) extends Rack::File to allow single-file 
+      # implementation of service for request, which allows for us to pipe a single file through
+      # also best-utilising DAV4Rack's implementation.
       def download
         raise NotFound unless file?
-        #log_activity("downloaded")
+
+        # If there is no range (start of ranged download, or direct download) then we log the
+        # file access, so we can properly keep logged information
         if @request.env['HTTP_RANGE'].nil?
-          access = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => @_filedata.last_revision.id,
+          access = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => file.last_revision.id,
             :action => DmsfFileRevisionAccess::DownloadAction)
           access.save!
         end
-
-        Download.new(@_filedata.last_revision.disk_file)
-        
+        Download.new(file.last_revision.disk_file)
       end
     end
   end
 end
-
-

@@ -7,24 +7,22 @@ module RedmineDmsf
 
       DIR_FILE = "<tr><td class=\"name\"><a href=\"%s\">%s</a></td><td class=\"size\">%s</td><td class=\"type\">%s</td><td class=\"mtime\">%s</td></tr>"
 
-      def initialize(public_path, path, request, response, options)
-        super(public_path, path, request, response, options)
-      end
-
       def accessor=(klass)
         @__proxy = klass
       end
 
+      #Overridable function to provide better listing for GET requests
       def long_name
         nil
       end
 
+      #Overridable function to provide better listing for GET requests
       def special_type
         nil
       end
 
+      #Generate HTML for Get requests
       def html_display
-
         @response.body = ""
         Confict unless collection?
         entities = children.map{|child| 
@@ -36,13 +34,22 @@ module RedmineDmsf
             child.last_modified
           ]
         } * "\n"
+        entities = DIR_FILE % [
+          parent.public_path,
+          l(:parent_directory),
+          '-',
+          '',
+          '',
+        ] + entities unless parent.nil?
         @response.body << index_page % [ path.empty? ? "/" : path, path.empty? ? "/" : path , entities ]
       end
 
+      #Run method through proxy class - ensuring always compatible child is generated
       def child(name, options = nil)
         @__proxy.child(name)
       end
 
+      #Override index_page from DAV4Rack::Resource
       def index_page
         return <<-PAGE
 <html><head>
@@ -76,9 +83,12 @@ table { width:100%%; }
       def basename
         File.basename(path)
       end
+
       def dirname
         File.dirname(path)
       end
+
+      #return instance of Project based on path
       def project
         return @Project unless @Project.nil?
         pinfo = @path.split('/').drop(1)
