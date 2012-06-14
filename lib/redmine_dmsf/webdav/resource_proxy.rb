@@ -1,5 +1,11 @@
 module RedmineDmsf
   module Webdav
+
+    # ResourceProxy
+    #
+    # This is more of a factory approach of an object, class determines which class to
+    # instantiate based on pathing information, it then populates @resource_c with this
+    # object, and proxies calls made against class to it.
     class ResourceProxy < DAV4Rack::Resource
 
       def initialize(*args)
@@ -16,10 +22,18 @@ module RedmineDmsf
         @resource_c.accessor= self unless @resource_c.nil?
       end
 
+      
       def authenticate(username, password)
+        # Bugfix: Current DAV4Rack (including production) authenticate against ALL requests
+        # Microsoft Web Client will not attempt any authentication (it'd seem) until it's acknowledged
+        # a completed OPTIONS request. Ideally this is a flaw with the controller, however as I'm not
+        # going to fork it to ensure compliance, checking the request method in the authentication
+        # seems the next best step, if the request method is OPTIONS return true, controller will simply
+        # call the options method within, which accesses nothing, just returns headers about dav env.
+        return false if (@request.request_method.downcase == "options")
         User.current = User.try_to_login(username, password) || nil
         return !User.current.anonymous? unless User.current.nil?
-        return false
+        false
       end
 
       def children
