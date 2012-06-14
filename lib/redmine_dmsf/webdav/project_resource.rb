@@ -9,6 +9,7 @@ module RedmineDmsf
       def children
         #caching for repeat usage
         return @children unless @children.nil?
+        return [] if project.nil? || project.id.nil?
         @children = []
         DmsfFolder.project_root_folders(project).map do |p|
           @children.push child(p.title, p)
@@ -63,6 +64,13 @@ module RedmineDmsf
         html_display
         response['Content-Length'] = response.body.bytesize.to_s
         OK
+      end
+
+      def folder
+        nil
+      end
+      def file
+        nil
       end
 
     end

@@ -167,7 +167,6 @@ module RedmineDmsf
       #
       # Create a DmsfFolder at location requested, only if parent is a folder (or root)
       def make_collection
-        debugger
         if (request.body.read.to_s == '')
           return MethodNotAllowed if exist? #If we already exist, why waste the time trying to save?
           parent_folder = nil

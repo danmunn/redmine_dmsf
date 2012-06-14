@@ -30,7 +30,7 @@ module RedmineDmsf
         # going to fork it to ensure compliance, checking the request method in the authentication
         # seems the next best step, if the request method is OPTIONS return true, controller will simply
         # call the options method within, which accesses nothing, just returns headers about dav env.
-        return false if (@request.request_method.downcase == "options")
+        return true if ( @request.request_method.downcase == "options" && ( path == "/" || path.empty? ) )
         User.current = User.try_to_login(username, password) || nil
         return !User.current.anonymous? unless User.current.nil?
         false

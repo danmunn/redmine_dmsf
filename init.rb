@@ -17,19 +17,29 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'redmine'
-#require 'dispatcher'
-  
-#Dispatcher.to_prepare :redmine_dmsf do
+require 'redmine_dmsf'
+
+#
+# This may need to be configurable
+#
+Rails.configuration.middleware.insert_before(ActionDispatch::ParamsParser,
+                                     RedmineDmsf::NoParse, :urls => ['/dmsf/webdav'])
+
+
+
 Rails.configuration.to_prepare do
-    unless ProjectsHelper.included_modules.include?(ProjectTabsExtended)
-        ProjectsHelper.send(:include, ProjectTabsExtended)
-    end
+  unless ProjectsHelper.included_modules.include?(ProjectTabsExtended)
+    ProjectsHelper.send(:include, ProjectTabsExtended)
+  end
 
-    unless CustomFieldsHelper.included_modules.include?(CustomFieldsHelper)
-        CustomFieldsHelper.send(:include, RedmineDmsf::Patches::CustomFieldsHelper)
-    end
+  unless CustomFieldsHelper.included_modules.include?(CustomFieldsHelper)
+    CustomFieldsHelper.send(:include, RedmineDmsf::Patches::CustomFieldsHelper)
+  end
 
-    Project.send(:include, RedmineDmsf::Patches::ProjectPatch)
+  Project.send(:include, RedmineDmsf::Patches::ProjectPatch)
+
+  #ActiveSupport::XmlMini.backend = 'Nokogiri'
+
 end
 
 Redmine::Plugin.register :redmine_dmsf do

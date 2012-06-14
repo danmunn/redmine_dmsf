@@ -92,5 +92,6 @@ RedmineApp::Application.routes.draw do
 #    :root => Rails.root.to_s,
     :root_uri_path => "/dmsf/webdav",
     :resource_class => RedmineDmsf::Webdav::ResourceProxy,
+    :controller_class => RedmineDmsf::Webdav::Controller
   ), :at => "/dmsf/webdav"
 end
