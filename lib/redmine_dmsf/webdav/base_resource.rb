@@ -49,6 +49,11 @@ module RedmineDmsf
         @__proxy.child(name)
       end
 
+      def parent
+        p = @__proxy.parent
+        return p.resource.nil? ? p : p.resource
+      end
+
       #Override index_page from DAV4Rack::Resource
       def index_page
         return <<-PAGE

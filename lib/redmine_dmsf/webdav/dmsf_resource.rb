@@ -15,9 +15,9 @@ module RedmineDmsf
       # Our already quite heavy usage of DB would just get silly every time we called
       # this method.
       def children
-        MethodNotAllowed unless collection?
         return @children unless @children.nil?
         @children = []
+        return [] unless collection?
         folder.subfolders.map do |p|
           @children.push child(p.title, p)
         end
@@ -42,6 +42,7 @@ module RedmineDmsf
       # Todo: Move folder data retrieval into folder function, and use folder method to determine existence
       def folder
         return @folder unless @folder == false
+        return nil if project.nil? || project.id.nil? #if the project doesnt exist, this entity can't exist
         @folder = nil
         # Note: Folder is searched for as a generic search to prevent SQL queries being generated:
         # if we were to look within parent, we'd have to go all the way up the chain as part of the 
@@ -71,6 +72,7 @@ module RedmineDmsf
       # Todo: Move file data retrieval into folder function, and use file method to determine existence
       def file
         return @file unless @file == false
+        return nil if project.nil? || project.id.nil? #Again if entity project is nil, it cannot exist in context of this object
         @file = nil
 
         # Hunt for files parent path
@@ -165,6 +167,7 @@ module RedmineDmsf
       #
       # Create a DmsfFolder at location requested, only if parent is a folder (or root)
       def make_collection
+        debugger
         if (request.body.read.to_s == '')
           return MethodNotAllowed if exist? #If we already exist, why waste the time trying to save?
           parent_folder = nil
