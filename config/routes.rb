@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright © 2012 Daniel Munn <dan.munn@munnster.co.uk>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -37,8 +38,6 @@ RedmineApp::Application.routes.draw do
   get '/projects/:id/dmsf/edit', :controller=> 'dmsf', :action => 'edit'
   get '/projects/:id/dmsf/edit/root', :controller=> 'dmsf', :action => 'edit_root'
 
-
-
   #
   # dmsf_state controller
   #   /projects/<project>/dmsf/state
@@ -66,11 +65,9 @@ RedmineApp::Application.routes.draw do
   post '/dmsf/files/:id/delete', :controller => 'dmsf_files', :action => 'delete'
   post '/dmsf/files/:id/revision/create', :controller => 'dmsf_files', :action => 'create_revision'
   post '/dmsf/files/:id/revision/delete', :controller => 'dmsf_files', :action => 'delete_revision'
-
   get '/dmsf/files/:id/download', :controller => 'dmsf_files', :action => 'show', :download => '' #Otherwise will not route nil download param
   get '/dmsf/files/:id/download/:download', :controller => 'dmsf_files', :action => 'show'
   get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show'
-
 
   #
   # files_copy controller
@@ -88,8 +85,10 @@ RedmineApp::Application.routes.draw do
   post '/dmsf/folders/:id/copy/to', :controller => 'dmsf_folders_copy', :action => 'copy_to'
   get '/dmsf/folders/:id/copy', :controller => 'dmsf_folders_copy', :action => 'new'
 
+  #
+  # DAV4Rack implementation of Webdav [note: if changing path you'll need to update lib/redmine_dmsf/webdav/no_parse.rb also]
+  #   /dmsf/webdav
   mount DAV4Rack::Handler.new(
-#    :root => Rails.root.to_s,
     :root_uri_path => "/dmsf/webdav",
     :resource_class => RedmineDmsf::Webdav::ResourceProxy,
     :controller_class => RedmineDmsf::Webdav::Controller

@@ -14,3 +14,10 @@ module RedmineDmsf
     end
   end
 end
+
+#Apply patch
+Rails.configuration.to_prepare do
+  unless CustomFieldsHelper.included_modules.include?(CustomFieldsHelper)
+    CustomFieldsHelper.send(:include, RedmineDmsf::Patches::CustomFieldsHelper)
+  end
+end

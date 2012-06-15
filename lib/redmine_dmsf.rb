@@ -1,8 +1,5 @@
-require 'redmine_dmsf/patches/custom_fields_helper'
-require 'redmine_dmsf/patches/acts_as_customizable'
-require 'redmine_dmsf/patches/project_patch'
-require 'redmine_dmsf/webdav'
-require 'redmine_dmsf/no_parse'
+reqiire 'redmine_dmsf/patches' #plugin patches
+require 'redmine_dmsf/webdav' #DAV4Rack implementation
 
 module RedmineDmsf
 end

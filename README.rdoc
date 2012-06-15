@@ -4,6 +4,8 @@ Redmine DMSF is Document Management System Features plugin for Redmine issue tra
 
 It is aimed to replace current Redmine's Documents module.
 
+Redmine DMSF now comes bundled with Webdav functionality, if switched on within administrative console - will be accessible from /dmsf/webdav.
+
 Initial development was for Kontron AG R&D department and it is released as open source thanks to their generosity.
 Project home: http://code.google.com/p/redmine-dmsf/
 
@@ -14,10 +16,11 @@ Further information about the GPL license can be found at http://www.gnu.org/lic
 
 == Dependencies
 
-As of version 1.4.0 of this plugin:
+As of version 1.4.1 of this plugin:
 * Redmine 2.0.x
 * Rails 2.3.x (Inline with Redmine installation requirement)
 * Zip (Gem)
+* DAV4Rack (Github Gem)
 
 === Fulltext search (optional) 
 
@@ -134,3 +137,12 @@ After these steps re-start your instance of Redmine.
 If you’ve added something, why not share it. Fork the repository (github.com/danmunn/redmine_dmsf), make the changes and send a pull request to the maintainers.
 
 Changes with tests, and full documentation are preferred.
+
+==History
+1.4.1: not yet released
+New: DAV4Rack requirement added (Gemfile makes reference to github repository for latest release).
+New: Webdav functionality included, additional administrative settings added
+Fixed: Issue #2 - extended xapian search fixed with Rails 3 compatible code.
+
+1.4.0: 2012-06-06
+New: Redmine 2.0 or higher is required

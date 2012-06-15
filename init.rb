@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,36 +20,13 @@
 require 'redmine'
 require 'redmine_dmsf'
 
-#
-# This may need to be configurable
-#
-Rails.configuration.middleware.insert_before(ActionDispatch::ParamsParser,
-                                     RedmineDmsf::NoParse, :urls => ['/dmsf/webdav'])
-
-
-
-Rails.configuration.to_prepare do
-  unless ProjectsHelper.included_modules.include?(ProjectTabsExtended)
-    ProjectsHelper.send(:include, ProjectTabsExtended)
-  end
-
-  unless CustomFieldsHelper.included_modules.include?(CustomFieldsHelper)
-    CustomFieldsHelper.send(:include, RedmineDmsf::Patches::CustomFieldsHelper)
-  end
-
-  Project.send(:include, RedmineDmsf::Patches::ProjectPatch)
-
-  #ActiveSupport::XmlMini.backend = 'Nokogiri'
-
-end
-
 Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
-  author "Vit Jonas"
+  author "Vit Jonas / Daniel Munn"
   description "Document Management System Features"
-  version "1.4.0 devel"
-  url "http://code.google.com/p/redmine-dmsf/"
-  author_url "mailto:vit.jonas@gmail.com"
+  version "1.4.1 devel"
+  url "https://github.com/danmunn/redmine_dmsf"
+  author_url "https://code.google.com/p/redmine-dmsf/"
   
   requires_redmine :version_or_higher => '2.0.0'
   
@@ -57,7 +35,7 @@ Redmine::Plugin.register :redmine_dmsf do
               "dmsf_max_file_upload" => "0",
               "dmsf_max_file_download" => "0",
               "dmsf_max_email_filesize" => "0",
-              "dmsf_storage_directory" => Rails.root.join('files/dmsf').to_s, #{RAILS_ROOT}/files/dmsf",
+              "dmsf_storage_directory" => Rails.root.join('files/dmsf').to_s,
               "dmsf_zip_encoding" => "utf-8",
               "dmsf_index_database" => Rails.root.join("files/dmsf_index").to_s,
               "dmsf_stemming_lang" => "english",
@@ -65,7 +43,6 @@ Redmine::Plugin.register :redmine_dmsf do
             }
   
   menu :project_menu, :dmsf, { :controller => "dmsf", :action => "show" }, :caption => :menu_dmsf, :before => :documents, :param => :id
-  #delete_menu_item :project_menu, :documents
   
   activity_provider :dmsf_files, :class_name => "DmsfFileRevision", :default => true
   
