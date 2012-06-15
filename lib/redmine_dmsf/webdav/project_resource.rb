@@ -39,7 +39,9 @@ module RedmineDmsf
       end
 
       def exist?
-        !(project.nil? || User.current.anonymous?)
+        return false if (project.nil? || User.current.anonymous?)
+        return true if User.current.admin?
+        User.current.allowed_to?(:view_dmsf_folders, project)
       end
 
       def collection?

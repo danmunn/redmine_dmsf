@@ -47,8 +47,10 @@ module RedmineDmsf
 
       # Does the object exist?
       # If it is either a folder or a file, then it exists
+      #  - 2012-06-15: Only if you're allowed to browse the project
       def exist?
-        folder? || file?
+        return false if project.nil? || !(folder? || file?)
+        User.current.admin? ? true : User.current.allowed_to?(:view_dmsf_folders, project)
       end
 
       # is this entity a folder?
@@ -170,12 +172,18 @@ module RedmineDmsf
         l(:field_folder) if folder?
       end
 
+      # Process incoming GET request
+      #
+      # If instance is a collection, calls html_display (defined in base_resource.rb) which cycles through children for display
+      # File will only be presented for download if user has permission to view files
+      ##
       def get(request, response)
         raise NotFound unless exist?
         if collection?
           html_display
           response['Content-Length'] = response.body.bytesize.to_s
         else
+          raise Forbidden unless User.current.admin? || User.current.allowed_to?(:view_dmsf_files, project)
           response.body = download #Rack based provider
         end
         OK
@@ -186,6 +194,7 @@ module RedmineDmsf
       # Create a DmsfFolder at location requested, only if parent is a folder (or root)
       def make_collection
         if (request.body.read.to_s == '')
+          raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           return MethodNotAllowed if exist? #If we already exist, why waste the time trying to save?
           parent_folder = nil
           if (parent.projectless_path != "/")
@@ -207,8 +216,10 @@ module RedmineDmsf
       # for deletion and return of appropriate status based on outcome.
       def delete
         if(file?) then
+          raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
           file.delete ? NoContent : Conflict
         elsif (folder?) then
+          raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           folder.delete ? NoContent : Conflict
         else
           MethodNotAllowed
@@ -236,6 +247,7 @@ module RedmineDmsf
 
           #At the moment we don't support cross project destinations
           return MethodNotImplemented unless project.id == resource.project.id
+          raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
 
           #Current object is a folder, so now we need to figure out information about Destination
           if(dest.exist?) then
@@ -255,6 +267,10 @@ module RedmineDmsf
 
           end
         else
+          raise Forbidden unless User.current.admin? || 
+              User.current.allowed_to?(:folder_manipulation, project) || 
+              User.current.allowed_to?(:folder_manipulation, resource.project)
+
           if(dest.exist?) then
 
             methodNotAllowed 
@@ -300,12 +316,23 @@ module RedmineDmsf
         end
 
         return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil? || resource.project.id == 0
-
         parent = resource.parent
         if (collection?)
 
           #Current object is a folder, so now we need to figure out information about Destination
           return MethodNotAllowed if(dest.exist?)
+
+          #Permission check if they can manipulate folders and view folders
+          # Can they:
+          #  Manipulate folders on destination project :folder_manipulation
+          #  View folders on destination project       :view_dmsf_folders
+          #  View files on the source project          :view_dmsf_files
+          #  View fodlers on the source project        :view_dmsf_folders
+          raise Forbidden unless User.current.admin? || 
+             (User.current.allowed_to?(:folder_manipulation, resource.project) &&
+              User.current.allowed_to?(:view_dmsf_folders, resource.project) &&
+              User.current.allowed_to?(:view_dmsf_files, project) &&
+              User.current.allowed_to?(:view_dmsf_folders, project))
 
           return PreconditionFailed if (parent.projectless_path != "/" && !parent.folder?)
           folder.title = resource.basename
@@ -321,6 +348,16 @@ module RedmineDmsf
             # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
 
           else
+
+            #Permission check if they can manipulate folders and view folders
+            # Can they:
+            #  Manipulate files on destination project   :file_manipulation
+            #  View files on destination project         :view_dmsf_files
+            #  View files on the source project          :view_dmsf_files
+            raise Forbidden unless User.current.admin? ||
+               (User.current.allowed_to?(:file_manipulation, resource.project) &&
+                User.current.allowed_to?(:view_dmsf_files, resource.project) &&
+                User.current.allowed_to?(:view_dmsf_files, project))
 
             if(parent.projectless_path == "/") #Project root
               f = nil
@@ -400,7 +437,10 @@ module RedmineDmsf
       #
       def put(request, response)
         filename = DmsfHelper.temp_dir+'/'+DmsfHelper.temp_filename(basename).gsub(/[\/\\]/,'')
-        raise BadRequest unless (!collection?)
+        raise BadRequest if (collection?)
+
+        raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
+
         new_revision = DmsfFileRevision.new
         if (exist? && file?) #We're over-writing something, so ultimately a new revision
           f = file

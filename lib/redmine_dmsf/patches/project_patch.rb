@@ -18,6 +18,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require_dependency 'project'
+
 module RedmineDmsf
   module Patches
     module ProjectPatch
@@ -41,7 +42,7 @@ end
 
 #Apply patch
 Rails.configuration.to_prepare do
-  unless Projects.included_modules.include?(RedmineDmsf::Patches::ProjectPatch)
+  unless Project.included_modules.include?(RedmineDmsf::Patches::ProjectPatch)
     Project.send(:include, RedmineDmsf::Patches::ProjectPatch)
   end
 end

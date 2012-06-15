@@ -27,9 +27,14 @@ module RedmineDmsf
 
       def children
         if @Projects.nil? || @Projects.empty?
-          @Projects = Project.visible.find(:all, :order => 'lft')
-          @Projects.delete_if { |node| node.module_enabled?('dmsf').nil? }
+          @Projects = []
+          if User.current.admin?
+            @Projects = Project.visible.find(:all, :order => 'lft')
+          elsif User.current.logged? #If user is not admin, we should only show memberships relevent
+            User.current.memberships.each {|m| @Projects << m.project if m.roles.detect {|r| r.allowed_to?(:view_dmsf_folders)}}
+          end
         end 
+        @Projects.delete_if { |node|  node.module_enabled?('dmsf').nil? } unless @Projects.nil?
         return [] if @Projects.nil? || @Projects.empty?
         @Projects.map do |p|
           child p.identifier

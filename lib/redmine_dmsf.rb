@@ -1,4 +1,4 @@
-reqiire 'redmine_dmsf/patches' #plugin patches
+require 'redmine_dmsf/patches' #plugin patches
 require 'redmine_dmsf/webdav' #DAV4Rack implementation
 
 module RedmineDmsf
