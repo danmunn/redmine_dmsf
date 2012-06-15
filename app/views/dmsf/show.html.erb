@@ -120,10 +120,8 @@
 					<%= link_to(image_tag("locked.png", :plugin => :redmine_dmsf), 
 							{:controller => "users", :action => "show", :id => file.locks[0].user },
 							:title => l(:title_locked_by_user, :user => file.locks[0].user.to_s)) %>
-        		<% else 
-					if file.locked? %>
+        		<% elsif file.locked? %>
 					<%= image_tag("lockedbycurrent.png", :title => l(:title_locked_by_you), :plugin => :redmine_dmsf) %>
-				<% 	end %>
 				<% end %>
 			</td>
 			<td class="version">
