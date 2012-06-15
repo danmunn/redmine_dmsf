@@ -81,6 +81,20 @@
 <%	end 
    end %>
 
+<p>
+  <%=content_tag(:label, l(:label_webdav) + ":") %>
+  <%=select_tag("settings[dmsf_webdav]",
+                options_for_select([
+                                [l(:select_option_deactivated), nil],
+                                [l(:select_option_activated), "1"]],
+                                :selected => @settings["dmsf_webdav"])) %><br/>
+  (<%=l(:label_default)%>: <%=l(:select_option_activated)%>)
+  <br/>
+  <%= l(:note_webdav).html_safe %>
+
+</p>
+
+
 <hr />
 <% begin
   	require 'xapian'

@@ -181,4 +181,7 @@ en-GB:
   :error_max_email_filesize_exceeded: "You've exceeded the maximum filesize for sending via email. (%{number} MB)"
   :note_maximum_email_filesize: "Limits maximum filesize that can be sent via email. 0 means unlimited. Number is in MB."
   :label_maximum_email_filesize: "Maximum email attachment size"
-  
+  :parent_directory: "Parent Directory"
+  :note_webdav: "Webdav once enabled can be found at http://.../dmsf/webdav/"
+  :label_webdav: "Webdav functionality"
+

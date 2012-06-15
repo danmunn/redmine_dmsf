@@ -22,6 +22,10 @@ module RedmineDmsf
       include Redmine::I18n
       include ActionView::Helpers::NumberHelper
 
+      def initialize(*args)
+        raise NotFound if Setting.plugin_redmine_dmsf["dmsf_webdav"].empty?
+        super(*args)
+      end
 
       DIR_FILE = "<tr><td class=\"name\"><a href=\"%s\">%s</a></td><td class=\"size\">%s</td><td class=\"type\">%s</td><td class=\"mtime\">%s</td></tr>"
 

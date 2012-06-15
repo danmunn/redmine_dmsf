@@ -189,4 +189,5 @@ en:
   :header_minimum_filesize: "File Error."
   :error_minimum_filesize: "The file %{file} is 0 bytes and will not be attached."
   :parent_directory: "Parent Directory"
-  
+  :note_webdav: "Webdav once enabled can be found at http://.../dmsf/webdav/"
+  :label_webdav: "Webdav functionality"
