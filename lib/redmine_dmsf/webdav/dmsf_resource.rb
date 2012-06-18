@@ -48,8 +48,9 @@ module RedmineDmsf
       # Does the object exist?
       # If it is either a folder or a file, then it exists
       #  - 2012-06-15: Only if you're allowed to browse the project
+      #  - 2012-06-18: Issue #5, ensure item is only listed if project is enabled for dmsf
       def exist?
-        return false if project.nil? || !(folder? || file?)
+        return false if project.nil? || project.module_enabled?('dmsf').nil? || !(folder? || file?)
         User.current.admin? ? true : User.current.allowed_to?(:view_dmsf_folders, project)
       end
 

@@ -1,24 +1,15 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-# It is possible to use ERb template markup
-one:
-  id: 1
+--- !omap
+- dmsf_folders_001:
+    id:             1
+    title:          folder1
+    project_id:     1 
+    dmsf_folder_id: NULL
+    user_id:        1
 
-  title: folder1
-
-  project_id: 1 
-  
-  dmsf_folder_id:
-  
-  user_id: 1
-
-two:
-  id: 2
-
-  title: folder2
-
-  project_id: 1 
-  
-  dmsf_folder_id: 1
-  
-  user_id: 1
+- dmsf_folders_002:
+    id:             2
+    title:          folder2
+    project_id:     1
+    dmsf_folder_id: 1
+    user_id:        1
 
