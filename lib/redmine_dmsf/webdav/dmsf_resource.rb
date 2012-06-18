@@ -193,8 +193,10 @@ module RedmineDmsf
       # Process incoming MKCOL request
       #
       # Create a DmsfFolder at location requested, only if parent is a folder (or root)
+      # - 2012-06-18: Ensure item is only functional if project is enabled for dmsf
       def make_collection
         if (request.body.read.to_s == '')
+          raise NotFound if project.nil? || project.id.nil? || project.module_enabled?('dmsf').nil?
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           return MethodNotAllowed if exist? #If we already exist, why waste the time trying to save?
           parent_folder = nil

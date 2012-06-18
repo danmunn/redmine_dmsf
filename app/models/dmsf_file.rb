@@ -53,13 +53,20 @@ class DmsfFile < ActiveRecord::Base
                 :datetime => Proc.new {|o| o.updated_at },
                 :author => Proc.new {|o| o.last_revision.user }
   
-  #TODO: place into better place
+
+  @@storage_path = Setting.plugin_redmine_dmsf["dmsf_storage_directory"].strip
+
   def self.storage_path
-    storage_dir = Setting.plugin_redmine_dmsf["dmsf_storage_directory"].strip
-    if !File.exists?(storage_dir)
-      Dir.mkdir(storage_dir)
+    if !File.exists?(@@storage_path)
+      Dir.mkdir(@@storage_path)
     end
-    storage_dir
+    @@storage_path
+  end
+
+  # Lets introduce a write for storage path, that way we can also 
+  # better interact from test-cases etc
+  def self.storage_path=(obj)
+    @@storage_path = obj
   end
   
   def self.project_root_files(project)
