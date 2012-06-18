@@ -3,7 +3,26 @@ dmsf_file_revisions_001:
   dmsf_file_id:                 1
   source_dmsf_file_revision_id: NULL
   name:                         "test.txt"
-  dmsf_folder_id:               1
+  dmsf_folder_id:               NULL
+  disk_filename:                "test.txt"
+  size:                         4
+  mime_type:                    text/plain
+  title:                        "Test File"
+  description:                  NULL
+  workflow:                     NULL
+  minor_version:                0
+  major_version:                1
+  comment:                      NULL
+  deleted:                      0
+  deleted_by_user_id:           NULL
+  user_id:                      1
+
+#revision for file on non-enabled project
+dmsf_file_revisions_002:
+  dmsf_file_id:                 2
+  source_dmsf_file_revision_id: NULL
+  name:                         "test.txt"
+  dmsf_folder_id:               NULL
   disk_filename:                "test.txt"
   size:                         4
   mime_type:                    text/plain

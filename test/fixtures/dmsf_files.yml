@@ -7,3 +7,13 @@ dmsf_files_001:
   notification:       0
   deleted:            0
   deleted_by_user_id: NULL
+
+#file on non-dmsf enabled project
+dmsf_files_002:
+  id:                 2
+  project_id:         2
+  dmsf_folder_id:     NULL
+  name:               "test.txt"
+  notification:       0
+  deleted:            0
+  deleted_by_user_id: NULL
