@@ -24,7 +24,7 @@ Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
   author "Vit Jonas / Daniel Munn"
   description "Document Management System Features"
-  version "1.4.1 stable"
+  version "1.4.2 devel"
   url "https://github.com/danmunn/redmine_dmsf"
   author_url "https://code.google.com/p/redmine-dmsf/"
   
@@ -40,7 +40,7 @@ Redmine::Plugin.register :redmine_dmsf do
               "dmsf_index_database" => Rails.root.join("files/dmsf_index").to_s,
               "dmsf_stemming_lang" => "english",
               "dmsf_stemming_strategy" => "STEM_NONE",
-              "dmsf_webdav" => 1
+              "dmsf_webdav" => "1"
             }
   
   menu :project_menu, :dmsf, { :controller => "dmsf", :action => "show" }, :caption => :menu_dmsf, :before => :documents, :param => :id

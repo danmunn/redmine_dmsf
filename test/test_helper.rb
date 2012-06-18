@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,7 +18,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 # Load the normal Rails helper
-require File.expand_path(File.dirname(__FILE__) + '/../../../../test/test_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
 
 # Ensure that we are using the temporary fixture path
-Engines::Testing.set_fixture_path
+#Engines::Testing.set_fixture_path
+
+#use fixtures from redmine
+ActiveSupport::TestCase.fixture_path = File.dirname(__FILE__) + '/../../../test/fixtures'
+
