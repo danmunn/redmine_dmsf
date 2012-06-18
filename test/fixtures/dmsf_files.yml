@@ -1,0 +1,9 @@
+---
+dmsf_files_001:
+  id:                 1
+  project_id:         1
+  dmsf_folder_id:     NULL
+  name:               "test.txt"
+  notification:       0
+  deleted:            0
+  deleted_by_user_id: NULL
