@@ -439,7 +439,7 @@ module RedmineDmsf
       #
       #
       def put(request, response)
-        filename = DmsfHelper.temp_dir+'/'+DmsfHelper.temp_filename(basename).gsub(/[\/\\]/,'')
+ 
         raise BadRequest if (collection?)
 
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
