@@ -67,7 +67,7 @@ module RedmineDmsf
       end
 
       def content_type
-        "text/html"
+        "inode/directory"
       end
 
       def content_length

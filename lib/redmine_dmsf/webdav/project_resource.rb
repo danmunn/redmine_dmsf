@@ -71,7 +71,7 @@ module RedmineDmsf
       end
 
       def content_type
-        "inode/directory" #l(:field_project)
+        "inode/directory"
       end
 
       def special_type
