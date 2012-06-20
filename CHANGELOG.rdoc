@@ -1,7 +1,0 @@
-[1.4.1: 2012-06-15]
-* New: DAV4Rack requirement added (Gemfile makes reference to github repository for latest release).
-* New: Webdav functionality included, additional administrative settings added
-* Fixed: Issue #2 - extended xapian search fixed with Rails 3 compatible code.
-
-[1.4.0: 2012-06-06]
-* New: Redmine 2.0 or higher is required
