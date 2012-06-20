@@ -22,6 +22,7 @@ module RedmineDmsf
 
       #Overload default options
       def options
+        raise NotFound unless resource.exist?
         response["Allow"] = 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
         response["Dav"] = "1,2,3"
         response["Ms-Author-Via"] = "DAV"
