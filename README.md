@@ -14,6 +14,24 @@ Redmine is a flexible project management web application, released under the ter
 Further information about the GPL license can be found at
 <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1>
 
+Features
+--------
+
+  * Directory structure
+  * Document versioning / revision history
+  * Email notifications for directories and/or documents
+  * Document locking
+  * Multi (drag/drop depending on browser) upload/download
+  * Multi download via zip
+  * Direct document sending via email
+  * Simple document approval workflow
+  * Document access auditing
+  * Integration with Redmine's activity feed
+  * Wiki macros for quick content linking
+  * Full read/write webdav functionality
+  * Optional document content fulltext search
+  * Compatible with redmine 2.0.x
+
 Dependencies
 ------------
 
