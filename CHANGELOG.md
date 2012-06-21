@@ -1,10 +1,11 @@
 Changelog for Redmine DMSF
 ==========================
 
-1.4.2: *Not-yet-released*
+1.4.2: *2012-06-21*
 -------------------------
 * New: Integration test cases for webdav functionality
 * Update: Documentation has been converted from Simpletext to Markdown
+* Update: Features listed in documentation
 * Fix: Issue #3 - "webdav broken until set in Administrator -> Settings"
 * Fix: Issue #5 - "Webdav incorrectly provides empty listing for non-DMSF enabled projects"
 * Fix: Issues identified by test cases

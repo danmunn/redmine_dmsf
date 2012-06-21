@@ -169,6 +169,11 @@ After these steps re-start your instance of Redmine.
 Contributing
 ------------
 
-If you’ve added something, why not share it. Fork the repository (github.com/danmunn/redmine_dmsf), make the changes and send a pull request to the maintainers.
+If you've added something, why not share it. Fork the repository (github.com/danmunn/redmine_dmsf), make the changes and send a pull request to the maintainers.
 
 Changes with tests, and full documentation are preferred.
+
+Additional Documentation
+------------------------
+
+[CHANGELOG.md](CHANGELOG.md) - Project changelog
