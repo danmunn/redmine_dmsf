@@ -54,7 +54,7 @@
 
 
 <h3><%= l(:heading_revisions) %></h3>
-<% @file.revisions[@revision_pages.current.offset,@revision_pages.items_per_page].each do |revision| %>
+<% @file.revisions.visible[@revision_pages.current.offset,@revision_pages.items_per_page].each do |revision| %>
 <div class="box dmsf_detail">
 	<div style="float:right">
 		<%= link_to(image_tag("download.png", :plugin => "redmine_dmsf"),
@@ -128,7 +128,7 @@
 </div>
 <% end %>
 
-<p class="pagination"><%= pagination_links_full @revision_pages, @file.revisions.count %></p>
+<p class="pagination"><%= pagination_links_full @revision_pages, @file.revisions.visible.count %></p>
 
 <%
 sUrl = "jquery.dataTables/en.json"

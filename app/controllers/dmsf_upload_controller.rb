@@ -91,7 +91,7 @@ class DmsfUploadController < ApplicationController
         name = commited_file["name"];
         
         new_revision = DmsfFileRevision.new
-        file = DmsfFile.find_file_by_name(@project, @folder, name)
+        file = DmsfFile.visible.find_file_by_name(@project, @folder, name)
         if file.nil?
           file = DmsfFile.new
           file.project = @project

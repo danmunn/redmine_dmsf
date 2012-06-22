@@ -28,11 +28,11 @@ class DmsfController < ApplicationController
 
   def show
     if @folder.nil?
-      @subfolders = DmsfFolder.project_root_folders(@project)
-      @files = DmsfFile.project_root_files(@project)
+      @subfolders = @project.dmsf_folders #DmsfFolder.project_root_folders(@project)
+      @files = @project.dmsf_files.visible #DmsfFile.project_root_files(@project)
     else 
       @subfolders = @folder.subfolders
-      @files = @folder.files
+      @files = @folder.files.visible
     end
     
     @files.sort! do |a,b|
@@ -97,7 +97,7 @@ class DmsfController < ApplicationController
       unless selected_folders.nil?
         if User.current.allowed_to?(:folder_manipulation, @project)
           selected_folders.each do |subfolderid|
-            subfolder = DmsfFolder.find(subfolderid)
+            subfolder = DmsfFolder.visible.find(subfolderid)
             next if subfolder.nil?
             if subfolder.project != @project || !subfolder.delete
               failed_entries.push(subfolder) 
@@ -112,7 +112,7 @@ class DmsfController < ApplicationController
       unless selected_files.nil?
         if User.current.allowed_to?(:file_manipulation, @project)
           selected_files.each do |fileid|
-            file = DmsfFile.find(fileid)
+            file = DmsfFile.visible.find(fileid)
             next if file.nil?
             if file.project != @project || !file.delete
               failed_entries.push(file)
@@ -180,7 +180,7 @@ class DmsfController < ApplicationController
   end
 
   def delete
-    check_project(@delete_folder = DmsfFolder.find(params[:delete_folder_id]))
+    check_project(@delete_folder = DmsfFolder.visible.find(params[:delete_folder_id]))
     if !@delete_folder.nil?
       if @delete_folder.delete
         flash[:notice] = l(:notice_folder_deleted)
@@ -290,7 +290,7 @@ class DmsfController < ApplicationController
     end
     if selected_files && selected_files.is_a?(Array)
       selected_files.each do |selected_file_id|
-        check_project(file = DmsfFile.find(selected_file_id))
+        check_project(file = DmsfFile.visible.find(selected_file_id))
         zip.add_file(file, (@folder.dmsf_path_str unless @folder.nil?)) unless file.nil?
       end
     end
@@ -316,7 +316,7 @@ class DmsfController < ApplicationController
   end
 
   def find_parent
-    @parent = DmsfFolder.find(params[:parent_id]) if params.keys.include?("parent_id")
+    @parent = DmsfFolder.visible.find(params[:parent_id]) if params.keys.include?("parent_id")
     check_project(@parent)
   rescue DmsfAccessError
     render_403

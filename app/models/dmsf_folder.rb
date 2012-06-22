@@ -27,7 +27,6 @@ class DmsfFolder < ActiveRecord::Base
   has_many :subfolders, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id", :order => "title ASC",
            :dependent => :destroy
   has_many :files, :class_name => "DmsfFile", :foreign_key => "dmsf_folder_id",
-           :conditions => { :deleted => false },
            :dependent => :destroy
   belongs_to :user
 
@@ -78,7 +77,7 @@ class DmsfFolder < ActiveRecord::Base
   end
   
   def delete
-    return false if !self.subfolders.empty? || !self.files.empty?
+    return false if !self.subfolders.empty? || !self.files.visible.empty?
     destroy
   end
   
@@ -126,7 +125,7 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def deep_file_count
-    file_count = self.files.length
+    file_count = self.files.visible.length
     self.subfolders.each {|subfolder| file_count += subfolder.deep_file_count}
     file_count
   end
@@ -139,7 +138,7 @@ class DmsfFolder < ActiveRecord::Base
 
   def deep_size
     size = 0
-    self.files.each {|file| size += file.size}
+    self.files.visible.each {|file| size += file.size}
     self.subfolders.each {|subfolder| size += subfolder.deep_size}
     size
   end
@@ -178,7 +177,7 @@ class DmsfFolder < ActiveRecord::Base
 
     return new_folder unless new_folder.save
     
-    self.files.each do |f|
+    self.files.visible.each do |f|
       f.copy_to(project, new_folder)
     end
     

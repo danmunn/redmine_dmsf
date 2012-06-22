@@ -29,10 +29,10 @@ module RedmineDmsf
         return @children unless @children.nil?
         return [] if project.nil? || project.id.nil?
         @children = []
-        DmsfFolder.project_root_folders(project).map do |p|
+        project.dmsf_folders.map do |p|
           @children.push child(p.title, p)
         end
-        DmsfFile.project_root_files(project).map do |p|
+        project.dmsf_files.visible.map do |p|
           @children.push child(p.name, p)
         end
         @children

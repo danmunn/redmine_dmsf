@@ -24,6 +24,9 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
   belongs_to :project
+  has_many :access, :class_name => "DmsfFileRevisionAccess", :foreign_key => "dmsf_file_revision_id", :dependent => :destroy
+
+  scope :visible, lambda {|*args| {:conditions => DmsfFile.visible_condition(args.shift || User.current, *args) }}
 
   acts_as_customizable
 
@@ -90,13 +93,19 @@ class DmsfFileRevision < ActiveRecord::Base
     end
   end
   
+  # In a static call, we find the first matched record on base object type and
+  # then run the access_grouped call against it
   def self.access_grouped(revision_id)
-    sql = "select user_id, count(*) as count, min(created_at) as min, max(created_at) as max from #{DmsfFileRevisionAccess.table_name} where dmsf_file_revision_id = ? group by user_id"
-    self.connection.select_all(self.sanitize_sql_array([sql, revision_id]))
+    DmsfFileRevision.find(revision_id).first.access_grouped
   end
   
+  # Get grouped data from dmsf_file_revision_access about file interactions
+  # - 22-06-2012 - Rather than calling a static, we should use the access 
+  #   (has_many) to re-run a query - it makes more sense then executing 
+  #   custom SQL into a temporary object
+  #
   def access_grouped
-    DmsfFileRevision.access_grouped(self.id)
+    access.select("user_id, count(*) as count, min(created_at) as min, max(created_at) as max").group("user_id")
   end
   
   def version

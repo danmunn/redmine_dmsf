@@ -30,12 +30,12 @@ class DmsfFile < ActiveRecord::Base
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
   has_many :revisions, :class_name => "DmsfFileRevision", :foreign_key => "dmsf_file_id", 
     :order => "major_version DESC, minor_version DESC, updated_at DESC", 
-    :conditions => { :deleted => false },
     :dependent => :destroy
   has_many :locks, :class_name => "DmsfFileLock", :foreign_key => "dmsf_file_id", 
     :order => "updated_at DESC",
     :dependent => :destroy
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
+  scope :visible, lambda {|*args| {:conditions => DmsfFile.visible_condition(args.shift || User.current, *args) }}
   
   validates_presence_of :name
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
@@ -43,6 +43,10 @@ class DmsfFile < ActiveRecord::Base
   
   validate :validates_name_uniqueness 
   
+  def self.visible_condition(user, options = {})
+    "deleted=0"
+  end
+
   def validates_name_uniqueness
     existing_file = DmsfFile.find_file_by_name(self.project, self.folder, self.name)
     errors.add(:name, l("activerecord.errors.messages.taken")) unless
@@ -80,17 +84,17 @@ class DmsfFile < ActiveRecord::Base
   def self.find_file_by_name(project, folder, name)
     if folder.nil?
       find(:first, :conditions => 
-        ["dmsf_folder_id is NULL and project_id = :project_id and name = :name and deleted = :deleted", 
-          {:project_id => project.id, :name => name, :deleted => false}])
+        ["dmsf_folder_id is NULL and project_id = :project_id and name = :name", 
+          {:project_id => project.id, :name => name}])
     else
       find(:first, :conditions => 
-        ["dmsf_folder_id = :folder_id and project_id = :project_id and name = :name and deleted = :deleted", 
-          {:project_id => project.id, :folder_id => folder.id, :name => name, :deleted => false}])
+        ["dmsf_folder_id = :folder_id and project_id = :project_id and name = :name",
+          {:project_id => project.id, :folder_id => folder.id, :name => name}])
     end
   end
 
   def last_revision
-    self.revisions.first
+    self.revisions.visible.first
   end
 
   def delete
@@ -102,7 +106,7 @@ class DmsfFile < ActiveRecord::Base
       CustomValue.find(:all, :conditions => "customized_id = " + self.id.to_s).each do |v|
         v.destroy
       end
-      self.revisions.each {|r| r.delete(true)}
+      self.revisions.visible.each {|r| r.delete(true)}
       self.destroy
     else
       self.deleted = true

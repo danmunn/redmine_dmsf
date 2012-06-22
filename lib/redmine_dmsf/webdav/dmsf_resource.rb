@@ -39,7 +39,7 @@ module RedmineDmsf
         folder.subfolders.map do |p|
           @children.push child(p.title, p)
         end
-        folder.files.map do |p|
+        folder.files.visible.map do |p|
           @children.push child(p.name, p)
         end
         @children        
@@ -109,12 +109,12 @@ module RedmineDmsf
         if f || f.nil? then
           # f has a value other than false? - lets use traditional
           # DMSF file search by name.
-          @file = DmsfFile.find_file_by_name(project, f, basename)
+          @file = DmsfFile.visible.find_file_by_name(project, f, basename)
         else
           # If folder is false, means it couldn't pick up parent, 
           # as such its probably fine to bail out, however we'll 
           # perform a search in this scenario
-          files = DmsfFile.find(:all, :conditions => ["project_id = :project_id AND name = :file_name AND deleted = :deleted", {:project_id => project.id, :file_name => basename, :deleted => false}], :order => "name ASC")
+          files = DmsfFile.visible.find(:all, :conditions => ["project_id = :project_id AND name = :file_name", {:project_id => project.id, :file_name => basename}], :order => "name ASC")
           files.delete_if {|x| File.dirname('/'+x.dmsf_path_str) != File.dirname(projectless_path)}
           if files.length > 0
             @file = files[0]
