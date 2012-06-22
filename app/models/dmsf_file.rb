@@ -30,9 +30,11 @@ class DmsfFile < ActiveRecord::Base
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
   has_many :revisions, :class_name => "DmsfFileRevision", :foreign_key => "dmsf_file_id", 
     :order => "major_version DESC, minor_version DESC, updated_at DESC", 
-    :conditions => { :deleted => false }
+    :conditions => { :deleted => false },
+    :dependent => :destroy
   has_many :locks, :class_name => "DmsfFileLock", :foreign_key => "dmsf_file_id", 
-    :order => "updated_at DESC"
+    :order => "updated_at DESC",
+    :dependent => :destroy
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
   
   validates_presence_of :name

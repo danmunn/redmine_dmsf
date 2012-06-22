@@ -1,8 +1,16 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.4.3: *Not yet released*
+-----------------------
+* New: Hook into project copy functionality to permit (although not attractively)
+       functionality for DMSF to be duplicated accross projects
+* Update: Project patch defines linkage between DMSF files and DMSF folders.
+* Update: Data linkage allowing dependent items to be deleted (project deletion for example)
+          this needs to be revised as files marked deleted are not affected by this at present
+
 1.4.2: *2012-06-21*
--------------------------
+-----------------
 * New: Integration test cases for webdav functionality
 * Update: Documentation has been converted from Simpletext to Markdown
 * Update: Features listed in documentation

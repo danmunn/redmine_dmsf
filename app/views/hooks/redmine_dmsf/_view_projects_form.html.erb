@@ -1,0 +1,5 @@
+<% if @project.new_record? %>
+  <p>
+    <label class="block"><%= check_box_tag 'only[]', 'dmsf', true %><%= l(:label_dmsf_plural, @source_project.dmsf_count) %></label>
+  </p>
+<% end %>

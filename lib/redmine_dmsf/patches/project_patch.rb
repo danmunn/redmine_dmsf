@@ -26,6 +26,14 @@ module RedmineDmsf
       def self.included(base) # :nodoc:
         base.send(:include, InstanceMethods)
         base.extend(ClassMethods)
+        base.class_eval do
+          unloadable
+          alias_method_chain :copy, :dmsf
+
+          has_many :files, :class_name => "DmsfFile", :foreign_key => "project_id", :conditions => { :deleted => false, :dmsf_folder_id => nil }, :dependent => :destroy
+          has_many :folders, :class_name => "DmsfFolder", :foreign_key => "project_id", :dependent => :destroy
+        end
+
       end
 
       module ClassMethods
@@ -34,6 +42,40 @@ module RedmineDmsf
       module InstanceMethods
         def all_dmsf_custom_fields
           @all_dmsf_custom_fields ||= (DmsfFileRevisionCustomField.for_all).uniq.sort # + dmsf_file_revision_custom_fields).uniq.sort
+        end
+
+        def dmsf_count
+          file_count = DmsfFile.project_root_files(self).count
+          folder_count = DmsfFolder.project_root_folders(self).count
+          DmsfFolder.project_root_folders(self).each {|rootfld| file_count += rootfld.deep_file_count; folder_count += rootfld.deep_folder_count }
+          {:files => file_count, :folders => folder_count}
+        end
+
+        def copy_with_dmsf(project, options={})
+          copy_without_dmsf(project, options)
+
+          project = project.is_a?(Project) ? project : Project.find(project)
+
+          to_be_copied = %w(dmsf)
+          to_be_copied = to_be_copied & options[:only].to_a unless options[:only].nil?
+
+          if save
+            to_be_copied.each do |name|
+              send "copy_#{name}", project
+            end
+            save
+          end
+
+        end
+
+        # Simple yet effective approach to copying things
+        def copy_dmsf(project)
+          DmsfFile.project_root_files(project).each {|f|
+            f.copy_to(self, nil)
+          }
+          DmsfFolder.project_root_folders(project).each {|f|
+            f.copy_to(self, nil)
+          }
         end
       end
     end

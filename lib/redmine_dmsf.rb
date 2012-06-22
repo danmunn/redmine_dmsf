@@ -1,6 +1,10 @@
 require 'redmine_dmsf/patches' #plugin patches
 require 'redmine_dmsf/webdav' #DAV4Rack implementation
 
+
+#Hooks
+require 'redmine_dmsf/hooks/view_projects_form_hook'
+
 module RedmineDmsf
 end
 

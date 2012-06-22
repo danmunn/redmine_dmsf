@@ -24,9 +24,11 @@ class DmsfFolder < ActiveRecord::Base
   
   belongs_to :project
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
-  has_many :subfolders, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id", :order => "title ASC"
+  has_many :subfolders, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id", :order => "title ASC",
+           :dependent => :destroy
   has_many :files, :class_name => "DmsfFile", :foreign_key => "dmsf_folder_id",
-           :conditions => { :deleted => false }
+           :conditions => { :deleted => false },
+           :dependent => :destroy
   belongs_to :user
 
   acts_as_customizable
@@ -127,6 +129,12 @@ class DmsfFolder < ActiveRecord::Base
     file_count = self.files.length
     self.subfolders.each {|subfolder| file_count += subfolder.deep_file_count}
     file_count
+  end
+
+  def deep_folder_count
+    folder_count = self.subfolders.length
+    self.subfolders.each {|subfolder| folder_count += subfolder.deep_folder_count}
+    folder_count
   end
 
   def deep_size
