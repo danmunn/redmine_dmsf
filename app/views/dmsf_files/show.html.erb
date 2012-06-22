@@ -49,9 +49,7 @@
 
 <%= render(:partial => "file_new_revision") if User.current.allowed_to?(:file_manipulation, @file.project) %>
 
-<% form_tag("", :id => "manipulation_form") do %>
-<% end %>
-
+<%= form_tag("", :id => "manipulation_form") %>
 
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.revisions.visible[@revision_pages.current.offset,@revision_pages.items_per_page].each do |revision| %>
