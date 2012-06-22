@@ -47,9 +47,9 @@ module RedmineDmsf
         end
 
         def dmsf_count
-          file_count = DmsfFile.project_root_files(self).count
-          folder_count = DmsfFolder.project_root_folders(self).count
-          DmsfFolder.project_root_folders(self).each {|rootfld| file_count += rootfld.deep_file_count; folder_count += rootfld.deep_folder_count }
+          file_count = DmsfFile.visible.project_root_files(self).count
+          folder_count = DmsfFolder.visible.project_root_folders(self).count
+          DmsfFolder.visible.project_root_folders(self).each {|rootfld| file_count += rootfld.deep_file_count; folder_count += rootfld.deep_folder_count }
           {:files => file_count, :folders => folder_count}
         end
 
@@ -72,10 +72,10 @@ module RedmineDmsf
 
         # Simple yet effective approach to copying things
         def copy_dmsf(project)
-          DmsfFile.project_root_files(project).each {|f|
+          DmsfFile.visible.project_root_files(project).each {|f|
             f.copy_to(self, nil)
           }
-          DmsfFolder.project_root_folders(project).each {|f|
+          DmsfFolder.visible.project_root_folders(project).each {|f|
             f.copy_to(self, nil)
           }
         end

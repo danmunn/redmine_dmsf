@@ -69,7 +69,7 @@ module RedmineDmsf
         # if we were to look within parent, we'd have to go all the way up the chain as part of the 
         # existence check, and although I'm sure we'd love to access the heirarchy, I can't yet
         # see a practical need for it
-        folders = DmsfFolder.find(:all, :conditions => ["project_id = :project_id AND title = :title", {:project_id => project.id, :title => basename}], :order => "title ASC")
+        folders = DmsfFolder.visible.find(:all, :conditions => ["project_id = :project_id AND title = :title", {:project_id => project.id, :title => basename}], :order => "title ASC")
         return nil unless folders.length > 0
         if (folders.length > 1) then
           folders.delete_if {|x| '/'+x.dmsf_path_str != projectless_path}

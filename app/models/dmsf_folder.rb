@@ -30,6 +30,8 @@ class DmsfFolder < ActiveRecord::Base
            :dependent => :destroy
   belongs_to :user
 
+  scope :visible, lambda {|*args| {:conditions => "" }} #For future use, however best to be referenced now
+
   acts_as_customizable
   
   validates_presence_of :title
@@ -66,18 +68,18 @@ class DmsfFolder < ActiveRecord::Base
   
   def self.find_by_title(project, folder, title)
     if folder.nil?
-      find(:first, :conditions => 
+      visible.find(:first, :conditions => 
         ["dmsf_folder_id is NULL and project_id = :project_id and title = :title", 
           {:project_id => project.id, :title => title}])
     else
-      find(:first, :conditions => 
+      visible.find(:first, :conditions => 
         ["dmsf_folder_id = :folder_id and title = :title", 
           {:project_id => project.id, :folder_id => folder.id, :title => title}])
     end
   end
   
   def delete
-    return false if !self.subfolders.empty? || !self.files.visible.empty?
+    return false if !self.subfolders.visible.empty? || !self.files.visible.empty?
     destroy
   end
   
@@ -115,7 +117,7 @@ class DmsfFolder < ActiveRecord::Base
   
   def self.directory_tree(project, current_folder = nil)
     tree = [[l(:link_documents), nil]]
-    DmsfFolder.project_root_folders(project).each do |folder|
+    DmsfFolder.visible.project_root_folders(project).each do |folder|
       unless folder == current_folder
         tree.push(["...#{folder.title}", folder.id])
         directory_subtree(tree, folder, 2, current_folder)
@@ -126,20 +128,20 @@ class DmsfFolder < ActiveRecord::Base
 
   def deep_file_count
     file_count = self.files.visible.length
-    self.subfolders.each {|subfolder| file_count += subfolder.deep_file_count}
+    self.subfolders.visible.each {|subfolder| file_count += subfolder.deep_file_count}
     file_count
   end
 
   def deep_folder_count
     folder_count = self.subfolders.length
-    self.subfolders.each {|subfolder| folder_count += subfolder.deep_folder_count}
+    self.subfolders.visible.each {|subfolder| folder_count += subfolder.deep_folder_count}
     folder_count
   end
 
   def deep_size
     size = 0
     self.files.visible.each {|file| size += file.size}
-    self.subfolders.each {|subfolder| size += subfolder.deep_size}
+    self.subfolders.visible.each {|subfolder| size += subfolder.deep_size}
     size
   end
 
@@ -244,7 +246,7 @@ class DmsfFolder < ActiveRecord::Base
   private
   
   def self.directory_subtree(tree, folder, level, current_folder)
-    folder.subfolders.each do |subfolder|
+    folder.subfolders.visible.each do |subfolder|
       unless subfolder == current_folder
         tree.push(["#{"..." * level}#{subfolder.title}", subfolder.id])
         directory_subtree(tree, subfolder, level + 1, current_folder)

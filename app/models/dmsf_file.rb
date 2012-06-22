@@ -48,7 +48,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def validates_name_uniqueness
-    existing_file = DmsfFile.find_file_by_name(self.project, self.folder, self.name)
+    existing_file = DmsfFile.visible.find_file_by_name(self.project, self.folder, self.name)
     errors.add(:name, l("activerecord.errors.messages.taken")) unless
       existing_file.nil? || existing_file.id == self.id
   end
@@ -76,18 +76,18 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def self.project_root_files(project)
-    find(:all, :conditions => 
-      ["dmsf_folder_id is NULL and project_id = :project_id and deleted = :deleted",
-        {:project_id => project.id, :deleted => false}], :order => "name ASC")
+    visible.find(:all, :conditions => 
+      ["dmsf_folder_id is NULL and project_id = :project_id",
+        {:project_id => project.id}], :order => "name ASC")
   end
   
   def self.find_file_by_name(project, folder, name)
     if folder.nil?
-      find(:first, :conditions => 
+      visible.find(:first, :conditions => 
         ["dmsf_folder_id is NULL and project_id = :project_id and name = :name", 
           {:project_id => project.id, :name => name}])
     else
-      find(:first, :conditions => 
+      visible.find(:first, :conditions => 
         ["dmsf_folder_id = :folder_id and project_id = :project_id and name = :name",
           {:project_id => project.id, :folder_id => folder.id, :name => name}])
     end

@@ -28,10 +28,10 @@ class DmsfController < ApplicationController
 
   def show
     if @folder.nil?
-      @subfolders = @project.dmsf_folders #DmsfFolder.project_root_folders(@project)
+      @subfolders = @project.dmsf_folders.visible #DmsfFolder.project_root_folders(@project)
       @files = @project.dmsf_files.visible #DmsfFile.project_root_files(@project)
     else 
-      @subfolders = @folder.subfolders
+      @subfolders = @folder.subfolders.visible
       @files = @folder.files.visible
     end
     
@@ -284,7 +284,7 @@ class DmsfController < ApplicationController
   def zip_entries(zip, selected_folders, selected_files)
     if selected_folders && selected_folders.is_a?(Array)
       selected_folders.each do |selected_folder_id|
-        check_project(folder = DmsfFolder.find(selected_folder_id))
+        check_project(folder = DmsfFolder.visible.find(selected_folder_id))
         zip.add_folder(folder, (@folder.dmsf_path_str unless @folder.nil?)) unless folder.nil?
       end
     end
@@ -309,7 +309,7 @@ class DmsfController < ApplicationController
   end
   
   def find_folder
-    @folder = DmsfFolder.find(params[:folder_id]) if params.keys.include?("folder_id")
+    @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?("folder_id")
     check_project(@folder)
   rescue DmsfAccessError
     render_403

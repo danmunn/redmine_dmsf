@@ -54,7 +54,7 @@ class DmsfUpload
   def initialize(project, folder, uploaded)
     @name = uploaded["original_filename"]
     
-    dmsf_file = DmsfFile.find_file_by_name(project, folder, @name)
+    dmsf_file = DmsfFile.visible.find_file_by_name(project, folder, @name)
     
     @disk_filename = uploaded["disk_filename"]
     @mime_type = uploaded["content_type"]

@@ -37,7 +37,7 @@ class DmsfFilesCopyController < ApplicationController
       @target_project ||= DmsfFile.allowed_target_projects_on_copy[0]
     end
     
-    @target_folder = DmsfFolder.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
+    @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
     @target_folder ||= @file.folder if @target_project == @project
     
     render :layout => !request.xhr?
@@ -49,7 +49,7 @@ class DmsfFilesCopyController < ApplicationController
       render_403
       return
     end
-    @target_folder = DmsfFolder.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
+    @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
     if !@target_folder.nil? && @target_folder.project != @target_project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
@@ -86,7 +86,7 @@ class DmsfFilesCopyController < ApplicationController
       render_403
       return
     end
-    @target_folder = DmsfFolder.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
+    @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
     if !@target_folder.nil? && @target_folder.project != @target_project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
@@ -125,7 +125,7 @@ class DmsfFilesCopyController < ApplicationController
   end
 
   def find_file
-    @file = DmsfFile.find(params[:id])
+    @file = DmsfFile.visible.find(params[:id])
     @project = @file.project
   end
   

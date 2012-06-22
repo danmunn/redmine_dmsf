@@ -195,7 +195,7 @@ class DmsfUploadController < ApplicationController
   end
   
   def find_folder
-    @folder = DmsfFolder.find(params[:folder_id]) if params.keys.include?("folder_id")
+    @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?("folder_id")
     check_project(@folder)
   rescue DmsfAccessError
     render_403

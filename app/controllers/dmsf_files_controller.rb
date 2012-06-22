@@ -223,13 +223,13 @@ class DmsfFilesController < ApplicationController
   end
   
   def find_file
-    @file = DmsfFile.find(params[:id])
+    @file = DmsfFile.visible.find(params[:id])
     @project = @file.project
   rescue
   end
 
   def find_revision
-    @revision = DmsfFileRevision.find(params[:id])
+    @revision = DmsfFileRevision.visible.find(params[:id])
     @file = @revision.file 
     @project = @file.project
   end
