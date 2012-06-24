@@ -35,8 +35,9 @@ Features
 Dependencies
 ------------
 
-As of version 1.4.2 of this plugin:
+As of version 1.4.3 of this plugin:
 
+  * Bundler 1.1 or greater (Gem)
   * Redmine 2.0.x 
   * Rails 3.2.x (Inline with Redmine installation requirement) 
   * zip (Gem)

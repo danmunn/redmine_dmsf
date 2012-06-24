@@ -8,6 +8,7 @@ Changelog for Redmine DMSF
 * Update: Project patch defines linkage between DMSF files and DMSF folders.
 * Update: Data linkage allowing dependent items to be deleted (project deletion for example)
           this needs to be revised as files marked deleted are not affected by this at present
+* Update: README.md updated with Bundler requirement (Issue #13)
 * Fix: Error in entity details page UI prevented revision management.
 
 1.4.2: *2012-06-21*
