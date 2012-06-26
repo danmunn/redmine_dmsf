@@ -30,7 +30,7 @@ module RedmineDmsf
           unloadable
           alias_method_chain :copy, :dmsf
 
-          has_many :dmsf_files, :class_name => "DmsfFile", :foreign_key => "project_id", :conditions => { :deleted => false, :dmsf_folder_id => nil }
+          has_many :dmsf_files, :class_name => "DmsfFile", :foreign_key => "project_id", :conditions => { :dmsf_folder_id => nil }
           #Fix: should only be root folders not, all folders
           has_many :dmsf_folders, :class_name => "DmsfFolder", :foreign_key => "project_id", :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy 
 

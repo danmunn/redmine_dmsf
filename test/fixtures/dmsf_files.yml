@@ -17,3 +17,14 @@ dmsf_files_002:
   notification:       0
   deleted:            0
   deleted_by_user_id: NULL
+
+#deleted file on dmsf-enabled project
+dmsf_files_003:
+  id:                 3
+  project_id:         1
+  dmsf_folder_id:     NULL
+  name:               "deleted.txt"
+  notification:       0
+  deleted:            1
+  deleted_by_user_id: 1
+

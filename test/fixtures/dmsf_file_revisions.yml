@@ -35,3 +35,23 @@ dmsf_file_revisions_002:
   deleted:                      0
   deleted_by_user_id:           NULL
   user_id:                      1
+
+#revision for deleted file on dmsf-enabled project
+dmsf_file_revisions_003:
+  dmsf_file_id:                 3
+  source_dmsf_file_revision_id: NULL
+  name:                         "deleted.txt"
+  dmsf_folder_id:               NULL
+  disk_filename:                "deleted.txt"
+  size:                         4
+  mime_type:                    text/plain
+  title:                        "Test File"
+  description:                  NULL
+  workflow:                     NULL
+  minor_version:                0
+  major_version:                1
+  comment:                      NULL
+  deleted:                      1
+  deleted_by_user_id:           1
+  user_id:                      1
+
