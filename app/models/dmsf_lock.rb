@@ -16,17 +16,42 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfFileLock < ActiveRecord::Base
+class DmsfLock < ActiveRecord::Base
   unloadable
-  belongs_to :file, :class_name => "DmsfFile", :foreign_key => "dmsf_file_id"
-  belongs_to :user  
+
+  belongs_to :file, :class_name => "DmsfFile", :foreign_key => "entity_id"
+  belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "entity_id"
+  belongs_to :user
+
+  #At the moment apparently we're only supporting a write lock?
+
+  as_enum :lock_type, [:type_write]
+  as_enum :lock_scope, [:scope_exclusive, :scope_shared]
   
+  # We really loosly bind the value in the belongs_to above
+  # here we just ensure the data internal to the model is correct
+  # to ensure everything lists fine - it's the same as a join
+  # just without runing the join in the first place
+  def file
+    entity_type == 0 ? super : nil;
+  end
+
+  # see file, exact same scenario
+  def folder
+    entity_type == 1 ? super : nil;
+  end
+
   def self.file_lock_state(file, locked)
     lock = DmsfFileLock.new
     lock.file = file
     lock.user = User.current
     lock.locked = locked
     lock.save!
+  end
+
+  def expired?
+    return false if expires_at.nil?
+    return expires_at <= Time.now
   end
   
 end

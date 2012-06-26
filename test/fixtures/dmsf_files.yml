@@ -28,3 +28,21 @@ dmsf_files_003:
   deleted:            1
   deleted_by_user_id: 1
 
+dmsf_files_004:
+  id:                 4
+  project_id:         1
+  dmsf_folder_id:     2
+  name:               "test.txt"
+  notification:       0
+  deleted:            0
+  deleted_by_user_id: NULL
+
+dmsf_files_005:
+  id:                 5
+  project_id:         1
+  dmsf_folder_id:     5
+  name:               "test.txt"
+  notification:       0
+  deleted:            0
+  deleted_by_user_id: NULL
+

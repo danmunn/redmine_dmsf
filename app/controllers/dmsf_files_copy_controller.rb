@@ -24,8 +24,6 @@ class DmsfFilesCopyController < ApplicationController
   before_filter :find_file
   before_filter :authorize
 
-#  verify :method => :post, :only => [:create, :move], :render => { :nothing => true, :status => :method_not_allowed }
-
   helper :all
 
   def new

@@ -18,6 +18,8 @@
 
 class DmsfFolder < ActiveRecord::Base
   unloadable
+
+  include RedmineDmsf::Lockable
   
   cattr_reader :invalid_characters
   @@invalid_characters = /\A[^\/\\\?":<>]*\z/
@@ -29,6 +31,11 @@ class DmsfFolder < ActiveRecord::Base
   has_many :files, :class_name => "DmsfFile", :foreign_key => "dmsf_folder_id",
            :dependent => :destroy
   belongs_to :user
+
+  has_many :locks, :class_name => "DmsfLock", :foreign_key => "entity_id",
+    :order => "updated_at DESC",
+    :conditions => {:entity_type => 1},
+    :dependent => :destroy
 
   scope :visible, lambda {|*args| {:conditions => "" }} #For future use, however best to be referenced now
 

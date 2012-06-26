@@ -403,7 +403,7 @@ module RedmineDmsf
         if (file.locked? && file.locked_for_user?)
           raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
         else
-          file.lock unless file.locked?
+          file.lock! unless file.locked?
           @response['Lock-Token'] = token
           Locked
           [8600, token]
@@ -423,7 +423,7 @@ module RedmineDmsf
           if (!file.locked? || file.locked_for_user? || token != _token)
             Forbidden
           else
-            file.unlock
+            file.unlock!
             NoContent
           end
         end

@@ -25,9 +25,6 @@ class DmsfFilesController < ApplicationController
   before_filter :find_revision, :only => [:delete_revision]
   before_filter :authorize
 
-#  verify :method => :post, :only => [:create_revision, :delete_revision, :delete, :lock, :unlock, :notify_activate, :notify_deactivate], 
-#    :render => { :nothing => true, :status => :method_not_allowed }
-
   helper :all
 
   def show
@@ -161,7 +158,7 @@ class DmsfFilesController < ApplicationController
     if @file.locked?
       flash[:warning] = l(:warning_file_already_locked)
     else
-      @file.lock
+      @file.lock!
       flash[:notice] = l(:notice_file_locked)
     end
       redirect_to params[:current] ? params[:current] : 
@@ -173,7 +170,7 @@ class DmsfFilesController < ApplicationController
       flash[:warning] = l(:warning_file_not_locked)
     else
       if @file.locks[0].user == User.current || User.current.allowed_to?(:force_file_unlock, @file.project)
-        @file.unlock
+        @file.unlock!
         flash[:notice] = l(:notice_file_unlocked)
       else
         flash[:error] = l(:error_only_user_that_locked_file_can_unlock_it)

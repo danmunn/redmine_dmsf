@@ -26,13 +26,17 @@ end
 
 class DmsfFile < ActiveRecord::Base
   unloadable
+
+  include RedmineDmsf::Lockable
+ 
   belongs_to :project
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
   has_many :revisions, :class_name => "DmsfFileRevision", :foreign_key => "dmsf_file_id", 
     :order => "major_version DESC, minor_version DESC, updated_at DESC", 
     :dependent => :destroy
-  has_many :locks, :class_name => "DmsfFileLock", :foreign_key => "dmsf_file_id", 
+  has_many :locks, :class_name => "DmsfLock", :foreign_key => "entity_id",
     :order => "updated_at DESC",
+    :conditions => {:entity_type => 0},
     :dependent => :destroy
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
   scope :visible, lambda {|*args| {:conditions => DmsfFile.visible_condition(args.shift || User.current, *args) }}
@@ -113,26 +117,6 @@ class DmsfFile < ActiveRecord::Base
       self.deleted_by_user = User.current
       save
     end
-  end
-  
-  def locked?
-    self.locks.empty? ? false : self.locks[0].locked
-  end
-  
-  def locked_for_user?
-    self.locked? && self.locks[0].user != User.current
-  end
-  
-  def lock
-    l = DmsfFileLock.file_lock_state(self, true)
-    self.reload
-    return l
-  end
-  
-  def unlock
-    l = DmsfFileLock.file_lock_state(self, false)
-    self.reload
-    return l
   end
   
   def title
