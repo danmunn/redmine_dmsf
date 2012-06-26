@@ -24,7 +24,7 @@ Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
   author "Vit Jonas / Daniel Munn"
   description "Document Management System Features"
-  version "1.4.3 devel"
+  version "1.4.3 stable"
   url "https://github.com/danmunn/redmine_dmsf"
   author_url "https://code.google.com/p/redmine-dmsf/"
   
