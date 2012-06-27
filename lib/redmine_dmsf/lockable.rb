@@ -16,7 +16,7 @@ module RedmineDmsf
         }
       end
       if tree
-        ret = ret | (folder.locks || folder.lock) unless folder.nil?
+        ret = ret | (folder.locks.empty? ? folder.lock : folder.locks) unless folder.nil?
       end
       return ret
     end

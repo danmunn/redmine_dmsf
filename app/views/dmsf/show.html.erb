@@ -154,8 +154,8 @@
 				<%= file.last_revision.updated_at.strftime("%Y-%m-%d %H:%M") %>
 				<% if file.locked_for_user? %>
 					<%= link_to(image_tag("locked.png", :plugin => :redmine_dmsf), 
-							{:controller => "users", :action => "show", :id => file.locks[0].user },
-							:title => l(:title_locked_by_user, :user => file.locks[0].user.to_s)) %>
+							{:controller => "users", :action => "show", :id => file.lock.reverse[0].user },
+							:title => l(:title_locked_by_user, :user => file.lock.reverse[0].user.to_s)) %>
         		<% elsif file.locked? %>
 					<%= image_tag("lockedbycurrent.png", :title => l(:title_locked_by_you), :plugin => :redmine_dmsf) %>
 				<% end %>
