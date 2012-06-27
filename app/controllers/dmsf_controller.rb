@@ -20,7 +20,7 @@ class DmsfController < ApplicationController
   unloadable
   
   before_filter :find_project
-  before_filter :authorize, :except => [:delete_entries]
+  before_filter :authorize, :except => [:delete_entries] 
   before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
   before_filter :find_parent, :only => [:new, :create]
   
@@ -28,8 +28,8 @@ class DmsfController < ApplicationController
 
   def show
     if @folder.nil?
-      @subfolders = @project.dmsf_folders.visible #DmsfFolder.project_root_folders(@project)
-      @files = @project.dmsf_files.visible #DmsfFile.project_root_files(@project)
+      @subfolders = @project.dmsf_folders.visible
+      @files = @project.dmsf_files.visible
     else 
       @subfolders = @folder.subfolders.visible
       @files = @folder.files.visible
@@ -224,6 +224,39 @@ class DmsfController < ApplicationController
     redirect_to params[:current] ? params[:current] : 
       {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder.folder}
   end
+
+
+  def lock
+    if @folder.nil?
+      flash[:warning] = l(:warning_foler_unlockable)
+    elsif @folder.locked?
+      flash[:warning] = l(:warning_folder_already_locked)
+    else
+      @folder.lock!
+      flash[:notice] = l(:notice_folder_locked)
+    end
+      redirect_to params[:current] ? params[:current] :
+        {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder.folder}
+  end
+
+  def unlock
+    if @folder.nil?
+      flash[:warning] = l(:warning_foler_unlockable)
+    elsif !@folder.locked?
+      flash[:warning] = l(:warning_folder_not_locked)
+    else
+      if @folder.locks[0].user == User.current || User.current.allowed_to?(:force_file_unlock, @project)
+        @folder.unlock!
+        flash[:notice] = l(:notice_folder_unlocked)
+      else
+        flash[:error] = l(:error_only_user_that_locked_folder_can_unlock_it)
+      end
+    end
+    redirect_to params[:current] ? params[:current] :
+        {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder.folder}
+  end
+
+
 
   private
 

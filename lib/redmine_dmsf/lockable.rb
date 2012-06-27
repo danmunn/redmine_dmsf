@@ -45,6 +45,13 @@ module RedmineDmsf
       return l
     end
 
+    def unlockable?
+      return false unless self.locked?
+      existing = self.lock(true)
+      return false if existing.empty? || (!self.folder.nil? && self.folder.locked?) #If its empty its a folder thats locked (not root)
+      true
+    end
+
     #
     # By using the path upwards, surely this would be quicker?
     def locked_for_user?(tree = true)

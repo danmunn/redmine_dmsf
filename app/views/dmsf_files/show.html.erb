@@ -4,14 +4,18 @@
 	<% if User.current.allowed_to?(:file_manipulation, @project) %>
 		<% unless @file.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, @project)%>
 			<% if @file.locked? %>
+                            <% unless @file.unlockable? %>
+                                <%= image_tag("locked.png", :plugin => :redmine_dmsf, :title => l(:title_file_parent_locked, :name => @file.lock[0].folder.title)) %>
+                            <% else %>
 				<%= link_to_function(image_tag("unlock.png", :plugin => "redmine_dmsf"),
 						"manipulation_link('#{url_for(:action => 'unlock', :id => @file, :current => request.url)}')",
 						:title => l(:title_unlock_file)) %>
-			<% 	else %>
+                            <% end %>
+			<% else %>
 				<%= link_to_function(image_tag("lock.png", :plugin => "redmine_dmsf"),
 						"manipulation_link('#{url_for(:action => 'lock', :id => @file, :current => request.url)}')",
 						:title => l(:title_lock_file)) %>
-			<% 	end %> 
+			<% end %> 
 		<% end %>
 		<% if User.current.allowed_to?(:file_manipulation, @project) && !@file.locked_for_user? %>
 			&nbsp;

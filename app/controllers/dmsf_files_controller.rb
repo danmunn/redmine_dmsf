@@ -107,9 +107,13 @@ class DmsfFilesController < ApplicationController
           @revision.copy_file_content(file_upload)
         end
         
-        if @file.locked?
-          DmsfFileLock.file_lock_state(@file, false)
-          flash[:notice] = l(:notice_file_unlocked) + ", "
+        if @file.locked? && !@file.locks.empty?
+          begin
+            @file.unlock!
+            flash[:notice] = l(:notice_file_unlocked) + ", "
+          rescue
+            #Nothing to do here
+          end
         end
         @file.save!
         @file.reload
