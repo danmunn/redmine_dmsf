@@ -5,6 +5,7 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
   fixtures :projects, :users, :members, :member_roles, :roles, :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
+    DmsfLock.delete_all #Delete all locks that are in our test DB - probably not safe but ho hum
     timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
     DmsfFile.storage_path = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
     Dir.mkdir(DmsfFile.storage_path) unless File.directory?(DmsfFile.storage_path)
@@ -167,15 +168,17 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
     assert !User.current.anonymous?, "Current user is not anonymous"
 
     file = DmsfFile.find_file_by_name(project, nil, "test.txt")
-    assert file.lock, "File failed to be locked by #{User.current.name}"
+    assert file.lock!, "File failed to be locked by #{User.current.name}"
 
     assert_no_difference('file.revisions.count') do
       put "dmsf/webdav/#{project.identifier}/test.txt", "1234", @jsmith.merge!({:content_type => :text})
       assert_response 423 #Locked
     end
 
-    file.unlock
-    assert file.locked?, "File failed to unlock by #{User.current.name}"
+    User.current = User.find(1)
+    file.unlock!
+    
+    assert !file.locked?, "File failed to unlock by #{User.current.name}"
 
     role.add_permission! :view_dmsf_folders
     role.add_permission! :file_manipulation
@@ -195,15 +198,19 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
     assert !User.current.anonymous?, "Current user is not anonymous"
 
     file = DmsfFile.find_file_by_name(project, nil, "test.txt")
-    assert file.lock, "File failed to be locked by #{User.current.name}"
+    assert file.lock!, "File failed to be locked by #{User.current.name}"
 
     assert_no_difference('file.revisions.count') do
       put "dmsf/webdav/#{project.identifier}/test.txt", "1234", @admin.merge!({:content_type => :text})
       assert_response 423 #Created
     end
-
-    file.unlock
-    assert file.locked?, "File failed to unlock by #{User.current.name}"
+    User.current = User.find(2)
+    begin
+      file.unlock!
+    rescue
+      #nothing
+    end
+    assert !file.locked?, "File failed to unlock by #{User.current.name}"
 
     role.add_permission! :view_dmsf_folders
     role.add_permission! :file_manipulation
@@ -222,15 +229,16 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
     assert !User.current.anonymous?, "Current user is not anonymous"
 
     file = DmsfFile.find_file_by_name(project, nil, "test.txt")
-    assert file.lock, "File failed to be locked by #{User.current.name}"
+    assert file.lock!, "File failed to be locked by #{User.current.name}"
 
     assert_difference('file.revisions.count') do
       put "dmsf/webdav/#{project.identifier}/test.txt", "1234", @jsmith.merge!({:content_type => :text})
       assert_response 201 #Created
     end
 
-    file.unlock
-    assert file.locked?, "File failed to unlock by #{User.current.name}"
+    file.unlock!
+
+    assert !file.locked?, "File failed to unlock by #{User.current.name}"
 
     role.add_permission! :view_dmsf_folders
     role.add_permission! :file_manipulation

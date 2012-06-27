@@ -16,14 +16,32 @@ module RedmineDmsf
         }
       end
       if tree
-        ret = ret | folder.lock unless folder.nil?
+        ret = ret | (folder.locks || folder.lock) unless folder.nil?
       end
       return ret
     end
 
-    def lock! scope = :exclusive, type = :write
-      l = DmsfLock.lock_state(self, scope, type)
-      self.reload
+    def lock! scope = :scope_exclusive, type = :type_write, expire = nil
+      # Raise a lock error if entity is locked, but its not at resource level
+      existing = locks(false)
+      raise DmsfLockError.new("Unable to complete lock - resource (or parent) is locked") if self.locked? && existing.empty?
+      unless existing.empty?
+        if existing[0].scope == :scope_exclusive
+          raise DmsfLockError.new("Unable to complete lock - resource (or parent) is locked")
+        else
+          raise DmsfLockError.new("unable to exclusively lock a shared-locked resource") if scope == :scope_exclusive
+        end
+      end
+      l = DmsfLock.new
+      l.entity_id = self.id
+      l.entity_type = self.is_a?(DmsfFile) ? 0 : 1
+      l.lock_type = type
+      l.lock_scope = scope
+      l.user = User.current
+      l.expires_at = expire
+      l.save!
+      reload
+      locks.reload
       return l
     end
 
@@ -34,7 +52,7 @@ module RedmineDmsf
       b_shared = nil
       heirarchy = self.dmsf_path
       heirarchy.each {|folder|
-        locks = folder.lock(false)
+        locks = folder.locks || folder.lock(false)
         next if locks.empty?
         locks.each {|lock|
           next if lock.expired? #Incase we're inbetween updates
@@ -50,32 +68,42 @@ module RedmineDmsf
       false
     end
 
-#    #Any better suggestions on this? - This is quite cumbersome
-#    def locked_for_user_old?
-#      return false unless locked?
-#      b_shared = nil
-#
-#      unless locks.empty?
-#        locks.each {|lock|
-#          continue if lock.expired? #Incase we're inbetween updates
-#          if (lock.lock_scope == :scope_exclusive && b_shared.nil?)
-#            return true if lock.user.id != User.current.id
-#          else
-#            b_shared = true if b_shared.nil?
-#            b_shared = false if lock.user.id == User.current.id
-#          end
-#        }
-#        return true if b_shared
-#      end
-#      return folder.locked_for_user? unless folder.nil?
-#      false
-#    end
-
     def unlock!
-      l = DmsfLock.lock_state(self, false)
-      self.reload
-      return l
-    end
+      raise DmsfLockError.new("Unable to complete unlock - requested resource is not reported locked") unless self.locked?
+      existing = self.lock(true)
+      if existing.empty? || (!self.folder.nil? && self.folder.locked?) #If its empty its a folder thats locked (not root)
+        raise DmsfLockError.new("Unlock failed - resource parent is locked")
+      else
+        # If entity is locked to you, you arent the lock originator (or named in a shared lock) so deny action
+        # Unless of course you have the rights to force an unlock
+        raise DmsfLockError.new("Unlock failed - resource is locked by another user") if (
+              self.locked_for_user?(false) &&
+              !User.current.allowed_to?(:force_file_unlock, self.project))
 
+        #Now we need to determine lock type and do the needful
+        if (existing.count == 1 && existing[0].lock_scope == :exclusive)
+          existing[0].destroy
+        else
+          b_destroyed = false
+          existing.each {|lock|
+            if (lock.user.id == User.current.id)
+              lock.destroy
+              b_destroyed = true
+              break
+            end
+          }
+          # At first it was going to be allowed for someone with force_file_unlock to delete all shared by default
+          # Instead, they by default remove themselves from sahred lock, and everyone from shared lock if they're not
+          # on said lock
+          if (!b_destroyed && User.current.allowed_to?(:force_file_unlock, self.project))
+            locks.delete_all
+          end
+        end
+      end
+
+      reload
+      locks.reload
+    end
+    true
   end
 end

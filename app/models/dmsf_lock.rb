@@ -25,7 +25,7 @@ class DmsfLock < ActiveRecord::Base
 
   #At the moment apparently we're only supporting a write lock?
 
-  as_enum :lock_type, [:type_write]
+  as_enum :lock_type, [:type_write, :type_other]
   as_enum :lock_scope, [:scope_exclusive, :scope_shared]
   
   # We really loosly bind the value in the belongs_to above
@@ -41,17 +41,13 @@ class DmsfLock < ActiveRecord::Base
     entity_type == 1 ? super : nil;
   end
 
-  def self.file_lock_state(file, locked)
-    lock = DmsfFileLock.new
-    lock.file = file
-    lock.user = User.current
-    lock.locked = locked
-    lock.save!
-  end
-
   def expired?
     return false if expires_at.nil?
     return expires_at <= Time.now
+  end
+
+  def self.delete_expired
+    self.delete_all ['expires_at IS NOT NULL && expires_at < ?', Time.now]
   end
   
 end

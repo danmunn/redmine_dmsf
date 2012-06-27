@@ -1,8 +1,15 @@
 Changelog for Redmine DMSF
 ==========================
 
-1.4.3: *Not yet released*
+1.4.4: *Not yet released*
 -----------------------
+* New: Locking model updated to support shared and exclusive write locks.
+* New: Folders are now write lockable (shared and exclusively)
+* New: Locks can now have a time-limit
+* New: Inereted lock support (locked folders child entries are now flagged as locked)
+
+1.4.3: *2012-06-26*
+-----------------
 * New: Hook into project copy functionality to permit (although not attractively)
        functionality for DMSF to be duplicated accross projects
 * Update: Project patch defines linkage between DMSF files and DMSF folders.

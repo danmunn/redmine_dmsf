@@ -6,6 +6,7 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
 
   def setup
     DmsfFile.storage_path = File.expand_path("../fixtures/files", __FILE__)
+    DmsfLock.delete_all
     @admin = credentials('admin')
     @jsmith = credentials('jsmith')
     super
@@ -211,7 +212,7 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
     assert !User.current.anonymous?, "Current user is not anonymous"
 
     file = DmsfFile.find_file_by_name(project, nil, "test.txt")
-    assert file.lock, "File failed to be locked by #{User.current.name}"
+    assert file.lock!, "File failed to be locked by #{User.current.name}"
 
     delete "dmsf/webdav/#{project.identifier}/test.txt", nil, @jsmith
     assert_response 423 #Locked
@@ -219,9 +220,10 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
     file = DmsfFile.find_file_by_name(project, nil, "test.txt")
     assert !file.nil?, 'File test.txt is expected to exist'
 
-    file.unlock
-    assert file.locked?, "File failed to unlock by #{User.current.name}"
+    User.current = User.find(1) #For some reason the above delete request changes User.current
 
+    file.unlock!
+    assert !file.locked?, "File failed to unlock by #{User.current.name}"
     project.disable_module! :dmsf 
     role.add_permission! :view_dmsf_folders
     role.add_permission! :file_manipulation
