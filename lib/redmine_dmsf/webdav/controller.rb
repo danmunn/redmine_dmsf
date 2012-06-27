@@ -29,6 +29,23 @@ module RedmineDmsf
         OK
       end
 
+      # This is just pain DIRTY
+      # to fix some gem bugs we're overriding their controller
+      def lock
+        begin
+          request.env['Timeout'] = request.env['HTTP_TIMEOUT'].split('-',2).join(',') unless request.env['HTTP_TIMEOUT'].nil?
+        rescue
+          #Nothing here
+        end
+
+        request_document.remove_namespaces! if ns.empty? 
+        # We re-imlement the function ns - if its return is empty, there are no usable namespaces
+        # so to prevent never returning data, we stip all namespaces
+
+        super
+      end
+
+
       #Overload the default propfind function with this
       def propfind
         unless(resource.exist?)
@@ -61,6 +78,16 @@ module RedmineDmsf
             end
           end
         end
+      end
+
+      private 
+      def ns(opt_head = '')
+        _ns = opt_head
+        if(request_document && request_document.root && request_document.root.namespace_definitions.size > 0)
+          _ns = request_document.root.namespace_definitions.first.prefix.to_s
+          _ns += ':' unless _ns.empty?
+        end
+        _ns.empty? ? opt_head : _ns
       end
 
     end

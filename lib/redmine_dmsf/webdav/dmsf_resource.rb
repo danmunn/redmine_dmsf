@@ -397,7 +397,7 @@ module RedmineDmsf
 
       # Lock
       def lock(args)
-        return Conflict unless (parent.projectless_path == "/" || parent_exists?) && !collection?
+        return Conflict unless (parent.projectless_path == "/" || parent_exists?)
         token = UUIDTools::UUID.md5_create(UUIDTools::UUID_URL_NAMESPACE, projectless_path).to_s
         lock_check(args[:scope])
         entity = file? ? file : folder
@@ -405,10 +405,40 @@ module RedmineDmsf
           if (entity.locked? && entity.locked_for_user?)
             raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
           else
-            entity.lock!
+
+            # If scope and type are not defined, the only thing we can
+            # logically assume is that the lock is being refreshed (office loves 
+            # to do this for example, so we do a few checks, try to find the lock
+            # and ultimately extend it, otherwise we return Conflict for any failure
+            if (!args[:scope] && !args[:type]) #Perhaps a lock refresh
+              http_if = request.env['HTTP_IF']
+
+              return Conflict if http_if.nil?
+
+              http_if = http_if.slice(1, http_if.length - 2)
+
+              return Conflict unless http_if == token
+              
+              entity.lock(false).each {|l|
+                 if l.user.id == User.current.id
+                   l.expires_at = Time.now + 1.hour
+                   l.save!
+                   @response['Lock-Token'] = token
+                   return [1.hours.to_i, token]
+                 end
+              }
+
+              #Unfortunately if we're here, then it's updating a lock we can't find
+
+              return Conflict
+            end
+
+            scope = "scope_#{(args[:scope] || "exclusive")}".to_sym
+            type = "type_#{(args[:type] || "write")}".to_sym
+
+            entity.lock! scope, type, Time.now + 1.hours
             @response['Lock-Token'] = token
-            Locked
-            [8600, token]
+            [1.hours.to_i, token]
           end
         rescue DmsfLockError
           raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
@@ -433,7 +463,7 @@ module RedmineDmsf
               entity.unlock!
               NoContent
             end
-          resue
+          rescue
             Forbidden
           end
         end
