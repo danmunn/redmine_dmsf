@@ -185,7 +185,7 @@ class DmsfController < ApplicationController
       if @delete_folder.delete
         flash[:notice] = l(:notice_folder_deleted)
       else
-        flash[:error] = l(:error_folder_is_not_empty)
+        flash[:error] = @delete_folder.errors[:base][0]
       end
     end
     redirect_to :controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder

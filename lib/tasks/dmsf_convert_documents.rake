@@ -75,7 +75,7 @@ class DmsfConvertDocuments
           if dry
             puts "Dry check folder: " + folder.title
             if folder.invalid?
-              folder.errors.each {|e| puts "#{e[0]}: #{e[1]}"}
+              folder.errors.each {|e,msg| puts "#{e}: #{msg}"}
             end
           else
             begin
@@ -120,7 +120,7 @@ class DmsfConvertDocuments
               if dry
                 puts "Dry check file: " + file.name
                 if file.invalid?
-                  file.errors.each {|e| puts "#{e[0]}: #{e[1]}"}
+                  file.errors.each {|e.msg| puts "#{e}: #{msg}"}
                 end
               else
                 file.save!
@@ -158,7 +158,7 @@ class DmsfConvertDocuments
               if dry
                 puts "Dry check revision: " + revision.title
                 if revision.invalid?
-                  revision.errors.each {|e| puts "#{e[0]}: #{e[1]}"}
+                  revision.errors.each {|e,msg| puts "#{e}: #{msg}"}
                 end
               else
                 revision.save!

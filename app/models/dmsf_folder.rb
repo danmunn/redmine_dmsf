@@ -86,7 +86,13 @@ class DmsfFolder < ActiveRecord::Base
   end
   
   def delete
-    return false if !self.subfolders.visible.empty? || !self.files.visible.empty?
+    if self.locked?
+      errors[:base] << l(:error_folder_is_locked)
+      return false
+    elsif !self.subfolders.visible.empty? || !self.files.visible.empty?
+      errors[:base] << l(:error_folder_is_not_empty)
+      return false
+    end
     destroy
   end
   

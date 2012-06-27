@@ -49,7 +49,7 @@
 	<div class="controls" style="float: left">
 		<%= submit_tag(l(:submit_download), :title => l(:title_download_checked), :name => "download_entries") %>
 		<%= submit_tag(l(:submit_email), :title => l(:title_send_checked_by_email), :name => "email_entries") %>
-		<% if User.current.allowed_to?(:file_manipulation, @project) %>
+		<% if User.current.allowed_to?(:file_manipulation, @project) && (!@folder.nil? && !@folder.locked_for_user?) %>
 			<button type="button" id="entries_delete_button" title="<%=l(:title_delete_checked)%>"><%=l(:button_delete)%></button>
 		<% end %>
 	</div> 
@@ -81,7 +81,15 @@
 				<%= render "custom_fields", :object => subfolder %>
 			</td>
 			<td class="size" title="<%= l(:title_total_size_of_all_files)%>"><%= number_to_human_size(subfolder.deep_size) %></td>
-			<td class="modified"><%= subfolder.updated_at.strftime("%Y-%m-%d %H:%M") %></td>
+			<td class="modified"><%= subfolder.updated_at.strftime("%Y-%m-%d %H:%M") %>
+                          <% if subfolder.locked_for_user? %>
+                            <%= link_to(image_tag("locked.png", :plugin => :redmine_dmsf),
+                                         {:controller => "users", :action => "show", :id => subfolder.lock.reverse[0].user },
+                                          :title => l(:title_locked_by_user, :user => subfolder.lock.reverse[0].user.to_s)) %>
+                              <% elsif subfolder.locked? %>
+                            <%= image_tag("lockedbycurrent.png", :title => l(:title_locked_by_you), :plugin => :redmine_dmsf) %>
+                          <% end %>
+                        </td>
 			<td class="version"></td>
 			<td class="author"><%= h(subfolder.user) %></td>
 			<td class="actions">
@@ -103,7 +111,7 @@
 					<div style="float: left">
 						<%= link_to(image_tag("edit.png", :class =>"detail_icon"), 
 								{:action => "edit", :id => @project, :folder_id => subfolder },
-								:title => l(:link_edit, :title => h(subfolder.title))) %>
+								:title => l(:link_edit, :title => h(subfolder.title))) unless subfolder.locked_for_user? %>
  					</div>
 					<% end %>
 					<div style="float: right; width: 44px;">
@@ -115,7 +123,7 @@
                                                                             :id => @project, :folder_id => subfolder)}')",
                                                                             :title => l(:title_unlock_file))%>
                                                           <% else %>
-                                                            <%= image_tag("locked.png", :plugin => :redmine_dmsf, :title => l(:title_folder_parent_locked, :name => subfolder.folder.lock.reverse[0].folder.title)) %>
+                                                            <%= image_tag("locked.png", :plugin => :redmine_dmsf, :title => l(:title_folder_parent_locked, :name => subfolder.lock.reverse[0].folder.title)) %>
                                                           <% end %>
                                                         <% else %>
                                                            <%= link_to_function(image_tag("lock.png", :plugin => :redmine_dmsf),
@@ -127,7 +135,7 @@
                                                 <% end %>
 						<%= link_to_function(image_tag("delete.png", :plugin => :redmine_dmsf),
 								"confirmation_link('#{url_for(:action => 'delete', :id => @project, :folder_id => @folder, :delete_folder_id => subfolder)}')", 
-								:title => l(:title_delete))%>
+								:title => l(:title_delete)) unless (subfolder.locked_for_user?)%>
 					</div>
 				</div>
 				<br class="clear" />
@@ -307,5 +315,5 @@ sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !
 	</script>
 <% end %>
 
-<%= render(:partial => "multi_upload") if User.current.allowed_to?(:file_manipulation, @project) %>
+<%= render(:partial => "multi_upload") if (User.current.allowed_to?(:file_manipulation, @project) && (!@folder.nil? && !@folder.locked_for_user?)) %>
 <br />

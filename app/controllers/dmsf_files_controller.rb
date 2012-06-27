@@ -152,7 +152,7 @@ class DmsfFilesController < ApplicationController
         log_activity("deleted")
       else
         # TODO: check this error handling
-        @revision.errors.each {|e| flash[:error] = e[1]}
+        @revision.errors.each {|e,msg| flash[:error] = msg}
       end
     end
     redirect_to :action => "show", :id => @file

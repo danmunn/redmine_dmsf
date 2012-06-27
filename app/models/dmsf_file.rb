@@ -103,7 +103,7 @@ class DmsfFile < ActiveRecord::Base
 
   def delete
     if locked_for_user?
-      errors.add_to_base(l(:error_file_is_locked))
+      errors[:base] << l(:error_file_is_locked)
       return false 
     end
     if Setting.plugin_redmine_dmsf["dmsf_really_delete_files"]
@@ -204,7 +204,7 @@ class DmsfFile < ActiveRecord::Base
 
   def move_to(project, folder)
     if self.locked_for_user?
-      errors.add_to_base(l(:error_file_is_locked))
+      errors[:base] << l(:error_file_is_locked)
       return false 
     end
     

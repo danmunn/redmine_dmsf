@@ -63,11 +63,11 @@ class DmsfFileRevision < ActiveRecord::Base
   
   def delete(delete_all = false)
     if self.file.locked_for_user?
-      errors.add_to_base(l(:error_file_is_locked))
+      errors[:base] << l(:error_file_is_locked)
       return false 
     end
     if !delete_all && self.file.revisions.length <= 1
-      errors.add_to_base(l(:error_at_least_one_revision_must_be_present))
+      errors[:base] << l(:error_at_least_one_revision_must_be_present)
       return false
     end
     dependent = DmsfFileRevision.find(:all, :conditions => 
