@@ -7,6 +7,7 @@ Changelog for Redmine DMSF
 * New: Folders are now write lockable (shared and exclusively)
 * New: Locks can now have a time-limit
 * New: Inereted lock support (locked folders child entries are now flagged as locked)
+* Fix: Some testcases erroniously passed when files are locked, when they should be unlocked
 
 1.4.3: *2012-06-26*
 -----------------

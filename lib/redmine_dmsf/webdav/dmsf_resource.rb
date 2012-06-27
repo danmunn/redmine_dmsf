@@ -384,29 +384,34 @@ module RedmineDmsf
       end
 
       # Lock Check
-      # Check for the existance of locks of files (Folders unsupported)
+      # Check for the existance of locks
       # At present as deletions of folders are not recursive, we do not need to extend 
       # this to cover every file, just queried
-      # TODO: Allow recursive deletions and update lock code appropriately
       def lock_check(lock_scope=nil)
         if file?
           raise Locked if file.locked_for_user?
+        elsif folder?
+          raise Locked if folder.locked_for_user?
         end
       end
 
       # Lock
-      # Locks a file entity only (DMSF Folders do not support locking)
       def lock(args)
-        return Conflict unless (parent.projectless_path == "/" || parent_exists?) && !collection? && file?
+        return Conflict unless (parent.projectless_path == "/" || parent_exists?) && !collection?
         token = UUIDTools::UUID.md5_create(UUIDTools::UUID_URL_NAMESPACE, projectless_path).to_s
         lock_check(args[:scope])
-        if (file.locked? && file.locked_for_user?)
+        entity = file? ? file : folder
+        begin
+          if (entity.locked? && entity.locked_for_user?)
+            raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
+          else
+            entity.lock!
+            @response['Lock-Token'] = token
+            Locked
+            [8600, token]
+          end
+        rescue DmsfLockError
           raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
-        else
-          file.lock! unless file.locked?
-          @response['Lock-Token'] = token
-          Locked
-          [8600, token]
         end
       end
 
@@ -414,17 +419,22 @@ module RedmineDmsf
       # Token based unlock (authenticated) will ensure that a correct token is sent, further ensuring
       # ownership of token before permitting unlock
       def unlock(token)
-        return NoContent unless file?
+        return NoContent unless exist?
         token=token.slice(1, token.length - 2)
         if (token.nil? || token.empty? || User.current.anonymous?)
           BadRequest
         else
-          _token = UUIDTools::UUID.md5_create(UUIDTools::UUID_URL_NAMESPACE, projectless_path).to_s
-          if (!file.locked? || file.locked_for_user? || token != _token)
+          begin
+            _token = UUIDTools::UUID.md5_create(UUIDTools::UUID_URL_NAMESPACE, projectless_path).to_s
+            entity = file? ? file : folder
+            if (!entity.locked? || entity.locked_for_user? || token != _token)
+              Forbidden
+            else
+              entity.unlock!
+              NoContent
+            end
+          resue
             Forbidden
-          else
-            file.unlock!
-            NoContent
           end
         end
       end
