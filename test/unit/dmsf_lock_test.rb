@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper.rb', __FILE__)
 
 class DmsfFileTest < RedmineDmsf::Test::UnitTest
   attr_reader :lock
@@ -61,6 +61,68 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
       assert lock.file.is_a?(DmsfFolder)
     end
   end
-  
+
+  test "locked folder reports un-locked child file as locked" do
+    #folder id 2 is locked by fixture
+    #files 4 and 5 are file resources within locked folder (declared by fixture)
+    folder = dmsf_folders(:dmsf_folders_002)
+    file = dmsf_files(:dmsf_files_004)
+
+    assert folder.locked?, "Folder (2) should be locked by fixture"
+    assert_equal 1, folder.lock.count #Check the folder lists 1 lock
+
+    assert file.locked?, "File (4) sits within Folder(2) and should be locked"
+    assert_equal 1, file.lock.count #Check the file lists 1 lock
+
+    assert_equal 0, file.lock(false).count #Check the file does not list any entries for itself
+  end
+
+  test "locked folder cannot be unlocked by someone without rights (or anon)" do
+    folder = dmsf_folders(:dmsf_folders_002)
+    assert_no_difference ('folder.lock.count') do
+      assert_raise DmsfLockError do
+        folder.unlock!
+      end
+    end
+
+    User.current = users(:users_002)
+     assert_no_difference ('folder.lock.count') do
+      assert_raise DmsfLockError do
+        folder.unlock!
+      end
+    end
+  end
+
+  test "locked folder can be unlocked by permission :force_file_unlock" do
+    User.current = users(:users_001)
+    folder = dmsf_folders(:dmsf_folders_002)
+
+    assert_difference('folder.lock.count', -1) do
+      assert_nothing_raised do
+        folder.unlock!
+      end
+    end
+
+    User.current = users(:users_002)
+
+    assert_difference('folder.lock.count') do
+      assert_nothing_raised do
+        folder.lock!
+      end
+    end
+
+    User.current = users(:users_001)
+    assert_difference('folder.lock.count', -1) do
+      assert_nothing_raised do
+        folder.unlock!
+      end
+    end
+
+
+    #We need to re-establish locks for other test 
+    folder.lock!
+    User.current = nil
+
+  end
 
 end

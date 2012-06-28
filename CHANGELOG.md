@@ -3,11 +3,14 @@ Changelog for Redmine DMSF
 
 1.4.4: *Not yet released*
 -----------------------
-* New: Locking model updated to support shared and exclusive write locks.
-* New: Folders are now write lockable (shared and exclusively)
-* New: Locks can now have a time-limit
+* New: Locking model updated to support shared and exclusive write locks. [At present UI and Webdav only support exclusive locking however]
+* New: Folders are now write lockable (shared and exclusively) [UI upgraded to support folder locking, however only exclusively]
+* New: Locks can now have a time-limit [Not yet supported from UI]
 * New: Inereted lock support (locked folders child entries are now flagged as locked)
 * Fix: Some testcases erroniously passed when files are locked, when they should be unlocked
+* Update: Webdav locks files for 1 hour at a time (requested time is ignored)
+* New: Files are now stored in project relevent folder
+* New: Implementation of lockdiscovery and supportedlock property requests
 
 1.4.3: *2012-06-26*
 -----------------

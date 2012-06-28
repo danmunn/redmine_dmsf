@@ -145,6 +145,15 @@ module RedmineDmsf
       def resource
         @resource_c
       end
+
+      def get_property(*args)
+        @resource_c.get_property(*args)
+      end
+
+      def property_names
+        @resource_c.property_names
+      end
+
     end
   end
 end

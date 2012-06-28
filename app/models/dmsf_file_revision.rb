@@ -26,7 +26,8 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :project
   has_many :access, :class_name => "DmsfFileRevisionAccess", :foreign_key => "dmsf_file_revision_id", :dependent => :destroy
 
-  scope :visible, lambda {|*args| {:conditions => DmsfFile.visible_condition(args.shift || User.current, *args) }}
+  #Returns a list of revisions that are not deleted here, or deleted at parent level either
+  scope :visible, lambda {|*args| joins(:file).where(DmsfFile.visible_condition(args.shift || User.current, *args)).where("#{self.table_name}.deleted = 0") }
 
   acts_as_customizable
 
@@ -113,7 +114,13 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def disk_file
-    "#{DmsfFile.storage_path}/#{self.disk_filename}"
+    storage_base = "#{DmsfFile.storage_path}" #perhaps .dup?
+    unless project.nil?
+      project_base = project.identifier.gsub(/[^\w\.\-]/,'_')
+      storage_base << "/p_#{project_base}"
+    end
+    Dir.mkdir(storage_base) unless File.exists?(storage_base)
+    "#{storage_base}/#{self.disk_filename}"
   end
   
   def detect_content_type

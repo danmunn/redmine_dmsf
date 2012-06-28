@@ -16,6 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+require 'fileutils'
+
 class Dmsf144 < ActiveRecord::Migration
 
 
@@ -58,8 +60,26 @@ class Dmsf144 < ActiveRecord::Migration
     #Data cleanup
     rename_column :dmsf_file_locks, :dmsf_file_id, :entity_id
     remove_column :dmsf_file_locks, :locked
-
     rename_table :dmsf_file_locks, :dmsf_locks
+
+    #Not sure if this is the right place to do this, as its file manipulation, not database (stricly)
+    begin
+      DmsfFileRevision.visible.each {|rev|
+        next if rev.project.nil?
+        existing = "#{DmsfFile.storage_path}/#{rev.disk_filename}"
+        new_path = rev.disk_file
+        if File.exist?(existing)
+          if File.exist?(new_path)
+            rev.disk_filename = rev.new_storage_filename
+            new_path = rev.disk_file
+            rev.save!
+          end
+          FileUtils.mv(existing, new_path)
+        end
+      }
+    rescue
+      #Nothing here, we just dont want a migration to break
+    end
   end
 
   def self.down
@@ -81,6 +101,26 @@ class Dmsf144 < ActiveRecord::Migration
     remove_column :dmsf_file_locks, :lock_type_cd
     remove_column :dmsf_file_locks, :lock_scope_cd
     remove_column :dmsf_file_locks, :expires_at
+
+    #Not sure if this is the right place to do this, as its file manipulation, not database (stricly)
+    begin
+      DmsfFileRevision.visible.each {|rev|
+        next if rev.project.nil?
+        project = rev.project.identifier.gsub(/[^\w\.\-]/,'_')
+        existing = "#{DmsfFile.storage_path}/p_#{project}/#{rev.disk_filename}"
+        new_path = "#{DmsfFile.storage_path}/#{rev.disk_filename}"
+        if File.exist?(existing)
+          if File.exist?(new_path)
+            rev.disk_filename = rev.new_storage_filename
+            rev.save!
+            new_path = "#{DmsfFile.storage_path}/#{rev.disk_filename}"
+          end
+          FileUtils.mv(existing, new_path)
+        end
+      }
+    rescue
+      #Nothing here, we just dont want a migration to break
+    end
   end
 
 end

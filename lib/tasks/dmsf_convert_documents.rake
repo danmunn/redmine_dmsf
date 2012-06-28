@@ -120,7 +120,7 @@ class DmsfConvertDocuments
               if dry
                 puts "Dry check file: " + file.name
                 if file.invalid?
-                  file.errors.each {|e.msg| puts "#{e}: #{msg}"}
+                  file.errors.each {|e,msg| puts "#{e}: #{msg}"}
                 end
               else
                 file.save!

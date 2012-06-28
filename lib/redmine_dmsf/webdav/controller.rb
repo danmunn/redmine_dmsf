@@ -80,6 +80,25 @@ module RedmineDmsf
         end
       end
 
+      # root_type:: Root tag name
+      # Render XML and set Rack::Response#body= to final XML
+      # Another override (they don't seem to flag UTF-8 [at this point I'm considering forking the gem to fix, 
+      # and making DMSF compliant on that .. *sigh*
+      def render_xml(root_type)
+        raise ArgumentError.new 'Expecting block' unless block_given?
+        doc = Nokogiri::XML::Builder.new(:encoding => 'utf-8') do |xml_base|
+          xml_base.send(root_type.to_s, {'xmlns:D' => 'DAV:'}.merge(resource.root_xml_attributes)) do
+            xml_base.parent.namespace = xml_base.parent.namespace_definitions.first
+            xml = xml_base['D']
+            yield xml
+          end
+        end
+        response.body = doc.to_xml
+        response["Content-Type"] = 'application/xml; charset="utf-8"'
+        response["Content-Length"] = response.body.size.to_s
+      end
+
+
       private 
       def ns(opt_head = '')
         _ns = opt_head

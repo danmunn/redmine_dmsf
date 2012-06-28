@@ -48,7 +48,7 @@ class DmsfFile < ActiveRecord::Base
   validate :validates_name_uniqueness 
   
   def self.visible_condition(user, options = {})
-    "deleted=0"
+    "#{self.table_name}.deleted = 0"
   end
 
   def validates_name_uniqueness
