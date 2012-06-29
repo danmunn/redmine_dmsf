@@ -17,8 +17,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfLock < ActiveRecord::Base
-  unloadable
-
+#  unloadable
+  before_create :generate_uuid
   belongs_to :file, :class_name => "DmsfFile", :foreign_key => "entity_id"
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "entity_id"
   belongs_to :user
@@ -46,8 +46,28 @@ class DmsfLock < ActiveRecord::Base
     return expires_at <= Time.now
   end
 
+  def generate_uuid
+    self.uuid = UUIDTools::UUID.timestamp_create().to_s
+  end
+
   def self.delete_expired
     self.delete_all ['expires_at IS NOT NULL && expires_at < ?', Time.now]
   end
+
+  #Lets allow our UUID to be searchable
+  def self.find(*args)
+    if args.first && args.first.is_a?(String) && !args.first.match(/^\d*$/)
+      lock = find_by_uuid(*args)
+      raise ActiveRecord::RecordNotFound, "Couldn't find lock with uuid=#{args.first}" if lock.nil?
+      lock
+    else
+      super
+    end
+  end
+
+  def self.find_by_param(*args)
+    self.find(*args)
+  end
+
   
 end

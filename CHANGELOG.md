@@ -11,6 +11,7 @@ Changelog for Redmine DMSF
 * Update: Webdav locks files for 1 hour at a time (requested time is ignored)
 * New: Files are now stored in project relevent folder
 * New: Implementation of lockdiscovery and supportedlock property requests
+* New: Locks store a timestamp based UUID string enabling better interaction with webservices
 
 1.4.3: *2012-06-26*
 -----------------

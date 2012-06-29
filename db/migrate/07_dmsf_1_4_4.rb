@@ -17,6 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'fileutils'
+require 'uuidtools'
 
 class Dmsf144 < ActiveRecord::Migration
 
@@ -34,6 +35,7 @@ class Dmsf144 < ActiveRecord::Migration
     #Add our lock relevent columns (ENUM) - null (till we upgrade data)
     add_column :dmsf_file_locks, :lock_type_cd, :integer, :null => true
     add_column :dmsf_file_locks, :lock_scope_cd, :integer, :null => true
+    add_column :dmsf_file_locks, :uuid, :string, :null => true, :limit => 36
 
     #Add our expires_at column
     add_column :dmsf_file_locks, :expires_at, :datetime, :null => true
@@ -45,9 +47,19 @@ class Dmsf144 < ActiveRecord::Migration
       end
     end
 
+    #Generate new lock Id's for whats being persisted
+    do_not_delete.each {|l|
+      #Find the lock
+      next unless lock = DmsfFileLock.find(l)
+      lock.uuid = UUIDTools::UUID.timestamp_create().to_s
+      lock.save!
+    }
+
     say "Preserving #{do_not_delete.count} file lock(s) found in old schema"
 
     DmsfFileLock.delete_all(['id NOT IN (?)', do_not_delete])
+
+    #We need to force our newly found
 
     say "Applying default lock scope / type - Exclusive / Write"
     DmsfFileLock.update_all ['entity_type = ?, lock_type_cd = ?, lock_scope_cd = ?', 0, 0, 0]
@@ -101,6 +113,7 @@ class Dmsf144 < ActiveRecord::Migration
     remove_column :dmsf_file_locks, :lock_type_cd
     remove_column :dmsf_file_locks, :lock_scope_cd
     remove_column :dmsf_file_locks, :expires_at
+    remove_column :dmsf_file_locks, :uuid
 
     #Not sure if this is the right place to do this, as its file manipulation, not database (stricly)
     begin

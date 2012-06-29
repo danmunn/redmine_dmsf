@@ -315,5 +315,6 @@ sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !
 	</script>
 <% end %>
 
-<%= render(:partial => "multi_upload") if (User.current.allowed_to?(:file_manipulation, @project) && (!@folder.nil? && !@folder.locked_for_user?)) %>
+<%= render(:partial => "multi_upload") if (User.current.allowed_to?(:file_manipulation, @project) && 
+       ( @folder.nil? || (!@folder.nil? &&!@folder.locked_for_user?) ) ) %>
 <br />

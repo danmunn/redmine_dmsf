@@ -26,23 +26,18 @@ module RedmineDmsf
       existing = locks(false)
       raise DmsfLockError.new("Unable to complete lock - resource (or parent) is locked") if self.locked? && existing.empty?
       unless existing.empty?
-        if existing[0].lock_scope == :scope_exclusive
-          # If it's an exclusive lock and you're re-requesting the actual desired behaviour is to not return a new lock, 
-          # but the same lock (extended)
+        if existing[0].lock_scope == :scope_shared && scope == :scope_shared
+          # RFC states if an item is exclusively locked and another lock is attempted we reject
+          # if the item is shared locked however, we can always add another lock to it
           if self.folder.locked?
             raise DmsfLockError.new("Unable to complete lock - resource parent is locked")
           else
-            if existing[0].user.id == User.current.id then
-              l = existing[0]
-              l.expires_at = expire
-              l.save!
-              return l
-            else
-              raise DmsfLockError.new("Unable to complete lock - resource is locked")
-            end
+            existing.each {|l|
+              raise DmsfLockError.new("Unable to complete lock - resource is locked") if l.user.id == User.current.id
+            }
           end
         else
-          raise DmsfLockError.new("unable to exclusively lock a shared-locked resource") if scope == :scope_exclusive
+          raise DmsfLockError.new("unable to lock exclusively an already-locked resource") if scope == :scope_exclusive
         end
       end
       l = DmsfLock.new

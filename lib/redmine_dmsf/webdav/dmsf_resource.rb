@@ -398,7 +398,6 @@ module RedmineDmsf
       # Lock
       def lock(args)
         return Conflict unless (parent.projectless_path == "/" || parent_exists?)
-        token = UUIDTools::UUID.md5_create(UUIDTools::UUID_URL_NAMESPACE, projectless_path).to_s
         lock_check(args[:scope])
         entity = file? ? file : folder
         begin
@@ -416,17 +415,12 @@ module RedmineDmsf
               return Conflict if http_if.nil?
 
               http_if = http_if.slice(1, http_if.length - 2)
-
-              return Conflict unless http_if == token
-              
-              entity.lock(false).each {|l|
-                 if l.user.id == User.current.id
-                   l.expires_at = Time.now + 1.hour
-                   l.save!
-                   @response['Lock-Token'] = token
-                   return [1.hours.to_i, token]
-                 end
-              }
+              l = DmsfLock.find(http_if)
+              return Conflict if l.nil?
+              l.expires_at = Time.now + 1.hour
+              l.save!
+              @response['Lock-Token'] = l.uuid
+              return [1.hours.to_i, l.uuid]
 
               #Unfortunately if we're here, then it's updating a lock we can't find
 
@@ -436,9 +430,10 @@ module RedmineDmsf
             scope = "scope_#{(args[:scope] || "exclusive")}".to_sym
             type = "type_#{(args[:type] || "write")}".to_sym
 
-            entity.lock! scope, type, Time.now + 1.hours
-            @response['Lock-Token'] = token
-            [1.hours.to_i, token]
+            #l should be the instance of the lock we've just created
+            l = entity.lock!(scope, type, Time.now + 1.hours)
+            @response['Lock-Token'] = l.uuid
+            [1.hours.to_i, l.uuid]
           end
         rescue DmsfLockError
           raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
@@ -455,9 +450,12 @@ module RedmineDmsf
           BadRequest
         else
           begin
-            _token = UUIDTools::UUID.md5_create(UUIDTools::UUID_URL_NAMESPACE, projectless_path).to_s
             entity = file? ? file : folder
-            if (!entity.locked? || entity.locked_for_user? || token != _token)
+            l = DmsfLock.find(token)
+            l_entity = l.file || l.folder
+            # Additional case: if a user trys to unlock the file instead of the folder that's locked
+            # This should throw forbidden as only the lock at level initiated should be unlocked
+            if (!entity.locked? || entity.locked_for_user? || l_entity != entity)
               Forbidden
             else
               entity.unlock!
@@ -607,6 +605,9 @@ module RedmineDmsf
                 lock_path << lock_entity.dmsf_path.map {|x| URI.escape(x.respond_to?('name') ? x.name : x.title) }.join('/')
                 lock_path << "/" if lock_entity.is_a?(DmsfFolder) && lock_path[-1,1] != '/'
                 doc.lockroot { doc.href lock_path }
+                if (lock.user.id == User.current.id || User.current.allowed_to?(:force_file_unlock, self.project))
+                  doc.locktoken { doc.href lock.uuid }
+                end
               }
             }
           }
