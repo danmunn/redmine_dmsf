@@ -1,3 +1,7 @@
+#Vendor
+require 'redmine_dmsf/vendored_dav4rack'
+
+# DMSF libraries
 require 'redmine_dmsf/patches' #plugin patches
 require 'redmine_dmsf/webdav' #DAV4Rack implementation
 

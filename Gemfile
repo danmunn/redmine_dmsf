@@ -1,8 +1,9 @@
 source :rubygems
 
 gem "zip"
-gem "dav4rack", :github => "chrisroberts/dav4rack"
 gem "simple_enum"
+gem "nokogiri", ">= 1.4.2"
+gem "uuidtools", "~> 2.1.1"
 
 #Allows --without=xapian
 group :xapian do

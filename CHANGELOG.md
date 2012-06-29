@@ -12,6 +12,9 @@ Changelog for Redmine DMSF
 * New: Files are now stored in project relevent folder
 * New: Implementation of lockdiscovery and supportedlock property requests
 * New: Locks store a timestamp based UUID string enabling better interaction with webservices
+* Fix: Issue #16 - unable to add new project when plugin enabled due to bug in UI
+* Fix: Issue #17 - dav4rack not installable on some systems - it is now vendored
+* Fix: Issue #18 - Warnings thrown due to space between function and parentheses 
 
 1.4.3: *2012-06-26*
 -----------------

@@ -5,6 +5,9 @@ Redmine DMSF is Document Management System Features plugin for Redmine issue tra
 
 Redmine DMSF now comes bundled with Webdav functionality: if switched on within plugin settings this will be accessible from /dmsf/webdav.
 
+Webdav functionality is provided through DAV4Rack, however is provided bundled due to modifications made, DAV4Rack is released under the terms of the 
+MIT license, more information can be found at <https://github.com/chrisrobers/dav4rack>
+
 Initial development was for Kontron AG R&D department and it is released as open source thanks to their generosity.  
 Project home: <http://code.google.com/p/redmine-dmsf/>
 
@@ -41,7 +44,8 @@ As of version 1.4.4 of this plugin:
   * Redmine 2.0.x 
   * Rails 3.2.x (Inline with Redmine installation requirement) 
   * zip (Gem)
-  * DAV4Rack (Github Gem)
+  * Nikogiri 1.4.2 or greater (Gem)
+  * UUIDTools 2.1.1 or greater (less than 2.2.0) (Gem)
   * simple_enum (Gem)
 
 ### Fulltext search (optional)
