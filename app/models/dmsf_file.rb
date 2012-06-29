@@ -32,10 +32,10 @@ class DmsfFile < ActiveRecord::Base
   belongs_to :project
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
   has_many :revisions, :class_name => "DmsfFileRevision", :foreign_key => "dmsf_file_id", 
-    :order => "major_version DESC, minor_version DESC, updated_at DESC", 
+    :order => "#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC", 
     :dependent => :destroy
   has_many :locks, :class_name => "DmsfLock", :foreign_key => "entity_id",
-    :order => "updated_at DESC",
+    :order => "#{DmsfLock.table_name}.updated_at DESC",
     :conditions => {:entity_type => 0},
     :dependent => :destroy
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
@@ -82,7 +82,7 @@ class DmsfFile < ActiveRecord::Base
   def self.project_root_files(project)
     visible.find(:all, :conditions => 
       ["dmsf_folder_id is NULL and project_id = :project_id",
-        {:project_id => project.id}], :order => "name ASC")
+        {:project_id => project.id}], :order => "#{self.table_name}.name ASC")
   end
   
   def self.find_file_by_name(project, folder, name)

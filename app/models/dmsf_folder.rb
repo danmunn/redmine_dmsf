@@ -26,14 +26,14 @@ class DmsfFolder < ActiveRecord::Base
   
   belongs_to :project
   belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
-  has_many :subfolders, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id", :order => "title ASC",
+  has_many :subfolders, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id", :order => "#{DmsfFolder.table_name}.title ASC",
            :dependent => :destroy
   has_many :files, :class_name => "DmsfFile", :foreign_key => "dmsf_folder_id",
            :dependent => :destroy
   belongs_to :user
 
   has_many :locks, :class_name => "DmsfLock", :foreign_key => "entity_id",
-    :order => "updated_at DESC",
+    :order => "#{DmsfLock.table_name}.updated_at DESC",
     :conditions => {:entity_type => 1},
     :dependent => :destroy
 
@@ -61,7 +61,7 @@ class DmsfFolder < ActiveRecord::Base
     folders.each do |folder|
       if folder == self.folder
         errors.add(:folder, l(:error_create_cycle_in_folder_dependency))
-        return false 
+        return false
       end
       folder.subfolders.each {|f| folders.push(f)}
     end
@@ -70,17 +70,17 @@ class DmsfFolder < ActiveRecord::Base
   
   def self.project_root_folders(project)
     find(:all, :conditions => 
-        ["dmsf_folder_id is NULL and project_id = :project_id", {:project_id => project.id}], :order => "title ASC")
+        ["#{DmsfFolder.table_name}.dmsf_folder_id is NULL and #{DmsfFolder.table_name}.project_id = :project_id", {:project_id => project.id}], :order => "#{DmsfFolder.table_name}.title ASC")
   end
   
   def self.find_by_title(project, folder, title)
     if folder.nil?
       visible.find(:first, :conditions => 
-        ["dmsf_folder_id is NULL and project_id = :project_id and title = :title", 
+        ["#{DmsfFolder.table_name}.dmsf_folder_id is NULL and #{DmsfFolder.table_name}.project_id = :project_id and #{DmsfFolder.table_name}.title = :title", 
           {:project_id => project.id, :title => title}])
     else
       visible.find(:first, :conditions => 
-        ["dmsf_folder_id = :folder_id and title = :title", 
+        ["#{DmsfFolder.table_name}.dmsf_folder_id = :folder_id and #{DmsfFolder.table_name}.title = :title", 
           {:project_id => project.id, :folder_id => folder.id, :title => title}])
     end
   end

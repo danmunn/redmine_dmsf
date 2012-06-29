@@ -51,7 +51,7 @@ class DmsfLock < ActiveRecord::Base
   end
 
   def self.delete_expired
-    self.delete_all ['expires_at IS NOT NULL && expires_at < ?', Time.now]
+    self.delete_all ["#{DmsfLock.table_name}.expires_at IS NOT NULL && #{DmsfLock.table_name}.expires_at < ?", Time.now]
   end
 
   #Lets allow our UUID to be searchable
