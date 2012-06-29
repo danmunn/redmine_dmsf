@@ -237,7 +237,7 @@ module RedmineDmsf
 
         # All of this should carry accrross the ResourceProxy frontend, we ensure this to
         # prevent unexpected errors
-        if dest.is_a? (ResourceProxy)
+        if dest.is_a?(ResourceProxy)
           resource = dest.resource
         else
           resource = dest
@@ -312,7 +312,7 @@ module RedmineDmsf
 
         # All of this should carry accrross the ResourceProxy frontend, we ensure this to
         # prevent unexpected errors
-        if dest.is_a? (ResourceProxy)
+        if dest.is_a?(ResourceProxy)
           resource = dest.resource
         else
           resource = dest
