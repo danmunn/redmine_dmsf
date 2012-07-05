@@ -1,4 +1,5 @@
 require File.expand_path('../../test_helper', __FILE__)
+require 'fileutils'
 
 class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
 
@@ -6,7 +7,7 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
 
   def setup
     DmsfLock.delete_all #Delete all locks that are in our test DB - probably not safe but ho hum
-    timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
+    timestamp = DateTime.now.strftime("%y%m%d%H%M")
     DmsfFile.storage_path = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
     Dir.mkdir(DmsfFile.storage_path) unless File.directory?(DmsfFile.storage_path)
     @admin = credentials('admin')
@@ -18,18 +19,10 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
     @headers = nil
     #Delete our tmp folder
     begin
-      Dir.entries(DmsfFile.storage_path).each {|x|
-         next if (x == "." || x == "..")
-         begin
-           File.delete(File.expand_path(x, DmsfFile.storage_path))
-         rescue
-           warn "failed to delete #{File.expand_path(x, DmsfFile.storage_path)}"
-         end
-      }
-      Dir.delete(DmsfFile.storage_path)
-   rescue
-     warn "DELETE FAILED"
-   end
+      FileUtils.rm_rf DmsfFile.storage_path
+    rescue 
+      warn "DELETE FAILED"
+    end
   end
 
   test "PUT denied unless authenticated" do
