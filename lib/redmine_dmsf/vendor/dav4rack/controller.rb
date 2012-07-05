@@ -337,8 +337,15 @@ module DAV4Rack
     
     # Returns Resource path with root URI removed
     def implied_path
+
       return clean_path(@request.path_info.dup) unless @request.path_info.empty?
-      clean_path(@request.path.dup)
+      c_path = clean_path(@request.path.dup)
+      return c_path if c_path.length != @request.path.length
+
+      #if we're here then it's probably down to thin
+      return @request.path.dup.gsub!(/^#{Regexp.escape(@request.script_name)}/, '') unless @request.script_name.empty?
+
+      return c_path #This will probably result in a processing error if we hit here
     end
     
     # x:: request path
