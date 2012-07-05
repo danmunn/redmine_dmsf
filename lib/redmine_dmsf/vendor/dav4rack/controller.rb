@@ -337,6 +337,7 @@ module DAV4Rack
     
     # Returns Resource path with root URI removed
     def implied_path
+      return clean_path(@request.path_info.dup) unless @request.path_info.empty?
       clean_path(@request.path.dup)
     end
     

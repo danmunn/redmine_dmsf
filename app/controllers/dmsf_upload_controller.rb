@@ -167,7 +167,7 @@ class DmsfUploadController < ApplicationController
         end
       end
       unless files.empty?
-        files.each {|file| log_activity(file, "uploaded")}
+        files.each {|file| log_activity(file, "uploaded") unless file.nil?}
         begin 
           DmsfMailer.files_updated(User.current, files).deliver
         rescue ActionView::MissingTemplate => e

@@ -80,6 +80,11 @@ module RedmineDmsf
         OK
       end
 
+      # Bugfix: Ensure that this level never indicates a parent
+      def parent
+        nil
+      end
+
     end
   end
 end
