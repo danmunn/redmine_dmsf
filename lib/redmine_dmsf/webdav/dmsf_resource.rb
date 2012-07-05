@@ -601,7 +601,7 @@ module RedmineDmsf
                 end
 
                 lock_entity = lock.folder || lock.file
-                lock_path = "#{request.scheme}://#{request.host}:#{request.port}/dmsf/webdav/#{URI.escape(lock_entity.project.identifier)}/"
+                lock_path = "#{request.scheme}://#{request.host}:#{request.port}#{path_prefix}#{URI.escape(lock_entity.project.identifier)}/"
                 lock_path << lock_entity.dmsf_path.map {|x| URI.escape(x.respond_to?('name') ? x.name : x.title) }.join('/')
                 lock_path << "/" if lock_entity.is_a?(DmsfFolder) && lock_path[-1,1] != '/'
                 doc.lockroot { doc.href lock_path }

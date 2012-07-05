@@ -132,6 +132,10 @@ table { width:100%%; }
       def projectless_path
         '/'+path.split('/').drop(2).join('/')
       end
+
+      def path_prefix
+        public_path.gsub(/#{Regexp.escape(path)}$/, '')        
+      end
     end
   end
 end
