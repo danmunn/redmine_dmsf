@@ -99,7 +99,6 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def last_revision
-debugger
     self.revisions.visible.first
   end
 
