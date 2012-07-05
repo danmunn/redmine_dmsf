@@ -39,7 +39,7 @@ class DmsfFile < ActiveRecord::Base
     :conditions => {:entity_type => 0},
     :dependent => :destroy
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
-  scope :visible, lambda {|*args| {:conditions => DmsfFile.visible_condition(args.shift || User.current, *args) }}
+  scope :visible, lambda {|*args| where(DmsfFile.visible_condition(args.shift || User.current, *args))}
   
   validates_presence_of :name
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
@@ -48,7 +48,8 @@ class DmsfFile < ActiveRecord::Base
   validate :validates_name_uniqueness 
   
   def self.visible_condition(user, options = {})
-    "#{self.table_name}.deleted = 0"
+    query = DmsfFile.where(:deleted => false)
+    query.where_values.map {|v| v.respond_to?(:to_sql) ? v.to_sql : v.to_s}.join(' AND ')
   end
 
   def validates_name_uniqueness
@@ -98,6 +99,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def last_revision
+debugger
     self.revisions.visible.first
   end
 

@@ -27,7 +27,7 @@ class DmsfFileRevision < ActiveRecord::Base
   has_many :access, :class_name => "DmsfFileRevisionAccess", :foreign_key => "dmsf_file_revision_id", :dependent => :destroy
 
   #Returns a list of revisions that are not deleted here, or deleted at parent level either
-  scope :visible, lambda {|*args| joins(:file).where(DmsfFile.visible_condition(args.shift || User.current, *args)).where("#{self.table_name}.deleted = 0") }
+  scope :visible, lambda {|*args| joins(:file).where(DmsfFile.visible_condition(args.shift || User.current, *args)).where("#{self.table_name}.deleted = :false", :false => false ) }
 
   acts_as_customizable
 
