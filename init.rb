@@ -1,4 +1,4 @@
-# Redmine plugin for Document Management System "Features"
+﻿# Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
@@ -24,7 +24,7 @@ Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
   author "Vit Jonas / Daniel Munn"
   description "Document Management System Features"
-  version "1.4.4 stable"
+  version "1.4.4p1 stable"
   url "https://github.com/danmunn/redmine_dmsf"
   author_url "https://code.google.com/p/redmine-dmsf/"
   

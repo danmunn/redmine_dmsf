@@ -1,8 +1,16 @@
 Changelog for Redmine DMSF
 ==========================
 
-1.4.4: *Not yet released*
------------------------
+1.4.4p1: *2012-07-07*
+-------------------
+* Fix: Issue #20 - Listing not functional when using sqlite adapter
+* Fix: Issue #21 - Webdav not functional under bitnami (or sub directory)
+* Fix: Testcase failed to cleanup after itself
+* Fix: Webdav index object identified itself as having parent under prefix'ed path (in error)
+* Fix: Addition of a path_prefix routine for webdav to be able to correct redirects
+
+1.4.4: *2012-07-01*
+-----------------
 * New: Locking model updated to support shared and exclusive write locks. [At present UI and Webdav only support exclusive locking however]
 * New: Folders are now write lockable (shared and exclusively) [UI upgraded to support folder locking, however only exclusively]
 * New: Locks can now have a time-limit [Not yet supported from UI]
