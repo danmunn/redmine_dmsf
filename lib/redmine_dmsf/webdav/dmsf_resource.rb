@@ -477,7 +477,6 @@ module RedmineDmsf
       #
       #
       def put(request, response)
- 
         raise BadRequest if (collection?)
 
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
@@ -511,7 +510,16 @@ module RedmineDmsf
         new_revision.comment = nil
         new_revision.increase_version(2, true)
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
-        new_revision.size = request.body.length
+        # Phusion passenger does not have a method "length" in its model
+        # however includes a size method - so we instead use reflection
+        # to determine best approach to problem
+        if request.body.respond_to? 'length'
+          new_revision.size = request.body.length
+        elsif request.body.respond_to? 'size'
+          new_revision.size = request.body.size
+        else
+          new_revision.size = request.content_length #Bad Guess
+        end
         raise InternalServerError unless new_revision.valid? && f.save
         new_revision.disk_filename = new_revision.new_storage_filename
 

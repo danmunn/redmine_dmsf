@@ -23,7 +23,8 @@ module RedmineDmsf
       include ActionView::Helpers::NumberHelper
 
       def initialize(*args)
-        raise NotFound if Setting.plugin_redmine_dmsf["dmsf_webdav"].empty?
+        webdav_setting = Setting.plugin_redmine_dmsf["dmsf_webdav"]
+        raise NotFound if !webdav_setting.nil? && webdav_setting.empty?
         super(*args)
       end
 
