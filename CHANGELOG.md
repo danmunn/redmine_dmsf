@@ -1,6 +1,11 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.4.4p2: *2012-07-08*
+-------------------
+* Fix: Issue #22 - Webdav upload with passenger/nginx fails with server error (passenger class for request.body does not contain length method.
+* Fix: Additional check implemented before reading settings to prevent server error when setting is not set and default does not apply.
+
 1.4.4p1: *2012-07-07*
 -------------------
 * Fix: Issue #20 - Listing not functional when using sqlite adapter
