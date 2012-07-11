@@ -203,4 +203,7 @@ en:
   :title_unlock_folder: "Unlock to allow changes for other members"
   :title_lock_folder: "Lock to prevent changes for other members"
 
-
+  :select_option_webdav_readonly: "Read-only"
+  :select_option_webdav_readwrite: "Read/Write"
+  :label_webdav_strategy: "Webdav strategy"
+  :note_webdav_strategy: "Enables the administrator to decide if webdav is a read-only or read-write platform for end users."

@@ -27,6 +27,21 @@ module RedmineDmsf
         @folder = false
       end
 
+      #Here we make sure our folder and file methods are not aliased - it should shave a few cycles off of processing
+      def setup
+        @skip_alias |= [ :folder, :file, :folder?, :file? ]
+      end
+      
+      # Here we hook into the fact that resources can have a pre-execution routine run for them
+      # Our sole job here is to ensure that any write functionality is restricted to relevent configuration
+      before do |resource, method_name|
+        #If our method is not one of the following, there is no point continuing.
+        if [ :put, :make_collection, :move, :copy, :delete, :lock, :unlock, :set_property ].include?(method_name)
+          webdav_setting = Setting.plugin_redmine_dmsf["dmsf_webdav_strategy"]
+          webdav_setting = "WEBDAV_READ_ONLY" if webdav_setting.nil?
+          raise BadGateway if webdav_setting == "WEBDAV_READ_ONLY"
+        end
+      end
 
       # Gather collection of objects that denote current entities child entities
       # Used for listing directories etc, implemented basic caching because otherwise
@@ -189,7 +204,7 @@ module RedmineDmsf
         end
         OK
       end
-
+      
       # Process incoming MKCOL request
       #
       # Create a DmsfFolder at location requested, only if parent is a folder (or root)
@@ -547,8 +562,6 @@ module RedmineDmsf
       def property_names
         %w(creationdate displayname getlastmodified getetag resourcetype getcontenttype getcontentlength supportedlock lockdiscovery)
       end
-
-
 
       private
       # Prepare file for download using Rack functionality:
