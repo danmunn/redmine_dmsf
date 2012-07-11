@@ -114,6 +114,8 @@ class DmsfFile < ActiveRecord::Base
       self.revisions.visible.each {|r| r.delete(true)}
       self.destroy
     else
+      #Revisions of a deleted file SHOULD be deleted too
+      self.revisions.visible.each {|r| r.delete }
       self.deleted = true
       self.deleted_by_user = User.current
       save
