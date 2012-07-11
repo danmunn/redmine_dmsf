@@ -91,8 +91,21 @@
   (<%=l(:label_default)%>: <%=l(:select_option_activated)%>)
   <br/>
   <%= l(:note_webdav).html_safe %>
-
 </p>
+
+<% if @settings["dmsf_webdav"].nil? || !@settings["dmsf_webdav"].empty? %>
+<p>
+  <%=content_tag(:label, l(:label_webdav_strategy) + ":") %>
+  <%=select_tag("settings[dmsf_webdav_strategy]",
+                options_for_select([
+                                [l(:select_option_webdav_readonly), "WEBDAV_READ_ONLY"],
+                                [l(:select_option_webdav_readwrite), "WEBDAV_READ_WRITE"]],
+                                :selected => @settings["dmsf_webdav_strategy"])) %><br/>
+  (<%=l(:label_default)%>: <%=l(:select_option_webdav_readonly)%>)
+  <br/>
+  <%= l(:note_webdav_strategy).html_safe %>
+</p>
+<% end %>
 
 
 <hr />

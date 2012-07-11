@@ -1,6 +1,10 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.4.5: *Not yet released*
+-----------------------
+* New: Settings introduced to enable read-only or read-write stance to be taken with webdav
+
 1.4.4p2: *2012-07-08*
 -------------------
 * Fix: Issue #22 - Webdav upload with passenger/nginx fails with server error (passenger class for request.body does not contain length method.
