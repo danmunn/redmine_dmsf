@@ -100,7 +100,8 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def last_revision
-    self.revisions.visible.first
+    return self.revisions.visible.first unless deleted
+    self.revisions.first
   end
 
   def delete
