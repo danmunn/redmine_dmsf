@@ -41,7 +41,16 @@ class Dmsf144 < ActiveRecord::Migration
     add_column :dmsf_file_locks, :expires_at, :datetime, :null => true
 
     do_not_delete = []
-    DmsfFileLock.order('updated_at DESC').group('dmsf_file_id').find_each do |lock|
+    # - 2012-07-12: Better compatibility for postgres - query used 3 columns however
+    #               only on appearing in group, find_each imposes a limit and incorrect
+    #               ordering, so adapted that, we grab id's load a mock object, and reload
+    #               data into it, which should enable us to run checks we need, not as
+    #               efficient, however compatible accross the board.
+    DmsfFileLock.select("MAX(#{DmsfFileLock.table_name}.id) id").
+      order("MAX(#{DmsfFileLock.table_name}.id) DESC").
+      group("#{DmsfFileLock.table_name}.dmsf_file_id").
+      each do |lock|
+      lock.reload 
       if (lock.locked)
         do_not_delete << lock.id
       end
@@ -75,6 +84,7 @@ class Dmsf144 < ActiveRecord::Migration
     rename_table :dmsf_file_locks, :dmsf_locks
 
     #Not sure if this is the right place to do this, as its file manipulation, not database (stricly)
+    say "Completing one-time file migration ..."
     begin
       DmsfFileRevision.visible.each {|rev|
         next if rev.project.nil?
@@ -89,7 +99,9 @@ class Dmsf144 < ActiveRecord::Migration
           FileUtils.mv(existing, new_path)
         end
       }
+      say "Action was successful"
     rescue
+      say "Action was not successful"
       #Nothing here, we just dont want a migration to break
     end
   end
@@ -117,6 +129,7 @@ class Dmsf144 < ActiveRecord::Migration
 
     #Not sure if this is the right place to do this, as its file manipulation, not database (stricly)
     begin
+      say "restoring old file-structure"
       DmsfFileRevision.visible.each {|rev|
         next if rev.project.nil?
         project = rev.project.identifier.gsub(/[^\w\.\-]/,'_')
