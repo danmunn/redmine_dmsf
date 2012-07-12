@@ -81,7 +81,7 @@
 				<%= render "custom_fields", :object => subfolder %>
 			</td>
 			<td class="size" title="<%= l(:title_total_size_of_all_files)%>"><%= number_to_human_size(subfolder.deep_size) %></td>
-			<td class="modified"><%= subfolder.updated_at.strftime("%Y-%m-%d %H:%M") %>
+			<td class="modified"><%= format_time(subfolder.updated_at) %>
                           <% if subfolder.locked_for_user? %>
                             <%= link_to(image_tag("locked.png", :plugin => :redmine_dmsf),
                                          {:controller => "users", :action => "show", :id => subfolder.lock.reverse[0].user },
@@ -159,7 +159,7 @@
 			</td>
 			<td class="size"><%= number_to_human_size(file.last_revision.size) %></td>
 			<td class="modified">
-				<%= file.last_revision.updated_at.strftime("%Y-%m-%d %H:%M") %>
+				<%= format_time(file.last_revision.updated_at) %>
 				<% if file.locked_for_user? %>
 					<%= link_to(image_tag("locked.png", :plugin => :redmine_dmsf), 
 							{:controller => "users", :action => "show", :id => file.lock.reverse[0].user },

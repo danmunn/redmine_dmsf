@@ -106,7 +106,7 @@ class DmsfFileRevision < ActiveRecord::Base
   #   custom SQL into a temporary object
   #
   def access_grouped
-    access.select("user_id, count(*) as count, min(created_at) as min, max(created_at) as max").group("user_id")
+    access.select("user_id, count(*) as count, min(created_at) as first_at, max(created_at) as last_at").group("user_id")
   end
   
   def version

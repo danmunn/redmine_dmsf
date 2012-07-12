@@ -14,8 +14,8 @@ table.entries  {
 }
 
 table.entries td.modified {
-	min-width: 120px;
-	width: 120px;
+	min-width: 140px;
+	width: 140px;
 }
 
 table.entries td.actions {
