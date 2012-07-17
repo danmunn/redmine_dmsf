@@ -63,7 +63,6 @@ class DmsfFileRevision < ActiveRecord::Base
   end
   
   def delete(delete_all = false)
-    reload
     if self.file.locked_for_user?
       errors[:base] << l(:error_file_is_locked)
       return false 
