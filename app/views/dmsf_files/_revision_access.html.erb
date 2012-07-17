@@ -13,8 +13,8 @@
 			<tr>
 				<td><%=link_to_user(access.user)%></td>
 				<td><%=access["count"]%></td>
-				<td><%=format_time(access.first_at.to_time(ActiveRecord::Base.default_timezone))%></td>
-				<td><%=format_time(access.last_at.to_time(ActiveRecord::Base.default_timezone))%></td>
+				<td><%=format_time(DmsfHelper::to_time(access.first_at))%></td>
+				<td><%=format_time(DmsfHelper::to_time(access.last_at))%></td>
 			</tr>
 <% end %>
 		</tbody>

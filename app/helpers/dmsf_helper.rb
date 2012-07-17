@@ -63,5 +63,17 @@ module DmsfHelper
   def plugin_asset_path(plugin, asset_type, source)
     return "/plugin_assets/#{plugin}/#{asset_type}/#{source}"
   end
+
+  def self.to_time(obj)
+    #Right, enough of bugs, let's try a better approach here.
+    return if !obj
+    return obj.to_time(ActiveRecord::Base.default_timezone) if obj.is_a?(String)
+
+    # Why can't Mysql::Time conform to time object? - without a utc? method it breaks redmine's
+    # rendering method, so we convert it to string, and back into time - not the most efficient 
+    # of methods - however seems functional. Not sure if MySQL
+    return obj.to_s.to_time(ActiveRecord::Base.default_timezone) if obj.class.name == "Mysql::Time"
+    return obj
+  end
   
 end

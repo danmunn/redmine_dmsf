@@ -6,6 +6,9 @@ Changelog for Redmine DMSF
 * New: Settings introduced to enable read-only or read-write stance to be taken with webdav
 * Fix: Issue #27 - incorrect call to display column information from database (redmine 1.x fragment).
 * Fix: Issue #28 - incompatible SQL in db migration script for postgresql
+* Fix: Issue #23 - Incorrect call to to_s for displaying time in certain views
+* Fix: Issue #24 - Incorrect times shown on revision history / documents
+* Fix: Issue #25 - Character in init.rb stops execution
 
 1.4.4p2: *2012-07-08*
 -------------------

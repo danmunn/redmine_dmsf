@@ -39,7 +39,8 @@ class DmsfFile < ActiveRecord::Base
     :conditions => {:entity_type => 0},
     :dependent => :destroy
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
-  scope :visible, lambda {|*args| where(DmsfFile.visible_condition(args.shift || User.current, *args))}
+
+  scope :visible, lambda {|*args| where(DmsfFile.visible_condition(args.shift || User.current, *args)).readonly(false)}
   
   validates_presence_of :name
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
