@@ -1,8 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-1.4.5: *2012-07-20*
+1.4.6: *Not yet released*
 -----------------------
+* Revisit: Issue #34 - fix does not function as expected on Rails < 3.2.6, Redmine 2.0.3 dependency added.
+
+1.4.5: *2012-07-20*
+-----------------
 * New: Settings introduced to enable read-only or read-write stance to be taken with webdav
 * Fix: Issue #27 - incorrect call to display column information from database (redmine 1.x fragment).
 * Fix: Issue #28 - incompatible SQL in db migration script for postgresql
