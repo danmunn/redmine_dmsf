@@ -44,7 +44,7 @@ As of version 1.4.4 of this plugin:
   * Redmine 2.0.x 
   * Rails 3.2.x (Inline with Redmine installation requirement) 
   * zip (Gem)
-  * Nikogiri 1.4.2 or greater (Gem)
+  * Nokogiri 1.4.2 or greater (Gem)
   * UUIDTools 2.1.1 or greater (less than 2.2.0) (Gem)
   * simple_enum (Gem)
 
