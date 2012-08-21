@@ -1,0 +1,20 @@
+language: ruby
+
+rvm:
+  - 1.8.7
+  - 1.9.3
+  - jruby-18mode
+  - jruby-19mode
+
+install: "echo skip bundle install"
+
+script:
+  - export WORKSPACE=`pwd`/workspace
+  - export PATH_TO_DMSF=`pwd`
+  - export PATH_TO_REDMINE=$WORKSPACE/redmine
+  - mkdir $WORKSPACE
+  - cp config/database.yml.travis $WORKSPACE/database.yml
+  - bash -x ./test/ci/redmine20_install.sh -r
+  - bash -x ./test/ci/redmine20_install.sh -i
+  - bash -x ./test/ci/redmine20_install.sh -t
+  - bash -x ./test/ci/redmine20_install.sh -u
