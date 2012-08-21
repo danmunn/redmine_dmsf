@@ -47,7 +47,7 @@ Redmine::Plugin.register :redmine_dmsf do
                          :indexing_database  => File.join(Attachment.storage_path, 'dmsf_index').to_s,
                          :stemming_lang      => 'english',
                          :stemming_strategy  => 'STEM_NONE',
-                         :webdav_enabled     => 'enabled'
+                         :webdav_enabled     => 'enabled',
                          :webdav_strategy    => 'WEBDAV_RW'
                        },
            :partial => 'settings/dmsf_settings'
