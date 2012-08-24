@@ -12,6 +12,7 @@ class DmsfEntityTest < Test::UnitTest
   test "Model utilises dmsf_entity database table" do
     assert_equal "#{Dmsf::Entity.table_name_prefix}entities#{Dmsf::Entity.table_name_suffix}", Dmsf::Entity.table_name
   end
+  
   context "Dmsf::Entity" do
     setup do
       @entity = Dmsf::Entity.new  :collection   => false,
@@ -31,21 +32,21 @@ class DmsfEntityTest < Test::UnitTest
       end
 
     end
-    should "return an owning user object" do
-      @entity.owner_id = 1
-      assert_kind_of User, @entity.owner
-    end
 
-    should "return an owning project object" do
-      assert_kind_of Project, @entity.project
-    end
+    context "Rules: Deleted" do
+      should "return a deleted_by user object or nil when not found" do
+        @entity.deleted_by_id = 1
+        assert_kind_of User, @entity.deleted_by
 
-    should "return a deleted_by user object or nil when not found" do
-      @entity.deleted_by_id = 1
-      assert_kind_of User, @entity.deleted_by
-
-      @entity.deleted_by_id = 0 #We know from the fixtures that user id=0 does not exist.
-      assert_nil @entity.deleted_by
+        @entity.deleted_by_id = 0 #We know from the fixtures that user id=0 does not exist.
+        assert_nil @entity.deleted_by
+      end
+      
+      should "not be valid if object is flagged deleted but holds deleted_by data" do
+        @entity.deleted = false
+        @entity.deleted_by_id = 1
+        assert @entity.invalid?
+      end
     end
 
     context "Field: title" do
@@ -65,5 +66,65 @@ class DmsfEntityTest < Test::UnitTest
         assert @entity.valid?, 'Entity should be valid'
       end
     end
+    
+    context "Field: project" do
+      
+      should "require a non-nil value" do
+        @entity.project = nil
+        assert_nil @entity.project
+        assert @entity.invalid?
+      end
+      
+      should "return an owning project object" do
+        assert_kind_of Project, @entity.project
+      end
+      
+      should "return nil when referenced project does not exist" do
+        @entity.project_id = 0
+        assert_nil @entity.project
+      end
+    end
+    
+    context "Field: owner" do
+      
+      should "require a non-nil value" do
+        @entity.owner = nil
+        assert_nil @entity.owner
+        assert @entity.invalid?
+      end
+      
+      should "return an owning user object" do
+        assert_kind_of User, @entity.owner
+      end
+      
+      should "return nil when referenced user does not exist" do
+        @entity.owner_id = 0
+        assert_nil @entity.owner
+      end
+    end
+
+    should "Prevent same-named items at the same level from existing" do
+      Dmsf::Entity.delete_all
+      root = Dmsf::Entity.create! :collection   => true,
+                                  :title        => 'Folder1',
+                                  :deleted      => false,
+                                  :description  => '',
+                                  :owner_id     => 1,
+                                  :project_id   => 1
+
+      test_obj = Dmsf::Entity.create! :collection => false,
+                                  :title          => 'Test.jpg',
+                                  :deleted        => false,
+                                  :description    => '',
+                                  :owner_id       => 1,
+                                  :project_id     => 1
+      root.children << test_obj
+      @entity.collection = false
+      @entity.title = "Test.jpg"
+      root.children << @entity
+      assert_equal root.children.count, 2
+      assert @entity.invalid?
+    end
+
   end
 end
