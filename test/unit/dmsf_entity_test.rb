@@ -48,14 +48,6 @@ class DmsfEntityTest < Test::UnitTest
       assert_nil @entity.deleted_by
     end
 
-    context "Field: collection" do
-      should "require a non-nil value" do
-        @entity.collection = nil
-        assert_nil @entity.collection
-        assert !@entity.valid?
-      end
-    end
-
     context "Field: title" do
       should "require a non-nil value" do
         @entity.title = nil

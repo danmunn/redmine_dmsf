@@ -5,6 +5,6 @@ module Dmsf
     belongs_to :owner, :class_name => "User"
     belongs_to :deleted_by, :class_name => "User"
 
-    validates_presence_of :collection, :title, :owner_id, :project_id
+    validates_presence_of :title, :owner_id, :project_id
   end
 end
