@@ -126,7 +126,6 @@ class DmsfEntityTest < Test::UnitTest
                                     :owner_id     => 1,
                                     :project_id   => 1
         root.children << test_obj
-        @entity.collection = false
         @entity.title = "Test.jpg"
         root.children << @entity
         assert_equal root.children.count, 2
