@@ -15,8 +15,7 @@ class DmsfEntityTest < Test::UnitTest
   
   context "Dmsf::Entity" do
     setup do
-      @entity = Dmsf::Entity.new  :collection   => false,
-                                  :parent_id    => nil,
+      @entity = Dmsf::Entity.new  :parent_id    => nil,
                                   :title        => 'Folder',
                                   :description  => '',
                                   :owner_id     => 1,
@@ -27,7 +26,6 @@ class DmsfEntityTest < Test::UnitTest
 
     context "without fixtures" do
       should "accept and return valid arguments" do
-        assert_equal false, @entity.collection
         assert_equal 'Folder', @entity.title
       end
 
@@ -103,27 +101,37 @@ class DmsfEntityTest < Test::UnitTest
       end
     end
 
-    should "Prevent same-named items at the same level from existing" do
-      Dmsf::Entity.delete_all
-      root = Dmsf::Entity.create! :collection   => true,
-                                  :title        => 'Folder1',
-                                  :deleted      => false,
-                                  :description  => '',
-                                  :owner_id     => 1,
-                                  :project_id   => 1
+    context "Item duplication" do
 
-      test_obj = Dmsf::Entity.create! :collection => false,
-                                  :title          => 'Test.jpg',
-                                  :deleted        => false,
-                                  :description    => '',
-                                  :owner_id       => 1,
-                                  :project_id     => 1
-      root.children << test_obj
-      @entity.collection = false
-      @entity.title = "Test.jpg"
-      root.children << @entity
-      assert_equal root.children.count, 2
-      assert @entity.invalid?
+      #The tests in this will create test data, it'll
+      #be nice to clean that up
+      teardown do
+        Dmsf::Entity.delete_all
+      end
+
+      should "Prevent same-named items at the same level from existing" do
+        Dmsf::Entity.delete_all
+        #Create a root level node
+        #This will actually be a Dmsf::Folder
+        root = Dmsf::Entity.create! :title        => 'Folder1',
+                                    :deleted      => false,
+                                    :description  => '',
+                                    :owner_id     => 1,
+                                    :project_id   => 1
+
+        #Create a leaf - this will actually be a Dmsf::File
+        test_obj = Dmsf::Entity.create! :title    => 'Test.jpg',
+                                    :deleted      => false,
+                                    :description  => '',
+                                    :owner_id     => 1,
+                                    :project_id   => 1
+        root.children << test_obj
+        @entity.collection = false
+        @entity.title = "Test.jpg"
+        root.children << @entity
+        assert_equal root.children.count, 2
+        assert @entity.invalid?
+      end
     end
 
   end
