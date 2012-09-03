@@ -4,6 +4,8 @@ Changelog for Redmine DMSF
 1.5.0: *NOT YET RELEASED*
 -----------------------
 * Refactored: Old codebase refactored to better enable testability
+* New: Hooks are being introduced into Redmines models to react to project data changes where appropriate.
+* New: Model structures and inheritence changed to utilise nested set approach.
 
 1.4.5: *2012-07-20*
 -----------------

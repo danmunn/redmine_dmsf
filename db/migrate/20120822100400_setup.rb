@@ -3,7 +3,7 @@ class Setup < ActiveRecord::Migration
     #Definition as model no-longer exists
   end
 
-  def change
+  def self.up
 
     #Things to do:
     # 1: Adapt dmsf_folders to structures for dmsf_entities
@@ -37,8 +37,13 @@ class Setup < ActiveRecord::Migration
       new_entity.save!
     end
 
-    delete_table :dmsf_files;
+    drop_table :dmsf_files;
 
+  end
+
+  def self.down
+    #For now we lie, because I've not worked out how we migrate things back yet
+    raise ActiveRecord::IrreversibleMigration, "Redmine DMSF 1.5.0 structures are not downgradable"
   end
 
 end
