@@ -17,7 +17,7 @@ class DmsfFileTest < Test::UnitTest
     end
 
     should "extend Dmsf::Entity" do
-      Dmsf::File.superclass.is_a?(Dmsf::Entity)
+      assert_equal Dmsf::Folder.superclass, Dmsf::Entity
     end
 
     should "be of type Dmsf::File" do

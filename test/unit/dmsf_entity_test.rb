@@ -101,12 +101,74 @@ class DmsfEntityTest < Test::UnitTest
       end
     end
 
+    context "Path information" do
+      teardown do
+        Dmsf::Entity.delete_all
+      end
+
+      setup do
+        @entity = Dmsf::Entity.create!  :title        => 'Folder1',
+                                        :deleted      => false,
+                                        :description  => '',
+                                        :owner_id     => 1,
+                                        :project_id   => 1
+      end
+
+      context "retrieval" do
+        should "return an array with self in for root level item when calling path" do
+          path = @entity.path
+          assert path.kind_of?(Dmsf::Path)
+          assert_equal 1, path.length
+          assert_equal 'Folder1', path[0].title
+        end
+
+        should "return a string with self in for root level item when calling path_to_s" do
+          path = @entity.path.to_s
+          assert path.is_a?(String);
+          assert_equal 'Folder1', path
+        end
+
+        should "return a multi-element array for a non-root object" do
+          child = Dmsf::Entity.new  :title        => 'Folder2',
+                                    :deleted      => false,
+                                    :description  => '',
+                                    :parent_id    => @entity.id,
+                                    :owner_id     => 1,
+                                    :project_id   => 1
+          path = child.path
+          assert path.kind_of?(Dmsf::Path)
+          assert_equal 2, path.length
+          assert_equal 'Folder2', path[1]
+        end
+
+      end
+    end
+
     context "Item duplication" do
 
       #The tests in this will create test data, it'll
       #be nice to clean that up
       teardown do
         Dmsf::Entity.delete_all
+      end
+
+      #satisfied by Dmsf::Entity.without_self
+      #This test fails under circumstances where checking a nil entry (unsaved)
+      #is checked for validity against existing data, awesome_nested set makes a
+      # != null query, which is invalid should be IS NOT NULL.
+
+      should "generate appropriate query based on primary key being nil (or not)" do
+        root = Dmsf::Entity.new :title        => 'Folder1',
+                                :deleted      => false,
+                                :description  => '',
+                                :owner_id     => 1,
+                                :project_id   => 1
+        query = root.without_self(Dmsf::Entity)
+        assert_match /IS NOT/, query.to_sql
+
+        root.id = 1
+        query = root.without_self(Dmsf::Entity)
+        assert_match /!=/, query.to_sql
       end
 
       should "Prevent same-named items at the same level from existing" do
@@ -128,10 +190,12 @@ class DmsfEntityTest < Test::UnitTest
         root.children << test_obj
         @entity.title = "Test.jpg"
         root.children << @entity
-        assert_equal root.children.count, 2
+        assert_equal root.children.count, 1
         assert @entity.invalid?
       end
     end
+
+
 
   end
 end
