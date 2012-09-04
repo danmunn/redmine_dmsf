@@ -68,8 +68,8 @@ class DmsfZip
     rescue
     end
     @zip_file.put_next_entry(string_path)
-    folder.subfolders.each { |subfolder| self.add_folder(subfolder, root_path) }
-    folder.files.each { |file| self.add_file(file, root_path) }
+    folder.subfolders.visible.each { |subfolder| self.add_folder(subfolder, root_path) }
+    folder.files.visible.each { |file| self.add_file(file, root_path) }
   end
   
 end
