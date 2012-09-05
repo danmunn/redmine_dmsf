@@ -18,10 +18,16 @@ class Setup < ActiveRecord::Migration
     add_column :dmsf_folders, :depth, :integer
     add_column :dmsf_folders, :type, :string
     add_column :dmsf_folders, :deleted_by_id, :integer
-    add_column :dmsf_folders, :deleted, :boolean
+    #Ensure we force true/false values
+    add_column :dmsf_folders, :deleted, :boolean, {:null => false, :default => false}
 
     rename_table :dmsf_folders, :dmsf_entities
+
+    #Entity type (Dmsf::Folder etc), lft value (nested set), and title
+    #should all be indexed to allow best-performance
     add_index :dmsf_entities, :type
+    add_index :dmsf_entities, :lft
+    add_index :dmsf_entities, :title
 
     Dmsf::Entity.reset_column_information
 

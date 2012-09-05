@@ -138,7 +138,7 @@ class DmsfEntityTest < Test::UnitTest
           path = child.path
           assert path.kind_of?(Dmsf::Path)
           assert_equal 2, path.length
-          assert_equal 'Folder2', path[1]
+          assert_equal 'Folder2', path[1].title
         end
 
       end
