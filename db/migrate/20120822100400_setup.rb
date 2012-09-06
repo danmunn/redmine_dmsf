@@ -4,7 +4,18 @@ class Setup < ActiveRecord::Migration
   end
 
   def self.up
+    self.alter_dmsf_revisions
+    self.alter_dmsf_entities
+    self.remove_dmsf_files
+  end
 
+  def self.down
+    #For now we lie, because I've not worked out how we migrate things back yet
+    raise ActiveRecord::IrreversibleMigration, "Redmine DMSF 1.5.0 structures are not downgradable"
+  end
+
+  protected
+  def self.alter_dmsf_entities
     #Things to do:
     # 1: Adapt dmsf_folders to structures for dmsf_entities
     # 2: Convert data from dmsf_folders where appropriate (setting Type etc)
@@ -34,22 +45,35 @@ class Setup < ActiveRecord::Migration
     Dmsf::Entity.all.each do |e|
       e.update_column :type, 'Dmsf::Folder' #Each entity is a DMSF Folder
     end
+  end
 
+  def self.alter_dmsf_revisions
+    rename_column :dmsf_file_revisions, :deleted_by_user_id, :deleted_by_id
+    rename_column :dmsf_file_revisions, :disk_filename, :source_path
+    rename_column :dmsf_file_revisions, :source_dmsf_file_revision_id, :source_revision_id
+    rename_column :dmsf_file_revisions, :user_id, :owner_id
+    rename_column :dmsf_file_revisions, :workflow, :workflow_id
+    rename_column :dmsf_file_revisions, :dmsf_file_id, :file_id
+
+    remove_column :dmsf_file_revisions, :dmsf_folder_id
+    remove_column :dmsf_file_revisions, :title
+    rename_column :dmsf_file_revisions, :name, :title
+
+    rename_table :dmsf_file_revisions, :dmsf_revisions
+  end
+
+  def self.remove_dmsf_files
     DmsfFile.all.each do |f|
-      new_entity = Dmsf::File.new :parent_id      => f.dmsf_folder_id,
-                                  :notification   => f.notification,
-                                  :deleted        => f.deleted,
-                                  :deleted_by_id  => f.deleted_by_user_id
-      new_entity.save!
+      new_entity = Dmsf::File.create! :parent_id      => f.dmsf_folder_id,
+                                      :notification   => f.notification,
+                                      :deleted        => f.deleted,
+                                      :deleted_by_id  => f.deleted_by_user_id
+
+      Dmsf::Revision.where(:file_id => f.id).update_all(:file_id => new_entity.id)
     end
 
     drop_table :dmsf_files;
 
-  end
-
-  def self.down
-    #For now we lie, because I've not worked out how we migrate things back yet
-    raise ActiveRecord::IrreversibleMigration, "Redmine DMSF 1.5.0 structures are not downgradable"
   end
 
 end

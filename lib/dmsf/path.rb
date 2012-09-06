@@ -1,13 +1,9 @@
 module Dmsf
   class Path < Array
     def push *input
-      if input.kind_of?(Array) || input.kind_of?(Dmsf::Path)
-        input.each{|x|
-          raise(ArgumentError, 'expected Dmsf::Entity object' ) unless x.kind_of?(Dmsf::Entity)
-        }
-      else
-        raise(ArgumentError, 'expected Dmsf::Entity object' ) unless input.kind_of?(Dmsf::Entity)
-      end
+      input.each{|x|
+        raise(ArgumentError, 'expected Dmsf::Entity object' ) unless x.kind_of?(Dmsf::Entity)
+      }
       return Array.instance_method(:push).bind(self).call *input
     end
 
