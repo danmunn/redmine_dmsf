@@ -68,7 +68,7 @@ module Dmsf
     protected
     def validate_name_uniqueness
       #reference project identified in model
-      project_id = self.project === nil ? nil : self.project.id
+      project_id = self.project === nil ? self.project_id : self.project.id
       return true unless siblings.where(:title => self.title, :project_id => project_id).count > 0
       errors.add(:entity, l(:error_create_entity_uniqueness))
       return false

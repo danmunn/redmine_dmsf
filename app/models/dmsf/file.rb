@@ -22,5 +22,15 @@
 module Dmsf
   class File < Entity
     has_many :revisions
+
+    def last_revision
+      return @last_revision unless @last_revision.nil?
+      @last_revision = revisions.visible.last
+    end
+
+    def title
+      last_revision.nil? ? 'Unknown' : last_revision.title
+    end
+
   end
 end

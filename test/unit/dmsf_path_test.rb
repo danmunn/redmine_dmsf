@@ -112,17 +112,19 @@ class DmsfPathTest < Test::UnitTest
                                       :description => '',
                                       :owner_id => 1,
                                       :project_id => 1)
-        Dmsf::File.create! :title => 'test.file',
-                           :description => '',
-                           :parent_id => entity.id,
-                           :owner_id => 1,
-                           :project_id => 1
-        Dmsf::File.create! :title => 'test.test',
-                           :description => '',
-                           :parent_id => entity.id,
-                           :owner_id => 1,
-                           :project_id => 1
+        f1 = Dmsf::File.create! :title => 'test.file',
+                                :description => '',
+                                :parent_id => entity.id,
+                                :owner_id => 1,
+                                :project_id => 1
+        f2 = Dmsf::File.create! :title => 'test.test',
+                                :description => '',
+                                :parent_id => entity.id,
+                                :owner_id => 1,
+                                :project_id => 1
 
+        f1.stubs(:revisions).returns(stub(:visible => [Dmsf::Revision.new(:title => 'test.file', :deleted => false)]))
+        f2.stubs(:revisions).returns(stub(:visible => [Dmsf::Revision.new(:title => 'test.test', :deleted => false)]))
       end
       teardown do
         Dmsf::Entity.delete_all
@@ -145,7 +147,7 @@ class DmsfPathTest < Test::UnitTest
         }
       end
 
-      should "be case sensetive" do
+      should "be case sensitive" do
         path = Dmsf::Path.find('/root/test.file', 1)
         assert path === nil
       end

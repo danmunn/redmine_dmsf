@@ -29,6 +29,10 @@ module Dmsf
     belongs_to :deleted_by, :class_name => 'User'
     belongs_to :project
     belongs_to :source_revision, :class_name => 'Revision'
+
+    scope :visible, where(:deleted => false)
+    scope :deleted, where(:deleted => true)
+
     #Todo: belongs_to :workflow
 
   end

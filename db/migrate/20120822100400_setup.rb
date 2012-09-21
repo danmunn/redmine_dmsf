@@ -7,6 +7,7 @@ class Setup < ActiveRecord::Migration
     self.alter_dmsf_revisions
     self.alter_dmsf_entities
     self.remove_dmsf_files
+    self.alter_dmsf_locks
   end
 
   def self.down
@@ -74,6 +75,17 @@ class Setup < ActiveRecord::Migration
 
     drop_table :dmsf_files;
 
+  end
+
+  def self.alter_dmsf_locks
+    remove_column :dmsf_locks, :entity_type
+    rename_column :dmsf_locks, :lock_type_cd, :type_cd
+    rename_column :dmsf_locks, :lock_scope_cd, :scope_cd
+  end
+
+  def self.alter_revision_accesses
+    rename_column :dmsf_file_revision_accesses, :dmsf_file_revision_id, :dmsf_revision_id
+    rename_table :dmsf_file_revision_accesses, :dmsf_revision_accesses
   end
 
 end
