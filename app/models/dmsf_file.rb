@@ -348,10 +348,10 @@ class DmsfFile < ActiveRecord::Base
             dochash = Hash[*docdata.scan(/(url|sample|modtime|type|size)=\/?([^\n\]]+)/).flatten]
             filename = dochash["url"]
             if !filename.nil?
-              dmsf_attrs = filename.split("_")
+              dmsf_attrs = filename.scan(/^([^\/]+\/[^_]+)_([\d]+)_(.*)$/)
               id_attribute = 0
-              id_attribute = dmsf_attrs[dmsf_attrs.length - 2] if dmsf_attrs.length > 2
-              next if dmsf_attrs[1].blank?
+              id_attribute = dmsf_attrs[0][1] if dmsf_attrs.length > 0
+              next if dmsf_attrs.length == 0 || id_attribute == 0
               next unless results.select{|f| f.id.to_s == id_attribute}.empty?
               
               dmsf_file = DmsfFile.where(limit_options[:conditions]).where(:id => id_attribute, :deleted => false).first
