@@ -8,6 +8,7 @@ module Dmsf
     should belong_to(:owner)
     should belong_to(:deleted_by)
     should belong_to(:project)
+    should have_many(:accesses)
 
     context "Dmsf::Revision" do
       context "named scope :visible" do

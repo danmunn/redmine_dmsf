@@ -29,6 +29,7 @@ module Dmsf
     belongs_to :deleted_by, :class_name => 'User'
     belongs_to :project
     belongs_to :source_revision, :class_name => 'Revision'
+    has_many :accesses, :as => :relation, :class_name => Dmsf::Audit::Access
 
     scope :visible, where(:deleted => false)
     scope :deleted, where(:deleted => true)

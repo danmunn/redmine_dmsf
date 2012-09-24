@@ -84,8 +84,12 @@ class Setup < ActiveRecord::Migration
   end
 
   def self.alter_revision_accesses
-    rename_column :dmsf_file_revision_accesses, :dmsf_file_revision_id, :dmsf_revision_id
-    rename_table :dmsf_file_revision_accesses, :dmsf_revision_accesses
+    rename_column :dmsf_file_revision_accesses, :dmsf_file_revision_id, :relation_id
+    add_column :dmsf_file_revision_accesses, :relation_type, :string
+    add_column :dmsf_file_revision_accesses, :type, :string, :null => false
+    add_column :dmsf_file_revision_accesses, :meta, :text
+    rename_table :dmsf_file_revision_accesses, :dmsf_audit
+    Dmsf::Audit::Base.update_all(:relation_type => 'Dmsf::Revision', :type => 'Dmsf::Audit::Access')
   end
 
 end
