@@ -1,3 +1,4 @@
+require File.dirname(__FILE__) + '/../../test_helper'
 module Dmsf
   module Audit
     class BaseTest < Test::UnitTest
