@@ -349,10 +349,12 @@ class DmsfFile < ActiveRecord::Base
             filename = dochash["url"]
             if !filename.nil?
               dmsf_attrs = filename.split("_")
+              id_attribute = 0
+              id_attribute = dmsf_attrs[dmsf_attrs.length - 2] if dmsf_attrs.length > 2
               next if dmsf_attrs[1].blank?
-              next unless results.select{|f| f.id.to_s == dmsf_attrs[1]}.empty?
+              next unless results.select{|f| f.id.to_s == id_attribute}.empty?
               
-              dmsf_file = DmsfFile.where(limit_options[:conditions]).where(:id => dmsf_attrs[1], :deleted => false).first
+              dmsf_file = DmsfFile.where(limit_options[:conditions]).where(:id => id_attribute, :deleted => false).first
     
               if !dmsf_file.nil?
                 if options[:offset]
