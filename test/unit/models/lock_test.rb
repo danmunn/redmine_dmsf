@@ -7,9 +7,6 @@ module Dmsf
 
     context "Dmsf::Lock" do
       context "method expired?" do
-        should "exist" do
-          assert Dmsf::Lock.public_instance_methods.include?('expired?')
-        end
 
         should "return false if 'Now' is less than expiry" do
           lock = Dmsf::Lock.new(:expires_at => 3.minutes.from_now)
@@ -30,9 +27,7 @@ module Dmsf
       end
 
       context "method generate_uuid" do
-        should "privately exist" do
-          assert Dmsf::Lock.private_instance_methods.include?('generate_uuid')
-        end
+
         should "Use the UUID toolset to generate a timestamp based UUID" do
           UUIDTools::UUID.expects(:timestamp_create).returns('b0825020-03cf-11e2-a1b3-005056c00001')
           lock = Dmsf::Lock.new
