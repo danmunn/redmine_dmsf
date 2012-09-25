@@ -8,6 +8,7 @@ class Setup < ActiveRecord::Migration
     self.alter_dmsf_entities
     self.remove_dmsf_files
     self.alter_dmsf_locks
+    self.alter_revision_accesses
   end
 
   def self.down

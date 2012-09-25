@@ -35,6 +35,8 @@ module Dmsf
     validates_presence_of :deleted, :if => 'deleted_by_id != nil'
     validate :validate_name_uniqueness
 
+    include Dmsf::Lockable
+
     #We're overriding the function from awesome_nested set, because it queries
     #based on object existing, if it doesn't a != null returns no results (so it'd seem)
     def without_self(scope)
