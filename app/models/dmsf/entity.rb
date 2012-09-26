@@ -27,13 +27,11 @@ module Dmsf
     belongs_to :deleted_by, :class_name => "User"
     belongs_to :parent, :class_name => 'Entity'
 
-    before_create :validate_name_uniqueness
-
+    validates_uniqueness_of :title, :scope => [:project_id, :parent_id]
     validates_presence_of :title, :owner_id, :project_id
     validates_format_of :title, :with => /\A[^\/\\\?":<>]*\z/
     validates_presence_of :deleted_by_id, :if => 'deleted == true'
     validates_presence_of :deleted, :if => 'deleted_by_id != nil'
-    validate :validate_name_uniqueness
 
     include Dmsf::Lockable
 
@@ -65,15 +63,6 @@ module Dmsf
       end
       r_path.push(self)
       return r_path
-    end
-
-    protected
-    def validate_name_uniqueness
-      #reference project identified in model
-      project_id = self.project === nil ? self.project_id : self.project.id
-      return true unless siblings.where(:title => self.title, :project_id => project_id).count > 0
-      errors.add(:entity, l(:error_create_entity_uniqueness))
-      return false
     end
   end
 end

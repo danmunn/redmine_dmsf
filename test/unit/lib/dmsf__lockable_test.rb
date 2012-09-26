@@ -112,12 +112,8 @@ module Dmsf
         end
 
         context 'Method unlock!' do
-#          setup do
-#            @item.unstub(:tree_with_locks)
-#            expectation = mock()
-#            expectation.stubs(:where).returns([@item])
-#            @item.stubs(:tree_with_locks).returns(expectation)
-#          end
+          fixtures :users
+
           should 'raise ResourceNotLocked when not locked' do
             assert_raise(Dmsf::Lockable::ResourceNotLocked) do
               @item.stubs(:locked?).returns(false)
