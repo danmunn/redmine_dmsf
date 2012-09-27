@@ -1,4 +1,3 @@
-require 'I18n'
 module Dmsf
   module Lockable
 
