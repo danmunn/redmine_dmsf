@@ -17,6 +17,11 @@ Redmine is a flexible project management web application, released under the ter
 Further information about the GPL license can be found at
 <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1>
 
+Redmine 1.5.0 development
+-------------------------
+Although regular logs are not publicly updated - you can keep an eye on the 1.5.0 codebase or the changelog:
+https://github.com/danmunn/redmine_dmsf/blob/devel-1.5.0/CHANGELOG.md
+
 Features
 --------
 
