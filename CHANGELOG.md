@@ -6,6 +6,14 @@ Changelog for Redmine DMSF
 * Refactored: Old codebase refactored to better enable testability
 * New: Hooks are being introduced into Redmines models to react to project data changes where appropriate.
 * New: Model structures and inheritence changed to utilise nested set approach.
+* New: Locking model re-worked to provide same functionality with less overhead
+* New: Permission model introduced
+* New: Dmsf::Audit introduced, providing sql-based logging for Dmsf application
+* Updated: DmsfFileRevisionAccesses removed in favour of Dmsf::Audit
+* TODO: Workflow models and libraries for providing better workflows
+* TODO: Library extension to provide quick permission check
+* TODO: (General) re-write controllers
+* TODO: Re-work entire UI to provide richer experience.
 
 1.4.5: *2012-07-20*
 -----------------
