@@ -111,6 +111,33 @@ module Dmsf
           end
         end
 
+        context 'Method lock!' do
+          should 'raise ResourceLocked if item is already locked' do
+            assert_raise(Dmsf::Lockable::ResourceLocked) do
+              @item.stubs(:effective_locks).returns([Dmsf::Lock.new(:entity_id => @item.id)])
+              @item.lock!
+            end
+          end
+
+          should 'raise ResourceParentLocked if hierarchy is locked' do
+            assert_raise(Dmsf::Lockable::ResourceParentLocked) do
+              #3 is a fictitious ID, however if the id is not the same and locks
+              #are designed for hierarchy - it must be a parent item (somewhere in
+              #hierarchy)
+              @item.stubs(:effective_locks).returns([Dmsf::Lock.new(:entity_id => 3)])
+              @item.lock!
+            end
+          end
+
+          should 'create new Dmsf::Lock' do
+            expectation = mock()
+            expectation.expects(:create!).returns(true)
+            @item.stubs(:effective_locks).returns([])
+            @item.stubs(:locks).returns(expectation)
+            @item.lock!
+          end
+        end
+
         context 'Method unlock!' do
           fixtures :users
 
@@ -145,6 +172,40 @@ module Dmsf
           end
 
         end
+
+        context 'Method locked_for?' do
+          should 'use User.current if no user is specified' do
+            @item.stubs(:effective_locks).returns([])
+            User.expects(:current).returns(User.new)
+            @item.locked_for?
+          end
+
+          should 'make use of effective_locks to determine lock-state' do
+            @item.expects(:effective_locks).twice.returns([Dmsf::Lock.new])
+            @item.locked_for?
+          end
+          should 'return false if item is not locked' do
+            @item.stubs(:effective_locks).returns([])
+            assert !@item.locked_for?
+          end
+          should 'return true if parent lock is owned by user but file lock is not' do
+            @item.stubs(:effective_locks).returns([
+              Dmsf::Lock.new(:entity_id => 1, :user_id => 6), #Virtual parent, as our entity has no id
+              Dmsf::Lock.new(:entity_id => @item.id, :user_id => 5)
+            ])
+            assert @item.locked_for?
+          end
+
+          should 'return false if item lock and parent lock is owned by current user' do
+            @item.stubs(:effective_locks).returns([
+              #Virtual parent, as our entity has no id
+              Dmsf::Lock.new(:entity_id => 1, :user_id => 6),
+              Dmsf::Lock.new(:entity_id => @item.id, :user_id => 6)
+            ])
+            assert !@item.locked_for?
+          end
+        end
+
       end
 
     end

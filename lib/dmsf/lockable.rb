@@ -1,4 +1,4 @@
-
+require 'I18n'
 module Dmsf
   module Lockable
 
@@ -33,6 +33,12 @@ module Dmsf
       def tree_with_locks
         return @tree_with_locks unless @tree_with_locks.nil?
         @tree_with_locks = self.self_and_ancestors.includes(:locks)
+      end
+
+      def reload(*args)
+        @tree_with_locks = nil
+        @effective_locks = nil
+        super *args
       end
 
       # effective_locks
@@ -73,10 +79,52 @@ module Dmsf
       # otherwise raises an exception
       def unlock! (user = nil)
         user ||= User.current
-        raise Dmsf::Lockable::ResourceNotLocked unless locked?
-        raise Dmsf::Lockable::ResourceParentLocked unless effective_locks.first.entity_id == id
-        raise Dmsf::Lockable::LockNotOwnedByPrincipal unless user.id == effective_locks.first.user_id
+        raise Dmsf::Lockable::ResourceNotLocked,
+              l('dmsf_exceptions.resource_not_locked') unless locked?
+        raise Dmsf::Lockable::ResourceParentLocked,
+              l('dmsf_exceptions.resource_parent_locked') unless effective_locks.first.entity_id == id
+        raise Dmsf::Lockable::LockNotOwnedByPrincipal,
+              l('dmsf_exceptions.lock_not_owned_by_principal') unless user.id == effective_locks.first.user_id
         effective_locks.first.delete
+        @effective_locks = nil #reset internal dictionary
+      end
+
+      # lock!
+      # -----
+      # If resource is unlocked, produces exclusive
+      # write lock, otherwise raises exception
+      def lock! (user = nil, expiry = nil)
+        user ||= User.current
+        if locked?
+          raise Dmsf::Lockable::ResourceParentLocked,
+                l('dmsf_exceptions.resource_parent_locked') unless effective_locks.first.entity_id == id
+          raise Dmsf::Lockable::ResourceLocked,
+                l('dmsf_exceptions.resource_locked')
+        end
+        expiry = expiry.to_time if expiry.kind_of?(Date)
+        expiry = nil unless expiry.kind_of?(Time)
+
+        lock = locks.create! :lock_scope => Dmsf::Lock.scope_exclusive,
+                             :lock_type  => Dmsf::Lock.type_write,
+                             :user       => user,
+                             :expires_at => expiry
+        @effective_locks = nil #Reset internal dictionary
+      end
+
+      def locked_for?(user = nil)
+        user ||= User.current
+        raise ArgumentError unless user.kind_of?(Principal)
+        return false unless locked?
+        #Scenario time:
+        #If user_a locks a file, then user_b locks the folder,
+        #user_b should still be prevented from writing to file
+        #that was locked by user_a - effective_locks returns all
+        #active locks in play on file ... so if we work our way
+        #through that its safe to assume its not locked to them
+        effective_locks.each do|lock|
+          return true if lock.user_id != user.id
+        end
+        false
       end
     end
   end
