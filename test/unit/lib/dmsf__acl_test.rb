@@ -150,38 +150,32 @@ module Dmsf
       end
 
       context "Extended logic verification" do
-        setup do
-          User.current = User.find(1) #Admin
-        end
-        teardown do
-          User.current = User.find(6) #Anon
-        end
 
         should 'Process user logic with more weight than role logic' do
+          user = User.find(1)
           #Role ID 2 prevent read/write
           r_perm = Dmsf::Permission.new(:role_id => 2, :prevent => true, :permission => 3)
           #User ID 1 permit read
           u_perm = Dmsf::Permission.new(:user_id => 1, :prevent => false, :permission => 1)
-
           #Should have outcome: read but not write
-
           file = Dmsf::File.new
           file.stubs(:self_and_ancestors).returns([file])
           file.Acl.stubs(:load_all_permissions).returns([r_perm, u_perm])
-          assert_equal file.Acl.permissions_for, {:read => true, :write => false,
-                                                  :modify => true, :delete => true,
-                                                  :perms => true}
+          assert_equal file.Acl.permissions_for(user), {:read => true, :write => false,
+                                                        :modify => true, :delete => true,
+                                                        :perms => true}
         end
 
         should 'Inherit Permissions' do
+          user = User.find(1)
           u_perm = Dmsf::Permission.new(:user_id => 1, :prevent => true, :permission => 2, :entity_id => 1)
           file = Dmsf::File.new{parent_id = 1}; file.id = 2
           folder = Dmsf::Folder.new; folder.id = 1
           file.stubs(:self_and_ancestors).returns([folder, file])
           file.Acl.stubs(:load_all_permissions).returns([u_perm])
-          assert_equal file.Acl.permissions_for, {:read => true, :write => false,
-                                                  :modify => true, :delete => true,
-                                                  :perms => true}
+          assert_equal file.Acl.permissions_for(user), {:read => true, :write => false,
+                                                        :modify => true, :delete => true,
+                                                        :perms => true}
         end
       end
     end
