@@ -9,9 +9,9 @@ Changelog for Redmine DMSF
 * New: Locking model re-worked to provide same functionality with less overhead
 * New: Permission model introduced
 * New: Dmsf::Audit introduced, providing sql-based logging for Dmsf application
+* New: Library extension to provide quick permission check (Dmsf::Acl)
 * Updated: DmsfFileRevisionAccesses removed in favour of Dmsf::Audit
 * TODO: Workflow models and libraries for providing better workflows
-* TODO: Library extension to provide quick permission check
 * TODO: (General) re-write controllers
 * TODO: Re-work entire UI to provide richer experience.
 
