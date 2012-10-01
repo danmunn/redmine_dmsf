@@ -124,8 +124,8 @@ module Dmsf
                                   :owner_id => 1,
                                   :project_id => 1
 
-          f1.stubs(:revisions).returns(stub(:visible => [Dmsf::Revision.new(:title => 'test.file', :deleted => false)]))
-          f2.stubs(:revisions).returns(stub(:visible => [Dmsf::Revision.new(:title => 'test.test', :deleted => false)]))
+#          f1.stubs(:revisions).returns(stub(:visible => [Dmsf::Revision.new(:title => 'test.file', :deleted => false)]))
+#          f2.stubs(:revisions).returns(stub(:visible => [Dmsf::Revision.new(:title => 'test.test', :deleted => false)]))
         end
         teardown do
           Dmsf::Entity.delete_all

@@ -44,7 +44,7 @@ module Dmsf
     #   - +String+ -> Title of file
     #
     def title
-      last_revision.nil? ? self.title : last_revision.title
+      last_revision.nil? ? 'Unknown' : last_revision.title
     end
 
   end

@@ -31,8 +31,8 @@ module Dmsf
     def visible?(user = nil)
       user ||= User.current
       hierarchy = @entity.self_and_ancestors
-      permissions = load_individual_permission(hierarchy, Dmsf::Permission.READ, use)
-      inject_to_chain(hierarchy + siblings, permissions)
+      permissions = load_individual_permission(hierarchy, Dmsf::Permission.READ, user)
+      inject_to_chain(hierarchy, permissions)
       return check_single_permission_hierarchy(hierarchy)
     end
 
@@ -87,12 +87,16 @@ module Dmsf
     #
     def visible_children(user = nil)
       user ||= User.current
-      return [] unless @entity.is_a(Dmsf::Folder)
+      return [] unless @entity.is_a?(Dmsf::Folder)
       hierarchy = @entity.self_and_ancestors
       children = @entity.children
-      permissions = load_all_permissions(hierarchy + children, user)
+      permissions = load_individual_permission(hierarchy + children,
+                                               Dmsf::Permission.READ,
+                                               user)
       inject_to_chain(hierarchy + children, permissions)
-      children.to_a.delete_if {|child| !check_single_permission_hierarchy(hierarchy + [child])}
+      children.to_a.delete_if {|child|
+        !check_single_permission_hierarchy(hierarchy + [child])
+      }
     end
 
     protected
@@ -111,6 +115,7 @@ module Dmsf
       perm = [perm] unless perm.is_a?(Array)
       permissions = load_all_permissions(scope, user)
       perm.each {|p| permissions = permissions.where("#{Dmsf::Permission.table_name}.permission & #{p} = #{p}")}
+      return permissions
     end
 
     # Retrieves all permissions for user based on provided pre-loaded
@@ -199,13 +204,14 @@ module Dmsf
       # Some logic rules, so we have them somewhere
       # * If a user based prevent is hit at any point, we immediately enter next level
       # * We take the view Allow,Deny (Allow takes precedence over a deny on roles)
-      entity_id = nil, c_perm = initial_permit, ignore_level = false
+      entity_id = nil; c_perm = initial_permit; ignore_level = false
       level_perms = []
       hierarchy.each do |level|
         l_perm = nil
         #We make a BIG assumption that the hierarchy will pre-load permissions where needed
         #next if !level.permissions.loaded? || level.permissions.empty?
         level.permissions.each do |perm|
+          next if perm.nil? #How did we hit this?
           if perm.user_id.nil?
             l_perm = !perm.prevent
             break perm
