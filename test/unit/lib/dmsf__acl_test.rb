@@ -150,7 +150,7 @@ module Dmsf
       end
 
       context "Extended logic verification" do
-
+        fixtures :users
         should 'Process user logic with more weight than role logic' do
           user = User.find(1)
           #Role ID 2 prevent read/write
