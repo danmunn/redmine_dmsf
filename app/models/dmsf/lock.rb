@@ -25,31 +25,42 @@ module Dmsf
     as_enum :lock_type, [:type_write, :type_other], :column => :type_cd
     as_enum :lock_scope, [:scope_exclusive, :scope_shared], :column => :scope_cd
 
-    # Expired?
-    # --------
-    # Returns a boolean value to indicate if the current Lock has
-    # expired or not.
+    # Returns a boolean value to indicate if the current Lock is
+    # expired (true) or not (false).
     #
-    # @return bool
+    # * *Args*    :
+    #   - None
+    # * *Returns* :
+    #   - +Boolean+ -> Determining expiration
+    #
     def expired?
       return false if expires_at.nil?
       return expires_at <= Time.now
     end
 
-    # delete_expired
-    # Utilising the scope "expired", a delete operation is called
+    # Utilising the scope "expired", a delete_all operation is called.
     #
-    # @return void
+    # * *Args*    :
+    #   - None
+    # * *Returns* :
+    #   - None
+    #
     def self.delete_expired
       self.expired.delete_all
     end
 
-    # find
-    # Overload the existing implementation of find to take a string
-    # value (and integer) and act similarly to a factory in determing
-    # best path of execution
+    # Overload the existing find implementation provided by ActiveRecord::Base
+    # to take either a string value (or integer id) and act similarly to a factory
+    # in determining the best path to search for lock.
     #
-    # @return Dmsf::Lock (or nil)
+    # * *Args*    :
+    #   - +any+ -> String or Any
+    # * *Returns* :
+    #   - +ActiveRecord::Relation+ -> When multiple Id's are provided
+    #   - +Dmsf::Lock+             -> When Id or UUID is provided
+    # * *Raises* :
+    #   - +ActiveRecord::RecordNotFound+ -> If nothing matches criteria
+    #
     def self.find(*args)
       if args.first && args.first.is_a?(String) && !args.first.match(/^\d*$/)
         lock = find_by_uuid(*args)
@@ -61,6 +72,15 @@ module Dmsf
     end
 
     private
+
+    # Utilising UUIDTools, generate a UUID timestamp for the lock being created.
+    # The created UUID is assigned to self.uuid.
+    #
+    # * *Args*    :
+    #   - None
+    # * *Returns* :
+    #   - +String+ -> UUID String
+    #
     def generate_uuid
       self.uuid = UUIDTools::UUID.timestamp_create().to_s
     end

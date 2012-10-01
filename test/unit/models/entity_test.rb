@@ -18,6 +18,7 @@ module Dmsf
     should belong_to(:owner)
     should belong_to(:deleted_by)
     should belong_to(:parent)
+    should have_many(:permissions)
 
     context "Dmsf::Entity" do
       setup do
@@ -201,7 +202,17 @@ module Dmsf
         end
       end
 
+      context 'Method Acl' do
+        should 'return an instance of Dmsf::Acl' do
+          file = Dmsf::File.new
+          assert file.Acl.is_a?(Dmsf::Acl)
+        end
 
+        should 'Only create one instance of Dmsf::Acl' do
+          file = Dmsf::File.new
+          assert_same file.Acl, file.Acl
+        end
+      end
 
     end
   end

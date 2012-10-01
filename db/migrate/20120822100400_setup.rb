@@ -9,6 +9,7 @@ class Setup < ActiveRecord::Migration
     self.remove_dmsf_files
     self.alter_dmsf_locks
     self.alter_revision_accesses
+    self.create_permissions
   end
 
   def self.down
@@ -93,4 +94,14 @@ class Setup < ActiveRecord::Migration
     Dmsf::Audit::Base.update_all(:relation_type => 'Dmsf::Revision', :type => 'Dmsf::Audit::Access')
   end
 
+  def self.create_permissions
+    create_table :dmsf_permissions do |t|
+      t.integer :entity_id, :null => false
+      t.integer :permission, :null => false
+      t.boolean :prevent
+      t.integer :role_id
+      t.integer :user_id
+      t.timestamps
+    end
+  end
 end

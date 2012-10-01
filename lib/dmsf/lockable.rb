@@ -25,24 +25,48 @@ module Dmsf
 
     module InstanceMethods
 
-      # tree_with_locks
-      # ---------------
-      # Returns ActiveRecord::Relation with all locks included
-      # for hierarchy
+      # Based on objects hierarchy, establishes its tree including
+      # any and all locks.
+      #
+      # * *Args*    :
+      #   - None
+      # * *Returns* :
+      #   - +Active::Relation+ -> Entity + Tree + Locks
+      #
       def tree_with_locks
         return @tree_with_locks unless @tree_with_locks.nil?
         @tree_with_locks = self.self_and_ancestors.includes(:locks)
       end
 
+      # Overload ActiveRecord::Base implementation of reload
+      # with ours providing a reset and then calling on the
+      # overloaded method to ensure functionality is preserved.
+      #
+      # We are resetting internal caches to ensure information is
+      # considered expired.
+      #
+      # * *Args*    :
+      #   - any
+      # * *Returns* :
+      #   - None
+      #
       def reload(*args)
         @tree_with_locks = nil
         @effective_locks = nil
         super *args
       end
 
-      # effective_locks
-      # ---------------
-      # Retrieves the hierarchy and
+      # Making reference to the objects hierarchy, all locks that
+      # are effective on a Dmsf::Entity will be loaded.
+      # Note: The lowest locked item will be returned, so if file
+      # is locked, and its parent, the parent item's locked will
+      # be returned
+      #
+      # * *Args*    :
+      #   - None
+      # * *Returns* :
+      #   - +[Dmsf::Lock]+ -> Array of effective locks
+      #
       def effective_locks
         return @effective_locks unless @effective_locks.nil?
         #This forces an inner join which will only return hierarchy items
@@ -63,19 +87,36 @@ module Dmsf
         return @effective_locks
       end
 
-      # locked?
-      # -------
-      # Indicates if the item is locked
-      # (makes use of effective_locks)
+      # Indicates if the current resource should be considered
+      # locked.
+      #
+      # * *Args*    :
+      #   - None
+      # * *Returns* :
+      #   - +Boolean+ -> Locked (true), Unlocked (false)
+      #
       def locked?
         #If effective_locks is empty then return false
         return !effective_locks.empty?
       end
 
-      # unlock!
-      # -------
-      # If resource is locked, deletes lock
-      # otherwise raises an exception
+      # Execute a process by where the entity lock is removed,
+      # Checks are run on the lock to ensure basic security is
+      # preserved (hence why this is in lib not model)
+      #
+      # Exceptions are raised if criteria is not met for unlock to
+      # be successful
+      #
+      # * *Args*    :
+      #   - +user+ -> Optional (User.current utilised when not set)
+      # * *Returns* :
+      #   - None
+      # * *Raises*  :
+      #   - +Dmsf::Lockable::ResourceNotLocked+ -> Unlock attempted when item not locked
+      #   - +Dmsf::Lockable::ResourceParentLocked+ -> Items in entities Hierarchy are locked
+      #   - +Dmsf::Lockable::LockNotOwnedByPrincipal+ -> The lock that would be unlocked by
+      #     this request is not owned by person requesting the unlock (user)
+      #
       def unlock! (user = nil)
         user ||= User.current
         raise Dmsf::Lockable::ResourceNotLocked,
@@ -88,10 +129,20 @@ module Dmsf
         @effective_locks = nil #reset internal dictionary
       end
 
-      # lock!
-      # -----
-      # If resource is unlocked, produces exclusive
-      # write lock, otherwise raises exception
+      # Providing that the resource is unlocked, produces and
+      # exclusive write lock, otherwise raising an exception
+      #
+      #
+      # * *Args*    :
+      #   - +user+   -> User lock is for (Optional: User.current when not set)
+      #   - +expiry+ -> Expiry date/time for lock (infinite when not set)
+      # * *Returns* :
+      #   - +Dmsf::Lock+ -> the created lock
+      # * *Raises*  :
+      #   - +Dmsf::Lockable::ResourceParentLocked+ -> Indicates that the resource has an inherited lock
+      #     enforced upon it.
+      #   - +Dmsf::Lockable::ResourceLocked+ -> Indicates that the requested resource is already locked.
+      #
       def lock! (user = nil, expiry = nil)
         user ||= User.current
         if locked?
@@ -108,8 +159,23 @@ module Dmsf
                              :user       => user,
                              :expires_at => expiry
         @effective_locks = nil #Reset internal dictionary
+        return lock
       end
 
+      # Indicates if a resource is locked and/or if the resource lock
+      # impedes operation for specified user.
+      #
+      # If a resource is locked, and the lock is owned by current user
+      # then it should not be considered as locked to that user, however
+      # should to all others
+      #
+      # * *Args*    :
+      #   - +user+ -> Principal for lock-check (Optional: User.current utilised otherwise)
+      # * *Returns* :
+      #   - +Boolean+ -> Locked (true); Unlocked (false)
+      # * *Raises*  :
+      #   - +ArgumentError+ -> If user is not a Principal
+      #
       def locked_for?(user = nil)
         user ||= User.current
         raise ArgumentError unless user.kind_of?(Principal)
