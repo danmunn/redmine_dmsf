@@ -8,9 +8,17 @@ Changelog for Redmine DMSF
 * New: Model structures and inheritence changed to utilise nested set approach.
 * New: Locking model re-worked to provide same functionality with less overhead
 * New: Permission model introduced
+  - Permissions can be assigned to roles used within project, as well as directly to users. 
+  - User assigned permissions hold more weight than role based permissions
+  - Generally an Allow will beat a Prevent, if you are in 2 groups one of which is prevented from access,
+  and one that is permitted - you will still gain access on account of your permit action.
+  - Permissions are inherited (when set on a parent folder, will propogate to each item within)
+  - Provided Permissions include: READ, WRITE, MODIFY, DELETE, PERMISSIONS
+  - The default stance where no permissions exist is a general Allow.
 * New: Dmsf::Audit introduced, providing sql-based logging for Dmsf application
 * New: Library extension to provide quick permission check (Dmsf::Acl)
 * Updated: DmsfFileRevisionAccesses removed in favour of Dmsf::Audit
+* Updated: Some Dmsf permissions of the past have been removed (in favour of permissions)
 * TODO: Workflow models and libraries for providing better workflows
 * TODO: (General) re-write controllers
 * TODO: Re-work entire UI to provide richer experience.
