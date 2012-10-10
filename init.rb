@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011   Vï¿½t Jonï¿½ <vit.jonas@gmail.com>
 # Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
 #
 # This program is free software; you can redistribute it and/or
@@ -47,10 +47,28 @@ Redmine::Plugin.register :redmine_dmsf do
                          :indexing_database  => File.join(Attachment.storage_path, 'dmsf_index').to_s,
                          :stemming_lang      => 'english',
                          :stemming_strategy  => 'STEM_NONE',
-                         :webdav_enabled     => 'enabled',
-                         :webdav_strategy    => 'WEBDAV_RW'
+                         :webdav             => {
+                             :provider       => 'Webdav::None',
+                             :configuration  => {},
+                         }
                        },
            :partial => 'settings/dmsf_settings'
             
-    
+
 end
+
+# Note:
+#  Wizardry in effect; will load from the configuration
+#  a module which will define a state for Webdav. The simple
+#  intention here is to create an environment where someone
+#  could potentially use the structure (module based on Webdav::Base
+#  with a mount method) to extend how Dmsf provides Webdav
+#  functionality, be that with 3rd party module (eg: redmine_dmsf)
+#  or other.
+#
+#  Included are :
+#  Webdav::None         - No Webdav mounting (turned off)
+#  Webdav::Dmsf         - Standard R/W webdav functionality
+#  Webdav::Dmsf::Locked - Read-only Dmsf provided webdav
+#
+Webdav.mount_from_config

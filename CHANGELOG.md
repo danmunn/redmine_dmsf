@@ -10,6 +10,12 @@ Changelog for Redmine DMSF
 * New: Permission model introduced
 * New: Dmsf::Audit introduced, providing sql-based logging for Dmsf application
 * New: Library extension to provide quick permission check (Dmsf::Acl)
+* New: Modular Webdav approach:
+   - Settings for dmsf will allow strategies to be picked (need to be registered)
+   - Webdav will load that particular module for its mounting instruction (or alternative)
+   - Defined will be Webdav::None (No Webdav), Webdav::Dmsf (R/W Webdav),
+   Webdav::Dmsf::Locked (Read only webdav)
+   - There are plans to allow modules to hold their own configuration
 * Updated: DmsfFileRevisionAccesses removed in favour of Dmsf::Audit
 * TODO: Workflow models and libraries for providing better workflows
 * TODO: (General) re-write controllers
