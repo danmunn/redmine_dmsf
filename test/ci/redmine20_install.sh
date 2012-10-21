@@ -80,7 +80,8 @@ ln -sf $PATH_TO_DMSF $PATH_TO_PLUGINS/redmine_dmsf
 #sed -i -e 's=.*gem ["'\'']test-unit["'\''].*==g' ${PATH_TO_REDMINE}/Gemfile
 # install gems
 mkdir -p vendor/bundle
-bundle install --path vendor/bundle
+#Not ideal, but at present Travis-CI will not install with xapian enabled.
+bundle install --path vendor/bundle --without xapian
 
 # copy database.yml
 cp $WORKSPACE/database.yml config/

@@ -1,12 +1,12 @@
 module Webdav
   class Base
 
-    def mount
+    def rails_mount
       raise NotImplementedError
     end
 
     def load_config(config)
-      raise NotImplementedError
+      @config = config || {}
     end
   end
 end

@@ -18,6 +18,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'redmine'
+require 'dmsf/init'
 
 # strategise any rails specific startup information
 #
@@ -67,8 +68,8 @@ end
 #  or other.
 #
 #  Included are :
-#  Webdav::None         - No Webdav mounting (turned off)
-#  Webdav::Dmsf         - Standard R/W webdav functionality
-#  Webdav::Dmsf::Locked - Read-only Dmsf provided webdav
+#  Webdav::None                   - No Webdav mounting (turned off)
+#  Webdav::Dmsf::Standard         - Standard R/W webdav functionality
+#  Webdav::Dmsf::Standard::Locked - Read-only Dmsf provided webdav
 #
 Webdav.mount_from_config

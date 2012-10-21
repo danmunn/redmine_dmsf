@@ -42,7 +42,7 @@ module Webdav
     config_base = webdav_settings[:configuration] || {}
     self.start_module(m_to_load) do
       load_config config_base[m_to_load]
-      mount
+      rails_mount
     end
   end
 end

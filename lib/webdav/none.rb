@@ -2,7 +2,7 @@ module Webdav
 
   #This class should quite literally do nothing
   class None < Webdav::Base
-    def mount
+    def rails_mount
       #This is a placeholder to override Webdav::Base
     end
 
