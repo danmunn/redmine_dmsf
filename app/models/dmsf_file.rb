@@ -371,10 +371,14 @@ class DmsfFile < ActiveRecord::Base
                 allowed = User.current.allowed_to?(:view_dmsf_files, dmsf_file.project)
                 project_included = false
                 project_included = true if projects.nil?
-                if !project_included
-                  projects.each {|x| 
-                    project_included = true if x[:id] == dmsf_file.project.id
-                  }
+                unless project_included                  
+                  projects.each do |x| 
+                    if x.is_a?(ActiveRecord::Relation)
+                      project_included = x.first.id == dmsf_file.project.id        
+                    else
+                      project_included = x[:id] == dmsf_file.project.id
+                    end
+                  end
                 end
   
                 if (allowed && project_included)
