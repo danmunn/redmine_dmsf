@@ -71,6 +71,9 @@ RedmineApp::Application.routes.draw do
   get '/dmsf/files/:id/download/:download', :controller => 'dmsf_files', :action => 'show'
   get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show'
 
+  # Just to keep backward compatibility with old external direct links
+  get '/dmsf_files/:id', :controller => 'dmsf_files', :action => 'show'
+
   #
   # files_copy controller
   #   /dmsf/files/<file id>/copy
