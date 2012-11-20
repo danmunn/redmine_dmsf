@@ -72,4 +72,11 @@ end
 #  Webdav::Dmsf::Standard         - Standard R/W webdav functionality
 #  Webdav::Dmsf::Standard::Locked - Read-only Dmsf provided webdav
 #
-Webdav.mount_from_config
+Rails.configuration.to_prepare do
+  # Not really sure on the correct workaround here, as we need to dynamically 
+  # mount based on a setting, we need DB - however it breaks migrations if the 
+  # settings table does not exist - Settings is added early on in Redmine 
+  # installation, so for now we'll check that the current version is not 0.
+  return unless ActiveRecord::Migrator.current_version > 0
+  Webdav.mount_from_config
+end
