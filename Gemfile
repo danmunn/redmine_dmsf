@@ -12,3 +12,7 @@ end
 group :test do
   gem "shoulda-matchers"
 end
+
+group :coverage do
+  gem "rcov"
+end

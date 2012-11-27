@@ -97,7 +97,7 @@ module Dmsf
     #   - +nil+ -> When nothing matches requested path.
     #
     def self.find input, project
-      return nil unless input.length > 2 && input[0..0] == '/'
+      return nil unless input.length > 2
 
       path = Dmsf::Path.new
       parts = input.gsub(/^[\/]+|[\/]+$/, '').split '/'

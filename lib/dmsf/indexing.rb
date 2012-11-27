@@ -1,5 +1,9 @@
 module Dmsf
   # TODO:
+  #   Perhaps I should move my development environment to Linux? However as much as I tried to
+  #   be test driven with Dmsf::Indexing, I cannot get Xapian to compile properly on windows to
+  #   do so. So Testing should ideally be written for this.
+  # TODO:
   #   The longer plan (probably Dmsf 1.6.0 will be to support different indexing strategies)
   #   right now we include the getIndexer to retrieve said instance, however of itself
   #   Dmsf::Indexing would ultimately become a module, and then strategies would exist as child
@@ -81,7 +85,7 @@ module Dmsf
       end
       query_parse.default_op = options[:all_words] ? Xapian::Query::OP_AND : Xapian::Query::OP_OR
       xapian.query = query_parse.parse_query(query)
-      return xapian.mset(0,1000 )
+      return xapian.mset(0,1000)
     end
 
 

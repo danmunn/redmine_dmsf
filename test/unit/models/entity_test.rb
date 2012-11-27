@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../../test_helper'
+require 'tmpdir'
 
 module Dmsf
   class EntityTest < Test::UnitTest
@@ -29,6 +30,15 @@ module Dmsf
                                     :project_id   => 1,
                                     :notification => false,
                                     :deleted      => false
+      end
+
+      context "variable storage path" do
+        should "return what is set" do
+          temp = "#{Dir.tmpdir}/test_dmsf_storage"
+          Dmsf::Entity.storage_path = temp
+          assert_equal temp, Dmsf::Entity.storage_path
+          Dir.delete(temp)
+        end
       end
 
       context "without fixtures" do

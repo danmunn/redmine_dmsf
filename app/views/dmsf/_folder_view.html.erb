@@ -1,0 +1,12 @@
+<div class="contextual">
+</div>
+
+<div class="dmsf-header">
+	<div class="wiki">
+	<% textilizable(@entity.nil? ? @project.dmsf_description : @entity.description) %>
+	</div>
+	<%# render "custom_fields", :object => @entity %>
+	<% @items.each do |item|%>
+		<%= render "dmsf/common/entity_listing", :item => item %>
+	<% end %>
+</div>

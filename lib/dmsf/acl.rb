@@ -50,7 +50,7 @@ module Dmsf
       user ||= User.current
       hierarchy = @entity.ancestors unless @entity.parent_id.nil?
       hierarchy ||= [] #If there is no ancestors (root level for example)
-      siblings = @entity.siblings
+      siblings = @entity.siblings.where(:project_id => @entity.project.id)
       permissions = load_individual_permission(hierarchy + siblings, Dmsf::Permission.READ, user)
       inject_to_chain(hierarchy + siblings, permissions)
       siblings.to_a.delete_if {|sibling| !check_single_permission_hierarchy(hierarchy + [sibling])}
@@ -93,8 +93,13 @@ module Dmsf
       permissions = load_individual_permission(hierarchy + children,
                                                Dmsf::Permission.READ,
                                                user)
+      #Above we load the permissions for entire hierarchy and all
+      #the children, subsequently we have a bunch of permissions
+      #now we just need to associate those permissions with the data
+      #entities collected via hierarchy and children.
       inject_to_chain(hierarchy + children, permissions)
       children.to_a.delete_if {|child|
+        #If
         !check_single_permission_hierarchy(hierarchy + [child])
       }
     end

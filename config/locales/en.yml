@@ -4,3 +4,5 @@ en:
     resource_parent_locked: "The hierarchy of the requested entity is locked"
     resource_not_locked: "The requested entity is not locked"
     lock_not_owned_by_principal: "You are the not the owner of the entities active lock"
+  dmsf_lang_folder: "folder"
+  dmsf_lang_file: "file"

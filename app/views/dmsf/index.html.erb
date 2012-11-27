@@ -1,0 +1,7 @@
+<% html_title(l(:dmsf)) %>
+
+<% if @entity.kind_of?(Dmsf::Folder) %>
+	<%= render(:partial => 'folder_view') %>
+<% else %>
+	<%= render(:partial => 'file_view') %>
+<% end %>

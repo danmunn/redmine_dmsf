@@ -112,5 +112,17 @@ module Dmsf
       @acl = nil
       super *args
     end
+
+    def self.storage_path=(path)
+      @@storage_path = path
+      if !File.exists?(@@storage_path)
+        Dir.mkdir(@@storage_path)
+      end
+    end
+
+    def self.storage_path
+      @@storage_path ||= Setting.plugin_redmine_dmsf["dmsf_storage_directory"].strip
+      return @@storage_path
+    end
   end
 end

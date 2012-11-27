@@ -1,0 +1,38 @@
+<%
+  #Setup internal variables for rendering
+  item_url = url_for(:action => 'index', :dmsf_path => item.path.to_s, :id => @project)
+  item_locked = item.locked? ? 'locked' : ''
+  item_actions = []
+
+  if item.kind_of?(Dmsf::Folder)
+    item_category = l('dmsf_lang_folder');
+    item_ext = ''
+    item_mod = '--'
+  else
+    item_category = ''
+    item_ext = ''
+    item_mod = item.last_modified
+  end
+%>
+
+<li class="dmsf-entity" data-entity="<%=item.id%>" id="d_e_<%=item.id%>">
+  <div class="entityname-col"><%=item.title%></div>
+  <div class="entitykind-col">
+    <span class="category"><%=item_category%></span>
+    <span class="ext"><%=item_ext%></span>
+  </div>
+  <div class="entitylock-col">
+    <span class="<%= item_locked %>"><%= item_locked %></span>
+  </div>
+  <div class="entitysize-col">
+    NaN
+  </div>
+  <div class="entitymod-col">
+    <%= item_mod %>
+  </div>
+  <div class="entityaction-col hover-expose">
+    <% item_actions.each do |action| %>
+        <%=action%>
+    <% end %>
+  </div>
+</li>
