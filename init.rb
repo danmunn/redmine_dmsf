@@ -72,7 +72,7 @@ Redmine::Plugin.register :redmine_dmsf do
       unless entry.nil? || entry.deleted
         title = args[1] ? args[1] : entry.title
         revision = args[2] ? args[2] : ""
-        return link_to "#{title}", :controller => "dmsf_files", :action => "show", :id => entry, :download => revision
+        return link_to "#{title}", :controller => "dmsf_files", :action => "show", :id => entry, :download => revision, :only_path => false
       end
       nil
     end
@@ -85,13 +85,13 @@ Redmine::Plugin.register :redmine_dmsf do
          
     macro :dmsff do |obj, args|
       if args.length < 1
-        return link_to l(:link_documents), :controller => "dmsf", :action => "show", :id => @project
+        return link_to l(:link_documents), :controller => "dmsf", :action => "show", :id => @project, :only_path => false
       else
         entry_id = args[0].strip
         entry = DmsfFolder.find(entry_id)
         unless entry.nil?
           title = args[1] ? args[1] : entry.title
-          return link_to "#{title}", :controller => "dmsf", :action => "show", :id => entry.project, :folder_id => entry
+          return link_to "#{title}", :controller => "dmsf", :action => "show", :id => entry.project, :folder_id => entry, :only_path => false
         end
       end
       nil
@@ -109,7 +109,7 @@ Redmine::Plugin.register :redmine_dmsf do
       entry = DmsfFile.find(entry_id)
       unless entry.nil? || entry.deleted
         title = args[1] ? args[1] : entry.title
-        return link_to "#{title}", :controller => "dmsf_files", :action => "show", :id => entry
+        return link_to "#{title}", :controller => "dmsf_files", :action => "show", :id => entry, :only_path => false
       end
       nil
     end
