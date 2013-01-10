@@ -28,7 +28,6 @@ module RedmineDmsf
         base.extend(ClassMethods)
         base.class_eval do
           unloadable
-<<<<<<< HEAD
           alias_method_chain :copy, :dmsf
 
           has_many :dmsf_files, :class_name => "DmsfFile", :foreign_key => "project_id", :conditions => { :dmsf_folder_id => nil }
@@ -37,10 +36,6 @@ module RedmineDmsf
 
         end
 
-=======
-          alias_method_chain :copy, :dmsf_copy
-        end
->>>>>>> d4e19db3410db4cae44a55b0e8c022a6fd82e9fa
       end
 
       module ClassMethods
@@ -50,7 +45,6 @@ module RedmineDmsf
         def all_dmsf_custom_fields
           @all_dmsf_custom_fields ||= (DmsfFileRevisionCustomField.for_all).uniq.sort # + dmsf_file_revision_custom_fields).uniq.sort
         end
-<<<<<<< HEAD
 
         def dmsf_count
           file_count = DmsfFile.visible.project_root_files(self).count
@@ -85,32 +79,6 @@ module RedmineDmsf
             f.copy_to(self, nil)
           }
         end
-=======
-        
-        def copy_with_dmsf_copy(project, options={})
-          project = project.is_a?(Project) ? project : Project.find(project)
-      
-          to_be_copied = %w(wiki versions issue_categories issues members queries boards dmsf)
-          to_be_copied = to_be_copied & options[:only].to_a unless options[:only].nil?
-      
-          Project.transaction do
-            if save
-              reload
-              to_be_copied.each do |name|
-                send "copy_#{name}", project
-              end
-              Redmine::Hook.call_hook(:model_project_copy_before_save, :source_project => project, :destination_project => self)
-              save
-            end
-          end
-        end
-      
-        # Copies DMSF from +project+
-        def copy_dmsf(project)          
-          DmsfFolder.project_root_folders(project).each{|subfolder| subfolder.copy_to(self, nil)}
-          DmsfFile.project_root_files(project).each{|file| file.copy_to(self, nil)}                   
-        end 
->>>>>>> d4e19db3410db4cae44a55b0e8c022a6fd82e9fa
       end
     end
   end
