@@ -86,7 +86,7 @@ From Omega documentation:
 
 On Debian use:
 
-```apt-get install libxapian-ruby1.8 xapian-omega libxapian-dev xpdf antiword unzip\
+```apt-get install libxapian-ruby1.8 xapian-omega libxapian-dev xpdf xpdf-utils antiword unzip\
 catdoc libwpd8c2a libwps-0.1-1 gzip unrtf catdvi djview djview3```
 
 On Ubuntu use:
