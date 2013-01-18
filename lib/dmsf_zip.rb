@@ -21,25 +21,26 @@ require 'zip/zipfilesystem'
 require 'iconv'
 
 class DmsfZip
-  
+
   attr_reader :files
-  
+
   def initialize()
     @zip = Tempfile.new(["dmsf_zip",".zip"])
+    @zip.chmod(0644)
     @zip_file = Zip::ZipOutputStream.new(@zip.path)
     @files = []
   end
-  
+
   def finish
     @zip_file.close unless @zip_file.nil?
     @zip.path unless @zip.nil?
   end
-  
+
   def close
     @zip_file.close unless @zip_file.nil?
     @zip.close unless @zip.nil?
   end
-  
+
   def add_file(file, root_path = nil)
     string_path = file.folder.nil? ? "" : file.folder.dmsf_path_str + "/"
     string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
@@ -50,7 +51,7 @@ class DmsfZip
     rescue
     end
     @zip_file.put_next_entry(string_path)
-    File.open(file.last_revision.disk_file, "rb") do |f| 
+    File.open(file.last_revision.disk_file, "rb") do |f|
       buffer = ""
       while (buffer = f.read(8192))
         @zip_file.write(buffer)
@@ -58,7 +59,7 @@ class DmsfZip
     end
     @files << file
   end
-  
+
   def add_folder(folder, root_path = nil)
     string_path = folder.dmsf_path_str + "/"
     string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
@@ -71,5 +72,5 @@ class DmsfZip
     folder.subfolders.visible.each { |subfolder| self.add_folder(subfolder, root_path) }
     folder.files.visible.each { |file| self.add_file(file, root_path) }
   end
-  
+
 end

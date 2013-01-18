@@ -354,7 +354,7 @@ class DmsfFile < ActiveRecord::Base
               next if dmsf_attrs.length == 0 || id_attribute == 0
               next unless results.select{|f| f.id.to_s == id_attribute}.empty?
               
-              dmsf_file = DmsfFile.where(limit_options[:conditions]).where(:id => id_attribute, :deleted => false).first
+              dmsf_file = DmsfFile.where(limit_options[:conditions]).where(:id => dmsf_attrs[2], :deleted => false).first
     
               if !dmsf_file.nil?
                 if options[:offset]
@@ -368,10 +368,14 @@ class DmsfFile < ActiveRecord::Base
                 allowed = User.current.allowed_to?(:view_dmsf_files, dmsf_file.project)
                 project_included = false
                 project_included = true if projects.nil?
-                if !project_included
-                  projects.each {|x| 
-                    project_included = true if x[:id] == dmsf_file.project.id
-                  }
+                unless project_included                  
+                  projects.each do |x| 
+                    if x.is_a?(ActiveRecord::Relation)
+                      project_included = x.first.id == dmsf_file.project.id        
+                    else
+                      project_included = x[:id] == dmsf_file.project.id
+                    end
+                  end
                 end
   
                 if (allowed && project_included)

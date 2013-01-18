@@ -144,6 +144,25 @@ class DmsfFolder < ActiveRecord::Base
     self.subfolders.visible.each {|subfolder| file_count += subfolder.deep_file_count}
     file_count
   end
+  
+  def deep_folder_count    
+    folder_count = self.subfolders.length
+    self.subfolders.each {|subfolder| folder_count += subfolder.deep_folder_count}
+    folder_count    
+  end
+  
+  def self.project_deep_folder_count(project)    
+    subfolders = self.project_root_folders(project) 
+    folder_count = subfolders.length 
+    subfolders.each{|subfolder| folder_count += subfolder.deep_folder_count}
+    folder_count
+  end
+  
+  def self.project_deep_file_count(project)
+    file_count = DmsfFile.project_root_files(project).length
+    self.project_root_folders(project).each{|subfolder| file_count += subfolder.deep_file_count}
+    file_count
+  end
 
   def deep_folder_count
     folder_count = self.subfolders.length
