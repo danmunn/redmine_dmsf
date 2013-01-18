@@ -354,7 +354,7 @@ class DmsfFile < ActiveRecord::Base
               next if dmsf_attrs.length == 0 || id_attribute == 0
               next unless results.select{|f| f.id.to_s == id_attribute}.empty?
               
-              dmsf_file = DmsfFile.where(limit_options[:conditions]).where(:id => dmsf_attrs[2], :deleted => false).first
+              dmsf_file = DmsfFile.where(limit_options[:conditions]).where(:id => id_attribute, :deleted => false).first
     
               if !dmsf_file.nil?
                 if options[:offset]
