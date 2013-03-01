@@ -1,4 +1,4 @@
-# For Simplified Chinese
+# Chinese translation for DMSF
 zh:
   :dmsf: "文档管家"
   :label_dmsf_file_plural: "Dmsf files"
@@ -167,8 +167,9 @@ zh:
   :label_dmsf_updated: "DMSF updated"
   :title_total_size_of_all_files: "文件夹所有文件总大小"
   :project_module_dmsf: "文档管家"
-
-# Not translated
+  
+# Not translated  
+  
   :warning_no_project_to_copy_file_to: "No project to copy file to"
   :comment_copied_from: "Copied from %{source}"
   :notice_file_copied: "File copied"
@@ -185,4 +186,29 @@ zh:
   :title_copy: "Copy"
   :error_folder_cannot_be_copied: "Folder can't be copied"
   :notice_folder_copied: "Folder copied"
+  
+  :error_max_email_filesize_exceeded: "You've exceeded the maximum filesize for sending via email. (%{number} MB)"
+  :note_maximum_email_filesize: "Limits maximum filesize that can be sent via email. 0 means unlimited. Number is in MB."
+  :label_maximum_email_filesize: "Maximum email attachment size"
+  :header_minimum_filesize: "File Error."
+  :error_minimum_filesize: "The file %{file} is 0 bytes and will not be attached."
+  :parent_directory: "Parent Directory"
+  :note_webdav: "Webdav once enabled can be found at http://.../dmsf/webdav/"
+  :label_webdav: "Webdav functionality"
+  :label_dmsf_plural: "Copy DMSF files and folders (%{files} files in %{folders} folders)"
+
+  :warning_folder_already_locked: "This folder is already locked"
+  :notice_folder_locked: "The folder was successfully locked"
+  :warning_folder_not_locked: "Unfortunately, the folder could not be locked"
+  :notice_folder_unlocked: "The folder was successfully unlocked"
+  :error_only_user_that_locked_folder_can_unlock_it: "You are not authorised to unlock this folder"
+  :title_folder_parent_locked: "Parent folder %{name} is locked"
+  :title_file_parent_locked: "Parent folder %{name} is locked"
+  :title_unlock_folder: "Unlock to allow changes for other members"
+  :title_lock_folder: "Lock to prevent changes for other members"
+
+  :select_option_webdav_readonly: "Read-only"
+  :select_option_webdav_readwrite: "Read/Write"
+  :label_webdav_strategy: "Webdav strategy"
+  :note_webdav_strategy: "Enables the administrator to decide if webdav is a read-only or read-write platform for end users."
   
