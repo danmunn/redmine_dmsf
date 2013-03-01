@@ -1,3 +1,4 @@
+# Czech translation for DMSF by vit.jonas@gmail.com, karel.picman@kontron.com
 cs:
   :dmsf: "DMSF"
   :label_dmsf_file_plural: "Dmsf soubory"
@@ -183,6 +184,28 @@ cs:
   :error_folder_cannot_be_copied: "Složka nemůže být zkopírována"
   :notice_folder_copied: "Složka zkopírována"
   :error_max_email_filesize_exceeded: "Přesáhli jste maximální velikost souboru, který lze poslat emailem. (%{number} MB)"
+  
   :note_maximum_email_filesize: "Omezí se maximální velikost souboru, který může být poslán emailem. 0 znamená neomezený. Číslo je v MB."
   :label_maximum_email_filesize: "Maximální velikost souboru emailu"
+  :header_minimum_filesize: "File Error."
+  :error_minimum_filesize: "The file %{file} is 0 bytes and will not be attached."
+  :parent_directory: "Parent Directory"
+  :note_webdav: "Webdav once enabled can be found at http://.../dmsf/webdav/"
+  :label_webdav: "Webdav functionality"
+  :label_dmsf_plural: "Copy DMSF files and folders (%{files} files in %{folders} folders)"
+
+  :warning_folder_already_locked: "Tato složka je již zamčená"
+  :notice_folder_locked: "Složka byla úspěšně zamčena"
+  :warning_folder_not_locked: "Složku nelze zamknout"
+  :notice_folder_unlocked: "Složka byla odemčena"
+  :error_only_user_that_locked_folder_can_unlock_it: "Nemáte oprávnění k odemknutí této složky"
+  :title_folder_parent_locked: "Nadřazená složka %{name} je zamčená"
+  :title_file_parent_locked: "Nadřazená složka %{name} je zamčená"
+  :title_unlock_folder: "Odemknout"
+  :title_lock_folder: "Zamknout"
+
+  :select_option_webdav_readonly: "Pouze pro čtení"
+  :select_option_webdav_readwrite: "Čtení/Zápis"
+  :label_webdav_strategy: "Webdav strategie"
+  :note_webdav_strategy: "Umožní administrátorovi rozhodnout, zdali je webdav pouze pro čtení nebo i pro zápis."
   

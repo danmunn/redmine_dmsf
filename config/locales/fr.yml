@@ -1,3 +1,4 @@
+# French translation for DMSF
 fr:
   :dmsf: "DMSF"
   :label_dmsf_file_plural: "Fichiers DMSF"
@@ -207,4 +208,3 @@ fr:
   :select_option_webdav_readwrite: "Lecture/Ecriture"
   :label_webdav_strategy: "Accès Webdav"
   :note_webdav_strategy: "Permet à l'administrateur d'autoriser les utilisateurs au module Webdav en letcure seule ou en lecture et écriture."
-

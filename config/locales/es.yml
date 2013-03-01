@@ -1,3 +1,4 @@
+# Spanish translation for DMSF
 es:
   :dmsf: "DMSF"
   :label_dmsf_file_plural: "DMSF Archivos"
@@ -35,10 +36,11 @@ es:
   :warning_file_notifications_already_activated: "Las notificaciones del archivo seleccionado ya estaban activadas previamente"
   :notice_file_notifications_activated: "Notificación de archivo activado"
   :warning_file_notifications_already_deactivated: "Las notificaciones del archivo seleccionado ya estaban desactivadas previamente"
-  :notice_file_notifications_deactivated: "Notificación de archivo desactivada"
-  
-# Not translated
+  :notice_file_notifications_deactivated: "Notificación de archivo desactivada"  
   :link_details: "%{title} details"
+  
+# Not translated  
+  
   :link_edit: "Edit %{title}"
   :submit_create: "Create"
   :link_create_folder: "Create folder"
@@ -78,6 +80,10 @@ es:
   :note_uploaded_maximum_files_at_once: "There can be uploaded maximum of %{number} files at once."
   :note_upload_files_greater_than_two_gb: "To upload files greater than 2GB you must have 64b browser."
   :submit_upload_files: "Upload"
+  :heading_new_folder: "New Folder"
+  :label_title: "Title"
+  :label_description: "Description"
+  :submit_save: "Save"
   :info_file_locked: "File locked!"
   :label_notifications: "Notifications"
   :select_option_default: "Default"
@@ -180,7 +186,28 @@ es:
   :title_copy: "Copy"
   :error_folder_cannot_be_copied: "Folder can't be copied"
   :notice_folder_copied: "Folder copied"
+  
   :error_max_email_filesize_exceeded: "You've exceeded the maximum filesize for sending via email. (%{number} MB)"
   :note_maximum_email_filesize: "Limits maximum filesize that can be sent via email. 0 means unlimited. Number is in MB."
   :label_maximum_email_filesize: "Maximum email attachment size"
-  
+  :header_minimum_filesize: "File Error."
+  :error_minimum_filesize: "The file %{file} is 0 bytes and will not be attached."
+  :parent_directory: "Parent Directory"
+  :note_webdav: "Webdav once enabled can be found at http://.../dmsf/webdav/"
+  :label_webdav: "Webdav functionality"
+  :label_dmsf_plural: "Copy DMSF files and folders (%{files} files in %{folders} folders)"
+
+  :warning_folder_already_locked: "This folder is already locked"
+  :notice_folder_locked: "The folder was successfully locked"
+  :warning_folder_not_locked: "Unfortunately, the folder could not be locked"
+  :notice_folder_unlocked: "The folder was successfully unlocked"
+  :error_only_user_that_locked_folder_can_unlock_it: "You are not authorised to unlock this folder"
+  :title_folder_parent_locked: "Parent folder %{name} is locked"
+  :title_file_parent_locked: "Parent folder %{name} is locked"
+  :title_unlock_folder: "Unlock to allow changes for other members"
+  :title_lock_folder: "Lock to prevent changes for other members"
+
+  :select_option_webdav_readonly: "Read-only"
+  :select_option_webdav_readwrite: "Read/Write"
+  :label_webdav_strategy: "Webdav strategy"
+  :note_webdav_strategy: "Enables the administrator to decide if webdav is a read-only or read-write platform for end users."
