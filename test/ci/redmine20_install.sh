@@ -86,7 +86,7 @@ cp $WORKSPACE/database.yml config/
 
 #Not ideal, but at present Travis-CI will not install with xapian enabled.
 #02-04-2013 bundle install needs to happen AFTER database configuration
-bundle install --path vendor/bundle --without xapian ldap
+bundle install --path vendor/bundle --without xapian
 
 # run redmine database migrations
 bundle exec rake db:migrate RAILS_ENV=test --trace
