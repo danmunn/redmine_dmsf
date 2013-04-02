@@ -25,7 +25,7 @@ fi
 export PATH_TO_PLUGINS=./plugins # for redmine 2.0
 export GENERATE_SECRET=generate_secret_token
 export MIGRATE_PLUGINS=redmine:plugins:migrate
-export REDMINE_GIT_REPO=git://github.com/edavis10/redmine.git
+export REDMINE_GIT_REPO=git://github.com/redmine/redmine.git
 export REDMINE_GIT_TAG=master
 export BUNDLE_GEMFILE=$PATH_TO_REDMINE/Gemfile
 
@@ -86,7 +86,7 @@ cp $WORKSPACE/database.yml config/
 
 #Not ideal, but at present Travis-CI will not install with xapian enabled.
 #02-04-2013 bundle install needs to happen AFTER database configuration
-bundle install --path vendor/bundle --without xapian
+bundle install --path vendor/bundle --without xapian ldap
 
 # run redmine database migrations
 bundle exec rake db:migrate RAILS_ENV=test --trace
