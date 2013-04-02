@@ -101,10 +101,12 @@ module Dmsf
 
       path = Dmsf::Path.new
       parts = input.gsub(/^[\/]+|[\/]+$/, '').split '/'
-      root = Dmsf::Entity.roots.where(:title => parts.shift,
+      root_title= parts.shift
+      root = Dmsf::Entity.roots.where(:title => root_title,
                                       :project_id => project,
                                       :deleted => false).first
       return nil if root === nil
+      return nil unless root.title === root_title #Ensure they are the same
 
       #Root goes into built path
       path << root

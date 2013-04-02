@@ -131,9 +131,12 @@ module Dmsf
           Dmsf::Entity.delete_all
         end
 
-        should "return nil when / is not present" do
+        # With modifications the original test could be maintained however,
+        # it was adjusted to paths could exist as path/to/file as well as
+        # /path/to/file (although automatically adjusted into latter)
+        should "return a path when / is not present as first character" do
           path = Dmsf::Path.find('Root', 1)
-          assert path === nil
+          assert path.nil? === false
         end
 
         should "return nil when nothing is found" do

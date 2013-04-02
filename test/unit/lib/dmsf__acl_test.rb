@@ -17,33 +17,35 @@ module Dmsf
       end
 
       context "Method visible_siblings" do
+        fixtures :projects
+
         should 'set user to User.current if not set' do
           User.expects(:current).returns(User.find(6))
-          file = Dmsf::File.new
-          file.stubs(:siblings).returns([])
+          file = Dmsf::File.new :project_id => 1
+          file.stubs(:siblings).returns(stub(:where => []))
           file.Acl.visible_siblings
         end
 
         should 'retrieve the current hierarchy' do
-          file = Dmsf::File.new :parent_id => 1
+          file = Dmsf::File.new :parent_id => 1, :project_id => 1
           file.expects(:ancestors).returns([])
-          file.stubs(:siblings).returns([])
+          file.stubs(:siblings).returns(stub(:where => []))
           file.Acl.visible_siblings
         end
 
         should 'retrieve siblings at current level' do
-          file = Dmsf::File.new
+          file = Dmsf::File.new :project_id => 1
           file.stubs(:ancestors).returns([])
-          file.expects(:siblings).returns([])
+          file.expects(:siblings).returns(stub(:where => []))
           file.Acl.visible_siblings
         end
 
         should 'Execute load_individual_permission with join of ancestors and siblings' do
-          file = Dmsf::File.new :parent_id => 1
+          file = Dmsf::File.new :parent_id => 1, :project_id => 1
           parent = Dmsf::Folder.new
           parent.id = 1
           file.stubs(:ancestors).returns([parent])
-          file.stubs(:siblings).returns([])
+          file.stubs(:siblings).returns(stub(:where => []))
           file.Acl.expects(:load_individual_permission).with([parent] + [], 1, User.current).returns([])
           file.Acl.visible_siblings
         end
