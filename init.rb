@@ -55,7 +55,17 @@ Redmine::Plugin.register :redmine_dmsf do
                        },
            :partial => 'settings/dmsf_settings'
             
-
+  # Administration menu extension
+  Redmine::MenuManager.map :admin_menu do |menu|
+    menu.push :workflow, {:controller => 'workflow', :action => 'index'}, :caption => :approval_workflow    
+  end
+  
+  # Adds javascript and stylesheet tags for project tree view
+  class DmsfViewListener < Redmine::Hook::ViewListener
+    def view_layouts_base_html_head(context)
+      stylesheet_link_tag('dmsf', :plugin => :redmine_dmsf)
+    end
+  end
 end
 
 # Note:
@@ -78,5 +88,5 @@ Rails.configuration.to_prepare do
   # settings table does not exist - Settings is added early on in Redmine 
   # installation, so for now we'll check that the current version is not 0.
   return unless ActiveRecord::Migrator.current_version > 0
-  Webdav.mount_from_config
+  #Webdav.mount_from_config
 end
