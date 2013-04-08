@@ -38,6 +38,7 @@ module Webdav
   #
   def self.mount_from_config
     webdav_settings = Setting.plugin_redmine_dmsf[:webdav]
+    return if webdav_settings.nil?
     m_to_load = webdav_settings[:provider]
     config_base = webdav_settings[:configuration] || {}
     self.start_module(m_to_load) do

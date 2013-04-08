@@ -1,0 +1,22 @@
+---
+entity_folder:
+  id: 1
+  project_id: 1
+  parent_id: NULL
+  title: Test Folder
+  description: Test Folder
+  owner_id: 1
+  created_at: 2013-04-01 00:00:00 +01:00
+  lft: 1
+  rgt: 4
+  type: Dmsf::Folder
+entity_file:
+  id: 2
+  project_id: 1
+  parent_id: 1
+  title: test.txt
+  owner_id: 1
+  created_at: 2013-04-01 00:00:00 +01:00
+  lft: 2
+  rgt: 3
+  type: Dmsf::File
