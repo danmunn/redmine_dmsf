@@ -1,0 +1,2 @@
+/* An image next to the approval workflow item in the administration menu */
+#admin-menu a.workflow { background-image: url(../images/ticket_go.png); }
