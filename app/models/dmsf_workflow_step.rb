@@ -9,7 +9,6 @@
 #  operator           :boolean          not null
 #
 
-module Dmsf
   class DmsfWorkflowStep < ActiveRecord::Base
     belongs_to :dmsf_workflow
     
@@ -20,4 +19,3 @@ module Dmsf
     validates :user_id, :presence => true
     validates :operator, :presence => true
   end
-end
