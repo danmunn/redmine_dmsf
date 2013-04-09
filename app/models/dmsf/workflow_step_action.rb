@@ -7,7 +7,8 @@
 #  action             :boolean          not null
 #  note               :text             not null
 #
+module Dmsf
+  class WorkflowStepAction < ActiveRecord::Base
 
-class DmsfWorkflowStepAction < ActiveRecord::Base
-
+  end
 end

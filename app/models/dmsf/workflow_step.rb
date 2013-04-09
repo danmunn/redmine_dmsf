@@ -8,14 +8,15 @@
 #  user_id            :integer          not null
 #  operator           :boolean          not null
 #
-
-  class DmsfWorkflowStep < ActiveRecord::Base
-    belongs_to :dmsf_workflow
+module Dmsf
+  class WorkflowStep < ActiveRecord::Base
+    belongs_to :workflow
     
-    has_many :dmsf_workflow_step_assignments, :dependent => :destroy    
+    has_many :workflow_step_assignments, :dependent => :destroy
         
     validates :workflow_id, :presence => true
     validates :step, :presence => true
     validates :user_id, :presence => true
     validates :operator, :presence => true
   end
+end

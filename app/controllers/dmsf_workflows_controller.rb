@@ -6,7 +6,7 @@ class DmsfWorkflowsController < ApplicationController
   before_filter :find_workflow, :except => [:create, :new, :index]
 
   def index    
-    @workflow_pages, @workflows = paginate DmsfWorkflow, :per_page => 25
+    @workflow_pages, @workflows = paginate Dmsf::Workflow, :per_page => 25
   end
 
   def action
@@ -20,7 +20,7 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def create
-    @workflow = DmsfWorkflow.new({:name => params[:dmsf_workflow][:name]})
+    @workflow = Dmsf::Workflow.new({:name => params[:dmsf_workflow][:name]})
     if request.post? && @workflow.save
       flash[:notice] = l(:notice_successful_create)
       redirect_to dmsf_workflows_path
@@ -52,6 +52,6 @@ class DmsfWorkflowsController < ApplicationController
   private    
   
   def find_workflow
-    @workflow = DmsfWorkflow.find(params[:id])
+    @workflow = Dmsf::Workflow.find(params[:id])
   end
 end
