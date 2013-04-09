@@ -105,6 +105,7 @@ module Dmsf
 
       context "static method find" do
         setup do
+          #ToDo: This needs to be converted into fixtures
           Dmsf::Folder.create! :title => 'Other',
                                :description => 'Bogus data',
                                :owner_id => 1,
@@ -124,11 +125,23 @@ module Dmsf
                                   :owner_id => 1,
                                   :project_id => 1
 
-#          f1.stubs(:revisions).returns(stub(:visible => [Dmsf::Revision.new(:title => 'test.file', :deleted => false)]))
-#          f2.stubs(:revisions).returns(stub(:visible => [Dmsf::Revision.new(:title => 'test.test', :deleted => false)]))
+          r1 = f1.revisions.create! :title => 'test.file',
+                                    :major_version => 1,
+                                    :minor_version => 0,
+                                    :project_id => 1,
+                                    :owner_id => 1,
+                                    :source_path => './do/not/exist.file'
+
+          r2 = f2.revisions.create! :title => 'test.test',
+                                    :major_version => 1,
+                                    :minor_version => 0,
+                                    :project_id => 1,
+                                    :owner_id => 1,
+                                    :source_path => './do/not/exist.file'
         end
         teardown do
           Dmsf::Entity.delete_all
+          Dmsf::Revision.delete_all
         end
 
         # With modifications the original test could be maintained however,
