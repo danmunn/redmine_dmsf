@@ -8,8 +8,6 @@
 #  note               :text             not null
 #
 
-module Dmsf
-  class DmsfWorkflowStepAction < ActiveRecord::Base
+class DmsfWorkflowStepAction < ActiveRecord::Base
 
-  end
 end
