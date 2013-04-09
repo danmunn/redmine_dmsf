@@ -118,7 +118,7 @@ module Dmsf
                                                                     #accidental data interaction
         parts.each {|e|
           #Iterate through nodes
-          found = nodes.reject{|n| n.title != e && n.parent_id != parent_id}.first
+          found = nodes.reject{|n| n.title != e || n.parent_id != parent_id}.first
           return nil if found.nil? #Path in its entirety is not found, we bail
           nodes.delete_if {|n|n.parent_id == parent_id} #Might as well shrink the array too :)
           parent_id = found.id

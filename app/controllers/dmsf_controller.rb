@@ -4,16 +4,23 @@ class DmsfController < ApplicationController
 
   before_filter :match_project
   before_filter :match_path
-
+  helper :dmsf
 
   def index
     #If path is not set (root) or path is empty
     if @path.nil? || @path.empty?
-      #Called without any form of pathing
+
+      #Called without any form of pathing?
+
+      # ToDo: dmsf should implement its own 404 (type) page
+      return render_404 if params[:dmsf_path]
+
       @entity = Dmsf::Folder.new(:project => @project)
       @items = @entity.Acl.visible_siblings
     else
+
       @entity = @path.last
+      @parent = @entity.parent || Dmsf::Folder.new
       @items = @entity.Acl.visible_children if @entity.kind_of?(Dmsf::Folder)
       @items ||= []
     end

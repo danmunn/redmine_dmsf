@@ -8,29 +8,31 @@
     item_category = l('dmsf_lang_folder');
     item_ext = ''
     item_mod = '--'
+    item_class = 'dmsf-entity-folder'
   else
     item_category = ''
     item_ext = ''
     item_mod = item.last_modified
+    item_class = 'dmsf-entity-file'
   end
 %>
 
-<li class="dmsf-entity" data-entity="<%=item.id%>" id="d_e_<%=item.id%>">
-  <div class="entityname-col"><%=item.title%></div>
-  <div class="entitykind-col">
+<li class="dmsf-entity <%=item_class%> dmsf-entity-<%=item.id%>" data-entity="<%=item.id%>" id="d_e_<%=item.id%>">
+  <div class="dmsf-entity-name"><%=link_to item.title, dmsf_index_path(:dmsf_path => item.path.to_s)%></div>
+  <div class="dmsf-entity-cat">
     <span class="category"><%=item_category%></span>
     <span class="ext"><%=item_ext%></span>
   </div>
-  <div class="entitylock-col">
-    <span class="<%= item_locked %>"><%= item_locked %></span>
+  <div class="dmsf-entity-lock <%= item_locked %>">
+    <span><%= item_locked %></span>
   </div>
-  <div class="entitysize-col">
+  <div class="dmsf-entity-size">
     NaN
   </div>
-  <div class="entitymod-col">
+  <div class="dmsf-entity-modified">
     <%= item_mod %>
   </div>
-  <div class="entityaction-col hover-expose">
+  <div class="dmsf-entity-action">
     <% item_actions.each do |action| %>
         <%=action%>
     <% end %>

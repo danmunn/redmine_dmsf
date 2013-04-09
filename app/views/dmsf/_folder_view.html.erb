@@ -1,3 +1,6 @@
+<%
+  container_class = @entity.nil? || @entity.parent.nil? ? 'root' : @entity.id
+%>
 <div class="contextual">
 </div>
 
@@ -6,7 +9,12 @@
 	<% textilizable(@entity.nil? ? @project.dmsf_description : @entity.description) %>
 	</div>
 	<%# render "custom_fields", :object => @entity %>
-	<% @items.each do |item|%>
-		<%= render "dmsf/common/entity_listing", :item => item %>
-	<% end %>
+    <ol id="dmsf-entity-container dmsf-entity-children-of-<%=container_class%>">
+        <% if @parent %>
+          <%= render_parent_link(@parent)%>
+        <% end %>
+        <% @items.each do |item|%>
+            <%= render "dmsf/common/entity_listing", :item => item %>
+        <% end %>
+    </ol>
 </div>
