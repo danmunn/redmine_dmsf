@@ -348,11 +348,13 @@ class DmsfFile < ActiveRecord::Base
             dochash = Hash[*docdata.scan(/(url|sample|modtime|type|size)=\/?([^\n\]]+)/).flatten]
             filename = dochash["url"]
             if !filename.nil?
-              dmsf_attrs = filename.split("_")
-              next if dmsf_attrs[1].blank?
-              next unless results.select{|f| f.id.to_s == dmsf_attrs[1]}.empty?
+              dmsf_attrs = filename.scan(/^([^\/]+\/[^_]+)_([\d]+)_(.*)$/)
+              id_attribute = 0
+              id_attribute = dmsf_attrs[0][1] if dmsf_attrs.length > 0
+              next if dmsf_attrs.length == 0 || id_attribute == 0
+              next unless results.select{|f| f.id.to_s == id_attribute}.empty?
               
-              dmsf_file = DmsfFile.where(limit_options[:conditions]).where(:id => dmsf_attrs[1], :deleted => false).first
+              dmsf_file = DmsfFile.where(limit_options[:conditions]).where(:id => id_attribute, :deleted => false).first
     
               if !dmsf_file.nil?
                 if options[:offset]
@@ -366,10 +368,14 @@ class DmsfFile < ActiveRecord::Base
                 allowed = User.current.allowed_to?(:view_dmsf_files, dmsf_file.project)
                 project_included = false
                 project_included = true if projects.nil?
-                if !project_included
-                  projects.each {|x| 
-                    project_included = true if x[:id] == dmsf_file.project.id
-                  }
+                unless project_included                  
+                  projects.each do |x| 
+                    if x.is_a?(ActiveRecord::Relation)
+                      project_included = x.first.id == dmsf_file.project.id        
+                    else
+                      project_included = x[:id] == dmsf_file.project.id
+                    end
+                  end
                 end
   
                 if (allowed && project_included)

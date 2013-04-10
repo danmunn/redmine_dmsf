@@ -45,7 +45,7 @@ class Dmsf144 < ActiveRecord::Migration
     #               only on appearing in group, find_each imposes a limit and incorrect
     #               ordering, so adapted that, we grab id's load a mock object, and reload
     #               data into it, which should enable us to run checks we need, not as
-    #               efficient, however compatible accross the board.
+    #               efficient, however compatible across the board.
     DmsfFileLock.select("MAX(#{DmsfFileLock.table_name}.id) id").
       order("MAX(#{DmsfFileLock.table_name}.id) DESC").
       group("#{DmsfFileLock.table_name}.dmsf_file_id").
@@ -83,25 +83,35 @@ class Dmsf144 < ActiveRecord::Migration
     remove_column :dmsf_file_locks, :locked
     rename_table :dmsf_file_locks, :dmsf_locks
 
-    #Not sure if this is the right place to do this, as its file manipulation, not database (stricly)
+    #Not sure if this is the right place to do this, as its file manipulation, not database (strictly)
     say "Completing one-time file migration ..."
     begin
       DmsfFileRevision.visible.each {|rev|
         next if rev.project.nil?
         existing = "#{DmsfFile.storage_path}/#{rev.disk_filename}"
         new_path = rev.disk_file
-        if File.exist?(existing)
-          if File.exist?(new_path)
-            rev.disk_filename = rev.new_storage_filename
-            new_path = rev.disk_file
-            rev.save!
+        begin
+          if File.exist?(existing)
+            if File.exist?(new_path)
+              rev.disk_filename = rev.new_storage_filename
+              new_path = rev.disk_file
+              rev.save!
+            end
+            #Ensure the project path exists
+            project_directory = File.dirname(new_path)
+            Dir.mkdir(project_directory) unless File.directory? project_directory
+            FileUtils.mv(existing, new_path)
+            say "Migration: #{existing} -> #{new_path} succeeded"
           end
-          FileUtils.mv(existing, new_path)
+        rescue #Here we wrap around IO in the loop to prevent one failure ruining complete run.
+          say "Migration: #{existing} -> #{new_path} failed"
         end
       }
       say "Action was successful"
-    rescue
+    rescue Exception => e
       say "Action was not successful"
+      puts e.message
+      puts e.backtrace.inspect #See issue 86
       #Nothing here, we just dont want a migration to break
     end
   end

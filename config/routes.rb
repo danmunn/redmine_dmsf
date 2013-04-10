@@ -70,6 +70,8 @@ RedmineApp::Application.routes.draw do
   get '/dmsf/files/:id/download', :controller => 'dmsf_files', :action => 'show', :download => '' #Otherwise will not route nil download param
   get '/dmsf/files/:id/download/:download', :controller => 'dmsf_files', :action => 'show'
   get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show'
+  # Just to keep backward compatibility of external url links
+  get '/dmsf_files/:id', :controller => 'dmsf_files', :action => 'show'
 
   # Just to keep backward compatibility with old external direct links
   get '/dmsf_files/:id', :controller => 'dmsf_files', :action => 'show'

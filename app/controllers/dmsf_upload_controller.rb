@@ -133,7 +133,7 @@ class DmsfUploadController < ApplicationController
         end
         
         if file.locked?
-          DmsfFileLock.file_lock_state(file, false)
+          file.unlock!
           flash[:notice] = l(:notice_file_unlocked)
         end
         

@@ -17,6 +17,11 @@ Redmine is a flexible project management web application, released under the ter
 Further information about the GPL license can be found at
 <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1>
 
+Redmine 1.5.0 development
+-------------------------
+Although regular logs are not publicly updated - you can keep an eye on the 1.5.0 codebase or the changelog:
+https://github.com/danmunn/redmine_dmsf/blob/devel-1.5.0/CHANGELOG.md
+
 Features
 --------
 
@@ -43,7 +48,7 @@ As of version 1.4.4 of this plugin:
   * Bundler 1.1 or greater (Gem)
   * Redmine 2.0.x 
   * Rails 3.2.x (Inline with Redmine installation requirement) 
-  * zip (Gem)
+  * rubyzip (Gem)
   * Nokogiri 1.4.2 or greater (Gem)
   * UUIDTools 2.1.1 or greater (less than 2.2.0) (Gem)
   * simple_enum (Gem)
@@ -81,7 +86,7 @@ From Omega documentation:
 
 On Debian use:
 
-```apt-get install libxapian-ruby1.8 xapian-omega libxapian-dev xpdf antiword unzip\
+```apt-get install libxapian-ruby1.8 xapian-omega libxapian-dev xpdf xpdf-utils antiword unzip\
 catdoc libwpd8c2a libwps-0.1-1 gzip unrtf catdvi djview djview3```
 
 On Ubuntu use:
