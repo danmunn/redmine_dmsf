@@ -1,8 +1,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-class DmsfWorkflowsControllerTest < ActionController::TestCase
-  fixtures :users
-  fixtures :dmsf_workflows
+class DmsfWorkflowsControllerTest < Test::TestCase
+  fixtures :users, :dmsf_workflows
   
   def setup
     User.current = nil    
