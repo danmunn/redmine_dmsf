@@ -1,6 +1,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
-class DmsfWorkflowTest < ActiveSupport::TestCase
+class DmsfWorkflowTest < Test::UnitTest
 
   def setup
     @wf1 = Dmsf::Workflow.find(1)
