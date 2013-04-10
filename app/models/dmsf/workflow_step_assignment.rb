@@ -7,7 +7,7 @@
 #  revision_id       :integer          not null
 #
 module Dmsf
-  class WorkflowStepAssignment < ActiveRecord::Base
+  class WorkflowStepAssignment < Dmsf::ActiveRecordBase
     belongs_to :workflow_step
 
     has_many :workflow_step_actions, :dependent => destroy

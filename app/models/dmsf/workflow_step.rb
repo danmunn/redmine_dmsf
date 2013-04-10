@@ -9,7 +9,7 @@
 #  operator           :boolean          not null
 #
 module Dmsf
-  class WorkflowStep < ActiveRecord::Base
+  class WorkflowStep < Dmsf::ActiveRecordBase
     belongs_to :workflow
     
     has_many :workflow_step_assignments, :dependent => :destroy

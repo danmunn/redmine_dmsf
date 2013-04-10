@@ -1,0 +1,37 @@
+--- 
+users_001: 
+  created_on: 2006-07-19 19:12:21 +02:00
+  status: 1
+  last_login_on: 2006-07-19 22:57:52 +02:00
+  language: en
+  # password = admin
+  salt: 82090c953c4a0000a7db253b0691a6b4
+  hashed_password: b5b6ff9543bf1387374cdfa27a54c96d236a7150
+  updated_on: 2006-07-19 22:57:52 +02:00
+  admin: true
+  mail: admin@somenet.foo
+  lastname: Admin
+  firstname: Redmine
+  id: 1
+  auth_source_id: 
+  mail_notification: all
+  login: admin
+  type: User
+users_002: 
+  created_on: 2006-07-19 19:32:09 +02:00
+  status: 1
+  last_login_on: 2006-07-19 22:42:15 +02:00
+  language: en
+  # password = jsmith
+  salt: 67eb4732624d5a7753dcea7ce0bb7d7d
+  hashed_password: bfbe06043353a677d0215b26a5800d128d5413bc
+  updated_on: 2006-07-19 22:42:15 +02:00
+  admin: false
+  mail: jsmith@somenet.foo
+  lastname: Smith
+  firstname: John
+  id: 2
+  auth_source_id: 
+  mail_notification: all
+  login: jsmith
+  type: User

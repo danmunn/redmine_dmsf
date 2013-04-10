@@ -16,7 +16,7 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def new   
-    @workflow = DmsfWorkflow.new
+    @workflow = Dmsf::Workflow.new
   end
   
   def create

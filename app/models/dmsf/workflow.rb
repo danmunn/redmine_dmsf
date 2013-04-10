@@ -8,7 +8,7 @@
 #
 
 module Dmsf
-  class Workflow < ActiveRecord::Base
+  class Workflow < Dmsf::ActiveRecordBase
     belongs_to :project
 
     has_many :workflow_steps, :dependent => :destroy
