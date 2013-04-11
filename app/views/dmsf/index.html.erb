@@ -1,3 +1,6 @@
+<% content_for :header_tags do %>
+    <%=  dmsf_stylesheet_link_tags(:controller => false) %>
+<% end %>
 <% html_title(l(:dmsf)) %>
 
 <% if @entity.kind_of?(Dmsf::Folder) %>

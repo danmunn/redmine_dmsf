@@ -18,21 +18,21 @@
 %>
 
 <li class="dmsf-entity <%=item_class%> dmsf-entity-<%=item.id%>" data-entity="<%=item.id%>" id="d_e_<%=item.id%>">
-  <div class="dmsf-entity-name"><%=link_to item.title, dmsf_index_path(:dmsf_path => item.path.to_s)%></div>
-  <div class="dmsf-entity-cat">
+  <div class="dmsf-col dmsf-entity-name"><%=link_to item.title, dmsf_index_path(:dmsf_path => item.path.to_s)%></div>
+  <div class="dmsf-col dmsf-entity-cat">
     <span class="category"><%=item_category%></span>
     <span class="ext"><%=item_ext%></span>
   </div>
-  <div class="dmsf-entity-lock <%= item_locked %>">
+  <div class="dmsf-col dmsf-entity-lock <%= item_locked %>">
     <span><%= item_locked %></span>
   </div>
-  <div class="dmsf-entity-size">
+  <div class="dmsf-col dmsf-entity-size">
     NaN
   </div>
-  <div class="dmsf-entity-modified">
+  <div class="dmsf-col dmsf-entity-modified">
     <%= item_mod %>
   </div>
-  <div class="dmsf-entity-action">
+  <div class="dmsf-col dmsf-entity-action">
     <% item_actions.each do |action| %>
         <%=action%>
     <% end %>

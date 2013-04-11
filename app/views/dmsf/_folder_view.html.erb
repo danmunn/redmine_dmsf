@@ -9,7 +9,7 @@
 	<% textilizable(@entity.nil? ? @project.dmsf_description : @entity.description) %>
 	</div>
 	<%# render "custom_fields", :object => @entity %>
-    <ol id="dmsf-entity-container dmsf-entity-children-of-<%=container_class%>">
+    <ol id="dmsf-entity-container" class="dmsf-entity-container dmsf-entity-children-of-<%=container_class%>">
         <% if @parent %>
           <%= render_parent_link(@parent)%>
         <% end %>
