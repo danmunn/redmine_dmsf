@@ -1,6 +1,8 @@
 Redmine DMSF Plugin
 ===================
 
+The current version of Redmine DMSF is **1.4.5p1**
+
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
 Redmine DMSF now comes bundled with Webdav functionality: if switched on within plugin settings this will be accessible from /dmsf/webdav.
