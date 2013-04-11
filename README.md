@@ -172,7 +172,7 @@ Uninstalling DMSF
 Before uninstalling the DMSF plugin, please ensure that the Redmine instance is stopped.
 
 1. `cd [redmine-install-dir]`
-2. `rake redmine:plugin:migrate NAME=redmine_dmsf VERSION=0`
+2. `rake redmine:plugins:migrate NAME=redmine_dmsf VERSION=0 RAILS_ENV=production`
 3. `rm plugins/redmine_dmsf -Rf`
 
 After these steps re-start your instance of Redmine.
