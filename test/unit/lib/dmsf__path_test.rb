@@ -104,68 +104,29 @@ module Dmsf
       end
 
       context "static method find" do
-        setup do
-          #ToDo: This needs to be converted into fixtures
-          Dmsf::Folder.create! :title => 'Other',
-                               :description => 'Bogus data',
-                               :owner_id => 1,
-                               :project_id => 1
-          entity = Dmsf::Folder.create!(:title => 'Root',
-                                        :description => '',
-                                        :owner_id => 1,
-                                        :project_id => 1)
-          f1 = Dmsf::File.create! :title => 'test.file',
-                                  :description => '',
-                                  :parent_id => entity.id,
-                                  :owner_id => 1,
-                                  :project_id => 1
-          f2 = Dmsf::File.create! :title => 'test.test',
-                                  :description => '',
-                                  :parent_id => entity.id,
-                                  :owner_id => 1,
-                                  :project_id => 1
-
-          r1 = f1.revisions.create! :title => 'test.file',
-                                    :major_version => 1,
-                                    :minor_version => 0,
-                                    :project_id => 1,
-                                    :owner_id => 1,
-                                    :source_path => './do/not/exist.file'
-
-          r2 = f2.revisions.create! :title => 'test.test',
-                                    :major_version => 1,
-                                    :minor_version => 0,
-                                    :project_id => 1,
-                                    :owner_id => 1,
-                                    :source_path => './do/not/exist.file'
-        end
-        teardown do
-          Dmsf::Entity.delete_all
-          Dmsf::Revision.delete_all
-        end
-
+        fixtures :dmsf_entities, :dmsf_revisions
         # With modifications the original test could be maintained however,
         # it was adjusted to paths could exist as path/to/file as well as
         # /path/to/file (although automatically adjusted into latter)
         should "return a path when / is not present as first character" do
-          path = Dmsf::Path.find('Root', 1)
+          path = Dmsf::Path.find('Test Folder', 1)
           assert path.nil? === false
         end
 
         should "return nil when nothing is found" do
-          path = Dmsf::Path.find('/blah', 1)
+          path = Dmsf::Path.find('/does/not/exist', 1)
           assert path === nil, 'Expecting Dmsf::Path to return nil'
         end
 
         should "return a Dmsf::Path with Dmsf::Entity items contained within" do
-          path = Dmsf::Path.find('/Root/test.file', 1)
+          path = Dmsf::Path.find('/Test Folder/test.file', 1)
           path.each{|e|
             assert e.kind_of?(Dmsf::Entity), 'Expecting Dmsf::Path item to be Dmsf::Entity'
           }
         end
 
         should "be case sensitive" do
-          path = Dmsf::Path.find('/root/test.file', 1)
+          path = Dmsf::Path.find('/test folder/test.File', 1)
           assert path === nil
         end
 
