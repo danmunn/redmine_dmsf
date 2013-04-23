@@ -18,5 +18,14 @@ module Dmsf
     validates :step, :presence => true
     validates :user_id, :presence => true
     validates :operator, :presence => true
+    validates_uniqueness_of :user_id, :scope => [:workflow_id, :step]
+    
+    def soperator
+      operator == 1 ? l(:dmsf_and) : l(:dmsf_or)
+    end
+    
+    def user
+      User.find(user_id)
+    end
   end
 end
