@@ -10,7 +10,7 @@ module Dmsf
   class WorkflowStepAssignment < Dmsf::ActiveRecordBase
     belongs_to :workflow_step
 
-    has_many :workflow_step_actions, :dependent => destroy
+    #has_many :workflow_step_actions, :dependent => destroy
 
     validates :workflow_step_id, :presence => true
     validates :revision_id, :presence => true
