@@ -5,12 +5,12 @@ class DmsfWorkflowStepTest < Test::UnitTest
   fixtures :dmsf_workflow_steps
 
   def setup 
-    @wfs1 = Dmsf::WorkflowStep.find(1)
-    @wfs2 = Dmsf::WorkflowStep.find(2)
+    @ws1 = Dmsf::WorkflowStep.find(1)
+    @ws2 = Dmsf::WorkflowStep.find(2)
   end
   
   def test_truth
-    assert_kind_of Dmsf::WorkflowStep, @wfs1    
+    assert_kind_of Dmsf::WorkflowStep, @ws1
   end
   
   def test_create
@@ -23,58 +23,58 @@ class DmsfWorkflowStepTest < Test::UnitTest
   end
   
   def test_update
-    assert_equal 1, @wfs1.workflow_id
-    @wfs1.workflow_id = 2
-    assert_equal 1, @wfs1.step
-    @wfs1.step = 2
-    assert_equal 1, @wfs1.user_id
-    @wfs1.user_id = 2
-    assert_equal 1, @wfs1.operator
-    @wfs1.operator = 2
+    assert_equal 1, @ws1.workflow_id
+    @ws1.workflow_id = 2
+    assert_equal 1, @ws1.step
+    @ws1.step = 2
+    assert_equal 1, @ws1.user_id
+    @ws1.user_id = 2
+    assert_equal 1, @ws1.operator
+    @ws1.operator = 2
     
-    assert @wfs1.save
-    @wfs1.reload
+    assert @ws1.save
+    @ws1.reload
     
-    assert_equal 2, @wfs1.workflow_id
-    assert_equal 2, @wfs1.step
-    assert_equal 2, @wfs1.user_id
-    assert_equal 2, @wfs1.operator
+    assert_equal 2, @ws1.workflow_id
+    assert_equal 2, @ws1.step
+    assert_equal 2, @ws1.user_id
+    assert_equal 2, @ws1.operator
   end
   
   def test_validate_workflow_id_presence
-    @wfs1.workflow_id = nil
-    assert !@wfs1.save
-    assert_equal 1, @wfs1.errors.count        
+    @ws1.workflow_id = nil
+    assert !@ws1.save
+    assert_equal 1, @ws1.errors.count        
   end
   
   def test_validate_step_presence
-    @wfs1.step = nil
-    assert !@wfs1.save
-    assert_equal 1, @wfs1.errors.count        
+    @ws1.step = nil
+    assert !@ws1.save
+    assert_equal 1, @ws1.errors.count        
   end
   
   def test_validate_user_id_presence
-    @wfs1.user_id = nil
-    assert !@wfs1.save
-    assert_equal 1, @wfs1.errors.count        
+    @ws1.user_id = nil
+    assert !@ws1.save
+    assert_equal 1, @ws1.errors.count        
   end
   
   def test_validate_operator_presence
-    @wfs1.operator = nil
-    assert !@wfs1.save
-    assert_equal 1, @wfs1.errors.count        
+    @ws1.operator = nil
+    assert !@ws1.save
+    assert_equal 1, @ws1.errors.count        
   end
   
   def test_validate_user_id_uniqueness
-    @wfs2.user_id = @wfs1.user_id
-    @wfs2.workflow_id = @wfs1.workflow_id
-    @wfs2.step = @wfs1.step
-    assert !@wfs2.save
-    assert_equal 1, @wfs2.errors.count        
+    @ws2.user_id = @ws1.user_id
+    @ws2.workflow_id = @ws1.workflow_id
+    @ws2.step = @ws1.step
+    assert !@ws2.save
+    assert_equal 1, @ws2.errors.count        
   end
   
   def test_destroy  
-    @wfs2.destroy
+    @ws2.destroy
     assert_nil Dmsf::WorkflowStep.find_by_id(2)
   end
 end

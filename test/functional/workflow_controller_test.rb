@@ -65,22 +65,23 @@ class DmsfWorkflowsControllerTest < Test::TestCase
     assert_difference 'Dmsf::WorkflowStep.count', +1 do    
       post :add_step, :commit => 'OR', :step => 1, :id => 1, :user_ids =>[3]
     end
-    wfs = Dmsf::WorkflowStep.first(:order => 'id DESC')
     assert_response 200
-    assert_equal 1, wfs.workflow_id
-    assert_equal 1, wfs.step
-    assert_equal 3, wfs.user_id
-    assert_equal 0, wfs.operator
+    ws = Dmsf::WorkflowStep.first(:order => 'id DESC')    
+    assert_equal 1, ws.workflow_id
+    assert_equal 1, ws.step
+    assert_equal 3, ws.user_id
+    assert_equal 0, ws.operator
   end
   
   def test_remove_step
     @request.session[:user_id] = 1 # admin
     n = Dmsf::WorkflowStep.where(:workflow_id => 1, :step => 1).count
     assert_difference 'Dmsf::WorkflowStep.count', -n do
-      delete :remove_step, :step_no => 1, :id => 1
-    end   
-    wfs = Dmsf::WorkflowStep.where(:workflow_id => 1).first(:order => 'id DESC')
-    assert_equal 1, wfs.step
+      delete :remove_step, :step => 1, :id => 1
+    end
+    assert_response 200
+    ws = Dmsf::WorkflowStep.where(:workflow_id => 1).first(:order => 'id DESC')    
+    assert_equal 1, ws.step
   end
   
 end

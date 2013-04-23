@@ -86,13 +86,13 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def remove_step        
-    if request.delete? && params[:step_no].present?
-      Dmsf::WorkflowStep.where(['workflow_id = ? AND step = ?', @workflow.id, params[:step_no]]).each do |ws|
+    if request.delete?
+      Dmsf::WorkflowStep.where(:workflow_id => @workflow.id, :step => params[:step]).each do |ws|
         @workflow.workflow_steps.delete(ws)
       end              
       @workflow.workflow_steps.each do |ws|
         n = ws.step.to_i
-        if n > params[:step_no].to_i        
+        if n > params[:step].to_i        
           ws.step = n - 1
           ws.save
         end
