@@ -5,9 +5,14 @@ en:
     resource_not_locked: "The requested entity is not locked"
     lock_not_owned_by_principal: "You are the not the owner of the entities active lock"
   dmsf_lang_folder: "folder"
-  dmsf_lang_file: "file"
-  dmsf_approval_workflow: Approval workflow
+  dmsf_lang_file: "file"  
   label_dmsf_workflow_new: New approval workflow
   label_dmsf_workflow_plural: Approval workflows  
   error_unable_delete_dmsf_workflow: Unable to delete the workflow
+  label_dmsf_workflow_step: Step
   label_dmsf_workflow_step_plural: Steps
+  label_dmsf_workflow_approval: Approval
+  label_dmsf_workflow_approval_plural: Approvals
+  dmsf_and: AND
+  dmsf_or: OR
+  dmsf_new_step: New step

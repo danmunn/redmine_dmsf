@@ -19,7 +19,7 @@ module Dmsf
 
     def self.workflows(project)
       if project
-        where(['project_id = ?', project])
+        where(:project_id => project)
       else
         where('project_id IS NULL')
       end
@@ -27,6 +27,26 @@ module Dmsf
 
     def to_s
       name
+    end
+    
+    def approvals(step)
+      wa = Array.new
+      workflow_steps.each do |s|
+        if s.step == step
+          wa << s
+        end
+      end
+      wa.sort_by { |obj| -obj.operator }
+    end
+    
+    def steps         
+      ws = Array.new
+      workflow_steps.each do |s|
+        unless ws.include? s.step
+          ws << s.step
+        end
+      end
+      ws.sort
     end
   end
 end
