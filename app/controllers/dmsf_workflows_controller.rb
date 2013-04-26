@@ -1,14 +1,18 @@
 class DmsfWorkflowsController < ApplicationController
-  unloadable
-  layout 'admin'
-    
-  before_filter :require_admin
-  before_filter :find_workflow, :except => [:create, :new, :index]
-
+  unloadable  
+  layout 'admin' unless @project    
+  
+  before_filter :find_workflow, :except => [:create, :new, :index]  
+  before_filter :authorization
+  
   def index    
-    @workflow_pages, @workflows = paginate Dmsf::Workflow, :per_page => 25
+    if @project
+      @workflow_pages, @workflows = paginate Dmsf::Workflow.where(:project_id => @project.id), :per_page => 25    
+    else
+      @workflow_pages, @workflows = paginate Dmsf::Workflow.where(:project_id => nil), :per_page => 25    
+    end
   end
-
+  
   def action
   end
 
@@ -16,14 +20,18 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def new   
-    @workflow = Dmsf::Workflow.new
+    @workflow = Dmsf::Workflow.new        
   end
   
   def create
-    @workflow = Dmsf::Workflow.new({:name => params[:dmsf_workflow][:name]})
+    @workflow = Dmsf::Workflow.new(:name => params[:dmsf_workflow][:name], :project_id => params[:project_id])
     if request.post? && @workflow.save
       flash[:notice] = l(:notice_successful_create)
-      redirect_to dmsf_workflows_path
+      if @project
+        redirect_to settings_project_path(@project, :tab => 'dmsf')
+      else
+        redirect_to dmsf_workflows_path
+      end
     else
       render_validation_errors(@workflow)
       render :action => 'new'
@@ -36,7 +44,11 @@ class DmsfWorkflowsController < ApplicationController
   def update    
     if request.put? && @workflow.update_attributes({:name => params[:dmsf_workflow][:name]})
       flash[:notice] = l(:notice_successful_update)
-      redirect_to dmsf_workflows_path
+      if @project
+        redirect_to settings_project_path(@project, :tab => 'dmsf')
+      else
+        redirect_to dmsf_workflows_path
+      end    
     else
       render_validation_errors(@workflow)
       render :action => 'edit'
@@ -49,7 +61,11 @@ class DmsfWorkflowsController < ApplicationController
     rescue
       flash[:error] = l(:error_unable_delete_dmsf_workflow)
     end
-    redirect_to dmsf_workflows_path
+    if @project
+      redirect_to settings_project_path(@project, :tab => 'dmsf')
+    else
+      redirect_to dmsf_workflows_path
+    end    
   end
   
   def autocomplete_for_user
@@ -107,5 +123,22 @@ class DmsfWorkflowsController < ApplicationController
   
   def find_workflow   
     @workflow = Dmsf::Workflow.find(params[:id])
+  end
+  
+  def authorization
+    find_project
+    if @project
+      authorize
+    else
+      require_admin
+    end  
+  end
+  
+  def find_project
+    if @workflow
+      @project = @workflow.project
+    else
+      @project = Project.find_by_id(params[:project_id]) if params[:project_id].present?
+    end
   end
 end

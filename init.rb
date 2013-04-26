@@ -54,6 +54,11 @@ Redmine::Plugin.register :redmine_dmsf do
                          }
                        },
            :partial => 'settings/dmsf_settings'
+         
+  # Roles & permissions
+  project_module :dmsf do
+    permission :approval_workflows, {:dmsf_workflows => [:new, :create, :destroy, :edit, :add_step, :remove_step]}    
+  end
             
   # Administration menu extension
   Redmine::MenuManager.map :admin_menu do |menu|

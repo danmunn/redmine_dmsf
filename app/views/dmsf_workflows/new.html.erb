@@ -4,6 +4,9 @@
   <%= error_messages_for 'workflow' %>
   <div class="box tabular">
     <p><%= f.text_field :name, :required => true %></p>
+    <% if params[:project_id] %>
+      <p><%= hidden_field_tag :project_id, params[:project_id] %></p>
+    <% end %>
   </div>
   <%= submit_tag l(:button_create) %>
 <% end %>
