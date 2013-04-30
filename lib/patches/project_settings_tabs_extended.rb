@@ -20,9 +20,9 @@ module Dmsf
       
         def project_settings_tabs_with_dmsf
           tabs = project_settings_tabs_without_dmsf
-          #if @project.module_enabled?('dmsf')
+          if @project.module_enabled? :dmsf
             tabs << {:name => 'dmsf', :controller => 'dmsf_workflows', :action => 'index', :partial => 'dmsf_workflows/main', :label => 'label_dmsf'}             
-          #end
+          end
           return tabs
         end
 

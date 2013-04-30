@@ -1,9 +1,10 @@
 class DmsfWorkflowsController < ApplicationController
   unloadable  
-  layout 'admin' unless @project    
+  layout :workflows_layout
   
   before_filter :find_workflow, :except => [:create, :new, :index]  
-  before_filter :authorization
+  before_filter :find_project   
+  before_filter :authorize_global
   
   def index    
     if @project
@@ -38,7 +39,7 @@ class DmsfWorkflowsController < ApplicationController
     end
   end
   
-  def edit    
+  def edit       
   end   
   
   def update    
@@ -122,23 +123,20 @@ class DmsfWorkflowsController < ApplicationController
   private    
   
   def find_workflow   
-    @workflow = Dmsf::Workflow.find(params[:id])
+    @workflow = Dmsf::Workflow.find_by_id(params[:id])    
   end
-  
-  def authorization
-    find_project
-    if @project
-      authorize
-    else
-      require_admin
-    end  
-  end
-  
-  def find_project
+    
+  def find_project    
     if @workflow
       @project = @workflow.project
-    else
-      @project = Project.find_by_id(params[:project_id]) if params[:project_id].present?
-    end
+    elsif params[:project_id].present?
+       @project = Project.find_by_id params[:project_id]
+    end              
+  end
+  
+  def workflows_layout
+    find_workflow
+    find_project
+    @project ? 'base' : 'admin'
   end
 end
