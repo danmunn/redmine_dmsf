@@ -2,11 +2,12 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfWorkflowTest < Test::UnitTest
 
-  fixtures :dmsf_workflows
+  fixtures :dmsf_workflows, :dmsf_workflow_steps
 
   def setup
     @wf1 = Dmsf::Workflow.find(1)
-    @wf2 = Dmsf::Workflow.find(2)
+    @wf2 = Dmsf::Workflow.find(2) 
+    @ws1 = Dmsf::WorkflowStep.find(1)
   end
   
   def test_truth
@@ -44,8 +45,9 @@ class DmsfWorkflowTest < Test::UnitTest
     assert_equal 1, @wf2.errors.count        
   end
   
-  def test_destroy  
-    @wf2.destroy
-    assert_nil Dmsf::Workflow.find_by_id(2)
+  def test_destroy      
+    @wf1.destroy
+    assert_nil Dmsf::Workflow.find_by_id(1)
+    assert_nil Dmsf::WorkflowStep.find_by_id(@ws1.id)
   end
 end
