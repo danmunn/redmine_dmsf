@@ -33,8 +33,7 @@ class DmsfWorkflowsController < ApplicationController
       else
         redirect_to dmsf_workflows_path
       end
-    else
-      render_validation_errors(@workflow)
+    else      
       render :action => 'new'
     end
   end
@@ -50,8 +49,7 @@ class DmsfWorkflowsController < ApplicationController
       else
         redirect_to dmsf_workflows_path
       end    
-    else
-      render_validation_errors(@workflow)
+    else      
       render :action => 'edit'
     end
   end
