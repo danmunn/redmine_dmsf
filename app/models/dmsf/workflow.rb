@@ -18,11 +18,12 @@ module Dmsf
     validates_length_of :name, :maximum => 255
 
     def self.workflows(project)
-      if project
-        where(:project_id => project)
-      else
-        where('project_id IS NULL')
-      end
+      project ? where(:project_id => project) : where('project_id IS NULL')      
+    end
+    
+    def project      
+      @project = Project.find_by_id(project_id) unless @project
+      @project
     end
 
     def to_s

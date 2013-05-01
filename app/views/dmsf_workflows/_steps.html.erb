@@ -1,6 +1,10 @@
-<h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=h @workflow %></h2>
-<%= error_messages_for 'workflow' %>
+<% if @workflow.project %>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(@project, :tab => 'dmsf') %> &#187; <%=h @workflow %></h2>
+<% else %>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=h @workflow %></h2>
+<% end %>
 <%= labelled_form_for @workflow do |f| %>
+  <%= error_messages_for 'workflow' %>
   <div class="box tabular">
     <p><%= f.text_field :name, :required => true %><%= submit_tag l(:button_save) %></p>
   </div>  
@@ -42,7 +46,7 @@
 
 <div class="splitcontentright">
   <%= form_for(@workflow, :url => edit_dmsf_workflow_path(@workflow),
-               :html => {:method => :post}) do |f| %>
+               :html => {:method => :post}) do |f| %>    
     <fieldset><legend><%=l(:label_user_new)%></legend>
 
     <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>    
