@@ -57,7 +57,7 @@ Redmine::Plugin.register :redmine_dmsf do
          
   # Roles & permissions
   project_module :dmsf do
-    permission :approval_workflows, {:dmsf_workflows => [:new, :create, :destroy, :edit, :add_step, :remove_step, :update]}    
+    permission :approval_workflows, {:dmsf_workflows => [:new, :create, :destroy, :edit, :add_step, :remove_step, :reorder_steps, :update]}    
   end
             
   # Administration menu extension

@@ -118,6 +118,15 @@ class DmsfWorkflowsController < ApplicationController
     end
   end
   
+  def reorder_steps    
+    if request.put?
+      @workflow.reorder_steps params[:step].to_i, params[:workflow_step][:move_to]      
+    end        
+    respond_to do |format|
+      format.html      
+    end
+  end
+  
   private    
   
   def find_workflow   

@@ -11,4 +11,5 @@ RedmineApp::Application.routes.draw do
   
   match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'add_step', :id => /\d+/, :via => :post
   match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'remove_step', :id => /\d+/, :via => :delete
+  match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'reorder_steps', :id => /\d+/, :via => :put
 end
