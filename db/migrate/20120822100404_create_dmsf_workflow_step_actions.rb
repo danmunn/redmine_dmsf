@@ -3,7 +3,8 @@ class CreateDmsfWorkflowStepActions < ActiveRecord::Migration
     create_table :dmsf_workflow_step_actions do |t|
       t.references :workflow_step_assignment, :null => false
       t.integer :action, :null => false
-      t.text :note
+      t.text :note      
+      t.timestamp :created_at
     end
     add_index :dmsf_workflow_step_actions, 
       :workflow_step_assignment_id,
