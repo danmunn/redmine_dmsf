@@ -95,5 +95,9 @@ module Dmsf
           end                            
       end      
     end
+    
+    def delegates
+      User.all
+    end
   end
 end

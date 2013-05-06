@@ -1,0 +1,33 @@
+<h3 class="title"><%= l(:label_dmsf_workflow) %></h3>
+
+<%= form_tag({:controller => 'dmsf_workflows',
+              :action => 'new_action',
+              :object_type => Dmsf::Workflow,
+              :object_id => @workflow,
+              :project_id => @project},
+              :remote => true,
+              :method => :post,
+              :id => 'new-action-form') do %>
+  <p><label><%= radio_button_tag 'action', 'approve', true %> <%= l(:label_dmsf_wokflow_action_approve) %></label><br/></p>
+  
+  <p>
+    <label><%= radio_button_tag 'action', 'reject' %> <%= l(:label_dmsf_wokflow_action_reject) %></label><br/>
+    <%= text_area_tag :note, '', :placeholder => l(:message_dmsf_wokflow_note), :size => '38x2' %>
+  </p>
+
+  <p>
+    <label><%= radio_button_tag 'action', 'delegate' %> <%= l(:label_dmsf_wokflow_action_delegate) %></label><br/>
+    <%= text_field_tag 'user_search', nil %>
+  </p>
+  
+  <%= javascript_tag "observeSearchfield('user_search', 'users_for_delegate', '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@workflow) }')" %>
+
+  <div id="users_for_delegate">
+    <%= principals_check_box_tags 'watcher[user_ids][]', @workflow.delegates %>
+  </div>
+
+  <p class="buttons">
+    <%= submit_tag l(:button_add), :name => nil, :onclick => "hideModal(this);" %>
+    <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
+  </p>
+<% end %>
