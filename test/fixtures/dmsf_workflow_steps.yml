@@ -12,3 +12,10 @@ wfs2:
   step: 2
   user_id: 2
   operator: 1 
+  
+wfs3:
+  id: 3
+  workflow_id: 1
+  step: 3
+  user_id: 1
+  operator: 1 

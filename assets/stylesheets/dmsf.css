@@ -45,3 +45,6 @@ li.dmsf-entity-folder {
 .dmsf-entity-container .dmsf-entity .dmsf-col.dmsf-entity-action {
   width: 20%;
 }
+
+#users_for_delegate {height: 200px; overflow:auto;}
+#users_for_delegate label {display: block;}

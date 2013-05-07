@@ -5,10 +5,10 @@ class DmsfWorkflowsControllerTest < Test::TestCase
     :members, :member_roles
   
   def setup
-    User.current = nil   
+    User.current = nil        
     
     @manager_role = Role.find_by_name('Manager')    
-    @project = Project.find(5)    
+    @project = Project.find(5)            
   end
   
   def test_index_admin
@@ -129,8 +129,43 @@ class DmsfWorkflowsControllerTest < Test::TestCase
       delete :remove_step, :step => 1, :id => 1
     end
     assert_response :success
-    ws = Dmsf::WorkflowStep.where(:workflow_id => 1).first(:order => 'id DESC')    
+    ws = Dmsf::WorkflowStep.where(:workflow_id => 1).first(:order => 'id ASC')    
     assert_equal 1, ws.step
   end
   
+  def test_reorder_steps_to_lower
+    @request.session[:user_id] = 1 # admin    
+    put :reorder_steps, :step => 1, :id => 1, :workflow_step => {:move_to => 'lower'}
+    assert_response :success        
+    assert_equal 2, Dmsf::WorkflowStep.find(1).step    
+    assert_equal 1, Dmsf::WorkflowStep.find(2).step    
+    assert_equal 3, Dmsf::WorkflowStep.find(3).step
+  end
+  
+  def test_reorder_steps_to_lowest    
+    @request.session[:user_id] = 1 # admin    
+    put :reorder_steps, :step => 1, :id => 1, :workflow_step => {:move_to => 'lowest'}
+    assert_response :success        
+    assert_equal 3, Dmsf::WorkflowStep.find(1).step
+    assert_equal 1, Dmsf::WorkflowStep.find(2).step    
+    assert_equal 2, Dmsf::WorkflowStep.find(3).step
+  end            
+  
+  def test_reorder_steps_to_higher
+    @request.session[:user_id] = 1 # admin    
+    put :reorder_steps, :step => 2, :id => 1, :workflow_step => {:move_to => 'higher'}
+    assert_response :success    
+    assert_equal 2, Dmsf::WorkflowStep.find(1).step    
+    assert_equal 1, Dmsf::WorkflowStep.find(2).step    
+    assert_equal 3, Dmsf::WorkflowStep.find(3).step
+  end
+  
+  def test_reorder_steps_to_highest
+    @request.session[:user_id] = 1 # admin    
+    put :reorder_steps, :step => 3, :id => 1, :workflow_step => {:move_to => 'highest'}
+    assert_response :success    
+    assert_equal 2, Dmsf::WorkflowStep.find(1).step    
+    assert_equal 3, Dmsf::WorkflowStep.find(2).step    
+    assert_equal 1, Dmsf::WorkflowStep.find(3).step
+  end
 end

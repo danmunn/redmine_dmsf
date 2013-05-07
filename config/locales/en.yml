@@ -7,7 +7,8 @@ en:
   dmsf_lang_folder: "folder"
   dmsf_lang_file: "file"  
   label_dmsf_workflow_new: New approval workflow
-  label_dmsf_workflow_plural: Approval workflows  
+  label_dmsf_workflow: Approval workflow
+  label_dmsf_workflow_plural: Approval workflows
   error_unable_delete_dmsf_workflow: Unable to delete the workflow
   label_dmsf_workflow_step: Step
   label_dmsf_workflow_step_plural: Steps
@@ -17,3 +18,7 @@ en:
   dmsf_or: OR
   dmsf_new_step: New step
   label_dmsf: DMSF
+  label_dmsf_wokflow_action_approve: Approve
+  label_dmsf_wokflow_action_reject: Reject
+  label_dmsf_wokflow_action_delegate: 'Delegate to:'
+  message_dmsf_wokflow_note: Your note...

@@ -3,6 +3,7 @@
 <% else %>
   <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=h @workflow %></h2>
 <% end %>
+
 <%= labelled_form_for @workflow do |f| %>
   <%= error_messages_for 'workflow' %>
   <div class="box tabular">
@@ -18,6 +19,7 @@
   <thead><tr>
     <th><%= l(:label_dmsf_workflow_step) %></th>
     <th><%= l(:label_dmsf_workflow_approval_plural) %></th>
+    <th><%=l(:button_sort)%></th>
     <th style="width:15%"></th>          
   </tr></thead>
   <tbody>  
@@ -32,6 +34,9 @@
           <%= link_to_user approval.user %>
         <% end %>
       </td>  
+      <td align="center" style="width:15%;">
+        <%= reorder_links('workflow_step', {:action => 'edit', :id => @workflow, :step => step}, :put) %>
+      </td>
       <td class="buttons">      
         <%= delete_link edit_dmsf_workflow_path(@workflow, :step => step) %>
       </td>  

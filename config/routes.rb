@@ -6,9 +6,12 @@ RedmineApp::Application.routes.draw do
   resources :dmsf_workflows do
     member do
       get 'autocomplete_for_user'
+      get 'action'
+      post 'new_action'
     end
   end
   
   match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'add_step', :id => /\d+/, :via => :post
   match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'remove_step', :id => /\d+/, :via => :delete
+  match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'reorder_steps', :id => /\d+/, :via => :put  
 end

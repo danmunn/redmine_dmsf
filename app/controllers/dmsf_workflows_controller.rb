@@ -4,7 +4,7 @@ class DmsfWorkflowsController < ApplicationController
   
   before_filter :find_workflow, :except => [:create, :new, :index]  
   before_filter :find_project   
-  before_filter :authorize_global
+  before_filter :authorize_global, :except => [:action, :new_action]
   
   def index    
     if @project
@@ -15,6 +15,10 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def action
+  end
+  
+  def new_action
+    logger.info '>>>>>>>>>>>>>>>>>>>>>>> YES!'
   end
 
   def log
@@ -112,6 +116,15 @@ class DmsfWorkflowsController < ApplicationController
           ws.save
         end
       end
+    end        
+    respond_to do |format|
+      format.html      
+    end
+  end
+  
+  def reorder_steps    
+    if request.put?
+      @workflow.reorder_steps params[:step].to_i, params[:workflow_step][:move_to]      
     end        
     respond_to do |format|
       format.html      

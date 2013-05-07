@@ -49,5 +49,55 @@ module Dmsf
       end
       ws.sort
     end
+    
+    def reorder_steps(step, move_to)      
+      case move_to
+        when 'highest'          
+          unless step == 1            
+            workflow_steps.each do |ws|              
+              if ws.step < step                
+                ws.update_attribute('step', ws.step + 1)
+              elsif ws.step == step                
+                ws.update_attribute('step', 1)
+              end            
+            end          
+          end
+        when 'higher'
+          unless step == 1            
+            workflow_steps.each do |ws|
+              if ws.step == step - 1                                
+                ws.update_attribute('step', step)
+              elsif ws.step == step                
+                ws.update_attribute('step', step - 1)
+              end            
+            end          
+          end
+        when 'lower'
+          unless step == steps.count            
+            workflow_steps.each do |ws|                            
+              if ws.step == step + 1                
+                ws.update_attribute('step', step)
+              elsif ws.step == step                
+                ws.update_attribute('step', step + 1)
+              end            
+            end          
+          end
+        when 'lowest'                   
+          size = steps.count
+          unless step == size
+            workflow_steps.each do |ws|                            
+              if ws.step > step                
+                ws.update_attribute('step', ws.step - 1)
+              elsif ws.step == step                
+                ws.update_attribute('step', size)
+              end
+            end            
+          end                            
+      end      
+    end
+    
+    def delegates
+      User.all
+    end
   end
 end

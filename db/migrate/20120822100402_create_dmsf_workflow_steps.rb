@@ -7,7 +7,6 @@ class CreateDmsfWorkflowSteps < ActiveRecord::Migration
       t.integer :operator, :null => false
     end
     add_index :dmsf_workflow_steps, :workflow_id
-    add_index :dmsf_workflow_steps, [:workflow_id, :user_id, :step], :unique => true
   end
   
   def self.down
