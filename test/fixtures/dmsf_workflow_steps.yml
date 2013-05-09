@@ -1,0 +1,21 @@
+---
+wfs1:
+  id: 1
+  dmsf_workflow_id: 1
+  step: 1
+  user_id: 1
+  operator: 1 
+
+wfs2:
+  id: 2
+  dmsf_workflow_id: 1
+  step: 2
+  user_id: 2
+  operator: 1 
+  
+wfs3:
+  id: 3
+  dmsf_workflow_id: 1
+  step: 3
+  user_id: 1
+  operator: 1 

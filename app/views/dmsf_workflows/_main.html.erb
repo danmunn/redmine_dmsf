@@ -1,0 +1,32 @@
+<% @workflows = DmsfWorkflow.where(:project_id => @project.id) if @project && @workflows.nil?  %>  
+
+<div class="contextual">
+<% if @project %>
+  <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(:project_id => @project.id), :class => 'icon icon-add' %>                
+<% else %>
+  <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path, :class => 'icon icon-add' %>
+<% end %>
+</div>
+
+<h2><%=l(:label_dmsf_workflow_plural)%></h2>
+
+<table class="list">
+  <thead><tr>
+    <th><%=l(:field_name)%></th>    
+    <th></th>
+  </tr></thead>
+  <tbody>
+<% for workflow in @workflows %>
+  <tr id="workflow-<%= workflow.id %>" class="<%= cycle('odd', 'even') %>">
+    <td><%= link_to(h(workflow.name), edit_dmsf_workflow_path(workflow)) %></td>    
+    <td class="buttons">      
+      <%= delete_link dmsf_workflow_path(workflow) %>
+    </td>
+  </tr>
+<% end %>
+  </tbody>
+</table>
+
+<% if @workflow_pages %>
+  <p class="pagination"><%= pagination_links_full @workflow_pages %></p>
+<% end %>

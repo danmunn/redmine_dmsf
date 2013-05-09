@@ -58,6 +58,19 @@ Redmine::Plugin.register :redmine_dmsf do
     permission :file_approval, {:dmsf_files => [:delete_revision, :notify_activate, :notify_deactivate], 
       :dmsf => [:notify_activate, :notify_deactivate]}
     permission :force_file_unlock, {}
+    permission :approval_workflows, {:dmsf_workflows => [:new, :create, :destroy, :edit, :add_step, :remove_step, :reorder_steps, :update]}
+  end
+  
+  # Administration menu extension
+  Redmine::MenuManager.map :admin_menu do |menu|
+    menu.push :approvalworkflows, {:controller => 'dmsf_workflows', :action => 'index'}, :caption => :label_dmsf_workflow_plural        
+  end
+  
+  # Adds javascript and stylesheet tags for project tree view
+  class DmsfViewListener < Redmine::Hook::ViewListener
+    def view_layouts_base_html_head(context)
+      stylesheet_link_tag('dmsf', :plugin => :redmine_dmsf)
+    end
   end
   
   Redmine::WikiFormatting::Macros.register do
