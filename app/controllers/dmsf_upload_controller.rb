@@ -26,6 +26,7 @@ class DmsfUploadController < ApplicationController
   before_filter :find_folder, :except => [:upload_file]
   
   helper :all
+  helper :dmsf_workflows
 
   def upload_files
     uploaded_files = params[:uploaded_files]
@@ -107,7 +108,7 @@ class DmsfUploadController < ApplicationController
           new_revision.source_revision = last_revision
           new_revision.major_version = last_revision.major_version
           new_revision.minor_version = last_revision.minor_version
-          new_revision.workflow = last_revision.workflow
+          #new_revision.workflow = last_revision.workflow
         end
 
         commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file["disk_filename"].gsub(/[\/\\]/,'')}"
@@ -120,8 +121,8 @@ class DmsfUploadController < ApplicationController
         new_revision.title = commited_file["title"]
         new_revision.description = commited_file["description"]
         new_revision.comment = commited_file["comment"]
-        new_revision.increase_version(commited_file["version"].to_i, true)
-        new_revision.set_workflow(commited_file["workflow"])
+        new_revision.increase_version(commited_file["version"].to_i, true)        
+        new_revision.set_workflow(commited_file[:dmsf_workflow_id], nil)
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         new_revision.size = File.size(commited_disk_filepath)
 
@@ -147,6 +148,7 @@ class DmsfUploadController < ApplicationController
         end
         
         if new_revision.save
+          new_revision.assign_workflow(commited_file[:dmsf_workflow_id])
           file.reload
           
           new_revision.copy_file_content(file_upload)

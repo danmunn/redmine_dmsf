@@ -42,4 +42,12 @@ module DmsfWorkflowsHelper
     options_for_select(options, 0)
   end   
   
+  def dmsf_workflows_for_select(project, dmsf_workflow_id)
+    options = Array.new
+    options << [l(:option_workflow_none), nil]
+    DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', project.id]).each do |wf|
+      options << [wf.name, wf.id]
+    end
+    options_for_select(options, :selected => dmsf_workflow_id)
+  end  
 end

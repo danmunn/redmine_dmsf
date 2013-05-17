@@ -3,20 +3,22 @@
 <%= form_tag({:controller => 'dmsf_workflows',
               :action => 'new_action',
               :object_type => DmsfWorkflow,
-              :object_id => @workflow,
-              :project_id => @project},
+              :object_id => @workflow.id,
+              :project_id => @project.id},
               :remote => true,
               :method => :post,
-              :id => 'new-action-form') do %>
-  <p><label><%= radio_button_tag 'action', 'approve', true %> <%= l(:label_dmsf_wokflow_action_approve) %></label><br/></p>
+              :id => 'new-action-form') do %>  
+  <%= hidden_field_tag :dmsf_workflow_step_assignment_id, params[:dmsf_workflow_step_assignment_id] %>
+  <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>
+  <p><label><%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_APPROVE, true %> <%= l(:label_dmsf_wokflow_action_approve) %></label><br/></p>
   
   <p>
-    <label><%= radio_button_tag 'action', 'reject' %> <%= l(:label_dmsf_wokflow_action_reject) %></label><br/>
+    <label><%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_REJECT %> <%= l(:label_dmsf_wokflow_action_reject) %></label><br/>
     <%= text_area_tag :note, '', :placeholder => l(:message_dmsf_wokflow_note), :size => '38x2' %>
   </p>
 
   <p>
-    <label><%= radio_button_tag 'action', 'delegate' %> <%= l(:label_dmsf_wokflow_action_delegate) %></label><br/>
+    <label><%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_DELEGATE %> <%= l(:label_dmsf_wokflow_action_delegate) %></label><br/>
     <%= text_field_tag 'user_search', nil %>
   </p>
   
@@ -27,7 +29,7 @@
   </div>
 
   <p class="buttons">
-    <%= submit_tag l(:button_add), :name => nil, :onclick => "hideModal(this);" %>
-    <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
+    <%= submit_tag l(:submit_commit), :name => nil, :onclick => 'hideModal(this);' %>
+    <%= submit_tag l(:button_cancel), :name => nil, :onclick => 'hideModal(this);' %>
   </p>
 <% end %>

@@ -4,21 +4,6 @@
 			<% if @file.locked_for_user? %>
 				<p class="warning"><%= l(:info_file_locked) %></p>
 			<% else %>
-<%
-disabled_workflow = []
-selected_workflow = nil
-if !User.current.allowed_to?(:file_approval, @project)
-	disabled_workflow << 2
-	current_workflow = @file.last_revision.workflow
-	if current_workflow == 1 || current_workflow == 2
-		disabled_workflow << nil
-		selected_workflow = 1
-	end
-else
-	selected_workflow = @file.last_revision.workflow
-end
-%>
-
 <%= form_for(@revision, :url => {:action => "create_revision", :id => @file},
 	:html => {:method=>:post, :multipart => true, :id => "new_revision_form"}) do |f| %>
 				<div class="clear">
@@ -60,12 +45,13 @@ end
 					</div>
 					<p>
 						<%= label_tag("workflow", l(:label_workflow) + ":") %>
-						<%= select_tag("workflow", 
-								options_for_select([
-										[l(:option_workflow_none), nil], 
-										[l(:option_workflow_waiting_for_approval), 1],
-										[l(:option_workflow_approved), 2]], 
-									:selected => selected_workflow, :disabled => disabled_workflow)) %>
+						<%= select_tag(
+                                                    'dmsf_workflow_id', 
+                                                    dmsf_workflows_for_select(@project, @file.last_revision.dmsf_workflow_id))%>
+                                                    <% if @file.last_revision.dmsf_workflow_id && @file.last_revision.workflow == 3%>
+                                                      <%= submit_tag(l(:label_dmsf_wokflow_action_start)) %>
+                                                    <% end %>
+                                                    
 					</p>
 				</div>
 				<div class="splitcontentright clear">
@@ -78,7 +64,7 @@ end
 								(<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
 							</small>
 						</div>
-					</p>
+					</p>					
 				</div>
 				<br style="clear: both"/>
 				<div class="custom_fields">
@@ -96,6 +82,7 @@ end
 				</div>
 				<br />
 				<%= submit_tag(l(:submit_create)) %>
+				
 <% end %>
 			<% end %>
 		</div>

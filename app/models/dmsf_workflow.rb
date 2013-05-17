@@ -24,6 +24,12 @@ class DmsfWorkflow < ActiveRecord::Base
   validates_uniqueness_of :name
   validates :name, :presence => true
   validates_length_of :name, :maximum => 255
+  
+  STATE_NONE = nil
+  STATE_DRAFT = 3
+  STATE_WAITING_FOR_APPROVAL = 1
+  STATE_APPROVED = 2
+  STATE_REJECTED = 4
 
   def self.workflows(project)
     project ? where(:project_id => project) : where('project_id IS NULL')      
@@ -107,4 +113,34 @@ class DmsfWorkflow < ActiveRecord::Base
   def delegates
     User.all
   end
+  
+  def get_free_assignment(user, dmsf_file_revision_id)
+    steps = DmsfWorkflowStep.where(:dmsf_workflow_id => self.id).all(:order => 'step ASC')
+    steps.each do |step|
+      unless step.finished?(dmsf_file_revision_id)        
+        return step.get_free_assignment(dmsf_file_revision_id, user)        
+      end
+    end 
+    return nil
+  end
+  
+  def assign(dmsf_file_revision_id)
+    dmsf_workflow_steps.each do |ws|
+      ws.assign(dmsf_file_revision_id)
+    end
+  end
+  
+  def try_finish(dmsf_file_revision_id)
+    res = nil
+    steps = DmsfWorkflowStep.where(:dmsf_workflow_id => self.id).all
+    steps.each do |step|
+      res = step.result dmsf_file_revision_id
+      unless step.finished? dmsf_file_revision_id
+        return
+      end
+    end
+    revision = DmsfFileRevision.find_by_id dmsf_file_revision_id     
+    revision.update_attribute(:workflow, res) if revision && res
+  end
+  
 end

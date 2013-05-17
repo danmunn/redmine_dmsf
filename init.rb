@@ -66,9 +66,9 @@ Redmine::Plugin.register :redmine_dmsf do
     menu.push :approvalworkflows, {:controller => 'dmsf_workflows', :action => 'index'}, :caption => :label_dmsf_workflow_plural        
   end
   
-  # Adds javascript and stylesheet tags for project tree view
+  # Adds stylesheet tag
   class DmsfViewListener < Redmine::Hook::ViewListener
-    def view_layouts_base_html_head(context)
+    def view_layouts_base_html_head(context)      
       stylesheet_link_tag('dmsf', :plugin => :redmine_dmsf)
     end
   end

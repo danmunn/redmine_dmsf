@@ -43,6 +43,9 @@
 	</div>
 	<%= render "custom_fields", :object => @folder %>
 </div>
+
+<%= error_messages_for('dmsf_workflow') %>
+
 <%= form_tag({:action => :entries_operation, :id => @project, :folder_id => @folder}, :method => :post,
 	:class => "dmfs_entries", :id => "entries_form") do %>
 	<%= hidden_field_tag("action") %>
@@ -170,11 +173,31 @@
 			</td>
 			<td class="version">
 				<%= file.last_revision.version %>
-				<% case file.last_revision.workflow
-        				when 1 then %><%= image_tag("waitingforapproval.png", :title => l(:title_waiting_for_approval),
-											:plugin => :redmine_dmsf) %>
-        		<% 		when 2 then %><%= image_tag("approved.png", :title => l(:title_approved),
-											:plugin => :redmine_dmsf) %>
+				<% case file.last_revision.workflow %>
+                                  <%  when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL %>
+                                    <% wf = DmsfWorkflow.find_by_id(file.last_revision.dmsf_workflow_id) %>
+                                    <% if wf %>
+                                      <% dmsf_workflow_step_assignment_id = wf.get_free_assignment(User.current, file.last_revision.id) %>
+                                      <% if dmsf_workflow_step_assignment_id %>
+                                        <%= link_to(
+                                          image_tag('waitingforapproval.png', :plugin => :redmine_dmsf),
+                                          action_dmsf_workflow_path(
+                                            :project_id => @project.id, 
+                                            :id => wf.id, 
+                                            :dmsf_workflow_step_assignment_id => dmsf_workflow_step_assignment_id, 
+                                            :dmsf_file_revision_id => file.last_revision.id),
+                                          :title => l(:title_waiting_for_approval),
+                                          :remote => true) %>
+                                      <% else %>
+                                        <%= image_tag('waitingforapproval.png', :title => l(:title_waiting_for_approval), :plugin => :redmine_dmsf) %>                                      
+                                      <% end %>
+                                    <% end %>
+                                  <% when DmsfWorkflow::STATE_APPROVED %>
+                                    <%= image_tag('approved.png', :title => l(:title_approved), :plugin => :redmine_dmsf) %>
+                                  <% when DmsfWorkflow::STATE_DRAFT %>
+                                    <%= image_tag('draft.png', :title => l(:title_draft), :plugin => :redmine_dmsf) %>
+                                  <% when DmsfWorkflow::STATE_REJECTED %>
+                                    <%= image_tag('delete.png', :title => l(:title_rejected), :plugin => :redmine_dmsf) %>                                    
 				<% end %>
 			</td>
 			<td class="author"><%= h(file.last_revision.user) %></td>

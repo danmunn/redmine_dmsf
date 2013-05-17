@@ -34,4 +34,57 @@ class DmsfWorkflowStep < ActiveRecord::Base
   def user
     User.find(user_id)
   end
+  
+  def assign(dmsf_file_revision_id)
+    step_assignment = DmsfWorkflowStepAssignment.new(
+      :dmsf_workflow_step_id => id,
+      :user_id => user_id,
+      :dmsf_file_revision_id => dmsf_file_revision_id)
+    step_assignment.save
+  end
+  
+  def finished?(dmsf_file_revision_id)            
+    res = result(dmsf_file_revision_id)
+    res == DmsfWorkflow::STATE_APPROVED || res == DmsfWorkflow::STATE_REJECTED
+  end
+  
+  def result(dmsf_file_revision_id)        
+    assignments = DmsfWorkflowStepAssignment.where(
+      :dmsf_workflow_step_id => self.id, :dmsf_file_revision_id => dmsf_file_revision_id).all
+    assignments.each do |assignment|
+      actions = DmsfWorkflowStepAction.where(
+        :dmsf_workflow_step_assignment_id => assignment.id).all
+      if actions.empty?
+        return
+      end
+      actions.each do |action|
+        if DmsfWorkflowStepAction.is_finished?(action.action)
+          case action.action
+            when DmsfWorkflowStepAction::ACTION_APPROVE
+              return DmsfWorkflow::STATE_APPROVED
+            when DmsfWorkflowStepAction::ACTION_REJECT
+              return DmsfWorkflow::STATE_REJECTED
+            else
+              return
+          end
+        end
+      end
+    end
+  end
+  
+  def get_free_assignment(dmsf_file_revision_id, user)  
+    assignment = DmsfWorkflowStepAssignment.where(
+      :dmsf_workflow_step_id => self.id, 
+      :dmsf_file_revision_id => dmsf_file_revision_id,
+      :user_id => user.id).first
+   actions = DmsfWorkflowStepAction.where(
+      :dmsf_workflow_step_assignment_id => assignment.id).all
+   actions.each do |action|
+     if action && action.is_finished?
+       return
+     end
+   end
+   return assignment.id       
+  end
+  
 end

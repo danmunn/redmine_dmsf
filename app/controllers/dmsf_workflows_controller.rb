@@ -32,11 +32,20 @@ class DmsfWorkflowsController < ApplicationController
     end
   end
   
-  def action
+  def action        
   end
   
-  def new_action
-    logger.info '>>>>>>>>>>>>>>>>>>>>>>> YES!'
+  def new_action   
+    action = DmsfWorkflowStepAction.new(
+      :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id],
+      :action => params[:step_action],
+      :note => params[:note])    
+    if request.post? && action.save
+      @workflow.try_finish params[:dmsf_file_revision_id]
+      flash[:notice] = l(:notice_successful_create)
+    end    
+    # TODO: Refresh the page!        
+    redirect_to :back    
   end
 
   def log
@@ -156,7 +165,7 @@ class DmsfWorkflowsController < ApplicationController
   end
     
   def find_project    
-    if @workflow
+    if @workflow && @workflow.project
       @project = @workflow.project
     elsif params[:project_id].present?
        @project = Project.find_by_id params[:project_id]

@@ -55,7 +55,7 @@ en:
   :title_locked_by_user: "Locked by %{user}"
   :title_locked_by_you: "Locked by you"
   :title_waiting_for_approval: "Waiting for Approval"
-  :title_approved: "Approved"
+  :title_approved: "Approved"  
   :title_unlock_file: "Unlock to allow changes for other members"
   :title_lock_file: "Lock to prevent changes for other members"
   :submit_download: "Download"
@@ -95,9 +95,7 @@ en:
   :info_changed_by_user: "%{changed} by %{user}"
   :label_filename: "Filename"
   :label_version: "Version"
-  :label_workflow: "Workflow"
-  :option_workflow_waiting_for_approval: "Waiting for approval"
-  :option_workflow_approved: "Approved"
+  :label_workflow: "Workflow"  
   :option_workflow_none: "None"
   :label_mime: "Mime"
   :label_size: "Size"
@@ -223,5 +221,8 @@ en:
   label_dmsf: DMSF
   label_dmsf_wokflow_action_approve: Approve
   label_dmsf_wokflow_action_reject: Reject
-  label_dmsf_wokflow_action_delegate: 'Delegate to:'
+  label_dmsf_wokflow_action_delegate: 'Delegate to'
   message_dmsf_wokflow_note: Your note...
+  title_draft: Draft
+  title_rejected: Rejected
+  label_dmsf_wokflow_action_start: Start workflow

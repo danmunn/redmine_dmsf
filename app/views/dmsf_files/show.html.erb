@@ -101,11 +101,13 @@
 		</p>
 		<p>
 			<%= label_tag("", l(:label_workflow) + ":") %>
-			<%= case revision.workflow
-					when 1 then l(:option_workflow_waiting_for_approval)
-					when 2 then l(:option_workflow_approved)
-					else l(:option_workflow_none) 
-				end %>
+			<%= #case revision.workflow
+			    #		when 1 then l(:option_workflow_waiting_for_approval)
+			    # 		when 2 then l(:option_workflow_approved)
+			    #		else l(:option_workflow_none) 
+			    #	end 
+                            revision.workflow_str
+			%>
 		</p>
 	</div>
 	<div class="splitcontentright clear">
