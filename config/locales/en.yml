@@ -45,7 +45,7 @@ en:
   :link_title: "Title"
   :link_size: "Size"
   :link_modified: "Modified"
-  :link_ver: "Ver."
+  :link_ver: "Version"
   :link_author: "Author"
   :title_check_for_zip_download_or_email: "Check for Zip download or email"
   :title_delete: "Delete"
@@ -222,7 +222,12 @@ en:
   label_dmsf_wokflow_action_approve: Approve
   label_dmsf_wokflow_action_reject: Reject
   label_dmsf_wokflow_action_delegate: 'Delegate to'
+  label_dmsf_wokflow_action_assign: 'Assign an approval workflow'
   message_dmsf_wokflow_note: Your note...
   title_draft: Draft
   title_rejected: Rejected
   label_dmsf_wokflow_action_start: Start workflow
+  info_revision: "r%{rev}"
+  link_workflow: Workflow
+  button_assign: Assign  
+  error_empty_note: "The note can't be empty"

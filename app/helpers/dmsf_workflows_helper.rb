@@ -18,19 +18,24 @@
 
 module DmsfWorkflowsHelper
   
-  def render_principals_for_new_dmsf_workflow_users(workflow)
-    scope = User.active.sorted.like(params[:q])    
+  def render_principals_for_new_dmsf_workflow_users(workflow, dmsf_workflow_step_assignment_id, dmsf_file_revision_id)
+    scope = workflow.delegates(params[:q], dmsf_workflow_step_assignment_id, dmsf_file_revision_id, nil)
     principal_count = scope.count
-    principal_pages = Redmine::Pagination::Paginator.new principal_count, 100, params['page']
+    principal_pages = Redmine::Pagination::Paginator.new principal_count, 10, params['page']
     principals = scope.offset(principal_pages.offset).limit(principal_pages.per_page).all
 
-    s = content_tag('div', principals_check_box_tags('user_ids[]', principals), :id => 'principals')
+    if dmsf_workflow_step_assignment_id
+      s = content_tag('div', principals_radio_button_tags('step_action', principals), :id => 'users_for_delegate')
+    else
+      s = content_tag('div', principals_check_box_tags('user_ids[]', principals), :id => 'users')
+    end
 
     links = pagination_links_full(principal_pages, principal_count, :per_page_links => false) {|text, parameters, options|
       link_to text, autocomplete_for_user_dmsf_workflow_path(workflow, parameters.merge(:q => params[:q], :format => 'js')), :remote => true      
     }
 
     s + content_tag('p', links, :class => 'pagination')
+    s.html_safe           
   end
   
   def dmsf_workflow_steps_options_for_select(steps)
@@ -50,4 +55,12 @@ module DmsfWorkflowsHelper
     end
     options_for_select(options, :selected => dmsf_workflow_id)
   end  
+  
+  def principals_radio_button_tags(name, principals)
+    s = ''
+    principals.each do |principal|
+      s << "<label>#{ radio_button_tag name, principal.id, false, :id => nil } #{h principal}</label>\n"
+    end
+    s.html_safe    
+  end
 end

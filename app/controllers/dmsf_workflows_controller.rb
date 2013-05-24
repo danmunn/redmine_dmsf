@@ -20,9 +20,9 @@ class DmsfWorkflowsController < ApplicationController
   unloadable  
   layout :workflows_layout
   
-  before_filter :find_workflow, :except => [:create, :new, :index]  
-  before_filter :find_project   
-  before_filter :authorize_global, :except => [:action, :new_action]
+  before_filter :find_workflow, :except => [:create, :new, :index, :assign, :assignment]  
+  before_filter :find_project, :except => [:start]
+  before_filter :authorize_global #, :except => [:action, :new_action]
   
   def index    
     if @project
@@ -35,17 +35,39 @@ class DmsfWorkflowsController < ApplicationController
   def action        
   end
   
-  def new_action   
-    action = DmsfWorkflowStepAction.new(
-      :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id],
-      :action => params[:step_action],
-      :note => params[:note])    
-    if request.post? && action.save
-      @workflow.try_finish params[:dmsf_file_revision_id]
-      flash[:notice] = l(:notice_successful_create)
-    end    
-    # TODO: Refresh the page!        
+  def new_action
+    if params[:commit] == l(:submit_commit)
+      action = DmsfWorkflowStepAction.new(
+        :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id],
+        :action => params[:step_action],
+        :note => params[:note])    
+      if request.post?
+        if action.save
+          @workflow.try_finish params[:dmsf_file_revision_id], action, params[:user_id]
+          flash[:notice] = l(:notice_successful_update)
+        else
+          flash[:error] = l(:error_empty_note)
+        end
+      end        
+    end
     redirect_to :back    
+  end
+  
+  def assign    
+  end
+  
+  def assignment
+    if params[:commit] == l(:button_assign)
+      revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
+      if revision
+        revision.set_workflow(params[:dmsf_workflow_id], params[:action])
+        revision.assign_workflow(params[:dmsf_workflow_id])
+        if request.post? && revision.save
+          flash[:notice] = l(:notice_successful_update)
+        end
+      end    
+    end
+    redirect_to :back        
   end
 
   def log
@@ -87,7 +109,8 @@ class DmsfWorkflowsController < ApplicationController
   
   def destroy    
     begin
-      @workflow.destroy    
+      @workflow.destroy 
+      flash[:notice] = l(:notice_successful_delete)
     rescue
       flash[:error] = l(:error_unable_delete_dmsf_workflow)
     end
@@ -98,10 +121,8 @@ class DmsfWorkflowsController < ApplicationController
     end    
   end
   
-  def autocomplete_for_user
-    respond_to do |format|      
-      format.js
-    end        
+  def autocomplete_for_user    
+    render :layout => false
   end
   
   def add_step     
@@ -156,6 +177,17 @@ class DmsfWorkflowsController < ApplicationController
     respond_to do |format|
       format.html      
     end
+  end
+  
+  def start
+    revision = DmsfFileRevision.find_by_id(params[:dmsf_file_revision_id])
+    if revision
+      revision.set_workflow(@workflow.id, params[:action])
+      if request.post? && revision.save
+        flash[:notice] = l(:notice_successful_update)
+      end
+    end
+    redirect_to :back
   end
   
   private    

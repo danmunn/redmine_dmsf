@@ -19,8 +19,8 @@ table.entries td.modified {
 }
 
 table.entries td.actions {
-	min-width: 108px;
-	width: 108px;
+	min-width: 116px;
+	width: 116px;
 }
 
 table.entries td.title {
@@ -238,3 +238,25 @@ table.access-table tbody td, table.access-table tbody tr:hover td {
 #admin-menu a.approvalworkflows { background-image: url(../images/ticket_go.png); }
 #users_for_delegate {height: 200px; overflow:auto;}
 #users_for_delegate label {display: block;}
+
+.revision_box{
+  padding: 0px 0px 0px 0px;
+  margin-bottom: 10px;
+  background-color:#f6f6f6;
+  color:#505050;
+  line-height:1.5em;
+  /*border: 1px solid #e4e4e4;*/
+}
+
+div.revision_box .ui-widget-header {
+    font-weight: normal;
+}
+
+td.workflow {
+	font-size: 0.8em;
+	white-space: nowrap;
+}
+
+td.workflow img {
+	vertical-align:text-top;
+}

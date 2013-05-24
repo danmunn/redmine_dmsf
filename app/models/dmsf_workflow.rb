@@ -42,7 +42,7 @@ class DmsfWorkflow < ActiveRecord::Base
 
   def to_s
     name
-  end
+  end  
 
   def approvals(step)
     wa = Array.new
@@ -109,9 +109,24 @@ class DmsfWorkflow < ActiveRecord::Base
         end                            
     end      
   end
-
-  def delegates
-    User.all
+  
+  def delegates(q, dmsf_workflow_step_assignment_id, dmsf_file_revision_id, project_id)        
+    if project_id
+      sql = ['id IN (SELECT user_id FROM members WHERE project_id = ?', project_id]
+    elsif dmsf_workflow_step_assignment_id && dmsf_file_revision_id
+      sql = [
+        'id NOT IN (SELECT a.user_id FROM dmsf_workflow_step_assignments a WHERE id = ?) AND id IN (SELECT m.user_id FROM members m JOIN dmsf_file_revisions r ON m.project_id = r.project_id WHERE r.id = ?)', 
+        dmsf_workflow_step_assignment_id, 
+        dmsf_file_revision_id]
+    else
+      sql = '1=1'
+    end
+    
+    unless q.nil? || q.empty?
+      User.active.sorted.where(sql).like(q)
+    else
+      User.active.sorted.where(sql)
+    end    
   end
   
   def get_free_assignment(user, dmsf_file_revision_id)
@@ -130,17 +145,28 @@ class DmsfWorkflow < ActiveRecord::Base
     end
   end
   
-  def try_finish(dmsf_file_revision_id)
+  def try_finish(dmsf_file_revision_id, action, user_id)
     res = nil
-    steps = DmsfWorkflowStep.where(:dmsf_workflow_id => self.id).all
-    steps.each do |step|
-      res = step.result dmsf_file_revision_id
-      unless step.finished? dmsf_file_revision_id
-        return
-      end
+    case action.action
+      when DmsfWorkflowStepAction::ACTION_APPROVE
+        steps = DmsfWorkflowStep.where(:dmsf_workflow_id => self.id).all
+        steps.each do |step|
+          res = step.result dmsf_file_revision_id
+          unless step.finished? dmsf_file_revision_id
+            return
+          end
+        end
+      when DmsfWorkflowStepAction::ACTION_REJECT
+        res = DmsfWorkflow::STATE_REJECTED
+      when DmsfWorkflowStepAction::ACTION_DELEGATE
+        assignment = DmsfWorkflowStepAssignment.find_by_id(action.dmsf_workflow_step_assignment_id)
+        assignment.update_attribute(:user_id, user_id) if assignment
     end
-    revision = DmsfFileRevision.find_by_id dmsf_file_revision_id     
-    revision.update_attribute(:workflow, res) if revision && res
+    
+    if res
+      revision = DmsfFileRevision.find_by_id dmsf_file_revision_id     
+      revision.update_attribute(:workflow, res) if revision
+    end
   end
   
 end

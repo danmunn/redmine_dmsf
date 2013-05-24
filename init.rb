@@ -51,14 +51,14 @@ Redmine::Plugin.register :redmine_dmsf do
     permission :view_dmsf_folders, {:dmsf => [:show], :dmsf_folders_copy => [:new, :copy_to, :move_to]}
     permission :user_preferences, {:dmsf_state => [:user_pref_save]}
     permission :view_dmsf_files, {:dmsf => [:entries_operation, :entries_email],
-      :dmsf_files => [:show], :dmsf_files_copy => [:new, :create, :move]}
+               :dmsf_files => [:show], :dmsf_files_copy => [:new, :create, :move]}
     permission :folder_manipulation, {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock]}
     permission :file_manipulation, {:dmsf_files => [:create_revision, :delete, :lock, :unlock],
-      :dmsf_upload => [:upload_files, :upload_file, :commit_files]}
+               :dmsf_upload => [:upload_files, :upload_file, :commit_files]}
     permission :file_approval, {:dmsf_files => [:delete_revision, :notify_activate, :notify_deactivate], 
-      :dmsf => [:notify_activate, :notify_deactivate]}
-    permission :force_file_unlock, {}
-    permission :approval_workflows, {:dmsf_workflows => [:new, :create, :destroy, :edit, :add_step, :remove_step, :reorder_steps, :update]}
+               :dmsf => [:notify_activate, :notify_deactivate], 
+               :dmsf_workflows => [:new, :create, :destroy, :edit, :add_step, :remove_step, :reorder_steps, :update, :start, :assign, :assignment, :action, :new_action]}
+    permission :force_file_unlock, {}    
   end
   
   # Administration menu extension

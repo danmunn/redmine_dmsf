@@ -156,19 +156,22 @@ class DmsfFileRevision < ActiveRecord::Base
     return new_revision
   end
     
-  def workflow_str
-    str = ''
-    if dmsf_workflow_id
+  def workflow_str(name)    
+    if name && dmsf_workflow_id
       wf = DmsfWorkflow.find_by_id(dmsf_workflow_id)
       str = "#{wf.name} - " if wf
+    else
+      str = ''
     end
     case workflow
-      when 1
+      when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
         str + l(:title_waiting_for_approval)
-      when 2
+      when DmsfWorkflow::STATE_APPROVED
         str + l(:title_approved)
-      when 3
+      when DmsfWorkflow::STATE_DRAFT
         str + l(:title_draft)
+      when DmsfWorkflow::STATE_REJECTED
+        str + l(:title_rejected)
       else
         str
     end
@@ -178,21 +181,21 @@ class DmsfFileRevision < ActiveRecord::Base
     if User.current.allowed_to?(:file_approval, self.file.project)
       unless dmsf_workflow_id.blank?
         self.dmsf_workflow_id = dmsf_workflow_id  
-        if commit == l(:label_dmsf_wokflow_action_start)
-          self.workflow = 1 # Waiting for approval
+        if commit == 'start'
+          self.workflow = DmsfWorkflow::STATE_WAITING_FOR_APPROVAL # Waiting for approval
         else
-          self.workflow = 3 # Draft          
-        end
+          self.workflow = DmsfWorkflow::STATE_DRAFT # Draft          
+        end        
       end
     end
   end
   
   def assign_workflow(dmsf_workflow_id)
     if User.current.allowed_to?(:file_approval, self.file.project)
-      if self.workflow == 1 # Waiting for approval
+      #if self.workflow == DmsfWorkflow::STATE_DRAFT # Waiting for approval
         wf = DmsfWorkflow.find_by_id(dmsf_workflow_id)
         wf.assign(self.id) if wf && self.id
-      end
+      #end
     end
   end
   

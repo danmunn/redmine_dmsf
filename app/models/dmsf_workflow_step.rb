@@ -77,14 +77,16 @@ class DmsfWorkflowStep < ActiveRecord::Base
       :dmsf_workflow_step_id => self.id, 
       :dmsf_file_revision_id => dmsf_file_revision_id,
       :user_id => user.id).first
-   actions = DmsfWorkflowStepAction.where(
-      :dmsf_workflow_step_assignment_id => assignment.id).all
-   actions.each do |action|
-     if action && action.is_finished?
-       return
+   if assignment
+     actions = DmsfWorkflowStepAction.where(
+        :dmsf_workflow_step_assignment_id => assignment.id).all
+     actions.each do |action|
+       if action && action.is_finished?
+         return
+       end
      end
+     return assignment.id       
    end
-   return assignment.id       
   end
   
 end

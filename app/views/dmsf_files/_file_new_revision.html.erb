@@ -44,7 +44,7 @@
 						<%= @file.last_revision.major_version + 1 %>.0 <%= l(:option_version_major) %><br />
 					</div>
 					<p>
-						<%= label_tag("workflow", l(:label_workflow) + ":") %>
+						<%= label_tag('workflow', l(:label_workflow) + ':') %>
 						<%= select_tag(
                                                     'dmsf_workflow_id', 
                                                     dmsf_workflows_for_select(@project, @file.last_revision.dmsf_workflow_id))%>

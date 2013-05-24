@@ -22,6 +22,7 @@ class DmsfWorkflowStepAction < ActiveRecord::Base
 
   validates :dmsf_workflow_step_assignment_id, :presence => true
   validates :action, :presence => true
+  validates :note, :presence => true, :unless => lambda { self.action == DmsfWorkflowStepAction::ACTION_APPROVE }
   
   ACTION_APPROVE = 1
   ACTION_REJECT = 2
