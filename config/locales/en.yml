@@ -92,7 +92,7 @@ en:
   :title_delete_revision: "Delete revision"
   :label_created: "Created"
   :label_changed: "Changed"
-  :info_changed_by_user: "%{changed} by %{user}"
+  :info_changed_by_user: "%{changed} by"
   :label_filename: "Filename"
   :label_version: "Version"
   :label_workflow: "Workflow"  

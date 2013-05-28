@@ -244,8 +244,7 @@ table.access-table tbody td, table.access-table tbody tr:hover td {
   margin-bottom: 10px;
   background-color:#f6f6f6;
   color:#505050;
-  line-height:1.5em;
-  /*border: 1px solid #e4e4e4;*/
+  line-height:1.5em;  
 }
 
 div.revision_box .ui-widget-header {
