@@ -31,14 +31,7 @@
 			<%= upload.major_version %>.<%= upload.minor_version + 1 %> <%= l(:option_version_minor) %><br />
 			<%= radio_button_tag("commited_files[#{i}][version]", 2) %> 
 			<%= upload.major_version + 1 %>.0 <%= l(:option_version_major) %><br />
-		</div>
-		<p>
-			<%= label_tag("commited_files[#{i}][workflow]", l(:label_workflow) + ":") %>
-			<%= select_tag(
-                              "commited_files[#{i}][dmsf_workflow_id]", 
-                              dmsf_workflows_for_select(@project, nil))%>                          
-				
-		</p>
+		</div>		
 	</div>
 	<div class="splitcontentright clear">
 		<p>
