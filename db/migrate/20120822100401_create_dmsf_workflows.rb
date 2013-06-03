@@ -26,11 +26,19 @@ class CreateDmsfWorkflows < ActiveRecord::Migration
         
     change_table :dmsf_file_revisions do |t|
       t.references :dmsf_workflow
+      t.integer :dmsf_workflow_assigned_by
+      t.datetime :dmsf_workflow_assigned_at
+      t.integer :dmsf_workflow_started_by
+      t.datetime :dmsf_workflow_started_at
     end
   end
   
   def self.down
     remove_column :dmsf_file_revisions, :dmsf_workflow_id
+    remove_column :dmsf_file_revisions, :dmsf_workflow_assigned_by
+    remove_column :dmsf_file_revisions, :dmsf_workflow_assigned_at
+    remove_column :dmsf_file_revisions, :dmsf_workflow_started_by
+    remove_column :dmsf_file_revisions, :dmsf_workflow_started_at
     drop_table :dmsf_workflows
   end    
 end

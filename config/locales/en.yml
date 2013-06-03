@@ -45,7 +45,7 @@ en:
   :link_title: "Title"
   :link_size: "Size"
   :link_modified: "Modified"
-  :link_ver: "Version"
+  :link_ver: "Ver."
   :link_author: "Author"
   :title_check_for_zip_download_or_email: "Check for Zip download or email"
   :title_delete: "Delete"
@@ -231,3 +231,6 @@ en:
   link_workflow: Workflow
   button_assign: Assign  
   error_empty_note: "The note can't be empty"
+  title_dmsf_workflow_log: 'Approval workflow log'
+  label_action: Action
+  label_note: Note

@@ -182,20 +182,22 @@ class DmsfFileRevision < ActiveRecord::Base
       unless dmsf_workflow_id.blank?
         self.dmsf_workflow_id = dmsf_workflow_id  
         if commit == 'start'
-          self.workflow = DmsfWorkflow::STATE_WAITING_FOR_APPROVAL # Waiting for approval
+          self.workflow = DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
+          self.dmsf_workflow_started_by = User.current.id if User.current
+          self.dmsf_workflow_started_at = DateTime.now
         else
-          self.workflow = DmsfWorkflow::STATE_DRAFT # Draft          
+          self.workflow = DmsfWorkflow::STATE_DRAFT   
+          self.dmsf_workflow_assigned_by = User.current.id if User.current
+          self.dmsf_workflow_assigned_at = DateTime.now
         end        
       end
     end
   end
   
   def assign_workflow(dmsf_workflow_id)
-    if User.current.allowed_to?(:file_approval, self.file.project)
-      #if self.workflow == DmsfWorkflow::STATE_DRAFT # Waiting for approval
-        wf = DmsfWorkflow.find_by_id(dmsf_workflow_id)
-        wf.assign(self.id) if wf && self.id
-      #end
+    if User.current.allowed_to?(:file_approval, self.file.project)      
+      wf = DmsfWorkflow.find_by_id(dmsf_workflow_id)
+      wf.assign(self.id) if wf && self.id
     end
   end
   

@@ -65,8 +65,9 @@
 				<th><%= l(:link_title) %></th>
 				<th><%= l(:link_size) %></th>
 				<th><%= l(:link_modified) %></th>
-				<th><%= l(:link_ver) %></th>				
-				<th><%= l(:link_author) %></th>
+				<th title="<%= l(:label_version) %>"><%= l(:link_ver) %></th>
+				<th><%= l(:link_workflow) %></th>
+                                <th><%= l(:link_author) %></th>
 				<th></th>
 				<th class="hidden"></th>
 				<th class="hidden"></th>
@@ -93,7 +94,8 @@
                             <%= image_tag("lockedbycurrent.png", :title => l(:title_locked_by_you), :plugin => :redmine_dmsf) %>
                           <% end %>
                         </td>
-			<td class="version"></td>			
+			<td class="version"></td>
+			<td class="workflow"></td>
 			<td class="author"><%= h(subfolder.user) %></td>
 			<td class="actions">
 				<% if User.current.allowed_to?(:file_approval, @project) %>
@@ -171,9 +173,21 @@
 					<%= image_tag("lockedbycurrent.png", :title => l(:title_locked_by_you), :plugin => :redmine_dmsf) %>
 				<% end %>
 			</td>
-			<td class="version">
-                          <%= "#{file.last_revision.version} #{file.last_revision.workflow_str(false)}" %>
-			</td>			
+			<td class="version"><%= file.last_revision.version %></td>
+			<td class="workflow">
+                          <% wf = DmsfWorkflow.find_by_id(file.last_revision.dmsf_workflow_id) %>
+                          <% if wf %>
+                            <%= link_to(
+                              file.last_revision.workflow_str(false),
+                              log_dmsf_workflow_path(
+                                :project_id => @project.id, 
+                                :id => wf.id, 
+                                #:dmsf_workflow_step_assignment_id => dmsf_workflow_step_assignment_id, 
+                                :dmsf_file_revision_id => file.last_revision.id),
+                              #:title => l(:title_waiting_for_approval),
+                              :remote => true) %>
+                          <% end %>
+			</td>
 			<td class="author"><%= h(file.last_revision.user) %></td>
 			<td class="actions">
 				<% if User.current.allowed_to?(:file_approval, @project) %>
@@ -314,9 +328,9 @@ sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !
 				"aaSorting": [[1,'asc']],
 				"aaSortingFixed": [[7,'asc']],
 				"aoColumnDefs": [
-					{ "bSearchable": false, "aTargets": [0, 6, 7, 8] },
-					{ "bSortable": false, "aTargets": [0, 6, 7] },
-					{ "iDataSort": 8, "aTargets": [ 2 ] }
+					{ "bSearchable": false, "aTargets": [0, 7, 8, 9] },
+					{ "bSortable": false, "aTargets": [0, 7, 8] },
+					{ "iDataSort": 9, "aTargets": [ 2 ] }
 				],
 				"fnInitComplete": function() {
 					jQuery("div.controls").prependTo(jQuery("#browser_wrapper div.fg-toolbar")[0]);

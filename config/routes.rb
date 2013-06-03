@@ -107,6 +107,7 @@ RedmineApp::Application.routes.draw do
       get 'autocomplete_for_user'
       get 'action'
       get 'assign'
+      get 'log'
       post 'new_action'
       post 'start'
       post 'assignment'

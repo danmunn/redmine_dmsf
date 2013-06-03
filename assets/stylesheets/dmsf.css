@@ -14,8 +14,8 @@ table.entries  {
 }
 
 table.entries td.modified {
-	min-width: 140px;
-	width: 140px;
+	min-width: 104px;
+	width: 104px;
 }
 
 table.entries td.actions {
@@ -24,7 +24,7 @@ table.entries td.actions {
 }
 
 table.entries td.title {
-	width: 50%;
+	width: 40%;
 }
 
 table.entries th.check, table.entries td.check {
@@ -134,6 +134,11 @@ td.version {
 
 td.version img {
 	vertical-align:text-top;
+}
+
+td.workflow {
+	font-size: 0.8em;
+	white-space: nowrap;
 }
 
 /* DMSF entries list icons */
@@ -251,11 +256,6 @@ div.revision_box .ui-widget-header {
     font-weight: normal;
 }
 
-td.workflow {
-	font-size: 0.8em;
-	white-space: nowrap;
-}
-
-td.workflow img {
-	vertical-align:text-top;
+table.steps td.note {
+	width: 30%;
 }
