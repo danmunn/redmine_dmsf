@@ -226,6 +226,9 @@ en:
   message_dmsf_wokflow_note: Your note...
   title_draft: Draft
   title_rejected: Rejected
+  title_delegated: Delegated
+  title_assigned: Assigned
+  title_started: Started
   label_dmsf_wokflow_action_start: Start workflow
   info_revision: "r%{rev}"
   link_workflow: Workflow

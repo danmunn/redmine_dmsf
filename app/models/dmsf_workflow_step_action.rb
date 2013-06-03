@@ -44,5 +44,22 @@ class DmsfWorkflowStepAction < ActiveRecord::Base
   def is_finished?
     DmsfWorkflowStepAction.is_finished? self.action
   end
+  
+  def self.action_str(action)
+    if action
+      case action.to_i
+        when ACTION_APPROVE
+          l(:title_approved)
+        when ACTION_REJECT
+          l(:title_rejected)
+        when ACTION_DELEGATE
+          l(:title_delegated)
+        when ACTION_ASSIGN
+          l(:title_assigned)
+        when ACTION_START
+          l(:title_started)       
+      end
+    end
+  end
    
 end
