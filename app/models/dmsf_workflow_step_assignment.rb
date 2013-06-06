@@ -20,6 +20,7 @@ class DmsfWorkflowStepAssignment < ActiveRecord::Base
   belongs_to :dmsf_workflow_step
 
   has_many :dmsf_workflow_step_actions, :dependent => :destroy
+  has_one :dmsf_workflow_step_assignment
 
   validates :dmsf_workflow_step_id, :presence => true
   validates :dmsf_file_revision_id, :presence => true

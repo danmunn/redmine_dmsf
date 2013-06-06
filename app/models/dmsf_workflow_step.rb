@@ -26,6 +26,9 @@ class DmsfWorkflowStep < ActiveRecord::Base
   validates :user_id, :presence => true
   validates :operator, :presence => true
   validates_uniqueness_of :user_id, :scope => [:dmsf_workflow_id, :step]
+  
+  OPERATOR_OR  = 0
+  OPERATOR_AND = 1
 
   def soperator
     operator == 1 ? l(:dmsf_and) : l(:dmsf_or)
@@ -44,7 +47,7 @@ class DmsfWorkflowStep < ActiveRecord::Base
   end
   
   def finished?(dmsf_file_revision_id)            
-    res = result(dmsf_file_revision_id)
+    res = self.result(dmsf_file_revision_id)
     res == DmsfWorkflow::STATE_APPROVED || res == DmsfWorkflow::STATE_REJECTED
   end
   
@@ -72,21 +75,22 @@ class DmsfWorkflowStep < ActiveRecord::Base
     end
   end
   
-  def get_free_assignment(dmsf_file_revision_id, user)  
-    assignment = DmsfWorkflowStepAssignment.where(
+  def next_assignments(dmsf_file_revision_id)
+    results = Array.new
+    assignments = DmsfWorkflowStepAssignment.where(
       :dmsf_workflow_step_id => self.id, 
-      :dmsf_file_revision_id => dmsf_file_revision_id,
-      :user_id => user.id).first
-   if assignment
-     actions = DmsfWorkflowStepAction.where(
-        :dmsf_workflow_step_assignment_id => assignment.id).all
-     actions.each do |action|
-       if action && action.is_finished?
-         return
-       end
-     end
-     return assignment.id       
-   end
+      :dmsf_file_revision_id => dmsf_file_revision_id)
+    assignments.each do |assignment|
+      add = true
+      assignment.dmsf_workflow_step_actions.each do |action|
+        if action.is_finished?
+          add = false
+          break
+        end
+      end
+      results << assignment if add
+    end
+    return results
   end
   
 end

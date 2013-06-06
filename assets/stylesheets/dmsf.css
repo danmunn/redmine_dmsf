@@ -256,6 +256,30 @@ div.revision_box .ui-widget-header {
     font-weight: normal;
 }
 
-table.steps td.note {
-	width: 30%;
+table.list td.note {
+    width: 30%;
 }
+
+table.list td.step, td.date {
+    text-align: center;
+}
+
+.log_header_box{
+  padding:6px;
+  margin-bottom: 10px;  
+}
+.log_header_left {
+    width: 50%;
+    float: left;    
+}
+
+.log_header_box label{
+  font-weight: bold;
+  margin-left: 0px;
+  margin-right: 3px;
+  padding: 3px 0 3px 0;
+}
+
+.modal a, a:link, a:visited{ color: #169; text-decoration: none; }
+.modal a:hover, a:active{ color: #c61a1a; text-decoration: underline;}
+.modal{ font-size: 12px}

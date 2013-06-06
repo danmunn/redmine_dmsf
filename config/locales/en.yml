@@ -207,33 +207,35 @@ en:
   :label_webdav_strategy: "Webdav strategy"
   :note_webdav_strategy: "Enables the administrator to decide if webdav is a read-only or read-write platform for end users."
   
-  label_dmsf_workflow_new: New approval workflow
-  label_dmsf_workflow: Approval workflow
-  label_dmsf_workflow_plural: Approval workflows
-  error_unable_delete_dmsf_workflow: Unable to delete the workflow
+  error_unable_delete_dmsf_workflow: 'Unable to delete the workflow'
+  error_empty_note: "The note can't be empty"
+  error_workflow_assign: 'An error occured while assigning'
+  label_dmsf_workflow_new: 'New approval workflow'
+  label_dmsf_workflow: 'Approval workflow'
+  label_dmsf_workflow_plural: 'Approval workflows'  
   label_dmsf_workflow_step: Step
   label_dmsf_workflow_step_plural: Steps
   label_dmsf_workflow_approval: Approval
   label_dmsf_workflow_approval_plural: Approvals
-  dmsf_and: AND
-  dmsf_or: OR
-  dmsf_new_step: New step
   label_dmsf: DMSF
   label_dmsf_wokflow_action_approve: Approve
   label_dmsf_wokflow_action_reject: Reject
   label_dmsf_wokflow_action_delegate: 'Delegate to'
   label_dmsf_wokflow_action_assign: 'Assign an approval workflow'
-  message_dmsf_wokflow_note: Your note...
+  label_dmsf_wokflow_action_start: 'Start workflow'
+  label_action: Action
+  label_note: Note  
   title_draft: Draft
   title_rejected: Rejected
   title_delegated: Delegated
   title_assigned: Assigned
-  title_started: Started
-  label_dmsf_wokflow_action_start: Start workflow
-  info_revision: "r%{rev}"
-  link_workflow: Workflow
-  button_assign: Assign  
-  error_empty_note: "The note can't be empty"
+  title_started: Started  
   title_dmsf_workflow_log: 'Approval workflow log'
-  label_action: Action
-  label_note: Note
+  dmsf_and: AND
+  dmsf_or: OR
+  dmsf_new_step: New step  
+  message_dmsf_wokflow_note: Your note...
+  info_revision: "r%{rev}"
+  link_workflow: Workflow    
+  
+  

@@ -149,7 +149,8 @@
 			<td class="hidden"><%= subfolder.deep_size %></td>
 		</tr>
 	<% end %>
-	<% @files.each do |file| %>          
+	<% @files.each do |file| %>
+          <% wf = DmsfWorkflow.find_by_id(file.last_revision.dmsf_workflow_id) %>
 		<tr class="file">
 			<td class="check"><%= check_box_tag("files[]", file.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
 			<td class="title">
@@ -174,17 +175,15 @@
 				<% end %>
 			</td>
 			<td class="version"><%= file.last_revision.version %></td>
-			<td class="workflow">
-                          <% wf = DmsfWorkflow.find_by_id(file.last_revision.dmsf_workflow_id) %>
+			<td class="workflow">                          
                           <% if wf %>
                             <%= link_to(
                               file.last_revision.workflow_str(false),
                               log_dmsf_workflow_path(
                                 :project_id => @project.id, 
-                                :id => wf.id, 
-                                #:dmsf_workflow_step_assignment_id => dmsf_workflow_step_assignment_id, 
+                                :id => wf.id,                                 
                                 :dmsf_file_revision_id => file.last_revision.id),
-                              #:title => l(:title_waiting_for_approval),
+                              :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(file.last_revision.id)),
                               :remote => true) %>
                           <% end %>
 			</td>
@@ -202,17 +201,17 @@
 								:title => l(:title_notifications_not_active_activate)) %>
 					<% end %>
 					<% case file.last_revision.workflow %>
-                                          <%  when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL %>
-                                            <% wf = DmsfWorkflow.find_by_id(file.last_revision.dmsf_workflow_id) %>
+                                          <%  when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL %>                                            
                                             <% if wf %>
-                                              <% dmsf_workflow_step_assignment_id = wf.get_free_assignment(User.current, file.last_revision.id) %>
-                                              <% if dmsf_workflow_step_assignment_id %>
+                                              <% assignments = wf.next_assignments(file.last_revision.id) %>
+                                              <% index = assignments.find_index{|assignment| assignment.user_id == User.current.id} if assignments %>
+                                              <% if index %>
                                                 <%= link_to(
                                                   image_tag('waiting_for_approval.png', :plugin => :redmine_dmsf),
                                                   action_dmsf_workflow_path(
                                                     :project_id => @project.id, 
                                                     :id => wf.id, 
-                                                    :dmsf_workflow_step_assignment_id => dmsf_workflow_step_assignment_id, 
+                                                    :dmsf_workflow_step_assignment_id => assignments[index].id,
                                                     :dmsf_file_revision_id => file.last_revision.id),
                                                   :title => l(:title_waiting_for_approval),
                                                   :remote => true) %>
@@ -222,20 +221,23 @@
                                             <% end %>
                                           <% when DmsfWorkflow::STATE_APPROVED %>
                                             <%= image_tag('approved.png', :title => l(:title_approved), :plugin => :redmine_dmsf) %>
-                                          <% when DmsfWorkflow::STATE_DRAFT %>                                            
-                                            <%= link_to_function(image_tag('draft.png', :plugin => :redmine_dmsf),
+                                          <% when DmsfWorkflow::STATE_DRAFT %>
+                                            <% if User.current && (file.last_revision.dmsf_workflow_assigned_by == User.current.id) %>
+                                              <%= link_to_function(image_tag('draft.png', :plugin => :redmine_dmsf),
                                                   "manipulation_link('#{start_dmsf_workflow_path(                                                    
                                                     :id => file.last_revision.dmsf_workflow_id,                                                     
                                                     :dmsf_file_revision_id => file.last_revision.id)}')",
-						  :title => l(:label_dmsf_wokflow_action_start)) %>                                            
+						  :title => l(:label_dmsf_wokflow_action_start)) %>
+                                            <% else %>
+                                              <%= image_tag('draft.png', :title => l(:label_dmsf_wokflow_action_start), :plugin => :redmine_dmsf) %>
+                                            <% end %>
                                           <% when DmsfWorkflow::STATE_REJECTED %>
                                             <%= image_tag('rejected.png', :title => l(:title_rejected), :plugin => :redmine_dmsf) %>
                                           <% else %>                                            
                                             <%= link_to(
                                                 image_tag('none.png', :plugin => :redmine_dmsf),
                                                 assign_dmsf_workflow_path(
-                                                  :project_id => @project.id,                                                  
-                                                  :dmsf_workflow_step_assignment_id => dmsf_workflow_step_assignment_id, 
+                                                  :project_id => @project.id,                                                                                                    
                                                   :dmsf_file_revision_id => file.last_revision.id),
                                                 :title => l(:label_dmsf_wokflow_action_assign),
                                                 :remote => true) %>                                            

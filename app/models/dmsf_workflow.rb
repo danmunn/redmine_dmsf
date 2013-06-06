@@ -16,10 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfWorkflow < ActiveRecord::Base
-  belongs_to :project
-
-  has_many :dmsf_workflow_steps, :dependent => :destroy
+class DmsfWorkflow < ActiveRecord::Base 
+  has_many :dmsf_workflow_steps, :dependent => :destroy, :order => 'step ASC, operator DESC'
 
   validates_uniqueness_of :name
   validates :name, :presence => true
@@ -35,9 +33,8 @@ class DmsfWorkflow < ActiveRecord::Base
     project ? where(:project_id => project) : where('project_id IS NULL')      
   end
 
-  def project      
-    @project = Project.find_by_id(project_id) unless @project
-    @project
+  def project          
+    Project.find_by_id(project_id) if project_id
   end
 
   def to_s
@@ -50,8 +47,8 @@ class DmsfWorkflow < ActiveRecord::Base
       if s.step == step
         wa << s
       end
-    end
-    wa.sort_by { |obj| -obj.operator }
+    end    
+    wa
   end
 
   def steps         
@@ -60,8 +57,8 @@ class DmsfWorkflow < ActiveRecord::Base
       unless ws.include? s.step
         ws << s.step
       end
-    end
-    ws.sort
+    end    
+    ws
   end
 
   def reorder_steps(step, move_to)      
@@ -129,16 +126,31 @@ class DmsfWorkflow < ActiveRecord::Base
     end    
   end
   
-  def get_free_assignment(user, dmsf_file_revision_id)
-    steps = DmsfWorkflowStep.where(:dmsf_workflow_id => self.id).all(:order => 'step ASC')
-    steps.each do |step|
+  def next_assignments(dmsf_file_revision_id)    
+    self.dmsf_workflow_steps.each do |step|
       unless step.finished?(dmsf_file_revision_id)        
-        return step.get_free_assignment(dmsf_file_revision_id, user)        
+        return step.next_assignments(dmsf_file_revision_id)
       end
     end 
     return nil
   end
   
+  def self.assignments_to_users_str(assignments)
+    str = ''
+    if assignments      
+      assignments.each_with_index do |assignment, index|
+        user = User.find_by_id assignment.user_id
+        if user
+          if index > 0
+            str << ', '
+          end
+          str << user.name
+        end
+      end
+    end
+    str    
+  end
+   
   def assign(dmsf_file_revision_id)
     dmsf_workflow_steps.each do |ws|
       ws.assign(dmsf_file_revision_id)
@@ -148,9 +160,8 @@ class DmsfWorkflow < ActiveRecord::Base
   def try_finish(dmsf_file_revision_id, action, user_id)
     res = nil
     case action.action
-      when DmsfWorkflowStepAction::ACTION_APPROVE
-        steps = DmsfWorkflowStep.where(:dmsf_workflow_id => self.id).all
-        steps.each do |step|
+      when DmsfWorkflowStepAction::ACTION_APPROVE        
+        self.dmsf_workflow_steps.each do |step|
           res = step.result dmsf_file_revision_id
           unless step.finished? dmsf_file_revision_id
             return

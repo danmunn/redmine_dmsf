@@ -22,7 +22,7 @@ class DmsfWorkflowsController < ApplicationController
   
   before_filter :find_workflow, :except => [:create, :new, :index, :assign, :assignment]  
   before_filter :find_project, :except => [:start]
-  before_filter :authorize_global #, :except => [:action, :new_action]
+  before_filter :authorize_global
   
   def index    
     if @project
@@ -36,7 +36,7 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def new_action
-    if params[:commit] == l(:submit_commit)
+    if params[:commit] == l(:button_submit)
       action = DmsfWorkflowStepAction.new(
         :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id],
         :action => params[:step_action],
@@ -57,13 +57,17 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def assignment
-    if params[:commit] == l(:button_assign)
+    if params[:commit] == l(:button_submit)
       revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
       if revision
         revision.set_workflow(params[:dmsf_workflow_id], params[:action])
         revision.assign_workflow(params[:dmsf_workflow_id])
-        if request.post? && revision.save
-          flash[:notice] = l(:notice_successful_update)
+        if request.post? 
+          if revision.save
+            flash[:notice] = l(:notice_successful_update)
+          else
+            flash[:error] = l(:error_workflow_assign)
+          end
         end
       end    
     end
@@ -137,7 +141,7 @@ class DmsfWorkflowsController < ApplicationController
       else
         step = params[:step].to_i
       end
-      operator = 1 ? params[:commit] == l(:dmsf_and) : 0      
+      operator = (params[:commit] == l(:dmsf_and)) ? DmsfWorkflowStep::OPERATOR_AND : DmsfWorkflowStep::OPERATOR_OR
       users.each do |user|
         @workflow.dmsf_workflow_steps << DmsfWorkflowStep.new(
           :dmsf_workflow_id => @workflow.id, 
