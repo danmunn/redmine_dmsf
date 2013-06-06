@@ -55,7 +55,7 @@ en:
   :title_locked_by_user: "Locked by %{user}"
   :title_locked_by_you: "Locked by you"
   :title_waiting_for_approval: "Waiting for Approval"
-  :title_approved: "Approved"
+  :title_approved: "Approved"  
   :title_unlock_file: "Unlock to allow changes for other members"
   :title_lock_file: "Lock to prevent changes for other members"
   :submit_download: "Download"
@@ -92,12 +92,10 @@ en:
   :title_delete_revision: "Delete revision"
   :label_created: "Created"
   :label_changed: "Changed"
-  :info_changed_by_user: "%{changed} by %{user}"
+  :info_changed_by_user: "%{changed} by"
   :label_filename: "Filename"
   :label_version: "Version"
-  :label_workflow: "Workflow"
-  :option_workflow_waiting_for_approval: "Waiting for approval"
-  :option_workflow_approved: "Approved"
+  :label_workflow: "Workflow"  
   :option_workflow_none: "None"
   :label_mime: "Mime"
   :label_size: "Size"
@@ -208,3 +206,36 @@ en:
   :select_option_webdav_readwrite: "Read/Write"
   :label_webdav_strategy: "Webdav strategy"
   :note_webdav_strategy: "Enables the administrator to decide if webdav is a read-only or read-write platform for end users."
+  
+  error_unable_delete_dmsf_workflow: 'Unable to delete the workflow'
+  error_empty_note: "The note can't be empty"
+  error_workflow_assign: 'An error occured while assigning'
+  label_dmsf_workflow_new: 'New approval workflow'
+  label_dmsf_workflow: 'Approval workflow'
+  label_dmsf_workflow_plural: 'Approval workflows'  
+  label_dmsf_workflow_step: Step
+  label_dmsf_workflow_step_plural: Steps
+  label_dmsf_workflow_approval: Approval
+  label_dmsf_workflow_approval_plural: Approvals
+  label_dmsf: DMSF
+  label_dmsf_wokflow_action_approve: Approve
+  label_dmsf_wokflow_action_reject: Reject
+  label_dmsf_wokflow_action_delegate: 'Delegate to'
+  label_dmsf_wokflow_action_assign: 'Assign an approval workflow'
+  label_dmsf_wokflow_action_start: 'Start workflow'
+  label_action: Action
+  label_note: Note  
+  title_draft: Draft
+  title_rejected: Rejected
+  title_delegated: Delegated
+  title_assigned: Assigned
+  title_started: Started  
+  title_dmsf_workflow_log: 'Approval workflow log'
+  dmsf_and: AND
+  dmsf_or: OR
+  dmsf_new_step: New step  
+  message_dmsf_wokflow_note: Your note...
+  info_revision: "r%{rev}"
+  link_workflow: Workflow    
+  
+  

@@ -27,15 +27,7 @@
 		<p>
 			<%= label_tag("", l(:label_version) + ":") %>
 			<%= upload.major_version %>.<%= upload.minor_version %>
-		</p>
-		<p>
-			<%= label_tag("", l(:label_workflow) + ":") %>
-			<%= case upload.workflow
-					when 1 then l(:option_workflow_waiting_for_approval)
-					when 2 then l(:option_workflow_approved)
-					else l(:option_workflow_none) 
-				end %>
-		</p>
+		</p>		
 	</div>
 	<div class="splitcontentright clear">
 		<p>
