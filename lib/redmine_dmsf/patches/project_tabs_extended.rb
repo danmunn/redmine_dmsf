@@ -39,8 +39,9 @@ module RedmineDmsf
       
         def project_settings_tabs_with_dmsf
           tabs = project_settings_tabs_without_dmsf
-          if @project.module_enabled?("dmsf")
-            tabs.push({:name => 'dmsf', :controller => :dmsf_state, :action => :user_pref_save, :partial => 'dmsf_state/user_pref', :label => :dmsf})
+          if @project.module_enabled? 'dmsf'
+            #tabs.push({:name => 'dmsf', :controller => :dmsf_state, :action => :user_pref_save, :partial => 'dmsf_state/user_pref', :label => :dmsf})
+            tabs << {:name => 'dmsf', :controller => 'dmsf_workflows', :action => 'index', :partial => 'dmsf_workflows/main', :label => 'label_dmsf'}  
           end
           return tabs
         end

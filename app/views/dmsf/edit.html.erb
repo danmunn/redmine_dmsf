@@ -27,8 +27,9 @@
 				<p>
 					<%= label_tag("", l(:field_folder) + ":") %>
 					<%= f.select(:dmsf_folder_id, 
-						options_for_select(DmsfFolder.directory_tree(@project, @folder), 
-							:selected => @folder.nil? ? (@pathfolder.id unless @pathfolder.nil?) : (@folder.folder.id unless @folder.folder.nil?))) %>
+						options_for_select(DmsfFolder.directory_tree(@project, @folder), 	
+                                                  :selected => @parent? @parent.id : (@pathfolder.id if @pathfolder)))                                                  
+					%>				
 				</p>
 			</div>
 		</div>

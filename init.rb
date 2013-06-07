@@ -51,13 +51,26 @@ Redmine::Plugin.register :redmine_dmsf do
     permission :view_dmsf_folders, {:dmsf => [:show], :dmsf_folders_copy => [:new, :copy_to, :move_to]}
     permission :user_preferences, {:dmsf_state => [:user_pref_save]}
     permission :view_dmsf_files, {:dmsf => [:entries_operation, :entries_email],
-      :dmsf_files => [:show], :dmsf_files_copy => [:new, :create, :move]}
+               :dmsf_files => [:show], :dmsf_files_copy => [:new, :create, :move]}
     permission :folder_manipulation, {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock]}
     permission :file_manipulation, {:dmsf_files => [:create_revision, :delete, :lock, :unlock],
-      :dmsf_upload => [:upload_files, :upload_file, :commit_files]}
+               :dmsf_upload => [:upload_files, :upload_file, :commit_files]}
     permission :file_approval, {:dmsf_files => [:delete_revision, :notify_activate, :notify_deactivate], 
-      :dmsf => [:notify_activate, :notify_deactivate]}
-    permission :force_file_unlock, {}
+               :dmsf => [:notify_activate, :notify_deactivate], 
+               :dmsf_workflows => [:new, :create, :destroy, :edit, :add_step, :remove_step, :reorder_steps, :update, :start, :assign, :assignment, :action, :new_action, :log]}
+    permission :force_file_unlock, {}    
+  end
+  
+  # Administration menu extension
+  Redmine::MenuManager.map :admin_menu do |menu|
+    menu.push :approvalworkflows, {:controller => 'dmsf_workflows', :action => 'index'}, :caption => :label_dmsf_workflow_plural        
+  end
+  
+  # Adds stylesheet tag
+  class DmsfViewListener < Redmine::Hook::ViewListener
+    def view_layouts_base_html_head(context)      
+      stylesheet_link_tag('dmsf', :plugin => :redmine_dmsf)
+    end
   end
   
   Redmine::WikiFormatting::Macros.register do

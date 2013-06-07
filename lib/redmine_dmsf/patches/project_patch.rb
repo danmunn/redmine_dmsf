@@ -33,7 +33,7 @@ module RedmineDmsf
           has_many :dmsf_files, :class_name => "DmsfFile", :foreign_key => "project_id", :conditions => { :dmsf_folder_id => nil }
           #Fix: should only be root folders not, all folders
           has_many :dmsf_folders, :class_name => "DmsfFolder", :foreign_key => "project_id", :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy 
-
+          has_many :dmsf_workflows, :dependent => :destroy
         end
 
       end

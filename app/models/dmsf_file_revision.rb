@@ -25,6 +25,7 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
   belongs_to :project
   has_many :access, :class_name => "DmsfFileRevisionAccess", :foreign_key => "dmsf_file_revision_id", :dependent => :destroy
+  has_many :dmsf_workflow_step_assignment, :dependent => :destroy
 
   #Returns a list of revisions that are not deleted here, or deleted at parent level either
   scope :visible, lambda {|*args| joins(:file).where(DmsfFile.visible_condition(args.shift || User.current, *args)).where("#{self.table_name}.deleted = :false", :false => false ).readonly(false) }
@@ -154,29 +155,49 @@ class DmsfFileRevision < ActiveRecord::Base
 
     return new_revision
   end
-  
-  #TODO: validate if it isn't doubled or move it to view
-  def workflow_str
+    
+  def workflow_str(name)    
+    if name && dmsf_workflow_id
+      wf = DmsfWorkflow.find_by_id(dmsf_workflow_id)
+      str = "#{wf.name} - " if wf
+    else
+      str = ''
+    end
     case workflow
-      when 1 then l(:title_waiting_for_approval)
-      when 2 then l(:title_approved)
-      else nil
+      when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
+        str + l(:title_waiting_for_approval)
+      when DmsfWorkflow::STATE_APPROVED
+        str + l(:title_approved)
+      when DmsfWorkflow::STATE_DRAFT
+        str + l(:title_draft)
+      when DmsfWorkflow::STATE_REJECTED
+        str + l(:title_rejected)
+      else
+        str
     end
   end
   
-  def set_workflow(workflow)
+  def set_workflow(dmsf_workflow_id, commit)
     if User.current.allowed_to?(:file_approval, self.file.project)
-      self.workflow = workflow
-    else
-      if self.source_revision.nil?
-        self.workflow = workflow == 2 ? 1 : workflow
-      else
-        if workflow == 2 || self.source_revision.workflow == 1 || self.source_revision.workflow == 2
-          self.workflow = 1
+      unless dmsf_workflow_id.blank?
+        self.dmsf_workflow_id = dmsf_workflow_id  
+        if commit == 'start'
+          self.workflow = DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
+          self.dmsf_workflow_started_by = User.current.id if User.current
+          self.dmsf_workflow_started_at = DateTime.now
         else
-          self.workflow = workflow
-        end
+          self.workflow = DmsfWorkflow::STATE_DRAFT   
+          self.dmsf_workflow_assigned_by = User.current.id if User.current
+          self.dmsf_workflow_assigned_at = DateTime.now
+        end        
       end
+    end
+  end
+  
+  def assign_workflow(dmsf_workflow_id)
+    if User.current.allowed_to?(:file_approval, self.file.project)      
+      wf = DmsfWorkflow.find_by_id(dmsf_workflow_id)
+      wf.assign(self.id) if wf && self.id
     end
   end
   
