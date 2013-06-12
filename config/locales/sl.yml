@@ -1,0 +1,24 @@
+sl:
+  dmsf_exceptions:
+    resource_locked: "Zahtevani objekt je zaklenjen."
+    resource_parent_locked: "Nadrejeni objekt je zaklenjen."
+    resource_not_locked: "Zahtevani objekt ni zaklenjen."
+    lock_not_owned_by_principal: "Niste lastnik ključa do objekta."
+  dmsf_lang_folder: "mapa"
+  dmsf_lang_file: "datoteka"  
+  label_dmsf_workflow_new: Nov postopek za odobritev
+  label_dmsf_workflow: Postopek za odobritev
+  label_dmsf_workflow_plural: Postopki za odobritev
+  error_unable_delete_dmsf_workflow: Ne morem brisati postopka
+  label_dmsf_workflow_step: Korak
+  label_dmsf_workflow_step_plural: Koraki
+  label_dmsf_workflow_approval: Odobritev
+  label_dmsf_workflow_approval_plural: Odobritve
+  dmsf_and: IN
+  dmsf_or: ALI
+  dmsf_new_step: Nov korak
+  label_dmsf: Dokumentacija
+  label_dmsf_wokflow_action_approve: Odobri
+  label_dmsf_wokflow_action_reject: Zavrni
+  label_dmsf_wokflow_action_delegate: 'Dodeli:'
+  message_dmsf_wokflow_note: Vaša zabležka...
