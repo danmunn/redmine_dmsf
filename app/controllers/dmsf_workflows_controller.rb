@@ -134,11 +134,7 @@ class DmsfWorkflowsController < ApplicationController
     if request.post?            
       users = User.find_all_by_id(params[:user_ids])      
       if params[:step] == '0'
-        if @workflow.steps.count > 0
-          step = @workflow.steps.last + 1
-        else
-          step = 1
-        end
+        step = @workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq.count + 1        
       else
         step = params[:step].to_i
       end
