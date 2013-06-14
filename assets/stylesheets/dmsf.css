@@ -260,8 +260,17 @@ table.list td.note {
     width: 30%;
 }
 
-table.list td.step, td.date {
+table.list td.date {
     text-align: center;
+}
+
+table.list td.reorder {
+    width: 15%;
+}
+
+table.list td.step {
+    text-align: center;
+    width: 16px;
 }
 
 .log_header_box{

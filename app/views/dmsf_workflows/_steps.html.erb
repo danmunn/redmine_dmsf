@@ -20,31 +20,32 @@
 <div class="tab-content" id="tab-content-members">
  
 <div class="splitcontentleft">  
-<% if @workflow.steps.any? %>
-<table class="list steps">
+<% steps = @workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq %>
+<% if steps.any? %>
+<table class="list">
   <thead><tr>
     <th><%= l(:label_dmsf_workflow_step) %></th>
     <th><%= l(:label_dmsf_workflow_approval_plural) %></th>
-    <th><%=l(:button_sort)%></th>
-    <th style="width:15%"></th>          
+    <th><%=l(:button_sort)%></th>    
+    <th/>
   </tr></thead>
-  <tbody>  
-  <% @workflow.steps.each do |step| %>    
-    <tr id="step-<%= step %>" class="<%= cycle 'odd', 'even' %> step">            
-      <td class="step"><%= step %></td>
-      <td class="approval">
-        <% @workflow.approvals(step).each_with_index do |approval, i| %>
-          <% if i != 0 %>
-            <b><%= approval.soperator %></b>&nbsp
+  <tbody>      
+  <% steps.each do |i|%>  
+    <tr id="step-<%= i %>" class="<%= cycle 'odd', 'even' %> step">            
+      <td class="step"><%= i %></td>
+      <td class="approval">                
+        <% @workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact.each_with_index do |step, j| %>
+          <% if j != 0 %>
+            <b><%= step.soperator %></b>&nbsp
           <% end %>
-          <%= link_to_user approval.user %>
+          <%= link_to_user step.user %>
         <% end %>
-      </td>  
-      <td align="center" style="width:15%;">
-        <%= reorder_links('workflow_step', {:action => 'edit', :id => @workflow, :step => step}, :put) %>
+      </td>        
+      <td class="reorder">  
+        <%= reorder_links('workflow_step', {:action => 'edit', :id => @workflow, :step => i}, :put) %>
       </td>
       <td class="buttons">      
-        <%= delete_link edit_dmsf_workflow_path(@workflow, :step => step) %>
+        <%= delete_link edit_dmsf_workflow_path(@workflow, :step => i) %>
       </td>  
     </tr>
   <% end; reset_cycle %>
@@ -70,7 +71,7 @@
     <p>
       <%= l(:label_dmsf_workflow_step) %>
       <%= select_tag 'step',
-              dmsf_workflow_steps_options_for_select(@workflow.steps),
+              dmsf_workflow_steps_options_for_select(steps),
               :id => 'selected_step', :style => "width:100px" %>              
     </p>
     <p><%= submit_tag l(:dmsf_and) %>&nbsp<%= submit_tag l(:dmsf_or) %></p>

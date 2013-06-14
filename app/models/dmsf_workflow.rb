@@ -39,37 +39,17 @@ class DmsfWorkflow < ActiveRecord::Base
 
   def to_s
     name
-  end  
-
-  def approvals(step)
-    wa = Array.new
-    dmsf_workflow_steps.each do |s|
-      if s.step == step
-        wa << s
-      end
-    end    
-    wa
-  end
-
-  def steps         
-    ws = Array.new
-    dmsf_workflow_steps.each do |s|
-      unless ws.include? s.step
-        ws << s.step
-      end
-    end    
-    ws
-  end
+  end   
 
   def reorder_steps(step, move_to)      
     case move_to
       when 'highest'          
         unless step == 1            
           dmsf_workflow_steps.each do |ws|              
-            if ws.step < step                
-              ws.update_attribute('step', ws.step + 1)
+            if ws.step < step
+             return false unless ws.update_attribute('step', ws.step + 1)
             elsif ws.step == step                
-              ws.update_attribute('step', 1)
+              return false unless ws.update_attribute('step', 1)
             end            
           end          
         end
@@ -77,42 +57,41 @@ class DmsfWorkflow < ActiveRecord::Base
         unless step == 1            
           dmsf_workflow_steps.each do |ws|
             if ws.step == step - 1                                
-              ws.update_attribute('step', step)
+              return false unless ws.update_attribute('step', step)
             elsif ws.step == step                
-              ws.update_attribute('step', step - 1)
+              return false unless ws.update_attribute('step', step - 1)
             end            
           end          
         end
       when 'lower'
-        unless step == steps.count            
+        unless step == dmsf_workflow_steps.collect{|s| s.step}.uniq.count            
           dmsf_workflow_steps.each do |ws|                            
             if ws.step == step + 1                
-              ws.update_attribute('step', step)
+             return false unless ws.update_attribute('step', step)
             elsif ws.step == step                
-              ws.update_attribute('step', step + 1)
+              return false unless ws.update_attribute('step', step + 1)
             end            
           end          
         end
       when 'lowest'                   
-        size = steps.count
+        size = dmsf_workflow_steps.collect{|s| s.step}.uniq.count
         unless step == size
           dmsf_workflow_steps.each do |ws|                            
             if ws.step > step                
-              ws.update_attribute('step', ws.step - 1)
+              return false unless ws.update_attribute('step', ws.step - 1)
             elsif ws.step == step                
-              ws.update_attribute('step', size)
+              return false unless ws.update_attribute('step', size)
             end
           end            
         end                            
-    end      
+    end     
+    return reload    
   end
   
-  def delegates(q, dmsf_workflow_step_assignment_id, dmsf_file_revision_id, project_id)        
-    if project_id
-      sql = ['id IN (SELECT user_id FROM members WHERE project_id = ?', project_id]
-    elsif dmsf_workflow_step_assignment_id && dmsf_file_revision_id
+  def delegates(q, dmsf_workflow_step_assignment_id, dmsf_file_revision_id)        
+    if dmsf_workflow_step_assignment_id && dmsf_file_revision_id
       sql = [
-        'id NOT IN (SELECT a.user_id FROM dmsf_workflow_step_assignments a WHERE id = ?) AND id IN (SELECT m.user_id FROM members m JOIN dmsf_file_revisions r ON m.project_id = r.project_id WHERE r.id = ?)', 
+        'id NOT IN (SELECT a.user_id FROM dmsf_workflow_step_assignments a WHERE id = ?) AND id IN (SELECT m.user_id FROM members m JOIN dmsf_files f ON f.project_id = m.project_id JOIN dmsf_file_revisions r ON r.dmsf_file_id = f.id WHERE r.id = ?)', 
         dmsf_workflow_step_assignment_id, 
         dmsf_file_revision_id]
     else
@@ -127,12 +106,27 @@ class DmsfWorkflow < ActiveRecord::Base
   end
   
   def next_assignments(dmsf_file_revision_id)    
-    self.dmsf_workflow_steps.each do |step|
-      unless step.finished?(dmsf_file_revision_id)        
-        return step.next_assignments(dmsf_file_revision_id)
+    results = Array.new    
+    self.dmsf_workflow_steps.each do |step|      
+      break unless results.empty? || results[0].step.step == step.step      
+      step.dmsf_workflow_step_assignments.each do |assignment|
+        if assignment.dmsf_file_revision_id == dmsf_file_revision_id
+          if assignment.dmsf_workflow_step_actions.empty?
+            results << assignment
+            next
+          end
+          add = true
+          assignment.dmsf_workflow_step_actions.each do |action|
+            if action.is_finished?              
+              add = false
+              break
+            end
+          end
+          results << assignment if add
+        end               
       end
-    end 
-    return nil
+    end
+    results
   end
   
   def self.assignments_to_users_str(assignments)
@@ -157,27 +151,29 @@ class DmsfWorkflow < ActiveRecord::Base
     end
   end
   
-  def try_finish(dmsf_file_revision_id, action, user_id)
-    res = nil
+  def try_finish(dmsf_file_revision_id, action, user_id)     
+    revision = DmsfFileRevision.find_by_id dmsf_file_revision_id
     case action.action
       when DmsfWorkflowStepAction::ACTION_APPROVE        
         self.dmsf_workflow_steps.each do |step|
-          res = step.result dmsf_file_revision_id
-          unless step.finished? dmsf_file_revision_id
-            return
-          end
-        end
+          step.dmsf_workflow_step_assignments.each do |assignment|
+            if assignment.dmsf_file_revision_id == dmsf_file_revision_id.to_i
+              if assignment.dmsf_workflow_step_actions.empty?            
+                return
+              end          
+              assignment.dmsf_workflow_step_actions.each do |act|
+                return unless act.is_finished?              
+              end
+            end               
+          end      
+        end 
+        # TODO: update_attribute doesn't wotk in unit tests because of "Couldn't find Project with id=0" error
+        revision.update_attribute(:workflow, DmsfWorkflow::STATE_APPROVED) if revision                
       when DmsfWorkflowStepAction::ACTION_REJECT
-        res = DmsfWorkflow::STATE_REJECTED
+        revision.update_attribute(:workflow, DmsfWorkflow::STATE_REJECTED) if revision        
       when DmsfWorkflowStepAction::ACTION_DELEGATE
         assignment = DmsfWorkflowStepAssignment.find_by_id(action.dmsf_workflow_step_assignment_id)
         assignment.update_attribute(:user_id, user_id) if assignment
     end
-    
-    if res
-      revision = DmsfFileRevision.find_by_id dmsf_file_revision_id     
-      revision.update_attribute(:workflow, res) if revision
-    end
   end
-  
 end

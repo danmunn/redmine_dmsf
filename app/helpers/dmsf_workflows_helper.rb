@@ -19,7 +19,7 @@
 module DmsfWorkflowsHelper
   
   def render_principals_for_new_dmsf_workflow_users(workflow, dmsf_workflow_step_assignment_id, dmsf_file_revision_id)
-    scope = workflow.delegates(params[:q], dmsf_workflow_step_assignment_id, dmsf_file_revision_id, nil)
+    scope = workflow.delegates(params[:q], dmsf_workflow_step_assignment_id, dmsf_file_revision_id)
     principal_count = scope.count
     principal_pages = Redmine::Pagination::Paginator.new principal_count, 10, params['page']
     principals = scope.offset(principal_pages.offset).limit(principal_pages.per_page).all

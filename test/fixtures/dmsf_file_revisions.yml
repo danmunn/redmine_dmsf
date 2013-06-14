@@ -1,5 +1,6 @@
 ---
 dmsf_file_revisions_001:
+  id:                           1
   dmsf_file_id:                 1
   source_dmsf_file_revision_id: NULL
   name:                         "test.txt"
@@ -19,6 +20,7 @@ dmsf_file_revisions_001:
 
 #revision for file on non-enabled project
 dmsf_file_revisions_002:
+  id:                           2
   dmsf_file_id:                 2
   source_dmsf_file_revision_id: NULL
   name:                         "test.txt"
@@ -38,6 +40,7 @@ dmsf_file_revisions_002:
 
 #revision for deleted file on dmsf-enabled project
 dmsf_file_revisions_003:
+  id:                           3
   dmsf_file_id:                 3
   source_dmsf_file_revision_id: NULL
   name:                         "deleted.txt"
@@ -54,4 +57,3 @@ dmsf_file_revisions_003:
   deleted:                      1
   deleted_by_user_id:           1
   user_id:                      1
-

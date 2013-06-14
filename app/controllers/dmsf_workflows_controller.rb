@@ -22,12 +22,13 @@ class DmsfWorkflowsController < ApplicationController
   
   before_filter :find_workflow, :except => [:create, :new, :index, :assign, :assignment]  
   before_filter :find_project, :except => [:start]
-  before_filter :authorize_global
+  before_filter :authorize_global  
+  before_filter :authorize_custom      
   
   def index    
     if @project
       @workflow_pages, @workflows = paginate DmsfWorkflow.where(:project_id => @project.id), :per_page => 25    
-    else
+    else      
       @workflow_pages, @workflows = paginate DmsfWorkflow.where(:project_id => nil), :per_page => 25    
     end
   end
@@ -130,7 +131,7 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def add_step     
-    if request.post?      
+    if request.post?            
       users = User.find_all_by_id(params[:user_ids])      
       if params[:step] == '0'
         if @workflow.steps.count > 0
@@ -142,14 +143,13 @@ class DmsfWorkflowsController < ApplicationController
         step = params[:step].to_i
       end
       operator = (params[:commit] == l(:dmsf_and)) ? DmsfWorkflowStep::OPERATOR_AND : DmsfWorkflowStep::OPERATOR_OR
-      users.each do |user|
+      users.each do |user|        
         @workflow.dmsf_workflow_steps << DmsfWorkflowStep.new(
           :dmsf_workflow_id => @workflow.id, 
           :step => step, 
           :user_id => user.id, 
           :operator => operator)
-      end   
-      @workflow.save      
+      end         
     end             
     respond_to do |format|
       format.html            
@@ -157,17 +157,19 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def remove_step        
-    if request.delete?
+    if request.delete?      
       DmsfWorkflowStep.where(:dmsf_workflow_id => @workflow.id, :step => params[:step]).each do |ws|
         @workflow.dmsf_workflow_steps.delete(ws)
-      end              
+      end                    
       @workflow.dmsf_workflow_steps.each do |ws|
         n = ws.step.to_i
         if n > params[:step].to_i        
           ws.step = n - 1
-          ws.save
+          unless ws.save
+            flash[:error] = l(:notice_cannot_renumber_steps)
+          end
         end
-      end
+      end      
     end        
     respond_to do |format|
       format.html      
@@ -176,7 +178,9 @@ class DmsfWorkflowsController < ApplicationController
   
   def reorder_steps    
     if request.put?
-      @workflow.reorder_steps params[:step].to_i, params[:workflow_step][:move_to]      
+      unless @workflow.reorder_steps(params[:step].to_i, params[:workflow_step][:move_to])
+        flash[:error] = l(:notice_cannot_renumber_steps)
+      end     
     end        
     respond_to do |format|
       format.html      
@@ -187,8 +191,12 @@ class DmsfWorkflowsController < ApplicationController
     revision = DmsfFileRevision.find_by_id(params[:dmsf_file_revision_id])
     if revision
       revision.set_workflow(@workflow.id, params[:action])
-      if request.post? && revision.save
-        flash[:notice] = l(:notice_successful_update)
+      if request.post?
+        if revision.save
+          flash[:notice] = l(:notice_successful_update)
+        else
+          flash[:error] = l(:notice_cannot_start_workflow)
+        end
       end
     end
     redirect_to :back
@@ -205,12 +213,16 @@ class DmsfWorkflowsController < ApplicationController
       @project = @workflow.project
     elsif params[:project_id].present?
        @project = Project.find_by_id params[:project_id]
-    end              
+    end    
   end
   
   def workflows_layout
     find_workflow
     find_project
     @project ? 'base' : 'admin'
+  end    
+  
+  def authorize_custom
+    require_admin unless @project
   end
 end

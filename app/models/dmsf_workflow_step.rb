@@ -44,53 +44,5 @@ class DmsfWorkflowStep < ActiveRecord::Base
       :user_id => user_id,
       :dmsf_file_revision_id => dmsf_file_revision_id)
     step_assignment.save
-  end
-  
-  def finished?(dmsf_file_revision_id)            
-    res = self.result(dmsf_file_revision_id)
-    res == DmsfWorkflow::STATE_APPROVED || res == DmsfWorkflow::STATE_REJECTED
-  end
-  
-  def result(dmsf_file_revision_id)        
-    assignments = DmsfWorkflowStepAssignment.where(
-      :dmsf_workflow_step_id => self.id, :dmsf_file_revision_id => dmsf_file_revision_id).all
-    assignments.each do |assignment|
-      actions = DmsfWorkflowStepAction.where(
-        :dmsf_workflow_step_assignment_id => assignment.id).all
-      if actions.empty?
-        return
-      end
-      actions.each do |action|
-        if DmsfWorkflowStepAction.is_finished?(action.action)
-          case action.action
-            when DmsfWorkflowStepAction::ACTION_APPROVE
-              return DmsfWorkflow::STATE_APPROVED
-            when DmsfWorkflowStepAction::ACTION_REJECT
-              return DmsfWorkflow::STATE_REJECTED
-            else
-              return
-          end
-        end
-      end
-    end
-  end
-  
-  def next_assignments(dmsf_file_revision_id)
-    results = Array.new
-    assignments = DmsfWorkflowStepAssignment.where(
-      :dmsf_workflow_step_id => self.id, 
-      :dmsf_file_revision_id => dmsf_file_revision_id)
-    assignments.each do |assignment|
-      add = true
-      assignment.dmsf_workflow_step_actions.each do |action|
-        if action.is_finished?
-          add = false
-          break
-        end
-      end
-      results << assignment if add
-    end
-    return results
-  end
-  
+  end  
 end

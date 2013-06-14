@@ -14,7 +14,7 @@ class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
   
   def test_create
     wfsa = DmsfWorkflowStepAssignment.new(      
-      :dmsf_workflow_step_id => 2,
+      :dmsf_workflow_step_id => 5,
       :user_id => 2,
       :dmsf_file_revision_id => 2)   
     assert wfsa.save
@@ -49,5 +49,9 @@ class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
     @wfsa1.destroy
     assert_nil DmsfWorkflowStepAssignment.find_by_id(1)
     assert_nil DmsfWorkflowStepAction.find_by_id(1)
+  end
+  
+  def test_step
+    assert_equal @wfsa1.step, DmsfWorkflowStep.find_by_id(@wfsa1.dmsf_workflow_step_id)
   end
 end

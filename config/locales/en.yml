@@ -210,6 +210,8 @@ en:
   error_unable_delete_dmsf_workflow: 'Unable to delete the workflow'
   error_empty_note: "The note can't be empty"
   error_workflow_assign: 'An error occured while assigning'
+  error_cannot_start_workflow: "Workflow can't be started"
+  error_cannot_renumber_steps: "Steps can't be renumbered"
   label_dmsf_workflow_new: 'New approval workflow'
   label_dmsf_workflow: 'Approval workflow'
   label_dmsf_workflow_plural: 'Approval workflows'  
@@ -236,6 +238,4 @@ en:
   dmsf_new_step: New step  
   message_dmsf_wokflow_note: Your note...
   info_revision: "r%{rev}"
-  link_workflow: Workflow    
-  
-  
+  link_workflow: Workflow       
