@@ -6,6 +6,7 @@ class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
   
   def setup
     @wfsa1 = DmsfWorkflowStepAssignment.find(1)
+    @wfsa2 = DmsfWorkflowStepAssignment.find(2)
   end
   
   def test_truth
@@ -21,14 +22,14 @@ class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_update    
-    @wfsa1.dmsf_workflow_step_id = 2    
+    @wfsa1.dmsf_workflow_step_id = 5   
     @wfsa1.user_id = 2
     @wfsa1.dmsf_file_revision_id = 2
     
     assert @wfsa1.save
     @wfsa1.reload
     
-    assert_equal 2, @wfsa1.dmsf_workflow_step_id    
+    assert_equal 5, @wfsa1.dmsf_workflow_step_id    
     assert_equal 2, @wfsa1.user_id
     assert_equal 2, @wfsa1.dmsf_file_revision_id
   end
@@ -43,6 +44,13 @@ class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
     @wfsa1.dmsf_file_revision_id = nil
     assert !@wfsa1.save
     assert_equal 1, @wfsa1.errors.count        
+  end
+  
+  def test_validate_dmsf_workflow_step_id_uniqueness    
+    @wfsa1.dmsf_workflow_step_id = @wfsa2.dmsf_workflow_step_id
+    @wfsa1.dmsf_file_revision_id = @wfsa2.dmsf_file_revision_id
+    assert !@wfsa1.save
+    assert_equal 1, @wfsa1.errors.count            
   end
   
   def test_destroy  

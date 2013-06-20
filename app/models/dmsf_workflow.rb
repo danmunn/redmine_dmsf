@@ -24,7 +24,7 @@ class DmsfWorkflow < ActiveRecord::Base
   validates_length_of :name, :maximum => 255
   
   STATE_NONE = nil
-  STATE_DRAFT = 3
+  STATE_ASSIGNED = 3
   STATE_WAITING_FOR_APPROVAL = 1
   STATE_APPROVED = 2
   STATE_REJECTED = 4

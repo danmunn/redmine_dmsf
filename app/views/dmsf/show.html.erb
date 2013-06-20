@@ -185,6 +185,8 @@
                                 :dmsf_file_revision_id => file.last_revision.id),
                               :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(file.last_revision.id)),
                               :remote => true) %>
+                          <% else %>
+                            <%= file.last_revision.workflow_str(false) %>
                           <% end %>
 			</td>
 			<td class="author"><%= h(file.last_revision.user) %></td>
@@ -221,15 +223,15 @@
                                             <% end %>
                                           <% when DmsfWorkflow::STATE_APPROVED %>
                                             <%= image_tag('approved.png', :title => l(:title_approved), :plugin => :redmine_dmsf) %>
-                                          <% when DmsfWorkflow::STATE_DRAFT %>
+                                          <% when DmsfWorkflow::STATE_ASSIGNED %>
                                             <% if User.current && (file.last_revision.dmsf_workflow_assigned_by == User.current.id) %>
-                                              <%= link_to_function(image_tag('draft.png', :plugin => :redmine_dmsf),
+                                              <%= link_to_function(image_tag('assigned.png', :plugin => :redmine_dmsf),
                                                   "manipulation_link('#{start_dmsf_workflow_path(                                                    
                                                     :id => file.last_revision.dmsf_workflow_id,                                                     
                                                     :dmsf_file_revision_id => file.last_revision.id)}')",
 						  :title => l(:label_dmsf_wokflow_action_start)) %>
                                             <% else %>
-                                              <%= image_tag('draft.png', :title => l(:label_dmsf_wokflow_action_start), :plugin => :redmine_dmsf) %>
+                                              <%= image_tag('assigned.png', :title => l(:label_dmsf_wokflow_action_start), :plugin => :redmine_dmsf) %>
                                             <% end %>
                                           <% when DmsfWorkflow::STATE_REJECTED %>
                                             <%= image_tag('rejected.png', :title => l(:title_rejected), :plugin => :redmine_dmsf) %>
@@ -325,15 +327,15 @@ sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !
 				"oLanguage": {
 					'sUrl': '<%= plugin_asset_path(:redmine_dmsf, 'javascripts', sUrl) %>'
 				},
-				"bAutoWidth": false,
-				"bPaginate": false,
-				"aaSorting": [[1,'asc']],
-				"aaSortingFixed": [[7,'asc']],
-				"aoColumnDefs": [
-					{ "bSearchable": false, "aTargets": [0, 7, 8, 9] },
-					{ "bSortable": false, "aTargets": [0, 7, 8] },
-					{ "iDataSort": 9, "aTargets": [ 2 ] }
-				],
+					"bAutoWidth": false,
+                                "bPaginate": false,
+                                "aaSorting": [[1,'asc']],
+                                "aaSortingFixed": [[8,'asc']],
+                                "aoColumnDefs": [
+                                  { "bSearchable": false, "aTargets": [0, 7, 8, 9] },
+                                  { "bSortable": false, "aTargets": [0, 7, 8] },
+                                  { "iDataSort": 9, "aTargets": [ 2 ] }
+                                ],
 				"fnInitComplete": function() {
 					jQuery("div.controls").prependTo(jQuery("#browser_wrapper div.fg-toolbar")[0]);
 				},

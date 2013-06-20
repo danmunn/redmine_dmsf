@@ -21,8 +21,8 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
   def test_create
     wfsac = DmsfWorkflowStepAction.new(
       :dmsf_workflow_step_assignment_id => 1,
-      :action => 1,
-      :note => 'Approvement')
+      :action => DmsfWorkflowStepAction::ACTION_DELEGATE,
+      :note => 'Approval')
     assert wfsac.save
     wfsac.reload
     assert wfsac.created_at
@@ -30,14 +30,14 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
   
   def test_update    
     @wfsac1.dmsf_workflow_step_assignment_id = 2    
-    @wfsac1.action = 2
+    @wfsac1.action = DmsfWorkflowStepAction::ACTION_REJECT
     @wfsac1.note = 'Rejection'
     
     assert @wfsac1.save
     @wfsac1.reload
     
     assert_equal 2, @wfsac1.dmsf_workflow_step_assignment_id    
-    assert_equal 2, @wfsac1.action
+    assert_equal DmsfWorkflowStepAction::ACTION_REJECT, @wfsac1.action
     assert_equal 'Rejection', @wfsac1.note
   end
   
@@ -77,6 +77,22 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
     assert_equal 1, @wfsac1.errors.count
   end
   
+  def test_validate_dmsf_workflow_step_assignment_id_uniqueness    
+    @wfsac2.dmsf_workflow_step_assignment_id = @wfsac1.dmsf_workflow_step_assignment_id;
+    @wfsac2.action = @wfsac1.action;
+    assert !@wfsac2.save
+    assert_equal 1, @wfsac2.errors.count  
+    @wfsac1.action = DmsfWorkflowStepAction::ACTION_REJECT
+    @wfsac2.action = @wfsac1.action;
+    assert @wfsac1.save
+    assert !@wfsac2.save
+    assert_equal 1, @wfsac2.errors.count
+    @wfsac1.action = DmsfWorkflowStepAction::ACTION_DELEGATE
+    assert @wfsac1.save
+    @wfsac2.action = @wfsac1.action;
+    assert @wfsac2.save
+  end
+  
   def test_destroy  
     @wfsac1.destroy
     assert_nil DmsfWorkflowStepAction.find_by_id(1)    
@@ -92,10 +108,10 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_action_str
-    assert_equal DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_APPROVE), l(:title_approved)          
-    assert_equal DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_REJECT), l(:title_rejected)
-    assert_equal DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_DELEGATE), l(:title_delegated)
-    assert_equal DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_ASSIGN), l(:title_assigned)
-    assert_equal DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_START), l(:title_started) 
+    assert_equal DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_APPROVE), l(:title_approval)          
+    assert_equal DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_REJECT), l(:title_rejection)
+    assert_equal DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_DELEGATE), l(:title_delegation)
+    assert_equal DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_ASSIGN), l(:title_assignment)
+    assert_equal DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_START), l(:title_start) 
   end
 end

@@ -26,7 +26,8 @@ class CreateDmsfWorkflowStepAssignments < ActiveRecord::Migration
     add_index :dmsf_workflow_step_assignments, 
       [:dmsf_workflow_step_id, :dmsf_file_revision_id],
       # The default index name exceeds the index name limit
-      {:name => 'index_dmsf_wrkfl_step_assigns_on_wrkfl_step_id_and_frev_id'}
+      :name => 'index_dmsf_wrkfl_step_assigns_on_wrkfl_step_id_and_frev_id',
+      :unique => true
   end
   
   def self.down

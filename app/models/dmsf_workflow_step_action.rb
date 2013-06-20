@@ -24,6 +24,7 @@ class DmsfWorkflowStepAction < ActiveRecord::Base
   validates :action, :presence => true
   validates :note, :presence => true, :unless => lambda { self.action == DmsfWorkflowStepAction::ACTION_APPROVE }
   validates :author_id, :presence => true
+  validates_uniqueness_of :dmsf_workflow_step_assignment_id, :scope => [:action], :unless => lambda {self.action == DmsfWorkflowStepAction::ACTION_DELEGATE}  
   
   ACTION_APPROVE = 1
   ACTION_REJECT = 2
@@ -49,15 +50,30 @@ class DmsfWorkflowStepAction < ActiveRecord::Base
     if action
       case action.to_i
         when ACTION_APPROVE
-          l(:title_approved)
+          l(:title_approval)
         when ACTION_REJECT
-          l(:title_rejected)
+          l(:title_rejection)
         when ACTION_DELEGATE
-          l(:title_delegated)
+          l(:title_delegation)
+        when ACTION_ASSIGN
+          l(:title_assignment)
+        when ACTION_START
+          l(:title_start)
+      end
+    end
+  end
+  
+  def self.workflow_str(action)
+    if action
+      case action.to_i        
+        when ACTION_REJECT
+          l(:title_rejected)       
         when ACTION_ASSIGN
           l(:title_assigned)
-        when ACTION_START
-          l(:title_started)       
+        when ACTION_START, ACTION_DELEGATE, ACTION_APPROVE
+          l(:title_waiting_for_approval)
+        else
+          l(:title_none)
       end
     end
   end

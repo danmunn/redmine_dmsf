@@ -256,12 +256,12 @@ div.revision_box .ui-widget-header {
     font-weight: normal;
 }
 
-table.list td.note {
-    width: 30%;
+table.list th {
+    text-align: left;
 }
 
-table.list td.date {
-    text-align: center;
+table.list td.note {
+    width: 20%;
 }
 
 table.list td.reorder {

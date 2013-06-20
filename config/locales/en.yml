@@ -213,7 +213,7 @@ en:
   error_cannot_start_workflow: "Workflow can't be started"
   error_cannot_renumber_steps: "Steps can't be renumbered"
   label_dmsf_workflow_new: 'New approval workflow'
-  label_dmsf_workflow: 'Approval workflow'
+  label_dmsf_workflow: 'Approval Workflow'
   label_dmsf_workflow_plural: 'Approval workflows'  
   label_dmsf_workflow_step: Step
   label_dmsf_workflow_step_plural: Steps
@@ -227,12 +227,15 @@ en:
   label_dmsf_wokflow_action_start: 'Start workflow'
   label_action: Action
   label_note: Note  
-  title_draft: Draft
-  title_rejected: Rejected
-  title_delegated: Delegated
+  title_none: None
+  title_rejection: Rejection
+  title_delegation: Delegation
+  title_assignment: Assignment
+  title_start: Start  
+  title_dmsf_workflow_log: 'Approval Workflow Log'
   title_assigned: Assigned
-  title_started: Started  
-  title_dmsf_workflow_log: 'Approval workflow log'
+  title_approval: Approval
+  title_rejected: Rejected
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: New step  

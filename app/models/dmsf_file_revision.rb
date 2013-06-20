@@ -167,12 +167,12 @@ class DmsfFileRevision < ActiveRecord::Base
         str + l(:title_waiting_for_approval)
       when DmsfWorkflow::STATE_APPROVED
         str + l(:title_approved)
-      when DmsfWorkflow::STATE_DRAFT
-        str + l(:title_draft)
+      when DmsfWorkflow::STATE_ASSIGNED
+        str + l(:title_assigned)
       when DmsfWorkflow::STATE_REJECTED
         str + l(:title_rejected)
       else
-        str
+        str + l(:title_none)
     end
   end
   
@@ -183,7 +183,7 @@ class DmsfFileRevision < ActiveRecord::Base
       self.dmsf_workflow_started_by = User.current.id if User.current
       self.dmsf_workflow_started_at = DateTime.now
     else
-      self.workflow = DmsfWorkflow::STATE_DRAFT
+      self.workflow = DmsfWorkflow::STATE_ASSIGNED
       self.dmsf_workflow_assigned_by = User.current.id if User.current
       self.dmsf_workflow_assigned_at = DateTime.now
     end                          
