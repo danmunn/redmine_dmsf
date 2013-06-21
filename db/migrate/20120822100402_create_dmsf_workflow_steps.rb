@@ -24,12 +24,7 @@ class CreateDmsfWorkflowSteps < ActiveRecord::Migration
       t.references :user, :null => false
       t.integer :operator, :null => false
     end
-    add_index :dmsf_workflow_steps, :dmsf_workflow_id
-    add_index :dmsf_workflow_steps, 
-      [:user_id, :dmsf_workflow_id, :step],
-      # The default index name exceeds the index name limit
-      :name => 'index_dmsf_wrkfl_steps_on_usr_id_and_dmsf_wrkfl_id_and_step',
-      :unique => true
+    add_index :dmsf_workflow_steps, :dmsf_workflow_id    
   end
   
   def self.down

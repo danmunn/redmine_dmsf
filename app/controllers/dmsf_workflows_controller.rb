@@ -44,7 +44,10 @@ class DmsfWorkflowsController < ApplicationController
         :note => params[:note])    
       if request.post?
         if action.save
-          @workflow.try_finish params[:dmsf_file_revision_id], action, params[:user_id]
+          if @workflow.try_finish params[:dmsf_file_revision_id], action, params[:user_id]            
+            file = DmsfFile.joins(:revisions).where(:dmsf_file_revisions => {:id => params[:dmsf_file_revision_id]}).first
+            file.unlock! if file
+          end
           flash[:notice] = l(:notice_successful_update)
         else
           flash[:error] = l(:error_empty_note)
@@ -65,6 +68,8 @@ class DmsfWorkflowsController < ApplicationController
         revision.assign_workflow(params[:dmsf_workflow_id])
         if request.post? 
           if revision.save
+            file = DmsfFile.find_by_id revision.dmsf_file_id
+            file.lock! if file
             flash[:notice] = l(:notice_successful_update)
           else
             flash[:error] = l(:error_workflow_assign)
