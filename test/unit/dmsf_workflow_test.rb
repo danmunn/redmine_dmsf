@@ -175,4 +175,9 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
 #    assert_equal @revision2.workflow, DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
      assert true
   end
+  
+  def test_participiants
+    # TODO:
+    assert true
+  end
 end

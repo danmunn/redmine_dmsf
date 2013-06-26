@@ -49,7 +49,7 @@ module DmsfWorkflowsHelper
   
   def dmsf_workflows_for_select(project, dmsf_workflow_id)
     options = Array.new
-    options << [l(:option_workflow_none), nil]
+    #options << [l(:option_workflow_none), nil]
     DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', project.id]).each do |wf|
       options << [wf.name, wf.id]
     end
@@ -59,7 +59,7 @@ module DmsfWorkflowsHelper
   def principals_radio_button_tags(name, principals)
     s = ''
     principals.each do |principal|
-      s << "<label>#{ radio_button_tag name, principal.id, false, :id => nil } #{h principal}</label>\n"
+      s << "<label>#{ radio_button_tag name, principal.id * 10, false, :id => nil } #{h principal}</label>\n"
     end
     s.html_safe    
   end

@@ -57,6 +57,20 @@ class DmsfMailer < Mailer
     mail(:to => email_to, :cc => email_cc, :subject => email_subject, :from => user.mail)
   end
   
+  def workflow_notification(to, workflow, revision, subject, text1, text2)
+    set_language_if_valid User.current.language    
+    @workflow = workflow
+    @revision = revision
+    @text1 = "The approval workflow '#{@workflow.name}' assigned to '#{@revision.file.name}' document has just #{text1}."            
+    unless @revision.folder
+      url = url_for(:controller => 'dmsf', :action => 'edit_root', :id => @revision.project, :only_path => false)
+    else
+      url = url_for(:controller => 'dmsf', :action => 'edit', :id => @project, :folder_id => @revision.folder, :only_path => false)
+    end            
+    @text2 = "#{text2} #{url}."
+    mail :to => to, :subject => subject
+  end
+      
   private
   
   def get_notify_user_emails(user, files)
@@ -93,5 +107,5 @@ class DmsfMailer < Mailer
 
     notify_members.collect {|m| m.user.mail }
   end
-  
+        
 end

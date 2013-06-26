@@ -40,13 +40,72 @@ class DmsfWorkflowsController < ApplicationController
     if params[:commit] == l(:button_submit)
       action = DmsfWorkflowStepAction.new(
         :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id],
-        :action => params[:step_action],
+        :action => (params[:step_action].to_i >= 10) ? DmsfWorkflowStepAction::ACTION_DELEGATE : params[:step_action],
         :note => params[:note])    
       if request.post?
         if action.save
-          if @workflow.try_finish params[:dmsf_file_revision_id], action, params[:user_id]            
-            file = DmsfFile.joins(:revisions).where(:dmsf_file_revisions => {:id => params[:dmsf_file_revision_id]}).first
-            file.unlock! if file
+          revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
+          if revision
+            if @workflow.try_finish revision, action, (params[:step_action].to_i / 10)            
+              file = DmsfFile.joins(:revisions).where(:dmsf_file_revisions => {:id => revision.id}).first
+              file.unlock! if file              
+              if revision.workflow == DmsfWorkflow::STATE_APPROVED
+                # Just approved                                
+                DmsfMailer.workflow_notification(
+                  revision.project.members.collect{ |member| member.user.mail},
+                  @workflow, 
+                  revision,
+                  "Approval workflow #{@workflow.name} approved",
+                  'been finished and the document has been approved',
+                  'To see the approval history click on the workflow status of the document in').deliver
+              else
+                # Just rejected
+                owner = User.find_by_id revision.dmsf_workflow_assigned_by
+                DmsfMailer.workflow_notification(
+                  @workflow.participiants.collect{ |user| user.mail} << owner.mail, 
+                  @workflow, 
+                  revision,
+                  "Approval workflow #{@workflow.name} rejected",
+                  "been finished and the document has been rejected because of '#{action.note}'",
+                  'To see the approval history click on the workflow status of the document in').deliver
+              end
+            else
+              if action.action == DmsfWorkflowStepAction::ACTION_DELEGATE
+                # Delegation
+                # TODO: Find the real delegate
+                delegate = User.current
+                DmsfMailer.workflow_notification(
+                  delegate.mail, 
+                  @workflow, 
+                  revision,
+                  "Approval workflow #{@workflow.name} step delegated",
+                  "been delegated  because of '#{action.note}' and you are expected to do an approval in the current approval step",
+                  'To proceed click on the check box icon next to the document in').deliver
+              else
+                # Next step
+                assignments = @workflow.next_assignments revision.id
+                unless assignments.empty?
+                  if assignments.first.dmsf_workflow_step.step != action.dmsf_workflow_step_assignment.dmsf_workflow_step.step
+                    # Next step                  
+                    DmsfMailer.workflow_notification(
+                      assignments.collect{ |assignment| assignment.user.mail}, 
+                      @workflow, 
+                      revision,
+                      "Approval workflow #{@workflow.name} requires your approval",
+                      'finished one of the approval steps and you are expected to do an approval in the next approval step',
+                      'To proceed click on the check box icon next to the document in the').deliver
+                    owner = User.find_by_id revision.dmsf_workflow_assigned_by
+                    DmsfMailer.workflow_notification(
+                      owner.mail, 
+                      @workflow, 
+                      revision,
+                      "Approval workflow #{@workflow.name} updated",
+                      'finished one of the approval steps',
+                      'To see the current status of the approval workflow click on the workflow status the document in').deliver
+                  end
+                end
+              end
+            end
           end
           flash[:notice] = l(:notice_successful_update)
         else
@@ -190,11 +249,19 @@ class DmsfWorkflowsController < ApplicationController
   
   def start
     revision = DmsfFileRevision.find_by_id(params[:dmsf_file_revision_id])
-    if revision
-      revision.set_workflow(@workflow.id, params[:action])
-      if request.post?
-        if revision.save
-          flash[:notice] = l(:notice_successful_update)
+    if revision      
+      if request.post?        
+        revision.set_workflow(@workflow.id, params[:action])
+        if revision.save          
+          assignments = @workflow.next_assignments revision.id          
+          DmsfMailer.workflow_notification(
+            assignments.collect{ |assignment| assignment.user.mail},
+            @workflow, 
+            revision,
+            "Approval workflow #{@workflow.name} started",
+            'been started and you are expected to do an approval in the current approval step',
+            'To proceed click on the check box icon next to the document in').deliver
+          flash[:notice] = l(:notice_workflow_started)
         else
           flash[:error] = l(:notice_cannot_start_workflow)
         end
@@ -202,9 +269,8 @@ class DmsfWorkflowsController < ApplicationController
     end
     redirect_to :back
   end
-  
-  private    
-  
+    
+private    
   def find_workflow   
     @workflow = DmsfWorkflow.find_by_id(params[:id])    
   end

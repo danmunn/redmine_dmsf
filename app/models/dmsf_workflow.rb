@@ -28,6 +28,14 @@ class DmsfWorkflow < ActiveRecord::Base
   STATE_WAITING_FOR_APPROVAL = 1
   STATE_APPROVED = 2
   STATE_REJECTED = 4
+  
+  def participiants
+    users = Array.new
+    self.dmsf_workflow_steps.each do |step|
+      users << step.user
+    end
+    users
+  end
 
   def self.workflows(project)
     project ? where(:project_id => project) : where('project_id IS NULL')      
@@ -110,7 +118,7 @@ class DmsfWorkflow < ActiveRecord::Base
   def next_assignments(dmsf_file_revision_id)    
     results = Array.new    
     self.dmsf_workflow_steps.each do |step|      
-      break unless results.empty? || results[0].step.step == step.step      
+      break unless results.empty? || results[0].dmsf_workflow_step.step == step.step      
       step.dmsf_workflow_step_assignments.each do |assignment|
         if assignment.dmsf_file_revision_id == dmsf_file_revision_id
           if assignment.dmsf_workflow_step_actions.empty?
@@ -134,14 +142,11 @@ class DmsfWorkflow < ActiveRecord::Base
   def self.assignments_to_users_str(assignments)
     str = ''
     if assignments      
-      assignments.each_with_index do |assignment, index|
-        user = User.find_by_id assignment.user_id
-        if user
-          if index > 0
-            str << ', '
-          end
-          str << user.name
+      assignments.each_with_index do |assignment, index|        
+        if index > 0
+          str << ', '
         end
+        str << assignment.user.name        
       end
     end
     str    
@@ -153,33 +158,38 @@ class DmsfWorkflow < ActiveRecord::Base
     end
   end
   
-  def try_finish(dmsf_file_revision_id, action, user_id)     
-    revision = DmsfFileRevision.find_by_id dmsf_file_revision_id
-    if revision
-      case action.action
-        when DmsfWorkflowStepAction::ACTION_APPROVE        
-          self.dmsf_workflow_steps.each do |step|
-            step.dmsf_workflow_step_assignments.each do |assignment|
-              if assignment.dmsf_file_revision_id == dmsf_file_revision_id.to_i
-                if assignment.dmsf_workflow_step_actions.empty?            
-                  return false
-                end          
-                assignment.dmsf_workflow_step_actions.each do |act|
-                  return false unless act.is_finished?              
-                end
-              end               
-            end      
-          end         
-          revision.update_attribute(:workflow, DmsfWorkflow::STATE_APPROVED)
-          return true
-        when DmsfWorkflowStepAction::ACTION_REJECT
-          revision.update_attribute(:workflow, DmsfWorkflow::STATE_REJECTED)
-          return true
-        when DmsfWorkflowStepAction::ACTION_DELEGATE
-          assignment = DmsfWorkflowStepAssignment.find_by_id(action.dmsf_workflow_step_assignment_id)
-          assignment.update_attribute(:user_id, user_id) if assignment
-      end
+  def try_finish(revision, action, user_id)         
+    case action.action
+      when DmsfWorkflowStepAction::ACTION_APPROVE        
+        self.dmsf_workflow_steps.each do |step|
+          step.dmsf_workflow_step_assignments.each do |assignment|
+            if assignment.dmsf_file_revision_id == revision.id
+              if assignment.dmsf_workflow_step_actions.empty?            
+                return false
+              end          
+              assignment.dmsf_workflow_step_actions.each do |act|
+                return false unless act.is_finished?              
+              end
+            end               
+          end      
+        end         
+        revision.update_attribute(:workflow, DmsfWorkflow::STATE_APPROVED)
+        return true
+      when DmsfWorkflowStepAction::ACTION_REJECT
+        revision.update_attribute(:workflow, DmsfWorkflow::STATE_REJECTED)
+        return true
+      when DmsfWorkflowStepAction::ACTION_DELEGATE
+        #assignment = DmsfWorkflowStepAssignment.find_by_id(action.dmsf_workflow_step_assignment_id)
+        #assignment.update_attribute(:user_id, user_id) if assignment
+        self.dmsf_workflow_steps.each do |step|
+          step.dmsf_workflow_step_assignments.each do |assignment|
+            if assignment.id == action.dmsf_workflow_step_assignment_id
+              assignment.update_attribute(:user_id, user_id)
+              return false
+            end
+          end
+        end
     end
     return false
-  end
+  end  
 end

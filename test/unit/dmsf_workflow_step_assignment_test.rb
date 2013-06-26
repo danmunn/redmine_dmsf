@@ -58,8 +58,4 @@ class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
     assert_nil DmsfWorkflowStepAssignment.find_by_id(1)
     assert_nil DmsfWorkflowStepAction.find_by_id(1)
   end
-  
-  def test_step
-    assert_equal @wfsa1.step, DmsfWorkflowStep.find_by_id(@wfsa1.dmsf_workflow_step_id)
-  end
 end
