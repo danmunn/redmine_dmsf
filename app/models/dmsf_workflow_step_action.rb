@@ -63,6 +63,23 @@ class DmsfWorkflowStepAction < ActiveRecord::Base
     end
   end
   
+  def self.action_type_str(action)
+    if action
+      case action.to_i
+        when ACTION_APPROVE
+          'approval'
+        when ACTION_REJECT
+          'rejection'
+        when ACTION_DELEGATE
+          'delegation'
+        when ACTION_ASSIGN
+          'assignment'
+        when ACTION_START
+          'start'
+      end
+    end
+  end
+  
   def self.workflow_str(action)
     if action
       case action.to_i        
