@@ -4,7 +4,8 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
   
   fixtures :users, :dmsf_workflows, :dmsf_workflow_steps, :projects, :roles, 
-    :members, :member_roles, :dmsf_workflow_step_assignments
+    :members, :member_roles, :dmsf_workflow_step_assignments, :dmsf_file_revisions, 
+    :dmsf_files
   
   def setup
     @user_admin = User.find_by_id 1 # Redmine admin
@@ -220,7 +221,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
 #      :action => DmsfWorkflowStepAction::ACTION_REJECT).first    
 #  end
 #  
-  def test_action        
+  def test_action            
     xhr(
       :get,
       :action,
@@ -234,7 +235,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       assert_template 'action'
   end
   
-  def test_new_action_delegate    
+  def test_new_action_delegate     
     @request.env['HTTP_REFERER'] = 'http://test.host/projects/2/dmsf'
     post( 
       :new_action, 
@@ -242,15 +243,14 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       :id => @wf1.id, 
       :dmsf_workflow_step_assignment_id => @wfsa2.id, 
       :dmsf_file_revision_id => @revision2.id,
-      :step_action => DmsfWorkflowStepAction::ACTION_DELEGATE,
-      :user_id => @user_admin.id,
+      :step_action => @user_admin.id * 10,
       :note => 'Delegated because...')    
     assert_response :redirect
     assert DmsfWorkflowStepAction.where(
       :dmsf_workflow_step_assignment_id => @wfsa2.id, 
       :action => DmsfWorkflowStepAction::ACTION_DELEGATE).first 
     @wfsa2.reload
-    assert_equal @wfsa2.user_id, @user_admin.id
+    assert_equal @wfsa2.user_id, @user_admin.id        
   end
   
   def test_assign        

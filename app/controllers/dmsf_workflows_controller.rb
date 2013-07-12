@@ -52,7 +52,7 @@ class DmsfWorkflowsController < ApplicationController
               if revision.workflow == DmsfWorkflow::STATE_APPROVED
                 # Just approved                                
                 DmsfMailer.workflow_notification(
-                  revision.project.members.collect{ |member| member.user.mail},
+                  revision.file.project.members.collect{ |member| member.user.mail},
                   @workflow, 
                   revision,
                   "Approval workflow #{@workflow.name} approved",
@@ -71,9 +71,8 @@ class DmsfWorkflowsController < ApplicationController
               end
             else
               if action.action == DmsfWorkflowStepAction::ACTION_DELEGATE
-                # Delegation
-                # TODO: Find the real delegate
-                delegate = User.current
+                # Delegation                
+                delegate = User.find_by_id params[:step_action].to_i / 10
                 DmsfMailer.workflow_notification(
                   delegate.mail, 
                   @workflow, 
