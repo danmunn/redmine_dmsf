@@ -4,12 +4,6 @@
   <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=h @workflow %></h2>
 <% end %>
 
-<% if @project %>
-  <div class="contextual">
-    <%= link_to 'Action', action_dmsf_workflow_path(:project_id => @project.id, :id => @workflow, :step => 1), :remote => true %>
-  </div>
-<% end %>
-
 <%= labelled_form_for @workflow do |f| %>
   <%= error_messages_for 'workflow' %>
   <div class="box tabular">
