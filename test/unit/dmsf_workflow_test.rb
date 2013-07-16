@@ -66,10 +66,10 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
   
   def test_project
     # Global workflow
-    assert_nil @wf1.project
+    assert_nil @wf2.project
     # Project workflow
-    @wf1.project_id = 5
-    assert @wf1.project
+    @wf2.project_id = 5
+    assert @wf2.project
   end
   
   def test_to_s

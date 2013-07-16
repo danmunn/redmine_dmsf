@@ -44,5 +44,18 @@ class DmsfWorkflowStep < ActiveRecord::Base
       :user_id => user_id,
       :dmsf_file_revision_id => dmsf_file_revision_id)
     step_assignment.save
-  end  
+  end
+  
+  def is_finished?(dmsf_file_revision_id)
+    self.dmsf_workflow_step_assignments.each do |assignment|
+      if assignment.dmsf_file_revision_id == dmsf_file_revision_id
+        if assignment.dmsf_workflow_step_actions.empty?            
+          return false
+        end          
+        assignment.dmsf_workflow_step_actions.each do |act|
+          return false unless act.is_finished?              
+        end
+      end               
+    end      
+  end
 end

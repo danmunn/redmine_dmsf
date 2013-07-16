@@ -116,24 +116,46 @@ class DmsfWorkflow < ActiveRecord::Base
   end
   
   def next_assignments(dmsf_file_revision_id)    
-    results = Array.new    
-    self.dmsf_workflow_steps.each do |step|      
-      break unless results.empty? || results[0].dmsf_workflow_step.step == step.step      
-      step.dmsf_workflow_step_assignments.each do |assignment|
-        if assignment.dmsf_file_revision_id == dmsf_file_revision_id
-          if assignment.dmsf_workflow_step_actions.empty?
-            results << assignment
-            next
-          end
-          add = true
-          assignment.dmsf_workflow_step_actions.each do |action|
-            if action.is_finished?              
-              add = false
-              break
+    results = Array.new  
+    nsteps = self.dmsf_workflow_steps.collect{|s| s.step}.uniq
+    nsteps.each do |i|
+      step_is_finished = false      
+      steps = self.dmsf_workflow_steps.collect{|s| s.step == i ? s : nil}.compact
+      steps.each do |step|
+        step.dmsf_workflow_step_assignments.each do |assignment|
+          if assignment.dmsf_file_revision_id == dmsf_file_revision_id
+            assignment.dmsf_workflow_step_actions.each do |action|
+              case action.action
+              when DmsfWorkflowStepAction::ACTION_APPROVE
+                step_is_finished = true
+                # Try to find another unfinished AND step  
+                exists = false
+                stps = self.dmsf_workflow_steps.collect{|s| (s.step == i && s.operator == DmsfWorkflowStep::OPERATOR_AND) ? s : nil}.compact
+                stps.each do |s|
+                  s.dmsf_workflow_step_assignments.each do |a|
+                    exists = a.add?(dmsf_file_revision_id)                    
+                    break if exists                    
+                  end
+                end  
+                step_is_finished = false if exists
+                break
+              when DmsfWorkflowStepAction::ACTION_REJECT
+                return Array.new              
+              end
             end
           end
-          results << assignment if add
-        end               
+          break if step_is_finished
+        end 
+        if step_is_finished
+          break        
+        else
+          steps.each do |step|
+            step.dmsf_workflow_step_assignments.each do |assignment|              
+              results << assignment if assignment.add?(dmsf_file_revision_id)              
+            end
+          end
+          return results
+        end
       end
     end
     results
@@ -160,27 +182,15 @@ class DmsfWorkflow < ActiveRecord::Base
   
   def try_finish(revision, action, user_id)         
     case action.action
-      when DmsfWorkflowStepAction::ACTION_APPROVE        
-        self.dmsf_workflow_steps.each do |step|
-          step.dmsf_workflow_step_assignments.each do |assignment|
-            if assignment.dmsf_file_revision_id == revision.id
-              if assignment.dmsf_workflow_step_actions.empty?            
-                return false
-              end          
-              assignment.dmsf_workflow_step_actions.each do |act|
-                return false unless act.is_finished?              
-              end
-            end               
-          end      
-        end         
+      when DmsfWorkflowStepAction::ACTION_APPROVE   
+        assignments = self.next_assignments revision.id
+        return false unless assignments.empty?
         revision.update_attribute(:workflow, DmsfWorkflow::STATE_APPROVED)
         return true
       when DmsfWorkflowStepAction::ACTION_REJECT
         revision.update_attribute(:workflow, DmsfWorkflow::STATE_REJECTED)
         return true
-      when DmsfWorkflowStepAction::ACTION_DELEGATE
-        #assignment = DmsfWorkflowStepAssignment.find_by_id(action.dmsf_workflow_step_assignment_id)
-        #assignment.update_attribute(:user_id, user_id) if assignment
+      when DmsfWorkflowStepAction::ACTION_DELEGATE        
         self.dmsf_workflow_steps.each do |step|
           step.dmsf_workflow_step_assignments.each do |assignment|
             if assignment.id == action.dmsf_workflow_step_assignment_id
