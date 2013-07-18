@@ -214,7 +214,8 @@ es:
   error_cannot_start_workflow: "Workflow can't be started"
   error_cannot_renumber_steps: "Steps can't be renumbered"
   label_dmsf_workflow_new: New approval workflow
-  label_dmsf_workflow: Approval Workflow
+  field_label_dmsf_workflow: Approval Workflow
+  field_label_dmsf_workflow_name: Approval workflow name
   label_dmsf_workflow_plural: Approval workflows
   label_dmsf_workflow_step: Step
   label_dmsf_workflow_step_plural: Steps
@@ -226,6 +227,8 @@ es:
   label_dmsf_wokflow_action_delegate: Delegate to
   label_dmsf_wokflow_action_assign: Assign an approval workflow
   label_dmsf_wokflow_action_start: Start workflow
+  label_dmsf_workflow_add_approver: "Add a new aprover(s) with a function:"
+  label_or: or
   label_action: Action
   label_note: Note  
   title_none: None

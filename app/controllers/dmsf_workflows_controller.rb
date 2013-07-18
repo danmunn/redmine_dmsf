@@ -146,11 +146,11 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def create
-    @workflow = DmsfWorkflow.new(:name => params[:dmsf_workflow][:name], :project_id => params[:project_id])
+    @workflow = DmsfWorkflow.new(:name => params[:name], :project_id => params[:project_id])
     if request.post? && @workflow.save
       flash[:notice] = l(:notice_successful_create)
       if @project
-        redirect_to settings_project_path(@project, :tab => 'dmsf')
+        redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
       else
         redirect_to dmsf_workflows_path
       end
@@ -163,10 +163,10 @@ class DmsfWorkflowsController < ApplicationController
   end   
   
   def update    
-    if request.put? && @workflow.update_attributes({:name => params[:dmsf_workflow][:name]})
+    if request.put? && @workflow.update_attributes({:name => params[:name]})
       flash[:notice] = l(:notice_successful_update)
       if @project
-        redirect_to settings_project_path(@project, :tab => 'dmsf')
+        redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
       else
         redirect_to dmsf_workflows_path
       end    
@@ -183,7 +183,7 @@ class DmsfWorkflowsController < ApplicationController
       flash[:error] = l(:error_unable_delete_dmsf_workflow)
     end
     if @project
-      redirect_to settings_project_path(@project, :tab => 'dmsf')
+      redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
     else
       redirect_to dmsf_workflows_path
     end    

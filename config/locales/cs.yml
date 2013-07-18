@@ -212,7 +212,8 @@ cs:
   error_cannot_start_workflow: Schvalovací proces nemůže být zahájen
   error_cannot_renumber_steps: Schvalovací kroky nelze přečíslovat
   label_dmsf_workflow_new: Nový schvalovací proces
-  label_dmsf_workflow: Schvalovací proces
+  field_label_dmsf_workflow: Schvalovací proces
+  field_label_dmsf_workflow_name: Approval workflow name
   label_dmsf_workflow_plural: Schvalovací procesy
   label_dmsf_workflow_step: Krok
   label_dmsf_workflow_step_plural: Kroky
@@ -224,6 +225,8 @@ cs:
   label_dmsf_wokflow_action_delegate: Delegovat na
   label_dmsf_wokflow_action_assign: Přiřadit schvalovací proces
   label_dmsf_wokflow_action_start: Zahájit schvalovací proces
+  label_dmsf_workflow_add_approver: "Přidat schvalovatele funkcí:"
+  label_or: nebo
   label_action: Akce
   label_note: Komentář
   title_none: Komentář

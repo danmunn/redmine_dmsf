@@ -1,5 +1,5 @@
 <% if @workflow.project %>
-  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(@project, :tab => 'dmsf') %> &#187; <%=h @workflow %></h2>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(@project, :tab => 'dmsf_workflow') %> &#187; <%=h @workflow %></h2>
 <% else %>
   <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=h @workflow %></h2>
 <% end %>
@@ -7,7 +7,7 @@
 <%= labelled_form_for @workflow do |f| %>
   <%= error_messages_for 'workflow' %>
   <div class="box tabular">
-    <p><%= f.text_field :name, :required => true %><%= submit_tag l(:button_save) %></p>
+    <p><%= f.label :label_dmsf_workflow_name %><%= text_field_tag :name, @workflow.name %><%= submit_tag l(:button_save) %></p>
   </div>  
 <% end %>    
 
@@ -68,7 +68,8 @@
               dmsf_workflow_steps_options_for_select(steps),
               :id => 'selected_step', :style => "width:100px" %>              
     </p>
-    <p><%= submit_tag l(:dmsf_and) %>&nbsp<%= submit_tag l(:dmsf_or) %></p>
+    <p><%= l(:label_dmsf_workflow_add_approver) %></p>
+    <p><%= submit_tag l(:dmsf_and) %>&nbsp<%= l(:label_or) %>&nbsp<%= submit_tag l(:dmsf_or) %></p>
     </fieldset>
   <% end %>
 </div>
