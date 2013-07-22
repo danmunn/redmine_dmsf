@@ -218,13 +218,15 @@
                                                   :title => l(:title_waiting_for_approval),
                                                   :remote => true) %>
                                               <% else %>
-                                                <%= image_tag('waiting_for_approval.png', :title => "#{l(:label_dmsf_wokflow_action_approve)} #{l(:label_dmsf_wokflow_action_reject)} #{l(:label_dmsf_wokflow_action_delegate)}", :plugin => :redmine_dmsf) %>                                      
+                                                <%= image_tag('waiting_for_approval.png', :title => "#{l(:label_dmsf_wokflow_action_approve)} #{l(:label_dmsf_wokflow_action_reject)} #{l(:label_dmsf_wokflow_action_delegate)}", :plugin => :redmine_dmsf) %>
                                               <% end %>
+                                            <% else %>
+                                              <%= image_tag('waiting_for_approval.png', :title => "#{l(:label_dmsf_wokflow_action_approve)} #{l(:label_dmsf_wokflow_action_reject)} #{l(:label_dmsf_wokflow_action_delegate)}", :plugin => :redmine_dmsf) %>
                                             <% end %>
                                           <% when DmsfWorkflow::STATE_APPROVED %>
                                             <%= image_tag('approved.png', :title => l(:title_approved), :plugin => :redmine_dmsf) %>
                                           <% when DmsfWorkflow::STATE_ASSIGNED %>
-                                            <% if User.current && (file.last_revision.dmsf_workflow_assigned_by == User.current.id) %>
+                                            <% if User.current && (file.last_revision.dmsf_workflow_assigned_by == User.current.id) && wf %>
                                               <%= link_to_function(image_tag('assigned.png', :plugin => :redmine_dmsf),
                                                   "manipulation_link('#{start_dmsf_workflow_path(                                                    
                                                     :id => file.last_revision.dmsf_workflow_id,                                                     
