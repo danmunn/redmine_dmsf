@@ -227,7 +227,7 @@ es:
   label_dmsf_wokflow_action_delegate: Delegate to
   label_dmsf_wokflow_action_assign: Assign an approval workflow
   label_dmsf_wokflow_action_start: Start workflow
-  label_dmsf_workflow_add_approver: "Add a new approver(s) with a function:"
+  label_dmsf_workflow_add_approver: "Add a new approver with a logical function:"
   label_or: or
   label_action: Action
   label_note: Note  

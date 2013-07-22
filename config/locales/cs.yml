@@ -225,7 +225,7 @@ cs:
   label_dmsf_wokflow_action_delegate: Delegovat na
   label_dmsf_wokflow_action_assign: Přiřadit schvalovací proces
   label_dmsf_wokflow_action_start: Zahájit schvalovací proces
-  label_dmsf_workflow_add_approver: "Přidat schvalovatele funkcí:"
+  label_dmsf_workflow_add_approver: "Přidat schvalovatele s logickou funkcí:"
   label_or: nebo
   label_action: Akce
   label_note: Komentář
