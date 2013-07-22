@@ -1,12 +1,15 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
+  include Redmine::I18n
   
   fixtures :users, :dmsf_workflows, :dmsf_workflow_steps
 
   def setup 
     @wfs1 = DmsfWorkflowStep.find(1)
     @wfs2 = DmsfWorkflowStep.find(2)
+    @wfs5 = DmsfWorkflowStep.find(5)
+    @revision1 = DmsfFileRevision.find_by_id 1
   end
   
   def test_truth
@@ -17,7 +20,7 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
     wfs = DmsfWorkflowStep.new(
       :dmsf_workflow_id => 1, 
       :step => 2, 
-      :user_id => 1, 
+      :user_id => 3, 
       :operator => 1)   
     assert wfs.save
   end
@@ -69,8 +72,25 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
     assert_equal 1, @wfs2.errors.count        
   end
   
-  def test_destroy  
+  def test_destroy
+    assert DmsfWorkflowStepAssignment.where(:dmsf_workflow_step_id => @wfs2.id).all.count > 0
     @wfs2.destroy
     assert_nil DmsfWorkflowStep.find_by_id(2)
+    assert_equal DmsfWorkflowStepAssignment.where(:dmsf_workflow_step_id => @wfs2.id).all.count, 0
+  end
+  
+  def test_soperator
+    assert_equal @wfs1.soperator, l(:dmsf_or)
+  end
+  
+  def test_user
+    assert_equal @wfs1.user, User.find_by_id(@wfs1.user_id)
+  end
+  
+  def test_assign
+    @wfs5.assign(@revision1.id)
+    assert DmsfWorkflowStepAssignment.where(
+      :dmsf_workflow_step_id => @wfs5.id, 
+      :dmsf_file_revision_id => @revision1.id).first
   end
 end

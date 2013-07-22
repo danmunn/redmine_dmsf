@@ -24,7 +24,7 @@ class CreateDmsfWorkflowSteps < ActiveRecord::Migration
       t.references :user, :null => false
       t.integer :operator, :null => false
     end
-    add_index :dmsf_workflow_steps, :dmsf_workflow_id
+    add_index :dmsf_workflow_steps, :dmsf_workflow_id    
   end
   
   def self.down

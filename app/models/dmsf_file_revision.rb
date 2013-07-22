@@ -156,49 +156,42 @@ class DmsfFileRevision < ActiveRecord::Base
     return new_revision
   end
     
-  def workflow_str(name)    
+  def workflow_str(name)
+    str = ''
     if name && dmsf_workflow_id
       wf = DmsfWorkflow.find_by_id(dmsf_workflow_id)
-      str = "#{wf.name} - " if wf
-    else
-      str = ''
+      str = "#{wf.name} - " if wf    
     end
     case workflow
       when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
         str + l(:title_waiting_for_approval)
       when DmsfWorkflow::STATE_APPROVED
         str + l(:title_approved)
-      when DmsfWorkflow::STATE_DRAFT
-        str + l(:title_draft)
+      when DmsfWorkflow::STATE_ASSIGNED
+        str + l(:title_assigned)
       when DmsfWorkflow::STATE_REJECTED
         str + l(:title_rejected)
       else
-        str
+        str + l(:title_none)
     end
   end
   
-  def set_workflow(dmsf_workflow_id, commit)
-    if User.current.allowed_to?(:file_approval, self.file.project)
-      unless dmsf_workflow_id.blank?
-        self.dmsf_workflow_id = dmsf_workflow_id  
-        if commit == 'start'
-          self.workflow = DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
-          self.dmsf_workflow_started_by = User.current.id if User.current
-          self.dmsf_workflow_started_at = DateTime.now
-        else
-          self.workflow = DmsfWorkflow::STATE_DRAFT   
-          self.dmsf_workflow_assigned_by = User.current.id if User.current
-          self.dmsf_workflow_assigned_at = DateTime.now
-        end        
-      end
-    end
+  def set_workflow(dmsf_workflow_id, commit)    
+    self.dmsf_workflow_id = dmsf_workflow_id  
+    if commit == 'start'
+      self.workflow = DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
+      self.dmsf_workflow_started_by = User.current.id if User.current
+      self.dmsf_workflow_started_at = DateTime.now
+    else
+      self.workflow = DmsfWorkflow::STATE_ASSIGNED
+      self.dmsf_workflow_assigned_by = User.current.id if User.current
+      self.dmsf_workflow_assigned_at = DateTime.now
+    end                          
   end
   
-  def assign_workflow(dmsf_workflow_id)
-    if User.current.allowed_to?(:file_approval, self.file.project)      
-      wf = DmsfWorkflow.find_by_id(dmsf_workflow_id)
-      wf.assign(self.id) if wf && self.id
-    end
+  def assign_workflow(dmsf_workflow_id)    
+    wf = DmsfWorkflow.find_by_id(dmsf_workflow_id)
+    wf.assign(self.id) if wf && self.id    
   end
   
   def increase_version(version_to_increase, new_content)
@@ -248,7 +241,7 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   # Overrides Redmine::Acts::Customizable::InstanceMethods#available_custom_fields
-  def available_custom_fields
+  def available_custom_fields    
     search_project = nil
     if self.project.present?
       search_project = self.project
