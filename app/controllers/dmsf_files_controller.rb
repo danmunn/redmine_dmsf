@@ -97,7 +97,7 @@ class DmsfFilesController < ApplicationController
         @revision.disk_filename = @revision.new_storage_filename
         @revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
       end
-      @revision.set_workflow(params[:dmsf_workflow_id], params[:commit])
+      #@revision.set_workflow(params[:dmsf_workflow_id], params[:commit])
       
       @file.name = @revision.name
       @file.folder = @revision.folder

@@ -122,7 +122,7 @@ class DmsfUploadController < ApplicationController
         new_revision.description = commited_file["description"]
         new_revision.comment = commited_file["comment"]
         new_revision.increase_version(commited_file["version"].to_i, true)        
-        new_revision.set_workflow(commited_file[:dmsf_workflow_id], nil)
+        #new_revision.set_workflow(commited_file[:dmsf_workflow_id], nil)
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         new_revision.size = File.size(commited_disk_filepath)
 

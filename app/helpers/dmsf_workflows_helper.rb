@@ -19,7 +19,7 @@
 module DmsfWorkflowsHelper
   
   def render_principals_for_new_dmsf_workflow_users(workflow, dmsf_workflow_step_assignment_id, dmsf_file_revision_id)
-    scope = workflow.delegates(params[:q], dmsf_workflow_step_assignment_id, dmsf_file_revision_id, nil)
+    scope = workflow.delegates(params[:q], dmsf_workflow_step_assignment_id, dmsf_file_revision_id)
     principal_count = scope.count
     principal_pages = Redmine::Pagination::Paginator.new principal_count, 10, params['page']
     principals = scope.offset(principal_pages.offset).limit(principal_pages.per_page).all
@@ -48,8 +48,7 @@ module DmsfWorkflowsHelper
   end   
   
   def dmsf_workflows_for_select(project, dmsf_workflow_id)
-    options = Array.new
-    options << [l(:option_workflow_none), nil]
+    options = Array.new    
     DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', project.id]).each do |wf|
       options << [wf.name, wf.id]
     end
@@ -59,7 +58,7 @@ module DmsfWorkflowsHelper
   def principals_radio_button_tags(name, principals)
     s = ''
     principals.each do |principal|
-      s << "<label>#{ radio_button_tag name, principal.id, false, :id => nil } #{h principal}</label>\n"
+      s << "<label>#{ radio_button_tag name, principal.id * 10, false, :id => nil } #{h principal}</label>\n"
     end
     s.html_safe    
   end

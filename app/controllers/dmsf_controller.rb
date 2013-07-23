@@ -256,21 +256,21 @@ class DmsfController < ApplicationController
         {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder.folder}
   end
   
-  def assign    
-  end
-  
-  def assignment
-    revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
-    if revision
-      revision.set_workflow(params[:dmsf_workflow_id], params[:action])
-      revision.assign_workflow(params[:dmsf_workflow_id])
-      if request.post? && revision.save
-        flash[:notice] = l(:notice_successful_create)
-      end
-    end
-    redirect_to params[:current] ? params[:current] :
-        {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder.folder} 
-  end
+#  def assign    
+#  end
+#  
+#  def assignment
+#    revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
+#    if revision
+#      revision.set_workflow(params[:dmsf_workflow_id], params[:action])
+#      revision.assign_workflow(params[:dmsf_workflow_id])
+#      if request.post? && revision.save
+#        flash[:notice] = l(:notice_successful_create)
+#      end
+#    end
+#    redirect_to params[:current] ? params[:current] :
+#        {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder.folder} 
+#  end
 
   private
 
