@@ -171,7 +171,7 @@ class DmsfUploadController < ApplicationController
         begin 
           DmsfMailer.files_updated(User.current, files).deliver
         rescue ActionView::MissingTemplate => e
-          Rails.logger.error "Could not send email notifications: " + e
+          Rails.logger.error "Could not send email notifications: " + e.to_s
         end
       end
       unless failed_uploads.empty?
