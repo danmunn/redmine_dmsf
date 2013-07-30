@@ -3,8 +3,7 @@ en:
   dmsf: DMSF
   label_dmsf_file_plural: Dmsf files
   warning_no_entries_selected: No entries selected
-  error_email_to_must_be_entered: Email To must be entered
-  notice_email_sent: Email sent
+  error_email_to_must_be_entered: Email To must be entered  
   warning_file_already_locked: File already locked
   notice_file_locked: File locked
   warning_file_not_locked: File not locked

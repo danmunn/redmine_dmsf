@@ -3,8 +3,7 @@ ru:
   dmsf: DMSF
   label_dmsf_file_plural: Файлы DMSF
   warning_no_entries_selected: Файлы не выбраны
-  error_email_to_must_be_entered: Нужно указать, на какую почту отправить письмо
-  notice_email_sent: Письмо отправлено
+  error_email_to_must_be_entered: Нужно указать, на какую почту отправить письмо  
   warning_file_already_locked: Файл уже заблокирован
   notice_file_locked: Файл заблокирован
   warning_file_not_locked: Файл не заблокирован

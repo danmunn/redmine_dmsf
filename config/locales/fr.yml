@@ -3,8 +3,7 @@ fr:
   dmsf: DMSF
   label_dmsf_file_plural: Fichiers DMSF
   warning_no_entries_selected: Aucun fichier sélectionné
-  error_email_to_must_be_entered: La saisie d'une adresse mail est obligatoire
-  notice_email_sent: Mail envoyé
+  error_email_to_must_be_entered: La saisie d'une adresse mail est obligatoire  
   warning_file_already_locked: Fichier déjà verrouillé
   notice_file_locked: Fichier verrouillé
   warning_file_not_locked: Fichier déverrouillé

@@ -3,8 +3,7 @@ de:
   dmsf: DMS
   label_dmsf_file_plural: DMS
   warning_no_entries_selected: Keine Einträge ausgewählt
-  error_email_to_must_be_entered: Es muss ein Email-Empfänger angegeben werden.
-  notice_email_sent: Email gesendet
+  error_email_to_must_be_entered: Es muss ein Email-Empfänger angegeben werden.  
   warning_file_already_locked: Datei schon gesperrt
   notice_file_locked: Datei gesperrt
   warning_file_not_locked: Datei nicht gesperrt

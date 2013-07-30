@@ -3,8 +3,7 @@ es:
   dmsf: DMSF
   label_dmsf_file_plural: DMSF Archivos
   warning_no_entries_selected: No ha seleccionado ningún ítem
-  error_email_to_must_be_entered: Ingrese un email
-  notice_email_sent: Email sent
+  error_email_to_must_be_entered: Ingrese un email  
   warning_file_already_locked: El archivo ya está bloqueado
   notice_file_locked: Archivo bloqueado
   warning_file_not_locked: Archivo no bloqueado

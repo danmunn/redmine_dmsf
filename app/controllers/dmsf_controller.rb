@@ -75,7 +75,7 @@ class DmsfController < ApplicationController
     DmsfMailer.send_documents(User.current, @email_params["to"], @email_params["cc"],
       @email_params["subject"], @email_params["zipped_content"], @email_params["body"]).deliver
     File.delete(@email_params["zipped_content"])
-    flash[:notice] = l(:notice_email_sent)
+    flash[:notice] = l(:notice_email_sent, @email_params['to'])
     redirect_to({:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder})
   end
 
