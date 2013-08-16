@@ -125,7 +125,7 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def title
-    self.last_revision.title
+    self.last_revision ? self.last_revision.title : self.name
   end
   
   def description
@@ -150,10 +150,8 @@ class DmsfFile < ActiveRecord::Base
     path
   end
   
-  def dmsf_path_str
-    path = self.dmsf_path
-    string_path = path.map { |element| element.title }
-    string_path.join("/")
+  def dmsf_path_str    
+    self.dmsf_path.map { |element| element.title }.join('/')    
   end
   
   def notify?

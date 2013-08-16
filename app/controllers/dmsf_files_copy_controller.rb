@@ -72,7 +72,7 @@ class DmsfFilesCopyController < ApplicationController
     begin 
       DmsfMailer.files_updated(User.current, [new_file]).deliver
     rescue ActionView::MissingTemplate => e
-      Rails.logger.error "Could not send email notifications: " + e
+      Rails.logger.error "Could not send email notifications: #{e.message}"
     end
     
     redirect_to :controller => "dmsf_files", :action => "show", :id => new_file
@@ -110,7 +110,7 @@ class DmsfFilesCopyController < ApplicationController
       # TODO: implement proper mail notification
       DmsfMailer.files_updated(User.current, [@file]).deliver
     rescue ActionView::MissingTemplate => e
-      Rails.logger.error "Could not send email notifications: " + e
+      Rails.logger.error "Could not send email notifications: #{e.message}"
     end
     
     redirect_to :controller => "dmsf_files", :action => "show", :id => @file
