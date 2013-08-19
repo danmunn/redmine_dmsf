@@ -1,40 +1,56 @@
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
-	<% if User.current.allowed_to?(:folder_manipulation, @project) %>
-                <% if !@folder.nil? && (!@folder.locked_for_user? || User.current.allowed_to?(:force_file_unlock, @project)) %>
-                        <% if @folder.locked? %>
-                            <% unless @folder.unlockable? %>
-                                <%= image_tag("locked.png", :plugin => :redmine_dmsf, :title => l(:title_folder_parent_locked, :name => @folder.folder.lock.reverse[0].folder.title)) unless @folder.nil?%>
-                            <% else %>
-                                <%= link_to_function(image_tag("unlock.png", :plugin => "redmine_dmsf"),
-                                                "manipulation_link('#{url_for(:action => 'unlock', :id => @project, :folder_id => @folder, :current => request.url)}')",
-                                                :title => l(:title_unlock_folder)) unless @folder.nil?%>
-                            <% end %>
-                        <% else %>
-                                <%= link_to_function(image_tag("lock.png", :plugin => "redmine_dmsf"),
-                                                "manipulation_link('#{url_for(:action => 'lock', :id => @project, :folder_id => @folder, :current => request.url)}')",
-                                                :title => l(:title_lock_folder)) unless @folder.nil?%>
-                        <% end %>
-                <% end %>
-		<% if @folder.nil? %>
-                        &nbsp;
-			<%= link_to("", {:action => "edit_root", :id => @project},
-					:title => l(:link_edit, :title => l(:link_documents)), :class => "icon icon-edit") %>
-		<% elsif (!@folder.nil? && !@folder.locked_for_user? ) %>
-                        &nbsp;
-			<%= link_to("", {:action => "edit", :id => @project, :folder_id => @folder },
-					:title => l(:link_edit, :title => h(@folder.title)), :class => "icon icon-edit") %>
-		<% end %>
-                &nbsp;
-		<%= link_to("", {:action => "new", :id => @project, :parent_id => @folder },
-				:title => l(:link_create_folder), :class => "icon icon-add") unless (!@folder.nil? && @folder.locked_for_user?) %>
-	<% end %>
+  <% if User.current.allowed_to?(:folder_manipulation, @project) %>    
+    <% if @folder.nil? %>
+      &nbsp;
+      <%= link_to('', {:action => 'edit_root', :id => @project},
+                      :title => l(:link_edit, :title => l(:link_documents)), :class => 'icon icon-edit') %>
+    <% elsif (@folder && !@folder.locked_for_user? ) %>
+      &nbsp;
+      <%= link_to('', {:action => 'edit', :id => @project, :folder_id => @folder },
+                      :title => l(:link_edit, :title => h(@folder.title)), :class => 'icon icon-edit') %>
+    <% end %>
+    <% if @folder && (!@folder.locked_for_user? || User.current.allowed_to?(:force_file_unlock, @project)) %>
+      <% if @folder.locked? %>
+        <% unless @folder.unlockable? %>
+          <%= image_tag('locked.png', :plugin => :redmine_dmsf, :title => l(:title_folder_parent_locked, :name => @folder.folder.lock.reverse[0].folder.title)) unless @folder.nil?%>
+        <% else %>
+          <%= link_to_function(image_tag('unlock.png', :plugin => 'redmine_dmsf'),
+            "manipulation_link('#{url_for(:action => 'unlock', :id => @project, :folder_id => @folder, :current => request.url)}')",
+            :title => l(:title_unlock_folder)) if @folder %>
+        <% end %>
+      <% else %>
+        <%= link_to_function(image_tag('lock.png', :plugin => 'redmine_dmsf'),
+          "manipulation_link('#{url_for(:action => 'lock', :id => @project, :folder_id => @folder, :current => request.url)}')",
+          :title => l(:title_lock_folder)) if @folder %>
+      <% end %>
+    <% end %>
+    <% unless @folder %>   
+      &nbsp; 
+      <% if @project.dmsf_notification %>
+        <%= link_to_function(image_tag('notify.png', :plugin => :redmine_dmsf),
+                "manipulation_link('#{url_for(:action => 'notify_deactivate', :id => @project)}')",
+                         :title => l(:title_notifications_active_deactivate)) %>
+      <% else %>
+        <%= link_to_function(image_tag('notifynot.png', :plugin => :redmine_dmsf),
+                "manipulation_link('#{url_for(:action => 'notify_activate', :id => @project)}')",
+                        :title => l(:title_notifications_not_active_activate)) %>
+      <% end %>                                                                                      
+    <% end %>
+    &nbsp;    
+    <%= link_to('', {:action => 'new', :id => @project, :parent_id => @folder },
+      :title => l(:link_create_folder), :class => 'icon icon-add') unless (@folder && @folder.locked_for_user?) %>
+  <% end %>
 </div>
 
-<% path = @folder.nil? ? [] : @folder.dmsf_path %>
-<h2>
-	<%= render(:partial => 'path', :locals => {:path => path}) %>
+<h2>  
+  <% path = @folder ? @folder.dmsf_path : [] %>  
+  <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @project } %>
+  <% path.each do |path_element| %>
+   / 
+   <%= link_to h(path_element.title), {:controller => 'dmsf', :action => 'show', :id=> @project, :folder_id => path_element} %>   
+  <% end %>
 </h2>
 
 <div class="dmsf-header">
