@@ -49,7 +49,11 @@ class DmsfFilesController < ApplicationController
         end
       end
       check_project(@revision.file)
-      send_revision
+      begin
+        send_revision
+      rescue MissingFile => e
+        render_404
+      end
       return
     end
     
