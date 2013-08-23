@@ -51,7 +51,7 @@ class DmsfFilesController < ApplicationController
       check_project(@revision.file)
       begin
         send_revision
-      rescue MissingFile => e
+      rescue ActionController::MissingFile => e
         render_404
       end
       return
