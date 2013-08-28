@@ -129,19 +129,19 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def description
-    self.last_revision.description
+    self.last_revision ? self.last_revision.description : ''
   end
   
   def version
-    self.last_revision.version
+    self.last_revision ? self.last_revision.version : '0'
   end
   
   def workflow
-    self.last_revision.workflow
+    self.last_revision ? self.last_revision.workflow : nil
   end
   
   def size
-    self.last_revision.size
+    self.last_revision ? self.last_revision.size : 0
   end
   
   def dmsf_path
