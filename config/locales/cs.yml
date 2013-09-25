@@ -3,8 +3,7 @@ cs:
   dmsf: DMSF
   label_dmsf_file_plural: Dmsf soubory
   warning_no_entries_selected: Není nic vybráno
-  error_email_to_must_be_entered: Musí být zadán adresát
-  notice_email_sent: Email byl odeslán
+  error_email_to_must_be_entered: Musí být zadán adresát  
   warning_file_already_locked: Soubor už je zamčen
   notice_file_locked: Soubor byl zamčen
   warning_file_not_locked: Soubor není zamčen

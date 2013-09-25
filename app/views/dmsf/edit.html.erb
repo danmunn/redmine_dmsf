@@ -7,9 +7,15 @@
 <% 
   create = @pathfolder == @parent 
 %>
-<h2>
-<%= render(:partial => "path", :locals => {:path => @pathfolder.nil? ? [] : @pathfolder.dmsf_path}) %>
-<%= ("/ " + l(:heading_new_folder)) if create %>
+
+<h2>  
+  <% path = @pathfolder ? @pathfolder.dmsf_path : [] %>  
+  <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @project } %>
+  <% path.each do |path_element| %>
+    / 
+    <%= link_to h(path_element.title), {:controller => 'dmsf', :action => 'show', :id=> @project, :folder_id => path_element} %>   
+  <% end %>
+  <%= "/ #{l(:heading_new_folder)}" if create %>
 </h2>
 
 <%= form_for(@folder, :url => {:action => create ? "create" : "save", :id => @project, :folder_id => @folder, :parent_id => @parent},
