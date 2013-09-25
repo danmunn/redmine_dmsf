@@ -123,14 +123,16 @@ class DmsfWorkflowsController < ApplicationController
       revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
       if revision
         revision.set_workflow(params[:dmsf_workflow_id], params[:action])
-        revision.assign_workflow(params[:dmsf_workflow_id])
-        if request.post? 
-          if revision.save
-            file = DmsfFile.find_by_id revision.dmsf_file_id
-            file.lock! if file
-            flash[:notice] = l(:notice_successful_update)
-          else
-            flash[:error] = l(:error_workflow_assign)
+        if params[:dmsf_workflow_id].present?
+          revision.assign_workflow(params[:dmsf_workflow_id])
+          if request.post? 
+            if revision.save
+              file = DmsfFile.find_by_id revision.dmsf_file_id
+              file.lock! if file
+              flash[:notice] = l(:notice_successful_update)
+            else
+              flash[:error] = l(:error_workflow_assign)
+            end
           end
         end
       end    
