@@ -121,8 +121,7 @@ class DmsfUploadController < ApplicationController
         new_revision.title = commited_file["title"]
         new_revision.description = commited_file["description"]
         new_revision.comment = commited_file["comment"]
-        new_revision.increase_version(commited_file["version"].to_i, true)        
-        #new_revision.set_workflow(commited_file[:dmsf_workflow_id], nil)
+        new_revision.increase_version(commited_file["version"].to_i, true)                
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         new_revision.size = File.size(commited_disk_filepath)
 
@@ -134,8 +133,13 @@ class DmsfUploadController < ApplicationController
         end
         
         if file.locked?
-          file.unlock!
-          flash[:notice] = l(:notice_file_unlocked)
+          begin
+            file.unlock!
+            flash[:notice] = l(:notice_file_unlocked)
+          rescue DmsfLockError => e
+            flash[:error] = e.message
+            next
+          end
         end
         
         # Need to save file first to generate id for it in case of creation. 

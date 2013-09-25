@@ -49,7 +49,11 @@ class DmsfFilesController < ApplicationController
         end
       end
       check_project(@revision.file)
-      send_revision
+      begin
+        send_revision
+      rescue ActionController::MissingFile => e
+        render_404
+      end
       return
     end
     
@@ -125,7 +129,7 @@ class DmsfFilesController < ApplicationController
         begin
           DmsfMailer.files_updated(User.current, [@file]).deliver
         rescue ActionView::MissingTemplate => e
-          Rails.logger.error "Could not send email notifications: " + e
+          Rails.logger.error "Could not send email notifications: #{e.message}"
         end
         redirect_to :action => "show", :id => @file
       else

@@ -3,8 +3,7 @@ ja:
   dmsf: DMSF
   label_dmsf_file_plural: Dmsf ファイル
   warning_no_entries_selected: エントリーが選ばれていません
-  error_email_to_must_be_entered: 電子メールの To 先は省略できません
-  notice_email_sent: 電子メールを送信しました
+  error_email_to_must_be_entered: 電子メールの To 先は省略できません  
   warning_file_already_locked: ファイルは既にロックされています
   notice_file_locked: ファイルをロックしました
   warning_file_not_locked: ファイルはロックされていません

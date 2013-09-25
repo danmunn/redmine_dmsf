@@ -1,4 +1,4 @@
-<% if @project.new_record? && !@source_project.nil? %>
+<% if @project.new_record? && @source_project %>
   <p>
     <label class="block"><%= check_box_tag 'only[]', 'dmsf', true %><%= l(:label_dmsf_plural, @source_project.dmsf_count) %></label>
   </p>

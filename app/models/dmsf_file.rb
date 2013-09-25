@@ -125,23 +125,23 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def title
-    self.last_revision.title
+    self.last_revision ? self.last_revision.title : self.name
   end
   
   def description
-    self.last_revision.description
+    self.last_revision ? self.last_revision.description : ''
   end
   
   def version
-    self.last_revision.version
+    self.last_revision ? self.last_revision.version : '0'
   end
   
   def workflow
-    self.last_revision.workflow
+    self.last_revision ? self.last_revision.workflow : nil
   end
   
   def size
-    self.last_revision.size
+    self.last_revision ? self.last_revision.size : 0
   end
   
   def dmsf_path
@@ -150,15 +150,14 @@ class DmsfFile < ActiveRecord::Base
     path
   end
   
-  def dmsf_path_str
-    path = self.dmsf_path
-    string_path = path.map { |element| element.title }
-    string_path.join("/")
+  def dmsf_path_str    
+    self.dmsf_path.map { |element| element.title }.join('/')    
   end
   
   def notify?
     return true if self.notification
     return true if folder && folder.notify?
+    return true if !folder && self.project.dmsf_notification
     return false
   end
   

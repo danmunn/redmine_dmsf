@@ -3,8 +3,7 @@ zh:
   dmsf: 文档管家
   label_dmsf_file_plural: Dmsf files
   warning_no_entries_selected: 未选择任何条目
-  error_email_to_must_be_entered: 请输入电子邮件
-  notice_email_sent: 邮件已发送
+  error_email_to_must_be_entered: 请输入电子邮件  
   warning_file_already_locked: 文件已经锁定
   notice_file_locked: 文件锁定
   warning_file_not_locked: 文件未锁定
