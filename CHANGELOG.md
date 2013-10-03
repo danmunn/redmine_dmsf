@@ -3,7 +3,20 @@ Changelog for Redmine DMSF
 
 1.4.6: *Not yet released*
 -----------------------
+* New: Document approval workflow
+* New: Slovene language translation
+* Update: German language translation
 * Revisit: Issue #34 - fix does not function as expected on Rails < 3.2.6, Redmine 2.0.3 dependency added.
+* Fix: Issue #75  - Wrong filename encoding in emailed zip file
+* Fix: Issue #87  - RoutingError (No route matches [GET] "/javascripts/jstoolbar/lang/jstoolbar-en-IS.js"):
+* Fix: Issue #103 - Multiple DMSF tabs in Administration->Custom fields & localization
+* Fix: Issue #110 - 'zip' gem conflicts with 'rubyzip' on Redmine XLS Export Plugin.
+* Fix: Issue #112 - Uninstall command
+* Fix: Issue #116 - Translation missing for DMSF custom field tabs
+* Fix: Issue #146 - Problem with Russian file names in zip
+* Fix: Issue #143 - Error on missing template - has to have to_s if adding to string
+* Fix: Issue #148 - I don't have a notification sent out when I upload a file
+* Fix: Issue #157 - Copying files/folders from one project to another project
 
 1.4.5: *2012-07-20*
 -----------------
