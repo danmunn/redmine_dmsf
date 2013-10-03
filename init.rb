@@ -19,6 +19,7 @@
 
 require 'redmine'
 require 'redmine_dmsf'
+require 'zip'
 
 Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
@@ -126,8 +127,10 @@ Redmine::Plugin.register :redmine_dmsf do
       end
       nil
     end
-  end
+  end    
   
+  # Rubyzip configuration
+  Zip.unicode_names = true
 end
 
 Redmine::Search.map do |search|
