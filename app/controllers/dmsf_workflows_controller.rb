@@ -48,7 +48,13 @@ class DmsfWorkflowsController < ApplicationController
           if revision
             if @workflow.try_finish revision, action, (params[:step_action].to_i / 10)            
               file = DmsfFile.joins(:revisions).where(:dmsf_file_revisions => {:id => revision.id}).first
-              file.unlock! if file              
+              if file
+                begin
+                  file.unlock!
+                rescue DmsfLockError => e
+                  logger.error e.message
+                end
+              end              
               if revision.workflow == DmsfWorkflow::STATE_APPROVED
                 # Just approved                                
                 DmsfMailer.workflow_notification(
@@ -107,8 +113,8 @@ class DmsfWorkflowsController < ApplicationController
             end
           end
           flash[:notice] = l(:notice_successful_update)
-        else
-          flash[:error] = l(:error_empty_note)
+        elsif action.action != DmsfWorkflowStepAction::ACTION_APPROVE && action.note.blank?
+          flash[:error] = l(:error_empty_note)          
         end
       end        
     end
