@@ -23,7 +23,7 @@ class DmsfWorkflowsController < ApplicationController
   before_filter :find_workflow, :except => [:create, :new, :index, :assign, :assignment]  
   before_filter :find_project, :except => [:start]
   before_filter :authorize_global  
-  before_filter :authorize_custom      
+  before_filter :authorize_custom, :except => [:assignment, :start, :new_action] 
   
   def index    
     if @project
