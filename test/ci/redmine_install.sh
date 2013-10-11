@@ -61,49 +61,49 @@ uninstall()
   cd $PATH_TO_REDMINE
   # clean up database
   bundle exec rake $MIGRATE_PLUGINS NAME=redmine_dmsf VERSION=0 RAILS_ENV=test
-bundle exec rake $MIGRATE_PLUGINS NAME=redmine_dmsf VERSION=0 RAILS_ENV=development
+  bundle exec rake $MIGRATE_PLUGINS NAME=redmine_dmsf VERSION=0 RAILS_ENV=development
 }
 
 run_install()
 {
-# exit if install fails
-set -e
+  # exit if install fails
+  set -e
 
-# cd to redmine folder
-cd $PATH_TO_REDMINE
-echo current directory is `pwd`
+  # cd to redmine folder
+  cd $PATH_TO_REDMINE
+  echo current directory is `pwd`
 
-# create a link to the dmsf plugin
-ln -sf $PATH_TO_DMSF $PATH_TO_PLUGINS/redmine_dmsf
+  # create a link to the dmsf plugin
+  ln -sf $PATH_TO_DMSF $PATH_TO_PLUGINS/redmine_dmsf
 
-#ignore redmine-master's test-unit dependency, we need 1.2.3
-#sed -i -e 's=.*gem ["'\'']test-unit["'\''].*==g' ${PATH_TO_REDMINE}/Gemfile
-# install gems
-mkdir -p vendor/bundle
+  #ignore redmine-master's test-unit dependency, we need 1.2.3
+  #sed -i -e 's=.*gem ["'\'']test-unit["'\''].*==g' ${PATH_TO_REDMINE}/Gemfile
+  # install gems
+  mkdir -p vendor/bundle
 
-# copy database.yml
-cp $WORKSPACE/database.yml config/
+  # copy database.yml
+  cp $WORKSPACE/database.yml config/
 
-#Not ideal, but at present Travis-CI will not install with xapian enabled.
-#02-04-2013 bundle install needs to happen AFTER database configuration
-bundle install --path vendor/bundle --without xapian
+  #Not ideal, but at present Travis-CI will not install with xapian enabled.
+  #02-04-2013 bundle install needs to happen AFTER database configuration
+  bundle install --path vendor/bundle --without xapian
 
-# run redmine database migrations
-bundle exec rake db:migrate RAILS_ENV=test --trace
-bundle exec rake db:migrate RAILS_ENV=development --trace
+  # run redmine database migrations
+  bundle exec rake db:migrate RAILS_ENV=test --trace
+  bundle exec rake db:migrate RAILS_ENV=development --trace
 
-# install redmine database
-bundle exec rake redmine:load_default_data REDMINE_LANG=en RAILS_ENV=development
+  # install redmine database
+  bundle exec rake redmine:load_default_data REDMINE_LANG=en RAILS_ENV=development
 
-# generate session store/secret token
-bundle exec rake $GENERATE_SECRET
+  # generate session store/secret token
+  bundle exec rake $GENERATE_SECRET
 
-# enable development features
-touch dmsf.dev
+  # enable development features
+  touch dmsf.dev
 
-# run dmsf database migrations
-bundle exec rake $MIGRATE_PLUGINS RAILS_ENV=test
-bundle exec rake $MIGRATE_PLUGINS RAILS_ENV=development
+  # run dmsf database migrations
+  bundle exec rake $MIGRATE_PLUGINS RAILS_ENV=test
+  bundle exec rake $MIGRATE_PLUGINS RAILS_ENV=development
 }
 
 while getopts :irtu opt
