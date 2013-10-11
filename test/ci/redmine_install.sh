@@ -22,18 +22,18 @@ echo "You should set"\
   exit 1;
 fi
 
-export PATH_TO_PLUGINS=./plugins # for redmine 2.0
+export PATH_TO_PLUGINS=./plugins
 export GENERATE_SECRET=generate_secret_token
 export MIGRATE_PLUGINS=redmine:plugins:migrate
 export REDMINE_GIT_REPO=git://github.com/redmine/redmine.git
-export REDMINE_GIT_TAG=master
+export REDMINE_GIT_TAG=2.3-stable
 export BUNDLE_GEMFILE=$PATH_TO_REDMINE/Gemfile
 
 clone_redmine()
 {
   set -e # exit if clone fails
   rm -rf $PATH_TO_REDMINE
-  git clone -b master --depth=100 --quiet $REDMINE_GIT_REPO $PATH_TO_REDMINE
+  git clone -b $REDMINE_GIT_TAG --depth=100 --quiet $REDMINE_GIT_REPO $PATH_TO_REDMINE
   cd $PATH_TO_REDMINE
   git checkout $REDMINE_GIT_TAG
 }
