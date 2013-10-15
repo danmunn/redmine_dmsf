@@ -254,13 +254,15 @@
                                           <% when DmsfWorkflow::STATE_REJECTED %>
                                             <%= image_tag('rejected.png', :title => l(:title_rejected), :plugin => :redmine_dmsf) %>
                                           <% else %>                                            
-                                            <%= link_to(
-                                                image_tag('none.png', :plugin => :redmine_dmsf),
-                                                assign_dmsf_workflow_path(
-                                                  :project_id => @project.id,                                                                                                    
-                                                  :dmsf_file_revision_id => file.last_revision.id),
-                                                :title => l(:label_dmsf_wokflow_action_assign),
-                                                :remote => true) %>                                            
+                                            <% if DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0 %>
+                                              <%= link_to(
+                                                    image_tag('none.png', :plugin => :redmine_dmsf),
+                                                    assign_dmsf_workflow_path(
+                                                      :project_id => @project.id,                                                                                                    
+                                                      :dmsf_file_revision_id => file.last_revision.id),
+                                                      :title => l(:label_dmsf_wokflow_action_assign),
+                                                      :remote => true) %>                                            
+                                            <% end %>     
                                         <% end %>
                                       </div>
 				<% end %>
