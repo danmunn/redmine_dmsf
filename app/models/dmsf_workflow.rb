@@ -19,7 +19,7 @@
 class DmsfWorkflow < ActiveRecord::Base 
   has_many :dmsf_workflow_steps, :dependent => :destroy, :order => 'step ASC, operator DESC'
 
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name, :case_sensitive => false
   validates :name, :presence => true
   validates_length_of :name, :maximum => 255
   
