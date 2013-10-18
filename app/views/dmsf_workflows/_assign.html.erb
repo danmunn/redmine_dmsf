@@ -1,0 +1,16 @@
+<h3 class="title"><%= l(:field_label_dmsf_workflow) %></h3>
+<%= form_tag({:controller => 'dmsf_workflows', :action => 'assignment'},             
+              :method => :post,
+              :id => 'assignment-form') do %>                  
+  <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>  
+  <p>
+    <%= label_tag('workflow', l(:label_workflow) + ':') %>
+    <%= select_tag(
+        'dmsf_workflow_id', 
+        dmsf_workflows_for_select(@project, nil))%>        
+  </p> 
+  <p class="buttons">
+    <%= submit_tag l(:button_submit), :name => 'commit', :onclick => 'hideModal(this);' %>
+    <%= submit_tag l(:button_cancel), :name => 'commit', :onclick => 'hideModal(this);' %>
+  </p>
+<% end %>

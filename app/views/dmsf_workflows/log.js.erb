@@ -1,0 +1,3 @@
+$('#ajax-modal').html('<%= escape_javascript(render :partial => 'log', :locals => {:workflow => @workflow}) %>');
+showModal('ajax-modal', '800px');
+$('#ajax-modal').addClass('workflow-log');

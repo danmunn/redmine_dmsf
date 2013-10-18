@@ -1,6 +1,0 @@
-User <%= @user %> actualized DMSF files in project <%= @project.name %>:
-<% @files.each do |file| %>
-	<%= file.dmsf_path_str %> (<%= file.name %>), <%= number_to_human_size(file.last_revision.size) %>, version: <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %><%= ", #{file.last_revision.workflow_str}" unless file.last_revision.workflow_str.blank? %>
-	<%= url_for({:only_path => false, :controller => "dmsf_files", :action => "show", :id => file}) %>
-	<% unless file.last_revision.comment.blank? %>    comment: <%= file.last_revision.comment %><% end %>
-<% end %>

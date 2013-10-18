@@ -1,0 +1,48 @@
+---
+wfsa1:
+  id: 1
+  dmsf_workflow_step_id: 1  
+  user_id: 1
+  dmsf_file_revision_id: 2 
+
+wfsa2:
+  id: 2
+  dmsf_workflow_step_id: 4  
+  user_id: 2
+  dmsf_file_revision_id: 2 
+  
+wfsa3:
+  id: 3
+  dmsf_workflow_step_id: 2
+  user_id: 1
+  dmsf_file_revision_id: 2 
+  
+wfsa4:
+  id: 4
+  dmsf_workflow_step_id: 3  
+  user_id: 2
+  dmsf_file_revision_id: 2 
+  
+wfsa5:
+  id: 5
+  dmsf_workflow_step_id: 1  
+  user_id: 1
+  dmsf_file_revision_id: 1
+
+wfsa6:
+  id: 6
+  dmsf_workflow_step_id: 4  
+  user_id: 2
+  dmsf_file_revision_id: 1 
+  
+wfsa7:
+  id: 7
+  dmsf_workflow_step_id: 2
+  user_id: 1
+  dmsf_file_revision_id: 1 
+  
+wfsa8:
+  id: 8
+  dmsf_workflow_step_id: 3  
+  user_id: 2
+  dmsf_file_revision_id: 1 

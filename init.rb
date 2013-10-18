@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,24 +20,24 @@
 
 require 'redmine'
 require 'redmine_dmsf'
+require 'zip'
 
 Redmine::Plugin.register :redmine_dmsf do
   name "DMSF"
-  author "Vit Jonas / Daniel Munn"
+  author "Vit Jonas / Daniel Munn / Karel Picman"
   description "Document Management System Features"
-  version "1.4.5p1 stable"
+  version "1.4.6 stable"
   url "https://github.com/danmunn/redmine_dmsf"
   author_url "https://code.google.com/p/redmine-dmsf/"
   
-  requires_redmine :version_or_higher => '2.0.0'
+  requires_redmine :version_or_higher => '2.0.3'
   
   settings  :partial => 'settings/dmsf_settings',
             :default => {
               "dmsf_max_file_upload" => "0",
               "dmsf_max_file_download" => "0",
               "dmsf_max_email_filesize" => "0",
-              "dmsf_storage_directory" => Rails.root.join('files/dmsf').to_s,
-              "dmsf_zip_encoding" => "utf-8",
+              "dmsf_storage_directory" => Rails.root.join('files/dmsf').to_s,              
               "dmsf_index_database" => Rails.root.join("files/dmsf_index").to_s,
               "dmsf_stemming_lang" => "english",
               "dmsf_stemming_strategy" => "STEM_NONE",
@@ -51,13 +52,26 @@ Redmine::Plugin.register :redmine_dmsf do
     permission :view_dmsf_folders, {:dmsf => [:show], :dmsf_folders_copy => [:new, :copy_to, :move_to]}
     permission :user_preferences, {:dmsf_state => [:user_pref_save]}
     permission :view_dmsf_files, {:dmsf => [:entries_operation, :entries_email],
-      :dmsf_files => [:show], :dmsf_files_copy => [:new, :create, :move]}
+               :dmsf_files => [:show], :dmsf_files_copy => [:new, :create, :move]}
     permission :folder_manipulation, {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock]}
     permission :file_manipulation, {:dmsf_files => [:create_revision, :delete, :lock, :unlock],
-      :dmsf_upload => [:upload_files, :upload_file, :commit_files]}
+               :dmsf_upload => [:upload_files, :upload_file, :commit_files]}
     permission :file_approval, {:dmsf_files => [:delete_revision, :notify_activate, :notify_deactivate], 
-      :dmsf => [:notify_activate, :notify_deactivate]}
-    permission :force_file_unlock, {}
+               :dmsf => [:notify_activate, :notify_deactivate], 
+               :dmsf_workflows => [:index, :new, :create, :destroy, :edit, :add_step, :remove_step, :reorder_steps, :update, :start, :assign, :assignment, :action, :new_action, :log, :autocomplete_for_user]}
+    permission :force_file_unlock, {}    
+  end
+  
+  # Administration menu extension
+  Redmine::MenuManager.map :admin_menu do |menu|
+    menu.push :approvalworkflows, {:controller => 'dmsf_workflows', :action => 'index'}, :caption => :label_dmsf_workflow_plural        
+  end
+  
+  # Adds stylesheet tag
+  class DmsfViewListener < Redmine::Hook::ViewListener
+    def view_layouts_base_html_head(context)      
+      stylesheet_link_tag('dmsf', :plugin => :redmine_dmsf)
+    end
   end
   
   Redmine::WikiFormatting::Macros.register do
@@ -113,8 +127,10 @@ Redmine::Plugin.register :redmine_dmsf do
       end
       nil
     end
-  end
+  end    
   
+  # Rubyzip configuration
+  Zip.unicode_names = true
 end
 
 Redmine::Search.map do |search|

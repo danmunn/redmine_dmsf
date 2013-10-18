@@ -1,0 +1,77 @@
+<h3 class="title"><%= l(:title_dmsf_workflow_log) %></h3>
+<p>
+  <% if params[:dmsf_file_revision_id].present? %>
+    <% revision = DmsfFileRevision.find_by_id(params[:dmsf_file_revision_id]) %>
+      <% if revision %>
+        <div class="log_header_box">                    
+          <div class="log_header_left">
+            <%= label_tag 'workflow_name', "#{l(:link_workflow)} #{l(:field_name).downcase}: " %>
+            <%= link_to @workflow.name, edit_dmsf_workflow_path(@workflow) %>          
+          </div>
+          <div>
+            <%= label_tag 'workflow_status', "#{l(:field_status)}: " %>
+            <%= revision.workflow_str false %>                
+          </div>            
+        </div>        
+        <div class="tab-content" id="tab-content-members">                     
+          <table class="list">
+            <thead><tr>
+              <th><%= l(:label_dmsf_workflow_step) %></th>
+              <th><%= l(:label_user) %> </th>
+              <th><%= l(:label_action) %></th>
+              <th><%= l(:label_workflow) %></th>
+              <th><%= l(:label_note) %></th>
+              <th><%=  l(:label_date)%></th>              
+            </tr></thead>
+            <tbody>
+            <tr id="step-0" class="even">
+                <td class="step"/>
+                <td/>
+                <td/>
+                <td><%= DmsfWorkflowStepAction.workflow_str(0) %></td>
+                <td class="note"></td>
+                <td/>
+              </tr>
+              <tr id="step-1" class="odd">
+                <td class="step"></td>
+                <td><%= link_to_user User.find_by_id(revision.dmsf_workflow_assigned_by) if revision.dmsf_workflow_assigned_by %></td>
+                <td><%=  DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_ASSIGN) %></td>
+                <td><%= DmsfWorkflowStepAction.workflow_str(DmsfWorkflowStepAction::ACTION_ASSIGN) %></td>
+                <td class="note"></td>
+                <td><%= format_time(revision.dmsf_workflow_assigned_at) if revision.dmsf_workflow_assigned_at %></td>
+              </tr>  
+              <tr id="step-2" class="even">
+                <td class="step"></td>
+                <td><%= link_to_user User.find_by_id(revision.dmsf_workflow_started_by) if revision.dmsf_workflow_started_by %></td>
+                <td><%=  DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_START) %></td>
+                <td><%= DmsfWorkflowStepAction.workflow_str(DmsfWorkflowStepAction::ACTION_START) if revision.dmsf_workflow_started_by %></td>
+                <td class="note"></td>
+                <td><%= format_time(revision.dmsf_workflow_started_at) if revision.dmsf_workflow_started_at %></td>
+              </tr>
+              <% sql = "SELECT c.action, c.note, c.created_at, c.author_id, a.user_id, s.step FROM dmsf_workflow_step_actions c RIGHT JOIN dmsf_workflow_step_assignments a ON a.id = c.dmsf_workflow_step_assignment_id RIGHT JOIN dmsf_workflow_steps s ON s.id = a.dmsf_workflow_step_id WHERE a.dmsf_file_revision_id = #{revision.id} ORDER BY s.step, c.action DESC, c.created_at" %>
+              <% result = DmsfWorkflowStep.connection.execute sql %>                                                                                                
+              <% result.each_with_index do |row, i| %>    
+                <tr id="step-<%= i + 3 %> " class="<%= cycle 'odd', 'even' %>">
+                  <td class="step"><%= row[5] %></td>
+                  <td><%= link_to_user User.find_by_id(row[3].present? ? row[3] : row[4]) %></td>
+                  <td><%= DmsfWorkflowStepAction.action_str(row[0]) %></td>
+                  <td>
+                    <% s = @workflow.dmsf_workflow_steps.last.step %>
+                    <% s1 = row[5] %>
+                    <% if((row[5].to_i == @workflow.dmsf_workflow_steps.last.step) && (revision.workflow == DmsfWorkflow::STATE_APPROVED)) %>
+                      <%= l(:title_approved) %>
+                    <% else %>
+                      <%= DmsfWorkflowStepAction.workflow_str(row[0]) %>
+                    <% end %>
+                  </td>
+                  <td class="note"><%= row[1] %></td>
+                  <td><%= format_time(row[2]) if row[2].present? %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>          
+        </div>                               
+      <% end %>
+  <% end %>
+</p>
+

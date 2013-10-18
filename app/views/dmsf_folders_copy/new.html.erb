@@ -3,7 +3,13 @@
 <div class="contextual">
 </div>
 
-<h2><%= render(:partial => "/dmsf/path", :locals => {:path => @folder.dmsf_path}) %></h2>
+<h2>    
+  <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @project } %>
+  <% @folder.dmsf_path.each do |path_element| %>
+   / 
+   <%= link_to h(path_element.title), {:controller => 'dmsf', :action => 'show', :id=> @project, :folder_id => path_element} %>   
+  <% end %>  
+</h2>
 
 <% unless DmsfFolder.allowed_target_projects_on_copy.blank? %>
 	<%= form_tag({:action => "copy_to", :id => @folder}, :id => "copyForm") do |f| %>

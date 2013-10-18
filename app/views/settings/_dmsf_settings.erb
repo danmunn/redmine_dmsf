@@ -67,21 +67,6 @@
 </p>
 
 <p>
-  <%=content_tag(:label, l(:label_zip_names_encoding) + ":") %>
-  <%=text_field_tag "settings[dmsf_zip_encoding]", @settings["dmsf_zip_encoding"], :size=>50 %><br/>
-  (<%=l(:label_default)%>: utf-8)
-  <br/>
-  <%= l(:note_zip_names_encoding_iconv) %>
-</p>
-<% unless @settings["dmsf_zip_encoding"].blank? || @settings["dmsf_zip_encoding"].downcase == "utf-8"
-	begin
-  		Iconv.conv(@settings["dmsf_zip_encoding"], "utf-8", "test")
-   	rescue %>
-		<p class="warning"><%= l(:error_wrong_zip_encoding) %></p> 
-<%	end 
-   end %>
-
-<p>
   <%=content_tag(:label, l(:label_webdav) + ":") %>
   <%=select_tag("settings[dmsf_webdav]",
                 options_for_select([

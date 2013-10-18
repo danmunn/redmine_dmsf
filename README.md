@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.4.5p1**
+The current version of Redmine DMSF is **1.4.6**
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -50,8 +50,7 @@ As of version 1.4.4 of this plugin:
   * Bundler 1.1 or greater (Gem)
   * Redmine 2.0.x 
   * Rails 3.2.x (Inline with Redmine installation requirement) 
-  * rubyzip (Gem)
-  * Nokogiri 1.4.2 or greater (Gem)
+  * rubyzip 1.0.0 (Gem)
   * UUIDTools 2.1.1 or greater (less than 2.2.0) (Gem)
   * simple_enum (Gem)
 
@@ -159,13 +158,13 @@ If you want to use fulltext search features, you must setup file content indexin
 
 It is necessary to index DMSF files with omega before searching attemts to recieve some output:
 
-    omindex -s english -l 1 -U / --db {path to index database from configuration} {path to storage from configuration}
+    omindex -s english --url / --db {path to index database from configuration} {path to storage from configuration}
 
 This command must be run on regular basis (e.g. from cron)
 
 Example of cron job (once per hour at 8th minute):
 
-    8 * * * * root /usr/bin/omindex -s english -l 1 -U / --db /opt/redmine/files/dmsf_index /opt/redmine/files/dmsf
+    8 * * * * root /usr/bin/omindex -s english --url / --db /vat/tmp/dmsf_index /opt/redmine/files/dmsf
 
 Use omindex -h for help.
 

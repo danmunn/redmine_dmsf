@@ -1,0 +1,17 @@
+<% project = Project.find_by_id params[:project_id] if params[:project_id] %>
+<% if project %>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(project, :tab => 'dmsf_workflow') %> &#187; <%=l(:label_dmsf_workflow_new)%></h2>
+<% else %>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=l(:label_dmsf_workflow_new)%></h2>
+<% end %>
+
+<%= labelled_form_for @workflow do |f| %>
+  <%= error_messages_for 'workflow' %>
+  <div class="box tabular">
+    <p><%= f.label :label_dmsf_workflow_name %><%= text_field_tag :name %></p>
+    <% if project %>
+      <p><%= hidden_field_tag :project_id, project.id %></p>
+    <% end %>
+  </div>
+  <%= submit_tag l(:button_create) %>
+<% end %>

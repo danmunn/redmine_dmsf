@@ -1,0 +1,77 @@
+<% if @workflow.project %>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(@project, :tab => 'dmsf_workflow') %> &#187; <%=h @workflow %></h2>
+<% else %>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=h @workflow %></h2>
+<% end %>
+
+<%= labelled_form_for @workflow do |f| %>
+  <%= error_messages_for 'workflow' %>
+  <div class="box tabular">
+    <p><%= f.label :label_dmsf_workflow_name %><%= text_field_tag :name, @workflow.name %><%= submit_tag l(:button_save) %></p>
+  </div>  
+<% end %>    
+
+<div class="tab-content" id="tab-content-members">
+ 
+<div class="splitcontentleft">  
+<% steps = @workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq %>
+<% if steps.any? %>
+<table class="list">
+  <thead><tr>
+    <th><%= l(:label_dmsf_workflow_step) %></th>
+    <th><%= l(:label_dmsf_workflow_approval_plural) %></th>
+    <th><%=l(:button_sort)%></th>    
+    <th/>
+  </tr></thead>
+  <tbody>      
+  <% steps.each do |i|%>  
+    <tr id="step-<%= i %>" class="<%= cycle 'odd', 'even' %> step">            
+      <td class="step"><%= i %></td>
+      <td class="approval">                
+        <% @workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact.each_with_index do |step, j| %>
+          <% if j != 0 %>
+            <b><%= step.soperator %></b>&nbsp
+          <% end %>
+          <%= link_to_user step.user %>
+        <% end %>
+      </td>        
+      <td class="reorder">  
+        <%= reorder_links('workflow_step', {:action => 'edit', :id => @workflow, :step => i}, :put) %>
+      </td>
+      <td class="buttons">      
+        <%= delete_link edit_dmsf_workflow_path(@workflow, :step => i) %>
+      </td>  
+    </tr>
+  <% end; reset_cycle %>
+  </tbody>
+</table>
+<% else %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>
+</div>
+
+<div class="splitcontentright">
+  <%= form_for(@workflow, :url => edit_dmsf_workflow_path(@workflow),
+               :html => {:method => :post}) do |f| %>    
+    <fieldset><legend><%=l(:label_user_new)%></legend>
+
+    <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>    
+    <%= javascript_tag "observeSearchfield('user_search', 'users', '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@workflow, :dmsf_workflow_step_assignment_id => nil, :dmsf_file_revision_id => nil, :project_id => @project ? @project.id : nil) }')" %>
+    
+    <div id="users">
+      <%= render_principals_for_new_dmsf_workflow_users(@workflow, nil, nil) %>
+    </div>
+
+    <p>
+      <%= l(:label_dmsf_workflow_step) %>
+      <%= select_tag 'step',
+              dmsf_workflow_steps_options_for_select(steps),
+              :id => 'selected_step', :style => "width:100px" %>              
+    </p>
+    <p><%= l(:label_dmsf_workflow_add_approver) %></p>
+    <p><%= submit_tag l(:dmsf_and) %>&nbsp<%= l(:label_or) %>&nbsp<%= submit_tag l(:dmsf_or) %></p>
+    </fieldset>
+  <% end %>
+</div>
+
+</div>

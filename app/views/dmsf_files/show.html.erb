@@ -40,12 +40,16 @@
 	<%= link_to(image_tag("copy.png"), {:controller => :dmsf_files_copy, :action => "new", :id => @file }, :title => l(:title_copy_or_move)) %>
 </div>
 
-<% path = @file.folder.nil? ? [] : @file.folder.dmsf_path %>
-<h2>
-<%= render(:partial => "/dmsf/path", :locals => {:path => path}) %>
-/ 
-<%= h(@file.last_revision.title) %>
-<%= image_tag("notify.png", :plugin => "redmine_dmsf", :title => l(:title_notifications_active)) if @file.notification %>
+<h2>  
+  <% path = @file.folder ? @file.folder.dmsf_path : [] %>  
+  <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @project } %>
+  <% path.each do |path_element| %>
+   / 
+   <%= link_to h(path_element.title), {:controller => 'dmsf', :action => 'show', :id=> @project, :folder_id => path_element} %>   
+  <% end %>
+  /
+  <%= h(@file.last_revision.title) %>
+  <%= image_tag('notify.png', :plugin => 'redmine_dmsf', :title => l(:title_notifications_active)) if @file.notification %>
 </h2>
 
 <%= error_messages_for("file") %>
@@ -57,77 +61,72 @@
 
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.revisions.visible[@revision_pages.current.offset,@revision_pages.items_per_page].each do |revision| %>
-<div class="box dmsf_detail">
-	<div style="float:right">
-		<%= link_to(image_tag("download.png", :plugin => "redmine_dmsf"),
-	        {:action => "show", :id => @file, :download => revision},
-			:title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version)) %>
-		<% if User.current.allowed_to?(:file_approval, @project) %>
-			&nbsp;
-			<%= link_to_function(image_tag("delete.png", :plugin => "redmine_dmsf"),
-				"confirmation_link('#{url_for(:action => 'delete_revision', :id => revision)}', '#{l(:question_do_you_really_want_to_delete_this_revision)}')",
-				:title => l(:title_delete_revision)) %>
-		<% end %>
-	</div>
-	<p class="no-ident">
-		<%=label_tag("", (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)) + ":")%>
-		<%= l(:info_changed_by_user, :changed => format_time(revision.updated_at), :user => h(revision.user)) %>
-	</p>
-	<div class="clear">
-		<div class="splitcontentleft">
-			<p>
-				<%= label_tag("", l(:label_title) + ":") %>
-				<%= h(revision.title) %>
-			</p>
-		</div>
-		<div class="splitcontentright">
-			<p>
-				<%= label_tag("", l(:label_file) + ":") %>
-				<%= (h(revision.folder.dmsf_path_str) + "/") unless revision.folder.nil? %><%= h(revision.name) %>
-			</p>
-		</div>
-	</div>
-	<p class="no-ident">
-		<%= label_tag("", l(:label_description) + ":") %>
-	</p>
-	<div class="wiki clear" style="margin-left: 110px">
-		<%= textilizable(revision.description) %>
-	</div>
-	
-	<div class="splitcontentleft">
-		<p>
-			<%= label_tag("", l(:label_version) + ":") %>
-			<%= revision.major_version %>.<%= revision.minor_version %>
-		</p>
-		<p>
-			<%= label_tag("", l(:label_workflow) + ":") %>
-			<%= case revision.workflow
-					when 1 then l(:option_workflow_waiting_for_approval)
-					when 2 then l(:option_workflow_approved)
-					else l(:option_workflow_none) 
-				end %>
-		</p>
-	</div>
-	<div class="splitcontentright clear">
-		<p>
-			<%= label_tag("", l(:label_mime) + ":") %>
-			<%= h(revision.mime_type) %>&nbsp;
-		</p>
-		<p>
-			<%= label_tag("", l(:label_size) + ":") %>
-			<%= number_to_human_size(revision.size) %>
-		</p>
-	</div>
-	<br style="clear: both"/>
-	<div class="no-ident clear">
-		<%= render "dmsf/custom_fields", :object => revision %>
-	</div>
-	<p class="no-ident clear">
-		<%= label_tag("", l(:label_comment) + ":") %>
-		<%= h(revision.comment) %>
-	</p>
-	<%= render(:partial => "revision_access", :locals => {:revision => revision}) if User.current.allowed_to?(:file_approval, @file.project) %>
-</div>
+  <div class="revision_box dmsf_detail dataTables_wrapper">  
+    <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">	
+      <div class="dataTables_lenght">
+        <div class="controls" style="float: right">
+          <%= link_to_function(image_tag('rev_downloads.png', :plugin => 'redmine_dmsf'), "$('#revision_access-#{revision.id}').toggle()", :title => 'Download entries')%>
+          <%= link_to(image_tag('rev_download.png', :plugin => 'redmine_dmsf'),
+                {:action => 'show', :id => @file, :download => revision},
+                :title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version)) %>
+          <% if User.current.allowed_to?(:file_approval, @project) %>          
+            <%= link_to_function(image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
+                "confirmation_link('#{url_for(:action => 'delete_revision', :id => revision)}', '#{l(:question_do_you_really_want_to_delete_this_revision)}')",
+                :title => l(:title_delete_revision)) %>
+          <% end %>
+        </div>      
+        <i><%= l(:info_revision, :rev => revision.id) %></i>
+        <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>
+        <%= l(:info_changed_by_user, :changed => format_time(revision.updated_at)) %>
+        <%=  link_to(revision.user) %>
+      </div>
+    </div>
+    <div style="border: 1px solid #e4e4e4;">
+      <div class="clear">
+        <div class="splitcontentleft">			
+          <%= label_tag("", l(:label_title) + ":") %>
+          <%= h(revision.title) %>		
+        </div>
+        <div class="splitcontentright">			
+          <%= label_tag("", l(:label_file) + ":") %>
+          <%= (h(revision.folder.dmsf_path_str) + "/") unless revision.folder.nil? %><%= h(revision.name) %>			
+        </div>
+      </div>
+      <p class="no-ident">
+        <%= label_tag("", l(:label_description) + ":") %>
+      </p>
+      <div class="wiki clear" style="margin-left: 110px">
+        <%= textilizable(revision.description) %>
+      </div>	
+      <div class="splitcontentleft">		
+        <%= label_tag("", l(:label_version) + ":") %>
+        <%= revision.major_version %>.<%= revision.minor_version %>
+        <br/>		
+        <%= label_tag('', l(:label_workflow) + ':') %>
+        <%= revision.workflow_str true %>	
+      </div>
+      <div class="splitcontentright clear">		
+        <%= label_tag("", l(:label_mime) + ":") %>
+        <%= h(revision.mime_type) %>&nbsp;
+        <br/>		
+        <%= label_tag("", l(:label_size) + ":") %>
+        <%= number_to_human_size(revision.size) %>		
+      </div>	
+      <div class="no-ident clear">
+        <%= render "dmsf/custom_fields", :object => revision %>
+      </div>
+      <div class="splitcontentleft clear">
+        <%= label_tag("", l(:label_comment) + ":") %>
+        <%= h(revision.comment) %>
+      </div>	     	     
+      <br/>
+      <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">
+        <%= render(:partial => "revision_access", :locals => {:revision => revision}) if User.current.allowed_to?(:file_approval, @file.project) %>
+      </div>    
+    </div>
+  </div>  
+  <br/>
+  <br/>
 <% end %>
 
 <p class="pagination"><%= pagination_links_full @revision_pages, @file.revisions.visible.count %></p>
@@ -176,7 +175,7 @@ sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !
 <% end %>
 
 <% content_for :header_tags do %>
-	<%= stylesheet_link_tag "jquery-ui/jquery-ui-1.8.13.css", :plugin => "redmine_dmsf" %>
+	<%= stylesheet_link_tag "jquery-ui/jquery-ui-1.9.2.css", :plugin => "redmine_dmsf" %>
 	<%= stylesheet_link_tag "jquery.dataTables/jquery-ui.dataTables.css", :plugin => "redmine_dmsf" %>
 	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
 	<%= javascript_include_tag "jquery-1.6.1.min.js", :plugin => "redmine_dmsf" %>

@@ -1,8 +1,0 @@
-<%= link_to(l(:link_documents), {:controller => "dmsf", :action => "show", :id=> @project }) %>
-<% path.each do |path_element| %>
- / 
- <%= link_to(h(path_element.title), {:controller => "dmsf", :action => "show", :id=> @project, :folder_id => path_element}) %>
- <% if path_element.notification %>
-	<%= image_tag("notify.png", :plugin => "redmine_dmsf", :title => l(:title_notifications_active)) %>
- <% end %>
-<% end %>

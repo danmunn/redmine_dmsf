@@ -204,26 +204,46 @@ class DmsfController < ApplicationController
     redirect_to :controller => "dmsf", :action => "show", :id => @project
   end
 
-  def notify_activate
-    if @folder.notification
+  def notify_activate        
+    if((@folder && @folder.notification) || (@folder.nil? && @project.dmsf_notification))
       flash[:warning] = l(:warning_folder_notifications_already_activated)
     else
-      @folder.notify_activate
+      if @folder
+        @folder.notify_activate
+      else
+        @project.dmsf_notification = true
+        @project.save
+      end
       flash[:notice] = l(:notice_folder_notifications_activated)
     end
-    redirect_to params[:current] ? params[:current] : 
-      {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder.folder}
+    if params[:current]
+      redirect_to params[:current]
+    elsif @folder
+      redirect_to({:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder.folder})
+    else
+      redirect_to({:controller => 'dmsf', :action => 'show', :id => @project})
+    end    
   end
   
   def notify_deactivate
-    if !@folder.notification
+    if((@folder && !@folder.notification) || (@folder.nil? && !@project.dmsf_notification))
       flash[:warning] = l(:warning_folder_notifications_already_deactivated)
     else
-      @folder.notify_deactivate
+      if @folder
+        @folder.notify_deactivate
+      else
+        @project.dmsf_notification = false
+        @project.save
+      end
       flash[:notice] = l(:notice_folder_notifications_deactivated)
     end
-    redirect_to params[:current] ? params[:current] : 
-      {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder.folder}
+    if params[:current]
+      redirect_to params[:current]
+    elsif @folder
+      redirect_to({:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder.folder})
+    else
+      redirect_to({:controller => 'dmsf', :action => 'show', :id => @project})
+    end    
   end
 
 
@@ -256,8 +276,22 @@ class DmsfController < ApplicationController
     redirect_to params[:current] ? params[:current] :
         {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder.folder}
   end
-
-
+  
+#  def assign    
+#  end
+#  
+#  def assignment
+#    revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
+#    if revision
+#      revision.set_workflow(params[:dmsf_workflow_id], params[:action])
+#      revision.assign_workflow(params[:dmsf_workflow_id])
+#      if request.post? && revision.save
+#        flash[:notice] = l(:notice_successful_create)
+#      end
+#    end
+#    redirect_to params[:current] ? params[:current] :
+#        {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder.folder} 
+#  end
 
   private
 

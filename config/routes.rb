@@ -73,6 +73,9 @@ RedmineApp::Application.routes.draw do
   # Just to keep backward compatibility of external url links
   get '/dmsf_files/:id', :controller => 'dmsf_files', :action => 'show'
 
+  # Just to keep backward compatibility with old external direct links
+  get '/dmsf_files/:id', :controller => 'dmsf_files', :action => 'show'
+
   #
   # files_copy controller
   #   /dmsf/files/<file id>/copy
@@ -97,4 +100,21 @@ RedmineApp::Application.routes.draw do
     :resource_class => RedmineDmsf::Webdav::ResourceProxy,
     :controller_class => RedmineDmsf::Webdav::Controller
   ), :at => "/dmsf/webdav"
+  
+  # Approval workflow    
+  resources :dmsf_workflows do
+    member do
+      get 'autocomplete_for_user'
+      get 'action'
+      get 'assign'
+      get 'log'
+      post 'new_action'
+      post 'start'
+      post 'assignment'
+    end
+  end
+  
+  match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'add_step', :id => /\d+/, :via => :post
+  match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'remove_step', :id => /\d+/, :via => :delete
+  match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'reorder_steps', :id => /\d+/, :via => :put    
 end

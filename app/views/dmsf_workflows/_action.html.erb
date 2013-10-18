@@ -1,0 +1,27 @@
+<h3 class="title"><%= l(:field_label_dmsf_workflow) %></h3>
+
+<%= form_tag({:controller => 'dmsf_workflows', :action => 'new_action'},              
+              :method => :post,
+              :id => 'new-action-form') do %>
+  
+  <%= hidden_field_tag :dmsf_workflow_step_assignment_id, params[:dmsf_workflow_step_assignment_id] %>
+  <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>
+  <p><label><%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_APPROVE, true %> <%= l(:label_dmsf_wokflow_action_approve) %></label><br/></p>
+  
+  <p>
+    <label><%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_REJECT %> <%= l(:label_dmsf_wokflow_action_reject) %></label><br/>
+    <%= text_area_tag :note, '', :placeholder => l(:message_dmsf_wokflow_note), :size => '38x2' %>
+  </p>
+
+  <p>
+    <%= label_tag 'delegate', l(:label_dmsf_wokflow_action_delegate) %><br/>
+    <%= text_field_tag 'user_search', nil %>    
+    <%= javascript_tag "observeSearchfield('user_search', 'users_for_delegate', '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@workflow, :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id], :dmsf_file_revision_id => params[:dmsf_file_revision_id]) }')" %>    
+    <%=  content_tag('div', principals_radio_button_tags('step_action', @workflow.delegates(nil, params[:dmsf_workflow_step_assignment_id], params[:dmsf_file_revision_id])), :id => 'users_for_delegate') %>
+  </p>
+  
+  <p class="buttons">
+    <%= submit_tag l(:button_submit), :name => 'commit', :onclick => 'hideModal(this);' %>
+    <%= submit_tag l(:button_cancel), :name => 'commit', :onclick => 'hideModal(this);' %>
+  </p>
+<% end %>

@@ -26,6 +26,7 @@ class DmsfFilesController < ApplicationController
   before_filter :authorize
 
   helper :all
+  helper :dmsf_workflows
 
   def show
     # download is put here to provide more clear and usable links
@@ -48,7 +49,11 @@ class DmsfFilesController < ApplicationController
         end
       end
       check_project(@revision.file)
-      send_revision
+      begin
+        send_revision
+      rescue ActionController::MissingFile => e
+        render_404
+      end
       return
     end
     
@@ -82,7 +87,7 @@ class DmsfFilesController < ApplicationController
       
       @revision.major_version = last_revision.major_version
       @revision.minor_version = last_revision.minor_version
-      @revision.workflow = last_revision.workflow
+      #@revision.workflow = last_revision.workflow      
       version = params[:version].to_i
       file_upload = params[:file_upload]
       if file_upload.nil?
@@ -96,13 +101,14 @@ class DmsfFilesController < ApplicationController
         @revision.disk_filename = @revision.new_storage_filename
         @revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
       end
-      @revision.set_workflow(params[:workflow])
+      #@revision.set_workflow(params[:dmsf_workflow_id], params[:commit])
       
       @file.name = @revision.name
       @file.folder = @revision.folder
       
       if @revision.valid? && @file.valid?
         @revision.save!
+        @revision.assign_workflow(params[:dmsf_workflow_id])
         unless file_upload.nil?
           @revision.copy_file_content(file_upload)
         end
@@ -123,7 +129,7 @@ class DmsfFilesController < ApplicationController
         begin
           DmsfMailer.files_updated(User.current, [@file]).deliver
         rescue ActionView::MissingTemplate => e
-          Rails.logger.error "Could not send email notifications: " + e
+          Rails.logger.error "Could not send email notifications: #{e.message}"
         end
         redirect_to :action => "show", :id => @file
       else

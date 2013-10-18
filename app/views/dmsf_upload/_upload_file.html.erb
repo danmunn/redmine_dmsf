@@ -1,17 +1,4 @@
-<%
-disabled_workflow = []
-selected_workflow = nil
-unless User.current.allowed_to?(:file_approval, @project)
-	disabled_workflow << 2
-	current_workflow = upload.workflow
-	if current_workflow == 1 || current_workflow == 2
-		disabled_workflow << nil
-		selected_workflow = 1
-	end
-else
-	selected_workflow = upload.workflow
-end
-%>
+
 <div class="box dmsf_detail">
 	<%= hidden_field_tag("commited_files[#{i}][disk_filename]", upload.disk_filename) %>
 	<div class="clear">
@@ -44,16 +31,7 @@ end
 			<%= upload.major_version %>.<%= upload.minor_version + 1 %> <%= l(:option_version_minor) %><br />
 			<%= radio_button_tag("commited_files[#{i}][version]", 2) %> 
 			<%= upload.major_version + 1 %>.0 <%= l(:option_version_major) %><br />
-		</div>
-		<p>
-			<%= label_tag("commited_files[#{i}][workflow]", l(:label_workflow) + ":") %>
-			<%= select_tag("commited_files[#{i}][workflow]", 
-					options_for_select([
-							[l(:option_workflow_none), nil], 
-							[l(:option_workflow_waiting_for_approval), 1],
-							[l(:option_workflow_approved), 2]], 
-						:selected => selected_workflow, :disabled => disabled_workflow)) %>
-		</p>
+		</div>		
 	</div>
 	<div class="splitcontentright clear">
 		<p>
