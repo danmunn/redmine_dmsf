@@ -289,6 +289,6 @@ table.list td.step {
   padding: 3px 0 3px 0;
 }
 
-.modal a, a:link, a:visited{ color: #169; text-decoration: none; }
-.modal a:hover, a:active{ color: #c61a1a; text-decoration: underline;}
+.modal a, .modal a:link, .modal a:visited{ color: #169; text-decoration: none; }
+.modal a:hover, .modal a:active{ color: #c61a1a; text-decoration: underline;}
 .modal{ font-size: 12px}
