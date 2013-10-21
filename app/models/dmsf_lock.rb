@@ -47,7 +47,7 @@ class DmsfLock < ActiveRecord::Base
   end
 
   def generate_uuid
-    self.uuid = UUIDTools::UUID.timestamp_create().to_s
+    self.uuid = UUIDTools::UUID.random_create.to_s
   end
 
   def self.delete_expired

@@ -60,7 +60,7 @@ class Dmsf144 < ActiveRecord::Migration
     do_not_delete.each {|l|
       #Find the lock
       next unless lock = DmsfFileLock.find(l)
-      lock.uuid = UUIDTools::UUID.timestamp_create().to_s
+      lock.uuid = UUIDTools::UUID.random_create.to_s
       lock.save!
     }
 
