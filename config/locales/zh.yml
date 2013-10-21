@@ -91,7 +91,7 @@ zh:
   title_delete_revision: 删除此修订
   label_created: 创建
   label_changed: 修改
-  info_changed_by_user: "%{changed} by %{user}"
+  info_changed_by_user: "%{changed} by"
   label_filename: 文件名
   label_version: 版本
   label_workflow: 工作流程

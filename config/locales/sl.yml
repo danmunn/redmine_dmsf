@@ -92,7 +92,7 @@ sl:
   :title_delete_revision: "Izbriši verzijo"
   :label_created: "Narejeno"
   :label_changed: "Spremenjeno"
-  :info_changed_by_user: "%{changed} po %{user}"
+  :info_changed_by_user: "%{changed} po"
   :label_filename: "Datoteka"
   :label_version: "Verzija"
   :label_workflow: "postopek"

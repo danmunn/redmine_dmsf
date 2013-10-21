@@ -91,7 +91,7 @@ ru:
   title_delete_revision: Удалить редакцию
   label_created: Создан
   label_changed: Изменен
-  info_changed_by_user: "%{changed} пользователем %{user}"
+  info_changed_by_user: "%{changed} пользователем"
   label_filename: Имя файла
   label_version: Версия
   label_workflow: Поток работ

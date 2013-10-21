@@ -91,7 +91,7 @@ fr:
   title_delete_revision: Supprimer la révision
   label_created: Créé
   label_changed: Modifié
-  info_changed_by_user: "%{changed} par %{user}"
+  info_changed_by_user: "%{changed} par"
   label_filename: Fichier
   label_version: Version
   label_workflow: Etat

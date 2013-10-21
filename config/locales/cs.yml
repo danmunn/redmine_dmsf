@@ -91,7 +91,7 @@ cs:
   title_delete_revision: Smazat revizi
   label_created: Vytvořeno
   label_changed: Změněno
-  info_changed_by_user: "%{changed} uživatelem %{user}"
+  info_changed_by_user: "%{changed} uživatelem"
   label_filename: Jméno souboru
   label_version: Verze
   label_workflow: Workflow

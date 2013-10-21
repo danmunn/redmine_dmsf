@@ -91,7 +91,7 @@ ja:
   title_delete_revision: リビジョンを削除します
   label_created: 作成者/日時
   label_changed: 更新者/日時
-  info_changed_by_user: "%{user} / %{changed}"
+  info_changed_by_user: "%{user} /"
   label_filename: ファイル名
   label_version: バージョン
   label_workflow: ワークフロー
