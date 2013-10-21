@@ -23,6 +23,6 @@ class UpdateProjects < ActiveRecord::Migration
   end
   
   def self.down
-    remove_column :porojects, :dmsf_notification
+    remove_column :projects, :dmsf_notification
   end
 end
