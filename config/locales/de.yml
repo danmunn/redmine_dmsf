@@ -147,9 +147,7 @@ de:
   title_number_of_files_in_directory: Dateizahl in dem Ordner
   title_filename_for_download: Dateiname benutzt zum Herunterladen oder ZIP-archivierung
   label_number_of_folders: Order
-  label_number_of_documents: Dokumente
-  label_zip_names_encoding: ZIP-namen Kodierung
-  note_zip_names_encoding_iconv: Iconv ist benutzt zum Charset-konversion von utf-8 in Zielkodierung
+  label_number_of_documents: Dokumente  
   error_file_storage_directory_does_not_exist: Ordner zum Dateispeichern existiert nicht und kann nicht gebildet.
   error_file_can_not_be_created: Datei kann nicht in dem gewählten Ordner gebildet werden.
   error_wrong_zip_encoding: Falsche ZIP-kodierung
@@ -190,20 +188,22 @@ de:
   label_webdav: Webdav Funktionalität
   label_dmsf_plural: "Kopieren von Dateien und Ordnern (%{files} Dateien in %{folders} Ordnern)"
   
-  :warning_folder_already_locked: Dieser Ordner ist bereits gesperrt
-  :notice_folder_locked: Der Ordner wurde erfolgreich gesperrt
-  :warning_folder_not_locked: Der Ordner konnte nicht gesperrt werden
-  :notice_folder_unlocked: Der Ordner wurde erfolgreich entsperrt
-  :error_only_user_that_locked_folder_can_unlock_it: Sie haben keine Berechtigung zur Entsperrung des Ordners
-  :title_folder_parent_locked: "Übergeordnetes Verzeichnis %{name} ist gesperrt"
-  :title_file_parent_locked: "Übergeordnetes Verzeichnis %{name} ist gesperrt"
-  :title_unlock_folder: Zur Modifikation für andere Benutzer entsperren
-  :title_lock_folder: Zum Schutz vor Modifikation durch andere Benutzer sperren
+  warning_folder_already_locked: Dieser Ordner ist bereits gesperrt
+  notice_folder_locked: Der Ordner wurde erfolgreich gesperrt
+  warning_folder_not_locked: Der Ordner konnte nicht gesperrt werden
+  notice_folder_unlocked: Der Ordner wurde erfolgreich entsperrt
+  error_only_user_that_locked_folder_can_unlock_it: Sie haben keine Berechtigung zur Entsperrung des Ordners
+  title_folder_parent_locked: "Übergeordnetes Verzeichnis %{name} ist gesperrt"
+  title_file_parent_locked: "Übergeordnetes Verzeichnis %{name} ist gesperrt"
+  title_unlock_folder: Zur Modifikation für andere Benutzer entsperren
+  title_lock_folder: Zum Schutz vor Modifikation durch andere Benutzer sperren
   
-  :select_option_webdav_readonly: nur Lesen
-  :select_option_webdav_readwrite: Lesen/Schreiben
-  :label_webdav_strategy: Webdav Strategie
-  :note_webdav_strategy: Erlaubt dem Administrator den Wechsel der WebDav Nutzung zwischen nur lesend und auch schreibenden Zugriffen.
+  select_option_webdav_readonly: nur Lesen
+  select_option_webdav_readwrite: Lesen/Schreiben
+  label_webdav_strategy: Webdav Strategie
+  note_webdav_strategy: Erlaubt dem Administrator den Wechsel der WebDav Nutzung zwischen nur lesend und auch schreibenden Zugriffen.
+  
+  # Not translated
   
   error_unable_delete_dmsf_workflow: Unable to delete the workflow
   error_empty_note: The note can't be empty
@@ -244,3 +244,18 @@ de:
   info_revision: "r%{rev}"
   link_workflow: Workflow  
   notice_workflow_started: Approval workflow successfully started
+  text_email_subject_approved: "Approval workflow %{name} approved"
+  text_email_subject_rejected: "Approval workflow %{name} rejected"
+  text_email_subject_delegated: "Approval workflow %{name} delegated"
+  text_email_subject_requires_approval: "Approval workflow %{name} requires your approval"
+  text_email_subject_updated: "Approval workflow %{name} updated"
+  text_email_subject_started: "Approval workflow %{name} started" 
+  text_email_finished_approved: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been approved."
+  text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been rejected because of '%{notice}'."
+  text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
+  text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps and you are expected to do an approval in the next approval step."
+  text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps."
+  text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you are expected to do an approval in the current approval step."  
+  text_email_to_proceed: To proceed click on the check box icon next to the document in
+  text_email_to_see_history: To see the approval history click on the workflow status of the document in
+  text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in

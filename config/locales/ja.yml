@@ -147,9 +147,7 @@ ja:
   title_number_of_files_in_directory: フォルダ内のファイル数
   title_filename_for_download: ファイル名はダウンロードまたは Zip アーカイブに使われます
   label_number_of_folders: フォルダ
-  label_number_of_documents: 文書
-  label_zip_names_encoding: Zip 名のエンコード
-  note_zip_names_encoding_iconv: 文字コードを utf-8 から目的のエンコードに変換するのに Iconv が使われています
+  label_number_of_documents: 文書  
   error_file_storage_directory_does_not_exist: ファイル保存フォルダが存在せず作ることもできません
   error_file_can_not_be_created: ファイルを保存フォルダに作ることができません
   error_wrong_zip_encoding: Zip エンコーディングが正しくありません
@@ -246,3 +244,18 @@ ja:
   info_revision: "r%{rev}"
   link_workflow: Workflow  
   notice_workflow_started: Approval workflow successfully started
+  text_email_subject_approved: "Approval workflow %{name} approved"
+  text_email_subject_rejected: "Approval workflow %{name} rejected"
+  text_email_subject_delegated: "Approval workflow %{name} delegated"
+  text_email_subject_requires_approval: "Approval workflow %{name} requires your approval"
+  text_email_subject_updated: "Approval workflow %{name} updated"
+  text_email_subject_started: "Approval workflow %{name} started" 
+  text_email_finished_approved: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been approved."
+  text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been rejected because of '%{notice}'."
+  text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
+  text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps and you are expected to do an approval in the next approval step."
+  text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps."
+  text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you are expected to do an approval in the current approval step."  
+  text_email_to_proceed: To proceed click on the check box icon next to the document in
+  text_email_to_see_history: To see the approval history click on the workflow status of the document in
+  text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in

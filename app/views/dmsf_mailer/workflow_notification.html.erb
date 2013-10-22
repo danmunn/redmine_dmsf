@@ -1,8 +1,13 @@
-<p>Dear user,</p>
+<p>Dear <%= @user.name %>,</p>
 <p>      
   <%= @text1 %>
 </p>
 <p>
   <%= @text2 %>      
+  <%  unless @revision.folder %>
+    <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @revision.file.project, :only_path => false } %>
+  <% else %>
+    <%=  link_to @revision.folder.title, {:controller => 'dmsf', :action => 'show', :id=> @revision.file.project, :folder_id => @revision.folder, :only_path => false } %>
+  <% end %>.
 </p>
   

@@ -56,57 +56,65 @@ class DmsfWorkflowsController < ApplicationController
                 end
               end              
               if revision.workflow == DmsfWorkflow::STATE_APPROVED
-                # Just approved                                
-                DmsfMailer.workflow_notification(
-                  revision.file.project.members.collect{ |member| member.user.mail},
-                  @workflow, 
-                  revision,
-                  "Approval workflow #{@workflow.name} approved",
-                  'been finished and the document has been approved',
-                  'To see the approval history click on the workflow status of the document in').deliver
+                # Just approved
+                revision.file.project.members.each do |member|
+                  DmsfMailer.workflow_notification(
+                    member.user,
+                    @workflow, 
+                    revision,
+                    l(:text_email_subject_approved, :name => @workflow.name),
+                    l(:text_email_finished_approved, :name => @workflow.name, :filename => revision.file.name),
+                    l(:text_email_to_see_history)).deliver
+                end
               else
-                # Just rejected
-                owner = User.find_by_id revision.dmsf_workflow_assigned_by
-                DmsfMailer.workflow_notification(
-                  @workflow.participiants.collect{ |user| user.mail} << owner.mail, 
-                  @workflow, 
-                  revision,
-                  "Approval workflow #{@workflow.name} rejected",
-                  "been finished and the document has been rejected because of '#{action.note}'",
-                  'To see the approval history click on the workflow status of the document in').deliver
+                # Just rejected                
+                recipients = @workflow.participiants
+                recipients.push User.find_by_id revision.dmsf_workflow_assigned_by
+                recipients.each do |user|
+                  DmsfMailer.workflow_notification(
+                    user, 
+                    @workflow, 
+                    revision,
+                    l(:text_email_subject_rejected, :name => @workflow.name),
+                    l(:text_email_finished_rejected, :name => @workflow.name, :filename => revision.file.name, :notice => action.note),
+                    l(:text_email_to_see_history)).deliver
+                end
               end
             else
               if action.action == DmsfWorkflowStepAction::ACTION_DELEGATE
                 # Delegation                
                 delegate = User.find_by_id params[:step_action].to_i / 10
-                DmsfMailer.workflow_notification(
-                  delegate.mail, 
-                  @workflow, 
-                  revision,
-                  "Approval workflow #{@workflow.name} step delegated",
-                  "been delegated  because of '#{action.note}' and you are expected to do an approval in the current approval step",
-                  'To proceed click on the check box icon next to the document in').deliver
+                if delegate
+                  DmsfMailer.workflow_notification(
+                    delegate, 
+                    @workflow, 
+                    revision,
+                    l(:text_email_subject_delegated, :name => @workflow.name),
+                    l(:text_email_finished_delegated, :name => @workflow.name, :filename => revision.file.name, :notice => action.note),
+                    l(:text_email_to_proceed)).deliver
+                end
               else
                 # Next step
                 assignments = @workflow.next_assignments revision.id
                 unless assignments.empty?
                   if assignments.first.dmsf_workflow_step.step != action.dmsf_workflow_step_assignment.dmsf_workflow_step.step
-                    # Next step                  
+                    # Next step
+                    assignments.each do |assignment|
+                      DmsfMailer.workflow_notification(
+                        assignment.user, 
+                        @workflow, 
+                        revision,
+                        l(:text_email_subject_reequires_approval, :name => @workflow.name),                        
+                        l(:text_email_finished_step, :name => @workflow.name, :filename => revision.file.name),
+                        l(:text_email_to_proceed)).deliver
+                    end                    
                     DmsfMailer.workflow_notification(
-                      assignments.collect{ |assignment| assignment.user.mail}, 
+                      User.find_by_id revision.dmsf_workflow_assigned_by, 
                       @workflow, 
                       revision,
-                      "Approval workflow #{@workflow.name} requires your approval",
-                      'finished one of the approval steps and you are expected to do an approval in the next approval step',
-                      'To proceed click on the check box icon next to the document in the').deliver
-                    owner = User.find_by_id revision.dmsf_workflow_assigned_by
-                    DmsfMailer.workflow_notification(
-                      owner.mail, 
-                      @workflow, 
-                      revision,
-                      "Approval workflow #{@workflow.name} updated",
-                      'finished one of the approval steps',
-                      'To see the current status of the approval workflow click on the workflow status the document in').deliver
+                      l(:text_email_subject_updated, :name => @workflow.name),
+                      l(:text_email_finished_step_short, :name => @workflow.name, :filename => revision.file.name),
+                      l(:text_email_to_see_status)).deliver
                   end
                 end
               end
@@ -267,13 +275,15 @@ class DmsfWorkflowsController < ApplicationController
         revision.set_workflow(@workflow.id, params[:action])
         if revision.save          
           assignments = @workflow.next_assignments revision.id          
-          DmsfMailer.workflow_notification(
-            assignments.collect{ |assignment| assignment.user.mail},
-            @workflow, 
-            revision,
-            "Approval workflow #{@workflow.name} started",
-            'been started and you are expected to do an approval in the current approval step',
-            'To proceed click on the check box icon next to the document in').deliver
+          assignments.each do |assignment|
+            DmsfMailer.workflow_notification(
+              assignment.user,
+              @workflow, 
+              revision,
+              l(:text_email_subject_started, :name => @workflow.name),              
+              l(:text_email_started, :name => @workflow.name, :filename => revision.file.name),
+              l(:text_email_to_proceed)).deliver
+          end
           flash[:notice] = l(:notice_workflow_started)
         else
           flash[:error] = l(:notice_cannot_start_workflow)

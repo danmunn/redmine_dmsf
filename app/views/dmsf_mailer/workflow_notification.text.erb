@@ -1,4 +1,7 @@
-Dear user,
+Dear <%= @user.name %> ,
 <%= @text1 %>
-
-<%= @text2 %>
+<% unless @revision.folder %>
+  <%= @text2 %> <%= url_for(:controller => 'dmsf', :action => 'show', :id => @revision.file.project, :only_path => false) %>.
+<% else %>
+  <%= @text2 %> <%= url_for(:controller => 'dmsf', :action => 'show', :id => @revision.file.project, :folder_id => @revision.folder, :only_path => false) %>.
+<% end %>
