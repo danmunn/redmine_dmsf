@@ -52,7 +52,7 @@ class DmsfWorkflowsController < ApplicationController
                 begin
                   file.unlock!
                 rescue DmsfLockError => e
-                  logger.error e.message
+                  logger.warn e.message
                 end
               end              
               if revision.workflow == DmsfWorkflow::STATE_APPROVED
@@ -134,8 +134,14 @@ class DmsfWorkflowsController < ApplicationController
           if request.post? 
             if revision.save
               file = DmsfFile.find_by_id revision.dmsf_file_id
-              file.lock! if file
-              flash[:notice] = l(:notice_successful_update)
+              if file
+                begin
+                  file.lock!
+                rescue DmsfLockError => e
+                  logger.warn e.message
+                end
+                flash[:notice] = l(:notice_successful_update)                
+              end
             else
               flash[:error] = l(:error_workflow_assign)
             end
