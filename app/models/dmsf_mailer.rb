@@ -63,9 +63,9 @@ class DmsfMailer < Mailer
     @revision = revision
     @text1 = "The approval workflow '#{@workflow.name}' assigned to '#{@revision.file.name}' document has just #{text1}."            
     unless @revision.folder
-      url = url_for(:controller => 'dmsf', :action => 'edit_root', :id => @revision.file.project, :only_path => false)
+      url = url_for(:controller => 'dmsf', :action => 'show', :id => @revision.file.project, :only_path => false)
     else
-      url = url_for(:controller => 'dmsf', :action => 'edit', :id => @revision.file.project, :folder_id => @revision.folder, :only_path => false)
+      url = url_for(:controller => 'dmsf', :action => 'show', :id => @revision.file.project, :folder_id => @revision.folder, :only_path => false)
     end            
     @text2 = "#{text2} #{url}."
     mail :to => to, :subject => subject
