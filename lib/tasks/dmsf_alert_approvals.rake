@@ -28,21 +28,24 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../../config/environme
 
 class DmsfAlertApprovals
   
+  include Redmine::I18n
+  
   def self.alert
-    revisions = DmsfFileRevision.where(:workflow => 1)
+    revisions = DmsfFileRevision.where(:workflow => DmsfWorkflow::STATE_WAITING_FOR_APPROVAL)
     revisions.each do |revision|
       next unless revision.file.last_revision == revision
       workflow = DmsfWorkflow.find_by_id revision.dmsf_workflow_id
       next unless workflow
-      assignments = workflow.next_assignments revision.id            
-      DmsfMailer.workflow_notification(
-        assignments.collect{|a| a.user.mail}, 
-        workflow, 
-        revision,
-        "Approval workflow #{workflow.name} requires your approval",
-        'finished one of the approval steps and you are expected to do an approval in the next approval step',
-        'To proceed click on the check box icon next to the document in the').deliver
-      Rails.logger.info "#{assignments.collect{|a| a.user.login}.join(',')} were alerted in order to do an approval of [workflow = #{workflow.id}, revision = #{revision.id}]"
+      assignments = workflow.next_assignments revision.id
+      assignments.each do |assignment|
+        DmsfMailer.workflow_notification(
+          assignment.user, 
+          workflow, 
+          revision,
+          l(:text_email_subject_reequires_approval, :name => workflow.name),                        
+          l(:text_email_finished_step, :name => workflow.name, :filename => revision.file.name),
+          l(:text_email_to_proceed)).deliver
+      end      
     end
   end
 end
