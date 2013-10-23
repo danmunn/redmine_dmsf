@@ -42,7 +42,7 @@ class DmsfAlertApprovals
           assignment.user, 
           workflow, 
           revision,
-          l(:text_email_subject_reequires_approval, :name => workflow.name),                        
+          l(:text_email_subject_requires_approval, :name => workflow.name),                        
           l(:text_email_finished_step, :name => workflow.name, :filename => revision.file.name),
           l(:text_email_to_proceed)).deliver
       end      
