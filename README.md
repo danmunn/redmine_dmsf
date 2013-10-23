@@ -152,6 +152,11 @@ Before installing ensure that the Redmine instance is stopped.
 5. Restart web server
 6. You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
 7. Assign DMSF permissions to appropriate roles
+8. There are two rake tasks:
+    a) To convert documents from the standard Redmine document module
+       rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
+    b) To alert all users who are expected to do an approval in the current approval steps
+       rake redmine:dmsf_alert_approvals RAILS_ENV="production"
 
 ### Fulltext search (optional)
 If you want to use fulltext search features, you must setup file content indexing.
