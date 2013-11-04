@@ -48,9 +48,8 @@ class DmsfFileRevision < ActiveRecord::Base
                                                 "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id",
                                               :conditions => ["#{DmsfFile.table_name}.deleted = :false", {:false => false}]
                                              }
-  
-  validates_presence_of :title
-  validates_presence_of :name
+    
+  validates :title, :name, :presence => true
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
     :message => l(:error_contains_invalid_character)
   

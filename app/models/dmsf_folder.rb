@@ -40,8 +40,8 @@ class DmsfFolder < ActiveRecord::Base
   scope :visible, lambda {|*args| {:conditions => "" }} #For future use, however best to be referenced now
 
   acts_as_customizable
-  
-  validates_presence_of :title
+    
+  validate :title, :presence => true
   validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id]
   
   validates_format_of :title, :with => @@invalid_characters,

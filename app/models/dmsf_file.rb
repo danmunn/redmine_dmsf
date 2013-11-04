@@ -42,7 +42,7 @@ class DmsfFile < ActiveRecord::Base
 
   scope :visible, lambda {|*args| where(DmsfFile.visible_condition(args.shift || User.current, *args)).readonly(false)}
   
-  validates_presence_of :name
+  validates :name, :presence => true
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
     :message => l(:error_contains_invalid_character)
   
