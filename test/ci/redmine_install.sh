@@ -35,7 +35,7 @@ clone_redmine()
   rm -rf $PATH_TO_REDMINE
   git clone -b $REDMINE_GIT_TAG --depth=100 --quiet $REDMINE_GIT_REPO $PATH_TO_REDMINE
   cd $PATH_TO_REDMINE
-  git checkout $REDMINE_GIT_TAG
+  git checkout $REDMINE_GIT_TAG  
 }
 
 run_tests()
@@ -87,6 +87,9 @@ run_install()
   #Not ideal, but at present Travis-CI will not install with xapian enabled.
   #02-04-2013 bundle install needs to happen AFTER database configuration
   bundle install --path vendor/bundle --without xapian
+
+  # https://github.com/marutosi/chili/commit/209ed25f245726d4b2aba41c14a15c33cc710ec9
+  patch -p0 < $PATH_TO_DMSF/travis_patch.diff
 
   # run redmine database migrations
   bundle exec rake db:migrate RAILS_ENV=test --trace
