@@ -2,17 +2,18 @@ Index: db/migrate/062_insert_builtin_roles.rb
 ===================================================================
 --- db/migrate/062_insert_builtin_roles.rb	(revision 12244)
 +++ db/migrate/062_insert_builtin_roles.rb	(working copy)
-@@ -2,11 +2,11 @@
+@@ -2,12 +2,12 @@
    def self.up
      Role.reset_column_information
      nonmember = Role.new(:name => 'Non member', :position => 0)
 -    nonmember.builtin = Role::BUILTIN_NON_MEMBER
-+    nonmember.send(:attributes=, { :builtin => Role::BUILTIN_NON_MEMBER }, false)
      nonmember.save
++    Role.connection.execute("UPDATE roles SET builtin = #{Role::BUILTIN_NON_MEMBER} WHERE name = 'Non member'")
  
      anonymous = Role.new(:name => 'Anonymous', :position => 0)
 -    anonymous.builtin = Role::BUILTIN_ANONYMOUS
-+    anonymous.send(:attributes=, { :builtin => Role::BUILTIN_ANONYMOUS }, false)
      anonymous.save
++    Role.connection.execute("UPDATE roles SET builtin = #{Role::BUILTIN_ANONYMOUS} WHERE name = 'Anonymous'")
    end
  
+   def self.down
