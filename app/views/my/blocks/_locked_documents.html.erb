@@ -1,0 +1,82 @@
+<%#
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<% folders = DmsfFolder.joins(
+  'JOIN dmsf_locks ON dmsf_folders.id = dmsf_locks.entity_id').where(
+  'dmsf_locks.entity_type' => 1, 'dmsf_locks.user_id' => @user.id).all %>
+<% files = DmsfFile.joins(
+  'JOIN dmsf_locks ON dmsf_files.id = dmsf_locks.entity_id').where(
+  'dmsf_locks.entity_type' => 0, 'dmsf_locks.user_id' => @user.id).all %>
+<h3><%= l(:label_my_locked_documents)%> (<%= folders.count %>/<%=  files.count %>)</h3>
+<% if folders.any? || files.any?%>
+  <%= form_tag({}) do %>
+    <div><table class="list">
+      <thead>
+        <tr>              
+          <th><%=l(:field_project)%></th>
+          <th><%=l(:label_document)%>/<%=l(:field_folder)%></th>                    
+          <th><%=l(:field_folder)%></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% folders.each do |folder| %>
+          <tr id="folder-<%= folder.id %>" class="<%= cycle('odd', 'even') %>">
+            <td class="project">
+              <%= link_to_project(folder.project) %>
+            </td>            
+            <td class="title">
+              <%= link_to(h(folder.title),
+                {:controller => 'dmsf', :action => 'show', :id => folder.project, :folder_id => folder},
+                :class => 'icon icon-folder') %>              
+             </td>             
+             <td class="title">
+               <% if folder.folder %>
+                 <%= link_to(h(folder.folder.title), 
+                    {:controller => 'dmsf', :action => 'show', :id => folder.project, :folder_id => folder.folder}) %>
+               <% else %>
+                  <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> folder.project }) %>                  
+               <% end %>            
+             </td>
+           </tr>
+        <% end %>
+        <% files.each do |file| %>
+          <tr id="file-<%= file.id %>" class="<%= cycle('odd', 'even') %>">
+            <td class="project">
+              <%= link_to_project(file.project) %>
+            </td>            
+            <td class="title">              
+              <%= link_to(h(file.last_revision.display_title), 
+                {:controller => 'dmsf_files', :action => :show, :id => file },
+                :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}") %>
+            </td>          
+             <td class="title">
+               <% if file.folder %>
+                 <%= link_to(h(file.folder.title), 
+                    {:controller => 'dmsf', :action => 'show', :id => file.project, :folder_id => file.folder}) %>
+               <% else %>
+                  <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> file.project }) %>                  
+               <% end %>            
+             </td>
+           </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>

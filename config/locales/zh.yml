@@ -260,3 +260,8 @@ zh:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  
+  my:
+    blocks:
+      locked_documents: Locked documents
+      open_approvals: Open approvals

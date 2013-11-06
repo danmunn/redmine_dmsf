@@ -257,3 +257,8 @@ cs:
   text_email_to_proceed: Pro schválení klikněte na zaškrtávací ikonku vedle dokumentu v
   text_email_to_see_history: Pro zobrazení historie schvalovacího procesu klikněte na status dokumentu v
   text_email_to_see_status: Pro zobrazení aktuálního stavu schvalovacího procesu klikněte na status dokumentu v
+    
+  my:
+    blocks:
+      locked_documents: Zamčené dokumenty
+      open_approvals: Procesy ke schválení
