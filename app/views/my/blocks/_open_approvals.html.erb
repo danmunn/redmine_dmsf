@@ -43,7 +43,9 @@
         <% assignments.each do |assignment| %>
           <tr id="assignment-<%= assignment.id %>" class="<%= cycle('odd', 'even') %>">
             <td class="project">
-              <%= link_to_project(assignment.dmsf_file_revision.project) %>
+              <% if assignment.dmsf_file_revision.project %>
+                <%= link_to_project(assignment.dmsf_file_revision.project) %>
+              <% end %>
             </td>
             <td>
               <% if assignment.dmsf_workflow_step && assignment.dmsf_workflow_step.dmsf_workflow %>                
@@ -62,7 +64,7 @@
                 <% if assignment.dmsf_file_revision.folder %>
                   <%= link_to(h(assignment.dmsf_file_revision.folder.title), 
                     {:controller => 'dmsf', :action => 'show', :id=> assignment.dmsf_file_revision.project, :folder_id => assignment.dmsf_file_revision.folder}) %>
-                <% else %>
+                <% elsif assignment.dmsf_file_revision.project %>
                   <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id => assignment.dmsf_file_revision.project }) %>                  
                 <% end %>
               <% end %>
