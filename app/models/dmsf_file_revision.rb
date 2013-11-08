@@ -18,16 +18,16 @@
 
 class DmsfFileRevision < ActiveRecord::Base
   unloadable
-  belongs_to :file, :class_name => "DmsfFile", :foreign_key => "dmsf_file_id"
-  belongs_to :source_revision, :class_name => "DmsfFileRevision", :foreign_key => "source_dmsf_file_revision_id"
+  belongs_to :file, :class_name => 'DmsfFile', :foreign_key => 'dmsf_file_id'
+  belongs_to :source_revision, :class_name => 'DmsfFileRevision', :foreign_key => 'source_dmsf_file_revision_id'
   belongs_to :user
-  belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
-  belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
+  belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
+  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   belongs_to :project
-  has_many :access, :class_name => "DmsfFileRevisionAccess", :foreign_key => "dmsf_file_revision_id", :dependent => :destroy
+  has_many :access, :class_name => 'DmsfFileRevisionAccess', :foreign_key => 'dmsf_file_revision_id', :dependent => :destroy
   has_many :dmsf_workflow_step_assignment, :dependent => :destroy
 
-  #Returns a list of revisions that are not deleted here, or deleted at parent level either
+  # Returns a list of revisions that are not deleted here, or deleted at parent level either
   scope :visible, lambda {|*args| joins(:file).where(DmsfFile.visible_condition(args.shift || User.current, *args)).where("#{self.table_name}.deleted = :false", :false => false ).readonly(false) }
 
   acts_as_customizable
@@ -38,7 +38,7 @@ class DmsfFileRevision < ActiveRecord::Base
                 :description => Proc.new {|o| o.comment },
                 :author => Proc.new {|o| o.user }
                 
-  acts_as_activity_provider :type => "dmsf_files",
+  acts_as_activity_provider :type => 'dmsf_files',
                             :timestamp => "#{DmsfFileRevision.table_name}.updated_at",
                             :author_key => "#{DmsfFileRevision.table_name}.user_id",
                             :permission => :view_dmsf_files,
@@ -57,9 +57,9 @@ class DmsfFileRevision < ActiveRecord::Base
     filename[0, (filename.length - File.extname(filename).length)]
   end
   
-  #TODO: check if better to move to dmsf_upload class
+  # TODO: check if better to move to dmsf_upload class
   def self.filename_to_title(filename)
-    remove_extension(filename).gsub(/_+/, " ");
+    remove_extension(filename).gsub(/_+/, ' ');
   end
   
   def delete(delete_all = false)
@@ -71,19 +71,18 @@ class DmsfFileRevision < ActiveRecord::Base
       errors[:base] << l(:error_at_least_one_revision_must_be_present)
       return false
     end
-    dependent = DmsfFileRevision.find(:all, :conditions => 
-      ["source_dmsf_file_revision_id = :id and deleted = :deleted",
-        {:id => self.id, :deleted => false}])
+    dependent = DmsfFileRevision.find(:source_dmsf_file_revision_id => self.id, :deleted => false).all        
     dependent.each do |d| 
       d.source_revision = self.source_revision
       d.save!
     end
-    if Setting.plugin_redmine_dmsf["dmsf_really_delete_files"]
-      dependent = DmsfFileRevision.find(:all, :conditions => 
-        ["disk_filename = :filename", {:filename => self.disk_filename}])
+    if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
+      dependent = DmsfFileRevision..where(:disk_filename => self.disk_filename).all        
       File.delete(self.disk_file) if dependent.length <= 1 && File.exist?(self.disk_file) 
-      DmsfFileRevisionAccess.find(:all, :conditions => ["dmsf_file_revision_id = ?", self.id]).each {|a| a.destroy}
-      CustomValue.find(:all, :conditions => "customized_id = " + self.id.to_s).each do |v|
+      DmsfFileRevisionAccess.where(:dmsf_file_revision_id => self.id).all.each do |a| 
+        a.destroy
+      end
+      CustomValue.find(:customized_id => self.id).all.each do |v|
         v.destroy
       end
       self.destroy
@@ -106,7 +105,7 @@ class DmsfFileRevision < ActiveRecord::Base
   #   custom SQL into a temporary object
   #
   def access_grouped
-    access.select("user_id, count(*) as count, min(created_at) as first_at, max(created_at) as last_at").group("user_id")
+    access.select('user_id, COUNT(*) AS count, MIN(created_at) AS first_at, MAX(created_at) AS last_at').group('user_id')
   end
   
   def version
@@ -126,11 +125,11 @@ class DmsfFileRevision < ActiveRecord::Base
   def detect_content_type
     content_type = self.mime_type
     content_type = Redmine::MimeType.of(self.disk_filename) if content_type.blank?
-    content_type = "application/octet-stream" if content_type.blank?
+    content_type = 'application/octet-stream' if content_type.blank?
     content_type.to_s
   end
   
-  #TODO: use standard clone method
+  # TODO: use standard clone method
   def clone
     new_revision = DmsfFileRevision.new
     new_revision.file = self.file
@@ -213,16 +212,12 @@ class DmsfFileRevision < ActiveRecord::Base
     end
   end
   
-  def display_title
-    #if self.title.length > 35
-    #  return self.title[0, 30] + "..."
-    #else 
-      return self.title
-    #end
+  def display_title    
+    return self.title    
   end
   
   def new_storage_filename
-    raise DmsfAccessError, "File id is not set" unless self.file.id
+    raise DmsfAccessError, 'File id is not set' unless self.file.id
     filename = DmsfHelper.sanitize_filename(self.name)
     timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
     while File.exist?(File.join(DmsfFile.storage_path, "#{timestamp}_#{self.file.id}_#{filename}"))
@@ -232,7 +227,7 @@ class DmsfFileRevision < ActiveRecord::Base
   end
   
   def copy_file_content(open_file)
-    File.open(self.disk_file, "wb") do |f| 
+    File.open(self.disk_file, 'wb') do |f| 
       while (buffer = open_file.read(8192))
         f.write(buffer)
       end
@@ -241,17 +236,7 @@ class DmsfFileRevision < ActiveRecord::Base
 
   # Overrides Redmine::Acts::Customizable::InstanceMethods#available_custom_fields
   def available_custom_fields    
-    search_project = nil
-    if self.project.present?
-      search_project = self.project
-    elsif self.project_id.present?
-      search_project = Project.find(self.project_id)
-    end
-    if search_project
-      search_project.all_dmsf_custom_fields
-    else
-      DmsfFileRevisionCustomField.all
-    end
+    DmsfFileRevisionCustomField.all
   end
 
 end

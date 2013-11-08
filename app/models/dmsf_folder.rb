@@ -25,19 +25,19 @@ class DmsfFolder < ActiveRecord::Base
   @@invalid_characters = /\A[^\/\\\?":<>]*\z/
   
   belongs_to :project
-  belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
-  has_many :subfolders, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id", :order => "#{DmsfFolder.table_name}.title ASC",
+  belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
+  has_many :subfolders, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id', :order => "#{DmsfFolder.table_name}.title ASC",
            :dependent => :destroy
-  has_many :files, :class_name => "DmsfFile", :foreign_key => "dmsf_folder_id",
+  has_many :files, :class_name => 'DmsfFile', :foreign_key => 'dmsf_folder_id',
            :dependent => :destroy
   belongs_to :user
 
-  has_many :locks, :class_name => "DmsfLock", :foreign_key => "entity_id",
+  has_many :locks, :class_name => 'DmsfLock', :foreign_key => 'entity_id',
     :order => "#{DmsfLock.table_name}.updated_at DESC",
     :conditions => {:entity_type => 1},
     :dependent => :destroy
 
-  scope :visible, lambda {|*args| {:conditions => "" }} #For future use, however best to be referenced now
+  scope :visible, lambda {|*args| {:conditions => '' }} #For future use, however best to be referenced now
 
   acts_as_customizable
     
@@ -51,7 +51,7 @@ class DmsfFolder < ActiveRecord::Base
   
   acts_as_event :title => Proc.new {|o| o.title},
                 :description => Proc.new {|o| o.description },
-                :url => Proc.new {|o| {:controller => "dmsf", :action => "show", :id => o.project, :folder_id => o}},
+                :url => Proc.new {|o| {:controller => 'dmsf', :action => 'show', :id => o.project, :folder_id => o}},
                 :datetime => Proc.new {|o| o.updated_at },
                 :author => Proc.new {|o| o.user }
   
@@ -69,20 +69,15 @@ class DmsfFolder < ActiveRecord::Base
   end
   
   def self.project_root_folders(project)
-    find(:all, :conditions => 
-        ["#{DmsfFolder.table_name}.dmsf_folder_id is NULL and #{DmsfFolder.table_name}.project_id = :project_id", {:project_id => project.id}], :order => "#{DmsfFolder.table_name}.title ASC")
+    visible.where(:project_id => project.id, :dmsf_folder_id => nil, ).order('title ASC').all
   end
   
-  def self.find_by_title(project, folder, title)
-    if folder.nil?
-      visible.find(:first, :conditions => 
-        ["#{DmsfFolder.table_name}.dmsf_folder_id is NULL and #{DmsfFolder.table_name}.project_id = :project_id and #{DmsfFolder.table_name}.title = :title", 
-          {:project_id => project.id, :title => title}])
+  def self.find_by_title(project, folder, title)    
+    if folder
+      visible.where(:project_id => project.id, :dmsf_folder_id => nil, :title => title).first
     else
-      visible.find(:first, :conditions => 
-        ["#{DmsfFolder.table_name}.dmsf_folder_id = :folder_id and #{DmsfFolder.table_name}.title = :title", 
-          {:project_id => project.id, :folder_id => folder.id, :title => title}])
-    end
+      visible.where(:project_id => project.id, :dmsf_folder_id => folder.id, :title => title).first
+    end    
   end
   
   def delete
@@ -99,7 +94,7 @@ class DmsfFolder < ActiveRecord::Base
   def dmsf_path
     folder = self
     path = []
-    while !folder.nil?
+    while folder
       path.unshift(folder)
       folder = folder.folder
     end 
@@ -109,7 +104,7 @@ class DmsfFolder < ActiveRecord::Base
   def dmsf_path_str
     path = self.dmsf_path
     string_path = path.map { |element| element.title }
-    string_path.join("/")
+    string_path.join('/')
   end
   
   def notify?
@@ -195,18 +190,15 @@ class DmsfFolder < ActiveRecord::Base
     new_folder.project = folder ? folder.project : project
     new_folder.title = self.title
     new_folder.description = self.description
-    new_folder.user = User.current
-
-    #copy only cfs present in destination project
-    temp_custom_values = self.custom_values.select{|cv| new_folder.project.all_dmsf_custom_fields.include?(cv.custom_field)}.map(&:clone)
+    new_folder.user = User.current   
     
-    new_folder.custom_values = temp_custom_values
+    new_folder.custom_values = Array.new(self.custom_values)
 
-    #add default value for CFs not existing
+    # Add default value for CFs not existing
     present_custom_fields = new_folder.custom_values.collect(&:custom_field).uniq
-    new_folder.project.all_dmsf_custom_fields.each do |cf|
+    new_folder.available_custom_fields.each do |cf|
       unless present_custom_fields.include?(cf)
-        new_folder.custom_values << CustomValue.new({:custom_field => cf, :value => cf.default_value})
+        new_folder.custom_values << CustomValue.new({:custom_field => cf, :value => cf.default_value}) if cf.default_value
       end
     end
 
@@ -225,17 +217,7 @@ class DmsfFolder < ActiveRecord::Base
 
   # Overrides Redmine::Acts::Customizable::InstanceMethods#available_custom_fields
   def available_custom_fields
-    search_project = nil
-    if self.project.present?
-      search_project = self.project
-    elsif self.project_id.present?
-      search_project = Project.find(self.project_id)
-    end
-    if search_project
-      search_project.all_dmsf_custom_fields
-    else
-      DmsfFileRevisionCustomField.all
-    end
+    DmsfFileRevisionCustomField.all
   end
 
   # To fullfill searchable module expectations
@@ -244,12 +226,12 @@ class DmsfFolder < ActiveRecord::Base
     projects = [] << projects unless projects.nil? || projects.is_a?(Array)
     
     find_options = {:include => [:project]}
-    find_options[:order] = "dmsf_folders.updated_at " + (options[:before] ? 'DESC' : 'ASC')
+    find_options[:order] = 'dmsf_folders.updated_at ' + (options[:before] ? 'DESC' : 'ASC')
     
     limit_options = {}
     limit_options[:limit] = options[:limit] if options[:limit]
     if options[:offset]
-      limit_options[:conditions] = "(dmsf_folders.updated_at " + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
+      limit_options[:conditions] = '(dmsf_folders.updated_at ' + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
     end
     
     columns = options[:titles_only] ? ["dmsf_folders.title"] : ["dmsf_folders.title", "dmsf_folders.description"]

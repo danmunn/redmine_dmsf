@@ -1,60 +1,77 @@
-
+<%# 
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 <div class="box dmsf_detail">
-	<%= hidden_field_tag("commited_files[#{i}][disk_filename]", upload.disk_filename) %>
-	<div class="clear">
-		<div class="splitcontentleft">
-			<p>
-				<%= label_tag("commited_files[#{i}][title]", l(:label_title) + ":") %>
-				<%= text_field_tag("commited_files[#{i}][title]", upload.title, :size => "32") %>
-			</p>
-		</div>
-		<div class="splitcontentright">
-			<p>
-				<%= label_tag("", l(:label_filename) + ":") %>
-				<%= h(upload.name) %>
-				<%= hidden_field_tag("commited_files[#{i}][name]", upload.name) %>
-			</p>
-		</div>
-	</div>
-	<p class="no-ident">
-		<%= label_tag("commited_files[#{i}][description]", l(:label_description) + ":") %>
-	</p>
-	<div class="wiki data clear">
-		<%= text_area_tag("commited_files[#{i}][description]", upload.description, :rows=> "6", :class => "wiki-edit") %>
-	</div>
-	<div class="splitcontentleft">
-		<p>
-			<%= label_tag("commited_files[#{i}][version]_minor", l(:label_version) + ":") %>
-		</p>
-		<div class="data clear">
-			<%= radio_button_tag("commited_files[#{i}][version]", 1, true) %> 
-			<%= upload.major_version %>.<%= upload.minor_version + 1 %> <%= l(:option_version_minor) %><br />
-			<%= radio_button_tag("commited_files[#{i}][version]", 2) %> 
-			<%= upload.major_version + 1 %>.0 <%= l(:option_version_major) %><br />
-		</div>		
-	</div>
-	<div class="splitcontentright clear">
-		<p>
-			<%= label_tag("", l(:label_mime) + ":") %>
-			<%= h(upload.mime_type) %>
-		</p>
-		<p>
-			<%= label_tag("", l(:label_size) + ":") %>
-			<%= number_to_human_size(upload.size) %>
-		</p>
-	</div>
-	<br style="clear: both"/>
-	<% @folder ? folder_exists = true : folder_exists = false %>
-	<% values = folder_exists ? @folder.custom_field_values : DmsfFileRevision.new(:file => DmsfFile.new(:project => @project)).custom_field_values %>
-	<% values.each do |value| %>
-		<p><%= custom_field_tag_with_label("commited_files[#{i}][dmsf_file_revision]", value) %></p>
-	<% end %>
-	<p>
-		<%= label_tag("commited_files[#{i}][comment]", l(:label_comment) + ":") %>
-		<div class="data">
-			<%= text_area_tag("commited_files[#{i}][comment]", upload.comment, :rows=> "2", :style => "width: 99%;") %>
-		</div>
-	</p>
+  <%= hidden_field_tag("commited_files[#{i}][disk_filename]", upload.disk_filename) %>
+  <div class="clear">
+    <div class="splitcontentleft">
+      <p>
+        <%= label_tag("commited_files[#{i}][title]", "#{l(:label_title)}:") %>
+        <%= text_field_tag("commited_files[#{i}][title]", upload.title, :size => '32') %>
+      </p>
+    </div>
+    <div class="splitcontentright">
+      <p>
+        <%= label_tag('', "#{l(:label_filename)}:") %>
+        <%= h(upload.name) %>
+        <%= hidden_field_tag("commited_files[#{i}][name]", upload.name) %>
+      </p>
+    </div>
+  </div>
+  <p class="no-ident">
+    <%= label_tag("commited_files[#{i}][description]", "#{l(:label_description)}:") %>
+  </p>
+  <div class="wiki data clear">
+    <%= text_area_tag("commited_files[#{i}][description]", upload.description, :rows=> '6', :class => 'wiki-edit') %>
+  </div>
+  <div class="splitcontentleft">
+    <p>
+      <%= label_tag("commited_files[#{i}][version]_minor", "#{l(:label_version)}:") %>
+    </p>
+    <div class="data clear">
+      <%= radio_button_tag("commited_files[#{i}][version]", 1, true) %> 
+      <%= upload.major_version %>.<%= upload.minor_version + 1 %> <%= l(:option_version_minor) %><br />
+      <%= radio_button_tag("commited_files[#{i}][version]", 2) %> 
+      <%= upload.major_version + 1 %>.0 <%= l(:option_version_major) %><br />
+    </div>		
+  </div>
+  <div class="splitcontentright clear">
+    <p>
+      <%= label_tag('', "#{l(:label_mime)}:") %>
+      <%= h(upload.mime_type) %>
+    </p>
+    <p>
+      <%= label_tag('', "#{l(:label_size)}:") %>
+      <%= number_to_human_size(upload.size) %>
+    </p>
+  </div>
+  <br style="clear: both"/>	
+  <% values = DmsfFileRevision.new(:file => DmsfFile.new(:project => @project)).custom_field_values %>
+  <% values.each do |value| %>
+    <p><%= custom_field_tag_with_label("commited_files[#{i}][dmsf_file_revision]", value) %></p>
+  <% end %>
+  <p>
+    <%= label_tag("commited_files[#{i}][comment]", "#{l(:label_comment)}:") %>
+    <div class="data">
+      <%= text_area_tag("commited_files[#{i}][comment]", upload.comment, :rows=> '2', :style => 'width: 99%;') %>
+    </div>
+  </p>
 </div>
 
 <%= wikitoolbar_for "commited_files_#{i}_description" %>

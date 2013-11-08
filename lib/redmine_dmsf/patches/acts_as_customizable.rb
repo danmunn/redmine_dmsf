@@ -1,7 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   V�t Jon� <vit.jonas@gmail.com>
+# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,13 +22,24 @@ module Redmine
   module Acts
     module Customizable
       module InstanceMethods
-        def available_custom_fields
-          cf_classname = self.class.name == 'DmsfFolder' ? 'DmsfFileRevision' : self.class.name
-          CustomField.find(:all, :conditions => "type = '#{cf_classname}CustomField'", :order => 'position')
-        end
+#        def available_custom_fields
+#          cf_classname = self.class.name == 'DmsfFolder' ? 'DmsfFileRevision' : self.class.name
+#          CustomField.find(:all, :conditions => "type = '#{cf_classname}CustomField'", :order => 'position')
+#        end
 
         def show_custom_field_values
-          custom_field_values.delete_if { |x| (!x.id && x.id.blank?) || x.value.blank? }
+#          a = custom_field_values
+#          c = a.count
+#          custom_field_values.each do |v|
+#            if v.id.blank?
+#              if v.value.blank?
+#                d = true
+#              end
+#            end
+#          end
+          #custom_field_values.delete_if { |x| (!x.id && x.id.blank?) || x.value.blank? } if d
+          custom_field_values.delete_if { |v| v.custom_field.blank? || v.value.blank? }
+#          b = a.count
         end
       end
     end

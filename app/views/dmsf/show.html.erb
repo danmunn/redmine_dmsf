@@ -54,10 +54,10 @@
 </h2>
 
 <div class="dmsf-header">
-	<div class="wiki">
-	<%= textilizable(@folder.nil? ? @project.dmsf_description : @folder.description) %>
-	</div>
-	<%= render "custom_fields", :object => @folder %>
+  <div class="wiki">
+    <%= textilizable(@folder ? @folder.description : @project.dmsf_description) %>
+  </div>
+    <%#= render 'custom_fields', :object => @folder %>
 </div>
 
 <%= error_messages_for('dmsf_workflow') %>
@@ -98,7 +98,7 @@
           {:action => "show", :id => @project, :folder_id => subfolder},
           :class => "icon icon-folder") %>
         <div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.deep_file_count %>]</div>
-        <%= render 'custom_fields', :object => subfolder %>
+        <%#= render 'custom_fields', :object => subfolder %>
       </td>
       <td class="size" title="<%= l(:title_total_size_of_all_files)%>"><%= number_to_human_size(subfolder.deep_size) %></td>
       <td class="modified"><%= format_time(subfolder.updated_at) %>
@@ -178,7 +178,7 @@
                         :title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version),
                         "data-downloadurl" => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_download_url}") %>
         <div class="filename" title="<%= l(:title_filename_for_download)%>"><%= h(file.display_name) %></div>
-        <%= render 'custom_fields', :object => file.last_revision %>
+        <%#= render 'custom_fields', :object => file.last_revision %>
       </td>
       <td class="size"><%= number_to_human_size(file.last_revision.size) %></td>
       <td class="modified">

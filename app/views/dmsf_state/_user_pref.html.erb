@@ -1,39 +1,40 @@
+<%# 
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
 <p><strong><%=l(:link_user_preferences)%></strong></p>
 <div class="box">
-	<%= form_tag({:controller => "dmsf_state", :action => "user_pref_save", :id => @project},
-		:method=>:post) do %>
-	<div>
-		<% 
-			member = @project.members.find(:first, :conditions => {:user_id => User.current.id})
-			mail_notification = member ? member.dmsf_mail_notification : nil
-		%>
-		<%= l(:label_notifications) %>: 
-		<%= select_tag("email_notify", 
-				options_for_select([[l(:select_option_default), nil], 
-					[l(:select_option_activated), true], [l(:select_option_deactivated), false]], 
-					:selected => mail_notification)) %>
-		<%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
-	</div>
-	<% end %>
-	
-        <% custom_fields = DmsfFileRevisionCustomField.find(:all) %>
-        <% unless custom_fields.empty? %>
-          <%= form_for @project, :url => project_path(@project), :html => {:method=>:post} do %>            
-            <fieldset id="project_issue_custom_fields"><legend><%=l(:label_custom_field_plural)%></legend>
-                <% custom_fields.each do |custom_field| %>
-                  <label class="floating">
-                    <%= check_box_tag 'project[dmsf_file_revision_custom_field_ids][]', custom_field.id, (@project.all_dmsf_custom_fields.include? custom_field), (custom_field.is_for_all? ? {:disabled => "disabled"} : {}) %>
-                    <%= custom_field.name %>
-                  </label>
-                <% end %>
-                <%= hidden_field_tag 'project[dmsf_file_revision_custom_field_ids][]', '' %>
-                <%= hidden_field_tag '_method', 'put' %>
-            </fieldset>              
-            <%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
-        <% end %>
-	<% end %>
+  <%= form_tag({:controller => 'dmsf_state', :action => 'user_pref_save', :id => @project}, :method => :post) do %>
+    <div>
+      <% member = @project.members.find(:first, :conditions => {:user_id => User.current.id}) %>
+      <% mail_notification = member ? member.dmsf_mail_notification : nil %>
+      <%= l(:label_notifications) %>: 
+      <%= select_tag(
+            'email_notify', 
+            options_for_select([[l(:select_option_default), nil], 
+            [l(:select_option_activated), true], [l(:select_option_deactivated), false]], 
+            :selected => mail_notification)) %>
+      <%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
+    </div>
+  <% end %>	       
 </div>
 
 <% content_for :header_tags do %>
-	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
+  <%= stylesheet_link_tag 'dmsf', :plugin => 'redmine_dmsf' %>
 <% end %>

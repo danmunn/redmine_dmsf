@@ -42,9 +42,9 @@ module RedmineDmsf
       end
 
       module InstanceMethods
-        def all_dmsf_custom_fields
-          @all_dmsf_custom_fields ||= (DmsfFileRevisionCustomField.for_all).uniq.sort # + dmsf_file_revision_custom_fields).uniq.sort
-        end
+        #def all_dmsf_custom_fields
+        #  @all_dmsf_custom_fields ||= (DmsfFileRevisionCustomField.for_all).uniq.sort # + dmsf_file_revision_custom_fields).uniq.sort
+        #end
 
         def dmsf_count
           file_count = DmsfFile.visible.project_root_files(self).count
