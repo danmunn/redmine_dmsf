@@ -5,7 +5,7 @@ module RedmineDmsf
 
       def view_projects_form(context={})
         context[:controller].send(:render_to_string, {
-          :partial => "hooks/redmine_dmsf/view_projects_form",
+          :partial => 'hooks/redmine_dmsf/view_projects_form',
           :locals => context
         })
 

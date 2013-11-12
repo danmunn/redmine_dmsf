@@ -1,3 +1,25 @@
+<%#=
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
@@ -8,36 +30,36 @@
           <%= image_tag('locked.png', :plugin => :redmine_dmsf, :title => l(:title_file_parent_locked, :name => @file.lock.reverse[0].folder.title)) %>
         <% else %>
           <%= link_to_function(image_tag('unlock.png', :plugin => 'redmine_dmsf'),
-                            "manipulation_link('#{url_for(:action => 'unlock', :id => @file, :current => request.url)}')",
-                            :title => l(:title_unlock_file)) %>
+            "manipulation_link('#{url_for(:action => 'unlock', :id => @file, :current => request.url)}')",
+            :title => l(:title_unlock_file)) %>
         <% end %>
       <% else %>
         <%= link_to_function(image_tag('lock.png', :plugin => 'redmine_dmsf'),
-                        "manipulation_link('#{url_for(:action => 'lock', :id => @file, :current => request.url)}')",
-                        :title => l(:title_lock_file)) %>
+          "manipulation_link('#{url_for(:action => 'lock', :id => @file, :current => request.url)}')",
+          :title => l(:title_lock_file)) %>
       <% end %> 
     <% end %>
     <% if User.current.allowed_to?(:file_manipulation, @project) && !@file.locked_for_user? %>
       &nbsp;
       <%= link_to_function(image_tag('delete.png', :plugin => 'redmine_dmsf'),
-                      "confirmation_link('#{url_for(:action => 'delete', :id => @file)}', '#{l(:question_do_you_really_want_to_delete_this_entry)}')", 
-                      :title => l(:title_delete)) %>
+        "confirmation_link('#{url_for(:action => 'delete', :id => @file)}', '#{l(:question_do_you_really_want_to_delete_this_entry)}')", 
+        :title => l(:title_delete)) %>
     <% end %>
     <% if User.current.allowed_to?(:file_approval, @project) %>
       &nbsp;
       <% if @file.notification %>
         <%= link_to_function(image_tag('notify.png', :plugin => 'redmine_dmsf'),
-                        "manipulation_link('#{url_for(:action => 'notify_deactivate', :id => @file, :current => request.url)}')",
-                        :title => l(:title_notifications_active_deactivate)) %>
+          "manipulation_link('#{url_for(:action => 'notify_deactivate', :id => @file, :current => request.url)}')",
+          :title => l(:title_notifications_active_deactivate)) %>
       <% else %>
         <%= link_to_function(image_tag('notifynot.png', :plugin => 'redmine_dmsf'),
-                        "manipulation_link('#{url_for(:action => 'notify_activate', :id => @file, :current => request.url)}')",
-                        :title => l(:title_notifications_not_active_activate)) %>
+          "manipulation_link('#{url_for(:action => 'notify_activate', :id => @file, :current => request.url)}')",
+          :title => l(:title_notifications_not_active_activate)) %>
       <% end %>
     <% end %>
   <% end %>
   &nbsp;
-  <%= link_to(image_tag('copy.png'), {:controller => :dmsf_files_copy, :action => "new", :id => @file }, :title => l(:title_copy_or_move)) %>
+  <%= link_to(image_tag('copy.png'), {:controller => :dmsf_files_copy, :action => 'new', :id => @file }, :title => l(:title_copy_or_move)) %>
 </div>
 
 <h2>  
@@ -54,10 +76,8 @@
 
 <%= error_messages_for('file') %>
 <%= error_messages_for('revision') %>
-
 <%= render(:partial => 'file_new_revision') if User.current.allowed_to?(:file_manipulation, @file.project) %>
-
-<%= form_tag('', :id => 'manipulation_form') %>
+<%= form_tag('', :id => 'entries_form') %>
 
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.revisions.visible[@revision_pages.current.offset,@revision_pages.items_per_page].each do |revision| %>
@@ -67,12 +87,12 @@
         <div class="controls" style="float: right">
           <%= link_to_function(image_tag('rev_downloads.png', :plugin => 'redmine_dmsf'), "$('#revision_access-#{revision.id}').toggle()", :title => 'Download entries')%>
           <%= link_to(image_tag('rev_download.png', :plugin => 'redmine_dmsf'),
-                {:action => 'show', :id => @file, :download => revision},
-                :title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version)) %>
+            {:action => 'show', :id => @file, :download => revision},
+            :title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version)) %>
           <% if User.current.allowed_to?(:file_approval, @project) %>          
             <%= link_to_function(image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
-                "confirmation_link('#{url_for(:action => 'delete_revision', :id => revision)}', '#{l(:question_do_you_really_want_to_delete_this_revision)}')",
-                :title => l(:title_delete_revision)) %>
+              "confirmation_link('#{url_for(:action => 'delete_revision', :id => revision)}', '#{l(:question_do_you_really_want_to_delete_this_revision)}')",
+              :title => l(:title_delete_revision)) %>
           <% end %>
         </div>      
         <i><%= l(:info_revision, :rev => revision.id) %></i>
@@ -184,19 +204,5 @@
   <%= stylesheet_link_tag 'dmsf', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag 'jquery-1.6.1.min.js', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag 'jquery-ui-1.8.13.min.js', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>
-  <script type="text/javascript">
-    jQuery.noConflict();
-
-    function manipulation_link(action) {
-      jQuery('#manipulation_form').attr('action', action);
-      jQuery('#manipulation_form').submit();
-    };
-
-    function confirmation_link(action, question) {
-      if(!window.confirm(question)) return;
-      jQuery('#manipulation_form').attr('action', action);
-      jQuery('#manipulation_form').submit();
-    };
-  </script>
+  <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>  
 <% end %>
