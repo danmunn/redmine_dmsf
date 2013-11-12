@@ -1,7 +1,9 @@
-<%# 
+<%#=
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -61,9 +63,8 @@
       <%= number_to_human_size(upload.size) %>
     </p>
   </div>
-  <br style="clear: both"/>	
-  <% values = DmsfFileRevision.new(:file => DmsfFile.new(:project => @project)).custom_field_values %>
-  <% values.each do |value| %>
+  <br style="clear: both"/>	  
+  <% upload.custom_values.each do |value| %>
     <p><%= custom_field_tag_with_label("commited_files[#{i}][dmsf_file_revision]", value) %></p>
   <% end %>
   <p>

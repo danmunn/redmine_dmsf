@@ -28,7 +28,7 @@ class DmsfController < ApplicationController
   helper :all
 
   def show
-    if @folder.nil?
+    unless @folder
       @subfolders = @project.dmsf_folders.visible
       @files = @project.dmsf_files.visible
     else 
@@ -37,7 +37,11 @@ class DmsfController < ApplicationController
     end
     
     @files.sort! do |a,b|
-      a.last_revision.title <=> b.last_revision.title
+      if a.last_revision && b.last_revision
+        a.last_revision.title <=> b.last_revision.title
+      else
+        0
+      end
     end
   end
 

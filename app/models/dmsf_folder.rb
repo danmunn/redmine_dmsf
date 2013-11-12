@@ -192,15 +192,10 @@ class DmsfFolder < ActiveRecord::Base
     new_folder.description = self.description
     new_folder.user = User.current   
     
-    new_folder.custom_values = Array.new(self.custom_values)
-
-    # Add default value for CFs not existing
-    present_custom_fields = new_folder.custom_values.collect(&:custom_field).uniq
-    new_folder.available_custom_fields.each do |cf|
-      unless present_custom_fields.include?(cf)
-        new_folder.custom_values << CustomValue.new({:custom_field => cf, :value => cf.default_value}) if cf.default_value
-      end
-    end
+    new_folder.custom_values = []
+    self.custom_values.each do |cv|
+      new_folder.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
+    end        
 
     return new_folder unless new_folder.save
     

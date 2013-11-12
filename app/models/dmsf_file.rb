@@ -103,10 +103,7 @@ class DmsfFile < ActiveRecord::Base
       errors[:base] << l(:error_file_is_locked)
       return false 
     end
-    if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
-      CustomValue.where(:customized_id => self.id).all.each do |v|
-        v.destroy
-      end
+    if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']     
       self.revisions.visible.each {|r| r.delete(true)}
       self.destroy
     else
@@ -179,12 +176,7 @@ class DmsfFile < ActiveRecord::Base
     end
     projects
   end
-
-  # Overrides Redmine::Acts::Customizable::InstanceMethods#available_custom_fields
-  def available_custom_fields
-    DmsfFileRevisionCustomField.all
-  end
-
+  
   def move_to(project, folder)
     if self.locked_for_user?
       errors[:base] << l(:error_file_is_locked)
@@ -196,18 +188,11 @@ class DmsfFile < ActiveRecord::Base
     new_revision.folder = folder
     new_revision.project = folder ? folder.project : project
     new_revision.comment = l(:comment_moved_from, :source => "#{self.project.identifier}:#{self.dmsf_path_str}") 
-
+    
     new_revision.custom_values = []
-    temp_custom_values = self.last_revision.custom_values.select{|cv| new_revision.available_custom_fields.include?(cv.custom_field)}.map(&:clone)
-    new_revision.custom_values = temp_custom_values
-
-    # Add default value for CFs not existing
-    present_custom_fields = new_revision.custom_values.collect(&:custom_field).uniq
-    new_revision.available_custom_fields.each do |cf|
-      unless present_custom_fields.include?(cf)
-        new_revision.custom_values << CustomValue.new({:custom_field => cf, :value => cf.default_value}) if cf.default_value
-      end
-    end
+    self.last_revision.custom_values.each do |cv|
+      new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
+    end        
     
     # If the target project differs from the source project we must physically move the file
     if self.project != new_revision.project
@@ -219,7 +204,7 @@ class DmsfFile < ActiveRecord::Base
     self.folder = new_revision.folder
     self.project = new_revision.project
 
-    self.save && new_revision.save    
+    self.save && new_revision.save        
   end
   
   def copy_to(project, folder)
@@ -237,19 +222,14 @@ class DmsfFile < ActiveRecord::Base
       new_revision.project = folder ? folder.project : project
       new_revision.comment = l(:comment_copied_from, :source => "#{self.project.identifier}: #{self.dmsf_path_str}")
       
-      new_revision.custom_values = Array.new(self.last_revision.custom_values)
-
-      # Add default value for CFs not existing
-      present_custom_fields = new_revision.custom_values.collect(&:custom_field).uniq
-      new_revision.available_custom_fields.each do |cf|
-        unless present_custom_fields.include?(cf)
-          new_revision.custom_values << CustomValue.new({:custom_field => cf, :value => cf.default_value}) if cf.default_value
-        end
+      new_revision.custom_values = []
+      self.last_revision.custom_values.each do |cv|
+        new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
       end
 
       unless new_revision.save
         file.delete
-      else
+      else        
         # If the target project differs from the source project we must physically copy the file
         if project != self.project          
           if File.exist? self.last_revision.disk_file
@@ -263,21 +243,21 @@ class DmsfFile < ActiveRecord::Base
   end
   
   # To fullfill searchable module expectations
-  def self.search(tokens, projects=nil, options={})
+  def self.search(tokens, projects = nil, options = {})
     tokens = [] << tokens unless tokens.is_a?(Array)
     projects = [] << projects unless projects.nil? || projects.is_a?(Array)
     
     find_options = {:include => [:project,:revisions]}
-    find_options[:order] = "dmsf_files.updated_at " + (options[:before] ? 'DESC' : 'ASC')
+    find_options[:order] = 'dmsf_files.updated_at ' + (options[:before] ? 'DESC' : 'ASC')
     
     limit_options = {}
     limit_options[:limit] = options[:limit] if options[:limit]
     if options[:offset]
-      limit_options[:conditions] = "(dmsf_files.updated_at " + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
+      limit_options[:conditions] = '(dmsf_files.updated_at ' + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
     end
     
-    columns = ["dmsf_files.name","dmsf_file_revisions.title", "dmsf_file_revisions.description"]
-    columns = ["dmsf_file_revisions.title"] if options[:titles_only]
+    columns = %w(dmsf_files.name, dmsf_file_revisions.title, dmsf_file_revisions.description)
+    columns = ['dmsf_file_revisions.title'] if options[:titles_only]
             
     token_clauses = columns.collect {|column| "(LOWER(#{column}) LIKE ?)"}
     
@@ -309,7 +289,7 @@ class DmsfFile < ActiveRecord::Base
       unless database.nil?
         enquire = Xapian::Enquire.new(database)
         
-        queryString = tokens.join(' ')
+        query_string = tokens.join(' ')
         qp = Xapian::QueryParser.new()
         stemmer = Xapian::Stem.new(Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].strip)
         qp.stemmer = stemmer
@@ -330,7 +310,7 @@ class DmsfFile < ActiveRecord::Base
           qp.default_op = Xapian::Query::OP_OR
         end
         
-        query = qp.parse_query(queryString)
+        query = qp.parse_query(query_string)
   
         enquire.query = query
         matchset = enquire.mset(0, 1000)

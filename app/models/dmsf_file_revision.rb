@@ -71,20 +71,14 @@ class DmsfFileRevision < ActiveRecord::Base
       errors[:base] << l(:error_at_least_one_revision_must_be_present)
       return false
     end
-    dependent = DmsfFileRevision.find(:source_dmsf_file_revision_id => self.id, :deleted => false).all        
+    dependent = DmsfFileRevision.where(:source_dmsf_file_revision_id => self.id, :deleted => false).all        
     dependent.each do |d| 
       d.source_revision = self.source_revision
       d.save!
     end
     if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
-      dependent = DmsfFileRevision..where(:disk_filename => self.disk_filename).all        
-      File.delete(self.disk_file) if dependent.length <= 1 && File.exist?(self.disk_file) 
-      DmsfFileRevisionAccess.where(:dmsf_file_revision_id => self.id).all.each do |a| 
-        a.destroy
-      end
-      CustomValue.find(:customized_id => self.id).all.each do |v|
-        v.destroy
-      end
+      dependencies = DmsfFileRevision.where(:disk_filename => self.disk_filename).all.count
+      File.delete(self.disk_file) if dependencies <= 1 && File.exist?(self.disk_file)       
       self.destroy
     else
       self.deleted = true
@@ -132,8 +126,7 @@ class DmsfFileRevision < ActiveRecord::Base
   # TODO: use standard clone method
   def clone
     new_revision = DmsfFileRevision.new
-    new_revision.file = self.file
-    new_revision.project = self.project
+    new_revision.file = self.file    
     new_revision.disk_filename = self.disk_filename
     new_revision.size = self.size
     new_revision.mime_type = self.mime_type
@@ -141,17 +134,11 @@ class DmsfFileRevision < ActiveRecord::Base
     new_revision.description = self.description
     new_revision.workflow = self.workflow
     new_revision.major_version = self.major_version
-    new_revision.minor_version = self.minor_version
-    
+    new_revision.minor_version = self.minor_version    
     new_revision.source_revision = self
-    new_revision.user = User.current
-    
-    new_revision.name = self.name
-    new_revision.folder = self.folder
-
-    new_revision.custom_values = self.custom_values.map(&:clone)
-
-    return new_revision
+    new_revision.user = User.current    
+    new_revision.name = self.name    
+    new_revision
   end
     
   def workflow_str(name)

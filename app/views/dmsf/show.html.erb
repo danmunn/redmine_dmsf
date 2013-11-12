@@ -167,16 +167,20 @@
   <% end %>
   <% workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0 %>
   <% @files.each do |file| %>
+    <% unless file.last_revision %>      
+      <% Rails.logger.error "Error: dmsf_file id #{file.id} has no revision!" %>
+      <% next %>
+    <% end %>
     <% wf = DmsfWorkflow.find_by_id(file.last_revision.dmsf_workflow_id) %>
     <tr class="file">
-      <td class="check"><%= check_box_tag("files[]", file.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
+      <td class="check"><%= check_box_tag('files[]', file.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
       <td class="title">
-        <% file_download_url = url_for({:only_path => false, :controller => :dmsf_files, :action => "show", :id => file, :download => ""}) %>
+        <% file_download_url = url_for({:only_path => false, :controller => :dmsf_files, :action => 'show', :id => file, :download => ''}) %>
         <%= link_to(h(file.last_revision.display_title),
-                file_download_url,
-                :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}",
-                        :title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version),
-                        "data-downloadurl" => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_download_url}") %>
+              file_download_url,
+              :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}",
+              :title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version),
+              'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_download_url}") %>
         <div class="filename" title="<%= l(:title_filename_for_download)%>"><%= h(file.display_name) %></div>
         <%#= render 'custom_fields', :object => file.last_revision %>
       </td>
@@ -300,7 +304,7 @@
         <br class="clear" />
       </td>
       <td class="hidden">1</td>
-      <td class="hidden"><%=file.last_revision.size%></td>
+      <td class="hidden"><%=  file.last_revision.size %></td>
     </tr>
   <% end %>
   </tbody>
