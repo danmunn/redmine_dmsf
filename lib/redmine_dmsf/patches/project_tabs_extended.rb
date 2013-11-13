@@ -52,7 +52,7 @@ module RedmineDmsf
   end
 end
 
-#Apply patch
+# Apply patch
 Rails.configuration.to_prepare do
   unless ProjectsHelper.included_modules.include?(RedmineDmsf::Patches::ProjectTabsExtended)
     ProjectsHelper.send(:include, RedmineDmsf::Patches::ProjectTabsExtended)

@@ -1,7 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   V�t Jon� <vit.jonas@gmail.com>
+# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -42,10 +43,7 @@ module RedmineDmsf
       end
 
       module InstanceMethods
-        #def all_dmsf_custom_fields
-        #  @all_dmsf_custom_fields ||= (DmsfFileRevisionCustomField.for_all).uniq.sort # + dmsf_file_revision_custom_fields).uniq.sort
-        #end
-
+        
         def dmsf_count
           file_count = DmsfFile.visible.project_root_files(self).count
           folder_count = DmsfFolder.visible.project_root_folders(self).count
