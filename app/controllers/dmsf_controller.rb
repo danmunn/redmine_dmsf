@@ -33,6 +33,9 @@ class DmsfController < ApplicationController
   helper :all
 
   def show
+    @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
+    @file_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
+    
     unless @folder
       @subfolders = @project.dmsf_folders.visible
       @files = @project.dmsf_files.visible      
