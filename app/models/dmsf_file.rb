@@ -82,7 +82,7 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def self.project_root_files(project)
-    visible.where(:dmsf_folder_id => nil, :project_id => project.if).order('name ASC')
+    visible.where(:project_id => project.id, :dmsf_folder_id => nil).order('name ASC')
   end
   
   def self.find_file_by_name(project, folder, name)

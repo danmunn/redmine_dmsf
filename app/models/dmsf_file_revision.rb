@@ -87,6 +87,14 @@ class DmsfFileRevision < ActiveRecord::Base
     end
   end
   
+  def destroy
+    if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
+      dependencies = DmsfFileRevision.where(:disk_filename => self.disk_filename).all.count
+      File.delete(self.disk_file) if dependencies <= 1 && File.exist?(self.disk_file)
+    end
+    super
+  end
+  
   # In a static call, we find the first matched record on base object type and
   # then run the access_grouped call against it
   def self.access_grouped(revision_id)
