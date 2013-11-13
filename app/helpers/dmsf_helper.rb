@@ -16,8 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require "tmpdir"
-require "digest/md5"
+require 'tmpdir'
+require 'digest/md5'
 
 module DmsfHelper
 
@@ -72,7 +72,7 @@ module DmsfHelper
     # Why can't Mysql::Time conform to time object? - without a utc? method it breaks redmine's
     # rendering method, so we convert it to string, and back into time - not the most efficient 
     # of methods - however seems functional. Not sure if MySQL
-    return obj.to_s.to_time(ActiveRecord::Base.default_timezone) if obj.class.name == "Mysql::Time"
+    return obj.to_s.to_time(ActiveRecord::Base.default_timezone) if obj.class.name == 'Mysql::Time'
     return obj
   end
   

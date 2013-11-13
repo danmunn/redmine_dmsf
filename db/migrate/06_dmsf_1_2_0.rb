@@ -19,11 +19,11 @@
 class Dmsf120 < ActiveRecord::Migration
   
   class DmsfFileRevision < ActiveRecord::Base
-    belongs_to :file, :class_name => "DmsfFile", :foreign_key => "dmsf_file_id"
-    belongs_to :source_revision, :class_name => "DmsfFileRevision", :foreign_key => "source_dmsf_file_revision_id"
+    belongs_to :file, :class_name => 'DmsfFile', :foreign_key => 'dmsf_file_id'
+    belongs_to :source_revision, :class_name => 'DmsfFileRevision', :foreign_key => 'source_dmsf_file_revision_id'
     belongs_to :user
-    belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "dmsf_folder_id"
-    belongs_to :deleted_by_user, :class_name => "User", :foreign_key => "deleted_by_user_id"
+    belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
+    belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
     belongs_to :project
   end
   

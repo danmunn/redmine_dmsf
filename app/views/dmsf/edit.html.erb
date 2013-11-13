@@ -20,12 +20,12 @@
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
-	<%= link_to(image_tag("copy.png"), {:controller => :dmsf_folders_copy, :action => "new", :id => @folder }, :title => l(:title_copy)) unless @folder.id.nil? %>
+  <%= link_to(image_tag('copy.png'), 
+    {:controller => :dmsf_folders_copy, :action => 'new', :id => @folder }, 
+    :title => l(:title_copy)) if @folder.id %>
 </div>
 
-<% 
-  create = @pathfolder == @parent 
-%>
+<% create = @pathfolder == @parent %>
 
 <h2>  
   <% path = @pathfolder ? @pathfolder.dmsf_path : [] %>  
@@ -37,43 +37,43 @@
   <%= "/ #{l(:heading_new_folder)}" if create %>
 </h2>
 
-<%= form_for(@folder, :url => {:action => create ? "create" : "save", :id => @project, :folder_id => @folder, :parent_id => @parent},
-	:html => {:method=>:post}) do |f| %>
-	<%= error_messages_for(@folder) %>
-	<div class="box dmsf_detail">
-		<div class="clear">
-			<div class="splitcontentleft">
-				<p>
-					<%= label_tag("dmsf_folder_title", l(:label_title) + ":") %>
-					<%= f.text_field(:title, :size => "32", :required => true) %>
-				</p>
-			</div>
-			<div class="splitcontentright">
-				<p>
-					<%= label_tag("", l(:field_folder) + ":") %>
-					<%= f.select(:dmsf_folder_id, 
-						options_for_select(DmsfFolder.directory_tree(@project, @folder), 	
-                                                  :selected => @parent? @parent.id : (@pathfolder.id if @pathfolder)))                                                  
-					%>				
-				</p>
-			</div>
-		</div>
-		<p class="no-ident">
-			<%= label_tag("dmsf_folder_description", l(:label_description) + ":") %>
-		</p>
-		<div class="wiki data clear">
-			<%= f.text_area(:description, :rows => 15, :class => "wiki-edit") %>
-		</div>
-		<% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
-		<% values.each do |value| %>
-			<p><%= custom_field_tag_with_label(:dmsf_folder, value) %></p>
-		<% end %>
-	</div>
-	<%= submit_tag(create ? l(:submit_create) : l(:submit_save)) %>
+<%= form_for(@folder, :url => {:action => create ? 'create' : 'save', :id => @project, :folder_id => @folder, :parent_id => @parent},
+  :html => {:method=>:post}) do |f| %>
+  <%= error_messages_for(@folder) %>
+  <div class="box dmsf_detail">
+    <div class="clear">
+      <div class="splitcontentleft">
+        <p>
+          <%= label_tag('dmsf_folder_title', "#{l(:label_title)}:") %>
+          <%= f.text_field(:title, :size => '32', :required => true) %>
+        </p>
+      </div>
+      <div class="splitcontentright">
+        <p>
+          <%= label_tag('', "#{l(:field_folder)}:") %>
+          <%= f.select(:dmsf_folder_id, 
+            options_for_select(DmsfFolder.directory_tree(@project, @folder), 	
+            :selected => @parent? @parent.id : (@pathfolder.id if @pathfolder)))                                                  
+          %>				
+        </p>
+      </div>
+    </div>
+    <p class="no-ident">
+      <%= label_tag('dmsf_folder_description', "#{l(:label_description)}:") %>
+    </p>
+    <div class="wiki data clear">
+      <%= f.text_area(:description, :rows => 15, :class => 'wiki-edit') %>
+    </div>
+    <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
+    <% values.each do |value| %>
+      <p><%= custom_field_tag_with_label(:dmsf_folder, value) %></p>
+    <% end %>
+  </div>
+  <%= submit_tag(create ? l(:submit_create) : l(:submit_save)) %>
 <% end %>
 
-<%= wikitoolbar_for "dmsf_folder_description" %>
+<%= wikitoolbar_for 'dmsf_folder_description' %>
 
 <% content_for :header_tags do %>
-	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
+  <%= stylesheet_link_tag 'dmsf', :plugin => 'redmine_dmsf' %>
 <% end %>

@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require "mailer"
+require 'mailer'
 
 class DmsfMailer < Mailer
   
@@ -31,29 +31,29 @@ class DmsfMailer < Mailer
     @project = project
 
     mail :to => get_notify_user_emails(user, files),
-      :subject =>  project.name + ": Dmsf files updated"
+      :subject =>  "#{project.name}: Dmsf files updated"
   end
   
   def files_deleted(user, files)
     project = files[0].project
     files = files.select { |file| file.notify? }
     
-    redmine_headers "Project" => project.identifier
+    redmine_headers 'Project' => project.identifier
 
     @user = user
     @files = files
     @project = project
 
     mail :to => get_notify_user_emails(user, files),
-      :subject => project.name + ": Dmsf files deleted"
+      :subject => "#{project.name}: Dmsf files deleted"
   end
   
   def send_documents(user, email_to, email_cc, email_subject, zipped_content, email_plain_body)
-    zipped_content_data = open(zipped_content, "rb") {|io| io.read }
+    zipped_content_data = open(zipped_content, 'rb') {|io| io.read }
 
     @body = email_plain_body
 
-    attachments['Documents.zip'] = {:content_type => "application/zip", :content => zipped_content_data}
+    attachments['Documents.zip'] = {:content_type => 'application/zip', :content => zipped_content_data}
     mail(:to => email_to, :cc => email_cc, :subject => email_subject, :from => user.mail)
   end
   

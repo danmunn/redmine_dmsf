@@ -55,7 +55,7 @@ class DmsfUploadController < ApplicationController
       return
     end
     @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
-    File.open("#{DmsfHelper.temp_dir}/#{@disk_filename}", "wb") do |f| 
+    File.open("#{DmsfHelper.temp_dir}/#{@disk_filename}", 'wb') do |f| 
       while (buffer = @tempfile.read(8192))
         f.write(buffer)
       end
@@ -65,7 +65,7 @@ class DmsfUploadController < ApplicationController
         File.delete("#{DmsfHelper.temp_dir}/#{@disk_filename}")
       rescue
       end
-      render :layout => nil, :json => { :jsonrpc => "2.0", 
+      render :layout => nil, :json => { :jsonrpc => '2.0', 
         :error => { 
           :code => 103, 
           :message => l(:header_minimum_filesize), 

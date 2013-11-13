@@ -23,7 +23,7 @@ class Dmsf144 < ActiveRecord::Migration
 
 
   class DmsfFileLock < ActiveRecord::Base
-    belongs_to :file, :class_name => "DmsfFile", :foreign_key => "dmsf_file_id"
+    belongs_to :file, :class_name => 'DmsfFile', :foreign_key => 'dmsf_file_id'
     belongs_to :user
   end  
 
@@ -70,7 +70,7 @@ class Dmsf144 < ActiveRecord::Migration
 
     #We need to force our newly found
 
-    say "Applying default lock scope / type - Exclusive / Write"
+    say 'Applying default lock scope / type - Exclusive / Write'
     DmsfFileLock.update_all ['entity_type = ?, lock_type_cd = ?, lock_scope_cd = ?', 0, 0, 0]
 
     #These are not null-allowed columns
@@ -107,9 +107,9 @@ class Dmsf144 < ActiveRecord::Migration
           say "Migration: #{existing} -> #{new_path} failed"
         end
       }
-      say "Action was successful"
+      say 'Action was successful'
     rescue Exception => e
-      say "Action was not successful"
+      say 'Action was not successful'
       puts e.message
       puts e.backtrace.inspect #See issue 86
       #Nothing here, we just dont want a migration to break
@@ -123,10 +123,10 @@ class Dmsf144 < ActiveRecord::Migration
     add_column :dmsf_file_locks, :locked, :boolean, :default => false, :null => false
 
     #Data cleanup - delete all expired locks, or any folder locks
-    say "Removing all expired and/or folder locks"
+    say 'Removing all expired and/or folder locks'
     DmsfFileLock.delete_all ['expires_at < ? OR entity_type = 1', Time.now]
 
-    say "Changing all records to be locked"
+    say 'Changing all records to be locked'
     DmsfFileLock.update_all ['locked = ?', true]
 
     rename_column :dmsf_file_locks, :entity_id, :dmsf_file_id
@@ -139,7 +139,7 @@ class Dmsf144 < ActiveRecord::Migration
 
     #Not sure if this is the right place to do this, as its file manipulation, not database (stricly)
     begin
-      say "restoring old file-structure"
+      say 'restoring old file-structure'
       DmsfFileRevision.visible.each {|rev|
         next if rev.project.nil?
         project = rev.project.identifier.gsub(/[^\w\.\-]/,'_')

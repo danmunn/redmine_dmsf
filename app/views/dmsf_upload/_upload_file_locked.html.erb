@@ -18,45 +18,45 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
 <div class="box dmsf_detail">
-	<%= hidden_field_tag("commited_files[#{i}][disk_filename]", upload.disk_filename) %>
-	<%= hidden_field_tag("commited_files[#{i}][name]", upload.name) %>
-	<p class="warning"><%= l(:info_file_locked) %></p>
-	
-	<div class="clear">
-		<div class="splitcontentleft">
-			<p>
-				<%= label_tag("", l(:label_title) + ":") %>
-				<%= h(upload.title) %>
-			</p>
-		</div>
-		<div class="splitcontentright">
-			<p>
-				<%= label_tag("", l(:label_filename) + ":") %>
-				<%= h(upload.name) %>
-			</p>
-		</div>
-	</div>
-	<p class="no-ident">
-		<%= label_tag("", l(:label_description) + ":") %>
-	</p>
-	<div class="wiki data clear">
-		<%= textilizable(upload.description) %>
-	</div>
-	<div class="splitcontentleft">
-		<p>
-			<%= label_tag("", l(:label_version) + ":") %>
-			<%= upload.major_version %>.<%= upload.minor_version %>
-		</p>		
-	</div>
-	<div class="splitcontentright clear">
-		<p>
-			<%= label_tag("", l(:label_mime) + ":") %>
-			<%= h(upload.mime_type) %>
-		</p>
-		<p>
-			<%= label_tag("", l(:label_size) + ":") %>
-			<%= number_to_human_size(upload.size) %>
-		</p>
-	</div>
-	<br style="clear: both"/>
+  <%= hidden_field_tag("commited_files[#{i}][disk_filename]", upload.disk_filename) %>
+  <%= hidden_field_tag("commited_files[#{i}][name]", upload.name) %>
+  <p class="warning"><%= l(:info_file_locked) %></p>
+
+  <div class="clear">
+    <div class="splitcontentleft">
+      <p>
+        <%= label_tag('', "#{l(:label_title)}:") %>
+        <%= h(upload.title) %>
+      </p>
+    </div>
+    <div class="splitcontentright">
+      <p>
+        <%= label_tag('', "#{l(:label_filename)}:") %>
+        <%= h(upload.name) %>
+      </p>
+    </div>
+  </div>
+  <p class="no-ident">
+    <%= label_tag('', "#{l(:label_description)}:") %>
+  </p>
+  <div class="wiki data clear">
+    <%= textilizable(upload.description) %>
+  </div>
+  <div class="splitcontentleft">
+    <p>
+            <%= label_tag('', "#{l(:label_version)}:") %>
+            <%= upload.major_version %>.<%= upload.minor_version %>
+    </p>		
+  </div>
+  <div class="splitcontentright clear">
+    <p>
+      <%= label_tag('', "#{l(:label_mime)}:") %>
+      <%= h(upload.mime_type) %>
+    </p>
+    <p>
+      <%= label_tag('', "#{l(:label_size)}:") %>
+      <%= number_to_human_size(upload.size) %>
+    </p>
+  </div>
+  <br style="clear: both"/>
 </div>

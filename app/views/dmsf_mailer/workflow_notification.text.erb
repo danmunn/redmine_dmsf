@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
-Dear <%= @user.name %> ,
+<%= @user.name %> ,
 <%= @text1 %>
 <% unless @revision.folder %>
   <%= @text2 %> <%= url_for(:controller => 'dmsf', :action => 'show', :id => @revision.file.project, :only_path => false) %>.

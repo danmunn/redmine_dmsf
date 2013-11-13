@@ -52,30 +52,30 @@ class DmsfFilesCopyController < ApplicationController
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
 
-    if (!@target_folder.nil? && @target_folder == @file.folder) || 
+    if (@target_folder && @target_folder == @file.folder) || 
         (@target_folder.nil? && @file.folder.nil? && @target_project == @file.project)
       flash[:error] = l(:error_target_folder_same)
-      redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
+      redirect_to :action => 'new', :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
 
     new_file = @file.copy_to(@target_project, @target_folder)
     
     unless new_file.errors.empty?
-      flash[:error] = "#{l(:error_file_cannot_be_copied)}: #{new_file.errors.full_messages.join(", ")}"
-      redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
+      flash[:error] = "#{l(:error_file_cannot_be_copied)}: #{new_file.errors.full_messages.join(', ')}"
+      redirect_to :action => 'new', :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
 
     flash[:notice] = l(:notice_file_copied)
-    log_activity(new_file, "was copied (is copy)")
+    log_activity(new_file, 'was copied (is copy)')
     begin 
       DmsfMailer.files_updated(User.current, [new_file]).deliver
     rescue ActionView::MissingTemplate => e
       Rails.logger.error "Could not send email notifications: #{e.message}"
     end
     
-    redirect_to :controller => "dmsf_files", :action => "show", :id => new_file
+    redirect_to :controller => 'dmsf_files', :action => 'show', :id => new_file
   end
 
   def move
@@ -85,27 +85,27 @@ class DmsfFilesCopyController < ApplicationController
       return
     end
     @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
-    if !@target_folder.nil? && @target_folder.project != @target_project
+    if @target_folder && @target_folder.project != @target_project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
 
-    if (!@target_folder.nil? && @target_folder == @file.folder) || 
+    if (@target_folder && @target_folder == @file.folder) || 
         (@target_folder.nil? && @file.folder.nil? && @target_project == @file.project)
       flash[:error] = l(:error_target_folder_same)
-      redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
+      redirect_to :action => 'new', :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
 
     unless @file.move_to(@target_project, @target_folder)
-      flash[:error] = "#{l(:error_file_cannot_be_moved)}: #{@file.errors.full_messages.join(", ")}"
-      redirect_to :action => "new", :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
+      flash[:error] = "#{l(:error_file_cannot_be_moved)}: #{@file.errors.full_messages.join(', ')}"
+      redirect_to :action => 'new', :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
 
     @file.reload
     
     flash[:notice] = l(:notice_file_moved)
-    log_activity(@file, "was moved (is copy)")
+    log_activity(@file, 'was moved (is copy)')
     begin
       # TODO: implement proper mail notification
       DmsfMailer.files_updated(User.current, [@file]).deliver
@@ -113,7 +113,7 @@ class DmsfFilesCopyController < ApplicationController
       Rails.logger.error "Could not send email notifications: #{e.message}"
     end
     
-    redirect_to :controller => "dmsf_files", :action => "show", :id => @file
+    redirect_to :controller => 'dmsf_files', :action => 'show', :id => @file
   end
 
   private

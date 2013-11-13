@@ -31,9 +31,9 @@ module RedmineDmsf
           unloadable
           alias_method_chain :copy, :dmsf
 
-          has_many :dmsf_files, :class_name => "DmsfFile", :foreign_key => "project_id", :conditions => { :dmsf_folder_id => nil }
+          has_many :dmsf_files, :class_name => 'DmsfFile', :foreign_key => 'project_id', :conditions => { :dmsf_folder_id => nil }
           #Fix: should only be root folders not, all folders
-          has_many :dmsf_folders, :class_name => "DmsfFolder", :foreign_key => "project_id", :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy 
+          has_many :dmsf_folders, :class_name => 'DmsfFolder', :foreign_key => 'project_id', :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy 
           has_many :dmsf_workflows, :dependent => :destroy
         end
 
@@ -57,7 +57,7 @@ module RedmineDmsf
           project = project.is_a?(Project) ? project : Project.find(project)
 
           to_be_copied = %w(dmsf)
-          to_be_copied = to_be_copied & options[:only].to_a unless options[:only].nil?
+          to_be_copied = to_be_copied & options[:only].to_a if options[:only].present?
 
           if save
             to_be_copied.each do |name|

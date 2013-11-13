@@ -18,142 +18,140 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
 <div class="box">
-	<%= form_tag({:controller => "dmsf_upload", :action => "upload_files", :id => @project, :folder_id => @folder},
-		:id => "uploadform", :method=>:post, :multipart => true) do %>
-<% if Setting.attachment_max_size.to_i >= 102400 %> 
-	<div class="upload_select">
-		<%= l(:label_file_size) %>: <select id="uploader_select"><option value="1">&lt; 100 MB</option><option value="2">> 100 MB</option></select>
-	</div>
-<% end %>
-<h3><%= l(:heading_file_upload) %></h3>
-<div style="padding-bottom: 6px; line-height: 1.4em; font-size: 0.9em;">
-<span>
-	<% max_file_upload = Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i %>
-	<%= l(:note_uploaded_maximum_files_at_once, :number => max_file_upload) if max_file_upload > 0 %>
-	<%= l(:note_upload_files_greater_than_two_gb) if Setting.attachment_max_size.to_i >= 2097151 %>
-</span>
-</div>
-<div id="uploader">
-<p>
-<span id="uploaded_files_fields">
-<%= file_field_tag("uploaded_files[1]", :size => 30, :id => nil) %>
-</span>
-<br />
-<small><%= link_to(l(:label_add_another_file), "#", :onclick => "dmsfAddFileField(); return false;" ) %>
-(<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
-</small>
-</p>
-<%= submit_tag(l(:submit_upload_files)) %>
-</div>
-<% end %>
+  <%= form_tag({:controller => 'dmsf_upload', :action => 'upload_files', :id => @project, :folder_id => @folder},
+    :id => 'uploadform', :method=>:post, :multipart => true) do %>
+    <% if Setting.attachment_max_size.to_i >= 102400 %> 
+      <div class="upload_select">
+	<%= l(:label_file_size) %>: <select id="uploader_select"><option value="1">&lt; 100 MB</option><option value="2">> 100 MB</option></select>
+      </div>
+    <% end %>
+    <h3><%= l(:heading_file_upload) %></h3>
+    <div style="padding-bottom: 6px; line-height: 1.4em; font-size: 0.9em;">
+      <span>
+        <% max_file_upload = Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i %>
+        <%= l(:note_uploaded_maximum_files_at_once, :number => max_file_upload) if max_file_upload > 0 %>
+        <%= l(:note_upload_files_greater_than_two_gb) if Setting.attachment_max_size.to_i >= 2097151 %>
+      </span>
+    </div>
+    <div id="uploader">
+      <p>
+        <span id="uploaded_files_fields">
+          <%= file_field_tag('uploaded_files[1]', :size => 30, :id => nil) %>
+        </span>
+        <br />
+        <small><%= link_to(l(:label_add_another_file), '#', :onclick => 'dmsfAddFileField(); return false;' ) %>
+          (<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
+        </small>
+      </p>
+      <%= submit_tag(l(:submit_upload_files)) %>
+    </div>
+  <% end %>
 </div>
 
 <script type="text/javascript">
-	var originalUploaderContent;
-	
-	var uploader = jQuery('#uploader');
-	
-	originalUploaderContent = uploader.html();
-	
-	jQuery('#uploader_select').change(function() {
-		if(jQuery(this).val() == 2) {
-			uploader.html(originalUploaderContent);
-		} else {
-			initPlUploader(uploader);
-		}
-	});
-	
-	initPlUploader(uploader);
-	
-	var dmsfFileFieldCount = 1;
+  var originalUploaderContent;
+  var uploader = jQuery('#uploader');
 
-	function dmsfAddFileField() {
-	    if (dmsfFileFieldCount >= 10) return false
-	    dmsfFileFieldCount++;
+  originalUploaderContent = uploader.html();
 
-	    var f = document.createElement("input");
-	    f.type = "file";
-	    f.name = "uploaded_files[" + dmsfFileFieldCount + "]";
-	    f.size = 30;
-	
-	    var p = document.getElementById("uploaded_files_fields");
-	    p.appendChild(document.createElement("br"));
-	    p.appendChild(f);
-	}
+  jQuery('#uploader_select').change(function() {
+    if(jQuery(this).val() === 2) {
+      uploader.html(originalUploaderContent);
+    } else {
+      initPlUploader(uploader);
+    }
+  });
 
+  initPlUploader(uploader);
+
+  var dmsfFileFieldCount = 1;
+
+  function dmsfAddFileField() {
+   if (dmsfFileFieldCount >= 10) return false;
+   dmsfFileFieldCount++;
+
+   var f = document.createElement('input');
+   f.type = 'file';
+   f.name = 'uploaded_files[' + dmsfFileFieldCount + ']';
+   f.size = 30;
+
+   var p = document.getElementById('uploaded_files_fields');
+   p.appendChild(document.createElement('br'));
+   p.appendChild(f);
+  }
 </script>
 
 <% content_for :header_tags do %>
-	<%= javascript_include_tag "bowser.min.js", :plugin => "redmine_dmsf" %>
-	<%= javascript_include_tag "plupload/plupload.js", :plugin => "redmine_dmsf" %>
-	<%= javascript_include_tag "plupload/plupload.flash.js", :plugin => "redmine_dmsf" %>
-	<%= javascript_include_tag "plupload/plupload.html5.js", :plugin => "redmine_dmsf" %>
-	<%= javascript_include_tag "plupload/plupload.html4.js", :plugin => "redmine_dmsf" %>
-	<%= javascript_include_tag "plupload/jquery.ui.plupload/jquery.ui.plupload.js", :plugin => "redmine_dmsf" %>
-	<%= javascript_include_tag("plupload/i18n/#{I18n.locale.to_s.downcase}.js", :plugin => "redmine_dmsf") if I18n.locale && !I18n.locale.to_s.match(/^en.*/) %>
-	
-	<script type="text/javascript">
-		function initPlUploader(uploader) {
-			uploader.html("<div></div>");
-			uploader = jQuery("div",uploader);
-			uploader.plupload({
-				runtimes : 'html5,flash,html4',
-				url : '<%= url_for({:controller => "dmsf_upload", :action => "upload_file", :id => @project}) %>',
-				max_file_size : "100mb",
-				max_file_count: '<%= Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i if Setting.plugin_redmine_dmsf["dmsf_max_file_upload"].to_i > 0 %>',
-				multipart: true,
-				multipart_params : {authenticity_token : jQuery("input[name=authenticity_token]").val()},
-		
-				// Rename files by clicking on their titles
-				rename: true,
-		
-				// Flash settings
-				flash_swf_url : '<%= plugin_asset_path(:redmine_dmsf, "javascripts", "plupload/plupload.flash.swf") %>'
-			});
-			jQuery(".plupload_scroll",uploader).resizable({
-				handles: "s"
-			});
-			var pluploader = uploader.plupload('getUploader');
-			
-			pluploader.bind('FileUploaded', function(pluploader, file, response) {
-				var responseObject = jQuery.parseJSON(response.response);
-				if (responseObject == null) { //Bug: on Firefox folders entries act unexpectedly.
-					file.status = plupload.FAILED;
-					pluploader.trigger('UploadProgress', file);
-					pluploader.trigger('QueueChanged');
-				} else {
-					if (responseObject.error == null) {
-						var disk_filename_input = jQuery("<input/>").attr("type","hidden")
-							.attr("name","uploaded[" + dmsfFileFieldCount + "][disk_filename]")
-							.val(responseObject.disk_filename);
-						uploader.append(disk_filename_input);
-						var content_type_input = jQuery("<input/>").attr("type","hidden")
-							.attr("name","uploaded[" + dmsfFileFieldCount + "][content_type]")
-							.val(responseObject.content_type);
-						uploader.append(content_type_input);
-						var original_filename_input = jQuery("<input/>").attr("type","hidden")
-							.attr("name","uploaded[" + dmsfFileFieldCount + "][original_filename]")
-							.val(responseObject.original_filename);
-						uploader.append(original_filename_input);
-					} else {
-						file.status = plupload.FAILED;
-//						responseObject.error.file = file;
-//						pluploader.trigger('Error', responseObject.error); 
-						pluploader.trigger('UploadProgress', file);
-						pluploader.trigger('QueueChanged');
-						/*
-							To-do: Though this is the documented method of reporting an error, on chrome this seems
-							to result in a bug, where the file afterwards seems to be out of sync and fired at the same
-							time as another, however this will only process one return from this. If I notify of a file fault, but don't
-							trigger a message, all seems to work as indtended.
-						*/
-					}
-				}
-				if(pluploader.total.uploaded == pluploader.files.length) jQuery('#uploadform').submit();
-				else if(pluploader.total.uploaded + pluploader.total.failed == pluploader.files.length) setTimeout(function() {jQuery('#uploadform').submit();}, 2000)
-				else dmsfFileFieldCount++;
-				return true;
-			});
-		}
-	</script>
+  <%= javascript_include_tag 'bowser.min.js', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag 'plupload/plupload.js', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag 'plupload/plupload.flash.js', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag 'plupload/plupload.html5.js', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag 'plupload/plupload.html4.js', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag 'plupload/jquery.ui.plupload/jquery.ui.plupload.js', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag('plupload/i18n/#{I18n.locale.to_s.downcase}.js', :plugin => 'redmine_dmsf') if I18n.locale && !I18n.locale.to_s.match(/^en.*/) %>
+
+  <script type="text/javascript">
+    function initPlUploader(uploader) {
+      uploader.html('<div></div>');
+      uploader = jQuery('div', uploader);
+      uploader.plupload({
+        runtimes : 'html5,flash,html4',
+        url : '<%= url_for({:controller => 'dmsf_upload', :action => 'upload_file', :id => @project}) %>',
+        max_file_size : '100mb',
+        max_file_count: '<%= Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i if Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i > 0 %>',
+        multipart: true,
+        multipart_params : {authenticity_token : jQuery('input[name=authenticity_token]').val()},
+
+        // Rename files by clicking on their titles
+        rename: true,
+
+        // Flash settings
+        flash_swf_url : '<%= plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/plupload.flash.swf') %>'
+      });
+      jQuery('.plupload_scroll',uploader).resizable({
+        handles: 's'
+      });
+      var pluploader = uploader.plupload('getUploader');
+
+      pluploader.bind('FileUploaded', function(pluploader, file, response) {
+        var responseObject = jQuery.parseJSON(response.response);
+        if (responseObject == null) { //Bug: on Firefox folders entries act unexpectedly.
+          file.status = plupload.FAILED;
+          pluploader.trigger('UploadProgress', file);
+          pluploader.trigger('QueueChanged');
+        } else {
+          if (responseObject.error == null) {
+            var disk_filename_input = jQuery('<input/>').attr('type', 'hidden')
+                    .attr('name', 'uploaded[' + dmsfFileFieldCount + '][disk_filename]')
+                    .val(responseObject.disk_filename);
+            uploader.append(disk_filename_input);
+            var content_type_input = jQuery('<input/>').attr('type', 'hidden')
+                    .attr('name', 'uploaded[' + dmsfFileFieldCount + '][content_type]')
+                    .val(responseObject.content_type);
+            uploader.append(content_type_input);
+            var original_filename_input = jQuery('<input/>').attr('type', 'hidden')
+                    .attr('name', 'uploaded[' + dmsfFileFieldCount + '][original_filename]')
+                    .val(responseObject.original_filename);
+            uploader.append(original_filename_input);
+          } else {
+              file.status = plupload.FAILED;
+              // responseObject.error.file = file;
+              // pluploader.trigger('Error', responseObject.error);
+              pluploader.trigger('UploadProgress', file);
+              pluploader.trigger('QueueChanged');
+              /*
+               To-do: Though this is the documented method of reporting an error, on chrome this seems
+                to result in a bug, where the file afterwards seems to be out of sync and fired at the same
+                time as another, however this will only process one return from this. If I notify of a file fault, but don't
+                trigger a message, all seems to work as indtended.
+              */
+          }
+        }
+        if(pluploader.total.uploaded === pluploader.files.length) jQuery('#uploadform').submit();
+        else if(pluploader.total.uploaded + pluploader.total.failed === pluploader.files.length) setTimeout(function() {jQuery('#uploadform').submit();}, 2000);
+        else dmsfFileFieldCount++;
+        return true;
+      });
+    }
+  </script>
 <% end %>
