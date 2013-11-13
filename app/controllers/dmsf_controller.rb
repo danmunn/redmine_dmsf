@@ -35,10 +35,11 @@ class DmsfController < ApplicationController
   def show
     unless @folder
       @subfolders = @project.dmsf_folders.visible
-      @files = @project.dmsf_files.visible
+      @files = @project.dmsf_files.visible      
     else 
       @subfolders = @folder.subfolders.visible
       @files = @folder.files.visible
+      @locked_for_user = @folder.locked_for_user?
     end
     
     @files.sort! do |a,b|
