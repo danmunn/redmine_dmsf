@@ -1,6 +1,17 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.4.7: *2014-01-02*
+-----------------------
+* New: Issue #38 - A few questions about the plugin (possible improvements)
+* New: Issue #49 - Make the 100 MB ajax upload limit an option 
+* Fix: Issue #52 - Error : undefined method `size' for nil:NilClass
+* Fix: Issue #94 - Files not deleted with project
+* Fix: Issue #95 - DMSF tab missing on closed projects
+* Fix: Issue #104 - Custom fields do not work
+* Fix: Issue #141 - Error 500 uploading file with DMSF custom fields
+* New: Issue #173 - Open approvals in My page
+
 1.4.6: *2013-10-18*
 -----------------------
 * New: Document approval workflow
