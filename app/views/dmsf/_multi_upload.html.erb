@@ -22,7 +22,15 @@
     :id => 'uploadform', :method=>:post, :multipart => true) do %>
     <% if Setting.attachment_max_size.to_i >= 102400 %> 
       <div class="upload_select">
-	<%= l(:label_file_size) %>: <select id="uploader_select"><option value="1">&lt; 100 MB</option><option value="2">> 100 MB</option></select>
+	<%= l(:label_file_size) %>: 
+          <select id="uploader_select">
+           <option value="1">
+              &lt; <%= "#{Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize']}" %> MB
+            </option>
+            <option value="2">
+              > <%= "#{Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize']}" %> MB
+            </option>
+          </select>
       </div>
     <% end %>
     <h3><%= l(:heading_file_upload) %></h3>
@@ -55,7 +63,7 @@
   originalUploaderContent = uploader.html();
 
   jQuery('#uploader_select').change(function() {
-    if(jQuery(this).val() === 2) {
+    if(jQuery(this).val() == 2) {
       uploader.html(originalUploaderContent);
     } else {
       initPlUploader(uploader);
@@ -97,7 +105,7 @@
       uploader.plupload({
         runtimes : 'html5,flash,html4',
         url : '<%= url_for({:controller => 'dmsf_upload', :action => 'upload_file', :id => @project}) %>',
-        max_file_size : '100mb',
+        max_file_size : '<%= "#{Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize']}mb" %>',
         max_file_count: '<%= Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i if Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i > 0 %>',
         multipart: true,
         multipart_params : {authenticity_token : jQuery('input[name=authenticity_token]').val()},
@@ -147,8 +155,8 @@
               */
           }
         }
-        if(pluploader.total.uploaded === pluploader.files.length) jQuery('#uploadform').submit();
-        else if(pluploader.total.uploaded + pluploader.total.failed === pluploader.files.length) setTimeout(function() {jQuery('#uploadform').submit();}, 2000);
+        if(pluploader.total.uploaded == pluploader.files.length) jQuery('#uploadform').submit();
+        else if(pluploader.total.uploaded + pluploader.total.failed == pluploader.files.length) setTimeout(function() {jQuery('#uploadform').submit();}, 2000);
         else dmsfFileFieldCount++;
         return true;
       });

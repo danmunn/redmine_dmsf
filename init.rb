@@ -33,16 +33,17 @@ Redmine::Plugin.register :redmine_dmsf do
   requires_redmine :version_or_higher => '2.3.0'
   
   settings  :partial => 'settings/dmsf_settings',
-            :default => {
-              'dmsf_max_file_upload' => '0',
-              'dmsf_max_file_download' => '0',
-              'dmsf_max_email_filesize' => '0',
-              'dmsf_storage_directory' => Rails.root.join('files/dmsf').to_s,              
-              'dmsf_index_database' => Rails.root.join('files/dmsf_index').to_s,
-              'dmsf_stemming_lang' => 'english',
-              'dmsf_stemming_strategy' => 'STEM_NONE',
-              'dmsf_webdav' => '1'
-            }
+    :default => {
+      'dmsf_max_file_upload' => '0',
+      'dmsf_max_file_download' => '0',
+      'dmsf_max_email_filesize' => '0',
+      'dmsf_max_ajax_upload_filesize' => '100',
+      'dmsf_storage_directory' => Rails.root.join('files/dmsf').to_s,              
+      'dmsf_index_database' => Rails.root.join('files/dmsf_index').to_s,
+      'dmsf_stemming_lang' => 'english',
+      'dmsf_stemming_strategy' => 'STEM_NONE',
+      'dmsf_webdav' => '1'
+    }
   
   menu :project_menu, :dmsf, { :controller => 'dmsf', :action => 'show' }, :caption => :menu_dmsf, :before => :documents, :param => :id
   

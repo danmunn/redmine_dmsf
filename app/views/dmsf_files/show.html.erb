@@ -170,7 +170,7 @@
   });
 
   jQuery('#file_upload').change(function() {
-    if(jQuery("input[name='version']:checked").val() === '0') {
+    if(jQuery("input[name='version']:checked").val() == '0') {
       jQuery('#fileMinorVersionRadio').prop('checked', true); 
     }
     jQuery('#fileSameVersionRadio').prop('disabled', true); 

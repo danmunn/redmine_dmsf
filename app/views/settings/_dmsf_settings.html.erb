@@ -42,6 +42,14 @@
 </p>
 
 <p>
+  <%= content_tag(:label, "#{l(:label_maximum_ajax_upload_filesize)}:") %>  
+  <%= text_field_tag 'settings[dmsf_max_ajax_upload_filesize]', @settings['dmsf_max_ajax_upload_filesize'], :size => 10 %><br/>
+  (<%= l(:label_default) %>: 100)
+  <br/>
+  <%= l(:note_maximum_ajax_upload_filesize) %>
+</p>
+
+<p>
   <%=  content_tag(:label, "#{l(:label_file_storage_directory)}:") %>
   <% 
     storage_dir = @settings['dmsf_storage_directory'].strip

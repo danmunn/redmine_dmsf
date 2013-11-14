@@ -280,3 +280,6 @@ cs:
     blocks:
       locked_documents: Zamčené dokumenty
       open_approvals: Procesy ke schválení
+          
+  label_maximum_ajax_upload_filesize: Maximální velikost souboru nahratelná přes AJAX
+  note_maximum_ajax_upload_filesize: Omezuje velikost souboru, který může být nahrán přes standardní rozhraní AJAX, jinak se použije standarní rozhraní Redminu. Číslo je MB.
