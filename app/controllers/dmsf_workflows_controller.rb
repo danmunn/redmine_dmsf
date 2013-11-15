@@ -64,7 +64,7 @@ class DmsfWorkflowsController < ApplicationController
                     revision,
                     l(:text_email_subject_approved, :name => @workflow.name),
                     l(:text_email_finished_approved, :name => @workflow.name, :filename => revision.file.name),
-                    l(:text_email_to_see_history)).deliver
+                    l(:text_email_to_see_history)).deliver if member.user
                 end
               else
                 # Just rejected                
@@ -77,22 +77,20 @@ class DmsfWorkflowsController < ApplicationController
                     revision,
                     l(:text_email_subject_rejected, :name => @workflow.name),
                     l(:text_email_finished_rejected, :name => @workflow.name, :filename => revision.file.name, :notice => action.note),
-                    l(:text_email_to_see_history)).deliver
+                    l(:text_email_to_see_history)).deliver if user
                 end
               end
             else
               if action.action == DmsfWorkflowStepAction::ACTION_DELEGATE
                 # Delegation                
-                delegate = User.find_by_id params[:step_action].to_i / 10
-                if delegate
-                  DmsfMailer.workflow_notification(
-                    delegate, 
-                    @workflow, 
-                    revision,
-                    l(:text_email_subject_delegated, :name => @workflow.name),
-                    l(:text_email_finished_delegated, :name => @workflow.name, :filename => revision.file.name, :notice => action.note),
-                    l(:text_email_to_proceed)).deliver
-                end
+                delegate = User.find_by_id params[:step_action].to_i / 10                
+                DmsfMailer.workflow_notification(
+                  delegate, 
+                  @workflow, 
+                  revision,
+                  l(:text_email_subject_delegated, :name => @workflow.name),
+                  l(:text_email_finished_delegated, :name => @workflow.name, :filename => revision.file.name, :notice => action.note),
+                  l(:text_email_to_proceed)).deliver if delegate                
               else
                 # Next step
                 assignments = @workflow.next_assignments revision.id
@@ -106,15 +104,16 @@ class DmsfWorkflowsController < ApplicationController
                         revision,
                         l(:text_email_subject_reequires_approval, :name => @workflow.name),                        
                         l(:text_email_finished_step, :name => @workflow.name, :filename => revision.file.name),
-                        l(:text_email_to_proceed)).deliver
-                    end                    
+                        l(:text_email_to_proceed)).deliver if assignment.user
+                    end
+                    to = User.find_by_id revision.dmsf_workflow_assigned_by                    
                     DmsfMailer.workflow_notification(
-                      User.find_by_id revision.dmsf_workflow_assigned_by, 
+                      to, 
                       @workflow, 
                       revision,
                       l(:text_email_subject_updated, :name => @workflow.name),
                       l(:text_email_finished_step_short, :name => @workflow.name, :filename => revision.file.name),
-                      l(:text_email_to_see_status)).deliver
+                      l(:text_email_to_see_status)).deliver if to
                   end
                 end
               end
@@ -282,7 +281,7 @@ class DmsfWorkflowsController < ApplicationController
               revision,
               l(:text_email_subject_started, :name => @workflow.name),              
               l(:text_email_started, :name => @workflow.name, :filename => revision.file.name),
-              l(:text_email_to_proceed)).deliver
+              l(:text_email_to_proceed)).deliver if assignment.user
           end
           flash[:notice] = l(:notice_workflow_started)
         else
