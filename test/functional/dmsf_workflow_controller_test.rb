@@ -102,13 +102,13 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   
   def test_create        
     assert_difference 'DmsfWorkflow.count', +1 do    
-      post :create, :dmsf_workflow => {:name => 'wf3'}, :project_id => @project5.id
+      post :create, :name => 'wf3', :project_id => @project5.id
     end    
-    assert_redirected_to settings_project_path(@project5, :tab => 'dmsf')    
+    assert_redirected_to settings_project_path(@project5, :tab => 'dmsf_workflow')    
   end
   
   def test_update        
-    put :update, :id => @wf1.id, :dmsf_workflow => {:name => 'wf1a'}
+    put :update, :id => @wf1.id, :name => 'wf1a'
     @wf1.reload
     assert_equal 'wf1a', @wf1.name    
   end
@@ -118,7 +118,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_difference 'DmsfWorkflow.count', -1 do
       delete :destroy, :id => @wf1.id
     end
-    assert_redirected_to settings_project_path(@project5, :tab => 'dmsf')
+    assert_redirected_to settings_project_path(@project5, :tab => 'dmsf_workflow')    
     assert_equal 0, DmsfWorkflowStep.where(:dmsf_workflow_id => id).all.count
   end
     
