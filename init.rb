@@ -30,7 +30,7 @@ Redmine::Plugin.register :redmine_dmsf do
   url 'https://github.com/danmunn/redmine_dmsf'
   author_url 'https://code.google.com/p/redmine-dmsf/'
   
-  requires_redmine :version_or_higher => '2.3.0'
+  requires_redmine :version_or_higher => '2.0.0'
   
   settings  :partial => 'settings/dmsf_settings',
     :default => {
