@@ -1,4 +1,4 @@
-<%# Redmine plugin for Document Management System "Features"
+# Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
 #
