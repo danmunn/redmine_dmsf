@@ -258,7 +258,7 @@ class DmsfFile < ActiveRecord::Base
       limit_options[:conditions] = '(dmsf_files.updated_at ' + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
     end
     
-    columns = %w(dmsf_files.name, dmsf_file_revisions.title, dmsf_file_revisions.description)
+    columns = %w(dmsf_files.name dmsf_file_revisions.title dmsf_file_revisions.description)
     columns = ['dmsf_file_revisions.title'] if options[:titles_only]
             
     token_clauses = columns.collect {|column| "(LOWER(#{column}) LIKE ?)"}
