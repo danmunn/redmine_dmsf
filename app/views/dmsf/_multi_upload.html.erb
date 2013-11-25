@@ -25,10 +25,10 @@
 	<%= l(:label_file_size) %>: 
           <select id="uploader_select">
            <option value="1">
-              &lt; <%= "#{Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize']}" %> MB
+              &lt; <%= "#{@ajax_upload_size}" %> MB
             </option>
             <option value="2">
-              > <%= "#{Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize']}" %> MB
+              > <%= "#{@ajax_upload_size}" %> MB
             </option>
           </select>
       </div>
@@ -105,7 +105,7 @@
       uploader.plupload({
         runtimes : 'html5,flash,html4',
         url : '<%= url_for({:controller => 'dmsf_upload', :action => 'upload_file', :id => @project}) %>',
-        max_file_size : '<%= "#{Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize']}mb" %>',
+        max_file_size : '<%= "#{@ajax_upload_size}mb" %>',
         max_file_count: '<%= Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i if Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i > 0 %>',
         multipart: true,
         multipart_params : {authenticity_token : jQuery('input[name=authenticity_token]').val()},

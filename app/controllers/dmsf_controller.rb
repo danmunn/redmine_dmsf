@@ -52,6 +52,8 @@ class DmsfController < ApplicationController
         0
       end
     end
+    
+    @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].present? ? Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'] : 100
   end
 
   def entries_operation
