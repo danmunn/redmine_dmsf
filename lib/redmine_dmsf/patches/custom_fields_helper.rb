@@ -28,11 +28,10 @@ module RedmineDmsf
       end
 
       def custom_fields_tabs_with_customer_tab                    
-        cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}
-        unless CustomField::CUSTOM_FIELDS_NAMES.include?(cf[:name])
-          CustomField::CUSTOM_FIELDS_TABS << cf
-          CustomField::CUSTOM_FIELDS_NAMES << cf[:name]
-        end        
+        cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}        
+        unless custom_fields_tabs_without_customer_tab.index { |f| f[:name] == cf[:name] }
+          custom_fields_tabs_without_customer_tab << cf 
+        end
         custom_fields_tabs_without_customer_tab        
       end
     end
