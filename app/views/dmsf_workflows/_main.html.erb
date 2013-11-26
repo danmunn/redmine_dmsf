@@ -36,7 +36,7 @@
   <tbody>
 <% for workflow in @workflows %>
   <tr id="workflow-<%= workflow.id %>" class="<%= cycle('odd', 'even') %>">
-    <td><%= link_to(h(workflow.name), edit_dmsf_workflow_path(workflow)) %></td>    
+    <td class="name"><%= link_to(h(workflow.name), edit_dmsf_workflow_path(workflow)) %></td>    
     <td class="buttons">      
       <%= delete_link dmsf_workflow_path(workflow) %>
     </td>
