@@ -121,9 +121,21 @@
       <div class="splitcontentleft">		
         <%= label_tag('', "#{l(:label_version)}:") %>
         <%= revision.major_version %>.<%= revision.minor_version %>
-        <br/>		
+        <br/>
         <%= label_tag('', "#{l(:label_workflow)}:") %>
-        <%= revision.workflow_str true %>	
+        <% wf = DmsfWorkflow.find_by_id(revision.dmsf_workflow_id) %>
+        <% if wf %>
+          <%= link_to(
+            revision.workflow_str(false),
+            log_dmsf_workflow_path(
+              :project_id => @project.id, 
+              :id => wf.id,                                 
+              :dmsf_file_revision_id => revision.id),
+            :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(revision.id)),
+            :remote => true) %>
+        <% else %>
+          <%= revision.workflow_str(false) %>
+        <% end %>	
       </div>
       <div class="splitcontentright clear">		
         <%= label_tag('', "#{l(:label_mime)}:") %>
