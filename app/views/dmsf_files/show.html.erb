@@ -125,6 +125,7 @@
         <%= label_tag('', "#{l(:label_workflow)}:") %>
         <% wf = DmsfWorkflow.find_by_id(revision.dmsf_workflow_id) %>
         <% if wf %>
+          <%= "#{wf.name} - " %>
           <%= link_to(
             revision.workflow_str(false),
             log_dmsf_workflow_path(
@@ -134,7 +135,7 @@
             :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(revision.id)),
             :remote => true) %>
         <% else %>
-          <%= revision.workflow_str(false) %>
+          <%= revision.workflow_str(true) %>
         <% end %>	
       </div>
       <div class="splitcontentright clear">		
