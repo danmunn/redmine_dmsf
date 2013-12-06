@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -35,14 +36,15 @@ module RedmineDmsf
       module ClassMethods
       end
 
-      module InstanceMethods
+      module InstanceMethods                
       
         def project_settings_tabs_with_dmsf
-          tabs = project_settings_tabs_without_dmsf
-          if @project.module_enabled? 'dmsf'
-            tabs << {:name => 'dmsf', :controller => 'dmsf_state', :action => 'user_pref_save', :partial => 'dmsf_state/user_pref', :label => :menu_dmsf}            
-            tabs << {:name => 'dmsf_workflow', :controller => 'dmsf_workflows', :action => 'index', :partial => 'dmsf_workflows/main', :label => :label_dmsf_workflow_plural}  
-          end
+          tabs = project_settings_tabs_without_dmsf          
+          dmsf_tabs = [
+            {:name => 'dmsf', :action => {:controller => 'dmsf_state', :action => 'user_pref_save'}, :partial => 'dmsf_state/user_pref', :label => :menu_dmsf},
+            {:name => 'dmsf_workflow', :action => {:controller => 'dmsf_workflows', :action => 'index'}, :partial => 'dmsf_workflows/main', :label => :label_dmsf_workflow_plural}            
+          ]
+          tabs.concat(dmsf_tabs.select {|dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project)})
           return tabs
         end
 
