@@ -35,6 +35,7 @@ class DmsfController < ApplicationController
   def show
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
+    @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
     
     unless @folder
       @subfolders = @project.dmsf_folders.visible
