@@ -52,13 +52,14 @@ class DmsfFilesController < ApplicationController
       begin
         send_revision
       rescue ActionController::MissingFile => e
+        logger.error e.message
         render_404
       end
       return
     end
     
     @revision = @file.last_revision
-    # TODO: line bellow is to handle old instalations with errors in data handling
+    # TODO: line bellow is to handle old installations with errors in data handling
     @revision.name = @file.name
     
     @revision_pages = Paginator.new self, @file.revisions.visible.count, params['per_page'] ? params['per_page'].to_i : 25, params['page']

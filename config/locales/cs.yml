@@ -147,9 +147,9 @@ cs:
   permission_user_preferences: Nastavení uživatele
   permission_view_dmsf_files: Zobrazit dokumenty
   permission_folder_manipulation: Manipulace se složkami
-  permission_file_manipulation: Manipulace se soubory
-  permission_file_approval: Schválení souboru
+  permission_file_manipulation: Manipulace se soubory  
   permission_force_file_unlock: Vynucené odemknutí souboru
+  permission_manage_workflows: Spravovat schvalovací procesy
   label_file: Soubor
   field_folder: Složka
   error_create_cycle_in_folder_dependency: vytvořit smyčku v závislostech složky

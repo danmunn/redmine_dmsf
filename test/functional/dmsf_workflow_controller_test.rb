@@ -31,7 +31,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     @user_non_member = User.find_by_id 3 #Dave Lopper
     @request.session[:user_id] = @user_member.id          
     @role_manager = Role.where(:name => 'Manager').first
-    @role_manager.add_permission! :file_approval        
+    @role_manager.add_permission! :file_manipulation        
     @wfs1 = DmsfWorkflowStep.find_by_id 1 # step 1
     @wfs2 = DmsfWorkflowStep.find_by_id 2 # step 2
     @wfs3 = DmsfWorkflowStep.find_by_id 3 # step 1
@@ -77,7 +77,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_response :forbidden    
     # Without permissions
     @project5.enable_module!(:dmsf)
-    @role_manager.remove_permission! :file_approval
+    @role_manager.remove_permission! :file_manipulation
     get :index, :project_id => @project5.id
     assert_response :forbidden    
   end

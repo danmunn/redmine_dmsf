@@ -147,9 +147,9 @@ de:
   permission_user_preferences: Benutzereinstellungen
   permission_view_dmsf_files: Betrachte Dateien
   permission_folder_manipulation: Ordner manipulation
-  permission_file_manipulation: Datei manipulation
-  permission_file_approval: Datei approval
+  permission_file_manipulation: Datei manipulation  
   permission_force_file_unlock: Erzwinge Aufhebung der Dateisperre
+  permission_manage_workflows: Manage workflows
   label_file: Datei
   field_folder: Ordner
   error_create_cycle_in_folder_dependency: schaffen Zyklus in Abhängigkeit Ordner

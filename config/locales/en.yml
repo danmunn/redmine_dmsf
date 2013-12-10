@@ -148,9 +148,9 @@ en:
   permission_user_preferences: User preferences
   permission_view_dmsf_files: View documents
   permission_folder_manipulation: Folder manipulation
-  permission_file_manipulation: File manipulation
-  permission_file_approval: File approval
+  permission_file_manipulation: File manipulation  
   permission_force_file_unlock: Force file unlock
+  permission_manage_workflows: Manage workflows
   label_file: File
   field_folder: Folder
   error_create_cycle_in_folder_dependency: create cycle in folder dependency

@@ -146,9 +146,9 @@ ru:
   permission_user_preferences: Настройки пользователя
   permission_view_dmsf_files: Просматривать документы
   permission_folder_manipulation: Управление папками
-  permission_file_manipulation: Управление файлами
-  permission_file_approval: Утверждение файлов
+  permission_file_manipulation: Управление файлами  
   permission_force_file_unlock: Разблокировка любых файлов
+  permission_manage_workflows: Manage workflows
   label_file: Файл
   field_folder: Папка
   error_create_cycle_in_folder_dependency: создать циклическую зависимость в папке

@@ -146,9 +146,9 @@ fr:
   permission_user_preferences: Préférences utilisateur
   permission_view_dmsf_files: Afficher documents
   permission_folder_manipulation: Gestion des dossiers
-  permission_file_manipulation: Gestion des documents
-  permission_file_approval: Validation du document
+  permission_file_manipulation: Gestion des documents  
   permission_force_file_unlock: Forcer le déverrouillage du document
+  permission_manage_workflows: Manage workflows
   label_file: Fichier
   field_folder: Dossier
   error_create_cycle_in_folder_dependency: create cycle in folder dependency

@@ -39,24 +39,22 @@
           :title => l(:title_lock_file)) %>
       <% end %> 
     <% end %>
-    <% if User.current.allowed_to?(:file_manipulation, @project) && !@file.locked_for_user? %>
+    <% unless @file.locked_for_user? %>
       &nbsp;
       <%= link_to_function(image_tag('delete.png', :plugin => 'redmine_dmsf'),
         "confirmation_link('#{url_for(:action => 'delete', :id => @file)}', '#{l(:question_do_you_really_want_to_delete_this_entry)}')", 
         :title => l(:title_delete)) %>
-    <% end %>
-    <% if User.current.allowed_to?(:file_approval, @project) %>
-      &nbsp;
-      <% if @file.notification %>
-        <%= link_to_function(image_tag('notify.png', :plugin => 'redmine_dmsf'),
-          "manipulation_link('#{url_for(:action => 'notify_deactivate', :id => @file, :current => request.url)}')",
-          :title => l(:title_notifications_active_deactivate)) %>
-      <% else %>
-        <%= link_to_function(image_tag('notifynot.png', :plugin => 'redmine_dmsf'),
-          "manipulation_link('#{url_for(:action => 'notify_activate', :id => @file, :current => request.url)}')",
-          :title => l(:title_notifications_not_active_activate)) %>
-      <% end %>
-    <% end %>
+    <% end %>    
+    &nbsp;
+    <% if @file.notification %>
+      <%= link_to_function(image_tag('notify.png', :plugin => 'redmine_dmsf'),
+        "manipulation_link('#{url_for(:action => 'notify_deactivate', :id => @file, :current => request.url)}')",
+        :title => l(:title_notifications_active_deactivate)) %>
+    <% else %>
+      <%= link_to_function(image_tag('notifynot.png', :plugin => 'redmine_dmsf'),
+        "manipulation_link('#{url_for(:action => 'notify_activate', :id => @file, :current => request.url)}')",
+        :title => l(:title_notifications_not_active_activate)) %>
+    <% end %>    
   <% end %>
   &nbsp;
   <%= link_to(image_tag('copy.png'), {:controller => :dmsf_files_copy, :action => 'new', :id => @file }, :title => l(:title_copy_or_move)) %>
@@ -89,7 +87,7 @@
           <%= link_to(image_tag('rev_download.png', :plugin => 'redmine_dmsf'),
             {:action => 'show', :id => @file, :download => revision},
             :title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version)) %>
-          <% if User.current.allowed_to?(:file_approval, @project) %>          
+          <% if User.current.allowed_to?(:file_manipulation, @project) %>          
             <%= link_to_function(image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
               "confirmation_link('#{url_for(:action => 'delete_revision', :id => revision)}', '#{l(:question_do_you_really_want_to_delete_this_revision)}')",
               :title => l(:title_delete_revision)) %>
@@ -154,7 +152,7 @@
       </div>	     	     
       <br/>
       <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">
-        <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if User.current.allowed_to?(:file_approval, @file.project) %>
+        <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if User.current.allowed_to?(:file_manipulation, @file.project) %>
       </div>    
     </div>
   </div>  
@@ -165,8 +163,8 @@
 <p class="pagination"><%= pagination_links_full @revision_pages, @file.revisions.visible.count %></p>
 
 <%
-  sUrl = 'jquery.dataTables/en.json'
-  sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !I18n.locale.to_s.match(/^en.*/)
+  url = 'jquery.dataTables/en.json'
+  url = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !I18n.locale.to_s.match(/^en.*/)
 %>
 
 <script type="text/javascript">
@@ -200,7 +198,7 @@
   jQuery('.access-table').dataTable({
     'bJQueryUI': true,
     'oLanguage': {
-      'sUrl': '/plugin_assets/<%= :redmine_dmsf %>/javascripts/<%= sUrl%>'	
+      'sUrl': '/plugin_assets/<%= :redmine_dmsf %>/javascripts/<%= url %>'	
     }
   });
 </script>

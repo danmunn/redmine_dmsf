@@ -146,9 +146,9 @@ ja:
   permission_user_preferences: ユーザ設定
   permission_view_dmsf_files: 文書の表示
   permission_folder_manipulation: フォルダの操作
-  permission_file_manipulation: ファイルの操作
-  permission_file_approval: ファイルの承認
+  permission_file_manipulation: ファイルの操作  
   permission_force_file_unlock: ファイルの強制ロック解除
+  permission_manage_workflows: Manage workflows
   label_file: ファイル
   field_folder: フォルダ
   error_create_cycle_in_folder_dependency: フォルダの依存関係が循環しています

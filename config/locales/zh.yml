@@ -146,9 +146,9 @@ zh:
   permission_user_preferences: 用户偏好设定
   permission_view_dmsf_files: 查看文档
   permission_folder_manipulation: 文件夹操作
-  permission_file_manipulation: 文件操作
-  permission_file_approval: 批准文件
+  permission_file_manipulation: 文件操作  
   permission_force_file_unlock: 强制文件解锁
+  permission_manage_workflows: Manage workflows
   label_file: 文件
   field_folder: 件夹
   error_create_cycle_in_folder_dependency: create cycle in folder dependency

@@ -90,10 +90,8 @@ class DmsfMailer < Mailer
             true
           when 'selected'
             notify_member.mail_notification?
-          when 'only_my_events'
-            notify_user.allowed_to?(:file_approval, project) ? true : false
-          when 'only_owner'
-            notify_user.allowed_to?(:file_approval, project) ? true : false
+          when 'only_my_events', 'only_owner'
+            notify_user.allowed_to?(:file_manipulation, project) ? true : false          
           else
             false
           end
