@@ -22,17 +22,7 @@
 <div class="contextual">
 </div>
 
-<h2>  
-  <% path = @file.folder ? @file.folder.dmsf_path : [] %>  
-  <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @project } %>
-  <% path.each do |path_element| %>
-   / 
-   <%= link_to h(path_element.title), {:controller => 'dmsf', :action => 'show', :id=> @project, :folder_id => path_element} %>   
-  <% end %>
-  /
-  <%= link_to(h(@file.title), {:controller => 'dmsf_files', :action => 'show', :id=> @file}) %>
-  <%= image_tag('notify.png', :plugin => 'redmine_dmsf', :title => l(:title_notifications_active)) if @file.notification %>
-</h2>
+<%= render(:partial => 'path', :locals => {:folder => @file.folder, :filename => @file.title}) %>
 
 <% if DmsfFile.allowed_target_projects_on_copy.present? %>
   <%= form_tag({:action => 'create', :id => @file}, :id => 'copyForm') do |f| %>

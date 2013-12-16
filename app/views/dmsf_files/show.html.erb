@@ -60,17 +60,7 @@
   <%= link_to(image_tag('copy.png'), {:controller => :dmsf_files_copy, :action => 'new', :id => @file }, :title => l(:title_copy_or_move)) %>
 </div>
 
-<h2>  
-  <% path = @file.folder ? @file.folder.dmsf_path : [] %>  
-  <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @project } %>
-  <% path.each do |path_element| %>
-   / 
-   <%= link_to h(path_element.title), {:controller => 'dmsf', :action => 'show', :id=> @project, :folder_id => path_element} %>   
-  <% end %>
-  /
-  <%= h(@file.last_revision.title) %>
-  <%= image_tag('notify.png', :plugin => 'redmine_dmsf', :title => l(:title_notifications_active)) if @file.notification %>
-</h2>
+<%= render(:partial => '/dmsf/path', :locals => {:folder => @file.folder, :filename => @file.title}) %>  
 
 <%= error_messages_for('file') %>
 <%= error_messages_for('revision') %>

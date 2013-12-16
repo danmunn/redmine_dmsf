@@ -22,14 +22,7 @@
 <div class="contextual">
 </div>
 
-<h2>  
-  <% path = @folder ? @folder.dmsf_path : [] %>  
-  <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @project } %>
-  <% path.each do |path_element| %>
-    / 
-    <%= link_to h(path_element.title), {:controller => 'dmsf', :action => 'show', :id=> @project, :folder_id => path_element} %>   
-  <% end %>  
-</h2>
+<%= render(:partial => 'path', :locals => {:folder => @folder}) %>
 
 <h3><%= l(:heading_send_documents_by_email) %></h3>
 

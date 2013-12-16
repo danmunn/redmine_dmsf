@@ -36,7 +36,7 @@ RedmineApp::Application.routes.draw do
   post '/projects/:id/dmsf/entries/email', :controller => 'dmsf', :action => 'entries_email'
   post '/projects/:id/dmsf/lock', :controller => 'dmsf', :action => 'lock'
   post '/projects/:id/dmsf/unlock', :controller => 'dmsf', :action => 'unlock'
-  get '/projects/:id/dmsf/', :controller => 'dmsf', :action => 'show'
+  get '/projects/:id/dmsf/', :controller => 'dmsf', :action => 'show', :as => 'dmsf'
   get '/projects/:id/dmsf/new', :controller => 'dmsf', :action => 'new'
   get '/projects/:id/dmsf/edit', :controller=> 'dmsf', :action => 'edit'
   get '/projects/:id/dmsf/edit/root', :controller=> 'dmsf', :action => 'edit_root'

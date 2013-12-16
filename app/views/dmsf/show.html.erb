@@ -65,14 +65,7 @@
   <% end %>
 </div>
 
-<h2>  
-  <% path = @folder ? @folder.dmsf_path : [] %>  
-  <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @project } %>
-  <% path.each do |path_element| %>
-   / 
-   <%= link_to h(path_element.title), {:controller => 'dmsf', :action => 'show', :id=> @project, :folder_id => path_element} %>   
-  <% end %>
-</h2>
+<%= render(:partial => 'path', :locals => {:folder => @folder}) %>
 
 <div class="dmsf-header">
   <div class="wiki">
