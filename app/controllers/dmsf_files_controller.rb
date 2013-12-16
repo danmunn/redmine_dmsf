@@ -116,8 +116,8 @@ class DmsfFilesController < ApplicationController
           begin
             @file.unlock!
             flash[:notice] = "#{l(:notice_file_unlocked)}, "
-          rescue
-            #Nothing to do here
+          rescue Exception => e
+            logger.error "Cannot unlock the file: #{e.message}"
           end
         end
         @file.save!
@@ -127,8 +127,8 @@ class DmsfFilesController < ApplicationController
         log_activity('new revision')
         begin
           DmsfMailer.files_updated(User.current, [@file]).deliver
-        rescue ActionView::MissingTemplate => e
-          Rails.logger.error "Could not send email notifications: #{e.message}"
+        rescue Exception => e
+          logger.error "Could not send email notifications: #{e.message}"
         end
         redirect_to :action => 'show', :id => @file
       else
