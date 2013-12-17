@@ -22,7 +22,7 @@
 <div class="contextual">
 </div>
 
-<%= render(:partial => 'path', :locals => {:folder => @folder}) %>
+<%= render(:partial => '/dmsf/path', :locals => {:folder => @folder, :filename => nil}) %>
 
 <div class="wiki">
   <%= textilizable(@folder.description) if @folder %>

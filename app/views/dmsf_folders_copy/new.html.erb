@@ -21,7 +21,7 @@
 
 <div class="contextual"></div>
 
-<%= render(:partial => 'path', :locals => {:folder => @folder}) %>
+<%= render(:partial => 'path', :locals => {:folder => @folder, :filename => nil}) %>
 
 <% unless DmsfFolder.allowed_target_projects_on_copy.blank? %>
   <%= form_tag({:action => 'copy_to', :id => @folder}, :id => 'copyForm') do |f| %>

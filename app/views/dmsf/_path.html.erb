@@ -28,7 +28,7 @@
       <% end %>
     <% end %>
   <% else %>
-     <%= l(:link_documents) %>
+     <%= link_to l(:link_documents), dmsf_path(:id => @project) %>
   <% end %>
   <% if filename %>
     /

@@ -25,7 +25,8 @@
     :title => l(:title_copy)) if @folder.id %>
 </div>
 
-<%= render(:partial => 'path', :locals => {:folder => @pathfolder, :filename => @pathfolder == @parent ? l(:heading_new_folder) : nil}) %>  
+<% create = @pathfolder == @parent %>
+<%= render(:partial => 'path', :locals => {:folder => @pathfolder, :filename => create ? l(:heading_new_folder) : nil}) %>  
 
 <%= form_for(@folder, :url => {:action => create ? 'create' : 'save', :id => @project, :folder_id => @folder, :parent_id => @parent},
   :html => {:method=>:post}) do |f| %>
