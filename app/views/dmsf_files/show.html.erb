@@ -68,7 +68,7 @@
 <%= form_tag('', :id => 'entries_form') %>
 
 <h3><%= l(:heading_revisions) %></h3>
-<% @file.revisions.visible[@revision_pages.current.offset,@revision_pages.items_per_page].each do |revision| %>
+<% @file.revisions.visible[@revision_pages.offset,@revision_pages.per_page].each do |revision| %>
   <div class="revision_box dmsf_detail dataTables_wrapper">  
     <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">	
       <div class="dataTables_lenght">
