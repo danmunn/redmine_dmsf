@@ -199,7 +199,7 @@ class DmsfFile < ActiveRecord::Base
     # If the target project differs from the source project we must physically move the file
     if self.project != new_revision.project
       if File.exist? self.last_revision.disk_file
-        File.move self.last_revision.disk_file, new_revision.disk_file        
+        FileUtils.mv self.last_revision.disk_file, new_revision.disk_file        
       end
     end
 
@@ -235,7 +235,7 @@ class DmsfFile < ActiveRecord::Base
         # If the target project differs from the source project we must physically copy the file
         if project != self.project          
           if File.exist? self.last_revision.disk_file
-            File.copy self.last_revision.disk_file, new_revision.disk_file
+            FileUtils.cp self.last_revision.disk_file, new_revision.disk_file
           end
         end
       end
