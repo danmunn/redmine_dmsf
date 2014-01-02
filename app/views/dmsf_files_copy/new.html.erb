@@ -22,7 +22,7 @@
 <div class="contextual">
 </div>
 
-<%= render(:partial => 'path', :locals => {:folder => @file.folder, :filename => @file.title}) %>
+<%= render(:partial => '/dmsf/path', :locals => {:folder => @file.folder, :filename => @file.title}) %>
 
 <% if DmsfFile.allowed_target_projects_on_copy.present? %>
   <%= form_tag({:action => 'create', :id => @file}, :id => 'copyForm') do |f| %>
