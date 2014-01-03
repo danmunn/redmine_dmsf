@@ -55,9 +55,9 @@
         "manipulation_link('#{url_for(:action => 'notify_activate', :id => @file, :current => request.url)}')",
         :title => l(:title_notifications_not_active_activate)) %>
     <% end %>    
-  <% end %>
-  &nbsp;
-  <%= link_to(image_tag('copy.png'), {:controller => :dmsf_files_copy, :action => 'new', :id => @file }, :title => l(:title_copy_or_move)) %>
+    &nbsp;
+    <%= link_to(image_tag('copy.png'), {:controller => :dmsf_files_copy, :action => 'new', :id => @file }, :title => l(:title_copy_or_move)) %>
+  <% end %>  
 </div>
 
 <%= render(:partial => '/dmsf/path', :locals => {:folder => @file.folder, :filename => @file.title}) %>  
