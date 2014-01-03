@@ -110,8 +110,7 @@ zh:
   label_changed: 修改
   info_changed_by_user: "%{changed} by"
   label_filename: 文件名
-  label_version: 版本
-  label_workflow: 工作流程
+  label_version: 版本  
   label_mime: Mime
   label_size: 大小
   label_comment: 注释

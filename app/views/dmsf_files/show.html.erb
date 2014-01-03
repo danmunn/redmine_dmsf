@@ -110,7 +110,7 @@
         <%= label_tag('', "#{l(:label_version)}:") %>
         <%= revision.major_version %>.<%= revision.minor_version %>
         <br/>
-        <%= label_tag('', "#{l(:label_workflow)}:") %>
+        <%= label_tag('', "#{l(:link_workflow)}:") %>
         <% wf = DmsfWorkflow.find_by_id(revision.dmsf_workflow_id) %>
         <% if wf %>
           <%= "#{wf.name} - " %>

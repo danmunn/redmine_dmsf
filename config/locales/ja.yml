@@ -110,8 +110,7 @@ ja:
   label_changed: 更新者/日時
   info_changed_by_user: "/ %{changed}"
   label_filename: ファイル名
-  label_version: バージョン
-  label_workflow: ワークフロー
+  label_version: バージョン  
   label_mime: Mime
   label_size: サイズ
   label_comment: コメント

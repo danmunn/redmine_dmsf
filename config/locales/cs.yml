@@ -111,8 +111,7 @@ cs:
   label_changed: Změněno
   info_changed_by_user: "%{changed} uživatelem"
   label_filename: Jméno souboru
-  label_version: Verze
-  label_workflow: Workflow
+  label_version: Verze  
   label_mime: Typ
   label_size: Velikost
   label_comment: Komentář

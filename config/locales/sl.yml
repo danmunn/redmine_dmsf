@@ -110,8 +110,7 @@ sl:
   label_changed: Spremenjeno
   info_changed_by_user: "%{changed} po"
   label_filename: Datoteka
-  label_version: Verzija
-  label_workflow: postopek  
+  label_version: Verzija  
   label_mime: Mime
   label_size: Velikost
   label_comment: Komentar

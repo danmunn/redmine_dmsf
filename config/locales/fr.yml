@@ -110,8 +110,7 @@ fr:
   label_changed: Modifié
   info_changed_by_user: "%{changed} par"
   label_filename: Fichier
-  label_version: Version
-  label_workflow: Etat
+  label_version: Version  
   label_mime: Type
   label_size: Taille
   label_comment: Commentaires

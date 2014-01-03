@@ -111,8 +111,7 @@ de:
   label_changed: Geändert
   info_changed_by_user: "%{changed} von"
   label_filename: Dateiname
-  label_version: Version
-  label_workflow: Workflow
+  label_version: Version  
   label_mime: Mime
   label_size: Größe
   label_comment: Kommentar

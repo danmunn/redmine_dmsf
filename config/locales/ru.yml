@@ -110,8 +110,7 @@ ru:
   label_changed: Изменен
   info_changed_by_user: "%{changed} пользователем"
   label_filename: Имя файла
-  label_version: Версия
-  label_workflow: Поток работ
+  label_version: Версия  
   label_mime: MIME-тип
   label_size: Размер
   label_comment: Комментарий

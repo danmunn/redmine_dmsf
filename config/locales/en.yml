@@ -113,7 +113,7 @@ en:
   info_changed_by_user: "%{changed} by"
   label_filename: Filename
   label_version: Version
-  label_workflow: Workflow
+  label_approval_workflow: Workflow
   label_mime: Mime
   label_size: Size
   label_comment: Comment
@@ -258,8 +258,7 @@ en:
   dmsf_or: OR
   dmsf_new_step: New step  
   message_dmsf_wokflow_note: Your note...
-  info_revision: "r%{rev}"
-  link_workflow: Workflow  
+  info_revision: "r%{rev}"  
   notice_workflow_started: Approval workflow successfully started  
   text_email_subject_approved: "Approval workflow %{name} approved"
   text_email_subject_rejected: "Approval workflow %{name} rejected"

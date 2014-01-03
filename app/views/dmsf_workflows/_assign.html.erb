@@ -22,7 +22,7 @@
               :id => 'assignment-form') do %>                  
   <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>  
   <p>
-    <%= label_tag('workflow', l(:label_workflow) + ':') %>
+    <%= label_tag('workflow', "#{l(:link_workflow)}:") %>
     <%= select_tag(
         'dmsf_workflow_id', 
         dmsf_workflows_for_select(@project, nil))%>        

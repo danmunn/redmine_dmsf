@@ -112,8 +112,7 @@ es:
   label_changed: Changed
   info_changed_by_user: "%{changed} by"
   label_filename: Filename
-  label_version: Version
-  label_workflow: Workflow
+  label_version: Version  
   label_mime: Mime
   label_size: Size
   label_comment: Comment
