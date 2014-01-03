@@ -259,7 +259,7 @@ en:
   dmsf_new_step: New step  
   message_dmsf_wokflow_note: Your note...
   info_revision: "r%{rev}"
-  link_workflow: Schvalovací proces
+  link_workflow: Workflow
   notice_workflow_started: Approval workflow successfully started  
   text_email_subject_approved: "Approval workflow %{name} approved"
   text_email_subject_rejected: "Approval workflow %{name} rejected"
