@@ -1,6 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012  Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2013  karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +22,7 @@ fr:
   dmsf: DMSF
   label_dmsf_file_plural: Fichiers DMSF
   warning_no_entries_selected: Aucun fichier sélectionné
-  error_email_to_must_be_entered: La saisie d'une adresse mail est obligatoire  
+  error_email_to_must_be_entered: "La saisie d'une adresse mail est obligatoire"
   warning_file_already_locked: Fichier déjà verrouillé
   notice_file_locked: Fichier verrouillé
   warning_file_not_locked: Fichier déverrouillé
@@ -29,7 +31,7 @@ fr:
   question_do_you_really_want_to_delete_this_entry: Etes-vous sûr de vouloir supprimer cet élément ?
   error_max_files_exceeded: Le nombre de fichiers pouvant être téléchargés simultanément est dépassé
   question_do_you_really_want_to_delete_this_revision: Etes-vous sûr de vouloir supprimer cette révision ?
-  error_entry_project_does_not_match_current_project: Entry project doesn't match current project
+  error_entry_project_does_not_match_current_project: "Entry project doesn't match current project"
   notice_folder_created: Dossier créé
   error_folder_creation_failed: Erreur de création du dossier
   error_folder_title_must_be_entered: Le titre du document est requis
@@ -73,7 +75,7 @@ fr:
   title_waiting_for_approval: Attente de validation
   title_approved: Validé
   title_unlock_file: Déverrouiller afin de permettre la modification par les membres du projet
-  title_lock_file: Verrouiller afin d'empêcher les modifications du document
+  title_lock_file: "Verrouiller afin d'empêcher les modifications du document"
   submit_download: Télécharger
   title_download_checked: Télécharger les fichiers sélectionnés au format zip
   submit_email: Email
@@ -91,7 +93,7 @@ fr:
   label_file_size: Taille du fichier
   heading_file_upload: Déposer des fichiers
   note_uploaded_maximum_files_at_once: "Seulement %{number} fichiers peuvent être déposés à la fois."
-  note_upload_files_greater_than_two_gb: Afin de transmettre des fichiers de plus de 2Go, l'utilisation d'un navigateur de 64Bits est nécessaire.
+  note_upload_files_greater_than_two_gb: "Afin de transmettre des fichiers de plus de 2Go, l'utilisation d'un navigateur de 64Bits est nécessaire."
   submit_upload_files: Transmission
   heading_new_folder: Nouveau Dossier
   label_title: Titre
@@ -111,6 +113,7 @@ fr:
   info_changed_by_user: "%{changed} par"
   label_filename: Fichier
   label_version: Version  
+  label_approval_workflow: Workflow
   label_mime: Type
   label_size: Taille
   label_comment: Commentaires
@@ -132,7 +135,7 @@ fr:
   option_stem_none: Aucun suffixe(défaut)
   option_stem_some: Quelques suffixes
   option_stem_all: Tous les suffixes
-  label_stemming_description: Ce paramètre contrôle l'algorithme de racinisation appliqué par le requêteur. La valeur par défaut est STEM_NONE. Les paramètres disponibles sont
+  label_stemming_description: "Ce paramètre contrôle l'algorithme de racinisation appliqué par le requêteur. La valeur par défaut est STEM_NONE. Les paramètres disponibles sont"
   note_do_not_stem: "N'effectuer aucune transformation"
   note_stem_some: "Rechercher des stemmes pour tous les mots sauf ceux qui commencent par des majuscules, ceux suivis d'un certain nombre de caractères ou ceux utilisés avec des opérateurs nécessitant des informations contextuelles. Les stemmes doivent être préfixées par 'Z'."
   note_stem_all: "Rechercher toutes les racines de tous les mots (note : le préfix 'Z' ne sera pas ajouté)."
@@ -219,67 +222,67 @@ fr:
   label_webdav_strategy: Accès Webdav
   note_webdav_strategy: "Permet à l'administrateur d'autoriser les utilisateurs au module Webdav en letcure seule ou en lecture et écriture."
   
-  # Not translated
-  
-  error_unable_delete_dmsf_workflow: Unable to delete the workflow
-  error_empty_note: The note can't be empty
-  error_workflow_assign: An error occured while assigning
-  error_cannot_start_workflow: Workflow can't be started
-  error_cannot_renumber_steps: Steps can't be renumbered
-  label_dmsf_workflow_new: New approval workflow
-  field_label_dmsf_workflow: Approval Workflow
-  field_label_dmsf_workflow_name: Approval workflow name
-  label_dmsf_workflow_plural: Approval workflows
-  label_dmsf_workflow_step: Step
-  label_dmsf_workflow_step_plural: Steps
-  label_dmsf_workflow_approval: Approval
-  label_dmsf_workflow_approval_plural: Approvals
+  error_unable_delete_dmsf_workflow: Impossible de supprimer le flux de validation
+  error_empty_note: La note ne peut pas être vide
+  error_workflow_assign: "Une erreur s'est produite lors de l'attribution"
+  error_cannot_start_workflow: Le flux de validation ne peut pas être démarré
+  error_cannot_renumber_steps: Les étapes ne peuvent pas être renumérotées
+  label_dmsf_workflow_new: Nouveau flux de validation
+  field_label_dmsf_workflow: Flux de validation
+  field_label_dmsf_workflow_name: Nom du flux
+  label_dmsf_workflow_plural: Flux de validation
+  label_dmsf_workflow_step: Etape
+  label_dmsf_workflow_step_plural: Etapes
+  label_dmsf_workflow_approval: Approbation
+  label_dmsf_workflow_approval_plural: Approbations
   label_dmsf: DMSF
-  label_dmsf_wokflow_action_approve: Approve
-  label_dmsf_wokflow_action_reject: Reject
-  label_dmsf_wokflow_action_delegate: Delegate to
-  label_dmsf_wokflow_action_assign: Assign an approval workflow
-  label_dmsf_wokflow_action_start: Start workflow
-  label_dmsf_workflow_add_approver: "Add a new approver with a logical function:"
-  label_or: or
+  label_dmsf_wokflow_action_approve: Approuver
+  label_dmsf_wokflow_action_reject: Rejeter
+  label_dmsf_wokflow_action_delegate: Déléguer à
+  label_dmsf_wokflow_action_assign: Attribuer un flux de validation
+  label_dmsf_wokflow_action_start: Démarrer le flux de validation
+  label_dmsf_workflow_add_approver: "Ajouter un nouvel approbateur avec une fonction logique :"
+  label_or: ou
   label_action: Action
   label_note: Note  
-  title_none: None
-  title_rejection: Rejection
-  title_delegation: Delegation
-  title_assignment: Assignment
-  title_start: Start  
-  title_dmsf_workflow_log: Approval Workflow Log
-  title_assigned: Assigned
-  title_approval: Approval
-  title_rejected: Rejected
-  dmsf_and: AND
-  dmsf_or: OR
-  dmsf_new_step: New step  
-  message_dmsf_wokflow_note: Your note...
+  title_none: Aucun
+  title_rejection: Rejet
+  title_delegation: Délégation
+  title_assignment: Attribution
+  title_start: Démarrer  
+  title_dmsf_workflow_log: Journal du flux de validation
+  title_assigned: Assigné
+  title_approval: Approbation
+  title_rejected: Rejeté
+  dmsf_and: ET
+  dmsf_or: OU
+  dmsf_new_step: Nouvelle étape  
+  message_dmsf_wokflow_note: Votre note...
   info_revision: "r%{rev}"
-  link_workflow: Workflow  
-  notice_workflow_started: Approval workflow successfully started
-  text_email_subject_approved: "Approval workflow %{name} approved"
-  text_email_subject_rejected: "Approval workflow %{name} rejected"
-  text_email_subject_delegated: "Approval workflow %{name} delegated"
-  text_email_subject_requires_approval: "Approval workflow %{name} requires your approval"
-  text_email_subject_updated: "Approval workflow %{name} updated"
-  text_email_subject_started: "Approval workflow %{name} started" 
-  text_email_finished_approved: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been approved."
-  text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been rejected because of '%{notice}'."
-  text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
-  text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps and you are expected to do an approval in the next approval step."
-  text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps."
-  text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you are expected to do an approval in the current approval step."  
-  text_email_to_proceed: To proceed click on the check box icon next to the document in
-  text_email_to_see_history: To see the approval history click on the workflow status of the document in
-  text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
-  
+  link_workflow: Flux  
+  notice_workflow_started: Flux de validation démarré avec succès
+  text_email_subject_approved: "Flux de validation %{name} approuvé"
+  text_email_subject_rejected: "Flux de validation %{name} rejeté"
+  text_email_subject_delegated: "Flux de validation %{name} délégué"
+  text_email_subject_requires_approval: "Flux de validation %{name} requiert votre approbation"
+  text_email_subject_updated: "Flux de validation %{name} mis à jour"
+  text_email_subject_started: "Flux de validation %{name} démarré" 
+  text_email_finished_approved: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer et le document a été approuvé."
+  text_email_finished_rejected: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer et le document a été rejeté pour la raison '%{notice}'."
+  text_email_finished_delegated: "Le flux de validation '%{name}' assigné au document '%{filename}' a été délégué pour la raison '%{notice}' et vous êtes tenu d'approuver l'étape actuelle."
+  text_email_finished_step: "Le flux de validation '%{name}' assigné au document '%{filename}' a passé une des étapes d'approbation et vous êtes tenu d'approuver l'étape suivante."
+  text_email_finished_step_short: "Le flux de validation '%{name}' assigné au document '%{filename}' a passé une des étapes d'approbation."
+  text_email_started: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de démarrer et vous êtes tenu d'approuver l'étape actuelle."
+  text_email_to_proceed: "Pour ce faire, cliquez sur l'icône de validation à côté du document dans"
+  text_email_to_see_history: "Pour consulter l'historique de validation, cliquez sur le statut du flux du document dans"
+  text_email_to_see_status: Pour consulter le statut actuel du flux de validation, cliquez sur le statut du flux du document dans
+  label_my_open_approvals: My open approvals
+  label_my_locked_documents: My locked documents
+
   my:
     blocks:
-      locked_documents: Locked documents
-      open_approvals: Open approvals
-          
-  label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
-  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+      locked_documents: Documents verouillés
+      open_approvals: Approbations en attente
+
+  label_maximum_ajax_upload_filesize: Taille maximale de fichier pour téléversement via AJAX
+  note_maximum_ajax_upload_filesize: "Taille maximale, en méga octets, de fichier pour téléversement via l'interface standard AJAX. Sinon l'interface standard de Redmine doit être utilisée."
