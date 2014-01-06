@@ -113,7 +113,7 @@ fr:
   info_changed_by_user: "%{changed} par"
   label_filename: Fichier
   label_version: Version  
-  label_approval_workflow: Workflow
+  label_approval_workflow: Flux de validation
   label_mime: Type
   label_size: Taille
   label_comment: Commentaires
@@ -150,7 +150,7 @@ fr:
   permission_folder_manipulation: Gestion des dossiers
   permission_file_manipulation: Gestion des documents  
   permission_force_file_unlock: Forcer le déverrouillage du document
-  permission_manage_workflows: Manage workflows
+  permission_manage_workflows: Gérer les flux de validation
   label_file: Fichier
   field_folder: Dossier
   error_create_cycle_in_folder_dependency: create cycle in folder dependency
