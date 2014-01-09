@@ -104,6 +104,8 @@ class DmsfWorkflow < ActiveRecord::Base
         'id NOT IN (SELECT a.user_id FROM dmsf_workflow_step_assignments a WHERE id = ?) AND id IN (SELECT m.user_id FROM members m JOIN dmsf_files f ON f.project_id = m.project_id JOIN dmsf_file_revisions r ON r.dmsf_file_id = f.id WHERE r.id = ?)', 
         dmsf_workflow_step_assignment_id, 
         dmsf_file_revision_id]
+    elsif project
+      sql = ['id IN (SELECT user_id FROM members WHERE project_id = ?)', project.id]
     else
       sql = '1=1'
     end
