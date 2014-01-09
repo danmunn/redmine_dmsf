@@ -72,20 +72,20 @@
               </tr>
               <% sql = "SELECT c.action, c.note, c.created_at, c.author_id, a.user_id, s.step FROM dmsf_workflow_step_actions c RIGHT JOIN dmsf_workflow_step_assignments a ON a.id = c.dmsf_workflow_step_assignment_id RIGHT JOIN dmsf_workflow_steps s ON s.id = a.dmsf_workflow_step_id WHERE a.dmsf_file_revision_id = #{revision.id} ORDER BY s.step, c.action DESC, c.created_at" %>
               <% result = DmsfWorkflowStep.connection.execute sql %>                                                                                                
-              <% result.each_with_index do |row, i| %>    
+              <% result.each_with_index do |row, i| %>
                 <tr id="step-<%= i + 3 %> " class="<%= cycle 'odd', 'even' %>">
-                  <td class="step"><%= row[5] %></td>
-                  <td><%= link_to_user User.find_by_id(row[3].present? ? row[3] : row[4]) %></td>
-                  <td><%= DmsfWorkflowStepAction.action_str(row[0]) %></td>
+                  <td class="step"><%= row['step'] %></td>
+                  <td><%= link_to_user User.find_by_id(row['author_id'].present? ? row['author_id'] : row['user_id']) %></td>
+                  <td><%= DmsfWorkflowStepAction.action_str(row['action']) %></td>
                   <td>                    
-                    <% if((row[5].to_i == @workflow.dmsf_workflow_steps.last.step) && (revision.workflow == DmsfWorkflow::STATE_APPROVED) && (row[0] != DmsfWorkflowStepAction::ACTION_DELEGATE)) %>
+                    <% if((row['step'].to_i == @workflow.dmsf_workflow_steps.last.step) && (revision.workflow == DmsfWorkflow::STATE_APPROVED) && (row['action'] != DmsfWorkflowStepAction::ACTION_DELEGATE)) %>
                       <%= l(:title_approved) %>
                     <% else %>
-                      <%= DmsfWorkflowStepAction.workflow_str(row[0]) %>
+                      <%= DmsfWorkflowStepAction.workflow_str(row['action']) %>
                     <% end %>
                   </td>
-                  <td class="note"><%= row[1] %></td>
-                  <td><%= format_time(row[2]) if row[2].present? %></td>
+                  <td class="note"><%= row['note'] %></td>
+                  <td><%= format_time(row['created_at']) if row['created_at'].present? %></td>
                 </tr>
               <% end %>
             </tbody>
