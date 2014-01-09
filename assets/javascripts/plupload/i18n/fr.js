@@ -1,7 +1,7 @@
 // French
 plupload.addI18n({
     'Select files' : 'Sélectionnez les fichiers',
-    'Add files to the upload queue and click the start button.' : 'Ajoutez des fichiers à la file et appuyez sur le bouton démarrer',
+    'Add files to the upload queue and click the start button.' : 'Ajoutez des fichiers à la file et appuyez sur le bouton démarrer.',
     'Filename' : 'Nom de fichier',
     'Status' : 'Statut',
     'Size' : 'Taille',
@@ -24,10 +24,10 @@ plupload.addI18n({
     '%d files queued': '%d fichiers en attente',
     'File: %s':'Fichier: %s',
     'Close':'Fermer',
-    'Using runtime:':'Moteur logiciel:',
+    'Using runtime:':'Moteur logiciel :',
     'File: %f, size: %s, max file size: %m':'Fichier: %f, poids: %s, poids maximal : %m',
-    'Upload element accepts only %d file(s) at a time. Extra files were stripped.':'La file accepte %d fichier(s) à la fois. Les fichiers en trop sont ignorés',
-    'Upload URL might be wrong or doesn\'t exist':'L\'URL d\'envoi est erronée ou inexistante',
+    'Upload element accepts only %d file(s) at a time. Extra files were stripped.':'La file accepte %d fichier(s) à la fois. Les fichiers en trop sont ignorés.',
+    'Upload URL might be wrong or doesn\'t exist':'L\'URL d\'envoi est erronée ou inexistante.',
     'Error: File to large: ':'Fichier trop volumineux : ',
     'Error: Invalid file extension: ':'Extension de fichier invalide : ',
     'File size error.':'Erreur de taille de fichier',
