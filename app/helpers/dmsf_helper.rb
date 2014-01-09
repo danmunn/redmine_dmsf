@@ -60,8 +60,8 @@ module DmsfHelper
     end
   end
 
-  def plugin_asset_path(plugin, asset_type, source)
-    return "/plugin_assets/#{plugin}/#{asset_type}/#{source}"
+  def plugin_asset_path(plugin, asset_type, source)    
+    return "#{Redmine::Utils.relative_url_root}/plugin_assets/#{plugin}/#{asset_type}/#{source}"           
   end
 
   def self.to_time(obj)
