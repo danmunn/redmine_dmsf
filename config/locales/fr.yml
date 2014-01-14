@@ -281,7 +281,7 @@ fr:
 
   my:
     blocks:
-      locked_documents: Documents verouillés
+      locked_documents: Documents verrouillés
       open_approvals: Approbations en attente
 
   label_maximum_ajax_upload_filesize: Taille maximale de fichier pour téléversement via AJAX
