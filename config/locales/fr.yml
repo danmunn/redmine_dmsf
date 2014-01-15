@@ -277,11 +277,11 @@ fr:
   text_email_to_see_history: "Pour consulter l'historique de validation, cliquez sur le statut du flux du document dans"
   text_email_to_see_status: Pour consulter le statut actuel du flux de validation, cliquez sur le statut du flux du document dans
   label_my_open_approvals: Mes approbations en attente
-  label_my_locked_documents: Mes documents verouillés
+  label_my_locked_documents: Mes documents verrouillés
 
   my:
     blocks:
-      locked_documents: Documents verouillés
+      locked_documents: Documents verrouillés
       open_approvals: Approbations en attente
 
   label_maximum_ajax_upload_filesize: Taille maximale de fichier pour téléversement via AJAX
