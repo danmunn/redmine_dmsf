@@ -3,14 +3,42 @@ Changelog for Redmine DMSF
 
 1.4.7: *2014-01-02*
 -----------------------
+
+    Open approvals in My page
+    Custom fields
+    Speeding up
+    Code revision
+
 * New: Issue #38 - A few questions about the plugin (possible improvements)
 * New: Issue #49 - Make the 100 MB ajax upload limit an option 
 * Fix: Issue #52 - Error : undefined method `size' for nil:NilClass
+* Fix: Issue #90 - Missing redmine_dmsf / assets / javascripts / plupload / i18n /en.js file?
 * Fix: Issue #94 - Files not deleted with project
 * Fix: Issue #95 - DMSF tab missing on closed projects
 * Fix: Issue #104 - Custom fields do not work
 * Fix: Issue #141 - Error 500 uploading file with DMSF custom fields
+* Fix: Issue #159 - Broken links caused by plugin_asset_path implementation
 * New: Issue #173 - Open approvals in My page
+* Fix: Issue #174 - Workflow error when more than one approver 
+* Fix: Issue #175 - Error 500 on performing search
+* Fix: Issue #176 - 500 internal error when approving workflow - dmsf_workflows/4/new_action
+* Fix: Issue #177 - 1.4.7-devel unable to upload files 
+* Fix: Issue #178 - Error 500 cannot access Administration -> Custom Fields page
+* New: Issue #179 - Workflow Log History in Detailed View
+* Fix: Issue #187 - Approval workflow permissions 
+* New: Issue #190 - Very slow in directories containing many files
+* Fix: Issue #191 - Move/Copy gives undefined method for File:Class type: bug 
+* New: Issue #193 - French translation 
+* Fix: Issue #194 - Workflow name link in workflow log window 
+* Fix: Issue #195 - Workflow log not displaying all the steps 
+* New: Issue #196 - Update French Language
+* Fix: Issue #197 - Multi upload not loading the translation
+* New: Issue #198 - When editing a workflow, only show current project's users
+* Fix: Issue #199 - Small error in plugin_asset_path function 
+* New: Issue #200 - Update the french translation for the multi upload module
+* Fix: Issue #202 - unable to create Custom Field when DMSF plugin installed
+* Fix: Issue #203 - Little typing error in french translation
+
 
 1.4.6: *2013-10-18*
 -----------------------
