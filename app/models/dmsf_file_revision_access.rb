@@ -18,7 +18,7 @@
 
 class DmsfFileRevisionAccess < ActiveRecord::Base
   unloadable
-  belongs_to :revision, :class_name => "DmsfFileRevision", :foreign_key => "dmsf_file_revision_id"
+  belongs_to :revision, :class_name => 'DmsfFileRevision', :foreign_key => 'dmsf_file_revision_id'
   belongs_to :user
 
   DownloadAction = 0

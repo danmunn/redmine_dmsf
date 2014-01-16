@@ -1,6 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,20 +19,18 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfUpload
-  attr_accessor :name
-  
+  attr_accessor :name  
   attr_accessor :disk_filename
-  attr_reader :size
+  attr_reader   :size
   attr_accessor :mime_type
   attr_accessor :title
-  attr_accessor :description
-      
+  attr_accessor :description      
   attr_accessor :comment
   attr_accessor :major_version
   attr_accessor :minor_version
-  attr_accessor :locked
-  
+  attr_accessor :locked  
   attr_accessor :workflow
+  attr_accessor :custom_values
   
   def disk_file
     "#{DmsfHelper.temp_dir}/#{self.disk_filename}"
@@ -38,9 +38,9 @@ class DmsfUpload
   
   def self.create_from_uploaded_file(project, folder, uploaded_file)
     uploaded = {
-      "disk_filename" => DmsfHelper.temp_filename(uploaded_file.original_filename),
-      "content_type" => uploaded_file.content_type.to_s,
-      "original_filename" => uploaded_file.original_filename,
+      'disk_filename' => DmsfHelper.temp_filename(uploaded_file.original_filename),
+      'content_type' => uploaded_file.content_type.to_s,
+      'original_filename' => uploaded_file.original_filename,
     }
     
     File.open("#{DmsfHelper.temp_dir}/#{uploaded["disk_filename"]}", "wb") do |f| 
@@ -52,12 +52,12 @@ class DmsfUpload
   end
   
   def initialize(project, folder, uploaded)
-    @name = uploaded["original_filename"]
+    @name = uploaded['original_filename']
     
     dmsf_file = DmsfFile.visible.find_file_by_name(project, folder, @name)
     
-    @disk_filename = uploaded["disk_filename"]
-    @mime_type = uploaded["content_type"]
+    @disk_filename = uploaded['disk_filename']
+    @mime_type = uploaded['content_type']
     @size = File.size(disk_file)
     
     if dmsf_file.nil? || dmsf_file.last_revision.nil?
@@ -65,7 +65,8 @@ class DmsfUpload
       @description = nil
       @major_version = 0
       @minor_version = 0
-      @workflow = nil
+      @workflow = nil      
+      @custom_values = DmsfFileRevision.new(:file => DmsfFile.new(:project => @project)).custom_field_values
     else
       last_revision = dmsf_file.last_revision 
       @title = last_revision.title
@@ -73,9 +74,18 @@ class DmsfUpload
       @major_version = last_revision.major_version
       @minor_version = last_revision.minor_version
       @workflow = last_revision.workflow
+      @custom_values = Array.new(dmsf_file.last_revision.custom_values)    
+
+      # Add default value for CFs not existing
+      present_custom_fields = dmsf_file.last_revision.custom_values.collect(&:custom_field).uniq
+      dmsf_file.last_revision.available_custom_fields.each do |cf|
+        unless present_custom_fields.include?(cf)
+          @custom_values << CustomValue.new({:custom_field => cf, :value => cf.default_value}) if cf.default_value
+        end
+      end
     end
     
-    @locked = !dmsf_file.nil? && dmsf_file.locked_for_user?
+    @locked = dmsf_file && dmsf_file.locked_for_user?
   end
   
 end

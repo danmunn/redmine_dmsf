@@ -1,44 +1,46 @@
 ---
 dmsf_file_revisions_001:
-  id:                           1
-  dmsf_file_id:                 1
+  id:                              1
+  dmsf_file_id:                   1
   source_dmsf_file_revision_id: NULL
-  name:                         "test.txt"
-  dmsf_folder_id:               NULL
-  disk_filename:                "test.txt"
-  size:                         4
-  mime_type:                    text/plain
-  title:                        "Test File"
-  description:                  NULL
-  workflow:                     NULL
-  minor_version:                0
-  major_version:                1
-  comment:                      NULL
-  deleted:                      0
-  deleted_by_user_id:           NULL
-  user_id:                      1
-  dmsf_workflow_assigned_by:    1
+  name:                            "test.txt"
+  dmsf_folder_id:                 NULL
+  disk_filename:                  "test.txt"
+  size:                            4
+  mime_type:                       text/plain
+  title:                           "Test File"
+  description:                     NULL
+  workflow:                        NULL
+  minor_version:                  0
+  major_version:                  1
+  comment:                         NULL
+  deleted:                         0
+  deleted_by_user_id:             NULL
+  user_id:                          1
+  dmsf_workflow_assigned_by:     1
+  dmsf_workflow_started_by:      1
 
 #revision for file on non-enabled project
 dmsf_file_revisions_002:
-  id:                           2
-  dmsf_file_id:                 2
+  id:                              2
+  dmsf_file_id:                   2
   source_dmsf_file_revision_id: NULL
-  name:                         "test.txt"
-  dmsf_folder_id:               NULL
-  disk_filename:                "test.txt"
-  size:                         4
-  mime_type:                    text/plain
-  title:                        "Test File"
-  description:                  NULL
-  workflow:                     NULL
-  minor_version:                0
-  major_version:                1
-  comment:                      NULL
-  deleted:                      0
-  deleted_by_user_id:           NULL
-  user_id:                      1
-  dmsf_workflow_assigned_by:    1
+  name:                            "test.txt"
+  dmsf_folder_id:                 NULL
+  disk_filename:                  "test.txt"
+  size:                            4
+  mime_type:                       text/plain
+  title:                           "Test File"
+  description:                     NULL
+  workflow:                        NULL
+  minor_version:                  0
+  major_version:                  1
+  comment:                         NULL
+  deleted:                         0
+  deleted_by_user_id:             NULL
+  user_id:                         1
+  dmsf_workflow_assigned_by:     1
+  dmsf_workflow_started_by:      1
 
 #revision for deleted file on dmsf-enabled project
 dmsf_file_revisions_003:
@@ -59,3 +61,5 @@ dmsf_file_revisions_003:
   deleted:                      1
   deleted_by_user_id:           1
   user_id:                      1
+  dmsf_workflow_assigned_by:    1
+  dmsf_workflow_started_by:     1

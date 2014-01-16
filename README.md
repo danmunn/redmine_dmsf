@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.4.6**
+The current version of Redmine DMSF is **1.4.7**
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -19,11 +19,6 @@ Redmine is a flexible project management web application, released under the ter
 Further information about the GPL license can be found at
 <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1>
 
-Redmine 1.5.0 development
--------------------------
-Although regular logs are not publicly updated - you can keep an eye on the 1.5.0 codebase or the changelog:
-https://github.com/danmunn/redmine_dmsf/blob/devel-1.5.0/CHANGELOG.md
-
 Features
 --------
 
@@ -34,7 +29,7 @@ Features
   * Multi (drag/drop depending on browser) upload/download
   * Multi download via zip
   * Direct document sending via email
-  * Simple document approval workflow
+  * Configurable document approval workflow
   * Document access auditing
   * Integration with Redmine's activity feed
   * Wiki macros for quick content linking

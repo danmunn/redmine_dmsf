@@ -1,47 +1,59 @@
+<%# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
 </div>
 
-<h2>  
-  <% path = @folder ? @folder.dmsf_path : [] %>  
-  <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @project } %>
-  <% path.each do |path_element| %>
-    / 
-    <%= link_to h(path_element.title), {:controller => 'dmsf', :action => 'show', :id=> @project, :folder_id => path_element} %>   
-  <% end %>  
-</h2>
+<%= render(:partial => 'path', :locals => {:folder => @folder, :filename => nil}) %>
 
 <h3><%= l(:heading_send_documents_by_email) %></h3>
 
-<%= form_tag({:action => "entries_email", :id => @project, :folder_id => @folder},
-	{ :method=>:post, :class => "tabular"}) do %>
-<div class="box">
-	<p>
-		<%= label_tag("", l(:label_email_from) + ":") %>
-		<%= h(User.current.mail) %>
-	</p>
-	<p>
-		<%= label_tag("email[to]", l(:label_email_to) + ":") %>
-		<%= text_field_tag("email[to]", @email_params["to"], :style => "width: 90%;") %>
-	</p>
-	<p>
-		<%= label_tag("email[cc]", l(:label_email_cc) + ":") %>
-		<%= text_field_tag("email[cc]", @email_params["cc"], :style => "width: 90%;") %>
-	</p>
-	<p>
-		<%= label_tag("email[subject]", l(:label_email_subject) + ":") %>
-		<%= text_field_tag("email[subject]", @email_params["subject"], :style => "width: 90%;") %>
-	</p>
-	<p>
-		<%= label_tag("", l(:label_email_documents) + ":") %>
-		<strong>Documents.zip</strong>
-		<%= hidden_field_tag("email[zipped_content]", @email_params["zipped_content"]) %>
-	</p>
-	<p>
-		<%= label_tag("email[body]", l(:label_email_body) + ":") %>
-		<%= text_area_tag("email[body]", @email_params["body"], :rows=> "20", :style => "width: 90%;") %>
-	</p>
-	<p><%= submit_tag(l(:label_email_send)) %></p>
-</div>
+<%= form_tag({:action => 'entries_email', :id => @project, :folder_id => @folder},
+  { :method=>:post, :class => 'tabular'}) do %>
+  <div class="box">
+    <p>
+      <%= label_tag('', "#{l(:label_email_from)}:") %>
+      <%= h(User.current.mail) %>
+    </p>
+    <p>
+      <%= label_tag('email[to]', "#{l(:label_email_to)}:") %>
+      <%= text_field_tag('email[to]', @email_params['to'], :style => 'width: 90%;') %>
+    </p>
+    <p>
+      <%= label_tag('email[cc]', "#{l(:label_email_cc)}:") %>
+      <%= text_field_tag('email[cc]', @email_params['cc'], :style => 'width: 90%;') %>
+    </p>
+    <p>
+      <%= label_tag('email[subject]', "#{l(:label_email_subject)}:") %>
+      <%= text_field_tag('email[subject]', @email_params['subject'], :style => 'width: 90%;') %>
+    </p>
+    <p>
+      <%= label_tag('', "#{l(:label_email_documents)}:") %>
+      <strong>Documents.zip</strong>
+      <%= hidden_field_tag('email[zipped_content]', @email_params['zipped_content']) %>
+    </p>
+    <p>
+      <%= label_tag('email[body]', "#{l(:label_email_body)}:") %>
+      <%= text_area_tag('email[body]', @email_params['body'], :rows=> '20', :style => 'width: 90%;') %>
+    </p>
+    <p><%= submit_tag(l(:label_email_send)) %></p>
+  </div>
 <% end %>

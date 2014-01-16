@@ -1,43 +1,54 @@
+<%# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
 </div>
 
-<h2>  
-  <% path = @folder ? @folder.dmsf_path : [] %>  
-  <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @project } %>
-  <% path.each do |path_element| %>
-   / 
-   <%= link_to h(path_element.title), {:controller => 'dmsf', :action => 'show', :id=> @project, :folder_id => path_element} %>   
-  <% end %>
-</h2>
+<%= render(:partial => '/dmsf/path', :locals => {:folder => @folder, :filename => nil}) %>
 
 <div class="wiki">
-<%= textilizable(@folder.description) unless @folder.nil? %>
+  <%= textilizable(@folder.description) if @folder %>
 </div>
 
 <h3><%=l(:heading_uploaded_files)%></h3>
 <% i = 1 %>
-<%= form_tag({:action => "commit_files", :id => @project, :folder_id => @folder},
-	:method=>:post) do %>
-	<% @uploads.each do |upload| %>
-		<% if upload.locked %>
-			<%= render(:partial => 'upload_file_locked', :locals => {:upload => upload, :i => i}) %>
-		<% else %>
-			<%= render(:partial => 'upload_file', :locals => {:upload => upload, :i => i}) %>
-		<% end %>
-		<% i += 1 %>
-	<% end %>
-	<%= submit_tag(l(:submit_commit)) %>
+<%= form_tag({:action => 'commit_files', :id => @project, :folder_id => @folder},
+  :method=>:post) do %>
+  <% @uploads.each do |upload| %>
+    <% if upload.locked %>
+      <%= render(:partial => 'upload_file_locked', :locals => {:upload => upload, :i => i}) %>
+    <% else %>
+      <%= render(:partial => 'upload_file', :locals => {:upload => upload, :i => i}) %>
+    <% end %>
+    <% i += 1 %>
+  <% end %>
+  <%= submit_tag(l(:submit_commit)) %>
 <% end %>
 
 <% content_for :header_tags do %>
-	<%= stylesheet_link_tag "dmsf", :plugin => "redmine_dmsf" %>
-	<%= javascript_include_tag "jquery-1.6.1.min.js", :plugin => "redmine_dmsf" %>
-	<script type="text/javascript">
-		jQuery.noConflict();
-		
-		jQuery(document).ready(function() {
-		});
-	</script>
+  <%= stylesheet_link_tag 'dmsf', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag 'jquery-1.6.1.min.js', :plugin => 'redmine_dmsf' %>
+  <script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function() {
+    });
+  </script>
 <% end %>

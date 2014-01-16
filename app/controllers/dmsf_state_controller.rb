@@ -35,7 +35,7 @@ class DmsfStateController < ApplicationController
     else
       flash[:warning] = l(:user_is_not_project_member)
     end
-    redirect_to :controller => "projects", :action => 'settings', :tab => 'dmsf', :id => @project
+    redirect_to :controller => 'projects', :action => 'settings', :tab => 'dmsf', :id => @project
   end
   
   private
@@ -45,7 +45,7 @@ class DmsfStateController < ApplicationController
   end
   
   def check_project(entry)
-    if !entry.nil? && entry.project != @project
+    if entry && entry.project != @project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
   end

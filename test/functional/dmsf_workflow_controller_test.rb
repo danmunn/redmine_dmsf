@@ -1,3 +1,21 @@
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
@@ -13,7 +31,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     @user_non_member = User.find_by_id 3 #Dave Lopper
     @request.session[:user_id] = @user_member.id          
     @role_manager = Role.where(:name => 'Manager').first
-    @role_manager.add_permission! :file_approval        
+    @role_manager.add_permission! :file_manipulation        
     @wfs1 = DmsfWorkflowStep.find_by_id 1 # step 1
     @wfs2 = DmsfWorkflowStep.find_by_id 2 # step 2
     @wfs3 = DmsfWorkflowStep.find_by_id 3 # step 1
@@ -59,7 +77,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_response :forbidden    
     # Without permissions
     @project5.enable_module!(:dmsf)
-    @role_manager.remove_permission! :file_approval
+    @role_manager.remove_permission! :file_manipulation
     get :index, :project_id => @project5.id
     assert_response :forbidden    
   end
@@ -84,13 +102,13 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   
   def test_create        
     assert_difference 'DmsfWorkflow.count', +1 do    
-      post :create, :dmsf_workflow => {:name => 'wf3'}, :project_id => @project5.id
+      post :create, :name => 'wf3', :project_id => @project5.id
     end    
-    assert_redirected_to settings_project_path(@project5, :tab => 'dmsf')    
+    assert_redirected_to settings_project_path(@project5, :tab => 'dmsf_workflow')    
   end
   
   def test_update        
-    put :update, :id => @wf1.id, :dmsf_workflow => {:name => 'wf1a'}
+    put :update, :id => @wf1.id, :name => 'wf1a'
     @wf1.reload
     assert_equal 'wf1a', @wf1.name    
   end
@@ -100,7 +118,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_difference 'DmsfWorkflow.count', -1 do
       delete :destroy, :id => @wf1.id
     end
-    assert_redirected_to settings_project_path(@project5, :tab => 'dmsf')
+    assert_redirected_to settings_project_path(@project5, :tab => 'dmsf_workflow')    
     assert_equal 0, DmsfWorkflowStep.where(:dmsf_workflow_id => id).all.count
   end
     

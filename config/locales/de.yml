@@ -1,4 +1,22 @@
-# German translation for DMSF by Terrence Miller
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011   Terrence Miller
+# Copyright (C) 2013   Christian Wetting <christian.wetting@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 de:
   dmsf: DMS
   label_dmsf_file_plural: DMS
@@ -93,8 +111,7 @@ de:
   label_changed: Geändert
   info_changed_by_user: "%{changed} von"
   label_filename: Dateiname
-  label_version: Version
-  label_workflow: Workflow
+  label_version: Version  
   label_mime: Mime
   label_size: Größe
   label_comment: Kommentar
@@ -129,9 +146,9 @@ de:
   permission_user_preferences: Benutzereinstellungen
   permission_view_dmsf_files: Betrachte Dateien
   permission_folder_manipulation: Ordner manipulation
-  permission_file_manipulation: Datei manipulation
-  permission_file_approval: Datei approval
+  permission_file_manipulation: Datei manipulation  
   permission_force_file_unlock: Erzwinge Aufhebung der Dateisperre
+  permission_manage_workflows: Manage workflows
   label_file: Datei
   field_folder: Ordner
   error_create_cycle_in_folder_dependency: schaffen Zyklus in Abhängigkeit Ordner
@@ -259,3 +276,11 @@ de:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  
+  my:
+    blocks:
+      locked_documents: Locked documents
+      open_approvals: Open approvals
+          
+  label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
+  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.

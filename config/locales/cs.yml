@@ -1,4 +1,22 @@
-# Czech translation for DMSF by vit.jonas@gmail.com, karel.picman@kontron.com
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 cs:
   dmsf: DMSF
   label_dmsf_file_plural: Dmsf soubory
@@ -93,8 +111,7 @@ cs:
   label_changed: Změněno
   info_changed_by_user: "%{changed} uživatelem"
   label_filename: Jméno souboru
-  label_version: Verze
-  label_workflow: Workflow
+  label_version: Verze  
   label_mime: Typ
   label_size: Velikost
   label_comment: Komentář
@@ -129,9 +146,9 @@ cs:
   permission_user_preferences: Nastavení uživatele
   permission_view_dmsf_files: Zobrazit dokumenty
   permission_folder_manipulation: Manipulace se složkami
-  permission_file_manipulation: Manipulace se soubory
-  permission_file_approval: Schválení souboru
+  permission_file_manipulation: Manipulace se soubory  
   permission_force_file_unlock: Vynucené odemknutí souboru
+  permission_manage_workflows: Spravovat schvalovací procesy
   label_file: Soubor
   field_folder: Složka
   error_create_cycle_in_folder_dependency: vytvořit smyčku v závislostech složky
@@ -226,7 +243,7 @@ cs:
   label_or: nebo
   label_action: Akce
   label_note: Komentář
-  title_none: Komentář
+  title_none: Žádný
   title_rejection: Zamítnutí
   title_delegation: Delegace
   title_assignment: Přiřazení
@@ -257,3 +274,11 @@ cs:
   text_email_to_proceed: Pro schválení klikněte na zaškrtávací ikonku vedle dokumentu v
   text_email_to_see_history: Pro zobrazení historie schvalovacího procesu klikněte na status dokumentu v
   text_email_to_see_status: Pro zobrazení aktuálního stavu schvalovacího procesu klikněte na status dokumentu v
+    
+  my:
+    blocks:
+      locked_documents: Zamčené dokumenty
+      open_approvals: Procesy ke schválení
+          
+  label_maximum_ajax_upload_filesize: Maximální velikost souboru nahratelná přes AJAX
+  note_maximum_ajax_upload_filesize: Omezuje velikost souboru, který může být nahrán přes standardní rozhraní AJAX, jinak se použije standarní rozhraní Redminu. Číslo je MB.

@@ -52,16 +52,17 @@ class DmsfFilesController < ApplicationController
       begin
         send_revision
       rescue ActionController::MissingFile => e
+        logger.error e.message
         render_404
       end
       return
     end
     
     @revision = @file.last_revision
-    # TODO: line bellow is to handle old instalations with errors in data handling
+    # TODO: line bellow is to handle old installations with errors in data handling
     @revision.name = @file.name
     
-    @revision_pages = Paginator.new self, @file.revisions.visible.count, params["per_page"] ? params["per_page"].to_i : 25, params["page"]
+    @revision_pages = Paginator.new @file.revisions.visible.count, params['per_page'] ? params['per_page'].to_i : 25, params['page']
     
     render :layout => !request.xhr?
   end
@@ -69,12 +70,12 @@ class DmsfFilesController < ApplicationController
   #TODO: don't create revision if nothing change
   def create_revision
     unless params[:dmsf_file_revision]
-      redirect_to :action => "show", :id => @file
+      redirect_to :action => 'show', :id => @file
       return
     end
     if @file.locked_for_user?
       flash[:error] = l(:error_file_is_locked)
-      redirect_to :action => "show", :id => @file
+      redirect_to :action => 'show', :id => @file
     else
       #TODO: validate folder_id
       @revision = DmsfFileRevision.new(params[:dmsf_file_revision])
@@ -86,8 +87,7 @@ class DmsfFilesController < ApplicationController
       @revision.user = User.current
       
       @revision.major_version = last_revision.major_version
-      @revision.minor_version = last_revision.minor_version
-      #@revision.workflow = last_revision.workflow      
+      @revision.minor_version = last_revision.minor_version      
       version = params[:version].to_i
       file_upload = params[:file_upload]
       if file_upload.nil?
@@ -100,8 +100,7 @@ class DmsfFilesController < ApplicationController
         @revision.size = file_upload.size
         @revision.disk_filename = @revision.new_storage_filename
         @revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
-      end
-      #@revision.set_workflow(params[:dmsf_workflow_id], params[:commit])
+      end      
       
       @file.name = @revision.name
       @file.folder = @revision.folder
@@ -109,59 +108,59 @@ class DmsfFilesController < ApplicationController
       if @revision.valid? && @file.valid?
         @revision.save!
         @revision.assign_workflow(params[:dmsf_workflow_id])
-        unless file_upload.nil?
+        if file_upload
           @revision.copy_file_content(file_upload)
         end
         
         if @file.locked? && !@file.locks.empty?
           begin
             @file.unlock!
-            flash[:notice] = l(:notice_file_unlocked) + ", "
-          rescue
-            #Nothing to do here
+            flash[:notice] = "#{l(:notice_file_unlocked)}, "
+          rescue Exception => e
+            logger.error "Cannot unlock the file: #{e.message}"
           end
         end
         @file.save!
         @file.reload
         
-        flash[:notice] = (flash[:notice].nil? ? "" : flash[:notice]) + l(:notice_file_revision_created)
-        log_activity("new revision")
+        flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
+        log_activity('new revision')
         begin
           DmsfMailer.files_updated(User.current, [@file]).deliver
-        rescue ActionView::MissingTemplate => e
-          Rails.logger.error "Could not send email notifications: #{e.message}"
+        rescue Exception => e
+          logger.error "Could not send email notifications: #{e.message}"
         end
-        redirect_to :action => "show", :id => @file
+        redirect_to :action => 'show', :id => @file
       else
-        render :action => "show"
+        render :action => 'show'
       end
     end
   end
 
   def delete
-    if !@file.nil?
+    if @file
       if @file.delete
         flash[:notice] = l(:notice_file_deleted)
-        log_activity("deleted")
+        log_activity('deleted')
         DmsfMailer.files_deleted(User.current, [@file]).deliver
       else
         flash[:error] = l(:error_file_is_locked)
       end
     end
-    redirect_to :controller => "dmsf", :action => "show", :id => @project, :folder_id => @file.folder
+    redirect_to :controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @file.folder
   end
 
   def delete_revision
-    if !@revision.nil? && !@revision.deleted
+    if @revision && !@revision.deleted
       if @revision.delete
         flash[:notice] = l(:notice_revision_deleted)
-        log_activity("deleted")
+        log_activity('deleted')
       else
         # TODO: check this error handling
         @revision.errors.each {|e,msg| flash[:error] = msg}
       end
     end
-    redirect_to :action => "show", :id => @file
+    redirect_to :action => 'show', :id => @file
   end
 
   def lock
@@ -172,11 +171,11 @@ class DmsfFilesController < ApplicationController
       flash[:notice] = l(:notice_file_locked)
     end
       redirect_to params[:current] ? params[:current] : 
-        {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @file.folder}
+        {:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @file.folder}
   end
   
   def unlock
-    if !@file.locked?
+    unless @file.locked?
       flash[:warning] = l(:warning_file_not_locked)
     else
       if @file.locks[0].user == User.current || User.current.allowed_to?(:force_file_unlock, @file.project)
@@ -187,7 +186,7 @@ class DmsfFilesController < ApplicationController
       end
     end
     redirect_to params[:current] ? params[:current] : 
-        {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @file.folder}
+        {:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @file.folder}
   end
 
   def notify_activate
@@ -198,18 +197,18 @@ class DmsfFilesController < ApplicationController
       flash[:notice] = l(:notice_file_notifications_activated)
     end
     redirect_to params[:current] ? params[:current] :
-      {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @file.folder}
+      {:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @file.folder}
   end
   
   def notify_deactivate
-    if !@file.notification
+    unless @file.notification
       flash[:warning] = l(:warning_file_notifications_already_deactivated)
     else
       @file.notify_deactivate
       flash[:notice] = l(:notice_file_notifications_deactivated)
     end
     redirect_to params[:current] ? params[:current] :
-      {:controller => "dmsf", :action => "show", :id => @project, :folder_id => @file.folder}
+      {:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @file.folder}
   end
 
   private
@@ -219,14 +218,14 @@ class DmsfFilesController < ApplicationController
   end
 
   def send_revision
-    log_activity("downloaded")
+    log_activity('downloaded')
     access = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => @revision.id, 
       :action => DmsfFileRevisionAccess::DownloadAction)
     access.save!
     send_file(@revision.disk_file, 
       :filename => filename_for_content_disposition(@revision.name),
       :type => @revision.detect_content_type, 
-      :disposition => "attachment")
+      :disposition => 'attachment')
   end
   
   def find_file
@@ -242,7 +241,7 @@ class DmsfFilesController < ApplicationController
   end
 
   def check_project(entry)
-    if !entry.nil? && entry.project != @project
+    if entry && entry.project != @project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
   end

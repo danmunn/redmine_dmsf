@@ -19,8 +19,8 @@
 
 class DmsfLock < ActiveRecord::Base
   before_create :generate_uuid
-  belongs_to :file, :class_name => "DmsfFile", :foreign_key => "entity_id"
-  belongs_to :folder, :class_name => "DmsfFolder", :foreign_key => "entity_id"
+  belongs_to :file, :class_name => 'DmsfFile', :foreign_key => 'entity_id'
+  belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'entity_id'
   belongs_to :user
 
   #At the moment apparently we're only supporting a write lock?
@@ -68,6 +68,5 @@ class DmsfLock < ActiveRecord::Base
   def self.find_by_param(*args)
     self.find(*args)
   end
-
   
 end

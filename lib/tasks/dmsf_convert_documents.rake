@@ -34,36 +34,36 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../../config/environme
 class DmsfConvertDocuments
   
   def self.convert(options={})
-    dry = options[:dry] ? options[:dry] == "true" : false
-    replace = options[:invalid] ? options[:invalid] == "replace" : false
+    dry = options[:dry] ? options[:dry] == 'true' : false
+    replace = options[:invalid] ? options[:invalid] == 'replace' : false
     
     projects = options[:project] ? [Project.find(options[:project])] : Project.find(:all)
     
-    projects.reject! {|project| project.module_enabled?("dmsf") }
-    projects.reject! {|project| !project.module_enabled?("documents") }
+    projects.reject! {|project| project.module_enabled?('dmsf') }
+    projects.reject! {|project| !project.module_enabled?('documents') }
     
     unless projects.nil? || projects.empty?
       projects.each do |project|
-        puts "Processing project: " + project.identifier
+        puts "Processing project: #{project.identifier}"
         
-        project.enabled_module_names = (project.enabled_module_names << "dmsf").uniq unless dry
+        project.enabled_module_names = (project.enabled_module_names << 'dmsf').uniq unless dry
         project.save! unless dry
 
         fail = false
         folders = []
         project.documents.each do |document|
-          puts "Processing document: " + document.title
+          puts "Processing document: #{document.title}"
           
           folder = DmsfFolder.new
           
           folder.project = project
-          folder.user = (a = document.attachments.find(:first, :order => "created_on ASC")) ? a.author : User.find(:first)
+          folder.user = (a = document.attachments.find(:first, :order => 'created_on ASC')) ? a.author : User.find(:first)
           
           folder.title = document.title
-          folder.title.gsub!(/[\/\\\?":<>]/,"-") if replace
+          folder.title.gsub!(/[\/\\\?":<>]/, '-') if replace
           
           i = 1
-          suffix = ""
+          suffix = ''
           while folders.index{|f| f.title == (folder.title + suffix)}
             i+=1
             suffix = "_#{i}"
@@ -73,16 +73,16 @@ class DmsfConvertDocuments
           folder.description = document.description
 
           if dry
-            puts "Dry check folder: " + folder.title
+            puts "Dry check folder: #{folder.title}"
             if folder.invalid?
               folder.errors.each {|e,msg| puts "#{e}: #{msg}"}
             end
           else
             begin
               folder.save!
-              puts "Created folder: " + folder.title
+              puts "Created folder: #{folder.title}"
             rescue Exception => e
-              puts "Creating folder: " + folder.title + " failed"
+              puts "Creating folder: #{folder.title} failed"
               puts e
               fail = true
               next
@@ -91,8 +91,7 @@ class DmsfConvertDocuments
           
           folders << folder;
           
-          files = []
-          failed_files = []
+          files = []          
           document.attachments.each do |attachment|
             begin
               file = DmsfFile.new
@@ -112,13 +111,13 @@ class DmsfConvertDocuments
               file.name = DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name)
               
               unless File.exist?(attachment.diskfile)
-                puts "Creating file: " + attachment.filename + " failed, attachment file doesn't exist"
+                puts "Creating file: #{attachment.filename} failed, attachment file doesn't exist"
                 fail = true
                 next
               end
               
               if dry
-                puts "Dry check file: " + file.name
+                puts "Dry check file: #{file.name}"
                 if file.invalid?
                   file.errors.each {|e,msg| puts "#{e}: #{msg}"}
                 end
@@ -138,14 +137,14 @@ class DmsfConvertDocuments
               revision.updated_at = attachment.created_on
               revision.major_version = 0
               revision.minor_version = 1
-              revision.comment = "Converted from documents"
+              revision.comment = 'Converted from documents'
               revision.mime_type = attachment.content_type
               
               revision.disk_filename = revision.new_storage_filename
-              attachment_file = File.open(attachment.diskfile, "rb")
+              attachment_file = File.open(attachment.diskfile, 'rb')
               
               unless dry
-                File.open(revision.disk_file, "wb") do |f| 
+                File.open(revision.disk_file, 'wb') do |f| 
                   while (buffer = attachment_file.read(8192))
                     f.write(buffer)
                   end
@@ -156,7 +155,7 @@ class DmsfConvertDocuments
               attachment_file.close
               
               if dry
-                puts "Dry check revision: " + revision.title
+                puts "Dry check revision: #{revision.title}"
                 if revision.invalid?
                   revision.errors.each {|e,msg| puts "#{e}: #{msg}"}
                 end
@@ -168,9 +167,9 @@ class DmsfConvertDocuments
 
               attachment.destroy unless dry
               
-              puts "Created file: " + file.name unless dry
+              puts "Created file: #{file.name}" unless dry
             rescue Exception => e
-              puts "Creating file: " + attachment.filename + " failed"
+              puts "Creating file: #{attachment.filename} failed"
               puts e
               fail = true
             end
@@ -179,7 +178,7 @@ class DmsfConvertDocuments
           document.destroy unless dry || fail
           
         end
-        project.enabled_module_names = project.enabled_module_names.reject {|mod| mod == "documents"} unless dry || fail
+        project.enabled_module_names = project.enabled_module_names.reject {|mod| mod == 'documents'} unless dry || fail
         project.save! unless dry
       end
     end

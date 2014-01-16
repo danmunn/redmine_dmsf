@@ -55,7 +55,7 @@ class DmsfUploadController < ApplicationController
       return
     end
     @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
-    File.open("#{DmsfHelper.temp_dir}/#{@disk_filename}", "wb") do |f| 
+    File.open("#{DmsfHelper.temp_dir}/#{@disk_filename}", 'wb') do |f| 
       while (buffer = @tempfile.read(8192))
         f.write(buffer)
       end
@@ -65,7 +65,7 @@ class DmsfUploadController < ApplicationController
         File.delete("#{DmsfHelper.temp_dir}/#{@disk_filename}")
       rescue
       end
-      render :layout => nil, :json => { :jsonrpc => "2.0", 
+      render :layout => nil, :json => { :jsonrpc => '2.0', 
         :error => { 
           :code => 103, 
           :message => l(:header_minimum_filesize), 
@@ -86,7 +86,7 @@ class DmsfUploadController < ApplicationController
       files = []
       failed_uploads = []
       commited_files.each_value do |commited_file|
-        name = commited_file["name"];
+        name = commited_file['name'];
         
         new_revision = DmsfFileRevision.new
         file = DmsfFile.visible.find_file_by_name(@project, @folder, name)
@@ -95,7 +95,7 @@ class DmsfUploadController < ApplicationController
           file.project = @project
           file.name = name
           file.folder = @folder
-          file.notification = !Setting.plugin_redmine_dmsf["dmsf_default_notifications"].blank?
+          file.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
           
           new_revision.minor_version = 0
           new_revision.major_version = 0
@@ -107,26 +107,25 @@ class DmsfUploadController < ApplicationController
           last_revision = file.last_revision
           new_revision.source_revision = last_revision
           new_revision.major_version = last_revision.major_version
-          new_revision.minor_version = last_revision.minor_version
-          #new_revision.workflow = last_revision.workflow
+          new_revision.minor_version = last_revision.minor_version          
         end
 
-        commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file["disk_filename"].gsub(/[\/\\]/,'')}"
+        commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file['disk_filename'].gsub(/[\/\\]/,'')}"
         
         new_revision.project = @project
         new_revision.folder = @folder
         new_revision.file = file
         new_revision.user = User.current
         new_revision.name = name
-        new_revision.title = commited_file["title"]
-        new_revision.description = commited_file["description"]
-        new_revision.comment = commited_file["comment"]
-        new_revision.increase_version(commited_file["version"].to_i, true)                
+        new_revision.title = commited_file['title']
+        new_revision.description = commited_file['description']
+        new_revision.comment = commited_file['comment']
+        new_revision.increase_version(commited_file['version'].to_i, true)                
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         new_revision.size = File.size(commited_disk_filepath)
 
-        file_upload = File.new(commited_disk_filepath, "rb")
-        if file_upload.nil?
+        file_upload = File.new(commited_disk_filepath, 'rb')
+        unless file_upload
           failed_uploads.push(commited_file)
           flash[:error] = l(:error_file_commit_require_uploaded_file)
           next
@@ -161,11 +160,13 @@ class DmsfUploadController < ApplicationController
           
           files.push(file)
 
-          unless commited_file["dmsf_file_revision"].blank?
-            commited_file["dmsf_file_revision"]["custom_field_values"].each do |v|
-              cv = CustomValue.find(:first, :conditions => ["customized_id = " + new_revision.id.to_s + " AND custom_field_id = " + v[0]])
-              cv.value = v[1]
-              cv.save
+          if commited_file['dmsf_file_revision'].present?
+            commited_file['dmsf_file_revision']['custom_field_values'].each do |v|
+              cv = CustomValue.where(:customized_id => new_revision.id, :custom_field_id => v[0]).first
+              if cv
+                cv.value = v[1]
+                cv.save
+              end
             end
           end
         else
@@ -173,18 +174,18 @@ class DmsfUploadController < ApplicationController
         end
       end
       unless files.empty?
-        files.each {|file| log_activity(file, "uploaded") unless file.nil?}
+        files.each { |file| log_activity(file, 'uploaded') if file }
         begin 
           DmsfMailer.files_updated(User.current, files).deliver
         rescue ActionView::MissingTemplate => e
-          Rails.logger.error "Could not send email notifications: " + e.to_s
+          Rails.logger.error "Could not send email notifications: #{e.message}"
         end
       end
       unless failed_uploads.empty?
-        flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u["name"]}.join(", "))
+        flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u['name']}.join(', '))
       end
     end
-    redirect_to :controller => "dmsf", :action => "show", :id => @project, :folder_id => @folder
+    redirect_to :controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder
   end
 
   private
@@ -198,14 +199,14 @@ class DmsfUploadController < ApplicationController
   end
   
   def find_folder
-    @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?("folder_id")
+    @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?('folder_id')
     check_project(@folder)
   rescue DmsfAccessError
     render_403
   end
 
   def check_project(entry)
-    if !entry.nil? && entry.project != @project
+    if entry && entry.project != @project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
     end
   end

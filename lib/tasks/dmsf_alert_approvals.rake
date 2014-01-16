@@ -24,7 +24,7 @@ Available options:
 Example:
   rake redmine:dmsf_alert_approvals RAILS_ENV="production"
 END_DESC
-require File.expand_path(File.dirname(__FILE__) + "/../../../../config/environment")
+require File.expand_path(File.dirname(__FILE__) + '/../../../../config/environment')
 
 class DmsfAlertApprovals
   

@@ -1,4 +1,23 @@
-# English translation for DMSF by vit.jonas@gmail.com, dan.munn@munnster.co.uk
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012  Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2013  karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 en:
   dmsf: DMSF
   label_dmsf_file_plural: Dmsf files
@@ -94,7 +113,7 @@ en:
   info_changed_by_user: "%{changed} by"
   label_filename: Filename
   label_version: Version
-  label_workflow: Workflow
+  label_approval_workflow: Workflow
   label_mime: Mime
   label_size: Size
   label_comment: Comment
@@ -129,9 +148,9 @@ en:
   permission_user_preferences: User preferences
   permission_view_dmsf_files: View documents
   permission_folder_manipulation: Folder manipulation
-  permission_file_manipulation: File manipulation
-  permission_file_approval: File approval
+  permission_file_manipulation: File manipulation  
   permission_force_file_unlock: Force file unlock
+  permission_manage_workflows: Manage workflows
   label_file: File
   field_folder: Folder
   error_create_cycle_in_folder_dependency: create cycle in folder dependency
@@ -240,7 +259,7 @@ en:
   dmsf_new_step: New step  
   message_dmsf_wokflow_note: Your note...
   info_revision: "r%{rev}"
-  link_workflow: Workflow  
+  link_workflow: Workflow
   notice_workflow_started: Approval workflow successfully started  
   text_email_subject_approved: "Approval workflow %{name} approved"
   text_email_subject_rejected: "Approval workflow %{name} rejected"
@@ -257,3 +276,13 @@ en:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  label_my_open_approvals: My open approvals
+  label_my_locked_documents: My locked documents
+  
+  my:
+    blocks:
+      locked_documents: Locked documents
+      openap_provals: Open approvals  
+      
+  label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
+  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.

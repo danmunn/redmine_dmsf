@@ -1,7 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   V�t Jon� <vit.jonas@gmail.com>
+# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,9 +31,8 @@ module RedmineDmsf
           unloadable
           alias_method_chain :copy, :dmsf
 
-          has_many :dmsf_files, :class_name => "DmsfFile", :foreign_key => "project_id", :conditions => { :dmsf_folder_id => nil }
-          #Fix: should only be root folders not, all folders
-          has_many :dmsf_folders, :class_name => "DmsfFolder", :foreign_key => "project_id", :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy 
+          has_many :dmsf_files, :class_name => 'DmsfFile', :foreign_key => 'project_id', :conditions => { :dmsf_folder_id => nil }, :dependent => :destroy
+          has_many :dmsf_folders, :class_name => 'DmsfFolder', :foreign_key => 'project_id', :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy
           has_many :dmsf_workflows, :dependent => :destroy
         end
 
@@ -42,10 +42,7 @@ module RedmineDmsf
       end
 
       module InstanceMethods
-        def all_dmsf_custom_fields
-          @all_dmsf_custom_fields ||= (DmsfFileRevisionCustomField.for_all).uniq.sort # + dmsf_file_revision_custom_fields).uniq.sort
-        end
-
+        
         def dmsf_count
           file_count = DmsfFile.visible.project_root_files(self).count
           folder_count = DmsfFolder.visible.project_root_folders(self).count
@@ -59,7 +56,7 @@ module RedmineDmsf
           project = project.is_a?(Project) ? project : Project.find(project)
 
           to_be_copied = %w(dmsf)
-          to_be_copied = to_be_copied & options[:only].to_a unless options[:only].nil?
+          to_be_copied = to_be_copied & options[:only].to_a if options[:only].present?
 
           if save
             to_be_copied.each do |name|
