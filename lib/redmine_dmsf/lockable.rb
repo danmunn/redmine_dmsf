@@ -91,7 +91,7 @@ module RedmineDmsf
         locks.each {|lock|
           next if lock.expired? #Incase we're inbetween updates
           if (lock.lock_scope == :scope_exclusive && b_shared.nil?)
-            return true if lock.user.id != User.current.id
+            return true if (!lock.user) || (lock.user.id != User.current.id)
           else
             b_shared = true if b_shared.nil?
             b_shared = false if lock.user.id == User.current.id
@@ -120,7 +120,7 @@ module RedmineDmsf
         else
           b_destroyed = false
           existing.each {|lock|
-            if (lock.user.id == User.current.id)
+            if (lock.user && (lock.user.id == User.current.id)) || User.current.admin?
               lock.destroy
               b_destroyed = true
               break

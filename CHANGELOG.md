@@ -38,7 +38,8 @@ Changelog for Redmine DMSF
 * New: Issue #200 - Update the french translation for the multi upload module
 * Fix: Issue #202 - unable to create Custom Field when DMSF plugin installed
 * Fix: Issue #203 - Little typing error in french translation
-
+* Fix: Issue #206 - "Select All" checkbox not functioning
+* Fix: Issue #207 - locks by deleted users producte internal server error 500
 
 1.4.6: *2013-10-18*
 -----------------------
