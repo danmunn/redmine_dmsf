@@ -95,7 +95,7 @@ class DmsfUploadController < ApplicationController
           file.project = @project
           file.name = name
           file.folder = @folder
-          file.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
+          file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
           
           new_revision.minor_version = 0
           new_revision.major_version = 0
