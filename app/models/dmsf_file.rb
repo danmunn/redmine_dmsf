@@ -105,15 +105,20 @@ class DmsfFile < ActiveRecord::Base
       errors[:base] << l(:error_file_is_locked)
       return false 
     end
-    if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']     
-      self.revisions.visible.each {|r| r.delete(true)}
-      self.destroy
-    else
-      # Revisions of a deleted file SHOULD be deleted too
-      self.revisions.visible.each {|r| r.delete }
-      self.deleted = true
-      self.deleted_by_user = User.current
-      save
+    begin
+      if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']     
+        self.revisions.visible.each {|r| r.delete(true)}
+        self.destroy
+      else
+        # Revisions of a deleted file SHOULD be deleted too
+        self.revisions.visible.each {|r| r.delete }
+        self.deleted = true
+        self.deleted_by_user = User.current
+        save
+      end
+    rescue Exception => e
+      errors[:base] << e.message
+      return false
     end
   end
   

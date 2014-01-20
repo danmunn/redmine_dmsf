@@ -143,8 +143,10 @@ class DmsfFilesController < ApplicationController
         flash[:notice] = l(:notice_file_deleted)
         log_activity('deleted')
         DmsfMailer.files_deleted(User.current, [@file]).deliver
-      else
-        flash[:error] = l(:error_file_is_locked)
+      else       
+        @file.errors.each do |e, msg| 
+          flash[:error] = msg         
+        end
       end
     end
     redirect_to :controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @file.folder
@@ -155,9 +157,10 @@ class DmsfFilesController < ApplicationController
       if @revision.delete
         flash[:notice] = l(:notice_revision_deleted)
         log_activity('deleted')
-      else
-        # TODO: check this error handling
-        @revision.errors.each {|e,msg| flash[:error] = msg}
+      else        
+        @revision.errors.each do |e, msg| 
+          flash[:error] = msg
+        end
       end
     end
     redirect_to :action => 'show', :id => @file

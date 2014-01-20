@@ -298,56 +298,64 @@ class DmsfController < ApplicationController
   end
 
   def email_entries(selected_folders, selected_files)
-    zip = DmsfZip.new
-    zip_entries(zip, selected_folders, selected_files)
-    
-    ziped_content = "#{DmsfHelper.temp_dir}/#{DmsfHelper.temp_filename('dmsf_email_sent_documents.zip')}";
-    
-    File.open(ziped_content, 'wb') do |f|
-      zip_file = File.open(zip.finish, 'rb')
-      while (buffer = zip_file.read(8192))
-        f.write(buffer)
-      end
-    end
+    begin
+      zip = DmsfZip.new
+      zip_entries(zip, selected_folders, selected_files)
 
-    max_filesize = Setting.plugin_redmine_dmsf['dmsf_max_email_filesize'].to_f
-    if max_filesize > 0 && File.size(ziped_content) > max_filesize * 1048576
-      raise EmailMaxFileSize
+      ziped_content = "#{DmsfHelper.temp_dir}/#{DmsfHelper.temp_filename('dmsf_email_sent_documents.zip')}";
+
+      File.open(ziped_content, 'wb') do |f|
+        zip_file = File.open(zip.finish, 'rb')
+        while (buffer = zip_file.read(8192))
+          f.write(buffer)
+        end
+      end
+
+      max_filesize = Setting.plugin_redmine_dmsf['dmsf_max_email_filesize'].to_f
+      if max_filesize > 0 && File.size(ziped_content) > max_filesize * 1048576
+        raise EmailMaxFileSize
+      end
+
+      zip.files.each do |f| 
+        log_activity(f, 'emailing zip')
+        audit = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => f.last_revision.id, 
+          :action => DmsfFileRevisionAccess::EmailAction)
+        audit.save!
+      end
+
+      @email_params = {'zipped_content' => ziped_content}
+      render :action => 'email_entries'
+    rescue Exception => e
+      flash[:error] = e.message
+    ensure
+      zip.close if zip
     end
-    
-    zip.files.each do |f| 
-      log_activity(f, 'emailing zip')
-      audit = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => f.last_revision.id, 
-        :action => DmsfFileRevisionAccess::EmailAction)
-      audit.save!
-    end
-    
-    @email_params = {'zipped_content' => ziped_content}
-    render :action => 'email_entries'
-  ensure
-    zip.close if zip
   end
 
   def download_entries(selected_folders, selected_files)
-    zip = DmsfZip.new
-    zip_entries(zip, selected_folders, selected_files)
-    
-    zip.files.each do |f| 
-      log_activity(f, 'download zip')
-      audit = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => f.last_revision.id, 
-        :action => DmsfFileRevisionAccess::DownloadAction)
-      audit.save!
+    begin
+      zip = DmsfZip.new
+      zip_entries(zip, selected_folders, selected_files)
+
+      zip.files.each do |f| 
+        log_activity(f, 'download zip')
+        audit = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => f.last_revision.id, 
+          :action => DmsfFileRevisionAccess::DownloadAction)
+        audit.save!
+      end
+
+      send_file(zip.finish, 
+        :filename => filename_for_content_disposition("#{@project.name}-#{DateTime.now.strftime('%y%m%d%H%M%S')}.zip"),
+        :type => 'application/zip', 
+        :disposition => 'attachment')
+    rescue Exception => e
+      flash[:error] = e.message
+    ensure
+      zip.close if zip
     end
-    
-    send_file(zip.finish, 
-      :filename => filename_for_content_disposition("#{@project.name}-#{DateTime.now.strftime('%y%m%d%H%M%S')}.zip"),
-      :type => 'application/zip', 
-      :disposition => 'attachment')
-  ensure
-    zip.close if zip
   end
   
-  def zip_entries(zip, selected_folders, selected_files)
+  def zip_entries(zip, selected_folders, selected_files)    
     if selected_folders && selected_folders.is_a?(Array)
       selected_folders.each do |selected_folder_id|
         check_project(folder = DmsfFolder.visible.find(selected_folder_id))
@@ -364,12 +372,10 @@ class DmsfController < ApplicationController
         end        
       end
     end
-        
     max_files = Setting.plugin_redmine_dmsf['dmsf_max_file_download'].to_i
     if max_files > 0 && zip.files.length > max_files
       raise ZipMaxFilesError, zip.files.length
-    end
-    
+    end    
     zip
   end
   
