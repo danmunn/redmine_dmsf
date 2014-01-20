@@ -327,26 +327,24 @@
 <% end %>   
 
 <script type="text/javascript">
-  jQuery('#entries_delete_button').click(function(event) {
+  jQuery('#entries_delete_button').click(function() {
     if(window.confirm("<%= l(:question_do_you_really_want_to_delete_entries) %>")) {
-      jQuery('#entries_form').attr('action', "<%= url_for(:action => :delete_entries, :id => @project, :folder_id => @folder) %>");'
+      jQuery('#entries_form').attr('action', "<%= url_for(:action => :delete_entries, :id => @project, :folder_id => @folder) %>");
       jQuery('#entries_form').submit();
     }
   });
 
-  jQuery('#check_all_entries').click(function(event) {
-    var $this = jQuery(this);
-    if($this.prop('checked')) {
-      jQuery('input[type=checkbox]', jQuery('#browser > tbody')).prop('checked', true);
-    } else {
-      jQuery('input[type=checkbox]', jQuery('#browser > tbody')).prop('checked', false);
-    }
-  });
+  jQuery('#check_all_entries').click(function() {    
+    jQuery('input[type=checkbox]', jQuery('#browser > tbody')).prop('checked', this.checked);    
+  });  
 </script>
 
 <%
-sUrl = 'jquery.dataTables/en.json'
-sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !I18n.locale.to_s.match(/^en.*/)
+  if I18n.locale && !I18n.locale.to_s.match(/^en.*/)
+    sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" 
+  else
+    sUrl = 'jquery.dataTables/en.json'
+  end    
 %>
 
 <% content_for :header_tags do %>
