@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.4.7**
+The current version of Redmine DMSF is **1.4.8**
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
