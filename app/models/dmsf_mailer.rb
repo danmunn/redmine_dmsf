@@ -72,19 +72,15 @@ class DmsfMailer < Mailer
   private
   
   def get_notify_user_emails(user, files)
-    if files.empty?
-      return []
-    end
-    
-    project = files[0].project
-    
+    return [] if files.empty?
+    project = files[0].project    
     notify_members = project.members
     notify_members = notify_members.select do |notify_member|
-      notify_user = notify_member.user
-      if notify_user.pref[:no_self_notified] && notify_user == user
+      notify_user = notify_member.user      
+      if notify_user.pref[:no_self_notified] == '1' && notify_user == user
         false
       else
-        if notify_member.dmsf_mail_notification.nil?
+        unless notify_member.dmsf_mail_notification
           case notify_user.mail_notification
           when 'all'
             true

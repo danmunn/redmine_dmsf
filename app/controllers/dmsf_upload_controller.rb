@@ -151,15 +151,12 @@ class DmsfUploadController < ApplicationController
         end
         
         if new_revision.save
-          new_revision.assign_workflow(commited_file[:dmsf_workflow_id])
-          file.reload
-          
+          new_revision.assign_workflow(commited_file[:dmsf_workflow_id])                    
           new_revision.copy_file_content(file_upload)
           file_upload.close
-          File.delete(commited_disk_filepath)
-          
+          File.delete(commited_disk_filepath)          
+          file.set_last_revision new_revision
           files.push(file)
-
           if commited_file['dmsf_file_revision'].present?
             commited_file['dmsf_file_revision']['custom_field_values'].each do |v|
               cv = CustomValue.where(:customized_id => new_revision.id, :custom_field_id => v[0]).first
@@ -173,8 +170,8 @@ class DmsfUploadController < ApplicationController
           failed_uploads.push(commited_file)
         end
       end
-      unless files.empty?
-        files.each { |file| log_activity(file, 'uploaded') if file }
+      unless files.empty?        
+        files.each { |file| log_activity(file, 'uploaded') if file }        
         begin 
           DmsfMailer.files_updated(User.current, files).deliver
         rescue ActionView::MissingTemplate => e
