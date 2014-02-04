@@ -99,6 +99,10 @@ class DmsfFile < ActiveRecord::Base
     end
     @last_revision
   end
+  
+  def set_last_revision(new_revision)
+    @last_revision = new_revision
+  end
 
   def delete
     if locked_for_user?
