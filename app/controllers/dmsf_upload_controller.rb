@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011 Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2014 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -142,7 +143,13 @@ class DmsfUploadController < ApplicationController
         end
         
         # Need to save file first to generate id for it in case of creation. 
-        # File id is needed to properly generate revision disk filename
+        # File id is needed to properly generate revision disk filename                
+        if commited_file['dmsf_file_revision'].present?
+          commited_file['dmsf_file_revision']['custom_field_values'].each_with_index do |v, i|
+            new_revision.custom_field_values[i].value = v[1]
+          end
+        end
+                       
         if new_revision.valid? && file.save
           new_revision.disk_filename = new_revision.new_storage_filename
         else
@@ -157,15 +164,6 @@ class DmsfUploadController < ApplicationController
           File.delete(commited_disk_filepath)          
           file.set_last_revision new_revision
           files.push(file)
-          if commited_file['dmsf_file_revision'].present?
-            commited_file['dmsf_file_revision']['custom_field_values'].each do |v|
-              cv = CustomValue.where(:customized_id => new_revision.id, :custom_field_id => v[0]).first
-              if cv
-                cv.value = v[1]
-                cv.save
-              end
-            end
-          end
         else
           failed_uploads.push(commited_file)
         end
