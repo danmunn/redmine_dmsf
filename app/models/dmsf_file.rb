@@ -353,7 +353,11 @@ class DmsfFile < ActiveRecord::Base
                     if x.is_a?(ActiveRecord::Relation)
                       project_included = x.first.id == dmsf_file.project.id        
                     else
-                      project_included = x[:id] == dmsf_file.project.id
+                      if dmsf_file.project
+                        project_included = x[:id] == dmsf_file.project.id
+                      else
+                        project_included = false
+                      end
                     end
                   end
                 end
