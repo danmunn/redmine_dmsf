@@ -27,10 +27,8 @@ en:
   notice_file_locked: File locked
   warning_file_not_locked: File not locked
   notice_file_unlocked: File unlocked
-  error_only_user_that_locked_file_can_unlock_it: Only user that locked file can unlock it
-  question_do_you_really_want_to_delete_this_entry: Do you really want to delete this entry?
-  error_max_files_exceeded: "Limit for %{number} simultaneously downloaded files exceeded"
-  question_do_you_really_want_to_delete_this_revision: Do you really want to delete this revision?
+  error_only_user_that_locked_file_can_unlock_it: Only user that locked file can unlock it  
+  error_max_files_exceeded: "Limit for %{number} simultaneously downloaded files exceeded"  
   error_entry_project_does_not_match_current_project: "Entry project doesn't match current project"
   notice_folder_created: Folder created
   error_folder_creation_failed: Folder creation failed
@@ -185,8 +183,8 @@ en:
   comment_copied_from: "Copied from %{source}"
   notice_file_copied: File copied
   notice_file_moved: File moved
-  label_target_project: Target project
-  label_target_folder: Target folder
+  field_target_project: Target project
+  field_target_folder: Target folder
   title_copy_or_move: Copy/Move
   label_dmsf_folder_plural: Dmsf folders
   comment_moved_from: "Moved from %{source}"
@@ -279,6 +277,13 @@ en:
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
   label_my_open_approvals: My open approvals
   label_my_locked_documents: My locked documents
+  
+  title_create_link: Create a symbolic link  
+  label_create_link: Create link  
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Target file
+  title_download_entries: Download entries
   
   my:
     blocks:

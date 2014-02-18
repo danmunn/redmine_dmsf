@@ -25,10 +25,8 @@ es:
   notice_file_locked: Archivo bloqueado
   warning_file_not_locked: Archivo no bloqueado
   notice_file_unlocked: Archivo desbloqueado
-  error_only_user_that_locked_file_can_unlock_it: Solo los usuarios que bloquearon previamente al archivo lo pueden desbloquear
-  question_do_you_really_want_to_delete_this_entry: ¿Está seguro de borrar el ítem seleccionado?
-  error_max_files_exceeded: "Se excedio el numero permitido de archivos bajados de manera simultánea:"
-  question_do_you_really_want_to_delete_this_revision: ¿Está seguro de borrar la revision seleccionada?
+  error_only_user_that_locked_file_can_unlock_it: Solo los usuarios que bloquearon previamente al archivo lo pueden desbloquear  
+  error_max_files_exceeded: "Se excedio el numero permitido de archivos bajados de manera simultánea:"  
   error_entry_project_does_not_match_current_project: Las entradas del proyecto no concuerdan con el proyecto seleccionado
   notice_folder_created: Carpeta creada satisfactoriamente
   error_folder_creation_failed: La creacion de la carpeta ha fallado
@@ -184,8 +182,8 @@ es:
   comment_copied_from: "Copied from %{source}"
   notice_file_copied: File copied
   notice_file_moved: File moved
-  label_target_project: Target project
-  label_target_folder: Target folder
+  field_target_project: Target project
+  field_target_folder: Target folder
   title_copy_or_move: Copy/Move
   label_dmsf_folder_plural: Dmsf folders
   comment_moved_from: "Moved from %{source}"
@@ -276,6 +274,13 @@ es:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  
+  title_create_link: Create a symbolic link  
+  label_create_link: Create link  
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Target file
+  title_download_entries: Download entries
   
   my:
     blocks:

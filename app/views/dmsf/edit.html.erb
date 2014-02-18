@@ -20,9 +20,39 @@
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
-  <%= link_to(image_tag('copy.png'), 
-    {:controller => :dmsf_folders_copy, :action => 'new', :id => @folder }, 
-    :title => l(:title_copy)) if @folder.id %>
+  <% if User.current.allowed_to?(:folder_manipulation, @project) && params[:action] == 'edit' %>
+    <% unless @folder.locked? %>
+       <%= link_to(l(:button_lock),
+          lock_dmsf_path(:id => @project, :folder_id => @folder),
+          :title => l(:title_lock_file),
+          :class => 'icon icon-dmsf-lock') %>  
+      <% if @folder.notification %>              
+          <%= link_to(l(:label_notifications_off),
+           notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
+            :title => l(:title_notifications_active_deactivate),
+            :class => 'icon icon-notification-on') %>
+        <% else %>              
+          <%= link_to(l(:label_notifications_on),
+            notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
+            :title => l(:title_notifications_not_active_activate),
+            :class => 'icon icon-notification-off') %>
+        <% end %> 
+      <%= link_to(l(:button_copy), copy_folder_path(:id => @folder),
+        :title => l(:title_copy), :class => 'icon icon-copy') %>
+      <%= link_to(l(:button_delete),
+        delete_dmsf_path(:id => @project, :folder_id => @folder.dmsf_folder_id, :delete_folder_id => @folder),
+        :data => {:confirm => l(:text_are_you_sure)},            
+        :title => l(:title_delete),
+        :class => 'icon icon-del') %>
+    <% else %>
+      <% if (!@folder.locked_for_user? || User.current.allowed_to?(:force_file_unlock, @project)) && @folder.unlockable? %>
+        <%= link_to(l(:button_unlock),
+          unlock_dmsf_path(:id => @project, :folder_id => @folder),
+            :title => l(:title_unlock_file),
+            :class => 'icon icon-dmsf-unlock')%>
+      <% end %>        
+    <% end %>   
+  <% end %>
 </div>
 
 <% create = @pathfolder == @parent %>
@@ -64,7 +94,3 @@
 <% end %>
 
 <%= wikitoolbar_for 'dmsf_folder_description' %>
-
-<% content_for :header_tags do %>
-  <%= stylesheet_link_tag 'dmsf', :plugin => 'redmine_dmsf' %>
-<% end %>

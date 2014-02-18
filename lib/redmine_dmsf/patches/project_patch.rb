@@ -31,9 +31,17 @@ module RedmineDmsf
           unloadable
           alias_method_chain :copy, :dmsf
 
-          has_many :dmsf_files, :class_name => 'DmsfFile', :foreign_key => 'project_id', :conditions => { :dmsf_folder_id => nil }, :dependent => :destroy
-          has_many :dmsf_folders, :class_name => 'DmsfFolder', :foreign_key => 'project_id', :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy
+          has_many :dmsf_files, :class_name => 'DmsfFile', :foreign_key => 'project_id', 
+            :conditions => { :dmsf_folder_id => nil }, :dependent => :destroy
+          has_many :dmsf_folders, :class_name => 'DmsfFolder', :foreign_key => 'project_id', 
+            :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy
           has_many :dmsf_workflows, :dependent => :destroy
+          has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'project_id', 
+            :conditions => { :dmsf_folder_id => nil, :target_type => DmsfFolder.model_name },
+            :dependent => :destroy 
+          has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'project_id', 
+            :conditions => { :dmsf_folder_id => nil, :target_type => DmsfFile.model_name },
+            :dependent => :destroy 
         end
 
       end

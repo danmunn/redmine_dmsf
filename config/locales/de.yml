@@ -26,10 +26,8 @@ de:
   notice_file_locked: Datei gesperrt
   warning_file_not_locked: Datei nicht gesperrt
   notice_file_unlocked: Dateisperre gelöst
-  error_only_user_that_locked_file_can_unlock_it: Nur der Benutzer, der die Datei gesperrt hat, kann sie auch wieder freigeben
-  question_do_you_really_want_to_delete_this_entry: Willst du diesen Eintrag wirklich löschen?
-  error_max_files_exceeded: "Grenze für %{number} gleichzeitig heruntergeladene Dateien überschritten"
-  question_do_you_really_want_to_delete_this_revision: Möchtest du diese Dateiversion wirklich löschen?
+  error_only_user_that_locked_file_can_unlock_it: Nur der Benutzer, der die Datei gesperrt hat, kann sie auch wieder freigeben 
+  error_max_files_exceeded: "Grenze für %{number} gleichzeitig heruntergeladene Dateien überschritten"  
   error_entry_project_does_not_match_current_project: Entry Projekt entspricht nicht aktuellen Projekt
   notice_folder_created: Ordner erstellt
   error_folder_creation_failed: Ordnererstellung fehlgeschlagen
@@ -182,8 +180,8 @@ de:
   comment_copied_from: "Kopiert aus %{source}"
   notice_file_copied: Datei kopiert
   notice_file_moved: Datei verschoben
-  label_target_project: Zielprojekte
-  label_target_folder: Zielordner
+  field_target_project: Zielprojekte
+  field_target_folder: Zielordner
   title_copy_or_move: Kopieren/Verschieben
   label_dmsf_folder_plural: Ordner
   comment_moved_from: "Verschoben aus %{source}"
@@ -276,6 +274,13 @@ de:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  
+  title_create_link: Create a symbolic link  
+  label_create_link: Create link  
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Target file
+  title_download_entries: Download entries
   
   my:
     blocks:

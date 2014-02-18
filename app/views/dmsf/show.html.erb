@@ -1,9 +1,9 @@
 <%#=
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011 Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012 Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2014 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,47 +22,73 @@
 
 <% html_title(l(:dmsf)) %>
 <div class="contextual">
-  <% if User.current.allowed_to?(:folder_manipulation, @project) %>    
-    <% if @folder.nil? %>
-      &nbsp;
-      <%= link_to('', {:action => 'edit_root', :id => @project},
-        :title => l(:link_edit, :title => l(:link_documents)), :class => 'icon icon-edit') %>
-    <% elsif @locked_for_user %>
-      &nbsp;
-      <%= link_to('', {:action => 'edit', :id => @project, :folder_id => @folder },
-        :title => l(:link_edit, :title => h(@folder.title)), :class => 'icon icon-edit') %>
+  <% if @folder_manipulation_allowed %>    
+    <% if @folder.nil? %>      
+      <%= link_to(l(:button_edit), 
+        edit_root_dmsf_path(:id => @project),
+        :title => l(:link_edit, :title => l(:link_documents)), 
+        :class => 'icon icon-edit') %>
+    <% elsif !@locked_for_user %>      
+      <%= link_to(l(:button_edit), 
+        edit_dmsf_path(:id => @project, :folder_id => @folder),
+        :title => l(:link_edit, :title => h(@folder.title)), 
+        :class => 'icon icon-edit') %>
     <% end %>
     <% if @folder && (!@locked_for_user || User.current.allowed_to?(:force_file_unlock, @project)) %>
       <% if @folder.locked? %>
         <% unless @folder.unlockable? %>
-          <%= image_tag('locked.png', :plugin => :redmine_dmsf, :title => l(:title_folder_parent_locked, :name => @folder.folder.lock.reverse[0].folder.title)) unless @folder.nil?%>
+          <%= link_to(l(:button_unlock),
+            :title => l(:title_folder_parent_locked, :name => @folder.folder.lock.reverse[0].folder.title),
+            :class => 'icon icon-dmsf-unlock') if @folder %>
         <% else %>
-          <%= link_to_function(image_tag('unlock.png', :plugin => 'redmine_dmsf'),
-            "manipulation_link('#{url_for(:action => 'unlock', :id => @project, :folder_id => @folder, :current => request.url)}')",
-            :title => l(:title_unlock_folder)) if @folder %>
+          <%= link_to(l(:button_unlock),
+            unlock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
+            :title => l(:title_unlock_folder),
+           :class => 'icon icon-dmsf-unlock') if @folder %>          
         <% end %>
       <% else %>
-        <%= link_to_function(image_tag('lock.png', :plugin => 'redmine_dmsf'),
-          "manipulation_link('#{url_for(:action => 'lock', :id => @project, :folder_id => @folder, :current => request.url)}')",
-          :title => l(:title_lock_folder)) if @folder %>
+        <%= link_to(l(:button_lock),
+          lock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
+          :title => l(:title_lock_folder),
+          :class => 'icon icon-dmsf-lock') if @folder %>
       <% end %>
     <% end %>
-    <% unless @folder %>   
-      &nbsp; 
-      <% if @project.dmsf_notification %>
-        <%= link_to_function(image_tag('notify.png', :plugin => :redmine_dmsf),
-                "manipulation_link('#{url_for(:action => 'notify_deactivate', :id => @project)}')",
-                         :title => l(:title_notifications_active_deactivate)) %>
-      <% else %>
-        <%= link_to_function(image_tag('notifynot.png', :plugin => :redmine_dmsf),
-                "manipulation_link('#{url_for(:action => 'notify_activate', :id => @project)}')",
-                        :title => l(:title_notifications_not_active_activate)) %>
-      <% end %>                                                                                      
-    <% end %>
-    &nbsp;    
-    <%= link_to('', {:action => 'new', :id => @project, :parent_id => @folder },
-      :title => l(:link_create_folder), :class => 'icon icon-add') unless @locked_for_user %>
-  <% end %>
+    <% unless @folder %>         
+      <% if @project.dmsf_notification %>        
+        <%= link_to(l(:label_notifications_off), 
+          notify_deactivate_dmsf_path(:id => @project),
+          :title => l(:title_notifications_active_deactivate), 
+          :class => 'icon icon-notification-on') %>
+      <% else %>        
+        <%= link_to(l(:label_notifications_on),
+          notify_activate_dmsf_path(:id => @project),
+          :title => l(:title_notifications_active_deactivate), 
+          :class => 'icon icon-notification-off') %>
+      <% end %> 
+    <% else %>
+      <% if @folder.notification %>
+          <%= link_to(l(:label_notifications_off),
+            notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
+            :title => l(:title_notifications_active_deactivate),
+            :class => 'icon icon-notification-on') %>
+        <% else %>
+          <%= link_to(l(:label_notifications_on),
+            notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
+            :title => l(:title_notifications_not_active_activate),
+            :class => 'icon icon-notification-off') %>
+        <% end %>    
+    <% end %>    
+    <% if @file_manipulation_allowed %>      
+      <%= link_to(l(:label_create_link), 
+        new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder, :target_project_id => @project.id),
+        :title => l(:link_create_link), 
+        :class => 'icon icon-link') unless @locked_for_user %>
+    <% end %>    
+    <%= link_to(l(:link_create_folder), 
+      new_dmsf_path(:id => @project, :parent_id => @folder),
+      :title => l(:link_create_folder), 
+      :class => 'icon icon-add') unless @locked_for_user %>
+  <% end %>  
 </div>
 
 <%= render(:partial => 'path', :locals => {:folder => @folder, :filename => nil}) %>
@@ -81,7 +107,7 @@
   <div class="controls" style="float: left">
     <%= submit_tag(l(:submit_download), :title => l(:title_download_checked), :name => 'download_entries') %>
     <%= submit_tag(l(:submit_email), :title => l(:title_send_checked_by_email), :name => 'email_entries') %>
-    <% if User.current.allowed_to?(:file_manipulation, @project) && @folder && !@locked_for_user %>
+    <% if @file_manipulation_allowed && @folder_manipulation_allowed && !@locked_for_user %>
       <button type="button" id="entries_delete_button" title="<%= l(:title_delete_checked) %>"><%= l(:button_delete) %></button>
     <% end %>
   </div>
@@ -102,236 +128,37 @@
         <th class="hidden"></th>
       </tr>
     </thead>
-  <tbody>    
-  <% @subfolders.each do |subfolder| %>
-    <% locked_for_user = subfolder.locked_for_user? %>
-    <% locked = subfolder.locked? %>    
+  <tbody>       
+  <% @subfolders.each do |subfolder| %>    
     <tr class="dir">
-      <td class="check"><%= check_box_tag('subfolders[]', subfolder.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
-      <td class="title">                
-        <%= link_to(h(subfolder.title),
-          {:action => 'show', :id => @project, :folder_id => subfolder}, :class => 'icon icon-folder') %>        
-        <div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.visible.count %>]</div>        
-      </td>            
-      <td class="size"></td>
-      <td class="modified"><%= format_time(subfolder.updated_at) %>                
-        <% if locked_for_user %>
-          <% if subfolder.lock.reverse[0].user %>
-            <%= link_to(image_tag('locked.png', :plugin => :redmine_dmsf),
-              { :controller => 'users', :action => 'show', :id => subfolder.lock.reverse[0].user },
-              :title => l(:title_locked_by_user, :user => subfolder.lock.reverse[0].user.to_s)) %>
-          <% else %>
-            <%= image_tag('locked.png', :title => l(:notice_account_unknown_email), :plugin => :redmine_dmsf) %>
-          <% end %>
-        <% elsif locked %>
-          <%= image_tag('lockedbycurrent.png', :title => l(:title_locked_by_you), :plugin => :redmine_dmsf) %>
-        <% end %>        
-      </td>
-      <td class="version"></td>
-      <td class="workflow"></td>
-      <td class="author"><%= h(subfolder.user) %></td>
-      <td class="actions">
-        <% if @folder_manipulation_allowed %>          
-          <div class="right_icon_box" style="width:26px;">
-          <% if subfolder.notification %>
-            <%= link_to_function(image_tag('notify.png', :plugin => :redmine_dmsf),
-              "manipulation_link('#{url_for(:action => 'notify_deactivate', :id => @project, :folder_id => subfolder)}')",
-              :title => l(:title_notifications_active_deactivate)) %>
-          <% else %>
-            <%= link_to_function(image_tag('notifynot.png', :plugin => :redmine_dmsf),
-              "manipulation_link('#{url_for(:action => 'notify_activate', :id => @project, :folder_id => subfolder)}')",
-              :title => l(:title_notifications_not_active_activate)) %>
-          <% end %>                                                                                  
-          </div>          
-          <div class="right_icon_box" style="width: 70px;">            
-            <div style="float: left">                        
-              <%= link_to(image_tag('edit.png', :class =>'detail_icon'),
-                {:action => 'edit', :id => @project, :folder_id => subfolder },
-                :title => l(:link_edit, :title => h(subfolder.title))) unless locked_for_user %>            
-            </div>            
-            <div style="float: right; width: 44px;">            
-              <% unless locked_for_user && !User.current.allowed_to?(:force_file_unlock, @project)%>
-                <% if locked %>
-                  <% if subfolder.unlockable? %>
-                    <%= link_to_function(image_tag('unlock.png', :plugin => :redmine_dmsf),
-                      "manipulation_link('#{url_for(:controller => 'dmsf', :action => 'unlock',
-                      :id => @project, :folder_id => subfolder)}')",
-                      :title => l(:title_unlock_file))%>
-                  <% else %>
-                    <%= image_tag('locked.png', :plugin => :redmine_dmsf, 
-                      :title => l(:title_folder_parent_locked, :name => subfolder.lock.reverse[0].folder.title)) %>
-                  <% end %>
-                <% else %>
-                   <%= link_to_function(image_tag('lock.png', :plugin => :redmine_dmsf),
-                      "manipulation_link('#{url_for(:controller => 'dmsf', :action => 'lock',
-                      :id => @project, :folder_id => subfolder)}')",
-                      :title => l(:title_lock_file)) %>
-                <% end %>            
-                &nbsp;
-              <% end %>              
-              <%= link_to_function(image_tag('delete.png', :plugin => :redmine_dmsf),
-                "confirmation_link('#{url_for(:action => 'delete', :id => @project, :folder_id => @folder, :delete_folder_id => subfolder)}', '#{l(:question_do_you_really_want_to_delete_this_entry)}')",
-                :title => l(:title_delete)) unless locked_for_user %>             
-            </div>
-          </div>
-          <br class="clear" />
-        <% end %>
-      </td>
-      <td class="hidden">0</td>
-      <td class="hidden">0</td>
+      <%= render(:partial => 'dir', :locals => {:subfolder => subfolder, :link => nil}) %>
     </tr>
   <% end %>  
-  <% workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0 %>  
+  <% @dir_links.each do |link| %>    
+    <tr class="gray">
+      <%= render(:partial => 'dir', :locals => {:subfolder => link.target_folder, :link => link}) %>
+    </tr>
+  <% end %>        
   <% @files.each do |file| %>
     <% unless file.last_revision %>      
       <% Rails.logger.error "Error: dmsf_file id #{file.id} has no revision!" %>
       <% next %>
-    <% end %>
-    <% locked_for_user = file.locked_for_user? %>
-    <% locked = file.locked? %>    
-    <% wf = DmsfWorkflow.find_by_id(file.last_revision.dmsf_workflow_id) %>
+    <% end %>         
     <tr class="file">
-      <td class="check"><%= check_box_tag('files[]', file.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
-      <td class="title">
-        <% file_download_url = url_for({:only_path => false, :controller => :dmsf_files, :action => 'show', :id => file, :download => ''}) %>
-        <%= link_to(h(file.last_revision.display_title),
-          file_download_url,
-          :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}",
-          :title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version),
-          'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_download_url}") %>
-        <div class="filename" title="<%= l(:title_filename_for_download)%>"><%= h(file.display_name) %></div>
-      </td>
-      <td class="size"><%= number_to_human_size(file.last_revision.size) %></td>
-      <td class="modified">
-        <%= format_time(file.last_revision.updated_at) %>
-        <% if locked_for_user %>
-          <% if file.lock.reverse[0].user %>
-            <%= link_to(image_tag('locked.png', :plugin => :redmine_dmsf),
-              {:controller => 'users', :action => 'show', :id => file.lock.reverse[0].user },
-              :title => l(:title_locked_by_user, :user => file.lock.reverse[0].user.to_s)) %>
-          <% else %>
-            <%= image_tag('locked.png', :title => l(:notice_account_unknown_email), :plugin => :redmine_dmsf) %>
-          <% end %>
-        <% elsif locked %>
-          <%= image_tag('lockedbycurrent.png', :title => l(:title_locked_by_you), :plugin => :redmine_dmsf) %>
-        <% end %>
-      </td>
-      <td class="version"><%= file.last_revision.version %></td>
-      <td class="workflow">                                  
-        <% if wf && @file_manipulation_allowed %>
-          <%= link_to(
-            file.last_revision.workflow_str(false),
-            log_dmsf_workflow_path(
-              :project_id => @project.id, 
-              :id => wf.id,                                 
-              :dmsf_file_revision_id => file.last_revision.id),
-            :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(file.last_revision.id)),
-            :remote => true) %>
-        <% else %>
-          <%= file.last_revision.workflow_str(false) %>
-        <% end %>
-      </td>
-      <td class="author"><%= h(file.last_revision.user) %></td>
-      <td class="actions">
-        <% if @file_manipulation_allowed %>          
-          <div class="right_icon_box" style="width:26px;">
-            <% if file.notification %>
-              <%= link_to_function(image_tag('notify.png', :plugin => :redmine_dmsf),
-                "manipulation_link('#{url_for(:controller => 'dmsf_files', :action => 'notify_deactivate', :id => file)}')",
-                :title => l(:title_notifications_active_deactivate)) %>
-            <% else %>
-              <%= link_to_function(image_tag('notifynot.png', :plugin => :redmine_dmsf),
-                "manipulation_link('#{url_for(:controller => 'dmsf_files', :action => 'notify_activate', :id => file)}')",
-                :title => l(:title_notifications_not_active_activate)) %>
-            <% end %>
-            <% case file.last_revision.workflow %>
-              <%  when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL %>                                            
-                <% if wf %>
-                  <% assignments = wf.next_assignments(file.last_revision.id) %>
-                  <% index = assignments.find_index{|assignment| assignment.user_id == User.current.id} if assignments %>
-                  <% if index %>
-                    <%= link_to(
-                      image_tag('waiting_for_approval.png', :plugin => :redmine_dmsf),
-                      action_dmsf_workflow_path(
-                        :project_id => @project.id, 
-                        :id => wf.id, 
-                        :dmsf_workflow_step_assignment_id => assignments[index].id,
-                        :dmsf_file_revision_id => file.last_revision.id),
-                      :title => l(:title_waiting_for_approval),
-                      :remote => true) %>
-                  <% else %>
-                    <%= image_tag('waiting_for_approval.png', :title => "#{l(:label_dmsf_wokflow_action_approve)} #{l(:label_dmsf_wokflow_action_reject)} #{l(:label_dmsf_wokflow_action_delegate)}", :plugin => :redmine_dmsf) %>
-                  <% end %>
-                <% else %>
-                  <%= image_tag('waiting_for_approval.png', :title => "#{l(:label_dmsf_wokflow_action_approve)} #{l(:label_dmsf_wokflow_action_reject)} #{l(:label_dmsf_wokflow_action_delegate)}", :plugin => :redmine_dmsf) %>
-                <% end %>
-              <% when DmsfWorkflow::STATE_APPROVED %>
-                <%= image_tag('approved.png', :title => l(:title_approved), :plugin => :redmine_dmsf) %>
-              <% when DmsfWorkflow::STATE_ASSIGNED %>
-                <% if User.current && (file.last_revision.dmsf_workflow_assigned_by == User.current.id) && wf %>
-                  <%= link_to_function(image_tag('assigned.png', :plugin => :redmine_dmsf),
-                      "manipulation_link('#{start_dmsf_workflow_path(                                                    
-                        :id => file.last_revision.dmsf_workflow_id,                                                     
-                        :dmsf_file_revision_id => file.last_revision.id)}')",
-                      :title => l(:label_dmsf_wokflow_action_start)) %>
-                <% else %>
-                  <%= image_tag('assigned.png', :title => l(:label_dmsf_wokflow_action_start), :plugin => :redmine_dmsf) %>
-                <% end %>
-              <% when DmsfWorkflow::STATE_REJECTED %>
-                <%= image_tag('rejected.png', :title => l(:title_rejected), :plugin => :redmine_dmsf) %>
-              <% else %>                                            
-                <% if workflows_available %>
-                  <%= link_to(
-                    image_tag('none.png', :plugin => :redmine_dmsf),
-                    assign_dmsf_workflow_path(
-                      :project_id => @project.id,                                                                                                    
-                      :dmsf_file_revision_id => file.last_revision.id),
-                      :title => l(:label_dmsf_wokflow_action_assign),
-                      :remote => true) %>                                            
-                <% end %>     
-            <% end %>
-          </div>
-          <div class="right_icon_box" style="width: 70px">
-            <div style="float: left">
-              <%= link_to(image_tag('filedetails.png', :plugin => :redmine_dmsf, :class =>'detail_icon'),
-                {:controller => 'dmsf_files', :action => :show, :id => file },
-                :title => l(:link_details, :title =>h(file.last_revision.title))) %>
-            </div>
-            <div style="float: right; width: 44px;">            
-            <% if !locked_for_user || @force_file_unlock_allowed %>
-              <% if locked %>
-                <% if file.unlockable? %>
-                  <%= link_to_function(image_tag('unlock.png', :plugin => :redmine_dmsf),
-                    "manipulation_link('#{url_for(:controller => 'dmsf_files', :action => 'unlock', :id => file)}')",
-                    :title => l(:title_unlock_file))%>
-                <% else %>
-                  <%= image_tag('locked.png', :plugin => :redmine_dmsf, 
-                    :title => l(:title_file_parent_locked, :name => file.folder.lock.reverse[0].folder.title)) %>
-                <% end%>
-              <% else %>
-                <%= link_to_function(image_tag('lock.png', :plugin => :redmine_dmsf),
-                  "manipulation_link('#{url_for(:controller => 'dmsf_files', :action => 'lock', :id => file)}')",
-                  :title => l(:title_lock_file)) %>
-              <% end %>
-              &nbsp;
-            <% end %>
-            <% unless locked_for_user %>
-              <%= link_to_function(image_tag('delete.png', :plugin => :redmine_dmsf),
-                "confirmation_link('#{url_for(:controller => 'dmsf_files', :action => 'delete', :id => file)}', '#{l(:question_do_you_really_want_to_delete_this_entry)}')",
-                :title => l(:title_delete)) %>            
-            <% end %>                                        
-            </div>
-          </div>
-          <br class="clear" />
-        <% end %>
-      </td>
-      <td class="hidden">1</td>
-      <td class="hidden"><%= file.last_revision.size %></td>
+      <%= render(:partial => 'file', :locals => {:file => file, :link => nil}) %>
+    </tr>
+  <% end %>
+  <% @file_links.each do |link| %>
+    <% unless link.target_file.last_revision %>      
+      <% Rails.logger.error "Error: dmsf_file id #{link.target_id} has no revision!" %>
+      <% next %>
+    <% end %>         
+    <tr class="gray">
+      <%= render(:partial => 'file', :locals => {:file => link.target_file, :link => link}) %>
     </tr>
   <% end %>
   </tbody>
-  </table>
-  <br />
+  </table>  
 <% end %>   
 
 <script type="text/javascript">
@@ -355,19 +182,16 @@
   end    
 %>
 
-<% content_for :header_tags do %>
-  <%= stylesheet_link_tag 'jquery-ui/jquery-ui-1.9.2.css', :plugin => 'redmine_dmsf' %>
+<% content_for :header_tags do %>    
   <%= stylesheet_link_tag 'plupload/jquery.ui.plupload.css', :plugin => 'redmine_dmsf' %>
   <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>
-  <%= stylesheet_link_tag 'dmsf', :plugin => 'redmine_dmsf' %>
-
   <%= javascript_include_tag 'jquery-1.6.1.min.js', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag 'jquery-ui-1.8.13.min.js', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>
-  <script type="text/javascript">
-    jQuery.noConflict();
-    jQuery(document).ready(function() {
-      jQuery('#browser').dataTable({
+
+  <script type="text/javascript">    
+    $(document).ready(function() {
+      $('#browser').dataTable({
         'bJQueryUI': true,
         'oLanguage': {
                 'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', sUrl) %>"
@@ -382,14 +206,14 @@
           { 'iDataSort': 9, 'aTargets': [ 2 ] }
         ],
         'fnInitComplete': function() {
-                jQuery('div.controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
+           jQuery('div.controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
         },
         'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-                return "<%= l(:label_number_of_folders)%>: <%= @subfolders.length %>, <%= l(:label_number_of_documents)%>: <%= @files.length %>";
+           return "<%= l(:label_number_of_folders)%>: <%= @subfolders.count + @dir_links.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count + @file_links.count %>";
         }
       });
 
-      jQuery('[data-downloadurl]').each(function() {
+      $('[data-downloadurl]').each(function() {
         var url = this.getAttribute('data-downloadurl');
         if (this.addEventListener) {
           this.addEventListener('dragstart', function(e) {
@@ -400,12 +224,11 @@
         }
       });
 
-      jQuery('#entries_form').submit(function () {
-          jQuery(this).removeAttr('data-submitted');
+      $('#entries_form').submit(function () {
+          $(this).removeAttr('data-submitted');
       });
     });   
   </script>
 <% end %>
 
 <%= render(:partial => 'multi_upload') if (@file_manipulation_allowed && !@locked_for_user) %>
-<br/>

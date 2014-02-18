@@ -23,9 +23,7 @@ module RedmineDmsf
     class DmsfViewListener < Redmine::Hook::ViewListener                
       
       def view_layouts_base_html_head(context={})  
-        tags = "\n".html_safe + javascript_include_tag('redmine_dmsf', :plugin => :redmine_dmsf)
-        tags << "\n".html_safe + stylesheet_link_tag('dmsf', :plugin => :redmine_dmsf)        
-        tags
+        "\n".html_safe + stylesheet_link_tag('dmsf', :plugin => :redmine_dmsf)        
       end          
       
     end

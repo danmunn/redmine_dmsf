@@ -269,25 +269,23 @@ class DmsfWorkflowsController < ApplicationController
   
   def start
     revision = DmsfFileRevision.find_by_id(params[:dmsf_file_revision_id])
-    if revision      
-      if request.post?        
-        revision.set_workflow(@workflow.id, params[:action])
-        if revision.save          
-          assignments = @workflow.next_assignments revision.id          
-          assignments.each do |assignment|
-            DmsfMailer.workflow_notification(
-              assignment.user,
-              @workflow, 
-              revision,
-              l(:text_email_subject_started, :name => @workflow.name),              
-              l(:text_email_started, :name => @workflow.name, :filename => revision.file.name),
-              l(:text_email_to_proceed)).deliver if assignment.user
-          end
-          flash[:notice] = l(:notice_workflow_started)
-        else
-          flash[:error] = l(:notice_cannot_start_workflow)
+    if revision            
+      revision.set_workflow(@workflow.id, params[:action])
+      if revision.save          
+        assignments = @workflow.next_assignments revision.id          
+        assignments.each do |assignment|
+          DmsfMailer.workflow_notification(
+            assignment.user,
+            @workflow, 
+            revision,
+            l(:text_email_subject_started, :name => @workflow.name),              
+            l(:text_email_started, :name => @workflow.name, :filename => revision.file.name),
+            l(:text_email_to_proceed)).deliver if assignment.user
         end
-      end
+        flash[:notice] = l(:notice_workflow_started)
+      else
+        flash[:error] = l(:notice_cannot_start_workflow)
+      end      
     end
     redirect_to :back
   end

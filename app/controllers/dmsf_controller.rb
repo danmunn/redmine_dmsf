@@ -37,13 +37,20 @@ class DmsfController < ApplicationController
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
     
+    @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0
+    
     unless @folder
       @subfolders = @project.dmsf_folders.visible
-      @files = @project.dmsf_files.visible      
+      @files = @project.dmsf_files.visible
+      @locked_for_user = false
+      @dir_links = @project.folder_links
+      @file_links = @project.file_links
     else 
       @subfolders = @folder.subfolders.visible
       @files = @folder.files.visible
       @locked_for_user = @folder.locked_for_user?
+      @dir_links = @folder.folder_links
+      @file_links = @folder.file_links
     end
     
     @files.sort! do |a,b|
@@ -58,13 +65,30 @@ class DmsfController < ApplicationController
   end
 
   def entries_operation
-    selected_folders = params[:subfolders]
-    selected_files = params[:files]
+    selected_folders = params[:subfolders].present? ? params[:subfolders] : []
+    selected_files = params[:files].present? ? params[:files] : []
+    selected_dir_links = params[:dir_links]
+    selected_file_links = params[:file_links]
     
-    if selected_folders.nil? && selected_files.nil?
-      flash[:warning] = l(:warning_no_entries_selected)
-      redirect_to :action => 'show', :id => @project, :folder_id => @folder
+    if selected_folders.blank? && selected_files.blank? && 
+      selected_dir_links.blank? && selected_file_links.blank?
+      flash[:warning] = l(:warning_no_entries_selected)      
+      redirect_to :back
       return
+    end
+    
+    if selected_dir_links.present?
+      selected_dir_links.each do |id|
+        link = DmsfLink.find_by_id id
+        selected_folders << link.target_id if link
+      end
+    end
+    
+    if selected_file_links.present?
+      selected_file_links.each do |id|
+        link = DmsfLink.find_by_id id
+        selected_files << link.target_id if link
+      end
     end
     
     if params[:email_entries].present?
@@ -74,10 +98,10 @@ class DmsfController < ApplicationController
     end
   rescue ZipMaxFilesError
     flash[:error] = l(:error_max_files_exceeded, :number => Setting.plugin_redmine_dmsf['dmsf_max_file_download'])
-    redirect_to({:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder})
+    redirect_to :back
   rescue EmailMaxFileSize
     flash[:error] = l(:error_max_email_filesize_exceeded, :number => Setting.plugin_redmine_dmsf['dmsf_max_email_filesize'])
-    redirect_to({:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder})
+    redirect_to :back
   rescue FileNotFound
     render_404
   rescue DmsfAccessError
@@ -101,42 +125,67 @@ class DmsfController < ApplicationController
   def delete_entries
     selected_folders = params[:subfolders]
     selected_files = params[:files]
-    if selected_folders.nil? && selected_files.nil?
+    selected_dir_links = params[:dir_links]
+    selected_file_links = params[:file_links]
+    if selected_folders.blank? && selected_files.blank? && 
+      selected_dir_links.blank? && selected_file_links.blank?
       flash[:warning] = l(:warning_no_entries_selected)
     else
-      failed_entries = []
-      deleted_files = []
-      deleted_folders = []
-      if selected_folders
-        if User.current.allowed_to?(:folder_manipulation, @project)
+      failed_entries = []            
+                  
+      if User.current.allowed_to?(:folder_manipulation, @project)
+        # Folders
+        if selected_folders.present?        
           selected_folders.each do |subfolderid|
-            subfolder = DmsfFolder.visible.find(subfolderid)
-            next if subfolder.nil?
+            subfolder = DmsfFolder.visible.find_by_id subfolderid
+            next unless subfolder
             if subfolder.project != @project || !subfolder.delete
-              failed_entries.push(subfolder) 
-            else
-              deleted_folders.push(subfolder)
+              failed_entries.push(subfolder)      
             end
-          end
-        else
-          flash[:error] = l(:error_user_has_not_right_delete_folder)
+          end        
         end
+        # Folder links
+        if selected_dir_links.present?        
+          selected_dir_links.each do |dir_link_id|
+            link_folder = DmsfLink.visible.find_by_id dir_link_id
+            next unless link_folder
+            if link_folder.project != @project || !link_folder.delete
+              failed_entries.push(link_folder)      
+            end
+          end        
+        end
+      else
+        flash[:error] = l(:error_user_has_not_right_delete_folder)
       end
-      if selected_files
-        if User.current.allowed_to?(:file_manipulation, @project)
+      
+      deleted_files = []
+      if User.current.allowed_to?(:file_manipulation, @project)
+        # Files
+        if selected_files.present?        
           selected_files.each do |fileid|
-            file = DmsfFile.visible.find(fileid)
+            file = DmsfFile.visible.find_by_id fileid
             next unless file
             if file.project != @project || !file.delete
               failed_entries.push(file)
             else
               deleted_files.push(file)
             end
-          end
-        else
-          flash[:error] = l(:error_user_has_not_right_delete_file)
+          end        
         end
+        # File links
+        if selected_file_links.present?        
+          selected_file_links.each do |file_link_id|
+            file_link = DmsfLink.visible.find_by_id file_link_id
+            next unless file_link
+            if file_link.project != @project || !file_link.delete
+              failed_entries.push(file_link)            
+            end
+          end        
+        end
+      else
+        flash[:error] = l(:error_user_has_not_right_delete_file)
       end
+      
       unless deleted_files.empty?
         deleted_files.each do |f| 
           log_activity(f, 'deleted')
@@ -149,8 +198,8 @@ class DmsfController < ApplicationController
         flash[:warning] = l(:warning_some_entries_were_not_deleted, :entries => failed_entries.map{|e| e.title}.join(', '))
       end
     end
-    
-    redirect_to :controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder
+        
+    redirect_to :back
   end
 
   # Folder manipulation
@@ -202,8 +251,8 @@ class DmsfController < ApplicationController
       else
         flash[:error] = @delete_folder.errors[:base][0]
       end
-    end
-    redirect_to :controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder
+    end    
+    redirect_to dmsf_folder_path(:id => @project, :folder_id => @delete_folder.dmsf_folder_id)
   rescue DmsfAccessError
     render_403  
   end
@@ -229,14 +278,8 @@ class DmsfController < ApplicationController
         @project.save
       end
       flash[:notice] = l(:notice_folder_notifications_activated)
-    end
-    if params[:current]
-      redirect_to params[:current]
-    elsif @folder
-      redirect_to({:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder.folder})
-    else
-      redirect_to({:controller => 'dmsf', :action => 'show', :id => @project})
     end    
+    redirect_to :back
   end
   
   def notify_deactivate
@@ -250,16 +293,9 @@ class DmsfController < ApplicationController
         @project.save
       end
       flash[:notice] = l(:notice_folder_notifications_deactivated)
-    end
-    if params[:current]
-      redirect_to params[:current]
-    elsif @folder
-      redirect_to({:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder.folder})
-    else
-      redirect_to({:controller => 'dmsf', :action => 'show', :id => @project})
     end    
+    redirect_to :back
   end
-
 
   def lock
     if @folder.nil?
@@ -269,9 +305,8 @@ class DmsfController < ApplicationController
     else
       @folder.lock!
       flash[:notice] = l(:notice_folder_locked)
-    end
-      redirect_to params[:current] ? params[:current] :
-        {:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder.folder}
+    end      
+      redirect_to :back
   end
 
   def unlock
@@ -286,9 +321,8 @@ class DmsfController < ApplicationController
       else
         flash[:error] = l(:error_only_user_that_locked_folder_can_unlock_it)
       end
-    end
-    redirect_to params[:current] ? params[:current] :
-        {:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder.folder}
+    end    
+     redirect_to :back
   end
   
   private

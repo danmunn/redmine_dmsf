@@ -25,10 +25,8 @@ ru:
   notice_file_locked: Файл заблокирован
   warning_file_not_locked: Файл не заблокирован
   notice_file_unlocked: Файл разблокирован
-  error_only_user_that_locked_file_can_unlock_it: Только пользователь, который заблокировал файл, может его разблокировать
-  question_do_you_really_want_to_delete_this_entry: Вы действительно хотите удалить этот файл?
-  error_max_files_exceeded: "Ограничение для %{number} одновременно загружаемых файлов превышено"
-  question_do_you_really_want_to_delete_this_revision: Вы действительно хотите удалить эту редакцию?
+  error_only_user_that_locked_file_can_unlock_it: Только пользователь, который заблокировал файл, может его разблокировать  
+  error_max_files_exceeded: "Ограничение для %{number} одновременно загружаемых файлов превышено"  
   error_entry_project_does_not_match_current_project: Проект, которому принадлежит файл, не соответсвует текущему проекту
   notice_folder_created: Папка создана
   error_folder_creation_failed: Папку не удалось создать
@@ -182,8 +180,8 @@ ru:
   comment_copied_from: "Скопировано из %{source}"
   notice_file_copied: Файл скопирован
   notice_file_moved: Файл перемещен
-  label_target_project: Целевой проект
-  label_target_folder: Целевая папка
+  field_target_project: Целевой проект
+  field_target_folder: Целевая папка
   title_copy_or_move: Копировать/Переместить
   label_dmsf_folder_plural: DMSF папки
   comment_moved_from: "Перемещен из %{source}"
@@ -276,6 +274,13 @@ ru:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+    
+  title_create_link: Create a symbolic link  
+  label_create_link: Create link  
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Target file
+  title_download_entries: Download entries
   
   my:
     blocks:

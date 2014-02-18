@@ -26,10 +26,8 @@ cs:
   notice_file_locked: Soubor byl zamčen
   warning_file_not_locked: Soubor není zamčen
   notice_file_unlocked: Soubor byl odemčen
-  error_only_user_that_locked_file_can_unlock_it: Soubor může být odemčen pouze uživatelem, který ho zamkl
-  question_do_you_really_want_to_delete_this_entry: Chcete to skutečně smazat?
-  error_max_files_exceeded: "Limit pro %{number} najednou stažených souborů je překročen"
-  question_do_you_really_want_to_delete_this_revision: Chcete skutečně smazat tuto revizi?
+  error_only_user_that_locked_file_can_unlock_it: Soubor může být odemčen pouze uživatelem, který ho zamkl 
+  error_max_files_exceeded: "Limit pro %{number} najednou stažených souborů je překročen"  
   error_entry_project_does_not_match_current_project: Zadaný projekt neodpovídá aktuálnímu projektu
   notice_folder_created: Adresář byl vytvořen
   error_folder_creation_failed: Vytváření složky selhalo
@@ -183,8 +181,8 @@ cs:
   comment_copied_from: "Zkopírováno z %{source}"
   notice_file_copied: Soubor zkopírován
   notice_file_moved: Soubor přesunut
-  label_target_project: Cílový projekt
-  label_target_folder: Cílový adresář
+  field_target_project: Cílový projekt
+  field_target_folder: Cílový adresář
   title_copy_or_move: Kopírovat/Přesunout
   label_dmsf_folder_plural: Dmsf složky
   comment_moved_from: "Přesunuto z %{source}"
@@ -275,6 +273,13 @@ cs:
   text_email_to_proceed: Pro schválení klikněte na zaškrtávací ikonku vedle dokumentu v
   text_email_to_see_history: Pro zobrazení historie schvalovacího procesu klikněte na status dokumentu v
   text_email_to_see_status: Pro zobrazení aktuálního stavu schvalovacího procesu klikněte na status dokumentu v
+    
+  title_create_link: Vytvořit symbolický odkaz  
+  label_create_link: Vytvořit odkaz
+  label_notifications_on: Zapnout notifikace
+  label_notifications_off: Vypnout notifikace
+  field_target_file: Cílový soubor
+  title_download_entries: Historie stahování
     
   my:
     blocks:

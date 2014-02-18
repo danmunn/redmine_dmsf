@@ -25,10 +25,8 @@ ja:
   notice_file_locked: ファイルをロックしました
   warning_file_not_locked: ファイルはロックされていません
   notice_file_unlocked: ファイルをロック解除しました
-  error_only_user_that_locked_file_can_unlock_it: ファイルをロックしたユーザだけがロック解除できます
-  question_do_you_really_want_to_delete_this_entry: 本当にこのエントリーを削除しますか？
-  error_max_files_exceeded: "同時にダウンロードできるファイル数の上限 %{number} を超えています"
-  question_do_you_really_want_to_delete_this_revision: 本当にこのリビジョンを削除しますか？
+  error_only_user_that_locked_file_can_unlock_it: ファイルをロックしたユーザだけがロック解除できます  
+  error_max_files_exceeded: "同時にダウンロードできるファイル数の上限 %{number} を超えています"  
   error_entry_project_does_not_match_current_project: 指定したプロジェクトは現在のプロジェクトと一致しません
   notice_folder_created: フォルダを作成しました
   error_folder_creation_failed: フォルダを作成できません
@@ -182,8 +180,8 @@ ja:
   comment_copied_from: "%{source} からコピーしました"
   notice_file_copied: ファイルをコピーしました
   notice_file_moved: ファイルを移動しました
-  label_target_project: ターゲットプロジェクト
-  label_target_folder: ターゲットフォルダ
+  field_target_project: ターゲットプロジェクト
+  field_target_folder: ターゲットフォルダ
   title_copy_or_move: コピー/移動
   label_dmsf_folder_plural: Dmsf フォルダ
   comment_moved_from: "%{source} から移動しました"
@@ -276,6 +274,13 @@ ja:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+    
+  title_create_link: Create a symbolic link  
+  label_create_link: Create link  
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Target file
+  title_download_entries: Download entries
   
   my:
     blocks:

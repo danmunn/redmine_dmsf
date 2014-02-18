@@ -67,7 +67,9 @@ Redmine::Plugin.register :redmine_dmsf do
     permission :file_manipulation, 
       {:dmsf_files => [:create_revision, :delete, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate], 
         :dmsf_upload => [:upload_files, :upload_file, :commit_files], 
-        :dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment]}
+        :dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment],
+        :dmsf_links => [:new, :create, :destroy]
+        }
     permission :manage_workflows, 
       {:dmsf_workflows => [:index, :new, :create, :destroy, :edit, :add_step, :remove_step, :reorder_steps, :update]}
     permission :force_file_unlock, {}

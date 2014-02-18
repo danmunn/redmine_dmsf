@@ -25,10 +25,8 @@ zh:
   notice_file_locked: 文件锁定
   warning_file_not_locked: 文件未锁定
   notice_file_unlocked: 文件解锁
-  error_only_user_that_locked_file_can_unlock_it: 只有锁定文件的用户才能解锁该文件
-  question_do_you_really_want_to_delete_this_entry: 您确定删除此条目?
-  error_max_files_exceeded: "超出同时下载%{number}个文件数量限制"
-  question_do_you_really_want_to_delete_this_revision: 您确定删除此修订版本吗?
+  error_only_user_that_locked_file_can_unlock_it: 只有锁定文件的用户才能解锁该文件  
+  error_max_files_exceeded: "超出同时下载%{number}个文件数量限制"  
   error_entry_project_does_not_match_current_project: 入口项目与当前项目不匹配
   notice_folder_created: 文件夹创建完毕
   error_folder_creation_failed: 文件夹创建失败
@@ -185,8 +183,8 @@ zh:
   comment_copied_from: "Copied from %{source}"
   notice_file_copied: File copied
   notice_file_moved: File moved
-  label_target_project: Target project
-  label_target_folder: Target folder
+  field_target_project: Target project
+  field_target_folder: Target folder
   title_copy_or_move: Copy/Move
   label_dmsf_folder_plural: Dmsf folders
   comment_moved_from: "Moved from %{source}"
@@ -277,6 +275,13 @@ zh:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+    
+  title_create_link: Create a symbolic link  
+  label_create_link: Create link  
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Target file
+  title_download_entries: Download entries
   
   my:
     blocks:

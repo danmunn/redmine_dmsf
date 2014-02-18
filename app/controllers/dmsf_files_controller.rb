@@ -172,9 +172,8 @@ class DmsfFilesController < ApplicationController
     else
       @file.lock!
       flash[:notice] = l(:notice_file_locked)
-    end
-      redirect_to params[:current] ? params[:current] : 
-        {:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @file.folder}
+    end      
+    redirect_to :back
   end
   
   def unlock
@@ -187,9 +186,8 @@ class DmsfFilesController < ApplicationController
       else
         flash[:error] = l(:error_only_user_that_locked_file_can_unlock_it)
       end
-    end
-    redirect_to params[:current] ? params[:current] : 
-        {:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @file.folder}
+    end    
+    redirect_to :back
   end
 
   def notify_activate
@@ -198,9 +196,8 @@ class DmsfFilesController < ApplicationController
     else
       @file.notify_activate
       flash[:notice] = l(:notice_file_notifications_activated)
-    end
-    redirect_to params[:current] ? params[:current] :
-      {:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @file.folder}
+    end    
+    redirect_to :back
   end
   
   def notify_deactivate
@@ -209,9 +206,8 @@ class DmsfFilesController < ApplicationController
     else
       @file.notify_deactivate
       flash[:notice] = l(:notice_file_notifications_deactivated)
-    end
-    redirect_to params[:current] ? params[:current] :
-      {:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @file.folder}
+    end    
+    redirect_to :back
   end
 
   private
@@ -234,13 +230,16 @@ class DmsfFilesController < ApplicationController
   def find_file
     @file = DmsfFile.visible.find(params[:id])
     @project = @file.project
-  rescue
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
 
   def find_revision
     @revision = DmsfFileRevision.visible.find(params[:id])
     @file = @revision.file 
     @project = @file.project
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
 
   def check_project(entry)

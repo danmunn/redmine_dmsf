@@ -31,14 +31,16 @@ class DmsfFile < ActiveRecord::Base
  
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
+  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   has_many :revisions, :class_name => 'DmsfFileRevision', :foreign_key => 'dmsf_file_id',
     :order => "#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC", 
     :dependent => :destroy
   has_many :locks, :class_name => 'DmsfLock', :foreign_key => 'entity_id',
     :order => "#{DmsfLock.table_name}.updated_at DESC",
     :conditions => {:entity_type => 0},
-    :dependent => :destroy
-  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+    :dependent => :destroy  
+  has_many :referenced_links, :class_name => 'DmsfLink', :foreign_key => 'target_id', 
+    :conditions => {:target_type => DmsfFile.model_name}, :dependent => :destroy
 
   scope :visible, lambda {|*args| where(DmsfFile.visible_condition(args.shift || User.current, *args)).readonly(false)}
   
