@@ -16,6 +16,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
-$('#ajax-modal').html('<%= escape_javascript(render :partial => 'action', :locals => {:workflow => @workflow}) %>');
+$('#ajax-modal').html('<%= escape_javascript(render :partial => 'action', :locals => {:workflow => @dmsf_workflow}) %>');
 showModal('ajax-modal', '400px');
 $('#ajax-modal').addClass('new-action');

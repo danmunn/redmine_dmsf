@@ -38,6 +38,7 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     @revision1 = DmsfFileRevision.find_by_id 1
     @revision2 = DmsfFileRevision.find_by_id 2
     @project = Project.find_by_id 2
+    @project5 = Project.find_by_id 5
   end
   
   def test_truth
@@ -152,8 +153,8 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
   
   def test_delegates    
     delegates = @wf1.delegates(nil, nil, nil)
-    assert_equal delegates.size, User.active.all.size
-    delegates = @wf1.delegates('Redmine', nil, nil)
+    assert_equal(delegates.all.count + 1, @project5.users.all.count)
+    delegates = @wf1.delegates('Dave', nil, nil)        
     assert_equal delegates.size, 1
     delegates = @wf1.delegates(nil, @wfsa1.id, 2)        
     assert !delegates.any?{|user| user.id == @wfsa1.user_id}

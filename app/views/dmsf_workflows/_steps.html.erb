@@ -16,23 +16,23 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
-<% if @workflow.project %>
-  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(@project, :tab => 'dmsf_workflow') %> &#187; <%=h @workflow %></h2>
+<% if @dmsf_workflow.project %>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(@project, :tab => 'dmsf_workflow') %> &#187; <%=h @dmsf_workflow %></h2>
 <% else %>
-  <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=h @workflow %></h2>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=h @dmsf_workflow %></h2>
 <% end %>
 
-<%= labelled_form_for @workflow do |f| %>
+<%= labelled_form_for @dmsf_workflow do |f| %>
   <%= error_messages_for 'workflow' %>
   <div class="box tabular">
-    <p><%= f.label :label_dmsf_workflow_name %><%= text_field_tag :name, @workflow.name %><%= submit_tag l(:button_save) %></p>
+    <p><%= f.label :label_dmsf_workflow_name %><%= text_field_tag :name, @dmsf_workflow.name %><%= submit_tag l(:button_save) %></p>
   </div>  
 <% end %>    
 
 <div class="tab-content" id="tab-content-members">
  
 <div class="splitcontentleft">  
-<% steps = @workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq %>
+<% steps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq %>
 <% if steps.any? %>
 <table class="list">
   <thead><tr>
@@ -46,7 +46,7 @@
     <tr id="step-<%= i %>" class="<%= cycle 'odd', 'even' %> step">            
       <td class="step"><%= i %></td>
       <td class="approval">                
-        <% @workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact.each_with_index do |step, j| %>
+        <% @dmsf_workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact.each_with_index do |step, j| %>
           <% if j != 0 %>
             <b><%= step.soperator %></b>&nbsp
           <% end %>
@@ -54,10 +54,10 @@
         <% end %>
       </td>        
       <td class="reorder">  
-        <%= reorder_links('workflow_step', {:action => 'edit', :id => @workflow, :step => i}, :put) %>
+        <%= reorder_links('workflow_step', {:action => 'edit', :id => @dmsf_workflow, :step => i}, :put) %>
       </td>
       <td class="buttons">      
-        <%= delete_link edit_dmsf_workflow_path(@workflow, :step => i) %>
+        <%= delete_link edit_dmsf_workflow_path(@dmsf_workflow, :step => i) %>
       </td>  
     </tr>
   <% end; reset_cycle %>
@@ -69,15 +69,15 @@
 </div>
 
 <div class="splitcontentright">
-  <%= form_for(@workflow, :url => edit_dmsf_workflow_path(@workflow),
+  <%= form_for(@dmsf_workflow, :url => edit_dmsf_workflow_path(@dmsf_workflow),
                :html => {:method => :post}) do |f| %>    
     <fieldset><legend><%=l(:label_user_new)%></legend>
 
     <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>    
-    <%= javascript_tag "observeSearchfield('user_search', 'users', '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@workflow, :dmsf_workflow_step_assignment_id => nil, :dmsf_file_revision_id => nil, :project_id => @project ? @project.id : nil) }')" %>
+    <%= javascript_tag "observeSearchfield('user_search', 'users', '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@dmsf_workflow, :dmsf_workflow_step_assignment_id => nil, :dmsf_file_revision_id => nil, :project_id => @project ? @project.id : nil) }')" %>
     
     <div id="users">
-      <%= render_principals_for_new_dmsf_workflow_users(@workflow, nil, nil) %>
+      <%= render_principals_for_new_dmsf_workflow_users(@dmsf_workflow, nil, nil) %>
     </div>
 
     <p>

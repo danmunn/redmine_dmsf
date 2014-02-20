@@ -17,13 +17,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfWorkflowsController < ApplicationController
-  unloadable  
-  layout :workflows_layout
+  unloadable    
+  model_object DmsfWorkflow
+    
+  before_filter :find_model_object, :except => [:create, :new, :index, :assign, :assignment]    
+  before_filter :find_project
+  before_filter :authorize_custom
   
-  before_filter :find_workflow, :except => [:create, :new, :index, :assign, :assignment]  
-  before_filter :find_project, :except => [:start]
-  before_filter :authorize_global  
-  before_filter :authorize_custom, :except => [:assignment, :start, :new_action]       
+  layout :workflows_layout
   
   def index    
     if @project
@@ -46,7 +47,7 @@ class DmsfWorkflowsController < ApplicationController
         if action.save
           revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
           if revision
-            if @workflow.try_finish revision, action, (params[:step_action].to_i / 10)            
+            if @dmsf_workflow.try_finish revision, action, (params[:step_action].to_i / 10)            
               file = DmsfFile.joins(:revisions).where(:dmsf_file_revisions => {:id => revision.id}).first
               if file
                 begin
@@ -60,23 +61,23 @@ class DmsfWorkflowsController < ApplicationController
                 revision.file.project.members.each do |member|
                   DmsfMailer.workflow_notification(
                     member.user,
-                    @workflow, 
+                    @dmsf_workflow, 
                     revision,
-                    l(:text_email_subject_approved, :name => @workflow.name),
-                    l(:text_email_finished_approved, :name => @workflow.name, :filename => revision.file.name),
+                    l(:text_email_subject_approved, :name => @dmsf_workflow.name),
+                    l(:text_email_finished_approved, :name => @dmsf_workflow.name, :filename => revision.file.name),
                     l(:text_email_to_see_history)).deliver if member.user
                 end
               else
                 # Just rejected                
-                recipients = @workflow.participiants
+                recipients = @dmsf_workflow.participiants
                 recipients.push User.find_by_id revision.dmsf_workflow_assigned_by
                 recipients.each do |user|
                   DmsfMailer.workflow_notification(
                     user, 
-                    @workflow, 
+                    @dmsf_workflow, 
                     revision,
-                    l(:text_email_subject_rejected, :name => @workflow.name),
-                    l(:text_email_finished_rejected, :name => @workflow.name, :filename => revision.file.name, :notice => action.note),
+                    l(:text_email_subject_rejected, :name => @dmsf_workflow.name),
+                    l(:text_email_finished_rejected, :name => @dmsf_workflow.name, :filename => revision.file.name, :notice => action.note),
                     l(:text_email_to_see_history)).deliver if user
                 end
               end
@@ -86,33 +87,33 @@ class DmsfWorkflowsController < ApplicationController
                 delegate = User.find_by_id params[:step_action].to_i / 10                
                 DmsfMailer.workflow_notification(
                   delegate, 
-                  @workflow, 
+                  @dmsf_workflow, 
                   revision,
-                  l(:text_email_subject_delegated, :name => @workflow.name),
-                  l(:text_email_finished_delegated, :name => @workflow.name, :filename => revision.file.name, :notice => action.note),
+                  l(:text_email_subject_delegated, :name => @dmsf_workflow.name),
+                  l(:text_email_finished_delegated, :name => @dmsf_workflow.name, :filename => revision.file.name, :notice => action.note),
                   l(:text_email_to_proceed)).deliver if delegate                
               else
                 # Next step
-                assignments = @workflow.next_assignments revision.id
+                assignments = @dmsf_workflow.next_assignments revision.id
                 unless assignments.empty?
                   if assignments.first.dmsf_workflow_step.step != action.dmsf_workflow_step_assignment.dmsf_workflow_step.step
                     # Next step
                     assignments.each do |assignment|
                       DmsfMailer.workflow_notification(
                         assignment.user, 
-                        @workflow, 
+                        @dmsf_workflow, 
                         revision,
-                        l(:text_email_subject_requires_approval, :name => @workflow.name),                        
-                        l(:text_email_finished_step, :name => @workflow.name, :filename => revision.file.name),
+                        l(:text_email_subject_requires_approval, :name => @dmsf_workflow.name),                        
+                        l(:text_email_finished_step, :name => @dmsf_workflow.name, :filename => revision.file.name),
                         l(:text_email_to_proceed)).deliver if assignment.user
                     end
                     to = User.find_by_id revision.dmsf_workflow_assigned_by                    
                     DmsfMailer.workflow_notification(
                       to, 
-                      @workflow, 
+                      @dmsf_workflow, 
                       revision,
-                      l(:text_email_subject_updated, :name => @workflow.name),
-                      l(:text_email_finished_step_short, :name => @workflow.name, :filename => revision.file.name),
+                      l(:text_email_subject_updated, :name => @dmsf_workflow.name),
+                      l(:text_email_finished_step_short, :name => @dmsf_workflow.name, :filename => revision.file.name),
                       l(:text_email_to_see_status)).deliver if to
                   end
                 end
@@ -163,12 +164,12 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def new   
-    @workflow = DmsfWorkflow.new        
+    @dmsf_workflow = DmsfWorkflow.new        
   end
   
   def create
-    @workflow = DmsfWorkflow.new(:name => params[:name], :project_id => params[:project_id])
-    if request.post? && @workflow.save
+    @dmsf_workflow = DmsfWorkflow.new(:name => params[:name], :project_id => params[:project_id])
+    if request.post? && @dmsf_workflow.save
       flash[:notice] = l(:notice_successful_create)
       if @project
         redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
@@ -184,7 +185,7 @@ class DmsfWorkflowsController < ApplicationController
   end   
   
   def update    
-    if request.put? && @workflow.update_attributes({:name => params[:name]})
+    if request.put? && @dmsf_workflow.update_attributes({:name => params[:name]})
       flash[:notice] = l(:notice_successful_update)
       if @project
         redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
@@ -198,7 +199,7 @@ class DmsfWorkflowsController < ApplicationController
   
   def destroy    
     begin
-      @workflow.destroy 
+      @dmsf_workflow.destroy 
       flash[:notice] = l(:notice_successful_delete)
     rescue
       flash[:error] = l(:error_unable_delete_dmsf_workflow)
@@ -218,14 +219,14 @@ class DmsfWorkflowsController < ApplicationController
     if request.post?            
       users = User.find_all_by_id(params[:user_ids])      
       if params[:step] == '0'
-        step = @workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq.count + 1        
+        step = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq.count + 1        
       else
         step = params[:step].to_i
       end
       operator = (params[:commit] == l(:dmsf_and)) ? DmsfWorkflowStep::OPERATOR_AND : DmsfWorkflowStep::OPERATOR_OR
       users.each do |user|        
-        @workflow.dmsf_workflow_steps << DmsfWorkflowStep.new(
-          :dmsf_workflow_id => @workflow.id, 
+        @dmsf_workflow.dmsf_workflow_steps << DmsfWorkflowStep.new(
+          :dmsf_workflow_id => @dmsf_workflow.id, 
           :step => step, 
           :user_id => user.id, 
           :operator => operator)
@@ -238,10 +239,10 @@ class DmsfWorkflowsController < ApplicationController
   
   def remove_step        
     if request.delete?      
-      DmsfWorkflowStep.where(:dmsf_workflow_id => @workflow.id, :step => params[:step]).each do |ws|
-        @workflow.dmsf_workflow_steps.delete(ws)
+      DmsfWorkflowStep.where(:dmsf_workflow_id => @dmsf_workflow.id, :step => params[:step]).each do |ws|
+        @dmsf_workflow.dmsf_workflow_steps.delete(ws)
       end                    
-      @workflow.dmsf_workflow_steps.each do |ws|
+      @dmsf_workflow.dmsf_workflow_steps.each do |ws|
         n = ws.step.to_i
         if n > params[:step].to_i        
           ws.step = n - 1
@@ -258,7 +259,7 @@ class DmsfWorkflowsController < ApplicationController
   
   def reorder_steps    
     if request.put?
-      unless @workflow.reorder_steps(params[:step].to_i, params[:workflow_step][:move_to])
+      unless @dmsf_workflow.reorder_steps(params[:step].to_i, params[:workflow_step][:move_to])
         flash[:error] = l(:notice_cannot_renumber_steps)
       end     
     end        
@@ -270,16 +271,16 @@ class DmsfWorkflowsController < ApplicationController
   def start
     revision = DmsfFileRevision.find_by_id(params[:dmsf_file_revision_id])
     if revision            
-      revision.set_workflow(@workflow.id, params[:action])
+      revision.set_workflow(@dmsf_workflow.id, params[:action])
       if revision.save          
-        assignments = @workflow.next_assignments revision.id          
+        assignments = @dmsf_workflow.next_assignments revision.id          
         assignments.each do |assignment|
           DmsfMailer.workflow_notification(
             assignment.user,
-            @workflow, 
+            @dmsf_workflow, 
             revision,
-            l(:text_email_subject_started, :name => @workflow.name),              
-            l(:text_email_started, :name => @workflow.name, :filename => revision.file.name),
+            l(:text_email_subject_started, :name => @dmsf_workflow.name),              
+            l(:text_email_started, :name => @dmsf_workflow.name, :filename => revision.file.name),
             l(:text_email_to_proceed)).deliver if assignment.user
         end
         flash[:notice] = l(:notice_workflow_started)
@@ -291,25 +292,26 @@ class DmsfWorkflowsController < ApplicationController
   end
     
 private    
-  def find_workflow   
-    @workflow = DmsfWorkflow.find_by_id(params[:id])    
-  end
-    
+
   def find_project    
-    if @workflow && @workflow.project
-      @project = @workflow.project
+    if @dmsf_workflow && @dmsf_workflow.project
+      @project = @dmsf_workflow.project
     elsif params[:project_id].present?
        @project = Project.find_by_id params[:project_id]
+    else
+      @project = Project.find_by_identifier params[:id]
     end    
   end
   
-  def workflows_layout
-    find_workflow
-    find_project
+  def workflows_layout    
     @project ? 'base' : 'admin'
   end    
   
-  def authorize_custom
-    require_admin unless @project
+  def authorize_custom    
+    if @project
+      authorize
+    else
+      require_admin
+    end
   end
 end

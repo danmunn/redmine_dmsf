@@ -27,7 +27,7 @@
 <h3><%= l(:label_my_locked_documents)%> (<%= folders.count %>/<%=  files.count %>)</h3>
 <% if folders.any? || files.any?%>
   <%= form_tag({}) do %>
-    <div><table class="list">
+    <table class="list">
       <thead>
         <tr>              
           <th><%=l(:field_project)%></th>

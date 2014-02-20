@@ -24,10 +24,10 @@
         <div class="log_header_box">                    
           <div class="log_header_left">
             <%= label_tag 'workflow_name', "#{l(:link_workflow)} #{l(:field_name).downcase}: " %>
-            <% if User.current.allowed_to?(:manage_workflows, @workflow.project) %>
-              <%= link_to @workflow.name, edit_dmsf_workflow_path(@workflow) %>
+            <% if User.current.allowed_to?(:manage_workflows, @dmsf_workflow.project) %>
+              <%= link_to @dmsf_workflow.name, edit_dmsf_workflow_path(@dmsf_workflow) %>
             <% else %>
-              <%= @workflow.name %>
+              <%= @dmsf_workflow.name %>
             <% end %>
           </div>
           <div>
@@ -78,7 +78,7 @@
                   <td><%= link_to_user User.find_by_id(row['author_id'].present? ? row['author_id'] : row['user_id']) %></td>
                   <td><%= DmsfWorkflowStepAction.action_str(row['action']) %></td>
                   <td>                    
-                    <% if((row['step'].to_i == @workflow.dmsf_workflow_steps.last.step) && (revision.workflow == DmsfWorkflow::STATE_APPROVED) && (row['action'] != DmsfWorkflowStepAction::ACTION_DELEGATE)) %>
+                    <% if((row['step'].to_i == @dmsf_workflow.dmsf_workflow_steps.last.step) && (revision.workflow == DmsfWorkflow::STATE_APPROVED) && (row['action'] != DmsfWorkflowStepAction::ACTION_DELEGATE)) %>
                       <%= l(:title_approved) %>
                     <% else %>
                       <%= DmsfWorkflowStepAction.workflow_str(row['action']) %>

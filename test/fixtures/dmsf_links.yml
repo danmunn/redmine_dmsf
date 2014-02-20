@@ -1,0 +1,26 @@
+---
+folder_link:
+  id: 1
+  target_project_id: 1
+  target_id: 1
+  target_type: DmsfFolder
+  name: folder1_link
+  project_id: 1
+  dmsf_folder_id: NULL
+  deleted: 0
+  deleted_by_user_id: NULL
+  created_at: <%= DateTime.now() %>
+  updated_at: <%= DateTime.now() %>
+
+file_link:
+  id: 2
+  target_project_id: 1
+  target_id: 4
+  target_type: DmsfFile
+  name: test_link
+  project_id: 1
+  dmsf_folder_id: 1
+  deleted: 0
+  deleted_by_user_id: NULL
+  created_at: <%= DateTime.now() %>
+  updated_at: <%= DateTime.now() %>

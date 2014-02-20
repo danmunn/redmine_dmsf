@@ -66,14 +66,12 @@ class DmsfFile < ActiveRecord::Base
                 :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o}},
                 :datetime => Proc.new {|o| o.updated_at },
                 :author => Proc.new {|o| o.last_revision.user }
-  
-
-  @@storage_path = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].strip
+    
+  @@storage_path = nil
 
   def self.storage_path
-    if !File.exists?(@@storage_path)
-      Dir.mkdir(@@storage_path)
-    end
+    self.storage_path = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].strip unless @@storage_path    
+    Dir.mkdir(@@storage_path) unless File.exists?(@@storage_path)    
     @@storage_path
   end
 
