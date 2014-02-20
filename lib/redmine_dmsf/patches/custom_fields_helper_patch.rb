@@ -18,21 +18,33 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+require_dependency 'custom_fields_helper'
+
 module RedmineDmsf
   module Patches
-    module CustomFieldsHelperPatch
+    module CustomFieldsHelperPatch                  
       def self.included(base)
+        base.extend(ClassMethods)
+        base.send(:include, InstanceMethods)
         base.class_eval do
-          alias_method_chain :custom_fields_tabs, :customer_tab
+          unloadable
+          alias_method_chain :custom_fields_tabs, :custom_tab
         end
       end
 
-      def custom_fields_tabs_with_customer_tab                    
-        cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}        
-        unless custom_fields_tabs_without_customer_tab.index { |f| f[:name] == cf[:name] }
-          custom_fields_tabs_without_customer_tab << cf 
+      module ClassMethods
+      end
+
+      module InstanceMethods
+              
+        def custom_fields_tabs_with_custom_tab                    
+          cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}        
+          unless custom_fields_tabs_without_custom_tab.index { |f| f[:name] == cf[:name] }
+            custom_fields_tabs_without_custom_tab << cf 
+          end
+          custom_fields_tabs_without_custom_tab        
         end
-        custom_fields_tabs_without_customer_tab        
+        
       end
     end
   end
