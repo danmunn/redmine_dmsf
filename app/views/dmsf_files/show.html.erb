@@ -142,13 +142,12 @@
         <%= h(revision.comment) %>
       </div>	     	     
       <br/>
-      <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">
-        <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if User.current.allowed_to?(:file_manipulation, @file.project) %>
+      <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">        
+        <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if User.current.allowed_to?(:file_manipulation, @file.project) %>        
       </div>    
     </div>
   </div>  
-  <!--<br/>
-  <br/>-->
+  <br/>  
 <% end %>
 
 <p class="pagination"><%= pagination_links_full @revision_pages, @file.revisions.visible.count %></p>
