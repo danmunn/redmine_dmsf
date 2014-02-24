@@ -78,9 +78,7 @@ class DmsfUploadController < ApplicationController
       render :layout => false
     end
   end
-
-  #TODO: flash notice when files saved and unlocked
-  #TODO: separate control for approval
+  
   def commit_files
     commited_files = params[:commited_files]
     if commited_files && commited_files.is_a?(Hash)

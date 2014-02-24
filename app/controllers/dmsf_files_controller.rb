@@ -59,21 +59,17 @@ class DmsfFilesController < ApplicationController
     end
     
     @revision = @file.last_revision
-    # TODO: line bellow is to handle old installations with errors in data handling
-    @revision.name = @file.name
     
     @revision_pages = Paginator.new @file.revisions.visible.count, params['per_page'] ? params['per_page'].to_i : 25, params['page']
     
     render :layout => !request.xhr?
   end
-
-  #TODO: don't create revision if nothing change
+  
   def create_revision
     if params[:dmsf_file_revision]
       if @file.locked_for_user?
         flash[:error] = l(:error_file_is_locked)        
-      else
-        #TODO: validate folder_id
+      else        
         @revision = DmsfFileRevision.new(params[:dmsf_file_revision])
 
         @revision.file = @file

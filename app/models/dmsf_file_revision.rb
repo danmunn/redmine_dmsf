@@ -33,21 +33,21 @@ class DmsfFileRevision < ActiveRecord::Base
   acts_as_customizable
 
   acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.file.dmsf_path_str}"},
-                :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.file}},
-                :datetime => Proc.new {|o| o.updated_at },
-                :description => Proc.new {|o| o.comment },
-                :author => Proc.new {|o| o.user }
+    :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.file}},
+    :datetime => Proc.new {|o| o.updated_at },
+    :description => Proc.new {|o| o.comment },
+    :author => Proc.new {|o| o.user }
                 
   acts_as_activity_provider :type => 'dmsf_files',
-                            :timestamp => "#{DmsfFileRevision.table_name}.updated_at",
-                            :author_key => "#{DmsfFileRevision.table_name}.user_id",
-                            :permission => :view_dmsf_files,
-                            :find_options => {:select => "#{DmsfFileRevision.table_name}.*", 
-                                              :joins => 
-                                                "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
-                                                "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id",
-                                              :conditions => ["#{DmsfFile.table_name}.deleted = :false", {:false => false}]
-                                             }
+    :timestamp => "#{DmsfFileRevision.table_name}.updated_at",
+    :author_key => "#{DmsfFileRevision.table_name}.user_id",
+    :permission => :view_dmsf_files,
+    :find_options => {:select => "#{DmsfFileRevision.table_name}.*", 
+      :joins => 
+        "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
+        "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id",
+      :conditions => ["#{DmsfFile.table_name}.deleted = :false", {:false => false}]
+     }
     
   validates :title, :name, :presence => true
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
@@ -56,8 +56,7 @@ class DmsfFileRevision < ActiveRecord::Base
   def self.remove_extension(filename)
     filename[0, (filename.length - File.extname(filename).length)]
   end
-  
-  # TODO: check if better to move to dmsf_upload class
+    
   def self.filename_to_title(filename)
     remove_extension(filename).gsub(/_+/, ' ');
   end
@@ -130,8 +129,7 @@ class DmsfFileRevision < ActiveRecord::Base
     content_type = 'application/octet-stream' if content_type.blank?
     content_type.to_s
   end
-  
-  # TODO: use standard clone method
+    
   def clone
     new_revision = DmsfFileRevision.new
     new_revision.file = self.file    

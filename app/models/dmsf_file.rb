@@ -194,7 +194,7 @@ class DmsfFile < ActiveRecord::Base
       return false 
     end
     
-    new_revision = self.last_revision.clone
+    new_revision = self.last_revision.clone    
     
     new_revision.folder = folder
     new_revision.project = folder ? folder.project : project
@@ -227,7 +227,6 @@ class DmsfFile < ActiveRecord::Base
 
     if file.save && self.last_revision
       new_revision = self.last_revision.clone
-
       new_revision.file = file
       new_revision.folder = folder
       new_revision.project = folder ? folder.project : project
