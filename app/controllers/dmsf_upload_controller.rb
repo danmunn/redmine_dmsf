@@ -170,9 +170,11 @@ class DmsfUploadController < ApplicationController
       end
       unless files.empty?        
         files.each { |file| log_activity(file, 'uploaded') if file }        
-        begin 
-          DmsfMailer.files_updated(User.current, files).deliver
-        rescue ActionView::MissingTemplate => e
+        begin
+          DmsfMailer.get_notify_users(User.current, files).each do |u|
+            DmsfMailer.files_updated(u, files).deliver
+          end
+        rescue Exception => e
           Rails.logger.error "Could not send email notifications: #{e.message}"
         end
       end
@@ -180,7 +182,7 @@ class DmsfUploadController < ApplicationController
         flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u['name']}.join(', '))
       end
     end
-    redirect_to :controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder
+    redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
   end
 
   private

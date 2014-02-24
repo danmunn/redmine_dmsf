@@ -108,11 +108,9 @@ sl:
   label_created: Narejeno
   label_changed: Spremenjeno
   info_changed_by_user: "%{changed} po"
-  label_filename: Datoteka
-  label_version: Verzija  
+  label_filename: Datoteka  
   label_mime: Mime
-  label_size: Velikost
-  label_comment: Komentar
+  label_size: Velikost  
   heading_new_revision: Nova verzija
   option_version_same: Enako
   option_version_minor: Minor
@@ -281,6 +279,12 @@ sl:
   label_notifications_off: Notifications off
   field_target_file: Target file
   title_download_entries: Download entries
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
   
   my:
     blocks:

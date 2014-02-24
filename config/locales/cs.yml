@@ -109,11 +109,9 @@ cs:
   label_created: Vytvořeno
   label_changed: Změněno
   info_changed_by_user: "%{changed} uživatelem"
-  label_filename: Jméno souboru
-  label_version: Verze  
+  label_filename: Jméno souboru  
   label_mime: Typ
-  label_size: Velikost
-  label_comment: Komentář
+  label_size: Velikost  
   heading_new_revision: Nová revize
   option_version_same: Stejná
   option_version_minor: Podružná
@@ -280,6 +278,12 @@ cs:
   label_notifications_off: Vypnout notifikace
   field_target_file: Cílový soubor
   title_download_entries: Historie stahování
+  
+  text_email_doc_updated_subject: "Dokumenty projektu %{project} aktualizovány"
+  text_email_doc_updated: právě aktualizoval dokumenty projektu
+  text_email_doc_follows: takto
+  text_email_doc_deleted_subject: "Dokumenty projektu %{project} smazány"
+  text_email_doc_deleted: právě smazal dokumety projektu
     
   my:
     blocks:

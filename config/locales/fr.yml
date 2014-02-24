@@ -110,12 +110,10 @@ fr:
   label_created: Créé
   label_changed: Modifié
   info_changed_by_user: "%{changed} par"
-  label_filename: Fichier
-  label_version: Version  
+  label_filename: Fichier  
   label_approval_workflow: Flux de validation
   label_mime: Type
-  label_size: Taille
-  label_comment: Commentaires
+  label_size: Taille  
   heading_new_revision: Nouvelle révision
   option_version_same: (identique)
   option_version_minor: (modification mineure)
@@ -284,6 +282,12 @@ fr:
   label_notifications_off: Notifications off
   field_target_file: Target file
   title_download_entries: Download entries
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
 
   my:
     blocks:

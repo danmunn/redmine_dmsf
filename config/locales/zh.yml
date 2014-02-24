@@ -108,11 +108,9 @@ zh:
   label_created: 创建
   label_changed: 修改
   info_changed_by_user: "%{changed} by"
-  label_filename: 文件名
-  label_version: 版本  
+  label_filename: 文件名  
   label_mime: Mime
-  label_size: 大小
-  label_comment: 注释
+  label_size: 大小  
   heading_new_revision: 新修订
   option_version_same: Same
   option_version_minor: Minor
@@ -282,6 +280,12 @@ zh:
   label_notifications_off: Notifications off
   field_target_file: Target file
   title_download_entries: Download entries
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
   
   my:
     blocks:

@@ -23,9 +23,11 @@
 <p>
   <%= @text2 %>      
   <%  unless @revision.folder %>
-    <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> @revision.file.project, :only_path => false } %>
+    <%= link_to l(:link_documents), 
+      dmsf_folder_path(:id => @revision.file.project, :only_path => false) %>
   <% else %>
-    <%=  link_to @revision.folder.title, {:controller => 'dmsf', :action => 'show', :id=> @revision.file.project, :folder_id => @revision.folder, :only_path => false } %>
+    <%=  link_to @revision.folder.title,
+      dmsf_folder_path(:id => @revision.file.project, :folder_id => @revision.folder, :only_path => false) %>
   <% end %>.
 </p>
   

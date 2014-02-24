@@ -115,7 +115,7 @@ class DmsfController < ApplicationController
       render :action => 'email_entries'
       return
     end
-    DmsfMailer.send_documents(User.current, @email_params['to'], @email_params['cc'],
+    DmsfMailer.send_documents(@project, User.current, @email_params['to'], @email_params['cc'],
       @email_params['subject'], @email_params['zipped_content'], @email_params['body']).deliver
     File.delete(@email_params['zipped_content'])
     flash[:notice] = l(:notice_email_sent, @email_params['to'])
@@ -190,7 +190,13 @@ class DmsfController < ApplicationController
         deleted_files.each do |f| 
           log_activity(f, 'deleted')
         end
-        DmsfMailer.files_deleted(User.current, deleted_files).deliver
+        begin
+          DmsfMailer.get_notify_users(User.current, deleted_files).each do |u|
+            DmsfMailer.files_deleted(u, deleted_files).deliver
+          end
+        rescue Exception => e
+          Rails.logger.error "Could not send email notifications: #{e.message}"
+        end
       end
       if failed_entries.empty?
         flash[:notice] = l(:notice_entries_deleted)

@@ -108,11 +108,9 @@ ja:
   label_created: 作成者/日時
   label_changed: 更新者/日時
   info_changed_by_user: "/ %{changed}"
-  label_filename: ファイル名
-  label_version: バージョン  
+  label_filename: ファイル名  
   label_mime: Mime
-  label_size: サイズ
-  label_comment: コメント
+  label_size: サイズ  
   heading_new_revision: 新しいリビジョン
   option_version_same: 変更なし
   option_version_minor: マイナー
@@ -281,6 +279,12 @@ ja:
   label_notifications_off: Notifications off
   field_target_file: Target file
   title_download_entries: Download entries
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
   
   my:
     blocks:

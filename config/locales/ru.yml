@@ -108,11 +108,9 @@ ru:
   label_created: Создан
   label_changed: Изменен
   info_changed_by_user: "%{changed} пользователем"
-  label_filename: Имя файла
-  label_version: Версия  
+  label_filename: Имя файла  
   label_mime: MIME-тип
-  label_size: Размер
-  label_comment: Комментарий
+  label_size: Размер  
   heading_new_revision: Новая редакция
   option_version_same: Та же версия
   option_version_minor: Незначительные изменения
@@ -281,6 +279,12 @@ ru:
   label_notifications_off: Notifications off
   field_target_file: Target file
   title_download_entries: Download entries
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
   
   my:
     blocks:

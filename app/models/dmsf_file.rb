@@ -225,7 +225,7 @@ class DmsfFile < ActiveRecord::Base
     file.name = self.name
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
 
-    if file.save
+    if file.save && self.last_revision
       new_revision = self.last_revision.clone
 
       new_revision.file = file

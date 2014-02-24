@@ -110,12 +110,10 @@ en:
   label_created: Created
   label_changed: Changed
   info_changed_by_user: "%{changed} by"
-  label_filename: Filename
-  label_version: Version
+  label_filename: Filename  
   label_approval_workflow: Workflow
   label_mime: Mime
-  label_size: Size
-  label_comment: Comment
+  label_size: Size  
   heading_new_revision: New Revision
   option_version_same: Same
   option_version_minor: Minor
@@ -284,6 +282,12 @@ en:
   label_notifications_off: Notifications off
   field_target_file: Target file
   title_download_entries: Download entries
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
   
   my:
     blocks:

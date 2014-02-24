@@ -69,15 +69,8 @@ class DmsfFoldersCopyController < ApplicationController
     
     flash[:notice] = l(:notice_folder_copied)
     log_activity(new_folder, 'was copied (is copy)')
-    
-    #TODO: implement proper notification for all new files
-    #begin 
-    #  DmsfMailer.files_updated(User.current, [new_file]).deliver
-    #rescue ActionView::MissingTemplate => e
-    #  Rails.logger.error "Could not send email notifications: " + e
-    #end
-    
-    redirect_to :controller => 'dmsf', :action => 'show', :id => @target_project, :folder_id => new_folder
+          
+    redirect_to dmsf_folder_path(:id => @target_project, :folder_id => new_folder)
   end
 
   private

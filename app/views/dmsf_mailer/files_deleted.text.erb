@@ -17,11 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
-
-<%= @user.name %> has just deleted documents of <%= @project.name %> as follows: 
-<% @files.each do |file| %>
-  <%= file.dmsf_path_str %> (<%= file.name %>)
-  <% if file.last_revision %>
-     , <%= number_to_human_size(file.last_revision.size) %>, version: <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>
-  <% end %>	
+    
+<%= @user.name %> <%= l(:text_email_doc_deleted) %> <%= @project.name %> <%= l(:text_email_doc_follows) %>
+<% @files.each do |file| %>  
+  <%= h(file.dmsf_path_str) %> (<%= file.name %>)
+  <%  if file.last_revision %>
+    , <%= number_to_human_size(file.last_revision.size) %>, <%= l(:label_version) %> <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>
+  <% end  %>  
 <% end %>

@@ -17,15 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
-
-<%= @user.name %> has just actualized documents of <%= @project.name %> as follows: 
+    
+<%= @user.name %> <%= l(:text_email_doc_updated) %>
+<%= @project.name %> <%= l(:text_email_doc_follows) %>
 <% @files.each do |file| %>
-  <%= file.dmsf_path_str %> (<%= file.name %>),
+  <%= h(file.dmsf_path_str) %> (<%= file.name %>),  
   <%= number_to_human_size(file.last_revision.size) %>,
-  version: <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>,
+  <%= l(:label_version) %> <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>,
   <%= "#{file.last_revision.workflow_str(true)}," if file.last_revision.workflow_str(true) != l(:title_none) %>
-  <%= url_for({:only_path => false, :controller => 'dmsf_files', :action => 'show', :id => file}) %>
+  <%= dmsf_file_path(file, :only_path => false) %>    
   <% if file.last_revision.comment.present? %>
-    comment: <%= h(file.last_revision.comment) %>
+    <%= l(:label_comment) %> <%= h(file.last_revision.comment) %>
   <% end %>
 <% end %>

@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,47 +20,57 @@
 require 'mailer'
 
 class DmsfMailer < Mailer
+  layout 'mailer'
   
   def files_updated(user, files)
-    project = files[0].project
-    files = files.select { |file| file.notify? }
-    
-    redmine_headers "Project" => project.identifier
+    if user && files.count > 0
+      project = files[0].project
+      files = files.select { |file| file.notify? }
 
-    @user = user
-    @files = files
-    @project = project
+      redmine_headers 'Project' => project.identifier if project
 
-    mail :to => get_notify_user_emails(user, files),
-      :subject =>  "#{project.name}: Dmsf files updated"
+      @user = user
+      @files = files
+      @project = project
+      
+      set_language_if_valid user.language
+      mail :to => user.mail, 
+          :subject =>  l(:text_email_doc_updated_subject, :project => project.name)
+    end
   end
   
   def files_deleted(user, files)
-    project = files[0].project
-    files = files.select { |file| file.notify? }
-    
-    redmine_headers 'Project' => project.identifier
+    if user && files.count > 0
+      project = files[0].project
+      files = files.select { |file| file.notify? }
 
-    @user = user
-    @files = files
-    @project = project
+      redmine_headers 'Project' => project.identifier if project
 
-    mail :to => get_notify_user_emails(user, files),
-      :subject => "#{project.name}: Dmsf files deleted"
+      @user = user
+      @files = files
+      @project = project
+      
+      set_language_if_valid user.language
+      mail :to => user.mail, 
+        :subject =>  l(:text_email_doc_deleted_subject, :project => project.name)
+    end
   end
   
-  def send_documents(user, email_to, email_cc, email_subject, zipped_content, email_plain_body)
+  def send_documents(project, user, email_to, email_cc, email_subject, zipped_content, email_plain_body)
     zipped_content_data = open(zipped_content, 'rb') {|io| io.read }
+    
+    redmine_headers 'Project' => project.identifier if project
 
     @body = email_plain_body
-
+    
     attachments['Documents.zip'] = {:content_type => 'application/zip', :content => zipped_content_data}
-    mail(:to => email_to, :cc => email_cc, :subject => email_subject, :from => user.mail)
+    mail :to => email_to, :cc => email_cc, :subject => email_subject, :from => user.mail
   end
   
   def workflow_notification(user, workflow, revision, subject, text1, text2)
     if user && workflow && revision
-      set_language_if_valid user.language    
+      redmine_headers 'Project' => revision.file.project.identifier if revision.file && revision.file.project
+      set_language_if_valid user.language
       @user = user
       @workflow = workflow
       @revision = revision
@@ -67,17 +78,15 @@ class DmsfMailer < Mailer
       @text2 = text2
       mail :to => user.mail, :subject => subject
     end
-  end
-      
-  private
+  end        
   
-  def get_notify_user_emails(user, files)
+  def self.get_notify_users(user, files)
     return [] if files.empty?
     project = files[0].project    
     notify_members = project.members
     notify_members = notify_members.select do |notify_member|
-      notify_user = notify_member.user      
-      if notify_user.pref[:no_self_notified] == '1' && notify_user == user
+      notify_user = notify_member.user         
+      if notify_user == user && user.pref.no_self_notified
         false
       else
         unless notify_member.dmsf_mail_notification
@@ -97,7 +106,7 @@ class DmsfMailer < Mailer
       end
     end      
 
-    notify_members.collect {|m| m.user.mail }
+    notify_members.collect { |m| m.user }
   end
         
 end
