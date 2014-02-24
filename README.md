@@ -35,15 +35,14 @@ Features
   * Wiki macros for quick content linking
   * Full read/write webdav functionality
   * Optional document content fulltext search
-  * Compatible with redmine 2.0.x
+  * Documents and files symbolic links
+  * Compatible with redmine 2.3.x
 
 Dependencies
 ------------
 
-As of version 1.4.4 of this plugin:
-
   * Bundler 1.1 or greater (Gem)
-  * Redmine 2.0.x 
+  * Redmine 2.3.x 
   * Rails 3.2.x (Inline with Redmine installation requirement) 
   * rubyzip 1.0.0 (Gem)
   * UUIDTools 2.1.1 or greater (less than 2.2.0) (Gem)
@@ -149,9 +148,15 @@ Before installing ensure that the Redmine instance is stopped.
 7. Assign DMSF permissions to appropriate roles
 8. There are two rake tasks:
     a) To convert documents from the standard Redmine document module
-       rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
+        Available options:
+            * project  => id or identifier of project (defaults to all projects)
+            * dry  => true or false (default false) to perform just check without any conversion
+            * invalid=replace  => to perform document title invalid characters replacement for '-'
+        Example:
+            rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
     b) To alert all users who are expected to do an approval in the current approval steps
-       rake redmine:dmsf_alert_approvals RAILS_ENV="production"
+        Example:
+            rake redmine:dmsf_alert_approvals RAILS_ENV="production"
 
 ### Fulltext search (optional)
 If you want to use fulltext search features, you must setup file content indexing.
