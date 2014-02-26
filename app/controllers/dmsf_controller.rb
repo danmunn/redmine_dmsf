@@ -63,6 +63,16 @@ class DmsfController < ApplicationController
     
     @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].present? ? Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'] : 100
   end
+  
+  def download_email_entries
+    send_file(        
+        params[:path],
+        :filename => 'Documents.zip',
+        :type => 'application/zip', 
+        :disposition => 'attachment')
+    rescue Exception => e
+      flash[:error] = e.message    
+  end
 
   def entries_operation
     selected_folders = params[:subfolders].present? ? params[:subfolders] : []
@@ -110,16 +120,16 @@ class DmsfController < ApplicationController
 
   def entries_email
     @email_params = params[:email]
-    if @email_params['to'].strip.blank?
+    if @email_params[:to].strip.blank?
       flash.now[:error] = l(:error_email_to_must_be_entered)
       render :action => 'email_entries'
       return
-    end
-    DmsfMailer.send_documents(@project, User.current, @email_params['to'], @email_params['cc'],
-      @email_params['subject'], @email_params['zipped_content'], @email_params['body']).deliver
+    end    
+    DmsfMailer.send_documents(@project, User.current, @email_params).deliver
     File.delete(@email_params['zipped_content'])
     flash[:notice] = l(:notice_email_sent, @email_params['to'])
-    redirect_to({:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder})
+    
+    redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
   end 
 
   def delete_entries
@@ -342,9 +352,9 @@ class DmsfController < ApplicationController
       zip = DmsfZip.new
       zip_entries(zip, selected_folders, selected_files)
 
-      ziped_content = "#{DmsfHelper.temp_dir}/#{DmsfHelper.temp_filename('dmsf_email_sent_documents.zip')}";
+      zipped_content = "#{DmsfHelper.temp_dir}/#{DmsfHelper.temp_filename('dmsf_email_sent_documents.zip')}";
 
-      File.open(ziped_content, 'wb') do |f|
+      File.open(zipped_content, 'wb') do |f|
         zip_file = File.open(zip.finish, 'rb')
         while (buffer = zip_file.read(8192))
           f.write(buffer)
@@ -352,7 +362,7 @@ class DmsfController < ApplicationController
       end
 
       max_filesize = Setting.plugin_redmine_dmsf['dmsf_max_email_filesize'].to_f
-      if max_filesize > 0 && File.size(ziped_content) > max_filesize * 1048576
+      if max_filesize > 0 && File.size(zipped_content) > max_filesize * 1048576
         raise EmailMaxFileSize
       end
 
@@ -363,7 +373,11 @@ class DmsfController < ApplicationController
         audit.save!
       end
 
-      @email_params = {'zipped_content' => ziped_content}
+      @email_params = { 
+        :zipped_content => zipped_content,
+        :folders => selected_folders,
+        :files => selected_files
+      }
       render :action => 'email_entries'
     rescue Exception => e
       flash[:error] = e.message

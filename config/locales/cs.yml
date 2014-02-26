@@ -284,6 +284,7 @@ cs:
   text_email_doc_follows: takto
   text_email_doc_deleted_subject: "Dokumenty projektu %{project} smazány"
   text_email_doc_deleted: právě smazal dokumety projektu
+  label_links_only: pouze odkazy
     
   my:
     blocks:

@@ -55,16 +55,22 @@ class DmsfMailer < Mailer
         :subject =>  l(:text_email_doc_deleted_subject, :project => project.name)
     end
   end
-  
-  def send_documents(project, user, email_to, email_cc, email_subject, zipped_content, email_plain_body)
-    zipped_content_data = open(zipped_content, 'rb') {|io| io.read }
+    
+  def send_documents(project, user, email_params)    
+    zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
     
     redmine_headers 'Project' => project.identifier if project
 
-    @body = email_plain_body
+    @body = email_params[:body]
+    @links_only = email_params[:links_only]
+    @folders = email_params[:folders]
+    @files = email_params[:files]
     
-    attachments['Documents.zip'] = {:content_type => 'application/zip', :content => zipped_content_data}
-    mail :to => email_to, :cc => email_cc, :subject => email_subject, :from => user.mail
+    unless @links_only == '1'
+      attachments['Documents.zip'] = { :content_type => 'application/zip', :content => zipped_content_data }
+    end
+    
+    mail :to => email_params[:to], :cc => email_params[:cc], :subject => email_params[:subject], :from => user.mail
   end
   
   def workflow_notification(user, workflow, revision, subject, text1, text2)

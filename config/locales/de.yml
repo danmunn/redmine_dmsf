@@ -279,6 +279,7 @@ de:
   label_notifications_off: Notifications off
   field_target_file: Target file
   title_download_entries: Download entries
+  label_links_only: links only
   
   my:
     blocks:

@@ -140,6 +140,12 @@ class DmsfFolder < ActiveRecord::Base
     return tree
   end    
   
+  def folder_tree
+    tree = [[self.title, self.id]]
+    DmsfFolder.directory_subtree(tree, self, 2, nil)    
+    return tree
+  end    
+  
   def self.file_list(files)
     options = Array.new
     options.push ['', nil]

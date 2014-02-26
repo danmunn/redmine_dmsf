@@ -288,6 +288,7 @@ fr:
   text_email_doc_follows: as follows
   text_email_doc_deleted_subject: "Documents of %{project} deleted"
   text_email_doc_deleted: has just deleted documents of
+  label_links_only: links only
 
   my:
     blocks:

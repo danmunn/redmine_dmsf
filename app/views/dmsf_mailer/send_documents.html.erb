@@ -1,7 +1,8 @@
 <%# Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,4 +18,38 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
-<%= simple_format(@body) %>
+<%= textilizable(@body) %>
+
+<% if @links_only == '1' %> 
+  <% if @folders.present? %>
+    <% JSON.parse(@folders).each do |id| %>
+      <% folder = DmsfFolder.find_by_id id %>
+      <% if folder %>        
+        <% folder.folder_tree.each do |name, i| %>          
+          <% dir = DmsfFolder.find_by_id i %>
+          <% if dir %>
+            <br/>
+            <%= link_to(h(dir.dmsf_path_str), dmsf_folder_path(:id => dir.project_id, :folder_id => dir.id, :only_path => false)) %>
+            <br/><br/>
+            <% dir.files.each do |file| %>            
+              <%= link_to(h(file.title), dmsf_file_path(file, :only_path => false)) %>
+              &nbsp;(<%= link_to(h(file.name), dmsf_file_path(file, :download => '', :only_path => false)) %>)
+              <br/>
+            <% end %>
+          <% end %>
+        <% end %>        
+      <% end %>
+    <% end %>
+  <% end %>
+  <% if @files.present? %>
+    <br/>
+    <% JSON.parse(@files).each do |id| %>
+      <% file = DmsfFile.find_by_id id %>
+      <% if file %>        
+        <%= link_to(h(file.title), dmsf_file_path(file, :only_path => false)) %>
+        &nbsp;(<%= link_to(h(file.name), dmsf_file_path(file, :download => '', :only_path => false)) %>)
+        <br/>
+      <% end %>
+    <% end %>
+   <% end %>
+<% end %>
