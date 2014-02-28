@@ -55,7 +55,7 @@
             </td>
             <td class="title">
               <% if assignment.dmsf_file_revision && assignment.dmsf_file_revision.file %>
-                <%= link_to(h(assignment.dmsf_file_revision.display_title), 
+                <%= link_to(h(assignment.dmsf_file_revision.title), 
                   {:controller => 'dmsf_files', :action => :show, :id => assignment.dmsf_file_revision.file }) %>                          
               <% end %>
             </td>

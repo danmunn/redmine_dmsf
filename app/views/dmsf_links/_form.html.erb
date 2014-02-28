@@ -1,6 +1,6 @@
 <%# Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2014 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,34 +21,59 @@
 <div class="contextual">
 </div>
 
-<%= render(:partial => '/dmsf/path', :locals => {:folder => @dmsf_link.folder, :filename => nil}) %>
+<% type = (@type || params[:dmsf_link].blank?) ? @type : params[:dmsf_link][:type] %>
+<% dmsf_file_id = (@dmsf_file_id || params[:dmsf_link].blank?) ? @dmsf_file_id : params[:dmsf_link][:dmsf_file_id] %>
+<% target_folder_id = (@target_folder_id || params[:dmsf_link].blank? || !DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])) ? @target_folder_id : params[:dmsf_link][:target_folder_id].to_i %>
+
+<% if dmsf_file_id %>
+  <% file = DmsfFile.find_by_id dmsf_file_id%>
+  <% title = file.title if file %>
+<% end %>
+
+<%= render(:partial => '/dmsf/path', :locals => {:folder => @dmsf_link.folder, :filename => title}) %>
 
 <%= labelled_form_for @dmsf_link do |f| %>
   <%= error_messages_for @dmsf_link %>
   <%= f.hidden_field :project_id, :value => @dmsf_link.project_id %>
   <%= f.hidden_field :dmsf_folder_id, :value => @dmsf_link.dmsf_folder_id if @dmsf_link.dmsf_folder_id %>
+  <%= f.hidden_field :type, :value => type %>
+  <%= f.hidden_field :dmsf_file_id, :value => dmsf_file_id %>
   <div class="box dmsf_detail">    
-    <p>      
-      <%= f.select(:target_project_id,
+    <p>
+      <% if type == 'link_from' %>
+        <%= label_tag('dmsf_link[target_project_id]', l(:label_source_project), :class => 'required') %>
+      <% else %>
+        <%= label_tag('dmsf_link[target_project_id]', l(:label_target_project), :class => 'required') %>
+      <% end %>
+      <%= select_tag('dmsf_link[target_project_id]',
          project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy, 
-           :selected => @dmsf_link.target_project),
-         {:required => true}) %>
-    </p>
-    <p>            
-      <%= f.select(:target_folder_id,
-        folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
-        :selected => @target_folder_id),
-        {:required => true}) %>             
-    </p>    
-    <p>              
-      <%= f.select(:target_file_id,
-        options_for_select(
-          DmsfFolder.file_list(
-            (@target_folder_id ? DmsfFolder.find(@target_folder_id).files : @dmsf_link.target_project.dmsf_files).visible), 
-            @target_file_id)) %>
+           :selected => @dmsf_link.target_project)) %>
     </p>
     <p>
-      <%= f.text_field :name, :size => 40, :maxlength => 255, :required => true, :value => @dmsf_link.name %>
+      <% if type == 'link_from' %>
+        <%= label_tag('dmsf_link[target_folder_id]', l(:label_source_folder)) %>
+      <% else %>
+        <%= label_tag('dmsf_link[target_folder_id]', l(:label_target_folder)) %>
+      <% end %>      
+      <%= select_tag('dmsf_link[target_folder_id]',
+        folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
+        :selected => target_folder_id)) %>             
+    </p>
+    <% if type == 'link_from' %>
+      <p>     
+        <% if target_folder_id %>
+          <% folder = DmsfFolder.find_by_id target_folder_id %>
+          <% files = folder.files.visible if folder %>
+        <% else %>
+          <% files = @dmsf_link.target_project.dmsf_files.visible if @dmsf_link.target_project %>
+        <% end %>
+        <%= f.select(:target_file_id,
+        options_for_select(DmsfFolder.file_list(files), params[:dmsf_link].present? ? params[:dmsf_link][:target_file_id] : nil)) %>
+      </p>
+    <% end %>
+    <p>
+      <%= label_tag('dmsf_link[name]', l(:label_link_name), :class => 'required') %>
+      <%= text_field_tag 'dmsf_link[name]', @dmsf_link.name, :size => 40, :maxlength => 255 %>
     </p>
   </div>
   <%= f.submit l(:button_create) %>
@@ -56,9 +81,9 @@
 
 <script type="text/javascript">  
   $('#dmsf_link_target_project_id').change(function () {
-    $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id, :dmsf_folder_id => @dmsf_link.dmsf_folder_id, :reload => true) %>", $('#new_dmsf_link').serialize());
+    $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id, :reload => true) %>", $('#new_dmsf_link').serialize());
   });
   $('#dmsf_link_target_folder_id').change(function () {
-    $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id, :dmsf_folder_id => @dmsf_link.dmsf_folder_id) %>", $('#new_dmsf_link').serialize());
+    $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id) %>", $('#new_dmsf_link').serialize());
   });
 </script> 

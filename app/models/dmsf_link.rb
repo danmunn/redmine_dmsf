@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2014 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ class DmsfLink < ActiveRecord::Base
   validates :name, :presence => true
   validates :target_id, :presence => true
   validates_length_of :name, :maximum => 255    
-  scope :visible, :conditions => 'deleted = 0'
+  scope :visible, :conditions => 'deleted = 0'      
   
   def target_folder_id
     if self.target_type == DmsfFolder.model_name
@@ -36,7 +36,7 @@ class DmsfLink < ActiveRecord::Base
   end
   
   def target_folder
-    DmsfFolder.find self.target_folder_id if self.target_folder_id
+    DmsfFolder.find_by_id self.target_folder_id if self.target_folder_id
   end
   
   def target_file_id
@@ -44,11 +44,11 @@ class DmsfLink < ActiveRecord::Base
   end
   
   def target_file
-    DmsfFile.find self.target_file_id if self.target_file_id
+    DmsfFile.find_by_id self.target_file_id if self.target_file_id
   end
   
   def target_project
-    Project.find self.target_project_id  
+    Project.find_by_id self.target_project_id  
   end
   
   def folder

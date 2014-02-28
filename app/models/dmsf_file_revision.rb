@@ -203,11 +203,7 @@ class DmsfFileRevision < ActiveRecord::Base
       when 2 then self.major_version + 1
       else self.major_version
     end
-  end
-  
-  def display_title    
-    return self.title    
-  end
+  end    
   
   def new_storage_filename
     raise DmsfAccessError, 'File id is not set' unless self.file.id

@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
 #
+#
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -51,9 +53,7 @@ es:
   warning_file_notifications_already_activated: Las notificaciones del archivo seleccionado ya estaban activadas previamente
   notice_file_notifications_activated: Notificación de archivo activado
   warning_file_notifications_already_deactivated: Las notificaciones del archivo seleccionado ya estaban desactivadas previamente
-  notice_file_notifications_deactivated: Notificación de archivo desactivada
-  
-  # Not translated
+  notice_file_notifications_deactivated: Notificación de archivo desactivada  
   link_details: "%{title} details"
   link_edit: "Edit %{title}"
   submit_create: Create
@@ -272,13 +272,21 @@ es:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  label_my_open_approvals: My open approvals
+  label_my_locked_documents: My locked documents
   
   title_create_link: Create a symbolic link  
-  label_create_link: Create link  
+  label_link_from: Link from
+  label_link_to: Link to
   label_notifications_on: Notifications on
   label_notifications_off: Notifications off
-  field_target_file: Target file
+  field_target_file: Source file
   title_download_entries: Download entries
+  label_link_name: Link name
+  label_target_folder: Target folder
+  label_source_folder: Source folder
+  label_target_project: Target project
+  label_source_project: Source project
   
   text_email_doc_updated_subject: "Documents of %{project} updated"
   text_email_doc_updated: has just actualized documents of
@@ -291,7 +299,6 @@ es:
     blocks:
       locked_documents: Locked documents
       open_approvals: Open approvals
-      
-          
+                
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.

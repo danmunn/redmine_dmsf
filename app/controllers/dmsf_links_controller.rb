@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2014 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,44 +25,75 @@ class DmsfLinksController < ApplicationController
   before_filter :authorize  
 
   def new        
-    @dmsf_link = DmsfLink.new    
-    @dmsf_link.project_id = @project.id
-    @dmsf_link.target_type = DmsfFolder.model_name    
-    @dmsf_link.dmsf_folder_id = params[:dmsf_folder_id]    
+    @dmsf_link = DmsfLink.new(:project_id => params[:project_id])
     
-    if params[:dmsf_link].present?
-      @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]
-      @target_folder_id = DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
+    if params[:dmsf_link].present?        
+      # Reload
+      @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
+      @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
+      @type = params[:dmsf_link][:type]
+      @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]      
+      @target_folder_id = params[:dmsf_link][:target_folder_id].to_i if params[:reload].blank? && DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])            
     else
-      @dmsf_link.target_project_id = @project.id
-      @target_folder_id = @dmsf_link.dmsf_folder_id
-    end
+      # Link from/to
+      @dmsf_link.dmsf_folder_id = params[:dmsf_folder_id]
+      @dmsf_file_id = params[:dmsf_file_id]
+      @type = params[:type]
+      @dmsf_link.target_project_id = params[:project_id]
+      @target_folder_id = params[:dmsf_folder_id].to_i if params[:dmsf_folder_id].present?      
+    end        
     
     render :layout => !request.xhr?
   end
    
   def create
     @dmsf_link = DmsfLink.new
-    @dmsf_link.project_id = @project.id
-    @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]
-    @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
     
-    if params[:dmsf_link][:target_file_id].present?
-      @dmsf_link.target_id = params[:dmsf_link][:target_file_id]
-      @dmsf_link.target_type = DmsfFile.model_name
+    if params[:dmsf_link][:type] == 'link_from'
+      # Link from
+      @dmsf_link.project_id = params[:dmsf_link][:project_id]
+      @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
+      @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]
+      if params[:dmsf_link][:target_file_id].present?
+        @dmsf_link.target_id = params[:dmsf_link][:target_file_id]
+        @dmsf_link.target_type = DmsfFile.model_name
+      else
+        @dmsf_link.target_id = DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
+        @dmsf_link.target_type = DmsfFolder.model_name
+      end        
+      @dmsf_link.name = params[:dmsf_link][:name]  
+                     
+      if @dmsf_link.save
+        flash[:notice] = l(:notice_successful_create)      
+        redirect_to dmsf_folder_path(:id => @project.id, :folder_id => @dmsf_link.dmsf_folder_id)
+      else      
+        render :action => 'new'
+      end
     else
-      @dmsf_link.target_id = DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
-      @dmsf_link.target_type = DmsfFolder.model_name
-    end  
-    
-    @dmsf_link.name = params[:dmsf_link][:name]  
-    
-    if @dmsf_link.save
-      flash[:notice] = l(:notice_successful_create)      
-      redirect_to dmsf_folder_path(:id => @project.id, :folder_id => @dmsf_link.dmsf_folder_id)
-    else      
-      render :action => 'new'
-    end
+      # Link to      
+      @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
+      @dmsf_link.dmsf_folder_id = DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
+      @dmsf_link.target_project_id = params[:dmsf_link][:project_id]
+      if params[:dmsf_link][:dmsf_file_id].present?        
+        @dmsf_link.target_id = params[:dmsf_link][:dmsf_file_id]
+        @dmsf_link.target_type = DmsfFile.model_name
+      else        
+        @dmsf_link.target_id = params[:dmsf_link][:dmsf_folder_id]
+        @dmsf_link.target_type = DmsfFolder.model_name
+      end
+      @dmsf_link.name = params[:dmsf_link][:name]  
+                     
+      if @dmsf_link.save        
+        flash[:notice] = l(:notice_successful_create)
+        if params[:dmsf_link][:dmsf_file_id].present?
+          redirect_to dmsf_file_path(@dmsf_link.target_file)
+        else          
+          redirect_to edit_dmsf_path(:id => params[:dmsf_link][:project_id], :folder_id => params[:dmsf_link][:dmsf_folder_id])          
+        end
+      else        
+        render :action => 'new'
+      end
+    end        
   end
   
   def destroy    

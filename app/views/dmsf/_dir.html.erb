@@ -21,11 +21,11 @@
 <% locked_for_user = subfolder.locked_for_user? %>
 <% locked = subfolder.locked? %>    
 
-<td class="check"><%= check_box_tag(link ? 'dir_links[]' : 'subfolders[]', 
-  link ? link.id : subfolder.id, false, :title => l(:title_check_for_zip_download_or_email)) %></td>
+<td class="check"><%= check_box_tag(name, id, false, 
+  :title => l(:title_check_for_zip_download_or_email)) %></td>
 <td class="title">                
-  <%= link_to(h(link ? link.name : subfolder.title),          
-    dmsf_folder_path(:id => @project, :folder_id => subfolder),
+  <%= link_to(h(title),          
+    dmsf_folder_path(:id => project, :folder_id => subfolder),
     :class => 'icon icon-folder') %>        
   <div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.visible.count %>]</div>        
 </td>            
@@ -54,21 +54,21 @@
     <div class="right_icon_box">
       <% unless locked %>
        <%= link_to('',
-          edit_dmsf_path(:id => @project, :folder_id => subfolder),
+          edit_dmsf_path(:id => project, :folder_id => subfolder),
           :title => l(:link_edit, :title => h(subfolder.title)),
           :class => 'icon icon-edit') %>
         <%= link_to('',
-          lock_dmsf_path(:id => @project, :folder_id => subfolder),
+          lock_dmsf_path(:id => project, :folder_id => subfolder),
           :title => l(:title_lock_file),
           :class => 'icon icon-dmsf-lock') %>          
         <% if subfolder.notification %>            
           <%= link_to('',            
-            notify_deactivate_dmsf_path(:id => @project, :folder_id => subfolder),
+            notify_deactivate_dmsf_path(:id => project, :folder_id => subfolder),
             :title => l(:title_notifications_active_deactivate),
             :class => 'icon icon-notification-on') %>
         <% else %>            
           <%= link_to('',
-            notify_activate_dmsf_path(:id => @project, :folder_id => subfolder),
+            notify_activate_dmsf_path(:id => project, :folder_id => subfolder),
             :title => l(:title_notifications_not_active_activate),
             :class => 'icon icon-notification-off') %>
         <% end %>
@@ -81,7 +81,7 @@
             :class => 'icon icon-del') %>                       
         <% else %>
           <%= link_to('',
-            delete_dmsf_path(:id => @project, :folder_id => @folder, :delete_folder_id => subfolder),
+            delete_dmsf_path(:id => project, :folder_id => @folder, :delete_folder_id => subfolder),
             :data => {:confirm => l(:text_are_you_sure)},            
             :title => l(:title_delete),
             :class => 'icon icon-del') %>             
@@ -90,7 +90,7 @@
         <span class="icon"></span>
         <% if (!locked_for_user || @force_file_unlock_allowed) && subfolder.unlockable? %>
           <%= link_to('',
-            unlock_dmsf_path(:id => @project, :folder_id => subfolder),
+            unlock_dmsf_path(:id => project, :folder_id => subfolder),
             :title => l(:title_unlock_file),
             :class => 'icon icon-dmsf-unlock')%>        
         <% end %>        

@@ -323,10 +323,14 @@ tr.gray .icon-folder { background-image: url(../images/folder_gray.png); }
 .icon-file.filetype-odp { background-image: url(../images/filetypes/odp.png); }
 .icon-file.filetype-odg { background-image: url(../images/filetypes/odg.png); }
 
-tr.gray .icon-file.filetype-doc, .icon-file.filetype-docx { background-image: url(../images/filetypes/doc_gray.png); }
-tr.gray .icon-file.filetype-xls, .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls_gray.png); }
-tr.gray .icon-file.filetype-ppt, .icon-file.filetype-pptx { background-image: url(../images/filetypes/ppt_gray.png); }
-tr.gray .icon-file.filetype-vsd, .icon-file.filetype-vsdx { background-image: url(../images/filetypes/vsd_gray.png); }
+tr.gray .icon-file.filetype-doc { background-image: url(../images/filetypes/doc_gray.png); }
+tr.gray .icon-file.filetype-docx { background-image: url(../images/filetypes/doc_gray.png); }
+tr.gray .icon-file.filetype-xls { background-image: url(../images/filetypes/xls_gray.png); }
+tr.gray .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls_gray.png); }
+tr.gray .icon-file.filetype-ppt { background-image: url(../images/filetypes/ppt_gray.png); }
+tr.gray .icon-file.filetype-pptx { background-image: url(../images/filetypes/ppt_gray.png); }
+tr.gray .icon-file.filetype-vsd { background-image: url(../images/filetypes/vsd_gray.png); }
+tr.gray .icon-file.filetype-vsdx { background-image: url(../images/filetypes/vsd_gray.png); }
 tr.gray .icon-file.filetype-mpp { background-image: url(../images/filetypes/mpp_gray.png); }
 tr.gray .icon-file.filetype-odt { background-image: url(../images/filetypes/odt_gray.png); }
 tr.gray .icon-file.filetype-ods { background-image: url(../images/filetypes/ods_gray.png); }
@@ -353,3 +357,8 @@ tr.gray .icon-file.application-x-gzip { background-image: url(../images/filetype
 /* Links */
 .gray { color: #AAA }
 .gray a, .gray a:link, .gray a:visited{ color: #484848; text-decoration: none; }
+
+label.required:after {
+    content: " *";
+    color: #bb0000;
+}

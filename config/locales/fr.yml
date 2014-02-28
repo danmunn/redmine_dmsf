@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012  Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2013  karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2014  Atmis
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -110,8 +110,7 @@ fr:
   label_created: Créé
   label_changed: Modifié
   info_changed_by_user: "%{changed} par"
-  label_filename: Fichier  
-  label_approval_workflow: Flux de validation
+  label_filename: Fichier    
   label_mime: Type
   label_size: Taille  
   heading_new_revision: Nouvelle révision
@@ -277,11 +276,17 @@ fr:
   label_my_locked_documents: Mes documents verrouillés
   
   title_create_link: Create a symbolic link  
-  label_create_link: Create link  
+  label_link_from: Link from
+  label_link_to: Link to
   label_notifications_on: Notifications on
   label_notifications_off: Notifications off
-  field_target_file: Target file
+  field_target_file: Source file
   title_download_entries: Download entries
+  label_link_name: Link name
+  label_target_folder: Target folder
+  label_source_folder: Source folder
+  label_target_project: Target project
+  label_source_project: Source project
   
   text_email_doc_updated_subject: "Documents of %{project} updated"
   text_email_doc_updated: has just actualized documents of

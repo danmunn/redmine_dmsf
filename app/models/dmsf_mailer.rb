@@ -28,8 +28,7 @@ class DmsfMailer < Mailer
       files = files.select { |file| file.notify? }
 
       redmine_headers 'Project' => project.identifier if project
-
-      @user = user
+      
       @files = files
       @project = project
       
@@ -45,8 +44,7 @@ class DmsfMailer < Mailer
       files = files.select { |file| file.notify? }
 
       redmine_headers 'Project' => project.identifier if project
-
-      @user = user
+      
       @files = files
       @project = project
       

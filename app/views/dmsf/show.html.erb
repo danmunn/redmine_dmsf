@@ -79,8 +79,8 @@
         <% end %>    
     <% end %>    
     <% if @file_manipulation_allowed %>      
-      <%= link_to(l(:label_create_link), 
-        new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder, :target_project_id => @project.id),
+      <%= link_to(l(:label_link_from), 
+        new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder, :type => 'link_from'),
         :title => l(:link_create_link), 
         :class => 'icon icon-link') unless @locked_for_user %>
     <% end %>    
@@ -131,12 +131,26 @@
   <tbody>       
   <% @subfolders.each do |subfolder| %>    
     <tr class="dir">
-      <%= render(:partial => 'dir', :locals => {:subfolder => subfolder, :link => nil}) %>
+      <%= render(:partial => 'dir', 
+        :locals => { 
+          :project => @project, 
+          :subfolder => subfolder, 
+          :link => nil,
+          :id => subfolder.id, 
+          :name => 'subfolders[]', 
+          :title => subfolder.title }) %>
     </tr>
   <% end %>  
   <% @dir_links.each do |link| %>    
     <tr class="gray">
-      <%= render(:partial => 'dir', :locals => {:subfolder => link.target_folder, :link => link}) %>
+      <%= render(:partial => 'dir', 
+        :locals => { 
+          :project => link.target_project, 
+          :subfolder => link.target_folder, 
+          :link => link,
+          :id => link.id, 
+          :name => 'dir_links[]', 
+          :title => link.name }) %>
     </tr>
   <% end %>        
   <% @files.each do |file| %>
@@ -145,7 +159,13 @@
       <% next %>
     <% end %>         
     <tr class="file">
-      <%= render(:partial => 'file', :locals => {:file => file, :link => nil}) %>
+      <%= render(:partial => 'file', :locals => { 
+          :project => @project, 
+          :file => file, 
+          :link => nil,
+          :id => file.id,
+          :name => 'files[]',
+          :title => file.title }) %>
     </tr>
   <% end %>
   <% @file_links.each do |link| %>
@@ -154,7 +174,13 @@
       <% next %>
     <% end %>         
     <tr class="gray">
-      <%= render(:partial => 'file', :locals => {:file => link.target_file, :link => link}) %>
+      <%= render(:partial => 'file', :locals => { 
+          :project => link.target_project, 
+          :file => link.target_file, 
+          :link => link,
+          :id => link.id,
+          :name => 'file_links[]',
+          :title => link.name }) %>
     </tr>
   <% end %>
   </tbody>

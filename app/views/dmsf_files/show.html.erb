@@ -30,16 +30,20 @@
           :title => l(:title_lock_file),
           :class => 'icon icon-dmsf-lock') %>
       <% if @file.notification %>              
-          <%= link_to(l(:label_notifications_off),
-            notify_deactivate_dmsf_files_path(:id => @file),
-            :title => l(:title_notifications_active_deactivate),
-            :class => 'icon icon-notification-on') %>
-        <% else %>              
-          <%= link_to(l(:label_notifications_on),
-            notify_activate_dmsf_files_path(:id => @file),
-            :title => l(:title_notifications_not_active_activate),
-            :class => 'icon icon-notification-off') %>
-        <% end %> 
+        <%= link_to(l(:label_notifications_off),
+          notify_deactivate_dmsf_files_path(:id => @file),
+          :title => l(:title_notifications_active_deactivate),
+          :class => 'icon icon-notification-on') %>
+      <% else %>              
+        <%= link_to(l(:label_notifications_on),
+          notify_activate_dmsf_files_path(:id => @file),
+          :title => l(:title_notifications_not_active_activate),
+          :class => 'icon icon-notification-off') %>
+      <% end %>
+      <%= link_to(l(:label_link_to), 
+        new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @file.folder ? @file.folder.id : nil, :dmsf_file_id => @file.id, :type => 'link_to'),
+        :title => l(:link_create_link), 
+        :class => 'icon icon-link') %>
       <%= link_to(l(:button_copy), copy_file_path(:id => @file),
         :title => l(:title_copy), :class => 'icon icon-copy') %>
       <%= delete_link @file %>
