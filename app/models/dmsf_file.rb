@@ -85,12 +85,11 @@ class DmsfFile < ActiveRecord::Base
     visible.where(:project_id => project.id, :dmsf_folder_id => nil).order('name ASC')
   end
   
-  def self.find_file_by_name(project, folder, name)
-    if folder
-      visible.where(:project_id => project, :dmsf_folder_id => folder.id, :name => name).first
-    else
-      visible.where(:project_id => project, :dmsf_folder_id => nil, :name => name).first
-    end
+  def self.find_file_by_name(project, folder, name)        
+    where(
+      :project_id => project, 
+      :dmsf_folder_id => folder ? folder.id : nil, 
+      :name => name).visible.first
   end
 
   def last_revision

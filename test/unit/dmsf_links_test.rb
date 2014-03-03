@@ -102,38 +102,44 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     assert_equal 1, @folder_link.target_folder_id    
   end
   
-  def target_folder
+  def test_target_folder
     assert_equal @folder2, @file_link.target_folder
     assert_equal @folder1, @folder_link.target_folder
   end
   
-  def target_file_id
+  def test_target_file_id
     assert_equal 4, @file_link.target_file_id
     assert_nil @folder_link.target_file
   end
   
-  def target_file
+  def test_target_file
     assert_equal @file4, @file_link.target_file
     assert_nil @folder_link.target_file
   end
   
-  def target_project
-    assert_equal @project, @file_link.target_project
-    assert_equal @project, @folder_link.target_project
+  def test_target_project
+    assert_equal @project1, @file_link.target_project
+    assert_equal @project1, @folder_link.target_project
   end
   
-  def folder
+  def test_folder
     assert_equal @folder1, @file_link.folder
     assert_nil @folder_link.folder
   end
   
-  def title
+  def test_title
     assert_equal @file_link.name, @file_link.title
     assert_equal @folder_link.name, @folder_link.title
+  end
+  
+  def test_find_link_by_file_name
+    assert_equal @file_link, 
+      DmsfLink.find_link_by_file_name(@file_link.project, @file_link.folder, @file_link.target_file.name)
   end
   
   def test_destroy      
     @folder_link.destroy
     assert_nil DmsfLink.find_by_id 1
   end
+   
 end

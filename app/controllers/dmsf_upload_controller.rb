@@ -85,16 +85,21 @@ class DmsfUploadController < ApplicationController
       files = []
       failed_uploads = []
       commited_files.each_value do |commited_file|
-        name = commited_file['name'];
+        name = commited_file[:name]
         
         new_revision = DmsfFileRevision.new
         file = DmsfFile.visible.find_file_by_name(@project, @folder, name)
-        if file.nil?
+        unless file
+          link = DmsfLink.find_link_by_file_name(@project, @folder, name)
+          file = link.target_file if link
+        end
+        
+        unless file
           file = DmsfFile.new
           file.project = @project
           file.name = name
           file.folder = @folder
-          file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
+          file.notification = Setting.plugin_redmine_dmsf[:dmsf_default_notifications].present?
           
           new_revision.minor_version = 0
           new_revision.major_version = 0
@@ -109,17 +114,17 @@ class DmsfUploadController < ApplicationController
           new_revision.minor_version = last_revision.minor_version          
         end
 
-        commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file['disk_filename'].gsub(/[\/\\]/,'')}"
+        commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file[:disk_filename].gsub(/[\/\\]/,'')}"
         
-        new_revision.project = @project
-        new_revision.folder = @folder
+        new_revision.project = link ? link.target_project : @project
+        new_revision.folder = link ? link.target_folder : @folder
         new_revision.file = file
         new_revision.user = User.current
         new_revision.name = name
-        new_revision.title = commited_file['title']
-        new_revision.description = commited_file['description']
-        new_revision.comment = commited_file['comment']
-        new_revision.increase_version(commited_file['version'].to_i, true)                
+        new_revision.title = commited_file[:title]
+        new_revision.description = commited_file[:description]
+        new_revision.comment = commited_file[:comment]
+        new_revision.increase_version(commited_file[:version].to_i, true)                
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         new_revision.size = File.size(commited_disk_filepath)
 
@@ -142,8 +147,8 @@ class DmsfUploadController < ApplicationController
         
         # Need to save file first to generate id for it in case of creation. 
         # File id is needed to properly generate revision disk filename                
-        if commited_file['dmsf_file_revision'].present?
-          commited_file['dmsf_file_revision']['custom_field_values'].each_with_index do |v, i|
+        if commited_file[:dmsf_file_revision].present?
+          commited_file[:dmsf_file_revision][:custom_field_values].each_with_index do |v, i|
             new_revision.custom_field_values[i].value = v[1]
           end
         end
@@ -170,7 +175,7 @@ class DmsfUploadController < ApplicationController
         files.each { |file| log_activity(file, 'uploaded') if file }        
         begin
           DmsfMailer.get_notify_users(User.current, files).each do |u|
-            DmsfMailer.files_updated(u, files).deliver
+            DmsfMailer.files_updated(u, @project, files).deliver
           end
         rescue Exception => e
           Rails.logger.error "Could not send email notifications: #{e.message}"

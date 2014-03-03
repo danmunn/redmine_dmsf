@@ -202,7 +202,7 @@ class DmsfController < ApplicationController
         end
         begin
           DmsfMailer.get_notify_users(User.current, deleted_files).each do |u|
-            DmsfMailer.files_deleted(u, deleted_files).deliver
+            DmsfMailer.files_deleted(u, @project, deleted_files).deliver
           end
         rescue Exception => e
           Rails.logger.error "Could not send email notifications: #{e.message}"

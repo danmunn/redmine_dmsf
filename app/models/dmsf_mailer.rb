@@ -22,9 +22,8 @@ require 'mailer'
 class DmsfMailer < Mailer
   layout 'mailer'
   
-  def files_updated(user, files)
-    if user && files.count > 0
-      project = files[0].project
+  def files_updated(user, project, files)
+    if user && project && files.count > 0      
       files = files.select { |file| file.notify? }
 
       redmine_headers 'Project' => project.identifier if project
@@ -38,9 +37,8 @@ class DmsfMailer < Mailer
     end
   end
   
-  def files_deleted(user, files)
-    if user && files.count > 0
-      project = files[0].project
+  def files_deleted(user, project, files)
+    if user && files.count > 0      
       files = files.select { |file| file.notify? }
 
       redmine_headers 'Project' => project.identifier if project
@@ -85,8 +83,9 @@ class DmsfMailer < Mailer
   end        
   
   def self.get_notify_users(user, files)
-    return [] if files.empty?
-    project = files[0].project    
+    notify_files = files.select { |file| file.notify? }
+    return [] if notify_files.empty?
+    project = notify_files[0].project    
     notify_members = project.members
     notify_members = notify_members.select do |notify_member|
       notify_user = notify_member.user         

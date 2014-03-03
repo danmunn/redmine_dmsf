@@ -82,7 +82,7 @@ class DmsfFilesController < ApplicationController
         @revision.minor_version = last_revision.minor_version      
         version = params[:version].to_i
         file_upload = params[:file_upload]
-        if file_upload.nil?
+        unless file_upload
           @revision.disk_filename = last_revision.disk_filename
           @revision.increase_version(version, false)
           @revision.mime_type = last_revision.mime_type
@@ -119,7 +119,7 @@ class DmsfFilesController < ApplicationController
           log_activity('new revision')
           begin
             DmsfMailer.get_notify_users(User.current, [@file]).each do |u|
-              DmsfMailer.files_updated(u, [@file]).deliver
+              DmsfMailer.files_updated(u, @project, [@file]).deliver
             end
           rescue Exception => e
             logger.error "Could not send email notifications: #{e.message}"
@@ -137,7 +137,7 @@ class DmsfFilesController < ApplicationController
         log_activity('deleted')        
         begin
           DmsfMailer.get_notify_users(User.current, [@file]).each do |u|
-            DmsfMailer.files_deleted(u, [@file]).deliver
+            DmsfMailer.files_deleted(u, @project, [@file]).deliver
           end
         rescue Exception => e
           Rails.logger.error "Could not send email notifications: #{e.message}"

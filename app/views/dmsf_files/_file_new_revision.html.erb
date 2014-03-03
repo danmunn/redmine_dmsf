@@ -26,8 +26,8 @@
     <% if @file.locked_for_user? %>
       <p class="warning"><%= l(:info_file_locked) %></p>
     <% else %>
-      <%= form_for(@revision, :url => {:action => 'create_revision', :id => @file},
-            :html => {:method=>:post, :multipart => true, :id => 'new_revision_form'}) do |f| %>
+      <%= form_for(@revision, :url => { :action => 'create_revision', :id => @file },
+            :html => { :method => :post, :multipart => true, :id => 'new_revision_form' }) do |f| %>
 	<div class="clear">
           <div class="splitcontentleft">
            <p>
