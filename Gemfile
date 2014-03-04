@@ -11,5 +11,5 @@ end
 
 #Allows --without=xapian
 group :xapian do
-  gem 'xapian-full', :require => false
+  gem 'xapian-full-alaveteli', :require => false
 end
