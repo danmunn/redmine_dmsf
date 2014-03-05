@@ -72,7 +72,7 @@
       </p>
     <% end %>
     <p>
-      <%= label_tag('dmsf_link[name]', l(:label_link_name), :class => 'required') %>
+      <%= label_tag('dmsf_link[name]', l(:label_link_name), :class => 'required') %>      
       <%= text_field_tag 'dmsf_link[name]', @dmsf_link.name, :size => 40, :maxlength => 255 %>
     </p>
   </div>
@@ -84,6 +84,9 @@
     $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id, :reload => true) %>", $('#new_dmsf_link').serialize());
   });
   $('#dmsf_link_target_folder_id').change(function () {
+    $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id) %>", $('#new_dmsf_link').serialize());
+  });
+  $('#dmsf_link_target_file_id').change(function () {
     $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id) %>", $('#new_dmsf_link').serialize());
   });
 </script> 

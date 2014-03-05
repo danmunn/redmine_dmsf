@@ -33,14 +33,44 @@ class DmsfLinksController < ApplicationController
       @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
       @type = params[:dmsf_link][:type]
       @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]      
-      @target_folder_id = params[:dmsf_link][:target_folder_id].to_i if params[:reload].blank? && DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])            
+      @target_folder_id = params[:dmsf_link][:target_folder_id].to_i if params[:reload].blank? && DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])                        
+      if params[:dmsf_link][:name].blank?
+        if @type == 'link_to'
+          if params[:dmsf_link][:dmsf_file_id].present?
+            file = DmsfFile.find_by_id params[:dmsf_link][:dmsf_file_id]
+            @dmsf_link.name = file.title if file
+          else
+            folder = DmsfFolder.find_by_id params[:dmsf_link][:dmsf_folder_id]
+            @dmsf_link.name = folder.title if folder
+          end
+        else
+          if params[:dmsf_link][:target_file_id].present?
+            file = DmsfFile.find_by_id params[:dmsf_link][:target_file_id]
+            @dmsf_link.name = file.title if file
+          else
+            folder = DmsfFolder.find_by_id params[:dmsf_link][:target_folder_id]
+            @dmsf_link.name = folder.title if folder
+          end
+        end
+      else
+        @dmsf_link.name = params[:dmsf_link][:name]
+      end      
     else
       # Link from/to
       @dmsf_link.dmsf_folder_id = params[:dmsf_folder_id]
       @dmsf_file_id = params[:dmsf_file_id]
       @type = params[:type]
       @dmsf_link.target_project_id = params[:project_id]
-      @target_folder_id = params[:dmsf_folder_id].to_i if params[:dmsf_folder_id].present?      
+      @target_folder_id = params[:dmsf_folder_id].to_i if params[:dmsf_folder_id].present?
+      if @type == 'link_to'
+        if @dmsf_file_id
+          file = DmsfFile.find_by_id @dmsf_file_id
+          @dmsf_link.name = file.title if file
+        else
+          folder = DmsfFolder.find_by_id @target_folder_id
+          @dmsf_link.name = folder.title if folder
+        end
+      end
     end        
     
     render :layout => !request.xhr?
