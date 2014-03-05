@@ -170,11 +170,7 @@ class DmsfFile < ActiveRecord::Base
   def notify_activate
     self.notification = true
     self.save!
-  end
-  
-  def display_name    
-    return self.name    
-  end
+  end    
   
   # Returns an array of projects that current user can copy file to
   def self.allowed_target_projects_on_copy

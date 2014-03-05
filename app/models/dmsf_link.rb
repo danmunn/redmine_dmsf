@@ -69,5 +69,10 @@ class DmsfLink < ActiveRecord::Base
     end
     nil
   end
+  
+  def path
+    file = self.target_file            
+    file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.name : element.title }.join('/') if file  
+  end
    
 end

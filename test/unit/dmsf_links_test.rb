@@ -137,6 +137,11 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
       DmsfLink.find_link_by_file_name(@file_link.project, @file_link.folder, @file_link.target_file.name)
   end
   
+  def test_path
+    assert_equal @file_link.path,
+      @file_link.target_file.dmsf_path_str
+  end
+  
   def test_destroy      
     @folder_link.destroy
     assert_nil DmsfLink.find_by_id 1
