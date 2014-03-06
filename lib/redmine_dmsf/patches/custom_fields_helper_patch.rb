@@ -28,23 +28,43 @@ module RedmineDmsf
         base.send(:include, InstanceMethods)
         base.class_eval do
           unloadable
-          alias_method_chain :custom_fields_tabs, :custom_tab
+          if Redmine::VERSION::MAJOR >= 2 && Redmine::VERSION::MINOR >= 5
+            alias_method_chain :render_custom_fields_tabs, :render_custom_tab
+            alias_method_chain :custom_field_type_options, :custom_tab_options
+          else
+            alias_method_chain :custom_fields_tabs, :custom_tab
+          end
         end
       end
 
-      module ClassMethods
+      module ClassMethods                          
       end
 
       module InstanceMethods
-              
-        def custom_fields_tabs_with_custom_tab                    
-          cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}        
-          unless custom_fields_tabs_without_custom_tab.index { |f| f[:name] == cf[:name] }
-            custom_fields_tabs_without_custom_tab << cf 
-          end
+                              
+        def custom_fields_tabs_with_custom_tab          
+          add_cf
           custom_fields_tabs_without_custom_tab        
         end
         
+        def render_custom_fields_tabs_with_render_custom_tab(types)          
+          add_cf
+          render_custom_fields_tabs_without_render_custom_tab(types)
+        end
+
+        def custom_field_type_options_with_custom_tab_options          
+          add_cf
+          custom_field_type_options_without_custom_tab_options
+        end                                
+           
+      private
+        
+        def add_cf
+          cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}
+          unless CustomFieldsHelper::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
+            CustomFieldsHelper::CUSTOM_FIELDS_TABS << cf 
+          end 
+        end
       end
     end
   end
