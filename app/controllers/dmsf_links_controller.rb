@@ -49,7 +49,7 @@ class DmsfLinksController < ApplicationController
 
           if file
             folder = DmsfFolder.find_by_id params[:dmsf_link][:target_folder_id]
-            if folder && (folder.project_id == @dmsf_link.target_project_id) && folder.files.include?(file)
+            if (folder && (folder.project_id == @dmsf_link.target_project_id) && folder.files.include?(file)) || folder.nil?
               @dmsf_link.name = file.title
             end
           end            
