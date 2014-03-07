@@ -33,27 +33,35 @@ class DmsfLinksController < ApplicationController
       @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
       @type = params[:dmsf_link][:type]
       @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]      
-      @target_folder_id = params[:dmsf_link][:target_folder_id].to_i if params[:reload].blank? && DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])                        
-      if params[:dmsf_link][:name].blank?
-        if @type == 'link_to'
-          if params[:dmsf_link][:dmsf_file_id].present?
-            file = DmsfFile.find_by_id params[:dmsf_link][:dmsf_file_id]
-            @dmsf_link.name = file.title if file
-          else
-            folder = DmsfFolder.find_by_id params[:dmsf_link][:dmsf_folder_id]
-            @dmsf_link.name = folder.title if folder
-          end
+      @target_folder_id = params[:dmsf_link][:target_folder_id].to_i if params[:reload].blank? && DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])      
+      if @type == 'link_to'
+        if params[:dmsf_link][:dmsf_file_id].present?
+          file = DmsfFile.find_by_id params[:dmsf_link][:dmsf_file_id]
+          @dmsf_link.name = file.title if file
         else
-          if params[:dmsf_link][:target_file_id].present?
-            file = DmsfFile.find_by_id params[:dmsf_link][:target_file_id]
-            @dmsf_link.name = file.title if file
-          else
-            folder = DmsfFolder.find_by_id params[:dmsf_link][:target_folder_id]
-            @dmsf_link.name = folder.title if folder
-          end
+          folder = DmsfFolder.find_by_id params[:dmsf_link][:dmsf_folder_id]
+          @dmsf_link.name = folder.title if folder
         end
-      else
-        @dmsf_link.name = params[:dmsf_link][:name]
+      else          
+        if params[:dmsf_link][:target_file_id].present?
+          @target_file_id = params[:dmsf_link][:target_file_id]
+          file = DmsfFile.find_by_id @target_file_id
+
+          if file
+            folder = DmsfFolder.find_by_id params[:dmsf_link][:target_folder_id]
+            if folder && (folder.project_id == @dmsf_link.target_project_id) && folder.files.include?(file)
+              @dmsf_link.name = file.title
+            end
+          end            
+        else
+          folder = DmsfFolder.find_by_id params[:dmsf_link][:target_folder_id]
+
+          if folder
+            if folder.project_id == @dmsf_link.target_project_id
+              @dmsf_link.name = folder.title if folder
+            end
+          end                      
+        end
       end      
     else
       # Link from/to
@@ -96,7 +104,11 @@ class DmsfLinksController < ApplicationController
       if @dmsf_link.save
         flash[:notice] = l(:notice_successful_create)      
         redirect_to dmsf_folder_path(:id => @project.id, :folder_id => @dmsf_link.dmsf_folder_id)
-      else      
+      else         
+        @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
+        @type = params[:dmsf_link][:type]        
+        @target_folder_id = params[:dmsf_link][:target_folder_id].to_i if DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])                        
+        @target_file_id = @dmsf_link.target_id if @dmsf_link.target_type == DmsfFile.model_name
         render :action => 'new'
       end
     else
@@ -120,7 +132,13 @@ class DmsfLinksController < ApplicationController
         else          
           redirect_to edit_dmsf_path(:id => params[:dmsf_link][:project_id], :folder_id => params[:dmsf_link][:dmsf_folder_id])          
         end
-      else        
+      else
+        @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
+        @type = params[:dmsf_link][:type]        
+        @target_folder_id = @dmsf_link.dmsf_folder_id        
+        @dmsf_link.target_project_id = @dmsf_link.project.id
+        @dmsf_link.project_id = params[:dmsf_link][:project_id]
+        @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
         render :action => 'new'
       end
     end        
