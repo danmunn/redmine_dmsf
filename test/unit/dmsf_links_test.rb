@@ -140,6 +140,8 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
   def test_path
     assert_equal @file_link.path,
       @file_link.target_file.dmsf_path_str
+    assert_equal @folder_link.path,
+      @folder_link.target_folder.dmsf_path_str
   end
   
   def test_destroy      

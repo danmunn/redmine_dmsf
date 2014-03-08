@@ -26,8 +26,12 @@
 <td class="title">                
   <%= link_to(h(title),          
     dmsf_folder_path(:id => project, :folder_id => subfolder),
-    :class => 'icon icon-folder') %>        
-  <div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.visible.count %>]</div>        
+    :class => 'icon icon-folder') %>
+  <% if link %>
+    <div class="filename" title="<%= l(:label_target_folder)%>"><%= link.path %></div>
+  <% else %>
+    <div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.visible.count %>]</div>
+  <% end %>
 </td>            
 <td class="size"></td>
 <td class="modified"><%= format_time(subfolder.updated_at) %>                
