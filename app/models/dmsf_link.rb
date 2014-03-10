@@ -79,6 +79,9 @@ class DmsfLink < ActiveRecord::Base
       path = folder.dmsf_path_str if folder      
     end
     path.insert(0, "#{self.target_project.name}:") if self.project_id != self.target_project_id && path
+    if path.length > 50
+      return "#{path[0, 25]}...#{path[-25, 25]}"
+    end
     path
   end
    

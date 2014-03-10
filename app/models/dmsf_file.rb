@@ -374,4 +374,11 @@ class DmsfFile < ActiveRecord::Base
     [results, results_count]
   end
   
+  def display_name
+    if self.name.length > 50
+      return "#{self.name[0, 25]}...#{self.name[-25, 25]}"
+    end
+    self.name
+  end
+  
 end
