@@ -46,8 +46,8 @@ run_tests()
   cd $PATH_TO_REDMINE
 
 
-  mkdir -p coverage
-  ln -sf `pwd`/coverage $WORKSPACE
+  #mkdir -p coverage
+  #ln -sf `pwd`/coverage $WORKSPACE
 
   # Run tests within application - for some reason redmine:plugins:test wont work under 1.8
   bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf
@@ -61,7 +61,7 @@ uninstall()
   cd $PATH_TO_REDMINE
   # clean up database
   bundle exec rake $MIGRATE_PLUGINS NAME=redmine_dmsf VERSION=0 RAILS_ENV=test
-  bundle exec rake $MIGRATE_PLUGINS NAME=redmine_dmsf VERSION=0 RAILS_ENV=development
+  #bundle exec rake $MIGRATE_PLUGINS NAME=redmine_dmsf VERSION=0 RAILS_ENV=development
 }
 
 run_install()
@@ -90,20 +90,21 @@ run_install()
 
   # run redmine database migrations
   bundle exec rake db:migrate RAILS_ENV=test --trace
-  bundle exec rake db:migrate RAILS_ENV=development --trace
+  #bundle exec rake db:migrate RAILS_ENV=development --trace
 
-  # install redmine database
-  bundle exec rake redmine:load_default_data REDMINE_LANG=en RAILS_ENV=development
+  # Load redmine database default data
+  #bundle exec rake redmine:load_default_data REDMINE_LANG=en RAILS_ENV=development
+  bundle exec rake redmine:load_default_data REDMINE_LANG=en RAILS_ENV=test
 
   # generate session store/secret token
   bundle exec rake $GENERATE_SECRET
 
   # enable development features
-  touch dmsf.dev
+  #touch dmsf.dev
 
   # run dmsf database migrations
   bundle exec rake $MIGRATE_PLUGINS RAILS_ENV=test
-  bundle exec rake $MIGRATE_PLUGINS RAILS_ENV=development
+  #bundle exec rake $MIGRATE_PLUGINS RAILS_ENV=development
 }
 
 while getopts :irtu opt
