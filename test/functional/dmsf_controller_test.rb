@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,19 +19,28 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfControllerTest < RedmineDmsf::Test::TestCase  
-  
-  fixtures :users, :dmsf_files, :dmsf_file_revisions, :dmsf_folders, 
-    :custom_fields, :custom_values, :projects, :members, :member_roles, 
-    :enabled_modules
+    
+  fixtures :users, :dmsf_folders, :custom_fields, :custom_values, :projects, 
+    :roles, :members, :member_roles
 
   def setup
     @request.session[:user_id] = 2
-    @project = Project.find_by_id 1    
+    @project = Project.find_by_id 1
+    assert_not_nil @project
+    @project.enable_module! :dmsf
     @folder = DmsfFolder.find_by_id 1
     @role = Role.find_by_id 1
     @custom_field = CustomField.find_by_id 21
-    @custom_value_1 = CustomValue.find_by_id 21
-  end 
+    @custom_value = CustomValue.find_by_id 21
+  end
+  
+  def test_truth
+    assert_kind_of Project, @project
+    assert_kind_of DmsfFolder, @folder
+    assert_kind_of Role, @role
+    assert_kind_of CustomField, @custom_field
+    assert_kind_of CustomValue, @custom_value
+  end
     
   def test_edit_folder
     # Missing permissions
@@ -43,8 +52,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :folder_manipulation
     get :edit, :id => @project, :folder_id => @folder
     assert_response :success
-    assert_select 'label', {:text => @custom_field.name}
-    assert_select 'option', {:value => @custom_value_1.value}
+    assert_select 'label', { :text => @custom_field.name }
+    assert_select 'option', { :value => @custom_value.value }
   end
 end
-

@@ -26,7 +26,7 @@ export PATH_TO_PLUGINS=./plugins
 export GENERATE_SECRET=generate_secret_token
 export MIGRATE_PLUGINS=redmine:plugins:migrate
 export REDMINE_GIT_REPO=git://github.com/redmine/redmine.git
-export REDMINE_GIT_TAG=2.4-stable
+export REDMINE_GIT_TAG=master
 export BUNDLE_GEMFILE=$PATH_TO_REDMINE/Gemfile
 
 clone_redmine()
@@ -49,10 +49,10 @@ run_tests()
   mkdir -p coverage
   ln -sf `pwd`/coverage $WORKSPACE
 
-  #Run tests within application - for some reason redmine:plugins:test wont work under 1.8
+  # Run tests within application - for some reason redmine:plugins:test wont work under 1.8
   bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf
   bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf
-  bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf
+  # TODO: bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf
 }
 
 uninstall()

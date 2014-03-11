@@ -20,30 +20,34 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class MyControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
-  
-  fixtures :users, :user_preferences
+    
+  fixtures :users, :user_preferences, :dmsf_workflows, :dmsf_workflow_steps,
+    :dmsf_workflow_step_assignments, :dmsf_file_revisions, :dmsf_files, 
+    :dmsf_file_revisions, :dmsf_locks
 
   def setup
-    @request.session[:user_id] = 2
+    @user_member = User.find_by_id 2
+    assert_not_nil @user_member
+    @request.session[:user_id] = @user_member.id    
   end 
   
-  def test_page_with_open_approvals_block
-    preferences = User.find(2).pref
-    preferences[:my_page_layout] = {'top' => ['open_approvals']}
-    preferences.save!
-    
-    get :page
-    assert_response :success    
-    assert_select 'h3', {:text => "#{l(:label_my_open_approvals)} (2)"}
+  def test_truth    
+    assert_kind_of User, @user_member    
   end
   
-  def test_page_with_open_locked_documents
-    preferences = User.find(2).pref
-    preferences[:my_page_layout] = {'top' => ['locked_documents']}
-    preferences.save!
-    
+  def test_page_with_open_approvals_block    
+    @user_member.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
+    @user_member.pref.save!    
+    get :page
+    assert_response :success    
+    assert_select 'h3', { :text => "#{l(:label_my_open_approvals)} (4)" }
+  end
+  
+  def test_page_with_open_locked_documents    
+    @user_member.pref[:my_page_layout] = { 'top' => ['locked_documents'] }
+    @user_member.pref.save!    
     get :page
     assert_response :success
-    assert_select 'h3', {:text => "#{l(:label_my_locked_documents)} (0/1)"}
+    assert_select 'h3', { :text => "#{l(:label_my_locked_documents)} (0/1)" }
   end
 end
