@@ -202,11 +202,19 @@ class DmsfFolder < ActiveRecord::Base
     return new_folder unless new_folder.save
     
     self.files.visible.each do |f|
-      f.copy_to(project, new_folder)
+      f.copy_to project, new_folder
     end
     
-    self.subfolders.each do |s|
-      s.copy_to(project, new_folder)
+    self.subfolders.visible.each do |s|
+      s.copy_to project, new_folder
+    end
+    
+    self.folder_links.visible.each do |l|
+      l.copy_to project, new_folder
+    end
+    
+    self.file_links.visible.each do |l|
+      l.copy_to project, new_folder
     end
     
     return new_folder

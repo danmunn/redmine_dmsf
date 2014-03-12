@@ -84,5 +84,17 @@ class DmsfLink < ActiveRecord::Base
     end
     path
   end
+  
+  def copy_to(project, folder)
+    link = DmsfLink.new(
+      :target_project_id => self.target_project_id,
+      :target_id => self.target_id,
+      :target_type => self.target_type,
+      :name => self.name,
+      :project_id => project.id,
+      :dmsf_folder_id => folder.id)
+    link.save
+    link
+  end
    
 end

@@ -144,6 +144,28 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
       @folder_link.target_folder.dmsf_path_str
   end
   
+  def test_copy_to
+    # File link
+    file_link_copy = @file_link.copy_to @folder2.project, @folder2
+    assert_not_nil file_link_copy
+    assert_equal file_link_copy.target_project_id, @file_link.target_project_id
+    assert_equal file_link_copy.target_id, @file_link.target_id
+    assert_equal file_link_copy.target_type, @file_link.target_type
+    assert_equal file_link_copy.name, @file_link.name
+    assert_equal file_link_copy.project_id, @folder2.project.id
+    assert_equal file_link_copy.dmsf_folder_id, @folder2.id    
+    
+    # Folder link
+    folder_link_copy = @folder_link.copy_to @folder2.project, @folder2
+    assert_not_nil folder_link_copy
+    assert_equal folder_link_copy.target_project_id, @folder_link.target_project_id
+    assert_equal folder_link_copy.target_id, @folder_link.target_id
+    assert_equal folder_link_copy.target_type, @folder_link.target_type
+    assert_equal folder_link_copy.name, @folder_link.name
+    assert_equal folder_link_copy.project_id, @folder2.project.id
+    assert_equal folder_link_copy.dmsf_folder_id, @folder2.id    
+  end
+  
   def test_destroy      
     @folder_link.destroy
     assert_nil DmsfLink.find_by_id 1

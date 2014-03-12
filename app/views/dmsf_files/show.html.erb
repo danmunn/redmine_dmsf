@@ -63,7 +63,6 @@
 <%= error_messages_for('file') %>
 <%= error_messages_for('revision') %>
 <%= render(:partial => 'file_new_revision') if User.current.allowed_to?(:file_manipulation, @file.project) %>
-<%#= form_tag('', :id => 'entries_form') %>
 
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.revisions.visible[@revision_pages.offset,@revision_pages.per_page].each do |revision| %>
