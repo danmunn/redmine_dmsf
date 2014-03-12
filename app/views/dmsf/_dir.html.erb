@@ -30,7 +30,7 @@
   <% if link %>
     <div class="filename" title="<%= l(:label_target_folder)%>"><%= link.path %></div>
   <% else %>
-    <div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.visible.count %>]</div>
+    <div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.visible.count + subfolder.file_links.visible.count %>]</div>
   <% end %>
 </td>            
 <td class="size"></td>
