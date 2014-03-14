@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -79,10 +80,6 @@ class DmsfFile < ActiveRecord::Base
   # better interact from test-cases etc
   def self.storage_path=(obj)
     @@storage_path = obj
-  end
-  
-  def self.project_root_files(project)
-    visible.where(:project_id => project.id, :dmsf_folder_id => nil).order('name ASC')
   end
   
   def self.find_file_by_name(project, folder, name)        

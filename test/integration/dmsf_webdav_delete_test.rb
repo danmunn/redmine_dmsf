@@ -73,7 +73,7 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
     file = DmsfFile.find_file_by_name(project, nil, "test.txt")
     assert !file.nil?, 'File test.txt is expected to exist'
 
-    assert_difference('DmsfFile.project_root_files(project).length', -1) do
+    assert_difference('project.dmsf_files.count', -1) do
       delete "dmsf/webdav/#{project.identifier}/test.txt", nil, @admin
       assert_response :success #If its in the 20x range it's acceptable, should be 204
     end

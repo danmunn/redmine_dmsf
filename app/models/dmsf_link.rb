@@ -92,7 +92,7 @@ class DmsfLink < ActiveRecord::Base
       :target_type => self.target_type,
       :name => self.name,
       :project_id => project.id,
-      :dmsf_folder_id => folder.id)
+      :dmsf_folder_id => folder ? folder.id : nil)
     link.save
     link
   end

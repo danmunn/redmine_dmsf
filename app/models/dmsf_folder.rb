@@ -74,10 +74,6 @@ class DmsfFolder < ActiveRecord::Base
     return true
   end
   
-  def self.project_root_folders(project)
-    visible.where(:project_id => project.id, :dmsf_folder_id => nil, ).order('title ASC').all
-  end
-  
   def self.find_by_title(project, folder, title)    
     if folder
       visible.where(:project_id => project.id, :dmsf_folder_id => nil, :title => title).first
@@ -132,7 +128,7 @@ class DmsfFolder < ActiveRecord::Base
   
   def self.directory_tree(project, current_folder = nil)
     tree = [[l(:link_documents), nil]]
-    DmsfFolder.visible.project_root_folders(project).each do |folder|
+    project.dmsf_folders.visible.each do |folder|
       unless folder == current_folder
         tree.push(["...#{folder.title}", folder.id])
         directory_subtree(tree, folder, 2, current_folder)
