@@ -47,8 +47,8 @@ module RedmineDmsf
       module InstanceMethods
         
         def dmsf_count
-          file_count = self.dmsf_files.visible.count
-          folder_count = self.dmsf_folders.visible.count          
+          file_count = self.dmsf_files.visible.count + self.file_links.count
+          folder_count = self.dmsf_folders.visible.count + self.folder_links.count
           self.dmsf_folders.visible.each do |f|
             file_count += f.deep_file_count
             folder_count += f.deep_folder_count
