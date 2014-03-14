@@ -295,6 +295,10 @@ ja:
   text_email_doc_deleted: has just deleted documents of
   label_links_only: links only
   
+  label_display_notified_recipients: Display notified recipients
+  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
+  warning_email_notifications: "Email notifications sent to %{to}"
+  
   my:
     blocks:
       locked_documents: Locked documents

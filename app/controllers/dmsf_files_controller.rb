@@ -117,9 +117,17 @@ class DmsfFilesController < ApplicationController
 
           flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
           log_activity('new revision')
-          begin
-            DmsfMailer.get_notify_users(User.current, [@file]).each do |u|
+          begin            
+            recipients = DmsfMailer.get_notify_users(User.current, [@file])
+            recipients.each do |u|
               DmsfMailer.files_updated(u, @project, [@file]).deliver
+            end                        
+            if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+              unless recipients.empty?
+                to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+                to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
+                flash[:warning] = l(:warning_email_notifications, :to => to)
+              end
             end
           rescue Exception => e
             logger.error "Could not send email notifications: #{e.message}"

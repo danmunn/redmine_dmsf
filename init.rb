@@ -1,8 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2014   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -42,7 +42,8 @@ Redmine::Plugin.register :redmine_dmsf do
       'dmsf_index_database' => Rails.root.join('files/dmsf_index').to_s,
       'dmsf_stemming_lang' => 'english',
       'dmsf_stemming_strategy' => 'STEM_NONE',
-      'dmsf_webdav' => '1'
+      'dmsf_webdav' => '1',
+      'dmsf_display_notified_recipients' => 0
     }
   
   menu :project_menu, :dmsf, { :controller => 'dmsf', :action => 'show' }, :caption => :menu_dmsf, :before => :documents, :param => :id

@@ -174,8 +174,16 @@ class DmsfUploadController < ApplicationController
       unless files.empty?        
         files.each { |file| log_activity(file, 'uploaded') if file }        
         begin
-          DmsfMailer.get_notify_users(User.current, files).each do |u|
+          recipients = DmsfMailer.get_notify_users(User.current, files)
+          recipients.each do |u|
             DmsfMailer.files_updated(u, @project, files).deliver
+          end          
+          if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+            unless recipients.empty?
+              to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+              to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
+              flash[:warning] = l(:warning_email_notifications, :to => to)
+            end
           end
         rescue Exception => e
           Rails.logger.error "Could not send email notifications: #{e.message}"

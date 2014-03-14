@@ -294,6 +294,10 @@ cs:
   text_email_doc_deleted_subject: "Dokumenty projektu %{project} smazány"
   text_email_doc_deleted: právě smazal dokumety projektu
   label_links_only: pouze odkazy
+  
+  label_display_notified_recipients: Zobrazit příjemce notifikací
+  note_display_notified_recipients: Uživatel bude informován o příjemcích právě odeslané emailové notifikace.
+  warning_email_notifications: "Notifikační email poslán na uživatele %{to}"
     
   my:
     blocks:

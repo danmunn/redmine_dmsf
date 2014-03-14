@@ -110,7 +110,7 @@ class DmsfWorkflow < ActiveRecord::Base
       sql = '1=1'
     end
     
-    unless q.nil? || q.empty?
+    if q.present?
       User.active.sorted.where(sql).like(q)
     else
       User.active.sorted.where(sql)
