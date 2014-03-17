@@ -24,9 +24,15 @@ Available options:
 Example:
   rake redmine:dmsf_alert_approvals RAILS_ENV="production"
 END_DESC
+  
+namespace :redmine do
+  task :dmsf_alert_approvals => :environment do    
+    DmsfAlertApprovals.alert
+  end
+end
 
-class DmsfAlertApprovals
-      
+class DmsfAlertApprovals    
+
   def self.alert
     revisions = DmsfFileRevision.where(:workflow => DmsfWorkflow::STATE_WAITING_FOR_APPROVAL)
     revisions.each do |revision|
@@ -39,17 +45,11 @@ class DmsfAlertApprovals
           assignment.user, 
           workflow, 
           revision,
-          l(:text_email_subject_requires_approval, :name => workflow.name),                        
-          l(:text_email_finished_step, :name => workflow.name, :filename => revision.file.name),
-          l(:text_email_to_proceed)).deliver
+          :text_email_subject_requires_approval,
+          :text_email_finished_step,
+          :text_email_to_proceed).deliver
       end      
     end
   end
-  
-end
 
-namespace :redmine do
-  task :dmsf_alert_approvals => :environment do    
-    DmsfAlertApprovals.alert
-  end
 end

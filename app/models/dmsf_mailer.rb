@@ -69,16 +69,20 @@ class DmsfMailer < Mailer
     mail :to => email_params[:to], :cc => email_params[:cc], :subject => email_params[:subject], :from => user.mail
   end
   
-  def workflow_notification(user, workflow, revision, subject, text1, text2)
+  def workflow_notification(user, workflow, revision, subject_id, text1_id, text2_id, notice = nil)
     if user && workflow && revision
-      redmine_headers 'Project' => revision.file.project.identifier if revision.file && revision.file.project
+      if revision.file && revision.file.project
+        @project = revision.file.project
+        redmine_headers 'Project' => @project.identifier
+      end
       set_language_if_valid user.language
       @user = user
       @workflow = workflow
-      @revision = revision
-      @text1 = text1
-      @text2 = text2
-      mail :to => user.mail, :subject => subject
+      @revision = revision      
+      @text1 = l(text1_id, :name => workflow.name, :filename => revision.file.name, :notice => notice)      
+      @text2 = l(text2_id)
+      @notice = notice
+      mail :to => user.mail, :subject => l(subject_id, :name => workflow.name)
     end
   end        
   
