@@ -106,14 +106,6 @@ class DmsfController < ApplicationController
       @locked_for_user = @folder.locked_for_user?
     end
     
-    @files.sort! do |a,b|
-      if a.last_revision && b.last_revision
-        a.last_revision.title <=> b.last_revision.title
-      else
-        0
-      end
-    end
-    
     @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].present? ? Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'] : 100
   end
   

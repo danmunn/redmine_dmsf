@@ -28,9 +28,9 @@ class DmsfFolder < ActiveRecord::Base
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
   has_many :subfolders, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id', 
-    :order => "#{DmsfFolder.table_name}.title ASC", :dependent => :destroy
-  has_many :files, :class_name => 'DmsfFile', :foreign_key => 'dmsf_folder_id',
-           :dependent => :destroy
+    :dependent => :destroy    
+  has_many :files, :class_name => 'DmsfFile', :foreign_key => 'dmsf_folder_id', 
+    :dependent => :destroy
   belongs_to :user
   has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', 
     :conditions => {:target_type => DmsfFolder.model_name}, :dependent => :destroy
