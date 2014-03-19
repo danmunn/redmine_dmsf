@@ -74,20 +74,6 @@ module DmsfHelper
     # of methods - however seems functional. Not sure if MySQL
     return obj.to_s.to_time(ActiveRecord::Base.default_timezone) if obj.class.name == 'Mysql::Time'
     return obj
-  end
-  
-   # Return custom field html tag corresponding to its format
-  def custom_field_tag_ex(prefix, custom_value, data)
-    custom_value.custom_field.format.edit_tag self,
-      custom_field_tag_id(prefix, custom_value.custom_field),
-      custom_field_tag_name(prefix, custom_value.custom_field),
-      custom_value,
-      {:class => "#{custom_value.custom_field.field_format}_cf}"}.merge(data)
-  end
-  
-  # Return custom field tag with its label tag
-  def custom_field_tag_with_label_ex(name, custom_value, options={}, data={})
-    custom_field_label_tag(name, custom_value, options) + custom_field_tag_ex(name, custom_value, data)
-  end
+  end  
   
 end
