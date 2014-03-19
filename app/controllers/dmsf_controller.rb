@@ -40,17 +40,70 @@ class DmsfController < ApplicationController
     @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0
     
     unless @folder
-      @subfolders = @project.dmsf_folders.visible
-      @files = @project.dmsf_files.visible
+      if params[:custom_field_id].present? && params[:custom_value].present?
+        @subfolders = []
+        DmsfFolder.where(:project_id => @project.id).visible.each do |f|
+          f.custom_field_values.each do |v|            
+            if v.custom_field_id == params[:custom_field_id].to_i
+              if v.custom_field.compare_values?(v.value, params[:custom_value])
+                @subfolders << f
+                break
+              end
+            end
+          end
+        end
+        @files = []
+        DmsfFile.where(:project_id => @project.id).visible.each do |f|
+          r = f.last_revision
+          if r
+            r.custom_field_values.each do |v|                            
+              if v.custom_field_id == params[:custom_field_id].to_i
+                if v.custom_field.compare_values?(v.value, params[:custom_value])
+                  @files << f
+                  break
+                end                  
+              end
+            end
+          end
+        end
+        @dir_links = []
+        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFolder.model_name).visible.each do |l|
+          l.target_folder.custom_field_values.each do |v|              
+            if v.custom_field_id == params[:custom_field_id].to_i
+              if v.custom_field.compare_values?(v.value, params[:custom_value])
+                @dir_links << l
+                break
+              end              
+            end
+          end
+        end
+        @file_links = []
+        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFile.model_name).visible.each do |l|
+          r = l.target_file.last_revision
+          if r
+            r.custom_field_values.each do |v|              
+              if v.custom_field_id == params[:custom_field_id].to_i
+                if v.custom_field.compare_values?(v.value, params[:custom_value])
+                  @file_links << l
+                  break
+                end               
+              end
+            end
+          end
+        end
+      else
+        @subfolders = @project.dmsf_folders.visible
+        @files = @project.dmsf_files.visible     
+        @dir_links = @project.folder_links.visible
+        @file_links = @project.file_links.visible
+      end
       @locked_for_user = false
-      @dir_links = @project.folder_links
-      @file_links = @project.file_links
     else 
       @subfolders = @folder.subfolders.visible
-      @files = @folder.files.visible
+      @files = @folder.files.visible      
+      @dir_links = @folder.folder_links.visible
+      @file_links = @folder.file_links.visible
       @locked_for_user = @folder.locked_for_user?
-      @dir_links = @folder.folder_links
-      @file_links = @folder.file_links
     end
     
     @files.sort! do |a,b|
@@ -75,6 +128,15 @@ class DmsfController < ApplicationController
   end
 
   def entries_operation
+    # Tag filter
+    if params[:dmsf_folder] && params[:dmsf_folder][:custom_field_values].present?
+      redirect_to dmsf_folder_path(
+        :id => @project,         
+        :custom_field_id => params[:dmsf_folder][:custom_field_values].first[0],
+        :custom_value => params[:dmsf_folder][:custom_field_values].first[1])
+      return
+    end
+    # Download/Email
     selected_folders = params[:subfolders].present? ? params[:subfolders] : []
     selected_files = params[:files].present? ? params[:files] : []
     selected_dir_links = params[:dir_links]

@@ -43,7 +43,7 @@ class DmsfFolder < ActiveRecord::Base
     :conditions => {:entity_type => 1},
     :dependent => :destroy
 
-  scope :visible, lambda {|*args| {:conditions => '' }} #For future use, however best to be referenced now
+  scope :visible, lambda {|*args| {:conditions => '' }} #For future use, however best to be referenced now    
 
   acts_as_customizable
     

@@ -109,8 +109,18 @@
     <%= submit_tag(l(:submit_email), :title => l(:title_send_checked_by_email), :name => 'email_entries') %>
     <% if @file_manipulation_allowed && @folder_manipulation_allowed && !@locked_for_user %>
       <button type="button" id="entries_delete_button" title="<%= l(:title_delete_checked) %>"><%= l(:button_delete) %></button>
-    <% end %>
+    <% end %>         
   </div>
+  <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
+  <% unless values.empty? %>
+    <div class="controls" style="float: right">    
+      <%= custom_field_tag_with_label_ex(
+        :dmsf_folder, 
+        CustomValue.new(:custom_field_id => params[:custom_field_id].present? ? params[:custom_field_id] : values.first.custom_field_id, :value => params[:custom_value]),
+        {},
+        :onchange => 'this.form.submit(); return false;') %>
+    </div>  
+  <% end %>    
   <table class="display entries" id="browser">
     <thead>
       <tr id="root">

@@ -44,6 +44,11 @@ class DmsfFile < ActiveRecord::Base
     :conditions => {:target_type => DmsfFile.model_name}, :dependent => :destroy
 
   scope :visible, lambda {|*args| where(DmsfFile.visible_condition(args.shift || User.current, *args)).readonly(false)}
+  scope :by_tag,
+    lambda { |id, value| {
+      :joins => 'JOIN custom_values ON dmsf_folders.id = custom_values.customized_id',
+      :conditions => ["custom_values.custom_field_id = ? AND custom_values.value = ?", id, value]
+    }}
   
   validates :name, :presence => true
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
