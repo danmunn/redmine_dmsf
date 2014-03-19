@@ -112,7 +112,9 @@
           <%= link_to('',
             unlock_dmsf_files_path(:id => file),
             :title => l(:title_unlock_file),
-            :class => 'icon icon-dmsf-unlock')%>        
+            :class => 'icon icon-dmsf-unlock')%>
+        <% else %>
+          <span class="icon"></span>
         <% end %>
         <span class="icon icon-margin-left"></span>
         <span class="icon"></span>
