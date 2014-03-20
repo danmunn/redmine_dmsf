@@ -156,8 +156,7 @@ de:
   error_user_has_not_right_delete_folder: Der Nutzer hat kein Recht die Ordner zu löschen.
   error_user_has_not_right_delete_file: Der Nutzer hat kein Recht die Datei zu löschen.
   notice_entries_deleted: Aufnahmen löschen
-  warning_some_entries_were_not_deleted: "Enige Aufnahmen wurden nich gelöscht: %{entries}"
-  question_do_you_really_want_to_delete_entries: Willst du wirklich die gewählten Aufnahmen löschen?
+  warning_some_entries_were_not_deleted: "Enige Aufnahmen wurden nich gelöscht: %{entries}"  
   title_delete_checked: Lösch gewähltest
   title_number_of_files_in_directory: Dateizahl in dem Ordner
   title_filename_for_download: Dateiname benutzt zum Herunterladen oder ZIP-archivierung

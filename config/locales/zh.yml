@@ -156,8 +156,7 @@ zh:
   error_user_has_not_right_delete_folder: 用户没有权限删除文件夹
   error_user_has_not_right_delete_file: 用户没有权限删除文件
   notice_entries_deleted: 条目已删除
-  warning_some_entries_were_not_deleted: "某些条目未被删除: %{entries}"
-  question_do_you_really_want_to_delete_entries: 您确定删除所选的条目吗?
+  warning_some_entries_were_not_deleted: "某些条目未被删除: %{entries}"  
   title_delete_checked: 删除选中
   title_number_of_files_in_directory: 目录总文件个数
   title_filename_for_download: 用于下载或zip归档的文件名

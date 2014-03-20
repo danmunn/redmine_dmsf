@@ -156,8 +156,7 @@ en:
   error_user_has_not_right_delete_folder: "User hasn't right to delete forders"
   error_user_has_not_right_delete_file: "User hasn't right to delete file"
   notice_entries_deleted: Entries deleted
-  warning_some_entries_were_not_deleted: "Some entries weren't deleted: %{entries}"
-  question_do_you_really_want_to_delete_entries: Do you really want to delete checked entries?
+  warning_some_entries_were_not_deleted: "Some entries weren't deleted: %{entries}"  
   title_delete_checked: Delete checked
   title_number_of_files_in_directory: Number of files in directory
   title_filename_for_download: Filename used for download or in Zip archive

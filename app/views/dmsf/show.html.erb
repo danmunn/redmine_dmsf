@@ -197,7 +197,7 @@
 
 <script type="text/javascript">
   $('#entries_delete_button').click(function() {
-    if(window.confirm("<%= l(:question_do_you_really_want_to_delete_entries) %>")) {
+    if(window.confirm("<%= l(:text_are_you_sure) %>")) {
       $('#entries_form').attr('action', "<%= url_for(:action => :delete_entries, :id => @project, :folder_id => @folder) %>");
       $('#entries_form').submit();
     }

@@ -156,8 +156,7 @@ fr:
   error_user_has_not_right_delete_folder: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression du dossier"
   error_user_has_not_right_delete_file: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression du dossier"
   notice_entries_deleted: Elément(s) supprimé(s)
-  warning_some_entries_were_not_deleted: "Certains éléments n'ont pas été supprimés : %{entries}"
-  question_do_you_really_want_to_delete_entries: Etes-vous sûr de vouloir supprimer le(s) élément(s) sélectionné(s)?
+  warning_some_entries_were_not_deleted: "Certains éléments n'ont pas été supprimés : %{entries}"  
   title_delete_checked: Supprimer les éléments sélectionnés
   title_number_of_files_in_directory: Nombre de fichiers dans le dossier
   title_filename_for_download: "Nom du fichier à utiliser lors du téléchargement ou de l'archive ZIP"

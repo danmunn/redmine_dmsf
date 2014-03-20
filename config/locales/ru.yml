@@ -156,8 +156,7 @@ ru:
   error_user_has_not_right_delete_folder: Пользователь не имеет нужных прав для удаления папки
   error_user_has_not_right_delete_file: Пользователь не имеет нужных прав для удаления файла
   notice_entries_deleted: Файлы удалены
-  warning_some_entries_were_not_deleted: "Некоторые файлы не были удалены: %{entries}"
-  question_do_you_really_want_to_delete_entries: Вы действительно хотите удалить выбранные файлы?
+  warning_some_entries_were_not_deleted: "Некоторые файлы не были удалены: %{entries}"  
   title_delete_checked: Удалить выбранные документы
   title_number_of_files_in_directory: Количество файлов в директории
   title_filename_for_download: Имя файла для скачиваемого архива

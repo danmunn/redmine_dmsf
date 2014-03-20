@@ -156,8 +156,7 @@ sl:
   error_user_has_not_right_delete_folder: Uporabnik nima privilegija brisati mapo
   error_user_has_not_right_delete_file: Uporabnik nima privilegija brisati datoteke
   notice_entries_deleted: Izbrane enote izbrisane
-  warning_some_entries_were_not_deleted: "Nekatere enote niso izbrisane: %{entries}"
-  question_do_you_really_want_to_delete_entries: Ste prepričani, da želite izbrisati izbrane enote?
+  warning_some_entries_were_not_deleted: "Nekatere enote niso izbrisane: %{entries}"  
   title_delete_checked: Izbriši izbrano
   title_number_of_files_in_directory: Število datotek v mapi
   title_filename_for_download: Naziv datoteke za prenos dol ali Zip arhiva

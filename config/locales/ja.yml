@@ -156,8 +156,7 @@ ja:
   error_user_has_not_right_delete_folder: ユーザにフォルダを削除する権限がありません
   error_user_has_not_right_delete_file: ユーザにファイルを削除する権限がありません
   notice_entries_deleted: エントリーを削除しました
-  warning_some_entries_were_not_deleted: "いくつかのエントリーは削除されませんでした: %{entries}"
-  question_do_you_really_want_to_delete_entries: 本当にチェックしたエントリーを削除しますか？
+  warning_some_entries_were_not_deleted: "いくつかのエントリーは削除されませんでした: %{entries}"  
   title_delete_checked: チェックしたものを削除します
   title_number_of_files_in_directory: フォルダ内のファイル数
   title_filename_for_download: ファイル名はダウンロードまたは Zip アーカイブに使われます

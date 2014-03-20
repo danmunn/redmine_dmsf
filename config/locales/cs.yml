@@ -156,8 +156,7 @@ cs:
   error_user_has_not_right_delete_folder: Uživatel nemá právo mazat složky
   error_user_has_not_right_delete_file: Uživatel nemá právo mazat soubor
   notice_entries_deleted: Položky smazány
-  warning_some_entries_were_not_deleted: "Některé položky nebyly smazány: %{entries}"
-  question_do_you_really_want_to_delete_entries: Opravdu chcete smazat vybrané položky?
+  warning_some_entries_were_not_deleted: "Některé položky nebyly smazány: %{entries}"  
   title_delete_checked: Smaž vybrané
   title_number_of_files_in_directory: Počet souborů ve složce
   title_filename_for_download: Název Zip archívu ke stažení
