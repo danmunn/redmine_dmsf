@@ -208,8 +208,7 @@ ru:
   warning_folder_not_locked: "К сожалению, папка не может быть заблокирована"
   notice_folder_unlocked: "Папка была успешно разблокирована"
   error_only_user_that_locked_folder_can_unlock_it: "Только пользователь, который заблокировал папку, может её разблокировать"
-  title_folder_parent_locked: "Родительская папка %{name} заблокирована"
-  title_file_parent_locked: "Родительская папка %{name} заблокирована"
+  title_folder_parent_locked: "Родительская папка %{name} заблокирована"  
   title_unlock_folder: "Разблокируйте папку, чтобы разрешить изменение её другими участниками"
   title_lock_folder: "Заблокируйте папку, чтобы запретить ёё изменение другими участниками"
 

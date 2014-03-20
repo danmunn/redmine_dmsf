@@ -208,8 +208,7 @@ de:
   warning_folder_not_locked: Der Ordner konnte nicht gesperrt werden
   notice_folder_unlocked: Der Ordner wurde erfolgreich entsperrt
   error_only_user_that_locked_folder_can_unlock_it: Sie haben keine Berechtigung zur Entsperrung des Ordners
-  title_folder_parent_locked: "Übergeordnetes Verzeichnis %{name} ist gesperrt"
-  title_file_parent_locked: "Übergeordnetes Verzeichnis %{name} ist gesperrt"
+  title_folder_parent_locked: "Übergeordnetes Verzeichnis %{name} ist gesperrt"  
   title_unlock_folder: Zur Modifikation für andere Benutzer entsperren
   title_lock_folder: Zum Schutz vor Modifikation durch andere Benutzer sperren
   

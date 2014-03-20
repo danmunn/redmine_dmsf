@@ -208,8 +208,7 @@ zh:
   warning_folder_not_locked: Unfortunately, the folder could not be locked
   notice_folder_unlocked: The folder was successfully unlocked
   error_only_user_that_locked_folder_can_unlock_it: You are not authorised to unlock this folder
-  title_folder_parent_locked: "Parent folder %{name} is locked"
-  title_file_parent_locked: "Parent folder %{name} is locked"
+  title_folder_parent_locked: "Parent folder %{name} is locked"  
   title_unlock_folder: Unlock to allow changes for other members
   title_lock_folder: Lock to prevent changes for other members
 

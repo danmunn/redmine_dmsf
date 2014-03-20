@@ -208,8 +208,7 @@ cs:
   warning_folder_not_locked: Složku nelze zamknout
   notice_folder_unlocked: Složka byla odemčena
   error_only_user_that_locked_folder_can_unlock_it: Nemáte oprávnění k odemknutí této složky
-  title_folder_parent_locked: "Nadřazená složka %{name} je zamčená"
-  title_file_parent_locked: "Nadřazená složka %{name} je zamčená"
+  title_folder_parent_locked: "Nadřazená složka %{name} je zamčená"  
   title_unlock_folder: Odemknout
   title_lock_folder: Zamknout
 
