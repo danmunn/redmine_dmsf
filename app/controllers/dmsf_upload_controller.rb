@@ -201,22 +201,11 @@ class DmsfUploadController < ApplicationController
   def log_activity(file, action)
     Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{file.project.identifier}/#{file.id}/#{file.last_revision.id}"
   end
-  
-  def find_project
-    @project = Project.find(params[:id])
-  end
-  
+    
   def find_folder
-    @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?('folder_id')
-    check_project(@folder)
+    @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?('folder_id')    
   rescue DmsfAccessError
     render_403
   end
-
-  def check_project(entry)
-    if entry && entry.project != @project
-      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
-    end
-  end
-  
+   
 end

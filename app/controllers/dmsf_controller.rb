@@ -1,8 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ class DmsfController < ApplicationController
   class FileNotFound < StandardError; end
   
   before_filter :find_project
-  before_filter :authorize, :except => [:delete_entries] 
+  before_filter :authorize
   before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
   before_filter :find_parent, :only => [:new, :create]
   
@@ -119,15 +119,7 @@ class DmsfController < ApplicationController
       flash[:error] = e.message    
   end
 
-  def entries_operation
-    # Tag filter
-    if params[:dmsf_folder] && params[:dmsf_folder][:custom_field_values].present?
-      redirect_to dmsf_folder_path(
-        :id => @project,         
-        :custom_field_id => params[:dmsf_folder][:custom_field_values].first[0],
-        :custom_value => params[:dmsf_folder][:custom_field_values].first[1])
-      return
-    end
+  def entries_operation    
     # Download/Email
     selected_folders = params[:subfolders].present? ? params[:subfolders] : []
     selected_files = params[:files].present? ? params[:files] : []
@@ -170,6 +162,18 @@ class DmsfController < ApplicationController
     render_404
   rescue DmsfAccessError
     render_403
+  end
+  
+  def tag_changed
+    # Tag filter
+    if params[:dmsf_folder] && params[:dmsf_folder][:custom_field_values].present?
+      redirect_to dmsf_folder_path(
+        :id => @project,         
+        :custom_field_id => params[:dmsf_folder][:custom_field_values].first[0],
+        :custom_value => params[:dmsf_folder][:custom_field_values].first[1])
+    else
+      redirect_to :back
+    end
   end
 
   def entries_email
@@ -313,8 +317,8 @@ class DmsfController < ApplicationController
     end
   end
 
-  def delete
-    check_project(@delete_folder = DmsfFolder.visible.find(params[:delete_folder_id]))
+  def delete    
+    @delete_folder = DmsfFolder.visible.find(params[:delete_folder_id])
     if @delete_folder
       if @delete_folder.delete
         flash[:notice] = l(:notice_folder_deleted)
@@ -465,14 +469,14 @@ class DmsfController < ApplicationController
   
   def zip_entries(zip, selected_folders, selected_files)    
     if selected_folders && selected_folders.is_a?(Array)
-      selected_folders.each do |selected_folder_id|
-        check_project(folder = DmsfFolder.visible.find(selected_folder_id))
+      selected_folders.each do |selected_folder_id|        
+        folder = DmsfFolder.visible.find(selected_folder_id)
         zip.add_folder(folder, (@folder.dmsf_path_str if @folder)) if folder
       end
     end
     if selected_files && selected_files.is_a?(Array)
-      selected_files.each do |selected_file_id|
-        check_project(file = DmsfFile.visible.find(selected_file_id))        
+      selected_files.each do |selected_file_id|        
+        file = DmsfFile.visible.find(selected_file_id)
         if file && file.last_revision && File.exists?(file.last_revision.disk_file)
           zip.add_file(file, (@folder.dmsf_path_str if @folder)) if file          
         else
@@ -487,28 +491,16 @@ class DmsfController < ApplicationController
     zip
   end
   
-  def find_project
-    @project = Project.find(params[:id])
-  end
-  
   def find_folder
-    @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?('folder_id')
-    check_project(@folder)
+    @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?('folder_id')    
   rescue DmsfAccessError
     render_403
   end
 
   def find_parent
-    @parent = DmsfFolder.visible.find(params[:parent_id]) if params.keys.include?('parent_id')
-    check_project(@parent)
+    @parent = DmsfFolder.visible.find(params[:parent_id]) if params.keys.include?('parent_id')    
   rescue DmsfAccessError
     render_403
-  end
-
-  def check_project(entry)
-    if entry && entry.project != @project
-      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
-    end
   end
 
   def copy_folder(folder)

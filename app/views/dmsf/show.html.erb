@@ -198,12 +198,13 @@
 <script type="text/javascript">
   $('#entries_delete_button').click(function() {
     if(window.confirm("<%= l(:text_are_you_sure) %>")) {
-      $('#entries_form').attr('action', "<%= url_for(:action => :delete_entries, :id => @project, :folder_id => @folder) %>");
+      $('#entries_form').attr('action', "<%= delete_entries_path(:id => @project, :folder_id => @folder) %>");      
       $('#entries_form').submit();
     }
   });
   
   $('.list_cf').change(function() {
+    $('#entries_form').attr('action', "<%= tag_changed_path(:id => @project, :folder_id => @folder) %>");
     $('#entries_form').submit();   
   });
 

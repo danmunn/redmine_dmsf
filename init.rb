@@ -58,13 +58,13 @@ Redmine::Plugin.register :redmine_dmsf do
     permission :user_preferences, 
       {:dmsf_state => [:user_pref_save]}
     permission :view_dmsf_files, 
-      {:dmsf => [:entries_operation, :entries_email, :download_email_entries], 
+      {:dmsf => [:entries_operation, :entries_email, :download_email_entries, :tag_changed], 
         :dmsf_files => [:show], 
         :dmsf_files_copy => [:new, :create, :move], 
         :dmsf_workflows => [:log]}, 
       :read => true
     permission :folder_manipulation, 
-      {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate]}
+      {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :delete_entries]}
     permission :file_manipulation, 
       {:dmsf_files => [:create_revision, :delete, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate], 
         :dmsf_upload => [:upload_files, :upload_file, :commit_files], 
