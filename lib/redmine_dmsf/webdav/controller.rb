@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,12 +21,12 @@ module RedmineDmsf
   module Webdav
     class Controller < DAV4Rack::Controller
 
-      #Overload default options
+      # Overload default options
       def options
         raise NotFound unless resource.exist?
-        response["Allow"] = 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
-        response["Dav"] = "1,2,3"
-        response["Ms-Author-Via"] = "DAV"
+        response['Allow'] = 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
+        response['Dav'] = '1,2,3'
+        response['Ms-Author-Via'] = 'DAV'
         OK
       end
 
@@ -35,7 +36,7 @@ module RedmineDmsf
         begin
           request.env['Timeout'] = request.env['HTTP_TIMEOUT'].split('-',2).join(',') unless request.env['HTTP_TIMEOUT'].nil?
         rescue
-          #Nothing here
+          # Nothing here
         end
 
         request_document.remove_namespaces! if ns.empty? 
@@ -46,7 +47,7 @@ module RedmineDmsf
       end
 
 
-      #Overload the default propfind function with this
+      # Overload the default propfind function with this
       def propfind
         unless(resource.exist?)
           NotFound
@@ -94,10 +95,22 @@ module RedmineDmsf
           end
         end
         response.body = doc.to_xml
-        response["Content-Type"] = 'application/xml; charset="utf-8"'
-        response["Content-Length"] = response.body.bytesize.to_s
+        response['Content-Type'] = 'application/xml; charset="utf-8"'
+        response['Content-Length'] = response.body.bytesize.to_s
       end
 
+      # Returns Resource path with root URI removed
+      def implied_path
+
+        return clean_path(@request.path_info.dup) unless @request.path_info.empty?
+        c_path = clean_path(@request.path.dup)
+        return c_path if c_path.length != @request.path.length
+
+        # If we're here then it's probably down to thin
+        return @request.path.dup.gsub!(/^#{Regexp.escape(@request.script_name)}/, '') unless @request.script_name.empty?
+
+        return c_path # This will probably result in a processing error if we hit here
+      end
 
       private 
       def ns(opt_head = '')
