@@ -134,6 +134,8 @@
         <th></th>
         <th class="hidden"></th>
         <th class="hidden"></th>
+        <th class="hidden"></th>
+        <th class="hidden"></th>
       </tr>
     </thead>
   <tbody>       
@@ -242,7 +244,9 @@
         'aoColumnDefs': [
           { 'bSearchable': false, 'aTargets': [0, 7, 8, 9] },
           { 'bSortable': false, 'aTargets': [0, 7, 8] },
-          { 'iDataSort': 9, 'aTargets': [ 2 ] }
+          { 'iDataSort': 9, 'aTargets': [ 2 ] },
+          { 'iDataSort': 10, 'aTargets': [ 3 ] },
+          { 'iDataSort': 11, 'aTargets': [ 4 ] }
         ],
         'fnInitComplete': function() {
            jQuery('div.controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);

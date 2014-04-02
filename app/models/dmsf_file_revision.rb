@@ -227,5 +227,10 @@ class DmsfFileRevision < ActiveRecord::Base
   def available_custom_fields    
     DmsfFileRevisionCustomField.all
   end
+  
+  def iversion
+    parts = self.version.split '.'
+    parts.size == 2 ? parts[0].to_i * 1000 + parts[1].to_i : 0    
+  end
 
 end
