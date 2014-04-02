@@ -1,9 +1,9 @@
 <%#=
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @file.folder ? @file.folder.id : nil, :dmsf_file_id => @file.id, :type => 'link_to'),
         :title => l(:link_create_link), 
         :class => 'icon icon-link') %>
-      <%= link_to(l(:button_copy), copy_file_path(:id => @file),
+      <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(:id => @file),
         :title => l(:title_copy), :class => 'icon icon-copy') %>
       <%= delete_link @file %>
     <% else %>

@@ -197,10 +197,10 @@ class DmsfFile < ActiveRecord::Base
       new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
     end        
     
-    # If the target project differs from the source project we must physically move the file
+    # If the target project differs from the source project we must physically copy the file
     if self.project != new_revision.project
       if File.exist? self.last_revision.disk_file
-        FileUtils.mv self.last_revision.disk_file, new_revision.disk_file        
+        FileUtils.cp self.last_revision.disk_file, new_revision.disk_file        
       end
     end
 
