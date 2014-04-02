@@ -1,7 +1,8 @@
 <%# Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,7 +35,7 @@
   <div class="box">
     <p>
       <%= label_tag('', "#{l(:label_email_from)}:") %>
-      <i><%= h(User.current.mail) %></i>
+      <i><%= h(Setting.mail_from) %></i>
     </p>
     <p>
       <%= label_tag('email[to]', "#{l(:label_email_to)}:") %>
