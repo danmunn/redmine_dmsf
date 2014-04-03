@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,23 +24,22 @@ class DmsfWebdavPostTest < RedmineDmsf::Test::IntegrationTest
   fixtures :users, :enabled_modules
 
   def setup
-    @headers = credentials('admin')
+    @admin = credentials 'admin'
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
+    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
     super
   end
-
-  def teardown
-    @headers = nil
-  end
-
-  #Test that any post request is authenticated
+  
+  # Test that any post request is authenticated
   def test_post_request_authenticated
-    post "/dmsf/webdav/"
-    assert_response 401 #401 Unauthorized
+    post '/dmsf/webdav/'
+    assert_response 401 # 401 Unauthorized
   end
 
-  #Test post is not implimented
+  # Test post is not implemented
   def test_post_not_implemented
-    post "/dmsf/webdav/", nil, @headers
-    assert_response 501 #501 Not Implemented
+    post '/dmsf/webdav/', nil, @admin
+    assert_response 501 # 501 Not Implemented
   end
+  
 end

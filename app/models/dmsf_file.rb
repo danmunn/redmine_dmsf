@@ -102,15 +102,18 @@ class DmsfFile < ActiveRecord::Base
 
   def delete
     if locked_for_user?
+      Rails.logger.info l(:error_file_is_locked)
       errors[:base] << l(:error_file_is_locked)
       return false 
     end
     begin
       if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']     
+        Rails.logger.info '>>> destroy'
         self.revisions.visible.each {|r| r.delete(true)}
         self.destroy
       else
         # Revisions of a deleted file SHOULD be deleted too
+        Rails.logger.info '>>> visible'
         self.revisions.visible.each {|r| r.delete }
         self.deleted = true
         self.deleted_by_user = User.current
