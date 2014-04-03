@@ -232,8 +232,7 @@ module RedmineDmsf
       #
       # <instance> should be of entity to be deleted, we simply follow the Dmsf entity method
       # for deletion and return of appropriate status based on outcome.
-      def delete
-        Rails.logger.info ">>>> def delete"        
+      def delete        
         if(file?) then
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
           file.delete ? NoContent : Conflict
