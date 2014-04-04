@@ -7,8 +7,7 @@ Redmine DMSF is Document Management System Features plugin for Redmine issue tra
 
 Redmine DMSF now comes bundled with Webdav functionality: if switched on within plugin settings this will be accessible from /dmsf/webdav.
 
-Webdav functionality is provided through DAV4Rack, however is provided bundled due to modifications made, DAV4Rack is released under the terms of the 
-MIT license, more information can be found at <https://github.com/chrisrobers/dav4rack>
+Webdav functionality is provided through DAV4Rack gem.
 
 Initial development was for Kontron AG R&D department and it is released as open source thanks to their generosity.  
 Project home: <http://code.google.com/p/redmine-dmsf/>
@@ -28,7 +27,7 @@ Features
   * Document locking
   * Multi (drag/drop depending on browser) upload/download
   * Multi download via zip
-  * Direct document sending via email
+  * Direct document or document link sending via email
   * Configurable document approval workflow
   * Document access auditing
   * Integration with Redmine's activity feed
@@ -36,17 +35,13 @@ Features
   * Full read/write webdav functionality
   * Optional document content fulltext search
   * Documents and files symbolic links
-  * Compatible with redmine 2.3.x
+  * Document tagging
+  * Compatible with redmine 2.5.x
 
 Dependencies
 ------------
-
-  * Bundler 1.1 or greater (Gem)
-  * Redmine 2.3.x 
-  * Rails 3.2.x (Inline with Redmine installation requirement) 
-  * rubyzip 1.0.0 (Gem)
-  * UUIDTools 2.1.1 or greater (less than 2.2.0) (Gem)
-  * simple_enum (Gem)
+  
+  * Redmine 2.3.x or higher
 
 ### Fulltext search (optional)
 
@@ -116,7 +111,9 @@ The DMSF file/revision id can be found in link for file/revision download from w
 
 The DMSF folder id can be found in the link when opening folders within Redmine.
 
-You can also publish Wiki help description: In the file <redmine_root>/public/help/wiki_syntax_detailed.html, after the document link description/definition:
+You can also publish Wiki help description: 
+
+In the file <redmine_root>/public/help/<language>/wiki_syntax_detailed.html, after the document link description/definition:
 
     <ul>
       <li>
@@ -133,6 +130,11 @@ You can also publish Wiki help description: In the file <redmine_root>/public/he
       </li>
     </ul>
 
+In the file <redmine_root>/public/help/<language>/wiki_syntax.html, at the end of the Redmine links section:
+
+    <tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+
+
 Setup / Upgrade
 ---------------
 
@@ -141,8 +143,7 @@ Before installing ensure that the Redmine instance is stopped.
 1. In case of upgrade BACKUP YOUR DATABASE first
 2. Put redmine_dmsf plugin directory into plugins
 3. Initialize/Update database: `rake redmine:plugins:migrate RAILS_ENV="production"`
-4. The access rights must be set for web server, example: `chown -R www-data:www-data /opt/redmine/plugins/redmine_dmsf`
-*Ensure that the path used in the above is adjusted for your installation*
+4. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`
 5. Restart web server
 6. You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
 7. Assign DMSF permissions to appropriate roles
