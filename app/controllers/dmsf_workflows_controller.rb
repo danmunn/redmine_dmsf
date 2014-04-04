@@ -335,12 +335,19 @@ class DmsfWorkflowsController < ApplicationController
 private    
 
   def find_project    
-    if @dmsf_workflow && @dmsf_workflow.project
-      @project = @dmsf_workflow.project
-    elsif params[:project_id].present?
-       @project = Project.find_by_id params[:project_id]
+    if @dmsf_workflow
+      if @dmsf_workflow.project # Project workflow
+        @project = @dmsf_workflow.project
+      else # Global workflow
+        revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
+        @project = revision.project if revision
+      end
     else
-      @project = Project.find_by_identifier params[:id]
+      if params[:project_id].present?
+        @project = Project.find_by_id params[:project_id]
+      else
+        @project = Project.find_by_identifier params[:id]
+      end
     end    
   end
   
