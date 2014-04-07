@@ -81,7 +81,7 @@
     <% if @file_manipulation_allowed %>      
       <%= link_to(l(:label_link_from), 
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder, :type => 'link_from'),
-        :title => l(:link_create_link), 
+        :title => l(:title_create_link), 
         :class => 'icon icon-link') unless @locked_for_user %>
     <% end %>    
     <%= link_to(l(:link_create_folder), 

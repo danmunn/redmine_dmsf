@@ -39,7 +39,7 @@
         <% end %>      
       <%= link_to(l(:label_link_to), 
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder.id, :type => 'link_to'),
-        :title => l(:link_create_link), 
+        :title => l(:title_create_link), 
         :class => 'icon icon-link') %>
       <%= link_to(l(:button_copy), copy_folder_path(:id => @folder),
         :title => l(:title_copy), :class => 'icon icon-copy') %>
