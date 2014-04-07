@@ -213,9 +213,6 @@ class DmsfWorkflowsController < ApplicationController
     end
   end
   
-  def edit       
-  end   
-  
   def update    
     if request.put? && @dmsf_workflow.update_attributes({:name => params[:name]})
       flash[:notice] = l(:notice_successful_update)

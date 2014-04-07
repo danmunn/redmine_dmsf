@@ -72,7 +72,7 @@ Redmine::Plugin.register :redmine_dmsf do
         :dmsf_links => [:new, :create, :destroy]
         }
     permission :manage_workflows, 
-      {:dmsf_workflows => [:index, :new, :create, :destroy, :edit, :add_step, :remove_step, :reorder_steps, :update]}
+      {:dmsf_workflows => [:index, :new, :create, :destroy, :show, :add_step, :remove_step, :reorder_steps, :update]}
     permission :force_file_unlock, {}
   end   
   
