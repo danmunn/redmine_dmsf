@@ -24,7 +24,7 @@ class DmsfLink < ActiveRecord::Base
   validates :name, :presence => true
   validates :target_id, :presence => true
   validates_length_of :name, :maximum => 255    
-  scope :visible, where(:deleted => false)
+  scope :visible, where('NOT deleted')
   
   def target_folder_id
     if self.target_type == DmsfFolder.model_name
