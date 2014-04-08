@@ -123,10 +123,10 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_template 'new'
   end    
 
-  def test_edit
-    get :edit, :id => @wf1.id
+  def test_show
+    get :show, :id => @wf1.id
     assert_response :success
-    assert_template 'edit'    
+    assert_template 'show'    
   end
   
   def test_create        
