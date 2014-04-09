@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -58,17 +58,24 @@ class DmsfWorkflowsController < ApplicationController
               end              
               if revision.workflow == DmsfWorkflow::STATE_APPROVED
                 # Just approved
-                revision.file.project.members.each do |member|
+                recipients = revision.file.project.members.collect{ |m| m.user }
+                if User.current && User.current.logged? && User.current.pref.no_self_notified
+                  recipients.delete User.current
+                end
+                recipients.each do |user|
                   DmsfMailer.workflow_notification(
-                    member.user,
+                    user,
                     @dmsf_workflow, 
                     revision,
                     :text_email_subject_approved,
                     :text_email_finished_approved,
-                    :text_email_to_see_history).deliver if member.user
+                    :text_email_to_see_history).deliver if user
                 end
                 if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
                   recipients = revision.file.project.members.collect{ |m| m.user }
+                  if User.current && User.current.logged? && User.current.pref.no_self_notified
+                    recipients.delete User.current
+                  end
                   unless recipients.empty?
                     to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                     to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
@@ -80,6 +87,9 @@ class DmsfWorkflowsController < ApplicationController
                 recipients = @dmsf_workflow.participiants
                 recipients.push User.find_by_id revision.dmsf_workflow_assigned_by
                 recipients.uniq!
+                if User.current && User.current.logged? && User.current.pref.no_self_notified
+                  recipients.delete User.current
+                end
                 recipients.each do |user|
                   DmsfMailer.workflow_notification(
                     user, 
@@ -315,6 +325,9 @@ class DmsfWorkflowsController < ApplicationController
         if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
           recipients = assignments.collect { |a| a.user }
           recipients.uniq!
+          if User.current && User.current.logged? && User.current.pref.no_self_notified
+            recipients.delete User.current
+          end
           unless recipients.empty?
             to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
             to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
