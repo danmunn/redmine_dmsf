@@ -51,8 +51,7 @@
     </p>
     <p>
       <%= label_tag('', "#{l(:label_email_documents)}:") %>
-      <%= link_to 'Documents.zip', 
-        download_email_entries_path(:id => @project, :folder_id => @folder, :path => @email_params['zipped_content']) %> 
+      <%= link_to 'Documents.zip', download_email_entries_path(:id => @project, :folder_id => @folder, :path => @email_params[:zipped_content]) %>       
       <%= l(:label_or) %> <%= check_box_tag('email[links_only]') %> <%= l(:label_links_only) %>      
     </p>
     <p>
