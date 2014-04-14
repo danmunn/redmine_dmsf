@@ -71,8 +71,11 @@ class DmsfFile < ActiveRecord::Base
   @@storage_path = nil
 
   def self.storage_path
-    self.storage_path = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].strip unless @@storage_path    
-    Dir.mkdir(@@storage_path) unless File.exists?(@@storage_path)    
+    unless @@storage_path.present?
+      @@storage_path = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].strip      
+      @@storage_path = Rails.root.join('files/dmsf').to_s if @@storage_path.blank?      
+      Dir.mkdir(@@storage_path) unless File.exists?(@@storage_path)    
+    end    
     @@storage_path
   end
 
