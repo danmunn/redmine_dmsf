@@ -1,8 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012  Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2013  karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,10 +27,8 @@ en:
   notice_file_locked: File locked
   warning_file_not_locked: File not locked
   notice_file_unlocked: File unlocked
-  error_only_user_that_locked_file_can_unlock_it: Only user that locked file can unlock it
-  question_do_you_really_want_to_delete_this_entry: Do you really want to delete this entry?
-  error_max_files_exceeded: "Limit for %{number} simultaneously downloaded files exceeded"
-  question_do_you_really_want_to_delete_this_revision: Do you really want to delete this revision?
+  error_only_user_that_locked_file_can_unlock_it: Only user that locked file can unlock it  
+  error_max_files_exceeded: "Limit for %{number} simultaneously downloaded files exceeded"  
   error_entry_project_does_not_match_current_project: "Entry project doesn't match current project"
   notice_folder_created: Folder created
   error_folder_creation_failed: Folder creation failed
@@ -112,12 +110,9 @@ en:
   label_created: Created
   label_changed: Changed
   info_changed_by_user: "%{changed} by"
-  label_filename: Filename
-  label_version: Version
-  label_approval_workflow: Workflow
+  label_filename: Filename    
   label_mime: Mime
-  label_size: Size
-  label_comment: Comment
+  label_size: Size  
   heading_new_revision: New Revision
   option_version_same: Same
   option_version_minor: Minor
@@ -161,8 +156,7 @@ en:
   error_user_has_not_right_delete_folder: "User hasn't right to delete forders"
   error_user_has_not_right_delete_file: "User hasn't right to delete file"
   notice_entries_deleted: Entries deleted
-  warning_some_entries_were_not_deleted: "Some entries weren't deleted: %{entries}"
-  question_do_you_really_want_to_delete_entries: Do you really want to delete checked entries?
+  warning_some_entries_were_not_deleted: "Some entries weren't deleted: %{entries}"  
   title_delete_checked: Delete checked
   title_number_of_files_in_directory: Number of files in directory
   title_filename_for_download: Filename used for download or in Zip archive
@@ -174,7 +168,7 @@ en:
   warning_xapian_not_available: Xapian not available
   menu_dmsf: DMSF
   label_physical_file_delete: Physical file delete
-  user_is_not_project_member: You are not member of the project
+  user_is_not_project_member: You are not a member of the project
   heading_access_downloads_emails: Downloads/Emails
   heading_access_first: First
   heading_access_last: Last
@@ -185,8 +179,8 @@ en:
   comment_copied_from: "Copied from %{source}"
   notice_file_copied: File copied
   notice_file_moved: File moved
-  label_target_project: Target project
-  label_target_folder: Target folder
+  field_target_project: Target project
+  field_target_folder: Target folder
   title_copy_or_move: Copy/Move
   label_dmsf_folder_plural: Dmsf folders
   comment_moved_from: "Moved from %{source}"
@@ -213,8 +207,7 @@ en:
   warning_folder_not_locked: Unfortunately, the folder could not be locked
   notice_folder_unlocked: The folder was successfully unlocked
   error_only_user_that_locked_folder_can_unlock_it: You are not authorised to unlock this folder
-  title_folder_parent_locked: "Parent folder %{name} is locked"
-  title_file_parent_locked: "Parent folder %{name} is locked"
+  title_folder_parent_locked: "Parent folder %{name} is locked"  
   title_unlock_folder: Unlock to allow changes for other members
   title_lock_folder: Lock to prevent changes for other members
 
@@ -279,6 +272,30 @@ en:
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
   label_my_open_approvals: My open approvals
   label_my_locked_documents: My locked documents
+  
+  title_create_link: Create a symbolic link  
+  label_link_from: Link from
+  label_link_to: Link to
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Source file
+  title_download_entries: Download entries
+  label_link_name: Link name
+  label_target_folder: Target folder
+  label_source_folder: Source folder
+  label_target_project: Target project
+  label_source_project: Source project
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
+  label_links_only: links only
+  
+  label_display_notified_recipients: Display notified recipients
+  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
+  warning_email_notifications: "Email notifications sent to %{to}"
   
   my:
     blocks:

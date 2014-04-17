@@ -27,7 +27,7 @@
 <h3><%= l(:label_my_locked_documents)%> (<%= folders.count %>/<%=  files.count %>)</h3>
 <% if folders.any? || files.any?%>
   <%= form_tag({}) do %>
-    <div><table class="list">
+    <table class="list">
       <thead>
         <tr>              
           <th><%=l(:field_project)%></th>
@@ -62,7 +62,7 @@
               <%= link_to_project(file.project) %>
             </td>            
             <td class="title">              
-              <%= link_to(h(file.last_revision.display_title), 
+              <%= link_to(h(file.title), 
                 {:controller => 'dmsf_files', :action => :show, :id => file },
                 :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}") %>
             </td>          

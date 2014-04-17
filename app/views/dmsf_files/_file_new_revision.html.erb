@@ -26,13 +26,13 @@
     <% if @file.locked_for_user? %>
       <p class="warning"><%= l(:info_file_locked) %></p>
     <% else %>
-      <%= form_for(@revision, :url => {:action => 'create_revision', :id => @file},
-            :html => {:method=>:post, :multipart => true, :id => 'new_revision_form'}) do |f| %>
+      <%= form_for(@revision, :url => { :action => 'create_revision', :id => @file },
+            :html => { :method => :post, :multipart => true, :id => 'new_revision_form' }) do |f| %>
 	<div class="clear">
           <div class="splitcontentleft">
            <p>
               <%= label_tag('dmsf_file_revision_title', "#{l(:label_title)}:") %>
-              <%= f.text_field(:title, :size => '32') %>
+              <%= f.text_field(:title, :size => 32) %>
             </p>
           </div>
 	<div class="splitcontentright">
@@ -41,7 +41,7 @@
             <%= f.select(:dmsf_folder_id, 
                  options_for_select(DmsfFolder.directory_tree(@project), 
                   :selected => (@revision.folder.id if @revision.folder))) %> /
-            <%= f.text_field(:name, :size => '22') %>
+            <%= f.text_field(:name, :size => 22) %>
           </p>
 	</div>
       </div>
@@ -49,7 +49,7 @@
         <%= label_tag('dmsf_file_revision_description', "#{l(:label_description)}:") %>
       </p>
       <div class="wiki data clear">
-        <%= f.text_area(:description, :rows=> '6', :class => 'wiki-edit') %>
+        <%= f.text_area(:description, :rows => 6, :class => 'wiki-edit') %>
       </div>
       <div class="splitcontentleft">
         <p>
@@ -69,14 +69,14 @@
        <div class="splitcontentright clear">
          <p>
            <%= label_tag('file_upload', "#{l(:label_new_content)}:") %>
-           <div class="data">
-             <%= file_field_tag('file_upload', :size => 30) %>
-             <br />
-             <small>
-               (<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
-             </small>
-          </div>
-         </p>					
+         </p>
+         <div class="data">
+           <%= file_field_tag('file_upload') %>
+           <br/>
+           <small>
+             (<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
+           </small>
+         </div>         
        </div>
         <br style="clear: both"/>
         <div class="custom_fields">
@@ -87,12 +87,12 @@
         <div class="comment">
           <p>
             <%= label_tag('dmsf_file_revision_comment', "#{l(:label_comment)}:") %>
-            <div class="data">
-              <%= f.text_area(:comment, :rows=> '2', :style => 'width: 99%;') %>
-            </div>
           </p>
+          <div class="data">
+            <%= f.text_area(:comment, :rows=> 2, :style => 'width: 99%;') %>
+          </div>
         </div>
-        <br />
+        <br/>
         <%= submit_tag(l(:submit_create)) %>			
       <% end %>
     <% end %>

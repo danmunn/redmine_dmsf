@@ -38,10 +38,23 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     @revision1 = DmsfFileRevision.find_by_id 1
     @revision2 = DmsfFileRevision.find_by_id 2
     @project = Project.find_by_id 2
+    @project5 = Project.find_by_id 5
   end
   
-  def test_truth
-    assert_kind_of DmsfWorkflow, @wf1
+  def test_truth    
+    assert_kind_of DmsfWorkflow, @wf1        
+    assert_kind_of DmsfWorkflow, @wf2
+    assert_kind_of DmsfWorkflowStep, @wfs1
+    assert_kind_of DmsfWorkflowStep, @wfs2
+    assert_kind_of DmsfWorkflowStep, @wfs3
+    assert_kind_of DmsfWorkflowStep, @wfs4
+    assert_kind_of DmsfWorkflowStep, @wfs5
+    assert_kind_of DmsfWorkflowStepAssignment, @wfsa1
+    assert_kind_of DmsfWorkflowStepAction, @wfsac1
+    assert_kind_of DmsfFileRevision, @revision1
+    assert_kind_of DmsfFileRevision, @revision2
+    assert_kind_of Project, @project
+    assert_kind_of Project, @project5
   end
   
   def test_create
@@ -152,8 +165,8 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
   
   def test_delegates    
     delegates = @wf1.delegates(nil, nil, nil)
-    assert_equal delegates.size, User.active.all.size
-    delegates = @wf1.delegates('Redmine', nil, nil)
+    assert_equal(delegates.all.count + 1, @project5.users.all.count)
+    delegates = @wf1.delegates('Dave', nil, nil)        
     assert_equal delegates.size, 1
     delegates = @wf1.delegates(nil, @wfsa1.id, 2)        
     assert !delegates.any?{|user| user.id == @wfsa1.user_id}
@@ -180,22 +193,18 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     end    
   end
   
-  def test_try_finish    
-    #def try_finish(dmsf_file_revision_id, action, user_id)        
-    # TODO: There is a strange error: 'ActiveRecord::RecordNotFound: Couldn't find Project with id=0'
-    # while saving the revision
-#    @revision1.set_workflow @wf1.id, 'start'        
-#    @wf1.try_finish @revision1.id, @wfsac1, User.current.id
-#    @revision1.reload
-#    assert_equal @revision1.workflow, DmsfWorkflow::STATE_APPROVED
-#    @revision2.set_workflow @wf1.id, 'start'        
-#    @wf1.try_finish @revision2.id, @wfsac1, User.current.id
-#    assert_equal @revision2.workflow, DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
-     assert true
+  def test_try_finish        
+    @revision1.set_workflow @wf1.id, 'start'        
+    @wf1.try_finish @revision1, @wfsac1, User.current.id
+    @revision1.reload
+    assert_equal @revision1.workflow, DmsfWorkflow::STATE_APPROVED
+    @revision2.set_workflow @wf1.id, 'start'        
+    @wf1.try_finish @revision2, @wfsac1, User.current.id
+    assert_equal @revision2.workflow, DmsfWorkflow::STATE_WAITING_FOR_APPROVAL    
   end
   
   def test_participiants
-    # TODO:
-    assert true
+    participiants = @wf1.participiants    
+    assert_equal participiants.count, 2
   end
 end

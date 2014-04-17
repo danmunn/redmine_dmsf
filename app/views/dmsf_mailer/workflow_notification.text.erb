@@ -16,10 +16,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
-<%= @user.name %> ,
+<%= @user.name %>,
 <%= @text1 %>
 <% unless @revision.folder %>
-  <%= @text2 %> <%= url_for(:controller => 'dmsf', :action => 'show', :id => @revision.file.project, :only_path => false) %>.
+  <%= @text2 %> <%= dmsf_folder_path(:id => @revision.file.project, :only_path => false) %>.
 <% else %>
-  <%= @text2 %> <%= url_for(:controller => 'dmsf', :action => 'show', :id => @revision.file.project, :folder_id => @revision.folder, :only_path => false) %>.
+  <%= @text2 %> <%= dmsf_folder_path(:id => @revision.file.project, :folder_id => @revision.folder, :only_path => false) %>.
 <% end %>

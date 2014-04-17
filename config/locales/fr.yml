@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012  Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2013  karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2014  Atmis
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,10 +27,8 @@ fr:
   notice_file_locked: Fichier verrouillé
   warning_file_not_locked: Fichier déverrouillé
   notice_file_unlocked: Fichier déverrouillé
-  error_only_user_that_locked_file_can_unlock_it: "Le fichier ne peut être déverrouillé que par celui qui l'a verrouillé"
-  question_do_you_really_want_to_delete_this_entry: Etes-vous sûr de vouloir supprimer cet élément ?
-  error_max_files_exceeded: Le nombre de fichiers pouvant être téléchargés simultanément est dépassé
-  question_do_you_really_want_to_delete_this_revision: Etes-vous sûr de vouloir supprimer cette révision ?
+  error_only_user_that_locked_file_can_unlock_it: "Le fichier ne peut être déverrouillé que par celui qui l'a verrouillé"  
+  error_max_files_exceeded: Le nombre de fichiers pouvant être téléchargés simultanément est dépassé  
   error_entry_project_does_not_match_current_project: "Le projet saisi ne correspond pas au projet courant"
   notice_folder_created: Dossier créé
   error_folder_creation_failed: Erreur de création du dossier
@@ -112,12 +110,9 @@ fr:
   label_created: Créé
   label_changed: Modifié
   info_changed_by_user: "%{changed} par"
-  label_filename: Fichier
-  label_version: Version  
-  label_approval_workflow: Flux de validation
+  label_filename: Fichier    
   label_mime: Type
-  label_size: Taille
-  label_comment: Commentaires
+  label_size: Taille  
   heading_new_revision: Nouvelle révision
   option_version_same: (identique)
   option_version_minor: (modification mineure)
@@ -161,8 +156,7 @@ fr:
   error_user_has_not_right_delete_folder: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression du dossier"
   error_user_has_not_right_delete_file: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression du dossier"
   notice_entries_deleted: Elément(s) supprimé(s)
-  warning_some_entries_were_not_deleted: "Certains éléments n'ont pas été supprimés : %{entries}"
-  question_do_you_really_want_to_delete_entries: Etes-vous sûr de vouloir supprimer le(s) élément(s) sélectionné(s)?
+  warning_some_entries_were_not_deleted: "Certains éléments n'ont pas été supprimés : %{entries}"  
   title_delete_checked: Supprimer les éléments sélectionnés
   title_number_of_files_in_directory: Nombre de fichiers dans le dossier
   title_filename_for_download: "Nom du fichier à utiliser lors du téléchargement ou de l'archive ZIP"
@@ -185,8 +179,8 @@ fr:
   comment_copied_from: "Copie effectuée depuis %{source}"
   notice_file_copied: Fichier copié
   notice_file_moved: Fichier déplacé
-  label_target_project: Projet cible
-  label_target_folder: Dossier cible
+  field_target_project: Projet cible
+  field_target_folder: Dossier cible
   title_copy_or_move: Copie/Déplacement
   label_dmsf_folder_plural: Les dossiers de DMSF
   comment_moved_from: "Déplacé depuis %{source}"
@@ -213,8 +207,7 @@ fr:
   warning_folder_not_locked: Echec du verrouillage du dossier
   notice_folder_unlocked: Le dossier a été déverrouillé
   error_only_user_that_locked_folder_can_unlock_it: "Vous n'êtes autorisé à déverrouiller ce dossier"
-  title_folder_parent_locked: "Le dossier parent %{name} verrouillé"
-  title_file_parent_locked: "Le dossier parent %{name} verrouillé"
+  title_folder_parent_locked: "Le dossier parent %{name} verrouillé"  
   title_unlock_folder: Déverrouiller afin de permettre la modification par les membres du projet
   title_lock_folder: "Verrouiller afin d'empêcher les modifications du dossier"
   
@@ -279,6 +272,30 @@ fr:
   text_email_to_see_status: Pour consulter le statut actuel du flux de validation, cliquez sur le statut du flux du document dans
   label_my_open_approvals: Mes approbations en attente
   label_my_locked_documents: Mes documents verrouillés
+  
+  title_create_link: Create a symbolic link  
+  label_link_from: Link from
+  label_link_to: Link to
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Source file
+  title_download_entries: Download entries
+  label_link_name: Link name
+  label_target_folder: Target folder
+  label_source_folder: Source folder
+  label_target_project: Target project
+  label_source_project: Source project
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
+  label_links_only: links only
+  
+  label_display_notified_recipients: Display notified recipients
+  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
+  warning_email_notifications: "Email notifications sent to %{to}"
 
   my:
     blocks:

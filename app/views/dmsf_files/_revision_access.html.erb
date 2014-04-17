@@ -19,25 +19,24 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
-<p>
-  <table class="display access-table list">
-    <thead>
+<br/>
+<table class="display access-table list">
+  <thead>
+    <tr>
+      <th><%= l(:field_user) %></th>
+      <th><%= l(:heading_access_downloads_emails) %></th>
+      <th><%= l(:heading_access_first) %></th>
+      <th><%= l(:heading_access_last) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% revision.access_grouped.each do |access| %>
       <tr>
-        <th><%= l(:field_user) %></th>
-        <th><%= l(:heading_access_downloads_emails) %></th>
-        <th><%= l(:heading_access_first) %></th>
-        <th><%= l(:heading_access_last) %></th>
+        <td><%= link_to_user(access.user) %></td>
+        <td><%= access['count'] %></td>
+        <td><%= format_time(DmsfHelper::to_time(access.first_at)) %></td>
+        <td><%= format_time(DmsfHelper::to_time(access.last_at)) %></td>
       </tr>
-    </thead>
-    <tbody>
-      <% revision.access_grouped.each do |access| %>
-        <tr>
-          <td><%= link_to_user(access.user) %></td>
-          <td><%= access['count'] %></td>
-          <td><%= format_time(DmsfHelper::to_time(access.first_at)) %></td>
-          <td><%= format_time(DmsfHelper::to_time(access.last_at)) %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</p>
+    <% end %>
+  </tbody>
+</table>

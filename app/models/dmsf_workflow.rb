@@ -32,7 +32,7 @@ class DmsfWorkflow < ActiveRecord::Base
   def participiants
     users = Array.new
     self.dmsf_workflow_steps.each do |step|
-      users << step.user
+      users << step.user unless users.include? step.user
     end
     users
   end
@@ -110,7 +110,7 @@ class DmsfWorkflow < ActiveRecord::Base
       sql = '1=1'
     end
     
-    unless q.nil? || q.empty?
+    if q.present?
       User.active.sorted.where(sql).like(q)
     else
       User.active.sorted.where(sql)

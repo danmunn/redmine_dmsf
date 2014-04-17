@@ -18,7 +18,17 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfFileRevisionCustomField < CustomField  
+  
   def type_name
     :menu_dmsf
   end
+  
+  def compare_values?(x, y)
+    if x.is_a?(Array) && y.is_a?(Array) && !y.empty?
+      x.include? y[0]       
+    else 
+      x == y
+    end    
+  end
+  
 end

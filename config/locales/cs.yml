@@ -1,7 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+#
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,10 +27,8 @@ cs:
   notice_file_locked: Soubor byl zamčen
   warning_file_not_locked: Soubor není zamčen
   notice_file_unlocked: Soubor byl odemčen
-  error_only_user_that_locked_file_can_unlock_it: Soubor může být odemčen pouze uživatelem, který ho zamkl
-  question_do_you_really_want_to_delete_this_entry: Chcete to skutečně smazat?
-  error_max_files_exceeded: "Limit pro %{number} najednou stažených souborů je překročen"
-  question_do_you_really_want_to_delete_this_revision: Chcete skutečně smazat tuto revizi?
+  error_only_user_that_locked_file_can_unlock_it: Soubor může být odemčen pouze uživatelem, který ho zamkl 
+  error_max_files_exceeded: "Limit pro %{number} najednou stažených souborů je překročen"  
   error_entry_project_does_not_match_current_project: Zadaný projekt neodpovídá aktuálnímu projektu
   notice_folder_created: Adresář byl vytvořen
   error_folder_creation_failed: Vytváření složky selhalo
@@ -111,11 +110,9 @@ cs:
   label_created: Vytvořeno
   label_changed: Změněno
   info_changed_by_user: "%{changed} uživatelem"
-  label_filename: Jméno souboru
-  label_version: Verze  
+  label_filename: Jméno souboru  
   label_mime: Typ
-  label_size: Velikost
-  label_comment: Komentář
+  label_size: Velikost  
   heading_new_revision: Nová revize
   option_version_same: Stejná
   option_version_minor: Podružná
@@ -159,8 +156,7 @@ cs:
   error_user_has_not_right_delete_folder: Uživatel nemá právo mazat složky
   error_user_has_not_right_delete_file: Uživatel nemá právo mazat soubor
   notice_entries_deleted: Položky smazány
-  warning_some_entries_were_not_deleted: "Některé položky nebyly smazány: %{entries}"
-  question_do_you_really_want_to_delete_entries: Opravdu chcete smazat vybrané položky?
+  warning_some_entries_were_not_deleted: "Některé položky nebyly smazány: %{entries}"  
   title_delete_checked: Smaž vybrané
   title_number_of_files_in_directory: Počet souborů ve složce
   title_filename_for_download: Název Zip archívu ke stažení
@@ -183,8 +179,8 @@ cs:
   comment_copied_from: "Zkopírováno z %{source}"
   notice_file_copied: Soubor zkopírován
   notice_file_moved: Soubor přesunut
-  label_target_project: Cílový projekt
-  label_target_folder: Cílový adresář
+  field_target_project: Cílový projekt
+  field_target_folder: Cílový adresář
   title_copy_or_move: Kopírovat/Přesunout
   label_dmsf_folder_plural: Dmsf složky
   comment_moved_from: "Přesunuto z %{source}"
@@ -195,8 +191,8 @@ cs:
   title_copy: Kopírovat
   error_folder_cannot_be_copied: Složka nemůže být zkopírována
   notice_folder_copied: Složka zkopírována
-  error_max_email_filesize_exceeded: "Přesáhli jste maximální velikost souboru, který lze poslat emailem. (%{number} MB)"
   
+  error_max_email_filesize_exceeded: "Přesáhli jste maximální velikost souboru, který lze poslat emailem. (%{number} MB)"  
   note_maximum_email_filesize: Omezí se maximální velikost souboru, který může být poslán emailem. 0 znamená neomezený. Číslo je v MB.
   label_maximum_email_filesize: Maximální velikost souboru emailu
   header_minimum_filesize: Chyba souboru.
@@ -211,8 +207,7 @@ cs:
   warning_folder_not_locked: Složku nelze zamknout
   notice_folder_unlocked: Složka byla odemčena
   error_only_user_that_locked_folder_can_unlock_it: Nemáte oprávnění k odemknutí této složky
-  title_folder_parent_locked: "Nadřazená složka %{name} je zamčená"
-  title_file_parent_locked: "Nadřazená složka %{name} je zamčená"
+  title_folder_parent_locked: "Nadřazená složka %{name} je zamčená"  
   title_unlock_folder: Odemknout
   title_lock_folder: Zamknout
 
@@ -267,14 +262,40 @@ cs:
   text_email_subject_updated: "Schvalovací proces %{name} aktualizován"
   text_email_subject_started: "Schvalovací proces %{name} spuštěn" 
   text_email_finished_approved: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl právě ukončen a dokument je schválen."
-  text_email_finished_rejected: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl dokončen a dokument byl zamítnut protože '%{notice}'."
-  text_email_finished_delegated: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl delegován protože '%{notice}' a od Vás se očekává schválení v aktuálním schvalovacím kroku."
+  text_email_finished_rejected: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl dokončen a dokument byl zamítnut, protože '%{notice}'."
+  text_email_finished_delegated: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl delegován, protože '%{notice}' a od Vás se očekává schválení v aktuálním schvalovacím kroku."
   text_email_finished_step: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' právě ukončil jeden ze schvalovacích kroků a od Vás se očekává schválení v dalším schvalovacím kroku."
   text_email_finished_step_short: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' právě ukončil jeden ze schvalovacích kroků."
   text_email_started: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl zahájen a od Vás se očekává schválení v aktuálním schvalovacím kroku."  
   text_email_to_proceed: Pro schválení klikněte na zaškrtávací ikonku vedle dokumentu v
   text_email_to_see_history: Pro zobrazení historie schvalovacího procesu klikněte na status dokumentu v
   text_email_to_see_status: Pro zobrazení aktuálního stavu schvalovacího procesu klikněte na status dokumentu v
+  label_my_open_approvals: My open approvals
+  label_my_locked_documents: My locked documents
+    
+  title_create_link: Vytvořit symbolický odkaz  
+  label_link_from: Odkaz z
+  label_link_to: Odkaz do
+  label_notifications_on: Zapnout notifikace
+  label_notifications_off: Vypnout notifikace
+  field_target_file: Zdrojový soubor
+  title_download_entries: Historie stahování
+  label_link_name: Název odkazu
+  label_target_folder: Cílový adresář
+  label_source_folder: Zdrojový adresář
+  label_target_project: Cílový projekt
+  label_source_project: Zdrojový projekt
+  
+  text_email_doc_updated_subject: "Dokumenty projektu %{project} aktualizovány"
+  text_email_doc_updated: právě aktualizoval dokumenty projektu
+  text_email_doc_follows: takto
+  text_email_doc_deleted_subject: "Dokumenty projektu %{project} smazány"
+  text_email_doc_deleted: právě smazal dokumety projektu
+  label_links_only: pouze odkazy
+  
+  label_display_notified_recipients: Zobrazit příjemce notifikací
+  note_display_notified_recipients: Uživatel bude informován o příjemcích právě odeslané emailové notifikace.
+  warning_email_notifications: "Notifikační email poslán na uživatele %{to}"
     
   my:
     blocks:

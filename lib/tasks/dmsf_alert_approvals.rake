@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-14   Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,12 +24,15 @@ Available options:
 Example:
   rake redmine:dmsf_alert_approvals RAILS_ENV="production"
 END_DESC
-require File.expand_path(File.dirname(__FILE__) + '/../../../../config/environment')
+  
+namespace :redmine do
+  task :dmsf_alert_approvals => :environment do    
+    DmsfAlertApprovals.alert
+  end
+end
 
-class DmsfAlertApprovals
-  
-  include Redmine::I18n
-  
+class DmsfAlertApprovals    
+
   def self.alert
     revisions = DmsfFileRevision.where(:workflow => DmsfWorkflow::STATE_WAITING_FOR_APPROVAL)
     revisions.each do |revision|
@@ -42,16 +45,11 @@ class DmsfAlertApprovals
           assignment.user, 
           workflow, 
           revision,
-          l(:text_email_subject_requires_approval, :name => workflow.name),                        
-          l(:text_email_finished_step, :name => workflow.name, :filename => revision.file.name),
-          l(:text_email_to_proceed)).deliver
+          :text_email_subject_requires_approval,
+          :text_email_finished_step,
+          :text_email_to_proceed).deliver
       end      
     end
   end
-end
 
-namespace :redmine do
-  task :dmsf_alert_approvals => :environment do    
-    DmsfAlertApprovals.alert
-  end
 end

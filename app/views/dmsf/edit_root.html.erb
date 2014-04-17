@@ -20,11 +20,22 @@
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
+  <% if User.current.allowed_to?(:folder_manipulation, @project) %>    
+    <% if @project.dmsf_notification %>        
+      <%= link_to(l(:label_notifications_off), 
+        notify_deactivate_dmsf_path(:id => @project),
+        :title => l(:title_notifications_active_deactivate), 
+        :class => 'icon icon-notification-on') %>
+    <% else %>        
+      <%= link_to(l(:label_notifications_on),
+        notify_activate_dmsf_path(:id => @project),
+        :title => l(:title_notifications_active_deactivate), 
+        :class => 'icon icon-notification-off') %>
+    <% end %>  
+  <% end %>
 </div>
 
-<h2>
-  <%= link_to l(:link_documents), {:controller => 'dmsf', :action => 'show', :id => @project } %>
-</h2>  
+<%= render(:partial => 'path', :locals => {:folder => nil, :filename => nil}) %>  
 
 <%= form_for(@project, :url => {:action => 'save_root', :id => @project},
   :html => {:method=>:post}) do |f| %>
@@ -39,8 +50,4 @@
   <%= submit_tag(l(:submit_save)) %>
 <% end %>
 
-<%= wikitoolbar_for 'dmsf_folder_description' %>
-
-<% content_for :header_tags do %>
-  <%= stylesheet_link_tag 'dmsf', :plugin => 'redmine_dmsf' %>
-<% end %>
+<%= wikitoolbar_for 'project_dmsf_description' %>

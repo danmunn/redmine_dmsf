@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2011 <zdravko.balorda@mks.si>
 #
+#
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -25,10 +27,8 @@ sl:
   notice_file_locked: Datoteka zaklenjena
   warning_file_not_locked: Datoteka ni zaklenjena
   notice_file_unlocked: Datoteka odklenjena
-  error_only_user_that_locked_file_can_unlock_it: Samo oseba, ki je zaklenila datoteko, jo lahko odklene.
-  question_do_you_really_want_to_delete_this_entry: Ste prepričani, da želite izbrisati objekt?
-  error_max_files_exceeded: "Max %{number} datotek za istočasno nalaganje je preseženo."
-  question_do_you_really_want_to_delete_this_revision: Ste prepričani, da želite izbrisati verzijo datoteke?
+  error_only_user_that_locked_file_can_unlock_it: Samo oseba, ki je zaklenila datoteko, jo lahko odklene.  
+  error_max_files_exceeded: "Max %{number} datotek za istočasno nalaganje je preseženo."  
   error_entry_project_does_not_match_current_project: Projekt se ujema s trenutno nastavljenim projektom
   notice_folder_created: Mapa kreirana
   error_folder_creation_failed: Mape ne morem kreirati
@@ -110,11 +110,9 @@ sl:
   label_created: Narejeno
   label_changed: Spremenjeno
   info_changed_by_user: "%{changed} po"
-  label_filename: Datoteka
-  label_version: Verzija  
+  label_filename: Datoteka  
   label_mime: Mime
-  label_size: Velikost
-  label_comment: Komentar
+  label_size: Velikost  
   heading_new_revision: Nova verzija
   option_version_same: Enako
   option_version_minor: Minor
@@ -158,8 +156,7 @@ sl:
   error_user_has_not_right_delete_folder: Uporabnik nima privilegija brisati mapo
   error_user_has_not_right_delete_file: Uporabnik nima privilegija brisati datoteke
   notice_entries_deleted: Izbrane enote izbrisane
-  warning_some_entries_were_not_deleted: "Nekatere enote niso izbrisane: %{entries}"
-  question_do_you_really_want_to_delete_entries: Ste prepričani, da želite izbrisati izbrane enote?
+  warning_some_entries_were_not_deleted: "Nekatere enote niso izbrisane: %{entries}"  
   title_delete_checked: Izbriši izbrano
   title_number_of_files_in_directory: Število datotek v mapi
   title_filename_for_download: Naziv datoteke za prenos dol ali Zip arhiva
@@ -177,14 +174,13 @@ sl:
   heading_access_last: Zadnji
   label_dmsf_updated: Arhiv posodobljen
   title_total_size_of_all_files: Skupna velikost vseh datotek v tej mapi
-  project_module_dmsf: Arhiv
-  
+  project_module_dmsf: Arhiv  
   warning_no_project_to_copy_file_to: Ni projekta kamor bi kopiral datoteko
   comment_copied_from: "Skopirano iz %{source}"
   notice_file_copied: Datoteka skopirana
   notice_file_moved: Datoteka premaknjena
-  label_target_project: Ciljni projekt
-  label_target_folder: Ciljna mapa
+  field_target_project: Ciljni projekt
+  field_target_folder: Ciljna mapa
   title_copy_or_move: "Kopiraj/Premakni"
   label_dmsf_folder_plural: Arhivske mape
   comment_moved_from: "Premaknjeno iz %{source}"
@@ -211,8 +207,7 @@ sl:
   warning_folder_not_locked: Ne, ta mapa ne more biti zaklenjena
   notice_folder_unlocked: Mapa je uspešno odklenjena
   error_only_user_that_locked_folder_can_unlock_it: Nimate privilegijev, da bi odklenili to mapo
-  title_folder_parent_locked: "Nadrejena mapa %{name} je zaklenjena"
-  title_file_parent_locked: "Nadrejena mapa %{name} je zaklenjena"
+  title_folder_parent_locked: "Nadrejena mapa %{name} je zaklenjena"  
   title_unlock_folder: Odkleni, da bi drugim članom omogočil spreminjanje
   title_lock_folder: Zakleni, da bi drugim članom preprečil spreminjanje
 
@@ -220,8 +215,7 @@ sl:
   select_option_webdav_readwrite: "Beri/Piši"
   label_webdav_strategy: Webdav strategija
   note_webdav_strategy: "Omogoči administratorju da odloči ali je webdav platforma na voljo izključno za branje ali beri/piši za končne uporabnike."
-  
-  # Not translated
+    
   error_unable_delete_dmsf_workflow: Unable to delete the workflow
   error_empty_note: "The note can't be empty"
   error_workflow_assign: An error occured while assigning
@@ -276,6 +270,32 @@ sl:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  label_my_open_approvals: My open approvals
+  label_my_locked_documents: My locked documents
+  
+  title_create_link: Create a symbolic link  
+  label_link_from: Link from
+  label_link_to: Link to
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Source file
+  title_download_entries: Download entries
+  label_link_name: Link name
+  label_target_folder: Target folder
+  label_source_folder: Source folder
+  label_target_project: Target project
+  label_source_project: Source project
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
+  label_links_only: links only
+  
+  label_display_notified_recipients: Display notified recipients
+  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
+  warning_email_notifications: "Email notifications sent to %{to}"
   
   my:
     blocks:

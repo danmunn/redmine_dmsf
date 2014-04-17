@@ -1,8 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,29 +25,35 @@ module RedmineDmsf
     module ProjectPatch
 
       def self.included(base) # :nodoc:
-        base.send(:include, InstanceMethods)
-        base.extend(ClassMethods)
+        base.send(:include, InstanceMethods)        
         base.class_eval do
           unloadable
           alias_method_chain :copy, :dmsf
 
-          has_many :dmsf_files, :class_name => 'DmsfFile', :foreign_key => 'project_id', :conditions => { :dmsf_folder_id => nil }, :dependent => :destroy
-          has_many :dmsf_folders, :class_name => 'DmsfFolder', :foreign_key => 'project_id', :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy
+          has_many :dmsf_files, :class_name => 'DmsfFile', :foreign_key => 'project_id', 
+            :conditions => { :dmsf_folder_id => nil }, :dependent => :destroy
+          has_many :dmsf_folders, :class_name => 'DmsfFolder', :foreign_key => 'project_id', 
+            :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy
           has_many :dmsf_workflows, :dependent => :destroy
+          has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'project_id', 
+            :conditions => { :dmsf_folder_id => nil, :target_type => DmsfFolder.model_name },
+            :dependent => :destroy 
+          has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'project_id', 
+            :conditions => { :dmsf_folder_id => nil, :target_type => DmsfFile.model_name },
+            :dependent => :destroy 
         end
-
       end
-
-      module ClassMethods
-      end
-
+      
       module InstanceMethods
         
         def dmsf_count
-          file_count = DmsfFile.visible.project_root_files(self).count
-          folder_count = DmsfFolder.visible.project_root_folders(self).count
-          DmsfFolder.visible.project_root_folders(self).each {|rootfld| file_count += rootfld.deep_file_count; folder_count += rootfld.deep_folder_count }
-          {:files => file_count, :folders => folder_count}
+          file_count = self.dmsf_files.visible.count + self.file_links.count
+          folder_count = self.dmsf_folders.visible.count + self.folder_links.count
+          self.dmsf_folders.visible.each do |f|
+            file_count += f.deep_file_count
+            folder_count += f.deep_folder_count
+          end
+          { :files => file_count, :folders => folder_count }
         end
 
         def copy_with_dmsf(project, options={})
@@ -69,19 +75,26 @@ module RedmineDmsf
 
         # Simple yet effective approach to copying things
         def copy_dmsf(project)
-          DmsfFile.visible.project_root_files(project).each {|f|
+          project.dmsf_folders.visible.each do |f|
             f.copy_to(self, nil)
-          }
-          DmsfFolder.visible.project_root_folders(project).each {|f|
+          end
+          project.dmsf_files.visible.each do |f|
             f.copy_to(self, nil)
-          }
+          end
+          project.folder_links.visible.each do |l|
+            l.copy_to(self, nil)            
+          end
+          project.file_links.visible.each do |l|
+            l.copy_to(self, nil)            
+          end
         end
       end
+      
     end
   end
 end
 
-#Apply patch
+# Apply patch
 Rails.configuration.to_prepare do
   unless Project.included_modules.include?(RedmineDmsf::Patches::ProjectPatch)
     Project.send(:include, RedmineDmsf::Patches::ProjectPatch)

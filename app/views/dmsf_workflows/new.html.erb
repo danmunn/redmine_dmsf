@@ -23,8 +23,8 @@
   <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=l(:label_dmsf_workflow_new)%></h2>
 <% end %>
 
-<%= labelled_form_for @workflow do |f| %>
-  <%= error_messages_for 'workflow' %>
+<%= labelled_form_for @dmsf_workflow do |f| %>
+  <%= error_messages_for 'dmsf_workflow' %>
   <div class="box tabular">
     <p><%= f.label :label_dmsf_workflow_name %><%= text_field_tag :name %></p>
     <% if project %>

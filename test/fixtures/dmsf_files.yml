@@ -46,3 +46,11 @@ dmsf_files_005:
   deleted:            0
   deleted_by_user_id: NULL
 
+dmsf_files_006:
+  id:                 6
+  project_id:         2
+  dmsf_folder_id:     3
+  name:               "test.txt"
+  notification:       0
+  deleted:            0
+  deleted_by_user_id: NULL

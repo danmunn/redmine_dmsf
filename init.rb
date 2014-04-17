@@ -1,8 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,11 +26,11 @@ Redmine::Plugin.register :redmine_dmsf do
   name 'DMSF'
   author 'Vit Jonas / Daniel Munn / Karel Picman'
   description 'Document Management System Features'
-  version '1.4.7 stable'
+  version '1.4.8 stable'
   url 'http://www.redmine.org/plugins/dmsf'
-  author_url 'mailto:karel.picman@kontron.com'
+  author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   
-  requires_redmine :version_or_higher => '2.0.0'
+  requires_redmine :version_or_higher => '2.3.0'
   
   settings  :partial => 'settings/dmsf_settings',
     :default => {
@@ -42,7 +42,8 @@ Redmine::Plugin.register :redmine_dmsf do
       'dmsf_index_database' => Rails.root.join('files/dmsf_index').to_s,
       'dmsf_stemming_lang' => 'english',
       'dmsf_stemming_strategy' => 'STEM_NONE',
-      'dmsf_webdav' => '1'
+      'dmsf_webdav' => '1',
+      'dmsf_display_notified_recipients' => 0
     }
   
   menu :project_menu, :dmsf, { :controller => 'dmsf', :action => 'show' }, :caption => :menu_dmsf, :before => :documents, :param => :id
@@ -57,19 +58,21 @@ Redmine::Plugin.register :redmine_dmsf do
     permission :user_preferences, 
       {:dmsf_state => [:user_pref_save]}
     permission :view_dmsf_files, 
-      {:dmsf => [:entries_operation, :entries_email], 
+      {:dmsf => [:entries_operation, :entries_email, :download_email_entries, :tag_changed], 
         :dmsf_files => [:show], 
         :dmsf_files_copy => [:new, :create, :move], 
         :dmsf_workflows => [:log]}, 
       :read => true
     permission :folder_manipulation, 
-      {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate]}
+      {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :delete_entries]}
     permission :file_manipulation, 
       {:dmsf_files => [:create_revision, :delete, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate], 
         :dmsf_upload => [:upload_files, :upload_file, :commit_files], 
-        :dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment]}
+        :dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment],
+        :dmsf_links => [:new, :create, :destroy]
+        }
     permission :manage_workflows, 
-      {:dmsf_workflows => [:index, :new, :create, :destroy, :edit, :add_step, :remove_step, :reorder_steps, :update]}
+      {:dmsf_workflows => [:index, :new, :create, :destroy, :show, :add_step, :remove_step, :reorder_steps, :update]}
     permission :force_file_unlock, {}
   end   
   

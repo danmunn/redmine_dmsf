@@ -1,0 +1,88 @@
+<%# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@lbcfree.net>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+
+<% html_title(l(:dmsf)) %>
+
+<div class="contextual">
+</div>
+
+<% if @dmsf_file_id %>
+  <% file = DmsfFile.find_by_id @dmsf_file_id%>
+  <% title = file.title if file %>
+<% end %>
+
+<%= render(:partial => '/dmsf/path', :locals => {:folder => @dmsf_link.folder, :filename => title}) %>
+
+<%= labelled_form_for @dmsf_link do |f| %>
+  <%= error_messages_for @dmsf_link %>
+  <%= f.hidden_field :project_id, :value => @dmsf_link.project_id %>
+  <%= f.hidden_field :dmsf_folder_id, :value => @dmsf_link.dmsf_folder_id if @dmsf_link.dmsf_folder_id %>
+  <%= f.hidden_field :type, :value => @type %>
+  <%= f.hidden_field :dmsf_file_id, :value => @dmsf_file_id %>
+  <div class="box dmsf_detail">    
+    <p>
+      <% if @type == 'link_from' %>
+        <%= label_tag('dmsf_link[target_project_id]', l(:label_source_project), :class => 'required') %>
+      <% else %>
+        <%= label_tag('dmsf_link[target_project_id]', l(:label_target_project), :class => 'required') %>
+      <% end %>
+      <%= select_tag('dmsf_link[target_project_id]',
+         project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy, 
+           :selected => @dmsf_link.target_project)) %>
+    </p>
+    <p>
+      <% if @type == 'link_from' %>
+        <%= label_tag('dmsf_link[target_folder_id]', l(:label_source_folder)) %>
+      <% else %>
+        <%= label_tag('dmsf_link[target_folder_id]', l(:label_target_folder)) %>
+      <% end %>      
+      <%= select_tag('dmsf_link[target_folder_id]',
+        folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
+        :selected => @target_folder_id)) %>             
+    </p>
+    <% if @type == 'link_from' %>
+      <p>     
+        <% if @target_folder_id %>
+          <% folder = DmsfFolder.find_by_id @target_folder_id %>
+          <% files = folder.files.visible if folder %>
+        <% else %>
+          <% files = @dmsf_link.target_project.dmsf_files.visible if @dmsf_link.target_project %>
+        <% end %>
+        <%= f.select(:target_file_id,
+        options_for_select(DmsfFolder.file_list(files), @target_file_id)) %>
+      </p>
+    <% end %>
+    <p>
+      <%= label_tag('dmsf_link[name]', l(:label_link_name), :class => 'required') %>      
+      <%= text_field_tag 'dmsf_link[name]', @dmsf_link.name, :size => 40, :maxlength => 255 %>
+    </p>
+  </div>
+  <%= f.submit l(:button_create) %>
+<% end %>
+
+<script type="text/javascript">  
+  $('#dmsf_link_target_project_id').change(function () {
+    $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id, :reload => true) %>", $('#new_dmsf_link').serialize());
+  });
+  $('#dmsf_link_target_folder_id').change(function () {
+    $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id) %>", $('#new_dmsf_link').serialize());
+  });
+  $('#dmsf_link_target_file_id').change(function () {
+    $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id) %>", $('#new_dmsf_link').serialize());
+  });
+</script> 

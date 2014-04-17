@@ -29,7 +29,6 @@ Available options:
 Example:
   rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
 END_DESC
-require File.expand_path(File.dirname(__FILE__) + "/../../../../config/environment")
 
 class DmsfConvertDocuments
   

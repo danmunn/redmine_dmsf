@@ -1,8 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -38,12 +38,12 @@ class DmsfUpload
   
   def self.create_from_uploaded_file(project, folder, uploaded_file)
     uploaded = {
-      'disk_filename' => DmsfHelper.temp_filename(uploaded_file.original_filename),
-      'content_type' => uploaded_file.content_type.to_s,
-      'original_filename' => uploaded_file.original_filename,
+      :disk_filename => DmsfHelper.temp_filename(uploaded_file.original_filename),
+      :content_type => uploaded_file.content_type.to_s,
+      :original_filename => uploaded_file.original_filename,
     }
     
-    File.open("#{DmsfHelper.temp_dir}/#{uploaded["disk_filename"]}", "wb") do |f| 
+    File.open("#{DmsfHelper.temp_dir}/#{uploaded[:disk_filename]}", 'wb') do |f| 
       while (buffer = uploaded_file.read(8192))
         f.write(buffer)
       end
@@ -52,15 +52,19 @@ class DmsfUpload
   end
   
   def initialize(project, folder, uploaded)
-    @name = uploaded['original_filename']
+    @name = uploaded[:original_filename]
     
-    dmsf_file = DmsfFile.visible.find_file_by_name(project, folder, @name)
+    file = DmsfFile.find_file_by_name(project, folder, @name)
+    unless file
+      link = DmsfLink.find_link_by_file_name(project, folder, @name)
+      file = link.target_file if link
+    end
     
-    @disk_filename = uploaded['disk_filename']
-    @mime_type = uploaded['content_type']
+    @disk_filename = uploaded[:disk_filename]
+    @mime_type = uploaded[:content_type]
     @size = File.size(disk_file)
     
-    if dmsf_file.nil? || dmsf_file.last_revision.nil?
+    if file.nil? || file.last_revision.nil?
       @title = DmsfFileRevision.filename_to_title(@name)
       @description = nil
       @major_version = 0
@@ -68,24 +72,24 @@ class DmsfUpload
       @workflow = nil      
       @custom_values = DmsfFileRevision.new(:file => DmsfFile.new(:project => @project)).custom_field_values
     else
-      last_revision = dmsf_file.last_revision 
+      last_revision = file.last_revision 
       @title = last_revision.title
       @description = last_revision.description
       @major_version = last_revision.major_version
       @minor_version = last_revision.minor_version
       @workflow = last_revision.workflow
-      @custom_values = Array.new(dmsf_file.last_revision.custom_values)    
+      @custom_values = Array.new(file.last_revision.custom_values)    
 
       # Add default value for CFs not existing
-      present_custom_fields = dmsf_file.last_revision.custom_values.collect(&:custom_field).uniq
-      dmsf_file.last_revision.available_custom_fields.each do |cf|
+      present_custom_fields = file.last_revision.custom_values.collect(&:custom_field).uniq
+      file.last_revision.available_custom_fields.each do |cf|
         unless present_custom_fields.include?(cf)
           @custom_values << CustomValue.new({:custom_field => cf, :value => cf.default_value}) if cf.default_value
         end
       end
     end
     
-    @locked = dmsf_file && dmsf_file.locked_for_user?
+    @locked = file && file.locked_for_user?
   end
   
 end

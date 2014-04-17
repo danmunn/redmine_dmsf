@@ -19,6 +19,7 @@ dmsf_file_revisions_001:
   user_id:                          1
   dmsf_workflow_assigned_by:     1
   dmsf_workflow_started_by:      1
+  project_id:                       1
 
 #revision for file on non-enabled project
 dmsf_file_revisions_002:
@@ -41,6 +42,7 @@ dmsf_file_revisions_002:
   user_id:                         1
   dmsf_workflow_assigned_by:     1
   dmsf_workflow_started_by:      1
+  project_id:                       2
 
 #revision for deleted file on dmsf-enabled project
 dmsf_file_revisions_003:
@@ -63,3 +65,4 @@ dmsf_file_revisions_003:
   user_id:                      1
   dmsf_workflow_assigned_by:    1
   dmsf_workflow_started_by:     1
+  project_id:                       1

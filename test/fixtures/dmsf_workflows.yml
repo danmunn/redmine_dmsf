@@ -2,7 +2,7 @@
 wf1:
   id: 1
   name: wf1
-  project_id: 5
+  project_id: 1
 
 wf2:
   id: 2

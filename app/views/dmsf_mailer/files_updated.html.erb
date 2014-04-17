@@ -1,7 +1,8 @@
 <%# Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+# Copyright (C) 2011 Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012 Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2014 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,20 +18,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
-User <%= link_to(h(@user), {:only_path => false, :controller => 'users', :action => 'show', :id => @user }) %>
-actualized DMSF files in project <%= @project.name %>: 
+<%= link_to User.current, user_path(User.current, :only_path => false) %> <%= l(:text_email_doc_updated) %>
+<%= link_to @project, project_path(@project, :only_path => false) %> <%= l(:text_email_doc_follows) %>
 <% @files.each do |file| %>
 <p>
   <%= link_to(h(file.dmsf_path_str),
-    {:only_path => false, :controller => 'dmsf_files', :action => 'show', :id => file,
-    :download => ''}) %> (<%= file.name %>),
+    dmsf_file_path(file, :download => '', :only_path => false)) %> 
+  (<%= file.name %>),
   <%= number_to_human_size(file.last_revision.size) %>,
-  version: <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>,
-  <%= "#{file.last_revision.workflow_str(true)}," if file.last_revision.workflow_str(true).present? %>
-  <%= link_to('Details',
-  {:only_path => false, :controller => 'dmsf_files', :action => 'show', :id => file}) %>
+  <%= l(:label_version) %> <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>,
+  <%= "#{file.last_revision.workflow_str(true)}," if file.last_revision.workflow_str(true) != l(:title_none) %>
+  <%= link_to(l(:link_details, :title => h(file.title)),
+    dmsf_file_path(file, :only_path => false)) %>    
   <% if file.last_revision.comment.present? %>
-    <br /><span style="font-size: 0.9em">&nbsp;&nbsp;&nbsp;&nbsp;<em><%= h(file.last_revision.comment) %></em></span>
+    <br/><span style="font-size: 0.9em">&nbsp;&nbsp;&nbsp;&nbsp;<em><%= h(file.last_revision.comment) %></em></span>
   <% end %>
 </p>
 <% end %>

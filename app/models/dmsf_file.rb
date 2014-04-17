@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,14 +32,16 @@ class DmsfFile < ActiveRecord::Base
  
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
+  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   has_many :revisions, :class_name => 'DmsfFileRevision', :foreign_key => 'dmsf_file_id',
     :order => "#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC", 
     :dependent => :destroy
   has_many :locks, :class_name => 'DmsfLock', :foreign_key => 'entity_id',
     :order => "#{DmsfLock.table_name}.updated_at DESC",
     :conditions => {:entity_type => 0},
-    :dependent => :destroy
-  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+    :dependent => :destroy  
+  has_many :referenced_links, :class_name => 'DmsfLink', :foreign_key => 'target_id', 
+    :conditions => {:target_type => DmsfFile.model_name}, :dependent => :destroy
 
   scope :visible, lambda {|*args| where(DmsfFile.visible_condition(args.shift || User.current, *args)).readonly(false)}
   
@@ -64,14 +67,15 @@ class DmsfFile < ActiveRecord::Base
                 :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o}},
                 :datetime => Proc.new {|o| o.updated_at },
                 :author => Proc.new {|o| o.last_revision.user }
-  
-
-  @@storage_path = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].strip
+    
+  @@storage_path = nil
 
   def self.storage_path
-    if !File.exists?(@@storage_path)
-      Dir.mkdir(@@storage_path)
-    end
+    unless @@storage_path.present?
+      @@storage_path = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].strip      
+      @@storage_path = Rails.root.join('files/dmsf').to_s if @@storage_path.blank?      
+      Dir.mkdir(@@storage_path) unless File.exists?(@@storage_path)    
+    end    
     @@storage_path
   end
 
@@ -81,16 +85,11 @@ class DmsfFile < ActiveRecord::Base
     @@storage_path = obj
   end
   
-  def self.project_root_files(project)
-    visible.where(:project_id => project.id, :dmsf_folder_id => nil).order('name ASC')
-  end
-  
-  def self.find_file_by_name(project, folder, name)
-    if folder
-      visible.where(:project_id => project, :dmsf_folder_id => folder.id, :name => name).first
-    else
-      visible.where(:project_id => project, :dmsf_folder_id => nil, :name => name).first
-    end
+  def self.find_file_by_name(project, folder, name)        
+    where(
+      :project_id => project, 
+      :dmsf_folder_id => folder ? folder.id : nil, 
+      :name => name).visible.first
   end
 
   def last_revision
@@ -99,14 +98,19 @@ class DmsfFile < ActiveRecord::Base
     end
     @last_revision
   end
+  
+  def set_last_revision(new_revision)
+    @last_revision = new_revision
+  end
 
   def delete
     if locked_for_user?
+      Rails.logger.info l(:error_file_is_locked)
       errors[:base] << l(:error_file_is_locked)
       return false 
     end
     begin
-      if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']     
+      if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']             
         self.revisions.visible.each {|r| r.delete(true)}
         self.destroy
       else
@@ -167,11 +171,7 @@ class DmsfFile < ActiveRecord::Base
   def notify_activate
     self.notification = true
     self.save!
-  end
-  
-  def display_name    
-    return self.name    
-  end
+  end    
   
   # Returns an array of projects that current user can copy file to
   def self.allowed_target_projects_on_copy
@@ -190,7 +190,7 @@ class DmsfFile < ActiveRecord::Base
       return false 
     end
     
-    new_revision = self.last_revision.clone
+    new_revision = self.last_revision.clone    
     
     new_revision.folder = folder
     new_revision.project = folder ? folder.project : project
@@ -201,10 +201,10 @@ class DmsfFile < ActiveRecord::Base
       new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
     end        
     
-    # If the target project differs from the source project we must physically move the file
+    # If the target project differs from the source project we must physically copy the file
     if self.project != new_revision.project
       if File.exist? self.last_revision.disk_file
-        FileUtils.mv self.last_revision.disk_file, new_revision.disk_file        
+        FileUtils.cp self.last_revision.disk_file, new_revision.disk_file        
       end
     end
 
@@ -221,9 +221,8 @@ class DmsfFile < ActiveRecord::Base
     file.name = self.name
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
 
-    if file.save
+    if file.save && self.last_revision
       new_revision = self.last_revision.clone
-
       new_revision.file = file
       new_revision.folder = folder
       new_revision.project = folder ? folder.project : project
@@ -374,6 +373,13 @@ class DmsfFile < ActiveRecord::Base
     end
     
     [results, results_count]
+  end
+  
+  def display_name
+    if self.name.length > 50
+      return "#{self.name[0, 25]}...#{self.name[-25, 25]}"
+    end
+    self.name
   end
   
 end

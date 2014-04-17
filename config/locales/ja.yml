@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
 #
+#
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -25,10 +27,8 @@ ja:
   notice_file_locked: ファイルをロックしました
   warning_file_not_locked: ファイルはロックされていません
   notice_file_unlocked: ファイルをロック解除しました
-  error_only_user_that_locked_file_can_unlock_it: ファイルをロックしたユーザだけがロック解除できます
-  question_do_you_really_want_to_delete_this_entry: 本当にこのエントリーを削除しますか？
-  error_max_files_exceeded: "同時にダウンロードできるファイル数の上限 %{number} を超えています"
-  question_do_you_really_want_to_delete_this_revision: 本当にこのリビジョンを削除しますか？
+  error_only_user_that_locked_file_can_unlock_it: ファイルをロックしたユーザだけがロック解除できます  
+  error_max_files_exceeded: "同時にダウンロードできるファイル数の上限 %{number} を超えています"  
   error_entry_project_does_not_match_current_project: 指定したプロジェクトは現在のプロジェクトと一致しません
   notice_folder_created: フォルダを作成しました
   error_folder_creation_failed: フォルダを作成できません
@@ -110,11 +110,9 @@ ja:
   label_created: 作成者/日時
   label_changed: 更新者/日時
   info_changed_by_user: "/ %{changed}"
-  label_filename: ファイル名
-  label_version: バージョン  
+  label_filename: ファイル名  
   label_mime: Mime
-  label_size: サイズ
-  label_comment: コメント
+  label_size: サイズ  
   heading_new_revision: 新しいリビジョン
   option_version_same: 変更なし
   option_version_minor: マイナー
@@ -158,8 +156,7 @@ ja:
   error_user_has_not_right_delete_folder: ユーザにフォルダを削除する権限がありません
   error_user_has_not_right_delete_file: ユーザにファイルを削除する権限がありません
   notice_entries_deleted: エントリーを削除しました
-  warning_some_entries_were_not_deleted: "いくつかのエントリーは削除されませんでした: %{entries}"
-  question_do_you_really_want_to_delete_entries: 本当にチェックしたエントリーを削除しますか？
+  warning_some_entries_were_not_deleted: "いくつかのエントリーは削除されませんでした: %{entries}"  
   title_delete_checked: チェックしたものを削除します
   title_number_of_files_in_directory: フォルダ内のファイル数
   title_filename_for_download: ファイル名はダウンロードまたは Zip アーカイブに使われます
@@ -182,8 +179,8 @@ ja:
   comment_copied_from: "%{source} からコピーしました"
   notice_file_copied: ファイルをコピーしました
   notice_file_moved: ファイルを移動しました
-  label_target_project: ターゲットプロジェクト
-  label_target_folder: ターゲットフォルダ
+  field_target_project: ターゲットプロジェクト
+  field_target_folder: ターゲットフォルダ
   title_copy_or_move: コピー/移動
   label_dmsf_folder_plural: Dmsf フォルダ
   comment_moved_from: "%{source} から移動しました"
@@ -193,9 +190,7 @@ ja:
   warning_no_project_to_copy_folder_to: フォルダをコピーするプロジェクトがありません
   title_copy: コピー
   error_folder_cannot_be_copied: フォルダをコピーできません
-  notice_folder_copied: フォルダをコピーしました
-    
-  # Not translated
+  notice_folder_copied: フォルダをコピーしました   
   
   error_max_email_filesize_exceeded: "You've exceeded the maximum filesize for sending via email. (%{number} MB)"
   note_maximum_email_filesize: "Limits maximum filesize that can be sent via email. 0 means unlimited. Number is in MB."
@@ -212,8 +207,7 @@ ja:
   warning_folder_not_locked: "Unfortunately, the folder could not be locked"
   notice_folder_unlocked: "The folder was successfully unlocked"
   error_only_user_that_locked_folder_can_unlock_it: "You are not authorised to unlock this folder"
-  title_folder_parent_locked: "Parent folder %{name} is locked"
-  title_file_parent_locked: "Parent folder %{name} is locked"
+  title_folder_parent_locked: "Parent folder %{name} is locked"  
   title_unlock_folder: "Unlock to allow changes for other members"
   title_lock_folder: "Lock to prevent changes for other members"
 
@@ -276,6 +270,32 @@ ja:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  label_my_open_approvals: My open approvals
+  label_my_locked_documents: My locked documents
+  
+  title_create_link: Create a symbolic link  
+  label_link_from: Link from
+  label_link_to: Link to
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Source file
+  title_download_entries: Download entries
+  label_link_name: Link name
+  label_target_folder: Target folder
+  label_source_folder: Source folder
+  label_target_project: Target project
+  label_source_project: Source project
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
+  label_links_only: links only
+  
+  label_display_notified_recipients: Display notified recipients
+  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
+  warning_email_notifications: "Email notifications sent to %{to}"
   
   my:
     blocks:

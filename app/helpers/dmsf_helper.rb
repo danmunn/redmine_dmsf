@@ -74,6 +74,6 @@ module DmsfHelper
     # of methods - however seems functional. Not sure if MySQL
     return obj.to_s.to_time(ActiveRecord::Base.default_timezone) if obj.class.name == 'Mysql::Time'
     return obj
-  end
+  end  
   
 end

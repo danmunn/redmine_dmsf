@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
 #
+#
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -25,10 +27,8 @@ es:
   notice_file_locked: Archivo bloqueado
   warning_file_not_locked: Archivo no bloqueado
   notice_file_unlocked: Archivo desbloqueado
-  error_only_user_that_locked_file_can_unlock_it: Solo los usuarios que bloquearon previamente al archivo lo pueden desbloquear
-  question_do_you_really_want_to_delete_this_entry: ¿Está seguro de borrar el ítem seleccionado?
-  error_max_files_exceeded: "Se excedio el numero permitido de archivos bajados de manera simultánea:"
-  question_do_you_really_want_to_delete_this_revision: ¿Está seguro de borrar la revision seleccionada?
+  error_only_user_that_locked_file_can_unlock_it: Solo los usuarios que bloquearon previamente al archivo lo pueden desbloquear  
+  error_max_files_exceeded: "Se excedio el numero permitido de archivos bajados de manera simultánea:"  
   error_entry_project_does_not_match_current_project: Las entradas del proyecto no concuerdan con el proyecto seleccionado
   notice_folder_created: Carpeta creada satisfactoriamente
   error_folder_creation_failed: La creacion de la carpeta ha fallado
@@ -53,9 +53,7 @@ es:
   warning_file_notifications_already_activated: Las notificaciones del archivo seleccionado ya estaban activadas previamente
   notice_file_notifications_activated: Notificación de archivo activado
   warning_file_notifications_already_deactivated: Las notificaciones del archivo seleccionado ya estaban desactivadas previamente
-  notice_file_notifications_deactivated: Notificación de archivo desactivada
-  
-  # Not translated
+  notice_file_notifications_deactivated: Notificación de archivo desactivada  
   link_details: "%{title} details"
   link_edit: "Edit %{title}"
   submit_create: Create
@@ -112,11 +110,9 @@ es:
   label_created: Created
   label_changed: Changed
   info_changed_by_user: "%{changed} by"
-  label_filename: Filename
-  label_version: Version  
+  label_filename: Filename  
   label_mime: Mime
-  label_size: Size
-  label_comment: Comment
+  label_size: Size  
   heading_new_revision: New Revision
   option_version_same: Same
   option_version_minor: Minor
@@ -160,8 +156,7 @@ es:
   error_user_has_not_right_delete_folder: "User hasn't right to delete forders"
   error_user_has_not_right_delete_file: "User hasn't right to delete file"
   notice_entries_deleted: Entries deleted
-  warning_some_entries_were_not_deleted: "Some entries weren't deleted: %{entries}"
-  question_do_you_really_want_to_delete_entries: Do you really want to delete checked entries?
+  warning_some_entries_were_not_deleted: "Some entries weren't deleted: %{entries}"  
   title_delete_checked: Delete checked
   title_number_of_files_in_directory: Number of files in directory
   title_filename_for_download: Filename used for download or in Zip archive
@@ -173,7 +168,7 @@ es:
   warning_xapian_not_available: Xapian not available
   menu_dmsf: DMSF
   label_physical_file_delete: Physical file delete
-  user_is_not_project_member: You are not member of the project
+  user_is_not_project_member: You are not a member of the project
   heading_access_downloads_emails: Downloads/Emails
   heading_access_first: First
   heading_access_last: Last
@@ -184,8 +179,8 @@ es:
   comment_copied_from: "Copied from %{source}"
   notice_file_copied: File copied
   notice_file_moved: File moved
-  label_target_project: Target project
-  label_target_folder: Target folder
+  field_target_project: Target project
+  field_target_folder: Target folder
   title_copy_or_move: Copy/Move
   label_dmsf_folder_plural: Dmsf folders
   comment_moved_from: "Moved from %{source}"
@@ -212,8 +207,7 @@ es:
   warning_folder_not_locked: Unfortunately, the folder could not be locked
   notice_folder_unlocked: The folder was successfully unlocked
   error_only_user_that_locked_folder_can_unlock_it: You are not authorised to unlock this folder
-  title_folder_parent_locked: "Parent folder %{name} is locked"
-  title_file_parent_locked: "Parent folder %{name} is locked"
+  title_folder_parent_locked: "Parent folder %{name} is locked"  
   title_unlock_folder: Unlock to allow changes for other members
   title_lock_folder: Lock to prevent changes for other members
 
@@ -276,12 +270,37 @@ es:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  label_my_open_approvals: My open approvals
+  label_my_locked_documents: My locked documents
+  
+  title_create_link: Create a symbolic link  
+  label_link_from: Link from
+  label_link_to: Link to
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Source file
+  title_download_entries: Download entries
+  label_link_name: Link name
+  label_target_folder: Target folder
+  label_source_folder: Source folder
+  label_target_project: Target project
+  label_source_project: Source project
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
+  label_links_only: links only
+  
+  label_display_notified_recipients: Display notified recipients
+  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
+  warning_email_notifications: "Email notifications sent to %{to}"
   
   my:
     blocks:
       locked_documents: Locked documents
       open_approvals: Open approvals
-      
-          
+                
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.

@@ -1,7 +1,8 @@
 <%# Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,10 +29,13 @@
 
 <%= form_tag({:action => 'entries_email', :id => @project, :folder_id => @folder},
   { :method=>:post, :class => 'tabular'}) do %>
+  <%= hidden_field_tag('email[zipped_content]', @email_params[:zipped_content]) %>
+  <%= hidden_field_tag('email[folders]', @email_params[:folders].to_json) %>
+  <%= hidden_field_tag('email[files]', @email_params[:files].to_json) %>
   <div class="box">
     <p>
       <%= label_tag('', "#{l(:label_email_from)}:") %>
-      <%= h(User.current.mail) %>
+      <i><%= h(Setting.mail_from) %></i>
     </p>
     <p>
       <%= label_tag('email[to]', "#{l(:label_email_to)}:") %>
@@ -47,8 +51,8 @@
     </p>
     <p>
       <%= label_tag('', "#{l(:label_email_documents)}:") %>
-      <strong>Documents.zip</strong>
-      <%= hidden_field_tag('email[zipped_content]', @email_params['zipped_content']) %>
+      <%= link_to 'Documents.zip', download_email_entries_path(:id => @project, :folder_id => @folder, :path => @email_params[:zipped_content]) %>       
+      <%= l(:label_or) %> <%= check_box_tag('email[links_only]') %> <%= l(:label_links_only) %>      
     </p>
     <p>
       <%= label_tag('email[body]', "#{l(:label_email_body)}:") %>
@@ -57,3 +61,5 @@
     <p><%= submit_tag(l(:label_email_send)) %></p>
   </div>
 <% end %>
+
+<%= wikitoolbar_for 'email_body' %>

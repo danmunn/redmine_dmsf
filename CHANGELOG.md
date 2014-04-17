@@ -1,6 +1,34 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.4.8: **
+-----------------------
+
+    Symbolic links
+    Document tagging
+    Localization of email notifications
+    An option to send document links by email
+
+ * New: Issue #19 - Documentation?
+ * Update: Issue #106 - [Feature Request] Save files in folder structure defined via DMSF
+ * Fix: Issue #107 - Problems upgrading redmine 1.3 to 2.23 regarding DMFS
+ * Fix: Issue #111 - Cannot sort files in folders by date, size, etc
+ * Update: Issue #139 - Error 500 on click on "details" icon
+ * New: Issue #183 - Create document links
+ * New: Issue #201 - Download link by email
+ * Fix: Issue #205 - Ampersand shows up in displayed filenames as "&amp;" instead of "&"
+ * Fix: Issue #212 - Incorrect revision information in email notification
+ * Fix: Issue #214 - Required DMSF custom field prevents documents to be saved
+ * Update: Issue #216 - Enhancement : having notification emails translated
+ * Update: Issue #224 - Setup/Upgrade documentation
+ * Fix: Issue #226 - undefined method `custom_fields_tabs' for module `CustomFieldsHelper'
+ * Fix: Issue #233 - Failed Travis builds
+ * Update: Issue #235 - "You are not member of the project" when changing project notification.
+ * New: Issue #236 - Documents tagging
+ * Fix: Issue #240 - Internal server error, redmine 2.5.1-devel.13064, PostgreSQL, dmsf 1.4.8-devel
+ * Fix: Issue #242 - dsmf 1.4.8 minor ... "link form" tab
+ * Fix: Issue #246 - "File storage directory" does not default properly when setting is empty   
+
 1.4.7: *2014-01-02*
 -----------------------
 

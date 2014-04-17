@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@konton.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,18 +27,23 @@ class DmsfFolder < ActiveRecord::Base
   
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
-  has_many :subfolders, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id', :order => "#{DmsfFolder.table_name}.title ASC",
-           :dependent => :destroy
-  has_many :files, :class_name => 'DmsfFile', :foreign_key => 'dmsf_folder_id',
-           :dependent => :destroy
+  has_many :subfolders, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id', 
+    :dependent => :destroy    
+  has_many :files, :class_name => 'DmsfFile', :foreign_key => 'dmsf_folder_id', 
+    :dependent => :destroy
   belongs_to :user
-
+  has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', 
+    :conditions => {:target_type => DmsfFolder.model_name}, :dependent => :destroy
+  has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', 
+    :conditions => {:target_type => DmsfFile.model_name}, :dependent => :destroy  
+  has_many :referenced_links, :class_name => 'DmsfLink', :foreign_key => 'target_id', 
+    :conditions => {:target_type => DmsfFolder.model_name}, :dependent => :destroy
   has_many :locks, :class_name => 'DmsfLock', :foreign_key => 'entity_id',
     :order => "#{DmsfLock.table_name}.updated_at DESC",
     :conditions => {:entity_type => 1},
     :dependent => :destroy
 
-  scope :visible, lambda {|*args| {:conditions => '' }} #For future use, however best to be referenced now
+  scope :visible, lambda {|*args| {:conditions => '' }} #For future use, however best to be referenced now    
 
   acts_as_customizable
     
@@ -66,10 +72,6 @@ class DmsfFolder < ActiveRecord::Base
       folder.subfolders.each {|f| folders.push(f)}
     end
     return true
-  end
-  
-  def self.project_root_folders(project)
-    visible.where(:project_id => project.id, :dmsf_folder_id => nil, ).order('title ASC').all
   end
   
   def self.find_by_title(project, folder, title)    
@@ -126,27 +128,42 @@ class DmsfFolder < ActiveRecord::Base
   
   def self.directory_tree(project, current_folder = nil)
     tree = [[l(:link_documents), nil]]
-    DmsfFolder.visible.project_root_folders(project).each do |folder|
+    project.dmsf_folders.visible.each do |folder|
       unless folder == current_folder
         tree.push(["...#{folder.title}", folder.id])
         directory_subtree(tree, folder, 2, current_folder)
       end
     end
     return tree
-  end     
+  end    
+  
+  def folder_tree
+    tree = [[self.title, self.id]]
+    DmsfFolder.directory_subtree(tree, self, 2, nil)    
+    return tree
+  end    
+  
+  def self.file_list(files)
+    options = Array.new
+    options.push ['', nil]
+    files.each do |f|
+      options.push [f.title, f.id]
+    end
+    options
+  end
     
   def deep_file_count
     file_count = self.files.visible.count
     self.subfolders.visible.each {|subfolder| file_count += subfolder.deep_file_count}
-    file_count
+    file_count + self.file_links.visible.count
   end    
 
   def deep_folder_count
     folder_count = self.subfolders.visible.count
     self.subfolders.visible.each {|subfolder| folder_count += subfolder.deep_folder_count}
-    folder_count
-  end    
-
+    folder_count + self.folder_links.visible.count
+  end
+      
   def deep_size
     size = 0
     self.files.visible.each {|file| size += file.size}
@@ -181,11 +198,19 @@ class DmsfFolder < ActiveRecord::Base
     return new_folder unless new_folder.save
     
     self.files.visible.each do |f|
-      f.copy_to(project, new_folder)
+      f.copy_to project, new_folder
     end
     
-    self.subfolders.each do |s|
-      s.copy_to(project, new_folder)
+    self.subfolders.visible.each do |s|
+      s.copy_to project, new_folder
+    end
+    
+    self.folder_links.visible.each do |l|
+      l.copy_to project, new_folder
+    end
+    
+    self.file_links.visible.each do |l|
+      l.copy_to project, new_folder
     end
     
     return new_folder
@@ -239,7 +264,7 @@ class DmsfFolder < ActiveRecord::Base
   def self.directory_subtree(tree, folder, level, current_folder)
     folder.subfolders.visible.each do |subfolder|
       unless subfolder == current_folder
-        tree.push(["#{"..." * level}#{subfolder.title}", subfolder.id])
+        tree.push(["#{'...' * level}#{subfolder.title}", subfolder.id])
         directory_subtree(tree, subfolder, level + 1, current_folder)
       end
     end

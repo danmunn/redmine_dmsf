@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
 #
+#
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -25,10 +27,8 @@ ru:
   notice_file_locked: Файл заблокирован
   warning_file_not_locked: Файл не заблокирован
   notice_file_unlocked: Файл разблокирован
-  error_only_user_that_locked_file_can_unlock_it: Только пользователь, который заблокировал файл, может его разблокировать
-  question_do_you_really_want_to_delete_this_entry: Вы действительно хотите удалить этот файл?
-  error_max_files_exceeded: "Ограничение для %{number} одновременно загружаемых файлов превышено"
-  question_do_you_really_want_to_delete_this_revision: Вы действительно хотите удалить эту редакцию?
+  error_only_user_that_locked_file_can_unlock_it: Только пользователь, который заблокировал файл, может его разблокировать  
+  error_max_files_exceeded: "Ограничение для %{number} одновременно загружаемых файлов превышено"  
   error_entry_project_does_not_match_current_project: Проект, которому принадлежит файл, не соответсвует текущему проекту
   notice_folder_created: Папка создана
   error_folder_creation_failed: Папку не удалось создать
@@ -110,11 +110,9 @@ ru:
   label_created: Создан
   label_changed: Изменен
   info_changed_by_user: "%{changed} пользователем"
-  label_filename: Имя файла
-  label_version: Версия  
+  label_filename: Имя файла  
   label_mime: MIME-тип
-  label_size: Размер
-  label_comment: Комментарий
+  label_size: Размер  
   heading_new_revision: Новая редакция
   option_version_same: Та же версия
   option_version_minor: Незначительные изменения
@@ -158,8 +156,7 @@ ru:
   error_user_has_not_right_delete_folder: Пользователь не имеет нужных прав для удаления папки
   error_user_has_not_right_delete_file: Пользователь не имеет нужных прав для удаления файла
   notice_entries_deleted: Файлы удалены
-  warning_some_entries_were_not_deleted: "Некоторые файлы не были удалены: %{entries}"
-  question_do_you_really_want_to_delete_entries: Вы действительно хотите удалить выбранные файлы?
+  warning_some_entries_were_not_deleted: "Некоторые файлы не были удалены: %{entries}"  
   title_delete_checked: Удалить выбранные документы
   title_number_of_files_in_directory: Количество файлов в директории
   title_filename_for_download: Имя файла для скачиваемого архива
@@ -182,8 +179,8 @@ ru:
   comment_copied_from: "Скопировано из %{source}"
   notice_file_copied: Файл скопирован
   notice_file_moved: Файл перемещен
-  label_target_project: Целевой проект
-  label_target_folder: Целевая папка
+  field_target_project: Целевой проект
+  field_target_folder: Целевая папка
   title_copy_or_move: Копировать/Переместить
   label_dmsf_folder_plural: DMSF папки
   comment_moved_from: "Перемещен из %{source}"
@@ -210,8 +207,7 @@ ru:
   warning_folder_not_locked: "К сожалению, папка не может быть заблокирована"
   notice_folder_unlocked: "Папка была успешно разблокирована"
   error_only_user_that_locked_folder_can_unlock_it: "Только пользователь, который заблокировал папку, может её разблокировать"
-  title_folder_parent_locked: "Родительская папка %{name} заблокирована"
-  title_file_parent_locked: "Родительская папка %{name} заблокирована"
+  title_folder_parent_locked: "Родительская папка %{name} заблокирована"  
   title_unlock_folder: "Разблокируйте папку, чтобы разрешить изменение её другими участниками"
   title_lock_folder: "Заблокируйте папку, чтобы запретить ёё изменение другими участниками"
 
@@ -219,9 +215,7 @@ ru:
   select_option_webdav_readwrite: "Чтение/Запись"
   label_webdav_strategy: "Стратегия WebDAV"
   note_webdav_strategy: "Позволяет администратору решить в каком режиме предоставить доступ к WebDAV для конечных пользователей (Только для чтения или Чтение+Запись)."
-
-  # Not translated
-
+  
   error_unable_delete_dmsf_workflow: Unable to delete the workflow
   error_empty_note: The note can't be empty
   error_workflow_assign: An error occured while assigning
@@ -276,6 +270,32 @@ ru:
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  label_my_open_approvals: My open approvals
+  label_my_locked_documents: My locked documents
+  
+  title_create_link: Create a symbolic link  
+  label_link_from: Link from
+  label_link_to: Link to
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Source file
+  title_download_entries: Download entries
+  label_link_name: Link name
+  label_target_folder: Target folder
+  label_source_folder: Source folder
+  label_target_project: Target project
+  label_source_project: Source project
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
+  label_links_only: links only
+  
+  label_display_notified_recipients: Display notified recipients
+  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
+  warning_email_notifications: "Email notifications sent to %{to}"
   
   my:
     blocks:

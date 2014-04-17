@@ -18,6 +18,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Load the normal Rails helper
+#require File.expand_path("#{Rails.root}/test/test_helper")
+
+# Use fixtures from redmine
+#ActiveSupport::TestCase.fixture_path = "#{Rails.root}/test/fixtures"
+
 module RedmineDmsf
   module Test
     class UnitTest < ActiveSupport::TestCase
@@ -25,11 +31,13 @@ module RedmineDmsf
       # Allow us to override the fixtures method to implement fixtures for our plugin.
       # Ultimately it allows for better integration without blowing redmine fixtures up,
       # and allowing us to suppliment redmine fixtures if we need to.
-      def self.fixtures(*table_names)
-        dir = File.expand_path( File.dirname(__FILE__) +  '../../../../test/fixtures')
-        table_names.each{|x,i|
-          ActiveRecord::Fixtures.create_fixtures(dir, x) if File.exist?("#{dir}/#{x}.yml")
-        }
+      def self.fixtures(*table_names)        
+        dir = File.expand_path('../../../../test/fixtures', __FILE__)        
+        table_names.each do |x|
+          if File.exist?("#{dir}/#{x}.yml")
+            ActiveRecord::Fixtures.create_fixtures(dir, x)           
+          end
+        end
         super(table_names)
       end
       

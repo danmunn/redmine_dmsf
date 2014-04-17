@@ -1,0 +1,108 @@
+<%#=
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2014 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<% locked_for_user = subfolder.locked_for_user? %>
+<% locked = subfolder.locked? %>    
+
+<td class="check"><%= check_box_tag(name, id, false, 
+  :title => l(:title_check_for_zip_download_or_email)) %></td>
+<td class="title">                
+  <%= link_to(h(title),          
+    dmsf_folder_path(:id => project, :folder_id => subfolder),
+    :class => 'icon icon-folder') %>
+  <% if link %>
+    <div class="filename" title="<%= l(:label_target_folder)%>"><%= link.path %></div>
+  <% else %>
+    <div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.visible.count + subfolder.file_links.visible.count %>]</div>
+  <% end %>
+</td>            
+<td class="size"></td>
+<td class="modified"><%= format_time(subfolder.updated_at) %>                
+  <% if locked_for_user %>
+    <% if subfolder.lock.reverse[0].user %>            
+      <%= link_to('',
+        user_path(subfolder.lock.reverse[0].user),
+        :title => l(:title_locked_by_user, :user => subfolder.lock.reverse[0].user),
+        :class => 'icon icon-dmsf-locked') %>
+    <% else %>            
+      <%= content_tag(:span, '', :title => l(:notice_account_unknown_email), 
+        :class => 'icon icon-dmsf-locked') %>
+    <% end %>
+  <% elsif locked %>          
+    <%= content_tag(:span, '', :title => l(:title_locked_by_you), 
+      :class => 'icon icon-dmsf-lockedbycurrent') %>
+  <% end %>        
+</td>
+<td class="version"></td>
+<td class="workflow"></td>
+<td class="author"><%= h(subfolder.user) %></td>
+<td class="actions">
+  <% if @folder_manipulation_allowed %>          
+    <div class="right_icon_box">
+      <% unless locked %>
+       <%= link_to('',
+          edit_dmsf_path(:id => project, :folder_id => subfolder),
+          :title => l(:link_edit, :title => h(subfolder.title)),
+          :class => 'icon icon-edit') %>
+        <%= link_to('',
+          lock_dmsf_path(:id => project, :folder_id => subfolder),
+          :title => l(:title_lock_file),
+          :class => 'icon icon-dmsf-lock') %>          
+        <% if subfolder.notification %>            
+          <%= link_to('',            
+            notify_deactivate_dmsf_path(:id => project, :folder_id => subfolder),
+            :title => l(:title_notifications_active_deactivate),
+            :class => 'icon icon-notification-on') %>
+        <% else %>            
+          <%= link_to('',
+            notify_activate_dmsf_path(:id => project, :folder_id => subfolder),
+            :title => l(:title_notifications_not_active_activate),
+            :class => 'icon icon-notification-off') %>
+        <% end %>
+        <% if link %>
+          <%= link_to('',            
+            dmsf_link_path(link),
+            :data => {:confirm => l(:text_are_you_sure)},
+            :method => :delete,
+            :title => l(:title_delete),
+            :class => 'icon icon-del') %>                       
+        <% else %>
+          <%= link_to('',
+            delete_dmsf_path(:id => project, :folder_id => @folder, :delete_folder_id => subfolder),
+            :data => {:confirm => l(:text_are_you_sure)},            
+            :title => l(:title_delete),
+            :class => 'icon icon-del') %>             
+        <% end %>    
+      <% else %>       
+        <span class="icon"></span>
+        <% if (!locked_for_user || @force_file_unlock_allowed) && subfolder.unlockable? %>
+          <%= link_to('',
+            unlock_dmsf_path(:id => project, :folder_id => subfolder),
+            :title => l(:title_unlock_file),
+            :class => 'icon icon-dmsf-unlock')%>        
+        <% end %>        
+      <% end %>                                                                                                                                                                   
+    </div>    
+  <% end %>
+</td>
+<td class="hidden">0</td>
+<td class="hidden">0</td>
+<td class="hidden"><%= subfolder.updated_at.to_i %></td>
+<td class="hidden">0</td>
