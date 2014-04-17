@@ -34,7 +34,7 @@ Features
   * Wiki macros for quick content linking
   * Full read/write webdav functionality
   * Optional document content fulltext search
-  * Documents and files symbolic links
+  * Documents and folders symbolic links
   * Document tagging
   * Compatible with redmine 2.5.x
 
