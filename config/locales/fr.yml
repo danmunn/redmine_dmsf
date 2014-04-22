@@ -136,7 +136,7 @@ fr:
   note_stem_some: "Rechercher des stemmes pour tous les mots sauf ceux qui commencent par des majuscules, ceux suivis d'un certain nombre de caractères ou ceux utilisés avec des opérateurs nécessitant des informations contextuelles. Les stemmes doivent être préfixées par 'Z'."
   note_stem_all: "Rechercher toutes les racines de tous les mots (note : le préfix 'Z' ne sera pas ajouté)."
   note_stemming_applied: Il est à noter que l'algorithme de racinisation ne sera appliqué qu'aux mots in probabilistic fields - Les filtres booléans ne seront pas racinisés.
-  label_default_notifications: Les notifications par défaut du document
+  label_default_notifications: Notifications par défaut du document
   heading_uploaded_files: Document(s) transmis
   submit_commit: Appliquer
   link_documents: Documents
@@ -276,10 +276,10 @@ fr:
   title_create_link: Créer un lien symbolique   
   label_link_from: Lien depuis
   label_link_to: Lien vers
-  label_notifications_on: Notifications on
-  label_notifications_off: Notifications off
+  label_notifications_on: Activer les notifications
+  label_notifications_off: Désactiver les notifications
   field_target_file: Fichier source
-  title_download_entries: Download entries
+  title_download_entries: Historique des téléchargements
   label_link_name: Nom du lien
   label_target_folder: Dossier cible
   label_source_folder: Dossier source
