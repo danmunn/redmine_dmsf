@@ -1,8 +1,8 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -72,8 +72,11 @@ RedmineApp::Application.routes.draw do
   get '/dmsf/files/:id/revision/delete', :controller => 'dmsf_files', :action => 'delete_revision', :as => 'delete_revision'
   get '/dmsf/files/:id/download', :controller => 'dmsf_files', :action => 'show', :download => '' # Otherwise will not route nil download param
   get '/dmsf/files/:id/download/:download', :controller => 'dmsf_files', :action => 'show'
-  get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show', :as => 'dmsf_file'
+  get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show', :as => 'dmsf_file'  
   delete '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'delete'
+  
+  # Just to keep backward compatibility with old external direct links
+  get '/dmsf_files/:id', :controller => 'dmsf_files', :action => 'show'
 
   #
   # files_copy controller
