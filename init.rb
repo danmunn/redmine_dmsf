@@ -26,7 +26,7 @@ Redmine::Plugin.register :redmine_dmsf do
   name 'DMSF'
   author 'Vit Jonas / Daniel Munn / Karel Picman'
   description 'Document Management System Features'
-  version '1.4.8 stable'
+  version '1.4.9 devel'
   url 'http://www.redmine.org/plugins/dmsf'
   author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   
@@ -90,10 +90,10 @@ Redmine::Plugin.register :redmine_dmsf do
       return nil if args.length < 1 # require file id
       entry_id = args[0].strip
       entry = DmsfFile.find(entry_id)
-      unless entry.nil? || entry.deleted
+      if entry && !entry.deleted && User.current && User.current.allowed_to?(:view_dmsf_files, entry.project)
         title = args[1] ? args[1] : entry.title
-        revision = args[2] ? args[2] : ''
-        return link_to "#{title}", :controller => 'dmsf_files', :action => 'show', :id => entry, :download => revision, :only_path => false
+        revision = args[2] ? args[2] : ''        
+        return link_to h(title), download_revision_path(entry, revision, :only_path => false)
       end
       nil
     end
@@ -110,9 +110,9 @@ Redmine::Plugin.register :redmine_dmsf do
       else
         entry_id = args[0].strip
         entry = DmsfFolder.find(entry_id)
-        unless entry.nil?
-          title = args[1] ? args[1] : entry.title
-          return link_to "#{title}", :controller => 'dmsf', :action => 'show', :id => entry.project, :folder_id => entry, :only_path => false
+        if entry && User.current && User.current.allowed_to?(:view_dmsf_folders, entry.project)
+          title = args[1] ? args[1] : entry.title          
+          return link_to h(title), dmsf_folder_path(entry.project, :folder_id => entry, :only_path => false)
         end
       end
       nil
@@ -128,9 +128,9 @@ Redmine::Plugin.register :redmine_dmsf do
       return nil if args.length < 1 # require file id
       entry_id = args[0].strip
       entry = DmsfFile.find(entry_id)
-      unless entry.nil? || entry.deleted
-        title = args[1] ? args[1] : entry.title
-        return link_to "#{title}", :controller => 'dmsf_files', :action => 'show', :id => entry, :only_path => false
+      if entry && !entry.deleted && User.current && User.current.allowed_to?(:view_dmsf_files, entry.project)
+        title = args[1] ? args[1] : entry.title        
+        return link_to h(title), dmsf_file_path(entry, :only_path => false)
       end
       nil
     end
