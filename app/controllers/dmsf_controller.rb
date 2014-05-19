@@ -35,6 +35,7 @@ class DmsfController < ApplicationController
   def show
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
+    @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
     
     @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0

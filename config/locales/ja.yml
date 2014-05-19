@@ -147,6 +147,7 @@ ja:
   permission_file_manipulation: ファイルの操作  
   permission_force_file_unlock: ファイルの強制ロック解除
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: ファイル
   field_folder: フォルダ
   error_create_cycle_in_folder_dependency: フォルダの依存関係が循環しています

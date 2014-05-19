@@ -99,12 +99,16 @@
             :title => l(:title_delete),
             :class => 'icon icon-del') %>                       
         <% else %>
-          <%= link_to('',
-            dmsf_file_path(:id => file),
-            :data => {:confirm => l(:text_are_you_sure)},
-            :method => :delete,
-            :title => l(:title_delete),
-            :class => 'icon icon-del') unless locked_for_user %>             
+          <% if @file_delete_allowed %>
+            <%= link_to('',
+              dmsf_file_path(:id => file),
+              :data => {:confirm => l(:text_are_you_sure)},
+              :method => :delete,
+              :title => l(:title_delete),
+              :class => 'icon icon-del') unless locked_for_user %>
+          <% else %>
+            <span class="icon"></span>
+          <% end %>
         <% end %>        
       <% else %>
         <span class="icon"></span>

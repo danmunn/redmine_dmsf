@@ -66,11 +66,12 @@ Redmine::Plugin.register :redmine_dmsf do
     permission :folder_manipulation, 
       {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :delete_entries]}
     permission :file_manipulation, 
-      {:dmsf_files => [:create_revision, :delete, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate], 
+      {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate], 
         :dmsf_upload => [:upload_files, :upload_file, :commit_files], 
         :dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment],
         :dmsf_links => [:new, :create, :destroy]
         }
+    permission :file_delete, {:dmsf_files => [:delete]}
     permission :manage_workflows, 
       {:dmsf_workflows => [:index, :new, :create, :destroy, :show, :add_step, :remove_step, :reorder_steps, :update]}
     permission :force_file_unlock, {}

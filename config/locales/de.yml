@@ -147,6 +147,7 @@ de:
   permission_file_manipulation: Datei manipulation  
   permission_force_file_unlock: Erzwinge Aufhebung der Dateisperre
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: Datei
   field_folder: Ordner
   error_create_cycle_in_folder_dependency: schaffen Zyklus in Abhängigkeit Ordner

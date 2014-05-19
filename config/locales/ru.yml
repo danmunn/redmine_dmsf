@@ -147,6 +147,7 @@ ru:
   permission_file_manipulation: Управление файлами  
   permission_force_file_unlock: Разблокировка любых файлов
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: Файл
   field_folder: Папка
   error_create_cycle_in_folder_dependency: создать циклическую зависимость в папке

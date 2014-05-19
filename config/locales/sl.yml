@@ -147,6 +147,7 @@ sl:
   permission_file_manipulation: Upravljanje z datotekami  
   permission_force_file_unlock: Prisilno odkleni datoteko
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: Datoteka
   field_folder: Pod mapo
   error_create_cycle_in_folder_dependency: naredi ciklično odvisnost med mapami

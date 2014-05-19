@@ -46,7 +46,7 @@
         :class => 'icon icon-link') %>
       <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(:id => @file),
         :title => l(:title_copy), :class => 'icon icon-copy') %>
-      <%= delete_link @file %>
+      <%= delete_link @file if @file_delete_allowed %>
     <% else %>
       <% if (!@file.locked_for_user? || User.current.allowed_to?(:force_file_unlock, @project)) && @file.unlockable? %>
         <%= link_to(l(:button_unlock),
@@ -78,14 +78,12 @@
           <%= link_to('',            
             dmsf_file_path(@file, :download => revision),
             :title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version),
-            :class => 'icon icon-dmsf-rev-download') %>
-          <% if User.current.allowed_to?(:file_manipulation, @project) %>          
-             <%= link_to '',
-              delete_revision_path(revision),
-              :data => {:confirm => l(:text_are_you_sure)},
-              :title => l(:title_delete_revision),
-              :class => 'icon icon-dmsf-rev-delete' %>
-          <% end %>
+            :class => 'icon icon-dmsf-rev-download') %>          
+          <%= link_to '',
+            delete_revision_path(revision),
+            :data => {:confirm => l(:text_are_you_sure)},
+            :title => l(:title_delete_revision),
+            :class => 'icon icon-dmsf-rev-delete' if @file_delete_allowed %>          
         </div>      
         <i><%= l(:info_revision, :rev => revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>

@@ -147,6 +147,7 @@ en:
   permission_file_manipulation: File manipulation  
   permission_force_file_unlock: Force file unlock
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: File
   field_folder: Folder
   error_create_cycle_in_folder_dependency: create cycle in folder dependency

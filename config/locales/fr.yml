@@ -147,6 +147,7 @@ fr:
   permission_file_manipulation: Gestion des documents  
   permission_force_file_unlock: Forcer le déverrouillage du document
   permission_manage_workflows: Gérer les flux de validation
+  permission_file_delete: Delete documents
   label_file: Fichier
   field_folder: Dossier
   error_create_cycle_in_folder_dependency: Crée une dépendance cyclique du dossier

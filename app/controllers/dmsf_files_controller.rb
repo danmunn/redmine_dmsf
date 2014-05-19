@@ -29,15 +29,15 @@ class DmsfFilesController < ApplicationController
   helper :dmsf_workflows
 
   def show
+    @revision = @file.last_revision
+    
     # download is put here to provide more clear and usable links
     if params.has_key?(:download)
       if @file.deleted
         render_404
         return
       end
-      if params[:download].blank?
-        @revision = @file.last_revision
-      else
+      if params[:download].present?        
         @revision = DmsfFileRevision.visible.find(params[:download].to_i)
         if @revision.file != @file
           render_403
@@ -56,9 +56,9 @@ class DmsfFilesController < ApplicationController
         render_404
       end
       return
-    end
+    end   
     
-    @revision = @file.last_revision
+    @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
     
     @revision_pages = Paginator.new @file.revisions.visible.count, params['per_page'] ? params['per_page'].to_i : 25, params['page']
     
@@ -139,6 +139,10 @@ class DmsfFilesController < ApplicationController
   end
 
   def delete
+    unless User.current.allowed_to?(:file_delete, @project)
+      render _403
+      return
+    end
     if @file
       if @file.delete
         flash[:notice] = l(:notice_file_deleted)
@@ -160,6 +164,10 @@ class DmsfFilesController < ApplicationController
   end
 
   def delete_revision
+    unless User.current.allowed_to?(:file_delete, @project)
+      render _403
+      return
+    end
     if @revision && !@revision.deleted
       if @revision.delete
         flash[:notice] = l(:notice_revision_deleted)

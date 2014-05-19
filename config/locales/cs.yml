@@ -147,6 +147,7 @@ cs:
   permission_file_manipulation: Manipulace se soubory  
   permission_force_file_unlock: Vynucené odemknutí souboru
   permission_manage_workflows: Spravovat schvalovací procesy
+  permission_file_delete: Mazat dokumenty
   label_file: Soubor
   field_folder: Složka
   error_create_cycle_in_folder_dependency: vytvořit smyčku v závislostech složky
