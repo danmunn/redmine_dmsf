@@ -297,6 +297,12 @@ cs:
   label_display_notified_recipients: Zobrazit příjemce notifikací
   note_display_notified_recipients: Uživatel bude informován o příjemcích právě odeslané emailové notifikace.
   warning_email_notifications: "Notifikační email poslán na uživatele %{to}"
+  
+  link_trash_bin: Koš
+  title_restore: Obnovit
+  notice_dmsf_file_restored: Document byl úspěšně obnoven
+  notice_dmsf_folder_restored: Adresář byl úspěšně obnoven
+  notice_dmsf_link_restored: Odkaz byl úspěšně obnoven
     
   my:
     blocks:

@@ -144,17 +144,22 @@ class DmsfLinksController < ApplicationController
     end        
   end
   
-  def destroy    
-    begin
-      @dmsf_link.destroy 
+  def destroy        
+    if @dmsf_link.delete
       flash[:notice] = l(:notice_successful_delete)
-    rescue
-      flash[:error] = l(:error_unable_delete_dmsf_workflow)
     end
     
     redirect_to :back
   end
- 
+  
+  def restore
+    if @dmsf_link.restore
+      flash[:notice] = l(:notice_dmsf_link_restored)
+    end
+    
+    redirect_to :back
+  end
+  
   private
   
   def find_link_project

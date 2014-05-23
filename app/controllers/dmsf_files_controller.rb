@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -29,24 +30,16 @@ class DmsfFilesController < ApplicationController
   helper :dmsf_workflows
 
   def show
-    @revision = @file.last_revision
-    
-    # download is put here to provide more clear and usable links
+    # The download is put here to provide more clear and usable links
     if params.has_key?(:download)
-      if @file.deleted
-        render_404
-        return
-      end
-      if params[:download].present?        
-        @revision = DmsfFileRevision.visible.find(params[:download].to_i)
+      if params[:download].blank?
+        @revision = @file.last_revision
+      else
+        @revision = DmsfFileRevision.find(params[:download].to_i)
         if @revision.file != @file
           render_403
           return
-        end
-        if @revision.deleted
-          render_404
-          return
-        end
+        end        
       end
       check_project(@revision.file)
       begin
@@ -56,10 +49,10 @@ class DmsfFilesController < ApplicationController
         render_404
       end
       return
-    end   
+    end
     
-    @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
-    
+    @revision = @file.last_revision    
+    @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)    
     @revision_pages = Paginator.new @file.revisions.visible.count, params['per_page'] ? params['per_page'].to_i : 25, params['page']
     
     render :layout => !request.xhr?
@@ -138,38 +131,37 @@ class DmsfFilesController < ApplicationController
     redirect_to :back
   end
 
-  def delete
-    unless User.current.allowed_to?(:file_delete, @project)
-      render _403
-      return
-    end
+  def delete    
     if @file
-      if @file.delete
+      commit = params[:commit] == 'yes'
+      if @file.delete(commit)
         flash[:notice] = l(:notice_file_deleted)
-        log_activity('deleted')        
-        begin
-          DmsfMailer.get_notify_users(User.current, [@file]).each do |u|
-            DmsfMailer.files_deleted(u, @project, [@file]).deliver
+        if commit
+          log_activity('deleted')
+          begin
+            DmsfMailer.get_notify_users(User.current, [@file]).each do |u|
+              DmsfMailer.files_deleted(u, @project, [@file]).deliver
+            end
+          rescue Exception => e
+            Rails.logger.error "Could not send email notifications: #{e.message}"
           end
-        rescue Exception => e
-          Rails.logger.error "Could not send email notifications: #{e.message}"
         end
       else       
         @file.errors.each do |e, msg| 
           flash[:error] = msg         
         end
-      end
+      end      
     end
-    redirect_to dmsf_folder_path(:id => @project, :folder_id => @file.folder)
+    if commit
+      redirect_to :back
+    else
+      redirect_to dmsf_folder_path(:id => @project, :folder_id => @file.folder)
+    end    
   end
 
-  def delete_revision
-    unless User.current.allowed_to?(:file_delete, @project)
-      render _403
-      return
-    end
-    if @revision && !@revision.deleted
-      if @revision.delete
+  def delete_revision    
+    if @revision # && !@revision.deleted
+      if @revision.delete(true)
         flash[:notice] = l(:notice_revision_deleted)
         log_activity('deleted')
       else        
@@ -224,6 +216,14 @@ class DmsfFilesController < ApplicationController
     end    
     redirect_to :back
   end
+  
+  def restore
+    if @file.restore
+      log_activity('restored')
+      flash[:notice] = l(:notice_dmsf_file_restored)
+    end
+    redirect_to :back
+  end
 
   private
 
@@ -242,8 +242,8 @@ class DmsfFilesController < ApplicationController
       :disposition => 'attachment')
   end
   
-  def find_file
-    @file = DmsfFile.visible.find(params[:id])
+  def find_file    
+    @file = DmsfFile.find params[:id]
     @project = @file.project
   rescue ActiveRecord::RecordNotFound
     render_404

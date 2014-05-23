@@ -1,8 +1,6 @@
 <%#=
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -21,81 +19,10 @@
 %>
 
 <% html_title(l(:dmsf)) %>
-<div class="contextual">
-  <% if @folder_manipulation_allowed %>    
-    <% if @folder.nil? %>      
-      <%= link_to(l(:button_edit), 
-        edit_root_dmsf_path(:id => @project),
-        :title => l(:link_edit, :title => l(:link_documents)), 
-        :class => 'icon icon-edit') %>
-    <% elsif !@locked_for_user %>      
-      <%= link_to(l(:button_edit), 
-        edit_dmsf_path(:id => @project, :folder_id => @folder),
-        :title => l(:link_edit, :title => h(@folder.title)), 
-        :class => 'icon icon-edit') %>
-    <% end %>
-    <% if @folder && (!@locked_for_user || User.current.allowed_to?(:force_file_unlock, @project)) %>
-      <% if @folder.locked? %>
-        <% unless @folder.unlockable? %>
-          <%= link_to(l(:button_unlock),
-            :title => l(:title_folder_parent_locked, :name => @folder.folder.lock.reverse[0].folder.title),
-            :class => 'icon icon-dmsf-unlock') if @folder %>
-        <% else %>
-          <%= link_to(l(:button_unlock),
-            unlock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-            :title => l(:title_unlock_folder),
-           :class => 'icon icon-dmsf-unlock') if @folder %>          
-        <% end %>
-      <% else %>
-        <%= link_to(l(:button_lock),
-          lock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-          :title => l(:title_lock_folder),
-          :class => 'icon icon-dmsf-lock') if @folder %>
-      <% end %>
-    <% end %>
-    <% unless @folder %>         
-      <% if @project.dmsf_notification %>        
-        <%= link_to(l(:label_notifications_off), 
-          notify_deactivate_dmsf_path(:id => @project),
-          :title => l(:title_notifications_active_deactivate), 
-          :class => 'icon icon-notification-on') %>
-      <% else %>        
-        <%= link_to(l(:label_notifications_on),
-          notify_activate_dmsf_path(:id => @project),
-          :title => l(:title_notifications_active_deactivate), 
-          :class => 'icon icon-notification-off') %>
-      <% end %> 
-    <% else %>
-      <% if @folder.notification %>
-          <%= link_to(l(:label_notifications_off),
-            notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
-            :title => l(:title_notifications_active_deactivate),
-            :class => 'icon icon-notification-on') %>
-        <% else %>
-          <%= link_to(l(:label_notifications_on),
-            notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
-            :title => l(:title_notifications_not_active_activate),
-            :class => 'icon icon-notification-off') %>
-        <% end %>    
-    <% end %>    
-    <% if @file_manipulation_allowed %>      
-      <%= link_to(l(:label_link_from), 
-        new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder, :type => 'link_from'),
-        :title => l(:title_create_link), 
-        :class => 'icon icon-link') unless @locked_for_user %>
-    <% end %>    
-    <%= link_to(l(:link_create_folder), 
-      new_dmsf_path(:id => @project, :parent_id => @folder),
-      :title => l(:link_create_folder), 
-      :class => 'icon icon-add') unless @locked_for_user %>
-  <% end %>
-  <%= link_to(l(:link_trash_bin), 
-    trash_dmsf_path(@project),
-    :title => l(:link_trash_bin), 
-    :class => 'icon icon-del') unless @locked_for_user unless @folder %>
+<div class="contextual">  
 </div>
 
-<%= render(:partial => 'path', :locals => {:folder => @folder, :filename => nil}) %>
+<h2><%=  l(:link_trash_bin) %></h2>
 
 <div class="dmsf-header">
   <div class="wiki">
@@ -109,20 +36,11 @@
   :class => 'dmfs_entries', :id => 'entries_form') do %>
   <%= hidden_field_tag('action') %>
   <div class="controls" style="float: left">
-    <%= submit_tag(l(:submit_download), :title => l(:title_download_checked), :name => 'download_entries') %>
-    <%= submit_tag(l(:submit_email), :title => l(:title_send_checked_by_email), :name => 'email_entries') %>
+    <%= submit_tag(l(:submit_download), :title => l(:title_download_checked), :name => 'download_entries') %>    
     <% if @file_manipulation_allowed && @folder_manipulation_allowed && !@locked_for_user %>
       <button type="button" id="entries_delete_button" title="<%= l(:title_delete_checked) %>"><%= l(:button_delete) %></button>
     <% end %>         
-  </div>
-  <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
-  <% unless values.empty? %>
-    <div class="controls" style="float: right">               
-      <%= custom_field_tag_with_label(
-        :dmsf_folder, 
-        CustomValue.new(:custom_field_id => params[:custom_field_id].present? ? params[:custom_field_id] : values.first.custom_field_id, :value => params[:custom_value])) %>
-    </div>  
-  <% end %>    
+  </div> 
   <table class="display entries" id="browser">
     <thead>
       <tr id="root">
@@ -145,7 +63,7 @@
   <tbody>       
   <% @subfolders.each do |subfolder| %>    
     <tr class="dir">
-      <%= render(:partial => 'dir', 
+      <%= render(:partial => 'dir_trash', 
         :locals => { 
           :project => @project, 
           :subfolder => subfolder, 
@@ -157,7 +75,7 @@
   <% end %>  
   <% @dir_links.each do |link| %>    
     <tr class="gray">
-      <%= render(:partial => 'dir', 
+      <%= render(:partial => 'dir_trash', 
         :locals => { 
           :project => link.target_project, 
           :subfolder => link.target_folder, 
@@ -173,7 +91,7 @@
       <% next %>
     <% end %>         
     <tr class="file">
-      <%= render(:partial => 'file', :locals => { 
+      <%= render(:partial => 'file_trash', :locals => { 
           :project => @project, 
           :file => file, 
           :link => nil,
@@ -188,7 +106,7 @@
       <% next %>
     <% end %>         
     <tr class="gray">
-      <%= render(:partial => 'file', :locals => { 
+      <%= render(:partial => 'file_trash', :locals => { 
           :project => link.target_project, 
           :file => link.target_file, 
           :link => link,
@@ -227,8 +145,7 @@
   end    
 %>
 
-<% content_for :header_tags do %>    
-  <%= stylesheet_link_tag 'plupload/jquery.ui.plupload.css', :plugin => 'redmine_dmsf' %>
+<% content_for :header_tags do %>      
   <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag 'jquery-1.6.1.min.js', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag 'jquery-ui-1.8.13.min.js', :plugin => 'redmine_dmsf' %>
@@ -260,22 +177,9 @@
         }
       });
 
-      $('[data-downloadurl]').each(function() {
-        var url = this.getAttribute('data-downloadurl');
-        if (this.addEventListener) {
-          this.addEventListener('dragstart', function(e) {
-            if (e.dataTransfer) {
-              e.dataTransfer.setData('DownloadURL', url);
-            }
-          },false);
-        }
-      });
-
       $('#entries_form').submit(function () {
           $(this).removeAttr('data-submitted');
       });
     });   
   </script>
 <% end %>
-
-<%= render(:partial => 'multi_upload') if (@file_manipulation_allowed && !@locked_for_user) %>

@@ -21,10 +21,14 @@ class DmsfLink < ActiveRecord::Base
     
   belongs_to :project
   belongs_to :dmsf_folder
+  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+  
   validates :name, :presence => true
   validates :target_id, :presence => true
   validates_length_of :name, :maximum => 255    
+  
   scope :visible, where('NOT deleted')
+  scope :deleted, where('NOT NOT deleted')
   
   def target_folder_id
     if self.target_type == DmsfFolder.model_name
@@ -95,6 +99,22 @@ class DmsfLink < ActiveRecord::Base
       :dmsf_folder_id => folder ? folder.id : nil)
     link.save
     link
+  end
+  
+  def delete(commit = false)
+    if commit
+      self.destroy
+    else
+      self.deleted = true
+      self.deleted_by_user = User.current
+      save
+    end
+  end
+  
+  def restore
+    self.deleted = false
+    self.deleted_by_user = nil
+    save
   end
    
 end

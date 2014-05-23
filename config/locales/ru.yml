@@ -298,6 +298,12 @@ ru:
   note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
   warning_email_notifications: "Email notifications sent to %{to}"
   
+  link_trash_bin: Trash bin
+  title_restore: Restore
+  notice_dmsf_file_restored: The document has been successfully restored
+  notice_dmsf_folder_restored: The folder has been successfully restored
+  notice_dmsf_link_restored: The link has been successfully restored
+  
   my:
     blocks:
       locked_documents: Locked documents

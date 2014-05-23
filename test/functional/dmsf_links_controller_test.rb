@@ -292,7 +292,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
   end
   
   def test_destroy      
-    assert_difference 'DmsfLink.count', -1 do
+    assert_difference 'DmsfLink.visible.count', -1 do
       delete :destroy, :project_id => @project1.id, :id => @file_link.id
     end
     assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)

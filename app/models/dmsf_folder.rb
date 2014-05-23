@@ -27,11 +27,13 @@ class DmsfFolder < ActiveRecord::Base
   
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
+  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+  belongs_to :user
+  
   has_many :subfolders, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id', 
     :dependent => :destroy    
   has_many :files, :class_name => 'DmsfFile', :foreign_key => 'dmsf_folder_id', 
-    :dependent => :destroy
-  belongs_to :user
+    :dependent => :destroy  
   has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', 
     :conditions => {:target_type => DmsfFolder.model_name}, :dependent => :destroy
   has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', 
@@ -42,8 +44,9 @@ class DmsfFolder < ActiveRecord::Base
     :order => "#{DmsfLock.table_name}.updated_at DESC",
     :conditions => {:entity_type => 1},
     :dependent => :destroy
-
-  scope :visible, lambda {|*args| {:conditions => '' }} #For future use, however best to be referenced now    
+  
+  scope :visible, where('NOT deleted')
+  scope :deleted, where('NOT NOT deleted')
 
   acts_as_customizable
     
@@ -89,8 +92,16 @@ class DmsfFolder < ActiveRecord::Base
     elsif !self.subfolders.visible.empty? || !self.files.visible.empty?
       errors[:base] << l(:error_folder_is_not_empty)
       return false
-    end
-    destroy
+    end    
+    self.deleted = true
+    self.deleted_by_user = User.current
+    self.save
+  end
+  
+  def restore
+    self.deleted = false
+    self.deleted_by_user = nil
+    self.save
   end
   
   def dmsf_path
@@ -271,4 +282,3 @@ class DmsfFolder < ActiveRecord::Base
   end
   
 end
-

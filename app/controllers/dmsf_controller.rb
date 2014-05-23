@@ -110,6 +110,16 @@ class DmsfController < ApplicationController
     @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].present? ? Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'] : 100
   end
   
+  def trash
+    @folder_manipulation_allowed = User.current.allowed_to? :folder_manipulation, @project
+    @file_manipulation_allowed = User.current.allowed_to? :file_manipulation, @project
+    @file_delete_allowed = User.current.allowed_to? :file_delete, @project
+    @subfolders = @project.dmsf_folders.deleted
+    @files = @project.dmsf_files.deleted
+    @dir_links = @project.folder_links.deleted
+    @file_links = @project.file_links.deleted             
+  end
+  
   def download_email_entries
     send_file(        
         params[:path],
@@ -318,18 +328,20 @@ class DmsfController < ApplicationController
     end
   end
 
-  def delete    
-    @delete_folder = DmsfFolder.visible.find(params[:delete_folder_id])
-    if @delete_folder
-      if @delete_folder.delete
-        flash[:notice] = l(:notice_folder_deleted)
-      else
-        flash[:error] = @delete_folder.errors[:base][0]
-      end
+  def delete        
+    if @folder.delete
+      flash[:notice] = l(:notice_folder_deleted)
+    else
+      flash[:error] = folder.errors[:base][0]
     end    
-    redirect_to dmsf_folder_path(:id => @project, :folder_id => @delete_folder.dmsf_folder_id)
-  rescue DmsfAccessError
-    render_403  
+    redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)  
+  end
+  
+  def restore
+    if @folder.restore    
+      flash[:notice] = l(:notice_dmsf_folder_restored)
+    end
+    redirect_to :back
   end
 
   def edit_root
@@ -493,13 +505,13 @@ class DmsfController < ApplicationController
   end
   
   def find_folder
-    @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?('folder_id')    
+    @folder = DmsfFolder.find params[:folder_id] if params[:folder_id].present?
   rescue DmsfAccessError
     render_403
   end
 
   def find_parent
-    @parent = DmsfFolder.visible.find(params[:parent_id]) if params.keys.include?('parent_id')    
+    @parent = DmsfFolder.visible.find params[:parent_id] if params[:parent_id].present?
   rescue DmsfAccessError
     render_403
   end

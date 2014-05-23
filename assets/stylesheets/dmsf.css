@@ -292,6 +292,7 @@ table.list td.step {
 .icon-dmsf-rev-download { background-image: url(../images/rev_download.png); }
 .icon-dmsf-rev-downloads { background-image: url(../images/rev_downloads.png); }
 .icon-dmsf-rev-delete { background-image: url(../images/rev_delete.png); }
+.icon-dmsf-restore { background-image: url(../images/restore.png); }
 
 .icon-edit-gray { background-image: url(../images/edit_gray.png); }
 .icon-notification-on-gray { background-image: url(../images/notify_gray.png); }
