@@ -85,20 +85,26 @@ class DmsfFolder < ActiveRecord::Base
     end    
   end
   
-  def delete
+  def delete(commit)
     if self.locked?
       errors[:base] << l(:error_folder_is_locked)
       return false
     elsif !self.subfolders.visible.empty? || !self.files.visible.empty?
       errors[:base] << l(:error_folder_is_not_empty)
       return false
-    end    
-    self.deleted = true
-    self.deleted_by_user = User.current
-    self.save
+    end   
+    self.referenced_links.each { |l| l.delete(commit) }
+    if commit
+      self.destroy
+    else
+      self.deleted = true
+      self.deleted_by_user = User.current
+      self.save
+    end
   end
   
   def restore
+    self.referenced_links.each { |l| l.restore }
     self.deleted = false
     self.deleted_by_user = nil
     self.save

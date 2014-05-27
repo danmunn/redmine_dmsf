@@ -114,10 +114,10 @@ class DmsfController < ApplicationController
     @folder_manipulation_allowed = User.current.allowed_to? :folder_manipulation, @project
     @file_manipulation_allowed = User.current.allowed_to? :file_manipulation, @project
     @file_delete_allowed = User.current.allowed_to? :file_delete, @project
-    @subfolders = @project.dmsf_folders.deleted
-    @files = @project.dmsf_files.deleted
-    @dir_links = @project.folder_links.deleted
-    @file_links = @project.file_links.deleted             
+    @subfolders = DmsfFolder.deleted.where(:project_id => @project.id)
+    @files = DmsfFile.deleted.where(:project_id => @project.id)
+    @dir_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFolder.model_name)
+    @file_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFile.model_name)
   end
   
   def download_email_entries
@@ -329,12 +329,17 @@ class DmsfController < ApplicationController
   end
 
   def delete        
-    if @folder.delete
+    commit = params[:commit] == 'yes'
+    if @folder.delete(commit)
       flash[:notice] = l(:notice_folder_deleted)
     else
       flash[:error] = folder.errors[:base][0]
-    end    
-    redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)  
+    end
+    if commit
+      redirect_to :back
+    else
+      redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder.folder)  
+    end
   end
   
   def restore
