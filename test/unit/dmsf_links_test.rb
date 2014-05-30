@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2014 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -138,10 +138,8 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_path
-    assert_equal @file_link.path,
-      @file_link.target_file.dmsf_path_str
-    assert_equal @folder_link.path,
-      @folder_link.target_folder.dmsf_path_str
+    assert_equal 'folder1/folder2/test.txt', @file_link.path
+    assert_equal 'folder1', @folder_link.path
   end
   
   def test_copy_to
@@ -166,9 +164,32 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     assert_equal folder_link_copy.dmsf_folder_id, @folder2.id    
   end
   
-  def test_destroy      
-    @folder_link.destroy
-    assert_nil DmsfLink.find_by_id 1
+  def test_delete_restore         
+    # File link
+    @file_link.delete false
+    assert_nil DmsfLink.visible.where(:id => @file_link.id).first
+    assert DmsfLink.deleted.where(:id => @file_link.id).first        
+    @file_link.restore
+    assert_nil DmsfLink.deleted.where(:id => @file_link.id).first
+    assert DmsfLink.visible.where(:id => @file_link.id).first        
+    
+    # Folder link
+    @folder_link.delete false
+    assert_nil DmsfLink.visible.where(:id => @folder_link.id).first
+    assert DmsfLink.deleted.where(:id => @folder_link.id).first        
+    @folder_link.restore
+    assert_nil DmsfLink.deleted.where(:id => @folder_link.id).first
+    assert DmsfLink.visible.where(:id => @folder_link.id).first        
+  end    
+  
+  def test_destroy   
+    # File link
+    @file_link.delete true
+    assert_nil DmsfLink.find_by_id @file_link.id
+    
+    # Folder link
+    @folder_link.delete true
+    assert_nil DmsfLink.find_by_id @folder_link.id
   end
-   
+  
 end

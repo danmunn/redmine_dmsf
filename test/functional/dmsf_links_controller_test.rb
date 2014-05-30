@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2014 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -296,5 +296,20 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       delete :destroy, :project_id => @project1.id, :id => @file_link.id
     end
     assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
+  end
+  
+  def test_restore
+    #User.current = @user_admin
+    @request.env['HTTP_REFERER'] = trash_dmsf_path(:id => @project1.id)
+    
+    # Missing permissions
+    @role_manager.remove_permission! :file_manipulation
+    get :restore, :project_id => @project1.id, :id => @file_link.id
+    assert_response :forbidden
+    
+    # Permissions OK
+    @role_manager.add_permission! :file_manipulation
+    get :restore, :project_id => @project1.id, :id => @file_link.id
+    assert_response :redirect
   end
 end

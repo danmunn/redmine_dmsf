@@ -333,7 +333,7 @@ class DmsfController < ApplicationController
     if @folder.delete(commit)
       flash[:notice] = l(:notice_folder_deleted)
     else
-      flash[:error] = folder.errors[:base][0]
+      flash[:error] = @folder.errors[:base][0]
     end
     if commit
       redirect_to :back

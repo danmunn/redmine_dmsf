@@ -12,6 +12,19 @@ folder_link:
   created_at: <%= DateTime.now() %>
   updated_at: <%= DateTime.now() %>
 
+folder_link2:
+  id: 3
+  target_project_id: 2
+  target_id: 4
+  target_type: DmsfFolder
+  name: folder4_link
+  project_id: 2
+  dmsf_folder_id: NULL
+  deleted: 0
+  deleted_by_user_id: NULL
+  created_at: <%= DateTime.now() %>
+  updated_at: <%= DateTime.now() %>
+
 file_link:
   id: 2
   target_project_id: 1

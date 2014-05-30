@@ -20,7 +20,7 @@ class DmsfLinksController < ApplicationController
   unloadable
     
   model_object DmsfLink
-  before_filter :find_model_object, :only => [:destroy]
+  before_filter :find_model_object, :only => [:destroy, :restore]
   before_filter :find_link_project
   before_filter :authorize  
 

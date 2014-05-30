@@ -69,7 +69,7 @@ Redmine::Plugin.register :redmine_dmsf do
       {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate, :restore], 
         :dmsf_upload => [:upload_files, :upload_file, :commit_files], 
         :dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment],
-        :dmsf_links => [:new, :create, :destroy]
+        :dmsf_links => [:new, :create, :destroy, :restore]
         }
     permission :file_delete, { :dmsf => [:trash], :dmsf_files => [:delete]}
     permission :manage_workflows, 

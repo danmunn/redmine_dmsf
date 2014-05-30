@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,14 +17,37 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require File.expand_path('../../test_helper.rb', __FILE__)
+require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   fixtures :projects, :users, :dmsf_folders, :dmsf_files, :dmsf_file_revisions,
-           :roles, :members, :member_roles, :enabled_modules, :enumerations
-
-  def test_folder_creating
-    assert_not_nil(dmsf_folders(:dmsf_folders_001))
+           :roles, :members, :member_roles, :dmsf_locks, :dmsf_links
+         
+  def setup    
+    @folder4 = DmsfFolder.find_by_id 4
+  end
+  
+  def test_truth
+    assert_kind_of DmsfFolder, @folder4
+  end
+    
+  def test_delete_restore         
+    assert_equal 1, @folder4.referenced_links.visible.count
+    @folder4.delete false
+    assert_nil DmsfFolder.visible.where(:id => @folder4.id).first
+    assert DmsfFolder.deleted.where(:id => @folder4.id).first    
+    assert_equal 0, @folder4.referenced_links.visible.count
+    @folder4.restore
+    assert_nil DmsfFolder.deleted.where(:id => @folder4.id).first
+    assert DmsfFolder.visible.where(:id => @folder4.id).first    
+    assert_equal 1, @folder4.referenced_links.visible.count
+  end
+  
+  def test_destroy
+    assert_equal 1, @folder4.referenced_links.visible.count
+    @folder4.delete true
+    assert_nil DmsfFolder.find_by_id(@folder4.id)        
+    assert_equal 0, DmsfLink.where(:target_id => @folder4.id, :target_type => DmsfFolder.model_name).count
   end
   
 end

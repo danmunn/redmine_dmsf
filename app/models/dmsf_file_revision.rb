@@ -30,6 +30,7 @@ class DmsfFileRevision < ActiveRecord::Base
 
   # Returns a list of revisions that are not deleted here, or deleted at parent level either  
   scope :visible, where('NOT deleted')
+  scope :deleted, where('NOT NOT deleted')
 
   acts_as_customizable
   acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.file.dmsf_path_str}"},

@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,7 +19,7 @@
 
 require File.expand_path('../../test_helper.rb', __FILE__)
 
-class DmsfFileTest < RedmineDmsf::Test::UnitTest
+class DmsfLockTest < RedmineDmsf::Test::UnitTest
   attr_reader :lock
   fixtures :projects, :users, :dmsf_folders, :dmsf_files, :dmsf_file_revisions,
            :roles, :members, :member_roles, :enabled_modules, :enumerations,
