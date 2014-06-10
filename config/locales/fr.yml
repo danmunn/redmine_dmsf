@@ -147,7 +147,7 @@ fr:
   permission_file_manipulation: Gestion des documents  
   permission_force_file_unlock: Forcer le déverrouillage du document
   permission_manage_workflows: Gérer les flux de validation
-  permission_file_delete: Delete documents
+  permission_file_delete: Supprimer les documents
   label_file: Fichier
   field_folder: Dossier
   error_create_cycle_in_folder_dependency: Crée une dépendance cyclique du dossier
@@ -298,11 +298,11 @@ fr:
   note_display_notified_recipients: "L'utilisateur sera informé de tous les destinataires à qui un email de notifcation a été envoyé"
   warning_email_notifications: "Email de notification envoyé à %{to}"
   
-  link_trash_bin: Trash bin
-  title_restore: Restore
-  notice_dmsf_file_restored: The document has been successfully restored
-  notice_dmsf_folder_restored: The folder has been successfully restored
-  notice_dmsf_link_restored: The link has been successfully restored
+  link_trash_bin: Corbeille
+  title_restore: Récupérer
+  notice_dmsf_file_restored: Le document a été récupéré avec succès
+  notice_dmsf_folder_restored: Le dossier a été récupéré avec succès
+  notice_dmsf_link_restored: Le lien a été récupéré avec succès
 
   my:
     blocks:
