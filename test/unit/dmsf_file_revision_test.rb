@@ -33,7 +33,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   
   def test_delete_restore             
     @revision5.delete false
-    assert_nil DmsfFileRevision.visible.where(:id => @revision5.id).first
+    assert_nil DmsfFileRevision.visible.where(:id => @revision5.id).first, @revision5.errors[:base][0]
     assert DmsfFileRevision.deleted.where(:id => @revision5.id).first        
     @revision5.restore
     assert_nil DmsfFileRevision.deleted.where(:id => @revision5.id).first

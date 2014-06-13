@@ -74,10 +74,8 @@ ru:
   title_waiting_for_approval: Ожидается на утверждение
   title_approved: Утверждено
   title_unlock_file: Разблокируйте файл, чтобы разрешить изменение его другими участниками
-  title_lock_file: Заблокируйте файл, чтобы запретить его изменение другими участниками
-  submit_download: Скачать
-  title_download_checked: Скачать выбранные файлы
-  submit_email: Отправить письмо
+  title_lock_file: Заблокируйте файл, чтобы запретить его изменение другими участниками  
+  title_download_checked: Скачать выбранные файлы  
   title_send_checked_by_email: Отправить выбранные файлы по электронной почте
   link_user_preferences: Ваши настройки DMSF проекта
   heading_send_documents_by_email: Отправить документы по электронной почте
@@ -303,6 +301,8 @@ ru:
   notice_dmsf_file_restored: The document has been successfully restored
   notice_dmsf_folder_restored: The folder has been successfully restored
   notice_dmsf_link_restored: The link has been successfully restored
+  title_restore_checked: Restore checked
+  error_parent_folder: "The parent folder doesn't exist"
   
   my:
     blocks:

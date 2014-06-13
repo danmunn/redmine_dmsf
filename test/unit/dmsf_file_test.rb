@@ -89,7 +89,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     
     # Delete
     @file4.delete false
-    assert_nil DmsfFile.visible.where(:id => @file4.id).first
+    assert_nil DmsfFile.visible.where(:id => @file4.id).first, @file4.errors[:base][0]
     assert DmsfFile.deleted.where(:id => @file4.id).first    
     assert_equal 0, @file4.revisions.visible.count
     assert_equal 0, @file4.referenced_links.visible.count

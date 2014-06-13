@@ -109,11 +109,9 @@
   :class => 'dmfs_entries', :id => 'entries_form') do %>
   <%= hidden_field_tag('action') %>
   <div class="controls" style="float: left">
-    <%= submit_tag(l(:submit_download), :title => l(:title_download_checked), :name => 'download_entries') %>
-    <%= submit_tag(l(:submit_email), :title => l(:title_send_checked_by_email), :name => 'email_entries') %>
-    <% if @file_manipulation_allowed && @folder_manipulation_allowed && !@locked_for_user %>
-      <button type="button" id="entries_delete_button" title="<%= l(:title_delete_checked) %>"><%= l(:button_delete) %></button>
-    <% end %>         
+    <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries') %>
+    <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries') %>
+    <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries') %>
   </div>
   <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
   <% unless values.empty? %>

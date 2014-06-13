@@ -34,7 +34,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   def test_delete_restore         
     assert_equal 1, @folder4.referenced_links.visible.count
     @folder4.delete false
-    assert_nil DmsfFolder.visible.where(:id => @folder4.id).first
+    assert_nil DmsfFolder.visible.where(:id => @folder4.id).first, @folder4.errors[:base][0]
     assert DmsfFolder.deleted.where(:id => @folder4.id).first    
     assert_equal 0, @folder4.referenced_links.visible.count
     @folder4.restore

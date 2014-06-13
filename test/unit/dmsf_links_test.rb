@@ -167,7 +167,7 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
   def test_delete_restore         
     # File link
     @file_link.delete false
-    assert_nil DmsfLink.visible.where(:id => @file_link.id).first
+    assert_nil DmsfLink.visible.where(:id => @file_link.id).first, @file_link.errors[:base][0]
     assert DmsfLink.deleted.where(:id => @file_link.id).first        
     @file_link.restore
     assert_nil DmsfLink.deleted.where(:id => @file_link.id).first

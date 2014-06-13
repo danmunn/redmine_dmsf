@@ -74,10 +74,8 @@ ja:
   title_waiting_for_approval: 承認待ち
   title_approved: 承認済み
   title_unlock_file: ロック解除して他のメンバーの変更を許可します
-  title_lock_file: ロックして他のメンバーの変更を禁止します
-  submit_download: ダウンロード
-  title_download_checked: チェックしたものを Zip アーカイブでダウンロードします
-  submit_email: 電子メール
+  title_lock_file: ロックして他のメンバーの変更を禁止します  
+  title_download_checked: チェックしたものを Zip アーカイブでダウンロードします  
   title_send_checked_by_email: チェックしたものを電子メールで送信します
   link_user_preferences: あなたの DMSF プロジェクト設定
   heading_send_documents_by_email: 電子メールによる文書の送信
@@ -303,6 +301,8 @@ ja:
   notice_dmsf_file_restored: The document has been successfully restored
   notice_dmsf_folder_restored: The folder has been successfully restored
   notice_dmsf_link_restored: The link has been successfully restored
+  title_restore_checked: Restore checked
+  error_parent_folder: "The parent folder doesn't exist"
   
   my:
     blocks:

@@ -74,10 +74,8 @@ sl:
   title_waiting_for_approval: V postopku odobritve
   title_approved: Odobreno
   title_unlock_file: Odkleni drugim članom za posodabljanje
-  title_lock_file: Zakleni za posodabljanje
-  submit_download: Prenesi dol
-  title_download_checked: Prenesi izbrano v Zip formatu
-  submit_email: Pripni v email
+  title_lock_file: Zakleni za posodabljanje  
+  title_download_checked: Prenesi izbrano v Zip formatu  
   title_send_checked_by_email: Pošlji izbrano po elektronski pošti
   link_user_preferences: Vaše Arhivske nastavitve za projekt
   heading_send_documents_by_email: Pošlji dokumente po elektronski pošti
@@ -303,6 +301,8 @@ sl:
   notice_dmsf_file_restored: The document has been successfully restored
   notice_dmsf_folder_restored: The folder has been successfully restored
   notice_dmsf_link_restored: The link has been successfully restored
+  title_restore_checked: Restore checked
+  error_parent_folder: "The parent folder doesn't exist"
   
   my:
     blocks:

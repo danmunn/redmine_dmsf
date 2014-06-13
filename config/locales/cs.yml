@@ -74,10 +74,8 @@ cs:
   title_waiting_for_approval: Čeká na schválení
   title_approved: Schváleno
   title_unlock_file: Odemknout a umožnit změny ostatním uživatelům
-  title_lock_file: Zamknout a zabránit změnám ostatních uživatelů
-  submit_download: Stáhnout
-  title_download_checked: Stáhnout vybrané jako Zip
-  submit_email: Email
+  title_lock_file: Zamknout a zabránit změnám ostatních uživatelů  
+  title_download_checked: Stáhnout vybrané jako Zip  
   title_send_checked_by_email: Zaslat vybrané emailem
   link_user_preferences: Vaše nastavení
   heading_send_documents_by_email: Odeslat dokumenty emailem
@@ -303,6 +301,8 @@ cs:
   notice_dmsf_file_restored: Document byl úspěšně obnoven
   notice_dmsf_folder_restored: Adresář byl úspěšně obnoven
   notice_dmsf_link_restored: Odkaz byl úspěšně obnoven
+  title_restore_checked: Obnov vybrané
+  error_parent_folder: Nadřazený adresář neexistuje
     
   my:
     blocks:

@@ -104,6 +104,10 @@ class DmsfFolder < ActiveRecord::Base
   end
   
   def restore
+    if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted)
+      errors[:base] << l(:error_parent_folder)
+      return false
+    end
     self.referenced_links.each { |l| l.restore }
     self.deleted = false
     self.deleted_by_user = nil

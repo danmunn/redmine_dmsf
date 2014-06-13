@@ -132,10 +132,10 @@ class DmsfController < ApplicationController
 
   def entries_operation    
     # Download/Email
-    selected_folders = params[:subfolders].present? ? params[:subfolders] : []
-    selected_files = params[:files].present? ? params[:files] : []
-    selected_dir_links = params[:dir_links]
-    selected_file_links = params[:file_links]
+    selected_folders = params[:subfolders] || []
+    selected_files = params[:files] || []
+    selected_dir_links = params[:dir_links] || []
+    selected_file_links = params[:file_links] || []
     
     if selected_folders.blank? && selected_files.blank? && 
       selected_dir_links.blank? && selected_file_links.blank?
@@ -147,19 +147,28 @@ class DmsfController < ApplicationController
     if selected_dir_links.present?
       selected_dir_links.each do |id|
         link = DmsfLink.find_by_id id
-        selected_folders << link.target_id if link
+        selected_folders << link.target_id if link && !selected_folders.include?(link.target_id.to_s)
       end
     end
     
     if selected_file_links.present?
       selected_file_links.each do |id|
         link = DmsfLink.find_by_id id
-        selected_files << link.target_id if link
+        selected_files << link.target_id if link && !selected_files.include?(link.target_id.to_s)
       end
     end
     
     if params[:email_entries].present?
       email_entries(selected_folders, selected_files)
+    elsif params[:restore_entries].present?
+      restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links)
+      redirect_to :back
+    elsif params[:delete_entries].present?
+      delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, false)
+      redirect_to :back
+    elsif params[:destroy_entries].present?
+      delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, true)
+      redirect_to :back
     else
       download_entries(selected_folders, selected_files)
     end
@@ -200,94 +209,6 @@ class DmsfController < ApplicationController
     
     redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
   end 
-
-  def delete_entries
-    selected_folders = params[:subfolders]
-    selected_files = params[:files]
-    selected_dir_links = params[:dir_links]
-    selected_file_links = params[:file_links]
-    if selected_folders.blank? && selected_files.blank? && 
-      selected_dir_links.blank? && selected_file_links.blank?
-      flash[:warning] = l(:warning_no_entries_selected)
-    else
-      failed_entries = []            
-                  
-      if User.current.allowed_to?(:folder_manipulation, @project)
-        # Folders
-        if selected_folders.present?        
-          selected_folders.each do |subfolderid|
-            subfolder = DmsfFolder.visible.find_by_id subfolderid
-            next unless subfolder
-            if subfolder.project != @project || !subfolder.delete
-              failed_entries.push(subfolder)      
-            end
-          end        
-        end
-        # Folder links
-        if selected_dir_links.present?        
-          selected_dir_links.each do |dir_link_id|
-            link_folder = DmsfLink.visible.find_by_id dir_link_id
-            next unless link_folder
-            if link_folder.project != @project || !link_folder.delete
-              failed_entries.push(link_folder)      
-            end
-          end        
-        end
-      else
-        flash[:error] = l(:error_user_has_not_right_delete_folder)
-      end
-      
-      deleted_files = []
-      if User.current.allowed_to?(:file_manipulation, @project)
-        # Files
-        if selected_files.present?        
-          selected_files.each do |fileid|
-            file = DmsfFile.visible.find_by_id fileid
-            next unless file
-            if file.project != @project || !file.delete
-              failed_entries.push(file)
-            else
-              deleted_files.push(file)
-            end
-          end        
-        end
-        # File links
-        if selected_file_links.present?        
-          selected_file_links.each do |file_link_id|
-            file_link = DmsfLink.visible.find_by_id file_link_id
-            next unless file_link
-            if file_link.project != @project || !file_link.delete
-              failed_entries.push(file_link)            
-            end
-          end        
-        end
-      else
-        flash[:error] = l(:error_user_has_not_right_delete_file)
-      end
-      
-      unless deleted_files.empty?
-        deleted_files.each do |f| 
-          log_activity(f, 'deleted')
-        end
-        begin
-          DmsfMailer.get_notify_users(User.current, deleted_files).each do |u|
-            DmsfMailer.files_deleted(u, @project, deleted_files).deliver
-          end
-        rescue Exception => e
-          Rails.logger.error "Could not send email notifications: #{e.message}"
-        end
-      end
-      if failed_entries.empty?
-        flash[:notice] = l(:notice_entries_deleted)
-      else
-        flash[:warning] = l(:warning_some_entries_were_not_deleted, :entries => failed_entries.map{|e| e.title}.join(', '))
-      end
-    end
-        
-    redirect_to :back
-  end
-
-  # Folder manipulation
 
   def new
     @folder = DmsfFolder.new
@@ -345,6 +266,8 @@ class DmsfController < ApplicationController
   def restore
     if @folder.restore    
       flash[:notice] = l(:notice_dmsf_folder_restored)
+    else
+      flash[:error] = @folder.errors[:base][0]
     end
     redirect_to :back
   end
@@ -488,13 +411,17 @@ class DmsfController < ApplicationController
   def zip_entries(zip, selected_folders, selected_files)    
     if selected_folders && selected_folders.is_a?(Array)
       selected_folders.each do |selected_folder_id|        
-        folder = DmsfFolder.visible.find(selected_folder_id)
-        zip.add_folder(folder, (@folder.dmsf_path_str if @folder)) if folder
+        folder = DmsfFolder.visible.find_by_id selected_folder_id
+        if folder
+          zip.add_folder(folder, (@folder.dmsf_path_str if @folder))
+        else
+          raise FileNotFound
+        end
       end
     end
     if selected_files && selected_files.is_a?(Array)
       selected_files.each do |selected_file_id|        
-        file = DmsfFile.visible.find(selected_file_id)
+        file = DmsfFile.visible.find_by_id selected_file_id
         if file && file.last_revision && File.exists?(file.last_revision.disk_file)
           zip.add_file(file, (@folder.dmsf_path_str if @folder)) if file          
         else
@@ -507,6 +434,95 @@ class DmsfController < ApplicationController
       raise ZipMaxFilesError, zip.files.length
     end    
     zip
+  end
+  
+  def restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links)
+    # Folders
+    selected_folders.each do |id|
+      folder = DmsfFolder.find_by_id id
+      if folder
+        unless folder.restore
+          flash[:error] = folder.errors[:base][0]
+        end
+      else
+        raise FileNotFound
+      end
+    end
+    # Files
+    selected_files.each do |id|
+      file = DmsfFile.find_by_id id
+      if file
+        unless file.restore
+          flash[:error] = file.errors[:base][0]
+        end
+      else
+        raise FileNotFound
+      end
+    end
+    # Links
+    (selected_dir_links + selected_file_links).each do |id|
+      link = DmsfLink.find_by_id id
+      if link
+        unless link.restore
+          flash[:error] = link.errors[:base][0]
+        end
+      else
+        raise FileNotFound
+      end
+    end
+  end
+  
+  def delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, commit)
+    # Folders
+    selected_folders.each do |id|
+      folder = DmsfFolder.find_by_id id
+      if folder
+        unless folder.delete commit
+          flash[:error] = folder.errors[:base][0]
+        end
+      else
+        raise FileNotFound
+      end
+    end
+    # Files
+    deleted_files = []
+    not_deleted_files = []
+    selected_files.each do |id|
+      file = DmsfFile.find_by_id id
+      if file
+        if file.delete(commit)
+          deleted_files << file unless commit
+        else
+          not_deleted_files << file
+        end
+      else
+        raise FileNotFound
+      end
+    end
+    # Activities
+    if !deleted_files.empty? 
+      deleted_files.each do |f| 
+        log_activity(f, 'deleted')
+      end
+      begin
+        DmsfMailer.get_notify_users(User.current, deleted_files).each do |u|
+          DmsfMailer.files_deleted(u, @project, deleted_files).deliver
+        end
+      rescue Exception => e
+        Rails.logger.error "Could not send email notifications: #{e.message}"
+      end
+    end
+    unless not_deleted_files.empty?      
+      flash[:warning] = l(:warning_some_entries_were_not_deleted, :entries => not_deleted_files.map{|e| e.title}.join(', '))
+    end
+    # Links
+    (selected_dir_links + selected_file_links).each do |id|
+      link = DmsfLink.find_by_id id      
+      link.delete commit if link      
+    end
+    if flash[:error].blank? && flash[:warning].blank?
+      flash[:notice] = l(:notice_entries_deleted)
+    end
   end
   
   def find_folder

@@ -74,10 +74,8 @@ fr:
   title_waiting_for_approval: Attente de validation
   title_approved: Validé
   title_unlock_file: Déverrouiller afin de permettre la modification par les membres du projet
-  title_lock_file: "Verrouiller afin d'empêcher les modifications du document"
-  submit_download: Télécharger
-  title_download_checked: Télécharger les fichiers sélectionnés au format zip
-  submit_email: Email
+  title_lock_file: "Verrouiller afin d'empêcher les modifications du document"  
+  title_download_checked: Télécharger les fichiers sélectionnés au format zip  
   title_send_checked_by_email: Transmettre les fichiers sélectionnés par mail
   link_user_preferences: Préférences personnelles du module DMSF
   heading_send_documents_by_email: Transmettre les documents par mail
@@ -303,6 +301,8 @@ fr:
   notice_dmsf_file_restored: The document has been successfully restored
   notice_dmsf_folder_restored: The folder has been successfully restored
   notice_dmsf_link_restored: The link has been successfully restored
+  title_restore_checked: Restore checked
+  error_parent_folder: "The parent folder doesn't exist"
 
   my:
     blocks:

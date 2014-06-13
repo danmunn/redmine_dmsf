@@ -221,6 +221,8 @@ class DmsfFilesController < ApplicationController
     if @file.restore
       log_activity('restored')
       flash[:notice] = l(:notice_dmsf_file_restored)
+    else
+      flash[:error] = @file.errors[:base][0]
     end
     redirect_to :back
   end
