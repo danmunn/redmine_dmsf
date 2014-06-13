@@ -31,15 +31,11 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert_kind_of DmsfFileRevision, @revision5    
   end
   
-  def test_delete_restore  
-    assert !@revision5.file.locked_for_user?, "The file is locked"
-    assert @revision5.file.revisions.length > 1, "The last revision can't be deleted"
-    @revision5.delete false
-    assert_nil DmsfFileRevision.visible.where(:id => @revision5.id).first, @revision5.errors[:base][0]
-    assert DmsfFileRevision.deleted.where(:id => @revision5.id).first        
-    @revision5.restore
-    assert_nil DmsfFileRevision.deleted.where(:id => @revision5.id).first
-    assert DmsfFileRevision.visible.where(:id => @revision5.id).first            
+  def test_delete_restore      
+    @revision5.delete false    
+    assert @revision5.deleted    
+    @revision5.restore    
+    assert !@revision5.deleted    
   end    
   
   def test_destroy       

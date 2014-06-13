@@ -85,26 +85,24 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   
   def test_delete_restore         
     assert_equal 1, @file4.revisions.visible.count
-    assert_equal 1, @file4.referenced_links.visible.count
+    assert_equal 2, @file4.referenced_links.visible.count
     
     # Delete
-    @file4.delete false
-    assert_nil DmsfFile.visible.where(:id => @file4.id).first, @file4.errors[:base][0]
-    assert DmsfFile.deleted.where(:id => @file4.id).first    
+    @file4.delete false    
+    assert @file4.deleted
     assert_equal 0, @file4.revisions.visible.count
     assert_equal 0, @file4.referenced_links.visible.count
     
     # Restore
-    @file4.restore
-    assert_nil DmsfFile.deleted.where(:id => @file4.id).first
-    assert DmsfFile.visible.where(:id => @file4.id).first    
+    @file4.restore    
+    assert !@file4.deleted
     assert_equal 1, @file4.revisions.visible.count
-    assert_equal 1, @file4.referenced_links.visible.count
+    assert_equal 2, @file4.referenced_links.visible.count
   end
   
   def test_destroy
     assert_equal 1, @file4.revisions.visible.count
-    assert_equal 1, @file4.referenced_links.visible.count
+    assert_equal 2, @file4.referenced_links.visible.count
     @file4.delete true
     assert_nil DmsfFile.find_by_id(@file4.id)
     assert_equal 0, @file4.revisions.count
