@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,17 +32,15 @@ module RedmineDmsf
       def initialize(*args)
         super(*args)
         pinfo = path.split('/').drop(1)
-        if (pinfo.length == 0) #If this is the base_path, we're at root
+        if (pinfo.length == 0) # If this is the base_path, we're at root
           @resource_c = IndexResource.new(*args)
         elsif (pinfo.length == 1) #This is first level, and as such, project path
           @resource_c = ProjectResource.new(*args)
-        else #We made it all the way to DMSF Data
+        else # We made it all the way to DMSF Data
           @resource_c = DmsfResource.new(*args)
         end
-
-        @resource_c.accessor= self unless @resource_c.nil?
+        @resource_c.accessor = self if @resource_c
       end
-
       
       def authenticate(username, password)
         # Bugfix: Current DAV4Rack (including production) authenticate against ALL requests
@@ -50,8 +49,8 @@ module RedmineDmsf
         # going to fork it to ensure compliance, checking the request method in the authentication
         # seems the next best step, if the request method is OPTIONS return true, controller will simply
         # call the options method within, which accesses nothing, just returns headers about dav env.
-        return true if ( @request.request_method.downcase == "options" && ( path == "/" || path.empty? ) )
-        User.current = User.try_to_login(username, password) || nil
+        return true if @request.request_method.downcase == 'options' && (path == '/' || path.empty?)
+        User.current = User.try_to_login(username, password) || nil        
         return !User.current.anonymous? unless User.current.nil?
         false
       end
