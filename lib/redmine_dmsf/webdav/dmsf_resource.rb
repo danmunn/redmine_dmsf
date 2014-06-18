@@ -146,9 +146,9 @@ module RedmineDmsf
       # Return the content type of file
       # will return inode/directory for any collections, and appropriate for File entities
       def content_type
-        if folder? then
+        if folder
           'inode/directory'
-        elsif file?
+        elsif file && file.last_revision
           file.last_revision.detect_content_type
         else
           NotFound
@@ -156,9 +156,9 @@ module RedmineDmsf
       end
 
       def creation_date
-        if folder?
+        if folder
           folder.created_at
-        elsif file?
+        elsif file
           file.created_at
         else
           NotFound
@@ -166,9 +166,9 @@ module RedmineDmsf
       end
 
       def last_modified
-        if folder?
+        if folder
           folder.updated_at
-        elsif file?
+        elsif file
           file.updated_at
         else
           NotFound
@@ -176,8 +176,8 @@ module RedmineDmsf
       end
 
       def etag
-        filesize = file? ? file.size : 4096;
-        fileino = file? ? File.stat(file.last_revision.disk_file).ino : 2;
+        filesize = file ? file.size : 4096;
+        fileino = (file && file.last_revision) ? File.stat(file.last_revision.disk_file).ino : 2;
         sprintf('%x-%x-%x', fileino, filesize, last_modified.to_i)
       end
 
@@ -308,14 +308,12 @@ module RedmineDmsf
             return PreconditionFailed unless exist? && file?
             return InternalServerError unless file.move_to(resource.project, f)
 
-            #Update Revision and names of file [We can link to old physical resource, as it's not changed]
-            rev = file.last_revision
-            rev.name = resource.basename
+            # Update Revision and names of file [We can link to old physical resource, as it's not changed]            
+            file.last_revision.name = resource.basename if file.last_revision            
             file.name = resource.basename
 
-            #Save Changes
+            # Save Changes
             (rev.save! && file.save!) ? Created : PreconditionFailed
-
           end
         end
       end
@@ -387,9 +385,8 @@ module RedmineDmsf
             return PreconditionFailed unless exist? && file?
             return InternalServerError unless file.copy_to(resource.project, f)
 
-            #Update Revision and names of file [We can link to old physical resource, as it's not changed]
-            rev = file.last_revision
-            rev.name = resource.basename
+            # Update Revision and names of file [We can link to old physical resource, as it's not changed]            
+            file.last_revision.name = resource.basename if file.last_revision
             file.name = resource.basename
 
             #Save Changes
@@ -498,15 +495,17 @@ module RedmineDmsf
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
 
         new_revision = DmsfFileRevision.new
-        if (exist? && file?) # We're over-writing something, so ultimately a new revision
+        if exist? && file # We're over-writing something, so ultimately a new revision
           f = file
           last_revision = file.last_revision
           new_revision.source_revision = last_revision
-          new_revision.major_version = last_revision.major_version
-          new_revision.minor_version = last_revision.minor_version
-          new_revision.workflow = last_revision.workflow
+          if last_revision
+            new_revision.major_version = last_revision.major_version
+            new_revision.minor_version = last_revision.minor_version
+            new_revision.workflow = last_revision.workflow
+          end
         else
-          raise BadRequest unless ( parent.projectless_path == '/' || (parent.exist? && parent.folder?) )
+          raise BadRequest unless (parent.projectless_path == '/' || (parent.exist? && parent.folder))
           f = DmsfFile.new
           f.project = project
           f.name = basename
@@ -574,7 +573,7 @@ module RedmineDmsf
       # implementation of service for request, which allows for us to pipe a single file through
       # also best-utilising DAV4Rack's implementation.
       def download
-        raise NotFound unless file?
+        raise NotFound unless file && file.last_revision
 
         # If there is no range (start of ranged download, or direct download) then we log the
         # file access, so we can properly keep logged information
@@ -589,7 +588,7 @@ module RedmineDmsf
       # discover_lock
       # As the name suggests, we're returning lock recovery information for requested resource
       def discover_lock
-        x = Nokogiri::XML::DocumentFragment.parse ""
+        x = Nokogiri::XML::DocumentFragment.parse ''
         entity = file || folder
         return nil unless entity.locked?
 
