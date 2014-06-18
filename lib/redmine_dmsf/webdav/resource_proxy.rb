@@ -54,6 +54,10 @@ module RedmineDmsf
         return !User.current.anonymous? unless User.current.nil?
         false
       end
+      
+      def supports_locking?
+        true
+      end
 
       def children
         @resource_c.children
@@ -94,7 +98,43 @@ module RedmineDmsf
       def get(request, response)
         @resource_c.get(request, response)
       end
+      
+      def put(request, response)
+        @resource_c.put(request, response)
+      end
+      
+      def delete
+        @resource_c.delete
+      end
+      
+      def copy(dest, overwrite = false)
+        @resource_c.copy(dest, overwrite)
+      end
+      
+      def move(dest, overwrite = false)
+        @resource_c.move(dest, overwrite)
+      end     
 
+      def make_collection
+        @resource_c.make_collection
+      end     
+
+      def special_type
+        @resource_c.special_type
+      end            
+
+      def lock(args)
+        @resource_c.lock(args)
+      end
+
+      def lock_check(lock_scope = nil)
+        @resource_c.lock_check(lock_scope)
+      end
+
+      def unlock(token)
+        @resource_c.unlock(token)
+      end
+      
       def name
         @resource_c.name
       end
@@ -102,57 +142,17 @@ module RedmineDmsf
       def long_name
         @resource_c.long_name
       end
-
-      def make_collection
-        @resource_c.make_collection
-      end
-
-      def delete
-        @resource_c.delete
-      end
-
-      def special_type
-        @resource_c.special_type
-      end
-
-      def move(dest, overwrite)
-        @resource_c.move(dest, overwrite)
-      end
-
-      def copy(dest, overwrite)
-        @resource_c.copy(dest, overwrite)
-      end
-
-      def lock(*args)
-        @resource_c.lock(*args)
-      end
-
-      def lock_check(*args)
-        @resource_c.lock_check(*args)
-      end
-
-      def unlock(*args)
-        @resource_c.unlock(*args)
-      end
-
-      def put(*args)
-        @resource_c.put(*args)
-      end
-
-      def post(*args)
-        @resource_c.post(*args)
-      end
-
+      
       def resource
         @resource_c
       end
 
-      def get_property(*args)
-        @resource_c.get_property(*args)
+      def get_property(element)
+        @resource_c.get_property(element)
       end
 
-      def property_names
-        @resource_c.property_names
+      def properties
+        @resource_c.properties
       end
 
     end

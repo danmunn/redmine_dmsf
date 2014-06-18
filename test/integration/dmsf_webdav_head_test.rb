@@ -19,7 +19,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
+class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
 
   fixtures :projects, :users, :members, :member_roles, :roles, :enabled_modules, 
     :dmsf_folders
@@ -37,13 +37,13 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     assert_kind_of Project, @project2
   end
 
-  test 'HEAD requires authentication' do
+  def test_head_requires_authentication
     make_request "/dmsf/webdav/#{@project1.identifier}"
     assert_response 401
     check_headers_dont_exist
   end
 
-  test 'HEAD responds with authentication' do
+  def test_head_responds_with_authentication
     make_request "/dmsf/webdav/#{@project1.identifier}", 'admin'
     assert_response :success
     check_headers_exist
@@ -54,7 +54,7 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   #   header and invalidates the test - where as a folder listing will always not include a last-modified 
   #   (but may include an etag, so there is an allowance for a 1 in 2 failure rate on (optionally) required 
   #   headers)
-  test 'HEAD responds to file' do
+  def test_head_responds_to_file
     # TODO: the storage path is not set as expected => reset
     DmsfFile.storage_path = File.expand_path('../../fixtures/files', __FILE__)    
     make_request "/dmsf/webdav/#{@project1.identifier}/test.txt", 'admin'
@@ -62,7 +62,7 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     check_headers_exist #Note it'll allow 1 out of the 3 expected to fail
   end
 
-  test 'HEAD fails when file or folder not found' do
+  def test_head_fails_when_file_or_folder_not_found
     make_request "/dmsf/webdav/#{@project1.identifier}/not_here.txt", 'admin'
     assert_response 404
     check_headers_dont_exist
@@ -72,8 +72,7 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     check_headers_dont_exist
   end
 
-  test 'HEAD fails when project is not enabled for DMSF' do
-
+  def test_head_fails_when_project_is_not_enabled_for_dmsf
     make_request "/dmsf/webdav/#{@project2.identifier}/test.txt", 'jsmith'
     assert_response 404
     check_headers_dont_exist

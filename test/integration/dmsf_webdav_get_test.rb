@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
+class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
 
   fixtures :projects, :users, :members, :member_roles, :roles, :enabled_modules, 
     :dmsf_folders, :dmsf_files, :dmsf_file_revisions
@@ -42,35 +42,35 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
     assert_kind_of Role, @role_developer    
   end
 
-  test 'should deny anonymous' do
+  def test_should_deny_anonymous
     get 'dmsf/webdav'
     assert_response 401
   end
 
-  test 'should deny failed authentication' do
+  def test_should_deny_failed_authentication
     get 'dmsf/webdav', nil, credentials('admin', 'badpassword')
     assert_response 401
   end
 
-  test 'should permit authenticated user' do
+  def test_should_permit_authenticated_user
     get 'dmsf/webdav', nil, @admin
     assert_response :success
   end
 
-  test 'should list DMSF enabled project' do
+  def test_should_list_dmsf_enabled_project
     get 'dmsf/webdav', nil, @admin
     assert_response :success
 
     assert !response.body.match(@project1.name).nil?, "Expected to find project #{@project1.name} in return data"
   end
 
-  test 'should not list non-DMSF enabled project' do    
+  def test_should_not_list_non_dmsf_enabled_project
     get 'dmsf/webdav', nil, @jsmith
     assert_response :success    
     assert response.body.match(@project2.name).nil?, "Unexpected find of project #{@project2.name} in return data"
   end
 
-  test 'should return status 404 when accessing non-existant or non dmsf-enabled project' do
+  def test_should_return_status_404_when_accessing_non_existant_or_non_dmsf_enabled_project
     ## Test project resource object
     get 'dmsf/webdav/project_does_not_exist', nil, @jsmith 
     assert_response 404
@@ -86,7 +86,7 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
     assert_response 404
   end
 
-  test 'download file from DMSF enabled project' do    
+  def test_download_file_from_dmsf_enabled_project
     # TODO: the storage path is not set as expected => reset
     DmsfFile.storage_path = File.expand_path('../../fixtures/files', __FILE__)    
     get "dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin    
@@ -94,7 +94,7 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
     assert_equal response.body, '1234', "File downloaded with unexpected contents: '#{response.body}'"
   end
 
-  test 'should list dmsf contents within project' do
+  def test_should_list_dmsf_contents_within_project
     get "dmsf/webdav/#{@project1.identifier}", nil, @admin
     assert_response :success
     folder = DmsfFolder.find_by_id 1
@@ -105,7 +105,7 @@ class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
     assert response.body.match(file.name), "Expected to find #{file.name} in return data"
   end
 
-  test 'user assigned to project' do
+  def test_user_assigned_to_project
     # We'll be using project 2 and user jsmith for this test (Manager)       
     get "dmsf/webdav/#{@project2.identifier}", nil, @jsmith
     assert_response 404

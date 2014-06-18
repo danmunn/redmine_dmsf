@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -41,44 +41,44 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
     assert_kind_of Role, @role_developer    
   end
   
-  test 'MKCOL requires authentication' do
+  def test_mkcol_requires_authentication
     xml_http_request  :mkcol, 'dmsf/webdav/test1'
     assert_response 401
   end
 
-  test 'MKCOL fails to create folder at root level' do
+  def test_mkcol_fails_to_create_folder_at_root_level
     xml_http_request  :mkcol, 'dmsf/webdav/test1', nil, @admin
     assert_response 501 #Not Implemented at this level
   end
 
-  test 'should not succeed on a non-existant project' do
+  def test_should_not_succeed_on_a_non_existant_project
     xml_http_request  :mkcol, 'dmsf/webdav/project_doesnt_exist/test1', nil, @admin
     assert_response 404 #Not found
   end
 
-  test 'should not succed on a non-dmsf enabled project' do
+  def test_should_not_succed_on_a_non_dmsf_enabled_project
     xml_http_request :mkcol, "dmsf/webdav/#{@project2.identifier}/test1", nil, @jsmith
     assert_response :forbidden
   end
 
-  test 'should create folder on dmsf enabled project' do
+  def test_should_create_folder_on_dmsf_enabled_project
     xml_http_request :mkcol, "dmsf/webdav/#{@project1.identifier}/test1", nil, @admin
     assert_response :success
   end
 
-  test 'should fail to create folder that already exists' do
+  def test_should_fail_to_create_folder_that_already_exists
     xml_http_request :mkcol, "dmsf/webdav/#{@project1.identifier}/test1", nil, @admin
     assert_response :success
     xml_http_request :mkcol, "dmsf/webdav/#{@project1.identifier}/test1", nil, @admin
     assert_response 405 #Method not Allowed
   end
 
-  test 'should fail to create folder for user without rights' do
+  def test_should_fail_to_create_folder_for_user_without_rights
     xml_http_request :mkcol, "dmsf/webdav/#{@project1.identifier}/test1", nil, @jsmith
     assert_response 403 #Forbidden
   end
 
-  test 'should create folder for non-admin user with rights' do  
+  def test_should_create_folder_for_non_admin_user_with_rights
     @role_developer.add_permission! :folder_manipulation
     @project2.enable_module! :dmsf
     xml_http_request :mkcol, "dmsf/webdav/#{@project2.identifier}/test1", nil, @jsmith

@@ -38,12 +38,12 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     assert_kind_of Project, @project2
   end
   
-  test 'OPTIONS requires no authentication for root level' do
+  def test_options_requires_no_authentication_for_root_level
     xml_http_request  :options, 'dmsf/webdav'
     assert_response :success
   end
 
-  test 'OPTIONS returns expected Allow header' do
+  def test_options_returns_expected_allow_header
     xml_http_request  :options, 'dmsf/webdav'
     assert_response :success
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
@@ -51,15 +51,14 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     assert response.headers['Allow'] == 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK', 'Allow header returns expected content'
   end
 
-  test 'OPTIONS returns expected Dav header' do
+  def test_options_returns_expected_dav_header
     xml_http_request  :options, 'dmsf/webdav'
     assert_response :success
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert response.headers['Dav'] , 'Dav header is empty or does not exist'
-    assert response.headers['Dav'] == '1,2,3', 'Dav header - expected: 1,2,3'
+    assert response.headers['Dav'] , 'Dav header is empty or does not exist'    
   end
 
-  test 'OPTIONS returns expected Ms-Auth-Via header' do
+  def test_options_returns_expected_ms_auth_via_header
     xml_http_request  :options, 'dmsf/webdav'
     assert_response :success
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
@@ -67,36 +66,33 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     assert response.headers['Ms-Author-Via'] == 'DAV', 'Ms-Author-Via header - expected: DAV'
   end
 
-  test 'OPTIONS requires authentication for non-root request' do
+  def test_options_requires_authentication_for_non_root_request
     xml_http_request :options, "dmsf/webdav/#{@project1.identifier}"
     assert_response 401 #Unauthorized
   end
 
-  test 'Un-authenticated OPTIONS returns expected Allow header' do
+  def test_un_authenticated_options_returns_expected_allow_header
     xml_http_request  :options, "dmsf/webdav/#{@project1.identifier}"
     assert_response 401
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert_nil response.headers['Allow'] , 'Allow header should not exist'
-    #assert response.headers['Allow'] != 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK', 'Allow header returns expected'
+    assert_nil response.headers['Allow'] , 'Allow header should not exist'    
   end
 
-  test 'Un-authenticated OPTIONS returns expected Dav header' do
+  def test_un_authenticated_options_returns_expected_dav_header
     xml_http_request  :options, "dmsf/webdav/#{@project1.identifier}"
     assert_response 401
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert_nil response.headers['Dav'] , 'Dav header should not exist'
-    #assert response.headers['Dav'] != '1,2,3', 'Dav header - expected: <None>'
+    assert_nil response.headers['Dav'] , 'Dav header should not exist'    
   end
 
-  test 'Un-athenticated OPTIONS returns expected Ms-Auth-Via header' do
+  def test_un_authenticated_options_returns_expected_ms_auth_via_header
     xml_http_request  :options, "dmsf/webdav/#{@project1.identifier}"
     assert_response 401
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert_nil response.headers['Ms-Author-Via'] , 'Ms-Author-Via header should not exist'
-    #assert response.headers["Ms-Author-Via"] != "DAV", "Ms-Author-Via header - expected: <None>"
+    assert_nil response.headers['Ms-Author-Via'] , 'Ms-Author-Via header should not exist'    
   end
 
-  test 'Authenticated OPTIONS returns expected Allow header' do
+  def test_authenticated_options_returns_expected_allow_header
     xml_http_request  :options, "dmsf/webdav/#{@project1.identifier}", nil, @admin
     assert_response :success
     assert !(response.headers.nil? || response.headers.empty?), "Response headers are empty"
@@ -104,15 +100,14 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     assert response.headers['Allow'] == 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK', 'Allow header returns expected'
   end
 
-  test 'Authenticated OPTIONS returns expected Dav header' do
+  def test_authenticated_options_returns_expected_dav_header
     xml_http_request  :options, "dmsf/webdav/#{@project1.identifier}", nil, @admin
     assert_response :success
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert response.headers['Dav'], 'Dav header is empty or does not exist'
-    assert response.headers['Dav'] == '1,2,3', 'Dav header - expected: 1,2,3'
+    assert response.headers['Dav'], 'Dav header is empty or does not exist'    
   end
 
-  test 'Authenticated OPTIONS returns expected Ms-Auth-Via header' do
+  def test_authenticated_options_returns_expected_ms_auth_via_header
     xml_http_request  :options, "dmsf/webdav/#{@project1.identifier}", nil, @admin
     assert_response :success
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
@@ -120,7 +115,7 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     assert response.headers['Ms-Author-Via'] == 'DAV', 'Ms-Author-Via header - expected: DAV'
   end
 
-  test 'Authenticated OPTIONS returns 401 for not-found or non-dmsf-enabled items' do
+  def test_authenticated_options_returns_401_for_not_found_or_non_dmsf_enabled_items
     xml_http_request  :options, "dmsf/webdav/#{@project2.identifier}", nil, @jsmith
     assert_response 401 # refused
     xml_http_request  :options, 'dmsf/webdav/does-not-exist', nil, @jsmith

@@ -6,6 +6,7 @@ dmsf_locks_001:
   entity_type:        0
   lock_type_cd:       0
   lock_scope_cd:      0
+  
 dmsf_locks_002:
   id:                 2
   entity_id:          2
@@ -13,6 +14,7 @@ dmsf_locks_002:
   entity_type:        1
   lock_type_cd:       0
   lock_scope_cd:      0
+  
 dmsf_locks_003:
   id:                 3
   entity_id:          2
