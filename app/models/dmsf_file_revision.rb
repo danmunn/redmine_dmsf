@@ -29,8 +29,8 @@ class DmsfFileRevision < ActiveRecord::Base
   has_many :dmsf_workflow_step_assignment, :dependent => :destroy
 
   # Returns a list of revisions that are not deleted here, or deleted at parent level either  
-  scope :visible, where('NOT deleted')
-  scope :deleted, where('NOT NOT deleted')
+  scope :visible, where(:deleted => false)
+  scope :deleted, where(:deleted => true)
 
   acts_as_customizable
   acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.file.dmsf_path_str}"},

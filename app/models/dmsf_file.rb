@@ -44,8 +44,8 @@ class DmsfFile < ActiveRecord::Base
   has_many :referenced_links, :class_name => 'DmsfLink', :foreign_key => 'target_id', 
     :conditions => {:target_type => DmsfFile.model_name}, :dependent => :destroy
   
-  scope :visible, where('NOT deleted')
-  scope :deleted, where('NOT NOT deleted')
+  scope :visible, where(:deleted => false)
+  scope :deleted, where(:deleted => true)
   
   validates :name, :presence => true
   validates_format_of :name, :with => DmsfFolder.invalid_characters,

@@ -45,8 +45,8 @@ class DmsfFolder < ActiveRecord::Base
     :conditions => {:entity_type => 1},
     :dependent => :destroy
   
-  scope :visible, where('NOT deleted')
-  scope :deleted, where('NOT NOT deleted')
+  scope :visible, where(:deleted => false)
+  scope :deleted, where(:deleted => true)
 
   acts_as_customizable
     
