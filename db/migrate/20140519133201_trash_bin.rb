@@ -22,7 +22,7 @@ class TrashBin < ActiveRecord::Migration
     add_column :dmsf_folders, :deleted, :boolean, :default => false, :null => false
     add_column :dmsf_folders, :deleted_by_user_id, :integer
     
-    DmsfFolder.connection.execute('UPDATE dmsf_folders SET deleted = false')
+    DmsfFolder.all.update_all(:deleted => false)
   end
   
   def down
