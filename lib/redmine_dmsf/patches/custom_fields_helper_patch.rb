@@ -1,7 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011    Vít Jonáš    <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
 # Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -61,9 +61,15 @@ module RedmineDmsf
         
         def add_cf
           cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}
-          unless CustomFieldsHelper::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
-            CustomFieldsHelper::CUSTOM_FIELDS_TABS << cf 
-          end 
+          if Redmine::VERSION::MAJOR <= 2 && Redmine::VERSION::MINOR < 4
+            unless CustomField::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
+              CustomField::CUSTOM_FIELDS_TABS << cf 
+            end 
+          else
+            unless CustomFieldsHelper::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
+              CustomFieldsHelper::CUSTOM_FIELDS_TABS << cf 
+            end 
+          end          
         end
       end
     end
