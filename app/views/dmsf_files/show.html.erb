@@ -138,11 +138,12 @@
       <div class="no-ident clear">
         <%= render 'dmsf/custom_fields', :object => revision %>
       </div>
-      <div class="splitcontentleft clear">
+      <p class="no-ident">
         <%= label_tag('', "#{l(:label_comment)}:") %>
-        <%= h(revision.comment) %>
-      </div>	     	     
-      <br/>
+      </p>
+      <div class="wiki clear" style="margin-left: 110px">
+        <%= textilizable(revision.comment) %>
+      </div>	     	           
       <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">        
         <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if User.current.allowed_to?(:file_manipulation, @file.project) %>        
       </div>    
