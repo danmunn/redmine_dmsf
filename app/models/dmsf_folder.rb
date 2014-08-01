@@ -279,6 +279,23 @@ class DmsfFolder < ActiveRecord::Base
     
     [results, results_count]
   end
+  
+  def modified
+    last_update = updated_at
+    subfolders.each do |subfolder|
+      last_update = subfolder.updated_at if subfolder.updated_at > last_update
+    end
+    files.each do |file|
+      last_update = file.updated_at if file.updated_at > last_update
+    end
+    folder_links.each do |folder_link|
+      last_update = folder_link.updated_at if folder_link.updated_at > last_update
+    end
+    file_links.each do |file_link|
+      last_update = file_link.updated_at if file_link.updated_at > last_update
+    end
+    last_update
+  end
 
   private
   

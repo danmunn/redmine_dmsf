@@ -34,7 +34,7 @@
   <% end %>
 </td>            
 <td class="size"></td>
-<td class="modified"><%= format_time(subfolder.updated_at) %>                
+<td class="modified"><%= format_time(subfolder.modified) %>                
   <% if locked_for_user %>
     <% if subfolder.lock.reverse[0].user %>            
       <%= link_to('',
