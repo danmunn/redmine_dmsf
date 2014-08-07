@@ -28,6 +28,19 @@ class DmsfFilesController < ApplicationController
   helper :all
   helper :dmsf_workflows
 
+  def view
+    @revision = @file.last_revision
+
+    check_project(@revision.file)
+    access = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => @revision.id,
+      :action => DmsfFileRevisionAccess::DownloadAction)
+    access.save!
+    send_file(@revision.disk_file,
+      :filename => filename_for_content_disposition(@revision.name),
+      :type => @revision.detect_content_type,
+      :disposition => 'inline')
+  end
+
   def show
     # download is put here to provide more clear and usable links
     if params.has_key?(:download)
