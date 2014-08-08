@@ -74,10 +74,8 @@ de:
   title_waiting_for_approval: Warte auf Zustimmung
   title_approved: Zugestimmt
   title_unlock_file: Hebe Sperre auf um Änderungen anderer Nutzer zu ermöglichen
-  title_lock_file: Sperre um Änderungen anderer Nutzer zu verhindern
-  submit_download: Download
-  title_download_checked: Download der ausgewählten Dateien in einem ZIP-Archiv
-  submit_email: Email
+  title_lock_file: Sperre um Änderungen anderer Nutzer zu verhindern  
+  title_download_checked: Download der ausgewählten Dateien in einem ZIP-Archiv  
   title_send_checked_by_email: Sende gewählte Dateien per Email
   link_user_preferences: Deine Einstellungen
   heading_send_documents_by_email: Sende Dateien per Email
@@ -147,6 +145,7 @@ de:
   permission_file_manipulation: Datei manipulation  
   permission_force_file_unlock: Erzwinge Aufhebung der Dateisperre
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: Datei
   field_folder: Ordner
   error_create_cycle_in_folder_dependency: schaffen Zyklus in Abhängigkeit Ordner
@@ -296,6 +295,14 @@ de:
   label_display_notified_recipients: Display notified recipients
   note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
   warning_email_notifications: "Email notifications sent to %{to}"
+  
+  link_trash_bin: Trash bin
+  title_restore: Restore
+  notice_dmsf_file_restored: The document has been successfully restored
+  notice_dmsf_folder_restored: The folder has been successfully restored
+  notice_dmsf_link_restored: The link has been successfully restored
+  title_restore_checked: Restore checked
+  error_parent_folder: "The parent folder doesn't exist"
   
   my:
     blocks:

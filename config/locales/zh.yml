@@ -74,10 +74,8 @@ zh:
   title_waiting_for_approval: 待批准
   title_approved: 已批准
   title_unlock_file: 解除锁定允许其他成员修改
-  title_lock_file: 锁定以防其他成员修改
-  submit_download: 下载
-  title_download_checked: zip归档下载所选
-  submit_email: 电子邮件
+  title_lock_file: 锁定以防其他成员修改  
+  title_download_checked: zip归档下载所选  
   title_send_checked_by_email: 电子邮件发送所选
   link_user_preferences: 您的文档管理系统项目偏好设定
   heading_send_documents_by_email: 电子邮件发送文档
@@ -147,6 +145,7 @@ zh:
   permission_file_manipulation: 文件操作  
   permission_force_file_unlock: 强制文件解锁
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: 文件
   field_folder: 件夹
   error_create_cycle_in_folder_dependency: create cycle in folder dependency
@@ -296,6 +295,14 @@ zh:
   label_display_notified_recipients: Display notified recipients
   note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
   warning_email_notifications: "Email notifications sent to %{to}"
+  
+  link_trash_bin: Trash bin
+  title_restore: Restore
+  notice_dmsf_file_restored: The document has been successfully restored
+  notice_dmsf_folder_restored: The folder has been successfully restored
+  notice_dmsf_link_restored: The link has been successfully restored
+  title_restore_checked: Restore checked
+  error_parent_folder: "The parent folder doesn't exist"
   
   my:
     blocks:

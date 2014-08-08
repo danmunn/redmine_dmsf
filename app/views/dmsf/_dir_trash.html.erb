@@ -1,0 +1,58 @@
+<%#=
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<td class="check"><%= check_box_tag(name, id, false, 
+  :title => l(:title_check_for_zip_download_or_email)) %></td>
+<td class="title">                  
+  <%= content_tag(:span, h(title), 
+    :title => h(title), 
+    :class => 'icon icon-folder') %>
+  <% if link %>
+    <div class="filename" title="<%= l(:label_target_folder)%>"><%= link.path %></div>
+  <% else %>
+    <div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.visible.count + subfolder.file_links.visible.count %>]</div>
+  <% end %>
+</td>            
+<td class="size"></td>
+<td class="modified">
+  <%= format_time(subfolder.updated_at) %>                      
+</td>
+<td class="version"></td>
+<td class="workflow"></td>
+<td class="author"><%= h(subfolder.user) %></td>
+<td class="actions">
+  <% if @folder_manipulation_allowed %>
+    <div class="right_icon_box">           
+      <%= link_to('',
+        restore_dmsf_path(:id => project, :folder_id => subfolder),                
+        :title => l(:title_restore),
+        :class => 'icon icon-dmsf-restore') %>
+      <%= link_to('',
+        delete_dmsf_path(:id => project, :folder_id => subfolder, :commit => 'yes'),
+        :data => {:confirm => l(:text_are_you_sure)},            
+        :title => l(:title_delete),
+        :class => 'icon icon-dmsf-rev-delete') %>  
+    </div>    
+  <% end %>
+</td>
+<td class="hidden">0</td>
+<td class="hidden">0</td>
+<td class="hidden"><%= subfolder.updated_at.to_i %></td>
+<td class="hidden">0</td>

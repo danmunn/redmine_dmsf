@@ -1,6 +1,5 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -19,34 +18,29 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class DmsfFolderTest < RedmineDmsf::Test::UnitTest
+class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   fixtures :projects, :users, :dmsf_folders, :dmsf_files, :dmsf_file_revisions,
-           :roles, :members, :member_roles, :dmsf_locks, :dmsf_links
+           :roles, :members, :member_roles, :enabled_modules, :enumerations,
+           :dmsf_locks
          
-  def setup    
-    @folder4 = DmsfFolder.find_by_id 4
+  def setup
+    @revision5 = DmsfFileRevision.find_by_id 5    
   end
   
   def test_truth
-    assert_kind_of DmsfFolder, @folder4
-  end
-    
-  def test_delete_restore         
-    assert_equal 1, @folder4.referenced_links.visible.count
-    @folder4.delete false    
-    assert @folder4.deleted
-    # TODO: Doesn't work in Travis
-    #assert_equal 0, @folder4.referenced_links.visible.count
-    @folder4.restore    
-    assert !@folder4.deleted
-    assert_equal 1, @folder4.referenced_links.visible.count
+    assert_kind_of DmsfFileRevision, @revision5    
   end
   
-  def test_destroy
-    assert_equal 1, @folder4.referenced_links.visible.count
-    @folder4.delete true
-    assert_nil DmsfFolder.find_by_id(@folder4.id)        
-    assert_equal 0, DmsfLink.where(:target_id => @folder4.id, :target_type => DmsfFolder.model_name).count
-  end
+  def test_delete_restore      
+    @revision5.delete false    
+    assert @revision5.deleted    
+    @revision5.restore    
+    assert !@revision5.deleted    
+  end    
   
+  def test_destroy       
+    @revision5.delete true
+    assert_nil DmsfFileRevision.find_by_id @revision5.id    
+  end
+
 end

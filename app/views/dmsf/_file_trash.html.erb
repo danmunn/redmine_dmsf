@@ -1,0 +1,60 @@
+<%#=
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<td class="check"><%= check_box_tag(name, id, false, 
+  :title => l(:title_check_for_zip_download_or_email)) %></td>
+<td class="title">
+  <% file_download_url = url_for({:only_path => false, :controller => :dmsf_files, :action => 'show', :id => file, :download => ''}) %>
+  <%= link_to(h(title),
+    file_download_url,
+    :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}",
+    :title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version),
+    'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_download_url}") %>
+  <div class="filename" title="<%= l(:title_filename_for_download)%>"><%= h(link ? link.path : file.display_name) %></div>
+</td>
+<td class="size"><%= number_to_human_size(file.last_revision.size) %></td>
+<td class="modified">
+  <%= format_time(file.last_revision.updated_at) %>  
+</td>
+<td class="version"><%= file.last_revision.version %></td>
+<td class="workflow">                                    
+  <%= file.last_revision.workflow_str(false) %>  
+</td>
+<td class="author"><%= h(file.last_revision.user) %></td>
+<td class="actions">
+  <% if @file_manipulation_allowed %>          
+    <div class="right_icon_box">
+      <%= link_to('',
+        restore_dmsf_file_path(:id => file),                
+        :title => l(:title_restore),
+        :class => 'icon icon-dmsf-restore') %>
+      <%= link_to('',
+        dmsf_file_path(:id => file, :commit => 'yes'),
+        :data => {:confirm => l(:text_are_you_sure)},
+        :method => :delete,
+        :title => l(:title_delete),
+        :class => 'icon icon-dmsf-rev-delete') %>           
+    </div>    
+  <% end %>
+</td>
+<td class="hidden">1</td>
+<td class="hidden"><%= file.last_revision.size %></td>
+<td class="hidden"><%= file.last_revision.updated_at.to_i %></td>
+<td class="hidden"><%= file.last_revision.iversion %></td>

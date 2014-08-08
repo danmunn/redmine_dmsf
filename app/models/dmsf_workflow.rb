@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -148,16 +148,15 @@ class DmsfWorkflow < ActiveRecord::Base
           end
           break if step_is_finished
         end 
-        if step_is_finished
-          break        
-        else
-          steps.each do |step|
-            step.dmsf_workflow_step_assignments.each do |assignment|              
-              results << assignment if assignment.add?(dmsf_file_revision_id)              
-            end
+        break if step_is_finished
+      end
+      unless step_is_finished
+        steps.each do |step|
+          step.dmsf_workflow_step_assignments.each do |assignment|
+            results << assignment if assignment.add?(dmsf_file_revision_id)
           end
-          return results
         end
+        return results
       end
     end
     results

@@ -74,10 +74,8 @@ en:
   title_waiting_for_approval: Waiting for Approval
   title_approved: Approved
   title_unlock_file: Unlock to allow changes for other members
-  title_lock_file: Lock to prevent changes for other members
-  submit_download: Download
-  title_download_checked: Download checked in Zip archive
-  submit_email: Email
+  title_lock_file: Lock to prevent changes for other members  
+  title_download_checked: Download checked in Zip archive  
   title_send_checked_by_email: Send checked by email
   link_user_preferences: Your DMSF project preferences
   heading_send_documents_by_email: Send documents by email
@@ -147,6 +145,7 @@ en:
   permission_file_manipulation: File manipulation  
   permission_force_file_unlock: Force file unlock
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: File
   field_folder: Folder
   error_create_cycle_in_folder_dependency: create cycle in folder dependency
@@ -296,6 +295,14 @@ en:
   label_display_notified_recipients: Display notified recipients
   note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
   warning_email_notifications: "Email notifications sent to %{to}"
+  
+  link_trash_bin: Trash bin
+  title_restore: Restore
+  notice_dmsf_file_restored: The document has been successfully restored
+  notice_dmsf_folder_restored: The folder has been successfully restored
+  notice_dmsf_link_restored: The link has been successfully restored
+  title_restore_checked: Restore checked
+  error_parent_folder: "The parent folder doesn't exist"
   
   my:
     blocks:

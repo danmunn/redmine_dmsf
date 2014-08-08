@@ -33,6 +33,7 @@ class DmsfFile < ActiveRecord::Base
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+  
   has_many :revisions, :class_name => 'DmsfFileRevision', :foreign_key => 'dmsf_file_id',
     :order => "#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC", 
     :dependent => :destroy
@@ -42,8 +43,9 @@ class DmsfFile < ActiveRecord::Base
     :dependent => :destroy  
   has_many :referenced_links, :class_name => 'DmsfLink', :foreign_key => 'target_id', 
     :conditions => {:target_type => DmsfFile.model_name}, :dependent => :destroy
-
-  scope :visible, lambda {|*args| where(DmsfFile.visible_condition(args.shift || User.current, *args)).readonly(false)}
+  
+  scope :visible, where(:deleted => false)
+  scope :deleted, where(:deleted => true)
   
   validates :name, :presence => true
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
@@ -51,11 +53,6 @@ class DmsfFile < ActiveRecord::Base
   
   validate :validates_name_uniqueness 
   
-  def self.visible_condition(user, options = {})
-    query = DmsfFile.where(:deleted => false)
-    query.where_values.map {|v| v.respond_to?(:to_sql) ? v.to_sql : v.to_s}.join(' AND ')
-  end
-
   def validates_name_uniqueness
     existing_file = DmsfFile.visible.find_file_by_name(self.project, self.folder, self.name)
     errors.add(:name, l('activerecord.errors.messages.taken')) unless
@@ -104,19 +101,19 @@ class DmsfFile < ActiveRecord::Base
     @last_revision = new_revision
   end
 
-  def delete
+  def delete(commit)
     if locked_for_user?
       Rails.logger.info l(:error_file_is_locked)
       errors[:base] << l(:error_file_is_locked)
       return false 
     end
     begin
-      if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']             
-        self.revisions.visible.each {|r| r.delete(true)}
+      # Revisions and links of a deleted file SHOULD be deleted too
+      self.revisions.each { |r| r.delete(commit, true) }
+      self.referenced_links.each { |l| l.delete(commit) }
+      if commit
         self.destroy
       else
-        # Revisions of a deleted file SHOULD be deleted too
-        self.revisions.visible.each {|r| r.delete }
         self.deleted = true
         self.deleted_by_user = User.current
         save
@@ -125,6 +122,18 @@ class DmsfFile < ActiveRecord::Base
       errors[:base] << e.message
       return false
     end
+  end
+  
+  def restore
+    if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted)
+      errors[:base] << l(:error_parent_folder)
+      return false
+    end
+    self.revisions.each { |r| r.restore }
+    self.referenced_links.each { |l| l.restore }
+    self.deleted = false
+    self.deleted_by_user = nil
+    save
   end
   
   def title

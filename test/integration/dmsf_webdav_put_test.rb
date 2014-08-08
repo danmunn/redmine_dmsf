@@ -20,7 +20,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 require 'fileutils'
 
-class DmsfWebdavIntegrationTest < RedmineDmsf::Test::IntegrationTest
+class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
 
   fixtures :projects, :users, :members, :member_roles, :roles, :enabled_modules, 
     :dmsf_folders, :dmsf_files, :dmsf_file_revisions

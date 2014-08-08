@@ -74,10 +74,8 @@ ru:
   title_waiting_for_approval: Ожидается на утверждение
   title_approved: Утверждено
   title_unlock_file: Разблокируйте файл, чтобы разрешить изменение его другими участниками
-  title_lock_file: Заблокируйте файл, чтобы запретить его изменение другими участниками
-  submit_download: Скачать
-  title_download_checked: Скачать выбранные файлы
-  submit_email: Отправить письмо
+  title_lock_file: Заблокируйте файл, чтобы запретить его изменение другими участниками  
+  title_download_checked: Скачать выбранные файлы  
   title_send_checked_by_email: Отправить выбранные файлы по электронной почте
   link_user_preferences: Ваши настройки DMSF проекта
   heading_send_documents_by_email: Отправить документы по электронной почте
@@ -147,6 +145,7 @@ ru:
   permission_file_manipulation: Управление файлами  
   permission_force_file_unlock: Разблокировка любых файлов
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: Файл
   field_folder: Папка
   error_create_cycle_in_folder_dependency: создать циклическую зависимость в папке
@@ -296,6 +295,14 @@ ru:
   label_display_notified_recipients: Display notified recipients
   note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
   warning_email_notifications: "Email notifications sent to %{to}"
+  
+  link_trash_bin: Trash bin
+  title_restore: Restore
+  notice_dmsf_file_restored: The document has been successfully restored
+  notice_dmsf_folder_restored: The folder has been successfully restored
+  notice_dmsf_link_restored: The link has been successfully restored
+  title_restore_checked: Restore checked
+  error_parent_folder: "The parent folder doesn't exist"
   
   my:
     blocks:

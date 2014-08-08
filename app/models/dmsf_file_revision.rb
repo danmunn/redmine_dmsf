@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,17 +28,16 @@ class DmsfFileRevision < ActiveRecord::Base
   has_many :access, :class_name => 'DmsfFileRevisionAccess', :foreign_key => 'dmsf_file_revision_id', :dependent => :destroy
   has_many :dmsf_workflow_step_assignment, :dependent => :destroy
 
-  # Returns a list of revisions that are not deleted here, or deleted at parent level either
-  scope :visible, lambda {|*args| joins(:file).where(DmsfFile.visible_condition(args.shift || User.current, *args)).where("#{self.table_name}.deleted = :false", :false => false ).readonly(false) }
+  # Returns a list of revisions that are not deleted here, or deleted at parent level either  
+  scope :visible, where(:deleted => false)
+  scope :deleted, where(:deleted => true)
 
   acts_as_customizable
-
   acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.file.dmsf_path_str}"},
     :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.file}},
     :datetime => Proc.new {|o| o.updated_at },
     :description => Proc.new {|o| o.comment },
-    :author => Proc.new {|o| o.user }
-                
+    :author => Proc.new {|o| o.user }          
   acts_as_activity_provider :type => 'dmsf_files',
     :timestamp => "#{DmsfFileRevision.table_name}.updated_at",
     :author_key => "#{DmsfFileRevision.table_name}.user_id",
@@ -60,30 +60,34 @@ class DmsfFileRevision < ActiveRecord::Base
   def self.filename_to_title(filename)
     remove_extension(filename).gsub(/_+/, ' ');
   end
-  
-  def delete(delete_all = false)
+    
+  def delete(commit = false, force = true)
     if self.file.locked_for_user?
       errors[:base] << l(:error_file_is_locked)
       return false 
-    end
-    if !delete_all && self.file.revisions.length <= 1
+    end    
+    if !commit && (!force && (self.file.revisions.length <= 1))
       errors[:base] << l(:error_at_least_one_revision_must_be_present)
       return false
     end
-    dependent = DmsfFileRevision.where(:source_dmsf_file_revision_id => self.id, :deleted => false).all        
+    dependent = DmsfFileRevision.where(:source_dmsf_file_revision_id => self.id).all
     dependent.each do |d| 
       d.source_revision = self.source_revision
       d.save!
     end
-    if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
-      dependencies = DmsfFileRevision.where(:disk_filename => self.disk_filename).all.count
-      File.delete(self.disk_file) if dependencies <= 1 && File.exist?(self.disk_file)       
+    if commit
       self.destroy
     else
       self.deleted = true
       self.deleted_by_user = User.current
       save
     end
+  end
+  
+  def restore
+    self.deleted = false
+    self.deleted_by_user = nil
+    save
   end
   
   def destroy

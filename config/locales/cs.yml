@@ -74,10 +74,8 @@ cs:
   title_waiting_for_approval: Čeká na schválení
   title_approved: Schváleno
   title_unlock_file: Odemknout a umožnit změny ostatním uživatelům
-  title_lock_file: Zamknout a zabránit změnám ostatních uživatelů
-  submit_download: Stáhnout
-  title_download_checked: Stáhnout vybrané jako Zip
-  submit_email: Email
+  title_lock_file: Zamknout a zabránit změnám ostatních uživatelů  
+  title_download_checked: Stáhnout vybrané jako Zip  
   title_send_checked_by_email: Zaslat vybrané emailem
   link_user_preferences: Vaše nastavení
   heading_send_documents_by_email: Odeslat dokumenty emailem
@@ -147,6 +145,7 @@ cs:
   permission_file_manipulation: Manipulace se soubory  
   permission_force_file_unlock: Vynucené odemknutí souboru
   permission_manage_workflows: Spravovat schvalovací procesy
+  permission_file_delete: Mazat dokumenty
   label_file: Soubor
   field_folder: Složka
   error_create_cycle_in_folder_dependency: vytvořit smyčku v závislostech složky
@@ -296,6 +295,14 @@ cs:
   label_display_notified_recipients: Zobrazit příjemce notifikací
   note_display_notified_recipients: Uživatel bude informován o příjemcích právě odeslané emailové notifikace.
   warning_email_notifications: "Notifikační email poslán na uživatele %{to}"
+  
+  link_trash_bin: Koš
+  title_restore: Obnovit
+  notice_dmsf_file_restored: Document byl úspěšně obnoven
+  notice_dmsf_folder_restored: Adresář byl úspěšně obnoven
+  notice_dmsf_link_restored: Odkaz byl úspěšně obnoven
+  title_restore_checked: Obnov vybrané
+  error_parent_folder: Nadřazený adresář neexistuje
     
   my:
     blocks:

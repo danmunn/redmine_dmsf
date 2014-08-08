@@ -46,7 +46,7 @@
         :class => 'icon icon-link') %>
       <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(:id => @file),
         :title => l(:title_copy), :class => 'icon icon-copy') %>
-      <%= delete_link @file %>
+      <%= delete_link @file if @file_delete_allowed %>
     <% else %>
       <% if (!@file.locked_for_user? || User.current.allowed_to?(:force_file_unlock, @project)) && @file.unlockable? %>
         <%= link_to(l(:button_unlock),
@@ -78,14 +78,12 @@
           <%= link_to('',            
             dmsf_file_path(@file, :download => revision),
             :title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version),
-            :class => 'icon icon-dmsf-rev-download') %>
-          <% if User.current.allowed_to?(:file_manipulation, @project) %>          
-             <%= link_to '',
-              delete_revision_path(revision),
-              :data => {:confirm => l(:text_are_you_sure)},
-              :title => l(:title_delete_revision),
-              :class => 'icon icon-dmsf-rev-delete' %>
-          <% end %>
+            :class => 'icon icon-dmsf-rev-download') %>          
+          <%= link_to '',
+            delete_revision_path(revision),
+            :data => {:confirm => l(:text_are_you_sure)},
+            :title => l(:title_delete_revision),
+            :class => 'icon icon-dmsf-rev-delete' if @file_delete_allowed %>          
         </div>      
         <i><%= l(:info_revision, :rev => revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>
@@ -140,11 +138,12 @@
       <div class="no-ident clear">
         <%= render 'dmsf/custom_fields', :object => revision %>
       </div>
-      <div class="splitcontentleft clear">
+      <p class="no-ident">
         <%= label_tag('', "#{l(:label_comment)}:") %>
-        <%= h(revision.comment) %>
-      </div>	     	     
-      <br/>
+      </p>
+      <div class="wiki clear" style="margin-left: 110px">
+        <%= textilizable(revision.comment) %>
+      </div>	     	           
       <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">        
         <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if User.current.allowed_to?(:file_manipulation, @file.project) %>        
       </div>    
@@ -203,8 +202,6 @@
 <% end %>
 
 <% content_for :header_tags do %>  
-  <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag 'jquery-1.6.1.min.js', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag 'jquery-ui-1.8.13.min.js', :plugin => 'redmine_dmsf' %>
+  <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>  
   <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>  
 <% end %>

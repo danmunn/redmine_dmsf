@@ -74,10 +74,8 @@ sl:
   title_waiting_for_approval: V postopku odobritve
   title_approved: Odobreno
   title_unlock_file: Odkleni drugim članom za posodabljanje
-  title_lock_file: Zakleni za posodabljanje
-  submit_download: Prenesi dol
-  title_download_checked: Prenesi izbrano v Zip formatu
-  submit_email: Pripni v email
+  title_lock_file: Zakleni za posodabljanje  
+  title_download_checked: Prenesi izbrano v Zip formatu  
   title_send_checked_by_email: Pošlji izbrano po elektronski pošti
   link_user_preferences: Vaše Arhivske nastavitve za projekt
   heading_send_documents_by_email: Pošlji dokumente po elektronski pošti
@@ -147,6 +145,7 @@ sl:
   permission_file_manipulation: Upravljanje z datotekami  
   permission_force_file_unlock: Prisilno odkleni datoteko
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: Datoteka
   field_folder: Pod mapo
   error_create_cycle_in_folder_dependency: naredi ciklično odvisnost med mapami
@@ -296,6 +295,14 @@ sl:
   label_display_notified_recipients: Display notified recipients
   note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
   warning_email_notifications: "Email notifications sent to %{to}"
+  
+  link_trash_bin: Trash bin
+  title_restore: Restore
+  notice_dmsf_file_restored: The document has been successfully restored
+  notice_dmsf_folder_restored: The folder has been successfully restored
+  notice_dmsf_link_restored: The link has been successfully restored
+  title_restore_checked: Restore checked
+  error_parent_folder: "The parent folder doesn't exist"
   
   my:
     blocks:

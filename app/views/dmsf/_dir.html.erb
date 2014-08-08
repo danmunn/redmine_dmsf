@@ -1,7 +1,7 @@
 <%#=
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2014 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@
   <% end %>
 </td>            
 <td class="size"></td>
-<td class="modified"><%= format_time(subfolder.updated_at) %>                
+<td class="modified"><%= format_time(subfolder.modified) %>                
   <% if locked_for_user %>
     <% if subfolder.lock.reverse[0].user %>            
       <%= link_to('',
@@ -85,7 +85,7 @@
             :class => 'icon icon-del') %>                       
         <% else %>
           <%= link_to('',
-            delete_dmsf_path(:id => project, :folder_id => @folder, :delete_folder_id => subfolder),
+            delete_dmsf_path(:id => project, :folder_id => subfolder),
             :data => {:confirm => l(:text_are_you_sure)},            
             :title => l(:title_delete),
             :class => 'icon icon-del') %>             

@@ -42,13 +42,14 @@ RedmineApp::Application.routes.draw do
   get '/projects/:id/dmsf/new', :controller => 'dmsf', :action => 'new', :as => 'new_dmsf'
   get '/projects/:id/dmsf/edit', :controller=> 'dmsf', :action => 'edit', :as => 'edit_dmsf'
   get '/projects/:id/dmsf/edit/root', :controller=> 'dmsf', :action => 'edit_root', :as => 'edit_root_dmsf'
+  get '/projects/:id/dmsf/trash', :controller => 'dmsf', :action => 'trash', :as => 'trash_dmsf'
+  get '/projects/:id/dmsf/restore', :controller => 'dmsf', :action => 'restore', :as => 'restore_dmsf'
 
   #
   # dmsf_state controller
   #   /projects/<project>/dmsf/state
   ##
   post '/projects/:id/dmsf/state', :controller => 'dmsf_state', :action => 'user_pref_save'
-
 
   #
   #  dmsf_upload controller
@@ -71,9 +72,11 @@ RedmineApp::Application.routes.draw do
   post '/dmsf/files/:id/revision/create', :controller => 'dmsf_files', :action => 'create_revision'
   get '/dmsf/files/:id/revision/delete', :controller => 'dmsf_files', :action => 'delete_revision', :as => 'delete_revision'
   get '/dmsf/files/:id/download', :controller => 'dmsf_files', :action => 'show', :download => '' # Otherwise will not route nil download param
-  get '/dmsf/files/:id/download/:download', :controller => 'dmsf_files', :action => 'show'
+  get '/dmsf/files/:id/download/:download', :controller => 'dmsf_files', :action => 'show', :as => 'download_revision'
+  get '/dmsf/files/:id/view', :controller => 'dmsf_files', :action => 'view'
   get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show', :as => 'dmsf_file'  
   delete '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'delete'
+  get '/dmsf/files/:id/restore', :controller => 'dmsf_files', :action => 'restore', :as => 'restore_dmsf_file'
   
   # Just to keep backward compatibility with old external direct links
   get '/dmsf_files/:id', :controller => 'dmsf_files', :action => 'show'
@@ -123,7 +126,8 @@ RedmineApp::Application.routes.draw do
   
   # Links
   resources :dmsf_links do
-    member do      
+    member do
+      get 'restore'
     end    
   end  
   

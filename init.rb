@@ -26,7 +26,7 @@ Redmine::Plugin.register :redmine_dmsf do
   name 'DMSF'
   author 'Vit Jonas / Daniel Munn / Karel Picman'
   description 'Document Management System Features'
-  version '1.4.8 stable'
+  version '1.4.9 devel'
   url 'http://www.redmine.org/plugins/dmsf'
   author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   
@@ -59,18 +59,19 @@ Redmine::Plugin.register :redmine_dmsf do
       {:dmsf_state => [:user_pref_save]}
     permission :view_dmsf_files, 
       {:dmsf => [:entries_operation, :entries_email, :download_email_entries, :tag_changed], 
-        :dmsf_files => [:show], 
+        :dmsf_files => [:show, :view],
         :dmsf_files_copy => [:new, :create, :move], 
         :dmsf_workflows => [:log]}, 
       :read => true
     permission :folder_manipulation, 
-      {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :delete_entries]}
+      {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :delete_entries, :restore]}
     permission :file_manipulation, 
-      {:dmsf_files => [:create_revision, :delete, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate], 
+      {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate, :restore], 
         :dmsf_upload => [:upload_files, :upload_file, :commit_files], 
         :dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment],
-        :dmsf_links => [:new, :create, :destroy]
+        :dmsf_links => [:new, :create, :destroy, :restore]
         }
+    permission :file_delete, { :dmsf => [:trash], :dmsf_files => [:delete]}
     permission :manage_workflows, 
       {:dmsf_workflows => [:index, :new, :create, :destroy, :show, :add_step, :remove_step, :reorder_steps, :update]}
     permission :force_file_unlock, {}
@@ -90,10 +91,10 @@ Redmine::Plugin.register :redmine_dmsf do
       return nil if args.length < 1 # require file id
       entry_id = args[0].strip
       entry = DmsfFile.find(entry_id)
-      unless entry.nil? || entry.deleted
+      if entry && !entry.deleted && User.current && User.current.allowed_to?(:view_dmsf_files, entry.project)
         title = args[1] ? args[1] : entry.title
-        revision = args[2] ? args[2] : ''
-        return link_to "#{title}", :controller => 'dmsf_files', :action => 'show', :id => entry, :download => revision, :only_path => false
+        revision = args[2] ? args[2] : ''        
+        return link_to h(title), download_revision_path(entry, revision, :only_path => false)
       end
       nil
     end
@@ -110,9 +111,9 @@ Redmine::Plugin.register :redmine_dmsf do
       else
         entry_id = args[0].strip
         entry = DmsfFolder.find(entry_id)
-        unless entry.nil?
-          title = args[1] ? args[1] : entry.title
-          return link_to "#{title}", :controller => 'dmsf', :action => 'show', :id => entry.project, :folder_id => entry, :only_path => false
+        if entry && User.current && User.current.allowed_to?(:view_dmsf_folders, entry.project)
+          title = args[1] ? args[1] : entry.title          
+          return link_to h(title), dmsf_folder_path(entry.project, :folder_id => entry, :only_path => false)
         end
       end
       nil
@@ -128,9 +129,9 @@ Redmine::Plugin.register :redmine_dmsf do
       return nil if args.length < 1 # require file id
       entry_id = args[0].strip
       entry = DmsfFile.find(entry_id)
-      unless entry.nil? || entry.deleted
-        title = args[1] ? args[1] : entry.title
-        return link_to "#{title}", :controller => 'dmsf_files', :action => 'show', :id => entry, :only_path => false
+      if entry && !entry.deleted && User.current && User.current.allowed_to?(:view_dmsf_files, entry.project)
+        title = args[1] ? args[1] : entry.title        
+        return link_to h(title), dmsf_file_path(entry, :only_path => false)
       end
       nil
     end

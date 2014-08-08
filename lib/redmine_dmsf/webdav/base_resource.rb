@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,7 +26,7 @@ module RedmineDmsf
       include ActionView::Helpers::NumberHelper
 
       def initialize(*args)
-        webdav_setting = Setting.plugin_redmine_dmsf["dmsf_webdav"]
+        webdav_setting = Setting.plugin_redmine_dmsf['dmsf_webdav']
         raise NotFound if !webdav_setting.nil? && webdav_setting.empty?
         super(*args)
       end
@@ -66,7 +67,7 @@ module RedmineDmsf
           '',
           '',
         ] + entities unless parent.nil?
-        @response.body << index_page % [ path.empty? ? "/" : path, path.empty? ? "/" : path , entities ]
+        @response.body << index_page % [ path.empty? ? '/' : path, path.empty? ? '/' : path , entities ]
       end
 
       #Run method through proxy class - ensuring always compatible child is generated
@@ -133,7 +134,7 @@ table { width:100%%; }
 
       #Make it easy to find the path without project in it.
       def projectless_path
-        '/'+path.split('/').drop(2).join('/')
+        '/' + path.split('/').drop(2).join('/')
       end
 
       def path_prefix
@@ -142,5 +143,3 @@ table { width:100%%; }
     end
   end
 end
-
-

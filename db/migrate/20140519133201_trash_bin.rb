@@ -1,7 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,29 +16,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require File.expand_path('../../test_helper', __FILE__)
-
-class DmsfWebdavPostTest < RedmineDmsf::Test::IntegrationTest
-
-  fixtures :users, :enabled_modules
-
-  def setup
-    @admin = credentials 'admin'
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    super
+class TrashBin < ActiveRecord::Migration
+  def up  
+    # DMSF - project's root folder notification
+    add_column :dmsf_folders, :deleted, :boolean, :default => false, :null => false
+    add_column :dmsf_folders, :deleted_by_user_id, :integer
+    
+    DmsfFolder.update_all(:deleted => false)
   end
   
-  # Test that any post request is authenticated
-  def test_post_request_authenticated
-    post '/dmsf/webdav/'
-    assert_response 401 # 401 Unauthorized
+  def down
+    remove_column :dmsf_folders, :deleted
+    remove_column :dmsf_folders, :deleted_by_user_id
   end
-
-  # Test post is not implemented
-  def test_post_not_implemented
-    post '/dmsf/webdav/', nil, @admin
-    assert_response 501 # 501 Not Implemented
-  end
-  
 end

@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -66,5 +66,25 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
 #    assert_select 'label', { :text => @custom_field.name }
 #    assert_select 'option', { :value => @custom_value.value }
 #  end
+
+  def delete
+    # Missing permissions
+    delete @file, :commit => false
+    assert_response 403
+    
+    # Permissions OK but the file is locked 
+    @role.add_permission! :file_delete
+    delete @file, :commit => false
+    assert_response :redirect    
+    assert_include l(:error_file_is_locked), flash[:error]
+    
+    # Permissions OK and not locked
+    flash[:error].clear   
+    @file.unlock!
+    delete @file, :commit => false
+    assert_response :redirect     
+    assert_equal 0, flash[:error].size
+  end
+  
 end
 
