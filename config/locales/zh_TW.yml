@@ -1,0 +1,306 @@
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
+#
+#
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+zh:
+  dmsf: 文档管家
+  label_dmsf_file_plural: Dmsf files
+  warning_no_entries_selected: 未选择任何条目
+  error_email_to_must_be_entered: 请输入电子邮件  
+  warning_file_already_locked: 文件已经锁定
+  notice_file_locked: 文件锁定
+  warning_file_not_locked: 文件未锁定
+  notice_file_unlocked: 文件解锁
+  error_only_user_that_locked_file_can_unlock_it: 只有锁定文件的用户才能解锁该文件  
+  error_max_files_exceeded: "超出同时下载%{number}个文件数量限制"  
+  error_entry_project_does_not_match_current_project: 入口项目与当前项目不匹配
+  notice_folder_created: 文件夹创建完毕
+  error_folder_creation_failed: 文件夹创建失败
+  error_folder_title_must_be_entered: 请输入主题
+  notice_folder_deleted: 文件夹已删除
+  error_folder_is_not_empty: 非空文件夹
+  error_folder_title_is_already_used: 标题已经被使用
+  notice_folder_details_were_saved: 文件夹详细信息已保存  
+  error_file_is_locked: Folder is locked
+  error_file_is_locked: 文件被锁定
+  notice_file_deleted: 文件已删除
+  error_at_least_one_revision_must_be_present: 至少一个修订版本必须存在
+  notice_revision_deleted: 修订版本已删除
+  warning_one_of_files_locked: 其中一个文件被锁定
+  notice_file_unlocked: 文件解锁
+  notice_file_revision_created: 文件修订版本已创建
+  notice_your_preferences_were_saved: 您的偏好设定已保存
+  warning_folder_notifications_already_activated: 文件夹通知已激活
+  notice_folder_notifications_activated: 文件夹通知激活
+  warning_folder_notifications_already_deactivated: 文件夹通知已注销
+  notice_folder_notifications_deactivated: 文件夹通知注销
+  warning_file_notifications_already_activated: 文件通知已激活
+  notice_file_notifications_activated: 文件通知激活
+  warning_file_notifications_already_deactivated: 文件通知已注销
+  notice_file_notifications_deactivated: 文件通知注销
+  link_details: "%{title} 详情"
+  link_edit: "编辑 %{title}"
+  submit_create: 创建
+  link_create_folder: 创建文件夹
+  title_check_uncheck_all_for_zip_download_or_email: 全选/全不选（zip下载或邮件发送）
+  link_title: 主题
+  link_size: 大小
+  link_modified: 修改日期
+  link_ver: 版本.
+  link_author: 作者
+  title_check_for_zip_download_or_email: 选中用于Zip下载或邮件发送
+  title_delete: 删除
+  title_notifications_active_deactivate: "通知有效：点击注销通知"
+  title_notifications_not_active_activate: "通知无效:点击激活通知"
+  title_title_version_version_download: " 下载‘%{title}’版本‘%{version}’"
+  title_locked_by_user: "%{user}锁定"
+  title_locked_by_you: 您锁定
+  title_waiting_for_approval: 待批准
+  title_approved: 已批准
+  title_unlock_file: 解除锁定允许其他成员修改
+  title_lock_file: 锁定以防其他成员修改
+  submit_download: 下载
+  title_download_checked: zip归档下载所选
+  submit_email: 电子邮件
+  title_send_checked_by_email: 电子邮件发送所选
+  link_user_preferences: 您的文档管理系统项目偏好设定
+  heading_send_documents_by_email: 电子邮件发送文档
+  label_email_from: 发件人
+  label_email_to: 收件人
+  label_email_cc: 抄送
+  label_email_subject: 主题
+  label_email_documents: 文档
+  label_email_body: 正文
+  label_email_send: 发送
+  title_notifications_active: 通知处于有效状态
+  label_file_size: 文件大小
+  heading_file_upload: 上传
+  note_uploaded_maximum_files_at_once: "一次最多上传%{number}个文件."
+  note_upload_files_greater_than_two_gb: 为了上传大于2GB文件，您需要64位版本的浏览器.
+  submit_upload_files: 上传
+  heading_new_folder: 新建文件夹
+  label_title: 标题
+  label_description: 描述
+  submit_save: 保存
+  info_file_locked: 文件已被锁定!
+  label_notifications: 通知功能
+  select_option_default: 默认
+  select_option_deactivated: 注销
+  select_option_activated: 激活
+  title_save_preferences: 保存偏好设定
+  heading_revisions: 修订版本
+  title_download: 下载
+  title_delete_revision: 删除此修订
+  label_created: 创建
+  label_changed: 修改
+  info_changed_by_user: "%{changed} by"
+  label_filename: 文件名  
+  label_mime: Mime
+  label_size: 大小  
+  heading_new_revision: 新修订
+  option_version_same: Same
+  option_version_minor: Minor
+  option_version_major: Major
+  label_new_content: 新内容
+  label_maximum_files_upload: 最大上传文件数
+  note_maximum_number_of_files_uploaded: 一次上传的最大文件数量. 0表示无限制.
+  label_maximum_files_download: 最大下载文件数
+  note_maximum_number_of_files_downloaded: 最大文件下载数量(zip或发送电子邮件方式). 0表示无限制.
+  label_file_storage_directory: 文件存储目录
+  label_index_database: Index database
+  label_stemming_language: Stemming Language
+  note_possible_values: Possible values
+  note_pass_none_to_disable_stemming: "pass 'none' to disable stemming"
+  label_stem_strategy: Stem strategy
+  option_stem_none: Stem none (default)
+  option_stem_some: Stem some
+  option_stem_all: Stem all
+  label_stemming_description: This controls how the query parser will apply the stemming algorithm. The default value is STEM_NONE. The possible values are
+  note_do_not_stem: "Don't perform any stemming."
+  note_stem_some: "Search for stemmed forms of terms except for those which start with a capital letter, or are followed by certain characters, or are used with operators which need positional information. Stemmed terms are prefixed with 'Z'."
+  note_stem_all: "Search for stemmed forms of all words (note: no 'Z' prefix is added)."
+  note_stemming_applied: Note that the stemming algorithm is only applied to words in probabilistic fields - boolean filter terms are never stemmed.
+  label_default_notifications: 文件默认通知
+  heading_uploaded_files: 上传文件
+  submit_commit: 提交
+  link_documents: 文档
+  permission_view_dmsf_folders: 浏览文档
+  permission_user_preferences: 用户偏好设定
+  permission_view_dmsf_files: 查看文档
+  permission_folder_manipulation: 文件夹操作
+  permission_file_manipulation: 文件操作  
+  permission_force_file_unlock: 强制文件解锁
+  permission_manage_workflows: Manage workflows
+  label_file: 文件
+  field_folder: 件夹
+  error_create_cycle_in_folder_dependency: create cycle in folder dependency
+  error_contains_invalid_character: 含有无效字符
+  error_file_commit_require_uploaded_file: 文件提交要求上传文件
+  warning_some_files_were_not_commited: "某些文件因验证错误未能被提交: %{files}"
+  error_user_has_not_right_delete_folder: 用户没有权限删除文件夹
+  error_user_has_not_right_delete_file: 用户没有权限删除文件
+  notice_entries_deleted: 条目已删除
+  warning_some_entries_were_not_deleted: "某些条目未被删除: %{entries}"  
+  title_delete_checked: 删除选中
+  title_number_of_files_in_directory: 目录总文件个数
+  title_filename_for_download: 用于下载或zip归档的文件名
+  label_number_of_folders: Folders
+  label_number_of_documents: Documents
+  error_file_storage_directory_does_not_exist: 文件存储目录不存在或不能创建
+  error_file_can_not_be_created: 文件未能在存储目录中创建
+  error_wrong_zip_encoding: 不正确的Zip编码
+  warning_xapian_not_available: Xapian not available
+  menu_dmsf: 文档管家
+  label_physical_file_delete: 物理删除文件
+  user_is_not_project_member: 您不是该项目的成员
+  heading_access_downloads_emails: 存取次数
+  heading_access_first: 首次
+  heading_access_last: 末次
+  label_dmsf_updated: DMSF updated
+  title_total_size_of_all_files: 文件夹所有文件总大小
+  project_module_dmsf: 文档管家  
+  warning_no_project_to_copy_file_to: No project to copy file to
+  comment_copied_from: "Copied from %{source}"
+  notice_file_copied: File copied
+  notice_file_moved: File moved
+  field_target_project: Target project
+  field_target_folder: Target folder
+  title_copy_or_move: Copy/Move
+  label_dmsf_folder_plural: Dmsf folders
+  comment_moved_from: "Moved from %{source}"
+  error_target_folder_same: Target folder and project are the same as current
+  error_file_cannot_be_moved: "File can't be moved"
+  error_file_cannot_be_copied: "File can't be copied"
+  warning_no_project_to_copy_folder_to: No project to copy folder to
+  title_copy: Copy
+  error_folder_cannot_be_copied: "Folder can't be copied"
+  notice_folder_copied: Folder copied
+  
+  error_max_email_filesize_exceeded: "You've exceeded the maximum filesize for sending via email. (%{number} MB)"
+  note_maximum_email_filesize: Limits maximum filesize that can be sent via email. 0 means unlimited. Number is in MB.
+  label_maximum_email_filesize: Maximum email attachment size
+  header_minimum_filesize: File Error.
+  error_minimum_filesize: "The file %{file} is 0 bytes and will not be attached."
+  parent_directory: Parent Directory
+  note_webdav: Webdav once enabled can be found at http://.../dmsf/webdav/
+  label_webdav: Webdav functionality
+  label_dmsf_plural: "Copy DMSF files and folders (%{files} files in %{folders} folders)"
+
+  warning_folder_already_locked: This folder is already locked
+  notice_folder_locked: The folder was successfully locked
+  warning_folder_not_locked: Unfortunately, the folder could not be locked
+  notice_folder_unlocked: The folder was successfully unlocked
+  error_only_user_that_locked_folder_can_unlock_it: You are not authorised to unlock this folder
+  title_folder_parent_locked: "Parent folder %{name} is locked"  
+  title_unlock_folder: Unlock to allow changes for other members
+  title_lock_folder: Lock to prevent changes for other members
+
+  select_option_webdav_readonly: Read-only
+  select_option_webdav_readwrite: Read/Write
+  label_webdav_strategy: Webdav strategy
+  note_webdav_strategy: Enables the administrator to decide if webdav is a read-only or read-write platform for end users.  
+  
+  error_unable_delete_dmsf_workflow: Unable to delete the workflow
+  error_empty_note: "The note can't be empty"
+  error_workflow_assign: An error occured while assigning
+  error_cannot_start_workflow: "Workflow can't be started"
+  error_cannot_renumber_steps: "Steps can't be renumbered"
+  label_dmsf_workflow_new: New approval workflow
+  field_label_dmsf_workflow: Approval Workflow
+  field_label_dmsf_workflow_name: Approval workflow name
+  label_dmsf_workflow_plural: Approval workflows
+  label_dmsf_workflow_step: Step
+  label_dmsf_workflow_step_plural: Steps
+  label_dmsf_workflow_approval: Approval
+  label_dmsf_workflow_approval_plural: Approvals
+  label_dmsf: DMSF
+  label_dmsf_wokflow_action_approve: Approve
+  label_dmsf_wokflow_action_reject: Reject
+  label_dmsf_wokflow_action_delegate: Delegate to
+  label_dmsf_wokflow_action_assign: Assign an approval workflow
+  label_dmsf_wokflow_action_start: Start workflow
+  label_dmsf_workflow_add_approver: "Add a new approver with a logical function:"
+  label_or: or
+  label_action: Action
+  label_note: Note  
+  title_none: None
+  title_rejection: Rejection
+  title_delegation: Delegation
+  title_assignment: Assignment
+  title_start: Start  
+  title_dmsf_workflow_log: Approval Workflow Log
+  title_assigned: Assigned
+  title_approval: Approval
+  title_rejected: Rejected
+  dmsf_and: AND
+  dmsf_or: OR
+  dmsf_new_step: New step  
+  message_dmsf_wokflow_note: Your note...
+  info_revision: "r%{rev}"
+  link_workflow: Workflow  
+  notice_workflow_started: Approval workflow successfully started
+  text_email_subject_approved: "Approval workflow %{name} approved"
+  text_email_subject_rejected: "Approval workflow %{name} rejected"
+  text_email_subject_delegated: "Approval workflow %{name} delegated"
+  text_email_subject_requires_approval: "Approval workflow %{name} requires your approval"
+  text_email_subject_updated: "Approval workflow %{name} updated"
+  text_email_subject_started: "Approval workflow %{name} started" 
+  text_email_finished_approved: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been approved."
+  text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been rejected because of '%{notice}'."
+  text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
+  text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps and you are expected to do an approval in the next approval step."
+  text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps."
+  text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you are expected to do an approval in the current approval step."  
+  text_email_to_proceed: To proceed click on the check box icon next to the document in
+  text_email_to_see_history: To see the approval history click on the workflow status of the document in
+  text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  label_my_open_approvals: My open approvals
+  label_my_locked_documents: My locked documents
+  
+  title_create_link: Create a symbolic link  
+  label_link_from: Link from
+  label_link_to: Link to
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Source file
+  title_download_entries: Download entries
+  label_link_name: Link name
+  label_target_folder: Target folder
+  label_source_folder: Source folder
+  label_target_project: Target project
+  label_source_project: Source project
+  
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
+  label_links_only: links only
+  
+  label_display_notified_recipients: Display notified recipients
+  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
+  warning_email_notifications: "Email notifications sent to %{to}"
+  
+  my:
+    blocks:
+      locked_documents: Locked documents
+      open_approvals: Open approvals
+                
+  label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
+  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
