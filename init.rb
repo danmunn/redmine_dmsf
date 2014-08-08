@@ -59,7 +59,7 @@ Redmine::Plugin.register :redmine_dmsf do
       {:dmsf_state => [:user_pref_save]}
     permission :view_dmsf_files, 
       {:dmsf => [:entries_operation, :entries_email, :download_email_entries, :tag_changed], 
-        :dmsf_files => [:show], 
+        :dmsf_files => [:show, :view],
         :dmsf_files_copy => [:new, :create, :move], 
         :dmsf_workflows => [:log]}, 
       :read => true
