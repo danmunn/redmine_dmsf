@@ -132,7 +132,7 @@
   option_stem_none: Stem none (default)
   option_stem_some: Stem some
   option_stem_all: Stem all
-  label_stemming_description: 這是用來控制 Query parser 要使用哪個stemming algorithm，預設值是'STEM NONE'。而這邊所能選取的值有以下幾種:
+  label_stemming_description: "這是用來控制 Query parser 要使用哪個stemming algorithm，預設值是:STEM NONE。而這邊所能選取的值有以下幾種:"
   note_do_not_stem: "Don't perform any stemming."
   note_stem_some: "Search for stemmed forms of terms except for those which start with a capital letter, or are followed by certain characters, or are used with operators which need positional information. Stemmed terms are prefixed with 'Z'."
   note_stem_all: "Search for stemmed forms of all words (note: no 'Z' prefix is added)."
@@ -192,14 +192,14 @@
   title_copy: Copy
   error_folder_cannot_be_copied: "Folder can't be copied"
   notice_folder_copied: Folder copied
-  
+
   error_max_email_filesize_exceeded: "己經超出Email所能允許的最大檔案大小。 (%{number} MB)"
   note_maximum_email_filesize: 限制Email所允許的最大檔案大小。 0 表示沒有限制。
   label_maximum_email_filesize: Email附加檔案最大的檔案大小。
   header_minimum_filesize: 檔案錯誤
   error_minimum_filesize: "這個檔案 %{file} 為空。無法被附加。"
   parent_directory: 上層目錄
-  note_webdav: Webdav 啟用後，可在下列網址被找到: http://.../dmsf/webdav/
+  note_webdav: "Webdav 啟用後，可在下列網址被找到: http://.../dmsf/webdav/"
   label_webdav: Webdav功能
   label_dmsf_plural: "複制DMSF的檔案和資料夾。 ( 資料夾: %{folders} 檔案: %{files} )"
 
@@ -216,7 +216,7 @@
   select_option_webdav_readwrite: 可讀可寫
   label_webdav_strategy: Webdav策略
   note_webdav_strategy: 讓管理者決定，webdav給使用者的權限，是唯讀or可讀可寫。
-  
+
   error_unable_delete_dmsf_workflow: 無法刪除工作流程
   error_empty_note: "備註不可以為空。"
   error_workflow_assign: 當指派時發生錯誤
@@ -273,7 +273,7 @@
   text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
   label_my_open_approvals: My open approvals
   label_my_locked_documents: My locked documents
-  
+
   title_create_link: Create a symbolic link  
   label_link_from: Link from
   label_link_to: Link to
@@ -286,22 +286,22 @@
   label_source_folder: Source folder
   label_target_project: Target project
   label_source_project: Source project
-  
+
   text_email_doc_updated_subject: "Documents of %{project} updated"
   text_email_doc_updated: has just actualized documents of
   text_email_doc_follows: as follows
   text_email_doc_deleted_subject: "Documents of %{project} deleted"
   text_email_doc_deleted: has just deleted documents of
   label_links_only: links only
-  
+
   label_display_notified_recipients: Display notified recipients
   note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
   warning_email_notifications: "Email notifications sent to %{to}"
-  
+
   my:
     blocks:
       locked_documents: Locked documents
       open_approvals: Open approvals
-                
+
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
