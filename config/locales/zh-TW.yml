@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 # Translated by Aecho Liu, (aecho1028@gmail.com)
-zh:
+"zh-TW":
   dmsf: DMSF
   label_dmsf_file_plural: Dmsf files
   warning_no_entries_selected: 尚未選取任何項目
@@ -168,7 +168,7 @@ zh:
   error_wrong_zip_encoding: 不正確的Zip encoding
   warning_xapian_not_available: Xapian not available
   menu_dmsf: DMSF
-  label_physical_file_delete: Physical file delete
+  label_physical_file_delete: 永久刪除檔案
   user_is_not_project_member: 您不是專案的成員之一
   heading_access_downloads_emails: 下載/電子郵件
   heading_access_first: First
@@ -193,49 +193,49 @@ zh:
   error_folder_cannot_be_copied: "Folder can't be copied"
   notice_folder_copied: Folder copied
   
-  error_max_email_filesize_exceeded: "You've exceeded the maximum filesize for sending via email. (%{number} MB)"
-  note_maximum_email_filesize: Limits maximum filesize that can be sent via email. 0 means unlimited. Number is in MB.
-  label_maximum_email_filesize: Maximum email attachment size
-  header_minimum_filesize: File Error.
-  error_minimum_filesize: "The file %{file} is 0 bytes and will not be attached."
-  parent_directory: Parent Directory
-  note_webdav: Webdav once enabled can be found at http://.../dmsf/webdav/
-  label_webdav: Webdav functionality
-  label_dmsf_plural: "Copy DMSF files and folders (%{files} files in %{folders} folders)"
+  error_max_email_filesize_exceeded: "己經超出Email所能允許的最大檔案大小。 (%{number} MB)"
+  note_maximum_email_filesize: 限制Email所允許的最大檔案大小。 0 表示沒有限制。
+  label_maximum_email_filesize: Email附加檔案最大的檔案大小。
+  header_minimum_filesize: 檔案錯誤
+  error_minimum_filesize: "這個檔案 %{file} 為空。無法被附加。"
+  parent_directory: 上層目錄
+  note_webdav: Webdav 啟用後，可在下列網址被找到: http://.../dmsf/webdav/
+  label_webdav: Webdav功能
+  label_dmsf_plural: "複制DMSF的檔案和資料夾。 ( 資料夾: %{folders} 檔案: %{files} )"
 
-  warning_folder_already_locked: This folder is already locked
-  notice_folder_locked: The folder was successfully locked
-  warning_folder_not_locked: Unfortunately, the folder could not be locked
-  notice_folder_unlocked: The folder was successfully unlocked
-  error_only_user_that_locked_folder_can_unlock_it: You are not authorised to unlock this folder
-  title_folder_parent_locked: "Parent folder %{name} is locked"  
-  title_unlock_folder: Unlock to allow changes for other members
-  title_lock_folder: Lock to prevent changes for other members
+  warning_folder_already_locked: 這個資料夾己經被鎖定了
+  notice_folder_locked: 這個資料夾己經成功地鎖定了。
+  warning_folder_not_locked: 不好意思，這個資料夾無法被鎖定。
+  notice_folder_unlocked: 這個資料夾己經成功地解除鎖定了。
+  error_only_user_that_locked_folder_can_unlock_it: 您未被授權，解除這個資料夾的鎖定狀態。
+  title_folder_parent_locked: "上層資料夾 %{name} 被鎖定了。"  
+  title_unlock_folder: 解除鎖定。允許其它使用者修改。
+  title_lock_folder: 鎖定資料夾。禁止其它使用者修改。
 
-  select_option_webdav_readonly: Read-only
-  select_option_webdav_readwrite: Read/Write
-  label_webdav_strategy: Webdav strategy
-  note_webdav_strategy: Enables the administrator to decide if webdav is a read-only or read-write platform for end users.  
+  select_option_webdav_readonly: 唯讀
+  select_option_webdav_readwrite: 可讀可寫
+  label_webdav_strategy: Webdav策略
+  note_webdav_strategy: 讓管理者決定，webdav給使用者的權限，是唯讀or可讀可寫。
   
-  error_unable_delete_dmsf_workflow: Unable to delete the workflow
-  error_empty_note: "The note can't be empty"
-  error_workflow_assign: An error occured while assigning
-  error_cannot_start_workflow: "Workflow can't be started"
-  error_cannot_renumber_steps: "Steps can't be renumbered"
-  label_dmsf_workflow_new: New approval workflow
-  field_label_dmsf_workflow: Approval Workflow
-  field_label_dmsf_workflow_name: Approval workflow name
-  label_dmsf_workflow_plural: Approval workflows
-  label_dmsf_workflow_step: Step
-  label_dmsf_workflow_step_plural: Steps
-  label_dmsf_workflow_approval: Approval
-  label_dmsf_workflow_approval_plural: Approvals
+  error_unable_delete_dmsf_workflow: 無法刪除工作流程
+  error_empty_note: "備註不可以為空。"
+  error_workflow_assign: 當指派時發生錯誤
+  error_cannot_start_workflow: "工作流程無法開始"
+  error_cannot_renumber_steps: "工作步驟無法重新標記號碼"
+  label_dmsf_workflow_new: 建立批准流程
+  field_label_dmsf_workflow: 批准流程
+  field_label_dmsf_workflow_name: 批准流程名稱
+  label_dmsf_workflow_plural: 批准流程
+  label_dmsf_workflow_step: 步驟
+  label_dmsf_workflow_step_plural: 步驟
+  label_dmsf_workflow_approval: 批准
+  label_dmsf_workflow_approval_plural: 批准
   label_dmsf: DMSF
-  label_dmsf_wokflow_action_approve: Approve
-  label_dmsf_wokflow_action_reject: Reject
-  label_dmsf_wokflow_action_delegate: Delegate to
-  label_dmsf_wokflow_action_assign: Assign an approval workflow
-  label_dmsf_wokflow_action_start: Start workflow
+  label_dmsf_wokflow_action_approve: 批准
+  label_dmsf_wokflow_action_reject: 拒絕
+  label_dmsf_wokflow_action_delegate: 委派給
+  label_dmsf_wokflow_action_assign: 指定批准流程
+  label_dmsf_wokflow_action_start: 流程開始
   label_dmsf_workflow_add_approver: "Add a new approver with a logical function:"
   label_or: or
   label_action: Action
@@ -245,7 +245,7 @@ zh:
   title_delegation: Delegation
   title_assignment: Assignment
   title_start: Start  
-  title_dmsf_workflow_log: Approval Workflow Log
+  title_dmsf_workflow_log: 批准流程Log
   title_assigned: Assigned
   title_approval: Approval
   title_rejected: Rejected
