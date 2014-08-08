@@ -14,7 +14,7 @@ plupload.addI18n({
    'Start uploading queue' : '開始上傳',
    'Stop upload' : '停止上傳',
    'Start upload' : '開始上傳',
-   '己上傳 %d/%d 檔案': '己上傳 %d/%d 檔案',
+   'Uploaded %d/%d files': '己上傳 %d/%d 檔案',
    'N/A' : 'N/A',
    'Drag files here.' : '將檔案拖拉到這邊',
    'File extension error.': '副檔名錯誤',
