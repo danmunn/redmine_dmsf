@@ -72,6 +72,7 @@ RedmineApp::Application.routes.draw do
   get '/dmsf/files/:id/revision/delete', :controller => 'dmsf_files', :action => 'delete_revision', :as => 'delete_revision'
   get '/dmsf/files/:id/download', :controller => 'dmsf_files', :action => 'show', :download => '' # Otherwise will not route nil download param
   get '/dmsf/files/:id/download/:download', :controller => 'dmsf_files', :action => 'show'
+  get '/dmsf/files/:id/view', :controller => 'dmsf_files', :action => 'view'
   get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show', :as => 'dmsf_file'  
   delete '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'delete'
   
