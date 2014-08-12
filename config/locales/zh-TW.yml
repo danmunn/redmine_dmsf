@@ -20,8 +20,8 @@
 #
 # Translated by Aecho Liu, (aecho1028@gmail.com)
 "zh-TW":
-  dmsf: DMSF
-  label_dmsf_file_plural: Dmsf files
+  dmsf: 文件總管
+  label_dmsf_file_plural: 文件檔案
   warning_no_entries_selected: 尚未選取任何項目
   error_email_to_must_be_entered: 請輸入收件者的電子郵件
   warning_file_already_locked: 檔案己經鎖定
@@ -114,11 +114,11 @@
   label_filename: 檔案名稱 
   label_mime: Mime
   label_size: 大小  
-  heading_new_revision: 新修訂版本
+  heading_new_revision: 新增修訂版本
   option_version_same: Same
   option_version_minor: Minor
   option_version_major: Major
-  label_new_content: 新的内容
+  label_new_content: 新的檔案內容
   label_maximum_files_upload: 最大上傳檔案數量
   note_maximum_number_of_files_uploaded: 同時間所能上傳的，最大檔案數量限制。 0 表示沒有限制。
   label_maximum_files_download: 最大下載檔案數量
@@ -167,7 +167,7 @@
   error_file_can_not_be_created: 在存儲目錄裡，無法建立檔案。
   error_wrong_zip_encoding: 不正確的Zip encoding
   warning_xapian_not_available: Xapian not available
-  menu_dmsf: DMSF
+  menu_dmsf: 文件總管
   label_physical_file_delete: 永久刪除檔案
   user_is_not_project_member: 您不是專案的成員之一
   heading_access_downloads_emails: 下載/電子郵件
@@ -175,7 +175,7 @@
   heading_access_last: Last
   label_dmsf_updated: DMSF updated
   title_total_size_of_all_files: 資料夾所有檔案的檔案大小
-  project_module_dmsf: DMSF
+  project_module_dmsf: 文件總管
   warning_no_project_to_copy_file_to: No project to copy file to
   comment_copied_from: "Copied from %{source}"
   notice_file_copied: File copied
@@ -201,7 +201,7 @@
   parent_directory: 上層目錄
   note_webdav: "Webdav 啟用後，可在下列網址被找到: http://.../dmsf/webdav/"
   label_webdav: Webdav功能
-  label_dmsf_plural: "複制DMSF的檔案和資料夾。 ( 資料夾: %{folders} 檔案: %{files} )"
+  label_dmsf_plural: "複制文件總管的檔案和資料夾。 ( 資料夾: %{folders} 檔案: %{files} )"
 
   warning_folder_already_locked: 這個資料夾己經被鎖定了
   notice_folder_locked: 這個資料夾己經成功地鎖定了。
@@ -230,7 +230,7 @@
   label_dmsf_workflow_step_plural: 步驟
   label_dmsf_workflow_approval: 批准
   label_dmsf_workflow_approval_plural: 批准
-  label_dmsf: DMSF
+  label_dmsf: 文件總管
   label_dmsf_wokflow_action_approve: 批准
   label_dmsf_wokflow_action_reject: 拒絕
   label_dmsf_wokflow_action_delegate: 委派給
