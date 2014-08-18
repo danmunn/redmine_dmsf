@@ -1,0 +1,307 @@
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
+#
+#
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
+# Translated by Aecho Liu, (aecho1028@gmail.com)
+"zh-TW":
+  dmsf: 文件總管
+  label_dmsf_file_plural: 文件檔案
+  warning_no_entries_selected: 尚未選取任何項目
+  error_email_to_must_be_entered: 請輸入收件者的電子郵件
+  warning_file_already_locked: 檔案己經鎖定
+  notice_file_locked: 檔案鎖定了
+  warning_file_not_locked: 檔案尚未鎖定
+  notice_file_unlocked: 檔案己解除鎖定
+  error_only_user_that_locked_file_can_unlock_it: 只有檔案的鎖定者，才能解除鎖定。
+  error_max_files_exceeded: "目前容許同時的檔案下載數量為%{number}個，己經超出此限制了。"  
+  error_entry_project_does_not_match_current_project: 所指定的專案，和目前的專案不一致。
+  notice_folder_created: 資料夾己建立
+  error_folder_creation_failed: 資料夾建立失敗
+  error_folder_title_must_be_entered: 請輸入標題
+  notice_folder_deleted: 資料夾己刪除
+  error_folder_is_not_empty: 資料夾尚未清空
+  error_folder_title_is_already_used: 標題己經被使用了
+  notice_folder_details_were_saved: 資料夾描述己儲存
+  error_folder_is_locked: 資料夾己經鎖定
+  error_file_is_locked: 檔案己經被鎖定了
+  notice_file_deleted: 檔案己經被刪除了
+  error_at_least_one_revision_must_be_present: 至少要有一個修訂版本存在
+  notice_revision_deleted: 修訂版本己經被刪除
+  warning_one_of_files_locked: 其中一個檔案被鎖定了
+  notice_file_unlocked: 檔案己經解除鎖定
+  notice_file_revision_created: 檔案修訂版本己建立
+  notice_your_preferences_were_saved: 您的偏好設定己經儲存
+  warning_folder_notifications_already_activated:  資料夾通知己經啟用了
+  notice_folder_notifications_activated: 資料夾通知啟用了
+  warning_folder_notifications_already_deactivated: 資料夾通知己經關閉了
+  notice_folder_notifications_deactivated: 資料夾通知關閉了
+  warning_file_notifications_already_activated: 檔案通知己經啟用了
+  notice_file_notifications_activated: 檔案通知己啟用
+  warning_file_notifications_already_deactivated: 檔案通知己經關閉了
+  notice_file_notifications_deactivated: 檔案通知己關閉
+  link_details: "%{title} 描述"
+  link_edit: "編輯 %{title}"
+  submit_create: 建立
+  link_create_folder: 建立資料夾
+  title_check_uncheck_all_for_zip_download_or_email: 全選/全不選（下載或電子郵件發送）
+  link_title: 標題
+  link_size: 檔案大小
+  link_modified: 修改日期
+  link_ver: 版本
+  link_author: 作者
+  title_check_for_zip_download_or_email: 選取檔案 (下載或電子郵件發送)
+  title_delete: 刪除
+  title_notifications_active_deactivate: "通知啟用中: 點擊關閉通知"
+  title_notifications_not_active_activate: "通知關閉中: 點擊啟用通知"
+  title_title_version_version_download: " 版本: %{version} 檔案: %{title} 下載"
+  title_locked_by_user: "被使用者%{user}，鎖定了。"
+  title_locked_by_you: 被您鎖定了。
+  title_waiting_for_approval: 等待批准
+  title_approved: 已經被批准
+  title_unlock_file: 解除鎖定。允許其它使用者修改。
+  title_lock_file: 鎖定檔案。禁止其它使用者修改。
+  submit_download: 下載
+  title_download_checked: 以ZIP下載所選取的檔案
+  submit_email: 電子郵件
+  title_send_checked_by_email: 以電子郵件發送所選取的檔案
+  link_user_preferences: 你的DMSF的系統偏好設定
+  heading_send_documents_by_email: 電子郵件寄送檔案
+  label_email_from: 寄件者
+  label_email_to: 收件者
+  label_email_cc: 副本
+  label_email_subject: 主題
+  label_email_documents: 附加檔案
+  label_email_body: 郵件內容
+  label_email_send: 寄信囉
+  title_notifications_active: 通知處於啟用中
+  label_file_size: 檔案大小
+  heading_file_upload: 上傳
+  note_uploaded_maximum_files_at_once: "一次最多，只能上傳%{number}個檔案。"
+  note_upload_files_greater_than_two_gb: 為了上傳大於 2GB 的檔案，您需要使用64位元版本的瀏覽器。
+  submit_upload_files: 上傳
+  heading_new_folder: 新增資料夾
+  label_title: 標題
+  label_description: 描述
+  submit_save: 儲存
+  info_file_locked: 檔案己被鎖定!
+  label_notifications: 通知
+  select_option_default: 預設
+  select_option_deactivated: 關閉
+  select_option_activated: 啟用
+  title_save_preferences: 儲存偏好設定
+  heading_revisions: 修訂版本
+  title_download: 下載
+  title_delete_revision: 刪除此修訂版本
+  label_created: 建立者/時間
+  label_changed: 修改者/時間
+  info_changed_by_user: "%{changed} by"
+  label_filename: 檔案名稱 
+  label_mime: Mime
+  label_size: 大小  
+  heading_new_revision: 新增修訂版本
+  option_version_same: Same
+  option_version_minor: Minor
+  option_version_major: Major
+  label_new_content: 新的檔案內容
+  label_maximum_files_upload: 最大上傳檔案數量
+  note_maximum_number_of_files_uploaded: 同時間所能上傳的，最大檔案數量限制。 0 表示沒有限制。
+  label_maximum_files_download: 最大下載檔案數量
+  note_maximum_number_of_files_downloaded: 同時間所能下載的，最大檔案數量限制，(下載或電子郵件發送)。 0 表示沒有限制。
+  label_file_storage_directory: 檔案儲存目錄
+  label_index_database: 索引資料庫
+  label_stemming_language: Stemming Language
+  note_possible_values: 容許的參數
+  note_pass_none_to_disable_stemming: "使用 'none' 來停用 stemming"
+  label_stem_strategy: Stem strategy
+  option_stem_none: Stem none (default)
+  option_stem_some: Stem some
+  option_stem_all: Stem all
+  label_stemming_description: "這是用來控制 Query parser 要使用哪個stemming algorithm，預設值是:STEM NONE。而這邊所能選取的值有以下幾種:"
+  note_do_not_stem: "Don't perform any stemming."
+  note_stem_some: "Search for stemmed forms of terms except for those which start with a capital letter, or are followed by certain characters, or are used with operators which need positional information. Stemmed terms are prefixed with 'Z'."
+  note_stem_all: "Search for stemmed forms of all words (note: no 'Z' prefix is added)."
+  note_stemming_applied: Note that the stemming algorithm is only applied to words in probabilistic fields - boolean filter terms are never stemmed.
+  label_default_notifications: 檔案通知預設
+  heading_uploaded_files: 上傳檔案
+  submit_commit: 提交
+  link_documents: 文件檔案
+  permission_view_dmsf_folders: 瀏覽文件檔案
+  permission_user_preferences: 使用者偏好設定
+  permission_view_dmsf_files: 查看文件檔案
+  permission_folder_manipulation: 資料夾操作
+  permission_file_manipulation: 文件操作  
+  permission_force_file_unlock: 強制解除檔案鎖定
+  permission_manage_workflows: Manage workflows
+  label_file: 檔案
+  field_folder: 資料夾
+  error_create_cycle_in_folder_dependency: 資料夾之間的關係，不得為一個cycle循環。
+  error_contains_invalid_character: 內有非法字元
+  error_file_commit_require_uploaded_file: 檔案提交，需要上傳檔案。
+  warning_some_files_were_not_commited: "部份檔案因為驗証失敗無法提交: %{files}"
+  error_user_has_not_right_delete_folder: 使用者沒有權限，刪除資料夾。
+  error_user_has_not_right_delete_file: 使用者沒有權限，刪除檔案。
+  notice_entries_deleted: 項目己刪除
+  warning_some_entries_were_not_deleted: "部份項目無法刪除: %{entries}"  
+  title_delete_checked: 刪除選取項目
+  title_number_of_files_in_directory: 資料夾的檔案數量
+  title_filename_for_download: 下載時的檔名，或是ZIP的檔案名稱。
+  label_number_of_folders: 資料夾
+  label_number_of_documents: 文件檔案
+  error_file_storage_directory_does_not_exist: 資料夾不存在，而且無法被建立。
+  error_file_can_not_be_created: 在存儲目錄裡，無法建立檔案。
+  error_wrong_zip_encoding: 不正確的Zip encoding
+  warning_xapian_not_available: Xapian not available
+  menu_dmsf: 文件總管
+  label_physical_file_delete: 永久刪除檔案
+  user_is_not_project_member: 您不是專案的成員之一
+  heading_access_downloads_emails: 下載/電子郵件
+  heading_access_first: First
+  heading_access_last: Last
+  label_dmsf_updated: DMSF updated
+  title_total_size_of_all_files: 資料夾所有檔案的檔案大小
+  project_module_dmsf: 文件總管
+  warning_no_project_to_copy_file_to: No project to copy file to
+  comment_copied_from: "Copied from %{source}"
+  notice_file_copied: File copied
+  notice_file_moved: File moved
+  field_target_project: Target project
+  field_target_folder: Target folder
+  title_copy_or_move: Copy/Move
+  label_dmsf_folder_plural: Dmsf folders
+  comment_moved_from: "Moved from %{source}"
+  error_target_folder_same: Target folder and project are the same as current
+  error_file_cannot_be_moved: "File can't be moved"
+  error_file_cannot_be_copied: "File can't be copied"
+  warning_no_project_to_copy_folder_to: No project to copy folder to
+  title_copy: Copy
+  error_folder_cannot_be_copied: "Folder can't be copied"
+  notice_folder_copied: Folder copied
+
+  error_max_email_filesize_exceeded: "己經超出Email所能允許的最大檔案大小。 (%{number} MB)"
+  note_maximum_email_filesize: 限制Email所允許的最大檔案大小。 0 表示沒有限制。
+  label_maximum_email_filesize: Email附加檔案最大的檔案大小。
+  header_minimum_filesize: 檔案錯誤
+  error_minimum_filesize: "這個檔案 %{file} 為空。無法被附加。"
+  parent_directory: 上層目錄
+  note_webdav: "Webdav 啟用後，可在下列網址被找到: http://.../dmsf/webdav/"
+  label_webdav: Webdav功能
+  label_dmsf_plural: "複制文件總管的檔案和資料夾。 ( 資料夾: %{folders} 檔案: %{files} )"
+
+  warning_folder_already_locked: 這個資料夾己經被鎖定了
+  notice_folder_locked: 這個資料夾己經成功地鎖定了。
+  warning_folder_not_locked: 不好意思，這個資料夾無法被鎖定。
+  notice_folder_unlocked: 這個資料夾己經成功地解除鎖定了。
+  error_only_user_that_locked_folder_can_unlock_it: 您未被授權，解除這個資料夾的鎖定狀態。
+  title_folder_parent_locked: "上層資料夾 %{name} 被鎖定了。"  
+  title_unlock_folder: 解除鎖定。允許其它使用者修改。
+  title_lock_folder: 鎖定資料夾。禁止其它使用者修改。
+
+  select_option_webdav_readonly: 唯讀
+  select_option_webdav_readwrite: 可讀可寫
+  label_webdav_strategy: Webdav策略
+  note_webdav_strategy: 讓管理者決定，webdav給使用者的權限，是唯讀or可讀可寫。
+
+  error_unable_delete_dmsf_workflow: 無法刪除工作流程
+  error_empty_note: "備註不可以為空。"
+  error_workflow_assign: 當指派時發生錯誤
+  error_cannot_start_workflow: "工作流程無法開始"
+  error_cannot_renumber_steps: "工作步驟無法重新標記號碼"
+  label_dmsf_workflow_new: 建立批准流程
+  field_label_dmsf_workflow: 批准流程
+  field_label_dmsf_workflow_name: 批准流程名稱
+  label_dmsf_workflow_plural: 批准流程
+  label_dmsf_workflow_step: 步驟
+  label_dmsf_workflow_step_plural: 步驟
+  label_dmsf_workflow_approval: 批准
+  label_dmsf_workflow_approval_plural: 批准
+  label_dmsf: 文件總管
+  label_dmsf_wokflow_action_approve: 批准
+  label_dmsf_wokflow_action_reject: 拒絕
+  label_dmsf_wokflow_action_delegate: 委派給
+  label_dmsf_wokflow_action_assign: 指定批准流程
+  label_dmsf_wokflow_action_start: 流程開始
+  label_dmsf_workflow_add_approver: "Add a new approver with a logical function:"
+  label_or: or
+  label_action: Action
+  label_note: Note  
+  title_none: None
+  title_rejection: Rejection
+  title_delegation: Delegation
+  title_assignment: Assignment
+  title_start: Start  
+  title_dmsf_workflow_log: 批准流程Log
+  title_assigned: Assigned
+  title_approval: Approval
+  title_rejected: Rejected
+  dmsf_and: AND
+  dmsf_or: OR
+  dmsf_new_step: New step  
+  message_dmsf_wokflow_note: Your note...
+  info_revision: "r%{rev}"
+  link_workflow: Workflow  
+  notice_workflow_started: Approval workflow successfully started
+  text_email_subject_approved: "Approval workflow %{name} approved"
+  text_email_subject_rejected: "Approval workflow %{name} rejected"
+  text_email_subject_delegated: "Approval workflow %{name} delegated"
+  text_email_subject_requires_approval: "Approval workflow %{name} requires your approval"
+  text_email_subject_updated: "Approval workflow %{name} updated"
+  text_email_subject_started: "Approval workflow %{name} started" 
+  text_email_finished_approved: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been approved."
+  text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been rejected because of '%{notice}'."
+  text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
+  text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps and you are expected to do an approval in the next approval step."
+  text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps."
+  text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you are expected to do an approval in the current approval step."  
+  text_email_to_proceed: To proceed click on the check box icon next to the document in
+  text_email_to_see_history: To see the approval history click on the workflow status of the document in
+  text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  label_my_open_approvals: My open approvals
+  label_my_locked_documents: My locked documents
+
+  title_create_link: Create a symbolic link  
+  label_link_from: Link from
+  label_link_to: Link to
+  label_notifications_on: Notifications on
+  label_notifications_off: Notifications off
+  field_target_file: Source file
+  title_download_entries: Download entries
+  label_link_name: Link name
+  label_target_folder: Target folder
+  label_source_folder: Source folder
+  label_target_project: Target project
+  label_source_project: Source project
+
+  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated: has just actualized documents of
+  text_email_doc_follows: as follows
+  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted: has just deleted documents of
+  label_links_only: links only
+
+  label_display_notified_recipients: Display notified recipients
+  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
+  warning_email_notifications: "Email notifications sent to %{to}"
+
+  my:
+    blocks:
+      locked_documents: Locked documents
+      open_approvals: Open approvals
+
+  label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
+  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
