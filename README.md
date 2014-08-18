@@ -170,7 +170,7 @@ This command must be run on regular basis (e.g. from cron)
 
 Example of cron job (once per hour at 8th minute):
 
-    8 * * * * root /usr/bin/omindex -s english --url / --db /vat/tmp/dmsf_index /opt/redmine/files/dmsf
+    8 * * * * root /usr/bin/omindex -s english --url / --db /var/tmp/dmsf_index /opt/redmine/files/dmsf
 
 Use omindex -h for help.
 
