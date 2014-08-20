@@ -363,3 +363,7 @@ label.required:after {
     content: " *";
     color: #bb0000;
 }
+
+/* Search results */
+dt.dmsf-file { background-image: url(../../../images/document.png); }
+dt.dmsf-folder { background-image: url(../../../images/folder.png); }

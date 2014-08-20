@@ -29,6 +29,8 @@ class DmsfFile < ActiveRecord::Base
   unloadable
 
   include RedmineDmsf::Lockable
+  
+  attr_accessor :event_description
  
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
@@ -295,19 +297,23 @@ class DmsfFile < ActiveRecord::Base
     end
     
     if !options[:titles_only] && $xapian_bindings_available
-      database = nil
-      begin
-        database = Xapian::Database.new(Setting.plugin_redmine_dmsf['dmsf_index_database'].strip)
-      rescue
+      database = nil      
+      begin        
+        lang = Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].strip
+        databasepath = File.join(
+          Setting.plugin_redmine_dmsf['dmsf_index_database'].strip, lang)
+        database = Xapian::Database.new(databasepath)        
+      rescue Exception => e
         Rails.logger.warn 'REDMAIN_XAPIAN ERROR: Xapian database is not properly set or initiated or is corrupted.'
+        Rails.logger.warn e.message
       end
 
-      unless database.nil?
+      if database
         enquire = Xapian::Enquire.new(database)
         
         query_string = tokens.join(' ')
         qp = Xapian::QueryParser.new()
-        stemmer = Xapian::Stem.new(Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].strip)
+        stemmer = Xapian::Stem.new(lang)
         qp.stemmer = stemmer
         qp.database = database
         
@@ -372,6 +378,7 @@ class DmsfFile < ActiveRecord::Base
                 end
   
                 if (allowed && project_included)
+                  dmsf_file.event_description = dochash['sample']
                   results.push(dmsf_file)
                   results_count += 1
                 end
@@ -383,7 +390,7 @@ class DmsfFile < ActiveRecord::Base
     end
     
     [results, results_count]
-  end
+  end    
   
   def display_name
     if self.name.length > 50

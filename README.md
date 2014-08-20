@@ -162,17 +162,18 @@ Before installing ensure that the Redmine instance is stopped.
 ### Fulltext search (optional)
 If you want to use fulltext search features, you must setup file content indexing.
 
-It is necessary to index DMSF files with omega before searching attemts to recieve some output:
+It is necessary to index DMSF files with omega before searching attempts to receive some output:
 
-    omindex -s english --url / --db {path to index database from configuration} {path to storage from configuration}
+  1. Change the configuration part of redmine_dmsf/extra/xapian_indexer.rb file according to your environment.
+  2. Run `ruby redmine_dmsf/extra/xapian_indexer.rb -f`
 
 This command must be run on regular basis (e.g. from cron)
 
 Example of cron job (once per hour at 8th minute):
 
-    8 * * * * root /usr/bin/omindex -s english --url / --db /var/tmp/dmsf_index /opt/redmine/files/dmsf
+    `8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f`
 
-Use omindex -h for help.
+See redmine_dmsf/extra/xapian_indexer.rb for help.
 
 Uninstalling DMSF
 -----------------
@@ -187,7 +188,8 @@ After these steps re-start your instance of Redmine.
 Contributing
 ------------
 
-If you've added something, why not share it. Fork the repository (github.com/danmunn/redmine_dmsf), make the changes and send a pull request to the maintainers.
+If you've added something, why not share it. Fork the repository (github.com/danmunn/redmine_dmsf), 
+make the changes and send a pull request to the maintainers.
 
 Changes with tests, and full documentation are preferred.
 
