@@ -1,7 +1,8 @@
 <%# Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -41,18 +42,13 @@
         <%= l(:note_upload_files_greater_than_two_gb) if Setting.attachment_max_size.to_i >= 2097151 %>
       </span>
     </div>
-    <div id="uploader">
+    <div id="uploader">      
       <p>
-        <span id="uploaded_files_fields">
-          <%= file_field_tag('uploaded_files[1]', :size => 30, :id => nil) %>
-        </span>
-        <br />
-        <small><%= link_to(l(:label_add_another_file), '#', :onclick => 'dmsfAddFileField(); return false;' ) %>
-          (<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
-        </small>
-      </p>
+        <label><%=l(:label_attachment_plural)%></label>
+        <%= render :partial => 'attachments/form' %>        
+      </p>        
       <%= submit_tag(l(:submit_upload_files)) %>
-    </div>
+    </div>    
   <% end %>
 </div>
 
@@ -72,21 +68,7 @@
 
   initPlUploader(uploader);
 
-  var dmsfFileFieldCount = 1;
-
-  function dmsfAddFileField() {
-   if (dmsfFileFieldCount >= 10) return false;
-   dmsfFileFieldCount++;
-
-   var f = document.createElement('input');
-   f.type = 'file';
-   f.name = 'uploaded_files[' + dmsfFileFieldCount + ']';
-   f.size = 30;
-
-   var p = document.getElementById('uploaded_files_fields');
-   p.appendChild(document.createElement('br'));
-   p.appendChild(f);
-  }
+  var dmsfFileFieldCount = 1; 
 </script>
 
 <% content_for :header_tags do %>

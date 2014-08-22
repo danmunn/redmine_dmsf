@@ -30,25 +30,31 @@ class DmsfUpload
   attr_accessor :minor_version
   attr_accessor :locked  
   attr_accessor :workflow
-  attr_accessor :custom_values
+  attr_accessor :custom_values  
   
   def disk_file
     "#{DmsfHelper.temp_dir}/#{self.disk_filename}"
-  end
+  end    
   
-  def self.create_from_uploaded_file(project, folder, uploaded_file)
-    uploaded = {
-      :disk_filename => DmsfHelper.temp_filename(uploaded_file.original_filename),
-      :content_type => uploaded_file.content_type.to_s,
-      :original_filename => uploaded_file.original_filename,
-    }
-    
-    File.open("#{DmsfHelper.temp_dir}/#{uploaded[:disk_filename]}", 'wb') do |f| 
-      while (buffer = uploaded_file.read(8192))
-        f.write(buffer)
+  def self.create_from_uploaded_attachment(project, folder, uploaded_file)    
+    a = Attachment.find_by_token(uploaded_file[:token])    
+    if a
+      uploaded = {
+        :disk_filename => DmsfHelper.temp_filename(a.filename),
+        :content_type => a.content_type,
+        :original_filename => a.filename,
+        :comment => uploaded_file[:description]
+      }        
+      File.open(a.diskfile, 'rb') do |fr|   
+        File.open("#{DmsfHelper.temp_dir}/#{uploaded[:disk_filename]}", 'wb') do |fw| 
+          while (buffer = fr.read(8192))
+            fw.write(buffer)
+          end
+        end
       end
+      a.destroy    
+      DmsfUpload.new(project, folder, uploaded)
     end
-    DmsfUpload.new(project, folder, uploaded)
   end
   
   def initialize(project, folder, uploaded)
@@ -62,19 +68,24 @@ class DmsfUpload
     
     @disk_filename = uploaded[:disk_filename]
     @mime_type = uploaded[:content_type]
-    @size = File.size(disk_file)
+    @size = File.size(disk_file)    
     
     if file.nil? || file.last_revision.nil?
       @title = DmsfFileRevision.filename_to_title(@name)
-      @description = nil
+      @description = uploaded[:comment]
       @major_version = 0
       @minor_version = 0
       @workflow = nil      
-      @custom_values = DmsfFileRevision.new(:file => DmsfFile.new(:project => @project)).custom_field_values
+      @custom_values = DmsfFileRevision.new(:file => DmsfFile.new(:project => @project)).custom_field_values      
     else
       last_revision = file.last_revision 
       @title = last_revision.title
-      @description = last_revision.description
+      if last_revision.description.present?
+        @description = last_revision.description
+        @comment = uploaded[:comment] if uploaded[:comment].present?
+      elsif uploaded[:comment].present?
+        @comment = uploaded[:comment]
+      end
       @major_version = last_revision.major_version
       @minor_version = last_revision.minor_version
       @workflow = last_revision.workflow

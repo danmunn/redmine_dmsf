@@ -1,7 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011 Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2014 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,12 +30,12 @@ class DmsfUploadController < ApplicationController
   helper :dmsf_workflows
 
   def upload_files
-    uploaded_files = params[:uploaded_files]
+    uploaded_files = params[:attachments]
     @uploads = []
     if uploaded_files && uploaded_files.is_a?(Hash)
       # standard file input uploads
-      uploaded_files.each_value do |uploaded_file|
-        @uploads.push(DmsfUpload.create_from_uploaded_file(@project, @folder, uploaded_file))
+      uploaded_files.each_value do |uploaded_file|        
+        @uploads.push(DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file))
       end
     else
       # plupload multi upload completed
