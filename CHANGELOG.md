@@ -1,6 +1,28 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.4.9: *2014-09-01*
+-----------------------
+
+  Trash bin
+  Standard Redmine's upload form with progress bar for files > 100 MB
+  WebDAV library upgrade
+
+
+ * New: # 130 - redmine_dmsf: last update of the folders 
+ * Fix: #131 - Wiki link shows filename for all users type
+ * New: #136 - `File Manipulation` permissions
+ * New: #218 - Feature request: Recycle bin
+ * Fix: #226 - Undefined method `custom_fields_tabs` for module `CustomFieldsHelper`
+ * New: #238 - DMSF document update shows up in issue referred to in comment
+ * New: #249 - Storage path for DMSF files ignores global storage path for attachments
+ * New: #255 - Debian - Readme install procedure update
+ * Fix: #258 - Jquery conflict with Redmine 
+ * Fix: #267 - Custom fields tabs not work with last custom_fields_helper_patch.rb 
+ * Fix: #269 - Workflow OR not working for second reviewer 
+ * Fix: #270 - 500 Internal Server Error, redmine 2.5.1, MS SQL Server 2012, dmsf 1.4.8-master, dmsf_link.rb 
+ * Fix: #275 - Typo in readme file type
+
 1.4.8: *2014-04-17*
 -----------------------
 
@@ -21,7 +43,7 @@ Changelog for Redmine DMSF
  * Fix: Issue #214 - Required DMSF custom field prevents documents to be saved
  * Update: Issue #216 - Enhancement : having notification emails translated
  * Update: Issue #224 - Setup/Upgrade documentation
- * Fix: Issue #226 - undefined method `custom_fields_tabs' for module `CustomFieldsHelper'
+ * Fix: Issue #226 - undefined method `custom_fields_tabs` for module `CustomFieldsHelper`
  * Fix: Issue #233 - Failed Travis builds
  * Update: Issue #235 - "You are not member of the project" when changing project notification.
  * New: Issue #236 - Documents tagging
