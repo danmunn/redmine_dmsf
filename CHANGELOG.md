@@ -9,7 +9,7 @@ Changelog for Redmine DMSF
   WebDAV library upgrade
 
 
- * New: # 130 - redmine_dmsf: last update of the folders 
+ * New: #130 - redmine_dmsf: last update of the folders 
  * Fix: #131 - Wiki link shows filename for all users type
  * New: #136 - `File Manipulation` permissions
  * New: #218 - Feature request: Recycle bin
