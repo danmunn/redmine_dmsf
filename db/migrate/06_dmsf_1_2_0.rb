@@ -31,8 +31,10 @@ class Dmsf120 < ActiveRecord::Migration
     add_column :dmsf_file_revisions, :project_id, :integer, :null => true
     
     DmsfFileRevision.find_each do |revision|
-      revision.project = revision.file.project
-      revision.save
+      if revision.file
+        revision.project = revision.file.project
+        revision.save
+      end
     end
     
     change_column :dmsf_file_revisions, :project_id, :integer, :null => false
