@@ -522,8 +522,8 @@ module RedmineDmsf
         new_revision.name = basename
         new_revision.title = DmsfFileRevision.filename_to_title(basename)
         new_revision.description = nil
-        new_revision.comment = nil
-        new_revision.increase_version(2, true)
+        new_revision.comment = nil        
+        new_revision.increase_version(1, true)
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         # Phusion passenger does not have a method "length" in its model
         # however includes a size method - so we instead use reflection
