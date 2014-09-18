@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -36,14 +37,12 @@ module RedmineDmsf
           @children.push child(p.name, p)
         end
         @children
-      end
+      end     
 
-      #  - 2012-06-18: Issue #5, ensure item is only listed if project is enabled for dmsf
       def exist?
-        return false if (project.nil? || User.current.anonymous?)
-        return false if (project.module_enabled?('dmsf').nil?) #See Issue #5
-        return true if User.current.admin?
-        User.current.allowed_to?(:view_dmsf_folders, project)
+        return false if (project.nil? || User.current.anonymous?)                        
+        return false unless project.module_enabled?('dmsf')        
+        User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project)
       end
 
       def collection?

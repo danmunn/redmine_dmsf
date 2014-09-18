@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -66,8 +66,8 @@ module RedmineDmsf
       #  - 2012-06-15: Only if you're allowed to browse the project
       #  - 2012-06-18: Issue #5, ensure item is only listed if project is enabled for dmsf
       def exist?
-        return false if project.nil? || project.module_enabled?('dmsf').nil? || !(folder? || file?)
-        User.current.admin? ? true : User.current.allowed_to?(:view_dmsf_folders, project)
+        return false if project.nil? || !project.module_enabled?('dmsf') || !(folder? || file?)
+        User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project)
       end
 
       # is this entity a folder?
@@ -212,7 +212,7 @@ module RedmineDmsf
       # - 2012-06-18: Ensure item is only functional if project is enabled for dmsf
       def make_collection
         if (request.body.read.to_s == '')
-          raise NotFound if project.nil? || project.id.nil? || project.module_enabled?('dmsf').nil?
+          raise NotFound if project.nil? || project.id.nil? || !project.module_enabled?('dmsf')
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           return MethodNotAllowed if exist? #If we already exist, why waste the time trying to save?
           parent_folder = nil

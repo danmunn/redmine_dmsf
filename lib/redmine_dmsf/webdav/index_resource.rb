@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,7 +35,7 @@ module RedmineDmsf
             User.current.memberships.each {|m| @Projects << m.project if m.roles.detect {|r| r.allowed_to?(:view_dmsf_folders)}}
           end
         end 
-        @Projects.delete_if { |node|  node.module_enabled?('dmsf').nil? } unless @Projects.nil?
+        @Projects.delete_if { |node|  !node.module_enabled?('dmsf') } unless @Projects.nil?
         return [] if @Projects.nil? || @Projects.empty?
         @Projects.map do |p|
           child p.identifier
