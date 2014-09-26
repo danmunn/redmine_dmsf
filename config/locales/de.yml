@@ -132,7 +132,7 @@ de:
   option_stem_some: reduziere manches
   option_stem_all: reduziere alles
   label_stemming_description: Diese Einstellung beeinflusst, wie der Parser den Normalformreduktionsalgorithmus anwendet. Voreingestellt ist STEM_NONE. Die möglichen Werte sind
-  note_do_not_stem: Jeine Normalformreduktion durchführen.
+  note_do_not_stem: Keine Normalformreduktion durchführen.
   note_stem_some: "Suche nach reduzierten Formen aller Wörter mit Ausnahme von Wörtern, die mit einem Großbuchstaben beginnen, bestimmten Zeichen beinhalten, oder von Operatoren mit Positionsinformationen verwendet werden. Reduzierten Formen wird ein 'Z' vorangestellt."
   note_stem_all: "Suche nach reduzierten Formen aller Wörter (Achtung: Kein 'Z'-Präfix wird hinzugefügt)."
   note_stemming_applied: Beachte, dass der Normalformreduzierungsalgorithmus nur bei Wörtern in Wahrscheinlichkeitsfeldern angewendert wird - boolesche Filterausdrücke werden nie reduziert.
@@ -216,7 +216,7 @@ de:
   label_webdav_strategy: Webdav Strategie
   note_webdav_strategy: Erlaubt dem Administrator den Wechsel der WebDav Nutzung zwischen nur lesend und auch schreibenden Zugriffen.      
   
-  error_unable_delete_dmsf_workflow: Abwählen, um den Workflow zu löschen
+  error_unable_delete_dmsf_workflow: Konnte den Workflow nicht löschen
   error_empty_note: Die Notiz darf nicht leer sein.
   error_workflow_assign: Es trat ein Fehler beim Zuweisen des Workflows auf
   error_cannot_start_workflow: Workflow kann nicht gestartet werden
@@ -244,7 +244,7 @@ de:
   title_delegation: Deligierung
   title_assignment: Zuweisung
   title_start: Start  
-  title_dmsf_workflow_log: Genehmigungs-Workflow Log
+  title_dmsf_workflow_log: Genehmigungs-Workflow Verlauf
   title_assigned: Zugewiesen
   title_approval: Genehmigt
   title_rejected: Abgelehnt
@@ -263,7 +263,7 @@ de:
   text_email_subject_started: "Genehmigungs-Workflow %{name} gestartet" 
   text_email_finished_approved: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist abgeschlossen und die Datei wurde genehmigt."
   text_email_finished_rejected: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist abgeschlossen, aber die Datei wurde abgelehnt, weil: '%{notice}'."
-  text_email_finished_delegated: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' wurde an die deligiert, weil: '%{notice}' und weil deine Zustimmung im aktuellen Genehmigungsschritt benötigt wird."
+  text_email_finished_delegated: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' wurde an dich deligiert, weil: '%{notice}' und weil deine Zustimmung im aktuellen Genehmigungsschritt benötigt wird."
   text_email_finished_step: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade einen Zustimmungsschritt abgeschlossen und im nächsten Genehmigungsschritt wird deine Zustimmung benötigt."
   text_email_finished_step_short: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade einen Genehmigungsschritt abgeschlossen."
   text_email_started: "Der Genehmigungs-Workflow '%{name}' zugewiesen an '%{filename}' wurde gestartet und im aktuellen Genehmigungsschritt wird deine Zustimmung benötigt."  
