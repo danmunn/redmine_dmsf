@@ -26,10 +26,10 @@ de:
   warning_file_already_locked: Datei schon gesperrt
   notice_file_locked: Datei gesperrt
   warning_file_not_locked: Datei nicht gesperrt
-  notice_file_unlocked: Dateisperre gelöst
+  notice_file_unlocked: Datei freigegeben
   error_only_user_that_locked_file_can_unlock_it: Nur der Benutzer, der die Datei gesperrt hat, kann sie auch wieder freigeben 
   error_max_files_exceeded: "Grenze für %{number} gleichzeitig heruntergeladene Dateien überschritten"  
-  error_entry_project_does_not_match_current_project: Entry Projekt entspricht nicht aktuellen Projekt
+  error_entry_project_does_not_match_current_project: Eingangsprojekt entspricht nicht aktuellem Projekt
   notice_folder_created: Ordner erstellt
   error_folder_creation_failed: Ordnererstellung fehlgeschlagen
   error_folder_title_must_be_entered: Es muss ein Titel angegeben werden
@@ -46,18 +46,18 @@ de:
   notice_file_unlocked: Dateisperre gelöst
   notice_file_revision_created: Dateiversion erstellt
   notice_your_preferences_were_saved: Deine Einstellungen wurden gespeichert
-  warning_folder_notifications_already_activated: Ordnerbenachrichtigungen schon aktiviert
+  warning_folder_notifications_already_activated: Ordnerbenachrichtigungen sind schon aktiviert
   notice_folder_notifications_activated: Ordnerbenachrichtigungen aktiviert
-  warning_folder_notifications_already_deactivated: Ordnerbenachrichtigungen schon deaktiviert
+  warning_folder_notifications_already_deactivated: Ordnerbenachrichtigungen sind schon deaktiviert
   notice_folder_notifications_deactivated: Ordnerbenachrichtigungen deaktiviert
-  warning_file_notifications_already_activated: Dateibenachrichtigungen schon aktiviert
+  warning_file_notifications_already_activated: Dateibenachrichtigungen sind schon aktiviert
   notice_file_notifications_activated: Dateibenachrichtigungen aktiviert
-  warning_file_notifications_already_deactivated: Dateibenachrichtigungen schon deaktiviert
+  warning_file_notifications_already_deactivated: Dateibenachrichtigungen sind schon deaktiviert
   notice_file_notifications_deactivated: Dateibenachrichtigungen deaktiviert
   link_details: "%{title} Details"
   link_edit: "Bearbeite %{title}"
   submit_create: Erstellen
-  link_create_folder: Erzeuge Ordner
+  link_create_folder: Ordner erstellen
   title_check_uncheck_all_for_zip_download_or_email: Wähle alle/keine für ZIP-Download bzw. Email
   link_title: Titel
   link_size: Größe
@@ -66,15 +66,15 @@ de:
   link_author: Autor
   title_check_for_zip_download_or_email: Wähle für ZIP-Download bzw. Email
   title_delete: Löschen
-  title_notifications_active_deactivate: "Benachrichtigungen aktiv: Ausschalten"
-  title_notifications_not_active_activate: "Benachrichtigungen nicht aktiv: Einschalten"
+  title_notifications_active_deactivate: "Benachrichtigungen sind aktiv: Ausschalten"
+  title_notifications_not_active_activate: "Benachrichtigungen sind nicht aktiv: Einschalten"
   title_title_version_version_download: "%{title} Version %{version} Download"
   title_locked_by_user: "Gesperrt von %{user}"
   title_locked_by_you: Gesperrt von dir
   title_waiting_for_approval: Warte auf Zustimmung
   title_approved: Zugestimmt
-  title_unlock_file: Hebe Sperre auf um Änderungen anderer Nutzer zu ermöglichen
-  title_lock_file: Sperre um Änderungen anderer Nutzer zu verhindern
+  title_unlock_file: Hebe Sperre auf, um Änderungen durch andere Nutzer zu ermöglichen
+  title_lock_file: Sperren, um Änderungen durch andere Nutzer zu verhindern
   submit_download: Download
   title_download_checked: Download der ausgewählten Dateien in einem ZIP-Archiv
   submit_email: Email
@@ -88,22 +88,22 @@ de:
   label_email_documents: Dateien
   label_email_body: Text
   label_email_send: Senden
-  title_notifications_active: Benachrichtigungen aktiv
+  title_notifications_active: Benachrichtigungen sind aktiv
   label_file_size: Dateigröße
   heading_file_upload: Upload
   note_uploaded_maximum_files_at_once: "Es können maximal %{number} Dateien auf einmal hochgeladen werden."
-  note_upload_files_greater_than_two_gb: Um Dateien größer 2GB hochzuladen brauchst du einen 64bit-Browser.
+  note_upload_files_greater_than_two_gb: Um Dateien größer 2GB hochzuladen, brauchst du einen 64bit-Browser.
   submit_upload_files: Upload
   heading_new_folder: Neuer Ordner
   label_title: Titel
   label_description: Beschreibung
   submit_save: Speichern
-  info_file_locked: Datei gesperrt!
+  info_file_locked: Datei ist gesperrt!
   label_notifications: Benachrichtigungen
   select_option_default: Voreinstellung
   select_option_deactivated: Aus
   select_option_activated: Ein
-  title_save_preferences: Speichere Einstellungen
+  title_save_preferences: Einstellungen speichern
   heading_revisions: Versionen
   title_download: Download
   title_delete_revision: Lösche Version
@@ -126,14 +126,14 @@ de:
   label_index_database: Index Datenbank
   label_stemming_language: Sprache für die Normalformreduktion
   note_possible_values: Mögliche Werte
-  note_pass_none_to_disable_stemming: "übergebe 'none' um die Normalformreduktion zu unterdrücken"
+  note_pass_none_to_disable_stemming: "schreibe 'none', um die Normalformreduktion zu unterdrücken"
   label_stem_strategy: Normalformreduktionsform
   option_stem_none: reduziere nichts (Voreinstellung)
   option_stem_some: reduziere manches
   option_stem_all: reduziere alles
-  label_stemming_description: Diese Einstellung beeinflusst wie der Parser den Normalformreduktionsalgorithmus anwendet. Voreingestellt ist STEM_NONE. Die möglichen Werte sind
-  note_do_not_stem: Mache keine Normalformreduktion.
-  note_stem_some: "Search for stemmed forms of terms except for those which start with a capital letter, or are followed by certain characters, or are used with operators which need positional information. Stemmed terms are prefixed with 'Z'."
+  label_stemming_description: Diese Einstellung beeinflusst, wie der Parser den Normalformreduktionsalgorithmus anwendet. Voreingestellt ist STEM_NONE. Die möglichen Werte sind
+  note_do_not_stem: Jeine Normalformreduktion durchführen.
+  note_stem_some: "Suche nach reduzierten Formen aller Wörter mit Ausnahme von Wörtern, die mit einem Großbuchstaben beginnen, bestimmten Zeichen beinhalten, oder von Operatoren mit Positionsinformationen verwendet werden. Reduzierten Formen wird ein 'Z' vorangestellt."
   note_stem_all: "Suche nach reduzierten Formen aller Wörter (Achtung: Kein 'Z'-Präfix wird hinzugefügt)."
   note_stemming_applied: Beachte, dass der Normalformreduzierungsalgorithmus nur bei Wörtern in Wahrscheinlichkeitsfeldern angewendert wird - boolesche Filterausdrücke werden nie reduziert.
   label_default_notifications: standardmäßge Dateibenachrichtigungen
@@ -143,57 +143,57 @@ de:
   permission_view_dmsf_folders: Durchforste Dateien
   permission_user_preferences: Benutzereinstellungen
   permission_view_dmsf_files: Betrachte Dateien
-  permission_folder_manipulation: Ordner manipulation
-  permission_file_manipulation: Datei manipulation  
+  permission_folder_manipulation: Ordner bearbeiten
+  permission_file_manipulation: Dateien bearbeiten  
   permission_force_file_unlock: Erzwinge Aufhebung der Dateisperre
-  permission_manage_workflows: Manage workflows
+  permission_manage_workflows: Workflows verwalten
   label_file: Datei
   field_folder: Ordner
-  error_create_cycle_in_folder_dependency: schaffen Zyklus in Abhängigkeit Ordner
+  error_create_cycle_in_folder_dependency: Zirkelabhängigkeit in der Ordnerstruktur erstellt
   error_contains_invalid_character: enthält ungültige Zeichen
-  error_file_commit_require_uploaded_file: Begehen einen Datei erfordet hochladene Datei
-  warning_some_files_were_not_commited: "Einige Dateien wurden nich begehen wegen Validation Fehlern: %{files}"
+  error_file_commit_require_uploaded_file: Der Commit erfordet eine hochladene Datei
+  warning_some_files_were_not_commited: "Einige Dateien wurden wegen Validierungsfehlern nicht commitet: %{files}"
   error_user_has_not_right_delete_folder: Der Nutzer hat kein Recht die Ordner zu löschen.
   error_user_has_not_right_delete_file: Der Nutzer hat kein Recht die Datei zu löschen.
-  notice_entries_deleted: Aufnahmen löschen
-  warning_some_entries_were_not_deleted: "Enige Aufnahmen wurden nich gelöscht: %{entries}"  
-  title_delete_checked: Lösch gewähltest
-  title_number_of_files_in_directory: Dateizahl in dem Ordner
-  title_filename_for_download: Dateiname benutzt zum Herunterladen oder ZIP-archivierung
+  notice_entries_deleted: Einträge löschen
+  warning_some_entries_were_not_deleted: "Enige Einträge wurden nicht gelöscht: %{entries}"  
+  title_delete_checked: Löschen ausgewählt
+  title_number_of_files_in_directory: Dateianzahl in dem Ordner
+  title_filename_for_download: Dateiname beim Herunterladen oder in ZIP-Archiv verwenden
   label_number_of_folders: Order
   label_number_of_documents: Dokumente  
-  error_file_storage_directory_does_not_exist: Ordner zum Dateispeichern existiert nicht und kann nicht gebildet.
-  error_file_can_not_be_created: Datei kann nicht in dem gewählten Ordner gebildet werden.
-  error_wrong_zip_encoding: Falsche ZIP-kodierung
-  warning_xapian_not_available: Xapian nicht zur Verfügung
+  error_file_storage_directory_does_not_exist: Der Dateiablageordner existiert nicht auf dem Server und kann nicht erstellt werden.
+  error_file_can_not_be_created: Datei kann nicht in dem gewählten Ordner erstellt werden.
+  error_wrong_zip_encoding: Falsche ZIP-Kodierung
+  warning_xapian_not_available: Xapian steht nicht zur Verfügung
   menu_dmsf: DMS
   label_physical_file_delete: Physisches Dateilöschen
   user_is_not_project_member: Du bist kein Projektmitglied
-  heading_access_downloads_emails: Herunterladene/Emails
+  heading_access_downloads_emails: Downloads oder Emailversand
   heading_access_first: Erste
   heading_access_last: Letzte
   label_dmsf_updated: DMS aktualisiert
-  title_total_size_of_all_files: Gesamtgröße aller Datein in diesem Ordner
+  title_total_size_of_all_files: Gesamtgröße aller Dateien in diesem Ordner
   project_module_dmsf: DMS
-  warning_no_project_to_copy_file_to: Kein Projekt für das Dateikopieren.
+  warning_no_project_to_copy_file_to: Kein Projekt, in das die Datei kopiert werden kann.
   comment_copied_from: "Kopiert aus %{source}"
   notice_file_copied: Datei kopiert
   notice_file_moved: Datei verschoben
-  field_target_project: Zielprojekte
+  field_target_project: Zielprojekt
   field_target_folder: Zielordner
   title_copy_or_move: Kopieren/Verschieben
   label_dmsf_folder_plural: Ordner
   comment_moved_from: "Verschoben aus %{source}"
-  error_target_folder_same: Zielordner und Projekt sind dieselbe wie die Aktuelle.
+  error_target_folder_same: Zielordner und Projekt sind dieselbe wie die aktuellen.
   error_file_cannot_be_moved: Die Datei kann nicht verschoben werden.
   error_file_cannot_be_copied: Die Datei kann nicht kopiert werden.
-  warning_no_project_to_copy_folder_to: Kein Projekt für das Ordnerkopieren.
+  warning_no_project_to_copy_folder_to: Kein Projekt, in das der Ordner kopiert werden kann.
   title_copy: Kopieren
   error_folder_cannot_be_copied: Der Ordner kann nicht kopiert werden.
   notice_folder_copied: Ordner kopiert
   
   error_max_email_filesize_exceeded: "Maximale Dateigröße der Anlage wurde überschritten. (%{number} MB)"
-  note_maximum_email_filesize: Maximale Dateigröße der Anlage. 0 bedeutet keinen Limit. Der Nummer ist in MB.
+  note_maximum_email_filesize: Maximale Dateigröße der Anlage. 0 bedeutet keinen Limit. Angabe in MB.
   label_maximum_email_filesize: Maximale Dateigröße der Anlage
   header_minimum_filesize: Dateifehler wegen minimaler Dateigröße.
   error_minimum_filesize: "Die Datei %{file} ist 0 Bytes groß und wird deswegen nicht angehängt."
@@ -208,99 +208,99 @@ de:
   notice_folder_unlocked: Der Ordner wurde erfolgreich entsperrt
   error_only_user_that_locked_folder_can_unlock_it: Sie haben keine Berechtigung zur Entsperrung des Ordners
   title_folder_parent_locked: "Übergeordnetes Verzeichnis %{name} ist gesperrt"  
-  title_unlock_folder: Zur Modifikation für andere Benutzer entsperren
-  title_lock_folder: Zum Schutz vor Modifikation durch andere Benutzer sperren
+  title_unlock_folder: Ordner zur Bearbeitung durch andere Benutzer entsperren
+  title_lock_folder: Ordner zum Schutz vor Bearbeitung durch andere Benutzer sperren
   
   select_option_webdav_readonly: nur Lesen
   select_option_webdav_readwrite: Lesen/Schreiben
   label_webdav_strategy: Webdav Strategie
   note_webdav_strategy: Erlaubt dem Administrator den Wechsel der WebDav Nutzung zwischen nur lesend und auch schreibenden Zugriffen.      
   
-  error_unable_delete_dmsf_workflow: Unable to delete the workflow
-  error_empty_note: The note can't be empty
-  error_workflow_assign: An error occured while assigning
-  error_cannot_start_workflow: Workflow can't be started
-  error_cannot_renumber_steps: Steps can't be renumbered
-  label_dmsf_workflow_new: New approval workflow
-  field_label_dmsf_workflow: Approval Workflow
-  field_label_dmsf_workflow_name: Approval workflow name
-  label_dmsf_workflow_plural: Approval workflows
-  label_dmsf_workflow_step: Step
-  label_dmsf_workflow_step_plural: Steps
-  label_dmsf_workflow_approval: Approval
-  label_dmsf_workflow_approval_plural: Approvals
+  error_unable_delete_dmsf_workflow: Abwählen, um den Workflow zu löschen
+  error_empty_note: Die Notiz darf nicht leer sein.
+  error_workflow_assign: Es trat ein Fehler beim Zuweisen des Workflows auf
+  error_cannot_start_workflow: Workflow kann nicht gestartet werden
+  error_cannot_renumber_steps: Schritte können nicht umsortiert werden
+  label_dmsf_workflow_new: Neuer Genehmigungs-Workflow
+  field_label_dmsf_workflow: Genehmigungs-Workflow
+  field_label_dmsf_workflow_name: Genehmigungs-Workflow Name
+  label_dmsf_workflow_plural: Genehmigungs-Workflows
+  label_dmsf_workflow_step: Schritt
+  label_dmsf_workflow_step_plural: Schritte
+  label_dmsf_workflow_approval: Genehmigung
+  label_dmsf_workflow_approval_plural: Genehmigungen
   label_dmsf: DMSF
-  label_dmsf_wokflow_action_approve: Approve
-  label_dmsf_wokflow_action_reject: Reject
-  label_dmsf_wokflow_action_delegate: Delegate to
-  label_dmsf_wokflow_action_assign: Assign an approval workflow
-  label_dmsf_wokflow_action_start: Start workflow
-  label_dmsf_workflow_add_approver: "Add a new approver with a logical function:"
+  label_dmsf_wokflow_action_approve: Genehmigen
+  label_dmsf_wokflow_action_reject: Ablehnen
+  label_dmsf_wokflow_action_delegate: Deligieren an
+  label_dmsf_wokflow_action_assign: Weise einen Genehmigungs-Workflow zu
+  label_dmsf_wokflow_action_start: Starte Genehmigungs-Workflow
+  label_dmsf_workflow_add_approver: "Füge einen neuen Genehmiger mit einer logischen Funktion hinzu:"
   label_or: oder
-  label_action: Action
-  label_note: Note  
-  title_none: None
-  title_rejection: Rejection
-  title_delegation: Delegation
-  title_assignment: Assignment
+  label_action: Aktion
+  label_note: Notiz  
+  title_none: Niemand
+  title_rejection: Ablehnung
+  title_delegation: Deligierung
+  title_assignment: Zuweisung
   title_start: Start  
-  title_dmsf_workflow_log: Approval Workflow Log
-  title_assigned: Assigned
-  title_approval: Approval
-  title_rejected: Rejected
-  dmsf_and: AND
-  dmsf_or: OR
-  dmsf_new_step: New step  
-  message_dmsf_wokflow_note: Your note...
+  title_dmsf_workflow_log: Genehmigungs-Workflow Log
+  title_assigned: Zugewiesen
+  title_approval: Genehmigt
+  title_rejected: Abgelehnt
+  dmsf_and: UND
+  dmsf_or: ODER
+  dmsf_new_step: Neuer Schritt
+  message_dmsf_wokflow_note: Deine Notiz...
   info_revision: "r%{rev}"
   link_workflow: Workflow  
-  notice_workflow_started: Approval workflow successfully started
-  text_email_subject_approved: "Approval workflow %{name} approved"
-  text_email_subject_rejected: "Approval workflow %{name} rejected"
-  text_email_subject_delegated: "Approval workflow %{name} delegated"
-  text_email_subject_requires_approval: "Approval workflow %{name} requires your approval"
-  text_email_subject_updated: "Approval workflow %{name} updated"
-  text_email_subject_started: "Approval workflow %{name} started" 
-  text_email_finished_approved: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been approved."
-  text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been rejected because of '%{notice}'."
-  text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
-  text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps and you are expected to do an approval in the next approval step."
-  text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps."
-  text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you are expected to do an approval in the current approval step."  
-  text_email_to_proceed: To proceed click on the check box icon next to the document in
-  text_email_to_see_history: To see the approval history click on the workflow status of the document in
-  text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
-  label_my_open_approvals: My open approvals
-  label_my_locked_documents: My locked documents
+  notice_workflow_started: Genehmigungs-Workflow gestartet
+  text_email_subject_approved: "Genehmigungs-Workflow %{name} genehmigt"
+  text_email_subject_rejected: "Genehmigungs-Workflow %{name} abgelehnt"
+  text_email_subject_delegated: "Genehmigungs-Workflow %{name} deligiert"
+  text_email_subject_requires_approval: "Genehmigungs-Workflow %{name} benötigt deine Genehmigung"
+  text_email_subject_updated: "Genehmigungs-Workflow %{name} bearbeitet"
+  text_email_subject_started: "Genehmigungs-Workflow %{name} gestartet" 
+  text_email_finished_approved: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist abgeschlossen und die Datei wurde genehmigt."
+  text_email_finished_rejected: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist abgeschlossen, aber die Datei wurde abgelehnt, weil: '%{notice}'."
+  text_email_finished_delegated: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' wurde an die deligiert, weil: '%{notice}' und weil deine Zustimmung im aktuellen Genehmigungsschritt benötigt wird."
+  text_email_finished_step: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade einen Zustimmungsschritt abgeschlossen und im nächsten Genehmigungsschritt wird deine Zustimmung benötigt."
+  text_email_finished_step_short: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade einen Genehmigungsschritt abgeschlossen."
+  text_email_started: "Der Genehmigungs-Workflow '%{name}' zugewiesen an '%{filename}' wurde gestartet und im aktuellen Genehmigungsschritt wird deine Zustimmung benötigt."  
+  text_email_to_proceed: Um fortzufahren klicke auf das Häckchen neben der Datei in
+  text_email_to_see_history: Um den Verlauf des Genehmigungs-Workflows zu sehen klicke auf den Workflowstatus zur Datei in
+  text_email_to_see_status: Um den aktuellen Status des Genehmigungs-Workflows zu sehen klicke auf den Workflowstatus zur Datei in
+  label_my_open_approvals: Meine offenen Genehmigungen
+  label_my_locked_documents: Meine geschlossenen Genehmigungen
   
-  title_create_link: Create a symbolic link  
-  label_link_from: Link from
-  label_link_to: Link to
-  label_notifications_on: Notifications on
-  label_notifications_off: Notifications off
-  field_target_file: Source file
+  title_create_link: Verknüpfung anlegen  
+  label_link_from: Verlinke von
+  label_link_to: Verlinke zu
+  label_notifications_on: Benachrichtigungen ein
+  label_notifications_off: Benachrichtigungen aus
+  field_target_file: Quelldatei
   title_download_entries: Download entries
-  label_link_name: Link name
-  label_target_folder: Target folder
-  label_source_folder: Source folder
-  label_target_project: Target project
-  label_source_project: Source project
+  label_link_name: Name der Verknüpfung
+  label_target_folder: Zielordner
+  label_source_folder: Quellordner
+  label_target_project: Zielprojekt
+  label_source_project: Quellprojekt
   
-  text_email_doc_updated_subject: "Documents of %{project} updated"
-  text_email_doc_updated: has just actualized documents of
-  text_email_doc_follows: as follows
-  text_email_doc_deleted_subject: "Documents of %{project} deleted"
-  text_email_doc_deleted: has just deleted documents of
-  label_links_only: links only
+  text_email_doc_updated_subject: "Dokumente im Projekt %{project} wurden aktualisiert"
+  text_email_doc_updated: hat folgende Dokumente bearbeitet
+  text_email_doc_follows: wie folgt
+  text_email_doc_deleted_subject: "Dokumente im Projekt %{project} wurden gelöscht"
+  text_email_doc_deleted: hat folgende Dokumente gelöscht
+  label_links_only: nur Verknüpfungen
   
-  label_display_notified_recipients: Display notified recipients
-  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
-  warning_email_notifications: "Email notifications sent to %{to}"
+  label_display_notified_recipients: Zeige benachrichtigte Empfänger
+  note_display_notified_recipients: Der User wird über alle Empfänger der Emailbenachrichtigung informiert.
+  warning_email_notifications: "Emailbenachrichtigung wurde gesendet an %{to}"
   
   my:
     blocks:
-      locked_documents: Locked documents
-      open_approvals: Open approvals
+      locked_documents: Gesperrte Dateien
+      open_approvals: Offene Genehmigungs-Workflows
           
-  label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
-  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  label_maximum_ajax_upload_filesize: Maximale Dateigröße für den Upload via AJAX
+  note_maximum_ajax_upload_filesize: Maximale Dateigröße für den Upload über die AJAX-Schnittstelle. Für größere Dateien muss der Standard-Uploader von Redmine verwendet werden. Angabe in MB.
