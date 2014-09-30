@@ -264,11 +264,16 @@ class DmsfWorkflowsController < ApplicationController
       end
       operator = (params[:commit] == l(:dmsf_and)) ? DmsfWorkflowStep::OPERATOR_AND : DmsfWorkflowStep::OPERATOR_OR
       users.each do |user|        
-        @dmsf_workflow.dmsf_workflow_steps << DmsfWorkflowStep.new(
+        ws = DmsfWorkflowStep.new(
           :dmsf_workflow_id => @dmsf_workflow.id, 
           :step => step, 
           :user_id => user.id, 
           :operator => operator)
+        if ws.save
+          @dmsf_workflow.dmsf_workflow_steps << ws
+        else
+          flash[:error] = l(:error_workflow_assign)
+        end
       end         
     end             
     respond_to do |format|
