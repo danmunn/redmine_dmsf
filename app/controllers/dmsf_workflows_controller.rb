@@ -355,7 +355,7 @@ private
         @project = @dmsf_workflow.project
       else # Global workflow
         revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
-        @project = revision.project if revision
+        @project = revision.file.project if revision && revision.file
       end
     else
       if params[:project_id].present?

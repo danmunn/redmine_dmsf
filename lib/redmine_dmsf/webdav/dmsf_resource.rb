@@ -514,9 +514,7 @@ module RedmineDmsf
           new_revision.minor_version = 0
           new_revision.major_version = 0
         end
-
-        new_revision.project = project
-        new_revision.folder = parent.folder
+                
         new_revision.file = f
         new_revision.user = User.current
         new_revision.name = basename

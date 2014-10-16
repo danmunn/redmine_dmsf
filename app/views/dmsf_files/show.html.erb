@@ -99,7 +99,7 @@
         </div>
         <div class="splitcontentright">			
           <%= label_tag('', "#{l(:label_file)}:") %>
-          <%= ("#{h(revision.folder.dmsf_path_str)}/") if revision.folder %><%= h(revision.name) %>			
+          <%= ("#{h(revision.file.folder.dmsf_path_str)}/") if revision.file.folder %><%= h(revision.name) %>			
         </div>
       </div>
       <p class="no-ident">

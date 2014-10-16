@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -76,38 +76,36 @@ class DmsfFilesController < ApplicationController
       if @file.locked_for_user?
         flash[:error] = l(:error_file_is_locked)        
       else        
-        @revision = DmsfFileRevision.new(params[:dmsf_file_revision])
+        revision = DmsfFileRevision.new(params[:dmsf_file_revision])
 
-        @revision.file = @file
-        @revision.project = @file.project
+        revision.file = @file        
         last_revision = @file.last_revision
-        @revision.source_revision = last_revision
-        @revision.user = User.current
+        revision.source_revision = last_revision
+        revision.user = User.current
 
-        @revision.major_version = last_revision.major_version
-        @revision.minor_version = last_revision.minor_version      
+        revision.major_version = last_revision.major_version
+        revision.minor_version = last_revision.minor_version      
         version = params[:version].to_i
         file_upload = params[:file_upload]
         unless file_upload
-          @revision.disk_filename = last_revision.disk_filename
-          @revision.increase_version(version, false)
-          @revision.mime_type = last_revision.mime_type
-          @revision.size = last_revision.size
+          revision.disk_filename = last_revision.disk_filename
+          revision.increase_version(version, false)
+          revision.mime_type = last_revision.mime_type
+          revision.size = last_revision.size
         else
-          @revision.increase_version(version, true)
-          @revision.size = file_upload.size
-          @revision.disk_filename = @revision.new_storage_filename
-          @revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
+          revision.increase_version(version, true)
+          revision.size = file_upload.size
+          revision.disk_filename = revision.new_storage_filename
+          revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
         end      
 
-        @file.name = @revision.name
-        @file.folder = @revision.folder
+        @file.name = revision.name        
 
-        if @revision.valid? && @file.valid?
-          @revision.save!
-          @revision.assign_workflow(params[:dmsf_workflow_id])
+        if revision.valid? && @file.valid?
+          revision.save!
+          revision.assign_workflow(params[:dmsf_workflow_id])
           if file_upload
-            @revision.copy_file_content(file_upload)
+            revision.copy_file_content(file_upload)
           end
 
           if @file.locked? && !@file.locks.empty?
@@ -119,7 +117,7 @@ class DmsfFilesController < ApplicationController
             end
           end
           @file.save!
-          @file.set_last_revision @revision
+          @file.set_last_revision revision
 
           flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
           log_activity('new revision')
@@ -235,7 +233,7 @@ class DmsfFilesController < ApplicationController
       log_activity('restored')
       flash[:notice] = l(:notice_dmsf_file_restored)
     else
-      flash[:error] = @file.errors[:base][0]
+      flash[:error] = @file.errors.full_messages.to_sentence
     end
     redirect_to :back
   end

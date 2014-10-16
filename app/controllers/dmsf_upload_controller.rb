@@ -115,9 +115,7 @@ class DmsfUploadController < ApplicationController
         end
 
         commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file[:disk_filename].gsub(/[\/\\]/,'')}"
-        
-        new_revision.project = link ? link.target_project : @project
-        new_revision.folder = link ? link.target_folder : @folder
+                        
         new_revision.file = file
         new_revision.user = User.current
         new_revision.name = name

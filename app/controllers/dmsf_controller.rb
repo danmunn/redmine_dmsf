@@ -36,9 +36,8 @@ class DmsfController < ApplicationController
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
-    @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
-    
-    @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0
+    @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)    
+    @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0        
     
     unless @folder
       if params[:custom_field_id].present? && params[:custom_value].present?
@@ -105,9 +104,16 @@ class DmsfController < ApplicationController
       @dir_links = @folder.folder_links.visible
       @file_links = @folder.file_links.visible
       @locked_for_user = @folder.locked_for_user?
-    end
+    end        
     
     @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].present? ? Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'] : 100
+    
+    # Trash
+    @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed && @file_delete_allowed && !@locked_for_user && !@folder    
+    @trash_enabled = DmsfFolder.deleted.where(:project_id => @project.id).any? ||
+      DmsfFile.deleted.where(:project_id => @project.id).any? || 
+      DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFolder.model_name).any? ||
+      DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFile.model_name).any?        
   end
   
   def trash
@@ -254,7 +260,7 @@ class DmsfController < ApplicationController
     if @folder.delete(commit)
       flash[:notice] = l(:notice_folder_deleted)
     else
-      flash[:error] = @folder.errors[:base][0]
+      flash[:error] = @folder.errors.full_messages.to_sentence
     end
     if commit
       redirect_to :back
@@ -267,7 +273,7 @@ class DmsfController < ApplicationController
     if @folder.restore    
       flash[:notice] = l(:notice_dmsf_folder_restored)
     else
-      flash[:error] = @folder.errors[:base][0]
+      flash[:error] = @folder.errors.full_messages.to_sentence
     end
     redirect_to :back
   end
@@ -442,7 +448,7 @@ class DmsfController < ApplicationController
       folder = DmsfFolder.find_by_id id
       if folder
         unless folder.restore
-          flash[:error] = folder.errors[:base][0]
+          flash[:error] = folder.errors.full_messages.to_sentence
         end
       else
         raise FileNotFound
@@ -453,7 +459,7 @@ class DmsfController < ApplicationController
       file = DmsfFile.find_by_id id
       if file
         unless file.restore
-          flash[:error] = file.errors[:base][0]
+          flash[:error] = file.errors.full_messages.to_sentence
         end
       else
         raise FileNotFound
@@ -464,7 +470,7 @@ class DmsfController < ApplicationController
       link = DmsfLink.find_by_id id
       if link
         unless link.restore
-          flash[:error] = link.errors[:base][0]
+          flash[:error] = link.errors.full_messages.to_sentence
         end
       else
         raise FileNotFound
@@ -478,7 +484,7 @@ class DmsfController < ApplicationController
       folder = DmsfFolder.find_by_id id
       if folder
         unless folder.delete commit
-          flash[:error] = folder.errors[:base][0]
+          flash[:error] = folder.errors.full_messages.to_sentence
         end
       else
         raise FileNotFound

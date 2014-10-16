@@ -22,12 +22,12 @@
 </p>
 <p>
   <%= @text2 %>      
-  <%  unless @revision.folder %>
+  <%  unless @revision.file.folder %>
     <%= link_to l(:link_documents), 
       dmsf_folder_path(:id => @revision.file.project, :only_path => false) %>
   <% else %>
-    <%=  link_to @revision.folder.title,
-      dmsf_folder_path(:id => @revision.file.project, :folder_id => @revision.folder, :only_path => false) %>
+    <%=  link_to @revision.file.folder.title,
+      dmsf_folder_path(:id => @revision.file.project, :folder_id => @revision.file.folder, :only_path => false) %>
   <% end %>.
 </p>
   

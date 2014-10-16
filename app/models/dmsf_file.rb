@@ -202,42 +202,49 @@ class DmsfFile < ActiveRecord::Base
       return false 
     end
     
-    new_revision = self.last_revision.clone    
-    
-    new_revision.folder = folder
-    new_revision.project = folder ? folder.project : project
-    new_revision.comment = l(:comment_moved_from, :source => "#{self.project.identifier}:#{self.dmsf_path_str}") 
-    
+    # If the target project differs from the source project we must physically move the disk files    
+    if self.project != project        
+      self.revisions.all.each do |rev|        
+        if File.exist? rev.disk_file(self.project)
+          FileUtils.mv rev.disk_file(self.project), rev.disk_file(project)
+        end
+      end      
+    end
+         
+    self.project = project
+    self.folder = folder        
+    new_revision = self.last_revision.clone  
+    new_revision.file = self    
+    new_revision.comment = l(:comment_moved_from, :source => "#{self.project.identifier}:#{self.dmsf_path_str}")
     new_revision.custom_values = []
+
     self.last_revision.custom_values.each do |cv|
       new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
     end        
     
-    # If the target project differs from the source project we must physically copy the file
-    if self.project != new_revision.project
-      if File.exist? self.last_revision.disk_file
-        FileUtils.cp self.last_revision.disk_file, new_revision.disk_file        
-      end
-    end
-
-    self.folder = new_revision.folder
-    self.project = new_revision.project
-
-    self.save && new_revision.save        
+    self.save && new_revision.save
   end
   
   def copy_to(project, folder)
+    
+    # If the target project differs from the source project we must physically move the disk files    
+    if self.project != project        
+      self.revisions.all.each do |rev|        
+        if File.exist? rev.disk_file(self.project)
+          FileUtils.cp rev.disk_file(self.project), rev.disk_file(project)
+        end
+      end      
+    end
+    
     file = DmsfFile.new
     file.folder = folder
-    file.project = folder ? folder.project : project
+    file.project = project
     file.name = self.name
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
 
     if file.save && self.last_revision
       new_revision = self.last_revision.clone
-      new_revision.file = file
-      new_revision.folder = folder
-      new_revision.project = folder ? folder.project : project
+      new_revision.file = file      
       new_revision.comment = l(:comment_copied_from, :source => "#{self.project.identifier}: #{self.dmsf_path_str}")
       
       new_revision.custom_values = []
@@ -245,22 +252,13 @@ class DmsfFile < ActiveRecord::Base
         new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
       end
 
-      unless new_revision.save
-        file.delete
-      else        
-        # If the target project differs from the source project we must physically copy the file
-        if project != self.project          
-          if File.exist? self.last_revision.disk_file
-            FileUtils.cp self.last_revision.disk_file, new_revision.disk_file
-          end
-        end
-      end
+      file.delete(true) unless new_revision.save        
     end
     
     return file
   end
   
-  # To fullfill searchable module expectations
+  # To fulfill searchable module expectations
   def self.search(tokens, projects = nil, options = {})
     tokens = [] << tokens unless tokens.is_a?(Array)
     projects = [] << projects unless projects.nil? || projects.is_a?(Array)

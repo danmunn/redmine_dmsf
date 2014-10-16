@@ -23,8 +23,7 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :source_revision, :class_name => 'DmsfFileRevision', :foreign_key => 'source_dmsf_file_revision_id'
   belongs_to :user
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
-  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
-  belongs_to :project
+  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'  
   has_many :access, :class_name => 'DmsfFileRevisionAccess', :foreign_key => 'dmsf_file_revision_id', :dependent => :destroy
   has_many :dmsf_workflow_step_assignment, :dependent => :destroy
 
@@ -52,6 +51,14 @@ class DmsfFileRevision < ActiveRecord::Base
   validates :title, :name, :presence => true
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
     :message => l(:error_contains_invalid_character)
+  
+  def project
+    self.file.project if self.file
+  end
+  
+  def folder
+    self.file.folder if self.file
+  end
   
   def self.remove_extension(filename)
     filename[0, (filename.length - File.extname(filename).length)]
@@ -117,9 +124,10 @@ class DmsfFileRevision < ActiveRecord::Base
     "#{self.major_version}.#{self.minor_version}"
   end
 
-  def disk_file
-    storage_base = "#{DmsfFile.storage_path}" #perhaps .dup?
-    unless project.nil?
+  def disk_file(project = nil)
+    project = self.file.project unless project    
+    storage_base = DmsfFile.storage_path.dup
+    if self.file && project    
       project_base = project.identifier.gsub(/[^\w\.\-]/,'_')
       storage_base << "/p_#{project_base}"
     end

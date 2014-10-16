@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -126,9 +127,7 @@ class DmsfConvertDocuments
               
               revision = DmsfFileRevision.new
               revision.file = file
-              revision.name = file.name
-              revision.folder = file.folder
-              revision.project = file.project
+              revision.name = file.name              
               revision.title = DmsfFileRevision.filename_to_title(attachment.filename)
               revision.description = attachment.description
               revision.user = attachment.author

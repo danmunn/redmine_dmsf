@@ -43,8 +43,8 @@
         <% assignments.each do |assignment| %>
           <tr id="assignment-<%= assignment.id %>" class="<%= cycle('odd', 'even') %>">
             <td class="project">
-              <% if assignment.dmsf_file_revision.project %>
-                <%= link_to_project(assignment.dmsf_file_revision.project) %>
+              <% if assignment.dmsf_file_revision.file.project %>
+                <%= link_to_project(assignment.dmsf_file_revision.file.project) %>
               <% end %>
             </td>
             <td>
@@ -61,11 +61,11 @@
             </td>
             <td class="title">
               <% if assignment.dmsf_file_revision %>
-                <% if assignment.dmsf_file_revision.folder %>
-                  <%= link_to(h(assignment.dmsf_file_revision.folder.title), 
-                    {:controller => 'dmsf', :action => 'show', :id=> assignment.dmsf_file_revision.project, :folder_id => assignment.dmsf_file_revision.folder}) %>
-                <% elsif assignment.dmsf_file_revision.project %>
-                  <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id => assignment.dmsf_file_revision.project }) %>                  
+                <% if assignment.dmsf_file_revision.file.folder %>
+                  <%= link_to(h(assignment.dmsf_file_revision.file.folder.title), 
+                    {:controller => 'dmsf', :action => 'show', :id => assignment.dmsf_file_revision.file.project, :folder_id => assignment.dmsf_file_revision.file.folder}) %>
+                <% elsif assignment.dmsf_file_revision.file.project %>
+                  <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id => assignment.dmsf_file_revision.file.project }) %>                  
                 <% end %>
               <% end %>
             </td>
