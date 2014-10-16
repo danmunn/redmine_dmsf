@@ -397,7 +397,7 @@ module RedmineDmsf
       end
 
       # Lock Check
-      # Check for the existance of locks
+      # Check for the existence of locks
       # At present as deletions of folders are not recursive, we do not need to extend 
       # this to cover every file, just queried
       def lock_check(lock_scope=nil)
@@ -410,8 +410,9 @@ module RedmineDmsf
 
       # Lock
       def lock(args)
-        return Conflict unless (parent.projectless_path == "/" || parent_exists?)
-        lock_check(args[:scope])
+        return Conflict unless (parent.projectless_path == '/' || parent_exists?)
+        lock_check(args[:scope])         
+        raise DAV4Rack::LockFailure.new("Path does't exist: #{@path}") unless exists?
         entity = file? ? file : folder
         begin
           if (entity.locked? && entity.locked_for_user?)
