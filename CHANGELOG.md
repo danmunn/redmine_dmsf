@@ -1,7 +1,7 @@
 Changelog for Redmine DMSF
 ==========================
 
-1.4.9: *2014-09-01*
+1.4.9: *2014-10-17*
 -----------------------
 
   Trash bin
@@ -22,6 +22,11 @@ Changelog for Redmine DMSF
  * Fix: #269 - Workflow OR not working for second reviewer 
  * Fix: #270 - 500 Internal Server Error, redmine 2.5.1, MS SQL Server 2012, dmsf 1.4.8-master, dmsf_link.rb 
  * Fix: #275 - Typo in readme file type
+ * Fix: #288 - ubuntu migrate failed 
+ * Fix: #290 - error installing plugin
+ * Fix: #293 - Locking of inexistent files fails
+ * Fix: #298 - The same approver in one approval step
+ * Update: #301 - Database normalization
 
 1.4.8: *2014-04-17*
 -----------------------
