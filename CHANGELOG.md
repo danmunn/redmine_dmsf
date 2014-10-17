@@ -4,10 +4,9 @@ Changelog for Redmine DMSF
 1.4.9: *2014-10-17*
 -----------------------
 
-  Trash bin
-  Standard Redmine's upload form with progress bar for files > 100 MB
-  WebDAV library upgrade
-
+    Trash bin
+    Standard Redmine's upload form with progress bar for files > 100 MB
+    WebDAV library upgrade
 
  * New: #130 - redmine_dmsf: last update of the folders 
  * Fix: #131 - Wiki link shows filename for all users type
