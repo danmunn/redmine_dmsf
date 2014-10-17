@@ -486,7 +486,7 @@ class DmsfController < ApplicationController
         unless folder.delete commit
           flash[:error] = folder.errors.full_messages.to_sentence
         end
-      else
+      elsif !commit
         raise FileNotFound
       end
     end
@@ -501,7 +501,7 @@ class DmsfController < ApplicationController
         else
           not_deleted_files << file
         end
-      else
+      elsif !commit
         raise FileNotFound
       end
     end
