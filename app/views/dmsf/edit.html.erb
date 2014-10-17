@@ -42,12 +42,12 @@
         :title => l(:title_create_link), 
         :class => 'icon icon-link') %>
       <%= link_to(l(:button_copy), copy_folder_path(:id => @folder),
-        :title => l(:title_copy), :class => 'icon icon-copy') %>
+        :title => l(:title_copy), :class => 'icon icon-copy') %>      
       <%= link_to(l(:button_delete),
-        delete_dmsf_path(:id => @project, :folder_id => @folder.dmsf_folder_id, :delete_folder_id => @folder),
+        delete_dmsf_path(:id => @project, :folder_id => @folder),
         :data => {:confirm => l(:text_are_you_sure)},            
         :title => l(:title_delete),
-        :class => 'icon icon-del') %>
+        :class => 'icon icon-del') %> 
     <% else %>
       <% if (!@folder.locked_for_user? || User.current.allowed_to?(:force_file_unlock, @project)) && @folder.unlockable? %>
         <%= link_to(l(:button_unlock),
