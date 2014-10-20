@@ -412,7 +412,7 @@ module RedmineDmsf
       def lock(args)
         return Conflict unless (parent.projectless_path == '/' || parent_exists?)
         lock_check(args[:scope])         
-        raise DAV4Rack::LockFailure.new("Path does't exist: #{@path}") unless exists?
+        raise DAV4Rack::LockFailure.new("Path does't exist: #{@path}") unless self.exist?
         entity = file? ? file : folder
         begin
           if (entity.locked? && entity.locked_for_user?)
