@@ -31,13 +31,13 @@ class DmsfFilesController < ApplicationController
 
   def view
     @revision = @file.last_revision
-
-    check_project(@revision.file)
-    access = DmsfFileRevisionAccess.new(:user_id => User.current.id, 
-      :dmsf_file_revision_id => @revision.id,
-      :action => DmsfFileRevisionAccess::DownloadAction)
-    access.save!
+    check_project(@revision.file)    
     begin
+      log_activity('downloaded')
+      access = DmsfFileRevisionAccess.new(:user_id => User.current.id, 
+        :dmsf_file_revision_id => @revision.id,
+        :action => DmsfFileRevisionAccess::DownloadAction)
+      access.save!
       send_file(@revision.disk_file,
         :filename => filename_for_content_disposition(@revision.name),
         :type => @revision.detect_content_type,
@@ -47,7 +47,7 @@ class DmsfFilesController < ApplicationController
       render_404
     end 
   end
-
+    
   def show
     # The download is put here to provide more clear and usable links
     if params.has_key?(:download)
@@ -62,7 +62,14 @@ class DmsfFilesController < ApplicationController
       end
       check_project(@revision.file)
       begin
-        send_revision
+        log_activity('downloaded')
+        access = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => @revision.id, 
+          :action => DmsfFileRevisionAccess::DownloadAction)
+        access.save!
+        send_file(@revision.disk_file, 
+          :filename => filename_for_content_disposition(@revision.name),
+          :type => @revision.detect_content_type, 
+          :disposition => 'attachment')
       rescue ActionController::MissingFile => e
         logger.error e.message
         render_404
@@ -248,18 +255,7 @@ class DmsfFilesController < ApplicationController
 
   def log_activity(action)
     Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{@file.project.identifier}/#{@file.id}/#{@revision.id if @revision}"
-  end
-
-  def send_revision
-    log_activity('downloaded')
-    access = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => @revision.id, 
-      :action => DmsfFileRevisionAccess::DownloadAction)
-    access.save!
-    send_file(@revision.disk_file, 
-      :filename => filename_for_content_disposition(@revision.name),
-      :type => @revision.detect_content_type, 
-      :disposition => 'attachment')
-  end
+  end 
   
   def find_file    
     @file = DmsfFile.find params[:id]
