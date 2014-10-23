@@ -1,1 +1,361 @@
-(function(a){a.runtimes.BrowserPlus=a.addRuntime("browserplus",{getFeatures:function(){return{dragdrop:true,jpgresize:true,pngresize:true,chunks:true,progress:true,multipart:true,multi_selection:true}},init:function(g,i){var e=window.BrowserPlus,h={},d=g.settings,c=d.resize;function f(n){var m,l,j=[],k,o;for(l=0;l<n.length;l++){k=n[l];o=a.guid();h[o]=k;j.push(new a.File(o,k.name,k.size))}if(l){g.trigger("FilesAdded",j)}}function b(){var j=false;g.bind("PostInit",function(){var n,l=d.drop_element,p=g.id+"_droptarget",k=document.getElementById(l),m;function q(s,r){e.DragAndDrop.AddDropTarget({id:s},function(t){e.DragAndDrop.AttachCallbacks({id:s,hover:function(u){if(!u&&r){r()}},drop:function(u){if(r){r()}f(u)}},function(){})})}function o(){document.getElementById(p).style.top="-1000px"}if(k){if(document.attachEvent&&(/MSIE/gi).test(navigator.userAgent)){n=document.createElement("div");n.setAttribute("id",p);a.extend(n.style,{position:"absolute",top:"-1000px",background:"red",filter:"alpha(opacity=0)",opacity:0});document.body.appendChild(n);a.addEvent(k,"dragenter",function(s){var r,t;r=document.getElementById(l);t=a.getPos(r);a.extend(document.getElementById(p).style,{top:t.y+"px",left:t.x+"px",width:r.offsetWidth+"px",height:r.offsetHeight+"px"})});q(p,o)}else{q(l)}}a.addEvent(document.getElementById(d.browse_button),"click",function(x){var r=[],t,s,w=d.filters,v,u;x.preventDefault();if(j){return}no_type_restriction:for(t=0;t<w.length;t++){v=w[t].extensions.split(",");for(s=0;s<v.length;s++){if(v[s]==="*"){r=[];break no_type_restriction}u=a.mimeTypes[v[s]];if(u&&a.inArray(u,r)===-1){r.push(a.mimeTypes[v[s]])}}}e.FileBrowse.OpenBrowseDialog({mimeTypes:r},function(y){if(y.success){f(y.value)}})});k=n=null});g.bind("CancelUpload",function(){e.Uploader.cancel({},function(){})});g.bind("DisableBrowse",function(k,l){j=l});g.bind("UploadFile",function(n,k){var m=h[k.id],s={},l=n.settings.chunk_size,o,p=[];function r(t,v){var u;if(k.status==a.FAILED){return}s.name=k.target_name||k.name;if(l){s.chunk=""+t;s.chunks=""+v}u=p.shift();e.Uploader.upload({url:n.settings.url,files:{file:u},cookies:document.cookies,postvars:a.extend(s,n.settings.multipart_params),progressCallback:function(y){var x,w=0;o[t]=parseInt(y.filePercent*u.size/100,10);for(x=0;x<o.length;x++){w+=o[x]}k.loaded=w;n.trigger("UploadProgress",k)}},function(x){var w,y;if(x.success){w=x.value.statusCode;if(l){n.trigger("ChunkUploaded",k,{chunk:t,chunks:v,response:x.value.body,status:w})}if(p.length>0){r(++t,v)}else{k.status=a.DONE;n.trigger("FileUploaded",k,{response:x.value.body,status:w});if(w>=400){n.trigger("Error",{code:a.HTTP_ERROR,message:a.translate("HTTP Error."),file:k,status:w})}}}else{n.trigger("Error",{code:a.GENERIC_ERROR,message:a.translate("Generic Error."),file:k,details:x.error})}})}function q(t){k.size=t.size;if(l){e.FileAccess.chunk({file:t,chunkSize:l},function(w){if(w.success){var x=w.value,u=x.length;o=Array(u);for(var v=0;v<u;v++){o[v]=0;p.push(x[v])}r(0,u)}})}else{o=Array(1);p.push(t);r(0,1)}}if(c&&/\.(png|jpg|jpeg)$/i.test(k.name)){BrowserPlus.ImageAlter.transform({file:m,quality:c.quality||90,actions:[{scale:{maxwidth:c.width,maxheight:c.height}}]},function(t){if(t.success){q(t.value.file)}})}else{q(m)}});i({success:true})}if(e){e.init(function(k){var j=[{service:"Uploader",version:"3"},{service:"DragAndDrop",version:"1"},{service:"FileBrowse",version:"1"},{service:"FileAccess",version:"2"}];if(c){j.push({service:"ImageAlter",version:"4"})}if(k.success){e.require({services:j},function(l){if(l.success){b()}else{i()}})}else{i()}})}else{i()}}})})(plupload);
+/**
+ * plupload.browserplus.js
+ *
+ * Copyright 2009, Moxiecode Systems AB
+ * Released under GPL License.
+ *
+ * License: http://www.plupload.com/license
+ * Contributing: http://www.plupload.com/contributing
+ */
+
+// JSLint defined globals
+/*global plupload:false, BrowserPlus:false, window:false */
+
+(function(plupload) {
+	/**
+	 * Yahoo BrowserPlus implementation. This runtime supports these features: dragdrop, jpgresize, pngresize.
+	 *
+	 * @static
+	 * @class plupload.runtimes.BrowserPlus
+	 * @extends plupload.Runtime
+	 */
+	plupload.runtimes.BrowserPlus = plupload.addRuntime("browserplus", {
+		/**
+		 * Returns a list of supported features for the runtime.
+		 *
+		 * @return {Object} Name/value object with supported features.
+		 */
+		getFeatures : function() {
+			return {
+				dragdrop : true,
+				jpgresize : true,
+				pngresize : true,
+				chunks : true,
+				progress: true,
+				multipart: true,
+				multi_selection: true
+			};
+		},
+
+		/**
+		 * Initializes the browserplus runtime.
+		 *
+		 * @method init
+		 * @param {plupload.Uploader} uploader Uploader instance that needs to be initialized.
+		 * @param {function} callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
+		 */
+		init : function(uploader, callback) {
+			var browserPlus = window.BrowserPlus, browserPlusFiles = {}, settings = uploader.settings, resize = settings.resize;
+
+			function addSelectedFiles(native_files) {
+				var files, i, selectedFiles = [], file, id;
+
+				// Add the native files and setup plupload files
+				for (i = 0; i < native_files.length; i++) {
+					file = native_files[i];
+					id = plupload.guid();
+					browserPlusFiles[id] = file;
+
+					selectedFiles.push(new plupload.File(id, file.name, file.size));
+				}
+
+				// Any files selected fire event
+				if (i) {
+					uploader.trigger("FilesAdded", selectedFiles);
+				}
+			}
+
+			// Setup event listeners if browserplus was initialized
+			function setup() {
+				var disabled = false;
+				
+				// Add drop handler
+				uploader.bind("PostInit", function() {
+					var dropTargetElm, dropElmId = settings.drop_element,
+						dropTargetId = uploader.id + '_droptarget',
+						dropElm = document.getElementById(dropElmId),
+						lastState;
+
+					// Enable/disable drop support for the drop target
+					// this is needed to resolve IE bubbeling issues and make it possible to drag/drop
+					// files into gears runtimes on the same page
+					function addDropHandler(id, end_callback) {
+						// Add drop target and listener
+						browserPlus.DragAndDrop.AddDropTarget({id : id}, function(res) {
+							browserPlus.DragAndDrop.AttachCallbacks({
+								id : id,
+								hover : function(res) {
+									if (!res && end_callback) {
+										end_callback();
+									}
+								},
+								drop : function(res) {
+									if (end_callback) {
+										end_callback();
+									}
+
+									addSelectedFiles(res);
+								}
+							}, function() {
+							});
+						});
+					}
+
+					function hide() {
+						document.getElementById(dropTargetId).style.top = '-1000px';
+					}
+
+					if (dropElm) {
+						// Since IE has issues with bubbeling when it comes to the drop of files
+						// we need to do this hack where we show a drop target div element while dropping
+						if (document.attachEvent && (/MSIE/gi).test(navigator.userAgent)) {
+							// Create drop target
+							dropTargetElm = document.createElement('div');
+							dropTargetElm.setAttribute('id', dropTargetId);
+							plupload.extend(dropTargetElm.style, {
+								position : 'absolute',
+								top : '-1000px',
+								background : 'red',
+								filter : 'alpha(opacity=0)',
+								opacity : 0
+							});
+
+							document.body.appendChild(dropTargetElm);
+
+							plupload.addEvent(dropElm, 'dragenter', function(e) {
+								var dropElm, dropElmPos;
+
+								dropElm = document.getElementById(dropElmId);
+								dropElmPos = plupload.getPos(dropElm);
+
+								plupload.extend(document.getElementById(dropTargetId).style, {
+									top : dropElmPos.y + 'px',
+									left : dropElmPos.x + 'px',
+									width : dropElm.offsetWidth + 'px',
+									height : dropElm.offsetHeight + 'px'
+								});
+							});
+
+							addDropHandler(dropTargetId, hide);
+						} else {
+							addDropHandler(dropElmId);
+						}
+					}
+
+					plupload.addEvent(document.getElementById(settings.browse_button), 'click', function(e) {
+						var mimes = [], i, a, filters = settings.filters, ext, type;
+
+						e.preventDefault();
+						
+						if (disabled) {
+							return;	
+						}
+
+						// Convert extensions to mimetypes
+						no_type_restriction:
+						for (i = 0; i < filters.length; i++) {
+							ext = filters[i].extensions.split(',');
+
+							for (a = 0; a < ext.length; a++) {
+								if (ext[a] === '*') {
+									mimes = [];
+									break no_type_restriction;
+								}
+								type = plupload.mimeTypes[ext[a]];
+								
+								if (type && plupload.inArray(type, mimes) === -1) {
+									mimes.push(plupload.mimeTypes[ext[a]]);
+								}
+							}
+						}
+
+						browserPlus.FileBrowse.OpenBrowseDialog({
+							mimeTypes : mimes
+						}, function(res) {
+							if (res.success) {
+								addSelectedFiles(res.value);
+							}
+						});
+					});
+
+					// Prevent IE leaks
+					dropElm = dropTargetElm = null;
+				});
+				
+				uploader.bind("CancelUpload", function() {
+					browserPlus.Uploader.cancel({}, function(){});
+				});
+				
+				uploader.bind("DisableBrowse", function(up, state) {
+					disabled = state;
+				});
+
+				uploader.bind("UploadFile", function(up, file) {
+					var nativeFile = browserPlusFiles[file.id], reqParams = {},
+					    chunkSize = up.settings.chunk_size, loadProgress, chunkStack = [];
+
+					function uploadFile(chunk, chunks) {
+						var chunkFile;
+
+						// Stop upload if file is maked as failed
+						if (file.status == plupload.FAILED) {
+							return;
+						}
+
+						reqParams.name = file.target_name || file.name;
+
+						// Only send chunk parameters if chunk size is defined
+						if (chunkSize) {
+							reqParams.chunk = "" + chunk;
+							reqParams.chunks = "" + chunks;
+						}
+
+					    chunkFile = chunkStack.shift();
+
+						browserPlus.Uploader.upload({
+							url : up.settings.url,
+							files : {file : chunkFile},
+							cookies : document.cookies,
+							postvars : plupload.extend(reqParams, up.settings.multipart_params),
+							progressCallback : function(res) {
+								var i, loaded = 0;
+
+								// since more than 1 chunk can be sent at a time, keep track of how many bytes
+								// of each chunk was sent
+								loadProgress[chunk] = parseInt(res.filePercent * chunkFile.size / 100, 10);
+								for (i = 0; i < loadProgress.length; i++) {
+									loaded += loadProgress[i];
+								}
+
+								file.loaded = loaded;
+								up.trigger('UploadProgress', file);
+							}
+						}, function(res) {
+							var httpStatus, chunkArgs;
+
+							if (res.success) {
+								httpStatus = res.value.statusCode;
+
+								if (chunkSize) {
+									up.trigger('ChunkUploaded', file, {
+										chunk : chunk,
+										chunks : chunks,
+										response : res.value.body,
+										status : httpStatus
+									});
+								}
+
+							    if (chunkStack.length > 0) {
+									// More chunks to be uploaded
+									uploadFile(++chunk, chunks);
+							    } else {
+									file.status = plupload.DONE;
+
+									up.trigger('FileUploaded', file, {
+										response : res.value.body,
+										status : httpStatus
+									});
+
+									// Is error status
+									if (httpStatus >= 400) {
+										up.trigger('Error', {
+											code : plupload.HTTP_ERROR,
+											message : plupload.translate('HTTP Error.'),
+											file : file,
+											status : httpStatus
+										});
+									}
+							    }
+							} else {
+								up.trigger('Error', {
+									code : plupload.GENERIC_ERROR,
+									message : plupload.translate('Generic Error.'),
+									file : file,
+									details : res.error
+								});
+							}
+						});
+					}
+
+					function chunkAndUploadFile(native_file) {
+						file.size = native_file.size;
+						if (chunkSize) {
+							browserPlus.FileAccess.chunk({file : native_file, chunkSize : chunkSize}, function(cr) {
+								if (cr.success) {
+									var chunks = cr.value, len = chunks.length;
+
+									loadProgress = Array(len);
+
+									for (var i = 0; i < len; i++) {
+										loadProgress[i] = 0;
+										chunkStack.push(chunks[i]);
+									}
+
+									uploadFile(0, len);
+								}
+							});
+						} else {
+							loadProgress = Array(1);
+							chunkStack.push(native_file);
+							uploadFile(0, 1);
+						}
+					}
+
+					// Resize image if it's a supported format and resize is enabled
+					if (resize && /\.(png|jpg|jpeg)$/i.test(file.name)) {
+						BrowserPlus.ImageAlter.transform({
+							file : nativeFile,
+							quality : resize.quality || 90,
+							actions : [{
+								scale : {
+									maxwidth : resize.width,
+									maxheight : resize.height
+								}
+							}]
+						}, function(res) {
+							if (res.success) {
+								chunkAndUploadFile(res.value.file);
+							}
+						});
+					} else {
+						chunkAndUploadFile(nativeFile);
+					}
+				});
+
+				callback({success : true});
+			}
+
+			// Check for browserplus object
+			if (browserPlus) {
+				browserPlus.init(function(res) {
+					var services = [
+						{service: "Uploader", version: "3"},
+						{service: "DragAndDrop", version: "1"},
+						{service: "FileBrowse", version: "1"},
+						{service: "FileAccess", version: "2"}
+					];
+
+					if (resize) {
+						services.push({service : 'ImageAlter', version : "4"});
+					}
+
+					if (res.success) {
+						browserPlus.require({
+							services : services
+						}, function(sres) {
+							if (sres.success) {
+								setup();
+							} else {
+								callback();
+							}
+						});
+					} else {
+						callback();
+					}
+				});
+			} else {
+				callback();
+			}
+		}
+	});
+})(plupload);
