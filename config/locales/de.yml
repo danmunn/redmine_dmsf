@@ -144,12 +144,8 @@ de:
   permission_folder_manipulation: Ordner bearbeiten
   permission_file_manipulation: Dateien bearbeiten  
   permission_force_file_unlock: Erzwinge Aufhebung der Dateisperre
-<<<<<<< HEAD
-  permission_manage_workflows: Manage workflows
-  permission_file_delete: Delete documents
-=======
+  permission_file_delete: Datei löschen
   permission_manage_workflows: Workflows verwalten
->>>>>>> 922c3a5bda2d2cca01fb48e001a5317609dc79f3
   label_file: Datei
   field_folder: Ordner
   error_create_cycle_in_folder_dependency: Zirkelabhängigkeit in der Ordnerstruktur erstellt
