@@ -33,13 +33,19 @@ class DmsfFilesController < ApplicationController
     @revision = @file.last_revision
 
     check_project(@revision.file)
-    access = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => @revision.id,
+    access = DmsfFileRevisionAccess.new(:user_id => User.current.id, 
+      :dmsf_file_revision_id => @revision.id,
       :action => DmsfFileRevisionAccess::DownloadAction)
     access.save!
-    send_file(@revision.disk_file,
-      :filename => filename_for_content_disposition(@revision.name),
-      :type => @revision.detect_content_type,
-      :disposition => 'inline')
+    begin
+      send_file(@revision.disk_file,
+        :filename => filename_for_content_disposition(@revision.name),
+        :type => @revision.detect_content_type,
+        :disposition => 'inline')
+    rescue ActionController::MissingFile => e
+      logger.error e.message
+      render_404
+    end 
   end
 
   def show
