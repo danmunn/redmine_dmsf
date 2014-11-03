@@ -177,14 +177,17 @@
       $('#fileMinorVersionRadio').prop('checked', true); 
     }
     $('#fileSameVersionRadio').prop('disabled', true); 
-  });
+  });  
 
-  $('#newRevisionFormContentToggle').toggle(function() {
-    $('#newRevisionFormContentToggle').text('[-]');
-    $('#newRevisionFormContent').show();
-  }, function() {
-    $('#newRevisionFormContentToggle').text('[+]');
-    $('#newRevisionFormContent').hide();
+  $('#newRevisionFormContentToggle').click(function() {
+    if($('#newRevisionFormContent').is(':visible')) {
+      $(this).text('[+]');
+      $('#newRevisionFormContent').hide();
+    }
+    else {
+      $(this).text('[-]');
+      $('#newRevisionFormContent').show();
+    }    
   });
 
   $('.access-table').dataTable({
@@ -196,8 +199,8 @@
 </script>
 <% if @revision.valid? && @file.valid? %>
   <script type="text/javascript">
-    $('#newRevisionFormContentToggle').text('[+]');
-    $('#newRevisionFormContent').hide();
+    $('#newRevisionFormContentToggle').text('[+]');    
+    $('#newRevisionFormContent').hide();    
   </script>
 <% end %>
 
