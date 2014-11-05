@@ -294,17 +294,6 @@ table.list td.step {
 .icon-dmsf-rev-delete { background-image: url(../images/rev_delete.png); }
 .icon-dmsf-restore { background-image: url(../images/restore.png); }
 
-.icon-edit-gray { background-image: url(../images/edit_gray.png); }
-.icon-notification-on-gray { background-image: url(../images/notify_gray.png); }
-.icon-notification-off-gray { background-image: url(../images/notifynot_gray.png); }
-.icon-dmsf-lock-gray { background-image: url(../images/lock_gray.png); }
-.icon-dmsf-unlock-gray { background-image: url(../images/unlock_gray.png); }
-.icon-dmsf-waiting-for-approval-gray { background-image: url(../images/waiting_for_approval_gray.png); }
-.icon-dmsf-approved-gray { background-image: url(../images/approved_gray.png); }
-.icon-dmsf-assigned-gray { background-image: url(../images/assigned_gray.png); }
-.icon-dmsf-rejected-gray { background-image: url(../images/rejected_gray.png); }
-.icon-dmsf-file-details-gray { background-image: url(../images/filedetails_gray.png); }
-
 tr.gray .icon-dmsf-locked { background-image: url(../images/locked_gray.png); margin-left: 2px }
 tr.gray .icon-dmsf-lockedbycurrent { background-image: url(../images/lockedbycurrent_gray.png); margin-left: 2px }
 
@@ -340,7 +329,7 @@ tr.gray .icon-file.filetype-odg { background-image: url(../images/filetypes/odg_
 
 tr.gray .icon-file.text-x-c { background-image: url(../images/filetypes/c_gray.png); }
 tr.gray .icon-file.text-x-csharp { background-image: url(../images/filetypes/csharp_gray.png); }
-tr.gray .icon-file.text-x-java { background-image: url(../images/files/filetypes_gray.png); }
+tr.gray .icon-file.text-x-java { background-image: url(../images/files/filetypes/java_gray.png); }
 tr.gray .icon-file.text-x-javascript { background-image: url(../images/filetypes/js_gray.png); }
 tr.gray .icon-file.text-x-php { background-image: url(../images/filetypes/php_gray.png); }
 tr.gray .icon-file.text-x-ruby { background-image: url(../images/filetypes/ruby_gray.png); }
