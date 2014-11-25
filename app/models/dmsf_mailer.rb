@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -86,14 +86,15 @@ class DmsfMailer < Mailer
     end
   end        
   
-  def self.get_notify_users(user, files)
-    notify_files = files.select { |file| file.notify? }
-    return [] if notify_files.empty?
-    project = notify_files[0].project    
+  def self.get_notify_users(project, files = nil)
+    if files
+      notify_files = files.select { |file| file.notify? }
+      return [] if notify_files.empty?
+    end        
     notify_members = project.members
     notify_members = notify_members.select do |notify_member|
       notify_user = notify_member.user         
-      if notify_user == user && user.pref.no_self_notified
+      if notify_user == User.current && notify_user.pref.no_self_notified
         false
       else
         unless notify_member.dmsf_mail_notification

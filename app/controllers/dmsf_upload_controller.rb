@@ -172,7 +172,7 @@ class DmsfUploadController < ApplicationController
       unless files.empty?        
         files.each { |file| log_activity(file, 'uploaded') if file }        
         begin
-          recipients = DmsfMailer.get_notify_users(User.current, files)
+          recipients = DmsfMailer.get_notify_users(@project, files)
           recipients.each do |u|
             DmsfMailer.files_updated(u, @project, files).deliver
           end          

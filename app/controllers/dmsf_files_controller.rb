@@ -135,7 +135,7 @@ class DmsfFilesController < ApplicationController
           flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
           log_activity('new revision')
           begin            
-            recipients = DmsfMailer.get_notify_users(User.current, [@file])
+            recipients = DmsfMailer.get_notify_users(@project, [@file])
             recipients.each do |u|
               DmsfMailer.files_updated(u, @project, [@file]).deliver
             end                        
@@ -163,7 +163,7 @@ class DmsfFilesController < ApplicationController
         if commit
           log_activity('deleted')
           begin
-            DmsfMailer.get_notify_users(User.current, [@file]).each do |u|
+            DmsfMailer.get_notify_users(@project, [@file]).each do |u|
               DmsfMailer.files_deleted(u, @project, [@file]).deliver
             end
           rescue Exception => e

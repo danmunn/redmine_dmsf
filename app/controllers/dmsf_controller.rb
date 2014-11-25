@@ -511,7 +511,7 @@ class DmsfController < ApplicationController
         log_activity(f, 'deleted')
       end
       begin
-        DmsfMailer.get_notify_users(User.current, deleted_files).each do |u|
+        DmsfMailer.get_notify_users(@project, deleted_files).each do |u|
           DmsfMailer.files_deleted(u, @project, deleted_files).deliver
         end
       rescue Exception => e

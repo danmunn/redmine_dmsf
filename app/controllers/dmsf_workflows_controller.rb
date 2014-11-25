@@ -57,11 +57,8 @@ class DmsfWorkflowsController < ApplicationController
                 end
               end              
               if revision.workflow == DmsfWorkflow::STATE_APPROVED
-                # Just approved
-                recipients = revision.file.project.members.collect{ |m| m.user }
-                if User.current && User.current.logged? && User.current.pref.no_self_notified
-                  recipients.delete User.current
-                end
+                # Just approved                
+                recipients = DmsfMailer.get_notify_users(@project)
                 recipients.each do |user|
                   DmsfMailer.workflow_notification(
                     user,
@@ -71,25 +68,19 @@ class DmsfWorkflowsController < ApplicationController
                     :text_email_finished_approved,
                     :text_email_to_see_history).deliver if user
                 end
-                if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
-                  recipients = revision.file.project.members.collect{ |m| m.user }
-                  if User.current && User.current.logged? && User.current.pref.no_self_notified
-                    recipients.delete User.current
-                  end
-                  unless recipients.empty?
+                if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'                  
+                  unless recipients.blank?
                     to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                     to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
                     flash[:warning] = l(:warning_email_notifications, :to => to)
                   end
                 end
               else
-                # Just rejected                
+                # Just rejected                                
                 recipients = @dmsf_workflow.participiants
                 recipients.push User.find_by_id revision.dmsf_workflow_assigned_by
                 recipients.uniq!
-                if User.current && User.current.logged? && User.current.pref.no_self_notified
-                  recipients.delete User.current
-                end
+                recipients = recipients & DmsfMailer.get_notify_users(@project)
                 recipients.each do |user|
                   DmsfMailer.workflow_notification(
                     user, 
@@ -98,10 +89,10 @@ class DmsfWorkflowsController < ApplicationController
                     :text_email_subject_rejected,
                     :text_email_finished_rejected,
                     :text_email_to_see_history,
-                    action.note).deliver if user
+                    action.note).deliver
                 end
                 if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
-                  unless recipients.empty?
+                  unless recipients.blank?
                     to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                     to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
                     flash[:warning] = l(:warning_email_notifications, :to => to)
@@ -112,7 +103,7 @@ class DmsfWorkflowsController < ApplicationController
               if action.action == DmsfWorkflowStepAction::ACTION_DELEGATE
                 # Delegation                
                 delegate = User.find_by_id params[:step_action].to_i / 10
-                if delegate
+                if DmsfMailer.get_notify_users(@project).include?(delegate)
                   DmsfMailer.workflow_notification(
                     delegate, 
                     @dmsf_workflow, 
@@ -132,25 +123,31 @@ class DmsfWorkflowsController < ApplicationController
                   if assignments.first.dmsf_workflow_step.step != action.dmsf_workflow_step_assignment.dmsf_workflow_step.step
                     # Next step
                     assignments.each do |assignment|
-                      DmsfMailer.workflow_notification(
-                        assignment.user, 
-                        @dmsf_workflow, 
-                        revision,
-                        :text_email_subject_requires_approval,
-                        :text_email_finished_step,
-                        :text_email_to_proceed).deliver if assignment.user
+                      if assignment.user && DmsfMailer.get_notify_users(@project).include?(assignment.user)
+                        DmsfMailer.workflow_notification(
+                          assignment.user, 
+                          @dmsf_workflow, 
+                          revision,
+                          :text_email_subject_requires_approval,
+                          :text_email_finished_step,
+                          :text_email_to_proceed).deliver
+                      end
                     end
                     to = User.find_by_id revision.dmsf_workflow_assigned_by                    
-                    DmsfMailer.workflow_notification(
-                      to, 
-                      @dmsf_workflow, 
-                      revision,
-                      :text_email_subject_updated,
-                      :text_email_finished_step_short,
-                      :text_email_to_see_status).deliver if to
+                    if to && DmsfMailer.get_notify_users(@project).include?(to)
+                      DmsfMailer.workflow_notification(
+                        to, 
+                        @dmsf_workflow, 
+                        revision,
+                        :text_email_subject_updated,
+                        :text_email_finished_step_short,
+                        :text_email_to_see_status).deliver
+                    end
                     if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
                       recipients = assignments.collect{ |a| a.user }
-                      recipients << to if to && !recipients.include?(to)
+                      recipients << to if to
+                      recipients.uniq!
+                      recipients = recipients & DmsfMailer.get_notify_users(@project)
                       unless recipients.empty?
                         to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                         to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
@@ -317,23 +314,21 @@ class DmsfWorkflowsController < ApplicationController
     if revision            
       revision.set_workflow(@dmsf_workflow.id, params[:action])
       if revision.save          
-        assignments = @dmsf_workflow.next_assignments revision.id          
-        assignments.each do |assignment|
+        assignments = @dmsf_workflow.next_assignments revision.id
+        recipients = assignments.collect{ |a| a.user }
+        recipients.uniq!
+        recipients = recipients & DmsfMailer.get_notify_users(@project)
+        recipients.each do |user|
           DmsfMailer.workflow_notification(
-            assignment.user,
+            user,
             @dmsf_workflow, 
             revision,
             :text_email_subject_started,
             :text_email_started,
-            :text_email_to_proceed).deliver if assignment.user
+            :text_email_to_proceed).deliver
         end
-        if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
-          recipients = assignments.collect { |a| a.user }
-          recipients.uniq!
-          if User.current && User.current.logged? && User.current.pref.no_self_notified
-            recipients.delete User.current
-          end
-          unless recipients.empty?
+        if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'          
+          unless recipients.blank?
             to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
             to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
             flash[:warning] = l(:warning_email_notifications, :to => to)
