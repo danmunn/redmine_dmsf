@@ -224,6 +224,7 @@ fr:
   field_label_dmsf_workflow: Flux de validation
   field_label_dmsf_workflow_name: Nom du flux
   label_dmsf_workflow_plural: Flux de validation
+  label_dmsf_workflow_plural_num: Flux de validation (%{count})
   label_dmsf_workflow_step: Etape
   label_dmsf_workflow_step_plural: Etapes
   label_dmsf_workflow_approval: Approbation

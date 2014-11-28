@@ -226,6 +226,7 @@
   field_label_dmsf_workflow: 批准流程
   field_label_dmsf_workflow_name: 批准流程名稱
   label_dmsf_workflow_plural: 批准流程
+  label_dmsf_workflow_plural_num: 批准流程 (%{count})
   label_dmsf_workflow_step: 步驟
   label_dmsf_workflow_step_plural: 步驟
   label_dmsf_workflow_approval: 批准

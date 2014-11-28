@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -55,5 +55,12 @@ class DmsfWorkflowStep < ActiveRecord::Base
         end
       end               
     end      
+  end
+  
+  def copy_to(workflow)
+    new_step = self.dup
+    new_step.dmsf_workflow_id = workflow.id
+    new_step.save
+    return new_step
   end
 end

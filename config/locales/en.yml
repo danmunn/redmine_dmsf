@@ -223,7 +223,8 @@ en:
   label_dmsf_workflow_new: New approval workflow  
   field_label_dmsf_workflow: Approval Workflow
   field_label_dmsf_workflow_name: Approval workflow name
-  label_dmsf_workflow_plural: Approval workflows  
+  label_dmsf_workflow_plural: Approval workflows
+  label_dmsf_workflow_plural_num: Approval workflows (%{count})
   label_dmsf_workflow_step: Step
   label_dmsf_workflow_step_plural: Steps
   label_dmsf_workflow_approval: Approval
