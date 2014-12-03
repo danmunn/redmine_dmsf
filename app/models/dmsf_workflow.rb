@@ -204,14 +204,18 @@ class DmsfWorkflow < ActiveRecord::Base
     return false
   end 
   
-  def copy_to(project)
+  def copy_to(project, name = nil)
     new_wf = self.dup
-    new_wf.name = "#{self.name}_#{project.identifier}"
+    if name
+      new_wf.name = name
+    else          
+      new_wf.name << "-#{project.identifier}"
+    end
     new_wf.project_id = project.id
     if new_wf.save
       self.dmsf_workflow_steps.each do |step|
         step.copy_to(new_wf)
-      end    
+      end          
     end
     return new_wf
   end

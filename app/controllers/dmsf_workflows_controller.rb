@@ -203,19 +203,36 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def new   
-    @dmsf_workflow = DmsfWorkflow.new        
+    @dmsf_workflow = DmsfWorkflow.new
+    
+    # Reload
+    if params[:dmsf_workflow] && params[:dmsf_workflow][:name].present?
+      @dmsf_workflow.name = params[:dmsf_workflow][:name]
+    elsif params[:dmsf_workflow_id].present?
+      wf = DmsfWorkflow.find_by_id params[:dmsf_workflow_id]
+      @dmsf_workflow.name = "#{wf.name}-#{@project.identifier}" if wf
+    end
+    
+    render :layout => !request.xhr?
   end
   
   def create
-    @dmsf_workflow = DmsfWorkflow.new(:name => params[:name], :project_id => params[:project_id])
-    if request.post? && @dmsf_workflow.save
+    if params[:dmsf_workflow_id] && params[:dmsf_workflow]
+      wf = DmsfWorkflow.find_by_id params[:dmsf_workflow_id]
+      @dmsf_workflow = wf.copy_to @project, params[:dmsf_workflow][:name]      
+    else
+      @dmsf_workflow = DmsfWorkflow.new(:name => params[:name], 
+        :project_id => @project.id)
+      @dmsf_workflow.save
+    end
+    if request.post? && @dmsf_workflow.valid?
       flash[:notice] = l(:notice_successful_create)
       if @project
         redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
       else
         redirect_to dmsf_workflows_path
       end
-    else      
+    else            
       render :action => 'new'
     end
   end

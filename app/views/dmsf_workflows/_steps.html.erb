@@ -25,7 +25,7 @@
 <%= labelled_form_for @dmsf_workflow do |f| %>
   <%= error_messages_for 'workflow' %>
   <div class="box tabular">
-    <p><%= f.label :label_dmsf_workflow_name %><%= text_field_tag :name, @dmsf_workflow.name %><%= submit_tag l(:button_save) %></p>
+    <p><%= f.text_field :name, :value => @dmsf_workflow.name, :required => true %><%= submit_tag l(:button_save) %></p>
   </div>  
 <% end %>    
 
@@ -38,7 +38,7 @@
   <thead><tr>
     <th><%= l(:label_dmsf_workflow_step) %></th>
     <th><%= l(:label_dmsf_workflow_approval_plural) %></th>
-    <th><%=l(:button_sort)%></th>    
+    <th><%=  l(:button_sort)%></th>    
     <th/>
   </tr></thead>
   <tbody>      
