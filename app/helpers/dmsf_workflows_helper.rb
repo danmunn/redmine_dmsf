@@ -49,20 +49,35 @@ module DmsfWorkflowsHelper
   
   def dmsf_workflows_for_select(project, dmsf_workflow_id)
     options = Array.new        
-    DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', project.id]).each do |wf|
-      options << [wf.name, wf.id]
+    DmsfWorkflow.sorted.where(['project_id = ? OR project_id IS NULL', project.id]).each do |wf|
+      if wf.project_id
+        options << [wf.name, wf.id]
+      else
+        options << ["#{wf.name} (global)", wf.id]
+      end
     end        
     options_for_select(options, :selected => dmsf_workflow_id)
   end  
   
   def dmsf_all_workflows_for_select(dmsf_workflow_id)
     options = Array.new        
-    options << ['', 0]
-    DmsfWorkflow.where('project_id IS NOT NULL').each do |wf|
-      if User.current.allowed_to?(:manage_workflows, wf.project)
+    options << ['', 0]    
+    DmsfWorkflow.sorted.all.each do |wf|            
+      if wf.project_id
+        prj = Project.find_by_id wf.project_id
+        if User.current.allowed_to?(:manage_workflows, prj)
+          # Local approval workflows
+          if prj
+            options << ["#{wf.name} (#{prj.name})", wf.id]
+          else
+            options << [wf.name, wf.id]
+          end
+        end
+      else
+        # Global approval workflows
         options << [wf.name, wf.id]
-      end
-    end        
+      end      
+    end            
     options_for_select(options, :selected => dmsf_workflow_id)
   end  
   

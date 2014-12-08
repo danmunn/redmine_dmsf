@@ -18,10 +18,39 @@
 
 class DmsfWorkflow < ActiveRecord::Base 
   has_many :dmsf_workflow_steps, :dependent => :destroy, :order => 'step ASC, operator DESC'
-
-  validates_uniqueness_of :name, :case_sensitive => false
+  
+  scope :sorted, lambda { order('name ASC') }
+  scope :global, lambda { where('project_id IS NULL') }
+    
+  validate :name_validation
   validates :name, :presence => true
   validates_length_of :name, :maximum => 255
+  
+  def name_validation
+    if self.project_id
+      if self.id
+        if (DmsfWorkflow.where(['(project_id IS NULL OR (project_id = ? AND id != ?)) AND name = ?', 
+            self.project_id, self.name, self.id]).count > 0)
+          errors.add(:name, l('activerecord.errors.messages.taken'))
+        end
+      else
+        if (DmsfWorkflow.where(['(project_id IS NULL OR project_id = ?) AND name = ?', 
+            self.project_id, self.name]).count > 0)
+          errors.add(:name, l('activerecord.errors.messages.taken'))
+        end
+      end
+    else      
+      if self.id
+        if DmsfWorkflow.where(['name = ? AND id != ?', self.name, self.id]).count > 0
+          errors.add(:name, l('activerecord.errors.messages.taken'))
+        end
+      else
+        if DmsfWorkflow.where(:name => self.name).count > 0
+          errors.add(:name, l('activerecord.errors.messages.taken'))
+        end
+      end
+    end
+  end
   
   STATE_NONE = nil
   STATE_ASSIGNED = 3
@@ -205,13 +234,9 @@ class DmsfWorkflow < ActiveRecord::Base
   end 
   
   def copy_to(project, name = nil)
-    new_wf = self.dup
-    if name
-      new_wf.name = name
-    else          
-      new_wf.name << "-#{project.identifier}"
-    end
-    new_wf.project_id = project.id
+    new_wf = self.dup    
+    new_wf.name = name if name
+    new_wf.project_id = project ? project.id : nil
     if new_wf.save
       self.dmsf_workflow_steps.each do |step|
         step.copy_to(new_wf)

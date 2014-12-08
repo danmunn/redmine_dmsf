@@ -55,7 +55,7 @@
 </td>
 <td class="version"><%= file.last_revision.version %></td>
 <td class="workflow">                                  
-  <% if wf && @file_manipulation_allowed %>
+  <% if wf && @file_approval_allowed %>
     <%= link_to(
       file.last_revision.workflow_str(false),
       log_dmsf_workflow_path(
@@ -70,61 +70,64 @@
 </td>
 <td class="author"><%= h(file.last_revision.user) %></td>
 <td class="actions">
-  <% if @file_manipulation_allowed %>          
+  <% if @file_manipulation_allowed || @file_approval_allowed %>
     <div class="right_icon_box">
-      <% unless locked %>
-        <%= link_to('',
-          dmsf_file_path(:id => file),
-          :title => l(:link_details, :title => h(file.last_revision.title)),
-          :class => 'icon icon-dmsf-file-details') %>
-        <%= link_to('',
-          lock_dmsf_files_path(:id => file),
-          :title => l(:title_lock_file),
-          :class => 'icon icon-dmsf-lock') %>        
-        <% if file.notification %>              
+      <% if @file_manipulation_allowed %>
+        <% unless locked %>
           <%= link_to('',
-            notify_deactivate_dmsf_files_path(:id => file),
-            :title => l(:title_notifications_active_deactivate),
-            :class => 'icon icon-notification-on') %>
-        <% else %>              
+            dmsf_file_path(:id => file),
+            :title => l(:link_details, :title => h(file.last_revision.title)),
+            :class => 'icon icon-dmsf-file-details') %>
           <%= link_to('',
-            notify_activate_dmsf_files_path(:id => file),
-            :title => l(:title_notifications_not_active_activate),
-            :class => 'icon icon-notification-off') %>
-        <% end %>
-        <% if link %>
-          <%= link_to('',            
-            dmsf_link_path(link),
-            :data => {:confirm => l(:text_are_you_sure)},
-            :method => :delete,
-            :title => l(:title_delete),
-            :class => 'icon icon-del') %>                       
-        <% else %>
-          <% if @file_delete_allowed %>
+            lock_dmsf_files_path(:id => file),
+            :title => l(:title_lock_file),
+            :class => 'icon icon-dmsf-lock') %>        
+          <% if file.notification %>              
             <%= link_to('',
-              dmsf_file_path(:id => file),
+              notify_deactivate_dmsf_files_path(:id => file),
+              :title => l(:title_notifications_active_deactivate),
+              :class => 'icon icon-notification-on') %>
+          <% else %>              
+            <%= link_to('',
+              notify_activate_dmsf_files_path(:id => file),
+              :title => l(:title_notifications_not_active_activate),
+              :class => 'icon icon-notification-off') %>
+          <% end %>
+          <% if link %>
+            <%= link_to('',            
+              dmsf_link_path(link),
               :data => {:confirm => l(:text_are_you_sure)},
               :method => :delete,
               :title => l(:title_delete),
-              :class => 'icon icon-del') unless locked_for_user %>
+              :class => 'icon icon-del') %>                       
+          <% else %>
+            <% if @file_delete_allowed %>
+              <%= link_to('',
+                dmsf_file_path(:id => file),
+                :data => {:confirm => l(:text_are_you_sure)},
+                :method => :delete,
+                :title => l(:title_delete),
+                :class => 'icon icon-del') unless locked_for_user %>
+            <% else %>
+              <span class="icon"></span>
+            <% end %>
+          <% end %>        
+        <% else %>
+          <span class="icon"></span>
+          <% if (!locked_for_user || @force_file_unlock_allowed) && file.unlockable? %>
+            <%= link_to('',
+              unlock_dmsf_files_path(:id => file),
+              :title => l(:title_unlock_file),
+              :class => 'icon icon-dmsf-unlock')%>
           <% else %>
             <span class="icon"></span>
           <% end %>
-        <% end %>        
-      <% else %>
-        <span class="icon"></span>
-        <% if (!locked_for_user || @force_file_unlock_allowed) && file.unlockable? %>
-          <%= link_to('',
-            unlock_dmsf_files_path(:id => file),
-            :title => l(:title_unlock_file),
-            :class => 'icon icon-dmsf-unlock')%>
-        <% else %>
+          <span class="icon icon-margin-left"></span>
           <span class="icon"></span>
         <% end %>
-        <span class="icon icon-margin-left"></span>
-        <span class="icon"></span>
       <% end %>
-      <% case file.last_revision.workflow %>
+      <% if @file_approval_allowed %>
+        <% case file.last_revision.workflow %>
           <%  when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL %>                                            
             <% if wf %>
               <% assignments = wf.next_assignments(file.last_revision.id) %>
@@ -178,7 +181,8 @@
                   :class => 'icon icon-dmsf-none',
                   :remote => true) %>                                                            
             <% end %>
-        <% end %>   
+        <% end %> 
+      <% end %>
     </div>    
   <% end %>
 </td>

@@ -27,11 +27,7 @@ class DmsfWorkflowsController < ApplicationController
   layout :workflows_layout
   
   def index    
-    if @project
-      @workflow_pages, @workflows = paginate DmsfWorkflow.where(:project_id => @project.id), :per_page => 25    
-    else      
-      @workflow_pages, @workflows = paginate DmsfWorkflow.where(:project_id => nil), :per_page => 25    
-    end
+    @workflow_pages, @workflows = paginate DmsfWorkflow.global.sorted, :per_page => 25
   end
   
   def action        
@@ -210,22 +206,24 @@ class DmsfWorkflowsController < ApplicationController
       @dmsf_workflow.name = params[:dmsf_workflow][:name]
     elsif params[:dmsf_workflow_id].present?
       wf = DmsfWorkflow.find_by_id params[:dmsf_workflow_id]
-      @dmsf_workflow.name = "#{wf.name}-#{@project.identifier}" if wf
+      @dmsf_workflow.name = wf.name if wf
     end
     
     render :layout => !request.xhr?
   end
   
   def create
-    if params[:dmsf_workflow_id] && params[:dmsf_workflow]
-      wf = DmsfWorkflow.find_by_id params[:dmsf_workflow_id]
-      @dmsf_workflow = wf.copy_to @project, params[:dmsf_workflow][:name]      
-    else
-      @dmsf_workflow = DmsfWorkflow.new(:name => params[:name], 
-        :project_id => @project.id)
-      @dmsf_workflow.save
+    if params[:dmsf_workflow]
+      if (params[:dmsf_workflow_id].to_i > 0)
+        wf = DmsfWorkflow.find_by_id params[:dmsf_workflow_id]
+        @dmsf_workflow = wf.copy_to(@project, params[:dmsf_workflow][:name]) if wf     
+      else
+        @dmsf_workflow = DmsfWorkflow.new(:name => params[:dmsf_workflow][:name])
+        @dmsf_workflow.project_id = @project.id if @project
+        @dmsf_workflow.save
+      end
     end
-    if request.post? && @dmsf_workflow.valid?
+    if request.post? && @dmsf_workflow && @dmsf_workflow.valid?
       flash[:notice] = l(:notice_successful_create)
       if @project
         redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
