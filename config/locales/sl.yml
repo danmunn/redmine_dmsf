@@ -21,6 +21,8 @@
 sl:
   dmsf: Arhiv
   label_dmsf_file_plural: Arhivske datoteke
+  label_dmsf_file_revision_plural: Dmsf document revisions
+  label_dmsf_file_revision_access_plural: Dmsf document accesses
   warning_no_entries_selected: Ničesar niste izbrali
   error_email_to_must_be_entered: Email Naslovnik mora bit izbran  
   warning_file_already_locked: Datoteka že zaklenjena
@@ -172,6 +174,7 @@ sl:
   heading_access_first: Prvi
   heading_access_last: Zadnji
   label_dmsf_updated: Arhiv posodobljen
+  label_dmsf_downloaded: DMSF document downloaded
   title_total_size_of_all_files: Skupna velikost vseh datotek v tej mapi
   project_module_dmsf: Arhiv  
   warning_no_project_to_copy_file_to: Ni projekta kamor bi kopiral datoteko

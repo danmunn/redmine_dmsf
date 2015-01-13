@@ -22,6 +22,8 @@
 pl:
   dmsf: DMSF
   label_dmsf_file_plural: Pliki Dmsf
+  label_dmsf_file_revision_plural: Dmsf document revisions
+  label_dmsf_file_revision_access_plural: Dmsf document accesses
   warning_no_entries_selected: Nie zaznaczono żadnych wierszy
   error_email_to_must_be_entered: Musisz podać adres email  
   warning_file_already_locked: Plik jest już zablokowany
@@ -173,6 +175,7 @@ pl:
   heading_access_first: Pierwszy
   heading_access_last: Ostatni
   label_dmsf_updated: DMSF został zaktualizowany
+  label_dmsf_downloaded: DMSF document downloaded
   title_total_size_of_all_files: Łączny rozmiar plików w folderze
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: Brak projektu do skopiowania pliku

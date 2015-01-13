@@ -49,6 +49,7 @@ Redmine::Plugin.register :redmine_dmsf do
   menu :project_menu, :dmsf, { :controller => 'dmsf', :action => 'show' }, :caption => :menu_dmsf, :before => :documents, :param => :id
   
   activity_provider :dmsf_files, :class_name => 'DmsfFileRevision', :default => true
+  activity_provider :dmsf_folders, :class_name => 'DmsfFileRevisionAccess', :default => false
   
   project_module :dmsf do
     permission :view_dmsf_folders, 
