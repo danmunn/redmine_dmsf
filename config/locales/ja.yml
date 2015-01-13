@@ -21,6 +21,8 @@
 ja:
   dmsf: DMSF
   label_dmsf_file_plural: Dmsf ファイル
+  label_dmsf_file_revision_plural: Dmsf document revisions
+  label_dmsf_file_revision_access_plural: Dmsf document accesses
   warning_no_entries_selected: エントリーが選ばれていません
   error_email_to_must_be_entered: 電子メールの To 先は省略できません  
   warning_file_already_locked: ファイルは既にロックされています
@@ -138,6 +140,8 @@ ja:
   heading_uploaded_files: アップロードされたファイル
   submit_commit: コミット
   link_documents: 文書
+  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
+  permission_view_dmsf_file_revisions: View revisions in Activity stream
   permission_view_dmsf_folders: 文書の一覧
   permission_user_preferences: ユーザ設定
   permission_view_dmsf_files: 文書の表示
@@ -172,6 +176,7 @@ ja:
   heading_access_first: 初回アクセス
   heading_access_last: 最終アクセス
   label_dmsf_updated: DMSF updated
+  label_dmsf_downloaded: DMSF document downloaded
   title_total_size_of_all_files: このフォルダにある全ファイルの合計サイズ
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: ファイルをコピーするプロジェクトがありません

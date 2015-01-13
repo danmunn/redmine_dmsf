@@ -21,6 +21,8 @@
 zh:
   dmsf: 文档管家
   label_dmsf_file_plural: Dmsf files
+  label_dmsf_file_revision_plural: Dmsf document revisions
+  label_dmsf_file_revision_access_plural: Dmsf document accesses
   warning_no_entries_selected: 未选择任何条目
   error_email_to_must_be_entered: 请输入电子邮件  
   warning_file_already_locked: 文件已经锁定
@@ -138,6 +140,8 @@ zh:
   heading_uploaded_files: 上传文件
   submit_commit: 提交
   link_documents: 文档
+  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
+  permission_view_dmsf_file_revisions: View revisions in Activity stream
   permission_view_dmsf_folders: 浏览文档
   permission_user_preferences: 用户偏好设定
   permission_view_dmsf_files: 查看文档
@@ -172,6 +176,7 @@ zh:
   heading_access_first: 首次
   heading_access_last: 末次
   label_dmsf_updated: DMSF updated
+  label_dmsf_downloaded: DMSF document downloaded
   title_total_size_of_all_files: 文件夹所有文件总大小
   project_module_dmsf: 文档管家  
   warning_no_project_to_copy_file_to: No project to copy file to
