@@ -1,8 +1,10 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -36,10 +38,10 @@ module RedmineDmsf
             :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy
           has_many :dmsf_workflows, :dependent => :destroy
           has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'project_id', 
-            :conditions => { :dmsf_folder_id => nil, :target_type => DmsfFolder.model_name },
+            :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfFolder' },
             :dependent => :destroy 
           has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'project_id', 
-            :conditions => { :dmsf_folder_id => nil, :target_type => DmsfFile.model_name },
+            :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfFile' },
             :dependent => :destroy 
         end
       end
