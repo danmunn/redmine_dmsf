@@ -422,8 +422,8 @@ class DmsfController < ApplicationController
     if selected_folders && selected_folders.is_a?(Array)
       selected_folders.each do |selected_folder_id|        
         folder = DmsfFolder.visible.find_by_id selected_folder_id
-        if folder
-          zip.add_folder(folder, (@folder.dmsf_path_str if @folder))
+        if folder          
+          zip.add_folder(folder, (folder.folder.dmsf_path_str if folder.folder))
         else
           raise FileNotFound
         end
@@ -432,8 +432,8 @@ class DmsfController < ApplicationController
     if selected_files && selected_files.is_a?(Array)
       selected_files.each do |selected_file_id|        
         file = DmsfFile.visible.find_by_id selected_file_id
-        if file && file.last_revision && File.exists?(file.last_revision.disk_file)
-          zip.add_file(file, (@folder.dmsf_path_str if @folder)) if file          
+        if file && file.last_revision && File.exists?(file.last_revision.disk_file)          
+          zip.add_file(file, (file.folder.dmsf_path_str if file.folder)) if file          
         else
           raise FileNotFound
         end        
