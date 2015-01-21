@@ -22,6 +22,8 @@
 "zh-TW":
   dmsf: 文件總管
   label_dmsf_file_plural: 文件檔案
+  label_dmsf_file_revision_plural: Dmsf document revisions
+  label_dmsf_file_revision_access_plural: Dmsf document accesses
   warning_no_entries_selected: 尚未選取任何項目
   error_email_to_must_be_entered: 請輸入收件者的電子郵件
   warning_file_already_locked: 檔案己經鎖定
@@ -141,6 +143,8 @@
   heading_uploaded_files: 上傳檔案
   submit_commit: 提交
   link_documents: 文件檔案
+  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
+  permission_view_dmsf_file_revisions: View revisions in Activity stream
   permission_view_dmsf_folders: 瀏覽文件檔案
   permission_user_preferences: 使用者偏好設定
   permission_view_dmsf_files: 查看文件檔案
@@ -174,6 +178,7 @@
   heading_access_first: First
   heading_access_last: Last
   label_dmsf_updated: DMSF updated
+  label_dmsf_downloaded: DMSF document downloaded
   title_total_size_of_all_files: 資料夾所有檔案的檔案大小
   project_module_dmsf: 文件總管
   warning_no_project_to_copy_file_to: No project to copy file to

@@ -37,10 +37,10 @@ class DmsfFileRevision < ActiveRecord::Base
     :datetime => Proc.new {|o| o.updated_at },
     :description => Proc.new {|o| o.comment },
     :author => Proc.new {|o| o.user }          
-  acts_as_activity_provider :type => 'dmsf_files',
+  acts_as_activity_provider :type => 'dmsf_file_revisions',
     :timestamp => "#{DmsfFileRevision.table_name}.updated_at",
     :author_key => "#{DmsfFileRevision.table_name}.user_id",
-    :permission => :view_dmsf_files,
+    :permission => :view_dmsf_file_revisions,
     :find_options => {:select => "#{DmsfFileRevision.table_name}.*", 
       :joins => 
         "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +

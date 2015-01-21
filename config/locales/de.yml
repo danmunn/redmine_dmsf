@@ -138,6 +138,8 @@ de:
   heading_uploaded_files: Hochgeladene Dateien
   submit_commit: OK
   link_documents: Dateien
+  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
+  permission_view_dmsf_file_revisions: View revisions in Activity stream
   permission_view_dmsf_folders: Durchforste Dateien
   permission_user_preferences: Benutzereinstellungen
   permission_view_dmsf_files: Betrachte Dateien

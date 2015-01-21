@@ -311,7 +311,7 @@ class DmsfController < ApplicationController
       if @folder
         @folder.notify_deactivate
       else
-        @project.dmsf_notification = false
+        @project.dmsf_notification = nil
         @project.save
       end
       flash[:notice] = l(:notice_folder_notifications_deactivated)

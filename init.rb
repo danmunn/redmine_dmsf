@@ -47,10 +47,15 @@ Redmine::Plugin.register :redmine_dmsf do
     }
   
   menu :project_menu, :dmsf, { :controller => 'dmsf', :action => 'show' }, :caption => :menu_dmsf, :before => :documents, :param => :id
-  
-  activity_provider :dmsf_files, :class_name => 'DmsfFileRevision', :default => true
+    
+  Redmine::Activity.register :dmsf_file_revision_accesses, :default => false
+  Redmine::Activity.register :dmsf_file_revisions
   
   project_module :dmsf do
+    permission :view_dmsf_file_revision_accesses, 
+      :read => true
+    permission :view_dmsf_file_revisions, 
+      :read => true
     permission :view_dmsf_folders, 
       {:dmsf => [:show], 
         :dmsf_folders_copy => [:new, :copy_to, :move_to]}, 
