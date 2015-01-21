@@ -25,6 +25,8 @@ class DmsfFilesController < ApplicationController
   before_filter :find_file, :except => [:delete_revision]
   before_filter :find_revision, :only => [:delete_revision]
   before_filter :authorize
+  
+  accept_api_auth :show
 
   helper :all
   helper :dmsf_workflows
@@ -80,8 +82,13 @@ class DmsfFilesController < ApplicationController
     @revision = @file.last_revision    
     @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)    
     @revision_pages = Paginator.new @file.revisions.visible.count, params['per_page'] ? params['per_page'].to_i : 25, params['page']
-    
-    render :layout => !request.xhr?
+            
+    respond_to do |format|
+      format.html {
+        render :layout => !request.xhr?
+      }
+      format.api      
+    end
   end
   
   def create_revision

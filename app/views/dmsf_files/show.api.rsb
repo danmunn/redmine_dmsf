@@ -1,0 +1,4 @@
+api.file do
+  api.id @file.id
+  api.name @file.name  
+end
