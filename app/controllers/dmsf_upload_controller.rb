@@ -1,7 +1,9 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -99,8 +101,7 @@ class DmsfUploadController < ApplicationController
           file.project = @project
           file.name = name
           file.folder = @folder
-          file.notification = Setting.plugin_redmine_dmsf[:dmsf_default_notifications].present?
-          
+          file.notification = Setting.plugin_redmine_dmsf[:dmsf_default_notifications].present?          
           new_revision.minor_version = 0
           new_revision.major_version = 0
         else
@@ -108,10 +109,15 @@ class DmsfUploadController < ApplicationController
             failed_uploads.push(commited_file)
             next
           end
-          last_revision = file.last_revision
-          new_revision.source_revision = last_revision
-          new_revision.major_version = last_revision.major_version
-          new_revision.minor_version = last_revision.minor_version          
+          if file.last_revision
+            last_revision = file.last_revision
+            new_revision.source_revision = last_revision
+            new_revision.major_version = last_revision.major_version
+            new_revision.minor_version = last_revision.minor_version          
+          else
+            new_revision.minor_version = 0
+            new_revision.major_version = 0
+          end
         end
 
         commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file[:disk_filename].gsub(/[\/\\]/,'')}"
