@@ -66,7 +66,17 @@ class DmsfFile < ActiveRecord::Base
                 :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o}},
                 :datetime => Proc.new {|o| o.updated_at },
                 :author => Proc.new {|o| o.last_revision.user }
-    
+
+  before_create :default_values
+  def default_values
+    @notifications = Setting.plugin_redmine_dmsf['dmsf_default_notifications']
+    if @notifications == '1'
+      self.notification = true
+    else
+      self.notification = nil
+    end
+  end
+
   @@storage_path = nil
 
   def self.storage_path
@@ -176,7 +186,7 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def notify_deactivate
-    self.notification = false
+    self.notification = nil
     self.save!
   end
   

@@ -63,7 +63,17 @@ class DmsfFolder < ActiveRecord::Base
                 :url => Proc.new {|o| {:controller => 'dmsf', :action => 'show', :id => o.project, :folder_id => o}},
                 :datetime => Proc.new {|o| o.updated_at },
                 :author => Proc.new {|o| o.user }
-  
+
+  before_create :default_values
+  def default_values
+    @notifications = Setting.plugin_redmine_dmsf['dmsf_default_notifications']
+    if @notifications == '1'
+      self.notification = true
+    else
+      self.notification = nil
+    end
+  end
+
   def check_cycle
     folders = []
     self.subfolders.each {|f| folders.push(f)}
@@ -138,7 +148,7 @@ class DmsfFolder < ActiveRecord::Base
   end
   
   def notify_deactivate
-    self.notification = false
+    self.notification = nil
     self.save!
   end
   
