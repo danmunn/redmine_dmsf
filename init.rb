@@ -1,8 +1,10 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -69,13 +71,15 @@ Redmine::Plugin.register :redmine_dmsf do
         :dmsf_workflows => [:log]}, 
       :read => true
     permission :folder_manipulation, 
-      {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :delete_entries, :restore]}
+      {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :restore]}
     permission :file_manipulation, 
       {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate, :restore], 
         :dmsf_upload => [:upload_files, :upload_file, :commit_files],         
         :dmsf_links => [:new, :create, :destroy, :restore]
         }
-    permission :file_delete, { :dmsf => [:trash], :dmsf_files => [:delete]}    
+    permission :file_delete, 
+      { :dmsf => [:trash, :delete_entries], 
+        :dmsf_files => [:delete]}    
     permission :force_file_unlock, {}
     permission :file_approval,
       {:dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment]}    

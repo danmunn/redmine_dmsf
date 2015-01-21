@@ -1,8 +1,10 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -35,7 +37,8 @@ class DmsfController < ApplicationController
   def show
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
-    @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
+    @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)    
+    @file_view_allowed = User.current.allowed_to?(:view_dmsf_files, @project)
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)    
     @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0
     @file_approval_allowed = User.current.allowed_to?(:file_approval, @project)
