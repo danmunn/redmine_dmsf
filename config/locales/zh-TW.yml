@@ -1,7 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
-#
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -62,12 +62,14 @@
   submit_create: 建立
   link_create_folder: 建立資料夾
   title_check_uncheck_all_for_zip_download_or_email: 全選/全不選（下載或電子郵件發送）
+  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
   link_title: 標題
   link_size: 檔案大小
   link_modified: 修改日期
   link_ver: 版本
   link_author: 作者
   title_check_for_zip_download_or_email: 選取檔案 (下載或電子郵件發送)
+  title_check_for_restore_or_delete: Check for restore or delete
   title_delete: 刪除
   title_notifications_active_deactivate: "通知啟用中: 點擊關閉通知"
   title_notifications_not_active_activate: "通知關閉中: 點擊啟用通知"

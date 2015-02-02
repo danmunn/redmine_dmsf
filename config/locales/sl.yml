@@ -1,7 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011 <zdravko.balorda@mks.si>
-#
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -61,12 +61,14 @@ sl:
   submit_create: Kreiraj
   link_create_folder: Kreiraj mapo
   title_check_uncheck_all_for_zip_download_or_email: "Označi/Odznači vse za Zip prenašanje ali email"
+  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
   link_title: Naslov
   link_size: Velikost
   link_modified: Spremenjeno
   link_ver: Ver.
   link_author: Autor
-  title_check_for_zip_download_or_email: Označi za Zip prenašanje ali email
+  title_check_for_zip_download_or_email: Označi za zip prenašanje ali email
+  title_check_for_restore_or_delete: Check for restore or delete
   title_delete: Izbriši
   title_notifications_active_deactivate: "Obveščanje aktivno: Deaktiviraj"
   title_notifications_not_active_activate: "Obveščanje ni aktivno: Aktiviraj"

@@ -1,7 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -60,13 +60,15 @@ cs:
   link_edit: "Upravit %{title}"
   submit_create: Vytvořit
   link_create_folder: Vytvořit složku
-  title_check_uncheck_all_for_zip_download_or_email: Vybrat/Nevybrat vše pro stažení jako Zip nebo emailem
+  title_check_uncheck_all_for_zip_download_or_email: Vybrat/Nevybrat vše pro stažení jako zip nebo emailem
+  title_check_uncheck_all_for_restore_or_delete: Vybrat/Nevybrat vše pro obnovení nebo smazání
   link_title: Název
   link_size: Velikost
   link_modified: Změněno
   link_ver: Ver.
   link_author: Autor
-  title_check_for_zip_download_or_email: Vybrat pro stažení jako Zip nebo emailem
+  title_check_for_zip_download_or_email: Vybrat pro stažení jako zip nebo emailem
+  title_check_for_restore_or_delete: Vybrat pro obnovení nebo smazání
   title_delete: Smazat
   title_notifications_active_deactivate: "Notifikace aktivní: Deaktivovat"
   title_notifications_not_active_activate: "Notifikace nejsou aktivní: Aktivovat"

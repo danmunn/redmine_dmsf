@@ -62,12 +62,14 @@ pl:
   submit_create: Utwórz
   link_create_folder: Utwórz folder
   title_check_uncheck_all_for_zip_download_or_email: Zaznacz/Odznacz wszystkie aby pobrać plik zip lub wysłać email
+  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
   link_title: Tytuł
   link_size: Rozmiar
   link_modified: Zmodyfikowany
   link_ver: Ver.
   link_author: Autor
   title_check_for_zip_download_or_email: Zaznacz aby pobrać plik zip lub wysłać email
+  title_check_for_restore_or_delete: Check for restore or delete
   title_delete: Usuń
   title_notifications_active_deactivate: "Powiadomienia aktywne: Wyłącz"
   title_notifications_not_active_activate: "Powiadomienia wyłączone: Aktywuj"

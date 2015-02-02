@@ -1,7 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
-#
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -61,6 +61,8 @@ ja:
   submit_create: 作成
   link_create_folder: フォルダを作成します
   title_check_uncheck_all_for_zip_download_or_email: すべての Zip ダウンロードまたは電子メールのチェックをオン/オフします
+  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
+  title_check_for_restore_or_delete: Check for restore or delete
   link_title: タイトル
   link_size: サイズ
   link_modified: 更新日時

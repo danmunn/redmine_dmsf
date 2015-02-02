@@ -164,9 +164,11 @@ class DmsfController < ApplicationController
     selected_files = params[:files] || []
     selected_dir_links = params[:dir_links] || []
     selected_file_links = params[:file_links] || []
+    selected_url_links = params[:url_links] || []
     
     if selected_folders.blank? && selected_files.blank? && 
-      selected_dir_links.blank? && selected_file_links.blank?
+      selected_dir_links.blank? && selected_file_links.blank? &&
+      selected_url_links.blank?
       flash[:warning] = l(:warning_no_entries_selected)      
       redirect_to :back
       return
@@ -189,13 +191,13 @@ class DmsfController < ApplicationController
     if params[:email_entries].present?
       email_entries(selected_folders, selected_files)
     elsif params[:restore_entries].present?
-      restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links)
+      restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links)
       redirect_to :back
     elsif params[:delete_entries].present?
-      delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, false)
+      delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, false)
       redirect_to :back
     elsif params[:destroy_entries].present?
-      delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, true)
+      delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, true)
       redirect_to :back
     else
       download_entries(selected_folders, selected_files)
@@ -464,7 +466,7 @@ class DmsfController < ApplicationController
     zip
   end
   
-  def restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links)
+  def restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links)
     # Folders
     selected_folders.each do |id|
       folder = DmsfFolder.find_by_id id
@@ -488,7 +490,7 @@ class DmsfController < ApplicationController
       end
     end
     # Links
-    (selected_dir_links + selected_file_links).each do |id|
+    (selected_dir_links + selected_file_links + selected_url_links).each do |id|
       link = DmsfLink.find_by_id id
       if link
         unless link.restore
@@ -500,7 +502,7 @@ class DmsfController < ApplicationController
     end
   end
   
-  def delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, commit)
+  def delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, commit)
     # Folders
     selected_folders.each do |id|
       folder = DmsfFolder.find_by_id id
@@ -544,7 +546,7 @@ class DmsfController < ApplicationController
       flash[:warning] = l(:warning_some_entries_were_not_deleted, :entries => not_deleted_files.map{|e| e.title}.join(', '))
     end
     # Links
-    (selected_dir_links + selected_file_links).each do |id|
+    (selected_dir_links + selected_file_links + selected_url_links).each do |id|
       link = DmsfLink.find_by_id id      
       link.delete commit if link      
     end

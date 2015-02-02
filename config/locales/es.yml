@@ -1,7 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
-#
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -61,12 +61,14 @@ es:
   submit_create: Create
   link_create_folder: Create folder
   title_check_uncheck_all_for_zip_download_or_email: Check/Uncheck all for zip download or email
+  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
   link_title: Title
   link_size: Size
   link_modified: Modified
   link_ver: Ver.
   link_author: Author
-  title_check_for_zip_download_or_email: Check for Zip download or email
+  title_check_for_zip_download_or_email: Check for zip, download or email
+  title_check_for_restore_or_delete: Check for restore or delete
   title_delete: Delete
   title_notifications_active_deactivate: "Notifications active: Deactivate"
   title_notifications_not_active_activate: "Notifications not active: Activate"

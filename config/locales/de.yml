@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2011    Terrence Miller
 # Copyright (C) 2013    Christian Wetting <christian.wetting@kontron.com>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -59,12 +59,14 @@ de:
   submit_create: Erstellen
   link_create_folder: Ordner erstellen
   title_check_uncheck_all_for_zip_download_or_email: Wähle alle/keine für ZIP-Download bzw. Email
+  title_check_uncheck_all_for_restore_or_delete: Wähle alle/keine für Rückstellen oder Löschen
   link_title: Titel
   link_size: Größe
   link_modified: Geändert
   link_ver: Version
   link_author: Autor
   title_check_for_zip_download_or_email: Wähle für ZIP-Download bzw. Email
+  title_check_for_restore_or_delete: Wähle für Rückstellen oder Löschen
   title_delete: Löschen
   title_notifications_active_deactivate: "Benachrichtigungen sind aktiv: Ausschalten"
   title_notifications_not_active_activate: "Benachrichtigungen sind nicht aktiv: Einschalten"

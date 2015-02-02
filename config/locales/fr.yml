@@ -3,7 +3,7 @@
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012  Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright (C) 2014  Atmis
-#
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -61,12 +61,14 @@ fr:
   submit_create: Ajouter
   link_create_folder: Créer un sous-dossier
   title_check_uncheck_all_for_zip_download_or_email: Sélectionner/Ignorer tous les documents pour le téléchargement ou pour la transmission par mail
+  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
   link_title: Titre
   link_size: Taille
   link_modified: Modifié
   link_ver: Version
   link_author: Auteur
   title_check_for_zip_download_or_email: Sélectionner pour le téléchargement ou la transmission par mail
+  title_check_for_restore_or_delete: Check for restore or delete
   title_delete: Supprimer
   title_notifications_active_deactivate: "Notifications activées : cliquer pour désactiver"
   title_notifications_not_active_activate: "Notifications désactivées : cliquer pour activer"
