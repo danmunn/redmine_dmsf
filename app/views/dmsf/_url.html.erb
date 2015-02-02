@@ -1,0 +1,59 @@
+<%#=
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<td class="check"></td>
+<td class="title">
+    <%= link_to(h(title),
+                link.external_url,
+                :target => "_blank",
+                :class => 'icon icon-link') %>
+    <div class="filename" title="<%= l(:label_target_folder)%>"><%= link.external_url %></div>
+</td>
+<td class="size"></td>
+<td class="modified"><%= format_time(link.updated_at) %></td>
+<td class="version"></td>
+<td class="workflow"></td>
+<td class="author"><%= h(link.user) %></td>
+<td class="actions">
+  <% if @file_manipulation_allowed %>
+    <div class="right_icon_box">
+      <% if @file_manipulation_allowed %>
+            <span class="icon"></span>
+            <span class="icon"></span>
+            <span class="icon icon-margin-left"></span>
+            <%= link_to('',            
+              dmsf_link_path(link),
+              :data => {:confirm => l(:text_are_you_sure)},
+              :method => :delete,
+              :title => l(:title_delete),
+              :class => 'icon icon-del') %>
+        <% else %>
+          <span class="icon"></span>
+          <span class="icon"></span>
+          <span class="icon icon-margin-left"></span>
+          <span class="icon"></span>
+        <% end %>
+    </div>    
+  <% end %>
+</td>
+<td class="hidden">1</td>
+<td class="hidden"></td>
+<td class="hidden"></td>
+<td class="hidden"></td>

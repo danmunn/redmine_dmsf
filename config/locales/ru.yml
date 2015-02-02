@@ -286,6 +286,7 @@ ru:
   field_target_file: Source file
   title_download_entries: Download entries
   label_link_name: Link name
+  label_link_external_url: URL
   label_target_folder: Target folder
   label_source_folder: Source folder
   label_target_project: Target project

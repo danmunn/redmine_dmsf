@@ -286,6 +286,7 @@ pl:
   field_target_file: Plik źródłowy
   title_download_entries: Pobrane
   label_link_name: Nazwa odnośnika
+  label_link_external_url: URL
   label_target_folder: Folder docelowy
   label_source_folder: Folder źródłowy
   label_target_project: Projekt docelowy

@@ -37,7 +37,9 @@ class DmsfFolder < ActiveRecord::Base
   has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', 
     :conditions => {:target_type => DmsfFolder.model_name}, :dependent => :destroy
   has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', 
-    :conditions => {:target_type => DmsfFile.model_name}, :dependent => :destroy  
+    :conditions => {:target_type => DmsfFile.model_name}, :dependent => :destroy
+  has_many :url_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id',
+           :conditions => {:target_type => 'DmsfUrl'}, :dependent => :destroy
   has_many :referenced_links, :class_name => 'DmsfLink', :foreign_key => 'target_id', 
     :conditions => {:target_type => DmsfFolder.model_name}, :dependent => :destroy
   has_many :locks, :class_name => 'DmsfLock', :foreign_key => 'entity_id',
@@ -243,6 +245,10 @@ class DmsfFolder < ActiveRecord::Base
     self.file_links.visible.each do |l|
       l.copy_to project, new_folder
     end
+
+    self.url_links.visible.each do |l|
+      l.copy_to project, new_folder
+    end
     
     return new_folder
   end
@@ -303,6 +309,9 @@ class DmsfFolder < ActiveRecord::Base
     end
     file_links.each do |file_link|
       last_update = file_link.updated_at if file_link.updated_at > last_update
+    end
+    url_links.each do |url_link|
+      last_update = url_link.updated_at if url_link.updated_at > last_update
     end
     last_update
   end

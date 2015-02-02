@@ -22,9 +22,9 @@ class DmsfLink < ActiveRecord::Base
   belongs_to :project
   belongs_to :dmsf_folder
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+  belongs_to :user
   
   validates :name, :presence => true
-  validates :target_id, :presence => true
   validates_length_of :name, :maximum => 255    
   
   scope :visible, where(:deleted => false)
@@ -95,6 +95,7 @@ class DmsfLink < ActiveRecord::Base
       :target_id => self.target_id,
       :target_type => self.target_type,
       :name => self.name,
+      :external_url => self.external_url,
       :project_id => project.id,
       :dmsf_folder_id => folder ? folder.id : nil)
     link.save

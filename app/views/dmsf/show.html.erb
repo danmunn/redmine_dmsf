@@ -181,20 +181,31 @@
     </tr>
   <% end %>
   <% @file_links.each do |link| %>
-    <% unless link.target_file.last_revision %>      
-      <% Rails.logger.error "Error: dmsf_file id #{link.target_id} has no revision!" %>
-      <% next %>
-    <% end %>         
-    <tr class="gray">
-      <%= render(:partial => 'file', :locals => { 
-          :project => link.target_project, 
-          :file => link.target_file, 
-          :link => link,
-          :id => link.id,
-          :name => 'file_links[]',
-          :title => link.name }) %>
-    </tr>
-  <% end %>
+    <% unless link.target_file.last_revision %>
+        <% Rails.logger.error "Error: dmsf_file id #{link.target_id} has no revision!" %>
+        <% next %>
+      <% end %>
+      <tr class="gray">
+        <%= render(:partial => 'file', :locals => {
+            :project => link.target_project,
+            :file => link.target_file,
+            :link => link,
+            :id => link.id,
+            :name => 'file_links[]',
+            :title => link.name }) %>
+      </tr>
+    <% end %>
+    <% @url_links.each do |link| %>
+      <tr class="gray">
+          <%= render(:partial => 'url', :locals => {
+                                              :project => link.target_project,
+                                              :file => link.target_file,
+                                              :link => link,
+                                              :id => link.id,
+                                              :name => 'file_links[]',
+                                              :title => link.name }) %>
+      </tr>
+    <% end %>
   </tbody>
   </table>  
 <% end %>   

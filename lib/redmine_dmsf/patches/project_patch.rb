@@ -42,7 +42,10 @@ module RedmineDmsf
             :dependent => :destroy 
           has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'project_id', 
             :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfFile' },
-            :dependent => :destroy 
+            :dependent => :destroy
+          has_many :url_links, :class_name => 'DmsfLink', :foreign_key => 'project_id',
+                   :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfUrl' },
+                   :dependent => :destroy
         end
       end
       
@@ -88,6 +91,9 @@ module RedmineDmsf
           end
           project.file_links.visible.each do |l|
             l.copy_to(self, nil)            
+          end
+          project.url_links.visible.each do |l|
+            l.copy_to(self, nil)
           end
         end
         
