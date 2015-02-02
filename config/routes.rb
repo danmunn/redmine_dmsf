@@ -77,7 +77,14 @@ RedmineApp::Application.routes.draw do
   get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show', :as => 'dmsf_file'  
   delete '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'delete'
   get '/dmsf/files/:id/restore', :controller => 'dmsf_files', :action => 'restore', :as => 'restore_dmsf_file'
-  
+
+  #
+  # url controller
+  #   /dmsf/links/<file id>
+  ##
+  get '/dmsf/links/:id/restore', :controller => 'dmsf_links', :action => 'restore', :as => 'restore_dmsf_link'
+  delete '/dmsf/links/:id', :controller => 'dmsf_links', :action => 'delete'
+
   # Just to keep backward compatibility with old external direct links
   get '/dmsf_files/:id', :controller => 'dmsf_files', :action => 'show'
   get '/dmsf_files/:id/download', :controller => 'dmsf_files', :action => 'show', :download => ''

@@ -29,9 +29,10 @@ class DmsfLinksController < ApplicationController
     
     if params[:dmsf_link].present?        
       # Reload
-      @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
+      @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]                       # TODO: Add stuff in here for external links so that if error occurs, repopulate the same
       @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
       @type = params[:dmsf_link][:type]
+      @link_external = (params[:external_link] == 'true')
       @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]      
       @target_folder_id = params[:dmsf_link][:target_folder_id].to_i if params[:reload].blank? && DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])      
       if @type == 'link_to'
@@ -68,6 +69,7 @@ class DmsfLinksController < ApplicationController
       @dmsf_link.dmsf_folder_id = params[:dmsf_folder_id]
       @dmsf_file_id = params[:dmsf_file_id]
       @type = params[:type]
+      @link_external = false
       @dmsf_link.target_project_id = params[:project_id]
       @target_folder_id = params[:dmsf_folder_id].to_i if params[:dmsf_folder_id].present?
       if @type == 'link_to'
@@ -86,13 +88,18 @@ class DmsfLinksController < ApplicationController
    
   def create
     @dmsf_link = DmsfLink.new
+    @dmsf_link.user = User.current
     
     if params[:dmsf_link][:type] == 'link_from'
       # Link from
       @dmsf_link.project_id = params[:dmsf_link][:project_id]
       @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
       @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]
-      if params[:dmsf_link][:target_file_id].present?
+      @link_external = (params[:external_link] == 'true')
+      @dmsf_link.external_url = params[:dmsf_link][:external_url]
+      if (@link_external)
+        @dmsf_link.target_type = 'DmsfUrl'
+      elsif params[:dmsf_link][:target_file_id].present?
         @dmsf_link.target_id = params[:dmsf_link][:target_file_id]
         @dmsf_link.target_type = DmsfFile.model_name
       else
@@ -116,7 +123,11 @@ class DmsfLinksController < ApplicationController
       @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
       @dmsf_link.dmsf_folder_id = DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
       @dmsf_link.target_project_id = params[:dmsf_link][:project_id]
-      if params[:dmsf_link][:dmsf_file_id].present?        
+      @link_external = (params[:external_link] == 'true')
+      @dmsf_link.external_url = params[:dmsf_link][:external_url]
+      if (@link_external)
+        @dmsf_link.target_type = 'DmsfUrl'
+      elsif params[:dmsf_link][:dmsf_file_id].present?
         @dmsf_link.target_id = params[:dmsf_link][:dmsf_file_id]
         @dmsf_link.target_type = DmsfFile.model_name
       else        
@@ -143,12 +154,24 @@ class DmsfLinksController < ApplicationController
       end
     end        
   end
-  
-  def destroy        
-    if @dmsf_link.delete
-      flash[:notice] = l(:notice_successful_delete)
+
+  def destroy
+    begin
+    if @dmsf_link
+      commit = params[:commit] == 'yes'
+      if @dmsf_link.delete(commit)
+        flash[:notice] = l(:notice_successful_delete)
+      else
+        @dmsf_link.errors.each do |e, msg|
+          flash[:error] = msg
+        end
+      end
     end
-    
+    rescue Exception => e
+      errors[:base] << e.message
+      return false
+    end
+
     redirect_to :back
   end
   

@@ -85,12 +85,26 @@ class DmsfController < ApplicationController
         DmsfLink.where(:project_id => @project.id, :target_type => DmsfFile.model_name).visible.each do |l|
           r = l.target_file.last_revision
           if r
-            r.custom_field_values.each do |v|              
+            r.custom_field_values.each do |v|
+              if v.custom_field_id == params[:custom_field_id].to_i
+                if v.custom_field.compare_values?(v.value, params[:custom_value])
+                    @file_links << l
+                  break
+                end
+              end
+            end
+          end
+        end
+        @url_links = []
+        DmsfLink.where(:project_id => @project.id, :target_type => 'DmsfUrl').visible.each do |l|
+          r = l.target_file.last_revision
+          if r
+            r.custom_field_values.each do |v|
               if v.custom_field_id == params[:custom_field_id].to_i
                 if v.custom_field.compare_values?(v.value, params[:custom_value])
                   @file_links << l
                   break
-                end               
+                end
               end
             end
           end
@@ -100,6 +114,7 @@ class DmsfController < ApplicationController
         @files = @project.dmsf_files.visible     
         @dir_links = @project.folder_links.visible
         @file_links = @project.file_links.visible
+        @url_links = @project.url_links.visible
       end
       @locked_for_user = false
     else 
@@ -107,6 +122,7 @@ class DmsfController < ApplicationController
       @files = @folder.files.visible      
       @dir_links = @folder.folder_links.visible
       @file_links = @folder.file_links.visible
+      @url_links = @folder.url_links.visible
       @locked_for_user = @folder.locked_for_user?
     end        
     
@@ -117,7 +133,8 @@ class DmsfController < ApplicationController
     @trash_enabled = DmsfFolder.deleted.where(:project_id => @project.id).any? ||
       DmsfFile.deleted.where(:project_id => @project.id).any? || 
       DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFolder.model_name).any? ||
-      DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFile.model_name).any?        
+      DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFile.model_name).any? ||
+      DmsfLink.deleted.where(:project_id => @project.id, :target_type => 'DmsfUrl').any?
   end
   
   def trash
@@ -128,6 +145,7 @@ class DmsfController < ApplicationController
     @files = DmsfFile.deleted.where(:project_id => @project.id)
     @dir_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFolder.model_name)
     @file_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFile.model_name)
+    @url_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => 'DmsfUrl')
   end
   
   def download_email_entries

@@ -117,6 +117,17 @@
           :title => link.name }) %>
     </tr>
   <% end %>
+  <% @url_links.each do |link| %>
+      <tr class="gray">
+          <%= render(:partial => 'url_trash', :locals => {
+                                                     :project => link.target_project,
+                                                     :file => link.target_file,
+                                                     :link => link,
+                                                     :id => link.id,
+                                                     :name => 'url_links[]',
+                                                     :title => link.name }) %>
+      </tr>
+  <% end %>
   </tbody>
   </table>  
 <% end %>   

@@ -286,6 +286,7 @@ cs:
   field_target_file: Zdrojový soubor
   title_download_entries: Historie stahování
   label_link_name: Název odkazu
+  label_link_external_url: URL
   label_target_folder: Cílový adresář
   label_source_folder: Zdrojový adresář
   label_target_project: Cílový projekt
