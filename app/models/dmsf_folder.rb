@@ -53,7 +53,7 @@ class DmsfFolder < ActiveRecord::Base
   acts_as_customizable
     
   validate :title, :presence => true
-  validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id]
+  validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted]
   
   validates_format_of :title, :with => @@invalid_characters,
     :message => l(:error_contains_invalid_character)
