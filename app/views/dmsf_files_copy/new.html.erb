@@ -17,6 +17,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
+
+<!--Select2 Files-->
+<%= stylesheet_link_tag 'select2.min.css', :plugin => 'redmine_dmsf' %>
+<%= javascript_include_tag 'select2.min.js', :plugin => 'redmine_dmsf' %>
+
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
@@ -54,5 +59,9 @@
 
   jQuery('#target_project_id').change(function () {
     jQuery('#content').load("<%= url_for(:action => 'new') %>", jQuery('#copyForm').serialize());
+    jQuery('#target_folder_id' ).select2({ width: "600px" });
   });
+
+  jQuery('#target_project_id' ).select2({ width: "600px" });
+  jQuery('#target_folder_id' ).select2({ width: "600px" });
 </script>
