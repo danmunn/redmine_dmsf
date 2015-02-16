@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-15   Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,9 +20,11 @@ desc <<-END_DESC
 Alert all users who are expected to do an approval in the current approval steps
 
 Available options:
+  *dry_run - No email, just print list of recipients to the console
 
 Example:
   rake redmine:dmsf_alert_approvals RAILS_ENV="production"
+  rake redmine:dmsf_alert_approvals dry_run=1 RAILS_ENV="production"
 END_DESC
   
 namespace :redmine do
@@ -34,6 +36,7 @@ end
 class DmsfAlertApprovals    
 
   def self.alert
+    dry_run = ENV['dry_run']
     revisions = DmsfFileRevision.where(:workflow => DmsfWorkflow::STATE_WAITING_FOR_APPROVAL)
     revisions.each do |revision|
       next unless revision.file.last_revision == revision
@@ -41,13 +44,17 @@ class DmsfAlertApprovals
       next unless workflow
       assignments = workflow.next_assignments revision.id
       assignments.each do |assignment|
-        DmsfMailer.workflow_notification(
-          assignment.user, 
-          workflow, 
-          revision,
-          :text_email_subject_requires_approval,
-          :text_email_finished_step,
-          :text_email_to_proceed).deliver
+        if dry_run
+          puts "#{assignment.user.name} <#{assignment.user.mail}>"
+        else
+          DmsfMailer.workflow_notification(
+            assignment.user, 
+            workflow, 
+            revision,
+            :text_email_subject_requires_approval,
+            :text_email_finished_step,
+            :text_email_to_proceed).deliver
+        end
       end      
     end
   end
