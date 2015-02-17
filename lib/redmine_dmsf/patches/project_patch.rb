@@ -66,7 +66,7 @@ module RedmineDmsf
 
           project = project.is_a?(Project) ? project : Project.find(project)
 
-          to_be_copied = %w(dmsf, approval_workflows)
+          to_be_copied = %w(dmsf approval_workflows)
           to_be_copied = to_be_copied & options[:only].to_a if options[:only].present?
 
           if save
