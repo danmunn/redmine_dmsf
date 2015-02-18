@@ -1,9 +1,11 @@
 <%#=
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -48,9 +50,14 @@
     </p>
     <div class="data clear">
       <%= radio_button_tag("commited_files[#{i}][version]", 1, true) %> 
-      <%= upload.major_version %>.<%= upload.minor_version + 1 %> <%= l(:option_version_minor) %><br />
+      <%= upload.major_version %>.<%= upload.minor_version + 1 %>
+      <%= l(:option_version_minor) %><br/>
       <%= radio_button_tag("commited_files[#{i}][version]", 2) %> 
-      <%= upload.major_version + 1 %>.0 <%= l(:option_version_major) %><br />
+      <%= upload.major_version + 1 %>.0 
+      <%= l(:option_version_major) %><br/>
+      <%= radio_button_tag("commited_files[#{i}][version]", 3) %>        
+        <%= select_tag "commited_files[#{i}][custom_version_major]", options_for_select(0..99, upload.major_version + 2) %>.<%= select_tag "commited_files[#{i}][custom_version_minor]", options_for_select(0..99, upload.minor_version + 1) %>
+        <%= l(:option_version_custom) %>
     </div>		
   </div>
   <div class="splitcontentright clear">

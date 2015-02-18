@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
@@ -119,6 +121,7 @@ zh:
   option_version_same: Same
   option_version_minor: Minor
   option_version_major: Major
+  option_version_custom: Custom
   label_new_content: 新内容
   label_maximum_files_upload: 最大上传文件数
   note_maximum_number_of_files_uploaded: 一次上传的最大文件数量. 0表示无限制.

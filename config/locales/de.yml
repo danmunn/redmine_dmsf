@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Terrence Miller
@@ -119,6 +121,7 @@ de:
   option_version_major: Hauptversion
   label_new_content: Neuer Inhalt
   label_maximum_files_upload: Maximal hochzuladende Dateien
+  option_version_custom: Benutzerdefinierte
   note_maximum_number_of_files_uploaded: Beschränkt die Anzahl der maximal auf einmal hochladbaren Dateien. 0 bedeutet unbeschränkt.
   label_maximum_files_download: Maximal herunterzuladende Dateien
   note_maximum_number_of_files_downloaded: Beschränkt die Anzahl der maximal auf einmal herunterladbaren Dateien (per ZIP oder Mail). 0 bedeutet unbeschränkt.

@@ -1,8 +1,10 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
-#
+# Copyright (C) 2013 Aecho Liu <aecho1028@gmail.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,9 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#
-# Translated by Aecho Liu, (aecho1028@gmail.com)
-"zh-TW":
+
+zh-TW:
   dmsf: 文件總管
   label_dmsf_file_plural: 文件檔案
   label_dmsf_file_revision_plural: Dmsf document revisions
@@ -122,6 +123,7 @@
   option_version_same: Same
   option_version_minor: Minor
   option_version_major: Major
+  option_version_custom: Custom
   label_new_content: 新的檔案內容
   label_maximum_files_upload: 最大上傳檔案數量
   note_maximum_number_of_files_uploaded: 同時間所能上傳的，最大檔案數量限制。 0 表示沒有限制。

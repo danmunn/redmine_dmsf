@@ -128,7 +128,13 @@ class DmsfUploadController < ApplicationController
         new_revision.title = commited_file[:title]
         new_revision.description = commited_file[:description]
         new_revision.comment = commited_file[:comment]
-        new_revision.increase_version(commited_file[:version].to_i, true)                
+        version = commited_file[:version].to_i
+        if version == 3
+          new_revision.major_version = commited_file[:custom_version_major].to_i
+          new_revision.minor_version = commited_file[:custom_version_minor].to_i
+        else
+          new_revision.increase_version(version, true)                
+        end
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         new_revision.size = File.size(commited_disk_filepath)
 

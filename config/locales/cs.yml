@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
@@ -119,6 +121,7 @@ cs:
   option_version_same: Stejná
   option_version_minor: Podružná
   option_version_major: Hlavní
+  option_version_custom: Vlastní
   label_new_content: Nový obsah
   label_maximum_files_upload: Maximální počet najednou nahraných souborů
   note_maximum_number_of_files_uploaded: Maximální počet najednou nahraných souborů. 0 znamená bez omezení.

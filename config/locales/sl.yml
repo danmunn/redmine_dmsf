@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011 <zdravko.balorda@mks.si>
@@ -119,6 +121,7 @@ sl:
   option_version_same: Enako
   option_version_minor: Minor
   option_version_major: Major
+  option_version_custom: Custom
   label_new_content: Nova vsebina
   label_maximum_files_upload: Maximum naloženih datotek
   note_maximum_number_of_files_uploaded: Omejitev največjega števila datotek za nalaganje naenkrat. 0 pomeni neomejeno.
