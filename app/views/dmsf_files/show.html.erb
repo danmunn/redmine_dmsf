@@ -3,7 +3,7 @@
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -88,7 +88,7 @@
         <i><%= l(:info_revision, :rev => revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>
         <%= l(:info_changed_by_user, :changed => format_time(revision.updated_at)) %>
-        <%=  link_to(revision.user) %>
+        <%= link_to(revision.user.name, user_path(revision.user)) %>
       </div>
     </div>
     <div style="border: 1px solid #e4e4e4;">
