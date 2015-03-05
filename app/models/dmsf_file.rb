@@ -386,7 +386,7 @@ class DmsfFile < ActiveRecord::Base
                 end
   
                 if (allowed && project_included)
-                  dmsf_file.event_description = dochash['sample']
+                  dmsf_file.event_description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']
                   results.push(dmsf_file)
                   results_count += 1
                 end
