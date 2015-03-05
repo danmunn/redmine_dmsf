@@ -33,7 +33,7 @@
 <td class="modified">
   <%= format_time(file.last_revision.updated_at) %>  
 </td>
-<td class="version"><%= file.last_revision.version %></td>
+<td class="version" title="<%= file.last_revision.comment %>"><%= file.last_revision.version %></td>
 <td class="workflow">                                    
   <%= file.last_revision.workflow_str(false) %>  
 </td>

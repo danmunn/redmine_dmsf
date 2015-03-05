@@ -53,7 +53,7 @@
       :class => 'icon icon-dmsf-lockedbycurrent') %>
   <% end %>
 </td>
-<td class="version"><%= file.last_revision.version %></td>
+<td class="version" title="<%= file.last_revision.comment %>"><%= file.last_revision.version %></td>
 <td class="workflow">                                  
   <% if wf && @file_approval_allowed %>
     <%= link_to(
