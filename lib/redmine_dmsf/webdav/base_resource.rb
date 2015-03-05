@@ -1,7 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-15 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -45,6 +45,16 @@ module RedmineDmsf
       #Overridable function to provide better listing for GET requests
       def special_type
         nil
+      end
+      
+      # Base attribute overriding in order to allow non-ascii characters in path
+      def path
+        @path.force_encoding('utf-8')
+      end
+      
+      # Base attribute overriding in order to allow non-ascii characters in path
+      def public_path
+        @public_path.force_encoding('utf-8')
       end
 
       #Generate HTML for Get requests
