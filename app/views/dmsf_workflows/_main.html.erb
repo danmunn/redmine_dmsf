@@ -1,6 +1,6 @@
 <%# Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,33 +18,37 @@
 
 <% @workflows = DmsfWorkflow.sorted.where(:project_id => @project.id) if @project && @workflows.nil?  %>  
 
-<div class="contextual">
-<% if @project %>
-  <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(:project_id => @project.id), :class => 'icon icon-add' %>                
+<% unless @project %>
+  <div class="contextual">  
+    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path, :class => 'icon icon-add' %>
+  </div>
+  
+  <h2><%=l(:label_dmsf_workflow_plural)%></h2>
+<% end %>
+
+<% if @workflows.any? %>
+  <table class="list">
+    <thead><tr>
+      <th><%=l(:field_name)%></th>    
+      <th></th>
+    </tr></thead>
+    <tbody>
+      <% for workflow in @workflows %>
+        <tr id="workflow-<%= workflow.id %>" class="<%= cycle('odd', 'even') %>">
+          <td class="name"><%= link_to(h(workflow.name), dmsf_workflow_path(workflow)) %></td>    
+          <td class="buttons"><%= delete_link dmsf_workflow_path(workflow) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% else %>
-  <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path, :class => 'icon icon-add' %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
-</div>
 
-<h2><%=l(:label_dmsf_workflow_plural)%></h2>
-
-<table class="list">
-  <thead><tr>
-    <th><%=l(:field_name)%></th>    
-    <th></th>
-  </tr></thead>
-  <tbody>
-<% for workflow in @workflows %>
-  <tr id="workflow-<%= workflow.id %>" class="<%= cycle('odd', 'even') %>">
-    <td class="name"><%= link_to(h(workflow.name), dmsf_workflow_path(workflow)) %></td>    
-    <td class="buttons">      
-      <%= delete_link dmsf_workflow_path(workflow) %>
-    </td>
-  </tr>
-<% end %>
-  </tbody>
-</table>
-
-<% if @workflow_pages %>
-  <p class="pagination"><%= pagination_links_full @workflow_pages %></p>
+<% if @project %>
+  <p><%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(:project_id => @project.id), :class => 'icon icon-add' %></p>
+<% else %>
+  <% if @workflow_pages %>
+    <p class="pagination"><%= pagination_links_full @workflow_pages %></p>
+  <% end %>
 <% end %>
