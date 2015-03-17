@@ -1,6 +1,8 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -236,15 +238,16 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def update    
-    if request.put? && @dmsf_workflow.update_attributes({:name => params[:name]})
+    if request.put? && params[:dmsf_workflow] && @dmsf_workflow.update_attributes(
+        {:name => params[:dmsf_workflow][:name]})
       flash[:notice] = l(:notice_successful_update)
       if @project
         redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
       else
         redirect_to dmsf_workflows_path
       end    
-    else      
-      render :action => 'edit'
+    else            
+      redirect_to dmsf_workflow_path(@dmsf_workflow)
     end
   end
   
