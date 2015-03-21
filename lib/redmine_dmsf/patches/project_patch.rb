@@ -1,5 +1,5 @@
 # encoding: utf-8
-# 
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
@@ -27,30 +27,45 @@ module RedmineDmsf
     module ProjectPatch
 
       def self.included(base) # :nodoc:
-        base.send(:include, InstanceMethods)        
+        base.send(:include, InstanceMethods)
         base.class_eval do
           unloadable
           alias_method_chain :copy, :dmsf
 
-          has_many :dmsf_files, :class_name => 'DmsfFile', :foreign_key => 'project_id', 
-            :conditions => { :dmsf_folder_id => nil }, :dependent => :destroy
-          has_many :dmsf_folders, :class_name => 'DmsfFolder', :foreign_key => 'project_id', 
-            :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy
-          has_many :dmsf_workflows, :dependent => :destroy
-          has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'project_id', 
-            :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfFolder' },
-            :dependent => :destroy 
-          has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'project_id', 
-            :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfFile' },
-            :dependent => :destroy
-          has_many :url_links, :class_name => 'DmsfLink', :foreign_key => 'project_id',
-                   :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfUrl' },
-                   :dependent => :destroy
+          if (Redmine::VERSION::MAJOR >= 3)
+            has_many :dmsf_files, -> { where dmsf_folder_id: nil},
+              :class_name => 'DmsfFile', :foreign_key => 'project_id', :dependent => :destroy
+            has_many :dmsf_folders, -> {where dmsf_folder_id: nil},
+              :class_name => 'DmsfFolder', :foreign_key => 'project_id',
+              :dependent => :destroy
+            has_many :dmsf_workflows, :dependent => :destroy
+            has_many :folder_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFolder' },
+              :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+            has_many :file_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFile' },
+              :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+            has_many :url_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfUrl' },
+              :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+          else
+            has_many :dmsf_files, :class_name => 'DmsfFile', :foreign_key => 'project_id',
+              :conditions => { :dmsf_folder_id => nil }, :dependent => :destroy
+            has_many :dmsf_folders, :class_name => 'DmsfFolder', :foreign_key => 'project_id',
+              :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy
+            has_many :dmsf_workflows, :dependent => :destroy
+            has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'project_id',
+              :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfFolder' },
+              :dependent => :destroy
+            has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'project_id',
+              :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfFile' },
+              :dependent => :destroy
+            has_many :url_links, :class_name => 'DmsfLink', :foreign_key => 'project_id',
+                     :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfUrl' },
+                     :dependent => :destroy
+          end
         end
       end
-      
+
       module InstanceMethods
-        
+
         def dmsf_count
           file_count = self.dmsf_files.visible.count + self.file_links.count
           folder_count = self.dmsf_folders.visible.count + self.folder_links.count
@@ -87,23 +102,23 @@ module RedmineDmsf
             f.copy_to(self, nil)
           end
           project.folder_links.visible.each do |l|
-            l.copy_to(self, nil)            
+            l.copy_to(self, nil)
           end
           project.file_links.visible.each do |l|
-            l.copy_to(self, nil)            
+            l.copy_to(self, nil)
           end
           project.url_links.visible.each do |l|
             l.copy_to(self, nil)
           end
         end
-        
+
         def copy_approval_workflows(project)
           project.dmsf_workflows.each do |wf|
             wf.copy_to self
           end
         end
       end
-      
+
     end
   end
 end
