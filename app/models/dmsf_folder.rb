@@ -20,6 +20,8 @@
 class DmsfFolder < ActiveRecord::Base
   unloadable
 
+  attr_accessible :title, :description, :dmsf_folder_id
+
   include RedmineDmsf::Lockable
 
   cattr_reader :invalid_characters
@@ -34,8 +36,6 @@ class DmsfFolder < ActiveRecord::Base
     :dependent => :destroy
   has_many :files, :class_name => 'DmsfFile', :foreign_key => 'dmsf_folder_id',
     :dependent => :destroy
-
-
   if (Redmine::VERSION::MAJOR >= 3)
     has_many :folder_links, -> { where target_type: DmsfFolder.model_name },
       :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
@@ -47,6 +47,7 @@ class DmsfFolder < ActiveRecord::Base
       :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
     has_many :locks, -> { where(entity_type:  1).order("#{DmsfLock.table_name}.updated_at DESC") },
       :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
+    accepts_nested_attributes_for :user, :project, :folder, :subfolders, :files, :folder_links, :file_links, :url_links, :referenced_links, :locks
   else
     has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id',
       :conditions => {:target_type => DmsfFolder.model_name}, :dependent => :destroy

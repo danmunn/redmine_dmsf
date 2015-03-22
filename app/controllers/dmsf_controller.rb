@@ -247,7 +247,11 @@ class DmsfController < ApplicationController
   end
 
   def create
-    @folder = DmsfFolder.new(params[:dmsf_folder])
+    if (Redmine::VERSION::MAJOR >= 3)
+      @folder = DmsfFolder.new(folder_params)
+    else
+      @folder = DmsfFolder.new(params[:dmsf_folder])
+    end
     @folder.project = @project
     @folder.user = User.current
     if @folder.save
@@ -405,8 +409,8 @@ class DmsfController < ApplicationController
         else
           audit = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => f.last_revision.id,
             :action => DmsfFileRevisionAccess::EmailAction)
-        end            
-        audit.save! 
+        end
+        audit.save!
       end
 
       @email_params = {
@@ -437,7 +441,7 @@ class DmsfController < ApplicationController
         else
           audit = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => f.last_revision.id,
             :action => DmsfFileRevisionAccess::DownloadAction)
-        end             
+        end
         audit.save!
       end
 
@@ -585,6 +589,11 @@ class DmsfController < ApplicationController
     copy = folder.clone
     copy.id = folder.id
     copy
+  end
+
+  private
+  def folder_params
+    params.require(:dmsf_folder).permit(:title, :description, :dmsf_folder_id)
   end
 
 end
