@@ -25,7 +25,11 @@ class DmsfLinksController < ApplicationController
   before_filter :authorize  
 
   def new        
-    @dmsf_link = DmsfLink.new(:project_id => params[:project_id])
+    if (Redmine::VERSION::MAJOR >= 3)
+      @dmsf_link = DmsfLink.new(l_params)
+    else
+      @dmsf_link = DmsfLink.new(:project_id => params[:project_id])
+    end
     
     if params[:dmsf_link].present?        
       # Reload
@@ -185,6 +189,10 @@ class DmsfLinksController < ApplicationController
   
   private
   
+  def l_params
+    params.fetch(:dmsf_link, {}).permit(:project_id)
+  end
+
   def find_link_project
     if @dmsf_link
       @project = @dmsf_link.project

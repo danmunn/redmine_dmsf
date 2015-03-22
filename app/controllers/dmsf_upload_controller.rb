@@ -52,7 +52,11 @@ class DmsfUploadController < ApplicationController
 
   # async single file upload handling 
   def upload_file
-    @tempfile = params[:file]
+    if (Redmine::VERSION::MAJOR >= 3)
+      @tempfile = params.require(:file)
+    else
+      @tempfile = params[:file]
+    end
     unless @tempfile.original_filename
       render_404
       return
@@ -82,7 +86,11 @@ class DmsfUploadController < ApplicationController
   end
   
   def commit_files
-    commited_files = params[:commited_files]
+    if (Redmine::VERSION::MAJOR >= 3)
+      commited_files = params.require(:commited_files)
+    else
+      commited_files = params[:commited_files]
+    end
     if commited_files && commited_files.is_a?(Hash)
       files = []
       failed_uploads = []

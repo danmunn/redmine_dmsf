@@ -27,7 +27,7 @@ class DmsfFileRevision < ActiveRecord::Base
   has_many :access, :class_name => 'DmsfFileRevisionAccess', :foreign_key => 'dmsf_file_revision_id', :dependent => :destroy
   has_many :dmsf_workflow_step_assignment, :dependent => :destroy
   if (Redmine::VERSION::MAJOR >= 3)
-    accepts_nested_attributes_for :access, :dmsf_workflow_step_assignment
+    accepts_nested_attributes_for :access, :dmsf_workflow_step_assignment, :file, :user
   end
 
 

@@ -114,7 +114,12 @@ class DmsfFilesController < ApplicationController
       if @file.locked_for_user?
         flash[:error] = l(:error_file_is_locked)
       else
-        revision = DmsfFileRevision.new(params[:dmsf_file_revision])
+        if (Redmine::VERSION::MAJOR >= 3)
+          aparams = frev_params
+        else
+          aparams = params
+        end
+        revision = DmsfFileRevision.new(aparams)
 
         revision.file = @file
         last_revision = @file.last_revision
@@ -287,6 +292,11 @@ class DmsfFilesController < ApplicationController
   end
 
   private
+
+  def frev_params
+    params.require(:dmsf_file_revision).permit(
+      :title, :name, :description, :comment)
+  end
 
   def log_activity(action)
     Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{@file.project.identifier}/#{@file.id}/#{@revision.id if @revision}"

@@ -20,8 +20,6 @@
 class DmsfFolder < ActiveRecord::Base
   unloadable
 
-  attr_accessible :title, :description, :dmsf_folder_id
-
   include RedmineDmsf::Lockable
 
   cattr_reader :invalid_characters

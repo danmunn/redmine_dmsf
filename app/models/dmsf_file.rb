@@ -44,6 +44,7 @@ class DmsfFile < ActiveRecord::Base
       :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
     has_many :referenced_links, -> { where target_type: DmsfFile.model_name},
       :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
+    accepts_nested_attributes_for :revisions, :locks, :referenced_links, :project
   else
     has_many :revisions, :class_name => 'DmsfFileRevision', :foreign_key => 'dmsf_file_id',
       :order => "#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC",
