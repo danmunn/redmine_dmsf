@@ -227,7 +227,11 @@ class DmsfController < ApplicationController
   end
 
   def entries_email
-    @email_params = params[:email]
+    if (Redmine::VERSION::MAJOR >= 3)
+      @email_params = e_params
+    else
+      @email_params = params[:email]
+    end
     if @email_params[:to].strip.blank?
       flash.now[:error] = l(:error_email_to_must_be_entered)
       render :action => 'email_entries'
@@ -248,7 +252,7 @@ class DmsfController < ApplicationController
 
   def create
     if (Redmine::VERSION::MAJOR >= 3)
-      @folder = DmsfFolder.new( 
+      @folder = DmsfFolder.new(
         params.require(:dmsf_folder).permit(:title, :description, :dmsf_folder_id))
     else
       @folder = DmsfFolder.new(params[:dmsf_folder])
@@ -405,7 +409,7 @@ class DmsfController < ApplicationController
         if (Redmine::VERSION::MAJOR >= 3)
           audit = DmsfFileRevisionAccess.new
           audit.user = User.current
-          audit.revision = @revision
+          audit.revision = f.last_revision
           audit.action = DmsfFileRevisionAccess::EmailAction
         else
           audit = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => f.last_revision.id,
@@ -591,5 +595,15 @@ class DmsfController < ApplicationController
     copy.id = folder.id
     copy
   end
+
+  private
+
+  def e_params
+    params.fetch(:email, {}).permit(
+      :to, :zipped_content, :email,
+      :cc, :subject, :zipped_content => [], :files => [])
+  end
+
+
 
 end
