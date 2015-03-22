@@ -1,5 +1,5 @@
 # encoding: utf-8
-# 
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
@@ -21,13 +21,13 @@
 
 class DmsfFilesController < ApplicationController
   unloadable
-  
+
   menu_item :dmsf
-  
+
   before_filter :find_file, :except => [:delete_revision]
   before_filter :find_revision, :only => [:delete_revision]
   before_filter :authorize
-  
+
   accept_api_auth :show
 
   helper :all
@@ -35,12 +35,20 @@ class DmsfFilesController < ApplicationController
 
   def view
     @revision = @file.last_revision
-    check_project(@revision.file)    
+    check_project(@revision.file)
     begin
       log_activity('downloaded')
-      access = DmsfFileRevisionAccess.new(:user_id => User.current.id, 
-        :dmsf_file_revision_id => @revision.id,
-        :action => DmsfFileRevisionAccess::DownloadAction)
+      if (Redmine::VERSION::MAJOR >= 3)
+        access = DmsfFileRevisionAccess.new
+        access.user = User.current
+        access.revision = @revision
+        access.action = DmsfFileRevisionAccess::DownloadAction
+      else
+        access = DmsfFileRevisionAccess.new(
+          :user_id => User.current.id,
+          :dmsf_file_revision_id => @revision.id,
+          :action => DmsfFileRevisionAccess::DownloadAction)
+      end
       access.save!
       send_file(@revision.disk_file,
         :filename => filename_for_content_disposition(@revision.name),
@@ -49,9 +57,9 @@ class DmsfFilesController < ApplicationController
     rescue ActionController::MissingFile => e
       logger.error e.message
       render_404
-    end 
+    end
   end
-    
+
   def show
     # The download is put here to provide more clear and usable links
     if params.has_key?(:download)
@@ -62,17 +70,25 @@ class DmsfFilesController < ApplicationController
         if @revision.file != @file
           render_403
           return
-        end        
+        end
       end
       check_project(@revision.file)
       begin
         log_activity('downloaded')
-        access = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => @revision.id, 
-          :action => DmsfFileRevisionAccess::DownloadAction)
-        access.save!
-        send_file(@revision.disk_file, 
+        if (Redmine::VERSION::MAJOR >= 3)
+          access = DmsfFileRevisionAccess.new
+          access.user = User.current
+          access.revision = @revision
+          access.action = DmsfFileRevisionAccess::DownloadAction
+        else
+          access = DmsfFileRevisionAccess.new(
+            :user_id => User.current.id,
+            :dmsf_file_revision_id => @revision.id,
+            :action => DmsfFileRevisionAccess::DownloadAction)
+        end
+        send_file(@revision.disk_file,
           :filename => filename_for_content_disposition(@revision.name),
-          :type => @revision.detect_content_type, 
+          :type => @revision.detect_content_type,
           :disposition => 'attachment')
       rescue ActionController::MissingFile => e
         logger.error e.message
@@ -80,35 +96,35 @@ class DmsfFilesController < ApplicationController
       end
       return
     end
-    
-    @revision = @file.last_revision    
-    @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)    
+
+    @revision = @file.last_revision
+    @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
     @revision_pages = Paginator.new @file.revisions.visible.count, params['per_page'] ? params['per_page'].to_i : 25, params['page']
-            
+
     respond_to do |format|
       format.html {
         render :layout => !request.xhr?
       }
-      format.api      
+      format.api
     end
   end
-  
+
   def create_revision
     if params[:dmsf_file_revision]
       if @file.locked_for_user?
-        flash[:error] = l(:error_file_is_locked)        
-      else        
+        flash[:error] = l(:error_file_is_locked)
+      else
         revision = DmsfFileRevision.new(params[:dmsf_file_revision])
 
-        revision.file = @file        
+        revision.file = @file
         last_revision = @file.last_revision
         revision.source_revision = last_revision
         revision.user = User.current
 
         revision.major_version = last_revision.major_version
-        revision.minor_version = last_revision.minor_version      
+        revision.minor_version = last_revision.minor_version
         version = params[:version].to_i
-        file_upload = params[:file_upload]        
+        file_upload = params[:file_upload]
         unless file_upload
           revision.disk_filename = last_revision.disk_filename
           if version == 3
@@ -129,9 +145,9 @@ class DmsfFilesController < ApplicationController
           revision.size = file_upload.size
           revision.disk_filename = revision.new_storage_filename
           revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
-        end      
+        end
 
-        @file.name = revision.name        
+        @file.name = revision.name
 
         if revision.valid? && @file.valid?
           revision.save!
@@ -153,11 +169,11 @@ class DmsfFilesController < ApplicationController
 
           flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
           log_activity('new revision')
-          begin            
+          begin
             recipients = DmsfMailer.get_notify_users(@project, [@file])
             recipients.each do |u|
               DmsfMailer.files_updated(u, @project, [@file]).deliver
-            end                        
+            end
             if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
               unless recipients.empty?
                 to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
@@ -167,14 +183,14 @@ class DmsfFilesController < ApplicationController
             end
           rescue Exception => e
             logger.error "Could not send email notifications: #{e.message}"
-          end          
+          end
         end
       end
     end
     redirect_to :back
   end
 
-  def delete    
+  def delete
     if @file
       commit = params[:commit] == 'yes'
       if @file.delete(commit)
@@ -189,26 +205,26 @@ class DmsfFilesController < ApplicationController
             Rails.logger.error "Could not send email notifications: #{e.message}"
           end
         end
-      else       
-        @file.errors.each do |e, msg| 
-          flash[:error] = msg         
+      else
+        @file.errors.each do |e, msg|
+          flash[:error] = msg
         end
-      end      
+      end
     end
     if commit
       redirect_to :back
     else
       redirect_to dmsf_folder_path(:id => @project, :folder_id => @file.folder)
-    end    
+    end
   end
 
-  def delete_revision    
+  def delete_revision
     if @revision # && !@revision.deleted
       if @revision.delete(true)
         flash[:notice] = l(:notice_revision_deleted)
         log_activity('deleted')
-      else        
-        @revision.errors.each do |e, msg| 
+      else
+        @revision.errors.each do |e, msg|
           flash[:error] = msg
         end
       end
@@ -222,10 +238,10 @@ class DmsfFilesController < ApplicationController
     else
       @file.lock!
       flash[:notice] = l(:notice_file_locked)
-    end      
+    end
     redirect_to :back
   end
-  
+
   def unlock
     unless @file.locked?
       flash[:warning] = l(:warning_file_not_locked)
@@ -236,7 +252,7 @@ class DmsfFilesController < ApplicationController
       else
         flash[:error] = l(:error_only_user_that_locked_file_can_unlock_it)
       end
-    end    
+    end
     redirect_to :back
   end
 
@@ -246,20 +262,20 @@ class DmsfFilesController < ApplicationController
     else
       @file.notify_activate
       flash[:notice] = l(:notice_file_notifications_activated)
-    end    
+    end
     redirect_to :back
   end
-  
+
   def notify_deactivate
     unless @file.notification
       flash[:warning] = l(:warning_file_notifications_already_deactivated)
     else
       @file.notify_deactivate
       flash[:notice] = l(:notice_file_notifications_deactivated)
-    end    
+    end
     redirect_to :back
   end
-  
+
   def restore
     if @file.restore
       log_activity('restored')
@@ -274,9 +290,9 @@ class DmsfFilesController < ApplicationController
 
   def log_activity(action)
     Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{@file.project.identifier}/#{@file.id}/#{@revision.id if @revision}"
-  end 
-  
-  def find_file    
+  end
+
+  def find_file
     @file = DmsfFile.find params[:id]
     @project = @file.project
   rescue ActiveRecord::RecordNotFound
@@ -285,7 +301,7 @@ class DmsfFilesController < ApplicationController
 
   def find_revision
     @revision = DmsfFileRevision.visible.find(params[:id])
-    @file = @revision.file 
+    @file = @revision.file
     @project = @file.project
   rescue ActiveRecord::RecordNotFound
     render_404
@@ -293,8 +309,8 @@ class DmsfFilesController < ApplicationController
 
   def check_project(entry)
     if entry && entry.project != @project
-      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
+      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)
     end
   end
-  
+
 end
