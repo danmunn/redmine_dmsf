@@ -296,13 +296,14 @@ cs:
   label_source_folder: Zdrojový adresář
   label_target_project: Cílový projekt
   label_source_project: Zdrojový projekt
+  label_external: Externí
   
   text_email_doc_updated_subject: "Dokumenty projektu %{project} aktualizovány"
   text_email_doc_updated: právě aktualizoval dokumenty projektu
   text_email_doc_follows: takto
   text_email_doc_deleted_subject: "Dokumenty projektu %{project} smazány"
   text_email_doc_deleted: právě smazal dokumety projektu
-  label_links_only: pouze odkazy
+  label_links_only: pouze odkazy  
   
   label_display_notified_recipients: Zobrazit příjemce notifikací
   note_display_notified_recipients: Uživatel bude informován o příjemcích právě odeslané emailové notifikace.

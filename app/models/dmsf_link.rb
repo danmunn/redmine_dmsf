@@ -1,3 +1,5 @@
+# encode: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
@@ -18,6 +20,7 @@
 
 class DmsfLink < ActiveRecord::Base
   unloadable
+  include ActiveModel::Validations
 
   belongs_to :project
   belongs_to :dmsf_folder
@@ -26,6 +29,16 @@ class DmsfLink < ActiveRecord::Base
 
   validates :name, :presence => true
   validates_length_of :name, :maximum => 255
+  validates_length_of :external_url, :maximum => 255  
+  validate :validate_url
+  
+  def validate_url
+    begin 
+      URI.parse self.external_url
+    rescue URI::InvalidURIError        
+      errors.add :external_url, :invalid
+    end      
+  end
 
   if (Redmine::VERSION::MAJOR >= 3)
     scope :visible, -> { where(deleted: false) }

@@ -296,6 +296,7 @@ sl:
   label_source_folder: Source folder
   label_target_project: Target project
   label_source_project: Source project
+  label_external: External
   
   text_email_doc_updated_subject: "Documents of %{project} updated"
   text_email_doc_updated: has just actualized documents of

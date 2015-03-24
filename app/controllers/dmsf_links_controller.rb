@@ -36,7 +36,7 @@ class DmsfLinksController < ApplicationController
       @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]                       # TODO: Add stuff in here for external links so that if error occurs, repopulate the same
       @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
       @type = params[:dmsf_link][:type]
-      @link_external = (params[:external_link] == 'true')
+      @link_external = (@type == 'link_from') && (params[:external_link] == 'true')
       @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]
       @target_folder_id = params[:dmsf_link][:target_folder_id].to_i if params[:reload].blank? && DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])
       if @type == 'link_to'

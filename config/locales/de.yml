@@ -293,13 +293,14 @@ de:
   label_source_folder: Quellordner
   label_target_project: Zielprojekt
   label_source_project: Quellprojekt
+  label_external: Außen
   
   text_email_doc_updated_subject: "Dokumente im Projekt %{project} wurden aktualisiert"
   text_email_doc_updated: hat folgende Dokumente bearbeitet
   text_email_doc_follows: wie folgt
   text_email_doc_deleted_subject: "Dokumente im Projekt %{project} wurden gelöscht"
   text_email_doc_deleted: hat folgende Dokumente gelöscht
-  label_links_only: nur Verknüpfungen
+  label_links_only: nur Verknüpfungen  
   
   label_display_notified_recipients: Zeige benachrichtigte Empfänger
   note_display_notified_recipients: Der User wird über alle Empfänger der Emailbenachrichtigung informiert.

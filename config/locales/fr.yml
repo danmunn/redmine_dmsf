@@ -293,13 +293,14 @@ fr:
   label_source_folder: Dossier source
   label_target_project: Projet cible
   label_source_project: Projet source
+  label_external: External
   
   text_email_doc_updated_subject: "Documents de %{project} mis à jour"
   text_email_doc_updated: a mis à jour des documents de
   text_email_doc_follows: comme suit
   text_email_doc_deleted_subject: "Documents de %{project} supprimés"
   text_email_doc_deleted: a supprimé des documents de
-  label_links_only: liens seulement
+  label_links_only: liens seulement  
   
   label_display_notified_recipients: Afficher les destinataires notifiés
   note_display_notified_recipients: "L'utilisateur sera informé de tous les destinataires à qui un email de notifcation a été envoyé"

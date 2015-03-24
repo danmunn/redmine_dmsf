@@ -296,6 +296,7 @@ es:
   label_source_folder: Directorio fuente
   label_target_project: Proyecto destino
   label_source_project: Proyecto fuente
+  label_external: External
   
   text_email_doc_updated_subject: "Documentos de %{project} actualizados"
   text_email_doc_updated: acaba de actualizar los ducumentos de

@@ -288,6 +288,7 @@ en:
   label_notifications_off: Notifications off
   field_target_file: Source file
   title_download_entries: Download entries
+  label_external: External
 
   label_link_name: Link name
   label_link_external_url: URL
@@ -301,7 +302,7 @@ en:
   text_email_doc_follows: as follows
   text_email_doc_deleted_subject: "Documents of %{project} deleted"
   text_email_doc_deleted: has just deleted documents of
-  label_links_only: links only
+  label_links_only: links only  
   
   label_display_notified_recipients: Display notified recipients
   note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.

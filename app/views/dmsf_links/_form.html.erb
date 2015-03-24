@@ -1,6 +1,6 @@
 <%# Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,15 +16,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
-<% html_title(l(:dmsf)) %>
+<% html_title l(:dmsf) %>
 
 <div class="contextual">
 </div>
 
 <% if @dmsf_file_id %>
   <% file = DmsfFile.find_by_id @dmsf_file_id%>
-  <% title = file.title if file %>
-    <% title = file.title if file %>
+  <% title = file.title if file %>    
 <% end %>
 
 <%= render(:partial => '/dmsf/path', :locals => {:folder => @dmsf_link.folder, :filename => title}) %>
@@ -36,31 +35,33 @@
   <%= f.hidden_field :type, :value => @type %>
   <%= f.hidden_field :dmsf_file_id, :value => @dmsf_file_id %>
   <div class="box dmsf_detail">
+    <% if @type == 'link_from' %>
       <p>
-          <%= radio_button_tag(:external_link,'false',@link_external == false) %> Internal</br>
-          <%= radio_button_tag(:external_link,'true',@link_external) %> External
-              </p>
-      <div id="link_internal" style="<%= @link_external ? 'display:none' : '' %>">
-        <p>
-          <% if @type == 'link_from' %>
-            <%= label_tag('dmsf_link[target_project_id]', l(:label_source_project), :class => 'required') %>
-          <% else %>
-            <%= label_tag('dmsf_link[target_project_id]', l(:label_target_project), :class => 'required') %>
-          <% end %>
-          <%= select_tag('dmsf_link[target_project_id]',
-             project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy,
-               :selected => @dmsf_link.target_project)) %>
-        </p>
-        <p>
-          <% if @type == 'link_from' %>
-            <%= label_tag('dmsf_link[target_folder_id]', l(:label_source_folder)) %>
-          <% else %>
-            <%= label_tag('dmsf_link[target_folder_id]', l(:label_target_folder)) %>
-          <% end %>
-          <%= select_tag('dmsf_link[target_folder_id]',
-            folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
-            :selected => @target_folder_id)) %>
-        </p>
+        <%= radio_button_tag(:external_link, 'false', @link_external == false) %> <%= l(:label_internal) %></br>
+        <%= radio_button_tag(:external_link, 'true', @link_external) %>  <%= l(:label_external) %>
+      </p>
+    <% end %>    
+    <div id="link_internal" style="<%= @link_external ? 'display:none' : '' %>">
+      <p>
+        <% if @type == 'link_from' %>
+          <%= label_tag('dmsf_link[target_project_id]', l(:label_source_project), :class => 'required') %>
+        <% else %>
+          <%= label_tag('dmsf_link[target_project_id]', l(:label_target_project), :class => 'required') %>
+        <% end %>
+        <%= select_tag('dmsf_link[target_project_id]',
+          project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy,
+          :selected => @dmsf_link.target_project)) %>
+      </p>
+      <p>
+        <% if @type == 'link_from' %>
+          <%= label_tag('dmsf_link[target_folder_id]', l(:label_source_folder)) %>
+        <% else %>
+          <%= label_tag('dmsf_link[target_folder_id]', l(:label_target_folder)) %>
+        <% end %>
+        <%= select_tag('dmsf_link[target_folder_id]',
+          folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
+          :selected => @target_folder_id)) %>
+      </p>
         <% if @type == 'link_from' %>
           <p>
             <% if @target_folder_id %>
@@ -74,12 +75,11 @@
           </p>
         <% end %>
         <p>
-      </div>
-
-      <div id="link_external" style="<%= @link_external ? '' : 'display:none' %>">
+      </div>      
+       <div id="link_external" style="<%= @link_external ? '' : 'display:none' %>">
           <%= label_tag('dmsf_link[external_url]', l(:label_link_external_url), :class => 'required') %>
           <%= text_field_tag 'dmsf_link[external_url]', @dmsf_link.external_url, :size => 40, :maxlength => 255 %>
-      </div>
+      </div>      
       <%= label_tag('dmsf_link[name]', l(:label_link_name), :class => 'required') %>      
       <%= text_field_tag 'dmsf_link[name]', @dmsf_link.name, :size => 40, :maxlength => 255 %>
     </p>
