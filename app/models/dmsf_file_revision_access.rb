@@ -22,6 +22,9 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
   belongs_to :user
   delegate :project, :to => :revision, :allow_nil => false
   delegate :file, :to => :revision, :allow_nil => false
+  if (Redmine::VERSION::MAJOR >= 3)
+    accepts_nested_attributes_for :user, :revision
+  end
 
   DownloadAction = 0
   EmailAction = 1
@@ -31,16 +34,29 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
     :datetime => Proc.new {|o| o.updated_at },
     :description => Proc.new {|o| o.revision.comment },
     :author => Proc.new {|o| o.user }    
-   acts_as_activity_provider :type => 'dmsf_file_revision_accesses',
-    :timestamp => "#{DmsfFileRevisionAccess.table_name}.updated_at",
-    :author_key => "#{DmsfFileRevisionAccess.table_name}.user_id",
-    :permission => :view_dmsf_file_revision_accesses,
-    :find_options => {:select => "#{DmsfFileRevisionAccess.table_name}.*", 
-      :joins => 
-        "INNER JOIN #{DmsfFileRevision.table_name} ON #{DmsfFileRevisionAccess.table_name}.dmsf_file_revision_id = #{DmsfFileRevision.table_name}.id " +
-        "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
-        "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id",
-      :conditions => ["#{DmsfFile.table_name}.deleted = :false", {:false => false}]
-     }
+  if (Redmine::VERSION::MAJOR >= 3)
+    acts_as_activity_provider :type => 'dmsf_file_revision_accesses',
+      :timestamp => "#{DmsfFileRevisionAccess.table_name}.updated_at",
+      :author_key => "#{DmsfFileRevisionAccess.table_name}.user_id",
+      :permission => :view_dmsf_file_revision_accesses,
+      :scope => select("#{DmsfFileRevisionAccess.table_name}.*").
+        joins(
+          "INNER JOIN #{DmsfFileRevision.table_name} ON #{DmsfFileRevisionAccess.table_name}.dmsf_file_revision_id = #{DmsfFileRevision.table_name}.id " +
+          "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
+          "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id").
+        where("#{DmsfFile.table_name}.deleted = :false", {:false => false})
+  else
+    acts_as_activity_provider :type => 'dmsf_file_revision_accesses',
+      :timestamp => "#{DmsfFileRevisionAccess.table_name}.updated_at",
+      :author_key => "#{DmsfFileRevisionAccess.table_name}.user_id",
+      :permission => :view_dmsf_file_revision_accesses,
+      :find_options => {:select => "#{DmsfFileRevisionAccess.table_name}.*", 
+        :joins => 
+          "INNER JOIN #{DmsfFileRevision.table_name} ON #{DmsfFileRevisionAccess.table_name}.dmsf_file_revision_id = #{DmsfFileRevision.table_name}.id " +
+          "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
+          "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id",
+        :conditions => ["#{DmsfFile.table_name}.deleted = :false", {:false => false}]
+       }
+  end
 
 end

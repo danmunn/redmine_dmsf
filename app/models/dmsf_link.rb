@@ -18,18 +18,23 @@
 
 class DmsfLink < ActiveRecord::Base
   unloadable
-    
+
   belongs_to :project
   belongs_to :dmsf_folder
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   belongs_to :user
-  
+
   validates :name, :presence => true
-  validates_length_of :name, :maximum => 255    
-  
-  scope :visible, where(:deleted => false)
-  scope :deleted, where(:deleted => true)
-  
+  validates_length_of :name, :maximum => 255
+
+  if (Redmine::VERSION::MAJOR >= 3)
+    scope :visible, -> { where(deleted: false) }
+    scope :deleted, -> { where(deleted: true) }
+  else
+    scope :visible, where(:deleted => false)
+    scope :deleted, where(:deleted => true)
+  end
+
   def target_folder_id
     if self.target_type == DmsfFolder.model_name
       self.target_id
@@ -38,49 +43,49 @@ class DmsfLink < ActiveRecord::Base
       f.dmsf_folder_id if f
     end
   end
-  
+
   def target_folder
     DmsfFolder.find_by_id self.target_folder_id if self.target_folder_id
   end
-  
+
   def target_file_id
     self.target_id if self.target_type == DmsfFile.model_name
   end
-  
+
   def target_file
     DmsfFile.find_by_id self.target_file_id if self.target_file_id
   end
-  
+
   def target_project
-    Project.find_by_id self.target_project_id  
+    Project.find_by_id self.target_project_id
   end
-  
+
   def folder
     DmsfFolder.find_by_id self.dmsf_folder_id
   end
-  
+
   def title
     self.name
   end
-  
+
   def self.find_link_by_file_name(project, folder, filename)
     links = DmsfLink.where(
       :project_id => project.id,
       :dmsf_folder_id => folder ? folder.id : nil,
       :target_type => DmsfFile.model_name).visible.all
-    links.each do |link|      
-      return link if link.target_file.name == filename      
+    links.each do |link|
+      return link if link.target_file.name == filename
     end
     nil
   end
-  
+
   def path
     if self.target_type == DmsfFile.model_name
-      file = self.target_file      
-      path = file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.name : element.title }.join('/') if file              
+      file = self.target_file
+      path = file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.name : element.title }.join('/') if file
     else
-      folder = self.target_folder      
-      path = folder.dmsf_path_str if folder      
+      folder = self.target_folder
+      path = folder.dmsf_path_str if folder
     end
     path.insert(0, "#{self.target_project.name}:") if self.project_id != self.target_project_id && path
     if path.length > 50
@@ -88,7 +93,7 @@ class DmsfLink < ActiveRecord::Base
     end
     path
   end
-  
+
   def copy_to(project, folder)
     link = DmsfLink.new(
       :target_project_id => self.target_project_id,
@@ -101,7 +106,7 @@ class DmsfLink < ActiveRecord::Base
     link.save
     link
   end
-  
+
   def delete(commit = false)
     if commit
       self.destroy
@@ -111,7 +116,7 @@ class DmsfLink < ActiveRecord::Base
       save
     end
   end
-  
+
   def restore
     if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted)
       errors[:base] << l(:error_parent_folder)
@@ -121,5 +126,5 @@ class DmsfLink < ActiveRecord::Base
     self.deleted_by_user = nil
     save
   end
-   
+
 end

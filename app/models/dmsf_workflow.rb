@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfWorkflow < ActiveRecord::Base 
-  has_many :dmsf_workflow_steps, :dependent => :destroy, :order => 'step ASC, operator DESC'
+  has_many :dmsf_workflow_steps, -> { order 'step ASC, operator DESC' }, :dependent => :destroy
   
   scope :sorted, lambda { order('name ASC') }
   scope :global, lambda { where('project_id IS NULL') }
