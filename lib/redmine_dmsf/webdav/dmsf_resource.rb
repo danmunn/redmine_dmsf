@@ -576,16 +576,11 @@ module RedmineDmsf
 
         # If there is no range (start of ranged download, or direct download) then we log the
         # file access, so we can properly keep logged information
-        if @request.env['HTTP_RANGE'].nil?
-          if (Redmine::VERSION::MAJOR >= 3)
-            access = DmsfFileRevisionAccess.new
-            access.user = User.current
-            access.revision = file.revision
-            access.action = DmsfFileRevisionAccess::DownloadAction 
-          else
-            access = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => file.last_revision.id,
-              :action => DmsfFileRevisionAccess::DownloadAction)
-          end
+        if @request.env['HTTP_RANGE'].nil?          
+          access = DmsfFileRevisionAccess.new
+          access.user = User.current
+          access.revision = file.revision
+          access.action = DmsfFileRevisionAccess::DownloadAction
           access.save!
         end
         Download.new(file.last_revision.disk_file)

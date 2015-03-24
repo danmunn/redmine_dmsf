@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,8 +18,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfWorkflow < ActiveRecord::Base 
-  has_many :dmsf_workflow_steps, -> { order 'step ASC, operator DESC' }, :dependent => :destroy
+class DmsfWorkflow < ActiveRecord::Base
+  if (Redmine::VERSION::MAJOR >= 3)
+    has_many :dmsf_workflow_steps, -> { order 'step ASC, operator DESC' }, :dependent => :destroy
+  else
+    has_many :dmsf_workflow_steps, :dependent => :destroy, :order => 'step ASC, operator DESC'
+  end
   
   scope :sorted, lambda { order('name ASC') }
   scope :global, lambda { where('project_id IS NULL') }

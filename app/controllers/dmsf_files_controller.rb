@@ -37,18 +37,11 @@ class DmsfFilesController < ApplicationController
     @revision = @file.last_revision
     check_project(@revision.file)
     begin
-      log_activity('downloaded')
-      if (Redmine::VERSION::MAJOR >= 3)
-        access = DmsfFileRevisionAccess.new
-        access.user = User.current
-        access.revision = @revision
-        access.action = DmsfFileRevisionAccess::DownloadAction
-      else
-        access = DmsfFileRevisionAccess.new(
-          :user_id => User.current.id,
-          :dmsf_file_revision_id => @revision.id,
-          :action => DmsfFileRevisionAccess::DownloadAction)
-      end
+      log_activity('downloaded')      
+      access = DmsfFileRevisionAccess.new
+      access.user = User.current
+      access.revision = @revision
+      access.action = DmsfFileRevisionAccess::DownloadAction      
       access.save!
       send_file(@revision.disk_file,
         :filename => filename_for_content_disposition(@revision.name),
@@ -74,18 +67,11 @@ class DmsfFilesController < ApplicationController
       end
       check_project(@revision.file)
       begin
-        log_activity('downloaded')
-        if (Redmine::VERSION::MAJOR >= 3)
-          access = DmsfFileRevisionAccess.new
-          access.user = User.current
-          access.revision = @revision
-          access.action = DmsfFileRevisionAccess::DownloadAction
-        else
-          access = DmsfFileRevisionAccess.new(
-            :user_id => User.current.id,
-            :dmsf_file_revision_id => @revision.id,
-            :action => DmsfFileRevisionAccess::DownloadAction)
-        end
+        log_activity('downloaded')        
+        access = DmsfFileRevisionAccess.new
+        access.user = User.current
+        access.revision = @revision
+        access.action = DmsfFileRevisionAccess::DownloadAction        
         send_file(@revision.disk_file,
           :filename => filename_for_content_disposition(@revision.name),
           :type => @revision.detect_content_type,

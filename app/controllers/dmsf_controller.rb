@@ -405,16 +405,11 @@ class DmsfController < ApplicationController
       end
 
       zip.files.each do |f|
-        log_activity(f, 'emailing zip')
-        if (Redmine::VERSION::MAJOR >= 3)
-          audit = DmsfFileRevisionAccess.new
-          audit.user = User.current
-          audit.revision = f.last_revision
-          audit.action = DmsfFileRevisionAccess::EmailAction
-        else
-          audit = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => f.last_revision.id,
-            :action => DmsfFileRevisionAccess::EmailAction)
-        end
+        log_activity(f, 'emailing zip')        
+        audit = DmsfFileRevisionAccess.new
+        audit.user = User.current
+        audit.revision = f.last_revision
+        audit.action = DmsfFileRevisionAccess::EmailAction        
         audit.save!
       end
 
@@ -437,16 +432,11 @@ class DmsfController < ApplicationController
       zip_entries(zip, selected_folders, selected_files)
 
       zip.files.each do |f|
-        log_activity(f, 'download zip')
-        if (Redmine::VERSION::MAJOR >= 3)
-          audit = DmsfFileRevisionAccess.new
-          audit.user = User.current
-          audit.revision = f.last_revision
-          audit.action = DmsfFileRevisionAccess::DownloadAction
-        else
-          audit = DmsfFileRevisionAccess.new(:user_id => User.current.id, :dmsf_file_revision_id => f.last_revision.id,
-            :action => DmsfFileRevisionAccess::DownloadAction)
-        end
+        log_activity(f, 'download zip')        
+        audit = DmsfFileRevisionAccess.new
+        audit.user = User.current
+        audit.revision = f.last_revision
+        audit.action = DmsfFileRevisionAccess::DownloadAction        
         audit.save!
       end
 
