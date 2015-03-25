@@ -1,7 +1,8 @@
 <%# Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,7 +22,7 @@
 <div class="box">
   <%= form_tag({:controller => 'dmsf_state', :action => 'user_pref_save', :id => @project}, :method => :post) do %>
     <div>
-      <% member = @project.members.find(:first, :conditions => {:user_id => User.current.id}) %>
+      <% member = @project.members.where(:user_id => User.current.id).first %>
       <% mail_notification = member ? member.dmsf_mail_notification : nil %>
       <%= l(:label_notifications) %>: 
       <%= select_tag(
