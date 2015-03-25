@@ -52,7 +52,7 @@ class DmsfUploadController < ApplicationController
 
   # async single file upload handling 
   def upload_file
-    if (Redmine::VERSION::MAJOR >= 3)
+    if (Rails::VERSION::MAJOR > 3)
       @tempfile = params.require(:file)
     else
       @tempfile = params[:file]
@@ -86,7 +86,7 @@ class DmsfUploadController < ApplicationController
   end
   
   def commit_files
-    if (Redmine::VERSION::MAJOR >= 3)
+    if (Rails::VERSION::MAJOR > 3)
       commited_files = params.require(:commited_files)
     else
       commited_files = params[:commited_files]

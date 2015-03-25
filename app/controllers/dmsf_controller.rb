@@ -227,7 +227,7 @@ class DmsfController < ApplicationController
   end
 
   def entries_email
-    if (Redmine::VERSION::MAJOR >= 3)
+    if (Rails::VERSION::MAJOR > 3)
       @email_params = e_params
     else
       @email_params = params[:email]
@@ -251,7 +251,7 @@ class DmsfController < ApplicationController
   end
 
   def create
-    if (Redmine::VERSION::MAJOR >= 3)
+    if (Rails::VERSION::MAJOR > 3)
       @folder = DmsfFolder.new(
         params.require(:dmsf_folder).permit(:title, :description, :dmsf_folder_id))
     else

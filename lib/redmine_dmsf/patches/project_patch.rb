@@ -32,7 +32,7 @@ module RedmineDmsf
           unloadable
           alias_method_chain :copy, :dmsf
 
-          if (Redmine::VERSION::MAJOR >= 3)
+          if (Rails::VERSION::MAJOR > 3)
             has_many :dmsf_files, -> { where dmsf_folder_id: nil},
               :class_name => 'DmsfFile', :foreign_key => 'project_id', :dependent => :destroy
             has_many :dmsf_folders, -> {where dmsf_folder_id: nil},

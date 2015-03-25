@@ -26,13 +26,13 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   has_many :access, :class_name => 'DmsfFileRevisionAccess', :foreign_key => 'dmsf_file_revision_id', :dependent => :destroy
   has_many :dmsf_workflow_step_assignment, :dependent => :destroy
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     accepts_nested_attributes_for :access, :dmsf_workflow_step_assignment, :file, :user
   end
 
 
   # Returns a list of revisions that are not deleted here, or deleted at parent level either
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     scope :visible, -> { where(deleted: false) }
     scope :deleted, -> { where(deleted: true) }
   else
@@ -46,7 +46,7 @@ class DmsfFileRevision < ActiveRecord::Base
     :datetime => Proc.new {|o| o.updated_at },
     :description => Proc.new {|o| o.comment },
     :author => Proc.new {|o| o.user }
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     acts_as_activity_provider :type => 'dmsf_file_revisions',
       :timestamp => "#{DmsfFileRevision.table_name}.updated_at",
       :author_key => "#{DmsfFileRevision.table_name}.user_id",

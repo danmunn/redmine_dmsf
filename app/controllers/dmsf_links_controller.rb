@@ -25,7 +25,7 @@ class DmsfLinksController < ApplicationController
   before_filter :authorize
 
   def new
-    if (Redmine::VERSION::MAJOR >= 3)
+    if (Rails::VERSION::MAJOR > 3)
       @dmsf_link = DmsfLink.new(l_params)
     else
       @dmsf_link = DmsfLink.new(:project_id => params[:project_id])

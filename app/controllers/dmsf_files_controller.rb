@@ -100,7 +100,7 @@ class DmsfFilesController < ApplicationController
       if @file.locked_for_user?
         flash[:error] = l(:error_file_is_locked)
       else
-        if (Redmine::VERSION::MAJOR >= 3)
+        if (Rails::VERSION::MAJOR > 3)
           aparams = frev_params
         else
           aparams = params

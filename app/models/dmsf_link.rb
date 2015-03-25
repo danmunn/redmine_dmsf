@@ -40,7 +40,7 @@ class DmsfLink < ActiveRecord::Base
     end      
   end
 
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     scope :visible, -> { where(deleted: false) }
     scope :deleted, -> { where(deleted: true) }
   else

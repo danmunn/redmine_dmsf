@@ -22,7 +22,7 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
   belongs_to :user
   delegate :project, :to => :revision, :allow_nil => false
   delegate :file, :to => :revision, :allow_nil => false
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     accepts_nested_attributes_for :user, :revision
   end
 
@@ -34,7 +34,7 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
     :datetime => Proc.new {|o| o.updated_at },
     :description => Proc.new {|o| o.revision.comment },
     :author => Proc.new {|o| o.user }    
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     acts_as_activity_provider :type => 'dmsf_file_revision_accesses',
       :timestamp => "#{DmsfFileRevisionAccess.table_name}.updated_at",
       :author_key => "#{DmsfFileRevisionAccess.table_name}.user_id",

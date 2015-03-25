@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfWorkflow < ActiveRecord::Base
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     has_many :dmsf_workflow_steps, -> { order 'step ASC, operator DESC' }, :dependent => :destroy
   else
     has_many :dmsf_workflow_steps, :dependent => :destroy, :order => 'step ASC, operator DESC'

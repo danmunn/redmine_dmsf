@@ -36,7 +36,7 @@ class DmsfFile < ActiveRecord::Base
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
 
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     has_many :revisions, -> { order("#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC") },
       :class_name => 'DmsfFileRevision', :foreign_key => 'dmsf_file_id',
       :dependent => :destroy
@@ -57,11 +57,11 @@ class DmsfFile < ActiveRecord::Base
       :conditions => {:target_type => DmsfFile.model_name}, :dependent => :destroy
   end
 
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     accepts_nested_attributes_for :revisions, :locks, :referenced_links
   end
 
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     scope :visible, -> { where(deleted: false) }
     scope :deleted, -> { where(deleted: true) }
   else

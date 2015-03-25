@@ -34,7 +34,7 @@ class DmsfFolder < ActiveRecord::Base
     :dependent => :destroy
   has_many :files, :class_name => 'DmsfFile', :foreign_key => 'dmsf_folder_id',
     :dependent => :destroy
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     has_many :folder_links, -> { where target_type: DmsfFolder.model_name },
       :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
     has_many :file_links, -> { where target_type: DmsfFile.model_name },
@@ -61,7 +61,7 @@ class DmsfFolder < ActiveRecord::Base
       :dependent => :destroy
   end
 
-  if (Redmine::VERSION::MAJOR >= 3)
+  if (Rails::VERSION::MAJOR > 3)
     scope :visible, -> { where(deleted: false) }
     scope :deleted, -> { where(deleted: true) }
   else
