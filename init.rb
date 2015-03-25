@@ -32,7 +32,7 @@ Redmine::Plugin.register :redmine_dmsf do
   url 'http://www.redmine.org/plugins/dmsf'
   author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   
-  requires_redmine :version_or_higher => '2.3.0'
+  requires_redmine :version_or_higher => '2.5.0'
   
   settings  :partial => 'settings/dmsf_settings',
     :default => {

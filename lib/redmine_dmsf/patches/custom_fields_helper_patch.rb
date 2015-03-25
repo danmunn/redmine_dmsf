@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2011    Vít Jonáš    <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,27 +28,16 @@ module RedmineDmsf
         base.send(:include, InstanceMethods)
         base.class_eval do
           unloadable
-          if (
-               (Redmine::VERSION::MAJOR >= 3) ||
-               (Redmine::VERSION::MAJOR >= 2 && Redmine::VERSION::MINOR >= 5)
-          )
-            alias_method_chain :render_custom_fields_tabs, :render_custom_tab
-            alias_method_chain :custom_field_type_options, :custom_tab_options
-          else
-            alias_method_chain :custom_fields_tabs, :custom_tab
-          end
+          
+          alias_method_chain :render_custom_fields_tabs, :render_custom_tab
+          alias_method_chain :custom_field_type_options, :custom_tab_options          
         end
       end
 
       module ClassMethods
       end
 
-      module InstanceMethods
-
-        def custom_fields_tabs_with_custom_tab
-          add_cf
-          custom_fields_tabs_without_custom_tab
-        end
+      module InstanceMethods       
 
         def render_custom_fields_tabs_with_render_custom_tab(types)
           add_cf
@@ -63,26 +52,18 @@ module RedmineDmsf
       private
 
         def add_cf
-          cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}
-          if (
-            (Redmine::VERSION::MAJOR >= 3) ||
-            (Redmine::VERSION::MAJOR >= 2 && Redmine::VERSION::MINOR >= 5)
-          )
-            unless CustomFieldsHelper::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
-              CustomFieldsHelper::CUSTOM_FIELDS_TABS << cf
-          else
-            unless CustomField::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
-              CustomField::CUSTOM_FIELDS_TABS << cf
-            end
-            end
+          cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}          
+          unless CustomFieldsHelper::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
+            CustomFieldsHelper::CUSTOM_FIELDS_TABS << cf          
           end
         end
+        
       end
     end
   end
 end
 
-# Apply patch
+# Apply the patch
 Rails.configuration.to_prepare do
   unless CustomFieldsHelper.included_modules.include?(RedmineDmsf::Patches::CustomFieldsHelperPatch)
     CustomFieldsHelper.send(:include, RedmineDmsf::Patches::CustomFieldsHelperPatch)

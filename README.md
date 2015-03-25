@@ -37,12 +37,12 @@ Features
   * Documents and folders symbolic links
   * Document tagging
   * Trash bin
-  * Compatible with Redmine 2.6.x
+  * Compatible with Redmine 3.x.x
 
 Dependencies
 ------------
   
-  * Redmine 2.3.2 or higher
+  * Redmine 2.5.0 or higher
 
 ### Fulltext search (optional)
 
