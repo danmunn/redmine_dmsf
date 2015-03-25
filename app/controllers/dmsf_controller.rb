@@ -129,12 +129,11 @@ class DmsfController < ApplicationController
     @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].present? ? Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'] : 100
 
     # Trash
-    @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed && @file_delete_allowed && !@locked_for_user && !@folder
+    @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed && 
+      @file_delete_allowed && !@locked_for_user && !@folder
     @trash_enabled = DmsfFolder.deleted.where(:project_id => @project.id).any? ||
       DmsfFile.deleted.where(:project_id => @project.id).any? ||
-      DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFolder.model_name).any? ||
-      DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFile.model_name).any? ||
-      DmsfLink.deleted.where(:project_id => @project.id, :target_type => 'DmsfUrl').any?
+      DmsfLink.deleted.where(:project_id => @project.id).any?
   end
 
   def trash
