@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2014 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,16 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class NotificationsNullable < ActiveRecord::Migration
-  def up  
-    # Switch on the default notifications for new projects and folders
+  def up      
     change_column :projects, :dmsf_notification, :boolean, :default => false, :null => true
     change_column :dmsf_folders, :notification, :boolean, :default => false, :null => true
     change_column :dmsf_files, :notification, :boolean, :default => false, :null => true
-  end
-  
-  def down
-    change_column :projects, :dmsf_notification, :boolean, :default => true, :null => false
-    change_column :dmsf_folders, :notification, :boolean, :default => true, :null => false
-    change_column :dmsf_files, :notification, :boolean, :default => true, :null => false
-  end
+  end    
 end
