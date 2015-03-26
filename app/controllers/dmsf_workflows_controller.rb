@@ -270,8 +270,8 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def add_step     
-    if request.post?            
-      users = User.find_all_by_id(params[:user_ids])      
+    if request.post?                  
+      users = User.where(:id => params[:user_ids])
       if params[:step] == '0'
         step = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq.count + 1        
       else
