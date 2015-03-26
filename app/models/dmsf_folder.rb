@@ -1,7 +1,9 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@konton.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@konton.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,6 +26,8 @@ class DmsfFolder < ActiveRecord::Base
 
   cattr_reader :invalid_characters
   @@invalid_characters = /\A[^\/\\\?":<>]*\z/
+  
+  attr_accessible :title, :description, :dmsf_folder_id
 
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
