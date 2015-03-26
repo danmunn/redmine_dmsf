@@ -25,6 +25,8 @@ class DmsfWorkflow < ActiveRecord::Base
     has_many :dmsf_workflow_steps, :dependent => :destroy, :order => 'step ASC, operator DESC'
   end
   
+  attr_accessible :name
+  
   scope :sorted, lambda { order('name ASC') }
   scope :global, lambda { where('project_id IS NULL') }
     
