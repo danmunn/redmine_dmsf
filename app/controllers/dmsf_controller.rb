@@ -83,7 +83,7 @@ class DmsfController < ApplicationController
         end
         @file_links = []
         DmsfLink.where(:project_id => @project.id, :target_type => DmsfFile.model_name).visible.each do |l|
-          r = l.target_file.last_revision
+          r = l.target_file.last_revision if l.target_file
           if r
             r.custom_field_values.each do |v|
               if v.custom_field_id == params[:custom_field_id].to_i
@@ -97,7 +97,7 @@ class DmsfController < ApplicationController
         end
         @url_links = []
         DmsfLink.where(:project_id => @project.id, :target_type => 'DmsfUrl').visible.each do |l|
-          r = l.target_file.last_revision
+          r = l.target_file.last_revision if l.target_file
           if r
             r.custom_field_values.each do |v|
               if v.custom_field_id == params[:custom_field_id].to_i

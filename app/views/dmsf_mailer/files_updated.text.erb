@@ -1,8 +1,8 @@
 <%# Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011 Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012 Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2014 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
   <%= number_to_human_size(file.last_revision.size) %>,
   <%= l(:label_version) %> <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>,
   <%= "#{file.last_revision.workflow_str(true)}," if file.last_revision.workflow_str(true) != l(:title_none) %>
-  <%= dmsf_file_path(file, :only_path => false) %>    
+  <%= dmsf_file_url(file) %>    
   <% if file.last_revision.comment.present? %>
     <%= l(:label_comment) %> <%= h(file.last_revision.comment) %>
   <% end %>

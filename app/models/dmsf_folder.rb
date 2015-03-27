@@ -27,7 +27,7 @@ class DmsfFolder < ActiveRecord::Base
   cattr_reader :invalid_characters
   @@invalid_characters = /\A[^\/\\\?":<>]*\z/
   
-  attr_accessible :title, :description, :dmsf_folder_id
+  attr_accessible :title, :description, :dmsf_folder_id, :project
 
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'

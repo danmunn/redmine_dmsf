@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -32,8 +32,8 @@
             <%= link_to(h(dir.dmsf_path_str), dmsf_folder_path(:id => dir.project_id, :folder_id => dir.id, :only_path => false)) %>
             <br/><br/>
             <% dir.files.each do |file| %>            
-              <%= link_to(h(file.title), dmsf_file_path(file, :only_path => false)) %>
-              &nbsp;(<%= link_to(h(file.name), dmsf_file_path(file, :download => '', :only_path => false)) %>)
+              <%= link_to(h(file.title), dmsf_file_url(file)) %>
+              &nbsp;(<%= link_to(h(file.name), dmsf_file_url(file, :download => '')) %>)
               <br/>
             <% end %>
           <% end %>
@@ -46,8 +46,8 @@
     <% JSON.parse(@files).each do |id| %>
       <% file = DmsfFile.find_by_id id %>
       <% if file %>        
-        <%= link_to(h(file.title), dmsf_file_path(file, :only_path => false)) %>
-        &nbsp;(<%= link_to(h(file.name), dmsf_file_path(file, :download => '', :only_path => false)) %>)
+        <%= link_to(h(file.title), dmsf_file_url(file)) %>
+        &nbsp;(<%= link_to(h(file.name), dmsf_file_url(file, :download => '')) %>)
         <br/>
       <% end %>
     <% end %>
