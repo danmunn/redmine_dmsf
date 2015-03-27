@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,6 +25,8 @@ class DmsfWorkflowStepAssignment < ActiveRecord::Base
   has_many :dmsf_workflow_step_actions, :dependent => :destroy  
   validates :dmsf_workflow_step_id, :dmsf_file_revision_id, :presence => true  
   validates_uniqueness_of :dmsf_workflow_step_id, :scope => [:dmsf_file_revision_id]
+  
+  attr_accessible :dmsf_workflow_step_id, :user_id, :dmsf_file_revision_id
   
   def add?(dmsf_file_revision_id)
     if self.dmsf_file_revision_id == dmsf_file_revision_id

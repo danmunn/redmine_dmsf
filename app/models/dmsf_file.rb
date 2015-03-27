@@ -1,3 +1,5 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
@@ -31,6 +33,7 @@ class DmsfFile < ActiveRecord::Base
   include RedmineDmsf::Lockable
 
   attr_accessor :event_description
+  attr_accessible :project
 
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
