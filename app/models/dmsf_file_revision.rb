@@ -32,8 +32,8 @@ class DmsfFileRevision < ActiveRecord::Base
     accepts_nested_attributes_for :access, :dmsf_workflow_step_assignment, :file, :user
   end
 
-  attr_accessible :file
-
+  attr_accessible :file, :title, :name, :description, :comment
+  
   # Returns a list of revisions that are not deleted here, or deleted at parent level either
   if (Rails::VERSION::MAJOR > 3)
     scope :visible, -> { where(deleted: false) }
