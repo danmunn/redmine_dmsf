@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -29,8 +31,7 @@ class RemoveProjectFromRevision < ActiveRecord::Migration
         revision.project_id = revision.file.project_id
         revision.save
       end
-    end
-    
-    change_column :dmsf_file_revisions, :project_id, :integer, :null => false
+    end        
   end
+  
 end
