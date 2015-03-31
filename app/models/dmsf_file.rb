@@ -422,6 +422,11 @@ class DmsfFile < ActiveRecord::Base
 
     [results, results_count]
   end
+  
+  def self.search_result_ranks_and_ids(tokens, user = User.current, projects = nil, options = {})
+    r = self.search(tokens, projects, options)[0]
+    r.each_index { |x| [x, r[1][x]] }
+  end
 
   def display_name
     if self.name.length > 50

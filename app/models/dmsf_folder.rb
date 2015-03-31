@@ -318,6 +318,10 @@ class DmsfFolder < ActiveRecord::Base
 
     [results, results_count]
   end
+  
+  def self.search_result_ranks_and_ids(tokens, user = User.current, projects = nil, options = {})
+    self.search(tokens, :user => user, :projects => projects, :options => options)
+  end
 
   def modified
     last_update = updated_at
