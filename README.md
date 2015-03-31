@@ -126,7 +126,7 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax_detailed.html, aft
           <li><strong>{{dmsff(5)}}</strong> (link to folder with id 5)</li>
           <li><strong>{{dmsff(5,Folder)}}</strong> (link to folder with id 5 with link text "Folder")</li>
         </ul>
-        The DMSF file/revision id can be found in link for file/revision download from within redmine.<br />
+        The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
         The DMSF folder id can be found in the link when opening folders within Redmine.
       </li>
     </ul>
