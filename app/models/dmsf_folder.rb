@@ -282,11 +282,11 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   # To fullfill searchable module expectations
-  def self.search(tokens, projects=nil, options={})
+  def self.search(tokens, projects = nil, options = {})
     tokens = [] << tokens unless tokens.is_a?(Array)
     projects = [] << projects unless projects.nil? || projects.is_a?(Array)
 
-    find_options = {:include => [:project]}
+    find_options = {}
     find_options[:order] = 'dmsf_folders.updated_at ' + (options[:before] ? 'DESC' : 'ASC')
 
     limit_options = {}
@@ -295,7 +295,7 @@ class DmsfFolder < ActiveRecord::Base
       limit_options[:conditions] = '(dmsf_folders.updated_at ' + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
     end
 
-    columns = options[:titles_only] ? ["dmsf_folders.title"] : ["dmsf_folders.title", "dmsf_folders.description"]
+    columns = options[:titles_only] ? ['dmsf_folders.title'] : ['dmsf_folders.title', 'dmsf_folders.description']
 
     token_clauses = columns.collect {|column| "(LOWER(#{column}) LIKE ?)"}
 
@@ -304,13 +304,14 @@ class DmsfFolder < ActiveRecord::Base
 
     project_conditions = []
     project_conditions << (Project.allowed_to_condition(User.current, :view_dmsf_files))
-    project_conditions << "project_id IN (#{projects.collect(&:id).join(',')})" unless projects.nil?
+    project_conditions << "project_id IN (#{projects.collect(&:id).join(',')})" if projects
 
     results = []
     results_count = 0
-
-    with_scope(:find => {:conditions => [project_conditions.join(' AND ')]}) do
-      with_scope(:find => find_options) do
+    
+    includes(:project).
+    where(project_conditions.join(' AND ')).scoping do
+      where(find_options[:conditions]).order(find_options[:order]).scoping do
         results_count = count(:all)
         results = find(:all, limit_options)
       end

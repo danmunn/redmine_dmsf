@@ -1,4 +1,4 @@
-# encoding: utf-8
+/scoping/# encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -296,7 +296,7 @@ class DmsfFile < ActiveRecord::Base
     tokens = [] << tokens unless tokens.is_a?(Array)
     projects = [] << projects unless projects.nil? || projects.is_a?(Array)
 
-    find_options = {:include => [:project,:revisions]}
+    find_options = {}
     find_options[:order] = 'dmsf_files.updated_at ' + (options[:before] ? 'DESC' : 'ASC')
 
     limit_options = {}
@@ -314,14 +314,15 @@ class DmsfFile < ActiveRecord::Base
     find_options[:conditions] = [sql, * (tokens.collect {|w| "%#{w.downcase}%"} * token_clauses.size).sort]
 
     project_conditions = []
-    project_conditions << (Project.allowed_to_condition(User.current, :view_dmsf_files))
+    project_conditions << Project.allowed_to_condition(User.current, :view_dmsf_files)    
     project_conditions << "#{DmsfFile.table_name}.project_id IN (#{projects.collect(&:id).join(',')})" unless projects.nil?
 
     results = []
-    results_count = 0
-
-    with_scope(:find => {:conditions => [project_conditions.join(' AND ') + " AND #{DmsfFile.table_name}.deleted = :false", {:false => false}]}) do
-      with_scope(:find => find_options) do
+    results_count = 0        
+    
+    includes(:project, :revisions).
+    where(project_conditions.join(' AND ') + " AND #{DmsfFile.table_name}.deleted = :false", {:false => false}).scoping do
+      where(find_options[:conditions]).order(find_options[:order]).scoping do
         results_count = count(:all)
         results = find(:all, limit_options)
       end
