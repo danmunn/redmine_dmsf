@@ -28,7 +28,7 @@ class CreateDmsfWorkflowStepActions < ActiveRecord::Migration
     add_index :dmsf_workflow_step_actions, 
       :dmsf_workflow_step_assignment_id,
       # The default index name exceeds the index name limit
-      {:name => 'index_dmsf_workflow_step_actions_on_workflow_step_assignment_id'}
+      {:name => 'idx_dmsf_wfstepact_on_wfstepassign_id'}
   end
   def self.down
     drop_table :dmsf_workflow_step_actions
