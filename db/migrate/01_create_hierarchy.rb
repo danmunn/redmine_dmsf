@@ -28,7 +28,7 @@ class CreateHierarchy < ActiveRecord::Migration
       t.boolean :notification, :default => false, :null => false
       
       t.references :user, :null => false
-      t.timestamps
+      t.timestamps :null => false
     end
     
     create_table :dmsf_files do |t|
@@ -43,7 +43,7 @@ class CreateHierarchy < ActiveRecord::Migration
       t.boolean :deleted, :default => false, :null => false
       t.integer :deleted_by_user_id
       
-      t.timestamps
+      t.timestamps  :null => false
     end
     
     create_table :dmsf_file_revisions do |t|
@@ -68,14 +68,14 @@ class CreateHierarchy < ActiveRecord::Migration
       t.integer :deleted_by_user_id
       
       t.references :user, :null => false
-      t.timestamps
+      t.timestamps  :null => false
     end
     
     create_table :dmsf_file_locks do |t|
       t.references :dmsf_file, :null => false
       t.boolean :locked, :default => false, :null => false
       t.references :user, :null => false
-      t.timestamps
+      t.timestamps  :null => false
     end
     
     create_table :dmsf_user_prefs do |t|
@@ -84,7 +84,7 @@ class CreateHierarchy < ActiveRecord::Migration
       
       t.boolean :email_notify
       
-      t.timestamps
+      t.timestamps  :null => false
     end
     
   end

@@ -22,7 +22,7 @@ class Dmsf0901 < ActiveRecord::Migration
       t.references :dmsf_file_revision, :null => false
       t.integer :action, :default => 0, :null => false  # 0 ... download, 1 ... email
       t.references :user, :null => false
-      t.timestamps
+      t.timestamps  :null => false
     end
   end
 

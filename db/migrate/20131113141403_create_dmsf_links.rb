@@ -27,7 +27,7 @@ class CreateDmsfLinks < ActiveRecord::Migration
       t.references :dmsf_folder
       t.boolean :deleted, :default => false, :null => false
       t.integer :deleted_by_user_id
-      t.timestamps
+      t.timestamps :null => false
     end
     add_index :dmsf_links, :project_id   
   end

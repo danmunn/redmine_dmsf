@@ -31,7 +31,7 @@ class Dmsf090 < ActiveRecord::Migration
       
       t.boolean :email_notify
       
-      t.timestamps
+      t.timestamps  :null => false
     end
   end
 

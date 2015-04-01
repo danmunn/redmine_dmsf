@@ -22,7 +22,7 @@ class CreateDmsfWorkflowStepActions < ActiveRecord::Migration
       t.references :dmsf_workflow_step_assignment, :null => false
       t.integer :action, :null => false
       t.text :note      
-      t.timestamp :created_at
+      t.timestamp :created_at, :null => false
       t.integer :author_id, :null => false
     end
     add_index :dmsf_workflow_step_actions, 
