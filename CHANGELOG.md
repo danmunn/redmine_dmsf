@@ -1,6 +1,40 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.5.1: *2015-04-01*
+-----------------------
+
+    Approval workflow copying
+    Polish localization
+    Custom versions for new document revisions
+    External links
+
+* New: #307 - Filter mail receivers for approval workflow with file managing permission
+* New: #308 - Rails 4 
+* Bug: #321 - My open approvals
+* Bug: #322 - Approval workflow notifications
+* New: #325 - Approval workflow permission
+* New: #326 - Approval workflow copying
+* Bug: #327 - ArgumentError: Unknown key: :conditions. (when running migration in redmine 2.6)
+* Bug: #330 - File link cannot download/email
+* New: #332 - ArgumentError: Unknown key: :conditions. (when running migration in redmine 2.6)
+* Bug: #323 - NoMethodError (undefined method `major_version' for nil:NilClass)
+* Bug: #336 - Delete documents configuration works for all the roles
+* Bug: #340 - Unwanted notifications
+* Bug: #341 - Error on approval workflow
+* Bug: #343 - Can't use a name of a folder already existing in the trash bin
+* Bug: #350 - Link seems wrong in when clicking "Approval workflow name"
+* New: #351 - [Feature Request] - overriding preconfigured Revision Tags/Steps
+* Bug: #353 - Link to User in Doc-Revision seems to point to wrong target link
+* New: #357 - Redmine 3.0.0 released! Compatibility with DMSF?
+* Bug: #361 - incompatible encoding regexp match (UTF-8 regexp with ASCII-8BIT string)
+* Bug: #366 - unable to properly uninstall under Redmine 3.0.1
+* Bug: #367 - Unable to create a folder 
+* Bug: #368 - Cannot create a document workflow
+* Bug: #369 - Update document revision under Redmine 3.0.1
+* Bug: #371 - Unable to properly uninstall the plugin
+* Bug: #372 - Can't move file via WebDav
+
 1.4.9: *2014-10-17*
 -----------------------
 

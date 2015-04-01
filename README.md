@@ -42,7 +42,7 @@ Features
 Dependencies
 ------------
   
-  * Redmine 2.5.0 or higher
+  * Redmine 2.5.0 or higher (Not yet fully compatible with Redmine 3.x but it should work in general)
 
 ### Fulltext search (optional)
 
