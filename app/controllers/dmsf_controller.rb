@@ -258,9 +258,17 @@ class DmsfController < ApplicationController
     end
     @folder.project = @project
     @folder.user = User.current
+    
+    # Custom fields
+    if params[:dmsf_folder][:custom_field_values].present?
+      params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
+        @folder.custom_field_values[i].value = v[1]
+      end
+    end
+    
     if @folder.save
-      flash[:notice] = l(:notice_folder_created)
-      redirect_to({:controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder})
+      flash[:notice] = l(:notice_folder_created)      
+      redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
     else
       @pathfolder = @parent
       render :action => 'edit'
@@ -273,15 +281,23 @@ class DmsfController < ApplicationController
   end
 
   def save
-    unless params[:dmsf_folder]
-      redirect_to :controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder
+    unless params[:dmsf_folder]      
+      redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
       return
     end
     @pathfolder = copy_folder(@folder)
     @folder.attributes = params[:dmsf_folder]
+    
+    # Custom fields
+    if params[:dmsf_folder][:custom_field_values].present?
+      params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
+        @folder.custom_field_values[i].value = v[1]
+      end
+    end
+    
     if @folder.save
-      flash[:notice] = l(:notice_folder_details_were_saved)
-      redirect_to :controller => 'dmsf', :action => 'show', :id => @project, :folder_id => @folder
+      flash[:notice] = l(:notice_folder_details_were_saved)      
+      redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
     else
       render :action => 'edit'
     end

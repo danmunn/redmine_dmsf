@@ -137,6 +137,13 @@ class DmsfFilesController < ApplicationController
           revision.disk_filename = revision.new_storage_filename
           revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
         end
+        
+        # Custom fields
+        if params[:dmsf_file_revision][:custom_field_values].present?
+          params[:dmsf_file_revision][:custom_field_values].each_with_index do |v, i|
+            revision.custom_field_values[i].value = v[1]
+          end
+        end
 
         @file.name = revision.name
 
