@@ -33,11 +33,13 @@ class DmsfLink < ActiveRecord::Base
   validate :validate_url
   
   def validate_url
-    begin 
-      URI.parse self.external_url
-    rescue URI::InvalidURIError        
-      errors.add :external_url, :invalid
-    end      
+    if self.target_type == 'DmsfUrl'
+      begin 
+        URI.parse self.external_url
+      rescue URI::InvalidURIError        
+        errors.add :external_url, :invalid
+      end      
+    end
   end
 
   if (Rails::VERSION::MAJOR > 3)

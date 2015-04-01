@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -175,7 +177,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
     
     # 2. Folder link in a folder from another root folder
-    assert_difference 'DmsfLink.count', +0 do    
+    assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
         :project_id => @project1.id, 
         :dmsf_folder_id => @folder1.id,
@@ -184,7 +186,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
         :type => 'link_from'
       }
     end    
-    assert_response :success
+    assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
     
     # 3. Folder link in a root folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
@@ -199,7 +201,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     assert_redirected_to dmsf_folder_path(:id => @project1.id)
     
     # 4. Folder link in a root folder from another root folder
-    assert_difference 'DmsfLink.count', +0 do    
+    assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
         :project_id => @project1.id, 
         :target_project_id => @project2.id,                
@@ -207,7 +209,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
         :type => 'link_from'
       }
     end    
-    assert_response :success
+    assert_redirected_to dmsf_folder_path(:id => @project1.id)
   end
   
   def test_create_file_link_to
@@ -262,6 +264,19 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       }
     end    
     assert_redirected_to dmsf_file_path(@file6)
+  end
+  
+  def test_create_external_link_from
+    assert_difference 'DmsfLink.count', +1 do    
+      post :create, :dmsf_link => {
+        :project_id => @project1.id,        
+        :target_project_id => @project1.id,        
+        :name => 'file_link',
+        :external_link => 'true',
+        :type => 'link_from'        
+      }
+    end    
+    assert_redirected_to dmsf_folder_path(:id => @project1.id)
   end
   
   def test_create_folder_link_to

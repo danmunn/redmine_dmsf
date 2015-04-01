@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -53,7 +55,7 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
       :project_id => @project1.id,
       :created_at => DateTime.now(),
       :updated_at => DateTime.now())
-    assert folder_link.save
+    assert folder_link.save, folder_link.errors.full_messages.to_sentence
     
     # File link
     file_link = DmsfLink.new(
@@ -64,7 +66,18 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
       :project_id => @project1.id,
       :created_at => DateTime.now(),
       :updated_at => DateTime.now())
-    assert file_link.save
+    assert file_link.save, file_link.errors.full_messages.to_sentence
+    
+    # External link
+    external_link = DmsfLink.new(      
+      :target_project_id => @project1.id,
+      :external_url => 'http://www.redmine.org/plugins/dmsf',
+      :target_type => 'DmsfUrl',
+      :name => 'DMSF plugin',
+      :project_id => @project1.id,
+      :created_at => DateTime.now(),
+      :updated_at => DateTime.now())
+    assert external_link.save, external_link.errors.full_messages.to_sentence
   end
   
   def test_validate_name_length
@@ -78,11 +91,12 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     assert !@folder_link.save
     assert_equal 1, @folder_link.errors.count        
   end
-  
-  def test_validate_target_id_presence
-    @folder_link.target_id = nil
-    assert !@folder_link.save
-    assert_equal 1, @folder_link.errors.count        
+    
+  def test_validate_external_url
+    @file_link.target_type = 'DmsfUrl'
+    @file_link.external_url = nil
+    assert !@file_link.save
+    assert_equal 1, @file_link.errors.count
   end
   
   def test_belongs_to_project
