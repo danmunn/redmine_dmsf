@@ -155,10 +155,10 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     
   def test_add_step    
     assert_difference 'DmsfWorkflowStep.count', +1 do    
-      post :add_step, :commit => l(:dmsf_or), :step => 1, :id => @wf1.id, :user_ids =>[@user_non_member.id]
+      post :add_step, :commit => l(:dmsf_or), :step => 1, :id => @wf1.id, :user_ids => [@user_non_member.id]
     end
     assert_response :success
-    ws = DmsfWorkflowStep.first(:order => 'id DESC')    
+    ws = DmsfWorkflowStep.order('id DESC').first    
     assert_equal @wf1.id, ws.dmsf_workflow_id
     assert_equal 1, ws.step
     assert_equal @user_non_member.id, ws.user_id
@@ -171,7 +171,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       delete :remove_step, :step => @wfs1.id, :id => @wf1.id
     end
     assert_response :success
-    ws = DmsfWorkflowStep.where(:dmsf_workflow_id => @wf1.id).first(:order => 'id ASC')    
+    ws = DmsfWorkflowStep.where(:dmsf_workflow_id => @wf1.id).order('id ASC').first
     assert_equal 1, ws.step
   end
   

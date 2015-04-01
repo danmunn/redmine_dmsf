@@ -1,7 +1,7 @@
 <%#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,7 +23,8 @@
   'dmsf_workflow_step_assignments.user_id = ? AND dmsf_workflow_step_actions.id IS NULL', @user.id).all %>
 <% assignments = Array.new %>
 <% all_assignments.each do |assignment| %>  
-  <% if !assignment.dmsf_file_revision.file.last_revision.deleted &&
+  <% if assignment.dmsf_file_revision.file.last_revision &&
+      !assignment.dmsf_file_revision.file.last_revision.deleted &&
       (assignment.dmsf_file_revision.workflow == DmsfWorkflow::STATE_WAITING_FOR_APPROVAL) && 
       (assignment.dmsf_file_revision == assignment.dmsf_file_revision.file.last_revision) %>
     <% assignments << assignment %>
