@@ -315,7 +315,7 @@ module RedmineDmsf
             file.name = resource.basename
 
             # Save Changes
-            (rev.save! && file.save!) ? Created : PreconditionFailed
+            (file.last_revision.save! && file.save!) ? Created : PreconditionFailed
           end
         end
       end
@@ -392,7 +392,7 @@ module RedmineDmsf
             file.name = resource.basename
 
             #Save Changes
-            (rev.save! && file.save!) ? Created : PreconditionFailed
+            (file.last_revision.save! && file.save!) ? Created : PreconditionFailed
 
           end
         end
@@ -402,7 +402,7 @@ module RedmineDmsf
       # Check for the existence of locks
       # At present as deletions of folders are not recursive, we do not need to extend 
       # this to cover every file, just queried
-      def lock_check(lock_scope=nil)
+      def lock_check(lock_scope = nil)
         if file?
           raise Locked if file.locked_for_user?
         elsif folder?
