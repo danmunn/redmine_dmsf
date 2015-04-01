@@ -47,36 +47,36 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
   
   def test_create
     # Folder link
-    folder_link = DmsfLink.new(
-      :target_project_id => @project1.id,
-      :target_id => @folder1.id,
-      :target_type => DmsfFolder.model_name,
-      :name => 'folder1_link2',
-      :project_id => @project1.id,
-      :created_at => DateTime.now(),
-      :updated_at => DateTime.now())
+    folder_link = DmsfLink.new
+    folder_link.target_project_id = @project1.id
+    folder_link.target_id = @folder1.id
+    folder_link.target_type = DmsfFolder.model_name
+    folder_link.name = 'folder1_link2'
+    folder_link.project_id = @project1.id
+    folder_link.created_at = DateTime.now()
+    folder_link.updated_at = DateTime.now()
     assert folder_link.save, folder_link.errors.full_messages.to_sentence
     
     # File link
-    file_link = DmsfLink.new(
-      :target_project_id => @project1.id,
-      :target_id => @file1.id,
-      :target_type => DmsfFile.model_name,
-      :name => 'file1_link2',
-      :project_id => @project1.id,
-      :created_at => DateTime.now(),
-      :updated_at => DateTime.now())
+    file_link = DmsfLink.new
+    file_link.target_project_id = @project1.id
+    file_link.target_id = @file1.id
+    file_link.target_type = DmsfFile.model_name
+    file_link.name = 'file1_link2'
+    file_link.project_id = @project1.id
+    file_link.created_at = DateTime.now()
+    file_link.updated_at = DateTime.now()
     assert file_link.save, file_link.errors.full_messages.to_sentence
     
     # External link
-    external_link = DmsfLink.new(      
-      :target_project_id => @project1.id,
-      :external_url => 'http://www.redmine.org/plugins/dmsf',
-      :target_type => 'DmsfUrl',
-      :name => 'DMSF plugin',
-      :project_id => @project1.id,
-      :created_at => DateTime.now(),
-      :updated_at => DateTime.now())
+    external_link = DmsfLink.new
+    external_link.target_project_id = @project1.id
+    external_link.external_url = 'http://www.redmine.org/plugins/dmsf'
+    external_link.target_type = 'DmsfUrl'
+    external_link.name = 'DMSF plugin'
+    external_link.project_id = @project1.id
+    external_link.created_at = DateTime.now()
+    external_link.updated_at = DateTime.now()
     assert external_link.save, external_link.errors.full_messages.to_sentence
   end
   
