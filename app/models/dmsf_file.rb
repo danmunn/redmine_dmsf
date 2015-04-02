@@ -1,4 +1,4 @@
-/scoping/# encoding: utf-8
+# encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
