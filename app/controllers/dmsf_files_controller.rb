@@ -100,12 +100,11 @@ class DmsfFilesController < ApplicationController
       if @file.locked_for_user?
         flash[:error] = l(:error_file_is_locked)
       else
-        if (Rails::VERSION::MAJOR > 3)
-          aparams = frev_params[:dmsf_file_revision]
-        else
-          aparams = params[:dmsf_file_revision]
-        end
-        revision = DmsfFileRevision.new(aparams)
+        revision = DmsfFileRevision.new
+        revision.title = params[:dmsf_file_revision][:title]
+        revision.name = params[:dmsf_file_revision][:name]
+        revision.description = params[:dmsf_file_revision][:description]
+        revision.comment = params[:dmsf_file_revision][:comment]
 
         revision.file = @file
         last_revision = @file.last_revision
