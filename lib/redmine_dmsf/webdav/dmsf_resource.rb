@@ -55,10 +55,10 @@ module RedmineDmsf
         @children = []
         return [] unless collection?
         folder.subfolders.map do |p|
-          @children.push child(p.title, p)
+          @children.push child(p.title)
         end
         folder.files.visible.map do |p|
-          @children.push child(p.name, p)
+          @children.push child(p.name)
         end
         @children        
       end

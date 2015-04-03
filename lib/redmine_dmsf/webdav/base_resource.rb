@@ -1,7 +1,9 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -59,7 +61,7 @@ module RedmineDmsf
 
       #Generate HTML for Get requests
       def html_display
-        @response.body = ""
+        @response.body = ''
         Confict unless collection?
         entities = children.map{|child| 
           DIR_FILE % [
@@ -76,18 +78,24 @@ module RedmineDmsf
           '-',
           '',
           '',
-        ] + entities unless parent.nil?
+        ] + entities if parent?
         @response.body << index_page % [ path.empty? ? '/' : path, path.empty? ? '/' : path , entities ]
       end
 
-      #Run method through proxy class - ensuring always compatible child is generated
-      def child(name, options = nil)
-        @__proxy.child(name)
+      # Run method through proxy class - ensuring always compatible child is generated      
+      def child(name)
+        new_public = public_path.dup
+        new_public = new_public + '/' unless new_public[-1,1] == '/'
+        new_public = '/' + new_public unless new_public[0,1] == '/'
+        new_path = path.dup
+        new_path = new_path + '/' unless new_path[-1,1] == '/'
+        new_path = '/' + new_path unless new_path[0,1] == '/'
+        @__proxy.class.new("#{new_public}#{name}", "#{new_path}#{name}", request, response, options.merge(:user => @user))
       end
 
       def parent
         p = @__proxy.parent
-        return nil if p.nil?
+        return nil unless p
         return p.resource.nil? ? p : p.resource
       end
 

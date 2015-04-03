@@ -1,7 +1,9 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,10 +33,10 @@ module RedmineDmsf
         return [] if project.nil? || project.id.nil?
         @children = []
         project.dmsf_folders.visible.map do |p|
-          @children.push child(p.title, p)
+          @children.push child(p.title)
         end
         project.dmsf_files.visible.map do |p|
-          @children.push child(p.name, p)
+          @children.push child(p.name)
         end
         @children
       end     
