@@ -78,7 +78,7 @@ module RedmineDmsf
           '-',
           '',
           '',
-        ] + entities if parent?
+        ] + entities unless parent.nil? 
         @response.body << index_page % [ path.empty? ? '/' : path, path.empty? ? '/' : path , entities ]
       end
 
