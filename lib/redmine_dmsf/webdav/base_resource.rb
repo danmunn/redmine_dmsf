@@ -95,7 +95,7 @@ module RedmineDmsf
 
       def parent
         p = @__proxy.parent
-        return nil unless p
+        return nil if p.nil? 
         return p.resource.nil? ? p : p.resource
       end
 
