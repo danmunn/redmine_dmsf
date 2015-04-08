@@ -1,3 +1,5 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
@@ -19,22 +21,25 @@
 require 'rubygems'
 require 'active_resource'
 
+# Simple REST API client in Ruby
+# usage: ruby api_client.rb [login] [password]
+
 # Dmsf file
 class DmsfFile < ActiveResource::Base
   self.site = 'http://localhost:3000/'
-  self.user = 'kpicman'
-  self.password = 'Kontron2014+'
+  self.user = ARGV[0]
+  self.password = ARGV[1]
 end
 
-# Retrieving a file
-file = DmsfFile.find 17200
+# 2. Get a document
+FILE_ID = 17216
+file = DmsfFile.find FILE_ID
 if file
   puts file.id
   puts file.name
   puts file.version  
-  puts file.project_id
-  puts file.dmsf_folder_id
+  puts file.project_id  
   puts file.content_url
 else
-  puts 'No file with id = 1 found'
+  puts "No file with id = #{FILE_ID} found"
 end

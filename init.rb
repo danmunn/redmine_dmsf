@@ -28,7 +28,7 @@ Redmine::Plugin.register :redmine_dmsf do
   name 'DMSF'
   author 'Vit Jonas / Daniel Munn / Karel Picman'
   description 'Document Management System Features'
-  version '1.5.1 stable'
+  version '1.5.2 devel'
   url 'http://www.redmine.org/plugins/dmsf'
   author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   
@@ -74,7 +74,7 @@ Redmine::Plugin.register :redmine_dmsf do
       {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :restore]}
     permission :file_manipulation, 
       {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate, :restore], 
-        :dmsf_upload => [:upload_files, :upload_file, :commit_files],         
+        :dmsf_upload => [:upload_files, :upload_file, :upload, :commit_files, :commit],         
         :dmsf_links => [:new, :create, :destroy, :restore]
         }
     permission :file_delete, 

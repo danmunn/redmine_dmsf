@@ -31,6 +31,8 @@ class DmsfController < ApplicationController
   before_filter :authorize
   before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
   before_filter :find_parent, :only => [:new, :create]
+  
+  accept_api_auth :show, :create
 
   helper :all
 
@@ -134,7 +136,14 @@ class DmsfController < ApplicationController
     @trash_enabled = DmsfFolder.deleted.where(:project_id => @project.id).any? ||
       DmsfFile.deleted.where(:project_id => @project.id).any? ||
       DmsfLink.deleted.where(:project_id => @project.id).any?
-  end
+    
+    respond_to do |format|
+      format.html {
+        render :layout => !request.xhr?
+      }
+      format.api
+    end
+  end  
 
   def trash
     @folder_manipulation_allowed = User.current.allowed_to? :folder_manipulation, @project
@@ -249,13 +258,11 @@ class DmsfController < ApplicationController
     render :action => 'edit'
   end
 
-  def create
-    if (Rails::VERSION::MAJOR > 3)
-      @folder = DmsfFolder.new(
-        params.require(:dmsf_folder).permit(:title, :description, :dmsf_folder_id))
-    else
-      @folder = DmsfFolder.new(params[:dmsf_folder])
-    end
+  def create    
+    @folder = DmsfFolder.new
+    @folder.title = params[:dmsf_folder][:title]
+    @folder.description = params[:dmsf_folder][:description]
+    @folder.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
     @folder.project = @project
     @folder.user = User.current
     

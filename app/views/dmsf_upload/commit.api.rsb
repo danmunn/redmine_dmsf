@@ -1,0 +1,3 @@
+api.commit do
+  puts 'OK'
+end
