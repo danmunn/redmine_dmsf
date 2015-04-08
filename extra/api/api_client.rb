@@ -26,13 +26,13 @@ require 'active_resource'
 
 # Dmsf file
 class DmsfFile < ActiveResource::Base
-  self.site = 'http://localhost:3000/'
+  self.site = 'https://localhost:3000/'
   self.user = ARGV[0]
   self.password = ARGV[1]
 end
 
 # 2. Get a document
-FILE_ID = 17216
+FILE_ID = 41532 
 file = DmsfFile.find FILE_ID
 if file
   puts file.id

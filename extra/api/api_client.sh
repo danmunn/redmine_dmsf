@@ -28,15 +28,16 @@
 # Just replace .xml with .json
 
 # 1. List of documents in a given folder or the root folder
-curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000//projects/12/dmsf.xml
-#curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000//projects/12/dmsf.xml?folder_id=5155
+curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/projects/12/dmsf.xml
+#curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/projects/12/dmsf.xml?folder_id=5155
 
 # 2. Get a document
 #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml
+#curl -v -H "Content-Type: application/octet-stream" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/41532/download > file.txt
 
 # 3. Create a folder
-#curl -v -H "Content-Type: application/xml" -X POST --data "@folder.xml" -u ${1}:${2} http://localhost:3000//projects/12/dmsf/create.xml
+#curl -v -H "Content-Type: application/xml" -X POST --data "@folder.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/create.xml
 
 # 4. Upload a document into a given folder or the root folder
-#curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000//projects/12/dmsf/upload.xml?filename=cat.gif
-#curl -v -H "Content-Type: application/xml" -X POST --data "@file.xml" -u ${1}:${2} http://localhost:3000//projects/12/dmsf/commit.xml
+#curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif
+#curl -v -H "Content-Type: application/xml" -X POST --data "@file.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/commit.xml

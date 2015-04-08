@@ -273,13 +273,22 @@ class DmsfController < ApplicationController
       end
     end
     
-    if @folder.save
-      flash[:notice] = l(:notice_folder_created)      
-      redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
-    else
-      @pathfolder = @parent
-      render :action => 'edit'
-    end
+    saved = @folder.save
+    
+    respond_to do |format|
+      format.js
+      format.api  { render_validation_errors(@folder) }
+      format.html { 
+        if saved
+          flash[:notice] = l(:notice_folder_created)      
+          redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
+        else
+          @pathfolder = @parent
+          render :action => 'edit'
+        end
+      }
+    end    
+    
   end
 
   def edit
