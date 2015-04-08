@@ -71,7 +71,8 @@ class DmsfFilesController < ApplicationController
         access = DmsfFileRevisionAccess.new
         access.user = User.current
         access.revision = @revision
-        access.action = DmsfFileRevisionAccess::DownloadAction        
+        access.action = DmsfFileRevisionAccess::DownloadAction
+        access.save!
         send_file(@revision.disk_file,
           :filename => filename_for_content_disposition(@revision.name),
           :type => @revision.detect_content_type,
