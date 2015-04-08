@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <attachments>
+  <folder_id>6118</folder_id>
   <uploaded_file>
     <disk_filename>cat.gif</disk_filename>
     <name>cat.gif</name>
@@ -7,6 +8,6 @@
     <description>REST API</description>
     <comment>From API</comment>
     <version/>
-    <token>15843.c49f68ff81b552d315927df2e27df506</token>
+    <token>15838.c49f68ff81b552d315927df2e27df506</token>
   </uploaded_file>
 </attachments>

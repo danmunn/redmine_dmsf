@@ -26,7 +26,7 @@ class DmsfUploadController < ApplicationController
   
   before_filter :find_project
   before_filter :authorize
-  before_filter :find_folder, :except => [:upload_file, :upload]
+  before_filter :find_folder, :except => [:upload_file, :upload, :commit]
   
   helper :all
   helper :dmsf_workflows
@@ -118,9 +118,11 @@ class DmsfUploadController < ApplicationController
   
   # REST API file commit
   def commit
-    uploaded_files = params[:attachments]    
-    if uploaded_files && uploaded_files.is_a?(Hash)
+    attachments = params[:attachments]    
+    if attachments && attachments.is_a?(Hash)
+      @folder = DmsfFolder.visible.find_by_id attachments[:folder_id].to_i if attachments[:folder_id].present?
       # standard file input uploads
+      uploaded_files = attachments.select { |key, value| key == 'uploaded_file'}
       uploaded_files.each_value do |uploaded_file|        
         upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
         uploaded_file[:disk_filename] = upload.disk_filename
@@ -133,7 +135,7 @@ class DmsfUploadController < ApplicationController
   
   def commit_files_internal(commited_files)
     if commited_files && commited_files.is_a?(Hash)
-      files = []
+      @files = []
       failed_uploads = []
       commited_files.each_value do |commited_file|
         name = commited_file[:name]
@@ -216,18 +218,18 @@ class DmsfUploadController < ApplicationController
           new_revision.assign_workflow(commited_file[:dmsf_workflow_id])                              
           FileUtils.mv(commited_disk_filepath, new_revision.disk_file)
           file.set_last_revision new_revision
-          files.push(file)
+          @files.push(file)
         else
           failed_uploads.push(commited_file)
         end
       end
-      unless files.empty?        
-        files.each { |file| log_activity(file, 'uploaded') if file }        
+      unless @files.empty?        
+        @files.each { |file| log_activity(file, 'uploaded') if file }        
         if (@folder && @folder.notification?) || (!@folder && @project.dmsf_notification?)
           begin
-            recipients = DmsfMailer.get_notify_users(@project, files)
+            recipients = DmsfMailer.get_notify_users(@project, @files)
             recipients.each do |u|
-              DmsfMailer.files_updated(u, @project, files).deliver
+              DmsfMailer.files_updated(u, @project, @files).deliver
             end          
             if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
               unless recipients.empty?
@@ -247,7 +249,9 @@ class DmsfUploadController < ApplicationController
     end
     respond_to do |format|
       format.js
-      format.api  { render_validation_errors(failed_uploads) }
+      format.api  {         
+          render_validation_errors(failed_uploads) unless failed_uploads.empty?        
+      }
       format.html { redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder) }
     end
     
