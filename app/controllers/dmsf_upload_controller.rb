@@ -187,13 +187,6 @@ class DmsfUploadController < ApplicationController
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         new_revision.size = File.size(commited_disk_filepath)
 
-#        file_upload = File.new(commited_disk_filepath, 'rb')
-#        unless file_upload
-#          failed_uploads.push(commited_file)
-#          flash[:error] = l(:error_file_commit_require_uploaded_file)
-#          next
-#        end
-        
         if file.locked?
           begin
             file.unlock!
@@ -220,10 +213,7 @@ class DmsfUploadController < ApplicationController
         end
         
         if new_revision.save
-          new_revision.assign_workflow(commited_file[:dmsf_workflow_id])                    
-          #new_revision.copy_file_content(file_upload)
-          #file_upload.close
-          #File.delete(commited_disk_filepath)          
+          new_revision.assign_workflow(commited_file[:dmsf_workflow_id])                              
           FileUtils.mv(commited_disk_filepath, new_revision.disk_file)
           file.set_last_revision new_revision
           files.push(file)
