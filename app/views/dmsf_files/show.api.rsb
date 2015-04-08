@@ -1,4 +1,4 @@
-api.file do
+api.dmsf_file do
   api.id @file.id
   api.name @file.name
   api.project_id @file.project_id

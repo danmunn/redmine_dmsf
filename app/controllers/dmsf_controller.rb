@@ -277,7 +277,11 @@ class DmsfController < ApplicationController
     
     respond_to do |format|
       format.js
-      format.api  { render_validation_errors(@folder) }
+      format.api  { 
+        unless saved                  
+          render_validation_errors(@folder) 
+        end        
+      }
       format.html { 
         if saved
           flash[:notice] = l(:notice_folder_created)      
