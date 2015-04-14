@@ -144,33 +144,48 @@ Before installing ensure that the Redmine instance is stopped.
 1. In case of upgrade BACKUP YOUR DATABASE first
 2. Put redmine_dmsf plugin directory into plugins
 3. If you install Redmine in a sub-uri, it's necessary to modify two hard-coded paths in order to webdav is working:
+
     a) /config/routes.rb
+
+    ```ruby
       mount DAV4Rack::Handler.new(
     --  :root_uri_path => '/dmsf/webdav',
     ++  :root_uri_path => '/sub-uri/dmsf/webdav',
         :resource_class => RedmineDmsf::Webdav::ResourceProxy,
         :controller_class => RedmineDmsf::Webdav::Controller
       ), :at => "/dmsf/webdav"
+      ```
+
     b) lib/redmine_dmsf/webdav/no_parse.rb
+
+    ```ruby
       Rails.configuration.middleware.insert_before(ActionDispatch::ParamsParser,
     --  RedmineDmsf::NoParse, :urls => ['/dmsf/webdav'])
     ++  RedmineDmsf::NoParse, :urls => ['/sub-uri/dmsf/webdav'])
+    ```
+
 4. Initialize/Update database: `rake redmine:plugins:migrate RAILS_ENV="production"`
 5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`
 6. Restart web server
 7. You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
 8. Assign DMSF permissions to appropriate roles
 9. There are two rake tasks:
+
     a) To convert documents from the standard Redmine document module
+
         Available options:
+
             * project  => id or identifier of project (defaults to all projects)
             * dry  => true or false (default false) to perform just check without any conversion
             * invalid=replace  => to perform document title invalid characters replacement for '-'
+
         Example:
-            rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
+            ```rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"```
+
     b) To alert all users who are expected to do an approval in the current approval steps
+
         Example:
-            rake redmine:dmsf_alert_approvals RAILS_ENV="production"
+            ```rake redmine:dmsf_alert_approvals RAILS_ENV="production"```
 
 ### Fulltext search (optional)
 If you want to use fulltext search features, you must setup file content indexing.
@@ -184,7 +199,7 @@ This command must be run on regular basis (e.g. from cron)
 
 Example of cron job (once per hour at 8th minute):
 
-    `8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f`
+    ```8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f```
 
 See redmine_dmsf/extra/xapian_indexer.rb for help.
 
