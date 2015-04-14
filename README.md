@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.5.1** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **1.5.2** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -42,7 +42,7 @@ Features
 Dependencies
 ------------
   
-  * Redmine 2.5.0 or higher (Not yet fully compatible with Redmine 3.x but it should work in general)
+  * Redmine 2.5.0 or higher
 
 ### Fulltext search (optional)
 
@@ -143,6 +143,18 @@ Before installing ensure that the Redmine instance is stopped.
 
 1. In case of upgrade BACKUP YOUR DATABASE first
 2. Put redmine_dmsf plugin directory into plugins
+3. If you install Redmine in a sub-uri, it's necessary to modify two hard-coded paths in order to webdav is working:
+    a) /config/routes.rb
+      mount DAV4Rack::Handler.new(
+    --  :root_uri_path => '/dmsf/webdav',
+    ++  :root_uri_path => '/sub-uri/dmsf/webdav',
+        :resource_class => RedmineDmsf::Webdav::ResourceProxy,
+        :controller_class => RedmineDmsf::Webdav::Controller
+      ), :at => "/dmsf/webdav"
+    b) lib/redmine_dmsf/webdav/no_parse.rb
+      Rails.configuration.middleware.insert_before(ActionDispatch::ParamsParser,
+    --  RedmineDmsf::NoParse, :urls => ['/dmsf/webdav'])
+    ++  RedmineDmsf::NoParse, :urls => ['/sub-uri/dmsf/webdav'])
 3. Initialize/Update database: `rake redmine:plugins:migrate RAILS_ENV="production"`
 4. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`
 5. Restart web server
