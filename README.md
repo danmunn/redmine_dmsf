@@ -155,12 +155,12 @@ Before installing ensure that the Redmine instance is stopped.
       Rails.configuration.middleware.insert_before(ActionDispatch::ParamsParser,
     --  RedmineDmsf::NoParse, :urls => ['/dmsf/webdav'])
     ++  RedmineDmsf::NoParse, :urls => ['/sub-uri/dmsf/webdav'])
-3. Initialize/Update database: `rake redmine:plugins:migrate RAILS_ENV="production"`
-4. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`
-5. Restart web server
-6. You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
-7. Assign DMSF permissions to appropriate roles
-8. There are two rake tasks:
+4. Initialize/Update database: `rake redmine:plugins:migrate RAILS_ENV="production"`
+5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`
+6. Restart web server
+7. You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
+8. Assign DMSF permissions to appropriate roles
+9. There are two rake tasks:
     a) To convert documents from the standard Redmine document module
         Available options:
             * project  => id or identifier of project (defaults to all projects)
