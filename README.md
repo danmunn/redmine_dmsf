@@ -180,12 +180,16 @@ Before installing ensure that the Redmine instance is stopped.
             * invalid=replace  => to perform document title invalid characters replacement for '-'
 
         Example:
-            ```rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"```
+            ```
+            rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
+            ```
 
     b) To alert all users who are expected to do an approval in the current approval steps
 
         Example:
-            ```rake redmine:dmsf_alert_approvals RAILS_ENV="production"```
+            ```
+            rake redmine:dmsf_alert_approvals RAILS_ENV="production"
+            ```
 
 ### Fulltext search (optional)
 If you want to use fulltext search features, you must setup file content indexing.
@@ -199,7 +203,9 @@ This command must be run on regular basis (e.g. from cron)
 
 Example of cron job (once per hour at 8th minute):
 
-    ```8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f```
+    ```
+    8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f
+    ```
 
 See redmine_dmsf/extra/xapian_indexer.rb for help.
 
