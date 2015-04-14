@@ -120,11 +120,12 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax_detailed.html, aft
       <li>
         DMSF:
         <ul>
-          <li><strong>{{dmsf(17)}}</strong> (link to file with id 17)</li>
-          <li><strong>{{dmsf(17,File)}}</strong> (link to file with id 17 with link text "File")</li>
-          <li><strong>{{dmsf(17,File,10)}}</strong> (link to file with id 17 with link text "File" and link pointing to revision 10)</li>
-          <li><strong>{{dmsff(5)}}</strong> (link to folder with id 5)</li>
-          <li><strong>{{dmsff(5,Folder)}}</strong> (link to folder with id 5 with link text "Folder")</li>
+          <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
+          <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
+          <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
+          <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
+          <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
+          <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
         </ul>
         The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
         The DMSF folder id can be found in the link when opening folders within Redmine.

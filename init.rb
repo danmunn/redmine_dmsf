@@ -89,19 +89,18 @@ Redmine::Plugin.register :redmine_dmsf do
   
   # Administration menu extension
   Redmine::MenuManager.map :admin_menu do |menu|
-    menu.push :approvalworkflows, {:controller => 'dmsf_workflows', :action => 'index'}, :caption => :label_dmsf_workflow_plural        
+    menu.push :approvalworkflows, {:controller => 'dmsf_workflows', :action => 'index'}, :caption => :label_dmsf_workflow_plural
   end    
   
   Redmine::WikiFormatting::Macros.register do
     desc "Wiki link to DMSF file:\n\n" +
              "!{{dmsf(file_id [, title [, revision_id]])}}\n\n" +
-         "_file_id_ / _revision_id_ can be found in link for file/revision download."
+         "_file_id_ / _revision_id_ can be found in the link for file/revision download."
          
     macro :dmsf do |obj, args|
-      return nil if args.length < 1 # require file id
-      entry_id = args[0].strip
-      entry = DmsfFile.find(entry_id)
-      if entry && !entry.deleted && User.current && User.current.allowed_to?(:view_dmsf_files, entry.project)
+      return nil if args.length < 1 # require file id      
+      entry = DmsfFile.visible.find_by_id args[0].strip
+      if entry && User.current && User.current.allowed_to?(:view_dmsf_files, entry.project)
         title = args[1] ? args[1] : entry.title
         revision = args[2] ? args[2] : ''        
         return link_to h(title), download_revision_path(entry, revision, :only_path => false)
@@ -113,14 +112,13 @@ Redmine::Plugin.register :redmine_dmsf do
   Redmine::WikiFormatting::Macros.register do
     desc "Wiki link to DMSF folder:\n\n" +
              "!{{dmsff(folder_id [, title])}}\n\n" +
-         "_folder_id_ may be missing. _folder_id_ can be found in link for folder opening."
+         "_folder_id_ may be missing. _folder_id_ can be found in the link for folder opening."
          
     macro :dmsff do |obj, args|
       if args.length < 1
-        return link_to l(:link_documents), :controller => 'dmsf', :action => 'show', :id => @project, :only_path => false
-      else
-        entry_id = args[0].strip
-        entry = DmsfFolder.find(entry_id)
+        return link_to l(:link_documents), dmsf_folder_path(@project, :only_path => false)
+      else        
+        entry = DmsfFolder.visible.find_by_id args[0].strip
         if entry && User.current && User.current.allowed_to?(:view_dmsf_folders, entry.project)
           title = args[1] ? args[1] : entry.title          
           return link_to h(title), dmsf_folder_path(entry.project, :folder_id => entry, :only_path => false)
@@ -132,16 +130,14 @@ Redmine::Plugin.register :redmine_dmsf do
   
   Redmine::WikiFormatting::Macros.register do
     desc "Wiki link to DMSF document description:\n\n" +
-             "{{dmsfd(file_id [, title])}}\n\n" +
-         "_file_id_ / _revision_id_ can be found in link for file/revision download." 
+             "{{dmsfd(file_id)}}\n\n" +
+         "_file_id_ can be found in the link for file/revision download." 
 
     macro :dmsfd do |obj, args|
-      return nil if args.length < 1 # require file id
-      entry_id = args[0].strip
-      entry = DmsfFile.find(entry_id)
-      if entry && !entry.deleted && User.current && User.current.allowed_to?(:view_dmsf_files, entry.project)
-        title = args[1] ? args[1] : entry.title        
-        return link_to h(title), dmsf_file_path(entry, :only_path => false)
+      return nil if args.length < 1 # require file id      
+      entry = DmsfFile.visible.find_by_id args[0].strip
+      if entry && User.current && User.current.allowed_to?(:view_dmsf_files, entry.project)        
+        return entry.description
       end
       nil
     end

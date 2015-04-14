@@ -36,7 +36,7 @@ class DmsfController < ApplicationController
 
   helper :all
 
-  def show
+  def show        
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
@@ -120,6 +120,12 @@ class DmsfController < ApplicationController
       end
       @locked_for_user = false
     else
+      
+      if @folder.deleted
+        render_404
+        return
+      end 
+    
       @subfolders = @folder.subfolders.visible
       @files = @folder.files.visible
       @dir_links = @folder.folder_links.visible
@@ -607,12 +613,16 @@ class DmsfController < ApplicationController
     @folder = DmsfFolder.find params[:folder_id] if params[:folder_id].present?
   rescue DmsfAccessError
     render_403
+  rescue ActiveRecord::RecordNotFound
+    render_404    
   end
 
   def find_parent
     @parent = DmsfFolder.visible.find params[:parent_id] if params[:parent_id].present?
   rescue DmsfAccessError
     render_403
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
 
   def copy_folder(folder)
@@ -628,7 +638,5 @@ class DmsfController < ApplicationController
       :to, :zipped_content, :email,
       :cc, :subject, :zipped_content => [], :files => [])
   end
-
-
-
+  
 end
