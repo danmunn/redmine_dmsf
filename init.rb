@@ -94,7 +94,7 @@ Redmine::Plugin.register :redmine_dmsf do
   
   Redmine::WikiFormatting::Macros.register do
     desc "Wiki link to DMSF file:\n\n" +
-             "!{{dmsf(file_id [, title [, revision_id]])}}\n\n" +
+             "{{dmsf(file_id [, title [, revision_id]])}}\n\n" +
          "_file_id_ / _revision_id_ can be found in the link for file/revision download."
          
     macro :dmsf do |obj, args|
@@ -111,7 +111,7 @@ Redmine::Plugin.register :redmine_dmsf do
   
   Redmine::WikiFormatting::Macros.register do
     desc "Wiki link to DMSF folder:\n\n" +
-             "!{{dmsff(folder_id [, title])}}\n\n" +
+             "{{dmsff(folder_id [, title])}}\n\n" +
          "_folder_id_ may be missing. _folder_id_ can be found in the link for folder opening."
          
     macro :dmsff do |obj, args|
@@ -141,6 +141,7 @@ Redmine::Plugin.register :redmine_dmsf do
       end
       nil
     end
+    
   end    
   
   # Rubyzip configuration
