@@ -144,33 +144,12 @@ Before installing ensure that the Redmine instance is stopped.
 
 1. In case of upgrade BACKUP YOUR DATABASE first
 2. Put redmine_dmsf plugin directory into plugins
-3. If you install Redmine in a sub-uri, it's necessary to modify two hard-coded paths in order to webdav is working:
-
-    a) /config/routes.rb
-
-    ```ruby
-      mount DAV4Rack::Handler.new(
-    --  :root_uri_path => '/dmsf/webdav',
-    ++  :root_uri_path => '/sub-uri/dmsf/webdav',
-        :resource_class => RedmineDmsf::Webdav::ResourceProxy,
-        :controller_class => RedmineDmsf::Webdav::Controller
-      ), :at => "/dmsf/webdav"
-      ```
-
-    b) lib/redmine_dmsf/webdav/no_parse.rb
-
-    ```ruby
-      Rails.configuration.middleware.insert_before(ActionDispatch::ParamsParser,
-    --  RedmineDmsf::NoParse, :urls => ['/dmsf/webdav'])
-    ++  RedmineDmsf::NoParse, :urls => ['/sub-uri/dmsf/webdav'])
-    ```
-
-4. Initialize/Update database: `rake redmine:plugins:migrate RAILS_ENV="production"`
-5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`
-6. Restart web server
-7. You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
-8. Assign DMSF permissions to appropriate roles
-9. There are two rake tasks:
+3. Initialize/Update database: `rake redmine:plugins:migrate RAILS_ENV="production"`
+4. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`
+5. Restart web server
+6. You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
+7. Assign DMSF permissions to appropriate roles
+8. There are two rake tasks:
 
     a) To convert documents from the standard Redmine document module
 
