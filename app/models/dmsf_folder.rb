@@ -343,6 +343,15 @@ class DmsfFolder < ActiveRecord::Base
     end
     last_update
   end
+  
+  # Number of items in the folder
+  def items
+    subfolders.visible.count +
+    files.visible.count +
+    folder_links.visible.count +
+    file_links.visible.count +
+    url_links.visible.count
+  end    
 
   private
 

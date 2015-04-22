@@ -166,7 +166,7 @@ zh:
   notice_entries_deleted: 条目已删除
   warning_some_entries_were_not_deleted: "某些条目未被删除: %{entries}"  
   title_delete_checked: 删除选中
-  title_number_of_files_in_directory: 目录总文件个数
+  title_items: items
   title_filename_for_download: 用于下载或zip归档的文件名
   label_number_of_folders: Folders
   label_number_of_documents: Documents

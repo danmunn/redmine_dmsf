@@ -167,7 +167,7 @@ zh-TW:
   notice_entries_deleted: 項目己刪除
   warning_some_entries_were_not_deleted: "部份項目無法刪除: %{entries}"  
   title_delete_checked: 刪除選取項目
-  title_number_of_files_in_directory: 資料夾的檔案數量
+  title_items: items
   title_filename_for_download: 下載時的檔名，或是ZIP的檔案名稱。
   label_number_of_folders: 資料夾
   label_number_of_documents: 文件檔案

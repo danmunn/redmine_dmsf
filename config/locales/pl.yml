@@ -167,7 +167,7 @@ pl:
   notice_entries_deleted: Wpisy usunięte
   warning_some_entries_were_not_deleted: "Niektóre wpisy nie zostały usunięte: %{entries}"  
   title_delete_checked: Usuń zaznaczone
-  title_number_of_files_in_directory: Liczba plików w folderze
+  title_items: items
   title_filename_for_download: Nazwa pliku używana do pobierania lub tworzenai archiwum Zip
   label_number_of_folders: Foldery
   label_number_of_documents: Dokumenty 

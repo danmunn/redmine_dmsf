@@ -166,7 +166,7 @@ es:
   notice_entries_deleted: Entradas eliminadas
   warning_some_entries_were_not_deleted: "Algunas entradas no fueron eliminadas: %{entries}"  
   title_delete_checked: Eliminación chequeada
-  title_number_of_files_in_directory: Número de archivos en directorio
+  title_items: items
   title_filename_for_download: Nombre de archivo utilizado para descargar o crear zip
   label_number_of_folders: Directorios
   label_number_of_documents: Documentos

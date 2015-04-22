@@ -164,7 +164,7 @@ de:
   notice_entries_deleted: Einträge löschen
   warning_some_entries_were_not_deleted: "Enige Einträge wurden nicht gelöscht: %{entries}"  
   title_delete_checked: Löschen ausgewählt
-  title_number_of_files_in_directory: Dateianzahl in dem Ordner
+  title_items: items
   title_filename_for_download: Dateiname beim Herunterladen oder in ZIP-Archiv verwenden
   label_number_of_folders: Order
   label_number_of_documents: Dokumente  

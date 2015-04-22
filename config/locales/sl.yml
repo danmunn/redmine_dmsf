@@ -166,7 +166,7 @@ sl:
   notice_entries_deleted: Izbrane enote izbrisane
   warning_some_entries_were_not_deleted: "Nekatere enote niso izbrisane: %{entries}"  
   title_delete_checked: Izbriši izbrano
-  title_number_of_files_in_directory: Število datotek v mapi
+  title_items: items
   title_filename_for_download: Naziv datoteke za prenos dol ali Zip arhiva
   label_number_of_folders: Mapa
   label_number_of_documents: Dokumentacija

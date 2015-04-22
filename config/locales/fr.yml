@@ -163,7 +163,7 @@ fr:
   notice_entries_deleted: Elément(s) supprimé(s)
   warning_some_entries_were_not_deleted: "Certains éléments n'ont pas été supprimés : %{entries}"  
   title_delete_checked: Supprimer les éléments sélectionnés
-  title_number_of_files_in_directory: Nombre de fichiers dans le dossier
+  title_items: items
   title_filename_for_download: "Nom du fichier à utiliser lors du téléchargement ou de l'archive ZIP"
   label_number_of_folders: Dossiers
   label_number_of_documents: Fichiers  

@@ -166,7 +166,7 @@ cs:
   notice_entries_deleted: Položky smazány
   warning_some_entries_were_not_deleted: "Některé položky nebyly smazány: %{entries}"  
   title_delete_checked: Smaž vybrané
-  title_number_of_files_in_directory: Počet souborů ve složce
+  title_items: položek
   title_filename_for_download: Název Zip archívu ke stažení
   label_number_of_folders: Složky
   label_number_of_documents: Dokumenty  

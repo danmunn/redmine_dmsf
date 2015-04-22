@@ -1,7 +1,9 @@
 <%#=
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,7 +32,7 @@
   <% if link %>
     <div class="filename" title="<%= l(:label_target_folder)%>"><%= link.path %></div>
   <% else %>
-    <div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.visible.count + subfolder.file_links.visible.count %>]</div>
+    <div class="filename" title="<%= l(:title_items)%>">[<%= subfolder.items %>]</div>
   <% end %>
 </td>            
 <td class="size"></td>
