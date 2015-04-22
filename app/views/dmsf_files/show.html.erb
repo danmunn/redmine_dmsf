@@ -1,4 +1,6 @@
 <%#=
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
@@ -83,7 +85,7 @@
             delete_revision_path(revision),
             :data => {:confirm => l(:text_are_you_sure)},
             :title => l(:title_delete_revision),
-            :class => 'icon icon-dmsf-rev-delete' if @file_delete_allowed %>          
+            :class => 'icon icon-dmsf-rev-delete' if @file_delete_allowed && (@file.revisions.visible.count > 1) %>          
         </div>      
         <i><%= l(:info_revision, :rev => revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>
