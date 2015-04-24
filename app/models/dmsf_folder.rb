@@ -312,7 +312,7 @@ class DmsfFolder < ActiveRecord::Base
     joins(:project).
     where(project_conditions.join(' AND ')).scoping do
       where(find_options[:conditions]).order(find_options[:order]).scoping do
-        results_count = count(:all)
+        results_count = count
         results = where(limit_options)
       end
     end   
