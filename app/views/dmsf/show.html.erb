@@ -153,7 +153,11 @@
           :title => subfolder.title }) %>
     </tr>
   <% end %>  
-  <% @dir_links.each do |link| %>    
+  <% @dir_links.each do |link| %>
+    <% unless (link.target_project && link.target_folder) %>
+      <% Rails.logger.error "Error: dmsf_link id #{link.id} has no target!" %>
+      <% next %>
+    <% end %>         
     <tr class="gray">
       <%= render(:partial => 'dir', 
         :locals => { 
