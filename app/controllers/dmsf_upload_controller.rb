@@ -53,12 +53,8 @@ class DmsfUploadController < ApplicationController
   end
 
   # async single file upload handling 
-  def upload_file
-    if (Rails::VERSION::MAJOR > 3)
-      @tempfile = params.require(:file)
-    else
-      @tempfile = params[:file]
-    end
+  def upload_file    
+    @tempfile = params[:file]    
     unless @tempfile.original_filename
       render_404
       return
@@ -107,13 +103,8 @@ class DmsfUploadController < ApplicationController
     end
   end
   
-  def commit_files
-    if (Rails::VERSION::MAJOR > 3)
-      commited_files = params.require(:commited_files)
-    else
-      commited_files = params[:commited_files]
-    end
-    commit_files_internal commited_files
+  def commit_files    
+    commit_files_internal params[:commited_files]
   end    
   
   # REST API file commit

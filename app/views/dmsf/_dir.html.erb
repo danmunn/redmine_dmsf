@@ -20,8 +20,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% locked_for_user = subfolder.locked_for_user? %>
-<% locked = subfolder.locked? %>    
+<% locked_for_user = subfolder && subfolder.locked_for_user? %>
+<% locked = subfolder && subfolder.locked? %>    
 
 <td class="check"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_zip_download_or_email)) %></td>
@@ -36,7 +36,7 @@
   <% end %>
 </td>            
 <td class="size"></td>
-<td class="modified"><%= format_time(subfolder.modified) %>                
+<td class="modified"><%= format_time(subfolder.modified) if subfolder %>                
   <% if locked_for_user %>
     <% if subfolder.lock.reverse[0].user %>            
       <%= link_to('',
@@ -54,20 +54,24 @@
 </td>
 <td class="version"></td>
 <td class="workflow"></td>
-<td class="author"><%= h(subfolder.user) %></td>
+<td class="author"><%= h(subfolder.user) if subfolder %></td>
 <td class="actions">
   <% if @folder_manipulation_allowed %>          
     <div class="right_icon_box">
       <% unless locked %>
        <%= link_to('',
           edit_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:link_edit, :title => h(subfolder.title)),
+          :title => l(:link_edit, :title => subfolder ? h(subfolder.title) : project.name),
           :class => 'icon icon-edit') %>
-        <%= link_to('',
-          lock_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:title_lock_file),
-          :class => 'icon icon-dmsf-lock') %>          
-        <% if subfolder.notification %>            
+        <% if subfolder %>
+          <%= link_to('',
+            lock_dmsf_path(:id => project, :folder_id => subfolder),
+            :title => l(:title_lock_file),
+            :class => 'icon icon-dmsf-lock') %>                  
+        <% else %>
+          <span class="icon"></span>
+        <% end %>
+        <% if (subfolder && subfolder.notification) || (!subfolder && project.dmsf_notification) %>            
           <%= link_to('',            
             notify_deactivate_dmsf_path(:id => project, :folder_id => subfolder),
             :title => l(:title_notifications_active_deactivate),
@@ -106,5 +110,5 @@
 </td>
 <td class="invisible">0</td>
 <td class="invisible">0</td>
-<td class="invisible"><%= subfolder.updated_at.to_i %></td>
+<td class="invisible"><%= subfolder.updated_at.to_i if subfolder %></td>
 <td class="invisible">0</td>

@@ -154,7 +154,7 @@
     </tr>
   <% end %>  
   <% @dir_links.each do |link| %>
-    <% unless (link.target_project && link.target_folder) %>
+    <% unless link.target_project %>
       <% Rails.logger.error "Error: dmsf_link id #{link.id} has no target!" %>
       <% next %>
     <% end %>         

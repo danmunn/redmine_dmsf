@@ -240,20 +240,15 @@ class DmsfController < ApplicationController
     end
   end
 
-  def entries_email
-    if (Rails::VERSION::MAJOR > 3)
-      @email_params = e_params
-    else
-      @email_params = params[:email]
-    end
-    if @email_params[:to].strip.blank?
+  def entries_email        
+    if params[:email][:to].strip.blank?
       flash.now[:error] = l(:error_email_to_must_be_entered)
       render :action => 'email_entries'
       return
     end
-    DmsfMailer.send_documents(@project, User.current, @email_params).deliver
-    File.delete(@email_params['zipped_content'])
-    flash[:notice] = l(:notice_email_sent, @email_params['to'])
+    DmsfMailer.send_documents(@project, User.current, params[:email]).deliver
+    File.delete(params[:email][:zipped_content])
+    flash[:notice] = l(:notice_email_sent, params[:email][:to])
 
     redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
   end
