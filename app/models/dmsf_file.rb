@@ -320,11 +320,11 @@ class DmsfFile < ActiveRecord::Base
     results = []
     results_count = 0        
     
-    includes(:project, :revisions).
+    joins(:project, :revisions).
     where(project_conditions.join(' AND ') + " AND #{DmsfFile.table_name}.deleted = :false", {:false => false}).scoping do
       where(find_options[:conditions]).order(find_options[:order]).scoping do
-        results_count = count(:all)
-        results = find(:all, limit_options)
+        results_count = count(:all)        
+        results = where(limit_options)
       end
     end
 
