@@ -34,7 +34,7 @@
 </td>            
 <td class="size"></td>
 <td class="modified">
-  <%= format_time(subfolder.updated_at) %>                      
+  <%= format_time(subfolder.modified) if subfolder %>                      
 </td>
 <td class="version"></td>
 <td class="workflow"></td>
@@ -56,5 +56,5 @@
 </td>
 <td class="invisible">0</td>
 <td class="invisible">0</td>
-<td class="invisible"><%= subfolder.updated_at.to_i %></td>
+<td class="invisible"><%= subfolder.modified.to_i %></td>
 <td class="invisible">0</td>
