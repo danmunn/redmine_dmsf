@@ -252,55 +252,42 @@ module RedmineDmsf
       # Behavioural differences between collection and single entity
       # Todo: Support overwrite between both types of entity, and implement better checking
       def move(dest, overwrite)
-
         # All of this should carry accrross the ResourceProxy frontend, we ensure this to
-        # prevent unexpected errors
-        if dest.is_a?(ResourceProxy)
-          resource = dest.resource
-        else
-          resource = dest
-        end
-
+        # prevent unexpected errors        
+        resource = dest.is_a?(ResourceProxy) ? dest.resource : dest        
+        
         return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil? || resource.project.id == 0
-
+        
         parent = resource.parent
+        
         if (collection?)
-
           #At the moment we don't support cross project destinations
           return MethodNotImplemented unless project.id == resource.project.id
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
 
           #Current object is a folder, so now we need to figure out information about Destination
-          if(dest.exist?) then
-
+          if dest.exist?
             MethodNotAllowed
-
           else
-
             if(parent.projectless_path == '/') #Project root
               folder.dmsf_folder_id = nil
             else
               return PreconditionFailed unless parent.exist? && parent.folder?
-              folder.dmsf_folder_id = parent.folder.id             
+                folder.dmsf_folder_id = parent.folder.id             
             end
             folder.title = resource.basename
             folder.save ? Created : PreconditionFailed
-
           end
         else
           raise Forbidden unless User.current.admin? || 
               User.current.allowed_to?(:folder_manipulation, project) || 
-              User.current.allowed_to?(:folder_manipulation, resource.project)
+              User.current.allowed_to?(:folder_manipulation, resource.project)         
 
-          if(dest.exist?) then
-
-            methodNotAllowed 
-         
+          if dest.exist?
+            methodNotAllowed          
             # Files cannot be merged at this point, until a decision is made on how to merge them
-            # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
-            
+            # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.            
           else
-
             if(parent.projectless_path == '/') #Project root
               f = nil
             else
@@ -311,8 +298,11 @@ module RedmineDmsf
             return InternalServerError unless file.move_to(resource.project, f)
 
             # Update Revision and names of file [We can link to old physical resource, as it's not changed]            
-            file.last_revision.name = resource.basename if file.last_revision            
-            file.name = resource.basename
+            if file.last_revision
+              file.last_revision.name = resource.basename 
+              file.last_revision.title = DmsfFileRevision.filename_to_title(resource.basename)
+            end
+            file.name = resource.basename            
 
             # Save Changes
             (file.last_revision.save! && file.save!) ? Created : PreconditionFailed
