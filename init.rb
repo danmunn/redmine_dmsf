@@ -101,9 +101,8 @@ Redmine::Plugin.register :redmine_dmsf do
       return nil if args.length < 1 # require file id      
       entry = DmsfFile.visible.find_by_id args[0].strip
       if entry && User.current && User.current.allowed_to?(:view_dmsf_files, entry.project)
-        title = args[1] ? args[1] : entry.title
-        revision = args[2] ? args[2] : ''        
-        return link_to h(title), download_revision_path(entry, revision, :only_path => false)
+        title = args[1] ? args[1] : entry.title        
+        return link_to h(title), dmsf_file_url(entry, :download => args[2])
       end
       nil
     end
@@ -116,12 +115,12 @@ Redmine::Plugin.register :redmine_dmsf do
          
     macro :dmsff do |obj, args|
       if args.length < 1
-        return link_to l(:link_documents), dmsf_folder_path(@project, :only_path => false)
+        return link_to l(:link_documents), dmsf_folder_url(@project)
       else        
         entry = DmsfFolder.visible.find_by_id args[0].strip
         if entry && User.current && User.current.allowed_to?(:view_dmsf_folders, entry.project)
           title = args[1] ? args[1] : entry.title          
-          return link_to h(title), dmsf_folder_path(entry.project, :folder_id => entry, :only_path => false)
+          return link_to h(title), dmsf_folder_url(entry.project, :folder_id => entry)
         end
       end
       nil
