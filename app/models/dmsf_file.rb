@@ -29,11 +29,8 @@ end
 
 class DmsfFile < ActiveRecord::Base
   unloadable
-
-  include RedmineDmsf::Lockable
-
-  attr_accessor :event_description
-  attr_accessible :project
+  
+  include RedmineDmsf::Lockable        
 
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
@@ -89,6 +86,10 @@ class DmsfFile < ActiveRecord::Base
                 :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o}},
                 :datetime => Proc.new {|o| o.updated_at },
                 :author => Proc.new {|o| o.last_revision.user }
+              
+  acts_as_searchable :columns => ["#{table_name}.name", "#{DmsfFileRevision}.title", "#{DmsfFileRevision}.description"],
+    :project_key => 'project_id',
+    :date_column => "#{table_name}.updated_at"    
 
   before_create :default_values
   def default_values
@@ -177,7 +178,7 @@ class DmsfFile < ActiveRecord::Base
 
   def description
     self.last_revision ? self.last_revision.description : ''
-  end
+  end    
 
   def version
     self.last_revision ? self.last_revision.version : '0'
@@ -292,38 +293,37 @@ class DmsfFile < ActiveRecord::Base
   end
 
   # To fulfill searchable module expectations
-  def self.search(tokens, projects = nil, options = {})
+  def self.search(tokens, user, projects = nil, options = {})
     tokens = [] << tokens unless tokens.is_a?(Array)
     projects = [] << projects unless projects.nil? || projects.is_a?(Array)
 
-    find_options = {}
-    find_options[:order] = 'dmsf_files.updated_at ' + (options[:before] ? 'DESC' : 'ASC')
-
+    find_options = {}    
     limit_options = {}
     limit_options[:limit] = options[:limit] if options[:limit]
     if options[:offset]
       limit_options[:conditions] = '(dmsf_files.updated_at ' + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
     end
-
-    columns = %w(dmsf_files.name dmsf_file_revisions.title dmsf_file_revisions.description)
-    columns = ['dmsf_file_revisions.title'] if options[:titles_only]
-
+    
+    if options[:titles_only]
+      columns = ['dmsf_file_revisions.title'] 
+    else
+      columns = %w(dmsf_files.name dmsf_file_revisions.title dmsf_file_revisions.description)
+    end
+    
     token_clauses = columns.collect {|column| "(LOWER(#{column}) LIKE ?)"}
 
     sql = (['(' + token_clauses.join(' OR ') + ')'] * tokens.size).join(options[:all_words] ? ' AND ' : ' OR ')
     find_options[:conditions] = [sql, * (tokens.collect {|w| "%#{w.downcase}%"} * token_clauses.size).sort]
 
     project_conditions = []
-    project_conditions << Project.allowed_to_condition(User.current, :view_dmsf_files)    
+    project_conditions << Project.allowed_to_condition(user, :view_dmsf_files)    
     project_conditions << "#{DmsfFile.table_name}.project_id IN (#{projects.collect(&:id).join(',')})" unless projects.nil?
 
-    results = []
-    results_count = 0        
+    results = []    
     
     joins(:project, :revisions).
     where(project_conditions.join(' AND ') + " AND #{DmsfFile.table_name}.deleted = :false", {:false => false}).scoping do
-      where(find_options[:conditions]).order(find_options[:order]).scoping do
-        results_count = count
+      where(find_options[:conditions]).scoping do        
         results = where(limit_options)
       end
     end
@@ -381,7 +381,7 @@ class DmsfFile < ActiveRecord::Base
               next if dmsf_attrs.length == 0 || id_attribute == 0
               next unless results.select{|f| f.id.to_s == id_attribute}.empty?
 
-              dmsf_file = DmsfFile.where(limit_options[:conditions]).where(:id => id_attribute, :deleted => false).first
+              dmsf_file = DmsfFile.visible.where(limit_options[:conditions]).where(:id => id_attribute).first
 
               if dmsf_file
                 if options[:offset]
@@ -392,7 +392,7 @@ class DmsfFile < ActiveRecord::Base
                   end
                 end
 
-                allowed = User.current.allowed_to?(:view_dmsf_files, dmsf_file.project)
+                allowed = user.allowed_to?(:view_dmsf_files, dmsf_file.project)
                 project_included = false
                 project_included = true unless projects
                 unless project_included
@@ -409,10 +409,10 @@ class DmsfFile < ActiveRecord::Base
                   end
                 end
 
-                if (allowed && project_included)
-                  dmsf_file.event_description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']
-                  results.push(dmsf_file)
-                  results_count += 1
+                if allowed && project_included
+                  # TODO: It works no more :-(
+                  #dmsf_file.last_revision.description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']                 
+                  results << dmsf_file
                 end
               end
             end
@@ -420,14 +420,14 @@ class DmsfFile < ActiveRecord::Base
         end
       end
     end
-
-    [results, results_count]
+    
+    results
   end
   
   def self.search_result_ranks_and_ids(tokens, user = User.current, projects = nil, options = {})
-    r = self.search(tokens, projects, options)[0]
-    r.each_index { |x| [x, r[1][x]] }
-  end
+    r = self.search(tokens, user, projects, options)    
+    r.map{ |f| [f.updated_at.to_i, f.id]}
+  end  
 
   def display_name
     if self.name.length > 50
