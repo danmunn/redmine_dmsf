@@ -295,7 +295,8 @@ class DmsfFile < ActiveRecord::Base
   # To fulfill searchable module expectations
   def self.search(tokens, user, projects = nil, options = {})
     tokens = [] << tokens unless tokens.is_a?(Array)
-    projects = [] << projects unless projects.nil? || projects.is_a?(Array)
+    projects = [] << projects if projects.is_a?(Project)
+    project_ids = projects.collect(&:id) if projects
 
     find_options = {}    
     limit_options = {}
@@ -316,13 +317,13 @@ class DmsfFile < ActiveRecord::Base
     find_options[:conditions] = [sql, * (tokens.collect {|w| "%#{w.downcase}%"} * token_clauses.size).sort]
 
     project_conditions = []
-    project_conditions << Project.allowed_to_condition(user, :view_dmsf_files)    
-    project_conditions << "#{DmsfFile.table_name}.project_id IN (#{projects.collect(&:id).join(',')})" unless projects.nil?
+    project_conditions << Project.allowed_to_condition(user, :view_dmsf_files) 
+    project_conditions << "#{DmsfFile.table_name}.project_id IN (#{project_ids.join(',')})" if project_ids.present?
 
     results = []    
     
-    joins(:project, :revisions).
-    where(project_conditions.join(' AND ') + " AND #{DmsfFile.table_name}.deleted = :false", {:false => false}).scoping do
+    visible.joins(:project, :revisions).
+    where(project_conditions.join(' AND ')).scoping do
       where(find_options[:conditions]).scoping do        
         results = where(limit_options)
       end
@@ -390,26 +391,10 @@ class DmsfFile < ActiveRecord::Base
                   else
                     next if dmsf_file.updated_at > options[:offset]
                   end
-                end
+                end               
 
-                allowed = user.allowed_to?(:view_dmsf_files, dmsf_file.project)
-                project_included = false
-                project_included = true unless projects
-                unless project_included
-                  projects.each do |x|
-                    if x.is_a?(ActiveRecord::Relation)
-                      project_included = x.first.id == dmsf_file.project.id
-                    else
-                      if dmsf_file.project
-                        project_included = x[:id] == dmsf_file.project.id
-                      else
-                        project_included = false
-                      end
-                    end
-                  end
-                end
-
-                if allowed && project_included
+                if user.allowed_to?(:view_dmsf_files, dmsf_file.project) && 
+                    (project_ids.empty? || (project_ids.include?(dmsf_file.project.id)))
                   # TODO: It works no more :-(
                   #dmsf_file.last_revision.description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']                 
                   results << dmsf_file
