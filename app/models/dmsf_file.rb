@@ -81,11 +81,19 @@ class DmsfFile < ActiveRecord::Base
       existing_file.nil? || existing_file.id == self.id
   end
 
-  acts_as_event :title => Proc.new {|o| "#{o.title} - #{o.name}"},
-                :description => Proc.new {|o| o.description },
-                :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o}},
-                :datetime => Proc.new {|o| o.updated_at },
-                :author => Proc.new {|o| o.last_revision.user }
+  acts_as_event :title => Proc.new { |o| o.name },
+                :description => Proc.new { |o| 
+                  desc = Redmine::Search.cache_store.fetch("DmsfFile-#{o.id}")                  
+                  if desc
+                    Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")
+                    desc
+                  else
+                    o.description
+                  end
+                },
+                :url => Proc.new { |o| {:controller => 'dmsf_files', :action => 'show', :id => o} },
+                :datetime => Proc.new { |o| o.updated_at },
+                :author => Proc.new { |o| o.last_revision.user }
               
   acts_as_searchable :columns => ["#{table_name}.name", "#{DmsfFileRevision}.title", "#{DmsfFileRevision}.description"],
     :project_key => 'project_id',
@@ -177,7 +185,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def description
-    self.last_revision ? self.last_revision.description : ''
+    self.last_revision ? self.last_revision.description : ''    
   end    
 
   def version
@@ -394,9 +402,9 @@ class DmsfFile < ActiveRecord::Base
                 end               
 
                 if user.allowed_to?(:view_dmsf_files, dmsf_file.project) && 
-                    (project_ids.empty? || (project_ids.include?(dmsf_file.project.id)))
-                  # TODO: It works no more :-(
-                  #dmsf_file.last_revision.description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']                 
+                    (project_ids.empty? || (project_ids.include?(dmsf_file.project.id)))                  
+                  Redmine::Search.cache_store.write("DmsfFile-#{dmsf_file.id}", 
+                    dochash['sample'].force_encoding('UTF-8')) if dochash['sample']
                   results << dmsf_file
                 end
               end
