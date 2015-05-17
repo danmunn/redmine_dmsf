@@ -22,11 +22,11 @@
 
 ja:
   dmsf: DMSF
-  label_dmsf_file_plural: Dmsf ファイル
-  label_dmsf_file_revision_plural: Dmsf document revisions
-  label_dmsf_file_revision_access_plural: Dmsf document accesses
+  label_dmsf_file_plural: 文書管理ファイル
+  label_dmsf_file_revision_plural: 文書管理ファイルリビジョン
+  label_dmsf_file_revision_access_plural: 文書管理ファイルアクセス
   warning_no_entries_selected: エントリーが選ばれていません
-  error_email_to_must_be_entered: 電子メールの To 先は省略できません  
+  error_email_to_must_be_entered: 電子メールの To は省略できません  
   warning_file_already_locked: ファイルは既にロックされています
   notice_file_locked: ファイルをロックしました
   warning_file_not_locked: ファイルはロックされていません
@@ -61,7 +61,7 @@ ja:
   link_details: "%{title} の詳細を表示します"
   link_edit: "%{title} を編集します"
   submit_create: 作成
-  link_create_folder: フォルダを作成します
+  link_create_folder: フォルダ作成
   title_check_uncheck_all_for_zip_download_or_email: すべての Zip ダウンロードまたは電子メールのチェックをオン/オフします
   title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
   title_check_for_restore_or_delete: Check for restore or delete
@@ -83,7 +83,7 @@ ja:
   title_lock_file: ロックして他のメンバーの変更を禁止します  
   title_download_checked: チェックしたものを Zip アーカイブでダウンロードします  
   title_send_checked_by_email: チェックしたものを電子メールで送信します
-  link_user_preferences: あなたの DMSF プロジェクト設定
+  link_user_preferences: プロジェクトの文書管理設定
   heading_send_documents_by_email: 電子メールによる文書の送信
   label_email_from: From
   label_email_to: To
@@ -153,8 +153,8 @@ ja:
   permission_folder_manipulation: フォルダの操作
   permission_file_manipulation: ファイルの操作  
   permission_force_file_unlock: ファイルの強制ロック解除
-  permission_manage_workflows: Manage workflows
-  permission_file_delete: Delete documents
+  permission_manage_workflows: ワークフロー管理
+  permission_file_delete: ファイルの削除
   label_file: ファイル
   field_folder: フォルダ
   error_create_cycle_in_folder_dependency: フォルダの依存関係が循環しています
@@ -174,16 +174,16 @@ ja:
   error_file_can_not_be_created: ファイルを保存フォルダに作ることができません
   error_wrong_zip_encoding: Zip エンコーディングが正しくありません
   warning_xapian_not_available: Xapian が利用できる状態になっていません
-  menu_dmsf: DMSF
+  menu_dmsf: 文書管理
   label_physical_file_delete: 物理ファイルの削除
   user_is_not_project_member: あなたはプロジェクトのメンバーではありません
   heading_access_downloads_emails: ダウンロード/電子メール
   heading_access_first: 初回アクセス
   heading_access_last: 最終アクセス
-  label_dmsf_updated: DMSF updated
-  label_dmsf_downloaded: DMSF document downloaded
+  label_dmsf_updated: 文書管理 更新
+  label_dmsf_downloaded: 文書管理 ダウンロード
   title_total_size_of_all_files: このフォルダにある全ファイルの合計サイズ
-  project_module_dmsf: DMSF
+  project_module_dmsf: 文書管理
   warning_no_project_to_copy_file_to: ファイルをコピーするプロジェクトがありません
   comment_copied_from: "%{source} からコピーしました"
   notice_file_copied: ファイルをコピーしました
@@ -201,126 +201,127 @@ ja:
   error_folder_cannot_be_copied: フォルダをコピーできません
   notice_folder_copied: フォルダをコピーしました   
   
-  error_max_email_filesize_exceeded: "You've exceeded the maximum filesize for sending via email. (%{number} MB)"
-  note_maximum_email_filesize: "Limits maximum filesize that can be sent via email. 0 means unlimited. Number is in MB."
-  label_maximum_email_filesize: "Maximum email attachment size"
-  header_minimum_filesize: "File Error."
-  error_minimum_filesize: "The file %{file} is 0 bytes and will not be attached."
+  error_max_email_filesize_exceeded: "電子メールで送信可能なファイルサイズの上限を越えています (%{number} MB)"
+  note_maximum_email_filesize: "電子メールで送信可能なファイルサイズの上限。0は無制限。単位はMB。"
+  label_maximum_email_filesize: "電子メール添付ファイルサイズ上限"
+  header_minimum_filesize: "ファイルエラー"
+  error_minimum_filesize: " %{file} のサイズは0バイトのため添付することはできません。"
   parent_directory: "Parent Directory"
-  note_webdav: "Webdav once enabled can be found at http://.../dmsf/webdav/"
-  label_webdav: "Webdav functionality"
-  label_dmsf_plural: "Copy DMSF files and folders (%{files} files in %{folders} folders)"
+  note_webdav: "Webdavを有効にすると http://.../dmsf/webdav/ で閲覧することができます"
+  label_webdav: "Webdav機能"
+  label_dmsf_plural: "ファイルとフォルダをコピーします (%{files} files in %{folders} folders)"
 
-  warning_folder_already_locked: "This folder is already locked"
-  notice_folder_locked: "The folder was successfully locked"
-  warning_folder_not_locked: "Unfortunately, the folder could not be locked"
-  notice_folder_unlocked: "The folder was successfully unlocked"
-  error_only_user_that_locked_folder_can_unlock_it: "You are not authorised to unlock this folder"
-  title_folder_parent_locked: "Parent folder %{name} is locked"  
-  title_unlock_folder: "Unlock to allow changes for other members"
-  title_lock_folder: "Lock to prevent changes for other members"
+  warning_folder_already_locked: "このフォルダは既にロックされています"
+  notice_folder_locked: "フォルダをロックしました"
+  warning_folder_not_locked: "フォルダをロックすることができませんでした"
+  notice_folder_unlocked: "フォルダのロックを解除しました"
+  error_only_user_that_locked_folder_can_unlock_it: "このフォルダのロックを解除する権限がありません"
+  title_folder_parent_locked: "親フォルダ %{name} はロックされています"  
+  title_unlock_folder: "ロックを解除し他メンバが更新できるようにします"
+  title_lock_folder: "ロックし他メンバとの競合を回避します"
 
   select_option_webdav_readonly: "Read-only"
   select_option_webdav_readwrite: "Read/Write"
-  label_webdav_strategy: "Webdav strategy"
-  note_webdav_strategy: "Enables the administrator to decide if webdav is a read-only or read-write platform for end users."
+  label_webdav_strategy: "Webdavアクセス制御"
+  note_webdav_strategy: "Webdavを使ったアクセスの制御（Read-onlyまたはRead/Write）を決定します。"
 
-  error_unable_delete_dmsf_workflow: Unable to delete the workflow
-  error_empty_note: The note can't be empty
-  error_workflow_assign: An error occured while assigning
-  error_cannot_start_workflow: Workflow can't be started
-  error_cannot_renumber_steps: Steps can't be renumbered
-  label_dmsf_workflow_new: New approval workflow
-  field_label_dmsf_workflow: Approval Workflow
-  field_label_dmsf_workflow_name: Approval workflow name
-  label_dmsf_workflow_plural: Approval workflows
-  label_dmsf_workflow_plural_num: Approval workflows (%{count})
-  label_dmsf_workflow_step: Step
-  label_dmsf_workflow_step_plural: Steps
-  label_dmsf_workflow_approval: Approval
-  label_dmsf_workflow_approval_plural: Approvals
-  label_dmsf: DMSF
-  label_dmsf_wokflow_action_approve: Approve
-  label_dmsf_wokflow_action_reject: Reject
-  label_dmsf_wokflow_action_delegate: Delegate to
-  label_dmsf_wokflow_action_assign: Assign an approval workflow
-  label_dmsf_wokflow_action_start: Start workflow
-  label_dmsf_workflow_add_approver: "Add a new approver with a logical function:"
+  error_unable_delete_dmsf_workflow: そのワークフローの削除はできません
+  error_empty_note: コメント欄が空です
+  error_workflow_assign: ワークフローの適用処理中にエラーは発生しました
+  error_cannot_start_workflow: ワークフローを開始することができませんでした
+  error_cannot_renumber_steps: ステップの順番の変更ができませんでした
+  label_dmsf_workflow_new: 新規承認ワークフロー
+  field_label_dmsf_workflow: 承認ワークフロー
+  field_label_dmsf_workflow_name: 承認ワークフロー名
+  label_dmsf_workflow_plural: 承認ワークフロー
+  label_dmsf_workflow_plural_num: 承認ワークフロー数 (%{count})
+  label_dmsf_workflow_step: ステップ
+  label_dmsf_workflow_step_plural: ステップ
+  label_dmsf_workflow_approval: 承認
+  label_dmsf_workflow_approval_plural: 承認
+  label_dmsf: 文書管理
+  label_dmsf_wokflow_action_approve: 承認
+  label_dmsf_wokflow_action_reject: 否認
+  label_dmsf_wokflow_action_delegate: 代理承認
+  label_dmsf_wokflow_action_assign: 承認ワークフロー設定
+  label_dmsf_wokflow_action_start: ワークフロー開始
+  label_dmsf_workflow_add_approver: "新規承認者の追加:"
   label_or: or
-  label_action: Action
-  label_note: Note  
-  title_none: None
-  title_rejection: Rejection
-  title_delegation: Delegation
-  title_assignment: Assignment
-  title_start: Start  
-  title_dmsf_workflow_log: Approval Workflow Log
-  title_assigned: Assigned
-  title_approval: Approval
-  title_rejected: Rejected
-  dmsf_and: AND
-  dmsf_or: OR
-  dmsf_new_step: New step  
-  message_dmsf_wokflow_note: Your note...
+  label_action: アクション
+  label_note: コメント  
+  title_none: 無し
+  title_rejection: 否認
+  title_delegation: 代理承認
+  title_assignment: アサイン
+  title_start: 開始  
+  title_dmsf_workflow_log: 承認ワークフローの履歴
+  title_assigned: アサイン
+  title_approval: 承認
+  title_rejected: 否認
+  dmsf_and: かつ
+  dmsf_or: または
+  dmsf_new_step: 新規ステップ  
+  message_dmsf_wokflow_note: コメント
   info_revision: "r%{rev}"
-  link_workflow: Workflow  
-  notice_workflow_started: Approval workflow successfully started
-  text_email_subject_approved: "Approval workflow %{name} approved"
-  text_email_subject_rejected: "Approval workflow %{name} rejected"
-  text_email_subject_delegated: "Approval workflow %{name} delegated"
-  text_email_subject_requires_approval: "Approval workflow %{name} requires your approval"
-  text_email_subject_updated: "Approval workflow %{name} updated"
-  text_email_subject_started: "Approval workflow %{name} started" 
-  text_email_finished_approved: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been approved."
-  text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been rejected because of '%{notice}'."
-  text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
-  text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps and you are expected to do an approval in the next approval step."
-  text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps."
-  text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you are expected to do an approval in the current approval step."  
-  text_email_to_proceed: To proceed click on the check box icon next to the document in
-  text_email_to_see_history: To see the approval history click on the workflow status of the document in
-  text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+  link_workflow: ワークフロー  
+  notice_workflow_started: 承認ワークフローが開始されました
+  text_email_subject_approved: "承認ワークフロー '%{name}' は承認されました"
+  text_email_subject_rejected: "承認ワークフロー '%{name}' は否認されました"
+  text_email_subject_delegated: "承認ワークフロー '%{name}' は代理承認が設定されました"
+  text_email_subject_requires_approval: "承認ワークフロー '%{name}' はあなたの承認待ちです"
+  text_email_subject_updated: "承認ワークフロー '%{name}' が更新されました"
+  text_email_subject_started: "承認ワークフロー '%{name}' が開始されました" 
+  text_email_finished_approved: "承認ワークフロー '%{name}' において '%{filename}' が承認されました。"
+  text_email_finished_rejected: "承認ワークフロー '%{name}' において '%{filename}' が否認されました。理由：'%{notice}'。"
+  text_email_finished_delegated: "承認ワークフロー '%{name}' において代理承認が依頼されました。承認対象 '%{filename}' の内容をご確認の上、承認・否認のご判断をお願い致します（依頼主コメント：'%{notice}'）。"
+  text_email_finished_step: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}' の内容をご確認の上、承認・否認のご判断をお願い致します。"
+  text_email_finished_step_short: "承認ワークフロー '%{name}' において '%{filename}' の承認ステップが一つ終了しました。"
+  text_email_started: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}' の内容をご確認の上、承認・否認のご判断をお願い致します。"  
+  text_email_to_proceed: 次のURLを開き内容を確認の上、右端のチェックマークをクリックし承認・否認の選択をしてください。
+  text_email_to_see_history: 承認ワークフローの履歴を確認するには次のURLをクリックしワークフローのステータスを確認してください。
+  text_email_to_see_status: 承認ワークフローの状況を確認するには次のURLをクリックしワークフローのステータスを確認してください。
   label_my_open_approvals: My open approvals
   label_my_locked_documents: My locked documents
   
-  title_create_link: Create a symbolic link  
-  label_link_from: Link from
+  title_create_link: シンボリックリンクを作成します  
+  label_link_from: リンク生成(from)
   label_link_to: Link to
-  label_notifications_on: Notifications on
-  label_notifications_off: Notifications off
-  field_target_file: Source file
-  title_download_entries: Download entries
-  label_link_name: Link name
+  label_notifications_on: 通知オン
+  label_notifications_off: 通知オフ
+  field_target_file: リンク元ファイル
+  title_download_entries: ダウンロード記録
+  label_link_name: リンク名
   label_link_external_url: URL
-  label_target_folder: Target folder
-  label_source_folder: Source folder
-  label_target_project: Target project
-  label_source_project: Source project
-  label_external: External
+  label_target_folder: リンク先フォルダ
+  label_source_folder: リンク元フォルダ
+  label_target_project: リンク先プロジェクト
+  label_source_project: リンク元プロジェクト
+  label_external: 外部
   
-  text_email_doc_updated_subject: "Documents of %{project} updated"
+  text_email_doc_updated_subject: "%{project}のファイルが更新されました"
   text_email_doc_updated: has just actualized documents of
   text_email_doc_follows: as follows
-  text_email_doc_deleted_subject: "Documents of %{project} deleted"
+  text_email_doc_deleted_subject: "%{project}のファイルが削除されました"
   text_email_doc_deleted: has just deleted documents of
   label_links_only: links only
   
-  label_display_notified_recipients: Display notified recipients
-  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
-  warning_email_notifications: "Email notifications sent to %{to}"
+  label_display_notified_recipients: 通知受信者の表示
+  note_display_notified_recipients: 電子メールで通知したすべてのユーザの情報を表示します。
+  warning_email_notifications: "%{to} へ電子メールで通知しました"
   
-  link_trash_bin: Trash bin
-  title_restore: Restore
-  notice_dmsf_file_restored: The document has been successfully restored
-  notice_dmsf_folder_restored: The folder has been successfully restored
-  notice_dmsf_link_restored: The link has been successfully restored
+  link_trash_bin: ゴミ箱
+  title_restore: 復元
+  notice_dmsf_file_restored: ファイルを復元しました
+  notice_dmsf_folder_restored: フォルダを復元しました
+  notice_dmsf_link_restored: リンクを復元しました
   title_restore_checked: Restore checked
-  error_parent_folder: "The parent folder doesn't exist"
+  error_parent_folder: "親フォルダが存在しません"
   
   my:
     blocks:
-      locked_documents: Locked documents
-      open_approvals: Open approvals
+      locked_documents: ロック中
+      open_approvals: 未承認
           
-  label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
-  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  label_maximum_ajax_upload_filesize: アップロードファイルサイズ上限
+  note_maximum_ajax_upload_filesize: アップロード可能なファイルサイズの上限。AjaxおよびRedmineの仕様に制限される（2ギガバイト程度までは確認済み）単位はMB。
+
