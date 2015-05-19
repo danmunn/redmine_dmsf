@@ -82,10 +82,14 @@ class DmsfFile < ActiveRecord::Base
 
   acts_as_event :title => Proc.new { |o| o.name },
                 :description => Proc.new { |o| 
-                  desc = Redmine::Search.cache_store.fetch("DmsfFile-#{o.id}")                  
-                  if desc
-                    Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")
-                    desc
+                  if (Rails::VERSION::MAJOR > 3)
+                    desc = Redmine::Search.cache_store.fetch("DmsfFile-#{o.id}")                  
+                    if desc
+                      Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")
+                      desc
+                    else
+                      o.description
+                    end
                   else
                     o.description
                   end
