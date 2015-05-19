@@ -300,7 +300,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   # To fulfill searchable module expectations
-  def self.search(tokens, user, projects = nil, options = {})
+  def self.search(tokens, projects = nil, options = {}, user = User.current)
     tokens = [] << tokens unless tokens.is_a?(Array)
     projects = [] << projects if projects.is_a?(Project)
     project_ids = projects.collect(&:id) if projects
@@ -402,8 +402,12 @@ class DmsfFile < ActiveRecord::Base
 
                 if user.allowed_to?(:view_dmsf_files, dmsf_file.project) && 
                     (project_ids.empty? || (project_ids.include?(dmsf_file.project.id)))                  
-                  Redmine::Search.cache_store.write("DmsfFile-#{dmsf_file.id}", 
-                    dochash['sample'].force_encoding('UTF-8')) if dochash['sample']
+                  if (Rails::VERSION::MAJOR > 3)
+                    Redmine::Search.cache_store.write("DmsfFile-#{dmsf_file.id}", 
+                      dochash['sample'].force_encoding('UTF-8')) if dochash['sample']
+                  else
+                    dmsf_file.event_description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']
+                  end
                   results << dmsf_file
                 end
               end
@@ -413,11 +417,11 @@ class DmsfFile < ActiveRecord::Base
       end
     end
     
-    results
+    [results, results.count]
   end
   
   def self.search_result_ranks_and_ids(tokens, user = User.current, projects = nil, options = {})
-    r = self.search(tokens, user, projects, options)    
+    r = self.search(tokens, projects, options, user)[0]
     r.map{ |f| [f.updated_at.to_i, f.id]}
   end  
 
