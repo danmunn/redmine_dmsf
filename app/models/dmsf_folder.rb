@@ -76,7 +76,8 @@ class DmsfFolder < ActiveRecord::Base
           :project_key => 'project_id',
           :date_column => 'updated_at',
           :permission => :view_dmsf_files,
-          :scope => self.joins(:project)
+          :scope => self.joins(:project),
+          :include => :project # Redmine < 3.0.0 compatibility
         
   acts_as_event :title => Proc.new {|o| o.title},
           :description => Proc.new {|o| o.description },
