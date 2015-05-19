@@ -60,14 +60,13 @@ class DmsfFile < ActiveRecord::Base
   if (Rails::VERSION::MAJOR > 3)
     accepts_nested_attributes_for :revisions, :locks, :referenced_links
   end
-
-  if (Rails::VERSION::MAJOR > 3)
-    scope :visible, -> { where(deleted: false) }
-    scope :deleted, -> { where(deleted: true) }
-  else
-    scope :visible, where(:deleted => false)
-    scope :deleted, where(:deleted => true)
-  end
+  
+  scope :visible, lambda { |*args|
+    where(deleted: false) 
+  }
+  scope :deleted, lambda { |*args|
+    where(deleted: true)
+  }  
 
   validates :name, :presence => true
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
