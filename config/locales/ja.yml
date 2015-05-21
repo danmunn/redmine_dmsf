@@ -63,8 +63,8 @@ ja:
   submit_create: 作成
   link_create_folder: フォルダ作成
   title_check_uncheck_all_for_zip_download_or_email: すべての Zip ダウンロードまたは電子メールのチェックをオン/オフします
-  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
-  title_check_for_restore_or_delete: Check for restore or delete
+  title_check_uncheck_all_for_restore_or_delete: すべての復元または削除のチェックをオン/オフします
+  title_check_for_restore_or_delete: 復元または削除をチェックします
   link_title: タイトル
   link_size: サイズ
   link_modified: 更新日時
@@ -145,11 +145,11 @@ ja:
   heading_uploaded_files: アップロードされたファイル
   submit_commit: コミット
   link_documents: 文書
-  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
-  permission_view_dmsf_file_revisions: View revisions in Activity stream
-  permission_view_dmsf_folders: 文書の一覧
+  permission_view_dmsf_file_revision_accesses: ダウンロード履歴の表示
+  permission_view_dmsf_file_revisions: リビジョン履歴の表示
+  permission_view_dmsf_folders: ファイルの一覧
   permission_user_preferences: ユーザ設定
-  permission_view_dmsf_files: 文書の表示
+  permission_view_dmsf_files: ファイル文書の表示
   permission_folder_manipulation: フォルダの操作
   permission_file_manipulation: ファイルの操作  
   permission_force_file_unlock: ファイルの強制ロック解除
@@ -206,8 +206,8 @@ ja:
   label_maximum_email_filesize: "電子メール添付ファイルサイズ上限"
   header_minimum_filesize: "ファイルエラー"
   error_minimum_filesize: " %{file} のサイズは0バイトのため添付することはできません。"
-  parent_directory: "Parent Directory"
-  note_webdav: "Webdavを有効にすると http://.../dmsf/webdav/ で閲覧することができます"
+  parent_directory: "親ディレクトリ"
+  note_webdav: "Webdavを有効にすると http[s]://.../dmsf/webdav/ で閲覧することができます"
   label_webdav: "Webdav機能"
   label_dmsf_plural: "ファイルとフォルダをコピーします (%{files} files in %{folders} folders)"
 
@@ -246,7 +246,7 @@ ja:
   label_dmsf_wokflow_action_assign: 承認ワークフロー設定
   label_dmsf_wokflow_action_start: ワークフロー開始
   label_dmsf_workflow_add_approver: "新規承認者の追加:"
-  label_or: or
+  label_or: または
   label_action: アクション
   label_note: コメント  
   title_none: 無し
@@ -258,8 +258,8 @@ ja:
   title_assigned: アサイン
   title_approval: 承認
   title_rejected: 否認
-  dmsf_and: かつ
-  dmsf_or: または
+  dmsf_and: AND
+  dmsf_or: OR
   dmsf_new_step: 新規ステップ  
   message_dmsf_wokflow_note: コメント
   info_revision: "r%{rev}"
@@ -280,8 +280,8 @@ ja:
   text_email_to_proceed: 次のURLを開き内容を確認の上、右端のチェックマークをクリックし承認・否認の選択をしてください。
   text_email_to_see_history: 承認ワークフローの履歴を確認するには次のURLをクリックしワークフローのステータスを確認してください。
   text_email_to_see_status: 承認ワークフローの状況を確認するには次のURLをクリックしワークフローのステータスを確認してください。
-  label_my_open_approvals: My open approvals
-  label_my_locked_documents: My locked documents
+  label_my_open_approvals: 自分の承認待ち
+  label_my_locked_documents: 自分のロック中ファイル
   
   title_create_link: シンボリックリンクを作成します  
   label_link_from: リンク生成(from)
@@ -299,11 +299,11 @@ ja:
   label_external: 外部
   
   text_email_doc_updated_subject: "%{project}のファイルが更新されました"
-  text_email_doc_updated: has just actualized documents of
-  text_email_doc_follows: as follows
+  text_email_doc_updated: が次のファイルを更新しました。
+  text_email_doc_follows: 対象ファイル：
   text_email_doc_deleted_subject: "%{project}のファイルが削除されました"
-  text_email_doc_deleted: has just deleted documents of
-  label_links_only: links only
+  text_email_doc_deleted: がファイルを削除しました。
+  label_links_only: リンクのみ
   
   label_display_notified_recipients: 通知受信者の表示
   note_display_notified_recipients: 電子メールで通知したすべてのユーザの情報を表示します。
@@ -314,7 +314,7 @@ ja:
   notice_dmsf_file_restored: ファイルを復元しました
   notice_dmsf_folder_restored: フォルダを復元しました
   notice_dmsf_link_restored: リンクを復元しました
-  title_restore_checked: Restore checked
+  title_restore_checked: チェックしたものを復元します
   error_parent_folder: "親フォルダが存在しません"
   
   my:
