@@ -72,12 +72,19 @@ class DmsfFolder < ActiveRecord::Base
 
   acts_as_customizable
   
-  acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
+  if (Rails::VERSION::MAJOR > 3)
+    acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
           :project_key => 'project_id',
           :date_column => 'updated_at',
           :permission => :view_dmsf_files,
-          :scope => self.joins(:project),
-          :include => :project # Redmine < 3.0.0 compatibility
+          :scope => self.joins(:project)
+  else        
+    acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
+          :project_key => 'project_id',
+          :date_column => 'updated_at',
+          :permission => :view_dmsf_files,          
+          :include => :project
+  end
         
   acts_as_event :title => Proc.new {|o| o.title},
           :description => Proc.new {|o| o.description },
