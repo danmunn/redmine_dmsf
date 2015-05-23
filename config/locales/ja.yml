@@ -149,12 +149,13 @@ ja:
   permission_view_dmsf_file_revisions: リビジョン履歴の表示
   permission_view_dmsf_folders: ファイルの一覧
   permission_user_preferences: ユーザ設定
-  permission_view_dmsf_files: ファイル文書の表示
+  permission_view_dmsf_files: ファイルの表示
   permission_folder_manipulation: フォルダの操作
   permission_file_manipulation: ファイルの操作  
   permission_force_file_unlock: ファイルの強制ロック解除
   permission_manage_workflows: ワークフロー管理
   permission_file_delete: ファイルの削除
+  permission_file_approval: ファイルの承認
   label_file: ファイル
   field_folder: フォルダ
   error_create_cycle_in_folder_dependency: フォルダの依存関係が循環しています
@@ -278,14 +279,14 @@ ja:
   text_email_finished_step_short: "承認ワークフロー '%{name}' において '%{filename}' の承認ステップが一つ終了しました。"
   text_email_started: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}' の内容をご確認の上、承認・否認のご判断をお願い致します。"  
   text_email_to_proceed: 次のURLを開き内容を確認の上、右端のチェックマークをクリックし承認・否認の選択をしてください。
-  text_email_to_see_history: 承認ワークフローの履歴を確認するには次のURLをクリックしワークフローのステータスを確認してください。
-  text_email_to_see_status: 承認ワークフローの状況を確認するには次のURLをクリックしワークフローのステータスを確認してください。
+  text_email_to_see_history: 次のURLで承認ワークフローの履歴を確認することができます。
+  text_email_to_see_status: 次のURLで承認ワークフローのステータスを確認することができます。
   label_my_open_approvals: 自分の承認待ち
   label_my_locked_documents: 自分のロック中ファイル
   
   title_create_link: シンボリックリンクを作成します  
   label_link_from: リンク生成(from)
-  label_link_to: Link to
+  label_link_to: リンク生成(to)
   label_notifications_on: 通知オン
   label_notifications_off: 通知オフ
   field_target_file: リンク元ファイル
@@ -298,11 +299,11 @@ ja:
   label_source_project: リンク元プロジェクト
   label_external: 外部
   
-  text_email_doc_updated_subject: "%{project}のファイルが更新されました"
+  text_email_doc_updated_subject: "プロジェクト'%{project}'のファイルが更新されました"
   text_email_doc_updated: が次のファイルを更新しました。
   text_email_doc_follows: 対象ファイル：
-  text_email_doc_deleted_subject: "%{project}のファイルが削除されました"
-  text_email_doc_deleted: がファイルを削除しました。
+  text_email_doc_deleted_subject: "プロジェクト'%{project}'のファイルが削除されました"
+  text_email_doc_deleted: が次のプロジェクトのファイルを削除しました。
   label_links_only: リンクのみ
   
   label_display_notified_recipients: 通知受信者の表示
