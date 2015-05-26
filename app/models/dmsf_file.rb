@@ -85,20 +85,22 @@ class DmsfFile < ActiveRecord::Base
                   if (Rails::VERSION::MAJOR > 3)
                     desc = Redmine::Search.cache_store.fetch("DmsfFile-#{o.id}")                  
                     if desc
-                      Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")
-                      desc
+                      Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")                      
                     else
-                      o.description
+                      desc = o.description
+                      desc += " / #{o.last_revision.comment}" if o.last_revision.comment.present?
                     end
                   else
-                    o.description
+                    desc = o.description
+                    desc += " / #{o.last_revision.comment}" if o.last_revision.comment.present?
                   end
+                  desc
                 },
                 :url => Proc.new { |o| {:controller => 'dmsf_files', :action => 'show', :id => o} },
                 :datetime => Proc.new { |o| o.updated_at },
                 :author => Proc.new { |o| o.last_revision.user }
               
-  acts_as_searchable :columns => ["#{table_name}.name", "#{DmsfFileRevision}.title", "#{DmsfFileRevision}.description"],
+  acts_as_searchable :columns => ["#{table_name}.name", "#{DmsfFileRevision.table_name}.title", "#{DmsfFileRevision.table_name}.description", "#{DmsfFileRevision.table_name}.comment"],
     :project_key => 'project_id',
     :date_column => "#{table_name}.updated_at"    
 
@@ -317,9 +319,9 @@ class DmsfFile < ActiveRecord::Base
     end
     
     if options[:titles_only]
-      columns = ['dmsf_file_revisions.title'] 
-    else
-      columns = %w(dmsf_files.name dmsf_file_revisions.title dmsf_file_revisions.description)
+      columns = [searchable_options[:columns][1]]
+    else      
+      columns = searchable_options[:columns]
     end
     
     token_clauses = columns.collect {|column| "(LOWER(#{column}) LIKE ?)"}
@@ -336,7 +338,7 @@ class DmsfFile < ActiveRecord::Base
     visible.joins(:project, :revisions).
     where(project_conditions.join(' AND ')).scoping do
       where(find_options[:conditions]).scoping do        
-        results = where(limit_options)
+        results = where(limit_options).uniq
       end
     end
 
