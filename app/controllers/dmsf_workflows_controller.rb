@@ -238,7 +238,7 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def update    
-    if request.put? && params[:dmsf_workflow] && @dmsf_workflow.update_attributes(
+    if params[:dmsf_workflow] && @dmsf_workflow.update_attributes(
         {:name => params[:dmsf_workflow][:name]})
       flash[:notice] = l(:notice_successful_update)
       if @project
@@ -246,7 +246,8 @@ class DmsfWorkflowsController < ApplicationController
       else
         redirect_to dmsf_workflows_path
       end    
-    else            
+    else
+      flash[:error] = @dmsf_workflow.errors.full_messages.to_sentence
       redirect_to dmsf_workflow_path(@dmsf_workflow)
     end
   end
