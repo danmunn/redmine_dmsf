@@ -271,26 +271,30 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def add_step     
-    if request.post?                  
-      users = User.where(:id => params[:user_ids])
+    if request.post?                        
       if params[:step] == '0'
         step = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq.count + 1        
       else
         step = params[:step].to_i
       end
       operator = (params[:commit] == l(:dmsf_and)) ? DmsfWorkflowStep::OPERATOR_AND : DmsfWorkflowStep::OPERATOR_OR
-      users.each do |user|        
-        ws = DmsfWorkflowStep.new(
-          :dmsf_workflow_id => @dmsf_workflow.id, 
-          :step => step, 
-          :user_id => user.id, 
-          :operator => operator)
-        if ws.save
-          @dmsf_workflow.dmsf_workflow_steps << ws
-        else
-          flash[:error] = l(:error_workflow_assign)
+      users = User.where(:id => params[:user_ids])
+      if users.count > 0
+        users.each do |user|        
+          ws = DmsfWorkflowStep.new(
+            :dmsf_workflow_id => @dmsf_workflow.id, 
+            :step => step, 
+            :user_id => user.id, 
+            :operator => operator)
+          if ws.save
+            @dmsf_workflow.dmsf_workflow_steps << ws
+          else
+            flash[:error] = @dmsf_workflow.errors.full_messages.to_sentence
+          end
         end
-      end         
+      else
+        flash[:error] = l(:error_workflow_assign)
+      end      
     end             
     respond_to do |format|
       format.html            
