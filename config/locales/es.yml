@@ -290,13 +290,14 @@ es:
   label_notifications_off: Notificaciones OFF
   field_target_file: Archivo fuente
   title_download_entries: Entradas de descarga
+  label_external: External
+  
   label_link_name: Nombre de enlace
   label_link_external_url: URL
   label_target_folder: Directorio destino
   label_source_folder: Directorio fuente
   label_target_project: Proyecto destino
-  label_source_project: Proyecto fuente
-  label_external: External
+  label_source_project: Proyecto fuente  
   
   text_email_doc_updated_subject: "Documentos de %{project} actualizados"
   text_email_doc_updated: acaba de actualizar los ducumentos de

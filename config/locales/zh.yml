@@ -290,13 +290,14 @@ zh:
   label_notifications_off: Notifications off
   field_target_file: Source file
   title_download_entries: Download entries
+  label_external: External
+  
   label_link_name: Link name
   label_link_external_url: URL
   label_target_folder: Target folder
   label_source_folder: Source folder
   label_target_project: Target project
-  label_source_project: Source project
-  label_external: External
+  label_source_project: Source project  
   
   text_email_doc_updated_subject: "Documents of %{project} updated"
   text_email_doc_updated: has just actualized documents of

@@ -23,6 +23,8 @@
 de:
   dmsf: DMS
   label_dmsf_file_plural: DMS
+  label_dmsf_file_revision_plural: Dmsf document revisions
+  label_dmsf_file_revision_access_plural: Dmsf document accesses
   warning_no_entries_selected: Keine Einträge ausgewählt
   error_email_to_must_be_entered: Es muss ein Email-Empfänger angegeben werden.  
   warning_file_already_locked: Datei schon gesperrt
@@ -150,9 +152,9 @@ de:
   permission_view_dmsf_files: Betrachte Dateien
   permission_folder_manipulation: Ordner bearbeiten
   permission_file_manipulation: Dateien bearbeiten  
-  permission_force_file_unlock: Erzwinge Aufhebung der Dateisperre
-  permission_file_delete: Datei löschen
+  permission_force_file_unlock: Erzwinge Aufhebung der Dateisperre  
   permission_manage_workflows: Workflows verwalten
+  permission_file_delete: Datei löschen
   label_file: Datei
   field_folder: Ordner
   error_create_cycle_in_folder_dependency: Zirkelabhängigkeit in der Ordnerstruktur erstellt
@@ -179,6 +181,7 @@ de:
   heading_access_first: Erste
   heading_access_last: Letzte
   label_dmsf_updated: DMS aktualisiert
+  label_dmsf_downloaded: DMSF document downloaded
   title_total_size_of_all_files: Gesamtgröße aller Dateien in diesem Ordner
   project_module_dmsf: DMS
   warning_no_project_to_copy_file_to: Kein Projekt, in das die Datei kopiert werden kann.
@@ -287,13 +290,14 @@ de:
   label_notifications_off: Benachrichtigungen aus
   field_target_file: Quelldatei
   title_download_entries: Download entries
+  label_external: Außen
+  
   label_link_name: Name der Verknüpfung
   label_link_external_url: URL
   label_target_folder: Zielordner
   label_source_folder: Quellordner
   label_target_project: Zielprojekt
-  label_source_project: Quellprojekt
-  label_external: Außen
+  label_source_project: Quellprojekt  
   
   text_email_doc_updated_subject: "Dokumente im Projekt %{project} wurden aktualisiert"
   text_email_doc_updated: hat folgende Dokumente bearbeitet

@@ -80,10 +80,8 @@ zh-TW:
   title_waiting_for_approval: 等待批准
   title_approved: 已經被批准
   title_unlock_file: 解除鎖定。允許其它使用者修改。
-  title_lock_file: 鎖定檔案。禁止其它使用者修改。
-  submit_download: 下載
-  title_download_checked: 以ZIP下載所選取的檔案
-  submit_email: 電子郵件
+  title_lock_file: 鎖定檔案。禁止其它使用者修改。  
+  title_download_checked: 以ZIP下載所選取的檔案  
   title_send_checked_by_email: 以電子郵件發送所選取的檔案
   link_user_preferences: 你的DMSF的系統偏好設定
   heading_send_documents_by_email: 電子郵件寄送檔案
@@ -156,6 +154,7 @@ zh-TW:
   permission_file_manipulation: 文件操作  
   permission_force_file_unlock: 強制解除檔案鎖定
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: 檔案
   field_folder: 資料夾
   error_create_cycle_in_folder_dependency: 資料夾之間的關係，不得為一個cycle循環。
@@ -291,13 +290,14 @@ zh-TW:
   label_notifications_off: Notifications off
   field_target_file: Source file
   title_download_entries: Download entries
+  label_external: External
+  
   label_link_name: Link name
   label_link_external_url: URL
   label_target_folder: Target folder
   label_source_folder: Source folder
   label_target_project: Target project
-  label_source_project: Source project
-  label_external: External
+  label_source_project: Source project  
 
   text_email_doc_updated_subject: "Documents of %{project} updated"
   text_email_doc_updated: has just actualized documents of
@@ -309,6 +309,14 @@ zh-TW:
   label_display_notified_recipients: Display notified recipients
   note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
   warning_email_notifications: "Email notifications sent to %{to}"
+  
+  link_trash_bin: Trash bin
+  title_restore: Restore
+  notice_dmsf_file_restored: The document has been successfully restored
+  notice_dmsf_folder_restored: The folder has been successfully restored
+  notice_dmsf_link_restored: The link has been successfully restored
+  title_restore_checked: Restore checked
+  error_parent_folder: "The parent folder doesn't exist"
 
   my:
     blocks:

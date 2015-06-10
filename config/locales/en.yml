@@ -145,6 +145,8 @@ en:
   heading_uploaded_files: Uploaded Files
   submit_commit: Commit
   link_documents: Documents
+  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
+  permission_view_dmsf_file_revisions: View revisions in Activity stream
   permission_view_dmsf_folders: Browse documents
   permission_user_preferences: User preferences
   permission_view_dmsf_files: View documents

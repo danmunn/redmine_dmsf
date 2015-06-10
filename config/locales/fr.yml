@@ -1,3 +1,5 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
@@ -119,6 +121,7 @@ fr:
   option_version_same: (identique)
   option_version_minor: (modification mineure)
   option_version_major: (modification majeure)
+  option_version_custom: Custom
   label_new_content: Nouvelle version du fichier
   label_maximum_files_upload: Nombre maximal de documents pouvant être transmis
   note_maximum_number_of_files_uploaded: Nombre maximal de documents pouvant être transmis en une fois. La valeur 0 signifie illimité.
@@ -287,13 +290,14 @@ fr:
   label_notifications_off: Désactiver les notifications
   field_target_file: Fichier source
   title_download_entries: Historique des téléchargements
+  label_external: External
+  
   label_link_name: Nom du lien
   label_link_external_url: Adresse Internet
   label_target_folder: Dossier cible
   label_source_folder: Dossier source
   label_target_project: Projet cible
-  label_source_project: Projet source
-  label_external: External
+  label_source_project: Projet source  
   
   text_email_doc_updated_subject: "Documents de %{project} mis à jour"
   text_email_doc_updated: a mis à jour des documents de

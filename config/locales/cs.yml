@@ -290,13 +290,14 @@ cs:
   label_notifications_off: Vypnout notifikace
   field_target_file: Zdrojový soubor
   title_download_entries: Historie stahování
+  label_external: Externí
+  
   label_link_name: Název odkazu
   label_link_external_url: URL
   label_target_folder: Cílový adresář
   label_source_folder: Zdrojový adresář
   label_target_project: Cílový projekt
-  label_source_project: Zdrojový projekt
-  label_external: Externí
+  label_source_project: Zdrojový projekt  
   
   text_email_doc_updated_subject: "Dokumenty projektu %{project} aktualizovány"
   text_email_doc_updated: právě aktualizoval dokumenty projektu

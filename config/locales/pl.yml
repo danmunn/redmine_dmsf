@@ -290,13 +290,14 @@ pl:
   label_notifications_off: Powiadomienia wyłączone
   field_target_file: Plik źródłowy
   title_download_entries: Pobrane
+  label_external: External
+  
   label_link_name: Nazwa odnośnika
   label_link_external_url: URL
   label_target_folder: Folder docelowy
   label_source_folder: Folder źródłowy
   label_target_project: Projekt docelowy
-  label_source_project: Projekt źródłowy
-  label_external: External
+  label_source_project: Projekt źródłowy  
   
   text_email_doc_updated_subject: "Dokumenty projektu %{project} zostały zaktualizowane"
   text_email_doc_updated: dokumenty zostały zaktualizowane
