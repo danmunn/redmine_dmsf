@@ -270,6 +270,15 @@ class DmsfWorkflowsController < ApplicationController
     render :layout => false
   end
   
+  def new_step
+    @steps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq
+
+    respond_to do |format|
+      format.html 
+      format.js
+    end        
+  end
+  
   def add_step     
     if request.post?                        
       if params[:step] == '0'
