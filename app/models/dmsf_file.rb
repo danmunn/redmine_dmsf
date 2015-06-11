@@ -407,7 +407,7 @@ class DmsfFile < ActiveRecord::Base
                 end               
 
                 if user.allowed_to?(:view_dmsf_files, dmsf_file.project) && 
-                    (project_ids.empty? || (project_ids.include?(dmsf_file.project.id)))                  
+                    (project_ids.blank? || (project_ids.include?(dmsf_file.project.id)))                  
                   if (Rails::VERSION::MAJOR > 3)
                     Redmine::Search.cache_store.write("DmsfFile-#{dmsf_file.id}", 
                       dochash['sample'].force_encoding('UTF-8')) if dochash['sample']
