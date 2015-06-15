@@ -22,9 +22,9 @@
 
 zh:
   dmsf: 文档管家
-  label_dmsf_file_plural: Dmsf files
-  label_dmsf_file_revision_plural: Dmsf document revisions
-  label_dmsf_file_revision_access_plural: Dmsf document accesses
+  label_dmsf_file_plural: Documents
+  label_dmsf_file_revision_plural: Document revisions
+  label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: 未选择任何条目
   error_email_to_must_be_entered: 请输入电子邮件  
   warning_file_already_locked: 文件已经锁定
@@ -191,7 +191,7 @@ zh:
   field_target_project: Target project
   field_target_folder: Target folder
   title_copy_or_move: Copy/Move
-  label_dmsf_folder_plural: Dmsf folders
+  label_dmsf_folder_plural: Folders
   comment_moved_from: "Moved from %{source}"
   error_target_folder_same: Target folder and project are the same as current
   error_file_cannot_be_moved: "File can't be moved"
@@ -209,7 +209,7 @@ zh:
   parent_directory: Parent Directory
   note_webdav: Webdav once enabled can be found at http://.../dmsf/webdav/
   label_webdav: Webdav functionality
-  label_dmsf_plural: "Copy DMSF files and folders (%{files} files in %{folders} folders)"
+  label_dmsf_plural: "Copy documents and folders (%{files} files in %{folders} folders)"
 
   warning_folder_already_locked: This folder is already locked
   notice_folder_locked: The folder was successfully locked

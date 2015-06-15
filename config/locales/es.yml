@@ -22,9 +22,9 @@
 
 es:
   dmsf: DMSF
-  label_dmsf_file_plural: DMSF Archivos
-  label_dmsf_file_revision_plural: Dmsf document revisions
-  label_dmsf_file_revision_access_plural: Dmsf document accesses
+  label_dmsf_file_plural: Archivos
+  label_dmsf_file_revision_plural: Document revisions
+  label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: No ha seleccionado ningún ítem
   error_email_to_must_be_entered: Ingrese un email  
   warning_file_already_locked: El archivo ya está bloqueado
@@ -191,7 +191,7 @@ es:
   field_target_project: Proyecto destino
   field_target_folder: Directorio destino
   title_copy_or_move: Copiar/Mover
-  label_dmsf_folder_plural: directorio Dmsf
+  label_dmsf_folder_plural: directorio
   comment_moved_from: "Mover desde %{source}"
   error_target_folder_same: El directorio y proyecto destino son el actual
   error_file_cannot_be_moved: "Los archivos no puesen ser movidos"
@@ -209,7 +209,7 @@ es:
   parent_directory: Directorio padre
   note_webdav: Si Webdav está habilitado, se puede encontrar en http://.../dmsf/webdav/
   label_webdav: Funcionalidad Webdav
-  label_dmsf_plural: "Copiar archivos y directorios  DMSF (%{files} archivos en %{folders} directorios)"
+  label_dmsf_plural: "Copiar archivos y directorios (%{files} archivos en %{folders} directorios)"
 
   warning_folder_already_locked: El directorio ya se encuentra bloqueado
   notice_folder_locked: "El directorio se bloqueó exitosamente"

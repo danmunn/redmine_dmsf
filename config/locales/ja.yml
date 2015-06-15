@@ -22,9 +22,9 @@
 
 ja:
   dmsf: DMSF
-  label_dmsf_file_plural: Dmsf ファイル
-  label_dmsf_file_revision_plural: Dmsf document revisions
-  label_dmsf_file_revision_access_plural: Dmsf document accesses
+  label_dmsf_file_plural: ファイル
+  label_dmsf_file_revision_plural: Document revisions
+  label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: エントリーが選ばれていません
   error_email_to_must_be_entered: 電子メールの To 先は省略できません  
   warning_file_already_locked: ファイルは既にロックされています
@@ -209,7 +209,7 @@ ja:
   parent_directory: "Parent Directory"
   note_webdav: "Webdav once enabled can be found at http://.../dmsf/webdav/"
   label_webdav: "Webdav functionality"
-  label_dmsf_plural: "Copy DMSF files and folders (%{files} files in %{folders} folders)"
+  label_dmsf_plural: "Copy documents and folders (%{files} files in %{folders} folders)"
 
   warning_folder_already_locked: "This folder is already locked"
   notice_folder_locked: "The folder was successfully locked"

@@ -23,8 +23,8 @@
 zh-TW:
   dmsf: 文件總管
   label_dmsf_file_plural: 文件檔案
-  label_dmsf_file_revision_plural: Dmsf document revisions
-  label_dmsf_file_revision_access_plural: Dmsf document accesses
+  label_dmsf_file_revision_plural: Document revisions
+  label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: 尚未選取任何項目
   error_email_to_must_be_entered: 請輸入收件者的電子郵件
   warning_file_already_locked: 檔案己經鎖定
@@ -180,8 +180,8 @@ zh-TW:
   heading_access_downloads_emails: 下載/電子郵件
   heading_access_first: First
   heading_access_last: Last
-  label_dmsf_updated: DMSF updated
-  label_dmsf_downloaded: DMSF document downloaded
+  label_dmsf_updated: Updated
+  label_dmsf_downloaded: Downloaded
   title_total_size_of_all_files: 資料夾所有檔案的檔案大小
   project_module_dmsf: 文件總管
   warning_no_project_to_copy_file_to: No project to copy file to
@@ -191,7 +191,7 @@ zh-TW:
   field_target_project: Target project
   field_target_folder: Target folder
   title_copy_or_move: Copy/Move
-  label_dmsf_folder_plural: Dmsf folders
+  label_dmsf_folder_plural: Folders
   comment_moved_from: "Moved from %{source}"
   error_target_folder_same: Target folder and project are the same as current
   error_file_cannot_be_moved: "File can't be moved"

@@ -22,9 +22,9 @@
 
 fr:
   dmsf: DMSF
-  label_dmsf_file_plural: Fichiers DMSF
-  label_dmsf_file_revision_plural: Dmsf document revisions
-  label_dmsf_file_revision_access_plural: Dmsf document accesses
+  label_dmsf_file_plural: Fichiers
+  label_dmsf_file_revision_plural: Document revisions
+  label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: Aucun fichier sélectionné
   error_email_to_must_be_entered: "La saisie d'une adresse mail est obligatoire"
   warning_file_already_locked: Fichier déjà verrouillé
@@ -191,7 +191,7 @@ fr:
   field_target_project: Projet cible
   field_target_folder: Dossier cible
   title_copy_or_move: Copie/Déplacement
-  label_dmsf_folder_plural: Les dossiers de DMSF
+  label_dmsf_folder_plural: Les dossiers
   comment_moved_from: "Déplacé depuis %{source}"
   error_target_folder_same: Le projet et le dossier cible sont identiques au projet et dossier source
   error_file_cannot_be_moved: Le fichier ne peut pas être déplacé
@@ -209,7 +209,7 @@ fr:
   parent_directory: Dossier parent
   note_webdav: "Après l'activation du module Webdav, celui-ci sera accessible par http://.../dmsf/webdav/"
   label_webdav: Module Webdav
-  label_dmsf_plural: "Copier les fichiers et les dossiers DMSF (%{files} fichiers dans %{folders} dossiers)"
+  label_dmsf_plural: "Copier les fichiers et les dossiers (%{files} fichiers dans %{folders} dossiers)"
 
   warning_folder_already_locked: Ce dossier est déjà verrouillé
   notice_folder_locked: Dossier verrouillé
