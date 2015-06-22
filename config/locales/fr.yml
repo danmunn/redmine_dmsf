@@ -23,8 +23,8 @@
 fr:
   dmsf: DMSF
   label_dmsf_file_plural: Fichiers
-  label_dmsf_file_revision_plural: Document revisions
-  label_dmsf_file_revision_access_plural: Document accesses
+  label_dmsf_file_revision_plural: Révisions du document
+  label_dmsf_file_revision_access_plural: Accès au document
   warning_no_entries_selected: Aucun fichier sélectionné
   error_email_to_must_be_entered: "La saisie d'une adresse mail est obligatoire"
   warning_file_already_locked: Fichier déjà verrouillé
@@ -63,14 +63,14 @@ fr:
   submit_create: Ajouter
   link_create_folder: Créer un sous-dossier
   title_check_uncheck_all_for_zip_download_or_email: Sélectionner/Ignorer tous les documents pour le téléchargement ou pour la transmission par mail
-  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
+  title_check_uncheck_all_for_restore_or_delete: Sélectionner/Ignorer pour restaurer ou supprimer
   link_title: Titre
   link_size: Taille
   link_modified: Modifié
   link_ver: Version
   link_author: Auteur
   title_check_for_zip_download_or_email: Sélectionner pour le téléchargement ou la transmission par mail
-  title_check_for_restore_or_delete: Check for restore or delete
+  title_check_for_restore_or_delete: Sélectionner pour restaurer ou supprimer
   title_delete: Supprimer
   title_notifications_active_deactivate: "Notifications activées : cliquer pour désactiver"
   title_notifications_not_active_activate: "Notifications désactivées : cliquer pour activer"
@@ -145,8 +145,8 @@ fr:
   heading_uploaded_files: Document(s) transmis
   submit_commit: Appliquer
   link_documents: Documents
-  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
-  permission_view_dmsf_file_revisions: View revisions in Activity stream
+  permission_view_dmsf_file_revision_accesses: Voir les téléchargements dans le flux d'activité
+  permission_view_dmsf_file_revisions: Voir les révisions dans le flux d'activité
   permission_view_dmsf_folders: Parcourir les documents
   permission_user_preferences: Préférences utilisateur
   permission_view_dmsf_files: Afficher documents
@@ -181,7 +181,7 @@ fr:
   heading_access_first: Premier
   heading_access_last: Dernier
   label_dmsf_updated: Dépôt ou mise à jour du document
-  label_dmsf_downloaded: DMSF document downloaded
+  label_dmsf_downloaded: Document DMSF téléchargé
   title_total_size_of_all_files: Taille totale des fichiers de ce dossier
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: "Le projet de destination n'est pas défini"
@@ -290,7 +290,7 @@ fr:
   label_notifications_off: Désactiver les notifications
   field_target_file: Fichier source
   title_download_entries: Historique des téléchargements
-  label_external: External
+  label_external: Externe
   
   label_link_name: Nom du lien
   label_link_external_url: Adresse Internet
@@ -315,8 +315,8 @@ fr:
   notice_dmsf_file_restored: Le document a été récupéré avec succès
   notice_dmsf_folder_restored: Le dossier a été récupéré avec succès
   notice_dmsf_link_restored: Le lien a été récupéré avec succès
-  title_restore_checked: Restore checked
-  error_parent_folder: "The parent folder doesn't exist"
+  title_restore_checked: Restauration vérifiée
+  error_parent_folder: "Le dossier parent n'existe pas"
 
   my:
     blocks:
