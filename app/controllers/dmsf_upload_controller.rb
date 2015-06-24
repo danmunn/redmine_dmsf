@@ -60,11 +60,16 @@ class DmsfUploadController < ApplicationController
       return
     end
     @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
-    FileUtils.mv(@tempfile.path, "#{DmsfHelper.temp_dir}/#{@disk_filename}")
+    begin
+      FileUtils.cp @tempfile.path, "#{DmsfHelper.temp_dir}/#{@disk_filename}"
+    rescue Exception => e
+      Rails.logger.error e.message
+    end
     if File.size("#{DmsfHelper.temp_dir}/#{@disk_filename}") <= 0
       begin
-        File.delete("#{DmsfHelper.temp_dir}/#{@disk_filename}")
-      rescue
+        File.delete "#{DmsfHelper.temp_dir}/#{@disk_filename}"
+      rescue Exception => e
+        Rails.logger.error e.message
       end
       render :layout => nil, :json => { :jsonrpc => '2.0', 
         :error => { 
