@@ -54,7 +54,7 @@ module RedmineDmsf
         return @children if @children
         @children = []
         return [] unless collection?
-        folder.subfolders.map do |p|
+        folder.subfolders.visible.map do |p|
           @children.push child(p.title)
         end
         folder.files.visible.map do |p|
@@ -81,13 +81,13 @@ module RedmineDmsf
       # Todo: Move folder data retrieval into folder function, and use folder method to determine existence
       def folder
         return @folder unless @folder == false
-        return nil if project.nil? || project.id.nil? #if the project doesnt exist, this entity can't exist
+        return nil if project.nil? || project.id.nil? #if the project doesn't exist, this entity can't exist
         @folder = nil
         # Note: Folder is searched for as a generic search to prevent SQL queries being generated:
         # if we were to look within parent, we'd have to go all the way up the chain as part of the 
-        # existence check, and although I'm sure we'd love to access the heirarchy, I can't yet
+        # existence check, and although I'm sure we'd love to access the hierarchy, I can't yet
         # see a practical need for it        
-        folders = DmsfFolder.visible.where(:project_id => project.id, :title => basename).order('title ASC').all
+        folders = DmsfFolder.visible.where(:project_id => project.id, :title => basename).order('title ASC').to_a
         return nil unless folders.length > 0
         if (folders.length > 1) then
           folders.delete_if { |x| '/' + x.dmsf_path_str != projectless_path }
