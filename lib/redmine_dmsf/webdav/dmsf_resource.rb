@@ -132,7 +132,7 @@ module RedmineDmsf
           # If folder is false, means it couldn't pick up parent, 
           # as such its probably fine to bail out, however we'll 
           # perform a search in this scenario
-          files = DmsfFile.visible.where(:project_id => project.id, :name => basename).order('name ASC').all
+          files = DmsfFile.visible.where(:project_id => project.id, :name => basename).order('name ASC').to_a
           files.delete_if {|x| File.dirname('/' + x.dmsf_path_str) != File.dirname(projectless_path)}
           if files.length > 0
             @file = files[0]
