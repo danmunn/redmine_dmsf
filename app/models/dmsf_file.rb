@@ -309,13 +309,10 @@ class DmsfFile < ActiveRecord::Base
   def self.search(tokens, projects = nil, options = {}, user = User.current)
     tokens = [] << tokens unless tokens.is_a?(Array)
     projects = [] << projects if projects.is_a?(Project)
-    project_ids = projects.collect(&:id) if projects
-
-    find_options = {}    
-    limit_options = {}
-    limit_options[:limit] = options[:limit] if options[:limit]
-    if options[:offset]
-      limit_options[:conditions] = '(dmsf_files.updated_at ' + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
+    project_ids = projects.collect(&:id) if projects           
+    
+    if options[:offset]      
+       limit_options = ["(dmsf_files.updated_at #{options[:before] ? '<' : '>'} ?", options[:offset]]
     end
     
     if options[:titles_only]
@@ -324,23 +321,22 @@ class DmsfFile < ActiveRecord::Base
       columns = searchable_options[:columns]
     end
     
-    token_clauses = columns.collect {|column| "(LOWER(#{column}) LIKE ?)"}
+    token_clauses = columns.collect{ |column| "(LOWER(#{column}) LIKE ?)" }
 
-    sql = (['(' + token_clauses.join(' OR ') + ')'] * tokens.size).join(options[:all_words] ? ' AND ' : ' OR ')
-    find_options[:conditions] = [sql, * (tokens.collect {|w| "%#{w.downcase}%"} * token_clauses.size).sort]
+    sql = (['(' + token_clauses.join(' OR ') + ')'] * tokens.size).join(options[:all_words] ? ' AND ' : ' OR ')    
+    find_options = [sql, * (tokens.collect {|w| "%#{w.downcase}%"} * token_clauses.size).sort]
 
     project_conditions = []
     project_conditions << Project.allowed_to_condition(user, :view_dmsf_files) 
     project_conditions << "#{DmsfFile.table_name}.project_id IN (#{project_ids.join(',')})" if project_ids.present?
 
-    results = []    
+    results = []        
     
-    visible.joins(:project, :revisions).
-    where(project_conditions.join(' AND ')).scoping do
-      where(find_options[:conditions]).scoping do        
-        results = where(limit_options).uniq
-      end
-    end
+    scope = self.visible.joins(:project, :revisions)
+    scope = scope.limit(options[:limit]) unless options[:limit].blank?    
+    scope = scope.where(limit_options) unless limit_options.blank?
+    scope = scope.where(project_conditions.join(' AND '))    
+    results = scope.where(find_options).uniq.to_a
 
     if !options[:titles_only] && $xapian_bindings_available
       database = nil
@@ -383,8 +379,8 @@ class DmsfFile < ActiveRecord::Base
         enquire.query = query
         matchset = enquire.mset(0, 1000)
 
-        if matchset
-          matchset.matches.each {|m|
+        if matchset          
+          matchset.matches.each { |m|
             docdata = m.document.data{url}
             dochash = Hash[*docdata.scan(/(url|sample|modtime|type|size)=\/?([^\n\]]+)/).flatten]
             filename = dochash['url']
@@ -394,18 +390,10 @@ class DmsfFile < ActiveRecord::Base
               id_attribute = dmsf_attrs[0][1] if dmsf_attrs.length > 0
               next if dmsf_attrs.length == 0 || id_attribute == 0
               next unless results.select{|f| f.id.to_s == id_attribute}.empty?
-
-              dmsf_file = DmsfFile.visible.where(limit_options[:conditions]).where(:id => id_attribute).first
+              
+              dmsf_file = DmsfFile.visible.where(limit_options).where(:id => id_attribute).first
 
               if dmsf_file
-                if options[:offset]
-                  if options[:before]
-                    next if dmsf_file.updated_at < options[:offset]
-                  else
-                    next if dmsf_file.updated_at > options[:offset]
-                  end
-                end               
-
                 if user.allowed_to?(:view_dmsf_files, dmsf_file.project) && 
                     (project_ids.blank? || (project_ids.include?(dmsf_file.project.id)))                  
                   if (Rails::VERSION::MAJOR > 3)
@@ -413,7 +401,8 @@ class DmsfFile < ActiveRecord::Base
                       dochash['sample'].force_encoding('UTF-8')) if dochash['sample']
                   else
                     dmsf_file.event_description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']
-                  end
+                  end                  
+                  break if(!options[:limit].blank? && results.count >= options[:limit])
                   results << dmsf_file
                 end
               end
