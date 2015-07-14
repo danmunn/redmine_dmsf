@@ -1,8 +1,36 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.5.2 *2015-07-13*
+------------------
+
+    Redmine >= 3.0 compatibility
+
+
+* Bug: #404 - Deleted folder (still in trash) results in errors while accessing parent folder via webdav
+* Bug: #401 - Link between project on Redmine 3.0
+* Bug: #400 - internal server error fulltext search
+* Bug: #396 - Error when uploading files
+* Bug: #394 - DMSF install to Redmine 3.0.3 problem
+* Bug: #393 - File can't be created in storage directory (Redmine 3.0.3)
+* Bug: #392 - Redmine 3 Search screen error with Xapian
+* New: #391 - Searchable document details
+* Bug: #387 - Wrong sorting by Modified column
+* Bug: #384 - Error when trying to uninstall DMSF
+* New: #383 - Missleading number of entities in documents folder
+* Bug: #382 - REST API - list of document produces invalid XML
+* Bug: #380 - Internal Error 500 when dmsf page is accessed
+* Bug: #378 - Revision view, delete revision bug
+* Bug: #377 - Can access WebDAV when redmine is located under sub-URI
+* Bug: #376 - Links to deleted documents
+* Bug: #374 - Number of downloads
+* Bug: #373 - internal 500 error : 1.5.1 stable with redmine 3.0.1 when search in dmsf enabled project
+* New: #339 - Maximum Upload Size
+* Bug: #319 - webdav problem after upgrading to 1.4.9 from 1.4.6
+* New: #78  - Control DMSF via REST API
+
 1.5.1: *2015-04-01*
------------------------
+-------------------
 
     Approval workflow copying
     Polish localization

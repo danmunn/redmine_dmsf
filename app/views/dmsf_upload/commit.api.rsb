@@ -1,0 +1,8 @@
+api.array :dmsf_files, api_meta(:total_count => @files.size) do
+  @files.each do |file|
+    api.file do
+      api.id file.id
+      api.name file.name      
+    end
+  end
+end

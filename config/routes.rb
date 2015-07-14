@@ -58,7 +58,9 @@ RedmineApp::Application.routes.draw do
 
   post '/projects/:id/dmsf/upload/files', :controller => 'dmsf_upload', :action => 'upload_files'
   post '/projects/:id/dmsf/upload/file', :controller => 'dmsf_upload', :action => 'upload_file'
+  post '/projects/:id/dmsf/upload', :controller => 'dmsf_upload', :action => 'upload'
   post '/projects/:id/dmsf/upload/commit', :controller => 'dmsf_upload', :action => 'commit_files'
+  post '/projects/:id/dmsf/commit', :controller => 'dmsf_upload', :action => 'commit'
   
   #
   # dmsf_files controller
@@ -109,7 +111,7 @@ RedmineApp::Application.routes.draw do
   # DAV4Rack implementation of Webdav [note: if changing path you'll need to update lib/redmine_dmsf/webdav/no_parse.rb also]
   #   /dmsf/webdav
   mount DAV4Rack::Handler.new(
-    :root_uri_path => "/dmsf/webdav",
+    :root_uri_path => "#{Redmine::Utils::relative_url_root}/dmsf/webdav",
     :resource_class => RedmineDmsf::Webdav::ResourceProxy,
     :controller_class => RedmineDmsf::Webdav::Controller
   ), :at => "/dmsf/webdav"
@@ -124,9 +126,10 @@ RedmineApp::Application.routes.draw do
       post 'new_action'
       get 'start'
       post 'assignment'
+      get 'new_step'
     end
   end
-  
+    
   match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'add_step', :id => /\d+/, :via => :post
   match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'remove_step', :id => /\d+/, :via => :delete
   match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'reorder_steps', :id => /\d+/, :via => :put    

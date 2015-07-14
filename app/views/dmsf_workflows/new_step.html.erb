@@ -1,0 +1,19 @@
+<%
+# encoding: utf-8
+#
+# Redmine plugin for Kontron customisation
+# Copyright (c) 2011-15 Kontron
+# Karel Pičman <karel.picman@kontron.com>
+#
+# Repository folders 
+%>
+
+<h2><%= l(:label_repository_folders) %></h2>
+
+<%= form_for(:repository_folder, {:url => edit_dmsf_workflow_path(@dmsf_workflow), :method => :post}) do |f| %>  
+  <%= render :partial => 'new_step_form' %>
+  <p>
+    <%= submit_tag l(:dmsf_and), :id => 'add-step-and' %>
+    <%= submit_tag l(:dmsf_or), :id => 'add-step-or' %>
+  </p>
+<% end %>

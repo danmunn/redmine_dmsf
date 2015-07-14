@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.5.1** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **1.5.2** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -42,7 +42,7 @@ Features
 Dependencies
 ------------
   
-  * Redmine 2.5.0 or higher (Not yet fully compatible with Redmine 3.x but it should work in general)
+  * Redmine 2.5.0 or higher
 
 ### Fulltext search (optional)
 
@@ -123,11 +123,12 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax_detailed.html, aft
       <li>
         DMSF:
         <ul>
-          <li><strong>{{dmsf(17)}}</strong> (link to file with id 17)</li>
-          <li><strong>{{dmsf(17,File)}}</strong> (link to file with id 17 with link text "File")</li>
-          <li><strong>{{dmsf(17,File,10)}}</strong> (link to file with id 17 with link text "File" and link pointing to revision 10)</li>
-          <li><strong>{{dmsff(5)}}</strong> (link to folder with id 5)</li>
-          <li><strong>{{dmsff(5,Folder)}}</strong> (link to folder with id 5 with link text "Folder")</li>
+          <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
+          <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
+          <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
+          <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
+          <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
+          <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
         </ul>
         The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
         The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -152,16 +153,24 @@ Before installing ensure that the Redmine instance is stopped.
 6. You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
 7. Assign DMSF permissions to appropriate roles
 8. There are two rake tasks:
+
     a) To convert documents from the standard Redmine document module
+
         Available options:
+
             * project  => id or identifier of project (defaults to all projects)
             * dry  => true or false (default false) to perform just check without any conversion
             * invalid=replace  => to perform document title invalid characters replacement for '-'
+
         Example:
+            
             rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
+
     b) To alert all users who are expected to do an approval in the current approval steps
+
         Example:
-            rake redmine:dmsf_alert_approvals RAILS_ENV="production"
+            
+            rake redmine:dmsf_alert_approvals RAILS_ENV="production"            
 
 ### Fulltext search (optional)
 If you want to use fulltext search features, you must setup file content indexing.
@@ -174,8 +183,8 @@ It is necessary to index DMSF files with omega before searching attempts to rece
 This command must be run on regular basis (e.g. from cron)
 
 Example of cron job (once per hour at 8th minute):
-
-    `8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f`
+    
+    8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f
 
 See redmine_dmsf/extra/xapian_indexer.rb for help.
 

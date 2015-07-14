@@ -1,0 +1,36 @@
+<%
+# encoding: utf-8
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-15   Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<fieldset class="box">
+  <legend><%=l(:label_dmsf_workflow_add_approver)%></legend>
+  <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>    
+  <%= javascript_tag "observeSearchfield('user_search', 'users', '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@dmsf_workflow, :dmsf_workflow_step_assignment_id => nil, :dmsf_file_revision_id => nil, :project_id => @project ? @project.id : nil) }')" %>
+
+  <div id="users">
+    <%= render_principals_for_new_dmsf_workflow_users(@dmsf_workflow, nil, nil) %>
+  </div>
+</fieldset>
+
+<fieldset class="box">
+  <legend><%= l(:label_dmsf_workflow_step) %></legend>
+  <%= select_tag 'step', dmsf_workflow_steps_options_for_select(@steps),
+    :id => 'selected_step', :style => "width:100px" %>              
+</fieldset>  

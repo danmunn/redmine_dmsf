@@ -37,6 +37,7 @@ class DmsfFilesController < ApplicationController
     @revision = @file.last_revision
     check_project(@revision.file)
     begin
+      raise ActionController::MissingFile if @file.deleted
       log_activity('downloaded')      
       access = DmsfFileRevisionAccess.new
       access.user = User.current
@@ -47,8 +48,7 @@ class DmsfFilesController < ApplicationController
         :filename => filename_for_content_disposition(@revision.name),
         :type => @revision.detect_content_type,
         :disposition => 'inline')
-    rescue ActionController::MissingFile => e
-      logger.error e.message
+    rescue ActionController::MissingFile      
       render_404
     end
   end
@@ -67,17 +67,18 @@ class DmsfFilesController < ApplicationController
       end
       check_project(@revision.file)
       begin
+        raise ActionController::MissingFile if @revision.file.deleted
         log_activity('downloaded')        
         access = DmsfFileRevisionAccess.new
         access.user = User.current
         access.revision = @revision
-        access.action = DmsfFileRevisionAccess::DownloadAction        
+        access.action = DmsfFileRevisionAccess::DownloadAction
+        access.save!
         send_file(@revision.disk_file,
           :filename => filename_for_content_disposition(@revision.name),
           :type => @revision.detect_content_type,
           :disposition => 'attachment')
-      rescue ActionController::MissingFile => e
-        logger.error e.message
+      rescue ActionController::MissingFile     
         render_404
       end
       return
@@ -302,7 +303,7 @@ class DmsfFilesController < ApplicationController
   end
 
   def find_revision
-    @revision = DmsfFileRevision.visible.find(params[:id])
+    @revision = DmsfFileRevision.visible.find params[:id]
     @file = @revision.file
     @project = @file.project
   rescue ActiveRecord::RecordNotFound

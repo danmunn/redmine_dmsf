@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2014 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,6 +27,6 @@ class NotificationsOn < ActiveRecord::Migration
   
   def down
     change_column :projects, :dmsf_notification, :boolean, :default => false, :null => true
-    change_column :dmsf_folders, :notification, :boolean, :default => false, :null => false
+    change_column :dmsf_folders, :notification, :boolean, :default => false
   end
 end

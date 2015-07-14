@@ -141,19 +141,12 @@ class DmsfConvertDocuments
               revision.comment = 'Converted from documents'
               revision.mime_type = attachment.content_type
               
-              revision.disk_filename = revision.new_storage_filename
-              attachment_file = File.open(attachment.diskfile, 'rb')
+              revision.disk_filename = revision.new_storage_filename              
               
               unless dry
-                File.open(revision.disk_file, 'wb') do |f| 
-                  while (buffer = attachment_file.read(8192))
-                    f.write(buffer)
-                  end
-                end
+                FileUtils.cp(attachment.diskfile, revision.disk_file)                
                 revision.size = File.size(revision.disk_file)
-              end
-
-              attachment_file.close
+              end              
               
               if dry
                 puts "Dry check revision: #{revision.title}"

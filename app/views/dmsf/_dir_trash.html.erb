@@ -1,4 +1,6 @@
 <%#=
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
@@ -27,12 +29,12 @@
   <% if link %>
     <div class="filename" title="<%= l(:label_target_folder)%>"><%= link.path %></div>
   <% else %>
-    <div class="filename" title="<%= l(:title_number_of_files_in_directory)%>">[<%= subfolder.files.visible.count + subfolder.file_links.visible.count %>]</div>
+    <div class="filename" title="<%= l(:title_items)%>">[<%= subfolder.items %>]</div>
   <% end %>
 </td>            
 <td class="size"></td>
 <td class="modified">
-  <%= format_time(subfolder.updated_at) %>                      
+  <%= format_time(subfolder.modified) if subfolder %>                      
 </td>
 <td class="version"></td>
 <td class="workflow"></td>
@@ -54,5 +56,5 @@
 </td>
 <td class="invisible">0</td>
 <td class="invisible">0</td>
-<td class="invisible"><%= subfolder.updated_at.to_i %></td>
+<td class="invisible"><%= subfolder.modified.to_i if subfolder %></td>
 <td class="invisible">0</td>

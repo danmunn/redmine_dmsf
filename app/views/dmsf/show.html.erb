@@ -153,7 +153,11 @@
           :title => subfolder.title }) %>
     </tr>
   <% end %>  
-  <% @dir_links.each do |link| %>    
+  <% @dir_links.each do |link| %>
+    <% unless link.target_project %>
+      <% Rails.logger.error "Error: dmsf_link id #{link.id} has no target!" %>
+      <% next %>
+    <% end %>         
     <tr class="gray">
       <%= render(:partial => 'dir', 
         :locals => { 
@@ -263,7 +267,7 @@
            jQuery('div.controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
         },
         'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-           return "<%= l(:label_number_of_folders)%>: <%= @subfolders.count + @dir_links.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count + @file_links.count %>";
+           return "<%= l(:label_number_of_folders)%>: <%= @subfolders.count + @dir_links.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count + @file_links.count + @url_links.count %>";
         }
       });
 

@@ -18,19 +18,28 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class RemoveFolderFromRevision < ActiveRecord::Migration
-  def up      
-    remove_column :dmsf_file_revisions, :dmsf_folder_id
-  end
-  
-  def down
-    add_column :dmsf_file_revisions, :dmsf_folder_id, :integer, :null => true
-    
-    DmsfFileRevision.find_each do |revision|
-      if revision.file
-        revision.dmsf_folder_id = revision.file.dmsf_folder_id
-        revision.save
-      end
-    end        
-  end
+require 'rubygems'
+require 'active_resource'
+
+# Simple REST API client in Ruby
+# usage: ruby api_client.rb [login] [password]
+
+# Dmsf file
+class DmsfFile < ActiveResource::Base
+  self.site = 'https://localhost:3000/'
+  self.user = ARGV[0]
+  self.password = ARGV[1]
+end
+
+# 2. Get a document
+FILE_ID = 41532 
+file = DmsfFile.find FILE_ID
+if file
+  puts file.id
+  puts file.name
+  puts file.version  
+  puts file.project_id  
+  puts file.content_url
+else
+  puts "No file with id = #{FILE_ID} found"
 end

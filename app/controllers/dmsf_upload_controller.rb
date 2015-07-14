@@ -26,10 +26,12 @@ class DmsfUploadController < ApplicationController
   
   before_filter :find_project
   before_filter :authorize
-  before_filter :find_folder, :except => [:upload_file]
+  before_filter :find_folder, :except => [:upload_file, :upload, :commit]
   
   helper :all
   helper :dmsf_workflows
+  
+  accept_api_auth :upload, :commit
 
   def upload_files
     uploaded_files = params[:attachments]
@@ -51,26 +53,23 @@ class DmsfUploadController < ApplicationController
   end
 
   # async single file upload handling 
-  def upload_file
-    if (Rails::VERSION::MAJOR > 3)
-      @tempfile = params.require(:file)
-    else
-      @tempfile = params[:file]
-    end
+  def upload_file    
+    @tempfile = params[:file]    
     unless @tempfile.original_filename
       render_404
       return
     end
     @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
-    File.open("#{DmsfHelper.temp_dir}/#{@disk_filename}", 'wb') do |f| 
-      while (buffer = @tempfile.read(8192))
-        f.write(buffer)
-      end
+    begin
+      FileUtils.cp @tempfile.path, "#{DmsfHelper.temp_dir}/#{@disk_filename}"
+    rescue Exception => e
+      Rails.logger.error e.message
     end
     if File.size("#{DmsfHelper.temp_dir}/#{@disk_filename}") <= 0
       begin
-        File.delete("#{DmsfHelper.temp_dir}/#{@disk_filename}")
-      rescue
+        File.delete "#{DmsfHelper.temp_dir}/#{@disk_filename}"
+      rescue Exception => e
+        Rails.logger.error e.message
       end
       render :layout => nil, :json => { :jsonrpc => '2.0', 
         :error => { 
@@ -85,14 +84,54 @@ class DmsfUploadController < ApplicationController
     end
   end
   
-  def commit_files
-    if (Rails::VERSION::MAJOR > 3)
-      commited_files = params.require(:commited_files)
-    else
-      commited_files = params[:commited_files]
+  # REST API document upload
+  def upload    
+    unless request.content_type == 'application/octet-stream'
+      render :nothing => true, :status => 406
+      return
     end
+
+    @attachment = Attachment.new(:file => request.raw_post)
+    @attachment.author = User.current
+    @attachment.filename = params[:filename].presence || Redmine::Utils.random_hex(16)
+    saved = @attachment.save
+
+    respond_to do |format|
+      format.js
+      format.api {
+        if saved
+          render :action => 'upload', :status => :created
+        else
+          render_validation_errors(@attachment)
+        end
+      }
+    end
+  end
+  
+  def commit_files    
+    commit_files_internal params[:commited_files]
+  end    
+  
+  # REST API file commit
+  def commit
+    attachments = params[:attachments]    
+    if attachments && attachments.is_a?(Hash)
+      @folder = DmsfFolder.visible.find_by_id attachments[:folder_id].to_i if attachments[:folder_id].present?
+      # standard file input uploads
+      uploaded_files = attachments.select { |key, value| key == 'uploaded_file'}
+      uploaded_files.each_value do |uploaded_file|        
+        upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
+        uploaded_file[:disk_filename] = upload.disk_filename
+      end
+    end
+    commit_files_internal uploaded_files   
+  end
+
+  private
+  
+  def commit_files_internal(commited_files)
     if commited_files && commited_files.is_a?(Hash)
-      files = []
+      @files = []
       failed_uploads = []
       commited_files.each_value do |commited_file|
         name = commited_file[:name]
@@ -146,13 +185,6 @@ class DmsfUploadController < ApplicationController
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         new_revision.size = File.size(commited_disk_filepath)
 
-        file_upload = File.new(commited_disk_filepath, 'rb')
-        unless file_upload
-          failed_uploads.push(commited_file)
-          flash[:error] = l(:error_file_commit_require_uploaded_file)
-          next
-        end
-        
         if file.locked?
           begin
             file.unlock!
@@ -179,23 +211,21 @@ class DmsfUploadController < ApplicationController
         end
         
         if new_revision.save
-          new_revision.assign_workflow(commited_file[:dmsf_workflow_id])                    
-          new_revision.copy_file_content(file_upload)
-          file_upload.close
-          File.delete(commited_disk_filepath)          
+          new_revision.assign_workflow(commited_file[:dmsf_workflow_id])                              
+          FileUtils.mv(commited_disk_filepath, new_revision.disk_file)
           file.set_last_revision new_revision
-          files.push(file)
+          @files.push(file)
         else
           failed_uploads.push(commited_file)
         end
       end
-      unless files.empty?        
-        files.each { |file| log_activity(file, 'uploaded') if file }        
+      unless @files.empty?        
+        @files.each { |file| log_activity(file, 'uploaded') if file }        
         if (@folder && @folder.notification?) || (!@folder && @project.dmsf_notification?)
           begin
-            recipients = DmsfMailer.get_notify_users(@project, files)
+            recipients = DmsfMailer.get_notify_users(@project, @files)
             recipients.each do |u|
-              DmsfMailer.files_updated(u, @project, files).deliver
+              DmsfMailer.files_updated(u, @project, @files).deliver
             end          
             if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
               unless recipients.empty?
@@ -213,10 +243,15 @@ class DmsfUploadController < ApplicationController
         flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u['name']}.join(', '))
       end
     end
-    redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
+    respond_to do |format|
+      format.js
+      format.api  {         
+          render_validation_errors(failed_uploads) unless failed_uploads.empty?        
+      }
+      format.html { redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder) }
+    end
+    
   end
-
-  private
   
   def log_activity(file, action)
     Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{file.project.identifier}/#{file.id}/#{file.last_revision.id}"

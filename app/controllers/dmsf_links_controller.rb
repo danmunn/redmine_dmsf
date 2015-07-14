@@ -1,3 +1,5 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
@@ -24,12 +26,9 @@ class DmsfLinksController < ApplicationController
   before_filter :find_link_project
   before_filter :authorize
 
-  def new
-    if (Rails::VERSION::MAJOR > 3)
-      @dmsf_link = DmsfLink.new(l_params)
-    else
-      @dmsf_link = DmsfLink.new(:project_id => params[:project_id])
-    end
+  def new    
+    @dmsf_link = DmsfLink.new
+    @dmsf_link.project_id = params[:project_id]
 
     if params[:dmsf_link].present?
       # Reload
