@@ -1,0 +1,1911 @@
+Index: ar/wiki_syntax.html
+===================================================================
+--- ar/wiki_syntax.html	(revision 14445)
++++ ar/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: ar/wiki_syntax_detailed.html
+===================================================================
+--- ar/wiki_syntax_detailed.html	(revision 14445)
++++ ar/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: az/wiki_syntax.html
+===================================================================
+--- az/wiki_syntax.html	(revision 14445)
++++ az/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: az/wiki_syntax_detailed.html
+===================================================================
+--- az/wiki_syntax_detailed.html	(revision 14445)
++++ az/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: bg/wiki_syntax.html
+===================================================================
+--- bg/wiki_syntax.html	(revision 14445)
++++ bg/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: bg/wiki_syntax_detailed.html
+===================================================================
+--- bg/wiki_syntax_detailed.html	(revision 14445)
++++ bg/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: bs/wiki_syntax.html
+===================================================================
+--- bs/wiki_syntax.html	(revision 14445)
++++ bs/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: bs/wiki_syntax_detailed.html
+===================================================================
+--- bs/wiki_syntax_detailed.html	(revision 14445)
++++ bs/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: ca/wiki_syntax.html
+===================================================================
+--- ca/wiki_syntax.html	(revision 14445)
++++ ca/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: ca/wiki_syntax_detailed.html
+===================================================================
+--- ca/wiki_syntax_detailed.html	(revision 14445)
++++ ca/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: cs/wiki_syntax.html
+===================================================================
+--- cs/wiki_syntax.html	(revision 14445)
++++ cs/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revize r43</td><td>Revize <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Dokumenty <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Vnořené obrázky</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Obrázek" /></th><td>!<em>url_obrázku</em>!</td><td></td></tr>
+Index: cs/wiki_syntax_detailed.html
+===================================================================
+--- cs/wiki_syntax_detailed.html	(revision 14445)
++++ cs/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>projekt_test:document:"Nějaký dokument"</strong> (odkaz na dokument s názvem "Nějaký dokument" v jiném projektu "projekt_test")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>                
++                <li><strong>{{dmsf(17)}}</strong> (odkaz na dokument s id 17)</li>
++                <li><strong>{{dmsf(17,File)}}</strong> (odkaz na dokument s id 17 s textem "File")</li>
++                <li><strong>{{dmsf(17,File,10)}}</strong> (odkaz na dokument s id 17 s textem "File" odkazující na revizi 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (odkaz na popis dokumentu s id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (odkaz na adresář s id 5)</li>
++                <li><strong>{{dmsff(5,Folder)}}</strong> (odkaz na adresář s id 5 s textem "Folder")</li>
++              </ul>
++              ID dokumentu respektive revize lze nalézt v odkazu na stažení souboru.<br />
++              ID adresáře lze nalézt na odkazu na adresář.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Verze:
+Index: da/wiki_syntax.html
+===================================================================
+--- da/wiki_syntax.html	(revision 14445)
++++ da/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: da/wiki_syntax_detailed.html
+===================================================================
+--- da/wiki_syntax_detailed.html	(revision 14445)
++++ da/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: de/wiki_syntax.html
+===================================================================
+--- de/wiki_syntax.html	(revision 14445)
++++ de/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Dokumente <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">eingebettete Bilder</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Bild" /></th><td>!<em>URL_zu_dem_Bild</em>!</td><td></td></tr>
+Index: de/wiki_syntax_detailed.html
+===================================================================
+--- de/wiki_syntax_detailed.html	(revision 14445)
++++ de/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: el/wiki_syntax.html
+===================================================================
+--- el/wiki_syntax.html	(revision 14445)
++++ el/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: el/wiki_syntax_detailed.html
+===================================================================
+--- el/wiki_syntax_detailed.html	(revision 14445)
++++ el/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: en/wiki_syntax.html
+===================================================================
+--- en/wiki_syntax.html	(revision 14445)
++++ en/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: en/wiki_syntax_detailed.html
+===================================================================
+--- en/wiki_syntax_detailed.html	(revision 14445)
++++ en/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: en-gb/wiki_syntax.html
+===================================================================
+--- en-gb/wiki_syntax.html	(revision 14445)
++++ en-gb/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: en-gb/wiki_syntax_detailed.html
+===================================================================
+--- en-gb/wiki_syntax_detailed.html	(revision 14445)
++++ en-gb/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: es/wiki_syntax.html
+===================================================================
+--- es/wiki_syntax.html	(revision 14445)
++++ es/wiki_syntax.html	(working copy)
+@@ -57,6 +57,7 @@
+ <tr><th></th><td>Revisi&oacute;n r43</td><td>Revisi&oacute;n <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Im&aacute;genes en l&iacute;nea</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Imagen" /></th><td>!<em>imagen_url</em>!</td><td></td></tr>
+Index: es/wiki_syntax_detailed.html
+===================================================================
+--- es/wiki_syntax_detailed.html	(revision 14445)
++++ es/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: es-pa/wiki_syntax.html
+===================================================================
+--- es-pa/wiki_syntax.html	(revision 14445)
++++ es-pa/wiki_syntax.html	(working copy)
+@@ -57,6 +57,7 @@
+ <tr><th></th><td>Revisi&oacute;n r43</td><td>Revisi&oacute;n <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Im&aacute;genes en l&iacute;nea</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Imagen" /></th><td>!<em>imagen_url</em>!</td><td></td></tr>
+Index: es-pa/wiki_syntax_detailed.html
+===================================================================
+--- es-pa/wiki_syntax_detailed.html	(revision 14445)
++++ es-pa/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: et/wiki_syntax.html
+===================================================================
+--- et/wiki_syntax.html	(revision 14445)
++++ et/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: et/wiki_syntax_detailed.html
+===================================================================
+--- et/wiki_syntax_detailed.html	(revision 14445)
++++ et/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: eu/wiki_syntax.html
+===================================================================
+--- eu/wiki_syntax.html	(revision 14445)
++++ eu/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: eu/wiki_syntax_detailed.html
+===================================================================
+--- eu/wiki_syntax_detailed.html	(revision 14445)
++++ eu/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: fa/wiki_syntax.html
+===================================================================
+--- fa/wiki_syntax.html	(revision 14445)
++++ fa/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: fa/wiki_syntax_detailed.html
+===================================================================
+--- fa/wiki_syntax_detailed.html	(revision 14445)
++++ fa/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: fi/wiki_syntax.html
+===================================================================
+--- fi/wiki_syntax.html	(revision 14445)
++++ fi/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: fi/wiki_syntax_detailed.html
+===================================================================
+--- fi/wiki_syntax_detailed.html	(revision 14445)
++++ fi/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: fr/wiki_syntax.html
+===================================================================
+--- fr/wiki_syntax.html	(revision 14445)
++++ fr/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Images en ligne</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>url_de_l_image</em>!</td><td></td></tr>
+Index: fr/wiki_syntax_detailed.html
+===================================================================
+--- fr/wiki_syntax_detailed.html	(revision 14445)
++++ fr/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Un document"</strong> (Lien vers le document dont le titre est "Un document" dans le projet différent "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: gl/wiki_syntax.html
+===================================================================
+--- gl/wiki_syntax.html	(revision 14445)
++++ gl/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: gl/wiki_syntax_detailed.html
+===================================================================
+--- gl/wiki_syntax_detailed.html	(revision 14445)
++++ gl/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: he/wiki_syntax.html
+===================================================================
+--- he/wiki_syntax.html	(revision 14445)
++++ he/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: he/wiki_syntax_detailed.html
+===================================================================
+--- he/wiki_syntax_detailed.html	(revision 14445)
++++ he/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: hr/wiki_syntax.html
+===================================================================
+--- hr/wiki_syntax.html	(revision 14445)
++++ hr/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: hr/wiki_syntax_detailed.html
+===================================================================
+--- hr/wiki_syntax_detailed.html	(revision 14445)
++++ hr/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: hu/wiki_syntax.html
+===================================================================
+--- hu/wiki_syntax.html	(revision 14445)
++++ hu/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: hu/wiki_syntax_detailed.html
+===================================================================
+--- hu/wiki_syntax_detailed.html	(revision 14445)
++++ hu/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: id/wiki_syntax.html
+===================================================================
+--- id/wiki_syntax.html	(revision 14445)
++++ id/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: id/wiki_syntax_detailed.html
+===================================================================
+--- id/wiki_syntax_detailed.html	(revision 14445)
++++ id/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: it/wiki_syntax.html
+===================================================================
+--- it/wiki_syntax.html	(revision 14445)
++++ it/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: it/wiki_syntax_detailed.html
+===================================================================
+--- it/wiki_syntax_detailed.html	(revision 14445)
++++ it/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: ja/wiki_syntax.html
+===================================================================
+--- ja/wiki_syntax.html	(revision 14445)
++++ ja/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>リビジョン r43</td><td>リビジョン <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">画像</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>画像URL</em>!</td><td></td></tr>
+Index: ja/wiki_syntax_detailed.html
+===================================================================
+--- ja/wiki_syntax_detailed.html	(revision 14445)
++++ ja/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> ("sandbox" というプロジェクトの "Some document" というタイトルの文書へのリンク)</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: ko/wiki_syntax.html
+===================================================================
+--- ko/wiki_syntax.html	(revision 14445)
++++ ko/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: ko/wiki_syntax_detailed.html
+===================================================================
+--- ko/wiki_syntax_detailed.html	(revision 14445)
++++ ko/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: lt/wiki_syntax.html
+===================================================================
+--- lt/wiki_syntax.html	(revision 14445)
++++ lt/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: lt/wiki_syntax_detailed.html
+===================================================================
+--- lt/wiki_syntax_detailed.html	(revision 14445)
++++ lt/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: lv/wiki_syntax.html
+===================================================================
+--- lv/wiki_syntax.html	(revision 14445)
++++ lv/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: lv/wiki_syntax_detailed.html
+===================================================================
+--- lv/wiki_syntax_detailed.html	(revision 14445)
++++ lv/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: mk/wiki_syntax.html
+===================================================================
+--- mk/wiki_syntax.html	(revision 14445)
++++ mk/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: mk/wiki_syntax_detailed.html
+===================================================================
+--- mk/wiki_syntax_detailed.html	(revision 14445)
++++ mk/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: mn/wiki_syntax.html
+===================================================================
+--- mn/wiki_syntax.html	(revision 14445)
++++ mn/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: mn/wiki_syntax_detailed.html
+===================================================================
+--- mn/wiki_syntax_detailed.html	(revision 14445)
++++ mn/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: nl/wiki_syntax.html
+===================================================================
+--- nl/wiki_syntax.html	(revision 14445)
++++ nl/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: nl/wiki_syntax_detailed.html
+===================================================================
+--- nl/wiki_syntax_detailed.html	(revision 14445)
++++ nl/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: no/wiki_syntax.html
+===================================================================
+--- no/wiki_syntax.html	(revision 14445)
++++ no/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: no/wiki_syntax_detailed.html
+===================================================================
+--- no/wiki_syntax_detailed.html	(revision 14445)
++++ no/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: pl/wiki_syntax.html
+===================================================================
+--- pl/wiki_syntax.html	(revision 14445)
++++ pl/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Dokumenty <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: pl/wiki_syntax_detailed.html
+===================================================================
+--- pl/wiki_syntax_detailed.html	(revision 14445)
++++ pl/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: pt/wiki_syntax.html
+===================================================================
+--- pt/wiki_syntax.html	(revision 14445)
++++ pt/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: pt/wiki_syntax_detailed.html
+===================================================================
+--- pt/wiki_syntax_detailed.html	(revision 14445)
++++ pt/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: pt-br/wiki_syntax.html
+===================================================================
+--- pt-br/wiki_syntax.html	(revision 14445)
++++ pt-br/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: pt-br/wiki_syntax_detailed.html
+===================================================================
+--- pt-br/wiki_syntax_detailed.html	(revision 14445)
++++ pt-br/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: ro/wiki_syntax.html
+===================================================================
+--- ro/wiki_syntax.html	(revision 14445)
++++ ro/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: ro/wiki_syntax_detailed.html
+===================================================================
+--- ro/wiki_syntax_detailed.html	(revision 14445)
++++ ro/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: ru/wiki_syntax.html
+===================================================================
+--- ru/wiki_syntax.html	(revision 14445)
++++ ru/wiki_syntax.html	(working copy)
+@@ -132,6 +132,7 @@
+         <td>source:some/file</td>
+         <td><a href="#">source:some/file</a></td>
+     </tr>
++    <tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+     <tr>
+         <th colspan="3">Вставка изображений</th>
+     </tr>
+Index: ru/wiki_syntax_detailed.html
+===================================================================
+--- ru/wiki_syntax_detailed.html	(revision 14445)
++++ ru/wiki_syntax_detailed.html	(working copy)
+@@ -98,6 +98,22 @@
+         </ul>
+ 
+         <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
++
++        <ul>
+             <li>Этапы:
+                 <ul>
+                   <li><strong>version#3</strong> (ссылка на этап с id 3)</li>
+Index: sk/wiki_syntax.html
+===================================================================
+--- sk/wiki_syntax.html	(revision 14445)
++++ sk/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Dokumenty <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: sk/wiki_syntax_detailed.html
+===================================================================
+--- sk/wiki_syntax_detailed.html	(revision 14445)
++++ sk/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: sl/wiki_syntax.html
+===================================================================
+--- sl/wiki_syntax.html	(revision 14445)
++++ sl/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: sl/wiki_syntax_detailed.html
+===================================================================
+--- sl/wiki_syntax_detailed.html	(revision 14445)
++++ sl/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: sq/wiki_syntax.html
+===================================================================
+--- sq/wiki_syntax.html	(revision 14445)
++++ sq/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: sq/wiki_syntax_detailed.html
+===================================================================
+--- sq/wiki_syntax_detailed.html	(revision 14445)
++++ sq/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: sr/wiki_syntax.html
+===================================================================
+--- sr/wiki_syntax.html	(revision 14445)
++++ sr/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: sr/wiki_syntax_detailed.html
+===================================================================
+--- sr/wiki_syntax_detailed.html	(revision 14445)
++++ sr/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: sr-yu/wiki_syntax.html
+===================================================================
+--- sr-yu/wiki_syntax.html	(revision 14445)
++++ sr-yu/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: sr-yu/wiki_syntax_detailed.html
+===================================================================
+--- sr-yu/wiki_syntax_detailed.html	(revision 14445)
++++ sr-yu/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: sv/wiki_syntax.html
+===================================================================
+--- sv/wiki_syntax.html	(revision 14445)
++++ sv/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: sv/wiki_syntax_detailed.html
+===================================================================
+--- sv/wiki_syntax_detailed.html	(revision 14445)
++++ sv/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: th/wiki_syntax.html
+===================================================================
+--- th/wiki_syntax.html	(revision 14445)
++++ th/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: th/wiki_syntax_detailed.html
+===================================================================
+--- th/wiki_syntax_detailed.html	(revision 14445)
++++ th/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: tr/wiki_syntax.html
+===================================================================
+--- tr/wiki_syntax.html	(revision 14445)
++++ tr/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: tr/wiki_syntax_detailed.html
+===================================================================
+--- tr/wiki_syntax_detailed.html	(revision 14445)
++++ tr/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: uk/wiki_syntax.html
+===================================================================
+--- uk/wiki_syntax.html	(revision 14445)
++++ uk/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: uk/wiki_syntax_detailed.html
+===================================================================
+--- uk/wiki_syntax_detailed.html	(revision 14445)
++++ uk/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: vi/wiki_syntax.html
+===================================================================
+--- vi/wiki_syntax.html	(revision 14445)
++++ vi/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: vi/wiki_syntax_detailed.html
+===================================================================
+--- vi/wiki_syntax_detailed.html	(revision 14445)
++++ vi/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: zh/wiki_syntax.html
+===================================================================
+--- zh/wiki_syntax.html	(revision 14445)
++++ zh/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>Revision r43</td><td>Revision <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">Inline images</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="Image" /></th><td>!<em>image_url</em>!</td><td></td></tr>
+Index: zh/wiki_syntax_detailed.html
+===================================================================
+--- zh/wiki_syntax_detailed.html	(revision 14445)
++++ zh/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (link to a document with title "Some document" in other project "sandbox")</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>Versions:
+Index: zh-tw/wiki_syntax.html
+===================================================================
+--- zh-tw/wiki_syntax.html	(revision 14445)
++++ zh-tw/wiki_syntax.html	(working copy)
+@@ -56,6 +56,7 @@
+ <tr><th></th><td>版次 r43</td><td>版次 <a href="#">r43</a></td></tr>
+ <tr><th></th><td>commit:f30e13e43</td><td><a href="#">f30e13e4</a></td></tr>
+ <tr><th></th><td>source:some/file</td><td><a href="#">source:some/file</a></td></tr>
++<tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+ 
+ <tr><th colspan="3">內置圖像</th></tr>
+ <tr><th><img src="../../images/jstoolbar/bt_img.png" style="border: 1px solid #bbb;" alt="圖像" /></th><td>!<em>圖像_url</em>!</td><td></td></tr>
+Index: zh-tw/wiki_syntax_detailed.html
+===================================================================
+--- zh-tw/wiki_syntax_detailed.html	(revision 14445)
++++ zh-tw/wiki_syntax_detailed.html	(working copy)
+@@ -78,6 +78,22 @@
+                     <li><strong>sandbox:document:"Some document"</strong> (連結至另外一個 "sandbox" 專案中，文件標題為 "Some document" 的文件)</li>
+                 </ul></li>
+         </ul>
++        
++        <ul>
++            <li>
++              DMSF:
++              <ul>
++                <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
++                <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
++                <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
++                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
++                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++              </ul>
++              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
++              The DMSF folder id can be found in the link when opening folders within Redmine.
++            </li>
++        </ul>
+ 
+         <ul>
+             <li>版本：

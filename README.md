@@ -93,25 +93,28 @@ Usage
 
 DMSF is designed to act as project module, so it must be checked as an enabled module within the project settings.
 
-Search will now automatically search DMSF content when a redmine search is performed, additionally a "Dmsf files" checkbox will be visible, allowing you to search DMSF content exclusively.
+Search will now automatically search DMSF content when a Redmine search is performed, additionally a "Documents" and "Folders" check box will be visible, allowing you to search DMSF content exclusively.
 
 ###Linking DMSF files from Wiki entries:
 
-####Link to file with id 17:
+####Link to a file with id 17:
 `{{dmsf(17)}}`
 
-####Link to file with id 17 with link text "File"
-`{{dmsf(17,File)}}`
+####Link to a file with id 17 with link text "File"
+`{{dmsf(17, File)}}`
 
-The DMSF file/revision id can be found in link for file/revision download from within redmine.
+####Link to the description of a file with id 17
+`{{dmsfd(17)}}`
+
+The DMSF file/revision id can be found in link for file/revision download from within Redmine.
 
 ###Linking DMSF folders from Wiki entries:
 
-####Link to folder with id 5:
+####Link to a folder with id 5:
 `{{dmsff(5)}}`
 
-####Link to folder with id 5 with link text "Folder"
-`{{dmsff(5,Folder)}}`
+####Link to a folder with id 5 with link text "Folder"
+`{{dmsff(5, Folder)}}`
 
 The DMSF folder id can be found in the link when opening folders within Redmine.
 
@@ -139,6 +142,11 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax.html, at the end o
 
     <tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
 
+There's a patch that helps you to modify all help files at once:
+
+`cd public/help`
+`patch -p0 < plugins/redmine_dmsf/extra/help_files_dmsf.diff`
+
 
 Setup / Upgrade
 ---------------
@@ -147,7 +155,7 @@ Before installing ensure that the Redmine instance is stopped.
 
 1. In case of upgrade BACKUP YOUR DATABASE first
 2. Put redmine_dmsf plugin directory into plugins
-3. Initialize/Update database: `rake redmine:plugins:migrate RAILS_ENV="production"`
+3. Initialize/Update database: `bundle exec rake redmine:plugins:migrate RAILS_ENV="production"`
 4. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`
 5. Restart web server
 6. You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
