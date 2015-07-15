@@ -142,9 +142,10 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax.html, at the end o
 
     <tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
 
-There's a patch that helps you to modify all help files at once:
+There's a patch that helps you to modify all help files at once. In your Redmine folder:
 
 `cd public/help`
+
 `patch -p0 < plugins/redmine_dmsf/extra/help_files_dmsf.diff`
 
 
