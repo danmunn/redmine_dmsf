@@ -221,8 +221,7 @@ module RedmineDmsf
           if (parent.projectless_path != '/')
             return Conflict unless parent.folder?
             parent_folder = parent.folder.id
-          end
-          #f = DmsfFolder.new({:title => basename, :dmsf_folder_id => parent_folder, :description => 'Folder created from WebDav'})
+          end          
           f = DmsfFolder.new
           f.title = basename
           f.dmsf_folder_id = parent_folder          
