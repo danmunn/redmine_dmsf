@@ -213,16 +213,19 @@ module RedmineDmsf
       # Create a DmsfFolder at location requested, only if parent is a folder (or root)
       # - 2012-06-18: Ensure item is only functional if project is enabled for dmsf
       def make_collection
-        if (request.body.read.to_s == '')
+        if request.body.read.to_s.empty?
           raise NotFound if project.nil? || project.id.nil? || !project.module_enabled?('dmsf')
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           return MethodNotAllowed if exist? #If we already exist, why waste the time trying to save?
           parent_folder = nil
-          if (parent.projectless_path != "/")
+          if (parent.projectless_path != '/')
             return Conflict unless parent.folder?
             parent_folder = parent.folder.id
           end
-          f = DmsfFolder.new({:title => basename, :dmsf_folder_id => parent_folder, :description => 'Folder created from WebDav'})
+          #f = DmsfFolder.new({:title => basename, :dmsf_folder_id => parent_folder, :description => 'Folder created from WebDav'})
+          f = DmsfFolder.new
+          f.title = basename
+          f.dmsf_folder_id = parent_folder          
           f.project = project
           f.user = User.current
           f.save ? OK : Conflict
