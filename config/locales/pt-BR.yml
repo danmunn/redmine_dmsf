@@ -20,8 +20,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-en:
+pt-BR:
   dmsf: DMSF
+  dmsf_quick_links: Documentos Normativos
+  label_show_quick_links: Mostrar Links Rápidos
   label_dmsf_file_plural: Dmsf files
   label_dmsf_file_revision_plural: Dmsf document revisions
   label_dmsf_file_revision_access_plural: Dmsf document accesses

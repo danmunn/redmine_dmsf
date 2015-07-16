@@ -129,7 +129,7 @@ class DmsfController < ApplicationController
     @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].present? ? Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'] : 100
 
     # Trash
-    @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed && 
+    @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed &&
       @file_delete_allowed && !@locked_for_user && !@folder
     @trash_enabled = DmsfFolder.deleted.where(:project_id => @project.id).any? ||
       DmsfFile.deleted.where(:project_id => @project.id).any? ||
@@ -258,16 +258,16 @@ class DmsfController < ApplicationController
     end
     @folder.project = @project
     @folder.user = User.current
-    
+
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
       params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
         @folder.custom_field_values[i].value = v[1]
       end
     end
-    
+
     if @folder.save
-      flash[:notice] = l(:notice_folder_created)      
+      flash[:notice] = l(:notice_folder_created)
       redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
     else
       @pathfolder = @parent
@@ -281,22 +281,22 @@ class DmsfController < ApplicationController
   end
 
   def save
-    unless params[:dmsf_folder]      
+    unless params[:dmsf_folder]
       redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
       return
     end
     @pathfolder = copy_folder(@folder)
     @folder.attributes = params[:dmsf_folder]
-    
+
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
       params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
         @folder.custom_field_values[i].value = v[1]
       end
     end
-    
+
     if @folder.save
-      flash[:notice] = l(:notice_folder_details_were_saved)      
+      flash[:notice] = l(:notice_folder_details_were_saved)
       redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
     else
       render :action => 'edit'
@@ -420,11 +420,11 @@ class DmsfController < ApplicationController
       end
 
       zip.files.each do |f|
-        log_activity(f, 'emailing zip')        
+        log_activity(f, 'emailing zip')
         audit = DmsfFileRevisionAccess.new
         audit.user = User.current
         audit.revision = f.last_revision
-        audit.action = DmsfFileRevisionAccess::EmailAction        
+        audit.action = DmsfFileRevisionAccess::EmailAction
         audit.save!
       end
 
@@ -447,11 +447,11 @@ class DmsfController < ApplicationController
       zip_entries(zip, selected_folders, selected_files)
 
       zip.files.each do |f|
-        log_activity(f, 'download zip')        
+        log_activity(f, 'download zip')
         audit = DmsfFileRevisionAccess.new
         audit.user = User.current
         audit.revision = f.last_revision
-        audit.action = DmsfFileRevisionAccess::DownloadAction        
+        audit.action = DmsfFileRevisionAccess::DownloadAction
         audit.save!
       end
 
