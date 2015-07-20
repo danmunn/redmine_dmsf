@@ -87,7 +87,7 @@ class DmsfLink < ActiveRecord::Base
     links = DmsfLink.where(
       :project_id => project.id,
       :dmsf_folder_id => folder ? folder.id : nil,
-      :target_type => DmsfFile.model_name).visible.all
+      :target_type => DmsfFile.model_name.to_s).visible.all
     links.each do |link|
       return link if link.target_file.name == filename
     end
