@@ -88,11 +88,13 @@ class DmsfFile < ActiveRecord::Base
                       Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")                      
                     else
                       desc = o.description
-                      desc += " / #{o.last_revision.comment}" if o.last_revision.comment.present?
+                      desc += ' / ' if o.description.present? && o.last_revision.comment.present?
+                      desc += o.last_revision.comment if o.last_revision.comment.present?
                     end
                   else
                     desc = o.description
-                    desc += " / #{o.last_revision.comment}" if o.last_revision.comment.present?
+                    desc += ' / ' if o.description.present? && o.last_revision.comment.present?
+                    desc += o.last_revision.comment if o.last_revision.comment.present?
                   end
                   desc
                 },
@@ -400,7 +402,7 @@ class DmsfFile < ActiveRecord::Base
                     Redmine::Search.cache_store.write("DmsfFile-#{dmsf_file.id}", 
                       dochash['sample'].force_encoding('UTF-8')) if dochash['sample']
                   else
-                    dmsf_file.event_description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']
+                    dmsf_file.description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']
                   end                  
                   break if(!options[:limit].blank? && results.count >= options[:limit])
                   results << dmsf_file
