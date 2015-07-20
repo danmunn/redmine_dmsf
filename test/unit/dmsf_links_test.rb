@@ -50,7 +50,7 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     folder_link = DmsfLink.new
     folder_link.target_project_id = @project1.id
     folder_link.target_id = @folder1.id
-    folder_link.target_type = DmsfFolder.model_name
+    folder_link.target_type = DmsfFolder.model_name.name
     folder_link.name = 'folder1_link2'
     folder_link.project_id = @project1.id
     folder_link.created_at = DateTime.now()
@@ -61,7 +61,7 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     file_link = DmsfLink.new
     file_link.target_project_id = @project1.id
     file_link.target_id = @file1.id
-    file_link.target_type = DmsfFile.model_name
+    file_link.target_type = DmsfFile.model_name.name
     file_link.name = 'file1_link2'
     file_link.project_id = @project1.id
     file_link.created_at = DateTime.now()
