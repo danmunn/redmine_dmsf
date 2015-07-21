@@ -51,7 +51,7 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def target_folder_id
-    if self.target_type == DmsfFolder.model_name.name
+    if self.target_type == DmsfFolder.model_name.to_s
       self.target_id
     else
       f = DmsfFile.find_by_id self.target_id
@@ -64,7 +64,7 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def target_file_id
-    self.target_id if self.target_type == DmsfFile.model_name.name
+    self.target_id if self.target_type == DmsfFile.model_name.to_s
   end
 
   def target_file

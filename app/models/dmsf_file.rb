@@ -42,7 +42,7 @@ class DmsfFile < ActiveRecord::Base
       :dependent => :destroy
     has_many :locks, -> { where(entity_type: 0).order("#{DmsfLock.table_name}.updated_at DESC") },
       :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
-    has_many :referenced_links, -> { where target_type: DmsfFile.model_name.name},
+    has_many :referenced_links, -> { where target_type: DmsfFile.model_name.to_s},
       :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
     accepts_nested_attributes_for :revisions, :locks, :referenced_links, :project
   else
@@ -54,7 +54,7 @@ class DmsfFile < ActiveRecord::Base
       :conditions => {:entity_type => 0},
       :dependent => :destroy
     has_many :referenced_links, :class_name => 'DmsfLink', :foreign_key => 'target_id',
-      :conditions => {:target_type => DmsfFile.model_name.name}, :dependent => :destroy
+      :conditions => {:target_type => DmsfFile.model_name.to_s}, :dependent => :destroy
   end
 
   if (Rails::VERSION::MAJOR > 3)

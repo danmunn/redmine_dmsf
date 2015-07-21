@@ -50,7 +50,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     @folder4.delete true
     assert_nil DmsfFolder.find_by_id(@folder4.id)        
     # TODO: Doesn't work in Travis - a problem with bolean visiblity
-    #assert_equal 0, DmsfLink.where(:target_id => @folder4.id, :target_type => DmsfFolder.model_name.name).count
+    #assert_equal 0, DmsfLink.where(:target_id => @folder4.id, :target_type => DmsfFolder.model_name.to_s).count
   end
   
 end

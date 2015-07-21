@@ -318,47 +318,7 @@ class DmsfFolder < ActiveRecord::Base
     file_links.visible.count +
     url_links.visible.count
   end 
-  
-  # To full fill searchable module expectations in Redmine <= 3.0
-  # TODO: Remove this function in the next release
-  def self.search(tokens, projects = nil, options = {})
-    tokens = [] << tokens unless tokens.is_a?(Array)
-    projects = [] << projects unless projects.nil? || projects.is_a?(Array)
-
-    find_options = {}
-    find_options[:order] = 'dmsf_folders.updated_at ' + (options[:before] ? 'DESC' : 'ASC')
-
-    limit_options = {}
-    limit_options[:limit] = options[:limit] if options[:limit]
-    if options[:offset]
-      limit_options[:conditions] = '(dmsf_folders.updated_at ' + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
-    end
-
-    columns = options[:titles_only] ? ['dmsf_folders.title'] : ['dmsf_folders.title', 'dmsf_folders.description']
-
-    token_clauses = columns.collect {|column| "(LOWER(#{column}) LIKE ?)"}
-
-    sql = (['(' + token_clauses.join(' OR ') + ')'] * tokens.size).join(options[:all_words] ? ' AND ' : ' OR ')
-    find_options[:conditions] = [sql, * (tokens.collect {|w| "%#{w.downcase}%"} * token_clauses.size).sort]
-
-    project_conditions = []
-    project_conditions << (Project.allowed_to_condition(User.current, :view_dmsf_files))
-    project_conditions << "project_id IN (#{projects.collect(&:id).join(',')})" if projects
-
-    results = []
-    results_count = 0
     
-    includes(:project).
-    where(project_conditions.join(' AND ')).scoping do
-      where(find_options[:conditions]).order(find_options[:order]).scoping do
-        results_count = count(:all)
-        results = find(:all, limit_options)
-      end
-    end
-
-    [results, results_count]
-  end
-  
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)

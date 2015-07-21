@@ -73,7 +73,7 @@ class DmsfController < ApplicationController
           end
         end
         @dir_links = []
-        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.name).visible.each do |l|
+        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.to_s).visible.each do |l|
           l.target_folder.custom_field_values.each do |v|
             if v.custom_field_id == params[:custom_field_id].to_i
               if v.custom_field.compare_values?(v.value, params[:custom_value])
@@ -84,7 +84,7 @@ class DmsfController < ApplicationController
           end
         end
         @file_links = []
-        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFile.model_name.name).visible.each do |l|
+        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFile.model_name.to_s).visible.each do |l|
           r = l.target_file.last_revision if l.target_file
           if r
             r.custom_field_values.each do |v|
@@ -157,8 +157,8 @@ class DmsfController < ApplicationController
     @file_delete_allowed = User.current.allowed_to? :file_delete, @project
     @subfolders = DmsfFolder.deleted.where(:project_id => @project.id)
     @files = DmsfFile.deleted.where(:project_id => @project.id)
-    @dir_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.name)
-    @file_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFile.model_name.name)
+    @dir_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.to_s)
+    @file_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFile.model_name.to_s)
     @url_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => 'DmsfUrl')
   end
 
