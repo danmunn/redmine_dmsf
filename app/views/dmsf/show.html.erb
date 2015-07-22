@@ -296,7 +296,7 @@
     <ul style='padding: 15px 20px 10px;'>
       <h2><%= t('dmsf_quick_links') %></h2>
       <% @project.dmsf_folders.visible.each do |rf| %>
-        <li><%= link_to(h("#{rf.title} [#{rf.files.visible.count + rf.file_links.visible.count}]"),
+        <li><%= link_to(h("#{rf.title} [#{rf.items}]"),
           dmsf_folder_path(:id => @project, :folder_id => rf),
           :class => 'icon icon-folder') %></li>
       <% end %>
