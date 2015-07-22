@@ -22,9 +22,9 @@
 
 ru:
   dmsf: DMSF
-  label_dmsf_file_plural: Файлы DMSF
-  label_dmsf_file_revision_plural: Dmsf document revisions
-  label_dmsf_file_revision_access_plural: Dmsf document accesses
+  label_dmsf_file_plural: Файлы
+  label_dmsf_file_revision_plural: Document revisions
+  label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: Файлы не выбраны
   error_email_to_must_be_entered: Нужно указать, на какую почту отправить письмо  
   warning_file_already_locked: Файл уже заблокирован
@@ -166,7 +166,7 @@ ru:
   notice_entries_deleted: Файлы удалены
   warning_some_entries_were_not_deleted: "Некоторые файлы не были удалены: %{entries}"  
   title_delete_checked: Удалить выбранные документы
-  title_number_of_files_in_directory: Количество файлов в директории
+  title_items: items
   title_filename_for_download: Имя файла для скачиваемого архива
   label_number_of_folders: Папок
   label_number_of_documents: Документов
@@ -181,7 +181,7 @@ ru:
   heading_access_first: Первый
   heading_access_last: Последний
   label_dmsf_updated: Документ обновлен
-  label_dmsf_downloaded: DMSF document downloaded
+  label_dmsf_downloaded: Документ downloaded
   title_total_size_of_all_files: Общий размер всех файлов в этой папке
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: Не выбран проект, в который нужно скопировать файл
@@ -191,7 +191,7 @@ ru:
   field_target_project: Целевой проект
   field_target_folder: Целевая папка
   title_copy_or_move: Копировать/Переместить
-  label_dmsf_folder_plural: DMSF папки
+  label_dmsf_folder_plural: Папки
   comment_moved_from: "Перемещен из %{source}"
   error_target_folder_same: Целевая папка и проект совпадают с текущими
   error_file_cannot_be_moved: Файл не может быть перемещен
@@ -209,7 +209,7 @@ ru:
   parent_directory: "Родительская директория"
   note_webdav: "После включения, WebDAV можно найти по адресу http://redmine-host/dmsf/webdav/"
   label_webdav: "Функциональность WebDAV"
-  label_dmsf_plural: "Скопировать DMSF файлы и папки (%{files} файлов в %{folders} папках)"
+  label_dmsf_plural: "Скопировать файлы и папки (%{files} файлов в %{folders} папках)"
 
   warning_folder_already_locked: "Эта папка уже заблокирована"
   notice_folder_locked: "Папка была успешно заблокирована"
@@ -290,13 +290,14 @@ ru:
   label_notifications_off: Notifications off
   field_target_file: Source file
   title_download_entries: Download entries
+  label_external: External
+  
   label_link_name: Link name
   label_link_external_url: URL
   label_target_folder: Target folder
   label_source_folder: Source folder
   label_target_project: Target project
-  label_source_project: Source project
-  label_external: External
+  label_source_project: Source project  
   
   text_email_doc_updated_subject: "Documents of %{project} updated"
   text_email_doc_updated: has just actualized documents of

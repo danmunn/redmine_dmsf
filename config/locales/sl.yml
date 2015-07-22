@@ -23,8 +23,8 @@
 sl:
   dmsf: Arhiv
   label_dmsf_file_plural: Arhivske datoteke
-  label_dmsf_file_revision_plural: Dmsf document revisions
-  label_dmsf_file_revision_access_plural: Dmsf document accesses
+  label_dmsf_file_revision_plural: Document revisions
+  label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: Ničesar niste izbrali
   error_email_to_must_be_entered: Email Naslovnik mora bit izbran  
   warning_file_already_locked: Datoteka že zaklenjena
@@ -166,7 +166,7 @@ sl:
   notice_entries_deleted: Izbrane enote izbrisane
   warning_some_entries_were_not_deleted: "Nekatere enote niso izbrisane: %{entries}"  
   title_delete_checked: Izbriši izbrano
-  title_number_of_files_in_directory: Število datotek v mapi
+  title_items: items
   title_filename_for_download: Naziv datoteke za prenos dol ali Zip arhiva
   label_number_of_folders: Mapa
   label_number_of_documents: Dokumentacija
@@ -181,7 +181,7 @@ sl:
   heading_access_first: Prvi
   heading_access_last: Zadnji
   label_dmsf_updated: Arhiv posodobljen
-  label_dmsf_downloaded: DMSF document downloaded
+  label_dmsf_downloaded: Arhiv downloaded
   title_total_size_of_all_files: Skupna velikost vseh datotek v tej mapi
   project_module_dmsf: Arhiv  
   warning_no_project_to_copy_file_to: Ni projekta kamor bi kopiral datoteko
@@ -290,13 +290,14 @@ sl:
   label_notifications_off: Notifications off
   field_target_file: Source file
   title_download_entries: Download entries
+  label_external: External
+  
   label_link_name: Link name
   label_link_external_url: URL
   label_target_folder: Target folder
   label_source_folder: Source folder
   label_target_project: Target project
-  label_source_project: Source project
-  label_external: External
+  label_source_project: Source project  
   
   text_email_doc_updated_subject: "Documents of %{project} updated"
   text_email_doc_updated: has just actualized documents of

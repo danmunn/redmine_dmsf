@@ -23,8 +23,8 @@
 zh-TW:
   dmsf: 文件總管
   label_dmsf_file_plural: 文件檔案
-  label_dmsf_file_revision_plural: Dmsf document revisions
-  label_dmsf_file_revision_access_plural: Dmsf document accesses
+  label_dmsf_file_revision_plural: Document revisions
+  label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: 尚未選取任何項目
   error_email_to_must_be_entered: 請輸入收件者的電子郵件
   warning_file_already_locked: 檔案己經鎖定
@@ -80,10 +80,8 @@ zh-TW:
   title_waiting_for_approval: 等待批准
   title_approved: 已經被批准
   title_unlock_file: 解除鎖定。允許其它使用者修改。
-  title_lock_file: 鎖定檔案。禁止其它使用者修改。
-  submit_download: 下載
-  title_download_checked: 以ZIP下載所選取的檔案
-  submit_email: 電子郵件
+  title_lock_file: 鎖定檔案。禁止其它使用者修改。  
+  title_download_checked: 以ZIP下載所選取的檔案  
   title_send_checked_by_email: 以電子郵件發送所選取的檔案
   link_user_preferences: 你的DMSF的系統偏好設定
   heading_send_documents_by_email: 電子郵件寄送檔案
@@ -156,6 +154,7 @@ zh-TW:
   permission_file_manipulation: 文件操作  
   permission_force_file_unlock: 強制解除檔案鎖定
   permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
   label_file: 檔案
   field_folder: 資料夾
   error_create_cycle_in_folder_dependency: 資料夾之間的關係，不得為一個cycle循環。
@@ -167,7 +166,7 @@ zh-TW:
   notice_entries_deleted: 項目己刪除
   warning_some_entries_were_not_deleted: "部份項目無法刪除: %{entries}"  
   title_delete_checked: 刪除選取項目
-  title_number_of_files_in_directory: 資料夾的檔案數量
+  title_items: items
   title_filename_for_download: 下載時的檔名，或是ZIP的檔案名稱。
   label_number_of_folders: 資料夾
   label_number_of_documents: 文件檔案
@@ -181,8 +180,8 @@ zh-TW:
   heading_access_downloads_emails: 下載/電子郵件
   heading_access_first: First
   heading_access_last: Last
-  label_dmsf_updated: DMSF updated
-  label_dmsf_downloaded: DMSF document downloaded
+  label_dmsf_updated: Updated
+  label_dmsf_downloaded: Downloaded
   title_total_size_of_all_files: 資料夾所有檔案的檔案大小
   project_module_dmsf: 文件總管
   warning_no_project_to_copy_file_to: No project to copy file to
@@ -192,7 +191,7 @@ zh-TW:
   field_target_project: Target project
   field_target_folder: Target folder
   title_copy_or_move: Copy/Move
-  label_dmsf_folder_plural: Dmsf folders
+  label_dmsf_folder_plural: Folders
   comment_moved_from: "Moved from %{source}"
   error_target_folder_same: Target folder and project are the same as current
   error_file_cannot_be_moved: "File can't be moved"
@@ -291,13 +290,14 @@ zh-TW:
   label_notifications_off: Notifications off
   field_target_file: Source file
   title_download_entries: Download entries
+  label_external: External
+  
   label_link_name: Link name
   label_link_external_url: URL
   label_target_folder: Target folder
   label_source_folder: Source folder
   label_target_project: Target project
-  label_source_project: Source project
-  label_external: External
+  label_source_project: Source project  
 
   text_email_doc_updated_subject: "Documents of %{project} updated"
   text_email_doc_updated: has just actualized documents of
@@ -309,6 +309,14 @@ zh-TW:
   label_display_notified_recipients: Display notified recipients
   note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
   warning_email_notifications: "Email notifications sent to %{to}"
+  
+  link_trash_bin: Trash bin
+  title_restore: Restore
+  notice_dmsf_file_restored: The document has been successfully restored
+  notice_dmsf_folder_restored: The folder has been successfully restored
+  notice_dmsf_link_restored: The link has been successfully restored
+  title_restore_checked: Restore checked
+  error_parent_folder: "The parent folder doesn't exist"
 
   my:
     blocks:

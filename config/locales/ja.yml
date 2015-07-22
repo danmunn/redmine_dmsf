@@ -167,7 +167,7 @@ ja:
   notice_entries_deleted: エントリーを削除しました
   warning_some_entries_were_not_deleted: "いくつかのエントリーは削除されませんでした: %{entries}"  
   title_delete_checked: チェックしたものを削除します
-  title_number_of_files_in_directory: フォルダ内のファイル数
+  title_items: items
   title_filename_for_download: ファイル名はダウンロードまたは Zip アーカイブに使われます
   label_number_of_folders: フォルダ
   label_number_of_documents: 文書  

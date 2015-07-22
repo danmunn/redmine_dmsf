@@ -1,0 +1,31 @@
+<%
+# encoding: utf-8
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-15   Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<h3 class="title"><%= l(:dmsf_new_step) %></h3>
+
+<%= form_for(:dmsf_workflow, {:url => edit_dmsf_workflow_path(@dmsf_workflow), :method => :post}) do |f| %>  
+  <%= render :partial => 'new_step_form' %>
+  <p class="buttons">
+    <%= submit_tag l(:dmsf_and), :id => 'add-step-and' %>
+    <%= submit_tag l(:dmsf_or), :id => 'add-step-or' %>
+    <%= submit_tag l(:button_cancel), :name => nil, :onclick => 'hideModal(this);', :type => 'button' %>    
+  </p>
+<% end %>

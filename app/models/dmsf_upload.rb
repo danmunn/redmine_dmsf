@@ -45,13 +45,7 @@ class DmsfUpload
         :original_filename => a.filename,
         :comment => uploaded_file[:description]
       }        
-      File.open(a.diskfile, 'rb') do |fr|   
-        File.open("#{DmsfHelper.temp_dir}/#{uploaded[:disk_filename]}", 'wb') do |fw| 
-          while (buffer = fr.read(8192))
-            fw.write(buffer)
-          end
-        end
-      end
+      FileUtils.mv(a.diskfile, "#{DmsfHelper.temp_dir}/#{uploaded[:disk_filename]}")
       a.destroy    
       DmsfUpload.new(project, folder, uploaded)
     end

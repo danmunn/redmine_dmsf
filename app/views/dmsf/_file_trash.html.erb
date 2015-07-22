@@ -20,13 +20,10 @@
 
 <td class="check"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_restore_or_delete)) %></td>
-<td class="title">
-  <% file_download_url = url_for({:only_path => false, :controller => :dmsf_files, :action => 'show', :id => file, :download => ''}) %>
-  <%= link_to(h(title),
-    file_download_url,
-    :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}",
-    :title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version),
-    'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_download_url}") %>
+<td class="title">  
+  <%= content_tag(:span, h(title), 
+    :title => h(title), 
+    :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}") %>
   <div class="filename" title="<%= l(:title_filename_for_download)%>"><%= h(link ? link.path : file.display_name) %></div>
 </td>
 <td class="size"><%= number_to_human_size(file.last_revision.size) %></td>

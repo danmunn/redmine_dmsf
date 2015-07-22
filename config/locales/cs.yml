@@ -22,9 +22,9 @@
 
 cs:
   dmsf: DMSF
-  label_dmsf_file_plural: Dmsf soubory
-  label_dmsf_file_revision_plural: Dmsf document revisions
-  label_dmsf_file_revision_access_plural: Dmsf document accesses
+  label_dmsf_file_plural: Dokumenty
+  label_dmsf_file_revision_plural: Revize dokumentů
+  label_dmsf_file_revision_access_plural: Přístupy k dokumentům
   warning_no_entries_selected: Není nic vybráno
   error_email_to_must_be_entered: Musí být zadán adresát  
   warning_file_already_locked: Soubor už je zamčen
@@ -166,8 +166,8 @@ cs:
   notice_entries_deleted: Položky smazány
   warning_some_entries_were_not_deleted: "Některé položky nebyly smazány: %{entries}"  
   title_delete_checked: Smaž vybrané
-  title_number_of_files_in_directory: Počet souborů ve složce
-  title_filename_for_download: Název Zip archívu ke stažení
+  title_items: položek
+  title_filename_for_download: Název Zip archivu ke stažení
   label_number_of_folders: Složky
   label_number_of_documents: Dokumenty  
   error_file_storage_directory_does_not_exist: Cílová složka neexistuje a nemůže být vytvořena
@@ -180,8 +180,8 @@ cs:
   heading_access_downloads_emails: Stažené/Emaily
   heading_access_first: První
   heading_access_last: Poslední
-  label_dmsf_updated: DMSF změněno
-  label_dmsf_downloaded: DMSF document downloaded
+  label_dmsf_updated: Změněno
+  label_dmsf_downloaded: Staženo
   title_total_size_of_all_files: Celková velikost všech souborů v adresáři
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: Neexistuje projekt, do kterého můžete kopírovat
@@ -191,7 +191,7 @@ cs:
   field_target_project: Cílový projekt
   field_target_folder: Cílový adresář
   title_copy_or_move: Kopírovat/Přesunout
-  label_dmsf_folder_plural: Dmsf složky
+  label_dmsf_folder_plural: Složky
   comment_moved_from: "Přesunuto z %{source}"
   error_target_folder_same: Cílový adresář a projekt jsou stejné jako aktuální
   error_file_cannot_be_moved: Soubor nemůže být přesunut
@@ -209,7 +209,7 @@ cs:
   parent_directory: Nadřazený adresář
   note_webdav: "Webdav je po založení k dispozici na http://.../dmsf/webdav/"
   label_webdav: Webdav functionalita
-  label_dmsf_plural: "Kopíruj DMSF soubory a složky (%{files} souborů v %{folders} složkách)"
+  label_dmsf_plural: "Kopíruj dokumenty a složky (%{files} souborů v %{folders} složkách)"
 
   warning_folder_already_locked: Tato složka je již zamčená
   notice_folder_locked: Složka byla úspěšně zamčena
@@ -290,13 +290,14 @@ cs:
   label_notifications_off: Vypnout notifikace
   field_target_file: Zdrojový soubor
   title_download_entries: Historie stahování
+  label_external: Externí
+  
   label_link_name: Název odkazu
   label_link_external_url: URL
   label_target_folder: Cílový adresář
   label_source_folder: Zdrojový adresář
   label_target_project: Cílový projekt
-  label_source_project: Zdrojový projekt
-  label_external: Externí
+  label_source_project: Zdrojový projekt  
   
   text_email_doc_updated_subject: "Dokumenty projektu %{project} aktualizovány"
   text_email_doc_updated: právě aktualizoval dokumenty projektu

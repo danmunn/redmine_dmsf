@@ -23,6 +23,8 @@
 de:
   dmsf: DMS
   label_dmsf_file_plural: DMS
+  label_dmsf_file_revision_plural: Dokumenteversion
+  label_dmsf_file_revision_access_plural: Dokumentezugriffe
   warning_no_entries_selected: Keine Einträge ausgewählt
   error_email_to_must_be_entered: Es muss ein Email-Empfänger angegeben werden.  
   warning_file_already_locked: Datei schon gesperrt
@@ -81,7 +83,7 @@ de:
   title_lock_file: Sperre um Änderungen anderer Nutzer zu verhindern  
   title_download_checked: Download der ausgewählten Dateien in einem ZIP-Archiv  
   title_send_checked_by_email: Sende gewählte Dateien per Email
-  link_user_preferences: Deine Einstellungen
+  link_user_preferences: Deine DMS Projekt Einstellungen
   heading_send_documents_by_email: Sende Dateien per Email
   label_email_from: Von
   label_email_to: An
@@ -143,16 +145,16 @@ de:
   heading_uploaded_files: Hochgeladene Dateien
   submit_commit: OK
   link_documents: Dateien
-  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
-  permission_view_dmsf_file_revisions: View revisions in Activity stream
+  permission_view_dmsf_file_revision_accesses: Betrachte Dokumentezugriffe in Aktivitäten
+  permission_view_dmsf_file_revisions: Betrachte Dokumenteversion in Aktivitäten
   permission_view_dmsf_folders: Durchforste Dateien
   permission_user_preferences: Benutzereinstellungen
   permission_view_dmsf_files: Betrachte Dateien
   permission_folder_manipulation: Ordner bearbeiten
   permission_file_manipulation: Dateien bearbeiten  
-  permission_force_file_unlock: Erzwinge Aufhebung der Dateisperre
-  permission_file_delete: Datei löschen
+  permission_force_file_unlock: Erzwinge Aufhebung der Dateisperre  
   permission_manage_workflows: Workflows verwalten
+  permission_file_delete: Datei löschen
   label_file: Datei
   field_folder: Ordner
   error_create_cycle_in_folder_dependency: Zirkelabhängigkeit in der Ordnerstruktur erstellt
@@ -164,7 +166,7 @@ de:
   notice_entries_deleted: Einträge löschen
   warning_some_entries_were_not_deleted: "Enige Einträge wurden nicht gelöscht: %{entries}"  
   title_delete_checked: Löschen ausgewählt
-  title_number_of_files_in_directory: Dateianzahl in dem Ordner
+  title_items: items
   title_filename_for_download: Dateiname beim Herunterladen oder in ZIP-Archiv verwenden
   label_number_of_folders: Order
   label_number_of_documents: Dokumente  
@@ -178,7 +180,8 @@ de:
   heading_access_downloads_emails: Downloads oder Emailversand
   heading_access_first: Erste
   heading_access_last: Letzte
-  label_dmsf_updated: DMS aktualisiert
+  label_dmsf_updated: aktualisiert
+  label_dmsf_downloaded: gespeichert
   title_total_size_of_all_files: Gesamtgröße aller Dateien in diesem Ordner
   project_module_dmsf: DMS
   warning_no_project_to_copy_file_to: Kein Projekt, in das die Datei kopiert werden kann.
@@ -287,13 +290,14 @@ de:
   label_notifications_off: Benachrichtigungen aus
   field_target_file: Quelldatei
   title_download_entries: Download entries
+  label_external: Außen
+  
   label_link_name: Name der Verknüpfung
   label_link_external_url: URL
   label_target_folder: Zielordner
   label_source_folder: Quellordner
   label_target_project: Zielprojekt
-  label_source_project: Quellprojekt
-  label_external: Außen
+  label_source_project: Quellprojekt  
   
   text_email_doc_updated_subject: "Dokumente im Projekt %{project} wurden aktualisiert"
   text_email_doc_updated: hat folgende Dokumente bearbeitet

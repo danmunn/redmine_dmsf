@@ -542,13 +542,13 @@ if not $onlyrepos then
 end
 
 # Indexing repositories
-if not $onlyfiles then
-  if not File.exist?($scriptindex) then
+unless $onlyfiles
+  unless File.exist?($scriptindex)
     log("- ERROR! #{$scriptindex} does not exist, exiting...")
     exit 1
   end
-  $databasepath = File.join( $dbrootpath.rstrip, "repodb" )
-  if not File.directory?($databasepath)
+  $databasepath = File.join($dbrootpath.rstrip, 'repodb')
+  unless File.directory?($databasepath)
     log("Db directory #{$databasepath} does not exist, creating...")
     begin
       Dir.mkdir($databasepath)
@@ -557,30 +557,30 @@ if not $onlyfiles then
       log("ERROR! #{$databasepath} can not be created!, exiting ...")
       exit 1
     end
-  end
-  $project=nil
-  $projects.each do |proj|
-    begin
-      scope = Project.active.has_module(:repository)
-      $project = scope.find_by_identifier(proj)
-      raise ActiveRecord::RecordNotFound unless $project
-      log("- Indexing repositories for #{$project.name} ...", :level=>1)
-      $repositories = $project.repositories.select { |repository| repository.supports_cat? }
-      $repositories.each do |repository|
-	if repository.identifier.nil? then
-	  log("\t>Ignoring repo id #{repository.id}, repo has undefined identifier", :level=>1)
-	else
-          if !$userch.nil? then
-	    changeset=Changeset.where("revision='#{$userch}' and repository_id='#{repository.id}'").first
-  	    update_log(repository,changeset,nil,nil) unless changeset.nil?
-	  end
-	  delete_log(repository) if ($resetlog)
+  end  
+  
+  projects.each do |identifier|
+    begin      
+      project = Project.active.find_by_identifier(identifier)
+      raise ActiveRecord::RecordNotFound unless project
+      raise ActiveRecord::RecordNotFound unless project.has_module(:repository)
+      log("- Indexing repositories for #{project.name} ...", :level => 1)
+      repositories = project.repositories.select { |repository| repository.supports_cat? }
+      repositories.each do |repository|
+        if repository.identifier.nil? then
+          log("\t>Ignoring repo id #{repository.id}, repo has undefined identifier", :level => 1)
+        else
+          if $userch
+            changeset = Changeset.where(:revision => $userch, :repository_id => repository.id).first
+            update_log(repository, changeset, nil, nil) if changeset
+          end
+          delete_log(repository) if ($resetlog)
           indexing(repository)
-	end
+        end
       end
     rescue ActiveRecord::RecordNotFound
-      log("- ERROR project identifier #{proj} not found, ignoring...", :level => 1)
-      Rails.logger.error "Project identifier #{proj} not found "
+      log("- ERROR project identifier #{identifier} not found or repository module not enabled, ignoring...", :level => 1)
+      Rails.logger.error "Project identifier #{identifier} not found "
     end
   end
 end

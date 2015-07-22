@@ -1,8 +1,10 @@
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš    <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -40,24 +42,21 @@ module RedmineDmsf
       module InstanceMethods       
 
         def render_custom_fields_tabs_with_render_custom_tab(types)
-          add_cf
-          render_custom_fields_tabs_without_render_custom_tab(types)
-        end
-
-        def custom_field_type_options_with_custom_tab_options
-          add_cf
-          custom_field_type_options_without_custom_tab_options
-        end
-
-      private
-
-        def add_cf
           cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}          
           unless CustomFieldsHelper::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
             CustomFieldsHelper::CUSTOM_FIELDS_TABS << cf          
           end
+          render_custom_fields_tabs_without_render_custom_tab(types)
         end
-        
+
+        def custom_field_type_options_with_custom_tab_options
+          cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}          
+          unless CustomFieldsHelper::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
+            CustomFieldsHelper::CUSTOM_FIELDS_TABS << cf          
+          end
+          custom_field_type_options_without_custom_tab_options
+        end
+      
       end
     end
   end

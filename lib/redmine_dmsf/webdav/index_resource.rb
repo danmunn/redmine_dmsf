@@ -1,7 +1,9 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,19 +27,18 @@ module RedmineDmsf
         super(public_path, path, request, response, options)
       end
 
-
       def children
-        if @Projects.nil? || @Projects.empty?
-          @Projects = []
-          if User.current.admin?
-            @Projects = Project.visible.find(:all, :order => 'lft')
-          elsif User.current.logged? #If user is not admin, we should only show memberships relevent
-            User.current.memberships.each {|m| @Projects << m.project if m.roles.detect {|r| r.allowed_to?(:view_dmsf_folders)}}
+        if @projects.blank?
+          @projects = []
+          if User.current.admin?            
+            @projects = Project.visible.order('lft').to_a
+          elsif User.current.logged? # If user is not admin, we should only show memberships relevant
+            User.current.memberships.each{ |m| @Projects << m.project if m.roles.detect{ |r| r.allowed_to?(:view_dmsf_folders) } }
           end
         end 
-        @Projects.delete_if { |node|  !node.module_enabled?('dmsf') } unless @Projects.nil?
-        return [] if @Projects.nil? || @Projects.empty?
-        @Projects.map do |p|
+        @projects.delete_if { |node| !node.module_enabled?('dmsf') } if @projects
+        return [] if @projects.blank?
+        @projects.map do |p|
           child p.identifier
         end
       end
@@ -58,7 +59,7 @@ module RedmineDmsf
         MethodNotAllowed
       end
 
-      #Index resource ALWAYS exists
+      # Index resource ALWAYS exists
       def exist?
         true
       end
@@ -68,7 +69,7 @@ module RedmineDmsf
       end
 
       def content_type
-        "inode/directory"
+        'inode/directory'
       end
 
       def content_length

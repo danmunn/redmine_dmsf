@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.5.1** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **1.5.2** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -42,7 +42,7 @@ Features
 Dependencies
 ------------
   
-  * Redmine 2.5.0 or higher (Not yet fully compatible with Redmine 3.x but it should work in general)
+  * Redmine 2.5.0 or higher
 
 ### Fulltext search (optional)
 
@@ -93,25 +93,28 @@ Usage
 
 DMSF is designed to act as project module, so it must be checked as an enabled module within the project settings.
 
-Search will now automatically search DMSF content when a redmine search is performed, additionally a "Dmsf files" checkbox will be visible, allowing you to search DMSF content exclusively.
+Search will now automatically search DMSF content when a Redmine search is performed, additionally a "Documents" and "Folders" check box will be visible, allowing you to search DMSF content exclusively.
 
 ###Linking DMSF files from Wiki entries:
 
-####Link to file with id 17:
+####Link to a file with id 17:
 `{{dmsf(17)}}`
 
-####Link to file with id 17 with link text "File"
-`{{dmsf(17,File)}}`
+####Link to a file with id 17 with link text "File"
+`{{dmsf(17, File)}}`
 
-The DMSF file/revision id can be found in link for file/revision download from within redmine.
+####Link to the description of a file with id 17
+`{{dmsfd(17)}}`
+
+The DMSF file/revision id can be found in link for file/revision download from within Redmine.
 
 ###Linking DMSF folders from Wiki entries:
 
-####Link to folder with id 5:
+####Link to a folder with id 5:
 `{{dmsff(5)}}`
 
-####Link to folder with id 5 with link text "Folder"
-`{{dmsff(5,Folder)}}`
+####Link to a folder with id 5 with link text "Folder"
+`{{dmsff(5, Folder)}}`
 
 The DMSF folder id can be found in the link when opening folders within Redmine.
 
@@ -123,11 +126,12 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax_detailed.html, aft
       <li>
         DMSF:
         <ul>
-          <li><strong>{{dmsf(17)}}</strong> (link to file with id 17)</li>
-          <li><strong>{{dmsf(17,File)}}</strong> (link to file with id 17 with link text "File")</li>
-          <li><strong>{{dmsf(17,File,10)}}</strong> (link to file with id 17 with link text "File" and link pointing to revision 10)</li>
-          <li><strong>{{dmsff(5)}}</strong> (link to folder with id 5)</li>
-          <li><strong>{{dmsff(5,Folder)}}</strong> (link to folder with id 5 with link text "Folder")</li>
+          <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
+          <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
+          <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
+          <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
+          <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
+          <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
         </ul>
         The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
         The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -138,6 +142,12 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax.html, at the end o
 
     <tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
 
+There's a patch that helps you to modify all help files at once. In your Redmine folder:
+
+`cd public/help`
+
+`patch -p0 < plugins/redmine_dmsf/extra/help_files_dmsf.diff`
+
 
 Setup / Upgrade
 ---------------
@@ -146,22 +156,30 @@ Before installing ensure that the Redmine instance is stopped.
 
 1. In case of upgrade BACKUP YOUR DATABASE first
 2. Put redmine_dmsf plugin directory into plugins
-3. Initialize/Update database: `rake redmine:plugins:migrate RAILS_ENV="production"`
+3. Initialize/Update database: `bundle exec rake redmine:plugins:migrate RAILS_ENV="production"`
 4. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`
 5. Restart web server
 6. You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
 7. Assign DMSF permissions to appropriate roles
 8. There are two rake tasks:
+
     a) To convert documents from the standard Redmine document module
+
         Available options:
+
             * project  => id or identifier of project (defaults to all projects)
             * dry  => true or false (default false) to perform just check without any conversion
             * invalid=replace  => to perform document title invalid characters replacement for '-'
+
         Example:
+            
             rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
+
     b) To alert all users who are expected to do an approval in the current approval steps
+
         Example:
-            rake redmine:dmsf_alert_approvals RAILS_ENV="production"
+            
+            rake redmine:dmsf_alert_approvals RAILS_ENV="production"            
 
 ### Fulltext search (optional)
 If you want to use fulltext search features, you must setup file content indexing.
@@ -174,8 +192,8 @@ It is necessary to index DMSF files with omega before searching attempts to rece
 This command must be run on regular basis (e.g. from cron)
 
 Example of cron job (once per hour at 8th minute):
-
-    `8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f`
+    
+    8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f
 
 See redmine_dmsf/extra/xapian_indexer.rb for help.
 

@@ -25,9 +25,7 @@ class DmsfFolder < ActiveRecord::Base
   include RedmineDmsf::Lockable
 
   cattr_reader :invalid_characters
-  @@invalid_characters = /\A[^\/\\\?":<>]*\z/
-  
-  attr_accessible :title, :description, :dmsf_folder_id, :project
+  @@invalid_characters = /\A[^\/\\\?":<>]*\z/    
 
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
@@ -39,55 +37,66 @@ class DmsfFolder < ActiveRecord::Base
   has_many :files, :class_name => 'DmsfFile', :foreign_key => 'dmsf_folder_id',
     :dependent => :destroy
   if (Rails::VERSION::MAJOR > 3)
-    has_many :folder_links, -> { where target_type: DmsfFolder.model_name },
+    has_many :folder_links, -> { where :target_type => 'DmsfFolder' },
       :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
-    has_many :file_links, -> { where target_type: DmsfFile.model_name },
+    has_many :file_links, -> { where :target_type => 'DmsfFile' },
       :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
-    has_many :url_links, -> { where target_type: 'DmsfUrl' },
+    has_many :url_links, -> { where :target_type => 'DmsfUrl' },
       :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
-    has_many :referenced_links, -> { where target_type: DmsfFolder.model_name },
+    has_many :referenced_links, -> { where :target_type => 'DmsfFolder' },
       :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
     has_many :locks, -> { where(entity_type:  1).order("#{DmsfLock.table_name}.updated_at DESC") },
       :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
     accepts_nested_attributes_for :user, :project, :folder, :subfolders, :files, :folder_links, :file_links, :url_links, :referenced_links, :locks
   else
     has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id',
-      :conditions => {:target_type => DmsfFolder.model_name}, :dependent => :destroy
+      :conditions => { :target_type => 'DmsfFolder' }, :dependent => :destroy
     has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id',
-      :conditions => {:target_type => DmsfFile.model_name}, :dependent => :destroy
+      :conditions => { :target_type => 'DmsfFile' }, :dependent => :destroy
     has_many :url_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id',
-             :conditions => {:target_type => 'DmsfUrl'}, :dependent => :destroy
+             :conditions => { :target_type => 'DmsfUrl' }, :dependent => :destroy
     has_many :referenced_links, :class_name => 'DmsfLink', :foreign_key => 'target_id',
-      :conditions => {:target_type => DmsfFolder.model_name}, :dependent => :destroy
+      :conditions => { :target_type => 'DmsfFolder' }, :dependent => :destroy
     has_many :locks, :class_name => 'DmsfLock', :foreign_key => 'entity_id',
       :order => "#{DmsfLock.table_name}.updated_at DESC",
       :conditions => {:entity_type => 1},
       :dependent => :destroy
   end
-
-  if (Rails::VERSION::MAJOR > 3)
-    scope :visible, -> { where(deleted: false) }
-    scope :deleted, -> { where(deleted: true) }
-  else
-    scope :visible, where(:deleted => false)
-    scope :deleted, where(:deleted => true)
-  end
+  
+  scope :visible, lambda { |*args|
+    where(deleted: false) 
+  }
+  scope :deleted, lambda { |*args|
+    where(deleted: true)
+  }  
 
   acts_as_customizable
+  
+  if (Rails::VERSION::MAJOR > 3)
+    acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
+          :project_key => 'project_id',
+          :date_column => 'updated_at',
+          :permission => :view_dmsf_files,
+          :scope => self.joins(:project)
+  else        
+    acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
+          :project_key => 'project_id',
+          :date_column => 'updated_at',
+          :permission => :view_dmsf_files,          
+          :include => :project
+  end
+        
+  acts_as_event :title => Proc.new {|o| o.title},
+          :description => Proc.new {|o| o.description },
+          :url => Proc.new {|o| {:controller => 'dmsf', :action => 'show', :id => o.project, :folder_id => o}},
+          :datetime => Proc.new {|o| o.updated_at },
+          :author => Proc.new {|o| o.user }
 
   validates :title, :presence => true
   validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted]
-
   validates_format_of :title, :with => @@invalid_characters,
     :message => l(:error_contains_invalid_character)
-
   validate :check_cycle
-
-  acts_as_event :title => Proc.new {|o| o.title},
-                :description => Proc.new {|o| o.description },
-                :url => Proc.new {|o| {:controller => 'dmsf', :action => 'show', :id => o.project, :folder_id => o}},
-                :datetime => Proc.new {|o| o.updated_at },
-                :author => Proc.new {|o| o.user }
 
   before_create :default_values
   def default_values
@@ -280,50 +289,7 @@ class DmsfFolder < ActiveRecord::Base
   def available_custom_fields
     DmsfFileRevisionCustomField.all
   end
-
-  # To fullfill searchable module expectations
-  def self.search(tokens, projects = nil, options = {})
-    tokens = [] << tokens unless tokens.is_a?(Array)
-    projects = [] << projects unless projects.nil? || projects.is_a?(Array)
-
-    find_options = {}
-    find_options[:order] = 'dmsf_folders.updated_at ' + (options[:before] ? 'DESC' : 'ASC')
-
-    limit_options = {}
-    limit_options[:limit] = options[:limit] if options[:limit]
-    if options[:offset]
-      limit_options[:conditions] = '(dmsf_folders.updated_at ' + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
-    end
-
-    columns = options[:titles_only] ? ['dmsf_folders.title'] : ['dmsf_folders.title', 'dmsf_folders.description']
-
-    token_clauses = columns.collect {|column| "(LOWER(#{column}) LIKE ?)"}
-
-    sql = (['(' + token_clauses.join(' OR ') + ')'] * tokens.size).join(options[:all_words] ? ' AND ' : ' OR ')
-    find_options[:conditions] = [sql, * (tokens.collect {|w| "%#{w.downcase}%"} * token_clauses.size).sort]
-
-    project_conditions = []
-    project_conditions << (Project.allowed_to_condition(User.current, :view_dmsf_files))
-    project_conditions << "project_id IN (#{projects.collect(&:id).join(',')})" if projects
-
-    results = []
-    results_count = 0
-    
-    includes(:project).
-    where(project_conditions.join(' AND ')).scoping do
-      where(find_options[:conditions]).order(find_options[:order]).scoping do
-        results_count = count(:all)
-        results = find(:all, limit_options)
-      end
-    end
-
-    [results, results_count]
-  end
   
-  def self.search_result_ranks_and_ids(tokens, user = User.current, projects = nil, options = {})
-    self.search(tokens, :user => user, :projects => projects, :options => options)
-  end
-
   def modified
     last_update = updated_at
     subfolders.each do |subfolder|
@@ -343,7 +309,16 @@ class DmsfFolder < ActiveRecord::Base
     end
     last_update
   end
-
+  
+  # Number of items in the folder
+  def items
+    subfolders.visible.count +
+    files.visible.count +
+    folder_links.visible.count +
+    file_links.visible.count +
+    url_links.visible.count
+  end 
+    
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)

@@ -29,11 +29,8 @@ end
 
 class DmsfFile < ActiveRecord::Base
   unloadable
-
-  include RedmineDmsf::Lockable
-
-  attr_accessor :event_description
-  attr_accessible :project
+  
+  include RedmineDmsf::Lockable        
 
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
@@ -45,7 +42,7 @@ class DmsfFile < ActiveRecord::Base
       :dependent => :destroy
     has_many :locks, -> { where(entity_type: 0).order("#{DmsfLock.table_name}.updated_at DESC") },
       :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
-    has_many :referenced_links, -> { where target_type: DmsfFile.model_name},
+    has_many :referenced_links, -> { where target_type: DmsfFile.model_name.to_s},
       :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
     accepts_nested_attributes_for :revisions, :locks, :referenced_links, :project
   else
@@ -57,20 +54,19 @@ class DmsfFile < ActiveRecord::Base
       :conditions => {:entity_type => 0},
       :dependent => :destroy
     has_many :referenced_links, :class_name => 'DmsfLink', :foreign_key => 'target_id',
-      :conditions => {:target_type => DmsfFile.model_name}, :dependent => :destroy
+      :conditions => {:target_type => DmsfFile.model_name.to_s}, :dependent => :destroy
   end
 
   if (Rails::VERSION::MAJOR > 3)
     accepts_nested_attributes_for :revisions, :locks, :referenced_links
   end
-
-  if (Rails::VERSION::MAJOR > 3)
-    scope :visible, -> { where(deleted: false) }
-    scope :deleted, -> { where(deleted: true) }
-  else
-    scope :visible, where(:deleted => false)
-    scope :deleted, where(:deleted => true)
-  end
+  
+  scope :visible, lambda { |*args|
+    where(deleted: false) 
+  }
+  scope :deleted, lambda { |*args|
+    where(deleted: true)
+  }  
 
   validates :name, :presence => true
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
@@ -84,11 +80,31 @@ class DmsfFile < ActiveRecord::Base
       existing_file.nil? || existing_file.id == self.id
   end
 
-  acts_as_event :title => Proc.new {|o| "#{o.title} - #{o.name}"},
-                :description => Proc.new {|o| o.description },
-                :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o}},
-                :datetime => Proc.new {|o| o.updated_at },
-                :author => Proc.new {|o| o.last_revision.user }
+  acts_as_event :title => Proc.new { |o| o.name },
+                :description => Proc.new { |o| 
+                  if (Rails::VERSION::MAJOR > 3)
+                    desc = Redmine::Search.cache_store.fetch("DmsfFile-#{o.id}")                  
+                    if desc
+                      Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")                      
+                    else
+                      desc = o.description
+                      desc += ' / ' if o.description.present? && o.last_revision.comment.present?
+                      desc += o.last_revision.comment if o.last_revision.comment.present?
+                    end
+                  else
+                    desc = o.description
+                    desc += ' / ' if o.description.present? && o.last_revision.comment.present?
+                    desc += o.last_revision.comment if o.last_revision.comment.present?
+                  end
+                  desc
+                },
+                :url => Proc.new { |o| {:controller => 'dmsf_files', :action => 'show', :id => o} },
+                :datetime => Proc.new { |o| o.updated_at },
+                :author => Proc.new { |o| o.last_revision.user }
+              
+  acts_as_searchable :columns => ["#{table_name}.name", "#{DmsfFileRevision.table_name}.title", "#{DmsfFileRevision.table_name}.description", "#{DmsfFileRevision.table_name}.comment"],
+    :project_key => 'project_id',
+    :date_column => "#{table_name}.updated_at"    
 
   before_create :default_values
   def default_values
@@ -176,8 +192,8 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def description
-    self.last_revision ? self.last_revision.description : ''
-  end
+    self.last_revision ? self.last_revision.description : ''    
+  end    
 
   def version
     self.last_revision ? self.last_revision.version : '0'
@@ -292,41 +308,37 @@ class DmsfFile < ActiveRecord::Base
   end
 
   # To fulfill searchable module expectations
-  def self.search(tokens, projects = nil, options = {})
+  def self.search(tokens, projects = nil, options = {}, user = User.current)
     tokens = [] << tokens unless tokens.is_a?(Array)
-    projects = [] << projects unless projects.nil? || projects.is_a?(Array)
-
-    find_options = {}
-    find_options[:order] = 'dmsf_files.updated_at ' + (options[:before] ? 'DESC' : 'ASC')
-
-    limit_options = {}
-    limit_options[:limit] = options[:limit] if options[:limit]
-    if options[:offset]
-      limit_options[:conditions] = '(dmsf_files.updated_at ' + (options[:before] ? '<' : '>') + "'#{connection.quoted_date(options[:offset])}')"
+    projects = [] << projects if projects.is_a?(Project)
+    project_ids = projects.collect(&:id) if projects           
+    
+    if options[:offset]      
+       limit_options = ["(dmsf_files.updated_at #{options[:before] ? '<' : '>'} ?", options[:offset]]
     end
+    
+    if options[:titles_only]
+      columns = [searchable_options[:columns][1]]
+    else      
+      columns = searchable_options[:columns]
+    end
+    
+    token_clauses = columns.collect{ |column| "(LOWER(#{column}) LIKE ?)" }
 
-    columns = %w(dmsf_files.name dmsf_file_revisions.title dmsf_file_revisions.description)
-    columns = ['dmsf_file_revisions.title'] if options[:titles_only]
-
-    token_clauses = columns.collect {|column| "(LOWER(#{column}) LIKE ?)"}
-
-    sql = (['(' + token_clauses.join(' OR ') + ')'] * tokens.size).join(options[:all_words] ? ' AND ' : ' OR ')
-    find_options[:conditions] = [sql, * (tokens.collect {|w| "%#{w.downcase}%"} * token_clauses.size).sort]
+    sql = (['(' + token_clauses.join(' OR ') + ')'] * tokens.size).join(options[:all_words] ? ' AND ' : ' OR ')    
+    find_options = [sql, * (tokens.collect {|w| "%#{w.downcase}%"} * token_clauses.size).sort]
 
     project_conditions = []
-    project_conditions << Project.allowed_to_condition(User.current, :view_dmsf_files)    
-    project_conditions << "#{DmsfFile.table_name}.project_id IN (#{projects.collect(&:id).join(',')})" unless projects.nil?
+    project_conditions << Project.allowed_to_condition(user, :view_dmsf_files) 
+    project_conditions << "#{DmsfFile.table_name}.project_id IN (#{project_ids.join(',')})" if project_ids.present?
 
-    results = []
-    results_count = 0        
+    results = []        
     
-    includes(:project, :revisions).
-    where(project_conditions.join(' AND ') + " AND #{DmsfFile.table_name}.deleted = :false", {:false => false}).scoping do
-      where(find_options[:conditions]).order(find_options[:order]).scoping do
-        results_count = count(:all)
-        results = find(:all, limit_options)
-      end
-    end
+    scope = self.visible.joins(:project, :revisions)
+    scope = scope.limit(options[:limit]) unless options[:limit].blank?    
+    scope = scope.where(limit_options) unless limit_options.blank?
+    scope = scope.where(project_conditions.join(' AND '))    
+    results = scope.where(find_options).uniq.to_a
 
     if !options[:titles_only] && $xapian_bindings_available
       database = nil
@@ -369,8 +381,8 @@ class DmsfFile < ActiveRecord::Base
         enquire.query = query
         matchset = enquire.mset(0, 1000)
 
-        if matchset
-          matchset.matches.each {|m|
+        if matchset          
+          matchset.matches.each { |m|
             docdata = m.document.data{url}
             dochash = Hash[*docdata.scan(/(url|sample|modtime|type|size)=\/?([^\n\]]+)/).flatten]
             filename = dochash['url']
@@ -380,39 +392,20 @@ class DmsfFile < ActiveRecord::Base
               id_attribute = dmsf_attrs[0][1] if dmsf_attrs.length > 0
               next if dmsf_attrs.length == 0 || id_attribute == 0
               next unless results.select{|f| f.id.to_s == id_attribute}.empty?
-
-              dmsf_file = DmsfFile.where(limit_options[:conditions]).where(:id => id_attribute, :deleted => false).first
+              
+              dmsf_file = DmsfFile.visible.where(limit_options).where(:id => id_attribute).first
 
               if dmsf_file
-                if options[:offset]
-                  if options[:before]
-                    next if dmsf_file.updated_at < options[:offset]
+                if user.allowed_to?(:view_dmsf_files, dmsf_file.project) && 
+                    (project_ids.blank? || (project_ids.include?(dmsf_file.project.id)))                  
+                  if (Rails::VERSION::MAJOR > 3)
+                    Redmine::Search.cache_store.write("DmsfFile-#{dmsf_file.id}", 
+                      dochash['sample'].force_encoding('UTF-8')) if dochash['sample']
                   else
-                    next if dmsf_file.updated_at > options[:offset]
-                  end
-                end
-
-                allowed = User.current.allowed_to?(:view_dmsf_files, dmsf_file.project)
-                project_included = false
-                project_included = true unless projects
-                unless project_included
-                  projects.each do |x|
-                    if x.is_a?(ActiveRecord::Relation)
-                      project_included = x.first.id == dmsf_file.project.id
-                    else
-                      if dmsf_file.project
-                        project_included = x[:id] == dmsf_file.project.id
-                      else
-                        project_included = false
-                      end
-                    end
-                  end
-                end
-
-                if (allowed && project_included)
-                  dmsf_file.event_description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']
-                  results.push(dmsf_file)
-                  results_count += 1
+                    dmsf_file.description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']
+                  end                  
+                  break if(!options[:limit].blank? && results.count >= options[:limit])
+                  results << dmsf_file
                 end
               end
             end
@@ -420,14 +413,14 @@ class DmsfFile < ActiveRecord::Base
         end
       end
     end
-
-    [results, results_count]
+    
+    [results, results.count]
   end
   
   def self.search_result_ranks_and_ids(tokens, user = User.current, projects = nil, options = {})
-    r = self.search(tokens, projects, options)[0]
-    r.each_index { |x| [x, r[1][x]] }
-  end
+    r = self.search(tokens, projects, options, user)[0]
+    r.map{ |f| [f.updated_at.to_i, f.id]}
+  end  
 
   def display_name
     if self.name.length > 50

@@ -51,7 +51,7 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def target_folder_id
-    if self.target_type == DmsfFolder.model_name
+    if self.target_type == DmsfFolder.model_name.to_s
       self.target_id
     else
       f = DmsfFile.find_by_id self.target_id
@@ -64,7 +64,7 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def target_file_id
-    self.target_id if self.target_type == DmsfFile.model_name
+    self.target_id if self.target_type == DmsfFile.model_name.to_s
   end
 
   def target_file
@@ -87,7 +87,7 @@ class DmsfLink < ActiveRecord::Base
     links = DmsfLink.where(
       :project_id => project.id,
       :dmsf_folder_id => folder ? folder.id : nil,
-      :target_type => DmsfFile.model_name).visible.all
+      :target_type => DmsfFile.model_name.name).visible.all
     links.each do |link|
       return link if link.target_file.name == filename
     end
@@ -95,15 +95,13 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def path
-    if self.target_type == DmsfFile.model_name
-      file = self.target_file
-      path = file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.name : element.title }.join('/') if file
-    else
-      folder = self.target_folder
-      path = folder.dmsf_path_str if folder
+    if self.target_type == DmsfFile.model_name.name  
+      path = self.target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.name : element.title }.join('/') if self.target_file
+    else      
+      path = self.target_folder ? self.target_folder.dmsf_path_str : ''
     end
-    path.insert(0, "#{self.target_project.name}:") if self.project_id != self.target_project_id && path
-    if path.length > 50
+    path.insert(0, "#{self.target_project.name}:") if self.project_id != self.target_project_id
+    if path && path.length > 50
       return "#{path[0, 25]}...#{path[-25, 25]}"
     end
     path

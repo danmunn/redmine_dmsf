@@ -1,0 +1,32 @@
+api.dmsf do
+  api.array :dmsf_folders, api_meta(:total_count => @subfolders.size) do
+    @subfolders.each do |folder|
+      api.folder do
+        api.id folder.id     
+        api.title folder.title
+      end
+    end
+  end
+
+  api.array :dmsf_files, api_meta(:total_count => @files.size) do
+    @files.each do |file|
+      api.file do
+        api.id file.id
+        api.name file.name      
+      end
+    end
+  end
+
+  api.array :dmsf_links, api_meta(:total_count => @dir_links.size + @file_links.size + @url_links.size) do
+    (@dir_links + @file_links + @url_links).each do |link|
+      api.link do
+        api.id link.id
+        api.name link.name
+        api.target_type link.target_type
+        api.target_id link.target_id
+        api.target_project_id link.target_project_id
+        api.external_url link.external_url if link.external_url.present?
+      end
+    end
+  end
+end

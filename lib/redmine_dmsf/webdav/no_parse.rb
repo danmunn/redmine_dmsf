@@ -46,5 +46,6 @@ end
 #   This should probably be configurable somehow or better have the module hunt for the correct pathing
 #   automatically without the need to add a "/dmsf/webdav" configuration to it, as if the route is changed
 #   the functonality of this patch will effectively break.
-Rails.configuration.middleware.insert_before(ActionDispatch::ParamsParser,
-                                   RedmineDmsf::NoParse, :urls => ['/dmsf/webdav'])
+Rails.configuration.middleware.insert_before(
+  ActionDispatch::ParamsParser,
+  RedmineDmsf::NoParse, :urls => ["#{Redmine::Utils::relative_url_root}/dmsf/webdav"])

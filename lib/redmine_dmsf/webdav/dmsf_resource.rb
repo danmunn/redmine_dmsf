@@ -54,7 +54,7 @@ module RedmineDmsf
         return @children if @children
         @children = []
         return [] unless collection?
-        folder.subfolders.map do |p|
+        folder.subfolders.visible.map do |p|
           @children.push child(p.title)
         end
         folder.files.visible.map do |p|
@@ -81,13 +81,13 @@ module RedmineDmsf
       # Todo: Move folder data retrieval into folder function, and use folder method to determine existence
       def folder
         return @folder unless @folder == false
-        return nil if project.nil? || project.id.nil? #if the project doesnt exist, this entity can't exist
+        return nil if project.nil? || project.id.nil? #if the project doesn't exist, this entity can't exist
         @folder = nil
         # Note: Folder is searched for as a generic search to prevent SQL queries being generated:
         # if we were to look within parent, we'd have to go all the way up the chain as part of the 
-        # existence check, and although I'm sure we'd love to access the heirarchy, I can't yet
+        # existence check, and although I'm sure we'd love to access the hierarchy, I can't yet
         # see a practical need for it        
-        folders = DmsfFolder.visible.where(:project_id => project.id, :title => basename).order('title ASC').all
+        folders = DmsfFolder.visible.where(:project_id => project.id, :title => basename).order('title ASC').to_a
         return nil unless folders.length > 0
         if (folders.length > 1) then
           folders.delete_if { |x| '/' + x.dmsf_path_str != projectless_path }
@@ -132,7 +132,7 @@ module RedmineDmsf
           # If folder is false, means it couldn't pick up parent, 
           # as such its probably fine to bail out, however we'll 
           # perform a search in this scenario
-          files = DmsfFile.visible.where(:project_id => project.id, :name => basename).order('name ASC').all
+          files = DmsfFile.visible.where(:project_id => project.id, :name => basename).order('name ASC').to_a
           files.delete_if {|x| File.dirname('/' + x.dmsf_path_str) != File.dirname(projectless_path)}
           if files.length > 0
             @file = files[0]
@@ -213,16 +213,18 @@ module RedmineDmsf
       # Create a DmsfFolder at location requested, only if parent is a folder (or root)
       # - 2012-06-18: Ensure item is only functional if project is enabled for dmsf
       def make_collection
-        if (request.body.read.to_s == '')
+        if request.body.read.to_s.empty?
           raise NotFound if project.nil? || project.id.nil? || !project.module_enabled?('dmsf')
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           return MethodNotAllowed if exist? #If we already exist, why waste the time trying to save?
           parent_folder = nil
-          if (parent.projectless_path != "/")
+          if (parent.projectless_path != '/')
             return Conflict unless parent.folder?
             parent_folder = parent.folder.id
-          end
-          f = DmsfFolder.new({:title => basename, :dmsf_folder_id => parent_folder, :description => 'Folder created from WebDav'})
+          end          
+          f = DmsfFolder.new
+          f.title = basename
+          f.dmsf_folder_id = parent_folder          
           f.project = project
           f.user = User.current
           f.save ? OK : Conflict
@@ -252,55 +254,42 @@ module RedmineDmsf
       # Behavioural differences between collection and single entity
       # Todo: Support overwrite between both types of entity, and implement better checking
       def move(dest, overwrite)
-
         # All of this should carry accrross the ResourceProxy frontend, we ensure this to
-        # prevent unexpected errors
-        if dest.is_a?(ResourceProxy)
-          resource = dest.resource
-        else
-          resource = dest
-        end
-
+        # prevent unexpected errors        
+        resource = dest.is_a?(ResourceProxy) ? dest.resource : dest        
+        
         return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil? || resource.project.id == 0
-
+        
         parent = resource.parent
+        
         if (collection?)
-
           #At the moment we don't support cross project destinations
           return MethodNotImplemented unless project.id == resource.project.id
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
 
           #Current object is a folder, so now we need to figure out information about Destination
-          if(dest.exist?) then
-
+          if dest.exist?
             MethodNotAllowed
-
           else
-
             if(parent.projectless_path == '/') #Project root
               folder.dmsf_folder_id = nil
             else
               return PreconditionFailed unless parent.exist? && parent.folder?
-              folder.dmsf_folder_id = parent.folder.id             
+                folder.dmsf_folder_id = parent.folder.id             
             end
             folder.title = resource.basename
             folder.save ? Created : PreconditionFailed
-
           end
         else
           raise Forbidden unless User.current.admin? || 
               User.current.allowed_to?(:folder_manipulation, project) || 
-              User.current.allowed_to?(:folder_manipulation, resource.project)
+              User.current.allowed_to?(:folder_manipulation, resource.project)         
 
-          if(dest.exist?) then
-
-            methodNotAllowed 
-         
+          if dest.exist?
+            methodNotAllowed          
             # Files cannot be merged at this point, until a decision is made on how to merge them
-            # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
-            
+            # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.            
           else
-
             if(parent.projectless_path == '/') #Project root
               f = nil
             else
@@ -311,8 +300,11 @@ module RedmineDmsf
             return InternalServerError unless file.move_to(resource.project, f)
 
             # Update Revision and names of file [We can link to old physical resource, as it's not changed]            
-            file.last_revision.name = resource.basename if file.last_revision            
-            file.name = resource.basename
+            if file.last_revision
+              file.last_revision.name = resource.basename 
+              file.last_revision.title = DmsfFileRevision.filename_to_title(resource.basename)
+            end
+            file.name = resource.basename            
 
             # Save Changes
             (file.last_revision.save! && file.save!) ? Created : PreconditionFailed

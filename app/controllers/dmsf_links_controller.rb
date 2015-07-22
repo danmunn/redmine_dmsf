@@ -1,3 +1,5 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
@@ -24,12 +26,9 @@ class DmsfLinksController < ApplicationController
   before_filter :find_link_project
   before_filter :authorize
 
-  def new
-    if (Rails::VERSION::MAJOR > 3)
-      @dmsf_link = DmsfLink.new(l_params)
-    else
-      @dmsf_link = DmsfLink.new(:project_id => params[:project_id])
-    end
+  def new    
+    @dmsf_link = DmsfLink.new
+    @dmsf_link.project_id = params[:project_id]
 
     if params[:dmsf_link].present?
       # Reload
@@ -106,13 +105,13 @@ class DmsfLinksController < ApplicationController
         @dmsf_link.target_type = 'DmsfUrl'
       elsif params[:dmsf_link][:target_file_id].present?
         @dmsf_link.target_id = params[:dmsf_link][:target_file_id]
-        @dmsf_link.target_type = DmsfFile.model_name
+        @dmsf_link.target_type = DmsfFile.model_name.to_s
       else
         @dmsf_link.target_id = DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
-        @dmsf_link.target_type = DmsfFolder.model_name
+        @dmsf_link.target_type = DmsfFolder.model_name.to_s
       end
       @dmsf_link.name = params[:dmsf_link][:name]
-
+            
       if @dmsf_link.save
         flash[:notice] = l(:notice_successful_create)
         redirect_to dmsf_folder_path(:id => @project.id, :folder_id => @dmsf_link.dmsf_folder_id)
@@ -120,7 +119,7 @@ class DmsfLinksController < ApplicationController
         @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
         @type = params[:dmsf_link][:type]
         @target_folder_id = params[:dmsf_link][:target_folder_id].to_i if DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])
-        @target_file_id = @dmsf_link.target_id if @dmsf_link.target_type == DmsfFile.model_name
+        @target_file_id = @dmsf_link.target_id if @dmsf_link.target_type == DmsfFile.model_name.to_s
         render :action => 'new'
       end
     else
@@ -134,10 +133,10 @@ class DmsfLinksController < ApplicationController
         @dmsf_link.target_type = 'DmsfUrl'
       elsif params[:dmsf_link][:dmsf_file_id].present?
         @dmsf_link.target_id = params[:dmsf_link][:dmsf_file_id]
-        @dmsf_link.target_type = DmsfFile.model_name
+        @dmsf_link.target_type = DmsfFile.model_name.to_s
       else
         @dmsf_link.target_id = params[:dmsf_link][:dmsf_folder_id]
-        @dmsf_link.target_type = DmsfFolder.model_name
+        @dmsf_link.target_type = DmsfFolder.model_name.to_s
       end
       @dmsf_link.name = params[:dmsf_link][:name]
 

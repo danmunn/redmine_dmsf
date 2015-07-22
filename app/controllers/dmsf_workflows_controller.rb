@@ -238,7 +238,7 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def update    
-    if request.put? && params[:dmsf_workflow] && @dmsf_workflow.update_attributes(
+    if params[:dmsf_workflow] && @dmsf_workflow.update_attributes(
         {:name => params[:dmsf_workflow][:name]})
       flash[:notice] = l(:notice_successful_update)
       if @project
@@ -246,7 +246,8 @@ class DmsfWorkflowsController < ApplicationController
       else
         redirect_to dmsf_workflows_path
       end    
-    else            
+    else
+      flash[:error] = @dmsf_workflow.errors.full_messages.to_sentence
       redirect_to dmsf_workflow_path(@dmsf_workflow)
     end
   end
@@ -269,27 +270,40 @@ class DmsfWorkflowsController < ApplicationController
     render :layout => false
   end
   
+  def new_step
+    @steps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq
+
+    respond_to do |format|
+      format.html 
+      format.js
+    end        
+  end
+  
   def add_step     
-    if request.post?                  
-      users = User.where(:id => params[:user_ids])
+    if request.post?                        
       if params[:step] == '0'
         step = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq.count + 1        
       else
         step = params[:step].to_i
       end
       operator = (params[:commit] == l(:dmsf_and)) ? DmsfWorkflowStep::OPERATOR_AND : DmsfWorkflowStep::OPERATOR_OR
-      users.each do |user|        
-        ws = DmsfWorkflowStep.new(
-          :dmsf_workflow_id => @dmsf_workflow.id, 
-          :step => step, 
-          :user_id => user.id, 
-          :operator => operator)
-        if ws.save
-          @dmsf_workflow.dmsf_workflow_steps << ws
-        else
-          flash[:error] = l(:error_workflow_assign)
+      users = User.where(:id => params[:user_ids])
+      if users.count > 0
+        users.each do |user|        
+          ws = DmsfWorkflowStep.new(
+            :dmsf_workflow_id => @dmsf_workflow.id, 
+            :step => step, 
+            :user_id => user.id, 
+            :operator => operator)
+          if ws.save
+            @dmsf_workflow.dmsf_workflow_steps << ws
+          else
+            flash[:error] = @dmsf_workflow.errors.full_messages.to_sentence
+          end
         end
-      end         
+      else
+        flash[:error] = l(:error_workflow_assign)
+      end      
     end             
     respond_to do |format|
       format.html            
