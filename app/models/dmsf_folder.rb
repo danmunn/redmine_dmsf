@@ -25,7 +25,7 @@ class DmsfFolder < ActiveRecord::Base
   include RedmineDmsf::Lockable
 
   cattr_reader :invalid_characters
-  @@invalid_characters = /\A[^\/\\\?":<>]*\z/    
+  @@invalid_characters = /\A[^\/\\\?":<>]*\z/
 
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
@@ -62,30 +62,30 @@ class DmsfFolder < ActiveRecord::Base
       :conditions => {:entity_type => 1},
       :dependent => :destroy
   end
-  
+
   scope :visible, lambda { |*args|
-    where(deleted: false) 
+    where(deleted: false)
   }
   scope :deleted, lambda { |*args|
     where(deleted: true)
-  }  
+  }
 
   acts_as_customizable
-  
+
   if (Rails::VERSION::MAJOR > 3)
     acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
           :project_key => 'project_id',
           :date_column => 'updated_at',
           :permission => :view_dmsf_files,
           :scope => self.joins(:project)
-  else        
+  else
     acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
           :project_key => 'project_id',
           :date_column => 'updated_at',
-          :permission => :view_dmsf_files,          
+          :permission => :view_dmsf_files,
           :include => :project
   end
-        
+
   acts_as_event :title => Proc.new {|o| o.title},
           :description => Proc.new {|o| o.description },
           :url => Proc.new {|o| {:controller => 'dmsf', :action => 'show', :id => o.project, :folder_id => o}},
@@ -289,7 +289,7 @@ class DmsfFolder < ActiveRecord::Base
   def available_custom_fields
     DmsfFileRevisionCustomField.all
   end
-  
+
   def modified
     last_update = updated_at
     subfolders.each do |subfolder|
@@ -309,16 +309,16 @@ class DmsfFolder < ActiveRecord::Base
     end
     last_update
   end
-  
+
   # Number of items in the folder
   def items
     subfolders.visible.count +
-    files.visible.count +
+    files.visible.select(&:last_revision).count +
     folder_links.visible.count +
     file_links.visible.count +
     url_links.visible.count
-  end 
-    
+  end
+
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)

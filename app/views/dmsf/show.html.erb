@@ -175,7 +175,6 @@
       <% next %>
     <% end %>
 
-    <% if file.last_revision.minor_version == 0 || User.current.allowed_to?(:view_minor_version, @project) %>
       <tr class="file">
         <%= render(:partial => 'file', :locals => {
             :project => @project,
@@ -185,7 +184,6 @@
             :name => 'files[]',
             :title => file.title }) %>
       </tr>
-  <% end %>
   <% end %>
   <% @file_links.each do |link| %>
     <% unless link.target_file.last_revision %>
