@@ -31,9 +31,6 @@ table.entries tbody td, table.entries tbody tr:hover td {
 	border-right: solid 1px #D7D7D7;
 }
 
-table.entries  {
-}
-
 table.entries td.modified {
 	min-width: 127px;
 	width: 127px;
@@ -70,7 +67,9 @@ table.display tbody tr.odd {
 	background-color: #FFFFFF;
 }
 
-table.display tbody tr:hover { background-color:#ffffdd; }
+table.display tbody tr:hover { 
+        background-color:#ffffdd; 
+}
 
 form.dmfs_entries {
 	margin-bottom: 10px;
@@ -124,15 +123,6 @@ td.version img {
 td.workflow {
 	font-size: 0.8em;
 	white-space: nowrap;
-}
-
-/* DMSF entries list icons */
-
-div.right_icon_box {
-	float: right;
-	white-space: nowrap; 
-	padding: 0 5px 0 5px;
-        width: 96px;
 }
 
 /* DMSF entries upload control */
@@ -210,10 +200,6 @@ table.access-table tbody td, table.access-table tbody tr:hover td {
 	margin: 5px 0px 5px 0px;
 }
 
-.dmsf-customfields .customfield {
-
-}
-
 .dmsf-customfields .customfield label {
 	font-weight: bold;
 	width: 100px;
@@ -276,7 +262,7 @@ table.list td.step {
 .modal{ font-size: 12px}
 
 /* Command icons */
-.icon-narrow { padding-left: 16px }
+.dmsf_icon-narrow { padding-left: 16px }
 .icon-link { background-image: url(../images/link.png); }
 .icon-notification-on { background-image: url(../images/notify.png); margin-left: 3px; }
 .icon-notification-off { background-image: url(../images/notifynot.png); margin-left: 3px; }
