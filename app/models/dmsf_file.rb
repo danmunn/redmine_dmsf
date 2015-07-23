@@ -79,6 +79,10 @@ class DmsfFile < ActiveRecord::Base
     errors.add(:name, l('activerecord.errors.messages.taken')) unless
       existing_file.nil? || existing_file.id == self.id
   end
+  
+  if (Rails::VERSION::MAJOR <= 3)
+    attr_accessor :event_description
+  end
 
   acts_as_event :title => Proc.new { |o| o.name },
                 :description => Proc.new { |o| 
@@ -92,9 +96,12 @@ class DmsfFile < ActiveRecord::Base
                       desc += o.last_revision.comment if o.last_revision.comment.present?
                     end
                   else
-                    desc = o.description
-                    desc += ' / ' if o.description.present? && o.last_revision.comment.present?
-                    desc += o.last_revision.comment if o.last_revision.comment.present?
+                    desc = o.event_description
+                    unless desc.present?                                          
+                      desc = o.description
+                      desc += ' / ' if o.description.present? && o.last_revision.comment.present?
+                      desc += o.last_revision.comment if o.last_revision.comment.present?
+                    end
                   end
                   desc
                 },
@@ -402,7 +409,7 @@ class DmsfFile < ActiveRecord::Base
                     Redmine::Search.cache_store.write("DmsfFile-#{dmsf_file.id}", 
                       dochash['sample'].force_encoding('UTF-8')) if dochash['sample']
                   else
-                    dmsf_file.description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']
+                    dmsf_file.event_description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']
                   end                  
                   break if(!options[:limit].blank? && results.count >= options[:limit])
                   results << dmsf_file
