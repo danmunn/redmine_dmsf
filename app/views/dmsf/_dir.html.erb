@@ -39,73 +39,63 @@
 <td class="modified"><%= format_time(subfolder.modified) if subfolder %>                
   <% if locked_for_user %>
     <% if subfolder.lock.reverse[0].user %>            
-      <%= link_to('',
+      <%= link_to(image_tag(link ? 'locked_gray.png' : 'locked.png', :plugin => 'redmine_dmsf'),
         user_path(subfolder.lock.reverse[0].user),
-        :title => l(:title_locked_by_user, :user => subfolder.lock.reverse[0].user),
-        :class => 'icon icon-dmsf-locked') %>
+        :title => l(:title_locked_by_user, :user => subfolder.lock.reverse[0].user)) %>
     <% else %>            
-      <%= content_tag(:span, '', :title => l(:notice_account_unknown_email), 
-        :class => 'icon icon-dmsf-locked') %>
+      <%= content_tag(:span, image_tag(link ? 'locked_gray.png' : 'locked.png', :plugin => 'redmine_dmsf'), 
+        :title => l(:notice_account_unknown_email)) %>
     <% end %>
   <% elsif locked %>          
-    <%= content_tag(:span, '', :title => l(:title_locked_by_you), 
-      :class => 'icon icon-dmsf-lockedbycurrent') %>
+    <%= content_tag(:span, image_tag(link ? 'lockedbycurrent_gray.png' : 'lockedbycurrent.png', :plugin => 'redmine_dmsf'), 
+      :title => l(:title_locked_by_you)) %>
   <% end %>        
 </td>
 <td class="version"></td>
 <td class="workflow"></td>
 <td class="author"><%= h(subfolder.user) if subfolder %></td>
-<td class="actions">
-  <% if @folder_manipulation_allowed %>          
-    <div class="right_icon_box">
-      <% unless locked %>
-       <%= link_to('',
-          edit_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:link_edit, :title => subfolder ? h(subfolder.title) : project.name),
-          :class => 'icon icon-edit') %>
-        <% if subfolder %>
-          <%= link_to('',
-            lock_dmsf_path(:id => project, :folder_id => subfolder),
-            :title => l(:title_lock_file),
-            :class => 'icon icon-dmsf-lock') %>                  
-        <% else %>
-          <span class="icon"></span>
-        <% end %>
-        <% if (subfolder && subfolder.notification) || (!subfolder && project.dmsf_notification) %>            
-          <%= link_to('',            
-            notify_deactivate_dmsf_path(:id => project, :folder_id => subfolder),
-            :title => l(:title_notifications_active_deactivate),
-            :class => 'icon icon-notification-on') %>
-        <% else %>            
-          <%= link_to('',
-            notify_activate_dmsf_path(:id => project, :folder_id => subfolder),
-            :title => l(:title_notifications_not_active_activate),
-            :class => 'icon icon-notification-off') %>
-        <% end %>
-        <% if link %>
-          <%= link_to('',            
-            dmsf_link_path(link),
-            :data => {:confirm => l(:text_are_you_sure)},
-            :method => :delete,
-            :title => l(:title_delete),
-            :class => 'icon icon-del') %>                       
-        <% else %>
-          <%= link_to('',
-            delete_dmsf_path(:id => project, :folder_id => subfolder),
-            :data => {:confirm => l(:text_are_you_sure)},            
-            :title => l(:title_delete),
-            :class => 'icon icon-del') %>             
-        <% end %>    
-      <% else %>       
+<td class="buttons">
+  <% if @folder_manipulation_allowed %>
+    <% unless locked %>
+     <%= link_to(image_tag('edit.png'),
+        edit_dmsf_path(:id => project, :folder_id => subfolder),
+        :title => l(:link_edit, :title => subfolder ? h(subfolder.title) : project.name)) %>
+      <% if subfolder %>
+        <%= link_to(image_tag('lock.png', :plugin => 'redmine_dmsf'),
+          lock_dmsf_path(:id => project, :folder_id => subfolder),
+          :title => l(:title_lock_file)) %>
+      <% else %>
         <span class="icon"></span>
-        <% if (!locked_for_user || @force_file_unlock_allowed) && subfolder.unlockable? %>
-          <%= link_to('',
-            unlock_dmsf_path(:id => project, :folder_id => subfolder),
-            :title => l(:title_unlock_file),
-            :class => 'icon icon-dmsf-unlock')%>        
-        <% end %>        
-      <% end %>                                                                                                                                                                   
-    </div>    
+      <% end %>
+      <% if (subfolder && subfolder.notification) || (!subfolder && project.dmsf_notification) %>            
+        <%= link_to(image_tag('notify.png', :plugin => 'redmine_dmsf'),
+          notify_deactivate_dmsf_path(:id => project, :folder_id => subfolder),
+          :title => l(:title_notifications_active_deactivate)) %>
+      <% else %>            
+        <%= link_to(image_tag('notifynot.png', :plugin => 'redmine_dmsf'),
+          notify_activate_dmsf_path(:id => project, :folder_id => subfolder),
+          :title => l(:title_notifications_not_active_activate)) %>
+      <% end %>
+      <% if link %>
+        <%= link_to(image_tag('delete.png'),
+          dmsf_link_path(link),
+          :data => {:confirm => l(:text_are_you_sure)},
+          :method => :delete,
+          :title => l(:title_delete)) %>                       
+      <% else %>
+        <%= link_to(image_tag('delete.png'),
+          delete_dmsf_path(:id => project, :folder_id => subfolder),
+          :data => {:confirm => l(:text_are_you_sure)},            
+          :title => l(:title_delete)) %>             
+      <% end %>    
+    <% else %>       
+      <span class="icon"></span>
+      <% if (!locked_for_user || @force_file_unlock_allowed) && subfolder.unlockable? %>
+        <%= link_to(image_tag('unlock.png', :plugin => 'redmine_dmsf'),
+          unlock_dmsf_path(:id => project, :folder_id => subfolder),
+          :title => l(:title_unlock_file)) %>        
+      <% end %>        
+    <% end %>                                                                                                                                                                       
   <% end %>
 </td>
 <td class="invisible">0</td>

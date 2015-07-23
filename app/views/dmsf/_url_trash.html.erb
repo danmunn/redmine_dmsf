@@ -23,32 +23,28 @@
 <td class="check"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_restore_or_delete)) %></td>
 <td class="title">
-    <%= link_to(h(title),
-                link.external_url,
-                :target => "_blank",
-                :class => 'icon icon-link') %>
-    <div class="filename" title="<%= l(:label_target_folder)%>"><%= link.external_url %></div>
+  <%= link_to(h(title),
+    link.external_url,
+    :target => "_blank",
+    :class => 'icon icon-link') %>
+  <div class="filename" title="<%= l(:label_target_folder)%>"><%= link.external_url %></div>
 </td>
 <td class="size"></td>
 <td class="modified"><%= format_time(link.updated_at) %></td>
 <td class="version"></td>
 <td class="workflow"></td>
 <td class="author"><%= h(link.user) %></td>
-<td class="actions">
-    <% if @file_manipulation_allowed %>
-        <div class="right_icon_box">
-            <%= link_to('',
-                        restore_dmsf_link_path(:id => link),
-                        :title => l(:title_restore),
-                        :class => 'icon icon-dmsf-restore') %>
-            <%= link_to('',
-                        dmsf_link_path(:id => link, :commit => 'yes'),
-                        :data => {:confirm => l(:text_are_you_sure)},
-                        :method => :delete,
-                        :title => l(:title_delete),
-                        :class => 'icon icon-dmsf-rev-delete') %>
-        </div>
-    <% end %>
+<td class="buttons">
+  <% if @file_manipulation_allowed %>        
+    <%= link_to(image_tag('restore.png', :plugin => 'redmine_dmsf'),
+      restore_dmsf_link_path(:id => link),
+      :title => l(:title_restore)) %>
+    <%= link_to(image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
+      dmsf_link_path(:id => link, :commit => 'yes'),
+      :data => {:confirm => l(:text_are_you_sure)},
+      :method => :delete,
+      :title => l(:title_delete)) %>
+  <% end %>
 </td>
 <td class="invisible">1</td>
 <td class="invisible"></td>

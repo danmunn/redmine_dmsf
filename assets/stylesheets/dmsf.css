@@ -276,30 +276,13 @@ table.list td.step {
 .modal{ font-size: 12px}
 
 /* Command icons */
-.icon-margin-left { margin-left: 3px; }
+.icon-narrow { padding-left: 16px }
 .icon-link { background-image: url(../images/link.png); }
 .icon-notification-on { background-image: url(../images/notify.png); margin-left: 3px; }
 .icon-notification-off { background-image: url(../images/notifynot.png); margin-left: 3px; }
 .icon-dmsf-lock { background-image: url(../images/lock.png); }
 .icon-dmsf-unlock { background-image: url(../images/unlock.png); }
 .icon-dmsf-locked { background-image: url(../images/locked.png); margin-left: 2px }
-.icon-dmsf-lockedbycurrent { background-image: url(../images/lockedbycurrent.png); margin-left: 2px }
-.icon-dmsf-waiting-for-approval { background-image: url(../images/waiting_for_approval.png); }
-.icon-dmsf-approved { background-image: url(../images/approved.png); }
-.icon-dmsf-assigned { background-image: url(../images/assigned.png); }
-.icon-dmsf-rejected { background-image: url(../images/rejected.png); }
-.icon-dmsf-none { background-image: url(../images/none.png); }
-.icon-dmsf-file-details { background-image: url(../images/filedetails.png); }
-.icon-dmsf-rev-download { background-image: url(../images/rev_download.png); }
-.icon-dmsf-rev-downloads { background-image: url(../images/rev_downloads.png); }
-.icon-dmsf-rev-delete { background-image: url(../images/rev_delete.png); }
-.icon-dmsf-restore { background-image: url(../images/restore.png); }
-
-tr.gray .icon-dmsf-locked { background-image: url(../images/locked_gray.png); margin-left: 2px }
-tr.gray .icon-dmsf-lockedbycurrent { background-image: url(../images/lockedbycurrent_gray.png); margin-left: 2px }
-
-tr.gray .icon-dmsf-locked { background-image: url(../images/locked_gray.png); margin-left: 2px }
-tr.gray .icon-dmsf-lockedbycurrent { background-image: url(../images/lockedbycurrent_gray.png); margin-left: 2px }
 
 /* File types */
 tr.gray .icon-folder { background-image: url(../images/folder_gray.png); }

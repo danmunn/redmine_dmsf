@@ -1,4 +1,6 @@
 <%#=
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
@@ -35,20 +37,16 @@
   <%= file.last_revision.workflow_str(false) %>  
 </td>
 <td class="author"><%= h(file.last_revision.user) %></td>
-<td class="actions">
-  <% if @file_manipulation_allowed %>          
-    <div class="right_icon_box">
-      <%= link_to('',
-        restore_dmsf_file_path(:id => file),                
-        :title => l(:title_restore),
-        :class => 'icon icon-dmsf-restore') %>
-      <%= link_to('',
-        dmsf_file_path(:id => file, :commit => 'yes'),
-        :data => {:confirm => l(:text_are_you_sure)},
-        :method => :delete,
-        :title => l(:title_delete),
-        :class => 'icon icon-dmsf-rev-delete') %>           
-    </div>    
+<td class="buttons">
+  <% if @file_manipulation_allowed %>              
+    <%= link_to(image_tag('restore.png', :plugin => 'redmine_dmsf'),
+      restore_dmsf_file_path(:id => file),                
+      :title => l(:title_restore)) %>
+    <%= link_to(image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
+      dmsf_file_path(:id => file, :commit => 'yes'),
+      :data => {:confirm => l(:text_are_you_sure)},
+      :method => :delete,
+      :title => l(:title_delete)) %>               
   <% end %>
 </td>
 <td class="invisible">1</td>

@@ -72,20 +72,16 @@
     <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">	
       <div class="dataTables_lenght">
         <div class="controls" style="float: right">            
-          <%= link_to_function(
-            '', 
+          <%= link_to_function image_tag('rev_downloads.png', :plugin => 'redmine_dmsf'), 
             "$('#revision_access-#{revision.id}').toggle()", 
-            :title => l(:title_download_entries),
-            :class => 'icon icon-dmsf-rev-downloads') %>
-          <%= link_to('',            
+            :title => l(:title_download_entries) %>
+          <%= link_to image_tag('rev_download.png', :plugin => 'redmine_dmsf'),
             dmsf_file_path(@file, :download => revision),
-            :title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version),
-            :class => 'icon icon-dmsf-rev-download') %>          
-          <%= link_to '',
+            :title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version) %>
+          <%= link_to image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
             delete_revision_path(revision),
             :data => {:confirm => l(:text_are_you_sure)},
-            :title => l(:title_delete_revision),
-            :class => 'icon icon-dmsf-rev-delete' if @file_delete_allowed && (@file.revisions.visible.count > 1) %>          
+            :title => l(:title_delete_revision) if @file_delete_allowed && (@file.revisions.visible.count > 1) %>          
         </div>      
         <i><%= l(:info_revision, :rev => revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>

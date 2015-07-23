@@ -39,19 +39,15 @@
 <td class="version"></td>
 <td class="workflow"></td>
 <td class="author"><%= h(subfolder.user) %></td>
-<td class="actions">
-  <% if @folder_manipulation_allowed %>
-    <div class="right_icon_box">           
-      <%= link_to('',
-        restore_dmsf_path(:id => project, :folder_id => subfolder),                
-        :title => l(:title_restore),
-        :class => 'icon icon-dmsf-restore') %>
-      <%= link_to('',
-        delete_dmsf_path(:id => project, :folder_id => subfolder, :commit => 'yes'),
-        :data => {:confirm => l(:text_are_you_sure)},            
-        :title => l(:title_delete),
-        :class => 'icon icon-dmsf-rev-delete') %>  
-    </div>    
+<td class="buttons">
+  <% if @folder_manipulation_allowed %>    
+    <%= link_to(image_tag('restore.png', :plugin => 'redmine_dmsf'),
+      restore_dmsf_path(:id => project, :folder_id => subfolder),                
+      :title => l(:title_restore)) %>
+    <%= link_to(image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
+      delete_dmsf_path(:id => project, :folder_id => subfolder, :commit => 'yes'),
+      :data => {:confirm => l(:text_are_you_sure)},            
+      :title => l(:title_delete)) %>      
   <% end %>
 </td>
 <td class="invisible">0</td>

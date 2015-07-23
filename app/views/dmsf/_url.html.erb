@@ -33,26 +33,23 @@
 <td class="version"></td>
 <td class="workflow"></td>
 <td class="author"><%= h(link.user) %></td>
-<td class="actions">
-  <% if @file_manipulation_allowed %>
-    <div class="right_icon_box">
-      <% if @file_manipulation_allowed %>
-            <span class="icon"></span>
-            <span class="icon"></span>
-            <span class="icon icon-margin-left"></span>
-            <%= link_to('',            
-              dmsf_link_path(link),
-              :data => {:confirm => l(:text_are_you_sure)},
-              :method => :delete,
-              :title => l(:title_delete),
-              :class => 'icon icon-del') %>
-        <% else %>
-          <span class="icon"></span>
-          <span class="icon"></span>
-          <span class="icon icon-margin-left"></span>
-          <span class="icon"></span>
-        <% end %>
-    </div>    
+<td class="buttons">
+  <% if @file_manipulation_allowed %>    
+    <% if @file_manipulation_allowed %>
+      <span class="icon"></span>
+      <span class="icon"></span>
+      <span class="icon"></span>
+      <%= link_to('delete.png',            
+        dmsf_link_path(link),
+        :data => {:confirm => l(:text_are_you_sure)},
+        :method => :delete,
+        :title => l(:title_delete)) %>
+    <% else %>
+      <span class="icon"></span>
+      <span class="icon"></span>
+      <span class="icon"></span>
+      <span class="icon icon-narrow"></span>
+    <% end %>    
   <% end %>
 </td>
 <td class="invisible">1</td>
