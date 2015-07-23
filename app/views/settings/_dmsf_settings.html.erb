@@ -43,7 +43,7 @@
 </p>
 
 <p>
-  <%= content_tag(:label, "#{l(:label_maximum_ajax_upload_filesize)}:") %>  
+  <%= content_tag(:label, "#{l(:label_maximum_ajax_upload_filesize)}:") %>
   <%= text_field_tag 'settings[dmsf_max_ajax_upload_filesize]', @settings['dmsf_max_ajax_upload_filesize'], :size => 10 %><br/>
   (<%= l(:label_default) %>: 100)
   <br/>
@@ -52,7 +52,7 @@
 
 <p>
   <%=  content_tag(:label, "#{l(:label_file_storage_directory)}:") %>
-  <% 
+  <%
     storage_dir = @settings['dmsf_storage_directory'].strip
     storage_dir = "#{Rails.root}/files/dmsf" if storage_dir.blank?
   %>
@@ -63,7 +63,7 @@
   <% begin %>
      <% Dir.mkdir(storage_dir) %>
   <% rescue %>
-    <p class="warning"><%= l(:error_file_storage_directory_does_not_exist) %></p> 
+    <p class="warning"><%= l(:error_file_storage_directory_does_not_exist) %></p>
   <% end %>
 <% end %>
 <% testfilename = "#{storage_dir}/test.test" %>
@@ -86,10 +86,10 @@
 
 <p>
   <%= content_tag(:label, "#{l(:label_default_notifications)}:") %>
-  <%= select_tag('settings[dmsf_default_notifications]', 
+  <%= select_tag('settings[dmsf_default_notifications]',
     options_for_select([
-                    [l(:select_option_deactivated), nil], 
-                    [l(:select_option_activated), '1']], 
+                    [l(:select_option_deactivated), nil],
+                    [l(:select_option_activated), '1']],
                     :selected => @settings['dmsf_default_notifications'])) %><br/>
   (<%= l(:label_default) %>: <%= l(:select_option_deactivated) %>)
 </p>
@@ -140,7 +140,7 @@
   <% require 'xapian' %>
   <% xapian_disabled = false %>
 <% rescue LoadError %>
-  <p class="warning"><%= l(:warning_xapian_not_available) %></p> 
+  <p class="warning"><%= l(:warning_xapian_not_available) %></p>
   <% xapian_disabled = true %>
 <% end %>
 
@@ -170,4 +170,10 @@
     STEM_ALL: <%=l(:note_stem_all) %><br>
   <br/>
   <%= l(:note_stemming_applied) %><br>
+</p>
+
+<p>
+  <%= content_tag(:label, "#{l(:label_show_quick_links)}:") %>
+  <%= check_box_tag('settings[dmsf_show_quick_links]', true, @settings['dmsf_show_quick_links']) %><br/>
+  (<%=l(:label_default)%>: <%=l(:general_text_No)%>)
 </p>

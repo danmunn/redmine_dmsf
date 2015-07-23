@@ -31,12 +31,12 @@ class DmsfController < ApplicationController
   before_filter :authorize
   before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
   before_filter :find_parent, :only => [:new, :create]
-  
+
   accept_api_auth :show, :create
 
   helper :all
 
-  def show        
+  def show
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
@@ -120,12 +120,12 @@ class DmsfController < ApplicationController
       end
       @locked_for_user = false
     else
-      
+
       if @folder.deleted
         render_404
         return
-      end 
-    
+      end
+
       @subfolders = @folder.subfolders.visible
       @files = @folder.files.visible
       @dir_links = @folder.folder_links.visible
@@ -137,19 +137,19 @@ class DmsfController < ApplicationController
     @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].present? ? Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'] : 100
 
     # Trash
-    @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed && 
+    @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed &&
       @file_delete_allowed && !@locked_for_user && !@folder
     @trash_enabled = DmsfFolder.deleted.where(:project_id => @project.id).any? ||
       DmsfFile.deleted.where(:project_id => @project.id).any? ||
       DmsfLink.deleted.where(:project_id => @project.id).any?
-    
+
     respond_to do |format|
       format.html {
         render :layout => !request.xhr?
       }
       format.api
     end
-  end  
+  end
 
   def trash
     @folder_manipulation_allowed = User.current.allowed_to? :folder_manipulation, @project
@@ -240,7 +240,7 @@ class DmsfController < ApplicationController
     end
   end
 
-  def entries_email        
+  def entries_email
     if params[:email][:to].strip.blank?
       flash.now[:error] = l(:error_email_to_must_be_entered)
       render :action => 'email_entries'
@@ -259,41 +259,39 @@ class DmsfController < ApplicationController
     render :action => 'edit'
   end
 
-  def create    
+  def create
     @folder = DmsfFolder.new
     @folder.title = params[:dmsf_folder][:title]
     @folder.description = params[:dmsf_folder][:description]
     @folder.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
     @folder.project = @project
     @folder.user = User.current
-    
+
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
       params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
         @folder.custom_field_values[i].value = v[1]
       end
     end
-    
     saved = @folder.save
-    
+
     respond_to do |format|
       format.js
-      format.api  { 
-        unless saved                  
-          render_validation_errors(@folder) 
-        end        
+      format.api  {
+        unless saved
+          render_validation_errors(@folder)
+        end
       }
-      format.html { 
+      format.html {
         if saved
-          flash[:notice] = l(:notice_folder_created)      
+          flash[:notice] = l(:notice_folder_created)
           redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
         else
           @pathfolder = @parent
           render :action => 'edit'
         end
       }
-    end    
-    
+    end
   end
 
   def edit
@@ -302,22 +300,22 @@ class DmsfController < ApplicationController
   end
 
   def save
-    unless params[:dmsf_folder]      
+    unless params[:dmsf_folder]
       redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
       return
     end
     @pathfolder = copy_folder(@folder)
     @folder.attributes = params[:dmsf_folder]
-    
+
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
       params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
         @folder.custom_field_values[i].value = v[1]
       end
     end
-    
+
     if @folder.save
-      flash[:notice] = l(:notice_folder_details_were_saved)      
+      flash[:notice] = l(:notice_folder_details_were_saved)
       redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
     else
       render :action => 'edit'
@@ -441,11 +439,11 @@ class DmsfController < ApplicationController
       end
 
       zip.files.each do |f|
-        log_activity(f, 'emailing zip')        
+        log_activity(f, 'emailing zip')
         audit = DmsfFileRevisionAccess.new
         audit.user = User.current
         audit.revision = f.last_revision
-        audit.action = DmsfFileRevisionAccess::EmailAction        
+        audit.action = DmsfFileRevisionAccess::EmailAction
         audit.save!
       end
 
@@ -468,11 +466,11 @@ class DmsfController < ApplicationController
       zip_entries(zip, selected_folders, selected_files)
 
       zip.files.each do |f|
-        log_activity(f, 'download zip')        
+        log_activity(f, 'download zip')
         audit = DmsfFileRevisionAccess.new
         audit.user = User.current
         audit.revision = f.last_revision
-        audit.action = DmsfFileRevisionAccess::DownloadAction        
+        audit.action = DmsfFileRevisionAccess::DownloadAction
         audit.save!
       end
 
@@ -609,7 +607,7 @@ class DmsfController < ApplicationController
   rescue DmsfAccessError
     render_403
   rescue ActiveRecord::RecordNotFound
-    render_404    
+    render_404
   end
 
   def find_parent
@@ -633,5 +631,5 @@ class DmsfController < ApplicationController
       :to, :zipped_content, :email,
       :cc, :subject, :zipped_content => [], :files => [])
   end
-  
+
 end
