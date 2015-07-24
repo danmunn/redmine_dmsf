@@ -87,7 +87,7 @@ class DmsfLink < ActiveRecord::Base
     links = DmsfLink.where(
       :project_id => project.id,
       :dmsf_folder_id => folder ? folder.id : nil,
-      :target_type => DmsfFile.model_name.name).visible.all
+      :target_type => DmsfFile.model_name.to_s).visible.all
     links.each do |link|
       return link if link.target_file.name == filename
     end
@@ -95,7 +95,7 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def path
-    if self.target_type == DmsfFile.model_name.name  
+    if self.target_type == DmsfFile.model_name.to_s  
       path = self.target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.name : element.title }.join('/') if self.target_file
     else      
       path = self.target_folder ? self.target_folder.dmsf_path_str : ''
