@@ -84,11 +84,11 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def self.find_link_by_file_name(project, folder, filename)
-    name = Rails::VERSION::MAJOR >= 4 ? DmsfFile.model_name.name : DmsfFile.model_name
+    model_name = Rails::VERSION::MAJOR >= 4 ? DmsfFile.model_name.name : DmsfFile.model_name
     links = DmsfLink.where(
       :project_id => project.id,
       :dmsf_folder_id => folder ? folder.id : nil,
-      :target_type => name).visible.all
+      :target_type => model_name).visible.all
     links.each do |link|
       return link if link.target_file.name == filename
     end
@@ -96,7 +96,8 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def path
-    if self.target_type == DmsfFile.model_name.name
+    model_name = Rails::VERSION::MAJOR >= 4 ? DmsfFile.model_name.name : DmsfFile.model_name
+    if self.target_type == model_name
       path = self.target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.name : element.title }.join('/') if self.target_file
     else
       path = self.target_folder ? self.target_folder.dmsf_path_str : ''
