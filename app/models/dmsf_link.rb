@@ -29,16 +29,16 @@ class DmsfLink < ActiveRecord::Base
 
   validates :name, :presence => true
   validates_length_of :name, :maximum => 255
-  validates_length_of :external_url, :maximum => 255  
+  validates_length_of :external_url, :maximum => 255
   validate :validate_url
-  
+
   def validate_url
     if self.target_type == 'DmsfUrl'
-      begin 
+      begin
         URI.parse self.external_url
-      rescue URI::InvalidURIError        
+      rescue URI::InvalidURIError
         errors.add :external_url, :invalid
-      end      
+      end
     end
   end
 
@@ -84,10 +84,11 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def self.find_link_by_file_name(project, folder, filename)
+    model_name = Rails::VERSION::MAJOR >= 4 ? DmsfFile.model_name.name : DmsfFile.model_name
     links = DmsfLink.where(
       :project_id => project.id,
       :dmsf_folder_id => folder ? folder.id : nil,
-      :target_type => DmsfFile.model_name.name).visible.all
+      :target_type => model_name).visible.all
     links.each do |link|
       return link if link.target_file.name == filename
     end
@@ -95,9 +96,10 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def path
-    if self.target_type == DmsfFile.model_name.name  
+    model_name = Rails::VERSION::MAJOR >= 4 ? DmsfFile.model_name.name : DmsfFile.model_name
+    if self.target_type == model_name
       path = self.target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.name : element.title }.join('/') if self.target_file
-    else      
+    else
       path = self.target_folder ? self.target_folder.dmsf_path_str : ''
     end
     path.insert(0, "#{self.target_project.name}:") if self.project_id != self.target_project_id
