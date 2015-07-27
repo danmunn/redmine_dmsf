@@ -90,7 +90,7 @@
         <% end %>
         <% if link %>
           <%= link_to(image_tag('delete.png'), 
-              dmsf_link_path(:id => file), 
+              dmsf_link_path(link), 
               :data => {:confirm => l(:text_are_you_sure)}, 
               :method => :delete,
               :title => l(:title_delete)) %>
