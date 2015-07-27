@@ -95,16 +95,28 @@ Redmine::Plugin.register :redmine_dmsf do
   Redmine::WikiFormatting::Macros.register do
     desc "Wiki link to DMSF file:\n\n" +
              "{{dmsf(file_id [, title [, revision_id]])}}\n\n" +
-         "_file_id_ / _revision_id_ can be found in the link for file/revision download."
-         
+         "_file_id_ / _revision_id_ can be found in the link for file/revision download."         
     macro :dmsf do |obj, args|
-      return nil if args.length < 1 # require file id      
-      entry = DmsfFile.visible.find_by_id args[0].strip
-      if entry && User.current && User.current.allowed_to?(:view_dmsf_files, entry.project)
-        title = args[1] ? args[1] : entry.title        
-        return link_to h(title), dmsf_file_url(entry, :download => args[2])
+      raise ArgumentError if args.length < 1 # Requires file id
+      file = DmsfFile.visible.find args[0].strip      
+      if args[2].blank?
+        revision = file.last_revision
+      else
+        revision = DmsfFileRevision.find(args[2])
+        if revision.file != file
+          raise ActiveRecord::RecordNotFound
+        end
+      end      
+      if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)        
+        file_view_url = url_for({:only_path => false, :controller => :dmsf_files, :action => 'view', :id => file, :download => args[2]})
+        return link_to(h(args[1] ? args[1] : file.title),
+          file_view_url,
+          :target => '_blank',
+          :title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version),
+          'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}")
+      else        
+        raise l(:notice_not_authorized)
       end
-      nil
     end
   end
   
@@ -117,13 +129,14 @@ Redmine::Plugin.register :redmine_dmsf do
       if args.length < 1
         return link_to l(:link_documents), dmsf_folder_url(@project)
       else        
-        entry = DmsfFolder.visible.find_by_id args[0].strip
-        if entry && User.current && User.current.allowed_to?(:view_dmsf_folders, entry.project)
-          title = args[1] ? args[1] : entry.title          
-          return link_to h(title), dmsf_folder_url(entry.project, :folder_id => entry)
+        folder = DmsfFolder.visible.find args[0].strip
+        if User.current && User.current.allowed_to?(:view_dmsf_folders, folder.project)          
+          return link_to h(args[1] ? args[1] : folder.title),
+            dmsf_folder_url(folder.project, :folder_id => folder)
+        else          
+          raise l(:notice_not_authorized)
         end
-      end
-      nil
+      end      
     end
   end
   
@@ -133,12 +146,13 @@ Redmine::Plugin.register :redmine_dmsf do
          "_file_id_ can be found in the link for file/revision download." 
 
     macro :dmsfd do |obj, args|
-      return nil if args.length < 1 # require file id      
-      entry = DmsfFile.visible.find_by_id args[0].strip
-      if entry && User.current && User.current.allowed_to?(:view_dmsf_files, entry.project)        
-        return entry.description
-      end
-      nil
+      raise ArgumentError if args.length < 1 # Requires file id
+      file = DmsfFile.visible.find args[0].strip
+      if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)        
+        return file.description
+      else        
+        raise l(:notice_not_authorized)
+      end      
     end
     
   end    

@@ -34,7 +34,15 @@ class DmsfFilesController < ApplicationController
   helper :dmsf_workflows
 
   def view
-    @revision = @file.last_revision
+    if params[:download].blank?
+      @revision = @file.last_revision
+    else
+      @revision = DmsfFileRevision.find(params[:download].to_i)
+      if @revision.file != @file
+        render_403
+        return
+      end
+    end
     check_project(@revision.file)
     begin
       raise ActionController::MissingFile if @file.deleted
