@@ -122,8 +122,8 @@ class DmsfMaintenance
   
   def check_file(file)
     name = Pathname.new(file).basename.to_s
-    if name =~ /^\d+_\d+_(.*)/
-      n = DmsfFileRevision.where(:disk_filename => $1).count
+    if name =~ /^\d+_\d+_.*/
+      n = DmsfFileRevision.where(:disk_filename => file).count
       @files_to_delete << file unless n > 0
     else
       STDERR.puts "#{file} doesn't seem to be a DMSF file!"
