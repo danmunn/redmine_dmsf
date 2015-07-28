@@ -117,7 +117,7 @@ class DmsfMaintenance
       n = DmsfFileRevision.where(:disk_filename => file).count
       unless n > 0
         @files_to_delete << file 
-        puts "\t#{f}\t#{number_to_human_size(s)}"
+        puts "\t#{file}\t#{number_to_human_size(File.size(file))}"
       end
     else
       STDERR.puts "#{file} doesn't seem to be a DMSF file!"
@@ -130,7 +130,7 @@ class DmsfMaintenance
       p = Project.find_by_identifier $1
       unless p
         @folders_to_delete << name 
-        puts "\t#{d}"
+        puts "\t#{name}"
       end
     else
       STDERR.puts "#{directory} doesn't seem to be a DMSF folder!"
