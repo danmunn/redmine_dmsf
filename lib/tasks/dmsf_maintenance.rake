@@ -75,7 +75,7 @@ class DmsfMaintenance
     end
     # Files    
     size = 0
-    @files_to_delete.cycle{ |f| size += File.size(f) }    
+    @files_to_delete.each{ |f| size += File.size(f) }    
     puts "\n#{@files_to_delete.count} files havn't got a coresponding revision and can be deleted"
     puts "#{number_to_human_size(size)} can be released\n\n"
     
@@ -114,13 +114,13 @@ class DmsfMaintenance
   def check_file(file)
     name = Pathname.new(file).basename.to_s
     if name =~ /^\d+_\d+_.*/
-      n = DmsfFileRevision.where(:disk_filename => file).count
+      n = DmsfFileRevision.where(:disk_filename => name).count
       unless n > 0
         @files_to_delete << file 
         puts "\t#{file}\t#{number_to_human_size(File.size(file))}"
       end
     else
-      STDERR.puts "#{file} doesn't seem to be a DMSF file!"
+      STDERR.puts "\t#{file} doesn't seem to be a DMSF file!"
     end
   end
   
@@ -133,7 +133,7 @@ class DmsfMaintenance
         puts "\t#{name}"
       end
     else
-      STDERR.puts "#{directory} doesn't seem to be a DMSF folder!"
+      STDERR.puts "\t#{directory} doesn't seem to be a DMSF folder!"
     end             
   end
 
