@@ -88,22 +88,17 @@ class DmsfMaintenance
       puts "\nNo orphens!\n\n"
       return
     end
-    # Files
-    puts "\nFiles:" if(@files_to_delete.count > 0)
+    # Files    
     size = 0
-    @files_to_delete.each do |f|      
-      s = File.size(f)
-      puts "\t#{f}\t#{number_to_human_size(s)}"
-      size += s
+    @files_to_delete.each do |f|            
+      size += File.size(f)
       File.delete f
     end 
     puts "\n#{@files_to_delete.count} files hadn't got a coresponding revision and have been be deleted" if(@files_to_delete.count > 0)
     puts "#{number_to_human_size(size)} has been released\n\n" if(@files_to_delete.count > 0)
     
-    # Projects
-    puts "\nFolders:" if(@folders_to_delete.count > 0)
-    @folders_to_delete.each do |d|
-      puts "\t#{d}"
+    # Projects    
+    @folders_to_delete.each do |d|      
       Dir.delete d
     end
     puts "\n#{@folders_to_delete.count} directories hadn't got a coresponding projects and have been deleted\n\n" if(@folders_to_delete.count > 0)
