@@ -18,10 +18,10 @@
 
 desc <<-END_DESC
 DMSF maintenance task
-  * Remove all files and folders with no database record from the documsnt directory
+  * Remove all files and folders with no database record from the document directory
 
 Available options:
-  *dry_run - No physical deletion but list of unused files and folders only
+  *dry_run - No physical deletion but to list of all unused files and folders only
 
 Example:
   rake redmine:dmsf_maintenance RAILS_ENV="production"
@@ -32,6 +32,7 @@ namespace :redmine do
   task :dmsf_maintenance => :environment do    
     m = DmsfMaintenance.new
     begin
+      STDERR.puts "\n"
       Dir.chdir(DmsfFile.storage_path)       
       m.files      
       if m.dry_run
@@ -120,17 +121,22 @@ class DmsfMaintenance
   private
   
   def check_file(file)
-    n = DmsfFileRevision.where(:disk_filename => file).count
-    @files_to_delete << file unless n > 0
+    name = Pathname.new(file).basename.to_s
+    if name =~ /^\d+_\d+_.*/
+      n = DmsfFileRevision.where(:disk_filename => file).count
+      @files_to_delete << file unless n > 0
+    else
+      STDERR.puts "#{file} doesn't seem to be a DMSF file!"
+    end
   end
   
   def check_dir(directory)   
     name = Pathname.new(directory).basename.to_s
     if name =~ /^p_(.*)/      
-      p = Project.find_by_identifier $1      
+      p = Project.find_by_identifier $1
       @folders_to_delete << name unless p
     else
-      puts "#{directory} doesn't seem to be a DMSF folder!"
+      STDERR.puts "#{directory} doesn't seem to be a DMSF folder!"
     end             
   end
 
