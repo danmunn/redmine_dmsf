@@ -73,22 +73,13 @@ class DmsfMaintenance
       puts "\nNo orphens!\n\n"
       return
     end
-    # Files
-    puts "\nFiles:" if(@files_to_delete.count > 0)
+    # Files    
     size = 0
-    @files_to_delete.each do |f|      
-      s = File.size(f)
-      puts "\t#{f}\t#{number_to_human_size(s)}"
-      size += s
-    end 
+    @files_to_delete.cycle{ |f| size += File.size(f) }    
     puts "\n#{@files_to_delete.count} files havn't got a coresponding revision and can be deleted"
     puts "#{number_to_human_size(size)} can be released\n\n"
     
-    # Projects
-    puts "\nFolders:" if(@folders_to_delete.count > 0)
-    @folders_to_delete.each do |d|
-      puts "\t#{d}"
-    end
+    # Projects    
     puts "\n#{@folders_to_delete.count} directories havn't got coresponding projects and can be deleted\n\n" if(@folders_to_delete.count > 0)
   end
   
@@ -124,7 +115,10 @@ class DmsfMaintenance
     name = Pathname.new(file).basename.to_s
     if name =~ /^\d+_\d+_.*/
       n = DmsfFileRevision.where(:disk_filename => file).count
-      @files_to_delete << file unless n > 0
+      unless n > 0
+        @files_to_delete << file 
+        puts "\t#{f}\t#{number_to_human_size(s)}"
+      end
     else
       STDERR.puts "#{file} doesn't seem to be a DMSF file!"
     end
@@ -134,7 +128,10 @@ class DmsfMaintenance
     name = Pathname.new(directory).basename.to_s
     if name =~ /^p_(.*)/      
       p = Project.find_by_identifier $1
-      @folders_to_delete << name unless p
+      unless p
+        @folders_to_delete << name 
+        puts "\t#{d}"
+      end
     else
       STDERR.puts "#{directory} doesn't seem to be a DMSF folder!"
     end             
