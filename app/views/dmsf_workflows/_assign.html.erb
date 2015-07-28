@@ -17,16 +17,21 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
 <h3 class="title"><%= l(:field_label_dmsf_workflow) %></h3>
-<%= form_tag({:controller => 'dmsf_workflows', :action => 'assignment'},             
+<%= form_tag({:controller => 'dmsf_workflows', :action => 'assignment'},
               :method => :post,
-              :id => 'assignment-form') do %>                  
-  <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>  
+              :id => 'assignment-form') do %>
+  <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>
   <p>
     <%= label_tag('workflow', "#{l(:link_workflow)}:") %>
     <%= select_tag(
-        'dmsf_workflow_id', 
-        dmsf_workflows_for_select(@project, nil))%>        
-  </p> 
+        'dmsf_workflow_id',
+        dmsf_workflows_for_select(@project, nil))%>
+  </p>
+  <% if User.current.allowed_to?(:manage_workflows, @project) %>
+    <p>
+      <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path, :class => 'icon icon-add' %>
+    </p>
+  <% end %>
   <p class="buttons">
     <%= submit_tag l(:button_submit), :name => 'commit', :onclick => 'hideModal(this);' %>
     <%= submit_tag l(:button_cancel), :name => 'commit', :onclick => 'hideModal(this);' %>
