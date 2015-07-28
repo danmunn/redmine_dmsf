@@ -106,7 +106,7 @@ class DmsfMaintenance
       size += s
       File.delete f
     end 
-    puts "\n#{@files_to_delete.count} files hadn't got a coresponding revision and has been be deleted" if(@files_to_delete.count > 0)
+    puts "\n#{@files_to_delete.count} files hadn't got a coresponding revision and have been be deleted" if(@files_to_delete.count > 0)
     puts "#{number_to_human_size(size)} has been released\n\n" if(@files_to_delete.count > 0)
     
     # Projects
@@ -115,7 +115,7 @@ class DmsfMaintenance
       puts "\t#{d}"
       Dir.delete d
     end
-    puts "\n#{@folders_to_delete.count} directories hadn't got a coresponding projects and has been deleted\n\n" if(@folders_to_delete.count > 0)
+    puts "\n#{@folders_to_delete.count} directories hadn't got a coresponding projects and have been deleted\n\n" if(@folders_to_delete.count > 0)
   end
   
   private
