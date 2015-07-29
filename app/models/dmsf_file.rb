@@ -35,31 +35,15 @@ class DmsfFile < ActiveRecord::Base
   belongs_to :project
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
-
-  if (Rails::VERSION::MAJOR > 3)
-    has_many :revisions, -> { order("#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC") },
-      :class_name => 'DmsfFileRevision', :foreign_key => 'dmsf_file_id',
-      :dependent => :destroy
-    has_many :locks, -> { where(entity_type: 0).order("#{DmsfLock.table_name}.updated_at DESC") },
-      :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
-    has_many :referenced_links, -> { where target_type: DmsfFile.model_name.to_s},
-      :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
-    accepts_nested_attributes_for :revisions, :locks, :referenced_links, :project
-  else
-    has_many :revisions, :class_name => 'DmsfFileRevision', :foreign_key => 'dmsf_file_id',
-      :order => "#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC",
-      :dependent => :destroy
-    has_many :locks, :class_name => 'DmsfLock', :foreign_key => 'entity_id',
-      :order => "#{DmsfLock.table_name}.updated_at DESC",
-      :conditions => {:entity_type => 0},
-      :dependent => :destroy
-    has_many :referenced_links, :class_name => 'DmsfLink', :foreign_key => 'target_id',
-      :conditions => {:target_type => DmsfFile.model_name.to_s}, :dependent => :destroy
-  end
-
-  if (Rails::VERSION::MAJOR > 3)
-    accepts_nested_attributes_for :revisions, :locks, :referenced_links
-  end
+  
+  has_many :revisions, -> { order("#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC") },
+    :class_name => 'DmsfFileRevision', :foreign_key => 'dmsf_file_id',
+    :dependent => :destroy
+  has_many :locks, -> { where(entity_type: 0).order("#{DmsfLock.table_name}.updated_at DESC") },
+    :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
+  has_many :referenced_links, -> { where target_type: DmsfFile.model_name.to_s},
+    :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
+  accepts_nested_attributes_for :revisions, :locks, :referenced_links, :project    
   
   scope :visible, lambda { |*args|
     where(deleted: false) 
@@ -78,31 +62,18 @@ class DmsfFile < ActiveRecord::Base
     existing_file = DmsfFile.visible.find_file_by_name(self.project, self.folder, self.name)
     errors.add(:name, l('activerecord.errors.messages.taken')) unless
       existing_file.nil? || existing_file.id == self.id
-  end
-  
-  if (Rails::VERSION::MAJOR <= 3)
-    attr_accessor :event_description
-  end
+  end   
 
   acts_as_event :title => Proc.new { |o| o.name },
-                :description => Proc.new { |o| 
-                  if (Rails::VERSION::MAJOR > 3)
-                    desc = Redmine::Search.cache_store.fetch("DmsfFile-#{o.id}")                  
-                    if desc
-                      Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")                      
-                    else
-                      desc = o.description
-                      desc += ' / ' if o.description.present? && o.last_revision.comment.present?
-                      desc += o.last_revision.comment if o.last_revision.comment.present?
-                    end
+                :description => Proc.new { |o|                  
+                  desc = Redmine::Search.cache_store.fetch("DmsfFile-#{o.id}")                  
+                  if desc
+                    Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")                      
                   else
-                    desc = o.event_description
-                    unless desc.present?                                          
-                      desc = o.description
-                      desc += ' / ' if o.description.present? && o.last_revision.comment.present?
-                      desc += o.last_revision.comment if o.last_revision.comment.present?
-                    end
-                  end
+                    desc = o.description
+                    desc += ' / ' if o.description.present? && o.last_revision.comment.present?
+                    desc += o.last_revision.comment if o.last_revision.comment.present?
+                  end                 
                   desc
                 },
                 :url => Proc.new { |o| {:controller => 'dmsf_files', :action => 'show', :id => o} },
@@ -404,13 +375,9 @@ class DmsfFile < ActiveRecord::Base
 
               if dmsf_file
                 if user.allowed_to?(:view_dmsf_files, dmsf_file.project) && 
-                    (project_ids.blank? || (project_ids.include?(dmsf_file.project.id)))                  
-                  if (Rails::VERSION::MAJOR > 3)
+                    (project_ids.blank? || (project_ids.include?(dmsf_file.project.id)))                                    
                     Redmine::Search.cache_store.write("DmsfFile-#{dmsf_file.id}", 
-                      dochash['sample'].force_encoding('UTF-8')) if dochash['sample']
-                  else
-                    dmsf_file.event_description = dochash['sample'].force_encoding('UTF-8') if dochash['sample']
-                  end                  
+                      dochash['sample'].force_encoding('UTF-8')) if dochash['sample']                  
                   break if(!options[:limit].blank? && results.count >= options[:limit])
                   results << dmsf_file
                 end

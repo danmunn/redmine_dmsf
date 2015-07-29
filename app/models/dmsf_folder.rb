@@ -35,33 +35,18 @@ class DmsfFolder < ActiveRecord::Base
   has_many :subfolders, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id',
     :dependent => :destroy
   has_many :files, :class_name => 'DmsfFile', :foreign_key => 'dmsf_folder_id',
-    :dependent => :destroy
-  if (Rails::VERSION::MAJOR > 3)
-    has_many :folder_links, -> { where :target_type => 'DmsfFolder' },
-      :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
-    has_many :file_links, -> { where :target_type => 'DmsfFile' },
-      :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
-    has_many :url_links, -> { where :target_type => 'DmsfUrl' },
-      :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
-    has_many :referenced_links, -> { where :target_type => 'DmsfFolder' },
-      :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
-    has_many :locks, -> { where(entity_type:  1).order("#{DmsfLock.table_name}.updated_at DESC") },
-      :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
-    accepts_nested_attributes_for :user, :project, :folder, :subfolders, :files, :folder_links, :file_links, :url_links, :referenced_links, :locks
-  else
-    has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id',
-      :conditions => { :target_type => 'DmsfFolder' }, :dependent => :destroy
-    has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id',
-      :conditions => { :target_type => 'DmsfFile' }, :dependent => :destroy
-    has_many :url_links, :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id',
-             :conditions => { :target_type => 'DmsfUrl' }, :dependent => :destroy
-    has_many :referenced_links, :class_name => 'DmsfLink', :foreign_key => 'target_id',
-      :conditions => { :target_type => 'DmsfFolder' }, :dependent => :destroy
-    has_many :locks, :class_name => 'DmsfLock', :foreign_key => 'entity_id',
-      :order => "#{DmsfLock.table_name}.updated_at DESC",
-      :conditions => {:entity_type => 1},
-      :dependent => :destroy
-  end
+    :dependent => :destroy  
+  has_many :folder_links, -> { where :target_type => 'DmsfFolder' },
+    :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
+  has_many :file_links, -> { where :target_type => 'DmsfFile' },
+    :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
+  has_many :url_links, -> { where :target_type => 'DmsfUrl' },
+    :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
+  has_many :referenced_links, -> { where :target_type => 'DmsfFolder' },
+    :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
+  has_many :locks, -> { where(entity_type:  1).order("#{DmsfLock.table_name}.updated_at DESC") },
+    :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
+  accepts_nested_attributes_for :user, :project, :folder, :subfolders, :files, :folder_links, :file_links, :url_links, :referenced_links, :locks  
   
   scope :visible, lambda { |*args|
     where(deleted: false) 
@@ -71,20 +56,12 @@ class DmsfFolder < ActiveRecord::Base
   }  
 
   acts_as_customizable
-  
-  if (Rails::VERSION::MAJOR > 3)
-    acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
-          :project_key => 'project_id',
-          :date_column => 'updated_at',
-          :permission => :view_dmsf_files,
-          :scope => self.joins(:project)
-  else        
-    acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
-          :project_key => 'project_id',
-          :date_column => 'updated_at',
-          :permission => :view_dmsf_files,          
-          :include => :project
-  end
+    
+  acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
+        :project_key => 'project_id',
+        :date_column => 'updated_at',
+        :permission => :view_dmsf_files,
+        :scope => self.joins(:project)  
         
   acts_as_event :title => Proc.new {|o| o.title},
           :description => Proc.new {|o| o.description },

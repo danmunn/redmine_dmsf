@@ -31,36 +31,19 @@ module RedmineDmsf
         base.class_eval do
           unloadable
           alias_method_chain :copy, :dmsf
-
-          if (Rails::VERSION::MAJOR > 3)
-            has_many :dmsf_files, -> { where dmsf_folder_id: nil},
-              :class_name => 'DmsfFile', :foreign_key => 'project_id', :dependent => :destroy
-            has_many :dmsf_folders, -> {where dmsf_folder_id: nil},
-              :class_name => 'DmsfFolder', :foreign_key => 'project_id',
-              :dependent => :destroy
-            has_many :dmsf_workflows, :dependent => :destroy
-            has_many :folder_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFolder' },
-              :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
-            has_many :file_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFile' },
-              :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
-            has_many :url_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfUrl' },
-              :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
-          else
-            has_many :dmsf_files, :class_name => 'DmsfFile', :foreign_key => 'project_id',
-              :conditions => { :dmsf_folder_id => nil }, :dependent => :destroy
-            has_many :dmsf_folders, :class_name => 'DmsfFolder', :foreign_key => 'project_id',
-              :conditions => {:dmsf_folder_id => nil}, :dependent => :destroy
-            has_many :dmsf_workflows, :dependent => :destroy
-            has_many :folder_links, :class_name => 'DmsfLink', :foreign_key => 'project_id',
-              :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfFolder' },
-              :dependent => :destroy
-            has_many :file_links, :class_name => 'DmsfLink', :foreign_key => 'project_id',
-              :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfFile' },
-              :dependent => :destroy
-            has_many :url_links, :class_name => 'DmsfLink', :foreign_key => 'project_id',
-                     :conditions => { :dmsf_folder_id => nil, :target_type => 'DmsfUrl' },
-                     :dependent => :destroy
-          end
+          
+          has_many :dmsf_files, -> { where dmsf_folder_id: nil},
+            :class_name => 'DmsfFile', :foreign_key => 'project_id', :dependent => :destroy
+          has_many :dmsf_folders, -> {where dmsf_folder_id: nil},
+            :class_name => 'DmsfFolder', :foreign_key => 'project_id',
+            :dependent => :destroy
+          has_many :dmsf_workflows, :dependent => :destroy
+          has_many :folder_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFolder' },
+            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+          has_many :file_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFile' },
+            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+          has_many :url_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfUrl' },
+            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy          
         end
       end
 
