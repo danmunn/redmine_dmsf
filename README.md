@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.5.2** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **1.5.3** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -42,7 +42,7 @@ Features
 Dependencies
 ------------
   
-  * Redmine 2.5.0 or higher
+  * Redmine 3.0.0 or higher
 
 ### Fulltext search (optional)
 
@@ -140,7 +140,7 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax_detailed.html, aft
 
 In the file <redmine_root>/public/help/<language>/wiki_syntax.html, at the end of the Redmine links section:
 
-    <tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>
+    <tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>    
 
 There's a patch that helps you to modify all help files at once. In your Redmine folder:
 
