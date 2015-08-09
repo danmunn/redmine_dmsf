@@ -1,8 +1,10 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontorn.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontorn.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,20 +28,20 @@ class DmsfLock < ActiveRecord::Base
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'entity_id'
   belongs_to :user
 
-  #At the moment apparently we're only supporting a write lock?
+  # At the moment apparently we're only supporting a write lock?
 
   as_enum :lock_type, [:type_write, :type_other]
   as_enum :lock_scope, [:scope_exclusive, :scope_shared]
   
-  # We really loosly bind the value in the belongs_to above
+  # We really loosely bind the value in the belongs_to above
   # here we just ensure the data internal to the model is correct
   # to ensure everything lists fine - it's the same as a join
-  # just without runing the join in the first place
+  # just without running the join in the first place
   def file
     entity_type == 0 ? super : nil;
   end
 
-  # see file, exact same scenario
+  # See the file, exact same scenario
   def folder
     entity_type == 1 ? super : nil;
   end
@@ -57,11 +59,11 @@ class DmsfLock < ActiveRecord::Base
     self.delete_all ["#{DmsfLock.table_name}.expires_at IS NOT NULL && #{DmsfLock.table_name}.expires_at < ?", Time.now]
   end
 
-  #Lets allow our UUID to be searchable
+  # Let's allow our UUID to be searchable
   def self.find(*args)
     if args.first && args.first.is_a?(String) && !args.first.match(/^\d*$/)
       lock = find_by_uuid(*args)
-      raise ActiveRecord::RecordNotFound, "Couldn't find lock with uuid=#{args.first}" if lock.nil?
+      raise ActiveRecord::RecordNotFound, "Couldn't find lock with uuid = #{args.first}" if lock.nil?
       lock
     else
       super

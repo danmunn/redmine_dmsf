@@ -27,7 +27,7 @@ cs:
   label_dmsf_file_revision_access_plural: Přístupy k dokumentům
   warning_no_entries_selected: Není nic vybráno
   error_email_to_must_be_entered: Musí být zadán adresát  
-  warning_file_already_locked: Soubor už je zamčen
+  warning_file_already_locked: Soubor je již zamčen
   notice_file_locked: Soubor byl zamčen
   warning_file_not_locked: Soubor není zamčen
   notice_file_unlocked: Soubor byl odemčen
@@ -317,6 +317,12 @@ cs:
   notice_dmsf_link_restored: Odkaz byl úspěšně obnoven
   title_restore_checked: Obnov vybrané
   error_parent_folder: Nadřazený adresář neexistuje
+  
+  error_resource_or_parent_locked: Nelze zamknout - zdrojový nebo nadřazený objekt je zamčený
+  error_parent_locked: Nelze zamknout - nadřazený objekt je zamčený
+  error_resource_locked: Nelze zamknout - zdrojový objekt je zamčený
+  error_lock_exclusively: Nelze zamknout již zamčený objekt  
+  error_unlock_parent_locked: Nelze odemknout - nadřazený objekt je zamčený  
     
   my:
     blocks:

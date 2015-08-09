@@ -49,9 +49,10 @@ class DmsfWorkflowsController < ApplicationController
               file = DmsfFile.joins(:revisions).where(:dmsf_file_revisions => {:id => revision.id}).first
               if file
                 begin
-                  file.unlock!
+                  file.unlock! true
                 rescue DmsfLockError => e
-                  logger.warn e.message
+                  flash[:info] = e.message
+                  #logger.warn e.message
                 end
               end              
               if revision.workflow == DmsfWorkflow::STATE_APPROVED
@@ -287,18 +288,18 @@ class DmsfWorkflowsController < ApplicationController
         step = params[:step].to_i
       end
       operator = (params[:commit] == l(:dmsf_and)) ? DmsfWorkflowStep::OPERATOR_AND : DmsfWorkflowStep::OPERATOR_OR
-      users = User.where(:id => params[:user_ids])
+      users = User.where(:id => params[:user_ids]).to_a
       if users.count > 0
         users.each do |user|        
-          ws = DmsfWorkflowStep.new(
-            :dmsf_workflow_id => @dmsf_workflow.id, 
-            :step => step, 
-            :user_id => user.id, 
-            :operator => operator)
+          ws = DmsfWorkflowStep.new
+          ws.dmsf_workflow_id = @dmsf_workflow.id
+          ws.step = step
+          ws.user_id = user.id
+          ws.operator = operator
           if ws.save
             @dmsf_workflow.dmsf_workflow_steps << ws
           else
-            flash[:error] = @dmsf_workflow.errors.full_messages.to_sentence
+            flash[:error] = ws.errors.full_messages.to_sentence
           end
         end
       else
