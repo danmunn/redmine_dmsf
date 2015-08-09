@@ -33,7 +33,7 @@ module RedmineDmsf
           if User.current.admin?            
             @projects = Project.visible.order('lft').to_a
           elsif User.current.logged? # If user is not admin, we should only show memberships relevant
-            User.current.memberships.each{ |m| @Projects << m.project if m.roles.detect{ |r| r.allowed_to?(:view_dmsf_folders) } }
+            User.current.memberships.each{ |m| @projects << m.project if m.roles.detect{ |r| r.allowed_to?(:view_dmsf_folders) } }
           end
         end 
         @projects.delete_if { |node| !node.module_enabled?('dmsf') } if @projects
