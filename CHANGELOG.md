@@ -1,6 +1,16 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.5.3 *2015-08-10*
+------------------
+
+    Plupload 2.1.8
+    Redmine >= 3.0 required
+
+* Bug: #430 - Got 500 error when change directory name
+* Bug: #427 - Can't access to WebDAV root directory
+* Bug: #422 - Document uploading in IE
+
 1.5.2 *2015-07-13*
 ------------------
 
