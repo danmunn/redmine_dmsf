@@ -35,11 +35,11 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_create
-    wfs = DmsfWorkflowStep.new(
-      :dmsf_workflow_id => 1, 
-      :step => 2, 
-      :user_id => 3, 
-      :operator => 1)   
+    wfs = DmsfWorkflowStep.new
+    wfs.dmsf_workflow_id = 1
+    wfs.step = 2
+    wfs.user_id = 3 
+    wfs.operator = 1
     assert wfs.save
   end
   

@@ -41,14 +41,9 @@ class DmsfLink < ActiveRecord::Base
       end      
     end
   end
-
-  if (Rails::VERSION::MAJOR > 3)
-    scope :visible, -> { where(deleted: false) }
-    scope :deleted, -> { where(deleted: true) }
-  else
-    scope :visible, where(:deleted => false)
-    scope :deleted, where(:deleted => true)
-  end
+  
+  scope :visible, -> { where(deleted: false) }
+  scope :deleted, -> { where(deleted: true) }
 
   def target_folder_id
     if self.target_type == DmsfFolder.model_name.to_s

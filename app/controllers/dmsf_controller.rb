@@ -306,8 +306,9 @@ class DmsfController < ApplicationController
       redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
       return
     end
-    @pathfolder = copy_folder(@folder)
-    @folder.attributes = params[:dmsf_folder]
+    @pathfolder = copy_folder(@folder)    
+    @folder.title = params[:dmsf_folder][:title]
+    @folder.description = params[:dmsf_folder][:description]
     
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?

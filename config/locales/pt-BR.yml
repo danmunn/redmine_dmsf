@@ -145,6 +145,8 @@ pt-BR:
   heading_uploaded_files: Arquivos enviados
   submit_commit: Salvar
   link_documents: DMSF
+  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
+  permission_view_dmsf_file_revisions: View revisions in Activity stream
   permission_view_dmsf_folders: Browse documents
   permission_user_preferences: User preferences
   permission_view_dmsf_files: View documents
@@ -269,7 +271,6 @@ pt-BR:
   text_email_subject_requires_approval: "Workflow de aprovação %{name} requer sua aprovação"
   text_email_subject_updated: "Workflow de aprovação %{name}: atualizado"
   text_email_subject_started: "Workflow de aprovação %{name}: iniciado"
-
   text_email_finished_approved: "O workflow de aprovação'%{name}' definido para o documento '%{filename}' foi finalizado e o documento foi aprovado."
   text_email_finished_rejected: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi finalizado e o documento foi reprovado devido a '%{notice}'."
   text_email_finished_delegated: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi atribuido pois '%{notice}' e está aguardando a sua aprovação na etapa atual."
@@ -316,6 +317,12 @@ pt-BR:
   notice_dmsf_link_restored: O link foi restaurado com sucesso
   title_restore_checked: Restaurar pasta ou arquivo
   error_parent_folder: "A pasta de pai não existe"
+  
+  error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
+  error_parent_locked: Unable to complete lock - resource parent is locked
+  error_resource_locked: Unable to complete lock - resource is locked
+  error_lock_exclusively: unable to lock exclusively an already-locked resource 
+  error_unlock_parent_locked: Unlock failed - resource parent is locked  
 
   my:
     blocks:

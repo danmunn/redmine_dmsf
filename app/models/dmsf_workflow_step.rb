@@ -25,9 +25,7 @@ class DmsfWorkflowStep < ActiveRecord::Base
   validates :step, :presence => true
   validates :user_id, :presence => true
   validates :operator, :presence => true
-  validates_uniqueness_of :user_id, :scope => [:dmsf_workflow_id, :step]
-  
-  attr_accessible :dmsf_workflow_id, :step, :user_id, :operator
+  validates_uniqueness_of :user_id, :scope => [:dmsf_workflow_id, :step]    
   
   OPERATOR_OR  = 0
   OPERATOR_AND = 1

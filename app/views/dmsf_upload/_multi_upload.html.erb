@@ -1,8 +1,10 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
+# Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,7 +18,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 
 <div class="box">
   <%= form_tag({:controller => 'dmsf_upload', :action => 'upload_files', :id => @project, :folder_id => @folder},
@@ -72,31 +75,48 @@
 </script>
 
 <% content_for :header_tags do %>
-  <%= javascript_include_tag 'bowser.min.js', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag 'plupload/plupload.js', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag 'plupload/plupload.flash.js', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag 'plupload/plupload.html5.js', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag 'plupload/plupload.html4.js', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag 'plupload/jquery.ui.plupload/jquery.ui.plupload.js', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag("plupload/i18n/#{I18n.locale.to_s.downcase}.js", :plugin => 'redmine_dmsf') if I18n.locale && !I18n.locale.to_s.match(/^en.*/) %>
+  <%= stylesheet_link_tag 'plupload/jquery.ui.plupload.css', :plugin => 'redmine_dmsf' %>  
+  <%= javascript_include_tag 'plupload/js/plupload.full.min.js', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag 'plupload/js/jquery.ui.plupload/jquery.ui.plupload.js', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag("plupload/js/i18n/#{I18n.locale.to_s.downcase}.js", :plugin => 'redmine_dmsf') if I18n.locale && !I18n.locale.to_s.match(/^en.*/) %>
 
   <script type="text/javascript">
     function initPlUploader(uploader) {
       uploader.html('<div></div>');
       uploader = jQuery('div', uploader);
       uploader.plupload({
-        runtimes : 'html5,flash,html4',
+        runtimes : 'html5,flash,silverlight,html4',
         url : '<%= url_for({:controller => 'dmsf_upload', :action => 'upload_file', :id => @project}) %>',
         max_file_size : '<%= "#{@ajax_upload_size}mb" %>',
         max_file_count: '<%= Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i if Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i > 0 %>',
         multipart: true,
+        // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
+        dragdrop: true,
         multipart_params : {authenticity_token : jQuery('input[name=authenticity_token]').val()},
 
         // Rename files by clicking on their titles
         rename: true,
-
+                
+                // Resize images on clientside if we can
+        resize : {
+            width : 200,
+            height : 200,
+            quality : 90,
+            crop: true // crop to exact dimensions
+        },
+                      
+        // Views to activate
+        views: {
+            list: true,
+            thumbs: true, // Show thumbs
+            active: 'thumbs'
+        },
+        
         // Flash settings
-        flash_swf_url : '<%= plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/plupload.flash.swf') %>'
+        flash_swf_url : '<%= plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.swf') %>',
+
+        // Silverlight settings
+        silverlight_xap_url : '<%= plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.xap') %>'
       });
       jQuery('.plupload_scroll',uploader).resizable({
         handles: 's'
@@ -124,21 +144,13 @@
                     .val(responseObject.original_filename);
             uploader.append(original_filename_input);
           } else {
-              file.status = plupload.FAILED;
-              // responseObject.error.file = file;
-              // pluploader.trigger('Error', responseObject.error);
+              file.status = plupload.FAILED;              
               pluploader.trigger('UploadProgress', file);
-              pluploader.trigger('QueueChanged');
-              /*
-               To-do: Though this is the documented method of reporting an error, on chrome this seems
-                to result in a bug, where the file afterwards seems to be out of sync and fired at the same
-                time as another, however this will only process one return from this. If I notify of a file fault, but don't
-                trigger a message, all seems to work as indtended.
-              */
+              pluploader.trigger('QueueChanged');             
           }
         }
         if(pluploader.total.uploaded == pluploader.files.length) jQuery('#uploadform').submit();
-        else if(pluploader.total.uploaded + pluploader.total.failed == pluploader.files.length) setTimeout(function() {jQuery('#uploadform').submit();}, 2000);
+        else if((pluploader.total.uploaded + pluploader.total.failed) == pluploader.files.length) setTimeout(function() {jQuery('#uploadform').submit();}, 2000);
         else dmsfFileFieldCount++;
         return true;
       });

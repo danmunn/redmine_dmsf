@@ -31,7 +31,7 @@ en:
   notice_file_locked: File locked
   warning_file_not_locked: File not locked
   notice_file_unlocked: File unlocked
-  error_only_user_that_locked_file_can_unlock_it: Only user that locked file can unlock it  
+  error_only_user_that_locked_file_can_unlock_it: Only user that locked the file can unlock it  
   error_max_files_exceeded: "Limit for %{number} simultaneously downloaded files exceeded"  
   error_entry_project_does_not_match_current_project: "Entry project doesn't match current project"
   notice_folder_created: Folder created
@@ -317,6 +317,12 @@ en:
   notice_dmsf_link_restored: The link has been successfully restored
   title_restore_checked: Restore checked
   error_parent_folder: "The parent folder doesn't exist"
+  
+  error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
+  error_parent_locked: Unable to complete lock - resource parent is locked
+  error_resource_locked: Unable to complete lock - resource is locked
+  error_lock_exclusively: unable to lock exclusively an already-locked resource  
+  error_unlock_parent_locked: Unlock failed - resource parent is locked  
   
   my:
     blocks:
