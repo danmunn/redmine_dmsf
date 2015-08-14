@@ -1,3 +1,5 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-15   Karel Picman <karel.picman@kontron.com>
@@ -37,7 +39,7 @@ class DmsfAlertApprovals
 
   def self.alert
     dry_run = ENV['dry_run']
-    revisions = DmsfFileRevision.where(:workflow => DmsfWorkflow::STATE_WAITING_FOR_APPROVAL)
+    revisions = DmsfFileRevision.visible.where(:workflow => DmsfWorkflow::STATE_WAITING_FOR_APPROVAL)
     revisions.each do |revision|
       next unless revision.file.last_revision == revision
       workflow = DmsfWorkflow.find_by_id revision.dmsf_workflow_id
