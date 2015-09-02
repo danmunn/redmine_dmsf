@@ -79,8 +79,8 @@ run_install()
   # Copy database.yml
   cp $WORKSPACE/database.yml config/
 
-  # Not ideal, but at present Travis-CI will not install with xapian enabled.  
-  bundle install --path vendor/bundle --without xapian  
+  # Installation
+  bundle install --path vendor/bundle
 
   # Run Redmine database migrations
   bundle exec rake db:migrate RAILS_ENV=test --trace  
