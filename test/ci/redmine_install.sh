@@ -45,7 +45,7 @@ run_tests()
 
   cd $PATH_TO_REDMINE 
 
-  # Run tests within application - for some reason redmine:plugins:test wont work under 1.8
+  # Run tests within application
   bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf
   bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf
   #bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf
@@ -63,39 +63,35 @@ uninstall()
 
 run_install()
 {
-  # exit if install fails
+  # Exit if install fails
   set -e
 
   # cd to redmine folder
   cd $PATH_TO_REDMINE
   echo current directory is `pwd`
 
-  # create a link to the dmsf plugin
+  # Create a link to the dmsf plugin
   ln -sf $PATH_TO_DMSF $PATH_TO_PLUGINS/redmine_dmsf
   
-  # install gems
+  # Install gems
   mkdir -p vendor/bundle
 
-  # copy database.yml
+  # Copy database.yml
   cp $WORKSPACE/database.yml config/
 
-  #Not ideal, but at present Travis-CI will not install with xapian enabled.
-  #02-04-2013 bundle install needs to happen AFTER database configuration
+  # Not ideal, but at present Travis-CI will not install with xapian enabled.  
   bundle install --path vendor/bundle --without xapian  
 
-  # run redmine database migrations
+  # Run Redmine database migrations
   bundle exec rake db:migrate RAILS_ENV=test --trace  
 
-  # Load redmine database default data  
+  # Load Redmine database default data  
   bundle exec rake redmine:load_default_data REDMINE_LANG=en RAILS_ENV=test
 
   # generate session store/secret token
   bundle exec rake $GENERATE_SECRET
-
-  # enable development features
-  #touch dmsf.dev
-
-  # run dmsf database migrations
+  
+  # Run the plugin database migrations
   bundle exec rake $MIGRATE_PLUGINS RAILS_ENV=test  
 }
 
