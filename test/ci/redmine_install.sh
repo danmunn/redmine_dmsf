@@ -79,8 +79,11 @@ run_install()
   # Copy database.yml
   cp $WORKSPACE/database.yml config/
 
-  # Installation
-  bundle install --path vendor/bundle
+  # Not ideal, but at present Travis-CI will not install with xapian enabled:
+  #     configure: error: Neither uuid/uuid.h nor uuid.h found - required for brass, 
+  #         chert and flint (you may need to install the uuid-dev, libuuid-devel or e2fsprogs-devel package
+  # sudo apt-get install uuid-dev => sudo not allowed
+  bundle install --path vendor/bundle --without xapian  
 
   # Run Redmine database migrations
   bundle exec rake db:migrate RAILS_ENV=test --trace  
