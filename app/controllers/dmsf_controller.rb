@@ -309,6 +309,7 @@ class DmsfController < ApplicationController
     @pathfolder = copy_folder(@folder)    
     @folder.title = params[:dmsf_folder][:title]
     @folder.description = params[:dmsf_folder][:description]
+    @folder.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
     
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
