@@ -155,13 +155,11 @@ class DmsfFilesController < ApplicationController
 
         @file.name = revision.name
 
-        if revision.valid? && @file.valid?
-          revision.save!
+        if revision.save
           revision.assign_workflow(params[:dmsf_workflow_id])
           if file_upload
             revision.copy_file_content(file_upload)
           end
-
           if @file.locked? && !@file.locks.empty?
             begin
               @file.unlock!
@@ -170,26 +168,30 @@ class DmsfFilesController < ApplicationController
               logger.error "Cannot unlock the file: #{e.message}"
             end
           end
-          @file.save!
-          @file.set_last_revision revision
-
-          flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
-          log_activity('new revision')
-          begin
-            recipients = DmsfMailer.get_notify_users(@project, [@file])
-            recipients.each do |u|
-              DmsfMailer.files_updated(u, @project, [@file]).deliver
-            end
-            if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
-              unless recipients.empty?
-                to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
-                to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-                flash[:warning] = l(:warning_email_notifications, :to => to)
+          if @file.save
+            @file.set_last_revision revision
+            flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
+            log_activity('new revision')
+            begin
+              recipients = DmsfMailer.get_notify_users(@project, [@file])
+              recipients.each do |u|
+                DmsfMailer.files_updated(u, @project, [@file]).deliver
               end
+              if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+                unless recipients.empty?
+                  to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+                  to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
+                  flash[:warning] = l(:warning_email_notifications, :to => to)
+                end
+              end
+            rescue Exception => e
+              logger.error "Could not send email notifications: #{e.message}"
             end
-          rescue Exception => e
-            logger.error "Could not send email notifications: #{e.message}"
+          else
+            flash[:error] = @file.errors.full_messages.join(', ')
           end
+        else
+          flash[:error] = revision.errors.full_messages.join(', ')          
         end
       end
     end
