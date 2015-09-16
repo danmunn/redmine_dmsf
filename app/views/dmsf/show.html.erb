@@ -111,7 +111,9 @@
   <div class="controls" style="float: left">
     <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries') if @file_view_allowed %>
     <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries') if @file_view_allowed %>
-    <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries') if @file_delete_allowed %>
+    <% if @file_delete_allowed%>
+        <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries') if @file_delete_allowed %>
+    <% end %>
   </div>
   <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
   <% unless values.empty? %>
