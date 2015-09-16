@@ -536,7 +536,7 @@ module RedmineDmsf
         end
         
         # Ignore Mac OS X resource forks and special Windows files.        
-        unless request.body.length > 0
+        unless new_revision.size > 0
           Rails.logger.info "#{basename} #{request.body.length}b ignored"
           return Created 
         end
