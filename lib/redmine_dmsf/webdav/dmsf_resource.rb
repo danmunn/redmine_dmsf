@@ -482,15 +482,20 @@ module RedmineDmsf
         raise Forbidden
       end
 
-      #
-      #
+      # HTTP POST request.      
       def put(request, response)
-        raise BadRequest if (collection?)
-
+        raise BadRequest if collection?
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
+        
+        # Ignore Mac OS X resource forks and special Windows files.        
+        if basename.match(/^\._/i) || basename.match(/^ThumbsT.db$/i)
+          Rails.logger.info "#{basename} ignored"
+          return NoContent
+        end
 
         new_revision = DmsfFileRevision.new
-        if exist? && file # We're over-writing something, so ultimately a new revision
+        
+        if exist? # We're over-writing something, so ultimately a new revision
           f = file
           last_revision = file.last_revision
           new_revision.source_revision = last_revision
@@ -518,6 +523,7 @@ module RedmineDmsf
         new_revision.comment = nil        
         new_revision.increase_version(1, true)
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
+        
         # Phusion passenger does not have a method "length" in its model
         # however includes a size method - so we instead use reflection
         # to determine best approach to problem
@@ -528,7 +534,15 @@ module RedmineDmsf
         else
           new_revision.size = request.content_length # Bad Guess
         end
+        
+        # Ignore Mac OS X resource forks and special Windows files.        
+        unless request.body.length > 0
+          Rails.logger.info "#{basename} #{request.body.length}b ignored"
+          return NoContent 
+        end
+        
         raise InternalServerError unless new_revision.valid? && f.save
+        
         new_revision.disk_filename = new_revision.new_storage_filename
 
         if new_revision.save

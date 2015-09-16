@@ -406,5 +406,9 @@ class DmsfFile < ActiveRecord::Base
   def image?
     self.last_revision && !!(self.last_revision.disk_filename =~ /\.(bmp|gif|jpg|jpe|jpeg|png)$/i)
   end
+  
+  def exist?
+    return self.last_revision && File.exist?(self.last_revision.disk_file)
+  end
 
 end
