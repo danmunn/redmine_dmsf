@@ -179,7 +179,7 @@ module RedmineDmsf
 
       def etag
         filesize = file ? file.size : 4096;
-        fileino = (file && file.last_revision) ? File.stat(file.last_revision.disk_file).ino : 2;
+        fileino = (file && file.last_revision && File.exist?(file.last_revision.disk_file)) ? File.stat(file.last_revision.disk_file).ino : 2;
         sprintf('%x-%x-%x', fileino, filesize, last_modified.to_i)
       end
 
@@ -488,7 +488,7 @@ module RedmineDmsf
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
         
         # Ignore Mac OS X resource forks and special Windows files.        
-        if basename.match(/^\._/i) || basename.match(/^ThumbsT.db$/i)
+        if basename.match(/^\._/i) || basename.match(/^Thumbs.db$/i)
           Rails.logger.info "#{basename} ignored"
           return NoContent
         end
@@ -538,7 +538,7 @@ module RedmineDmsf
         # Ignore Mac OS X resource forks and special Windows files.        
         unless request.body.length > 0
           Rails.logger.info "#{basename} #{request.body.length}b ignored"
-          return NoContent 
+          return Created 
         end
         
         raise InternalServerError unless new_revision.valid? && f.save
@@ -560,6 +560,9 @@ module RedmineDmsf
       # for lock information to be presented
       def get_property(element)
         raise NotImplemented if (element[:ns_href] != 'DAV:')
+        unless folder? 
+          return NotFound unless (file && file.last_revision && File.exist?(file.last_revision.disk_file))
+        end
         case element[:name]
         when 'supportedlock' then supported_lock
         when 'lockdiscovery' then discover_lock
@@ -580,7 +583,7 @@ module RedmineDmsf
       # implementation of service for request, which allows for us to pipe a single file through
       # also best-utilising DAV4Rack's implementation.
       def download
-        raise NotFound unless file && file.last_revision
+        raise NotFound unless (file && file.last_revision && file.last_revision.disk_file)
 
         # If there is no range (start of ranged download, or direct download) then we log the
         # file access, so we can properly keep logged information
