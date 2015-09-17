@@ -402,5 +402,9 @@ class DmsfFile < ActiveRecord::Base
     end
     self.name
   end
-
+  
+  def image?
+    self.last_revision && !!(self.last_revision.disk_filename =~ /\.(bmp|gif|jpg|jpe|jpeg|png)$/i)
+  end
+ 
 end

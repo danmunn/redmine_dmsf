@@ -1,6 +1,21 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.5.4 *2015-09-17*
+------------------
+
+    New DMSF macro for inline pictures
+    File name updating when a new content is uploaded
+    System files filtering when working with WebDAV
+
+ * Bug: #442 - Can't move directories
+ * Bug: #441 - Drag'n'drop save only the picture thumbnail
+ * New: #438 - The file name update when a new content is uploaded
+ * Bug: #418 - Documents details from in IE
+ * Bug: #417 - Selected column is not highlighted under mouse pointer in IE
+ * New: #352 - DMSF Macro to display inline Pictures in wiki
+ * New: #54  - Webdav: Filter Mac OS X "resource forks" files
+
 1.5.3 *2015-08-10*
 ------------------
 

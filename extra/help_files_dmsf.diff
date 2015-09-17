@@ -2,7 +2,7 @@ Index: public/help/ar/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/ar/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/ar/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -22,6 +22,9 @@ Index: public/help/ar/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -54,6 +57,9 @@ Index: public/help/ar/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -89,7 +95,7 @@ Index: public/help/az/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/az/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/az/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -109,6 +115,9 @@ Index: public/help/az/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -139,6 +148,9 @@ Index: public/help/az/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -177,7 +189,7 @@ Index: public/help/bg/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/bg/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/bg/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -197,6 +209,9 @@ Index: public/help/bg/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -207,7 +222,7 @@ Index: public/help/bg/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/bg/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/bg/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -227,6 +242,9 @@ Index: public/help/bg/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -262,7 +280,7 @@ Index: public/help/bs/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/bs/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/bs/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -282,6 +300,9 @@ Index: public/help/bs/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -292,7 +313,7 @@ Index: public/help/bs/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/bs/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/bs/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -312,6 +333,9 @@ Index: public/help/bs/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -347,7 +371,7 @@ Index: public/help/ca/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/ca/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/ca/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -367,6 +391,9 @@ Index: public/help/ca/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -377,7 +404,7 @@ Index: public/help/ca/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/ca/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/ca/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -397,6 +424,9 @@ Index: public/help/ca/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -432,7 +462,7 @@ Index: public/help/cs/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/cs/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/cs/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,14 +70,18 @@
+@@ -70,14 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -452,6 +482,9 @@ Index: public/help/cs/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17,File,10)}}</strong> (odkaz na soubor s id 17 s textem "File" odkazující na revizi 10)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (odkaz na adresář s id 5)</li>
 +              <li><strong>{{dmsff(5,Folder)}}</strong> (odkaz na adresář s id 5 s textem "Folder")</li>
++              <li><strong>{{dmsf_image(8)}} (vložený obrázek ze souboru s  8; dokument musí být obrázek, např. JPEG, PNG,...)</li>
++              <li><strong>{{dmsf_image(8, size=300)}} (vložený obrázek s definovanou velikostí)</li>
++              <li><strong>{{dmsf_image(8, size=640x480)}} (vložený obrázek s definovanou velikostí)</li>
 +            </ul>
 +            ID dokumentu respektive revize lze nalézt v odkazu na stažení souboru.<br />
 +            ID adresáře lze nalézt na odkazu na adresář.
@@ -463,7 +496,7 @@ Index: public/help/cs/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/cs/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/cs/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Odkazy na další zdroje:</p>
  
          <ul>
@@ -482,6 +515,9 @@ Index: public/help/cs/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17,File,10)}}</strong> (odkaz na soubor s id 17 s textem "File" odkazující na revizi 10)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (odkaz na adresář s id 5)</li>
 +              <li><strong>{{dmsff(5,Folder)}}</strong> (odkaz na adresář s id 5 s textem "Folder")</li>
++              <li><strong>{{dmsf_image(8)}} (vložený obrázek ze souboru s  8; dokument musí být obrázek, např. JPEG, PNG,...)</li>
++              <li><strong>{{dmsf_image(8, size=300)}} (vložený obrázek s definovanou velikostí)</li>
++              <li><strong>{{dmsf_image(8, size=640x480)}} (vložený obrázek s definovanou velikostí)</li>
 +            </ul>
 +            ID dokumentu respektive revize lze nalézt v odkazu na stažení souboru.<br />
 +            ID adresáře lze nalézt na odkazu na adresář.
@@ -517,7 +553,7 @@ Index: public/help/da/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/da/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/da/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -537,6 +573,9 @@ Index: public/help/da/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -547,7 +586,7 @@ Index: public/help/da/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/da/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/da/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -567,6 +606,9 @@ Index: public/help/da/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -602,7 +644,7 @@ Index: public/help/de/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/de/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/de/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -622,6 +664,9 @@ Index: public/help/de/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -632,7 +677,7 @@ Index: public/help/de/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/de/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/de/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -652,6 +697,9 @@ Index: public/help/de/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -687,7 +735,7 @@ Index: public/help/el/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/el/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/el/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -707,6 +755,9 @@ Index: public/help/el/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -717,7 +768,7 @@ Index: public/help/el/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/el/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/el/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -737,6 +788,9 @@ Index: public/help/el/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -772,7 +826,7 @@ Index: public/help/en/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/en/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/en/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -792,6 +846,9 @@ Index: public/help/en/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -802,7 +859,7 @@ Index: public/help/en/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/en/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/en/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -822,6 +879,9 @@ Index: public/help/en/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -857,7 +917,7 @@ Index: public/help/en-gb/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/en-gb/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/en-gb/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -69,14 +69,19 @@
+@@ -69,14 +69,22 @@
  
          <p>Links to other resources:</p>
  
@@ -879,6 +939,9 @@ Index: public/help/en-gb/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -889,7 +952,7 @@ Index: public/help/en-gb/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/en-gb/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/en-gb/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -909,6 +972,9 @@ Index: public/help/en-gb/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -944,7 +1010,7 @@ Index: public/help/es/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/es/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/es/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -964,6 +1030,9 @@ Index: public/help/es/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -974,7 +1043,7 @@ Index: public/help/es/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/es/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/es/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -994,6 +1063,9 @@ Index: public/help/es/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1051,6 +1123,9 @@ Index: public/help/es-pa/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1065,7 +1140,7 @@ Index: public/help/es-pa/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/es-pa/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/es-pa/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -1085,6 +1160,9 @@ Index: public/help/es-pa/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1120,7 +1198,7 @@ Index: public/help/et/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/et/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/et/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -69,14 +69,19 @@
+@@ -69,14 +69,22 @@
  
          <p>Links to other resources:</p>
  
@@ -1142,6 +1220,9 @@ Index: public/help/et/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1174,6 +1255,9 @@ Index: public/help/et/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1209,7 +1293,7 @@ Index: public/help/eu/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/eu/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/eu/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -1229,6 +1313,9 @@ Index: public/help/eu/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1261,6 +1348,9 @@ Index: public/help/eu/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1296,7 +1386,7 @@ Index: public/help/fa/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/fa/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/fa/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -1316,6 +1406,9 @@ Index: public/help/fa/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1348,6 +1441,9 @@ Index: public/help/fa/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1383,7 +1479,7 @@ Index: public/help/fi/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/fi/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/fi/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -1403,6 +1499,9 @@ Index: public/help/fi/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1413,7 +1512,7 @@ Index: public/help/fi/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/fi/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/fi/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -1433,6 +1532,9 @@ Index: public/help/fi/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1468,7 +1570,7 @@ Index: public/help/fr/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/fr/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/fr/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -1488,6 +1590,9 @@ Index: public/help/fr/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1520,6 +1625,9 @@ Index: public/help/fr/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1555,7 +1663,7 @@ Index: public/help/gl/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/gl/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/gl/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -69,14 +69,19 @@
+@@ -69,14 +69,22 @@
  
          <p>Links to other resources:</p>
  
@@ -1577,6 +1685,9 @@ Index: public/help/gl/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1609,6 +1720,9 @@ Index: public/help/gl/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1644,7 +1758,7 @@ Index: public/help/he/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/he/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/he/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -1664,6 +1778,9 @@ Index: public/help/he/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1674,7 +1791,7 @@ Index: public/help/he/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/he/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/he/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -1694,6 +1811,9 @@ Index: public/help/he/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1729,7 +1849,7 @@ Index: public/help/hr/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/hr/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/hr/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -69,14 +69,19 @@
+@@ -69,14 +69,22 @@
  
          <p>Links to other resources:</p>
  
@@ -1751,6 +1871,9 @@ Index: public/help/hr/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1783,6 +1906,9 @@ Index: public/help/hr/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1818,7 +1944,7 @@ Index: public/help/hu/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/hu/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/hu/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -69,14 +69,19 @@
+@@ -69,14 +69,22 @@
  
          <p>Links to other resources:</p>
  
@@ -1840,6 +1966,9 @@ Index: public/help/hu/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1850,7 +1979,7 @@ Index: public/help/hu/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/hu/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/hu/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -1870,6 +1999,9 @@ Index: public/help/hu/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1905,7 +2037,7 @@ Index: public/help/id/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/id/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/id/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -69,14 +69,19 @@
+@@ -69,14 +69,22 @@
  
          <p>Links to other resources:</p>
  
@@ -1927,6 +2059,9 @@ Index: public/help/id/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1937,7 +2072,7 @@ Index: public/help/id/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/id/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/id/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -1957,6 +2092,9 @@ Index: public/help/id/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -1992,7 +2130,7 @@ Index: public/help/it/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/it/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/it/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2012,6 +2150,9 @@ Index: public/help/it/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2022,7 +2163,7 @@ Index: public/help/it/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/it/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/it/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2042,6 +2183,9 @@ Index: public/help/it/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2077,7 +2221,7 @@ Index: public/help/ja/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/ja/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/ja/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2097,6 +2241,9 @@ Index: public/help/ja/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2107,7 +2254,7 @@ Index: public/help/ja/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/ja/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/ja/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>そのほかのリソースへのリンク:</p>
  
          <ul>
@@ -2127,6 +2274,9 @@ Index: public/help/ja/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2162,7 +2312,7 @@ Index: public/help/ko/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/ko/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/ko/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2182,6 +2332,9 @@ Index: public/help/ko/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2192,7 +2345,7 @@ Index: public/help/ko/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/ko/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/ko/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2212,8 +2365,12 @@ Index: public/help/ko/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
+
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
 +            </li>
          </ul>
@@ -2247,7 +2404,7 @@ Index: public/help/lt/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/lt/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/lt/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2267,6 +2424,9 @@ Index: public/help/lt/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2277,7 +2437,7 @@ Index: public/help/lt/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/lt/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/lt/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2297,6 +2457,9 @@ Index: public/help/lt/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2332,7 +2495,7 @@ Index: public/help/lv/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/lv/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/lv/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2352,6 +2515,9 @@ Index: public/help/lv/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2362,7 +2528,7 @@ Index: public/help/lv/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/lv/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/lv/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2382,6 +2548,9 @@ Index: public/help/lv/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2417,7 +2586,7 @@ Index: public/help/mk/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/mk/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/mk/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2437,6 +2606,9 @@ Index: public/help/mk/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2447,7 +2619,7 @@ Index: public/help/mk/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/mk/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/mk/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2467,6 +2639,9 @@ Index: public/help/mk/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2502,7 +2677,7 @@ Index: public/help/mn/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/mn/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/mn/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2522,6 +2697,9 @@ Index: public/help/mn/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2532,7 +2710,7 @@ Index: public/help/mn/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/mn/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/mn/wiki_syntax_detailed_textile.html	(working copy)
-@@ -80,13 +80,19 @@
+@@ -80,13 +80,22 @@
          </ul>
  
          <ul>
@@ -2552,6 +2730,9 @@ Index: public/help/mn/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2587,7 +2768,7 @@ Index: public/help/nl/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/nl/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/nl/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2607,6 +2788,9 @@ Index: public/help/nl/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2617,7 +2801,7 @@ Index: public/help/nl/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/nl/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/nl/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2637,6 +2821,9 @@ Index: public/help/nl/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2672,7 +2859,7 @@ Index: public/help/no/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/no/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/no/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2692,6 +2879,9 @@ Index: public/help/no/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2702,7 +2892,7 @@ Index: public/help/no/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/no/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/no/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2722,6 +2912,9 @@ Index: public/help/no/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2757,7 +2950,7 @@ Index: public/help/pl/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/pl/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/pl/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2777,6 +2970,9 @@ Index: public/help/pl/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2787,7 +2983,7 @@ Index: public/help/pl/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/pl/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/pl/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2807,6 +3003,9 @@ Index: public/help/pl/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2842,7 +3041,7 @@ Index: public/help/pt/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/pt/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/pt/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2862,6 +3061,9 @@ Index: public/help/pt/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2872,7 +3074,7 @@ Index: public/help/pt/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/pt/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/pt/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2892,6 +3094,9 @@ Index: public/help/pt/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2927,7 +3132,7 @@ Index: public/help/pt-br/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/pt-br/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/pt-br/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2947,6 +3152,9 @@ Index: public/help/pt-br/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -2957,7 +3165,7 @@ Index: public/help/pt-br/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/pt-br/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/pt-br/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -2977,6 +3185,9 @@ Index: public/help/pt-br/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3012,7 +3223,7 @@ Index: public/help/ro/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/ro/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/ro/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3032,6 +3243,9 @@ Index: public/help/ro/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3042,7 +3256,7 @@ Index: public/help/ro/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/ro/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/ro/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3062,6 +3276,9 @@ Index: public/help/ro/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3097,7 +3314,7 @@ Index: public/help/ru/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/ru/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/ru/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3117,6 +3334,9 @@ Index: public/help/ru/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3127,7 +3347,7 @@ Index: public/help/ru/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/ru/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/ru/wiki_syntax_detailed_textile.html	(working copy)
-@@ -84,17 +84,19 @@
+@@ -84,17 +84,22 @@
  <p>ССылки на другие ресурсы:</p>
  
          <ul>
@@ -3146,8 +3366,12 @@ Index: public/help/ru/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
+
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
              </li>
 -            <li><strong>sandbox:document:"Приветствие"</strong> (ссылка на документ с названием "Приветствие" в проекте
@@ -3185,7 +3409,7 @@ Index: public/help/sk/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/sk/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/sk/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -69,14 +69,19 @@
+@@ -69,14 +69,22 @@
  
          <p>Links to other resources:</p>
  
@@ -3207,6 +3431,9 @@ Index: public/help/sk/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3217,7 +3444,7 @@ Index: public/help/sk/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/sk/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/sk/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3237,6 +3464,9 @@ Index: public/help/sk/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3272,7 +3502,7 @@ Index: public/help/sl/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/sl/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/sl/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3292,6 +3522,9 @@ Index: public/help/sl/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3302,7 +3535,7 @@ Index: public/help/sl/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/sl/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/sl/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3322,6 +3555,9 @@ Index: public/help/sl/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3357,7 +3593,7 @@ Index: public/help/sq/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/sq/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/sq/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3377,6 +3613,9 @@ Index: public/help/sq/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3387,7 +3626,7 @@ Index: public/help/sq/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/sq/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/sq/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3407,6 +3646,9 @@ Index: public/help/sq/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3442,7 +3684,7 @@ Index: public/help/sr/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/sr/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/sr/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3462,6 +3704,9 @@ Index: public/help/sr/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3472,7 +3717,7 @@ Index: public/help/sr/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/sr/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/sr/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3492,6 +3737,9 @@ Index: public/help/sr/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3527,7 +3775,7 @@ Index: public/help/sr-yu/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/sr-yu/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/sr-yu/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3547,6 +3795,9 @@ Index: public/help/sr-yu/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3557,7 +3808,7 @@ Index: public/help/sr-yu/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/sr-yu/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/sr-yu/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3577,6 +3828,9 @@ Index: public/help/sr-yu/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3612,7 +3866,7 @@ Index: public/help/sv/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/sv/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/sv/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3632,6 +3886,9 @@ Index: public/help/sv/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3642,7 +3899,7 @@ Index: public/help/sv/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/sv/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/sv/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3662,6 +3919,9 @@ Index: public/help/sv/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3697,7 +3957,7 @@ Index: public/help/th/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/th/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/th/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3717,6 +3977,9 @@ Index: public/help/th/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3727,7 +3990,7 @@ Index: public/help/th/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/th/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/th/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3747,6 +4010,9 @@ Index: public/help/th/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3782,7 +4048,7 @@ Index: public/help/tr/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/tr/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/tr/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3802,6 +4068,9 @@ Index: public/help/tr/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3812,7 +4081,7 @@ Index: public/help/tr/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/tr/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/tr/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3832,6 +4101,9 @@ Index: public/help/tr/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3867,7 +4139,7 @@ Index: public/help/uk/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/uk/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/uk/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3887,6 +4159,9 @@ Index: public/help/uk/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3897,7 +4172,7 @@ Index: public/help/uk/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/uk/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/uk/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3917,6 +4192,9 @@ Index: public/help/uk/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3952,7 +4230,7 @@ Index: public/help/vi/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/vi/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/vi/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -3972,6 +4250,9 @@ Index: public/help/vi/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -3982,7 +4263,7 @@ Index: public/help/vi/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/vi/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/vi/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -4002,6 +4283,9 @@ Index: public/help/vi/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -4037,7 +4321,7 @@ Index: public/help/zh/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/zh/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/zh/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -4057,6 +4341,9 @@ Index: public/help/zh/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -4067,7 +4354,7 @@ Index: public/help/zh/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/zh/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/zh/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -4087,6 +4374,9 @@ Index: public/help/zh/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -4122,7 +4412,7 @@ Index: public/help/zh-tw/wiki_syntax_detailed_markdown.html
 ===================================================================
 --- public/help/zh-tw/wiki_syntax_detailed_markdown.html	(revision 14471)
 +++ public/help/zh-tw/wiki_syntax_detailed_markdown.html	(working copy)
-@@ -70,13 +70,18 @@
+@@ -70,13 +70,21 @@
          <p>Links to other resources:</p>
  
          <ul>
@@ -4142,6 +4432,9 @@ Index: public/help/zh-tw/wiki_syntax_detailed_markdown.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -4152,7 +4445,7 @@ Index: public/help/zh-tw/wiki_syntax_detailed_textile.html
 ===================================================================
 --- public/help/zh-tw/wiki_syntax_detailed_textile.html	(revision 14471)
 +++ public/help/zh-tw/wiki_syntax_detailed_textile.html	(working copy)
-@@ -70,13 +70,19 @@
+@@ -70,13 +70,22 @@
          <p>連結至其他資源：</p>
  
          <ul>
@@ -4172,6 +4465,9 @@ Index: public/help/zh-tw/wiki_syntax_detailed_textile.html
 +                <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
 +                <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +                <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
++                <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
++                <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
++                <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
 +              </ul>
 +              The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
 +              The DMSF folder id can be found in the link when opening folders within Redmine.

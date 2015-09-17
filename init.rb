@@ -28,7 +28,7 @@ Redmine::Plugin.register :redmine_dmsf do
   name 'DMSF'
   author 'Vit Jonas / Daniel Munn / Karel Picman'
   description 'Document Management System Features'
-  version '1.5.3'
+  version '1.5.4'
   url 'http://www.redmine.org/plugins/dmsf'
   author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   
@@ -108,7 +108,7 @@ Redmine::Plugin.register :redmine_dmsf do
         end
       end      
       if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)        
-        file_view_url = url_for({:only_path => false, :controller => :dmsf_files, :action => 'view', :id => file, :download => args[2]})
+        file_view_url = url_for(:controller => :dmsf_files, :action => 'view', :id => file, :download => args[2])
         return link_to(h(args[1] ? args[1] : file.title),
           file_view_url,
           :target => '_blank',
@@ -118,13 +118,10 @@ Redmine::Plugin.register :redmine_dmsf do
         raise l(:notice_not_authorized)
       end
     end
-  end
   
-  Redmine::WikiFormatting::Macros.register do
     desc "Wiki link to DMSF folder:\n\n" +
              "{{dmsff(folder_id [, title])}}\n\n" +
-         "_folder_id_ may be missing. _folder_id_ can be found in the link for folder opening."
-         
+         "_folder_id_ may be missing. _folder_id_ can be found in the link for folder opening."         
     macro :dmsff do |obj, args|
       if args.length < 1
         return link_to l(:link_documents), dmsf_folder_url(@project)
@@ -137,14 +134,11 @@ Redmine::Plugin.register :redmine_dmsf do
           raise l(:notice_not_authorized)
         end
       end      
-    end
-  end
-  
-  Redmine::WikiFormatting::Macros.register do
+    end  
+    
     desc "Wiki link to DMSF document description:\n\n" +
              "{{dmsfd(file_id)}}\n\n" +
          "_file_id_ can be found in the link for file/revision download." 
-
     macro :dmsfd do |obj, args|
       raise ArgumentError if args.length < 1 # Requires file id
       file = DmsfFile.visible.find args[0].strip
@@ -152,10 +146,30 @@ Redmine::Plugin.register :redmine_dmsf do
         return file.description
       else        
         raise l(:notice_not_authorized)
-      end      
+      end   
+    end  
+
+    desc "Wiki DMSF image:\n\n" +
+               "{{dmsf_image(file_id)}}\n" +
+               "{{dmsf_image(file_id, size=300)}} -- with custom title and size\n" +
+               "{{dmsf_image(file_id, size=640x480)}}"
+    macro :dmsf_image do |obj, args|
+      args, options = extract_macro_options(args, :size, :title)
+      file_id = args.first
+      raise 'DMSF document ID required' unless file_id.present?
+      size = options[:size]      
+      if file = DmsfFile.find_by_id(file_id)
+        unless User.current && User.current.allowed_to?(:view_dmsf_files, file.project)        
+          raise l(:notice_not_authorized)
+        end
+        raise 'Not supported image format' unless file.image?
+        url = url_for(:controller => :dmsf_files, :action => 'view', :id => file)      
+        image_tag(url, :alt => file.title, :size => size)
+      else
+        raise "Document ID #{file_id} not found"
+      end
     end
-    
-  end    
+  end
   
   # Rubyzip configuration
   Zip.unicode_names = true

@@ -179,7 +179,7 @@ module RedmineDmsf
 
       def etag
         filesize = file ? file.size : 4096;
-        fileino = (file && file.last_revision) ? File.stat(file.last_revision.disk_file).ino : 2;
+        fileino = (file && file.last_revision && File.exist?(file.last_revision.disk_file)) ? File.stat(file.last_revision.disk_file).ino : 2;
         sprintf('%x-%x-%x', fileino, filesize, last_modified.to_i)
       end
 
@@ -482,15 +482,20 @@ module RedmineDmsf
         raise Forbidden
       end
 
-      #
-      #
+      # HTTP POST request.      
       def put(request, response)
-        raise BadRequest if (collection?)
-
+        raise BadRequest if collection?
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
+        
+        # Ignore Mac OS X resource forks and special Windows files.        
+        if basename.match(/^\._/i) || basename.match(/^Thumbs.db$/i)
+          Rails.logger.info "#{basename} ignored"
+          return NoContent
+        end
 
         new_revision = DmsfFileRevision.new
-        if exist? && file # We're over-writing something, so ultimately a new revision
+        
+        if exist? # We're over-writing something, so ultimately a new revision
           f = file
           last_revision = file.last_revision
           new_revision.source_revision = last_revision
@@ -518,6 +523,7 @@ module RedmineDmsf
         new_revision.comment = nil        
         new_revision.increase_version(1, true)
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
+        
         # Phusion passenger does not have a method "length" in its model
         # however includes a size method - so we instead use reflection
         # to determine best approach to problem
@@ -528,7 +534,15 @@ module RedmineDmsf
         else
           new_revision.size = request.content_length # Bad Guess
         end
+        
+        # Ignore Mac OS X resource forks and special Windows files.        
+        unless new_revision.size > 0
+          Rails.logger.info "#{basename} #{new_revision.size}b ignored"
+          return Created 
+        end
+        
         raise InternalServerError unless new_revision.valid? && f.save
+        
         new_revision.disk_filename = new_revision.new_storage_filename
 
         if new_revision.save
@@ -546,6 +560,9 @@ module RedmineDmsf
       # for lock information to be presented
       def get_property(element)
         raise NotImplemented if (element[:ns_href] != 'DAV:')
+        unless folder? 
+          return NotFound unless (file && file.last_revision && File.exist?(file.last_revision.disk_file))
+        end
         case element[:name]
         when 'supportedlock' then supported_lock
         when 'lockdiscovery' then discover_lock
@@ -566,7 +583,7 @@ module RedmineDmsf
       # implementation of service for request, which allows for us to pipe a single file through
       # also best-utilising DAV4Rack's implementation.
       def download
-        raise NotFound unless file && file.last_revision
+        raise NotFound unless (file && file.last_revision && file.last_revision.disk_file)
 
         # If there is no range (start of ranged download, or direct download) then we log the
         # file access, so we can properly keep logged information

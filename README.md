@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.5.3** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **1.5.4** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -116,6 +116,15 @@ The DMSF file/revision id can be found in link for file/revision download from w
 ####Link to a folder with id 5 with link text "Folder"
 `{{dmsff(5, Folder)}}`
 
+####An inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...
+`{{dmsf_image(8)}}`
+
+####An inline picture with custom size
+`{{dmsf_image(8, size=300)}}`
+
+####An inline picture with custom size
+`{{dmsf_image(8, size=640x480)}}`
+
 The DMSF folder id can be found in the link when opening folders within Redmine.
 
 You can also publish Wiki help description: 
@@ -132,6 +141,9 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax_detailed.html, aft
           <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
           <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
           <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
+          <li><strong>{{dmsf_image(8)}} (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
+          <li><strong>{{dmsf_image(8, size=300)}} (an inline picture with custom size)</li>
+          <li><strong>{{dmsf_image(8, size=640x480)}} (an inline picture with custom size)</li>
         </ul>
         The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
         The DMSF folder id can be found in the link when opening folders within Redmine.

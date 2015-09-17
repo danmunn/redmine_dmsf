@@ -28,9 +28,7 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   has_many :access, :class_name => 'DmsfFileRevisionAccess', :foreign_key => 'dmsf_file_revision_id', :dependent => :destroy
   has_many :dmsf_workflow_step_assignment, :dependent => :destroy  
-  accepts_nested_attributes_for :access, :dmsf_workflow_step_assignment, :file, :user  
-
-  attr_accessible :file, :title, :name, :description, :comment
+  accepts_nested_attributes_for :access, :dmsf_workflow_step_assignment, :file, :user   
   
   # Returns a list of revisions that are not deleted here, or deleted at parent level either
   scope :visible, -> { where(deleted: false) }
@@ -53,7 +51,7 @@ class DmsfFileRevision < ActiveRecord::Base
         "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id").
       where("#{DmsfFile.table_name}.deleted = :false", {:false => false})  
 
-  validates :title, :name, :presence => true
+  validates :title, :presence => true  
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
     :message => l(:error_contains_invalid_character)
 
