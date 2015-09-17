@@ -106,6 +106,15 @@ Search will now automatically search DMSF content when a Redmine search is perfo
 ####Link to the description of a file with id 17
 `{{dmsfd(17)}}`
 
+####An inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...
+`{{dmsf_image(8)}}`
+
+####An inline picture with custom size
+`{{dmsf_image(8, size=300)}}`
+
+####An inline picture with custom size
+`{{dmsf_image(8, size=640x480)}}`
+
 The DMSF file/revision id can be found in link for file/revision download from within Redmine.
 
 ###Linking DMSF folders from Wiki entries:
@@ -115,15 +124,6 @@ The DMSF file/revision id can be found in link for file/revision download from w
 
 ####Link to a folder with id 5 with link text "Folder"
 `{{dmsff(5, Folder)}}`
-
-####An inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...
-`{{dmsf_image(8)}}`
-
-####An inline picture with custom size
-`{{dmsf_image(8, size=300)}}`
-
-####An inline picture with custom size
-`{{dmsf_image(8, size=640x480)}}`
 
 The DMSF folder id can be found in the link when opening folders within Redmine.
 
