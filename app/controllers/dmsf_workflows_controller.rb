@@ -221,7 +221,8 @@ class DmsfWorkflowsController < ApplicationController
         wf = DmsfWorkflow.find_by_id params[:dmsf_workflow_id]
         @dmsf_workflow = wf.copy_to(@project, params[:dmsf_workflow][:name]) if wf     
       else
-        @dmsf_workflow = DmsfWorkflow.new(:name => params[:dmsf_workflow][:name])
+        @dmsf_workflow = DmsfWorkflow.new
+        @dmsf_workflow.name = params[:dmsf_workflow][:name]
         @dmsf_workflow.project_id = @project.id if @project
         @dmsf_workflow.save
       end

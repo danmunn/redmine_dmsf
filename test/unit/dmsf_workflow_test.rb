@@ -58,7 +58,8 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_create
-    workflow = DmsfWorkflow.new(:name => 'wf')   
+    workflow = DmsfWorkflow.new
+    workflow.name = 'wf'
     assert workflow.save
   end
   
