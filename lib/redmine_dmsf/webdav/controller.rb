@@ -76,17 +76,19 @@ module RedmineDmsf
       # args:: Only argument used: :copy
       # Move Resource to new location. If :copy is provided,
       # Resource will be copied (implementation ease)
-      # The only reason for overriding is a typing mistake 'include' -> 'include?'!
+      # The only reason for overriding is a typing mistake 'include' -> 'include?' 
+      #   and a wrong regular expression for BadGateway check
       def move(*args)
         unless(resource.exist?)
           NotFound
         else
           resource.lock_check if resource.supports_locking? && !args.include?(:copy)
-          destination = url_unescape(env['HTTP_DESTINATION'].sub(%r{https?://([^/]+)}, ''))
-          dest_host = $1
-          if(dest_host && dest_host.gsub(/:\d{2,5}$/, '') != request.host)
+          destination = url_unescape(env['HTTP_DESTINATION'].sub(%r{https?://([^/]+)}, ''))          
+          host = $1.gsub(/:\d{2,5}$/, '') if $1
+          host = host.gsub(/^.+@/, '') if host
+          if(host != request.host)
             BadGateway
-          elsif(destination == resource.public_path)
+          elsif(destination == resource.public_path)            
             Forbidden
           else
             collection = resource.collection?
