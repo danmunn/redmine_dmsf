@@ -70,7 +70,8 @@ class DmsfFolder < ActiveRecord::Base
           :author => Proc.new {|o| o.user }
 
   validates :title, :presence => true
-  validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted]
+  validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted], 
+    conditions: -> { where.not(deleted: true) }
   validates_format_of :title, :with => @@invalid_characters,
     :message => l(:error_contains_invalid_character)
   validate :check_cycle
