@@ -207,7 +207,7 @@ zh-TW:
   header_minimum_filesize: 檔案錯誤
   error_minimum_filesize: "這個檔案 %{file} 為空。無法被附加。"
   parent_directory: 上層目錄
-  note_webdav: "Webdav 啟用後，可在下列網址被找到: http://.../dmsf/webdav/"
+  note_webdav: "Webdav 啟用後，可在下列網址被找到: %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Webdav功能
   label_dmsf_plural: "複制文件總管的檔案和資料夾。 ( 資料夾: %{folders} 檔案: %{files} )"
 

@@ -207,7 +207,7 @@ cs:
   header_minimum_filesize: Chyba souboru.
   error_minimum_filesize: "Soubor %{file} má nulovou velikost a nebude přiložen."
   parent_directory: Nadřazený adresář
-  note_webdav: "Webdav je po založení k dispozici na http://.../dmsf/webdav/"
+  note_webdav: "Webdav je po aktivaci k dispozici na %{protocol}://%{domain}/dmsf/webdav/[identifikátor projektu]"
   label_webdav: Webdav functionalita
   label_dmsf_plural: "Kopíruj dokumenty a složky (%{files} souborů v %{folders} složkách)"
 

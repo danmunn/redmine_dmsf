@@ -208,7 +208,7 @@ pl:
   header_minimum_filesize: Błąd pliku.
   error_minimum_filesize: "Plik %{file} ma 0 bytes i nie zostanie załączony."
   parent_directory: Folder nadrzędny
-  note_webdav: Webdav once enabled can be found at http://.../dmsf/webdav/
+  note_webdav: "Webdav once enabled can be found at %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Webdav functionality
   label_dmsf_plural: "Skopiuj pliki i foldery (%{files} plików w %{folders} folderach)"
 

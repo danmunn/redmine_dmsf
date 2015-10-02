@@ -207,7 +207,7 @@ es:
   header_minimum_filesize: Error en archivo.
   error_minimum_filesize: "El archivo %{file} tiene 0 bytes de tamaño y no será adjuntado."
   parent_directory: Directorio padre
-  note_webdav: Si Webdav está habilitado, se puede encontrar en http://.../dmsf/webdav/
+  note_webdav: "Si Webdav está habilitado, se puede encontrar en %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Funcionalidad Webdav
   label_dmsf_plural: "Copiar archivos y directorios (%{files} archivos en %{folders} directorios)"
 

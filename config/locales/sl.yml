@@ -207,7 +207,7 @@ sl:
   header_minimum_filesize: Datotečna napaka.
   error_minimum_filesize: "Datoteka %{file} je 0 bytov in ne bo pripeta."
   parent_directory: Nadrejena mapa
-  note_webdav: "Webdav po vklopu lahko najdete na http://.../dmsf/webdav/"
+  note_webdav: "Webdav po vklopu lahko najdete na %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Webdav delovanje
   label_dmsf_plural: "Kopiraj Arhivske datoteke in mape (%{files} datoteke v %{folders} mape)"
 

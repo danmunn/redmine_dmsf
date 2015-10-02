@@ -207,7 +207,7 @@ fr:
   header_minimum_filesize: Erreur de fichier.
   error_minimum_filesize: "Le fichier %{file} est vide. Il ne sera pas transmis."
   parent_directory: Dossier parent
-  note_webdav: "Après l'activation du module Webdav, celui-ci sera accessible par http://.../dmsf/webdav/"
+  note_webdav: "Après l'activation du module Webdav, celui-ci sera accessible par %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Module Webdav
   label_dmsf_plural: "Copier les fichiers et les dossiers (%{files} fichiers dans %{folders} dossiers)"
 

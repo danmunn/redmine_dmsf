@@ -207,7 +207,7 @@ ru:
   header_minimum_filesize: "Ошибка файла."
   error_minimum_filesize: "Файла %{file} является пустым и он не будет прикреплен."
   parent_directory: "Родительская директория"
-  note_webdav: "После включения, WebDAV можно найти по адресу http://redmine-host/dmsf/webdav/"
+  note_webdav: "После включения, WebDAV можно найти по адресу %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: "Функциональность WebDAV"
   label_dmsf_plural: "Скопировать файлы и папки (%{files} файлов в %{folders} папках)"
 
