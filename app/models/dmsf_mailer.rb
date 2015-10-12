@@ -99,14 +99,14 @@ class DmsfMailer < Mailer
       if notify_user == User.current && notify_user.pref.no_self_notified
         false
       else
-        unless notify_member.dmsf_mail_notification
+        if notify_member.dmsf_mail_notification.nil?
           case notify_user.mail_notification
           when 'all'
             true
           when 'selected'
             notify_member.mail_notification?
           when 'only_my_events', 'only_owner'
-            notify_user.allowed_to?(:file_manipulation, project) ? true : false          
+            notify_user.allowed_to?(:file_manipulation, project)
           else
             false
           end
