@@ -261,8 +261,8 @@ class DmsfController < ApplicationController
 
   def create    
     @folder = DmsfFolder.new
-    @folder.title = params[:dmsf_folder][:title]
-    @folder.description = params[:dmsf_folder][:description]
+    @folder.title = params[:dmsf_folder][:title].strip
+    @folder.description = params[:dmsf_folder][:description].strip
     @folder.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
     @folder.project = @project
     @folder.user = User.current
@@ -307,8 +307,8 @@ class DmsfController < ApplicationController
       return
     end
     @pathfolder = copy_folder(@folder)    
-    @folder.title = params[:dmsf_folder][:title]
-    @folder.description = params[:dmsf_folder][:description]
+    @folder.title = params[:dmsf_folder][:title].strip
+    @folder.description = params[:dmsf_folder][:description].strip
     @folder.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
     
     # Custom fields
