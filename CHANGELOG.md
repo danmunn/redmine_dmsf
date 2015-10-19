@@ -1,6 +1,17 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.5.5 *2015-10-19*
+------------------
+
+    Maintenance release
+
+* Bug: #457 - Folder name Documents inaccessible
+* Bug: #456 - Everything is set to DEACTIVATED but still I got notifications
+* Bug: #448 - C:\fakepath\ added to Revision Filename Path
+* Bug: #432 - approval process for 3 users "user1 AND user2 AND user3"
+* Bug: #109 - Rename folder over webdav
+
 1.5.4 *2015-09-17*
 ------------------
 
@@ -30,7 +41,6 @@ Changelog for Redmine DMSF
 ------------------
 
     Redmine >= 3.0 compatibility
-
 
 * Bug: #404 - Deleted folder (still in trash) results in errors while accessing parent folder via webdav
 * Bug: #401 - Link between project on Redmine 3.0
@@ -184,6 +194,7 @@ Changelog for Redmine DMSF
 
 1.4.6: *2013-10-18*
 -----------------------
+
 * New: Document approval workflow
 * New: Slovene language translation
 * Update: German language translation
@@ -201,6 +212,7 @@ Changelog for Redmine DMSF
 
 1.4.5: *2012-07-20*
 -----------------
+
 * New: Settings introduced to enable read-only or read-write stance to be taken with webdav
 * Fix: Issue #27 - incorrect call to display column information from database (redmine 1.x fragment).
 * Fix: Issue #28 - incompatible SQL in db migration script for postgresql
@@ -211,11 +223,13 @@ Changelog for Redmine DMSF
 
 1.4.4p2: *2012-07-08*
 -------------------
+
 * Fix: Issue #22 - Webdav upload with passenger/nginx fails with server error (passenger class for request.body does not contain length method.
 * Fix: Additional check implemented before reading settings to prevent server error when setting is not set and default does not apply.
 
 1.4.4p1: *2012-07-07*
 -------------------
+
 * Fix: Issue #20 - Listing not functional when using sqlite adapter
 * Fix: Issue #21 - Webdav not functional under bitnami (or sub directory)
 * Fix: Testcase failed to cleanup after itself
@@ -224,6 +238,7 @@ Changelog for Redmine DMSF
 
 1.4.4: *2012-07-01*
 -----------------
+
 * New: Locking model updated to support shared and exclusive write locks. [At present UI and Webdav only support exclusive locking however]
 * New: Folders are now write lockable (shared and exclusively) [UI upgraded to support folder locking, however only exclusively]
 * New: Locks can now have a time-limit [Not yet supported from UI]
@@ -239,6 +254,7 @@ Changelog for Redmine DMSF
 
 1.4.3: *2012-06-26*
 -----------------
+
 * New: Hook into project copy functionality to permit (although not attractively)
        functionality for DMSF to be duplicated accross projects
 * Update: Project patch defines linkage between DMSF files and DMSF folders.
@@ -249,6 +265,7 @@ Changelog for Redmine DMSF
 
 1.4.2: *2012-06-21*
 -----------------
+
 * New: Integration test cases for webdav functionality
 * Update: Documentation has been converted from Simpletext to Markdown
 * Update: Features listed in documentation
@@ -258,10 +275,12 @@ Changelog for Redmine DMSF
 
 1.4.1: *2012-06-15*
 -----------------
+
 * New: DAV4Rack requirement added (Gemfile makes reference to github repository for latest release).
 * New: Webdav functionality included, additional administrative settings added
 * Fixed: Issue #2 - extended xapian search fixed with Rails 3 compatible code.
 
 1.4.0: *2012-06-06*
 -----------------
+
 * New: Redmine 2.0 or higher is required
