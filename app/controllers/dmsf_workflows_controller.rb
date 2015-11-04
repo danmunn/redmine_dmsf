@@ -51,8 +51,7 @@ class DmsfWorkflowsController < ApplicationController
                 begin
                   file.unlock! true
                 rescue DmsfLockError => e
-                  flash[:info] = e.message
-                  #logger.warn e.message
+                  flash[:info] = e.message                  
                 end
               end              
               if revision.workflow == DmsfWorkflow::STATE_APPROVED
@@ -171,28 +170,27 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def assignment
-    if params[:commit] == l(:button_submit)
+    if (params[:commit] == l(:button_submit)) && 
+        params[:dmsf_workflow_id].present? && (params[:dmsf_workflow_id] != '-1')
       revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
       if revision
-        revision.set_workflow(params[:dmsf_workflow_id], params[:action])
-        if params[:dmsf_workflow_id].present?
-          revision.assign_workflow(params[:dmsf_workflow_id])
-          if request.post? 
-            if revision.save
-              file = DmsfFile.find_by_id revision.dmsf_file_id
-              if file
-                begin
-                  file.lock!
-                rescue DmsfLockError => e
-                  logger.warn e.message
-                end
-                flash[:notice] = l(:notice_successful_update)                
+        revision.set_workflow(params[:dmsf_workflow_id], params[:action])        
+        revision.assign_workflow(params[:dmsf_workflow_id])
+        if request.post? 
+          if revision.save
+            file = DmsfFile.find_by_id revision.dmsf_file_id
+            if file
+              begin
+                file.lock!
+              rescue DmsfLockError => e
+                logger.warn e.message
               end
-            else
-              flash[:error] = l(:error_workflow_assign)
+              flash[:notice] = l(:notice_successful_update)                
             end
+          else
+            flash[:error] = l(:error_workflow_assign)
           end
-        end
+        end        
       end    
     end
     redirect_to :back        
