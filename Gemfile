@@ -10,7 +10,7 @@ group :production do
   gem 'nokogiri', '>= 1.5.10'
 end
 
-#Allows --without=xapian
 group :xapian do
+  gem "xapian-ruby", :require => false
   gem 'xapian-full-alaveteli', :require => false
 end
