@@ -143,7 +143,7 @@ Redmine::Plugin.register :redmine_dmsf do
       raise ArgumentError if args.length < 1 # Requires file id
       file = DmsfFile.visible.find args[0].strip
       if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)        
-        return file.description
+        return textilizable(file.description)
       else        
         raise l(:notice_not_authorized)
       end   
