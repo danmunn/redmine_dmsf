@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.5.5** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **1.5.6 devel** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -106,6 +106,9 @@ Search will now automatically search DMSF content when a Redmine search is perfo
 
 ####Link to the description of a file with id 17
 `{{dmsfd(17)}}`
+
+####Link to the preview of the first 5 lines from a file with id 17
+`{{dmsft(17, 5)}}`
 
 ####An inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...
 `{{dmsf_image(8)}}`

@@ -1,6 +1,17 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.5.6 *2015-??-??*
+------------------
+
+* Bug: #469 - dmsfd doesn't reuse Wiki syntax in Wiki page
+* New: #468 - Display contents of text file in Wiki page
+* Bug: #465 - Install using debian 8 (jessie)
+* Bug: #459 - WebDav Windows
+* Bug: #458 - Cannot upload big files
+
+    Maintenance release II.
+
 1.5.5 *2015-10-19*
 ------------------
 

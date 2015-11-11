@@ -406,5 +406,27 @@ class DmsfFile < ActiveRecord::Base
   def image?
     self.last_revision && !!(self.last_revision.disk_filename =~ /\.(bmp|gif|jpg|jpe|jpeg|png)$/i)
   end
+  
+  def preview(limit)
+    result = 'No preview available'
+    if (self.last_revision.disk_filename =~ /\.(txt|ini|diff|c|cpp|php|csv|rb|h|erb|html|css)$/i)
+      begin
+        f = File.new(self.last_revision.disk_file)
+        f.each_line do |line| 
+          case f.lineno
+            when 1
+              result = line
+            when limit.to_i + 1
+              break
+            else
+              result << line              
+          end          
+        end
+      rescue Exception => e
+        result = e.message
+      end
+    end    
+    result
+  end
  
 end

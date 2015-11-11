@@ -28,7 +28,7 @@ Redmine::Plugin.register :redmine_dmsf do
   name 'DMSF'
   author 'Vit Jonas / Daniel Munn / Karel Picman'
   description 'Document Management System Features'
-  version '1.5.5'
+  version '1.5.6 devel'
   url 'http://www.redmine.org/plugins/dmsf'
   author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   
@@ -144,6 +144,19 @@ Redmine::Plugin.register :redmine_dmsf do
       file = DmsfFile.visible.find args[0].strip
       if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)        
         return textilizable(file.description)
+      else        
+        raise l(:notice_not_authorized)
+      end   
+    end  
+    
+    desc "Wiki link to DMSF document's content preview:\n\n" +
+             "{{dmsft(file_id)}}\n\n" +
+         "_file_id_ can be found in the link for file/revision download." 
+    macro :dmsft do |obj, args|
+      raise ArgumentError if args.length < 2 # Requires file id and lines number
+      file = DmsfFile.visible.find args[0].strip
+      if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)           
+        return file.preview(args[1].strip).gsub("\n", '<br/>').html_safe        
       else        
         raise l(:notice_not_authorized)
       end   
