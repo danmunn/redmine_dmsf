@@ -21,7 +21,7 @@
 %>
 
 <td class="check"><%= check_box_tag(name, id, false, 
-  :title => l(:title_check_for_restore_or_delete)) %></td>
+  :title => l(:title_check_for_restore_or_delete), :id => "subfolder_#{id}") %></td>
 <td class="title">                  
   <%= content_tag(:span, h(title), 
     :title => h(title), 
