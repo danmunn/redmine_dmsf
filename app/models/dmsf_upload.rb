@@ -47,8 +47,11 @@ class DmsfUpload
       }        
       FileUtils.mv(a.diskfile, "#{DmsfHelper.temp_dir}/#{uploaded[:disk_filename]}")
       a.destroy    
-      DmsfUpload.new(project, folder, uploaded)
+      upload = DmsfUpload.new(project, folder, uploaded)
+    else
+      Rails.logger.error "An attachment not found by its token: #{uploaded_file[:token]}"      
     end
+    upload
   end
   
   def initialize(project, folder, uploaded)

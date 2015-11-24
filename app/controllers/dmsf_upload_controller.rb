@@ -39,7 +39,8 @@ class DmsfUploadController < ApplicationController
     if uploaded_files && uploaded_files.is_a?(Hash)
       # standard file input uploads
       uploaded_files.each_value do |uploaded_file|        
-        @uploads.push(DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file))
+        upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
+        @uploads.push(upload) if upload
       end
     else
       # plupload multi upload completed
