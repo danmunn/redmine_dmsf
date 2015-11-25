@@ -23,8 +23,8 @@
 ru:
   dmsf: DMSF
   label_dmsf_file_plural: Файлы
-  label_dmsf_file_revision_plural: Document revisions
-  label_dmsf_file_revision_access_plural: Document accesses
+  label_dmsf_file_revision_plural: Изменения документов
+  label_dmsf_file_revision_access_plural: Доступы к документам
   warning_no_entries_selected: Файлы не выбраны
   error_email_to_must_be_entered: Нужно указать, на какую почту отправить письмо  
   warning_file_already_locked: Файл уже заблокирован
@@ -63,14 +63,14 @@ ru:
   submit_create: Создать
   link_create_folder: Создать папку
   title_check_uncheck_all_for_zip_download_or_email: Выбрать/Снять все документы для того, чтобы скачать или отправить их по электронной почте
-  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
+  title_check_uncheck_all_for_restore_or_delete: Выбрать/Снять все документы для восстановления или удаления
   link_title: Название
   link_size: Размер
   link_modified: Изменен
   link_ver: Версия
   link_author: Автор
   title_check_for_zip_download_or_email: Выберите документы, которые нужно скачать или отправить их по электронной почте
-  title_check_for_restore_or_delete: Check for restore or delete
+  title_check_for_restore_or_delete: Отметка удаления или восстановления
   title_delete: Удалить
   title_notifications_active_deactivate: "Уведомления включены: Отключить"
   title_notifications_not_active_activate: "Уведомления не включены: Включить"
@@ -121,7 +121,7 @@ ru:
   option_version_same: Та же версия
   option_version_minor: Незначительные изменения
   option_version_major: Значительные изменения
-  option_version_custom: Custom
+  option_version_custom: Пользовательская
   label_new_content: Новое содержание
   label_maximum_files_upload: Максимальное количество файлов для загрузки
   note_maximum_number_of_files_uploaded: Ограничивает максимальное количество файлов, которое может быть загружено за один раз. 0 означает отсутствие ограничений.
@@ -145,16 +145,16 @@ ru:
   heading_uploaded_files: Загруженные файлы
   submit_commit: Зафиксировать
   link_documents: Документы
-  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
-  permission_view_dmsf_file_revisions: View revisions in Activity stream
+  permission_view_dmsf_file_revision_accesses: Показывать загрзуки файлов в ленте активности
+  permission_view_dmsf_file_revisions: Показывать изменение файлов в ленте активности
   permission_view_dmsf_folders: Просматривать папки
   permission_user_preferences: Настройки пользователя
   permission_view_dmsf_files: Просматривать документы
   permission_folder_manipulation: Управление папками
   permission_file_manipulation: Управление файлами  
   permission_force_file_unlock: Разблокировка любых файлов
-  permission_manage_workflows: Manage workflows
-  permission_file_delete: Delete documents
+  permission_manage_workflows: Управление согласованиями
+  permission_file_delete: Удаление документов
   label_file: Файл
   field_folder: Папка
   error_create_cycle_in_folder_dependency: создать циклическую зависимость в папке
@@ -166,7 +166,7 @@ ru:
   notice_entries_deleted: Файлы удалены
   warning_some_entries_were_not_deleted: "Некоторые файлы не были удалены: %{entries}"  
   title_delete_checked: Удалить выбранные документы
-  title_items: items
+  title_items: элементы
   title_filename_for_download: Имя файла для скачиваемого архива
   label_number_of_folders: Папок
   label_number_of_documents: Документов
@@ -181,7 +181,7 @@ ru:
   heading_access_first: Первый
   heading_access_last: Последний
   label_dmsf_updated: Документ обновлен
-  label_dmsf_downloaded: Документ downloaded
+  label_dmsf_downloaded: Документ скачан
   title_total_size_of_all_files: Общий размер всех файлов в этой папке
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: Не выбран проект, в который нужно скопировать файл
@@ -225,109 +225,109 @@ ru:
   label_webdav_strategy: "Стратегия WebDAV"
   note_webdav_strategy: "Позволяет администратору решить в каком режиме предоставить доступ к WebDAV для конечных пользователей (Только для чтения или Чтение+Запись)."
   
-  error_unable_delete_dmsf_workflow: Unable to delete the workflow
-  error_empty_note: The note can't be empty
-  error_workflow_assign: An error occured while assigning
-  error_cannot_start_workflow: Workflow can't be started
-  error_cannot_renumber_steps: Steps can't be renumbered
-  label_dmsf_workflow_new: New approval workflow
-  field_label_dmsf_workflow: Approval Workflow
-  field_label_dmsf_workflow_name: Approval workflow name
-  label_dmsf_workflow_plural: Approval workflows
-  label_dmsf_workflow_plural_num: Approval workflows (%{count})
-  label_dmsf_workflow_step: Step
-  label_dmsf_workflow_step_plural: Steps
-  label_dmsf_workflow_approval: Approval
-  label_dmsf_workflow_approval_plural: Approvals
+  error_unable_delete_dmsf_workflow: Невозможно удалить процесс согласование
+  error_empty_note: Примечание не может быть пустым
+  error_workflow_assign: Возникла ошибка при назначении
+  error_cannot_start_workflow: Согласование не может быть запущено
+  error_cannot_renumber_steps: Нумерация этапов не может быть изменена
+  label_dmsf_workflow_new: Новый процесс согласования
+  field_label_dmsf_workflow: Процесс согласования
+  field_label_dmsf_workflow_name: Название процесса согласования
+  label_dmsf_workflow_plural: Процессы согласования
+  label_dmsf_workflow_plural_num: Процессы согласования (%{count})
+  label_dmsf_workflow_step: Шаг
+  label_dmsf_workflow_step_plural: Шаги
+  label_dmsf_workflow_approval: Утверждение
+  label_dmsf_workflow_approval_plural: Утверждения
   label_dmsf: DMSF
-  label_dmsf_wokflow_action_approve: Approve
-  label_dmsf_wokflow_action_reject: Reject
-  label_dmsf_wokflow_action_delegate: Delegate to
-  label_dmsf_wokflow_action_assign: Assign an approval workflow
-  label_dmsf_wokflow_action_start: Start workflow
-  label_dmsf_workflow_add_approver: "Add a new approver with a logical function:"
-  label_or: or
-  label_action: Action
-  label_note: Note  
-  title_none: None
-  title_rejection: Rejection
-  title_delegation: Delegation
-  title_assignment: Assignment
-  title_start: Start  
-  title_dmsf_workflow_log: Approval Workflow Log
-  title_assigned: Assigned
-  title_approval: Approval
-  title_rejected: Rejected
+  label_dmsf_wokflow_action_approve: Согласовать
+  label_dmsf_wokflow_action_reject: Отклонить
+  label_dmsf_wokflow_action_delegate: Делегировать
+  label_dmsf_wokflow_action_assign: Назначить процесс согласования
+  label_dmsf_wokflow_action_start: Запустить процесс согласования
+  label_dmsf_workflow_add_approver: "Добавить нового согласующего с логической функцией:"
+  label_or: или
+  label_action: Действие
+  label_note: Примечание
+  title_none: Примечание
+  title_rejection: Отклонение
+  title_delegation: Делегирование
+  title_assignment: Назначение
+  title_start: Запуск
+  title_dmsf_workflow_log: Протокол процесса согласования
+  title_assigned: Назначен
+  title_approval: Согласован
+  title_rejected: Отклонен
   dmsf_and: AND
   dmsf_or: OR
-  dmsf_new_step: New step  
-  message_dmsf_wokflow_note: Your note...
+  dmsf_new_step: Новый шаг  
+  message_dmsf_wokflow_note: Ваше примечание...
   info_revision: "r%{rev}"
-  link_workflow: Workflow  
-  notice_workflow_started: Approval workflow successfully started
-  text_email_subject_approved: "Approval workflow %{name} approved"
-  text_email_subject_rejected: "Approval workflow %{name} rejected"
-  text_email_subject_delegated: "Approval workflow %{name} delegated"
-  text_email_subject_requires_approval: "Approval workflow %{name} requires your approval"
-  text_email_subject_updated: "Approval workflow %{name} updated"
-  text_email_subject_started: "Approval workflow %{name} started" 
-  text_email_finished_approved: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been approved."
-  text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been rejected because of '%{notice}'."
-  text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
-  text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps and you are expected to do an approval in the next approval step."
-  text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps."
-  text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you are expected to do an approval in the current approval step."  
-  text_email_to_proceed: To proceed click on the check box icon next to the document in
-  text_email_to_see_history: To see the approval history click on the workflow status of the document in
-  text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
-  label_my_open_approvals: My open approvals
-  label_my_locked_documents: My locked documents
+  link_workflow: Согласование  
+  notice_workflow_started: Процесс согласования успешно запущен
+  text_email_subject_approved: "Процесс согласования %{name} успешно завершен"
+  text_email_subject_rejected: "Процесс согласования %{name} отклонен"
+  text_email_subject_delegated: "Процесс согласования %{name} делегирован"
+  text_email_subject_requires_approval: "Процесс согласования %{name} требует вашего участия"
+  text_email_subject_updated: "Процесс согласования %{name} обновлен"
+  text_email_subject_started: "Процесс согласования %{name} запущен" 
+  text_email_finished_approved: "Процесс согласования '%{name}' документа '%{filename}' только что завершился и документ был согласован."
+  text_email_finished_rejected: "Процесс согласования '%{name}' документа '%{filename}' только что завершился и документ был отклонен по причине '%{notice}'."
+  text_email_finished_delegated: "Процесс согласования '%{name}' документа '%{filename}' только что был делегирован по причине '%{notice}' и от Вас ожидается согласование."
+  text_email_finished_step: "Процесс согласования '%{name}' документа '%{filename}' только что завершил один из шагов согласования и ожидает Вашего соглсования."
+  text_email_finished_step_short: "Процесс согласования '%{name}' документа '%{filename}' только что завершил один из шагов согласования."
+  text_email_started: "Процесс согласования '%{name}' документа '%{filename}'  только что начался и ожидает Вашего соглсования."  
+  text_email_to_proceed: Для продолжения поставьте отметку рядом с документом в 
+  text_email_to_see_history: Для просмотра истории согласования нажмите статус согласования документа в 
+  text_email_to_see_status: Для просмотра текущего статуса согласования нажмите статус согласования документа в 
+  label_my_open_approvals: Мои согласования
+  label_my_locked_documents: Мои заблокированные документы
   
-  title_create_link: Create a symbolic link  
-  label_link_from: Link from
-  label_link_to: Link to
-  label_notifications_on: Notifications on
-  label_notifications_off: Notifications off
-  field_target_file: Source file
-  title_download_entries: Download entries
-  label_external: External
+  title_create_link: Создать символическую ссылку  
+  label_link_from: Ссылка из
+  label_link_to: Ссылка на
+  label_notifications_on: Включить уведомления
+  label_notifications_off: Отключить уведоления
+  field_target_file: Исходный файл
+  title_download_entries: Скачать записи
+  label_external: Внешний
   
-  label_link_name: Link name
+  label_link_name: Наименование ссылки
   label_link_external_url: URL
-  label_target_folder: Target folder
-  label_source_folder: Source folder
-  label_target_project: Target project
-  label_source_project: Source project  
+  label_target_folder: Целевая папка
+  label_source_folder: Исходная папка
+  label_target_project: Целевой проект
+  label_source_project: Исходный проект  
   
-  text_email_doc_updated_subject: "Documents of %{project} updated"
-  text_email_doc_updated: has just actualized documents of
-  text_email_doc_follows: as follows
-  text_email_doc_deleted_subject: "Documents of %{project} deleted"
-  text_email_doc_deleted: has just deleted documents of
-  label_links_only: links only
+  text_email_doc_updated_subject: "Документы проекта %{project} обновлены"
+  text_email_doc_updated: только что обновил документы
+  text_email_doc_follows: следующим образом
+  text_email_doc_deleted_subject: "Документы проекта %{project} удалены"
+  text_email_doc_deleted: только что удалил документы
+  label_links_only: только ссылки
   
-  label_display_notified_recipients: Display notified recipients
-  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
-  warning_email_notifications: "Email notifications sent to %{to}"
+  label_display_notified_recipients: Показывать получателей, получивших уведомление
+  note_display_notified_recipients: Пользователь будет проинфмораирован о всех получателях, кому было направлено уведомление.
+  warning_email_notifications: "Уведомление отправлено %{to}"
   
-  link_trash_bin: Trash bin
-  title_restore: Restore
-  notice_dmsf_file_restored: The document has been successfully restored
-  notice_dmsf_folder_restored: The folder has been successfully restored
-  notice_dmsf_link_restored: The link has been successfully restored
-  title_restore_checked: Restore checked
-  error_parent_folder: "The parent folder doesn't exist"
+  link_trash_bin: Корзина
+  title_restore: Восстановить
+  notice_dmsf_file_restored: Документ был успешно восстановлен
+  notice_dmsf_folder_restored: Папка была успешно восстановлена
+  notice_dmsf_link_restored: Папка была успешно восстановлена
+  title_restore_checked: Восстановить отмеченные
+  error_parent_folder: "Родительская папка не существует"
   
-  error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
-  error_parent_locked: Unable to complete lock - resource parent is locked
-  error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: unable to lock exclusively an already-locked resource  
-  error_unlock_parent_locked: Unlock failed - resource parent is locked
+  error_resource_or_parent_locked: Невозможно выполнить блокировку - ресурс (или родительская запись) заблокированы
+  error_parent_locked: Невозможно выполнить блокировку - родительская запись заблокирована
+  error_resource_locked: Невозможно выполнить блокировку - ресурс заблокирован
+  error_lock_exclusively: невозможно эксклюзивно заблокировать уже забловированный ресурс  
+  error_unlock_parent_locked: Разблокировка не удалась - родительская запись заблокирована
   
   my:
     blocks:
-      locked_documents: Locked documents
-      open_approvals: Open approvals
+      locked_documents: Заблокированные документы
+      open_approvals: Открытые согласования
           
-  label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
-  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  label_maximum_ajax_upload_filesize: Максимальный размер файла, загружаемого посредством AJAX
+  note_maximum_ajax_upload_filesize: Превышает максимальный размер файла, загружаемого посредством интерфейса AJAX, для загрузки можно использовать стандартную форму Redmine. Размер указан в MB.
