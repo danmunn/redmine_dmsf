@@ -45,12 +45,12 @@ class DmsfConvertDocuments
       prjs = projects.reject {|project| project.module_enabled?('dmsf') }
       diff = (projects - prjs)
       if diff.count > 0
-        puts "Projects skiped due to already enabled module DMSF: #{diff.collect{|p| p.name }.join(' ,')}"
+        puts "Projects skipped due to already enabled module DMSF: #{diff.collect{|p| p.name }.join(' ,')}"
       end
       projects = prjs.reject {|project| !project.module_enabled?('documents') }
       diff = (prjs - projects)
       if diff.count > 0
-        puts "Projects skiped due to not enabled module Documents: #{diff.collect{|p| p.name }.join(' ,')}"
+        puts "Projects skipped due to not enabled module Documents: #{diff.collect{|p| p.name }.join(' ,')}"
       end
       
       projects.each do |project|
