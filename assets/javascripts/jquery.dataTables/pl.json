@@ -1,0 +1,17 @@
+{
+	"sProcessing":   "Przetwarzanie...",
+	"sLengthMenu":   "Pokaż _MENU_",
+	"sZeroRecords":  "Nie znaleziono wpisów pasujących do zapytania",
+	"sInfo":         "Pokaż wszystkie",
+	"sInfoEmpty":    "Brak informacji ",
+	"sInfoFiltered": "(przefiltrowano wszystkie wpisy)",
+	"sInfoPostFix":  "",
+	"sSearch":       "Szukaj/Filtruj:",
+	"sUrl":          "",
+	"oPaginate": {
+		"sFirst":    "Pierwszy",
+		"sPrevious": "Poprzedni",
+		"sNext":     "Następny",
+		"sLast":     "Ostatni"
+	}
+}
