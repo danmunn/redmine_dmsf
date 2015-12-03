@@ -362,7 +362,7 @@ class DmsfFile < ActiveRecord::Base
         if matchset          
           matchset.matches.each { |m|
             docdata = m.document.data{url}
-            dochash = Hash[*docdata.scan(/(url|sample|modtime|type|size)=\/?([^\n\]]+)/).flatten]
+            dochash = Hash[*docdata.scan(/(url|sample|modtime|author|type|size)=\/?([^\n\]]+)/).flatten]
             filename = dochash['url']
             if filename
               dmsf_attrs = filename.scan(/^([^\/]+\/[^_]+)_([\d]+)_(.*)$/)
