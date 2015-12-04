@@ -70,6 +70,7 @@ Redmine::Plugin.register :redmine_dmsf do
         :dmsf_files_copy => [:new, :create, :move], 
         :dmsf_workflows => [:log]}, 
       :read => true
+    permission :email_documents, {}
     permission :folder_manipulation, 
       {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :restore]}
     permission :file_manipulation, 
