@@ -216,9 +216,9 @@ class DmsfFile < ActiveRecord::Base
   def self.allowed_target_projects_on_copy
     projects = []
     if User.current.admin?
-      projects = Project.visible.all
+      projects = Project.visible.has_module('dmsf').all
     elsif User.current.logged?
-      User.current.memberships.each {|m| projects << m.project if m.roles.detect {|r| r.allowed_to?(:file_manipulation)}}
+      User.current.memberships.each {|m| projects << m.project if m.roles.detect {|r| r.allowed_to?(:file_manipulation)} && m.project.module_enabled?('dmsf')}
     end
     projects
   end
