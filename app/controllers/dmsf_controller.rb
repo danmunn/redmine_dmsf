@@ -200,8 +200,7 @@ class DmsfController < ApplicationController
         link = DmsfLink.find_by_id id
         selected_files << link.target_id if link && !selected_files.include?(link.target_id.to_s)
       end
-    end
-
+    end    
     if params[:email_entries].present?
       email_entries(selected_folders, selected_files)
     elsif params[:restore_entries].present?
@@ -225,7 +224,7 @@ class DmsfController < ApplicationController
   rescue FileNotFound
     render_404
   rescue DmsfAccessError
-    render_403
+    render_403    
   end
 
   def tag_changed
@@ -457,8 +456,8 @@ class DmsfController < ApplicationController
         :files => selected_files
       }
       render :action => 'email_entries'
-    rescue Exception => e
-      flash[:error] = e.message
+    rescue Exception
+      raise
     ensure
       zip.close if zip
     end
@@ -482,8 +481,8 @@ class DmsfController < ApplicationController
         :filename => filename_for_content_disposition("#{@project.name}-#{DateTime.now.strftime('%y%m%d%H%M%S')}.zip"),
         :type => 'application/zip',
         :disposition => 'attachment')
-    rescue Exception => e
-      flash[:error] = e.message
+    rescue Exception      
+      raise
     ensure
       zip.close if zip
     end
@@ -503,6 +502,9 @@ class DmsfController < ApplicationController
     if selected_files && selected_files.is_a?(Array)
       selected_files.each do |selected_file_id|
         file = DmsfFile.visible.find_by_id selected_file_id
+        unless (file.project == @project) || User.current.allowed_to?(:view_dmsf_files, file.project)
+          raise DmsfAccessError
+        end
         if file && file.last_revision && File.exists?(file.last_revision.disk_file)
           zip.add_file(file, (file.folder.dmsf_path_str if file.folder)) if file
         else
