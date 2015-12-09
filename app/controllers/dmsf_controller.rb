@@ -30,7 +30,7 @@ class DmsfController < ApplicationController
   before_filter :find_project
   before_filter :authorize
   before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
-  before_filter :find_parent, :only => [:new, :create]
+  before_filter :find_parent, :only => [:new, :create]  
   
   accept_api_auth :show, :create
 
@@ -489,11 +489,12 @@ class DmsfController < ApplicationController
   end
 
   def zip_entries(zip, selected_folders, selected_files)
+    member = Member.where(:user_id => User.current.id, :project_id => @project.id).first
     if selected_folders && selected_folders.is_a?(Array)
       selected_folders.each do |selected_folder_id|
         folder = DmsfFolder.visible.find_by_id selected_folder_id
         if folder
-          zip.add_folder(folder, (folder.folder.dmsf_path_str if folder.folder))
+          zip.add_folder(folder, member, (folder.folder.dmsf_path_str if folder.folder))
         else
           raise FileNotFound
         end
@@ -506,7 +507,7 @@ class DmsfController < ApplicationController
           raise DmsfAccessError
         end
         if file && file.last_revision && File.exists?(file.last_revision.disk_file)
-          zip.add_file(file, (file.folder.dmsf_path_str if file.folder)) if file
+          zip.add_file(file, member, (file.folder.dmsf_path_str if file.folder)) if file
         else
           raise FileNotFound
         end

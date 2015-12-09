@@ -247,5 +247,21 @@ class DmsfFileRevision < ActiveRecord::Base
     parts = self.version.split '.'
     parts.size == 2 ? parts[0].to_i * 1000 + parts[1].to_i : 0
   end
+  
+  def formatted_name(format)
+    return self.name if format.blank?
+    if self.name =~ /(.*)(\..*)$/
+      filename = $1
+      ext = $2
+    else
+      filename = self.name
+    end    
+    format.sub!('%t', filename)
+    format.sub!('%d', self.updated_at.strftime('%Y%m%d%H%M%S'))
+    format.sub!('%v', self.version)
+    format.sub!('%i', self.file.id.to_s)
+    format.sub!('%r', self.id.to_s)
+    format + ext
+  end
 
 end

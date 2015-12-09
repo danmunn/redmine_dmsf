@@ -26,7 +26,7 @@ class DmsfFilesController < ApplicationController
 
   before_filter :find_file, :except => [:delete_revision]
   before_filter :find_revision, :only => [:delete_revision]
-  before_filter :authorize
+  before_filter :authorize  
 
   accept_api_auth :show
 
@@ -52,8 +52,9 @@ class DmsfFilesController < ApplicationController
       access.revision = @revision
       access.action = DmsfFileRevisionAccess::DownloadAction      
       access.save!
-      send_file(@revision.disk_file,
-        :filename => filename_for_content_disposition(@revision.name),
+      member = Member.where(:user_id => User.current.id, :project_id => @file.project.id).first
+      send_file(@revision.disk_file,        
+        :filename => filename_for_content_disposition(@revision.formatted_name(member ? member.title_format : nil)),
         :type => @revision.detect_content_type,
         :disposition => 'inline')
     rescue ActionController::MissingFile      
@@ -82,8 +83,9 @@ class DmsfFilesController < ApplicationController
         access.revision = @revision
         access.action = DmsfFileRevisionAccess::DownloadAction
         access.save!
-        send_file(@revision.disk_file,
-          :filename => filename_for_content_disposition(@revision.name),
+        member = Member.where(:user_id => User.current.id, :project_id => @file.project.id).first
+        send_file(@revision.disk_file,          
+          :filename => filename_for_content_disposition(@revision.formatted_name(member ? member.title_format : nil)),
           :type => @revision.detect_content_type,
           :disposition => 'attachment')
       rescue ActionController::MissingFile     
@@ -319,7 +321,7 @@ class DmsfFilesController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     render_404
   end
-
+  
   def check_project(entry)
     if entry && entry.project != @project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)

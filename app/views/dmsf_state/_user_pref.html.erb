@@ -18,19 +18,28 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
-<p><strong><%=l(:link_user_preferences)%></strong></p>
-<div class="box">
-  <%= form_tag({:controller => 'dmsf_state', :action => 'user_pref_save', :id => @project}, :method => :post) do %>
-    <div>
-      <% member = @project.members.where(:user_id => User.current.id).first %>
-      <% mail_notification = member ? member.dmsf_mail_notification : nil %>
-      <%= l(:label_notifications) %>: 
+<% member = @project.members.where(:user_id => User.current.id).first %>
+<% if member %>
+  <% mail_notification = member.dmsf_mail_notification %>
+  <% title_format = member.title_format %>
+<% end %>
+
+<%= form_tag(dmsf_user_pref_save_path(@project)) do %>
+  <fieldset class="box tabular">
+    <legend><%=  l(:link_user_preferences) %></legend>
+    <p>
+      <%= content_tag(:label, "#{l(:label_notifications)}:") %>      
       <%= select_tag(
-            'email_notify', 
-            options_for_select([[l(:select_option_default), nil], 
-            [l(:select_option_activated), true], [l(:select_option_deactivated), false]], 
-            :selected => mail_notification)) %>
-      <%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
-    </div>
-  <% end %>	       
-</div>
+        'email_notify', 
+        options_for_select([[l(:select_option_default), nil], 
+        [l(:select_option_activated), true], [l(:select_option_deactivated), false]], 
+        :selected => mail_notification)) %>      
+    </p>
+    <p>
+      <%= content_tag(:label, "#{l(:label_title_format)}:") %>
+      <%= text_field_tag 'title_format', title_format, :size => 10 %>
+      <em class="info"><%= l(:text_title_format) %></em>
+    </p>
+  </fieldset>
+  <%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
+<% end %>

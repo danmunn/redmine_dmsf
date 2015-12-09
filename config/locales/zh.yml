@@ -50,6 +50,7 @@ zh:
   notice_file_unlocked: 文件解锁
   notice_file_revision_created: 文件修订版本已创建
   notice_your_preferences_were_saved: 您的偏好设定已保存
+  notice_your_preferences_were_not_saved: Your preferences were not saved
   warning_folder_notifications_already_activated: 文件夹通知已激活
   notice_folder_notifications_activated: 文件夹通知激活
   warning_folder_notifications_already_deactivated: 文件夹通知已注销
@@ -108,6 +109,8 @@ zh:
   select_option_deactivated: 注销
   select_option_activated: 激活
   title_save_preferences: 保存偏好设定
+  label_title_format: Title format
+  text_title_format: "Document title format for download (%t - title, %d - date, %v- version, %i - ID, %r - revision). Example: %t_%v"
   heading_revisions: 修订版本
   title_download: 下载
   title_delete_revision: 删除此修订

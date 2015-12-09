@@ -428,5 +428,13 @@ class DmsfFile < ActiveRecord::Base
     end    
     result
   end
+  
+  def formatted_name(format)
+    if self.last_revision
+      self.last_revision.formatted_name(format)
+    else
+      self.name
+    end
+  end
  
 end

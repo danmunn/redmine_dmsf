@@ -155,7 +155,8 @@
   <%= text_field_tag 'settings[dmsf_stemming_lang]', @settings['dmsf_stemming_lang'], :disabled => xapian_disabled %><br/>
   (<%= l(:label_default)%>: english )<br/>
   <br/>
-  <%= l(:note_possible_values)%>: danish dutch english finnish french german german2 hungarian italian kraaij_pohlmann lovins norwegian porter portuguese romanian russian spanish swedish turkish (<%= l(:note_pass_none_to_disable_stemming) %>)</p>
+  <%= l(:note_possible_values)%>: danish dutch english finnish french german german2 hungarian italian kraaij_pohlmann lovins norwegian porter portuguese romanian russian spanish swedish turkish (<%= l(:note_pass_none_to_disable_stemming) %>)
+</p>
 
 <p>
   <%= content_tag(:label, l(:label_stem_strategy) + ":")%>
