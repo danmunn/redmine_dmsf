@@ -171,13 +171,14 @@ Setup / Upgrade
 Before installing ensure that the Redmine instance is stopped.
 
 1. In case of upgrade BACKUP YOUR DATABASE first
-2. Put redmine_dmsf plugin directory into plugins
-3. Initialize/Update database: `bundle exec rake redmine:plugins:migrate RAILS_ENV="production"`
-4. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`
-5. Restart web server
-6. You should configure plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure
-7. Assign DMSF permissions to appropriate roles
-8. There are two rake tasks:
+2. Put redmine_dmsf plugin directory into plugins.
+3. Install dependencies: `bundle install`.
+4. Initialize/Update database: `bundle exec rake redmine:plugins:migrate RAILS_ENV="production"`.
+5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
+6. Restart the web server.
+7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure.
+8. Assign DMSF permissions to appropriate roles.
+9. There are two rake tasks:
 
     a) To convert documents from the standard Redmine document module
 
