@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
 <p>
-  <%= content_tag(:label, "#{l(:label_maximum_files_upload)}:") %>
+  <%= content_tag(:label, l(:label_maximum_files_upload)) %>
   <%= text_field_tag 'settings[dmsf_max_file_upload]', @settings['dmsf_max_file_upload'], :size => 10 %>
   <em class="info">
     <%= l(:note_maximum_number_of_files_uploaded) %> <%= l(:label_default) %>: 0    
@@ -27,7 +27,7 @@
 </p>
 
 <p>
-  <%= content_tag(:label, "#{l(:label_maximum_files_download)}:") %>
+  <%= content_tag(:label, l(:label_maximum_files_download)) %>
   <%= text_field_tag 'settings[dmsf_max_file_download]', @settings['dmsf_max_file_download'], :size => 10 %>
   <em class="info">
     <%= l(:note_maximum_number_of_files_downloaded) %> <%= l(:label_default) %>: 0
@@ -35,7 +35,7 @@
 </p>
 
 <p>
-  <%= content_tag(:label, "#{l(:label_maximum_email_filesize)}:") %>
+  <%= content_tag(:label, l(:label_maximum_email_filesize)) %>
   <%= text_field_tag 'settings[dmsf_max_email_filesize]', @settings['dmsf_max_email_filesize'], :size => 10 %>
   <em class="info">
     <%= l(:note_maximum_email_filesize) %> <%= l(:label_default) %>: 0  
@@ -43,7 +43,7 @@
 </p>
 
 <p>
-  <%= content_tag(:label, "#{l(:label_maximum_ajax_upload_filesize)}:") %>  
+  <%= content_tag(:label, l(:label_maximum_ajax_upload_filesize)) %>  
   <%= text_field_tag 'settings[dmsf_max_ajax_upload_filesize]', @settings['dmsf_max_ajax_upload_filesize'], :size => 10 %>
   <em class="info">
     <%= l(:note_maximum_ajax_upload_filesize) %> <%= l(:label_default) %>: 100
@@ -51,7 +51,7 @@
 </p>
 
 <p>
-  <%=  content_tag(:label, "#{l(:label_file_storage_directory)}:") %>
+  <%=  content_tag(:label, l(:label_file_storage_directory)) %>
   <% 
     storage_dir = @settings['dmsf_storage_directory'].strip
     storage_dir = "#{Rails.root}/files/dmsf" if storage_dir.blank?
@@ -81,7 +81,7 @@
 <% end %>
 
 <p>
-  <%= content_tag(:label, "#{l(:label_physical_file_delete)}:") %>
+  <%= content_tag(:label, l(:label_physical_file_delete)) %>
   <%= check_box_tag('settings[dmsf_really_delete_files]', true, @settings['dmsf_really_delete_files']) %>
   <em class="info">
     <%= l(:label_default)%>: <%= l(:general_text_No)%>
@@ -89,7 +89,7 @@
 </p>
 
 <p>
-  <%= content_tag(:label, "#{l(:label_default_notifications)}:") %>
+  <%= content_tag(:label, l(:label_default_notifications)) %>
   <%= select_tag('settings[dmsf_default_notifications]', 
     options_for_select([
                     [l(:select_option_deactivated), nil], 
@@ -101,7 +101,7 @@
 </p>
 
 <p>
-  <%= content_tag(:label, "#{l(:label_display_notified_recipients)}:") %>
+  <%= content_tag(:label, l(:label_display_notified_recipients)) %>
   <%= select_tag('settings[dmsf_display_notified_recipients]',
     options_for_select([
       [l(:select_option_deactivated), nil],
@@ -115,7 +115,7 @@
 <hr/>
 
 <p>
-  <%= content_tag(:label, "#{l(:label_webdav)}:") %>
+  <%= content_tag(:label, l(:label_webdav)) %>
   <%= select_tag('settings[dmsf_webdav]',
     options_for_select([
       [l(:select_option_deactivated), nil],
@@ -128,7 +128,7 @@
 
 <% if @settings['dmsf_webdav'].nil? || !@settings['dmsf_webdav'].empty? %>
   <p>
-    <%= content_tag(:label, "#{l(:label_webdav_strategy)}:") %>
+    <%= content_tag(:label, l(:label_webdav_strategy)) %>
     <%= select_tag('settings[dmsf_webdav_strategy]',
       options_for_select([
         [l(:select_option_webdav_readonly), 'WEBDAV_READ_ONLY'],
@@ -151,23 +151,25 @@
 <% end %>
 
 <p>
-  <%= content_tag(:label, "#{l(:label_index_database)}:") %>
+  <%= content_tag(:label, l(:label_index_database)) %>
   <%= text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], :disabled => xapian_disabled, :size => 50 %>
   <em class="info">
     <%= l(:label_default) %>: <%= "#{Rails.root}/files/dmsf_index" %>
   </em>
 </p>
 
-<p>
-  <%= content_tag(:label, "#{l(:label_stemming_language)}:") %>
-  <%= text_field_tag 'settings[dmsf_stemming_lang]', @settings['dmsf_stemming_lang'], :disabled => xapian_disabled %><br/>    
+<% stem_langs = %w(danish dutch english finnish french german hungarian italian norwegian portuguese romanian russian spanish swedish turkish) %>
+
+<p>  
+  <%= content_tag(:label, l(:label_stemming_language)) %>
+  <%= select_tag('settings[dmsf_stemming_lang]', options_for_select(stem_langs, @settings['dmsf_stemming_lang']))%>
   <em class="info">
-    <%= l(:note_possible_values)%>: danish dutch english finnish french german german2 hungarian italian kraaij_pohlmann lovins norwegian porter portuguese romanian russian spanish swedish turkish (<%= l(:note_pass_none_to_disable_stemming) %>)
+    <%= l(:note_possible_values) %>: <%= stem_langs.join(', ') %>. <%= "#{l(:label_default)}: #{stem_langs[2]}" %>
   </em>
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_stem_strategy) + ':')%>
+  <%= content_tag(:label, l(:label_stem_strategy)) %>
   <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_NONE', @settings['dmsf_stemming_strategy'] == 'STEM_NONE', :disabled => xapian_disabled, :checked => true  %> <%= l(:option_stem_none) %><br/>
   <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_SOME', @settings['dmsf_stemming_strategy'] == 'STEM_SOME', :disabled => xapian_disabled  %> <%= l(:option_stem_some) %><br/>
   <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_ALL', @settings['dmsf_stemming_strategy'] == 'STEM_ALL', :disabled => xapian_disabled  %> <%= l(:option_stem_all) %><br/>
