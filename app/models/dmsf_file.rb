@@ -292,7 +292,7 @@ class DmsfFile < ActiveRecord::Base
     project_ids = projects.collect(&:id) if projects           
     
     if options[:offset]      
-       limit_options = ["(dmsf_files.updated_at #{options[:before] ? '<' : '>'} ?", options[:offset]]
+       limit_options = ["dmsf_files.updated_at #{options[:before] ? '<' : '>'} ?", options[:offset]]
     end
     
     if options[:titles_only]
