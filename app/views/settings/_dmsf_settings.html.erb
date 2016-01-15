@@ -53,7 +53,7 @@
 <p>
   <%=  content_tag(:label, "#{l(:label_file_storage_directory)}:") %>
   <% 
-    storage_dir = @settings['dmsf_storage_directory'].strip
+    storage_dir = @settings['dmsf_storage_directory'].strip if @settings['dmsf_storage_directory'].present?
     storage_dir = "#{Rails.root}/files/dmsf" if storage_dir.blank?
   %>
   <%= text_field_tag 'settings[dmsf_storage_directory]', storage_dir, :size => 50 %>
