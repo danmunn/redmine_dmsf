@@ -53,6 +53,9 @@ Redmine::Plugin.register :redmine_dmsf do
   Redmine::Activity.register :dmsf_file_revision_accesses, :default => false
   Redmine::Activity.register :dmsf_file_revisions
   
+  # Uncomment to remove the original Documents from searching (replaced with DMSF)
+  # Redmine::Search.available_search_types.delete('documents')
+  
   project_module :dmsf do
     permission :view_dmsf_file_revision_accesses, 
       :read => true

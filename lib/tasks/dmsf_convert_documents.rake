@@ -39,7 +39,7 @@ class DmsfConvertDocuments
     dry = options[:dry] ? options[:dry] == 'true' : false
     replace = options[:invalid] ? options[:invalid] == 'replace' : false
     
-    projects = options[:project] ? [Project.find(options[:project])] : Project.find(:all)
+    projects = options[:project] ? [Project.find(options[:project])] : Project.active.to_a
     
     if projects
       prjs = projects.reject {|project| project.module_enabled?('dmsf') }
