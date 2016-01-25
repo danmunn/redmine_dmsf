@@ -80,7 +80,7 @@ On Debian use:
 ```
 apt-get install libxapian-ruby1.9.1 xapian-omega libxapian-dev xpdf \
   xpdf-utils antiword unzip catdoc libwpd-0.9-9 libwps-0.2-2 gzip unrtf \
-  catdvi djview djview3 uuid uuid-dev
+  catdvi djview djview3 uuid uuid-dev xz-utils
 ```
 
 On Ubuntu use:
@@ -88,14 +88,14 @@ On Ubuntu use:
 ```
 sudo apt-get install libxapian-ruby1.9.1 xapian-omega libxapian-dev xpdf \
   antiword unzip catdoc libwpd-0.9-9 libwps-0.2-2 gzip unrtf catdvi djview \
-  djview3 uuid uuid-dev
+  djview3 uuid uuid-dev xz-utils
 ```
 
 On CentOS user:
 ```
 sudo yum install libxapian-ruby1.9.1 xapian-omega libxapian-dev xpdf \
   antiword unzip catdoc libwpd-0.9-9 libwps-0.2-2 gzip unrtf catdvi djview \
-  djview3 uuid uuid-dev
+  djview3 uuid uuid-dev xz
 ```
 
 Usage
