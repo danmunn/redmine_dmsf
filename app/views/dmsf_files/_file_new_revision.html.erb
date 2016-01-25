@@ -52,7 +52,7 @@
       </div>
       <div class="splitcontentleft">
         <p>
-          <%= label_tag('fileMinorVersionRadio', "#{l(:label_version)}:") %>
+          <%= label_tag('version_0', "#{l(:label_version)}:") %>
 	</p>
       <div class="data clear">
 	<%= radio_button_tag('version', 0, 
@@ -79,7 +79,7 @@
          </p>
          <span class="add_attachment">           
            <%= file_field_tag 'file_upload',
-                :id => nil,
+                :id => 'file_upload',
                 :class => 'file_selector',
                 :multiple => false,
                 :onchange => "$('#dmsf_file_revision_name').val(this.files[0].name)",

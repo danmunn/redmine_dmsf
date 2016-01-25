@@ -40,7 +40,7 @@ pl:
   error_folder_title_must_be_entered: Musisz podać tytuł
   notice_folder_deleted: Folder został usunięty
   error_folder_is_not_empty: Folder zawiera pliki
-  error_folder_title_is_already_used: Podany tytuł jest już w użyciu
+  error_folder_title_is_already_used: Podany tytuł jest już w użyciu  
   notice_folder_details_were_saved: Szczegóły folderu zostały zapisane
   error_folder_is_locked: Folder jest zablokowany
   error_file_is_locked: Plik jest zablokowany
@@ -51,6 +51,7 @@ pl:
   notice_file_unlocked: Plik odblokowany
   notice_file_revision_created: Utworzono wersję pliku
   notice_your_preferences_were_saved: Twoje preferencje zostały zapisane
+  notice_your_preferences_were_not_saved: Your preferences were not saved
   warning_folder_notifications_already_activated: Powiadomienia dla folderu zostały już aktywowane
   notice_folder_notifications_activated: Aktywowano powiadomienia dla folderu
   warning_folder_notifications_already_deactivated: Powiadomienia dla folderu zostały już wyłączone
@@ -107,6 +108,8 @@ pl:
   label_notifications: Powiadomienia
   select_option_default: Domyślny
   select_option_deactivated: Wyłączono
+  label_title_format: Title format
+  text_title_format: "Document title format for download (%t - title, %d - date, %v- version, %i - ID, %r - revision). Example: %t_%v"
   select_option_activated: Aktywowano
   title_save_preferences: Zapisz ustawienia
   heading_revisions: Wersje

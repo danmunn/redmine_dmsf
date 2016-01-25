@@ -98,7 +98,7 @@ class DmsfFile < ActiveRecord::Base
 
   def self.storage_path
     unless @@storage_path.present?
-      @@storage_path = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].strip
+      @@storage_path = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].strip if Setting.plugin_redmine_dmsf['dmsf_storage_directory'].present?
       @@storage_path = Pathname(Redmine::Configuration['attachments_storage_path']).join('dmsf') if @@storage_path.blank? && Redmine::Configuration['attachments_storage_path'].present?
       @@storage_path = Rails.root.join('files/dmsf').to_s if @@storage_path.blank?
       Dir.mkdir(@@storage_path) unless File.exists?(@@storage_path)
@@ -216,9 +216,9 @@ class DmsfFile < ActiveRecord::Base
   def self.allowed_target_projects_on_copy
     projects = []
     if User.current.admin?
-      projects = Project.visible.all
+      projects = Project.visible.has_module('dmsf').all
     elsif User.current.logged?
-      User.current.memberships.each {|m| projects << m.project if m.roles.detect {|r| r.allowed_to?(:file_manipulation)}}
+      User.current.memberships.each {|m| projects << m.project if m.roles.detect {|r| r.allowed_to?(:file_manipulation)} && m.project.module_enabled?('dmsf')}
     end
     projects
   end
@@ -362,7 +362,7 @@ class DmsfFile < ActiveRecord::Base
         if matchset          
           matchset.matches.each { |m|
             docdata = m.document.data{url}
-            dochash = Hash[*docdata.scan(/(url|sample|modtime|type|size)=\/?([^\n\]]+)/).flatten]
+            dochash = Hash[*docdata.scan(/(url|sample|modtime|author|type|size)=\/?([^\n\]]+)/).flatten]
             filename = dochash['url']
             if filename
               dmsf_attrs = filename.scan(/^([^\/]+\/[^_]+)_([\d]+)_(.*)$/)
@@ -405,6 +405,36 @@ class DmsfFile < ActiveRecord::Base
   
   def image?
     self.last_revision && !!(self.last_revision.disk_filename =~ /\.(bmp|gif|jpg|jpe|jpeg|png)$/i)
+  end
+  
+  def preview(limit)
+    result = 'No preview available'
+    if (self.last_revision.disk_filename =~ /\.(txt|ini|diff|c|cpp|php|csv|rb|h|erb|html|css)$/i)
+      begin
+        f = File.new(self.last_revision.disk_file)
+        f.each_line do |line| 
+          case f.lineno
+            when 1
+              result = line
+            when limit.to_i + 1
+              break
+            else
+              result << line              
+          end          
+        end
+      rescue Exception => e
+        result = e.message
+      end
+    end    
+    result
+  end
+  
+  def formatted_name(format)
+    if self.last_revision
+      self.last_revision.formatted_name(format)
+    else
+      self.name
+    end
   end
  
 end

@@ -1,9 +1,7 @@
 # encoding: utf-8
-# 
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -20,18 +18,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-source 'https://rubygems.org'
+class LargeFiles < ActiveRecord::Migration
+  def up    
+    change_column :dmsf_file_revisions, :size, :bigint, :null => true
+  end
 
-gem 'rubyzip', '>= 1.0.0'
-gem 'zip-zip' # Just to avoid 'cannot load such file -- zip/zip' error
-gem 'simple_enum'
-gem 'uuidtools', '~> 2.1.1'
-gem 'dav4rack',  '~> 0.3.0'
-
-group :production do
-  gem 'nokogiri', '>= 1.5.10'
-end
-
-group :xapian do  
-  gem 'xapian-full-alaveteli', :require => false
+  def down
+    change_column :dmsf_file_revisions, :size, :int, :null => true
+  end
 end

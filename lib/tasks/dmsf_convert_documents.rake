@@ -39,15 +39,23 @@ class DmsfConvertDocuments
     dry = options[:dry] ? options[:dry] == 'true' : false
     replace = options[:invalid] ? options[:invalid] == 'replace' : false
     
-    projects = options[:project] ? [Project.find(options[:project])] : Project.find(:all)
+    projects = options[:project] ? [Project.find(options[:project])] : Project.active.to_a
     
-    projects.reject! {|project| project.module_enabled?('dmsf') }
-    projects.reject! {|project| !project.module_enabled?('documents') }
-    
-    unless projects.nil? || projects.empty?
+    if projects
+      prjs = projects.reject {|project| project.module_enabled?('dmsf') }
+      diff = (projects - prjs)
+      if diff.count > 0
+        puts "Projects skipped due to already enabled module DMSF: #{diff.collect{|p| p.name }.join(' ,')}"
+      end
+      projects = prjs.reject {|project| !project.module_enabled?('documents') }
+      diff = (prjs - projects)
+      if diff.count > 0
+        puts "Projects skipped due to not enabled module Documents: #{diff.collect{|p| p.name }.join(' ,')}"
+      end
+      
       projects.each do |project|
-        puts "Processing project: #{project.identifier}"
-        
+        puts "Processing project: #{project}"
+
         project.enabled_module_names = (project.enabled_module_names << 'dmsf').uniq unless dry
         project.save! unless dry
 
@@ -55,22 +63,22 @@ class DmsfConvertDocuments
         folders = []
         project.documents.each do |document|
           puts "Processing document: #{document.title}"
-          
+
           folder = DmsfFolder.new
-          
-          folder.project = project
-          folder.user = (a = document.attachments.find(:first, :order => 'created_on ASC')) ? a.author : User.find(:first)
-          
+
+          folder.project = project          
+          folder.user = document.attachments.reorder("#{Attachment.table_name}.created_on ASC").first.try(:author)
+
           folder.title = document.title
           folder.title.gsub!(/[\/\\\?":<>]/, '-') if replace
-          
+
           i = 1
           suffix = ''
           while folders.index{|f| f.title == (folder.title + suffix)}
             i+=1
             suffix = "_#{i}"
           end
-          
+
           folder.title = folder.title + suffix
           folder.description = document.description
 
@@ -90,44 +98,44 @@ class DmsfConvertDocuments
               next
             end
           end
-          
+
           folders << folder;
-          
+
           files = []          
           document.attachments.each do |attachment|
             begin
               file = DmsfFile.new
               file.project = project
               file.folder = folder
-              
+
               file.name = attachment.filename
               i = 1
-              suffix = ""
+              suffix = ''
               while files.index{|f| f.name == (DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name))}
                 i+=1
                 suffix = "_#{i}"
               end
-              
+
               # Need to save file first to generate id for it in case of creation. 
               # File id is needed to properly generate revision disk filename
               file.name = DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name)
-              
+
               unless File.exist?(attachment.diskfile)
                 puts "Creating file: #{attachment.filename} failed, attachment file #{attachment.diskfile} doesn't exist"
                 fail = true
                 next
               end
-              
+
               if dry
                 file.id = attachment.id # Just to have an ID there
                 puts "Dry check file: #{file.name}"
                 if file.invalid?
-                  file.errors.each {|e,msg| puts "#{e}: #{msg}"}
+                  file.errors.each {|e, msg| puts "#{e}: #{msg}"}
                 end
               else
                 file.save!
               end
-              
+
               revision = DmsfFileRevision.new
               revision.file = file
               revision.name = file.name              
@@ -140,27 +148,27 @@ class DmsfConvertDocuments
               revision.minor_version = 1
               revision.comment = 'Converted from documents'
               revision.mime_type = attachment.content_type
-              
+
               revision.disk_filename = revision.new_storage_filename              
-              
+
               unless dry
                 FileUtils.cp(attachment.diskfile, revision.disk_file)                
                 revision.size = File.size(revision.disk_file)
               end              
-              
+
               if dry
                 puts "Dry check revision: #{revision.title}"
                 if revision.invalid?
-                  revision.errors.each {|e,msg| puts "#{e}: #{msg}"}
+                  revision.errors.each {|e, msg| puts "#{e}: #{msg}"}
                 end
               else
                 revision.save!
               end
-  
+
               files << file
 
               attachment.destroy unless dry
-              
+
               puts "Created file: #{file.name}" unless dry
             rescue Exception => e
               puts "Creating file: #{attachment.filename} failed"
@@ -168,13 +176,13 @@ class DmsfConvertDocuments
               fail = true
             end
           end
-          
+
           document.destroy unless dry || fail
-          
+
         end
         project.enabled_module_names = project.enabled_module_names.reject {|mod| mod == 'documents'} unless dry || fail
         project.save! unless dry
-      end
+      end      
     end
     
   end

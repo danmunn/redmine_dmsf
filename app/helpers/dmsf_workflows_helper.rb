@@ -55,6 +55,7 @@ module DmsfWorkflowsHelper
   
   def dmsf_workflows_for_select(project, dmsf_workflow_id)
     options = Array.new        
+    options << ['', -1]
     DmsfWorkflow.sorted.where(['project_id = ? OR project_id IS NULL', project.id]).each do |wf|
       if wf.project_id
         options << [wf.name, wf.id]

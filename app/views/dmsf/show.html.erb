@@ -234,12 +234,9 @@
   });  
 </script>
 
-<%
-  if I18n.locale && !I18n.locale.to_s.match(/^en.*/)
-    sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" 
-  else
-    sUrl = 'jquery.dataTables/en.json'
-  end    
+<%  
+  sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json"
+  sUrl = 'jquery.dataTables/en.json' unless File.exist?(sUrl)
 %>
 
 <% content_for :header_tags do %>      

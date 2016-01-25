@@ -40,8 +40,8 @@ de:
   notice_folder_deleted: Ordner gelöscht
   error_folder_is_not_empty: Ordner ist nicht leer
   error_folder_title_is_already_used: Titel wird schon benutzt. Denk dir was Neues aus.
-  notice_folder_details_were_saved: Ordnerdetails wurden gespeichert
-  error_folder_is_locked: Order ist gesperrt
+  notice_folder_details_were_saved: Ordnerdetails wurden gespeichert  
+  error_folder_is_locked: Ordner ist gesperrt
   error_file_is_locked: Datei ist gesperrt
   notice_file_deleted: Datei gelöscht
   error_at_least_one_revision_must_be_present: Es muss mindestens eine Version existieren
@@ -50,6 +50,7 @@ de:
   notice_file_unlocked: Dateisperre gelöst
   notice_file_revision_created: Dateiversion erstellt
   notice_your_preferences_were_saved: Deine Einstellungen wurden gespeichert
+  notice_your_preferences_were_not_saved: Your preferences were not saved
   warning_folder_notifications_already_activated: Ordnerbenachrichtigungen sind schon aktiviert
   notice_folder_notifications_activated: Ordnerbenachrichtigungen aktiviert
   warning_folder_notifications_already_deactivated: Ordnerbenachrichtigungen sind schon deaktiviert
@@ -107,6 +108,8 @@ de:
   select_option_default: Voreinstellung
   select_option_deactivated: Aus
   select_option_activated: Ein
+  label_title_format: Title format
+  text_title_format: "Document title format for download (%t - title, %d - date, %v- version, %i - ID, %r - revision). Example: %t_%v"
   title_save_preferences: Einstellungen speichern
   heading_revisions: Versionen
   title_download: Download
@@ -168,7 +171,7 @@ de:
   title_delete_checked: Löschen ausgewählt
   title_items: items
   title_filename_for_download: Dateiname beim Herunterladen oder in ZIP-Archiv verwenden
-  label_number_of_folders: Order
+  label_number_of_folders: Ordner
   label_number_of_documents: Dokumente  
   error_file_storage_directory_does_not_exist: Der Dateiablageordner existiert nicht auf dem Server und kann nicht erstellt werden.
   error_file_can_not_be_created: Datei kann nicht in dem gewählten Ordner erstellt werden.

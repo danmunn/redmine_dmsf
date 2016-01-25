@@ -49,7 +49,7 @@ RedmineApp::Application.routes.draw do
   # dmsf_state controller
   #   /projects/<project>/dmsf/state
   ##
-  post '/projects/:id/dmsf/state', :controller => 'dmsf_state', :action => 'user_pref_save'
+  post '/projects/:id/dmsf/state', :controller => 'dmsf_state', :action => 'user_pref_save', :as => 'dmsf_user_pref_save'
 
   #
   #  dmsf_upload controller

@@ -1,6 +1,27 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.5.6 *2015-01-25*
+------------------
+
+    Uploading of large files (>2GB) 
+
+* Bug: #494 - Unable to upload files with ruby > ruby-2.0.0-p598
+* Bug: #491 - Still using original uploaded filename after filename renamed (PDF file)
+* Bug: #488 - Available projects for 'link to' operation
+* Bug: #487 - Not able to view the url link file, but able to Download
+* Bug: #480 - Big files ( > 500mb) uploading problems
+* Bug: #471 - Converting Documents to DMSF is not working
+* Bug: #470 - sort function
+* Bug: #469 - dmsfd doesn't reuse Wiki syntax in Wiki page
+* New: #468 - Display contents of text file in Wiki page
+* Bug: #465 - Install using debian 8 (jessie)
+* Bug: #459 - WebDav Windows
+* Bug: #458 - Cannot upload big files
+* New  #44  - Append File Revision on filename when downloading file
+
+    Maintenance release II.
+
 1.5.5 *2015-10-19*
 ------------------
 

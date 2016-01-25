@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -39,7 +39,8 @@ class DmsfUploadController < ApplicationController
     if uploaded_files && uploaded_files.is_a?(Hash)
       # standard file input uploads
       uploaded_files.each_value do |uploaded_file|        
-        @uploads.push(DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file))
+        upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
+        @uploads.push(upload) if upload
       end
     else
       # plupload multi upload completed
@@ -94,6 +95,7 @@ class DmsfUploadController < ApplicationController
     @attachment = Attachment.new(:file => request.raw_post)
     @attachment.author = User.current
     @attachment.filename = params[:filename].presence || Redmine::Utils.random_hex(16)
+    @attachment.content_type = params[:content_type].presence
     saved = @attachment.save
 
     respond_to do |format|

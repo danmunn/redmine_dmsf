@@ -24,7 +24,7 @@
 <% locked = subfolder && subfolder.locked? %>    
 
 <td class="check"><%= check_box_tag(name, id, false, 
-  :title => l(:title_check_for_zip_download_or_email)) %></td>
+  :title => l(:title_check_for_zip_download_or_email), :id => "subfolder_#{id}") %></td>
 <td class="title">                
   <%= link_to(h(title),          
     dmsf_folder_path(:id => project, :folder_id => subfolder),

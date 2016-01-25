@@ -188,7 +188,7 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.file_list(files)
     options = Array.new
-    options.push ['', nil]
+    options.push ['', nil, :label => 'none']
     files.each do |f|
       options.push [f.title, f.id]
     end

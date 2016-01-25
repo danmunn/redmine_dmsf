@@ -37,7 +37,7 @@
   <div class="box dmsf_detail">
     <% if @type == 'link_from' %>
       <p>
-        <%= radio_button_tag(:external_link, 'false', @link_external == false) %> <%= l(:label_internal) %></br>
+        <%= radio_button_tag(:external_link, 'false', @link_external == false) %> <%= l(:label_internal) %><br/>
         <%= radio_button_tag(:external_link, 'true', @link_external) %>  <%= l(:label_external) %>
       </p>
     <% end %>    
@@ -82,7 +82,7 @@
       </div>      
       <%= label_tag('dmsf_link[name]', l(:label_link_name), :class => 'required') %>      
       <%= text_field_tag 'dmsf_link[name]', @dmsf_link.name, :size => 40, :maxlength => 255 %>
-    </p>
+    <!--</p>-->
   </div>
   <%= f.submit l(:button_create) %>
 <% end %>

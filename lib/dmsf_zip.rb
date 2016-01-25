@@ -39,10 +39,10 @@ class DmsfZip
     @zip.close if @zip
   end
 
-  def add_file(file, root_path = nil)
+  def add_file(file, member, root_path = nil)
     string_path = file.folder.nil? ? '' : "#{file.folder.dmsf_path_str}/"
-    string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
-    string_path += file.name   
+    string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path    
+    string_path += file.formatted_name(member ? member.title_format : nil)
     @zip_file.put_next_entry(string_path)
     File.open(file.last_revision.disk_file, 'rb') do |f|      
       while (buffer = f.read(8192))
@@ -52,12 +52,12 @@ class DmsfZip
     @files << file
   end
 
-  def add_folder(folder, root_path = nil)
+  def add_folder(folder, member, root_path = nil)
     string_path = "#{folder.dmsf_path_str}/"
     string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path    
     @zip_file.put_next_entry(string_path)
     folder.subfolders.visible.each { |subfolder| self.add_folder(subfolder, root_path) }
-    folder.files.visible.each { |file| self.add_file(file, root_path) }
+    folder.files.visible.each { |file| self.add_file(file, member, root_path) }
   end
 
 end

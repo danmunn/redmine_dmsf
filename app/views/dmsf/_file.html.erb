@@ -25,7 +25,7 @@
 <% wf = DmsfWorkflow.find_by_id(file.last_revision.dmsf_workflow_id) %>
 
 <td class="check"><%= check_box_tag(name, id, false, 
-  :title => l(:title_check_for_zip_download_or_email)) %></td>
+  :title => l(:title_check_for_zip_download_or_email), :id => "file_#{id}") %></td>
 <td class="title">
   <% file_view_url = url_for({:controller => :dmsf_files, :action => 'view', :id => file}) %>
   <%= link_to(h(title),

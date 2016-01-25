@@ -30,7 +30,7 @@ class DmsfController < ApplicationController
   before_filter :find_project
   before_filter :authorize
   before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
-  before_filter :find_parent, :only => [:new, :create]
+  before_filter :find_parent, :only => [:new, :create]  
   
   accept_api_auth :show, :create
 
@@ -200,8 +200,7 @@ class DmsfController < ApplicationController
         link = DmsfLink.find_by_id id
         selected_files << link.target_id if link && !selected_files.include?(link.target_id.to_s)
       end
-    end
-
+    end    
     if params[:email_entries].present?
       email_entries(selected_folders, selected_files)
     elsif params[:restore_entries].present?
@@ -225,7 +224,7 @@ class DmsfController < ApplicationController
   rescue FileNotFound
     render_404
   rescue DmsfAccessError
-    render_403
+    render_403    
   end
 
   def tag_changed
@@ -457,8 +456,8 @@ class DmsfController < ApplicationController
         :files => selected_files
       }
       render :action => 'email_entries'
-    rescue Exception => e
-      flash[:error] = e.message
+    rescue Exception
+      raise
     ensure
       zip.close if zip
     end
@@ -482,19 +481,20 @@ class DmsfController < ApplicationController
         :filename => filename_for_content_disposition("#{@project.name}-#{DateTime.now.strftime('%y%m%d%H%M%S')}.zip"),
         :type => 'application/zip',
         :disposition => 'attachment')
-    rescue Exception => e
-      flash[:error] = e.message
+    rescue Exception      
+      raise
     ensure
       zip.close if zip
     end
   end
 
   def zip_entries(zip, selected_folders, selected_files)
+    member = Member.where(:user_id => User.current.id, :project_id => @project.id).first
     if selected_folders && selected_folders.is_a?(Array)
       selected_folders.each do |selected_folder_id|
         folder = DmsfFolder.visible.find_by_id selected_folder_id
         if folder
-          zip.add_folder(folder, (folder.folder.dmsf_path_str if folder.folder))
+          zip.add_folder(folder, member, (folder.folder.dmsf_path_str if folder.folder))
         else
           raise FileNotFound
         end
@@ -503,8 +503,11 @@ class DmsfController < ApplicationController
     if selected_files && selected_files.is_a?(Array)
       selected_files.each do |selected_file_id|
         file = DmsfFile.visible.find_by_id selected_file_id
+        unless (file.project == @project) || User.current.allowed_to?(:view_dmsf_files, file.project)
+          raise DmsfAccessError
+        end
         if file && file.last_revision && File.exists?(file.last_revision.disk_file)
-          zip.add_file(file, (file.folder.dmsf_path_str if file.folder)) if file
+          zip.add_file(file, member, (file.folder.dmsf_path_str if file.folder)) if file
         else
           raise FileNotFound
         end

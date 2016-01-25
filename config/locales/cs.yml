@@ -50,6 +50,7 @@ cs:
   notice_file_unlocked: Soubor byl odemčen
   notice_file_revision_created: vytvořena nová revize
   notice_your_preferences_were_saved: Vaše nastavení bylo uloženo
+  notice_your_preferences_were_not_saved: Your preferences were not saved
   warning_folder_notifications_already_activated: Notifikace složky již byly aktivovány
   notice_folder_notifications_activated: Notifikace složky byly aktivovány
   warning_folder_notifications_already_deactivated: Notifikace složky již byly deaktivovány
@@ -107,6 +108,8 @@ cs:
   select_option_default: Výchozí
   select_option_deactivated: Deaktivováno
   select_option_activated: Aktivováno
+  label_title_format: Formát názvu
+  text_title_format: "Formát názvu souboru pro stažení (%t - název, %d - datum, %v- verze, %i - ID, %r - revize). Např.: %t_%v"
   title_save_preferences: Uložit nastavení
   heading_revisions: Revize
   title_download: Stáhnout

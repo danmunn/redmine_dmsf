@@ -26,7 +26,7 @@ class DmsfFilesController < ApplicationController
 
   before_filter :find_file, :except => [:delete_revision]
   before_filter :find_revision, :only => [:delete_revision]
-  before_filter :authorize
+  before_filter :authorize  
 
   accept_api_auth :show
 
@@ -34,17 +34,14 @@ class DmsfFilesController < ApplicationController
   helper :dmsf_workflows
 
   def view
-    if params[:download].blank?
-      @revision = @file.last_revision
-    else
-      @revision = DmsfFileRevision.find(params[:download].to_i)
-      if @revision.file != @file
-        render_403
-        return
-      end
-    end
-    check_project(@revision.file)
     begin
+      if params[:download].blank?
+        @revision = @file.last_revision
+      else
+        @revision = DmsfFileRevision.find(params[:download].to_i)
+        raise DmsfAccessError if @revision.file != @file
+      end
+      check_project(@revision.file)    
       raise ActionController::MissingFile if @file.deleted
       log_activity('downloaded')      
       access = DmsfFileRevisionAccess.new
@@ -52,11 +49,16 @@ class DmsfFilesController < ApplicationController
       access.revision = @revision
       access.action = DmsfFileRevisionAccess::DownloadAction      
       access.save!
-      send_file(@revision.disk_file,
-        :filename => filename_for_content_disposition(@revision.name),
+      member = Member.where(:user_id => User.current.id, :project_id => @file.project.id).first
+      send_file(@revision.disk_file,        
+        :filename => filename_for_content_disposition(@revision.formatted_name(member ? member.title_format : nil)),
         :type => @revision.detect_content_type,
-        :disposition => 'inline')
-    rescue ActionController::MissingFile      
+        :disposition => 'inline')    
+    rescue DmsfAccessError => e
+      Rails.logger.error e.message
+      render_403
+    rescue Exception => e
+      Rails.logger.error e.message
       render_404
     end
   end
@@ -64,17 +66,14 @@ class DmsfFilesController < ApplicationController
   def show
     # The download is put here to provide more clear and usable links
     if params.has_key?(:download)
-      if params[:download].blank?
-        @revision = @file.last_revision
-      else
-        @revision = DmsfFileRevision.find(params[:download].to_i)
-        if @revision.file != @file
-          render_403
-          return
-        end
-      end
-      check_project(@revision.file)
       begin
+        if params[:download].blank?
+          @revision = @file.last_revision
+        else
+          @revision = DmsfFileRevision.find(params[:download].to_i)
+          raise DmsfAccessError if @revision.file != @file
+        end
+        check_project(@revision.file)      
         raise ActionController::MissingFile if @revision.file.deleted
         log_activity('downloaded')        
         access = DmsfFileRevisionAccess.new
@@ -82,11 +81,16 @@ class DmsfFilesController < ApplicationController
         access.revision = @revision
         access.action = DmsfFileRevisionAccess::DownloadAction
         access.save!
-        send_file(@revision.disk_file,
-          :filename => filename_for_content_disposition(@revision.name),
+        member = Member.where(:user_id => User.current.id, :project_id => @file.project.id).first
+        send_file(@revision.disk_file,          
+          :filename => filename_for_content_disposition(@revision.formatted_name(member ? member.title_format : nil)),
           :type => @revision.detect_content_type,
           :disposition => 'attachment')
-      rescue ActionController::MissingFile     
+      rescue DmsfAccessError => e
+        Rails.logger.error e.message
+        render_403
+      rescue Exception => e
+        Rails.logger.error e.message
         render_404
       end
       return
@@ -319,7 +323,7 @@ class DmsfFilesController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     render_404
   end
-
+  
   def check_project(entry)
     if entry && entry.project != @project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)

@@ -40,7 +40,7 @@ ja:
   notice_folder_deleted: フォルダを削除しました
   error_folder_is_not_empty: フォルダが空ではありません
   error_folder_title_is_already_used: タイトルは既に使われています
-  notice_folder_details_were_saved: フォルダの詳細を保存しました
+  notice_folder_details_were_saved: フォルダの詳細を保存しました  
   error_folder_is_locked: Folder is locked
   error_file_is_locked: ファイルはロックされています
   notice_file_deleted: ファイルを削除しました
@@ -50,6 +50,7 @@ ja:
   notice_file_unlocked: ファイルをロック解除しました
   notice_file_revision_created: ファイルのリビジョンを作成しました
   notice_your_preferences_were_saved: あなたの設定を保存しました
+  notice_your_preferences_were_not_saved: Your preferences were not saved
   warning_folder_notifications_already_activated: フォルダ通知は既に有効です
   notice_folder_notifications_activated: フォルダ通知を有効にしました
   warning_folder_notifications_already_deactivated: フォルダ通知は既に無効です
@@ -107,6 +108,8 @@ ja:
   select_option_default: 既定値
   select_option_deactivated: 無効
   select_option_activated: 有効
+  label_title_format: Title format
+  text_title_format: "Document title format for download (%t - title, %d - date, %v- version, %i - ID, %r - revision). Example: %t_%v"
   title_save_preferences: 設定を保存します
   heading_revisions: リビジョン
   title_download: ダウンロードします
