@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,10 +27,7 @@ gem 'zip-zip' # Just to avoid 'cannot load such file -- zip/zip' error
 gem 'simple_enum'
 gem 'uuidtools', '~> 2.1.1'
 gem 'dav4rack',  '~> 0.3.0'
-
-group :production do
-  gem 'nokogiri', '>= 1.5.10'
-end
+gem 'nokogiri'
 
 group :xapian do  
   gem 'xapian-full-alaveteli', :require => false
