@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +22,8 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
   
-  fixtures :users, :dmsf_file_revisions, :dmsf_workflow_steps, :dmsf_workflow_step_assignments
+  fixtures :users, :email_addresses, :dmsf_file_revisions, :dmsf_workflow_steps, 
+    :dmsf_workflow_step_assignments
   
   def setup
     @wfsa1 = DmsfWorkflowStepAssignment.find(1)
@@ -29,24 +32,23 @@ class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
   
   def test_truth
     assert_kind_of DmsfWorkflowStepAssignment, @wfsa1
+    assert_kind_of DmsfWorkflowStepAssignment, @wfsa2
   end
   
   def test_create
-    wfsa = DmsfWorkflowStepAssignment.new(      
-      :dmsf_workflow_step_id => 5,
-      :user_id => 2,
-      :dmsf_file_revision_id => 2)   
-    assert wfsa.save
+    wfsa = DmsfWorkflowStepAssignment.new
+    wfsa.dmsf_workflow_step_id = 5
+    wfsa.user_id = 2
+    wfsa.dmsf_file_revision_id = 2
+    assert wfsa.save, wfsa.errors.full_messages.to_sentence
   end
   
   def test_update    
     @wfsa1.dmsf_workflow_step_id = 5   
     @wfsa1.user_id = 2
-    @wfsa1.dmsf_file_revision_id = 2
-    
-    assert @wfsa1.save
-    @wfsa1.reload
-    
+    @wfsa1.dmsf_file_revision_id = 2  
+    assert @wfsa1.save, @wfsa1.errors.full_messages.to_sentence
+    @wfsa1.reload    
     assert_equal 5, @wfsa1.dmsf_workflow_step_id    
     assert_equal 2, @wfsa1.user_id
     assert_equal 2, @wfsa1.dmsf_file_revision_id
@@ -76,4 +78,5 @@ class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
     assert_nil DmsfWorkflowStepAssignment.find_by_id(1)
     assert_nil DmsfWorkflowStepAction.find_by_id(1)
   end
+  
 end

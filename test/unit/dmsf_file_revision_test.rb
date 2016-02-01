@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,9 +21,9 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
-  fixtures :projects, :users, :dmsf_folders, :dmsf_files, :dmsf_file_revisions,
-           :roles, :members, :member_roles, :enabled_modules, :enumerations,
-           :dmsf_locks
+  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, 
+    :dmsf_file_revisions, :roles, :members, :member_roles, :enabled_modules, 
+    :enumerations, :dmsf_locks
          
   def setup
     @revision5 = DmsfFileRevision.find_by_id 5    
@@ -33,9 +35,11 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   
   def test_delete_restore      
     @revision5.delete false    
-    assert @revision5.deleted    
+    assert @revision5.deleted, 
+      "File revision #{@revision5.name} hasn't been deleted"
     @revision5.restore    
-    assert !@revision5.deleted    
+    assert !@revision5.deleted, 
+      "File revision #{@revision5.name} hasn't been restored"
   end    
   
   def test_destroy       

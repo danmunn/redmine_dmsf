@@ -138,19 +138,22 @@ table { width:100%%; }
         File.dirname(path)
       end
 
-      #return instance of Project based on path
+      # Return instance of Project based on path
       def project
-        return @Project unless @Project.nil?
-        pinfo = @path.split('/').drop(1)
-        if pinfo.length > 0
-          begin
-            @Project = Project.find(pinfo.first)
-          rescue
+        unless @project
+          pinfo = @path.split('/').drop(1)
+          if pinfo.length > 0
+            begin
+              @project = Project.find(pinfo.first)
+            rescue Exception => e
+              Rails.logger.error e.message
+            end
           end
         end
+        @project
       end
 
-      #Make it easy to find the path without project in it.
+      # Make it easy to find the path without project in it.
       def projectless_path
         '/' + path.split('/').drop(2).join('/')
       end

@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,8 +23,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
   include Redmine::I18n
   
-  fixtures :dmsf_workflow_steps
-  fixtures :dmsf_workflow_step_actions
+  fixtures :dmsf_workflow_steps, :dmsf_workflow_step_actions
   
   def setup
     @wfsac1 = DmsfWorkflowStepAction.find(1)
@@ -37,11 +38,11 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_create
-    wfsac = DmsfWorkflowStepAction.new(
-      :dmsf_workflow_step_assignment_id => 1,
-      :action => DmsfWorkflowStepAction::ACTION_DELEGATE,
-      :note => 'Approval')
-    assert wfsac.save
+    wfsac = DmsfWorkflowStepAction.new
+    wfsac.dmsf_workflow_step_assignment_id = 1
+    wfsac.action = DmsfWorkflowStepAction::ACTION_DELEGATE
+    wfsac.note = 'Approval'
+    assert wfsac.save, wfsac.errors.full_messages.to_sentence
     wfsac.reload
     assert wfsac.created_at
   end
@@ -49,11 +50,9 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
   def test_update    
     @wfsac1.dmsf_workflow_step_assignment_id = 2    
     @wfsac1.action = DmsfWorkflowStepAction::ACTION_REJECT
-    @wfsac1.note = 'Rejection'
-    
-    assert @wfsac1.save
-    @wfsac1.reload
-    
+    @wfsac1.note = 'Rejection'    
+    assert @wfsac1.save, !@wfsac1.errors.full_messages.to_sentence
+    @wfsac1.reload   
     assert_equal 2, @wfsac1.dmsf_workflow_step_assignment_id    
     assert_equal DmsfWorkflowStepAction::ACTION_REJECT, @wfsac1.action
     assert_equal 'Rejection', @wfsac1.note
@@ -61,7 +60,7 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
   
   def test_validate_workflow_step_assignment_id_presence
     @wfsac1.dmsf_workflow_step_assignment_id = nil
-    assert !@wfsac1.save
+    assert !@wfsac1.save, @wfsac1.errors.full_messages.to_sentence
     assert_equal 1, @wfsac1.errors.count        
   end
   
@@ -83,10 +82,10 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
     assert !@wfsac1.save
     assert_equal 1, @wfsac1.errors.count
     @wfsac1.note = 'Delegated because'
-    assert @wfsac1.save    
+    assert @wfsac1.save, @wfsac1.errors.full_messages.to_sentence    
     @wfsac1.note = ''
     @wfsac1.action = DmsfWorkflowStepAction::ACTION_APPROVE
-    assert @wfsac1.save
+    assert @wfsac1.save, @wfsac1.errors.full_messages.to_sentence
   end
   
   def test_validate_author_id
@@ -102,7 +101,7 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
     assert_equal 1, @wfsac2.errors.count  
     @wfsac1.action = DmsfWorkflowStepAction::ACTION_REJECT
     @wfsac2.action = @wfsac1.action;
-    assert @wfsac1.save
+    assert @wfsac1.save, @wfsac1.errors.full_messages.to_sentence
     assert !@wfsac2.save
     assert_equal 1, @wfsac2.errors.count
     @wfsac1.action = DmsfWorkflowStepAction::ACTION_DELEGATE

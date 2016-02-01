@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,7 +23,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n  
     
-  fixtures :users, :projects, :members, :roles, :member_roles
+  fixtures :users, :email_addresses, :projects, :members, :roles, :member_roles
 
   def setup
     @user_admin = User.find_by_id 1 # Redmine admin
@@ -30,8 +32,8 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
     @project = Project.find_by_id 1
     assert_not_nil @project
     @project.enable_module! :dmsf
-    @role_manager = Role.find_by_name('Manager')
-    @role_manager.add_permission! :user_preferences
+    @role_manager = Role.find_by_name('Manager')    
+    User.current = nil
   end
   
   def test_truth
@@ -42,24 +44,43 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
     assert_kind_of Role, @role_manager
   end
     
-  def test_user_pref_save
-    # Member
+  def test_user_pref_save_member
+    # Member    
     @request.session[:user_id] = @user_member.id
-    post :user_pref_save, :id => @project.id, :email_notify => 1
+    @role_manager.add_permission! :user_preferences
+    post :user_pref_save, :id => @project.id, :email_notify => 1, 
+      :title_format => '%t_%v'
     assert_redirected_to settings_project_path(@project, :tab => 'dmsf')        
     assert_not_nil flash[:notice]
     assert_equal flash[:notice], l(:notice_your_preferences_were_saved)
-    
-    # Non Member
-    @request.session[:user_id] = @user_non_member.id    
-    post :user_pref_save, :id => @project.id, :email_notify => 1
+  end
+  
+  def test_user_pref_save_member_forbidden
+    # Member
+    @request.session[:user_id] = @user_member.id    
+    post :user_pref_save, :id => @project.id, :email_notify => 1, 
+      :title_format => '%t_%v'
     assert_response :forbidden
-    
+  end
+  
+  def test_user_pref_save_none_member
+    # Non Member
+    @request.session[:user_id] = @user_non_member.id
+    @role_manager.add_permission! :user_preferences
+    post :user_pref_save, :id => @project.id, :email_notify => 1, 
+      :title_format => '%t_%v'
+    assert_response :forbidden
+  end
+  
+  def test_user_pref_save_admin
     # Admin - non member
     @request.session[:user_id] = @user_admin.id
-    post :user_pref_save, :id => @project.id, :email_notify => 1
+    @role_manager.add_permission! :user_preferences
+    post :user_pref_save, :id => @project.id, :email_notify => 1, 
+      :title_format => '%t_%v'
     assert_redirected_to settings_project_path(@project, :tab => 'dmsf')        
     assert_not_nil flash[:warning]
     assert_equal flash[:warning], l(:user_is_not_project_member)
   end
+
 end

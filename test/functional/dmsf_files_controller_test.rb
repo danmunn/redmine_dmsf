@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,64 +22,66 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase 
   
-  fixtures :users, :dmsf_files, :dmsf_file_revisions, :custom_fields, 
-    :custom_values, :projects, :roles, :members, :member_roles, :enabled_modules,
-    :dmsf_file_revisions
+  fixtures :users, :email_addresses, :dmsf_files, :dmsf_file_revisions, 
+    :custom_fields, :custom_values, :projects, :roles, :members, :member_roles, 
+    :enabled_modules, :dmsf_file_revisions
 
   def setup
     @project = Project.find_by_id 1
     assert_not_nil @project
-    @project.enable_module! :dmsf
-    @user = User.find_by_id 2
-    assert_not_nil @user
-    @request.session[:user_id] = @user.id
+    @project.enable_module! :dmsf    
     @file = DmsfFile.find_by_id 1    
     @role = Role.find_by_id 1
-    @custom_field = CustomField.find_by_id 21
-    @custom_value = CustomValue.find_by_id 22
+    User.current = nil
+    @request.session[:user_id] = 2
   end 
   
-  def test_truth
-    assert_kind_of Project, @project
-    assert_kind_of User, @user
+  def test_truth    
     assert_kind_of DmsfFile, @file
-    assert_kind_of Role, @role
-    assert_kind_of CustomField, @custom_field
-    assert_kind_of CustomValue, @custom_value
+    assert_kind_of Role, @role    
   end
-    
-  # TODO: Not working in Travis
-#  def test_show_file
-#    # Missing permissions    
-#    get :show, :id => @file.id
-#    assert_response 403    
-#    
-#    # Permissions OK
-#    @role.add_permission! :view_dmsf_files
-#    @role.add_permission! :file_manipulation
-#    get :show, :id => @file.id 
-#    assert_response :success
-#    
-#    # The last revision
-#    assert_select 'label', { :text => @custom_field.name }
-#    assert_select '.customfield', { :text => "#{@custom_field.name}: #{@custom_value.value}" }
-#    
-#    # A new revision
-#    assert_select 'label', { :text => @custom_field.name }
-#    assert_select 'option', { :value => @custom_value.value }
-#  end
+  
+  def test_show_file_ok
+    # Permissions OK
+    @role.add_permission! :view_dmsf_files    
+    get :show, :id => @file.id, :download => ''    
+    assert_response :missing # The file is not physically present.    
+  end
+      
+  def test_show_file_forbidden
+    # Missing permissions        
+    get :show, :id => @file.id, :download => ''
+    assert_response :forbidden   
+  end      
+  
+  def test_view_file_ok
+    # Permissions OK
+    @role.add_permission! :view_dmsf_files    
+    get :view, :id => @file.id   
+    assert_response :missing # The file is not physically present.
+  end
+      
+  def test_view_file_forbidden
+    # Missing permissions        
+    get :view, :id => @file.id
+    assert_response :forbidden   
+  end      
 
-  def delete
+  def delete_forbidden
     # Missing permissions
     delete @file, :commit => false
-    assert_response 403
+    assert_response :forbidden
+  end
     
+  def delete_locked  
     # Permissions OK but the file is locked 
     @role.add_permission! :file_delete
     delete @file, :commit => false
     assert_response :redirect    
     assert_include l(:error_file_is_locked), flash[:error]
+  end
     
+  def delete_ok
     # Permissions OK and not locked
     flash[:error].clear   
     @file.unlock!
@@ -87,4 +91,3 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
   end
   
 end
-

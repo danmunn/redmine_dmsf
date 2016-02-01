@@ -1,7 +1,9 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,37 +22,32 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFolderTest < RedmineDmsf::Test::UnitTest
-  fixtures :projects, :users, :dmsf_folders, :dmsf_files, :dmsf_file_revisions,
-           :roles, :members, :member_roles, :dmsf_locks, :dmsf_links
+  fixtures :projects, :users, :email_addresses, :dmsf_folders, :roles, 
+    :members, :member_roles
          
   def setup    
-    @folder4 = DmsfFolder.find_by_id 4
+    @folder6 = DmsfFolder.find_by_id 6
   end
   
   def test_truth
-    assert_kind_of DmsfFolder, @folder4
+    assert_kind_of DmsfFolder, @folder6
   end
     
-  def test_delete_restore         
-    # TODO: Doesn't work in Travis - a problem with bolean visiblity
-    #assert_equal 1, @folder4.referenced_links.visible.count
-    @folder4.delete false    
-    assert @folder4.deleted
-    # TODO: Doesn't work in Travis - a problem with bolean visiblity
-    #assert_equal 0, @folder4.referenced_links.visible.count
-    @folder4.restore    
-    assert !@folder4.deleted
-    # TODO: Doesn't work in Travis - a problem with bolean visiblity
-    #assert_equal 1, @folder4.referenced_links.visible.count
+  def test_delete        
+    assert @folder6.delete(false), @folder6.errors.full_messages.to_sentence
+    assert @folder6.deleted, "Folder #{@folder6} hasn't been deleted"
   end
   
-  def test_destroy
-    # TODO: Doesn't work in Travis - a problem with bolean visiblity
-    #assert_equal 1, @folder4.referenced_links.visible.count
-    @folder4.delete true
-    assert_nil DmsfFolder.find_by_id(@folder4.id)        
-    # TODO: Doesn't work in Travis - a problem with bolean visiblity
-    #assert_equal 0, DmsfLink.where(:target_id => @folder4.id, :target_type => DmsfFolder.model_name.to_s).count
+  def test_restore    
+    assert @folder6.delete(false), @folder6.errors.full_messages.to_sentence
+    assert @folder6.deleted, "Folder #{@folder6} hasn't been deleted"
+    assert @folder6.restore, @folder6.errors.full_messages.to_sentence
+    assert !@folder6.deleted, "Folder #{@folder6} hasn't been restored"
+  end
+  
+  def test_destroy    
+    @folder6.delete true
+    assert_nil DmsfFolder.find_by_id(@folder6.id)    
   end
   
 end

@@ -148,6 +148,7 @@ class DmsfFile < ActiveRecord::Base
         save
       end
     rescue Exception => e
+      Rails.logger.error e.message
       errors[:base] << e.message
       return false
     end

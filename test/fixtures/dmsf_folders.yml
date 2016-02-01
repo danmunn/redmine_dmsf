@@ -1,35 +1,42 @@
---- !omap
-- dmsf_folders_001:
-    id:             1
-    title:          folder1
-    project_id:     1 
-    dmsf_folder_id: NULL
-    user_id:        1
+---
+dmsf_folders_001:
+  id:             1
+  title:          folder1
+  project_id:     1 
+  dmsf_folder_id: NULL
+  user_id:        1
 
-- dmsf_folders_002:
-    id:             2
-    title:          folder2
-    project_id:     1
-    dmsf_folder_id: 1
-    user_id:        1
+dmsf_folders_002:
+  id:             2
+  title:          folder2
+  project_id:     1
+  dmsf_folder_id: 1
+  user_id:        1
 
-- dmsf_folders_003:
-    id:             3
-    title:          folder1
-    project_id:     2
-    dmsf_folder_id: NULL
-    user_id:        1
+dmsf_folders_003:
+  id:             3
+  title:          folder1
+  project_id:     2
+  dmsf_folder_id: NULL
+  user_id:        1
 
-- dmsf_folders_004:
-    id:             4
-    title:          folder2
-    project_id:     2
-    dmsf_folder_id: 3
-    user_id:        1
-    
-- dmsf_folders_005:
-    id:             5
-    title:          folder3
-    project_id:     1
-    dmsf_folder_id: 2
-    user_id:        1
+dmsf_folders_004:
+  id:             4
+  title:          folder2
+  project_id:     2
+  dmsf_folder_id: 3
+  user_id:        1
+
+dmsf_folders_005:
+  id:             5
+  title:          folder3
+  project_id:     1
+  dmsf_folder_id: 2
+  user_id:        1
+
+dmsf_folders_006:
+  id:             6
+  title:          folder6
+  project_id:     1
+  dmsf_folder_id: NULL
+  user_id:        2

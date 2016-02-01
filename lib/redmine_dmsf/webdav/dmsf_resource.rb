@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,21 +24,16 @@ require 'uuidtools'
 module RedmineDmsf
   module Webdav
     class DmsfResource < BaseResource
-      def initialize(*args)
-        super(*args)
-        @file = false
-        @folder = false
-      end
 
-      #Here we make sure our folder and file methods are not aliased - it should shave a few cycles off of processing
+      # Here we make sure our folder and file methods are not aliased - it should shave a few cycles off of processing
       def setup
-        @skip_alias |= [ :folder, :file, :folder?, :file? ]
+        @skip_alias |= [ :folder, :file ]
       end
       
       # Here we hook into the fact that resources can have a pre-execution routine run for them
       # Our sole job here is to ensure that any write functionality is restricted to relevent configuration
       before do |resource, method_name|
-        #If our method is not one of the following, there is no point continuing.
+        # If our method is not one of the following, there is no point continuing.
         if [ :put, :make_collection, :move, :copy, :delete, :lock, :unlock, :set_property ].include?(method_name)
           webdav_setting = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
           webdav_setting = 'WEBDAV_READ_ONLY' unless webdav_setting
@@ -68,82 +63,65 @@ module RedmineDmsf
       #  - 2012-06-15: Only if you're allowed to browse the project
       #  - 2012-06-18: Issue #5, ensure item is only listed if project is enabled for dmsf
       def exist?
-        return false if project.nil? || !project.module_enabled?('dmsf') || !(folder? || file?)
-        User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project)
+        return project && project.module_enabled?('dmsf') && (folder || file) && 
+          (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project))
       end
 
-      # is this entity a folder?
+      # Is this entity a folder?
       def collection?
-        folder? #no need to check if entity exists, as false is returned if entity does not exist anyways
+        folder.present? # No need to check if entity exists, as false is returned if entity does not exist anyways
       end
 
-      # Check if current entity is a folder and return DmsfFolder object if found (nil if not)
-      # Todo: Move folder data retrieval into folder function, and use folder method to determine existence
+      # Check if current entity is a folder and return DmsfFolder object if found (nil if not)      
       def folder
-        return @folder unless @folder == false
-        return nil if project.nil? || project.id.nil? #if the project doesn't exist, this entity can't exist
-        @folder = nil
-        # Note: Folder is searched for as a generic search to prevent SQL queries being generated:
-        # if we were to look within parent, we'd have to go all the way up the chain as part of the 
-        # existence check, and although I'm sure we'd love to access the hierarchy, I can't yet
-        # see a practical need for it        
-        folders = DmsfFolder.visible.where(:project_id => project.id, :title => basename).order('title ASC').to_a
-        return nil unless folders.length > 0
-        if (folders.length > 1) then
-          folders.delete_if { |x| '/' + x.dmsf_path_str != projectless_path }
+        unless @folder
+          return nil unless project # If the project doesn't exist, this entity can't exist        
+          # Note: Folder is searched for as a generic search to prevent SQL queries being generated:
+          # if we were to look within parent, we'd have to go all the way up the chain as part of the 
+          # existence check, and although I'm sure we'd love to access the hierarchy, I can't yet
+          # see a practical need for it        
+          folders = DmsfFolder.visible.where(:project_id => project.id, :title => basename).order('title ASC').to_a        
           return nil unless folders.length > 0
-          @folder = folders[0]
-        else
-          if ('/' + folders[0].dmsf_path_str == projectless_path) then
+          if (folders.length > 1)
+            folders.delete_if { |x| '/' + x.dmsf_path_str != projectless_path }
+            return nil unless folders.length > 0
             @folder = folders[0]
+          else          
+            if (('/' + folders[0].dmsf_path_str) == projectless_path)
+              @folder = folders[0]                      
+            end
           end
         end
         @folder
-      end
-
-      # return boolean to determine if entity is a folder or not
-      def folder?
-        return !folder.nil?
-      end
+      end    
 
       # Check if current entity exists as a file (DmsfFile), and returns corresponding object if found (nil otherwise)
-      # Currently has a dual search approach (depending on if parent can be determined)
-      # Todo: Move file data retrieval into folder function, and use file method to determine existence
+      # Currently has a dual search approach (depending on if parent can be determined)      
       def file
-        return @file unless @file == false
-        return nil if project.nil? || project.id.nil? # Again if entity project is nil, it cannot exist in context of this object
-        @file = nil
-
-        # Hunt for files parent path
-        f = false
-        if (parent.projectless_path != '/')
-          if parent.folder?
-            f = parent.folder
+        unless @file
+          return nil unless project # Again if entity project is nil, it cannot exist in context of this object
+          # Hunt for files parent path
+          f = false
+          if (parent.projectless_path != '/')           
+            f = parent.folder if parent.folder            
+          else
+            f = nil
           end
-        else
-          f = nil
-        end
-
-        if f || f.nil? then
-          # f has a value other than false? - lets use traditional
-          # DMSF file search by name.
-          @file = DmsfFile.visible.find_file_by_name(project, f, basename)
-        else
-          # If folder is false, means it couldn't pick up parent, 
-          # as such its probably fine to bail out, however we'll 
-          # perform a search in this scenario
-          files = DmsfFile.visible.where(:project_id => project.id, :name => basename).order('name ASC').to_a
-          files.delete_if {|x| File.dirname('/' + x.dmsf_path_str) != File.dirname(projectless_path)}
-          if files.length > 0
-            @file = files[0]
+          if f || f.nil?
+            # f has a value other than false? - lets use traditional
+            # DMSF file search by name.
+            @file = DmsfFile.visible.find_file_by_name(project, f, basename)
+          else
+            # If folder is false, means it couldn't pick up parent, 
+            # as such its probably fine to bail out, however we'll 
+            # perform a search in this scenario
+            files = DmsfFile.visible.where(:project_id => project.id, :name => basename).order('name ASC').to_a
+            files.delete_if { |x| File.dirname('/' + x.dmsf_path_str) != File.dirname(projectless_path) }            
+            @file = files[0] if files.length > 0            
           end
         end
-      end
-
-      # return boolean to determine if entity is a file or not
-      def file?
-        return !file.nil?
-      end
+        @file
+      end     
 
       # Return the content type of file
       # will return inode/directory for any collections, and appropriate for File entities
@@ -184,11 +162,11 @@ module RedmineDmsf
       end
 
       def content_length
-        file? ? file.size : 4096;
+        file ? file.size : 4096;
       end
 
       def special_type
-        l(:field_folder) if folder?
+        l(:field_folder) if folder
       end
 
       # Process incoming GET request
@@ -214,12 +192,12 @@ module RedmineDmsf
       # - 2012-06-18: Ensure item is only functional if project is enabled for dmsf
       def make_collection
         if request.body.read.to_s.empty?
-          raise NotFound if project.nil? || project.id.nil? || !project.module_enabled?('dmsf')
+          raise NotFound unless project && project.module_enabled?('dmsf')
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
-          return MethodNotAllowed if exist? #If we already exist, why waste the time trying to save?
+          return MethodNotAllowed if exist? # If we already exist, why waste the time trying to save?
           parent_folder = nil
           if (parent.projectless_path != '/')
-            return Conflict unless parent.folder?
+            return Conflict unless parent.folder
             parent_folder = parent.folder.id
           end          
           f = DmsfFolder.new
@@ -252,7 +230,7 @@ module RedmineDmsf
       # Process incoming MOVE request
       #
       # Behavioural differences between collection and single entity
-      # Todo: Support overwrite between both types of entity, and implement better checking
+      # TODO: Support overwrite between both types of entity, and implement better checking
       def move(dest, overwrite)
         # All of this should carry accrross the ResourceProxy frontend, we ensure this to
         # prevent unexpected errors        
@@ -262,19 +240,19 @@ module RedmineDmsf
         
         parent = resource.parent
         
-        if (collection?)
-          #At the moment we don't support cross project destinations
+        if collection?
+          # At the moment we don't support cross project destinations
           return MethodNotImplemented unless project.id == resource.project.id
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
 
-          #Current object is a folder, so now we need to figure out information about Destination
+          # Current object is a folder, so now we need to figure out information about Destination
           if dest.exist?
             MethodNotAllowed
           else
             if(parent.projectless_path == '/') #Project root
               folder.dmsf_folder_id = nil
             else
-              return PreconditionFailed unless parent.exist? && parent.folder?
+              return PreconditionFailed unless parent.exist? && parent.folder
                 folder.dmsf_folder_id = parent.folder.id             
             end
             folder.title = resource.basename
@@ -293,10 +271,10 @@ module RedmineDmsf
             if(parent.projectless_path == '/') #Project root
               f = nil
             else
-              return PreconditionFailed unless parent.exist? && parent.folder?
+              return PreconditionFailed unless parent.exist? && parent.folder
               f = parent.folder
             end
-            return PreconditionFailed unless exist? && file?
+            return PreconditionFailed unless exist? && file
             return InternalServerError unless file.move_to(resource.project, f)
 
             # Update Revision and names of file [We can link to old physical resource, as it's not changed]            
@@ -315,10 +293,10 @@ module RedmineDmsf
       # Process incoming COPY request
       #
       # Behavioural differences between collection and single entity
-      # Todo: Support overwrite between both types of entity, and an integrative copy where destination exists for collections
+      # TODO: Support overwrite between both types of entity, and an integrative copy where destination exists for collections
       def copy(dest, overwrite)
 
-        # All of this should carry accrross the ResourceProxy frontend, we ensure this to
+        # All of this should carry across the ResourceProxy frontend, we ensure this to
         # prevent unexpected errors
         if dest.is_a?(ResourceProxy)
           resource = dest.resource
@@ -327,13 +305,14 @@ module RedmineDmsf
         end
 
         return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil? || resource.project.id == 0
+        
         parent = resource.parent
-        if (collection?)
-
-          #Current object is a folder, so now we need to figure out information about Destination
+        
+        if collection?
+          # Current object is a folder, so now we need to figure out information about Destination
           return MethodNotAllowed if(dest.exist?)
 
-          #Permission check if they can manipulate folders and view folders
+          # Permission check if they can manipulate folders and view folders
           # Can they:
           #  Manipulate folders on destination project :folder_manipulation
           #  View folders on destination project       :view_dmsf_folders
@@ -345,22 +324,18 @@ module RedmineDmsf
               User.current.allowed_to?(:view_dmsf_files, project) &&
               User.current.allowed_to?(:view_dmsf_folders, project))
 
-          return PreconditionFailed if (parent.projectless_path != "/" && !parent.folder?)
+          return PreconditionFailed if (parent.projectless_path != '/' && !parent.folder)
           folder.title = resource.basename
           new_folder = folder.copy_to(resource.project, parent.folder)
           return PreconditionFailed if new_folder.nil? || new_folder.id.nil?
           Created
         else
-          if(dest.exist?) then
-
+          if dest.exist?
             methodNotAllowed
-
             # Files cannot be merged at this point, until a decision is made on how to merge them
             # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
-
           else
-
-            #Permission check if they can manipulate folders and view folders
+            # Permission check if they can manipulate folders and view folders
             # Can they:
             #  Manipulate files on destination project   :file_manipulation
             #  View files on destination project         :view_dmsf_files
@@ -373,19 +348,18 @@ module RedmineDmsf
             if(parent.projectless_path == '/') #Project root
               f = nil
             else
-              return PreconditionFailed unless parent.exist? && parent.folder?
+              return PreconditionFailed unless parent.exist? && parent.folder
               f = parent.folder
             end
-            return PreconditionFailed unless exist? && file?
+            return PreconditionFailed unless exist? && file
             return InternalServerError unless file.copy_to(resource.project, f)
 
             # Update Revision and names of file [We can link to old physical resource, as it's not changed]            
             file.last_revision.name = resource.basename if file.last_revision
             file.name = resource.basename
 
-            #Save Changes
+            # Save Changes
             (file.last_revision.save! && file.save!) ? Created : PreconditionFailed
-
           end
         end
       end
@@ -395,9 +369,9 @@ module RedmineDmsf
       # At present as deletions of folders are not recursive, we do not need to extend 
       # this to cover every file, just queried
       def lock_check(lock_scope = nil)
-        if file?
+        if file
           raise Locked if file.locked_for_user?
-        elsif folder?
+        elsif folder
           raise Locked if folder.locked_for_user?
         end
       end
@@ -410,12 +384,11 @@ module RedmineDmsf
           Rails.logger.warn "Path doesn't exist: #{@path}"
           return super
         end
-        entity = file? ? file : folder
+        entity = file ? file : folder
         begin
           if (entity.locked? && entity.locked_for_user?)
             raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
           else
-
             # If scope and type are not defined, the only thing we can
             # logically assume is that the lock is being refreshed (office loves 
             # to do this for example, so we do a few checks, try to find the lock
@@ -433,8 +406,7 @@ module RedmineDmsf
               @response['Lock-Token'] = l.uuid
               return [1.hours.to_i, l.uuid]
 
-              #Unfortunately if we're here, then it's updating a lock we can't find
-
+              # Unfortunately if we're here, then it's updating a lock we can't find
               return Conflict
             end
 
@@ -461,7 +433,7 @@ module RedmineDmsf
           BadRequest
         else
           begin
-            entity = file? ? file : folder
+            entity = file ? file : folder
             l = DmsfLock.find(token)
             l_entity = l.file || l.folder
             # Additional case: if a user tries to unlock the file instead of the folder that's locked
@@ -480,15 +452,15 @@ module RedmineDmsf
 
       # HTTP POST request.
       #
-      # Forbidden, as method should not be utilised.
+      # Forbidden, as method should not be utilized.
       def post(request, response)
         raise Forbidden
       end
 
       # HTTP POST request.      
-      def put(request, response)
-        raise BadRequest if collection?
-        raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
+      def put(request, response)        
+        raise BadRequest if collection?       
+        raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)                
         
         # Ignore Mac OS X resource forks and special Windows files.        
         if basename.match(/^\._/i) || basename.match(/^Thumbs.db$/i)
@@ -528,7 +500,7 @@ module RedmineDmsf
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         
         # Phusion passenger does not have a method "length" in its model
-        # however includes a size method - so we instead use reflection
+        # however, includes a size method - so we instead use reflection
         # to determine best approach to problem
         if request.body.respond_to? 'length'
           new_revision.size = request.body.length
@@ -563,13 +535,16 @@ module RedmineDmsf
       # for lock information to be presented
       def get_property(element)
         raise NotImplemented if (element[:ns_href] != 'DAV:')
-        unless folder? 
+        unless folder
           return NotFound unless (file && file.last_revision && File.exist?(file.last_revision.disk_file))
         end
         case element[:name]
-        when 'supportedlock' then supported_lock
-        when 'lockdiscovery' then discover_lock
-        else super
+        when 'supportedlock'
+          supported_lock
+        when 'lockdiscovery' 
+          discover_lock
+        else 
+          super
         end
       end
      
@@ -629,13 +604,13 @@ module RedmineDmsf
                   end
                 }
                 if lock.folder.nil?
-                  doc.depth "0"
+                  doc.depth '0'
                 else
-                  doc.depth "infinity"
+                  doc.depth 'infinity'
                 end
                 doc.owner lock.user.to_s
                 if lock.expires_at.nil?
-                  doc.timeout = "Infinite"
+                  doc.timeout = 'Infinite'
                 else
                   doc.timeout "Second-#{(lock.expires_at.to_i - Time.now.to_i)}"
                 end
@@ -659,7 +634,7 @@ module RedmineDmsf
       # supported_lock
       # As the name suggests, we're returning locks supported by our implementation
       def supported_lock
-        x = Nokogiri::XML::DocumentFragment.parse ""
+        x = Nokogiri::XML::DocumentFragment.parse ''
         Nokogiri::XML::Builder.with(x) do |doc|
           doc.supportedlock {
             doc.lockentry {

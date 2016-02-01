@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,15 +23,14 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
   
-  fixtures :users, :dmsf_workflows, :dmsf_workflow_steps, :projects, :roles, 
-    :members, :member_roles, :dmsf_workflow_step_assignments, :dmsf_file_revisions, 
-    :dmsf_files
+  fixtures :users, :email_addresses, :dmsf_workflows, :dmsf_workflow_steps, 
+    :projects, :roles, :members, :member_roles, :dmsf_workflow_step_assignments, 
+    :dmsf_file_revisions, :dmsf_files
   
   def setup
-    @user_admin = User.find_by_id 1 # Redmine admin
-    @user_member = User.find_by_id 2 # John Smith - manager
-    @user_non_member = User.find_by_id 3 # Dave Lopper
-    @request.session[:user_id] = @user_member.id          
+    @user_admin = User.find_by_id 1 # Redmine admin    
+    @user_member = User.find_by_id 2 # John Smith - manager    
+    @user_non_member = User.find_by_id 3 # Dave Lopper    
     @role_manager = Role.find_by_name('Manager')
     @role_manager.add_permission! :file_manipulation
     @role_manager.add_permission! :manage_workflows
@@ -51,6 +50,8 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     @file1 = DmsfFile.find_by_id 1
     @file2 = DmsfFile.find_by_id 2
     @request.env['HTTP_REFERER'] = dmsf_folder_path(:id => @project1.id)
+    User.current = nil
+    @request.session[:user_id] = @user_member.id          
   end
   
   def test_truth
@@ -73,40 +74,58 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_kind_of DmsfFile, @file2
   end
   
-  def test_authorize
+  def test_authorize_admin
     # Admin
     @request.session[:user_id] = @user_admin.id
     get :index
     assert_response :success
     assert_template 'index'        
+  end
     
+  def test_authorize_member
     # Non member
     @request.session[:user_id] = @user_non_member.id    
     get :index, :project_id => @project1.id
     assert_response :forbidden           
-    
-    # Member    
-    @request.session[:user_id] = @user_member.id        
+  end
+  
+  def test_authorize_administration    
     # Administration
     get :index
     assert_response :forbidden    
+  end
+  
+  def test_authorize_projects    
     # Project    
     get :index, :project_id => @project1.id
     assert_response :success
     assert_template 'index'
-            
+  end
+       
+  def test_authorize_manage_workflows_forbidden
     # Without permissions
     @role_manager.remove_permission! :manage_workflows
     get :index, :project_id => @project1.id
     assert_response :forbidden
+  end
+  
+  def test_authorization_file_approval_ok
     @role_manager.add_permission! :file_approval    
-    @revision2.dmsf_workflow_id = @wf1.id    
-    get :start, :id => @revision2.dmsf_workflow_id,:dmsf_file_revision_id => @revision2.id
+    @revision2.dmsf_workflow_id = @wf1.id
+    get :start, :id => @revision2.dmsf_workflow_id,
+      :dmsf_file_revision_id => @revision2.id
     assert_response :redirect
+  end
+  
+  def test_authorization_file_approval_forbidden
     @role_manager.remove_permission! :file_approval
-    get :start, :id => @revision2.dmsf_workflow_id,:dmsf_file_revision_id => @revision2.id
+    @revision2.dmsf_workflow_id = @wf1.id
+    get :start, :id => @revision2.dmsf_workflow_id,
+      :dmsf_file_revision_id => @revision2.id
     assert_response :forbidden
+  end
     
+  def test_authorization_no_module
     # Without the module    
     @role_manager.add_permission! :file_manipulation
     @project1.disable_module!(:dmsf)    
@@ -327,4 +346,5 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       :project_id => @project1.id)    
     assert_response :redirect     
   end
+
 end

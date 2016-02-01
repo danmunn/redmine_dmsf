@@ -48,7 +48,7 @@ run_tests()
   # Run tests within application
   bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf
   bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf
-  #bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf
+  bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf
 }
 
 uninstall()

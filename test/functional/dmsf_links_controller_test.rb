@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,14 +22,16 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
 
-  fixtures :projects, :members, :dmsf_files, :dmsf_file_revisions, 
-    :dmsf_folders, :dmsf_links, :roles, :member_roles
+  fixtures :users, :email_addresses, :projects, :members, :dmsf_files, 
+    :dmsf_file_revisions, :dmsf_folders, :dmsf_links, :roles, :member_roles
   
   def setup
-    @user_admin = User.find_by_id 1    
+    @user_admin = User.find_by_id 1
+    assert_not_nil @user_admin
     @user_member = User.find_by_id 2
     assert_not_nil @user_member
     @user_non_member = User.find_by_id 3
+    assert_not_nil @user_non_member
     @role_manager = Role.where(:name => 'Manager').first
     assert_not_nil @role_manager
     @role_manager.add_permission! :file_manipulation
@@ -48,10 +50,11 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     @file1 = DmsfFile.find_by_id 1 # project1/file1
     @file2 = DmsfFile.find_by_id 2 # project2/file2
     @file4 = DmsfFile.find_by_id 4 # project1/folder2/file4
-    @file6 = DmsfFile.find_by_id 6 # project2/folder3/file6
-    @request.session[:user_id] = @user_member.id
+    @file6 = DmsfFile.find_by_id 6 # project2/folder3/file6    
     @file_link = DmsfLink.find_by_id 1
     @request.env['HTTP_REFERER'] = dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
+    @request.session[:user_id] = @user_member.id
+    User.current = nil
   end
   
   def test_truth
@@ -85,16 +88,20 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     assert_response :forbidden
   end
     
-  def test_authorize_member
+  def test_authorize_member_ok
     @request.session[:user_id] = @user_member.id
     get :new, :project_id => @project1.id
     assert_response :success
-             
+  end
+  
+  def test_authorize_member_no_module
     # Without the module
     @project1.disable_module!(:dmsf)    
     get :new, :project_id => @project1.id
     assert_response :forbidden    
-    
+  end
+  
+  def test_authorize_forbidden
     # Without permissions
     @project1.enable_module!(:dmsf)
     @role_manager.remove_permission! :file_manipulation
@@ -107,7 +114,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     assert_response :success
   end
   
-  def test_create_file_link_from
+  def test_create_file_link_from_f1
     # 1. File link in a folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -121,7 +128,9 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       }
     end    
     assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
-    
+  end
+  
+  def test_create_file_link_from_f2
     # 2. File link in a folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -135,7 +144,9 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       }
     end    
     assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
-    
+  end
+  
+  def test_create_file_link_from_f3
     # 3. File link in a root folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -148,7 +159,9 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       }
     end    
     assert_redirected_to dmsf_folder_path(:id => @project1.id)
-    
+  end
+  
+  def test_create_file_link_from_f4
     # 4. File link in a root folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -161,8 +174,8 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     end    
     assert_redirected_to dmsf_folder_path(:id => @project1.id)
   end
-  
-  def test_create_folder_link_from
+
+  def test_create_folder_link_from_d1
     # 1. Folder link in a folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -175,7 +188,9 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       }
     end    
     assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
+  end
     
+  def test_create_folder_link_from_d2
     # 2. Folder link in a folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -187,7 +202,9 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       }
     end    
     assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
+  end
     
+  def test_create_folder_link_from_d3
     # 3. Folder link in a root folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -199,7 +216,9 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       }
     end    
     assert_redirected_to dmsf_folder_path(:id => @project1.id)
+  end
     
+  def test_create_folder_link_from_d4
     # 4. Folder link in a root folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -212,7 +231,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     assert_redirected_to dmsf_folder_path(:id => @project1.id)
   end
   
-  def test_create_file_link_to
+  def test_create_file_link_to_f1
     # 1. File link to a root folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -225,7 +244,9 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       }
     end    
     assert_redirected_to dmsf_file_path(@file1)        
+  end
     
+  def test_create_file_link_to_f2
     # 2. File link to a folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -239,7 +260,9 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       }
     end    
     assert_redirected_to dmsf_file_path(@file6)
+  end
     
+  def test_create_file_link_to_f3
     # 3. File link to a root folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -251,7 +274,9 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       }
     end    
     assert_redirected_to dmsf_file_path(@file6)
+  end
     
+  def test_create_file_link_to_f4
     # 4. File link to a folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -279,7 +304,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     assert_redirected_to dmsf_folder_path(:id => @project1.id)
   end
   
-  def test_create_folder_link_to
+  def test_create_folder_link_to_f1
     # 1. Folder link to a root folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -291,7 +316,9 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
       }
     end    
     assert_redirected_to edit_dmsf_path(:id => @project1.id, :folder_id => @folder1.id)
-    
+  end
+  
+  def test_create_folder_link_to_f2
     # 2. Folder link to a folder
     assert_difference 'DmsfLink.count', +1 do    
       post :create, :dmsf_link => {
@@ -306,26 +333,27 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     assert_redirected_to edit_dmsf_path(:id => @project1.id, :folder_id => @folder1.id)               
   end
   
-  def test_destroy      
-    # TODO: Doesn't work in Travis
-    #assert_difference 'DmsfLink.visible.count', -1 do
+  def test_destroy          
+    assert_difference 'DmsfLink.visible.count', -1 do
       delete :destroy, :project_id => @project1.id, :id => @file_link.id
-    #end
+    end
     assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
   end
   
-  def test_restore
-    #User.current = @user_admin
-    @request.env['HTTP_REFERER'] = trash_dmsf_path(:id => @project1.id)
-    
+  def test_restore_forbidden
     # Missing permissions
+    @request.env['HTTP_REFERER'] = trash_dmsf_path(:id => @project1.id)        
     @role_manager.remove_permission! :file_manipulation
     get :restore, :project_id => @project1.id, :id => @file_link.id
     assert_response :forbidden
+  end
     
+  def test_restore_ok
     # Permissions OK
+    @request.env['HTTP_REFERER'] = trash_dmsf_path(:id => @project1.id)        
     @role_manager.add_permission! :file_manipulation
     get :restore, :project_id => @project1.id, :id => @file_link.id
     assert_response :redirect
   end
+
 end

@@ -1,7 +1,9 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,131 +22,95 @@
 require File.expand_path('../../test_helper.rb', __FILE__)
 
 class DmsfLockTest < RedmineDmsf::Test::UnitTest
-  attr_reader :lock
-  fixtures :projects, :users, :dmsf_folders, :dmsf_files, :dmsf_file_revisions,
-           :roles, :members, :member_roles, :enabled_modules, :enumerations,
-           :dmsf_locks
+  #attr_reader :lock
+  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, 
+    :dmsf_file_revisions, :roles, :members, :member_roles, :enabled_modules, 
+    :enumerations, :dmsf_locks
 
   def setup
     @lock = dmsf_locks(:dmsf_locks_001)
+    @folder2 = dmsf_folders(:dmsf_folders_002)
+    @file4 = dmsf_files(:dmsf_files_004)
+    @jsmith = User.find_by_id 2
+    @admin = User.find_by_id 1
   end
 
-  test "lock data is created" do
-    assert_not_nil(lock)
+  def test_truth
+    assert_kind_of DmsfLock, @lock
+    assert_kind_of DmsfFile, @file4
+    assert_kind_of DmsfFolder, @folder2
+    assert_kind_of User, @jsmith
+    assert_kind_of User, @admin
   end
 
-# TODO: Not working in Travis
-#  test "lock_type is enumerable" do
-#    assert DmsfLock.respond_to?(:lock_types) #lock_types is a method created by as_enum
-#    assert DmsfLock.lock_types.is_a?(Hash)
-#  end
-#
-#  test "lock_scope is enumerable" do
-#    assert DmsfLock.respond_to?(:lock_scopes) #lock_types is a method created by as_enum
-#    assert DmsfLock.lock_scopes.is_a?(Hash)
-#  end
-#
-#  test "lock_type does not accept invalid values" do
-#    assert lock.lock_type = :type_write
-#    assert_raise ArgumentError do
-#      assert lock.lock_type = :write
-#    end
-#  end
-
-  test "lock_type accepts a valid answer" do
-    assert_nothing_raised ArgumentError do
-      lock.lock_type = :type_write
-      assert lock.lock_type == :type_write
-    end
+  def test_lock_type_is_enumerable
+    assert DmsfLock.respond_to?(:lock_types), 
+      "DmsfLock class hasn't got lock_types method"
+    assert DmsfLock.lock_types.is_a?(SimpleEnum::Enum), 
+      'DmsfLock class is not enumerable'
   end
 
-# TODO: Not working in Travis
-#  test "lock_scope does not accept invalid values" do
-#    assert lock.lock_scope = :scope_exclusive
-#    assert_raise ArgumentError do
-#      assert lock.lock_scope = :write
-#    end
-#  end
-
-  test "lock_scope accepts a valid answer" do
-    assert_nothing_raised ArgumentError do
-      lock.lock_scope = :scope_shared
-      assert lock.lock_scope == :scope_shared
-    end
+  def test_lock_scope_is_enumerable
+    assert DmsfLock.respond_to?(:lock_scopes),
+      "DmsfLock class hasn't got lock_scopes method"
+    assert DmsfLock.lock_scopes.is_a?(SimpleEnum::Enum),
+      'DmsfLock class is not enumerable'
   end
 
-  test "linked to either file or folder" do
-    assert !(lock.file.nil? && lock.folder.nil?)
-    assert !lock.file.nil? || !lock.folder.nil?
-    if !lock.file.nil?
-      assert lock.file.is_a?(DmsfFile)
+  def test_linked_to_either_file_or_folder
+    assert_not_nil @lock.file || @lock.folder    
+    if @lock.file
+      assert_kind_of DmsfFile, @lock.file
     else
-      assert lock.file.is_a?(DmsfFolder)
+      assert_kind_of DmsfFolder @lock.folder
     end
   end
 
-  test "locked folder reports un-locked child file as locked" do
-    #folder id 2 is locked by fixture
-    #files 4 and 5 are file resources within locked folder (declared by fixture)
-    folder = dmsf_folders(:dmsf_folders_002)
-    file = dmsf_files(:dmsf_files_004)
-
-    assert folder.locked?, "Folder (2) should be locked by fixture"
-    assert_equal 1, folder.lock.count #Check the folder lists 1 lock
-
-    assert file.locked?, "File (4) sits within Folder(2) and should be locked"
-    assert_equal 1, file.lock.count #Check the file lists 1 lock
-
-    assert_equal 0, file.lock(false).count #Check the file does not list any entries for itself
+  def test_locked_folder_reports_un_locked_child_file_as_locked    
+    assert @folder2.locked?, 
+      "Folder #{@folder2.title} should be locked by fixture"
+    assert_equal 1, @folder2.lock.count # Check the folder lists 1 lock
+    assert @file4.locked?, 
+      "File #{@file4.name} sits within #{@folder2.title} and should be locked"
+    assert_equal 1, @file4.lock.count # Check the file lists 1 lock
+    assert_equal 0, @file4.lock(false).count # Check the file does not list any entries for itself
+  end
+ 
+  def test_locked_folder_cannot_be_unlocked_by_someone_without_rights_or_anon    
+    assert_no_difference ('@folder2.lock.count') do
+      assert_raise DmsfLockError do
+        @folder2.unlock!
+      end
+    end
+    User.current = @jsmith
+     assert_no_difference ('@folder2.lock.count') do
+      assert_raise DmsfLockError do
+        @folder2.unlock!
+      end
+    end
   end
 
-# TODO: Not working in Travis
-#  test "locked folder cannot be unlocked by someone without rights (or anon)" do
-#    folder = dmsf_folders(:dmsf_folders_002)
-#    assert_no_difference ('folder.lock.count') do
-#      assert_raise DmsfLockError do
-#        folder.unlock!
-#      end
-#    end
-#
-#    User.current = users(:users_002)
-#     assert_no_difference ('folder.lock.count') do
-#      assert_raise DmsfLockError do
-#        folder.unlock!
-#      end
-#    end
-#  end
-
-  test "locked folder can be unlocked by permission :force_file_unlock" do
-    User.current = users(:users_001)
-    folder = dmsf_folders(:dmsf_folders_002)
-
-    assert_difference('folder.lock.count', -1) do
+  def test_locked_folder_can_be_unlocked_by_permission
+    User.current = @admin
+    assert_difference('@folder2.lock.count', -1) do
       assert_nothing_raised do
-        folder.unlock!
+        @folder2.unlock!
       end
     end
-
-    User.current = users(:users_002)
-
-    assert_difference('folder.lock.count') do
+    User.current = @jsmith
+    assert_difference('@folder2.lock.count') do
       assert_nothing_raised do
-        folder.lock!
+        @folder2.lock!
       end
     end
-
-    User.current = users(:users_001)
-    assert_difference('folder.lock.count', -1) do
+    User.current = @admin
+    assert_difference('@folder2.lock.count', -1) do
       assert_nothing_raised do
-        folder.unlock!
+        @folder2.unlock!
       end
-    end
-
-
-    #We need to re-establish locks for other test 
-    folder.lock!
+    end    
+    @folder2.lock!
     User.current = nil
-
   end
 
 end

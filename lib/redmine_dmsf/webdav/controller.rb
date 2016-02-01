@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,9 +31,7 @@ module RedmineDmsf
         unless(resource.exist?)
           NotFound
         else
-          # Win7 hack start
-          #unless(request_document.xpath("//#{ns}propfind/#{ns}allprop").empty?)
-          #  properties = resource.properties
+          # Win7 hack start          
           if request_document.xpath("//#{ns}propfind").empty? || request_document.xpath("//#{ns}propfind/#{ns}allprop").present?
             properties = resource.properties.map { |prop| DAV4Rack::DAVElement.new(prop.merge(:namespace => DAV4Rack::DAVElement.new(:href => prop[:ns_href]))) }
           # Win7 hack end

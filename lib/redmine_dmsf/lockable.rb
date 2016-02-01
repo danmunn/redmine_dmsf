@@ -86,14 +86,13 @@ module RedmineDmsf
     # By using the path upwards, surely this would be quicker?
     def locked_for_user?
       return false unless locked?
-      b_shared = nil
-      heirarchy = self.dmsf_path
-      heirarchy.each do |folder|
-        locks = folder.locks || folder.lock(false)
+      b_shared = nil            
+      self.dmsf_path.each do |entity|        
+        locks = entity.locks || entity.lock(false)
         next if locks.empty?
         locks.each do |lock|
           next if lock.expired? # In case we're in between updates
-          if (lock.lock_scope == :scope_exclusive && b_shared.nil?)
+          if (lock.lock_scope == :scope_exclusive && b_shared.nil?)            
             return true if (!lock.user) || (lock.user.id != User.current.id)
           else
             b_shared = true if b_shared.nil?
