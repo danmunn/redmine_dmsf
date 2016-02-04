@@ -163,7 +163,7 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax.html, at the end o
 
 There's a patch that helps you to modify all help files at once. In your Redmine folder:
 
-`cd public/help`
+`cd redmine`
 
 `patch -p0 < plugins/redmine_dmsf/extra/help_files_dmsf.diff`
 
