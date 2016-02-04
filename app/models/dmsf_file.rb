@@ -410,7 +410,7 @@ class DmsfFile < ActiveRecord::Base
   
   def preview(limit)
     result = 'No preview available'
-    if (self.last_revision.disk_filename =~ /\.(txt|ini|diff|c|cpp|php|csv|rb|h|erb|html|css)$/i)
+    if (self.last_revision.disk_filename =~ /\.(txt|ini|diff|c|cpp|php|csv|rb|h|erb|html|css|py)$/i)
       begin
         f = File.new(self.last_revision.disk_file)
         f.each_line do |line| 
