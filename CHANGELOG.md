@@ -4,8 +4,12 @@ Changelog for Redmine DMSF
 1.5.6 *2015-01-25*
 ------------------
 
-    Uploading of large files (>2GB) 
+    Uploading of large files (>2GB)
+    Support for *.svg and *.py in wiki macros
+    Filename formating while downloading
 
+* Bug: #498 - Webdav: Invalid handling of files with '[' or ']' in file name
+* New: #497 - file.image ignore SVG type
 * Bug: #494 - Unable to upload files with ruby > ruby-2.0.0-p598
 * Bug: #491 - Still using original uploaded filename after filename renamed (PDF file)
 * Bug: #488 - Available projects for 'link to' operation
