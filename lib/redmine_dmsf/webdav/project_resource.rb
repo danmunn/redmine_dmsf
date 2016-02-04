@@ -22,24 +22,21 @@
 module RedmineDmsf
   module Webdav
     class ProjectResource < BaseResource
-
-      def initialize(public_path, path, request, response, options)
-        super(public_path, path, request, response, options)
-      end
-
-      def children
-        #caching for repeat usage
-        return @children unless @children.nil?
-        return [] if project.nil? || project.id.nil?
-        @children = []
-        project.dmsf_folders.visible.map do |p|
-          @children.push child(p.title)
-        end
-        project.dmsf_files.visible.map do |p|
-          @children.push child(p.name)
+      
+      def children        
+        unless @children          
+          @children = []
+          if project
+            project.dmsf_folders.visible.map do |p|
+              @children.push child(p.title)
+            end
+            project.dmsf_files.visible.map do |p|
+              @children.push child(p.name)              
+            end
+          end
         end
         @children
-      end     
+      end      
 
       def exist?
         return false if (project.nil? || User.current.anonymous?)                        

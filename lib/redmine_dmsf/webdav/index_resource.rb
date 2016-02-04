@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,25 +22,16 @@
 module RedmineDmsf
   module Webdav
     class IndexResource < BaseResource
-
-      def initialize(public_path, path, request, response, options)
-        super(public_path, path, request, response, options)
-      end
-
+      
       def children
-        if @projects.blank?
+        unless @projects
           @projects = []
-          if User.current.admin?            
-            @projects = Project.visible.order('lft').to_a
-          elsif User.current.logged? # If user is not admin, we should only show memberships relevant
-            User.current.memberships.each{ |m| @projects << m.project if m.roles.detect{ |r| r.allowed_to?(:view_dmsf_folders) } }
+          Project.has_module(:dmsf).where(Project.allowed_to_condition(
+              User.current, :view_dmsf_folders)).order('lft').all.each do |p|
+            @projects << child(p.identifier)
           end
-        end 
-        @projects.delete_if { |node| !node.module_enabled?('dmsf') } if @projects
-        return [] if @projects.blank?
-        @projects.map do |p|
-          child p.identifier
         end
+        @projects
       end
 
       def collection?

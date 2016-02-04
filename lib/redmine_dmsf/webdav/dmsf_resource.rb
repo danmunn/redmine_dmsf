@@ -46,14 +46,16 @@ module RedmineDmsf
       # Our already quite heavy usage of DB would just get silly every time we called
       # this method.
       def children
-        return @children if @children
-        @children = []
-        return [] unless collection?
-        folder.subfolders.visible.map do |p|
-          @children.push child(p.title)
-        end
-        folder.files.visible.map do |p|
-          @children.push child(p.name)
+        unless @childern
+          @children = []
+          if collection?
+            folder.subfolders.visible.map do |p|
+              @children.push child(p.title)
+            end
+            folder.files.visible.map do |p|
+              @children.push child(p.name)
+            end
+          end
         end
         @children        
       end
@@ -97,7 +99,7 @@ module RedmineDmsf
 
       # Check if current entity exists as a file (DmsfFile), and returns corresponding object if found (nil otherwise)
       # Currently has a dual search approach (depending on if parent can be determined)      
-      def file
+      def file        
         unless @file
           return nil unless project # Again if entity project is nil, it cannot exist in context of this object
           # Hunt for files parent path
