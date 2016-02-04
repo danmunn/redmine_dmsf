@@ -60,14 +60,14 @@ module RedmineDmsf
             find_resources.each do |resource|
               xml.response do
                 unless(resource.propstat_relative_path)
-                  xml.href "#{scheme}://#{host}:#{port}#{url_format(resource)}"
+                  xml.href "#{scheme}://#{host}:#{port}#{url_format(resource)}"                  
                 else
                   xml.href url_format(resource)
                 end
                 propstats(xml, get_properties(resource, properties.empty? ? resource.properties : properties))
               end
             end
-          end
+          end          
         end
       end
     
@@ -113,6 +113,13 @@ module RedmineDmsf
           end
           true          
         end
+      end
+      
+      # Escape URL string
+      def url_format(resource)
+        # Additionally escape square brackets, otherwise files with 
+        # file name like file[1].pdf are not visible in some WebDAV clients
+        URI.encode(super, '[]')
       end
       
     end
