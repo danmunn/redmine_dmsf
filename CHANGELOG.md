@@ -6,7 +6,7 @@ Changelog for Redmine DMSF
 
     Uploading of large files (>2GB)
     Support for *.svg and *.py in wiki macros
-    Filename formating while downloading
+    File name formatting while downloading
 
 * Bug: #498 - Webdav: Invalid handling of files with '[' or ']' in file name
 * New: #497 - file.image ignore SVG type

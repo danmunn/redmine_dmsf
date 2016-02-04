@@ -33,7 +33,7 @@ Features
   * Integration with Redmine's activity feed
   * Wiki macros for quick content linking
   * Full read/write webdav functionality
-  * Optional document content fulltext search
+  * Optional document content full-text search
   * Documents and folders symbolic links
   * Document tagging
   * Trash bin
@@ -44,7 +44,7 @@ Dependencies
   
   * Redmine 3.0.0 or higher
 
-### Fulltext search (optional)
+### Full-text search (optional)
 
 If you want to use fulltext search abilities:
 
@@ -202,7 +202,7 @@ Before installing ensure that the Redmine instance is stopped.
             rake redmine:dmsf_alert_approvals RAILS_ENV="production"            
 
 ### Fulltext search (optional)
-If you want to use fulltext search features, you must setup file content indexing.
+If you want to use full-text search features, you must setup file content indexing.
 
 It is necessary to index DMSF files with omega before searching attempts to receive some output:
 
