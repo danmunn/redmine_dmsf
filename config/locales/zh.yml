@@ -110,7 +110,7 @@ zh:
   select_option_activated: 激活
   title_save_preferences: 保存偏好设定
   label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %d - date, %v- version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
   heading_revisions: 修订版本
   title_download: 下载
   title_delete_revision: 删除此修订

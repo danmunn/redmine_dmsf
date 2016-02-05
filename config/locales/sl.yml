@@ -109,7 +109,7 @@ sl:
   select_option_deactivated: Deaktivirano
   select_option_activated: Aktivirano
   label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %d - date, %v- version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
   title_save_preferences: Save preferences
   heading_revisions: Verzije
   title_download: Prenesi dol

@@ -109,7 +109,7 @@ cs:
   select_option_deactivated: Deaktivováno
   select_option_activated: Aktivováno
   label_title_format: Formát názvu
-  text_title_format: "Formát názvu souboru pro stažení (%t - název, %d - datum, %v- verze, %i - ID, %r - revize). Např.: %t_%v"
+  text_title_format: "Formát názvu souboru pro stažení (%t - název, %d - datum, %v - verze, %i - ID, %r - revize). Např.: %t_%v"
   title_save_preferences: Uložit nastavení
   heading_revisions: Revize
   title_download: Stáhnout

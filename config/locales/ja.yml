@@ -109,7 +109,7 @@ ja:
   select_option_deactivated: 無効
   select_option_activated: 有効
   label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %d - date, %v- version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
   title_save_preferences: 設定を保存します
   heading_revisions: リビジョン
   title_download: ダウンロードします
