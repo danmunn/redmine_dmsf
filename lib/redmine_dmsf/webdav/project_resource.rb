@@ -27,10 +27,10 @@ module RedmineDmsf
         unless @children          
           @children = []
           if project
-            project.dmsf_folders.visible.map do |p|
+            project.dmsf_folders.select(:title).visible.map do |p|
               @children.push child(p.title)
             end
-            project.dmsf_files.visible.map do |p|
+            project.dmsf_files.select(:name).visible.map do |p|
               @children.push child(p.name)              
             end
           end
