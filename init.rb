@@ -181,7 +181,11 @@ Redmine::Plugin.register :redmine_dmsf do
         end
         raise 'Not supported image format' unless file.image?
         url = url_for(:controller => :dmsf_files, :action => 'view', :id => file)      
-        image_tag(url, :alt => file.title, :size => size)
+       if size.include? "%"
+          image_tag(url, :alt => file.title, :width => size, :height => size)
+        else
+          image_tag(url, :alt => file.title, :size => size)
+        end
       else
         raise "Document ID #{file_id} not found"
       end
