@@ -176,6 +176,7 @@ Before installing ensure that the Redmine instance is stopped.
 1. In case of upgrade BACKUP YOUR DATABASE first
 2. Put redmine_dmsf plugin directory into plugins.
 3. Install dependencies: `bundle install`.
+3.1 To install dependencies without Xapian (full-text searching): `bundle install --without xapian`. This option might be useful especially in Windows.
 4. Initialize/Update database: `bundle exec rake redmine:plugins:migrate RAILS_ENV="production"`.
 5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
 6. Restart the web server.
