@@ -30,9 +30,11 @@ class DmsfFileRevision < ActiveRecord::Base
   has_many :dmsf_workflow_step_assignment, :dependent => :destroy  
   accepts_nested_attributes_for :access, :dmsf_workflow_step_assignment, :file, :user   
   
-  # Returns a list of revisions that are not deleted here, or deleted at parent level either
-  scope :visible, -> { where(deleted: false) }
-  scope :deleted, -> { where(deleted: true) }  
+  STATUS_DELETED = 1
+  STATUS_ACTIVE = 0
+    
+  scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
+  scope :deleted, -> { where(:deleted => STATUS_DELETED) }
 
   acts_as_customizable
   acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.file.dmsf_path_str}"},
@@ -49,11 +51,11 @@ class DmsfFileRevision < ActiveRecord::Base
       joins(
         "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
         "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id").
-      where("#{DmsfFile.table_name}.deleted = :false", {:false => false})  
+      where("#{DmsfFile.table_name}.deleted = ?", STATUS_ACTIVE)  
 
   validates :title, :presence => true  
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
-    :message => l(:error_contains_invalid_character)
+    :message => l(:error_contains_invalid_character)    
 
   def project
     self.file.project if self.file
@@ -88,14 +90,14 @@ class DmsfFileRevision < ActiveRecord::Base
     if commit
       self.destroy
     else
-      self.deleted = true
+      self.deleted = DmsfFile::STATUS_DELETED
       self.deleted_by_user = User.current
       save
     end
   end
 
   def restore
-    self.deleted = false
+    self.deleted = DmsfFile::STATUS_ACTIVE
     self.deleted_by_user = nil
     save
   end

@@ -43,14 +43,13 @@ class DmsfFile < ActiveRecord::Base
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
   has_many :referenced_links, -> { where target_type: DmsfFile.model_name.to_s},
     :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
-  accepts_nested_attributes_for :revisions, :locks, :referenced_links, :project    
+  accepts_nested_attributes_for :revisions, :locks, :referenced_links, :project
   
-  scope :visible, lambda { |*args|
-    where(deleted: false) 
-  }
-  scope :deleted, lambda { |*args|
-    where(deleted: true)
-  }  
+  STATUS_DELETED = 1
+  STATUS_ACTIVE = 0
+  
+  scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
+  scope :deleted, -> { where(:deleted => STATUS_DELETED) }
 
   validates :name, :presence => true
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
@@ -82,7 +81,7 @@ class DmsfFile < ActiveRecord::Base
               
   acts_as_searchable :columns => ["#{table_name}.name", "#{DmsfFileRevision.table_name}.title", "#{DmsfFileRevision.table_name}.description", "#{DmsfFileRevision.table_name}.comment"],
     :project_key => 'project_id',
-    :date_column => "#{table_name}.updated_at"    
+    :date_column => "#{table_name}.updated_at"   
 
   before_create :default_values
   def default_values
@@ -121,13 +120,17 @@ class DmsfFile < ActiveRecord::Base
 
   def last_revision
     unless @last_revision
-      @last_revision = deleted ? self.revisions.first : self.revisions.visible.first
+      @last_revision = self.deleted? ? self.revisions.first : self.revisions.visible.first
     end
     @last_revision
   end
 
   def set_last_revision(new_revision)
     @last_revision = new_revision
+  end
+  
+  def deleted?
+    self.deleted == STATUS_DELETED
   end
 
   def delete(commit)
@@ -143,7 +146,7 @@ class DmsfFile < ActiveRecord::Base
       if commit
         self.destroy
       else
-        self.deleted = true
+        self.deleted = STATUS_DELETED
         self.deleted_by_user = User.current
         save
       end
@@ -155,13 +158,13 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def restore
-    if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted)
+    if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted?)
       errors[:base] << l(:error_parent_folder)
       return false
     end
     self.revisions.each { |r| r.restore }
     self.referenced_links.each { |l| l.restore }
-    self.deleted = false
+    self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
     save
   end

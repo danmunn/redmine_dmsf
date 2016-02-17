@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -42,6 +43,6 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
         "INNER JOIN #{DmsfFileRevision.table_name} ON #{DmsfFileRevisionAccess.table_name}.dmsf_file_revision_id = #{DmsfFileRevision.table_name}.id " +
         "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
         "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id").
-      where("#{DmsfFile.table_name}.deleted = :false", {:false => false}) 
+      where("#{DmsfFile.table_name}.deleted = ?", DmsfFile::STATUS_ACTIVE) 
 
 end

@@ -54,12 +54,12 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_project_dmsf_file_listing_contains_deleted_items        
-    assert @project1.dmsf_files.index{ |f| f.deleted }, 
+    assert @project1.dmsf_files.index{ |f| f.deleted? }, 
       'Expected at least one deleted item in <all items>'    
   end
 
   def test_project_dmsf_file_visible_listing_contains_no_deleted_items    
-    assert @project1.dmsf_files.visible.index{ |f| f.deleted }.nil?, 
+    assert @project1.dmsf_files.visible.index{ |f| f.deleted? }.nil?, 
       'There is a deleted file, this was unexpected'
   end
 
@@ -106,7 +106,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     User.current = @admin
     @file4.folder.unlock!
     assert @file4.delete(false), @file4.errors.full_messages.to_sentence
-    assert @file4.deleted, "File #{@file4.name} is not deleted"
+    assert @file4.deleted?, "File #{@file4.name} is not deleted"
     assert_equal 0, @file4.revisions.visible.count
     assert_equal 0, @file4.referenced_links.visible.count
     @file4.folder.lock!
@@ -117,7 +117,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     @file4.folder.unlock!
     assert @file4.delete(false), @file4.errors.full_messages.to_sentence
     @file4.restore        
-    assert !@file4.deleted, "File #{@file4} hasn't been restored"
+    assert !@file4.deleted?, "File #{@file4} hasn't been restored"
     assert_equal 1, @file4.revisions.visible.count
     assert_equal 2, @file4.referenced_links.visible.count
     @file4.folder.lock!

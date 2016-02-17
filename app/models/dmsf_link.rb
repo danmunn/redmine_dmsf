@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -42,8 +42,11 @@ class DmsfLink < ActiveRecord::Base
     end
   end
   
-  scope :visible, -> { where(deleted: false) }
-  scope :deleted, -> { where(deleted: true) }
+  STATUS_DELETED = 1
+  STATUS_ACTIVE = 0
+  
+  scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
+  scope :deleted, -> { where(:deleted => STATUS_DELETED) }    
 
   def target_folder_id
     if self.target_type == DmsfFolder.model_name.to_s
@@ -119,18 +122,18 @@ class DmsfLink < ActiveRecord::Base
     if commit
       self.destroy
     else
-      self.deleted = true
+      self.deleted = STATUS_DELETED
       self.deleted_by_user = User.current
       save
     end
   end
 
   def restore
-    if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted)
+    if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted?)
       errors[:base] << l(:error_parent_folder)
       return false
     end
-    self.deleted = false
+    self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
     save
   end

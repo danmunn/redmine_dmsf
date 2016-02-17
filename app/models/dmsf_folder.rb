@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@konton.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@konton.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -48,12 +48,11 @@ class DmsfFolder < ActiveRecord::Base
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
   accepts_nested_attributes_for :user, :project, :folder, :subfolders, :files, :folder_links, :file_links, :url_links, :referenced_links, :locks  
   
-  scope :visible, lambda { |*args|
-    where(deleted: false) 
-  }
-  scope :deleted, lambda { |*args|
-    where(deleted: true)
-  }  
+  STATUS_DELETED = 1
+  STATUS_ACTIVE = 0
+  
+  scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
+  scope :deleted, -> { where(:deleted => STATUS_DELETED) }
 
   acts_as_customizable
     
@@ -71,10 +70,10 @@ class DmsfFolder < ActiveRecord::Base
 
   validates :title, :presence => true
   validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted], 
-    conditions: -> { where.not(deleted: true) }
+    conditions: -> { where(:deleted => STATUS_ACTIVE) }
   validates_format_of :title, :with => @@invalid_characters,
     :message => l(:error_contains_invalid_character)
-  validate :check_cycle
+  validate :check_cycle    
 
   before_create :default_values
   def default_values
@@ -119,19 +118,23 @@ class DmsfFolder < ActiveRecord::Base
     if commit
       self.destroy
     else
-      self.deleted = true
+      self.deleted = STATUS_DELETED
       self.deleted_by_user = User.current
       self.save
     end
   end
+  
+  def deleted?
+    self.deleted == STATUS_DELETED
+  end
 
   def restore
-    if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted)
+    if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted?)
       errors[:base] << l(:error_parent_folder)
       return false
     end
     self.referenced_links.each { |l| l.restore }
-    self.deleted = false
+    self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
     self.save
   end

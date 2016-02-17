@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ class DmsfFilesController < ApplicationController
         raise DmsfAccessError if @revision.file != @file
       end
       check_project(@revision.file)    
-      raise ActionController::MissingFile if @file.deleted
+      raise ActionController::MissingFile if @file.deleted?
       log_activity('downloaded')      
       access = DmsfFileRevisionAccess.new
       access.user = User.current
@@ -74,7 +74,7 @@ class DmsfFilesController < ApplicationController
           raise DmsfAccessError if @revision.file != @file
         end
         check_project(@revision.file)      
-        raise ActionController::MissingFile if @revision.file.deleted
+        raise ActionController::MissingFile if @revision.file.deleted?
         log_activity('downloaded')        
         access = DmsfFileRevisionAccess.new
         access.user = User.current
@@ -231,7 +231,7 @@ class DmsfFilesController < ApplicationController
   end
 
   def delete_revision
-    if @revision # && !@revision.deleted
+    if @revision
       if @revision.delete(true)
         flash[:notice] = l(:notice_revision_deleted)
         log_activity('deleted')
