@@ -43,6 +43,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     @project1 = Project.find_by_id 1    
     @project1.enable_module! :dmsf
     @wf1 = DmsfWorkflow.find_by_id 1
+    @wf3 = DmsfWorkflow.find_by_id 3
     @wfsa2 = DmsfWorkflowStepAssignment.find_by_id 2
     @revision1 = DmsfFileRevision.find_by_id 1
     @revision2 = DmsfFileRevision.find_by_id 2
@@ -66,6 +67,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_kind_of DmsfWorkflowStep, @wfs5
     assert_kind_of Project, @project1    
     assert_kind_of DmsfWorkflow, @wf1
+    assert_kind_of DmsfWorkflow, @wf3
     assert_kind_of DmsfWorkflowStepAssignment, @wfsa2
     assert_kind_of DmsfFileRevision, @revision1
     assert_kind_of DmsfFileRevision, @revision2
@@ -133,7 +135,14 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_response :forbidden        
   end
   
-  def test_index    
+  def test_index_administration
+    @request.session[:user_id] = @user_admin.id
+    get :index
+    assert_response :success
+    assert_template 'index'
+  end
+  
+  def test_index_project    
     get :index, :project_id => @project1.id
     assert_response :success
     assert_template 'index'
@@ -144,6 +153,19 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_response :success
     assert_template 'new'
   end    
+  
+  def test_lock
+    put :update, :id => @wf1.id, :dmsf_workflow => { :status => DmsfWorkflow::STATUS_LOCKED }
+    @wf1.reload
+    assert @wf1.locked?, "#{@wf1.name} status is #{@wf1.status}"
+  end
+  
+  def test_unlock
+    @request.session[:user_id] = @user_admin.id
+    put :update, :id => @wf3.id, :dmsf_workflow => { :status => DmsfWorkflow::STATUS_ACTIVE }    
+    @wf3.reload
+    assert @wf3.active?, "#{@wf3.name} status is #{@wf3.status}"
+  end
 
   def test_show
     get :show, :id => @wf1.id
@@ -153,7 +175,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   
   def test_create        
     assert_difference 'DmsfWorkflow.count', +1 do    
-      post :create, :dmsf_workflow => {:name => 'wf3'}, :project_id => @project1.id
+      post :create, :dmsf_workflow => {:name => 'wf4'}, :project_id => @project1.id
     end    
     assert_redirected_to settings_project_path(@project1, :tab => 'dmsf_workflow')    
   end

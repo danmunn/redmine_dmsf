@@ -24,6 +24,8 @@ class DmsfWorkflow < ActiveRecord::Base
       
   scope :sorted, lambda { order('name ASC') }
   scope :global, lambda { where('project_id IS NULL') }
+  scope :active, lambda { where(:status => STATUS_ACTIVE) }
+  scope :status, lambda { |arg| where(arg.blank? ? nil : {:status => arg.to_i}) }
     
   validate :name_validation
   validates :name, :presence => true
@@ -60,6 +62,9 @@ class DmsfWorkflow < ActiveRecord::Base
   STATE_WAITING_FOR_APPROVAL = 1
   STATE_APPROVED = 2
   STATE_REJECTED = 4
+  
+  STATUS_LOCKED = 0
+  STATUS_ACTIVE = 1
   
   def participiants
     users = Array.new
@@ -247,4 +252,13 @@ class DmsfWorkflow < ActiveRecord::Base
     end
     return new_wf
   end
+  
+  def locked?
+    self.status == STATUS_LOCKED
+  end
+  
+  def active?
+    self.status == STATUS_ACTIVE
+  end
+  
 end

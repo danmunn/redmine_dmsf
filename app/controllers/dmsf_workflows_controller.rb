@@ -28,8 +28,9 @@ class DmsfWorkflowsController < ApplicationController
   
   layout :workflows_layout
   
-  def index    
-    @workflow_pages, @workflows = paginate DmsfWorkflow.global.sorted, :per_page => 25
+  def index
+    @status = params[:status] || 1
+    @workflow_pages, @workflows = paginate DmsfWorkflow.status(@status).global.sorted, :per_page => 25
   end
   
   def action        
@@ -238,16 +239,21 @@ class DmsfWorkflowsController < ApplicationController
   end
   
   def update    
-    if params[:dmsf_workflow] && @dmsf_workflow.update_attributes(
-        {:name => params[:dmsf_workflow][:name]})
-      flash[:notice] = l(:notice_successful_update)
-      if @project
-        redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
+    if params[:dmsf_workflow]
+      res = @dmsf_workflow.update_attributes({:name => params[:dmsf_workflow][:name]}) if params[:dmsf_workflow][:name].present?
+      res = @dmsf_workflow.update_attributes({:status => params[:dmsf_workflow][:status]}) if params[:dmsf_workflow][:status].present?
+      if res
+        flash[:notice] = l(:notice_successful_update)
+        if @project
+          redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
+        else
+          redirect_to dmsf_workflows_path
+        end    
       else
-        redirect_to dmsf_workflows_path
-      end    
+        flash[:error] = @dmsf_workflow.errors.full_messages.to_sentence
+        redirect_to dmsf_workflow_path(@dmsf_workflow)
+      end
     else
-      flash[:error] = @dmsf_workflow.errors.full_messages.to_sentence
       redirect_to dmsf_workflow_path(@dmsf_workflow)
     end
   end

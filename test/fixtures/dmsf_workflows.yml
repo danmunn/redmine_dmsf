@@ -7,3 +7,8 @@ wf1:
 wf2:
   id: 2
   name: wf2
+  
+wf3:
+  id: 3
+  name: wf3
+  status: 0

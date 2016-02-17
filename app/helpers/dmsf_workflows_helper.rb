@@ -1,8 +1,7 @@
-# encoding: utf-8
-#
+# encoding: utf-8#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -56,7 +55,7 @@ module DmsfWorkflowsHelper
   def dmsf_workflows_for_select(project, dmsf_workflow_id)
     options = Array.new        
     options << ['', -1]
-    DmsfWorkflow.sorted.where(['project_id = ? OR project_id IS NULL', project.id]).each do |wf|
+    DmsfWorkflow.active.sorted.where(['project_id = ? OR project_id IS NULL', project.id]).each do |wf|
       if wf.project_id
         options << [wf.name, wf.id]
       else
@@ -69,7 +68,7 @@ module DmsfWorkflowsHelper
   def dmsf_all_workflows_for_select(dmsf_workflow_id)
     options = Array.new        
     options << ['', 0]    
-    DmsfWorkflow.sorted.all.each do |wf|            
+    DmsfWorkflow.active.sorted.all.each do |wf|            
       if wf.project_id
         prj = Project.find_by_id wf.project_id
         if User.current.allowed_to?(:manage_workflows, prj)
@@ -95,4 +94,21 @@ module DmsfWorkflowsHelper
     end
     s.html_safe    
   end
+  
+  def change_status_link(workflow)  
+    url = { :controller => 'dmsf_workflows', :action => 'update', :id => workflow.id }
+    if workflow.locked?
+      link_to l(:button_unlock), url.merge(:dmsf_workflow => {:status => DmsfWorkflow::STATUS_ACTIVE}), :method => :put, :class => 'icon icon-unlock'          
+    else
+      link_to l(:button_lock), url.merge(:dmsf_workflow => {:status => DmsfWorkflow::STATUS_LOCKED}), :method => :put, :class => 'icon icon-lock'      
+    end
+  end
+  
+  def workflows_status_options_for_select(selected)
+    worflows_count_by_status = DmsfWorkflow.global.group('status').count.to_hash
+    options_for_select([[l(:label_all), ''],
+      ["#{l(:status_active)} (#{worflows_count_by_status[DmsfWorkflow::STATUS_ACTIVE].to_i})", DmsfWorkflow::STATUS_ACTIVE.to_s],                        
+      ["#{l(:status_locked)} (#{worflows_count_by_status[DmsfWorkflow::STATUS_LOCKED].to_i})", DmsfWorkflow::STATUS_LOCKED.to_s]], selected.to_s)
+  end
+  
 end

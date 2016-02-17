@@ -211,6 +211,7 @@ table.access-table tbody td, table.access-table tbody tr:hover td {
 #admin-menu a.approvalworkflows { background-image: url(../images/ticket_go.png); }
 #users_for_delegate {height: 200px; overflow:auto;}
 #users_for_delegate label {display: block;}
+tr.workflow.locked a { color: #aaa; }
 
 .revision_box{
   padding: 0px 0px 0px 0px;
