@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -66,8 +66,13 @@ class DmsfConvertDocuments
 
           folder = DmsfFolder.new
 
-          folder.project = project          
-          folder.user = document.attachments.reorder("#{Attachment.table_name}.created_on ASC").first.try(:author)
+          folder.project = project
+          attachment = document.attachments.reorder("#{Attachment.table_name}.created_on ASC").first
+          if attachment
+            folder.user = attachment.author
+          else
+            folder.user = Users.active.where(:admin => true).first
+          end
 
           folder.title = document.title
           folder.title.gsub!(/[\/\\\?":<>]/, '-') if replace
