@@ -196,7 +196,7 @@ Before installing ensure that the Redmine instance is stopped.
             
             rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
 
-            (If you don't run the rake task as the web server user don't forget to change the ownership of the imported files, e.g.
+            (If you don't run the rake task as the web server user, don't forget to change the ownership of the imported files, e.g.
               chown -R www-data:www-data /redmine/files/dmsf
             afterwards)
 
