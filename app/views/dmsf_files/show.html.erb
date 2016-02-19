@@ -61,13 +61,18 @@
   <% end %>
 </div>
 
-<%= render(:partial => '/dmsf/path', :locals => {:folder => @file.folder, :filename => @file.title}) %>  
+<%= render(:partial => '/dmsf/path', :locals => {:folder => @file.folder, :filename => @file.title}) %>
 
 <% if User.current.allowed_to?(:file_manipulation, @file.project) && !@file.locked_for_user? %>
   <%= error_messages_for('file') %>
   <%= error_messages_for('revision') %>
   <%= render(:partial => 'file_new_revision') %>
 <% end %>
+
+<div class="dmsf_id_box dmsf_detail">
+  <%= label_tag('', "#{l(:label_document)}:") %>
+  <%= "##{@file.id}" %>
+</div>
 
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.revisions.visible[@revision_pages.offset,@revision_pages.per_page].each do |revision| %>
@@ -92,7 +97,7 @@
         <%= link_to(revision.user.name, user_path(revision.user)) if revision.user %>
       </div>
     </div>
-    <div style="border: 1px solid #e4e4e4;">
+    <div class="dmsf_revision_inner_box">
       <div class="clear">
         <div class="splitcontentleft">			
           <%= label_tag('', "#{l(:label_title)}:") %>
@@ -117,12 +122,9 @@
         <% wf = DmsfWorkflow.find_by_id(revision.dmsf_workflow_id) %>
         <% if wf %>
           <%= "#{wf.name} - " %>
-          <%= link_to(
-            revision.workflow_str(false),
-            log_dmsf_workflow_path(
-              :project_id => @project.id, 
-              :id => wf.id,                                 
-              :dmsf_file_revision_id => revision.id),
+          <%= link_to(revision.workflow_str(false),
+            log_dmsf_workflow_path(:project_id => @project.id, 
+              :id => wf.id, :dmsf_file_revision_id => revision.id),
             :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(revision.id)),
             :remote => true) %>
         <% else %>
@@ -131,7 +133,7 @@
       </div>
       <div class="splitcontentright clear">		
         <%= label_tag('', "#{l(:label_mime)}:") %>
-        <%= h(revision.mime_type) %>&nbsp;
+        <%= h(revision.mime_type) %>
         <br/>
         <%= label_tag('', "#{l(:label_size)}:") %>
         <%= number_to_human_size(revision.size) %>		

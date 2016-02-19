@@ -2,7 +2,7 @@
 * Redmine plugin for Document Management System "Features"
 *
 * Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-* Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+* Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -209,16 +209,30 @@ table.access-table tbody td, table.access-table tbody tr:hover td {
 
 /* Approval workflow */
 #admin-menu a.approvalworkflows { background-image: url(../../../images/ticket_go.png); }
-#users_for_delegate {height: 200px; overflow:auto;}
-#users_for_delegate label {display: block;}
+#users_for_delegate { height: 200px; overflow:auto; }
+#users_for_delegate label { display: block; }
 tr.workflow.locked a { color: #aaa; }
 
-.revision_box{
+.revision_box {
   padding: 0px 0px 0px 0px;
   margin-bottom: 10px;
   background-color:#f6f6f6;
   color:#505050;
   line-height:1.5em;  
+}
+
+.dmsf_revision_inner_box {
+  border: 1px solid #e4e4e4;
+}
+
+.dmsf_id_box {
+  float: right;
+  white-space: nowrap;
+  line-height: 1.5em;
+  color: #505050;
+  margin-top: 5px;
+  padding-left: 10px;
+  //font-size: 0.9em;
 }
 
 div.revision_box .ui-widget-header {
