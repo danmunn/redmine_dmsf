@@ -231,8 +231,7 @@ tr.workflow.locked a { color: #aaa; }
   line-height: 1.5em;
   color: #505050;
   margin-top: 5px;
-  padding-left: 10px;
-  //font-size: 0.9em;
+  padding-left: 10px;  
 }
 
 div.revision_box .ui-widget-header {
