@@ -26,11 +26,14 @@
 
 <div class="contextual">
   <% if User.current.allowed_to?(:file_manipulation, @project) %>
-    <% unless @file.locked? %>
-       <%= link_to(l(:button_lock),
-          lock_dmsf_files_path(:id => @file),
-          :title => l(:title_lock_file),
-          :class => 'icon icon-dmsf-lock') %>
+    <% unless @file.locked_for_user? %>
+      <% unless @file.locked? %> 
+        <%= link_to(l(:button_lock), lock_dmsf_files_path(:id => @file),
+          :title => l(:title_lock_file), :class => 'icon icon-dmsf-lock') %>
+      <% else %>
+        <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
+          :title => l(:title_unlock_file), :class => 'icon icon-dmsf-unlock') %>          
+      <% end %>
       <% if @file.notification %>              
         <%= link_to(l(:label_notifications_off),
           notify_deactivate_dmsf_files_path(:id => @file),
@@ -50,11 +53,9 @@
         :title => l(:title_copy), :class => 'icon icon-copy') %>
       <%= delete_link @file if @file_delete_allowed %>
     <% else %>
-      <% if (!@file.locked_for_user? || User.current.allowed_to?(:force_file_unlock, @project)) && @file.unlockable? %>
-        <%= link_to(l(:button_unlock),
-          unlock_dmsf_files_path(:id => @file),
-          :title => l(:title_unlock_file),
-          :class => 'icon icon-dmsf-unlock')%>        
+      <% if User.current.allowed_to?(:force_file_unlock, @project) %>
+        <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
+          :title => l(:title_unlock_file), :class => 'icon icon-dmsf-unlock')%>        
       <% end %>        
     <% end %>   
   <% end %>
@@ -62,9 +63,11 @@
 
 <%= render(:partial => '/dmsf/path', :locals => {:folder => @file.folder, :filename => @file.title}) %>  
 
-<%= error_messages_for('file') %>
-<%= error_messages_for('revision') %>
-<%= render(:partial => 'file_new_revision') if User.current.allowed_to?(:file_manipulation, @file.project) %>
+<% if User.current.allowed_to?(:file_manipulation, @file.project) && !@file.locked_for_user? %>
+  <%= error_messages_for('file') %>
+  <%= error_messages_for('revision') %>
+  <%= render(:partial => 'file_new_revision') %>
+<% end %>
 
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.revisions.visible[@revision_pages.offset,@revision_pages.per_page].each do |revision| %>

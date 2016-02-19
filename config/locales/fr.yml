@@ -2,10 +2,10 @@
 # 
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012  Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2014  Atmis
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2014   Atmis
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -219,7 +219,6 @@ fr:
   warning_folder_not_locked: Echec du verrouillage du dossier
   notice_folder_unlocked: Le dossier a été déverrouillé
   error_only_user_that_locked_folder_can_unlock_it: "Vous n'êtes autorisé à déverrouiller ce dossier"
-  title_folder_parent_locked: "Le dossier parent %{name} verrouillé"  
   title_unlock_folder: Déverrouiller afin de permettre la modification par les membres du projet
   title_lock_folder: "Verrouiller afin d'empêcher les modifications du dossier"
   

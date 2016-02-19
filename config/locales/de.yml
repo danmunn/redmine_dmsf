@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2011    Terrence Miller
 # Copyright (C) 2013    Christian Wetting <christian.wetting@kontron.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -219,7 +219,6 @@ de:
   warning_folder_not_locked: Der Ordner konnte nicht gesperrt werden
   notice_folder_unlocked: Der Ordner wurde erfolgreich entsperrt
   error_only_user_that_locked_folder_can_unlock_it: Sie haben keine Berechtigung zur Entsperrung des Ordners
-  title_folder_parent_locked: "Übergeordnetes Verzeichnis %{name} ist gesperrt"  
   title_unlock_folder: Ordner zur Bearbeitung durch andere Benutzer entsperren
   title_lock_folder: Ordner zum Schutz vor Bearbeitung durch andere Benutzer sperren
   

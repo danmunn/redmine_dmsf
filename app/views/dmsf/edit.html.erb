@@ -1,7 +1,11 @@
-<%# Redmine plugin for Document Management System "Features"
+<%# 
+# encoding: utf-8
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,12 +24,17 @@
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
-  <% if User.current.allowed_to?(:folder_manipulation, @project) && params[:action] == 'edit' %>
-    <% unless @folder.locked? %>
-       <%= link_to(l(:button_lock),
+  <% if !@folder.new_record? && User.current.allowed_to?(:folder_manipulation, @project) %>
+    <% if !@folder.locked_for_user? %>
+      <% unless @folder.locked? %>
+        <%= link_to(l(:button_lock),
           lock_dmsf_path(:id => @project, :folder_id => @folder),
-          :title => l(:title_lock_file),
-          :class => 'icon icon-dmsf-lock') %>  
+          :title => l(:title_lock_file), :class => 'icon icon-dmsf-lock') %>  
+      <% else %>
+        <%= link_to_if(@folder.unlockable?, l(:button_unlock),
+          unlock_dmsf_path(:id => @project, :folder_id => @folder),
+          :title => l(:title_unlock_file), :class => 'icon icon-dmsf-unlock')%>            
+      <% end %>
       <% if @folder.notification %>              
           <%= link_to(l(:label_notifications_off),
            notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
@@ -39,22 +48,17 @@
         <% end %>      
       <%= link_to(l(:label_link_to), 
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder.id, :type => 'link_to'),
-        :title => l(:title_create_link), 
-        :class => 'icon icon-link') %>
+        :title => l(:title_create_link), :class => 'icon icon-link') %>
       <%= link_to(l(:button_copy), copy_folder_path(:id => @folder),
         :title => l(:title_copy), :class => 'icon icon-copy') %>      
       <%= link_to(l(:button_delete),
         delete_dmsf_path(:id => @project, :folder_id => @folder),
         :data => {:confirm => l(:text_are_you_sure)},            
-        :title => l(:title_delete),
-        :class => 'icon icon-del') %> 
-    <% else %>
-      <% if (!@folder.locked_for_user? || User.current.allowed_to?(:force_file_unlock, @project)) && @folder.unlockable? %>
-        <%= link_to(l(:button_unlock),
-          unlock_dmsf_path(:id => @project, :folder_id => @folder),
-            :title => l(:title_unlock_file),
-            :class => 'icon icon-dmsf-unlock')%>
-      <% end %>        
+        :title => l(:title_delete), :class => 'icon icon-del') %> 
+    <% elsif @force_file_unlock_allowed %>
+      <%= link_to_if(@folder.unlockable?, l(:button_unlock),
+        unlock_dmsf_path(:id => @project, :folder_id => @folder),
+          :title => l(:title_unlock_file), :class => 'icon icon-dmsf-unlock')%>      
     <% end %>   
   <% end %>
 </div>

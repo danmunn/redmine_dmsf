@@ -4,9 +4,8 @@
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 # Polish translation created by Sebastian Białas <sbialas@bs-it.pl> www.bs-it.pl
-#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -220,7 +219,6 @@ pl:
   warning_folder_not_locked: Niestety folder nie może zostać zablokowany
   notice_folder_unlocked: Folder został odblokowany
   error_only_user_that_locked_folder_can_unlock_it: Nie posiadasz uprawnień do odblokowania tego folderu
-  title_folder_parent_locked: "Folder nadrzędny %{name} jest zablokowany"  
   title_unlock_folder: Odblokuj w celu umożliwienia wprowadzania zmian innym użytkownikom
   title_lock_folder: Zablokuj aby zabezpieczyć przed wprowadzaniem zmian przez innych użytkowników
 
@@ -238,6 +236,7 @@ pl:
   field_label_dmsf_workflow: Proces akceptacji
   field_label_dmsf_workflow_name: Nazwa procesu akceptacji
   label_dmsf_workflow_plural: Procesy akceptacji
+  label_dmsf_workflow_plural_num: Procesy akceptacji (%{count})
   label_dmsf_workflow_step: Krok
   label_dmsf_workflow_step_plural: Kroki
   label_dmsf_workflow_approval: Akceptacja

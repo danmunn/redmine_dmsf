@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -56,14 +56,24 @@
 <td class="author"><%= h(subfolder.user) if subfolder %></td>
 <td class="buttons">
   <% if @folder_manipulation_allowed %>
-    <% unless locked %>
+    <% unless locked_for_user %>
      <%= link_to(image_tag('edit.png'),
         edit_dmsf_path(:id => project, :folder_id => subfolder),
         :title => l(:link_edit, :title => subfolder ? h(subfolder.title) : project.name)) %>
       <% if subfolder %>
-        <%= link_to(image_tag('lock.png', :plugin => 'redmine_dmsf'),
-          lock_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:title_lock_file)) %>
+        <% if locked %>
+          <% if subfolder.unlockable? %>
+            <%= link_to(image_tag('unlock.png', :plugin => 'redmine_dmsf'),
+              unlock_dmsf_path(:id => project, :folder_id => subfolder),
+              :title => l(:title_unlock_file)) %>              
+          <% else %>
+            <span class="icon"></span>
+          <% end %>
+        <% else %>
+          <%= link_to(image_tag('lock.png', :plugin => 'redmine_dmsf'),
+            lock_dmsf_path(:id => project, :folder_id => subfolder),
+            :title => l(:title_lock_file)) %>
+        <% end %>
       <% else %>
         <span class="icon"></span>
       <% end %>
@@ -77,11 +87,9 @@
           :title => l(:title_notifications_not_active_activate)) %>
       <% end %>
       <% if link %>
-        <%= link_to(image_tag('delete.png'),
-          dmsf_link_path(link),
+        <%= link_to(image_tag('delete.png'), dmsf_link_path(link),
           :data => {:confirm => l(:text_are_you_sure)},
-          :method => :delete,
-          :title => l(:title_delete)) %>                       
+          :method => :delete, :title => l(:title_delete)) %>                       
       <% else %>
         <%= link_to(image_tag('delete.png'),
           delete_dmsf_path(:id => project, :folder_id => subfolder),

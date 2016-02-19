@@ -5,7 +5,7 @@
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,12 +22,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% html_title(l(:dmsf)) %>
+<% html_title l(:dmsf) %>
 <div class="contextual">
   <% if @folder_manipulation_allowed %>    
     <% if @folder.nil? %>      
-      <%= link_to(l(:button_edit), 
-        edit_root_dmsf_path(:id => @project),
+      <%= link_to(l(:button_edit), edit_root_dmsf_path(:id => @project),
         :title => l(:link_edit, :title => l(:link_documents)), 
         :class => 'icon icon-edit') %>
     <% elsif !@locked_for_user %>      
@@ -37,54 +36,31 @@
         :class => 'icon icon-edit') %>
     <% end %>
     <% if @folder && (!@locked_for_user || User.current.allowed_to?(:force_file_unlock, @project)) %>
-      <% if @folder.locked? %>
-        <% unless @folder.unlockable? %>
-          <%= link_to(l(:button_unlock),
-            :title => l(:title_folder_parent_locked, :name => @folder.folder.lock.reverse[0].folder.title),
-            :class => 'icon icon-dmsf-unlock') if @folder %>
-        <% else %>
-          <%= link_to(l(:button_unlock),
-            unlock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-            :title => l(:title_unlock_folder),
-           :class => 'icon icon-dmsf-unlock') if @folder %>          
-        <% end %>
+      <% if @folder.locked? %>                
+        <%= link_to_if(@folder.unlockable?, l(:button_unlock),
+          unlock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
+          :title => l(:title_unlock_folder), :class => 'icon icon-dmsf-unlock')  %>        
       <% else %>
         <%= link_to(l(:button_lock),
           lock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-          :title => l(:title_lock_folder),
-          :class => 'icon icon-dmsf-lock') if @folder %>
+          :title => l(:title_lock_folder), :class => 'icon icon-dmsf-lock') %>
       <% end %>
-    <% end %>
-    <% unless @folder %>         
-      <% if @project.dmsf_notification %>        
-        <%= link_to(l(:label_notifications_off), 
-          notify_deactivate_dmsf_path(:id => @project),
-          :title => l(:title_notifications_active_deactivate), 
-          :class => 'icon icon-notification-on') %>
-      <% else %>        
-        <%= link_to(l(:label_notifications_on),
-          notify_activate_dmsf_path(:id => @project),
-          :title => l(:title_notifications_active_deactivate), 
-          :class => 'icon icon-notification-off') %>
-      <% end %> 
+    <% end %>   
+    <% if !@locked_for_user && ((@folder && @folder.notification) || (!@filder && @project.dmsf_notification)) %>
+      <%= link_to(l(:label_notifications_off),
+        notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
+        :title => l(:title_notifications_active_deactivate),
+        :class => 'icon icon-notification-on') %>
     <% else %>
-      <% if @folder.notification %>
-          <%= link_to(l(:label_notifications_off),
-            notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
-            :title => l(:title_notifications_active_deactivate),
-            :class => 'icon icon-notification-on') %>
-        <% else %>
-          <%= link_to(l(:label_notifications_on),
-            notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
-            :title => l(:title_notifications_not_active_activate),
-            :class => 'icon icon-notification-off') %>
-        <% end %>    
-    <% end %>    
-    <% if @file_manipulation_allowed %>      
+      <%= link_to(l(:label_notifications_on),
+        notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
+        :title => l(:title_notifications_not_active_activate),
+        :class => 'icon icon-notification-off') %>
+    <% end %>        
+    <% if @file_manipulation_allowed && !@locked_for_user %>
       <%= link_to(l(:label_link_from), 
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder, :type => 'link_from'),
-        :title => l(:title_create_link), 
-        :class => 'icon icon-link') unless @locked_for_user %>
+        :title => l(:title_create_link), :class => 'icon icon-link') %>
     <% end %>    
     <%= link_to(l(:link_create_folder), 
       new_dmsf_path(:id => @project, :parent_id => @folder),
@@ -288,4 +264,6 @@
   </script>
 <% end %>
 
-<%= render(:partial => 'dmsf_upload/multi_upload') if (@file_manipulation_allowed && !@locked_for_user) %>
+<% if (@file_manipulation_allowed && !@locked_for_user) %>
+  <%= render(:partial => 'dmsf_upload/multi_upload') %>
+<% end %>

@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -157,8 +157,7 @@ ja:
   permission_file_manipulation: ファイルの操作  
   permission_force_file_unlock: ファイルの強制ロック解除
   permission_manage_workflows: ワークフロー管理
-  permission_file_delete: ファイルの削除
-  permission_file_approval: ファイルの承認
+  permission_file_delete: ファイルの削除  
   label_file: ファイル
   field_folder: フォルダ
   error_create_cycle_in_folder_dependency: フォルダの依存関係が循環しています
@@ -219,8 +218,7 @@ ja:
   notice_folder_locked: "フォルダをロックしました"
   warning_folder_not_locked: "フォルダをロックすることができませんでした"
   notice_folder_unlocked: "フォルダのロックを解除しました"
-  error_only_user_that_locked_folder_can_unlock_it: "このフォルダのロックを解除する権限がありません"
-  title_folder_parent_locked: "親フォルダ %{name} はロックされています"  
+  error_only_user_that_locked_folder_can_unlock_it: "このフォルダのロックを解除する権限がありません"  
   title_unlock_folder: "ロックを解除し他メンバが更新できるようにします"
   title_lock_folder: "ロックし他メンバとの競合を回避します"
 
@@ -294,13 +292,14 @@ ja:
   label_notifications_off: 通知オフ
   field_target_file: リンク元ファイル
   title_download_entries: ダウンロード記録
+  label_external: 外部
+  
   label_link_name: リンク名
   label_link_external_url: URL
   label_target_folder: リンク先フォルダ
   label_source_folder: リンク元フォルダ
   label_target_project: リンク先プロジェクト
-  label_source_project: リンク元プロジェクト
-  label_external: 外部
+  label_source_project: リンク元プロジェクト  
   
   text_email_doc_updated_subject: "プロジェクト'%{project}'のファイルが更新されました"
   text_email_doc_updated: が次のファイルを更新しました。
@@ -334,4 +333,3 @@ ja:
           
   label_maximum_ajax_upload_filesize: アップロードファイルサイズ上限
   note_maximum_ajax_upload_filesize: アップロード可能なファイルサイズの上限。AjaxおよびRedmineの仕様に制限される（2ギガバイト程度までは確認済み）単位はMB。
-

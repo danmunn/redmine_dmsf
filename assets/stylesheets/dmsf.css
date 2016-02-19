@@ -208,7 +208,7 @@ table.access-table tbody td, table.access-table tbody tr:hover td {
 }
 
 /* Approval workflow */
-#admin-menu a.approvalworkflows { background-image: url(../images/ticket_go.png); }
+#admin-menu a.approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 #users_for_delegate {height: 200px; overflow:auto;}
 #users_for_delegate label {display: block;}
 tr.workflow.locked a { color: #aaa; }
@@ -263,7 +263,6 @@ table.list td.step {
 .modal{ font-size: 12px}
 
 /* Command icons */
-.dmsf_icon-narrow { padding-left: 16px }
 .icon-link { background-image: url(../images/link.png); }
 .icon-notification-on { background-image: url(../images/notify.png); margin-left: 3px; }
 .icon-notification-off { background-image: url(../images/notifynot.png); margin-left: 3px; }

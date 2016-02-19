@@ -153,11 +153,7 @@ class DmsfUploadController < ApplicationController
           file.notification = Setting.plugin_redmine_dmsf[:dmsf_default_notifications].present?          
           new_revision.minor_version = 0
           new_revision.major_version = 0
-        else
-          if file.locked_for_user?
-            failed_uploads.push(commited_file)
-            next
-          end
+        else          
           if file.last_revision
             last_revision = file.last_revision
             new_revision.source_revision = last_revision
@@ -167,6 +163,11 @@ class DmsfUploadController < ApplicationController
             new_revision.minor_version = 0
             new_revision.major_version = 0
           end
+        end
+        
+        if file.locked_for_user?
+          failed_uploads.push(commited_file)
+          next
         end
 
         commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file[:disk_filename].gsub(/[\/\\]/,'')}"
@@ -186,16 +187,6 @@ class DmsfUploadController < ApplicationController
         end
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         new_revision.size = File.size(commited_disk_filepath)
-
-        if file.locked?
-          begin
-            file.unlock!
-            flash[:notice] = l(:notice_file_unlocked)
-          rescue DmsfLockError => e
-            flash[:error] = e.message
-            next
-          end
-        end
         
         # Need to save file first to generate id for it in case of creation. 
         # File id is needed to properly generate revision disk filename                

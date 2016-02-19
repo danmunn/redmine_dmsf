@@ -2,8 +2,8 @@
 # 
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -219,7 +219,6 @@ zh:
   warning_folder_not_locked: Unfortunately, the folder could not be locked
   notice_folder_unlocked: The folder was successfully unlocked
   error_only_user_that_locked_folder_can_unlock_it: You are not authorised to unlock this folder
-  title_folder_parent_locked: "Parent folder %{name} is locked"  
   title_unlock_folder: Unlock to allow changes for other members
   title_lock_folder: Lock to prevent changes for other members
 

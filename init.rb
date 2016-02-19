@@ -93,7 +93,9 @@ Redmine::Plugin.register :redmine_dmsf do
   
   # Administration menu extension
   Redmine::MenuManager.map :admin_menu do |menu|
-    menu.push :approvalworkflows, {:controller => 'dmsf_workflows', :action => 'index'}, :caption => :label_dmsf_workflow_plural
+    menu.push :approvalworkflows, 
+      {:controller => 'dmsf_workflows', :action => 'index'}, 
+      :caption => :label_dmsf_workflow_plural
   end    
   
   Redmine::WikiFormatting::Macros.register do

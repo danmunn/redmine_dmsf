@@ -2,9 +2,9 @@
 # 
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
-# Copyright (C) 2013 Aecho Liu <aecho1028@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2013    Aecho Liu <aecho1028@gmail.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -219,7 +219,6 @@ zh-TW:
   warning_folder_not_locked: 不好意思，這個資料夾無法被鎖定。
   notice_folder_unlocked: 這個資料夾己經成功地解除鎖定了。
   error_only_user_that_locked_folder_can_unlock_it: 您未被授權，解除這個資料夾的鎖定狀態。
-  title_folder_parent_locked: "上層資料夾 %{name} 被鎖定了。"  
   title_unlock_folder: 解除鎖定。允許其它使用者修改。
   title_lock_folder: 鎖定資料夾。禁止其它使用者修改。
 

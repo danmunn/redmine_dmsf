@@ -298,6 +298,7 @@ class DmsfController < ApplicationController
   def edit
     @parent = @folder.folder
     @pathfolder = copy_folder(@folder)
+    @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
   end
 
   def save

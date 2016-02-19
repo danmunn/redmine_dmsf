@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2015    Agustin Ivorra <agustinivorra@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -219,7 +219,6 @@ es:
   warning_folder_not_locked: Desafortunadamente, el directorio no se pudo bloquear
   notice_folder_unlocked: El directorio se desbloqueó exitosamente
   error_only_user_that_locked_folder_can_unlock_it: No está autorizado para desbloquearel directorio
-  title_folder_parent_locked: "Directorio padre %{name} está bloqueado"  
   title_unlock_folder: Desbloquear para que sea editado por otros miembros
   title_lock_folder: Bloquear para evitar que sea editado por otros miembros
 
