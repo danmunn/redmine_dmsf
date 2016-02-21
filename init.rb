@@ -171,29 +171,26 @@ Redmine::Plugin.register :redmine_dmsf do
                "{{dmsf_image(file_id, size=300)}} -- with custom title and size\n" +
                "{{dmsf_image(file_id, size=640x480)}}"
     macro :dmsf_image do |obj, args|
-      args, options = extract_macro_options(args, :size, :width, :title)
+      args, options = extract_macro_options(args, :size, :width, :height, :title)
       file_id = args.first
       raise 'DMSF document ID required' unless file_id.present?
       size = options[:size]
       width = options[:width]
+      height = options[:height]
       if file = DmsfFile.find_by_id(file_id)
         unless User.current && User.current.allowed_to?(:view_dmsf_files, file.project)        
           raise l(:notice_not_authorized)
         end
         raise 'Not supported image format' unless file.image?
         url = url_for(:controller => :dmsf_files, :action => 'view', :id => file)      
-        if size
-	  if size.include? "%"
-            image_tag(url, :alt => file.title, :width => size, :height => size)
-          elsif size.include? "x"
-            image_tag(url, :alt => file.title, :size => size)
-          else
-            image_tag(url, :alt => file.title, :width => 'auto', :height => size)
-	  end
+        if size and size.include? "%"
+          image_tag(url, :alt => file.title, :width => size, :height => size)
+        elsif height
+          image_tag(url, :alt => file.title, :width => 'auto', :height => height)
         elsif width
           image_tag(url, :alt => file.title, :width => width, :height => 'auto')
         else
-          image_tag(url, :alt => file.title, :width => 'auto', :height => size)
+          image_tag(url, :alt => file.title, :size => size)
         end
       else
         raise "Document ID #{file_id} not found"

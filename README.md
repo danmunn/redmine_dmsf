@@ -122,6 +122,12 @@ Search will now automatically search DMSF content when a Redmine search is perfo
 ####An inline picture with custom size
 `{{dmsf_image(8, size=50%)}}`
 
+####An inline picture with custom height
+`{{dmsf_image(8, height=300)}}`
+
+####An inline picture with custom width
+`{{dmsf_image(8, width=300)}}`
+
 ####An inline picture with custom size
 `{{dmsf_image(8, size=640x480)}}`
 
