@@ -131,6 +131,13 @@ Search will now automatically search DMSF content when a Redmine search is perfo
 ####An inline picture with custom size
 `{{dmsf_image(8, size=640x480)}}`
 
+####A thumbnail with height of 200px
+`{{dmsftn(8)}}`
+
+####A thumbnail with custom size
+`{{dmsftn(8, size=300)}}`
+
+
 The DMSF file/revision id can be found in link for file/revision download from within Redmine.
 
 ###Linking DMSF folders from Wiki entries:

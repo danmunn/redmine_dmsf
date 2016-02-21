@@ -169,6 +169,8 @@ Redmine::Plugin.register :redmine_dmsf do
     desc "Wiki DMSF image:\n\n" +
                "{{dmsf_image(file_id)}}\n" +
                "{{dmsf_image(file_id, size=300)}} -- with custom title and size\n" +
+               "{{dmsf_image(file_id, height=300)}} -- with custom title and height (auto width)\n" +
+               "{{dmsf_image(file_id, width=300)}} -- with custom title and width (auto height)\n" +
                "{{dmsf_image(file_id, size=640x480)}}"
     macro :dmsf_image do |obj, args|
       args, options = extract_macro_options(args, :size, :width, :height, :title)
@@ -196,6 +198,48 @@ Redmine::Plugin.register :redmine_dmsf do
         raise "Document ID #{file_id} not found"
       end
     end
+
+
+    desc "Wiki DMSF thumbnail:\n\n" +
+               "{{dmsftn(file_id)}}\n" +
+               "{{dmsftn(file_id, size=300)}} -- with custom title and size\n" +
+               "{{dmsftn(file_id, height=300)}} -- with custom title and height (auto width)\n" +
+               "{{dmsftn(file_id, width=300)}} -- with custom title and width (auto height)\n" +
+               "{{dmsftn(file_id, size=640x480)}}"
+    macro :dmsftn do |obj, args|
+      args, options = extract_macro_options(args, :size, :width, :height, :title)
+      file_id = args.first
+      raise 'DMSF document ID required' unless file_id.present?
+      size = options[:size]
+      width = options[:width]
+      height = options[:height]
+      if file = DmsfFile.find_by_id(file_id)
+        unless User.current && User.current.allowed_to?(:view_dmsf_files, file.project)        
+          raise l(:notice_not_authorized)
+        end
+        raise 'Not supported image format' unless file.image?
+        url = url_for(:controller => :dmsf_files, :action => 'view', :id => file)      
+        file_view_url = url_for(:controller => :dmsf_files, :action => 'view', :id => file, :download => args[2])
+        if size and size.include? "%"
+          img = image_tag(url, :alt => file.title, :width => size, :height => size)
+        elsif size and size.include? "x"
+          img = image_tag(url, :alt => file.title, :size => size)
+        elsif height
+          img = image_tag(url, :alt => file.title, :width => 'auto', :height => height)
+        elsif width
+          img = image_tag(url, :alt => file.title, :width => width, :height => 'auto')
+        else
+          img = image_tag(url, :alt => file.title, :width => 'auto', :height => 200)
+        end
+        link_to(img,
+          file_view_url, :target => '_blank',
+          :title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version),
+          'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}")
+      else
+        raise "Document ID #{file_id} not found"
+      end
+    end
+
   end
   
   # Rubyzip configuration
