@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -256,7 +256,8 @@ class DmsfFileRevision < ActiveRecord::Base
     else
       filename = self.name
     end    
-    format.sub!('%t', filename)
+    format.sub!('%t', self.title)
+    format.sub!('%f', filename)
     format.sub!('%d', self.updated_at.strftime('%Y%m%d%H%M%S'))
     format.sub!('%v', self.version)
     format.sub!('%i', self.file.id.to_s)

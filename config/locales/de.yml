@@ -109,7 +109,7 @@ de:
   select_option_deactivated: Aus
   select_option_activated: Ein
   label_title_format: Title format
-  text_title_format: "Format des Dokumente-Titels für Speichern (%t - Titel, %d - Datum, %v - Version, %i - ID, %r - Revision). z.B.: %t_%v"
+  text_title_format: "Format des Dokumente-Titels für Speichern (%t - Titel, %f - Datei, %d - Datum, %v - Version, %i - ID, %r - Revision). z.B.: %t_%v"
   title_save_preferences: Einstellungen speichern
   heading_revisions: Versionen
   title_download: Download

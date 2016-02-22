@@ -109,7 +109,7 @@ es:
   select_option_deactivated: Desactivado
   select_option_activated: Activado
   label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
   title_save_preferences: Guardar Preferencias
   heading_revisions: Revisiones
   title_download: Descargar

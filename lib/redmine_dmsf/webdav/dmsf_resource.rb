@@ -49,10 +49,10 @@ module RedmineDmsf
         unless @childern
           @children = []
           if collection?
-            folder.subfolders.visible.map do |p|
+            folder.subfolders.select(:title).visible.map do |p|
               @children.push child(p.title)
             end
-            folder.files.visible.map do |p|
+            folder.files.select(:name).visible.map do |p|
               @children.push child(p.name)
             end
           end
