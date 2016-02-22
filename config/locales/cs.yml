@@ -267,12 +267,12 @@ cs:
   info_revision: "r%{rev}"
   link_workflow: Schvalovací proces
   notice_workflow_started: Schvalovací proces byl úspěšně zahájen
-  text_email_subject_approved: "Schvalovací proces %{name} schválen"
-  text_email_subject_rejected: "Schvalovací proces %{name} zamítnut"
-  text_email_subject_delegated: "Schvalovací proces %{name} delegován"
-  text_email_subject_requires_approval: "Schvalovací proces %{name} očekává Vaše schválení"
-  text_email_subject_updated: "Schvalovací proces %{name} aktualizován"
-  text_email_subject_started: "Schvalovací proces %{name} spuštěn" 
+  text_email_subject_approved: schválen
+  text_email_subject_rejected: zamítnut
+  text_email_subject_delegated: delegován
+  text_email_subject_requires_approval: očekává Vaše schválení
+  text_email_subject_updated: aktualizován
+  text_email_subject_started: spuštěn
   text_email_finished_approved: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl právě ukončen a dokument je schválen."
   text_email_finished_rejected: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl dokončen a dokument byl zamítnut, protože '%{notice}'."
   text_email_finished_delegated: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl delegován, protože '%{notice}' a od Vás se očekává schválení v aktuálním schvalovacím kroku."
@@ -301,10 +301,10 @@ cs:
   label_target_project: Cílový projekt
   label_source_project: Zdrojový projekt  
   
-  text_email_doc_updated_subject: "Dokumenty projektu %{project} aktualizovány"
+  text_email_doc_updated_subject: Dokumenty aktualizovány
   text_email_doc_updated: právě aktualizoval dokumenty projektu
   text_email_doc_follows: takto
-  text_email_doc_deleted_subject: "Dokumenty projektu %{project} smazány"
+  text_email_doc_deleted_subject: Dokumenty smazány
   text_email_doc_deleted: právě smazal dokumety projektu
   label_links_only: pouze odkazy  
   

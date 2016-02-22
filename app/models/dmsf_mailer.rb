@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,48 +27,39 @@ class DmsfMailer < Mailer
   def files_updated(user, project, files)
     if user && project && files.count > 0      
       files = files.select { |file| file.notify? }
-
-      redmine_headers 'Project' => project.identifier if project
-      
+      redmine_headers 'Project' => project.identifier if project      
       @files = files
-      @project = project
-      
+      @project = project      
       set_language_if_valid user.language
-      mail :to => user.mail, 
-          :subject =>  l(:text_email_doc_updated_subject, :project => project.name)
+      mail :to => user.mail,           
+        :subject => "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
     end
   end
   
   def files_deleted(user, project, files)
     if user && files.count > 0      
       files = files.select { |file| file.notify? }
-
-      redmine_headers 'Project' => project.identifier if project
-      
+      redmine_headers 'Project' => project.identifier if project      
       @files = files
-      @project = project
-      
+      @project = project      
       set_language_if_valid user.language
-      mail :to => user.mail, 
-        :subject =>  l(:text_email_doc_deleted_subject, :project => project.name)
+      mail :to => user.mail,         
+        :subject => "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_deleted_subject)}"
     end
   end
     
   def send_documents(project, user, email_params)    
-    zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
-    
+    zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }    
     redmine_headers 'Project' => project.identifier if project
-
     @body = email_params[:body]
     @links_only = email_params[:links_only]
     @folders = email_params[:folders]
-    @files = email_params[:files]
-    
+    @files = email_params[:files]    
     unless @links_only == '1'
       attachments['Documents.zip'] = { :content_type => 'application/zip', :content => zipped_content_data }
-    end
-    
-    mail :to => email_params[:to], :cc => email_params[:cc], :subject => email_params[:subject], :from => user.mail
+    end    
+    mail :to => email_params[:to], :cc => email_params[:cc], 
+      :subject => email_params[:subject], :from => user.mail
   end
   
   def workflow_notification(user, workflow, revision, subject_id, text1_id, text2_id, notice = nil)
@@ -84,7 +75,8 @@ class DmsfMailer < Mailer
       @text1 = l(text1_id, :name => workflow.name, :filename => revision.file.name, :notice => notice)      
       @text2 = l(text2_id)
       @notice = notice
-      mail :to => user.mail, :subject => l(subject_id, :name => workflow.name)
+      mail :to => user.mail, 
+        :subject => "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)}"
     end
   end        
   

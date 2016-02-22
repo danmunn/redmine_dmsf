@@ -267,12 +267,12 @@ fr:
   info_revision: "r%{rev}"
   link_workflow: Flux  
   notice_workflow_started: Flux de validation démarré avec succès
-  text_email_subject_approved: "Flux de validation %{name} approuvé"
-  text_email_subject_rejected: "Flux de validation %{name} rejeté"
-  text_email_subject_delegated: "Flux de validation %{name} délégué"
-  text_email_subject_requires_approval: "Flux de validation %{name} requiert votre approbation"
-  text_email_subject_updated: "Flux de validation %{name} mis à jour"
-  text_email_subject_started: "Flux de validation %{name} démarré" 
+  text_email_subject_approved: approuvé
+  text_email_subject_rejected: rejeté
+  text_email_subject_delegated: délégué
+  text_email_subject_requires_approval: requiert votre approbation
+  text_email_subject_updated: mis à jour
+  text_email_subject_started: démarré
   text_email_finished_approved: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer et le document a été approuvé."
   text_email_finished_rejected: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer et le document a été rejeté pour la raison '%{notice}'."
   text_email_finished_delegated: "Le flux de validation '%{name}' assigné au document '%{filename}' a été délégué pour la raison '%{notice}' et vous êtes tenu d'approuver l'étape actuelle."
@@ -301,10 +301,10 @@ fr:
   label_target_project: Projet cible
   label_source_project: Projet source  
   
-  text_email_doc_updated_subject: "Documents de %{project} mis à jour"
+  text_email_doc_updated_subject: Documents mis à jour
   text_email_doc_updated: a mis à jour des documents de
   text_email_doc_follows: comme suit
-  text_email_doc_deleted_subject: "Documents de %{project} supprimés"
+  text_email_doc_deleted_subject: Documents supprimés
   text_email_doc_deleted: a supprimé des documents de
   label_links_only: liens seulement  
   

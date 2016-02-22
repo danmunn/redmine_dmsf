@@ -267,12 +267,12 @@ de:
   info_revision: "r%{rev}"
   link_workflow: Workflow  
   notice_workflow_started: Genehmigungs-Workflow gestartet
-  text_email_subject_approved: "Genehmigungs-Workflow %{name} genehmigt"
-  text_email_subject_rejected: "Genehmigungs-Workflow %{name} abgelehnt"
-  text_email_subject_delegated: "Genehmigungs-Workflow %{name} deligiert"
-  text_email_subject_requires_approval: "Genehmigungs-Workflow %{name} benötigt deine Genehmigung"
-  text_email_subject_updated: "Genehmigungs-Workflow %{name} bearbeitet"
-  text_email_subject_started: "Genehmigungs-Workflow %{name} gestartet" 
+  text_email_subject_approved: genehmigt
+  text_email_subject_rejected: abgelehnt
+  text_email_subject_delegated: deligiert
+  text_email_subject_requires_approval: benötigt deine Genehmigung
+  text_email_subject_updated: bearbeitet
+  text_email_subject_started: gestartet
   text_email_finished_approved: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist abgeschlossen und die Datei wurde genehmigt."
   text_email_finished_rejected: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist abgeschlossen, aber die Datei wurde abgelehnt, weil: '%{notice}'."
   text_email_finished_delegated: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' wurde an dich deligiert, weil: '%{notice}' und weil deine Zustimmung im aktuellen Genehmigungsschritt benötigt wird."
@@ -301,10 +301,10 @@ de:
   label_target_project: Zielprojekt
   label_source_project: Quellprojekt  
   
-  text_email_doc_updated_subject: "Dokumente im Projekt %{project} wurden aktualisiert"
+  text_email_doc_updated_subject: Dokumente wurden aktualisiert
   text_email_doc_updated: hat folgende Dokumente bearbeitet
   text_email_doc_follows: wie folgt
-  text_email_doc_deleted_subject: "Dokumente im Projekt %{project} wurden gelöscht"
+  text_email_doc_deleted_subject: Dokumente wurden gelöscht
   text_email_doc_deleted: hat folgende Dokumente gelöscht
   label_links_only: nur Verknüpfungen  
   

@@ -267,12 +267,12 @@ es:
   info_revision: "r%{rev}"
   link_workflow: Flujo de Trabajo  
   notice_workflow_started: "Flujo de trabajo de aprobación iniciado satisfactoriamente"
-  text_email_subject_approved: "Flujo de trabajo de aprobación %{name} aprobado"
-  text_email_subject_rejected: "Flujo de trabajo de aprobación %{name} rechazado"
-  text_email_subject_delegated: "Flujo de trabajo de aprobación %{name} delegado"
-  text_email_subject_requires_approval: "Flujo de trabajo de aprobación %{name} requiere su aprobación"
-  text_email_subject_updated: "Flujo de trabajo de aprobación %{name} actualizado"
-  text_email_subject_started: "Flujo de trabajo de aprobación %{name} comenzado" 
+  text_email_subject_approved: aprobado
+  text_email_subject_rejected: rechazado
+  text_email_subject_delegated: delegado
+  text_email_subject_requires_approval: requiere su aprobación
+  text_email_subject_updated: actualizado
+  text_email_subject_started: comenzado
   text_email_finished_approved: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de ser terminado y él ha sido aprobado."
   text_email_finished_rejected: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de ser terminado y él ha sido rechazado por el siguiente motivo '%{notice}'."
   text_email_finished_delegated: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de ser delegado por '%{notice}' y se espera que haga una aprobación en la etapa de aprobación actual."
@@ -301,10 +301,10 @@ es:
   label_target_project: Proyecto destino
   label_source_project: Proyecto fuente  
   
-  text_email_doc_updated_subject: "Documentos de %{project} actualizados"
+  text_email_doc_updated_subject: Documentos actualizados
   text_email_doc_updated: acaba de actualizar los ducumentos de
   text_email_doc_follows: lo siguiente
-  text_email_doc_deleted_subject: "Documentos de %{project} eliminados"
+  text_email_doc_deleted_subject: Documentos eliminados
   text_email_doc_deleted: acaba de eliminar documentos de
   label_links_only: Solo enlaces
   

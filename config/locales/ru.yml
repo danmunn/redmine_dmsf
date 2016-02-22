@@ -267,12 +267,12 @@ ru:
   info_revision: "r%{rev}"
   link_workflow: Согласование  
   notice_workflow_started: Процесс согласования успешно запущен
-  text_email_subject_approved: "Процесс согласования %{name} успешно завершен"
-  text_email_subject_rejected: "Процесс согласования %{name} отклонен"
-  text_email_subject_delegated: "Процесс согласования %{name} делегирован"
-  text_email_subject_requires_approval: "Процесс согласования %{name} требует вашего участия"
-  text_email_subject_updated: "Процесс согласования %{name} обновлен"
-  text_email_subject_started: "Процесс согласования %{name} запущен" 
+  text_email_subject_approved: успешно завершен
+  text_email_subject_rejected: отклонен
+  text_email_subject_delegated: делегирован
+  text_email_subject_requires_approval: ребует вашего участия
+  text_email_subject_updated: обновлен
+  text_email_subject_started: запущен
   text_email_finished_approved: "Процесс согласования '%{name}' документа '%{filename}' только что завершился и документ был согласован."
   text_email_finished_rejected: "Процесс согласования '%{name}' документа '%{filename}' только что завершился и документ был отклонен по причине '%{notice}'."
   text_email_finished_delegated: "Процесс согласования '%{name}' документа '%{filename}' только что был делегирован по причине '%{notice}' и от Вас ожидается согласование."
@@ -301,10 +301,10 @@ ru:
   label_target_project: Целевой проект
   label_source_project: Исходный проект  
   
-  text_email_doc_updated_subject: "Документы проекта %{project} обновлены"
+  text_email_doc_updated_subject: Документы обновлены
   text_email_doc_updated: только что обновил документы
   text_email_doc_follows: следующим образом
-  text_email_doc_deleted_subject: "Документы проекта %{project} удалены"
+  text_email_doc_deleted_subject: Документы удалены
   text_email_doc_deleted: только что удалил документы
   label_links_only: только ссылки
   

@@ -267,12 +267,12 @@ pt-BR:
   info_revision: "r%{rev}"
   link_workflow: Workflow
   notice_workflow_started: Workflow de aprovação foi iniciado com êxito
-  text_email_subject_approved: "Workflow de aprovação %{name}: aprovado"
-  text_email_subject_rejected: "Workflow de aprovação %{name} reprovado"
-  text_email_subject_delegated: "Workflow de aprovação %{name} atribuído para"
-  text_email_subject_requires_approval: "Workflow de aprovação %{name} requer sua aprovação"
-  text_email_subject_updated: "Workflow de aprovação %{name}: atualizado"
-  text_email_subject_started: "Workflow de aprovação %{name}: iniciado"
+  text_email_subject_approved: aprovado
+  text_email_subject_rejected: reprovado
+  text_email_subject_delegated: atribuído para
+  text_email_subject_requires_approval: requer sua aprovação
+  text_email_subject_updated: atualizado
+  text_email_subject_started: iniciado
   text_email_finished_approved: "O workflow de aprovação'%{name}' definido para o documento '%{filename}' foi finalizado e o documento foi aprovado."
   text_email_finished_rejected: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi finalizado e o documento foi reprovado devido a '%{notice}'."
   text_email_finished_delegated: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi atribuido pois '%{notice}' e está aguardando a sua aprovação na etapa atual."
@@ -301,10 +301,10 @@ pt-BR:
   label_target_project: Target project
   label_source_project: Source project
 
-  text_email_doc_updated_subject: "%{project} : Documentos atualizados"
+  text_email_doc_updated_subject: Documentos atualizados
   text_email_doc_updated: atualizou os documentos da área
   text_email_doc_follows: as follows
-  text_email_doc_deleted_subject: "%{project} : Exclusão de documentos"
+  text_email_doc_deleted_subject: Exclusão de documentos
   text_email_doc_deleted: deletou os documentos da área
   label_links_only: links only
 

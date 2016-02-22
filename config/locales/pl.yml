@@ -267,12 +267,12 @@ pl:
   info_revision: "r%{rev}"
   link_workflow: Proces akceptacji
   notice_workflow_started: Proces akceptacji został uruchomiony 
-  text_email_subject_approved: "Proces akceptacji %{name} został zakończony akceptacją"
-  text_email_subject_rejected: "Proces akceptacji %{name} został odrzucony"
-  text_email_subject_delegated: "Proces akceptacji %{name} został delegowany"
-  text_email_subject_requires_approval: "Proces akceptacji %{name} wymaga Twojej akceptacji"
-  text_email_subject_updated: "Proces akceptacji %{name} został zaktualizowany"
-  text_email_subject_started: "Proces akceptacji %{name} został uruchomiony" 
+  text_email_subject_approved: został zakończony akceptacją
+  text_email_subject_rejected: został odrzucony
+  text_email_subject_delegated: został delegowany
+  text_email_subject_requires_approval: wymaga Twojej akceptacji
+  text_email_subject_updated: został zaktualizowany
+  text_email_subject_started: został uruchomiony
   text_email_finished_approved: "Proces akceptacji '%{name}' dokumentu '%{filename}' został właśnie zakończony. Dokument został zaakceptowany."
   text_email_finished_rejected: "Proces akceptacji '%{name}' dokumentu '%{filename}' został właśnie zakończony. Dokument został odrzucony z powodu '%{notice}'."
   text_email_finished_delegated: "Proces akceptacji '%{name}' dokumentu '%{filename}' został właśnie delegowany z powodu '%{notice}'. Zostałeś wskazany jako akceptujący w bieżącym kroku zatwierdzania."
@@ -301,10 +301,10 @@ pl:
   label_target_project: Projekt docelowy
   label_source_project: Projekt źródłowy  
   
-  text_email_doc_updated_subject: "Dokumenty projektu %{project} zostały zaktualizowane"
+  text_email_doc_updated_subject: Dokumenty zostały zaktualizowane
   text_email_doc_updated: dokumenty zostały zaktualizowane
   text_email_doc_follows: następujące
-  text_email_doc_deleted_subject: "Dokumenty projektu %{project} zostały usunięte"
+  text_email_doc_deleted_subject: Dokumenty zostały usunięte
   text_email_doc_deleted: dokumenty zostały usunięte
   label_links_only: odnośniki
   
