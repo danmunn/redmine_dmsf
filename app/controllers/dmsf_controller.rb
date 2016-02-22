@@ -590,8 +590,16 @@ class DmsfController < ApplicationController
         log_activity(f, 'deleted')
       end
       begin
-        DmsfMailer.get_notify_users(@project, deleted_files).each do |u|
+        recipients = DmsfMailer.get_notify_users(@project, deleted_files)
+        recipients.each do |u|
           DmsfMailer.files_deleted(u, @project, deleted_files).deliver
+        end
+        if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+          unless recipients.empty?
+            to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+            to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
+            flash[:warning] = l(:warning_email_notifications, :to => to)
+          end
         end
       rescue Exception => e
         Rails.logger.error "Could not send email notifications: #{e.message}"

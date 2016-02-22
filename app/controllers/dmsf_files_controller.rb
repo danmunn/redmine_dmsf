@@ -211,17 +211,23 @@ class DmsfFilesController < ApplicationController
         if commit
           log_activity('deleted')
           begin
-            DmsfMailer.get_notify_users(@project, [@file]).each do |u|
+            recipients = DmsfMailer.get_notify_users(@project, [@file])
+            recipients.each do |u|
               DmsfMailer.files_deleted(u, @project, [@file]).deliver
+            end
+            if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+              unless recipients.empty?
+                to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+                to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
+                flash[:warning] = l(:warning_email_notifications, :to => to)
+              end
             end
           rescue Exception => e
             Rails.logger.error "Could not send email notifications: #{e.message}"
           end
         end
-      else
-        @file.errors.each do |e, msg|
-          flash[:error] = msg
-        end
+      else        
+        flash[:error] = @file.errors.full_messages.join(', ')
       end
     end
     if commit
@@ -236,10 +242,8 @@ class DmsfFilesController < ApplicationController
       if @revision.delete(true)
         flash[:notice] = l(:notice_revision_deleted)
         log_activity('deleted')
-      else
-        @revision.errors.each do |e, msg|
-          flash[:error] = msg
-        end
+      else        
+        flash[:error] = @revision.errors.full_messages.join(', ')
       end
     end
     redirect_to :action => 'show', :id => @file
