@@ -29,7 +29,8 @@ class DmsfMailer < Mailer
       files = files.select { |file| file.notify? }
       redmine_headers 'Project' => project.identifier if project      
       @files = files
-      @project = project      
+      @project = project
+      message_id project
       set_language_if_valid user.language
       mail :to => user.mail,           
         :subject => "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
@@ -41,7 +42,8 @@ class DmsfMailer < Mailer
       files = files.select { |file| file.notify? }
       redmine_headers 'Project' => project.identifier if project      
       @files = files
-      @project = project      
+      @project = project
+      message_id project
       set_language_if_valid user.language
       mail :to => user.mail,         
         :subject => "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_deleted_subject)}"
@@ -70,6 +72,7 @@ class DmsfMailer < Mailer
       end
       set_language_if_valid user.language
       @user = user
+      message_id workflow
       @workflow = workflow
       @revision = revision      
       @text1 = l(text1_id, :name => workflow.name, :filename => revision.file.name, :notice => notice)      

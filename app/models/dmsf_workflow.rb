@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +20,8 @@
 
 class DmsfWorkflow < ActiveRecord::Base  
   
-  has_many :dmsf_workflow_steps, -> { order 'step ASC, operator DESC' }, :dependent => :destroy  
+  has_many :dmsf_workflow_steps, -> { order 'step ASC, operator DESC' }, :dependent => :destroy
+  belongs_to :author, :class_name => 'User'
       
   scope :sorted, lambda { order('name ASC') }
   scope :global, lambda { where('project_id IS NULL') }
@@ -245,6 +246,7 @@ class DmsfWorkflow < ActiveRecord::Base
     new_wf = self.dup    
     new_wf.name = name if name
     new_wf.project_id = project ? project.id : nil
+    new_wf.author = User.current
     if new_wf.save
       self.dmsf_workflow_steps.each do |step|
         step.copy_to(new_wf)

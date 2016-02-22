@@ -2,7 +2,7 @@
 # 
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -223,6 +223,7 @@ class DmsfWorkflowsController < ApplicationController
         @dmsf_workflow = DmsfWorkflow.new
         @dmsf_workflow.name = params[:dmsf_workflow][:name]
         @dmsf_workflow.project_id = @project.id if @project
+        @dmsf_workflow.author = User.current
         @dmsf_workflow.save
       end
     end
