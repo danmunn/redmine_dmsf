@@ -185,7 +185,7 @@ Redmine::Plugin.register :redmine_dmsf do
         end
         raise 'Not supported image format' unless file.image?
         url = url_for(:controller => :dmsf_files, :action => 'view', :id => file)      
-        if size and size.include? "%"
+        if size && size.include?('%')
           image_tag(url, :alt => file.title, :width => size, :height => size)
         elsif height
           image_tag(url, :alt => file.title, :width => 'auto', :height => height)
