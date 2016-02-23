@@ -113,8 +113,7 @@ class DmsfFolder < ActiveRecord::Base
     elsif !self.subfolders.visible.empty? || !self.files.visible.empty?
       errors[:base] << l(:error_folder_is_not_empty)
       return false
-    end
-    self.referenced_links.each { |l| l.delete(commit) }
+    end    
     if commit
       self.destroy
     else
@@ -132,8 +131,7 @@ class DmsfFolder < ActiveRecord::Base
     if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted?)
       errors[:base] << l(:error_parent_folder)
       return false
-    end
-    self.referenced_links.each { |l| l.restore }
+    end    
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
     self.save

@@ -141,8 +141,7 @@ class DmsfFile < ActiveRecord::Base
     end
     begin
       # Revisions and links of a deleted file SHOULD be deleted too
-      self.revisions.each { |r| r.delete(commit, true) }
-      self.referenced_links.each { |l| l.delete(commit) }
+      self.revisions.each { |r| r.delete(commit, true) }      
       if commit
         self.destroy
       else
@@ -162,8 +161,7 @@ class DmsfFile < ActiveRecord::Base
       errors[:base] << l(:error_parent_folder)
       return false
     end
-    self.revisions.each { |r| r.restore }
-    self.referenced_links.each { |l| l.restore }
+    self.revisions.each { |r| r.restore }    
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
     save

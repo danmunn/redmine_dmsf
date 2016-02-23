@@ -188,19 +188,22 @@ class DmsfController < ApplicationController
       return
     end
 
-    if selected_dir_links.present?
-      selected_dir_links.each do |id|
-        link = DmsfLink.find_by_id id
-        selected_folders << link.target_id if link && !selected_folders.include?(link.target_id.to_s)
+    if selected_dir_links.present? &&
+      (params[:email_entries].present? || params[:download_entries].present?)
+        selected_dir_links.each do |id|
+          link = DmsfLink.find_by_id id
+          selected_folders << link.target_id if link && !selected_folders.include?(link.target_id.to_s)        
       end
     end
 
-    if selected_file_links.present?
-      selected_file_links.each do |id|
-        link = DmsfLink.find_by_id id
-        selected_files << link.target_id if link && !selected_files.include?(link.target_id.to_s)
+    if selected_file_links.present? &&
+      (params[:email_entries].present? || params[:download_entries].present?)
+        selected_file_links.each do |id|
+          link = DmsfLink.find_by_id id
+          selected_files << link.target_id if link && !selected_files.include?(link.target_id.to_s)        
       end
-    end    
+    end
+    
     if params[:email_entries].present?
       email_entries(selected_folders, selected_files)
     elsif params[:restore_entries].present?
@@ -503,15 +506,14 @@ class DmsfController < ApplicationController
     end
     if selected_files && selected_files.is_a?(Array)
       selected_files.each do |selected_file_id|
-        file = DmsfFile.visible.find_by_id selected_file_id
+        file = DmsfFile.visible.find_by_id selected_file_id        
+        unless file && file.last_revision && File.exists?(file.last_revision.disk_file)
+          raise FileNotFound
+        end
         unless (file.project == @project) || User.current.allowed_to?(:view_dmsf_files, file.project)
           raise DmsfAccessError
         end
-        if file && file.last_revision && File.exists?(file.last_revision.disk_file)
-          zip.add_file(file, member, (file.folder.dmsf_path_str if file.folder)) if file
-        else
-          raise FileNotFound
-        end
+        zip.add_file(file, member, (file.folder.dmsf_path_str if file.folder)) if file        
       end
     end
     max_files = Setting.plugin_redmine_dmsf['dmsf_max_file_download'].to_i
