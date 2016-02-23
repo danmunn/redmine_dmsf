@@ -108,7 +108,8 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert @file4.delete(false), @file4.errors.full_messages.to_sentence
     assert @file4.deleted?, "File #{@file4.name} is not deleted"
     assert_equal 0, @file4.revisions.visible.count
-    assert_equal 0, @file4.referenced_links.visible.count
+    # Links should not be deleted
+    assert_equal 2, @file4.referenced_links.visible.count
     @file4.folder.lock!
   end
     
