@@ -33,7 +33,7 @@ class DmsfWorkflow < ActiveRecord::Base
     if self.project_id
       if self.id
         if (DmsfWorkflow.where(['(project_id IS NULL OR (project_id = ? AND id != ?)) AND name = ?', 
-            self.project_id, self.name, self.id]).count > 0)
+            self.project_id, self.id, self.name]).count > 0)
           errors.add(:name, l('activerecord.errors.messages.taken'))
         end
       else
