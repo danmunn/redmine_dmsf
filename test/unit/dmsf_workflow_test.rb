@@ -87,8 +87,15 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     assert_equal 1, @wf1.errors.count        
   end
   
-  def test_validate_name_uniqueness
+  def test_validate_name_uniqueness_globaly   
     @wf2.name = @wf1.name
+    assert !@wf2.save
+    assert_equal 1, @wf2.errors.count        
+  end
+  
+  def test_validate_name_uniqueness_localy
+    @wf2.name = @wf1.name
+    @wf2.project_id = @wf1.project_id
     assert !@wf2.save
     assert_equal 1, @wf2.errors.count        
   end
