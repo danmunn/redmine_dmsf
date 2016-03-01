@@ -45,7 +45,7 @@ module RedmineDmsf
         if available
           serving(env)
         else
-          return fail(403, 'Not Found')          
+          fail(404, "File not found: #{@path}")
         end
       end
     end
