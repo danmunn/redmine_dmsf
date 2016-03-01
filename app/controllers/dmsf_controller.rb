@@ -23,10 +23,6 @@
 class DmsfController < ApplicationController
   unloadable
 
-  class ZipMaxFilesError < StandardError; end
-  class EmailMaxFileSize < StandardError; end
-  class FileNotFound < StandardError; end
-
   before_filter :find_project
   before_filter :authorize
   before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
@@ -217,17 +213,15 @@ class DmsfController < ApplicationController
       redirect_to :back
     else
       download_entries(selected_folders, selected_files)
-    end
-  rescue ZipMaxFilesError
-    flash[:error] = l(:error_max_files_exceeded, :number => Setting.plugin_redmine_dmsf['dmsf_max_file_download'])
-    redirect_to :back
-  rescue EmailMaxFileSize
-    flash[:error] = l(:error_max_email_filesize_exceeded, :number => Setting.plugin_redmine_dmsf['dmsf_max_email_filesize'])
-    redirect_to :back
+    end  
   rescue FileNotFound
     render_404
   rescue DmsfAccessError
-    render_403    
+    render_403
+  rescue Exception => e
+    flash[:error] = e.message
+    Rails.logger.error e.message
+    redirect_to :back  
   end
 
   def tag_changed
@@ -518,7 +512,7 @@ class DmsfController < ApplicationController
     end
     max_files = Setting.plugin_redmine_dmsf['dmsf_max_file_download'].to_i
     if max_files > 0 && zip.files.length > max_files
-      raise ZipMaxFilesError, zip.files.length
+      raise ZipMaxFilesError#, zip.files.length
     end
     zip
   end

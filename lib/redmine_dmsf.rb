@@ -1,8 +1,10 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,8 +23,9 @@
 DMSF_MAX_NOTIFICATION_RECEIVERS_INFO = 10
 
 # DMSF libraries
-require 'redmine_dmsf/patches' #plugin patches
-require 'redmine_dmsf/webdav' #DAV4Rack implementation
+require 'redmine_dmsf/patches' # plugin patches
+require 'redmine_dmsf/webdav' # DAV4Rack implementation
+require 'redmine_dmsf/errors' # Exceptions
 
 
 # Hooks
@@ -33,4 +36,5 @@ module RedmineDmsf
 end
 
 # Add the plugin view folder into ActionMailer's paths to search
-ActionMailer::Base.append_view_path(File.expand_path(File.dirname(__FILE__) + '/../app/views'))
+ActionMailer::Base.append_view_path(File.expand_path(
+    File.dirname(__FILE__) + '/../app/views'))

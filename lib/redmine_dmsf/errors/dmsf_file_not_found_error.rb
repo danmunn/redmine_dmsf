@@ -2,7 +2,6 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -19,35 +18,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require 'time'
-require 'rack/utils'
-require 'rack/mime'
-
-module RedmineDmsf
-  module Webdav
-    class Download < Rack::File
-      def initialize(root, cache_control = nil)
-        @path = root
-        @cache_control = cache_control
-      end
-
-      def _call(env)
-        unless ALLOWED_VERBS.include? env['REQUEST_METHOD']
-          return fail(405, 'Method Not Allowed')
-        end
-
-        available = begin
-          F.file?(@path) && F.readable?(@path)
-        rescue SystemCallError
-          false
-        end
-
-        if available
-          serving(env)
-        else
-          return fail(403, 'Not Found')          
-        end
-      end
-    end
-  end
+class FileNotFound < StandardError
+   
 end
