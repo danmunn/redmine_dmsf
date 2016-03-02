@@ -542,9 +542,9 @@ module RedmineDmsf
         end
         case element[:name]
         when 'supportedlock'
-          supported_lock
+          supportedlock
         when 'lockdiscovery' 
-          discover_lock
+          lockdiscovery
         else 
           super
         end
@@ -576,66 +576,56 @@ module RedmineDmsf
         end
         Download.new(file.last_revision.disk_file)
       end
-
-      # discover_lock
+      
       # As the name suggests, we're returning lock recovery information for requested resource
-      def discover_lock
+      def lockdiscovery
         x = Nokogiri::XML::DocumentFragment.parse ''
         entity = file || folder
         return nil unless entity.locked?
 
-        if !entity.folder.nil? && entity.folder.locked?
-          locks = entity.lock.reverse[0].folder.locks(false)# longwinded way of getting base items locks
+        if entity.folder && entity.folder.locked?
+          locks = entity.lock.reverse[0].folder.locks(false) # longwinded way of getting base items locks
         else
           locks = entity.lock(false)
         end
         
         Nokogiri::XML::Builder.with(x) do |doc|
           doc.lockdiscovery {
-            locks.each {|lock|
+            locks.each do |lock|
               next if lock.expired?
               doc.activelock {
-                doc.locktype {
-                  doc.write
-                }
+                doc.locktype { doc.write }
                 doc.lockscope {
                   if lock.lock_scope == :scope_exclusive
                     doc.exclusive
                   else
                     doc.shared
                   end
-                }
-                if lock.folder.nil?
-                  doc.depth '0'
-                else
-                  doc.depth 'infinity'
-                end
+                }                
+                doc.depth lock.folder.nil? ? '0' : 'infinity'                
                 doc.owner lock.user.to_s
                 if lock.expires_at.nil?
-                  doc.timeout = 'Infinite'
+                  doc.timeout 'Infinite'
                 else
                   doc.timeout "Second-#{(lock.expires_at.to_i - Time.now.to_i)}"
                 end
-
                 lock_entity = lock.folder || lock.file
                 lock_path = "#{request.scheme}://#{request.host}:#{request.port}#{path_prefix}#{URI.escape(lock_entity.project.identifier)}/"
                 lock_path << lock_entity.dmsf_path.map {|x| URI.escape(x.respond_to?('name') ? x.name : x.title) }.join('/')
                 lock_path << '/' if lock_entity.is_a?(DmsfFolder) && lock_path[-1,1] != '/'
                 doc.lockroot { doc.href lock_path }
-                if (lock.user.id == User.current.id || User.current.allowed_to?(:force_file_unlock, self.project))
+                if ((lock.user.id == User.current.id) || User.current.allowed_to?(:force_file_unlock, self.project))
                   doc.locktoken { doc.href lock.uuid }
                 end
               }
-            }
+            end
           }
         end
-
         x
       end
-
-      # supported_lock
+      
       # As the name suggests, we're returning locks supported by our implementation
-      def supported_lock
+      def supportedlock
         x = Nokogiri::XML::DocumentFragment.parse ''
         Nokogiri::XML::Builder.with(x) do |doc|
           doc.supportedlock {
