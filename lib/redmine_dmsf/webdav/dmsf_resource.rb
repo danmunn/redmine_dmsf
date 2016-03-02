@@ -538,7 +538,7 @@ module RedmineDmsf
       def get_property(element)
         raise NotImplemented if (element[:ns_href] != 'DAV:')
         unless folder
-          return NotFound unless (file && file.last_revision && File.exist?(file.last_revision.disk_file))
+          return NotFound unless (file && file.last_revision)
         end
         case element[:name]
         when 'supportedlock'
