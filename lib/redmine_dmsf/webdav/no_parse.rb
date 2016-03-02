@@ -1,6 +1,9 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,21 +27,15 @@ module RedmineDmsf
     end
 
     def call(env)
-      if env['REQUEST_METHOD'] == "PUT" && env.has_key?('CONTENT_TYPE') then
+      if env['REQUEST_METHOD'] == 'PUT' && env.has_key?('CONTENT_TYPE') then
         if (@urls.dup.delete_if {|x| !env['PATH_INFO'].starts_with? x}.length > 0) then
-          logger "RedmineDmsf::NoParse prevented mime parsing for PUT #{env['PATH_INFO']}"
+          Rails.logger.info "RedmineDmsf::NoParse prevented mime parsing for PUT #{env['PATH_INFO']}"
           env['CONTENT_TYPE'] = 'text/plain'
         end
       end
       @app.call(env)
     end
-
-    private
-
-      def logger(env)
-        env['action_dispatch.logger'] || Logger.new($stdout)
-      end
-
+    
   end
 end
 

@@ -1,8 +1,10 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -113,8 +115,9 @@ RedmineApp::Application.routes.draw do
   mount DAV4Rack::Handler.new(
     :root_uri_path => "#{Redmine::Utils::relative_url_root}/dmsf/webdav",
     :resource_class => RedmineDmsf::Webdav::ResourceProxy,
-    :controller_class => RedmineDmsf::Webdav::Controller
-  ), :at => "/dmsf/webdav"
+    :controller_class => RedmineDmsf::Webdav::Controller,
+    :log_to => Rails.logger
+  ), :at => '/dmsf/webdav'
   
   # Approval workflow    
   resources :dmsf_workflows do
