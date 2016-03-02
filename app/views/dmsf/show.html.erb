@@ -46,7 +46,7 @@
           :title => l(:title_lock_folder), :class => 'icon icon-dmsf-lock') %>
       <% end %>
     <% end %>   
-    <% if !@locked_for_user && ((@folder && @folder.notification) || (!@filder && @project.dmsf_notification)) %>
+    <% if !@locked_for_user && ((@folder && @folder.notification) || (!@folder && @project.dmsf_notification)) %>
       <%= link_to(l(:label_notifications_off),
         notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
         :title => l(:title_notifications_active_deactivate),
