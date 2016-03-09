@@ -28,24 +28,21 @@
     <% if @file.locked_for_user? %>
       <p class="warning"><%= l(:info_file_locked) %></p>
     <% else %>
-      <%= form_for(@revision, :url => { :action => 'create_revision', :id => @file },
+      <%= labelled_form_for(@revision, :url => { :action => 'create_revision', :id => @file },
             :html => { :method => :post, :multipart => true, :id => 'new_revision_form' }) do |f| %>
         <div class="clear">
           <div class="splitcontentleft">
-            <p>
-              <%= label_tag('dmsf_file_revision_title', l(:label_title)) %>
-              <%= f.text_field(:title, :size => 32) %>
+            <p>              
+              <%= f.text_field(:title) %>
             </p>
           </div>
           <div class="splitcontentright">
-            <p>
-              <%= label_tag('', l(:label_file)) %>            
-              <%= f.text_field(:name, :size => 22) %>
+            <p>              
+              <%= f.text_field(:name, :label => l(:label_file)) %>
             </p>
           </div>
         </div>
-        <p>
-          <%= label_tag('dmsf_file_revision_description', l(:label_description)) %>        
+        <p>          
           <%= f.text_area(:description, :rows => 6, :class => 'wiki-edit') %>        
         </p>
         <div class="clear">
@@ -93,11 +90,10 @@
             <p><%= custom_field_tag_with_label(:dmsf_file_revision, value) %></p>
           <% end %>
         </div>        
-        <p>
-          <%= label_tag('dmsf_file_revision_comment', l(:label_comment)) %>                      
-          <%= f.text_area(:comment, :rows => 2) %>            
+        <p>          
+          <%= f.text_area(:comment, :rows => 2, :label => l(:label_comment)) %>
         </p>          
-        <%= submit_tag(l(:submit_create)) %>
+        <%= f.submit l(:submit_create) %>
       <% end %>
     <% end %>   
   </div>  

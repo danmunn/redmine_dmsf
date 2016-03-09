@@ -206,8 +206,8 @@ class DmsfWorkflowsController < ApplicationController
     # Reload
     if params[:dmsf_workflow] && params[:dmsf_workflow][:name].present?
       @dmsf_workflow.name = params[:dmsf_workflow][:name]
-    elsif params[:dmsf_workflow_id].present?
-      wf = DmsfWorkflow.find_by_id params[:dmsf_workflow_id]
+    elsif params[:dmsf_workflow] && params[:dmsf_workflow][:id].present?
+      wf = DmsfWorkflow.find_by_id params[:dmsf_workflow][:id]
       @dmsf_workflow.name = wf.name if wf
     end
     
@@ -216,8 +216,8 @@ class DmsfWorkflowsController < ApplicationController
   
   def create
     if params[:dmsf_workflow]
-      if (params[:dmsf_workflow_id].to_i > 0)
-        wf = DmsfWorkflow.find_by_id params[:dmsf_workflow_id]
+      if (params[:dmsf_workflow][:id].to_i > 0)
+        wf = DmsfWorkflow.find_by_id params[:dmsf_workflow][:id]
         @dmsf_workflow = wf.copy_to(@project, params[:dmsf_workflow][:name]) if wf     
       else
         @dmsf_workflow = DmsfWorkflow.new

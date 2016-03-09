@@ -350,10 +350,15 @@ class DmsfController < ApplicationController
   end
 
   def save_root
-    @project.dmsf_description = params[:project][:dmsf_description]
-    @project.save!
-    flash[:notice] = l(:notice_folder_details_were_saved)
-    redirect_to :controller => 'dmsf', :action => 'show', :id => @project
+    if params[:project]
+      @project.dmsf_description = params[:project][:dmsf_description]
+      if @project.save
+        flash[:notice] = l(:notice_folder_details_were_saved)    
+      else
+        flash[:error] = @project.errors.full_messages.to_sentence
+      end
+    end
+    redirect_to dmsf_folder_path(:id => @project)
   end
 
   def notify_activate

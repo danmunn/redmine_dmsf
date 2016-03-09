@@ -43,15 +43,15 @@
 <%= render(:partial => 'path', 
   :locals => {:folder => nil, :filename => nil, :title => nil}) %>  
 
-<%= form_for(@project, :url => {:action => 'save_root', :id => @project},
-  :html => {:method=>:post}) do |f| %>
+<%= labelled_form_for(@project, :url => {:action => 'save_root', :id => @project},
+  :html => {:method => :post}) do |f| %>
   <div class="box tabular">
-    <p>
-      <%= label_tag('project_dmsf_description', l(:label_description)) %>        
-      <%= f.text_area(:dmsf_description, :rows => 8, :class => 'wiki-edit') %>    
+    <p>      
+      <%= f.text_area(:dmsf_description, :rows => 8, :class => 'wiki-edit', 
+        :label => l(:field_description)) %>    
     </p>
   </div>
-  <%= submit_tag(l(:submit_save)) %>
+  <%= f.submit l(:submit_save) %>
 <% end %>
 
 <%= wikitoolbar_for 'project_dmsf_description' %>

@@ -1,8 +1,9 @@
 <%
 # encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15   Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,11 +22,11 @@
 
 <h3 class="title"><%= l(:dmsf_new_step) %></h3>
 
-<%= form_for(:dmsf_workflow, {:url => edit_dmsf_workflow_path(@dmsf_workflow), :method => :post}) do |f| %>  
+<%= labelled_form_for(@dmsf_workflow, {:url => edit_dmsf_workflow_path(@dmsf_workflow), :method => :post}) do |f| %>  
   <%= render :partial => 'new_step_form' %>
   <p class="buttons">
-    <%= submit_tag l(:dmsf_and), :id => 'add-step-and' %>
-    <%= submit_tag l(:dmsf_or), :id => 'add-step-or' %>
-    <%= submit_tag l(:button_cancel), :name => nil, :onclick => 'hideModal(this);', :type => 'button' %>    
+    <%= f.submit l(:dmsf_and), :id => 'add-step-and' %>
+    <%= f.submit l(:dmsf_or), :id => 'add-step-or' %>
+    <%= f.submit l(:button_cancel), :name => nil, :onclick => 'hideModal(this);', :type => 'button' %>    
   </p>
 <% end %>

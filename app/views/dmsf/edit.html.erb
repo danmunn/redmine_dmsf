@@ -68,23 +68,21 @@
 <%= render(:partial => 'path', 
   :locals => {:folder => @pathfolder, :filename => create ? l(:heading_new_folder) : nil, :title => nil}) %>  
 
-<%= form_for(@folder, :url => {:action => create ? 'create' : 'save', :id => @project, :folder_id => @folder, :parent_id => @parent},
+<%= labelled_form_for(@folder, :url => {:action => create ? 'create' : 'save', :id => @project, :folder_id => @folder, :parent_id => @parent},
   :html => {:method=>:post}) do |f| %>
   <%= error_messages_for(@folder) %>
   <div class="box tabular">    
-    <p>          
-      <label for="dmsf_folder_title"><%=  l(:label_title) %><span class="required">*</span></label>
-      <%= f.text_field(:title, :size => '32', :required => true) %>
+    <p>                
+      <%= f.text_field(:title, :required => true) %>
     </p>  
-    <p>
-      <%= label_tag('', l(:field_folder)) %>
+    <p>      
       <%= f.select(:dmsf_folder_id, 
         options_for_select(DmsfFolder.directory_tree(@project, @folder), 	
-        :selected => @parent? @parent.id : (@pathfolder.id if @pathfolder)))                                                  
+        :selected => @parent? @parent.id : (@pathfolder.id if @pathfolder)),
+      :label => l(:field_folder))                           
       %>				
     </p>          
-    <p>
-      <%= label_tag('dmsf_folder_description', l(:label_description)) %>          
+    <p>      
       <%= f.text_area :description, :rows => 8, :class => 'wiki-edit' %>
     </p>
     <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>

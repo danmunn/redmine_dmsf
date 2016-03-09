@@ -1,6 +1,9 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
 #
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,30 +17,30 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 
 <% project = Project.find_by_id params[:project_id] if params[:project_id] %>
 <% if project %>
-  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(project, :tab => 'dmsf_workflow') %> &#187; <%=  l(:label_dmsf_workflow_new) %></h2>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(project, :tab => 'dmsf_workflow') %> &#187; <%= l(:label_dmsf_workflow_new) %></h2>
 <% else %>
   <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=  l(:label_dmsf_workflow_new) %></h2>
 <% end %>
 
-<%= labelled_form_for @dmsf_workflow do |f| %>
+<%= labelled_form_for @dmsf_workflow do |f| %>  
+  <%= f.hidden_field(:project_id) if project %>    
   <%= error_messages_for 'dmsf_workflow' %>
   <div class="box tabular">
     <p>      
-      <%= f.text_field :name, :value => @dmsf_workflow.name, :size => 25, :maxlength => 255, :required => true %>
+      <%= f.text_field :name, :required => true %>
     </p>
-    <p>      
-      <%= label_tag  :label_copy_workflow_from, l(:label_copy_workflow_from) %>
-      <%= select_tag('dmsf_workflow_id', dmsf_all_workflows_for_select(params[:dmsf_workflow_id])) %>
-    </p>
-    <% if project %>
-      <p><%= hidden_field_tag :project_id, project.id %></p>
-    <% end %>
+    <p>            
+      <%= f.select(:id, 
+        dmsf_all_workflows_for_select(params[:dmsf_workflow] ? params[:dmsf_workflow][:id] : nil), 
+        :label => l(:label_copy_workflow_from)) %>
+    </p>    
   </div>
-  <%= submit_tag l(:button_create) %>
+  <%= f.submit l(:button_create) %>
 <% end %>
   
 <script type="text/javascript">    
