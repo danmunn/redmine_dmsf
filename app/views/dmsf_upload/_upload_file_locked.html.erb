@@ -1,7 +1,11 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
+# 
+# Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,48 +19,57 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 
-<div class="box dmsf_detail">
+<div class="box tabular">
   <%= hidden_field_tag("commited_files[#{i}][disk_filename]", upload.disk_filename) %>
   <%= hidden_field_tag("commited_files[#{i}][name]", upload.name) %>
   <p class="warning"><%= l(:info_file_locked) %></p>
-
   <div class="clear">
     <div class="splitcontentleft">
       <p>
-        <%= label_tag('', "#{l(:label_title)}:") %>
+        <%= label_tag('', l(:label_title)) %>
         <%= h(upload.title) %>
       </p>
     </div>
     <div class="splitcontentright">
       <p>
-        <%= label_tag('', "#{l(:label_filename)}:") %>
+        <%= label_tag('', l(:label_filename)) %>
         <%= h(upload.name) %>
       </p>
     </div>
   </div>
-  <p class="no-ident">
-    <%= label_tag('', "#{l(:label_description)}:") %>
-  </p>
-  <div class="wiki data clear">
-    <%= textilizable(upload.description) %>
-  </div>
-  <div class="splitcontentleft">
+  <% if upload.description.present? %>
     <p>
-            <%= label_tag('', "#{l(:label_version)}:") %>
-            <%= upload.major_version %>.<%= upload.minor_version %>
-    </p>		
-  </div>
-  <div class="splitcontentright clear">
-    <p>
-      <%= label_tag('', "#{l(:label_mime)}:") %>
-      <%= h(upload.mime_type) %>
+      <%= label_tag('', l(:label_description)) %>  
+      <div class="wiki">
+        <%= textilizable(upload.description) %>
+      </div>
     </p>
+  <% end %>
+  <div class="clear">
+    <div class="splitcontentleft">
+      <p>
+        <%= label_tag('', l(:label_version)) %>
+        <%= upload.major_version %>.<%= upload.minor_version %>
+      </p>		
+    </div>
+    <div class="splitcontentright">
+      <p>
+        <%= label_tag('', l(:label_mime)) %>
+        <%= h(upload.mime_type) %>
+      </p>
+      <p>
+        <%= label_tag('', l(:label_size)) %>
+        <%= number_to_human_size(upload.size) %>
+      </p>
+    </div>  
+  </div>  
+  <% if upload.comment.present? %>
     <p>
-      <%= label_tag('', "#{l(:label_size)}:") %>
-      <%= number_to_human_size(upload.size) %>
+      <%= label_tag('', l(:label_comment)) %>  
+      <div class="wiki"><%= textilizable(upload.comment) %></div>	     	           
     </p>
-  </div>
-  <br style="clear: both"/>
+  <% end %>
 </div>

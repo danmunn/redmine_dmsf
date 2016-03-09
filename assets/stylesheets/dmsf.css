@@ -25,50 +25,49 @@ button {
 	margin-bottom: 1px;
 }
 
-/* DMSF entries list */
-table.entries tbody td, table.entries tbody tr:hover td {
-	border-left: solid 1px #D7D7D7;
-	border-right: solid 1px #D7D7D7;
+/* DMSF table.list modifications */
+table.list th.ui-state-default {
+  border: none;
 }
 
-table.entries td.modified {
+table.list td.dmsf_modified {
 	min-width: 127px;
 	width: 127px;
+  font-size: 0.8em;
 }
 
-table.entries td.actions {
+table.list td.dmsf_title {
+	width: 40%;
+  text-align: left;
+}
+
+table.list td.dmsf_buttons {
 	min-width: 96px;
 	width: 96px;
+  text-align: left;
 }
 
-table.entries td.title {
-	width: 40%;
-}
-
-table.entries th.check, table.entries td.check {
+table.list th.dmsf_check, table.list td.dmsf_check {
 	width: 17px; 
 	padding: 2px; 
 	text-align: left;
 }
 
-table.entries th.check div.DataTables_sort_wrapper {
+table.list th.dmsf_check div.DataTables_sort_wrapper {
 	padding: 0;
 }
 
-table.display th {
-	font-weight: bold;
+table.list td.note {
+    width: 20%;
 }
 
-table.display tbody tr.even {
-	background-color: #F8F8F8;
+table.list td.reorder {
+    width: 15%;
 }
 
-table.display tbody tr.odd {
-	background-color: #FFFFFF;
-}
-
-table.display tbody tr:hover { 
-        background-color:#ffffdd; 
+table.list td.step {
+    text-align: center;
+    width: 16px;
 }
 
 form.dmfs_entries {
@@ -76,12 +75,8 @@ form.dmfs_entries {
 	display: block;
 }
 
-div.dataTables_wrapper div.fg-toolbar {
-	font-size: 0.9em;
-}
-
 div.dataTables_wrapper div.fg-toolbar input, div.dataTables_wrapper div.fg-toolbar button,
-div.dataTables_wrapper div.fg-toolbar select {
+div.dataTables_wrapper div.fg-toolbar select, div.dataTables_wrapper div.fg-toolbar {
 	font-size: 0.9em;
 }
 
@@ -97,10 +92,6 @@ div.filename {
 td.size {
 	font-size: 0.8em;
 	white-space: nowrap;
-}
-
-td.modified {
-	font-size: 0.8em;
 }
 
 td.modified img {
@@ -126,7 +117,6 @@ td.workflow {
 }
 
 /* DMSF entries upload control */
-
 .dmsf_upload textarea {
 	width: 90%;
 }
@@ -148,10 +138,7 @@ td.workflow {
 }
 
 div.upload_select {
-	float: right;
-	white-space: nowrap;
-	line-height: 1.4em;
-	padding-left: 10px;
+	float: right;	
 	font-size: 0.9em;
 }
 
@@ -166,45 +153,6 @@ div.upload_select input, div.upload_select select {
 
 .ui-resizable-s {
 	bottom: 0px;
-}
-
-/* DMSF detail/commit page */
-
-.dmsf_detail .warning {
-	padding: 4px 4px 4px 30px;
-}
-
-.dmsf_detail div.data {
-	margin-left: 110px;
-}
-
-.dmsf_detail label {
-	font-weight: bold;
-	width: 100px;
-	float: left;
-	text-align: right;
-	padding-right: 10px;
-}
-
-p.no-ident {
-	margin-bottom: 0;
-	margin-top: 0;
-}
-
-table.access-table tbody td, table.access-table tbody tr:hover td {
-	border: solid 1px #D7D7D7;
-}
-
-/* Custom field */
-.dmsf-customfields {
-	margin: 5px 0px 5px 0px;
-}
-
-.dmsf-customfields .customfield label {
-	font-weight: bold;
-	width: 100px;
-	display: block;
-	float: left;
 }
 
 /* Approval workflow */
@@ -236,23 +184,6 @@ tr.workflow.locked a { color: #aaa; }
 
 div.revision_box .ui-widget-header {
     font-weight: normal;
-}
-
-table.list th {
-    text-align: left;
-}
-
-table.list td.note {
-    width: 20%;
-}
-
-table.list td.reorder {
-    width: 15%;
-}
-
-table.list td.step {
-    text-align: center;
-    width: 16px;
 }
 
 .log_header_box{
@@ -330,11 +261,6 @@ tr.gray .icon-file.application-x-gzip { background-image: url(../images/filetype
 /* Links */
 .gray { color: #AAA }
 .gray a, .gray a:link, .gray a:visited{ color: #484848; text-decoration: none; }
-
-label.required:after {
-    content: " *";
-    color: #bb0000;
-}
 
 /* Search results */
 dt.dmsf-file { background-image: url(../../../images/document.png); }

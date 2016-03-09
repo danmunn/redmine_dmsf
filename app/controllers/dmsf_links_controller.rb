@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,8 +31,8 @@ class DmsfLinksController < ApplicationController
     @dmsf_link.project_id = params[:project_id]
 
     if params[:dmsf_link].present?
-      # Reload
-      @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]                       # TODO: Add stuff in here for external links so that if error occurs, repopulate the same
+      # Reload      
+      @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
       @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
       @type = params[:dmsf_link][:type]
       @link_external = (@type == 'link_from') && (params[:external_link] == 'true')

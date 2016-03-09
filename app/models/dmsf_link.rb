@@ -34,8 +34,12 @@ class DmsfLink < ActiveRecord::Base
   
   def validate_url
     if self.target_type == 'DmsfUrl'
-      begin 
-        URI.parse self.external_url
+      begin
+        if self.external_url.present?
+          URI.parse self.external_url
+        else
+          errors.add :external_url, :invalid
+        end
       rescue URI::InvalidURIError        
         errors.add :external_url, :invalid
       end      
@@ -124,7 +128,7 @@ class DmsfLink < ActiveRecord::Base
     else
       self.deleted = STATUS_DELETED
       self.deleted_by_user = User.current
-      save
+      save(:validate => false)
     end
   end
 
@@ -135,7 +139,7 @@ class DmsfLink < ActiveRecord::Base
     end
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
-    save
+    save(:validate => false)
   end
 
 end

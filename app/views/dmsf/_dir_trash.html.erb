@@ -1,4 +1,4 @@
-<%#=
+<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
@@ -20,9 +20,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<td class="check"><%= check_box_tag(name, id, false, 
+<td class="dmsf_check"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_restore_or_delete), :id => "subfolder_#{id}") %></td>
-<td class="title">                  
+<td class="dmsf_title">                  
   <%= content_tag(:span, h(title), 
     :title => h(title), 
     :class => 'icon icon-folder') %>
@@ -33,13 +33,13 @@
   <% end %>
 </td>            
 <td class="size"></td>
-<td class="modified">
+<td class="dmsf_modified">
   <%= format_time(subfolder.modified) if subfolder %>                      
 </td>
 <td class="version"></td>
 <td class="workflow"></td>
 <td class="author"><%= h(subfolder.user) %></td>
-<td class="buttons">
+<td class="dmsf_buttons">
   <% if @folder_manipulation_allowed %>    
     <%= link_to(image_tag('restore.png', :plugin => 'redmine_dmsf'),
       restore_dmsf_path(:id => project, :folder_id => subfolder),                

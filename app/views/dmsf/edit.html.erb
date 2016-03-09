@@ -1,4 +1,4 @@
-<%# 
+<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,7 +19,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 
 <% html_title(l(:dmsf)) %>
 
@@ -64,41 +65,34 @@
 </div>
 
 <% create = @pathfolder == @parent %>
-<%= render(:partial => 'path', :locals => {:folder => @pathfolder, :filename => create ? l(:heading_new_folder) : nil}) %>  
+<%= render(:partial => 'path', 
+  :locals => {:folder => @pathfolder, :filename => create ? l(:heading_new_folder) : nil, :title => nil}) %>  
 
 <%= form_for(@folder, :url => {:action => create ? 'create' : 'save', :id => @project, :folder_id => @folder, :parent_id => @parent},
   :html => {:method=>:post}) do |f| %>
   <%= error_messages_for(@folder) %>
-  <div class="box dmsf_detail">
-    <div class="clear">
-      <div class="splitcontentleft">
-        <p>
-          <%= label_tag('dmsf_folder_title', "#{l(:label_title)}:") %>
-          <%= f.text_field(:title, :size => '32', :required => true) %>
-        </p>
-      </div>
-      <div class="splitcontentright">
-        <p>
-          <%= label_tag('', "#{l(:field_folder)}:") %>
-          <%= f.select(:dmsf_folder_id, 
-            options_for_select(DmsfFolder.directory_tree(@project, @folder), 	
-            :selected => @parent? @parent.id : (@pathfolder.id if @pathfolder)))                                                  
-          %>				
-        </p>
-      </div>
-    </div>
-    <p class="no-ident">
-      <%= label_tag('dmsf_folder_description', "#{l(:label_description)}:") %>
+  <div class="box tabular">    
+    <p>          
+      <label for="dmsf_folder_title"><%=  l(:label_title) %><span class="required">*</span></label>
+      <%= f.text_field(:title, :size => '32', :required => true) %>
+    </p>  
+    <p>
+      <%= label_tag('', l(:field_folder)) %>
+      <%= f.select(:dmsf_folder_id, 
+        options_for_select(DmsfFolder.directory_tree(@project, @folder), 	
+        :selected => @parent? @parent.id : (@pathfolder.id if @pathfolder)))                                                  
+      %>				
+    </p>          
+    <p>
+      <%= label_tag('dmsf_folder_description', l(:label_description)) %>          
+      <%= f.text_area :description, :rows => 8, :class => 'wiki-edit' %>
     </p>
-    <div class="wiki data clear">
-      <%= f.text_area(:description, :rows => 15, :class => 'wiki-edit') %>
-    </div>
     <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
     <% values.each do |value| %>
       <p><%= custom_field_tag_with_label(:dmsf_folder, value) %></p>
-    <% end %>
-  </div>
-  <%= submit_tag(create ? l(:submit_create) : l(:submit_save)) %>
+    <% end %>    
+  </div>  
+  <p><%= submit_tag(create ? l(:submit_create) : l(:submit_save)) %></p>
 <% end %>
 
 <%= wikitoolbar_for 'dmsf_folder_description' %>

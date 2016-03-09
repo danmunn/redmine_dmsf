@@ -1,6 +1,9 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@lbcfree.net>
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,15 +21,14 @@
 
 <% html_title l(:dmsf) %>
 
-<div class="contextual">
-</div>
-
 <% if @dmsf_file_id %>
   <% file = DmsfFile.find_by_id @dmsf_file_id%>
   <% title = file.title if file %>    
 <% end %>
 
-<%= render(:partial => '/dmsf/path', :locals => {:folder => @dmsf_link.folder, :filename => title}) %>
+<%= render(:partial => '/dmsf/path', 
+  :locals => {:folder => @dmsf_link.folder, :filename => nil, 
+    :title => (@type == 'link_from') ? l(:label_link_from) : l(:label_link_to) }) %>
 
 <%= labelled_form_for @dmsf_link do |f| %>
   <%= error_messages_for @dmsf_link %>
@@ -34,7 +36,7 @@
   <%= f.hidden_field :dmsf_folder_id, :value => @dmsf_link.dmsf_folder_id if @dmsf_link.dmsf_folder_id %>
   <%= f.hidden_field :type, :value => @type %>
   <%= f.hidden_field :dmsf_file_id, :value => @dmsf_file_id %>
-  <div class="box dmsf_detail">
+  <div class="box tabular">
     <% if @type == 'link_from' %>
       <p>
         <%= radio_button_tag(:external_link, 'false', @link_external == false) %> <%= l(:label_internal) %><br/>
@@ -43,10 +45,10 @@
     <% end %>    
     <div id="link_internal" style="<%= @link_external ? 'display:none' : '' %>">
       <p>
-        <% if @type == 'link_from' %>
-          <%= label_tag('dmsf_link[target_project_id]', l(:label_source_project), :class => 'required') %>
-        <% else %>
-          <%= label_tag('dmsf_link[target_project_id]', l(:label_target_project), :class => 'required') %>
+        <% if @type == 'link_from' %>          
+          <label for="dmsf_link[target_project_id]"><%= l(:label_source_project) %><span class="required">*</span></label>
+        <% else %>          
+          <label for="dmsf_link[target_project_id]"><%= l(:label_target_project) %><span class="required">*</span></label>
         <% end %>
         <%= select_tag('dmsf_link[target_project_id]',
           project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy,
@@ -62,29 +64,31 @@
           folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
           :selected => @target_folder_id)) %>
       </p>
-        <% if @type == 'link_from' %>
-          <p>
-            <% if @target_folder_id %>
-              <% folder = DmsfFolder.find_by_id @target_folder_id %>
-              <% files = folder.files.visible if folder %>
-            <% else %>
-              <% files = @dmsf_link.target_project.dmsf_files.visible if @dmsf_link.target_project %>
-            <% end %>
-            <%= f.select(:target_file_id,
-            options_for_select(DmsfFolder.file_list(files), @target_file_id)) %>
-          </p>
-        <% end %>
+      <% if @type == 'link_from' %>
         <p>
-      </div>      
-       <div id="link_external" style="<%= @link_external ? '' : 'display:none' %>">
-          <%= label_tag('dmsf_link[external_url]', l(:label_link_external_url), :class => 'required') %>
-          <%= text_field_tag 'dmsf_link[external_url]', @dmsf_link.external_url, :size => 40, :maxlength => 255 %>
-      </div>      
-      <%= label_tag('dmsf_link[name]', l(:label_link_name), :class => 'required') %>      
-      <%= text_field_tag 'dmsf_link[name]', @dmsf_link.name, :size => 40, :maxlength => 255 %>
-    <!--</p>-->
+          <% if @target_folder_id %>
+            <% folder = DmsfFolder.find_by_id @target_folder_id %>
+            <% files = folder.files.visible if folder %>
+          <% else %>
+            <% files = @dmsf_link.target_project.dmsf_files.visible if @dmsf_link.target_project %>
+          <% end %>
+          <%= f.select(:target_file_id,
+          options_for_select(DmsfFolder.file_list(files), @target_file_id)) %>
+        </p>
+      <% end %>      
+    </div>      
+    <div id="link_external" style="<%= @link_external ? '' : 'display:none' %>">
+      <p>
+        <label for="dmsf_link[external_url]"><%=  l(:label_link_external_url) %><span class="required">*</span></label>
+        <%= text_field_tag 'dmsf_link[external_url]', @dmsf_link.external_url, :size => 40, :maxlength => 255 %>
+      </p>
+    </div>    
+    <p>
+      <label for="dmsf_link[name]"><%=  l(:label_link_name) %><span class="required">*</span></label>
+      <%= text_field_tag 'dmsf_link[name]', @dmsf_link.name, :size => 40, :maxlength => 255 %>    
+    </p>    
   </div>
-  <%= f.submit l(:button_create) %>
+  <p><%= f.submit l(:button_create) %></p>
 <% end %>
 
 <script type="text/javascript">  

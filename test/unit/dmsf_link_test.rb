@@ -94,11 +94,28 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
       "Folder link #{@folder_link.name} should have not been saved"
     assert_equal 1, @folder_link.errors.count        
   end
+  
+  def test_validate_external_url_length
+    @file_link.target_type = 'DmsfUrl'
+    @file_link.external_url = 'https://localhost/' + 'a' * 256
+    assert !@file_link.save, 
+      "External URL link #{@file_link.name} should have not been saved"
+    assert_equal 1, @file_link.errors.count        
+  end
+  
+  def test_validate_external_url_presence
+    @file_link.target_type = 'DmsfUrl'
+    @file_link.external_url = ''
+    assert !@file_link.save,
+      "External URL link #{@file_link.name} should have not been saved"
+    assert_equal 1, @file_link.errors.count        
+  end
     
   def test_validate_external_url
     @file_link.target_type = 'DmsfUrl'
-    @file_link.external_url = nil
-    assert !@file_link.save, 'External link should have not been saved'
+    @file_link.external_url = 'htt ps://abc.xyz'
+    assert !@file_link.save, 
+      "External URL link #{@file_link.name} should have not been saved"
     assert_equal 1, @file_link.errors.count
   end
    

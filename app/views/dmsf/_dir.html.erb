@@ -1,4 +1,4 @@
-<%#=
+<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
@@ -23,9 +23,9 @@
 <% locked_for_user = subfolder && subfolder.locked_for_user? %>
 <% locked = subfolder && subfolder.locked? %>    
 
-<td class="check"><%= check_box_tag(name, id, false, 
+<td class="dmsf_check"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_zip_download_or_email), :id => "subfolder_#{id}") %></td>
-<td class="title">                
+<td class="dmsf_title">                
   <%= link_to(h(title),          
     dmsf_folder_path(:id => project, :folder_id => subfolder),
     :class => 'icon icon-folder') %>
@@ -36,7 +36,7 @@
   <% end %>
 </td>            
 <td class="size"></td>
-<td class="modified"><%= format_time(subfolder.modified) if subfolder %>                
+<td class="dmsf_modified"><%= format_time(subfolder.modified) if subfolder %>                
   <% if locked_for_user %>
     <% if subfolder.lock.reverse[0].user %>            
       <%= link_to(image_tag(link ? 'locked_gray.png' : 'locked.png', :plugin => 'redmine_dmsf'),
@@ -54,7 +54,7 @@
 <td class="version"></td>
 <td class="workflow"></td>
 <td class="author"><%= h(subfolder.user) if subfolder %></td>
-<td class="buttons">
+<td class="dmsf_buttons">
   <% if @folder_manipulation_allowed %>
     <% unless locked_for_user %>
      <%= link_to(image_tag('edit.png'),

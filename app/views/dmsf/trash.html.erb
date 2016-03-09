@@ -1,9 +1,9 @@
-<%#=
+<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,10 +21,8 @@
 %>
 
 <% html_title(l(:dmsf)) %>
-<div class="contextual">  
-</div>
 
-<h2><%=  l(:link_trash_bin) %></h2>
+<h2><%= l(:link_trash_bin) %></h2>
 
 <div class="dmsf-header">
   <div class="wiki">
@@ -44,11 +42,12 @@
         <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'destroy_entries') %>
       <% end %>
     <% end %>         
-  </div> 
-  <table class="display entries" id="browser">
+  </div>
+  <div class="autoscroll">
+  <table class="display list" id="browser">
     <thead>
       <tr id="root">
-        <th class="check">
+        <th class="dmsf_check">
           <input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_restore_or_delete) %>" type="checkbox" />
         </th>
         <th><%= l(:link_title) %></th>
@@ -131,7 +130,8 @@
       </tr>
   <% end %>
   </tbody>
-  </table>  
+  </table>
+  </div>
 <% end %>   
 
 <script type="text/javascript">

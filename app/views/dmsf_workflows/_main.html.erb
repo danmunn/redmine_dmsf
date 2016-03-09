@@ -1,4 +1,7 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
+#
+# Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
@@ -29,7 +32,7 @@
     <fieldset>
       <legend><%= l(:label_filter_plural) %></legend>
       <label for='status'><%= l(:field_status) %>:</label>
-      <%= select_tag 'status', workflows_status_options_for_select(@status), :class => 'small', :onchange => "this.form.submit(); return false;"  %>
+      <%= select_tag 'status', workflows_status_options_for_select(@status), :class => 'small', :onchange => 'this.form.submit(); return false;' %>
     </fieldset>    
   <% end %>
   &nbsp;

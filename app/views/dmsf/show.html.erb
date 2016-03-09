@@ -1,4 +1,4 @@
-<%#=
+<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
@@ -71,7 +71,8 @@
     :title => l(:link_trash_bin), :class => 'icon icon-del') if @trash_visible %>
 </div>
 
-<%= render(:partial => 'path', :locals => {:folder => @folder, :filename => nil}) %>
+<%= render(:partial => 'path', 
+  :locals => {:folder => @folder, :filename => nil, :title => nil}) %>
 
 <div class="dmsf-header">
   <div class="wiki">
@@ -98,11 +99,12 @@
         :dmsf_folder, 
         CustomValue.new(:custom_field_id => params[:custom_field_id].present? ? params[:custom_field_id] : values.first.custom_field_id, :value => params[:custom_value])) %>
     </div>  
-  <% end %>    
-  <table class="display entries" id="browser">
+  <% end %>
+  <div class="autoscroll">
+  <table class="display list" id="browser">
     <thead>
       <tr id="root">
-        <th class="check">
+        <th class="dmsf_check">
           <input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
         </th>
         <th><%= l(:link_title) %></th>
@@ -189,7 +191,8 @@
       </tr>
     <% end %>
   </tbody>
-  </table>  
+  </table>
+  </div>
 <% end %>   
 
 <script type="text/javascript">

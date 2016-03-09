@@ -1,4 +1,4 @@
-<%#=
+<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
@@ -61,7 +61,8 @@
   <% end %>
 </div>
 
-<%= render(:partial => '/dmsf/path', :locals => {:folder => @file.folder, :filename => @file.title}) %>
+<%= render(:partial => '/dmsf/path', 
+  :locals => {:folder => @file.folder, :filename => @file.title, :title => nil}) %>
 
 <% if User.current.allowed_to?(:file_manipulation, @file.project) && !@file.locked_for_user? %>
   <%= error_messages_for('file') %>
@@ -69,14 +70,14 @@
   <%= render(:partial => 'file_new_revision') %>
 <% end %>
 
-<div class="dmsf_id_box dmsf_detail">
-  <%= label_tag('', "#{l(:label_document)}:") %>
+<div class="dmsf_id_box tabular">
+  <%= label_tag('', l(:label_document)) %>
   <%= "##{@file.id}" %>
 </div>
 
 <h3><%= l(:heading_revisions) %></h3>
-<% @file.revisions.visible[@revision_pages.offset,@revision_pages.per_page].each do |revision| %>
-  <div class="revision_box dmsf_detail dataTables_wrapper">  
+<% @file.revisions.visible[@revision_pages.offset, @revision_pages.per_page].each do |revision| %>
+  <div class="revision_box tabular dataTables_wrapper">  
     <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">	
       <div class="dataTables_lenght">
         <div class="controls" style="float: right">            
@@ -99,54 +100,68 @@
     </div>
     <div class="dmsf_revision_inner_box">
       <div class="clear">
-        <div class="splitcontentleft">			
-          <%= label_tag('', "#{l(:label_title)}:") %>
-          <%= h(revision.title) %>		
+        <div class="splitcontentleft">
+          <p>
+            <%= label_tag('', l(:label_title)) %>
+            <%= h(revision.title) %>		
+          </p>
         </div>
-        <div class="splitcontentright">			
-          <%= label_tag('', "#{l(:label_file)}:") %>
-          <%= ("#{h(revision.file.folder.dmsf_path_str)}/") if revision.file.folder %><%= h(revision.name) %>			
+        <div class="splitcontentright">
+          <p>
+            <%= label_tag('', l(:label_file)) %>
+            <%= ("#{h(revision.file.folder.dmsf_path_str)}/") if revision.file.folder %><%= h(revision.name) %>			
+          </p>
         </div>
       </div>
-      <p class="no-ident">
-        <%= label_tag('', "#{l(:label_description)}:") %>
-      </p>
-      <div class="wiki clear" style="margin-left: 110px">
-        <%= textilizable(revision.description) %>
-      </div>	
-      <div class="splitcontentleft">		
-        <%= label_tag('', "#{l(:label_version)}:") %>
-        <%= revision.major_version %>.<%= revision.minor_version %>
-        <br/>
-        <%= label_tag('', "#{l(:link_workflow)}:") %>
-        <% wf = DmsfWorkflow.find_by_id(revision.dmsf_workflow_id) %>
-        <% if wf %>
-          <%= "#{wf.name} - " %>
-          <%= link_to(revision.workflow_str(false),
-            log_dmsf_workflow_path(:project_id => @project.id, 
-              :id => wf.id, :dmsf_file_revision_id => revision.id),
-            :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(revision.id)),
-            :remote => true) %>
-        <% else %>
-          <%= revision.workflow_str(true) %>
-        <% end %>	
-      </div>
-      <div class="splitcontentright clear">		
-        <%= label_tag('', "#{l(:label_mime)}:") %>
-        <%= h(revision.mime_type) %>
-        <br/>
-        <%= label_tag('', "#{l(:label_size)}:") %>
-        <%= number_to_human_size(revision.size) %>		
-      </div>	
-      <div class="no-ident clear">
-        <%= render 'dmsf/custom_fields', :object => revision %>
-      </div>
-      <p class="no-ident">
-        <%= label_tag('', "#{l(:label_comment)}:") %>
-      </p>
-      <div class="wiki clear" style="margin-left: 110px">
-        <%= textilizable(revision.comment) %>
-      </div>	     	           
+      <% if revision.description.present? %>
+        <p>
+          <%= label_tag('', l(:label_description)) %>              
+          <div class="wiki">
+            <%= textilizable(revision.description) %>
+          </div>	        
+        </p>
+      <% end %>
+      <div class="clear">
+        <div class="splitcontentleft">		
+          <p>
+            <%= label_tag('', l(:label_version)) %>
+            <%= revision.major_version %>.<%= revision.minor_version %>          
+          </p>
+          <p>
+            <%= label_tag('', l(:link_workflow)) %>
+            <% wf = DmsfWorkflow.find_by_id(revision.dmsf_workflow_id) %>
+            <% if wf %>
+              <%= "#{wf.name} - " %>
+              <%= link_to(revision.workflow_str(false),
+                log_dmsf_workflow_path(:project_id => @project.id, 
+                  :id => wf.id, :dmsf_file_revision_id => revision.id),
+                :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(revision.id)),
+                :remote => true) %>
+            <% else %>
+              <%= revision.workflow_str(true) %>
+            <% end %>	
+          </p>
+        </div>
+        <div class="splitcontentright">		
+          <p>
+            <%= label_tag('', l(:label_mime)) %>
+            <%= h(revision.mime_type) %>
+          </p>
+          <p>
+            <%= label_tag('', l(:label_size)) %>
+            <%= number_to_human_size(revision.size) %>		
+          </p>
+        </div>	
+      </div>      
+      <%= render 'dmsf/custom_fields', :object => revision %>      
+      <% if revision.comment.present? %>
+        <p>
+          <%= label_tag('', l(:label_comment)) %>        
+          <div class="wiki">
+            <%= textilizable(revision.comment) %>
+          </div>	     	                   
+        </p>
+      <% end %>
       <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">        
         <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if User.current.allowed_to?(:file_manipulation, @file.project) %>        
       </div>    

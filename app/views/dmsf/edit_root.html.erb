@@ -1,7 +1,11 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,7 +19,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 
 <% html_title(l(:dmsf)) %>
 
@@ -35,17 +40,16 @@
   <% end %>
 </div>
 
-<%= render(:partial => 'path', :locals => {:folder => nil, :filename => nil}) %>  
+<%= render(:partial => 'path', 
+  :locals => {:folder => nil, :filename => nil, :title => nil}) %>  
 
 <%= form_for(@project, :url => {:action => 'save_root', :id => @project},
   :html => {:method=>:post}) do |f| %>
-  <div class="box dmsf_detail">
-    <p class="no-ident">
-      <%= label_tag('project_dmsf_description', "#{l(:label_description)}:") %>
+  <div class="box tabular">
+    <p>
+      <%= label_tag('project_dmsf_description', l(:label_description)) %>        
+      <%= f.text_area(:dmsf_description, :rows => 8, :class => 'wiki-edit') %>    
     </p>
-    <div class="wiki data clear">
-      <%= f.text_area(:dmsf_description, :rows => 15, :class => 'wiki-edit') %>
-    </div>
   </div>
   <%= submit_tag(l(:submit_save)) %>
 <% end %>

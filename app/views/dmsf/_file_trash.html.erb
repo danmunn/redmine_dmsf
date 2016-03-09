@@ -1,4 +1,4 @@
-<%#=
+<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
@@ -20,16 +20,16 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<td class="check"><%= check_box_tag(name, id, false, 
+<td class="dmsf_check"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_restore_or_delete), :id => "file_#{id}") %></td>
-<td class="title">  
+<td class="dmsf_title">  
   <%= content_tag(:span, h(title), 
     :title => h(title), 
     :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}") %>
   <div class="filename" title="<%= l(:title_filename_for_download)%>"><%= h(link ? link.path : file.display_name) %></div>
 </td>
 <td class="size"><%= number_to_human_size(file.last_revision.size) %></td>
-<td class="modified">
+<td class="dmsf_modified">
   <%= format_time(file.last_revision.updated_at) %>  
 </td>
 <td class="version" title="<%= file.last_revision.comment %>"><%= file.last_revision.version %></td>
@@ -37,7 +37,7 @@
   <%= file.last_revision.workflow_str(false) %>  
 </td>
 <td class="author"><%= h(file.last_revision.user) %></td>
-<td class="buttons">
+<td class="dmsf_buttons">
   <% if @file_manipulation_allowed %>
     <% if link %>
       <%= link_to(image_tag('restore.png', :plugin => 'redmine_dmsf'),

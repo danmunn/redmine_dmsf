@@ -1,4 +1,4 @@
-<%#=
+<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
@@ -20,8 +20,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<td class="check"></td>
-<td class="title">
+<td class="dmsf_check"></td>
+<td class="dmsf_title">
   <%= link_to(h(title),
         link.external_url,
         :target => '_blank',
@@ -31,11 +31,11 @@
   </div>
 </td>
 <td class="size"></td>
-<td class="modified"><%= format_time(link.updated_at) %></td>
+<td class="dmsf_modified"><%= format_time(link.updated_at) %></td>
 <td class="version"></td>
 <td class="workflow"></td>
 <td class="author"><%= h(link.user) %></td>
-<td class="buttons">
+<td class="dmsf_buttons">
   <span class="icon"></span>
   <span class="icon"></span>
   <span class="icon"></span>
