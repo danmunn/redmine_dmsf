@@ -93,12 +93,8 @@ pl:
   label_email_documents: Dokumenty
   label_email_body: Treść
   label_email_send: Wyślij
-  title_notifications_active: Powiadomienia aktywne
-  label_file_size: Rozmiar pliku
-  heading_file_upload: Prześlij
-  note_uploaded_maximum_files_at_once: "Można przesłać maksymalnie %{number} plików jednocześnie."
-  note_upload_files_greater_than_two_gb: Aby przesyłać pliki większe niż 2GB musisz posiadać 64bitową przeglądarkę.
-  submit_upload_files: Prześlij
+  title_notifications_active: Powiadomienia aktywne  
+  label_upload: Prześlij    
   heading_new_folder: Nowy Folder
   label_title: Tytuł
   label_description: Opis
@@ -333,3 +329,5 @@ pl:
       
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"

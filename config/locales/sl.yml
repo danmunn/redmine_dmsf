@@ -93,12 +93,8 @@ sl:
   label_email_documents: Priloge
   label_email_body: Vsebina
   label_email_send: Pošlji
-  title_notifications_active: Obveščanje aktivno
-  label_file_size: Velikost datoteke
-  heading_file_upload: Naloži
-  note_uploaded_maximum_files_at_once: "Naenkrat lahko prenesete največ %{number} datotek."
-  note_upload_files_greater_than_two_gb: Za datoteke večje od 2GB rabite 64bitni brskalnik.
-  submit_upload_files: Naloži
+  title_notifications_active: Obveščanje aktivno  
+  label_upload: Naloži    
   heading_new_folder: Nova mapa
   label_title: Naziv mape
   label_description: Opis
@@ -333,3 +329,5 @@ sl:
                 
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"

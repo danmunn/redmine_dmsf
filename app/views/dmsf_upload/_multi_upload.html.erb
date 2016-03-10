@@ -24,46 +24,36 @@
 
 <div class="box">
   <%= form_tag({:controller => 'dmsf_upload', :action => 'upload_files', :id => @project, :folder_id => @folder},
-    :id => 'uploadform', :method=>:post, :multipart => true) do %>
-    <% if Setting.attachment_max_size.to_i >= 102400 %> 
-      <div class="upload_select">
-	<%= l(:label_file_size) %>: 
-          <select id="uploader_select">
-           <option value="1">
-              &lt; <%= "#{@ajax_upload_size}" %> MB
-            </option>
-            <option value="2">
-              > <%= "#{@ajax_upload_size}" %> MB
-            </option>
-          </select>
-      </div>
-    <% end %>
-    <h3><%= l(:heading_file_upload) %></h3>
-    <div style="padding-bottom: 6px; line-height: 1.4em; font-size: 0.9em;">
-      <span>
-        <% max_file_upload = Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i %>
-        <%= l(:note_uploaded_maximum_files_at_once, :number => max_file_upload) if max_file_upload > 0 %>
-        <%= l(:note_upload_files_greater_than_two_gb) if Setting.attachment_max_size.to_i >= 2097151 %>
-      </span>
-    </div>
+    :id => 'uploadform', :method => :post, :multipart => true) do %>    
+    <div class="upload_select">        
+      <select id="uploader_select">
+       <option value="1">
+          <%= l(:label_drag_drop) %>
+        </option>
+        <option value="2">
+          <%= l(:label_classic) %>
+        </option>
+      </select>
+    </div>    
+    <h3><%= l(:label_upload) %></h3>    
     <div id="uploader">      
       <p>
-        <label><%=l(:label_attachment_plural)%></label>
+        <label><%= l(:label_attachment_plural) %></label>
         <%= render :partial => 'attachments/form' %>        
       </p>        
-      <%= submit_tag(l(:submit_upload_files)) %>
+      <%= submit_tag l(:label_upload) %>
     </div>    
   <% end %>
 </div>
 
 <script type="text/javascript">
   var originalUploaderContent;
-  var uploader = jQuery('#uploader');
+  var uploader = $('#uploader');
 
   originalUploaderContent = uploader.html();
 
-  jQuery('#uploader_select').change(function() {
-    if(jQuery(this).val() == 2) {
+  $('#uploader_select').change(function() {
+    if($(this).val() === '2') {
       uploader.html(originalUploaderContent);
     } else {
       initPlUploader(uploader);
@@ -84,7 +74,7 @@
   <script type="text/javascript">
     function initPlUploader(uploader) {
       uploader.html('<div></div>');
-      uploader = jQuery('div', uploader);
+      uploader = $('div', uploader);
       uploader.plupload({
         runtimes : 'html5,flash,silverlight,html4',
         url : '<%= url_for({:controller => 'dmsf_upload', :action => 'upload_file', :id => @project}) %>',
@@ -111,28 +101,28 @@
         // Silverlight settings
         silverlight_xap_url : '<%= plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.xap') %>'
       });
-      jQuery('.plupload_scroll',uploader).resizable({
+      $('.plupload_scroll',uploader).resizable({
         handles: 's'
       });
       var pluploader = uploader.plupload('getUploader');
 
       pluploader.bind('FileUploaded', function(pluploader, file, response) {
-        var responseObject = jQuery.parseJSON(response.response);
+        var responseObject = $.parseJSON(response.response);
         if (responseObject == null) { //Bug: on Firefox folders entries act unexpectedly.
           file.status = plupload.FAILED;
           pluploader.trigger('UploadProgress', file);
           pluploader.trigger('QueueChanged');
         } else {
           if (responseObject.error == null) {
-            var disk_filename_input = jQuery('<input/>').attr('type', 'hidden')
+            var disk_filename_input = $('<input/>').attr('type', 'hidden')
                     .attr('name', 'uploaded[' + dmsfFileFieldCount + '][disk_filename]')
                     .val(responseObject.disk_filename);
             uploader.append(disk_filename_input);
-            var content_type_input = jQuery('<input/>').attr('type', 'hidden')
+            var content_type_input = $('<input/>').attr('type', 'hidden')
                     .attr('name', 'uploaded[' + dmsfFileFieldCount + '][content_type]')
                     .val(responseObject.content_type);
             uploader.append(content_type_input);
-            var original_filename_input = jQuery('<input/>').attr('type', 'hidden')
+            var original_filename_input = $('<input/>').attr('type', 'hidden')
                     .attr('name', 'uploaded[' + dmsfFileFieldCount + '][original_filename]')
                     .val(responseObject.original_filename);
             uploader.append(original_filename_input);
@@ -143,7 +133,7 @@
           }
         }
         if(pluploader.total.uploaded == pluploader.files.length) jQuery('#uploadform').submit();
-        else if((pluploader.total.uploaded + pluploader.total.failed) == pluploader.files.length) setTimeout(function() {jQuery('#uploadform').submit();}, 2000);
+        else if((pluploader.total.uploaded + pluploader.total.failed) == pluploader.files.length) setTimeout(function() {$('#uploadform').submit();}, 2000);
         else dmsfFileFieldCount++;
         return true;
       });

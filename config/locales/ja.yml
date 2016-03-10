@@ -93,12 +93,8 @@ ja:
   label_email_documents: 文書
   label_email_body: 本文
   label_email_send: 送信
-  title_notifications_active: 通知は有効です
-  label_file_size: ファイルサイズ
-  heading_file_upload: アップロード
-  note_uploaded_maximum_files_at_once: "最大 %{number} ファイルを一度にアップロードすることができます。"
-  note_upload_files_greater_than_two_gb: 2GB より大きいファイルをアップロードするには 64bit 対応ブラウザが必要です。
-  submit_upload_files: アップロード
+  title_notifications_active: 通知は有効です  
+  label_upload: アップロード    
   heading_new_folder: 新規フォルダ
   label_title: タイトル
   label_description: 説明
@@ -333,3 +329,5 @@ ja:
           
   label_maximum_ajax_upload_filesize: アップロードファイルサイズ上限
   note_maximum_ajax_upload_filesize: アップロード可能なファイルサイズの上限。AjaxおよびRedmineの仕様に制限される（2ギガバイト程度までは確認済み）単位はMB。
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"

@@ -93,12 +93,8 @@ pt-BR:
   label_email_documents: DMSF
   label_email_body: Descrição
   label_email_send: Enviar
-  title_notifications_active: Notificações Ativas
-  label_file_size: Tamanho do Arquivo
-  heading_file_upload: Envio
-  note_uploaded_maximum_files_at_once: "Não pode ser carregado o máximo de %{number} arquivo de apenas uma vez."
-  note_upload_files_greater_than_two_gb: Para fazer o upload maiores que 2GB você deve possuir sistema 64b.
-  submit_upload_files: Envio
+  title_notifications_active: Notificações Ativas  
+  label_upload: Envio    
   heading_new_folder: Nova Pasta
   label_title: Taxonomia
   label_description: Descrição
@@ -333,3 +329,5 @@ pt-BR:
 
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"

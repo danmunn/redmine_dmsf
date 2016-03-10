@@ -93,12 +93,8 @@ zh-TW:
   label_email_documents: 附加檔案
   label_email_body: 郵件內容
   label_email_send: 寄信囉
-  title_notifications_active: 通知處於啟用中
-  label_file_size: 檔案大小
-  heading_file_upload: 上傳
-  note_uploaded_maximum_files_at_once: "一次最多，只能上傳%{number}個檔案。"
-  note_upload_files_greater_than_two_gb: 為了上傳大於 2GB 的檔案，您需要使用64位元版本的瀏覽器。
-  submit_upload_files: 上傳
+  title_notifications_active: 通知處於啟用中  
+  label_upload: 上傳    
   heading_new_folder: 新增資料夾
   label_title: 標題
   label_description: 描述
@@ -333,3 +329,5 @@ zh-TW:
 
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"

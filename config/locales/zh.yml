@@ -93,12 +93,8 @@ zh:
   label_email_documents: 文档
   label_email_body: 正文
   label_email_send: 发送
-  title_notifications_active: 通知处于有效状态
-  label_file_size: 文件大小
-  heading_file_upload: 上传
-  note_uploaded_maximum_files_at_once: "一次最多上传%{number}个文件."
-  note_upload_files_greater_than_two_gb: 为了上传大于2GB文件，您需要64位版本的浏览器.
-  submit_upload_files: 上传
+  title_notifications_active: 通知处于有效状态  
+  label_upload: 上传    
   heading_new_folder: 新建文件夹
   label_title: 标题
   label_description: 描述
@@ -333,3 +329,5 @@ zh:
                 
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"

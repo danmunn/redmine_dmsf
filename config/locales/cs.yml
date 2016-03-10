@@ -93,12 +93,8 @@ cs:
   label_email_documents: Documenty
   label_email_body: Obsah
   label_email_send: Odesláno
-  title_notifications_active: Notifikace jsou aktivní
-  label_file_size: Velikost souboru
-  heading_file_upload: Nahrát
-  note_uploaded_maximum_files_at_once: "Maximálně může být nahráno %{number} souborů najednou."
-  note_upload_files_greater_than_two_gb: Nahrání souborů větších než 2GB vyžaduje 64b prohlížeč.
-  submit_upload_files: Nahrání
+  title_notifications_active: Notifikace jsou aktivní  
+  label_upload_upload: Nahrát  
   heading_new_folder: Nová složka
   label_title: Název
   label_description: Popis
@@ -332,4 +328,6 @@ cs:
       open_approvals: Procesy ke schválení
           
   label_maximum_ajax_upload_filesize: Maximální velikost souboru nahratelná přes AJAX
-  note_maximum_ajax_upload_filesize: Omezuje velikost souboru, který může být nahrán přes standardní rozhraní AJAX, jinak se použije standarní rozhraní Redminu. Číslo je MB.
+  note_maximum_ajax_upload_filesize: Omezuje velikost souboru, který může být nahrán přes standardní rozhraní AJAX, jinak se použije standardní rozhraní Redminu. Číslo je v MB.
+  label_classic: Klasický
+  label_drag_drop: "Drag&Drop"

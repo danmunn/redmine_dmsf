@@ -93,12 +93,8 @@ es:
   label_email_documents: Documentos
   label_email_body: Cuerpo de Mensaje
   label_email_send: Enviar
-  title_notifications_active: Activar Notificaciones
-  label_file_size: Tamaño de Archivo
-  heading_file_upload: Subir
-  note_uploaded_maximum_files_at_once: "El número máximo de una subida de archivos es %{number}."
-  note_upload_files_greater_than_two_gb: Para subir archivos mayores a 2GB debe tener un navegador web de 64bits.
-  submit_upload_files: Subir
+  title_notifications_active: Activar Notificaciones  
+  label_upload: Subir  
   heading_new_folder: Nuevo directorio
   label_title: Título
   label_description: Descripción
@@ -333,3 +329,5 @@ es:
                 
   label_maximum_ajax_upload_filesize: "El máximo tamaño de archivo para subir por AJAX"
   note_maximum_ajax_upload_filesize: "El límite máximo de tamaño de archivo que puede ser subido por la interfaz AJAX estandar, de lo contrario se debe utilizar el formulario estandar de Redmine. El número es en MB."
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"

@@ -93,12 +93,8 @@ ru:
   label_email_documents: Документы
   label_email_body: Содержание
   label_email_send: Отправить
-  title_notifications_active: Уведомления активны
-  label_file_size: Размер файла
-  heading_file_upload: Закачать
-  note_uploaded_maximum_files_at_once: "За один раз можно загрузить только %{number} файлов."
-  note_upload_files_greater_than_two_gb: Чтобы загружать файлы размером больше чем 2 Гб у вас должен быть 64-битный браузер.
-  submit_upload_files: Загрузить
+  title_notifications_active: Уведомления активны  
+  label_upload: Закачать    
   heading_new_folder: Новая папка
   label_title: Заголовок
   label_description: Описание
@@ -333,3 +329,5 @@ ru:
           
   label_maximum_ajax_upload_filesize: Максимальный размер файла, загружаемого посредством AJAX
   note_maximum_ajax_upload_filesize: Превышает максимальный размер файла, загружаемого посредством интерфейса AJAX, для загрузки можно использовать стандартную форму Redmine. Размер указан в MB.
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"
