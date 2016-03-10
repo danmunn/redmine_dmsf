@@ -22,10 +22,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<!--Select2 Files-->
-<%= stylesheet_link_tag 'select2.min.css', :plugin => 'redmine_dmsf' %>
-<%= javascript_include_tag 'select2.min.js', :plugin => 'redmine_dmsf' %>
-
 <% html_title(l(:dmsf)) %>
 
 <%= render(:partial => '/dmsf/path', 
@@ -58,16 +54,15 @@
 <% end %>
 
 <script type="text/javascript">
-  jQuery('#move_button').click(function(event) {
-    jQuery('#copyForm').attr('action', "<%= url_for(:action => 'move', :id => @file) %>");
-    jQuery('#copyForm').submit();
+  $('#move_button').click(function(event) {
+    $('#copyForm').attr('action', "<%= url_for(:action => 'move', :id => @file) %>");
+    $('#copyForm').submit();
   });
 
-  jQuery('#target_project_id').change(function () {
-    jQuery('#content').load("<%= url_for(:action => 'new') %>", jQuery('#copyForm').serialize());
-    jQuery('#target_folder_id' ).select2({ width: "600px" });
+  $('#target_project_id').change(function () {
+    $('#content').load("<%= url_for(:action => 'new') %>", $('#copyForm').serialize());    
   });
 
-  jQuery('#target_project_id' ).select2({ width: "600px" });
-  jQuery('#target_folder_id' ).select2({ width: "600px" });
+  $('#target_project_id').select2();
+  $('#target_folder_id').select2();
 </script>

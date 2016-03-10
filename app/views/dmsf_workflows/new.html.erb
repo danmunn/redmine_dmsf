@@ -47,4 +47,6 @@
   $('#dmsf_workflow_id').change(function () {
     $('#content').load("<%= url_for(:action => 'new', :project_id => @project) %>", $('#new_dmsf_workflow').serialize());
   });
+  
+  $('#dmsf_workflow_id').select2();
 </script> 

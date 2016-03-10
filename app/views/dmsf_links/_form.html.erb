@@ -80,13 +80,12 @@
     </div>      
     <div id="link_external" style="<%= @link_external ? '' : 'display:none' %>">
       <p>        
-        <%= f.text_field :external_url,
-          :maxlength => 255, :required => true, :label => l(:label_link_external_url) %>
+        <%= f.text_field :external_url, :required => true, 
+          :label => l(:label_link_external_url) %>
       </p>
     </div>    
     <p>      
-      <%= f.text_field :name,
-        :maxlength => 255, :required => true, :label => l(:label_link_name) %>    
+      <%= f.text_field :name, :required => true, :label => l(:label_link_name) %>    
     </p>    
   </div>
   <p><%= f.submit l(:button_create) %></p>
@@ -96,14 +95,21 @@
   $('#dmsf_link_target_project_id').change(function () {
     $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id, :reload => true) %>", $('#new_dmsf_link').serialize());
   });
+  
   $('#dmsf_link_target_folder_id').change(function () {
     $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id) %>", $('#new_dmsf_link').serialize());
   });
+  
   $('#dmsf_link_target_file_id').change(function () {
     $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id) %>", $('#new_dmsf_link').serialize());
   });
+  
   $("input[name=external_link]:radio").change(function(){
     $("#link_internal").toggle();
     $("#link_external").toggle();
   });
+  
+  $('#dmsf_link_target_project_id').select2();
+  $('#dmsf_link_target_folder_id').select2();
+  $('#dmsf_link_target_file_id').select2();
 </script> 
