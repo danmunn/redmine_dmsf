@@ -116,19 +116,6 @@ td.workflow {
 	white-space: nowrap;
 }
 
-/* DMSF entries upload control */
-.dmsf_upload textarea {
-	width: 90%;
-}
-
-.dmsf_upload legend {
-	font-weight: bold;
-}
-
-.dmsf_upload .warning {
-	padding: 4px 4px 4px 30px;
-}
-
 #uploader div.flash {
 	border: none;
 }
