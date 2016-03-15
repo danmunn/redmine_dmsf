@@ -19,17 +19,28 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class StatusDeleted < ActiveRecord::Migration
+  def self.cast_integer(colname)
+    adapter_name = ActiveRecord::Base.connection.adapter_name.downcase
+    case adapter_name
+    when /postgresql/
+      "integer USING CAST(#{colname} AS integer)"
+    else
+      'integer'
+    end
+  end
+  
   def self.up
-    change_column :dmsf_folders, :deleted, :integer, :null => false, :default => DmsfFolder::STATUS_ACTIVE
-    change_column :dmsf_files, :deleted, :integer, :null => false, :default => DmsfFile::STATUS_ACTIVE
-    change_column :dmsf_file_revisions, :deleted, :integer, :null => false, :default => DmsfFileRevision::STATUS_ACTIVE
-    change_column :dmsf_links, :deleted, :integer, :null => false, :default => DmsfLink::STATUS_ACTIVE
+    change_column :dmsf_folders, :deleted, :boolean, :default => nil
+    change_column :dmsf_files, :deleted, :boolean, :default => nil
+    change_column :dmsf_file_revisions, :deleted, :boolean, :default => nil
+    change_column :dmsf_links, :deleted, :boolean, :default => nil
+    
+    change_column :dmsf_folders, :deleted, cast_integer(:deleted), :null => false, :default => DmsfFolder::STATUS_ACTIVE
+    change_column :dmsf_files, :deleted, cast_integer(:deleted), :null => false, :default => DmsfFile::STATUS_ACTIVE
+    change_column :dmsf_file_revisions, :deleted, cast_integer(:deleted), :null => false, :default => DmsfFileRevision::STATUS_ACTIVE
+    change_column :dmsf_links, :deleted, cast_integer(:deleted), :null => false, :default => DmsfLink::STATUS_ACTIVE
   end
 
   def self.down
-    change_column :dmsf_folders, :deleted, :boolean, :null => false, :default => false
-    change_column :dmsf_files, :deleted, :boolean, :null => false, :default => false
-    change_column :dmsf_file_revisions, :deleted, :boolean, :null => false, :default => false
-    change_column :dmsf_links, :deleted, :boolean, :null => false, :default => false
   end
 end
