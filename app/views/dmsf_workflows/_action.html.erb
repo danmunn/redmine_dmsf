@@ -1,6 +1,9 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
 #
-# Copyright (C) 2013   Karel Pičman <karel.picman@kontron.com>
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,28 +17,35 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 
 <h3 class="title"><%= l(:field_label_dmsf_workflow) %></h3>
 
 <%= form_tag({:controller => 'dmsf_workflows', :action => 'new_action'},              
-              :method => :post,
-              :id => 'new-action-form') do %>
-  
+      :method => :post, :id => 'new-action-form') do %> 
   <%= hidden_field_tag :dmsf_workflow_step_assignment_id, params[:dmsf_workflow_step_assignment_id] %>
   <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>
-  <p><label><%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_APPROVE, true %> <%= l(:label_dmsf_wokflow_action_approve) %></label><br/></p>
-  
   <p>
-    <label><%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_REJECT %> <%= l(:label_dmsf_wokflow_action_reject) %></label><br/>
-    <%= text_area_tag :note, '', :placeholder => l(:message_dmsf_wokflow_note), :size => '38x2' %>
+    <label>
+      <%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_APPROVE, true %>
+      <%= l(:label_dmsf_wokflow_action_approve) %>
+    </label>
+  </p>  
+  <p>
+    <label>
+      <%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_REJECT %>
+      <%= l(:label_dmsf_wokflow_action_reject) %>
+    </label>    
+    <br/>
+    <%= text_area_tag :note, '', :placeholder => l(:message_dmsf_wokflow_note), :style => 'width: 90%' %>
   </p>
 
   <p>
     <%= label_tag 'delegate', l(:label_dmsf_wokflow_action_delegate) %><br/>
     <%= text_field_tag 'user_search', nil %>    
-    <%= javascript_tag "observeSearchfield('user_search', 'users_for_delegate', '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@dmsf_workflow, :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id], :dmsf_file_revision_id => params[:dmsf_file_revision_id]) }')" %>    
-    <%=  content_tag('div', principals_radio_button_tags('step_action', @dmsf_workflow.delegates(nil, params[:dmsf_workflow_step_assignment_id], params[:dmsf_file_revision_id])), :id => 'users_for_delegate') %>
+    <%= javascript_tag "observeSearchfield('user_search', 'dmsf_users_for_delegate', '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@dmsf_workflow, :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id], :dmsf_file_revision_id => params[:dmsf_file_revision_id]) }')" %>    
+    <%= content_tag('div', principals_radio_button_tags('step_action', @dmsf_workflow.delegates(nil, params[:dmsf_workflow_step_assignment_id], params[:dmsf_file_revision_id])), :id => 'dmsf_users_for_delegate') %>
   </p>
   
   <p class="buttons">

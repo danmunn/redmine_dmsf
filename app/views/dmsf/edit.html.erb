@@ -30,26 +30,26 @@
       <% unless @folder.locked? %>
         <%= link_to(l(:button_lock),
           lock_dmsf_path(:id => @project, :folder_id => @folder),
-          :title => l(:title_lock_file), :class => 'icon icon-dmsf-lock') %>  
+          :title => l(:title_lock_file), :class => 'icon dmsf_icon-lock') %>  
       <% else %>
         <%= link_to_if(@folder.unlockable?, l(:button_unlock),
           unlock_dmsf_path(:id => @project, :folder_id => @folder),
-          :title => l(:title_unlock_file), :class => 'icon icon-dmsf-unlock')%>            
+          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock')%>            
       <% end %>
       <% if @folder.notification %>              
           <%= link_to(l(:label_notifications_off),
            notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
             :title => l(:title_notifications_active_deactivate),
-            :class => 'icon icon-notification-on') %>
+            :class => 'icon dmsf_icon-notification-on') %>
         <% else %>              
           <%= link_to(l(:label_notifications_on),
             notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
             :title => l(:title_notifications_not_active_activate),
-            :class => 'icon icon-notification-off') %>
+            :class => 'icon dmsf_icon-notification-off') %>
         <% end %>      
       <%= link_to(l(:label_link_to), 
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder.id, :type => 'link_to'),
-        :title => l(:title_create_link), :class => 'icon icon-link') %>
+        :title => l(:title_create_link), :class => 'icon dmsf_icon-link') %>
       <%= link_to(l(:button_copy), copy_folder_path(:id => @folder),
         :title => l(:title_copy), :class => 'icon icon-copy') %>      
       <%= link_to(l(:button_delete),
@@ -59,7 +59,7 @@
     <% elsif @force_file_unlock_allowed %>
       <%= link_to_if(@folder.unlockable?, l(:button_unlock),
         unlock_dmsf_path(:id => @project, :folder_id => @folder),
-          :title => l(:title_unlock_file), :class => 'icon icon-dmsf-unlock')%>      
+          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock')%>      
     <% end %>   
   <% end %>
 </div>

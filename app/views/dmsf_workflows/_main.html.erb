@@ -17,7 +17,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 
 <% @workflows = DmsfWorkflow.active.sorted.where(:project_id => @project.id) if @project && @workflows.nil?  %>  
 
@@ -46,7 +47,7 @@
     </tr></thead>
     <tbody>
       <% for workflow in @workflows %>
-        <tr id="workflow-<%= workflow.id %>" class="workflow <%= workflow.active? ? 'active' : 'locked' %> <%= cycle('odd', 'even') %>">
+        <tr id="workflow-<%= workflow.id %>" class="dmsf_workflow <%= workflow.active? ? 'active' : 'locked' %> <%= cycle('odd', 'even') %>">
           <td class="name"><%= link_to(h(workflow.name), dmsf_workflow_path(workflow)) %></td>          
           <td class="buttons">
             <%= change_status_link(workflow) unless @project %>

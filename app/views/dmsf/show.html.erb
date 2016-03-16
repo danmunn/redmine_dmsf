@@ -39,28 +39,28 @@
       <% if @folder.locked? %>                
         <%= link_to_if(@folder.unlockable?, l(:button_unlock),
           unlock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-          :title => l(:title_unlock_folder), :class => 'icon icon-dmsf-unlock')  %>        
+          :title => l(:title_unlock_folder), :class => 'icon dmsf_icon-unlock')  %>        
       <% else %>
         <%= link_to(l(:button_lock),
           lock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-          :title => l(:title_lock_folder), :class => 'icon icon-dmsf-lock') %>
+          :title => l(:title_lock_folder), :class => 'icon dmsf_icon-lock') %>
       <% end %>
     <% end %>   
     <% if !@locked_for_user && ((@folder && @folder.notification) || (!@folder && @project.dmsf_notification)) %>
       <%= link_to(l(:label_notifications_off),
         notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
         :title => l(:title_notifications_active_deactivate),
-        :class => 'icon icon-notification-on') %>
+        :class => 'icon dmsf_icon-notification-on') %>
     <% else %>
       <%= link_to(l(:label_notifications_on),
         notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
         :title => l(:title_notifications_not_active_activate),
-        :class => 'icon icon-notification-off') %>
+        :class => 'icon dmsf_icon-notification-off') %>
     <% end %>        
     <% if @file_manipulation_allowed && !@locked_for_user %>
       <%= link_to(l(:label_link_from), 
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder, :type => 'link_from'),
-        :title => l(:title_create_link), :class => 'icon icon-link') %>
+        :title => l(:title_create_link), :class => 'icon dmsf_icon-link') %>
     <% end %>    
     <%= link_to(l(:link_create_folder), 
       new_dmsf_path(:id => @project, :parent_id => @folder),
@@ -85,7 +85,7 @@
 <%= form_tag({:action => :entries_operation, :id => @project, :folder_id => @folder}, :method => :post,
   :class => 'dmfs_entries', :id => 'entries_form') do %>
   <%= hidden_field_tag('action') %>
-  <div class="controls" style="float: left">
+  <div class="dmsf_controls" style="float: left">
     <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries') if @file_view_allowed %>
     <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries') if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
     <% if @file_delete_allowed%>
@@ -94,30 +94,30 @@
   </div>
   <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
   <% unless values.empty? %>
-    <div class="controls" style="float: right">               
+    <div class="dmsf_controls" style="float: right">               
       <%= custom_field_tag_with_label(
         :dmsf_folder, 
         CustomValue.new(:custom_field_id => params[:custom_field_id].present? ? params[:custom_field_id] : values.first.custom_field_id, :value => params[:custom_value])) %>
     </div>  
   <% end %>
   <div class="autoscroll">
-  <table class="display list" id="browser">
+  <table class="display list dmsf_list" id="browser">
     <thead>
-      <tr id="root">
-        <th class="dmsf_check">
+      <tr>
+        <th class="dmsf_checkbox dmsf_th">
           <input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
         </th>
-        <th><%= l(:link_title) %></th>
-        <th><%= l(:link_size) %></th>
-        <th><%= l(:link_modified) %></th>
-        <th title="<%= l(:label_version) %>"><%= l(:link_ver) %></th>
-        <th><%= l(:link_workflow) %></th>
-        <th><%= l(:link_author) %></th>
-        <th></th>
-        <th class="invisible"></th>
-        <th class="invisible"></th>
-        <th class="invisible"></th>
-        <th class="invisible"></th>
+        <th class ="dmsf_th"><%= l(:link_title) %></th>
+        <th class ="dmsf_th"><%= l(:link_size) %></th>
+        <th class ="dmsf_th"><%= l(:link_modified) %></th>
+        <th title="<%= l(:label_version) %>" class ="dmsf_th"><%= l(:link_ver) %></th>
+        <th class ="dmsf_th"><%= l(:link_workflow) %></th>
+        <th class ="dmsf_th"><%= l(:link_author) %></th>
+        <th class ="dmsf_th"></th>
+        <th class="dmsf_invisible"></th>
+        <th class="dmsf_invisible"></th>
+        <th class="dmsf_invisible"></th>
+        <th class="dmsf_invisible"></th>
       </tr>
     </thead>
   <tbody>       
@@ -138,7 +138,7 @@
       <% Rails.logger.error "Error: dmsf_link id #{link.id} has no target!" %>
       <% next %>
     <% end %>         
-    <tr class="gray">
+    <tr class="dmsf_gray">
       <%= render(:partial => 'dir', 
         :locals => { 
           :project => link.target_project, 
@@ -169,7 +169,7 @@
         <% Rails.logger.error "Error: dmsf_file id #{link.target_id} has no revision!" %>
         <% next %>
       <% end %>
-      <tr class="gray">
+      <tr class="dmsf_gray">
         <%= render(:partial => 'file', :locals => {
             :project => link.target_project,
             :file => link.target_file,
@@ -180,7 +180,7 @@
       </tr>
     <% end %>
     <% @url_links.each do |link| %>
-      <tr class="gray">
+      <tr class="dmsf_gray">
           <%= render(:partial => 'url', :locals => {
                                               :project => link.target_project,
                                               :file => link.target_file,
@@ -242,7 +242,7 @@
           { 'iDataSort': 11, 'aTargets': [ 4 ] }
         ],
         'fnInitComplete': function() {
-           jQuery('div.controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
+           jQuery('div.dmsf_controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
         },
         'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
            return "<%= l(:label_number_of_folders)%>: <%= @subfolders.count + @dir_links.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count + @file_links.count + @url_links.count %>";

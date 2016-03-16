@@ -35,7 +35,7 @@
     <% revision.access_grouped.each do |access| %>
       <tr>
         <td><%= link_to_user(access.user) %></td>
-        <td class="version"><%= access['count'] %></td>
+        <td class="dmsf_version"><%= access['count'] %></td>
         <td class="dmsf_modified"><%= format_time(DmsfHelper::to_time(access.first_at)) %></td>
         <td class="dmsf_modified"><%= format_time(DmsfHelper::to_time(access.last_at)) %></td>
       </tr>

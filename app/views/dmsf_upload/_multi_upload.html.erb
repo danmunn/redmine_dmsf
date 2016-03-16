@@ -25,7 +25,7 @@
 <div class="box">
   <%= form_tag({:controller => 'dmsf_upload', :action => 'upload_files', :id => @project, :folder_id => @folder},
     :id => 'uploadform', :method => :post, :multipart => true) do %>    
-    <div class="upload_select">        
+    <div class="dmsf_upload_select">        
       <select id="uploader_select">
        <option value="1">
           <%= l(:label_drag_drop) %>

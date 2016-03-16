@@ -23,19 +23,19 @@
 <% locked_for_user = subfolder && subfolder.locked_for_user? %>
 <% locked = subfolder && subfolder.locked? %>    
 
-<td class="dmsf_check"><%= check_box_tag(name, id, false, 
+<td class="checkbox"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_zip_download_or_email), :id => "subfolder_#{id}") %></td>
 <td class="dmsf_title">                
   <%= link_to(h(title),          
     dmsf_folder_path(:id => project, :folder_id => subfolder),
     :class => 'icon icon-folder') %>
   <% if link %>
-    <div class="filename" title="<%= l(:label_target_folder)%>"><%= link.path %></div>
+    <div class="dmsf_filename" title="<%= l(:label_target_folder)%>"><%= link.path %></div>
   <% else %>
-    <div class="filename" title="<%= l(:title_items)%>">[<%= subfolder.items %>]</div>
+    <div class="dmsf_filename" title="<%= l(:title_items)%>">[<%= subfolder.items %>]</div>
   <% end %>
 </td>            
-<td class="size"></td>
+<td class="dmsf_size"></td>
 <td class="dmsf_modified"><%= format_time(subfolder.modified) if subfolder %>                
   <% if locked_for_user %>
     <% if subfolder.lock.reverse[0].user %>            
@@ -51,9 +51,9 @@
       :title => l(:title_locked_by_you)) %>
   <% end %>        
 </td>
-<td class="version"></td>
-<td class="workflow"></td>
-<td class="author"><%= h(subfolder.user) if subfolder %></td>
+<td class="dmsf_version"></td>
+<td class="dmsf_workflow"></td>
+<td class="dmsf_author"><%= h(subfolder.user) if subfolder %></td>
 <td class="dmsf_buttons">
   <% if @folder_manipulation_allowed %>
     <% unless locked_for_user %>
@@ -106,7 +106,7 @@
     <% end %>                                                                                                                                                                       
   <% end %>
 </td>
-<td class="invisible">0</td>
-<td class="invisible">0</td>
-<td class="invisible"><%= subfolder.modified.to_i if subfolder %></td>
-<td class="invisible">0</td>
+<td class="dmsf_invisible">0</td>
+<td class="dmsf_invisible">0</td>
+<td class="dmsf_invisible"><%= subfolder.modified.to_i if subfolder %></td>
+<td class="dmsf_invisible">0</td>

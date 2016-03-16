@@ -52,7 +52,7 @@
       <tbody>      
       <% steps.each do |i|%>  
         <tr id="step-<%= i %>" class="<%= cycle 'odd', 'even' %> step">            
-          <td class="step"><%= i %></td>
+          <td class="id"><%= i %></td>
           <td class="approval">                
             <% @dmsf_workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact.each_with_index do |step, j| %>
               <% if j != 0 %>

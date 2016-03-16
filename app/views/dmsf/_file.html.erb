@@ -22,7 +22,7 @@
 
 <% wf = DmsfWorkflow.find_by_id(file.last_revision.dmsf_workflow_id) %>
 
-<td class="dmsf_check"><%= check_box_tag(name, id, false, 
+<td class="checkbox"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_zip_download_or_email), :id => "file_#{id}") %></td>
 <td class="dmsf_title">
   <% file_view_url = url_for({:controller => :dmsf_files, :action => 'view', :id => file}) %>
@@ -32,9 +32,9 @@
     :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}",
     :title => l(:title_title_version_version_download, :title => h(file.title), :version => file.version),
     'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}") %>
-  <div class="filename" title="<%= l(:title_filename_for_download)%>"><%= h(link ? link.path : file.display_name) %></div>
+  <div class="dmsf_filename" title="<%= l(:title_filename_for_download)%>"><%= h(link ? link.path : file.display_name) %></div>
 </td>
-<td class="size"><%= number_to_human_size(file.last_revision.size) %></td>
+<td class="dmsf_size"><%= number_to_human_size(file.last_revision.size) %></td>
 <td class="dmsf_modified">
   <%= format_time(file.last_revision.updated_at) %>
   <% if file.locked_for_user? %>
@@ -51,8 +51,8 @@
       :title => l(:title_locked_by_you)) %>
   <% end %>
 </td>
-<td class="version" title="<%= file.last_revision.comment %>"><%= file.last_revision.version %></td>
-<td class="workflow">                                  
+<td class="dmsf_version" title="<%= file.last_revision.comment %>"><%= file.last_revision.version %></td>
+<td class="dmsf_workflow">                                  
   <% if wf && @file_approval_allowed %>
     <%= link_to(
       file.last_revision.workflow_str(false),
@@ -66,7 +66,7 @@
     <%= file.last_revision.workflow_str(false) %>
   <% end %>
 </td>
-<td class="author"><%= h(file.last_revision.user) %></td>
+<td class="dmsf_author"><%= h(file.last_revision.user) %></td>
 <td class="dmsf_buttons">  
   <% if @file_manipulation_allowed %>
     <%= link_to(image_tag('filedetails.png', :plugin => 'redmine_dmsf'),
@@ -160,7 +160,7 @@
             title => l(:label_dmsf_wokflow_action_start)) %>
         <% end %>
       <% when DmsfWorkflow::STATE_REJECTED %>                
-        <%= content_tag(:span, image_tag('assigned.png', :plugin => 'redmine_dmsf'), 
+        <%= content_tag(:span, image_tag('rejected.png', :plugin => 'redmine_dmsf'), 
           :title => l(:title_rejected)) %>
       <% else %>
         <% if @workflows_available && !file.locked_for_user? %>
@@ -174,7 +174,7 @@
     <% end %> 
   <% end %>
 </td>
-<td class="invisible">1</td>
-<td class="invisible"><%= file.last_revision.size %></td>
-<td class="invisible"><%= file.last_revision.updated_at.to_i %></td>
-<td class="invisible"><%= file.last_revision.iversion %></td>
+<td class="dmsf_invisible">1</td>
+<td class="dmsf_invisible"><%= file.last_revision.size %></td>
+<td class="dmsf_invisible"><%= file.last_revision.updated_at.to_i %></td>
+<td class="dmsf_invisible"><%= file.last_revision.iversion %></td>
