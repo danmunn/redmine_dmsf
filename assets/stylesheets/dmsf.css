@@ -47,7 +47,8 @@ table.list td.dmsf_buttons {
   text-align: left;
 }
 
-table.list th.dmsf_checkbox { 
+table.list th.dmsf_checkbox,
+table.list td.dmsf_checkbox { 
   width: 15px; 
   padding: 2px 0 0 0; 
 }

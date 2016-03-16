@@ -23,7 +23,7 @@
 <% locked_for_user = subfolder && subfolder.locked_for_user? %>
 <% locked = subfolder && subfolder.locked? %>    
 
-<td class="checkbox"><%= check_box_tag(name, id, false, 
+<td class="dmsf_checkbox"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_zip_download_or_email), :id => "subfolder_#{id}") %></td>
 <td class="dmsf_title">                
   <%= link_to(h(title),          
