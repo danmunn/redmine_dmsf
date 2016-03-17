@@ -51,6 +51,7 @@ require 'redmine_dmsf/errors/dmsf_zip_max_file_error.rb'
 # Hooks
 require 'redmine_dmsf/hooks/view_projects_form_hook'
 require 'redmine_dmsf/hooks/base_view_hooks'
+require 'redmine_dmsf/hooks/search_controller_hooks'
 
 # Macros
 require 'redmine_dmsf/macros'
