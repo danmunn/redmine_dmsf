@@ -1,4 +1,5 @@
-# encoding: utf-8#
+# encoding: utf-8
+# 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
