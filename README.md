@@ -77,18 +77,18 @@ From Omega documentation:
 
 On Debian use:
 
-```sudo apt-get install xapian-omega libxapian-dev xpdf xpdf-utils \
+```sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils \
  antiword unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi \
  djview djview3 uuid uuid-dev xz-utils```
 
 On Ubuntu use:
 
-```sudo apt-get install xapian-omega libxapian-dev xpdf xpdf-utils antiword \
+```sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils antiword \
  unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi djview djview3 \
  uuid uuid-dev xz-utils```
 
 On CentOS user:
-```sudo yum install xapian-omega libxapian-dev xpdf xpdf-utils antiword \
+```sudo yum install xapian-omega libxapian-dev xpdf poppler-utils antiword \
  unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi djview djview3 \
  uuid uuid-dev xz```
 
