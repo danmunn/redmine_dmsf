@@ -45,6 +45,13 @@ module RedmineDmsf
       end
 
       def authenticate(username, password)
+        # Bugfix: Current DAV4Rack (including production) authenticate against ALL requests
+        # Microsoft Web Client will not attempt any authentication (it'd seem) until it's acknowledged
+        # a completed OPTIONS request. Ideally this is a flaw with the controller, however as I'm not
+        # going to fork it to ensure compliance, checking the request method in the authentication
+        # seems the next best step, if the request method is OPTIONS return true, controller will simply
+        # call the options method within, which accesses nothing, just returns headers about dav env.
+        return true if @request.request_method.downcase == 'options' && (path == '/' || path.empty?)
         return false unless username && password
         User.current = User.try_to_login(username, password)
         return User.current && !User.current.anonymous?
