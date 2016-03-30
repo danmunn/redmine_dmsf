@@ -48,9 +48,9 @@ table.list td.dmsf_buttons {
 }
 
 table.list th.dmsf_checkbox,
-table.list td.dmsf_checkbox { 
-  width: 15px; 
-  padding: 2px 0 0 0; 
+table.list td.dmsf_checkbox {
+  width: 15px;
+  padding: 2px 0 0 0;
 }
 
 table.list th.dmsf_checkbox input {
@@ -61,7 +61,7 @@ table.list th.dmsf_checkbox div.DataTables_sort_wrapper {
 	padding: 0;
 }
 
-form.dmfs_entries {
+form.dmsf_entries {
 	margin-bottom: 10px;
 	display: block;
 }
@@ -69,14 +69,14 @@ form.dmfs_entries {
 div.dmsf_controls,
 div.dmsf_controls input,
 div.dmsf_controls select,
-form.dmfs_entries #browser_filter.dataTables_filter,
-form.dmfs_entries #browser_filter.dataTables_filter input{
+form.dmsf_entries #browser_filter.dataTables_filter,
+form.dmsf_entries #browser_filter.dataTables_filter input{
 	font-size: 0.9em;
 }
 
 div.dmsf_filename {
-	padding: 0 10px 0 10px; 
-  float: right; 
+	padding: 0 10px 0 10px;
+  float: right;
   font-size: 0.8em;
 	white-space: nowrap;
 }
@@ -110,7 +110,7 @@ td.dmsf_workflow {
 }
 
 div.dmsf_upload_select {
-	float: right;	
+	float: right;
 	font-size: 0.9em;
 }
 
@@ -129,7 +129,7 @@ tr.dmsf_workflow.locked a { color: #aaa; }
   margin-bottom: 10px;
   background-color:#f6f6f6;
   color:#505050;
-  line-height:1.5em;  
+  line-height:1.5em;
 }
 
 .dmsf_revision_inner_box {
@@ -142,7 +142,7 @@ tr.dmsf_workflow.locked a { color: #aaa; }
   line-height: 1.5em;
   color: #505050;
   margin-top: 5px;
-  padding-left: 10px;  
+  padding-left: 10px;
 }
 
 div.dmsf_revision_box .ui-widget-header {
@@ -151,11 +151,11 @@ div.dmsf_revision_box .ui-widget-header {
 
 .dmsf_log_header_box{
   padding:6px;
-  margin-bottom: 10px;  
+  margin-bottom: 10px;
 }
 .dmsf_log_header_left {
     width: 50%;
-    float: left;    
+    float: left;
 }
 
 .dmsf_log_header_box label{
