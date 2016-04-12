@@ -27,12 +27,12 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   has_many :access, :class_name => 'DmsfFileRevisionAccess', :foreign_key => 'dmsf_file_revision_id', :dependent => :destroy
-  has_many :dmsf_workflow_step_assignment, :dependent => :destroy  
-  accepts_nested_attributes_for :access, :dmsf_workflow_step_assignment, :file, :user   
-  
+  has_many :dmsf_workflow_step_assignment, :dependent => :destroy
+  accepts_nested_attributes_for :access, :dmsf_workflow_step_assignment, :file, :user
+
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
-    
+
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }
 
@@ -42,7 +42,7 @@ class DmsfFileRevision < ActiveRecord::Base
     :datetime => Proc.new {|o| o.updated_at },
     :description => Proc.new {|o| o.comment },
     :author => Proc.new {|o| o.user }
-  
+
   acts_as_activity_provider :type => 'dmsf_file_revisions',
     :timestamp => "#{DmsfFileRevision.table_name}.updated_at",
     :author_key => "#{DmsfFileRevision.table_name}.user_id",
@@ -51,11 +51,11 @@ class DmsfFileRevision < ActiveRecord::Base
       joins(
         "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
         "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id").
-      where("#{DmsfFile.table_name}.deleted = ?", STATUS_ACTIVE)  
+      where("#{DmsfFile.table_name}.deleted = ?", STATUS_ACTIVE)
 
-  validates :title, :presence => true  
+  validates :title, :presence => true
   validates_format_of :name, :with => DmsfFolder.invalid_characters,
-    :message => l(:error_contains_invalid_character)    
+    :message => l(:error_contains_invalid_character)
 
   def project
     self.file.project if self.file
@@ -136,7 +136,7 @@ class DmsfFileRevision < ActiveRecord::Base
       project_base = project.identifier.gsub(/[^\w\.\-]/,'_')
       storage_base << "/p_#{project_base}"
     end
-    Dir.mkdir(storage_base) unless File.exists?(storage_base)
+    FileUtils.mkdir_p(storage_base) unless File.exists?(storage_base)
     "#{storage_base}/#{self.disk_filename}"
   end
 
@@ -249,7 +249,7 @@ class DmsfFileRevision < ActiveRecord::Base
     parts = self.version.split '.'
     parts.size == 2 ? parts[0].to_i * 1000 + parts[1].to_i : 0
   end
-  
+
   def formatted_name(format)
     return self.name if format.blank?
     if self.name =~ /(.*)(\..*)$/
@@ -257,7 +257,7 @@ class DmsfFileRevision < ActiveRecord::Base
       ext = $2
     else
       filename = self.name
-    end    
+    end
     format.sub!('%t', self.title)
     format.sub!('%f', filename)
     format.sub!('%d', self.updated_at.strftime('%Y%m%d%H%M%S'))
