@@ -28,45 +28,46 @@
 
 <%= labelled_form_for @dmsf_workflow do |f| %>
   <%= error_messages_for 'workflow' %>
-  <div class="box tabular">    
+  <div class="box tabular">
     <p>
       <%= f.text_field :name, :required => true %>
       <%= f.submit l(:button_save) %>
-    </p>    
-  </div>  
-<% end %>    
+    </p>
+  </div>
+<% end %>
 
-<div class="tab-content" id="tab-content-members">  
-  <p>  
+<div class="tab-content" id="tab-content-members">
+  <p>
     <%= link_to l(:dmsf_new_step), new_step_dmsf_workflow_path(@dmsf_workflow), :remote => true, :class => 'icon icon-add' %>
-  </p>  
+  </p>
   <% steps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq %>
   <% if steps.any? %>
     <table class="list">
       <thead><tr>
         <th><%= l(:label_dmsf_workflow_step) %></th>
         <th><%= l(:label_dmsf_workflow_approval_plural) %></th>
-        <th><%=  l(:button_sort)%></th>    
+        <th><%= l(:button_sort) %></th>
         <th></th>
       </tr></thead>
-      <tbody>      
-      <% steps.each do |i|%>  
-        <tr id="step-<%= i %>" class="<%= cycle 'odd', 'even' %> step">            
+      <tbody>
+      <% steps.each do |i|%>
+        <tr id="step-<%= i %>" class="<%= cycle 'odd', 'even' %> step">
           <td class="id"><%= i %></td>
-          <td class="approval">                
-            <% @dmsf_workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact.each_with_index do |step, j| %>
-              <% if j != 0 %>
-                <b><%= step.soperator %></b>&nbsp
+          <td class="approval">
+            <% stps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact %>
+            <% stps.each_with_index do |step, j| %>
+              <% if (j != 0) || (stps.count > 1) %>
+                <b><%= step.soperator %></b>
               <% end %>
               <%= link_to_user step.user %>
             <% end %>
-          </td>        
-          <td class="reorder">  
+          </td>
+          <td class="reorder">
             <%= reorder_links('workflow_step', {:action => 'edit', :id => @dmsf_workflow, :step => i}, :put) %>
           </td>
-          <td class="buttons">      
+          <td class="buttons">
             <%= delete_link edit_dmsf_workflow_path(@dmsf_workflow, :step => i) %>
-          </td>  
+          </td>
         </tr>
       <% end; reset_cycle %>
       </tbody>

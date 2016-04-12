@@ -27,26 +27,26 @@
   <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=  l(:label_dmsf_workflow_new) %></h2>
 <% end %>
 
-<%= labelled_form_for @dmsf_workflow do |f| %>  
-  <%= f.hidden_field(:project_id) if project %>    
+<%= labelled_form_for @dmsf_workflow do |f| %>
+  <%= f.hidden_field(:project_id, :value => project.id) if project %>
   <%= error_messages_for 'dmsf_workflow' %>
   <div class="box tabular">
-    <p>      
+    <p>
       <%= f.text_field :name, :required => true %>
     </p>
-    <p>            
-      <%= f.select(:id, 
-        dmsf_all_workflows_for_select(params[:dmsf_workflow] ? params[:dmsf_workflow][:id] : nil), 
+    <p>
+      <%= f.select(:id,
+        dmsf_all_workflows_for_select(params[:dmsf_workflow] ? params[:dmsf_workflow][:id] : nil),
         :label => l(:label_copy_workflow_from)) %>
-    </p>    
+    </p>
   </div>
   <%= f.submit l(:button_create) %>
 <% end %>
-  
-<script type="text/javascript">    
+
+<script type="text/javascript">
   $('#dmsf_workflow_id').change(function () {
     $('#content').load("<%= url_for(:action => 'new', :project_id => @project) %>", $('#new_dmsf_workflow').serialize());
   });
-  
+
   $('#dmsf_workflow_id').select2();
-</script> 
+</script>
