@@ -1,5 +1,5 @@
 # encoding: utf-8
-# 
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
@@ -26,13 +26,13 @@ ja:
   label_dmsf_file_revision_plural: 文書管理ファイルリビジョン
   label_dmsf_file_revision_access_plural: 文書管理ファイルアクセス
   warning_no_entries_selected: エントリーが選ばれていません
-  error_email_to_must_be_entered: 電子メールの To は省略できません  
+  error_email_to_must_be_entered: 電子メールの To は省略できません
   warning_file_already_locked: ファイルは既にロックされています
   notice_file_locked: ファイルをロックしました
   warning_file_not_locked: ファイルはロックされていません
   notice_file_unlocked: ファイルをロック解除しました
-  error_only_user_that_locked_file_can_unlock_it: ファイルをロックしたユーザだけがロック解除できます  
-  error_max_files_exceeded: "同時にダウンロードできるファイル数の上限 %{number} を超えています"  
+  error_only_user_that_locked_file_can_unlock_it: ファイルをロックしたユーザだけがロック解除できます
+  error_max_files_exceeded: "同時にダウンロードできるファイル数の上限 %{number} を超えています"
   error_entry_project_does_not_match_current_project: 指定したプロジェクトは現在のプロジェクトと一致しません
   notice_folder_created: フォルダを作成しました
   error_folder_creation_failed: フォルダを作成できません
@@ -40,7 +40,7 @@ ja:
   notice_folder_deleted: フォルダを削除しました
   error_folder_is_not_empty: フォルダが空ではありません
   error_folder_title_is_already_used: タイトルは既に使われています
-  notice_folder_details_were_saved: フォルダの詳細を保存しました  
+  notice_folder_details_were_saved: フォルダの詳細を保存しました
   error_folder_is_locked: Folder is locked
   error_file_is_locked: ファイルはロックされています
   notice_file_deleted: ファイルを削除しました
@@ -81,8 +81,8 @@ ja:
   title_waiting_for_approval: 承認待ち
   title_approved: 承認済み
   title_unlock_file: ロック解除して他のメンバーの変更を許可します
-  title_lock_file: ロックして他のメンバーの変更を禁止します  
-  title_download_checked: チェックしたものを Zip アーカイブでダウンロードします  
+  title_lock_file: ロックして他のメンバーの変更を禁止します
+  title_download_checked: チェックしたものを Zip アーカイブでダウンロードします
   title_send_checked_by_email: チェックしたものを電子メールで送信します
   link_user_preferences: プロジェクトの文書管理設定
   heading_send_documents_by_email: 電子メールによる文書の送信
@@ -93,8 +93,8 @@ ja:
   label_email_documents: 文書
   label_email_body: 本文
   label_email_send: 送信
-  title_notifications_active: 通知は有効です  
-  label_upload: アップロード    
+  title_notifications_active: 通知は有効です
+  label_upload: アップロード
   heading_new_folder: 新規フォルダ
   label_title: タイトル
   label_description: 説明
@@ -113,9 +113,9 @@ ja:
   label_created: 作成者/日時
   label_changed: 更新者/日時
   info_changed_by_user: "/ %{changed}"
-  label_filename: ファイル名  
+  label_filename: ファイル名
   label_mime: Mime
-  label_size: サイズ  
+  label_size: サイズ
   heading_new_revision: 新しいリビジョン
   option_version_same: 変更なし
   option_version_minor: マイナー
@@ -140,7 +140,7 @@ ja:
   note_stem_some: "大文字から始まる、特定の文字の後に続く、あるいは位置情報を必要とするオペレーターと共に使われる語を除くそれ以外の語の語幹を検索します。語幹抽出された語は、先頭に 'Z' が付きます。"
   note_stem_all: "すべての語の語幹を検索します。(注: 先頭に 'Z' は付きません。)"
   note_stemming_applied: 語幹抽出アルゴリズムは、確率を測る対象の位置にある語にしか適用できない (論理演算子の用語自体は語幹抽出されない) ことにご注意ください。
-  label_default_notifications: ファイル通知の既定値  
+  label_default_notifications: ファイル通知の既定値
   heading_uploaded_files: アップロードされたファイル
   submit_commit: コミット
   link_documents: 文書
@@ -150,10 +150,10 @@ ja:
   permission_user_preferences: ユーザ設定
   permission_view_dmsf_files: ファイルの表示
   permission_folder_manipulation: フォルダの操作
-  permission_file_manipulation: ファイルの操作  
+  permission_file_manipulation: ファイルの操作
   permission_force_file_unlock: ファイルの強制ロック解除
   permission_manage_workflows: ワークフロー管理
-  permission_file_delete: ファイルの削除  
+  permission_file_delete: ファイルの削除
   label_file: ファイル
   field_folder: フォルダ
   error_create_cycle_in_folder_dependency: フォルダの依存関係が循環しています
@@ -163,12 +163,12 @@ ja:
   error_user_has_not_right_delete_folder: ユーザにフォルダを削除する権限がありません
   error_user_has_not_right_delete_file: ユーザにファイルを削除する権限がありません
   notice_entries_deleted: エントリーを削除しました
-  warning_some_entries_were_not_deleted: "いくつかのエントリーは削除されませんでした: %{entries}"  
+  warning_some_entries_were_not_deleted: "いくつかのエントリーは削除されませんでした: %{entries}"
   title_delete_checked: チェックしたものを削除します
   title_items: items
   title_filename_for_download: ファイル名はダウンロードまたは Zip アーカイブに使われます
   label_number_of_folders: フォルダ
-  label_number_of_documents: 文書  
+  label_number_of_documents: 文書
   error_file_storage_directory_does_not_exist: ファイル保存フォルダが存在せず作ることもできません
   error_file_can_not_be_created: ファイルを保存フォルダに作ることができません
   error_wrong_zip_encoding: Zip エンコーディングが正しくありません
@@ -192,14 +192,14 @@ ja:
   title_copy_or_move: コピー/移動
   label_dmsf_folder_plural: Dmsf フォルダ
   comment_moved_from: "%{source} から移動しました"
-  error_target_folder_same: コピー/移動先のフォルダとプロジェクトが現在と同じです  
+  error_target_folder_same: コピー/移動先のフォルダとプロジェクトが現在と同じです
   error_file_cannot_be_moved: ファイルを移動できません
   error_file_cannot_be_copied: ファイルをコピーできません
   warning_no_project_to_copy_folder_to: フォルダをコピーするプロジェクトがありません
   title_copy: コピー
   error_folder_cannot_be_copied: フォルダをコピーできません
-  notice_folder_copied: フォルダをコピーしました   
-  
+  notice_folder_copied: フォルダをコピーしました
+
   error_max_email_filesize_exceeded: "電子メールで送信可能なファイルサイズの上限を越えています (%{number} MB)"
   note_maximum_email_filesize: "電子メールで送信可能なファイルサイズの上限。0は無制限。単位はMB。"
   label_maximum_email_filesize: "電子メール添付ファイルサイズ上限"
@@ -214,7 +214,7 @@ ja:
   notice_folder_locked: "フォルダをロックしました"
   warning_folder_not_locked: "フォルダをロックすることができませんでした"
   notice_folder_unlocked: "フォルダのロックを解除しました"
-  error_only_user_that_locked_folder_can_unlock_it: "このフォルダのロックを解除する権限がありません"  
+  error_only_user_that_locked_folder_can_unlock_it: "このフォルダのロックを解除する権限がありません"
   title_unlock_folder: "ロックを解除し他メンバが更新できるようにします"
   title_lock_folder: "ロックし他メンバとの競合を回避します"
 
@@ -246,22 +246,22 @@ ja:
   label_dmsf_workflow_add_approver: "新規承認者の追加:"
   label_or: または
   label_action: アクション
-  label_note: コメント  
+  label_note: コメント
   title_none: 無し
   title_rejection: 否認
   title_delegation: 代理承認
   title_assignment: アサイン
-  title_start: 開始  
+  title_start: 開始
   title_dmsf_workflow_log: 承認ワークフローの履歴
   title_assigned: アサイン
   title_approval: 承認
   title_rejected: 否認
   dmsf_and: AND
   dmsf_or: OR
-  dmsf_new_step: 新規ステップ  
+  dmsf_new_step: 新規ステップ
   message_dmsf_wokflow_note: コメント
   info_revision: "r%{rev}"
-  link_workflow: ワークフロー  
+  link_workflow: ワークフロー
   notice_workflow_started: 承認ワークフローが開始されました
   text_email_subject_approved: は承認されました
   text_email_subject_rejected: は否認されました
@@ -274,14 +274,14 @@ ja:
   text_email_finished_delegated: "承認ワークフロー '%{name}' において代理承認が依頼されました。承認対象 '%{filename}' の内容をご確認の上、承認・否認のご判断をお願い致します（依頼主コメント：'%{notice}'）。"
   text_email_finished_step: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}' の内容をご確認の上、承認・否認のご判断をお願い致します。"
   text_email_finished_step_short: "承認ワークフロー '%{name}' において '%{filename}' の承認ステップが一つ終了しました。"
-  text_email_started: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}' の内容をご確認の上、承認・否認のご判断をお願い致します。"  
+  text_email_started: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}' の内容をご確認の上、承認・否認のご判断をお願い致します。"
   text_email_to_proceed: 次のURLを開き内容を確認の上、右端のチェックマークをクリックし承認・否認の選択をしてください。
   text_email_to_see_history: 次のURLで承認ワークフローの履歴を確認することができます。
   text_email_to_see_status: 次のURLで承認ワークフローのステータスを確認することができます。
   label_my_open_approvals: 自分の承認待ち
   label_my_locked_documents: 自分のロック中ファイル
-  
-  title_create_link: シンボリックリンクを作成します  
+
+  title_create_link: シンボリックリンクを作成します
   label_link_from: リンク生成(from)
   label_link_to: リンク生成(to)
   label_notifications_on: 通知オン
@@ -289,25 +289,25 @@ ja:
   field_target_file: リンク元ファイル
   title_download_entries: ダウンロード記録
   label_external: 外部
-  
+
   label_link_name: リンク名
   label_link_external_url: URL
   label_target_folder: リンク先フォルダ
   label_source_folder: リンク元フォルダ
   label_target_project: リンク先プロジェクト
-  label_source_project: リンク元プロジェクト  
-  
+  label_source_project: リンク元プロジェクト
+
   text_email_doc_updated_subject: プロジェクトのファイルが更新されました
   text_email_doc_updated: が次のファイルを更新しました。
   text_email_doc_follows: 対象ファイル：
   text_email_doc_deleted_subject: プロジェクトのファイルが削除されました
   text_email_doc_deleted: が次のプロジェクトのファイルを削除しました。
   label_links_only: リンクのみ
-  
+
   label_display_notified_recipients: 通知受信者の表示
   note_display_notified_recipients: 電子メールで通知したすべてのユーザの情報を表示します。
   warning_email_notifications: "%{to} へ電子メールで通知しました"
-  
+
   link_trash_bin: ゴミ箱
   title_restore: 復元
   notice_dmsf_file_restored: ファイルを復元しました
@@ -315,18 +315,20 @@ ja:
   notice_dmsf_link_restored: リンクを復元しました
   title_restore_checked: チェックしたものを復元します
   error_parent_folder: "親フォルダが存在しません"
-  
+
   error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
   error_parent_locked: Unable to complete lock - resource parent is locked
   error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: unable to lock exclusively an already-locked resource  
-  error_unlock_parent_locked: Unlock failed - resource parent is locked 
-  
+  error_lock_exclusively: unable to lock exclusively an already-locked resource
+  error_unlock_parent_locked: Unlock failed - resource parent is locked
+
+  field_dmsf_tree_view: Navigate folders in a tree
+
   my:
     blocks:
       locked_documents: ロック中
       open_approvals: 未承認
-          
+
   label_maximum_ajax_upload_filesize: アップロードファイルサイズ上限
   note_maximum_ajax_upload_filesize: アップロード可能なファイルサイズの上限。AjaxおよびRedmineの仕様に制限される（2ギガバイト程度までは確認済み）単位はMB。
   label_classic: Classic

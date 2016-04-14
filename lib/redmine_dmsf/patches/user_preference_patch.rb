@@ -2,8 +2,6 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -20,14 +18,22 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-source 'https://rubygems.org'
+module DmsfUserPreference
+  def self.included(base)
+    base.send(:include, InstanceMethods)
+  end
 
-gem 'rubyzip', '>= 1.0.0'
-gem 'zip-zip'
-gem 'simple_enum'
-gem 'uuidtools'
-gem 'dav4rack'
+  module InstanceMethods
 
-group :xapian do
-  gem 'xapian-full-alaveteli', :require => false
+    def dmsf_tree_view
+      self[:dmsf_tree_view] || '0'
+    end
+
+    def dmsf_tree_view=(value)
+      self[:dmsf_tree_view] = value
+    end
+  end
+
 end
+
+UserPreference.send(:include, DmsfUserPreference)

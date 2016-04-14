@@ -29,6 +29,7 @@ require 'redmine_dmsf/patches/custom_fields_helper_patch'
 require 'redmine_dmsf/patches/acts_as_customizable'
 require 'redmine_dmsf/patches/project_patch'
 require 'redmine_dmsf/patches/project_tabs_extended'
+require 'redmine_dmsf/patches/user_preference_patch'
 
 # Load up classes that make up our WebDAV solution ontop of DAV4Rack
 require 'redmine_dmsf/webdav/no_parse'
@@ -49,9 +50,10 @@ require 'redmine_dmsf/errors/dmsf_lock_error.rb'
 require 'redmine_dmsf/errors/dmsf_zip_max_file_error.rb'
 
 # Hooks
-require 'redmine_dmsf/hooks/view_projects_form_hook'
-require 'redmine_dmsf/hooks/base_view_hooks'
-require 'redmine_dmsf/hooks/search_controller_hooks'
+require 'redmine_dmsf/hooks/views/view_projects_form_hook'
+require 'redmine_dmsf/hooks/views/base_view_hooks'
+require 'redmine_dmsf/hooks/controllers/search_controller_hooks'
+require 'redmine_dmsf/hooks/views/my_account_view_hooks'
 
 # Macros
 require 'redmine_dmsf/macros'

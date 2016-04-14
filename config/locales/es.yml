@@ -1,5 +1,5 @@
 # encoding: utf-8
-# 
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
@@ -26,13 +26,13 @@ es:
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: No ha seleccionado ningún ítem
-  error_email_to_must_be_entered: Ingrese un email  
+  error_email_to_must_be_entered: Ingrese un email
   warning_file_already_locked: El archivo ya está bloqueado
   notice_file_locked: Archivo bloqueado
   warning_file_not_locked: Archivo no bloqueado
   notice_file_unlocked: Archivo desbloqueado
-  error_only_user_that_locked_file_can_unlock_it: Solo los usuarios que bloquearon previamente al archivo lo pueden desbloquear  
-  error_max_files_exceeded: "Se excedio el numero permitido de archivos bajados de manera simultánea:"  
+  error_only_user_that_locked_file_can_unlock_it: Solo los usuarios que bloquearon previamente al archivo lo pueden desbloquear
+  error_max_files_exceeded: "Se excedio el numero permitido de archivos bajados de manera simultánea:"
   error_entry_project_does_not_match_current_project: Las entradas del proyecto no concuerdan con el proyecto seleccionado
   notice_folder_created: Carpeta creada satisfactoriamente
   error_folder_creation_failed: La creacion de la carpeta ha fallado
@@ -40,7 +40,7 @@ es:
   notice_folder_deleted: Carpeta borrada
   error_folder_is_not_empty: La carpeta no está vacía
   error_folder_title_is_already_used: El título ingresado ya está siendo usado por otro documento
-  notice_folder_details_were_saved: Los detalles de la carpeta fueron grabados correctamente  
+  notice_folder_details_were_saved: Los detalles de la carpeta fueron grabados correctamente
   error_folder_is_locked: Carpeta bloqueado
   error_file_is_locked: Archivo bloqueado
   notice_file_deleted: Archivo borrado
@@ -58,7 +58,7 @@ es:
   warning_file_notifications_already_activated: Las notificaciones del archivo seleccionado ya estaban activadas previamente
   notice_file_notifications_activated: Notificación de archivo activado
   warning_file_notifications_already_deactivated: Las notificaciones del archivo seleccionado ya estaban desactivadas previamente
-  notice_file_notifications_deactivated: Notificación de archivo desactivada  
+  notice_file_notifications_deactivated: Notificación de archivo desactivada
   link_details: "%{title} detalles"
   link_edit: "Editar %{title}"
   submit_create: Crear
@@ -81,8 +81,8 @@ es:
   title_waiting_for_approval: Esperando Aprobación
   title_approved: Aprobado
   title_unlock_file: Desbloquear para que otros miembros puedan editarlo
-  title_lock_file: Bloquear para que otros miembros no puedan editarlo  
-  title_download_checked: Descargar archivos seleccionados en Zip  
+  title_lock_file: Bloquear para que otros miembros no puedan editarlo
+  title_download_checked: Descargar archivos seleccionados en Zip
   title_send_checked_by_email: Enviar los seleccionados por email
   link_user_preferences: Preferencias de su proyecto DMSF
   heading_send_documents_by_email: Enviar documentos por email
@@ -93,8 +93,8 @@ es:
   label_email_documents: Documentos
   label_email_body: Cuerpo de Mensaje
   label_email_send: Enviar
-  title_notifications_active: Activar Notificaciones  
-  label_upload: Subir  
+  title_notifications_active: Activar Notificaciones
+  label_upload: Subir
   heading_new_folder: Nuevo directorio
   label_title: Título
   label_description: Descripción
@@ -113,9 +113,9 @@ es:
   label_created: Creado
   label_changed: Modificado
   info_changed_by_user: "%{changed} por"
-  label_filename: Nombre  
+  label_filename: Nombre
   label_mime: Mime
-  label_size: Tamaño 
+  label_size: Tamaño
   heading_new_revision: Nueva Revisión
   option_version_same: Misma
   option_version_minor: Menor
@@ -150,7 +150,7 @@ es:
   permission_user_preferences: Preferencias de usuario
   permission_view_dmsf_files: Ver documentos
   permission_folder_manipulation: Manipulación de directorio
-  permission_file_manipulation: Manipulación de Archivos 
+  permission_file_manipulation: Manipulación de Archivos
   permission_force_file_unlock: Forzar desbloqueo de archivo
   permission_manage_workflows: Gesti{on de flujo de trabajo
   permission_file_delete: Eliminar documentos
@@ -163,7 +163,7 @@ es:
   error_user_has_not_right_delete_folder: "No tiene permisos para eliminar el directorio"
   error_user_has_not_right_delete_file: "No tiene permisos para eliminar el archivo"
   notice_entries_deleted: Entradas eliminadas
-  warning_some_entries_were_not_deleted: "Algunas entradas no fueron eliminadas: %{entries}"  
+  warning_some_entries_were_not_deleted: "Algunas entradas no fueron eliminadas: %{entries}"
   title_delete_checked: Eliminación chequeada
   title_items: items
   title_filename_for_download: Nombre de archivo utilizado para descargar o crear zip
@@ -221,8 +221,8 @@ es:
   select_option_webdav_readonly: Solo Lectura
   select_option_webdav_readwrite: Lectura/Escritura
   label_webdav_strategy: Estrategia Webdav
-  note_webdav_strategy: Habilitar el administrador para configurar si la plataforma webdav es solo lectura o lectura-escritura para los usuarios finales.  
-  
+  note_webdav_strategy: Habilitar el administrador para configurar si la plataforma webdav es solo lectura o lectura-escritura para los usuarios finales.
+
   error_unable_delete_dmsf_workflow: Incapaz de eliminar el flujo de trabajo
   error_empty_note: "La nota no puede estar vacía"
   error_workflow_assign: "Ocurió un errpr mientras se asignaba"
@@ -246,7 +246,7 @@ es:
   label_dmsf_workflow_add_approver: "Añadir un nuevo aprobador con una función lógica:"
   label_or: o
   label_action: "Acción"
-  label_note: Nota  
+  label_note: Nota
   title_none: Ninguno
   title_rejection: Rechazo
   title_delegation: "Delegación"
@@ -261,7 +261,7 @@ es:
   dmsf_new_step: Nuevo Paso
   message_dmsf_wokflow_note: Tu nota...
   info_revision: "r%{rev}"
-  link_workflow: Flujo de Trabajo  
+  link_workflow: Flujo de Trabajo
   notice_workflow_started: "Flujo de trabajo de aprobación iniciado satisfactoriamente"
   text_email_subject_approved: aprobado
   text_email_subject_rejected: rechazado
@@ -274,13 +274,13 @@ es:
   text_email_finished_delegated: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de ser delegado por '%{notice}' y se espera que haga una aprobación en la etapa de aprobación actual."
   text_email_finished_step: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de terminar uno de los pasos de aprobación y se espera que haga una aprobación en el siguiente paso."
   text_email_finished_step_short: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de finalizar uno de los pasos de aprobación."
-  text_email_started: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de iniciarse y se espera que haga una aprobación en la etapa de aprobación actual."  
+  text_email_started: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de iniciarse y se espera que haga una aprobación en la etapa de aprobación actual."
   text_email_to_proceed: "Para continuar, haga clic en el icono de la casilla de verificación al lado del documento"
   text_email_to_see_history: "Para ver el historial de aprobación haga clic en el estado del flujo de trabajo del documento"
   text_email_to_see_status: "Para ver el estado actual del flujo de trabajo de aprobación, haga clic en el estado del flujo de trabajo del documento"
   label_my_open_approvals: Mis aprobaciones abiertas
   label_my_locked_documents: Mis documentos bloqueados
-  
+
   title_create_link: "Crear un enlace simbólico"
   label_link_from: Enlace desde
   label_link_to: Enlace hacia
@@ -289,25 +289,25 @@ es:
   field_target_file: Archivo fuente
   title_download_entries: Entradas de descarga
   label_external: External
-  
+
   label_link_name: Nombre de enlace
   label_link_external_url: URL
   label_target_folder: Directorio destino
   label_source_folder: Directorio fuente
   label_target_project: Proyecto destino
-  label_source_project: Proyecto fuente  
-  
+  label_source_project: Proyecto fuente
+
   text_email_doc_updated_subject: Documentos actualizados
   text_email_doc_updated: acaba de actualizar los ducumentos de
   text_email_doc_follows: lo siguiente
   text_email_doc_deleted_subject: Documentos eliminados
   text_email_doc_deleted: acaba de eliminar documentos de
   label_links_only: Solo enlaces
-  
+
   label_display_notified_recipients: Mostrar destinatarios notificados
   note_display_notified_recipients: "El usuario será informado de todos los destinatarios a los que acaba de enviar la notificación por correo electrónico"
   warning_email_notifications: "Notificaciones de email enviadas a %{to}"
-  
+
   link_trash_bin: Tacho
   title_restore: Recuperar
   notice_dmsf_file_restored: El documento ha sido restaurado satisfactoriamente
@@ -315,18 +315,20 @@ es:
   notice_dmsf_link_restored: El enlace ha sido restaurado satisfactoriamente
   title_restore_checked: Restaurar Seleccionados
   error_parent_folder: "El directorio padre no existe"
-  
+
   error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
   error_parent_locked: Unable to complete lock - resource parent is locked
   error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: unable to lock exclusively an already-locked resource  
-  error_unlock_parent_locked: Unlock failed - resource parent is locked  
-  
+  error_lock_exclusively: unable to lock exclusively an already-locked resource
+  error_unlock_parent_locked: Unlock failed - resource parent is locked
+
+  field_dmsf_tree_view: Navigate folders in a tree
+
   my:
     blocks:
       locked_documents: Documentos bloqueados
       open_approvals: Aprobaciones abiertas
-                
+
   label_maximum_ajax_upload_filesize: "El máximo tamaño de archivo para subir por AJAX"
   note_maximum_ajax_upload_filesize: "El límite máximo de tamaño de archivo que puede ser subido por la interfaz AJAX estandar, de lo contrario se debe utilizar el formulario estandar de Redmine. El número es en MB."
   label_classic: Classic

@@ -40,7 +40,7 @@ pt-BR:
   notice_folder_deleted: Pasta deletada
   error_folder_is_not_empty: Pasta não está vazia
   error_folder_title_is_already_used: Título já utilizado
-  notice_folder_details_were_saved: Pasta atualizada  
+  notice_folder_details_were_saved: Pasta atualizada
   error_folder_is_locked: Pasta está bloqueada
   error_file_is_locked: Arquivo está bloqueado
   notice_file_deleted: Arquivo excluído
@@ -93,8 +93,8 @@ pt-BR:
   label_email_documents: DMSF
   label_email_body: Descrição
   label_email_send: Enviar
-  title_notifications_active: Notificações Ativas  
-  label_upload: Envio    
+  title_notifications_active: Notificações Ativas
+  label_upload: Envio
   heading_new_folder: Nova Pasta
   label_title: Taxonomia
   label_description: Descrição
@@ -315,12 +315,14 @@ pt-BR:
   notice_dmsf_link_restored: O link foi restaurado com sucesso
   title_restore_checked: Restaurar pasta ou arquivo
   error_parent_folder: "A pasta de pai não existe"
-  
+
   error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
   error_parent_locked: Unable to complete lock - resource parent is locked
   error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: unable to lock exclusively an already-locked resource 
-  error_unlock_parent_locked: Unlock failed - resource parent is locked  
+  error_lock_exclusively: unable to lock exclusively an already-locked resource
+  error_unlock_parent_locked: Unlock failed - resource parent is locked
+
+  field_dmsf_tree_view: Navigate folders in a tree
 
   my:
     blocks:
