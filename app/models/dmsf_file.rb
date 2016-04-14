@@ -75,7 +75,7 @@ class DmsfFile < ActiveRecord::Base
                   end
                   desc
                 },
-                :url => Proc.new { |o| {:controller => 'dmsf_files', :action => 'show', :id => o} },
+                :url => Proc.new { |o| {:controller => 'dmsf_files', :action => 'view', :id => o} },
                 :datetime => Proc.new { |o| o.updated_at },
                 :author => Proc.new { |o| o.last_revision.user }
 
