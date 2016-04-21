@@ -33,17 +33,15 @@ class DmsfFile < ActiveRecord::Base
   include RedmineDmsf::Lockable
 
   belongs_to :project
-  belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
+  belongs_to :dmsf_folder
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
 
-  has_many :revisions, -> { order("#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC") },
-    :class_name => 'DmsfFileRevision', :foreign_key => 'dmsf_file_id',
+  has_many :dmsf_file_revisions, -> { order("#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC") },
     :dependent => :destroy
   has_many :locks, -> { where(entity_type: 0).order("#{DmsfLock.table_name}.updated_at DESC") },
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
   has_many :referenced_links, -> { where target_type: DmsfFile.model_name.to_s},
     :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
-  accepts_nested_attributes_for :revisions, :locks, :referenced_links, :project
 
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
@@ -58,7 +56,7 @@ class DmsfFile < ActiveRecord::Base
   validate :validates_name_uniqueness
 
   def validates_name_uniqueness
-    existing_file = DmsfFile.visible.find_file_by_name(self.project, self.folder, self.name)
+    existing_file = DmsfFile.visible.find_file_by_name(self.project, self.dmsf_folder, self.name)
     errors.add(:name, l('activerecord.errors.messages.taken')) unless
       existing_file.nil? || existing_file.id == self.id
   end
@@ -96,11 +94,12 @@ class DmsfFile < ActiveRecord::Base
   @@storage_path = nil
 
   def self.storage_path
-    path = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].strip if Setting.plugin_redmine_dmsf['dmsf_storage_directory'].present?
+    return @@storage_path if @@storage_path.present?
+    path = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
     path = Pathname(Redmine::Configuration['attachments_storage_path']).join('dmsf') if path.blank? && Redmine::Configuration['attachments_storage_path'].present?
     path = Rails.root.join('files/dmsf').to_s if path.blank?
-    DmsfFile.storage_path = path if path != @@storage_path
-    @@storage_path
+    path.strip if path
+    path
   end
 
   # Lets introduce a write for storage path, that way we can also
@@ -123,7 +122,7 @@ class DmsfFile < ActiveRecord::Base
 
   def last_revision
     unless @last_revision
-      @last_revision = self.deleted? ? self.revisions.first : self.revisions.visible.first
+      @last_revision = self.deleted? ? self.dmsf_file_revisions.first : self.dmsf_file_revisions.visible.first
     end
     @last_revision
   end
@@ -144,7 +143,7 @@ class DmsfFile < ActiveRecord::Base
     end
     begin
       # Revisions and links of a deleted file SHOULD be deleted too
-      self.revisions.each { |r| r.delete(commit, true) }
+      self.dmsf_file_revisions.each { |r| r.delete(commit, true) }
       if commit
         self.destroy
       else
@@ -160,11 +159,11 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def restore
-    if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted?)
+    if self.dmsf_folder_id && (self.dmsf_folder.nil? || self.dmsf_folder.deleted?)
       errors[:base] << l(:error_parent_folder)
       return false
     end
-    self.revisions.each { |r| r.restore }
+    self.dmsf_file_revisions.each { |r| r.restore }
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
     save
@@ -191,7 +190,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def dmsf_path
-    path = self.folder.nil? ? [] : self.folder.dmsf_path
+    path = self.dmsf_folder ? self.dmsf_folder.dmsf_path : []
     path.push(self)
     path
   end
@@ -202,8 +201,8 @@ class DmsfFile < ActiveRecord::Base
 
   def notify?
     return true if self.notification
-    return true if folder && folder.notify?
-    return true if !folder && self.project.dmsf_notification
+    return true if self.dmsf_folder && delf.dmsf_folder.notify?
+    return true if !self.dmsf_folder && self.project.dmsf_notification
     return false
   end
 
@@ -236,7 +235,7 @@ class DmsfFile < ActiveRecord::Base
 
     # If the target project differs from the source project we must physically move the disk files
     if self.project != project
-      self.revisions.all.each do |rev|
+      self.dmsf_file_revisions.all.each do |rev|
         if File.exist? rev.disk_file(self.project)
           FileUtils.mv rev.disk_file(self.project), rev.disk_file(project)
         end
@@ -244,9 +243,9 @@ class DmsfFile < ActiveRecord::Base
     end
 
     self.project = project
-    self.folder = folder
+    self.dmsf_folder = folder
     new_revision = self.last_revision.clone
-    new_revision.file = self
+    new_revision.dmsf_file = self
     new_revision.comment = l(:comment_moved_from, :source => "#{self.project.identifier}:#{self.dmsf_path_str}")
     new_revision.custom_values = []
 
@@ -261,7 +260,7 @@ class DmsfFile < ActiveRecord::Base
 
     # If the target project differs from the source project we must physically move the disk files
     if self.project != project
-      self.revisions.all.each do |rev|
+      self.dmsf_file_revisions.all.each do |rev|
         if File.exist? rev.disk_file(self.project)
           FileUtils.cp rev.disk_file(self.project), rev.disk_file(project)
         end
@@ -269,14 +268,14 @@ class DmsfFile < ActiveRecord::Base
     end
 
     file = DmsfFile.new
-    file.folder = folder
+    file.dmsf_folder = folder
     file.project = project
     file.name = self.name
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
 
     if file.save && self.last_revision
       new_revision = self.last_revision.clone
-      new_revision.file = file
+      new_revision.dmsf_file = file
       new_revision.comment = l(:comment_copied_from, :source => "#{self.project.identifier}: #{self.dmsf_path_str}")
 
       new_revision.custom_values = []

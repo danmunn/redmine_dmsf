@@ -21,14 +21,12 @@
 
 class DmsfFileRevision < ActiveRecord::Base
   unloadable
-  belongs_to :file, :class_name => 'DmsfFile', :foreign_key => 'dmsf_file_id'
+  belongs_to :dmsf_file
   belongs_to :source_revision, :class_name => 'DmsfFileRevision', :foreign_key => 'source_dmsf_file_revision_id'
   belongs_to :user
-  belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
-  has_many :access, :class_name => 'DmsfFileRevisionAccess', :foreign_key => 'dmsf_file_revision_id', :dependent => :destroy
+  has_many :dmsf_file_revision_access, :dependent => :destroy
   has_many :dmsf_workflow_step_assignment, :dependent => :destroy
-  accepts_nested_attributes_for :access, :dmsf_workflow_step_assignment, :file, :user
 
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
@@ -37,8 +35,8 @@ class DmsfFileRevision < ActiveRecord::Base
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }
 
   acts_as_customizable
-  acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.file.dmsf_path_str}"},
-    :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.file}},
+  acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.dmsf_file.dmsf_path_str}"},
+    :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.dmsf_file}},
     :datetime => Proc.new {|o| o.updated_at },
     :description => Proc.new {|o| o.comment },
     :author => Proc.new {|o| o.user }
@@ -58,11 +56,11 @@ class DmsfFileRevision < ActiveRecord::Base
     :message => l(:error_contains_invalid_character)
 
   def project
-    self.file.project if self.file
+    self.dmsf_file.project if self.dmsf_file
   end
 
   def folder
-    self.file.folder if self.file
+    self.dmsf_file.dmsf_folder if self.dmsf_file
   end
 
   def self.remove_extension(filename)
@@ -74,11 +72,11 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def delete(commit = false, force = true)
-    if self.file.locked_for_user?
+    if self.dmsf_file.locked_for_user?
       errors[:base] << l(:error_file_is_locked)
       return false
     end
-    if !commit && (!force && (self.file.revisions.length <= 1))
+    if !commit && (!force && (self.dmsf_file.dmsf_file_revisions.length <= 1))
       errors[:base] << l(:error_at_least_one_revision_must_be_present)
       return false
     end
@@ -122,7 +120,7 @@ class DmsfFileRevision < ActiveRecord::Base
   #   custom SQL into a temporary object
   #
   def access_grouped
-    access.select('user_id, COUNT(*) AS count, MIN(created_at) AS first_at, MAX(created_at) AS last_at').group('user_id')
+    self.dmsf_file_revision_access.select('user_id, COUNT(*) AS count, MIN(created_at) AS first_at, MAX(created_at) AS last_at').group('user_id')
   end
 
   def version
@@ -130,9 +128,9 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def disk_file(project = nil)
-    project = self.file.project unless project
+    project = self.dmsf_file.project unless project
     storage_base = DmsfFile.storage_path.dup
-    if self.file && project
+    if self.dmsf_file && project
       project_base = project.identifier.gsub(/[^\w\.\-]/,'_')
       storage_base << "/p_#{project_base}"
     end
@@ -149,7 +147,7 @@ class DmsfFileRevision < ActiveRecord::Base
 
   def clone
     new_revision = DmsfFileRevision.new
-    new_revision.file = self.file
+    new_revision.dmsf_file = self.dmsf_file
     new_revision.disk_filename = self.disk_filename
     new_revision.size = self.size
     new_revision.mime_type = self.mime_type
@@ -223,13 +221,13 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def new_storage_filename
-    raise DmsfAccessError, 'File id is not set' unless self.file.id
+    raise DmsfAccessError, 'File id is not set' unless self.dmsf_file.id
     filename = DmsfHelper.sanitize_filename(self.name)
     timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
-    while File.exist?(File.join(DmsfFile.storage_path, "#{timestamp}_#{self.file.id}_#{filename}"))
+    while File.exist?(File.join(DmsfFile.storage_path, "#{timestamp}_#{self.dmsf_file.id}_#{filename}"))
       timestamp.succ!
     end
-    "#{timestamp}_#{self.file.id}_#{filename}"
+    "#{timestamp}_#{self.dmsf_file.id}_#{filename}"
   end
 
   def copy_file_content(open_file)
@@ -262,7 +260,7 @@ class DmsfFileRevision < ActiveRecord::Base
     format.sub!('%f', filename)
     format.sub!('%d', self.updated_at.strftime('%Y%m%d%H%M%S'))
     format.sub!('%v', self.version)
-    format.sub!('%i', self.file.id.to_s)
+    format.sub!('%i', self.dmsf_file.id.to_s)
     format.sub!('%r', self.id.to_s)
     format + ext
   end

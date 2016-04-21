@@ -31,7 +31,7 @@ module RedmineDmsf
         base.class_eval do
           unloadable
           alias_method_chain :copy, :dmsf
-          
+
           has_many :dmsf_files, -> { where dmsf_folder_id: nil},
             :class_name => 'DmsfFile', :foreign_key => 'project_id', :dependent => :destroy
           has_many :dmsf_folders, -> {where dmsf_folder_id: nil},
@@ -43,7 +43,9 @@ module RedmineDmsf
           has_many :file_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFile' },
             :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
           has_many :url_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfUrl' },
-            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy          
+            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+          has_many :dmsf_links, -> { where dmsf_folder_id: nil },
+            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
         end
       end
 

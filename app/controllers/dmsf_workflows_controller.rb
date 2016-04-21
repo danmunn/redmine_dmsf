@@ -47,10 +47,9 @@ class DmsfWorkflowsController < ApplicationController
           revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
           if revision
             if @dmsf_workflow.try_finish revision, action, (params[:step_action].to_i / 10)
-              file = DmsfFile.joins(:revisions).where(:dmsf_file_revisions => {:id => revision.id}).first
-              if file
+              if revision.dmsf_file
                 begin
-                  file.unlock! true
+                  revision.dmsf_file.unlock! true
                 rescue DmsfLockError => e
                   flash[:info] = e.message
                 end
@@ -389,7 +388,7 @@ private
         @project = @dmsf_workflow.project
       else # Global workflow
         revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
-        @project = revision.file.project if revision && revision.file
+        @project = revision.dmsf_file.project if revision && revision.dmsf_file
       end
     else
       if params[:dmsf_workflow]

@@ -149,7 +149,7 @@ class DmsfUploadController < ApplicationController
           file = DmsfFile.new
           file.project = @project
           file.name = name
-          file.folder = @folder
+          file.dmsf_folder = @folder
           file.notification = Setting.plugin_redmine_dmsf[:dmsf_default_notifications].present?
           new_revision.minor_version = 0
           new_revision.major_version = 0
@@ -172,7 +172,7 @@ class DmsfUploadController < ApplicationController
 
         commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file[:disk_filename].gsub(/[\/\\]/,'')}"
 
-        new_revision.file = file
+        new_revision.dmsf_file = file
         new_revision.user = User.current
         new_revision.name = name
         new_revision.title = commited_file[:title]

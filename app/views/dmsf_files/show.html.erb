@@ -27,27 +27,27 @@
 <div class="contextual">
   <% if User.current.allowed_to?(:file_manipulation, @project) %>
     <% unless @file.locked_for_user? %>
-      <% unless @file.locked? %> 
+      <% unless @file.locked? %>
         <%= link_to(l(:button_lock), lock_dmsf_files_path(:id => @file),
           :title => l(:title_lock_file), :class => 'icon dmsf_icon-lock') %>
       <% else %>
         <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
-          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock') %>          
+          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock') %>
       <% end %>
-      <% if @file.notification %>              
+      <% if @file.notification %>
         <%= link_to(l(:label_notifications_off),
           notify_deactivate_dmsf_files_path(:id => @file),
           :title => l(:title_notifications_active_deactivate),
           :class => 'icon dmsf_icon-notification-on') %>
-      <% else %>              
+      <% else %>
         <%= link_to(l(:label_notifications_on),
           notify_activate_dmsf_files_path(:id => @file),
           :title => l(:title_notifications_not_active_activate),
           :class => 'icon dmsf_icon-notification-off') %>
       <% end %>
-      <%= link_to(l(:label_link_to), 
-        new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @file.folder ? @file.folder.id : nil, :dmsf_file_id => @file.id, :type => 'link_to'),
-        :title => l(:title_create_link), 
+      <%= link_to(l(:label_link_to),
+        new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @file.dmsf_folder ? @file.dmsf_folder.id : nil, :dmsf_file_id => @file.id, :type => 'link_to'),
+        :title => l(:title_create_link),
         :class => 'icon dmsf_icon-link') %>
       <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(:id => @file),
         :title => l(:title_copy), :class => 'icon icon-copy') %>
@@ -55,13 +55,13 @@
     <% else %>
       <% if User.current.allowed_to?(:force_file_unlock, @project) %>
         <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
-          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock')%>        
-      <% end %>        
-    <% end %>   
+          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock')%>
+      <% end %>
+    <% end %>
   <% end %>
 </div>
 
-<%= render(:partial => '/dmsf/path', 
+<%= render(:partial => '/dmsf/path',
   :locals => {:folder => @file.folder, :filename => @file.title, :title => nil}) %>
 
 <% if User.current.allowed_to?(:file_manipulation, @file.project) && !@file.locked_for_user? %>
@@ -76,13 +76,13 @@
 </div>
 
 <h3><%= l(:heading_revisions) %></h3>
-<% @file.revisions.visible[@revision_pages.offset, @revision_pages.per_page].each do |revision| %>
-  <div class="dmsf_revision_box tabular dataTables_wrapper">  
-    <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">	
+<% @file.dmsf_file_revisions.visible[@revision_pages.offset, @revision_pages.per_page].each do |revision| %>
+  <div class="dmsf_revision_box tabular dataTables_wrapper">
+    <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">
       <div class="dataTables_lenght">
-        <div class="dmsf_controls" style="float: right">            
-          <%= link_to_function image_tag('rev_downloads.png', :plugin => 'redmine_dmsf'), 
-            "$('#revision_access-#{revision.id}').toggle()", 
+        <div class="dmsf_controls" style="float: right">
+          <%= link_to_function image_tag('rev_downloads.png', :plugin => 'redmine_dmsf'),
+            "$('#revision_access-#{revision.id}').toggle()",
             :title => l(:title_download_entries) %>
           <%= link_to image_tag('rev_download.png', :plugin => 'redmine_dmsf'),
             dmsf_file_path(@file, :download => revision),
@@ -90,8 +90,8 @@
           <%= link_to image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
             delete_revision_path(revision),
             :data => {:confirm => l(:text_are_you_sure)},
-            :title => l(:title_delete_revision) if @file_delete_allowed && (@file.revisions.visible.count > 1) %>          
-        </div>      
+            :title => l(:title_delete_revision) if @file_delete_allowed && (@file.dmsf_file_revisions.visible.count > 1) %>
+        </div>
         <i><%= l(:info_revision, :rev => revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>
         <%= l(:info_changed_by_user, :changed => format_time(revision.updated_at)) %>
@@ -103,29 +103,29 @@
         <div class="splitcontentleft">
           <p>
             <%= label_tag('', l(:label_title)) %>
-            <%= h(revision.title) %>		
+            <%= h(revision.title) %>
           </p>
         </div>
         <div class="splitcontentright">
           <p>
             <%= label_tag('', l(:label_file)) %>
-            <%= ("#{h(revision.file.folder.dmsf_path_str)}/") if revision.file.folder %><%= h(revision.name) %>			
+            <%= ("#{h(revision.dmsf_file.dmsf_folder.dmsf_path_str)}/") if revision.dmsf_file.dmsf_folder %><%= h(revision.name) %>
           </p>
         </div>
       </div>
       <% if revision.description.present? %>
         <p>
-          <%= label_tag('', l(:label_description)) %>              
+          <%= label_tag('', l(:label_description)) %>
           <div class="wiki">
             <%= textilizable(revision.description) %>
-          </div>	        
+          </div>
         </p>
       <% end %>
       <div class="clear">
-        <div class="splitcontentleft">		
+        <div class="splitcontentleft">
           <p>
             <%= label_tag('', l(:label_version)) %>
-            <%= revision.major_version %>.<%= revision.minor_version %>          
+            <%= revision.major_version %>.<%= revision.minor_version %>
           </p>
           <p>
             <%= label_tag('', l(:link_workflow)) %>
@@ -133,44 +133,44 @@
             <% if wf %>
               <%= "#{wf.name} - " %>
               <%= link_to(revision.workflow_str(false),
-                log_dmsf_workflow_path(:project_id => @project.id, 
+                log_dmsf_workflow_path(:project_id => @project.id,
                   :id => wf.id, :dmsf_file_revision_id => revision.id),
                 :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(revision.id)),
                 :remote => true) %>
             <% else %>
               <%= revision.workflow_str(true) %>
-            <% end %>	
+            <% end %>
           </p>
         </div>
-        <div class="splitcontentright">		
+        <div class="splitcontentright">
           <p>
             <%= label_tag('', l(:label_mime)) %>
             <%= h(revision.mime_type) %>
           </p>
           <p>
             <%= label_tag('', l(:label_size)) %>
-            <%= number_to_human_size(revision.size) %>		
+            <%= number_to_human_size(revision.size) %>
           </p>
-        </div>	
-      </div>      
-      <%= render 'dmsf/custom_fields', :object => revision %>      
+        </div>
+      </div>
+      <%= render 'dmsf/custom_fields', :object => revision %>
       <% if revision.comment.present? %>
         <p>
-          <%= label_tag('', l(:label_comment)) %>        
+          <%= label_tag('', l(:label_comment)) %>
           <div class="wiki">
             <%= textilizable(revision.comment) %>
-          </div>	     	                   
+          </div>
         </p>
       <% end %>
-      <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">        
-        <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if User.current.allowed_to?(:file_manipulation, @file.project) %>        
-      </div>    
+      <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">
+        <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if User.current.allowed_to?(:file_manipulation, @file.project) %>
+      </div>
     </div>
-  </div>  
-  <br/>  
+  </div>
+  <br/>
 <% end %>
 
-<span class="pagination"><%= pagination_links_full @revision_pages, @file.revisions.visible.count %></span>
+<span class="pagination"><%= pagination_links_full @revision_pages, @file.dmsf_file_revisions.visible.count %></span>
 
 <%
   url = 'jquery.dataTables/en.json'
@@ -186,16 +186,16 @@
 
   $('a.delete-entry').click(function(event) {
     if(!window.confirm('<%= l(:text_are_you_sure) %>')) {
-      event.preventDefault();      
+      event.preventDefault();
     }
   });
 
   $('#file_upload').change(function() {
     if($("input[name='version']:checked").val() == '0') {
-      $('#fileMinorVersionRadio').prop('checked', true); 
+      $('#fileMinorVersionRadio').prop('checked', true);
     }
-    $('#fileSameVersionRadio').prop('disabled', true); 
-  });  
+    $('#fileSameVersionRadio').prop('disabled', true);
+  });
 
   $('#newRevisionFormContentToggle').click(function() {
     if($('#newRevisionFormContent').is(':visible')) {
@@ -205,24 +205,24 @@
     else {
       $(this).text('[-]');
       $('#newRevisionFormContent').show();
-    }    
+    }
   });
 
   $('.access-table').dataTable({
     'bJQueryUI': true,
     'oLanguage': {
-      'sUrl': '/plugin_assets/<%= :redmine_dmsf %>/javascripts/<%= url %>'	
+      'sUrl': '/plugin_assets/<%= :redmine_dmsf %>/javascripts/<%= url %>'
     }
   });
 </script>
 <% if @revision.valid? && @file.valid? %>
   <script type="text/javascript">
-    $('#newRevisionFormContentToggle').text('[+]');    
-    $('#newRevisionFormContent').hide();    
+    $('#newRevisionFormContentToggle').text('[+]');
+    $('#newRevisionFormContent').hide();
   </script>
 <% end %>
 
-<% content_for :header_tags do %>  
-  <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>  
-  <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>  
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>
 <% end %>

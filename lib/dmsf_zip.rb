@@ -30,6 +30,7 @@ class DmsfZip
     @zip.chmod(0644)
     @zip_file = Zip::OutputStream.new(@zip.path)
     @files = []
+    @folders = []
   end
 
   def finish
@@ -43,24 +44,29 @@ class DmsfZip
   end
 
   def add_file(file, member, root_path = nil)
-    string_path = file.folder.nil? ? '' : "#{file.folder.dmsf_path_str}/"
-    string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path    
-    string_path += file.formatted_name(member ? member.title_format : nil)
-    @zip_file.put_next_entry(string_path)
-    File.open(file.last_revision.disk_file, 'rb') do |f|      
-      while (buffer = f.read(8192))
-        @zip_file.write(buffer)
+    unless @files.include?(file)
+      string_path = file.dmsf_folder.nil? ? '' : "#{file.dmsf_folder.dmsf_path_str}/"
+      string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
+      string_path += file.formatted_name(member ? member.title_format : nil)
+      @zip_file.put_next_entry(string_path)
+      File.open(file.last_revision.disk_file, 'rb') do |f|
+        while (buffer = f.read(8192))
+          @zip_file.write(buffer)
+        end
       end
+      @files << file
     end
-    @files << file
   end
 
   def add_folder(folder, member, root_path = nil)
-    string_path = "#{folder.dmsf_path_str}/"
-    string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path    
-    @zip_file.put_next_entry(string_path)
-    folder.subfolders.visible.each { |subfolder| self.add_folder(subfolder, root_path) }
-    folder.files.visible.each { |file| self.add_file(file, member, root_path) }
+    unless @folders.include?(folder)
+      string_path = "#{folder.dmsf_path_str}/"
+      string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
+      @zip_file.put_next_entry(string_path)
+      @folders << folder
+      folder.dmsf_folders.visible.each { |subfolder| self.add_folder(subfolder, root_path) }
+      folder.dmsf_files.visible.each { |file| self.add_file(file, member, root_path) }
+    end
   end
 
 end

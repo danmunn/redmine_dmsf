@@ -23,74 +23,74 @@ require 'mailer'
 
 class DmsfMailer < Mailer
   layout 'mailer'
-  
+
   def files_updated(user, project, files)
-    if user && project && files.count > 0      
+    if user && project && files.count > 0
       files = files.select { |file| file.notify? }
-      redmine_headers 'Project' => project.identifier if project      
+      redmine_headers 'Project' => project.identifier if project
       @files = files
       @project = project
       message_id project
       set_language_if_valid user.language
-      mail :to => user.mail,           
+      mail :to => user.mail,
         :subject => "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
     end
   end
-  
+
   def files_deleted(user, project, files)
-    if user && files.count > 0      
+    if user && files.count > 0
       files = files.select { |file| file.notify? }
-      redmine_headers 'Project' => project.identifier if project      
+      redmine_headers 'Project' => project.identifier if project
       @files = files
       @project = project
       message_id project
       set_language_if_valid user.language
-      mail :to => user.mail,         
+      mail :to => user.mail,
         :subject => "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_deleted_subject)}"
     end
   end
-    
-  def send_documents(project, user, email_params)    
-    zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }    
+
+  def send_documents(project, user, email_params)
+    zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
     redmine_headers 'Project' => project.identifier if project
     @body = email_params[:body]
     @links_only = email_params[:links_only]
     @folders = email_params[:folders]
-    @files = email_params[:files]    
+    @files = email_params[:files]
     unless @links_only == '1'
       attachments['Documents.zip'] = { :content_type => 'application/zip', :content => zipped_content_data }
-    end    
-    mail :to => email_params[:to], :cc => email_params[:cc], 
+    end
+    mail :to => email_params[:to], :cc => email_params[:cc],
       :subject => email_params[:subject], :from => user.mail
   end
-  
+
   def workflow_notification(user, workflow, revision, subject_id, text1_id, text2_id, notice = nil)
     if user && workflow && revision
-      if revision.file && revision.file.project
-        @project = revision.file.project
+      if revision.dmsf_file && revision.dmsf_file.project
+        @project = revision.dmsf_file.project
         redmine_headers 'Project' => @project.identifier
       end
       set_language_if_valid user.language
       @user = user
       message_id workflow
       @workflow = workflow
-      @revision = revision      
-      @text1 = l(text1_id, :name => workflow.name, :filename => revision.file.name, :notice => notice)      
+      @revision = revision
+      @text1 = l(text1_id, :name => workflow.name, :filename => revision.dmsf_file.name, :notice => notice)
       @text2 = l(text2_id)
       @notice = notice
-      mail :to => user.mail, 
+      mail :to => user.mail,
         :subject => "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)}"
     end
-  end        
-  
+  end
+
   def self.get_notify_users(project, files = nil)
     if files
       notify_files = files.select { |file| file.notify? }
       return [] if notify_files.empty?
-    end        
+    end
     notify_members = project.members
     notify_members = notify_members.select do |notify_member|
-      notify_user = notify_member.user         
+      notify_user = notify_member.user
       if notify_user == User.current && notify_user.pref.no_self_notified
         false
       else
@@ -105,13 +105,13 @@ class DmsfMailer < Mailer
           else
             false
           end
-        else  
+        else
           notify_member.dmsf_mail_notification
         end
       end
-    end      
+    end
 
     notify_members.collect { |m| m.user }.uniq
   end
-        
+
 end

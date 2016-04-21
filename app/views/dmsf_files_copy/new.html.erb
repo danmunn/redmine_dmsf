@@ -24,17 +24,17 @@
 
 <% html_title(l(:dmsf)) %>
 
-<%= render(:partial => '/dmsf/path', 
-  :locals => {:folder => @file.folder, :filename => @file.title, 
+<%= render(:partial => '/dmsf/path',
+  :locals => {:folder => @file.dmsf_folder, :filename => @file.title,
     :title => "#{l(:button_copy)}/#{l(:button_move)}"}) %>
 
 <% if DmsfFile.allowed_target_projects_on_copy.present? %>
   <%= form_tag({:action => 'create', :id => @file}, :id => 'copyForm') do |f| %>
     <div class="box tabular">
-      <p>        
+      <p>
         <%= label_tag('target_project_id', l(:field_target_project)) %>
         <%= select_tag('target_project_id',
-           project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy, 
+           project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy,
              :selected => @target_project)) %>
       </p>
       <p>
@@ -46,7 +46,7 @@
     </div>
     <p>
       <%= submit_tag(l(:button_copy)) %>
-      <% if User.current.allowed_to?(:file_manipulation, @project) %>        
+      <% if User.current.allowed_to?(:file_manipulation, @project) %>
         <%= submit_tag(l(:button_move), :id => 'move_button') %>
       <% end %>
     </p>
@@ -60,7 +60,7 @@
   });
 
   $('#target_project_id').change(function () {
-    $('#content').load("<%= url_for(:action => 'new') %>", $('#copyForm').serialize());    
+    $('#content').load("<%= url_for(:action => 'new') %>", $('#copyForm').serialize());
   });
 
   $('#target_project_id').select2();

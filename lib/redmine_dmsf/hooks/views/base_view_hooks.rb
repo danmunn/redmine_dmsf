@@ -20,16 +20,17 @@
 
 module RedmineDmsf
   module Hooks
-    include Redmine::Hook   
-        
-    class DmsfViewListener < Redmine::Hook::ViewListener                
-      
-      def view_layouts_base_html_head(context={})  
-        "\n".html_safe + stylesheet_link_tag('dmsf', :plugin => :redmine_dmsf) +
+    include Redmine::Hook
+
+    class DmsfViewListener < Redmine::Hook::ViewListener
+
+      def view_layouts_base_html_head(context={})
+        "\n".html_safe + stylesheet_link_tag('redmine_dmsf.css', :plugin => :redmine_dmsf) +
         "\n".html_safe + stylesheet_link_tag('select2.min.css', :plugin => :redmine_dmsf) +
-        "\n".html_safe + javascript_include_tag('select2.min.js', :plugin => :redmine_dmsf)
-      end          
-      
+        "\n".html_safe + javascript_include_tag('select2.min.js', :plugin => :redmine_dmsf) +
+        "\n".html_safe + javascript_include_tag('redmine_dmsf.js', :plugin => :redmine_dmsf)
+      end
+
     end
   end
 end

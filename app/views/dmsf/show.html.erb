@@ -101,97 +101,11 @@
     </div>
   <% end %>
   <div class="autoscroll">
-  <table class="display list dmsf_list" id="browser">
-    <thead>
-      <tr>
-        <th class="dmsf_checkbox dmsf_th">
-          <input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
-        </th>
-        <th class ="dmsf_th"><%= l(:link_title) %></th>
-        <th class ="dmsf_th"><%= l(:link_size) %></th>
-        <th class ="dmsf_th"><%= l(:link_modified) %></th>
-        <th title="<%= l(:label_version) %>" class ="dmsf_th"><%= l(:link_ver) %></th>
-        <th class ="dmsf_th"><%= l(:link_workflow) %></th>
-        <th class ="dmsf_th"><%= l(:link_author) %></th>
-        <th class ="dmsf_th"></th>
-        <th class="dmsf_invisible"></th>
-        <th class="dmsf_invisible"></th>
-        <th class="dmsf_invisible"></th>
-        <th class="dmsf_invisible"></th>
-      </tr>
-    </thead>
-  <tbody>
-  <% @subfolders.each do |subfolder| %>
-    <tr class="dir">
-      <%= render(:partial => 'dir',
-        :locals => {
-          :project => @project,
-          :subfolder => subfolder,
-          :link => nil,
-          :id => subfolder.id,
-          :name => 'subfolders[]',
-          :title => subfolder.title }) %>
-    </tr>
-  <% end %>
-  <% @dir_links.each do |link| %>
-    <% unless link.target_project %>
-      <% Rails.logger.error "Error: dmsf_link id #{link.id} has no target!" %>
-      <% next %>
+    <% if @tree_view %>
+      <%= render(:partial => 'tree_view') %>
+    <% else %>
+      <%= render(:partial => 'list_view') %>
     <% end %>
-    <tr class="dmsf_gray">
-      <%= render(:partial => 'dir',
-        :locals => {
-          :project => link.target_project,
-          :subfolder => link.target_folder,
-          :link => link,
-          :id => link.id,
-          :name => 'dir_links[]',
-          :title => link.name }) %>
-    </tr>
-  <% end %>
-  <% @files.each do |file| %>
-    <% unless file.last_revision %>
-      <% Rails.logger.error "Error: dmsf_file id #{file.id} has no revision!" %>
-      <% next %>
-    <% end %>
-    <tr class="file">
-      <%= render(:partial => 'file', :locals => {
-          :project => @project,
-          :file => file,
-          :link => nil,
-          :id => file.id,
-          :name => 'files[]',
-          :title => file.title }) %>
-    </tr>
-  <% end %>
-  <% @file_links.each do |link| %>
-    <% unless link.target_file.last_revision %>
-        <% Rails.logger.error "Error: dmsf_file id #{link.target_id} has no revision!" %>
-        <% next %>
-      <% end %>
-      <tr class="dmsf_gray">
-        <%= render(:partial => 'file', :locals => {
-            :project => link.target_project,
-            :file => link.target_file,
-            :link => link,
-            :id => link.id,
-            :name => 'file_links[]',
-            :title => link.name }) %>
-      </tr>
-    <% end %>
-    <% @url_links.each do |link| %>
-      <tr class="dmsf_gray">
-          <%= render(:partial => 'url', :locals => {
-                                              :project => link.target_project,
-                                              :file => link.target_file,
-                                              :link => link,
-                                              :id => link.id,
-                                              :name => 'file_links[]',
-                                              :title => link.name }) %>
-      </tr>
-    <% end %>
-  </tbody>
-  </table>
   </div>
 <% end %>
 
@@ -228,15 +142,15 @@
       $('#browser').dataTable({
         'bJQueryUI': true,
         'oLanguage': {
-                'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', sUrl) %>"
+          'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', sUrl) %>"
         },
-                'bAutoWidth': false,
+        'bAutoWidth': false,
         'bPaginate': false,
-        'aaSorting': [[1,'asc']],
-        'aaSortingFixed': [[8,'asc']],
+        'aaSorting': [[1, 'asc']],
+        'aaSortingFixed': [[ 8, 'asc']],
         'aoColumnDefs': [
-          { 'bSearchable': false, 'aTargets': [0, 7, 8, 9] },
-          { 'bSortable': false, 'aTargets': [0, 7, 8] },
+          { 'bSearchable': false, 'aTargets': [0, 7, 8, 9, 10, 11] },
+          { 'bSortable': false, 'aTargets': [0, 7] },
           { 'iDataSort': 9, 'aTargets': [ 2 ] },
           { 'iDataSort': 10, 'aTargets': [ 3 ] },
           { 'iDataSort': 11, 'aTargets': [ 4 ] }
@@ -245,7 +159,15 @@
            jQuery('div.dmsf_controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
         },
         'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-           return "<%= l(:label_number_of_folders)%>: <%= @subfolders.count + @dir_links.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count + @file_links.count + @url_links.count %>";
+          <% if @tree_view %>
+            <% if @folder %>
+              return "<%= "#{l(:label_number_of_folders)}: #{@folder.deep_folder_count} #{l(:label_number_of_documents)}: #{@folder.deep_file_count}" %>";
+            <% else %>
+              return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFolder').count}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFile').count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfUrl').count}" %>";
+            <% end %>
+          <% else %>
+            return "<%= "#{l(:label_number_of_folders)}: #{@subfolders.count + @dir_links.count}, #{l(:label_number_of_documents)}: #{@files.count + @file_links.count + @url_links.count}" %>";
+          <% end %>
         }
       });
 

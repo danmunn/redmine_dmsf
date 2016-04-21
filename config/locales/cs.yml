@@ -26,7 +26,7 @@ cs:
   label_dmsf_file_revision_plural: Revize dokumentů
   label_dmsf_file_revision_access_plural: Přístupy k dokumentům
   warning_no_entries_selected: Není nic vybráno
-  error_email_to_must_be_entered: Musí být zadán adresát
+  error_email_to_must_be_entered: Musí být zadán příjemce
   warning_file_already_locked: Soubor je již zamčen
   notice_file_locked: Soubor byl zamčen
   warning_file_not_locked: Soubor není zamčen
@@ -34,14 +34,14 @@ cs:
   error_only_user_that_locked_file_can_unlock_it: Soubor může být odemčen pouze uživatelem, který ho zamkl
   error_max_files_exceeded: "Limit pro %{number} najednou stažených souborů je překročen"
   error_entry_project_does_not_match_current_project: Zadaný projekt neodpovídá aktuálnímu projektu
-  notice_folder_created: Adresář byl vytvořen
+  notice_folder_created: Složka byla vytvořena
   error_folder_creation_failed: Vytváření složky selhalo
   error_folder_title_must_be_entered: Musí být zadán název
-  notice_folder_deleted: Adresář byl smazán
-  error_folder_is_not_empty: Adresář není prázdný
+  notice_folder_deleted: Složka byla smazána
+  error_folder_is_not_empty: Složka není prázdná
   error_folder_title_is_already_used: Název již existuje
   notice_folder_details_were_saved: Detaily složky byly uloženy
-  error_folder_is_locked: Adresář je zamčen
+  error_folder_is_locked: Složka je zamčena
   error_file_is_locked: Soubor je zamčen
   notice_file_deleted: Soubor byl smazán
   error_at_least_one_revision_must_be_present: Musí existovat alespoň jedna revize
@@ -181,18 +181,18 @@ cs:
   heading_access_last: Poslední
   label_dmsf_updated: Změněno
   label_dmsf_downloaded: Staženo
-  title_total_size_of_all_files: Celková velikost všech souborů v adresáři
+  title_total_size_of_all_files: Celková velikost všech souborů ve složce
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: Neexistuje projekt, do kterého můžete kopírovat
   comment_copied_from: "Zkopírováno z %{source}"
   notice_file_copied: Soubor zkopírován
   notice_file_moved: Soubor přesunut
   field_target_project: Cílový projekt
-  field_target_folder: Cílový adresář
+  field_target_folder: Cílová složka
   title_copy_or_move: Kopírovat/Přesunout
   label_dmsf_folder_plural: Složky
   comment_moved_from: "Přesunuto z %{source}"
-  error_target_folder_same: Cílový adresář a projekt jsou stejné jako aktuální
+  error_target_folder_same: Cílový složka a projekt jsou stejné jako aktuální
   error_file_cannot_be_moved: Soubor nemůže být přesunut
   error_file_cannot_be_copied: Soubor nemůže být zkopírován
   warning_no_project_to_copy_folder_to: Neexistuje projekt, do kterého můžete kopírovat
@@ -205,7 +205,7 @@ cs:
   label_maximum_email_filesize: Maximální velikost souboru emailu
   header_minimum_filesize: Chyba souboru.
   error_minimum_filesize: "Soubor %{file} má nulovou velikost a nebude přiložen."
-  parent_directory: Nadřazený adresář
+  parent_directory: Nadřazená složka
   note_webdav: "Webdav je po aktivaci k dispozici na %{protocol}://%{domain}/dmsf/webdav/[identifikátor projektu]"
   label_webdav: Webdav functionalita
   label_dmsf_plural: "Kopíruj dokumenty a složky (%{files} souborů v %{folders} složkách)"
@@ -292,8 +292,8 @@ cs:
 
   label_link_name: Název odkazu
   label_link_external_url: URL
-  label_target_folder: Cílový adresář
-  label_source_folder: Zdrojový adresář
+  label_target_folder: Cílová složka
+  label_source_folder: Zdrojová složka
   label_target_project: Cílový projekt
   label_source_project: Zdrojový projekt
 
@@ -311,10 +311,10 @@ cs:
   link_trash_bin: Koš
   title_restore: Obnovit
   notice_dmsf_file_restored: Document byl úspěšně obnoven
-  notice_dmsf_folder_restored: Adresář byl úspěšně obnoven
+  notice_dmsf_folder_restored: Složka byla úspěšně obnovena
   notice_dmsf_link_restored: Odkaz byl úspěšně obnoven
   title_restore_checked: Obnov vybrané
-  error_parent_folder: Nadřazený adresář neexistuje
+  error_parent_folder: Nadřazená složka neexistuje
 
   error_resource_or_parent_locked: Nelze zamknout - zdrojový nebo nadřazený objekt je zamčený
   error_parent_locked: Nelze zamknout - nadřazený objekt je zamčený
@@ -322,7 +322,7 @@ cs:
   error_lock_exclusively: Nelze zamknout již zamčený objekt
   error_unlock_parent_locked: Nelze odemknout - nadřazený objekt je zamčený
 
-  field_dmsf_tree_view: Navigate folders in a tree
+  field_dmsf_tree_view: Zobrazit složky jako stromovou strukturu
 
   my:
     blocks:

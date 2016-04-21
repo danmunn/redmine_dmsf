@@ -39,14 +39,14 @@ class DmsfFilesController < ApplicationController
         @revision = @file.last_revision
       else
         @revision = DmsfFileRevision.find(params[:download].to_i)
-        raise DmsfAccessError if @revision.file != @file
+        raise DmsfAccessError if @revision.dmsf_file != @file
       end
-      check_project(@revision.file)
+      check_project(@revision.dmsf_file)
       raise ActionController::MissingFile if @file.deleted?
       log_activity('downloaded')
       access = DmsfFileRevisionAccess.new
       access.user = User.current
-      access.revision = @revision
+      access.dmsf_file_revision = @revision
       access.action = DmsfFileRevisionAccess::DownloadAction
       access.save!
       member = Member.where(:user_id => User.current.id, :project_id => @file.project.id).first
@@ -71,14 +71,14 @@ class DmsfFilesController < ApplicationController
           @revision = @file.last_revision
         else
           @revision = DmsfFileRevision.find(params[:download].to_i)
-          raise DmsfAccessError if @revision.file != @file
+          raise DmsfAccessError if @revision.dmsf_file != @file
         end
-        check_project(@revision.file)
-        raise ActionController::MissingFile if @revision.file.deleted?
+        check_project(@revision.dmsf_file)
+        raise ActionController::MissingFile if @revision.dmsf_file.deleted?
         log_activity('downloaded')
         access = DmsfFileRevisionAccess.new
         access.user = User.current
-        access.revision = @revision
+        access.dmsf_file_revision = @revision
         access.action = DmsfFileRevisionAccess::DownloadAction
         access.save!
         member = Member.where(:user_id => User.current.id, :project_id => @file.project.id).first
@@ -99,7 +99,7 @@ class DmsfFilesController < ApplicationController
     @revision = @file.last_revision
     @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
-    @revision_pages = Paginator.new @file.revisions.visible.count, params['per_page'] ? params['per_page'].to_i : 25, params['page']
+    @revision_pages = Paginator.new @file.dmsf_file_revisions.visible.count, params['per_page'] ? params['per_page'].to_i : 25, params['page']
 
     respond_to do |format|
       format.html {
@@ -120,7 +120,7 @@ class DmsfFilesController < ApplicationController
         revision.description = params[:dmsf_file_revision][:description]
         revision.comment = params[:dmsf_file_revision][:comment]
 
-        revision.file = @file
+        revision.dmsf_file = @file
         last_revision = @file.last_revision
         revision.source_revision = last_revision
         revision.user = User.current
@@ -233,7 +233,7 @@ class DmsfFilesController < ApplicationController
     if commit
       redirect_to :back
     else
-      redirect_to dmsf_folder_path(:id => @project, :folder_id => @file.folder)
+      redirect_to dmsf_folder_path(:id => @project, :folder_id => @file.dmsf_folder)
     end
   end
 
@@ -318,7 +318,7 @@ class DmsfFilesController < ApplicationController
 
   def find_revision
     @revision = DmsfFileRevision.visible.find params[:id]
-    @file = @revision.file
+    @file = @revision.dmsf_file
     @project = @file.project
   rescue ActiveRecord::RecordNotFound
     render_404

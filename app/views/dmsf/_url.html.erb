@@ -22,13 +22,17 @@
 
 <td class="dmsf_checkbox"></td>
 <td class="dmsf_title">
+  <% if @tree_view %>
+    <span class='dmsf_expander' <%= onclick.html_safe %>></span>
+  <% end %>
   <%= link_to(h(title),
         link.external_url,
         :target => '_blank',
         :class => 'icon dmsf_icon-link') %>
-  <div class="dmsf_filename" title="<%= l(:label_target_folder)%>">
+  <div class="dmsf_filename" title="<%= l(:label_target_folder) %>">
     <%= link.external_url %>
   </div>
+  <%= '</span>'.html_safe if @tree_view %>
 </td>
 <td class="dmsf_size"></td>
 <td class="dmsf_modified"><%= format_time(link.updated_at) %></td>
@@ -39,17 +43,17 @@
   <span class="icon"></span>
   <span class="icon"></span>
   <span class="icon"></span>
-  <% if @file_manipulation_allowed %>    
-    <%= link_to(image_tag('delete.png'),            
+  <% if @file_manipulation_allowed %>
+    <%= link_to(image_tag('delete.png'),
       dmsf_link_path(link),
       :data => {:confirm => l(:text_are_you_sure)},
       :method => :delete,
       :title => l(:title_delete)) %>
-  <% else %>  
+  <% else %>
     <span class="icon"></span>
-  <% end %>      
+  <% end %>
 </td>
-<td class="dmsf_invisible">1</td>
+<td class="dmsf_invisible"><%= position %> </td>
 <td class="dmsf_invisible"></td>
 <td class="dmsf_invisible">link.updated_at.to_i</td>
 <td class="dmsf_invisible"></td>

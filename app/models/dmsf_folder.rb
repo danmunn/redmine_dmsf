@@ -25,43 +25,41 @@ class DmsfFolder < ActiveRecord::Base
   include RedmineDmsf::Lockable
 
   cattr_reader :invalid_characters
-  @@invalid_characters = /\A[^\/\\\?":<>]*\z/    
+  @@invalid_characters = /\A[^\/\\\?":<>]*\z/
 
   belongs_to :project
-  belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
+  belongs_to :dmsf_folder
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   belongs_to :user
 
-  has_many :subfolders, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id',
-    :dependent => :destroy
-  has_many :files, :class_name => 'DmsfFile', :foreign_key => 'dmsf_folder_id',
-    :dependent => :destroy  
+  has_many :dmsf_folders, :dependent => :destroy
+  has_many :dmsf_files, :dependent => :destroy
   has_many :folder_links, -> { where :target_type => 'DmsfFolder' },
     :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
   has_many :file_links, -> { where :target_type => 'DmsfFile' },
     :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
   has_many :url_links, -> { where :target_type => 'DmsfUrl' },
     :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
+  has_many :dmsf_links, :dependent => :destroy
   has_many :referenced_links, -> { where :target_type => 'DmsfFolder' },
     :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
   has_many :locks, -> { where(entity_type:  1).order("#{DmsfLock.table_name}.updated_at DESC") },
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
-  accepts_nested_attributes_for :user, :project, :folder, :subfolders, :files, :folder_links, :file_links, :url_links, :referenced_links, :locks  
-  
+
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
-  
+
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }
 
   acts_as_customizable
-    
+
   acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
         :project_key => 'project_id',
         :date_column => 'updated_at',
         :permission => :view_dmsf_files,
-        :scope => self.joins(:project)  
-        
+        :scope => self.joins(:project)
+
   acts_as_event :title => Proc.new {|o| o.title},
           :description => Proc.new {|o| o.description },
           :url => Proc.new {|o| {:controller => 'dmsf', :action => 'show', :id => o.project, :folder_id => o}},
@@ -69,11 +67,11 @@ class DmsfFolder < ActiveRecord::Base
           :author => Proc.new {|o| o.user }
 
   validates :title, :presence => true
-  validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted], 
+  validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted],
     conditions: -> { where(:deleted => STATUS_ACTIVE) }
   validates_format_of :title, :with => @@invalid_characters,
     :message => l(:error_contains_invalid_character)
-  validate :check_cycle    
+  validate :check_cycle
 
   before_create :default_values
   def default_values
@@ -87,13 +85,13 @@ class DmsfFolder < ActiveRecord::Base
 
   def check_cycle
     folders = []
-    self.subfolders.each {|f| folders.push(f)}
-    folders.each do |folder|
-      if folder == self.folder
+    self.dmsf_folders.each {|f| folders.push(f)}
+    self.dmsf_folders.each do |folder|
+      if folder == self.dmsf_folder
         errors.add(:folder, l(:error_create_cycle_in_folder_dependency))
         return false
       end
-      folder.subfolders.each {|f| folders.push(f)}
+      folder.dmsf_folders.each {|f| folders.push(f)}
     end
     return true
   end
@@ -110,10 +108,10 @@ class DmsfFolder < ActiveRecord::Base
     if self.locked?
       errors[:base] << l(:error_folder_is_locked)
       return false
-    elsif !self.subfolders.visible.empty? || !self.files.visible.empty?
+    elsif !self.dmsf_folders.visible.empty? || !self.dmsf_files.visible.empty?
       errors[:base] << l(:error_folder_is_not_empty)
       return false
-    end    
+    end
     if commit
       self.destroy
     else
@@ -122,16 +120,16 @@ class DmsfFolder < ActiveRecord::Base
       self.save
     end
   end
-  
+
   def deleted?
     self.deleted == STATUS_DELETED
   end
 
   def restore
-    if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted?)
+    if self.dmsf_folder_id && (self.dmsf_folder.nil? || self.dmsf_folder.deleted?)
       errors[:base] << l(:error_parent_folder)
       return false
-    end    
+    end
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
     self.save
@@ -142,7 +140,7 @@ class DmsfFolder < ActiveRecord::Base
     path = []
     while folder
       path.unshift(folder)
-      folder = folder.folder
+      folder = folder.dmsf_folder
     end
     path
   end
@@ -155,8 +153,8 @@ class DmsfFolder < ActiveRecord::Base
 
   def notify?
     return true if self.notification
-    return true if folder && folder.notify?
-    return true if !folder && self.project.dmsf_notification
+    return true if self.dmsf_folder && self.dmsf_folder.notify?
+    return true if !self.dmsf_folder && self.project.dmsf_notification
     return false
   end
 
@@ -197,21 +195,21 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def deep_file_count
-    file_count = self.files.visible.count
-    self.subfolders.visible.each {|subfolder| file_count += subfolder.deep_file_count}
-    file_count + self.file_links.visible.count
+    file_count = self.dmsf_files.visible.count
+    self.dmsf_folders.visible.each { |subfolder| file_count += subfolder.deep_file_count }
+    file_count + self.file_links.visible.count + self.url_links.visible.count
   end
 
   def deep_folder_count
-    folder_count = self.subfolders.visible.count
-    self.subfolders.visible.each {|subfolder| folder_count += subfolder.deep_folder_count}
+    folder_count = self.dmsf_folders.visible.count
+    self.dmsf_folders.visible.each { |subfolder| folder_count += subfolder.deep_folder_count }
     folder_count + self.folder_links.visible.count
   end
 
   def deep_size
     size = 0
-    self.files.visible.each {|file| size += file.size}
-    self.subfolders.visible.each {|subfolder| size += subfolder.deep_size}
+    self.dmsf_files.visible.each {|file| size += file.size}
+    self.dmsf_folders.visible.each {|subfolder| size += subfolder.deep_size}
     size
   end
 
@@ -228,7 +226,7 @@ class DmsfFolder < ActiveRecord::Base
 
   def copy_to(project, folder)
     new_folder = DmsfFolder.new
-    new_folder.folder = folder ? folder : nil
+    new_folder.dmsf_folder = folder ? folder : nil
     new_folder.project = folder ? folder.project : project
     new_folder.title = self.title
     new_folder.description = self.description
@@ -241,11 +239,11 @@ class DmsfFolder < ActiveRecord::Base
 
     return new_folder unless new_folder.save
 
-    self.files.visible.each do |f|
+    self.dmsf_files.visible.each do |f|
       f.copy_to project, new_folder
     end
 
-    self.subfolders.visible.each do |s|
+    self.dmsf_folders.visible.each do |s|
       s.copy_to project, new_folder
     end
 
@@ -268,13 +266,13 @@ class DmsfFolder < ActiveRecord::Base
   def available_custom_fields
     DmsfFileRevisionCustomField.all
   end
-  
+
   def modified
     last_update = updated_at
-    subfolders.each do |subfolder|
+    dmsf_folders.each do |subfolder|
       last_update = subfolder.updated_at if subfolder.updated_at > last_update
     end
-    files.each do |file|
+    dmsf_files.each do |file|
       last_update = file.updated_at if file.updated_at > last_update
     end
     folder_links.each do |folder_link|
@@ -288,20 +286,20 @@ class DmsfFolder < ActiveRecord::Base
     end
     last_update
   end
-  
+
   # Number of items in the folder
   def items
-    subfolders.visible.count +
-    files.visible.count +
+    dmsf_folders.visible.count +
+    dmsf_files.visible.count +
     folder_links.visible.count +
     file_links.visible.count +
     url_links.visible.count
-  end 
-    
+  end
+
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)
-    folder.subfolders.visible.each do |subfolder|
+    folder.dmsf_folders.visible.each do |subfolder|
       unless subfolder == current_folder
         tree.push(["#{'...' * level}#{subfolder.title}", subfolder.id])
         directory_subtree(tree, subfolder, level + 1, current_folder)

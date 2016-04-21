@@ -21,12 +21,15 @@
 %>
 
 <% locked_for_user = subfolder && subfolder.locked_for_user? %>
-<% locked = subfolder && subfolder.locked? %>    
+<% locked = subfolder && subfolder.locked? %>
 
-<td class="dmsf_checkbox"><%= check_box_tag(name, id, false, 
+<td class="dmsf_checkbox"><%= check_box_tag(name, id, false,
   :title => l(:title_check_for_zip_download_or_email), :id => "subfolder_#{id}") %></td>
-<td class="dmsf_title">                
-  <%= link_to(h(title),          
+<td class="dmsf_title">
+  <% if @tree_view %>
+    <span class='dmsf_expander' <%= onclick.html_safe %>></span>
+  <% end %>
+  <%= link_to(h(title),
     dmsf_folder_path(:id => project, :folder_id => subfolder),
     :class => 'icon icon-folder') %>
   <% if link %>
@@ -34,22 +37,22 @@
   <% else %>
     <div class="dmsf_filename" title="<%= l(:title_items)%>">[<%= subfolder.items %>]</div>
   <% end %>
-</td>            
+</td>
 <td class="dmsf_size"></td>
-<td class="dmsf_modified"><%= format_time(subfolder.modified) if subfolder %>                
+<td class="dmsf_modified"><%= format_time(subfolder.modified) if subfolder %>
   <% if locked_for_user %>
-    <% if subfolder.lock.reverse[0].user %>            
+    <% if subfolder.lock.reverse[0].user %>
       <%= link_to(image_tag(link ? 'locked_gray.png' : 'locked.png', :plugin => 'redmine_dmsf'),
         user_path(subfolder.lock.reverse[0].user),
         :title => l(:title_locked_by_user, :user => subfolder.lock.reverse[0].user)) %>
-    <% else %>            
-      <%= content_tag(:span, image_tag(link ? 'locked_gray.png' : 'locked.png', :plugin => 'redmine_dmsf'), 
+    <% else %>
+      <%= content_tag(:span, image_tag(link ? 'locked_gray.png' : 'locked.png', :plugin => 'redmine_dmsf'),
         :title => l(:notice_account_unknown_email)) %>
     <% end %>
-  <% elsif locked %>          
-    <%= content_tag(:span, image_tag(link ? 'lockedbycurrent_gray.png' : 'lockedbycurrent.png', :plugin => 'redmine_dmsf'), 
+  <% elsif locked %>
+    <%= content_tag(:span, image_tag(link ? 'lockedbycurrent_gray.png' : 'lockedbycurrent.png', :plugin => 'redmine_dmsf'),
       :title => l(:title_locked_by_you)) %>
-  <% end %>        
+  <% end %>
 </td>
 <td class="dmsf_version"></td>
 <td class="dmsf_workflow"></td>
@@ -65,7 +68,7 @@
           <% if subfolder.unlockable? %>
             <%= link_to(image_tag('unlock.png', :plugin => 'redmine_dmsf'),
               unlock_dmsf_path(:id => project, :folder_id => subfolder),
-              :title => l(:title_unlock_file)) %>              
+              :title => l(:title_unlock_file)) %>
           <% else %>
             <span class="icon"></span>
           <% end %>
@@ -77,11 +80,11 @@
       <% else %>
         <span class="icon"></span>
       <% end %>
-      <% if (subfolder && subfolder.notification) || (!subfolder && project.dmsf_notification) %>            
+      <% if (subfolder && subfolder.notification) || (!subfolder && project.dmsf_notification) %>
         <%= link_to(image_tag('notify.png', :plugin => 'redmine_dmsf'),
           notify_deactivate_dmsf_path(:id => project, :folder_id => subfolder),
           :title => l(:title_notifications_active_deactivate)) %>
-      <% else %>            
+      <% else %>
         <%= link_to(image_tag('notifynot.png', :plugin => 'redmine_dmsf'),
           notify_activate_dmsf_path(:id => project, :folder_id => subfolder),
           :title => l(:title_notifications_not_active_activate)) %>
@@ -89,24 +92,24 @@
       <% if link %>
         <%= link_to(image_tag('delete.png'), dmsf_link_path(link),
           :data => {:confirm => l(:text_are_you_sure)},
-          :method => :delete, :title => l(:title_delete)) %>                       
+          :method => :delete, :title => l(:title_delete)) %>
       <% else %>
         <%= link_to(image_tag('delete.png'),
           delete_dmsf_path(:id => project, :folder_id => subfolder),
-          :data => {:confirm => l(:text_are_you_sure)},            
-          :title => l(:title_delete)) %>             
-      <% end %>    
-    <% else %>       
+          :data => {:confirm => l(:text_are_you_sure)},
+          :title => l(:title_delete)) %>
+      <% end %>
+    <% else %>
       <span class="icon"></span>
       <% if (!locked_for_user || @force_file_unlock_allowed) && subfolder.unlockable? %>
         <%= link_to(image_tag('unlock.png', :plugin => 'redmine_dmsf'),
           unlock_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:title_unlock_file)) %>        
-      <% end %>        
-    <% end %>                                                                                                                                                                       
+          :title => l(:title_unlock_file)) %>
+      <% end %>
+    <% end %>
   <% end %>
 </td>
-<td class="dmsf_invisible">0</td>
+<td class="dmsf_invisible"><%= position %></td>
 <td class="dmsf_invisible">0</td>
 <td class="dmsf_invisible"><%= subfolder.modified.to_i if subfolder %></td>
 <td class="dmsf_invisible">0</td>

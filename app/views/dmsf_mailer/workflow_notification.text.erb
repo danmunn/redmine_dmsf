@@ -18,8 +18,8 @@
 
 <%= @user.name %>,
 <%= @text1 %>
-<% unless @revision.file.folder %>
-  <%= @text2 %> <%= dmsf_folder_url(:id => @revision.file.project) %>.
+<% unless @revision.dmsf_file.dmsf_folder %>
+  <%= @text2 %> <%= dmsf_folder_url(:id => @revision.dmsf_file.project) %>.
 <% else %>
-  <%= @text2 %> <%= dmsf_folder_url(:id => @revision.file.project, :folder_id => @revision.file.folder) %>.
+  <%= @text2 %> <%= dmsf_folder_url(:id => @revision.dmsf_file.project, :folder_id => @revision.dmsf_file.dmsf_folder) %>.
 <% end %>

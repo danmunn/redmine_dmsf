@@ -26,12 +26,12 @@ class DmsfLinksController < ApplicationController
   before_filter :find_link_project
   before_filter :authorize
 
-  def new    
+  def new
     @dmsf_link = DmsfLink.new
     @dmsf_link.project_id = params[:project_id]
 
     if params[:dmsf_link].present?
-      # Reload      
+      # Reload
       @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
       @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
       @type = params[:dmsf_link][:type]
@@ -53,7 +53,7 @@ class DmsfLinksController < ApplicationController
 
           if file
             folder = DmsfFolder.find_by_id params[:dmsf_link][:target_folder_id]
-            if (folder && (folder.project_id == @dmsf_link.target_project_id) && folder.files.include?(file)) || folder.nil?
+            if (folder && (folder.project_id == @dmsf_link.target_project_id) && folder.dmsf_files.include?(file)) || folder.nil?
               @dmsf_link.name = file.title
             end
           end
@@ -111,7 +111,7 @@ class DmsfLinksController < ApplicationController
         @dmsf_link.target_type = DmsfFolder.model_name.to_s
       end
       @dmsf_link.name = params[:dmsf_link][:name]
-            
+
       if @dmsf_link.save
         flash[:notice] = l(:notice_successful_create)
         redirect_to dmsf_folder_path(:id => @project.id, :folder_id => @dmsf_link.dmsf_folder_id)

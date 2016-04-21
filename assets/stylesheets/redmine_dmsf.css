@@ -20,7 +20,6 @@
 */
 
 /* DMSF table.list modifications */
-
 table.dmsf_list th.dmsf_th {
   border: none;
 }
@@ -223,3 +222,25 @@ tr.dmsf_gray .icon-file.application-x-gzip { background-image: url(../images/fil
 /* Search results */
 dt.dmsf-file { background-image: url(../../../images/document.png); }
 dt.dmsf-folder { background-image: url(../../../images/folder.png); }
+
+/* DMSF tree view */
+tr.dmsf_hidden { display:none; }
+tr.dmsf_tree span.dmsf_expander { cursor: pointer; }
+tr.dmsf_tree.dmsf_expanded td.dmsf_title span {
+  background: url(../images/bullet_arrow_down.png) no-repeat 0 50%;
+  padding-left: 16px;
+}
+tr.dmsf_tree.dmsf_child td.dmsf_title span { padding-left: 16px; }
+tr.dmsf_tree.dmsf_collapsed td.dmsf_title span {
+  background: url(../../../images/bullet_arrow_right.png) no-repeat 0 50%;
+  padding-left: 16px;
+}
+tr.dmsf_tree.idnt-1 td.dmsf_title {padding-left: 1.5em;}
+tr.dmsf_tree.idnt-2 td.dmsf_title {padding-left: 2em;}
+tr.dmsf_tree.idnt-3 td.dmsf_title {padding-left: 2.5em;}
+tr.dmsf_tree.idnt-4 td.dmsf_title {padding-left: 3em;}
+tr.dmsf_tree.idnt-5 td.dmsf_title {padding-left: 3.5em;}
+tr.dmsf_tree.idnt-6 td.dmsf_title {padding-left: 4em;}
+tr.dmsf_tree.idnt-7 td.dmsf_title {padding-left: 4.5em;}
+tr.dmsf_tree.idnt-8 td.dmsf_title {padding-left: 5em;}
+tr.dmsf_tree.idnt-9 td.dmsf_title {padding-left: 5.5em;}

@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,8 +25,8 @@ class DmsfWorkflowStep < ActiveRecord::Base
   validates :step, :presence => true
   validates :user_id, :presence => true
   validates :operator, :presence => true
-  validates_uniqueness_of :user_id, :scope => [:dmsf_workflow_id, :step]    
-  
+  validates_uniqueness_of :user_id, :scope => [:dmsf_workflow_id, :step]
+
   OPERATOR_OR  = 0
   OPERATOR_AND = 1
 
@@ -37,7 +37,7 @@ class DmsfWorkflowStep < ActiveRecord::Base
   def user
     User.find(user_id)
   end
-  
+
   def assign(dmsf_file_revision_id)
     step_assignment = DmsfWorkflowStepAssignment.new(
       :dmsf_workflow_step_id => id,
@@ -45,20 +45,20 @@ class DmsfWorkflowStep < ActiveRecord::Base
       :dmsf_file_revision_id => dmsf_file_revision_id)
     step_assignment.save
   end
-  
+
   def is_finished?(dmsf_file_revision_id)
     self.dmsf_workflow_step_assignments.each do |assignment|
       if assignment.dmsf_file_revision_id == dmsf_file_revision_id
-        if assignment.dmsf_workflow_step_actions.empty?            
+        if assignment.dmsf_workflow_step_actions.empty?
           return false
-        end          
-        assignment.dmsf_workflow_step_actions.each do |act|
-          return false unless act.is_finished?              
         end
-      end               
-    end      
+        assignment.dmsf_workflow_step_actions.each do |act|
+          return false unless act.is_finished?
+        end
+      end
+    end
   end
-  
+
   def copy_to(workflow)
     new_step = self.dup
     new_step.dmsf_workflow_id = workflow.id

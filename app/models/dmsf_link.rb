@@ -29,9 +29,9 @@ class DmsfLink < ActiveRecord::Base
 
   validates :name, :presence => true
   validates_length_of :name, :maximum => 255
-  validates_length_of :external_url, :maximum => 255  
+  validates_length_of :external_url, :maximum => 255
   validate :validate_url
-  
+
   def validate_url
     if self.target_type == 'DmsfUrl'
       begin
@@ -40,17 +40,17 @@ class DmsfLink < ActiveRecord::Base
         else
           errors.add :external_url, :invalid
         end
-      rescue URI::InvalidURIError        
+      rescue URI::InvalidURIError
         errors.add :external_url, :invalid
-      end      
+      end
     end
   end
-  
+
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
-  
+
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
-  scope :deleted, -> { where(:deleted => STATUS_DELETED) }    
+  scope :deleted, -> { where(:deleted => STATUS_DELETED) }
 
   def target_folder_id
     if self.target_type == DmsfFolder.model_name.to_s
@@ -97,9 +97,9 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def path
-    if self.target_type == DmsfFile.model_name.to_s  
+    if self.target_type == DmsfFile.model_name.to_s
       path = self.target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.name : element.title }.join('/') if self.target_file
-    else      
+    else
       path = self.target_folder ? self.target_folder.dmsf_path_str : ''
     end
     path.insert(0, "#{self.target_project.name}:") if self.project_id != self.target_project_id
@@ -133,13 +133,21 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def restore
-    if self.dmsf_folder_id && (self.folder.nil? || self.folder.deleted?)
+    if self.dmsf_folder_id && (self.dmsf_folder.nil? || self.dmsf_folder.deleted?)
       errors[:base] << l(:error_parent_folder)
       return false
     end
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
     save(:validate => false)
+  end
+
+  def is_folder?
+    self.target_type == 'DmsfFolder'
+  end
+
+  def is_file?
+    !is_folder?
   end
 
 end
