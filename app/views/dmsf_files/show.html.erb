@@ -62,7 +62,7 @@
 </div>
 
 <%= render(:partial => '/dmsf/path',
-  :locals => {:folder => @file.folder, :filename => @file.title, :title => nil}) %>
+  :locals => {:folder => @file.dmsf_folder, :filename => @file.title, :title => nil}) %>
 
 <% if User.current.allowed_to?(:file_manipulation, @file.project) && !@file.locked_for_user? %>
   <%= error_messages_for('file') %>

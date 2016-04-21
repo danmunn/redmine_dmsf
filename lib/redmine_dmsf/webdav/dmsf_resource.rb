@@ -105,7 +105,7 @@ module RedmineDmsf
           # Hunt for files parent path
           f = false
           if (parent.projectless_path != '/')
-            f = parent.dmsf_folder if parent.dmsf_folder
+            f = parent.folder if parent.folder
           else
             f = nil
           end
@@ -199,8 +199,8 @@ module RedmineDmsf
           return MethodNotAllowed if exist? # If we already exist, why waste the time trying to save?
           parent_folder = nil
           if (parent.projectless_path != '/')
-            return Conflict unless parent.dmsf_folder
-            parent_folder = parent.dmsf_folder.id
+            return Conflict unless parent.folder
+            parent_folder = parent.folder.id
           end
           f = DmsfFolder.new
           f.title = basename
@@ -498,7 +498,7 @@ module RedmineDmsf
         new_revision.title = DmsfFileRevision.filename_to_title(basename)
         new_revision.description = nil
         new_revision.comment = nil
-        new_revision.increase_version(1, true)
+        new_revision.increase_version(1)
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
 
         # Phusion passenger does not have a method "length" in its model

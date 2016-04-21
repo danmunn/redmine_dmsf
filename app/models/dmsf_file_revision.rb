@@ -200,23 +200,20 @@ class DmsfFileRevision < ActiveRecord::Base
     wf.assign(self.id) if wf && self.id
   end
 
-  def increase_version(version_to_increase, new_content)
-    if new_content
-      self.minor_version = case version_to_increase
-        when 2 then 0
-        else self.minor_version + 1
-      end
-    else
-      self.minor_version = case version_to_increase
-        when 1 then self.minor_version + 1
-        when 2 then 0
-        else self.minor_version
-      end
+  def increase_version(version_to_increase)
+    self.minor_version = case version_to_increase
+      when 1
+        self.minor_version + 1
+      when 2
+        0
+      else
+        self.minor_version
     end
-
     self.major_version = case version_to_increase
-      when 2 then self.major_version + 1
-      else self.major_version
+      when 2
+        self.major_version + 1
+      else
+        major_version
     end
   end
 

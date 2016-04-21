@@ -128,24 +128,18 @@ class DmsfFilesController < ApplicationController
         revision.major_version = last_revision.major_version
         revision.minor_version = last_revision.minor_version
         version = params[:version].to_i
+        if version == 3
+          revision.major_version = params[:custom_version_major].to_i
+          revision.minor_version = params[:custom_version_minor].to_i
+         else
+           revision.increase_version(version)
+         end
         file_upload = params[:file_upload]
         unless file_upload
-          revision.disk_filename = last_revision.disk_filename
-          if version == 3
-           revision.major_version = params[:custom_version_major].to_i
-           revision.minor_version = params[:custom_version_minor].to_i
-          else
-            revision.increase_version(version, false)
-          end
-          revision.mime_type = last_revision.mime_type
           revision.size = last_revision.size
+          revision.disk_filename = last_revision.disk_filename
+          revision.mime_type = last_revision.mime_type
         else
-          if version == 3
-           revision.major_version = params[:custom_version_major].to_i
-           revision.minor_version = params[:custom_version_minor].to_i
-          else
-            revision.increase_version(version, true)
-          end
           revision.size = file_upload.size
           revision.disk_filename = revision.new_storage_filename
           revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
