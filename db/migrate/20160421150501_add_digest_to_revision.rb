@@ -1,10 +1,7 @@
-<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -20,25 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-%>
 
-<table class="display list dmsf_list">
-  <thead>
-    <tr>
-      <th class="dmsf_th"><%= l(:field_user) %></th>
-      <th class="dmsf_th"><%= l(:heading_access_downloads_emails) %></th>
-      <th class="dmsf_th"><%= l(:heading_access_first) %></th>
-      <th class="dmsf_th"><%= l(:heading_access_last) %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% revision.access_grouped.each do |access| %>
-      <tr>
-        <td class="dmsf_author"><%= link_to_user(access.user) %></td>
-        <td class="dmsf_version"><%= access.count %></td>
-        <td class="dmsf_modified"><%= format_time(access.first_at) %></td>
-        <td class="dmsf_modified"><%= format_time(access.last_at) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+class AddDigestToRevision < ActiveRecord::Migration
+  def up
+    add_column :dmsf_file_revisions, :digest, :string, :limit => 40, :default => '', :null => false
+  end
+
+  def down
+    remove_column :dmsf_file_revisions, :digest
+  end
+end

@@ -187,6 +187,7 @@ class DmsfUploadController < ApplicationController
         end
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
         new_revision.size = File.size(commited_disk_filepath)
+        new_revision.digest = DmsfFileRevision.create_digest commited_disk_filepath
 
         # Need to save file first to generate id for it in case of creation.
         # File id is needed to properly generate revision disk filename

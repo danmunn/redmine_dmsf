@@ -98,70 +98,68 @@
         <%= link_to(revision.user.name, user_path(revision.user)) if revision.user %>
       </div>
     </div>
-    <div class="dmsf_revision_inner_box">
-      <div class="clear">
+    <div class="attributes dmsf_revision_inner_box">
+      <div class="splitcontent">
         <div class="splitcontentleft">
           <p>
             <%= label_tag('', l(:label_title)) %>
             <%= h(revision.title) %>
           </p>
-        </div>
-        <div class="splitcontentright">
-          <p>
-            <%= label_tag('', l(:label_file)) %>
-            <%= ("#{h(revision.dmsf_file.dmsf_folder.dmsf_path_str)}/") if revision.dmsf_file.dmsf_folder %><%= h(revision.name) %>
-          </p>
-        </div>
-      </div>
-      <% if revision.description.present? %>
-        <p>
-          <%= label_tag('', l(:label_description)) %>
-          <div class="wiki">
-            <%= textilizable(revision.description) %>
-          </div>
-        </p>
-      <% end %>
-      <div class="clear">
-        <div class="splitcontentleft">
+          <% if revision.description.present? %>
+            <p>
+              <%= label_tag('', l(:label_description)) %>
+              <div class="wiki">
+                <%= textilizable(revision.description) %>
+              </div>
+            </p>
+          <% end %>
           <p>
             <%= label_tag('', l(:label_version)) %>
             <%= revision.major_version %>.<%= revision.minor_version %>
           </p>
           <p>
-            <%= label_tag('', l(:link_workflow)) %>
-            <% wf = DmsfWorkflow.find_by_id(revision.dmsf_workflow_id) %>
-            <% if wf %>
+            <%= label_tag('', l(:label_size)) %>
+            <%= number_to_human_size(revision.size) %>
+          </p>
+          <% wf = DmsfWorkflow.find_by_id(revision.dmsf_workflow_id) %>
+          <% if wf %>
+            <p>
+              <%= label_tag('', l(:link_workflow)) %>
               <%= "#{wf.name} - " %>
               <%= link_to(revision.workflow_str(false),
                 log_dmsf_workflow_path(:project_id => @project.id,
                   :id => wf.id, :dmsf_file_revision_id => revision.id),
                 :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(revision.id)),
                 :remote => true) %>
-            <% else %>
-              <%= revision.workflow_str(true) %>
-            <% end %>
-          </p>
+            </p>
+          <% end %>
+          <% if revision.comment.present? %>
+            <p>
+              <%= label_tag('', l(:label_comment)) %>
+              <div class="wiki">
+                <%= textilizable(revision.comment) %>
+              </div>
+            </p>
+          <% end %>
         </div>
         <div class="splitcontentright">
+          <p>
+            <%= label_tag('', l(:label_file)) %>
+            <%= ("#{h(revision.dmsf_file.dmsf_folder.dmsf_path_str)}/") if revision.dmsf_file.dmsf_folder %><%= h(revision.name) %>
+          </p>
           <p>
             <%= label_tag('', l(:label_mime)) %>
             <%= h(revision.mime_type) %>
           </p>
-          <p>
-            <%= label_tag('', l(:label_size)) %>
-            <%= number_to_human_size(revision.size) %>
-          </p>
+          <% if revision.digest.present? %>
+            <p>
+              <%= label_tag('', 'MD5') %>
+              <%= revision.digest %>
+            </p>
+          <% end %>
+          <%= render 'dmsf/custom_fields', :object => revision %>
         </div>
       </div>
-      <%= render 'dmsf/custom_fields', :object => revision %>
-      <% if revision.comment.present? %>
-        <p>
-          <%= label_tag('', l(:label_comment)) %>
-          <div class="wiki">
-            <%= textilizable(revision.comment) %>
-          </div>
-        </p>
-      <% end %>
       <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">
         <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if User.current.allowed_to?(:file_manipulation, @file.project) %>
       </div>
@@ -208,7 +206,7 @@
     }
   });
 
-  $('.access-table').dataTable({
+  $('.dmsf_list').dataTable({
     'bJQueryUI': true,
     'oLanguage': {
       'sUrl': '/plugin_assets/<%= :redmine_dmsf %>/javascripts/<%= url %>'

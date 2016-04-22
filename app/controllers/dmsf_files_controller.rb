@@ -139,10 +139,16 @@ class DmsfFilesController < ApplicationController
           revision.size = last_revision.size
           revision.disk_filename = last_revision.disk_filename
           revision.mime_type = last_revision.mime_type
+          if last_revision.digest.blank?
+            revision.digest = DmsfFileRevision.create_digest last_revision.disk_file
+          else
+            revision.digest = last_revision.digest
+          end
         else
           revision.size = file_upload.size
           revision.disk_filename = revision.new_storage_filename
           revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
+          revision.digest = DmsfFileRevision.create_digest file_upload.path
         end
 
         # Custom fields

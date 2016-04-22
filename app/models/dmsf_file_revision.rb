@@ -19,6 +19,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+require 'digest/md5'
+
 class DmsfFileRevision < ActiveRecord::Base
   unloadable
   belongs_to :dmsf_file
@@ -159,6 +161,7 @@ class DmsfFileRevision < ActiveRecord::Base
     new_revision.source_revision = self
     new_revision.user = User.current
     new_revision.name = self.name
+    new_revision.digest = self.digest
     new_revision
   end
 
@@ -260,6 +263,25 @@ class DmsfFileRevision < ActiveRecord::Base
     format.sub!('%i', self.dmsf_file.id.to_s)
     format.sub!('%r', self.id.to_s)
     format + ext
+  end
+
+  def self.create_digest(path)
+    begin
+      Digest::MD5.file(path).hexdigest
+    rescue Exception => e
+      Rails.logger.error e.message
+      nil
+    end
+  end
+
+  def create_digest
+    begin
+      self.digest = Digest::MD5.file(self.disk_file).hexdigest
+      true
+    rescue Exception => e
+      Rails.logger.error e.message
+      false
+    end
   end
 
 end
