@@ -40,13 +40,14 @@ class DmsfController < ApplicationController
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
     @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0
     @file_approval_allowed = User.current.allowed_to?(:file_approval, @project)
-    @tree_view = (User.current.pref[:dmsf_tree_view] == '1') && (!%w(atom xml json).include?(params[:format]))
-
+    tag = params[:custom_field_id].present? && params[:custom_value].present?
+    @tree_view = (User.current.pref[:dmsf_tree_view] == '1') && (!%w(atom xml json).include?(params[:format])) && !tag
+    @folder = nil if tag
     if @tree_view
       @locked_for_user = false
     else
       unless @folder
-        if params[:custom_field_id].present? && params[:custom_value].present?
+        if tag
           @subfolders = []
           DmsfFolder.where(:project_id => @project.id).visible.each do |f|
             f.custom_field_values.each do |v|
@@ -120,12 +121,10 @@ class DmsfController < ApplicationController
         end
         @locked_for_user = false
       else
-
         if @folder.deleted?
           render_404
           return
         end
-
         @subfolders = @folder.dmsf_folders.visible
         @files = @folder.dmsf_files.visible
         @dir_links = @folder.folder_links.visible
