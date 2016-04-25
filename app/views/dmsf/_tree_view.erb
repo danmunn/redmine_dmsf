@@ -51,7 +51,12 @@
         <% classes += ' dmsf_child' %>
         <% onclick = '' %>
       <% end %>
-      <% classes += ' dmsf_hidden' if obj.dmsf_folder && obj.dmsf_folder != @folder %>
+      <%if obj.dmsf_folder && obj.dmsf_folder != @folder %>
+        <% classes += ' dmsf_hidden' %>
+      <% else %>
+        <%# Force odd/even backgroung style for visible items %>
+        <% classes += " dmsf_#{cycle('odd', 'even')}" %>
+      <% end %>
       <% parent = obj.dmsf_folder %>
       <% while parent %>
         <% classes += " #{parent.id}" %>

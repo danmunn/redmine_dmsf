@@ -244,3 +244,5 @@ tr.dmsf_tree.idnt-6 td.dmsf_title {padding-left: 4em;}
 tr.dmsf_tree.idnt-7 td.dmsf_title {padding-left: 4.5em;}
 tr.dmsf_tree.idnt-8 td.dmsf_title {padding-left: 5em;}
 tr.dmsf_tree.idnt-9 td.dmsf_title {padding-left: 5.5em;}
+.dmsf_odd {background-color:#f6f7f8;}
+.dmsf_even {background-color: #fff;}
