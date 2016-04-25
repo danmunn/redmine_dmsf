@@ -316,7 +316,7 @@ class DmsfFile < ActiveRecord::Base
 
     results = []
 
-    scope = self.visible.joins(:project, :revisions)
+    scope = self.visible.joins(:project, :dmsf_file_revisions)
     scope = scope.limit(options[:limit]) unless options[:limit].blank?
     scope = scope.where(limit_options) unless limit_options.blank?
     scope = scope.where(project_conditions.join(' AND '))
@@ -330,7 +330,7 @@ class DmsfFile < ActiveRecord::Base
           Setting.plugin_redmine_dmsf['dmsf_index_database'].strip, lang)
         database = Xapian::Database.new(databasepath)
       rescue Exception => e
-        Rails.logger.warn 'REDMAIN_XAPIAN ERROR: Xapian database is not properly set or initiated or is corrupted.'
+        Rails.logger.warn "REDMAIN_XAPIAN ERROR: Xapian database is not properly set, initiated or it's corrupted."
         Rails.logger.warn e.message
       end
 
