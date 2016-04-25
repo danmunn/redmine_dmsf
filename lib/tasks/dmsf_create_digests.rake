@@ -23,7 +23,7 @@ DMSF maintenance task
   * Create missing MD5 digest for all file revisions
 
 Available options:
-  *dry_run - test, no changes to he database
+  *dry_run - test, no changes to the database
 
 Example:
   bundle exec rake redmine:dmsf_create_digests RAILS_ENV="production"
