@@ -24,7 +24,8 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
   unloadable
   belongs_to :dmsf_file_revision
   belongs_to :user
-  delegate :dmsf_file, :to => :revision, :allow_nil => false
+  delegate :dmsf_file, :to => :dmsf_file_revision, :allow_nil => false
+  delegate :project, :to => :dmsf_file, :allow_nil => false
 
   DownloadAction = 0
   EmailAction = 1
