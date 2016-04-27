@@ -24,17 +24,16 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
   unloadable
   belongs_to :dmsf_file_revision
   belongs_to :user
-  delegate :project, :to => :revision, :allow_nil => false
-  delegate :file, :to => :revision, :allow_nil => false
+  delegate :dmsf_file, :to => :revision, :allow_nil => false
 
   DownloadAction = 0
   EmailAction = 1
 
-  acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_downloaded)}: #{o.dmsf_file.dmsf_path_str}"},
-    :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.dmsf_file}},
-    :datetime => Proc.new {|o| o.updated_at },
-    :description => Proc.new {|o| o.dmsf_file_revision.comment },
-    :author => Proc.new {|o| o.user }
+  acts_as_event :title => Proc.new {|ra| "#{l(:label_dmsf_downloaded)}: #{ra.dmsf_file.dmsf_path_str}"},
+    :url => Proc.new {|ra| {:controller => 'dmsf_files', :action => 'show', :id => ra.dmsf_file}},
+    :datetime => Proc.new {|ra| ra.updated_at },
+    :description => Proc.new {|ra| ra.dmsf_file_revision.comment },
+    :author => Proc.new {|ra| ra.user }
 
   acts_as_activity_provider :type => 'dmsf_file_revision_accesses',
     :timestamp => "#{DmsfFileRevisionAccess.table_name}.updated_at",
@@ -46,5 +45,4 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
         "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
         "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id").
       where("#{DmsfFile.table_name}.deleted = ?", DmsfFile::STATUS_ACTIVE)
-
 end
