@@ -32,7 +32,6 @@ require 'redmine_dmsf/patches/project_tabs_extended'
 require 'redmine_dmsf/patches/user_preference_patch'
 
 # Load up classes that make up our WebDAV solution ontop of DAV4Rack
-require 'redmine_dmsf/webdav/no_parse'
 require 'redmine_dmsf/webdav/base_resource'
 require 'redmine_dmsf/webdav/controller'
 require 'redmine_dmsf/webdav/dmsf_resource'

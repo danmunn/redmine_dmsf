@@ -110,8 +110,7 @@ RedmineApp::Application.routes.draw do
   get '/dmsf/folders/:id/copy', :controller => 'dmsf_folders_copy', :action => 'new', :as => 'copy_folder'
 
   #
-  # DAV4Rack implementation of Webdav [note: if changing path you'll need to update lib/redmine_dmsf/webdav/no_parse.rb also]
-  #   /dmsf/webdav
+  # DAV4Rack implementation of Webdav
   mount DAV4Rack::Handler.new(
     :root_uri_path => "#{Redmine::Utils::relative_url_root}/dmsf/webdav",
     :resource_class => RedmineDmsf::Webdav::ResourceProxy,
