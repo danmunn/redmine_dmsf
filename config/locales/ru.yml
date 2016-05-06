@@ -323,6 +323,7 @@ ru:
   error_unlock_parent_locked: Разблокировка не удалась - родительская запись заблокирована
 
   field_dmsf_tree_view: Navigate folders in a tree
+  label_dmsf_version: Версия
 
   my:
     blocks:

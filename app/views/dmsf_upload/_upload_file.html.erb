@@ -46,7 +46,7 @@
   <div class="clear">
     <div class="splitcontentleft">
       <p>
-        <%= label_tag("commited_files[#{i}][version]_minor", l(:label_version)) %>          
+        <%= label_tag("commited_files[#{i}][version]_minor", l(:label_dmsf_version)) %>
         <%= radio_button_tag("commited_files[#{i}][version]", 1, true) %> 
         <%= upload.major_version %>.<%= upload.minor_version + 1 %>
         <%= l(:option_version_minor) %><br/>

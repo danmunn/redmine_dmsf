@@ -323,6 +323,7 @@ cs:
   error_unlock_parent_locked: Nelze odemknout - nadřazený objekt je zamčený
 
   field_dmsf_tree_view: Zobrazit složky jako stromovou strukturu
+  label_dmsf_version: Verze
 
   my:
     blocks:

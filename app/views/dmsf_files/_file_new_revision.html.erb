@@ -48,7 +48,7 @@
         <div class="clear">
           <div class="splitcontentleft">
             <p>
-              <%= label_tag('version_0', l(:label_version)) %>      
+              <%= label_tag('version_0', l(:label_dmsf_version)) %>
               <%= radio_button_tag('version', 0, @revision.version == @file.last_revision.version) %>
               <%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version %>
               <%= l(:option_version_same) %><br/>

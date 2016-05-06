@@ -323,6 +323,7 @@ zh-TW:
   error_unlock_parent_locked: Unlock failed - resource parent is locked
 
   field_dmsf_tree_view: Navigate folders in a tree
+  label_dmsf_version: 版本
 
   my:
     blocks:
