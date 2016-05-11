@@ -325,10 +325,8 @@ ja:
   field_dmsf_tree_view: Navigate folders in a tree
   label_dmsf_version: バージョン
 
-  my:
-    blocks:
-      locked_documents: ロック中
-      open_approvals: 未承認
+  locked_documents: ロック中
+  open_approvals: 未承認
 
   label_maximum_ajax_upload_filesize: アップロードファイルサイズ上限
   note_maximum_ajax_upload_filesize: アップロード可能なファイルサイズの上限。AjaxおよびRedmineの仕様に制限される（2ギガバイト程度までは確認済み）単位はMB。

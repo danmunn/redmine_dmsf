@@ -1,7 +1,9 @@
-<%#
+<%
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,7 +26,7 @@
 <% files = DmsfFile.joins(
   'JOIN dmsf_locks ON dmsf_files.id = dmsf_locks.entity_id').where(
   'dmsf_locks.entity_type' => 0, 'dmsf_locks.user_id' => @user.id).all %>
-<h3><%= l(:label_my_locked_documents)%> (<%= folders.count %>/<%=  files.count %>)</h3>
+<h3><%= l(:locked_documents)%> (<%= folders.count %>/<%=  files.count %>)</h3>
 <% if folders.any? || files.any?%>
   <%= form_tag({}) do %>
     <table class="list">

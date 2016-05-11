@@ -325,10 +325,8 @@ pt-BR:
   field_dmsf_tree_view: Navigate folders in a tree
   label_dmsf_version: Versão
 
-  my:
-    blocks:
-      locked_documents: Documentos bloqueados
-      open_approvals: Aprovações abertas
+  locked_documents: Documentos bloqueados
+  open_approvals: Aprovações abertas
 
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.

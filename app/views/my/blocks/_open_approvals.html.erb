@@ -1,4 +1,4 @@
-<%#
+<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
@@ -32,7 +32,7 @@
     <% assignments << assignment %>
   <% end %>
 <% end %>
-<h3><%= l(:label_my_open_approvals)%> (<%= assignments.count %>)</h3>
+<h3><%= l(:open_approvals)%> (<%= assignments.count %>)</h3>
 <% if assignments.any? %>
   <%= form_tag({}) do %>
     <table class="list">
