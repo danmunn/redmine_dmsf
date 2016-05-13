@@ -27,8 +27,8 @@ class RemoveFolderFromRevision < ActiveRecord::Migration
     add_column :dmsf_file_revisions, :dmsf_folder_id, :integer, :null => true
     
     DmsfFileRevision.find_each do |revision|
-      if revision.file
-        revision.dmsf_folder_id = revision.file.dmsf_folder_id
+      if revision.dmsf_file
+        revision.dmsf_folder_id = revision.dmsf_file.dmsf_folder_id
         revision.save
       end
     end        
