@@ -254,8 +254,8 @@ module RedmineDmsf
             if(parent.projectless_path == '/') #Project root
               folder.dmsf_folder_id = nil
             else
-              return PreconditionFailed unless parent.exist? && parent.dmsf_folder
-                folder.dmsf_folder_id = parent.dmsf_folder.id
+              return PreconditionFailed unless parent.exist? && parent.folder
+                folder.dmsf_folder_id = parent.folder.id
             end
             folder.title = resource.basename
             folder.save ? Created : PreconditionFailed
@@ -273,8 +273,8 @@ module RedmineDmsf
             if(parent.projectless_path == '/') #Project root
               f = nil
             else
-              return PreconditionFailed unless parent.exist? && parent.dmsf_folder
-              f = parent.dmsf_folder
+              return PreconditionFailed unless parent.exist? && parent.folder
+              f = parent.folder
             end
             return PreconditionFailed unless exist? && file
             return InternalServerError unless file.move_to(resource.project, f)
@@ -351,7 +351,7 @@ module RedmineDmsf
               f = nil
             else
               return PreconditionFailed unless parent.exist? && parent.folder
-              f = parent.dmsf_folder
+              f = parent.folder
             end
             return PreconditionFailed unless exist? && file
             return InternalServerError unless file.copy_to(resource.project, f)
