@@ -31,6 +31,7 @@ Available options:
 
 Example:
   rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
+  rake redmine:dmsf_convert_documents project=test dry=true RAILS_ENV="production"
 END_DESC
 
 class DmsfConvertDocuments
@@ -111,7 +112,7 @@ class DmsfConvertDocuments
             begin
               file = DmsfFile.new
               file.project = project
-              file.folder = folder
+              file.dmsf_folder = folder
 
               file.name = attachment.filename
               i = 1
@@ -142,7 +143,7 @@ class DmsfConvertDocuments
               end
 
               revision = DmsfFileRevision.new
-              revision.file = file
+              revision.dmsf_file = file
               revision.name = file.name              
               revision.title = DmsfFileRevision.filename_to_title(attachment.filename)
               revision.description = attachment.description
