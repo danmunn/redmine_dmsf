@@ -27,6 +27,7 @@ class DmsfController < ApplicationController
   before_filter :authorize
   before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
   before_filter :find_parent, :only => [:new, :create]
+  before_filter :tree_view, :only => [:delete, :show]
 
   accept_api_auth :show, :create
 
@@ -41,7 +42,7 @@ class DmsfController < ApplicationController
     @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0
     @file_approval_allowed = User.current.allowed_to?(:file_approval, @project)
     tag = params[:custom_field_id].present? && params[:custom_value].present?
-    @tree_view = (User.current.pref[:dmsf_tree_view] == '1') && (!%w(atom xml json).include?(params[:format])) && !tag
+    #@tree_view = (User.current.pref[:dmsf_tree_view] == '1') && (!%w(atom xml json).include?(params[:format])) && !tag
     @folder = nil if tag
     if @tree_view
       @locked_for_user = false
@@ -334,7 +335,7 @@ class DmsfController < ApplicationController
     else
       flash[:error] = @folder.errors.full_messages.to_sentence
     end
-    if commit
+    if commit || @tree_view
       redirect_to :back
     else
       redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder.dmsf_folder)
@@ -640,18 +641,15 @@ class DmsfController < ApplicationController
     render_404
   end
 
+  def tree_view
+    tag = params[:custom_field_id].present? && params[:custom_value].present?
+    @tree_view = (User.current.pref[:dmsf_tree_view] == '1') && (!%w(atom xml json).include?(params[:format])) && !tag
+  end
+
   def copy_folder(folder)
     copy = folder.clone
     copy.id = folder.id
     copy
-  end
-
-  private
-
-  def e_params
-    params.fetch(:email, {}).permit(
-      :to, :zipped_content, :email,
-      :cc, :subject, :zipped_content => [], :files => [])
   end
 
 end

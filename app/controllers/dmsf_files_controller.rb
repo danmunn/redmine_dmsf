@@ -27,6 +27,7 @@ class DmsfFilesController < ApplicationController
   before_filter :find_file, :except => [:delete_revision]
   before_filter :find_revision, :only => [:delete_revision]
   before_filter :authorize
+  before_filter :tree_view, :only => [:delete]
 
   accept_api_auth :show
 
@@ -230,7 +231,7 @@ class DmsfFilesController < ApplicationController
         flash[:error] = @file.errors.full_messages.join(', ')
       end
     end
-    if commit
+    if commit || @tree_view
       redirect_to :back
     else
       redirect_to dmsf_folder_path(:id => @project, :folder_id => @file.dmsf_folder)
@@ -328,6 +329,11 @@ class DmsfFilesController < ApplicationController
     if entry && entry.project != @project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)
     end
+  end
+
+  def tree_view
+    tag = params[:custom_field_id].present? && params[:custom_value].present?
+    @tree_view = (User.current.pref[:dmsf_tree_view] == '1') && (!%w(atom xml json).include?(params[:format])) && !tag
   end
 
 end
