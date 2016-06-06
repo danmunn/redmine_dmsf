@@ -32,9 +32,9 @@
     <table class="list">
       <thead>
         <tr>
-          <th><%=l(:field_project)%></th>
-          <th><%=l(:label_document)%>/<%=l(:field_folder)%></th>
-          <th><%=l(:field_folder)%></th>
+          <th><%= l(:field_project) %></th>
+          <th><%= l(:label_document) %>/<%= l(:field_folder) %></th>
+          <th><%= l(:field_folder) %></th>
         </tr>
       </thead>
       <tbody>
@@ -71,7 +71,7 @@
              <td class="title">
                <% if file.dmsf_folder %>
                  <%= link_to(h(file.dmsf_folder.title),
-                    {:controller => 'dmsf', :action => 'show', :id => file.project, :folder_id => file.folder}) %>
+                    {:controller => 'dmsf', :action => 'show', :id => file.project, :folder_id => file.dmsf_folder}) %>
                <% else %>
                   <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> file.project }) %>
                <% end %>
