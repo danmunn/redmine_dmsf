@@ -36,22 +36,22 @@ class DmsfWorkflow < ActiveRecord::Base
     if self.project_id
       if self.id
         if (DmsfWorkflow.where(['(project_id IS NULL OR (project_id = ? AND id != ?)) AND name = ?',
-            self.project_id, self.id, self.name]).count > 0)
+            self.project_id, self.id, self.name]).exists?)
           errors.add(:name, l('activerecord.errors.messages.taken'))
         end
       else
         if (DmsfWorkflow.where(['(project_id IS NULL OR project_id = ?) AND name = ?',
-            self.project_id, self.name]).count > 0)
+            self.project_id, self.name]).exists?)
           errors.add(:name, l('activerecord.errors.messages.taken'))
         end
       end
     else
       if self.id
-        if DmsfWorkflow.where(['name = ? AND id != ?', self.name, self.id]).count > 0
+        if DmsfWorkflow.where(['name = ? AND id != ?', self.name, self.id]).exists?
           errors.add(:name, l('activerecord.errors.messages.taken'))
         end
       else
-        if DmsfWorkflow.where(:name => self.name).count > 0
+        if DmsfWorkflow.where(:name => self.name).exists?
           errors.add(:name, l('activerecord.errors.messages.taken'))
         end
       end

@@ -24,7 +24,7 @@ class ApprovalWorkflowStdFields < ActiveRecord::Migration
     add_column :dmsf_workflows, :created_on, :datetime
     add_column :dmsf_workflows, :author_id, :integer
     # Set updated_on
-    DmsfWorkflow.all.each(&:save)
+    DmsfWorkflow.all.each(&:touch)
     # Set created_on and author_id
     DmsfWorkflow.update_all 'created_on = updated_on, author_id = (select id from users where admin = 1 limit 1)'
   end

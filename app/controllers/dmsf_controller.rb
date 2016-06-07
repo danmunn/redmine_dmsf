@@ -39,7 +39,7 @@ class DmsfController < ApplicationController
     @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
     @file_view_allowed = User.current.allowed_to?(:view_dmsf_files, @project)
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
-    @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).count > 0
+    @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).exists?
     @file_approval_allowed = User.current.allowed_to?(:file_approval, @project)
     tag = params[:custom_field_id].present? && params[:custom_value].present?
     @folder = nil if tag
