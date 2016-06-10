@@ -88,8 +88,7 @@ class DmsfMailer < Mailer
       notify_files = files.select { |file| file.notify? }
       return [] if notify_files.empty?
     end
-    notify_members = project.members
-    notify_members = notify_members.select do |notify_member|
+    notify_members = project.members.select do |notify_member|
       notify_user = notify_member.user
       if notify_user == User.current && notify_user.pref.no_self_notified
         false
@@ -100,8 +99,24 @@ class DmsfMailer < Mailer
             true
           when 'selected'
             notify_member.mail_notification?
-          when 'only_my_events', 'only_owner'
-            notify_user.allowed_to?(:file_manipulation, project)
+            when 'only_my_events'
+              author = false
+              files.each do |file|
+                if file.involved?(notify_user)
+                  author = true
+                  break
+                end
+              end
+              author
+          when 'only_owner', 'only_assigned'
+            author = false
+            files.each do |file|
+              if file.owner?(notify_user)
+                author = true
+                break
+              end
+            end
+            author
           else
             false
           end

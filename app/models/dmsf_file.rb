@@ -441,4 +441,15 @@ class DmsfFile < ActiveRecord::Base
     end
   end
 
+  def owner?(user)
+    self.last_revision && (self.last_revision.user == user)
+  end
+
+  def involved?(user)
+    self.dmsf_file_revisions.each do |file_revision|
+      return true if file_revision.user == user
+    end
+    false
+  end
+
 end
