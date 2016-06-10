@@ -254,8 +254,12 @@ class DmsfFilesController < ApplicationController
     if @file.locked?
       flash[:warning] = l(:warning_file_already_locked)
     else
-      @file.lock!
-      flash[:notice] = l(:notice_file_locked)
+      begin
+        @file.lock!
+        flash[:notice] = l(:notice_file_locked)
+      rescue Exception => e
+        flash[:error] = e.message
+      end
     end
     redirect_to :back
   end
@@ -265,8 +269,12 @@ class DmsfFilesController < ApplicationController
       flash[:warning] = l(:warning_file_not_locked)
     else
       if @file.locks[0].user == User.current || User.current.allowed_to?(:force_file_unlock, @file.project)
-        @file.unlock!
-        flash[:notice] = l(:notice_file_unlocked)
+        begin
+          @file.unlock!
+          flash[:notice] = l(:notice_file_unlocked)
+        rescue Exception => e
+          flash[:error] = e.message
+        end
       else
         flash[:error] = l(:error_only_user_that_locked_file_can_unlock_it)
       end

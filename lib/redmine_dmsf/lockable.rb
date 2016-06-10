@@ -45,7 +45,7 @@ module RedmineDmsf
 
     def lock!(scope = :scope_exclusive, type = :type_write, expire = nil)
       # Raise a lock error if entity is locked, but its not at resource level
-      existing = locks(false)
+      existing = lock(false)
       raise DmsfLockError.new(l(:error_resource_or_parent_locked)) if self.locked? && existing.empty?
       unless existing.empty?
         if (existing[0].lock_scope == :scope_shared) && (scope == :scope_shared)

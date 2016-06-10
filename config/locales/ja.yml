@@ -319,7 +319,7 @@ ja:
   error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
   error_parent_locked: Unable to complete lock - resource parent is locked
   error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: unable to lock exclusively an already-locked resource
+  error_lock_exclusively: Unable to lock exclusively an already-locked resource
   error_unlock_parent_locked: Unlock failed - resource parent is locked
 
   field_dmsf_tree_view: Navigate folders in a tree
