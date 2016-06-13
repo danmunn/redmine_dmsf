@@ -452,4 +452,23 @@ class DmsfFile < ActiveRecord::Base
     false
   end
 
+  def tooltip(download_info=true)
+    text = ''
+    if self.last_revision
+      if self.last_revision.description.present?
+        text = self.last_revision.description
+      end
+      if self.last_revision.comment.present?
+        if text.present?
+          text += '&#xA;'
+        end
+        text += self.last_revision.comment
+      end
+    end
+    if text.blank? && download_info
+      text = l(:title_title_version_version_download, :title => self.title, :version => self.version)
+    end
+    text.html_safe
+  end
+
 end
