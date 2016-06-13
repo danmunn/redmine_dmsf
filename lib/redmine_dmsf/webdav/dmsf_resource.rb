@@ -465,7 +465,7 @@ module RedmineDmsf
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
 
         # Ignore Mac OS X resource forks and special Windows files.
-        if basename.match(/^\._/i) || basename.match(/^Thumbs.db$/i)
+        if basename.match(/^\._/i) || basename.match(/^\.DS_Store$/i) || basename.match(/^Thumbs.db$/i)
           Rails.logger.info "#{basename} ignored"
           return NoContent
         end
@@ -511,13 +511,7 @@ module RedmineDmsf
         else
           new_revision.size = request.content_length # Bad Guess
         end
-
-        # Ignore Mac OS X resource forks and special Windows files.
-        unless new_revision.size > 0
-          Rails.logger.info "#{basename} #{new_revision.size}b ignored"
-          return Created
-        end
-
+        
         raise InternalServerError unless new_revision.valid? && f.save
 
         new_revision.disk_filename = new_revision.new_storage_filename
