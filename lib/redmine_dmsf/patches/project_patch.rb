@@ -31,7 +31,7 @@ module RedmineDmsf
         base.class_eval do
           unloadable
           alias_method_chain :copy, :dmsf
-          
+
           has_many :dmsf_files, -> { where dmsf_folder_id: nil},
             :class_name => 'DmsfFile', :foreign_key => 'project_id', :dependent => :destroy
           has_many :dmsf_folders, -> {where dmsf_folder_id: nil},
@@ -43,7 +43,7 @@ module RedmineDmsf
           has_many :file_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFile' },
             :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
           has_many :url_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfUrl' },
-            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy          
+            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
         end
       end
 
@@ -65,7 +65,7 @@ module RedmineDmsf
           project = project.is_a?(Project) ? project : Project.find(project)
 
           to_be_copied = %w(dmsf approval_workflows)
-          to_be_copied = to_be_copied & options[:only].to_a if options[:only].present?
+          to_be_copied = to_be_copied & Array.wrap(options[:only]) unless options[:only].nil?
 
           if save
             to_be_copied.each do |name|
