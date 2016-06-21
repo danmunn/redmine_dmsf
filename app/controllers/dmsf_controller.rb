@@ -38,6 +38,7 @@ class DmsfController < ApplicationController
 
   def show        
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
+    @view_folder_allowed = User.current.allowed_to?(:view_folder, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
     @file_view_allowed = User.current.allowed_to?(:view_dmsf_files, @project)
@@ -113,6 +114,11 @@ class DmsfController < ApplicationController
         end
       else
         @subfolders = @project.dmsf_folders.visible
+        @subfolders = if User.current.allowed_to?(:revision_folder, @project)
+                        @project.dmsf_folders.editable
+                      else
+                        @project.dmsf_folders.visible
+                      end
         @files = @project.dmsf_files.visible
         @dir_links = @project.folder_links.visible
         @file_links = @project.file_links.visible
