@@ -49,11 +49,14 @@ class DmsfFolder < ActiveRecord::Base
   accepts_nested_attributes_for :user, :project, :folder, :subfolders, :files, :folder_links, :file_links, :url_links, :referenced_links, :locks  
   
   scope :visible, lambda { |*args|
-    where(deleted: false) 
+    where(deleted: false).where(editable: false)
   }
   scope :deleted, lambda { |*args|
     where(deleted: true)
-  }  
+  }
+  scope :editable, lambda { |*args|
+    where(deleted: false)
+  }
 
   acts_as_customizable
     

@@ -57,6 +57,7 @@ Redmine::Plugin.register :redmine_dmsf do
   # Redmine::Search.available_search_types.delete('documents')
   
   project_module :dmsf do
+    permission :revision_folder, dmsf: :index
     permission :view_dmsf_file_revision_accesses, 
       :read => true
     permission :view_dmsf_file_revisions, 

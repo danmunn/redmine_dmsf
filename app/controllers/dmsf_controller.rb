@@ -269,6 +269,7 @@ class DmsfController < ApplicationController
     @folder.title = params[:dmsf_folder][:title].strip
     @folder.description = params[:dmsf_folder][:description].strip
     @folder.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
+    @folder.editable = params[:dmsf_folder][:editable]
     @folder.project = @project
     @folder.user = User.current
     
