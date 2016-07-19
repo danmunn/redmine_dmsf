@@ -338,12 +338,15 @@ class DmsfWorkflowsController < ApplicationController
 
   def reorder_steps
     if request.put?
-      unless @dmsf_workflow.reorder_steps(params[:step].to_i, params[:workflow_step][:move_to])
+      unless @dmsf_workflow.reorder_steps(params[:step].to_i, params[:dmsf_workflow][:position].to_i)
         flash[:error] = l(:notice_cannot_renumber_steps)
       end
     end
     respond_to do |format|
       format.html
+      format.js {
+        render inline: "location.replace('#{dmsf_workflow_path(@dmsf_workflow)}');"
+      }
     end
   end
 

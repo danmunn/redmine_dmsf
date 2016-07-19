@@ -19,7 +19,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfWorkflow < ActiveRecord::Base
-
   has_many :dmsf_workflow_steps, -> { order 'step ASC, operator DESC' }, :dependent => :destroy
   belongs_to :author, :class_name => 'User'
 
@@ -89,51 +88,19 @@ class DmsfWorkflow < ActiveRecord::Base
 
   def reorder_steps(step, move_to)
     DmsfWorkflow.transaction do
-      case move_to
-        when 'highest'
-          unless step == 1
-            dmsf_workflow_steps.each do |ws|
-              if ws.step < step
-               return false unless ws.update_attribute('step', ws.step + 1)
-              elsif ws.step == step
-                return false unless ws.update_attribute('step', 1)
-              end
-            end
+        dmsf_workflow_steps.each do |ws|
+          if ws.step == step
+            return false unless ws.update_attribute('step', move_to)
+          elsif ws.step >= move_to && ws.step < step
+            # Move up
+            return false unless ws.update_attribute('step', ws.step + 1)
+          elsif ws.step <= move_to && ws.step > step
+            # Move down
+            return false unless ws.update_attribute('step', ws.step - 1)
           end
-        when 'higher'
-          unless step == 1
-            dmsf_workflow_steps.each do |ws|
-              if ws.step == step - 1
-                return false unless ws.update_attribute('step', step)
-              elsif ws.step == step
-                return false unless ws.update_attribute('step', step - 1)
-              end
-            end
-          end
-        when 'lower'
-          unless step == dmsf_workflow_steps.collect{|s| s.step}.uniq.count
-            dmsf_workflow_steps.each do |ws|
-              if ws.step == step + 1
-                return false unless ws.update_attribute('step', step)
-              elsif ws.step == step
-                return false unless ws.update_attribute('step', step + 1)
-              end
-            end
-          end
-        when 'lowest'
-          size = dmsf_workflow_steps.collect{|s| s.step}.uniq.count
-          unless step == size
-            dmsf_workflow_steps.each do |ws|
-              if ws.step > step
-                return false unless ws.update_attribute('step', ws.step - 1)
-              elsif ws.step == step
-                return false unless ws.update_attribute('step', size)
-              end
-            end
-          end
+        end
       end
-    end
-    return reload
+    return true
   end
 
   def delegates(q, dmsf_workflow_step_assignment_id, dmsf_file_revision_id)

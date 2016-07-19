@@ -42,11 +42,11 @@
   </p>
   <% steps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq %>
   <% if steps.any? %>
-    <table class="list">
+    <table class="list steps">
       <thead><tr>
         <th><%= l(:label_dmsf_workflow_step) %></th>
         <th><%= l(:label_dmsf_workflow_approval_plural) %></th>
-        <th><%= l(:button_sort) %></th>
+        <th></th>
         <th></th>
       </tr></thead>
       <tbody>
@@ -62,10 +62,8 @@
               <%= link_to_user step.user %>
             <% end %>
           </td>
-          <td class="reorder">
-            <%= reorder_links('workflow_step', {:action => 'edit', :id => @dmsf_workflow, :step => i}, :put) %>
-          </td>
           <td class="buttons">
+            <%= reorder_handle(@dmsf_workflow, :url => url_for(:action => 'edit', :id => @dmsf_workflow, :step => i) ) %>
             <%= delete_link edit_dmsf_workflow_path(@dmsf_workflow, :step => i) %>
           </td>
         </tr>
@@ -76,3 +74,7 @@
     <p class="nodata"><%= l(:label_no_data) %></p>
   <% end %>
 </div>
+
+<%= javascript_tag do %>
+    $(function() { $("table.steps tbody").positionedItems(); });
+<% end %>
