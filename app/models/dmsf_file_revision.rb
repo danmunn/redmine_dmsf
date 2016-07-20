@@ -284,4 +284,14 @@ class DmsfFileRevision < ActiveRecord::Base
     end
   end
 
+  def tooltip
+    text = ''
+    text = self.description if self.description.present?
+    if self.comment.present?
+      text += '&#xA;' if text.present?
+      text += self.comment
+    end
+    text.html_safe
+  end
+
 end

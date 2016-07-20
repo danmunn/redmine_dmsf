@@ -24,7 +24,7 @@
   :title => l(:title_check_for_restore_or_delete), :id => "file_#{id}") %></td>
 <td class="dmsf_title">  
   <%= content_tag(:span, h(title), 
-    :title => h(file.tooltip),
+    :title => h(file.last_revision.try(:tooltip)),
     :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}") %>
   <div class="dmsf_filename" title="<%= l(:title_filename_for_download)%>"><%= h(link ? link.path : file.display_name) %></div>
 </td>

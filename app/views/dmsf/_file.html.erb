@@ -33,7 +33,7 @@
     file_view_url,
     :target => '_blank',
     :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}",
-    :title => file.tooltip,
+    :title => file.last_revision.try(:tooltip),
     'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}") %>
   <div class="dmsf_filename" title="<%= l(:title_filename_for_download)%>"><%= h(link ? link.path : file.display_name) %></div>
   <%= '</span>'.html_safe if @tree_view %>

@@ -40,7 +40,7 @@ Redmine::WikiFormatting::Macros.register do
       return link_to(h(args[1] ? args[1] : file.title),
         file_view_url,
         :target => '_blank',
-        :title => h(file.tooltip),
+        :title => h(revision.tooltip),
         'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}")
     else
       raise l(:notice_not_authorized)
@@ -161,7 +161,7 @@ Redmine::WikiFormatting::Macros.register do
       end
       link_to(img,
         file_view_url, :target => '_blank',
-        :title => h(file.tooltip),
+        :title => h(file.last_revision.try(:tooltip)),
         'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}")
     else
       raise "Document ID #{file_id} not found"
