@@ -32,9 +32,9 @@ class DmsfFolder < ActiveRecord::Base
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   belongs_to :user
 
-  has_many :dmsf_folders, :dependent => :destroy
+  has_many :dmsf_folders, -> { order(:title) }, :dependent => :destroy
   has_many :dmsf_files, :dependent => :destroy
-  has_many :folder_links, -> { where :target_type => 'DmsfFolder' },
+  has_many :folder_links, -> { where(:target_type => 'DmsfFolder').order(:name) },
     :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
   has_many :file_links, -> { where :target_type => 'DmsfFile' },
     :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
