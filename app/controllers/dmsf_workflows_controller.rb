@@ -56,7 +56,7 @@ class DmsfWorkflowsController < ApplicationController
               end
               if revision.workflow == DmsfWorkflow::STATE_APPROVED
                 # Just approved
-                recipients = DmsfMailer.get_notify_users(@project)
+                recipients = DmsfMailer.get_notify_users(@project, [revision.dmsf_file])
                 recipients.each do |user|
                   DmsfMailer.workflow_notification(
                     user,
@@ -78,7 +78,7 @@ class DmsfWorkflowsController < ApplicationController
                 recipients = @dmsf_workflow.participiants
                 recipients.push User.find_by_id revision.dmsf_workflow_assigned_by
                 recipients.uniq!
-                recipients = recipients & DmsfMailer.get_notify_users(@project)
+                recipients = recipients & DmsfMailer.get_notify_users(@project, [revision.dmsf_file])
                 recipients.each do |user|
                   DmsfMailer.workflow_notification(
                     user,

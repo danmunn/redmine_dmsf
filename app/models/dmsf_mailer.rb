@@ -83,8 +83,8 @@ class DmsfMailer < Mailer
     end
   end
 
-  def self.get_notify_users(project, files = nil)
-    if files
+  def self.get_notify_users(project, files = [])
+    if files.present?
       notify_files = files.select { |file| file.notify? }
       return [] if notify_files.empty?
     end
