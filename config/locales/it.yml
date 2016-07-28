@@ -1,0 +1,334 @@
+# encoding: utf-8
+# 
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+it: # Italian strings thx 2 Matteo Arceci!
+  dmsf: DMSF
+  label_dmsf_file_plural: Documenti
+  label_dmsf_file_revision_plural: Revisioni al documento
+  label_dmsf_file_revision_access_plural: Accessi al documento
+  warning_no_entries_selected: Nessun documento selezionato
+  error_email_to_must_be_entered: Deve essere inserito l'indirizzo email
+  warning_file_already_locked: Documento già bloccato
+  notice_file_locked: Documento bloccato
+  warning_file_not_locked: Documento non bloccato
+  notice_file_unlocked: Documento sbloccato
+  error_only_user_that_locked_file_can_unlock_it: Solo chi ha bloccato il documento può sbloccarlo
+  error_max_files_exceeded: "Superato il limite di %{number} documenti per il download simultaneo"  
+  error_entry_project_does_not_match_current_project: "Il progetto non corrisponde al progetto corrente"
+  notice_folder_created: Cartella creata
+  error_folder_creation_failed: Creazione cartella fallita
+  error_folder_title_must_be_entered: Deve essere inserito il titolo
+  notice_folder_deleted: Cartella cancellata
+  error_folder_is_not_empty: La cartella non è vuota
+  error_folder_title_is_already_used: Il titolo è già in uso
+  notice_folder_details_were_saved: I dettagli della cartella sono stati salvati  
+  error_folder_is_locked: La cartella è bloccata
+  error_file_is_locked: Il documento è bloccato
+  notice_file_deleted: Il documento è stato cancellato
+  error_at_least_one_revision_must_be_present: Deve essere presente almeno una revisione
+  notice_revision_deleted: Revisione cancellata
+  warning_one_of_files_locked: Uno dei documenti è bloccato
+  notice_file_unlocked: Documento sbloccato
+  notice_file_revision_created: Revisione del documento creata
+  notice_your_preferences_were_saved: Le tue preferenze sono state salvate
+  notice_your_preferences_were_not_saved: Le tue preferenze non sono state salvate
+  warning_folder_notifications_already_activated: La notifica su cartella è già attiva
+  notice_folder_notifications_activated: La notifica su cartella è stata attivata
+  warning_folder_notifications_already_deactivated: La notifica su cartella è già disattiva
+  notice_folder_notifications_deactivated: La notifica su cartella è stat disattivata
+  warning_file_notifications_already_activated: La notifica su documento è già attiva
+  notice_file_notifications_activated: La notifica su documento è stata attivata
+  warning_file_notifications_already_deactivated: La notifica su documento è già disattiva
+  notice_file_notifications_deactivated: La notifica su documento è disattiva
+  link_details: "%{title} dettagli"
+  link_edit: "Modifica %{title}"
+  submit_create: Creato
+  link_create_folder: Creata cartella
+  title_check_uncheck_all_for_zip_download_or_email: Seleziona/Deseleziona tutto per lo zip, download o email
+  title_check_uncheck_all_for_restore_or_delete: Seleziona/Deseleziona tutto per ripristinare o cancellare
+  link_title: Nome documento
+  link_size: Dimensioni
+  link_modified: Modificato
+  link_ver: Ver.
+  link_author: Autore
+  title_check_for_zip_download_or_email: Seleziona per zip, download o email
+  title_check_for_restore_or_delete: Seleziona per ripristinare o cancellare
+  title_delete: Cancella
+  title_notifications_active_deactivate: "Notifiche attive: Disattiva"
+  title_notifications_not_active_activate: "Notifiche disattivate: Attiva"
+  title_title_version_version_download: "%{title} versione %{version} download"
+  title_locked_by_user: "Bloccato da %{user}"
+  title_locked_by_you: Bloccato da te
+  title_waiting_for_approval: In attesa di Approvazione
+  title_approved: Approvato
+  title_unlock_file: Sblocca per consentire modifiche degli altri membri
+  title_lock_file: Blocca per evitare modifiche degli altri membri
+  title_download_checked: Download selezionati in archivio Zip
+  title_send_checked_by_email: Selezionati spediti per email
+  link_user_preferences: Le tue preferenze DMSF di progetto
+  heading_send_documents_by_email: Documenti spediti per email
+  label_email_from: Da
+  label_email_to: A
+  label_email_cc: CC
+  label_email_subject: Oggetto
+  label_email_documents: Documenti
+  label_email_body: Corpo
+  label_email_send: Spedisci
+  title_notifications_active: Notifiche attive
+  label_upload: Carica
+  heading_new_folder: Nuova cartella
+  label_title: Titolo
+  label_description: Descrizione
+  submit_save: Salva
+  info_file_locked: Documento bloccato!
+  label_notifications: Notifiche
+  select_option_default: Default
+  select_option_deactivated: Disattivato
+  select_option_activated: Attivato
+  label_title_format: Titolo formattato
+  text_title_format: "Titolo del documento formattato per il download (%t - titolo, %d - data, %v - versione, %i - ID, %r - revisione). Esempio: %t_%v"
+  title_save_preferences: Salva preferenze
+  heading_revisions: Revisioni
+  title_download: Download
+  title_delete_revision: Cancella revisione
+  label_created: Creato
+  label_changed: Modificato
+  info_changed_by_user: "%{changed} da"
+  label_filename: Nome file
+  label_mime: Mime
+  label_size: Dimensioni
+  heading_new_revision: Nuova revisione
+  option_version_same: Stessa
+  option_version_minor: Miniore
+  option_version_major: Maggiore
+  option_version_custom: Personalizzata
+  label_new_content: Nuovo contenuto
+  label_maximum_files_upload: Limite di caricamento
+  note_maximum_number_of_files_uploaded: Limita il numero massimo di documenti caricati alla volta. 0 significa senza limiti.
+  label_maximum_files_download: Numero massimo di documenti scaricabili
+  note_maximum_number_of_files_downloaded: Limita il numero massimo di documenti scaricabili in archivio zip o spediti via email. 0 significa senza limiti.
+  label_file_storage_directory: Cartella dei documenti
+  label_index_database: Indice database
+  label_stemming_language: Linguaggio di Stemming
+  note_possible_values: Valori possibili
+  note_pass_none_to_disable_stemming: "passa 'nulla' per disabilitare lo stemming"
+  label_stem_strategy: Strategia dello Stem
+  option_stem_none: Stem nulla (default)
+  option_stem_some: Stem qualcosa
+  option_stem_all: Stem tutto
+  label_stemming_description: Questo controlla come il parser delle query applica l'algoritmo di Stemming. Il valore di default è STEM_NONE. I valori possibili sono
+  note_do_not_stem: "Non fare alcun stemming."
+  note_stem_some: Cerca per termini 'Stemmed' ad eccezione di quelli che iniziano con la lettera maiuscola, o sono seguiti da alcuni caratteri, o vengono utilizzati con gli operatori che hanno bisogno di informazioni di posizione. I termini 'Stemmed' hanno il prefisso 'Z'.
+  note_stem_all: "Cerca per termini 'Stemmed' di tutte le parole (nota: non viene aggiunto alcun prefisso 'Z')."
+  note_stemming_applied: Si noti che l'algoritmo di 'Stemming' viene applicato solo alle parole nei campi probabilistici - termini con filtro booleano non sono compresi.
+  label_default_notifications: Notifica di default dei documenti
+  heading_uploaded_files: Documenti caricati
+  submit_commit: Invia/Salva
+  link_documents: Documenti
+  permission_view_dmsf_file_revision_accesses: Visualizza i download nel flusso di attività
+  permission_view_dmsf_file_revisions: Visualizza le revisioni nel flusso di attività
+  permission_view_dmsf_folders: Sfoglia i documenti
+  permission_user_preferences: Preferenze
+  permission_view_dmsf_files: Visualizza i documenti
+  permission_folder_manipulation: Modifica la cartella
+  permission_file_manipulation: Modifica il documento
+  permission_force_file_unlock: Forza lo sblocco del documento
+  permission_manage_workflows: Gestisci i flussi di lavoro
+  permission_file_delete: Elimina i documenti
+  label_file: Documento
+  field_folder: Cartella
+  error_create_cycle_in_folder_dependency: crea un ciclo nella dipendenza della cartella
+  error_contains_invalid_character: contiene carattere(i) non validi
+  error_file_commit_require_uploaded_file: L'aggiornamento del documento richiede un documento già caricato in precedenza
+  warning_some_files_were_not_commited: "Alcuni documenti non sono stati aggiornati a causa di errori di validazione: %{files}"
+  error_user_has_not_right_delete_folder: "L'utente non ha i diritti per eliminare le cartelle"
+  error_user_has_not_right_delete_file: "L'utente non ha i diritti per eliminare il documento"
+  notice_entries_deleted: Voci eliminate
+  warning_some_entries_were_not_deleted: "Alcune voci non sono state eliminate: %{entries}"  
+  title_delete_checked: Elimina i selezionati
+  title_items: elementi
+  title_filename_for_download: Nome file utilizzato per il download o nell'archivio Zip
+  label_number_of_folders: Cartelle
+  label_number_of_documents: Documenti
+  error_file_storage_directory_does_not_exist: "La cartella di archiviazione non esiste e non può essere creata"
+  error_file_can_not_be_created: "Il documento non può essere creato nella cartella di archiviazione"
+  error_wrong_zip_encoding: Errato encoding dello Zip
+  warning_xapian_not_available: Xapian non disponibile
+  menu_dmsf: Documenti
+  label_physical_file_delete: File fisico eliminato
+  user_is_not_project_member: Non sei un membro del progetto
+  heading_access_downloads_emails: Downloads/Emails
+  heading_access_first: Primo
+  heading_access_last: Ultimo
+  label_dmsf_updated: Aggiornato
+  label_dmsf_downloaded: Scaricato
+  title_total_size_of_all_files: Dimensione totale di tutti i files in questa cartella
+  project_module_dmsf: DMSF
+  warning_no_project_to_copy_file_to: Nessun progetto nel quale copiare il documento
+  comment_copied_from: "Copiato da %{source}"
+  notice_file_copied: Documento copiato
+  notice_file_moved: Documento spostato
+  field_target_project: Progetto di destinazione
+  field_target_folder: Cartella di destinazione
+  title_copy_or_move: Copia/Sposta
+  label_dmsf_folder_plural: Cartelle
+  comment_moved_from: "Spostato da %{source}"
+  error_target_folder_same: La cartella di destinazione ed il progetto sono gli stessi di adesso
+  error_file_cannot_be_moved: "Il documento non può essere spostato"
+  error_file_cannot_be_copied: "Il documento non può essere copiato"
+  warning_no_project_to_copy_folder_to: Nessun progetto dove copiare la cartella
+  title_copy: Copia
+  error_folder_cannot_be_copied: "La cartella non può essere copiata"
+  notice_folder_copied: Cartella copiata
+  
+  error_max_email_filesize_exceeded: "Hai superato la dimensione massima del file per l'invio tramite e-mail. (%{number} MB)"
+  note_maximum_email_filesize: Limiti di dimensione massima dei file che possono essere inviati via e-mail. 0 significa illimitato. Il numero è in MB.
+  label_maximum_email_filesize: Dimensione massima degli allegati delle e-mail
+  header_minimum_filesize: Errore file.
+  error_minimum_filesize: "Il file %{file} è 0 bytes e non sarà allegato."
+  parent_directory: Cartella superiore
+  note_webdav: "Una volta abilitato il Webdav può essere contattato sul percorso %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
+  label_webdav: Funzionalità Webdav
+  label_dmsf_plural: "Copia documenti e cartelle (%{files} documenti in %{folders} cartelle)"
+
+  warning_folder_already_locked: Questa cartella è già bloccata
+  notice_folder_locked: La cartella è stata bloccata
+  warning_folder_not_locked: Purtroppo la cartella non può essere bloccata
+  notice_folder_unlocked: La cartella è stata sbloccata
+  error_only_user_that_locked_folder_can_unlock_it: Non sei autorizzato a sbloccare questa cartella
+  title_unlock_folder: Sblocca per consentire modifiche agli altri membri
+  title_lock_folder: Blocca per evitare modifiche da parte di altri membri
+
+  select_option_webdav_readonly: Sola lettura
+  select_option_webdav_readwrite: Lettura/Scrittura
+  label_webdav_strategy: Strategia Webdav
+  note_webdav_strategy: Abilita l'amministratore a decidere se Webdav è di sola lettura oppure lettura-scrittura per gli utenti finali.
+  
+  error_unable_delete_dmsf_workflow: Impossibile eliminare il flusso di lavoro
+  error_empty_note: "La nota non può essere vuota"
+  error_workflow_assign: C'è stato un errore durante l'assegnazione
+  error_cannot_start_workflow: "Il flusso di lavoro non può partire"
+  error_cannot_renumber_steps: "I passi non possono essere numerati"
+  label_dmsf_workflow_new: Nuova 'approvazione di flusso di lavoro'
+  field_label_dmsf_workflow: Approvazione di flusso di lavoro
+  field_label_dmsf_workflow_name: Nome per l'approvazione di flusso di lavoro
+  label_dmsf_workflow_plural: Approvazioni flusso di lavoro
+  label_dmsf_workflow_plural_num: Approvazioni flusso di lavoro (%{count})
+  label_dmsf_workflow_step: Passo
+  label_dmsf_workflow_step_plural: Passi
+  label_dmsf_workflow_approval: Approvazione
+  label_dmsf_workflow_approval_plural: Approvazioni
+  label_dmsf: DMSF
+  label_dmsf_wokflow_action_approve: Approva
+  label_dmsf_wokflow_action_reject: Rifiuta
+  label_dmsf_wokflow_action_delegate: Delega a 
+  label_dmsf_wokflow_action_assign: Assegna un 'approvazione di flusso di lavoro'
+  label_dmsf_wokflow_action_start: Inizia un flusso di lavoro
+  label_dmsf_workflow_add_approver: "Aggiungi un nuovo approvatore con funzioni logiche:"
+  label_or: oppure
+  label_action: Azione
+  label_note: Note
+  title_none: Nessuno
+  title_rejection: Rifiuto
+  title_delegation: Delega
+  title_assignment: Assegnazione
+  title_start: Inizio
+  title_dmsf_workflow_log: Log di approvazione di flusso di lavoro
+  title_assigned: Assegnato
+  title_approval: Approvazione
+  title_rejected: Rifiutato
+  dmsf_and: AND
+  dmsf_or: OR
+  dmsf_new_step: Nuovo passo
+  message_dmsf_wokflow_note: La tua nota...
+  info_revision: "r%{rev}"
+  link_workflow: Flusso di lavoro
+  notice_workflow_started: Approvazione di flusso di lavoro inizializzato
+  text_email_subject_approved: "Approvazione di flusso di lavoro %{name} approvato"
+  text_email_subject_rejected: "Approvazione di flusso di lavoro %{name} rifiutato"
+  text_email_subject_delegated: "Approvazione di flusso di lavoro %{name} delegato"
+  text_email_subject_requires_approval: "Approvazione di flusso di lavoro %{name} richiede la tua approvazione"
+  text_email_subject_updated: "Approvazione di flusso di lavoro %{name} aggiornato"
+  text_email_subject_started: "Approvazione di flusso di lavoro %{name} inizializzato" 
+  text_email_finished_approved: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata completata ed il documento è stato approvato."
+  text_email_finished_rejected: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata completata ma il documento è stato rifiutato a causa di '%{notice}'."
+  text_email_finished_delegated: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata delegata a causa di '%{notice}' e sei tenuto ad approvare nel passo corrente."
+  text_email_finished_step: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' ha completato uno dei passi di approvazione e sei tenuto ad approvare il prossimo passo."
+  text_email_finished_step_short: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' ha completato uno dei passi di approvazione."
+  text_email_started: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stato inizializzato e sei tenuto ad approvare il passo corrente."
+  text_email_to_proceed: Per proseguire clicca sull'icona checkbox a fianco del documento
+  text_email_to_see_history: Per vedere la storia di approvazione clicca sullo stato del flusso di lavoro del documento
+  text_email_to_see_status: Per vedere lo stato attuale del flusso di lavoro di approvazione clicca sullo stato del flusso di lavoro del documento
+  label_my_open_approvals: Le mie approvazioni aperte
+  label_my_locked_documents: I miei documenti bloccati
+  
+  title_create_link: Crea un collegamento
+  label_link_from: Collegamento da
+  label_link_to: Collegamento a
+  label_notifications_on: Attiva notifiche
+  label_notifications_off: Disattiva notifiche
+  field_target_file: Scarica sorgente
+  title_download_entries: Scarica documenti
+  label_external: Esterno
+
+  label_link_name: Nome del collegamento
+  label_link_external_url: URL
+  label_target_folder: Cartella di destinazione
+  label_source_folder: Cartella sorgente
+  label_target_project: Progetto di destinazione
+  label_source_project: Progetto sorgente
+  
+  text_email_doc_updated_subject: "Documenti del progetto %{project} caricati"
+  text_email_doc_updated: ha documenti appena attualizzati
+  text_email_doc_follows: come segue
+  text_email_doc_deleted_subject: "Documenti del progetto %{project} cancellati"
+  text_email_doc_deleted: ha documenti appena eliminati
+  label_links_only: solo colegamenti
+  
+  label_display_notified_recipients: Visualizza i destinatari notificati
+  note_display_notified_recipients: L'utente sarà informato di tutti i destinatari appena inviato la notifica e-mail.
+  warning_email_notifications: "Notifica email inviata a %{to}"
+  
+  link_trash_bin: Cestino
+  title_restore: Ripristina
+  notice_dmsf_file_restored: Il documento è stato ripristinato correttamente
+  notice_dmsf_folder_restored: La cartella è stata ripristinata correttamente
+  notice_dmsf_link_restored: Il collegamento è stato ripristinato correttamente
+  title_restore_checked: Ripristina selezionati
+  error_parent_folder: "La cartella padre non esiste"
+  
+  error_resource_or_parent_locked: Impossibile completare il blocco - la risorsa (o superiore) è bloccata
+  error_parent_locked: Impossibile completare il blocco - la risorsa superiore è bloccata
+  error_resource_locked: Impossibile completare il blocco - la risorsa è bloccata
+  error_lock_exclusively: impossibile bloccare in modo esclusivo una risorsa già bloccata
+  error_unlock_parent_locked: Sblocco fallito - la risorsa superiore è bloccata
+
+  field_dmsf_tree_view: Navigate folders in a tree
+  label_dmsf_version: Version
+
+  locked_documents: Documenti bloccati
+  open_approvals: Approvazioni aperte
+
+  label_maximum_ajax_upload_filesize: Dimensione massima dei documenti caricabili tramite AJAX
+  note_maximum_ajax_upload_filesize: Limita la dimensione massima dei documenti che possono essere caricati tramite interfaccia standard AJAX altrimenti sarà necessario utilizzare il modulo standard di Redmine. Il numero è espresso in MB.
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"
