@@ -61,14 +61,16 @@ class DmsfUploadController < ApplicationController
       return
     end
     @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
+    target = "#{DmsfHelper.temp_dir}/#{@disk_filename}"
     begin
-      FileUtils.cp @tempfile.path, "#{DmsfHelper.temp_dir}/#{@disk_filename}"
+      FileUtils.cp @tempfile.path, target
+      FileUtils.chmod 'u=wr,g=r', target
     rescue Exception => e
       Rails.logger.error e.message
     end
-    if File.size("#{DmsfHelper.temp_dir}/#{@disk_filename}") <= 0
+    if File.size(target) <= 0
       begin
-        File.delete "#{DmsfHelper.temp_dir}/#{@disk_filename}"
+        File.delete target
       rescue Exception => e
         Rails.logger.error e.message
       end
