@@ -28,7 +28,7 @@
     <div class="splitcontentleft">
       <p>
         <%= label_tag("commited_files[#{i}][title]", l(:label_title)) %>
-        <%= text_field_tag("commited_files[#{i}][title]", upload.title, :size => 32) %>
+        <%= text_field_tag("commited_files[#{i}][title]", upload.title, :size => 32, :required => true) %>
       </p>
     </div>
     <div class="splitcontentright">
