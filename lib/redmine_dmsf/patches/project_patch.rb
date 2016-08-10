@@ -46,10 +46,18 @@ module RedmineDmsf
             :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
           has_many :dmsf_links, -> { where dmsf_folder_id: nil },
             :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+
+          before_save :set_default_dmsf_notification
         end
       end
 
       module InstanceMethods
+
+        def set_default_dmsf_notification
+          if self.new_record?
+            self.dmsf_notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'] == '1'
+          end
+        end
 
         def dmsf_count
           file_count = self.dmsf_files.visible.count + self.file_links.visible.count
