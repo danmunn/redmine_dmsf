@@ -119,7 +119,7 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
   end    
   
   def test_reorder_steps_highest    
-    @wf1.reorder_steps(3, 'highest')
+    @wf1.reorder_steps(3, 1)
     @wfs1.reload
     @wfs2.reload
     @wfs3.reload
@@ -133,7 +133,7 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_reorder_steps_higher    
-    @wf1.reorder_steps(3, 'higher')
+    @wf1.reorder_steps(3, 2)
     @wfs1.reload
     @wfs2.reload
     @wfs3.reload
@@ -147,7 +147,7 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_reorder_steps_lower   
-    @wf1.reorder_steps(1, 'lower')
+    @wf1.reorder_steps(1, 2)
     @wfs1.reload
     @wfs2.reload
     @wfs3.reload
@@ -161,7 +161,7 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_reorder_steps_lowest    
-    @wf1.reorder_steps(1, 'lowest')
+    @wf1.reorder_steps(1, 3)
     @wfs1.reload
     @wfs2.reload
     @wfs3.reload
