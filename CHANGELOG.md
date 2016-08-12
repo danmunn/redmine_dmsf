@@ -1,8 +1,40 @@
 Changelog for Redmine DMSF
 ==========================
 
-1.5.7 *2015-??-??*
+1.5.7 *2015-08-12*
 ------------------
+    
+    SQLite compatibility
+    Lock/Unlock feature for global approval workflows
+    Document ID in the document's details
+    New wiki macros (thumbnail, approval workflow)
+    Searchable pick lists
+    Tree view as an user's option
+    Italian localisation
+
+* Bug: #556 - Plugin settings "File default notifications" does not apply!
+* Bug: #554 - JQeury datatable not load correct language file
+* Bug: #545 - Wrong tool-tip for dmsf macro
+* Bug: #544 - Approval workflow email notifications
+* Bug: #542 - Link from commbo box sorting
+* Bug: #538 - Migration error with Redmine 3.3
+* New: #532 - Modified timestamps lost after migration
+* Bug: #531 - webdav: Error -36 on OSX
+* Bug: #530 - Cannot download folders with sub folders
+* New: #529 - Show document description in mouseover or column
+* New: #527 - Add MD5 of each revision in the detail view of documents
+* Bug: #526 - The same version feature doen't work as expected
+* Bug: #523 - Bug with "delegate approval step"
+* Bug: #522 - File Storage Directory does not change
+* New: #520 - Document link after a search ...
+* New: #518 - Debian installation issues
+* Bug: #506 - Document title format %t doesn't reffer to the title
+* Bug: #504 - Non-fatal MySQL error when migrating documents
+* New: #503 - Information about migrating documents
+* Bug: #501 - If a folder or file is locked, we can't activate or deactivate notifications
+* New: #500 - Automatically check the inline radiobutton when use custom version
+* New: #252 - nautilus-like folders-files list view
+
 
 1.5.6 *2015-01-25*
 ------------------
