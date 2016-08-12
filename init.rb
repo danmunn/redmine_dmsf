@@ -28,11 +28,11 @@ Redmine::Plugin.register :redmine_dmsf do
   name 'DMSF'
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
-  version '1.5.7 devel'
+  version '1.5.7'
   url 'http://www.redmine.org/plugins/dmsf'
   author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   
-  requires_redmine :version_or_higher => '3.0.0'
+  requires_redmine :version_or_higher => '3.3.0'
   
   settings  :partial => 'settings/dmsf_settings',
     :default => {

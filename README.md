@@ -37,18 +37,18 @@ Features
   * Documents and folders symbolic links
   * Document tagging
   * Trash bin
-  * Compatible with Redmine 3.x.x
+  * Compatible with Redmine 3.3.x
 
 Dependencies
 ------------
   
-  * Redmine 3.0.0 or higher
+  * Redmine 3.3.0 or higher
 
 ### Full-text search (optional)
 
 If you want to use fulltext search abilities:
 
-  * Xapian (<http://www.xapian.org/>) search engine 
+  * Xapian (<http://www.xapian.org>) search engine 
   * Xapian Omega indexing tool
   * Xapian ruby bindings - xapian or xapian-full gem
 
