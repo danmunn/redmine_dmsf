@@ -278,8 +278,6 @@ pt-BR:
   text_email_to_proceed: Para dar continuidade ao fluxo, clique no íncone ao lado do documento
   text_email_to_see_history: Para visualizar o histórico de workflow de aprovação clique no status do workflow disponível ao lado do documento
   text_email_to_see_status: Para visualizar o status atual do workflow de aprovação, clique no status de fluxo de trabalho do documento
-  label_my_open_approvals: Minhas aprovações abertas
-  label_my_locked_documents: Meus documentos bloqueados
 
   title_create_link: Create a symbolic link
   label_link_from: Link from

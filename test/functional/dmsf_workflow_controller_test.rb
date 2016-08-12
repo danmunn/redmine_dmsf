@@ -217,7 +217,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_reorder_steps_to_lower
-    put :reorder_steps, :step => 1, :id => @wf1.id, :workflow_step => {:move_to => 'lower'}
+    put :reorder_steps, :step => 1, :id => @wf1.id, :dmsf_workflow => {:position => 2}
     assert_response :success
     @wfs1.reload
     @wfs2.reload
@@ -232,7 +232,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_reorder_steps_to_lowest
-    put :reorder_steps, :step => 1, :id => @wf1.id, :workflow_step => {:move_to => 'lowest'}
+    put :reorder_steps, :step => 1, :id => @wf1.id, :dmsf_workflow => {:position => 3}
     assert_response :success
     @wfs1.reload
     @wfs2.reload
@@ -247,7 +247,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_reorder_steps_to_higher
-    put :reorder_steps, :step => 3, :id => @wf1.id, :workflow_step => {:move_to => 'higher'}
+    put :reorder_steps, :step => 3, :id => @wf1.id, :dmsf_workflow => {:position => 2}
     assert_response :success
     @wfs1.reload
     @wfs2.reload
@@ -262,7 +262,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_reorder_steps_to_highest
-    put :reorder_steps, :step => 3, :id => @wf1.id, :workflow_step => {:move_to => 'highest'}
+    put :reorder_steps, :step => 3, :id => @wf1.id, :dmsf_workflow => {:position => '1'}
     assert_response :success
     @wfs1.reload
     @wfs2.reload
