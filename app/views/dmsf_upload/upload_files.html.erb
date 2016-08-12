@@ -1,7 +1,11 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,24 +19,23 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 
-<% html_title(l(:dmsf)) %>
+<% html_title l(:dmsf) %>
 
-<div class="contextual">
-</div>
+<%= render(:partial => '/dmsf/path', 
+  :locals => {:folder => @folder, :filename => nil, :title => l(:heading_uploaded_files)}) %>
 
-<%= render(:partial => '/dmsf/path', :locals => {:folder => @folder, :filename => nil}) %>
+<% if (@folder && @folder.description.present?) || @project.description.present? %>
+  <div class="wiki">
+    <%= textilizable(@folder ? @folder.description : @project.description) %>
+  </div>
+<% end %>
 
-<div class="wiki">
-  <%= textilizable(@folder.description) if @folder %>
-</div>
-
-<h3><%=l(:heading_uploaded_files)%></h3>
-<% i = 1 %>
 <%= form_tag({:action => 'commit_files', :id => @project, :folder_id => @folder},
-  :method=>:post) do %>
-  <% @uploads.each do |upload| %>
+  :method => :post) do %>  
+  <% @uploads.each_with_index do |upload, i| %>
     <% if upload.locked %>
       <%= render(:partial => 'upload_file_locked', :locals => {:upload => upload, :i => i}) %>
     <% else %>
@@ -40,5 +43,5 @@
     <% end %>
     <% i += 1 %>
   <% end %>
-  <%= submit_tag(l(:submit_commit)) %>
+  <%= submit_tag l(:submit_commit) %>
 <% end %>

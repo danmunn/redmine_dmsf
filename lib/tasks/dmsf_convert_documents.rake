@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@ Available options:
 
 Example:
   rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
+  rake redmine:dmsf_convert_documents project=test dry=true RAILS_ENV="production"
 END_DESC
 
 class DmsfConvertDocuments
@@ -66,8 +67,13 @@ class DmsfConvertDocuments
 
           folder = DmsfFolder.new
 
-          folder.project = project          
-          folder.user = document.attachments.reorder("#{Attachment.table_name}.created_on ASC").first.try(:author)
+          folder.project = project
+          attachment = document.attachments.reorder("#{Attachment.table_name}.created_on ASC").first
+          if attachment
+            folder.user = attachment.author
+          else
+            folder.user = Users.active.where(:admin => true).first
+          end
 
           folder.title = document.title
           folder.title.gsub!(/[\/\\\?":<>]/, '-') if replace
@@ -106,7 +112,7 @@ class DmsfConvertDocuments
             begin
               file = DmsfFile.new
               file.project = project
-              file.folder = folder
+              file.dmsf_folder = folder
 
               file.name = attachment.filename
               i = 1
@@ -137,7 +143,7 @@ class DmsfConvertDocuments
               end
 
               revision = DmsfFileRevision.new
-              revision.file = file
+              revision.dmsf_file = file
               revision.name = file.name              
               revision.title = DmsfFileRevision.filename_to_title(attachment.filename)
               revision.description = attachment.description

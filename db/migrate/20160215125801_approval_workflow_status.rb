@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,13 +18,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-# Load up classes that make up our webdav solution ontop
-# of DAV4Rack
-require 'redmine_dmsf/webdav/no_parse'
-require 'redmine_dmsf/webdav/base_resource'
-require 'redmine_dmsf/webdav/controller'
-require 'redmine_dmsf/webdav/dmsf_resource'
-require 'redmine_dmsf/webdav/download'
-require 'redmine_dmsf/webdav/index_resource'
-require 'redmine_dmsf/webdav/project_resource'
-require 'redmine_dmsf/webdav/resource_proxy'
+class ApprovalWorkflowStatus < ActiveRecord::Migration
+  def self.up
+    add_column :dmsf_workflows, :status, :integer, :null => false, :default => DmsfWorkflow::STATUS_ACTIVE
+    DmsfWorkflow.all.each {|wf| wf.update_attribute(:status, DmsfWorkflow::STATUS_ACTIVE)}
+  end
+
+  def self.down
+    remove_column :dmsf_workflows, :status        
+  end
+end

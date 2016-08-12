@@ -21,8 +21,7 @@
 
 require File.expand_path('../../test_helper.rb', __FILE__)
 
-class DmsfLockTest < RedmineDmsf::Test::UnitTest
-  #attr_reader :lock
+class DmsfLockTest < RedmineDmsf::Test::UnitTest  
   fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, 
     :dmsf_file_revisions, :roles, :members, :member_roles, :enabled_modules, 
     :enumerations, :dmsf_locks
@@ -77,6 +76,7 @@ class DmsfLockTest < RedmineDmsf::Test::UnitTest
   end
  
   def test_locked_folder_cannot_be_unlocked_by_someone_without_rights_or_anon    
+    User.current = nil
     assert_no_difference ('@folder2.lock.count') do
       assert_raise DmsfLockError do
         @folder2.unlock!

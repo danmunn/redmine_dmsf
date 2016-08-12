@@ -1,0 +1,248 @@
+/*
+* Redmine plugin for Document Management System "Features"
+*
+* Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+* Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+*
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License
+* as published by the Free Software Foundation; either version 2
+* of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
+/* DMSF table.list modifications */
+table.dmsf_list th.dmsf_th {
+  border: none;
+}
+
+table.list td.dmsf_modified {
+	min-width: 127px;
+	width: 127px;
+  font-size: 0.8em;
+  text-align: left;
+}
+
+td.dmsf_modified img {
+	vertical-align:text-top;
+}
+
+table.list td.dmsf_title {
+	width: 40%;
+  text-align: left;
+}
+
+table.list td.dmsf_buttons {
+	min-width: 96px;
+	width: 96px;
+  text-align: left;
+}
+
+table.list th.dmsf_checkbox,
+table.list td.dmsf_checkbox {
+  width: 15px;
+  padding: 2px 0 0 0;
+}
+
+table.list th.dmsf_checkbox input {
+  padding:0px;
+}
+
+table.list th.dmsf_checkbox div.DataTables_sort_wrapper {
+	padding: 0;
+}
+
+form.dmsf_entries {
+	margin-bottom: 10px;
+	display: block;
+}
+
+div.dmsf_controls,
+div.dmsf_controls input,
+div.dmsf_controls select,
+form.dmsf_entries #browser_filter.dataTables_filter,
+form.dmsf_entries #browser_filter.dataTables_filter input{
+	font-size: 0.9em;
+}
+
+div.dmsf_filename {
+	padding: 0 10px 0 10px;
+  float: right;
+  font-size: 0.8em;
+	white-space: nowrap;
+}
+
+td.dmsf_size {
+	font-size: 0.8em;
+	white-space: nowrap;
+}
+
+td.dmsf_author {
+	font-size: 0.8em;
+  white-space: nowrap;
+}
+
+td.dmsf_version {
+	font-size: 0.8em;
+	white-space: nowrap;
+}
+
+td.dmsf_version img {
+	vertical-align:text-top;
+}
+
+td.dmsf_workflow {
+	font-size: 0.8em;
+	white-space: nowrap;
+}
+
+.dmsf_invisible {
+	display: none;
+}
+
+div.dmsf_upload_select {
+	float: right;
+	font-size: 0.9em;
+}
+
+div.dmsf_upload_select input, div.dmsf_upload_select select {
+	font-size: 0.9em;
+}
+
+/* Approval workflow */
+#admin-menu a.dmsf-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
+#dmsf_users_for_delegate { height: 200px; overflow:auto; }
+#dmsf_users_for_delegate label { display: block; }
+tr.dmsf_workflow.locked a { color: #aaa; }
+
+.dmsf_revision_box {
+  padding: 0px 0px 0px 0px;
+  margin-bottom: 10px;
+  background-color:#f6f6f6;
+  color:#505050;
+  line-height:1.5em;
+}
+
+.dmsf_revision_inner_box {
+  border: 1px solid #e4e4e4;
+}
+
+.dmsf_id_box {
+  float: right;
+  white-space: nowrap;
+  line-height: 1.5em;
+  color: #505050;
+  margin-top: 5px;
+  padding-left: 10px;
+}
+
+div.dmsf_revision_box .ui-widget-header {
+    font-weight: normal;
+}
+
+.dmsf_log_header_box{
+  padding:6px;
+  margin-bottom: 10px;
+}
+.dmsf_log_header_left {
+    width: 50%;
+    float: left;
+}
+
+.dmsf_log_header_box label{
+  font-weight: bold;
+  margin-left: 0px;
+  margin-right: 3px;
+  padding: 3px 0 3px 0;
+}
+
+/* Command icons */
+.dmsf_icon-link { background-image: url(../images/link.png); }
+.dmsf_icon-notification-on { background-image: url(../images/notify.png); margin-left: 3px; }
+.dmsf_icon-notification-off { background-image: url(../images/notifynot.png); margin-left: 3px; }
+.dmsf_icon-lock { background-image: url(../images/lock.png); }
+.dmsf_icon-unlock { background-image: url(../images/unlock.png); }
+
+/* File types */
+tr.dmsf_gray .icon-folder { background-image: url(../images/folder_gray.png); }
+
+.icon-file.filetype-doc, .icon-file.filetype-docx { background-image: url(../images/filetypes/doc.png); }
+.icon-file.filetype-xls, .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls.png); }
+.icon-file.filetype-ppt, .icon-file.filetype-pptx { background-image: url(../images/filetypes/ppt.png); }
+.icon-file.filetype-vsd, .icon-file.filetype-vsdx { background-image: url(../images/filetypes/vsd.png); }
+.icon-file.filetype-mpp { background-image: url(../images/filetypes/mpp.png); }
+.icon-file.filetype-odt { background-image: url(../images/filetypes/odt.png); }
+.icon-file.filetype-ods { background-image: url(../images/filetypes/ods.png); }
+.icon-file.filetype-odp { background-image: url(../images/filetypes/odp.png); }
+.icon-file.filetype-odg { background-image: url(../images/filetypes/odg.png); }
+
+tr.dmsf_gray .icon-file.filetype-doc { background-image: url(../images/filetypes/doc_gray.png); }
+tr.dmsf_gray .icon-file.filetype-docx { background-image: url(../images/filetypes/doc_gray.png); }
+tr.dmsf_gray .icon-file.filetype-xls { background-image: url(../images/filetypes/xls_gray.png); }
+tr.dmsf_gray .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls_gray.png); }
+tr.dmsf_gray .icon-file.filetype-ppt { background-image: url(../images/filetypes/ppt_gray.png); }
+tr.dmsf_gray .icon-file.filetype-pptx { background-image: url(../images/filetypes/ppt_gray.png); }
+tr.dmsf_gray .icon-file.filetype-vsd { background-image: url(../images/filetypes/vsd_gray.png); }
+tr.dmsf_gray .icon-file.filetype-vsdx { background-image: url(../images/filetypes/vsd_gray.png); }
+tr.dmsf_gray .icon-file.filetype-mpp { background-image: url(../images/filetypes/mpp_gray.png); }
+tr.dmsf_gray .icon-file.filetype-odt { background-image: url(../images/filetypes/odt_gray.png); }
+tr.dmsf_gray .icon-file.filetype-ods { background-image: url(../images/filetypes/ods_gray.png); }
+tr.dmsf_gray .icon-file.filetype-odp { background-image: url(../images/filetypes/odp_gray.png); }
+tr.dmsf_gray .icon-file.filetype-odg { background-image: url(../images/filetypes/odg_gray.png); }
+
+tr.dmsf_gray .icon-file.text-x-c { background-image: url(../images/filetypes/c_gray.png); }
+tr.dmsf_gray .icon-file.text-x-csharp { background-image: url(../images/filetypes/csharp_gray.png); }
+tr.dmsf_gray .icon-file.text-x-java { background-image: url(../images/files/filetypes/java_gray.png); }
+tr.dmsf_gray .icon-file.text-x-javascript { background-image: url(../images/filetypes/js_gray.png); }
+tr.dmsf_gray .icon-file.text-x-php { background-image: url(../images/filetypes/php_gray.png); }
+tr.dmsf_gray .icon-file.text-x-ruby { background-image: url(../images/filetypes/ruby_gray.png); }
+tr.dmsf_gray .icon-file.text-xml { background-image: url(../images/filetypes/xml_gray.png); }
+tr.dmsf_gray .icon-file.text-css { background-image: url(../images/filetypes/css_gray.png); }
+tr.dmsf_gray .icon-file.text-html { background-image: url(../images/filetypes/html_gray.png); }
+tr.dmsf_gray .icon-file.image-gif { background-image: url(../images/filetypes/image_gray.png); }
+tr.dmsf_gray .icon-file.image-jpeg { background-image: url(../images/filetypes/image_gray.png); }
+tr.dmsf_gray .icon-file.image-png { background-image: url(../images/filetypes/image_gray.png); }
+tr.dmsf_gray .icon-file.image-tiff { background-image: url(../images/filetypes/image_gray.png); }
+tr.dmsf_gray .icon-file.application-pdf { background-image: url(../images/filetypes/pdf_gray.png); }
+tr.dmsf_gray .icon-file.application-zip { background-image: url(../images/filetypes/zip_gray.png); }
+tr.dmsf_gray .icon-file.application-x-gzip { background-image: url(../images/filetypes/zip_gray.png); }
+
+/* Links */
+.dmsf_gray { color: #AAA }
+.dmsf_gray a, .dmsf_gray a:link, .dmsf_gray a:visited{ color: #484848; text-decoration: none; }
+
+/* Search results */
+dt.dmsf-file { background-image: url(../../../images/document.png); }
+dt.dmsf-folder { background-image: url(../../../images/folder.png); }
+
+/* DMSF tree view */
+tr.dmsf_hidden { display:none; }
+tr.dmsf_tree span.dmsf_expander { cursor: pointer; }
+tr.dmsf_tree.dmsf_expanded td.dmsf_title span {
+  background: url(../images/bullet_arrow_down.png) no-repeat 0 50%;
+  padding-left: 16px;
+}
+tr.dmsf_tree.dmsf_child td.dmsf_title span { padding-left: 16px; }
+tr.dmsf_tree.dmsf_collapsed td.dmsf_title span {
+  background: url(../../../images/bullet_arrow_right.png) no-repeat 0 50%;
+  padding-left: 16px;
+}
+tr.dmsf_tree.idnt-1 td.dmsf_title {padding-left: 1.5em;}
+tr.dmsf_tree.idnt-2 td.dmsf_title {padding-left: 2em;}
+tr.dmsf_tree.idnt-3 td.dmsf_title {padding-left: 2.5em;}
+tr.dmsf_tree.idnt-4 td.dmsf_title {padding-left: 3em;}
+tr.dmsf_tree.idnt-5 td.dmsf_title {padding-left: 3.5em;}
+tr.dmsf_tree.idnt-6 td.dmsf_title {padding-left: 4em;}
+tr.dmsf_tree.idnt-7 td.dmsf_title {padding-left: 4.5em;}
+tr.dmsf_tree.idnt-8 td.dmsf_title {padding-left: 5em;}
+tr.dmsf_tree.idnt-9 td.dmsf_title {padding-left: 5.5em;}
+.dmsf_odd {background-color:#f6f7f8;}
+.dmsf_even {background-color: #fff;}

@@ -1,4 +1,7 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
+#
+# Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
@@ -14,9 +17,10 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 
-<% @workflows = DmsfWorkflow.sorted.where(:project_id => @project.id) if @project && @workflows.nil?  %>  
+<% @workflows = DmsfWorkflow.active.sorted.where(:project_id => @project.id) if @project && @workflows.nil?  %>  
 
 <% unless @project %>
   <div class="contextual">  
@@ -24,9 +28,18 @@
   </div>
   
   <h2><%=l(:label_dmsf_workflow_plural)%></h2>
-<% end %>
+  
+  <%= form_tag(dmsf_workflows_path, :method => :get) do %>
+    <fieldset>
+      <legend><%= l(:label_filter_plural) %></legend>
+      <label for='status'><%= l(:field_status) %>:</label>
+      <%= select_tag 'status', workflows_status_options_for_select(@status), :class => 'small', :onchange => 'this.form.submit(); return false;' %>
+    </fieldset>    
+  <% end %>
+  &nbsp;
+<% end %>  
 
-<% if @workflows.any? %>
+<% if @workflows.any? %>  
   <table class="list">
     <thead><tr>
       <th><%=l(:field_name)%></th>    
@@ -34,9 +47,12 @@
     </tr></thead>
     <tbody>
       <% for workflow in @workflows %>
-        <tr id="workflow-<%= workflow.id %>" class="<%= cycle('odd', 'even') %>">
-          <td class="name"><%= link_to(h(workflow.name), dmsf_workflow_path(workflow)) %></td>    
-          <td class="buttons"><%= delete_link dmsf_workflow_path(workflow) %></td>
+        <tr id="workflow-<%= workflow.id %>" class="dmsf_workflow <%= workflow.active? ? 'active' : 'locked' %> <%= cycle('odd', 'even') %>">
+          <td class="name"><%= link_to(h(workflow.name), dmsf_workflow_path(workflow)) %></td>          
+          <td class="buttons">
+            <%= change_status_link(workflow) unless @project %>
+            <%= delete_link dmsf_workflow_path(workflow) %>
+          </td>
         </tr>
       <% end %>
     </tbody>

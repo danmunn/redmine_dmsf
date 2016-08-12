@@ -1,11 +1,11 @@
-<%#=
+<%
 # encoding: utf-8
 # 
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,96 +22,81 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<div class="box dmsf_detail">
+<div class="box tabular">
   <strong><%= l(:heading_new_revision) %> <a href="#" id="newRevisionFormContentToggle">[-]</a></strong>
   <div id="newRevisionFormContent">
     <% if @file.locked_for_user? %>
       <p class="warning"><%= l(:info_file_locked) %></p>
     <% else %>
-      <%= form_for(@revision, :url => { :action => 'create_revision', :id => @file },
+      <%= labelled_form_for(@revision, :url => { :action => 'create_revision', :id => @file },
             :html => { :method => :post, :multipart => true, :id => 'new_revision_form' }) do |f| %>
-	<div class="clear">
+        <div class="clear">
           <div class="splitcontentleft">
-           <p>
-              <%= label_tag('dmsf_file_revision_title', "#{l(:label_title)}:") %>
-              <%= f.text_field(:title, :size => 32) %>
+            <p>              
+              <%= f.text_field(:title) %>
             </p>
           </div>
-	<div class="splitcontentright">
-          <p style="white-space: nowrap;">
-           <%= label_tag('', "#{l(:label_file)}:") %>            
-           <%= f.text_field(:name, :size => 22) %>
-          </p>
-	</div>
-      </div>
-      <p class="no-ident">
-        <%= label_tag('dmsf_file_revision_description', "#{l(:label_description)}:") %>
-      </p>
-      <div class="wiki data clear">
-        <%= f.text_area(:description, :rows => 6, :class => 'wiki-edit') %>
-      </div>
-      <div class="splitcontentleft">
-        <p>
-          <%= label_tag('version_0', "#{l(:label_version)}:") %>
-	</p>
-      <div class="data clear">
-	<%= radio_button_tag('version', 0, 
-          @revision.version == @file.last_revision.version) %>
-	<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version %>
-        <%= l(:option_version_same) %><br/> 
-	<%= radio_button_tag('version', 1, 
-              @revision.major_version == @file.last_revision.major_version && 
-                @revision.minor_version != @file.last_revision.minor_version) %> 
-	<%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version + 1 %>
-        <%= l(:option_version_minor) %><br/>
-	<%= radio_button_tag('version', 2, 
-          @revision.major_version != @file.last_revision.major_version) %> 
-	<%= @file.last_revision.major_version + 1 %>.0 
-        <%= l(:option_version_major) %><br/>
-        <%= radio_button_tag('version', 3) %>        
-        <%= select_tag 'custom_version_major', options_for_select(0..99, @file.last_revision.major_version + 2) %>.<%= select_tag 'custom_version_minor', options_for_select(0..99, @file.last_revision.minor_version + 1) %>
-        <%= l(:option_version_custom) %>
-      </div>	        
-     </div>
-       <div class="splitcontentright clear">
-         <p>
-           <%= label_tag('file_upload', "#{l(:label_new_content)}:") %>
-         </p>
-         <span class="add_attachment">           
-           <%= file_field_tag 'file_upload',
-                :id => 'file_upload',
-                :class => 'file_selector',
-                :multiple => false,
-                :onchange => "$('#dmsf_file_revision_name').val(this.files[0].name)",
-                :data => {
-                  :max_file_size => Setting.attachment_max_size.to_i.kilobytes,
-                  :max_file_size_message => l(:error_attachment_too_big, :max_size => number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)),
-                  :max_concurrent_uploads => 1,
-                  :upload_path => uploads_path(:format => 'js')
-                } 
-            %>           
-           (<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)           
-         </span>         
-       </div>
-        <br style="clear: both"/>
+          <div class="splitcontentright">
+            <p>              
+              <%= f.text_field(:name, :label => l(:label_file)) %>
+            </p>
+          </div>
+        </div>
+        <p>          
+          <%= f.text_area(:description, :rows => 6, :class => 'wiki-edit') %>        
+        </p>
+        <div class="clear">
+          <div class="splitcontentleft">
+            <p>
+              <%= label_tag('version_0', l(:label_dmsf_version)) %>
+              <%= radio_button_tag('version', 0, @revision.version == @file.last_revision.version) %>
+              <%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version %>
+              <%= l(:option_version_same) %><br/>
+              <%= radio_button_tag('version', 1, @revision.major_version == @file.last_revision.major_version && @revision.minor_version != @file.last_revision.minor_version) %> 
+              <%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version + 1 %>
+              <%= l(:option_version_minor) %><br/>
+              <%= radio_button_tag('version', 2, @revision.major_version != @file.last_revision.major_version) %> 
+              <%= @file.last_revision.major_version + 1 %>.0 
+              <%= l(:option_version_major) %><br/>
+              <%= radio_button_tag('version', 3) %>        
+              <%= select_tag 'custom_version_major', options_for_select(0..99, @file.last_revision.major_version + 2), :onchange => '$("#version_3").prop("checked", true)' %>.
+              <%= select_tag 'custom_version_minor', options_for_select(0..99, @file.last_revision.minor_version + 1), :onchange => '$("#version_3").prop("checked", true)' %>
+              <%= l(:option_version_custom) %>
+            </p>	        
+          </div>
+          <div class="splitcontentright">
+            <p>
+              <%= label_tag('file_upload', l(:label_new_content)) %>         
+              <span class="add_attachment">           
+                <%= file_field_tag 'file_upload',
+                  :id => 'file_upload',
+                  :class => 'file_selector',
+                  :multiple => false,
+                  :onchange => "$('#dmsf_file_revision_name').val(this.files[0].name)",
+                  :data => {
+                    :max_file_size => Setting.attachment_max_size.to_i.kilobytes,
+                    :max_file_size_message => l(:error_attachment_too_big, :max_size => number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)),
+                    :max_concurrent_uploads => 1,
+                    :upload_path => uploads_path(:format => 'js')
+                  } 
+                %>           
+                (<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)           
+              </span>  
+            </p>
+          </div>
+        </div>        
         <div class="custom_fields">
           <% @revision.custom_field_values.each do |value| %>
             <p><%= custom_field_tag_with_label(:dmsf_file_revision, value) %></p>
           <% end %>
-        </div>
-        <div class="comment">
-          <p>
-            <%= label_tag('dmsf_file_revision_comment', "#{l(:label_comment)}:") %>
-          </p>
-          <div class="data">
-            <%= f.text_area(:comment, :rows=> 2, :style => 'width: 99%;') %>
-          </div>
-        </div>
-        <br/>
-        <%= submit_tag(l(:submit_create)) %>			
+        </div>        
+        <p>          
+          <%= f.text_area(:comment, :rows => 2, :label => l(:label_comment)) %>
+        </p>          
+        <%= f.submit l(:submit_create) %>
       <% end %>
-    <% end %>
-  </div>
+    <% end %>   
+  </div>  
 </div>
 
 <%= wikitoolbar_for 'dmsf_file_revision_description' %>

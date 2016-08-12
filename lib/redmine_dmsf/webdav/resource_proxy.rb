@@ -43,7 +43,7 @@ module RedmineDmsf
         end
         @resource_c.accessor = self if @resource_c
       end
-      
+
       def authenticate(username, password)
         # Bugfix: Current DAV4Rack (including production) authenticate against ALL requests
         # Microsoft Web Client will not attempt any authentication (it'd seem) until it's acknowledged
@@ -52,11 +52,11 @@ module RedmineDmsf
         # seems the next best step, if the request method is OPTIONS return true, controller will simply
         # call the options method within, which accesses nothing, just returns headers about dav env.
         return true if @request.request_method.downcase == 'options' && (path == '/' || path.empty?)
-        User.current = User.try_to_login(username, password) || nil        
-        return !User.current.anonymous? unless User.current.nil?
-        false
+        return false unless username && password
+        User.current = User.try_to_login(username, password)
+        return User.current && !User.current.anonymous?
       end
-      
+
       def supports_locking?
         true
       end
@@ -100,30 +100,30 @@ module RedmineDmsf
       def get(request, response)
         @resource_c.get(request, response)
       end
-      
-      def put(request, response)        
+
+      def put(request, response)
         @resource_c.put(request, response)
       end
-      
+
       def delete
         @resource_c.delete
       end
-      
+
       def copy(dest, overwrite = false)
         @resource_c.copy(dest, overwrite)
       end
-      
+
       def move(dest, overwrite = false)
         @resource_c.move(dest, overwrite)
-      end     
+      end
 
       def make_collection
         @resource_c.make_collection
-      end     
+      end
 
       def special_type
         @resource_c.special_type
-      end            
+      end
 
       def lock(args)
         @resource_c.lock(args)
@@ -136,7 +136,7 @@ module RedmineDmsf
       def unlock(token)
         @resource_c.unlock(token)
       end
-      
+
       def name
         @resource_c.name
       end
@@ -144,7 +144,7 @@ module RedmineDmsf
       def long_name
         @resource_c.long_name
       end
-      
+
       def resource
         @resource_c
       end

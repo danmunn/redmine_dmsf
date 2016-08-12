@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ pt-BR:
   notice_folder_deleted: Pasta deletada
   error_folder_is_not_empty: Pasta não está vazia
   error_folder_title_is_already_used: Título já utilizado
-  notice_folder_details_were_saved: Pasta atualizada  
+  notice_folder_details_were_saved: Pasta atualizada
   error_folder_is_locked: Pasta está bloqueada
   error_file_is_locked: Arquivo está bloqueado
   notice_file_deleted: Arquivo excluído
@@ -94,11 +94,7 @@ pt-BR:
   label_email_body: Descrição
   label_email_send: Enviar
   title_notifications_active: Notificações Ativas
-  label_file_size: Tamanho do Arquivo
-  heading_file_upload: Envio
-  note_uploaded_maximum_files_at_once: "Não pode ser carregado o máximo de %{number} arquivo de apenas uma vez."
-  note_upload_files_greater_than_two_gb: Para fazer o upload maiores que 2GB você deve possuir sistema 64b.
-  submit_upload_files: Envio
+  label_upload: Envio
   heading_new_folder: Nova Pasta
   label_title: Taxonomia
   label_description: Descrição
@@ -109,7 +105,7 @@ pt-BR:
   select_option_deactivated: Desativado
   select_option_activated: Ativado
   label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
   title_save_preferences: Salvar preferências
   heading_revisions: Revisões
   title_download: Download
@@ -219,7 +215,6 @@ pt-BR:
   warning_folder_not_locked: A pasta não pode ser bloqueada
   notice_folder_unlocked: A pasta foi desbloqueada com sucesso
   error_only_user_that_locked_folder_can_unlock_it: Você não está autorizado a desbloquear esta pasta
-  title_folder_parent_locked: "A pasta %{name} está bloqueada"
   title_unlock_folder: Clique aqui para desbloquear e permitir alterações por outros usuários
   title_lock_folder: Clique aqui para impedir alterações por outros usuários
 
@@ -268,12 +263,12 @@ pt-BR:
   info_revision: "r%{rev}"
   link_workflow: Workflow
   notice_workflow_started: Workflow de aprovação foi iniciado com êxito
-  text_email_subject_approved: "Workflow de aprovação %{name}: aprovado"
-  text_email_subject_rejected: "Workflow de aprovação %{name} reprovado"
-  text_email_subject_delegated: "Workflow de aprovação %{name} atribuído para"
-  text_email_subject_requires_approval: "Workflow de aprovação %{name} requer sua aprovação"
-  text_email_subject_updated: "Workflow de aprovação %{name}: atualizado"
-  text_email_subject_started: "Workflow de aprovação %{name}: iniciado"
+  text_email_subject_approved: aprovado
+  text_email_subject_rejected: reprovado
+  text_email_subject_delegated: atribuído para
+  text_email_subject_requires_approval: requer sua aprovação
+  text_email_subject_updated: atualizado
+  text_email_subject_started: iniciado
   text_email_finished_approved: "O workflow de aprovação'%{name}' definido para o documento '%{filename}' foi finalizado e o documento foi aprovado."
   text_email_finished_rejected: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi finalizado e o documento foi reprovado devido a '%{notice}'."
   text_email_finished_delegated: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi atribuido pois '%{notice}' e está aguardando a sua aprovação na etapa atual."
@@ -302,10 +297,10 @@ pt-BR:
   label_target_project: Target project
   label_source_project: Source project
 
-  text_email_doc_updated_subject: "%{project} : Documentos atualizados"
+  text_email_doc_updated_subject: Documentos atualizados
   text_email_doc_updated: atualizou os documentos da área
   text_email_doc_follows: as follows
-  text_email_doc_deleted_subject: "%{project} : Exclusão de documentos"
+  text_email_doc_deleted_subject: Exclusão de documentos
   text_email_doc_deleted: deletou os documentos da área
   label_links_only: links only
 
@@ -320,17 +315,20 @@ pt-BR:
   notice_dmsf_link_restored: O link foi restaurado com sucesso
   title_restore_checked: Restaurar pasta ou arquivo
   error_parent_folder: "A pasta de pai não existe"
-  
+
   error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
   error_parent_locked: Unable to complete lock - resource parent is locked
   error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: unable to lock exclusively an already-locked resource 
-  error_unlock_parent_locked: Unlock failed - resource parent is locked  
+  error_lock_exclusively: Unable to lock exclusively an already-locked resource
+  error_unlock_parent_locked: Unlock failed - resource parent is locked
 
-  my:
-    blocks:
-      locked_documents: Documentos bloqueados
-      open_approvals: Aprovações abertas
+  field_dmsf_tree_view: Navigate folders in a tree
+  label_dmsf_version: Versão
+
+  locked_documents: Documentos bloqueados
+  open_approvals: Aprovações abertas
 
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"

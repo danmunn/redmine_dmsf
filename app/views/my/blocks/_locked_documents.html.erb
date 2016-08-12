@@ -1,7 +1,9 @@
-<%#
+<%
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2013   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,15 +26,15 @@
 <% files = DmsfFile.joins(
   'JOIN dmsf_locks ON dmsf_files.id = dmsf_locks.entity_id').where(
   'dmsf_locks.entity_type' => 0, 'dmsf_locks.user_id' => @user.id).all %>
-<h3><%= l(:label_my_locked_documents)%> (<%= folders.count %>/<%=  files.count %>)</h3>
+<h3><%= l(:locked_documents)%> (<%= folders.count %>/<%=  files.count %>)</h3>
 <% if folders.any? || files.any?%>
   <%= form_tag({}) do %>
     <table class="list">
       <thead>
-        <tr>              
-          <th><%=l(:field_project)%></th>
-          <th><%=l(:label_document)%>/<%=l(:field_folder)%></th>                    
-          <th><%=l(:field_folder)%></th>
+        <tr>
+          <th><%= l(:field_project) %></th>
+          <th><%= l(:label_document) %>/<%= l(:field_folder) %></th>
+          <th><%= l(:field_folder) %></th>
         </tr>
       </thead>
       <tbody>
@@ -40,19 +42,19 @@
           <tr id="folder-<%= folder.id %>" class="<%= cycle('odd', 'even') %>">
             <td class="project">
               <%= link_to_project(folder.project) %>
-            </td>            
+            </td>
             <td class="title">
               <%= link_to(h(folder.title),
                 {:controller => 'dmsf', :action => 'show', :id => folder.project, :folder_id => folder},
-                :class => 'icon icon-folder') %>              
-             </td>             
+                :class => 'icon icon-folder') %>
+             </td>
              <td class="title">
-               <% if folder.folder %>
-                 <%= link_to(h(folder.folder.title), 
-                    {:controller => 'dmsf', :action => 'show', :id => folder.project, :folder_id => folder.folder}) %>
+               <% if folder.dmsf_folder %>
+                 <%= link_to(h(folder.dmsf_folder.title),
+                    {:controller => 'dmsf', :action => 'show', :id => folder.project, :folder_id => folder.dmsf_folder}) %>
                <% else %>
-                  <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> folder.project }) %>                  
-               <% end %>            
+                  <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> folder.project }) %>
+               <% end %>
              </td>
            </tr>
         <% end %>
@@ -60,19 +62,19 @@
           <tr id="file-<%= file.id %>" class="<%= cycle('odd', 'even') %>">
             <td class="project">
               <%= link_to_project(file.project) %>
-            </td>            
-            <td class="title">              
-              <%= link_to(h(file.title), 
+            </td>
+            <td class="title">
+              <%= link_to(h(file.title),
                 {:controller => 'dmsf_files', :action => :show, :id => file },
                 :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}") %>
-            </td>          
+            </td>
              <td class="title">
-               <% if file.folder %>
-                 <%= link_to(h(file.folder.title), 
-                    {:controller => 'dmsf', :action => 'show', :id => file.project, :folder_id => file.folder}) %>
+               <% if file.dmsf_folder %>
+                 <%= link_to(h(file.dmsf_folder.title),
+                    {:controller => 'dmsf', :action => 'show', :id => file.project, :folder_id => file.dmsf_folder}) %>
                <% else %>
-                  <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> file.project }) %>                  
-               <% end %>            
+                  <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> file.project }) %>
+               <% end %>
              </td>
            </tr>
         <% end %>

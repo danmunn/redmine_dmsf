@@ -18,9 +18,9 @@
 
 class DmsfFilesCopyController < ApplicationController
   unloadable
-  
+
   menu_item :dmsf
-  
+
   before_filter :find_file
   before_filter :authorize
 
@@ -34,10 +34,10 @@ class DmsfFilesCopyController < ApplicationController
     else
       @target_project ||= DmsfFile.allowed_target_projects_on_copy[0]
     end
-    
+
     @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
-    @target_folder ||= @file.folder if @target_project == @project
-    
+    @target_folder ||= @file.dmsf_folder if @target_project == @project
+
     render :layout => !request.xhr?
   end
 
@@ -47,20 +47,20 @@ class DmsfFilesCopyController < ApplicationController
       render_403
       return
     end
-    @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
-    if !@target_folder.nil? && @target_folder.project != @target_project
-      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
+    @target_folder = DmsfFolder.visible.find_by_id(params[:target_folder_id]) unless params[:target_folder_id].blank?
+    if @target_folder && (@target_folder.project != @target_project)
+      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)
     end
 
-    if (@target_folder && @target_folder == @file.folder) || 
-        (@target_folder.nil? && @file.folder.nil? && @target_project == @file.project)
+    if (@target_folder && @target_folder == @file.dmsf_folder) ||
+        (@target_folder.nil? && @file.dmsf_folder.nil? && @target_project == @file.project)
       flash[:error] = l(:error_target_folder_same)
       redirect_to :action => 'new', :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
 
     new_file = @file.copy_to(@target_project, @target_folder)
-    
+
     unless new_file.errors.empty?
       flash[:error] = "#{l(:error_file_cannot_be_copied)}: #{new_file.errors.full_messages.join(', ')}"
       redirect_to :action => 'new', :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
@@ -68,8 +68,8 @@ class DmsfFilesCopyController < ApplicationController
     end
 
     flash[:notice] = l(:notice_file_copied)
-    log_activity(new_file, 'was copied (is copy)')   
-    
+    log_activity(new_file, 'was copied (is copy)')
+
     redirect_to dmsf_file_path(new_file)
   end
 
@@ -81,11 +81,11 @@ class DmsfFilesCopyController < ApplicationController
     end
     @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
     if @target_folder && @target_folder.project != @target_project
-      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project) 
+      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)
     end
 
-    if (@target_folder && @target_folder == @file.folder) || 
-        (@target_folder.nil? && @file.folder.nil? && @target_project == @file.project)
+    if (@target_folder && @target_folder == @file.dmsf_folder) ||
+        (@target_folder.nil? && @file.dmsf_folder.nil? && @target_project == @file.project)
       flash[:error] = l(:error_target_folder_same)
       redirect_to :action => 'new', :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
@@ -98,14 +98,14 @@ class DmsfFilesCopyController < ApplicationController
     end
 
     @file.reload
-    
+
     flash[:notice] = l(:notice_file_moved)
-    log_activity(@file, 'was moved (is copy)')    
-    
+    log_activity(@file, 'was moved (is copy)')
+
     redirect_to dmsf_file_path(@file)
   end
 
-  private
+private
 
   def log_activity(file, action)
     Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{file.project.identifier}/#{file.id}/#{file.last_revision.id}"
@@ -115,5 +115,5 @@ class DmsfFilesCopyController < ApplicationController
     @file = DmsfFile.visible.find(params[:id])
     @project = @file.project
   end
-  
+
 end

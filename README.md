@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.5.6** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **1.5.7** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -77,18 +77,18 @@ From Omega documentation:
 
 On Debian use:
 
-```sudo apt-get install xapian-omega libxapian-dev xpdf xpdf-utils \
+```sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils \
  antiword unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi \
  djview djview3 uuid uuid-dev xz-utils```
 
 On Ubuntu use:
 
-```sudo apt-get install xapian-omega libxapian-dev xpdf xpdf-utils antiword \
+```sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils antiword \
  unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi djview djview3 \
  uuid uuid-dev xz-utils```
 
 On CentOS user:
-```sudo yum install xapian-omega libxapian-dev xpdf xpdf-utils antiword \
+```sudo yum install xapian-omega libxapian-dev xpdf poppler-utils antiword \
  unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi djview djview3 \
  uuid uuid-dev xz```
 
@@ -101,16 +101,16 @@ Search will now automatically search DMSF content when a Redmine search is perfo
 
 ###Linking DMSF files from Wiki entries:
 
-####Link to a file with id 17:
+####Link to a document with id 17:
 `{{dmsf(17)}}`
 
-####Link to a file with id 17 with link text "File"
+####Link to a document with id 17 with link text "File"
 `{{dmsf(17, File)}}`
 
-####Link to the description of a file with id 17
+####Link to the description of a document with id 17
 `{{dmsfd(17)}}`
 
-####Link to the preview of the first 5 lines from a file with id 17
+####Link to the preview of 5 lines from a document with id 17
 `{{dmsft(17, 5)}}`
 
 ####An inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...
@@ -122,10 +122,26 @@ Search will now automatically search DMSF content when a Redmine search is perfo
 ####An inline picture with custom size
 `{{dmsf_image(8, size=50%)}}`
 
+####An inline picture with custom height
+`{{dmsf_image(8, height=300)}}`
+
+####An inline picture with custom width
+`{{dmsf_image(8, width=300)}}`
+
 ####An inline picture with custom size
 `{{dmsf_image(8, size=640x480)}}`
 
-The DMSF file/revision id can be found in link for file/revision download from within Redmine.
+####A thumbnail with height of 200px
+`{{dmsftn(8)}}`
+
+####A thumbnail with custom size
+`{{dmsftn(8, size=300)}}`
+
+####Approval workflow status of a document with id 8
+`{{dmsfw(8)}}`
+
+
+The DMSF document/revision id can be found in document details.
 
 ###Linking DMSF folders from Wiki entries:
 
@@ -153,7 +169,13 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax_detailed.html, aft
           <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
           <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
           <li><strong>{{dmsf_image(8, size=300)}}</strong> (an inline picture with custom size)</li>
-          <li><strong>{{dmsf_image(8, size=640x480)}}</strong> (an inline picture with custom size)</li>
+          <li><strong>{{dmsf_image(8, size=640x480)}}</strong> (an inline picture with custom size)</li>                    
+          <li><strong>{{dmsf_image(8, size=50%)}}</strong> (an inline picture with custom size)</li>          
+          <li><strong>{{dmsf_image(8, height=300)}}</strong> (an inline picture with custom size)</li>
+          <li><strong>{{dmsf_image(8, width=300)}}</strong> (an inline picture with custom size)</li>
+          <li><strong>{{dmsftn(8)}}</strong> (a thumbnail with height of 200px)</li>
+          <li><strong>{{dmsftn(8, size=300)}}</strong> (a thumbnail with custom size)</li>
+          <li><strong>{{dmsfw(8)}}</strong> (approval workflow status of a document with id 8)</li>
         </ul>
         The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
         The DMSF folder id can be found in the link when opening folders within Redmine.
@@ -179,6 +201,7 @@ Before installing ensure that the Redmine instance is stopped.
 1. In case of upgrade BACKUP YOUR DATABASE first
 2. Put redmine_dmsf plugin directory into plugins.
 3. Install dependencies: `bundle install`.
+3.1 To install dependencies without Xapian (full-text searching): `bundle install --without xapian`. This option might be useful especially in Windows.
 4. Initialize/Update database: `bundle exec rake redmine:plugins:migrate RAILS_ENV="production"`.
 5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
 6. Restart the web server.
@@ -197,6 +220,10 @@ Before installing ensure that the Redmine instance is stopped.
         Example:
             
             rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
+
+            (If you don't run the rake task as the web server user, don't forget to change the ownership of the imported files, e.g.
+              chown -R www-data:www-data /redmine/files/dmsf
+            afterwards)
 
     b) To alert all users who are expected to do an approval in the current approval steps
 

@@ -1,9 +1,9 @@
 # encoding: utf-8
-# 
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -26,22 +26,22 @@ cs:
   label_dmsf_file_revision_plural: Revize dokumentů
   label_dmsf_file_revision_access_plural: Přístupy k dokumentům
   warning_no_entries_selected: Není nic vybráno
-  error_email_to_must_be_entered: Musí být zadán adresát  
+  error_email_to_must_be_entered: Musí být zadán příjemce
   warning_file_already_locked: Soubor je již zamčen
   notice_file_locked: Soubor byl zamčen
   warning_file_not_locked: Soubor není zamčen
   notice_file_unlocked: Soubor byl odemčen
-  error_only_user_that_locked_file_can_unlock_it: Soubor může být odemčen pouze uživatelem, který ho zamkl 
-  error_max_files_exceeded: "Limit pro %{number} najednou stažených souborů je překročen"  
+  error_only_user_that_locked_file_can_unlock_it: Soubor může být odemčen pouze uživatelem, který ho zamkl
+  error_max_files_exceeded: "Limit pro %{number} najednou stažených souborů je překročen"
   error_entry_project_does_not_match_current_project: Zadaný projekt neodpovídá aktuálnímu projektu
-  notice_folder_created: Adresář byl vytvořen
+  notice_folder_created: Složka byla vytvořena
   error_folder_creation_failed: Vytváření složky selhalo
   error_folder_title_must_be_entered: Musí být zadán název
-  notice_folder_deleted: Adresář byl smazán
-  error_folder_is_not_empty: Adresář není prázdný
+  notice_folder_deleted: Složka byla smazána
+  error_folder_is_not_empty: Složka není prázdná
   error_folder_title_is_already_used: Název již existuje
   notice_folder_details_were_saved: Detaily složky byly uloženy
-  error_folder_is_locked: Adresář je zamčen
+  error_folder_is_locked: Složka je zamčena
   error_file_is_locked: Soubor je zamčen
   notice_file_deleted: Soubor byl smazán
   error_at_least_one_revision_must_be_present: Musí existovat alespoň jedna revize
@@ -81,8 +81,8 @@ cs:
   title_waiting_for_approval: Čeká na schválení
   title_approved: Schváleno
   title_unlock_file: Odemknout a umožnit změny ostatním uživatelům
-  title_lock_file: Zamknout a zabránit změnám ostatních uživatelů  
-  title_download_checked: Stáhnout vybrané jako Zip  
+  title_lock_file: Zamknout a zabránit změnám ostatních uživatelů
+  title_download_checked: Stáhnout vybrané jako Zip
   title_send_checked_by_email: Zaslat vybrané emailem
   link_user_preferences: Vaše nastavení
   heading_send_documents_by_email: Odeslat dokumenty emailem
@@ -94,11 +94,7 @@ cs:
   label_email_body: Obsah
   label_email_send: Odesláno
   title_notifications_active: Notifikace jsou aktivní
-  label_file_size: Velikost souboru
-  heading_file_upload: Nahrát
-  note_uploaded_maximum_files_at_once: "Maximálně může být nahráno %{number} souborů najednou."
-  note_upload_files_greater_than_two_gb: Nahrání souborů větších než 2GB vyžaduje 64b prohlížeč.
-  submit_upload_files: Nahrání
+  label_upload_upload: Nahrát
   heading_new_folder: Nová složka
   label_title: Název
   label_description: Popis
@@ -109,7 +105,7 @@ cs:
   select_option_deactivated: Deaktivováno
   select_option_activated: Aktivováno
   label_title_format: Formát názvu
-  text_title_format: "Formát názvu souboru pro stažení (%t - název, %d - datum, %v - verze, %i - ID, %r - revize). Např.: %t_%v"
+  text_title_format: "Formát názvu souboru pro stažení (%t - název, %f - soubor, %d - datum, %v - verze, %i - ID, %r - revize). Např.: %t_%v"
   title_save_preferences: Uložit nastavení
   heading_revisions: Revize
   title_download: Stáhnout
@@ -117,9 +113,9 @@ cs:
   label_created: Vytvořeno
   label_changed: Změněno
   info_changed_by_user: "%{changed} uživatelem"
-  label_filename: Jméno souboru  
+  label_filename: Jméno souboru
   label_mime: Typ
-  label_size: Velikost  
+  label_size: Velikost
   heading_new_revision: Nová revize
   option_version_same: Stejná
   option_version_minor: Podružná
@@ -139,7 +135,7 @@ cs:
   option_stem_none: Stem nic (výchozí)
   option_stem_some: Stem něco
   option_stem_all: Stem vše
-  label_stemming_description: Tímto je určeno, jak analyzátor dotazu aplikuje algoritmus Stemmingu. Výchozí hodnota je STEM_NONE. Dostupné hodnoty jsou  
+  label_stemming_description: Tímto je určeno, jak analyzátor dotazu aplikuje algoritmus Stemmingu. Výchozí hodnota je STEM_NONE. Dostupné hodnoty jsou
   note_do_not_stem: Žádný stemming.
   note_stem_some: "Hledej stemmed formy výrazů kromě těch, které začínají velkým písmenem nebo jsou následovány určitými znaky nebo jsou použity s operátory, které vyžadují informaci o pozici. Stemmed výrazy začínají písmenem 'Z'."
   note_stem_all: "Hledej stemmed formy všech slov (poznámka: 'Z' prefix není přidán)."
@@ -154,7 +150,7 @@ cs:
   permission_user_preferences: Nastavení uživatele
   permission_view_dmsf_files: Zobrazit dokumenty
   permission_folder_manipulation: Manipulace se složkami
-  permission_file_manipulation: Manipulace se soubory  
+  permission_file_manipulation: Manipulace se soubory
   permission_force_file_unlock: Vynucené odemknutí souboru
   permission_manage_workflows: Spravovat schvalovací procesy
   permission_file_delete: Mazat dokumenty
@@ -167,12 +163,12 @@ cs:
   error_user_has_not_right_delete_folder: Uživatel nemá právo mazat složky
   error_user_has_not_right_delete_file: Uživatel nemá právo mazat soubor
   notice_entries_deleted: Položky smazány
-  warning_some_entries_were_not_deleted: "Některé položky nebyly smazány: %{entries}"  
+  warning_some_entries_were_not_deleted: "Některé položky nebyly smazány: %{entries}"
   title_delete_checked: Smaž vybrané
   title_items: položek
   title_filename_for_download: Název Zip archivu ke stažení
   label_number_of_folders: Složky
-  label_number_of_documents: Dokumenty  
+  label_number_of_documents: Dokumenty
   error_file_storage_directory_does_not_exist: Cílová složka neexistuje a nemůže být vytvořena
   error_file_can_not_be_created: Nelze vytvořit soubor v cílové složce
   error_wrong_zip_encoding: Chybné kódování Zipu
@@ -185,31 +181,31 @@ cs:
   heading_access_last: Poslední
   label_dmsf_updated: Změněno
   label_dmsf_downloaded: Staženo
-  title_total_size_of_all_files: Celková velikost všech souborů v adresáři
+  title_total_size_of_all_files: Celková velikost všech souborů ve složce
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: Neexistuje projekt, do kterého můžete kopírovat
   comment_copied_from: "Zkopírováno z %{source}"
   notice_file_copied: Soubor zkopírován
   notice_file_moved: Soubor přesunut
   field_target_project: Cílový projekt
-  field_target_folder: Cílový adresář
+  field_target_folder: Cílová složka
   title_copy_or_move: Kopírovat/Přesunout
   label_dmsf_folder_plural: Složky
   comment_moved_from: "Přesunuto z %{source}"
-  error_target_folder_same: Cílový adresář a projekt jsou stejné jako aktuální
+  error_target_folder_same: Cílový složka a projekt jsou stejné jako aktuální
   error_file_cannot_be_moved: Soubor nemůže být přesunut
   error_file_cannot_be_copied: Soubor nemůže být zkopírován
   warning_no_project_to_copy_folder_to: Neexistuje projekt, do kterého můžete kopírovat
   title_copy: Kopírovat
   error_folder_cannot_be_copied: Složka nemůže být zkopírována
   notice_folder_copied: Složka zkopírována
-  
-  error_max_email_filesize_exceeded: "Přesáhli jste maximální velikost souboru, který lze poslat emailem. (%{number} MB)"  
+
+  error_max_email_filesize_exceeded: "Přesáhli jste maximální velikost souboru, který lze poslat emailem. (%{number} MB)"
   note_maximum_email_filesize: Omezí se maximální velikost souboru, který může být poslán emailem. 0 znamená neomezený. Číslo je v MB.
   label_maximum_email_filesize: Maximální velikost souboru emailu
   header_minimum_filesize: Chyba souboru.
   error_minimum_filesize: "Soubor %{file} má nulovou velikost a nebude přiložen."
-  parent_directory: Nadřazený adresář
+  parent_directory: Nadřazená složka
   note_webdav: "Webdav je po aktivaci k dispozici na %{protocol}://%{domain}/dmsf/webdav/[identifikátor projektu]"
   label_webdav: Webdav functionalita
   label_dmsf_plural: "Kopíruj dokumenty a složky (%{files} souborů v %{folders} složkách)"
@@ -219,7 +215,6 @@ cs:
   warning_folder_not_locked: Složku nelze zamknout
   notice_folder_unlocked: Složka byla odemčena
   error_only_user_that_locked_folder_can_unlock_it: Nemáte oprávnění k odemknutí této složky
-  title_folder_parent_locked: "Nadřazená složka %{name} je zamčená"  
   title_unlock_folder: Odemknout
   title_lock_folder: Zamknout
 
@@ -227,7 +222,7 @@ cs:
   select_option_webdav_readwrite: Čtení/Zápis
   label_webdav_strategy: Webdav strategie
   note_webdav_strategy: Umožní administrátorovi rozhodnout, zdali je webdav pouze pro čtení nebo i pro zápis.
-    
+
   error_unable_delete_dmsf_workflow: Nelze smazat schvalovací proces
   error_empty_note: Musí být vyplněn komentář
   error_workflow_assign: Chyba při přiřazování
@@ -268,25 +263,25 @@ cs:
   info_revision: "r%{rev}"
   link_workflow: Schvalovací proces
   notice_workflow_started: Schvalovací proces byl úspěšně zahájen
-  text_email_subject_approved: "Schvalovací proces %{name} schválen"
-  text_email_subject_rejected: "Schvalovací proces %{name} zamítnut"
-  text_email_subject_delegated: "Schvalovací proces %{name} delegován"
-  text_email_subject_requires_approval: "Schvalovací proces %{name} očekává Vaše schválení"
-  text_email_subject_updated: "Schvalovací proces %{name} aktualizován"
-  text_email_subject_started: "Schvalovací proces %{name} spuštěn" 
+  text_email_subject_approved: schválen
+  text_email_subject_rejected: zamítnut
+  text_email_subject_delegated: delegován
+  text_email_subject_requires_approval: očekává Vaše schválení
+  text_email_subject_updated: aktualizován
+  text_email_subject_started: spuštěn
   text_email_finished_approved: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl právě ukončen a dokument je schválen."
   text_email_finished_rejected: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl dokončen a dokument byl zamítnut, protože '%{notice}'."
   text_email_finished_delegated: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl delegován, protože '%{notice}' a od Vás se očekává schválení v aktuálním schvalovacím kroku."
   text_email_finished_step: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' právě ukončil jeden ze schvalovacích kroků a od Vás se očekává schválení v dalším schvalovacím kroku."
   text_email_finished_step_short: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' právě ukončil jeden ze schvalovacích kroků."
-  text_email_started: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl zahájen a od Vás se očekává schválení v aktuálním schvalovacím kroku."  
+  text_email_started: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl zahájen a od Vás se očekává schválení v aktuálním schvalovacím kroku."
   text_email_to_proceed: Pro schválení klikněte na zaškrtávací ikonku vedle dokumentu v
   text_email_to_see_history: Pro zobrazení historie schvalovacího procesu klikněte na status dokumentu v
   text_email_to_see_status: Pro zobrazení aktuálního stavu schvalovacího procesu klikněte na status dokumentu v
   label_my_open_approvals: My open approvals
   label_my_locked_documents: My locked documents
-    
-  title_create_link: Vytvořit symbolický odkaz  
+
+  title_create_link: Vytvořit symbolický odkaz
   label_link_from: Odkaz z
   label_link_to: Odkaz do
   label_notifications_on: Zapnout notifikace
@@ -294,43 +289,46 @@ cs:
   field_target_file: Zdrojový soubor
   title_download_entries: Historie stahování
   label_external: Externí
-  
+
   label_link_name: Název odkazu
   label_link_external_url: URL
-  label_target_folder: Cílový adresář
-  label_source_folder: Zdrojový adresář
+  label_target_folder: Cílová složka
+  label_source_folder: Zdrojová složka
   label_target_project: Cílový projekt
-  label_source_project: Zdrojový projekt  
-  
-  text_email_doc_updated_subject: "Dokumenty projektu %{project} aktualizovány"
+  label_source_project: Zdrojový projekt
+
+  text_email_doc_updated_subject: Dokumenty aktualizovány
   text_email_doc_updated: právě aktualizoval dokumenty projektu
   text_email_doc_follows: takto
-  text_email_doc_deleted_subject: "Dokumenty projektu %{project} smazány"
+  text_email_doc_deleted_subject: Dokumenty smazány
   text_email_doc_deleted: právě smazal dokumety projektu
-  label_links_only: pouze odkazy  
-  
+  label_links_only: pouze odkazy
+
   label_display_notified_recipients: Zobrazit příjemce notifikací
   note_display_notified_recipients: Uživatel bude informován o příjemcích právě odeslané emailové notifikace.
   warning_email_notifications: "Notifikační email poslán na uživatele %{to}"
-  
+
   link_trash_bin: Koš
   title_restore: Obnovit
   notice_dmsf_file_restored: Document byl úspěšně obnoven
-  notice_dmsf_folder_restored: Adresář byl úspěšně obnoven
+  notice_dmsf_folder_restored: Složka byla úspěšně obnovena
   notice_dmsf_link_restored: Odkaz byl úspěšně obnoven
   title_restore_checked: Obnov vybrané
-  error_parent_folder: Nadřazený adresář neexistuje
-  
+  error_parent_folder: Nadřazená složka neexistuje
+
   error_resource_or_parent_locked: Nelze zamknout - zdrojový nebo nadřazený objekt je zamčený
   error_parent_locked: Nelze zamknout - nadřazený objekt je zamčený
   error_resource_locked: Nelze zamknout - zdrojový objekt je zamčený
-  error_lock_exclusively: Nelze zamknout již zamčený objekt  
-  error_unlock_parent_locked: Nelze odemknout - nadřazený objekt je zamčený  
-    
-  my:
-    blocks:
-      locked_documents: Zamčené dokumenty
-      open_approvals: Procesy ke schválení
-          
+  error_lock_exclusively: Nelze zamknout již zamčený objekt
+  error_unlock_parent_locked: Nelze odemknout - nadřazený objekt je zamčený
+
+  field_dmsf_tree_view: Zobrazit složky jako stromovou strukturu
+  label_dmsf_version: Verze
+
+  locked_documents: Zamčené dokumenty
+  open_approvals: Procesy ke schválení
+
   label_maximum_ajax_upload_filesize: Maximální velikost souboru nahratelná přes AJAX
-  note_maximum_ajax_upload_filesize: Omezuje velikost souboru, který může být nahrán přes standardní rozhraní AJAX, jinak se použije standarní rozhraní Redminu. Číslo je MB.
+  note_maximum_ajax_upload_filesize: Omezuje velikost souboru, který může být nahrán přes standardní rozhraní AJAX, jinak se použije standardní rozhraní Redminu. Číslo je v MB.
+  label_classic: Klasický
+  label_drag_drop: "Drag&Drop"

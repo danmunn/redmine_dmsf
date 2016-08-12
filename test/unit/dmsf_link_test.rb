@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -94,11 +94,28 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
       "Folder link #{@folder_link.name} should have not been saved"
     assert_equal 1, @folder_link.errors.count        
   end
+  
+  def test_validate_external_url_length
+    @file_link.target_type = 'DmsfUrl'
+    @file_link.external_url = 'https://localhost/' + 'a' * 256
+    assert !@file_link.save, 
+      "External URL link #{@file_link.name} should have not been saved"
+    assert_equal 1, @file_link.errors.count        
+  end
+  
+  def test_validate_external_url_presence
+    @file_link.target_type = 'DmsfUrl'
+    @file_link.external_url = ''
+    assert !@file_link.save,
+      "External URL link #{@file_link.name} should have not been saved"
+    assert_equal 1, @file_link.errors.count        
+  end
     
   def test_validate_external_url
     @file_link.target_type = 'DmsfUrl'
-    @file_link.external_url = nil
-    assert !@file_link.save, 'External link should have not been saved'
+    @file_link.external_url = 'htt ps://abc.xyz'
+    assert !@file_link.save, 
+      "External URL link #{@file_link.name} should have not been saved"
     assert_equal 1, @file_link.errors.count
   end
    
@@ -185,28 +202,28 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
   
   def test_delete_file_link    
     assert @file_link.delete(false), @file_link.errors.full_messages.to_sentence
-    assert @file_link.deleted, "File link hasn't been deleted"
+    assert @file_link.deleted?, "File link hasn't been deleted"
   end
   
   def test_restore_file_link
     assert @file_link.delete(false), @file_link.errors.full_messages.to_sentence
-    assert @file_link.deleted, "File link hasn't been deleted"
+    assert @file_link.deleted?, "File link hasn't been deleted"
     assert @file_link.restore, @file_link.errors.full_messages.to_sentence
-    assert !@file_link.deleted, "File link hasn't been restored"
+    assert !@file_link.deleted?, "File link hasn't been restored"
   end
     
   def test_delete_folder_link
     assert @folder_link.delete(false), 
       @folder_link.errors.full_messages.to_sentence
-    assert @folder_link.deleted, "Folder link hasn't been deleted"
+    assert @folder_link.deleted?, "Folder link hasn't been deleted"
   end
   
   def test_restore_folder_link
     assert @folder_link.delete(false), 
       @folder_link.errors.full_messages.to_sentence
-    assert @folder_link.deleted, "Folder link hasn't been deleted"
+    assert @folder_link.deleted?, "Folder link hasn't been deleted"
     assert @folder_link.restore, @folder_link.errors.full_messages.to_sentence
-    assert !@folder_link.deleted, "Folder link hasn't been restored"
+    assert !@folder_link.deleted?, "Folder link hasn't been restored"
   end
   
   def test_destroy_file_link    

@@ -104,7 +104,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @admin
     assert_response :success # If its in the 20x range it's acceptable, should be 204.
     @file1.reload
-    assert @file1.deleted, "File #{@file1.name} hasn't been deleted"    
+    assert @file1.deleted?, "File #{@file1.name} hasn't been deleted"    
   end
 
   def test_unathorized_user  
@@ -112,7 +112,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
     assert_response :missing # Without folder_view permission, he will not even be aware of its existence.
     @file1.reload
-    assert !@file1.deleted, "File #{@file1.name} is expected to exist"
+    assert !@file1.deleted?, "File #{@file1.name} is expected to exist"
   end
   
   def test_unathorized_user_forbidden
@@ -121,7 +121,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
     assert_response :forbidden # Now jsmith's role has view_folder rights, however they do not hold file manipulation rights.
     @file1.reload
-    assert !@file1.deleted, "File #{@file1.name} is expected to exist"
+    assert !@file1.deleted?, "File #{@file1.name} is expected to exist"
   end
 
   def test_view_folder_not_allowed  
@@ -130,7 +130,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", nil, @jsmith
     assert_response :missing # Without folder_view permission, he will not even be aware of its existence.
     @folder1.reload
-    assert !@folder1.deleted, "Folder #{@folder1.title} is expected to exist"
+    assert !@folder1.deleted?, "Folder #{@folder1.title} is expected to exist"
   end
 
   def test_folder_manipulation_not_allowed  
@@ -139,7 +139,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", nil, @jsmith
     assert_response :forbidden # Without manipulation permission, action is forbidden.
     @folder1.reload
-    assert !@folder1.deleted, "Foler #{@folder1.title} is expected to exist"
+    assert !@folder1.deleted?, "Foler #{@folder1.title} is expected to exist"
   end
 
   def test_folder_delete_by_admin  
@@ -147,7 +147,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @admin
     assert_response :success
     @folder6.reload
-    assert @folder6.deleted, "Folder #{@folder1.title} is not expected to exist"
+    assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
   end
 
   def test_folder_delete_by_user  
@@ -157,7 +157,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
     assert_response :success
     @folder6.reload
-    assert @folder6.deleted, "Folder #{@folder1.title} is not expected to exist"
+    assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
   end
 
   def test_file_delete_by_administrator  
@@ -165,7 +165,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @admin
     assert_response :success
     @file1.reload
-    assert @file1.deleted, "File #{@file1.name} is not expected to exist"
+    assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
   end
 
   def test_file_delete_by_user
@@ -175,7 +175,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
     assert_response :success    
     @file1.reload
-    assert @file1.deleted, "File #{@file1.name} is not expected to exist"
+    assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
   end
 
   def test_locked_folder
@@ -186,7 +186,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
     assert_response 423 # Locked    
     @folder6.reload
-    assert !@folder6.deleted, "Folder #{@folder6.title} is expected to exist"    
+    assert !@folder6.deleted?, "Folder #{@folder6.title} is expected to exist"    
   end
   
   def test_locked_file
@@ -197,7 +197,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
     assert_response 423 # Locked        
     @file1.reload
-    assert !@file1.deleted, "File #{@file1.name} is expected to exist"
+    assert !@file1.deleted?, "File #{@file1.name} is expected to exist"
   end
 
 end

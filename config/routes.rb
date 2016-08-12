@@ -1,8 +1,10 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-14 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -40,8 +42,8 @@ RedmineApp::Application.routes.draw do
   get '/projects/:id/dmsf/unlock', :controller => 'dmsf', :action => 'unlock', :as => 'unlock_dmsf'
   get '/projects/:id/dmsf/', :controller => 'dmsf', :action => 'show', :as => 'dmsf_folder'
   get '/projects/:id/dmsf/new', :controller => 'dmsf', :action => 'new', :as => 'new_dmsf'
-  get '/projects/:id/dmsf/edit', :controller=> 'dmsf', :action => 'edit', :as => 'edit_dmsf'
-  get '/projects/:id/dmsf/edit/root', :controller=> 'dmsf', :action => 'edit_root', :as => 'edit_root_dmsf'
+  get '/projects/:id/dmsf/edit', :controller => 'dmsf', :action => 'edit', :as => 'edit_dmsf'
+  get '/projects/:id/dmsf/edit/root', :controller => 'dmsf', :action => 'edit_root', :as => 'edit_root_dmsf'
   get '/projects/:id/dmsf/trash', :controller => 'dmsf', :action => 'trash', :as => 'trash_dmsf'
   get '/projects/:id/dmsf/restore', :controller => 'dmsf', :action => 'restore', :as => 'restore_dmsf'
 
@@ -61,7 +63,7 @@ RedmineApp::Application.routes.draw do
   post '/projects/:id/dmsf/upload', :controller => 'dmsf_upload', :action => 'upload'
   post '/projects/:id/dmsf/upload/commit', :controller => 'dmsf_upload', :action => 'commit_files'
   post '/projects/:id/dmsf/commit', :controller => 'dmsf_upload', :action => 'commit'
-  
+
   #
   # dmsf_files controller
   #   /dmsf/files/<file id>
@@ -76,7 +78,7 @@ RedmineApp::Application.routes.draw do
   get '/dmsf/files/:id/download', :controller => 'dmsf_files', :action => 'show', :download => '' # Otherwise will not route nil download param
   get '/dmsf/files/:id/download/:download', :controller => 'dmsf_files', :action => 'show', :as => 'download_revision'
   get '/dmsf/files/:id/view', :controller => 'dmsf_files', :action => 'view'
-  get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show', :as => 'dmsf_file'  
+  get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show', :as => 'dmsf_file'
   delete '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'delete'
   get '/dmsf/files/:id/restore', :controller => 'dmsf_files', :action => 'restore', :as => 'restore_dmsf_file'
 
@@ -108,15 +110,15 @@ RedmineApp::Application.routes.draw do
   get '/dmsf/folders/:id/copy', :controller => 'dmsf_folders_copy', :action => 'new', :as => 'copy_folder'
 
   #
-  # DAV4Rack implementation of Webdav [note: if changing path you'll need to update lib/redmine_dmsf/webdav/no_parse.rb also]
-  #   /dmsf/webdav
+  # DAV4Rack implementation of Webdav
   mount DAV4Rack::Handler.new(
     :root_uri_path => "#{Redmine::Utils::relative_url_root}/dmsf/webdav",
     :resource_class => RedmineDmsf::Webdav::ResourceProxy,
-    :controller_class => RedmineDmsf::Webdav::Controller
-  ), :at => "/dmsf/webdav"
-  
-  # Approval workflow    
+    :controller_class => RedmineDmsf::Webdav::Controller,
+    :log_to => Rails.logger
+  ), :at => '/dmsf/webdav'
+
+  # Approval workflow
   resources :dmsf_workflows do
     member do
       get 'autocomplete_for_user'
@@ -129,16 +131,16 @@ RedmineApp::Application.routes.draw do
       get 'new_step'
     end
   end
-    
+
   match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'add_step', :id => /\d+/, :via => :post
   match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'remove_step', :id => /\d+/, :via => :delete
-  match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'reorder_steps', :id => /\d+/, :via => :put    
-  
+  match 'dmsf_workflows/:id/edit', :controller => 'dmsf_workflows', :action => 'reorder_steps', :id => /\d+/, :via => :put
+
   # Links
   resources :dmsf_links do
     member do
       get 'restore'
-    end    
-  end  
-  
+    end
+  end
+
 end

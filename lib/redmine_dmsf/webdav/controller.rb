@@ -118,7 +118,7 @@ module RedmineDmsf
       # Escape URL string
       def url_format(resource)
         # Additionally escape square brackets, otherwise files with 
-        # file name like file[1].pdf are not visible in some WebDAV clients
+        # file names like file[1].pdf are not visible in some WebDAV clients
         URI.encode(super, '[]')
       end
       

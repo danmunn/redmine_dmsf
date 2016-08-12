@@ -19,19 +19,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class RemoveProjectFromRevision < ActiveRecord::Migration
-  def up      
-    remove_column :dmsf_file_revisions, :project_id            
+  def up
+    remove_column :dmsf_file_revisions, :project_id
   end
-  
+
   def down
     add_column :dmsf_file_revisions, :project_id, :integer, :null => true
-    
+
     DmsfFileRevision.find_each do |revision|
-      if revision.file
-        revision.project_id = revision.file.project_id
+      if revision.dmsf_file
+        revision.project_id = revision.dmsf_file.project_id
         revision.save
       end
-    end        
+    end
   end
-  
+
 end

@@ -17,16 +17,16 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
 <p><%= @user.name %>,</p>
-<p>      
+<p>
   <%= @text1 %>
 </p>
 <p>
-  <%= @text2 %>      
-  <%  unless @revision.file.folder %>
-    <%= link_to l(:link_documents), 
-      dmsf_folder_url(:id => @revision.file.project) %>
+  <%= @text2 %>
+  <%  unless @revision.dmsf_file.dmsf_folder %>
+    <%= link_to l(:link_documents),
+      dmsf_folder_url(:id => @revision.dmsf_file.project) %>
   <% else %>
-    <%=  link_to @revision.file.folder.title,
-      dmsf_folder_url(:id => @revision.file.project, :folder_id => @revision.file.folder) %>
+    <%=  link_to @revision.dmsf_file.dmsf_folder.title,
+      dmsf_folder_url(:id => @revision.dmsf_file.project, :folder_id => @revision.dmsf_file.dmsf_folder) %>
   <% end %>.
 </p>

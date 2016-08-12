@@ -35,14 +35,14 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     
   def test_delete        
     assert @folder6.delete(false), @folder6.errors.full_messages.to_sentence
-    assert @folder6.deleted, "Folder #{@folder6} hasn't been deleted"
+    assert @folder6.deleted?, "Folder #{@folder6} hasn't been deleted"
   end
   
   def test_restore    
     assert @folder6.delete(false), @folder6.errors.full_messages.to_sentence
-    assert @folder6.deleted, "Folder #{@folder6} hasn't been deleted"
+    assert @folder6.deleted?, "Folder #{@folder6} hasn't been deleted"
     assert @folder6.restore, @folder6.errors.full_messages.to_sentence
-    assert !@folder6.deleted, "Folder #{@folder6} hasn't been restored"
+    assert !@folder6.deleted?, "Folder #{@folder6} hasn't been restored"
   end
   
   def test_destroy    

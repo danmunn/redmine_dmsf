@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012 Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,9 +18,22 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfLockError < StandardError
+module DmsfUserPreference
+  def self.included(base)
+    base.send(:include, InstanceMethods)
+  end
+
+  module InstanceMethods
+
+    def dmsf_tree_view
+      self[:dmsf_tree_view] || '0'
+    end
+
+    def dmsf_tree_view=(value)
+      self[:dmsf_tree_view] = value
+    end
+  end
 
 end
 
-
-
+UserPreference.send(:include, DmsfUserPreference)

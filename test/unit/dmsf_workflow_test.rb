@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,15 +27,16 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions
 
   def setup    
-    @wf1 = DmsfWorkflow.find_by_id(1)
-    @wf2 = DmsfWorkflow.find_by_id(2) 
-    @wfs1 = DmsfWorkflowStep.find_by_id(1)
-    @wfs2 = DmsfWorkflowStep.find_by_id(2)
-    @wfs3 = DmsfWorkflowStep.find_by_id(3)
-    @wfs4 = DmsfWorkflowStep.find_by_id(4)
-    @wfs5 = DmsfWorkflowStep.find_by_id(5)
-    @wfsa1 = DmsfWorkflowStepAssignment.find_by_id(1)
-    @wfsac1 = DmsfWorkflowStepAction.find_by_id(1)
+    @wf1 = DmsfWorkflow.find_by_id 1
+    @wf2 = DmsfWorkflow.find_by_id 2 
+    @wf3 = DmsfWorkflow.find_by_id 3 
+    @wfs1 = DmsfWorkflowStep.find_by_id 1
+    @wfs2 = DmsfWorkflowStep.find_by_id 2
+    @wfs3 = DmsfWorkflowStep.find_by_id 3
+    @wfs4 = DmsfWorkflowStep.find_by_id 4
+    @wfs5 = DmsfWorkflowStep.find_by_id 5
+    @wfsa1 = DmsfWorkflowStepAssignment.find_by_id 1
+    @wfsac1 = DmsfWorkflowStepAction.find_by_id 1
     @revision1 = DmsfFileRevision.find_by_id 1
     @revision2 = DmsfFileRevision.find_by_id 2
     @project = Project.find_by_id 2
@@ -45,6 +46,7 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
   def test_truth    
     assert_kind_of DmsfWorkflow, @wf1        
     assert_kind_of DmsfWorkflow, @wf2
+    assert_kind_of DmsfWorkflow, @wf3
     assert_kind_of DmsfWorkflowStep, @wfs1
     assert_kind_of DmsfWorkflowStep, @wfs2
     assert_kind_of DmsfWorkflowStep, @wfs3
@@ -85,8 +87,15 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     assert_equal 1, @wf1.errors.count        
   end
   
-  def test_validate_name_uniqueness
+  def test_validate_name_uniqueness_globaly   
     @wf2.name = @wf1.name
+    assert !@wf2.save
+    assert_equal 1, @wf2.errors.count        
+  end
+  
+  def test_validate_name_uniqueness_localy
+    @wf2.name = @wf1.name
+    @wf2.project_id = @wf1.project_id
     assert !@wf2.save
     assert_equal 1, @wf2.errors.count        
   end
@@ -208,6 +217,22 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
   def test_participiants
     participiants = @wf1.participiants    
     assert_equal participiants.count, 2
+  end
+  
+  def test_locked    
+    assert @wf3.locked?, "#{@wf2.name} status is #{@wf3.status}"
+  end
+  
+  def test_active
+    assert @wf1.active?, "#{@wf1.name} status is #{@wf1.status}"
+  end
+  
+  def test_scope_active
+    assert_equal DmsfWorkflow.count, (DmsfWorkflow.active.count + 1)
+  end
+  
+  def test_scope_status    
+    assert_equal 1, DmsfWorkflow.status(DmsfWorkflow::STATUS_LOCKED).count
   end
   
 end

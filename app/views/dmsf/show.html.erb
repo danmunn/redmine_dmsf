@@ -1,11 +1,11 @@
-<%#=
+<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,93 +22,70 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% html_title(l(:dmsf)) %>
+<% html_title l(:dmsf) %>
 <div class="contextual">
-  <% if @folder_manipulation_allowed %>    
-    <% if @folder.nil? %>      
-      <%= link_to(l(:button_edit), 
-        edit_root_dmsf_path(:id => @project),
-        :title => l(:link_edit, :title => l(:link_documents)), 
+  <% if @folder_manipulation_allowed %>
+    <% if @folder.nil? %>
+      <%= link_to(l(:button_edit), edit_root_dmsf_path(:id => @project),
+        :title => l(:link_edit, :title => l(:link_documents)),
         :class => 'icon icon-edit') %>
-    <% elsif !@locked_for_user %>      
-      <%= link_to(l(:button_edit), 
+    <% elsif !@locked_for_user %>
+      <%= link_to(l(:button_edit),
         edit_dmsf_path(:id => @project, :folder_id => @folder),
-        :title => l(:link_edit, :title => h(@folder.title)), 
+        :title => l(:link_edit, :title => h(@folder.title)),
         :class => 'icon icon-edit') %>
     <% end %>
     <% if @folder && (!@locked_for_user || User.current.allowed_to?(:force_file_unlock, @project)) %>
       <% if @folder.locked? %>
-        <% unless @folder.unlockable? %>
-          <%= link_to(l(:button_unlock),
-            :title => l(:title_folder_parent_locked, :name => @folder.folder.lock.reverse[0].folder.title),
-            :class => 'icon icon-dmsf-unlock') if @folder %>
-        <% else %>
-          <%= link_to(l(:button_unlock),
-            unlock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-            :title => l(:title_unlock_folder),
-           :class => 'icon icon-dmsf-unlock') if @folder %>          
-        <% end %>
+        <%= link_to_if(@folder.unlockable?, l(:button_unlock),
+          unlock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
+          :title => l(:title_unlock_folder), :class => 'icon dmsf_icon-unlock')  %>
       <% else %>
         <%= link_to(l(:button_lock),
           lock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-          :title => l(:title_lock_folder),
-          :class => 'icon icon-dmsf-lock') if @folder %>
+          :title => l(:title_lock_folder), :class => 'icon dmsf_icon-lock') %>
       <% end %>
     <% end %>
-    <% unless @folder %>         
-      <% if @project.dmsf_notification %>        
-        <%= link_to(l(:label_notifications_off), 
-          notify_deactivate_dmsf_path(:id => @project),
-          :title => l(:title_notifications_active_deactivate), 
-          :class => 'icon icon-notification-on') %>
-      <% else %>        
-        <%= link_to(l(:label_notifications_on),
-          notify_activate_dmsf_path(:id => @project),
-          :title => l(:title_notifications_active_deactivate), 
-          :class => 'icon icon-notification-off') %>
-      <% end %> 
+    <% if !@locked_for_user && ((@folder && @folder.notification) || (!@folder && @project.dmsf_notification)) %>
+      <%= link_to(l(:label_notifications_off),
+        notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
+        :title => l(:title_notifications_active_deactivate),
+        :class => 'icon dmsf_icon-notification-on') %>
     <% else %>
-      <% if @folder.notification %>
-          <%= link_to(l(:label_notifications_off),
-            notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
-            :title => l(:title_notifications_active_deactivate),
-            :class => 'icon icon-notification-on') %>
-        <% else %>
-          <%= link_to(l(:label_notifications_on),
-            notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
-            :title => l(:title_notifications_not_active_activate),
-            :class => 'icon icon-notification-off') %>
-        <% end %>    
-    <% end %>    
-    <% if @file_manipulation_allowed %>      
-      <%= link_to(l(:label_link_from), 
+      <%= link_to(l(:label_notifications_on),
+        notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
+        :title => l(:title_notifications_not_active_activate),
+        :class => 'icon dmsf_icon-notification-off') %>
+    <% end %>
+    <% if @file_manipulation_allowed && !@locked_for_user %>
+      <%= link_to(l(:label_link_from),
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder, :type => 'link_from'),
-        :title => l(:title_create_link), 
-        :class => 'icon icon-link') unless @locked_for_user %>
-    <% end %>    
-    <%= link_to(l(:link_create_folder), 
+        :title => l(:title_create_link), :class => 'icon dmsf_icon-link') %>
+    <% end %>
+    <%= link_to(l(:link_create_folder),
       new_dmsf_path(:id => @project, :parent_id => @folder),
-      :title => l(:link_create_folder), 
+      :title => l(:link_create_folder),
       :class => 'icon icon-add') unless @locked_for_user %>
   <% end %>
   <%= link_to_if(@trash_enabled, l(:link_trash_bin), trash_dmsf_path(@project),
     :title => l(:link_trash_bin), :class => 'icon icon-del') if @trash_visible %>
 </div>
 
-<%= render(:partial => 'path', :locals => {:folder => @folder, :filename => nil}) %>
+<%= render(:partial => 'path',
+  :locals => {:folder => @folder, :filename => nil, :title => nil}) %>
 
 <div class="dmsf-header">
   <div class="wiki">
     <%= textilizable(@folder ? @folder.description : @project.dmsf_description) %>
-  </div>    
+  </div>
 </div>
 
 <%= error_messages_for('dmsf_workflow') %>
 
 <%= form_tag({:action => :entries_operation, :id => @project, :folder_id => @folder}, :method => :post,
-  :class => 'dmfs_entries', :id => 'entries_form') do %>
+  :class => 'dmsf_entries', :id => 'entries_form') do %>
   <%= hidden_field_tag('action') %>
-  <div class="controls" style="float: left">
+  <div class="dmsf_controls" style="float: left">
     <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries') if @file_view_allowed %>
     <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries') if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
     <% if @file_delete_allowed%>
@@ -117,156 +94,80 @@
   </div>
   <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
   <% unless values.empty? %>
-    <div class="controls" style="float: right">               
+    <div class="dmsf_controls" style="float: right">
       <%= custom_field_tag_with_label(
-        :dmsf_folder, 
+        :dmsf_folder,
         CustomValue.new(:custom_field_id => params[:custom_field_id].present? ? params[:custom_field_id] : values.first.custom_field_id, :value => params[:custom_value])) %>
-    </div>  
-  <% end %>    
-  <table class="display entries" id="browser">
-    <thead>
-      <tr id="root">
-        <th class="check">
-          <input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
-        </th>
-        <th><%= l(:link_title) %></th>
-        <th><%= l(:link_size) %></th>
-        <th><%= l(:link_modified) %></th>
-        <th title="<%= l(:label_version) %>"><%= l(:link_ver) %></th>
-        <th><%= l(:link_workflow) %></th>
-        <th><%= l(:link_author) %></th>
-        <th></th>
-        <th class="invisible"></th>
-        <th class="invisible"></th>
-        <th class="invisible"></th>
-        <th class="invisible"></th>
-      </tr>
-    </thead>
-  <tbody>       
-  <% @subfolders.each do |subfolder| %>    
-    <tr class="dir">
-      <%= render(:partial => 'dir', 
-        :locals => { 
-          :project => @project, 
-          :subfolder => subfolder, 
-          :link => nil,
-          :id => subfolder.id, 
-          :name => 'subfolders[]', 
-          :title => subfolder.title }) %>
-    </tr>
-  <% end %>  
-  <% @dir_links.each do |link| %>
-    <% unless link.target_project %>
-      <% Rails.logger.error "Error: dmsf_link id #{link.id} has no target!" %>
-      <% next %>
-    <% end %>         
-    <tr class="gray">
-      <%= render(:partial => 'dir', 
-        :locals => { 
-          :project => link.target_project, 
-          :subfolder => link.target_folder, 
-          :link => link,
-          :id => link.id, 
-          :name => 'dir_links[]', 
-          :title => link.name }) %>
-    </tr>
-  <% end %>        
-  <% @files.each do |file| %>
-    <% unless file.last_revision %>      
-      <% Rails.logger.error "Error: dmsf_file id #{file.id} has no revision!" %>
-      <% next %>
-    <% end %>         
-    <tr class="file">
-      <%= render(:partial => 'file', :locals => { 
-          :project => @project, 
-          :file => file, 
-          :link => nil,
-          :id => file.id,
-          :name => 'files[]',
-          :title => file.title }) %>
-    </tr>
+    </div>
   <% end %>
-  <% @file_links.each do |link| %>
-    <% unless link.target_file.last_revision %>
-        <% Rails.logger.error "Error: dmsf_file id #{link.target_id} has no revision!" %>
-        <% next %>
-      <% end %>
-      <tr class="gray">
-        <%= render(:partial => 'file', :locals => {
-            :project => link.target_project,
-            :file => link.target_file,
-            :link => link,
-            :id => link.id,
-            :name => 'file_links[]',
-            :title => link.name }) %>
-      </tr>
+  <div class="autoscroll">
+    <% if @tree_view %>
+      <%= render(:partial => 'tree_view') %>
+    <% else %>
+      <%= render(:partial => 'list_view') %>
     <% end %>
-    <% @url_links.each do |link| %>
-      <tr class="gray">
-          <%= render(:partial => 'url', :locals => {
-                                              :project => link.target_project,
-                                              :file => link.target_file,
-                                              :link => link,
-                                              :id => link.id,
-                                              :name => 'file_links[]',
-                                              :title => link.name }) %>
-      </tr>
-    <% end %>
-  </tbody>
-  </table>  
-<% end %>   
+  </div>
+<% end %>
 
 <script type="text/javascript">
   $('#entries_delete_button').click(function() {
     if(window.confirm("<%= l(:text_are_you_sure) %>")) {
-      $('#entries_form').attr('action', "<%= delete_entries_path(:id => @project, :folder_id => @folder) %>");      
+      $('#entries_form').attr('action', "<%= delete_entries_path(:id => @project, :folder_id => @folder) %>");
       $('#entries_form').submit();
     }
   });
-  
+
   $('.list_cf').change(function() {
     $('#entries_form').attr('action', "<%= tag_changed_path(:id => @project, :folder_id => @folder) %>");
-    $('#entries_form').submit();   
+    $('#entries_form').submit();
   });
 
-  $('#check_all_entries').click(function() {    
-    $('input[type=checkbox]', $('#browser > tbody')).prop('checked', this.checked);    
-  });  
+  $('#check_all_entries').click(function() {
+    $('input[type=checkbox]', $('#browser > tbody')).prop('checked', this.checked);
+  });
 </script>
 
-<%  
-  sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json"
-  sUrl = 'jquery.dataTables/en.json' unless File.exist?(sUrl)
+<%
+  sUrl = 'jquery.dataTables/en.json'
+  sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !I18n.locale.to_s.match(/^en.*/)
 %>
 
-<% content_for :header_tags do %>      
+<% content_for :header_tags do %>
   <%= javascript_include_tag 'bowser.min.js', :plugin => 'redmine_dmsf' %>
-  <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>  
+  <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>
 
-  <script type="text/javascript">    
+  <script type="text/javascript">
     $(document).ready(function() {
       $('#browser').dataTable({
         'bJQueryUI': true,
         'oLanguage': {
-                'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', sUrl) %>"
+          'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', sUrl) %>"
         },
-                'bAutoWidth': false,
+        'bAutoWidth': false,
         'bPaginate': false,
-        'aaSorting': [[1,'asc']],
-        'aaSortingFixed': [[8,'asc']],
+        'aaSorting': [[1, 'asc']],
+        'aaSortingFixed': [[ 8, 'asc']],
         'aoColumnDefs': [
-          { 'bSearchable': false, 'aTargets': [0, 7, 8, 9] },
-          { 'bSortable': false, 'aTargets': [0, 7, 8] },
+          { 'bSearchable': false, 'aTargets': [0, 7, 8, 9, 10, 11] },
+          { 'bSortable': false, 'aTargets': [0, 7] },
           { 'iDataSort': 9, 'aTargets': [ 2 ] },
           { 'iDataSort': 10, 'aTargets': [ 3 ] },
           { 'iDataSort': 11, 'aTargets': [ 4 ] }
         ],
         'fnInitComplete': function() {
-           jQuery('div.controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
+           jQuery('div.dmsf_controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
         },
         'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-           return "<%= l(:label_number_of_folders)%>: <%= @subfolders.count + @dir_links.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count + @file_links.count + @url_links.count %>";
+          <% if @tree_view %>
+            <% if @folder %>
+              return "<%= "#{l(:label_number_of_folders)}: #{@folder.deep_folder_count} #{l(:label_number_of_documents)}: #{@folder.deep_file_count}" %>";
+            <% else %>
+              return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFolder').count}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFile').count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfUrl').count}" %>";
+            <% end %>
+          <% else %>
+            return "<%= "#{l(:label_number_of_folders)}: #{@subfolders.count + @dir_links.count}, #{l(:label_number_of_documents)}: #{@files.count + @file_links.count + @url_links.count}" %>";
+          <% end %>
         }
       });
 
@@ -284,8 +185,10 @@
       $('#entries_form').submit(function () {
           $(this).removeAttr('data-submitted');
       });
-    });   
+    });
   </script>
 <% end %>
 
-<%= render(:partial => 'dmsf_upload/multi_upload') if (@file_manipulation_allowed && !@locked_for_user) %>
+<% if (@file_manipulation_allowed && !@locked_for_user) %>
+  <%= render(:partial => 'dmsf_upload/multi_upload') %>
+<% end %>

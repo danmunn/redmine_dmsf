@@ -35,10 +35,10 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   
   def test_delete_restore      
     @revision5.delete false    
-    assert @revision5.deleted, 
+    assert @revision5.deleted?, 
       "File revision #{@revision5.name} hasn't been deleted"
     @revision5.restore    
-    assert !@revision5.deleted, 
+    assert !@revision5.deleted?, 
       "File revision #{@revision5.name} hasn't been restored"
   end    
   

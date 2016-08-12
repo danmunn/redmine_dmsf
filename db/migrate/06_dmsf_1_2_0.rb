@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class Dmsf120 < ActiveRecord::Migration
-  
+
   class DmsfFileRevision < ActiveRecord::Base
     belongs_to :file, :class_name => 'DmsfFile', :foreign_key => 'dmsf_file_id'
     belongs_to :source_revision, :class_name => 'DmsfFileRevision', :foreign_key => 'source_dmsf_file_revision_id'
@@ -26,22 +26,22 @@ class Dmsf120 < ActiveRecord::Migration
     belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
     belongs_to :project
   end
-  
+
   def self.up
     add_column :dmsf_file_revisions, :project_id, :integer, :null => true
-    
+
     DmsfFileRevision.find_each do |revision|
-      if revision.file
-        revision.project_id = revision.file.project.id
+      if revision.dmsf_file
+        revision.project_id = revision.dmsf_file.project.id
         revision.save
       end
     end
-    
+
     change_column :dmsf_file_revisions, :project_id, :integer, :null => false
   end
 
   def self.down
-    remove_column :dmsf_file_revisions, :project_id 
+    remove_column :dmsf_file_revisions, :project_id
   end
 
 end

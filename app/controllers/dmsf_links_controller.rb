@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,13 +26,13 @@ class DmsfLinksController < ApplicationController
   before_filter :find_link_project
   before_filter :authorize
 
-  def new    
+  def new
     @dmsf_link = DmsfLink.new
     @dmsf_link.project_id = params[:project_id]
 
     if params[:dmsf_link].present?
       # Reload
-      @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]                       # TODO: Add stuff in here for external links so that if error occurs, repopulate the same
+      @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
       @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
       @type = params[:dmsf_link][:type]
       @link_external = (@type == 'link_from') && (params[:external_link] == 'true')
@@ -53,7 +53,7 @@ class DmsfLinksController < ApplicationController
 
           if file
             folder = DmsfFolder.find_by_id params[:dmsf_link][:target_folder_id]
-            if (folder && (folder.project_id == @dmsf_link.target_project_id) && folder.files.include?(file)) || folder.nil?
+            if (folder && (folder.project_id == @dmsf_link.target_project_id) && folder.dmsf_files.include?(file)) || folder.nil?
               @dmsf_link.name = file.title
             end
           end
@@ -111,7 +111,7 @@ class DmsfLinksController < ApplicationController
         @dmsf_link.target_type = DmsfFolder.model_name.to_s
       end
       @dmsf_link.name = params[:dmsf_link][:name]
-            
+
       if @dmsf_link.save
         flash[:notice] = l(:notice_successful_create)
         redirect_to dmsf_folder_path(:id => @project.id, :folder_id => @dmsf_link.dmsf_folder_id)

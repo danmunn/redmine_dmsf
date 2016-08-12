@@ -43,7 +43,7 @@
 .plupload_logo {
 	width: 40px;
 	height: 40px;
-	background: url('../img/plupload.png') no-repeat 0 0;
+	background: url('../images/plupload.png') no-repeat 0 0;
 	position: absolute;
 	top: 8px;
 	left: 8px;
@@ -119,7 +119,7 @@
 }
 
 .plupload_thumb_loading {
-	background: #eee url(../img/loading.gif) center no-repeat;
+	background: #eee url(../images/loading.gif) center no-repeat;
 }
 
 .plupload_thumb_loading .plupload_file_dummy,

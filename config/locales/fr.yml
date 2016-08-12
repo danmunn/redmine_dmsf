@@ -1,11 +1,11 @@
 # encoding: utf-8
-# 
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012  Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2014  Atmis
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2014   Atmis
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -31,8 +31,8 @@ fr:
   notice_file_locked: Fichier verrouillé
   warning_file_not_locked: Fichier déverrouillé
   notice_file_unlocked: Fichier déverrouillé
-  error_only_user_that_locked_file_can_unlock_it: "Le fichier ne peut être déverrouillé que par celui qui l'a verrouillé"  
-  error_max_files_exceeded: Le nombre de fichiers pouvant être téléchargés simultanément est dépassé  
+  error_only_user_that_locked_file_can_unlock_it: "Le fichier ne peut être déverrouillé que par celui qui l'a verrouillé"
+  error_max_files_exceeded: Le nombre de fichiers pouvant être téléchargés simultanément est dépassé
   error_entry_project_does_not_match_current_project: "Le projet saisi ne correspond pas au projet courant"
   notice_folder_created: Dossier créé
   error_folder_creation_failed: Erreur de création du dossier
@@ -40,7 +40,7 @@ fr:
   notice_folder_deleted: Dossier supprimé
   error_folder_is_not_empty: "Le dossier n'est pas vide"
   error_folder_title_is_already_used: Le titre du fichier est déjà utilisé
-  notice_folder_details_were_saved: Les détails du dossier ont été enregistrés  
+  notice_folder_details_were_saved: Les détails du dossier ont été enregistrés
   error_folder_is_locked: Le dossier est verrouillé
   error_file_is_locked: Le fichier est verrouillé
   notice_file_deleted: Le fichier a été supprimé
@@ -81,8 +81,8 @@ fr:
   title_waiting_for_approval: Attente de validation
   title_approved: Validé
   title_unlock_file: Déverrouiller afin de permettre la modification par les membres du projet
-  title_lock_file: "Verrouiller afin d'empêcher les modifications du document"  
-  title_download_checked: Télécharger les fichiers sélectionnés au format zip  
+  title_lock_file: "Verrouiller afin d'empêcher les modifications du document"
+  title_download_checked: Télécharger les fichiers sélectionnés au format zip
   title_send_checked_by_email: Transmettre les fichiers sélectionnés par mail
   link_user_preferences: Préférences personnelles du module DMSF
   heading_send_documents_by_email: Transmettre les documents par mail
@@ -94,11 +94,7 @@ fr:
   label_email_body: Message
   label_email_send: Envoyer
   title_notifications_active: Notifications actives
-  label_file_size: Taille du fichier
-  heading_file_upload: Déposer des fichiers
-  note_uploaded_maximum_files_at_once: "Seulement %{number} fichiers peuvent être déposés à la fois."
-  note_upload_files_greater_than_two_gb: "Afin de transmettre des fichiers de plus de 2Go, l'utilisation d'un navigateur de 64Bits est nécessaire."
-  submit_upload_files: Transmission
+  label_upload: Transmission
   heading_new_folder: Nouveau Dossier
   label_title: Titre
   label_description: Description
@@ -109,7 +105,7 @@ fr:
   select_option_deactivated: Désactivé
   select_option_activated: Activé
   label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
   title_save_preferences: Enregistrer les préférences
   heading_revisions: Révisions
   title_download: Télécharger
@@ -117,9 +113,9 @@ fr:
   label_created: Créé
   label_changed: Modifié
   info_changed_by_user: "%{changed} par"
-  label_filename: Fichier    
+  label_filename: Fichier
   label_mime: Type
-  label_size: Taille  
+  label_size: Taille
   heading_new_revision: Nouvelle révision
   option_version_same: (identique)
   option_version_minor: (modification mineure)
@@ -154,7 +150,7 @@ fr:
   permission_user_preferences: Préférences utilisateur
   permission_view_dmsf_files: Afficher documents
   permission_folder_manipulation: Gestion des dossiers
-  permission_file_manipulation: Gestion des documents  
+  permission_file_manipulation: Gestion des documents
   permission_force_file_unlock: Forcer le déverrouillage du document
   permission_manage_workflows: Gérer les flux de validation
   permission_file_delete: Supprimer les documents
@@ -167,12 +163,12 @@ fr:
   error_user_has_not_right_delete_folder: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression du dossier"
   error_user_has_not_right_delete_file: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression du dossier"
   notice_entries_deleted: Elément(s) supprimé(s)
-  warning_some_entries_were_not_deleted: "Certains éléments n'ont pas été supprimés : %{entries}"  
+  warning_some_entries_were_not_deleted: "Certains éléments n'ont pas été supprimés : %{entries}"
   title_delete_checked: Supprimer les éléments sélectionnés
   title_items: items
   title_filename_for_download: "Nom du fichier à utiliser lors du téléchargement ou de l'archive ZIP"
   label_number_of_folders: Dossiers
-  label_number_of_documents: Fichiers  
+  label_number_of_documents: Fichiers
   error_file_storage_directory_does_not_exist: Le répertoire de stockage des fichiers n'existe pas ou n'a pas pu être créé
   error_file_can_not_be_created: "Le fichier n'a pas pu être enregistré dans le répertoire de stockage"
   error_wrong_zip_encoding: Mauvais jeu de caractères pour la transformation du nom du ZIP
@@ -203,7 +199,7 @@ fr:
   title_copy: Copie
   error_folder_cannot_be_copied: Le dossier ne peut pas être copié
   notice_folder_copied: Dossier copié
-  
+
   error_max_email_filesize_exceeded: "Vous avez dépassé la taille maximale des fichiers pouvant être transmis par mail (%{number} MB)"
   note_maximum_email_filesize: Taille maximale, en méga octets, des fichiers pouvant être transmis par mail. 0 indique aucune restriction
   label_maximum_email_filesize: Taille maximale du fichier attaché
@@ -219,15 +215,14 @@ fr:
   warning_folder_not_locked: Echec du verrouillage du dossier
   notice_folder_unlocked: Le dossier a été déverrouillé
   error_only_user_that_locked_folder_can_unlock_it: "Vous n'êtes autorisé à déverrouiller ce dossier"
-  title_folder_parent_locked: "Le dossier parent %{name} verrouillé"  
   title_unlock_folder: Déverrouiller afin de permettre la modification par les membres du projet
   title_lock_folder: "Verrouiller afin d'empêcher les modifications du dossier"
-  
+
   select_option_webdav_readonly: Lecture
   select_option_webdav_readwrite: Lecture/Ecriture
   label_webdav_strategy: Accès Webdav
   note_webdav_strategy: "Permet à l'administrateur d'autoriser les utilisateurs au module Webdav en letcure seule ou en lecture et écriture."
-  
+
   error_unable_delete_dmsf_workflow: Impossible de supprimer le flux de validation
   error_empty_note: La note ne peut pas être vide
   error_workflow_assign: "Une erreur s'est produite lors de l'attribution"
@@ -251,29 +246,29 @@ fr:
   label_dmsf_workflow_add_approver: "Ajouter un nouvel approbateur avec une fonction logique :"
   label_or: ou
   label_action: Action
-  label_note: Note  
+  label_note: Note
   title_none: Aucun
   title_rejection: Rejet
   title_delegation: Délégation
   title_assignment: Attribution
-  title_start: Démarrer  
+  title_start: Démarrer
   title_dmsf_workflow_log: Journal du flux de validation
   title_assigned: Assigné
   title_approval: Approbation
   title_rejected: Rejeté
   dmsf_and: ET
   dmsf_or: OU
-  dmsf_new_step: Nouvelle étape  
+  dmsf_new_step: Nouvelle étape
   message_dmsf_wokflow_note: Votre note...
   info_revision: "r%{rev}"
-  link_workflow: Flux  
+  link_workflow: Flux
   notice_workflow_started: Flux de validation démarré avec succès
-  text_email_subject_approved: "Flux de validation %{name} approuvé"
-  text_email_subject_rejected: "Flux de validation %{name} rejeté"
-  text_email_subject_delegated: "Flux de validation %{name} délégué"
-  text_email_subject_requires_approval: "Flux de validation %{name} requiert votre approbation"
-  text_email_subject_updated: "Flux de validation %{name} mis à jour"
-  text_email_subject_started: "Flux de validation %{name} démarré" 
+  text_email_subject_approved: approuvé
+  text_email_subject_rejected: rejeté
+  text_email_subject_delegated: délégué
+  text_email_subject_requires_approval: requiert votre approbation
+  text_email_subject_updated: mis à jour
+  text_email_subject_started: démarré
   text_email_finished_approved: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer et le document a été approuvé."
   text_email_finished_rejected: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer et le document a été rejeté pour la raison '%{notice}'."
   text_email_finished_delegated: "Le flux de validation '%{name}' assigné au document '%{filename}' a été délégué pour la raison '%{notice}' et vous êtes tenu d'approuver l'étape actuelle."
@@ -285,8 +280,8 @@ fr:
   text_email_to_see_status: Pour consulter le statut actuel du flux de validation, cliquez sur le statut du flux du document dans
   label_my_open_approvals: Mes approbations en attente
   label_my_locked_documents: Mes documents verrouillés
-  
-  title_create_link: Créer un lien symbolique   
+
+  title_create_link: Créer un lien symbolique
   label_link_from: Lien depuis
   label_link_to: Lien vers
   label_notifications_on: Activer les notifications
@@ -294,25 +289,25 @@ fr:
   field_target_file: Fichier source
   title_download_entries: Historique des téléchargements
   label_external: Externe
-  
+
   label_link_name: Nom du lien
   label_link_external_url: Adresse Internet
   label_target_folder: Dossier cible
   label_source_folder: Dossier source
   label_target_project: Projet cible
-  label_source_project: Projet source  
-  
-  text_email_doc_updated_subject: "Documents de %{project} mis à jour"
+  label_source_project: Projet source
+
+  text_email_doc_updated_subject: Documents mis à jour
   text_email_doc_updated: a mis à jour des documents de
   text_email_doc_follows: comme suit
-  text_email_doc_deleted_subject: "Documents de %{project} supprimés"
+  text_email_doc_deleted_subject: Documents supprimés
   text_email_doc_deleted: a supprimé des documents de
-  label_links_only: liens seulement  
-  
+  label_links_only: liens seulement
+
   label_display_notified_recipients: Afficher les destinataires notifiés
   note_display_notified_recipients: "L'utilisateur sera informé de tous les destinataires à qui un email de notifcation a été envoyé"
   warning_email_notifications: "Email de notification envoyé à %{to}"
-  
+
   link_trash_bin: Corbeille
   title_restore: Récupérer
   notice_dmsf_file_restored: Le document a été récupéré avec succès
@@ -320,17 +315,20 @@ fr:
   notice_dmsf_link_restored: Le lien a été récupéré avec succès
   title_restore_checked: Restauration vérifiée
   error_parent_folder: "Le dossier parent n'existe pas"
-  
+
   error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
   error_parent_locked: Unable to complete lock - resource parent is locked
   error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: unable to lock exclusively an already-locked resource  
-  error_unlock_parent_locked: Unlock failed - resource parent is locked  
+  error_lock_exclusively: Unable to lock exclusively an already-locked resource
+  error_unlock_parent_locked: Unlock failed - resource parent is locked
 
-  my:
-    blocks:
-      locked_documents: Documents verrouillés
-      open_approvals: Approbations en attente
+  field_dmsf_tree_view: Navigate folders in a tree
+  label_dmsf_version: Version
+
+  locked_documents: Documents verrouillés
+  open_approvals: Approbations en attente
 
   label_maximum_ajax_upload_filesize: Taille maximale de fichier pour téléversement via AJAX
   note_maximum_ajax_upload_filesize: "Taille maximale, en méga octets, de fichier pour téléversement via l'interface standard AJAX. Sinon l'interface standard de Redmine doit être utilisée."
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"

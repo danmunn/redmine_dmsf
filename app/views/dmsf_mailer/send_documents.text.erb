@@ -1,8 +1,11 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
+#
+# Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,28 +23,34 @@
 
 <%= @body %>
 
-<% if @links_only == '1' %> 
+<% if @links_only == '1' %>
+  <% folders = [] %>
+  <% files = [] %>
   <% if @folders.present? %>
     <% JSON.parse(@folders).each do |id| %>
       <% folder = DmsfFolder.find_by_id id %>
-      <% if folder %>        
-        <% folder.folder_tree.each do |name, i| %>          
+      <% if folder && !folders.include?(folder) %>
+        <% folder.folder_tree.each do |name, i| %>
           <% dir = DmsfFolder.find_by_id i %>
           <% if dir %>
             <%= dir.dmsf_path_str %>
-            <% dir.files.each do |file| %>            
-              <%= dmsf_file_url(file, :download => '') %>
+            <% dir.dmsf_files.each do |file| %>
+              <% unless files.include?(file) %>
+                <%= dmsf_file_url(file, :download => '') %>
+                <% files << file %>
+              <% end %>
             <% end %>
           <% end %>
-        <% end %>        
+        <% end %>
       <% end %>
     <% end %>
   <% end %>
   <% if @files.present? %>
     <% JSON.parse(@files).each do |id| %>
       <% file = DmsfFile.find_by_id id %>
-      <% if file %>        
+      <% if file && !files.include?(file) %>
         <%= dmsf_file_url(file, :download => '') %>
+        <% files << file %>
       <% end %>
     <% end %>
    <% end %>

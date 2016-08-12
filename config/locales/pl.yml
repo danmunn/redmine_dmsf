@@ -1,12 +1,11 @@
 # encoding: utf-8
-# 
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 # Polish translation created by Sebastian Białas <sbialas@bs-it.pl> www.bs-it.pl
-#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -27,20 +26,20 @@ pl:
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: Nie zaznaczono żadnych wierszy
-  error_email_to_must_be_entered: Musisz podać adres email  
+  error_email_to_must_be_entered: Musisz podać adres email
   warning_file_already_locked: Plik jest już zablokowany
   notice_file_locked: Plik zablokowany
   warning_file_not_locked: Plik nie zablokowany
   notice_file_unlocked: Plik odblokowany
-  error_only_user_that_locked_file_can_unlock_it: Plik może zostać odblokowany jedynie przez użytkownika, który go zablokował  
-  error_max_files_exceeded: "Limit %{number} jedocześnie pobieranych plików został przekroczony"  
+  error_only_user_that_locked_file_can_unlock_it: Plik może zostać odblokowany jedynie przez użytkownika, który go zablokował
+  error_max_files_exceeded: "Limit %{number} jedocześnie pobieranych plików został przekroczony"
   error_entry_project_does_not_match_current_project: "Podany projekt nie odpowiada obecnemu projektowy"
   notice_folder_created: Folder został utworzony
   error_folder_creation_failed: Błąd podczas tworzenia folderu
   error_folder_title_must_be_entered: Musisz podać tytuł
   notice_folder_deleted: Folder został usunięty
   error_folder_is_not_empty: Folder zawiera pliki
-  error_folder_title_is_already_used: Podany tytuł jest już w użyciu  
+  error_folder_title_is_already_used: Podany tytuł jest już w użyciu
   notice_folder_details_were_saved: Szczegóły folderu zostały zapisane
   error_folder_is_locked: Folder jest zablokowany
   error_file_is_locked: Plik jest zablokowany
@@ -82,7 +81,7 @@ pl:
   title_waiting_for_approval: Oczekiwanie na akceptację
   title_approved: Zaakceptowany
   title_unlock_file: Odblokuj aby umożliwić wprowadzanie zmian innym użytkownikom
-  title_lock_file: Zablokuj aby zabezpieczyć przed wprowadzaniem zmian przez innych użytkowników  
+  title_lock_file: Zablokuj aby zabezpieczyć przed wprowadzaniem zmian przez innych użytkowników
   title_download_checked: Pobierz zaznaczone jako archiwum Zip
   title_send_checked_by_email: Wyślij zaznaczone przez email
   link_user_preferences: Preferencje DMSF dla projektu
@@ -95,11 +94,7 @@ pl:
   label_email_body: Treść
   label_email_send: Wyślij
   title_notifications_active: Powiadomienia aktywne
-  label_file_size: Rozmiar pliku
-  heading_file_upload: Prześlij
-  note_uploaded_maximum_files_at_once: "Można przesłać maksymalnie %{number} plików jednocześnie."
-  note_upload_files_greater_than_two_gb: Aby przesyłać pliki większe niż 2GB musisz posiadać 64bitową przeglądarkę.
-  submit_upload_files: Prześlij
+  label_upload: Prześlij
   heading_new_folder: Nowy Folder
   label_title: Tytuł
   label_description: Opis
@@ -109,7 +104,7 @@ pl:
   select_option_default: Domyślny
   select_option_deactivated: Wyłączono
   label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
   select_option_activated: Aktywowano
   title_save_preferences: Zapisz ustawienia
   heading_revisions: Wersje
@@ -118,7 +113,7 @@ pl:
   label_created: Utworzono
   label_changed: Zmieniono
   info_changed_by_user: "%{changed} przez"
-  label_filename: Nazwa pliku    
+  label_filename: Nazwa pliku
   label_mime: Mime
   label_size: Rozmiar
   heading_new_revision: Nowa wersja
@@ -168,15 +163,15 @@ pl:
   error_user_has_not_right_delete_folder: "Użytkownik nie posiada uprawnień do usuwania folderów"
   error_user_has_not_right_delete_file: "Użytkownik nie posiada uprawnień do usuwania plików"
   notice_entries_deleted: Wpisy usunięte
-  warning_some_entries_were_not_deleted: "Niektóre wpisy nie zostały usunięte: %{entries}"  
+  warning_some_entries_were_not_deleted: "Niektóre wpisy nie zostały usunięte: %{entries}"
   title_delete_checked: Usuń zaznaczone
   title_items: items
   title_filename_for_download: Nazwa pliku używana do pobierania lub tworzenai archiwum Zip
   label_number_of_folders: Foldery
-  label_number_of_documents: Dokumenty 
+  label_number_of_documents: Dokumenty
   error_file_storage_directory_does_not_exist: "Folder przechowywania plików nie istnieje i nie może zostać utworzony"
   error_file_can_not_be_created: "Plik nie może zostać utworzony w folderze przechowywania"
-  error_wrong_zip_encoding: Złe kodowanie Zip 
+  error_wrong_zip_encoding: Złe kodowanie Zip
   warning_xapian_not_available: Xapian niedostępny
   menu_dmsf: DMSF
   label_physical_file_delete: Fizyczne usuwanie plików
@@ -204,7 +199,7 @@ pl:
   title_copy: Kopiuj
   error_folder_cannot_be_copied: "Folder nie może zostać skopiowany"
   notice_folder_copied: Folder został skopiowany
-  
+
   error_max_email_filesize_exceeded: "Maksymalny rozmiar pliku załącznika email został przekroczony. (%{number} MB)"
   note_maximum_email_filesize: Maksymalny rozmiar pliku, który może zostać wysłany przez email. 0 oznacza brak ograniczeń. Rozmiar w MB.
   label_maximum_email_filesize: Maksymalny rozmiar załącznika email
@@ -220,24 +215,24 @@ pl:
   warning_folder_not_locked: Niestety folder nie może zostać zablokowany
   notice_folder_unlocked: Folder został odblokowany
   error_only_user_that_locked_folder_can_unlock_it: Nie posiadasz uprawnień do odblokowania tego folderu
-  title_folder_parent_locked: "Folder nadrzędny %{name} jest zablokowany"  
   title_unlock_folder: Odblokuj w celu umożliwienia wprowadzania zmian innym użytkownikom
   title_lock_folder: Zablokuj aby zabezpieczyć przed wprowadzaniem zmian przez innych użytkowników
 
   select_option_webdav_readonly: Tylko do odczytu
   select_option_webdav_readwrite: Odczyt/Zapis
   label_webdav_strategy: Webdav strategy
-  note_webdav_strategy: Enables the administrator to decide if webdav is a read-only or read-write platform for end users.  
-  
+  note_webdav_strategy: Enables the administrator to decide if webdav is a read-only or read-write platform for end users.
+
   error_unable_delete_dmsf_workflow: Nie można usunąć procesu workflow
   error_empty_note: "Notatka nie może być pusta"
   error_workflow_assign: Wystąpił błąd podczas przydzielania
   error_cannot_start_workflow: "Workflow nie może zostać uruchomiony"
   error_cannot_renumber_steps: "Kroki nie mogą zostać przenumerowane"
-  label_dmsf_workflow_new: Nowy proces akceptacji  
+  label_dmsf_workflow_new: Nowy proces akceptacji
   field_label_dmsf_workflow: Proces akceptacji
   field_label_dmsf_workflow_name: Nazwa procesu akceptacji
   label_dmsf_workflow_plural: Procesy akceptacji
+  label_dmsf_workflow_plural_num: Procesy akceptacji (%{count})
   label_dmsf_workflow_step: Krok
   label_dmsf_workflow_step_plural: Kroki
   label_dmsf_workflow_approval: Akceptacja
@@ -251,42 +246,42 @@ pl:
   label_dmsf_workflow_add_approver: "Dodaj nowego akceptującego z warunkiem logicznym:"
   label_or: lub
   label_action: Akcja
-  label_note: Notatka  
+  label_note: Notatka
   title_none: Brak
   title_rejection: Odrzucenie
   title_delegation: Delegacja
   title_assignment: Przydział
-  title_start: Start  
+  title_start: Start
   title_dmsf_workflow_log: Historia procesu akceptacji
   title_assigned: Przydzielony
   title_approval: Akceptacja
   title_rejected: Odrzucony
   dmsf_and: AND
   dmsf_or: OR
-  dmsf_new_step: Nowy krok 
+  dmsf_new_step: Nowy krok
   message_dmsf_wokflow_note: Twoja notatka...
   info_revision: "r%{rev}"
   link_workflow: Proces akceptacji
-  notice_workflow_started: Proces akceptacji został uruchomiony 
-  text_email_subject_approved: "Proces akceptacji %{name} został zakończony akceptacją"
-  text_email_subject_rejected: "Proces akceptacji %{name} został odrzucony"
-  text_email_subject_delegated: "Proces akceptacji %{name} został delegowany"
-  text_email_subject_requires_approval: "Proces akceptacji %{name} wymaga Twojej akceptacji"
-  text_email_subject_updated: "Proces akceptacji %{name} został zaktualizowany"
-  text_email_subject_started: "Proces akceptacji %{name} został uruchomiony" 
+  notice_workflow_started: Proces akceptacji został uruchomiony
+  text_email_subject_approved: został zakończony akceptacją
+  text_email_subject_rejected: został odrzucony
+  text_email_subject_delegated: został delegowany
+  text_email_subject_requires_approval: wymaga Twojej akceptacji
+  text_email_subject_updated: został zaktualizowany
+  text_email_subject_started: został uruchomiony
   text_email_finished_approved: "Proces akceptacji '%{name}' dokumentu '%{filename}' został właśnie zakończony. Dokument został zaakceptowany."
   text_email_finished_rejected: "Proces akceptacji '%{name}' dokumentu '%{filename}' został właśnie zakończony. Dokument został odrzucony z powodu '%{notice}'."
   text_email_finished_delegated: "Proces akceptacji '%{name}' dokumentu '%{filename}' został właśnie delegowany z powodu '%{notice}'. Zostałeś wskazany jako akceptujący w bieżącym kroku zatwierdzania."
   text_email_finished_step: "Zakończono krok w procesie akceptacji '%{name}' dokumentu '%{filename}'. Jesteś kolejną osobą decyzyjną w procesie akceptacji."
   text_email_finished_step_short: "Zakończono krok w procesie akceptacji '%{name}' dokumentu '%{filename}'."
-  text_email_started: "Proces akceptacji '%{name}' dokuentu '%{filename}' został uruchomiony. Jesteś osobą akceptującą w bieżącym kroku zatwierdzania."  
+  text_email_started: "Proces akceptacji '%{name}' dokuentu '%{filename}' został uruchomiony. Jesteś osobą akceptującą w bieżącym kroku zatwierdzania."
   text_email_to_proceed: Aby procedować zaznacz check box przy dokumencie
   text_email_to_see_history: Aby zobaczyć historię akceptacji kliknij w proces akceptacji dokumentu
   text_email_to_see_status: Aby zobaczyć aktualny stan procesu akceptacji kliknij w proces akceptacji dokumentu
   label_my_open_approvals: Otwarte akceptacje
   label_my_locked_documents: Zablokowane dokumenty
-  
-  title_create_link: Utwórz symbolic link  
+
+  title_create_link: Utwórz symbolic link
   label_link_from: Odnośnik z
   label_link_to: Odnośnik do
   label_notifications_on: Powiadomienia włączone
@@ -294,25 +289,25 @@ pl:
   field_target_file: Plik źródłowy
   title_download_entries: Pobrane
   label_external: External
-  
+
   label_link_name: Nazwa odnośnika
   label_link_external_url: URL
   label_target_folder: Folder docelowy
   label_source_folder: Folder źródłowy
   label_target_project: Projekt docelowy
-  label_source_project: Projekt źródłowy  
-  
-  text_email_doc_updated_subject: "Dokumenty projektu %{project} zostały zaktualizowane"
+  label_source_project: Projekt źródłowy
+
+  text_email_doc_updated_subject: Dokumenty zostały zaktualizowane
   text_email_doc_updated: dokumenty zostały zaktualizowane
   text_email_doc_follows: następujące
-  text_email_doc_deleted_subject: "Dokumenty projektu %{project} zostały usunięte"
+  text_email_doc_deleted_subject: Dokumenty zostały usunięte
   text_email_doc_deleted: dokumenty zostały usunięte
   label_links_only: odnośniki
-  
+
   label_display_notified_recipients: Wyświetl odbiorców powiadomienia
   note_display_notified_recipients: Użytkownik zostanie poinformowany o wszystkich odbiorcach wysłanego powiadomienia email.
   warning_email_notifications: "Powiadomienie email zostało wysłane do %{to}"
-  
+
   link_trash_bin: Kosz
   title_restore: Przywróć
   notice_dmsf_file_restored: Dokument został przywrócony
@@ -320,17 +315,20 @@ pl:
   notice_dmsf_link_restored: Link został przywrócony
   title_restore_checked: Restore checked
   error_parent_folder: "Folder nadrzędny nie istnieje"
-  
+
   error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
   error_parent_locked: Unable to complete lock - resource parent is locked
   error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: unable to lock exclusively an already-locked resource  
+  error_lock_exclusively: Unable to lock exclusively an already-locked resource
   error_unlock_parent_locked: Unlock failed - resource parent is locked
-  
-  my:
-    blocks:
-      locked_documents: Dokumenty zablokowane
-      openap_provals: Otwarte procesy akceptacji 
-      
+
+  field_dmsf_tree_view: Navigate folders in a tree
+  label_dmsf_version: Wersja
+
+  locked_documents: Dokumenty zablokowane
+  open_approvals: Otwarte procesy akceptacji
+
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"

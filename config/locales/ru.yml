@@ -1,9 +1,9 @@
 # encoding: utf-8
-# 
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011  Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -26,13 +26,13 @@ ru:
   label_dmsf_file_revision_plural: Изменения документов
   label_dmsf_file_revision_access_plural: Доступы к документам
   warning_no_entries_selected: Файлы не выбраны
-  error_email_to_must_be_entered: Нужно указать, на какую почту отправить письмо  
+  error_email_to_must_be_entered: Нужно указать, на какую почту отправить письмо
   warning_file_already_locked: Файл уже заблокирован
   notice_file_locked: Файл заблокирован
   warning_file_not_locked: Файл не заблокирован
   notice_file_unlocked: Файл разблокирован
-  error_only_user_that_locked_file_can_unlock_it: Только пользователь, который заблокировал файл, может его разблокировать  
-  error_max_files_exceeded: "Ограничение для %{number} одновременно загружаемых файлов превышено"  
+  error_only_user_that_locked_file_can_unlock_it: Только пользователь, который заблокировал файл, может его разблокировать
+  error_max_files_exceeded: "Ограничение для %{number} одновременно загружаемых файлов превышено"
   error_entry_project_does_not_match_current_project: Проект, которому принадлежит файл, не соответсвует текущему проекту
   notice_folder_created: Папка создана
   error_folder_creation_failed: Папку не удалось создать
@@ -40,7 +40,7 @@ ru:
   notice_folder_deleted: Папка удалена
   error_folder_is_not_empty: Папка не пустая
   error_folder_title_is_already_used: Название папки уже используется
-  notice_folder_details_were_saved: Описание папки было сохранено  
+  notice_folder_details_were_saved: Описание папки было сохранено
   error_folder_is_locked: Папка заблокированa
   error_file_is_locked: Файл заблокирован
   notice_file_deleted: Файл удален
@@ -81,8 +81,8 @@ ru:
   title_waiting_for_approval: Ожидается на утверждение
   title_approved: Утверждено
   title_unlock_file: Разблокируйте файл, чтобы разрешить изменение его другими участниками
-  title_lock_file: Заблокируйте файл, чтобы запретить его изменение другими участниками  
-  title_download_checked: Скачать выбранные файлы  
+  title_lock_file: Заблокируйте файл, чтобы запретить его изменение другими участниками
+  title_download_checked: Скачать выбранные файлы
   title_send_checked_by_email: Отправить выбранные файлы по электронной почте
   link_user_preferences: Ваши настройки DMSF проекта
   heading_send_documents_by_email: Отправить документы по электронной почте
@@ -94,11 +94,7 @@ ru:
   label_email_body: Содержание
   label_email_send: Отправить
   title_notifications_active: Уведомления активны
-  label_file_size: Размер файла
-  heading_file_upload: Закачать
-  note_uploaded_maximum_files_at_once: "За один раз можно загрузить только %{number} файлов."
-  note_upload_files_greater_than_two_gb: Чтобы загружать файлы размером больше чем 2 Гб у вас должен быть 64-битный браузер.
-  submit_upload_files: Загрузить
+  label_upload: Закачать
   heading_new_folder: Новая папка
   label_title: Заголовок
   label_description: Описание
@@ -109,7 +105,7 @@ ru:
   select_option_deactivated: Отключено
   select_option_activated: Включено
   label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
   title_save_preferences: Сохранить настройки
   heading_revisions: Редакции
   title_download: Скачать
@@ -117,9 +113,9 @@ ru:
   label_created: Создан
   label_changed: Изменен
   info_changed_by_user: "%{changed} пользователем"
-  label_filename: Имя файла  
+  label_filename: Имя файла
   label_mime: MIME-тип
-  label_size: Размер  
+  label_size: Размер
   heading_new_revision: Новая редакция
   option_version_same: Та же версия
   option_version_minor: Незначительные изменения
@@ -154,7 +150,7 @@ ru:
   permission_user_preferences: Настройки пользователя
   permission_view_dmsf_files: Просматривать документы
   permission_folder_manipulation: Управление папками
-  permission_file_manipulation: Управление файлами  
+  permission_file_manipulation: Управление файлами
   permission_force_file_unlock: Разблокировка любых файлов
   permission_manage_workflows: Управление согласованиями
   permission_file_delete: Удаление документов
@@ -167,7 +163,7 @@ ru:
   error_user_has_not_right_delete_folder: Пользователь не имеет нужных прав для удаления папки
   error_user_has_not_right_delete_file: Пользователь не имеет нужных прав для удаления файла
   notice_entries_deleted: Файлы удалены
-  warning_some_entries_were_not_deleted: "Некоторые файлы не были удалены: %{entries}"  
+  warning_some_entries_were_not_deleted: "Некоторые файлы не были удалены: %{entries}"
   title_delete_checked: Удалить выбранные документы
   title_items: элементы
   title_filename_for_download: Имя файла для скачиваемого архива
@@ -219,7 +215,6 @@ ru:
   warning_folder_not_locked: "К сожалению, папка не может быть заблокирована"
   notice_folder_unlocked: "Папка была успешно разблокирована"
   error_only_user_that_locked_folder_can_unlock_it: "Только пользователь, который заблокировал папку, может её разблокировать"
-  title_folder_parent_locked: "Родительская папка %{name} заблокирована"  
   title_unlock_folder: "Разблокируйте папку, чтобы разрешить изменение её другими участниками"
   title_lock_folder: "Заблокируйте папку, чтобы запретить ёё изменение другими участниками"
 
@@ -227,7 +222,7 @@ ru:
   select_option_webdav_readwrite: "Чтение/Запись"
   label_webdav_strategy: "Стратегия WebDAV"
   note_webdav_strategy: "Позволяет администратору решить в каком режиме предоставить доступ к WebDAV для конечных пользователей (Только для чтения или Чтение+Запись)."
-  
+
   error_unable_delete_dmsf_workflow: Невозможно удалить процесс согласование
   error_empty_note: Примечание не может быть пустым
   error_workflow_assign: Возникла ошибка при назначении
@@ -263,30 +258,30 @@ ru:
   title_rejected: Отклонен
   dmsf_and: AND
   dmsf_or: OR
-  dmsf_new_step: Новый шаг  
+  dmsf_new_step: Новый шаг
   message_dmsf_wokflow_note: Ваше примечание...
   info_revision: "r%{rev}"
-  link_workflow: Согласование  
+  link_workflow: Согласование
   notice_workflow_started: Процесс согласования успешно запущен
-  text_email_subject_approved: "Процесс согласования %{name} успешно завершен"
-  text_email_subject_rejected: "Процесс согласования %{name} отклонен"
-  text_email_subject_delegated: "Процесс согласования %{name} делегирован"
-  text_email_subject_requires_approval: "Процесс согласования %{name} требует вашего участия"
-  text_email_subject_updated: "Процесс согласования %{name} обновлен"
-  text_email_subject_started: "Процесс согласования %{name} запущен" 
+  text_email_subject_approved: успешно завершен
+  text_email_subject_rejected: отклонен
+  text_email_subject_delegated: делегирован
+  text_email_subject_requires_approval: ребует вашего участия
+  text_email_subject_updated: обновлен
+  text_email_subject_started: запущен
   text_email_finished_approved: "Процесс согласования '%{name}' документа '%{filename}' только что завершился и документ был согласован."
   text_email_finished_rejected: "Процесс согласования '%{name}' документа '%{filename}' только что завершился и документ был отклонен по причине '%{notice}'."
   text_email_finished_delegated: "Процесс согласования '%{name}' документа '%{filename}' только что был делегирован по причине '%{notice}' и от Вас ожидается согласование."
   text_email_finished_step: "Процесс согласования '%{name}' документа '%{filename}' только что завершил один из шагов согласования и ожидает Вашего соглсования."
   text_email_finished_step_short: "Процесс согласования '%{name}' документа '%{filename}' только что завершил один из шагов согласования."
-  text_email_started: "Процесс согласования '%{name}' документа '%{filename}'  только что начался и ожидает Вашего соглсования."  
-  text_email_to_proceed: Для продолжения поставьте отметку рядом с документом в 
-  text_email_to_see_history: Для просмотра истории согласования нажмите статус согласования документа в 
-  text_email_to_see_status: Для просмотра текущего статуса согласования нажмите статус согласования документа в 
+  text_email_started: "Процесс согласования '%{name}' документа '%{filename}'  только что начался и ожидает Вашего соглсования."
+  text_email_to_proceed: Для продолжения поставьте отметку рядом с документом в
+  text_email_to_see_history: Для просмотра истории согласования нажмите статус согласования документа в
+  text_email_to_see_status: Для просмотра текущего статуса согласования нажмите статус согласования документа в
   label_my_open_approvals: Мои согласования
   label_my_locked_documents: Мои заблокированные документы
-  
-  title_create_link: Создать символическую ссылку  
+
+  title_create_link: Создать символическую ссылку
   label_link_from: Ссылка из
   label_link_to: Ссылка на
   label_notifications_on: Включить уведомления
@@ -294,25 +289,25 @@ ru:
   field_target_file: Исходный файл
   title_download_entries: Скачать записи
   label_external: Внешний
-  
+
   label_link_name: Наименование ссылки
   label_link_external_url: URL
   label_target_folder: Целевая папка
   label_source_folder: Исходная папка
   label_target_project: Целевой проект
-  label_source_project: Исходный проект  
-  
-  text_email_doc_updated_subject: "Документы проекта %{project} обновлены"
+  label_source_project: Исходный проект
+
+  text_email_doc_updated_subject: Документы обновлены
   text_email_doc_updated: только что обновил документы
   text_email_doc_follows: следующим образом
-  text_email_doc_deleted_subject: "Документы проекта %{project} удалены"
+  text_email_doc_deleted_subject: Документы удалены
   text_email_doc_deleted: только что удалил документы
   label_links_only: только ссылки
-  
+
   label_display_notified_recipients: Показывать получателей, получивших уведомление
   note_display_notified_recipients: Пользователь будет проинфмораирован о всех получателях, кому было направлено уведомление.
   warning_email_notifications: "Уведомление отправлено %{to}"
-  
+
   link_trash_bin: Корзина
   title_restore: Восстановить
   notice_dmsf_file_restored: Документ был успешно восстановлен
@@ -320,17 +315,20 @@ ru:
   notice_dmsf_link_restored: Папка была успешно восстановлена
   title_restore_checked: Восстановить отмеченные
   error_parent_folder: "Родительская папка не существует"
-  
+
   error_resource_or_parent_locked: Невозможно выполнить блокировку - ресурс (или родительская запись) заблокированы
   error_parent_locked: Невозможно выполнить блокировку - родительская запись заблокирована
   error_resource_locked: Невозможно выполнить блокировку - ресурс заблокирован
-  error_lock_exclusively: невозможно эксклюзивно заблокировать уже забловированный ресурс  
+  error_lock_exclusively: Невозможно эксклюзивно заблокировать уже забловированный ресурс
   error_unlock_parent_locked: Разблокировка не удалась - родительская запись заблокирована
-  
-  my:
-    blocks:
-      locked_documents: Заблокированные документы
-      open_approvals: Открытые согласования
-          
+
+  field_dmsf_tree_view: Navigate folders in a tree
+  label_dmsf_version: Версия
+
+  locked_documents: Заблокированные документы
+  open_approvals: Открытые согласования
+
   label_maximum_ajax_upload_filesize: Максимальный размер файла, загружаемого посредством AJAX
   note_maximum_ajax_upload_filesize: Превышает максимальный размер файла, загружаемого посредством интерфейса AJAX, для загрузки можно использовать стандартную форму Redmine. Размер указан в MB.
+  label_classic: Classic
+  label_drag_drop: "Drag&Drop"

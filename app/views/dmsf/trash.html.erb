@@ -1,9 +1,9 @@
-<%#=
+<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,83 +21,82 @@
 %>
 
 <% html_title(l(:dmsf)) %>
-<div class="contextual">  
-</div>
 
-<h2><%=  l(:link_trash_bin) %></h2>
+<h2><%= l(:link_trash_bin) %></h2>
 
 <div class="dmsf-header">
   <div class="wiki">
     <%= textilizable(@folder ? @folder.description : @project.dmsf_description) %>
-  </div>    
+  </div>
 </div>
 
 <%= error_messages_for('dmsf_workflow') %>
 
 <%= form_tag({:action => :entries_operation, :id => @project, :folder_id => @folder}, :method => :post,
-  :class => 'dmfs_entries', :id => 'entries_form') do %>
+  :class => 'dmsf_entries', :id => 'entries_form') do %>
   <%= hidden_field_tag('action') %>
-  <div class="controls" style="float: left">
+  <div class="dmsf_controls" style="float: left">
     <% if @file_manipulation_allowed && @folder_manipulation_allowed %>
       <%= submit_tag(l(:title_restore), :title => l(:title_restore_checked), :name => 'restore_entries') %>
       <% if @file_delete_allowed%>
         <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'destroy_entries') %>
       <% end %>
-    <% end %>         
-  </div> 
-  <table class="display entries" id="browser">
+    <% end %>
+  </div>
+  <div class="autoscroll">
+  <table class="display list dmsf_list" id="browser">
     <thead>
-      <tr id="root">
-        <th class="check">
+      <tr>
+        <th class="dmsf_checkbox dmsf_th">
           <input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_restore_or_delete) %>" type="checkbox" />
         </th>
-        <th><%= l(:link_title) %></th>
-        <th><%= l(:link_size) %></th>
-        <th><%= l(:link_modified) %></th>
-        <th title="<%= l(:label_version) %>"><%= l(:link_ver) %></th>
-        <th><%= l(:link_workflow) %></th>
-        <th><%= l(:link_author) %></th>
-        <th></th>
-        <th class="invisible"></th>
-        <th class="invisible"></th>
-        <th class="invisible"></th>
-        <th class="invisible"></th>
+        <th class="dmsf_th"><%= l(:link_title) %></th>
+        <th class="dmsf_th"><%= l(:link_size) %></th>
+        <th class="dmsf_th"><%= l(:link_modified) %></th>
+        <th title="<%= l(:label_dmsf_version) %>" class="dmsf_th"><%= l(:link_ver) %></th>
+        <th class="dmsf_th"><%= l(:link_workflow) %></th>
+        <th class="dmsf_th"><%= l(:link_author) %></th>
+        <th class="dmsf_th"></th>
+        <th class="dmsf_invisible"></th>
+        <th class="dmsf_invisible"></th>
+        <th class="dmsf_invisible"></th>
+        <th class="dmsf_invisible"></th>
       </tr>
     </thead>
-  <tbody>       
-  <% @subfolders.each do |subfolder| %>    
+  <tbody>
+  <% @subfolders.each do |subfolder| %>
     <tr class="dir">
-      <%= render(:partial => 'dir_trash', 
-        :locals => { 
-          :project => @project, 
-          :subfolder => subfolder, 
+      <%= render(:partial => 'dir_trash',
+        :locals => {
+          :project => @project,
+          :subfolder => subfolder,
           :link => nil,
-          :id => subfolder.id, 
-          :name => 'subfolders[]', 
+          :id => subfolder.id,
+          :name => 'subfolders[]',
           :title => subfolder.title }) %>
     </tr>
-  <% end %>  
-  <% @dir_links.each do |link| %>    
-    <tr class="gray">
-      <%= render(:partial => 'dir_trash', 
-        :locals => { 
-          :project => link.target_project, 
-          :subfolder => link.target_folder, 
+  <% end %>
+  <% @dir_links.each do |link| %>
+    <tr class="dmsf_gray">
+      <%= render(:partial => 'dir_trash',
+        :locals => {
+          :project => link.target_project,
+          :subfolder => link.target_folder,
           :link => link,
-          :id => link.id, 
-          :name => 'dir_links[]', 
+          :id => link.id,
+          :name => 'dir_links[]',
           :title => link.name }) %>
     </tr>
-  <% end %>        
+  <% end %>
   <% @files.each do |file| %>
-    <% unless file.last_revision %>      
+    <% unless file.last_revision %>
       <% Rails.logger.error "Error: dmsf_file id #{file.id} has no revision!" %>
       <% next %>
-    <% end %>         
+    <% end %>
     <tr class="file">
-      <%= render(:partial => 'file_trash', :locals => { 
-          :project => @project, 
-          :file => file, 
+      <%= render(:partial => 'file_trash', :locals => {
+          :project => @project,
+          :file => file,
           :link => nil,
           :id => file.id,
           :name => 'files[]',
@@ -105,14 +104,14 @@
     </tr>
   <% end %>
   <% @file_links.each do |link| %>
-    <% unless link.target_file.last_revision %>      
+    <% unless link.target_file.last_revision %>
       <% Rails.logger.error "Error: dmsf_file id #{link.target_id} has no revision!" %>
       <% next %>
-    <% end %>         
-    <tr class="gray">
-      <%= render(:partial => 'file_trash', :locals => { 
-          :project => link.target_project, 
-          :file => link.target_file, 
+    <% end %>
+    <tr class="dmsf_gray">
+      <%= render(:partial => 'file_trash', :locals => {
+          :project => link.target_project,
+          :file => link.target_file,
           :link => link,
           :id => link.id,
           :name => 'file_links[]',
@@ -120,7 +119,7 @@
     </tr>
   <% end %>
   <% @url_links.each do |link| %>
-      <tr class="gray">
+      <tr class="dmsf_gray">
           <%= render(:partial => 'url_trash', :locals => {
                                                      :project => link.target_project,
                                                      :file => link.target_file,
@@ -131,25 +130,26 @@
       </tr>
   <% end %>
   </tbody>
-  </table>  
-<% end %>   
+  </table>
+  </div>
+<% end %>
 
 <script type="text/javascript">
   $('#entries_delete_button').click(function() {
     if(window.confirm("<%= l(:text_are_you_sure) %>")) {
-      $('#entries_form').attr('action', "<%= delete_entries_path(:id => @project, :folder_id => @folder) %>");      
+      $('#entries_form').attr('action', "<%= delete_entries_path(:id => @project, :folder_id => @folder) %>");
       $('#entries_form').submit();
     }
   });
-  
+
   $('.list_cf').change(function() {
     $('#entries_form').attr('action', "<%= tag_changed_path(:id => @project, :folder_id => @folder) %>");
-    $('#entries_form').submit();   
+    $('#entries_form').submit();
   });
 
-  $('#check_all_entries').click(function() {    
-    $('input[type=checkbox]', $('#browser > tbody')).prop('checked', this.checked);    
-  });  
+  $('#check_all_entries').click(function() {
+    $('input[type=checkbox]', $('#browser > tbody')).prop('checked', this.checked);
+  });
 </script>
 
 <%
@@ -157,11 +157,11 @@
   sUrl = 'jquery.dataTables/en.json' unless File.exist?(sUrl)
 %>
 
-<% content_for :header_tags do %>      
-  <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>  
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>
 
-  <script type="text/javascript">    
+  <script type="text/javascript">
     $(document).ready(function() {
       $('#browser').dataTable({
         'bJQueryUI': true,
@@ -180,7 +180,7 @@
           { 'iDataSort': 11, 'aTargets': [ 4 ] }
         ],
         'fnInitComplete': function() {
-           jQuery('div.controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
+           jQuery('div.dmsf_controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
         },
         'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
            return "<%= l(:label_number_of_folders)%>: <%= @subfolders.count + @dir_links.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count + @file_links.count + @url_links.count %>";
@@ -190,6 +190,6 @@
       $('#entries_form').submit(function () {
           $(this).removeAttr('data-submitted');
       });
-    });   
+    });
   </script>
 <% end %>

@@ -1,7 +1,11 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2012   Daniel Munn  <dan.munn@munnster.co.uk>
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,86 +19,82 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
-  <% if User.current.allowed_to?(:folder_manipulation, @project) && params[:action] == 'edit' %>
-    <% unless @folder.locked? %>
-       <%= link_to(l(:button_lock),
+  <% if !@folder.new_record? && User.current.allowed_to?(:folder_manipulation, @project) %>
+    <% if !@folder.locked_for_user? %>
+      <% unless @folder.locked? %>
+        <%= link_to(l(:button_lock),
           lock_dmsf_path(:id => @project, :folder_id => @folder),
-          :title => l(:title_lock_file),
-          :class => 'icon icon-dmsf-lock') %>  
+          :title => l(:title_lock_file), :class => 'icon dmsf_icon-lock') %>  
+      <% else %>
+        <%= link_to_if(@folder.unlockable?, l(:button_unlock),
+          unlock_dmsf_path(:id => @project, :folder_id => @folder),
+          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock')%>            
+      <% end %>
       <% if @folder.notification %>              
           <%= link_to(l(:label_notifications_off),
            notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
             :title => l(:title_notifications_active_deactivate),
-            :class => 'icon icon-notification-on') %>
+            :class => 'icon dmsf_icon-notification-on') %>
         <% else %>              
           <%= link_to(l(:label_notifications_on),
             notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
             :title => l(:title_notifications_not_active_activate),
-            :class => 'icon icon-notification-off') %>
+            :class => 'icon dmsf_icon-notification-off') %>
         <% end %>      
       <%= link_to(l(:label_link_to), 
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder.id, :type => 'link_to'),
-        :title => l(:title_create_link), 
-        :class => 'icon icon-link') %>
+        :title => l(:title_create_link), :class => 'icon dmsf_icon-link') %>
       <%= link_to(l(:button_copy), copy_folder_path(:id => @folder),
         :title => l(:title_copy), :class => 'icon icon-copy') %>      
       <%= link_to(l(:button_delete),
         delete_dmsf_path(:id => @project, :folder_id => @folder),
         :data => {:confirm => l(:text_are_you_sure)},            
-        :title => l(:title_delete),
-        :class => 'icon icon-del') %> 
-    <% else %>
-      <% if (!@folder.locked_for_user? || User.current.allowed_to?(:force_file_unlock, @project)) && @folder.unlockable? %>
-        <%= link_to(l(:button_unlock),
-          unlock_dmsf_path(:id => @project, :folder_id => @folder),
-            :title => l(:title_unlock_file),
-            :class => 'icon icon-dmsf-unlock')%>
-      <% end %>        
+        :title => l(:title_delete), :class => 'icon icon-del') %> 
+    <% elsif @force_file_unlock_allowed %>
+      <%= link_to_if(@folder.unlockable?, l(:button_unlock),
+        unlock_dmsf_path(:id => @project, :folder_id => @folder),
+          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock')%>      
     <% end %>   
   <% end %>
 </div>
 
 <% create = @pathfolder == @parent %>
-<%= render(:partial => 'path', :locals => {:folder => @pathfolder, :filename => create ? l(:heading_new_folder) : nil}) %>  
+<%= render(:partial => 'path', 
+  :locals => {:folder => @pathfolder, :filename => create ? l(:heading_new_folder) : nil, :title => nil}) %>  
 
-<%= form_for(@folder, :url => {:action => create ? 'create' : 'save', :id => @project, :folder_id => @folder, :parent_id => @parent},
+<%= labelled_form_for(@folder, :url => {:action => create ? 'create' : 'save', :id => @project, :folder_id => @folder, :parent_id => @parent},
   :html => {:method=>:post}) do |f| %>
   <%= error_messages_for(@folder) %>
-  <div class="box dmsf_detail">
-    <div class="clear">
-      <div class="splitcontentleft">
-        <p>
-          <%= label_tag('dmsf_folder_title', "#{l(:label_title)}:") %>
-          <%= f.text_field(:title, :size => '32', :required => true) %>
-        </p>
-      </div>
-      <div class="splitcontentright">
-        <p>
-          <%= label_tag('', "#{l(:field_folder)}:") %>
-          <%= f.select(:dmsf_folder_id, 
-            options_for_select(DmsfFolder.directory_tree(@project, @folder), 	
-            :selected => @parent? @parent.id : (@pathfolder.id if @pathfolder)))                                                  
-          %>				
-        </p>
-      </div>
-    </div>
-    <p class="no-ident">
-      <%= label_tag('dmsf_folder_description', "#{l(:label_description)}:") %>
+  <div class="box tabular">    
+    <p>                
+      <%= f.text_field(:title, :required => true) %>
+    </p>  
+    <p>      
+      <%= f.select(:dmsf_folder_id, 
+        options_for_select(DmsfFolder.directory_tree(@project, @folder), 	
+        :selected => @parent? @parent.id : (@pathfolder.id if @pathfolder)),
+      :label => l(:field_folder))                           
+      %>				
+    </p>          
+    <p>      
+      <%= f.text_area :description, :rows => 8, :class => 'wiki-edit' %>
     </p>
-    <div class="wiki data clear">
-      <%= f.text_area(:description, :rows => 15, :class => 'wiki-edit') %>
-    </div>
     <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
     <% values.each do |value| %>
       <p><%= custom_field_tag_with_label(:dmsf_folder, value) %></p>
-    <% end %>
-  </div>
-  <%= submit_tag(create ? l(:submit_create) : l(:submit_save)) %>
+    <% end %>    
+  </div>  
+  <p><%= submit_tag(create ? l(:submit_create) : l(:submit_save)) %></p>
 <% end %>
 
 <%= wikitoolbar_for 'dmsf_folder_description' %>
+  
+<script type="text/javascript">  
+  $('#dmsf_folder_dmsf_folder_id').select2();  
+</script>
