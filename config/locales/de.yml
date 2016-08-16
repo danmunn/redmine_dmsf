@@ -237,7 +237,7 @@ de:
   label_dmsf_workflow_step_plural: Schritte
   label_dmsf_workflow_approval: Genehmigung
   label_dmsf_workflow_approval_plural: Genehmigungen
-  label_dmsf: DMSF
+  label_dmsf: DMS
   label_dmsf_wokflow_action_approve: Genehmigen
   label_dmsf_wokflow_action_reject: Ablehnen
   label_dmsf_wokflow_action_delegate: Deligieren an
