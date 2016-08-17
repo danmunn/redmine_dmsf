@@ -258,7 +258,7 @@ cs:
   title_rejected: Zamítnutý
   dmsf_and: A
   dmsf_or: NEBO
-  dmsf_new_step: Nový krok
+  dmsf_new_step: Nový krok nebo Nový schvalovatel
   message_dmsf_wokflow_note: Váš komentář...
   info_revision: "r%{rev}"
   link_workflow: Schvalovací proces
