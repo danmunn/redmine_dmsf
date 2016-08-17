@@ -145,7 +145,7 @@
         <div class="splitcontentright">
           <p>
             <%= label_tag('', l(:label_file)) %>
-            <%= ("#{h(revision.dmsf_file.dmsf_folder.dmsf_path_str)}/") if revision.dmsf_file.dmsf_folder %><%= h(revision.name) %>
+            <%= (h("#{revision.dmsf_file.dmsf_folder.dmsf_path_str}/")) if revision.dmsf_file.dmsf_folder %><%= h(revision.name) %>
           </p>
           <p>
             <%= label_tag('', l(:label_mime)) %>
