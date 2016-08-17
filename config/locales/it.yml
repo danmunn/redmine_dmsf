@@ -258,7 +258,8 @@ it: # Italian strings thx 2 Matteo Arceci!
   title_rejected: Rifiutato
   dmsf_and: AND
   dmsf_or: OR
-  dmsf_new_step: Nuovo passo oppure Nuovo approver
+  dmsf_new_step: Nuovo passo
+  dmsf_new_step_or_approver: Nuovo passo oppure Nuovo approver
   message_dmsf_wokflow_note: La tua nota...
   info_revision: "r%{rev}"
   link_workflow: Flusso di lavoro

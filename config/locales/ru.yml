@@ -258,7 +258,8 @@ ru:
   title_rejected: Отклонен
   dmsf_and: AND
   dmsf_or: OR
-  dmsf_new_step: Новый шаг или Новый согласующ
+  dmsf_new_step: Новый шаг
+  dmsf_new_step_or_approver: Новый шаг или Новый согласующ
   message_dmsf_wokflow_note: Ваше примечание...
   info_revision: "r%{rev}"
   link_workflow: Согласование

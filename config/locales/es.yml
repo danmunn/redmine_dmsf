@@ -258,7 +258,8 @@ es:
   title_rejected: Rechazado
   dmsf_and: Y
   dmsf_or: O
-  dmsf_new_step: Nuevo Paso o Nuevo aprobador
+  dmsf_new_step: Nuevo Paso
+  dmsf_new_step_or_approver: Nuevo Paso o Nuevo aprobador
   message_dmsf_wokflow_note: Tu nota...
   info_revision: "r%{rev}"
   link_workflow: Flujo de Trabajo

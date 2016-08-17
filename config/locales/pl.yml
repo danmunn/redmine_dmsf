@@ -258,7 +258,8 @@ pl:
   title_rejected: Odrzucony
   dmsf_and: AND
   dmsf_or: OR
-  dmsf_new_step: Nowy krok lob Nowy akceptować
+  dmsf_new_step: Nowy krok
+  dmsf_new_step_or_approver: Nowy krok lub Nowy akceptować
   message_dmsf_wokflow_note: Twoja notatka...
   info_revision: "r%{rev}"
   link_workflow: Proces akceptacji

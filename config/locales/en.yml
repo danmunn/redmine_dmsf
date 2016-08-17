@@ -258,7 +258,8 @@ en:
   title_rejected: Rejected
   dmsf_and: AND
   dmsf_or: OR
-  dmsf_new_step: New step or New Approver
+  dmsf_new_step: New step
+  dmsf_new_step_or_approver: New step or New Approver
   message_dmsf_wokflow_note: Your note...
   info_revision: "r%{rev}"
   link_workflow: Workflow

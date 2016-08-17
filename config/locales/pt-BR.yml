@@ -258,7 +258,8 @@ pt-BR:
   title_rejected: Rejeitado
   dmsf_and: E
   dmsf_or: OU
-  dmsf_new_step: New step or New approver
+  dmsf_new_step: New step
+  dmsf_new_step_or_approver: New step or New approver
   message_dmsf_wokflow_note: Sua observação...
   info_revision: "r%{rev}"
   link_workflow: Workflow

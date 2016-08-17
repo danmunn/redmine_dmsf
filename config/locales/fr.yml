@@ -258,7 +258,8 @@ fr:
   title_rejected: Rejeté
   dmsf_and: ET
   dmsf_or: OU
-  dmsf_new_step: Nouvelle étape ou Nouvel approbateur
+  dmsf_new_step: Nouvelle étape
+  dmsf_new_step_or_approver: Nouvelle étape ou Nouvel approbateur
   message_dmsf_wokflow_note: Votre note...
   info_revision: "r%{rev}"
   link_workflow: Flux

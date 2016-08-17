@@ -258,7 +258,8 @@ de:
   title_rejected: Abgelehnt
   dmsf_and: UND
   dmsf_or: ODER
-  dmsf_new_step: Neuer Schritt oder Neuer Genehmiger
+  dmsf_new_step: Neuer Schritt
+  dmsf_new_step_or_approver: Neuer Schritt oder Neuer Genehmiger
   message_dmsf_wokflow_note: Deine Notiz...
   info_revision: "r%{rev}"
   link_workflow: Workflow
