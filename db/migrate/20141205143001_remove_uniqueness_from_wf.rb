@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,6 +20,6 @@
 
 class RemoveUniquenessFromWf < ActiveRecord::Migration
   def up      
-    remove_index :dmsf_workflows, :name
+    remove_index(:dmsf_workflows, :name) if index_exists?(:dmsf_workflows, :name)
   end  
 end
