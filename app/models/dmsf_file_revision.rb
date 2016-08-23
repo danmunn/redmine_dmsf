@@ -22,6 +22,7 @@
 require 'digest/md5'
 
 class DmsfFileRevision < ActiveRecord::Base
+
   unloadable
   belongs_to :dmsf_file
   belongs_to :source_revision, :class_name => 'DmsfFileRevision', :foreign_key => 'source_dmsf_file_revision_id'
@@ -288,10 +289,10 @@ class DmsfFileRevision < ActiveRecord::Base
     text = ''
     text = self.description if self.description.present?
     if self.comment.present?
-      text += '&#xA;' if text.present?
+      text += ' / ' if text.present?
       text += self.comment
     end
-    text.html_safe
+    ActionView::Base.full_sanitizer.sanitize(text)
   end
 
 end
