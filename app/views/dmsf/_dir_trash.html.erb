@@ -23,8 +23,8 @@
 <td class="dmsf_checkbox"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_restore_or_delete), :id => "subfolder_#{id}") %></td>
 <td class="dmsf_title">                  
-  <%= content_tag(:span, h(title), 
-    :title => h(subfolder.description),
+  <%= content_tag(:span, h(title),
+    :title => subfolder ? h(subfolder.description) : nil,
     :class => 'icon icon-folder') %>
   <% if link %>
     <div class="dmsf_filename" title="<%= l(:label_target_folder)%>"><%= link.path %></div>
