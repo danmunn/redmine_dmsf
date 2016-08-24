@@ -208,7 +208,7 @@ en:
   parent_directory: Parent Directory
   note_webdav: "Webdav once enabled can be found at %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Webdav functionality
-  label_dmsf_plural: "Copy Documents and folders (%{files} files in %{folders} folders)"
+  label_dmsf_plural: "Copy Documents and Folders (%{files} files in %{folders} folders)"
 
   warning_folder_already_locked: This folder is already locked
   notice_folder_locked: The folder was successfully locked

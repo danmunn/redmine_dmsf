@@ -179,8 +179,8 @@ zh:
   heading_access_downloads_emails: 存取次数
   heading_access_first: 首次
   heading_access_last: 末次
-  label_dmsf_updated: DMSF updated
-  label_dmsf_downloaded: DMSF document downloaded
+  label_dmsf_updated: Updated
+  label_dmsf_downloaded: Downloaded
   title_total_size_of_all_files: 文件夹所有文件总大小
   project_module_dmsf: 文档管家
   warning_no_project_to_copy_file_to: No project to copy file to

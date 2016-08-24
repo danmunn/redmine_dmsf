@@ -179,8 +179,8 @@ pt-BR:
   heading_access_downloads_emails: Downloads/Emails
   heading_access_first: First
   heading_access_last: Last
-  label_dmsf_updated: DMSF document updated
-  label_dmsf_downloaded: DMSF document downloaded
+  label_dmsf_updated: Updated
+  label_dmsf_downloaded: Downloaded
   title_total_size_of_all_files: Total size of all files under this folder
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: No project to copy file to
@@ -208,7 +208,7 @@ pt-BR:
   parent_directory: Parent Directory
   note_webdav: "Webdav once enabled can be found at %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Webdav functionality
-  label_dmsf_plural: "Copy DMSF files and folders (%{files} files in %{folders} folders)"
+  label_dmsf_plural: "Copy Documents and folders (%{files} documents in %{folders} folders)"
 
   warning_folder_already_locked: Esta pasta já está bloqueada
   notice_folder_locked: A pasta foi bloqueada com sucesso
