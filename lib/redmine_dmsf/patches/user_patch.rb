@@ -29,13 +29,13 @@ module RedmineDmsf
         base.class_eval do
           unloadable
 
-          before_destroy :remove_references
+          before_destroy :remove_dmsf_references
         end
       end
 
       module InstanceMethods
 
-        def remove_references
+        def remove_dmsf_references
           return if self.id.nil?
           substitute = User.anonymous
           DmsfFileRevisionAccess.where(:user_id => id).update_all(:user_id => substitute.id)
