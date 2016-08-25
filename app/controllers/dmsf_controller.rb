@@ -242,14 +242,12 @@ class DmsfController < ApplicationController
 
   def entries_email
     if params[:email][:to].strip.blank?
-      flash.now[:error] = l(:error_email_to_must_be_entered)
-      render :action => 'email_entries'
-      return
+      flash[:error] = l(:error_email_to_must_be_entered)
+    else
+      DmsfMailer.send_documents(@project, User.current, params[:email]).deliver
+      File.delete(params[:email][:zipped_content])
+      flash[:notice] = l(:notice_email_sent, params[:email][:to])
     end
-    DmsfMailer.send_documents(@project, User.current, params[:email]).deliver
-    File.delete(params[:email][:zipped_content])
-    flash[:notice] = l(:notice_email_sent, params[:email][:to])
-
     redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
   end
 
@@ -460,7 +458,8 @@ class DmsfController < ApplicationController
       @email_params = {
         :zipped_content => zipped_content,
         :folders => selected_folders,
-        :files => selected_files
+        :files => selected_files,
+        :subject => "#{@project.name} #{l(:label_dmsf_file_plural).downcase}"
       }
       render :action => 'email_entries'
     rescue Exception
