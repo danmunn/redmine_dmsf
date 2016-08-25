@@ -330,4 +330,6 @@ es:
   label_maximum_ajax_upload_filesize: "El máximo tamaño de archivo para subir por AJAX"
   note_maximum_ajax_upload_filesize: "El límite máximo de tamaño de archivo que puede ser subido por la interfaz AJAX estandar, de lo contrario se debe utilizar el formulario estandar de Redmine. El número es en MB."
   label_classic: Classic
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."

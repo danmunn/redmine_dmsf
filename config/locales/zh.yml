@@ -330,4 +330,6 @@ zh:
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
   label_classic: Classic
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."

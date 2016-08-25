@@ -330,4 +330,6 @@ ja:
   label_maximum_ajax_upload_filesize: アップロードファイルサイズ上限
   note_maximum_ajax_upload_filesize: アップロード可能なファイルサイズの上限。AjaxおよびRedmineの仕様に制限される（2ギガバイト程度までは確認済み）単位はMB。
   label_classic: Classic
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."

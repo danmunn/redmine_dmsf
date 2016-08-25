@@ -201,7 +201,7 @@ class DmsfFile < ActiveRecord::Base
 
   def notify?
     return true if self.notification
-    return true if self.dmsf_folder && delf.dmsf_folder.notify?
+    return true if self.dmsf_folder && self.dmsf_folder.notify?
     return true if !self.dmsf_folder && self.project.dmsf_notification
     return false
   end

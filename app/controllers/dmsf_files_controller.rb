@@ -135,7 +135,8 @@ class DmsfFilesController < ApplicationController
          else
            revision.increase_version(version)
          end
-        file_upload = params[:file_upload]
+        #file_upload = params[:file_upload]
+        file_upload = params[:attachments]['1'] if params[:attachments].present?
         unless file_upload
           revision.size = last_revision.size
           revision.disk_filename = last_revision.disk_filename
@@ -146,10 +147,11 @@ class DmsfFilesController < ApplicationController
             revision.digest = last_revision.digest
           end
         else
+          upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, file_upload)
           revision.size = file_upload.size
           revision.disk_filename = revision.new_storage_filename
-          revision.mime_type = Redmine::MimeType.of(file_upload.original_filename)
-          revision.digest = DmsfFileRevision.create_digest file_upload.path
+          revision.mime_type = upload.mime_type
+          revision.digest = DmsfFileRevision.create_digest upload.disk_file
         end
 
         # Custom fields
@@ -163,8 +165,8 @@ class DmsfFilesController < ApplicationController
 
         if revision.save
           revision.assign_workflow(params[:dmsf_workflow_id])
-          if file_upload
-            revision.copy_file_content(file_upload)
+          if upload
+            FileUtils.mv(upload.disk_file, revision.disk_file)
           end
           if @file.locked? && !@file.locks.empty?
             begin
