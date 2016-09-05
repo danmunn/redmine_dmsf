@@ -20,86 +20,85 @@
 */
 
 /* DMSF table.list modifications */
-table.dmsf_list th.dmsf_th {
+.dmsf_list .dmsf_th {
   border: none;
 }
 
-table.list td.dmsf_modified {
+.list .dmsf_modified {
 	min-width: 127px;
 	width: 127px;
   font-size: 0.8em;
   text-align: left;
 }
 
-td.dmsf_modified img {
+.dmsf_modified img {
 	vertical-align:text-top;
 }
 
-table.list td.dmsf_title {
+.list .dmsf_title {
 	width: 40%;
   text-align: left;
 }
 
-table.list td.dmsf_buttons {
+.list .dmsf_buttons {
 	min-width: 96px;
 	width: 96px;
   text-align: left;
 }
 
-table.list th.dmsf_checkbox,
-table.list td.dmsf_checkbox {
+.list .dmsf_checkbox {
   width: 15px;
   padding: 2px 0 0 0;
 }
 
-table.list th.dmsf_checkbox input {
+.list .dmsf_checkbox input {
   padding:0px;
 }
 
-table.list th.dmsf_checkbox div.DataTables_sort_wrapper {
+.list .dmsf_checkbox .DataTables_sort_wrapper {
 	padding: 0;
 }
 
-form.dmsf_entries {
+.dmsf_entries {
 	margin-bottom: 10px;
 	display: block;
 }
 
-div.dmsf_controls,
-div.dmsf_controls input,
-div.dmsf_controls select,
-form.dmsf_entries #browser_filter.dataTables_filter,
-form.dmsf_entries #browser_filter.dataTables_filter input{
+.dmsf_controls,
+.dmsf_controls input,
+.dmsf_controls select,
+.dmsf_entries #browser_filter.dataTables_filter,
+.dmsf_entries #browser_filter.dataTables_filter input{
 	font-size: 0.9em;
 }
 
-div.dmsf_filename {
+.dmsf_filename {
 	padding: 0 10px 0 10px;
   float: right;
   font-size: 0.8em;
 	white-space: nowrap;
 }
 
-td.dmsf_size {
+.dmsf_size {
 	font-size: 0.8em;
 	white-space: nowrap;
 }
 
-td.dmsf_author {
+.dmsf_author {
 	font-size: 0.8em;
   white-space: nowrap;
 }
 
-td.dmsf_version {
+.dmsf_version {
 	font-size: 0.8em;
 	white-space: nowrap;
 }
 
-td.dmsf_version img {
+.dmsf_version img {
 	vertical-align:text-top;
 }
 
-td.dmsf_workflow {
+.dmsf_workflow {
 	font-size: 0.8em;
 	white-space: nowrap;
 }
@@ -108,12 +107,12 @@ td.dmsf_workflow {
 	display: none;
 }
 
-div.dmsf_upload_select {
+.dmsf_upload_select {
 	float: right;
 	font-size: 0.9em;
 }
 
-div.dmsf_upload_select input, div.dmsf_upload_select select {
+.dmsf_upload_select input, .dmsf_upload_select select {
 	font-size: 0.9em;
 }
 
@@ -121,7 +120,7 @@ div.dmsf_upload_select input, div.dmsf_upload_select select {
 #admin-menu a.dmsf-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 #dmsf_users_for_delegate { height: 200px; overflow:auto; }
 #dmsf_users_for_delegate label { display: block; }
-tr.dmsf_workflow.locked a { color: #aaa; }
+.dmsf_workflow.locked a { color: #aaa; }
 
 .dmsf_revision_box {
   padding: 0px 0px 0px 0px;
@@ -144,7 +143,7 @@ tr.dmsf_workflow.locked a { color: #aaa; }
   padding-left: 10px;
 }
 
-div.dmsf_revision_box .ui-widget-header {
+.dmsf_revision_box .ui-widget-header {
     font-weight: normal;
 }
 
@@ -172,7 +171,7 @@ div.dmsf_revision_box .ui-widget-header {
 .dmsf_icon-unlock { background-image: url(../images/unlock.png); }
 
 /* File types */
-tr.dmsf_gray .icon-folder { background-image: url(../images/folder_gray.png); }
+.dmsf_gray .icon-folder { background-image: url(../images/folder_gray.png); }
 
 .icon-file.filetype-doc, .icon-file.filetype-docx { background-image: url(../images/filetypes/doc.png); }
 .icon-file.filetype-xls, .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls.png); }
@@ -184,65 +183,65 @@ tr.dmsf_gray .icon-folder { background-image: url(../images/folder_gray.png); }
 .icon-file.filetype-odp { background-image: url(../images/filetypes/odp.png); }
 .icon-file.filetype-odg { background-image: url(../images/filetypes/odg.png); }
 
-tr.dmsf_gray .icon-file.filetype-doc { background-image: url(../images/filetypes/doc_gray.png); }
-tr.dmsf_gray .icon-file.filetype-docx { background-image: url(../images/filetypes/doc_gray.png); }
-tr.dmsf_gray .icon-file.filetype-xls { background-image: url(../images/filetypes/xls_gray.png); }
-tr.dmsf_gray .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls_gray.png); }
-tr.dmsf_gray .icon-file.filetype-ppt { background-image: url(../images/filetypes/ppt_gray.png); }
-tr.dmsf_gray .icon-file.filetype-pptx { background-image: url(../images/filetypes/ppt_gray.png); }
-tr.dmsf_gray .icon-file.filetype-vsd { background-image: url(../images/filetypes/vsd_gray.png); }
-tr.dmsf_gray .icon-file.filetype-vsdx { background-image: url(../images/filetypes/vsd_gray.png); }
-tr.dmsf_gray .icon-file.filetype-mpp { background-image: url(../images/filetypes/mpp_gray.png); }
-tr.dmsf_gray .icon-file.filetype-odt { background-image: url(../images/filetypes/odt_gray.png); }
-tr.dmsf_gray .icon-file.filetype-ods { background-image: url(../images/filetypes/ods_gray.png); }
-tr.dmsf_gray .icon-file.filetype-odp { background-image: url(../images/filetypes/odp_gray.png); }
-tr.dmsf_gray .icon-file.filetype-odg { background-image: url(../images/filetypes/odg_gray.png); }
+.dmsf_gray .icon-file.filetype-doc { background-image: url(../images/filetypes/doc_gray.png); }
+.dmsf_gray .icon-file.filetype-docx { background-image: url(../images/filetypes/doc_gray.png); }
+.dmsf_gray .icon-file.filetype-xls { background-image: url(../images/filetypes/xls_gray.png); }
+.dmsf_gray .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls_gray.png); }
+.dmsf_gray .icon-file.filetype-ppt { background-image: url(../images/filetypes/ppt_gray.png); }
+.dmsf_gray .icon-file.filetype-pptx { background-image: url(../images/filetypes/ppt_gray.png); }
+.dmsf_gray .icon-file.filetype-vsd { background-image: url(../images/filetypes/vsd_gray.png); }
+.dmsf_gray .icon-file.filetype-vsdx { background-image: url(../images/filetypes/vsd_gray.png); }
+.dmsf_gray .icon-file.filetype-mpp { background-image: url(../images/filetypes/mpp_gray.png); }
+.dmsf_gray .icon-file.filetype-odt { background-image: url(../images/filetypes/odt_gray.png); }
+.dmsf_gray .icon-file.filetype-ods { background-image: url(../images/filetypes/ods_gray.png); }
+.dmsf_gray .icon-file.filetype-odp { background-image: url(../images/filetypes/odp_gray.png); }
+.dmsf_gray .icon-file.filetype-odg { background-image: url(../images/filetypes/odg_gray.png); }
 
-tr.dmsf_gray .icon-file.text-x-c { background-image: url(../images/filetypes/c_gray.png); }
-tr.dmsf_gray .icon-file.text-x-csharp { background-image: url(../images/filetypes/csharp_gray.png); }
-tr.dmsf_gray .icon-file.text-x-java { background-image: url(../images/files/filetypes/java_gray.png); }
-tr.dmsf_gray .icon-file.text-x-javascript { background-image: url(../images/filetypes/js_gray.png); }
-tr.dmsf_gray .icon-file.text-x-php { background-image: url(../images/filetypes/php_gray.png); }
-tr.dmsf_gray .icon-file.text-x-ruby { background-image: url(../images/filetypes/ruby_gray.png); }
-tr.dmsf_gray .icon-file.text-xml { background-image: url(../images/filetypes/xml_gray.png); }
-tr.dmsf_gray .icon-file.text-css { background-image: url(../images/filetypes/css_gray.png); }
-tr.dmsf_gray .icon-file.text-html { background-image: url(../images/filetypes/html_gray.png); }
-tr.dmsf_gray .icon-file.image-gif { background-image: url(../images/filetypes/image_gray.png); }
-tr.dmsf_gray .icon-file.image-jpeg { background-image: url(../images/filetypes/image_gray.png); }
-tr.dmsf_gray .icon-file.image-png { background-image: url(../images/filetypes/image_gray.png); }
-tr.dmsf_gray .icon-file.image-tiff { background-image: url(../images/filetypes/image_gray.png); }
-tr.dmsf_gray .icon-file.application-pdf { background-image: url(../images/filetypes/pdf_gray.png); }
-tr.dmsf_gray .icon-file.application-zip { background-image: url(../images/filetypes/zip_gray.png); }
-tr.dmsf_gray .icon-file.application-x-gzip { background-image: url(../images/filetypes/zip_gray.png); }
+.dmsf_gray .icon-file.text-x-c { background-image: url(../images/filetypes/c_gray.png); }
+.dmsf_gray .icon-file.text-x-csharp { background-image: url(../images/filetypes/csharp_gray.png); }
+.dmsf_gray .icon-file.text-x-java { background-image: url(../images/files/filetypes/java_gray.png); }
+.dmsf_gray .icon-file.text-x-javascript { background-image: url(../images/filetypes/js_gray.png); }
+.dmsf_gray .icon-file.text-x-php { background-image: url(../images/filetypes/php_gray.png); }
+.dmsf_gray .icon-file.text-x-ruby { background-image: url(../images/filetypes/ruby_gray.png); }
+.dmsf_gray .icon-file.text-xml { background-image: url(../images/filetypes/xml_gray.png); }
+.dmsf_gray .icon-file.text-css { background-image: url(../images/filetypes/css_gray.png); }
+.dmsf_gray .icon-file.text-html { background-image: url(../images/filetypes/html_gray.png); }
+.dmsf_gray .icon-file.image-gif { background-image: url(../images/filetypes/image_gray.png); }
+.dmsf_gray .icon-file.image-jpeg { background-image: url(../images/filetypes/image_gray.png); }
+.dmsf_gray .icon-file.image-png { background-image: url(../images/filetypes/image_gray.png); }
+.dmsf_gray .icon-file.image-tiff { background-image: url(../images/filetypes/image_gray.png); }
+.dmsf_gray .icon-file.application-pdf { background-image: url(../images/filetypes/pdf_gray.png); }
+.dmsf_gray .icon-file.application-zip { background-image: url(../images/filetypes/zip_gray.png); }
+.dmsf_gray .icon-file.application-x-gzip { background-image: url(../images/filetypes/zip_gray.png); }
 
 /* Links */
 .dmsf_gray { color: #AAA }
 .dmsf_gray a, .dmsf_gray a:link, .dmsf_gray a:visited{ color: #484848; text-decoration: none; }
 
 /* Search results */
-dt.dmsf-file { background-image: url(../../../images/document.png); }
-dt.dmsf-folder { background-image: url(../../../images/folder.png); }
+.dmsf-file { background-image: url(../../../images/document.png); }
+.dmsf-folder { background-image: url(../../../images/folder.png); }
 
 /* DMSF tree view */
-tr.dmsf_hidden { display:none; }
-tr.dmsf_tree span.dmsf_expander { cursor: pointer; }
-tr.dmsf_tree.dmsf_expanded td.dmsf_title span {
+.dmsf_hidden { display:none; }
+.dmsf_tree span.dmsf_expander { cursor: pointer; }
+.dmsf_tree.dmsf_expanded td.dmsf_title span {
   background: url(../images/bullet_arrow_down.png) no-repeat 0 50%;
   padding-left: 16px;
 }
-tr.dmsf_tree.dmsf_child td.dmsf_title span { padding-left: 16px; }
-tr.dmsf_tree.dmsf_collapsed td.dmsf_title span {
+.dmsf_tree.dmsf_child .dmsf_title span { padding-left: 16px; }
+.dmsf_tree.dmsf_collapsed .dmsf_title span {
   background: url(../../../images/bullet_arrow_right.png) no-repeat 0 50%;
   padding-left: 16px;
 }
-tr.dmsf_tree.idnt-1 td.dmsf_title {padding-left: 1.5em;}
-tr.dmsf_tree.idnt-2 td.dmsf_title {padding-left: 2em;}
-tr.dmsf_tree.idnt-3 td.dmsf_title {padding-left: 2.5em;}
-tr.dmsf_tree.idnt-4 td.dmsf_title {padding-left: 3em;}
-tr.dmsf_tree.idnt-5 td.dmsf_title {padding-left: 3.5em;}
-tr.dmsf_tree.idnt-6 td.dmsf_title {padding-left: 4em;}
-tr.dmsf_tree.idnt-7 td.dmsf_title {padding-left: 4.5em;}
-tr.dmsf_tree.idnt-8 td.dmsf_title {padding-left: 5em;}
-tr.dmsf_tree.idnt-9 td.dmsf_title {padding-left: 5.5em;}
+.dmsf_tree.idnt-1 .dmsf_title {padding-left: 1.5em;}
+.dmsf_tree.idnt-2 .dmsf_title {padding-left: 2em;}
+.dmsf_tree.idnt-3 .dmsf_title {padding-left: 2.5em;}
+.dmsf_tree.idnt-4 .dmsf_title {padding-left: 3em;}
+.dmsf_tree.idnt-5 .dmsf_title {padding-left: 3.5em;}
+.dmsf_tree.idnt-6 .dmsf_title {padding-left: 4em;}
+.dmsf_tree.idnt-7 .dmsf_title {padding-left: 4.5em;}
+.dmsf_tree.idnt-8 .dmsf_title {padding-left: 5em;}
+.dmsf_tree.idnt-9 .dmsf_title {padding-left: 5.5em;}
 .dmsf_odd {background-color:#f6f7f8;}
 .dmsf_even {background-color: #fff;}
