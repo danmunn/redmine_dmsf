@@ -24,6 +24,8 @@ module RedmineDmsf
 
     class MyAccountViewHook < Redmine::Hook::ViewListener
 
+      render_on :view_users_bulk_edit, :partial => 'hooks/redmine_dmsf/view_users_bulk_edit'
+
       def view_my_account_preferences(context={})
         if context.is_a?(Hash) && context[:user]
           context[:controller].send(
