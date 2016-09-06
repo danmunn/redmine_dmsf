@@ -18,8 +18,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require_dependency 'user'
-
 module RedmineDmsf
   module Patches
     module UserPatch
@@ -60,7 +58,7 @@ end
 
 # Apply patch
 Rails.configuration.to_prepare do
-  unless Project.included_modules.include?(RedmineDmsf::Patches::UserPatch)
+  unless User.included_modules.include?(RedmineDmsf::Patches::UserPatch)
     User.send(:include, RedmineDmsf::Patches::UserPatch)
   end
 end
