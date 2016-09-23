@@ -117,7 +117,7 @@ RedmineApp::Application.routes.draw do
     :resource_class => RedmineDmsf::Webdav::ResourceProxy,
     :controller_class => RedmineDmsf::Webdav::Controller,
     :log_to => Rails.logger
-  ), :at => '/dmsf/webdav'
+  ), :at => '/dmsf/webdav'  if defined?(RedmineDmsf)
 
   # Approval workflow
   resources :dmsf_workflows do
