@@ -85,7 +85,7 @@
 <%= form_tag({:action => :entries_operation, :id => @project, :folder_id => @folder}, :method => :post,
   :class => 'dmsf_entries', :id => 'entries_form') do %>
   <%= hidden_field_tag('action') %>
-  <div class="dmsf_controls" style="float: left">
+  <div id="dmsf_buttons" class="dmsf_controls" style="float: left">
     <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries') if @file_view_allowed %>
     <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries') if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
     <% if @file_delete_allowed%>
@@ -94,7 +94,7 @@
   </div>
   <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
   <% unless values.empty? %>
-    <div class="dmsf_controls" style="float: right">
+    <div id="dmsf_tag" class="dmsf_controls" style="float: right">
       <%= custom_field_tag_with_label(
         :dmsf_folder,
         CustomValue.new(:custom_field_id => params[:custom_field_id].present? ? params[:custom_field_id] : values.first.custom_field_id, :value => params[:custom_value])) %>
@@ -127,11 +127,6 @@
   });
 </script>
 
-<%
-  sUrl = 'jquery.dataTables/en.json'
-  sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !I18n.locale.to_s.match(/^en.*/)
-%>
-
 <% content_for :header_tags do %>
   <%= javascript_include_tag 'bowser.min.js', :plugin => 'redmine_dmsf' %>
   <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>
@@ -142,7 +137,7 @@
       $('#browser').dataTable({
         'bJQueryUI': true,
         'oLanguage': {
-          'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', sUrl) %>"
+          'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
         },
         'bAutoWidth': false,
         'bPaginate': false,
@@ -156,7 +151,8 @@
           { 'iDataSort': 11, 'aTargets': [ 4 ] }
         ],
         'fnInitComplete': function() {
-           jQuery('div.dmsf_controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
+          $('#dmsf_buttons').prependTo($('#browser_wrapper div.fg-toolbar')[0]);
+          $('#dmsf_tag').prependTo($('#browser_wrapper div.fg-toolbar')[0]);
         },
         'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
           <% if @tree_view %>

@@ -152,11 +152,6 @@
   });
 </script>
 
-<%
-  sUrl = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json"
-  sUrl = 'jquery.dataTables/en.json' unless File.exist?(sUrl)
-%>
-
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>
@@ -166,7 +161,7 @@
       $('#browser').dataTable({
         'bJQueryUI': true,
         'oLanguage': {
-                'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', sUrl) %>"
+                'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
         },
         'bAutoWidth': false,
         'bPaginate': false,
@@ -180,7 +175,7 @@
           { 'iDataSort': 11, 'aTargets': [ 4 ] }
         ],
         'fnInitComplete': function() {
-           jQuery('div.dmsf_controls').prependTo(jQuery('#browser_wrapper div.fg-toolbar')[0]);
+           $('div.dmsf_controls').prependTo($('#browser_wrapper div.fg-toolbar')[0]);
         },
         'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
            return "<%= l(:label_number_of_folders)%>: <%= @subfolders.count + @dir_links.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count + @file_links.count + @url_links.count %>";

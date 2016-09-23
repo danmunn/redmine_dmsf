@@ -85,7 +85,7 @@
         multipart: true,
         // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
         dragdrop: true,
-        multipart_params : {authenticity_token : jQuery('input[name=authenticity_token]').val()},
+        multipart_params : { authenticity_token : $('input[name=authenticity_token]').val() },
 
         // Rename files by clicking on their titles
         rename: true,
@@ -134,7 +134,7 @@
               pluploader.trigger('QueueChanged');             
           }
         }
-        if(pluploader.total.uploaded == pluploader.files.length) jQuery('#uploadform').submit();
+        if(pluploader.total.uploaded == pluploader.files.length) $('#uploadform').submit();
         else if((pluploader.total.uploaded + pluploader.total.failed) == pluploader.files.length) setTimeout(function() {$('#uploadform').submit();}, 2000);
         else dmsfFileFieldCount++;
         return true;

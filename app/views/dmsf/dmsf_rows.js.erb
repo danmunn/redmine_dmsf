@@ -1,0 +1,39 @@
+// Store DMSF controls
+var dmsfButtons = $('#dmsf_buttons')[0].outerHTML
+var dmsfTag = $('#dmsf_tag')[0].outerHTML
+var browserInfo = $('#browser_info').text();
+
+// Destroy the original dataTable
+$("#browser").dataTable().fnDestroy();
+
+// Add rows
+$('#<%= params[:row_id] %>').after('<%= escape_javascript(render(:partial => 'dmsf/dmsf_rows')) %>');
+
+// Reinitialize the dataTable
+$('#browser').dataTable({
+  'bJQueryUI': true,
+  'oLanguage': {
+    'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
+  },
+  'bAutoWidth': false,
+  'bPaginate': false,
+  'aaSorting': [[1, 'asc']],
+  'aaSortingFixed': [[ 8, 'asc']],
+  'aoColumnDefs': [
+    { 'bSearchable': false, 'aTargets': [0, 7, 8, 9, 10, 11] },
+    { 'bSortable': false, 'aTargets': [0, 7] },
+    { 'iDataSort': 9, 'aTargets': [ 2 ] },
+    { 'iDataSort': 10, 'aTargets': [ 3 ] },
+    { 'iDataSort': 11, 'aTargets': [ 4 ] }
+  ],
+  'fnInitComplete': function() {
+    $(dmsfButtons).prependTo($('#browser_wrapper div.fg-toolbar')[0]);
+    $(dmsfTag).prependTo($('#browser_wrapper div.fg-toolbar')[0]);
+  },
+  'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+    return browserInfo;
+  }
+});
+
+// Hot fix
+$('#browser').attr('style', 'width: 100%');

@@ -46,6 +46,7 @@ RedmineApp::Application.routes.draw do
   get '/projects/:id/dmsf/edit/root', :controller => 'dmsf', :action => 'edit_root', :as => 'edit_root_dmsf'
   get '/projects/:id/dmsf/trash', :controller => 'dmsf', :action => 'trash', :as => 'trash_dmsf'
   get '/projects/:id/dmsf/restore', :controller => 'dmsf', :action => 'restore', :as => 'restore_dmsf'
+  post '/projects/:id/dmsf/expand_folder', :controller => 'dmsf', :action => 'expand_folder', :as => 'expand_folder_dmsf'
 
   #
   # dmsf_state controller

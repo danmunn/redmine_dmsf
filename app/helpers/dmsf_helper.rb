@@ -57,20 +57,27 @@ module DmsfHelper
     extension = File.extname(filename)
     extension = extension[1, extension.length-1]
     if File.exists?("#{File.dirname(__FILE__)}/../../assets/images/filetypes/#{extension}.png")
-      return "filetype-#{extension}";
+      "filetype-#{extension}";
     else
-      return Redmine::MimeType.css_class_of(filename)
+      Redmine::MimeType.css_class_of(filename)
     end
   end
 
   def plugin_asset_path(plugin, asset_type, source)
-    return "#{Redmine::Utils.relative_url_root}/plugin_assets/#{plugin}/#{asset_type}/#{source}"
+    "#{Redmine::Utils.relative_url_root}/plugin_assets/#{plugin}/#{asset_type}/#{source}"
   end
 
-  def self.dmsf_tree(parent, obj, tree = nil)
-    tree ||= []
+  def json_url
+    if I18n.locale && !I18n.locale.to_s.match(/^en.*/)
+      "jquery.dataTables/#{I18n.locale.to_s.downcase}.json"
+    else
+      'jquery.dataTables/en.json'
+    end
+  end
+
+  def self.all_children_sorted(parent, pos, ident)
     # Folders && files && links
-    nodes = obj.dmsf_folders.visible + obj.dmsf_links.visible + obj.dmsf_files.visible
+    nodes = parent.dmsf_folders.visible + parent.dmsf_links.visible + parent.dmsf_files.visible
     # Alphabetical and type sort
     nodes.sort! do |x, y|
       if ((x.is_a?(DmsfFolder) || (x.is_a?(DmsfLink) && x.is_folder?)) &&
@@ -83,22 +90,17 @@ module DmsfHelper
         x.title.downcase <=> y.title.downcase
       end
     end
-    # Create the tree
-    nodes.each do |node|
-      local_parent = node.dmsf_folder
-      level = 0
-      while local_parent && (local_parent != parent)
-        level += 1
-        local_parent = local_parent.dmsf_folder
+    # Calculate position
+    step = 1.0 / (10 ** ident)
+    tree = []
+    i = 0
+    nodes.each do |x|
+      if x.is_a?(DmsfFolder) || (x.is_a?(DmsfLink) && x.is_folder?)
+        i += 1
+        tree << [x, pos + (step * i)]
+      else
+        tree << [x, pos + step + i]
       end
-      position = tree.size
-      # Files of the same parent and on the same level have the same position
-      if position > 0 && tree[-1][1] == level &&
-        (tree[-1][0].is_a?(DmsfFile) || (tree[-1][0].is_a?(DmsfLink) && tree[-1][0].is_file?))
-        position = tree[-1][2]
-      end
-      tree << [node, level, position]
-      self.dmsf_tree(parent, node, tree) if node.is_a?(DmsfFolder)
     end
     tree
   end

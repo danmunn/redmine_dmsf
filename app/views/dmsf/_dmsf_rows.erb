@@ -1,0 +1,96 @@
+<% parent = @folder ? @folder : @project %>
+<% @idnt = 0 unless @idnt %>
+<% @pos = 0.0 unless @pos %>
+<% DmsfHelper.all_children_sorted(parent, @pos, @idnt).each do |obj, position| %>
+    <% classes = "dmsf_tree idnt-#{@idnt}" %>
+    <% classes += " dmsf-#{cycle('odd', 'even')}" %>
+    <% if obj.is_a?(DmsfFolder) && ((obj.dmsf_folders.visible.count > 0) || (obj.dmsf_files.visible.count > 0) || (obj.dmsf_links.visible.count > 0)) %>
+        <% classes += ' idnt dmsf_collapsed dmsf-not-loaded' %>
+        <% id = "id='#{obj.id}span'".html_safe %>
+        <% onclick = "onclick=\"dmsfToggle('#{obj.id}','#{obj.id}span','#{escape_javascript(expand_folder_dmsf_path)}')\"" %>
+    <% else %>
+        <% classes += ' dmsf_child' %>
+        <% onclick = '' %>
+    <% end %>
+    <% parent = obj.dmsf_folder %>
+    <% while parent %>
+        <% classes += " #{parent.id}" %>
+        <% parent = parent.dmsf_folder %>
+    <% end %>
+
+    <% if obj.is_a? DmsfFolder %>
+        <tr <%= id %> class="dir <%= classes %>">
+          <%= render(:partial => 'dir',
+                     :locals => {
+                         :project => @project,
+                         :subfolder => obj,
+                         :link => nil,
+                         :id => obj.id,
+                         :name => 'subfolders[]',
+                         :title => obj.title,
+                         :onclick => onclick,
+                         :position => position}) %>
+        </tr>
+    <% elsif obj.is_a?(DmsfLink) && (obj.target_type == 'DmsfFolder') %>
+        <% unless obj.target_project %>
+            <% Rails.logger.error "Error: dmsf_link id #{obj.id} has no target!" %>
+            <% next %>
+        <% end %>
+        <tr <%= id %> class="dmsf_gray <%= classes %>">
+          <%= render(:partial => 'dir',
+                     :locals => {
+                         :project => obj.target_project,
+                         :subfolder => obj.target_folder,
+                         :link => obj,
+                         :id => obj.id,
+                         :name => 'dir_links[]',
+                         :title => obj.name,
+                         :onclick => onclick,
+                         :position => position}) %>
+        </tr>
+    <% elsif obj.is_a?(DmsfFile) %>
+        <% unless obj.last_revision %>
+            <% Rails.logger.error "Error: dmsf_file id #{obj.id} has no revision!" %>
+            <% next %>
+        <% end %>
+        <tr <%= id %> class="file <%= classes %>">
+          <%= render(:partial => 'file', :locals => {
+              :project => @project,
+              :file => obj,
+              :link => nil,
+              :id => obj.id,
+              :name => 'files[]',
+              :title => obj.title,
+              :onclick => onclick,
+              :position => position}) %>
+        </tr>
+    <% elsif obj.is_a?(DmsfLink) && (obj.target_type == 'DmsfFile') %>
+        <% unless obj.target_file.last_revision %>
+            <% Rails.logger.error "Error: dmsf_file id #{obj.target_id} has no revision!" %>
+            <% next %>
+        <% end %>
+        <tr <%= id %> class="dmsf_gray <%= classes %>">
+          <%= render(:partial => 'file', :locals => {
+              :project => obj.target_project,
+              :file => obj.target_file,
+              :link => obj,
+              :id => obj.id,
+              :name => 'file_links[]',
+              :title => obj.name,
+              :onclick => onclick,
+              :position => position}) %>
+        </tr>
+    <% elsif obj.is_a?(DmsfLink) && (obj.target_type == 'DmsfUrl') %>
+        <tr <%= id %> class="dmsf_gray <%= classes %>">
+          <%= render(:partial => 'url', :locals => {
+              :project => obj.target_project,
+              :file => obj.target_file,
+              :link => obj,
+              :id => obj.id,
+              :name => 'file_links[]',
+              :title => obj.name,
+              :onclick => onclick,
+              :position => position}) %>
+        </tr>
+    <% end %>
+<% end %>

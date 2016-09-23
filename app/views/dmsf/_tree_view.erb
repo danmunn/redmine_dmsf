@@ -29,115 +29,17 @@
       <th class ="dmsf_th"><%= l(:link_title) %></th>
       <th class ="dmsf_th"><%= l(:link_size) %></th>
       <th class ="dmsf_th"><%= l(:link_modified) %></th>
-      <th title="<%= l(:label_dmsf_version) %>" class ="dmsf_th"><%= l(:link_ver) %></th>
+      <th title="<%= l(:label_dmsf_version) %>" class="dmsf_th"><%= l(:link_ver) %></th>
       <th class ="dmsf_th"><%= l(:link_workflow) %></th>
       <th class ="dmsf_th"><%= l(:link_author) %></th>
-      <th class ="dmsf_th"></th>
-      <th class="dmsf_invisible"></th>
-      <th class="dmsf_invisible"></th>
-      <th class="dmsf_invisible"></th>
-      <th class="dmsf_invisible"></th>
+      <th class ="dmsf_th"><%# controls %></th>
+      <th class="dmsf_invisible"><%# position %></th>
+      <th class="dmsf_invisible"><%# size %></th>
+      <th class="dmsf_invisible"><%# updated %></th>
+      <th class="dmsf_invisible"><%# revision %></th>
     </tr>
   </thead>
   <tbody>
-    <% parent = @folder ? @folder : @project %>
-    <% DmsfHelper.dmsf_tree(parent, parent).each do |obj, level, position| %>
-      <% classes = "dmsf_tree idnt-#{level}" %>
-      <% if obj.is_a?(DmsfFolder) && ((obj.dmsf_folders.visible.count > 0) || (obj.dmsf_files.visible.count > 0) || (obj.dmsf_links.visible.count > 0)) %>
-        <% classes += ' idnt dmsf_collapsed' %>
-        <% id = "id='#{obj.id}span'".html_safe %>
-        <% onclick = "onclick=\"dmsf_toggle('#{obj.id}','#{obj.id}span')\"" %>
-      <% else %>
-        <% classes += ' dmsf_child' %>
-        <% onclick = '' %>
-      <% end %>
-      <%if obj.dmsf_folder && obj.dmsf_folder != @folder %>
-        <% classes += ' dmsf_hidden' %>
-      <% else %>
-        <%# Force odd/even backgroung style for visible items %>
-        <% classes += " dmsf_#{cycle('odd', 'even')}" %>
-      <% end %>
-      <% parent = obj.dmsf_folder %>
-      <% while parent %>
-        <% classes += " #{parent.id}" %>
-        <% parent = parent.dmsf_folder %>
-      <% end %>
-
-      <% if obj.is_a? DmsfFolder %>
-        <tr <%= id %> class="dir <%= classes %>">
-          <%= render(:partial => 'dir',
-            :locals => {
-              :project => @project,
-              :subfolder => obj,
-              :link => nil,
-              :id => obj.id,
-              :name => 'subfolders[]',
-              :title => obj.title,
-              :onclick => onclick,
-              :position => position}) %>
-        </tr>
-      <% elsif obj.is_a?(DmsfLink) && (obj.target_type == 'DmsfFolder') %>
-        <% unless obj.target_project %>
-          <% Rails.logger.error "Error: dmsf_link id #{obj.id} has no target!" %>
-          <% next %>
-        <% end %>
-        <tr <%= id %> class="dmsf_gray <%= classes %>">
-          <%= render(:partial => 'dir',
-            :locals => {
-              :project => obj.target_project,
-              :subfolder => obj.target_folder,
-              :link => obj,
-              :id => obj.id,
-              :name => 'dir_links[]',
-              :title => obj.name,
-              :onclick => onclick,
-              :position => position}) %>
-        </tr>
-      <% elsif obj.is_a?(DmsfFile) %>
-        <% unless obj.last_revision %>
-          <% Rails.logger.error "Error: dmsf_file id #{obj.id} has no revision!" %>
-          <% next %>
-        <% end %>
-        <tr <%= id %> class="file <%= classes %>">
-          <%= render(:partial => 'file', :locals => {
-              :project => @project,
-              :file => obj,
-              :link => nil,
-              :id => obj.id,
-              :name => 'files[]',
-              :title => obj.title,
-              :onclick => onclick,
-              :position => position}) %>
-        </tr>
-      <% elsif obj.is_a?(DmsfLink) && (obj.target_type == 'DmsfFile') %>
-        <% unless obj.target_file.last_revision %>
-          <% Rails.logger.error "Error: dmsf_file id #{obj.target_id} has no revision!" %>
-          <% next %>
-        <% end %>
-        <tr <%= id %> class="dmsf_gray <%= classes %>">
-          <%= render(:partial => 'file', :locals => {
-              :project => obj.target_project,
-              :file => obj.target_file,
-              :link => obj,
-              :id => obj.id,
-              :name => 'file_links[]',
-              :title => obj.name,
-              :onclick => onclick,
-              :position => position}) %>
-        </tr>
-      <% elsif obj.is_a?(DmsfLink) && (obj.target_type == 'DmsfUrl') %>
-        <tr <%= id %> class="dmsf_gray <%= classes %>">
-          <%= render(:partial => 'url', :locals => {
-              :project => obj.target_project,
-              :file => obj.target_file,
-              :link => obj,
-              :id => obj.id,
-              :name => 'file_links[]',
-              :title => obj.name,
-              :onclick => onclick,
-              :position => position}) %>
-        </tr>
-      <% end %>
-    <% end %>
+    <%= render(:partial => 'dmsf/dmsf_rows') %>
   </tbody>
 </table>

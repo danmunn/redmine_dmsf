@@ -20,9 +20,9 @@
 */
 
 /* Function to allow the projects to show up as a tree */
-function dmsf_toggle(EL, PM)
+function dmsfToggle(EL, PM, url)
 {
-  var els = document.getElementsByTagName('tr');
+  var els = document.querySelectorAll('tr.dmsf_tree');
   var elsLen = els.length;
   var pattern = new RegExp("(^|\\s)" + EL + "(\\s|$)");
   var cpattern = new RegExp('span');
@@ -32,6 +32,14 @@ function dmsf_toggle(EL, PM)
   var spanid = PM;
   var classid = new RegExp('junk');
   var oddeventoggle = 0;
+
+  // Expand not yet loaded selected row
+  var selectedRow = document.getElementById(PM);
+
+  if(selectedRow.className.indexOf('dmsf-not-loaded') >= 0){
+
+    dmsfExpandRows(EL, selectedRow, url);
+  }
 
   for(i = 0; i < elsLen; i++)
   {
@@ -61,7 +69,7 @@ function dmsf_toggle(EL, PM)
 
       cnames = cnames.replace(/dmsf_hidden/g,'');
 
-      if(expand.test(document.getElementById(PM).className))
+      if(expand.test(selectedRow.className))
       {
         cnames += ' dmsf_hidden';
       }
@@ -100,18 +108,43 @@ function dmsf_toggle(EL, PM)
     }
   }
 
-  if (collapse.test(document.getElementById(PM).className))
+  if (collapse.test(selectedRow.className))
   {
-    var cnames = document.getElementById(PM).className;
+    var cnames = selectedRow.className;
 
     cnames = cnames.replace(/dmsf_collapsed/,'dmsf_expanded');
-    document.getElementById(PM).className = cnames;
+    selectedRow.className = cnames;
   }
   else
   {
-    var cnames = document.getElementById(PM).className;
+    var cnames = selectedRow.className;
 
     cnames = cnames.replace(/dmsf_expanded/,'dmsf_collapsed');
-    document.getElementById(PM).className = cnames;
+    selectedRow.className = cnames;
   }
+}
+
+/* Add child rows */
+function dmsfExpandRows(EL, parentRow, url) {
+
+  parentRow.className = parentRow.className.replace(/dmsf-not-loaded/, '');
+
+  var idnt = 0;
+  var result = parentRow.className.match(/idnt-(\d+)/);
+
+  if(result){
+    idnt = result[1];
+  }
+
+  var pos = $(parentRow).find('#dmsf_position').text();
+
+  return $.ajax({
+    url: url,
+    type: 'post',
+    data: {
+      folder_id: EL,
+      row_id: parentRow.id,
+      idnt: idnt,
+      pos: pos}
+  });
 }
