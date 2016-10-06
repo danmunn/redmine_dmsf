@@ -475,7 +475,7 @@ unless $onlyrepos
         exit 1
       end      
     end    
-    cmd = "#{$omindex} -s #{lang} --db #{databasepath} #{filespath} --url /"
+    cmd = "#{$omindex} -s #{lang} --db #{databasepath} #{filespath} --url / --depth-limit=0"
     cmd << ' -v' if $verbose > 0
     log cmd
     system_or_raise (cmd)
