@@ -66,8 +66,10 @@
               <%= @file.last_revision.major_version + 1 %>.0 
               <%= l(:option_version_major) %><br/>
               <%= radio_button_tag('version', 3) %>        
-              <%= select_tag 'custom_version_major', options_for_select(0..99, @file.last_revision.major_version + 2), :onchange => '$("#version_3").prop("checked", true)' %>.
-              <%= select_tag 'custom_version_minor', options_for_select(0..99, @file.last_revision.minor_version + 1), :onchange => '$("#version_3").prop("checked", true)' %>
+              <%= select_tag 'custom_version_major', options_for_select(0..99, @file.last_revision.major_version + 2),
+                             :onchange => '$("#version_3").prop("checked", true)', :class => 'dmsf_select_version' %>.
+              <%= select_tag 'custom_version_minor', options_for_select(0..99, @file.last_revision.minor_version + 1),
+                             :onchange => '$("#version_3").prop("checked", true)', :class => 'dmsf_select_version' %>
               <%= l(:option_version_custom) %>
             </p>
           </div>

@@ -245,3 +245,7 @@
 .dmsf_tree.idnt-9 .dmsf_title {padding-left: 5.5em;}
 .dmsf_odd {background-color:#f6f7f8;}
 .dmsf_even {background-color: #fff;}
+
+.dmsf_select_version {
+    max-width: 50px;
+}
