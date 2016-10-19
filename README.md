@@ -107,8 +107,11 @@ Search will now automatically search DMSF content when a Redmine search is perfo
 ####Link to a document with id 17 with link text "File"
 `{{dmsf(17, File)}}`
 
-####Link to the description of a document with id 17
+####Link to the details of a document with id 17
 `{{dmsfd(17)}}`
+
+####Link to the description of a document with id 17
+`{{dmsfdesc(17)}}`
 
 ####Link to the preview of 5 lines from a document with id 17
 `{{dmsft(17, 5)}}`
@@ -164,7 +167,8 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax_detailed.html, aft
           <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
           <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
           <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-          <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
+          <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
+          <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
           <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
           <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
           <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>

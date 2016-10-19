@@ -65,11 +65,25 @@ Redmine::WikiFormatting::Macros.register do
     end
   end
 
-  # dmsfd - link to a document's description
-  desc "Wiki link to DMSF document description:\n\n" +
-           "{{dmsfd(file_id)}}\n\n" +
-       "_file_id_ can be found in the document's details."
+  # dmsfd - link to the document's details
+  desc "Wiki link to DMSF document details:\n\n" +
+           "{{dmsfd(document_id)}}\n\n" +
+       "_document_id_ can be found in the document's details."
   macro :dmsfd do |obj, args|
+    raise ArgumentError if args.length < 1 # Requires file id
+    file = DmsfFile.visible.find args[0].strip
+    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
+      return link_to file.title, dmsf_file_path(:id => file)
+    else
+      raise l(:notice_not_authorized)
+    end
+  end
+
+  # dmsfdesc - link to the document's description
+  desc "Wiki link to DMSF document description:\n\n" +
+         "{{dmsfdesc(document_id)}}\n\n" +
+         "_document_id_ can be found in the document's details."
+  macro :dmsfdesc do |obj, args|
     raise ArgumentError if args.length < 1 # Requires file id
     file = DmsfFile.visible.find args[0].strip
     if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
@@ -79,7 +93,7 @@ Redmine::WikiFormatting::Macros.register do
     end
   end
 
-  # dmsft - link to a document's content preview
+  # dmsft - link to the document's content preview
   desc "Wiki link to DMSF document's content preview:\n\n" +
            "{{dmsft(file_id)}}\n\n" +
        "_file_id_ can be found in the document's details."
