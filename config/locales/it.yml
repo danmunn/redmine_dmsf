@@ -259,6 +259,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: Nuovo passo
+  dmsf_new_step_or_approver: Nuovo passo oppure Nuovo approver
   message_dmsf_wokflow_note: La tua nota...
   info_revision: "r%{rev}"
   link_workflow: Flusso di lavoro
@@ -329,4 +330,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_maximum_ajax_upload_filesize: Dimensione massima dei documenti caricabili tramite AJAX
   note_maximum_ajax_upload_filesize: Limita la dimensione massima dei documenti che possono essere caricati tramite interfaccia standard AJAX altrimenti sarà necessario utilizzare il modulo standard di Redmine. Il numero è espresso in MB.
   label_classic: Classic
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."

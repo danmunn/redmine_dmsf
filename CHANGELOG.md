@@ -1,7 +1,25 @@
 Changelog for Redmine DMSF
 ==========================
 
-1.5.7 *2015-08-12*
+1.5.8 *2016-10-21*
+------------------
+
+    Drag&Drop for a new content in the new revision form
+    Tree view optimization for speed
+    Wiki macros revision: dmsfd X dmsfdesc
+    Support for deleting users
+        
+* Bug: #578 - A wrong title when uploading documents type: bug
+* Bug: #574 - Macro {{dmsfd(xx)}} produce blank value type: bug
+* Bug: #566 - HTML tags in the document description breaks UI type: bug 
+* Bug: #565 - Error 500 when a link to another folder is in the folder/project type: bug
+* New: #562 - New step button text type: enhancement
+* Bug: #561 - Wrong path in the document's details form type: bug
+* Bug: #560 - Trying to send mail without recipient results in error 500 type: bug
+* Bug: #558 - Deletion of a user type: bug
+* New: #443 - Drag/drop feature for new content type: enhancement
+
+1.5.7 *2016-08-12*
 ------------------
     
     SQLite compatibility
@@ -36,7 +54,7 @@ Changelog for Redmine DMSF
 * New: #252 - nautilus-like folders-files list view
 
 
-1.5.6 *2015-01-25*
+1.5.6 *2016-01-25*
 ------------------
 
     Uploading of large files (>2GB)

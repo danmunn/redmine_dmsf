@@ -61,7 +61,7 @@
     <%= l(:label_default) %>: <%= "#{Rails.root}/files/dmsf" %>
   </em>
 </p>
-<% unless File.exists?(storage_dir) %>
+<% unless File.exist?(storage_dir) %>
   <% begin %>
      <% Dir.mkdir(storage_dir) %>
   <% rescue %>
@@ -69,14 +69,14 @@
   <% end %>
 <% end %>
 <% testfilename = "#{storage_dir}/test.test" %>
-<% if File.exists?(storage_dir) %>
+<% if File.exist?(storage_dir) %>
   <%	begin %>
     <% File.open(testfilename, 'wb') do |file| %>
     <% end %>
   <% rescue %>
     <p class="warning"><%= l(:error_file_can_not_be_created) %></p>
   <%	ensure %>
-    <% File.delete(testfilename) if File.exists?(testfilename) %>
+    <% File.delete(testfilename) if File.exist?(testfilename) %>
   <% end %>
 <% end %>
 

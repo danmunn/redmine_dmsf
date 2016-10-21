@@ -27,9 +27,9 @@
 <%= render(:partial => '/dmsf/path', 
   :locals => {:folder => @folder, :filename => nil, :title => l(:heading_uploaded_files)}) %>
 
-<% if (@folder && @folder.description.present?) || @project.description.present? %>
+<% if (@folder && @folder.description.present?) || @project.dmsf_description.present? %>
   <div class="wiki">
-    <%= textilizable(@folder ? @folder.description : @project.description) %>
+    <%= textilizable(@folder ? @folder.description : @project.dmsf_description) %>
   </div>
 <% end %>
 

@@ -259,6 +259,7 @@ cs:
   dmsf_and: A
   dmsf_or: NEBO
   dmsf_new_step: Nový krok
+  dmsf_new_step_or_approver: Nový krok nebo Nový schvalovatel
   message_dmsf_wokflow_note: Váš komentář...
   info_revision: "r%{rev}"
   link_workflow: Schvalovací proces
@@ -329,4 +330,6 @@ cs:
   label_maximum_ajax_upload_filesize: Maximální velikost souboru nahratelná přes AJAX
   note_maximum_ajax_upload_filesize: Omezuje velikost souboru, který může být nahrán přes standardní rozhraní AJAX, jinak se použije standardní rozhraní Redminu. Číslo je v MB.
   label_classic: Klasický
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Moderní
+
+  error_maximum_upload_filecount: "Nelze nahrát více než %{filecount} soubor(ů)."

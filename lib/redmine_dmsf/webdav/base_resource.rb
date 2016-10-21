@@ -30,6 +30,7 @@ module RedmineDmsf
       def initialize(*args)
         webdav_setting = Setting.plugin_redmine_dmsf['dmsf_webdav']
         raise NotFound if !webdav_setting.nil? && webdav_setting.empty?
+        @project = nil
         super(*args)
       end
 

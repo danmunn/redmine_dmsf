@@ -38,7 +38,7 @@
 
 <div class="tab-content" id="tab-content-members">
   <p>
-    <%= link_to l(:dmsf_new_step), new_step_dmsf_workflow_path(@dmsf_workflow), :remote => true, :class => 'icon icon-add' %>
+    <%= link_to l(:dmsf_new_step_or_approver), new_step_dmsf_workflow_path(@dmsf_workflow), :remote => true, :class => 'icon icon-add' %>
   </p>
   <% steps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq %>
   <% if steps.any? %>

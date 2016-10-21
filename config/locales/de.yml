@@ -259,6 +259,7 @@ de:
   dmsf_and: UND
   dmsf_or: ODER
   dmsf_new_step: Neuer Schritt
+  dmsf_new_step_or_approver: Neuer Schritt oder Neuer Genehmiger
   message_dmsf_wokflow_note: Deine Notiz...
   info_revision: "r%{rev}"
   link_workflow: Workflow
@@ -329,4 +330,6 @@ de:
   label_maximum_ajax_upload_filesize: Maximale Dateigröße für den Upload via AJAX
   note_maximum_ajax_upload_filesize: Maximale Dateigröße für den Upload über die AJAX-Schnittstelle. Für größere Dateien muss der Standard-Uploader von Redmine verwendet werden. Angabe in MB.
   label_classic: Klassisch
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "Nicht mehr als %{filecount} Datai(en) kann man hochladen."

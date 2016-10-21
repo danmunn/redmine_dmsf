@@ -26,17 +26,16 @@
   :title => l(:title_check_for_zip_download_or_email), :id => "file_#{id}") %></td>
 <td class="dmsf_title">
   <% if @tree_view %>
-    <span class='dmsf_expander' <%= onclick.html_safe %>></span>
+    <span class='dmsf_expander'></span>
   <% end %>
   <% file_view_url = url_for({:controller => :dmsf_files, :action => 'view', :id => file}) %>
   <%= link_to(h(title),
     file_view_url,
     :target => '_blank',
     :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}",
-    :title => file.last_revision.try(:tooltip),
+    :title => h(file.last_revision.try(:tooltip)),
     'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}") %>
   <div class="dmsf_filename" title="<%= l(:title_filename_for_download)%>"><%= h(link ? link.path : file.display_name) %></div>
-  <%= '</span>'.html_safe if @tree_view %>
 </td>
 <td class="dmsf_size"><%= number_to_human_size(file.last_revision.size) %></td>
 <td class="dmsf_modified">

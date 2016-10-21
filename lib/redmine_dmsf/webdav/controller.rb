@@ -81,7 +81,7 @@ module RedmineDmsf
           NotFound
         else
           resource.lock_check if resource.supports_locking? && !args.include?(:copy)
-          destination = url_unescape(env['HTTP_DESTINATION'].sub(%r{https?://([^/]+)}, ''))          
+          destination = url_unescape(env['HTTP_DESTINATION'].sub(%r{https?://([^/]+)}, ''))
           host = $1.gsub(/:\d{2,5}$/, '') if $1
           host = host.gsub(/^.+@/, '') if host
           if(host != request.host)
@@ -114,12 +114,18 @@ module RedmineDmsf
           true          
         end
       end
-      
+
       # Escape URL string
       def url_format(resource)
-        # Additionally escape square brackets, otherwise files with 
+        # Additionally escape square brackets, otherwise files with
         # file names like file[1].pdf are not visible in some WebDAV clients
+        # TODO: The method is obsolete
         URI.encode(super, '[]')
+      end
+
+      def url_unescape(str)
+        # TODO: The method is obsolete
+        super str
       end
       
     end

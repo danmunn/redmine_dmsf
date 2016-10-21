@@ -208,7 +208,7 @@ en:
   parent_directory: Parent Directory
   note_webdav: "Webdav once enabled can be found at %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Webdav functionality
-  label_dmsf_plural: "Copy Documents and folders (%{files} files in %{folders} folders)"
+  label_dmsf_plural: "Copy Documents and Folders (%{files} files in %{folders} folders)"
 
   warning_folder_already_locked: This folder is already locked
   notice_folder_locked: The folder was successfully locked
@@ -259,6 +259,7 @@ en:
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: New step
+  dmsf_new_step_or_approver: New step or New Approver
   message_dmsf_wokflow_note: Your note...
   info_revision: "r%{rev}"
   link_workflow: Workflow
@@ -329,4 +330,6 @@ en:
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
   label_classic: Classic
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."

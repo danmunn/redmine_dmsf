@@ -259,6 +259,7 @@ ru:
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: Новый шаг
+  dmsf_new_step_or_approver: Новый шаг или Новый согласующ
   message_dmsf_wokflow_note: Ваше примечание...
   info_revision: "r%{rev}"
   link_workflow: Согласование
@@ -329,4 +330,6 @@ ru:
   label_maximum_ajax_upload_filesize: Максимальный размер файла, загружаемого посредством AJAX
   note_maximum_ajax_upload_filesize: Превышает максимальный размер файла, загружаемого посредством интерфейса AJAX, для загрузки можно использовать стандартную форму Redmine. Размер указан в MB.
   label_classic: Classic
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."

@@ -179,8 +179,8 @@ pt-BR:
   heading_access_downloads_emails: Downloads/Emails
   heading_access_first: First
   heading_access_last: Last
-  label_dmsf_updated: DMSF document updated
-  label_dmsf_downloaded: DMSF document downloaded
+  label_dmsf_updated: Updated
+  label_dmsf_downloaded: Downloaded
   title_total_size_of_all_files: Total size of all files under this folder
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: No project to copy file to
@@ -208,7 +208,7 @@ pt-BR:
   parent_directory: Parent Directory
   note_webdav: "Webdav once enabled can be found at %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Webdav functionality
-  label_dmsf_plural: "Copy DMSF files and folders (%{files} files in %{folders} folders)"
+  label_dmsf_plural: "Copy Documents and folders (%{files} documents in %{folders} folders)"
 
   warning_folder_already_locked: Esta pasta já está bloqueada
   notice_folder_locked: A pasta foi bloqueada com sucesso
@@ -259,6 +259,7 @@ pt-BR:
   dmsf_and: E
   dmsf_or: OU
   dmsf_new_step: New step
+  dmsf_new_step_or_approver: New step or New approver
   message_dmsf_wokflow_note: Sua observação...
   info_revision: "r%{rev}"
   link_workflow: Workflow
@@ -329,4 +330,6 @@ pt-BR:
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
   label_classic: Classic
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."

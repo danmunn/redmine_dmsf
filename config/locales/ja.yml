@@ -259,6 +259,7 @@ ja:
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: 新規ステップ
+  dmsf_new_step_or_approver: 新規ステップ or New approver
   message_dmsf_wokflow_note: コメント
   info_revision: "r%{rev}"
   link_workflow: ワークフロー
@@ -329,4 +330,6 @@ ja:
   label_maximum_ajax_upload_filesize: アップロードファイルサイズ上限
   note_maximum_ajax_upload_filesize: アップロード可能なファイルサイズの上限。AjaxおよびRedmineの仕様に制限される（2ギガバイト程度までは確認済み）単位はMB。
   label_classic: Classic
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."

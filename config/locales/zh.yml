@@ -179,8 +179,8 @@ zh:
   heading_access_downloads_emails: 存取次数
   heading_access_first: 首次
   heading_access_last: 末次
-  label_dmsf_updated: DMSF updated
-  label_dmsf_downloaded: DMSF document downloaded
+  label_dmsf_updated: Updated
+  label_dmsf_downloaded: Downloaded
   title_total_size_of_all_files: 文件夹所有文件总大小
   project_module_dmsf: 文档管家
   warning_no_project_to_copy_file_to: No project to copy file to
@@ -259,6 +259,7 @@ zh:
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: New step
+  dmsf_new_step_or_approver: New step or New approver
   message_dmsf_wokflow_note: Your note...
   info_revision: "r%{rev}"
   link_workflow: Workflow
@@ -329,4 +330,6 @@ zh:
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
   note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
   label_classic: Classic
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."

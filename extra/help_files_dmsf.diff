@@ -14,7 +14,8 @@ Index: public/help/ar/wiki_syntax_detailed_markdown.html
 +          <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +          <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +          <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+          <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++          <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++          <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +          <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +          <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +          <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -44,7 +45,8 @@ Index: public/help/ar/wiki_syntax_detailed_textile.html
 +          <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +          <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +          <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+          <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++          <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++          <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +          <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +          <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +          <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -98,7 +100,8 @@ Index: public/help/az/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -128,7 +131,8 @@ Index: public/help/az/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -182,7 +186,8 @@ Index: public/help/bg/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -212,7 +217,8 @@ Index: public/help/bg/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -266,7 +272,8 @@ Index: public/help/bs/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -296,7 +303,8 @@ Index: public/help/bs/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -350,7 +358,8 @@ Index: public/help/ca/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -380,7 +389,8 @@ Index: public/help/ca/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -434,7 +444,8 @@ Index: public/help/cs/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -464,7 +475,8 @@ Index: public/help/cs/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -518,7 +530,8 @@ Index: public/help/da/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -548,7 +561,8 @@ Index: public/help/da/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -602,7 +616,8 @@ Index: public/help/de/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -632,7 +647,8 @@ Index: public/help/de/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -686,7 +702,8 @@ Index: public/help/el/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -716,7 +733,8 @@ Index: public/help/el/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -770,7 +788,8 @@ Index: public/help/en/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -800,7 +819,8 @@ Index: public/help/en/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -854,7 +874,8 @@ Index: public/help/en-gb/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -884,7 +905,8 @@ Index: public/help/en-gb/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -938,7 +960,8 @@ Index: public/help/es/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -968,7 +991,8 @@ Index: public/help/es/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1022,7 +1046,8 @@ Index: public/help/es-pa/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1052,7 +1077,8 @@ Index: public/help/es-pa/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1106,7 +1132,8 @@ Index: public/help/et/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1136,7 +1163,8 @@ Index: public/help/et/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1190,7 +1218,8 @@ Index: public/help/eu/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1220,7 +1249,8 @@ Index: public/help/eu/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1274,7 +1304,8 @@ Index: public/help/fa/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1304,7 +1335,8 @@ Index: public/help/fa/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1358,7 +1390,8 @@ Index: public/help/fi/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1388,7 +1421,8 @@ Index: public/help/fi/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1442,7 +1476,8 @@ Index: public/help/fr/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1472,7 +1507,8 @@ Index: public/help/fr/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1526,7 +1562,8 @@ Index: public/help/gl/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1556,7 +1593,8 @@ Index: public/help/gl/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1610,7 +1648,8 @@ Index: public/help/he/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1640,7 +1679,8 @@ Index: public/help/he/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1694,7 +1734,8 @@ Index: public/help/hr/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1724,7 +1765,8 @@ Index: public/help/hr/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1778,7 +1820,8 @@ Index: public/help/hu/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1808,7 +1851,8 @@ Index: public/help/hu/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1862,7 +1906,8 @@ Index: public/help/id/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1892,7 +1937,8 @@ Index: public/help/id/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1946,7 +1992,8 @@ Index: public/help/it/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -1976,7 +2023,8 @@ Index: public/help/it/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2030,7 +2078,8 @@ Index: public/help/ja/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2060,7 +2109,8 @@ Index: public/help/ja/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2114,7 +2164,8 @@ Index: public/help/ko/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2144,7 +2195,8 @@ Index: public/help/ko/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2198,7 +2250,8 @@ Index: public/help/lt/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2228,7 +2281,8 @@ Index: public/help/lt/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2282,7 +2336,8 @@ Index: public/help/lv/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2312,7 +2367,8 @@ Index: public/help/lv/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2366,7 +2422,8 @@ Index: public/help/mk/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2396,7 +2453,8 @@ Index: public/help/mk/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2450,7 +2508,8 @@ Index: public/help/mn/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2480,7 +2539,8 @@ Index: public/help/mn/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2534,7 +2594,8 @@ Index: public/help/nl/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2564,7 +2625,8 @@ Index: public/help/nl/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2618,7 +2680,8 @@ Index: public/help/no/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2632,7 +2695,7 @@ Index: public/help/no/wiki_syntax_detailed_markdown.html
  
          <ul>
              <li>Documents:
-Index: public/help/no/wiki_syntax_detailed_textile.html
+Index: public/help/no/wiki_syntax_detailed_textile.html+              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 ===================================================================
 --- public/help/no/wiki_syntax_detailed_textile.html	(revision 15144)
 +++ public/help/no/wiki_syntax_detailed_textile.html	(working copy)
@@ -2648,7 +2711,8 @@ Index: public/help/no/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2702,7 +2766,8 @@ Index: public/help/pl/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2732,7 +2797,8 @@ Index: public/help/pl/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2786,7 +2852,8 @@ Index: public/help/pt/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2816,7 +2883,8 @@ Index: public/help/pt/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2870,7 +2938,8 @@ Index: public/help/pt-br/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2900,7 +2969,8 @@ Index: public/help/pt-br/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2954,7 +3024,8 @@ Index: public/help/ro/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -2984,7 +3055,8 @@ Index: public/help/ro/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3038,7 +3110,8 @@ Index: public/help/ru/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3067,7 +3140,8 @@ Index: public/help/ru/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3122,7 +3196,8 @@ Index: public/help/sk/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3152,7 +3227,8 @@ Index: public/help/sk/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3206,7 +3282,8 @@ Index: public/help/sl/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3236,7 +3313,8 @@ Index: public/help/sl/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3290,7 +3368,8 @@ Index: public/help/sq/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3320,7 +3399,8 @@ Index: public/help/sq/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3374,7 +3454,8 @@ Index: public/help/sr/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3404,7 +3485,8 @@ Index: public/help/sr/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3458,7 +3540,8 @@ Index: public/help/sr-yu/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3488,7 +3571,8 @@ Index: public/help/sr-yu/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3542,7 +3626,8 @@ Index: public/help/sv/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3572,7 +3657,8 @@ Index: public/help/sv/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3626,7 +3712,8 @@ Index: public/help/th/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3656,7 +3743,8 @@ Index: public/help/th/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3710,7 +3798,8 @@ Index: public/help/tr/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3740,7 +3829,8 @@ Index: public/help/tr/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3794,7 +3884,8 @@ Index: public/help/uk/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3824,7 +3915,8 @@ Index: public/help/uk/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3878,7 +3970,8 @@ Index: public/help/vi/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3908,7 +4001,8 @@ Index: public/help/vi/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3962,7 +4056,8 @@ Index: public/help/zh/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -3992,7 +4087,8 @@ Index: public/help/zh/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -4046,7 +4142,8 @@ Index: public/help/zh-tw/wiki_syntax_detailed_markdown.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
@@ -4075,7 +4172,8 @@ Index: public/help/zh-tw/wiki_syntax_detailed_textile.html
 +              <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
 +              <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
 +              <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-+              <li><strong>{{dmsfd(17)}}</strong> (a link to the description of the file with id 17)</li>
++              <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
++              <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
 +              <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
 +              <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
 +              <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>

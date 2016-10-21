@@ -39,15 +39,15 @@
     </p>
     <p>
       <%= label_tag('email[to]', l(:label_email_to)) %>
-      <%= text_field_tag('email[to]', @email_params['to'], :style => 'width: 90%;') %>
+      <%= text_field_tag('email[to]', @email_params[:to], :style => 'width: 90%;', :required => true) %>
     </p>
     <p>
       <%= label_tag('email[cc]', l(:label_email_cc)) %>
-      <%= text_field_tag('email[cc]', @email_params['cc'], :style => 'width: 90%;') %>
+      <%= text_field_tag('email[cc]', @email_params[:cc], :style => 'width: 90%;') %>
     </p>
     <p>
       <%= label_tag('email[subject]', l(:label_email_subject)) %>
-      <%= text_field_tag('email[subject]', @email_params['subject'], :style => 'width: 90%;') %>
+      <%= text_field_tag('email[subject]', @email_params[:subject], :style => 'width: 90%;') %>
     </p>
     <p>
       <%= label_tag('', l(:label_email_documents)) %>

@@ -21,30 +21,31 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
+<div class="dmsf_upload_select">
+  <select id="uploader_select">
+   <option value="1">
+      <%= l(:label_drag_drop) %>
+    </option>
+    <option value="2">
+      <%= l(:label_classic) %>
+    </option>
+  </select>
+</div>
 
-<div class="box">
-  <%= form_tag({:controller => 'dmsf_upload', :action => 'upload_files', :id => @project, :folder_id => @folder},
-    :id => 'uploadform', :method => :post, :multipart => true) do %>    
-    <div class="dmsf_upload_select">        
-      <select id="uploader_select">
-       <option value="1">
-          <%= l(:label_drag_drop) %>
-        </option>
-        <option value="2">
-          <%= l(:label_classic) %>
-        </option>
-      </select>
-    </div>    
-    <h3><%= l(:label_upload) %></h3>    
-    <div id="uploader">      
+<h3><%= l(:label_upload) %></h3>
+
+<%= form_tag({:controller => 'dmsf_upload', :action => 'upload_files', :id => @project, :folder_id => @folder},
+             :id => 'uploadform', :method => :post, :multipart => true) do %>
+  <div id="uploader">
+    <div class="box">
       <p>
         <label><%= l(:label_attachment_plural) %></label>
-        <%= render :partial => 'attachments/form' %>        
-      </p>        
-      <%= submit_tag l(:label_upload) %>
-    </div>    
-  <% end %>
-</div>
+        <%= render :partial => 'attachments/form' %>
+      </p>
+    </div>
+    <%= submit_tag l(:label_upload) %>
+  </div>
+<% end %>
 
 <script type="text/javascript">
   var originalUploaderContent;
@@ -55,6 +56,7 @@
   $('#uploader_select').change(function() {
     if($(this).val() === '2') {
       uploader.html(originalUploaderContent);
+      setupFileDrop();
     } else {
       initPlUploader(uploader);
     }
@@ -83,7 +85,7 @@
         multipart: true,
         // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
         dragdrop: true,
-        multipart_params : {authenticity_token : jQuery('input[name=authenticity_token]').val()},
+        multipart_params : { authenticity_token : $('input[name=authenticity_token]').val() },
 
         // Rename files by clicking on their titles
         rename: true,
@@ -132,7 +134,7 @@
               pluploader.trigger('QueueChanged');             
           }
         }
-        if(pluploader.total.uploaded == pluploader.files.length) jQuery('#uploadform').submit();
+        if(pluploader.total.uploaded == pluploader.files.length) $('#uploadform').submit();
         else if((pluploader.total.uploaded + pluploader.total.failed) == pluploader.files.length) setTimeout(function() {$('#uploadform').submit();}, 2000);
         else dmsfFileFieldCount++;
         return true;

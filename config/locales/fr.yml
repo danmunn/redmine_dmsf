@@ -179,8 +179,8 @@ fr:
   heading_access_downloads_emails: Téléchargement / Envoi par mail
   heading_access_first: Premier
   heading_access_last: Dernier
-  label_dmsf_updated: Dépôt ou mise à jour du document
-  label_dmsf_downloaded: Document DMSF téléchargé
+  label_dmsf_updated: Dépôt
+  label_dmsf_downloaded: Téléchargé
   title_total_size_of_all_files: Taille totale des fichiers de ce dossier
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: "Le projet de destination n'est pas défini"
@@ -259,6 +259,7 @@ fr:
   dmsf_and: ET
   dmsf_or: OU
   dmsf_new_step: Nouvelle étape
+  dmsf_new_step_or_approver: Nouvelle étape ou Nouvel approbateur
   message_dmsf_wokflow_note: Votre note...
   info_revision: "r%{rev}"
   link_workflow: Flux
@@ -329,4 +330,6 @@ fr:
   label_maximum_ajax_upload_filesize: Taille maximale de fichier pour téléversement via AJAX
   note_maximum_ajax_upload_filesize: "Taille maximale, en méga octets, de fichier pour téléversement via l'interface standard AJAX. Sinon l'interface standard de Redmine doit être utilisée."
   label_classic: Classic
-  label_drag_drop: "Drag&Drop"
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."
