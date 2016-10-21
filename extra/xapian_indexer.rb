@@ -335,7 +335,7 @@ def generate_uri(project, repository, identifier, path)
 
 def convert_to_text(fpath, type)
   text = nil
-  return text if !File.exists?(FORMAT_HANDLERS[type].split(' ').first)
+  return text if !File.exist?(FORMAT_HANDLERS[type].split(' ').first)
   case type
     when 'pdf'    
       text = "#{FORMAT_HANDLERS[type]} #{fpath} -"
@@ -377,7 +377,7 @@ def add_or_update_index(databasepath, indexconf, project, repository, identifier
     File.open( "#{$tempdir}/#{fname}", 'wb+') do | bs |
       bs.write(bstr)
     end
-    text = convert_to_text("#{$tempdir}/#{fname}", type) if File.exists?("#{$tempdir}/#{fname}") and !bstr.nil?
+    text = convert_to_text("#{$tempdir}/#{fname}", type) if File.exist?("#{$tempdir}/#{fname}") and !bstr.nil?
     File.unlink("#{$tempdir}/#{fname}")
   end  
   log "generated uri: #{uri}"

@@ -137,7 +137,7 @@ class DmsfFileRevision < ActiveRecord::Base
       project_base = project.identifier.gsub(/[^\w\.\-]/,'_')
       storage_base << "/p_#{project_base}"
     end
-    FileUtils.mkdir_p(storage_base) unless File.exists?(storage_base)
+    FileUtils.mkdir_p(storage_base) unless File.exist?(storage_base)
     "#{storage_base}/#{self.disk_filename}"
   end
 

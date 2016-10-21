@@ -56,7 +56,7 @@ module DmsfHelper
   def self.filetype_css(filename)
     extension = File.extname(filename)
     extension = extension[1, extension.length-1]
-    if File.exists?("#{File.dirname(__FILE__)}/../../assets/images/filetypes/#{extension}.png")
+    if File.exist?("#{File.dirname(__FILE__)}/../../assets/images/filetypes/#{extension}.png")
       "filetype-#{extension}";
     else
       Redmine::MimeType.css_class_of(filename)

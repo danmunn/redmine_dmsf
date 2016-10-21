@@ -415,7 +415,7 @@ class DmsfController < ApplicationController
     if selected_files && selected_files.is_a?(Array)
       selected_files.each do |selected_file_id|
         file = DmsfFile.visible.find_by_id selected_file_id
-        unless file && file.last_revision && File.exists?(file.last_revision.disk_file)
+        unless file && file.last_revision && File.exist?(file.last_revision.disk_file)
           raise FileNotFound
         end
         unless (file.project == @project) || User.current.allowed_to?(:view_dmsf_files, file.project)

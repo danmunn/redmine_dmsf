@@ -106,7 +106,7 @@ class DmsfFile < ActiveRecord::Base
   # better interact from test-cases etc
   def self.storage_path=(path)
     begin
-      FileUtils.mkdir_p(path) unless File.exists?(path)
+      FileUtils.mkdir_p(path) unless File.exist?(path)
     rescue Exception => e
       Rails.logger.error e.message
     end
