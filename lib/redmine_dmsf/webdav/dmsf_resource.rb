@@ -25,6 +25,12 @@ module RedmineDmsf
   module Webdav
     class DmsfResource < BaseResource
 
+      def initialize(*args)
+        @folder = nil
+        @file = nil
+        super(*args)
+      end
+
       # Here we make sure our folder and file methods are not aliased - it should shave a few cycles off of processing
       def setup
         @skip_alias |= [ :folder, :file ]
