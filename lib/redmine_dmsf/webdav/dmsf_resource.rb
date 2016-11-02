@@ -272,7 +272,7 @@ module RedmineDmsf
               User.current.allowed_to?(:folder_manipulation, resource.project)
 
           if dest.exist?
-            methodNotAllowed
+            MethodNotAllowed
             # Files cannot be merged at this point, until a decision is made on how to merge them
             # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
           else
@@ -481,11 +481,16 @@ module RedmineDmsf
         if exist? # We're over-writing something, so ultimately a new revision
           f = file
           last_revision = file.last_revision
-          new_revision.source_revision = last_revision
-          if last_revision
-            new_revision.major_version = last_revision.major_version
-            new_revision.minor_version = last_revision.minor_version
-            new_revision.workflow = last_revision.workflow
+          if last_revision.size == 0
+            new_revision = last_revision
+            new_revision.minor_version -= 1
+          else
+            new_revision.source_revision = last_revision
+            if last_revision
+              new_revision.major_version = last_revision.major_version
+              new_revision.minor_version = last_revision.minor_version
+              new_revision.workflow = last_revision.workflow
+            end
           end
         else
           raise BadRequest unless (parent.projectless_path == '/' || (parent.exist? && parent.folder))
