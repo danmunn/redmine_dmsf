@@ -272,9 +272,29 @@ module RedmineDmsf
               User.current.allowed_to?(:folder_manipulation, resource.project)
 
           if dest.exist?
-            MethodNotAllowed
-            # Files cannot be merged at this point, until a decision is made on how to merge them
-            # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
+            if (project == resource.project) && file.name.match(/.\.tmp$/i)
+              # Renaming a *.tmp file to an existing file in the same project, probably Office that is saving a file.
+              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename} (exists), possible MSOffice rename when saving"
+              
+              if resource.file.last_revision.size == 0
+                # Last revision in the destination has zero size so reuse that revision, just change the disk_filename and size
+                new_revision = resource.file.last_revision
+                new_revision.disk_filename = file.last_revision.disk_filename
+                new_revision.size = file.last_revision.size
+  
+                # Save Changes
+                new_revision.save && resource.file.save
+              else
+                # Copy just the last revision from the .tmp file
+                return InternalServerError unless file.copy_last_revision_to(resource.file)
+              end
+              # Delete the file that should have been renamed.
+              file.delete(false) ? NoContent : Conflict
+            else
+              # Files cannot be merged at this point, until a decision is made on how to merge them
+              # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
+              MethodNotAllowed
+            end
           else
             if(parent.projectless_path == '/') #Project root
               f = nil
@@ -283,17 +303,24 @@ module RedmineDmsf
               f = parent.folder
             end
             return PreconditionFailed unless exist? && file
-            return InternalServerError unless file.move_to(resource.project, f)
+            
+            if (project == resource.project) && resource.basename.match(/.\.tmp$/i)
+              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename}, possible MSOffice rename when saving."
+              # Renaming the file to X.tmp, might be Office that is saving a file. Keep the original file.
+              return InternalServerError unless file.copy_to(resource.project, f)
+            else
+              return InternalServerError unless file.move_to(resource.project, f)
 
-            # Update Revision and names of file [We can link to old physical resource, as it's not changed]
-            if file.last_revision
-              file.last_revision.name = resource.basename
-              file.last_revision.title = DmsfFileRevision.filename_to_title(resource.basename)
+              # Update Revision and names of file [We can link to old physical resource, as it's not changed]
+              if file.last_revision
+                file.last_revision.name = resource.basename
+                file.last_revision.title = DmsfFileRevision.filename_to_title(resource.basename)
+              end
+              file.name = resource.basename
+
+              # Save Changes
+              (file.last_revision.save! && file.save!) ? Created : PreconditionFailed
             end
-            file.name = resource.basename
-
-            # Save Changes
-            (file.last_revision.save! && file.save!) ? Created : PreconditionFailed
           end
         end
       end
