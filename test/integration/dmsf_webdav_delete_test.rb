@@ -64,7 +64,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     assert_response 401
   end
 
-  def test_failed_authentication    
+  def test_failed_authentication_global
     delete '/dmsf/webdav', nil, credentials('admin', 'badpassword')
     assert_response 401
   end

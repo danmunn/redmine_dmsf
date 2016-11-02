@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'dav4rack'
+require 'addressable/uri'
 
 module RedmineDmsf
   module Webdav
@@ -117,15 +118,15 @@ module RedmineDmsf
 
       # Escape URL string
       def url_format(resource)
-        # Additionally escape square brackets, otherwise files with
-        # file names like file[1].pdf are not visible in some WebDAV clients
-        # TODO: The method is obsolete
-        URI.encode(super, '[]')
+        ret = resource.public_path
+        if resource.collection? && (ret[-1,1] != '/')
+          ret += '/'
+        end
+        Addressable::URI.escape ret
       end
 
       def url_unescape(str)
-        # TODO: The method is obsolete
-        super str
+        Addressable::URI.unescape str
       end
       
     end

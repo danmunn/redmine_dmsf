@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'uuidtools'
+require 'addressable/uri'
 
 module RedmineDmsf
   module Webdav
@@ -413,9 +414,6 @@ module RedmineDmsf
               l.save!
               @response['Lock-Token'] = l.uuid
               return [1.hours.to_i, l.uuid]
-
-              # Unfortunately if we're here, then it's updating a lock we can't find
-              return Conflict
             end
 
             scope = "scope_#{(args[:scope] || 'exclusive')}".to_sym
@@ -610,8 +608,8 @@ module RedmineDmsf
                   doc.timeout "Second-#{(lock.expires_at.to_i - Time.now.to_i)}"
                 end
                 lock_entity = lock.folder || lock.file
-                lock_path = "#{request.scheme}://#{request.host}:#{request.port}#{path_prefix}#{URI.escape(lock_entity.project.identifier)}/"
-                lock_path << lock_entity.dmsf_path.map {|x| URI.escape(x.respond_to?('name') ? x.name : x.title) }.join('/')
+                lock_path = "#{request.scheme}://#{request.host}:#{request.port}#{path_prefix}#{Addressable::URI.escape(lock_entity.project.identifier)}/"
+                lock_path << lock_entity.dmsf_path.map { |e| Addressable::URI.escape(e.respond_to?('name') ? e.name : e.title) }.join('/')
                 lock_path << '/' if lock_entity.is_a?(DmsfFolder) && lock_path[-1,1] != '/'
                 doc.lockroot { doc.href lock_path }
                 if ((lock.user.id == User.current.id) || User.current.allowed_to?(:force_file_unlock, self.project))

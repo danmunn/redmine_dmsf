@@ -22,6 +22,11 @@
 module RedmineDmsf
   module Webdav
     class ProjectResource < BaseResource
+
+      def initialize(*args)
+        super(*args)
+        @children = nil
+      end
       
       def children        
         unless @children          
