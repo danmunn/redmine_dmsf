@@ -274,20 +274,29 @@ module RedmineDmsf
           if dest.exist?
             if (project == resource.project) && file.name.match(/.\.tmp$/i)
               # Renaming a *.tmp file to an existing file in the same project, probably Office that is saving a file.
-              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename} (exists), possible MSOffice rename when saving"
+              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename} (exists), possible MSOffice rename from .tmp when saving"
               
               if resource.file.last_revision.size == 0
-                # Last revision in the destination has zero size so reuse that revision, just change the disk_filename and size
+                # Last revision in the destination has zero size so reuse that revision
                 new_revision = resource.file.last_revision
-                new_revision.disk_filename = file.last_revision.disk_filename
-                new_revision.size = file.last_revision.size
-  
-                # Save Changes
-                new_revision.save && resource.file.save
               else
-                # Copy just the last revision from the .tmp file
-                return InternalServerError unless file.copy_last_revision_to(resource.file)
+                # Create a new revison by cloning the last revision in the destination
+                new_revision = resource.file.last_revision.clone
+                new_revision.increase_version(1)
               end
+
+              # The file on disk must be renamed from .tmp to the correct filetype or else Xapian won't know how to index.
+              # Copy file.last_revision.disk_file to new_revision.disk_file
+              new_revision.size = file.last_revision.size
+              new_revision.disk_filename = new_revision.new_storage_filename
+              Rails.logger.info "WebDAV MOVE: Copy file #{file.last_revision.disk_filename} -> #{new_revision.disk_filename}"
+              File.open(file.last_revision.disk_file, 'rb') do |f|
+                new_revision.copy_file_content(f)
+              end
+
+              # Save
+              new_revision.save && resource.file.save
+
               # Delete the file that should have been renamed.
               file.delete(false) ? NoContent : Conflict
             else
@@ -305,7 +314,7 @@ module RedmineDmsf
             return PreconditionFailed unless exist? && file
             
             if (project == resource.project) && resource.basename.match(/.\.tmp$/i)
-              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename}, possible MSOffice rename when saving."
+              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename}, possible MSOffice rename to .tmp when saving."
               # Renaming the file to X.tmp, might be Office that is saving a file. Keep the original file.
               return InternalServerError unless file.copy_to(resource.project, f)
             else
