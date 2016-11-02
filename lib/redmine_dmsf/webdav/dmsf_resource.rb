@@ -157,8 +157,8 @@ module RedmineDmsf
       def last_modified
         if folder
           folder.updated_at
-        elsif file
-          file.updated_at
+        elsif file && file.last_revision
+          file.last_revision.updated_at
         else
           NotFound
         end
