@@ -273,9 +273,38 @@ module RedmineDmsf
               User.current.allowed_to?(:folder_manipulation, resource.project)
 
           if dest.exist?
-            methodNotAllowed
-            # Files cannot be merged at this point, until a decision is made on how to merge them
-            # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
+            if (project == resource.project) && file.name.match(/.\.tmp$/i)
+              # Renaming a *.tmp file to an existing file in the same project, probably Office that is saving a file.
+              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename} (exists), possible MSOffice rename from .tmp when saving"
+              
+              if resource.file.last_revision.size == 0
+                # Last revision in the destination has zero size so reuse that revision
+                new_revision = resource.file.last_revision
+              else
+                # Create a new revison by cloning the last revision in the destination
+                new_revision = resource.file.last_revision.clone
+                new_revision.increase_version(1)
+              end
+
+              # The file on disk must be renamed from .tmp to the correct filetype or else Xapian won't know how to index.
+              # Copy file.last_revision.disk_file to new_revision.disk_file
+              new_revision.size = file.last_revision.size
+              new_revision.disk_filename = new_revision.new_storage_filename
+              Rails.logger.info "WebDAV MOVE: Copy file #{file.last_revision.disk_filename} -> #{new_revision.disk_filename}"
+              File.open(file.last_revision.disk_file, 'rb') do |f|
+                new_revision.copy_file_content(f)
+              end
+
+              # Save
+              new_revision.save && resource.file.save
+
+              # Delete the file that should have been renamed.
+              file.delete(false) ? NoContent : Conflict
+            else
+              # Files cannot be merged at this point, until a decision is made on how to merge them
+              # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
+              MethodNotAllowed
+            end
           else
             if(parent.projectless_path == '/') #Project root
               f = nil
@@ -284,17 +313,24 @@ module RedmineDmsf
               f = parent.folder
             end
             return PreconditionFailed unless exist? && file
-            return InternalServerError unless file.move_to(resource.project, f)
+            
+            if (project == resource.project) && resource.basename.match(/.\.tmp$/i)
+              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename}, possible MSOffice rename to .tmp when saving."
+              # Renaming the file to X.tmp, might be Office that is saving a file. Keep the original file.
+              return InternalServerError unless file.copy_to(resource.project, f)
+            else
+              return InternalServerError unless file.move_to(resource.project, f)
 
-            # Update Revision and names of file [We can link to old physical resource, as it's not changed]
-            if file.last_revision
-              file.last_revision.name = resource.basename
-              file.last_revision.title = DmsfFileRevision.filename_to_title(resource.basename)
+              # Update Revision and names of file [We can link to old physical resource, as it's not changed]
+              if file.last_revision
+                file.last_revision.name = resource.basename
+                file.last_revision.title = DmsfFileRevision.filename_to_title(resource.basename)
+              end
+              file.name = resource.basename
+
+              # Save Changes
+              (file.last_revision.save! && file.save!) ? Created : PreconditionFailed
             end
-            file.name = resource.basename
-
-            # Save Changes
-            (file.last_revision.save! && file.save!) ? Created : PreconditionFailed
           end
         end
       end
@@ -479,11 +515,16 @@ module RedmineDmsf
         if exist? # We're over-writing something, so ultimately a new revision
           f = file
           last_revision = file.last_revision
-          new_revision.source_revision = last_revision
-          if last_revision
-            new_revision.major_version = last_revision.major_version
-            new_revision.minor_version = last_revision.minor_version
-            new_revision.workflow = last_revision.workflow
+          if last_revision.size == 0
+            new_revision = last_revision
+            new_revision.minor_version -= 1
+          else
+            new_revision.source_revision = last_revision
+            if last_revision
+              new_revision.major_version = last_revision.major_version
+              new_revision.minor_version = last_revision.minor_version
+              new_revision.workflow = last_revision.workflow
+            end
           end
         else
           raise BadRequest unless (parent.projectless_path == '/' || (parent.exist? && parent.folder))
