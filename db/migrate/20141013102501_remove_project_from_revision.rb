@@ -25,7 +25,7 @@ class RemoveProjectFromRevision < ActiveRecord::Migration
 
   def down
     add_column :dmsf_file_revisions, :project_id, :integer, :null => true
-
+    DmsfFileRevision.reset_column_information
     DmsfFileRevision.find_each do |revision|
       if revision.dmsf_file
         revision.project_id = revision.dmsf_file.project_id

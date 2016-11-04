@@ -23,7 +23,7 @@ class TrashBin < ActiveRecord::Migration
     # DMSF - project's root folder notification
     add_column :dmsf_folders, :deleted, :boolean, :default => false, :null => false
     add_column :dmsf_folders, :deleted_by_user_id, :integer
-    
+    DmsfFolder.reset_column_information
     DmsfFolder.update_all(:deleted => false)
   end
   

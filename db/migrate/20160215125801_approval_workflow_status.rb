@@ -21,6 +21,7 @@
 class ApprovalWorkflowStatus < ActiveRecord::Migration
   def self.up
     add_column :dmsf_workflows, :status, :integer, :null => false, :default => DmsfWorkflow::STATUS_ACTIVE
+    DmsfWorkflow.reset_column_information
     DmsfWorkflow.all.each {|wf| wf.update_attribute(:status, DmsfWorkflow::STATUS_ACTIVE)}
   end
 

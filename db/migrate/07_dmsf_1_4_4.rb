@@ -28,7 +28,6 @@ class Dmsf144 < ActiveRecord::Migration
   end  
 
   def self.up
-
     #Add our entity_type column (used with our entity type)
     add_column :dmsf_file_locks, :entity_type, :integer, :null => true
 
@@ -46,6 +45,7 @@ class Dmsf144 < ActiveRecord::Migration
     #               ordering, so adapted that, we grab id's load a mock object, and reload
     #               data into it, which should enable us to run checks we need, not as
     #               efficient, however compatible across the board.
+    DmsfFileLock.reset_column_information
     DmsfFileLock.select("MAX(#{DmsfFileLock.table_name}.id) id").
       order("MAX(#{DmsfFileLock.table_name}.id) DESC").
       group("#{DmsfFileLock.table_name}.dmsf_file_id").
@@ -117,12 +117,11 @@ class Dmsf144 < ActiveRecord::Migration
   end
 
   def self.down
-
     rename_table :dmsf_locks, :dmsf_file_locks
-
     add_column :dmsf_file_locks, :locked, :boolean, :default => false, :null => false
 
     #Data cleanup - delete all expired locks, or any folder locks
+    DmsfFileLock.reset_column_information
     say 'Removing all expired and/or folder locks'
     DmsfFileLock.delete_all ['expires_at < ? OR entity_type = 1', Time.now]
 

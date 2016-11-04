@@ -23,6 +23,7 @@ class ApprovalWorkflowStdFields < ActiveRecord::Migration
     add_column :dmsf_workflows, :updated_on, :timestamp
     add_column :dmsf_workflows, :created_on, :datetime
     add_column :dmsf_workflows, :author_id, :integer
+    DmsfWorkflow.reset_column_information
     # Set updated_on
     DmsfWorkflow.all.each(&:touch)
     # Set created_on and author_id
