@@ -423,12 +423,17 @@ module RedmineDmsf
 
       # Lock
       def lock(args)
-        return Conflict unless (parent.projectless_path == '/' || parent_exists?)
-        lock_check(args[:scope])
-        unless self.exist?
-          Rails.logger.warn "Path doesn't exist: #{@path}"
-          return super
+        unless (parent.projectless_path == '/' || parent_exists?)
+          e = DAV4Rack::LockFailure.new
+          e.add_failure @path, Conflict
+          raise e
         end
+        unless self.exist?
+          e = DAV4Rack::LockFailure.new
+          e.add_failure @path, NotFound
+          raise e
+        end
+        lock_check(args[:scope])
         entity = file ? file : folder
         begin
           if (entity.locked? && entity.locked_for_user?)
@@ -440,12 +445,18 @@ module RedmineDmsf
             # and ultimately extend it, otherwise we return Conflict for any failure
             if (!args[:scope] && !args[:type]) #Perhaps a lock refresh
               http_if = request.env['HTTP_IF']
-
-              return Conflict if http_if.nil?
-
+              if http_if.nil?
+                e = DAV4Rack::LockFailure.new
+                e.add_failure @path, Conflict
+                raise e
+              end
               http_if = http_if.slice(1, http_if.length - 2)
               l = DmsfLock.find(http_if)
-              return Conflict unless l
+              unless l
+                e = DAV4Rack::LockFailure.new
+                e.add_failure @path, Conflict
+                raise e
+              end
               l.expires_at = Time.now + 1.hour
               l.save!
               @response['Lock-Token'] = l.uuid
@@ -461,7 +472,9 @@ module RedmineDmsf
             [1.hours.to_i, l.uuid]
           end
         rescue DmsfLockError
-          raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
+          e = DAV4Rack::LockFailure.new
+          e.add_failure @path, Conflict
+          raise e
         end
       end
 
@@ -469,25 +482,27 @@ module RedmineDmsf
       # Token based unlock (authenticated) will ensure that a correct token is sent, further ensuring
       # ownership of token before permitting unlock
       def unlock(token)
-        return NoContent unless exist?
-        token=token.slice(1, token.length - 2)
-        if (token.nil? || token.empty? || User.current.anonymous?)
+        return NotFound unless exist?
+        if (token.nil? || token.empty? || token == "<(null)>" || User.current.anonymous?)
           BadRequest
         else
+          token = token.slice(1, token.length - 2)
           begin
             entity = file ? file : folder
             l = DmsfLock.find(token)
-            l_entity = l.file || l.folder
+            return NoContent unless l
             # Additional case: if a user tries to unlock the file instead of the folder that's locked
             # This should throw forbidden as only the lock at level initiated should be unlocked
-            if (!entity.locked? || entity.locked_for_user? || l_entity != entity)
+            return NoContent unless entity.locked?
+            l_entity = l.file || l.folder
+            if (entity.locked_for_user? || l_entity != entity)
               Forbidden
             else
               entity.unlock!
               NoContent
             end
           rescue
-            Forbidden
+            BadRequest
           end
         end
       end
@@ -499,13 +514,13 @@ module RedmineDmsf
         raise Forbidden
       end
 
-      # HTTP POST request.
+      # HTTP PUT request.
       def put(request, response)
         raise BadRequest if collection?
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
 
         # Ignore Mac OS X resource forks and special Windows files.
-        if basename.match(/^\._/i) || basename.match(/^\.DS_Store$/i) || basename.match(/^Thumbs.db$/i)
+        if basename.match(/^\._/) || basename.match(/^\.DS_Store$/i) || basename.match(/^Thumbs.db$/i)
           Rails.logger.info "#{basename} ignored"
           return NoContent
         end

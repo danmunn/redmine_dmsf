@@ -29,7 +29,7 @@ module RedmineDmsf
 
       def initialize(*args)
         webdav_setting = Setting.plugin_redmine_dmsf['dmsf_webdav']
-        raise NotFound if !webdav_setting.nil? && webdav_setting.empty?
+        raise NotFound if webdav_setting.nil? || webdav_setting.empty?
         @project = nil
         super(*args)
       end
@@ -166,8 +166,9 @@ module RedmineDmsf
       end
 
       def path_prefix
-        public_path.gsub(/#{Regexp.escape(path)}$/, '')        
+        public_path.gsub(/#{Regexp.escape(path)}$/, '')
       end
+
     end
   end
 end

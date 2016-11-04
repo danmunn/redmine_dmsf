@@ -80,11 +80,7 @@ module RedmineDmsf
       def last_modified
         @resource_c.last_modified
       end
-
-      def last_modified=(time)
-        @resource_c.last_modified=(time)
-      end
-
+      
       def etag
         @resource_c.etag
       end

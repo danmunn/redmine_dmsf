@@ -52,10 +52,6 @@ module RedmineDmsf
         Time.now
       end
 
-      def last_modified=
-        MethodNotAllowed
-      end
-
       # Index resource ALWAYS exists
       def exist?
         true
