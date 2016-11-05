@@ -577,7 +577,6 @@ module RedmineDmsf
         new_revision.disk_filename = new_revision.new_storage_filename
 
         if new_revision.save
-          f.reload
           new_revision.copy_file_content(request.body)
         else
           raise InternalServerError
