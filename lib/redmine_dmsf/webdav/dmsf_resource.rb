@@ -513,6 +513,7 @@ module RedmineDmsf
         end
 
         new_revision = DmsfFileRevision.new
+        reuse_revision = false
 
         if exist? # We're over-writing something, so ultimately a new revision
           f = file
@@ -520,6 +521,7 @@ module RedmineDmsf
           if last_revision.size == 0
             new_revision = last_revision
             new_revision.minor_version -= 1
+            reuse_revision = true
           else
             new_revision.source_revision = last_revision
             if last_revision
@@ -561,7 +563,7 @@ module RedmineDmsf
         
         raise InternalServerError unless new_revision.valid? && f.save
 
-        new_revision.disk_filename = new_revision.new_storage_filename
+        new_revision.disk_filename = new_revision.new_storage_filename unless reuse_revision
 
         if new_revision.save
           f.reload
