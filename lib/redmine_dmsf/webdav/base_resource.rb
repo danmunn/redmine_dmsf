@@ -60,8 +60,8 @@ module RedmineDmsf
         @public_path.force_encoding('utf-8')
       end
 
-      # Generate HTML for Get requests
-      def html_display
+      # Generate HTML for Get requests, or Head requests if no_body is true
+      def html_display(no_body = false)
         @response.body = ''
         Confict unless collection?        
         entities = children.map{|child| 
@@ -80,7 +80,7 @@ module RedmineDmsf
           '',
           '',
         ] + entities if parent        
-        @response.body << index_page % [ path.empty? ? '/' : path, path.empty? ? '/' : path, entities ]
+        @response.body << index_page % [ path.empty? ? '/' : path, path.empty? ? '/' : path, entities ] unless no_body
       end
 
       # Run method through proxy class - ensuring always compatible child is generated      

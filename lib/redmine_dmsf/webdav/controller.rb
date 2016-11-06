@@ -26,6 +26,20 @@ module RedmineDmsf
     class Controller < DAV4Rack::Controller
       include DAV4Rack::Utils
 
+      # Return response to OPTIONS
+      def options
+        # Always return MethodNotAllowed(405) because how MsOffice uses anonymous OPTIONS request.
+        # See https://support.microsoft.com/en-us/kb/2019105
+        MethodNotAllowed
+      end
+
+      # Return response to HEAD
+      def head
+        # Don't check resource.exist? because it returns false for anonymous requests and MsOffice's uses anonymous HEAD requests.
+        # See https://support.microsoft.com/en-us/kb/2019105
+        resource.head(request, response)
+      end
+
       # Return response to PROPFIND
       def propfind
         unless(resource.exist?)

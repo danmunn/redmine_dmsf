@@ -80,6 +80,12 @@ module RedmineDmsf
         4096
       end
 
+      def head(request, response)
+        html_display(true)
+        response['Content-Length'] = response.body.bytesize.to_s
+        OK        
+      end
+
       def get(request, response)
         html_display
         response['Content-Length'] = response.body.bytesize.to_s
