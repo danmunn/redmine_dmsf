@@ -297,8 +297,8 @@ module RedmineDmsf
               # Save
               new_revision.save && resource.file.save
 
-              # Delete the file that should have been renamed.
-              file.delete(false) ? NoContent : Conflict
+              # Delete (and destroy) the file that should have been renamed and return what should have been returned in case of a copy
+              file.delete(true) ? Created : PreconditionFailed
             else
               # Files cannot be merged at this point, until a decision is made on how to merge them
               # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
