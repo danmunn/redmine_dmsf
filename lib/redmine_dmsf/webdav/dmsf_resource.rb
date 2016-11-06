@@ -52,7 +52,7 @@ module RedmineDmsf
       # Our already quite heavy usage of DB would just get silly every time we called
       # this method.
       def children
-        unless @childern
+        unless @children
           @children = []
           if collection?
             folder.dmsf_folders.select(:title).visible.map do |p|
