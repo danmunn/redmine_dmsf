@@ -226,7 +226,19 @@ module RedmineDmsf
       def delete
         if file
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_delete, project)
-          file.delete(false) ? NoContent : Conflict
+          if file.name.match(/.\.tmp$/i)
+            # .tmp files should be destroyed (MsOffice file)
+            destroy = true
+          elsif file.name.match(/^\~\$/i)
+            # Files starting with ~$ should be destroyed (MsOffice file)
+            destroy = true
+          elsif file.last_revision.size == 0
+            # Zero-sized files should be destroyed
+            destroy = true
+          else
+            destroy = false
+          end
+          file.delete(destroy) ? NoContent : Conflict
         elsif folder
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           folder.delete(false) ? NoContent : Conflict
