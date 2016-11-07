@@ -80,6 +80,14 @@ module RedmineDmsf
         OK
       end
 
+      def options_req
+        response["Allow"] = 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
+        #response["Allow"] = 'OPTIONS,PROPFIND'
+        response["Dav"] = '1, 2'
+        response["Ms-Author-Via"] = "DAV"
+        OK
+      end
+
       # Bugfix: Ensure that this level never indicates a parent
       def parent
         nil

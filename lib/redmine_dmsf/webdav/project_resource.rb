@@ -81,14 +81,26 @@ module RedmineDmsf
       end
 
       def head(request, response)
-        html_display(true)
-        response['Content-Length'] = response.body.bytesize.to_s
-        OK        
+        # HEAD must be allowed even for anonymous users, so just verify that the project exists and that the dmsf module is enabled.
+        if project.nil? || !project.module_enabled?('dmsf')
+          NotFound
+        else
+          html_display(true)
+          response['Content-Length'] = response.body.bytesize.to_s
+          OK        
+        end
       end
 
       def get(request, response)
         html_display
         response['Content-Length'] = response.body.bytesize.to_s
+        OK
+      end
+
+      def options_req
+        response["Allow"] = 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
+        response["Dav"] = '1, 2'
+        response["Ms-Author-Via"] = "DAV"
         OK
       end
 

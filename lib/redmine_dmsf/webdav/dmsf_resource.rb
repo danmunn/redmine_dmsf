@@ -201,6 +201,7 @@ module RedmineDmsf
       ##
       def head(request, response)
         raise NotFound unless project && project.module_enabled?('dmsf') && (folder || file)
+        
         if collection?
           html_display(true)
           response['Content-Length'] = response.body.bytesize.to_s
@@ -626,6 +627,13 @@ module RedmineDmsf
         %w(creationdate displayname getlastmodified getetag resourcetype getcontenttype getcontentlength supportedlock lockdiscovery).collect do |prop|
           {:name => prop, :ns_href => 'DAV:'}
         end
+      end
+
+      def options_req
+        response["Allow"] = 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
+        response["Dav"] = '1, 2'
+        response["Ms-Author-Via"] = "DAV"
+        OK
       end
 
       private
