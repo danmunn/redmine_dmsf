@@ -54,9 +54,9 @@ module RedmineDmsf
         return true if @request.request_method.downcase == 'options' && (path == '/' || path.empty?)
 
         # Allow anonymous OPTIONS requests from MsOffice
-        return true if @request.request_method.downcase == 'options' && @request.user_agent.downcase.include?('microsoft office')
+        return true if @request.request_method.downcase == 'options' && !@request.user_agent.nil? && @request.user_agent.downcase.include?('microsoft office')
         # Allow anonymous HEAD requests from MsOffice
-        return true if @request.request_method.downcase == 'head' && request.user_agent.downcase.include?('microsoft office')
+        return true if @request.request_method.downcase == 'head' && !@request.user_agent.nil? && request.user_agent.downcase.include?('microsoft office')
 
         return false unless username && password
         User.current = User.try_to_login(username, password)
