@@ -33,7 +33,7 @@ module RedmineDmsf
           # Return NotFound if resource does not exist and the request is not anonymous.
           NotFound
         else
-          if request.env.has_key?('HTTP_X_OFFICE_MAJOR_VERSION') && User.current && User.current.anonymous?
+          if request.user_agent.downcase.include?('microsoft office') && User.current && User.current.anonymous?
             # Anonymous request from MsOffice, respond 405.
             # If responding with 401 then MsOffice will fail.
             # If responding with 200 then MsOffice will think that anonymous access is ok for everything.
@@ -48,7 +48,7 @@ module RedmineDmsf
       # Return response to HEAD
       def head
         # exist? returns false if user is anonymous for ProjectResource and DmsfResource, but not for IndexResource.
-        unless(resource.exist? || (request.env.has_key?('HTTP_X_OFFICE_MAJOR_VERSION') && User.current && User.current.anonymous?))
+        unless(resource.exist? || (request.user_agent.downcase.include?('microsoft office') && User.current && User.current.anonymous?))
           # Return NotFound if resource does not exist and the request is not from an anonymous MsOffice product.
           NotFound
         else
