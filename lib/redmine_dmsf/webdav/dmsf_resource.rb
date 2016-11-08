@@ -75,6 +75,10 @@ module RedmineDmsf
           (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project))
       end
 
+      def really_exist?
+        return project && project.module_enabled?('dmsf') && (folder || file)        
+      end
+
       # Is this entity a folder?
       def collection?
         folder.present? # No need to check if entity exists, as false is returned if entity does not exist anyways
@@ -190,23 +194,6 @@ module RedmineDmsf
         else
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:view_dmsf_files, project)
           response.body = download # Rack based provider
-        end
-        OK
-      end
-
-      # Process incoming HEAD request
-      #
-      # MsOFfice uses anonymous HEAD requests, so always return a response.
-      # See https://support.microsoft.com/en-us/kb/2019105
-      ##
-      def head(request, response)
-        raise NotFound unless project && project.module_enabled?('dmsf') && (folder || file)
-        
-        if collection?
-          html_display(true)
-          response['Content-Length'] = response.body.bytesize.to_s
-        else
-          response.body = ''
         end
         OK
       end
@@ -627,13 +614,6 @@ module RedmineDmsf
         %w(creationdate displayname getlastmodified getetag resourcetype getcontenttype getcontentlength supportedlock lockdiscovery).collect do |prop|
           {:name => prop, :ns_href => 'DAV:'}
         end
-      end
-
-      def options_req
-        response["Allow"] = 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
-        response["Dav"] = '1, 2'
-        response["Ms-Author-Via"] = "DAV"
-        OK
       end
 
       private

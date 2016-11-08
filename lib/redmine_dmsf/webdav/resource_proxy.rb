@@ -81,6 +81,10 @@ module RedmineDmsf
         @resource_c.exist?
       end
 
+      def really_exist?
+        @resource_c.really_exist?
+      end
+
       def creation_date
         @resource_c.creation_date
       end
@@ -103,10 +107,6 @@ module RedmineDmsf
 
       def content_length
         @resource_c.content_length
-      end
-
-      def head(request,response)
-        @resource_c.head(request, response)
       end
 
       def get(request, response)
@@ -167,10 +167,6 @@ module RedmineDmsf
 
       def properties
         @resource_c.properties
-      end
-
-      def options
-        @resource_c.options_req
       end
     end
   end

@@ -61,7 +61,7 @@ module RedmineDmsf
       end
 
       # Generate HTML for Get requests, or Head requests if no_body is true
-      def html_display(no_body = false)
+      def html_display
         @response.body = ''
         Confict unless collection?        
         entities = children.map{|child| 
@@ -80,7 +80,7 @@ module RedmineDmsf
           '',
           '',
         ] + entities if parent        
-        @response.body << index_page % [ path.empty? ? '/' : path, path.empty? ? '/' : path, entities ] unless no_body
+        @response.body << index_page % [ path.empty? ? '/' : path, path.empty? ? '/' : path, entities ]
       end
 
       # Run method through proxy class - ensuring always compatible child is generated      
