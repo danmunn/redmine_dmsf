@@ -27,6 +27,36 @@ module RedmineDmsf
     class Controller < DAV4Rack::Controller
       include DAV4Rack::Utils
 
+      # Return response to OPTIONS
+      def options
+        # exist? returns false if user is anonymous for ProjectResource and DmsfResource, but not for IndexResource.
+        unless(resource.exist? || (User.current && User.current.anonymous?))
+          # Return NotFound if resource does not exist and the request is not anonymous.
+          NotFound
+        else
+          if request.env.has_key?('HTTP_X_OFFICE_MAJOR_VERSION') && User.current && User.current.anonymous?
+            # Anonymous request from MsOffice, respond 405.
+            # If responding with 401 then MsOffice will fail.
+            # If responding with 200 then MsOffice will think that anonymous access is ok for everything.
+            # Responding with 405 is a workaround found in https://support.microsoft.com/en-us/kb/2019105
+            MethodNotAllowed
+          else
+            resource.options
+          end
+        end
+      end
+
+      # Return response to HEAD
+      def head
+        # exist? returns false if user is anonymous for ProjectResource and DmsfResource, but not for IndexResource.
+        unless(resource.exist? || (request.env.has_key?('HTTP_X_OFFICE_MAJOR_VERSION') && User.current && User.current.anonymous?))
+          # Return NotFound if resource does not exist and the request is not from an anonymous MsOffice product.
+          NotFound
+        else
+          resource.head(request, response)
+        end
+      end
+
       # Return response to PROPFIND
       def propfind
         unless(resource.exist?)

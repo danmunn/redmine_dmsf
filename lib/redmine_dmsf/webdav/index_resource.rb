@@ -69,9 +69,23 @@ module RedmineDmsf
         4096
       end
 
+      def head(request, response)
+        html_display(true)
+        response['Content-Length'] = response.body.bytesize.to_s
+        OK
+      end
+
       def get(request, response)
         html_display
         response['Content-Length'] = response.body.bytesize.to_s
+        OK
+      end
+
+      def options_req
+        response["Allow"] = 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
+        #response["Allow"] = 'OPTIONS,PROPFIND'
+        response["Dav"] = '1, 2'
+        response["Ms-Author-Via"] = "DAV"
         OK
       end
 

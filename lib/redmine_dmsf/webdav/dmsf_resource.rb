@@ -53,7 +53,7 @@ module RedmineDmsf
       # Our already quite heavy usage of DB would just get silly every time we called
       # this method.
       def children
-        unless @childern
+        unless @children
           @children = []
           if collection?
             folder.dmsf_folders.select(:title).visible.map do |p|
@@ -195,6 +195,23 @@ module RedmineDmsf
         OK
       end
 
+      # Process incoming HEAD request
+      #
+      # MsOFfice uses anonymous HEAD requests, so always return a response.
+      # See https://support.microsoft.com/en-us/kb/2019105
+      ##
+      def head(request, response)
+        raise NotFound unless project && project.module_enabled?('dmsf') && (folder || file)
+        
+        if collection?
+          html_display(true)
+          response['Content-Length'] = response.body.bytesize.to_s
+        else
+          response.body = ''
+        end
+        OK
+      end
+
       # Process incoming MKCOL request
       #
       # Create a DmsfFolder at location requested, only if parent is a folder (or root)
@@ -227,7 +244,19 @@ module RedmineDmsf
       def delete
         if file
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_delete, project)
-          file.delete(false) ? NoContent : Conflict
+          if file.name.match(/.\.tmp$/i)
+            # .tmp files should be destroyed (MsOffice file)
+            destroy = true
+          elsif file.name.match(/^\~\$/i)
+            # Files starting with ~$ should be destroyed (MsOffice file)
+            destroy = true
+          elsif file.last_revision.size == 0
+            # Zero-sized files should be destroyed
+            destroy = true
+          else
+            destroy = false
+          end
+          file.delete(destroy) ? NoContent : Conflict
         elsif folder
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           folder.delete(false) ? NoContent : Conflict
@@ -298,8 +327,8 @@ module RedmineDmsf
               # Save
               new_revision.save && resource.file.save
 
-              # Delete the file that should have been renamed.
-              file.delete(false) ? NoContent : Conflict
+              # Delete (and destroy) the file that should have been renamed and return what should have been returned in case of a copy
+              file.delete(true) ? Created : PreconditionFailed
             else
               # Files cannot be merged at this point, until a decision is made on how to merge them
               # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
@@ -526,6 +555,7 @@ module RedmineDmsf
         end
 
         new_revision = DmsfFileRevision.new
+        reuse_revision = false
 
         if exist? # We're over-writing something, so ultimately a new revision
           f = file
@@ -533,6 +563,7 @@ module RedmineDmsf
           if last_revision.size == 0
             new_revision = last_revision
             new_revision.minor_version -= 1
+            reuse_revision = true
           else
             new_revision.source_revision = last_revision
             if last_revision
@@ -574,7 +605,7 @@ module RedmineDmsf
         
         raise InternalServerError unless new_revision.valid? && f.save
 
-        new_revision.disk_filename = new_revision.new_storage_filename
+        new_revision.disk_filename = new_revision.new_storage_filename unless reuse_revision
 
         if new_revision.save
           new_revision.copy_file_content(request.body)
@@ -608,6 +639,13 @@ module RedmineDmsf
         %w(creationdate displayname getlastmodified getetag resourcetype getcontenttype getcontentlength supportedlock lockdiscovery).collect do |prop|
           {:name => prop, :ns_href => 'DAV:'}
         end
+      end
+
+      def options_req
+        response["Allow"] = 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
+        response["Dav"] = '1, 2'
+        response["Ms-Author-Via"] = "DAV"
+        OK
       end
 
       private
