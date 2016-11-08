@@ -51,12 +51,12 @@ module RedmineDmsf
         # going to fork it to ensure compliance, checking the request method in the authentication
         # seems the next best step, if the request method is OPTIONS return true, controller will simply
         # call the options method within, which accesses nothing, just returns headers about dav env.
-        #return true if @request.request_method.downcase == 'options' && (path == '/' || path.empty?)
+        return true if @request.request_method.downcase == 'options' && (path == '/' || path.empty?)
 
-        # Allow anonymous OPTIONS requests.
-        return true if @request.request_method.downcase == 'options'
-        # Allow anonymous HEAD requests.
-        return true if @request.request_method.downcase == 'head'
+        # Allow anonymous OPTIONS requests from MsOffice
+        return true if @request.request_method.downcase == 'options' && @request.user_agent.downcase.include?('microsoft office')
+        # Allow anonymous HEAD requests from MsOffice
+        return true if @request.request_method.downcase == 'head' && request.user_agent.downcase.include?('microsoft office')
 
         return false unless username && password
         User.current = User.try_to_login(username, password)
