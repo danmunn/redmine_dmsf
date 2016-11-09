@@ -30,31 +30,43 @@ module RedmineDmsf
       # Return response to OPTIONS
       def options
         # exist? returns false if user is anonymous for ProjectResource and DmsfResource, but not for IndexResource.
-        unless(resource.exist? || (User.current && User.current.anonymous?))
-          # Return NotFound if resource does not exist and the request is not anonymous.
-          NotFound
+        if resource.exist?
+          # resource exists and user is not anonymous.
+          super
+        elsif resource.really_exist? &&
+              !request.user_agent.nil? && request.user_agent.downcase.include?('microsoft office') &&
+              User.current && User.current.anonymous?
+          # resource actually exist, but this was an anonymous request from MsOffice so respond with 405,
+          # hopefully the resource did actually exist but failed because of anon.
+          # If responding with 401 then MsOffice will fail.
+          # If responding with 200 then MsOffice will think that anonymous access is ok for everything.
+          # Responding with 405 is a workaround found in https://support.microsoft.com/en-us/kb/2019105
+          MethodNotAllowed
         else
-          if request.env.has_key?('HTTP_X_OFFICE_MAJOR_VERSION') && User.current && User.current.anonymous?
-            # Anonymous request from MsOffice, respond 405.
-            # If responding with 401 then MsOffice will fail.
-            # If responding with 200 then MsOffice will think that anonymous access is ok for everything.
-            # Responding with 405 is a workaround found in https://support.microsoft.com/en-us/kb/2019105
-            MethodNotAllowed
-          else
-            resource.options
-          end
+          # Return NotFound if resource does not exist and the request is not anonymous from MsOffice
+          NotFound
         end
       end
 
       # Return response to HEAD
       def head
         # exist? returns false if user is anonymous for ProjectResource and DmsfResource, but not for IndexResource.
-        unless(resource.exist? || (request.env.has_key?('HTTP_X_OFFICE_MAJOR_VERSION') && User.current && User.current.anonymous?))
-          # Return NotFound if resource does not exist and the request is not from an anonymous MsOffice product.
-          NotFound
+        if resource.exist?
+          # resource exists and user is not anonymous.
+          super
+        elsif resource.really_exist? &&
+              !request.user_agent.nil? && request.user_agent.downcase.include?('microsoft office') &&
+              User.current && User.current.anonymous?
+          # resource said it don't exist, but this was an anonymous request from MsOffice so respond anyway
+          # Can not call super here since it calls resource.exist? which will fail
+          response['Etag'] = resource.etag
+          response['Content-Type'] = resource.content_type
+          response['Last-Modified'] = resource.last_modified.httpdate
+          OK
         else
-          resource.head(request, response)
-        end
+          # Return NotFound if resource does not exist and the request is not anonymous from MsOffice
+          NotFound
+        end          
       end
 
       # Return response to PROPFIND

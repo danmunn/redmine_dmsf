@@ -54,6 +54,18 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     check_headers_exist
   end
 
+  def test_head_responds_anonymous_msoffice_user_agent
+    head "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => "Microsoft Office Word 2014"}
+    assert_response :success
+    check_headers_exist
+  end
+
+  def test_head_responds_anonymous_other_user_agent
+    head "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => "Other"}
+    assert_response 401
+    check_headers_dont_exist
+  end
+
   # Note:
   #   At present we use Rack to serve the file, this makes life easy however it removes the Etag 
   #   header and invalidates the test - where as a folder listing will always not include a last-modified 
@@ -65,15 +77,51 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     check_headers_exist # Note it'll allow 1 out of the 3 expected to fail
   end
 
+  def test_head_responds_to_file_anonymous_msoffice_user_agent
+    head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, {:HTTP_USER_AGENT => "Microsoft Office Word 2014"}
+    assert_response :success
+    check_headers_exist # Note it'll allow 1 out of the 3 expected to fail
+  end
+
+  def test_head_responds_to_file_anonymous_other_user_agent
+    head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, {:HTTP_USER_AGENT => "Other"}
+    assert_response 401
+    check_headers_dont_exist
+  end
+
   def test_head_fails_when_file_not_found
     head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", nil, @admin
     assert_response :missing
     check_headers_dont_exist
   end
   
+  def test_head_fails_when_file_not_found_anonymous_msoffice_user_agent
+    head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", nil, {:HTTP_USER_AGENT => "Microsoft Office Word 2014"}
+    assert_response :missing
+    check_headers_dont_exist
+  end
+  
+  def test_head_fails_when_file_not_found_anonymous_other_user_agent
+    head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", nil, {:HTTP_USER_AGENT => "Other"}
+    assert_response 401
+    check_headers_dont_exist
+  end
+  
   def test_head_fails_when_folder_not_found
     head '/dmsf/webdav/folder_not_here', nil, @admin
     assert_response :missing
+    check_headers_dont_exist
+  end
+
+  def test_head_fails_when_folder_not_found_anonymous_msoffice_user_agent
+    head '/dmsf/webdav/folder_not_here', nil, {:HTTP_USER_AGENT => "Microsoft Office Word 2014"}
+    assert_response :missing
+    check_headers_dont_exist
+  end
+
+  def test_head_fails_when_folder_not_found_anonymous_other_user_agent
+    head '/dmsf/webdav/folder_not_here', nil, {:HTTP_USER_AGENT => "Other"}
+    assert_response 401
     check_headers_dont_exist
   end
 

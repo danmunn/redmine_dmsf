@@ -117,6 +117,26 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     assert response.headers['Ms-Author-Via'] == 'DAV', 'Ms-Author-Via header - expected: DAV'
   end
 
+  def test_un_authenticated_options_for_msoffice_user_agent
+    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => "Microsoft Office Word 2014"}
+    assert_response 405
+  end
+
+  def test_authenticated_options_for_msoffice_user_agent
+    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_USER_AGENT => "Microsoft Office Word 2014"})
+    assert_response :success
+  end
+
+  def test_un_authenticated_options_for_other_user_agent
+    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => "Other"}
+    assert_response 401
+  end
+
+  def test_authenticated_options_for_other_user_agent
+    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_USER_AGENT => "Other"})
+    assert_response :success
+  end
+
   # TODO: It doesn't work
   # def test_authenticated_options_returns_401_for_non_dmsf_enabled_items
   #   @project2.disable_module! :dmsf
