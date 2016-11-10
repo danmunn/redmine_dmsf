@@ -242,6 +242,10 @@ class DmsfFilesController < ApplicationController
   def delete_revision
     if @revision
       if @revision.delete(true)
+        if @file.name != @file.last_revision.name
+          @file.name = @file.last_revision.name
+          @file.save
+        end
         flash[:notice] = l(:notice_revision_deleted)
         log_activity('deleted')
       else
