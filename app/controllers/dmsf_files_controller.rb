@@ -135,7 +135,6 @@ class DmsfFilesController < ApplicationController
          else
            revision.increase_version(version)
          end
-        #file_upload = params[:file_upload]
         file_upload = params[:attachments]['1'] if params[:attachments].present?
         unless file_upload
           revision.size = last_revision.size
@@ -148,7 +147,7 @@ class DmsfFilesController < ApplicationController
           end
         else
           upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, file_upload)
-          revision.size = file_upload.size
+          revision.size = upload.size
           revision.disk_filename = revision.new_storage_filename
           revision.mime_type = upload.mime_type
           revision.digest = DmsfFileRevision.create_digest upload.disk_file
