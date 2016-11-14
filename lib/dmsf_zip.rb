@@ -47,7 +47,12 @@ class DmsfZip
     unless @files.include?(file)
       string_path = file.dmsf_folder.nil? ? '' : "#{file.dmsf_folder.dmsf_path_str}/"
       string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
-      string_path += file.formatted_name(member ? member.title_format : nil)
+      
+      if member && !member.title_format.nil? && !member.title_format.empty?
+        string_path += file.formatted_name(member.title_format)
+      else
+        string_path += file.formatted_name(Setting.plugin_redmine_dmsf['dmsf_global_title_format'])
+      end
       @zip_file.put_next_entry(string_path)
       File.open(file.last_revision.disk_file, 'rb') do |f|
         while (buffer = f.read(8192))
