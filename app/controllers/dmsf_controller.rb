@@ -365,7 +365,8 @@ class DmsfController < ApplicationController
         :zipped_content => zipped_content,
         :folders => selected_folders,
         :files => selected_files,
-        :subject => "#{@project.name} #{l(:label_dmsf_file_plural).downcase}"
+        :subject => "#{@project.name} #{l(:label_dmsf_file_plural).downcase}",
+        :from => "#{User.current.name} <#{User.current.mail}>"
       }
       render :action => 'email_entries'
     rescue Exception

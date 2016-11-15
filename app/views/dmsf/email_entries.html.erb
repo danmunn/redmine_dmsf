@@ -32,10 +32,11 @@
   <%= hidden_field_tag('email[zipped_content]', @email_params[:zipped_content]) %>
   <%= hidden_field_tag('email[folders]', @email_params[:folders].to_json) %>
   <%= hidden_field_tag('email[files]', @email_params[:files].to_json) %>
+  <%= hidden_field_tag('email[from]', @email_params[:from]) %>
   <div class="box tabular">
     <p>
       <%= label_tag('', l(:label_email_from)) %>      
-      <%= text_field_tag('email[from]', h(Setting.mail_from), :style => 'width: 90%;', :disabled => true) %>
+      <%= text_field_tag('email[from_disabled]', @email_params[:from], :style => 'width: 90%;', :disabled => true) %>
     </p>
     <p>
       <%= label_tag('email[to]', l(:label_email_to)) %>
