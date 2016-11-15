@@ -46,7 +46,7 @@ Redmine::Plugin.register :redmine_dmsf do
       'dmsf_stemming_strategy' => 'STEM_NONE',
       'dmsf_webdav' => '1',
       'dmsf_display_notified_recipients' => 0,
-      'dmsf_global_title_format' => '%t_%v'
+      'dmsf_global_title_format' => ''
     }
   
   menu :project_menu, :dmsf, { :controller => 'dmsf', :action => 'show' }, :caption => :menu_dmsf, :before => :documents, :param => :id
