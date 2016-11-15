@@ -33,6 +33,7 @@ class DmsfFilesController < ApplicationController
 
   helper :all
   helper :dmsf_workflows
+  helper :dmsf
 
   def view
     begin

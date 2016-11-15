@@ -170,11 +170,6 @@
 
 <span class="pagination"><%= pagination_links_full @revision_pages, @file.dmsf_file_revisions.visible.count %></span>
 
-<%
-  url = 'jquery.dataTables/en.json'
-  url = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json" if I18n.locale && !I18n.locale.to_s.match(/^en.*/)
-%>
-
 <script type="text/javascript">
   $('a.delete-revision').click(function(event) {
     if(!window.confirm('<%= l(:text_are_you_sure) %>')) {
@@ -209,7 +204,7 @@
   $('.dmsf_list').dataTable({
     'bJQueryUI': true,
     'oLanguage': {
-      'sUrl': '/plugin_assets/<%= :redmine_dmsf %>/javascripts/<%= url %>'
+      'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
     }
   });
 </script>

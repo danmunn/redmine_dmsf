@@ -69,12 +69,22 @@ module DmsfHelper
 
   def json_url
     if I18n.locale
-      ret = "jquery.dataTables/#{I18n.locale.to_s.downcase}.json"
+      ret = "jquery.dataTables/#{I18n.locale}.json"
       path = "#{File.dirname(__FILE__)}/../../assets/javascripts/#{ret}"
       return ret if File.exist?(path)
       Rails.logger.warn "#{path} not found"
     end
     'jquery.dataTables/en.json'
+  end
+
+  def js_url
+    if I18n.locale
+      ret = "plupload/js/i18n/#{I18n.locale}.js"
+      path = "#{File.dirname(__FILE__)}/../../assets/javascripts/#{ret}"
+      return ret if File.exist?(path)
+      Rails.logger.warn "#{path} not found"
+    end
+    'plupload/js/i18n/en.js'
   end
 
   def self.all_children_sorted(parent, pos, ident)

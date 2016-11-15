@@ -71,7 +71,7 @@
   <%= stylesheet_link_tag 'plupload/jquery.ui.plupload.css', :plugin => 'redmine_dmsf' %>  
   <%= javascript_include_tag 'plupload/js/plupload.full.min.js', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag 'plupload/js/jquery.ui.plupload/jquery.ui.plupload.js', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag("plupload/js/i18n/#{I18n.locale.to_s.downcase}.js", :plugin => 'redmine_dmsf') if I18n.locale && !I18n.locale.to_s.match(/^en.*/) %>
+  <%= javascript_include_tag(js_url, :plugin => 'redmine_dmsf') %>
 
   <script type="text/javascript">
     function initPlUploader(uploader) {
