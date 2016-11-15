@@ -112,6 +112,14 @@
   </em>
 </p>
 
+<p>
+  <%= content_tag(:label, l(:label_title_format)) %>  
+  <%= text_field_tag 'settings[dmsf_global_title_format]', @settings['dmsf_global_title_format'], :size => 10 %>
+  <em class="info">
+    <%= l(:text_title_format) %> <%= l(:label_default) %>: %t_%v
+  </em>
+</p>
+
 <hr/>
 
 <p>
