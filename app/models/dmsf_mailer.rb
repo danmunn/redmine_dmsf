@@ -61,7 +61,7 @@ class DmsfMailer < Mailer
       attachments['Documents.zip'] = { :content_type => 'application/zip', :content => zipped_content_data }
     end
     mail :to => email_params[:to], :cc => email_params[:cc],
-      :subject => email_params[:subject], :from => user.mail
+      :subject => email_params[:subject], 'From' => email_params[:from]
   end
 
   def workflow_notification(user, workflow, revision, subject_id, text1_id, text2_id, notice = nil)
