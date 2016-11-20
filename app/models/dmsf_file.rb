@@ -252,6 +252,8 @@ class DmsfFile < ActiveRecord::Base
     self.last_revision.custom_values.each do |cv|
       new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
     end
+    
+    self.set_last_revision(new_revision)
 
     self.save && new_revision.save
   end
