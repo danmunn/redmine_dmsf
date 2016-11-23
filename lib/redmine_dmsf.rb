@@ -35,6 +35,7 @@ require 'redmine_dmsf/patches/user_patch'
 # Load up classes that make up our WebDAV solution ontop of DAV4Rack
 require 'redmine_dmsf/webdav/base_resource'
 require 'redmine_dmsf/webdav/controller'
+require 'redmine_dmsf/webdav/cache'
 require 'redmine_dmsf/webdav/dmsf_resource'
 require 'redmine_dmsf/webdav/download'
 require 'redmine_dmsf/webdav/index_resource'
@@ -57,3 +58,7 @@ require 'redmine_dmsf/hooks/views/my_account_view_hooks'
 
 # Macros
 require 'redmine_dmsf/macros'
+
+# Add the plugin view folder into ActionMailer's paths to search
+ActionMailer::Base.append_view_path(File.expand_path(
+    File.dirname(__FILE__) + '/../app/views'))

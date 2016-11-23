@@ -47,7 +47,8 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_webdav' => '1',
               'dmsf_display_notified_recipients' => 0,
               'dmsf_global_title_format' => '',
-              'dmsf_columns' => %w(title size modified version workflow author)
+              'dmsf_columns' => %w(title size modified version workflow author),
+              'dmsf_memcached_servers' => ''
             }
   
   menu :project_menu, :dmsf, { :controller => 'dmsf', :action => 'show' }, :caption => :menu_dmsf, :before => :documents, :param => :id

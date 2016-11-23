@@ -79,6 +79,10 @@ module RedmineDmsf
       def really_exist?
         return project && project.module_enabled?('dmsf') && (folder || file)        
       end
+      
+      def project_id
+        project.id unless project.nil?
+      end
 
       # Is this entity a folder?
       def collection?

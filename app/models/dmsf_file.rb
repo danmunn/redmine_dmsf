@@ -478,4 +478,33 @@ class DmsfFile < ActiveRecord::Base
     nil
   end
 
+  def save(*args)
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
+    super(*args)
+  end
+  
+  def save!(*args)
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
+    super(*args)
+  end
+  
+  def destroy
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
+    super
+  end
+
+  def destroy!
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
+    super
+  end
+  
+  def propfind_cache_key
+    if dmsf_folder_id.nil?
+      # File is in project root
+      return "PROPFIND/#{project_id}"
+    else
+      return "PROPFIND/#{project_id}/#{dmsf_folder_id}"
+    end
+  end
+
 end
