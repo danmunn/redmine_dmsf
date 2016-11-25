@@ -83,11 +83,7 @@ class DmsfFileRevision < ActiveRecord::Base
       errors[:base] << l(:error_at_least_one_revision_must_be_present)
       return false
     end
-    dependent = DmsfFileRevision.where(:source_dmsf_file_revision_id => self.id).all
-    dependent.each do |d|
-      d.source_revision = self.source_revision
-      d.save!
-    end
+
     if commit
       self.destroy
     else
@@ -104,6 +100,11 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def destroy
+    dependent = DmsfFileRevision.where(:source_dmsf_file_revision_id => self.id).all
+    dependent.each do |d|
+      d.source_revision = self.source_revision
+      d.save!
+    end
     if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
       dependencies = DmsfFileRevision.where(:disk_filename => self.disk_filename).all.count
       File.delete(self.disk_file) if dependencies <= 1 && File.exist?(self.disk_file)
