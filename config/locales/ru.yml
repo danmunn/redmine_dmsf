@@ -104,7 +104,7 @@ ru:
   select_option_default: По умолчанию
   select_option_deactivated: Отключено
   select_option_activated: Включено
-  label_title_format: Title format
+  label_title_format: Формат заголовка
   text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
   title_save_preferences: Сохранить настройки
   heading_revisions: Редакции
