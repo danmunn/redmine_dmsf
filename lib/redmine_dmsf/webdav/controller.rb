@@ -71,7 +71,8 @@ module RedmineDmsf
 
       # Return response to PROPFIND
       def propfind
-        unless(resource.exist?)
+        return MethodNotAllowed if resource && !resource.public_path.start_with?('/dmsf/webdav')
+        unless resource.exist?
           NotFound
         else
           # Win7 hack start          

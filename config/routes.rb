@@ -112,12 +112,16 @@ RedmineApp::Application.routes.draw do
 
   #
   # DAV4Rack implementation of Webdav
-  mount DAV4Rack::Handler.new(
+  dav_engine = DAV4Rack::Handler.new(
     :root_uri_path => "#{Redmine::Utils::relative_url_root}/dmsf/webdav",
     :resource_class => RedmineDmsf::Webdav::ResourceProxy,
     :controller_class => RedmineDmsf::Webdav::Controller,
     :log_to => Rails.logger
-  ), :at => '/dmsf/webdav'  if defined?(RedmineDmsf)
+  )
+  mount dav_engine, :at => '/dmsf/webdav'
+  mount dav_engine, :at => '/', :via => :options
+  mount dav_engine, :at => '/', :via => :propfind
+  mount dav_engine, :at => '/dmsf', :via => :propfind
 
   # Approval workflow
   resources :dmsf_workflows do
