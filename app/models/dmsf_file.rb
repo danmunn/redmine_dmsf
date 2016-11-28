@@ -36,7 +36,7 @@ class DmsfFile < ActiveRecord::Base
   belongs_to :dmsf_folder
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
 
-  has_many :dmsf_file_revisions, -> { order("#{DmsfFileRevision.table_name}.major_version DESC, #{DmsfFileRevision.table_name}.minor_version DESC, #{DmsfFileRevision.table_name}.updated_at DESC") },
+  has_many :dmsf_file_revisions, -> { order("#{DmsfFileRevision.table_name}.id DESC") },
     :dependent => :destroy
   has_many :locks, -> { where(entity_type: 0).order("#{DmsfLock.table_name}.updated_at DESC") },
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
@@ -403,10 +403,17 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def display_name
-    if self.name.length > 50
-      return "#{self.name[0, 25]}...#{self.name[-25, 25]}"
+    member = Member.where(:user_id => User.current.id, :project_id => self.project.id).first
+    if member && !member.title_format.nil? && !member.title_format.empty?
+      title_format = member.title_format
+    else
+      title_format = Setting.plugin_redmine_dmsf['dmsf_global_title_format']
     end
-    self.name
+    fname = formatted_name(title_format)
+    if fname.length > 50
+      return "#{fname[0, 25]}...#{fname[-25, 25]}"
+    end
+    fname
   end
 
   def image?

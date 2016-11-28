@@ -83,11 +83,7 @@ class DmsfFileRevision < ActiveRecord::Base
       errors[:base] << l(:error_at_least_one_revision_must_be_present)
       return false
     end
-    dependent = DmsfFileRevision.where(:source_dmsf_file_revision_id => self.id).all
-    dependent.each do |d|
-      d.source_revision = self.source_revision
-      d.save!
-    end
+
     if commit
       self.destroy
     else
@@ -104,6 +100,11 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def destroy
+    dependent = DmsfFileRevision.where(:source_dmsf_file_revision_id => self.id).all
+    dependent.each do |d|
+      d.source_revision = self.source_revision
+      d.save!
+    end
     if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
       dependencies = DmsfFileRevision.where(:disk_filename => self.disk_filename).all.count
       File.delete(self.disk_file) if dependencies <= 1 && File.exist?(self.disk_file)
@@ -257,13 +258,14 @@ class DmsfFileRevision < ActiveRecord::Base
     else
       filename = self.name
     end
-    format.sub!('%t', self.title)
-    format.sub!('%f', filename)
-    format.sub!('%d', self.updated_at.strftime('%Y%m%d%H%M%S'))
-    format.sub!('%v', self.version)
-    format.sub!('%i', self.dmsf_file.id.to_s)
-    format.sub!('%r', self.id.to_s)
-    format + ext
+    format2 = format.dup
+    format2.sub!('%t', self.title)
+    format2.sub!('%f', filename)
+    format2.sub!('%d', self.updated_at.strftime('%Y%m%d%H%M%S'))
+    format2.sub!('%v', self.version)
+    format2.sub!('%i', self.dmsf_file.id.to_s)
+    format2.sub!('%r', self.id.to_s)
+    format2 + ext
   end
 
   def self.create_digest(path)

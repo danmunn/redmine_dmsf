@@ -98,7 +98,7 @@ class DmsfLink < ActiveRecord::Base
 
   def path
     if self.target_type == DmsfFile.model_name.to_s
-      path = self.target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.name : element.title }.join('/') if self.target_file
+      path = self.target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.display_name : element.title }.join('/') if self.target_file
     else
       path = self.target_folder ? self.target_folder.dmsf_path_str : ''
     end

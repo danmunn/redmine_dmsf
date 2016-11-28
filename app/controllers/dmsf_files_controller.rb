@@ -52,8 +52,13 @@ class DmsfFilesController < ApplicationController
       access.action = DmsfFileRevisionAccess::DownloadAction
       access.save!
       member = Member.where(:user_id => User.current.id, :project_id => @file.project.id).first
+      if member && !member.title_format.nil? && !member.title_format.empty?
+        title_format = member.title_format
+      else
+        title_format = Setting.plugin_redmine_dmsf['dmsf_global_title_format']
+      end
       send_file(@revision.disk_file,
-        :filename => filename_for_content_disposition(@revision.formatted_name(member ? member.title_format : nil)),
+        :filename => filename_for_content_disposition(@revision.formatted_name(title_format)),
         :type => @revision.detect_content_type,
         :disposition => 'inline')
     rescue DmsfAccessError => e
@@ -84,8 +89,13 @@ class DmsfFilesController < ApplicationController
         access.action = DmsfFileRevisionAccess::DownloadAction
         access.save!
         member = Member.where(:user_id => User.current.id, :project_id => @file.project.id).first
+        if member && !member.title_format.nil? && !member.title_format.empty?
+          title_format = member.title_format
+        else
+          title_format = Setting.plugin_redmine_dmsf['dmsf_global_title_format']
+        end
         send_file(@revision.disk_file,
-          :filename => filename_for_content_disposition(@revision.formatted_name(member ? member.title_format : nil)),
+          :filename => filename_for_content_disposition(@revision.formatted_name(title_format)),
           :type => @revision.detect_content_type,
           :disposition => 'attachment')
       rescue DmsfAccessError => e
