@@ -46,11 +46,20 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_options_returns_expected_allow_header
+    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_ONLY'
     xml_http_request  :options, '/dmsf/webdav'
     assert_response :success
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
     assert response.headers['Allow'] , 'Allow header is empty or does not exist'
-    assert response.headers['Allow'] == 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK', 'Allow header returns expected content'
+    assert response.headers['Allow'] == 'OPTIONS,HEAD,GET,PROPFIND', 'Allow header returns expected content'
+  end
+
+  def test_options_returns_expected_allow_header_for_ro
+    xml_http_request  :options, '/dmsf/webdav'
+    assert_response :success
+    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
+    assert response.headers['Allow'] , 'Allow header is empty or does not exist'
+    assert response.headers['Allow'] == 'OPTIONS,HEAD,GET,PROPFIND,PUT,POST,DELETE,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK', 'Allow header returns expected content'
   end
 
   def test_options_returns_expected_dav_header
@@ -99,7 +108,7 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     assert !(response.headers.nil? || response.headers.empty?), "Response headers are empty"
     assert response.headers['Allow'], 'Allow header is empty or does not exist'
-    assert response.headers['Allow'] == 'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK', 'Allow header returns expected'
+    assert response.headers['Allow'] == 'OPTIONS,HEAD,GET,PROPFIND,PUT,POST,DELETE,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK', 'Allow header returns expected'
   end
 
   def test_authenticated_options_returns_expected_dav_header
