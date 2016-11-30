@@ -32,7 +32,14 @@ module RedmineDmsf
         # exist? returns false if user is anonymous for ProjectResource and DmsfResource, but not for IndexResource.
         if resource.exist?
           # resource exists and user is not anonymous.
-          super
+          add_dav_header
+          response['Allow'] = 'OPTIONS,HEAD,GET,PROPFIND'
+          webdav_setting = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
+          if webdav_setting && (webdav_setting != 'WEBDAV_READ_ONLY')
+            response['Allow'] << ',PUT,POST,DELETE,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
+          end
+          response['Ms-Author-Via'] = 'DAV'
+          OK
         elsif resource.really_exist? &&
               !request.user_agent.nil? && request.user_agent.downcase.include?('microsoft office') &&
               User.current && User.current.anonymous?
