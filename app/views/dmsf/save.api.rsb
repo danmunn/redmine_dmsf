@@ -1,0 +1,5 @@
+api.dmsf_folder do
+  api.id @folder.id
+  api.title @folder.title
+  api.description @folder.description
+end
