@@ -29,7 +29,7 @@ class DmsfController < ApplicationController
   before_filter :find_parent, :only => [:new, :create]
   before_filter :tree_view, :only => [:delete, :show]
 
-  accept_api_auth :show, :create
+  accept_api_auth :show, :create, :save
 
   helper :all
 
@@ -180,6 +180,8 @@ class DmsfController < ApplicationController
 
     saved = @folder.save
 
+
+
     respond_to do |format|
       format.js
       format.api  {
@@ -223,11 +225,21 @@ class DmsfController < ApplicationController
       end
     end
 
-    if @folder.save
-      flash[:notice] = l(:notice_folder_details_were_saved)
-      redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
-    else
-      render :action => 'edit'
+    saved = @folder.save
+    respond_to do |format|
+      format.api  {
+        unless saved
+          render_validation_errors(@folder)
+        end
+      }
+      format.html {
+        if saved
+          flash[:notice] = l(:notice_folder_details_were_saved)
+          redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
+        else
+          render :action => 'edit'
+        end
+      }
     end
   end
 
@@ -667,3 +679,4 @@ class DmsfController < ApplicationController
   end
 
 end
+
