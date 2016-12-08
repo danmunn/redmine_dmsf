@@ -29,7 +29,9 @@ class DmsfController < ApplicationController
   before_filter :find_parent, :only => [:new, :create]
   before_filter :tree_view, :only => [:delete, :show]
 
-  accept_api_auth :show, :create
+  accept_api_auth :show, :create, :save
+
+  skip_before_action :verify_authenticity_token,  if: -> { request.headers["HTTP_X_REDMINE_API_KEY"].present? }
 
   helper :all
 
@@ -44,6 +46,8 @@ class DmsfController < ApplicationController
   end
 
   def show
+    # also try to lookup folder by title if this is API call
+    find_folder_by_title if [:xml, :json].include? request.format.to_sym
     get_display_params
     if @folder && @folder.deleted?
       render_404
@@ -180,6 +184,8 @@ class DmsfController < ApplicationController
 
     saved = @folder.save
 
+
+
     respond_to do |format|
       format.js
       format.api  {
@@ -223,11 +229,21 @@ class DmsfController < ApplicationController
       end
     end
 
-    if @folder.save
-      flash[:notice] = l(:notice_folder_details_were_saved)
-      redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
-    else
-      render :action => 'edit'
+    saved = @folder.save
+    respond_to do |format|
+      format.api  {
+        unless saved
+          render_validation_errors(@folder)
+        end
+      }
+      format.html {
+        if saved
+          flash[:notice] = l(:notice_folder_details_were_saved)
+          redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
+        else
+          render :action => 'edit'
+        end
+      }
     end
   end
 
@@ -537,6 +553,15 @@ class DmsfController < ApplicationController
     render_404
   end
 
+  def find_folder_by_title
+    # find by title has to be scoped to project
+    @folder = DmsfFolder.find_by(title: params[:folder_title], project_id: params[:id]) if params[:folder_title].present?
+  rescue DmsfAccessError
+    render_403
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
   def find_parent
     @parent = DmsfFolder.visible.find params[:parent_id] if params[:parent_id].present?
   rescue DmsfAccessError
@@ -666,3 +691,4 @@ class DmsfController < ApplicationController
   end
 
 end
+

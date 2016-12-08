@@ -29,4 +29,12 @@ api.dmsf do
       end
     end
   end
+
+  if @folder
+    api.found_folder do
+      api.id @folder.id
+      api.title @folder.title
+    end
+  end
+
 end
