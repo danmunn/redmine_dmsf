@@ -31,6 +31,8 @@ class DmsfController < ApplicationController
 
   accept_api_auth :show, :create, :save
 
+  skip_before_action :verify_authenticity_token,  if: -> { request.headers["HTTP_X_REDMINE_API_KEY"].present? }
+
   helper :all
 
   def expand_folder
@@ -44,6 +46,8 @@ class DmsfController < ApplicationController
   end
 
   def show
+    # also try to lookup folder by title if this is API call
+    find_folder_by_title if [:xml, :json].include? request.format.to_sym
     get_display_params
     if @folder && @folder.deleted?
       render_404
@@ -544,6 +548,15 @@ class DmsfController < ApplicationController
 
   def find_folder
     @folder = DmsfFolder.find params[:folder_id] if params[:folder_id].present?
+  rescue DmsfAccessError
+    render_403
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
+  def find_folder_by_title
+    # find by title has to be scoped to project
+    @folder = DmsfFolder.find_by(title: params[:folder_title], project_id: params[:id]) if params[:folder_title].present?
   rescue DmsfAccessError
     render_403
   rescue ActiveRecord::RecordNotFound
