@@ -1,7 +1,12 @@
 // Store DMSF controls
-var dmsfButtons = $('#dmsf_buttons')[0].outerHTML
-var dmsfTag = $('#dmsf_tag')[0].outerHTML
+var dmsfButtons = $('#dmsf_buttons')[0].outerHTML;
 var browserInfo = $('#browser_info').text();
+var dmsfTag;
+
+if(($('#dmsf_tag') != null) && $('#dmsf_tag')[0] != null) {
+
+    dmsfTag = $('#dmsf_tag')[0].outerHTML
+}
 
 // Destroy the original dataTable
 $("#browser").dataTable().fnDestroy();
@@ -28,7 +33,11 @@ $('#browser').dataTable({
   ],
   'fnInitComplete': function() {
     $(dmsfButtons).prependTo($('#browser_wrapper div.fg-toolbar')[0]);
-    $(dmsfTag).prependTo($('#browser_wrapper div.fg-toolbar')[0]);
+
+    if($(dmsfTag) != null) {
+
+        $(dmsfTag).prependTo($('#browser_wrapper div.fg-toolbar')[0]);
+    }
   },
   'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
     return browserInfo;

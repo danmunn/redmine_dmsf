@@ -138,13 +138,19 @@ function dmsfExpandRows(EL, parentRow, url) {
 
   var pos = $(parentRow).find('#dmsf_position').text();
 
-  return $.ajax({
+  $.ajax({
     url: url,
     type: 'post',
+    dataType: 'html',
     data: {
       folder_id: EL,
       row_id: parentRow.id,
       idnt: idnt,
       pos: pos}
+  }).done(function(data) {
+      eval(data);
+  })
+  .fail(function() {
+      alert('An error in rows expanding');
   });
 }
