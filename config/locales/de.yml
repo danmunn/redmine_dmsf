@@ -121,26 +121,26 @@ de:
   option_version_minor: Unterversion
   option_version_major: Hauptversion
   label_new_content: Neuer Inhalt
-  label_maximum_files_upload: Maximal hochzuladende Dateien
+  label_maximum_files_upload: Maximal zulässige Anzahl der hochgeladenen Dateien
   option_version_custom: Benutzerdefinierte
-  note_maximum_number_of_files_uploaded: Beschränkt die Anzahl der maximal auf einmal hochladbaren Dateien. 0 bedeutet unbeschränkt.
-  label_maximum_files_download: Maximal herunterzuladende Dateien
-  note_maximum_number_of_files_downloaded: Beschränkt die Anzahl der maximal auf einmal herunterladbaren Dateien (per ZIP oder Mail). 0 bedeutet unbeschränkt.
+  note_maximum_number_of_files_uploaded: Beschränkt die maximale Anzahl der  Dateien, die auf einmal hochgeladen werden können. 0 bedeutet unbeschränkt.
+  label_maximum_files_download: Maximal zulässige Anzahl der Dateien, die heruntergeladen werden können.
+  note_maximum_number_of_files_downloaded: Beschränkt die maximale Anzahl, der Dateien, die auf einmal heruntergeladen werden können. (per ZIP oder Mail). 0 bedeutet unbeschränkt.
   label_file_storage_directory: Verzeichnis für die Dateiablage
   label_index_database: Index Datenbank
-  label_stemming_language: Sprache für die Normalformreduktion
+  label_stemming_language: Stemming-Sprache
   note_possible_values: Mögliche Werte
   note_pass_none_to_disable_stemming: "schreibe 'none', um die Normalformreduktion zu unterdrücken"
   label_stem_strategy: Normalformreduktionsform
   option_stem_none: reduziere nichts (Voreinstellung)
   option_stem_some: reduziere manches
   option_stem_all: reduziere alles
-  label_stemming_description: Diese Einstellung beeinflusst, wie der Parser den Normalformreduktionsalgorithmus anwendet. Voreingestellt ist STEM_NONE. Die möglichen Werte sind
-  note_do_not_stem: Keine Normalformreduktion durchführen.
-  note_stem_some: "Suche nach reduzierten Formen aller Wörter mit Ausnahme von Wörtern, die mit einem Großbuchstaben beginnen, bestimmten Zeichen beinhalten, oder von Operatoren mit Positionsinformationen verwendet werden. Reduzierten Formen wird ein 'Z' vorangestellt."
+  label_stemming_description: Diese Einstellung beeinflusst, wie der Parser den Stemming-Algorithmus anwendet. Voreingestellt ist STEM_NONE. Die möglichen Werte sind
+  note_do_not_stem: Kein Stemming durchführen.
+  note_stem_some: Suche nach reduzierten Formen aller Wörter mit Ausnahme von Wörtern, die mit einem Großbuchstaben beginnen,von bestimmten Zeichen gefolgt werden oder von einem Operator verwendet werden, die Positionsinformationen  braucht. Reduzierten Formen wird ein 'Z' vorangestellt.
   note_stem_all: "Suche nach reduzierten Formen aller Wörter (Achtung: Kein 'Z'-Präfix wird hinzugefügt)."
-  note_stemming_applied: Beachte, dass der Normalformreduzierungsalgorithmus nur bei Wörtern in Wahrscheinlichkeitsfeldern angewendert wird - boolesche Filterausdrücke werden nie reduziert.
-  label_default_notifications: standardmäßge Dateibenachrichtigungen
+  note_stemming_applied: Beachten Sie, dass der Stemming- Algorithmus nur bei Wörtern in Wahrscheinlichkeitsfeldern angewendet wird - boolesche Filtereinstellungen werden nie reduziert.
+  label_default_notifications: Standardmäßge Dateibenachrichtigungen
   heading_uploaded_files: Hochgeladene Dateien
   submit_commit: OK
   link_documents: Dateien
@@ -174,7 +174,7 @@ de:
   error_wrong_zip_encoding: Falsche ZIP-Kodierung
   warning_xapian_not_available: Xapian steht nicht zur Verfügung
   menu_dmsf: DMS
-  label_physical_file_delete: Physisches Dateilöschen
+  label_physical_file_delete: Datei physisch löschen
   user_is_not_project_member: Du bist kein Projektmitglied
   heading_access_downloads_emails: Downloads oder Emailversand
   heading_access_first: Erste
@@ -201,8 +201,8 @@ de:
   notice_folder_copied: Ordner kopiert
 
   error_max_email_filesize_exceeded: "Maximale Dateigröße der Anlage wurde überschritten. (%{number} MB)"
-  note_maximum_email_filesize: Maximale Dateigröße der Anlage. 0 bedeutet keinen Limit. Angabe in MB.
-  label_maximum_email_filesize: Maximale Dateigröße der Anlage
+  note_maximum_email_filesize: Maximale Dateigröße der Anhänge, die per E-mail verschickt werden können. 0 bedeutet keinen Limit. Angabe in MB.
+  label_maximum_email_filesize: Maximale Dateigröße der Anhänge
   header_minimum_filesize: Dateifehler wegen minimaler Dateigröße.
   error_minimum_filesize: "Die Datei %{file} ist 0 Bytes groß und wird deswegen nicht angehängt."
   parent_directory: übergeordnetes Verzeichnis
@@ -221,7 +221,7 @@ de:
   select_option_webdav_readonly: nur Lesen
   select_option_webdav_readwrite: Lesen/Schreiben
   label_webdav_strategy: Webdav Strategie
-  note_webdav_strategy: Erlaubt dem Administrator den Wechsel der WebDav Nutzung zwischen nur lesend und auch schreibenden Zugriffen.
+  note_webdav_strategy: Erlaubt dem Administrator den Wechsel der WebDav Rolle für die Endbenutzer zwischen Nur-Lesen oder Lesen-und-Schreiben.
 
   error_unable_delete_dmsf_workflow: Konnte den Workflow nicht löschen
   error_empty_note: Die Notiz darf nicht leer sein.
@@ -281,13 +281,13 @@ de:
   text_email_to_see_status: Um den aktuellen Status des Genehmigungs-Workflows zu sehen klicke auf den Workflowstatus zur Datei in
 
   title_create_link: Verknüpfung anlegen
-  label_link_from: Verlinke von
-  label_link_to: Verlinke zu
+  label_link_from: Link von
+  label_link_to: Verlinke mit
   label_notifications_on: Benachrichtigungen ein
   label_notifications_off: Benachrichtigungen aus
   field_target_file: Quelldatei
   title_download_entries: Download entries
-  label_external: Außen
+  label_external: Extern
 
   label_link_name: Name der Verknüpfung
   label_link_external_url: URL
@@ -304,10 +304,10 @@ de:
   label_links_only: nur Verknüpfungen
 
   label_display_notified_recipients: Zeige benachrichtigte Empfänger
-  note_display_notified_recipients: Der User wird über alle Empfänger der Emailbenachrichtigung informiert.
+  note_display_notified_recipients: Der User wird über über den Empfang der E-mail Benachrichtigungen von allen Empfängern informiert.
   warning_email_notifications: "Emailbenachrichtigung wurde gesendet an %{to}"
 
-  link_trash_bin: Trash bin
+  link_trash_bin: Papierkorb
   title_restore: Restore
   notice_dmsf_file_restored: The document has been successfully restored
   notice_dmsf_folder_restored: The folder has been successfully restored
@@ -321,7 +321,7 @@ de:
   error_lock_exclusively: Unable to lock exclusively an already-locked resource
   error_unlock_parent_locked: Unlock failed - resource parent is locked
 
-  field_dmsf_tree_view: Navigate folders in a tree
+  field_dmsf_tree_view: Ordner in der Baumstruktur durchstöbern
   label_dmsf_version: Version
 
   locked_documents: Gesperrte Dateien
