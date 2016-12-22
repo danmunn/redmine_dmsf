@@ -85,7 +85,7 @@
             "$('#revision_access-#{revision.id}').toggle()",
             :title => l(:title_download_entries) %>
           <%= link_to image_tag('rev_download.png', :plugin => 'redmine_dmsf'),
-            dmsf_file_path(@file, :download => revision),
+            view_dmsf_file_path(@file, :download => revision),
             :title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version) %>
           <%= link_to image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
             delete_revision_path(revision),

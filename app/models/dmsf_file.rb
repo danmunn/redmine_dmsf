@@ -420,6 +420,14 @@ class DmsfFile < ActiveRecord::Base
     self.last_revision && !!(self.last_revision.disk_filename =~ /\.(bmp|gif|jpg|jpe|jpeg|png|svg)$/i)
   end
 
+  def pdf?
+    self.last_revision && !!(self.last_revision.disk_filename =~ /\.(pdf)$/i)
+  end
+
+  def disposition
+    (self.image? || self.pdf?) ? 'inline' : 'attachment'
+  end
+
   def preview(limit)
     result = 'No preview available'
     if (self.last_revision.disk_filename =~ /\.(txt|ini|diff|c|cpp|php|csv|rb|h|erb|html|css|py)$/i)

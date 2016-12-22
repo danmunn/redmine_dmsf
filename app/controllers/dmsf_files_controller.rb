@@ -60,7 +60,7 @@ class DmsfFilesController < ApplicationController
       send_file(@revision.disk_file,
         :filename => filename_for_content_disposition(@revision.formatted_name(title_format)),
         :type => @revision.detect_content_type,
-        :disposition => 'inline')
+        :disposition => @revision.dmsf_file.disposition)
     rescue DmsfAccessError => e
       Rails.logger.error e.message
       render_403
@@ -71,43 +71,6 @@ class DmsfFilesController < ApplicationController
   end
 
   def show
-    # The download is put here to provide more clear and usable links
-    if params.has_key?(:download)
-      begin
-        if params[:download].blank?
-          @revision = @file.last_revision
-        else
-          @revision = DmsfFileRevision.find(params[:download].to_i)
-          raise DmsfAccessError if @revision.dmsf_file != @file
-        end
-        check_project(@revision.dmsf_file)
-        raise ActionController::MissingFile if @revision.dmsf_file.deleted?
-        log_activity('downloaded')
-        access = DmsfFileRevisionAccess.new
-        access.user = User.current
-        access.dmsf_file_revision = @revision
-        access.action = DmsfFileRevisionAccess::DownloadAction
-        access.save!
-        member = Member.where(:user_id => User.current.id, :project_id => @file.project.id).first
-        if member && !member.title_format.nil? && !member.title_format.empty?
-          title_format = member.title_format
-        else
-          title_format = Setting.plugin_redmine_dmsf['dmsf_global_title_format']
-        end
-        send_file(@revision.disk_file,
-          :filename => filename_for_content_disposition(@revision.formatted_name(title_format)),
-          :type => @revision.detect_content_type,
-          :disposition => 'attachment')
-      rescue DmsfAccessError => e
-        Rails.logger.error e.message
-        render_403
-      rescue Exception => e
-        Rails.logger.error e.message
-        render_404
-      end
-      return
-    end
-
     @revision = @file.last_revision
     @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
