@@ -44,13 +44,13 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
   def test_show_file_ok
     # Permissions OK
     @role.add_permission! :view_dmsf_files    
-    get :show, :id => @file.id, :download => ''    
-    assert_response :missing # The file is not physically present.    
+    get :show, :id => @file.id
+    assert_response :success
   end
       
   def test_show_file_forbidden
     # Missing permissions        
-    get :show, :id => @file.id, :download => ''
+    get :show, :id => @file.id
     assert_response :forbidden   
   end      
   
