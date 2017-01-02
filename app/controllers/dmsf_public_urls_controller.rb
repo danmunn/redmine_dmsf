@@ -26,7 +26,7 @@ class DmsfPublicUrlsController < ApplicationController
   skip_before_filter :check_if_login_required, :only => [:show]
 
   def show
-    dmsf_public_url = DmsfPublicUrl.where("token = ? AND expire_at >= date('now')", params[:token]).first
+    dmsf_public_url = DmsfPublicUrl.where("token = ? AND expire_at >= ?", params[:token], DateTime.now).first
     if dmsf_public_url
       revision = dmsf_public_url.dmsf_file.last_revision
       begin
