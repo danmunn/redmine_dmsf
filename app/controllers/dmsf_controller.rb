@@ -443,7 +443,7 @@ class DmsfController < ApplicationController
     end
     max_files = Setting.plugin_redmine_dmsf['dmsf_max_file_download'].to_i
     if max_files > 0 && zip.files.length > max_files
-      raise ZipMaxFilesError#, zip.files.length
+      raise ZipMaxFilesError
     end
     zip
   end

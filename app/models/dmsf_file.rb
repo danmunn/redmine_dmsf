@@ -42,6 +42,7 @@ class DmsfFile < ActiveRecord::Base
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
   has_many :referenced_links, -> { where target_type: DmsfFile.model_name.to_s},
     :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
+  has_many :dmsf_public_urls, :dependent => :destroy
 
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0

@@ -1,0 +1,18 @@
+---
+public_url_1:
+  id: 1
+  dmsf_file_id: 1
+  user_id: 1
+  token: 'd8d33e21914a433b280fdc94450ee212'
+  expire_at: <%= (Time.now + 1.day).to_date %>
+  created_at: <%= DateTime.now() %>
+  updated_at: <%= DateTime.now() %>
+
+public_url_2:
+  id: 2
+  dmsf_file_id: 1
+  user_id: 1
+  token: 'e8d33e21914a433b280fdc94450ee212'
+  expire_at: <%= (Time.now - 1.day).to_date %>
+  created_at: <%= DateTime.now() %>
+  updated_at: <%= DateTime.now() %>

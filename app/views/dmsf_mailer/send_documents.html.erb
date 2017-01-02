@@ -23,7 +23,7 @@
 
 <%= textilizable(@body) %>
 
-<% if @links_only == '1' %>
+<% if @links_only %>
   <% folders = [] %>
   <% files = [] %>
   <% if @folders.present? %>
@@ -38,8 +38,18 @@
             <br/><br/>
             <% dir.dmsf_files.each do |file| %>
               <% unless files.include?(file) %>
-                <%= link_to(h(file.title), dmsf_file_url(file)) %>
-                &nbsp;(<%= link_to(h(file.name), dmsf_file_url(file, :download => '')) %>)
+                <% if @public_urls %>
+                  <% dmsf_public_url = DmsfPublicUrl.new %>
+                  <% dmsf_public_url.dmsf_file = file %>
+                  <% dmsf_public_url.user = User.current %>
+                  <% dmsf_public_url.expire_at = @expired_at %>
+                  <% dmsf_public_url.save %>
+                  <%= link_to(h(file.title), dmsf_public_urls_url(:token => dmsf_public_url.token)) %>
+                   (<%= link_to(h(file.name),  dmsf_public_urls_url(:token => dmsf_public_url.token)) %>)
+                <% else %>
+                  <%= link_to(h(file.title), dmsf_file_url(file)) %>
+                  &nbsp;(<%= link_to(h(file.name), dmsf_file_url(file)) %>)
+                <% end %>
                 <br/>
                 <% files << file %>
               <% end %>
@@ -55,8 +65,18 @@
     <% JSON.parse(@files).each do |id| %>
       <% file = DmsfFile.find_by_id id %>
       <% if file && !files.include?(file) %>
-        <%= link_to(h(file.title), dmsf_file_url(file)) %>
-        &nbsp;(<%= link_to(h(file.name), dmsf_file_url(file, :download => '')) %>)
+        <% if @public_url %>
+          <% dmsf_public_url = DmsfPublicUrl.new %>
+          <% dmsf_public_url.dmsf_file = file %>
+          <% dmsf_public_url.user = User.current %>
+          <% dmsf_public_url.expire_at = @expired_at %>
+          <% dmsf_public_url.save %>
+          <%= link_to(h(file.title), dmsf_public_urls_url(:token => dmsf_public_url.token)) %>
+          &nbsp;(<%= link_to(h(file.name),  dmsf_public_urls_url(:token => dmsf_public_url.token)) %>)
+        <% else %>
+          <%= link_to(h(file.title), dmsf_file_url(file)) %>
+          &nbsp;(<%= link_to(h(file.name), dmsf_file_url(file)) %>)
+        <% end %>
         <br/>
         <% files << file %>
       <% end %>

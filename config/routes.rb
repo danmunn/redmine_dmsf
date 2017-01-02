@@ -36,7 +36,7 @@ RedmineApp::Application.routes.draw do
   post '/projects/:id/dmsf/entries', :controller => 'dmsf', :action => 'entries_operation'
   post '/projects/:id/dmsf/tag_changed', :controller => 'dmsf', :action => 'tag_changed', :as => 'tag_changed'
   post '/projects/:id/dmsf/entries/delete', :controller => 'dmsf', :action => 'delete_entries', :as => 'delete_entries'
-  post '/projects/:id/dmsf/entries/email', :controller => 'dmsf', :action => 'entries_email'
+  post '/projects/:id/dmsf/entries/email', :to => 'dmsf#entries_email', :as => 'email_entries'
   get '/projects/:id/dmsf/entries/download_email_entries', :controller => 'dmsf', :action => 'download_email_entries', :as => 'download_email_entries'
   get '/projects/:id/dmsf/lock', :controller => 'dmsf', :action => 'lock', :as => 'lock_dmsf'
   get '/projects/:id/dmsf/unlock', :controller => 'dmsf', :action => 'unlock', :as => 'unlock_dmsf'
@@ -146,5 +146,8 @@ RedmineApp::Application.routes.draw do
       get 'restore'
     end
   end
+
+  # Public URLs
+  resource :dmsf_public_urls
 
 end
