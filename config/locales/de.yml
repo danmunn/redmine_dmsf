@@ -333,3 +333,5 @@ de:
   label_drag_drop: Modern
 
   error_maximum_upload_filecount: "Nicht mehr als %{filecount} Datai(en) kann man hochladen."
+
+  label_public_urls: Öffentliches URLs gültig bis

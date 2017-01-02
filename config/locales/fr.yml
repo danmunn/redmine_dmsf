@@ -333,3 +333,5 @@ fr:
   label_drag_drop: Modern
 
   error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."
+
+  label_public_urls: Public URLs valid to

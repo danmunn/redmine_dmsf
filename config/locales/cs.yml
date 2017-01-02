@@ -333,3 +333,5 @@ cs:
   label_drag_drop: Moderní
 
   error_maximum_upload_filecount: "Nelze nahrát více než %{filecount} soubor(ů)."
+
+  label_public_urls: Veřejné URL platné do

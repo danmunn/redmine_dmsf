@@ -333,3 +333,5 @@ ru:
   label_drag_drop: Перетаскивание
 
   error_maximum_upload_filecount: "Не более %{filecount} файла(ов) может быть загружено."
+
+  label_public_urls: Public URLs valid to
