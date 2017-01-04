@@ -33,10 +33,9 @@
 <fieldset class="box">
   <legend><%= l(:label_dmsf_workflow_step) %></legend>
   <%= select_tag 'step', dmsf_workflow_steps_options_for_select(@steps),
-    :id => 'selected_step', :onchange => "$('#dmsf_step_name').toggle(this.value == 0);" %>
-  <span id="dmsf_step_name">
-    &nbsp;
+    :id => 'selected_step', :onchange => "$('#dmsf_step_name').toggle(this.value == 0);", :style => 'max-width: 40%'  %>
+  <span id="dmsf_step_name">&nbsp;
     <%= label_tag 'name', l(:field_name) %>
-    <%= text_field_tag 'name', nil, :maxlength => 30 %>
+    <%= text_field_tag 'name', nil, :maxlength => 30, :style => 'max-width: 40%'  %>
   </span>
 </fieldset>
