@@ -277,7 +277,7 @@ class DmsfWorkflowsController < ApplicationController
   end
 
   def new_step
-    @steps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq
+    @steps = @dmsf_workflow.dmsf_workflow_steps.group(:step).to_a
 
     respond_to do |format|
       format.html
@@ -301,6 +301,7 @@ class DmsfWorkflowsController < ApplicationController
           ws.step = step
           ws.user_id = user.id
           ws.operator = operator
+          ws.name = params[:name]
           if ws.save
             @dmsf_workflow.dmsf_workflow_steps << ws
           else

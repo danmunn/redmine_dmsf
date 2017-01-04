@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
     wfs = DmsfWorkflowStep.new
     wfs.dmsf_workflow_id = 1
     wfs.step = 2
+    wfs.name = '2nd step'
     wfs.user_id = 3 
     wfs.operator = 1
     assert wfs.save, wfs.errors.full_messages.to_sentence
@@ -51,13 +52,15 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
   
   def test_update    
     @wfs1.dmsf_workflow_id = 2    
-    @wfs1.step = 2    
+    @wfs1.step = 2
+    @wfs1.name = '2nd step'
     @wfs1.user_id = 2    
     @wfs1.operator = 2    
     assert @wfs1.save, @wfs1.errors.full_messages.to_sentence
     @wfs1.reload    
     assert_equal 2, @wfs1.dmsf_workflow_id
     assert_equal 2, @wfs1.step
+    assert_equal '2nd step', @wfs1.name
     assert_equal 2, @wfs1.user_id
     assert_equal 2, @wfs1.operator
   end
@@ -92,6 +95,12 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
     @wfs2.step = @wfs1.step
     assert !@wfs2.save
     assert_equal 1, @wfs2.errors.count        
+  end
+
+  def test_validate_name_length
+    @wfs1.name = 'a' * 31
+    assert !@wfs1.save
+    assert_equal 1, @wfs1.errors.count
   end
   
   def test_destroy

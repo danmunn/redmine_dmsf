@@ -26,6 +26,7 @@ class DmsfWorkflowStep < ActiveRecord::Base
   validates :user_id, :presence => true
   validates :operator, :presence => true
   validates_uniqueness_of :user_id, :scope => [:dmsf_workflow_id, :step]
+  validates_length_of :name, :maximum => 30
 
   OPERATOR_OR  = 0
   OPERATOR_AND = 1

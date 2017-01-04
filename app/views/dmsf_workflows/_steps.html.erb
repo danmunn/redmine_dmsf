@@ -44,6 +44,7 @@
   <% if steps.any? %>
     <table class="list steps">
       <thead><tr>
+        <th></th>
         <th><%= l(:label_dmsf_workflow_step) %></th>
         <th><%= l(:label_dmsf_workflow_approval_plural) %></th>
         <th></th>
@@ -52,6 +53,8 @@
       <% steps.each do |i|%>
         <tr id="step-<%= i %>" class="<%= cycle 'odd', 'even' %> step">
           <td class="id"><%= i %></td>
+          <% index = @dmsf_workflow.dmsf_workflow_steps.order(:id).index{ |s| s.step == i } %>
+          <td class="name"><%= @dmsf_workflow.dmsf_workflow_steps[index].name if index %></td>
           <td class="approval">
             <% stps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact %>
             <% stps.each_with_index do |step, j| %>

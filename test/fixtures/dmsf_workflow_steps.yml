@@ -3,6 +3,7 @@ wfs2:
   id: 2
   dmsf_workflow_id: 1
   step: 2
+  name: '2nd step'
   user_id: 2
   operator: 1 
   
@@ -10,6 +11,7 @@ wfs1:
   id: 1
   dmsf_workflow_id: 1
   step: 1
+  name: '1st step'
   user_id: 1
   operator: 0
   
@@ -31,5 +33,6 @@ wfs5:
   id: 5
   dmsf_workflow_id: 1
   step: 3
+  name: '3rd step'
   user_id: 2
   operator: 1 
