@@ -31,13 +31,15 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
     @wfs2 = DmsfWorkflowStep.find(2)
     @wfs5 = DmsfWorkflowStep.find(5)
     @revision1 = DmsfFileRevision.find_by_id 1
+    @wf2 = DmsfWorkflow.find(2)
   end
   
   def test_truth
     assert_kind_of DmsfWorkflowStep, @wfs1
     assert_kind_of DmsfWorkflowStep, @wfs2
     assert_kind_of DmsfWorkflowStep, @wfs5
-    assert_kind_of DmsfFileRevision, @revision1    
+    assert_kind_of DmsfFileRevision, @revision1
+    assert_kind_of DmsfWorkflow, @wf2
   end
   
   def test_create
@@ -124,5 +126,14 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
       :dmsf_workflow_step_id => @wfs5.id, 
       :dmsf_file_revision_id => @revision1.id).first
   end
-  
+
+  def test_copy_to
+    wfs = @wfs1.copy_to(@wf2);
+    assert_equal wfs.dmsf_workflow_id, @wf2.id
+    assert_equal wfs.step, @wfs1.step
+    assert_equal wfs.name, @wfs1.name
+    assert_equal wfs.user_id, @wfs1.user_id
+    assert_equal wfs.operator, @wfs1.operator
+  end
+
 end
