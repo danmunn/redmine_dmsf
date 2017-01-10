@@ -335,3 +335,7 @@ cs:
   error_maximum_upload_filecount: "Nelze nahrát více než %{filecount} soubor(ů)."
 
   label_public_urls: Veřejné URL platné do
+
+  label_webdav: WebDAV
+  label_full_text: Full-textové vyhledávání
+  link_extension: Příp.

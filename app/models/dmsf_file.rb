@@ -51,7 +51,7 @@ class DmsfFile < ActiveRecord::Base
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }
 
   validates :name, :presence => true
-  validates_format_of :name, :with => DmsfFolder.invalid_characters,
+  validates_format_of :name, :with => DmsfFolder::INVALID_CHARACTERS,
     :message => l(:error_contains_invalid_character)
 
   validate :validates_name_uniqueness
@@ -468,6 +468,13 @@ class DmsfFile < ActiveRecord::Base
       return true if file_revision.user == user
     end
     false
+  end
+
+  def custom_value(custom_field)
+    self.last_revision.custom_field_values.each do |cv|
+      return cv.value if cv.custom_field == custom_field
+    end
+    nil
   end
 
 end

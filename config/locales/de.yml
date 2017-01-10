@@ -335,3 +335,7 @@ de:
   error_maximum_upload_filecount: "Nicht mehr als %{filecount} Datai(en) kann man hochladen."
 
   label_public_urls: Öffentliches URLs gültig bis
+
+  label_webdav: WebDAV
+  label_full_text: Full-text search
+  link_extension: Ext

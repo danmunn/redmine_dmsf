@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,24 +21,48 @@
 %>
 
 <td class="dmsf_checkbox"></td>
-<td class="dmsf_title">
-  <% if @tree_view %>
-    <span class='dmsf_expander' <%= onclick.html_safe %>></span>
-  <% end %>
-  <%= link_to(h(title),
-        link.external_url,
-        :target => '_blank',
-        :class => 'icon dmsf_icon-link') %>
-  <div class="dmsf_filename" title="<%= l(:label_target_folder) %>">
-    <%= link.external_url %>
-  </div>
-  <%= '</span>'.html_safe if @tree_view %>
-</td>
-<td class="dmsf_size"></td>
-<td class="dmsf_modified"><%= format_time(link.updated_at) %></td>
-<td class="dmsf_version"></td>
-<td class="dmsf_workflow"></td>
-<td class="dmsf_author"><%= h(link.user) %></td>
+<% if DmsfFolder.is_column_on?('id') %>
+  <td class="id"></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('title') %>
+  <td class="dmsf_title">
+    <% if @tree_view %>
+      <span class='dmsf_expander' <%= onclick.html_safe %>></span>
+    <% end %>
+    <%= link_to(h(title),
+          link.external_url,
+          :target => '_blank',
+          :class => 'icon dmsf_icon-link') %>
+    <div class="dmsf_filename" title="<%= l(:label_target_folder) %>">
+      <%= link.external_url %>
+    </div>
+    <%= '</span>'.html_safe if @tree_view %>
+  </td>
+<% end %>
+<% if DmsfFolder.is_column_on?('extension') %>
+    <td class="dmsf_extension"></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('size') %>
+  <td class="dmsf_size"></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('modified') %>
+  <td class="dmsf_modified"><%= format_time(link.updated_at) %></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('version') %>
+  <td class="dmsf_version"></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('workflow') %>
+  <td class="dmsf_workflow"></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('author') %>
+  <td class="dmsf_author"><%= h(link.user) %></td>
+<% end %>
+<% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
+<% cfs.each do |c| %>
+    <% if DmsfFolder.is_column_on?(c.name) %>
+        <td class="dmsf_cf"></td>
+    <% end %>
+<% end %>
 <td class="dmsf_buttons">
   <span class="icon"></span>
   <span class="icon"></span>

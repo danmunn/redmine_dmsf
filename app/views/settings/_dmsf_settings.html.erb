@@ -1,8 +1,11 @@
-<%# Redmine plugin for Document Management System "Features"
+<%
+# encoding: utf-8
+#
+# Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,7 +19,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<em class="info">
+  <%= l(:label_general) %>
+</em>
 
 <p>
   <%= content_tag(:label, l(:label_maximum_files_upload)) %>
@@ -121,6 +129,28 @@
 </p>
 
 <hr/>
+<em class="info">
+  <%= l(:menu_dmsf) %> <%= l(:field_column_names) %>
+</em>
+
+<p>
+  <%= content_tag(:label, l(:field_column_names)) %>
+  <% columns = DmsfFolder::AVAILABLE_COLUMNS.dup %>
+  <% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
+  <% columns.concat(cfs.map{ |c| c.name }) %>
+  <% selected_columns = @settings[:dmsf_columns] %>
+  <% selected_columns = DmsfFolder::DEFAULT_COLUMNS unless selected_columns %>
+  <% columns.each_with_index do |column, i| %>
+    <%= check_box_tag('settings[dmsf_columns][]', column, selected_columns.include?(column)) %>
+    <%= h column.capitalize %>
+    <br/>
+  <% end %>
+</p>
+
+<hr/>
+<em class="info">
+  <%= l(:label_webdav) %>
+</em>
 
 <p>
   <%= content_tag(:label, l(:label_webdav)) %>
@@ -149,6 +179,9 @@
 <% end %>
 
 <hr/>
+<em class="info">
+  <%= l(:label_full_text) %>
+</em>
 
 <% begin %>
   <% require 'xapian' %>

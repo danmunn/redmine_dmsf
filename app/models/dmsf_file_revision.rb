@@ -55,7 +55,7 @@ class DmsfFileRevision < ActiveRecord::Base
       where("#{DmsfFile.table_name}.deleted = ?", STATUS_ACTIVE)
 
   validates :title, :presence => true
-  validates_format_of :name, :with => DmsfFolder.invalid_characters,
+  validates_format_of :name, :with => DmsfFolder::INVALID_CHARACTERS,
     :message => l(:error_contains_invalid_character)
 
   def project

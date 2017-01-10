@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,21 +22,49 @@
 
 <td class="dmsf_checkbox"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_restore_or_delete), :id => "file_#{id}") %></td>
-<td class="dmsf_title">  
-  <%= content_tag(:span, h(title), 
-    :title => h(file.last_revision.try(:tooltip)),
-    :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}") %>
-  <div class="dmsf_filename" title="<%= l(:title_filename_for_download)%>"><%= h(link ? link.path : file.display_name) %></div>
-</td>
-<td class="dmsf_size"><%= number_to_human_size(file.last_revision.size) %></td>
-<td class="dmsf_modified">
-  <%= format_time(file.last_revision.updated_at) %>  
-</td>
-<td class="dmsf_version" title="<%= file.last_revision.comment %>"><%= file.last_revision.version %></td>
-<td class="dmsf_workflow">                                    
-  <%= file.last_revision.workflow_str(false) %>  
-</td>
-<td class="dmsf_author"><%= h(file.last_revision.user) %></td>
+<% if DmsfFolder.is_column_on?('id') %>
+    <td class="id"><%= file.id %></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('title') %>
+  <td class="dmsf_title">
+    <%= content_tag(:span, h(title),
+      :title => h(file.last_revision.try(:tooltip)),
+      :class => "icon icon-file #{DmsfHelper.filetype_css(file.name)}") %>
+    <div class="dmsf_filename" title="<%= l(:title_filename_for_download)%>"><%= h(link ? link.path : file.display_name) %></div>
+  </td>
+<% end %>
+<% if DmsfFolder.is_column_on?('extension') %>
+    <td class="dmsf_extension">
+      <%= $1 if file.last_revision.disk_filename =~ /\.(.+)$/ %>
+    </td>
+<% end %>
+<% if DmsfFolder.is_column_on?('size') %>
+  <td class="dmsf_size"><%= number_to_human_size(file.last_revision.size) %></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('modified') %>
+  <td class="dmsf_modified">
+    <%= format_time(file.last_revision.updated_at) %>
+  </td>
+<% end %>
+<% if DmsfFolder.is_column_on?('version') %>
+  <td class="dmsf_version" title="<%= file.last_revision.comment %>"><%= file.last_revision.version %></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('workflow') %>
+  <td class="dmsf_workflow">
+    <%= file.last_revision.workflow_str(false) %>
+  </td>
+<% end %>
+<% if DmsfFolder.is_column_on?('author') %>
+  <td class="dmsf_author"><%= h(file.last_revision.user) %></td>
+<% end %>
+<% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
+<% cfs.each do |c| %>
+    <% if DmsfFolder.is_column_on?(c.name) %>
+        <td class="dmsf_cf">
+          <%= file.custom_value(c) %>
+        </td>
+    <% end %>
+<% end %>
 <td class="dmsf_buttons">
   <% if @file_manipulation_allowed %>
     <% if link %>

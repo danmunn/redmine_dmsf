@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@konton.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@konton.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,9 +24,6 @@ class DmsfFolder < ActiveRecord::Base
 
   include RedmineDmsf::Lockable
 
-  cattr_reader :invalid_characters
-  @@invalid_characters = /\A[^\/\\\?":<>]*\z/
-
   belongs_to :project
   belongs_to :dmsf_folder
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
@@ -46,8 +43,11 @@ class DmsfFolder < ActiveRecord::Base
   has_many :locks, -> { where(entity_type:  1).order("#{DmsfLock.table_name}.updated_at DESC") },
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
 
-  STATUS_DELETED = 1
-  STATUS_ACTIVE = 0
+  INVALID_CHARACTERS = /\A[^\/\\\?":<>]*\z/.freeze
+  STATUS_DELETED = 1.freeze
+  STATUS_ACTIVE = 0.freeze
+  AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
+  DEFAULT_COLUMNS = %w(title size modified version workflow author).freeze
 
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }
@@ -69,7 +69,7 @@ class DmsfFolder < ActiveRecord::Base
   validates :title, :presence => true
   validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted],
     conditions: -> { where(:deleted => STATUS_ACTIVE) }
-  validates_format_of :title, :with => @@invalid_characters,
+  validates_format_of :title, :with => INVALID_CHARACTERS,
     :message => l(:error_contains_invalid_character)
   validate :check_cycle
 
@@ -294,6 +294,91 @@ class DmsfFolder < ActiveRecord::Base
     folder_links.visible.count +
     file_links.visible.count +
     url_links.visible.count
+  end
+
+  def self.is_column_on?(column)
+    columns = Setting.plugin_redmine_dmsf['dmsf_columns']
+    columns = DmsfFolder::DEFAULT_COLUMNS unless columns
+    columns.include? column
+  end
+
+  def custom_value(custom_field)
+    self.custom_field_values.each do |cv|
+      return cv.value if cv.custom_field == custom_field
+    end
+    nil
+  end
+
+  def self.get_column_position(column)
+    pos = 0
+    # 0 - checkbox
+    # 1 - id
+    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('id')
+      pos += 1
+    end
+    # 2 - title
+    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('title')
+      pos += 1
+      return pos if column == 'title'
+    else
+      return nil if column == 'title'
+    end
+    # 3 - extension
+    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('extension')
+      pos += 1
+    end
+    # 4 - size
+    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('size')
+      pos += 1
+      return pos if column == 'size'
+    else
+      return nil if column == 'size'
+    end
+    # 5 - modified
+    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('modified')
+      pos += 1
+      return pos if column == 'modified'
+    else
+      return nil if column == 'modified'
+    end
+    # 6 - version
+    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('version')
+      pos += 1
+      return pos if column == 'version'
+    else
+      return nil if column == 'version'
+    end
+    # 7 - workflow
+    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('workflow')
+      pos += 1
+    end
+    # 8 - author
+    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('author')
+      pos += 1
+    end
+    # 9 - custom fields
+    cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField')
+    cfs.each do |c|
+      if DmsfFolder.is_column_on?(c.name)
+        pos += 1
+      end
+    end
+    # 10 - commands
+    pos += 1
+    return pos if column == 'commands'
+    # 11 - (position)
+    pos += 1
+    return pos if column == 'position'
+    # 12 - (size)
+    pos += 1
+    return pos if column == 'size_calculated'
+    # 13 - (modified)
+    pos += 1
+    return pos if column == 'modified_calculated'
+    # 14 - (version)
+    pos += 1
+    return pos if column == 'version_calculated'
+    nil
   end
 
   private

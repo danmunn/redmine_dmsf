@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,23 +22,49 @@
 
 <td class="dmsf_checkbox"><%= check_box_tag(name, id, false, 
   :title => l(:title_check_for_restore_or_delete), :id => "subfolder_#{id}") %></td>
-<td class="dmsf_title">                  
-  <%= content_tag(:span, h(title), 
-    :title => subfolder ? h(subfolder.description) : nil,
-    :class => 'icon icon-folder') %>
-  <% if link %>
-    <div class="dmsf_filename" title="<%= l(:label_target_folder)%>"><%= link.path %></div>
-  <% else %>
-    <div class="dmsf_filename" title="<%= l(:title_items)%>">[<%= subfolder.items %>]</div>
-  <% end %>
-</td>            
-<td class="dmsf_size"></td>
-<td class="dmsf_modified">
-  <%= format_time(subfolder.modified) if subfolder %>                      
-</td>
-<td class="dmsf_version"></td>
-<td class="dmsf_workflow"></td>
-<td class="dmsf_author"><%= h(subfolder.user) %></td>
+<% if DmsfFolder.is_column_on?('id') %>
+    <td class="id"><%= link_to(subfolder.id, edit_dmsf_path(:id => project, :folder_id => subfolder)) %></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('title') %>
+  <td class="dmsf_title">
+    <%= content_tag(:span, h(title),
+      :title => subfolder ? h(subfolder.description) : nil,
+      :class => 'icon icon-folder') %>
+    <% if link %>
+      <div class="dmsf_filename" title="<%= l(:label_target_folder)%>"><%= link.path %></div>
+    <% else %>
+      <div class="dmsf_filename" title="<%= l(:title_items)%>">[<%= subfolder.items %>]</div>
+    <% end %>
+  </td>
+<% end %>
+<% if DmsfFolder.is_column_on?('extension') %>
+    <td class="dmsf_extension"></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('size') %>
+  <td class="dmsf_size"></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('modified') %>
+  <td class="dmsf_modified">
+    <%= format_time(subfolder.modified) if subfolder %>
+  </td>
+<% end %>
+<% if DmsfFolder.is_column_on?('version') %>
+  <td class="dmsf_version"></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('workflow') %>
+  <td class="dmsf_workflow"></td>
+<% end %>
+<% if DmsfFolder.is_column_on?('author') %>
+  <td class="dmsf_author"><%= h(subfolder.user) %></td>
+<% end %>
+<% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
+<% cfs.each do |c| %>
+    <% if DmsfFolder.is_column_on?(c.name) %>
+        <td class="dmsf_cf">
+          <%= subfolder.custom_value(c) %>
+        </td>
+    <% end %>
+<% end %>
 <td class="dmsf_buttons">
   <% if @folder_manipulation_allowed %>
     <% if link %>

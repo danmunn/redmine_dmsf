@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,17 +26,41 @@
       <th class="dmsf_checkbox dmsf_th">
         <input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
       </th>
-      <th class ="dmsf_th"><%= l(:link_title) %></th>
-      <th class ="dmsf_th"><%= l(:link_size) %></th>
-      <th class ="dmsf_th"><%= l(:link_modified) %></th>
-      <th title="<%= l(:label_dmsf_version) %>" class ="dmsf_th"><%= l(:link_ver) %></th>
-      <th class ="dmsf_th"><%= l(:link_workflow) %></th>
-      <th class ="dmsf_th"><%= l(:link_author) %></th>
-      <th class ="dmsf_th"></th>
-      <th class="dmsf_invisible"></th>
-      <th class="dmsf_invisible"></th>
-      <th class="dmsf_invisible"></th>
-      <th class="dmsf_invisible"></th>
+      <% if DmsfFolder.is_column_on?('id') %>
+          <th class="dmsf_th">#</th>
+      <% end %>
+      <% if DmsfFolder.is_column_on?('title') %>
+        <th class="dmsf_th"><%= l(:link_title) %></th>
+      <% end %>
+      <% if DmsfFolder.is_column_on?('extension') %>
+          <th class="dmsf_th"><%= l(:link_extension) %></th>
+      <% end %>
+      <% if DmsfFolder.is_column_on?('size') %>
+        <th class="dmsf_th"><%= l(:link_size) %></th>
+      <% end %>
+      <% if DmsfFolder.is_column_on?('modified') %>
+        <th class="dmsf_th"><%= l(:link_modified) %></th>
+      <% end %>
+      <% if DmsfFolder.is_column_on?('version') %>
+        <th title="<%= l(:label_dmsf_version) %>" class ="dmsf_th"><%= l(:link_ver) %></th>
+      <% end %>
+      <% if DmsfFolder.is_column_on?('workflow') %>
+        <th class="dmsf_th"><%= l(:link_workflow) %></th>
+      <% end %>
+      <% if DmsfFolder.is_column_on?('author') %>
+        <th class="dmsf_th"><%= l(:link_author) %></th>
+      <% end %>
+      <% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
+      <% cfs.each do |c| %>
+        <% if DmsfFolder.is_column_on?(c.name) %>
+          <th class="dmsf_th"><%= h(c.name) %></th>
+        <% end %>
+      <% end %>
+      <th class ="dmsf_th"><%# controls %></th>
+      <th class="dmsf_invisible"><%# position %></th>
+      <th class="dmsf_invisible"><%# size %></th>
+      <th class="dmsf_invisible"><%# updated %></th>
+      <th class="dmsf_invisible"><%# version %></th>
     </tr>
   </thead>
   <tbody>

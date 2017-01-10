@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,26 +28,27 @@ Redmine::Plugin.register :redmine_dmsf do
   name 'DMSF'
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
-  version '1.5.8'
+  version '1.5.9 - devel'
   url 'http://www.redmine.org/plugins/dmsf'
   author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   
   requires_redmine :version_or_higher => '3.3.0'
   
   settings  :partial => 'settings/dmsf_settings',
-    :default => {
-      'dmsf_max_file_upload' => '0',
-      'dmsf_max_file_download' => '0',
-      'dmsf_max_email_filesize' => '0',
-      'dmsf_max_ajax_upload_filesize' => '100',
-      'dmsf_storage_directory' => Rails.root.join('files/dmsf').to_s,              
-      'dmsf_index_database' => Rails.root.join('files/dmsf_index').to_s,
-      'dmsf_stemming_lang' => 'english',
-      'dmsf_stemming_strategy' => 'STEM_NONE',
-      'dmsf_webdav' => '1',
-      'dmsf_display_notified_recipients' => 0,
-      'dmsf_global_title_format' => ''
-    }
+            :default => {
+              'dmsf_max_file_upload' => '0',
+              'dmsf_max_file_download' => '0',
+              'dmsf_max_email_filesize' => '0',
+              'dmsf_max_ajax_upload_filesize' => '100',
+              'dmsf_storage_directory' => Rails.root.join('files/dmsf').to_s,
+              'dmsf_index_database' => Rails.root.join('files/dmsf_index').to_s,
+              'dmsf_stemming_lang' => 'english',
+              'dmsf_stemming_strategy' => 'STEM_NONE',
+              'dmsf_webdav' => '1',
+              'dmsf_display_notified_recipients' => 0,
+              'dmsf_global_title_format' => '',
+              'dmsf_columns' => %w(title size modified version workflow author)
+            }
   
   menu :project_menu, :dmsf, { :controller => 'dmsf', :action => 'show' }, :caption => :menu_dmsf, :before => :documents, :param => :id
     
