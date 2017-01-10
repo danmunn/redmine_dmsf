@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -48,10 +48,9 @@ class DmsfDigest
     count = revisions.count
     n = 0
     revisions.each_with_index do |rev, i|
-      if rev.create_digest
-        rev.save unless @dry_run
-        n += 1
-      end
+      rev.create_digest
+      rev.save unless @dry_run
+      n += 1
       # Progress bar
       print "\r#{i * 100 / count}%"
     end

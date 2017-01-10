@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -273,18 +273,12 @@ class DmsfFileRevision < ActiveRecord::Base
       Digest::MD5.file(path).hexdigest
     rescue Exception => e
       Rails.logger.error e.message
-      nil
+      0
     end
   end
 
   def create_digest
-    begin
-      self.digest = Digest::MD5.file(self.disk_file).hexdigest
-      true
-    rescue Exception => e
-      Rails.logger.error e.message
-      false
-    end
+    self.digest = DmsfFileRevision.create_digest(self.disk_file)
   end
 
   def tooltip
