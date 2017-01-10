@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,9 +21,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
-  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, 
-    :dmsf_file_revisions, :roles, :members, :member_roles, :enabled_modules, 
-    :enumerations, :dmsf_locks
+  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles, :members,
+           :member_roles, :enabled_modules, :enumerations, :dmsf_locks
          
   def setup
     @revision5 = DmsfFileRevision.find_by_id 5    
@@ -45,6 +44,10 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   def test_destroy       
     @revision5.delete true
     assert_nil DmsfFileRevision.find_by_id @revision5.id    
+  end
+
+  def test_create_digest
+    assert_equal @revision5.create_digest, 0, "MD5 should be 0, if the file is missing"
   end
 
 end
