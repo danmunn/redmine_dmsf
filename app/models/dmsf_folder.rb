@@ -311,58 +311,60 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.get_column_position(column)
     pos = 0
+    columns = Setting.plugin_redmine_dmsf['dmsf_columns']
+    columns = DmsfFolder::DEFAULT_COLUMNS unless columns
     # 0 - checkbox
     # 1 - id
-    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('id')
+    if columns.include?('id')
       pos += 1
       return pos if column == 'id'
     else
       return nil if column == 'id'
     end
     # 2 - title
-    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('title')
+    if columns.include?('title')
       pos += 1
       return pos if column == 'title'
     else
       return nil if column == 'title'
     end
     # 3 - extension
-    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('extension')
+    if columns.include?('extension')
       pos += 1
       return pos if column == 'extension'
     else
       return nil if column == 'extension'
     end
     # 4 - size
-    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('size')
+    if columns.include?('size')
       pos += 1
       return pos if column == 'size'
     else
       return nil if column == 'size'
     end
     # 5 - modified
-    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('modified')
+    if columns.include?('modified')
       pos += 1
       return pos if column == 'modified'
     else
       return nil if column == 'modified'
     end
     # 6 - version
-    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('version')
+    if columns.include?('version')
       pos += 1
       return pos if column == 'version'
     else
       return nil if column == 'version'
     end
     # 7 - workflow
-    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('workflow')
+    if columns.include?('workflow')
       pos += 1
       return pos if column == 'workflow'
     else
       return nil if column == 'workflow'
     end
     # 8 - author
-    if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('author')
+    if columns.include?('author')
       pos += 1
       return pos if column == 'author'
     else
