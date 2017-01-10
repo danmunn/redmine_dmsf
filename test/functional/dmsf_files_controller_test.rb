@@ -58,7 +58,7 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     # Permissions OK
     @role.add_permission! :view_dmsf_files    
     get :view, :id => @file.id   
-    assert_response :missing # The file is not physically present.
+    assert_response :success
   end
       
   def test_view_file_forbidden
