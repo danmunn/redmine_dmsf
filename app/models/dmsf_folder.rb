@@ -315,6 +315,9 @@ class DmsfFolder < ActiveRecord::Base
     # 1 - id
     if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('id')
       pos += 1
+      return pos if column == 'id'
+    else
+      return nil if column == 'id'
     end
     # 2 - title
     if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('title')
@@ -326,6 +329,9 @@ class DmsfFolder < ActiveRecord::Base
     # 3 - extension
     if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('extension')
       pos += 1
+      return pos if column == 'extension'
+    else
+      return nil if column == 'extension'
     end
     # 4 - size
     if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('size')
@@ -351,10 +357,16 @@ class DmsfFolder < ActiveRecord::Base
     # 7 - workflow
     if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('workflow')
       pos += 1
+      return pos if column == 'workflow'
+    else
+      return nil if column == 'workflow'
     end
     # 8 - author
     if Setting.plugin_redmine_dmsf['dmsf_columns'].include?('author')
       pos += 1
+      return pos if column == 'author'
+    else
+      return nil if column == 'author'
     end
     # 9 - custom fields
     cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField')
