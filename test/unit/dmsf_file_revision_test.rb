@@ -25,11 +25,15 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
            :member_roles, :enabled_modules, :enumerations, :dmsf_locks
          
   def setup
-    @revision5 = DmsfFileRevision.find_by_id 5    
+    @revision1 = DmsfFileRevision.find_by_id 1
+    @revision2 = DmsfFileRevision.find_by_id 2
+    @revision5 = DmsfFileRevision.find_by_id 5
   end
   
   def test_truth
-    assert_kind_of DmsfFileRevision, @revision5    
+    assert_kind_of DmsfFileRevision, @revision1
+    assert_kind_of DmsfFileRevision, @revision2
+    assert_kind_of DmsfFileRevision, @revision5
   end
   
   def test_delete_restore      
@@ -48,6 +52,39 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
 
   def test_create_digest
     assert_equal @revision5.create_digest, 0, "MD5 should be 0, if the file is missing"
+  end
+  
+  def test_save_and_destroy_with_cache
+    RedmineDmsf::Webdav::Cache.init_testcache
+    
+    # save
+    cache_key = @revision1.propfind_cache_key
+    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    @revision1.save
+    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
+    
+    # destroy
+    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    @revision1.destroy
+    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    
+    # save!
+    cache_key = @revision2.propfind_cache_key
+    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    @revision2.save!
+    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    
+    RedmineDmsf::Webdav::Cache.init_nullcache
   end
 
 end
