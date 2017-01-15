@@ -58,7 +58,3 @@ require 'redmine_dmsf/hooks/views/my_account_view_hooks'
 
 # Macros
 require 'redmine_dmsf/macros'
-
-# Add the plugin view folder into ActionMailer's paths to search
-ActionMailer::Base.append_view_path(File.expand_path(
-    File.dirname(__FILE__) + '/../app/views'))
