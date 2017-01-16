@@ -47,9 +47,10 @@ class DmsfExport
   
   def export
       puts "\"Title\";\"Size\";\"Modified\";\"Ver.\";\"Workflow\";\"Author\";\"Doc ID\";\"Active\nDoc\nrevision\";\"URL\"\n"
-      @folder.dmsf_files.visible.order(:name).each do |f|
+      files = @folder.dmsf_files.visible.to_a
+      files.sort_by!{ |f| f.title }
+      files.each do |f|
         puts f.to_csv
-        puts "\n"
       end
   end
 

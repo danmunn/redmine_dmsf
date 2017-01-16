@@ -511,7 +511,7 @@ class DmsfFile < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
   def to_csv
-    csv =  "\"#{self.display_name}\""
+    csv =  "\"#{self.title}\""
     csv << ';'
     csv << "\"#{number_to_human_size(self.last_revision.size)}\""
     csv << ';'
