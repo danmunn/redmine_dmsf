@@ -507,4 +507,30 @@ class DmsfFile < ActiveRecord::Base
     end
   end
 
+  include ActionView::Helpers::NumberHelper
+  include Rails.application.routes.url_helpers
+
+  def to_csv
+    csv =  "\"#{self.display_name}\""
+    csv << ';'
+    csv << "\"#{number_to_human_size(self.last_revision.size)}\""
+    csv << ';'
+    csv << "\"#{format_time(self.last_revision.updated_at)}\""
+    csv << ';'
+    csv << "\"#{self.last_revision.version}\""
+    csv << ';'
+    csv << "\"#{self.last_revision.workflow_str(false)}\""
+    csv << ';'
+    csv << "\"#{self.last_revision.user}\""
+    csv << ';'
+    csv << "\"#{self.id}\""
+    csv << ';'
+    csv << "\"r#{self.last_revision.id}\""
+    csv << ';'
+    default_url_options[:host] = Setting.host_name
+    csv << "\"#{url_for(:controller => :dmsf_files, :action => 'view', :id => self)}\""
+    csv << ';'
+    csv
+  end
+
 end
