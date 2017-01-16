@@ -25,10 +25,14 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   fixtures :projects, :users, :email_addresses, :dmsf_folders, :roles, :members, :member_roles
          
   def setup    
+    @folder4 = DmsfFolder.find_by_id 4
+    @folder5 = DmsfFolder.find_by_id 5
     @folder6 = DmsfFolder.find_by_id 6
   end
   
   def test_truth
+    assert_kind_of DmsfFolder, @folder4
+    assert_kind_of DmsfFolder, @folder5
     assert_kind_of DmsfFolder, @folder6
   end
     
@@ -96,5 +100,47 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert_equal DmsfFolder.get_column_position('version_calculated'), 11,
                  "The expected position of the 'version_calculated' column is 14"
   end
-  
+
+  def test_save_and_destroy_with_cache
+    RedmineDmsf::Webdav::Cache.init_testcache
+    
+    # save
+    cache_key = @folder4.propfind_cache_key
+    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    @folder4.save
+    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
+    
+    # destroy
+    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    @folder4.destroy
+    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    RedmineDmsf::Webdav::Cache.cache.clear
+    
+    # save!
+    cache_key = @folder5.propfind_cache_key
+    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    @folder5.save!
+    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
+    
+    # destroy!
+    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    @folder5.destroy!
+    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    
+    RedmineDmsf::Webdav::Cache.init_nullcache
+  end  
 end

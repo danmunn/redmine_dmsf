@@ -35,6 +35,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     @file3 = DmsfFile.find_by_id 3
     @file4 = DmsfFile.find_by_id 4
     @file5 = DmsfFile.find_by_id 5
+    @file6 = DmsfFile.find_by_id 6
     User.current = nil
   end
 
@@ -47,6 +48,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_kind_of DmsfFile, @file3
     assert_kind_of DmsfFile, @file4
     assert_kind_of DmsfFile, @file5
+    assert_kind_of DmsfFile, @file6
   end
 
   def test_project_file_count_differs_from_project_visibility_count
@@ -133,6 +135,48 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_equal 0, @file4.dmsf_file_revisions.count
     assert_equal 0, @file4.referenced_links.count
     @file4.dmsf_folder.lock!
+  end
+  
+  def test_save_and_destroy_with_cache
+    RedmineDmsf::Webdav::Cache.init_testcache
+    
+    # save
+    cache_key = @file5.propfind_cache_key
+    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    @file5.save
+    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
+    
+    # destroy
+    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    @file5.destroy
+    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    
+    # save!
+    cache_key = @file6.propfind_cache_key
+    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    @file6.save!
+    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
+    
+    # destroy!
+    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    @file6.destroy!
+    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
+    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
+    
+    RedmineDmsf::Webdav::Cache.init_nullcache
   end
 
 end

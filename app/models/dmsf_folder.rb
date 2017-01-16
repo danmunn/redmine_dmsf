@@ -295,7 +295,7 @@ class DmsfFolder < ActiveRecord::Base
     file_links.visible.count +
     url_links.visible.count
   end
-
+  
   def self.is_column_on?(column)
     columns = Setting.plugin_redmine_dmsf['dmsf_columns']
     columns = DmsfFolder::DEFAULT_COLUMNS unless columns
@@ -393,6 +393,35 @@ class DmsfFolder < ActiveRecord::Base
     pos += 1
     return pos if column == 'version_calculated'
     nil
+  end
+
+  def save(*args)
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)    
+    super(*args)
+  end
+  
+  def save!(*args)
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)    
+    super(*args)
+  end
+
+  def destroy
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)    
+    super
+  end
+
+  def destroy!
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)    
+    super
+  end
+  
+  def propfind_cache_key
+    if dmsf_folder_id.nil?
+      # Folder is in project root
+      return "PROPFIND/#{project_id}"
+    else
+      return "PROPFIND/#{project_id}/#{dmsf_folder_id}"
+    end
   end
 
   private

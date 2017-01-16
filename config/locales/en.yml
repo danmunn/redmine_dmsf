@@ -339,3 +339,7 @@ en:
   label_webdav: WebDAV
   label_full_text: Full-text search
   link_extension: Ext
+
+  label_memcached_servers: "memcached server address"
+  text_memcached_servers: "Address to memcached server. Only a single server is supported, if empty then caching is disabled. After changing this the server must be restarted!"
+
