@@ -415,7 +415,7 @@ class DmsfWorkflowsController < ApplicationController
         end
       end
     end
-    redirect_to :back
+    redirect_to dmsf_workflow_path(@dmsf_workflow)
   end
 
   def delete_step
@@ -433,7 +433,7 @@ class DmsfWorkflowsController < ApplicationController
       # Destroy
       step.destroy
     end
-    redirect_to :back
+    redirect_to dmsf_workflow_path(@dmsf_workflow)
   end
 
 private
