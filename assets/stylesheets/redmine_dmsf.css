@@ -99,7 +99,7 @@
 }
 
 .dmsf_workflow {
-	font-size: 0.8em;
+	/*font-size: 0.8em;*/
 	white-space: nowrap;
 }
 
@@ -248,4 +248,16 @@
 
 .dmsf_select_version {
     max-width: 50px;
+}
+
+.dmsf_parent_container {
+    overflow: hidden;
+    /*padding: 20px 0px 0px 0px;*/
+}
+
+.dmsf_child_container {
+    float: left;
+    text-align: left;
+    /*padding: 0px 10px 0px 0px;
+    width: 200px;*/
 }

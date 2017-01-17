@@ -92,7 +92,8 @@ Redmine::Plugin.register :redmine_dmsf do
     permission :file_approval,
       {:dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment]}    
     permission :manage_workflows, 
-      {:dmsf_workflows => [:index, :new, :create, :destroy, :show, :new_step, :add_step, :remove_step, :reorder_steps, :update]}
+      {:dmsf_workflows => [:index, :new, :create, :destroy, :show, :new_step, :add_step, :remove_step, :reorder_steps,
+                           :update, :update_step, :delete_step]}
   end   
   
   # Administration menu extension

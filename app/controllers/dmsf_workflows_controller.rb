@@ -384,6 +384,58 @@ class DmsfWorkflowsController < ApplicationController
     redirect_to :back
   end
 
+  def update_step
+    # Name
+    if params[:dmsf_workflow].present?
+      index = params[:step].to_i
+      name =  params[:dmsf_workflow][:name]
+      if name.present?
+        step = @dmsf_workflow.dmsf_workflow_steps[index]
+        step.name = name
+        unless step.save
+           flash[:error] = step.errors.full_messages.to_sentence
+        else
+          @dmsf_workflow.dmsf_workflow_steps.each do |s|
+            if s.step == step.step
+              s.name = step.name
+              s.save
+            end
+          end
+        end
+      end
+    else
+      # Operators
+      params[:operator_step].each do |id, operator|
+        step = DmsfWorkflowStep.find_by_id id
+        if step
+          step.operator = operator.to_i
+          unless step.save
+            flash[:error] = step.errors.full_messages.to_sentence
+          end
+        end
+      end
+    end
+    redirect_to :back
+  end
+
+  def delete_step
+    step = DmsfWorkflowStep.find_by_id params[:step]
+    if step
+      # Safe the name
+      if step.name.present?
+        @dmsf_workflow.dmsf_workflow_steps.each do |s|
+          if s.step == step.step
+            s.name = step.name
+            s.save
+          end
+        end
+      end
+      # Destroy
+      step.destroy
+    end
+    redirect_to :back
+  end
+
 private
 
   def find_project

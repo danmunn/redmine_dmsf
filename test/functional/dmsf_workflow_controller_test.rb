@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -368,6 +368,32 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       :dmsf_file_revision_id => @revision2.id,
       :action => 'assignment',
       :project_id => @project1.id)
+    assert_response :redirect
+  end
+
+  def test_update_step_name
+    put :update_step, :id => @wf1, :step => @wfs2.step.to_s, :dmsf_workflow => {:name => 'new_name'}
+    assert_response :redirect
+    @wfs2.reload
+    assert_equal @wfs2.name, 'new_name'
+    @wfs3.reload
+    assert_equal @wfs3.name, 'new_name'
+  end
+
+  def test_update_step_operators
+    put :update_step, :id => @wf1, :step => '1', :operator_step => {@wfs1.id.to_s => DmsfWorkflowStep::OPERATOR_OR.to_s}
+    assert_response :redirect
+    @wfs1.reload
+    assert_equal @wfs1.operator, DmsfWorkflowStep::OPERATOR_OR
+  end
+
+  def test_delete_step
+    name = @wfs2.name
+    assert_difference 'DmsfWorkflowStep.count', -1 do
+      delete :delete_step, :id => @wf1, :step => @wfs2.id
+    end
+    @wfs3.reload
+    assert_equal @wfs3.name, name
     assert_response :redirect
   end
 

@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -54,18 +54,74 @@
         <tr id="step-<%= i %>" class="<%= cycle 'odd', 'even' %> step">
           <td class="id"><%= i %></td>
           <% index = @dmsf_workflow.dmsf_workflow_steps.order(:id).index{ |s| s.step == i } %>
-          <td class="name"><%= @dmsf_workflow.dmsf_workflow_steps[index].name if index %></td>
-          <td class="approval">
-            <% stps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact %>
-            <% stps.each_with_index do |step, j| %>
-              <% if (j != 0) || (stps.count > 1) %>
-                <b><%= step.soperator %></b>
+          <td class="name">
+            <span id="step-index-<%= index %>-name"><%= @dmsf_workflow.dmsf_workflow_steps[index].name if index %></span>
+            <%= form_for(@dmsf_workflow,
+                    :url => update_step_dmsf_workflow_path(:step => index),
+                    :method => :put,
+                    :html => {:id => "step-index-#{index}-name-form", :class => 'hol'}) do |f| %>
+                <p>
+                  <%= f.text_field(:name, :value => @dmsf_workflow.dmsf_workflow_steps[index].name) %>
+                </p>
+                <p>
+                  <%= submit_tag l(:button_change), :class => 'small' %>
+                  <%= link_to_function(
+                        l(:button_cancel),
+                        "$('#step-index-#{index}-name').show(); $('#step-index-#{index}-approvers').show(); $('#step-index-#{index}-name-form').hide(); $('#step-index-#{index}-approvers-form').hide();")
+                  %>
+                </p>
+            <% end %>
+          </td>
+          <td>
+            <span id="step-index-<%= index %>-approvers">
+              <% stps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact %>
+              <% stps.each_with_index do |step, j| %>
+                <% if (j != 0) || (stps.count > 1) %>
+                  <b><%= step.soperator %></b>
+                <% end %>
+                <%= link_to_user step.user %>
               <% end %>
-              <%= link_to_user step.user %>
+            </span>
+            <%= form_for(@dmsf_workflow,
+                         :url => update_step_dmsf_workflow_path(:step => index),
+                         :method => :put,
+                         :html => {:id => "step-index-#{index}-approvers-form", :class => 'hol'}) do |f| %>
+                <div class="dmsf_parent_container">
+                  <% stps.each_with_index do |step, j| %>
+                      <div class="dmsf_child_container">
+                        <label>
+                          <%= radio_button_tag "operator_step[#{step.id}]", DmsfWorkflowStep::OPERATOR_AND,
+                            step.operator == DmsfWorkflowStep::OPERATOR_AND %>
+                          <%= DmsfWorkflowStep.soperator(DmsfWorkflowStep::OPERATOR_AND) %>
+                        </label>
+                        <br/>
+                        <label>
+                          <%= radio_button_tag "operator_step[#{step.id}]", DmsfWorkflowStep::OPERATOR_OR,
+                            step.operator == DmsfWorkflowStep::OPERATOR_OR %>
+                          <%= DmsfWorkflowStep.soperator(DmsfWorkflowStep::OPERATOR_OR) %>
+                        </label>
+                        <br/>
+                        &nbsp;<%= delete_link delete_step_dmsf_workflow_path(:step => step.id) %>
+                      </div>
+                      <div class="dmsf_child_container">
+                        <%= link_to_user step.user %>
+                      </div>
+                  <% end %>
+                </div>
+                <p>
+                  <%= submit_tag l(:button_change), :class => 'small' %>
+                  <%= link_to_function(
+                        l(:button_cancel),
+                        "$('#step-index-#{index}-name').show(); $('#step-index-#{index}-approvers').show(); $('#step-index-#{index}-name-form').hide(); $('#step-index-#{index}-approvers-form').hide();")
+                  %>
+                </p>
             <% end %>
           </td>
           <td class="buttons">
             <%= reorder_handle(@dmsf_workflow, :url => url_for(:action => 'edit', :id => @dmsf_workflow, :step => i) ) %>
+            <%= link_to_function l(:button_edit),
+                   "$('#step-index-#{index}-name').hide(); $('#step-index-#{index}-approvers').hide(); $('#step-index-#{index}-name-form').show(); $('#step-index-#{index}-approvers-form').show();",
+                   :class => 'icon icon-edit' %>
             <%= delete_link edit_dmsf_workflow_path(@dmsf_workflow, :step => i) %>
           </td>
         </tr>

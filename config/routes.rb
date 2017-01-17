@@ -133,6 +133,8 @@ RedmineApp::Application.routes.draw do
       get 'start'
       post 'assignment'
       get 'new_step'
+      put 'update_step'
+      delete 'delete_step'
     end
   end
 
