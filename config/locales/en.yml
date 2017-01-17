@@ -128,7 +128,7 @@ en:
   note_maximum_number_of_files_downloaded: Limits maximum number of files downloaded in zip or sent via email. 0 means unlimited.
   label_file_storage_directory: File storage directory
   label_index_database: Index database
-  label_stemming_language: Stemming Language
+  label_stemming_language: Stemming language
   note_possible_values: Possible values
   note_pass_none_to_disable_stemming: "pass 'none' to disable stemming"
   label_stem_strategy: Stem strategy
@@ -340,6 +340,5 @@ en:
   label_full_text: Full-text search
   link_extension: Ext
 
-  label_memcached_servers: "memcached server address"
-  text_memcached_servers: "Address to memcached server. Only a single server is supported, if empty then caching is disabled. After changing this the server must be restarted!"
-
+  label_memcached_servers: Memcached server address
+  text_memcached_servers: Only a single server is supported, if empty then caching is disabled. After changing this, the application must be restarted!

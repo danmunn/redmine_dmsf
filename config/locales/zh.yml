@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -128,7 +128,7 @@ zh:
   note_maximum_number_of_files_downloaded: 最大文件下载数量(zip或发送电子邮件方式). 0表示无限制.
   label_file_storage_directory: 文件存储目录
   label_index_database: Index database
-  label_stemming_language: Stemming Language
+  label_stemming_language: Stemming language
   note_possible_values: Possible values
   note_pass_none_to_disable_stemming: "pass 'none' to disable stemming"
   label_stem_strategy: Stem strategy
@@ -339,3 +339,6 @@ zh:
   label_webdav: WebDAV
   label_full_text: Full-text search
   link_extension: Ext
+
+  label_memcached_servers: Memcached server address
+  text_memcached_servers: Only a single server is supported, if empty then caching is disabled. After changing this, the application must be restarted!
