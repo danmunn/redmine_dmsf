@@ -1,6 +1,9 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,15 +20,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class Dmsf120 < ActiveRecord::Migration
-
-  class DmsfFileRevision < ActiveRecord::Base
-    belongs_to :file, :class_name => 'DmsfFile', :foreign_key => 'dmsf_file_id'
-    belongs_to :source_revision, :class_name => 'DmsfFileRevision', :foreign_key => 'source_dmsf_file_revision_id'
-    belongs_to :user
-    belongs_to :folder, :class_name => 'DmsfFolder', :foreign_key => 'dmsf_folder_id'
-    belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
-    belongs_to :project
-  end
 
   def self.up
     add_column :dmsf_file_revisions, :project_id, :integer, :null => true
