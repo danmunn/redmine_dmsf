@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@ class DmsfFile < ActiveRecord::Base
 
   include RedmineDmsf::Lockable
 
-  belongs_to :project
   belongs_to :dmsf_folder
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
 
@@ -56,10 +55,11 @@ class DmsfFile < ActiveRecord::Base
 
   validate :validates_name_uniqueness
 
+  attr_accessible :project, :project_id
+
   def validates_name_uniqueness
-    existing_file = DmsfFile.visible.find_file_by_name(self.project, self.dmsf_folder, self.name)
-    errors.add(:name, l('activerecord.errors.messages.taken')) unless
-      existing_file.nil? || existing_file.id == self.id
+    existing_file = DmsfFile.visible.findn_file_by_name(self.container_id, self.container_type, self.dmsf_folder, self.name)
+    errors.add(:name, l('activerecord.errors.messages.taken')) unless (existing_file.nil? || existing_file.id == self.id)
   end
 
   acts_as_event :title => Proc.new { |o| o.name },
@@ -115,9 +115,14 @@ class DmsfFile < ActiveRecord::Base
     @@storage_path = path
   end
 
-  def self.find_file_by_name(project, folder, name)
+  def self.find_file_by_name(container, folder, name)
+    self.findn_file_by_name(container.id, container.class.name.demodulize, folder, name)
+  end
+
+  def self.findn_file_by_name(container_id, container_type, folder, name)
     where(
-      :project_id => project,
+      :container_id => container_id,
+      :container_type => container_type,
       :dmsf_folder_id => folder ? folder.id : nil,
       :name => name).visible.first
   end
@@ -273,6 +278,7 @@ class DmsfFile < ActiveRecord::Base
 
     file = DmsfFile.new
     file.dmsf_folder = folder
+    file.container_type = 'Project'
     file.project = project
     file.name = self.name
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
@@ -531,6 +537,41 @@ class DmsfFile < ActiveRecord::Base
     csv << "\"#{url_for(:controller => :dmsf_files, :action => 'view', :id => self)}\""
     csv << ';'
     csv
+  end
+
+  def project
+    unless @project
+      case self.container_type
+        when 'Project'
+          @project = Project.find_by_id(self.container_id)
+        when 'Issue'
+          issue = Issue.find_by_id(self.container_id)
+          @project = issue.project if issue
+      end
+    end
+    @project
+  end
+
+  def project=(project)
+    case self.container_type
+      when 'Project'
+        self.container_id = project.id
+      else
+        raise Exception.new('The container type is not project!')
+    end
+  end
+
+  def project_id
+    self.project.id if self.project
+  end
+
+  def project_id=(project_id)
+    case self.container_type
+      when 'Project'
+        self.container_id = project_id
+      else
+        raise Exception.new('The container type is not project!')
+    end
   end
 
 end

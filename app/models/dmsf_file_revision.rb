@@ -51,8 +51,8 @@ class DmsfFileRevision < ActiveRecord::Base
     :scope => select("#{DmsfFileRevision.table_name}.*").
       joins(
         "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
-        "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.project_id = #{Project.table_name}.id").
-      where("#{DmsfFile.table_name}.deleted = ?", STATUS_ACTIVE)
+        "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.container_id = #{Project.table_name}.id").
+      where("#{DmsfFile.table_name}.deleted = ? AND #{DmsfFile.table_name}.container_type = ?", STATUS_ACTIVE, 'Project')
 
   validates :title, :presence => true
   validates_format_of :name, :with => DmsfFolder::INVALID_CHARACTERS,

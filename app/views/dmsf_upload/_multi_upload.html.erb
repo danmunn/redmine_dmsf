@@ -36,11 +36,11 @@
 
 <%= form_tag({:controller => 'dmsf_upload', :action => 'upload_files', :id => @project, :folder_id => @folder},
              :id => 'uploadform', :method => :post, :multipart => true) do %>
-  <div id="uploader">
-    <div class="box">
+  <div id="dmsf_uploader">
+    <div class="dmsf_uploader">
       <p>
-        <label><%= l(:label_attachment_plural) %></label>
-        <%= render :partial => 'attachments/form' %>
+        <label><%= l(:label_document_plural) %></label>
+        <%= render :partial => 'dmsf_upload/form' %>
       </p>
     </div>
     <%= submit_tag l(:label_upload) %>
@@ -49,14 +49,14 @@
 
 <script type="text/javascript">
   var originalUploaderContent;
-  var uploader = $('#uploader');
+  var uploader = $('#dmsf_uploader');
 
   originalUploaderContent = uploader.html();
 
   $('#uploader_select').change(function() {
     if($(this).val() === '2') {
       uploader.html(originalUploaderContent);
-      setupFileDrop();
+      dmsfSetupFileDrop();
     } else {
       initPlUploader(uploader);
     }

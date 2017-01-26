@@ -111,6 +111,7 @@ class DmsfConvertDocuments
           document.attachments.each do |attachment|
             begin
               file = DmsfFile.new
+              file.container_type = 'Project'
               file.project = project
               file.dmsf_folder = folder
 

@@ -566,6 +566,7 @@ module RedmineDmsf
         else
           raise BadRequest unless (parent.projectless_path == '/' || (parent.exist? && parent.folder))
           f = DmsfFile.new
+          f.container_type = 'Project'
           f.project = project
           f.name = basename
           f.dmsf_folder = parent.folder

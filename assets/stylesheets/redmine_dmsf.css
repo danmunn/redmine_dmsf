@@ -252,12 +252,28 @@
 
 .dmsf_parent_container {
     overflow: hidden;
-    /*padding: 20px 0px 0px 0px;*/
 }
 
 .dmsf_child_container {
     float: left;
     text-align: left;
-    /*padding: 0px 10px 0px 0px;
-    width: 200px;*/
 }
+
+/* DMSF file upload */
+.dmsf_uploader{
+    padding:6px;
+    margin-bottom: 10px;
+    background-color:#f6f6f6;
+    color:#505050;
+    line-height:1.5em;
+    border: 1px solid #e4e4e4;
+    word-wrap: break-word;
+    border-radius: 3px;
+}
+
+#dmsf_attachments_fields input.description {margin-left:4px; width:340px;}
+#dmsf_attachments_fields span {display:block; white-space:nowrap;}
+#dmsf_attachments_fields input.filename {border:0; height:1.8em; width:250px; color:#555; background-color:inherit; background:url(../../../images/attachment.png) no-repeat 1px 50%; padding-left:18px;}
+#dmsf_attachments_fields .ajax-waiting input.filename {background:url(../../../images/hourglass.png) no-repeat 0px 50%;}
+#dmsf_attachments_fields .ajax-loading input.filename {background:url(../../../images/loading.gif) no-repeat 0px 50%;}
+#dmsf_attachments_fields div.ui-progressbar { width: 100px; height:14px; margin: 2px 0 -5px 8px; display: inline-block; }

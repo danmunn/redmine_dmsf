@@ -64,6 +64,7 @@ RedmineApp::Application.routes.draw do
   post '/projects/:id/dmsf/upload', :controller => 'dmsf_upload', :action => 'upload'
   post '/projects/:id/dmsf/upload/commit', :controller => 'dmsf_upload', :action => 'commit_files'
   post '/projects/:id/dmsf/commit', :controller => 'dmsf_upload', :action => 'commit'
+  match 'dmsf_uploads', :to => 'dmsf_upload#upload', :via => :post
 
   #
   # dmsf_files controller

@@ -18,20 +18,19 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-module RedmineDmsf
-  module Hooks
-    include Redmine::Hook
+class DmsfFileContainer < ActiveRecord::Migration
+  def up
+    remove_index :dmsf_files, :project_id
+    rename_column :dmsf_files, :project_id, :container_id
+    add_column :dmsf_files, :container_type, :string, :limit => 30, :null => false, :default => 'Project'
+    DmsfFile.update_all(:container_type => 'Project')
+    add_index :dmsf_files, [:container_id, :container_type]
+  end
 
-    class DmsfViewListener < Redmine::Hook::ViewListener
-
-      def view_layouts_base_html_head(context={})
-        "\n".html_safe + stylesheet_link_tag('redmine_dmsf.css', :plugin => :redmine_dmsf) +
-        "\n".html_safe + stylesheet_link_tag('select2.min.css', :plugin => :redmine_dmsf) +
-        "\n".html_safe + javascript_include_tag('select2.min.js', :plugin => :redmine_dmsf) +
-        "\n".html_safe + javascript_include_tag('redmine_dmsf.js', :plugin => :redmine_dmsf) +
-        "\n".html_safe + javascript_include_tag('attachments_dmsf.js', :plugin => :redmine_dmsf)
-      end
-
-    end
+  def down
+    remove_index :dmsf_files, [:container_id, :container_type]
+    remove_column :dmsf_files, :container_type
+    rename_column :dmsf_files, :container_id, :project_id
+    add_index :dmsf_files, :project_id
   end
 end

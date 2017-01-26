@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@ require 'redmine_dmsf/patches/project_patch'
 require 'redmine_dmsf/patches/project_tabs_extended'
 require 'redmine_dmsf/patches/user_preference_patch'
 require 'redmine_dmsf/patches/user_patch'
+require 'redmine_dmsf/patches/issue_patch'
 
 # Load up classes that make up our WebDAV solution ontop of DAV4Rack
 require 'redmine_dmsf/webdav/base_resource'
@@ -51,10 +52,12 @@ require 'redmine_dmsf/errors/dmsf_lock_error.rb'
 require 'redmine_dmsf/errors/dmsf_zip_max_file_error.rb'
 
 # Hooks
+require 'redmine_dmsf/hooks/controllers/search_controller_hooks'
+require 'redmine_dmsf/hooks/controllers/issues_controller_hooks'
 require 'redmine_dmsf/hooks/views/view_projects_form_hook'
 require 'redmine_dmsf/hooks/views/base_view_hooks'
-require 'redmine_dmsf/hooks/controllers/search_controller_hooks'
 require 'redmine_dmsf/hooks/views/my_account_view_hooks'
+require 'redmine_dmsf/hooks/views/issue_view_hooks'
 
 # Macros
 require 'redmine_dmsf/macros'

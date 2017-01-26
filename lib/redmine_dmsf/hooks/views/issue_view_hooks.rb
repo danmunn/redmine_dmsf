@@ -24,14 +24,28 @@ module RedmineDmsf
 
     class DmsfViewListener < Redmine::Hook::ViewListener
 
-      def view_layouts_base_html_head(context={})
-        "\n".html_safe + stylesheet_link_tag('redmine_dmsf.css', :plugin => :redmine_dmsf) +
-        "\n".html_safe + stylesheet_link_tag('select2.min.css', :plugin => :redmine_dmsf) +
-        "\n".html_safe + javascript_include_tag('select2.min.js', :plugin => :redmine_dmsf) +
-        "\n".html_safe + javascript_include_tag('redmine_dmsf.js', :plugin => :redmine_dmsf) +
-        "\n".html_safe + javascript_include_tag('attachments_dmsf.js', :plugin => :redmine_dmsf)
+     def view_issues_form_details_bottom(context={})
+        if context.is_a?(Hash) && context[:issue]
+          issue = context[:issue]
+          # Add Dmsf upload form
+          html = "<div class=\"dmsf_uploader\">"
+          html << '<p>'
+          html << "<label>#{l(:label_document_plural)}</label>"
+          html << context[:controller].send(:render_to_string, {:partial => 'dmsf_upload/form', :locals => context})
+          html << '</p>'
+          html << '</div>'
+          html.html_safe
+        end
+     end
+
+      def view_issues_show_description_bottom(context={})
+        if context.is_a?(Hash) && context[:issue]
+          issue = context[:issue]
+          context[:controller].send(:render_to_string, {:partial => 'dmsf_files/links',
+                                                        :locals => { :dmsf_files => issue.dmsf_files.to_a }})
+        end
       end
 
-    end
+     end
   end
 end

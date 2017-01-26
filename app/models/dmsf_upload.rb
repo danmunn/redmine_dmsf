@@ -76,7 +76,8 @@ class DmsfUpload
       @minor_version = 0
       @workflow = nil
       file = DmsfFile.new
-      file.project = @project
+      file.container_type = 'Project'
+      file.project = project
       revision = DmsfFileRevision.new
       revision.dmsf_file = file
       @custom_values = revision.custom_field_values

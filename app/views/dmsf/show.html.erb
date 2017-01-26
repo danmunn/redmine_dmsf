@@ -178,7 +178,7 @@
             <% if @folder %>
               return "<%= "#{l(:label_number_of_folders)}: #{@folder.deep_folder_count} #{l(:label_number_of_documents)}: #{@folder.deep_file_count}" %>";
             <% else %>
-              return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFolder').count}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFile').count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfUrl').count}" %>";
+              return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFolder').count}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(:container_id => @project.id, :container_type => 'Project').count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFile').count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfUrl').count}" %>";
             <% end %>
           <% else %>
             return "<%= "#{l(:label_number_of_folders)}: #{@subfolders.count + @dir_links.count}, #{l(:label_number_of_documents)}: #{@files.count + @file_links.count + @url_links.count}" %>";

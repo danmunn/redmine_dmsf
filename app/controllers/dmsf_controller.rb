@@ -66,7 +66,7 @@ class DmsfController < ApplicationController
     @file_manipulation_allowed = User.current.allowed_to? :file_manipulation, @project
     @file_delete_allowed = User.current.allowed_to? :file_delete, @project
     @subfolders = DmsfFolder.deleted.where(:project_id => @project.id)
-    @files = DmsfFile.deleted.where(:project_id => @project.id)
+    @files = DmsfFile.deleted.where(:container_id => @project.id, :container_type => 'Project')
     @dir_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.to_s)
     @file_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFile.model_name.to_s)
     @url_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => 'DmsfUrl')

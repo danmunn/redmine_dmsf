@@ -18,20 +18,27 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+require_dependency 'issue'
+
 module RedmineDmsf
-  module Hooks
-    include Redmine::Hook
+  module Patches
+    module IssuePatch
 
-    class DmsfViewListener < Redmine::Hook::ViewListener
-
-      def view_layouts_base_html_head(context={})
-        "\n".html_safe + stylesheet_link_tag('redmine_dmsf.css', :plugin => :redmine_dmsf) +
-        "\n".html_safe + stylesheet_link_tag('select2.min.css', :plugin => :redmine_dmsf) +
-        "\n".html_safe + javascript_include_tag('select2.min.js', :plugin => :redmine_dmsf) +
-        "\n".html_safe + javascript_include_tag('redmine_dmsf.js', :plugin => :redmine_dmsf) +
-        "\n".html_safe + javascript_include_tag('attachments_dmsf.js', :plugin => :redmine_dmsf)
+      def self.included(base)
+        base.class_eval do
+          unloadable
+          has_many :dmsf_files, -> { where(dmsf_folder_id: nil, container_type: 'Issue').order(:name) },
+            :class_name => 'DmsfFile', :foreign_key => 'container_id', :dependent => :destroy
+        end
       end
 
     end
+  end
+end
+
+# Apply patch
+Rails.configuration.to_prepare do
+  unless Issue.included_modules.include?(RedmineDmsf::Patches::IssuePatch)
+    Issue.send(:include, RedmineDmsf::Patches::IssuePatch)
   end
 end
