@@ -72,7 +72,7 @@ Redmine::Plugin.register :redmine_dmsf do
       {:dmsf_state => [:user_pref_save]}
     permission :view_dmsf_files, 
       {:dmsf => [:entries_operation, :entries_email, :download_email_entries, :tag_changed], 
-        :dmsf_files => [:show, :view],
+        :dmsf_files => [:show, :view, :thumbnail],
         :dmsf_files_copy => [:new, :create, :move], 
         :dmsf_workflows => [:log]}, 
       :read => true
@@ -82,7 +82,7 @@ Redmine::Plugin.register :redmine_dmsf do
       {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :restore]}
     permission :file_manipulation, 
       {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate, :restore], 
-        :dmsf_upload => [:upload_files, :upload_file, :upload, :commit_files, :commit],         
+        :dmsf_upload => [:upload_files, :upload_file, :upload, :commit_files, :commit, :delete_dmsf_attachment],
         :dmsf_links => [:new, :create, :destroy, :restore]
         }
     permission :file_delete, 

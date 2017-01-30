@@ -30,7 +30,7 @@ fileSpan.find('a.remove-upload')
   .attr({
     "data-remote": true,
     "data-method": 'delete',
-    href: '<%= j attachment_path(@attachment, :attachment_id => params[:attachment_id], :format => 'js') %>'
+    href: '<%= j dmsf_attachment_path(@attachment, :attachment_id => params[:attachment_id], :format => 'js') %>'
   })
   .off('click');
 <% end %>

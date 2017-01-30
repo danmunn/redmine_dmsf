@@ -65,6 +65,7 @@ RedmineApp::Application.routes.draw do
   post '/projects/:id/dmsf/upload/commit', :controller => 'dmsf_upload', :action => 'commit_files'
   post '/projects/:id/dmsf/commit', :controller => 'dmsf_upload', :action => 'commit'
   match 'dmsf_uploads', :to => 'dmsf_upload#upload', :via => :post
+  delete '/dmsf/attachments/:id/delete', :to => 'dmsf_upload#delete_dmsf_attachment', :as => 'dmsf_attachment'
 
   #
   # dmsf_files controller
@@ -82,6 +83,7 @@ RedmineApp::Application.routes.draw do
   get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show', :as => 'dmsf_file'
   delete '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'delete'
   get '/dmsf/files/:id/restore', :controller => 'dmsf_files', :action => 'restore', :as => 'restore_dmsf_file'
+  get '/dmsf/files/:id/thumbnail', :to => 'dmsf_files#thumbnail', :as => 'dmsf_thumbnail'
 
   #
   # url controller

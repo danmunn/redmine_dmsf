@@ -687,8 +687,8 @@ class DmsfController < ApplicationController
     @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed &&
       @file_delete_allowed && !@locked_for_user && !@folder
     @trash_enabled = DmsfFolder.deleted.where(:project_id => @project.id).any? ||
-      DmsfFile.deleted.where(:project_id => @project.id).any? ||
-      DmsfLink.deleted.where(:project_id => @project.id).any?
+      DmsfFile.deleted.where(:container_id => @project.id, :container_type => 'Project').any? ||
+      DmsfLink.deleted.where(:container_id => @project.id, :container_type => 'Project').any?
   end
 
 end

@@ -19,8 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 module DmsfUploadHelper
+  include Redmine::I18n
 
-  def self.commit_files_internal(commited_files, container, folder = nil)
+  def self.commit_files_internal(commited_files, container, folder, controller)
     if container.is_a?(Project)
       project = container
     else
@@ -42,7 +43,6 @@ module DmsfUploadHelper
           file = DmsfFile.new
           file.container_type = container.class.name.demodulize
           file.container_id = container.id
-          #file.project = project if container_type == 'Project'
           file.name = name
           file.dmsf_folder = folder
           file.notification = Setting.plugin_redmine_dmsf[:dmsf_default_notifications].present?
@@ -106,20 +106,18 @@ module DmsfUploadHelper
             FileUtils.mv(commited_disk_filepath, new_revision.disk_file)
             file.set_last_revision new_revision
             files.push(file)
+            if file.container.is_a?(Issue)
+              file.container.dmsf_file_added(file)
+            end
           rescue Exception => e
             Rails.logger.error e.message
-            #flash[:error] = e.message
+            controller.flash[:error] = e.message
             failed_uploads.push(file)
           end
         else
           failed_uploads.push(commited_file)
         end
       end
-      #unless files.empty?
-        #files.each do |file|
-          #Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}: uploaded dmsf://#{file.project.identifier}/#{file.id}/#{file.last_revision.id}"
-        #end
-      #end
       if container.is_a?(Project) && ((folder && folder.notification?) || (!folder && project.dmsf_notification?))
         begin
           recipients = DmsfMailer.get_notify_users(project, files)
@@ -130,7 +128,7 @@ module DmsfUploadHelper
             unless recipients.empty?
               to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
               to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-              #flash[:warning] = l(:warning_email_notifications, :to => to)
+              controller.flash[:warning] = l(:warning_email_notifications, :to => to)
             end
           end
         rescue Exception => e
@@ -139,7 +137,7 @@ module DmsfUploadHelper
       end
     end
     unless failed_uploads.empty?
-      #flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u['name']}.join(', '))
+      controller.flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u['name']}.join(', '))
     end
   end
 

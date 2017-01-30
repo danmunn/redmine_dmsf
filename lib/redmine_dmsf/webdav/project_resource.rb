@@ -78,10 +78,6 @@ module RedmineDmsf
       def long_name
         project.name unless project.nil?
       end
-      
-      def project_id
-        project.id unless project.nil?
-      end
 
       def content_type
         'inode/directory'

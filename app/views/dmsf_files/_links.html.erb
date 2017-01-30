@@ -20,25 +20,47 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<hr/>
-<div class="attachments">
-<% for dmsf_file in dmsf_files %>
-<p>
-  <% file_view_url = url_for({:controller => :dmsf_files, :action => 'view', :id => dmsf_file}) %>
-  <%= link_to(h(dmsf_file.title),
-              file_view_url,
-              :target => '_blank',
-              :class => "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
-              :title => h(dmsf_file.last_revision.try(:tooltip)),
-              'data-downloadurl' => "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}") %>
-  <%= " - #{dmsf_file.description}" unless dmsf_file.description.blank? %>
-  <span class="size">(<%= number_to_human_size dmsf_file.last_revision.size %>)</span>
-  <%= link_to(image_tag('delete.png'),
-              dmsf_file_path(:id => dmsf_file),
-              :data => {:confirm => l(:text_are_you_sure)},
-              :method => :delete,
-              :title => l(:title_delete)) %>
-  <span class="author"><%= dmsf_file.last_revision.user %>, <%= format_time(dmsf_file.last_revision.updated_at) %></span>
-  </p>
+<% if dmsf_files.present? %>
+  <hr/>
+  <div class="attachments">
+    <% for dmsf_file in dmsf_files %>
+    <p>
+      <% file_view_url = url_for({:controller => :dmsf_files, :action => 'view', :id => dmsf_file}) %>
+      <%= link_to(h(dmsf_file.title),
+                  file_view_url,
+                  :target => '_blank',
+                  :class => "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
+                  :title => h(dmsf_file.last_revision.try(:tooltip)),
+                  'data-downloadurl' => "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}") %>
+      <% if dmsf_file.text? || dmsf_file.image? %>
+          <%= link_to l(:button_view),
+                      file_view_url,
+                      :class => 'icon-only icon-magnifier',
+                      :title => l(:button_view) %>
+      <% end %>
+      <%= " - #{dmsf_file.description}" unless dmsf_file.description.blank? %>
+      <span class="size">(<%= number_to_human_size dmsf_file.last_revision.size %>)</span>
+      <%= link_to(image_tag('delete.png'),
+                  dmsf_file_path(:id => dmsf_file, :commit => 'yes'),
+                  :data => {:confirm => l(:text_are_you_sure)},
+                  :method => :delete,
+                  :title => l(:title_delete)) %>
+      <span class="author"><%= dmsf_file.last_revision.user %>, <%= format_time(dmsf_file.last_revision.updated_at) %></span>
+      </p>
+    <% end %>
+    <% if defined?(thumbnails) && thumbnails %>
+        <% images = dmsf_files.select(&:image?) %>
+        <% if images.any? %>
+            <div class="thumbnails">
+              <% images.each do |file| %>
+                  <div>
+                    <%= link_to image_tag(dmsf_thumbnail_path(file)),
+                      url_for({:controller => :dmsf_files, :action => 'view', :id => file}),
+                      :alt => dmsf_file.title %>
+                  </div>
+              <% end %>
+            </div>
+        <% end %>
+    <% end %>
+  </div>
 <% end %>
-</div>

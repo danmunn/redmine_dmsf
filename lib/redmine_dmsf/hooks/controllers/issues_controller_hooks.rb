@@ -21,30 +21,38 @@
 module RedmineDmsf
   module Hooks
     include Redmine::Hook
-    #include ::DmsfUploadHelper
-    #helper :dmsf_upload
     
     class ControllerIssuesHook < RedmineDmsf::Hooks::Listener
                         
       def controller_issues_new_after_save(context={})
-        if context.is_a?(Hash) 
+        controller_issues_after_save(context)
+      end
+
+      def controller_issues_edit_after_save(context={})
+        controller_issues_after_save(context)
+      end
+
+      private
+
+      def controller_issues_after_save(context)
+        if context.is_a?(Hash)
           issue = context[:issue]
           params = context[:params]
           uploaded_files = params[:dmsf_attachments]
+          journal = params[:journal]
           uploads = []
           if uploaded_files && uploaded_files.is_a?(Hash)
             # standard file input uploads
             uploaded_files.each_value do |uploaded_file|
               upload = DmsfUpload.create_from_uploaded_attachment(issue.project, nil, uploaded_file)
-              #uploads.push(upload) if upload
               uploaded_file[:disk_filename] = upload.disk_filename
               uploaded_file[:name] = upload.name
               uploaded_file[:title] = upload.title
             end
-            DmsfUploadHelper.commit_files_internal uploaded_files, issue
+            DmsfUploadHelper.commit_files_internal uploaded_files, issue, nil, self
           end
-        end        
-      end      
+        end
+      end
                   
     end
     

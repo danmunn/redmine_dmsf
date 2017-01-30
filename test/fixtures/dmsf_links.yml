@@ -50,3 +50,16 @@ file_link2:
   deleted_by_user_id: NULL
   created_at: <%= DateTime.now() %>
   updated_at: <%= DateTime.now() %>
+
+url_link:
+  id: 5
+  target_project_id: 1
+  target_id: 4
+  target_type: DmsfUrl
+  name: url_link
+  project_id: 1
+  external_url: 'https://www.kontron.com'
+  deleted: 0
+  deleted_by_user_id: NULL
+  created_at: <%= DateTime.now() %>
+  updated_at: <%= DateTime.now() %>

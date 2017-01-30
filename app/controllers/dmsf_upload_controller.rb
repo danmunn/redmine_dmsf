@@ -24,10 +24,10 @@ class DmsfUploadController < ApplicationController
 
   menu_item :dmsf
 
-  before_filter :find_project, :except => [:upload]
-  before_filter :authorize, :except => [:upload]
-  before_filter :authorize_global, :only => [:upload]
-  before_filter :find_folder, :except => [:upload_file, :upload, :commit]
+  before_filter :find_project, :except => [:upload, :delete_dmsf_attachment]
+  before_filter :authorize, :except => [:upload, :delete_dmsf_attachment]
+  before_filter :authorize_global, :only => [:upload, :delete_dmsf_attachment]
+  before_filter :find_folder, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment]
 
   helper :all
   helper :dmsf_workflows
@@ -65,7 +65,6 @@ class DmsfUploadController < ApplicationController
     target = "#{DmsfHelper.temp_dir}/#{@disk_filename}"
     begin
       FileUtils.cp @tempfile.path, target
-      FileUtils.chmod 'u=wr,g=r', target
     rescue Exception => e
       Rails.logger.error e.message
     end
@@ -132,10 +131,17 @@ class DmsfUploadController < ApplicationController
     commit_files_internal uploaded_files
   end
 
+  def delete_dmsf_attachment
+    attachment = Attachment.find(params[:id])
+    attachment.destroy
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
   private
 
   def commit_files_internal(commited_files)
-    DmsfUploadHelper.commit_files_internal(commited_files, @project, @folder)
+    DmsfUploadHelper.commit_files_internal(commited_files, @project, @folder, self)
     respond_to do |format|
       format.js
       format.api  { render_validation_errors(failed_uploads) unless failed_uploads.empty? }

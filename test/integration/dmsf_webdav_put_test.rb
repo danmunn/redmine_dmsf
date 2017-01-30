@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -93,11 +93,13 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_put_as_admin_granted_on_dmsf_enabled_project
-    put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @admin.merge!({:content_type => :text})
-    assert_response :success # 201 Created
-    # Lets check for our file
-    file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
-    assert file, 'Check for files existance'
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @admin.merge!({:content_type => :text})
+      assert_response :success # 201 Created
+      # Lets check for our file
+      file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
+      assert file, 'Check for files existance'
+    end
   end
 
   def test_put_failed_as_jsmith_on_non_dmsf_enabled_project
@@ -115,10 +117,12 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_put_failed_when_no_file_manipulation_permission
-    @project1.enable_module! :dmsf # Flag module enabled
-    @role.add_permission! :view_dmsf_folders
-    put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})
-    assert_response :forbidden # We don't hold the permission file_manipulation - so we're unable to do anything with files
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      @project1.enable_module! :dmsf # Flag module enabled
+      @role.add_permission! :view_dmsf_folders
+      put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})
+      assert_response :forbidden # We don't hold the permission file_manipulation - so we're unable to do anything with files
+    end
   end
 
   def test_put_failed_when_no_view_dmsf_folders_permission
@@ -133,25 +137,29 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_put_succeeds_for_non_admin_with_correct_permissions
-    @project1.enable_module! :dmsf # Flag module enabled
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :file_manipulation
-    put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})
-    assert_response :success # 201 - Now we have permissions
-    # Lets check for our file
-    file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
-    assert file, 'File test-1234 was not found in projects dmsf folder.'
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      @project1.enable_module! :dmsf # Flag module enabled
+      @role.add_permission! :view_dmsf_folders
+      @role.add_permission! :file_manipulation
+      put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})
+      assert_response :success # 201 - Now we have permissions
+      # Lets check for our file
+      file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
+      assert file, 'File test-1234 was not found in projects dmsf folder.'
+    end
   end
 
   def test_put_writes_revision_successfully_for_unlocked_file
-    @project1.enable_module! :dmsf #Flag module enabled
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :file_manipulation
-    file = DmsfFile.find_file_by_name @project1, nil, 'test.txt'
-    assert_not_nil file, 'test.txt file not found'
-    assert_difference 'file.dmsf_file_revisions.count', +1 do
-      put "/dmsf/webdav/#{@project1.identifier}/test.txt", '1234', @jsmith.merge!({:content_type => :text})
-      assert_response :success # 201 - Created
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      @project1.enable_module! :dmsf #Flag module enabled
+      @role.add_permission! :view_dmsf_folders
+      @role.add_permission! :file_manipulation
+      file = DmsfFile.find_file_by_name @project1, nil, 'test.txt'
+      assert_not_nil file, 'test.txt file not found'
+      assert_difference 'file.dmsf_file_revisions.count', +1 do
+        put "/dmsf/webdav/#{@project1.identifier}/test.txt", '1234', @jsmith.merge!({:content_type => :text})
+        assert_response :success # 201 - Created
+      end
     end
   end
 
@@ -184,16 +192,18 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_put_accepts_revision_when_file_is_locked_and_user_is_same_as_lock_holder
-    @project1.enable_module! :dmsf # Flag module enabled
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :file_manipulation
-    log_user 'jsmith', 'jsmith' # login as jsmith
-    assert !User.current.anonymous?, 'Current user is not anonymous'
-    file = DmsfFile.find_file_by_name @project1, nil, 'test.txt'
-    assert file.lock!, "File failed to be locked by #{User.current.name}"
-    assert_difference 'file.dmsf_file_revisions.count', +1 do
-      put "/dmsf/webdav/#{@project1.identifier}/test.txt", '1234', @jsmith.merge!({:content_type => :text})
-      assert_response :success # 201 - Created
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      @project1.enable_module! :dmsf # Flag module enabled
+      @role.add_permission! :view_dmsf_folders
+      @role.add_permission! :file_manipulation
+      log_user 'jsmith', 'jsmith' # login as jsmith
+      assert !User.current.anonymous?, 'Current user is not anonymous'
+      file = DmsfFile.find_file_by_name @project1, nil, 'test.txt'
+      assert file.lock!, "File failed to be locked by #{User.current.name}"
+      assert_difference 'file.dmsf_file_revisions.count', +1 do
+        put "/dmsf/webdav/#{@project1.identifier}/test.txt", '1234', @jsmith.merge!({:content_type => :text})
+        assert_response :success # 201 - Created
+      end
     end
   end
 

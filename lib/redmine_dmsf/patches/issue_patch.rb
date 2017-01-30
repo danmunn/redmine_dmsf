@@ -25,10 +25,37 @@ module RedmineDmsf
     module IssuePatch
 
       def self.included(base)
+        base.send(:include, InstanceMethods)
         base.class_eval do
           unloadable
           has_many :dmsf_files, -> { where(dmsf_folder_id: nil, container_type: 'Issue').order(:name) },
             :class_name => 'DmsfFile', :foreign_key => 'container_id', :dependent => :destroy
+        end
+      end
+
+      module InstanceMethods
+        def dmsf_file_added(dmsf_file)
+          unless dmsf_file.new_record?
+            self.journalize_dmsf_file(dmsf_file, :added)
+          end
+        end
+
+        def dmsf_file_removed(dmsf_file)
+          unless dmsf_file.new_record?
+            self.journalize_dmsf_file(dmsf_file, :removed)
+          end
+        end
+
+        # Adds a journal detail for an attachment that was added or removed
+        def journalize_dmsf_file(dmsf_file, added_or_removed)
+          init_journal(User.current)
+          key = (added_or_removed == :removed ? :old_value : :value)
+          current_journal.details << JournalDetail.new(
+            :property => 'dmsf_file',
+            :prop_key => dmsf_file.id,
+            key => dmsf_file.title
+          )
+          current_journal.save
         end
       end
 

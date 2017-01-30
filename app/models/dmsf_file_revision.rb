@@ -49,10 +49,9 @@ class DmsfFileRevision < ActiveRecord::Base
     :author_key => "#{DmsfFileRevision.table_name}.user_id",
     :permission => :view_dmsf_file_revisions,
     :scope => select("#{DmsfFileRevision.table_name}.*").
-      joins(
-        "INNER JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
-        "INNER JOIN #{Project.table_name} ON #{DmsfFile.table_name}.container_id = #{Project.table_name}.id").
-      where("#{DmsfFile.table_name}.deleted = ? AND #{DmsfFile.table_name}.container_type = ?", STATUS_ACTIVE, 'Project')
+      joins(:dmsf_file).joins(
+        "LEFT JOIN #{Project.table_name} ON #{DmsfFile.table_name}.container_id = #{Project.table_name}.id").
+      where("#{DmsfFile.table_name}.container_type = ?", 'Project').visible
 
   validates :title, :presence => true
   validates_format_of :name, :with => DmsfFolder::INVALID_CHARACTERS,

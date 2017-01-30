@@ -152,6 +152,9 @@ class DmsfFile < ActiveRecord::Base
       # Revisions and links of a deleted file SHOULD be deleted too
       self.dmsf_file_revisions.each { |r| r.delete(commit, true) }
       if commit
+        if self.container.is_a?(Issue)
+          self.container.dmsf_file_removed(self)
+        end
         self.destroy
       else
         self.deleted = STATUS_DELETED
@@ -278,8 +281,8 @@ class DmsfFile < ActiveRecord::Base
 
     file = DmsfFile.new
     file.dmsf_folder = folder
-    file.container_type = 'Project'
-    file.project = project
+    file.container_type = self.container_type
+    file.container_id = project.id
     file.name = self.name
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
 
@@ -424,13 +427,18 @@ class DmsfFile < ActiveRecord::Base
     fname
   end
 
+  def text?
+    self.last_revision && Redmine::MimeType.is_type?('text', self.last_revision.disk_filename)
+  end
+
   def image?
-    self.last_revision && !!(self.last_revision.disk_filename =~ /\.(bmp|gif|jpg|jpe|jpeg|png|svg)$/i)
+    self.last_revision && Redmine::MimeType.is_type?('image', self.last_revision.disk_filename)
   end
 
   def pdf?
-    self.last_revision && !!(self.last_revision.disk_filename =~ /\.(pdf)$/i)
+    self.last_revision && (Redmine::MimeType.of(self.last_revision.disk_filename) == 'application/pdf')
   end
+
 
   def disposition
     (self.image? || self.pdf?) ? 'inline' : 'attachment'
@@ -438,7 +446,7 @@ class DmsfFile < ActiveRecord::Base
 
   def preview(limit)
     result = 'No preview available'
-    if (self.last_revision.disk_filename =~ /\.(txt|ini|diff|c|cpp|php|csv|rb|h|erb|html|css|py)$/i)
+    if self.text?
       begin
         f = File.new(self.last_revision.disk_file)
         f.each_line do |line|
@@ -505,11 +513,13 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def propfind_cache_key
-    if dmsf_folder_id.nil?
-      # File is in project root
-      return "PROPFIND/#{project_id}"
-    else
-      return "PROPFIND/#{project_id}/#{dmsf_folder_id}"
+    if self.container_type == 'Project'
+      if dmsf_folder_id.nil?
+        # File is in project root
+        return "PROPFIND/#{self.container_id}"
+      else
+        return "PROPFIND/#{self.container_id}/#{self.dmsf_folder_id}"
+      end
     end
   end
 
@@ -552,25 +562,38 @@ class DmsfFile < ActiveRecord::Base
     @project
   end
 
-  def project=(project)
-    case self.container_type
-      when 'Project'
-        self.container_id = project.id
-      else
-        raise Exception.new('The container type is not project!')
+  def container
+    unless @container
+      case self.container_type
+        when 'Project'
+          @container = Project.find_by_id(self.container_id)
+        when 'Issue'
+          @container = Issue.find_by_id(self.container_id)
+      end
     end
+    @container
   end
 
-  def project_id
-    self.project.id if self.project
-  end
-
-  def project_id=(project_id)
-    case self.container_type
-      when 'Project'
-        self.container_id = project_id
+  def thumbnail(options={})
+    if image?
+      size = options[:size].to_i
+      if size > 0
+        # Limit the number of thumbnails per image
+        size = (size / 50) * 50
+        # Maximum thumbnail size
+        size = 800 if size > 800
       else
-        raise Exception.new('The container type is not project!')
+        size = Setting.thumbnails_size.to_i
+      end
+      size = 100 unless size > 0
+      target = File.join(Attachment.thumbnails_storage_path, "#{self.id}_#{self.last_revision.digest}_#{size}.thumb")
+
+      begin
+        Redmine::Thumbnail.generate(self.last_revision.disk_file, target, size)
+      rescue => e
+        Rails.logger.error "An error occured while generating thumbnail for #{self.last_revision.disk_file} to #{target}\nException was: #{e.message}"
+        return nil
+      end
     end
   end
 

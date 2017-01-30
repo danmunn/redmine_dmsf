@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -57,41 +57,53 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_should_not_succeed_on_a_non_existant_project
-    xml_http_request  :mkcol, '/dmsf/webdav/project_doesnt_exist/test1', nil, @admin
-    assert_response :missing # Not found
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      xml_http_request  :mkcol, '/dmsf/webdav/project_doesnt_exist/test1', nil, @admin
+      assert_response :missing # Not found
+    end
   end
 
   def test_should_not_succed_on_a_non_dmsf_enabled_project
-    xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/folder", nil, @jsmith
-    assert_response :forbidden
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/folder", nil, @jsmith
+      assert_response :forbidden
+    end
   end
 
   def test_should_not_create_folder_without_permissions
-    @project1.enable_module! :dmsf # Flag module enabled
-    xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/folder", nil, @jsmith
-    assert_response :forbidden
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      @project1.enable_module! :dmsf # Flag module enabled
+      xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/folder", nil, @jsmith
+      assert_response :forbidden
+    end
   end
 
   def test_should_fail_to_create_folder_that_already_exists
-    @project1.enable_module! :dmsf # Flag module enabled
-    @role.add_permission! :folder_manipulation
-    @role.add_permission! :view_dmsf_folders
-    xml_http_request :mkcol, 
-      "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
-    assert_response 405 # Method not Allowed
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      @project1.enable_module! :dmsf # Flag module enabled
+      @role.add_permission! :folder_manipulation
+      @role.add_permission! :view_dmsf_folders
+      xml_http_request :mkcol,
+        "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
+      assert_response 405 # Method not Allowed
+    end
   end
 
   def test_should_fail_to_create_folder_for_user_without_rights
-    @project1.enable_module! :dmsf # Flag module enabled
-    xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", nil, @jsmith
-    assert_response :forbidden
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      @project1.enable_module! :dmsf # Flag module enabled
+      xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", nil, @jsmith
+      assert_response :forbidden
+    end
   end
 
   def test_should_create_folder_for_non_admin_user_with_rights
-    @project1.enable_module! :dmsf
-    @role.add_permission! :folder_manipulation    
-    xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", nil, @jsmith
-    assert_response :success            
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      @project1.enable_module! :dmsf
+      @role.add_permission! :folder_manipulation
+      xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", nil, @jsmith
+      assert_response :success
+    end
   end
   
 end

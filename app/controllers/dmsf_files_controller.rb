@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ class DmsfFilesController < ApplicationController
       commit = params[:commit] == 'yes'
       if @file.delete(commit)
         flash[:notice] = l(:notice_file_deleted)
-        if commit
+        if commit && (@file.container_type == 'Project')
           log_activity('deleted')
           begin
             recipients = DmsfMailer.get_notify_users(@project, [@file])
@@ -289,6 +289,19 @@ class DmsfFilesController < ApplicationController
       flash[:error] = @file.errors.full_messages.to_sentence
     end
     redirect_to :back
+  end
+
+  def thumbnail
+    if @file.image? && tbnail = @file.thumbnail(:size => params[:size])
+      if stale?(:etag => tbnail)
+        send_file tbnail,
+                  :filename => filename_for_content_disposition(@file.last_revision.disk_file),
+                  :type => @file.last_revision.detect_content_type,
+                  :disposition => 'inline'
+      end
+    else
+      render :nothing => true, :status => 404
+    end
   end
 
   private

@@ -99,4 +99,44 @@ dmsf_file_revisions_005:
   deleted_by_user_id:            NULL
   user_id:                       1
   dmsf_workflow_assigned_by:     NULL
-  dmsf_workflow_started_by:      NULL  
+  dmsf_workflow_started_by:      NULL
+
+dmsf_file_revisions_006:
+  id:                            6
+  dmsf_file_id:                  7
+  source_dmsf_file_revision_id:  NULL
+  name:                          "test.gif"
+  disk_filename:                 "test.gif"
+  size:                          4
+  mime_type:                     image/gif
+  title:                         "Image"
+  description:                   NULL
+  workflow:                      NULL
+  minor_version:                 0
+  major_version:                 1
+  comment:                       NULL
+  deleted:                       0
+  deleted_by_user_id:            NULL
+  user_id:                       1
+  dmsf_workflow_assigned_by:     NULL
+  dmsf_workflow_started_by:      NULL
+
+dmsf_file_revisions_007:
+  id:                            7
+  dmsf_file_id:                  8
+  source_dmsf_file_revision_id:  NULL
+  name:                          "test.pdf"
+  disk_filename:                 "test.pdf"
+  size:                          4
+  mime_type:                     application/pdf
+  title:                         "PDF"
+  description:                   NULL
+  workflow:                      NULL
+  minor_version:                 0
+  major_version:                 1
+  comment:                       NULL
+  deleted:                       0
+  deleted_by_user_id:            NULL
+  user_id:                       1
+  dmsf_workflow_assigned_by:     NULL
+  dmsf_workflow_started_by:      NULL

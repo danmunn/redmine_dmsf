@@ -21,31 +21,22 @@
 module RedmineDmsf
   module Hooks
     include Redmine::Hook
+    
+    class HellperIssuesHook < RedmineDmsf::Hooks::Listener
 
-    class DmsfViewListener < Redmine::Hook::ViewListener
-
-      def view_issues_form_details_bottom(context={})
-        if context.is_a?(Hash) && context[:issue]
-          issue = context[:issue]
-          # Add Dmsf upload form
-          html = "<div class=\"dmsf_uploader\">"
-          html << '<p>'
-          html << "<label>#{l(:label_document_plural)}</label>"
-          html << context[:controller].send(:render_to_string, {:partial => 'dmsf_upload/form', :locals => context})
-          html << '</p>'
-          html << '</div>'
-          html.html_safe
+      def helper_issues_show_detail_after_setting(context)
+        if context.is_a?(Hash)
+          detail = context[:detail]
+          case detail.property
+            when 'dmsf_file'
+              dmsf_file = detail.journal.journalized.dmsf_files.detect {|f| f.id == detail.prop_key.to_i}
+              detail.prop_key = l(:label_document)
+              detail.property = 'attachment'
+            end
         end
       end
-
-      def view_issues_show_description_bottom(context={})
-        if context.is_a?(Hash) && context[:issue]
-          issue = context[:issue]
-          context[:controller].send(:render_to_string, {:partial => 'dmsf_files/links',
-            :locals => { :dmsf_files => issue.dmsf_files.to_a, :thumbnails => Setting.thumbnails_enabled? }})
-        end
-      end
-
+                  
     end
+    
   end
 end

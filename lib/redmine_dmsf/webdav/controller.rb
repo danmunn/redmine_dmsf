@@ -115,11 +115,11 @@ module RedmineDmsf
               # Don't know when projects are added/removed from the visibility list for this user,
               # so don't cache root.
             elsif (pinfo.length == 1) #This is first level, and as such, project path
-              propfind_key = "PROPFIND/#{resource.resource.project_id}"
+              propfind_key = "PROPFIND/#{resource.resource.project.id}"
             else # We made it all the way to DMSF Data
               if resource.collection?
                 # Only store collections in the cache since responses to files are simple and fast already.
-                propfind_key = "PROPFIND/#{resource.resource.project_id}/#{resource.resource.folder.id}"
+                propfind_key = "PROPFIND/#{resource.resource.project.id}/#{resource.resource.dmsf_folder_id}"
               end
             end
           end

@@ -84,10 +84,6 @@ module RedmineDmsf
       def really_exist?
         @resource_c.really_exist?
       end
-      
-      def project_id
-        @resource_c.project_id
-      end
 
       def creation_date
         @resource_c.creation_date

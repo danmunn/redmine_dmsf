@@ -44,6 +44,7 @@ module RedmineDmsf
         if [ :put, :make_collection, :move, :copy, :delete, :lock, :unlock, :set_property ].include?(method_name)
           webdav_setting = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
           webdav_setting = 'WEBDAV_READ_ONLY' unless webdav_setting
+          Rails.logger.info ">>> #{webdav_setting}"
           raise BadGateway if webdav_setting == 'WEBDAV_READ_ONLY'
         end
       end
@@ -78,10 +79,6 @@ module RedmineDmsf
 
       def really_exist?
         return project && project.module_enabled?('dmsf') && (folder || file)        
-      end
-      
-      def project_id
-        project.id unless project.nil?
       end
 
       # Is this entity a folder?
@@ -132,7 +129,7 @@ module RedmineDmsf
             # If folder is false, means it couldn't pick up parent,
             # as such its probably fine to bail out, however we'll
             # perform a search in this scenario
-            files = DmsfFile.visible.where(:project_id => project.id, :name => basename).order('name ASC').to_a
+            files = DmsfFile.visible.where(:container_id => project.id, :container_type => 'Project', :name => basename).order('name ASC').to_a
             files.delete_if { |x| File.dirname('/' + x.dmsf_path_str) != File.dirname(projectless_path) }
             @file = files[0] if files.length > 0
           end
@@ -265,13 +262,13 @@ module RedmineDmsf
         # prevent unexpected errors
         resource = dest.is_a?(ResourceProxy) ? dest.resource : dest
 
-        return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil? || resource.project.id == 0
+        return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil?
 
         parent = resource.parent
 
         if collection?
           # At the moment we don't support cross project destinations
-          return MethodNotImplemented unless project.id == resource.project.id
+          return MethodNotImplemented unless (project.id == resource.project.id)
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
 
           # Current object is a folder, so now we need to figure out information about Destination
@@ -369,7 +366,7 @@ module RedmineDmsf
           resource = dest
         end
 
-        return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil? || resource.project.id == 0
+        return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil?
 
         parent = resource.parent
 
@@ -536,9 +533,11 @@ module RedmineDmsf
 
       # HTTP PUT request.
       def put(request, response)
+        Rails.logger.info ">>> 1"
         raise BadRequest if collection?
+        Rails.logger.info ">>> 2"
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
-
+        Rails.logger.info ">>> 3"
         # Ignore Mac OS X resource forks and special Windows files.
         if basename.match(/^\._/) || basename.match(/^\.DS_Store$/i) || basename.match(/^Thumbs.db$/i)
           Rails.logger.info "#{basename} ignored"
@@ -567,7 +566,7 @@ module RedmineDmsf
           raise BadRequest unless (parent.projectless_path == '/' || (parent.exist? && parent.folder))
           f = DmsfFile.new
           f.container_type = 'Project'
-          f.project = project
+          f.container_id = project.id
           f.name = basename
           f.dmsf_folder = parent.folder
           f.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
