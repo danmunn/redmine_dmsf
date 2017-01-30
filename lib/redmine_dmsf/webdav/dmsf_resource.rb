@@ -632,6 +632,10 @@ module RedmineDmsf
         end
       end
 
+      def project_id
+        self.project.id if self.project
+      end
+
       private
       # Prepare file for download using Rack functionality:
       # Download (see RedmineDmsf::Webdav::Download) extends Rack::File to allow single-file

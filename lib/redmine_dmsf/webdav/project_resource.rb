@@ -100,8 +100,13 @@ module RedmineDmsf
       def folder
         nil
       end
+
       def file
         nil
+      end
+
+      def project_id
+	self.project.id if self.project
       end
 
     end
