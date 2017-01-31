@@ -207,4 +207,21 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     end
   end
 
+  def test_put_ignored_files_default
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      @project1.enable_module! :dmsf
+      @role.add_permission! :view_dmsf_folders
+      @role.add_permission! :file_manipulation
+      put "/dmsf/webdav/#{@project1.identifier}/._test.txt", '1234', @admin.merge!({:content_type => :text})
+      assert_response 204 # NoContent
+      put "/dmsf/webdav/#{@project1.identifier}/.DS_Store", '1234', @admin.merge!({:content_type => :text})
+      assert_response 204 # NoContent
+      put "/dmsf/webdav/#{@project1.identifier}/Thumbs.sb", '1234', @admin.merge!({:content_type => :text})
+      assert_response 204 # NoContent
+      Setting.plugin_redmine_dmsf['dmsf_webdav_ignore'] = '.dump$'
+      put "/dmsf/webdav/#{@project1.identifier}/test.dump", '1234', @admin.merge!({:content_type => :text})
+      assert_response 204 # NoContent
+    end
+  end
+  
 end

@@ -124,7 +124,7 @@
   <%= content_tag(:label, l(:label_title_format)) %>  
   <%= text_field_tag 'settings[dmsf_global_title_format]', @settings['dmsf_global_title_format'], :size => 10 %>
   <em class="info">
-    <%= l(:text_title_format) %> <%= l(:label_default) %>: %t_%v
+    <%= l(:text_title_format) %>
   </em>
 </p>
 
@@ -164,26 +164,33 @@
   </em>  
 </p>
 
-<% if @settings['dmsf_webdav'].nil? || !@settings['dmsf_webdav'].empty? %>
-  <p>
-    <%= content_tag(:label, l(:label_webdav_strategy)) %>
-    <%= select_tag('settings[dmsf_webdav_strategy]',
-      options_for_select([
-        [l(:select_option_webdav_readonly), 'WEBDAV_READ_ONLY'],
-        [l(:select_option_webdav_readwrite), 'WEBDAV_READ_WRITE']],
-        :selected => @settings['dmsf_webdav_strategy'])) %><br/>
-    <em class="info">
-      <%= l(:note_webdav_strategy).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_webdav_readonly) %>    
-    </em>
-  </p>
-  <p>
-    <%= content_tag(:label, l(:label_memcached_servers)) %>
-    <%= text_field_tag 'settings[dmsf_memcached_servers]', @settings['dmsf_memcached_servers'], :size => 50 %>
-	<em class="info">
-	  <%= l(:text_memcached_servers) %>
-	</em>
-  </p>  
-<% end %>
+<p>
+  <%= content_tag(:label, l(:label_webdav_strategy)) %>
+  <%= select_tag('settings[dmsf_webdav_strategy]',
+    options_for_select([
+      [l(:select_option_webdav_readonly), 'WEBDAV_READ_ONLY'],
+      [l(:select_option_webdav_readwrite), 'WEBDAV_READ_WRITE']],
+      :selected => @settings['dmsf_webdav_strategy'])) %><br/>
+  <em class="info">
+    <%= l(:note_webdav_strategy).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_webdav_readonly) %>
+  </em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_memcached_servers)) %>
+  <%= text_field_tag 'settings[dmsf_memcached_servers]', @settings['dmsf_memcached_servers'], :size => 50 %>
+  <em class="info">
+    <%= l(:text_memcached_servers) %>
+  </em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_webdav_ignore)) %>
+  <%= text_field_tag 'settings[dmsf_webdav_ignore]', @settings['dmsf_webdav_ignore'], :size => 50 %>
+  <em class="info">
+    <%= l(:note_webdav_ignore) %> <%= l(:label_default) %>: ^(\._|\.DS_Store$|Thumbs.db$)
+  </em>
+</p>
 
 <hr/>
 <em class="info">

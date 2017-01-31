@@ -342,3 +342,6 @@ cs:
 
   label_memcached_servers: Adresa Memcached serveru
   text_memcached_servers: Je podporován pouze jeden server. Pokud není vyplněno, kešování je vypnuté. Při změně adresy je potřeba restartovat aplikaci.
+
+  label_webdav_ignore: Vzory názvů ignorovaných souborů
+  note_webdav_ignore: Regulární výraz pro názvy souborů, které budou ignorovány při volání PUT.

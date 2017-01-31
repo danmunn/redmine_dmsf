@@ -533,13 +533,12 @@ module RedmineDmsf
 
       # HTTP PUT request.
       def put(request, response)
-        Rails.logger.info ">>> 1"
         raise BadRequest if collection?
-        Rails.logger.info ">>> 2"
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
-        Rails.logger.info ">>> 3"
-        # Ignore Mac OS X resource forks and special Windows files.
-        if basename.match(/^\._/) || basename.match(/^\.DS_Store$/i) || basename.match(/^Thumbs.db$/i)
+        # Ignore file name patterns given in the plugin settings
+        pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore']
+        pattern = /^(\._|\.DS_Store$|Thumbs.db$)/ if pattern.blank?
+        if basename.match(pattern)
           Rails.logger.info "#{basename} ignored"
           return NoContent
         end
