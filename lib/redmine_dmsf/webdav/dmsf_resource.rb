@@ -44,7 +44,6 @@ module RedmineDmsf
         if [ :put, :make_collection, :move, :copy, :delete, :lock, :unlock, :set_property ].include?(method_name)
           webdav_setting = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
           webdav_setting = 'WEBDAV_READ_ONLY' unless webdav_setting
-          Rails.logger.info ">>> #{webdav_setting}"
           raise BadGateway if webdav_setting == 'WEBDAV_READ_ONLY'
         end
       end
