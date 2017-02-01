@@ -24,6 +24,6 @@ class AddNameToAppovalWorkflowStep < ActiveRecord::Migration
   end
 
   def down
-    remove_column :dmsf_links, :external_url
+    remove_column :dmsf_workflow_steps, :name
   end
 end
