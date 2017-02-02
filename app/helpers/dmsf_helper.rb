@@ -23,6 +23,7 @@ require 'tmpdir'
 require 'digest/md5'
 
 module DmsfHelper
+  include Redmine::I18n
 
   def self.temp_dir
     Dir.tmpdir
@@ -118,7 +119,8 @@ module DmsfHelper
   end
 
   def self.dmsf_to_csv(parent, columns)
-    Redmine::Export::CSV.generate do |csv|
+    #Redmine::Export::CSV.generate do |csv|
+    CSV.generate(:force_quotes => true, :encoding => 'UTF-8') do |csv|
       # Header
       csv << columns.map { |c| c.capitalize }
       # Lines
@@ -129,7 +131,7 @@ module DmsfHelper
   def self.object_to_csv(csv, parent, columns, level = -1)
     # Folder
     if level >= 0
-      csv << parent.to_csv(columns, level + 1)
+      csv << parent.to_csv(columns, level)
     end
     # Sub-folders
     folders = parent.dmsf_folders.visible.to_a
