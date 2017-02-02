@@ -432,7 +432,7 @@ class DmsfFolder < ActiveRecord::Base
     # Id
     csv << self.id if columns.include?('id')
     # Title
-    csv << self.title.insert(0, ' ' * level) if columns.include?('title')
+    csv << self.title.insert(0, '  ' * level) if columns.include?('title')
     # Extension
     csv << '' if columns.include?('extension')
     # Size
