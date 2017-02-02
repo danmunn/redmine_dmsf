@@ -109,7 +109,7 @@ class DmsfFilesController < ApplicationController
          else
            revision.increase_version(version)
          end
-        file_upload = params[:attachments]['1'] if params[:attachments].present?
+        file_upload = params[:dmsf_attachments]['1'] if params[:dmsf_attachments].present?
         unless file_upload
           revision.size = last_revision.size
           revision.disk_filename = last_revision.disk_filename

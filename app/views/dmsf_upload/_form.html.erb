@@ -23,7 +23,7 @@
 <span id="dmsf_attachments_fields">
 <% if defined?(container) && container && container.saved_attachments %>
   <% container.saved_attachments.each_with_index do |attachment, i| %>
-    <span id="dmsf_attachments_p<%#= i %>">
+    <span id="dmsf_attachments_p<%= i %>">
       <%= text_field_tag("dmsf_attachments[p#{i}][filename]", attachment.filename, :class => 'filename') +
               text_field_tag("dmsf_attachments[p#{i}][description]", attachment.description, :maxlength => 255, :placeholder => l(:label_optional_description), :class => 'description') +
               link_to('&nbsp;'.html_safe, dmsf_attachment_path(attachment, :attachment_id => "p#{i}", :format => 'js'), :method => 'delete', :remote => true, :class => 'remove-upload') %>
@@ -36,8 +36,8 @@
 <%= file_field_tag 'dmsf_attachments[dummy][file]',
                    :id => nil,
                    :class => 'file_selector',
-                   :multiple => true,
-                   :onchange => 'dmsfAddInputFiles(this);',
+                   :multiple => multiple,
+                   :onchange => "dmsfAddInputFiles(this);",
                    :data => {
                        :max_file_size => Setting.attachment_max_size.to_i.kilobytes,
                        :max_file_size_message => l(:error_attachment_too_big, :max_size => number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)),

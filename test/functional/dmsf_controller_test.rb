@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -194,6 +194,14 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     get :show, :id => @project.id
     assert_response :success
     assert_select 'tr.dmsf_tree'
+  end
+
+  def test_show_csv
+    @role.add_permission! :view_dmsf_files
+    @role.add_permission! :view_dmsf_folders
+    get :show, :id => @project.id, :format => 'csv', :settings => {:dmsf_columns => ['id', 'title']}
+    assert_response :success
+    assert_equal 'text/csv; header=present', @response.content_type
   end
 
 end

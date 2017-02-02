@@ -31,9 +31,10 @@ class DmsfController < ApplicationController
 
   accept_api_auth :show, :create, :save
 
-  skip_before_action :verify_authenticity_token,  if: -> { request.headers["HTTP_X_REDMINE_API_KEY"].present? }
+  skip_before_action :verify_authenticity_token,  if: -> { request.headers['HTTP_X_REDMINE_API_KEY'].present? }
 
   helper :all
+  #helper :dmsf
 
   def expand_folder
     @tree_view = true
@@ -58,6 +59,10 @@ class DmsfController < ApplicationController
         render :layout => !request.xhr?
       }
       format.api
+      format.csv  {
+        send_data(DmsfHelper.dmsf_to_csv(@folder ? @folder : @project, params[:settings][:dmsf_columns]),
+                  :type => 'text/csv; header=present', :filename => 'dmsf.csv')
+      }
     end
   end
 
@@ -594,6 +599,7 @@ class DmsfController < ApplicationController
     @file_approval_allowed = User.current.allowed_to?(:file_approval, @project)
     tag = params[:custom_field_id].present? && params[:custom_value].present?
     @folder = nil if tag
+    @extra_columns = [l(:label_document_url), l(:label_last_revision_id)]
     if @tree_view
       @locked_for_user = false
     else
@@ -688,7 +694,7 @@ class DmsfController < ApplicationController
       @file_delete_allowed && !@locked_for_user && !@folder
     @trash_enabled = DmsfFolder.deleted.where(:project_id => @project.id).any? ||
       DmsfFile.deleted.where(:container_id => @project.id, :container_type => 'Project').any? ||
-      DmsfLink.deleted.where(:container_id => @project.id, :container_type => 'Project').any?
+      DmsfLink.deleted.where(:project_id => @project.id).any?
   end
 
 end

@@ -128,6 +128,10 @@
     </tr>
   <% end %>
   <% @file_links.each do |link| %>
+    <% unless link.target_file %>
+        <% Rails.logger.error "Error: dmsf_link id #{link.id} has no target file!" %>
+        <% next %>
+    <% end %>
     <% unless link.target_file.last_revision %>
       <% Rails.logger.error "Error: dmsf_file id #{link.target_id} has no revision!" %>
       <% next %>

@@ -1,5 +1,23 @@
-/* Redmine - project management software
- Copyright (C) 2006-2016  Jean-Philippe Lang */
+/* encoding: utf-8
+ *
+ * Redmine plugin for Document Management System "Features"
+ *
+ * Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 
 function dmsfAddFile(inputEl, file, eagerUpload) {
 
@@ -9,11 +27,35 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
 
         var fileSpan = $('<span>', { id: 'dmsf_attachments_' + attachmentId });
 
-        fileSpan.append(
-            $('<input>', { type: 'text', 'class': 'filename readonly', name: 'dmsf_attachments[' + attachmentId + '][filename]', readonly: 'readonly'} ).val(file.name),
-            $('<input>', { type: 'text', 'class': 'description', name: 'dmsf_attachments[' + attachmentId + '][description]', maxlength: 255, placeholder: $(inputEl).data('description-placeholder') } ).toggle(!eagerUpload),
-            $('<a>&nbsp</a>').attr({ href: "#", 'class': 'remove-upload' }).click(dmsfRemoveFile).toggle(!eagerUpload)
-        ).appendTo('#dmsf_attachments_fields');
+        if($(inputEl).attr('multiple') == 'multiple') {
+            fileSpan.append(
+                $('<input>', {
+                    type: 'text',
+                    'class': 'filename readonly',
+                    name: 'dmsf_attachments[' + attachmentId + '][filename]',
+                    readonly: 'readonly'
+                }).val(file.name),
+                $('<input>', {
+                    type: 'text',
+                    'class': 'description',
+                    name: 'dmsf_attachments[' + attachmentId + '][description]',
+                    maxlength: 255,
+                    placeholder: $(inputEl).data('description-placeholder')
+                }).toggle(!eagerUpload),
+                $('<a>&nbsp</a>').attr({href: "#", 'class': 'remove-upload'}).click(dmsfRemoveFile).toggle(!eagerUpload)
+            ).appendTo('#dmsf_attachments_fields');
+        }
+        else{
+            fileSpan.append(
+                $('<input>', {
+                    type: 'text',
+                    'class': 'filename readonly',
+                    name: 'dmsf_attachments[' + attachmentId + '][filename]',
+                    readonly: 'readonly'
+                }).val(file.name)
+            ).appendTo('#dmsf_attachments_fields');
+            $('#dmsf_file_revision_name').val(file.name);
+        }
 
         if(eagerUpload) {
             dmsfAjaxUpload(file, attachmentId, fileSpan, inputEl);
@@ -58,7 +100,7 @@ function dmsfAjaxUpload(file, attachmentId, fileSpan, inputEl) {
             dmsfAjaxUpload.uploading--;
             fileSpan.removeClass('ajax-loading');
             var form = fileSpan.parents('form');
-            if (form.queue('upload').length == 0 && dmsfAjaxUpload.uploading == 0) {
+            if ((form.queue('upload').length == 0) && (dmsfAjaxUpload.uploading == 0)) {
                 $('input:submit', form).removeAttr('disabled');
             }
             form.dequeue('upload');
@@ -134,7 +176,10 @@ function dmsfAddInputFiles(inputEl) {
         }
     }
 
-    clearedFileInput.insertAfter('#dmsf_attachments_fields');
+    if($(inputEl).attr('multiple') == 'multiple')
+        clearedFileInput.insertAfter('#dmsf_attachments_fields');
+    else
+        $('.dmsf_add_attachment').toggle();
 }
 
 function dmsfUploadAndAttachFiles(files, inputEl) {

@@ -142,5 +142,11 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
     
     RedmineDmsf::Webdav::Cache.init_nullcache
-  end  
+  end
+
+  def test_to_csv
+    columns = ['id', 'title']
+    csv = @folder4.to_csv(columns, 0)
+    assert_equal 2, csv.size
+  end
 end

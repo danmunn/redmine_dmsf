@@ -133,19 +133,7 @@
   <%= l(:menu_dmsf) %> <%= l(:field_column_names) %>
 </em>
 
-<p>
-  <%= content_tag(:label, l(:field_column_names)) %>
-  <% columns = DmsfFolder::AVAILABLE_COLUMNS.dup %>
-  <% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
-  <% columns.concat(cfs.map{ |c| c.name }) %>
-  <% selected_columns = @settings[:dmsf_columns] %>
-  <% selected_columns = DmsfFolder::DEFAULT_COLUMNS unless selected_columns %>
-  <% columns.each_with_index do |column, i| %>
-    <%= check_box_tag('settings[dmsf_columns][]', column, selected_columns.include?(column)) %>
-    <%= h column.capitalize %>
-    <br/>
-  <% end %>
-</p>
+<%= render(:partial => 'settings/dmsf_columns', :locals => { :settings => @settings }) %>
 
 <hr/>
 <em class="info">

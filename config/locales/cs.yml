@@ -345,3 +345,6 @@ cs:
 
   label_webdav_ignore: Vzory názvů ignorovaných souborů
   note_webdav_ignore: Regulární výraz pro názvy souborů, které budou ignorovány při volání PUT.
+
+  label_document_url: Url
+  label_last_revision_id: Revize

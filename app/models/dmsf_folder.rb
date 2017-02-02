@@ -424,6 +424,42 @@ class DmsfFolder < ActiveRecord::Base
     end
   end
 
+  include ActionView::Helpers::NumberHelper
+  include Rails.application.routes.url_helpers
+
+  def to_csv(columns, level)
+    csv = []
+    # Id
+    csv << self.id if columns.include?('id')
+    # Title
+    csv << self.title.insert(0, ' ' * level) if columns.include?('title')
+    # Extension
+    csv << '' if columns.include?('extension')
+    # Size
+    csv << '' if columns.include?('size')
+    # Modified
+    csv << format_time(self.updated_at) if columns.include?('modified')
+    # Version
+    csv << '' if columns.include?('version')
+    # Workflow
+    csv << '' if columns.include?('workflow')
+    # Author
+    csv << self.user.name if columns.include?('author')
+    # Url
+    if columns.include?(l(:label_document_url))
+      default_url_options[:host] = Setting.host_name
+      csv << url_for(:controller => :dmsf, :action => 'show', :id => self.project_id, :folder_id => self.id)
+    end
+    # Revision
+    csv << '' if columns.include?(l(:label_last_revision_id))
+    # Custom fields
+    cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position)
+    cfs.each do |c|
+      csv << self.custom_value(c) if columns.include?(c.name)
+    end
+    csv
+  end
+
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)

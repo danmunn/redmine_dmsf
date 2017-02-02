@@ -44,7 +44,7 @@
 <% end %>
 <% if DmsfFolder.is_column_on?('extension') %>
     <td class="dmsf_extension">
-      <%= $1 if file.last_revision.disk_filename =~ /\.(.+)$/ %>
+      <%= file.extension %>
     </td>
 <% end %>
 <% if DmsfFolder.is_column_on?('size') %>

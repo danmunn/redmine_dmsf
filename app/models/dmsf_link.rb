@@ -46,8 +46,8 @@ class DmsfLink < ActiveRecord::Base
     end
   end
 
-  STATUS_DELETED = 1
-  STATUS_ACTIVE = 0
+  STATUS_DELETED = 1.freeze
+  STATUS_ACTIVE = 0.freeze
 
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }
@@ -148,6 +148,38 @@ class DmsfLink < ActiveRecord::Base
 
   def is_file?
     !is_folder?
+  end
+
+  def to_csv(columns, level)
+    csv = []
+    if self.target_type == 'DmsfUrl'
+      # Id
+      csv << '' if columns.include?('id')
+      # Title
+      csv << self.title.insert(0, ' ' * level) if columns.include?('title')
+      # Extension
+      csv << '' if columns.include?('extension')
+      # Size
+      csv << '' if columns.include?('size')
+      # Modified
+      csv << format_time(self.updated_at) if columns.include?('modified')
+      # Version
+      csv << '' if columns.include?('version')
+      # Workflow
+      csv << '' if columns.include?('workflow')
+      # Author
+      csv << self.last_revision.user.name if columns.include?('author')
+      # Url
+      csv << self.external_url if columns.include?('url')
+      # Revision
+      csv << '' if columns.include?('revision')
+      # Custom fields
+      cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position)
+      cfs.each do |c|
+        csv << '' if columns.include?(c.name)
+      end
+    end
+    csv
   end
 
 end

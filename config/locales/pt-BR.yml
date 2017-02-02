@@ -345,3 +345,6 @@ pt-BR:
 
   label_webdav_ignore: Ignored files patterns
   note_webdav_ignore: A regular expresion with filenames to ignore by PUT requests.
+
+  label_document_url: Url
+  label_last_revision_id: Revision

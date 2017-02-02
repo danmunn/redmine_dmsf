@@ -523,29 +523,74 @@ class DmsfFile < ActiveRecord::Base
     end
   end
 
+  def extension
+    $1 if self.last_revision && self.last_revision.disk_filename =~ /\.(.+)$/
+  end
+
   include ActionView::Helpers::NumberHelper
   include Rails.application.routes.url_helpers
 
-  def to_csv
-    csv =  "\"#{self.title}\""
-    csv << ';'
-    csv << "\"#{number_to_human_size(self.last_revision.size)}\""
-    csv << ';'
-    csv << "\"#{format_time(self.last_revision.updated_at)}\""
-    csv << ';'
-    csv << "\"#{self.last_revision.version}\""
-    csv << ';'
-    csv << "\"#{self.last_revision.workflow_str(false)}\""
-    csv << ';'
-    csv << "\"#{self.last_revision.user}\""
-    csv << ';'
-    csv << "\"#{self.id}\""
-    csv << ';'
-    csv << "\"r#{self.last_revision.id}\""
-    csv << ';'
-    default_url_options[:host] = Setting.host_name
-    csv << "\"#{url_for(:controller => :dmsf_files, :action => 'view', :id => self)}\""
-    csv << ';'
+  def to_csv(columns, level)
+    csv = []
+    # Id
+    csv << self.id if columns.include?('id')
+    # Title
+    csv << self.title.insert(0, ' ' * level) if columns.include?('title')
+    # Extension
+    csv << self.extension if columns.include?('extension')
+    # Size
+    csv << number_to_human_size(self.last_revision.size) if columns.include?('size')
+    # Modified
+    if columns.include?('modified')
+      if self.last_revision
+        csv << format_time(self.last_revision.updated_at)
+      else
+        csv << ''
+      end
+    end
+    # Version
+    if columns.include?('version')
+      if self.last_revision
+        csv << self.last_revision.version
+      else
+        csv << ''
+      end
+    end
+    # Workflow
+    if columns.include?('workflow')
+      if self.last_revision
+        csv << self.last_revision.workflow_str(false)
+      else
+        csv << ''
+      end
+    end
+    # Author
+    if columns.include?('author')
+      if self.last_revision && self.last_revision.user
+        csv << self.last_revision.user.name
+      else
+        csv << ''
+      end
+    end
+    # Url
+    if columns.include?(l(:label_document_url))
+      default_url_options[:host] = Setting.host_name
+      url = url_for(:controller => :dmsf_files, :action => 'view', :id => self.id)
+      csv << url_for(:controller => :dmsf_files, :action => 'view', :id => self.id)
+    end
+    # Revision
+    if columns.include?(l(:label_last_revision_id))
+      if self.last_revision
+        csv << self.last_revision.id
+      else
+        csv << ''
+      end
+    end
+    # Custom fields
+    cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position)
+    cfs.each do |c|
+      csv << self.custom_value(c) if columns.include?(c.name)
+    end
     csv
   end
 
