@@ -179,6 +179,14 @@
     <%= l(:note_webdav_ignore) %> <%= l(:label_default) %>: ^(\._|\.DS_Store$|Thumbs.db$)
   </em>
 </p>
+<p>
+  <%= content_tag(:label, l(:label_webdav_disable_versioning)) %>
+  <%= text_field_tag 'settings[dmsf_webdav_disable_versioning]', @settings['dmsf_webdav_disable_versioning'], :size => 50 %>
+  <em class="info">
+    <%= l(:note_webdav_disable_versioning) %> <br/>
+    <%= l(:label_default) %>: ^\~\$|\.tmp$
+  </em>
+</p>
 
 <hr/>
 <em class="info">

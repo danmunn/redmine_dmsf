@@ -534,6 +534,7 @@ module RedmineDmsf
       def put(request, response)
         raise BadRequest if collection?
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
+
         # Ignore file name patterns given in the plugin settings
         pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore']
         pattern = /^(\._|\.DS_Store$|Thumbs.db$)/ if pattern.blank?
@@ -542,17 +543,24 @@ module RedmineDmsf
           return NoContent
         end
 
-        new_revision = DmsfFileRevision.new
-        reuse_revision = false
+        # Disable versioning for file name patterns given in the plugin settings.
+        pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
+        if !pattern.blank? && basename.match(pattern)
+            Rails.logger.info "Versioning disabled for #{basename}"
+            reuse_revision = true
+        else
+            reuse_revision = false
+        end
 
         if exist? # We're over-writing something, so ultimately a new revision
           f = file
           last_revision = file.last_revision
-          if last_revision.size == 0
+          if last_revision.size == 0 || reuse_revision
             new_revision = last_revision
             new_revision.minor_version -= 1
             reuse_revision = true
           else
+            new_revision = DmsfFileRevision.new
             new_revision.source_revision = last_revision
             if last_revision
               new_revision.major_version = last_revision.major_version
@@ -568,8 +576,10 @@ module RedmineDmsf
           f.name = basename
           f.dmsf_folder = parent.folder
           f.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
+          new_revision = DmsfFileRevision.new
           new_revision.minor_version = 0
           new_revision.major_version = 0
+          reuse_revision = false
         end
 
         new_revision.dmsf_file = f
