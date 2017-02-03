@@ -348,3 +348,6 @@ pt-BR:
 
   label_document_url: Url
   label_last_revision_id: Revision
+    
+  label_webdav_disable_versioning: No versioning files patterns
+  note_webdav_disable_versioning: A regular expression that disables versioning for matching files.
