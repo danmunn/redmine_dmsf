@@ -268,8 +268,8 @@ class DmsfFile < ActiveRecord::Base
     self.save && new_revision.save
   end
 
-  def copy_to(project, folder)
-
+  def copy_to(container, folder = nil)
+    project = container.is_a?(Project) ? container : container.project
     # If the target project differs from the source project we must physically move the disk files
     if self.project != project
       self.dmsf_file_revisions.all.each do |rev|
@@ -278,27 +278,22 @@ class DmsfFile < ActiveRecord::Base
         end
       end
     end
-
     file = DmsfFile.new
     file.dmsf_folder = folder
     file.container_type = self.container_type
-    file.container_id = project.id
+    file.container_id = container.id
     file.name = self.name
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
-
     if file.save && self.last_revision
       new_revision = self.last_revision.clone
       new_revision.dmsf_file = file
-      new_revision.comment = l(:comment_copied_from, :source => "#{self.project.identifier}: #{self.dmsf_path_str}")
-
+      new_revision.comment = l(:comment_copied_from, :source => "#{project.identifier}: #{self.dmsf_path_str}")
       new_revision.custom_values = []
       self.last_revision.custom_values.each do |cv|
         new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
       end
-
       file.delete(true) unless new_revision.save
     end
-
     return file
   end
 

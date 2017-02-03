@@ -28,12 +28,22 @@ module RedmineDmsf
         base.send(:include, InstanceMethods)
         base.class_eval do
           unloadable
+          alias_method_chain :copy_from, :dmsf_copy_from
           has_many :dmsf_files, -> { where(dmsf_folder_id: nil, container_type: 'Issue').order(:name) },
             :class_name => 'DmsfFile', :foreign_key => 'container_id', :dependent => :destroy
         end
       end
 
       module InstanceMethods
+
+        def copy_from_with_dmsf_copy_from(arg, options={})
+          copy_from_without_dmsf_copy_from(arg, options)
+          # issue = @copied_from
+          # self.dmsf_files = issue.dmsf_files.map do |dmsf_file|
+          #   dmsf_file.copy_to(self)
+          # end
+        end
+
         def dmsf_file_added(dmsf_file)
           unless dmsf_file.new_record?
             self.journalize_dmsf_file(dmsf_file, :added)
