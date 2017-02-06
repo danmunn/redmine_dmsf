@@ -54,6 +54,63 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert_equal @revision5.create_digest, 0, "MD5 should be 0, if the file is missing"
   end
   
+  def test_new_storage_filename
+    # Create a file.
+    f = DmsfFile.new
+    f.container_type = 'Project'
+    f.container_id = 1
+    f.name = "Testfile.txt"
+    f.dmsf_folder = nil
+    f.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
+    f.save
+    
+    # Create two new revisions, r1 and r2
+    r1 = DmsfFileRevision.new
+    r1.minor_version = 0
+    r1.major_version = 1
+    r1.dmsf_file = f
+    r1.user = User.current
+    r1.name = "Testfile.txt"
+    r1.title = DmsfFileRevision.filename_to_title("Testfile.txt")
+    r1.description = nil
+    r1.comment = nil
+    r1.mime_type = nil
+    r1.size = 4
+    
+    r2 = r1.clone
+    r2.minor_version = 1
+    
+    assert r1.valid?
+    assert r2.valid?
+    
+    # This is a very stupid since the generation and storing of files below must be done during the
+    # same second, so wait until the microsecond part of the DateTime is less than 10 ms, should be
+    # plenty of time to do the rest then.
+    wait_timeout = 2000
+    while (DateTime.now.usec > 10*1000)
+        wait_timeout -= 10
+        if wait_timeout <= 0
+            flunk "Waited too long."
+        end
+        sleep 0.01
+    end
+    
+    # First, generate the r1 storage filename and save the file
+    r1.disk_filename = r1.new_storage_filename
+    assert r1.save
+    # Just make sure the file exists
+    File.open(r1.disk_file, 'wb') do |f|
+        f.write("1234")
+    end
+    
+    # Directly after the file has been stored generate the r2 storage filename.
+    # Hopefully the seconds part of the DateTime.now has not changed and the generated filename will
+    # be on the same second but it should then be increased by 1.
+    r2.disk_filename = r2.new_storage_filename
+    
+    assert_not_equal r1.disk_filename, r2.disk_filename, "The disk filename should not be equal for two revisions."
+  end
+  
   def test_save_and_destroy_with_cache
     RedmineDmsf::Webdav::Cache.init_testcache
     

@@ -130,16 +130,21 @@ class DmsfFileRevision < ActiveRecord::Base
   def version
     "#{self.major_version}.#{self.minor_version}"
   end
+  
+  def storage_base_path(project = nil)
+    project = self.dmsf_file.project unless project
+    path = DmsfFile.storage_path.dup
+    if self.dmsf_file && project
+      project_base = project.identifier.gsub(/[^\w\.\-]/,'_')
+      path << "/p_#{project_base}"
+    end
+  end
 
   def disk_file(project = nil)
     project = self.dmsf_file.project unless project
-    storage_base = DmsfFile.storage_path.dup
-    if self.dmsf_file && project
-      project_base = project.identifier.gsub(/[^\w\.\-]/,'_')
-      storage_base << "/p_#{project_base}"
-    end
-    FileUtils.mkdir_p(storage_base) unless File.exist?(storage_base)
-    "#{storage_base}/#{self.disk_filename}"
+    path = storage_base_path(project)
+    FileUtils.mkdir_p(path) unless File.exist?(path)
+    "#{path}/#{self.disk_filename}"
   end
 
   def detect_content_type
@@ -226,7 +231,7 @@ class DmsfFileRevision < ActiveRecord::Base
     raise DmsfAccessError, 'File id is not set' unless self.dmsf_file.id
     filename = DmsfHelper.sanitize_filename(self.name)
     timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
-    while File.exist?(File.join(DmsfFile.storage_path, "#{timestamp}_#{self.dmsf_file.id}_#{filename}"))
+    while File.exist?(File.join(storage_base_path, "#{timestamp}_#{self.dmsf_file.id}_#{filename}"))
       timestamp.succ!
     end
     "#{timestamp}_#{self.dmsf_file.id}_#{filename}"
