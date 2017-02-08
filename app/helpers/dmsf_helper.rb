@@ -21,6 +21,7 @@
 
 require 'tmpdir'
 require 'digest/md5'
+require 'csv'
 
 module DmsfHelper
   include Redmine::I18n
