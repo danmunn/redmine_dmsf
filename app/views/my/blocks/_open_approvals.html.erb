@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -40,10 +40,11 @@
     <table class="list">
       <thead>
         <tr>
-          <th><%=l(:field_project)%></th>
-          <th><%=l(:field_label_dmsf_workflow)%></th>
-          <th><%=l(:label_document)%></th>
-          <th><%=l(:field_folder)%></th>
+          <th><%= l(:field_project) %></th>
+          <th><%= l(:field_label_dmsf_workflow) %></th>
+          <th><%= l(:label_document) %></th>
+          <th><%= l(:field_folder) %></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -73,6 +74,22 @@
                     {:controller => 'dmsf', :action => 'show', :id => assignment.dmsf_file_revision.dmsf_file.project, :folder_id => assignment.dmsf_file_revision.dmsf_file.dmsf_folder}) %>
                 <% elsif assignment.dmsf_file_revision.dmsf_file.project %>
                   <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id => assignment.dmsf_file_revision.dmsf_file.project }) %>
+                <% end %>
+              <% end %>
+            </td>
+            <td class="dmsf_buttons">
+              <% if assignment.dmsf_workflow_step.dmsf_workflow %>
+                <% assigns = assignment.dmsf_workflow_step.dmsf_workflow.next_assignments(assignment.dmsf_file_revision.id) %>
+                <% index = assigns.find_index{|assign| assign.user_id == User.current.id} if assigns %>
+                <% if index %>
+                    <%= link_to(image_tag('waiting_for_approval.png', :plugin => 'redmine_dmsf'),
+                                action_dmsf_workflow_path(
+                                    :project_id => assignment.dmsf_file_revision.dmsf_file.project.id,
+                                    :id => assignment.dmsf_workflow_step.dmsf_workflow.id,
+                                    :dmsf_workflow_step_assignment_id => assigns[index].id,
+                                    :dmsf_file_revision_id => assignment.dmsf_file_revision.id),
+                                :title => l(:title_waiting_for_approval),
+                                :remote => true) %>
                 <% end %>
               <% end %>
             </td>
