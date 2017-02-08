@@ -33,7 +33,7 @@ Changelog for Redmine DMSF
 * Bug: #605 - Wrong file size detection for non English language
 * Bug: #603 - Send documents by email, from address is emission email address instead of user mail
 * Bug: #598 - WebDAV: PROPFIND to "/" and "/dmsf" throws FATAL error
-* Bug: #593 - Modern upload file type don't work type
+* Bug: #593 - Modern upload file type doesn't work
 * Bug: #592 - reset_column_information is missing in DB migration
 * Bug: #591 - rsync doesn't work for WebDAV mounted folder
 * Bug: #587 - Working with MS Office documents directly in mounted WebDAV share 
