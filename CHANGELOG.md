@@ -1,6 +1,52 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.5.9 *2016-03-01*
+------------------
+
+    WebDAV 
+        Documents editing in MS Office 
+        Support for rsync and cp commands 
+        Disable verioning for certain file names pattern by PUT request
+        Ignoring certain file names pattern by PUT request
+        Caching of PROPSTATS and PROPFIND requests
+    REST API
+        Update folders
+        Finding folders by their titles
+    Approval workflow
+        Editing of approval workflow steps
+        Approval workflow step name
+    DMSF
+        Document export   
+        Public URLs option in email entries
+        Global title format for downloading
+        New columns in the main DMSF view; columns are configurable from the plugin settings
+
+* New: #641 - Documents export
+* New: #635 - Edit approval workflow steps
+* Bug: #632 - database migration error (from ver 0.9.1 to ver 1.5.8)
+* New: #630 - Disable versioning for certain files/file patterns
+* New: #629 - Approval workflow step name
+* New: #626 - Public URLs in email entries
+* New: #614 - WebDAV caching
+* Bug: #606 - DmsfFile.move_to does not update last_revision
+* Bug: #605 - Wrong file size detection for non English language
+* Bug: #603 - Send documents by email, from address is emission email address instead of user mail
+* Bug: #598 - WebDAV: PROPFIND to "/" and "/dmsf" throws FATAL error
+* Bug: #593 - Modern upload file type don't work type
+* Bug: #592 - reset_column_information is missing in DB migration
+* Bug: #591 - rsync doesn't work for WebDAV mounted folder
+* Bug: #587 - Working with MS Office documents directly in mounted WebDAV share 
+* New: #584 - A lot of warnings in WebDAV unit tests
+* Bug: #582 - FATAL -- : ActionController::RoutingError (No route matches [GET] "/plugin_assets/redmine_dmsf/javascripts/jquery.dataTables/zh.json")
+* Bug: #581 - Webdav always shows the create date
+* Bug: #580 - Revision deleting
+* Bug: #579 - Wrong file size
+* New: #555 - Documents ID easy access
+* New: #551 - Default action for files viewing
+* New: #547 - Setting Title format should be global setting, but released as local setting
+* New: #499 - Add column "type/extension" in folder content view    
+
 1.5.8 *2016-10-21*
 ------------------
 

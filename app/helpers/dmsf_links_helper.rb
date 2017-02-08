@@ -2,7 +2,7 @@
 # 
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-16 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
