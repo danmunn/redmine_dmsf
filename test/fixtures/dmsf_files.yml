@@ -80,3 +80,13 @@ dmsf_files_008:
   notification:       0
   deleted:            0
   deleted_by_user_id: NULL
+  
+dmsf_files_009:
+  id:                 9
+  container_id:       1
+  container_type:     "Project"
+  dmsf_folder_id:     NULL
+  name:               "myfile.txt"
+  notification:       0
+  deleted:            0
+  deleted_by_user_id: NULL
