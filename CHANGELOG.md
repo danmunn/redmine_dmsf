@@ -22,6 +22,7 @@ Changelog for Redmine DMSF
         Global title format for downloading
         New columns in the main DMSF view; columns are configurable from the plugin settings
 
+* Bug: #651 - Incomplete copy of a file to another project
 * New: #641 - Documents export
 * New: #635 - Edit approval workflow steps
 * Bug: #632 - database migration error (from ver 0.9.1 to ver 1.5.8)

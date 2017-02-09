@@ -277,10 +277,8 @@ class DmsfFile < ActiveRecord::Base
     project = container.is_a?(Project) ? container : container.project
     # If the target project differs from the source project we must physically move the disk files
     if self.project != project
-      self.dmsf_file_revisions.all.each do |rev|
-        if File.exist? rev.disk_file(self.project)
-          FileUtils.cp rev.disk_file(self.project), rev.disk_file(project)
-        end
+      if File.exist? self.last_revision.disk_file(self.project)
+        FileUtils.cp self.last_revision.disk_file(self.project), self.last_revision.disk_file(project)
       end
     end
     file = DmsfFile.new
