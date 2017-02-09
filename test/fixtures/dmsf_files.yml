@@ -90,3 +90,13 @@ dmsf_files_009:
   notification:       0
   deleted:            0
   deleted_by_user_id: NULL
+  
+dmsf_files_010:
+  id:                 10
+  container_id:       1
+  container_type:     "Project"
+  dmsf_folder_id:     NULL
+  name:               "zero.txt"
+  notification:       0
+  deleted:            0
+  deleted_by_user_id: NULL

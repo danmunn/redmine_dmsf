@@ -131,6 +131,19 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     end
   end
   
+  def test_move_zero_sized_to_new_filename
+    file = DmsfFile.find_by_id 10
+
+    new_name = "#{file.name}.moved"
+    assert_no_difference 'file.dmsf_file_revisions.count' do
+      xml_http_request :move, "/dmsf/webdav/#{@project1.identifier}/#{file.name}", nil,
+        @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
+      assert_response 201 # Created
+      f = DmsfFile.find_file_by_name @project1, nil, "#{new_name}"
+      assert f, "Moved file '#{new_name}' not found in project."
+    end
+  end
+  
   def test_move_to_new_folder
     file = DmsfFile.find_by_id 1
     folder = DmsfFolder.find_by_id 1
@@ -141,6 +154,23 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
       xml_http_request :move, "/dmsf/webdav/#{@project1.identifier}/#{file.name}", nil,
         @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{folder.title}/#{file.name}"})
       assert_response 201 # Created
+      file2 = DmsfFile.find_by_id 1
+      assert_equal folder.id, file2.dmsf_folder_id
+    end
+  end
+  
+  def test_move_zero_sized_to_new_folder
+    file = DmsfFile.find_by_id 10
+    folder = DmsfFolder.find_by_id 1
+    assert_kind_of DmsfFile, file
+    assert_kind_of DmsfFolder, folder
+
+    assert_no_difference 'file.dmsf_file_revisions.count' do
+      xml_http_request :move, "/dmsf/webdav/#{@project1.identifier}/#{file.name}", nil,
+        @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{folder.title}/#{file.name}"})
+      assert_response 201 # Created
+      file2 = DmsfFile.find_by_id 10
+      assert_equal folder.id, file2.dmsf_folder_id
     end
   end
   

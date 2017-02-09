@@ -140,3 +140,23 @@ dmsf_file_revisions_007:
   user_id:                       1
   dmsf_workflow_assigned_by:     NULL
   dmsf_workflow_started_by:      NULL
+  
+dmsf_file_revisions_008:
+  id:                            8
+  dmsf_file_id:                  10
+  source_dmsf_file_revision_id:  NULL
+  name:                          "zero.txt"  
+  disk_filename:                 "zero.txt"
+  size:                          0
+  mime_type:                     text/plain
+  title:                         "Zero Size File"
+  description:                   NULL
+  workflow:                      NULL
+  minor_version:                 0
+  major_version:                 1
+  comment:                       NULL
+  deleted:                       0
+  deleted_by_user_id:            NULL
+  user_id:                       1
+  dmsf_workflow_assigned_by:     NULL
+  dmsf_workflow_started_by:      NULL
