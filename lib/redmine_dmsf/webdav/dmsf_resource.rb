@@ -333,7 +333,8 @@ module RedmineDmsf
             if (project == resource.project) && resource.basename.match(/.\.tmp$/i)
               Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename}, possible MSOffice rename to .tmp when saving."
               # Renaming the file to X.tmp, might be Office that is saving a file. Keep the original file.
-              return InternalServerError unless file.copy_to(resource.project, f)
+              file.copy_to_filename(resource.project, f, resource.basename)
+              Created
             else
               return InternalServerError unless file.move_to(resource.project, f)
 
