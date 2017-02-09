@@ -30,7 +30,7 @@ class DmsfPublicUrlsControllerTest < RedmineDmsf::Test::TestCase
 
   def test_show_valid_url
     get :show, :token => 'd8d33e21914a433b280fdc94450ee212'
-    assert_response :success
+    assert_response :success, "#{DmsfFile.find_by_id(1).last_revision.disk_file} probably not found"
   end
 
   def test_show_url_width_invalid_token

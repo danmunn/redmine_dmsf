@@ -34,59 +34,60 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     @role = Role.find_by_id 1
     User.current = nil
     @request.session[:user_id] = 2
+    DmsfFile.storage_path = File.expand_path '../../fixtures/files', __FILE__
   end 
   
-  def test_truth    
+  def test_truth
     assert_kind_of DmsfFile, @file
-    assert_kind_of Role, @role    
+    assert_kind_of Role, @role
   end
-  
+
   def test_show_file_ok
     # Permissions OK
-    @role.add_permission! :view_dmsf_files    
+    @role.add_permission! :view_dmsf_files
     get :show, :id => @file.id
     assert_response :success
   end
-      
+
   def test_show_file_forbidden
-    # Missing permissions        
+    # Missing permissions
     get :show, :id => @file.id
-    assert_response :forbidden   
-  end      
+    assert_response :forbidden
+  end
   
   def test_view_file_ok
     # Permissions OK
     @role.add_permission! :view_dmsf_files    
     get :view, :id => @file.id   
-    assert_response :missing # The file is physicaly not present
+    assert_response :success
   end
       
   def test_view_file_forbidden
-    # Missing permissions        
+    # Missing permissions
     get :view, :id => @file.id
-    assert_response :forbidden   
-  end      
+    assert_response :forbidden
+  end
 
   def delete_forbidden
     # Missing permissions
     delete @file, :commit => false
     assert_response :forbidden
   end
-    
-  def delete_locked  
-    # Permissions OK but the file is locked 
+
+  def delete_locked
+    # Permissions OK but the file is locked
     @role.add_permission! :file_delete
     delete @file, :commit => false
-    assert_response :redirect    
+    assert_response :redirect
     assert_include l(:error_file_is_locked), flash[:error]
   end
-    
+
   def delete_ok
     # Permissions OK and not locked
-    flash[:error].clear   
+    flash[:error].clear
     @file.unlock!
     delete @file, :commit => false
-    assert_response :redirect     
+    assert_response :redirect
     assert_equal 0, flash[:error].size
   end
   
