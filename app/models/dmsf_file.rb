@@ -276,7 +276,7 @@ class DmsfFile < ActiveRecord::Base
   def copy_to(container, folder = nil)
     project = container.is_a?(Project) ? container : container.project
     # If the target project differs from the source project we must physically move the disk files
-    if self.project != project
+    if (self.project != project) && self.last_revision
       if File.exist? self.last_revision.disk_file(self.project)
         FileUtils.cp self.last_revision.disk_file(self.project), self.last_revision.disk_file(project)
       end
