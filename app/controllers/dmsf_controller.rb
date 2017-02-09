@@ -50,7 +50,7 @@ class DmsfController < ApplicationController
     # also try to lookup folder by title if this is API call
     find_folder_by_title if [:xml, :json].include? request.format.to_sym
     get_display_params
-    if @folder && @folder.deleted?
+    if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
       render_404
       return
     end

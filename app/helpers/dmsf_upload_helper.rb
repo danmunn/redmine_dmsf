@@ -22,13 +22,14 @@ module DmsfUploadHelper
   include Redmine::I18n
 
   def self.commit_files_internal(commited_files, container, folder, controller)
+    failed_uploads = []
+    files = []
     if container.is_a?(Project)
       project = container
     else
       project = container.project
     end
     if commited_files && commited_files.is_a?(Hash)
-      files = []
       failed_uploads = []
       commited_files.each_value do |commited_file|
         name = commited_file[:name]
@@ -136,9 +137,10 @@ module DmsfUploadHelper
         end
       end
     end
-    unless failed_uploads.empty?
+    if failed_uploads.present?
       controller.flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u['name']}.join(', '))
     end
+    [files, failed_uploads]
   end
 
 end

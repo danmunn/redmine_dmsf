@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require File.expand_path('../../test_helper', __FILE__)
+require File.expand_path('../../../test_helper', __FILE__)
 require 'fileutils'
 
 class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
@@ -226,46 +226,48 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   end
   
   def test_put_non_versioned_files
-    @project1.enable_module! :dmsf
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :file_manipulation
-    
-    put "/dmsf/webdav/#{@project1.identifier}/file1.tmp", '1234', @admin.merge!({:content_type => :text})
-    assert_response :success
-    file1 = DmsfFile.find_file_by_name @project1, nil, 'file1.tmp'
-    assert_difference 'file1.dmsf_file_revisions.count', 0 do
-        put "/dmsf/webdav/#{@project1.identifier}/file1.tmp", '5678', @admin.merge!({:content_type => :text})
-        assert_response :success # 201 - Created
-    end
-    assert_difference 'file1.dmsf_file_revisions.count', 0 do
-        put "/dmsf/webdav/#{@project1.identifier}/file1.tmp", '9ABC', @admin.merge!({:content_type => :text})
-        assert_response :success # 201 - Created
-    end
-    
-    put "/dmsf/webdav/#{@project1.identifier}/~$file2.txt", '1234', @admin.merge!({:content_type => :text})
-    assert_response :success
-    file2 = DmsfFile.find_file_by_name @project1, nil, '~$file2.txt'
-    assert_difference 'file1.dmsf_file_revisions.count', 0 do
-        put "/dmsf/webdav/#{@project1.identifier}/~$file2.txt", '5678', @admin.merge!({:content_type => :text})
-        assert_response :success # 201 - Created
-    end
-    assert_difference 'file1.dmsf_file_revisions.count', 0 do
-        put "/dmsf/webdav/#{@project1.identifier}/~$file2.txt", '9ABC', @admin.merge!({:content_type => :text})
-        assert_response :success # 201 - Created
-    end
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      @project1.enable_module! :dmsf
+      @role.add_permission! :view_dmsf_folders
+      @role.add_permission! :file_manipulation
 
-    Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] = '.dump$'
-    put "/dmsf/webdav/#{@project1.identifier}/file3.dump", '1234', @admin.merge!({:content_type => :text})
-    assert_response :success
-    file2 = DmsfFile.find_file_by_name @project1, nil, 'file3.dump'
-    assert_difference 'file1.dmsf_file_revisions.count', 0 do
-        put "/dmsf/webdav/#{@project1.identifier}/file3.dump", '5678', @admin.merge!({:content_type => :text})
-        assert_response :success # 201 - Created
+      put "/dmsf/webdav/#{@project1.identifier}/file1.tmp", '1234', @admin.merge!({:content_type => :text})
+      assert_response :success
+      file1 = DmsfFile.find_file_by_name @project1, nil, 'file1.tmp'
+      assert_difference 'file1.dmsf_file_revisions.count', 0 do
+          put "/dmsf/webdav/#{@project1.identifier}/file1.tmp", '5678', @admin.merge!({:content_type => :text})
+          assert_response :success # 201 - Created
+      end
+      assert_difference 'file1.dmsf_file_revisions.count', 0 do
+          put "/dmsf/webdav/#{@project1.identifier}/file1.tmp", '9ABC', @admin.merge!({:content_type => :text})
+          assert_response :success # 201 - Created
+      end
+
+      put "/dmsf/webdav/#{@project1.identifier}/~$file2.txt", '1234', @admin.merge!({:content_type => :text})
+      assert_response :success
+      file2 = DmsfFile.find_file_by_name @project1, nil, '~$file2.txt'
+      assert_difference 'file1.dmsf_file_revisions.count', 0 do
+          put "/dmsf/webdav/#{@project1.identifier}/~$file2.txt", '5678', @admin.merge!({:content_type => :text})
+          assert_response :success # 201 - Created
+      end
+      assert_difference 'file1.dmsf_file_revisions.count', 0 do
+          put "/dmsf/webdav/#{@project1.identifier}/~$file2.txt", '9ABC', @admin.merge!({:content_type => :text})
+          assert_response :success # 201 - Created
+      end
+
+      Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] = '.dump$'
+      put "/dmsf/webdav/#{@project1.identifier}/file3.dump", '1234', @admin.merge!({:content_type => :text})
+      assert_response :success
+      file2 = DmsfFile.find_file_by_name @project1, nil, 'file3.dump'
+      assert_difference 'file1.dmsf_file_revisions.count', 0 do
+          put "/dmsf/webdav/#{@project1.identifier}/file3.dump", '5678', @admin.merge!({:content_type => :text})
+          assert_response :success # 201 - Created
+      end
+      assert_difference 'file1.dmsf_file_revisions.count', 0 do
+          put "/dmsf/webdav/#{@project1.identifier}/file3.dump", '9ABC', @admin.merge!({:content_type => :text})
+          assert_response :success # 201 - Created
+      end
     end
-    assert_difference 'file1.dmsf_file_revisions.count', 0 do
-        put "/dmsf/webdav/#{@project1.identifier}/file3.dump", '9ABC', @admin.merge!({:content_type => :text})
-        assert_response :success # 201 - Created
-    end    
 end
   
 end

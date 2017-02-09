@@ -44,6 +44,7 @@ curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:
 
 # 5. list folder contents & check folder existence (by folder title)
 # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_title=Updated%20title
+
 # 6. list folder contents & check folder existence (by folder id)
 # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KE" http://localhost:3000/projects/1/dmsf.json?folder_id=3
 # both returns 404 not found, or json with following structure:
@@ -67,8 +68,7 @@ curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:
 #}
 
 # 7. update folder
-# curl -v -H "Content-Type: application/json" -X POST --data "@update-folder-payload.json" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000//projects/#{project_id}/dmsf/save.json
-
+# curl -v -H "Content-Type: application/json" -X POST --data "@update-folder-payload.json" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000//projects/#{project_id}/dmsf/save.json?folder_id=#{folder_id}
 
 # update-folder-payload.json 
 #  {
@@ -76,5 +76,4 @@ curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:
 #       "title": title,
 #       "description": description
 #      },
-#      "folder_id": id                 -- id of folder to be updated
 #    }

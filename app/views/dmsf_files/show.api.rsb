@@ -1,7 +1,8 @@
 api.dmsf_file do
   api.id @file.id
   api.name @file.name
-  api.project_id @file.project_id
+  api.container_id @file.container_id
+  api.container_type @file.container_type
   api.dmsf_folder_id @file.folder if @file.dmsf_folder_id
   api.version "#{@file.last_revision.major_version}.#{@file.last_revision.minor_version}" if @file.last_revision
   api.content_url url_for(:controller => :dmsf_files, :action => 'show', :download => '', :id => @file)

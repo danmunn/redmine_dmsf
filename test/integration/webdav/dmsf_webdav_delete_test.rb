@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require File.expand_path('../../test_helper', __FILE__)
+require File.expand_path('../../../test_helper', __FILE__)
 
 class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   include Redmine::I18n  
@@ -29,7 +29,6 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     :dmsf_locks
    
   def setup
-    DmsfFile.storage_path = File.expand_path '../../fixtures/files', __FILE__
     DmsfLock.delete_all
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
@@ -41,7 +40,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     @file1 = DmsfFile.find_by_id 1    
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    DmsfFile.storage_path = File.expand_path '../../fixtures/files', __FILE__
+    DmsfFile.storage_path = File.expand_path '../../../fixtures/files', __FILE__
     User.current = nil    
   end
   

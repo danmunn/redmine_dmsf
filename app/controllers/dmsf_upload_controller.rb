@@ -118,6 +118,7 @@ class DmsfUploadController < ApplicationController
 
   # REST API file commit
   def commit
+    @files = []
     attachments = params[:attachments]
     if attachments && attachments.is_a?(Hash)
       @folder = DmsfFolder.visible.find_by_id attachments[:folder_id].to_i if attachments[:folder_id].present?
@@ -127,8 +128,8 @@ class DmsfUploadController < ApplicationController
         upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
         uploaded_file[:disk_filename] = upload.disk_filename
       end
+      commit_files_internal uploaded_files
     end
-    commit_files_internal uploaded_files
   end
 
   def delete_dmsf_attachment
@@ -141,7 +142,7 @@ class DmsfUploadController < ApplicationController
   private
 
   def commit_files_internal(commited_files)
-    DmsfUploadHelper.commit_files_internal(commited_files, @project, @folder, self)
+    @files, failed_uploads = DmsfUploadHelper.commit_files_internal(commited_files, @project, @folder, self)
     respond_to do |format|
       format.js
       format.api  { render_validation_errors(failed_uploads) unless failed_uploads.empty? }
