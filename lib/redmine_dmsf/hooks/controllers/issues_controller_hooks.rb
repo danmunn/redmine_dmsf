@@ -52,8 +52,6 @@ module RedmineDmsf
           issue = context[:issue]
           params = context[:params]
           uploaded_files = params[:dmsf_attachments]
-          journal = params[:journal]
-          uploads = []
           if uploaded_files && uploaded_files.is_a?(Hash)
             # standard file input uploads
             uploaded_files.each_value do |uploaded_file|

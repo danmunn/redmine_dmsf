@@ -57,7 +57,7 @@ module RedmineDmsf
       
       def self.init_testcache
         puts "Webdav::Cache: Enable MemoryStore cache."
-        @@WebDAVCache = ActiveSupport::Cache::MemoryStore.new(options={:namespace => "RedmineDmsfWebDAV"})
+        @@WebDAVCache = ActiveSupport::Cache::MemoryStore.new(:namespace => "RedmineDmsfWebDAV")
       end
       
       def self.init_nullcache
@@ -75,7 +75,7 @@ module RedmineDmsf
         else
           # Create cache using the provided server address
           Rails.logger.info "Webdav::Cache: Cache enabled, using memcached server '#{Setting.plugin_redmine_dmsf['dmsf_memcached_servers']}'"
-          @@WebDAVCache = ActiveSupport::Cache::MemCacheStore.new(Setting.plugin_redmine_dmsf['dmsf_memcached_servers'], options={:namespace => "RedmineDmsfWebDAV"})
+          @@WebDAVCache = ActiveSupport::Cache::MemCacheStore.new(Setting.plugin_redmine_dmsf['dmsf_memcached_servers'])
         end
       end
     end

@@ -26,7 +26,6 @@ module RedmineDmsf
 
       def view_issues_form_details_bottom(context={})
         if context.is_a?(Hash) && context[:issue]
-          issue = context[:issue]
           # Add Dmsf upload form
           html = "<div class=\"dmsf_uploader\">"
           html << '<p>'

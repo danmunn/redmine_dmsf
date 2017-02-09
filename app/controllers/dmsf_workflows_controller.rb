@@ -28,6 +28,12 @@ class DmsfWorkflowsController < ApplicationController
 
   layout :workflows_layout
 
+  def initialize
+    @dmsf_workflow = nil
+    @project = nil
+    super
+  end
+
   def index
     @status = params[:status] || 1
     @workflow_pages, @workflows = paginate DmsfWorkflow.status(@status).global.sorted, :per_page => 25

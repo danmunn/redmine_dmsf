@@ -29,10 +29,9 @@ module RedmineDmsf
           detail = context[:detail]
           case detail.property
             when 'dmsf_file'
-              dmsf_file = detail.journal.journalized.dmsf_files.detect {|f| f.id == detail.prop_key.to_i}
               detail.prop_key = l(:label_document)
               detail.property = 'attachment'
-            end
+          end
         end
       end
                   

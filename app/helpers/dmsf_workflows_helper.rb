@@ -42,7 +42,7 @@ module DmsfWorkflowsHelper
       link_to text, autocomplete_for_user_dmsf_workflow_path(workflow, parameters.merge(:q => params[:q], :format => 'js')), :remote => true
     }
 
-    s + content_tag('p', links, :class => 'pagination')
+    s += content_tag('p', links, :class => 'pagination')
     s.html_safe
   end
 

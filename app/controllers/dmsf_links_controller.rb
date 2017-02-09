@@ -26,6 +26,12 @@ class DmsfLinksController < ApplicationController
   before_filter :find_link_project
   before_filter :authorize
 
+  def initialize
+    @dmsf_link = nil
+    @target_folder_id = nil
+    super
+  end
+
   def new
     @dmsf_link = DmsfLink.new
     @dmsf_link.project_id = params[:project_id]

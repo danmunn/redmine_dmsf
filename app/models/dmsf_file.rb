@@ -93,6 +93,11 @@ class DmsfFile < ActiveRecord::Base
     end
   end
 
+  def initialize
+    @project = nil
+    super
+  end
+
   @@storage_path = nil
 
   def self.storage_path

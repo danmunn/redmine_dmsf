@@ -319,7 +319,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       :dmsf_file_revision_id => @revision2.id,
       :title => l(:title_waiting_for_approval))
       assert_response :success
-      assert_match /ajax-modal/, response.body
+      assert_match(/ajax-modal/, response.body)
       assert_template 'action'
   end
 
@@ -349,7 +349,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       :dmsf_file_revision_id => @revision1.id,
       :title => l(:label_dmsf_wokflow_action_assign))
     assert_response :success
-    assert_match /ajax-modal/, response.body
+    assert_match(/ajax-modal/, response.body)
     assert_template 'assign'
   end
 
