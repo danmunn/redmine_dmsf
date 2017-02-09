@@ -274,6 +274,10 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def copy_to(container, folder = nil)
+    copy_to_filename(container, folder, self.name)
+  end
+  
+  def copy_to_filename(container, folder=nil, filename)
     project = container.is_a?(Project) ? container : container.project
     # If the target project differs from the source project we must physically move the disk files
     if (self.project != project) && self.last_revision
@@ -285,7 +289,7 @@ class DmsfFile < ActiveRecord::Base
     file.dmsf_folder = folder
     file.container_type = self.container_type
     file.container_id = container.id
-    file.name = self.name
+    file.name = filename
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
     if file.save && self.last_revision
       new_revision = self.last_revision.clone
