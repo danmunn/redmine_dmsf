@@ -242,12 +242,13 @@ class DmsfFile < ActiveRecord::Base
     projects
   end
 
-  def move_to(project, folder)
+  def move_to(container, folder)
     if self.locked_for_user?
       errors[:base] << l(:error_file_is_locked)
       return false
     end
 
+    project = container.is_a?(Project) ? container : container.project
     # If the target project differs from the source project we must physically move the disk files
     if self.project != project
       self.dmsf_file_revisions.all.each do |rev|
@@ -257,7 +258,8 @@ class DmsfFile < ActiveRecord::Base
       end
     end
 
-    self.project = project
+    self.container_type = self.container_type
+    self.container_id = container.id
     self.dmsf_folder = folder
     new_revision = self.last_revision.clone
     new_revision.dmsf_file = self
