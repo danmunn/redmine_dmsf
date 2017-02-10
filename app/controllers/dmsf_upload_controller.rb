@@ -65,6 +65,7 @@ class DmsfUploadController < ApplicationController
     target = "#{DmsfHelper.temp_dir}/#{@disk_filename}"
     begin
       FileUtils.cp @tempfile.path, target
+      FileUtils.chmod 'u=wr,g=r', target
     rescue Exception => e
       Rails.logger.error e.message
     end
