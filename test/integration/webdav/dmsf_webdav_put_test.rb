@@ -204,6 +204,11 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
         put "/dmsf/webdav/#{@project1.identifier}/test.txt", '1234', @jsmith.merge!({:content_type => :text})
         assert_response :success # 201 - Created
       end
+      # Second PUT on a locked file should only update the revision that were created on the first PUT
+      assert_no_difference 'file.dmsf_file_revisions.count' do
+        put "/dmsf/webdav/#{@project1.identifier}/test.txt", '1234', @jsmith.merge!({:content_type => :text})
+        assert_response :success # 201 - Created
+      end
     end
   end
 
