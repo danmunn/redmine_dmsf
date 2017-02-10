@@ -37,6 +37,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     @file6 = DmsfFile.find_by_id 6
     @file7 = DmsfFile.find_by_id 7
     @file8 = DmsfFile.find_by_id 8
+    @folder1 = DmsfFolder.find_by_id 1
     @issue1 = Issue.find_by_id 1
     User.current = nil
   end
@@ -53,6 +54,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_kind_of DmsfFile, @file6
     assert_kind_of DmsfFile, @file7
     assert_kind_of DmsfFile, @file8
+    assert_kind_of DmsfFolder, @folder1
     assert_kind_of Issue, @issue1
   end
 
@@ -140,6 +142,28 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_equal 0, @file4.dmsf_file_revisions.count
     assert_equal 0, @file4.referenced_links.count
     @file4.dmsf_folder.lock!
+  end
+  
+  def test_copy_to_filename
+    assert_no_difference '@file1.dmsf_file_revisions.count' do
+      new_file = @file1.copy_to_filename(@file1.project, nil, "new_file.txt")
+      assert_not_equal new_file.id, @file1.id
+      assert_nil new_file.dmsf_folder_id
+      assert_nil @file1.dmsf_folder_id
+      assert_not_equal new_file.name, @file1.name
+      assert_equal new_file.dmsf_file_revisions.count, 1
+    end
+  end
+  
+  def test_copy_to
+    assert_no_difference '@file1.dmsf_file_revisions.count' do
+      new_file = @file1.copy_to(@file1.project, @folder1)
+      assert_not_equal new_file.id, @file1.id
+      assert_not_equal @file1.dmsf_folder_id, @folder1.id
+      assert_equal new_file.dmsf_folder_id, @folder1.id
+      assert_equal new_file.name, @file1.name
+      assert_equal new_file.dmsf_file_revisions.count, 1
+    end
   end
   
   def test_save_and_destroy_with_cache

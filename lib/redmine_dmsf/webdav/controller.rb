@@ -188,7 +188,6 @@ module RedmineDmsf
               status
             end
           end
-          true          
         end
       end
 
