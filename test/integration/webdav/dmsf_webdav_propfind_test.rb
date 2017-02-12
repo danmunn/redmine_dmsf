@@ -36,7 +36,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     @folder1 = DmsfFolder.find_by_id 1
     @folder6 = DmsfFolder.find_by_id 6
     # Files in project1/
-    @file5 = DmsfFile.find_by_id 5
+    @file1 = DmsfFile.find_by_id 1
     @file9 = DmsfFile.find_by_id 9
     @file10 = DmsfFile.find_by_id 10
     
@@ -129,8 +129,8 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}/</D:href>", response.body
     assert_no_match "<D:displayname>#{@folder6.title}</D:displayname>", response.body
     # Files
-    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file5.name}</D:href>", response.body
-    assert_no_match "<D:displayname>#{@file5.name}</D:displayname>", response.body
+    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file1.name}</D:href>", response.body
+    assert_no_match "<D:displayname>#{@file1.name}</D:displayname>", response.body
     assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file9.name}</D:href>", response.body
     assert_no_match "<D:displayname>#{@file9.name}</D:displayname>", response.body
     assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file10.name}</D:href>", response.body
@@ -152,12 +152,93 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}/</D:href>", response.body
     assert_match "<D:displayname>#{@folder6.title}</D:displayname>", response.body
     # Files
-    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file5.name}</D:href>", response.body
-    assert_match "<D:displayname>#{@file5.name}</D:displayname>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file1.name}</D:href>", response.body
+    assert_match "<D:displayname>#{@file1.name}</D:displayname>", response.body
     assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file9.name}</D:href>", response.body
     assert_match "<D:displayname>#{@file9.name}</D:displayname>", response.body
     assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file10.name}</D:href>", response.body
     assert_match "<D:displayname>#{@file10.name}</D:displayname>", response.body
+  end
+  
+  def test_propfind_depth0_on_project1_for_admin_with_cache
+    RedmineDmsf::Webdav::Cache.init_testcache
+    
+    assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +1 do
+      xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+        @admin.merge!({:HTTP_DEPTH => "0"})
+      assert_response 207 # MultiStatus
+    end
+    
+    # Response should be correct
+    # Project
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", response.body
+    # A new PROPSTATS entry should have been created for project1
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", RedmineDmsf::Webdav::Cache.read("PROPSTATS/#{@project1.identifier}")
+    
+    # Replace the PROPSTATS cache entry and make sure that it is used
+    RedmineDmsf::Webdav::Cache.write("PROPSTATS/#{@project1.identifier}", "Cached PROPSTATS/#{@project1.identifier}")
+    
+    assert_no_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count' do
+      xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+        @admin.merge!({:HTTP_DEPTH => "0"})
+      assert_response 207 # MultiStatus
+    end
+    assert_match "Cached PROPSTATS/#{@project1.identifier}", response.body
+    
+    RedmineDmsf::Webdav::Cache.init_nullcache
+  end
+  
+  def test_propfind_depth1_on_project1_for_admin_with_cache
+    RedmineDmsf::Webdav::Cache.init_testcache
+    
+    assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +7 do
+      xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+        @admin.merge!({:HTTP_DEPTH => "1"})
+      assert_response 207 # MultiStatus
+    end
+    
+    # Project, a new PROPFIND and PROPSTATS should have been created for project1
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", RedmineDmsf::Webdav::Cache.read("PROPFIND/#{@project1.id}")
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", RedmineDmsf::Webdav::Cache.read("PROPSTATS/#{@project1.identifier}")
+    # Folders, new PROPSTATS should be created for each folder.
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}/</D:href>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}/</D:href>", RedmineDmsf::Webdav::Cache.read("PROPSTATS/#{@project1.identifier}/#{@folder1.title}")
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}/</D:href>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}/</D:href>", RedmineDmsf::Webdav::Cache.read("PROPSTATS/#{@project1.identifier}/#{@folder6.title}")
+    # Files, new PROPSTATS should be created for each folder.
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file1.name}</D:href>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file1.name}</D:href>", RedmineDmsf::Webdav::Cache.read("PROPSTATS/#{@file1.id}-#{@file1.last_revision.id}")
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file9.name}</D:href>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file9.name}</D:href>", RedmineDmsf::Webdav::Cache.read("PROPSTATS/#{@file9.id}-#{@file9.last_revision.id}")
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file10.name}</D:href>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file10.name}</D:href>", RedmineDmsf::Webdav::Cache.read("PROPSTATS/#{@file10.id}-#{@file10.last_revision.id}")
+    
+    # Replace PROPFIND and verify that cached entry is used.
+    RedmineDmsf::Webdav::Cache.write("PROPFIND/#{@project1.id}", "Cached PROPFIND/#{@project1.id}")
+    assert_no_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count' do
+      xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+        @admin.merge!({:HTTP_DEPTH => "1"})
+      assert_response 207 # MultiStatus
+      assert_match "Cached PROPFIND/#{@project1.id}", response.body
+    end
+    
+    # Delete PROPFIND, replace PROPSTATS for one entry and verify that it is used when creating the response and new cache
+    RedmineDmsf::Webdav::Cache.invalidate_item("PROPFIND/#{@project1.id}")
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
+    RedmineDmsf::Webdav::Cache.write("PROPSTATS/#{@project1.identifier}", "Cached PROPSTATS/#{@project1.identifier}")
+    # One PROPFIND entry is added and one .invalid entry is deleted, so no differenct.
+    assert_no_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count' do
+      xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+        @admin.merge!({:HTTP_DEPTH => "1"})
+      assert_response 207 # MultiStatus
+    end
+    assert_match "Cached PROPSTATS/#{@project1.identifier}", response.body
+    assert_match "Cached PROPSTATS/#{@project1.identifier}", RedmineDmsf::Webdav::Cache.read("PROPFIND/#{@project1.id}")
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
+    
+    RedmineDmsf::Webdav::Cache.init_nullcache
   end
   
 end
