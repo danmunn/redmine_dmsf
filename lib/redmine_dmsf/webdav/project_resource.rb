@@ -28,7 +28,7 @@ module RedmineDmsf
         @children = nil
       end
       
-      def children        
+      def children
         unless @children          
           @children = []
           if project
@@ -72,7 +72,7 @@ module RedmineDmsf
       end
 
       def name
-        project.identifier unless project.nil?
+        ProjectResource.create_display_name(project)
       end
 
       def long_name
@@ -108,7 +108,16 @@ module RedmineDmsf
       def project_id
 	      self.project.id if self.project
       end
-
+      
+      def self.create_display_name(p)
+        use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+        if use_project_names
+          "#{p.name.gsub(/\W/, "_")} [#{p.id}]" unless p.nil?
+        else
+          p.identifier unless p.nil?
+        end
+      end
     end
+    
   end
 end

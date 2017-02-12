@@ -93,6 +93,22 @@ module RedmineDmsf
         new_path = '/' + new_path unless new_path[0,1] == '/'
         @__proxy.class.new("#{new_public}#{name}", "#{new_path}#{name}", request, response, options.merge(:user => @user))
       end
+      
+      def child_project(p)
+        project_display_name = ProjectResource.create_display_name(p)
+        
+        new_public = public_path.dup
+        new_public = new_public + '/' unless new_public[-1,1] == '/'
+        new_public = '/' + new_public unless new_public[0,1] == '/'
+        new_public += project_display_name
+        
+        new_path = path.dup
+        new_path = new_path + '/' unless new_path[-1,1] == '/'
+        new_path = '/' + new_path unless new_path[0,1] == '/'
+        new_path += project_display_name
+        
+        @__proxy.class.new("#{new_public}", "#{new_path}", request, response, options.merge(:user => @user))
+      end
 
       def parent
         p = @__proxy.parent
@@ -148,12 +164,27 @@ module RedmineDmsf
       # Return instance of Project based on the path
       def project
         unless @project
+          use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
           pinfo = @path.split('/').drop(1)
           if pinfo.length > 0
-            begin
-              @project = Project.find(pinfo.first)
-            rescue Exception => e
-              Rails.logger.warn e.message
+            if use_project_names
+              unless pinfo.first.match('(\[([0-9]+)\])$').nil?
+                pid = $2
+                begin
+                    @project = Project.find_by_id(pid)
+                rescue Exception => e
+                  Rails.logger.error e.message
+                end
+              end
+              if @project.nil?
+                Rails.logger.warn {"WebDAV ERROR: No project found on path '#{@path}'"}
+              end
+            else
+              begin
+                @project = Project.find(pinfo.first)
+              rescue Exception => e
+                Rails.logger.warn e.message
+              end
             end
           end
         end
