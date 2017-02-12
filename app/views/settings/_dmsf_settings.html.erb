@@ -202,6 +202,15 @@
   </em>
 </p>
 
+<p>
+  <%= content_tag(:label, l(:label_webdav_use_project_names)) %>
+  <%= check_box_tag('settings[dmsf_webdav_use_project_names]', true, @settings['dmsf_webdav_use_project_names']) %>
+  <em class="info">
+	<%= l(:note_webdav_use_project_names) %> <br/>
+    <%= l(:label_default)%>: <%= l(:general_text_No)%>
+  </em>
+</p>
+
 <hr/>
 <em class="info">
   <%= l(:label_full_text) %>

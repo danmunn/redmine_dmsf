@@ -356,3 +356,6 @@ cs:
   note_dmsf_keep_documents_locked: Dokumenty zůstanou i po schválení zamčené.
   note_global: (globální)
   field_dmsf_not_inheritable: Není dědičné
+  
+  label_webdav_use_project_names: Use project name for project folder
+  note_webdav_use_project_names: Use project names instead of project identifier for project folders.
