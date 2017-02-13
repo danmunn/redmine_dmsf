@@ -25,8 +25,8 @@
   <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>    
   <%= javascript_tag "observeSearchfield('user_search', 'users', '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@dmsf_workflow, :dmsf_workflow_step_assignment_id => nil, :dmsf_file_revision_id => nil, :project_id => @project ? @project.id : nil) }')" %>
 
-  <div id="users">
-    <%= render_principals_for_new_dmsf_workflow_users(@dmsf_workflow, nil, nil) %>
+  <div id="new_approvers">
+    <%= render_principals_for_new_dmsf_workflow_users(@dmsf_workflow) %>
   </div>
 </fieldset>
 

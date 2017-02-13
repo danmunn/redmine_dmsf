@@ -279,7 +279,9 @@ class DmsfWorkflowsController < ApplicationController
   end
 
   def autocomplete_for_user
-    render :layout => false
+     respond_to do |format|
+       format.js
+     end
   end
 
   def new_step

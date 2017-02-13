@@ -1,0 +1,3 @@
+$('#new_approvers').html('<%= escape_javascript(
+  render_principals_for_new_dmsf_workflow_users(
+    @dmsf_workflow, params[:dmsf_workflow_step_assignment_id], params[:dmsf_file_revision_id])) %>');
