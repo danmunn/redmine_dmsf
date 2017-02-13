@@ -215,7 +215,7 @@ module RedmineDmsf
               # path is unique enough for the key and is available for all three, and the path doesn't change 
               # for this path as long as it stays. On its path. The path does not stray from its path without 
               # changing its path.
-              propstats_key = "PROPSTATS/#{resource.path}"
+              propstats_key = "PROPSTATS#{resource.path}"
             else
               # File
               # Use file.id & file.last_revision.id as key
