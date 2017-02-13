@@ -293,7 +293,7 @@ module RedmineDmsf
               # Renaming a *.tmp file to an existing file in the same project, probably Office that is saving a file.
               Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename} (exists), possible MSOffice rename from .tmp when saving"
               
-              if resource.file.last_revision.size == 0
+              if resource.file.last_revision.size == 0 || reuse_version_for_locked_file(resource.file)
                 # Last revision in the destination has zero size so reuse that revision
                 new_revision = resource.file.last_revision
               else
@@ -549,21 +549,25 @@ module RedmineDmsf
           return NoContent
         end
 
-        # Disable versioning for file name patterns given in the plugin settings.
-        pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
-        if !pattern.blank? && basename.match(pattern)
-            Rails.logger.info "Versioning disabled for #{basename}"
-            reuse_revision = true
-        else
-            reuse_revision = false
-        end
+        reuse_revision = false
 
         if exist? # We're over-writing something, so ultimately a new revision
           f = file
+          
+          # Disable versioning for file name patterns given in the plugin settings.
+          pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
+          if !pattern.blank? && basename.match(pattern)
+              Rails.logger.info "Versioning disabled for #{basename}"
+              reuse_revision = true
+          end
+          
+          if reuse_version_for_locked_file(file)
+            reuse_revision = true
+          end
+          
           last_revision = file.last_revision
           if last_revision.size == 0 || reuse_revision
             new_revision = last_revision
-            new_revision.minor_version -= 1
             reuse_revision = true
           else
             new_revision = DmsfFileRevision.new
@@ -585,7 +589,6 @@ module RedmineDmsf
           new_revision = DmsfFileRevision.new
           new_revision.minor_version = 0
           new_revision.major_version = 0
-          reuse_revision = false
         end
 
         new_revision.dmsf_file = f
@@ -594,7 +597,7 @@ module RedmineDmsf
         new_revision.title = DmsfFileRevision.filename_to_title(basename)
         new_revision.description = nil
         new_revision.comment = nil
-        new_revision.increase_version(1)
+        new_revision.increase_version(1) unless reuse_revision
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
 
         # Phusion passenger does not have a method "length" in its model
@@ -735,6 +738,20 @@ module RedmineDmsf
         x
       end
 
+private
+      def reuse_version_for_locked_file(file)
+        locks = file.lock
+        locks.each do |lock|
+          next if lock.expired?
+          # lock should be exclusive but just in case make sure we find this users lock
+          next if lock.user != User.current
+          if lock.revision != file.last_revision.id
+            return true
+          end
+        end
+        return false
+      end
+      
     end
   end
 end
