@@ -113,4 +113,14 @@ class DmsfLockTest < RedmineDmsf::Test::UnitTest
     User.current = nil
   end
 
+  def test_expired
+    User.current = @jsmith
+    lock = DmsfLock.new
+    assert !lock.expired?
+    lock.expires_at = Time.now
+    assert lock.expired?
+    lock.expires_at = Time.now + 1.hour
+    assert !lock.expired?
+  end
+
 end

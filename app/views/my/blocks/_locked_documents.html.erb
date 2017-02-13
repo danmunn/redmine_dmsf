@@ -22,12 +22,14 @@
 
 <% folders = [] %>
 <% files = [] %>
-<% folders = DmsfFolder.joins(
+<% folders = DmsfFolder.visible.joins(
   'JOIN dmsf_locks ON dmsf_folders.id = dmsf_locks.entity_id').where(
-  'dmsf_locks.entity_type' => 1, 'dmsf_locks.user_id' => @user.id).all if @user %>
-<% files = DmsfFile.joins(
+  ['dmsf_locks.entity_type = ? AND dmsf_locks.user_id = ? AND (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > ?)',
+   1, @user.id, Time.now]).all if @user %>
+<% files = DmsfFile.visible.joins(
   'JOIN dmsf_locks ON dmsf_files.id = dmsf_locks.entity_id').where(
-  'dmsf_locks.entity_type' => 0, 'dmsf_locks.user_id' => @user.id).all if @user %>
+  ['dmsf_locks.entity_type = ? AND dmsf_locks.user_id = ? AND (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > ?)',
+   0, @user.id, Time.now]).all if @user %>
 <h3><%= l(:locked_documents)%> (<%= folders.count %>/<%=  files.count %>)</h3>
 <% if folders.any? || files.any?%>
   <%= form_tag({}) do %>
