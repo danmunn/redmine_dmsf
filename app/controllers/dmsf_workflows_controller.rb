@@ -340,9 +340,7 @@ class DmsfWorkflowsController < ApplicationController
         end
       end
     end
-    respond_to do |format|
-      format.html
-    end
+    redirect_to :back
   end
 
   def reorder_steps
