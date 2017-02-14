@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2011    Vít Jonáš    <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn  <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@ module RedmineDmsf
   module Patches
     module CustomFieldsHelperPatch
       def self.included(base)
-        base.extend(ClassMethods)
         base.send(:include, InstanceMethods)
         base.class_eval do
           unloadable
@@ -34,9 +33,6 @@ module RedmineDmsf
           alias_method_chain :render_custom_fields_tabs, :render_custom_tab
           alias_method_chain :custom_field_type_options, :custom_tab_options          
         end
-      end
-
-      module ClassMethods
       end
 
       module InstanceMethods       

@@ -23,7 +23,8 @@ Changelog for Redmine DMSF
         New columns in the main DMSF view; columns are configurable from the plugin settings
 
 * Bug: #663 - Locked documnts on My page
-* Bug: #662 - Broken paging on the Add approver form 
+* Bug: #662 - Broken paging on the Add approver form
+* Bug: #652 - Missing date picker when creating new file
 * Bug: #651 - Incomplete copy of a file to another project
 * New: #641 - Documents export
 * New: #635 - Edit approval workflow steps
