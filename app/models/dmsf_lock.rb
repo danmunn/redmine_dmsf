@@ -52,11 +52,7 @@ class DmsfLock < ActiveRecord::Base
   def generate_uuid
     self.uuid = UUIDTools::UUID.random_create.to_s
   end
-
-  def self.delete_expired
-    DmsfLock.where(['expires_at < ?', Time.now]).delete_all
-  end
-
+  
   # Let's allow our UUID to be searchable
   def self.find(*args)
     if args.first && args.first.is_a?(String) && !args.first.match(/^\d*$/)
