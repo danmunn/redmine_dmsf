@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require File.expand_path('../../../test_helper', __FILE__)
+require 'uri'
 
 class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
 
@@ -42,6 +43,8 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
+    RedmineDmsf::Webdav::Cache.init_nullcache
   end
   
   def test_truth
@@ -108,6 +111,26 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert_no_match "<D:displayname>#{@project2.identifier}</D:displayname>", response.body
   end
   
+  def test_propfind_depth1_on_root_for_admin_with_project_names
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+    xml_http_request :propfind, "/dmsf/webdav/", nil,
+      @admin.merge!({:HTTP_DEPTH => "1"})
+
+    assert_response 207 # MultiStatus
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/</D:href>", response.body
+    assert_match "<D:displayname>/</D:displayname>", response.body
+
+    # project.identifier should not match when using project names
+    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", response.body
+    assert_no_match "<D:displayname>#{@project1.identifier}</D:displayname>", response.body
+    
+    # but the project name should match
+    p1name = RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1)
+    p1name_uri = URI.encode(p1name, /\W/)
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{p1name_uri}/</D:href>", response.body
+    assert_match "<D:displayname>#{p1name}</D:displayname>", response.body
+  end
+  
   def test_propfind_depth0_on_project1_for_non_member
     xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
       @jsmith.merge!({:HTTP_DEPTH => "0"})
@@ -136,6 +159,28 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file10.name}</D:href>", response.body
     assert_no_match "<D:displayname>#{@file10.name}</D:displayname>", response.body
   end
+
+  def test_propfind_depth0_on_project1_for_admin_with_project_names
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+    
+    xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+      @admin.merge!({:HTTP_DEPTH => "0"})
+    assert_response 404
+
+    p1name = RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1)
+    p1name_uri = URI.encode(p1name, /\W/)
+    
+    xml_http_request :propfind, "/dmsf/webdav/#{p1name_uri}", nil,
+      @admin.merge!({:HTTP_DEPTH => "0"})
+    assert_response 207 # MultiStatus
+    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/</D:href>", response.body
+    assert_no_match "<D:displayname>/</D:displayname>", response.body
+    # Project
+    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", response.body
+    assert_no_match "<D:displayname>#{@project1.identifier}</D:displayname>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{p1name_uri}/</D:href>", response.body
+    assert_match "<D:displayname>#{p1name}</D:displayname>", response.body
+  end
   
   def test_propfind_depth1_on_project1_for_admin
     xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
@@ -159,6 +204,50 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file10.name}</D:href>", response.body
     assert_match "<D:displayname>#{@file10.name}</D:displayname>", response.body
   end
+  
+  def test_propfind_depth1_on_project1_for_admin_with_project_names
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+    
+    xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+      @admin.merge!({:HTTP_DEPTH => "1"})
+    assert_response 404
+    
+    p1name = RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1)
+    p1name_uri = URI.encode(p1name, /\W/)
+    
+    xml_http_request :propfind, "/dmsf/webdav/#{p1name_uri}", nil,
+      @admin.merge!({:HTTP_DEPTH => "1"})
+    assert_response 207 # MultiStatus
+
+    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/</D:href>", response.body
+    assert_no_match "<D:displayname>/</D:displayname>", response.body
+    
+    # Project
+    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", response.body
+    assert_no_match "<D:displayname>#{@project1.identifier}</D:displayname>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{p1name_uri}/</D:href>", response.body
+    assert_match "<D:displayname>#{p1name}</D:displayname>", response.body
+    
+    # Folders
+    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}/</D:href>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{p1name_uri}/#{@folder1.title}/</D:href>", response.body
+    assert_match "<D:displayname>#{@folder1.title}</D:displayname>", response.body
+    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}/</D:href>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{p1name_uri}/#{@folder6.title}/</D:href>", response.body
+    assert_match "<D:displayname>#{@folder6.title}</D:displayname>", response.body
+    
+    # Files
+    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file1.name}</D:href>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{p1name_uri}/#{@file1.name}</D:href>", response.body
+    assert_match "<D:displayname>#{@file1.name}</D:displayname>", response.body
+    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file9.name}</D:href>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{p1name_uri}/#{@file9.name}</D:href>", response.body
+    assert_match "<D:displayname>#{@file9.name}</D:displayname>", response.body
+    assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@file10.name}</D:href>", response.body
+    assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{p1name_uri}/#{@file10.name}</D:href>", response.body
+    assert_match "<D:displayname>#{@file10.name}</D:displayname>", response.body
+  end
+
   
   def test_propfind_depth0_on_project1_for_admin_with_cache
     RedmineDmsf::Webdav::Cache.init_testcache
@@ -184,8 +273,6 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
       assert_response 207 # MultiStatus
     end
     assert_match "Cached PROPSTATS/#{@project1.identifier}", response.body
-    
-    RedmineDmsf::Webdav::Cache.init_nullcache
   end
   
   def test_propfind_depth1_on_project1_for_admin_with_cache
@@ -237,8 +324,6 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert_match "Cached PROPSTATS/#{@project1.identifier}", response.body
     assert_match "Cached PROPSTATS/#{@project1.identifier}", RedmineDmsf::Webdav::Cache.read("PROPFIND/#{@project1.id}")
     assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
-    
-    RedmineDmsf::Webdav::Cache.init_nullcache
   end
   
 end
