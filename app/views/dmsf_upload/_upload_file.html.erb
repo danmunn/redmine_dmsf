@@ -47,7 +47,7 @@
     <div class="splitcontentright">
       <div class="custom_fields">
         <% upload.custom_values.each do |value| %>
-            <p><%= custom_field_tag_with_label("commited_files[#{i}][dmsf_file_revision]", value) %></p>
+            <p><%= custom_field_tag_with_label "commited_files[#{i}]", value %></p>
         <% end %>
       </div>
     </div>

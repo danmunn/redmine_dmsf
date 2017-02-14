@@ -85,14 +85,14 @@ module DmsfUploadHelper
         new_revision.size = File.size(commited_disk_filepath)
         new_revision.digest = DmsfFileRevision.create_digest commited_disk_filepath
 
-        # Need to save file first to generate id for it in case of creation.
-        # File id is needed to properly generate revision disk filename
-        if commited_file[:dmsf_file_revision].present?
-          commited_file[:dmsf_file_revision][:custom_field_values].each_with_index do |v, i|
+        if commited_file[:custom_field_values].present?
+          commited_file[:custom_field_values].each_with_index do |v, i|
             new_revision.custom_field_values[i].value = v[1]
           end
         end
 
+        # Need to save file first to generate id for it in case of creation.
+        # File id is needed to properly generate revision disk filename
         if new_revision.valid? && file.save
           new_revision.disk_filename = new_revision.new_storage_filename
         else
