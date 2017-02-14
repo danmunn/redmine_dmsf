@@ -56,12 +56,12 @@ module RedmineDmsf
       end
       
       def self.init_testcache
-        puts "Webdav::Cache: Enable MemoryStore cache."
+        #puts "Webdav::Cache: Enable MemoryStore cache."
         @@WebDAVCache = ActiveSupport::Cache::MemoryStore.new(:namespace => "RedmineDmsfWebDAV")
       end
       
       def self.init_nullcache
-        puts "Webdav::Cache: Disable cache."
+        #puts "Webdav::Cache: Disable cache."
         @@WebDAVCache = ActiveSupport::Cache::NullStore.new
       end
       
