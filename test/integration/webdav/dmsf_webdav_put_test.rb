@@ -201,7 +201,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       assert !User.current.anonymous?, 'Current user is not anonymous'
       file = DmsfFile.find_file_by_name @project1, nil, 'test.txt'
       assert l=file.lock!, "File failed to be locked by #{User.current.name}"
-      assert_equal file.last_revision.id, l.revision
+      assert_equal file.last_revision.id, l.dmsf_file_last_revision_id
       
       # First PUT should always create new revision.
       assert_difference 'file.dmsf_file_revisions.count', +1 do
@@ -219,7 +219,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       # Lock file again, but this time delete the revision that were stored in the lock
       file = DmsfFile.find_file_by_name @project1, nil, 'test.txt'
       assert l=file.lock!, "File failed to be locked by #{User.current.name}"
-      assert_equal file.last_revision.id, l.revision
+      assert_equal file.last_revision.id, l.dmsf_file_last_revision_id
       
       # Delete the last revision, the revision that were stored in the lock.
       file.last_revision.delete(true)

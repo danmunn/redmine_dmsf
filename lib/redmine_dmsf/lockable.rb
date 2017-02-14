@@ -69,7 +69,7 @@ module RedmineDmsf
       l.lock_scope = scope
       l.user = User.current
       l.expires_at = expire
-      l.revision = self.last_revision.id if self.is_a?(DmsfFile)
+      l.dmsf_file_last_revision_id = self.last_revision.id if self.is_a?(DmsfFile)
       l.save!
       reload
       locks.reload

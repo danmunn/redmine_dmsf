@@ -745,7 +745,7 @@ private
           next if lock.expired?
           # lock should be exclusive but just in case make sure we find this users lock
           next if lock.user != User.current
-          if lock.revision < file.last_revision.id
+          if lock.dmsf_file_last_revision_id < file.last_revision.id
             # At least one new revision has been created since the lock was created, reuse that revision.
             return true
           end
