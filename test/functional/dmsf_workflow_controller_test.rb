@@ -213,7 +213,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_difference 'DmsfWorkflowStep.count', -n do
       delete :remove_step, :step => @wfs1.id, :id => @wf1.id
     end
-    assert_response :success
+    assert_response :redirect
     ws = DmsfWorkflowStep.where(:dmsf_workflow_id => @wf1.id).order('id ASC').first
     assert_equal 1, ws.step
   end
