@@ -145,7 +145,7 @@ module RedmineDmsf
         File.dirname(path)
       end
 
-      # Return instance of Project based on path
+      # Return instance of Project based on the path
       def project
         unless @project
           pinfo = @path.split('/').drop(1)
@@ -153,7 +153,7 @@ module RedmineDmsf
             begin
               @project = Project.find(pinfo.first)
             rescue Exception => e
-              Rails.logger.error e.message
+              Rails.logger.warn e.message
             end
           end
         end

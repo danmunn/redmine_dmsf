@@ -24,6 +24,7 @@ Changelog for Redmine DMSF
 
 * Bug: #663 - Locked documnts on My page
 * Bug: #662 - Broken paging on the Add approver form
+* New: #655 - ERROR: Couldn't find Project with identifier=desktop.ini
 * Bug: #652 - Missing date picker when creating new file
 * Bug: #651 - Incomplete copy of a file to another project
 * New: #641 - Documents export

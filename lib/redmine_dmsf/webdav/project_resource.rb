@@ -106,7 +106,7 @@ module RedmineDmsf
       end
 
       def project_id
-	self.project.id if self.project
+	      self.project.id if self.project
       end
 
     end
