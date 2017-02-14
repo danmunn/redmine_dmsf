@@ -231,11 +231,10 @@ module RedmineDmsf
       def delete
         if file
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_delete, project)
-          if file.name.match(/.\.tmp$/i)
-            # .tmp files should be destroyed (MsOffice file)
-            destroy = true
-          elsif file.name.match(/^\~\$/i)
-            # Files starting with ~$ should be destroyed (MsOffice file)
+          
+          pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
+          if !pattern.blank? && basename.match(pattern)
+            # Files that are not versioned should be destroyed
             destroy = true
           elsif file.last_revision.size == 0
             # Zero-sized files should be destroyed
