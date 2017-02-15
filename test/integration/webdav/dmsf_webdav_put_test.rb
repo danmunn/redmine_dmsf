@@ -196,10 +196,35 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       @project1.enable_module! :dmsf # Flag module enabled
       @role.add_permission! :view_dmsf_folders
       @role.add_permission! :file_manipulation
+      
       log_user 'jsmith', 'jsmith' # login as jsmith
       assert !User.current.anonymous?, 'Current user is not anonymous'
       file = DmsfFile.find_file_by_name @project1, nil, 'test.txt'
-      assert file.lock!, "File failed to be locked by #{User.current.name}"
+      assert l=file.lock!, "File failed to be locked by #{User.current.name}"
+      assert_equal file.last_revision.id, l.dmsf_file_last_revision_id
+      
+      # First PUT should always create new revision.
+      assert_difference 'file.dmsf_file_revisions.count', +1 do
+        put "/dmsf/webdav/#{@project1.identifier}/test.txt", '1234', @jsmith.merge!({:content_type => :text})
+        assert_response :success # 201 - Created
+      end
+      # Second PUT on a locked file should only update the revision that were created on the first PUT
+      assert_no_difference 'file.dmsf_file_revisions.count' do
+        put "/dmsf/webdav/#{@project1.identifier}/test.txt", '1234', @jsmith.merge!({:content_type => :text})
+        assert_response :success # 201 - Created
+      end
+      # Unlock
+      assert file.unlock!, "File failed to be unlocked by #{User.current.name}"
+
+      # Lock file again, but this time delete the revision that were stored in the lock
+      file = DmsfFile.find_file_by_name @project1, nil, 'test.txt'
+      assert l=file.lock!, "File failed to be locked by #{User.current.name}"
+      assert_equal file.last_revision.id, l.dmsf_file_last_revision_id
+      
+      # Delete the last revision, the revision that were stored in the lock.
+      file.last_revision.delete(true)
+      
+      # First PUT should always create new revision.
       assert_difference 'file.dmsf_file_revisions.count', +1 do
         put "/dmsf/webdav/#{@project1.identifier}/test.txt", '1234', @jsmith.merge!({:content_type => :text})
         assert_response :success # 201 - Created
@@ -211,7 +236,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       end
     end
   end
-
+  
   def test_put_ignored_files_default
     # Ignored patterns: /^(\._|\.DS_Store$|Thumbs.db$)/
     if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'

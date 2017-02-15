@@ -231,11 +231,10 @@ module RedmineDmsf
       def delete
         if file
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_delete, project)
-          if file.name.match(/.\.tmp$/i)
-            # .tmp files should be destroyed (MsOffice file)
-            destroy = true
-          elsif file.name.match(/^\~\$/i)
-            # Files starting with ~$ should be destroyed (MsOffice file)
+          
+          pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
+          if !pattern.blank? && basename.match(pattern)
+            # Files that are not versioned should be destroyed
             destroy = true
           elsif file.last_revision.size == 0
             # Zero-sized files should be destroyed
@@ -479,19 +478,19 @@ module RedmineDmsf
                 e.add_failure @path, Conflict
                 raise e
               end
-              l.expires_at = Time.now + 1.hour
+              l.expires_at = Time.now + 1.week
               l.save!
               @response['Lock-Token'] = l.uuid
-              return [1.hours.to_i, l.uuid]
+              return [1.weeks.to_i, l.uuid]
             end
 
             scope = "scope_#{(args[:scope] || 'exclusive')}".to_sym
             type = "type_#{(args[:type] || 'write')}".to_sym
 
             #l should be the instance of the lock we've just created
-            l = entity.lock!(scope, type, Time.now + 1.hours)
+            l = entity.lock!(scope, type, Time.now + 1.weeks)
             @response['Lock-Token'] = l.uuid
-            [1.hours.to_i, l.uuid]
+            [1.week.to_i, l.uuid]
           end
         rescue DmsfLockError
           e = DAV4Rack::LockFailure.new
@@ -745,7 +744,8 @@ private
           next if lock.expired?
           # lock should be exclusive but just in case make sure we find this users lock
           next if lock.user != User.current
-          if lock.revision != file.last_revision.id
+          if lock.dmsf_file_last_revision_id < file.last_revision.id
+            # At least one new revision has been created since the lock was created, reuse that revision.
             return true
           end
         end

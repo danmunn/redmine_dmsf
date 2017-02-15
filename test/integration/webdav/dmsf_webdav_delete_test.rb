@@ -212,5 +212,18 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     @file1.reload
     assert !@file1.deleted?, "File #{@file1.name} is expected to exist"
   end
+  
+  def test_non_versioned_file
+    Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] = '\.tmp$'
+    @project1.enable_module! :dmsf
+    @role.add_permission! :view_dmsf_folders    
+    @role.add_permission! :file_delete
+    
+    file = @file1.copy_to_filename(@project1, nil, "delete_test.tmp")
+    
+    delete "/dmsf/webdav/#{@project1.identifier}/delete_test.tmp", nil, @jsmith
+    # The file should be destroyed
+    assert_nil DmsfFile.find_file_by_name(@project1, nil, "delete_test.tmp")
+  end
 
 end
