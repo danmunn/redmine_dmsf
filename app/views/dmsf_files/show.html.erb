@@ -51,7 +51,7 @@
         :class => 'icon dmsf_icon-link') %>
       <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(:id => @file),
         :title => l(:title_copy), :class => 'icon icon-copy') %>
-      <%= delete_link @file if @file_delete_allowed %>
+      <%= delete_link(dmsf_file_path(:id => @file, :details => true)) if @file_delete_allowed %>
     <% else %>
       <% if User.current.allowed_to?(:force_file_unlock, @project) %>
         <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),

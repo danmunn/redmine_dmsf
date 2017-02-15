@@ -206,7 +206,7 @@ class DmsfFilesController < ApplicationController
         flash[:error] = @file.errors.full_messages.join(', ')
       end
     end
-    if commit || @tree_view
+    if commit || (@tree_view && params[:details].blank?)
       redirect_to :back
     else
       redirect_to dmsf_folder_path(:id => @project, :folder_id => @file.dmsf_folder)
