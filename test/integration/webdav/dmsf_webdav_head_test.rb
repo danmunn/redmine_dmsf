@@ -35,7 +35,7 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
     # Temporarily enable project names
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    @project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1), /\W/)    
+    @project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)    
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false    
     DmsfFile.storage_path = File.expand_path '../../../fixtures/files', __FILE__
     User.current = nil    

@@ -149,7 +149,7 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1), /\W/)
+    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
     
     xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_USER_AGENT => "Other"})
     assert_response 404

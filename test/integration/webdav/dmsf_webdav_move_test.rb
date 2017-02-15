@@ -135,7 +135,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
   def test_move_to_new_filename_with_project_names
     file = DmsfFile.find_by_id 1
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1), /\W/)
+    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
 
     new_name = "#{file.name}.moved"
     assert_difference 'file.dmsf_file_revisions.count', +1 do
@@ -179,7 +179,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     file = DmsfFile.find_by_id 1
     folder = DmsfFolder.find_by_id 1
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1), /\W/)
+    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
     assert_kind_of DmsfFile, file
     assert_kind_of DmsfFolder, folder
 

@@ -66,7 +66,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     assert !response.body.match(@project1.identifier).nil?, "Expected to find project #{@project1.identifier} in return data"
     
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1)
+    project1_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
     
     get '/dmsf/webdav', nil, @admin
     assert_response :success
@@ -96,7 +96,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1), /\W/)
+    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
     
     get "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
     assert_response 404

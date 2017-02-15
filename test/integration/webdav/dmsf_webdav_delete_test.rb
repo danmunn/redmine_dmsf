@@ -179,7 +179,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
     assert_response 404
     
-    p1name = RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1)
+    p1name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
     p1name_uri = URI.encode(p1name, /\W/)
     delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", nil, @jsmith
     assert_response :success
@@ -218,7 +218,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
     assert_response 404
     
-    p1name = RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1)
+    p1name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
     p1name_uri = URI.encode(p1name, /\W/)
     
     delete "/dmsf/webdav/#{p1name_uri}/#{@file1.name}", nil, @jsmith

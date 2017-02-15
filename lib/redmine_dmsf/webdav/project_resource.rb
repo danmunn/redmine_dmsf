@@ -72,7 +72,7 @@ module RedmineDmsf
       end
 
       def name
-        ProjectResource.create_display_name(project)
+        ProjectResource.create_project_name(project)
       end
 
       def long_name
@@ -109,15 +109,17 @@ module RedmineDmsf
 	      self.project.id if self.project
       end
       
-      def self.create_display_name(p)
+      # Characters that MATCH this regex will be replaced by '_'
+      PROJECT_NAME_FILTER = /\W/
+
+      def self.create_project_name(p)
         use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
         if use_project_names
-          "#{p.name.gsub(/\W/, "_")} [#{p.id}]" unless p.nil?
+          "#{p.name.gsub(PROJECT_NAME_FILTER, "_")} [#{p.id}]" unless p.nil?
         else
           p.identifier unless p.nil?
         end
       end
     end
-    
   end
 end

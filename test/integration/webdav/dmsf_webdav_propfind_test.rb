@@ -125,8 +125,8 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert_no_match "<D:displayname>#{@project1.identifier}</D:displayname>", response.body
     
     # but the project name should match
-    p1name = RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1)
-    p1name_uri = URI.encode(p1name, /\W/)
+    p1name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+    p1name_uri = URI.encode(p1name, RedmineDmsf::Webdav::ProjectResource::PROJECT_NAME_FILTER)
     assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{p1name_uri}/</D:href>", response.body
     assert_match "<D:displayname>#{p1name}</D:displayname>", response.body
   end
@@ -167,8 +167,8 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
       @admin.merge!({:HTTP_DEPTH => "0"})
     assert_response 404
 
-    p1name = RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1)
-    p1name_uri = URI.encode(p1name, /\W/)
+    p1name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+    p1name_uri = URI.encode(p1name, RedmineDmsf::Webdav::ProjectResource::PROJECT_NAME_FILTER)
     
     xml_http_request :propfind, "/dmsf/webdav/#{p1name_uri}", nil,
       @admin.merge!({:HTTP_DEPTH => "0"})
@@ -212,8 +212,8 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
       @admin.merge!({:HTTP_DEPTH => "1"})
     assert_response 404
     
-    p1name = RedmineDmsf::Webdav::ProjectResource.create_display_name(@project1)
-    p1name_uri = URI.encode(p1name, /\W/)
+    p1name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+    p1name_uri = URI.encode(p1name, RedmineDmsf::Webdav::ProjectResource::PROJECT_NAME_FILTER)
     
     xml_http_request :propfind, "/dmsf/webdav/#{p1name_uri}", nil,
       @admin.merge!({:HTTP_DEPTH => "1"})
@@ -248,7 +248,6 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert_match "<D:displayname>#{@file10.name}</D:displayname>", response.body
   end
 
-  
   def test_propfind_depth0_on_project1_for_admin_with_cache
     RedmineDmsf::Webdav::Cache.init_testcache
     

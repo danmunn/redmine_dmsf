@@ -95,7 +95,7 @@ module RedmineDmsf
       end
       
       def child_project(p)
-        project_display_name = ProjectResource.create_display_name(p)
+        project_display_name = ProjectResource.create_project_name(p)
         
         new_public = public_path.dup
         new_public = new_public + '/' unless new_public[-1,1] == '/'
