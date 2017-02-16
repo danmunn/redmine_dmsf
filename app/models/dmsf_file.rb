@@ -326,9 +326,8 @@ class DmsfFile < ActiveRecord::Base
 
     sql = (['(' + token_clauses.join(' OR ') + ')'] * tokens.size).join(options[:all_words] ? ' AND ' : ' OR ')
     find_options = [sql, * (tokens.collect {|w| "%#{w.downcase}%"} * token_clauses.size).sort]
-
-    project_conditions = []
-    project_conditions << Project.allowed_to_condition(user, :view_dmsf_files)
+    
+    project_conditions = Project.allowed_to_condition(user, :view_dmsf_files)
     project_conditions << "#{Project.table_name}.id IN (#{project_ids.join(',')})" if project_ids.present?
 
     scope = self.visible.joins(:dmsf_file_revisions).joins(
