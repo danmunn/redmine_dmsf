@@ -330,10 +330,9 @@ class DmsfFile < ActiveRecord::Base
     project_conditions = []
     project_conditions << Project.allowed_to_condition(user, :view_dmsf_files)
     project_conditions << "#{DmsfFile.table_name}.project_id IN (#{project_ids.join(',')})" if project_ids.present?
-
-    results = []
-
-    scope = self.visible.joins(:project, :dmsf_file_revisions)
+    
+    scope = self.visible.joins(:dmsf_file_revisions).joins(
+      "JOIN projects ON dmsf_files.container_id = projects.id AND dmsf_files.container_type = 'Project'")
     scope = scope.limit(options[:limit]) unless options[:limit].blank?
     scope = scope.where(limit_options) unless limit_options.blank?
     scope = scope.where(project_conditions.join(' AND '))

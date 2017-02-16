@@ -25,8 +25,10 @@ Changelog for Redmine DMSF
 * Bug: #663 - Locked documnts on My page
 * Bug: #662 - Broken paging on the Add approver form
 * New: #655 - ERROR: Couldn't find Project with identifier=desktop.ini
+* New: #654 - Non-versioned files should not go to trash bin when deleted
 * Bug: #652 - Missing date picker when creating new file
 * Bug: #651 - Incomplete copy of a file to another project
+* New: #648 - Lock duration
 * New: #641 - Documents export
 * New: #635 - Edit approval workflow steps
 * Bug: #632 - database migration error (from ver 0.9.1 to ver 1.5.8)
