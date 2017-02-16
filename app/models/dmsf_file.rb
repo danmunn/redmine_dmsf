@@ -237,7 +237,10 @@ class DmsfFile < ActiveRecord::Base
     if User.current.admin?
       projects = Project.visible.has_module('dmsf').all
     elsif User.current.logged?
-      User.current.memberships.each {|m| projects << m.project if m.roles.detect {|r| r.allowed_to?(:file_manipulation)} && m.project.module_enabled?('dmsf')}
+      User.current.memberships.each do |m|
+        projects << m.project if m.project.module_enabled?('dmsf') &&
+          m.roles.detect { |r| r.allowed_to?(:file_manipulation) }
+      end
     end
     projects
   end
