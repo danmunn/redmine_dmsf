@@ -176,17 +176,7 @@ module RedmineDmsf
               status = resource.move(dest, overwrite)
             end
             response['Location'] = "#{scheme}://#{host}:#{port}#{url_format(dest)}" if status == Created
-            # RFC 2518
-            if collection
-              multistatus do |xml|
-                xml.response do
-                  xml.href "#{scheme}://#{host}:#{port}#{url_format(status == Created ? dest : resource)}"
-                  xml.status "#{http_version} #{status.status_line}"
-                end
-              end
-            else
-              status
-            end
+            status
           end
         end
       end
