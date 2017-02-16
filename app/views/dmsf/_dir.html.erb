@@ -80,7 +80,7 @@
 <% cfs.each do |c| %>
     <% if DmsfFolder.is_column_on?(c.name) %>
         <td class="dmsf_cf">
-          <%= subfolder.custom_value(c) %>
+          <%= subfolder.custom_value(c) if subfolder %>
         </td>
     <% end %>
 <% end %>
