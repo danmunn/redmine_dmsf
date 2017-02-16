@@ -65,7 +65,7 @@
     <% JSON.parse(@files).each do |id| %>
       <% file = DmsfFile.find_by_id id %>
       <% if file && !files.include?(file) %>
-        <% if @public_url %>
+        <% if @public_urls %>
           <% dmsf_public_url = DmsfPublicUrl.new %>
           <% dmsf_public_url.dmsf_file = file %>
           <% dmsf_public_url.user = User.current %>

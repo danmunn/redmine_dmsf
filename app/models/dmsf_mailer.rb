@@ -55,7 +55,7 @@ class DmsfMailer < Mailer
     redmine_headers 'Project' => project.identifier if project
     @body = email_params[:body]
     @links_only = email_params[:links_only] == '1'
-    @public_url = email_params[:public_urls] == '1'
+    @public_urls = email_params[:public_urls] == '1'
     @expired_at = email_params[:expired_at]
     @folders = email_params[:folders]
     @files = email_params[:files]
