@@ -617,7 +617,7 @@ class DmsfController < ApplicationController
             end
           end
           @files = []
-          DmsfFile.where(:project_id => @project.id).visible.each do |f|
+          DmsfFile.where(:container_id => @project.id, :container_type => 'Project').visible.each do |f|
             r = f.last_revision
             if r
               r.custom_field_values.each do |v|
