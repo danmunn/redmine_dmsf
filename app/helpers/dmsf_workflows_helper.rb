@@ -61,7 +61,7 @@ module DmsfWorkflowsHelper
       if wf.project_id
         options << [wf.name, wf.id]
       else
-        options << ["#{wf.name} (global)", wf.id]
+        options << ["#{wf.name} #{l(:note_global)}", wf.id]
       end
     end
     options_for_select(options, :selected => dmsf_workflow_id)
@@ -83,7 +83,7 @@ module DmsfWorkflowsHelper
         end
       else
         # Global approval workflows
-        options << [wf.name, wf.id]
+        options << ["#{wf.name} #{l(:note_global)}", wf.id]
       end
     end
     options_for_select(options, :selected => dmsf_workflow_id)

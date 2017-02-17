@@ -137,6 +137,20 @@
 
 <hr/>
 <em class="info">
+  <%= l(:field_label_dmsf_workflow) %>
+</em>
+
+<p>
+  <%= content_tag(:label, l(:label_dmsf_keep_documents_locked)) %>
+  <%= check_box_tag('settings[dmsf_keep_documents_locked]', false, @settings['dmsf_keep_documents_locked']) %>
+  <em class="info">
+    <%= l(:note_dmsf_keep_documents_locked) %><br/>
+    <%= l(:label_default)%>: <%= l(:general_text_No)%>
+  </em>
+</p>
+
+<hr/>
+<em class="info">
   <%= l(:label_webdav) %>
 </em>
 

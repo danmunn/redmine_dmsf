@@ -22,6 +22,8 @@ Changelog for Redmine DMSF
         Global title format for downloading
         New columns in the main DMSF view; columns are configurable from the plugin settings
 
+* New: #675 - Keep documents locked after the approval workflow is finished as an option
+* Bug: #671 - Webdav: MOVE returns incorrect response
 * Bug: #663 - Locked documnts on My page
 * Bug: #662 - Broken paging on the Add approver form
 * New: #655 - ERROR: Couldn't find Project with identifier=desktop.ini

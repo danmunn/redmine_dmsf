@@ -50,7 +50,8 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_columns' => %w(title size modified version workflow author),
               'dmsf_memcached_servers' => '',
               'dmsf_webdav_ignore' => '^(\._|\.DS_Store$|Thumbs.db$)',
-              'dmsf_webdav_disable_versioning' => '^\~\$|\.tmp$'
+              'dmsf_webdav_disable_versioning' => '^\~\$|\.tmp$',
+              'dmsf_keep_documents_locked' => false
             }
   
   menu :project_menu, :dmsf, { :controller => 'dmsf', :action => 'show' }, :caption => :menu_dmsf, :before => :documents, :param => :id
@@ -95,7 +96,7 @@ Redmine::Plugin.register :redmine_dmsf do
       {:dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment]}    
     permission :manage_workflows, 
       {:dmsf_workflows => [:index, :new, :create, :destroy, :show, :new_step, :add_step, :remove_step, :reorder_steps,
-                           :update, :update_step, :delete_step]}
+                           :update, :update_step, :delete_step, :edit]}
   end   
   
   # Administration menu extension

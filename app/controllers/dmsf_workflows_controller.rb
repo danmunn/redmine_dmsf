@@ -55,7 +55,7 @@ class DmsfWorkflowsController < ApplicationController
             if @dmsf_workflow.try_finish revision, action, (params[:step_action].to_i / 10)
               if revision.dmsf_file
                 begin
-                  revision.dmsf_file.unlock! true
+                  revision.dmsf_file.unlock!(true) unless Setting.plugin_redmine_dmsf['dmsf_keep_documents_locked'].present?
                 rescue DmsfLockError => e
                   flash[:info] = e.message
                 end
@@ -203,6 +203,10 @@ class DmsfWorkflowsController < ApplicationController
   end
 
   def log
+  end
+
+  def edit
+    redirect_to dmsf_workflow_path(@dmsf_workflow)
   end
 
   def new

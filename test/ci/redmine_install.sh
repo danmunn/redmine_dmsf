@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 #
 # This script is almost entirely built on the build script from redmine_backlogs
 # Please see: https://github.com/backlogs/redmine_backlogs
