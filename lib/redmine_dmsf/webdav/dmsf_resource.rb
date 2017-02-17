@@ -679,7 +679,7 @@ module RedmineDmsf
         return nil unless entity.locked?
 
         if entity.dmsf_folder && entity.dmsf_folder.locked?
-          locks = entity.lock.reverse[0].dmsf_folder.locks(false) # longwinded way of getting base items locks
+          locks = entity.lock.reverse[0].folder.locks(false) # longwinded way of getting base items locks
         else
           locks = entity.lock(false)
         end
