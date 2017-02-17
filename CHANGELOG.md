@@ -22,6 +22,7 @@ Changelog for Redmine DMSF
         Global title format for downloading
         New columns in the main DMSF view; columns are configurable from the plugin settings
 
+* New: #676 - An option to prevent inheritance of CF
 * New: #675 - Keep documents locked after the approval workflow is finished as an option
 * Bug: #671 - Webdav: MOVE returns incorrect response
 * Bug: #663 - Locked documnts on My page
