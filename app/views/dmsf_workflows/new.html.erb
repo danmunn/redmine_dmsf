@@ -20,15 +20,17 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% project = Project.find_by_id params[:project_id] if params[:project_id] %>
-<% if project %>
-  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(project, :tab => 'dmsf_workflow') %> &#187; <%= l(:label_dmsf_workflow_new) %></h2>
+<% if !@project && params[:dmsf_workflow] && params[:dmsf_workflow][:project_id].present? %>
+    <% @project = Project.find_by_id params[:dmsf_workflow][:project_id] %>
+<% end %>
+<% if @project %>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(@project, :tab => 'dmsf_workflow') %> &#187; <%= l(:label_dmsf_workflow_new) %></h2>
 <% else %>
   <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=  l(:label_dmsf_workflow_new) %></h2>
 <% end %>
 
 <%= labelled_form_for @dmsf_workflow do |f| %>
-  <%= f.hidden_field(:project_id, :value => project.id) if project %>
+  <%= f.hidden_field(:project_id, :value => @project.id) if @project %>
   <%= error_messages_for 'dmsf_workflow' %>
   <div class="box tabular">
     <p>
