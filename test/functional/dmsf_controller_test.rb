@@ -186,6 +186,14 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'tr.dmsf_tree', :count => 0
   end
 
+  def test_show_tag
+    @role.add_permission! :view_dmsf_files
+    @role.add_permission! :view_dmsf_folders
+    get :show, :id => @project.id, :custom_field_id => 21, :custom_value => 'Technical documentation'
+    assert_response :success
+    assert_select 'tr.dmsf_tree', :count => 0
+  end
+
   def test_show_tree_view
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders

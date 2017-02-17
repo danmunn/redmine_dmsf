@@ -26,7 +26,7 @@ cf_1:
   max_length: 0
   possible_values: 
   - User documentation
-  - Technical docuemntation  
+  - Technical documentation
   id: 21
   is_required: false
   field_format: list
