@@ -3,7 +3,6 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
-# Copyright (C) 2016-17 carlolars
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,12 +18,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class AddDmsfFileLastRevisionIdToDmsfLock < ActiveRecord::Migration
+class AddDmsfNotInheritableToCustomFields < ActiveRecord::Migration
   def up
-    rename_column :dmsf_locks, :revision, :dmsf_file_last_revision_id
+    add_column :custom_fields, :dmsf_not_inheritable, :boolean, :null => true
   end
 
   def down
-    rename_column :dmsf_locks, :dmsf_file_last_revision_id, :revision
+    remove_column :custom_fields, :dmsf_not_inheritable
   end
 end

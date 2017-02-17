@@ -47,6 +47,7 @@
     <div class="splitcontentright">
       <div class="custom_fields">
         <% upload.custom_values.each do |value| %>
+            <% value.value = nil if value.custom_field.dmsf_not_inheritable %>
             <p><%= custom_field_tag_with_label "commited_files[#{i}]", value %></p>
         <% end %>
       </div>

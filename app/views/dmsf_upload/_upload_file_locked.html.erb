@@ -54,7 +54,8 @@
         <% upload.custom_values.each do |value| %>
             <p>
               <%= label_tag('', h(value.custom_field.name)) %>
-              <%= h(value) %>
+              <% value.value = nil if value.custom_field.dmsf_not_inheritable %>
+              <%= h(value.value) %>
             </p>
         <% end %>
       </div>

@@ -355,3 +355,4 @@ ru:
   label_dmsf_keep_documents_locked: Keep documents locked
   note_dmsf_keep_documents_locked: Documents will be kept locked when approved
   note_global: (global)
+  field_dmsf_not_inheritable: Not inheritable

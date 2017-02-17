@@ -355,3 +355,4 @@ cs:
   label_dmsf_keep_documents_locked: Ponechat dokumenty zamčené
   note_dmsf_keep_documents_locked: Dokumenty zůstanou i po schválení zamčené.
   note_global: (globální)
+  field_dmsf_not_inheritable: Není dědičné

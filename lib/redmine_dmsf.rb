@@ -59,6 +59,7 @@ require 'redmine_dmsf/hooks/views/view_projects_form_hook'
 require 'redmine_dmsf/hooks/views/base_view_hooks'
 require 'redmine_dmsf/hooks/views/my_account_view_hooks'
 require 'redmine_dmsf/hooks/views/issue_view_hooks'
+require 'redmine_dmsf/hooks/views/custom_field_view_hooks'
 require 'redmine_dmsf/hooks/helpers/issues_helper_hooks'
 
 # Macros

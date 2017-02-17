@@ -49,6 +49,7 @@
           <div class="splitcontentright">
             <div class="custom_fields">
               <% @revision.custom_field_values.each do |value| %>
+                  <% value.value = nil if value.custom_field.dmsf_not_inheritable %>
                   <p><%= custom_field_tag_with_label(:dmsf_file_revision, value) %></p>
               <% end %>
             </div>
