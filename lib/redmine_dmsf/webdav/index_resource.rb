@@ -31,10 +31,10 @@ module RedmineDmsf
       def children
         unless @projects
           @projects = []
-          Project.select(:identifier).has_module(:dmsf).where(
+          Project.select(:id, :identifier, :name).has_module(:dmsf).where(
             Project.allowed_to_condition(
               User.current, :view_dmsf_folders)).order('lft').all.each do |p|
-            @projects << child(p.identifier)
+            @projects << child_project(p)
           end
         end
         @projects

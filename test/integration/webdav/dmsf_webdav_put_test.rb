@@ -39,6 +39,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     @role = Role.find 1 #
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
     super
   end
 
@@ -93,13 +94,19 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_put_as_admin_granted_on_dmsf_enabled_project
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @admin.merge!({:content_type => :text})
-      assert_response :success # 201 Created
-      # Lets check for our file
-      file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
-      assert file, 'Check for files existance'
-    end
+    put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @admin.merge!({:content_type => :text})
+    assert_response :success # 201 Created
+    # Lets check for our file
+    file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
+    assert file, 'Check for files existance'
+    
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+    
+    put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @admin.merge!({:content_type => :text})
+    assert_response 409
+    put "/dmsf/webdav/#{project1_uri}/test-1234.txt", '1234', @admin.merge!({:content_type => :text})
+    assert_response :success # 201 Created
   end
 
   def test_put_failed_as_jsmith_on_non_dmsf_enabled_project
@@ -137,16 +144,21 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_put_succeeds_for_non_admin_with_correct_permissions
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      @project1.enable_module! :dmsf # Flag module enabled
-      @role.add_permission! :view_dmsf_folders
-      @role.add_permission! :file_manipulation
-      put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})
-      assert_response :success # 201 - Now we have permissions
-      # Lets check for our file
-      file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
-      assert file, 'File test-1234 was not found in projects dmsf folder.'
-    end
+    @project1.enable_module! :dmsf # Flag module enabled
+    @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :file_manipulation
+    put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})
+    assert_response :success # 201 - Now we have permissions
+    # Lets check for our file
+    file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
+    assert file, 'File test-1234 was not found in projects dmsf folder.'
+
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+    put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})
+    assert_response 409
+    put "/dmsf/webdav/#{project1_uri}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})
+    assert_response :success # 201 - Now we have permissions
   end
 
   def test_put_writes_revision_successfully_for_unlocked_file

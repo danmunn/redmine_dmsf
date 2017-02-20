@@ -46,6 +46,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
     
     super
   end
@@ -130,6 +131,21 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
       assert f, "Moved file '#{new_name}' not found in project."
     end
   end
+
+  def test_move_to_new_filename_with_project_names
+    file = DmsfFile.find_by_id 1
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+
+    new_name = "#{file.name}.moved"
+    assert_difference 'file.dmsf_file_revisions.count', +1 do
+      xml_http_request :move, "/dmsf/webdav/#{project1_uri}/#{file.name}", nil,
+        @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{project1_uri}/#{new_name}"})
+      assert_response 201 # Created
+      f = DmsfFile.find_file_by_name @project1, nil, "#{new_name}"
+      assert f, "Moved file '#{new_name}' not found in project."
+    end
+  end
   
   def test_move_zero_sized_to_new_filename
     file = DmsfFile.find_by_id 10
@@ -153,6 +169,23 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     assert_difference 'file.dmsf_file_revisions.count', +1 do
       xml_http_request :move, "/dmsf/webdav/#{@project1.identifier}/#{file.name}", nil,
         @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{folder.title}/#{file.name}"})
+      assert_response 201 # Created
+      file2 = DmsfFile.find_by_id 1
+      assert_equal folder.id, file2.dmsf_folder_id
+    end
+  end
+
+  def test_move_to_new_folder_with_project_names
+    file = DmsfFile.find_by_id 1
+    folder = DmsfFolder.find_by_id 1
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+    assert_kind_of DmsfFile, file
+    assert_kind_of DmsfFolder, folder
+
+    assert_difference 'file.dmsf_file_revisions.count', +1 do
+      xml_http_request :move, "/dmsf/webdav/#{project1_uri}/#{file.name}", nil,
+        @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{project1_uri}/#{folder.title}/#{file.name}"})
       assert_response 201 # Created
       file2 = DmsfFile.find_by_id 1
       assert_equal folder.id, file2.dmsf_folder_id

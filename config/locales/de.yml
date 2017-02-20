@@ -353,3 +353,6 @@ de:
   note_dmsf_keep_documents_locked: Documents will be kept locked when approved
   note_global: (global)
   field_dmsf_not_inheritable: Not inheritable
+  
+  label_webdav_use_project_names: Use project name for project folder
+  note_webdav_use_project_names: Use project names instead of project identifier for project folders.
