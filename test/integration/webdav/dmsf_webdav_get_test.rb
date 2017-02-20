@@ -66,12 +66,13 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     assert !response.body.match(@project1.identifier).nil?, "Expected to find project #{@project1.identifier} in return data"
     
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-    
-    get '/dmsf/webdav', nil, @admin
-    assert_response :success
-    assert_no_match @project1.identifier, response.body
-    assert_match project1_uri, response.body
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
+      project1_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      get '/dmsf/webdav', nil, @admin
+      assert_response :success
+      assert_no_match @project1.identifier, response.body
+      assert_match project1_uri, response.body
+    end
   end
 
   def test_should_not_list_non_dmsf_enabled_project
@@ -96,13 +97,13 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
-    
-    get "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
-    assert_response 404
-    
-    get "/dmsf/webdav/#{project1_uri}/test.txt", nil, @admin
-    assert_response :success
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
+      project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+      get "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
+      assert_response 404
+      get "/dmsf/webdav/#{project1_uri}/test.txt", nil, @admin
+      assert_response :success
+    end
   end
 
   def test_should_list_dmsf_contents_within_project

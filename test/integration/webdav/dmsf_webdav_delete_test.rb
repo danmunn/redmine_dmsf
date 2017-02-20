@@ -172,19 +172,19 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
 
   def test_folder_delete_by_user_with_project_names
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :folder_manipulation
-    @project1.enable_module! :dmsf # Flag module enabled
-    
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
-    assert_response 404
-    
-    p1name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-    p1name_uri = URI.encode(p1name, /\W/)
-    delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", nil, @jsmith
-    assert_response :success
-    @folder6.reload
-    assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
+      @role.add_permission! :view_dmsf_folders
+      @role.add_permission! :folder_manipulation
+      @project1.enable_module! :dmsf # Flag module enabled
+      delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
+      assert_response 404
+      p1name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      p1name_uri = URI.encode(p1name, /\W/)
+      delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", nil, @jsmith
+      assert_response :success
+      @folder6.reload
+      assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
+    end
   end
 
   def test_file_delete_by_administrator
@@ -211,21 +211,23 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
 
   def test_file_delete_by_user_with_project_names
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    @project1.enable_module! :dmsf
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :file_delete
-    
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
-    assert_response 404
-    
-    p1name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-    p1name_uri = URI.encode(p1name, /\W/)
-    
-    delete "/dmsf/webdav/#{p1name_uri}/#{@file1.name}", nil, @jsmith
-    assert_response :success
-    
-    @file1.reload
-    assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
+      @project1.enable_module! :dmsf
+      @role.add_permission! :view_dmsf_folders
+      @role.add_permission! :file_delete
+
+      delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
+      assert_response 404
+
+      p1name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      p1name_uri = URI.encode(p1name, /\W/)
+
+      delete "/dmsf/webdav/#{p1name_uri}/#{@file1.name}", nil, @jsmith
+      assert_response :success
+
+      @file1.reload
+      assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
+    end
   end
 
   def test_locked_folder
@@ -252,15 +254,17 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   
   def test_non_versioned_file
     Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] = '\.tmp$'
-    @project1.enable_module! :dmsf
-    @role.add_permission! :view_dmsf_folders    
-    @role.add_permission! :file_delete
-    
-    file = @file1.copy_to_filename(@project1, nil, "delete_test.tmp")
-    
-    delete "/dmsf/webdav/#{@project1.identifier}/delete_test.tmp", nil, @jsmith
-    # The file should be destroyed
-    assert_nil DmsfFile.find_file_by_name(@project1, nil, "delete_test.tmp")
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] == '\.tmp$'
+      @project1.enable_module! :dmsf
+      @role.add_permission! :view_dmsf_folders
+      @role.add_permission! :file_delete
+
+      file = @file1.copy_to_filename(@project1, nil, "delete_test.tmp")
+
+      delete "/dmsf/webdav/#{@project1.identifier}/delete_test.tmp", nil, @jsmith
+      # The file should be destroyed
+      assert_nil DmsfFile.find_file_by_name(@project1, nil, 'delete_test.tmp')
+    end
   end
 
 end

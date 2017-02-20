@@ -44,33 +44,13 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
   end
   
   def test_lock_file_already_locked_by_other
-    file = DmsfFile.find_by_id 1
-    
-    log_user 'admin', 'admin' # login as admin
-    assert !User.current.anonymous?, 'Current user is anonymous'
-    assert file.lock!, "File failed to be locked by #{User.current.name}"
-    
-    xml_http_request :lock, "/dmsf/webdav/#{@project1.identifier}/#{file.name}",
-      "<?xml version=\"1.0\" encoding=\"utf-8\" ?>
-<d:lockinfo xmlns:d=\"DAV:\">
-  <d:lockscope><d:exclusive/></d:lockscope>
-  <d:locktype><d:write/></d:locktype>
-  <d:owner>jsmith</d:owner>
-</d:lockinfo>",
-      @jsmith.merge!({:HTTP_DEPTH=>"infinity",
-                      :HTTP_TIMEOUT=>"Infinite",})
-    assert_response 423 # Locked
-  end
-  
-  def test_lock_file
-    file = DmsfFile.find_by_id 1
-    
-    create_time = Time.utc(2000, 1, 2, 3, 4, 5)
-    refresh_time = Time.utc(2000, 1, 2, 6, 7, 8)
-    
-    # Time travel, will make the usec part of the time 0
-    travel_to create_time do
-      # Lock file
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      file = DmsfFile.find_by_id 1
+
+      log_user 'admin', 'admin' # login as admin
+      assert !User.current.anonymous?, 'Current user is anonymous'
+      assert file.lock!, "File failed to be locked by #{User.current.name}"
+
       xml_http_request :lock, "/dmsf/webdav/#{@project1.identifier}/#{file.name}",
         "<?xml version=\"1.0\" encoding=\"utf-8\" ?>
   <d:lockinfo xmlns:d=\"DAV:\">
@@ -78,40 +58,64 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     <d:locktype><d:write/></d:locktype>
     <d:owner>jsmith</d:owner>
   </d:lockinfo>",
-        @jsmith.merge!({:HTTP_DEPTH=>"infinity",
-                        :HTTP_TIMEOUT=>"Infinite",})
-      assert_response 200
-      # Verify the response
-      assert_match "<D:lockscope><D:exclusive/></D:lockscope>", response.body
-      assert_match "<D:locktype><D:write/></D:locktype>", response.body
-      assert_match "<D:depth>infinity</D:depth>", response.body
-      # 1.week = 7*24*3600=604800 seconds
-      assert_match "<D:timeout>Second-604800</D:timeout>", response.body
-      assert_match /<D:locktoken><D:href>([a-z0-9\-]+)<\/D:href><\/D:locktoken>/, response.body
-      # Extract the locktoken, needed when refreshing the lock
-      response.body.match(/<D:locktoken><D:href>([a-z0-9\-]+)<\/D:href><\/D:locktoken>/)
-      locktoken=$1
-      # Verify the lock in the db
-      l = DmsfFile.find_by_id(1).lock.first
-      assert_equal l.created_at, create_time
-      assert_equal l.updated_at, create_time
-      assert_equal l.expires_at, create_time + 1.week
-      
-      travel_to refresh_time do
-        # Refresh lock
+        @jsmith.merge!({:HTTP_DEPTH => 'infinity',
+                        :HTTP_TIMEOUT => 'Infinite',})
+      assert_response 423 # Locked
+    end
+  end
+  
+  def test_lock_file
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      file = DmsfFile.find_by_id 1
+
+      create_time = Time.utc(2000, 1, 2, 3, 4, 5)
+      refresh_time = Time.utc(2000, 1, 2, 6, 7, 8)
+
+      # Time travel, will make the usec part of the time 0
+      travel_to create_time do
+        # Lock file
         xml_http_request :lock, "/dmsf/webdav/#{@project1.identifier}/#{file.name}",
-          nil,
-          @jsmith.merge!({:HTTP_DEPTH=>"infinity",
-                          :HTTP_TIMEOUT=>"Infinite",
-                          :HTTP_IF=>"(#{locktoken})"})
-        assert_response 200
+          "<?xml version=\"1.0\" encoding=\"utf-8\" ?>
+    <d:lockinfo xmlns:d=\"DAV:\">
+      <d:lockscope><d:exclusive/></d:lockscope>
+      <d:locktype><d:write/></d:locktype>
+      <d:owner>jsmith</d:owner>
+    </d:lockinfo>",
+          @jsmith.merge!({:HTTP_DEPTH => 'infinity',
+                          :HTTP_TIMEOUT => 'Infinite',})
+        assert_response :success
+        # Verify the response
+        assert_match '<D:lockscope><D:exclusive/></D:lockscope>', response.body
+        assert_match '<D:locktype><D:write/></D:locktype>', response.body
+        assert_match '<D:depth>infinity</D:depth>', response.body
         # 1.week = 7*24*3600=604800 seconds
-        assert_match "<D:timeout>Second-604800</D:timeout>", response.body
+        assert_match '<D:timeout>Second-604800</D:timeout>', response.body
+        assert_match /<D:locktoken><D:href>([a-z0-9\-]+)<\/D:href><\/D:locktoken>/, response.body
+        # Extract the locktoken, needed when refreshing the lock
+        response.body.match(/<D:locktoken><D:href>([a-z0-9\-]+)<\/D:href><\/D:locktoken>/)
+        locktoken=$1
         # Verify the lock in the db
         l = DmsfFile.find_by_id(1).lock.first
         assert_equal l.created_at, create_time
-        assert_equal l.updated_at, refresh_time
-        assert_equal l.expires_at, refresh_time + 1.week
+        assert_equal l.updated_at, create_time
+        assert_equal l.expires_at, create_time + 1.week
+
+        travel_to refresh_time do
+          # Refresh lock
+          xml_http_request :lock, "/dmsf/webdav/#{@project1.identifier}/#{file.name}",
+            nil,
+            @jsmith.merge!({:HTTP_DEPTH => 'infinity',
+                            :HTTP_TIMEOUT => 'Infinite',
+                            :HTTP_IF => "(#{locktoken})"})
+          assert_response :success
+          # 1.week = 7*24*3600=604800 seconds
+          assert_match '<D:timeout>Second-604800</D:timeout>', response.body
+          # Verify the lock in the db
+          l = DmsfFile.find_by_id(1).lock.first
+          assert_equal l.created_at, create_time
+          assert_equal l.updated_at, refresh_time
+          assert_equal l.expires_at, refresh_time + 1.week
+        end
       end
     end
   end

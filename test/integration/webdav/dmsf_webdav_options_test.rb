@@ -48,20 +48,24 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
 
   def test_options_returns_expected_allow_header_for_ro
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_ONLY'
-    xml_http_request  :options, '/dmsf/webdav'
-    assert_response :success
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert response.headers['Allow'] , 'Allow header is empty or does not exist'
-    assert_equal response.headers['Allow'], 'OPTIONS,HEAD,GET,PROPFIND'
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_ONLY'
+      xml_http_request  :options, '/dmsf/webdav'
+      assert_response :success
+      assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
+      assert response.headers['Allow'] , 'Allow header is empty or does not exist'
+      assert_equal response.headers['Allow'], 'OPTIONS,HEAD,GET,PROPFIND'
+    end
   end
 
   def test_options_returns_expected_allow_header_for_rw
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    xml_http_request  :options, '/dmsf/webdav'
-    assert_response :success
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert response.headers['Allow'] , 'Allow header is empty or does not exist'
-    assert_equal response.headers['Allow'], 'OPTIONS,HEAD,GET,PROPFIND,PUT,POST,DELETE,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      xml_http_request  :options, '/dmsf/webdav'
+      assert_response :success
+      assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
+      assert response.headers['Allow'] , 'Allow header is empty or does not exist'
+      assert_equal response.headers['Allow'], 'OPTIONS,HEAD,GET,PROPFIND,PUT,POST,DELETE,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
+    end
   end
 
   def test_options_returns_expected_dav_header
@@ -107,11 +111,13 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
 
   def test_authenticated_options_returns_expected_allow_header
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin
-    assert_response :success
-    assert !(response.headers.nil? || response.headers.empty?), "Response headers are empty"
-    assert response.headers['Allow'], 'Allow header is empty or does not exist'
-    assert_equal response.headers['Allow'], 'OPTIONS,HEAD,GET,PROPFIND,PUT,POST,DELETE,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
+      xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin
+      assert_response :success
+      assert !(response.headers.nil? || response.headers.empty?), "Response headers are empty"
+      assert response.headers['Allow'], 'Allow header is empty or does not exist'
+      assert_equal response.headers['Allow'], 'OPTIONS,HEAD,GET,PROPFIND,PUT,POST,DELETE,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
+    end
   end
 
   def test_authenticated_options_returns_expected_dav_header
@@ -130,31 +136,32 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_un_authenticated_options_for_msoffice_user_agent
-    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => "Microsoft Office Word 2014"}
+    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
     assert_response 405
   end
 
   def test_authenticated_options_for_msoffice_user_agent
-    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_USER_AGENT => "Microsoft Office Word 2014"})
+    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_USER_AGENT => 'Microsoft Office Word 2014'})
     assert_response :success
   end
 
   def test_un_authenticated_options_for_other_user_agent
-    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => "Other"}
+    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => 'Other'}
     assert_response 401
   end
 
   def test_authenticated_options_for_other_user_agent
-    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_USER_AGENT => "Other"})
+    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_USER_AGENT => 'Other'})
     assert_response :success
     
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
-    
-    xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_USER_AGENT => "Other"})
-    assert_response 404
-    xml_http_request  :options, "/dmsf/webdav/#{project1_uri}", nil, @admin.merge!({:HTTP_USER_AGENT => "Other"})
-    assert_response :success
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
+      project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+      xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_USER_AGENT => 'Other'})
+      assert_response 404
+      xml_http_request  :options, "/dmsf/webdav/#{project1_uri}", nil, @admin.merge!({:HTTP_USER_AGENT => 'Other'})
+      assert_response :success
+    end
   end
 
   def test_authenticated_options_returns_404_for_non_dmsf_enabled_items
