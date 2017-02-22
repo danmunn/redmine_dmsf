@@ -270,7 +270,7 @@ class DmsfFileRevision < ActiveRecord::Base
     format2.sub!('%v', self.version)
     format2.sub!('%i', self.dmsf_file.id.to_s)
     format2.sub!('%r', self.id.to_s)
-    format2 + ext if ext
+    format2 += ext if ext
     format2
   end
 
