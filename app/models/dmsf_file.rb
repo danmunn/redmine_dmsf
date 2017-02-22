@@ -260,6 +260,9 @@ class DmsfFile < ActiveRecord::Base
         end
       end
     end
+    
+    # Must invalidate source parent folder cache before moving
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
 
     self.container_type = self.container_type
     self.container_id = container.id
