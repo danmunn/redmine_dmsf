@@ -104,6 +104,13 @@ module RedmineDmsf
       def file
         nil
       end
+      
+      # Available properties
+      def properties
+        %w(creationdate displayname getlastmodified getetag resourcetype getcontenttype getcontentlength supportedlock lockdiscovery).collect do |prop|
+          {:name => prop, :ns_href => 'DAV:'}
+        end
+      end
 
       def project_id
 	      self.project.id if self.project
