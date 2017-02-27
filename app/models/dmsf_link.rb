@@ -154,7 +154,7 @@ class DmsfLink < ActiveRecord::Base
     csv = []
     if self.target_type == 'DmsfUrl'
       # Id
-      csv << '' if columns.include?('id')
+      csv << self.id if columns.include?('id')
       # Title
       csv << self.title.insert(0, ' ' * level) if columns.include?('title')
       # Extension
@@ -168,11 +168,11 @@ class DmsfLink < ActiveRecord::Base
       # Workflow
       csv << '' if columns.include?('workflow')
       # Author
-      csv << self.last_revision.user.name if columns.include?('author')
+      csv << self.user.name if columns.include?('author')
       # Url
-      csv << self.external_url if columns.include?('url')
+      csv << self.external_url if columns.include?(l(:label_document_url))
       # Revision
-      csv << '' if columns.include?('revision')
+      csv << '' if columns.include?(l(:label_last_revision_id))
       # Custom fields
       cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position)
       cfs.each do |c|

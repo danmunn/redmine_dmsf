@@ -584,7 +584,6 @@ class DmsfFile < ActiveRecord::Base
     # Url
     if columns.include?(l(:label_document_url))
       default_url_options[:host] = Setting.host_name
-      url = url_for(:controller => :dmsf_files, :action => 'view', :id => self.id)
       csv << url_for(:controller => :dmsf_files, :action => 'view', :id => self.id)
     end
     # Revision

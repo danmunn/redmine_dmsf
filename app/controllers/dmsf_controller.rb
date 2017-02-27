@@ -34,7 +34,6 @@ class DmsfController < ApplicationController
   skip_before_action :verify_authenticity_token,  if: -> { request.headers['HTTP_X_REDMINE_API_KEY'].present? }
 
   helper :all
-  #helper :dmsf
 
   def expand_folder
     @tree_view = true
