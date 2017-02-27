@@ -273,6 +273,9 @@ module RedmineDmsf
           if dest.exist?
             MethodNotAllowed
           else
+            # Must invalidate source parent folder cache before moving
+            RedmineDmsf::Webdav::Cache.invalidate_item(folder.propfind_cache_key)
+            
             if(parent.projectless_path == '/') #Project root
               folder.dmsf_folder_id = nil
             else
@@ -337,6 +340,8 @@ module RedmineDmsf
             else
               if (project == resource.project) && (file.last_revision.size == 0)
                 # Moving a zero sized file within the same project, just update the dmsf_folder
+                # Must invalidate source parent folder cache before moving
+                RedmineDmsf::Webdav::Cache.invalidate_item(file.propfind_cache_key)
                 file.dmsf_folder = f
               else
                 return InternalServerError unless file.move_to(resource.project, f)

@@ -372,4 +372,106 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
   end
   
+  def test_propfind_depth1_on_project1_for_admin_with_cache_and_locks
+    RedmineDmsf::Webdav::Cache.init_testcache
+    
+    log_user 'admin', 'admin' # login as admin
+    assert !User.current.anonymous?, 'Current user is anonymous'
+    
+    assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +7 do
+      xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+        @admin.merge!({:HTTP_DEPTH => '1'})
+      assert_response 207 # MultiStatus
+    end
+    
+    # Verify that everything exists in the cache as it should
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder1.title}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder6.title}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file1.id}-#{@file1.last_revision.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file9.id}-#{@file9.last_revision.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file10.id}-#{@file10.last_revision.id}")
+
+    # Lock a file and verify that the PROPSTATS for the file and the PROPFIND were deleted
+    assert @file1.lock!, "File failed to be locked by #{User.current.name}"
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder1.title}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder6.title}")
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file1.id}-#{@file1.last_revision.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file9.id}-#{@file9.last_revision.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file10.id}-#{@file10.last_revision.id}")
+    
+    assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +1 do
+      xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+        @admin.merge!({:HTTP_DEPTH => '1'})
+      assert_response 207 # MultiStatus
+    end
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file1.id}-#{@file1.last_revision.id}")
+    
+    # Unlock a file and verify that the PROPSTATS for the file and the PROPFIND were deleted
+    assert @file1.unlock!, "File failed to be unlocked by #{User.current.name}"
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder1.title}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder6.title}")
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file1.id}-#{@file1.last_revision.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file9.id}-#{@file9.last_revision.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file10.id}-#{@file10.last_revision.id}")
+    
+    assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +1 do
+      xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+        @admin.merge!({:HTTP_DEPTH => '1'})
+      assert_response 207 # MultiStatus
+    end
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file1.id}-#{@file1.last_revision.id}")
+    
+    # Lock a folder and verify that the PROPSTATS for the file and the PROPFIND were deleted
+    assert @folder1.lock!, "File failed to be locked by #{User.current.name}"
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}")
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder1.title}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder6.title}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file1.id}-#{@file1.last_revision.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file9.id}-#{@file9.last_revision.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file10.id}-#{@file10.last_revision.id}")
+    
+    assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +1 do
+      xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+        @admin.merge!({:HTTP_DEPTH => '1'})
+      assert_response 207 # MultiStatus
+    end
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder1.title}")
+    
+    # Unlock a folder and verify that the PROPSTATS for the file and the PROPFIND were deleted
+    assert @folder1.unlock!, "File failed to be unlocked by #{User.current.name}"
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}")
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder1.title}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder6.title}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file1.id}-#{@file1.last_revision.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file9.id}-#{@file9.last_revision.id}")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@file10.id}-#{@file10.last_revision.id}")
+    
+    assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +1 do
+      xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
+        @admin.merge!({:HTTP_DEPTH => '1'})
+      assert_response 207 # MultiStatus
+    end
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
+    assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder1.title}")
+  end
+  
 end

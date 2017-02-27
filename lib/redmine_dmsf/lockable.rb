@@ -73,6 +73,12 @@ module RedmineDmsf
       l.save!
       reload
       locks.reload
+      
+      # Invalidate PROPFIND (for parent folder)
+      RedmineDmsf::Webdav::Cache.invalidate_item(self.propfind_cache_key)
+      # Invalidate PROPSTATS
+      RedmineDmsf::Webdav::Cache.delete("PROPSTATS/#{RedmineDmsf::Webdav::ProjectResource.create_project_name(self.project)}/#{self.dmsf_path_str}") if self.is_a?(DmsfFolder)
+      RedmineDmsf::Webdav::Cache.delete("PROPSTATS/#{self.id}-#{self.last_revision.id}") if self.is_a?(DmsfFile)
       return l
     end
 
@@ -136,6 +142,13 @@ module RedmineDmsf
           end
         end
       end
+      
+      # Invalidate PROPFIND (for parent folder)
+      RedmineDmsf::Webdav::Cache.invalidate_item(self.propfind_cache_key)
+      # Invalidate PROPSTATS 
+      RedmineDmsf::Webdav::Cache.delete("PROPSTATS/#{RedmineDmsf::Webdav::ProjectResource.create_project_name(self.project)}/#{self.dmsf_path_str}") if self.is_a?(DmsfFolder)
+      RedmineDmsf::Webdav::Cache.delete("PROPSTATS/#{self.id}-#{self.last_revision.id}") if self.is_a?(DmsfFile)
+      
       reload
       locks.reload
     end
