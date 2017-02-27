@@ -279,16 +279,19 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_action_approve
-    approve
-    assert !@revision1.dmsf_file.locked_for_user?
-  end
-
-  def test_action_approve
-    Setting.plugin_redmine_dmsf['dmsf_keep_documents_locked'] = '1'
-    approve
-    if Setting.plugin_redmine_dmsf['dmsf_keep_documents_locked'] == '1'
-      assert @revision1.dmsf_file.locked_for_user?
-    end
+    post(
+      :new_action,
+      :commit => l(:button_submit),
+      :id => @wf1.id,
+      :dmsf_workflow_step_assignment_id => @wfsa2.id,
+      :dmsf_file_revision_id => @revision1.id,
+      :step_action => DmsfWorkflowStepAction::ACTION_APPROVE,
+      :user_id => nil,
+      :note => '')
+    assert_redirected_to dmsf_folder_path(:id => @project1.id)
+    assert DmsfWorkflowStepAction.where(
+      :dmsf_workflow_step_assignment_id => @wfsa2.id,
+      :action => DmsfWorkflowStepAction::ACTION_APPROVE).first
   end
 
   def test_action_reject
@@ -394,21 +397,4 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_response :redirect
   end
 
-  private
-
-  def approve
-    post(
-      :new_action,
-      :commit => l(:button_submit),
-      :id => @wf1.id,
-      :dmsf_workflow_step_assignment_id => @wfsa2.id,
-      :dmsf_file_revision_id => @revision1.id,
-      :step_action => DmsfWorkflowStepAction::ACTION_APPROVE,
-      :user_id => nil,
-      :note => '')
-    assert_redirected_to dmsf_folder_path(:id => @project1.id)
-    assert DmsfWorkflowStepAction.where(
-      :dmsf_workflow_step_assignment_id => @wfsa2.id,
-      :action => DmsfWorkflowStepAction::ACTION_APPROVE).first
-  end
 end
