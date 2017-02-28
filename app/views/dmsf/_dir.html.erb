@@ -87,10 +87,10 @@
 <td class="dmsf_buttons">
   <% if @folder_manipulation_allowed %>
     <% unless locked_for_user %>
-     <%= link_to(image_tag('edit.png'),
-        edit_dmsf_path(:id => project, :folder_id => subfolder),
-        :title => l(:link_edit, :title => subfolder ? h(subfolder.title) : project.name)) %>
       <% if subfolder %>
+        <%= link_to(image_tag('edit.png'),
+                    edit_dmsf_path(:id => project, :folder_id => subfolder),
+                    :title => l(:link_edit, :title => subfolder ? h(subfolder.title) : project.name)) %>
         <% if locked %>
           <% if subfolder.unlockable? %>
             <%= link_to(image_tag('unlock.png', :plugin => 'redmine_dmsf'),
@@ -105,6 +105,8 @@
             :title => l(:title_lock_file)) %>
         <% end %>
       <% else %>
+        <%= link_to(image_tag('edit.png'), edit_root_dmsf_path(:id => @project),
+                    :title => l(:link_edit, :title => l(:link_documents))) %>
         <span class="icon"></span>
       <% end %>
       <% if (subfolder && subfolder.notification) || (!subfolder && project.dmsf_notification) %>
