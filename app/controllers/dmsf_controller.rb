@@ -59,8 +59,11 @@ class DmsfController < ApplicationController
       }
       format.api
       format.csv  {
+        filename = @project.name
+        filename << "_#{@folder.title}" if @folder
+        filename << DateTime.now.strftime('_%Y%m%d%H%M%S.csv')
         send_data(DmsfHelper.dmsf_to_csv(@folder ? @folder : @project, params[:settings][:dmsf_columns]),
-                  :type => 'text/csv; header=present', :filename => 'dmsf.csv')
+                  :type => 'text/csv; header=present', :filename => filename)
       }
     end
   end
