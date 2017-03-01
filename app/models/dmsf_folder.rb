@@ -432,6 +432,8 @@ class DmsfFolder < ActiveRecord::Base
 
   def to_csv(columns, level)
     csv = []
+    # Project
+    csv << self.project.name if columns.include?(l(:field_project))
     # Id
     csv << self.id if columns.include?('id')
     # Title

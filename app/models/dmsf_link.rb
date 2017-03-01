@@ -153,6 +153,8 @@ class DmsfLink < ActiveRecord::Base
   def to_csv(columns, level)
     csv = []
     if self.target_type == 'DmsfUrl'
+      # Project
+      csv << self.project.name if columns.include?(l(:field_project))
       # Id
       csv << self.id if columns.include?('id')
       # Title

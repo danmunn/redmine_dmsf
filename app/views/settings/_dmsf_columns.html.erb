@@ -24,6 +24,11 @@
   <%= content_tag(:label, l(:field_column_names)) %>
   <% columns = DmsfFolder::AVAILABLE_COLUMNS.dup %>
   <% columns.concat(extra_columns) if defined?(extra_columns) %>
+  <% index = columns.index(l(:field_project)) %>
+  <%# Move Project to the second position %>
+  <% if index %>
+    <% columns.insert(0, columns.delete_at(index)) %>
+  <% end %>
   <% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
   <% columns.concat(cfs.map{ |c| c.name }) %>
   <% selected_columns = settings[:dmsf_columns] %>

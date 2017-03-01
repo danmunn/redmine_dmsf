@@ -601,7 +601,7 @@ class DmsfController < ApplicationController
     @file_approval_allowed = User.current.allowed_to?(:file_approval, @project)
     tag = params[:custom_field_id].present? && params[:custom_value].present?
     @folder = nil if tag
-    @extra_columns = [l(:label_document_url), l(:label_last_revision_id)]
+    @extra_columns = [l(:field_project), l(:label_document_url), l(:label_last_revision_id)]
     if @tree_view
       @locked_for_user = false
     else
