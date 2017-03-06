@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ class DmsfAlertApprovals
     dry_run = ENV['dry_run']
     revisions = DmsfFileRevision.visible.where(:workflow => DmsfWorkflow::STATE_WAITING_FOR_APPROVAL)
     revisions.each do |revision|
-      next unless revision.file.last_revision == revision
+      next unless revision.dmsf_file.last_revision == revision
       workflow = DmsfWorkflow.find_by_id revision.dmsf_workflow_id
       next unless workflow
       assignments = workflow.next_assignments revision.id
