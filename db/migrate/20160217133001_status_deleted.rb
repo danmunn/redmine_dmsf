@@ -30,17 +30,10 @@ class StatusDeleted < ActiveRecord::Migration
   end
   
   def self.up
-    change_column :dmsf_folders, :deleted, :boolean, :default => nil
-    change_column :dmsf_files, :deleted, :boolean, :default => nil
-    change_column :dmsf_file_revisions, :deleted, :boolean, :default => nil
-    change_column :dmsf_links, :deleted, :boolean, :default => nil
-    
     change_column :dmsf_folders, :deleted, cast_integer(:deleted), :null => false, :default => DmsfFolder::STATUS_ACTIVE
     change_column :dmsf_files, :deleted, cast_integer(:deleted), :null => false, :default => DmsfFile::STATUS_ACTIVE
     change_column :dmsf_file_revisions, :deleted, cast_integer(:deleted), :null => false, :default => DmsfFileRevision::STATUS_ACTIVE
     change_column :dmsf_links, :deleted, cast_integer(:deleted), :null => false, :default => DmsfLink::STATUS_ACTIVE
   end
-
-  def self.down
-  end
+  
 end
