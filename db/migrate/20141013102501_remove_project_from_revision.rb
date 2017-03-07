@@ -28,7 +28,7 @@ class RemoveProjectFromRevision < ActiveRecord::Migration
     DmsfFileRevision.reset_column_information
     DmsfFileRevision.find_each do |revision|
       if revision.dmsf_file
-        revision.project_id = revision.dmsf_file.project_id
+        revision.project_id = revision.dmsf_file.project.id
         revision.save
       end
     end
