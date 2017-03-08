@@ -24,26 +24,27 @@ module RedmineDmsf
     class Cache
       def self.read(name, options = nil)
         init unless defined?(@@WebDAVCache)
-        @@WebDAVCache.read(name, options)
+        @@WebDAVCache.read(name, options) unless name.blank?
       end
       
       def self.write(name, value, options = nil)
         init unless defined?(@@WebDAVCache)
-        @@WebDAVCache.write(name, value, options)
+        @@WebDAVCache.write(name, value, options) unless name.blank?
       end
       
       def self.delete(name, options = nil)
         init unless defined?(@@WebDAVCache)
-        @@WebDAVCache.delete(name, options)
+        @@WebDAVCache.delete(name, options) unless name.blank?
       end
       
       def self.exist?(name, options = nil)
         init unless defined?(@@WebDAVCache)
-        @@WebDAVCache.exist?(name, options)
+        @@WebDAVCache.exist?(name, options) unless name.blank?
       end
       
       def self.invalidate_item(key)
         init unless defined?(@@WebDAVCache)
+        return if key.blank?
         # Write an .invalid entry to notify anyone that is currently creating a response
         # that that response is invalid and should not be cached
         @@WebDAVCache.write("#{key}.invalid", expires_in: 60.seconds)
