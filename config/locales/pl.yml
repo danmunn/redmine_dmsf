@@ -359,3 +359,5 @@ pl:
   
   label_webdav_use_project_names: Use project name for project folder
   note_webdav_use_project_names: Use project names instead of project identifier for project folders.
+
+  label_last_approver: Last approver

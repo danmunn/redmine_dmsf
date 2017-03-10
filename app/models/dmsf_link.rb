@@ -171,6 +171,8 @@ class DmsfLink < ActiveRecord::Base
       csv << '' if columns.include?('workflow')
       # Author
       csv << self.user.name if columns.include?('author')
+      # Last approver
+      csv << '' if columns.include?(l(:label_last_approver))
       # Url
       csv << self.external_url if columns.include?(l(:label_document_url))
       # Revision

@@ -583,6 +583,14 @@ class DmsfFile < ActiveRecord::Base
         csv << ''
       end
     end
+    # Last approver
+    if columns.include?(l(:label_last_approver))
+      if self.last_revision && self.last_revision.dmsf_workflow
+        csv << self.last_revision.workflow_tooltip
+      else
+        csv << ''
+      end
+    end
     # Url
     if columns.include?(l(:label_document_url))
       default_url_options[:host] = Setting.host_name

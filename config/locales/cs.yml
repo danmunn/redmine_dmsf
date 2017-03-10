@@ -359,3 +359,5 @@ cs:
   
   label_webdav_use_project_names: Použít názvy projektů
   note_webdav_use_project_names: Použít názvy projektů místo identifikátorů pro názvy adresářů.
+
+  label_last_approver: Poslední schvalovatel
