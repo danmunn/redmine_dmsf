@@ -112,14 +112,14 @@ class DmsfConvertDocuments
             begin
               file = DmsfFile.new
               file.container_type = 'Project'
-              file.project = project
+              file.container_id = project.id
               file.dmsf_folder = folder
 
               file.name = attachment.filename
               i = 1
               suffix = ''
               while files.index{|f| f.name == (DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name))}
-                i+=1
+                i += 1
                 suffix = "_#{i}"
               end
 
