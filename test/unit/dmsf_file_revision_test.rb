@@ -22,18 +22,21 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles, :members,
-           :member_roles, :enabled_modules, :enumerations, :dmsf_locks
+           :member_roles, :enabled_modules, :enumerations, :dmsf_locks, :dmsf_workflows, :dmsf_workflow_steps,
+           :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions
          
   def setup
     @revision1 = DmsfFileRevision.find_by_id 1
     @revision2 = DmsfFileRevision.find_by_id 2
     @revision5 = DmsfFileRevision.find_by_id 5
+    @wf1 = DmsfWorkflow.find_by_id 1
   end
   
   def test_truth
     assert_kind_of DmsfFileRevision, @revision1
     assert_kind_of DmsfFileRevision, @revision2
     assert_kind_of DmsfFileRevision, @revision5
+    assert_kind_of DmsfWorkflow, @wf1
   end
   
   def test_delete_restore      
@@ -142,6 +145,11 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
     
     RedmineDmsf::Webdav::Cache.init_nullcache
+  end
+
+  def test_workflow_tooltip
+    @revision2.set_workflow @wf1.id, 'start'
+    assert_equal 'John Smith', @revision2.workflow_tooltip
   end
 
 end

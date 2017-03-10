@@ -80,7 +80,7 @@
           :project_id => project.id,
           :id => wf.id,
           :dmsf_file_revision_id => file.last_revision.id),
-        :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(file.last_revision.id)),
+        :title => file.last_revision.workflow_tooltip,
         :remote => true) %>
     <% else %>
       <%= file.last_revision.workflow_str(false) %>

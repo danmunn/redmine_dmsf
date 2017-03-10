@@ -167,19 +167,6 @@ class DmsfWorkflow < ActiveRecord::Base
     results
   end
 
-  def self.assignments_to_users_str(assignments)
-    str = ''
-    if assignments
-      assignments.each_with_index do |assignment, index|
-        if index > 0
-          str << ', '
-        end
-        str << assignment.user.name
-      end
-    end
-    str
-  end
-
   def assign(dmsf_file_revision_id)
     dmsf_workflow_steps.each do |ws|
       ws.assign(dmsf_file_revision_id)

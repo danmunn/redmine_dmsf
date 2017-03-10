@@ -28,6 +28,7 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :source_revision, :class_name => 'DmsfFileRevision', :foreign_key => 'source_dmsf_file_revision_id'
   belongs_to :user
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+  belongs_to :dmsf_workflow
   has_many :dmsf_file_revision_access, :dependent => :destroy
   has_many :dmsf_workflow_step_assignment, :dependent => :destroy
 
@@ -309,6 +310,27 @@ class DmsfFileRevision < ActiveRecord::Base
   
   def propfind_cache_key
     dmsf_file.propfind_cache_key
+  end
+
+  def workflow_tooltip
+    tooltip = ''
+    if self.dmsf_workflow
+      case workflow
+        when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, DmsfWorkflow::STATE_ASSIGNED
+          assignments = self.dmsf_workflow.next_assignments(self.id)
+          if assignments
+            assignments.each_with_index do |assignment, index|
+              tooltip << ', ' if index > 0
+              tooltip << assignment.user.name
+            end
+          end
+        when DmsfWorkflow::STATE_APPROVED, DmsfWorkflow::STATE_REJECTED
+          action = DmsfWorkflowStepAction.joins(:dmsf_workflow_step_assignment).where(
+            ['dmsf_workflow_step_assignments.dmsf_file_revision_id', self.id]).order('dmsf_workflow_step_actions.id').last
+          tooltip << action.author.name if action
+      end
+    end
+    tooltip
   end
 
 end

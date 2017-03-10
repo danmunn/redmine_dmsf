@@ -21,6 +21,7 @@
 class DmsfWorkflowStepAction < ActiveRecord::Base
 
   belongs_to :dmsf_workflow_step_assignment
+  belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
 
   validates :dmsf_workflow_step_assignment_id, :presence => true
   validates :action, :presence => true

@@ -129,7 +129,7 @@
               <%= link_to(revision.workflow_str(false),
                 log_dmsf_workflow_path(:project_id => @project.id,
                   :id => wf.id, :dmsf_file_revision_id => revision.id),
-                :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(revision.id)),
+                :title => revision.workflow_tooltip,
                 :remote => true) %>
             </p>
           <% end %>
