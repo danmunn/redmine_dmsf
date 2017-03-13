@@ -242,7 +242,15 @@ module RedmineDmsf
           else
             destroy = false
           end
-          file.delete(destroy) ? NoContent : Conflict
+          if file.delete(destroy)
+            recipients = DmsfMailer.get_notify_users(project, [file])
+            recipients.each do |u|
+              DmsfMailer.files_deleted(u, project, [file]).deliver
+            end
+            NoContent
+          else
+            Conflict
+          end
         elsif folder
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           folder.delete(false) ? NoContent : Conflict
@@ -621,6 +629,11 @@ module RedmineDmsf
 
         if new_revision.save
           new_revision.copy_file_content(request.body)
+          # Notifications
+          recipients = DmsfMailer.get_notify_users(project, [f])
+          recipients.each do |u|
+            DmsfMailer.files_updated(u, project, [f]).deliver
+          end
         else
           raise InternalServerError
         end
