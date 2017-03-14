@@ -67,25 +67,16 @@
 <% end %>
 <td class="dmsf_buttons">
   <% if @file_manipulation_allowed %>
-    <% if link %>
-      <%= link_to(image_tag('restore.png', :plugin => 'redmine_dmsf'),
-        restore_dmsf_link_path(:id => link),
-        :title => l(:title_restore)) %>
-      <%= link_to(image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
-        dmsf_link_path(:id => link, :commit => 'yes'),
-        :data => {:confirm => l(:text_are_you_sure)},
-        :method => :delete,
-        :title => l(:title_delete)) %>
-    <% else # file %>
-      <%= link_to(image_tag('restore.png', :plugin => 'redmine_dmsf'),
-        restore_dmsf_file_path(:id => file),                
-        :title => l(:title_restore)) %>
-      <%= link_to(image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
-        dmsf_file_path(:id => file, :commit => 'yes'),
-        :data => {:confirm => l(:text_are_you_sure)},
-        :method => :delete,
-        :title => l(:title_delete)) %>               
-    <% end %>
+    <%= link_to('', link ? restore_dmsf_link_path(:id => link) : restore_dmsf_file_path(:id => file),
+      :title => l(:title_restore),
+      :class => 'icon icon-cancel') %>
+  <% end %>
+  <% if @file_delete_allowed %>
+    <%= link_to('', link ? dmsf_link_path(:id => link, :commit => 'yes') : dmsf_file_path(:id => file, :commit => 'yes'),
+      :data => {:confirm => l(:text_are_you_sure)},
+      :method => :delete,
+      :title => l(:title_delete),
+      :class => 'icon icon-delete') %>
   <% end %>
 </td>
 <td class="dmsf_invisible">1</td>

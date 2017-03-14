@@ -32,7 +32,7 @@
     <%= link_to(h(title),
           link.external_url,
           :target => '_blank',
-          :class => 'icon dmsf_icon-link') %>
+          :class => 'icon icon-link') %>
     <div class="dmsf_filename" title="<%= l(:label_target_folder) %>">
       <%= link.external_url %>
     </div>
@@ -67,12 +67,13 @@
   <span class="icon"></span>
   <span class="icon"></span>
   <span class="icon"></span>
-  <% if @file_manipulation_allowed %>
-    <%= link_to(image_tag('delete.png'),
+  <% if @file_delete_allowed %>
+    <%= link_to('',
       dmsf_link_path(link),
       :data => {:confirm => l(:text_are_you_sure)},
       :method => :delete,
-      :title => l(:title_delete)) %>
+      :title => l(:title_delete),
+        :class => "icon icon-del") %>
   <% else %>
     <span class="icon"></span>
   <% end %>

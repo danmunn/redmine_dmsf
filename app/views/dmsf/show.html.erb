@@ -35,32 +35,32 @@
         :title => l(:link_edit, :title => h(@folder.title)),
         :class => 'icon icon-edit') %>
     <% end %>
-    <% if @folder && (!@locked_for_user || User.current.allowed_to?(:force_file_unlock, @project)) %>
+    <% if @folder && (!@folder.locked_for_user || User.current.allowed_to?(:force_file_unlock, @project)) %>
       <% if @folder.locked? %>
         <%= link_to_if(@folder.unlockable?, l(:button_unlock),
           unlock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-          :title => l(:title_unlock_folder), :class => 'icon dmsf_icon-unlock')  %>
+          :title => l(:title_unlock_folder), :class => 'icon icon-unlock')  %>
       <% else %>
         <%= link_to(l(:button_lock),
           lock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-          :title => l(:title_lock_folder), :class => 'icon dmsf_icon-lock') %>
+          :title => l(:title_lock_folder), :class => 'icon icon-lock') %>
       <% end %>
     <% end %>
     <% if !@locked_for_user && ((@folder && @folder.notification) || (!@folder && @project.dmsf_notification)) %>
       <%= link_to(l(:label_notifications_off),
         notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
         :title => l(:title_notifications_active_deactivate),
-        :class => 'icon dmsf_icon-notification-on') %>
+        :class => 'icon icon-email') %>
     <% else %>
       <%= link_to(l(:label_notifications_on),
         notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
         :title => l(:title_notifications_not_active_activate),
-        :class => 'icon dmsf_icon-notification-off') %>
+        :class => 'icon icon-email-add') %>
     <% end %>
     <% if @file_manipulation_allowed && !@locked_for_user %>
       <%= link_to(l(:label_link_from),
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder, :type => 'link_from'),
-        :title => l(:title_create_link), :class => 'icon dmsf_icon-link') %>
+        :title => l(:title_create_link), :class => 'icon icon-link') %>
     <% end %>
     <%= link_to(l(:link_create_folder),
       new_dmsf_path(:id => @project, :parent_id => @folder),

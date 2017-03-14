@@ -660,4 +660,15 @@ class DmsfFile < ActiveRecord::Base
     end
   end
 
+  def get_locked_title
+    if self.locked_for_user?
+      if self.lock.reverse[0].user
+        return l(:title_locked_by_user, :user => self.lock.reverse[0].user)
+      else
+        return l(:notice_account_unknown_email)
+      end
+    end
+    l(:title_unlock_file)
+  end
+
 end

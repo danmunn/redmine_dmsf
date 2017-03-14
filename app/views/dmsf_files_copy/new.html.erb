@@ -46,7 +46,7 @@
     </div>
     <p>
       <%= submit_tag(l(:button_copy)) %>
-      <% if User.current.allowed_to?(:file_manipulation, @project) %>
+      <% if !@file.locked? && User.current.allowed_to?(:file_manipulation, @project) %>
         <%= submit_tag(l(:button_move), :id => 'move_button') %>
       <% end %>
     </p>

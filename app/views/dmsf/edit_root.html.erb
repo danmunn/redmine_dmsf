@@ -30,12 +30,12 @@
       <%= link_to(l(:label_notifications_off), 
         notify_deactivate_dmsf_path(:id => @project),
         :title => l(:title_notifications_active_deactivate), 
-        :class => 'icon dmsf_icon-notification-on') %>
+        :class => 'icon icon-email') %>
     <% else %>        
       <%= link_to(l(:label_notifications_on),
         notify_activate_dmsf_path(:id => @project),
         :title => l(:title_notifications_active_deactivate), 
-        :class => 'icon dmsf_icon-notification-off') %>
+        :class => 'icon icon-email-add') %>
     <% end %>  
   <% end %>
 </div>
