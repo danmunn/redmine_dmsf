@@ -34,7 +34,7 @@ class StatusDeleted < ActiveRecord::Migration
       else
         change_column :dmsf_folders, :deleted, :integer, :default => DmsfFolder::STATUS_ACTIVE
         change_column :dmsf_files, :deleted, :integer, :default => DmsfFile::STATUS_ACTIVE
-        change_column :dmsf_file_revisions, :integer, :boolean, :default => DmsfFile::STATUS_ACTIVE
+        change_column :dmsf_file_revisions, :integer, :default => DmsfFile::STATUS_ACTIVE
         change_column :dmsf_links, :deleted, :integer, :default => DmsfFile::STATUS_ACTIVE
     end
   end
