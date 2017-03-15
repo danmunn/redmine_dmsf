@@ -80,12 +80,11 @@
     </div>
     <div id="link_external" style="<%= @link_external ? '' : 'display:none' %>">
       <p>
-        <%= f.text_field :external_url, :required => true,
-          :label => l(:label_link_external_url) %>
+        <%= f.text_field :external_url, :label => l(:label_link_external_url) %>
       </p>
     </div>
     <p>
-      <%= f.text_field :name, :required => true, :label => l(:label_link_name) %>
+      <%= f.text_field :name, :label => l(:label_link_name) %>
     </p>
   </div>
   <p><%= f.submit l(:button_create) %></p>
