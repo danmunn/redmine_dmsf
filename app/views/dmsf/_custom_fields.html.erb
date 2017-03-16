@@ -24,10 +24,12 @@
 <% if object %>
   <div>
     <% object.show_custom_field_values.each do |custom_value| %>
-      <p>
-         <%= label_tag('', h(custom_value.custom_field.name)) %>
-         <%= show_value custom_value %>
-      </p>
+      <div class="status attribute">
+        <%= content_tag :div, h(custom_value.custom_field.name), :class => 'label' %>
+        <div class="value">
+          <%= show_value custom_value %>
+        </div>
+      </div>
     <% end %>
   </div>
 <% end %>
