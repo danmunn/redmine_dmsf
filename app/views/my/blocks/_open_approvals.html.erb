@@ -42,6 +42,7 @@
         <tr>
           <th><%= l(:field_project) %></th>
           <th><%= l(:field_label_dmsf_workflow) %></th>
+          <th><%= l(:field_status) %></th>
           <th><%= l(:label_document) %></th>
           <th><%= l(:field_folder) %></th>
           <th></th>
@@ -59,6 +60,20 @@
               <% if assignment.dmsf_workflow_step && assignment.dmsf_workflow_step.dmsf_workflow %>
                   <%= link_to(h(assignment.dmsf_workflow_step.dmsf_workflow.name),
                     edit_dmsf_workflow_path(assignment.dmsf_workflow_step.dmsf_workflow)) %>
+              <% end %>
+            </td>
+            <td class="dmsf_workflow">
+              <% if assignment.dmsf_workflow_step.dmsf_workflow %>
+                  <%= link_to(
+                          assignment.dmsf_file_revision.workflow_str(false),
+                          log_dmsf_workflow_path(
+                              :project_id => assignment.dmsf_file_revision.dmsf_file.project.id,
+                              :id => assignment.dmsf_workflow_step.dmsf_workflow.id,
+                              :dmsf_file_revision_id => assignment.dmsf_file_revision.id),
+                          :title => assignment.dmsf_file_revision.workflow_tooltip,
+                          :remote => true) %>
+              <% else %>
+                  <%= assignment.dmsf_file_revision.workflow_str(false) %>
               <% end %>
             </td>
             <td class="title">
