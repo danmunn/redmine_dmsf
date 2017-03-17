@@ -96,7 +96,7 @@ module DmsfUploadHelper
         if new_revision.valid? && file.save
           new_revision.disk_filename = new_revision.new_storage_filename
         else
-          Rails.logger.error (new_revision.errors + file.errors).full_messages.to_sentence
+          Rails.logger.error (new_revision.errors.full_messages + file.errors.full_messages).to_sentence
           failed_uploads.push(commited_file)
           next
         end
