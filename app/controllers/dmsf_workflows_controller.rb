@@ -413,12 +413,14 @@ class DmsfWorkflowsController < ApplicationController
       end
     end
     # Operators
-    params[:operator_step].each do |id, operator|
-      step = DmsfWorkflowStep.find_by_id id
-      if step
-        step.operator = operator.to_i
-        unless step.save
-          flash[:error] = step.errors.full_messages.to_sentence
+    if params[:operator_step].present?
+      params[:operator_step].each do |id, operator|
+        step = DmsfWorkflowStep.find_by_id id
+        if step
+          step.operator = operator.to_i
+          unless step.save
+            flash[:error] = step.errors.full_messages.to_sentence
+          end
         end
       end
     end
