@@ -43,7 +43,7 @@ class DmsfFolder < ActiveRecord::Base
   has_many :locks, -> { where(entity_type:  1).order("#{DmsfLock.table_name}.updated_at DESC") },
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
 
-  INVALID_CHARACTERS = /\A[^\/\\\?":<>#%\*]*\z/.freeze
+  INVALID_CHARACTERS = /\A[^\[\]\/\\\?":<>#%\*]*\z/.freeze
   STATUS_DELETED = 1.freeze
   STATUS_ACTIVE = 0.freeze
   AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
