@@ -99,7 +99,7 @@
 }
 
 .dmsf_workflow {
-	/*font-size: 0.8em;*/
+	font-size: 0.8em;
 	white-space: nowrap;
 }
 
@@ -120,8 +120,9 @@
 #admin-menu a.dmsf-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 #dmsf_users_for_delegate { height: 200px; overflow:auto; }
 #dmsf_users_for_delegate label { display: block; }
-.dmsf_workflow.locked a { color: #aaa; }
+.dmsf_workflows.locked a { color: #aaa; }
 
+/* DMSF revision box */
 .dmsf_revision_box {
   padding: 0px 0px 0px 0px;
   margin-bottom: 10px;
@@ -285,8 +286,3 @@ div.dmsf_revision_inner_box .attribute .label {
 #dmsf_attachments_fields .ajax-loading input.filename {background:url(../../../images/loading.gif) no-repeat 0px 50%;}
 #dmsf_attachments_fields div.ui-progressbar { width: 100px; height:14px; margin: 2px 0 -5px 8px; display: inline-block; }
 
-/* DMSF details */
-.dmsf_properties{
-    vertical-align: middle;
-    padding: 6px 0;
-}
