@@ -108,7 +108,11 @@
           <% if revision.description.present? %>
             <div class="status attribute">
               <%= content_tag :div, l(:label_description), :class => 'label' %>
-              <%= content_tag :div, textilizable(revision.description), :class => 'wiki, value' %>
+              <% text = textilizable(revision.description) %>
+              <% if text =~ /^<p>(.*)<\/p>$/ %>
+                  <% text = $1 %>
+               <% end %>
+              <%= content_tag :div, text.html_safe, :class => 'value wiki' %>
             </div>
           <% end %>
           <div class="status attribute">
@@ -136,7 +140,11 @@
           <% if revision.comment.present? %>
             <div class="status attribute">
               <%= content_tag :div, l(:label_comment), :class => 'label' %>
-              <%= content_tag :div, textilizable(revision.comment), :class => 'value wiki' %>
+              <% text = textilizable(revision.comment) %>
+              <% if text =~ /^<p>(.*)<\/p>$/ %>
+                  <% text = $1 %>
+              <% end %>
+              <%= content_tag :div, text.html_safe, :class => 'value wiki' %>
             </div>
           <% end %>
         </div>

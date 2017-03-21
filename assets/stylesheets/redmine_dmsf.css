@@ -136,10 +136,17 @@
   padding: 10px;
 }
 
+div.dmsf_revision_inner_box .attribute {
+    padding-left: 180px;
+    clear: left;
+    min-height: 1.8em;
+}
+
 div.dmsf_revision_inner_box .attribute .label {
-    font-weight:bold;
-    float: left;
     width: 170px;
+    margin-left: -180px;
+    font-weight: bold;
+    float: left;
 }
 
 .dmsf_id_box {
