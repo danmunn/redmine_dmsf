@@ -26,7 +26,7 @@ module DmsfUserPreference
   module InstanceMethods
 
     def dmsf_tree_view
-      self[:dmsf_tree_view] || '0'
+      self[:dmsf_tree_view] || '1'
     end
 
     def dmsf_tree_view=(value)
