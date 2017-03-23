@@ -72,6 +72,7 @@ class DmsfFolder < ActiveRecord::Base
   validates_format_of :title, :with => INVALID_CHARACTERS,
     :message => l(:error_contains_invalid_character)
   validate :check_cycle
+  validates_length_of :description, :maximum => 65535
 
   before_create :default_values
   def default_values

@@ -46,6 +46,8 @@ module RedmineDmsf
             :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
 
           before_save :set_default_dmsf_notification
+
+          validates_length_of :dmsf_description, :maximum => 65535
         end
       end
 
