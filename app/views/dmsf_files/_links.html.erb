@@ -41,11 +41,13 @@
             <% end %>
             <%= " - #{dmsf_file.description}" unless dmsf_file.description.blank? %>
             <span class="size">(<%= number_to_human_size dmsf_file.last_revision.size %>)</span>
-            <%= link_to(image_tag('delete.png'),
+            <% if User.current.allowed_to?(:file_delete, dmsf_file.project) %>
+              <%= link_to(image_tag('delete.png'),
                         dmsf_file_path(:id => dmsf_file, :commit => 'yes'),
                         :data => {:confirm => l(:text_are_you_sure)},
                         :method => :delete,
                         :title => l(:title_delete)) %>
+            <% end %>
             <span class="author"><%= dmsf_file.last_revision.user %>, <%= format_time(dmsf_file.last_revision.updated_at) %></span>
           </p>
         <% end %>

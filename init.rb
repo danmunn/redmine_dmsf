@@ -51,7 +51,8 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_memcached_servers' => '',
               'dmsf_webdav_ignore' => '^(\._|\.DS_Store$|Thumbs.db$)',
               'dmsf_webdav_disable_versioning' => '^\~\$|\.tmp$',
-              'dmsf_keep_documents_locked' => false
+              'dmsf_keep_documents_locked' => false,
+              'dmsf_act_as_attachable' => false
             }
   
   menu :project_menu, :dmsf, { :controller => 'dmsf', :action => 'show' }, :caption => :menu_dmsf, :before => :documents, :param => :id
