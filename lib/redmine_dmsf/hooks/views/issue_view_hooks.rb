@@ -27,22 +27,30 @@ module RedmineDmsf
       def view_issues_form_details_bottom(context={})
         if context.is_a?(Hash) && context[:issue]
           # Add Dmsf upload form
-          html = "<div class=\"dmsf_uploader\">"
-          html << '<p>'
-          html << "<label>#{l(:label_document_plural)}</label>"
-          html << context[:controller].send(:render_to_string,
-            {:partial => 'dmsf_upload/form', :locals => { :multiple => true }})
-          html << '</p>'
-          html << '</div>'
-          html.html_safe
+          issue = context[:issue]
+          if User.current.allowed_to?(:file_manipulation, issue.project) &&
+            Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
+            html = "<div class=\"dmsf_uploader\">"
+            html << '<p>'
+            html << "<label>#{l(:label_document_plural)}</label>"
+            html << context[:controller].send(:render_to_string,
+              {:partial => 'dmsf_upload/form', :locals => { :multiple => true }})
+            html << '</p>'
+            html << '</div>'
+            html.html_safe
+          end
         end
       end
 
       def view_issues_show_description_bottom(context={})
         if context.is_a?(Hash) && context[:issue]
+          # Add list of attached documents
           issue = context[:issue]
-          context[:controller].send(:render_to_string, {:partial => 'dmsf_files/links',
-            :locals => { :dmsf_files => issue.dmsf_files.to_a, :thumbnails => Setting.thumbnails_enabled? }})
+          if User.current.allowed_to?(:view_dmsf_files, issue.project) &&
+            Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
+            context[:controller].send(:render_to_string, {:partial => 'dmsf_files/links',
+              :locals => { :dmsf_files => issue.dmsf_files.to_a, :thumbnails => Setting.thumbnails_enabled? }})
+          end
         end
       end
 

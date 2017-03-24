@@ -128,6 +128,15 @@
   </em>
 </p>
 
+<p>
+  <%= content_tag(:label, l(:label_act_as_attachable)) %>
+  <%= check_box_tag('settings[dmsf_act_as_attachable]', true, @settings['dmsf_act_as_attachable']) %>
+  <em class="info">
+    <%= l(:note_dmsf_act_as_attachable) %><br/>
+    <%= l(:label_default)%>: <%= l(:general_text_No)%>
+  </em>
+</p>
+
 <hr/>
 <em class="info">
   <%= l(:menu_dmsf) %> <%= l(:field_column_names) %>

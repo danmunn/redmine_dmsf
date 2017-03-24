@@ -41,7 +41,7 @@
             <% end %>
             <%= " - #{dmsf_file.description}" unless dmsf_file.description.blank? %>
             <span class="size">(<%= number_to_human_size dmsf_file.last_revision.size %>)</span>
-            <% if @issue.attributes_editable? %>
+            <% if @issue.attributes_editable?  && User.current.allowed_to?(:file_delete, dmsf_file.project) %>
               <%= link_to('',
                 dmsf_file_path(:id => dmsf_file, :commit => 'yes'),
                 :data => {:confirm => l(:text_are_you_sure)},

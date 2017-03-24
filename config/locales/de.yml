@@ -358,3 +358,6 @@ de:
   note_webdav_use_project_names: Use project names instead of project identifier for project folders.
 
   label_last_approver: Last approver
+
+  label_act_as_attachable: Act as attachable
+  note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.

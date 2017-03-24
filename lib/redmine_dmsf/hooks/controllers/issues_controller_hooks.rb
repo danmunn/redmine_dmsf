@@ -60,7 +60,7 @@ module RedmineDmsf
               uploaded_file[:name] = upload.name
               uploaded_file[:title] = upload.title
             end
-            DmsfUploadHelper.commit_files_internal uploaded_files, issue, nil, self
+            DmsfUploadHelper.commit_files_internal uploaded_files, issue, nil, context[:controller]
           end
         end
       end
