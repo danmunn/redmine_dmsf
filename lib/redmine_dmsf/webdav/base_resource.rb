@@ -168,7 +168,7 @@ module RedmineDmsf
           pinfo = @path.split('/').drop(1)
           if pinfo.length > 0
             if use_project_names
-              unless pinfo.first.match('(\[([0-9]+)\])$').nil?
+              unless pinfo.first.match('(-([0-9]+)-)$').nil?
                 pid = $2
                 begin
                     @project = Project.find_by_id(pid)
