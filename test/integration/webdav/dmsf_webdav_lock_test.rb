@@ -90,7 +90,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
         assert_match '<D:depth>infinity</D:depth>', response.body
         # 1.week = 7*24*3600=604800 seconds
         assert_match '<D:timeout>Second-604800</D:timeout>', response.body
-        assert_match /<D:locktoken><D:href>([a-z0-9\-]+)<\/D:href><\/D:locktoken>/, response.body
+        assert_match(/<D:locktoken><D:href>([a-z0-9\-]+)<\/D:href><\/D:locktoken>/, response.body)
         # Extract the locktoken, needed when refreshing the lock
         response.body.match(/<D:locktoken><D:href>([a-z0-9\-]+)<\/D:href><\/D:locktoken>/)
         locktoken=$1

@@ -258,9 +258,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
       @project1.enable_module! :dmsf
       @role.add_permission! :view_dmsf_folders
       @role.add_permission! :file_delete
-
-      file = @file1.copy_to_filename(@project1, nil, "delete_test.tmp")
-
+      @file1.copy_to_filename(@project1, nil, "delete_test.tmp")
       delete "/dmsf/webdav/#{@project1.identifier}/delete_test.tmp", nil, @jsmith
       # The file should be destroyed
       assert_nil DmsfFile.find_file_by_name(@project1, nil, 'delete_test.tmp')
