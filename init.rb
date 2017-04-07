@@ -69,35 +69,35 @@ Redmine::Plugin.register :redmine_dmsf do
     permission :view_dmsf_file_revisions, 
       :read => true
     permission :view_dmsf_folders, 
-      {:dmsf => [:show], 
-        :dmsf_folders_copy => [:new, :copy_to, :move_to]}, 
+      { :dmsf => [:show],
+        :dmsf_folders_copy => [:new, :copy_to, :move_to] },
       :read => true
     permission :user_preferences, 
-      {:dmsf_state => [:user_pref_save]}
+      { :dmsf_state => [:user_pref_save] }
     permission :view_dmsf_files, 
-      {:dmsf => [:entries_operation, :entries_email, :download_email_entries, :tag_changed], 
+      { :dmsf => [:entries_operation, :entries_email, :download_email_entries, :tag_changed],
         :dmsf_files => [:show, :view, :thumbnail],
         :dmsf_files_copy => [:new, :create, :move], 
-        :dmsf_workflows => [:log]}, 
+        :dmsf_workflows => [:log] },
       :read => true
     permission :email_documents,
-       {:dmsf_public_urls => [:create]}
+       { :dmsf_public_urls => [:create] }
     permission :folder_manipulation, 
-      {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :restore]}
+       { :dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock, :notify_activate, :notify_deactivate, :restore],
+         :dmsf_folder_permissions => [:new, :append, :autocomplete_for_user] }
     permission :file_manipulation, 
-      {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate, :restore], 
+      { :dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate, :restore],
         :dmsf_upload => [:upload_files, :upload_file, :upload, :commit_files, :commit, :delete_dmsf_attachment],
-        :dmsf_links => [:new, :create, :destroy, :restore]
-        }
+        :dmsf_links => [:new, :create, :destroy, :restore] }
     permission :file_delete, 
       { :dmsf => [:trash, :delete_entries], 
-        :dmsf_files => [:delete]}    
+        :dmsf_files => [:delete] }
     permission :force_file_unlock, {}
     permission :file_approval,
-      {:dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment]}    
+      { :dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment] }
     permission :manage_workflows, 
-      {:dmsf_workflows => [:index, :new, :create, :destroy, :show, :new_step, :add_step, :remove_step, :reorder_steps,
-                           :update, :update_step, :delete_step, :edit]}
+      { :dmsf_workflows => [:index, :new, :create, :destroy, :show, :new_step, :add_step, :remove_step, :reorder_steps,
+        :update, :update_step, :delete_step, :edit] }
   end   
   
   # Administration menu extension

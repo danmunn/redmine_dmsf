@@ -1,10 +1,8 @@
-<%
 # encoding: utf-8
-# 
+#
 # Redmine plugin for Document Management System "Features"
 #
-#
-# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@konton.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,10 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-%>
 
-<span id="public_url" class="hol">
-    <%= check_box_tag('email[public_urls]', 1, false) %> <%= l(:label_public_urls) %>
-    <%= date_field_tag('email[expired_at]', '', :value => (DateTime.now + 3.days).to_date, :size => 10,
-          :readonly => true) + calendar_for('email_expired_at') %>
-</span>
+class DmsfFolderPermission < ActiveRecord::Base
+  unloadable
+
+  belongs_to :dmsf_folder
+
+  scope :users, -> { where(:object_type => User.model_name.to_s) }
+  scope :roles, -> { where(:object_type => Role.model_name.to_s) }
+end

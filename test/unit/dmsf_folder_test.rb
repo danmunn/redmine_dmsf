@@ -22,18 +22,48 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFolderTest < RedmineDmsf::Test::UnitTest
-  fixtures :projects, :users, :email_addresses, :dmsf_folders, :roles, :members, :member_roles
+  fixtures :projects, :users, :email_addresses, :dmsf_folders, :roles, :members, :member_roles, :dmsf_folder_permissions
          
-  def setup    
+  def setup
+    @project = Project.find_by_id 1
+    assert_not_nil @project
+    @project.enable_module! :dmsf
     @folder4 = DmsfFolder.find_by_id 4
     @folder5 = DmsfFolder.find_by_id 5
     @folder6 = DmsfFolder.find_by_id 6
+    @folder7 = DmsfFolder.find_by_id 7
+    @manager = User.find_by_id 2
+    @developer = User.find_by_id 3
   end
   
   def test_truth
     assert_kind_of DmsfFolder, @folder4
     assert_kind_of DmsfFolder, @folder5
     assert_kind_of DmsfFolder, @folder6
+    assert_kind_of DmsfFolder, @folder7
+    assert_kind_of Project, @project
+    assert_kind_of User, @manager
+    assert_kind_of User, @developer
+  end
+
+  def test_visiblity
+    # The role has got permissions
+    User.current = @manager
+    assert_equal 6, DmsfFolder.visible.where(:project_id => 1).count
+    # The user has got permissions
+    User.current = @developer
+    assert_equal 6, DmsfFolder.visible.where(:project_id => 1).count
+    # Hasn't got permissions for @folder7
+    @folder7.dmsf_folder_permissions.where(:object_type => 'User').delete_all
+    assert_equal 5, DmsfFolder.visible.where(:project_id => 1).count
+  end
+
+  def test_permissions
+    User.current = @developer
+    assert DmsfFolder.permissions(@folder7)
+    @folder7.dmsf_folder_permissions.where(:object_type => 'User').delete_all
+    @folder7.reload
+    assert !DmsfFolder.permissions(@folder7)
   end
     
   def test_delete        

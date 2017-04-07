@@ -1,8 +1,6 @@
-<%
 # encoding: utf-8
-# 
-# Redmine plugin for Document Management System "Features"
 #
+# Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
@@ -13,16 +11,28 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-<span id="public_url" class="hol">
-    <%= check_box_tag('email[public_urls]', 1, false) %> <%= l(:label_public_urls) %>
-    <%= date_field_tag('email[expired_at]', '', :value => (DateTime.now + 3.days).to_date, :size => 10,
-          :readonly => true) + calendar_for('email_expired_at') %>
-</span>
+require File.expand_path('../../test_helper', __FILE__)
+
+class DmsfFolderPermissionTest < RedmineDmsf::Test::UnitTest
+  fixtures :dmsf_folder_permissions
+
+  def test_scope
+    assert_equal 2, DmsfFolderPermission.count
+  end
+
+  def test_scope_users
+    assert_equal 1, DmsfFolderPermission.users.count
+  end
+
+  def test_scope_roles
+    assert_equal 1, DmsfFolderPermission.roles.count
+  end
+
+end

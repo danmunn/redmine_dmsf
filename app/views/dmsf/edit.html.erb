@@ -55,7 +55,7 @@
     <% unless @folder.locked? %>
       <%= link_to(l(:button_delete), delete_dmsf_path(:id => @project, :folder_id => @folder),
         :data => {:confirm => l(:text_are_you_sure)},
-        :title => l(:title_delete), :class => 'icon icon-del') %>
+        :title => l(:title_delete), :class => 'icon icon-del', :method => :delete) %>
     <% end %>
   <% end %>
 </div>
@@ -81,7 +81,24 @@
     <p>      
       <%= f.text_area :description, :rows => 8, :class => 'wiki-edit' %>
     </p>
-    <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
+    <p>
+      <%= label_tag '', l(:label_permissions) %>
+      <% User.current.managed_roles(@project).each do |role| %>
+          <% checked = @folder.dmsf_folder_permissions.roles.exists?(:object_id => role.id) %>
+          <label class="inline"><%= check_box_tag 'permissions[role_ids][]', role.id, checked, :id => nil %> <%= role %></label>
+      <% end %>
+      <span id="user_permissions">
+        <br/>
+        <%= users_checkboxes(@users) %>
+      </span>
+      <span class="search_for_watchers">
+        <%= link_to l(:label_user_search),
+          new_dmsf_folder_permissions_path(:project_id => @project, :dmsf_folder_id => @folder),
+          :remote => true,
+          :method => 'get' %>
+      </span>
+    </p>
+    <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new.custom_field_values %>
     <% values.each do |value| %>
       <p><%= custom_field_tag_with_label(:dmsf_folder, value) %></p>
     <% end %>    

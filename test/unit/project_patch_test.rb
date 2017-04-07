@@ -66,7 +66,7 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
   def test_dmsf_count
     hash = @project1.dmsf_count
     assert_equal 7, hash[:files]
-    assert_equal 5, hash[:folders]
+    assert_equal 7, hash[:folders]
   end
 
   def test_copy_approval_workflows
@@ -78,7 +78,7 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
 
   def test_copy_dmsf
     assert_equal 3, @project1.dmsf_files.visible.count
-    assert_equal 2, @project1.dmsf_folders.visible.count
+    assert_equal 4, @project1.dmsf_folders.visible.count
     assert_equal 1, @project1.file_links.visible.count
     assert_equal 1, @project1.folder_links.visible.count
     assert_equal 1, @project1.url_links.visible.count
@@ -89,7 +89,7 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
     assert_equal 0, @project3.url_links.visible.count
     @project3.copy_dmsf(@project1)
     assert_equal 3, @project3.dmsf_files.visible.count
-    assert_equal 2, @project3.dmsf_folders.visible.count
+    assert_equal 3, @project3.dmsf_folders.visible.count # Folder if 7 is not visible due to folder permissions
     assert_equal 1, @project3.file_links.visible.count
     assert_equal 1, @project3.folder_links.visible.count
     assert_equal 1, @project3.url_links.visible.count

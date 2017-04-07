@@ -24,6 +24,10 @@
   border: none;
 }
 
+#dmsf_tag {
+   margin-left: 5px;
+}
+
 .list .dmsf_modified {
 	min-width: 127px;
 	width: 127px;
@@ -101,10 +105,6 @@
 .dmsf_workflow {
 	font-size: 0.8em;
 	white-space: nowrap;
-}
-
-.dmsf_invisible {
-	display: none;
 }
 
 .dmsf_upload_select {

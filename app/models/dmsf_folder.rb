@@ -29,7 +29,7 @@ class DmsfFolder < ActiveRecord::Base
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   belongs_to :user
 
-  has_many :dmsf_folders, -> { order(:title) }, :dependent => :destroy
+  has_many :dmsf_folders, -> { order :title }, :dependent => :destroy
   has_many :dmsf_files, :dependent => :destroy
   has_many :folder_links, -> { where(:target_type => 'DmsfFolder').order(:name) },
     :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
@@ -42,6 +42,7 @@ class DmsfFolder < ActiveRecord::Base
     :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
   has_many :locks, -> { where(entity_type:  1).order("#{DmsfLock.table_name}.updated_at DESC") },
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
+  has_many :dmsf_folder_permissions, :dependent => :destroy
 
   INVALID_CHARACTERS = /\A[^\[\]\/\\\?":<>#%\*]*\z/.freeze
   STATUS_DELETED = 1.freeze
@@ -49,8 +50,14 @@ class DmsfFolder < ActiveRecord::Base
   AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
   DEFAULT_COLUMNS = %w(title size modified version workflow author).freeze
 
-  scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
-  scope :deleted, -> { where(:deleted => STATUS_DELETED) }
+  scope :visible, -> { joins(:project).joins(
+    "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
+    :deleted => STATUS_ACTIVE).where(DmsfFolder.visible_condition)
+  }
+  scope :deleted, -> { joins(:project).joins(
+    "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
+    :deleted => STATUS_DELETED).where(DmsfFolder.visible_condition)
+  }
 
   acts_as_customizable
 
@@ -75,6 +82,33 @@ class DmsfFolder < ActiveRecord::Base
   validates_length_of :description, :maximum => 65535
 
   before_create :default_values
+
+  def self.visible_condition
+    sql = '1=1'
+    Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
+      if user.id && user.logged?
+        sql = %{
+          (#{DmsfFolderPermission.table_name}.object_id IS NULL) OR
+          (#{DmsfFolderPermission.table_name}.object_id = #{role.id} AND #{DmsfFolderPermission.table_name}.object_type = 'Role') OR
+          (#{DmsfFolderPermission.table_name}.object_id = #{user.id} AND #{DmsfFolderPermission.table_name}.object_type = 'User')
+        }
+      end
+    end
+    sql
+  end
+
+  def self.permissions(folder)
+    return true if (User.current.admin? || folder.nil?)
+    if !folder.dmsf_folder || permissions(folder.dmsf_folder)
+      if folder.dmsf_folder_permissions.any?
+        role_ids = User.current.roles_for_project(folder.project).map{ |r| r.id }
+        role_permission_ids = folder.dmsf_folder_permissions.roles.map{ |p| p.object_id }
+        return (role_ids & role_permission_ids).any? || folder.dmsf_folder_permissions.users.map{ |p| p.object_id }.include?(User.current.id)
+      end
+      true
+    end
+  end
+
   def default_values
     @notifications = Setting.plugin_redmine_dmsf['dmsf_default_notifications']
     if @notifications == '1'
@@ -109,7 +143,7 @@ class DmsfFolder < ActiveRecord::Base
     if self.locked?
       errors[:base] << l(:error_folder_is_locked)
       return false
-    elsif !self.dmsf_folders.visible.empty? || !self.dmsf_files.visible.empty?
+    elsif !self.dmsf_folders.visible.empty? || !self.dmsf_files.visible.empty? || !self.dmsf_links.visible.empty?
       errors[:base] << l(:error_folder_is_not_empty)
       return false
     end

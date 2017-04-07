@@ -25,7 +25,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   fixtures :users, :email_addresses, :dmsf_folders, :custom_fields,
     :custom_values, :projects, :roles, :members, :member_roles, :dmsf_links,
-    :dmsf_files, :dmsf_file_revisions
+    :dmsf_files, :dmsf_file_revisions, :dmsf_folder_permissions, :dmsf_locks
 
   def setup
     @project = Project.find_by_id 1
@@ -40,9 +40,10 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role = Role.find_by_id 1
     @custom_field = CustomField.find_by_id 21
     @custom_value = CustomValue.find_by_id 21
-    @user_member = User.find_by_id 2
+    @folder7 = DmsfFolder.find_by_id 7
+    @manager = User.find_by_id 2 #1
     User.current = nil
-    @request.session[:user_id] = @user_member.id
+    @request.session[:user_id] = @manager.id
   end
 
   def test_truth
@@ -56,7 +57,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_kind_of Role, @role
     assert_kind_of CustomField, @custom_field
     assert_kind_of CustomValue, @custom_value
-    assert_kind_of User, @user_member
+    assert_kind_of User, @manager
   end
 
   def test_edit_folder_forbidden
@@ -197,8 +198,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_show_tree_view
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders
-    @user_member.pref[:dmsf_tree_view] = '1'
-    @user_member.preference.save
+    @manager.pref[:dmsf_tree_view] = '1'
+    @manager.preference.save
     get :show, :id => @project.id
     assert_response :success
     assert_select 'tr.dmsf_tree'

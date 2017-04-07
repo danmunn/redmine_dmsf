@@ -33,6 +33,7 @@ require 'redmine_dmsf/patches/user_preference_patch'
 require 'redmine_dmsf/patches/user_patch'
 require 'redmine_dmsf/patches/issue_patch'
 require 'redmine_dmsf/patches/application_helper_patch'
+require 'redmine_dmsf/patches/role_patch'
 
 # Load up classes that make up our WebDAV solution ontop of DAV4Rack
 require 'redmine_dmsf/webdav/base_resource'

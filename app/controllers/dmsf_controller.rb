@@ -28,12 +28,19 @@ class DmsfController < ApplicationController
   before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
   before_filter :find_parent, :only => [:new, :create]
   before_filter :tree_view, :only => [:delete, :show]
+  before_filter :permissions
 
   accept_api_auth :show, :create, :save
 
   skip_before_action :verify_authenticity_token,  if: -> { request.headers['HTTP_X_REDMINE_API_KEY'].present? }
 
   helper :all
+  helper :dmsf_folder_permissions
+
+  def permissions
+    render_403 unless DmsfFolder.permissions(@folder)
+    true
+  end
 
   def expand_folder
     @tree_view = true
@@ -46,6 +53,8 @@ class DmsfController < ApplicationController
   end
 
   def show
+    s = DmsfFolder.visible.where(:project_id => 1995).to_sql
+    Rails.logger.info s
     # also try to lookup folder by title if this is API call
     find_folder_by_title if [:xml, :json].include? request.format.to_sym
     get_display_params
@@ -150,6 +159,7 @@ class DmsfController < ApplicationController
     if params[:dmsf_folder] && params[:dmsf_folder][:custom_field_values].present?
       redirect_to dmsf_folder_path(
         :id => @project,
+        :folder_id => @folder,
         :custom_field_id => params[:dmsf_folder][:custom_field_values].first[0],
         :custom_value => params[:dmsf_folder][:custom_field_values].first[1])
     else
@@ -189,9 +199,28 @@ class DmsfController < ApplicationController
       end
     end
 
+    # Permissions
+    @folder.dmsf_folder_permissions.delete_all
+    if params[:permissions]
+      if params[:permissions][:role_ids]
+        params[:permissions][:role_ids].each do |role_id|
+          permission = DmsfFolderPermission.new
+          permission.object_id = role_id
+          permission.object_type = Role.model_name.to_s
+          @folder.dmsf_folder_permissions << permission
+        end
+      end
+      if params[:permissions][:user_ids]
+        params[:permissions][:user_ids].each do |user_id|
+          permission = DmsfFolderPermission.new
+          permission.object_id = user_id
+          permission.object_type = User.model_name.to_s
+          @folder.dmsf_folder_permissions << permission
+        end
+      end
+    end
+
     saved = @folder.save
-
-
 
     respond_to do |format|
       format.js
@@ -217,6 +246,8 @@ class DmsfController < ApplicationController
     @parent = @folder.dmsf_folder
     @pathfolder = copy_folder(@folder)
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
+    @users = User.find(@folder.dmsf_folder_permissions.users.map{ |p| p.object_id })
+    @users.delete_if{ |u| !u.active? }
   end
 
   def save
@@ -236,7 +267,29 @@ class DmsfController < ApplicationController
       end
     end
 
+    # Permissions
+    @folder.dmsf_folder_permissions.delete_all
+    if params[:permissions]
+      if params[:permissions][:role_ids]
+        params[:permissions][:role_ids].each do |role_id|
+          permission = DmsfFolderPermission.new
+          permission.object_id = role_id
+          permission.object_type = Role.model_name.to_s
+          @folder.dmsf_folder_permissions << permission
+        end
+      end
+      if params[:permissions][:user_ids]
+        params[:permissions][:user_ids].each do |user_id|
+          permission = DmsfFolderPermission.new
+          permission.object_id = user_id
+          permission.object_type = User.model_name.to_s
+          @folder.dmsf_folder_permissions << permission
+        end
+      end
+    end
+
     saved = @folder.save
+
     respond_to do |format|
       format.api  {
         unless saved
@@ -600,92 +653,79 @@ class DmsfController < ApplicationController
     @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).exists?
     @file_approval_allowed = User.current.allowed_to?(:file_approval, @project)
     tag = params[:custom_field_id].present? && params[:custom_value].present?
-    @folder = nil if tag
     @extra_columns = [l(:label_last_approver), l(:field_project), l(:label_document_url), l(:label_last_revision_id)]
     if @tree_view
       @locked_for_user = false
     else
-      unless @folder
-        if tag
-          @subfolders = []
-          DmsfFolder.where(:project_id => @project.id).visible.each do |f|
-            f.custom_field_values.each do |v|
+      if tag
+        @subfolders = []
+        folder_id = @folder.id if @folder
+        DmsfFolder.where(:project_id => @project.id, :dmsf_folder_id => folder_id).visible.each do |f|
+          f.custom_field_values.each do |v|
+            if v.custom_field_id == params[:custom_field_id].to_i
+              if v.custom_field.compare_values?(v.value, params[:custom_value])
+                @subfolders << f
+                break
+              end
+            end
+          end
+        end
+        @files = []
+        DmsfFile.where(:container_id => @project.id, :container_type => 'Project', :dmsf_folder_id => folder_id).visible.each do |f|
+          r = f.last_revision
+          if r
+            r.custom_field_values.each do |v|
               if v.custom_field_id == params[:custom_field_id].to_i
                 if v.custom_field.compare_values?(v.value, params[:custom_value])
-                  @subfolders << f
+                  @files << f
                   break
                 end
               end
             end
           end
-          @files = []
-          DmsfFile.where(:container_id => @project.id, :container_type => 'Project').visible.each do |f|
-            r = f.last_revision
-            if r
-              r.custom_field_values.each do |v|
-                if v.custom_field_id == params[:custom_field_id].to_i
-                  if v.custom_field.compare_values?(v.value, params[:custom_value])
-                    @files << f
-                    break
-                  end
-                end
+        end
+        @dir_links = []
+        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.to_s, :dmsf_folder_id => folder_id).where('target_id IS NOT NULL').visible.each do |l|
+          l.target_folder.custom_field_values.each do |v|
+            if v.custom_field_id == params[:custom_field_id].to_i
+              if v.custom_field.compare_values?(v.value, params[:custom_value])
+                @dir_links << l
+                break
               end
             end
           end
-          @dir_links = []
-          DmsfLink.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.to_s).visible.each do |l|
-            l.target_folder.custom_field_values.each do |v|
+        end
+        @file_links = []
+        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFile.model_name.to_s, :dmsf_folder_id => folder_id).visible.each do |l|
+          r = l.target_file.last_revision if l.target_file
+          if r
+            r.custom_field_values.each do |v|
               if v.custom_field_id == params[:custom_field_id].to_i
                 if v.custom_field.compare_values?(v.value, params[:custom_value])
-                  @dir_links << l
+                  @file_links << l
                   break
                 end
               end
             end
           end
-          @file_links = []
-          DmsfLink.where(:project_id => @project.id, :target_type => DmsfFile.model_name.to_s).visible.each do |l|
-            r = l.target_file.last_revision if l.target_file
-            if r
-              r.custom_field_values.each do |v|
-                if v.custom_field_id == params[:custom_field_id].to_i
-                  if v.custom_field.compare_values?(v.value, params[:custom_value])
-                    @file_links << l
-                    break
-                  end
-                end
-              end
-            end
-          end
-          @url_links = []
-          DmsfLink.where(:project_id => @project.id, :target_type => 'DmsfUrl').visible.each do |l|
-            r = l.target_file.last_revision if l.target_file
-            if r
-              r.custom_field_values.each do |v|
-                if v.custom_field_id == params[:custom_field_id].to_i
-                  if v.custom_field.compare_values?(v.value, params[:custom_value])
-                    @file_links << l
-                    break
-                  end
-                end
-              end
-            end
-          end
+        end
+        @url_links = []
+      else
+        if @folder
+          @subfolders = @folder.dmsf_folders.visible
+          @files = @folder.dmsf_files.visible
+          @dir_links = @folder.folder_links.visible
+          @file_links = @folder.file_links.visible
+          @url_links = @folder.url_links.visible
+          @locked_for_user = @folder.locked_for_user?
         else
           @subfolders = @project.dmsf_folders.visible
           @files = @project.dmsf_files.visible
           @dir_links = @project.folder_links.visible
           @file_links = @project.file_links.visible
           @url_links = @project.url_links.visible
+          @locked_for_user = false
         end
-        @locked_for_user = false
-      else
-        @subfolders = @folder.dmsf_folders.visible
-        @files = @folder.dmsf_files.visible
-        @dir_links = @folder.folder_links.visible
-        @file_links = @folder.file_links.visible
-        @url_links = @folder.url_links.visible
-        @locked_for_user = @folder.locked_for_user?
       end
     end
 

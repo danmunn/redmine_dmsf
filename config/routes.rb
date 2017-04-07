@@ -32,7 +32,7 @@ if Redmine::Plugin.installed? :redmine_dmsf
     post '/projects/:id/dmsf/create', :controller => 'dmsf', :action => 'create'
     get '/projects/:id/dmsf/notify/activate', :controller => 'dmsf', :action => 'notify_activate', :as => 'notify_activate_dmsf'
     get '/projects/:id/dmsf/notify/deactivate', :controller => 'dmsf', :action => 'notify_deactivate', :as => 'notify_deactivate_dmsf'
-    get '/projects/:id/dmsf/delete', :controller => 'dmsf', :action => 'delete', :as => 'delete_dmsf'
+    delete '/projects/:id/dmsf/delete', :controller => 'dmsf', :action => 'delete', :as => 'delete_dmsf'
     post '/projects/:id/dmsf/save', :controller => 'dmsf', :action => 'save'
     post '/projects/:id/dmsf/save/root', :controller => 'dmsf', :action => 'save_root'
     post '/projects/:id/dmsf/entries', :controller => 'dmsf', :action => 'entries_operation'
@@ -157,5 +157,13 @@ if Redmine::Plugin.installed? :redmine_dmsf
     # Public URLs
     resource :dmsf_public_urls
 
+     # Folder permissions
+    resource :dmsf_folder_permissions do
+      member do
+        get 'autocomplete_for_user'
+        post 'append'
+      end
     end
+
   end
+end

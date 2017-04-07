@@ -28,12 +28,18 @@ class DmsfFilesController < ApplicationController
   before_filter :find_revision, :only => [:delete_revision]
   before_filter :authorize
   before_filter :tree_view, :only => [:delete]
+  before_filter :permissions
 
   accept_api_auth :show
 
   helper :all
   helper :dmsf_workflows
   helper :dmsf
+
+  def permissions
+    render_403 unless DmsfFolder.permissions(@file.dmsf_folder)
+    true
+  end
 
   def view
     begin
