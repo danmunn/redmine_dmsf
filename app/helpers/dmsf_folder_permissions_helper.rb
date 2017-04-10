@@ -11,4 +11,8 @@ module DmsfFolderPermissionsHelper
     s.html_safe
   end
 
+  def render_principals_for_new_folder_permissions(users)
+    principals_check_box_tags 'user[user_ids][]', users
+  end
+
 end

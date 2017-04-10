@@ -36,7 +36,9 @@ class DmsfFolderPermissionsController < ApplicationController
 
   def autocomplete_for_user
     @users = users_for_new_users
-    render :layout => false
+    respond_to do |format|
+      format.js
+    end
   end
 
   private
