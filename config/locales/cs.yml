@@ -364,3 +364,5 @@ cs:
 
   label_act_as_attachable: Jako příloha
   note_dmsf_act_as_attachable: Umožní přikládat dokumenty k objektům např. úkolům.
+
+  label_user_search_add: Vyhledej uživatele pro přidání

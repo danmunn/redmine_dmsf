@@ -38,6 +38,7 @@ class DmsfController < ApplicationController
   helper :dmsf_folder_permissions
 
   def permissions
+    Rails.logger.info ">>> #{DmsfFolder.visible.where(:project_id => @project.id).to_sql}"
     render_403 unless DmsfFolder.permissions(@folder)
     true
   end
@@ -53,8 +54,6 @@ class DmsfController < ApplicationController
   end
 
   def show
-    s = DmsfFolder.visible.where(:project_id => 1995).to_sql
-    Rails.logger.info s
     # also try to lookup folder by title if this is API call
     find_folder_by_title if [:xml, :json].include? request.format.to_sym
     get_display_params

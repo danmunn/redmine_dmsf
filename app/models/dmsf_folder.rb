@@ -52,11 +52,11 @@ class DmsfFolder < ActiveRecord::Base
 
   scope :visible, -> { joins(:project).joins(
     "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
-    :deleted => STATUS_ACTIVE).where(DmsfFolder.visible_condition)
+    :deleted => STATUS_ACTIVE).where(DmsfFolder.visible_condition).distinct
   }
   scope :deleted, -> { joins(:project).joins(
     "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
-    :deleted => STATUS_DELETED).where(DmsfFolder.visible_condition)
+    :deleted => STATUS_DELETED).where(DmsfFolder.visible_condition).distinct
   }
 
   acts_as_customizable
@@ -84,17 +84,17 @@ class DmsfFolder < ActiveRecord::Base
   before_create :default_values
 
   def self.visible_condition
-    sql = '1=1'
     Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
       if user.id && user.logged?
-        sql = %{
+        %{
           (#{DmsfFolderPermission.table_name}.object_id IS NULL) OR
           (#{DmsfFolderPermission.table_name}.object_id = #{role.id} AND #{DmsfFolderPermission.table_name}.object_type = 'Role') OR
           (#{DmsfFolderPermission.table_name}.object_id = #{user.id} AND #{DmsfFolderPermission.table_name}.object_type = 'User')
         }
+      else
+        '0=1'
       end
     end
-    sql
   end
 
   def self.permissions(folder)

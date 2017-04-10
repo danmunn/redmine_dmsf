@@ -364,3 +364,5 @@ pt-BR:
 
   label_act_as_attachable: Act as attachable
   note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+
+  label_user_search_add: Search for user to add
