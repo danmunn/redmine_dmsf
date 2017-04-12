@@ -283,8 +283,8 @@ es:
   title_create_link: "Crear un enlace simbólico"
   label_link_from: Enlace desde
   label_link_to: Enlace hacia
-  label_notifications_on: Notificaciones ON
-  label_notifications_off: Notificaciones OFF
+  label_notifications_off: Desactivar notificaciones
+    label_notifications_on: Activar notificaciones
   field_target_file: Archivo fuente
   title_download_entries: Entradas de descarga
   label_external: External

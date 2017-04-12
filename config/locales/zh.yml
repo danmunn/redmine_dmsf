@@ -283,8 +283,8 @@ zh:
   title_create_link: Create a symbolic link
   label_link_from: Link from
   label_link_to: Link to
-  label_notifications_on: Notifications on
-  label_notifications_off: Notifications off
+  label_notifications_off: "关闭通知"
+  label_notifications_on: "开启通知"
   field_target_file: Source file
   title_download_entries: Download entries
   label_external: External
