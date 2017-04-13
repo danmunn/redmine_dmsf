@@ -80,6 +80,7 @@
       <%= link_to('', delete_dmsf_path(:id => project, :folder_id => subfolder, :commit => 'yes'),
         :data => {:confirm => l(:text_are_you_sure)},
         :title => l(:title_delete),
+        :method => :delete,
         :class => 'icon icon-delete') %>
     <% end %>
   <% end %>

@@ -38,7 +38,6 @@ class DmsfController < ApplicationController
   helper :dmsf_folder_permissions
 
   def permissions
-    Rails.logger.info ">>> #{DmsfFolder.visible.where(:project_id => @project.id).to_sql}"
     render_403 unless DmsfFolder.permissions(@folder)
     true
   end
