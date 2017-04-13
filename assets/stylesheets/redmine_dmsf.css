@@ -28,6 +28,11 @@
    margin-left: 5px;
 }
 
+#dmsf_tag .check_box_group {
+    background: inherit;
+    border: 0px;
+}
+
 .list .dmsf_modified {
 	min-width: 127px;
 	width: 127px;

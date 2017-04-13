@@ -26,8 +26,16 @@ class DmsfFileRevisionCustomField < CustomField
   end
 
   def compare_values?(x, y)
-    if x.is_a?(Array) && y.is_a?(Array) && !y.empty?
-      x.include? y[0]
+    if x.is_a?(Array) && y.is_a?(Array)
+      y.reject!{ |a| a.empty? }
+      return true if y.empty?
+      x.reject!{ |a| a.empty? }
+      y.each do |b|
+        if x.include?(b)
+          return true
+        end
+      end
+      return false
     else
       x == y
     end

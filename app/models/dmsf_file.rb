@@ -500,7 +500,13 @@ class DmsfFile < ActiveRecord::Base
 
   def custom_value(custom_field)
     self.last_revision.custom_field_values.each do |cv|
-      return cv.value if cv.custom_field == custom_field
+      if cv.custom_field == custom_field
+        if cv.value.is_a? Array
+          return cv.value.reject{ |x| x.empty? }.join(',')
+        else
+          return cv.value
+        end
+      end
     end
     nil
   end
