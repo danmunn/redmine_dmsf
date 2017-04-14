@@ -69,7 +69,7 @@ class DmsfFile < ActiveRecord::Base
                     Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")
                   else
                     # Set desc to an empty string if o.description is nil
-                    desc = o.description.nil? ? "" : o.description
+                    desc = o.description.nil? ? '' : o.description
                     desc += ' / ' if o.description.present? && o.last_revision.comment.present?
                     desc += o.last_revision.comment if o.last_revision.comment.present?
                   end
