@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 sl:
-  dmsf: Arhiv
+  dmsf: Arhiv  # Custom fields tab title
   label_dmsf_file_plural: Arhivske datoteke
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses
@@ -173,7 +173,7 @@ sl:
   error_file_can_not_be_created: Datoteke se ne da kreirat v mapi
   error_wrong_zip_encoding: Napačen Zip nabor znakov
   warning_xapian_not_available: Xapian ni na voljo
-  menu_dmsf: Arhiv
+  menu_dmsf: Arhiv  # Project tab title
   label_physical_file_delete: Brisanje datoteke (fizično)
   user_is_not_project_member: Niste član projekta
   heading_access_downloads_emails: "Prenosi/Email-i"
@@ -182,7 +182,7 @@ sl:
   label_dmsf_updated: Arhiv posodobljen
   label_dmsf_downloaded: Arhiv downloaded
   title_total_size_of_all_files: Skupna velikost vseh datotek v tej mapi
-  project_module_dmsf: Arhiv
+  project_module_dmsf: Arhiv  # Project module name
   warning_no_project_to_copy_file_to: Ni projekta kamor bi kopiral datoteko
   comment_copied_from: "Skopirano iz %{source}"
   notice_file_copied: Datoteka skopirana
@@ -237,7 +237,6 @@ sl:
   label_dmsf_workflow_step_plural: Steps
   label_dmsf_workflow_approval: Approval
   label_dmsf_workflow_approval_plural: Approvals
-  label_dmsf: DMSF
   label_dmsf_wokflow_action_approve: Approve
   label_dmsf_wokflow_action_reject: Reject
   label_dmsf_wokflow_action_delegate: Delegate to

@@ -26,6 +26,7 @@ module RedmineDmsf
 
       def self.included(base) # :nodoc:
         base.send(:include, InstanceMethods)
+        base.send :include, Redmine::NestedSet::Traversing
         base.class_eval do
           unloadable
           alias_method_chain :copy, :dmsf

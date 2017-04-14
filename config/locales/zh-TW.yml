@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 zh-TW:
-  dmsf: 文件總管
+  dmsf: 文件總管  # Custom fields tab title
   label_dmsf_file_plural: 文件檔案
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses
@@ -84,7 +84,7 @@ zh-TW:
   title_lock_file: 鎖定檔案。禁止其它使用者修改。
   title_download_checked: 以ZIP下載所選取的檔案
   title_send_checked_by_email: 以電子郵件發送所選取的檔案
-  link_user_preferences: 你的DMSF的系統偏好設定
+  link_user_preferences: 你的DMS的系統偏好設定
   heading_send_documents_by_email: 電子郵件寄送檔案
   label_email_from: 寄件者
   label_email_to: 收件者
@@ -173,7 +173,7 @@ zh-TW:
   error_file_can_not_be_created: 在存儲目錄裡，無法建立檔案。
   error_wrong_zip_encoding: 不正確的Zip encoding
   warning_xapian_not_available: Xapian not available
-  menu_dmsf: 文件總管
+  menu_dmsf: 文件總管  # Project tab title
   label_physical_file_delete: 永久刪除檔案
   user_is_not_project_member: 您不是專案的成員之一
   heading_access_downloads_emails: 下載/電子郵件
@@ -182,7 +182,7 @@ zh-TW:
   label_dmsf_updated: Updated
   label_dmsf_downloaded: Downloaded
   title_total_size_of_all_files: 資料夾所有檔案的檔案大小
-  project_module_dmsf: 文件總管
+  project_module_dmsf: 文件總管  # Project module name
   warning_no_project_to_copy_file_to: No project to copy file to
   comment_copied_from: "Copied from %{source}"
   notice_file_copied: File copied
@@ -237,7 +237,6 @@ zh-TW:
   label_dmsf_workflow_step_plural: 步驟
   label_dmsf_workflow_approval: 批准
   label_dmsf_workflow_approval_plural: 批准
-  label_dmsf: 文件總管
   label_dmsf_wokflow_action_approve: 批准
   label_dmsf_wokflow_action_reject: 拒絕
   label_dmsf_wokflow_action_delegate: 委派給

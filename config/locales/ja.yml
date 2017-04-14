@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ja:
-  dmsf: DMSF
+  dmsf: DMS  # Custom fields tab title
   label_dmsf_file_plural: 文書管理ファイル
   label_dmsf_file_revision_plural: 文書管理ファイルリビジョン
   label_dmsf_file_revision_access_plural: 文書管理ファイルアクセス
@@ -173,7 +173,7 @@ ja:
   error_file_can_not_be_created: ファイルを保存フォルダに作ることができません
   error_wrong_zip_encoding: Zip エンコーディングが正しくありません
   warning_xapian_not_available: Xapian が利用できる状態になっていません
-  menu_dmsf: 文書管理
+  menu_dmsf: 文書管理  # Project tab title
   label_physical_file_delete: 物理ファイルの削除
   user_is_not_project_member: あなたはプロジェクトのメンバーではありません
   heading_access_downloads_emails: ダウンロード/電子メール
@@ -182,7 +182,7 @@ ja:
   label_dmsf_updated: 文書管理 更新
   label_dmsf_downloaded: 文書管理 ダウンロード
   title_total_size_of_all_files: このフォルダにある全ファイルの合計サイズ
-  project_module_dmsf: 文書管理
+  project_module_dmsf: 文書管理  # Project module name
   warning_no_project_to_copy_file_to: ファイルをコピーするプロジェクトがありません
   comment_copied_from: "%{source} からコピーしました"
   notice_file_copied: ファイルをコピーしました
@@ -237,7 +237,6 @@ ja:
   label_dmsf_workflow_step_plural: ステップ
   label_dmsf_workflow_approval: 承認
   label_dmsf_workflow_approval_plural: 承認
-  label_dmsf: 文書管理
   label_dmsf_wokflow_action_approve: 承認
   label_dmsf_wokflow_action_reject: 否認
   label_dmsf_wokflow_action_delegate: 代理承認

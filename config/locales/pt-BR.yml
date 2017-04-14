@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 pt-BR:
-  dmsf: DMSF
+  dmsf: DMS  # Custom fields tab title
   label_dmsf_file_plural: Arquivos Documentos
   label_dmsf_file_revision_plural: Revisões dos Documentos
   label_dmsf_file_revision_access_plural: Acessos aos Documentos
@@ -90,7 +90,7 @@ pt-BR:
   label_email_to: Destinatário
   label_email_cc: CC
   label_email_subject: Assunto
-  label_email_documents: DMSF
+  label_email_documents: DMS
   label_email_body: Descrição
   label_email_send: Enviar
   title_notifications_active: Notificações Ativas
@@ -143,7 +143,7 @@ pt-BR:
   label_default_notifications: Notificações padrões de arquivo
   heading_uploaded_files: Arquivos enviados
   submit_commit: Salvar
-  link_documents: DMSF
+  link_documents: DMS
   permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
   permission_view_dmsf_file_revisions: View revisions in Activity stream
   permission_view_dmsf_folders: Browse documents
@@ -173,7 +173,7 @@ pt-BR:
   error_file_can_not_be_created: "O arquivo não pode ser criado"
   error_wrong_zip_encoding: Wrong Zip encoding
   warning_xapian_not_available: Xapian not available
-  menu_dmsf: DMSF
+  menu_dmsf: DMS  # Project tab title
   label_physical_file_delete: Physical file delete
   user_is_not_project_member: You are not a member of the project
   heading_access_downloads_emails: Downloads/Emails
@@ -182,7 +182,7 @@ pt-BR:
   label_dmsf_updated: Updated
   label_dmsf_downloaded: Downloaded
   title_total_size_of_all_files: Total size of all files under this folder
-  project_module_dmsf: DMSF
+  project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: No project to copy file to
   comment_copied_from: "Copiado de %{source}"
   notice_file_copied: Arquivo copiado
@@ -237,7 +237,6 @@ pt-BR:
   label_dmsf_workflow_step_plural: Steps
   label_dmsf_workflow_approval: Approval
   label_dmsf_workflow_approval_plural: Approvals
-  label_dmsf: DMSF
   label_dmsf_wokflow_action_approve: Aprovar
   label_dmsf_wokflow_action_reject: Reprovar
   label_dmsf_wokflow_action_delegate: Atribuir para
