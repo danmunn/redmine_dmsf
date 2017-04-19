@@ -29,11 +29,12 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     
   def setup
     DmsfLock.delete_all # Delete all locks that are in our test DB - probably not safe but ho hum
-    timestamp = DateTime.now.strftime("%y%m%d%H%M")
+    timestamp = DateTime.now.strftime('%y%m%d%H%M')
     DmsfFile.storage_path = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
     Dir.mkdir(DmsfFile.storage_path) unless File.directory?(DmsfFile.storage_path)
     # Copy the physical files to the temporary storage
-    FileUtils.cp_r File.dirname(__FILE__) + "/../../fixtures/files/.", DmsfFile.storage_path
+    files = File.expand_path('../../../fixtures/files/.', __FILE__)
+    FileUtils.cp_r files, DmsfFile.storage_path
     
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
