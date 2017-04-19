@@ -297,6 +297,10 @@ class DmsfFolder < ActiveRecord::Base
       l.copy_to project, new_folder
     end
 
+    self.dmsf_folder_permissions.each do |p|
+      p.copy_to new_folder
+    end
+
     return new_folder
   end
 

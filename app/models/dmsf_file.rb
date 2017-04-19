@@ -254,34 +254,20 @@ class DmsfFile < ActiveRecord::Base
       errors[:base] << l(:error_file_is_locked)
       return false
     end
-
-    project = container.is_a?(Project) ? container : container.project
-    # If the target project differs from the source project we must physically move the disk files
-    if self.project != project
-      self.dmsf_file_revisions.all.each do |rev|
-        if File.exist? rev.disk_file(self.project)
-          FileUtils.mv rev.disk_file(self.project), rev.disk_file(project)
-        end
-      end
-    end
-    
     # Must invalidate source parent folder cache before moving
     RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-
     self.container_type = self.container_type
     self.container_id = container.id
     self.dmsf_folder = folder
     new_revision = self.last_revision.clone
     new_revision.dmsf_file = self
+    project = container.is_a?(Project) ? container : container.project
     new_revision.comment = l(:comment_moved_from, :source => "#{self.project.identifier}:#{self.dmsf_path_str}")
     new_revision.custom_values = []
-
     self.last_revision.custom_values.each do |cv|
       new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
     end
-    
     self.set_last_revision(new_revision)
-
     self.save && new_revision.save
   end
 
@@ -290,13 +276,6 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def copy_to_filename(container, folder=nil, filename)
-    project = container.is_a?(Project) ? container : container.project
-    # If the target project differs from the source project we must physically move the disk files
-    if (self.project != project) && self.last_revision
-      if File.exist? self.last_revision.disk_file(self.project)
-        FileUtils.cp self.last_revision.disk_file(self.project), self.last_revision.disk_file(project)
-      end
-    end
     file = DmsfFile.new
     file.dmsf_folder = folder
     file.container_type = self.container_type
@@ -306,6 +285,11 @@ class DmsfFile < ActiveRecord::Base
     if file.save && self.last_revision
       new_revision = self.last_revision.clone
       new_revision.dmsf_file = file
+      new_revision.disk_filename = new_revision.new_storage_filename
+      if File.exist? self.last_revision.disk_file
+        FileUtils.cp self.last_revision.disk_file, new_revision.disk_file
+      end
+      project = container.is_a?(Project) ? container : container.project
       new_revision.comment = l(:comment_copied_from, :source => "#{project.identifier}: #{self.dmsf_path_str}")
       new_revision.custom_values = []
       self.last_revision.custom_values.each do |cv|

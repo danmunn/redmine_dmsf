@@ -25,4 +25,14 @@ class DmsfFolderPermission < ActiveRecord::Base
 
   scope :users, -> { where(:object_type => User.model_name.to_s) }
   scope :roles, -> { where(:object_type => Role.model_name.to_s) }
+
+  def copy_to(folder)
+    permission = DmsfFolderPermission.new
+    permission.dmsf_folder_id = folder.id
+    permission.object_id = self.object_id
+    permission.object_type = self.object_type
+    permission.save
+    permission
+  end
+
 end

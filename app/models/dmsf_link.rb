@@ -110,14 +110,14 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def copy_to(project, folder)
-    link = DmsfLink.new(
-      :target_project_id => self.target_project_id,
-      :target_id => self.target_id,
-      :target_type => self.target_type,
-      :name => self.name,
-      :external_url => self.external_url,
-      :project_id => project.id,
-      :dmsf_folder_id => folder ? folder.id : nil)
+    link = DmsfLink.new
+    link.target_project_id = self.target_project_id
+    link.target_id = self.target_id
+    link.target_type = self.target_type
+    link.name = self.name
+    link.external_url = self.external_url
+    link.project_id = project.id
+    link.dmsf_folder_id = folder ? folder.id : nil
     link.save
     link
   end

@@ -21,7 +21,17 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFolderPermissionTest < RedmineDmsf::Test::UnitTest
-  fixtures :dmsf_folder_permissions
+  fixtures :dmsf_folder_permissions, :dmsf_folders
+
+  def setup
+    @folder1 = DmsfFolder.find 1
+    @permission1 = DmsfFolderPermission.find 1
+  end
+
+  def test_truth
+    assert_kind_of DmsfFolder, @folder1
+    assert_kind_of DmsfFolderPermission, @permission1
+  end
 
   def test_scope
     assert_equal 2, DmsfFolderPermission.count
@@ -33,6 +43,14 @@ class DmsfFolderPermissionTest < RedmineDmsf::Test::UnitTest
 
   def test_scope_roles
     assert_equal 1, DmsfFolderPermission.roles.count
+  end
+
+  def test_copy_to
+    permission = @permission1.copy_to(@folder1)
+    assert permission
+    assert_equal @folder1.id, permission.dmsf_folder_id
+    assert_equal @permission1.object_id, permission.object_id
+    assert_equal @permission1.object_type, permission.object_type
   end
 
 end
