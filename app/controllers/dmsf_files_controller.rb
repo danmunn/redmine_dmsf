@@ -37,7 +37,9 @@ class DmsfFilesController < ApplicationController
   helper :dmsf
 
   def permissions
-    render_403 unless DmsfFolder.permissions(@file.dmsf_folder)
+    if @file
+      render_403 unless DmsfFolder.permissions(@file.dmsf_folder)
+    end
     true
   end
 

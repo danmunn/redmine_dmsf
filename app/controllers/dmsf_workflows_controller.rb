@@ -25,8 +25,17 @@ class DmsfWorkflowsController < ApplicationController
   before_filter :find_model_object, :except => [:create, :new, :index, :assign, :assignment]
   before_filter :find_project
   before_filter :authorize_custom
+  before_filter :permissions, :only => [:new_action, :assignment, :start]
 
   layout :workflows_layout
+
+  def permissions
+    revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id] if params[:dmsf_file_revision_id].present?
+    if revision
+      render_403 unless revision.dmsf_file || DmsfFolder.permissions(revision.dmsf_file.dmsf_folder)
+    end
+    true
+  end
 
   def initialize
     @dmsf_workflow = nil

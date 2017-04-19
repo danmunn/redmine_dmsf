@@ -29,33 +29,33 @@
     <% unless @file.locked_for_user? %>
       <% unless @file.locked? %>
         <%= link_to(l(:button_lock), lock_dmsf_files_path(:id => @file),
-          :title => l(:title_lock_file), :class => 'icon dmsf_icon-lock') %>
+          :title => l(:title_lock_file), :class => 'icon icon-lock') %>
       <% else %>
         <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
-          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock') %>
+          :title => l(:title_unlock_file), :class => 'icon icon-unlock') %>
       <% end %>
       <% if @file.notification %>
         <%= link_to(l(:label_notifications_off),
           notify_deactivate_dmsf_files_path(:id => @file),
           :title => l(:title_notifications_active_deactivate),
-          :class => 'icon dmsf_icon-notification-on') %>
+          :class => 'icon icon-email') %>
       <% else %>
         <%= link_to(l(:label_notifications_on),
           notify_activate_dmsf_files_path(:id => @file),
           :title => l(:title_notifications_not_active_activate),
-          :class => 'icon dmsf_icon-notification-off') %>
+          :class => 'icon icon-email-add') %>
       <% end %>
       <%= link_to(l(:label_link_to),
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @file.dmsf_folder ? @file.dmsf_folder.id : nil, :dmsf_file_id => @file.id, :type => 'link_to'),
         :title => l(:title_create_link),
-        :class => 'icon dmsf_icon-link') %>
+        :class => 'icon icon-link') %>
       <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(:id => @file),
         :title => l(:title_copy), :class => 'icon icon-copy') %>
       <%= delete_link(dmsf_file_path(:id => @file, :details => true)) if @file_delete_allowed %>
     <% else %>
       <% if User.current.allowed_to?(:force_file_unlock, @project) %>
         <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
-          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock')%>
+          :title => l(:title_unlock_file), :class => 'icon icon-unlock')%>
       <% end %>
     <% end %>
   <% end %>

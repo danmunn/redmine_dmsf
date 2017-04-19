@@ -24,6 +24,12 @@ class DmsfFolderPermissionsController < ApplicationController
   before_filter :find_folder, :only => [:destroy]
   before_filter :find_project
   before_filter :authorize
+  before_filter :permissions
+
+  def permissions
+    render_403 unless DmsfFolder.permissions(@dmsf_folder)
+    true
+  end
 
   def new
     @users = users_for_new_users

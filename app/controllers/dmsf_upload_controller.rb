@@ -28,11 +28,17 @@ class DmsfUploadController < ApplicationController
   before_filter :authorize, :except => [:upload, :delete_dmsf_attachment]
   before_filter :authorize_global, :only => [:upload, :delete_dmsf_attachment]
   before_filter :find_folder, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment]
+  before_filter :permissions, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment]
 
   helper :all
   helper :dmsf_workflows
 
   accept_api_auth :upload, :commit
+
+  def permissions
+    render_403 unless DmsfFolder.permissions(@folder)
+    true
+  end
 
   def upload_files
     uploaded_files = params[:dmsf_attachments]

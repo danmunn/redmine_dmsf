@@ -25,6 +25,14 @@ class DmsfLinksController < ApplicationController
   before_filter :find_model_object, :only => [:destroy, :restore]
   before_filter :find_link_project
   before_filter :authorize
+  before_filter :permissions
+
+  def permissions
+    if @dmsf_link
+      render_403 unless DmsfFolder.permissions(@dmsf_link.dmsf_folder)
+    end
+    true
+  end
 
   def initialize
     @dmsf_link = nil

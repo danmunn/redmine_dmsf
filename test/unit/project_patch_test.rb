@@ -21,7 +21,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class ProjectPatchTest < RedmineDmsf::Test::UnitTest
-  fixtures :projects, :dmsf_files, :dmsf_file_revisions, :dmsf_links, :dmsf_folders, :dmsf_workflows
+  fixtures :projects, :dmsf_files, :dmsf_file_revisions, :dmsf_links, :dmsf_folders, :dmsf_workflows, :users
 
   def setup
     @project1 = Project.find_by_id 1
