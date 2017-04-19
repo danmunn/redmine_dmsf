@@ -118,7 +118,7 @@ module RedmineDmsf
 
       # Characters that MATCH this regex will be replaced with dots, no more than one dot in a row.
       INVALID_CHARACTERS = /[\/\\\?":<>#%\*\[\]]/.freeze # = / \ ? " : < > # % * [ ]
-      
+
       def self.create_project_name(p)
         use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
         if use_project_names
