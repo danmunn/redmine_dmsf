@@ -102,7 +102,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       assert file, 'Check for files existance'
       Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
       if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-        project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+        project1_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
         put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @admin.merge!({:content_type => :text})
         assert_response 409
         put "/dmsf/webdav/#{project1_uri}/test-1234.txt", '1234', @admin.merge!({:content_type => :text})
@@ -157,7 +157,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       assert file, 'File test-1234 was not found in projects dmsf folder.'
       Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
       if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-        project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+        project1_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
         put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})
         assert_response 409
         put "/dmsf/webdav/#{project1_uri}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})

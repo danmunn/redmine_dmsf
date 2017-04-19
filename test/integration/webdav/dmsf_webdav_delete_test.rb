@@ -178,8 +178,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
       @project1.enable_module! :dmsf # Flag module enabled
       delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
       assert_response 404
-      p1name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-      p1name_uri = URI.encode(p1name, /\W/)
+      p1name_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
       delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", nil, @jsmith
       assert_response :success
       @folder6.reload
@@ -215,16 +214,11 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
       @project1.enable_module! :dmsf
       @role.add_permission! :view_dmsf_folders
       @role.add_permission! :file_delete
-
       delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
       assert_response 404
-
-      p1name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-      p1name_uri = URI.encode(p1name, /\W/)
-
+      p1name_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
       delete "/dmsf/webdav/#{p1name_uri}/#{@file1.name}", nil, @jsmith
       assert_response :success
-
       @file1.reload
       assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
     end

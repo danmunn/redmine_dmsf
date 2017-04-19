@@ -46,8 +46,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     
     # Temporarily enable project names to generate names for project1
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-    @project1_uri = URI.encode(@project1_name, /\W/)
+    @project1_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
     RedmineDmsf::Webdav::Cache.init_nullcache
   end
@@ -127,7 +126,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
       assert_no_match "<D:displayname>#{@project1.identifier}</D:displayname>", response.body
       # but the project name should match
       assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</D:href>", response.body
-      assert_match "<D:displayname>#{@project1_name}</D:displayname>", response.body
+      assert_match "<D:displayname>#{@project1_uri}</D:displayname>", response.body
     end
   end
   
@@ -175,7 +174,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
       assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", response.body
       assert_no_match "<D:displayname>#{@project1.identifier}</D:displayname>", response.body
       assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</D:href>", response.body
-      assert_match "<D:displayname>#{@project1_name}</D:displayname>", response.body
+      assert_match "<D:displayname>#{@project1_uri}</D:displayname>", response.body
     end
   end
   
@@ -220,7 +219,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
       assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", response.body
       assert_no_match "<D:displayname>#{@project1.identifier}</D:displayname>", response.body
       assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</D:href>", response.body
-      assert_match "<D:displayname>#{@project1_name}</D:displayname>", response.body
+      assert_match "<D:displayname>#{@project1_uri}</D:displayname>", response.body
 
       # Folders
       assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}/</D:href>", response.body
@@ -263,13 +262,12 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
 
       # but the project name should match
       assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</D:href>", response.body
-      assert_match "<D:displayname>#{@project1_name}</D:displayname>", response.body
+      assert_match "<D:displayname>#{@project1_uri}</D:displayname>", response.body
 
       # Rename project1
       @project1.name = 'Online Cookbook'
       @project1.save!
-      project1_new_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-      project1_new_uri = URI.encode(project1_new_name, /\W/)
+      project1_new_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
 
       # PROPSTATS for / is already cached, but a new PROPSTATS should be cached for project1
       assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +1 do
@@ -287,11 +285,11 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
 
       # old project name should not match
       assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</D:href>", response.body
-      assert_no_match "<D:displayname>#{@project1_name}</D:displayname>", response.body
+      assert_no_match "<D:displayname>#{@project1_uri}</D:displayname>", response.body
 
       # but new project name should match
       assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{project1_new_uri}/</D:href>", response.body
-      assert_match "<D:displayname>#{project1_new_name}</D:displayname>", response.body
+      assert_match "<D:displayname>#{project1_new_uri}</D:displayname>", response.body
     end
   end
   

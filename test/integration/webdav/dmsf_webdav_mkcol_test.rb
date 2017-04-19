@@ -106,7 +106,7 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
       assert_response :success
       Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
       if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-        project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+        project1_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
         xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test2", nil, @jsmith
         assert_response 404
         xml_http_request :mkcol, "/dmsf/webdav/#{project1_uri}/test3", nil, @jsmith
