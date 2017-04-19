@@ -67,7 +67,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-      project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+      project1_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
       get '/dmsf/webdav', nil, @admin
       assert_response :success
       assert_no_match @project1.identifier, response.body
