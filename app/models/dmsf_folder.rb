@@ -311,31 +311,26 @@ class DmsfFolder < ActiveRecord::Base
 
   def modified
     last_update = updated_at
-    dmsf_folders.each do |subfolder|
-      last_update = subfolder.updated_at if subfolder.updated_at > last_update
-    end
-    dmsf_files.each do |file|
-      last_update = file.updated_at if file.updated_at > last_update
-    end
-    folder_links.each do |folder_link|
-      last_update = folder_link.updated_at if folder_link.updated_at > last_update
-    end
-    file_links.each do |file_link|
-      last_update = file_link.updated_at if file_link.updated_at > last_update
-    end
-    url_links.each do |url_link|
-      last_update = url_link.updated_at if url_link.updated_at > last_update
-    end
+    time = DmsfFolder.where(
+      ['project_id = ? AND dmsf_folder_id = ? AND updated_at > ?',
+       self.project_id, self.id, last_update]).maximum(:updated_at)
+    last_update = time if time
+    time = DmsfFile.where(
+      ['container_id = ? AND container_type = ? AND dmsf_folder_id = ? AND updated_at > ?',
+       self.project_id, 'Project', self.id, last_update]).maximum(:updated_at)
+    last_update = time if time
+    time = DmsfLink.where(
+      ['project_id = ? AND dmsf_folder_id = ? AND updated_at > ?',
+       self.project_id, self.id, last_update]).maximum(:updated_at)
+    last_update = time if time
     last_update
   end
 
   # Number of items in the folder
   def items
-    dmsf_folders.visible.count +
-    dmsf_files.visible.count +
-    folder_links.visible.count +
-    file_links.visible.count +
-    url_links.visible.count
+    dmsf_folders.where(:project_id => self.project_id).visible.count +
+    dmsf_files.visible.where(:container_id => self.project_id).count +
+    dmsf_links.visible.where(:project_id => self.project_id).count
   end
   
   def self.is_column_on?(column)
