@@ -50,9 +50,6 @@ class DmsfFolder < ActiveRecord::Base
   AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
   DEFAULT_COLUMNS = %w(title size modified version workflow author).freeze
 
-  @@dmsf_columns = Setting.plugin_redmine_dmsf['dmsf_columns']
-  @@dmsf_columns = DmsfFolder::DEFAULT_COLUMNS unless columns
-
   scope :visible, -> { joins(:project).joins(
     "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
     :deleted => STATUS_ACTIVE).where(DmsfFolder.visible_condition).distinct
@@ -337,6 +334,10 @@ class DmsfFolder < ActiveRecord::Base
   end
   
   def self.is_column_on?(column)
+    unless @@dmsf_columns
+      @@dmsf_columns = Setting.plugin_redmine_dmsf['dmsf_columns']
+      @@dmsf_columns = DmsfFolder::DEFAULT_COLUMNS unless columns
+    end
     @@dmsf_columns.include? column
   end
 
