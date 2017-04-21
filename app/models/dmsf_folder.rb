@@ -332,6 +332,8 @@ class DmsfFolder < ActiveRecord::Base
     dmsf_files.visible.where(:container_id => self.project_id).count +
     dmsf_links.visible.where(:project_id => self.project_id).count
   end
+
+  @@dmsf_columns = nil
   
   def self.is_column_on?(column)
     unless @@dmsf_columns
