@@ -50,6 +50,9 @@ class DmsfFolder < ActiveRecord::Base
   AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
   DEFAULT_COLUMNS = %w(title size modified version workflow author).freeze
 
+  @@dmsf_columns = Setting.plugin_redmine_dmsf['dmsf_columns']
+  @@dmsf_columns = DmsfFolder::DEFAULT_COLUMNS unless columns
+
   scope :visible, -> { joins(:project).joins(
     "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
     :deleted => STATUS_ACTIVE).where(DmsfFolder.visible_condition).distinct
@@ -328,15 +331,13 @@ class DmsfFolder < ActiveRecord::Base
 
   # Number of items in the folder
   def items
-    dmsf_folders.where(:project_id => self.project_id).visible.count +
+    dmsf_folders.visible.where(:project_id => self.project_id).count +
     dmsf_files.visible.where(:container_id => self.project_id).count +
     dmsf_links.visible.where(:project_id => self.project_id).count
   end
   
   def self.is_column_on?(column)
-    columns = Setting.plugin_redmine_dmsf['dmsf_columns']
-    columns = DmsfFolder::DEFAULT_COLUMNS unless columns
-    columns.include? column
+    @@dmsf_columns.include? column
   end
 
   def custom_value(custom_field)
@@ -348,60 +349,58 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.get_column_position(column)
     pos = 0
-    columns = Setting.plugin_redmine_dmsf['dmsf_columns']
-    columns = DmsfFolder::DEFAULT_COLUMNS unless columns
     # 0 - checkbox
     # 1 - id
-    if columns.include?('id')
+    if @@dmsf_columns.include?('id')
       pos += 1
       return pos if column == 'id'
     else
       return nil if column == 'id'
     end
     # 2 - title
-    if columns.include?('title')
+    if @@dmsf_columns.include?('title')
       pos += 1
       return pos if column == 'title'
     else
       return nil if column == 'title'
     end
     # 3 - extension
-    if columns.include?('extension')
+    if @@dmsf_columns.include?('extension')
       pos += 1
       return pos if column == 'extension'
     else
       return nil if column == 'extension'
     end
     # 4 - size
-    if columns.include?('size')
+    if @@dmsf_columns.include?('size')
       pos += 1
       return pos if column == 'size'
     else
       return nil if column == 'size'
     end
     # 5 - modified
-    if columns.include?('modified')
+    if @@dmsf_columns.include?('modified')
       pos += 1
       return pos if column == 'modified'
     else
       return nil if column == 'modified'
     end
     # 6 - version
-    if columns.include?('version')
+    if @@dmsf_columns.include?('version')
       pos += 1
       return pos if column == 'version'
     else
       return nil if column == 'version'
     end
     # 7 - workflow
-    if columns.include?('workflow')
+    if @@dmsf_columns.include?('workflow')
       pos += 1
       return pos if column == 'workflow'
     else
       return nil if column == 'workflow'
     end
     # 8 - author
-    if columns.include?('author')
+    if @@dmsf_columns.include?('author')
       pos += 1
       return pos if column == 'author'
     else
