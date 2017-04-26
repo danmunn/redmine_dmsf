@@ -13,6 +13,7 @@ $("#browser").dataTable().fnDestroy();
 
 // Add rows
 $('#<%= params[:row_id] %>').after('<%= escape_javascript(render(:partial => 'dmsf/dmsf_rows')) %>');
+hideOnLoad();
 
 // Reinitialize the dataTable
 <% title = DmsfFolder.get_column_position('title') %>
