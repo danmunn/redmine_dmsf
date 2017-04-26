@@ -59,6 +59,7 @@ module RedmineDmsf
               uploaded_file[:disk_filename] = upload.disk_filename
               uploaded_file[:name] = upload.name
               uploaded_file[:title] = upload.title
+              uploaded_file[:version] = 1
             end
             DmsfUploadHelper.commit_files_internal uploaded_files, issue.project, system_folder,
              context[:controller]
