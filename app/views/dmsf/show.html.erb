@@ -24,7 +24,7 @@
 
 <% html_title l(:dmsf) %>
 <div class="contextual">
-  <% if @folder_manipulation_allowed %>
+  <% if @folder_manipulation_allowed && !@system_folder %>
     <% if @folder.nil? %>
       <%= link_to(l(:button_edit), edit_root_dmsf_path(:id => @project),
         :title => l(:link_edit, :title => l(:link_documents)),
@@ -92,16 +92,18 @@
         <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries') if @file_delete_allowed %>
     <% end %>
   </div>
-  <% values = @folder ? @folder.custom_field_values : DmsfFolder.new.custom_field_values %>
-  <% unless values.empty? %>
-    <div id="dmsf_tag" class="dmsf_controls" style="float: right">
-      <% custom_value = values.first %>
-      <% custom_value.custom_field.is_required = false %>
-      <% custom_value.value = params[:custom_value].present? ? params[:custom_value] : '' %>
-      <% name = :dmsf_folder %>
-      <%= content_tag('label', custom_field_name_tag(custom_value.custom_field),
-            :for => "#{name}_custom_field_values_#{custom_value.custom_field.id}") + ': ' + custom_field_tag(name, custom_value) %>
-    </div>
+  <% unless @system_folder %>
+    <% values = @folder ? @folder.custom_field_values : DmsfFolder.new.custom_field_values %>
+    <% unless values.empty? %>
+      <div id="dmsf_tag" class="dmsf_controls" style="float: right">
+        <% custom_value = values.first %>
+        <% custom_value.custom_field.is_required = false %>
+        <% custom_value.value = params[:custom_value].present? ? params[:custom_value] : '' %>
+        <% name = :dmsf_folder %>
+        <%= content_tag('label', custom_field_name_tag(custom_value.custom_field),
+              :for => "#{name}_custom_field_values_#{custom_value.custom_field.id}") + ': ' + custom_field_tag(name, custom_value) %>
+      </div>
+    <% end %>
   <% end %>
   <div class="autoscroll">
     <% if @tree_view %>
@@ -181,7 +183,7 @@
             <% if @folder %>
               return "<%= "#{l(:label_number_of_folders)}: #{@folder.deep_folder_count} #{l(:label_number_of_documents)}: #{@folder.deep_file_count}" %>";
             <% else %>
-              return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFolder').count}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(:container_id => @project.id, :container_type => 'Project').count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFile').count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfUrl').count}" %>";
+              return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFolder').count}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => ['DmsfFile', 'DmsfUrl']).count}" %>";
             <% end %>
           <% else %>
             return "<%= "#{l(:label_number_of_folders)}: #{@subfolders.count + @dir_links.count}, #{l(:label_number_of_documents)}: #{@files.count + @file_links.count + @url_links.count}" %>";
@@ -207,12 +209,14 @@
   </script>
 <% end %>
 
-<% if (@file_manipulation_allowed && !@locked_for_user) %>
+<% if (@file_manipulation_allowed && !@locked_for_user && !@system_folder) %>
   <%= render(:partial => 'dmsf_upload/multi_upload') %>
 <% end %>
 
-<% other_formats_links do |f| %>
+<% unless @system_folder %>
+  <% other_formats_links do |f| %>
     <%= f.link_to 'CSV', :url => params, :onclick => "showModal('csv-export-options', '350px'); return false;" %>
+  <% end %>
 <% end %>
 
 <div id="csv-export-options" style="display:none;">

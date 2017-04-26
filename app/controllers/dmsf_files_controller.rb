@@ -38,7 +38,7 @@ class DmsfFilesController < ApplicationController
 
   def permissions
     if @file
-      render_403 unless DmsfFolder.permissions(@file.dmsf_folder)
+      render_403 unless DmsfFolder.permissions?(@file.dmsf_folder)
     end
     true
   end
@@ -192,7 +192,7 @@ class DmsfFilesController < ApplicationController
       commit = params[:commit] == 'yes'
       if @file.delete(commit)
         flash[:notice] = l(:notice_file_deleted)
-        if commit && (@file.container_type == 'Project')
+        if commit
           log_activity('deleted')
           begin
             recipients = DmsfMailer.get_notify_users(@project, [@file])

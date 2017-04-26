@@ -29,7 +29,7 @@ class DmsfLinksController < ApplicationController
 
   def permissions
     if @dmsf_link
-      render_403 unless DmsfFolder.permissions(@dmsf_link.dmsf_folder)
+      render_403 unless DmsfFolder.permissions?(@dmsf_link.dmsf_folder)
     end
     true
   end

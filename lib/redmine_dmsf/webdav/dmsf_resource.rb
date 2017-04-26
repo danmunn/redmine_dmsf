@@ -88,50 +88,21 @@ module RedmineDmsf
       # Check if current entity is a folder and return DmsfFolder object if found (nil if not)
       def folder
         unless @folder
-          return nil unless project # If the project doesn't exist, this entity can't exist
-          # Note: Folder is searched for as a generic search to prevent SQL queries being generated:
-          # if we were to look within parent, we'd have to go all the way up the chain as part of the
-          # existence check, and although I'm sure we'd love to access the hierarchy, I can't yet
-          # see a practical need for it
-          folders = DmsfFolder.visible.where(:project_id => project.id, :title => basename).order('title ASC').to_a
-          return nil unless folders.length > 0
-          if (folders.length > 1)
-            folders.delete_if { |x| '/' + x.dmsf_path_str != projectless_path }
-            return nil unless folders.length > 0
-            @folder = folders[0]
-          else
-            if (('/' + folders[0].dmsf_path_str) == projectless_path)
-              @folder = folders[0]
-            end
-          end
+          return nil unless project
+          f = parent.folder
+          @folder = DmsfFolder.visible.where(:project_id => project.id, :title => basename,
+            :dmsf_folder_id => parent.folder ? parent.folder.id : nil).first
         end
         @folder
       end
 
       # Check if current entity exists as a file (DmsfFile), and returns corresponding object if found (nil otherwise)
-      # Currently has a dual search approach (depending on if parent can be determined)
       def file
         unless @file
           return nil unless project # Again if entity project is nil, it cannot exist in context of this object
-          # Hunt for files parent path
-          f = false
-          if (parent.projectless_path != '/')
-            f = parent.folder if parent.folder
-          else
-            f = nil
-          end
-          if f || f.nil?
-            # f has a value other than false? - lets use traditional
-            # DMSF file search by name.
-            @file = DmsfFile.visible.find_file_by_name(project, f, basename)
-          else
-            # If folder is false, means it couldn't pick up parent,
-            # as such its probably fine to bail out, however we'll
-            # perform a search in this scenario
-            files = DmsfFile.visible.where(:container_id => project.id, :container_type => 'Project', :name => basename).order('name ASC').to_a
-            files.delete_if { |x| File.dirname('/' + x.dmsf_path_str) != File.dirname(projectless_path) }
-            @file = files[0] if files.length > 0
-          end
+          @file = DmsfFile.visible.joins('JOIN dmsf_file_revisions ON dmsf_files.id = dmsf_file_revisions.dmsf_file_id').where(
+            ["dmsf_files.project_id = ? AND dmsf_files.dmsf_folder_id #{parent.folder ? '=' : 'IS'} ? AND dmsf_file_revisions.name = ?",
+             project.id, parent.folder ? parent.folder.id : nil, basename]).first
         end
         @file
       end
@@ -189,6 +160,7 @@ module RedmineDmsf
       ##
       def get(request, response)
         raise NotFound unless exist?
+        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder))
         if collection?
           html_display
           response['Content-Length'] = response.body.bytesize.to_s
@@ -207,6 +179,7 @@ module RedmineDmsf
         if request.body.read.to_s.empty?
           raise NotFound unless project && project.module_enabled?('dmsf')
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
+          raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
           return MethodNotAllowed if exist? # If we already exist, why waste the time trying to save?
           parent_folder = nil
           if (parent.projectless_path != '/')
@@ -231,7 +204,7 @@ module RedmineDmsf
       def delete
         if file
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_delete, project)
-          
+          raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
           pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
           if !pattern.blank? && basename.match(pattern)
             # Files that are not versioned should be destroyed
@@ -253,6 +226,7 @@ module RedmineDmsf
           end
         elsif folder
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
+          raise Forbidden unless DmsfFolder.permissions?(folder, false)
           folder.delete(false) ? NoContent : Conflict
         else
           MethodNotAllowed
@@ -271,11 +245,13 @@ module RedmineDmsf
         return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil?
 
         parent = resource.parent
+        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
 
         if collection?
           # At the moment we don't support cross project destinations
           return MethodNotImplemented unless (project.id == resource.project.id)
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
+          raise Forbidden unless DmsfFolder.permissions?(folder, false)
 
           # Current object is a folder, so now we need to figure out information about Destination
           if dest.exist?
@@ -386,6 +362,7 @@ module RedmineDmsf
         return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil?
 
         parent = resource.parent
+        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
 
         if collection?
           # Current object is a folder, so now we need to figure out information about Destination
@@ -402,6 +379,7 @@ module RedmineDmsf
               User.current.allowed_to?(:view_dmsf_folders, resource.project) &&
               User.current.allowed_to?(:view_dmsf_files, project) &&
               User.current.allowed_to?(:view_dmsf_folders, project))
+          raise Forbidden unless DmsfFolder.permissions?(folder, false)
 
           return PreconditionFailed if (parent.projectless_path != '/' && !parent.folder)
           folder.title = resource.basename
@@ -552,6 +530,7 @@ module RedmineDmsf
       def put(request, response)
         raise BadRequest if collection?
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
+        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
 
         # Ignore file name patterns given in the plugin settings
         pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore']
@@ -593,8 +572,7 @@ module RedmineDmsf
         else
           raise BadRequest unless (parent.projectless_path == '/' || (parent.exist? && parent.folder))
           f = DmsfFile.new
-          f.container_type = 'Project'
-          f.container_id = project.id
+          f.project_id = project.id
           f.name = basename
           f.dmsf_folder = parent.folder
           f.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
@@ -677,6 +655,7 @@ module RedmineDmsf
       # also best-utilising DAV4Rack's implementation.
       def download
         raise NotFound unless (file && file.last_revision && file.last_revision.disk_file)
+        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder))
 
         # If there is no range (start of ranged download, or direct download) then we log the
         # file access, so we can properly keep logged information

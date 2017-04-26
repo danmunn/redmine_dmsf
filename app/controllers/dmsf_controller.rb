@@ -38,7 +38,7 @@ class DmsfController < ApplicationController
   helper :dmsf_folder_permissions
 
   def permissions
-    render_403 unless DmsfFolder.permissions(@folder)
+    render_403 unless DmsfFolder.permissions?(@folder)
     true
   end
 
@@ -80,7 +80,7 @@ class DmsfController < ApplicationController
     @file_manipulation_allowed = User.current.allowed_to? :file_manipulation, @project
     @file_delete_allowed = User.current.allowed_to? :file_delete, @project
     @subfolders = DmsfFolder.deleted.where(:project_id => @project.id)
-    @files = DmsfFile.deleted.where(:container_id => @project.id, :container_type => 'Project')
+    @files = DmsfFile.deleted.where(:project_id => @project.id)
     @dir_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.to_s)
     @file_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFile.model_name.to_s)
     @url_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => 'DmsfUrl')
@@ -643,6 +643,7 @@ class DmsfController < ApplicationController
   private
 
   def get_display_params
+    @system_folder = @folder && @folder.system
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
@@ -658,7 +659,7 @@ class DmsfController < ApplicationController
       if tag
         @subfolders = []
         folder_id = @folder.id if @folder
-        DmsfFolder.where(:project_id => @project.id, :dmsf_folder_id => folder_id).visible.each do |f|
+        DmsfFolder.where(:project_id => @project.id, :dmsf_folder_id => folder_id, :system => false).visible.each do |f|
           f.custom_field_values.each do |v|
             if v.custom_field_id == params[:custom_field_id].to_i
               if v.custom_field.compare_values?(v.value, params[:custom_value])
@@ -669,7 +670,7 @@ class DmsfController < ApplicationController
           end
         end
         @files = []
-        DmsfFile.where(:container_id => @project.id, :container_type => 'Project', :dmsf_folder_id => folder_id).visible.each do |f|
+        DmsfFile.where(:project_id => @project.id, :dmsf_folder_id => folder_id).visible.each do |f|
           r = f.last_revision
           if r
             r.custom_field_values.each do |v|
@@ -733,7 +734,7 @@ class DmsfController < ApplicationController
     @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed &&
       @file_delete_allowed && !@locked_for_user && !@folder
     @trash_enabled = DmsfFolder.deleted.where(:project_id => @project.id).any? ||
-      DmsfFile.deleted.where(:container_id => @project.id, :container_type => 'Project').any? ||
+      DmsfFile.deleted.where(:project_id => @project.id).any? ||
       DmsfLink.deleted.where(:project_id => @project.id).any?
   end
 

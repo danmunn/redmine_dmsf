@@ -27,7 +27,7 @@ class DmsfFolderPermissionsController < ApplicationController
   before_filter :permissions
 
   def permissions
-    render_403 unless DmsfFolder.permissions(@dmsf_folder)
+    render_403 unless DmsfFolder.permissions?(@dmsf_folder)
     true
   end
 

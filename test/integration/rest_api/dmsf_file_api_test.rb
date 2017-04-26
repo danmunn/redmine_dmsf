@@ -63,15 +63,13 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     # <dmsf_file>
     #   <id>1</id>
     #   <name>test.txt</name>
-    #   <container_id>1</container_id>
-    #   <container_type>Project</container_type>
+    #   <project_id>1</project_id>
     #   <version>1.0</version>
     #   <content_url>/dmsf/files/1/download</content_url>
     # </dmsf_file>
     assert_select 'dmsf_file > id', :text => @file1.id.to_s
     assert_select 'dmsf_file > name', :text => @file1.name
-    assert_select 'dmsf_file > container_id', :text => @file1.container_id.to_s
-    assert_select 'dmsf_file > container_type', :text => @file1.container_type.to_s
+    assert_select 'dmsf_file > project_id', :text => @file1.project_id.to_s
     assert_select 'dmsf_file > version', :text => "#{@file1.last_revision.major_version}.#{@file1.last_revision.minor_version}"
     assert_select 'dmsf_file > content_url', :text => "/dmsf/files/#{@file1.id}/download"
     #curl -v -H "Content-Type: application/octet-stream" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/41532/download > file.txt

@@ -210,10 +210,10 @@ module RedmineDmsf
               # File
               # Use file.id & file.last_revision.id as key
               # When revision changes then the key will change and the old cached item will eventually be evicted
-              propstats_key = "PROPSTATS/#{resource.resource.file.id}-#{resource.resource.file.last_revision.id}"
+              propstats_key = "PROPSTATS/#{resource.resource.file.id}-#{resource.resource.file.last_revision.id}" if resource.resource.file
             end
 
-            xml_str = RedmineDmsf::Webdav::Cache.read(propstats_key)
+            xml_str = RedmineDmsf::Webdav::Cache.read(propstats_key) if propstats_key
             if xml_str.nil?
               # Create the complete PROPSTATS response
               propstats_builder = Nokogiri::XML::Builder.new do |propstats_xml|
@@ -238,7 +238,7 @@ module RedmineDmsf
               
               # Add PROPSTATS to cache
               # Caching the PROPSTATS response as xml text string.
-              RedmineDmsf::Webdav::Cache.write(propstats_key, xml_str)
+              RedmineDmsf::Webdav::Cache.write(propstats_key, xml_str) if propstats_key
             end
             xml << xml_str
           end

@@ -65,7 +65,7 @@
   </thead>
   <tbody>
   <% @subfolders.each do |subfolder| %>
-    <tr class="dir">
+    <tr class="dir <%= 'dmsf_system' if subfolder.system %>">
       <%= render(:partial => 'dir',
         :locals => {
           :project => @project,

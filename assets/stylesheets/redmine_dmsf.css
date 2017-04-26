@@ -194,6 +194,7 @@ div.dmsf_revision_inner_box .attribute .label {
 
 /* File types */
 .dmsf_gray .icon-folder { background-image: url(../images/folder_gray.png); }
+.dmsf_system .icon-folder { background-image: url(../images/folder_system.png); }
 
 .icon-file.filetype-doc, .icon-file.filetype-docx { background-image: url(../images/filetypes/doc.png); }
 .icon-file.filetype-xls, .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls.png); }
@@ -239,6 +240,10 @@ div.dmsf_revision_inner_box .attribute .label {
 /* Links */
 .dmsf_gray { color: #AAA }
 .dmsf_gray a, .dmsf_gray a:link, .dmsf_gray a:visited{ color: #484848; text-decoration: none; }
+
+/* System folders */
+.dmsf_system { color: #5C82AD }
+.dmsf_system a, .dmsf_gray a:link, .dmsf_gray a:visited{ color: #484848; text-decoration: none; }
 
 /* Search results */
 .dmsf-file { background-image: url(../../../images/document.png); }

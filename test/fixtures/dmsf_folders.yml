@@ -47,3 +47,11 @@ dmsf_folders_007:
   project_id:     1
   dmsf_folder_id: NULL
   user_id:        1
+
+dmsf_folders_008:
+  id:             8
+  title:          .Issues
+  project_id:     1
+  dmsf_folder_id: NULL
+  user_id:        1
+  system:         true

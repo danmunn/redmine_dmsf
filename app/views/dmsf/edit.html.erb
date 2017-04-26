@@ -25,7 +25,7 @@
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
-  <% if !@folder.new_record? && User.current.allowed_to?(:folder_manipulation, @project) %>
+  <% if !@folder.new_record? && User.current.allowed_to?(:folder_manipulation, @project) && !@folder.system %>
     <% unless @folder.locked? %>
       <%= link_to(l(:button_lock), lock_dmsf_path(:id => @project, :folder_id => @folder),
         :title => l(:title_lock_file), :class => 'icon icon-lock') %>

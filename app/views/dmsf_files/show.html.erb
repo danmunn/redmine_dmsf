@@ -152,10 +152,8 @@
           <div class="status attribute">
             <%= content_tag :div, l(:label_file), :class => 'label' %>
             <div class="value">
-              <% if revision.dmsf_file.dmsf_folder %>
-                <%= (h("#{revision.dmsf_file.dmsf_folder.dmsf_path_str}/")) %>
-              <% end %>
-              <%= h(revision.name) %>
+              <% path = "#{revision.dmsf_file.dmsf_folder.dmsf_path_str}/" if revision.dmsf_file.dmsf_folder %>
+              <%= h("#{path}#{revision.name}") %>
             </div>
           </div>
           <div class="status attribute">

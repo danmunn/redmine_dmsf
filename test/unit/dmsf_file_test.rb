@@ -208,18 +208,6 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     RedmineDmsf::Webdav::Cache.init_nullcache
   end
 
-  def test_container_project
-    container = @file1.container
-    assert_not_nil container
-    assert container.is_a?(Project)
-  end
-
-  def test_container_issue
-    container = @file7.container
-    assert_not_nil container
-    assert container.is_a?(Issue)
-  end
-
   def test_project_project
     project = @file1.project
     assert_not_nil project

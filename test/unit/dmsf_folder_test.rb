@@ -53,7 +53,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   def test_visiblity
     # The role has got permissions
     User.current = @manager
-    assert_equal 5, DmsfFolder.where(:project_id => 1).count
+    assert_equal 6, DmsfFolder.where(:project_id => 1).count
     assert_equal 5, DmsfFolder.visible.where(:project_id => 1).count
     # The user has got permissions
     User.current = @developer
@@ -65,10 +65,10 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
 
   def test_permissions
     User.current = @developer
-    assert DmsfFolder.permissions(@folder7)
+    assert DmsfFolder.permissions?(@folder7)
     @folder7.dmsf_folder_permissions.where(:object_type => 'User').delete_all
     @folder7.reload
-    assert !DmsfFolder.permissions(@folder7)
+    assert !DmsfFolder.permissions?(@folder7)
   end
 
   def test_delete

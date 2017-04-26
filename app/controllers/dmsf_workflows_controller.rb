@@ -32,7 +32,7 @@ class DmsfWorkflowsController < ApplicationController
   def permissions
     revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id] if params[:dmsf_file_revision_id].present?
     if revision
-      render_403 unless revision.dmsf_file || DmsfFolder.permissions(revision.dmsf_file.dmsf_folder)
+      render_403 unless revision.dmsf_file || DmsfFolder.permissions?(revision.dmsf_file.dmsf_folder)
     end
     true
   end

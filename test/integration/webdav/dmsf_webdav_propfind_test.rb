@@ -322,7 +322,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
   def test_propfind_depth1_on_project1_for_admin_with_cache
     RedmineDmsf::Webdav::Cache.init_testcache
     
-    assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +8 do
+    assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +9 do
       xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
         @admin.merge!({:HTTP_DEPTH => '1'})
       assert_response 207 # MultiStatus
@@ -376,7 +376,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     log_user 'admin', 'admin' # login as admin
     assert !User.current.anonymous?, 'Current user is anonymous'
     
-    assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +8 do
+    assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +9 do
       xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil,
         @admin.merge!({:HTTP_DEPTH => '1'})
       assert_response 207 # MultiStatus

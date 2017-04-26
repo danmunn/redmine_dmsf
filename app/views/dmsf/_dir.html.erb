@@ -20,8 +20,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<td class="dmsf_checkbox"><%= check_box_tag(name, id, false,
-  :title => l(:title_check_for_zip_download_or_email), :id => "subfolder_#{id}") %></td>
+<td class="dmsf_checkbox">
+  <% unless (subfolder && subfolder.system) %>
+    <%= check_box_tag(name, id, false, :title => l(:title_check_for_zip_download_or_email), :id => "subfolder_#{id}") %>
+  <% end %>
+</td>
 <% if DmsfFolder.is_column_on?('id') %>
     <td class="id"><%= link_to(subfolder.id, edit_dmsf_path(:id => project, :folder_id => subfolder)) %></td>
 <% end %>
@@ -68,7 +71,7 @@
     <% end %>
 <% end %>
 <td class="dmsf_buttons">
-  <% if @folder_manipulation_allowed %>
+  <% if @folder_manipulation_allowed && !(subfolder && subfolder.system) %>
     <% if subfolder && subfolder.locked? %>
       <span class="icon"></span>
       <% if subfolder.unlockable? && (!subfolder.locked_for_user? || @force_file_unlock_allowed) %>

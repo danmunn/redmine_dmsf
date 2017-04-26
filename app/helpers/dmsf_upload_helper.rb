@@ -21,20 +21,15 @@
 module DmsfUploadHelper
   include Redmine::I18n
 
-  def self.commit_files_internal(commited_files, container, folder, controller)
+  def self.commit_files_internal(commited_files, project, folder, controller)
     failed_uploads = []
     files = []
-    if container.is_a?(Project)
-      project = container
-    else
-      project = container.project
-    end
     if commited_files && commited_files.is_a?(Hash)
       failed_uploads = []
       commited_files.each_value do |commited_file|
         name = commited_file[:name]
         new_revision = DmsfFileRevision.new
-        file = DmsfFile.visible.find_file_by_name(container, folder, name)
+        file = DmsfFile.visible.find_file_by_name(project, folder, name)
         unless file
           link = DmsfLink.find_link_by_file_name(project, folder, name)
           file = link.target_file if link
@@ -42,8 +37,7 @@ module DmsfUploadHelper
 
         unless file
           file = DmsfFile.new
-          file.container_type = container.class.name.demodulize
-          file.container_id = container.id
+          file.project_id = project.id
           file.name = name
           file.dmsf_folder = folder
           file.notification = Setting.plugin_redmine_dmsf[:dmsf_default_notifications].present?
@@ -119,7 +113,7 @@ module DmsfUploadHelper
           failed_uploads.push(commited_file)
         end
       end
-      if container.is_a?(Project) && ((folder && folder.notification?) || (!folder && project.dmsf_notification?))
+      if ((folder && folder.notification?) || (!folder && project.dmsf_notification?))
         begin
           recipients = DmsfMailer.get_notify_users(project, files)
           recipients.each do |u|

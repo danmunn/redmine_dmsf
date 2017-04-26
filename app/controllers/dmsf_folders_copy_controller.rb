@@ -26,7 +26,7 @@ class DmsfFoldersCopyController < ApplicationController
   before_filter :permissions
 
   def permissions
-    render_403 unless DmsfFolder.permissions(@folder)
+    render_403 unless DmsfFolder.permissions?(@folder)
     true
   end
 

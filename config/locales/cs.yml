@@ -363,5 +363,7 @@ cs:
 
   label_act_as_attachable: Jako příloha
   note_dmsf_act_as_attachable: Umožní přikládat dokumenty k objektům např. úkolům.
+  label_show_system_folders: Zobrazit systémové složky
+  note_dmsf_show_system_folders: Systémové složky jsou složky se specifickým určením, např. pro dokumenty nahrané k úkolům.
 
   label_user_search_add: Vyhledej uživatele pro přidání

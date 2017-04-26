@@ -32,6 +32,7 @@ class DmsfFile < ActiveRecord::Base
 
   include RedmineDmsf::Lockable
 
+  belongs_to :project
   belongs_to :dmsf_folder
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
 
@@ -58,7 +59,7 @@ class DmsfFile < ActiveRecord::Base
   attr_accessible :project, :project_id
 
   def validates_name_uniqueness
-    existing_file = DmsfFile.visible.findn_file_by_name(self.container_id, self.container_type, self.dmsf_folder, self.name)
+    existing_file = DmsfFile.visible.findn_file_by_name(self.project_id, self.dmsf_folder, self.name)
     errors.add(:name, l('activerecord.errors.messages.taken')) unless (existing_file.nil? || existing_file.id == self.id)
   end
 
@@ -120,14 +121,13 @@ class DmsfFile < ActiveRecord::Base
     @@storage_path = path
   end
 
-  def self.find_file_by_name(container, folder, name)
-    self.findn_file_by_name(container.id, container.class.name.demodulize, folder, name)
+  def self.find_file_by_name(project, folder, name)
+    self.findn_file_by_name(project.id, folder, name)
   end
 
-  def self.findn_file_by_name(container_id, container_type, folder, name)
+  def self.findn_file_by_name(project_id, folder, name)
     where(
-      :container_id => container_id,
-      :container_type => container_type,
+      :project_id => project_id,
       :dmsf_folder_id => folder ? folder.id : nil,
       :name => name).visible.first
   end
@@ -249,19 +249,17 @@ class DmsfFile < ActiveRecord::Base
     projects
   end
 
-  def move_to(container, folder)
+  def move_to(project, folder)
     if self.locked_for_user?
       errors[:base] << l(:error_file_is_locked)
       return false
     end
     # Must invalidate source parent folder cache before moving
     RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-    self.container_type = self.container_type
-    self.container_id = container.id
+    self.project_id = project.id
     self.dmsf_folder = folder
     new_revision = self.last_revision.clone
     new_revision.dmsf_file = self
-    project = container.is_a?(Project) ? container : container.project
     new_revision.comment = l(:comment_moved_from, :source => "#{self.project.identifier}:#{self.dmsf_path_str}")
     new_revision.custom_values = []
     self.last_revision.custom_values.each do |cv|
@@ -271,15 +269,14 @@ class DmsfFile < ActiveRecord::Base
     self.save && new_revision.save
   end
 
-  def copy_to(container, folder = nil)
-    copy_to_filename(container, folder, self.name)
+  def copy_to(project, folder = nil)
+    copy_to_filename(project, folder, self.name)
   end
   
-  def copy_to_filename(container, folder=nil, filename)
+  def copy_to_filename(project, folder, filename)
     file = DmsfFile.new
     file.dmsf_folder = folder
-    file.container_type = self.container_type
-    file.container_id = container.id
+    file.project_id = project.id
     file.name = filename
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
     if file.save && self.last_revision
@@ -289,7 +286,6 @@ class DmsfFile < ActiveRecord::Base
       if File.exist? self.last_revision.disk_file
         FileUtils.cp self.last_revision.disk_file, new_revision.disk_file
       end
-      project = container.is_a?(Project) ? container : container.project
       new_revision.comment = l(:comment_copied_from, :source => "#{project.identifier}: #{self.dmsf_path_str}")
       new_revision.custom_values = []
       self.last_revision.custom_values.each do |cv|
@@ -325,8 +321,7 @@ class DmsfFile < ActiveRecord::Base
     project_conditions << Project.allowed_to_condition(user, :view_dmsf_files)
     project_conditions << "#{Project.table_name}.id IN (#{project_ids.join(',')})" if project_ids.present?
 
-    scope = self.visible.joins(:dmsf_file_revisions).joins(
-      "JOIN  #{Project.table_name} ON #{DmsfFile.table_name}.container_id = #{Project.table_name}.id AND #{DmsfFile.table_name}.container_type = 'Project'")
+    scope = self.visible.joins(:dmsf_file_revision).joins(:project)
     scope = scope.limit(options[:limit]) unless options[:limit].blank?
     scope = scope.where(limit_options) unless limit_options.blank?
     scope = scope.where(project_conditions.join(' AND '))
@@ -516,13 +511,11 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def propfind_cache_key
-    if self.container_type == 'Project'
-      if dmsf_folder_id.nil?
-        # File is in project root
-        return "PROPFIND/#{self.container_id}"
-      else
-        return "PROPFIND/#{self.container_id}/#{self.dmsf_folder_id}"
-      end
+    unless dmsf_folder_id
+      # File is in project root
+      return "PROPFIND/#{self.project_id}"
+    else
+      return "PROPFIND/#{self.project_id}/#{self.dmsf_folder_id}"
     end
   end
 
@@ -606,31 +599,6 @@ class DmsfFile < ActiveRecord::Base
     csv
   end
 
-  def project
-    unless @project
-      case self.container_type
-        when 'Project'
-          @project = Project.find_by_id(self.container_id)
-        when 'Issue'
-          issue = Issue.find_by_id(self.container_id)
-          @project = issue.project if issue
-      end
-    end
-    @project
-  end
-
-  def container
-    unless @container
-      case self.container_type
-        when 'Project'
-          @container = Project.find_by_id(self.container_id)
-        when 'Issue'
-          @container = Issue.find_by_id(self.container_id)
-      end
-    end
-    @container
-  end
-
   def thumbnail(options={})
     if image?
       size = options[:size].to_i
@@ -663,6 +631,12 @@ class DmsfFile < ActiveRecord::Base
       end
     end
     l(:title_unlock_file)
+  end
+
+  def container
+    if self.dmsf_folder && self.dmsf_folder.system
+      Issue.where(:id => self.dmsf_folder.title.to_i).first
+    end
   end
 
 end

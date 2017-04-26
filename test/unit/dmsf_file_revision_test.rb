@@ -60,9 +60,8 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   def test_new_storage_filename
     # Create a file.
     f = DmsfFile.new
-    f.container_type = 'Project'
-    f.container_id = 1
-    f.name = "Testfile.txt"
+    f.project_id = 1
+    f.name = 'Testfile.txt'
     f.dmsf_folder = nil
     f.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
     f.save
@@ -74,7 +73,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     r1.dmsf_file = f
     r1.user = User.current
     r1.name = "Testfile.txt"
-    r1.title = DmsfFileRevision.filename_to_title("Testfile.txt")
+    r1.title = DmsfFileRevision.filename_to_title('Testfile.txt')
     r1.description = nil
     r1.comment = nil
     r1.mime_type = nil

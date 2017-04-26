@@ -26,20 +26,47 @@ module RedmineDmsf
         base.send(:include, InstanceMethods)
         base.class_eval do
           unloadable
-          alias_method_chain :copy_from, :dmsf_copy_from
-          has_many :dmsf_files, -> { where(dmsf_folder_id: nil, container_type: 'Issue').order(:name) },
-            :class_name => 'DmsfFile', :foreign_key => 'container_id', :dependent => :destroy
+          before_destroy :delete_system_folder
         end
       end
 
       module InstanceMethods
 
-        def copy_from_with_dmsf_copy_from(arg, options={})
-          copy_from_without_dmsf_copy_from(arg, options)
-          # issue = @copied_from
-          # self.dmsf_files = issue.dmsf_files.map do |dmsf_file|
-          #   dmsf_file.copy_to(self)
-          # end
+        def system_folder(create = false)
+          parent = DmsfFolder.system.where(:project_id => self.project_id, :title => '.Issues').first
+          if create && !parent
+            parent = DmsfFolder.new
+            parent.project_id = self.project_id
+            parent.title = '.Issues'
+            parent.description = 'Documents assigned to issues'
+            parent.user_id = User.anonymous.id
+            parent.system = true
+            parent.save
+          end
+          if parent
+            folder = DmsfFolder.system.where(['project_id = ? AND dmsf_folder_id = ? AND CAST(title AS UNSIGNED) = ?',
+              self.project_id, parent.id, self.id]).first
+            if create && !folder
+              folder = DmsfFolder.new
+              folder.dmsf_folder_id = parent.id
+              folder.project_id = self.project_id
+              folder.title = "#{self.id} - #{self.subject}"
+              folder.user_id = User.anonymous.id
+              folder.system = true
+              folder.save
+            end
+          end
+          folder
+        end
+
+        def dmsf_files
+          folder = self.system_folder
+          folder.dmsf_files if folder
+        end
+
+        def delete_system_folder
+          folder = self.system_folder
+          folder.destroy if folder
         end
 
         def dmsf_file_added(dmsf_file)

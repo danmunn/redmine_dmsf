@@ -33,8 +33,8 @@ module RedmineDmsf
           copied_from = Issue.find_by_id(params[:copy_from]) if params[:copy_from].present?
           # Save documents
           if copied_from
-            issue.dmsf_files = copied_from.dmsf_files.map do |dmsf_file|
-              dmsf_file.copy_to(issue)
+            copied_from.dmsf_files.each do |dmsf_file|
+              dmsf_file.copy_to(issue.project, issue.system_folder(true))
             end
           end
         end
@@ -53,14 +53,15 @@ module RedmineDmsf
           params = context[:params]
           uploaded_files = params[:dmsf_attachments]
           if uploaded_files && uploaded_files.is_a?(Hash)
-            # standard file input uploads
+            system_folder = issue.system_folder(true)
             uploaded_files.each_value do |uploaded_file|
-              upload = DmsfUpload.create_from_uploaded_attachment(issue.project, nil, uploaded_file)
+              upload = DmsfUpload.create_from_uploaded_attachment(issue.project, system_folder, uploaded_file)
               uploaded_file[:disk_filename] = upload.disk_filename
               uploaded_file[:name] = upload.name
               uploaded_file[:title] = upload.title
             end
-            DmsfUploadHelper.commit_files_internal uploaded_files, issue, nil, context[:controller]
+            DmsfUploadHelper.commit_files_internal uploaded_files, issue.project, system_folder,
+             context[:controller]
           end
         end
       end

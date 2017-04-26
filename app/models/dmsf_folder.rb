@@ -50,14 +50,15 @@ class DmsfFolder < ActiveRecord::Base
   AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
   DEFAULT_COLUMNS = %w(title size modified version workflow author).freeze
 
-  scope :visible, -> { joins(:project).joins(
+  scope :visible, -> (system=true) { joins(:project).joins(
     "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
-    :deleted => STATUS_ACTIVE).where(DmsfFolder.visible_condition).distinct
+    :deleted => STATUS_ACTIVE).where(DmsfFolder.visible_condition(system)).distinct
   }
   scope :deleted, -> { joins(:project).joins(
     "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
     :deleted => STATUS_DELETED).where(DmsfFolder.visible_condition).distinct
   }
+  scope :system, -> { where(:system => true) }
 
   acts_as_customizable
 
@@ -83,8 +84,8 @@ class DmsfFolder < ActiveRecord::Base
 
   before_create :default_values
 
-  def self.visible_condition
-    Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
+  def self.visible_condition(system=true)
+    sql = Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
       if user.id && user.logged?
         %{
           (#{DmsfFolderPermission.table_name}.object_id IS NULL) OR
@@ -92,14 +93,16 @@ class DmsfFolder < ActiveRecord::Base
           (#{DmsfFolderPermission.table_name}.object_id = #{user.id} AND #{DmsfFolderPermission.table_name}.object_type = 'User')
         }
       else
-        '0=1'
+        '0 = 1'
       end
     end
+    "#{sql} AND (#{DmsfFolder.table_name}.system = 0 OR 1 = #{(system && Setting.plugin_redmine_dmsf['dmsf_show_system_folders']) ? 1 : 0})"
   end
 
-  def self.permissions(folder)
+  def self.permissions?(folder, allow_system = true)
+    return false if folder && folder.system && (!allow_system || !Setting.plugin_redmine_dmsf['dmsf_show_system_folders'])
     return true if (User.current.admin? || folder.nil?)
-    if !folder.dmsf_folder || permissions(folder.dmsf_folder)
+    if !folder.dmsf_folder || permissions?(folder.dmsf_folder, allow_system)
       if folder.dmsf_folder_permissions.any?
         role_ids = User.current.roles_for_project(folder.project).map{ |r| r.id }
         role_permission_ids = folder.dmsf_folder_permissions.roles.map{ |p| p.object_id }
@@ -205,7 +208,7 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.directory_tree(project, current_folder = nil)
     tree = [[l(:link_documents), nil]]
-    project.dmsf_folders.visible.each do |folder|
+    project.dmsf_folders.visible(false).each do |folder|
       unless folder == current_folder
         tree.push(["...#{folder.title}", folder.id])
         directory_subtree(tree, folder, 2, current_folder)
@@ -316,8 +319,8 @@ class DmsfFolder < ActiveRecord::Base
        self.project_id, self.id, last_update]).maximum(:updated_at)
     last_update = time if time
     time = DmsfFile.where(
-      ['container_id = ? AND container_type = ? AND dmsf_folder_id = ? AND updated_at > ?',
-       self.project_id, 'Project', self.id, last_update]).maximum(:updated_at)
+      ['project_id = ? AND dmsf_folder_id = ? AND updated_at > ?',
+       self.project_id, self.id, last_update]).maximum(:updated_at)
     last_update = time if time
     time = DmsfLink.where(
       ['project_id = ? AND dmsf_folder_id = ? AND updated_at > ?',
@@ -329,7 +332,7 @@ class DmsfFolder < ActiveRecord::Base
   # Number of items in the folder
   def items
     dmsf_folders.visible.where(:project_id => self.project_id).count +
-    dmsf_files.visible.where(:container_id => self.project_id).count +
+    dmsf_files.visible.where(:project_id => self.project_id).count +
     dmsf_links.visible.where(:project_id => self.project_id).count
   end
 
@@ -351,6 +354,10 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def self.get_column_position(column)
+    unless @@dmsf_columns
+      @@dmsf_columns = Setting.plugin_redmine_dmsf['dmsf_columns']
+      @@dmsf_columns = DmsfFolder::DEFAULT_COLUMNS unless columns
+    end
     pos = 0
     # 0 - checkbox
     # 1 - id
@@ -517,7 +524,7 @@ class DmsfFolder < ActiveRecord::Base
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)
-    folder.dmsf_folders.visible.each do |subfolder|
+    folder.dmsf_folders.visible(false).each do |subfolder|
       unless subfolder == current_folder
         tree.push(["#{'...' * level}#{subfolder.title}", subfolder.id])
         directory_subtree(tree, subfolder, level + 1, current_folder)

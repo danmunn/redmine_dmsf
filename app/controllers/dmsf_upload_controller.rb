@@ -36,7 +36,7 @@ class DmsfUploadController < ApplicationController
   accept_api_auth :upload, :commit
 
   def permissions
-    render_403 unless DmsfFolder.permissions(@folder)
+    render_403 unless DmsfFolder.permissions?(@folder)
     true
   end
 
