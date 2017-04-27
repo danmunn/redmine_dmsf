@@ -60,8 +60,6 @@ module DmsfUploadHelper
           next
         end
 
-        commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file[:disk_filename].gsub(/[\/\\]/,'')}"
-
         new_revision.dmsf_file = file
         new_revision.user = User.current
         new_revision.name = name
@@ -75,9 +73,9 @@ module DmsfUploadHelper
         else
           new_revision.increase_version(version)
         end
-        new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
-        new_revision.size = File.size(commited_disk_filepath)
-        new_revision.digest = DmsfFileRevision.create_digest commited_disk_filepath
+        new_revision.mime_type = commited_file[:mime_type]
+        new_revision.size = commited_file[:size]
+        new_revision.digest = DmsfFileRevision.create_digest commited_file[:tempfile_path]
 
         if commited_file[:custom_field_values].present?
           commited_file[:custom_field_values].each_with_index do |v, i|
@@ -98,7 +96,8 @@ module DmsfUploadHelper
         if new_revision.save
           new_revision.assign_workflow(commited_file[:dmsf_workflow_id])
           begin
-            FileUtils.mv(commited_disk_filepath, new_revision.disk_file)
+            FileUtils.mv commited_file[:tempfile_path], new_revision.disk_file
+            FileUtils.chmod 'u=wr,g=r', new_revision.disk_file
             file.set_last_revision new_revision
             files.push(file)
             if file.container.is_a?(Issue)

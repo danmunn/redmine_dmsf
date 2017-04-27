@@ -56,10 +56,15 @@ module RedmineDmsf
             system_folder = issue.system_folder(true)
             uploaded_files.each_value do |uploaded_file|
               upload = DmsfUpload.create_from_uploaded_attachment(issue.project, system_folder, uploaded_file)
-              uploaded_file[:disk_filename] = upload.disk_filename
-              uploaded_file[:name] = upload.name
-              uploaded_file[:title] = upload.title
-              uploaded_file[:version] = 1
+              if upload
+                uploaded_file[:disk_filename] = upload.disk_filename
+                uploaded_file[:name] = upload.name
+                uploaded_file[:title] = upload.title
+                uploaded_file[:version] = 1
+                uploaded_file[:size] = upload.size
+                uploaded_file[:mime_type] = upload.mime_type
+                uploaded_file[:tempfile_path] = upload.tempfile_path
+              end
             end
             DmsfUploadHelper.commit_files_internal uploaded_files, issue.project, system_folder,
              context[:controller]

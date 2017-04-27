@@ -129,10 +129,12 @@ class DmsfFilesController < ApplicationController
           end
         else
           upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, file_upload)
-          revision.size = upload.size
-          revision.disk_filename = revision.new_storage_filename
-          revision.mime_type = upload.mime_type
-          revision.digest = DmsfFileRevision.create_digest upload.disk_file
+          if upload
+            revision.size = upload.size
+            revision.disk_filename = revision.new_storage_filename
+            revision.mime_type = upload.mime_type
+            revision.digest = DmsfFileRevision.create_digest upload.disk_file
+          end
         end
 
         # Custom fields

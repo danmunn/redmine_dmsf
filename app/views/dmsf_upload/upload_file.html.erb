@@ -19,8 +19,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
 
-{"original_filename":"<%= (@tempfile.original_filename).html_safe %>", 
-  "content_type":"<%= (@tempfile.content_type.gsub('"', '')).html_safe %>",
-  "disk_filename":"<%= (@disk_filename).html_safe %>"}
+{
+  "original_filename":"<%= @tempfile.original_filename.html_safe %>",
+  "content_type":     "<%= @tempfile.content_type.gsub('"', '').html_safe %>",
+  "disk_filename":    "<%= @disk_filename.html_safe %>",
+  "tempfile_path":    "<%= @tempfile.path.html_safe %>"
+}

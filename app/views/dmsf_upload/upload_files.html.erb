@@ -41,7 +41,6 @@
     <% else %>
       <%= render(:partial => 'upload_file', :locals => {:upload => upload, :i => i}) %>
     <% end %>
-    <% i += 1 %>
   <% end %>
   <%= submit_tag l(:submit_commit) %>
 <% end %>

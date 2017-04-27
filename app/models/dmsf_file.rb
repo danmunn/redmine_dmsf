@@ -85,12 +85,10 @@ class DmsfFile < ActiveRecord::Base
     :date_column => "#{table_name}.updated_at"
 
   before_create :default_values
+
   def default_values
-    @notifications = Setting.plugin_redmine_dmsf['dmsf_default_notifications']
-    if @notifications == '1'
+    if (Setting.plugin_redmine_dmsf['dmsf_default_notifications'] == '1') && (!self.dmsf_folder || !self.dmsf_folder.system)
       self.notification = true
-    else
-      self.notification = nil
     end
   end
 

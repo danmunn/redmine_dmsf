@@ -68,30 +68,7 @@ class DmsfUploadController < ApplicationController
       return
     end
     @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
-    target = "#{DmsfHelper.temp_dir}/#{@disk_filename}"
-    begin
-      FileUtils.cp @tempfile.path, target
-      FileUtils.chmod 'u=wr,g=r', target
-    rescue Exception => e
-      Rails.logger.error e.message
-    end
-    if File.size(target) <= 0
-      begin
-        File.delete target
-      rescue Exception => e
-        Rails.logger.error e.message
-      end
-      render :layout => nil, :json => { :jsonrpc => '2.0',
-        :error => {
-          :code => 103,
-          :message => l(:header_minimum_filesize),
-          :details => l(:error_minimum_filesize,
-          :file => @tempfile.original_filename.to_s)
-        }
-      }
-    else
-      render :layout => false
-    end
+    render :layout => false
   end
 
   # REST API document upload
@@ -133,7 +110,7 @@ class DmsfUploadController < ApplicationController
       uploaded_files = attachments.select { |key, value| key == 'uploaded_file'}
       uploaded_files.each_value do |uploaded_file|
         upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
-        uploaded_file[:disk_filename] = upload.disk_filename
+        uploaded_file[:disk_filename] = upload.disk_filename if upload
       end
       commit_files_internal uploaded_files
     end

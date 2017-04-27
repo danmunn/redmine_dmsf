@@ -128,6 +128,10 @@
                     .attr('name', 'uploaded[' + dmsfFileFieldCount + '][original_filename]')
                     .val(responseObject.original_filename);
             uploader.append(original_filename_input);
+            var tempfile_path = $('<input/>').attr('type', 'hidden')
+                .attr('name', 'uploaded[' + dmsfFileFieldCount + '][tempfile_path]')
+                .val(responseObject.tempfile_path);
+            uploader.append(tempfile_path);
           } else {
               file.status = plupload.FAILED;              
               pluploader.trigger('UploadProgress', file);
