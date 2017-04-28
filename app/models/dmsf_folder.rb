@@ -338,7 +338,7 @@ class DmsfFolder < ActiveRecord::Base
   def self.is_column_on?(column)
     unless @@dmsf_columns
       @@dmsf_columns = Setting.plugin_redmine_dmsf['dmsf_columns']
-      @@dmsf_columns = DmsfFolder::DEFAULT_COLUMNS unless columns
+      @@dmsf_columns = DmsfFolder::DEFAULT_COLUMNS unless @@dmsf_columns
     end
     @@dmsf_columns.include? column
   end
@@ -353,7 +353,7 @@ class DmsfFolder < ActiveRecord::Base
   def self.get_column_position(column)
     unless @@dmsf_columns
       @@dmsf_columns = Setting.plugin_redmine_dmsf['dmsf_columns']
-      @@dmsf_columns = DmsfFolder::DEFAULT_COLUMNS unless columns
+      @@dmsf_columns = DmsfFolder::DEFAULT_COLUMNS unless @@dmsf_columns
     end
     pos = 0
     # 0 - checkbox
