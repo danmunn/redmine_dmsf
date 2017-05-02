@@ -57,40 +57,64 @@ xpdf, antiword, ...
 
 From Omega documentation:
 
-    * PDF (.pdf) if pdftotext is available (comes with xpdf)  
-    * PostScript (.ps, .eps, .ai) if ps2pdf (from ghostscript) and pdftotext (comes with xpdf) are available  
-    * OpenOffice/StarOffice documents (.sxc, .stc, .sxd, .std, .sxi, .sti, .sxm, .sxw, .sxg, .stw) if unzip is available.
-    * OpenDocument format documents (.odt, .ods, .odp, .odg, .odc, .odf, .odb, .odi, .odm, .ott, .ots, .otp, .otg, .otc, .otf, .oti, .oth) if unzip is available  
-    * MS Word documents (.doc, .dot) if antiword is available  
-    * MS Excel documents (.xls, .xlb, .xlt) if xls2csv is available (comes with catdoc)  
-    * MS Powerpoint documents (.ppt, .pps) if catppt is available (comes with catdoc)  
-    * MS Office 2007 documents (.docx, .dotx, .xlsx, .xlst, .pptx, .potx, .ppsx) if unzip is available  
-    * Wordperfect documents (.wpd) if wpd2text is available (comes with libwpd)  
-    * MS Works documents (.wps, .wpt) if wps2text is available (comes with libwps)  
-    * AbiWord documents (.abw)  
-    * Compressed AbiWord documents (.zabw) if gzip is available  
-    * Rich Text Format documents (.rtf) if unrtf is available  
-    * Perl POD documentation (.pl, .pm, .pod) if pod2text is available  
-    * TeX DVI files (.dvi) if catdvi is available  
-    * DjVu files (.djv, .djvu) if djvutxt is available  
-    * XPS files (.xps) if unzip is available
+   * HTML (.html, .htm, .shtml, .shtm, .xhtml, .xhtm)
+   * PHP (.php) - our HTML parser knows to ignore PHP code
+   * text files (.txt, .text)
+   * SVG (.svg)
+   * CSV (Comma-Separated Values) files (.csv)
+   * PDF (.pdf) if pdftotext is available (comes with poppler or xpdf)
+   * PostScript (.ps, .eps, .ai) if ps2pdf (from ghostscript) and pdftotext (comes with poppler or xpdf) are available
+   * OpenOffice/StarOffice documents (.sxc, .stc, .sxd, .std, .sxi, .sti, .sxm, .sxw, .sxg, .stw) if unzip is available
+   * OpenDocument format documents (.odt, .ods, .odp, .odg, .odc, .odf, .odb, .odi, .odm, .ott, .ots, .otp, .otg, .otc, .otf, .oti, .oth) if unzip is available
+   * MS Word documents (.dot) if antiword is available (.doc files are left to libmagic, as they may actually be RTF (AbiWord saves RTF when asked to save as .doc, and Microsoft Word quietly loads RTF files with a .doc extension), or plain-text).
+   * MS Excel documents (.xls, .xlb, .xlt, .xlr, .xla) if xls2csv is available (comes with catdoc)
+   * MS Powerpoint documents (.ppt, .pps) if catppt is available (comes with catdoc)
+   * MS Office 2007 documents (.docx, .docm, .dotx, .dotm, .xlsx, .xlsm, .xltx, .xltm, .pptx, .pptm, .potx, .potm, .ppsx, .ppsm) if unzip is available
+   * Wordperfect documents (.wpd) if wpd2text is available (comes with libwpd)
+   * MS Works documents (.wps, .wpt) if wps2text is available (comes with libwps)
+   * MS Outlook message (.msg) if perl with Email::Outlook::Message and HTML::Parser modules is available
+   * MS Publisher documents (.pub) if pub2xhtml is available (comes with libmspub)
+   * AbiWord documents (.abw)
+   * Compressed AbiWord documents (.zabw)
+   * Rich Text Format documents (.rtf) if unrtf is available
+   * Perl POD documentation (.pl, .pm, .pod) if pod2text is available
+   * reStructured text (.rst, .rest) if rst2html is available (comes with docutils)
+   * Markdown (.md, .markdown) if markdown is available
+   * TeX DVI files (.dvi) if catdvi is available
+   * DjVu files (.djv, .djvu) if djvutxt is available
+   * XPS files (.xps) if unzip is available
+   * Debian packages (.deb, .udeb) if dpkg-deb is available
+   * RPM packages (.rpm) if rpm is available
+   * Atom feeds (.atom)
+   * MAFF (.maff) if unzip is available
+   * MHTML (.mhtml, .mht) if perl with MIME::Tools is available
+   * MIME email messages (.eml) and USENET articles if perl with MIME::Tools and HTML::Parser is available
+   * vCard files (.vcf, .vcard) if perl with Text::vCard is available
+    
+You can use following commands to install some of the required indexing tools:    
 
 On Debian use:
 
-```sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils \
+```
+sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils \
  antiword unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi \
- djview djview3 uuid uuid-dev xz-utils```
+ djview djview3 uuid uuid-dev xz-utils libemail-outlook-message-perl
+```
 
 On Ubuntu use:
 
-```sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils antiword \
+```
+sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils antiword \
  unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi djview djview3 \
- uuid uuid-dev xz-utils```
+ uuid uuid-dev xz-utils libemail-outlook-message-perl
+```
 
-On CentOS user:
-```sudo yum install xapian-omega libxapian-dev xpdf poppler-utils antiword \
+On CentOS use:
+```
+sudo yum install xapian-omega libxapian-dev xpdf poppler-utils antiword \
  unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi djview djview3 \
- uuid uuid-dev xz```
+ uuid uuid-dev xz libemail-outlook-message-perl
+```
 
 Usage
 -----
