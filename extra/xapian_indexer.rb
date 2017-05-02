@@ -89,7 +89,8 @@ MIME_TYPES = {
   'application/vnd.openxmlformats-officedocument.presentationml.slideshow' => 'ppsx',
   'application/vnd.oasis.opendocument.spreadsheet' => 'ods',
   'application/vnd.oasis.opendocument.text' => 'odt',
-  'application/vnd.oasis.opendocument.presentation' => 'odp'
+  'application/vnd.oasis.opendocument.presentation' => 'odp',
+  'application/javascript'
 }.freeze
 
 
@@ -190,9 +191,7 @@ end
 
 def supported_mime_type(entry)
   mtype = Redmine::MimeType.of(entry)
-  included = false
-  included = MIME_TYPES.include?(mtype) || mtype.split('/').first.eql?('text') unless mtype.nil?  
-  return included
+  MIME_TYPES.include?(mtype) || Redmine::MimeType.is_type?('text', mtype)
 end
 
 def add_log(repository, changeset, status, message = nil)
@@ -368,7 +367,7 @@ def add_or_update_index(databasepath, indexconf, project, repository, identifier
   uri = generate_uri(project, repository, identifier, path)
   return unless uri
   text = nil
-  if Redmine::MimeType.is_type?('text', path) || (%(js msg eml).include?(type))
+  if Redmine::MimeType.is_type?('text', path) || (%(js).include?(type))
     text = repository.cat(path, identifier)
   else
     fname = path.split('/').last.tr(' ', '_')
