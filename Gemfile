@@ -27,7 +27,6 @@ gem 'zip-zip'
 gem 'simple_enum'
 gem 'uuidtools'
 gem 'dav4rack'
-gem 'dalli'
 
 group :xapian do
   gem 'xapian-full-alaveteli', :require => false
