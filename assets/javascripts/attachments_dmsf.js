@@ -42,7 +42,7 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
                     maxlength: 255,
                     placeholder: $(inputEl).data('description-placeholder')
                 }).toggle(!eagerUpload),
-                $('<a>&nbsp</a>').attr({href: "#", 'class': 'remove-upload'}).click(dmsfRemoveFile).toggle(!eagerUpload)
+                $('<a>&nbsp</a>').attr({href: "#", 'class': 'remove-upload icon icon-del'}).click(dmsfRemoveFile).toggle(!eagerUpload)
             ).appendTo('#dmsf_attachments_fields');
         }
         else{
@@ -234,3 +234,6 @@ function dmsfSetupFileDrop() {
 }
 
 $(document).ready(dmsfSetupFileDrop);
+$(document).on("erui_new_dom", function() {
+    dmsfSetupFileDrop();
+});

@@ -26,7 +26,7 @@
     <span id="dmsf_attachments_p<%= i %>">
       <%= text_field_tag("dmsf_attachments[p#{i}][filename]", attachment.filename, :class => 'filename') +
               text_field_tag("dmsf_attachments[p#{i}][description]", attachment.description, :maxlength => 255, :placeholder => l(:label_optional_description), :class => 'description') +
-              link_to('&nbsp;'.html_safe, dmsf_attachment_path(attachment, :attachment_id => "p#{i}", :format => 'js'), :method => 'delete', :remote => true, :class => 'remove-upload') %>
+              link_to('&nbsp;'.html_safe, dmsf_attachment_path(attachment, :attachment_id => "p#{i}", :format => 'js'), :method => 'delete', :remote => true, :class => 'remove-upload icon icon-del') %>
       <%= hidden_field_tag "dmsf_attachments[p#{i}][token]", "#{attachment.token}" %>
     </span>
   <% end %>

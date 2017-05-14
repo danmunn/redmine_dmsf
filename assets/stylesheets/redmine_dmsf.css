@@ -121,6 +121,11 @@
 	font-size: 0.9em;
 }
 
+.dmsf_uploader span[id*="dmsf_attachments"] .filename {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
 /* Approval workflow */
 #admin-menu a.dmsf-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 #dmsf_users_for_delegate { height: 200px; overflow:auto; }
