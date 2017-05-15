@@ -68,6 +68,14 @@
 	padding: 0;
 }
 
+table.display thead th div.DataTables_sort_wrapper {
+    position: unset;
+}
+
+table.display thead th div.DataTables_sort_wrapper span {
+    z-index: 1;
+}
+
 .dmsf_entries {
 	margin-bottom: 10px;
 	display: block;
