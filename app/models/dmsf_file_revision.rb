@@ -104,7 +104,7 @@ class DmsfFileRevision < ActiveRecord::Base
       d.save!
     end
     if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
-      dependencies = DmsfFileRevision.where(:disk_filename => self.disk_filename).all.count
+      dependencies = DmsfFileRevision.where(:disk_filename => self.disk_filename).count
       File.delete(self.disk_file) if dependencies <= 1 && File.exist?(self.disk_file)
     end
     RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
