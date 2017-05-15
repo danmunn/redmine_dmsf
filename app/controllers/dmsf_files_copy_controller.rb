@@ -30,7 +30,7 @@ class DmsfFilesCopyController < ApplicationController
 
   def permissions
     if @file
-      render_403 unless DmsfFolder.permissions(@file.dmsf_folder)
+      render_403 unless DmsfFolder.permissions?(@file.dmsf_folder)
     end
     true
   end
