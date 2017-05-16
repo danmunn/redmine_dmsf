@@ -711,14 +711,15 @@ class DmsfController < ApplicationController
         @url_links = []
       else
         if @folder
-          @subfolders = @folder.dmsf_folders.visible
+          @subfolders = @folder.dmsf_folders.visible.to_a
           @files = @folder.dmsf_files.visible
           @dir_links = @folder.folder_links.visible
           @file_links = @folder.file_links.visible
           @url_links = @folder.url_links.visible
           @locked_for_user = @folder.locked_for_user?
         else
-          @subfolders = @project.dmsf_folders.visible
+          Rails.logger.info ">>> #{@project.dmsf_folders.visible.to_sql}"
+          @subfolders = @project.dmsf_folders.visible.to_a
           @files = @project.dmsf_files.visible
           @dir_links = @project.folder_links.visible
           @file_links = @project.file_links.visible
@@ -726,6 +727,20 @@ class DmsfController < ApplicationController
           @locked_for_user = false
         end
       end
+      # Remove system folders you are not allowed to see because you are not allowed to see the issue
+      @subfolders.delete_if{ |folder|
+        if folder.system
+          issue_id = folder.title.to_i
+          if issue_id > 0
+            issue = Issue.find_by_id issue_id
+            issue && !issue.visible?(User.current)
+          else
+            false
+          end
+        else
+          false
+        end
+      }
     end
 
     @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].present? ? Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'] : 100

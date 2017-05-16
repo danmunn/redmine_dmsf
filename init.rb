@@ -99,6 +99,8 @@ Redmine::Plugin.register :redmine_dmsf do
     permission :manage_workflows, 
       { :dmsf_workflows => [:index, :new, :create, :destroy, :show, :new_step, :add_step, :remove_step, :reorder_steps,
         :update, :update_step, :delete_step, :edit] }
+    permission :display_system_folders,
+      :read => true
   end   
   
   # Administration menu extension

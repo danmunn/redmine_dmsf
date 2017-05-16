@@ -153,6 +153,7 @@ hu:
   permission_force_file_unlock: Fájl kényszerített feloldása
   permission_manage_workflows: Munkamenet kezelése
   permission_file_delete: Dokumentumok törlése
+  permission_display_system_folders: Display system folders
   label_file: Fájl
   field_folder: Mappa
   error_create_cycle_in_folder_dependency: hurok létrehozása a könyvtárstruktúrában
@@ -362,7 +363,5 @@ hu:
 
   label_act_as_attachable: Act as attachable
   note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
-  label_show_system_folders: Show system folders
-  note_dmsf_show_system_folders: System folders are folders with a specifics purpose, e.g. for documents attached to issues.
 
   label_user_search_add: Search for user to add

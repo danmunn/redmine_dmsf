@@ -85,23 +85,35 @@ class DmsfFolder < ActiveRecord::Base
   before_create :default_values
 
   def self.visible_condition(system=true)
-    sql = Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
+    Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
       if user.id && user.logged?
         %{
-          (#{DmsfFolderPermission.table_name}.object_id IS NULL) OR
-          (#{DmsfFolderPermission.table_name}.object_id = #{role.id} AND #{DmsfFolderPermission.table_name}.object_type = 'Role') OR
-          (#{DmsfFolderPermission.table_name}.object_id = #{user.id} AND #{DmsfFolderPermission.table_name}.object_type = 'User')
+          ((#{DmsfFolderPermission.table_name}.object_id IS NULL) OR
+          ((#{DmsfFolderPermission.table_name}.object_id = #{role.id} AND #{DmsfFolderPermission.table_name}.object_type = 'Role')) OR
+          ((#{DmsfFolderPermission.table_name}.object_id = #{user.id} AND #{DmsfFolderPermission.table_name}.object_type = 'User'))) AND
+          ((#{DmsfFolder.table_name}.system = 0 OR 1 = #{(system && role.allowed_to?(:display_system_folders)) ? 1 : 0}))
         }
       else
         '0 = 1'
       end
     end
-    "#{sql} AND (#{DmsfFolder.table_name}.system = 0 OR 1 = #{(system && Setting.plugin_redmine_dmsf['dmsf_show_system_folders']) ? 1 : 0})"
   end
 
   def self.permissions?(folder, allow_system = true)
-    return false if folder && folder.system && (!allow_system || !Setting.plugin_redmine_dmsf['dmsf_show_system_folders'])
+    # Administrator?
     return true if (User.current.admin? || folder.nil?)
+    # System folder?
+    if folder && folder.system
+      if (!allow_system || !User.current.allowed_to?(:display_system_folders, folder.project))
+        return false
+      end
+      issue_id = folder.title.to_i
+      if issue_id > 0
+        issue = Issue.find_by_id issue_id
+        return false unless issue && issue.visible?(User.current)
+      end
+    end
+    # Permissions?
     if !folder.dmsf_folder || permissions?(folder.dmsf_folder, allow_system)
       if folder.dmsf_folder_permissions.any?
         role_ids = User.current.roles_for_project(folder.project).map{ |r| r.id }

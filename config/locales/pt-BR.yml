@@ -154,6 +154,7 @@ pt-BR:
   permission_force_file_unlock: Force file unlock
   permission_manage_workflows: Manage workflows
   permission_file_delete: Delete documents
+  permission_display_system_folders: Display system folders
   label_file: Arquivo
   field_folder: Pasta
   error_create_cycle_in_folder_dependency: Dependência entre pastas
@@ -363,7 +364,5 @@ pt-BR:
 
   label_act_as_attachable: Act as attachable
   note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
-  label_show_system_folders: Show system folders
-  note_dmsf_show_system_folders: System folders are folders with a specifics purpose, e.g. for documents attached to issues.
 
   label_user_search_add: Search for user to add

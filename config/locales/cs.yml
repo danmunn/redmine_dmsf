@@ -154,6 +154,7 @@ cs:
   permission_force_file_unlock: Vynucené odemknutí souboru
   permission_manage_workflows: Spravovat schvalovací procesy
   permission_file_delete: Mazat dokumenty
+  permission_display_system_folders: Zobrazit systémové adresáře
   label_file: Soubor
   field_folder: Složka
   error_create_cycle_in_folder_dependency: vytvořit smyčku v závislostech složky
@@ -363,7 +364,5 @@ cs:
 
   label_act_as_attachable: Jako příloha
   note_dmsf_act_as_attachable: Umožní přikládat dokumenty k objektům např. úkolům.
-  label_show_system_folders: Zobrazit systémové složky
-  note_dmsf_show_system_folders: Systémové složky jsou složky se specifickým určením, např. pro dokumenty nahrané k úkolům.
 
   label_user_search_add: Vyhledej uživatele pro přidání
