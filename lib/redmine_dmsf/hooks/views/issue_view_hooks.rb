@@ -34,7 +34,7 @@ module RedmineDmsf
             html << '<p>'
             html << "<label>#{l(:label_document_plural)}</label>"
             html << context[:controller].send(:render_to_string,
-              {:partial => 'dmsf_upload/form', :locals => { :multiple => true }})
+              {:partial => 'dmsf_upload/form', :locals => { :container => issue, :multiple => true }})
             html << '</p>'
             html << '</div>'
             html.html_safe

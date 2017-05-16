@@ -24,6 +24,10 @@ module RedmineDmsf
     
     class ControllerIssuesHook < RedmineDmsf::Hooks::Listener
 
+      def controller_issues_new_before_save(context={})
+        controller_issues_before_save(context)
+      end
+
       def controller_issues_new_after_save(context={})
         controller_issues_after_save(context)
         # Copy documents from the source issue
@@ -40,11 +44,23 @@ module RedmineDmsf
         end
       end
 
+      def controller_issues_edit_before_save(context={})
+        controller_issues_before_save(context)
+      end
+
       def controller_issues_edit_after_save(context={})
         controller_issues_after_save(context)
       end
 
       private
+
+      def controller_issues_before_save(context)
+        if context.is_a?(Hash)
+          issue = context[:issue]
+          params = context[:params]
+          issue.save_dmsf_attachments(params[:dmsf_attachments])
+        end
+      end
 
       def controller_issues_after_save(context)
         # Create attached documents

@@ -32,6 +32,19 @@ module RedmineDmsf
 
       module InstanceMethods
 
+        def save_dmsf_attachments(dmsf_attachments)
+          @saved_dmsf_attachments = []
+          dmsf_attachments = dmsf_attachments.map(&:last)
+          dmsf_attachments.each do |dmsf_attachment|
+            a = Attachment.find_by_token(dmsf_attachment[:token])
+            @saved_dmsf_attachments << a if a
+          end
+        end
+
+        def saved_dmsf_attachments
+          @saved_dmsf_attachments || []
+        end
+
         def system_folder(create = false)
           parent = DmsfFolder.system.where(:project_id => self.project_id, :title => '.Issues').first
           if create && !parent

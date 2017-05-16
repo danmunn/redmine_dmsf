@@ -21,8 +21,8 @@
 %>
 
 <span id="dmsf_attachments_fields">
-<% if defined?(container) && container && container.saved_attachments %>
-  <% container.saved_attachments.each_with_index do |attachment, i| %>
+<% if defined?(container) && container && container.saved_dmsf_attachments %>
+  <% container.saved_dmsf_attachments.each_with_index do |attachment, i| %>
     <span id="dmsf_attachments_p<%= i %>">
       <%= text_field_tag("dmsf_attachments[p#{i}][filename]", attachment.filename, :class => 'filename') +
               text_field_tag("dmsf_attachments[p#{i}][description]", attachment.description, :maxlength => 255, :placeholder => l(:label_optional_description), :class => 'description') +
