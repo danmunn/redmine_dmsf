@@ -104,14 +104,8 @@ class DmsfFolder < ActiveRecord::Base
     return true if (User.current.admin? || folder.nil?)
     # System folder?
     if folder && folder.system
-      if (!allow_system || !User.current.allowed_to?(:display_system_folders, folder.project))
-        return false
-      end
-      issue_id = folder.title.to_i
-      if issue_id > 0
-        issue = Issue.find_by_id issue_id
-        return false unless issue && issue.visible?(User.current)
-      end
+      return false if (!allow_system || !User.current.allowed_to?(:display_system_folders, folder.project))
+      return false unless self.issue && self.issue.visible?(User.current)
     end
     # Permissions?
     if !folder.dmsf_folder || permissions?(folder.dmsf_folder, allow_system)
@@ -528,6 +522,16 @@ class DmsfFolder < ActiveRecord::Base
       end
     end
     l(:title_unlock_file)
+  end
+
+  def issue
+    unless @issue
+      if self.system
+        issue_id = self.title.to_i
+        @issue = Issue.find_by_id(issue_id) if issue_id > 0
+      end
+    end
+    @issue
   end
 
   private

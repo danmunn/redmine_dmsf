@@ -20,6 +20,7 @@
 
     <% if obj.is_a? DmsfFolder %>
         <% classes << ' dmsf_system' if obj.system %>
+        <% classes << ' dmsf_system_closed' if obj.issue && obj.issue.closed? %>
         <tr <%= id %> class="dir <%= classes %>">
           <%= render(:partial => 'dir',
                      :locals => {

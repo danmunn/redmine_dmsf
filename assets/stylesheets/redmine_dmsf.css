@@ -208,6 +208,7 @@ div.dmsf_revision_inner_box .attribute .label {
 /* File types */
 .dmsf_gray .icon-folder { background-image: url(../images/folder_gray.png); }
 .dmsf_system .icon-folder { background-image: url(../images/folder_system.png); }
+.dmsf_system_closed .icon-folder { background-image: url(../images/folder_system_closed.png); }
 
 .icon-file.filetype-doc, .icon-file.filetype-docx { background-image: url(../images/filetypes/doc.png); }
 .icon-file.filetype-xls, .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls.png); }

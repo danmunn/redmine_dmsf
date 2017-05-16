@@ -65,7 +65,7 @@
   </thead>
   <tbody>
   <% @subfolders.each do |subfolder| %>
-    <tr class="dir <%= 'dmsf_system' if subfolder.system %>">
+    <tr class="dir <%= 'dmsf_system' if subfolder.system %> <%= 'dmsf_system_closed' if subfolder.issue && subfolder.issue.closed? %>">
       <%= render(:partial => 'dir',
         :locals => {
           :project => @project,
