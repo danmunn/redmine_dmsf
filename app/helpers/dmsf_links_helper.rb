@@ -37,6 +37,18 @@ module DmsfLinksHelper
   # An integer test
   def self.is_a_number?(s)
     s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
-  end   
+  end
+
+  def files_for_select(project_id, folder_id)
+    files = []
+    if folder_id && (folder_id != '0')
+      folder = DmsfFolder.find_by_id folder_id
+      files = folder.dmsf_files.visible.to_a if folder
+    elsif project_id
+      project = Project.find_by_id project_id
+      files = project.dmsf_files.visible.to_a if project
+    end
+    files
+  end
     
 end

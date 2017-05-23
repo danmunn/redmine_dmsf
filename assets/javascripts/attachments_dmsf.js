@@ -19,6 +19,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+function dmsfAddLink(linksSpan, linkId, linkName) {
+
+    if (linksSpan.children().length < 10) {
+
+        var nextLinkId = dmsfAddLink.nextLinkId++;
+        var linkSpan = $('<span>', { id: 'dmsf_links_' + nextLinkId });
+
+        linkSpan.append(
+            "<input name='dmsf_links[" + nextLinkId + "]' value='" + linkId + "' type='hidden'>",
+            "<input type='text' class='filename readonly' value='" + linkName + "'>",
+            $('<a>&nbsp;</a>').attr({href: "#", 'class': 'remove-upload icon icon-del'}).click(dmsfRemoveFile),
+            "<br/>"
+        ).appendTo(linksSpan);
+    }
+}
+
+dmsfAddLink.nextLinkId = 1000;
+
 function dmsfAddFile(inputEl, file, eagerUpload) {
 
     if ($('#dmsf_attachments_fields').children().length < 10) {

@@ -59,6 +59,7 @@ module RedmineDmsf
           issue = context[:issue]
           params = context[:params]
           issue.save_dmsf_attachments(params[:dmsf_attachments])
+          issue.save_dmsf_links(params[:dmsf_links])
         end
       end
 
@@ -84,6 +85,21 @@ module RedmineDmsf
             end
             DmsfUploadHelper.commit_files_internal uploaded_files, issue.project, system_folder,
              context[:controller]
+          end
+          dmsf_links = params[:dmsf_links]
+          if dmsf_links && dmsf_links.is_a?(Hash)
+            system_folder = issue.system_folder(true)
+            ids = dmsf_links.map(&:last)
+            ids.each do |id|
+              l = DmsfLink.find_by_id(id)
+              if l
+                l.project_id = system_folder.project_id
+                l.dmsf_folder_id = system_folder.id
+                if l.save
+                  issue.dmsf_file_added l.target_file
+                end
+              end
+            end
           end
         end
       end

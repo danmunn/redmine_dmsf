@@ -18,10 +18,11 @@
 
 desc <<-END_DESC
 DMSF maintenance task
-  * Remove all files and folders with no database record from the document directory
+  * Remove all files with no database record from the document directory
+  * Remove all links project_id = -1 (added links to an issue which hasn't been created)
 
 Available options:
-  *dry_run - No physical deletion but to list of all unused files and folders only
+  *dry_run - No physical deletion but to list of all unused files only
 
 Example:
   rake redmine:dmsf_maintenance RAILS_ENV="production"
@@ -34,7 +35,7 @@ namespace :redmine do
     begin
       STDERR.puts "\n"
       Dir.chdir(DmsfFile.storage_path)       
-      m.files      
+      m.files
       if m.dry_run
         m.result
       else
@@ -54,54 +55,41 @@ class DmsfMaintenance
   
   def initialize
     @dry_run = ENV['dry_run']
-    @folders_to_delete = Array.new
     @files_to_delete = Array.new
   end 
   
   def files        
     Dir.glob("**/*").each do |f|      
-      if Dir.exist?(f)
-        check_dir f
-      else
+      unless Dir.exist?(f)
         check_file f
       end      
     end   
   end
   
-  def result    
-    if (@files_to_delete.count == 0) && (@folders_to_delete.count == 0)
-      puts "\nNo orphens!\n\n"
-      return
-    end
+  def result
     # Files    
     size = 0
     @files_to_delete.each{ |f| size += File.size(f) }    
-    puts "\n#{@files_to_delete.count} files havn't got a coresponding revision and can be deleted"
-    puts "#{number_to_human_size(size)} can be released\n\n"
-    
-    # Projects    
-    puts "\n#{@folders_to_delete.count} directories havn't got coresponding projects and can be deleted\n\n" if(@folders_to_delete.count > 0)
+    puts "\n#{@files_to_delete.count} files havn't got a coresponding revision and can be deleted."
+    puts "#{number_to_human_size(size)} can be released.\n\n"
+    # Links
+    size = DmsfLink.where(:project_id => -1).count
+    puts "#{size} links can be deleted.\n\n"
   end
   
-  def clean  
-    if (@files_to_delete.count == 0) && (@folders_to_delete.count == 0)
-      puts "\nNo orphens!\n\n"
-      return
-    end
+  def clean
     # Files    
     size = 0
     @files_to_delete.each do |f|            
       size += File.size(f)
       File.delete f
     end 
-    puts "\n#{@files_to_delete.count} files hadn't got a coresponding revision and have been be deleted" if(@files_to_delete.count > 0)
-    puts "#{number_to_human_size(size)} has been released\n\n" if(@files_to_delete.count > 0)
-    
-    # Projects    
-    @folders_to_delete.each do |d|      
-      Dir.delete d
-    end
-    puts "\n#{@folders_to_delete.count} directories hadn't got a coresponding projects and have been deleted\n\n" if(@folders_to_delete.count > 0)
+    puts "\n#{@files_to_delete.count} files hadn't got a coresponding revision and have been be deleted."
+    puts "#{number_to_human_size(size)} has been released\n\n"
+    # Links
+    size = DmsfLink.where(:project_id => -1).count
+    DmsfLink.delete_all(:project_id => -1)
+    puts "#{size} links have been deleted.\n\n"
   end
   
   private
@@ -117,19 +105,6 @@ class DmsfMaintenance
     else
       STDERR.puts "\t#{file} doesn't seem to be a DMSF file!"
     end
-  end
-  
-  def check_dir(directory)   
-    name = Pathname.new(directory).basename.to_s
-    if name =~ /^p_(.*)/      
-      p = Project.find_by_identifier $1
-      unless p
-        @folders_to_delete << name 
-        puts "\t#{name}"
-      end
-    else
-      STDERR.puts "\t#{directory} doesn't seem to be a DMSF folder!"
-    end             
   end
 
 end

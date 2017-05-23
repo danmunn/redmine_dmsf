@@ -210,7 +210,10 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def self.directory_tree(project, current_folder = nil)
-    tree = [[l(:link_documents), nil]]
+    unless project.is_a? Project
+      project = Project.find_by_id project
+    end
+    tree = [[l(:link_documents), 0]]
     project.dmsf_folders.visible(false).each do |folder|
       unless folder == current_folder
         tree.push(["...#{folder.title}", folder.id])

@@ -151,6 +151,8 @@ if Redmine::Plugin.installed? :redmine_dmsf
     resources :dmsf_links do
       member do
         get 'restore'
+        get 'autocomplete_for_project'
+        get 'autocomplete_for_folder'
       end
     end
 

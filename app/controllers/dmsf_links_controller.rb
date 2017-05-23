@@ -26,6 +26,7 @@ class DmsfLinksController < ApplicationController
   before_filter :find_link_project
   before_filter :authorize
   before_filter :permissions
+  protect_from_forgery except: :new
 
   def permissions
     if @dmsf_link
@@ -43,109 +44,80 @@ class DmsfLinksController < ApplicationController
   def new
     @dmsf_link = DmsfLink.new
     @dmsf_link.project_id = params[:project_id]
-
-    if params[:dmsf_link].present?
-      # Reload
-      @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
-      @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
-      @type = params[:dmsf_link][:type]
-      @link_external = (@type == 'link_from') && (params[:external_link] == 'true')
-      @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]
-      @target_folder_id = params[:dmsf_link][:target_folder_id].to_i if params[:reload].blank? && DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])
-      if @type == 'link_to'
-        if params[:dmsf_link][:dmsf_file_id].present?
-          file = DmsfFile.find_by_id params[:dmsf_link][:dmsf_file_id]
-          @dmsf_link.name = file.title if file
-        else
-          folder = DmsfFolder.find_by_id params[:dmsf_link][:dmsf_folder_id]
-          @dmsf_link.name = folder.title if folder
-        end
+    @dmsf_link.dmsf_folder_id = params[:dmsf_folder_id]
+    @dmsf_file_id = params[:dmsf_file_id]
+    @type = params[:type]
+    @dmsf_link.target_project_id = params[:project_id]
+    @dmsf_link.project_id = params[:project_id]
+    @target_folder_id = params[:dmsf_folder_id].to_i if params[:dmsf_folder_id].present?
+    if @type == 'link_to'
+      if @dmsf_file_id
+        file = DmsfFile.find_by_id @dmsf_file_id
+        @dmsf_link.name = file.title if file
       else
-        if params[:dmsf_link][:target_file_id].present?
-          @target_file_id = params[:dmsf_link][:target_file_id]
-          file = DmsfFile.find_by_id @target_file_id
-
-          if file
-            folder = DmsfFolder.find_by_id params[:dmsf_link][:target_folder_id]
-            if (folder && (folder.project_id == @dmsf_link.target_project_id) && folder.dmsf_files.include?(file)) || folder.nil?
-              @dmsf_link.name = file.title
-            end
-          end
-        else
-          folder = DmsfFolder.find_by_id params[:dmsf_link][:target_folder_id]
-
-          if folder
-            if folder.project_id == @dmsf_link.target_project_id
-              @dmsf_link.name = folder.title if folder
-            end
-          end
-        end
-      end
-    else
-      # Link from/to
-      @dmsf_link.dmsf_folder_id = params[:dmsf_folder_id]
-      @dmsf_file_id = params[:dmsf_file_id]
-      @type = params[:type]
-      @link_external = false
-      @dmsf_link.target_project_id = params[:project_id]
-      @dmsf_link.project_id = params[:project_id]
-      @target_folder_id = params[:dmsf_folder_id].to_i if params[:dmsf_folder_id].present?
-      if @type == 'link_to'
-        if @dmsf_file_id
-          file = DmsfFile.find_by_id @dmsf_file_id
-          @dmsf_link.name = file.title if file
-        else
-          folder = DmsfFolder.find_by_id @target_folder_id
-          @dmsf_link.name = folder.title if folder
-        end
+        folder = DmsfFolder.find_by_id @target_folder_id
+        @dmsf_link.name = folder.title if folder
       end
     end
+    @container = params[:container]
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
 
-    render :layout => !request.xhr?
+  def autocomplete_for_project
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def autocomplete_for_folder
+    respond_to do |format|
+      format.js
+    end
   end
 
   def create
     @dmsf_link = DmsfLink.new
     @dmsf_link.user = User.current
-
     if params[:dmsf_link][:type] == 'link_from'
       # Link from
-      @dmsf_link.project_id = params[:dmsf_link][:project_id]
-      @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
+      if params[:dmsf_link][:container].blank?
+        @dmsf_link.project_id = params[:dmsf_link][:project_id]
+        @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
+      else
+        # An issue link
+        @dmsf_link.project_id = -1
+        @dmsf_link.dmsf_folder_id = nil
+      end
       @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]
-      @link_external = (params[:external_link] == 'true')
-      @dmsf_link.external_url = params[:dmsf_link][:external_url]
-      if (@link_external)
+      if (params[:external_link] == 'true')
+        @dmsf_link.external_url = params[:dmsf_link][:external_url]
         @dmsf_link.target_type = 'DmsfUrl'
       elsif params[:dmsf_link][:target_file_id].present?
         @dmsf_link.target_id = params[:dmsf_link][:target_file_id]
         @dmsf_link.target_type = DmsfFile.model_name.to_s
       else
-        @dmsf_link.target_id = DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
+        @dmsf_link.target_id = DmsfLinksHelper.is_a_number?(
+          params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
+        @dmsf_link.target_id = nil if(@dmsf_link.target_id == 0)
         @dmsf_link.target_type = DmsfFolder.model_name.to_s
       end
       @dmsf_link.name = params[:dmsf_link][:name]
-
       if @dmsf_link.save
         flash[:notice] = l(:notice_successful_create)
-        redirect_to dmsf_folder_path(:id => @project.id, :folder_id => @dmsf_link.dmsf_folder_id)
       else
-        @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
-        @type = params[:dmsf_link][:type]
-        @target_folder_id = params[:dmsf_link][:target_folder_id].to_i if DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id])
-        @target_file_id = @dmsf_link.target_id if @dmsf_link.target_type == DmsfFile.model_name.to_s
-        render :action => 'new'
+        flash[:error] = @dmsf_link.errors.full_messages.to_sentence
       end
     else
       # Link to
       @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
-      @dmsf_link.dmsf_folder_id = DmsfLinksHelper.is_a_number?(params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
+      @dmsf_link.dmsf_folder_id = DmsfLinksHelper.is_a_number?(
+        params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
+      @dmsf_link.dmsf_folder_id = nil if(@dmsf_link.dmsf_folder_id == 0)
       @dmsf_link.target_project_id = params[:dmsf_link][:project_id]
-      @link_external = (params[:external_link] == 'true')
-      @dmsf_link.external_url = params[:dmsf_link][:external_url]
-      if (@link_external)
-        @dmsf_link.target_type = 'DmsfUrl'
-      elsif params[:dmsf_link][:dmsf_file_id].present?
+      if params[:dmsf_link][:dmsf_file_id].present?
         @dmsf_link.target_id = params[:dmsf_link][:dmsf_file_id]
         @dmsf_link.target_type = DmsfFile.model_name.to_s
       else
@@ -153,23 +125,25 @@ class DmsfLinksController < ApplicationController
         @dmsf_link.target_type = DmsfFolder.model_name.to_s
       end
       @dmsf_link.name = params[:dmsf_link][:name]
-
       if @dmsf_link.save
         flash[:notice] = l(:notice_successful_create)
-        if params[:dmsf_link][:dmsf_file_id].present?
-          redirect_to dmsf_file_path(@dmsf_link.target_file)
-        else
-          redirect_to edit_dmsf_path(:id => params[:dmsf_link][:project_id], :folder_id => params[:dmsf_link][:dmsf_folder_id])
-        end
       else
-        @dmsf_file_id = params[:dmsf_link][:dmsf_file_id]
-        @type = params[:dmsf_link][:type]
-        @target_folder_id = @dmsf_link.dmsf_folder_id
-        @dmsf_link.target_project_id = @dmsf_link.project.id
-        @dmsf_link.project_id = params[:dmsf_link][:project_id]
-        @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
-        render :action => 'new'
+        flash[:error] = @dmsf_link.errors.full_messages.to_sentence
       end
+    end
+    respond_to do |format|
+      format.html {
+        if params[:dmsf_link][:type] == 'link_from'
+          redirect_to dmsf_folder_path(:id => @project.id, :folder_id => @dmsf_link.dmsf_folder_id)
+        else
+          if params[:dmsf_link][:dmsf_file_id].present?
+            redirect_to dmsf_file_path(@dmsf_link.target_file)
+          else
+            redirect_to edit_dmsf_path(:id => params[:dmsf_link][:project_id], :folder_id => params[:dmsf_link][:dmsf_folder_id])
+          end
+        end
+      }
+      format.js
     end
   end
 

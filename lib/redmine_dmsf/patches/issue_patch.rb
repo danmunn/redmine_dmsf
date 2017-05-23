@@ -34,15 +34,32 @@ module RedmineDmsf
 
         def save_dmsf_attachments(dmsf_attachments)
           @saved_dmsf_attachments = []
-          dmsf_attachments = dmsf_attachments.map(&:last)
-          dmsf_attachments.each do |dmsf_attachment|
-            a = Attachment.find_by_token(dmsf_attachment[:token])
-            @saved_dmsf_attachments << a if a
+          if dmsf_attachments
+            dmsf_attachments = dmsf_attachments.map(&:last)
+            dmsf_attachments.each do |dmsf_attachment|
+              a = Attachment.find_by_token(dmsf_attachment[:token])
+              @saved_dmsf_attachments << a if a
+            end
           end
         end
 
         def saved_dmsf_attachments
           @saved_dmsf_attachments || []
+        end
+
+        def save_dmsf_links(dmsf_links)
+          @saved_dmsf_links = []
+          if dmsf_links
+            ids = dmsf_links.map(&:last)
+            ids.each do |id|
+              l = DmsfLink.find_by_id(id)
+              @saved_dmsf_links << l if l
+            end
+          end
+        end
+
+        def saved_dmsf_links
+          @saved_dmsf_links || []
         end
 
         def system_folder(create = false)
@@ -73,8 +90,21 @@ module RedmineDmsf
         end
 
         def dmsf_files
+          files = []
           folder = self.system_folder
-          folder.dmsf_files if folder
+          if folder
+            files = folder.dmsf_files.to_a
+          end
+          files
+        end
+
+        def dmsf_links
+          links = []
+          folder = self.system_folder
+          if folder
+            links = folder.dmsf_links
+          end
+          links
         end
 
         def delete_system_folder
@@ -105,6 +135,7 @@ module RedmineDmsf
           )
           current_journal.save
         end
+
       end
 
     end

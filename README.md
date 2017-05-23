@@ -37,6 +37,7 @@ Features
   * Documents and folders symbolic links
   * Document tagging
   * Trash bin
+  * Documents attachable to issues
   * Compatible with Redmine 3.3.x
 
 Dependencies
@@ -235,9 +236,9 @@ Before installing ensure that the Redmine instance is stopped.
 6. Restart the web server.
 7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure.
 8. Assign DMSF permissions to appropriate roles.
-9. There are two rake tasks:
+9. There are a few rake tasks:
 
-    a) To convert documents from the standard Redmine document module
+    I) To convert documents from the standard Redmine document module
 
         Available options:
 
@@ -253,11 +254,42 @@ Before installing ensure that the Redmine instance is stopped.
               chown -R www-data:www-data /redmine/files/dmsf
             afterwards)
 
-    b) To alert all users who are expected to do an approval in the current approval steps
+    II) To alert all users who are expected to do an approval in the current approval steps
 
         Example:
             
-            rake redmine:dmsf_alert_approvals RAILS_ENV="production"            
+            rake redmine:dmsf_alert_approvals RAILS_ENV="production"   
+                     
+    III) To clears the Webdav Cache
+                     
+         Example:
+         
+            rake redmine:dmsf_clear_webdav_cache RAILS_ENV="production"
+            
+    IV) To create missing MD5 digest for all file revisions
+            
+        Available options:
+        
+          *dry_run - test, no changes to the database
+        
+        Example:
+        
+          bundle exec rake redmine:dmsf_create_digests RAILS_ENV="production"
+          bundle exec rake redmine:dmsf_create_digests dry_run=1 RAILS_ENV="production"
+          
+    V) To maintain DMSF
+        
+        * Remove all files with no database record from the document directory
+        * Remove all links project_id = -1 (added links to an issue which hasn't been created)
+        
+        Available options:
+        
+          *dry_run - No physical deletion but to list of all unused files only
+        
+        Example:
+        
+          rake redmine:dmsf_maintenance RAILS_ENV="production"
+          rake redmine:dmsf_maintenance dry_run=1 RAILS_ENV="production"
 
 ### Fulltext search (optional)
 If you want to use full-text search features, you must setup file content indexing.

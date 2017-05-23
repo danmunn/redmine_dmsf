@@ -1,0 +1,4 @@
+$('#dmsf_link_target_file_id').html('<%= escape_javascript(
+  select_tag('dmsf_link[target_file_id]',
+            options_for_select(DmsfFolder.file_list(files_for_select(params[:dmsf_link][:target_project_id],
+            params[:dmsf_link][:target_folder_id]))))) %>');

@@ -20,7 +20,7 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% if dmsf_files.present? %>
+<% if dmsf_files.present? || dmsf_links.present? %>
   <hr/>
   <div class="attachments dmsf_parent_container">
     <% for dmsf_file in dmsf_files %>
@@ -76,4 +76,58 @@
         <% end %>
     <% end %>
   </div>
+    <% for dmsf_link in dmsf_links %>
+        <% dmsf_file = dmsf_link.target_file %>
+        <% if dmsf_file.last_revision %>
+            <p class = "dmsf_gray">
+              <% file_view_url = url_for({:controller => :dmsf_files, :action => 'view', :id => dmsf_file}) %>
+              <%= link_to(h(dmsf_link.title),
+                          file_view_url,
+                          :target => '_blank',
+                          :class => "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
+                          :title => h(dmsf_file.last_revision.try(:tooltip)),
+                          'data-downloadurl' => "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}") %>
+              <% if dmsf_file.text? || dmsf_file.image? %>
+                  <%= link_to l(:button_view),
+                              file_view_url,
+                              :class => 'icon-only icon-magnifier',
+                              :title => l(:button_view) %>
+              <% end %>
+              <%= " - #{dmsf_file.description}" unless dmsf_file.description.blank? %>
+              <span class="size">(<%= number_to_human_size dmsf_file.last_revision.size %>)</span>
+              <% if @issue.attributes_editable?  && User.current.allowed_to?(:file_delete, dmsf_file.project) %>
+                  <%= link_to('',
+                              dmsf_link_path(dmsf_link, :commit => 'yes'),
+                              :data => {:confirm => l(:text_are_you_sure)},
+                              :method => :delete,
+                              :title => l(:title_delete),
+                              :class => 'icon icon-del') %>
+              <% end %>
+              <span class="author"><%= dmsf_file.last_revision.user %>, <%= format_time(dmsf_file.last_revision.updated_at) %></span>
+              <span class="dmsf_upload_select">
+              <% wf = DmsfWorkflow.find_by_id(dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id %>
+                <%= render(:partial => 'dmsf_files/approval_workflow_button',
+                           :locals => {:file => dmsf_file,
+                                       :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_file.project),
+                                       :workflows_available => DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', dmsf_file.project.id]).exists?,
+                                       :project => dmsf_file.project, :wf => wf }) %>
+            </span>
+            </p>
+        <% end %>
+    <% end %>
+    <% if defined?(thumbnails) && thumbnails %>
+        <% images = dmsf_links.map{ |link| link.target_file }.select(&:image?) %>
+        <% if images.any? %>
+            <div class="thumbnails">
+              <% images.each do |file| %>
+                  <div>
+                    <%= link_to image_tag(dmsf_thumbnail_path(file)),
+                                url_for({:controller => :dmsf_files, :action => 'view', :id => file}),
+                                :alt => dmsf_file.title %>
+                  </div>
+              <% end %>
+            </div>
+        <% end %>
+    <% end %>
+    </div>
 <% end %>

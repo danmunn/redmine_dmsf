@@ -59,8 +59,9 @@
       <% end %>
       <% if @file_manipulation_allowed && !@locked_for_user %>
           <%= link_to(l(:label_link_from),
-                      new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder, :type => 'link_from'),
-                      :title => l(:title_create_link), :class => 'icon icon-link') %>
+                      new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder,
+                        :type => 'link_from'), :title => l(:title_create_link),
+                        :class => 'icon icon-link') %>
       <% end %>
       <%= link_to(l(:link_create_folder),
                   new_dmsf_path(:id => @project, :parent_id => @folder),
@@ -100,7 +101,6 @@
               <% custom_value.custom_field.is_required = false %>
               <% custom_value.value = params[:custom_value].present? ? params[:custom_value] : '' %>
               <%= h(custom_value.custom_field.name) %>:
-              <%#= custom_field_tag(:dmsf_folder, custom_value, :style => 'width: auto') %>
               <%= custom_value.custom_field.format.edit_tag(self,
                 custom_field_tag_id(:dmsf_folder, custom_value.custom_field),
                 custom_field_tag_name(:dmsf_folder, custom_value.custom_field),

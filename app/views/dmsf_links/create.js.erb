@@ -20,4 +20,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<%= render :partial => 'form', :locals => { :modal => false } %>
+var linksSpan = $("#dmsf_links_fields");
+var linkId = "<%= @dmsf_link.id %>";
+var linkName = "<%= @dmsf_link.name %>";
+
+dmsfAddLink(linksSpan, linkId, linkName);

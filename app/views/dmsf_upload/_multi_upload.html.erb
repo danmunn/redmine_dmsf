@@ -40,7 +40,7 @@
     <div class="dmsf_uploader">
       <p>
         <label><%= l(:label_document_plural) %></label>
-        <%= render :partial => 'dmsf_upload/form', :locals => { :multiple => true } %>
+        <%= render :partial => 'dmsf_upload/form', :locals => { :multiple => true, :container => nil } %>
       </p>
     </div>
     <%= submit_tag l(:label_upload) %>

@@ -21,7 +21,7 @@
 %>
 
 <span id="dmsf_attachments_fields">
-<% if defined?(container) && container && container.saved_dmsf_attachments %>
+<% if defined?(container) && container && container.saved_dmsf_attachments.present? %>
   <% container.saved_dmsf_attachments.each_with_index do |attachment, i| %>
     <span id="dmsf_attachments_p<%= i %>">
       <%= text_field_tag("dmsf_attachments[p#{i}][filename]", attachment.filename, :class => 'filename') +
@@ -47,3 +47,24 @@
                    } %>
   (<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
 </span>
+<% if container %>
+  <br/>
+  <span id="dmsf_links_fields">
+    <% if container.saved_dmsf_links.present? %>
+        <% container.saved_dmsf_links.each_with_index do |dmsf_link, index| %>
+          <span id="dmsf_links_<%= index %>">
+            <input name="dmsf_links[<%= index %>]" value="<%= dmsf_link.id %>" type="hidden">
+            <input type="text" class='filename readonly' value="<%= dmsf_link.name %>">
+            <a href="#" class="remove-upload icon icon-del" onclick="$(this).parent('span').remove();return false;">&nbsp;</a>
+            <br/>
+          </span>
+        <% end %>
+    <% end %>
+  </span>
+  <span class="dmsf_add_link">
+    <%= link_to l(:label_link_from),
+                new_dmsf_link_path(:project_id => container.project.id, :type => 'link_from', :container => 'issue'),
+                :title => l(:title_create_link), :class => 'icon icon-add', :remote => true %>
+  </span>
+<% end %>
+

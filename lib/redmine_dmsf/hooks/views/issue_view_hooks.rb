@@ -49,7 +49,8 @@ module RedmineDmsf
           if User.current.allowed_to?(:view_dmsf_files, issue.project) &&
             Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
             context[:controller].send(:render_to_string, {:partial => 'dmsf_files/links',
-              :locals => { :dmsf_files => issue.dmsf_files.to_a, :thumbnails => Setting.thumbnails_enabled? }})
+              :locals => { :dmsf_files => issue.dmsf_files, :dmsf_links => issue.dmsf_links,
+                           :thumbnails => Setting.thumbnails_enabled? }})
           end
         end
       end

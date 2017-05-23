@@ -20,40 +20,41 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% html_title l(:dmsf) %>
+<h3 class="title"><%= l(:title_create_link) %></h3>
 
-<% if @dmsf_file_id %>
-  <% file = DmsfFile.find_by_id @dmsf_file_id%>
-  <% title = file.title if file %>
-<% end %>
-
-<%= render(:partial => '/dmsf/path',
-  :locals => {:folder => @dmsf_link.folder, :filename => nil,
-    :title => (@type == 'link_from') ? l(:label_link_from) : l(:label_link_to) }) %>
-
-<%= labelled_form_for @dmsf_link do |f| %>
+<%= labelled_form_for @dmsf_link, :remote => modal do |f| %>
   <%= error_messages_for @dmsf_link %>
   <%= f.hidden_field :project_id, :value => @dmsf_link.project_id %>
   <%= f.hidden_field :dmsf_folder_id, :value => @dmsf_link.dmsf_folder_id if @dmsf_link.dmsf_folder_id %>
   <%= f.hidden_field :type, :value => @type %>
   <%= f.hidden_field :dmsf_file_id, :value => @dmsf_file_id %>
+  <%= f.hidden_field(:container, :value => @container) if @container %>
   <div class="box tabular">
-    <% if @type == 'link_from' %>
+    <% if (@type == 'link_from') && !@container %>
       <p>
-        <%= radio_button_tag(:external_link, 'false', @link_external == false) %> <%= l(:label_internal) %><br/>
-        <%= radio_button_tag(:external_link, 'true', @link_external) %>  <%= l(:label_external) %>
+        <%= radio_button_tag(:external_link, 'false', true) %> <%= l(:label_internal) %><br/>
+        <%= radio_button_tag(:external_link, 'true', false) %>  <%= l(:label_external) %>
       </p>
     <% end %>
-    <div id="link_internal" style="<%= @link_external ? 'display:none' : '' %>">
+    <div id="link_internal">
       <p>
         <% if @type == 'link_from' %>
-          <label for="dmsf_link[target_project_id]"><%= l(:label_source_project) %><span class="required">*</span></label>
+          <label for="dmsf_link[target_project_id]"><%= l(:label_source_project) %></label>
         <% else %>
-          <label for="dmsf_link[target_project_id]"><%= l(:label_target_project) %><span class="required">*</span></label>
+          <label for="dmsf_link[target_project_id]"><%= l(:label_target_project) %></label>
         <% end %>
         <%= select_tag('dmsf_link[target_project_id]',
           project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy,
-          :selected => @dmsf_link.target_project)) %>
+          :selected => @dmsf_link.target_project), :style => "width=100%") %>
+        <%= javascript_tag do %>
+            $('#dmsf_link_target_project_id').change(function(){
+              $.ajax({
+                url: '<%= autocomplete_for_project_dmsf_link_path(@project, :format => 'js') %>',
+                type: 'get',
+                data: $('#new_dmsf_link').serialize()
+              });
+            });
+        <% end %>
       </p>
       <p>
         <% if @type == 'link_from' %>
@@ -64,51 +65,50 @@
         <%= select_tag('dmsf_link[target_folder_id]',
           folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
           :selected => @target_folder_id)) %>
+        <%= javascript_tag do %>
+            $('#dmsf_link_target_folder_id').change(function(){
+              $.ajax({
+                url: '<%= autocomplete_for_folder_dmsf_link_path(@project, :format => 'js') %>',
+                type: 'get',
+                data: $('#new_dmsf_link').serialize()
+              });
+            });
+        <% end %>
       </p>
       <% if @type == 'link_from' %>
         <p>
-          <% if @target_folder_id %>
-            <% folder = DmsfFolder.find_by_id @target_folder_id %>
-            <% files = folder.dmsf_files.visible if folder %>
-          <% else %>
-            <% files = @dmsf_link.target_project.dmsf_files.visible if @dmsf_link.target_project %>
-          <% end %>
-          <%= f.select(:target_file_id,
-            options_for_select(DmsfFolder.file_list(files), @target_file_id)) %>
+          <%= label_tag('dmsf_link[target_file_id]', l(:field_target_file)) %>
+          <% files = files_for_select(@dmsf_link.target_project.id, @target_folder_id) %>
+          <%= select_tag('dmsf_link[target_file_id]',
+            options_for_select(DmsfFolder.file_list(files))) %>
         </p>
       <% end %>
     </div>
-    <div id="link_external" style="<%= @link_external ? '' : 'display:none' %>">
+    <div id="link_external" style="display: none">
       <p>
-        <%= f.text_field :external_url, :label => l(:label_link_external_url) %>
+        <%= f.text_field :external_url, :required => true %>
       </p>
     </div>
     <p>
-      <%= f.text_field :name, :label => l(:label_link_name) %>
+      <%= f.text_field :name, :required => true %>
     </p>
   </div>
-  <p><%= f.submit l(:button_create) %></p>
+  <p><%= f.submit l(:button_create), :onclick => 'hideModal(this);' %></p>
 <% end %>
 
 <script type="text/javascript">
-  $('#dmsf_link_target_project_id').change(function () {
-    $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id, :reload => true) %>", $('#new_dmsf_link').serialize());
-  });
-
-  $('#dmsf_link_target_folder_id').change(function () {
-    $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id) %>", $('#new_dmsf_link').serialize());
-  });
-
+  // Suggest a link name when a file is selected
   $('#dmsf_link_target_file_id').change(function () {
-    $('#content').load("<%= url_for(:action => 'new', :project_id => @project.id) %>", $('#new_dmsf_link').serialize());
-  });
+    var linkName = $('#dmsf_link_name');
+    var name = linkName.val();
 
+    if(name == '') {
+        linkName.val($('#dmsf_link_target_file_id option:selected').text().replace(/\./g, ''));
+    }
+  });
+  // Internal/External link switch
   $("input[name=external_link]:radio").change(function(){
     $("#link_internal").toggle();
     $("#link_external").toggle();
   });
-
-  $('#dmsf_link_target_project_id').select2();
-  $('#dmsf_link_target_folder_id').select2();
-  $('#dmsf_link_target_file_id').select2();
 </script>
