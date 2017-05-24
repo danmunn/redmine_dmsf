@@ -213,7 +213,7 @@ class DmsfFolder < ActiveRecord::Base
     unless project.is_a? Project
       project = Project.find_by_id project
     end
-    tree = [[l(:link_documents), 0]]
+    tree = [[l(:link_documents), nil]]
     project.dmsf_folders.visible(false).each do |folder|
       unless folder == current_folder
         tree.push(["...#{folder.title}", folder.id])

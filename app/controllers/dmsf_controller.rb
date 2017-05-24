@@ -1,4 +1,5 @@
 # encoding: utf-8
+# encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -217,7 +218,7 @@ class DmsfController < ApplicationController
         end
       end
     end
-
+    
     saved = @folder.save
 
     respond_to do |format|

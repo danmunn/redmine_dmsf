@@ -93,7 +93,13 @@
       <%= f.text_field :name, :required => true %>
     </p>
   </div>
-  <p><%= f.submit l(:button_create), :onclick => 'hideModal(this);' %></p>
+  <p>
+    <% if modal %>
+        <%= f.submit l(:button_create), :onclick => 'hideModal(this);' %>
+    <% else %>
+        <%= f.submit l(:button_create) %>
+    <% end %>
+  </p>
 <% end %>
 
 <script type="text/javascript">

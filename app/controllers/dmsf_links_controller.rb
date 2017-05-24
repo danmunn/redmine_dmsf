@@ -101,7 +101,6 @@ class DmsfLinksController < ApplicationController
       else
         @dmsf_link.target_id = DmsfLinksHelper.is_a_number?(
           params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
-        @dmsf_link.target_id = nil if(@dmsf_link.target_id == 0)
         @dmsf_link.target_type = DmsfFolder.model_name.to_s
       end
       @dmsf_link.name = params[:dmsf_link][:name]
@@ -115,7 +114,6 @@ class DmsfLinksController < ApplicationController
       @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
       @dmsf_link.dmsf_folder_id = DmsfLinksHelper.is_a_number?(
         params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
-      @dmsf_link.dmsf_folder_id = nil if(@dmsf_link.dmsf_folder_id == 0)
       @dmsf_link.target_project_id = params[:dmsf_link][:project_id]
       if params[:dmsf_link][:dmsf_file_id].present?
         @dmsf_link.target_id = params[:dmsf_link][:dmsf_file_id]
