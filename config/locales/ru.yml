@@ -290,7 +290,7 @@ ru:
   label_external: Внешний
 
   label_link_name: Наименование ссылки
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: Целевая папка
   label_source_folder: Исходная папка
   label_target_project: Целевой проект

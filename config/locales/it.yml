@@ -290,7 +290,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_external: Esterno
 
   label_link_name: Nome del collegamento
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: Cartella di destinazione
   label_source_folder: Cartella sorgente
   label_target_project: Progetto di destinazione

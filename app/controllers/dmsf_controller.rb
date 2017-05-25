@@ -218,7 +218,7 @@ class DmsfController < ApplicationController
         end
       end
     end
-    
+
     saved = @folder.save
 
     respond_to do |format|

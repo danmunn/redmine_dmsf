@@ -290,7 +290,7 @@ sl:
   label_external: External
 
   label_link_name: Link name
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: Target folder
   label_source_folder: Source folder
   label_target_project: Target project

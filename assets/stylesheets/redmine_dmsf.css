@@ -129,7 +129,7 @@ table.display thead th div.DataTables_sort_wrapper span {
 	font-size: 0.9em;
 }
 
-.dmsf_uploader span[id*="dmsf_attachments"] .filename {
+.dmsf_uploader span[id*="dmsf_"] .filename {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
 }

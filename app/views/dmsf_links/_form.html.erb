@@ -80,15 +80,17 @@
           <%= label_tag('dmsf_link[target_file_id]', l(:field_target_file)) %>
           <% files = files_for_select(@dmsf_link.target_project.id, @target_folder_id) %>
           <%= select_tag('dmsf_link[target_file_id]',
-            options_for_select(DmsfFolder.file_list(files))) %>
+            options_for_select(DmsfFolder.file_list(files)), :required => modal) %>
         </p>
       <% end %>
     </div>
-    <div id="link_external" style="display: none">
-      <p>
-        <%= f.text_field :external_url, :required => true %>
-      </p>
-    </div>
+    <% if (@type == 'link_from') && !@container %>
+      <div id="link_external" style="display: none">
+        <p>
+          <%= f.text_field :external_url, :required => true %>
+        </p>
+      </div>
+    <% end %>
     <p>
       <%= f.text_field :name, :required => true %>
     </p>

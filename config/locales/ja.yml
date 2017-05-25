@@ -290,7 +290,7 @@ ja:
   label_external: 外部
 
   label_link_name: リンク名
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: リンク先フォルダ
   label_source_folder: リンク元フォルダ
   label_target_project: リンク先プロジェクト

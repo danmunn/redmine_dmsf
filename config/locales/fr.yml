@@ -290,7 +290,7 @@ fr:
   label_external: Externe
 
   label_link_name: Nom du lien
-  label_link_external_url: Adresse Internet
+  field_external_url: Adresse Internet
   label_target_folder: Dossier cible
   label_source_folder: Dossier source
   label_target_project: Projet cible

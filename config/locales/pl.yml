@@ -290,7 +290,7 @@ pl:
   label_external: External
 
   label_link_name: Nazwa odnośnika
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: Folder docelowy
   label_source_folder: Folder źródłowy
   label_target_project: Projekt docelowy

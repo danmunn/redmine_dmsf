@@ -290,7 +290,7 @@ cs:
   label_external: Externí
 
   label_link_name: Název odkazu
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: Cílová složka
   label_source_folder: Zdrojová složka
   label_target_project: Cílový projekt

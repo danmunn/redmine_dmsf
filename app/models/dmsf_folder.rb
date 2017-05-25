@@ -59,6 +59,7 @@ class DmsfFolder < ActiveRecord::Base
     :deleted => STATUS_DELETED).where(DmsfFolder.visible_condition).distinct
   }
   scope :system, -> { where(:system => true) }
+  scope :notsystem, -> { where(:system => false) }
 
   acts_as_customizable
 
@@ -214,7 +215,7 @@ class DmsfFolder < ActiveRecord::Base
       project = Project.find_by_id project
     end
     tree = [[l(:link_documents), nil]]
-    project.dmsf_folders.visible(false).each do |folder|
+    project.dmsf_folders.notsystem.visible(false).each do |folder|
       unless folder == current_folder
         tree.push(["...#{folder.title}", folder.id])
         directory_subtree(tree, folder, 2, current_folder)
