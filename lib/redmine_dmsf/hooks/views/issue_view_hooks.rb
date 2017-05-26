@@ -48,9 +48,22 @@ module RedmineDmsf
           issue = context[:issue]
           if User.current.allowed_to?(:view_dmsf_files, issue.project) &&
             Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
+            links = []
+            for dmsf_file in issue.dmsf_files
+              if dmsf_file.last_revision
+                links << [dmsf_file, nil, dmsf_file.created_at]
+              end
+            end
+            for dmsf_link in issue.dmsf_links
+              dmsf_file = dmsf_link.target_file
+              if dmsf_file && dmsf_file.last_revision
+                links << [dmsf_file, dmsf_link, dmsf_link.created_at]
+              end
+            end
+            # Sort by 'create_at' %>
+            links.sort!{ |x, y| x[2] <=> y[2] }
             context[:controller].send(:render_to_string, {:partial => 'dmsf_files/links',
-              :locals => { :dmsf_files => issue.dmsf_files, :dmsf_links => issue.dmsf_links,
-                           :thumbnails => Setting.thumbnails_enabled? }})
+              :locals => { :links => links, :thumbnails => Setting.thumbnails_enabled? }})
           end
         end
       end
