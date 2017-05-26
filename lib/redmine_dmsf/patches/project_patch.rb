@@ -48,6 +48,9 @@ module RedmineDmsf
           before_save :set_default_dmsf_notification
 
           validates_length_of :dmsf_description, :maximum => 65535
+
+          Project.const_set(:ATTACHABLE_DMS_AND_ATTACHMENTS, 1)
+          Project.const_set(:ATTACHABLE_ATTACHMENTS, 2)
         end
       end
 

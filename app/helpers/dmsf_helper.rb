@@ -89,8 +89,9 @@ module DmsfHelper
     'plupload/js/i18n/en.js'
   end
 
-  def self.visible_folders(folders)
-    allowed = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
+  def self.visible_folders(folders, project)
+    allowed = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
+      (project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
     folders.reject{ |folder|
       if folder.system
         unless allowed
@@ -112,7 +113,7 @@ module DmsfHelper
 
   def self.all_children_sorted(parent, pos, ident)
     # Folders && files && links
-    nodes = visible_folders(parent.dmsf_folders.visible.to_a) + parent.dmsf_links.visible + parent.dmsf_files.visible
+    nodes = visible_folders(parent.dmsf_folders.visible.to_a, parent.is_a?(Project) ? parent : parent.project) + parent.dmsf_links.visible + parent.dmsf_files.visible
     # Alphabetical and type sort
     nodes.sort! do |x, y|
       if ((x.is_a?(DmsfFolder) || (x.is_a?(DmsfLink) && x.is_folder?)) &&

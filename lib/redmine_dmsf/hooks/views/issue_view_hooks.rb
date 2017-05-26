@@ -29,7 +29,8 @@ module RedmineDmsf
           # Add Dmsf upload form
           issue = context[:issue]
           if User.current.allowed_to?(:file_manipulation, issue.project) &&
-            Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
+            Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
+            (issue.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
             html = "<div class=\"dmsf_uploader\">"
             html << '<p>'
             html << "<label>#{l(:label_document_plural)}</label>"
@@ -47,7 +48,8 @@ module RedmineDmsf
           # Add list of attached documents
           issue = context[:issue]
           if User.current.allowed_to?(:view_dmsf_files, issue.project) &&
-            Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
+            Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
+            (issue.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
             links = []
             for dmsf_file in issue.dmsf_files
               if dmsf_file.last_revision
