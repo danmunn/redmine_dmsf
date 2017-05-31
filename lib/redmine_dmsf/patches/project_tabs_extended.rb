@@ -23,33 +23,15 @@ require_dependency 'projects_helper'
 module RedmineDmsf
   module Patches
     module ProjectTabsExtended
-
-      def self.included(base)
-        base.extend(ClassMethods)
-        base.send(:include, InstanceMethods)
-        base.class_eval do
-          unloadable
-          alias_method_chain :project_settings_tabs, :dmsf
-        end
-      end
-
-      module ClassMethods
-      end
-
-      module InstanceMethods                
-      
-        def project_settings_tabs_with_dmsf
-          tabs = project_settings_tabs_without_dmsf          
-          dmsf_tabs = [
+      def project_settings_tabs
+        tabs = super
+        dmsf_tabs = [
             {:name => 'dmsf', :action => {:controller => 'dmsf_state', :action => 'user_pref_save'}, :partial => 'dmsf_state/user_pref', :label => :menu_dmsf},
-            {:name => 'dmsf_workflow', :action => {:controller => 'dmsf_workflows', :action => 'index'}, :partial => 'dmsf_workflows/main', :label => :label_dmsf_workflow_plural}            
-          ]
-          tabs.concat(dmsf_tabs.select {|dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project)})
-          return tabs
-        end
-
+            {:name => 'dmsf_workflow', :action => {:controller => 'dmsf_workflows', :action => 'index'}, :partial => 'dmsf_workflows/main', :label => :label_dmsf_workflow_plural}
+        ]
+        tabs.concat(dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project) })
+        return tabs
       end
-
     end
   end
 end
@@ -57,6 +39,6 @@ end
 # Apply patch
 Rails.configuration.to_prepare do
   unless ProjectsHelper.included_modules.include?(RedmineDmsf::Patches::ProjectTabsExtended)
-    ProjectsHelper.send(:include, RedmineDmsf::Patches::ProjectTabsExtended)
+    ProjectsHelper.send(:prepend, RedmineDmsf::Patches::ProjectTabsExtended)
   end
 end
