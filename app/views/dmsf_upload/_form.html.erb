@@ -25,9 +25,20 @@
   <% container.saved_dmsf_attachments.each_with_index do |attachment, i| %>
     <span id="dmsf_attachments_p<%= i %>">
       <%= text_field_tag("dmsf_attachments[p#{i}][filename]", attachment.filename, :class => 'filename') +
-              text_field_tag("dmsf_attachments[p#{i}][description]", attachment.description, :maxlength => 255, :placeholder => l(:label_optional_description), :class => 'description') +
-              link_to('&nbsp;'.html_safe, dmsf_attachment_path(attachment, :attachment_id => "p#{i}", :format => 'js'), :method => 'delete', :remote => true, :class => 'remove-upload icon icon-del') %>
+              text_field_tag("dmsf_attachments[p#{i}][description]", attachment.description, :maxlength => 255,
+                             :placeholder => l(:label_optional_description), :class => 'description') +
+              link_to('&nbsp;'.html_safe, dmsf_attachment_path(attachment, :attachment_id => "p#{i}", :format => 'js'),
+                      :method => 'delete', :remote => true, :class => 'remove-upload icon icon-del') %>
       <%= hidden_field_tag "dmsf_attachments[p#{i}][token]", "#{attachment.token}" %>
+      <% wf = container.saved_dmsf_attachments_wfs[attachment.id] %>
+      <% if wf %>
+          <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="icon icon-wf-assigned"></a>
+          <%= hidden_field_tag("dmsf_attachments_wfs[p#{i}]", wf.id) if wf %>
+      <% else %>
+          <%= link_to('',  assign_dmsf_workflow_path(:id => container.project.id, :project_id => container.project.id,
+            :attachment_id => i + 1), :title => l(:label_dmsf_wokflow_action_assign),
+            :remote => true, :class => 'icon icon-wf-none') %>
+      <% end %>
     </span>
   <% end %>
 <% end %>
@@ -40,7 +51,8 @@
                    :onchange => "dmsfAddInputFiles(this);",
                    :data => {
                        :max_file_size => Setting.attachment_max_size.to_i.kilobytes,
-                       :max_file_size_message => l(:error_attachment_too_big, :max_size => number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)),
+                       :max_file_size_message => l(:error_attachment_too_big,
+                         :max_size => number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)),
                        :max_concurrent_uploads => Redmine::Configuration['max_concurrent_ajax_uploads'].to_i,
                        :upload_path => dmsf_uploads_path(:format => 'js'),
                        :description_placeholder => l(:label_optional_description)
@@ -56,6 +68,18 @@
             <input name="dmsf_links[<%= index %>]" value="<%= dmsf_link.id %>" type="hidden">
             <input type="text" class='filename readonly' value="<%= dmsf_link.name %>">
             <a href="#" class="remove-upload icon icon-del" onclick="$(this).parent('span').remove();return false;">&nbsp;</a>
+            <% wf = container.saved_dmsf_links_wfs[dmsf_link.id] %>
+            <% if wf %>
+              <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="icon icon-wf-assigned"></a>
+              <%= hidden_field_tag("dmsf_links_wfs[#{dmsf_link.id}]", wf.id) if wf %>
+            <% else %>
+              <%= render(:partial => 'dmsf_files/approval_workflow_button',
+                       :locals => {:file => dmsf_link.target_file,
+                                   :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_link.target_file.project),
+                                   :workflows_available => DmsfWorkflow.where(
+                                       ['project_id = ? OR project_id IS NULL', dmsf_link.target_file.project]).exists?,
+                                   :project => dmsf_link.target_file.project, :wf => wf, :dmsf_link_id => dmsf_link.id }) %>
+            <% end %>
             <br/>
           </span>
         <% end %>

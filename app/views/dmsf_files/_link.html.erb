@@ -96,6 +96,6 @@
       :locals => {:file => dmsf_file,
          :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_file.project),
          :workflows_available => DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', dmsf_file.project.id]).exists?,
-         :project => dmsf_file.project, :wf => wf }) %>
+         :project => dmsf_file.project, :wf => wf, :dmsf_link_id => nil }) %>
   </span>
 </p>

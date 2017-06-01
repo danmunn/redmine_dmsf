@@ -135,7 +135,7 @@ module DmsfHelper
         i += 1
         tree << [x, pos + (step * i)]
       else
-        tree << [x, pos + step + i]
+        tree << [x, pos + (step * (i + 1))]
       end
     end
     tree

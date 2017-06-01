@@ -62,6 +62,38 @@ module RedmineDmsf
           @saved_dmsf_links || []
         end
 
+        def save_dmsf_attachments_wfs(dmsf_attachments_wfs, dmsf_attachments)
+          if dmsf_attachments_wfs
+            @dmsf_attachments_wfs = {}
+            dmsf_attachments_wfs.each do |attachment_id, approval_workflow_id|
+              attachment = dmsf_attachments[attachment_id]
+              if attachment
+                a = Attachment.find_by_token(attachment[:token])
+                wf = DmsfWorkflow.find_by_id approval_workflow_id
+                @dmsf_attachments_wfs[a.id] = wf if wf && a
+              end
+            end
+          end
+        end
+
+        def saved_dmsf_attachments_wfs
+          @dmsf_attachments_wfs || []
+        end
+
+        def save_dmsf_links_wfs(dmsf_links_wfs)
+          if dmsf_links_wfs
+            @saved_dmsf_links_wfs = {}
+            dmsf_links_wfs.each do |dmsf_link_id, approval_workflow_id|
+              wf = DmsfWorkflow.find_by_id approval_workflow_id
+              @saved_dmsf_links_wfs[dmsf_link_id.to_i] = wf if wf
+            end
+          end
+        end
+
+        def saved_dmsf_links_wfs
+          @saved_dmsf_links_wfs || {}
+        end
+
         def system_folder(create = false)
           parent = DmsfFolder.system.where(:project_id => self.project_id, :title => '.Issues').first
           if create && !parent

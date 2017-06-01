@@ -36,7 +36,11 @@
                             :title => l(:title_waiting_for_approval),
                             :remote => true,
                             :class => 'icon icon-wf-waiting') %>
+            <% else %>
+                <span class="icon"></span>
             <% end %>
+        <% else %>
+            <span class="icon"></span>
         <% end %>
     <% when DmsfWorkflow::STATE_ASSIGNED %>
         <% if User.current && (file.last_revision.dmsf_workflow_assigned_by == User.current.id) && wf %>
@@ -46,17 +50,28 @@
                             :dmsf_file_revision_id => file.last_revision.id),
                         :title => l(:label_dmsf_wokflow_action_start),
                         :class => 'icon icon-wf-assigned') %>
+        <% else %>
+            <span class="icon"></span>
         <% end %>
     <% when DmsfWorkflow::STATE_APPROVED, DmsfWorkflow::STATE_REJECTED %>
+        <span class="icon"></span>
     <% else %>
         <% if workflows_available %>
-            <%= link_to('',
-                        assign_dmsf_workflow_path(
-                            :project_id => project.id,
-                            :dmsf_file_revision_id => file.last_revision.id),
-                        :title => l(:label_dmsf_wokflow_action_assign),
-                        :remote => true,
-                        :class => 'icon icon-wf-none') %>
+          <%= link_to('',
+            dmsf_link_id ?
+              assign_dmsf_workflow_path(
+                  :id => project.id,
+                  :project_id => project.id,
+                  :dmsf_link_id => dmsf_link_id) :
+              assign_dmsf_workflow_path(
+                  :id => project.id,
+                  :project_id => project.id,
+                  :dmsf_file_revision_id => file.last_revision.id),
+            :title => l(:label_dmsf_wokflow_action_assign),
+            :remote => true,
+            :class => 'icon icon-wf-none') %>
+        <% else %>
+            <span class="icon"></span>
         <% end %>
     <% end %>
 <% end %>

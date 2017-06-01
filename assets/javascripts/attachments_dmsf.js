@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-function dmsfAddLink(linksSpan, linkId, linkName) {
+function dmsfAddLink(linksSpan, linkId, linkName, title, awf) {
 
     if (linksSpan.children().length < 10) {
 
@@ -29,9 +29,19 @@ function dmsfAddLink(linksSpan, linkId, linkName) {
         linkSpan.append(
             "<input name='dmsf_links[" + nextLinkId + "]' value='" + linkId + "' type='hidden'>",
             "<input type='text' class='filename readonly' value='" + linkName + "'>",
-            $('<a>&nbsp;</a>').attr({href: "#", 'class': 'remove-upload icon icon-del'}).click(dmsfRemoveFile),
-            "<br/>"
-        ).appendTo(linksSpan);
+            $('<a>&nbsp;</a>').attr({href: "#", 'class': 'remove-upload icon icon-del'}).click(dmsfRemoveFile)
+        );
+
+        if(awf) {
+
+            linkSpan.append($('<a>&nbsp;</a>').attr({
+                href: "/dmsf_workflows/c1/assign?dmsf_link_id=" + linkId,
+                'class': 'icon icon-wf-none', 'data-remote': 'true', 'title': title
+            }));
+        }
+
+        linkSpan.append("<br/>");
+        linkSpan.appendTo(linksSpan);
     }
 }
 
@@ -42,7 +52,6 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
     if ($('#dmsf_attachments_fields').children().length < 10) {
 
         var attachmentId = dmsfAddFile.nextAttachmentId++;
-
         var fileSpan = $('<span>', { id: 'dmsf_attachments_' + attachmentId });
 
         if($(inputEl).attr('multiple') == 'multiple') {
@@ -60,7 +69,9 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
                     maxlength: 255,
                     placeholder: $(inputEl).data('description-placeholder')
                 }).toggle(!eagerUpload),
-                $('<a>&nbsp</a>').attr({href: "#", 'class': 'remove-upload icon icon-del'}).click(dmsfRemoveFile).toggle(!eagerUpload)
+                $('<a>&nbsp;</a>').attr({href: "#", 'class': 'remove-upload icon icon-del'}).click(dmsfRemoveFile).toggle(!eagerUpload),
+                $('<a>&nbsp;</a>').attr({href: "/dmsf_workflows/c1/assign?attachment_id=" + attachmentId,
+                    'class': 'icon icon-wf-none', 'data-remote': 'true'})
             ).appendTo('#dmsf_attachments_fields');
         }
         else{

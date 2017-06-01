@@ -187,28 +187,47 @@ class DmsfWorkflowsController < ApplicationController
   def assignment
     if (params[:commit] == l(:button_submit)) &&
         params[:dmsf_workflow_id].present? && (params[:dmsf_workflow_id] != '-1')
-      revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
-      if revision
-        revision.set_workflow(params[:dmsf_workflow_id], params[:action])
-        revision.assign_workflow(params[:dmsf_workflow_id])
-        if request.post?
-          if revision.save
-            file = DmsfFile.find_by_id revision.dmsf_file_id
-            if file
-              begin
-                file.lock!
-              rescue DmsfLockError => e
-                logger.warn e.message
+      # DMS file
+      if params[:dmsf_file_revision_id].present? && params[:dmsf_link_id].blank? && params[:attachment_id].blank?
+        revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
+        if revision
+          revision.set_workflow(params[:dmsf_workflow_id], params[:action])
+          revision.assign_workflow(params[:dmsf_workflow_id])
+          if request.post?
+            if revision.save
+              file = DmsfFile.find_by_id revision.dmsf_file_id
+              if file
+                begin
+                  file.lock!
+                rescue DmsfLockError => e
+                  Rails.logger.warn e.message
+                end
+                flash[:notice] = l(:notice_successful_update)
               end
-              flash[:notice] = l(:notice_successful_update)
+            else
+              flash[:error] = l(:error_workflow_assign)
             end
-          else
-            flash[:error] = l(:error_workflow_assign)
           end
         end
+        redirect_to :back
+        return
+      # DMS link (attached)
+      elsif params[:dmsf_link_id].present?
+        @dmsf_link_id = params[:dmsf_link_id]
+        @dmsf_workflow_id = params[:dmsf_workflow_id]
+      # Attachment (attached)
+      elsif params[:attachment_id].present?
+        @attachment_id = params[:attachment_id]
+        @dmsf_workflow_id = params[:dmsf_workflow_id]
       end
+     else
+      redirect_to :back
+      return
     end
-    redirect_to :back
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   def log

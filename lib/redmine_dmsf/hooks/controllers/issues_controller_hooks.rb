@@ -60,18 +60,20 @@ module RedmineDmsf
           params = context[:params]
           issue.save_dmsf_attachments(params[:dmsf_attachments])
           issue.save_dmsf_links(params[:dmsf_links])
+          issue.save_dmsf_attachments_wfs(params[:dmsf_attachments_wfs], params[:dmsf_attachments])
+          issue.save_dmsf_links_wfs(params[:dmsf_links_wfs])
         end
       end
 
       def controller_issues_after_save(context)
-        # Create attached documents
         if context.is_a?(Hash)
           issue = context[:issue]
           params = context[:params]
+          # Attach DMS documents
           uploaded_files = params[:dmsf_attachments]
           if uploaded_files && uploaded_files.is_a?(Hash)
             system_folder = issue.system_folder(true)
-            uploaded_files.each_value do |uploaded_file|
+            uploaded_files.each do |key, uploaded_file|
               upload = DmsfUpload.create_from_uploaded_attachment(issue.project, system_folder, uploaded_file)
               if upload
                 uploaded_file[:disk_filename] = upload.disk_filename
@@ -81,22 +83,40 @@ module RedmineDmsf
                 uploaded_file[:size] = upload.size
                 uploaded_file[:mime_type] = upload.mime_type
                 uploaded_file[:tempfile_path] = upload.tempfile_path
+                if params[:dmsf_attachments_wfs].present? && params[:dmsf_attachments_wfs][key].present?
+                  uploaded_file[:workflow_id] = params[:dmsf_attachments_wfs][key].to_i
+                end
               end
             end
             DmsfUploadHelper.commit_files_internal uploaded_files, issue.project, system_folder,
              context[:controller]
           end
-          dmsf_links = params[:dmsf_links]
-          if dmsf_links && dmsf_links.is_a?(Hash)
+          # Attach DMS links
+          issue.saved_dmsf_links.each do |l|
+            file = l.target_file
+            revision = file.last_revision
             system_folder = issue.system_folder(true)
-            ids = dmsf_links.map(&:last)
-            ids.each do |id|
-              l = DmsfLink.find_by_id(id)
-              if l
-                l.project_id = system_folder.project_id
-                l.dmsf_folder_id = system_folder.id
-                if l.save
-                  issue.dmsf_file_added l.target_file
+            if system_folder
+              l.project_id = system_folder.project_id
+              l.dmsf_folder_id = system_folder.id
+              if l.save
+                issue.dmsf_file_added file
+              end
+              wf = issue.saved_dmsf_links_wfs[l.id]
+              if wf
+                # Assign the workflow
+                revision.set_workflow(wf.id, 'assign')
+                revision.assign_workflow(wf.id)
+                # Start the workflow
+                revision.set_workflow(wf.id, 'start')
+                if revision.save
+                  begin
+                    file.lock!
+                  rescue DmsfLockError => e
+                    Rails.logger.warn e.message
+                  end
+                else
+                  Rails.logger.error l(:error_workflow_assign)
                 end
               end
             end

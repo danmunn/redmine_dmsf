@@ -20,18 +20,26 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-var linksSpan = $("#dmsf_links_fields");
-var linkId = "<%= @dmsf_link.id %>";
-var linkName = "<%= @dmsf_link.name %>";
-var title = "<%= l(:label_dmsf_wokflow_action_assign) %>";
-var awf = false;
+var input;
 
-<% file = @dmsf_link.target_file %>
-<% if file && !file.locked? && User.current.allowed_to?(:file_approval, file.project) %>
-  <% revision = file.last_revision %>
-  <% if revision && (revision.workflow == DmsfWorkflow::STATE_NONE) %>
-    awf = true;
-  <% end %>
+<% if @dmsf_link_id %>
+  input = $('input[value="<%= @dmsf_link_id %>"]');
+<% else %>
+  input = $('input[name="dmsf_attachments[<%= @attachment_id %>][token]"]');
 <% end %>
 
-dmsfAddLink(linksSpan, linkId, linkName, title, awf);
+var span = input.parent();
+
+<% if @dmsf_link_id %>
+  span.append(
+    "<input name='dmsf_links_wfs[<%= @dmsf_link_id %>]' value='<%= @dmsf_workflow_id %>' type='hidden'>");
+<% else %>
+  span.append(
+    "<input name='dmsf_attachments_wfs[<%= @attachment_id %>]' value='<%= @dmsf_workflow_id %>' type='hidden'>");
+<% end %>
+
+var a = span.children("a.icon-wf-none");
+
+a.attr("class", "icon icon-wf-assigned");
+a.attr("href", "javascript:void(0);");
+a.attr("title", "<%= l(:title_assigned) %>");

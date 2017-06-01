@@ -111,7 +111,28 @@ module DmsfUploadHelper
         else
           failed_uploads.push(commited_file)
         end
+        # Approval workflow
+        if commited_file[:workflow_id].present?
+          wf = DmsfWorkflow.find_by_id commited_file[:workflow_id]
+          if wf
+            # Assign the workflow
+            new_revision.set_workflow(wf.id, 'assign')
+            new_revision.assign_workflow(wf.id)
+            # Start the workflow
+            new_revision.set_workflow(wf.id, 'start')
+            if new_revision.save
+              begin
+                file.lock!
+              rescue DmsfLockError => e
+                Rails.logger.warn e.message
+              end
+            else
+              Rails.logger.error l(:error_workflow_assign)
+            end
+          end
+        end
       end
+      # Notifications
       if ((folder && folder.notification?) || (!folder && project.dmsf_notification?))
         begin
           recipients = DmsfMailer.get_notify_users(project, files)
