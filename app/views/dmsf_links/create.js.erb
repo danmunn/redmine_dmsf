@@ -24,6 +24,7 @@ var linksSpan = $("#dmsf_links_fields");
 var linkId = "<%= @dmsf_link.id %>";
 var linkName = "<%= @dmsf_link.name %>";
 var title = "<%= l(:label_dmsf_wokflow_action_assign) %>";
+var project = "<%= @project.identifier %>"
 var awf = false;
 
 <% file = @dmsf_link.target_file %>
@@ -34,4 +35,4 @@ var awf = false;
   <% end %>
 <% end %>
 
-dmsfAddLink(linksSpan, linkId, linkName, title, awf);
+dmsfAddLink(linksSpan, linkId, linkName, title, project, awf);

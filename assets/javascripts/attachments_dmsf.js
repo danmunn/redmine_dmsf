@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-function dmsfAddLink(linksSpan, linkId, linkName, title, awf) {
+function dmsfAddLink(linksSpan, linkId, linkName, title, project, awf) {
 
     if (linksSpan.children().length < 10) {
 
@@ -35,7 +35,7 @@ function dmsfAddLink(linksSpan, linkId, linkName, title, awf) {
         if(awf) {
 
             linkSpan.append($('<a>&nbsp;</a>').attr({
-                href: "/dmsf_workflows/c1/assign?dmsf_link_id=" + linkId,
+                href: "/dmsf_workflows/" + project + "/assign?dmsf_link_id=" + linkId,
                 'class': 'icon icon-wf-none', 'data-remote': 'true', 'title': title
             }));
         }
@@ -70,7 +70,7 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
                     placeholder: $(inputEl).data('description-placeholder')
                 }).toggle(!eagerUpload),
                 $('<a>&nbsp;</a>').attr({href: "#", 'class': 'remove-upload icon icon-del'}).click(dmsfRemoveFile).toggle(!eagerUpload),
-                $('<a>&nbsp;</a>').attr({href: "/dmsf_workflows/c1/assign?attachment_id=" + attachmentId,
+                $('<a>&nbsp;</a>').attr({href: "/dmsf_workflows/" + $(inputEl).attr('data-project') + "/assign?attachment_id=" + attachmentId,
                     'class': 'icon icon-wf-none', 'data-remote': 'true'})
             ).appendTo('#dmsf_attachments_fields');
         }
