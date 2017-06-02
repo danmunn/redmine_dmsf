@@ -4,6 +4,11 @@ Changelog for Redmine DMSF
 1.6.0 *????-??-??*
 ------------------
 
+IMPORTANT
+
+1. Files in the filesystem are re-organized by a new system based on date.
+2. DMS storage directory plugin option is related to the rails root directory.
+
 1.5.9 *2016-03-01*
 ------------------
 

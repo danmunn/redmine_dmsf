@@ -133,20 +133,20 @@ class DmsfFileRevision < ActiveRecord::Base
   def storage_base_path
     time = self.created_at || DateTime.now
     path = time.strftime('%Y/%m')
-    "#{DmsfFile.storage_path}/#{path}"
+    DmsfFile.storage_path.join path
   end
 
   def disk_file
     path = self.storage_base_path
     FileUtils.mkdir_p(path) unless File.exist?(path)
-    "#{path}/#{self.disk_filename}"
+    path.join self.disk_filename
   end
 
   def new_storage_filename
     raise DmsfAccessError, 'File id is not set' unless self.dmsf_file.id
     filename = DmsfHelper.sanitize_filename(self.name)
     timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
-    while File.exist?(File.join(storage_base_path, "#{timestamp}_#{self.dmsf_file.id}_#{filename}"))
+    while File.exist?(storage_base_path.join("#{timestamp}_#{self.dmsf_file.id}_#{filename}"))
       timestamp.succ!
     end
     "#{timestamp}_#{self.dmsf_file.id}_#{filename}"

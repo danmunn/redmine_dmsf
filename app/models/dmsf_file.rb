@@ -102,10 +102,12 @@ class DmsfFile < ActiveRecord::Base
   def self.storage_path
     return @@storage_path if @@storage_path.present?
     path = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    path = Pathname(Redmine::Configuration['attachments_storage_path']).join('dmsf') if path.blank? && Redmine::Configuration['attachments_storage_path'].present?
-    path = Rails.root.join('files/dmsf').to_s if path.blank?
-    path.strip if path
-    path
+    if path.blank?
+      path = 'dmsf'
+    else
+      path.strip!
+    end
+    Rails.root.join(path)
   end
 
   # Lets introduce a write for storage path, that way we can also

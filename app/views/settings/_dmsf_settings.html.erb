@@ -62,21 +62,21 @@
   <%=  content_tag(:label, l(:label_file_storage_directory)) %>
   <% 
     storage_dir = @settings['dmsf_storage_directory'].strip if @settings['dmsf_storage_directory'].present?
-    storage_dir = "#{Rails.root}/files/dmsf" if storage_dir.blank?
+    storage_dir = 'dmsf' if storage_dir.blank?
   %>
   <%= text_field_tag 'settings[dmsf_storage_directory]', storage_dir, :size => 50 %>
   <em class="info">
-    <%= l(:label_default) %>: <%= "#{Rails.root}/files/dmsf" %>
+    <%= l(:label_default) %>: dmsf
   </em>
 </p>
-<% unless File.exist?(storage_dir) %>
+<% unless File.exist?(DmsfFile.storage_path) %>
   <% begin %>
-     <% Dir.mkdir(storage_dir) %>
+     <% Dir.mkdir(DmsfFile.storage_path) %>
   <% rescue %>
     <p class="warning"><%= l(:error_file_storage_directory_does_not_exist) %></p> 
   <% end %>
 <% end %>
-<% testfilename = "#{storage_dir}/test.test" %>
+<% testfilename = DmsfFile.storage_path.join('test.test') %>
 <% if File.exist?(storage_dir) %>
   <%	begin %>
     <% File.open(testfilename, 'wb') do |file| %>
