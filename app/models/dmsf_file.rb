@@ -105,7 +105,8 @@ class DmsfFile < ActiveRecord::Base
     if path.blank?
       path = 'dmsf'
     else
-      path.strip!
+      pn = Pathname.new(path)
+      return pn if pn.absolute?
     end
     Rails.root.join(path)
   end
