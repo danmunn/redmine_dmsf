@@ -127,7 +127,9 @@ module DmsfHelper
       end
     end
     # Calculate position
-    step = 1.0 / (10 ** ident)
+    ident = 0 unless ident
+    pos = (10 ** 12) unless pos
+    step = (10 ** 12) / (10 ** (ident * 3))
     tree = []
     i = 0
     nodes.each do |x|

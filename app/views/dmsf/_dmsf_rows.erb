@@ -1,6 +1,4 @@
 <% parent = @folder ? @folder : @project %>
-<% @idnt = 0 unless @idnt %>
-<% @pos = 0.0 unless @pos %>
 <% DmsfHelper.all_children_sorted(parent, @pos, @idnt).each do |obj, position| %>
     <% classes = "dmsf_tree idnt-#{@idnt}" %>
     <% classes += " dmsf-#{cycle('odd', 'even')}" %>
