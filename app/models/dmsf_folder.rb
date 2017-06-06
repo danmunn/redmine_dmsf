@@ -88,11 +88,16 @@ class DmsfFolder < ActiveRecord::Base
   def self.visible_condition(system=true)
     Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
       if user.id && user.logged?
+        permissions = "#{DmsfFolderPermission.table_name}"
+        folders = "#{DmsfFolder.table_name}"
+        group_ids = user.groups.map{ |g| g.id }.join(',')
+        group_ids = -1 if group_ids.blank?
+        allowed = (system && role.allowed_to?(:display_system_folders)) ? 1 : 0
         %{
-          ((#{DmsfFolderPermission.table_name}.object_id IS NULL) OR
-          ((#{DmsfFolderPermission.table_name}.object_id = #{role.id} AND #{DmsfFolderPermission.table_name}.object_type = 'Role')) OR
-          ((#{DmsfFolderPermission.table_name}.object_id = #{user.id} AND #{DmsfFolderPermission.table_name}.object_type = 'User'))) AND
-          ((#{DmsfFolder.table_name}.system = 0 OR 1 = #{(system && role.allowed_to?(:display_system_folders)) ? 1 : 0}))
+          (#{permissions}.object_id IS NULL) OR
+          (#{permissions}.object_id = #{role.id} AND #{permissions}.object_type = 'Role') OR
+          ((#{permissions}.object_id = #{user.id} OR #{permissions}.object_id IN (#{group_ids})) AND #{permissions}.object_type = 'User') AND
+          (#{folders}.system = 0 OR 1 = #{allowed})
         }
       else
         '0 = 1'
@@ -113,7 +118,12 @@ class DmsfFolder < ActiveRecord::Base
       if folder.dmsf_folder_permissions.any?
         role_ids = User.current.roles_for_project(folder.project).map{ |r| r.id }
         role_permission_ids = folder.dmsf_folder_permissions.roles.map{ |p| p.object_id }
-        return (role_ids & role_permission_ids).any? || folder.dmsf_folder_permissions.users.map{ |p| p.object_id }.include?(User.current.id)
+        return true if (role_ids & role_permission_ids).any?
+        principal_ids = folder.dmsf_folder_permissions.users.map{ |p| p.object_id }
+        return true if principal_ids.include?(User.current.id)
+        user_group_ids = User.current.groups.map{ |g| g.id }
+        return true if (principal_ids & user_group_ids).any?
+        return false
       end
       true
     end

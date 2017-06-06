@@ -32,16 +32,17 @@ class DmsfFolderPermissionsController < ApplicationController
   end
 
   def new
-    @users = users_for_new_users
+    @principals = users_for_new_users
   end
 
   def append
-    @users = User.active.visible.where(:id => params[:user_ids]).to_a
-    render :nothing => true if @users.blank?
+    #@principals = User.active.visible.where(:id => params[:user_ids]).to_a
+    @principals = Principal.where(:id => params[:user_ids]).to_a
+    render :nothing => true if @principals.blank?
   end
 
   def autocomplete_for_user
-    @users = users_for_new_users
+    @principals = users_for_new_users
     respond_to do |format|
       format.js
     end
@@ -50,12 +51,13 @@ class DmsfFolderPermissionsController < ApplicationController
   private
 
   def users_for_new_users
-    if params[:q].blank? && @project.present?
-      scope = @project.users
-    else
-      scope = User.all.limit(100)
-    end
-    scope.active.visible.sorted.like(params[:q]).to_a
+    #if params[:q].blank? && @project.present?
+    #  scope = @project.users
+    #else
+    #  scope = User.all.limit(100)
+    #end
+    #scope.active.visible.sorted.like(params[:q]).to_a
+    Principal.active.visible.member_of(@project).like(params[:q]).order(:type, :lastname).to_a
   end
 
   def find_project

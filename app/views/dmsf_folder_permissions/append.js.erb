@@ -1,4 +1,4 @@
-<% @users.each do |user| %>
-  $("#user_permission_ids_<%= user.id %>").remove();
+<% @principals.each do |principal| %>
+  $("#user_permission_ids_<%= principal.id %>").remove();
 <% end %>
-$('#user_permissions').append('<%= escape_javascript(users_checkboxes(@users)) %>');
+$('#user_permissions').append('<%= escape_javascript(users_checkboxes(@principals)) %>');
