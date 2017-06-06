@@ -36,7 +36,6 @@ class DmsfFolderPermissionsController < ApplicationController
   end
 
   def append
-    #@principals = User.active.visible.where(:id => params[:user_ids]).to_a
     @principals = Principal.where(:id => params[:user_ids]).to_a
     render :nothing => true if @principals.blank?
   end
@@ -51,12 +50,6 @@ class DmsfFolderPermissionsController < ApplicationController
   private
 
   def users_for_new_users
-    #if params[:q].blank? && @project.present?
-    #  scope = @project.users
-    #else
-    #  scope = User.all.limit(100)
-    #end
-    #scope.active.visible.sorted.like(params[:q]).to_a
     Principal.active.visible.member_of(@project).like(params[:q]).order(:type, :lastname).to_a
   end
 

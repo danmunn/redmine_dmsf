@@ -7,7 +7,6 @@ module DmsfFolderPermissionsHelper
         content = check_box_tag('permissions[user_ids][]', user.id, true, :id => nil) + user.name
         s << content_tag(:label, content, :id => "user_permission_ids_#{user.id}", :class => 'inline')
       end
-      s << '<br/>' if users.any?
     end
     s.html_safe
   end

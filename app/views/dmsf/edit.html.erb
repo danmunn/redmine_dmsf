@@ -89,7 +89,12 @@
       <% end %>
       <span id="user_permissions">
         <br/>
-        <%= users_checkboxes(@users) %>
+        <% checkboxes = users_checkboxes(@users) %>
+        <%= checkboxes %>
+      </span>
+        <% if checkboxes.present? %>
+        <br/>
+      <% end %>
       </span>
       <span class="search_for_watchers">
         <%= link_to l(:label_user_search_add),
