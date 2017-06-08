@@ -105,7 +105,13 @@
 <% end %>
 
 <script type="text/javascript">
-  // Suggest a link name when a file is selected
+  <%# Select2 extension, TODO: in case of a modal window, select2 makes problems %>
+  <% unless modal %>
+    $('#dmsf_link_target_project_id').select2();
+    $('#dmsf_link_target_folder_id').select2();
+    $('#dmsf_link_target_file_id').select2();
+  <% end %>
+  <%# Suggest a link name when a file is selected %>
   $('#dmsf_link_target_file_id').change(function () {
     var linkName = $('#dmsf_link_name');
     var name = linkName.val();
@@ -114,7 +120,7 @@
         linkName.val($('#dmsf_link_target_file_id option:selected').text().replace(/\./g, ''));
     }
   });
-  // Internal/External link switch
+  <%# Internal/External link switch %>
   $("input[name=external_link]:radio").change(function(){
     $("#link_internal").toggle();
     $("#link_external").toggle();
