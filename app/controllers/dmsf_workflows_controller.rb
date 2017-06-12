@@ -394,26 +394,7 @@ class DmsfWorkflowsController < ApplicationController
     if revision
       revision.set_workflow(@dmsf_workflow.id, params[:action])
       if revision.save
-        assignments = @dmsf_workflow.next_assignments revision.id
-        recipients = assignments.collect{ |a| a.user }
-        recipients.uniq!
-        recipients = recipients & DmsfMailer.get_notify_users(@project)
-        recipients.each do |user|
-          DmsfMailer.workflow_notification(
-            user,
-            @dmsf_workflow,
-            revision,
-            :text_email_subject_started,
-            :text_email_started,
-            :text_email_to_proceed).deliver
-        end
-        if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
-          unless recipients.blank?
-            to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
-            to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-            flash[:warning] = l(:warning_email_notifications, :to => to)
-          end
-        end
+        @dmsf_workflow.notify_users(@project, revision, self)
         flash[:notice] = l(:notice_workflow_started)
       else
         flash[:error] = l(:notice_cannot_start_workflow)

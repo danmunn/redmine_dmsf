@@ -62,7 +62,12 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def target_folder
-    DmsfFolder.find_by_id self.target_folder_id if self.target_folder_id
+    unless @target_folder
+      if self.target_folder_id
+        @target_folder = DmsfFolder.find_by_id self.target_folder_id
+      end
+    end
+    @target_folder
   end
 
   def target_file_id
@@ -70,15 +75,28 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def target_file
-    DmsfFile.find_by_id self.target_file_id if self.target_file_id
+    unless @target_file
+      if self.target_file_id
+        DmsfFile.find_by_id self.target_file_id
+      end
+    end
+    @target_file
   end
 
   def target_project
-    Project.find_by_id self.target_project_id
+    unless @target_project
+      Project.find_by_id self.target_project_id
+    end
+    @target_project
   end
 
   def folder
-    DmsfFolder.find_by_id self.dmsf_folder_id
+    unless @folder
+      if self.dmsf_folder_id
+        @folder = DmsfFolder.find_by_id self.dmsf_folder_id
+      end
+    end
+    @folder
   end
 
   def title

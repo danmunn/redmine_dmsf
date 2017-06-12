@@ -385,7 +385,7 @@ class DmsfFile < ActiveRecord::Base
 
               if dmsf_file
                 if user.allowed_to?(:view_dmsf_files, dmsf_file.project) &&
-                    (project_ids.blank? || (project_ids.include?(dmsf_file.project.id)))
+                    (project_ids.blank? || (project_ids.include?(dmsf_file.project_id)))
                     Redmine::Search.cache_store.write("DmsfFile-#{dmsf_file.id}",
                       dochash['sample'].force_encoding('UTF-8')) if dochash['sample']
                   break if(!options[:limit].blank? && results.count >= options[:limit])
@@ -407,7 +407,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def display_name
-    member = Member.where(:user_id => User.current.id, :project_id => self.project.id).first
+    member = Member.where(:user_id => User.current.id, :project_id => self.project_id).first
     if member && !member.title_format.nil? && !member.title_format.empty?
       title_format = member.title_format
     else
@@ -635,9 +635,12 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def container
-    if self.dmsf_folder && self.dmsf_folder.system
-      Issue.where(:id => self.dmsf_folder.title.to_i).first
+    unless @container
+      if self.dmsf_folder && self.dmsf_folder.system
+        @container = Issue.where(:id => self.dmsf_folder.title.to_i).first
+      end
     end
+    @container
   end
 
 end

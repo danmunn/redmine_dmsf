@@ -110,6 +110,7 @@ module RedmineDmsf
                 # Start the workflow
                 revision.set_workflow(wf.id, 'start')
                 if revision.save
+                  wf.notify_users(issue.project, revision, context[:controller])
                   begin
                     file.lock!
                   rescue DmsfLockError => e

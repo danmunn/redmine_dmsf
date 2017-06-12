@@ -217,4 +217,27 @@ class DmsfWorkflow < ActiveRecord::Base
     self.status == STATUS_ACTIVE
   end
 
+  def notify_users(project, revision, controller)
+    assignments = self.next_assignments revision.id
+    recipients = assignments.collect{ |a| a.user }
+    recipients.uniq!
+    recipients = recipients & DmsfMailer.get_notify_users(project)
+    recipients.each do |user|
+      DmsfMailer.workflow_notification(
+        user,
+        self,
+        revision,
+        :text_email_subject_started,
+        :text_email_started,
+        :text_email_to_proceed).deliver
+    end
+    if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+      unless recipients.blank?
+        to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+        to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
+        controller.flash[:warning] = l(:warning_email_notifications, :to => to)
+      end
+    end
+  end
+
 end

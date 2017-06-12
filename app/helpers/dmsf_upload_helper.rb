@@ -121,6 +121,7 @@ module DmsfUploadHelper
             # Start the workflow
             new_revision.set_workflow(wf.id, 'start')
             if new_revision.save
+              wf.notify_users(project, new_revision, controller)
               begin
                 file.lock!
               rescue DmsfLockError => e
