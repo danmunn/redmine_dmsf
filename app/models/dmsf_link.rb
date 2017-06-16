@@ -77,7 +77,7 @@ class DmsfLink < ActiveRecord::Base
   def target_file
     unless @target_file
       if self.target_file_id
-        DmsfFile.find_by_id self.target_file_id
+        @target_file = DmsfFile.find_by_id self.target_file_id
       end
     end
     @target_file
@@ -85,7 +85,7 @@ class DmsfLink < ActiveRecord::Base
 
   def target_project
     unless @target_project
-      Project.find_by_id self.target_project_id
+      @target_project = Project.find_by_id self.target_project_id
     end
     @target_project
   end
