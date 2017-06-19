@@ -115,3 +115,23 @@ Redmine::Search.map do |search|
   search.register :dmsf_files
   search.register :dmsf_folders
 end
+
+# Set DMSF tmp folder
+def Dir::tmpdir
+  if $SAFE > 0
+    tmp = @@systmpdir
+  else
+    tmp = nil
+    for dir in [ENV['DMSF_TMPDIR'], '/var/www/redmine/files/.dmsf_tmp', ENV['TMP'], ENV['TEMP'], '/tmp', './files/tmp', './files']
+      next if !dir
+      dir = File.expand_path(dir)
+      if stat = File.stat(dir) and stat.directory? and stat.writable? and
+          (!stat.world_writable? or stat.sticky?)
+        tmp = dir
+        break
+      end rescue nil
+    end
+    raise ArgumentError, "could not find a temporary directory" if !tmp
+    tmp
+  end
+end
