@@ -110,7 +110,10 @@ class DmsfUploadController < ApplicationController
       uploaded_files = attachments.select { |key, value| key == 'uploaded_file'}
       uploaded_files.each_value do |uploaded_file|
         upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
-        uploaded_file[:disk_filename] = upload.disk_filename if upload
+        if upload
+          uploaded_file[:disk_filename] = upload.disk_filename
+          uploaded_file[:tempfile_path] = upload.tempfile_path
+        end
       end
       commit_files_internal uploaded_files
     end

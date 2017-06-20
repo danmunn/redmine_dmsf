@@ -718,7 +718,6 @@ class DmsfController < ApplicationController
           @url_links = @folder.url_links.visible
           @locked_for_user = @folder.locked_for_user?
         else
-          Rails.logger.info ">>> #{@project.dmsf_folders.visible.to_sql}"
           @subfolders = @project.dmsf_folders.visible.to_a
           @files = @project.dmsf_files.visible
           @dir_links = @project.folder_links.visible

@@ -39,14 +39,14 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
     DmsfFile.storage_path = File.expand_path '../../../fixtures/files', __FILE__
     User.current = nil        
   end
-  
-  def test_truth    
+
+  def test_truth
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
     assert_kind_of Role, @role
     assert_kind_of DmsfFolder, @folder6
   end
-  
+
   def test_mkcol_requires_authentication
     xml_http_request  :mkcol, '/dmsf/webdav/test1'
     assert_response 401

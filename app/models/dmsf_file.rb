@@ -119,7 +119,7 @@ class DmsfFile < ActiveRecord::Base
     rescue Exception => e
       Rails.logger.error e.message
     end
-    @@storage_path = path
+    @@storage_path = Pathname.new(path)
   end
 
   def self.find_file_by_name(project, folder, name)

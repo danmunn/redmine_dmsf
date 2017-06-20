@@ -72,7 +72,7 @@ module RedmineDmsf
       #  - 2012-06-15: Only if you're allowed to browse the project
       #  - 2012-06-18: Issue #5, ensure item is only listed if project is enabled for dmsf
       def exist?
-        return project && project.module_enabled?('dmsf') && (folder || file) &&
+        project && project.module_enabled?('dmsf') && (folder || file) &&
           (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project))
       end
 
@@ -96,13 +96,11 @@ module RedmineDmsf
         @folder
       end
 
-      # Check if current entity exists as a file (DmsfFile), and returns corresponding object if found (nil otherwise)
+      # Check if the current entity exists as a file (DmsfFile), and returns corresponding object if found (nil otherwise)
       def file
         unless @file
           return nil unless project # Again if entity project is nil, it cannot exist in context of this object
-          @file = DmsfFile.visible.joins('JOIN dmsf_file_revisions ON dmsf_files.id = dmsf_file_revisions.dmsf_file_id').where(
-            ["dmsf_files.project_id = ? AND dmsf_files.dmsf_folder_id #{parent.folder ? '=' : 'IS'} ? AND dmsf_file_revisions.name = ?",
-             project.id, parent.folder ? parent.folder.id : nil, basename]).first
+          @file = DmsfFile.find_file_by_name(project, parent.folder, basename)
         end
         @file
       end
@@ -238,7 +236,7 @@ module RedmineDmsf
       # Behavioural differences between collection and single entity
       # TODO: Support overwrite between both types of entity, and implement better checking
       def move(dest, overwrite)
-        # All of this should carry accrross the ResourceProxy frontend, we ensure this to
+        # All of this should carry across the ResourceProxy frontend, we ensure this to
         # prevent unexpected errors
         resource = dest.is_a?(ResourceProxy) ? dest.resource : dest
 
