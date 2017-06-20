@@ -42,10 +42,12 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
     @user_member.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
     @user_member.pref.save!    
     get :page
-    assert_response :success        
-    assert_select 'div#list-top' do      
-      assert_select 'h3', { :text => "#{l(:open_approvals)} (0)" }
-    end      
+    assert_response :success
+    unless defined?(EasyExtensions)
+      assert_select 'div#list-top' do
+        assert_select 'h3', { :text => "#{l(:open_approvals)} (0)" }
+      end
+    end
   end
   
   def test_page_with_open_locked_documents    
@@ -53,8 +55,10 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
     @user_member.pref.save!    
     get :page
     assert_response :success
-    assert_select 'div#list-top' do      
-      assert_select 'h3', { :text => "#{l(:locked_documents)} (0/1)" }
+    unless defined?(EasyExtensions)
+      assert_select 'div#list-top' do
+        assert_select 'h3', { :text => "#{l(:locked_documents)} (0/1)" }
+      end
     end
   end
 
