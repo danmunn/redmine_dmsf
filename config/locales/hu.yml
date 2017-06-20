@@ -32,7 +32,7 @@ hu:
   warning_file_not_locked: Fájl nincs lezárva
   notice_file_unlocked: Fájl kinyitva
   error_only_user_that_locked_file_can_unlock_it: Csak az tudja kinyitni a fájlt aki bezárta
-  error_max_files_exceeded: Túllépte az egyszerre letölthető fájlok %{number} számának korlátozását
+  error_max_files_exceeded: "Túllépte az egyszerre letölthető fájlok %{number} számának korlátozását"
   error_entry_project_does_not_match_current_project: Az állomány projektje nem egyezik a jelenlegi projekttel
   notice_folder_created: Mappa létrehozása sikerült
   error_folder_creation_failed: Mappa létrehozása nem sikerült
@@ -75,7 +75,7 @@ hu:
   title_notifications_active_deactivate: "Értesítések bekapcsolva: Kikapcsolás"
   title_notifications_not_active_activate: "Értesítések nincsnek bekapcsolva: Bekapcsolás"
   title_title_version_version_download: "%{title} verzió %{version} letöltés"
-  title_locked_by_user: Zárolva %{user}
+  title_locked_by_user: "Zárolva %{user}"
   title_locked_by_you: Ön zárolta
   title_waiting_for_approval: Elfogadásra vár
   title_approved: Elfogadva
@@ -104,7 +104,7 @@ hu:
   select_option_deactivated: Deaktivált
   select_option_activated: Aktivált
   label_title_format: Cím formátum
-  text_title_format: 'Dokumentum címformátum a letöltéshez (%t - cím, %f - fájl, %d - dátum, %v - verzió, %i - ID, %r - revízió) Például: t_%v'
+  text_title_format: "Dokumentum címformátum a letöltéshez (%t - cím, %f - fájl, %d - dátum, %v - verzió, %i - ID, %r - revízió) Például: t_%v"
   title_save_preferences: Preferenciák mentése
   heading_revisions: Verziók
   title_download: Letöltés
@@ -134,7 +134,7 @@ hu:
   option_stem_none: Nincs csonkolás (alapértelmezett)
   option_stem_some: Részleges csonkolás
   option_stem_all: Teljes csonkolás
-  label_stemming_description: 'Ez a beállítás szabályozza, hogy a lekérdezés hogyan fogja alkalmazni a csonkoló algoritmust. Az alapértelmezett érték: STEM_NONE. A lehetséges értékek'
+  label_stemming_description: "Ez a beállítás szabályozza, hogy a lekérdezés hogyan fogja alkalmazni a csonkoló algoritmust. Az alapértelmezett érték: STEM_NONE. A lehetséges értékek"
   note_do_not_stem: Ne végezzen csonkolást
   note_stem_some: Keressen a szótöveket, kivéve ha nagy kezdőbetűvel kezdődik a szó, vagy bizonyos karakterek követik, vagy ha a szó helyőrző operátorokat használ. A csonkolt kifejezések 'Z'-vel kerülnek jelölésre.
   note_stem_all: Minden szó csonkolt formáját keresse meg (nincs 'Z' jelzés)
@@ -163,7 +163,7 @@ hu:
   error_user_has_not_right_delete_folder: A felhasználónak nincs jogosultsága a mappa törléséhez
   error_user_has_not_right_delete_file: Felhasználónak nincs jogosultsága a fájl törléséhez.
   notice_entries_deleted: Állományok törölve
-  warning_some_entries_were_not_deleted: Néhány állomány nem került törlésre %{entries}
+  warning_some_entries_were_not_deleted: "Néhány állomány nem került törlésre %{entries}"
   title_delete_checked: Ellenőrzöttek törlése
   title_items: Elemek
   title_filename_for_download: Letöltéshez vagy .zip tömörített állományhoz használt fájlnév
@@ -184,31 +184,31 @@ hu:
   title_total_size_of_all_files: Ebbe a mappába tartozó összes fájl mérete
   project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: Nincs projekt ahová másolható a fájl
-  comment_copied_from: Másolva  %{source}
+  comment_copied_from: "Másolva  %{source}"
   notice_file_copied: Fájl másolva
   notice_file_moved: Fájl áthelyezve
   field_target_project: Célprojekt
   field_target_folder: Cél mappa
   title_copy_or_move: Másolás/Elmozgatás
   label_dmsf_folder_plural: Mappák
-  comment_moved_from: Elmozgatva %{source}
+  comment_moved_from: "Elmozgatva %{source}"
   error_target_folder_same: A cél mappa és a projekt ugyanaz, mint a jelenlegi
   error_file_cannot_be_moved: Fájl nem áthelyezhető
   error_file_cannot_be_copied: Fájlt nem lehet másolni
-  warning_no_project_to_copy_folder_to: Nincs projekt ahova a mappa másolható hibák miatt: %{files}'
+  warning_no_project_to_copy_folder_to: "Nincs projekt ahova a mappa másolható hibák miatt: %{files}"
   title_copy: Másolás
   error_folder_cannot_be_copied: Mappa nem másolható
   notice_folder_copied: Mappa másolásra került
 
-  error_max_email_filesize_exceeded: Túllépte a maximum fájlméretet ami emailen küldhető. (%{number} MB)
+  error_max_email_filesize_exceeded: "Túllépte a maximum fájlméretet ami emailen küldhető. (%{number} MB)"
   note_maximum_email_filesize: Korlátozza a maximális fájlméretet, amely küldhető email-ben. A 0 korlátlan méretet jelent, az érték MB-ban kerül megadásra.
   label_maximum_email_filesize: Emailhez csatolható fájl maximum mérete.
   header_minimum_filesize: Fájl hiba.
-  error_minimum_filesize: A fájl %{file} 0 bájt, ezért nem lesz csatolva.
+  error_minimum_filesize: "A fájl %{file} 0 bájt, ezért nem lesz csatolva."
   parent_directory: Szülő könyvtár
-  note_webdav: Webdav aktiválása után itt található %{protocol}://%{domain}/dmsf/webdav/[projekt azonosító]
+  note_webdav: "Webdav aktiválása után itt található %{protocol}://%{domain}/dmsf/webdav/[projekt azonosító]"
   label_webdav: Webdav funkciók
-  label_dmsf_plural: Dokumentumok és mappák (%{files}  másolása a %{folders} mappákba
+  label_dmsf_plural: "Dokumentumok és mappák (%{files}  másolása a %{folders} mappákba"
 
   warning_folder_already_locked: Ez a mappa már zárolva
   notice_folder_locked: A mappa sikeresen lett zárolva
@@ -232,7 +232,7 @@ hu:
   field_label_dmsf_workflow: Elfogadott Workflow
   field_label_dmsf_workflow_name: Jóváhagyási workflow neve
   label_dmsf_workflow_plural: Jóváhagyási folyamatok
-  label_dmsf_workflow_plural_num: Jóváhagyási workflow-k (%{count})
+  label_dmsf_workflow_plural_num: "Jóváhagyási workflow-k (%{count})"
   label_dmsf_workflow_step: Lépés
   label_dmsf_workflow_step_plural: Lépések
   label_dmsf_workflow_approval: Jóváhagyás
@@ -260,7 +260,7 @@ hu:
   dmsf_new_step: Új lépés
   dmsf_new_step_or_approver: Új lépés vagy új jóváhagyó
   message_dmsf_wokflow_note: Saját jegyzet
-  info_revision: r%{rev}
+  info_revision: "r%{rev}"
   link_workflow: Workflow
   notice_workflow_started: Jóváhagyási workflow sikeresen elkezdődött
   text_email_subject_approved: elfogadott
@@ -269,12 +269,12 @@ hu:
   text_email_subject_requires_approval: Ön jóváhagyása szükséges
   text_email_subject_updated: frissített
   text_email_subject_started: elkezdett
-  text_email_finished_approved: A  '%{name}'  jóváhagyási workflow amely a '%{filename}'  dokumentumhoz került hozzárendelésre, befejeződött és a dokumentum jóváhagyásra került.
-  text_email_finished_rejected: 'A  ''%{name}''  jóváhagyási workflow amely a ''%{filename}'' dokumentumhoz került hozzárendelésre, befejeződött és visszautasításra került a következő üzenettel: ''%{notice}''.'
-  text_email_finished_delegated: A  '%{name}'  jóváhagyási workflow amely a '%{filename}'  dokumentumhoz került hozzárendelésre, Önhöz került az alábbi megjegyzés '%{notice}' miatt és a jelenlegi lépésben az Ön jóváhagyására vár.
-  text_email_finished_step: A  '%{name}'  jóváhagyási workflow-ban amely a '%{filename}' dokumentumhoz került hozzárendelésre, egy lépés teljesült és a következő lépésben lépésben az Ön jóváhagyására vár.
-  text_email_finished_step_short: A  '%{name}'  jóváhagyási workflow-ban amely a '%{filename}'  dokumentumhoz került hozzárendelésre, egy lépés teljesült a folyamatban.
-  text_email_started: A  '%{name}'  jóváhagyási workflow amely a '%{filename}'  dokumentumhoz került hozzárendelésre, elindult és a jelenlegi lépésben az Ön jóváhagyására vár.
+  text_email_finished_approved: "A '%{name}' jóváhagyási workflow amely a '%{filename}'  dokumentumhoz került hozzárendelésre, befejeződött és a dokumentum jóváhagyásra került."
+  text_email_finished_rejected: "A '%{name}' jóváhagyási workflow amely a '%{filename}' dokumentumhoz került hozzárendelésre, befejeződött és visszautasításra került a következő üzenettel: '%{notice}'."
+  text_email_finished_delegated: "A '%{name}' jóváhagyási workflow amely a '%{filename}'  dokumentumhoz került hozzárendelésre, Önhöz került az alábbi megjegyzés '%{notice}' miatt és a jelenlegi lépésben az Ön jóváhagyására vár."
+  text_email_finished_step: "A '%{name}' jóváhagyási workflow-ban amely a '%{filename}' dokumentumhoz került hozzárendelésre, egy lépés teljesült és a következő lépésben lépésben az Ön jóváhagyására vár."
+  text_email_finished_step_short: "A '%{name}' jóváhagyási workflow-ban amely a '%{filename}'  dokumentumhoz került hozzárendelésre, egy lépés teljesült a folyamatban."
+  text_email_started: "A '%{name}' jóváhagyási workflow amely a '%{filename}' dokumentumhoz került hozzárendelésre, elindult és a jelenlegi lépésben az Ön jóváhagyására vár."
   text_email_to_proceed: A folytatáshoz kattintson a négyzetre a dokumentum mellett
   text_email_to_see_history: Ha meg akarja nézni a jóváhagyási előzményeket, akkor kattintson a dokumentumon belül a workflow státuszra
   text_email_to_see_status: Ha meg szeretné nézni a jóváhagyási folyamatot kattintson a dokumentumon belül a workflow státuszra
@@ -304,7 +304,7 @@ hu:
 
   label_display_notified_recipients: Értesített címzettek megjelenítése
   note_display_notified_recipients: A felhasználó tájékoztatást kap a címzettekről,
-  Warning_email_notifications: Email értesítés lett küldve %{to}
+  Warning_email_notifications: "Email értesítés lett küldve %{to}"
 
   link_trash_bin: Lomtár
   title_restore: Helyreállít
@@ -331,7 +331,7 @@ hu:
   label_classic: Klasszikus
   label_drag_drop: Drag&Drop
 
-  error_maximum_upload_filecount: Nem több, mint %{filecount} fájl tölthető fel.
+  error_maximum_upload_filecount: "Nem több, mint %{filecount} fájl tölthető fel."
 
   label_public_urls: Public URLs valid to
 
