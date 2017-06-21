@@ -57,7 +57,8 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert_equal 6, DmsfFolder.visible.where(:project_id => 1).count
     # The user has got permissions
     User.current = @developer
-    assert_equal 6, DmsfFolder.visible.where(:project_id => 1).count
+    str = "#{User.current.id};" + DmsfFolder.select(:id).visible.where(:project_id => 1).map{ |f| f.id }.join(',') + ';' + DmsfFolder.visible.where(:project_id => 1).to_sql
+    assert_equal 6, DmsfFolder.visible.where(:project_id => 1).count, str
     # Hasn't got permissions for @folder7
     @folder7.dmsf_folder_permissions.where(:object_type => 'User').delete_all
     assert_equal 5, DmsfFolder.visible.where(:project_id => 1).count
