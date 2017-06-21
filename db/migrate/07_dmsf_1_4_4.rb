@@ -142,7 +142,7 @@ class Dmsf144 < ActiveRecord::Migration
       DmsfFileRevision.visible.each {|rev|
         next if rev.project.nil?
         project = rev.project.identifier.gsub(/[^\w\.\-]/,'_')
-        existing = DmsfFile.storage_path.jopin("p_#{project}/#{rev.disk_filename}")
+        existing = DmsfFile.storage_path.join("p_#{project}/#{rev.disk_filename}")
         new_path = DmsfFile.storage_path.join(rev.disk_filename)
         if File.exist?(existing)
           if File.exist?(new_path)
