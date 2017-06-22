@@ -106,7 +106,7 @@ module RedmineDmsf
             parent.save
           end
           if parent
-            folder = DmsfFolder.system.where(['project_id = ? AND dmsf_folder_id = ? AND CAST(title AS UNSIGNED) = ?',
+            folder = DmsfFolder.system.where(['project_id = ? AND dmsf_folder_id = ? AND CAST(title AS DECIMAL) = ?',
               self.project_id, parent.id, self.id]).first
             if create && !folder
               folder = DmsfFolder.new

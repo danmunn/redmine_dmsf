@@ -90,14 +90,14 @@ class DmsfFolder < ActiveRecord::Base
       if user.id && user.logged?
         permissions = "#{DmsfFolderPermission.table_name}"
         folders = "#{DmsfFolder.table_name}"
-        group_ids = user.groups.map{ |g| g.id }.join(',')
+        group_ids = user.group_ids.join(',')
         group_ids = -1 if group_ids.blank?
         allowed = (system && role.allowed_to?(:display_system_folders)) ? 1 : 0
         %{
           (#{permissions}.object_id IS NULL) OR
           (#{permissions}.object_id = #{role.id} AND #{permissions}.object_type = 'Role') OR
           ((#{permissions}.object_id = #{user.id} OR #{permissions}.object_id IN (#{group_ids})) AND #{permissions}.object_type = 'User') AND
-          (#{folders}.system = 0 OR 1 = #{allowed})
+          (#{folders}.system = #{DmsfFolder.connection.quoted_false} OR 1 = #{allowed})
         }
       else
         '0 = 1'
@@ -459,22 +459,22 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def save(*args)
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)    
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
     super(*args)
   end
   
   def save!(*args)
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)    
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
     super(*args)
   end
 
   def destroy
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)    
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
     super
   end
 
   def destroy!
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)    
+    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
     super
   end
   
