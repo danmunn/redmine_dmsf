@@ -51,7 +51,6 @@ class DmsfMailer < Mailer
   end
 
   def send_documents(project, user, email_params)
-    zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
     redmine_headers 'Project' => project.identifier if project
     @body = email_params[:body]
     @links_only = email_params[:links_only] == '1'
@@ -61,6 +60,7 @@ class DmsfMailer < Mailer
     @files = email_params[:files]
 
     unless @links_only
+      zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
       attachments['Documents.zip'] = { :content_type => 'application/zip', :content => zipped_content_data }
     end
     mail :to => email_params[:to], :cc => email_params[:cc],
