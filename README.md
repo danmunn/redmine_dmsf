@@ -47,11 +47,11 @@ Dependencies
 
 ### Full-text search (optional)
 
-If you want to use fulltext search abilities:
+If you want to use fulltext search abilities, install xapian-core, omega and xapian-bindings from 
+https://xapian.org/download or install xapian-omega package from your Linux distribution repositories.
 
-  * Xapian (<http://www.xapian.org>) search engine 
-  * Xapian Omega indexing tool
-  * Xapian ruby bindings - xapian or xapian-full gem
+As of xapian-full-alaveteli (1.2.21.1), the latest working version of Xapian installed in the system is 1.2.24. Later 
+versions give an error: "REDMAIN_XAPIAN ERROR: Xapian database is not properly set, initiated or it's corrupted"
 
 To index some files with omega you may have to install some other packages like
 xpdf, antiword, ...
