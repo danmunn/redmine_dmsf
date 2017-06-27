@@ -62,13 +62,17 @@ class DmsfUploadController < ApplicationController
 
   # async single file upload handling
   def upload_file
-    @tempfile = params[:file]
-    unless @tempfile.original_filename
-      render_404
-      return
+    begin
+      @tempfile = params[:file]
+      unless @tempfile.original_filename
+        render_404
+        return
+      end
+      @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
+      render :layout => false
+    ensure
+      @tempfile.close false
     end
-    @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
-    render :layout => false
   end
 
   # REST API document upload

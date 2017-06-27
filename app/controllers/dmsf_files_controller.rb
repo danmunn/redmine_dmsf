@@ -133,7 +133,7 @@ class DmsfFilesController < ApplicationController
             revision.size = upload.size
             revision.disk_filename = revision.new_storage_filename
             revision.mime_type = upload.mime_type
-            revision.digest = DmsfFileRevision.create_digest upload.disk_file
+            revision.digest = DmsfFileRevision.create_digest upload.tempfile_path
           end
         end
 
@@ -149,7 +149,7 @@ class DmsfFilesController < ApplicationController
         if revision.save
           revision.assign_workflow(params[:dmsf_workflow_id])
           if upload
-            FileUtils.mv(upload.disk_file, revision.disk_file)
+            FileUtils.mv(upload.tempfile_path, revision.disk_file)
           end
           if @file.locked? && !@file.locks.empty?
             begin
