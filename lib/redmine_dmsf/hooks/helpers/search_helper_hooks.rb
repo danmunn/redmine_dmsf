@@ -1,3 +1,5 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
@@ -18,19 +20,22 @@
 
 module RedmineDmsf
   module Hooks
+    include Redmine::Hook
+    
+    class SearchHelperHook < RedmineDmsf::Hooks::Listener
 
-    class ViewSearchFormHook < Redmine::Hook::ViewListener
-
-      def view_search_index_container(context={})
-        if context[:object].is_a?(DmsfFile) || context[:object].is_a?(DmsfFolder)
-          str = context[:controller].send(:render_to_string, :partial => 'search/container',
-            :locals => { :object => context[:object] })
-          if str
-            " #{str} /"
-          end
+      def helper_easy_extensions_search_helper_patch(context={})
+        case context[:entity].event_type
+          when 'dmsf-file', 'dmsf-folder'
+            str = context[:controller].send(:render_to_string, :partial => 'search/container',
+              :locals => { :object => context[:entity] })
+            if str
+              context[:additional_result] << str
+            end
         end
       end
-
+                  
     end
+    
   end
 end

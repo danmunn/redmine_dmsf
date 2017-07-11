@@ -22,7 +22,7 @@ module RedmineDmsf
   module Hooks
     include Redmine::Hook
     
-    class HellperIssuesHook < RedmineDmsf::Hooks::Listener
+    class HelperIssuesHook < RedmineDmsf::Hooks::Listener
 
       def helper_issues_show_detail_after_setting(context)
         if context.is_a?(Hash)
