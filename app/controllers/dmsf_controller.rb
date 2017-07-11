@@ -88,6 +88,8 @@ class DmsfController < ApplicationController
   end
 
   def download_email_entries
+    # IE has got a tendency to cache files
+    expires_in(0.year, "must-revalidate" => true)
     send_file(
         params[:path],
         :filename => 'Documents.zip',

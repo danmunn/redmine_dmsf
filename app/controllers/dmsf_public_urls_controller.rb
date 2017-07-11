@@ -30,6 +30,8 @@ class DmsfPublicUrlsController < ApplicationController
     if dmsf_public_url
       revision = dmsf_public_url.dmsf_file.last_revision
       begin
+        # IE has got a tendency to cache files
+        expires_in(0.year, "must-revalidate" => true)
         send_file(revision.disk_file,
                   :filename => filename_for_content_disposition(revision.name),
                   :type => revision.detect_content_type,
