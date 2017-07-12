@@ -30,7 +30,16 @@ module RedmineDmsf
             str = context[:controller].send(:render_to_string, :partial => 'search/container',
               :locals => { :object => context[:entity] })
             if str
-              context[:additional_result] << str
+              html = '<p class=\"file-detail-container\"><span><strong>'
+              if context[:entity].dmsf_folder_id
+                html << context[:entity].class.human_attribute_name(:folder)
+              else
+                html << context[:entity].class.human_attribute_name(:project)
+              end
+              html << ':</strong>'
+              html << str
+              html << '</span></p>'
+              context[:additional_result] << html
             end
         end
       end
