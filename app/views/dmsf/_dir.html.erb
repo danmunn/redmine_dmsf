@@ -26,7 +26,17 @@
   <% end %>
 </td>
 <% if DmsfFolder.is_column_on?('id') %>
-    <td class="id"><%= link_to(subfolder.id, edit_dmsf_path(:id => project, :folder_id => subfolder)) %></td>
+    <td class="id">
+      <% if subfolder %>
+          <% if subfolder.system %>
+            <%= subfolder.id %>
+          <% else %>
+            <%= link_to(subfolder.id, edit_dmsf_path(:id => project, :folder_id => subfolder)) %>
+          <% end %>
+      <% else %>
+        <%= link_to(link.target_project_id, project_path(link.target_project)) %>
+      <% end %>
+    </td>
 <% end %>
 <% if DmsfFolder.is_column_on?('title') %>
   <td class="dmsf_title">

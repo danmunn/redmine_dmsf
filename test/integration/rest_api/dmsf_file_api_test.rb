@@ -25,7 +25,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   fixtures :projects, :users, :dmsf_files, :dmsf_file_revisions, :members, :roles
 
   def setup
-    DmsfFile.storage_path = File.expand_path '../../../fixtures/files', __FILE__
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
     timestamp = DateTime.now.strftime("%y%m%d%H%M")
     @tmp_storage_path = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
     Dir.mkdir(@tmp_storage_path) unless File.directory?(@tmp_storage_path)
@@ -78,7 +78,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_upload_document
-    DmsfFile.storage_path = @tmp_storage_path
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @tmp_storage_path
     @role.add_permission! :file_manipulation
     token = Token.create!(:user => @jsmith, :action => 'api')
     #curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif

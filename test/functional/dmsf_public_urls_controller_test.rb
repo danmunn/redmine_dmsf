@@ -25,7 +25,7 @@ class DmsfPublicUrlsControllerTest < RedmineDmsf::Test::TestCase
   fixtures :dmsf_files, :dmsf_file_revisions, :dmsf_public_urls
   
   def setup
-    DmsfFile.storage_path = File.expand_path '../../fixtures/files', __FILE__
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
   end
 
   def test_show_valid_url

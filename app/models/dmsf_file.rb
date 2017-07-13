@@ -97,10 +97,7 @@ class DmsfFile < ActiveRecord::Base
     super
   end
 
-  @@storage_path = nil
-
   def self.storage_path
-    return @@storage_path if @@storage_path.present?
     path = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
     if path.blank?
       path = Pathname.new('files').join('dmsf').to_s
@@ -109,17 +106,6 @@ class DmsfFile < ActiveRecord::Base
       return pn if pn.absolute?
     end
     Rails.root.join(path)
-  end
-
-  # Lets introduce a write for storage path, that way we can also
-  # better interact from test-cases etc
-  def self.storage_path=(path)
-    begin
-      FileUtils.mkdir_p(path) unless File.exist?(path)
-    rescue Exception => e
-      Rails.logger.error e.message
-    end
-    @@storage_path = Pathname.new(path)
   end
 
   def self.find_file_by_name(project, folder, name)

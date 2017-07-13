@@ -30,7 +30,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   def setup
     DmsfLock.delete_all # Delete all locks that are in our test DB - probably not safe but ho hum
     timestamp = DateTime.now.strftime("%y%m%d%H%M")
-    DmsfFile.storage_path = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
     Dir.mkdir(DmsfFile.storage_path) unless File.directory?(DmsfFile.storage_path)
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'

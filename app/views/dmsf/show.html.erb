@@ -230,7 +230,7 @@
       <%= hidden_field_tag(:folder_id, @folder.id) if @folder %>
       <div class="tabular">
         <%= render(:partial => 'settings/dmsf_columns',
-                   :locals => { :settings => Setting.plugin_redmine_dmsf, :extra_columns => @extra_columns }) %>
+                   :locals => { :selected_columns => Setting.plugin_redmine_dmsf['dmsf_columns'], :extra_columns => @extra_columns }) %>
       </div>
       <p class="buttons">
         <%= submit_tag l(:button_export), :name => nil, :onclick => "hideModal(this);" %>

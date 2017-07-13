@@ -25,7 +25,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
   fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :projects, :users, :members, :roles
 
   def setup
-    DmsfFile.storage_path = File.expand_path '../../../fixtures/files', __FILE__
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
     @jsmith = User.find_by_id 2
     @file1 = DmsfFile.find_by_id 1
     @folder1 = DmsfFolder.find_by_id 1

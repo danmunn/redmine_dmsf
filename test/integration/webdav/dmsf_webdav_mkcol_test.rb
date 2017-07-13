@@ -36,7 +36,7 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-    DmsfFile.storage_path = File.expand_path '../../../fixtures/files', __FILE__
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
     User.current = nil        
   end
 

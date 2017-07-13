@@ -34,7 +34,7 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     @role = Role.find_by_id 1
     User.current = nil
     @request.session[:user_id] = 2
-    DmsfFile.storage_path = File.expand_path '../../fixtures/files', __FILE__
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
   end 
   
   def test_truth
