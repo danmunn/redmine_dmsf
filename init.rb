@@ -104,9 +104,8 @@ Redmine::Plugin.register :redmine_dmsf do
   
   # Administration menu extension
   Redmine::MenuManager.map :admin_menu do |menu|
-    menu.push :dmsf_approvalworkflows, 
-      {:controller => 'dmsf_workflows', :action => 'index'}, 
-      :caption => :label_dmsf_workflow_plural
+    menu.push :dmsf_approvalworkflows, {:controller => 'dmsf_workflows', :action => 'index'},
+      :caption => :label_dmsf_workflow_plural, :html => { :class => 'icon icon-approvalworkflows' }
   end     
   
   # Rubyzip configuration

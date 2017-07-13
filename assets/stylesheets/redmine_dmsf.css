@@ -135,7 +135,6 @@ table.display thead th div.DataTables_sort_wrapper span {
 }
 
 /* Approval workflow */
-#admin-menu a.dmsf-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 #dmsf_users_for_delegate { height: 200px; overflow:auto; }
 #dmsf_users_for_delegate label { display: block; }
 .dmsf_workflows.locked a { color: #aaa; }
@@ -204,6 +203,7 @@ div.dmsf_revision_inner_box .attribute .label {
 .icon-download { background-image: url(../images/rev_download.png); }
 .icon-downloads { background-image: url(../images/rev_downloads.png); }
 .icon-link { background-image: url(../../../images/link.png); }
+.icon-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 
 /* File types */
 .dmsf_gray .icon-folder { background-image: url(../images/folder_gray.png); }
