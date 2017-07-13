@@ -102,7 +102,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert r1.save
     # Just make sure the file exists
     File.open(r1.disk_file, 'wb') do |f|
-        f.write("1234")
+        f.write('1234')
     end
     
     # Directly after the file has been stored generate the r2 storage filename.
@@ -114,8 +114,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_save_and_destroy_with_cache
-    RedmineDmsf::Webdav::Cache.init_testcache
-    
+    Rails.cache.clear
     # save
     cache_key = @revision1.propfind_cache_key
     RedmineDmsf::Webdav::Cache.write(cache_key, "")
@@ -125,7 +124,6 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
     RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
-    
     # destroy
     RedmineDmsf::Webdav::Cache.write(cache_key, "")
     assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
@@ -133,7 +131,6 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     @revision1.destroy
     assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    
     # save!
     cache_key = @revision2.propfind_cache_key
     RedmineDmsf::Webdav::Cache.write(cache_key, "")
@@ -142,8 +139,6 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     @revision2.save!
     assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    
-    RedmineDmsf::Webdav::Cache.init_nullcache
   end
 
   def test_workflow_tooltip

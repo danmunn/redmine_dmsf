@@ -188,14 +188,6 @@
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_memcached_servers)) %>
-  <%= text_field_tag 'settings[dmsf_memcached_servers]', @settings['dmsf_memcached_servers'], :size => 50 %>
-  <em class="info">
-    <%= l(:text_memcached_servers) %>
-  </em>
-</p>
-
-<p>
   <%= content_tag(:label, l(:label_webdav_ignore)) %>
   <%= text_field_tag 'settings[dmsf_webdav_ignore]', @settings['dmsf_webdav_ignore'], :size => 50 %>
   <em class="info">
