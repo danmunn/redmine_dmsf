@@ -289,7 +289,7 @@ class DmsfWorkflowsController < ApplicationController
   end
 
   def new_step
-    @steps = @dmsf_workflow.dmsf_workflow_steps.group(:step).to_a
+    @steps = @dmsf_workflow.dmsf_workflow_steps.order(:step).to_a
 
     respond_to do |format|
       format.html
