@@ -35,6 +35,10 @@ require 'redmine_dmsf/patches/issue_patch'
 require 'redmine_dmsf/patches/application_helper_patch'
 require 'redmine_dmsf/patches/role_patch'
 
+if defined?(EasyExtensions)
+  require 'redmine_dmsf/patches/easy_crm_case_patch'
+end
+
 # Load up classes that make up our WebDAV solution ontop of DAV4Rack
 require 'redmine_dmsf/webdav/base_resource'
 require 'redmine_dmsf/webdav/controller'
@@ -64,6 +68,10 @@ require 'redmine_dmsf/hooks/views/custom_field_view_hooks'
 require 'redmine_dmsf/hooks/views/search_view_hooks'
 require 'redmine_dmsf/hooks/helpers/issues_helper_hooks'
 require 'redmine_dmsf/hooks/helpers/search_helper_hooks'
+
+if defined?(EasyExtensions)
+  require 'redmine_dmsf/hooks/controllers/easy_crm_cases_controller_hooks'
+end
 
 # Macros
 require 'redmine_dmsf/macros'

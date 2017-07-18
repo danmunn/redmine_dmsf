@@ -71,6 +71,10 @@ class DmsfFileRevision < ActiveRecord::Base
   def self.filename_to_title(filename)
     remove_extension(filename).gsub(/_+/, ' ');
   end
+ 
+  def self.easy_activity_custom_project_scope(scope, options, event_type)
+    scope.where(:dmsf_files => { :project_id => options[:project_ids] })
+  end
 
   def delete(commit = false, force = true)
     if self.dmsf_file.locked_for_user?
