@@ -39,10 +39,47 @@ module RedmineDmsf
       end
 
       def view_issues_show_attachments_bottom(context={})
-        show_attached_documents(context[:container], context[:controller])
+        unless context[:options][:only_mails].present?
+          show_attached_documents(context[:container], context[:controller])
+        end
+      end
+
+      def view_issues_show_thumbnails(context={})
+        unless context[:options][:only_mails].present?
+          show_thumbnails(context[:container], context[:controller])
+        end
       end
 
       private
+
+      def get_links(container)
+        if User.current.allowed_to?(:view_dmsf_files, container.project) &&
+          Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
+          (container.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
+          links = []
+          for dmsf_file in container.dmsf_files
+            if dmsf_file.last_revision
+              links << [dmsf_file, nil, dmsf_file.created_at]
+            end
+          end
+          for dmsf_link in container.dmsf_links
+            dmsf_file = dmsf_link.target_file
+            if dmsf_file && dmsf_file.last_revision
+              links << [dmsf_file, dmsf_link, dmsf_link.created_at]
+            end
+          end
+          # Sort by 'create_at'
+          links.sort{ |x, y| x[2] <=> y[2] }
+        end
+      end
+
+      def show_thumbnails(container, controller)
+        links = get_links(container)
+        html = controller.send(:render_to_string,
+          { :partial => 'dmsf_files/thumbnails',
+            :locals => { :links => links, :thumbnails => Setting.thumbnails_enabled?} })
+        html.html_safe
+      end
 
       def attach_documents_form(context)
         if context.is_a?(Hash) && context[:issue]
@@ -65,23 +102,8 @@ module RedmineDmsf
 
       def show_attached_documents(container, controller)
         # Add list of attached documents
-        if User.current.allowed_to?(:view_dmsf_files, container.project) &&
-          Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
-          (container.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
-          links = []
-          for dmsf_file in container.dmsf_files
-            if dmsf_file.last_revision
-              links << [dmsf_file, nil, dmsf_file.created_at]
-            end
-          end
-          for dmsf_link in container.dmsf_links
-            dmsf_file = dmsf_link.target_file
-            if dmsf_file && dmsf_file.last_revision
-              links << [dmsf_file, dmsf_link, dmsf_link.created_at]
-            end
-          end
-          # Sort by 'create_at'
-          links.sort!{ |x, y| x[2] <=> y[2] }
+        links = get_links(container)
+        if links.any?
           unless defined?(EasyExtensions)
             controller.send(:render_to_string, {:partial => 'dmsf_files/links',
               :locals => { :links => links, :thumbnails => Setting.thumbnails_enabled? }})
@@ -90,8 +112,6 @@ module RedmineDmsf
           end
         end
       end
-
-      private
 
       def attachment_rows(links, issue, controller)
         html = '<tbody>'

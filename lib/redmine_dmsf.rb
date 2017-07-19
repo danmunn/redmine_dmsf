@@ -37,6 +37,7 @@ require 'redmine_dmsf/patches/role_patch'
 
 if defined?(EasyExtensions)
   require 'redmine_dmsf/patches/easy_crm_case_patch'
+  require 'redmine_dmsf/patches/attachable_patch'
 end
 
 # Load up classes that make up our WebDAV solution ontop of DAV4Rack
