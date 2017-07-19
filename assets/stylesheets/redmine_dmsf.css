@@ -99,8 +99,12 @@
 }
 
 .dmsf_workflow {
-	/*font-size: 0.8em;*/
+	font-size: 0.8em;
 	white-space: nowrap;
+}
+
+.dmsf_cf {
+	font-size: 0.8em;
 }
 
 .dmsf_invisible {

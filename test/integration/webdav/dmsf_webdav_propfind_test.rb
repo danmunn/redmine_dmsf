@@ -47,7 +47,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     # Temporarily enable project names to generate names for project1
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-    @project1_uri = URI.encode(@project1_name, /\W/)
+	@project1_uri = URI.encode(@project1_name)
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
     RedmineDmsf::Webdav::Cache.init_nullcache
   end
@@ -269,7 +269,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
       @project1.name = 'Online Cookbook'
       @project1.save!
       project1_new_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-      project1_new_uri = URI.encode(project1_new_name, /\W/)
+      project1_new_uri = URI.encode(project1_new_name)
 
       # PROPSTATS for / is already cached, but a new PROPSTATS should be cached for project1
       assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +1 do

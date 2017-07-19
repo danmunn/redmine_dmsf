@@ -102,15 +102,15 @@ class DmsfMailer < Mailer
             true
           when 'selected'
             notify_member.mail_notification?
-            when 'only_my_events'
-              author = false
-              files.each do |file|
-                if file.involved?(notify_user)
-                  author = true
-                  break
-                end
+          when 'only_my_events'
+            author = false
+            files.each do |file|
+              if file.involved?(notify_user)
+                author = true
+                break
               end
-              author
+            end
+            author
           when 'only_owner', 'only_assigned'
             author = false
             files.each do |file|
