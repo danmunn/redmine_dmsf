@@ -31,7 +31,7 @@ module RedmineDmsf
       module InstanceMethods
 
         def has_attachments_with_has_attachments_dms?
-          has_attachments_without_has_attachments_dms? || self.dmsf_files.any?
+          has_attachments_without_has_attachments_dms? || (defined?(self.dmsf_files) && self.dmsf_files.any?)
         end
 
       end
