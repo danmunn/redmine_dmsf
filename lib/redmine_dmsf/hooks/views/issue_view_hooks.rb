@@ -78,7 +78,7 @@ module RedmineDmsf
         if links.present?
           html = controller.send(:render_to_string,
             { :partial => 'dmsf_files/thumbnails',
-              :locals => { :links => links, :thumbnails => Setting.thumbnails_enabled?} })
+              :locals => { :links => links, :thumbnails => Setting.thumbnails_enabled?, :link_to => false } })
           html.html_safe
         end
       end
