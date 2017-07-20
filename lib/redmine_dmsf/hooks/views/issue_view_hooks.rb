@@ -151,7 +151,6 @@ module RedmineDmsf
         html << '</td>'
         # Command icons
         html << '<td class="fast-icons easy-query-additional-ending-buttons hide-when-print">'
-          html << '<span class="dmsf_upload_select">'
           # Details
           if User.current.allowed_to? :file_manipulation, dmsf_file.project
             html << link_to('', dmsf_file_path(:id => dmsf_file),
@@ -167,7 +166,7 @@ module RedmineDmsf
           # Lock
           if !dmsf_file.locked?
             html << link_to('', lock_dmsf_files_path(:id => dmsf_file),
-            :title => l(:title_lock_file), :class => 'icon icon-lock')
+            :title => l(:title_loc_file), :class => 'icon icon-lock')
           elsif dmsf_file.unlockable? && (!dmsf_file.locked_for_user? || User.current.allowed_to?(:force_file_unlock, dmsf_file.project))
             html << link_to('', unlock_dmsf_files_path(:id => dmsf_file),
               :title => dmsf_file.get_locked_title, :class => 'icon icon-unlock')
@@ -199,8 +198,7 @@ module RedmineDmsf
             :locals => {:file => dmsf_file,
               :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_file.project),
               :workflows_available => DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', dmsf_file.project.id]).exists?,
-              :project => dmsf_file.project, :wf => wf, :dmsf_link_id => nil }})
-          html << '</span>'
+              :project => dmsf_file.project, :wf => wf, :dmsf_link_id => nil }})         
         html << '</td>'
         html << '</tr>'
         html
