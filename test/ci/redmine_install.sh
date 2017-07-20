@@ -43,7 +43,11 @@ run_tests()
   # exit if tests fail
   set -e
 
-  cd $PATH_TO_REDMINE 
+  cd $PATH_TO_REDMINE
+
+  # create tmp/cache folder (required for Rails 3)
+  # https://github.com/rails/rails/issues/5376
+  bundle exec rake tmp:create
 
   # Run tests within application
   bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf
