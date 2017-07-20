@@ -53,7 +53,7 @@ module RedmineDmsf
       private
 
       def get_links(container)
-        if User.current.allowed_to?(:view_dmsf_files, container.project) &&
+        if defined?(container.dmsf_files) && User.current.allowed_to?(:view_dmsf_files, container.project) &&
           Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
           (container.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
           links = []
@@ -75,10 +75,12 @@ module RedmineDmsf
 
       def show_thumbnails(container, controller)
         links = get_links(container)
-        html = controller.send(:render_to_string,
-          { :partial => 'dmsf_files/thumbnails',
-            :locals => { :links => links, :thumbnails => Setting.thumbnails_enabled?} })
-        html.html_safe
+        if links.present?
+          html = controller.send(:render_to_string,
+            { :partial => 'dmsf_files/thumbnails',
+              :locals => { :links => links, :thumbnails => Setting.thumbnails_enabled?} })
+          html.html_safe
+        end
       end
 
       def attach_documents_form(context)
@@ -88,13 +90,13 @@ module RedmineDmsf
           if User.current.allowed_to?(:file_manipulation, issue.project) &&
             Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
             (issue.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
-            html = "<div class=\"dmsf_uploader\">"
-            html << '<p>'
-            html << "<label>#{l(:label_document_plural)}</label>"
-            html << context[:controller].send(:render_to_string,
-              { :partial => 'dmsf_upload/form', :locals => { :container => issue, :multiple => true }})
+            html = '<p>'
+              html << "<label>#{l(:label_document_plural)}</label>"
+              html << "<span class=\"dmsf_uploader\">"
+                html << context[:controller].send(:render_to_string,
+                  { :partial => 'dmsf_upload/form', :locals => { :container => issue, :multiple => true }})
+              html << '</span>'
             html << '</p>'
-            html << '</div>'
             html.html_safe
           end
         end
@@ -103,7 +105,7 @@ module RedmineDmsf
       def show_attached_documents(container, controller)
         # Add list of attached documents
         links = get_links(container)
-        if links.any?
+        if links.present?
           unless defined?(EasyExtensions)
             controller.send(:render_to_string, {:partial => 'dmsf_files/links',
               :locals => { :links => links, :thumbnails => Setting.thumbnails_enabled? }})

@@ -310,6 +310,8 @@ div.dmsf_revision_inner_box .attribute .label {
     border: 1px solid #e4e4e4;
     word-wrap: break-word;
     border-radius: 3px;
+    min-height: 50px;
+    display: block;
 }
 
 #dmsf_attachments_fields input.description {margin-left:4px; width:340px;}

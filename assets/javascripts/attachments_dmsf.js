@@ -252,7 +252,7 @@ function dmsfSetupFileDrop() {
 
         $.event.fixHooks.drop = { props: [ 'dataTransfer' ] };
 
-        $('form div.dmsf_uploader').has('input:file').each(function() {
+        $('form span.dmsf_uploader').has('input:file').each(function() {
             $(this).on({
                 dragover: dmsfDragOverHandler,
                 dragleave: dmsfDragOutHandler,

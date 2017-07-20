@@ -37,12 +37,9 @@
 <%= form_tag({:controller => 'dmsf_upload', :action => 'upload_files', :id => @project, :folder_id => @folder},
              :id => 'uploadform', :method => :post, :multipart => true) do %>
   <div id="dmsf_uploader">
-    <div class="dmsf_uploader">
-      <p>
-        <label><%= l(:label_document_plural) %></label>
-        <%= render :partial => 'dmsf_upload/form', :locals => { :multiple => true, :container => nil } %>
-      </p>
-    </div>
+    <span class="dmsf_uploader">
+      <%= render :partial => 'dmsf_upload/form', :locals => { :multiple => true, :container => nil } %>
+    </span>
     <%= submit_tag l(:label_upload) %>
   </div>
 <% end %>
