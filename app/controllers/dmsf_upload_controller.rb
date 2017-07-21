@@ -24,11 +24,11 @@ class DmsfUploadController < ApplicationController
 
   menu_item :dmsf
 
-  before_filter :find_project, :except => [:upload, :delete_dmsf_attachment]
-  before_filter :authorize, :except => [:upload, :delete_dmsf_attachment]
-  before_filter :authorize_global, :only => [:upload, :delete_dmsf_attachment]
-  before_filter :find_folder, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment]
-  before_filter :permissions, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment]
+  before_action :find_project, :except => [:upload, :delete_dmsf_attachment]
+  before_action :authorize, :except => [:upload, :delete_dmsf_attachment]
+  before_action :authorize_global, :only => [:upload, :delete_dmsf_attachment]
+  before_action :find_folder, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment]
+  before_action :permissions, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment]
 
   helper :all
   helper :dmsf_workflows

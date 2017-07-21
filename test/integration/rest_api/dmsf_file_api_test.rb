@@ -22,11 +22,11 @@ require File.expand_path('../../../test_helper', __FILE__)
 
 class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
 
-  fixtures :projects, :users, :dmsf_files, :dmsf_file_revisions, :members, :roles
+  fixtures :projects, :users, :dmsf_files, :dmsf_file_revisions, :members, :roles, :member_roles
 
   def setup
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
-    timestamp = DateTime.now.strftime("%y%m%d%H%M")
+    timestamp = DateTime.now.strftime('%y%m%d%H%M')
     @tmp_storage_path = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
     Dir.mkdir(@tmp_storage_path) unless File.directory?(@tmp_storage_path)
     @jsmith = User.find_by_id 2
@@ -34,6 +34,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     Setting.rest_api_enabled = '1'
     @role = Role.find_by_id 1
     @project1 = Project.find_by_id 1
+    @project1.enable_module! :dmsf
   end
 
   def teardown

@@ -24,11 +24,11 @@ class DmsfFilesController < ApplicationController
 
   menu_item :dmsf
 
-  before_filter :find_file, :except => [:delete_revision]
-  before_filter :find_revision, :only => [:delete_revision]
-  before_filter :authorize
-  before_filter :tree_view, :only => [:delete]
-  before_filter :permissions
+  before_action :find_file, :except => [:delete_revision]
+  before_action :find_revision, :only => [:delete_revision]
+  before_action :authorize
+  before_action :tree_view, :only => [:delete]
+  before_action :permissions
 
   accept_api_auth :show
 
@@ -312,7 +312,7 @@ class DmsfFilesController < ApplicationController
                   :disposition => 'inline'
       end
     else
-      render :nothing => true, :status => 404
+      head 404
     end
   end
 

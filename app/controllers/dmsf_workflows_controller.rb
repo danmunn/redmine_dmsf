@@ -22,10 +22,10 @@ class DmsfWorkflowsController < ApplicationController
   unloadable
   model_object DmsfWorkflow
 
-  before_filter :find_model_object, :except => [:create, :new, :index, :assign, :assignment]
-  before_filter :find_project
-  before_filter :authorize_custom
-  before_filter :permissions, :only => [:new_action, :assignment, :start]
+  before_action :find_model_object, :except => [:create, :new, :index, :assign, :assignment]
+  before_action :find_project
+  before_action :authorize_custom
+  before_action :permissions, :only => [:new_action, :assignment, :start]
 
   layout :workflows_layout
 
@@ -332,7 +332,7 @@ class DmsfWorkflowsController < ApplicationController
   def add_step
     if request.post?
       if params[:step] == '0'
-        step = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq.count + 1
+        step = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.distinct.count + 1
       else
         step = params[:step].to_i
       end

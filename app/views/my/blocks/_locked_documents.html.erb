@@ -43,7 +43,7 @@
       </thead>
       <tbody>
         <% folders.each do |folder| %>
-          <tr id="folder-<%= folder.id %>" class="<%= cycle('odd', 'even') %>">
+          <tr id="folder-<%= folder.id %>">
             <td class="project">
               <%= link_to_project(folder.project) %>
             </td>
@@ -63,7 +63,7 @@
            </tr>
         <% end %>
         <% files.each do |file| %>
-          <tr id="file-<%= file.id %>" class="<%= cycle('odd', 'even') %>">
+          <tr id="file-<%= file.id %>">
             <td class="project">
               <%= link_to_project(file.project) %>
             </td>

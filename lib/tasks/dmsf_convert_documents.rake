@@ -68,7 +68,7 @@ class DmsfConvertDocuments
           folder = DmsfFolder.new
 
           folder.project = project
-          attachment = document.attachments.reorder("#{Attachment.table_name}.created_on ASC").first
+          attachment = document.attachments.reorder(:created_on => :asc).first
           if attachment
             folder.user = attachment.author
           else

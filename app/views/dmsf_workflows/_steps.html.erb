@@ -51,7 +51,7 @@
       </tr></thead>
       <tbody>
       <% steps.each do |i|%>
-        <tr id="step-<%= i %>" class="<%= cycle 'odd', 'even' %> step">
+        <tr id="step-<%= i %>" class="step">
           <% index = @dmsf_workflow.dmsf_workflow_steps.order(:id).index{ |s| s.step == i } %>
           <%= form_for(@dmsf_workflow,
            :url => update_step_dmsf_workflow_path(:step => index),
@@ -115,7 +115,7 @@
             <%= delete_link edit_dmsf_workflow_path(@dmsf_workflow, :step => i) %>
           </td>
         </tr>
-      <% end; reset_cycle %>
+      <% end %>
       </tbody>
     </table>
   <% else %>

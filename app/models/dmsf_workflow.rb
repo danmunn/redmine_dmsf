@@ -22,8 +22,8 @@ class DmsfWorkflow < ActiveRecord::Base
   has_many :dmsf_workflow_steps, -> { order 'step ASC, operator DESC' }, :dependent => :destroy
   belongs_to :author, :class_name => 'User'
 
-  scope :sorted, lambda { order('name ASC') }
-  scope :global, lambda { where('project_id IS NULL') }
+  scope :sorted, lambda { order(:name => :asc) }
+  scope :global, lambda { where(:project_id => nil) }
   scope :active, lambda { where(:status => STATUS_ACTIVE) }
   scope :status, lambda { |arg| where(arg.blank? ? nil : {:status => arg.to_i}) }
 

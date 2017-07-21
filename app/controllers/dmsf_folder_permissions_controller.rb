@@ -21,10 +21,10 @@
 class DmsfFolderPermissionsController < ApplicationController
   unloadable
 
-  before_filter :find_folder, :only => [:destroy]
-  before_filter :find_project
-  before_filter :authorize
-  before_filter :permissions
+  before_action :find_folder, :only => [:destroy]
+  before_action :find_project
+  before_action :authorize
+  before_action :permissions
 
   def permissions
     render_403 unless DmsfFolder.permissions?(@dmsf_folder)

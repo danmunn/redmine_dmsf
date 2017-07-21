@@ -24,8 +24,8 @@ class DmsfStateController < ApplicationController
   
   menu_item :dmsf
   
-  before_filter :find_project
-  before_filter :authorize 
+  before_action :find_project
+  before_action :authorize
 
   def user_pref_save
     member = @project.members.where(:user_id => User.current.id).first

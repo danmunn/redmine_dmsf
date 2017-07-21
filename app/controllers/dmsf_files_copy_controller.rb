@@ -22,9 +22,9 @@ class DmsfFilesCopyController < ApplicationController
 
   menu_item :dmsf
 
-  before_filter :find_file
-  before_filter :authorize
-  before_filter :permissions
+  before_action :find_file
+  before_action :authorize
+  before_action :permissions
 
   helper :all
 

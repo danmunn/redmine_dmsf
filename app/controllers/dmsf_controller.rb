@@ -24,12 +24,12 @@
 class DmsfController < ApplicationController
   unloadable
 
-  before_filter :find_project
-  before_filter :authorize, :except => [:expand_folder]
-  before_filter :find_folder, :except => [:new, :create, :edit_root, :save_root]
-  before_filter :find_parent, :only => [:new, :create]
-  before_filter :tree_view, :only => [:delete, :show]
-  before_filter :permissions
+  before_action :find_project
+  before_action :authorize, :except => [:expand_folder]
+  before_action :find_folder, :except => [:new, :create, :edit_root, :save_root]
+  before_action :find_parent, :only => [:new, :create]
+  before_action :tree_view, :only => [:delete, :show]
+  before_action :permissions
 
   accept_api_auth :show, :create, :save
 

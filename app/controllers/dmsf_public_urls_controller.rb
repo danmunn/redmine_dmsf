@@ -22,8 +22,8 @@ class DmsfPublicUrlsController < ApplicationController
   unloadable
 
   model_object DmsfPublicUrl
-  before_filter :authorize, :only => [:create]
-  skip_before_filter :check_if_login_required, :only => [:show]
+  before_action :authorize, :only => [:create]
+  skip_before_action :check_if_login_required, :only => [:show]
 
   def show
     dmsf_public_url = DmsfPublicUrl.where('token = ? AND expire_at >= ?', params[:token], DateTime.now).first

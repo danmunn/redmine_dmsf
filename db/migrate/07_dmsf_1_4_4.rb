@@ -46,9 +46,9 @@ class Dmsf144 < ActiveRecord::Migration
     #               data into it, which should enable us to run checks we need, not as
     #               efficient, however compatible across the board.
     DmsfFileLock.reset_column_information
-    DmsfFileLock.select("MAX(#{DmsfFileLock.table_name}.id) id").
-      order("MAX(#{DmsfFileLock.table_name}.id) DESC").
-      group("#{DmsfFileLock.table_name}.dmsf_file_id").
+    DmsfFileLock.select('MAX(id) id').
+      order('MAX(id) DESC').
+      group('dmsf_file_id').
       each do |lock|
       lock.reload 
       if (lock.locked)
@@ -66,7 +66,7 @@ class Dmsf144 < ActiveRecord::Migration
 
     say "Preserving #{do_not_delete.count} file lock(s) found in old schema"
 
-    DmsfFileLock.delete_all(['id NOT IN (?)', do_not_delete])
+    DmsfFileLock.where(['id NOT IN (?)', do_not_delete]).delete_all
 
     #We need to force our newly found
 
@@ -123,7 +123,7 @@ class Dmsf144 < ActiveRecord::Migration
     #Data cleanup - delete all expired locks, or any folder locks
     DmsfFileLock.reset_column_information
     say 'Removing all expired and/or folder locks'
-    DmsfFileLock.delete_all ['expires_at < ? OR entity_type = 1', Time.now]
+    DmsfFileLock.where(['expires_at < ? OR entity_type = 1', Time.now]).delete_all
 
     say 'Changing all records to be locked'
     DmsfFileLock.update_all ['locked = ?', true]

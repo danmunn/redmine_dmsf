@@ -33,7 +33,7 @@ module RedmineDmsf
           @projects = []
           Project.select(:id, :identifier, :name).has_module(:dmsf).where(
             Project.allowed_to_condition(
-              User.current, :view_dmsf_folders)).order('lft').all.each do |p|
+              User.current, :view_dmsf_folders)).order('lft').each do |p|
             @projects << child_project(p)
           end
         end

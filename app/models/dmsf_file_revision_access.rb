@@ -43,5 +43,5 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
     :scope => select("#{DmsfFileRevisionAccess.table_name}.*").
       joins(:dmsf_file_revision).joins("JOIN #{DmsfFile.table_name} ON dmsf_files.id = dmsf_file_revisions.dmsf_file_id").
       joins("JOIN #{Project.table_name} on dmsf_files.project_id = projects.id").
-      where(["#{DmsfFile.table_name}.deleted = ?", DmsfFile::STATUS_ACTIVE])
+      where(:dmsf_files => { :deleted => DmsfFile::STATUS_ACTIVE })
 end
