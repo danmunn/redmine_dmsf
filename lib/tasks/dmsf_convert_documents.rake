@@ -158,7 +158,7 @@ class DmsfConvertDocuments
               revision.disk_filename = revision.new_storage_filename              
 
               unless dry
-                FileUtils.cp(attachment.diskfile, revision.disk_file)                
+                FileUtils.cp(attachment.diskfile, revision.disk_file(false))
                 revision.size = File.size(revision.disk_file(false))
               end              
 
