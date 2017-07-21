@@ -28,7 +28,7 @@ class MigrateDocuments < ActiveRecord::Migration
           origin = self.disk_file(dmsf_file_revision)
           if origin
             if File.exist?(origin)
-              target = dmsf_file_revision.disk_file
+              target = dmsf_file_revision.disk_file(false)
               if target
                 unless File.exist?(target)
                   begin
@@ -64,7 +64,7 @@ class MigrateDocuments < ActiveRecord::Migration
     DmsfFileRevision.find_each do |dmsf_file_revision|
       if dmsf_file_revision.dmsf_file
         if dmsf_file_revision.dmsf_file.project
-          origin = dmsf_file_revision.disk_file
+          origin = dmsf_file_revision.disk_file(false)
           if origin
             if File.exist?(origin)
               target = self.disk_file(dmsf_file_revision)

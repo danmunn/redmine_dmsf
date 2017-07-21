@@ -271,7 +271,7 @@ class DmsfFile < ActiveRecord::Base
       new_revision.dmsf_file = file
       new_revision.disk_filename = new_revision.new_storage_filename
       if File.exist? self.last_revision.disk_file
-        FileUtils.cp self.last_revision.disk_file, new_revision.disk_file
+        FileUtils.cp self.last_revision.disk_file, new_revision.disk_file(false)
       end
       new_revision.comment = l(:comment_copied_from, :source => "#{project.identifier}: #{self.dmsf_path_str}")
       new_revision.custom_values = []

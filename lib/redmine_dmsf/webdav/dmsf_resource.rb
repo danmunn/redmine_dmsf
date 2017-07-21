@@ -652,7 +652,7 @@ module RedmineDmsf
       # implementation of service for request, which allows for us to pipe a single file through
       # also best-utilising DAV4Rack's implementation.
       def download
-        raise NotFound unless (file && file.last_revision && file.last_revision.disk_file)
+        raise NotFound unless (file && file.last_revision && file.last_revision.disk_file(false))
         raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder))
 
         # If there is no range (start of ranged download, or direct download) then we log the

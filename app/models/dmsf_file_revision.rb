@@ -140,10 +140,21 @@ class DmsfFileRevision < ActiveRecord::Base
     DmsfFile.storage_path.join path
   end
 
-  def disk_file
+  def disk_file(search_if_not_exists = true)
     path = self.storage_base_path
     FileUtils.mkdir_p(path) unless File.exist?(path)
-    path.join self.disk_filename
+    filename = path.join(self.disk_filename)
+    if search_if_not_exists
+      unless File.exist?(filename)
+        # Let's search for the physical file in source revisions
+        revisions = self.dmsf_file.dmsf_file_revisions.where(['id < ?', self.id]).order(:id => :desc)
+        revisions.each do |rev|
+          filename = rev.disk_file
+          break if File.exist?(filename)
+        end
+      end
+    end
+    filename
   end
 
   def new_storage_filename

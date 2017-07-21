@@ -96,8 +96,8 @@ module DmsfUploadHelper
         if new_revision.save
           new_revision.assign_workflow(commited_file[:dmsf_workflow_id])
           begin
-            FileUtils.mv commited_file[:tempfile_path], new_revision.disk_file
-            FileUtils.chmod 'u=wr,g=r', new_revision.disk_file
+            FileUtils.mv commited_file[:tempfile_path], new_revision.disk_file(false)
+            FileUtils.chmod 'u=wr,g=r', new_revision.disk_file(false)
             file.set_last_revision new_revision
             files.push(file)
             if file.container.is_a?(Issue)

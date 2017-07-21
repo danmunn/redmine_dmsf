@@ -151,7 +151,7 @@ class DmsfFilesController < ApplicationController
         if revision.save
           revision.assign_workflow(params[:dmsf_workflow_id])
           if upload
-            FileUtils.mv(upload.tempfile_path, revision.disk_file)
+            FileUtils.mv(upload.tempfile_path, revision.disk_file(false))
           end
           if @file.locked? && !@file.locks.empty?
             begin

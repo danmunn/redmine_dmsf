@@ -159,7 +159,7 @@ class DmsfConvertDocuments
 
               unless dry
                 FileUtils.cp(attachment.diskfile, revision.disk_file)                
-                revision.size = File.size(revision.disk_file)
+                revision.size = File.size(revision.disk_file(false))
               end              
 
               if dry
