@@ -23,7 +23,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfMailerTest < RedmineDmsf::Test::UnitTest
   include Redmine::I18n
 
-  fixtures :users, :projects, :dmsf_files, :dmsf_workflows, :dmsf_file_revisions
+  fixtures :users, :projects, :dmsf_files, :dmsf_workflows, :dmsf_file_revisions, :members
 
   def setup
     @user2 = User.find_by_id 2
