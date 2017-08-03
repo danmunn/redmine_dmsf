@@ -24,24 +24,24 @@ function dmsfAddLink(linksSpan, linkId, linkName, title, project, awf) {
     if (linksSpan.children().length < 10) {
 
         var nextLinkId = dmsfAddLink.nextLinkId++;
-        var linkSpan = $('<span>', { id: 'dmsf_links_' + nextLinkId });
+        var linkSpan = $('<span>', { id: 'dmsf_links_attachments_' + nextLinkId, 'class': 'attachment' });
+        var iconDel = $('<a>').attr({href: '#', 'class': 'remove-upload icon-only icon-del'});
+        var inputId = $('<input>', {type: 'hidden', name: 'dmsf_links[' + nextLinkId + ']'}).val(linkId);
+        var inputName = $('<input>', {type: 'text', class: 'filename readonly'}).val(linkName);
 
-        linkSpan.append(
-            "<input name='dmsf_links[" + nextLinkId + "]' value='" + linkId + "' type='hidden'>",
-            "<input type='text' class='filename readonly' value='" + linkName + "'>",
-            $('<a>&nbsp;</a>').attr({href: "#", 'class': 'remove-upload icon icon-del'}).click(dmsfRemoveFile)
-        );
+        linkSpan.append(inputId);
+        linkSpan.append(inputName);
+        linkSpan.append(iconDel.click(dmsfRemoveFileLbl));
 
         if(awf) {
 
-            linkSpan.append($('<a>&nbsp;</a>').attr({
-                href: "/dmsf_workflows/" + project + "/assign?dmsf_link_id=" + linkId,
-                'class': 'icon icon-wf-none', 'data-remote': 'true', 'title': title
-            }));
+            var iconWf = $('<a>').attr({href: "/dmsf_workflows/" + project + "/assign?dmsf_link_id=" + linkId,
+                'class': 'icon-only icon-wf-none', 'data-remote': 'true', 'title': title});
+
+            linkSpan.append(iconWf);
         }
 
-        linkSpan.append("<br/>");
-        linkSpan.appendTo(linksSpan);
+        linksSpan.append(linkSpan);
     }
 }
 
@@ -52,37 +52,41 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
     if ($('#dmsf_attachments_fields').children().length < 10) {
 
         var attachmentId = dmsfAddFile.nextAttachmentId++;
-        var fileSpan = $('<span>', { id: 'dmsf_attachments_' + attachmentId });
+        var fileSpan = $('<span>', { id: 'dmsf_attachments_' + attachmentId, 'class': 'attachment' });
+        var iconDel = $('<a>').attr({href: '#', 'class': 'remove-upload icon-only icon-del'}).toggle(!eagerUpload);
+        var fileName = $('<input>', {type: 'text', 'class': 'filename readonly',
+            name: 'dmsf_attachments[' + attachmentId + '][filename]', readonly: 'readonly'}).val(file.name);
 
         if($(inputEl).attr('multiple') == 'multiple') {
-            fileSpan.append(
-                $('<input>', {
-                    type: 'text',
-                    'class': 'filename readonly',
-                    name: 'dmsf_attachments[' + attachmentId + '][filename]',
-                    readonly: 'readonly'
-                }).val(file.name),
-                $('<input>', {
-                    type: 'text',
-                    'class': 'description',
-                    name: 'dmsf_attachments[' + attachmentId + '][description]',
-                    maxlength: 255,
+
+            fileSpan.append(fileName);
+
+            if($(inputEl).data('description')) {
+
+                var description = $('<input>', {type: 'text', 'class': 'description',
+                    name: 'dmsf_attachments[' + attachmentId + '][description]', maxlength: 255,
                     placeholder: $(inputEl).data('description-placeholder')
-                }).toggle(!eagerUpload),
-                $('<a>&nbsp;</a>').attr({href: "#", 'class': 'remove-upload icon icon-del'}).click(dmsfRemoveFile).toggle(!eagerUpload),
-                $('<a>&nbsp;</a>').attr({href: "/dmsf_workflows/" + $(inputEl).attr('data-project') + "/assign?attachment_id=" + attachmentId,
-                    'class': 'icon icon-wf-none', 'data-remote': 'true'})
-            ).appendTo('#dmsf_attachments_fields');
+                }).toggle(!eagerUpload);
+
+                fileSpan.append(description);
+            }
+
+            fileSpan.append(iconDel.click(dmsfRemoveFileLbl));
+
+            if($(inputEl).data('awf')) {
+
+                var iconWf = $('<a>').attr({href: '/dmsf_workflows/' + $(inputEl).attr(
+                    'data-project') + "/assign?attachment_id=" + attachmentId, 'class': 'icon-only icon-wf-none',
+                    'data-remote': 'true'});
+
+                fileSpan.append(iconWf);
+            }
+
+            $('#dmsf_attachments_fields').append(fileSpan);
         }
         else{
-            fileSpan.append(
-                $('<input>', {
-                    type: 'text',
-                    'class': 'filename readonly',
-                    name: 'dmsf_attachments[' + attachmentId + '][filename]',
-                    readonly: 'readonly'
-                }).val(file.name)
-            ).appendTo('#dmsf_attachments_fields');
+            fileSpan.append(fileName);
+            $('#dmsf_attachments_fields').append(fileSpan);
             $('#dmsf_file_revision_name').val(file.name);
         }
 
@@ -150,8 +154,17 @@ function dmsfAjaxUpload(file, attachmentId, fileSpan, inputEl) {
 
 dmsfAjaxUpload.uploading = 0;
 
-function dmsfRemoveFile() {
+function dmsfRemoveFileLbl() {
+
     $(this).parent('span').remove();
+
+    return false;
+}
+
+function dmsfRemoveFile() {
+
+    $(this).parent('span').parent('span').remove();
+
     return false;
 }
 
@@ -189,7 +202,9 @@ function dmsfUploadBlob(blob, uploadUrl, attachmentId, options) {
 }
 
 function dmsfAddInputFiles(inputEl) {
+
     var clearedFileInput = $(inputEl).clone().val('');
+    var addFileSpan = $('.dmsf_add_attachment');
 
     if ($.ajaxSettings.xhr().upload && inputEl.files) {
         // upload files using ajax
@@ -199,16 +214,22 @@ function dmsfAddInputFiles(inputEl) {
         // browser not supporting the file API, upload on form submission
         var attachmentId;
         var aFilename = inputEl.value.split(/\/|\\/);
-        attachmentId = dmsfAddFile(inputEl, { name: aFilename[ aFilename.length - 1 ] }, false);
+        attachmentId = dmsfAddFile(inputEl, {name: aFilename[aFilename.length - 1]}, false);
         if (attachmentId) {
-            $(inputEl).attr({ name: 'dmsf_attachments[' + attachmentId + '][file]', style: 'display:none;' }).appendTo('#dmsf_attachments_' + attachmentId);
+            $(inputEl).attr({name: 'dmsf_attachments[' + attachmentId + '][file]', style: 'display:none;'}).appendTo(
+                '#dmsf_attachments_' + attachmentId);
         }
     }
 
-    if($(inputEl).attr('multiple') == 'multiple')
-        clearedFileInput.insertAfter('#dmsf_attachments_fields');
-    else
-        $('.dmsf_add_attachment').toggle();
+    if ($(inputEl).attr('multiple') == 'multiple') {
+
+        clearedFileInput.val('');
+        addFileSpan.prepend(clearedFileInput);
+    }
+    else {
+
+        addFileSpan.hide();
+    }
 }
 
 function dmsfUploadAndAttachFiles(files, inputEl) {
@@ -223,7 +244,9 @@ function dmsfUploadAndAttachFiles(files, inputEl) {
     if (sizeExceeded) {
         window.alert(maxFileSizeExceeded);
     } else {
-        $.each(files, function() {dmsfAddFile(inputEl, this, true);});
+        $.each(files, function() {
+            dmsfAddFile(inputEl, this, true);
+        });
     }
 }
 

@@ -24,11 +24,11 @@ class DmsfUploadController < ApplicationController
 
   menu_item :dmsf
 
-  before_action :find_project, :except => [:upload, :delete_dmsf_attachment]
-  before_action :authorize, :except => [:upload, :delete_dmsf_attachment]
-  before_action :authorize_global, :only => [:upload, :delete_dmsf_attachment]
-  before_action :find_folder, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment]
-  before_action :permissions, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment]
+  before_action :find_project, :except => [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :authorize, :except => [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :authorize_global, :only => [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :find_folder, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :permissions, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
 
   helper :all
   helper :dmsf_workflows
@@ -75,7 +75,7 @@ class DmsfUploadController < ApplicationController
     end
   end
 
-  # REST API document upload
+  # REST API and Redmine attachment form
   def upload
     unless request.content_type == 'application/octet-stream'
       render :nothing => true, :status => 406
@@ -126,6 +126,13 @@ class DmsfUploadController < ApplicationController
   def delete_dmsf_attachment
     attachment = Attachment.find(params[:id])
     attachment.destroy
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
+  def delete_dmsf_link_attachment
+    link = DmsfLink.find(params[:id])
+    link.destroy
   rescue ActiveRecord::RecordNotFound
     render_404
   end

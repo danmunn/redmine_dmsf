@@ -35,12 +35,12 @@
                                 :dmsf_file_revision_id => file.last_revision.id),
                             :title => l(:title_waiting_for_approval),
                             :remote => true,
-                            :class => 'icon icon-wf-waiting') %>
+                            :class => "icon-only icon-wf-waiting") %>
             <% else %>
-                <span class="icon"></span>
+                <span class="icon-only"></span>
             <% end %>
         <% else %>
-            <span class="icon"></span>
+            <span class="icon-only"></span>
         <% end %>
     <% when DmsfWorkflow::STATE_ASSIGNED %>
         <% if User.current && (file.last_revision.dmsf_workflow_assigned_by == User.current.id) && wf %>
@@ -49,12 +49,12 @@
                             :id => file.last_revision.dmsf_workflow_id,
                             :dmsf_file_revision_id => file.last_revision.id),
                         :title => l(:label_dmsf_wokflow_action_start),
-                        :class => 'icon icon-wf-assigned') %>
+                        :class => 'icon-only icon-wf-assigned') %>
         <% else %>
             <span class="icon"></span>
         <% end %>
     <% when DmsfWorkflow::STATE_APPROVED, DmsfWorkflow::STATE_REJECTED %>
-        <span class="icon"></span>
+        <span class="icon-only"></span>
     <% else %>
         <% if workflows_available %>
           <%= link_to('',
@@ -69,9 +69,9 @@
                   :dmsf_file_revision_id => file.last_revision.id),
             :title => l(:label_dmsf_wokflow_action_assign),
             :remote => true,
-            :class => 'icon icon-wf-none') %>
+            :class => 'icon-only icon-wf-none') %>
         <% else %>
-            <span class="icon"></span>
+            <span class="icon-only"></span>
         <% end %>
     <% end %>
 <% end %>

@@ -366,3 +366,6 @@ sl:
   note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
 
   label_user_search_add: Search for user to add
+
+  label_dmsf_attachments: DMS Attachments
+  label_basic_attachments: Basic Attachments

@@ -87,7 +87,7 @@ class DmsfLinksController < ApplicationController
         @dmsf_link.project_id = params[:dmsf_link][:project_id]
         @dmsf_link.dmsf_folder_id = params[:dmsf_link][:dmsf_folder_id]
       else
-        # An issue link
+        # A container link
         @dmsf_link.project_id = -1
         @dmsf_link.dmsf_folder_id = nil
       end

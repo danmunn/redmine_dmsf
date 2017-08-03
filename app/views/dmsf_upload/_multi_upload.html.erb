@@ -38,7 +38,8 @@
              :id => 'uploadform', :method => :post, :multipart => true) do %>
   <div id="dmsf_uploader">
     <span class="dmsf_uploader">
-      <%= render :partial => 'dmsf_upload/form', :locals => { :multiple => true, :container => nil } %>
+      <%= render :partial => 'dmsf_upload/form',
+                 :locals => { :multiple => true, :container => nil, :description => true, :awf => false } %>
     </span>
     <%= submit_tag l(:label_upload) %>
   </div>

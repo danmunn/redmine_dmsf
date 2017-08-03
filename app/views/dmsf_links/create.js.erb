@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-var linksSpan = $("#dmsf_links_fields");
+var linksSpan = $("#dmsf_links_attachments_fields");
 var linkId = "<%= @dmsf_link.id %>";
 var linkName = "<%= @dmsf_link.name %>";
 var title = "<%= l(:label_dmsf_wokflow_action_assign) %>";
@@ -35,4 +35,4 @@ var awf = false;
   <% end %>
 <% end %>
 
-dmsfAddLink(linksSpan, linkId, linkName, title, project, awf);
+dmsfAddLink(linksSpan, linkId, linkName, title, project, awf, <%= !defined?(EasyExtensions) %>);
