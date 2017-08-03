@@ -69,19 +69,19 @@
   <% if @folder_manipulation_allowed %>
     <%= link_to('', link ? restore_dmsf_link_path(:id => link) : restore_dmsf_path(:id => project, :folder_id => subfolder),
       :title => l(:title_restore),
-      :class => 'icon icon-cancel') %>
+      :class => 'icon-only icon-cancel') %>
     <% if link %>
       <%= link_to('', dmsf_link_path(:id => link, :commit => 'yes'),
         :data => {:confirm => l(:text_are_you_sure)},
         :method => :delete,
         :title => l(:title_delete),
-        :class => 'icon icon-delete') %>
+        :class => 'icon-only icon-delete') %>
     <% else %>
       <%= link_to('', delete_dmsf_path(:id => project, :folder_id => subfolder, :commit => 'yes'),
         :data => {:confirm => l(:text_are_you_sure)},
         :title => l(:title_delete),
         :method => :delete,
-        :class => 'icon icon-delete') %>
+        :class => 'icon-only icon-delete') %>
     <% end %>
   <% end %>
 </td>

@@ -46,36 +46,36 @@
     <% if User.current.allowed_to? :file_manipulation, dmsf_file.project %>
       <%= link_to('', dmsf_file_path(:id => dmsf_file),
         :title => l(:link_details, :title => h(dmsf_file.last_revision.title)),
-        :class => 'icon icon-edit') %>
+        :class => 'icon-only icon-edit') %>
     <% else %>
-      <span class="icon"></span>
+      <span class="icon-only"></span>
     <% end %>
     <% # Email %>
     <%= link_to('', entries_operations_dmsf_path(:id => dmsf_file.project, :email_entries => 'email', :files => [dmsf_file.id]), :method => :post,
                 :title => l(:heading_send_documents_by_email),
-                :class => 'icon icon-email-disabled') %>
+                :class => 'icon-only icon-email-disabled') %>
     <% # Lock %>
     <% if !dmsf_file.locked? %>
       <%= link_to('', lock_dmsf_files_path(:id => dmsf_file),
                   :title => l(:title_lock_file),
-                  :class => 'icon icon-lock') %>
+                  :class => 'icon-only icon-lock') %>
     <% elsif dmsf_file.unlockable? && (!dmsf_file.locked_for_user? || User.current.allowed_to?(:force_file_unlock, dmsf_file.project)) %>
       <%= link_to('', unlock_dmsf_files_path(:id => dmsf_file),
                   :title => dmsf_file.get_locked_title,
-                  :class => 'icon icon-unlock') %>
+                  :class => 'icon-only icon-unlock') %>
     <% else %>
-      <span class="icon icon-unlock" title="<%= dmsf_file.get_locked_title %>"></span>
+      <span class="icon-only icon-unlock" title="<%= dmsf_file.get_locked_title %>"></span>
     <% end %>
     <% unless dmsf_file.locked? %>
       <% # Notifications %>
       <% if dmsf_file.notification %>
         <%= link_to('', notify_deactivate_dmsf_files_path(:id => dmsf_file),
                     :title => l(:title_notifications_active_deactivate),
-                    :class => 'icon icon-email') %>
+                    :class => 'icon-only icon-email') %>
       <% else %>
         <%= link_to('', notify_activate_dmsf_files_path(:id => dmsf_file),
                     :title => l(:title_notifications_not_active_activate),
-                    :class => 'icon icon-email-add') %>
+                    :class => 'icon-only icon-email-add') %>
       <% end %>
       <% # Delete %>
       <% if @issue.attributes_editable?  && User.current.allowed_to?(:file_delete, dmsf_file.project) %>
@@ -84,11 +84,11 @@
                   :data => {:confirm => l(:text_are_you_sure)},
                   :method => :delete,
                   :title => l(:title_delete),
-                  :class => 'icon icon-del') %>
+                  :class => 'icon-only icon-del') %>
       <% end %>
     <% else %>
-      <span class="icon"></span>
-      <span class="icon"></span>
+      <span class="icon-only"></span>
+      <span class="icon-only"></span>
     <% end %>
     <% # Approval workflow %>
     <% wf = DmsfWorkflow.find_by_id(dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id %>

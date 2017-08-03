@@ -59,10 +59,11 @@ module DmsfHelper
     extension = File.extname(filename)
     extension = extension[1, extension.length-1]
     if File.exist?("#{File.dirname(__FILE__)}/../../assets/images/filetypes/#{extension}.png")
-      "filetype-#{extension}";
+      cls = "filetype-#{extension}";
     else
-      Redmine::MimeType.css_class_of(filename)
+      cls = Redmine::MimeType.css_class_of(filename)
     end
+    cls + ' dmsf-icon-file'
   end
 
   def plugin_asset_path(plugin, asset_type, source)

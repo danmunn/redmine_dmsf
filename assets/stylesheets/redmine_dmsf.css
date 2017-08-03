@@ -206,6 +206,11 @@ div.dmsf_revision_inner_box .attribute .label {
 .icon-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 
 /* File types */
+.dmsf-icon-file{
+    display: inline-block;
+    height: 16px;
+}
+
 .dmsf_gray .icon-folder { background-image: url(../images/folder_gray.png); }
 .dmsf_system .icon-folder { background-image: url(../images/folder_system.png); }
 .dmsf_system_closed .icon-folder { background-image: url(../images/folder_system_closed.png); }
