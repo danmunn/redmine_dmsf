@@ -83,6 +83,15 @@ module RedmineDmsf
         end
       end
 
+      def view_issues_edit_notes_bottom_style(context={})
+        if (User.current.pref[:dmsf_attachments_upload_choice] == 'Attachments') ||
+          !allowed_to_attach_documents(context[:container])
+          ''
+        else
+          'display: none'
+        end
+      end
+
       private
 
       def allowed_to_attach_documents(container)
