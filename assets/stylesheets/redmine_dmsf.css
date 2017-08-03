@@ -199,9 +199,6 @@ div.dmsf_revision_inner_box .attribute .label {
 .icon-wf-none { background-image: url(../images/none.png); }
 .icon-wf-waiting { background-image: url(../images/waiting_for_approval.png); }
 .icon-wf-assigned { background-image: url(../images/assigned.png); }
-.icon-delete { background-image: url(../images/rev_delete.png); }
-.icon-download { background-image: url(../images/rev_download.png); }
-.icon-downloads { background-image: url(../images/rev_downloads.png); }
 .icon-link { background-image: url(../../../images/link.png); }
 .icon-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 

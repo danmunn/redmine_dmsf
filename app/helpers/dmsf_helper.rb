@@ -63,7 +63,8 @@ module DmsfHelper
     else
       cls = Redmine::MimeType.css_class_of(filename)
     end
-    cls + ' dmsf-icon-file'
+    cls << ' dmsf-icon-file' if cls
+    cls
   end
 
   def plugin_asset_path(plugin, asset_type, source)
