@@ -332,7 +332,7 @@ class DmsfWorkflowsController < ApplicationController
   def add_step
     if request.post?
       if params[:step] == '0'
-        step = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.distinct.count + 1
+        step = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq.count + 1
       else
         step = params[:step].to_i
       end
