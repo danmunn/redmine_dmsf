@@ -37,7 +37,7 @@
           <% else %>
               <%= link_to('',  assign_dmsf_workflow_path(:id => container.project.id, :project_id => container.project.id,
                 :attachment_id => i + 1), :title => l(:label_dmsf_wokflow_action_assign),
-                :remote => true, :class => 'icon-only icon-wf-none') %>
+                :remote => true, :class => 'modify-upload icon-only icon-wf-none') %>
           <% end %>
       </span>
     <% end %>
@@ -54,7 +54,7 @@
                       :method => 'delete', :remote => true, :class => 'remove-upload icon-only icon-del') %>
             <% wf = container.saved_dmsf_links_wfs[dmsf_link.id] %>
             <% if wf %>
-              <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="icon-only icon-wf-assigned"></a>
+              <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="modify-upload icon-only icon-wf-assigned"></a>
                 <%= hidden_field_tag("dmsf_links_wfs[#{dmsf_link.id}]", wf.id) if wf %>
             <% else %>
               <%= render(:partial => 'dmsf_files/approval_workflow_button',
