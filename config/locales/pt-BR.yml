@@ -22,9 +22,9 @@
 
 pt-BR:
   dmsf: DMSF
-  label_dmsf_file_plural: Arquivos Documentos
-  label_dmsf_file_revision_plural: Revisões dos Documentos
-  label_dmsf_file_revision_access_plural: Acessos aos Documentos
+  label_dmsf_file_plural: Arquivos
+  label_dmsf_file_revision_plural: Revisões dos Arquivos
+  label_dmsf_file_revision_access_plural: Acessos aos Arquivos
   warning_no_entries_selected: É necessário selecionar um arquivo ou pasta
   error_email_to_must_be_entered: Destinatário não pode ficar em branco
   warning_file_already_locked: Arquivo já bloqueado
@@ -45,12 +45,12 @@ pt-BR:
   error_file_is_locked: Arquivo está bloqueado
   notice_file_deleted: Arquivo excluído
   error_at_least_one_revision_must_be_present: Deve existir pelo menos uma revisão
-  notice_revision_deleted: Revisão deletada
+  notice_revision_deleted: Revisão excluída
   warning_one_of_files_locked: Um dos arquivos bloqueados
   notice_file_unlocked: Arquivo desbloqueado
   notice_file_revision_created: Revisão do arquivo criado
   notice_your_preferences_were_saved: Suas atualizações foram salvas
-  notice_your_preferences_were_not_saved: Your preferences were not saved
+  notice_your_preferences_were_not_saved: Suas preferências não foram salvas
   warning_folder_notifications_already_activated: Notificações de pasta atualizadas
   notice_folder_notifications_activated: Notificações da pasta ativas
   warning_folder_notifications_already_deactivateNd: Notificações da pasta desativadas
@@ -71,8 +71,8 @@ pt-BR:
   link_ver: Revisão
   link_author: Autor
   title_check_for_zip_download_or_email: Marcar para download ou enviar por e-mail
-  title_check_for_restore_or_delete: Marcar para restaurar ou deletar
-  title_delete: Deletar
+  title_check_for_restore_or_delete: Marcar para restaurar ou excluir
+  title_delete: Excluir
   title_notifications_active_deactivate: "Notificações ativas: Desativar"
   title_notifications_not_active_activate: "Notificações não ativas: Ativar"
   title_title_version_version_download: "%{title} revisão %{version} download"
@@ -84,7 +84,7 @@ pt-BR:
   title_lock_file: Clique aqui para impedir alterações por outro usuário
   title_download_checked: Download em arquivo compactado
   title_send_checked_by_email: Enviar por e-mail
-  link_user_preferences: 'Configurações: Documentos'
+  link_user_preferences: Suas preferências de projeto DMSF
   heading_send_documents_by_email: Enviar documentos por e-mail
   label_email_from: Remetente
   label_email_to: Destinatário
@@ -104,12 +104,12 @@ pt-BR:
   select_option_default: Padrão
   select_option_deactivated: Desativado
   select_option_activated: Ativado
-  label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
+  label_title_format: 'Formato do Título'
+  text_title_format: "Formato do título do documento para download (%t - título, %f - arquivo, %d - data, %v - versão, %i - ID, %r - revisão). Exemplo: %t_%v"
   title_save_preferences: Salvar preferências
   heading_revisions: Revisões
   title_download: Download
-  title_delete_revision: Revisão deletada
+  title_delete_revision: Revisão excluída
   label_created: Criado
   label_changed: Alterado
   info_changed_by_user: "%{changed} por"
@@ -117,7 +117,7 @@ pt-BR:
   label_mime: Extensão do arquivo
   label_size: Tamanho
   heading_new_revision: Nova revisão
-  option_version_same: Same
+  option_version_same: Mesma
   option_version_minor: Minor
   option_version_major: Major
   option_version_custom: Personalizado
@@ -130,30 +130,30 @@ pt-BR:
   label_index_database: Index database
   label_stemming_language: Stemming language
   note_possible_values: Valores possíveis
-  note_pass_none_to_disable_stemming: "pass 'none' to disable stemming"
+  note_pass_none_to_disable_stemming: "Passe 'none' para desabilitar derivação"
   label_stem_strategy: Stem strategy
   option_stem_none: Stem none (default)
   option_stem_some: Stem some
   option_stem_all: Stem all
-  label_stemming_description: This controls how the query parser will apply the stemming algorithm. The default value is STEM_NONE. The possible values are
-  note_do_not_stem: "Don't perform any stemming."
-  note_stem_some: Search for stemmed forms of terms except for those which start with a capital letter, or are followed by certain characters, or are used with operators which need positional information. Stemmed terms are prefixed with 'Z'.
-  note_stem_all: "Search for stemmed forms of all words (note: no 'Z' prefix is added)."
-  note_stemming_applied: Note that the stemming algorithm is only applied to words in probabilistic fields - boolean filter terms are never stemmed.
+  label_stemming_description: Isso controla como o analisador de consulta aplicará o algoritmo de derivação. O valor padrão é STEM_NONE. Os valores possíveis são
+  note_do_not_stem: "Não execute nenhuma derivação."
+  note_stem_some: "Procure por formas derivadas dos termos, exceto aqueles que iniciam com letra maiúscula ou são seguidos por certos caracteres ou são usados com operadores que necessitam informação de posição. Termos derivados são prefixados com 'Z'."
+  note_stem_all: "Procure por formas derivadas de todas as palavras (nota: não é adicionado um prefixo 'Z')."
+  note_stemming_applied: Observe que o algoritmo de derivação só é aplicado a palavras em campos probabilísticos - os termos de filtro booleanos nunca são gerados.
   label_default_notifications: Notificações padrões de arquivo
   heading_uploaded_files: Arquivos enviados
   submit_commit: Salvar
   link_documents: DMSF
-  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
-  permission_view_dmsf_file_revisions: View revisions in Activity stream
-  permission_view_dmsf_folders: Browse documents
-  permission_user_preferences: User preferences
-  permission_view_dmsf_files: View documents
-  permission_folder_manipulation: Folder manipulation
-  permission_file_manipulation: File manipulation
-  permission_force_file_unlock: Force file unlock
-  permission_manage_workflows: Manage workflows
-  permission_file_delete: Delete documents
+  permission_view_dmsf_file_revision_accesses: Ver downloads no fluxo de Atividades
+  permission_view_dmsf_file_revisions: Ver revisões no fluxo de Atividades
+  permission_view_dmsf_folders: Browse documentos
+  permission_user_preferences: Preferências do usuário
+  permission_view_dmsf_files: Ver documentos
+  permission_folder_manipulation: Manipulação de pastas
+  permission_file_manipulation: Manipulação de arquivos
+  permission_force_file_unlock: Forçar desbloqueio do arquivo
+  permission_manage_workflows: Administrar workflows
+  permission_file_delete: Excluir arquivos
   label_file: Arquivo
   field_folder: Pasta
   error_create_cycle_in_folder_dependency: Dependência entre pastas
@@ -162,7 +162,7 @@ pt-BR:
   warning_some_files_were_not_commited: "O(s) arquivo(s) não foram salvos: %{files}"
   error_user_has_not_right_delete_folder: "Usuário não possui permissão para excluir pastas"
   error_user_has_not_right_delete_file: "Usuário não possui permissão para excluir arquivos"
-  notice_entries_deleted: Deletado com sucesso
+  notice_entries_deleted: Excluído com sucesso
   warning_some_entries_were_not_deleted: "Não foi possível excluir os seguintes arquivos: %{entries}"
   title_delete_checked: Excluir documento ou arquivo selecionado
   title_number_of_files_in_directory: Número de arquivos no diretório
@@ -171,19 +171,19 @@ pt-BR:
   label_number_of_documents: Documentos
   error_file_storage_directory_does_not_exist: "O diretório de armazenamento de arquivo não existe e não pode ser criado"
   error_file_can_not_be_created: "O arquivo não pode ser criado"
-  error_wrong_zip_encoding: Wrong Zip encoding
-  warning_xapian_not_available: Xapian not available
+  error_wrong_zip_encoding: Código Zip errado
+  warning_xapian_not_available: Xapian não disponível
   menu_dmsf: DMSF
-  label_physical_file_delete: Physical file delete
-  user_is_not_project_member: You are not a member of the project
+  label_physical_file_delete: Excluir fisicamente arquivo
+  user_is_not_project_member: Você não é um membro do projeto
   heading_access_downloads_emails: Downloads/Emails
-  heading_access_first: First
-  heading_access_last: Last
+  heading_access_first: Primeiro
+  heading_access_last: Último
   label_dmsf_updated: Updated
   label_dmsf_downloaded: Downloaded
-  title_total_size_of_all_files: Total size of all files under this folder
+  title_total_size_of_all_files: Tamanho total de todos os arquivos nesta pasta
   project_module_dmsf: DMSF
-  warning_no_project_to_copy_file_to: No project to copy file to
+  warning_no_project_to_copy_file_to: Nenhum projeto para cópia do arquivo
   comment_copied_from: "Copiado de %{source}"
   notice_file_copied: Arquivo copiado
   notice_file_moved: Arquivo movido
@@ -191,24 +191,24 @@ pt-BR:
   field_target_folder: Pasta de destino
   title_copy_or_move: Copiar / Mover
   label_dmsf_folder_plural: Pastas
-  comment_moved_from: "Moved from %{source}"
-  error_target_folder_same: Target folder and project are the same as current
+  comment_moved_from: "Mover de %{source}"
+  error_target_folder_same: A pasta e o projeto alvo são os mesmos que os atuais
   error_file_cannot_be_moved: "Arquivo não pode ser movido"
   error_file_cannot_be_copied: "Arquivo não pode ser copiado"
-  warning_no_project_to_copy_folder_to: No project to copy folder to
+  warning_no_project_to_copy_folder_to: Nenhum projeto para cópia da pasta
   title_copy: Copiar
   error_folder_cannot_be_copied: "Pasta não pode ser copiada"
   notice_folder_copied: Pasta copiada
 
-  error_max_email_filesize_exceeded: "You've exceeded the maximum filesize for sending via email. (%{number} MB)"
-  note_maximum_email_filesize: Limits maximum filesize that can be sent via email. 0 means unlimited. Number is in MB.
-  label_maximum_email_filesize: Maximum email attachment size
-  header_minimum_filesize: File Error.
-  error_minimum_filesize: "The file %{file} is 0 bytes and will not be attached."
-  parent_directory: Parent Directory
-  note_webdav: "Webdav once enabled can be found at %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
+  error_max_email_filesize_exceeded: "Você excedeu o tamanho máximo do arquivo para enviar via e-mail. (%{number} MB)"
+  note_maximum_email_filesize: Limita o tamanho máximo de arquivos que pode ser enviado por e-mail. 0 significa ilimitado. O número está em MB.
+  label_maximum_email_filesize: Tamanho máximo do anexo de e-mail
+  header_minimum_filesize: Erro de arquivo.
+  error_minimum_filesize: "O arquivo %{file} é 0 bytes e não será anexado."
+  parent_directory: Diretório Pai
+  note_webdav: "Webdav uma vez habilitado pode ser encontrado em %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Webdav functionality
-  label_dmsf_plural: "Copy Documents and folders (%{files} documents in %{folders} folders)"
+  label_dmsf_plural: "Copiar documentos e pastas (%{files} documentos em %{folders} pastas)"
 
   warning_folder_already_locked: Esta pasta já está bloqueada
   notice_folder_locked: A pasta foi bloqueada com sucesso
@@ -221,22 +221,22 @@ pt-BR:
   select_option_webdav_readonly: Read-only
   select_option_webdav_readwrite: Read/Write
   label_webdav_strategy: Webdav strategy
-  note_webdav_strategy: Enables the administrator to decide if webdav is a read-only or read-write platform for end users.
+  note_webdav_strategy: Permite que o administrador decida se o webdav é uma plataforma read-only ou read-write para usuários finais.
 
-  error_unable_delete_dmsf_workflow: Unable to delete the workflow
+  error_unable_delete_dmsf_workflow: Não foi possível excluir o workflow
   error_empty_note: "No caso de reprovação o preenchimento do camo notas é obrigatório"
-  error_workflow_assign: An error occured while assigning
+  error_workflow_assign: Ocorreu um erro ao atribuir workflow
   error_cannot_start_workflow: "Workflow não pode ser iniciado"
-  error_cannot_renumber_steps: "Steps can't be renumbered"
+  error_cannot_renumber_steps: "Os passos não podem ser renumerados"
   label_dmsf_workflow_new: Novo workflow de aprovação
   field_label_dmsf_workflow: Workflow de aprovação
   field_label_dmsf_workflow_name: Nome do workflow de aprovação
   label_dmsf_workflow_plural: Workflows de aprovação
   label_dmsf_workflow_plural_num: Workflows de aprovação(%{count})
-  label_dmsf_workflow_step: Step
-  label_dmsf_workflow_step_plural: Steps
-  label_dmsf_workflow_approval: Approval
-  label_dmsf_workflow_approval_plural: Approvals
+  label_dmsf_workflow_step: Passo
+  label_dmsf_workflow_step_plural: Passos
+  label_dmsf_workflow_approval: Aprovação
+  label_dmsf_workflow_approval_plural: Aprovações
   label_dmsf: DMSF
   label_dmsf_wokflow_action_approve: Aprovar
   label_dmsf_wokflow_action_reject: Reprovar
@@ -247,19 +247,19 @@ pt-BR:
   label_or: ou
   label_action: Ação
   label_note: Observação
-  title_none: None
-  title_rejection: Rejection
-  title_delegation: Delegation
-  title_assignment: Inclusão do Documento
+  title_none: Nenhum
+  title_rejection: Rejeição
+  title_delegation: Delegação
+  title_assignment: Atribuição
   title_start: Iniciado
-  title_dmsf_workflow_log: Approval Workflow Log
+  title_dmsf_workflow_log: Registro do workflow de aprovação
   title_assigned: Atribuído
   title_approval: Aprovado
   title_rejected: Rejeitado
   dmsf_and: E
   dmsf_or: OU
-  dmsf_new_step: New step
-  dmsf_new_step_or_approver: New step or New approver
+  dmsf_new_step: Novo passo
+  dmsf_new_step_or_approver: Novo passo ou Novo aprovador
   message_dmsf_wokflow_note: Sua observação...
   info_revision: "r%{rev}"
   link_workflow: Workflow
@@ -280,12 +280,12 @@ pt-BR:
   text_email_to_see_history: Para visualizar o histórico de workflow de aprovação clique no status do workflow disponível ao lado do documento
   text_email_to_see_status: Para visualizar o status atual do workflow de aprovação, clique no status de fluxo de trabalho do documento
 
-  title_create_link: Create a symbolic link
-  label_link_from: Link from
-  label_link_to: Link to
+  title_create_link: Crie um link simbólico
+  label_link_from: Link de
+  label_link_to: Link para
   label_notifications_on: Ativar Notificações
   label_notifications_off: Desativar Notificações
-  field_target_file: Source file
+  field_target_file: Arquivo fonte
   title_download_entries: Download entries
   label_external: External
 
@@ -301,11 +301,11 @@ pt-BR:
   text_email_doc_follows: as follows
   text_email_doc_deleted_subject: Exclusão de documentos
   text_email_doc_deleted: deletou os documentos da área
-  label_links_only: links only
+  label_links_only: links apenas
 
-  label_display_notified_recipients: Display notified recipients
-  note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
-  warning_email_notifications: "Email notifications sent to %{to}"
+  label_display_notified_recipients: Mostrar destinatários notificados
+  note_display_notified_recipients: O usuário será informado sobre todos os destinatários que enviou a notificação por e-mail.
+  warning_email_notifications: "Notificações de e-mail enviadas para %{to}"
 
   link_trash_bin: Lixeira
   title_restore: Restaurar
@@ -315,50 +315,50 @@ pt-BR:
   title_restore_checked: Restaurar pasta ou arquivo
   error_parent_folder: "A pasta de pai não existe"
 
-  error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
-  error_parent_locked: Unable to complete lock - resource parent is locked
-  error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: Unable to lock exclusively an already-locked resource
-  error_unlock_parent_locked: Unlock failed - resource parent is locked
+  error_resource_or_parent_locked: Não é possível completar o bloqueio - recurso (ou pai) está bloqueado
+  error_parent_locked: Não é possível completar o bloqueio - o recurso pai está bloqueado
+  error_resource_locked: Não foi possível concluir o bloqueio - o recurso está bloqueado
+  error_lock_exclusively: Não é possível bloquear exclusivamente um recurso já bloqueado
+  error_unlock_parent_locked: Falha no desbloqueio - o recurso pai está bloqueado
 
-  field_dmsf_tree_view: Navigate folders in a tree
+  field_dmsf_tree_view: Navegação de pastas em árvore
   label_dmsf_version: Versão
 
   locked_documents: Documentos bloqueados
   open_approvals: Aprovações abertas
 
-  label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
-  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  label_maximum_ajax_upload_filesize: Tamanha máximo de arquivo carregável via AJAX
+  note_maximum_ajax_upload_filesize: Limita o tamanho máximo do arquivo que pode ser carregado através da interface AJAX padrão, caso contrário o formulário de upload padrão da Redmine deve ser usado. O número está em MB.
   label_classic: Classic
   label_drag_drop: Modern
 
-  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."
+  error_maximum_upload_filecount: "Não mais que %{filecount} arquivo(s) pode(m) ser carregado(s)."
 
-  label_public_urls: Public URLs valid to
+  label_public_urls: URLs públicas válidas para
 
   label_webdav: WebDAV
   label_full_text: Full-text search
   link_extension: Ext
 
-  label_memcached_servers: Memcached server address
-  text_memcached_servers: Only a single server is supported, if empty then caching is disabled. After changing this, the application must be restarted!
+  label_memcached_servers: Endereço do servidor Memcached
+  text_memcached_servers: Apenas um único servidor é suportado, se vazio, o cache está desabilitado. Depois de alterado, o aplicativo deve ser reiniciado!
 
-  label_webdav_ignore: Ignored files patterns
-  note_webdav_ignore: A regular expresion with filenames to ignore by PUT requests.
+  label_webdav_ignore: Modelo de arquivos ignorados
+  note_webdav_ignore: Uma expressão regular com nomes de arquivos para serem ignorados por requisições PUT.
 
   label_document_url: Url
-  label_last_revision_id: Revision
+  label_last_revision_id: Revisão
     
-  label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern matches temporary files created by MsOffice.
+  label_webdav_disable_versioning: Não há modelo de arquivos de versão
+  note_webdav_disable_versioning: Uma expressão regular que desabilita o controle de versão para os arquivos correspondentes. O modelo padrão corresponde aos arquivos temporários criados pelo MsOffice.
 
-  label_dmsf_keep_documents_locked: Keep documents locked
-  note_dmsf_keep_documents_locked: Documents will be kept locked when approved
+  label_dmsf_keep_documents_locked: Manter documentos bloqueados
+  note_dmsf_keep_documents_locked: Documentos serão mantidos bloqueados quando aprovados
   note_global: (global)
-  field_dmsf_not_inheritable: Not inheritable
+  field_dmsf_not_inheritable: Não herdável
   
-  label_webdav_use_project_names: Use project name for project folder
-  note_webdav_use_project_names: Use project names instead of project identifier for project folders.
+  label_webdav_use_project_names: Use o nome do projeto para a pasta do projeto
+  note_webdav_use_project_names: Use nomes de projetos em vez de identificador de projeto para pastas de projeto.
 
-  label_act_as_attachable: Act as attachable
-  note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+  label_act_as_attachable: Atuar como anexo
+  note_dmsf_act_as_attachable: Permite anexar documentos a objetos, por exemplo, issues.
