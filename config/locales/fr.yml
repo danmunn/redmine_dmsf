@@ -158,7 +158,7 @@ fr:
   label_file: Fichier
   field_folder: Dossier
   error_create_cycle_in_folder_dependency: Crée une dépendance cyclique du dossier
-  error_contains_invalid_character: Contient de(s) caractère(s) invalide(s)
+  error_contains_invalid_character: Contient un(des) caractère(s) invalide(s)
   error_file_commit_require_uploaded_file: "Transmission des fichiers nécessaire avant l'enregistrement"
   warning_some_files_were_not_commited: "Erreur d'enregsitrement de certains fichiers %{files}"
   error_user_has_not_right_delete_folder: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression du dossier"
@@ -220,7 +220,7 @@ fr:
   title_lock_folder: "Verrouiller afin d'empêcher les modifications du dossier"
 
   select_option_webdav_readonly: Lecture
-  select_option_webdav_readwrite: Lecture/Ecriture
+  select_option_webdav_readwrite: Lecture/Écriture
   label_webdav_strategy: Accès Webdav
   note_webdav_strategy: "Permet à l'administrateur d'autoriser les utilisateurs au module Webdav en letcure seule ou en lecture et écriture."
 
@@ -315,11 +315,11 @@ fr:
   title_restore_checked: Restauration vérifiée
   error_parent_folder: "Le dossier parent n'existe pas"
 
-  error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
-  error_parent_locked: Unable to complete lock - resource parent is locked
-  error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: Unable to lock exclusively an already-locked resource
-  error_unlock_parent_locked: Unlock failed - resource parent is locked
+  error_resource_or_parent_locked: Impossible de verrouiller - la ressource (ou parent) est verrouillée
+  error_parent_locked: Impossible de verrouiller - la ressource parente est verrouillée
+  error_resource_locked: Impossible de verrouiller - la ressource est verrouillée
+  error_lock_exclusively: Impossible de verrouiller de manière exclusive une ressource déjà verrouillée
+  error_unlock_parent_locked: Echec du déverrouillage - la ressource parente est verrouillée
 
   field_dmsf_tree_view: Vue arborescente des dossiers
   label_dmsf_version: Version
@@ -329,28 +329,28 @@ fr:
 
   label_maximum_ajax_upload_filesize: Taille maximale de fichier pour téléversement via AJAX
   note_maximum_ajax_upload_filesize: "Taille maximale, en méga octets, de fichier pour téléversement via l'interface standard AJAX. Sinon l'interface standard de Redmine doit être utilisée."
-  label_classic: Classic
-  label_drag_drop: Modern
+  label_classic: Classique
+  label_drag_drop: Moderne
 
   error_maximum_upload_filecount: "Pas plus de %{filecount} fichier(s) ne peuvent être téléversés."
 
-  label_public_urls: Public URLs valid to
+  label_public_urls: URLs publiques valides pour
 
   label_webdav: WebDAV
   label_full_text: Recherche de texte intégral
   link_extension: Ext
 
   label_memcached_servers: Adresse du serveur Memcached
-  text_memcached_servers: Only a single server is supported, if empty then caching is disabled. After changing this, the application must be restarted!
+  text_memcached_servers: "Seul un unique serveur est supporté, si laissé vide alors la mise en cache est désactivée. Après avoir changé cela, l'application doit-être redémarrée !"
 
-  label_webdav_ignore: Ignored files patterns
-  note_webdav_ignore: A regular expresion with filenames to ignore by PUT requests.
+  label_webdav_ignore: Modèles de fichiers ignorés
+  note_webdav_ignore: Expression régulière avec les noms de fichier qui doivent être ignorés par les requêtes PUT.
 
   label_document_url: Url
   label_last_revision_id: Révision
     
-  label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern matches temporary files created by MsOffice.
+  label_webdav_disable_versioning: Modèles de fichiers sans gestion de version
+  note_webdav_disable_versioning: "Expression régulière qui désactive la gestion de version pour les fichiers correspondants. L'expression par défaut correspond aux fichiers temporaires créés par MsOffice."
 
   label_dmsf_keep_documents_locked: Garder les documents verrouillés
   note_dmsf_keep_documents_locked: Les documents seront maintenus verrouillés après approbation.
