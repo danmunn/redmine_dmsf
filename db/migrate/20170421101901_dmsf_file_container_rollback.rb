@@ -74,6 +74,11 @@ class DmsfFileContainerRollback < ActiveRecord::Migration
       if file
         file.container_id = container_id
         file.container_type = 'Issue'
+        # Inject project into instance of dmsf_file because save method needs it.
+        class << file
+          attr_accessor :project_id
+        end
+        file.project_id = 0
         file.save
       end
     end
