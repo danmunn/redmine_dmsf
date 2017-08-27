@@ -341,10 +341,10 @@ fr:
   link_extension: Ext
 
   label_memcached_servers: Adresse du serveur Memcached
-  text_memcached_servers: "Seul un unique serveur est supporté, si laissé vide alors la mise en cache est désactivée. Après avoir changé cela, l'application doit-être redémarrée !"
+  text_memcached_servers: "Seul un unique serveur est supporté, si laissé vide alors la mise en cache est désactivée. Après changement, l'application doit-être redémarrée !"
 
   label_webdav_ignore: Modèles de fichiers ignorés
-  note_webdav_ignore: Expression régulière avec les noms de fichier qui doivent être ignorés par les requêtes PUT.
+  note_webdav_ignore: Expression régulière avec les noms de fichiers qui doivent être ignorés par les requêtes PUT.
 
   label_document_url: Url
   label_last_revision_id: Révision
@@ -363,6 +363,6 @@ fr:
   label_last_approver: Dernier approbateur
 
   label_act_as_attachable: Utiliser comme pièce jointe
-  note_dmsf_act_as_attachable: "Permet de joindre des documents aux objets tel que les demandes."
+  note_dmsf_act_as_attachable: "Permet de joindre des documents aux objets tels que les demandes."
 
   label_user_search_add: Rechercher des utilisateurs à ajouter
