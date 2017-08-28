@@ -199,13 +199,15 @@ div.dmsf_revision_inner_box .attribute .label {
 .icon-wf-none { background-image: url(../images/none.png); }
 .icon-wf-waiting { background-image: url(../images/waiting_for_approval.png); }
 .icon-wf-assigned { background-image: url(../images/assigned.png); }
-.icon-delete { background-image: url(../images/rev_delete.png); }
-.icon-download { background-image: url(../images/rev_download.png); }
-.icon-downloads { background-image: url(../images/rev_downloads.png); }
 .icon-link { background-image: url(../../../images/link.png); }
 .icon-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 
 /* File types */
+.dmsf-icon-file{
+    display: inline-block;
+    height: 16px;
+}
+
 .dmsf_gray .icon-folder { background-image: url(../images/folder_gray.png); }
 .dmsf_system .icon-folder { background-image: url(../images/folder_system.png); }
 .dmsf_system_closed .icon-folder { background-image: url(../images/folder_system_closed.png); }
@@ -302,8 +304,8 @@ div.dmsf_revision_inner_box .attribute .label {
 
 /* DMSF file upload */
 .dmsf_uploader{
-    padding:6px;
-    margin-bottom: 10px;
+    padding:10px;
+    margin-bottom: 20px;
     background-color:#f6f6f6;
     color:#505050;
     line-height:1.5em;
@@ -312,6 +314,21 @@ div.dmsf_revision_inner_box .attribute .label {
     border-radius: 3px;
     min-height: 50px;
     display: block;
+    overflow: hidden;
+}
+
+.dmsf_add_link{
+    display: block;
+    float: right;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.dmsf_add_file{
+    display: block;
+    float: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #dmsf_attachments_fields input.description {margin-left:4px; width:340px;}
@@ -321,5 +338,5 @@ div.dmsf_revision_inner_box .attribute .label {
 #dmsf_attachments_fields .ajax-loading input.filename {background:url(../../../images/loading.gif) no-repeat 0px 50%;}
 #dmsf_attachments_fields div.ui-progressbar { width: 100px; height:14px; margin: 2px 0 -5px 8px; display: inline-block; }
 
-#dmsf_links_fields span {display:block; white-space:nowrap;}
-#dmsf_links_fields input.filename {border:0; height:1.8em; width:250px; color:#555; background-color:inherit; background:url(../../../images/link.png) no-repeat 1px 50%; padding-left:18px;}
+#dmsf_links_attachments_fields span {display:block; white-space:nowrap;}
+#dmsf_links_attachments_fields input.filename {border:0; height:1.8em; width:250px; color:#555; background-color:inherit; background:url(../../../images/link.png) no-repeat 1px 50%; padding-left:18px;}

@@ -366,3 +366,6 @@ fr:
   note_dmsf_act_as_attachable: "Permet de joindre des documents aux objets tels que les demandes."
 
   label_user_search_add: Rechercher des utilisateurs à ajouter
+
+  label_dmsf_attachments: DMS Attachments
+  label_basic_attachments: Basic Attachments

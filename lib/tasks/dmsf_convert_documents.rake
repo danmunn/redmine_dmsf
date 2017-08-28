@@ -72,7 +72,7 @@ class DmsfConvertDocuments
           if attachment
             folder.user = attachment.author
           else
-            folder.user = Users.active.where(:admin => true).first
+            folder.user = User.active.where(:admin => true).first
           end
 
           folder.title = document.title

@@ -58,6 +58,7 @@ module RedmineDmsf
         if context.is_a?(Hash)
           issue = context[:issue]
           params = context[:params]
+          User.current.pref.update_attribute :dmsf_attachments_upload_choice, params[:dmsf_attachments_upload_choice]
           issue.save_dmsf_attachments(params[:dmsf_attachments])
           issue.save_dmsf_links(params[:dmsf_links])
           issue.save_dmsf_attachments_wfs(params[:dmsf_attachments_wfs], params[:dmsf_attachments])

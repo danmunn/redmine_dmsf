@@ -78,7 +78,8 @@
         <div class="box">
           <p>
             <%= label_tag('file_upload', l(:label_new_content)) %>
-            <%= render :partial => 'dmsf_upload/form', :locals => { :multiple => false, :container => nil } %>
+            <%= render :partial => 'dmsf_upload/form',
+                       :locals => { :multiple => false, :container => nil, :description => false, :awf => false } %>
           </p>
         </div>
         <p>          

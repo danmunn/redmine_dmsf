@@ -68,6 +68,7 @@ if Redmine::Plugin.installed? :redmine_dmsf
     post '/projects/:id/dmsf/commit', :controller => 'dmsf_upload', :action => 'commit'
     match 'dmsf_uploads', :to => 'dmsf_upload#upload', :via => :post
     delete '/dmsf/attachments/:id/delete', :to => 'dmsf_upload#delete_dmsf_attachment', :as => 'dmsf_attachment'
+    delete '/dmsf/link_attachments/:id/delete', :to => 'dmsf_upload#delete_dmsf_link_attachment', :as => 'dmsf_link_attachment'
 
     #
     # dmsf_files controller

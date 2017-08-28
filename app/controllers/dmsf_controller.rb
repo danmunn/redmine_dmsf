@@ -616,7 +616,8 @@ class DmsfController < ApplicationController
 
   def find_folder_by_title
     # find by title has to be scoped to project
-    @folder = DmsfFolder.find_by(title: params[:folder_title], project_id: params[:id]) if params[:folder_title].present?
+    project = Project.find(params[:id])
+    @folder = DmsfFolder.find_by(title: params[:folder_title], project_id: project.id) if params[:folder_title].present?
   rescue DmsfAccessError
     render_403
   rescue ActiveRecord::RecordNotFound

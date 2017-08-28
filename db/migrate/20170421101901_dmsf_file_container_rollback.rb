@@ -20,6 +20,8 @@
 
 class DmsfFileContainerRollback < ActiveRecord::Migration
   def up
+    # Add system folder_flag to dmsf_folders
+    add_column :dmsf_folders, :system, :boolean, :null => false, :default => false
     # Create necessary folders
     new_folder_ids = []
     description = 'Documents assigned to issues'
@@ -50,15 +52,18 @@ class DmsfFileContainerRollback < ActiveRecord::Migration
       new_folder_ids << folder.id
       # Move the file into the new folder
       file.dmsf_folder_id = folder.id
-      file.save
+      # The save methos requires project_id
+      class << file
+        attr_accessor :project_id
+      end
+      file.save(validate: false)
     end
     # Make DB changes in dmsf_files
     remove_index :dmsf_files, [:container_id, :container_type]
     remove_column :dmsf_files, :container_type
     rename_column :dmsf_files, :container_id, :project_id
     add_index :dmsf_files, :project_id
-    # Add system folder_flag to dmsf_folders
-    add_column :dmsf_folders, :system, :boolean, :null => false, :default => false
+    # Initialize system folder_flag to dmsf_folders
     DmsfFolder.where(:id => new_folder_ids).update_all(:system => true)
   end
 
@@ -67,6 +72,7 @@ class DmsfFileContainerRollback < ActiveRecord::Migration
     file_folder_ids = DmsfFile.joins(:dmsf_folder).where(:dmsf_folders => { :system => true }).pluck('dmsf_files.id, cast(dmsf_folders.title as unsigned)')
     remove_index :dmsf_files, :project_id
     rename_column :dmsf_files, :project_id, :container_id
+    add_column :dmsf_files, :project_id, :int, :null => true # temporarily added for the save method
     add_column :dmsf_files, :container_type, :string, :limit => 30, :null => false, :default => 'Project'
     DmsfFile.update_all(:container_type => 'Project')
     file_folder_ids.each do |id, container_id|
@@ -77,6 +83,7 @@ class DmsfFileContainerRollback < ActiveRecord::Migration
         file.save
       end
     end
+    remove_column :dmsf_files, :project_id # temporarily added for the save method
     add_index :dmsf_files, [:container_id, :container_type]
     # dmsf_folders
     DmsfFolder.where(:system => true).delete_all

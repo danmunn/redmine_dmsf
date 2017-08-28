@@ -69,14 +69,14 @@
   <% if @file_manipulation_allowed %>
     <%= link_to('', link ? restore_dmsf_link_path(:id => link) : restore_dmsf_file_path(:id => file),
       :title => l(:title_restore),
-      :class => 'icon icon-cancel') %>
+      :class => 'icon-only icon-cancel') %>
   <% end %>
   <% if @file_delete_allowed %>
     <%= link_to('', link ? dmsf_link_path(:id => link, :commit => 'yes') : dmsf_file_path(:id => file, :commit => 'yes'),
       :data => {:confirm => l(:text_are_you_sure)},
       :method => :delete,
       :title => l(:title_delete),
-      :class => 'icon icon-delete') %>
+      :class => 'icon-only icon-del') %>
   <% end %>
 </td>
 <td class="hol">1</td>

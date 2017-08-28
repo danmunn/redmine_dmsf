@@ -507,7 +507,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def extension
-    $1 if self.last_revision && self.last_revision.disk_filename =~ /\.(.+)$/
+    File.extname(self.last_revision.disk_filename).strip.downcase[1..-1] if self.last_revision
   end
 
   include ActionView::Helpers::NumberHelper

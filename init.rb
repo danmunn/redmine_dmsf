@@ -87,7 +87,8 @@ Redmine::Plugin.register :redmine_dmsf do
          :dmsf_folder_permissions => [:new, :append, :autocomplete_for_user] }
     permission :file_manipulation, 
       { :dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate, :notify_deactivate, :restore],
-        :dmsf_upload => [:upload_files, :upload_file, :upload, :commit_files, :commit, :delete_dmsf_attachment],
+        :dmsf_upload => [:upload_files, :upload_file, :upload, :commit_files, :commit, :delete_dmsf_attachment,
+        :delete_dmsf_link_attachment],
         :dmsf_links => [:new, :create, :destroy, :restore,  :autocomplete_for_project, :autocomplete_for_folder] }
     permission :file_delete, 
       { :dmsf => [:trash, :delete_entries], 

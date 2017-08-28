@@ -26,11 +26,32 @@ module RedmineDmsf
 
       def view_issues_form_details_bottom(context={})
         return if defined?(EasyExtensions)
+        context[:container] = context[:issue]
         attach_documents_form(context)
       end
 
       def view_issues_edit_notes_bottom(context={})
-        attach_documents_form(context)
+        html = ''
+        # Radio buttons
+        if allowed_to_attach_documents(context[:container])
+          html << '<p>'
+            html << '<label class="inline">'
+              html << radio_button_tag('dmsf_attachments_upload_choice', 'Attachments',
+                    User.current.pref.dmsf_attachments_upload_choice == 'Attachments',
+                    onchange: "$('.attachments-container').parent().show(); $('.dmsf_uploader').parent().hide(); return false;")
+              html << l(:label_basic_attachments)
+            html << '</label>'
+            html << '<label class="inline">'
+              html << radio_button_tag('dmsf_attachments_upload_choice', 'DMSF',
+                    User.current.pref.dmsf_attachments_upload_choice == 'DMSF',
+                    onchange: "$('.attachments-container').parent().hide(); $('.dmsf_uploader').parent().show(); return false;")
+              html << l(:label_dmsf_attachments)
+            html << '</label>'
+          html << '</p>'
+        end
+        # Upload form
+        html.html_safe + attach_documents_form(context, false,
+          defined?(EasyExtensions) && EasySetting.value('attachment_description'))
       end
 
       def view_issues_show_description_bottom(context={})
@@ -40,23 +61,51 @@ module RedmineDmsf
 
       def view_issues_show_attachments_bottom(context={})
         unless context[:options][:only_mails].present?
-          show_attached_documents(context[:container], context[:controller])
+          show_attached_documents(context[:container], context[:controller], context[:attachments])
         end
       end
 
+      def view_issues_dms_attachments(context={})
+        'yes' if get_links(context[:container]).any?
+      end
+
       def view_issues_show_thumbnails(context={})
+        show_thumbnails(context[:container], context[:controller])
+      end
+
+      def view_issues_dms_thumbnails(context={})
         unless context[:options][:only_mails].present?
-          show_thumbnails(context[:container], context[:controller])
+          links = get_links(context[:container])
+          if links.present? && Setting.thumbnails_enabled?
+            images = links.map{ |x| x[0] }.select(&:image?)
+            return 'yes' if images.any?
+          end
+        end
+      end
+
+      def view_issues_edit_notes_bottom_style(context={})
+        if (User.current.pref[:dmsf_attachments_upload_choice] == 'Attachments') ||
+          !allowed_to_attach_documents(context[:container])
+          ''
+        else
+          'display: none'
         end
       end
 
       private
 
+      def allowed_to_attach_documents(container)
+        container &&
+          User.current.allowed_to?(:file_manipulation, container.project) &&
+          Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
+          (container.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
+      end
+
       def get_links(container)
+        links = []
         if defined?(container.dmsf_files) && User.current.allowed_to?(:view_dmsf_files, container.project) &&
           Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
           (container.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
-          links = []
           for dmsf_file in container.dmsf_files
             if dmsf_file.last_revision
               links << [dmsf_file, nil, dmsf_file.created_at]
@@ -69,8 +118,9 @@ module RedmineDmsf
             end
           end
           # Sort by 'create_at'
-          links.sort{ |x, y| x[2] <=> y[2] }
+          links.sort!{ |x, y| x[2] <=> y[2] }
         end
+        links
       end
 
       def show_thumbnails(container, controller)
@@ -83,18 +133,21 @@ module RedmineDmsf
         end
       end
 
-      def attach_documents_form(context)
-        if context.is_a?(Hash) && context[:issue]
+      def attach_documents_form(context, label=true, description=true)
+        if context.is_a?(Hash) && context[:container]
           # Add Dmsf upload form
-          issue = context[:issue]
-          if User.current.allowed_to?(:file_manipulation, issue.project) &&
-            Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
-            (issue.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
-            html = '<p>'
+          container = context[:container]
+          if allowed_to_attach_documents(container)
+            html = "<p class=\"#{(User.current.pref[:dmsf_attachments_upload_choice] == 'Attachments') ? 'hol' : ''}\">"
+            if label
               html << "<label>#{l(:label_document_plural)}</label>"
-              html << "<span class=\"dmsf_uploader\">"
+              html << "<span class=\"attachments-container dmsf_uploader\">"
+            else
+              html << "<span class=\"attachments-container dmsf_uploader\" style=\"border: 2px dashed #dfccaf; background: none;\">"
+            end
                 html << context[:controller].send(:render_to_string,
-                  { :partial => 'dmsf_upload/form', :locals => { :container => issue, :multiple => true }})
+                  { :partial => 'dmsf_upload/form',
+                    :locals => { :container => container, :multiple => true, :description => description, :awf => true }})
               html << '</span>'
             html << '</p>'
             html.html_safe
@@ -102,7 +155,7 @@ module RedmineDmsf
         end
       end
 
-      def show_attached_documents(container, controller)
+      def show_attached_documents(container, controller, attachments=nil)
         # Add list of attached documents
         links = get_links(container)
         if links.present?
@@ -110,18 +163,23 @@ module RedmineDmsf
             controller.send(:render_to_string, {:partial => 'dmsf_files/links',
               :locals => { :links => links, :thumbnails => Setting.thumbnails_enabled? }})
           else
-            attachment_rows(links, container, controller)
+            attachment_rows(links, container, controller, attachments)
           end
         end
       end
 
-      def attachment_rows(links, issue, controller)
-        html = '<tbody>'
-        links.each do |dmsf_file, link, create_at|
-          html << attachment_row(dmsf_file, link, issue, controller)
+      def attachment_rows(links, issue, controller, attachments)
+        if links.any?
+          html = '<tbody>'
+          if attachments.any?
+            html << "<tr><th colspan=\"4\">#{l(:label_dmsf_attachments)} (#{links.count})</th></tr>"
+          end
+          links.each do |dmsf_file, link, create_at|
+            html << attachment_row(dmsf_file, link, issue, controller)
+          end
+          html << '</tbody>'
+          html.html_safe
         end
-        html << '</tbody>'
-        html.html_safe
       end
 
       def attachment_row(dmsf_file, link, issue, controller)

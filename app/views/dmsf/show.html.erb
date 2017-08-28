@@ -215,7 +215,7 @@
 <% end %>
 
 <% if (@file_manipulation_allowed && !@locked_for_user && !@system_folder) %>
-    <%= render(:partial => 'dmsf_upload/multi_upload') %>
+    <%= render(:partial => 'dmsf_upload/multi_upload', :local => { :lbl => true }) %>
 <% end %>
 
 <% unless @system_folder %>
