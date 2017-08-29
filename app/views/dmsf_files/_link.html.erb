@@ -51,9 +51,9 @@
       <span class="icon-only"></span>
     <% end %>
     <% # Email %>
-    <%= link_to('', entries_operations_dmsf_path(:id => dmsf_file.project, :email_entries => 'email', :files => [dmsf_file.id]), :method => :post,
-                :title => l(:heading_send_documents_by_email),
-                :class => 'icon-only icon-email-disabled') %>
+    <%= link_to('', entries_operations_dmsf_path(:id => dmsf_file.project_id, :email_entries => 'email',
+      :files => [dmsf_file.id]), :method => :post, :title => l(:heading_send_documents_by_email),
+      :class => 'icon-only icon-email-disabled') %>
     <% # Lock %>
     <% if !dmsf_file.locked? %>
       <%= link_to('', lock_dmsf_files_path(:id => dmsf_file),
@@ -95,7 +95,7 @@
     <%= render(:partial => 'dmsf_files/approval_workflow_button',
       :locals => {:file => dmsf_file,
          :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_file.project),
-         :workflows_available => DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', dmsf_file.project.id]).exists?,
+         :workflows_available => DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', dmsf_file.project_id]).exists?,
          :project => dmsf_file.project, :wf => wf, :dmsf_link_id => nil }) %>
   </span>
 </p>
