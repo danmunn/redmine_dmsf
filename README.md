@@ -215,7 +215,7 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax.html, at the end o
 
     <tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>    
 
-There's a patch that helps you to modify all help files at once. In your Redmine folder:
+There's a patch (tested with Redmine 3.4.2) that helps you to modify all help files at once. In your Redmine folder:
 
 `cd redmine`
 
