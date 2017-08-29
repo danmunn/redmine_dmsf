@@ -289,7 +289,7 @@ class DmsfWorkflowsController < ApplicationController
   end
 
   def new_step
-    @steps = @dmsf_workflow.dmsf_workflow_steps.select('step, MAX(name) AS name').group(:step)
+    @steps = @dmsf_workflow.dmsf_workflow_steps.select('step, MAX(name) AS name').group(:step, :operator)
 
     respond_to do |format|
       format.html
