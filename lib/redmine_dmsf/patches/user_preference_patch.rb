@@ -24,6 +24,10 @@ module RedmineDmsf
 
       def self.included(base)
         base.send(:include, InstanceMethods)
+        base.class_eval do
+          safe_attributes 'dmsf_tree_view',
+                          'dmsf_attachments_upload_choice'
+          end
       end
 
       module InstanceMethods
