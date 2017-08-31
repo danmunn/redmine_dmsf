@@ -56,8 +56,6 @@ class DmsfFile < ActiveRecord::Base
 
   validate :validates_name_uniqueness
 
-  attr_accessible :project, :project_id
-
   def validates_name_uniqueness
     existing_file = DmsfFile.visible.findn_file_by_name(self.project_id, self.dmsf_folder, self.name)
     errors.add(:name, l('activerecord.errors.messages.taken')) unless (existing_file.nil? || existing_file.id == self.id)

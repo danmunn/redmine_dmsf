@@ -49,7 +49,7 @@ class DmsfFileRevision < ActiveRecord::Base
     :timestamp => "#{DmsfFileRevision.table_name}.updated_at",
     :author_key => "#{DmsfFileRevision.table_name}.user_id",
     :permission => :view_dmsf_file_revisions,
-    :scope => select("#{DmsfFileRevision.table_name}.*").joins(:dmsf_file).
+    :scope => DmsfFileRevision.joins(:dmsf_file).
       joins("JOIN #{Project.table_name} ON #{Project.table_name}.id = #{DmsfFile.table_name}.project_id").visible
 
   validates :title, :presence => true

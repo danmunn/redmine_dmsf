@@ -14,7 +14,8 @@ IMPORTANT
 1. Files in the filesystem are re-organized by a new system based on dates.
 2. DMS storage directory plugin option is related to the rails root directory.    
     
-* Bug: #758 - Error in template when retrieving details of a file in a subfolder  
+* Bug: #758 - Error in template when retrieving details of a file in a subfolder
+* New: #755 - Ability to retrieve the MD5 value of a Document type 
 * Bug: #749 - REST API - List of documents in folder fails when using folder_title
 * Bug: #747 - Background icon repeating in admin panel (Redmine 3.4.2)
 * Bug: #746 - Thumbnail macro: size paramter not respected
@@ -46,6 +47,7 @@ IMPORTANT
 * Bug: #683 - Approval reminder problem
 * New: #667 - A better navigation in found results
 * New: #651 - Incomplete copy of a file to another project
+* Bug: #623 - Option "Navigate folders in a tree" seems not to be saved 
 * New: #543 - Feature Request: Document Location - Folder Structure
 * New: #170 - Document and Folder Access Control. This issue may be duplicated as I saw it on google code some time ago.
 * New: #48  - Linking Issues and DMSF Documents

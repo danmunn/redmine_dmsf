@@ -542,6 +542,41 @@ class DmsfFolder < ActiveRecord::Base
     @issue
   end
 
+  def update_from_params(params)
+    # Attributes
+    self.title = params[:dmsf_folder][:title].strip
+    self.description = params[:dmsf_folder][:description].strip
+    self.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
+    # Custom fields
+    if params[:dmsf_folder][:custom_field_values].present?
+      params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
+        self.custom_field_values[i].value = v[1]
+      end
+    end
+    # Permissions
+    self.dmsf_folder_permissions.delete_all
+    if params[:permissions]
+      if params[:permissions][:role_ids]
+        params[:permissions][:role_ids].each do |role_id|
+          permission = DmsfFolderPermission.new
+          permission.object_id = role_id
+          permission.object_type = Role.model_name.to_s
+          self.dmsf_folder_permissions << permission
+        end
+      end
+      if params[:permissions][:user_ids]
+        params[:permissions][:user_ids].each do |user_id|
+          permission = DmsfFolderPermission.new
+          permission.object_id = user_id
+          permission.object_type = User.model_name.to_s
+          self.dmsf_folder_permissions << permission
+        end
+      end
+    end
+    # Save
+    self.save
+  end
+
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)

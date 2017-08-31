@@ -185,44 +185,18 @@ class DmsfController < ApplicationController
     render :action => 'edit'
   end
 
+  def edit
+    @parent = @folder.dmsf_folder
+    @pathfolder = copy_folder(@folder)
+    @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
+    @users = Principal.active.where(:id => @folder.dmsf_folder_permissions.users.map{ |p| p.object_id })
+  end
+
   def create
     @folder = DmsfFolder.new
-    @folder.title = params[:dmsf_folder][:title].strip
-    @folder.description = params[:dmsf_folder][:description].strip
-    @folder.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
     @folder.project = @project
     @folder.user = User.current
-
-    # Custom fields
-    if params[:dmsf_folder][:custom_field_values].present?
-      params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
-        @folder.custom_field_values[i].value = v[1]
-      end
-    end
-
-    # Permissions
-    @folder.dmsf_folder_permissions.delete_all
-    if params[:permissions]
-      if params[:permissions][:role_ids]
-        params[:permissions][:role_ids].each do |role_id|
-          permission = DmsfFolderPermission.new
-          permission.object_id = role_id
-          permission.object_type = Role.model_name.to_s
-          @folder.dmsf_folder_permissions << permission
-        end
-      end
-      if params[:permissions][:user_ids]
-        params[:permissions][:user_ids].each do |user_id|
-          permission = DmsfFolderPermission.new
-          permission.object_id = user_id
-          permission.object_type = User.model_name.to_s
-          @folder.dmsf_folder_permissions << permission
-        end
-      end
-    end
-
-    saved = @folder.save
-
+    saved = @folder.update_from_params(params)
     respond_to do |format|
       format.js
       format.api  {
@@ -233,7 +207,7 @@ class DmsfController < ApplicationController
       format.html {
         if saved
           flash[:notice] = l(:notice_folder_created)
-          redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
+          redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder.dmsf_folder)
         else
           @pathfolder = @parent
           render :action => 'edit'
@@ -243,53 +217,13 @@ class DmsfController < ApplicationController
 
   end
 
-  def edit
-    @parent = @folder.dmsf_folder
-    @pathfolder = copy_folder(@folder)
-    @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
-    @users = Principal.active.where(:id => @folder.dmsf_folder_permissions.users.map{ |p| p.object_id })
-  end
-
   def save
     unless params[:dmsf_folder]
       redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
       return
     end
     @pathfolder = copy_folder(@folder)
-    @folder.title = params[:dmsf_folder][:title].strip
-    @folder.description = params[:dmsf_folder][:description].strip
-    @folder.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
-
-    # Custom fields
-    if params[:dmsf_folder][:custom_field_values].present?
-      params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
-        @folder.custom_field_values[i].value = v[1]
-      end
-    end
-
-    # Permissions
-    @folder.dmsf_folder_permissions.delete_all
-    if params[:permissions]
-      if params[:permissions][:role_ids]
-        params[:permissions][:role_ids].each do |role_id|
-          permission = DmsfFolderPermission.new
-          permission.object_id = role_id
-          permission.object_type = Role.model_name.to_s
-          @folder.dmsf_folder_permissions << permission
-        end
-      end
-      if params[:permissions][:user_ids]
-        params[:permissions][:user_ids].each do |user_id|
-          permission = DmsfFolderPermission.new
-          permission.object_id = user_id
-          permission.object_type = User.model_name.to_s
-          @folder.dmsf_folder_permissions << permission
-        end
-      end
-    end
-
-    saved = @folder.save
-
+    saved = @folder.update_from_params(params)
     respond_to do |format|
       format.api  {
         unless saved
@@ -299,7 +233,7 @@ class DmsfController < ApplicationController
       format.html {
         if saved
           flash[:notice] = l(:notice_folder_details_were_saved)
-          redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
+          redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder.dmsf_folder)
         else
           render :action => 'edit'
         end
