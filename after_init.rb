@@ -69,7 +69,7 @@ else
   end
 end
 
-ActionDispatch::Reloader.to_prepare do
+def prepare
   # Rubyzip configuration
   Zip.unicode_names = true
 
@@ -80,4 +80,14 @@ ActionDispatch::Reloader.to_prepare do
 
   Redmine::Activity.register :dmsf_file_revision_accesses, :default => false
   Redmine::Activity.register :dmsf_file_revisions
+end
+
+if Rails::VERSION::MAJOR >= 5 && Rails::VERSION::MINOR >= 1
+  ActiveSupport::Reloader.to_prepare do
+    prepare
+  end
+else
+  ActionDispatch::Reloader.to_prepare do
+    prepare
+  end
 end
