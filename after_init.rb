@@ -69,7 +69,7 @@ else
   end
 end
 
-ActiveSupport::Reloader.to_prepare do
+ActionDispatch::Reloader.to_prepare do
   # Rubyzip configuration
   Zip.unicode_names = true
 
