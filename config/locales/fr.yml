@@ -104,8 +104,8 @@ fr:
   select_option_default: Défaut
   select_option_deactivated: Désactivé
   select_option_activated: Activé
-  label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
+  label_title_format: Format du titre
+  text_title_format: "Format du titre du document pour le téléchargement (%t - titre, %f - fichier, %d - date, %v - version, %i - ID, %r - révision). Example: %t_%v"
   title_save_preferences: Enregistrer les préférences
   heading_revisions: Révisions
   title_download: Télécharger
@@ -120,7 +120,7 @@ fr:
   option_version_same: (identique)
   option_version_minor: (modification mineure)
   option_version_major: (modification majeure)
-  option_version_custom: Custom
+  option_version_custom: (personnalisée)
   label_new_content: Nouvelle version du fichier
   label_maximum_files_upload: Nombre maximal de documents pouvant être transmis
   note_maximum_number_of_files_uploaded: Nombre maximal de documents pouvant être transmis en une fois. La valeur 0 signifie illimité.
@@ -139,7 +139,7 @@ fr:
   note_do_not_stem: "N'effectuer aucune transformation"
   note_stem_some: "Rechercher des stemmes pour tous les mots sauf ceux qui commencent par des majuscules, ceux suivis d'un certain nombre de caractères ou ceux utilisés avec des opérateurs nécessitant des informations contextuelles. Les stemmes doivent être préfixées par 'Z'."
   note_stem_all: "Rechercher toutes les racines de tous les mots (note : le préfix 'Z' ne sera pas ajouté)."
-  note_stemming_applied: Il est à noter que l'algorithme de racinisation ne sera appliqué qu'aux mots in probabilistic fields - Les filtres booléans ne seront pas racinisés.
+  note_stemming_applied: Il est à noter que l'algorithme de racinisation ne sera appliqué qu'aux mots dans les champs de probabilité - Les filtres booléans ne seront pas racinisés.
   label_default_notifications: Notifications par défaut du document
   heading_uploaded_files: Document(s) transmis
   submit_commit: Appliquer
@@ -154,11 +154,11 @@ fr:
   permission_force_file_unlock: Forcer le déverrouillage du document
   permission_manage_workflows: Gérer les flux de validation
   permission_file_delete: Supprimer les documents
-  permission_display_system_folders: Display system folders
+  permission_display_system_folders: Afficher les dossiers système
   label_file: Fichier
   field_folder: Dossier
   error_create_cycle_in_folder_dependency: Crée une dépendance cyclique du dossier
-  error_contains_invalid_character: Contient de(s) caractère(s) invalide(s)
+  error_contains_invalid_character: Contient un(des) caractère(s) invalide(s)
   error_file_commit_require_uploaded_file: "Transmission des fichiers nécessaire avant l'enregistrement"
   warning_some_files_were_not_commited: "Erreur d'enregsitrement de certains fichiers %{files}"
   error_user_has_not_right_delete_folder: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression du dossier"
@@ -166,7 +166,7 @@ fr:
   notice_entries_deleted: Elément(s) supprimé(s)
   warning_some_entries_were_not_deleted: "Certains éléments n'ont pas été supprimés : %{entries}"
   title_delete_checked: Supprimer les éléments sélectionnés
-  title_items: items
+  title_items: éléments
   title_filename_for_download: "Nom du fichier à utiliser lors du téléchargement ou de l'archive ZIP"
   label_number_of_folders: Dossiers
   label_number_of_documents: Fichiers
@@ -220,7 +220,7 @@ fr:
   title_lock_folder: "Verrouiller afin d'empêcher les modifications du dossier"
 
   select_option_webdav_readonly: Lecture
-  select_option_webdav_readwrite: Lecture/Ecriture
+  select_option_webdav_readwrite: Lecture/Écriture
   label_webdav_strategy: Accès Webdav
   note_webdav_strategy: "Permet à l'administrateur d'autoriser les utilisateurs au module Webdav en letcure seule ou en lecture et écriture."
 
@@ -315,13 +315,13 @@ fr:
   title_restore_checked: Restauration vérifiée
   error_parent_folder: "Le dossier parent n'existe pas"
 
-  error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
-  error_parent_locked: Unable to complete lock - resource parent is locked
-  error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: Unable to lock exclusively an already-locked resource
-  error_unlock_parent_locked: Unlock failed - resource parent is locked
+  error_resource_or_parent_locked: Impossible de verrouiller - la ressource (ou parent) est verrouillée
+  error_parent_locked: Impossible de verrouiller - la ressource parente est verrouillée
+  error_resource_locked: Impossible de verrouiller - la ressource est verrouillée
+  error_lock_exclusively: Impossible de verrouiller de manière exclusive une ressource déjà verrouillée
+  error_unlock_parent_locked: Echec du déverrouillage - la ressource parente est verrouillée
 
-  field_dmsf_tree_view: Navigate folders in a tree
+  field_dmsf_tree_view: Vue arborescente des dossiers
   label_dmsf_version: Version
 
   locked_documents: Documents verrouillés
@@ -329,43 +329,43 @@ fr:
 
   label_maximum_ajax_upload_filesize: Taille maximale de fichier pour téléversement via AJAX
   note_maximum_ajax_upload_filesize: "Taille maximale, en méga octets, de fichier pour téléversement via l'interface standard AJAX. Sinon l'interface standard de Redmine doit être utilisée."
-  label_classic: Classic
-  label_drag_drop: Modern
+  label_classic: Classique
+  label_drag_drop: Moderne
 
-  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."
+  error_maximum_upload_filecount: "Pas plus de %{filecount} fichier(s) ne peuvent être téléversés."
 
-  label_public_urls: Public URLs valid to
+  label_public_urls: URLs publiques valides pour
 
   label_webdav: WebDAV
-  label_full_text: Full-text search
+  label_full_text: Recherche de texte intégral
   link_extension: Ext
 
-  label_memcached_servers: Memcached server address
-  text_memcached_servers: Only a single server is supported, if empty then caching is disabled. After changing this, the application must be restarted!
+  label_memcached_servers: Adresse du serveur Memcached
+  text_memcached_servers: "Seul un unique serveur est supporté, si laissé vide alors la mise en cache est désactivée. Après changement, l'application doit-être redémarrée !"
 
-  label_webdav_ignore: Ignored files patterns
-  note_webdav_ignore: A regular expresion with filenames to ignore by PUT requests.
+  label_webdav_ignore: Modèles de fichiers ignorés
+  note_webdav_ignore: Expression régulière avec les noms de fichiers qui doivent être ignorés par les requêtes PUT.
 
   label_document_url: Url
-  label_last_revision_id: Revision
+  label_last_revision_id: Révision
     
-  label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern matches temporary files created by MsOffice.
+  label_webdav_disable_versioning: Modèles de fichiers sans gestion de version
+  note_webdav_disable_versioning: "Expression régulière qui désactive la gestion de version pour les fichiers correspondants. L'expression par défaut correspond aux fichiers temporaires créés par MsOffice."
 
-  label_dmsf_keep_documents_locked: Keep documents locked
-  note_dmsf_keep_documents_locked: Documents will be kept locked when approved
+  label_dmsf_keep_documents_locked: Garder les documents verrouillés
+  note_dmsf_keep_documents_locked: Les documents seront maintenus verrouillés après approbation.
   note_global: (global)
-  field_dmsf_not_inheritable: Not inheritable
+  field_dmsf_not_inheritable: Ne peut être hérité
   
-  label_webdav_use_project_names: Use project name for project folder
-  note_webdav_use_project_names: Use project names instead of project identifier for project folders.
+  label_webdav_use_project_names: Utiliser le nom de projet pour le dossier du projet
+  note_webdav_use_project_names: "Utilise le nom du projet au lieu de l'identifiant projet pour le dossier du projet."
 
-  label_last_approver: Last approver
+  label_last_approver: Dernier approbateur
 
-  label_act_as_attachable: Act as attachable
-  note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+  label_act_as_attachable: Utiliser comme pièce jointe
+  note_dmsf_act_as_attachable: "Permet de joindre des documents aux objets tels que les demandes."
 
-  label_user_search_add: Search for user to add
+  label_user_search_add: Rechercher des utilisateurs à ajouter
 
-  label_dmsf_attachments: DMS Attachments
-  label_basic_attachments: Basic Attachments
+  label_dmsf_attachments: Pièces-jointes DMS
+  label_basic_attachments: Pièces-jointes standards
