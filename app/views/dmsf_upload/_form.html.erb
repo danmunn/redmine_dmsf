@@ -57,7 +57,7 @@
               <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="modify-upload icon-only icon-wf-assigned"></a>
                 <%= hidden_field_tag("dmsf_links_wfs[#{dmsf_link.id}]", wf.id) if wf %>
             <% else %>
-              <%= render(:partial => 'dmsf_files/approval_workflow_button',
+              <%= render(:partial => 'dmsf_workflows/approval_workflow_button',
                  :locals => {:file => dmsf_link.target_file,
                              :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_link.target_file.project),
                              :workflows_available => DmsfWorkflow.where(

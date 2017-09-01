@@ -252,7 +252,7 @@ module RedmineDmsf
           end
           # Approval workflow
           wf = DmsfWorkflow.find_by_id(dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id
-          html << controller.send(:render_to_string, {:partial => 'dmsf_files/approval_workflow_button',
+          html << controller.send(:render_to_string, {:partial => 'dmsf_workflows/approval_workflow_button',
             :locals => {:file => dmsf_file,
               :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_file.project),
               :workflows_available => DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', dmsf_file.project.id]).exists?,

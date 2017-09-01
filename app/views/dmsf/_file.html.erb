@@ -133,7 +133,7 @@
       <span class="icon-only"></span>
     <% end %>
   <% end %>
-  <%= render(:partial => 'dmsf_files/approval_workflow_button',
+  <%= render(:partial => 'dmsf_workflows/approval_workflow_button',
     :locals => {:file => file, :file_approval_allowed => @file_approval_allowed,
                 :workflows_available => @workflows_available, :project => project, :wf => wf, :dmsf_link_id => nil }) %>
 </td>
