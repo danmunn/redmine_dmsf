@@ -231,7 +231,7 @@ class DmsfWorkflow < ActiveRecord::Base
         :text_email_started,
         :text_email_to_proceed).deliver
     end
-    if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+    if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
       unless recipients.blank?
         to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
         to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')

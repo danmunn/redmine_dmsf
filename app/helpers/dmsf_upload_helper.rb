@@ -40,7 +40,7 @@ module DmsfUploadHelper
           file.project_id = project.id
           file.name = name
           file.dmsf_folder = folder
-          file.notification = Setting.plugin_redmine_dmsf[:dmsf_default_notifications].present?
+          file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
           new_revision.minor_version = 0
           new_revision.major_version = 0
         else
@@ -140,7 +140,7 @@ module DmsfUploadHelper
           recipients.each do |u|
             DmsfMailer.files_updated(u, project, files).deliver
           end
-          if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+          if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
             unless recipients.empty?
               to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
               to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')

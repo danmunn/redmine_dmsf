@@ -81,7 +81,7 @@ class DmsfWorkflowsController < ApplicationController
                     :text_email_finished_approved,
                     :text_email_to_see_history).deliver if user
                 end
-                if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+                if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
                   unless recipients.blank?
                     to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                     to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
@@ -104,7 +104,7 @@ class DmsfWorkflowsController < ApplicationController
                     :text_email_to_see_history,
                     action.note).deliver
                 end
-                if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+                if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
                   unless recipients.blank?
                     to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                     to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
@@ -125,7 +125,7 @@ class DmsfWorkflowsController < ApplicationController
                     :text_email_finished_delegated,
                     :text_email_to_proceed,
                     action.note).deliver
-                  if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+                  if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
                     flash[:warning] = l(:warning_email_notifications, :to => delegate.name)
                   end
                 end
@@ -156,7 +156,7 @@ class DmsfWorkflowsController < ApplicationController
                         :text_email_finished_step_short,
                         :text_email_to_see_status).deliver
                     end
-                    if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+                    if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
                       recipients = assignments.collect{ |a| a.user }
                       recipients << to if to
                       recipients.uniq!
