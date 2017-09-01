@@ -474,9 +474,11 @@ private
       elsif params[:project_id]
         @project = Project.find_by_id params[:project_id]
       else
-        @project = Project.find_by_identifier params[:id]
+        @project = Project.find params[:id]
       end
     end
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
 
   def workflows_layout
