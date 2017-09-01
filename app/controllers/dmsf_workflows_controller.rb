@@ -478,7 +478,7 @@ private
       end
     end
   rescue ActiveRecord::RecordNotFound
-    render_404
+    @project = nil
   end
 
   def workflows_layout
