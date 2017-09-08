@@ -78,7 +78,7 @@ class DmsfUploadController < ApplicationController
   # REST API and Redmine attachment form
   def upload
     unless request.content_type == 'application/octet-stream'
-      render :nothing => true, :status => 406
+      head 406
       return
     end
 
