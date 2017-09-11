@@ -262,8 +262,7 @@ div.dmsf_revision_inner_box .attribute .label {
 .dmsf_system a, .dmsf_gray a:link, .dmsf_gray a:visited{ color: #484848; text-decoration: none; }
 
 /* Search results */
-.dmsf-file { background-image: url(../../../images/document.png); }
-.dmsf-folder { background-image: url(../../../images/folder.png); }
+.icon-dmsf-file { background-image: url(../../../images/document.png); }
 
 /* DMSF tree view */
 .dmsf_hidden { display:none; }
