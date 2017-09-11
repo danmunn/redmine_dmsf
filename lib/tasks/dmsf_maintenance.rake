@@ -88,7 +88,7 @@ class DmsfMaintenance
     puts "#{number_to_human_size(size)} has been released\n\n"
     # Links
     size = DmsfLink.where(:project_id => -1).count
-    DmsfLink.delete_all(:project_id => -1)
+    DmsfLink.where(:project_id => -1).delete_all
     puts "#{size} links have been deleted.\n\n"
   end
   

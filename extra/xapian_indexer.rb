@@ -224,7 +224,7 @@ def update_log(repository, changeset, status, message = nil)
 end
 
 def delete_log(repository)
-  Indexinglog.delete_all(:repository_id => repository.id)
+  Indexinglog.where(:repository_id => repository.id).delete_all
   log "Log for repo #{repo_name(repository)} removed!"  
 end
 
