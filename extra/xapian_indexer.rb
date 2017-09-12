@@ -4,8 +4,8 @@
 #
 # Redmine Xapian is a Redmine plugin to allow attachments searches by content.
 #
-# Copyright (C) 2010  Xabier Elkano
-# Copyright (C) 2015  Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2010    Xabier Elkano
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -89,9 +89,9 @@ MIME_TYPES = {
   'application/vnd.openxmlformats-officedocument.presentationml.slideshow' => 'ppsx',
   'application/vnd.oasis.opendocument.spreadsheet' => 'ods',
   'application/vnd.oasis.opendocument.text' => 'odt',
-  'application/vnd.oasis.opendocument.presentation' => 'odp'
+  'application/vnd.oasis.opendocument.presentation' => 'odp',
+  'application/javascript' => 'js'
 }.freeze
-
 
 FORMAT_HANDLERS = {
   'pdf' => $pdftotext,
@@ -190,9 +190,7 @@ end
 
 def supported_mime_type(entry)
   mtype = Redmine::MimeType.of(entry)
-  included = false
-  included = MIME_TYPES.include?(mtype) || mtype.split('/').first.eql?('text') unless mtype.nil?  
-  return included
+  MIME_TYPES.include?(mtype) || Redmine::MimeType.is_type?('text', mtype)
 end
 
 def add_log(repository, changeset, status, message = nil)
@@ -226,7 +224,7 @@ def update_log(repository, changeset, status, message = nil)
 end
 
 def delete_log(repository)
-  Indexinglog.delete_all(:repository_id => repository.id)
+  Indexinglog.where(:repository_id => repository.id).delete_all
   log "Log for repo #{repo_name(repository)} removed!"  
 end
 
@@ -368,10 +366,10 @@ def add_or_update_index(databasepath, indexconf, project, repository, identifier
   uri = generate_uri(project, repository, identifier, path)
   return unless uri
   text = nil
-  if Redmine::MimeType.is_type?('text', path) #type eq 'txt' 
+  if Redmine::MimeType.is_type?('text', path) || (%(js).include?(type))
     text = repository.cat(path, identifier)
   else
-    fname = path.split( '/').last.tr(' ', '_')
+    fname = path.split('/').last.tr(' ', '_')
     bstr = nil
     bstr = repository.cat(path, identifier)
     File.open( "#{$tempdir}/#{fname}", 'wb+') do | bs |

@@ -1,9 +1,6 @@
 <% parent = @folder ? @folder : @project %>
-<% @idnt = 0 unless @idnt %>
-<% @pos = 0.0 unless @pos %>
 <% DmsfHelper.all_children_sorted(parent, @pos, @idnt).each do |obj, position| %>
     <% classes = "dmsf_tree idnt-#{@idnt}" %>
-    <% classes += " dmsf-#{cycle('odd', 'even')}" %>
     <% if obj.is_a?(DmsfFolder) && ((obj.dmsf_folders.visible.count > 0) || (obj.dmsf_files.visible.count > 0) || (obj.dmsf_links.visible.count > 0)) %>
         <% classes += ' idnt dmsf_collapsed dmsf-not-loaded' %>
         <% id = "id='#{obj.id}span'".html_safe %>
@@ -19,6 +16,8 @@
     <% end %>
 
     <% if obj.is_a? DmsfFolder %>
+        <% classes << ' dmsf_system' if obj.system %>
+        <% classes << ' dmsf_system_closed' if obj.issue && obj.issue.closed? %>
         <tr <%= id %> class="dir <%= classes %>">
           <%= render(:partial => 'dir',
                      :locals => {

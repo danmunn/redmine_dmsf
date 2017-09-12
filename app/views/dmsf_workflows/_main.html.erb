@@ -47,7 +47,7 @@
     </tr></thead>
     <tbody>
       <% for workflow in @workflows %>
-        <tr id="workflow-<%= workflow.id %>" class="dmsf_workflow <%= workflow.active? ? 'active' : 'locked' %> <%= cycle('odd', 'even') %>">
+        <tr id="workflow-<%= workflow.id %>" class="dmsf_workflows <%= workflow.active? ? 'active' : 'locked' %>">
           <td class="name"><%= link_to(h(workflow.name), dmsf_workflow_path(workflow)) %></td>          
           <td class="buttons">
             <%= change_status_link(workflow) unless @project %>

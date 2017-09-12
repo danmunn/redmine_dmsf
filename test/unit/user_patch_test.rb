@@ -23,28 +23,28 @@ require File.expand_path('../../test_helper', __FILE__)
 class UserPatchTest < RedmineDmsf::Test::UnitTest
   fixtures :users, :projects, :dmsf_files, :dmsf_file_revisions, :dmsf_folders, :dmsf_links
   def setup
-    @user1 = User.find_by_id 1
+    @user2 = User.find_by_id 2
   end
 
   def test_truth
-    assert_kind_of User, @user1
+    assert_kind_of User, @user2
   end
 
   def test_remove_dmsf_references
-    id = @user1.id
-    @user1.destroy
-    assert_equal 0 ,DmsfFileRevisionAccess.where(:user_id => id).count
-    assert_equal 0 ,DmsfFileRevision.where(:user_id => id).count
-    assert_equal 0 ,DmsfFile.where(:deleted_by_user_id => id).count
-    assert_equal 0 ,DmsfFolder.where(:user_id => id).count
-    assert_equal 0 ,DmsfFolder.where(:deleted_by_user_id => id).count
-    assert_equal 0 ,DmsfLink.where(:user_id => id).count
-    assert_equal 0 ,DmsfLink.where(:deleted_by_user_id => id).count
-    assert_equal 0 ,DmsfLock.where(:user_id => id).count
-    assert_equal 0 ,DmsfWorkflowStepAction.where(:author_id => id).count
-    assert_equal 0 ,DmsfWorkflowStepAssignment.where(:user_id => id).count
-    assert_equal 0 ,DmsfWorkflowStep.where(:user_id => id).count
-    assert_equal 0 ,DmsfWorkflow.where(:author_id => id).count
+    id = @user2.id
+    @user2.destroy
+    assert_equal 0, DmsfFileRevisionAccess.where(:user_id => id).count
+    assert_equal 0, DmsfFileRevision.where(:user_id => id).count
+    assert_equal 0, DmsfFile.where(:deleted_by_user_id => id).count
+    assert_equal 0, DmsfFolder.where(:user_id => id).count
+    assert_equal 0, DmsfFolder.where(:deleted_by_user_id => id).count
+    assert_equal 0, DmsfLink.where(:user_id => id).count
+    assert_equal 0, DmsfLink.where(:deleted_by_user_id => id).count
+    assert_equal 0, DmsfLock.where(:user_id => id).count
+    assert_equal 0, DmsfWorkflowStepAction.where(:author_id => id).count
+    assert_equal 0, DmsfWorkflowStepAssignment.where(:user_id => id).count
+    assert_equal 0, DmsfWorkflowStep.where(:user_id => id).count
+    assert_equal 0, DmsfWorkflow.where(:author_id => id).count
   end
 
 end

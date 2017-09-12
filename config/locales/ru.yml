@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ru:
-  dmsf: DMSF
+  dmsf: DMS  # Custom fields tab title
   label_dmsf_file_plural: Файлы
   label_dmsf_file_revision_plural: Изменения документов
   label_dmsf_file_revision_access_plural: Доступы к документам
@@ -84,7 +84,7 @@ ru:
   title_lock_file: Заблокируйте файл, чтобы запретить его изменение другими участниками
   title_download_checked: Скачать выбранные файлы
   title_send_checked_by_email: Отправить выбранные файлы по электронной почте
-  link_user_preferences: Ваши настройки DMSF проекта
+  link_user_preferences: Ваши настройки DMS проекта
   heading_send_documents_by_email: Отправить документы по электронной почте
   label_email_from: От
   label_email_to: Кому
@@ -154,6 +154,7 @@ ru:
   permission_force_file_unlock: Разблокировка любых файлов
   permission_manage_workflows: Управление согласованиями
   permission_file_delete: Удаление документов
+  permission_display_system_folders: Display system folders
   label_file: Файл
   field_folder: Папка
   error_create_cycle_in_folder_dependency: создать циклическую зависимость в папке
@@ -173,7 +174,7 @@ ru:
   error_file_can_not_be_created: Файл не может быть создан в каталоге хранения файлов
   error_wrong_zip_encoding: Неверная кодировка zip
   warning_xapian_not_available: Xapian не доступен
-  menu_dmsf: Документы
+  menu_dmsf: Документы  # Project tab title
   label_physical_file_delete: Физическое удаление файла
   user_is_not_project_member: Вы не являетесь участником проекта
   heading_access_downloads_emails: Скачивание / Отправка по почте
@@ -182,7 +183,7 @@ ru:
   label_dmsf_updated: Документ обновлен
   label_dmsf_downloaded: Документ скачан
   title_total_size_of_all_files: Общий размер всех файлов в этой папке
-  project_module_dmsf: DMSF
+  project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: Не выбран проект, в который нужно скопировать файл
   comment_copied_from: "Скопировано из %{source}"
   notice_file_copied: Файл скопирован
@@ -237,7 +238,6 @@ ru:
   label_dmsf_workflow_step_plural: Шаги
   label_dmsf_workflow_approval: Утверждение
   label_dmsf_workflow_approval_plural: Утверждения
-  label_dmsf: DMSF
   label_dmsf_wokflow_action_approve: Согласовать
   label_dmsf_wokflow_action_reject: Отклонить
   label_dmsf_wokflow_action_delegate: Делегировать
@@ -290,7 +290,7 @@ ru:
   label_external: Внешний
 
   label_link_name: Наименование ссылки
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: Целевая папка
   label_source_folder: Исходная папка
   label_target_project: Целевой проект
@@ -360,5 +360,12 @@ ru:
   label_webdav_use_project_names: Use project name for project folder
   note_webdav_use_project_names: Use project names instead of project identifier for project folders.
 
+  label_last_approver: Last approver
+
   label_act_as_attachable: Act as attachable
   note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+
+  label_user_search_add: Search for user to add
+
+  label_dmsf_attachments: DMS Attachments
+  label_basic_attachments: Basic Attachments

@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<span id="public_url" class="dmsf_invisible">
+<span id="public_url" class="hol">
     <%= check_box_tag('email[public_urls]', 1, false) %> <%= l(:label_public_urls) %>
     <%= date_field_tag('email[expired_at]', '', :value => (DateTime.now + 3.days).to_date, :size => 10,
           :readonly => true) + calendar_for('email_expired_at') %>

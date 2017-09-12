@@ -1,0 +1,101 @@
+<%
+  # encoding: utf-8
+  #
+  # Redmine plugin for Document Management System "Features"
+  #
+  # Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
+  #
+  # This program is free software; you can redistribute it and/or
+  # modify it under the terms of the GNU General Public License
+  # as published by the Free Software Foundation; either version 2
+  # of the License, or (at your option) any later version.
+  #
+  # This program is distributed in the hope that it will be useful,
+  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  # GNU General Public License for more details.
+  #
+  # You should have received a copy of the GNU General Public License
+  # along with this program; if not, write to the Free Software
+  # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+<% if link %>
+  <p class="dmsf_gray">
+<% else %>
+  <p>
+<% end %>
+  <% file_view_url = url_for({:controller => :dmsf_files, :action => 'view', :id => dmsf_file}) %>
+  <%= link_to(h(dmsf_file.title),
+    file_view_url,
+    :target => '_blank',
+    :class => "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
+    :title => h(dmsf_file.last_revision.try(:tooltip)),
+    'data-downloadurl' => "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}") %>
+  <% if dmsf_file.text? || dmsf_file.image? %>
+      <%= link_to l(:button_view),
+        file_view_url,
+        :class => 'icon-only icon-magnifier',
+        :title => l(:button_view) %>
+  <% end %>
+  <%= " - #{dmsf_file.description}" unless dmsf_file.description.blank? %>
+  <span class="size">(<%= number_to_human_size dmsf_file.last_revision.size %>)</span>
+  <span class="author"><%= dmsf_file.last_revision.user %>, <%= format_time(dmsf_file.last_revision.updated_at) %></span>
+  <% # Command icons %>
+  <span class="dmsf_upload_select">
+    <% # Details %>
+    <% if User.current.allowed_to? :file_manipulation, dmsf_file.project %>
+      <%= link_to('', dmsf_file_path(:id => dmsf_file),
+        :title => l(:link_details, :title => h(dmsf_file.last_revision.title)),
+        :class => 'icon-only icon-edit') %>
+    <% else %>
+      <span class="icon-only"></span>
+    <% end %>
+    <% # Email %>
+    <%= link_to('', entries_operations_dmsf_path(:id => dmsf_file.project_id, :email_entries => 'email',
+      :files => [dmsf_file.id]), :method => :post, :title => l(:heading_send_documents_by_email),
+      :class => 'icon-only icon-email-disabled') %>
+    <% # Lock %>
+    <% if !dmsf_file.locked? %>
+      <%= link_to('', lock_dmsf_files_path(:id => dmsf_file),
+                  :title => l(:title_lock_file),
+                  :class => 'icon-only icon-lock') %>
+    <% elsif dmsf_file.unlockable? && (!dmsf_file.locked_for_user? || User.current.allowed_to?(:force_file_unlock, dmsf_file.project)) %>
+      <%= link_to('', unlock_dmsf_files_path(:id => dmsf_file),
+                  :title => dmsf_file.get_locked_title,
+                  :class => 'icon-only icon-unlock') %>
+    <% else %>
+      <span class="icon-only icon-unlock" title="<%= dmsf_file.get_locked_title %>"></span>
+    <% end %>
+    <% unless dmsf_file.locked? %>
+      <% # Notifications %>
+      <% if dmsf_file.notification %>
+        <%= link_to('', notify_deactivate_dmsf_files_path(:id => dmsf_file),
+                    :title => l(:title_notifications_active_deactivate),
+                    :class => 'icon-only icon-email') %>
+      <% else %>
+        <%= link_to('', notify_activate_dmsf_files_path(:id => dmsf_file),
+                    :title => l(:title_notifications_not_active_activate),
+                    :class => 'icon-only icon-email-add') %>
+      <% end %>
+      <% # Delete %>
+      <% if @issue.attributes_editable?  && User.current.allowed_to?(:file_delete, dmsf_file.project) %>
+        <%= link_to('',
+                  link ? dmsf_link_path(link, :commit => 'yes') : dmsf_file_path(:id => dmsf_file, :commit => 'yes'),
+                  :data => {:confirm => l(:text_are_you_sure)},
+                  :method => :delete,
+                  :title => l(:title_delete),
+                  :class => 'icon-only icon-del') %>
+      <% end %>
+    <% else %>
+      <span class="icon-only"></span>
+      <span class="icon-only"></span>
+    <% end %>
+    <% # Approval workflow %>
+    <% wf = DmsfWorkflow.find_by_id(dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id %>
+    <%= render(:partial => 'dmsf_workflows/approval_workflow_button',
+      :locals => {:file => dmsf_file,
+         :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_file.project),
+         :workflows_available => DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', dmsf_file.project_id]).exists?,
+         :project => dmsf_file.project, :wf => wf, :dmsf_link_id => nil }) %>
+  </span>
+</p>

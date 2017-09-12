@@ -30,7 +30,7 @@
     <%= link_to(h(title),
       link.external_url,
       :target => '_blank',
-      :class => 'icon dmsf_icon-link') %>
+      :class => 'icon icon-link') %>
     <div class="dmsf_filename" title="<%= l(:label_target_folder)%>"><%= link.external_url %></div>
   </td>
 <% end %>
@@ -59,18 +59,15 @@
   <% end %>
 <% end %>
 <td class="dmsf_buttons">
-  <% if @file_manipulation_allowed %>        
-    <%= link_to(image_tag('restore.png', :plugin => 'redmine_dmsf'),
-      restore_dmsf_link_path(:id => link),
-      :title => l(:title_restore)) %>
-    <%= link_to(image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
-      dmsf_link_path(:id => link, :commit => 'yes'),
-      :data => {:confirm => l(:text_are_you_sure)},
-      :method => :delete,
-      :title => l(:title_delete)) %>
+  <%= link_to_if(@file_manipulation_allowed, '', restore_dmsf_link_path(:id => link),
+    :title => l(:title_restore), :class => "icon icon-cancel") %>
+  <% if @file_delete_allowed %>
+    <%= link_to_if(@file_delete_allowed, '', dmsf_link_path(:id => link, :commit => 'yes'),
+      :data => {:confirm => l(:text_are_you_sure)}, :method => :delete,
+      :title => l(:title_delete), :class => "icon icon-delete" ) %>
   <% end %>
 </td>
-<td class="dmsf_invisible">1</td>
-<td class="dmsf_invisible"></td>
-<td class="dmsf_invisible">link.updated_at.to_i</td>
-<td class="dmsf_invisible"></td>
+<td class="hol">1</td>
+<td class="hol"></td>
+<td class="hol">link.updated_at.to_i</td>
+<td class="hol"></td>

@@ -26,7 +26,7 @@
 
 <%= form_tag(dmsf_user_pref_save_path(@project)) do %>
   <fieldset class="box tabular">
-    <legend><%=  l(:link_user_preferences) %></legend>
+    <legend><%= l(:link_user_preferences) %></legend>
     <p>
       <%= content_tag(:label, "#{l(:label_notifications)}:") %>      
       <%= select_tag(
@@ -41,5 +41,19 @@
       <em class="info"><%= l(:text_title_format) %></em>
     </p>
   </fieldset>
+  <% if Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] %>
+    <fieldset class="box tabular">
+      <legend><%= l(:field_project) %> <%= l(:label_preferences) %></legend>
+      <p>
+        <%= content_tag(:label, "#{l(:label_act_as_attachable)}:") %>
+        <%= select_tag(
+                'act_as_attachable',
+                options_for_select([
+                    [l(:label_attachment_plural) + ' & ' + l(:menu_dmsf), Project::ATTACHABLE_DMS_AND_ATTACHMENTS],
+                    [l(:label_attachment_plural), Project::ATTACHABLE_ATTACHMENTS],
+                ],:selected => @project.dmsf_act_as_attachable)) %>
+      </p>
+    </fieldset>
+  <% end %>
   <%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
 <% end %>

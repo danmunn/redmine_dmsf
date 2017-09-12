@@ -51,26 +51,18 @@
       </tr></thead>
       <tbody>
       <% steps.each do |i|%>
-        <tr id="step-<%= i %>" class="<%= cycle 'odd', 'even' %> step">
-          <td class="id"><%= i %></td>
+        <tr id="step-<%= i %>" class="step">
           <% index = @dmsf_workflow.dmsf_workflow_steps.order(:id).index{ |s| s.step == i } %>
+          <%= form_for(@dmsf_workflow,
+           :url => update_step_dmsf_workflow_path(:step => index),
+           :method => :put,
+           :html => {:id => "step-index-#{index}-form", :class => 'hol'}) do |f| %>
+          <td class="id"><%= i %></td>
           <td class="name">
             <span id="step-index-<%= index %>-name"><%= @dmsf_workflow.dmsf_workflow_steps[index].name if index %></span>
-            <%= form_for(@dmsf_workflow,
-                    :url => update_step_dmsf_workflow_path(:step => index),
-                    :method => :put,
-                    :html => {:id => "step-index-#{index}-name-form", :class => 'hol'}) do |f| %>
-                <p>
-                  <%= f.text_field(:name, :value => @dmsf_workflow.dmsf_workflow_steps[index].name) %>
-                </p>
-                <p>
-                  <%= submit_tag l(:button_change), :class => 'small' %>
-                  <%= link_to_function(
-                        l(:button_cancel),
-                        "$('#step-index-#{index}-name').show(); $('#step-index-#{index}-approvers').show(); $('#step-index-#{index}-name-form').hide(); $('#step-index-#{index}-approvers-form').hide();")
-                  %>
-                </p>
-            <% end %>
+            <div id="<%= "step-index-#{index}-name-form" %>" class="hol">
+              <%= f.text_field(:name, :value => @dmsf_workflow.dmsf_workflow_steps[index].name) %>
+            </div>
           </td>
           <td>
             <span id="step-index-<%= index %>-approvers">
@@ -82,10 +74,7 @@
                 <%= link_to_user step.user %>
               <% end %>
             </span>
-            <%= form_for(@dmsf_workflow,
-                         :url => update_step_dmsf_workflow_path(:step => index),
-                         :method => :put,
-                         :html => {:id => "step-index-#{index}-approvers-form", :class => 'hol'}) do |f| %>
+            <div id="<%= "step-index-#{index}-approvers-form" %>", class="hol">
                 <div class="dmsf_parent_container">
                   <% stps.each_with_index do |step, j| %>
                       <div class="dmsf_child_container">
@@ -115,7 +104,8 @@
                         "$('#step-index-#{index}-name').show(); $('#step-index-#{index}-approvers').show(); $('#step-index-#{index}-name-form').hide(); $('#step-index-#{index}-approvers-form').hide();")
                   %>
                 </p>
-            <% end %>
+            </div>
+          <% end %>
           </td>
           <td class="buttons">
             <%= reorder_handle(@dmsf_workflow, :url => url_for(:action => 'edit', :id => @dmsf_workflow, :step => i) ) %>
@@ -125,7 +115,7 @@
             <%= delete_link edit_dmsf_workflow_path(@dmsf_workflow, :step => i) %>
           </td>
         </tr>
-      <% end; reset_cycle %>
+      <% end %>
       </tbody>
     </table>
   <% else %>

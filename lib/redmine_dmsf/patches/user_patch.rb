@@ -43,11 +43,12 @@ module RedmineDmsf
           DmsfFolder.where(:deleted_by_user_id => id).update_all(:deleted_by_user_id => substitute.id)
           DmsfLink.where(:user_id => id).update_all(:user_id => substitute.id)
           DmsfLink.where(:deleted_by_user_id => id).update_all(:deleted_by_user_id => substitute.id)
-          DmsfLock.delete_all(:user_id => id)
+          DmsfLock.where(:user_id => id).delete_all
           DmsfWorkflowStepAction.where(:author_id => id).update_all(:author_id => substitute.id)
           DmsfWorkflowStepAssignment.where(:user_id => id).update_all(:user_id => substitute.id)
           DmsfWorkflowStep.where(:user_id => id).update_all(:user_id => substitute.id)
           DmsfWorkflow.where(:author_id => id).update_all(:author_id => substitute.id)
+          DmsfFolderPermission.where(:object_id => id, :object_type => 'User').update_all(:object_id => substitute.id)
         end
 
       end

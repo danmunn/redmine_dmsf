@@ -26,15 +26,15 @@ module RedmineDmsf
 
       def self.included(base) # :nodoc:
         base.send(:include, InstanceMethods)
+        base.send :include, Redmine::NestedSet::Traversing
         base.class_eval do
           unloadable
           alias_method_chain :copy, :dmsf
 
-          has_many :dmsf_files, -> { where(dmsf_folder_id: nil, container_type: 'Project').order(:name) },
-            :class_name => 'DmsfFile', :foreign_key => 'container_id', :dependent => :destroy
-          has_many :dmsf_folders, -> { where(dmsf_folder_id: nil).order(:title) },
-            :class_name => 'DmsfFolder', :foreign_key => 'project_id',
-            :dependent => :destroy
+          has_many :dmsf_files, -> { where(dmsf_folder_id: nil).order(:name) },
+            :class_name => 'DmsfFile', :foreign_key => 'project_id', :dependent => :destroy
+          has_many :dmsf_folders, ->{ where(:dmsf_folder_id => nil).order(:title) },
+            :class_name => 'DmsfFolder', :foreign_key => 'project_id', :dependent => :destroy
           has_many :dmsf_workflows, :dependent => :destroy
           has_many :folder_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFolder' },
             :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
@@ -46,6 +46,11 @@ module RedmineDmsf
             :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
 
           before_save :set_default_dmsf_notification
+
+          validates_length_of :dmsf_description, :maximum => 65535
+
+          Project.const_set(:ATTACHABLE_DMS_AND_ATTACHMENTS, 1)
+          Project.const_set(:ATTACHABLE_ATTACHMENTS, 2)
         end
       end
 

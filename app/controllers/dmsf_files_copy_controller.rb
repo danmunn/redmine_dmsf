@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,10 +22,18 @@ class DmsfFilesCopyController < ApplicationController
 
   menu_item :dmsf
 
-  before_filter :find_file
-  before_filter :authorize
+  before_action :find_file
+  before_action :authorize
+  before_action :permissions
 
   helper :all
+
+  def permissions
+    if @file
+      render_403 unless DmsfFolder.permissions?(@file.dmsf_folder)
+    end
+    true
+  end
 
   def new
     @target_project = DmsfFile.allowed_target_projects_on_copy.detect {|p| p.id.to_s == params[:target_project_id]} if params[:target_project_id]
@@ -108,12 +117,15 @@ class DmsfFilesCopyController < ApplicationController
 private
 
   def log_activity(file, action)
-    Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{file.project.identifier}/#{file.id}/#{file.last_revision.id}"
+    if file && file.last_revision
+      Rails.logger.info
+        "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{file.project.identifier}/#{file.id}/#{file.last_revision.id}"
+    end
   end
 
   def find_file
-    @file = DmsfFile.visible.find(params[:id])
-    @project = @file.project
+    @file = DmsfFile.visible.find_by_id params[:id]
+    @project = @file.project if @file
   end
 
 end

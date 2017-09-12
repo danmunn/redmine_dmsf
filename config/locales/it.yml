@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 it: # Italian strings thx 2 Matteo Arceci!
-  dmsf: DMSF
+  dmsf: DMS  # Custom fields tab title
   label_dmsf_file_plural: Documenti
   label_dmsf_file_revision_plural: Revisioni al documento
   label_dmsf_file_revision_access_plural: Accessi al documento
@@ -84,7 +84,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   title_lock_file: Blocca per evitare modifiche degli altri membri
   title_download_checked: Download selezionati in archivio Zip
   title_send_checked_by_email: Selezionati spediti per email
-  link_user_preferences: Le tue preferenze DMSF di progetto
+  link_user_preferences: Le tue preferenze DMS di progetto
   heading_send_documents_by_email: Documenti spediti per email
   label_email_from: Da
   label_email_to: A
@@ -154,6 +154,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   permission_force_file_unlock: Forza lo sblocco del documento
   permission_manage_workflows: Gestisci i flussi di lavoro
   permission_file_delete: Elimina i documenti
+  permission_display_system_folders: Display system folders
   label_file: Documento
   field_folder: Cartella
   error_create_cycle_in_folder_dependency: crea un ciclo nella dipendenza della cartella
@@ -173,7 +174,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   error_file_can_not_be_created: "Il documento non può essere creato nella cartella di archiviazione"
   error_wrong_zip_encoding: Errato encoding dello Zip
   warning_xapian_not_available: Xapian non disponibile
-  menu_dmsf: Documenti
+  menu_dmsf: Documenti  # Project tab title
   label_physical_file_delete: File fisico eliminato
   user_is_not_project_member: Non sei un membro del progetto
   heading_access_downloads_emails: Downloads/Emails
@@ -182,7 +183,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_dmsf_updated: Aggiornato
   label_dmsf_downloaded: Scaricato
   title_total_size_of_all_files: Dimensione totale di tutti i files in questa cartella
-  project_module_dmsf: DMSF
+  project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: Nessun progetto nel quale copiare il documento
   comment_copied_from: "Copiato da %{source}"
   notice_file_copied: Documento copiato
@@ -237,7 +238,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_dmsf_workflow_step_plural: Passi
   label_dmsf_workflow_approval: Approvazione
   label_dmsf_workflow_approval_plural: Approvazioni
-  label_dmsf: DMSF
   label_dmsf_wokflow_action_approve: Approva
   label_dmsf_wokflow_action_reject: Rifiuta
   label_dmsf_wokflow_action_delegate: Delega a 
@@ -290,7 +290,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_external: Esterno
 
   label_link_name: Nome del collegamento
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: Cartella di destinazione
   label_source_folder: Cartella sorgente
   label_target_project: Progetto di destinazione
@@ -360,5 +360,12 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_webdav_use_project_names: Use project name for project folder
   note_webdav_use_project_names: Use project names instead of project identifier for project folders.
 
+  label_last_approver: Last approver
+
   label_act_as_attachable: Act as attachable
   note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+
+  label_user_search_add: Search for user to add
+
+  label_dmsf_attachments: DMS Attachments
+  label_basic_attachments: Basic Attachments

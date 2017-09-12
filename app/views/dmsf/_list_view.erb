@@ -57,15 +57,15 @@
         <% end %>
       <% end %>
       <th class ="dmsf_th"><%# controls %></th>
-      <th class="dmsf_invisible"><%# position %></th>
-      <th class="dmsf_invisible"><%# size %></th>
-      <th class="dmsf_invisible"><%# updated %></th>
-      <th class="dmsf_invisible"><%# version %></th>
+      <th class="hol"><%# position %></th>
+      <th class="hol"><%# size %></th>
+      <th class="hol"><%# updated %></th>
+      <th class="hol"><%# version %></th>
     </tr>
   </thead>
   <tbody>
   <% @subfolders.each do |subfolder| %>
-    <tr class="dir">
+    <tr class="dir <%= 'dmsf_system' if subfolder.system %> <%= 'dmsf_system_closed' if subfolder.issue && subfolder.issue.closed? %>">
       <%= render(:partial => 'dir',
         :locals => {
           :project => @project,

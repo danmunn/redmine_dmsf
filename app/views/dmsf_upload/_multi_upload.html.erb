@@ -37,12 +37,10 @@
 <%= form_tag({:controller => 'dmsf_upload', :action => 'upload_files', :id => @project, :folder_id => @folder},
              :id => 'uploadform', :method => :post, :multipart => true) do %>
   <div id="dmsf_uploader">
-    <div class="dmsf_uploader">
-      <p>
-        <label><%= l(:label_document_plural) %></label>
-        <%= render :partial => 'dmsf_upload/form', :locals => { :multiple => true } %>
-      </p>
-    </div>
+    <span class="dmsf_uploader">
+      <%= render :partial => 'dmsf_upload/form',
+                 :locals => { :multiple => true, :container => nil, :description => true, :awf => false } %>
+    </span>
     <%= submit_tag l(:label_upload) %>
   </div>
 <% end %>
@@ -128,6 +126,10 @@
                     .attr('name', 'uploaded[' + dmsfFileFieldCount + '][original_filename]')
                     .val(responseObject.original_filename);
             uploader.append(original_filename_input);
+            var tempfile_path = $('<input/>').attr('type', 'hidden')
+                .attr('name', 'uploaded[' + dmsfFileFieldCount + '][tempfile_path]')
+                .val(responseObject.tempfile_path);
+            uploader.append(tempfile_path);
           } else {
               file.status = plupload.FAILED;              
               pluploader.trigger('UploadProgress', file);

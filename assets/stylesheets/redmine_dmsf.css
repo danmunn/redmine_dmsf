@@ -24,6 +24,15 @@
   border: none;
 }
 
+#dmsf_tag {
+   margin-left: 5px;
+}
+
+#dmsf_tag .check_box_group {
+    background: inherit;
+    border: 0px;
+}
+
 .list .dmsf_modified {
 	min-width: 127px;
 	width: 127px;
@@ -57,6 +66,14 @@
 
 .list .dmsf_checkbox .DataTables_sort_wrapper {
 	padding: 0;
+}
+
+table.display thead th div.DataTables_sort_wrapper {
+    position: unset;
+}
+
+table.display thead th div.DataTables_sort_wrapper span {
+    z-index: 1;
 }
 
 .dmsf_entries {
@@ -103,6 +120,7 @@
 	white-space: nowrap;
 }
 
+<<<<<<< HEAD
 .dmsf_cf {
 	font-size: 0.8em;
 }
@@ -111,6 +129,8 @@
 	display: none;
 }
 
+=======
+>>>>>>> devel-1.6.0
 .dmsf_upload_select {
 	float: right;
 	font-size: 0.9em;
@@ -120,12 +140,17 @@
 	font-size: 0.9em;
 }
 
+.dmsf_uploader span[id*="dmsf_"] .filename {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
 /* Approval workflow */
-#admin-menu a.dmsf-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 #dmsf_users_for_delegate { height: 200px; overflow:auto; }
 #dmsf_users_for_delegate label { display: block; }
-.dmsf_workflow.locked a { color: #aaa; }
+.dmsf_workflows.locked a { color: #aaa; }
 
+/* DMSF revision box */
 .dmsf_revision_box {
   padding: 0px 0px 0px 0px;
   margin-bottom: 10px;
@@ -136,6 +161,20 @@
 
 .dmsf_revision_inner_box {
   border: 1px solid #e4e4e4;
+  padding: 10px;
+}
+
+div.dmsf_revision_inner_box .attribute {
+    padding-left: 180px;
+    clear: left;
+    min-height: 1.8em;
+}
+
+div.dmsf_revision_inner_box .attribute .label {
+    width: 170px;
+    margin-left: -180px;
+    font-weight: bold;
+    float: left;
 }
 
 .dmsf_id_box {
@@ -168,14 +207,21 @@
 }
 
 /* Command icons */
-.dmsf_icon-link { background-image: url(../images/link.png); }
-.dmsf_icon-notification-on { background-image: url(../images/notify.png); margin-left: 3px; }
-.dmsf_icon-notification-off { background-image: url(../images/notifynot.png); margin-left: 3px; }
-.dmsf_icon-lock { background-image: url(../images/lock.png); }
-.dmsf_icon-unlock { background-image: url(../images/unlock.png); }
+.icon-wf-none { background-image: url(../images/none.png); }
+.icon-wf-waiting { background-image: url(../images/waiting_for_approval.png); }
+.icon-wf-assigned { background-image: url(../images/assigned.png); }
+.icon-link { background-image: url(../../../images/link.png); }
+.icon-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 
 /* File types */
+.dmsf-icon-file{
+    display: inline-block;
+    height: 16px;
+}
+
 .dmsf_gray .icon-folder { background-image: url(../images/folder_gray.png); }
+.dmsf_system .icon-folder { background-image: url(../images/folder_system.png); }
+.dmsf_system_closed .icon-folder { background-image: url(../images/folder_system_closed.png); }
 
 .icon-file.filetype-doc, .icon-file.filetype-docx { background-image: url(../images/filetypes/doc.png); }
 .icon-file.filetype-xls, .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls.png); }
@@ -203,7 +249,7 @@
 
 .dmsf_gray .icon-file.text-x-c { background-image: url(../images/filetypes/c_gray.png); }
 .dmsf_gray .icon-file.text-x-csharp { background-image: url(../images/filetypes/csharp_gray.png); }
-.dmsf_gray .icon-file.text-x-java { background-image: url(../images/files/filetypes/java_gray.png); }
+.dmsf_gray .icon-file.text-x-java { background-image: url(../images/filetypes/java_gray.png); }
 .dmsf_gray .icon-file.text-x-javascript { background-image: url(../images/filetypes/js_gray.png); }
 .dmsf_gray .icon-file.text-x-php { background-image: url(../images/filetypes/php_gray.png); }
 .dmsf_gray .icon-file.text-x-ruby { background-image: url(../images/filetypes/ruby_gray.png); }
@@ -222,9 +268,12 @@
 .dmsf_gray { color: #AAA }
 .dmsf_gray a, .dmsf_gray a:link, .dmsf_gray a:visited{ color: #484848; text-decoration: none; }
 
+/* System folders */
+.dmsf_system { color: #5C82AD }
+.dmsf_system a, .dmsf_gray a:link, .dmsf_gray a:visited{ color: #484848; text-decoration: none; }
+
 /* Search results */
-.dmsf-file { background-image: url(../../../images/document.png); }
-.dmsf-folder { background-image: url(../../../images/folder.png); }
+.icon-dmsf-file { background-image: url(../../../images/document.png); }
 
 /* DMSF tree view */
 .dmsf_hidden { display:none; }
@@ -265,14 +314,31 @@
 
 /* DMSF file upload */
 .dmsf_uploader{
-    padding:6px;
-    margin-bottom: 10px;
+    padding:10px;
+    margin-bottom: 20px;
     background-color:#f6f6f6;
     color:#505050;
     line-height:1.5em;
     border: 1px solid #e4e4e4;
     word-wrap: break-word;
     border-radius: 3px;
+    min-height: 50px;
+    display: block;
+    overflow: hidden;
+}
+
+.dmsf_add_link{
+    display: block;
+    float: right;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.dmsf_add_file{
+    display: block;
+    float: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #dmsf_attachments_fields input.description {margin-left:4px; width:340px;}
@@ -281,3 +347,6 @@
 #dmsf_attachments_fields .ajax-waiting input.filename {background:url(../../../images/hourglass.png) no-repeat 0px 50%;}
 #dmsf_attachments_fields .ajax-loading input.filename {background:url(../../../images/loading.gif) no-repeat 0px 50%;}
 #dmsf_attachments_fields div.ui-progressbar { width: 100px; height:14px; margin: 2px 0 -5px 8px; display: inline-block; }
+
+#dmsf_links_attachments_fields span {display:block; white-space:nowrap;}
+#dmsf_links_attachments_fields input.filename {border:0; height:1.8em; width:250px; color:#555; background-color:inherit; background:url(../../../images/link.png) no-repeat 1px 50%; padding-left:18px;}

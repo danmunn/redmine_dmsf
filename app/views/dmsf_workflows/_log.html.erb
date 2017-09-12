@@ -82,7 +82,7 @@
               <% result = DmsfWorkflowStep.connection.exec_query sql %>
               <% last_step = 0 %>
               <% result.each_with_index do |row, i| %>
-                <tr id="step-<%= i + 3 %> " class="<%= cycle 'odd', 'even' %>">
+                <tr id="step-<%= i + 3 %>">
                   <td class="id"><%= row['step'] unless row['step'] == last_step %></td>
                   <% last_step = row['step'] %>
                   <td class="name"><%= row['name'] %></td>

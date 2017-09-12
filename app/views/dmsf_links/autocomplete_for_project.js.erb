@@ -1,0 +1,4 @@
+$('#dmsf_link_target_folder_id').html('<%= escape_javascript(
+  select_tag('dmsf_link[target_folder_id]',
+         folder_tree_options_for_select(DmsfFolder.directory_tree(params[:dmsf_link][:target_project_id])))) %>');
+$('#dmsf_link_target_folder_id').change();

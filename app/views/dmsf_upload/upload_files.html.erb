@@ -41,7 +41,9 @@
     <% else %>
       <%= render(:partial => 'upload_file', :locals => {:upload => upload, :i => i}) %>
     <% end %>
-    <% i += 1 %>
   <% end %>
-  <%= submit_tag l(:submit_commit) %>
+  <%#= submit_tag l(:submit_commit) %>
+  <div class="form-actions">
+    <%= submit_tag l(:submit_commit), :class => 'button-positive' %>
+  </div>
 <% end %>

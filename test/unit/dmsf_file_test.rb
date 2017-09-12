@@ -167,57 +167,39 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_save_and_destroy_with_cache
-    RedmineDmsf::Webdav::Cache.init_testcache
-    
+    Rails.cache.clear
     # save
     cache_key = @file5.propfind_cache_key
-    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    RedmineDmsf::Webdav::Cache.write(cache_key, '')
     assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
     @file5.save
     assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
     RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
-    
     # destroy
-    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    RedmineDmsf::Webdav::Cache.write(cache_key, '')
     assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
     @file5.destroy
     assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    
     # save!
     cache_key = @file6.propfind_cache_key
-    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    RedmineDmsf::Webdav::Cache.write(cache_key, '')
     assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
     @file6.save!
     assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
     RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
-    
     # destroy!
-    RedmineDmsf::Webdav::Cache.write(cache_key, "")
+    RedmineDmsf::Webdav::Cache.write(cache_key, '')
     assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
     @file6.destroy!
     assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    
-    RedmineDmsf::Webdav::Cache.init_nullcache
-  end
-
-  def test_container_project
-    container = @file1.container
-    assert_not_nil container
-    assert container.is_a?(Project)
-  end
-
-  def test_container_issue
-    container = @file7.container
-    assert_not_nil container
-    assert container.is_a?(Issue)
   end
 
   def test_project_project

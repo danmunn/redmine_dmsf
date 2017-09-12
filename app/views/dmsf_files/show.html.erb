@@ -29,33 +29,33 @@
     <% unless @file.locked_for_user? %>
       <% unless @file.locked? %>
         <%= link_to(l(:button_lock), lock_dmsf_files_path(:id => @file),
-          :title => l(:title_lock_file), :class => 'icon dmsf_icon-lock') %>
+          :title => l(:title_lock_file), :class => 'icon icon-lock') %>
       <% else %>
         <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
-          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock') %>
+          :title => l(:title_unlock_file), :class => 'icon icon-unlock') %>
       <% end %>
       <% if @file.notification %>
         <%= link_to(l(:label_notifications_off),
           notify_deactivate_dmsf_files_path(:id => @file),
           :title => l(:title_notifications_active_deactivate),
-          :class => 'icon dmsf_icon-notification-on') %>
+          :class => 'icon icon-email') %>
       <% else %>
         <%= link_to(l(:label_notifications_on),
           notify_activate_dmsf_files_path(:id => @file),
           :title => l(:title_notifications_not_active_activate),
-          :class => 'icon dmsf_icon-notification-off') %>
+          :class => 'icon icon-email-add') %>
       <% end %>
       <%= link_to(l(:label_link_to),
         new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @file.dmsf_folder ? @file.dmsf_folder.id : nil, :dmsf_file_id => @file.id, :type => 'link_to'),
         :title => l(:title_create_link),
-        :class => 'icon dmsf_icon-link') %>
+        :class => 'icon icon-link') %>
       <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(:id => @file),
         :title => l(:title_copy), :class => 'icon icon-copy') %>
       <%= delete_link(dmsf_file_path(:id => @file, :details => true)) if @file_delete_allowed %>
     <% else %>
       <% if User.current.allowed_to?(:force_file_unlock, @project) %>
         <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
-          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock')%>
+          :title => l(:title_unlock_file), :class => 'icon icon-unlock')%>
       <% end %>
     <% end %>
   <% end %>
@@ -81,13 +81,13 @@
     <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">
       <div class="dataTables_lenght">
         <div class="dmsf_controls" style="float: right">
-          <%= link_to_function image_tag('rev_downloads.png', :plugin => 'redmine_dmsf'),
+          <%= link_to_function image_tag('group.png'),
             "$('#revision_access-#{revision.id}').toggle()",
             :title => l(:title_download_entries) %>
-          <%= link_to image_tag('rev_download.png', :plugin => 'redmine_dmsf'),
+          <%= link_to image_tag('download.png'),
             view_dmsf_file_path(@file, :download => revision),
             :title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version) %>
-          <%= link_to image_tag('rev_delete.png', :plugin => 'redmine_dmsf'),
+          <%= link_to image_tag('delete.png'),
             delete_revision_path(revision),
             :data => {:confirm => l(:text_are_you_sure)},
             :title => l(:title_delete_revision) if @file_delete_allowed && (@file.dmsf_file_revisions.visible.count > 1) %>
@@ -101,61 +101,70 @@
     <div class="attributes dmsf_revision_inner_box">
       <div class="splitcontent">
         <div class="splitcontentleft">
-          <p>
-            <%= label_tag('', l(:label_title)) %>
-            <%= h(revision.title) %>
-          </p>
+            <div class="status attribute">
+              <%= content_tag :div, l(:label_title), :class => 'label' %>
+              <%= content_tag :div, h(revision.title), :class => 'value' %>
+            </div>
           <% if revision.description.present? %>
-            <p>
-              <%= label_tag('', l(:label_description)) %>
-              <div class="wiki">
-                <%= textilizable(revision.description) %>
-              </div>
-            </p>
+            <div class="status attribute">
+              <%= content_tag :div, l(:label_description), :class => 'label' %>
+              <% text = textilizable(revision.description) %>
+              <% if text =~ /^<p>(.*)<\/p>$/ %>
+                  <% text = $1 %>
+               <% end %>
+              <%= content_tag :div, text.html_safe, :class => 'value wiki' %>
+            </div>
           <% end %>
-          <p>
-            <%= label_tag('', l(:label_dmsf_version)) %>
-            <%= revision.major_version %>.<%= revision.minor_version %>
-          </p>
-          <p>
-            <%= label_tag('', l(:label_size)) %>
-            <%= number_to_human_size(revision.size) %>
-          </p>
+          <div class="status attribute">
+            <%= content_tag :div, l(:label_dmsf_version), :class => 'label' %>
+            <%= content_tag :div, "#{revision.major_version}.#{revision.minor_version}", :class => 'value' %>
+          </div>
+          <div class="status attribute">
+            <%= content_tag :div, l(:label_size), :class => 'label' %>
+            <%= content_tag :div, number_to_human_size(revision.size), :class => 'value' %>
+          </div>
           <% wf = DmsfWorkflow.find_by_id(revision.dmsf_workflow_id) %>
           <% if wf %>
-            <p>
-              <%= label_tag('', l(:link_workflow)) %>
-              <%= "#{wf.name} - " %>
-              <%= link_to(revision.workflow_str(false),
-                log_dmsf_workflow_path(:project_id => @project.id,
-                  :id => wf.id, :dmsf_file_revision_id => revision.id),
-                :title => DmsfWorkflow.assignments_to_users_str(wf.next_assignments(revision.id)),
-                :remote => true) %>
-            </p>
+            <div class="status attribute">
+              <%= content_tag :div, l(:label_workflow), :class => 'label' %>
+              <div class="value">
+                <%= "#{wf.name} - " %>
+                <%= link_to(revision.workflow_str(false),
+                  log_dmsf_workflow_path(:project_id => @project.id,
+                    :id => wf.id, :dmsf_file_revision_id => revision.id),
+                  :title => revision.workflow_tooltip,
+                  :remote => true) %>
+              </div>
+            </div>
           <% end %>
           <% if revision.comment.present? %>
-            <p>
-              <%= label_tag('', l(:label_comment)) %>
-              <div class="wiki">
-                <%= textilizable(revision.comment) %>
-              </div>
-            </p>
+            <div class="status attribute">
+              <%= content_tag :div, l(:label_comment), :class => 'label' %>
+              <% text = textilizable(revision.comment) %>
+              <% if text =~ /^<p>(.*)<\/p>$/ %>
+                  <% text = $1 %>
+              <% end %>
+              <%= content_tag :div, text.html_safe, :class => 'value wiki' %>
+            </div>
           <% end %>
         </div>
         <div class="splitcontentright">
-          <p>
-            <%= label_tag('', l(:label_file)) %>
-            <%= (h("#{revision.dmsf_file.dmsf_folder.dmsf_path_str}/")) if revision.dmsf_file.dmsf_folder %><%= h(revision.name) %>
-          </p>
-          <p>
-            <%= label_tag('', l(:label_mime)) %>
-            <%= h(revision.mime_type) %>
-          </p>
+          <div class="status attribute">
+            <%= content_tag :div, l(:label_file), :class => 'label' %>
+            <div class="value">
+              <% path = "#{revision.dmsf_file.dmsf_folder.dmsf_path_str}/" if revision.dmsf_file.dmsf_folder %>
+              <%= h("#{path}#{revision.name}") %>
+            </div>
+          </div>
+          <div class="status attribute">
+            <%= content_tag :div, l(:label_mime), :class => 'label' %>
+            <%= content_tag :div, revision.mime_type, :class => 'value' %>
+          </div>
           <% if revision.digest.present? %>
-            <p>
-              <%= label_tag('', 'MD5') %>
-              <%= revision.digest %>
-            </p>
+            <div class="status attribute">
+              <%= content_tag :div, 'MD5', :class => 'label' %>
+              <%= content_tag :div, revision.digest, :class => 'value wiki' %>
+            </div>
           <% end %>
           <%= render 'dmsf/custom_fields', :object => revision %>
         </div>

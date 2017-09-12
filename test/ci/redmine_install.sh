@@ -26,7 +26,7 @@ export PATH_TO_PLUGINS=./plugins
 export GENERATE_SECRET=generate_secret_token
 export MIGRATE_PLUGINS=redmine:plugins:migrate
 export REDMINE_GIT_REPO=git://github.com/redmine/redmine.git
-export REDMINE_GIT_TAG=master
+export REDMINE_GIT_TAG=3.4-stable
 export BUNDLE_GEMFILE=$PATH_TO_REDMINE/Gemfile
 
 clone_redmine()
@@ -43,7 +43,11 @@ run_tests()
   # exit if tests fail
   set -e
 
-  cd $PATH_TO_REDMINE 
+  cd $PATH_TO_REDMINE
+
+  # create tmp/cache folder (required for Rails 3)
+  # https://github.com/rails/rails/issues/5376
+  bundle exec rake tmp:create
 
   # Run tests within application
   bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf

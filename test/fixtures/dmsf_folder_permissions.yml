@@ -1,0 +1,12 @@
+---
+dmsf_folder_permissions_001:
+  id:             1
+  dmsf_folder_id: 7
+  object_id:      1
+  object_type:    'Role'
+
+dmsf_folder_permissions_002:
+  id:             2
+  dmsf_folder_id: 7
+  object_id:      3
+  object_type:    'User'

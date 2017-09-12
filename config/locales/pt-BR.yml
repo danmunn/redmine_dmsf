@@ -21,10 +21,17 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 pt-BR:
+<<<<<<< HEAD
   dmsf: DMSF
   label_dmsf_file_plural: Arquivos
   label_dmsf_file_revision_plural: Revisões dos Arquivos
   label_dmsf_file_revision_access_plural: Acessos aos Arquivos
+=======
+  dmsf: DMS  # Custom fields tab title
+  label_dmsf_file_plural: Arquivos Documentos
+  label_dmsf_file_revision_plural: Revisões dos Documentos
+  label_dmsf_file_revision_access_plural: Acessos aos Documentos
+>>>>>>> devel-1.6.0
   warning_no_entries_selected: É necessário selecionar um arquivo ou pasta
   error_email_to_must_be_entered: Destinatário não pode ficar em branco
   warning_file_already_locked: Arquivo já bloqueado
@@ -90,7 +97,7 @@ pt-BR:
   label_email_to: Destinatário
   label_email_cc: CC
   label_email_subject: Assunto
-  label_email_documents: DMSF
+  label_email_documents: DMS
   label_email_body: Descrição
   label_email_send: Enviar
   title_notifications_active: Notificações Ativas
@@ -143,6 +150,7 @@ pt-BR:
   label_default_notifications: Notificações padrões de arquivo
   heading_uploaded_files: Arquivos enviados
   submit_commit: Salvar
+<<<<<<< HEAD
   link_documents: DMSF
   permission_view_dmsf_file_revision_accesses: Ver downloads no fluxo de Atividades
   permission_view_dmsf_file_revisions: Ver revisões no fluxo de Atividades
@@ -154,6 +162,20 @@ pt-BR:
   permission_force_file_unlock: Forçar desbloqueio do arquivo
   permission_manage_workflows: Administrar workflows
   permission_file_delete: Excluir arquivos
+=======
+  link_documents: DMS
+  permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
+  permission_view_dmsf_file_revisions: View revisions in Activity stream
+  permission_view_dmsf_folders: Browse documents
+  permission_user_preferences: User preferences
+  permission_view_dmsf_files: View documents
+  permission_folder_manipulation: Folder manipulation
+  permission_file_manipulation: File manipulation
+  permission_force_file_unlock: Force file unlock
+  permission_manage_workflows: Manage workflows
+  permission_file_delete: Delete documents
+  permission_display_system_folders: Display system folders
+>>>>>>> devel-1.6.0
   label_file: Arquivo
   field_folder: Pasta
   error_create_cycle_in_folder_dependency: Dependência entre pastas
@@ -171,19 +193,33 @@ pt-BR:
   label_number_of_documents: Documentos
   error_file_storage_directory_does_not_exist: "O diretório de armazenamento de arquivo não existe e não pode ser criado"
   error_file_can_not_be_created: "O arquivo não pode ser criado"
+<<<<<<< HEAD
   error_wrong_zip_encoding: Código Zip errado
   warning_xapian_not_available: Xapian não disponível
   menu_dmsf: DMSF
   label_physical_file_delete: Excluir fisicamente arquivo
   user_is_not_project_member: Você não é um membro do projeto
+=======
+  error_wrong_zip_encoding: Wrong Zip encoding
+  warning_xapian_not_available: Xapian not available
+  menu_dmsf: DMS  # Project tab title
+  label_physical_file_delete: Physical file delete
+  user_is_not_project_member: You are not a member of the project
+>>>>>>> devel-1.6.0
   heading_access_downloads_emails: Downloads/Emails
   heading_access_first: Primeiro
   heading_access_last: Último
   label_dmsf_updated: Updated
   label_dmsf_downloaded: Downloaded
+<<<<<<< HEAD
   title_total_size_of_all_files: Tamanho total de todos os arquivos nesta pasta
   project_module_dmsf: DMSF
   warning_no_project_to_copy_file_to: Nenhum projeto para cópia do arquivo
+=======
+  title_total_size_of_all_files: Total size of all files under this folder
+  project_module_dmsf: DMS  # Project module name
+  warning_no_project_to_copy_file_to: No project to copy file to
+>>>>>>> devel-1.6.0
   comment_copied_from: "Copiado de %{source}"
   notice_file_copied: Arquivo copiado
   notice_file_moved: Arquivo movido
@@ -233,11 +269,18 @@ pt-BR:
   field_label_dmsf_workflow_name: Nome do workflow de aprovação
   label_dmsf_workflow_plural: Workflows de aprovação
   label_dmsf_workflow_plural_num: Workflows de aprovação(%{count})
+<<<<<<< HEAD
   label_dmsf_workflow_step: Passo
   label_dmsf_workflow_step_plural: Passos
   label_dmsf_workflow_approval: Aprovação
   label_dmsf_workflow_approval_plural: Aprovações
   label_dmsf: DMSF
+=======
+  label_dmsf_workflow_step: Step
+  label_dmsf_workflow_step_plural: Steps
+  label_dmsf_workflow_approval: Approval
+  label_dmsf_workflow_approval_plural: Approvals
+>>>>>>> devel-1.6.0
   label_dmsf_wokflow_action_approve: Aprovar
   label_dmsf_wokflow_action_reject: Reprovar
   label_dmsf_wokflow_action_delegate: Atribuir para
@@ -290,7 +333,7 @@ pt-BR:
   label_external: External
 
   label_link_name: Link name
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: Target folder
   label_source_folder: Source folder
   label_target_project: Target project
@@ -360,5 +403,17 @@ pt-BR:
   label_webdav_use_project_names: Use o nome do projeto para a pasta do projeto
   note_webdav_use_project_names: Use nomes de projetos em vez de identificador de projeto para pastas de projeto.
 
+<<<<<<< HEAD
   label_act_as_attachable: Atuar como anexo
   note_dmsf_act_as_attachable: Permite anexar documentos a objetos, por exemplo, issues.
+=======
+  label_last_approver: Last approver
+
+  label_act_as_attachable: Act as attachable
+  note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+
+  label_user_search_add: Search for user to add
+
+  label_dmsf_attachments: DMS Attachments
+  label_basic_attachments: Basic Attachments
+>>>>>>> devel-1.6.0

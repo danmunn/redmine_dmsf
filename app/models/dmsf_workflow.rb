@@ -22,8 +22,8 @@ class DmsfWorkflow < ActiveRecord::Base
   has_many :dmsf_workflow_steps, -> { order 'step ASC, operator DESC' }, :dependent => :destroy
   belongs_to :author, :class_name => 'User'
 
-  scope :sorted, lambda { order('name ASC') }
-  scope :global, lambda { where('project_id IS NULL') }
+  scope :sorted, lambda { order(:name => :asc) }
+  scope :global, lambda { where(:project_id => nil) }
   scope :active, lambda { where(:status => STATUS_ACTIVE) }
   scope :status, lambda { |arg| where(arg.blank? ? nil : {:status => arg.to_i}) }
 
@@ -106,8 +106,8 @@ class DmsfWorkflow < ActiveRecord::Base
   def delegates(q, dmsf_workflow_step_assignment_id, dmsf_file_revision_id)
     if dmsf_workflow_step_assignment_id && dmsf_file_revision_id
       sql = [
-        'id NOT IN (SELECT a.user_id FROM dmsf_workflow_step_assignments a WHERE id = ?) AND id IN (SELECT m.user_id FROM members m JOIN dmsf_files f ON f.container_id = m.project_id JOIN dmsf_file_revisions r ON r.dmsf_file_id = f.id WHERE r.id = ? AND container_type = ?)',
-        dmsf_workflow_step_assignment_id, dmsf_file_revision_id, 'Project']
+        'id NOT IN (SELECT a.user_id FROM dmsf_workflow_step_assignments a WHERE id = ?) AND id IN (SELECT m.user_id FROM members m JOIN dmsf_files f ON f.project_id = m.project_id JOIN dmsf_file_revisions r ON r.dmsf_file_id = f.id WHERE r.id = ?)',
+        dmsf_workflow_step_assignment_id, dmsf_file_revision_id]
     elsif project
       sql = ['id IN (SELECT user_id FROM members WHERE project_id = ?)', project.id]
     else
@@ -167,19 +167,6 @@ class DmsfWorkflow < ActiveRecord::Base
     results
   end
 
-  def self.assignments_to_users_str(assignments)
-    str = ''
-    if assignments
-      assignments.each_with_index do |assignment, index|
-        if index > 0
-          str << ', '
-        end
-        str << assignment.user.name
-      end
-    end
-    str
-  end
-
   def assign(dmsf_file_revision_id)
     dmsf_workflow_steps.each do |ws|
       ws.assign(dmsf_file_revision_id)
@@ -228,6 +215,29 @@ class DmsfWorkflow < ActiveRecord::Base
 
   def active?
     self.status == STATUS_ACTIVE
+  end
+
+  def notify_users(project, revision, controller)
+    assignments = self.next_assignments revision.id
+    recipients = assignments.collect{ |a| a.user }
+    recipients.uniq!
+    recipients = recipients & DmsfMailer.get_notify_users(project)
+    recipients.each do |user|
+      DmsfMailer.workflow_notification(
+        user,
+        self,
+        revision,
+        :text_email_subject_started,
+        :text_email_started,
+        :text_email_to_proceed).deliver
+    end
+    if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
+      unless recipients.blank?
+        to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+        to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
+        controller.flash[:warning] = l(:warning_email_notifications, :to => to)
+      end
+    end
   end
 
 end

@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.5.9** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **1.6.0** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -37,7 +37,8 @@ Features
   * Documents and folders symbolic links
   * Document tagging
   * Trash bin
-  * Compatible with Redmine 3.3.x
+  * Documents attachable to issues
+  * Compatible with Redmine 3.4.x
 
 Dependencies
 ------------
@@ -46,51 +47,76 @@ Dependencies
 
 ### Full-text search (optional)
 
-If you want to use fulltext search abilities:
-
-  * Xapian (<http://www.xapian.org>) search engine 
-  * Xapian Omega indexing tool
-  * Xapian ruby bindings - xapian or xapian-full gem
+If you want to use fulltext search abilities, install xapian-omega and ruby-xapian packages. See https://xapian.org
+ for details.
+ 
+```
+sudo apt-get install xapian-omega ruby-xapian
+```
 
 To index some files with omega you may have to install some other packages like
 xpdf, antiword, ...
 
 From Omega documentation:
 
-    * PDF (.pdf) if pdftotext is available (comes with xpdf)  
-    * PostScript (.ps, .eps, .ai) if ps2pdf (from ghostscript) and pdftotext (comes with xpdf) are available  
-    * OpenOffice/StarOffice documents (.sxc, .stc, .sxd, .std, .sxi, .sti, .sxm, .sxw, .sxg, .stw) if unzip is available.
-    * OpenDocument format documents (.odt, .ods, .odp, .odg, .odc, .odf, .odb, .odi, .odm, .ott, .ots, .otp, .otg, .otc, .otf, .oti, .oth) if unzip is available  
-    * MS Word documents (.doc, .dot) if antiword is available  
-    * MS Excel documents (.xls, .xlb, .xlt) if xls2csv is available (comes with catdoc)  
-    * MS Powerpoint documents (.ppt, .pps) if catppt is available (comes with catdoc)  
-    * MS Office 2007 documents (.docx, .dotx, .xlsx, .xlst, .pptx, .potx, .ppsx) if unzip is available  
-    * Wordperfect documents (.wpd) if wpd2text is available (comes with libwpd)  
-    * MS Works documents (.wps, .wpt) if wps2text is available (comes with libwps)  
-    * AbiWord documents (.abw)  
-    * Compressed AbiWord documents (.zabw) if gzip is available  
-    * Rich Text Format documents (.rtf) if unrtf is available  
-    * Perl POD documentation (.pl, .pm, .pod) if pod2text is available  
-    * TeX DVI files (.dvi) if catdvi is available  
-    * DjVu files (.djv, .djvu) if djvutxt is available  
-    * XPS files (.xps) if unzip is available
+   * HTML (.html, .htm, .shtml, .shtm, .xhtml, .xhtm)
+   * PHP (.php) - our HTML parser knows to ignore PHP code
+   * text files (.txt, .text)
+   * SVG (.svg)
+   * CSV (Comma-Separated Values) files (.csv)
+   * PDF (.pdf) if pdftotext is available (comes with poppler or xpdf)
+   * PostScript (.ps, .eps, .ai) if ps2pdf (from ghostscript) and pdftotext (comes with poppler or xpdf) are available
+   * OpenOffice/StarOffice documents (.sxc, .stc, .sxd, .std, .sxi, .sti, .sxm, .sxw, .sxg, .stw) if unzip is available
+   * OpenDocument format documents (.odt, .ods, .odp, .odg, .odc, .odf, .odb, .odi, .odm, .ott, .ots, .otp, .otg, .otc, .otf, .oti, .oth) if unzip is available
+   * MS Word documents (.dot) if antiword is available (.doc files are left to libmagic, as they may actually be RTF (AbiWord saves RTF when asked to save as .doc, and Microsoft Word quietly loads RTF files with a .doc extension), or plain-text).
+   * MS Excel documents (.xls, .xlb, .xlt, .xlr, .xla) if xls2csv is available (comes with catdoc)
+   * MS Powerpoint documents (.ppt, .pps) if catppt is available (comes with catdoc)
+   * MS Office 2007 documents (.docx, .docm, .dotx, .dotm, .xlsx, .xlsm, .xltx, .xltm, .pptx, .pptm, .potx, .potm, .ppsx, .ppsm) if unzip is available
+   * Wordperfect documents (.wpd) if wpd2text is available (comes with libwpd)
+   * MS Works documents (.wps, .wpt) if wps2text is available (comes with libwps)
+   * MS Outlook message (.msg) if perl with Email::Outlook::Message and HTML::Parser modules is available
+   * MS Publisher documents (.pub) if pub2xhtml is available (comes with libmspub)
+   * AbiWord documents (.abw)
+   * Compressed AbiWord documents (.zabw)
+   * Rich Text Format documents (.rtf) if unrtf is available
+   * Perl POD documentation (.pl, .pm, .pod) if pod2text is available
+   * reStructured text (.rst, .rest) if rst2html is available (comes with docutils)
+   * Markdown (.md, .markdown) if markdown is available
+   * TeX DVI files (.dvi) if catdvi is available
+   * DjVu files (.djv, .djvu) if djvutxt is available
+   * XPS files (.xps) if unzip is available
+   * Debian packages (.deb, .udeb) if dpkg-deb is available
+   * RPM packages (.rpm) if rpm is available
+   * Atom feeds (.atom)
+   * MAFF (.maff) if unzip is available
+   * MHTML (.mhtml, .mht) if perl with MIME::Tools is available
+   * MIME email messages (.eml) and USENET articles if perl with MIME::Tools and HTML::Parser is available
+   * vCard files (.vcf, .vcard) if perl with Text::vCard is available
+    
+You can use following commands to install some of the required indexing tools:    
 
 On Debian use:
 
-```sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils \
+```
+sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils \
  antiword unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi \
- djview djview3 uuid uuid-dev xz-utils```
+ djview djview3 uuid uuid-dev xz-utils libemail-outlook-message-perl
+```
 
 On Ubuntu use:
 
-```sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils antiword \
+```
+sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils antiword \
  unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi djview djview3 \
- uuid uuid-dev xz-utils```
+ uuid uuid-dev xz-utils libemail-outlook-message-perl
+```
 
-On CentOS user:
-```sudo yum install xapian-omega libxapian-dev xpdf poppler-utils antiword \
+On CentOS use:
+```
+sudo yum install xapian-omega libxapian-dev xpdf poppler-utils antiword \
  unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi djview djview3 \
- uuid uuid-dev xz```
+ uuid uuid-dev xz libemail-outlook-message-perl
+```
 
 Usage
 -----
@@ -190,7 +216,7 @@ In the file <redmine_root>/public/help/<language>/wiki_syntax.html, at the end o
 
     <tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>    
 
-There's a patch that helps you to modify all help files at once. In your Redmine folder:
+There's a patch (tested with Redmine 3.4.2) that helps you to modify all help files at once. In your Redmine folder:
 
 `cd redmine`
 
@@ -211,9 +237,9 @@ Before installing ensure that the Redmine instance is stopped.
 6. Restart the web server.
 7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure.
 8. Assign DMSF permissions to appropriate roles.
-9. There are two rake tasks:
+9. There are a few rake tasks:
 
-    a) To convert documents from the standard Redmine document module
+    I) To convert documents from the standard Redmine document module
 
         Available options:
 
@@ -229,21 +255,53 @@ Before installing ensure that the Redmine instance is stopped.
               chown -R www-data:www-data /redmine/files/dmsf
             afterwards)
 
-    b) To alert all users who are expected to do an approval in the current approval steps
+    II) To alert all users who are expected to do an approval in the current approval steps
 
         Example:
             
-            rake redmine:dmsf_alert_approvals RAILS_ENV="production"            
+            rake redmine:dmsf_alert_approvals RAILS_ENV="production"   
+                     
+    III) To clears the Webdav Cache
+                     
+         Example:
+         
+            rake redmine:dmsf_clear_webdav_cache RAILS_ENV="production"
+            
+    IV) To create missing MD5 digest for all file revisions
+            
+        Available options:
+        
+          *dry_run - test, no changes to the database
+        
+        Example:
+        
+          bundle exec rake redmine:dmsf_create_digests RAILS_ENV="production"
+          bundle exec rake redmine:dmsf_create_digests dry_run=1 RAILS_ENV="production"
+          
+    V) To maintain DMSF
+        
+        * Remove all files with no database record from the document directory
+        * Remove all links project_id = -1 (added links to an issue which hasn't been created)
+        
+        Available options:
+        
+          *dry_run - No physical deletion but to list of all unused files only
+        
+        Example:
+        
+          rake redmine:dmsf_maintenance RAILS_ENV="production"
+          rake redmine:dmsf_maintenance dry_run=1 RAILS_ENV="production"
 
 ### Fulltext search (optional)
 If you want to use full-text search features, you must setup file content indexing.
 
-It is necessary to index DMSF files with omega before searching attempts to receive some output:
+It is necessary to index DMSF files with omindex before searching attempts to receive some output:
 
   1. Change the configuration part of redmine_dmsf/extra/xapian_indexer.rb file according to your environment.
-  2. Run `ruby redmine_dmsf/extra/xapian_indexer.rb -f`
+     (The path to the index database set in xapian_indexer.rb must corresponds to the path set in the plugin's settings.)   
+  2. Run `ruby redmine_dmsf/extra/xapian_indexer.rb -vf`
 
-This command must be run on regular basis (e.g. from cron)
+This command should be run on regular basis (e.g. from cron)
 
 Example of cron job (once per hour at 8th minute):
     

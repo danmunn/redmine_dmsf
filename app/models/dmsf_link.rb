@@ -62,7 +62,12 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def target_folder
-    DmsfFolder.find_by_id self.target_folder_id if self.target_folder_id
+    unless @target_folder
+      if self.target_folder_id
+        @target_folder = DmsfFolder.find_by_id self.target_folder_id
+      end
+    end
+    @target_folder
   end
 
   def target_file_id
@@ -70,15 +75,28 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def target_file
-    DmsfFile.find_by_id self.target_file_id if self.target_file_id
+    unless @target_file
+      if self.target_file_id
+        @target_file = DmsfFile.find_by_id self.target_file_id
+      end
+    end
+    @target_file
   end
 
   def target_project
-    Project.find_by_id self.target_project_id
+    unless @target_project
+      @target_project = Project.find_by_id self.target_project_id
+    end
+    @target_project
   end
 
   def folder
-    DmsfFolder.find_by_id self.dmsf_folder_id
+    unless @folder
+      if self.dmsf_folder_id
+        @folder = DmsfFolder.find_by_id self.dmsf_folder_id
+      end
+    end
+    @folder
   end
 
   def title
@@ -110,20 +128,29 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def copy_to(project, folder)
-    link = DmsfLink.new(
-      :target_project_id => self.target_project_id,
-      :target_id => self.target_id,
-      :target_type => self.target_type,
-      :name => self.name,
-      :external_url => self.external_url,
-      :project_id => project.id,
-      :dmsf_folder_id => folder ? folder.id : nil)
+    link = DmsfLink.new
+    link.target_project_id = self.target_project_id
+    link.target_id = self.target_id
+    link.target_type = self.target_type
+    link.name = self.name
+    link.external_url = self.external_url
+    link.project_id = project.id
+    link.dmsf_folder_id = folder ? folder.id : nil
     link.save
     link
   end
 
+  def container
+    if self.folder && self.folder.system
+      Issue.where(:id => self.folder.title.to_i).first
+    end
+  end
+
   def delete(commit = false)
     if commit
+      if self.container.is_a?(Issue)
+        self.container.dmsf_file_removed(self.target_file)
+      end
       self.destroy
     else
       self.deleted = STATUS_DELETED
@@ -171,6 +198,8 @@ class DmsfLink < ActiveRecord::Base
       csv << '' if columns.include?('workflow')
       # Author
       csv << self.user.name if columns.include?('author')
+      # Last approver
+      csv << '' if columns.include?(l(:label_last_approver))
       # Url
       csv << self.external_url if columns.include?(l(:label_document_url))
       # Revision

@@ -1,0 +1,22 @@
+<h3 class="title"><%= l(:label_user_search) %></h3>
+
+<%= form_tag(append_dmsf_folder_permissions_path,
+             :remote => true,
+             :method => :post,
+             :id => 'new-user-form') do %>
+    <%= hidden_field_tag :project_id, @project.id %>
+
+  <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>
+  <%= javascript_tag "observeSearchfield('user_search', 'users_for_users', '#{ escape_javascript url_for(:controller => 'dmsf_folder_permissions',
+                 :action => 'autocomplete_for_user',
+                 :project_id => @project) }')" %>
+
+  <div id="users_for_watcher">
+    <%= render_principals_for_new_folder_permissions(@principals) %>
+  </div>
+
+  <p class="buttons">
+    <%= submit_tag l(:button_add), :name => nil, :onclick => "hideModal(this);" %>
+    <%= submit_tag l(:button_cancel), :name => nil, :onclick => "hideModal(this);", :type => 'button' %>
+  </p>
+<% end %>

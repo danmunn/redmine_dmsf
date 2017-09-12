@@ -18,22 +18,45 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-module DmsfUserPreference
-  def self.included(base)
-    base.send(:include, InstanceMethods)
-  end
+module RedmineDmsf
+  module Patches
+    module UserPreference
 
-  module InstanceMethods
+      def self.included(base)
+        base.send(:include, InstanceMethods)
+        base.class_eval do
+          safe_attributes 'dmsf_tree_view',
+                          'dmsf_attachments_upload_choice'
+          end
+      end
 
-    def dmsf_tree_view
-      self[:dmsf_tree_view] || '0'
+      module InstanceMethods
+
+        def dmsf_tree_view
+          self[:dmsf_tree_view] || '1'
+        end
+
+        def dmsf_tree_view=(value)
+          self[:dmsf_tree_view] = value
+        end
+
+        def dmsf_attachments_upload_choice
+          self[:dmsf_attachments_upload_choice] || 'DMSF'
+        end
+
+        def dmsf_attachments_upload_choice=(value)
+          self[:dmsf_attachments_upload_choice] = value
+        end
+
+      end
+
     end
-
-    def dmsf_tree_view=(value)
-      self[:dmsf_tree_view] = value
-    end
   end
-
 end
 
-UserPreference.send(:include, DmsfUserPreference)
+# Apply patch
+Rails.configuration.to_prepare do
+  unless UserPreference.included_modules.include?(RedmineDmsf::Patches::UserPreference)
+    UserPreference.send(:include, RedmineDmsf::Patches::UserPreference)
+  end
+end

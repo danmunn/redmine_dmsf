@@ -62,21 +62,21 @@
   <%=  content_tag(:label, l(:label_file_storage_directory)) %>
   <% 
     storage_dir = @settings['dmsf_storage_directory'].strip if @settings['dmsf_storage_directory'].present?
-    storage_dir = "#{Rails.root}/files/dmsf" if storage_dir.blank?
+    storage_dir = 'dmsf' if storage_dir.blank?
   %>
   <%= text_field_tag 'settings[dmsf_storage_directory]', storage_dir, :size => 50 %>
   <em class="info">
-    <%= l(:label_default) %>: <%= "#{Rails.root}/files/dmsf" %>
+    <%= l(:label_default) %>: dmsf
   </em>
 </p>
-<% unless File.exist?(storage_dir) %>
+<% unless File.exist?(DmsfFile.storage_path) %>
   <% begin %>
-     <% Dir.mkdir(storage_dir) %>
+     <% Dir.mkdir(DmsfFile.storage_path) %>
   <% rescue %>
     <p class="warning"><%= l(:error_file_storage_directory_does_not_exist) %></p> 
   <% end %>
 <% end %>
-<% testfilename = "#{storage_dir}/test.test" %>
+<% testfilename = DmsfFile.storage_path.join('test.test') %>
 <% if File.exist?(storage_dir) %>
   <%	begin %>
     <% File.open(testfilename, 'wb') do |file| %>
@@ -142,7 +142,7 @@
   <%= l(:menu_dmsf) %> <%= l(:field_column_names) %>
 </em>
 
-<%= render(:partial => 'settings/dmsf_columns', :locals => { :settings => @settings }) %>
+<%= render(:partial => 'settings/dmsf_columns', :locals => { :selected_columns => @settings['dmsf_columns'] }) %>
 
 <hr/>
 <em class="info">
@@ -184,14 +184,6 @@
       :selected => @settings['dmsf_webdav_strategy'])) %><br/>
   <em class="info">
     <%= l(:note_webdav_strategy).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_webdav_readonly) %>
-  </em>
-</p>
-
-<p>
-  <%= content_tag(:label, l(:label_memcached_servers)) %>
-  <%= text_field_tag 'settings[dmsf_memcached_servers]', @settings['dmsf_memcached_servers'], :size => 50 %>
-  <em class="info">
-    <%= l(:text_memcached_servers) %>
   </em>
 </p>
 

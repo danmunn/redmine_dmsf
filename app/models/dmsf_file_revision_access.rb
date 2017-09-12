@@ -40,9 +40,8 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
     :timestamp => "#{DmsfFileRevisionAccess.table_name}.updated_at",
     :author_key => "#{DmsfFileRevisionAccess.table_name}.user_id",
     :permission => :view_dmsf_file_revision_accesses,
-    :scope => select("#{DmsfFileRevisionAccess.table_name}.*").
-      joins(:dmsf_file_revision).joins(
-        "LEFT JOIN #{DmsfFile.table_name} ON #{DmsfFileRevision.table_name}.dmsf_file_id = #{DmsfFile.table_name}.id " +
-        "LEFT JOIN #{Project.table_name} ON #{DmsfFile.table_name}.container_id = #{Project.table_name}.id").
-      where("#{DmsfFile.table_name}.deleted = ? AND #{DmsfFile.table_name}.container_type = ?", DmsfFile::STATUS_ACTIVE, 'Project')
+    :scope => DmsfFileRevisionAccess.
+      joins(:dmsf_file_revision).joins("JOIN #{DmsfFile.table_name} ON dmsf_files.id = dmsf_file_revisions.dmsf_file_id").
+      joins("JOIN #{Project.table_name} on dmsf_files.project_id = projects.id").
+      where(:dmsf_files => { :deleted => DmsfFile::STATUS_ACTIVE })
 end

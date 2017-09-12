@@ -1,6 +1,62 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.6.0 *2017-09-12*
+------------------
+
+    Folder permissions    
+    Documents attachable to issues
+    Hungarian localisation
+    Fulltext search in *.eml and *.msg
+
+IMPORTANT
+
+1. Files in the filesystem are re-organized by a new system based on dates. So, documents are not stored in folders named 
+    by the project's identifier but by the data of uploading, e.g. 2017/09. It's the same system used by Redmine for 
+    attachments.
+2. DMS storage directory plugin option is related to the rails root directory.
+3. The plugin is independent of the gem xapian-full-alaveteli which has been replaced with ruby-xapian package. Therefore
+    is recommended to uninstall xapian-full-alaveteli gem and install ruby-xapian package in order the full-text search
+    is working. 
+    
+* Bug: #758 - Error in template when retrieving details of a file in a subfolder
+* New: #755 - Ability to retrieve the MD5 value of a Document type 
+* Bug: #749 - REST API - List of documents in folder fails when using folder_title
+* Bug: #747 - Background icon repeating in admin panel (Redmine 3.4.2)
+* Bug: #746 - Thumbnail macro: size paramter not respected
+* Bug: #744 - Full stops within filename lead to false extensions
+* New: #742 - WebDAV PROPSTATS and PROPFIND caching change
+* Bug: #738 - Upload failure
+* Bug: #734 - DMSF uploader seems to override built in uploader
+* New: #733 - Make the storage path Rails.root related
+* Bug: #732 - Buggy tree view
+* Bug: #731 - Add users for new step in Worflow Dialogue
+* Bug: #730 - Workflow "New Step" dialog not appearing
+* Bug: #728 - Internal error 500 when uploading document via Edit issue
+* New: #727 - Ability to disable document upload in issues
+* Bug: #725 - Can't uninstall redmine dmsf in Bitnami
+* New: #717 - Enhacement: Xapian parse eml and msg files in same way as word, excel...
+* Bug: #714 - The full text search does not work
+* New: #713 - Hungarian localisation
+* New: #712 - Notifications ON/OFF are confusing
+* Bug: #710 - Can't delete locked documents from the trash
+* Bug: #701 - How tagging with multiple values works?
+* Bug: #700 - 'Save as' from Excel does not work when using project names
+* New: #699 - Speed up the main view
+* New: #697 - Email notifications from WebDAV interface
+* Bug: #694 - redmine:dmsf_convert_documents
+* Bug: #693 - redmine:dmsf_convert_documents
+* Bug: #692 - Error migrate plugin v1.5.9
+* New: #691 - The last approver in the CSV export
+* Bug: #685 - Problem deleting plugin
+* Bug: #683 - Approval reminder problem
+* New: #667 - A better navigation in found results
+* New: #651 - Incomplete copy of a file to another project
+* Bug: #623 - Option "Navigate folders in a tree" seems not to be saved 
+* New: #543 - Feature Request: Document Location - Folder Structure
+* New: #170 - Document and Folder Access Control. This issue may be duplicated as I saw it on google code some time ago.
+* New: #48  - Linking Issues and DMSF Documents
+
 1.5.9 *2016-03-01*
 ------------------
 

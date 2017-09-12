@@ -30,7 +30,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   def setup
     DmsfLock.delete_all # Delete all locks that are in our test DB - probably not safe but ho hum
     timestamp = DateTime.now.strftime("%y%m%d%H%M")
-    DmsfFile.storage_path = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
     Dir.mkdir(DmsfFile.storage_path) unless File.directory?(DmsfFile.storage_path)
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
@@ -102,7 +102,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       assert file, 'Check for files existance'
       Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
       if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-        project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+        project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
         put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @admin.merge!({:content_type => :text})
         assert_response 409
         put "/dmsf/webdav/#{project1_uri}/test-1234.txt", '1234', @admin.merge!({:content_type => :text})
@@ -157,7 +157,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       assert file, 'File test-1234 was not found in projects dmsf folder.'
       Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
       if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-        project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+        project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
         put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})
         assert_response 409
         put "/dmsf/webdav/#{project1_uri}/test-1234.txt", '1234', @jsmith.merge!({:content_type => :text})
@@ -315,6 +315,6 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
           assert_response :success # 201 - Created
       end
     end
-end
+  end
   
 end

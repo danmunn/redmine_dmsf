@@ -22,11 +22,20 @@ class DmsfWorkflowsController < ApplicationController
   unloadable
   model_object DmsfWorkflow
 
-  before_filter :find_model_object, :except => [:create, :new, :index, :assign, :assignment]
-  before_filter :find_project
-  before_filter :authorize_custom
+  before_action :find_model_object, :except => [:create, :new, :index, :assign, :assignment]
+  before_action :find_project
+  before_action :authorize_custom
+  before_action :permissions, :only => [:new_action, :assignment, :start]
 
   layout :workflows_layout
+
+  def permissions
+    revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id] if params[:dmsf_file_revision_id].present?
+    if revision
+      render_403 unless revision.dmsf_file || DmsfFolder.permissions?(revision.dmsf_file.dmsf_folder)
+    end
+    true
+  end
 
   def initialize
     @dmsf_workflow = nil
@@ -72,7 +81,7 @@ class DmsfWorkflowsController < ApplicationController
                     :text_email_finished_approved,
                     :text_email_to_see_history).deliver if user
                 end
-                if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+                if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
                   unless recipients.blank?
                     to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                     to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
@@ -95,7 +104,7 @@ class DmsfWorkflowsController < ApplicationController
                     :text_email_to_see_history,
                     action.note).deliver
                 end
-                if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+                if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
                   unless recipients.blank?
                     to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                     to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
@@ -116,7 +125,7 @@ class DmsfWorkflowsController < ApplicationController
                     :text_email_finished_delegated,
                     :text_email_to_proceed,
                     action.note).deliver
-                  if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+                  if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
                     flash[:warning] = l(:warning_email_notifications, :to => delegate.name)
                   end
                 end
@@ -147,7 +156,7 @@ class DmsfWorkflowsController < ApplicationController
                         :text_email_finished_step_short,
                         :text_email_to_see_status).deliver
                     end
-                    if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+                    if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
                       recipients = assignments.collect{ |a| a.user }
                       recipients << to if to
                       recipients.uniq!
@@ -178,31 +187,54 @@ class DmsfWorkflowsController < ApplicationController
   def assignment
     if (params[:commit] == l(:button_submit)) &&
         params[:dmsf_workflow_id].present? && (params[:dmsf_workflow_id] != '-1')
-      revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
-      if revision
-        revision.set_workflow(params[:dmsf_workflow_id], params[:action])
-        revision.assign_workflow(params[:dmsf_workflow_id])
-        if request.post?
-          if revision.save
-            file = DmsfFile.find_by_id revision.dmsf_file_id
-            if file
-              begin
-                file.lock!
-              rescue DmsfLockError => e
-                logger.warn e.message
+      # DMS file
+      if params[:dmsf_file_revision_id].present? && params[:dmsf_link_id].blank? && params[:attachment_id].blank?
+        revision = DmsfFileRevision.find_by_id params[:dmsf_file_revision_id]
+        if revision
+          revision.set_workflow(params[:dmsf_workflow_id], params[:action])
+          revision.assign_workflow(params[:dmsf_workflow_id])
+          if request.post?
+            if revision.save
+              file = DmsfFile.find_by_id revision.dmsf_file_id
+              if file
+                begin
+                  file.lock!
+                rescue DmsfLockError => e
+                  Rails.logger.warn e.message
+                end
+                flash[:notice] = l(:notice_successful_update)
               end
-              flash[:notice] = l(:notice_successful_update)
+            else
+              flash[:error] = l(:error_workflow_assign)
             end
-          else
-            flash[:error] = l(:error_workflow_assign)
           end
         end
+        redirect_to :back
+        return
+      # DMS link (attached)
+      elsif params[:dmsf_link_id].present?
+        @dmsf_link_id = params[:dmsf_link_id]
+        @dmsf_workflow_id = params[:dmsf_workflow_id]
+      # Attachment (attached)
+      elsif params[:attachment_id].present?
+        @attachment_id = params[:attachment_id]
+        @dmsf_workflow_id = params[:dmsf_workflow_id]
       end
+     else
+      redirect_to :back
+      return
     end
-    redirect_to :back
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   def log
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   def edit
@@ -366,26 +398,7 @@ class DmsfWorkflowsController < ApplicationController
     if revision
       revision.set_workflow(@dmsf_workflow.id, params[:action])
       if revision.save
-        assignments = @dmsf_workflow.next_assignments revision.id
-        recipients = assignments.collect{ |a| a.user }
-        recipients.uniq!
-        recipients = recipients & DmsfMailer.get_notify_users(@project)
-        recipients.each do |user|
-          DmsfMailer.workflow_notification(
-            user,
-            @dmsf_workflow,
-            revision,
-            :text_email_subject_started,
-            :text_email_started,
-            :text_email_to_proceed).deliver
-        end
-        if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
-          unless recipients.blank?
-            to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
-            to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-            flash[:warning] = l(:warning_email_notifications, :to => to)
-          end
-        end
+        @dmsf_workflow.notify_users(@project, revision, self)
         flash[:notice] = l(:notice_workflow_started)
       else
         flash[:error] = l(:notice_cannot_start_workflow)
@@ -399,22 +412,21 @@ class DmsfWorkflowsController < ApplicationController
     if params[:dmsf_workflow].present?
       index = params[:step].to_i
       name =  params[:dmsf_workflow][:name]
-      if name.present?
-        step = @dmsf_workflow.dmsf_workflow_steps[index]
-        step.name = name
-        unless step.save
-           flash[:error] = step.errors.full_messages.to_sentence
-        else
-          @dmsf_workflow.dmsf_workflow_steps.each do |s|
-            if s.step == step.step
-              s.name = step.name
-              s.save
-            end
+      step = @dmsf_workflow.dmsf_workflow_steps[index]
+      step.name = name
+      unless step.save
+         flash[:error] = step.errors.full_messages.to_sentence
+      else
+        @dmsf_workflow.dmsf_workflow_steps.each do |s|
+          if s.step == step.step
+            s.name = step.name
+            s.save
           end
         end
       end
-    else
-      # Operators
+    end
+    # Operators
+    if params[:operator_step].present?
       params[:operator_step].each do |id, operator|
         step = DmsfWorkflowStep.find_by_id id
         if step
@@ -462,9 +474,11 @@ private
       elsif params[:project_id]
         @project = Project.find_by_id params[:project_id]
       else
-        @project = Project.find_by_identifier params[:id]
+        @project = Project.find params[:id]
       end
     end
+  rescue ActiveRecord::RecordNotFound
+    @project = nil
   end
 
   def workflows_layout

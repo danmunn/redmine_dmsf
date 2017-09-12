@@ -1,102 +1,92 @@
 ---
 dmsf_files_001:
   id:                 1
-  container_id:       1
-  container_type:     "Project"
+  project_id:         1
   dmsf_folder_id:     NULL
-  name:               "test.txt"
-  notification:       0
+  name:               'test.txt'
+  notification:       false
   deleted:            0
   deleted_by_user_id: NULL
 
 #file on non-dmsf enabled project
 dmsf_files_002:
   id:                 2
-  container_id:       2
-  container_type:     "Project"
+  project_id:         2
   dmsf_folder_id:     NULL
-  name:               "test.txt"
-  notification:       0
+  name:               'test.txt'
+  notification:       false
   deleted:            0
   deleted_by_user_id: NULL
 
 #deleted file on dmsf-enabled project
 dmsf_files_003:
   id:                 3
-  container_id:       1
-  container_type:     "Project"
+  project_id:         1
   dmsf_folder_id:     NULL
-  name:               "deleted.txt"
-  notification:       0
+  name:               'deleted.txt'
+  notification:       false
   deleted:            1
   deleted_by_user_id: 1
 
 dmsf_files_004:
   id:                 4
-  container_id:       1
-  container_type:     "Project"
+  project_id:         1
   dmsf_folder_id:     2
-  name:               "test.txt"
-  notification:       0
+  name:               'test.txt'
+  notification:       false
   deleted:            0
   deleted_by_user_id: NULL
 
 dmsf_files_005:
   id:                 5
-  container_id:       1
-  container_type:     "Project"
+  project_id:         1
   dmsf_folder_id:     5
-  name:               "test.txt"
-  notification:       0
+  name:               'test.txt'
+  notification:       false
   deleted:            0
   deleted_by_user_id: NULL
 
 dmsf_files_006:
   id:                 6
-  container_id:       1
-  container_type:     "Project"
+  project_id:         1
   dmsf_folder_id:     3
-  name:               "test.txt"
-  notification:       0
+  name:               'test.txt'
+  notification:       false
   deleted:            0
   deleted_by_user_id: NULL
 
 dmsf_files_007:
   id:                 7
-  container_id:       1
-  container_type:     "Issue"
-  dmsf_folder_id:     NULL
-  name:               "test.gif"
-  notification:       0
+  project_id:         1
+  dmsf_folder_id:     8
+  name:               'test.gif'
+  notification:       false
   deleted:            0
   deleted_by_user_id: NULL
 
 dmsf_files_008:
   id:                 8
-  container_id:       1
-  container_type:     "Issue"
+  project_id:         1
   dmsf_folder_id:     NULL
-  name:               "test.pdf"
-  notification:       0
+  name:               'test.pdf'
+  notification:       false
   deleted:            0
   deleted_by_user_id: NULL
   
 dmsf_files_009:
   id:                 9
-  container_id:       1
-  container_type:     "Project"
+  project_id:         1
   dmsf_folder_id:     NULL
-  name:               "myfile.txt"
-  notification:       0
+  name:               'myfile.txt'
+  notification:       false
   deleted:            0
   deleted_by_user_id: NULL
   
 dmsf_files_010:
   id:                 10
-  container_id:       1
-  container_type:     "Project"
+  project_id:         1
   dmsf_folder_id:     NULL
-  name:               "zero.txt"
-  notification:       0
+  name:               'zero.txt'
+  notification:       false
   deleted:            0
   deleted_by_user_id: NULL

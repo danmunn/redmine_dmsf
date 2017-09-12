@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 pl:
-  dmsf: DMSF
+  dmsf: DMS  # Custom fields tab title
   label_dmsf_file_plural: Pliki
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses
@@ -84,7 +84,7 @@ pl:
   title_lock_file: Zablokuj aby zabezpieczyć przed wprowadzaniem zmian przez innych użytkowników
   title_download_checked: Pobierz zaznaczone jako archiwum Zip
   title_send_checked_by_email: Wyślij zaznaczone przez email
-  link_user_preferences: Preferencje DMSF dla projektu
+  link_user_preferences: Preferencje DMS dla projektu
   heading_send_documents_by_email: Wyślij dokumenty przez email
   label_email_from: Od
   label_email_to: Do
@@ -154,6 +154,7 @@ pl:
   permission_force_file_unlock: Wymuś odblokowanie pliku
   permission_manage_workflows: Zarządzaj procesami
   permission_file_delete: Usuń dokumenty
+  permission_display_system_folders: Display system folders
   label_file: Plik
   field_folder: Folder
   error_create_cycle_in_folder_dependency: utworzono pętlę zależności pomiędzy folderami
@@ -173,7 +174,7 @@ pl:
   error_file_can_not_be_created: "Plik nie może zostać utworzony w folderze przechowywania"
   error_wrong_zip_encoding: Złe kodowanie Zip
   warning_xapian_not_available: Xapian niedostępny
-  menu_dmsf: DMSF
+  menu_dmsf: DMS  # Project tab title
   label_physical_file_delete: Fizyczne usuwanie plików
   user_is_not_project_member: Nie jesteś przypisany do tego projektu
   heading_access_downloads_emails: Downloads/Emails
@@ -182,7 +183,7 @@ pl:
   label_dmsf_updated: Zaktualizowany
   label_dmsf_downloaded: Downloaded
   title_total_size_of_all_files: Łączny rozmiar plików w folderze
-  project_module_dmsf: DMSF
+  project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: Brak projektu do skopiowania pliku
   comment_copied_from: "Skopiowano z %{source}"
   notice_file_copied: Plik został skopiowany
@@ -237,7 +238,6 @@ pl:
   label_dmsf_workflow_step_plural: Kroki
   label_dmsf_workflow_approval: Akceptacja
   label_dmsf_workflow_approval_plural: Akceptacje
-  label_dmsf: DMSF
   label_dmsf_wokflow_action_approve: Zaakceptuj
   label_dmsf_wokflow_action_reject: Odrzuć
   label_dmsf_wokflow_action_delegate: Deleguj do
@@ -290,7 +290,7 @@ pl:
   label_external: External
 
   label_link_name: Nazwa odnośnika
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: Folder docelowy
   label_source_folder: Folder źródłowy
   label_target_project: Projekt docelowy
@@ -360,5 +360,12 @@ pl:
   label_webdav_use_project_names: Use project name for project folder
   note_webdav_use_project_names: Use project names instead of project identifier for project folders.
 
+  label_last_approver: Last approver
+
   label_act_as_attachable: Act as attachable
   note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+
+  label_user_search_add: Search for user to add
+
+  label_dmsf_attachments: DMS Attachments
+  label_basic_attachments: Basic Attachments

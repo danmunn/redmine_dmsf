@@ -107,7 +107,7 @@ module RedmineDmsf
               raise BadRequest
             end
           end
-          
+
           if depth != 0
             # Only use cache for requests with a depth>0, depth=0 responses are already fast.
             pinfo = resource.path.split('/').drop(1)
@@ -123,7 +123,7 @@ module RedmineDmsf
               end
             end
           end
-          
+
           if propfind_key.nil?
             # This PROPFIND is never cached so always create a new response
             create_propfind_response(properties)
@@ -131,8 +131,8 @@ module RedmineDmsf
             response.body = RedmineDmsf::Webdav::Cache.read(propfind_key)
             if !response.body.nil?
               # Found cached PROPFIND, fill in Content-Type and Content-Length
-              response["Content-Type"] = 'text/xml; charset="utf-8"'
-              response["Content-Length"] = response.body.size.to_s
+              response['Content-Type'] = 'text/xml; charset="utf-8"'
+              response['Content-Length'] = response.body.size.to_s
             else
               # No cached PROPFIND found
               # Remove .invalid entry for this propfind since we are now creating a new valid propfind
@@ -210,10 +210,10 @@ module RedmineDmsf
               # File
               # Use file.id & file.last_revision.id as key
               # When revision changes then the key will change and the old cached item will eventually be evicted
-              propstats_key = "PROPSTATS/#{resource.resource.file.id}-#{resource.resource.file.last_revision.id}"
+              propstats_key = "PROPSTATS/#{resource.resource.file.id}-#{resource.resource.file.last_revision.id}" if resource.resource.file
             end
 
-            xml_str = RedmineDmsf::Webdav::Cache.read(propstats_key)
+            xml_str = RedmineDmsf::Webdav::Cache.read(propstats_key) if propstats_key
             if xml_str.nil?
               # Create the complete PROPSTATS response
               propstats_builder = Nokogiri::XML::Builder.new do |propstats_xml|
@@ -223,7 +223,7 @@ module RedmineDmsf
                   
                   xml2.response do
                     unless(resource.propstat_relative_path)
-                      xml2.href "#{scheme}://#{host}:#{port}#{url_format(resource)}"                  
+                      xml2.href "#{scheme}://#{host}:#{port}#{url_format(resource)}"
                     else
                       xml2.href url_format(resource)
                     end
@@ -238,7 +238,7 @@ module RedmineDmsf
               
               # Add PROPSTATS to cache
               # Caching the PROPSTATS response as xml text string.
-              RedmineDmsf::Webdav::Cache.write(propstats_key, xml_str)
+              RedmineDmsf::Webdav::Cache.write(propstats_key, xml_str) if propstats_key
             end
             xml << xml_str
           end

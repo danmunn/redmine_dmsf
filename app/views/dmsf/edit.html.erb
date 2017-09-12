@@ -25,42 +25,38 @@
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
-  <% if !@folder.new_record? && User.current.allowed_to?(:folder_manipulation, @project) %>
-    <% if !@folder.locked_for_user? %>
-      <% unless @folder.locked? %>
-        <%= link_to(l(:button_lock),
-          lock_dmsf_path(:id => @project, :folder_id => @folder),
-          :title => l(:title_lock_file), :class => 'icon dmsf_icon-lock') %>  
-      <% else %>
-        <%= link_to_if(@folder.unlockable?, l(:button_unlock),
-          unlock_dmsf_path(:id => @project, :folder_id => @folder),
-          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock')%>            
-      <% end %>
-      <% if @folder.notification %>              
-          <%= link_to(l(:label_notifications_off),
-           notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
-            :title => l(:title_notifications_active_deactivate),
-            :class => 'icon dmsf_icon-notification-on') %>
-        <% else %>              
-          <%= link_to(l(:label_notifications_on),
-            notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
-            :title => l(:title_notifications_not_active_activate),
-            :class => 'icon dmsf_icon-notification-off') %>
-        <% end %>      
-      <%= link_to(l(:label_link_to), 
-        new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder.id, :type => 'link_to'),
-        :title => l(:title_create_link), :class => 'icon dmsf_icon-link') %>
-      <%= link_to(l(:button_copy), copy_folder_path(:id => @folder),
-        :title => l(:title_copy), :class => 'icon icon-copy') %>      
-      <%= link_to(l(:button_delete),
-        delete_dmsf_path(:id => @project, :folder_id => @folder),
-        :data => {:confirm => l(:text_are_you_sure)},            
-        :title => l(:title_delete), :class => 'icon icon-del') %> 
-    <% elsif @force_file_unlock_allowed %>
-      <%= link_to_if(@folder.unlockable?, l(:button_unlock),
+  <% if !@folder.new_record? && User.current.allowed_to?(:folder_manipulation, @project) && !@folder.system %>
+    <% unless @folder.locked? %>
+      <%= link_to(l(:button_lock), lock_dmsf_path(:id => @project, :folder_id => @folder),
+        :title => l(:title_lock_file), :class => 'icon icon-lock') %>
+    <% else %>
+      <%= link_to_if(@folder.unlockable? && (!@folder.locked_for_user? || @force_file_unlock_allowed), l(:button_unlock),
         unlock_dmsf_path(:id => @project, :folder_id => @folder),
-          :title => l(:title_unlock_file), :class => 'icon dmsf_icon-unlock')%>      
-    <% end %>   
+        :title => l(:title_unlock_file), :class => 'icon icon-unlock')%>
+    <% end %>
+    <% unless @folder.locked? %>
+      <% if @folder.notification %>
+        <%= link_to(l(:label_notifications_off),
+         notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
+          :title => l(:title_notifications_active_deactivate),
+          :class => 'icon icon-email') %>
+      <% else %>
+        <%= link_to(l(:label_notifications_on),
+          notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
+          :title => l(:title_notifications_not_active_activate),
+          :class => 'icon icon-email-add') %>
+      <% end %>
+    <% end %>
+    <%= link_to(l(:label_link_to),
+      new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder.id, :type => 'link_to'),
+      :title => l(:title_create_link), :class => 'icon icon-link') %>
+    <%= link_to(l(:button_copy), copy_folder_path(:id => @folder),
+      :title => l(:title_copy), :class => 'icon icon-copy') %>
+    <% unless @folder.locked? %>
+      <%= link_to(l(:button_delete), delete_dmsf_path(:id => @project, :folder_id => @folder),
+        :data => {:confirm => l(:text_are_you_sure)},
+        :title => l(:title_delete), :class => 'icon icon-del', :method => :delete) %>
+    <% end %>
   <% end %>
 </div>
 
@@ -85,7 +81,28 @@
     <p>      
       <%= f.text_area :description, :rows => 8, :class => 'wiki-edit' %>
     </p>
-    <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new(:project => @project).custom_field_values %>
+    <p>
+      <%= label_tag '', l(:label_permissions) %>
+      <% User.current.managed_roles(@project).each do |role| %>
+          <% checked = @folder.dmsf_folder_permissions.roles.exists?(:object_id => role.id) %>
+          <label class="inline"><%= check_box_tag 'permissions[role_ids][]', role.id, checked, :id => nil %> <%= role %></label>
+      <% end %>
+      <span id="user_permissions">
+        <br/>
+        <% checkboxes = users_checkboxes(@users) %>
+        <%= checkboxes %>
+      </span>
+        <% if checkboxes.present? %>
+        <br/>
+      <% end %>
+      <span class="search_for_watchers">
+        <%= link_to l(:label_user_search_add),
+          new_dmsf_folder_permissions_path(:project_id => @project, :dmsf_folder_id => @folder),
+          :remote => true,
+          :method => 'get' %>
+      </span>
+    </p>
+    <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new.custom_field_values %>
     <% values.each do |value| %>
       <p><%= custom_field_tag_with_label(:dmsf_folder, value) %></p>
     <% end %>    

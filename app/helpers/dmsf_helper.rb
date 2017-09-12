@@ -59,10 +59,12 @@ module DmsfHelper
     extension = File.extname(filename)
     extension = extension[1, extension.length-1]
     if File.exist?("#{File.dirname(__FILE__)}/../../assets/images/filetypes/#{extension}.png")
-      "filetype-#{extension}";
+      cls = "filetype-#{extension}";
     else
-      Redmine::MimeType.css_class_of(filename)
+      cls = Redmine::MimeType.css_class_of(filename)
     end
+    cls << ' dmsf-icon-file' if cls
+    cls
   end
 
   def plugin_asset_path(plugin, asset_type, source)
@@ -89,9 +91,31 @@ module DmsfHelper
     'plupload/js/i18n/en.js'
   end
 
+  def self.visible_folders(folders, project)
+    allowed = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
+      (project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
+    folders.reject{ |folder|
+      if folder.system
+        unless allowed
+          true
+        else
+          issue_id = folder.title.to_i
+          if issue_id > 0
+            issue = Issue.find_by_id issue_id
+            issue && !issue.visible?(User.current)
+          else
+            false
+          end
+        end
+      else
+        false
+      end
+    }
+  end
+
   def self.all_children_sorted(parent, pos, ident)
     # Folders && files && links
-    nodes = parent.dmsf_folders.visible + parent.dmsf_links.visible + parent.dmsf_files.visible
+    nodes = visible_folders(parent.dmsf_folders.visible.to_a, parent.is_a?(Project) ? parent : parent.project) + parent.dmsf_links.visible + parent.dmsf_files.visible
     # Alphabetical and type sort
     nodes.sort! do |x, y|
       if ((x.is_a?(DmsfFolder) || (x.is_a?(DmsfLink) && x.is_folder?)) &&
@@ -105,7 +129,9 @@ module DmsfHelper
       end
     end
     # Calculate position
-    step = 1.0 / (10 ** ident)
+    ident = 0 unless ident
+    pos = (10 ** 12) unless pos
+    step = (10 ** 12) / (10 ** (ident * 3))
     tree = []
     i = 0
     nodes.each do |x|
@@ -113,7 +139,7 @@ module DmsfHelper
         i += 1
         tree << [x, pos + (step * i)]
       else
-        tree << [x, pos + step + i]
+        tree << [x, pos + (step * (i + 1))]
       end
     end
     tree

@@ -20,13 +20,23 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% locked_for_user = subfolder && subfolder.locked_for_user? %>
-<% locked = subfolder && subfolder.locked? %>
-
-<td class="dmsf_checkbox"><%= check_box_tag(name, id, false,
-  :title => l(:title_check_for_zip_download_or_email), :id => "subfolder_#{id}") %></td>
+<td class="dmsf_checkbox">
+  <% unless (subfolder && subfolder.system) %>
+    <%= check_box_tag(name, id, false, :title => l(:title_check_for_zip_download_or_email), :id => "subfolder_#{id}") %>
+  <% end %>
+</td>
 <% if DmsfFolder.is_column_on?('id') %>
-    <td class="id"><%= link_to(subfolder.id, edit_dmsf_path(:id => project, :folder_id => subfolder)) %></td>
+    <td class="id">
+      <% if subfolder %>
+          <% if subfolder.system %>
+            <%= subfolder.id %>
+          <% else %>
+            <%= link_to(subfolder.id, edit_dmsf_path(:id => project, :folder_id => subfolder)) %>
+          <% end %>
+      <% else %>
+        <%= link_to(link.target_project_id, project_path(link.target_project)) %>
+      <% end %>
+    </td>
 <% end %>
 <% if DmsfFolder.is_column_on?('title') %>
   <td class="dmsf_title">
@@ -51,21 +61,7 @@
   <td class="dmsf_size"></td>
 <% end %>
 <% if DmsfFolder.is_column_on?('modified') %>
-  <td class="dmsf_modified"><%= format_time(subfolder.modified) if subfolder %>
-    <% if locked_for_user %>
-      <% if subfolder.lock.reverse[0].user %>
-        <%= link_to(image_tag(link ? 'locked_gray.png' : 'locked.png', :plugin => 'redmine_dmsf'),
-          user_path(subfolder.lock.reverse[0].user),
-          :title => l(:title_locked_by_user, :user => subfolder.lock.reverse[0].user)) %>
-      <% else %>
-        <%= content_tag(:span, image_tag(link ? 'locked_gray.png' : 'locked.png', :plugin => 'redmine_dmsf'),
-          :title => l(:notice_account_unknown_email)) %>
-      <% end %>
-    <% elsif locked %>
-      <%= content_tag(:span, image_tag(link ? 'lockedbycurrent_gray.png' : 'lockedbycurrent.png', :plugin => 'redmine_dmsf'),
-        :title => l(:title_locked_by_you)) %>
-    <% end %>
-  </td>
+  <td class="dmsf_modified"><%= format_time(subfolder.modified) if subfolder %></td>
 <% end %>
 <% if DmsfFolder.is_column_on?('version') %>
   <td class="dmsf_version"></td>
@@ -85,60 +81,51 @@
     <% end %>
 <% end %>
 <td class="dmsf_buttons">
-  <% if @folder_manipulation_allowed %>
-    <% unless locked_for_user %>
-      <% if subfolder %>
-        <%= link_to(image_tag('edit.png'),
-                    edit_dmsf_path(:id => project, :folder_id => subfolder),
-                    :title => l(:link_edit, :title => subfolder ? h(subfolder.title) : project.name)) %>
-        <% if locked %>
-          <% if subfolder.unlockable? %>
-            <%= link_to(image_tag('unlock.png', :plugin => 'redmine_dmsf'),
-              unlock_dmsf_path(:id => project, :folder_id => subfolder),
-              :title => l(:title_unlock_file)) %>
-          <% else %>
-            <span class="icon"></span>
-          <% end %>
-        <% else %>
-          <%= link_to(image_tag('lock.png', :plugin => 'redmine_dmsf'),
-            lock_dmsf_path(:id => project, :folder_id => subfolder),
-            :title => l(:title_lock_file)) %>
-        <% end %>
+  <% if @folder_manipulation_allowed && !(subfolder && subfolder.system) %>
+    <% if subfolder && subfolder.locked? %>
+      <span class="icon-only"></span>
+      <% if subfolder.unlockable? && (!subfolder.locked_for_user? || @force_file_unlock_allowed) %>
+        <%= link_to('', unlock_dmsf_path(:id => project, :folder_id => subfolder),
+          :title => subfolder.get_locked_title,
+          :class => 'icon-only icon-unlock') %>
       <% else %>
-        <%= link_to(image_tag('edit.png'), edit_root_dmsf_path(:id => @project),
-                    :title => l(:link_edit, :title => l(:link_documents))) %>
-        <span class="icon"></span>
-      <% end %>
-      <% if (subfolder && subfolder.notification) || (!subfolder && project.dmsf_notification) %>
-        <%= link_to(image_tag('notify.png', :plugin => 'redmine_dmsf'),
-          notify_deactivate_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:title_notifications_active_deactivate)) %>
-      <% else %>
-        <%= link_to(image_tag('notifynot.png', :plugin => 'redmine_dmsf'),
-          notify_activate_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:title_notifications_not_active_activate)) %>
-      <% end %>
-      <% if link %>
-        <%= link_to(image_tag('delete.png'), dmsf_link_path(link),
-          :data => {:confirm => l(:text_are_you_sure)},
-          :method => :delete, :title => l(:title_delete)) %>
-      <% else %>
-        <%= link_to(image_tag('delete.png'),
-          delete_dmsf_path(:id => project, :folder_id => subfolder),
-          :data => {:confirm => l(:text_are_you_sure)},
-          :title => l(:title_delete)) %>
+        <span class="icon-only icon-unlock" title="<%= subfolder.get_locked_title %>"></span>
       <% end %>
     <% else %>
-      <span class="icon"></span>
-      <% if (!locked_for_user || @force_file_unlock_allowed) && subfolder.unlockable? %>
-        <%= link_to(image_tag('unlock.png', :plugin => 'redmine_dmsf'),
-          unlock_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:title_unlock_file)) %>
+      <% if subfolder %>
+        <%= link_to('', edit_dmsf_path(:id => project, :folder_id => subfolder),
+          :title => l(:link_edit, :title => h(subfolder.title)),
+          :class => 'icon-only icon-edit') %>
+      <% else %>
+        <%= link_to('', edit_root_dmsf_path(:id => @project),
+          :title => l(:link_edit, :title => l(:link_documents)),
+          :class => 'icon-only icon-edit') %>
       <% end %>
+      <% if subfolder %>
+        <%= link_to('', lock_dmsf_path(:id => project, :folder_id => subfolder),
+          :title => l(:title_lock_file),
+          :class => 'icon-only icon-lock') %>
+      <% else %>
+        <span class="icon-only"></span>
+      <% end %>
+      <% if (subfolder && subfolder.notification) || (!subfolder && project.dmsf_notification) %>
+        <%= link_to('', notify_deactivate_dmsf_path(:id => project, :folder_id => subfolder),
+          :title => l(:title_notifications_active_deactivate),
+          :class => 'icon-only icon-email') %>
+      <% else %>
+        <%= link_to('', notify_activate_dmsf_path(:id => project, :folder_id => subfolder),
+          :title => l(:title_notifications_not_active_activate),
+          :class => 'icon-only icon-email-add') %>
+      <% end %>
+      <%= link_to('', link ? dmsf_link_path(link) : delete_dmsf_path(:id => project, :folder_id => subfolder),
+        :data => {:confirm => l(:text_are_you_sure)},
+        :title => l(:title_delete),
+        :method => :delete,
+        :class => 'icon-only icon-del') %>
     <% end %>
   <% end %>
 </td>
-<td id="dmsf_position" class="dmsf_invisible"><%= position %></td>
-<td class="dmsf_invisible">0</td>
-<td class="dmsf_invisible"><%= subfolder.modified.to_i if subfolder %></td>
-<td class="dmsf_invisible">0</td>
+<td id="dmsf_position" class="hol"><%= position %></td>
+<td class="hol">0</td>
+<td class="hol"><%= subfolder.modified.to_i if subfolder %></td>
+<td class="hol">0</td>

@@ -188,12 +188,6 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     assignments = @wf1.next_assignments(2)
     assert_equal assignments.size, 1
     assert_equal assignments[0].user_id, 2    
-  end 
-  
-  def test_assignments_to_users_str    
-    assignments = @wf1.next_assignments(2)
-    str = DmsfWorkflow.assignments_to_users_str(assignments)
-    assert_equal str, 'John Smith', str
   end
   
   def test_assign

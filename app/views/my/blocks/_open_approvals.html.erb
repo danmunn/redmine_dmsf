@@ -24,7 +24,7 @@
 <% if @user %>
   <% all_assignments = DmsfWorkflowStepAssignment.joins(
     'LEFT JOIN dmsf_workflow_step_actions ON dmsf_workflow_step_assignments.id = dmsf_workflow_step_actions.dmsf_workflow_step_assignment_id').where(
-    'dmsf_workflow_step_assignments.user_id = ? AND dmsf_workflow_step_actions.id IS NULL', @user.id).all %>
+    :dmsf_workflow_step_assignments => { :user_id => @user.id }, :dmsf_workflow_step_actions => { :id => nil }) %>
   <% all_assignments.each do |assignment| %>
     <% if assignment.dmsf_file_revision.dmsf_file.last_revision &&
         !assignment.dmsf_file_revision.dmsf_file.last_revision.deleted? &&
@@ -42,6 +42,7 @@
         <tr>
           <th><%= l(:field_project) %></th>
           <th><%= l(:field_label_dmsf_workflow) %></th>
+          <th><%= l(:field_status) %></th>
           <th><%= l(:label_document) %></th>
           <th><%= l(:field_folder) %></th>
           <th></th>
@@ -49,7 +50,7 @@
       </thead>
       <tbody>
         <% assignments.each do |assignment| %>
-          <tr id="assignment-<%= assignment.id %>" class="<%= cycle('odd', 'even') %>">
+          <tr id="assignment-<%= assignment.id %>">
             <td class="project">
               <% if assignment.dmsf_file_revision.dmsf_file.project %>
                 <%= link_to_project(assignment.dmsf_file_revision.dmsf_file.project) %>
@@ -59,6 +60,20 @@
               <% if assignment.dmsf_workflow_step && assignment.dmsf_workflow_step.dmsf_workflow %>
                   <%= link_to(h(assignment.dmsf_workflow_step.dmsf_workflow.name),
                     edit_dmsf_workflow_path(assignment.dmsf_workflow_step.dmsf_workflow)) %>
+              <% end %>
+            </td>
+            <td class="dmsf_workflow">
+              <% if assignment.dmsf_workflow_step.dmsf_workflow %>
+                  <%= link_to(
+                          assignment.dmsf_file_revision.workflow_str(false),
+                          log_dmsf_workflow_path(
+                              :project_id => assignment.dmsf_file_revision.dmsf_file.project_id,
+                              :id => assignment.dmsf_workflow_step.dmsf_workflow_id,
+                              :dmsf_file_revision_id => assignment.dmsf_file_revision_id),
+                          :title => assignment.dmsf_file_revision.workflow_tooltip,
+                          :remote => true) %>
+              <% else %>
+                  <%= assignment.dmsf_file_revision.workflow_str(false) %>
               <% end %>
             </td>
             <td class="title">
@@ -71,27 +86,22 @@
               <% if assignment.dmsf_file_revision %>
                 <% if assignment.dmsf_file_revision.dmsf_file.dmsf_folder %>
                   <%= link_to(h(assignment.dmsf_file_revision.dmsf_file.dmsf_folder.title),
-                    {:controller => 'dmsf', :action => 'show', :id => assignment.dmsf_file_revision.dmsf_file.project, :folder_id => assignment.dmsf_file_revision.dmsf_file.dmsf_folder}) %>
+                    {:controller => 'dmsf', :action => 'show', :id => assignment.dmsf_file_revision.dmsf_file.project,
+                     :folder_id => assignment.dmsf_file_revision.dmsf_file.dmsf_folder}) %>
                 <% elsif assignment.dmsf_file_revision.dmsf_file.project %>
-                  <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id => assignment.dmsf_file_revision.dmsf_file.project }) %>
+                  <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show',
+                                                   :id => assignment.dmsf_file_revision.dmsf_file.project }) %>
                 <% end %>
               <% end %>
             </td>
             <td class="dmsf_buttons">
-              <% if assignment.dmsf_workflow_step.dmsf_workflow %>
-                <% assigns = assignment.dmsf_workflow_step.dmsf_workflow.next_assignments(assignment.dmsf_file_revision.id) %>
-                <% index = assigns.find_index{|assign| assign.user_id == User.current.id} if assigns %>
-                <% if index %>
-                    <%= link_to(image_tag('waiting_for_approval.png', :plugin => 'redmine_dmsf'),
-                                action_dmsf_workflow_path(
-                                    :project_id => assignment.dmsf_file_revision.dmsf_file.project.id,
-                                    :id => assignment.dmsf_workflow_step.dmsf_workflow.id,
-                                    :dmsf_workflow_step_assignment_id => assigns[index].id,
-                                    :dmsf_file_revision_id => assignment.dmsf_file_revision.id),
-                                :title => l(:title_waiting_for_approval),
-                                :remote => true) %>
-                <% end %>
-              <% end %>
+              <%= render(:partial => 'dmsf_workflows/approval_workflow_button',
+                         :locals => {:file => assignment.dmsf_file_revision.dmsf_file,
+                                     :file_approval_allowed => User.current.allowed_to?(:file_approval,
+                                       assignment.dmsf_file_revision.dmsf_file.project),
+                                     :workflows_available => nil,
+                                     :project => assignment.dmsf_file_revision.dmsf_file.project,
+                                     :wf => assignment.dmsf_workflow_step.dmsf_workflow, :dmsf_link_id => nil }) %>
             </td>
           </tr>
         <% end %>

@@ -200,7 +200,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
            :user_ids => [@user_non_member.id]
     end
     assert_response :success
-    ws = DmsfWorkflowStep.order('id DESC').first
+    ws = DmsfWorkflowStep.order(:id => :desc).first
     assert_equal @wf1.id, ws.dmsf_workflow_id
     assert_equal 1, ws.step
     assert_equal '1st step', ws.name
@@ -214,7 +214,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       delete :remove_step, :step => @wfs1.id, :id => @wf1.id
     end
     assert_response :redirect
-    ws = DmsfWorkflowStep.where(:dmsf_workflow_id => @wf1.id).order('id ASC').first
+    ws = DmsfWorkflowStep.where(:dmsf_workflow_id => @wf1.id).order(:id =>:asc).first
     assert_equal 1, ws.step
   end
 

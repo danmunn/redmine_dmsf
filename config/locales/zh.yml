@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 zh:
-  dmsf: 文档管家
+  dmsf: 文档管家  # Custom fields tab title
   label_dmsf_file_plural: Documents
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses
@@ -154,6 +154,7 @@ zh:
   permission_force_file_unlock: 强制文件解锁
   permission_manage_workflows: Manage workflows
   permission_file_delete: Delete documents
+  permission_display_system_folders: Display system folders
   label_file: 文件
   field_folder: 件夹
   error_create_cycle_in_folder_dependency: create cycle in folder dependency
@@ -173,7 +174,7 @@ zh:
   error_file_can_not_be_created: 文件未能在存储目录中创建
   error_wrong_zip_encoding: 不正确的Zip编码
   warning_xapian_not_available: Xapian not available
-  menu_dmsf: 文档管家
+  menu_dmsf: 文档管家  # Project tab title
   label_physical_file_delete: 物理删除文件
   user_is_not_project_member: 您不是该项目的成员
   heading_access_downloads_emails: 存取次数
@@ -182,7 +183,7 @@ zh:
   label_dmsf_updated: Updated
   label_dmsf_downloaded: Downloaded
   title_total_size_of_all_files: 文件夹所有文件总大小
-  project_module_dmsf: 文档管家
+  project_module_dmsf: 文档管家  # Project module name
   warning_no_project_to_copy_file_to: No project to copy file to
   comment_copied_from: "Copied from %{source}"
   notice_file_copied: File copied
@@ -237,7 +238,6 @@ zh:
   label_dmsf_workflow_step_plural: Steps
   label_dmsf_workflow_approval: Approval
   label_dmsf_workflow_approval_plural: Approvals
-  label_dmsf: DMSF
   label_dmsf_wokflow_action_approve: Approve
   label_dmsf_wokflow_action_reject: Reject
   label_dmsf_wokflow_action_delegate: Delegate to
@@ -283,14 +283,14 @@ zh:
   title_create_link: Create a symbolic link
   label_link_from: Link from
   label_link_to: Link to
-  label_notifications_on: Notifications on
-  label_notifications_off: Notifications off
+  label_notifications_off: "关闭通知"
+  label_notifications_on: "开启通知"
   field_target_file: Source file
   title_download_entries: Download entries
   label_external: External
 
   label_link_name: Link name
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: Target folder
   label_source_folder: Source folder
   label_target_project: Target project
@@ -360,5 +360,12 @@ zh:
   label_webdav_use_project_names: Use project name for project folder
   note_webdav_use_project_names: Use project names instead of project identifier for project folders.
 
+  label_last_approver: Last approver
+
   label_act_as_attachable: Act as attachable
   note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+
+  label_user_search_add: Search for user to add
+
+  label_dmsf_attachments: DMS Attachments
+  label_basic_attachments: Basic Attachments

@@ -21,20 +21,15 @@
 module DmsfUploadHelper
   include Redmine::I18n
 
-  def self.commit_files_internal(commited_files, container, folder, controller)
+  def self.commit_files_internal(commited_files, project, folder, controller)
     failed_uploads = []
     files = []
-    if container.is_a?(Project)
-      project = container
-    else
-      project = container.project
-    end
     if commited_files && commited_files.is_a?(Hash)
       failed_uploads = []
       commited_files.each_value do |commited_file|
         name = commited_file[:name]
         new_revision = DmsfFileRevision.new
-        file = DmsfFile.visible.find_file_by_name(container, folder, name)
+        file = DmsfFile.visible.find_file_by_name(project, folder, name)
         unless file
           link = DmsfLink.find_link_by_file_name(project, folder, name)
           file = link.target_file if link
@@ -42,11 +37,10 @@ module DmsfUploadHelper
 
         unless file
           file = DmsfFile.new
-          file.container_type = container.class.name.demodulize
-          file.container_id = container.id
+          file.project_id = project.id
           file.name = name
           file.dmsf_folder = folder
-          file.notification = Setting.plugin_redmine_dmsf[:dmsf_default_notifications].present?
+          file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
           new_revision.minor_version = 0
           new_revision.major_version = 0
         else
@@ -66,8 +60,6 @@ module DmsfUploadHelper
           next
         end
 
-        commited_disk_filepath = "#{DmsfHelper.temp_dir}/#{commited_file[:disk_filename].gsub(/[\/\\]/,'')}"
-
         new_revision.dmsf_file = file
         new_revision.user = User.current
         new_revision.name = name
@@ -81,9 +73,9 @@ module DmsfUploadHelper
         else
           new_revision.increase_version(version)
         end
-        new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
-        new_revision.size = File.size(commited_disk_filepath)
-        new_revision.digest = DmsfFileRevision.create_digest commited_disk_filepath
+        new_revision.mime_type = commited_file[:mime_type]
+        new_revision.size = commited_file[:size]
+        new_revision.digest = DmsfFileRevision.create_digest commited_file[:tempfile_path]
 
         if commited_file[:custom_field_values].present?
           commited_file[:custom_field_values].each_with_index do |v, i|
@@ -104,7 +96,8 @@ module DmsfUploadHelper
         if new_revision.save
           new_revision.assign_workflow(commited_file[:dmsf_workflow_id])
           begin
-            FileUtils.mv(commited_disk_filepath, new_revision.disk_file)
+            FileUtils.mv commited_file[:tempfile_path], new_revision.disk_file(false)
+            FileUtils.chmod 'u=wr,g=r', new_revision.disk_file(false)
             file.set_last_revision new_revision
             files.push(file)
             if file.container.is_a?(Issue)
@@ -118,14 +111,36 @@ module DmsfUploadHelper
         else
           failed_uploads.push(commited_file)
         end
+        # Approval workflow
+        if commited_file[:workflow_id].present?
+          wf = DmsfWorkflow.find_by_id commited_file[:workflow_id]
+          if wf
+            # Assign the workflow
+            new_revision.set_workflow(wf.id, 'assign')
+            new_revision.assign_workflow(wf.id)
+            # Start the workflow
+            new_revision.set_workflow(wf.id, 'start')
+            if new_revision.save
+              wf.notify_users(project, new_revision, controller)
+              begin
+                file.lock!
+              rescue DmsfLockError => e
+                Rails.logger.warn e.message
+              end
+            else
+              Rails.logger.error l(:error_workflow_assign)
+            end
+          end
+        end
       end
-      if container.is_a?(Project) && ((folder && folder.notification?) || (!folder && project.dmsf_notification?))
+      # Notifications
+      if ((folder && folder.notification?) || (!folder && project.dmsf_notification?))
         begin
           recipients = DmsfMailer.get_notify_users(project, files)
           recipients.each do |u|
             DmsfMailer.files_updated(u, project, files).deliver
           end
-          if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+          if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
             unless recipients.empty?
               to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
               to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')

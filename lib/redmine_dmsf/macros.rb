@@ -162,9 +162,7 @@ Redmine::WikiFormatting::Macros.register do
       raise 'Not supported image format' unless file.image?
       url = url_for(:controller => :dmsf_files, :action => 'view', :id => file)
       file_view_url = url_for(:controller => :dmsf_files, :action => 'view', :id => file, :download => args[2])
-      if size && size.include?("%")
-        img = image_tag(url, :alt => file.title, :width => size, :height => size)
-      elsif size && size.include?("x")
+      if size
         img = image_tag(url, :alt => file.title, :size => size)
       elsif height
         img = image_tag(url, :alt => file.title, :width => 'auto', :height => height)

@@ -21,12 +21,14 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class ProjectPatchTest < RedmineDmsf::Test::UnitTest
-  fixtures :projects, :dmsf_files, :dmsf_file_revisions, :dmsf_links, :dmsf_folders, :dmsf_workflows
+  fixtures :projects, :dmsf_files, :dmsf_file_revisions, :dmsf_links, :dmsf_folders, :dmsf_workflows, :users
 
   def setup
     @project1 = Project.find_by_id 1
     @project2 = Project.find_by_id 2
     @project3 = Project.find_by_id 3
+    admin = User.find 1
+    User.current = admin
   end
 
   def test_truth
@@ -65,8 +67,8 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
 
   def test_dmsf_count
     hash = @project1.dmsf_count
-    assert_equal 7, hash[:files]
-    assert_equal 5, hash[:folders]
+    assert_equal 9, hash[:files]
+    assert_equal 7, hash[:folders]
   end
 
   def test_copy_approval_workflows
@@ -77,19 +79,19 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_copy_dmsf
-    assert_equal 3, @project1.dmsf_files.visible.count
-    assert_equal 2, @project1.dmsf_folders.visible.count
+    assert_equal 4, @project1.dmsf_files.visible.count
+    assert_equal 4, @project1.dmsf_folders.visible.count
     assert_equal 1, @project1.file_links.visible.count
     assert_equal 1, @project1.folder_links.visible.count
     assert_equal 1, @project1.url_links.visible.count
     assert_equal 0, @project3.dmsf_files.visible.count
-    assert_equal 0, @project3.dmsf_folders.visible.count
+    assert_equal 0, @project3.dmsf_folders.count
     assert_equal 0, @project3.file_links.visible.count
     assert_equal 0, @project3.folder_links.visible.count
     assert_equal 0, @project3.url_links.visible.count
     @project3.copy_dmsf(@project1)
-    assert_equal 3, @project3.dmsf_files.visible.count
-    assert_equal 2, @project3.dmsf_folders.visible.count
+    assert_equal 4, @project3.dmsf_files.visible.count
+    assert_equal 4, @project3.dmsf_folders.count
     assert_equal 1, @project3.file_links.visible.count
     assert_equal 1, @project3.folder_links.visible.count
     assert_equal 1, @project3.url_links.visible.count

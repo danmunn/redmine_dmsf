@@ -22,15 +22,18 @@ require File.expand_path('../../../test_helper', __FILE__)
 
 class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
 
-  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :projects, :users, :members, :roles
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :projects, :users, :members, :roles,
+           :member_roles
 
   def setup
-    DmsfFile.storage_path = File.expand_path '../../../../fixtures/files', __FILE__
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
     @jsmith = User.find_by_id 2
     @file1 = DmsfFile.find_by_id 1
     @folder1 = DmsfFolder.find_by_id 1
     Setting.rest_api_enabled = '1'
     @role = Role.find_by_id 1
+    @project1 = Project.find_by_id 1
+    @project1.enable_module! :dmsf
   end
 
   def test_truth
@@ -38,13 +41,14 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     assert_kind_of DmsfFolder, @folder1
     assert_kind_of DmsfFile, @file1
     assert_kind_of Role, @role
+    assert_kind_of Project, @project1
   end
 
   def test_list_folder
     @role.add_permission! :view_dmsf_folders
     token = Token.create!(:user => @jsmith, :action => 'api')
     #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml
-    get "/projects/1/dmsf.xml?key=#{token.value}"
+    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}"
     assert_response :success
     assert_equal 'application/xml', @response.content_type
     # <?xml version="1.0" encoding="UTF-8"?>
@@ -87,7 +91,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
         <dmsf_folder_id/>
       </dmsf_folder>
     }
-    post "/projects/1/dmsf/create.xml?&key=#{token.value}", payload, {"CONTENT_TYPE" => 'application/xml'}
+    post "/projects/#{@project1.id}/dmsf/create.xml?&key=#{token.value}", payload, {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_folder>
@@ -101,7 +105,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_title=Updated%20title
-    get "/projects/1/dmsf.xml?key=#{token.value}&folder_title=#{@folder1.title}"
+    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&folder_title=#{@folder1.title}"
     assert_response :success
     assert_equal 'application/xml', @response.content_type
     # <?xml version="1.0" encoding="UTF-8"?>
@@ -129,7 +133,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_title=Updated%20title
-    get "/projects/1/dmsf.xml?key=#{token.value}&folder_title=xxx"
+    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&folder_title=xxx"
     assert_response :missing
   end
 
@@ -137,7 +141,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KE" http://localhost:3000/projects/1/dmsf.json?folder_id=3
-    get "/projects/1/dmsf.xml?key=#{token.value}&folder_id=#{@folder1.id}"
+    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&folder_id=#{@folder1.id}"
     assert_response :success
     assert_equal 'application/xml', @response.content_type
     # <?xml version="1.0" encoding="UTF-8"?>
@@ -165,7 +169,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KE" http://localhost:3000/projects/1/dmsf.json?folder_id=3
-    get "/projects/1/dmsf.xml?key=#{token.value}&folder_id=99999999999"
+    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&folder_id=99999999999"
     assert_response :missing
   end
 
@@ -180,7 +184,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
           <description>A folder updated via REST API</description>
         </dmsf_folder>
     }
-    post "/projects/1/dmsf/save.xml?folder_id=1&key=#{token.value}", payload, {"CONTENT_TYPE" => 'application/xml'}
+    post "/projects/#{@project1.id}/dmsf/save.xml?folder_id=1&key=#{token.value}", payload, {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_folder>

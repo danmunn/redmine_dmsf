@@ -21,8 +21,14 @@ class DmsfFoldersCopyController < ApplicationController
 
   menu_item :dmsf
 
-  before_filter :find_folder
-  before_filter :authorize
+  before_action :find_folder
+  before_action :authorize
+  before_action :permissions
+
+  def permissions
+    render_403 unless DmsfFolder.permissions?(@folder)
+    true
+  end
 
   def new
     @target_project = DmsfFolder.allowed_target_projects_on_copy.detect {|p| p.id.to_s == params[:target_project_id]} if params[:target_project_id]
@@ -80,8 +86,8 @@ class DmsfFoldersCopyController < ApplicationController
   end
 
   def find_folder
-    @folder = DmsfFolder.visible.find(params[:id])
-    @project = @folder.project
+    @folder = DmsfFolder.visible.find_by_id(params[:id])
+    @project = @folder.project if @folder
   end
 
 end

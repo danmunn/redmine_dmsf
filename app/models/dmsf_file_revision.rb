@@ -28,6 +28,7 @@ class DmsfFileRevision < ActiveRecord::Base
   belongs_to :source_revision, :class_name => 'DmsfFileRevision', :foreign_key => 'source_dmsf_file_revision_id'
   belongs_to :user
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+  belongs_to :dmsf_workflow
   has_many :dmsf_file_revision_access, :dependent => :destroy
   has_many :dmsf_workflow_step_assignment, :dependent => :destroy
 
@@ -48,10 +49,8 @@ class DmsfFileRevision < ActiveRecord::Base
     :timestamp => "#{DmsfFileRevision.table_name}.updated_at",
     :author_key => "#{DmsfFileRevision.table_name}.user_id",
     :permission => :view_dmsf_file_revisions,
-    :scope => select("#{DmsfFileRevision.table_name}.*").
-      joins(:dmsf_file).joins(
-        "LEFT JOIN #{Project.table_name} ON #{DmsfFile.table_name}.container_id = #{Project.table_name}.id").
-      where("#{DmsfFile.table_name}.container_type = ?", 'Project').visible
+    :scope => DmsfFileRevision.joins(:dmsf_file).
+      joins("JOIN #{Project.table_name} ON #{Project.table_name}.id = #{DmsfFile.table_name}.project_id").visible
 
   validates :title, :presence => true
   validates_format_of :name, :with => DmsfFolder::INVALID_CHARACTERS,
@@ -71,6 +70,10 @@ class DmsfFileRevision < ActiveRecord::Base
 
   def self.filename_to_title(filename)
     remove_extension(filename).gsub(/_+/, ' ');
+  end
+ 
+  def self.easy_activity_custom_project_scope(scope, options, event_type)
+    scope.where(:dmsf_files => { :project_id => options[:project_ids] })
   end
 
   def delete(commit = false, force = true)
@@ -105,7 +108,7 @@ class DmsfFileRevision < ActiveRecord::Base
       d.save!
     end
     if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
-      dependencies = DmsfFileRevision.where(:disk_filename => self.disk_filename).all.count
+      dependencies = DmsfFileRevision.where(:disk_filename => self.disk_filename).count
       File.delete(self.disk_file) if dependencies <= 1 && File.exist?(self.disk_file)
     end
     RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
@@ -131,20 +134,37 @@ class DmsfFileRevision < ActiveRecord::Base
     "#{self.major_version}.#{self.minor_version}"
   end
   
-  def storage_base_path(project = nil)
-    project = self.dmsf_file.project unless project
-    path = DmsfFile.storage_path.dup
-    if self.dmsf_file && project
-      project_base = project.identifier.gsub(/[^\w\.\-]/,'_')
-      path << "/p_#{project_base}"
-    end
+  def storage_base_path
+    time = self.created_at || DateTime.now
+    path = time.strftime('%Y/%m')
+    DmsfFile.storage_path.join path
   end
 
-  def disk_file(project = nil)
-    project = self.dmsf_file.project unless project
-    path = storage_base_path(project)
+  def disk_file(search_if_not_exists = true)
+    path = self.storage_base_path
     FileUtils.mkdir_p(path) unless File.exist?(path)
-    "#{path}/#{self.disk_filename}"
+    filename = path.join(self.disk_filename)
+    if search_if_not_exists
+      unless File.exist?(filename)
+        # Let's search for the physical file in source revisions
+        revisions = self.dmsf_file.dmsf_file_revisions.where(['id < ?', self.id]).order(:id => :desc)
+        revisions.each do |rev|
+          filename = rev.disk_file
+          break if File.exist?(filename)
+        end
+      end
+    end
+    filename
+  end
+
+  def new_storage_filename
+    raise DmsfAccessError, 'File id is not set' unless self.dmsf_file.id
+    filename = DmsfHelper.sanitize_filename(self.name)
+    timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
+    while File.exist?(storage_base_path.join("#{timestamp}_#{self.dmsf_file.id}_#{filename}"))
+      timestamp.succ!
+    end
+    "#{timestamp}_#{self.dmsf_file.id}_#{filename}"
   end
 
   def detect_content_type
@@ -227,16 +247,6 @@ class DmsfFileRevision < ActiveRecord::Base
     end
   end
 
-  def new_storage_filename
-    raise DmsfAccessError, 'File id is not set' unless self.dmsf_file.id
-    filename = DmsfHelper.sanitize_filename(self.name)
-    timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
-    while File.exist?(File.join(storage_base_path, "#{timestamp}_#{self.dmsf_file.id}_#{filename}"))
-      timestamp.succ!
-    end
-    "#{timestamp}_#{self.dmsf_file.id}_#{filename}"
-  end
-
   def copy_file_content(open_file)
     File.open(self.disk_file, 'wb') do |f|
       while (buffer = open_file.read(8192))
@@ -309,6 +319,27 @@ class DmsfFileRevision < ActiveRecord::Base
   
   def propfind_cache_key
     dmsf_file.propfind_cache_key
+  end
+
+  def workflow_tooltip
+    tooltip = ''
+    if self.dmsf_workflow
+      case workflow
+        when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, DmsfWorkflow::STATE_ASSIGNED
+          assignments = self.dmsf_workflow.next_assignments(self.id)
+          if assignments
+            assignments.each_with_index do |assignment, index|
+              tooltip << ', ' if index > 0
+              tooltip << assignment.user.name
+            end
+          end
+        when DmsfWorkflow::STATE_APPROVED, DmsfWorkflow::STATE_REJECTED
+          action = DmsfWorkflowStepAction.joins(:dmsf_workflow_step_assignment).where(
+            ['dmsf_workflow_step_assignments.dmsf_file_revision_id', self.id]).order('dmsf_workflow_step_actions.id').last
+          tooltip << action.author.name if action
+      end
+    end
+    tooltip
   end
 
 end

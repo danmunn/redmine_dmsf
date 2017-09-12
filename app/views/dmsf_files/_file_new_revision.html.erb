@@ -78,11 +78,12 @@
         <div class="box">
           <p>
             <%= label_tag('file_upload', l(:label_new_content)) %>
-            <%= render :partial => 'dmsf_upload/form', :locals => { :multiple => false } %>
+            <%= render :partial => 'dmsf_upload/form',
+                       :locals => { :multiple => false, :container => nil, :description => false, :awf => false } %>
           </p>
         </div>
         <p>          
-          <%= f.text_area(:comment, :rows => 2, :label => l(:label_comment)) %>
+          <%= f.text_area(:comment, :rows => 2, :label => l(:label_comment), :class => 'wiki-edit') %>
         </p>          
         <%= f.submit l(:submit_create) %>
       <% end %>

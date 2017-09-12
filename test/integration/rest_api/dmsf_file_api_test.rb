@@ -22,11 +22,11 @@ require File.expand_path('../../../test_helper', __FILE__)
 
 class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
 
-  fixtures :projects, :users, :dmsf_files, :dmsf_file_revisions, :members, :roles
+  fixtures :projects, :users, :dmsf_files, :dmsf_file_revisions, :members, :roles, :member_roles
 
   def setup
-    DmsfFile.storage_path = File.expand_path '../../../fixtures/files', __FILE__
-    timestamp = DateTime.now.strftime("%y%m%d%H%M")
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
+    timestamp = DateTime.now.strftime('%y%m%d%H%M')
     @tmp_storage_path = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
     Dir.mkdir(@tmp_storage_path) unless File.directory?(@tmp_storage_path)
     @jsmith = User.find_by_id 2
@@ -34,6 +34,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     Setting.rest_api_enabled = '1'
     @role = Role.find_by_id 1
     @project1 = Project.find_by_id 1
+    @project1.enable_module! :dmsf
   end
 
   def teardown
@@ -63,16 +64,22 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     # <dmsf_file>
     #   <id>1</id>
     #   <name>test.txt</name>
-    #   <container_id>1</container_id>
-    #   <container_type>Project</container_type>
+    #   <project_id>1</project_id>
     #   <version>1.0</version>
+    #   <mime_type>text/plain</mime_type>
+    #   <digest>81dc9bdb52d04dc20036dbd8313ed055</digest>
+    #   <size>4</size>
+    #   <description>Some file :-)</description>
     #   <content_url>/dmsf/files/1/download</content_url>
     # </dmsf_file>
     assert_select 'dmsf_file > id', :text => @file1.id.to_s
     assert_select 'dmsf_file > name', :text => @file1.name
-    assert_select 'dmsf_file > container_id', :text => @file1.container_id.to_s
-    assert_select 'dmsf_file > container_type', :text => @file1.container_type.to_s
+    assert_select 'dmsf_file > project_id', :text => @file1.project_id.to_s
     assert_select 'dmsf_file > version', :text => "#{@file1.last_revision.major_version}.#{@file1.last_revision.minor_version}"
+    assert_select 'dmsf_file > mime_type', :text => @file1.last_revision.mime_type
+    assert_select 'dmsf_file > digest', :text => @file1.last_revision.digest
+    assert_select 'dmsf_file > size', :text => @file1.last_revision.size.to_s
+    assert_select 'dmsf_file > description', :text => @file1.last_revision.description
     assert_select 'dmsf_file > content_url', :text => "/dmsf/files/#{@file1.id}/download"
     #curl -v -H "Content-Type: application/octet-stream" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/41532/download > file.txt
     get "/dmsf/files/#{@file1.id}/download?key=#{token.value}"
@@ -80,7 +87,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_upload_document
-    DmsfFile.storage_path = @tmp_storage_path
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @tmp_storage_path
     @role.add_permission! :file_manipulation
     token = Token.create!(:user => @jsmith, :action => 'api')
     #curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif

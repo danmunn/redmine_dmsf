@@ -24,16 +24,24 @@ class DmsfFilesController < ApplicationController
 
   menu_item :dmsf
 
-  before_filter :find_file, :except => [:delete_revision]
-  before_filter :find_revision, :only => [:delete_revision]
-  before_filter :authorize
-  before_filter :tree_view, :only => [:delete]
+  before_action :find_file, :except => [:delete_revision]
+  before_action :find_revision, :only => [:delete_revision]
+  before_action :authorize
+  before_action :tree_view, :only => [:delete]
+  before_action :permissions
 
   accept_api_auth :show
 
   helper :all
   helper :dmsf_workflows
   helper :dmsf
+
+  def permissions
+    if @file
+      render_403 unless DmsfFolder.permissions?(@file.dmsf_folder)
+    end
+    true
+  end
 
   def view
     begin
@@ -57,6 +65,8 @@ class DmsfFilesController < ApplicationController
       else
         title_format = Setting.plugin_redmine_dmsf['dmsf_global_title_format']
       end
+      # IE has got a tendency to cache files
+      expires_in(0.year, "must-revalidate" => true)
       send_file(@revision.disk_file,
         :filename => filename_for_content_disposition(@revision.formatted_name(title_format)),
         :type => @revision.detect_content_type,
@@ -121,10 +131,12 @@ class DmsfFilesController < ApplicationController
           end
         else
           upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, file_upload)
-          revision.size = upload.size
-          revision.disk_filename = revision.new_storage_filename
-          revision.mime_type = upload.mime_type
-          revision.digest = DmsfFileRevision.create_digest upload.disk_file
+          if upload
+            revision.size = upload.size
+            revision.disk_filename = revision.new_storage_filename
+            revision.mime_type = upload.mime_type
+            revision.digest = DmsfFileRevision.create_digest upload.tempfile_path
+          end
         end
 
         # Custom fields
@@ -139,7 +151,7 @@ class DmsfFilesController < ApplicationController
         if revision.save
           revision.assign_workflow(params[:dmsf_workflow_id])
           if upload
-            FileUtils.mv(upload.disk_file, revision.disk_file)
+            FileUtils.mv(upload.tempfile_path, revision.disk_file(false))
           end
           if @file.locked? && !@file.locks.empty?
             begin
@@ -158,7 +170,7 @@ class DmsfFilesController < ApplicationController
               recipients.each do |u|
                 DmsfMailer.files_updated(u, @project, [@file]).deliver
               end
-              if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+              if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
                 unless recipients.empty?
                   to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                   to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
@@ -184,14 +196,14 @@ class DmsfFilesController < ApplicationController
       commit = params[:commit] == 'yes'
       if @file.delete(commit)
         flash[:notice] = l(:notice_file_deleted)
-        if commit && (@file.container_type == 'Project')
+        if commit
           log_activity('deleted')
           begin
             recipients = DmsfMailer.get_notify_users(@project, [@file])
             recipients.each do |u|
               DmsfMailer.files_deleted(u, @project, [@file]).deliver
             end
-            if Setting.plugin_redmine_dmsf[:dmsf_display_notified_recipients] == '1'
+            if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
               unless recipients.empty?
                 to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                 to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
@@ -300,7 +312,7 @@ class DmsfFilesController < ApplicationController
                   :disposition => 'inline'
       end
     else
-      render :nothing => true, :status => 404
+      head 404
     end
   end
 

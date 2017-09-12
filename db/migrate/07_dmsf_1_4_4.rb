@@ -46,9 +46,9 @@ class Dmsf144 < ActiveRecord::Migration
     #               data into it, which should enable us to run checks we need, not as
     #               efficient, however compatible across the board.
     DmsfFileLock.reset_column_information
-    DmsfFileLock.select("MAX(#{DmsfFileLock.table_name}.id) id").
-      order("MAX(#{DmsfFileLock.table_name}.id) DESC").
-      group("#{DmsfFileLock.table_name}.dmsf_file_id").
+    DmsfFileLock.select('MAX(id) id').
+      order('MAX(id) DESC').
+      group('dmsf_file_id').
       each do |lock|
       lock.reload 
       if (lock.locked)
@@ -66,7 +66,7 @@ class Dmsf144 < ActiveRecord::Migration
 
     say "Preserving #{do_not_delete.count} file lock(s) found in old schema"
 
-    DmsfFileLock.delete_all(['id NOT IN (?)', do_not_delete])
+    DmsfFileLock.where(['id NOT IN (?)', do_not_delete]).delete_all
 
     #We need to force our newly found
 
@@ -88,13 +88,13 @@ class Dmsf144 < ActiveRecord::Migration
     begin
       DmsfFileRevision.visible.each {|rev|
         next if rev.project.nil?
-        existing = "#{DmsfFile.storage_path}/#{rev.disk_filename}"
-        new_path = rev.disk_file
+        existing = DmsfFile.storage_path.join rev.disk_filename
+        new_path = rev.disk_file(false)
         begin
           if File.exist?(existing)
             if File.exist?(new_path)
               rev.disk_filename = rev.new_storage_filename
-              new_path = rev.disk_file
+              new_path = rev.disk_file(false)
               rev.save!
             end
             #Ensure the project path exists
@@ -123,7 +123,7 @@ class Dmsf144 < ActiveRecord::Migration
     #Data cleanup - delete all expired locks, or any folder locks
     DmsfFileLock.reset_column_information
     say 'Removing all expired and/or folder locks'
-    DmsfFileLock.delete_all ['expires_at < ? OR entity_type = 1', Time.now]
+    DmsfFileLock.where(['expires_at < ? OR entity_type = 1', Time.now]).delete_all
 
     say 'Changing all records to be locked'
     DmsfFileLock.update_all ['locked = ?', true]
@@ -142,13 +142,13 @@ class Dmsf144 < ActiveRecord::Migration
       DmsfFileRevision.visible.each {|rev|
         next if rev.project.nil?
         project = rev.project.identifier.gsub(/[^\w\.\-]/,'_')
-        existing = "#{DmsfFile.storage_path}/p_#{project}/#{rev.disk_filename}"
-        new_path = "#{DmsfFile.storage_path}/#{rev.disk_filename}"
+        existing = DmsfFile.storage_path.join("p_#{project}/#{rev.disk_filename}")
+        new_path = DmsfFile.storage_path.join(rev.disk_filename)
         if File.exist?(existing)
           if File.exist?(new_path)
             rev.disk_filename = rev.new_storage_filename
             rev.save!
-            new_path = "#{DmsfFile.storage_path}/#{rev.disk_filename}"
+            new_path = DmsfFile.storage_path.join(rev.disk_filename)
           end
           FileUtils.mv(existing, new_path)
         end

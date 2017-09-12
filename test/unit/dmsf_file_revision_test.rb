@@ -22,18 +22,21 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles, :members,
-           :member_roles, :enabled_modules, :enumerations, :dmsf_locks
+           :member_roles, :enabled_modules, :enumerations, :dmsf_locks, :dmsf_workflows, :dmsf_workflow_steps,
+           :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions
          
   def setup
     @revision1 = DmsfFileRevision.find_by_id 1
     @revision2 = DmsfFileRevision.find_by_id 2
     @revision5 = DmsfFileRevision.find_by_id 5
+    @wf1 = DmsfWorkflow.find_by_id 1
   end
   
   def test_truth
     assert_kind_of DmsfFileRevision, @revision1
     assert_kind_of DmsfFileRevision, @revision2
     assert_kind_of DmsfFileRevision, @revision5
+    assert_kind_of DmsfWorkflow, @wf1
   end
   
   def test_delete_restore      
@@ -57,9 +60,8 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   def test_new_storage_filename
     # Create a file.
     f = DmsfFile.new
-    f.container_type = 'Project'
-    f.container_id = 1
-    f.name = "Testfile.txt"
+    f.project_id = 1
+    f.name = 'Testfile.txt'
     f.dmsf_folder = nil
     f.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
     f.save
@@ -71,7 +73,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     r1.dmsf_file = f
     r1.user = User.current
     r1.name = "Testfile.txt"
-    r1.title = DmsfFileRevision.filename_to_title("Testfile.txt")
+    r1.title = DmsfFileRevision.filename_to_title('Testfile.txt')
     r1.description = nil
     r1.comment = nil
     r1.mime_type = nil
@@ -100,7 +102,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert r1.save
     # Just make sure the file exists
     File.open(r1.disk_file, 'wb') do |f|
-        f.write("1234")
+        f.write('1234')
     end
     
     # Directly after the file has been stored generate the r2 storage filename.
@@ -112,8 +114,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_save_and_destroy_with_cache
-    RedmineDmsf::Webdav::Cache.init_testcache
-    
+    Rails.cache.clear
     # save
     cache_key = @revision1.propfind_cache_key
     RedmineDmsf::Webdav::Cache.write(cache_key, "")
@@ -123,7 +124,6 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
     RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
-    
     # destroy
     RedmineDmsf::Webdav::Cache.write(cache_key, "")
     assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
@@ -131,7 +131,6 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     @revision1.destroy
     assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    
     # save!
     cache_key = @revision2.propfind_cache_key
     RedmineDmsf::Webdav::Cache.write(cache_key, "")
@@ -140,8 +139,11 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     @revision2.save!
     assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
     assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    
-    RedmineDmsf::Webdav::Cache.init_nullcache
+  end
+
+  def test_workflow_tooltip
+    @revision2.set_workflow @wf1.id, 'start'
+    assert_equal 'John Smith', @revision2.workflow_tooltip
   end
 
 end

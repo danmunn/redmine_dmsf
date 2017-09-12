@@ -36,17 +36,17 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-    DmsfFile.storage_path = File.expand_path '../../../fixtures/files', __FILE__
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
     User.current = nil        
   end
-  
-  def test_truth    
+
+  def test_truth
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
     assert_kind_of Role, @role
     assert_kind_of DmsfFolder, @folder6
   end
-  
+
   def test_mkcol_requires_authentication
     xml_http_request  :mkcol, '/dmsf/webdav/test1'
     assert_response 401
@@ -106,7 +106,7 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
       assert_response :success
       Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
       if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-        project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+        project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
         xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test2", nil, @jsmith
         assert_response 404
         xml_http_request :mkcol, "/dmsf/webdav/#{project1_uri}/test3", nil, @jsmith

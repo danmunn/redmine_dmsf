@@ -26,20 +26,122 @@ module RedmineDmsf
         base.send(:include, InstanceMethods)
         base.class_eval do
           unloadable
-          alias_method_chain :copy_from, :dmsf_copy_from
-          has_many :dmsf_files, -> { where(dmsf_folder_id: nil, container_type: 'Issue').order(:name) },
-            :class_name => 'DmsfFile', :foreign_key => 'container_id', :dependent => :destroy
+          before_destroy :delete_system_folder
         end
       end
 
       module InstanceMethods
 
-        def copy_from_with_dmsf_copy_from(arg, options={})
-          copy_from_without_dmsf_copy_from(arg, options)
-          # issue = @copied_from
-          # self.dmsf_files = issue.dmsf_files.map do |dmsf_file|
-          #   dmsf_file.copy_to(self)
-          # end
+        def save_dmsf_attachments(dmsf_attachments)
+          @saved_dmsf_attachments = []
+          if dmsf_attachments
+            dmsf_attachments = dmsf_attachments.map(&:last)
+            dmsf_attachments.each do |dmsf_attachment|
+              a = Attachment.find_by_token(dmsf_attachment[:token])
+              @saved_dmsf_attachments << a if a
+            end
+          end
+        end
+
+        def saved_dmsf_attachments
+          @saved_dmsf_attachments || []
+        end
+
+        def save_dmsf_links(dmsf_links)
+          @saved_dmsf_links = []
+          if dmsf_links
+            ids = dmsf_links.map(&:last)
+            ids.each do |id|
+              l = DmsfLink.find_by_id(id)
+              @saved_dmsf_links << l if l
+            end
+          end
+        end
+
+        def saved_dmsf_links
+          @saved_dmsf_links || []
+        end
+
+        def save_dmsf_attachments_wfs(dmsf_attachments_wfs, dmsf_attachments)
+          if dmsf_attachments_wfs
+            @dmsf_attachments_wfs = {}
+            dmsf_attachments_wfs.each do |attachment_id, approval_workflow_id|
+              attachment = dmsf_attachments[attachment_id]
+              if attachment
+                a = Attachment.find_by_token(attachment[:token])
+                wf = DmsfWorkflow.find_by_id approval_workflow_id
+                @dmsf_attachments_wfs[a.id] = wf if wf && a
+              end
+            end
+          end
+        end
+
+        def saved_dmsf_attachments_wfs
+          @dmsf_attachments_wfs || []
+        end
+
+        def save_dmsf_links_wfs(dmsf_links_wfs)
+          if dmsf_links_wfs
+            @saved_dmsf_links_wfs = {}
+            dmsf_links_wfs.each do |dmsf_link_id, approval_workflow_id|
+              wf = DmsfWorkflow.find_by_id approval_workflow_id
+              @saved_dmsf_links_wfs[dmsf_link_id.to_i] = wf if wf
+            end
+          end
+        end
+
+        def saved_dmsf_links_wfs
+          @saved_dmsf_links_wfs || {}
+        end
+
+        def system_folder(create = false)
+          parent = DmsfFolder.system.where(:project_id => self.project_id, :title => '.Issues').first
+          if create && !parent
+            parent = DmsfFolder.new
+            parent.project_id = self.project_id
+            parent.title = '.Issues'
+            parent.description = 'Documents assigned to issues'
+            parent.user_id = User.anonymous.id
+            parent.system = true
+            parent.save
+          end
+          if parent
+            folder = DmsfFolder.system.where(['project_id = ? AND dmsf_folder_id = ? AND CAST(title AS DECIMAL) = ?',
+              self.project_id, parent.id, self.id]).first
+            if create && !folder
+              folder = DmsfFolder.new
+              folder.dmsf_folder_id = parent.id
+              folder.project_id = self.project_id
+              folder.title = "#{self.id} - #{self.subject}"
+              folder.user_id = User.anonymous.id
+              folder.system = true
+              folder.save
+            end
+          end
+          folder
+        end
+
+        def dmsf_files
+          files = []
+          folder = self.system_folder
+          if folder
+            files = folder.dmsf_files.to_a
+          end
+          files
+        end
+
+        def dmsf_links
+          links = []
+          folder = self.system_folder
+          if folder
+            links = folder.dmsf_links
+          end
+          links
+        end
+
+        def delete_system_folder
+          folder = self.system_folder
+          folder.destroy if folder
         end
 
         def dmsf_file_added(dmsf_file)
@@ -65,6 +167,7 @@ module RedmineDmsf
           )
           current_journal.save
         end
+
       end
 
     end

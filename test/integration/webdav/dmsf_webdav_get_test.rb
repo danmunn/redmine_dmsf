@@ -35,7 +35,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-    DmsfFile.storage_path = File.expand_path '../../../fixtures/files', __FILE__
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
     User.current = nil
   end
 
@@ -98,7 +98,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-      project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1), /\W/)
+      project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
       get "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
       assert_response 404
       get "/dmsf/webdav/#{project1_uri}/test.txt", nil, @admin

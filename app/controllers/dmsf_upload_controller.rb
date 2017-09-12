@@ -24,15 +24,21 @@ class DmsfUploadController < ApplicationController
 
   menu_item :dmsf
 
-  before_filter :find_project, :except => [:upload, :delete_dmsf_attachment]
-  before_filter :authorize, :except => [:upload, :delete_dmsf_attachment]
-  before_filter :authorize_global, :only => [:upload, :delete_dmsf_attachment]
-  before_filter :find_folder, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment]
+  before_action :find_project, :except => [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :authorize, :except => [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :authorize_global, :only => [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :find_folder, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :permissions, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
 
   helper :all
   helper :dmsf_workflows
 
   accept_api_auth :upload, :commit
+
+  def permissions
+    render_403 unless DmsfFolder.permissions?(@folder)
+    true
+  end
 
   def upload_files
     uploaded_files = params[:dmsf_attachments]
@@ -56,42 +62,23 @@ class DmsfUploadController < ApplicationController
 
   # async single file upload handling
   def upload_file
-    @tempfile = params[:file]
-    unless @tempfile.original_filename
-      render_404
-      return
-    end
-    @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
-    target = "#{DmsfHelper.temp_dir}/#{@disk_filename}"
     begin
-      FileUtils.cp @tempfile.path, target
-      FileUtils.chmod 'u=wr,g=r', target
-    rescue Exception => e
-      Rails.logger.error e.message
-    end
-    if File.size(target) <= 0
-      begin
-        File.delete target
-      rescue Exception => e
-        Rails.logger.error e.message
+      @tempfile = params[:file]
+      unless @tempfile.original_filename
+        render_404
+        return
       end
-      render :layout => nil, :json => { :jsonrpc => '2.0',
-        :error => {
-          :code => 103,
-          :message => l(:header_minimum_filesize),
-          :details => l(:error_minimum_filesize,
-          :file => @tempfile.original_filename.to_s)
-        }
-      }
-    else
+      @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
       render :layout => false
+    ensure
+      @tempfile.close false
     end
   end
 
-  # REST API document upload
+  # REST API and Redmine attachment form
   def upload
     unless request.content_type == 'application/octet-stream'
-      render :nothing => true, :status => 406
+      head 406
       return
     end
 
@@ -127,7 +114,10 @@ class DmsfUploadController < ApplicationController
       uploaded_files = attachments.select { |key, value| key == 'uploaded_file'}
       uploaded_files.each_value do |uploaded_file|
         upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
-        uploaded_file[:disk_filename] = upload.disk_filename
+        if upload
+          uploaded_file[:disk_filename] = upload.disk_filename
+          uploaded_file[:tempfile_path] = upload.tempfile_path
+        end
       end
       commit_files_internal uploaded_files
     end
@@ -136,6 +126,13 @@ class DmsfUploadController < ApplicationController
   def delete_dmsf_attachment
     attachment = Attachment.find(params[:id])
     attachment.destroy
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
+  def delete_dmsf_link_attachment
+    link = DmsfLink.find(params[:id])
+    link.destroy
   rescue ActiveRecord::RecordNotFound
     render_404
   end

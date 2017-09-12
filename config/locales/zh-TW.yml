@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 zh-TW:
-  dmsf: 文件總管
+  dmsf: 文件總管  # Custom fields tab title
   label_dmsf_file_plural: 文件檔案
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses
@@ -84,7 +84,7 @@ zh-TW:
   title_lock_file: 鎖定檔案。禁止其它使用者修改。
   title_download_checked: 以ZIP下載所選取的檔案
   title_send_checked_by_email: 以電子郵件發送所選取的檔案
-  link_user_preferences: 你的DMSF的系統偏好設定
+  link_user_preferences: 你的DMS的系統偏好設定
   heading_send_documents_by_email: 電子郵件寄送檔案
   label_email_from: 寄件者
   label_email_to: 收件者
@@ -154,6 +154,7 @@ zh-TW:
   permission_force_file_unlock: 強制解除檔案鎖定
   permission_manage_workflows: Manage workflows
   permission_file_delete: Delete documents
+  permission_display_system_folders: Display system folders
   label_file: 檔案
   field_folder: 資料夾
   error_create_cycle_in_folder_dependency: 資料夾之間的關係，不得為一個cycle循環。
@@ -173,7 +174,7 @@ zh-TW:
   error_file_can_not_be_created: 在存儲目錄裡，無法建立檔案。
   error_wrong_zip_encoding: 不正確的Zip encoding
   warning_xapian_not_available: Xapian not available
-  menu_dmsf: 文件總管
+  menu_dmsf: 文件總管  # Project tab title
   label_physical_file_delete: 永久刪除檔案
   user_is_not_project_member: 您不是專案的成員之一
   heading_access_downloads_emails: 下載/電子郵件
@@ -182,7 +183,7 @@ zh-TW:
   label_dmsf_updated: Updated
   label_dmsf_downloaded: Downloaded
   title_total_size_of_all_files: 資料夾所有檔案的檔案大小
-  project_module_dmsf: 文件總管
+  project_module_dmsf: 文件總管  # Project module name
   warning_no_project_to_copy_file_to: No project to copy file to
   comment_copied_from: "Copied from %{source}"
   notice_file_copied: File copied
@@ -237,7 +238,6 @@ zh-TW:
   label_dmsf_workflow_step_plural: 步驟
   label_dmsf_workflow_approval: 批准
   label_dmsf_workflow_approval_plural: 批准
-  label_dmsf: 文件總管
   label_dmsf_wokflow_action_approve: 批准
   label_dmsf_wokflow_action_reject: 拒絕
   label_dmsf_wokflow_action_delegate: 委派給
@@ -283,14 +283,14 @@ zh-TW:
   title_create_link: Create a symbolic link
   label_link_from: Link from
   label_link_to: Link to
-  label_notifications_on: Notifications on
-  label_notifications_off: Notifications off
+  label_notifications_off: "关闭通知"
+  label_notifications_on: "开启通知"
   field_target_file: Source file
   title_download_entries: Download entries
   label_external: External
 
   label_link_name: Link name
-  label_link_external_url: URL
+  field_external_url: URL
   label_target_folder: Target folder
   label_source_folder: Source folder
   label_target_project: Target project
@@ -360,5 +360,12 @@ zh-TW:
   label_webdav_use_project_names: Use project name for project folder
   note_webdav_use_project_names: Use project names instead of project identifier for project folders.
 
+  label_last_approver: Last approver
+
   label_act_as_attachable: Act as attachable
   note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+
+  label_user_search_add: Search for user to add
+
+  label_dmsf_attachments: DMS Attachments
+  label_basic_attachments: Basic Attachments

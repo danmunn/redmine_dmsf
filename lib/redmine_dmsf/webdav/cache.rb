@@ -23,62 +23,33 @@ module RedmineDmsf
   module Webdav
     class Cache
       def self.read(name, options = nil)
-        init unless defined?(@@WebDAVCache)
-        @@WebDAVCache.read(name, options) unless name.blank?
+        Rails.cache.read(name, options)
       end
-      
+
       def self.write(name, value, options = nil)
-        init unless defined?(@@WebDAVCache)
-        @@WebDAVCache.write(name, value, options) unless name.blank?
+        Rails.cache.write(name, value, options)
       end
-      
+
       def self.delete(name, options = nil)
-        init unless defined?(@@WebDAVCache)
-        @@WebDAVCache.delete(name, options) unless name.blank?
+        Rails.cache.delete(name, options)
       end
-      
+
       def self.exist?(name, options = nil)
-        init unless defined?(@@WebDAVCache)
-        @@WebDAVCache.exist?(name, options) unless name.blank?
+        Rails.cache.exist?(name, options)
+      end
+
+      def self.clear
+        Rails.cache.clear
       end
       
       def self.invalidate_item(key)
-        init unless defined?(@@WebDAVCache)
         return if key.blank?
         # Write an .invalid entry to notify anyone that is currently creating a response
-        # that that response is invalid and should not be cached
-        @@WebDAVCache.write("#{key}.invalid", expires_in: 60.seconds)
+        self.write("#{key}.invalid", expires_in: 60.seconds)
         # Delete any existing entry in the cache
-        @@WebDAVCache.delete(key)
+        self.delete(key)
       end
-      
-      def self.cache
-        @@WebDAVCache
-      end
-      
-      def self.init_testcache
-        #puts "Webdav::Cache: Enable MemoryStore cache."
-        @@WebDAVCache = ActiveSupport::Cache::MemoryStore.new(:namespace => "RedmineDmsfWebDAV")
-      end
-      
-      def self.init_nullcache
-        #puts "Webdav::Cache: Disable cache."
-        @@WebDAVCache = ActiveSupport::Cache::NullStore.new
-      end
-      
-      private
-      
-      def self.init
-        if Setting.plugin_redmine_dmsf['dmsf_memcached_servers'].nil? || Setting.plugin_redmine_dmsf['dmsf_memcached_servers'].empty?
-          # Disable caching by using a null cache
-          Rails.logger.info "Webdav::Cache: Cache disabled!"
-          @@WebDAVCache = ActiveSupport::Cache::NullStore.new
-        else
-          # Create cache using the provided server address
-          Rails.logger.info "Webdav::Cache: Cache enabled, using memcached server '#{Setting.plugin_redmine_dmsf['dmsf_memcached_servers']}'"
-          @@WebDAVCache = ActiveSupport::Cache::MemCacheStore.new(Setting.plugin_redmine_dmsf['dmsf_memcached_servers'])
-        end
-      end
+
     end
   end
 end
