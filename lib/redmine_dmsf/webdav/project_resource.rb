@@ -125,11 +125,7 @@ module RedmineDmsf
           # 1. Invalid characters are replaced with a dot.
           # 2. Two or more dots in a row are replaced with a single dot.
           # (3. Windows WebClient does not like a dot at the end, but since the project id tag is appended this is not a problem.)
-<<<<<<< HEAD
-          "#{p.name.gsub(INVALID_CHARACTERS, ".").gsub(/\.{2,}/, ".")} -#{p.id}-" unless p.nil?
-=======
           "#{p.name.gsub(INVALID_CHARACTERS, '.').gsub(/\.{2,}/, '.')} #{p.id}" if p
->>>>>>> devel-1.6.0
         else
           p.identifier if p
         end

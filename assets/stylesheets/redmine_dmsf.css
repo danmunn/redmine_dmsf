@@ -120,17 +120,6 @@ table.display thead th div.DataTables_sort_wrapper span {
 	white-space: nowrap;
 }
 
-<<<<<<< HEAD
-.dmsf_cf {
-	font-size: 0.8em;
-}
-
-.dmsf_invisible {
-	display: none;
-}
-
-=======
->>>>>>> devel-1.6.0
 .dmsf_upload_select {
 	float: right;
 	font-size: 0.9em;

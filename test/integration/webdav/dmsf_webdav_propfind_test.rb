@@ -44,11 +44,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     # Temporarily enable project names to generate names for project1
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-<<<<<<< HEAD
-	@project1_uri = URI.encode(@project1_name)
-=======
     @project1_uri = Addressable::URI.escape(@project1_name)
->>>>>>> devel-1.6.0
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
     RedmineDmsf::Webdav::Cache.clear
   end
@@ -170,57 +166,6 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_propfind_depth1_on_root_for_admin_with_project_names_and_cache
-<<<<<<< HEAD
-    RedmineDmsf::Webdav::Cache.init_testcache
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-      # PROPSTATS for / and project1 should be cached.
-      assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +2 do
-        xml_http_request :propfind, '/dmsf/webdav/', nil,
-          @admin.merge!({:HTTP_DEPTH => '1'})
-      end
-
-      assert_response 207 # MultiStatus
-      assert_match '<D:href>http://www.example.com:80/dmsf/webdav/</D:href>', response.body
-      assert_match '<D:displayname>/</D:displayname>', response.body
-
-      # project.identifier should not match when using project names
-      assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", response.body
-      assert_no_match "<D:displayname>#{@project1.identifier}</D:displayname>", response.body
-
-      # but the project name should match
-      assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</D:href>", response.body
-      assert_match "<D:displayname>#{@project1_name}</D:displayname>", response.body
-
-      # Rename project1
-      @project1.name = 'Online Cookbook'
-      @project1.save!
-      project1_new_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-      project1_new_uri = URI.encode(project1_new_name)
-
-      # PROPSTATS for / is already cached, but a new PROPSTATS should be cached for project1
-      assert_difference 'RedmineDmsf::Webdav::Cache.cache.instance_variable_get(:@data).count', +1 do
-        xml_http_request :propfind, '/dmsf/webdav/', nil,
-          @admin.merge!({:HTTP_DEPTH => '1'})
-      end
-
-      assert_response 207 # MultiStatus
-      assert_match '<D:href>http://www.example.com:80/dmsf/webdav/</D:href>', response.body
-      assert_match '<D:displayname>/</D:displayname>', response.body
-
-      # project.identifier should not match when using project names
-      assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</D:href>", response.body
-      assert_no_match "<D:displayname>#{@project1.identifier}</D:displayname>", response.body
-
-      # old project name should not match
-      assert_no_match "<D:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</D:href>", response.body
-      assert_no_match "<D:displayname>#{@project1_name}</D:displayname>", response.body
-
-      # but new project name should match
-      assert_match "<D:href>http://www.example.com:80/dmsf/webdav/#{project1_new_uri}/</D:href>", response.body
-      assert_match "<D:displayname>#{project1_new_name}</D:displayname>", response.body
-    end
-=======
     @project1.name = 'Online Cookbook'
     @project1.save!
     project1_new_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
@@ -229,7 +174,6 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert_response 207 # MultiStatus
     assert response.body.include?("<D:href>http://www.example.com:80/dmsf/webdav/#{project1_new_uri}/</D:href>")
     assert response.body.include?("<D:displayname>#{project1_new_name}</D:displayname>")
->>>>>>> devel-1.6.0
   end
 
   def test_propfind_depth0_on_project1_for_admin_with_cache
