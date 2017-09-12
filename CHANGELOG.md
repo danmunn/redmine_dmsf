@@ -4,15 +4,20 @@ Changelog for Redmine DMSF
 1.6.0 *2017-09-04*
 ------------------
 
-IMPORTANT
-
     Folder permissions    
     Documents attachable to issues
     Hungarian localisation
     Fulltext search in *.eml and *.msg
 
-1. Files in the filesystem are re-organized by a new system based on dates.
-2. DMS storage directory plugin option is related to the rails root directory.    
+IMPORTANT
+
+1. Files in the filesystem are re-organized by a new system based on dates. So, documents are not stored in folders named 
+    by the project's identifier but by the data of uploading, e.g. 2017/09. It's the same system used by Redmine for 
+    attachments.
+2. DMS storage directory plugin option is related to the rails root directory.
+3. The plugin is independent of the gem xapian-full-alaveteli which has been replaced with ruby-xapian package. Therefore
+    is recommended to uninstall xapian-full-alaveteli gem and install ruby-xapian package in order the full-text search
+    is working. 
     
 * Bug: #758 - Error in template when retrieving details of a file in a subfolder
 * New: #755 - Ability to retrieve the MD5 value of a Document type 

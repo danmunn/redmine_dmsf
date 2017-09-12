@@ -23,7 +23,8 @@ begin
   require 'xapian'
   $xapian_bindings_available = true
 rescue LoadError
-  Rails.logger.info 'REDMAIN_XAPIAN ERROR: No Ruby bindings for Xapian installed !!. PLEASE install Xapian search engine interface for Ruby.'
+  Rails.logger.warn %{No Xapian search engine interface for Ruby installed => Full-text search won't be available.
+                      Install a ruby-xapian package or an alternative Xapian binding (https://xapian.org).}
   $xapian_bindings_available = false
 end
 
@@ -320,8 +321,8 @@ class DmsfFile < ActiveRecord::Base
           Setting.plugin_redmine_dmsf['dmsf_index_database'].strip, lang)
         database = Xapian::Database.new(databasepath)
       rescue Exception => e
-        Rails.logger.warn "REDMAIN_XAPIAN ERROR: Xapian database is not properly set, initiated or it's corrupted."
-        Rails.logger.warn e.message
+        Rails.logger.error "REDMINE_XAPIAN ERROR: Xapian database is not properly set, initiated or it's corrupted."
+        Rails.logger.error e.message
       end
 
       if database

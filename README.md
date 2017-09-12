@@ -38,7 +38,7 @@ Features
   * Document tagging
   * Trash bin
   * Documents attachable to issues
-  * Compatible with Redmine 3.3.x
+  * Compatible with Redmine 3.4.x
 
 Dependencies
 ------------
@@ -47,11 +47,12 @@ Dependencies
 
 ### Full-text search (optional)
 
-If you want to use fulltext search abilities, install xapian-core, omega and xapian-bindings from 
-https://xapian.org/download or install xapian-omega package from your Linux distribution repositories.
-
-As of xapian-full-alaveteli (1.2.21.1), the latest working version of Xapian installed in the system is 1.2.24. Later 
-versions give an error: "REDMAIN_XAPIAN ERROR: Xapian database is not properly set, initiated or it's corrupted"
+If you want to use fulltext search abilities, install xapian-omega and ruby-xapian packages. See https://xapian.org
+ for details.
+ 
+```
+sudo apt-get install xapian-omega ruby-xapian
+```
 
 To index some files with omega you may have to install some other packages like
 xpdf, antiword, ...
@@ -294,12 +295,13 @@ Before installing ensure that the Redmine instance is stopped.
 ### Fulltext search (optional)
 If you want to use full-text search features, you must setup file content indexing.
 
-It is necessary to index DMSF files with omega before searching attempts to receive some output:
+It is necessary to index DMSF files with omindex before searching attempts to receive some output:
 
   1. Change the configuration part of redmine_dmsf/extra/xapian_indexer.rb file according to your environment.
-  2. Run `ruby redmine_dmsf/extra/xapian_indexer.rb -f`
+     (The path to the index database set in xapian_indexer.rb must corresponds to the path set in the plugin's settings.)   
+  2. Run `ruby redmine_dmsf/extra/xapian_indexer.rb -vf`
 
-This command must be run on regular basis (e.g. from cron)
+This command should be run on regular basis (e.g. from cron)
 
 Example of cron job (once per hour at 8th minute):
     
