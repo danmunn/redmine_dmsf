@@ -1,7 +1,7 @@
 Changelog for Redmine DMSF
 ==========================
 
-1.6.0 *2017-09-04*
+1.6.0 *2017-09-12*
 ------------------
 
     Folder permissions    
