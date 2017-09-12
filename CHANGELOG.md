@@ -6,8 +6,8 @@ Changelog for Redmine DMSF
 
     Folder permissions    
     Documents attachable to issues
-    Hungarian localisation
-    Fulltext search in *.eml and *.msg
+    Hungarian localization
+    Full-text search in *.eml and *.msg
 
 IMPORTANT
 
