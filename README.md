@@ -43,7 +43,7 @@ Features
 Dependencies
 ------------
   
-  * Redmine 3.3.0 or higher
+  * Redmine 3.4.0 or higher
 
 ### Full-text search (optional)
 
