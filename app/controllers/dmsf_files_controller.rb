@@ -66,7 +66,7 @@ class DmsfFilesController < ApplicationController
         title_format = Setting.plugin_redmine_dmsf['dmsf_global_title_format']
       end
       # IE has got a tendency to cache files
-      expires_in(0.year, "must-revalidate" => true)
+      expires_in(0.year, 'must-revalidate' => true)
       send_file(@revision.disk_file,
         :filename => filename_for_content_disposition(@revision.formatted_name(title_format)),
         :type => @revision.detect_content_type,

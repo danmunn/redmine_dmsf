@@ -25,25 +25,12 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   fixtures :projects, :users, :dmsf_files, :dmsf_file_revisions, :members, :roles, :member_roles
 
   def setup
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
-    timestamp = DateTime.now.strftime('%y%m%d%H%M')
-    @tmp_storage_path = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
-    Dir.mkdir(@tmp_storage_path) unless File.directory?(@tmp_storage_path)
     @jsmith = User.find_by_id 2
     @file1 = DmsfFile.find_by_id 1
     Setting.rest_api_enabled = '1'
     @role = Role.find_by_id 1
     @project1 = Project.find_by_id 1
     @project1.enable_module! :dmsf
-  end
-
-  def teardown
-    # Delete our tmp folder
-    begin
-      FileUtils.rm_rf @tmp_storage_path
-    rescue Exception => e
-      error e.message
-    end
   end
 
   def test_truth
@@ -82,12 +69,16 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     assert_select 'dmsf_file > description', :text => @file1.last_revision.description
     assert_select 'dmsf_file > content_url', :text => "http://www.example.com/dmsf/files/#{@file1.id}/download"
     #curl -v -H "Content-Type: application/octet-stream" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/41532/download > file.txt
-    get "/dmsf/files/#{@file1.id}/download?key=#{token.value}"
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
+    get "/dmsf/files/#{@file1.id}/download.xml?key=#{token.value}"
     assert_response :success
+    assert_equal '1234', @response.body
   end
 
   def test_upload_document
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @tmp_storage_path
+    timestamp = DateTime.now.strftime('%y%m%d%H%M')
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
+    FileUtils.mkdir_p(Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
     @role.add_permission! :file_manipulation
     token = Token.create!(:user => @jsmith, :action => 'api')
     #curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif
@@ -128,5 +119,10 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     # </dmsf_files>
     assert_select 'dmsf_files > file > name', :text => 'test.txt'
     assert_response :success
+    begin
+      FileUtils.rm_rf Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    rescue Exception => e
+      error e.message
+    end
   end
 end
