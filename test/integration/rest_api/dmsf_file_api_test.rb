@@ -70,7 +70,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     #   <digest>81dc9bdb52d04dc20036dbd8313ed055</digest>
     #   <size>4</size>
     #   <description>Some file :-)</description>
-    #   <content_url>/dmsf/files/1/download</content_url>
+    #   <content_url>http://www.example.com/dmsf/files/1/download</content_url>
     # </dmsf_file>
     assert_select 'dmsf_file > id', :text => @file1.id.to_s
     assert_select 'dmsf_file > name', :text => @file1.name
@@ -80,7 +80,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     assert_select 'dmsf_file > digest', :text => @file1.last_revision.digest
     assert_select 'dmsf_file > size', :text => @file1.last_revision.size.to_s
     assert_select 'dmsf_file > description', :text => @file1.last_revision.description
-    assert_select 'dmsf_file > content_url', :text => "/dmsf/files/#{@file1.id}/download"
+    assert_select 'dmsf_file > content_url', :text => "http://www.example.com/dmsf/files/#{@file1.id}/download"
     #curl -v -H "Content-Type: application/octet-stream" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/41532/download > file.txt
     get "/dmsf/files/#{@file1.id}/download?key=#{token.value}"
     assert_response :success

@@ -30,7 +30,7 @@ class DmsfFilesController < ApplicationController
   before_action :tree_view, :only => [:delete]
   before_action :permissions
 
-  accept_api_auth :show
+  accept_api_auth :show, :view
 
   helper :all
   helper :dmsf_workflows
