@@ -67,7 +67,11 @@ class DmsfUpload
 
     @disk_filename = uploaded[:disk_filename]
     @mime_type = uploaded[:content_type]
-    @size = File.size(uploaded[:tempfile_path])
+    @size = File.size?(uploaded[:tempfile_path])
+    unless @size
+      @size = 0
+      Rails.logger.error "Cannot find #{uploaded[:tempfile_path]}"
+    end
     @tempfile_path = uploaded[:tempfile_path]
 
     if file.nil? || file.last_revision.nil?
