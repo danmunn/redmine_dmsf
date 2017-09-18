@@ -36,25 +36,39 @@ class MigrateDocuments < ActiveRecord::Migration
                     folder = self.storage_base_path(dmsf_file_revision)
                     Dir.rmdir(folder) if (folder && (Dir.entries(folder).size == 2))
                   rescue Exception => e
-                    say "DmsfFileRevisions ID #{dmsf_file_revision.id}: #{e.message}"
+                    msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: #{e.message}"
+                    say msg
+                    Rails.logger.error msg
                   end
                 else
-                  say "DmsfFileRevisions ID #{dmsf_file_revision.id}: Target '#{target}' exists"
+                  msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: Target '#{target}' exists"
+                  say msg
+                  Rails.logger.error msg
                 end
               else
-                say "DmsfFileRevisions ID #{dmsf_file_revision.id}: target = nil"
+                msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: target = nil"
+                say msg
+                Rails.logger.error msg
               end
             else
-              say "DmsfFileRevisions ID #{dmsf_file_revision.id}: Origin '#{origin}' doesn't exist"
+              msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: Origin '#{origin}' doesn't exist"
+              say msg
+              Rails.logger.error msg
             end
           else
-            say "DmsfFileRevisions ID #{dmsf_file_revision.id}: disk_file = nil"
+            msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: disk_file = nil"
+            say msg
+            Rails.logger.error msg
           end
         else
-          say "DmsfFile ID #{dmsf_file_revision.dmsf_file.id}: project = nil"
+          msg = "DmsfFile ID #{dmsf_file_revision.dmsf_file.id}: project = nil"
+          say msg
+          Rails.logger.error msg
         end
       else
-        say "DmsfFileRevisions ID #{dmsf_file_revision.id}: dmsf_file = nil"
+        msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: dmsf_file = nil"
+        say msg
+        Rails.logger.error msg
       end
     end
   end
@@ -75,25 +89,39 @@ class MigrateDocuments < ActiveRecord::Migration
                     folder = dmsf_file_revision.storage_base_path
                     Dir.rmdir(folder) if (folder && (Dir.entries(folder).size == 2))
                   rescue Exception => e
-                    say "DmsfFileRevisions ID #{dmsf_file_revision.id}: #{e.message}"
+                    msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: #{e.message}"
+                    say msg
+                    Rails.logger.error msg
                   end
                 else
-                  say "DmsfFileRevisions ID #{dmsf_file_revision.id}: Target '#{target}' exists"
+                  msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: Target '#{target}' exists"
+                  say msg
+                  Rails.logger.error msg
                 end
               else
-                say "DmsfFileRevisions ID #{dmsf_file_revision.id}: target = nil"
+                msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: target = nil"
+                say msg
+                Rails.logger.error msg
               end
             else
-              say "DmsfFileRevisions ID #{dmsf_file_revision.id}: Origin '#{origin}' doesn't exist"
+              msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: Origin '#{origin}' doesn't exist"
+              say msg
+              Rails.logger.error msg
             end
           else
-            say "DmsfFileRevisions ID #{dmsf_file_revision.id}: disk_file = nil"
+            msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: disk_file = nil"
+            say msg
+            Rails.logger.error msg
           end
         else
-          say "DmsfFile ID #{dmsf_file_revision.dmsf_file.id}: project = nil"
+          msg = "DmsfFile ID #{dmsf_file_revision.dmsf_file.id}: project = nil"
+          say msg
+          Rails.logger.error msg
         end
       else
-        say "DmsfFileRevisions ID #{dmsf_file_revision.id}: dmsf_file = nil"
+        msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: dmsf_file = nil"
+        say msg
+        Rails.logger.error msg
       end
     end
   end
