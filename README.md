@@ -47,8 +47,9 @@ Dependencies
 
 ### Full-text search (optional)
 
-If you want to use fulltext search abilities, install xapian-omega and ruby-xapian packages. See https://xapian.org
- for details.
+If you want to use fulltext search abilities, install xapian-omega and ruby-xapian packages. In case of using of Bitnami 
+stack or Ruby installed via RVM it might be necessary to install Xapian bindings from sources. See https://xapian.org
+ for details. 
  
 ```
 sudo apt-get install xapian-omega ruby-xapian
@@ -231,7 +232,6 @@ Before installing ensure that the Redmine instance is stopped.
 1. In case of upgrade BACKUP YOUR DATABASE first
 2. Put redmine_dmsf plugin directory into plugins.
 3. Install dependencies: `bundle install`.
-3.1 To install dependencies without Xapian (full-text searching): `bundle install --without xapian`. This option might be useful especially in Windows.
 4. Initialize/Update database: `bundle exec rake redmine:plugins:migrate RAILS_ENV="production"`.
 5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
 6. Restart the web server.
@@ -292,7 +292,7 @@ Before installing ensure that the Redmine instance is stopped.
           rake redmine:dmsf_maintenance RAILS_ENV="production"
           rake redmine:dmsf_maintenance dry_run=1 RAILS_ENV="production"
 
-### Fulltext search (optional)
+### Full-text search
 If you want to use full-text search features, you must setup file content indexing.
 
 It is necessary to index DMSF files with omindex before searching attempts to receive some output:
@@ -309,7 +309,7 @@ Example of cron job (once per hour at 8th minute):
 
 See redmine_dmsf/extra/xapian_indexer.rb for help.
 
-### WebDAV caching (optional, experimental!)
+### WebDAV caching (optional)
 Creating the file lists for the WebDAV takes a lot of resources, for folders with many files it can take several seconds
 and for clients that don't cache the lists (Windows WebClient!) a new list must be created every time you browse into that folder, even if nothing has changed in the folder so browsing a WebDAV share in Windows is not a pleasant experience.
 By enabling caching the response time can be significantly reduced from several seconds for folders with hundreds of items down to a few milliseconds.
