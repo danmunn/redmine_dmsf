@@ -65,7 +65,7 @@
         <% files.each do |file| %>
           <tr id="file-<%= file.id %>">
             <td class="project">
-              <%= link_to_project(file.project) %>
+              <%= link_to_project(file.project) if file.project %>
             </td>
             <td class="title">
               <%= link_to(h(file.title),
@@ -77,7 +77,8 @@
                  <%= link_to(h(file.dmsf_folder.title),
                     {:controller => 'dmsf', :action => 'show', :id => file.project, :folder_id => file.dmsf_folder}) %>
                <% else %>
-                  <%= link_to(l(:link_documents), {:controller => 'dmsf', :action => 'show', :id=> file.project }) %>
+                  <%= link_to_if(file.project, l(:link_documents), {:controller => 'dmsf', :action => 'show',
+                                                                    :id=> file.project }) %>
                <% end %>
              </td>
            </tr>
