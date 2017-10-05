@@ -1,6 +1,8 @@
+# encoding: utf-8
+#
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-15   Karel Picman <karel.picman@kontron.com>
+# Copyright (C) 2011-17   Karel Picman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,6 +22,7 @@ desc <<-END_DESC
 DMSF maintenance task
   * Remove all files with no database record from the document directory
   * Remove all links project_id = -1 (added links to an issue which hasn't been created)
+  * Report all documents without a corresponding file in the file system (dry_run only)
 
 Available options:
   *dry_run - No physical deletion but to list of all unused files only
@@ -34,8 +37,11 @@ namespace :redmine do
     m = DmsfMaintenance.new
     begin
       STDERR.puts "\n"
-      Dir.chdir(DmsfFile.storage_path)       
+      Dir.chdir(DmsfFile.storage_path)
+      puts "Files...\n"
       m.files
+      puts "Documents...\n"
+      m.documents
       if m.dry_run
         m.result
       else
@@ -56,6 +62,7 @@ class DmsfMaintenance
   def initialize
     @dry_run = ENV['dry_run']
     @files_to_delete = Array.new
+    @documents_to_delete = Array.new
   end 
   
   def files        
@@ -64,6 +71,18 @@ class DmsfMaintenance
         check_file f
       end      
     end   
+  end
+
+  def documents
+    DmsfFile.all.each do |f|
+      r = f.last_revision
+      if r.nil? || (!File.exist?(r.disk_file))
+        @documents_to_delete << f
+        folder = f.dmsf_folder ? f.dmsf_folder.dmsf_path_str : ''
+        project = f.project ? f.project.name : '<nil>'
+        puts "\t#{r.disk_file}\n" if r
+      end
+    end
   end
   
   def result
@@ -75,6 +94,8 @@ class DmsfMaintenance
     # Links
     size = DmsfLink.where(:project_id => -1).count
     puts "#{size} links can be deleted.\n\n"
+    # Documents
+    puts "#{@documents_to_delete.size} corrupted documents.\n\n"
   end
   
   def clean
