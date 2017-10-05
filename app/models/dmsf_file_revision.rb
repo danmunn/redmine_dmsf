@@ -335,7 +335,8 @@ class DmsfFileRevision < ActiveRecord::Base
           end
         when DmsfWorkflow::STATE_APPROVED, DmsfWorkflow::STATE_REJECTED
           action = DmsfWorkflowStepAction.joins(:dmsf_workflow_step_assignment).where(
-            ['dmsf_workflow_step_assignments.dmsf_file_revision_id', self.id]).order('dmsf_workflow_step_actions.id').last
+            :dmsf_workflow_step_assignments => { :dmsf_file_revision_id => self.id }).order(
+            'dmsf_workflow_step_actions.id').last
           tooltip << action.author.name if action
       end
     end
