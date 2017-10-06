@@ -62,17 +62,23 @@ class DmsfUploadController < ApplicationController
 
   # async single file upload handling
   def upload_file
-    begin
-      @tempfile = params[:file]
-      unless @tempfile.original_filename
-        render_404
-        return
-      end
-      @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
-      render :layout => false
-    ensure
-      @tempfile.close false
+    @tempfile = params[:file]
+    unless @tempfile.original_filename
+      render_404
+      return
     end
+    @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
+    @tempfile_path = "#{DmsfHelper.temp_dir}/#{@disk_filename}"
+    File.open(@tempfile_path, 'wb') do |f|
+      if params[:file].respond_to?(:read)
+        while (buffer = @tempfile.read(8192))
+          f.write(buffer)
+        end
+      else
+        f.write(@tempfile)
+      end
+    end
+    render :layout => false
   end
 
   # REST API and Redmine attachment form
