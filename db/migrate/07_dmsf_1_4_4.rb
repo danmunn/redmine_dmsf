@@ -46,9 +46,9 @@ class Dmsf144 < ActiveRecord::Migration
     #               data into it, which should enable us to run checks we need, not as
     #               efficient, however compatible across the board.
     DmsfFileLock.reset_column_information
-    DmsfFileLock.select('MAX(id) id').
+    DmsfFileLock.select('MAX(id), id').
       order('MAX(id) DESC').
-      group('dmsf_file_id').
+      group(:dmsf_file_id, :id).
       each do |lock|
       lock.reload 
       if (lock.locked)
