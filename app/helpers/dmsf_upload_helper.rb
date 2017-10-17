@@ -66,7 +66,9 @@ module DmsfUploadHelper
         new_revision.title = commited_file[:title]
         new_revision.description = commited_file[:description]
         new_revision.comment = commited_file[:comment]
-        version = commited_file[:version].to_i
+        if commited_file[:version].present?
+          version = commited_file[:version].is_a?(Array) ? commited_file[:version][0].to_i : commited_file[:version].to_i
+        end
         if version == 3
           new_revision.major_version = commited_file[:custom_version_major].to_i
           new_revision.minor_version = commited_file[:custom_version_minor].to_i
