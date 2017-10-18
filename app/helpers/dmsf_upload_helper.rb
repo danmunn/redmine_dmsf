@@ -68,6 +68,8 @@ module DmsfUploadHelper
         new_revision.comment = commited_file[:comment]
         if commited_file[:version].present?
           version = commited_file[:version].is_a?(Array) ? commited_file[:version][0].to_i : commited_file[:version].to_i
+        else
+          version = 1
         end
         if version == 3
           new_revision.major_version = commited_file[:custom_version_major].to_i
