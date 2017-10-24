@@ -39,7 +39,7 @@ class DmsfController < ApplicationController
   helper :dmsf_folder_permissions
 
   def permissions
-    render_403 unless DmsfFolder.permissions?(@folder)
+    render_403 unless DmsfFolder.permissions?(@folder, false)
     true
   end
 
@@ -663,7 +663,8 @@ class DmsfController < ApplicationController
           @locked_for_user = false
         end
       end
-      # Remove system folders you are not allowed to see because you are not allowed to see the issue
+      # Remove system folders you are not allowed to see because you are not allowed to see the issue or you are not
+      # permitted to see system folders
       @subfolders = DmsfHelper.visible_folders(@subfolders, @project)
     end
 

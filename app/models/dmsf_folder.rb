@@ -110,11 +110,11 @@ class DmsfFolder < ActiveRecord::Base
     return true if (User.current.admin? || folder.nil?)
     # System folder?
     if folder && folder.system
-      return false if (!allow_system || !User.current.allowed_to?(:display_system_folders, folder.project))
-      return false unless self.issue && self.issue.visible?(User.current)
+      return false if !(allow_system || User.current.allowed_to?(:display_system_folders, folder.project))
+      return false if folder.issue && !folder.issue.visible?(User.current)
     end
     # Permissions?
-    if !folder.dmsf_folder || permissions?(folder.dmsf_folder, allow_system)
+    if !folder.dmsf_folder || DmsfFolder.permissions?(folder.dmsf_folder, allow_system)
       if folder.dmsf_folder_permissions.any?
         role_ids = User.current.roles_for_project(folder.project).map{ |r| r.id }
         role_permission_ids = folder.dmsf_folder_permissions.roles.map{ |p| p.object_id }
@@ -125,8 +125,8 @@ class DmsfFolder < ActiveRecord::Base
         return true if (principal_ids & user_group_ids).any?
         return false
       end
-      true
     end
+    true
   end
 
   def default_values

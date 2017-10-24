@@ -93,7 +93,8 @@ module DmsfHelper
 
   def self.visible_folders(folders, project)
     allowed = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
-      (project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
+      (project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS) &&
+      User.current.allowed_to?(:display_system_folders, project)
     folders.reject{ |folder|
       if folder.system
         unless allowed
