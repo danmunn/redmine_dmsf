@@ -4,7 +4,7 @@ api.dmsf_file do
   api.project_id @file.project_id
   api.dmsf_folder_id @file.dmsf_folder_id if @file.dmsf_folder_id
   if @file.last_revision
-    api.version "#{@file.last_revision.major_version}.#{@file.last_revision.minor_version}"
+    api.version "#{@file.last_revision.version}"
     api.mime_type @file.last_revision.mime_type
     api.digest @file.last_revision.digest
     api.size @file.last_revision.size

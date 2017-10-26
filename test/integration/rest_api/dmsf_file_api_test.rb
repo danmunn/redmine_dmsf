@@ -62,7 +62,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     assert_select 'dmsf_file > id', :text => @file1.id.to_s
     assert_select 'dmsf_file > name', :text => @file1.name
     assert_select 'dmsf_file > project_id', :text => @file1.project_id.to_s
-    assert_select 'dmsf_file > version', :text => "#{@file1.last_revision.major_version}.#{@file1.last_revision.minor_version}"
+    assert_select 'dmsf_file > version', :text => "#{@file1.last_revision.version}"
     assert_select 'dmsf_file > mime_type', :text => @file1.last_revision.mime_type
     assert_select 'dmsf_file > digest', :text => @file1.last_revision.digest
     assert_select 'dmsf_file > size', :text => @file1.last_revision.size.to_s

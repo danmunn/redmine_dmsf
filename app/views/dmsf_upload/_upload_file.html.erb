@@ -59,18 +59,20 @@
       <p>
         <%= label_tag("commited_files[#{i}][version]_minor", l(:label_dmsf_version)) %>
         <%= radio_button_tag("commited_files[#{i}][version]", 1, true) %>
-        <%= upload.major_version %>.<%= upload.minor_version + 1 %>
+        <%= DmsfUploadHelper::gui_version(upload.major_version) %>.<%= DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(upload.minor_version, 1)) %>
         <%= l(:option_version_minor) %><br/>
         <%= radio_button_tag("commited_files[#{i}][version]", 2) %>
-        <%= upload.major_version + 1 %>.0
+        <%= DmsfUploadHelper::gui_version(DmsfUploadHelper::increase_version(upload.major_version, 1)) %>.0
         <%= l(:option_version_major) %><br/>
         <%= radio_button_tag("commited_files[#{i}][version]", 3) %>
         <%= select_tag "commited_files[#{i}][custom_version_major]",
-                       options_for_select(0..99, upload.major_version + 2),
+                       options_for_select(DmsfUploadHelper::major_version_select_options,
+                                          DmsfUploadHelper::gui_version(DmsfUploadHelper::increase_version(upload.major_version, 2))),
                        :onchange => "$('#commited_files_#{i}_version_3').prop('checked', true)",
                        :class => 'dmsf_select_version'%>.
         <%= select_tag "commited_files[#{i}][custom_version_minor]",
-                       options_for_select(0..99, upload.minor_version + 1),
+                       options_for_select(DmsfUploadHelper::minor_version_select_options,
+                       DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(upload.minor_version, 1))),
                        :onchange => "$('#commited_files_#{i}_version_3').prop('checked', true)",
                        :class => 'dmsf_select_version' %>
         <%= l(:option_version_custom) %>

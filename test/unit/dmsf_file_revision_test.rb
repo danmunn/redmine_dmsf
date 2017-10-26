@@ -146,4 +146,16 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert_equal 'John Smith', @revision2.workflow_tooltip
   end
 
+  def test_version
+    @revision1.major_version = 1
+    @revision1.minor_version = 0
+    assert_equal '1.0', @revision1.version
+    @revision1.major_version = -('A'.ord)
+    @revision1.minor_version = -(' '.ord)
+    assert_equal 'A', @revision1.version
+    @revision1.major_version = -('A'.ord)
+    @revision1.minor_version = 0
+    assert_equal 'A.0', @revision1.version
+  end
+
 end

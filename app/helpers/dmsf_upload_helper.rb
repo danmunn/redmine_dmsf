@@ -72,8 +72,8 @@ module DmsfUploadHelper
           version = 1
         end
         if version == 3
-          new_revision.major_version = commited_file[:custom_version_major].to_i
-          new_revision.minor_version = commited_file[:custom_version_minor].to_i
+          new_revision.major_version = DmsfUploadHelper::db_version(commited_file[:custom_version_major])
+          new_revision.minor_version = DmsfUploadHelper::db_version(commited_file[:custom_version_minor])
         else
           new_revision.increase_version(version)
         end
@@ -160,6 +160,56 @@ module DmsfUploadHelper
       controller.flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u['name']}.join(', '))
     end
     [files, failed_uploads]
+  end
+
+  # 0..99, A..Z except O
+  def self.major_version_select_options
+    (0..99).to_a + ('A'..'Y').to_a - ['O']
+  end
+
+  # 0..99, ' '
+  def self.minor_version_select_options
+    (0..99).to_a + [' ']
+  end
+
+  # 1 -> 2, -1 -> -2, A -> B
+  def self.increase_version(version, number)
+    return number if ((version == ' ') || ((-version) == ' '.ord))
+    if Integer(version)
+      if version >= 0
+        if (version + number) < 100
+          version + number
+        else
+          version
+        end
+      else
+        if -(version - number) < 'Z'.ord
+          version - number
+        else
+          version
+        end
+      end
+    end
+    rescue
+      if (version.ord + number) < 'Z'.ord
+        (version.ord + number).chr
+      else
+        version
+      end
+  end
+
+  # 1 -> 1, -65 -> A
+  def self.gui_version(version)
+    return version if version >= 0
+    (-version).chr
+  end
+
+  # 1 -> 1, A -> -65
+  def self.db_version(version)
+    version.to_i if Integer(version)
+  rescue
+    version = ' ' if version.blank?
+    -(version.ord)
   end
 
 end

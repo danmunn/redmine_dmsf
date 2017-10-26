@@ -24,7 +24,7 @@
   <p>
     <%= h(file.dmsf_path_str) %> (<%= file.name %>)
     <%  if file.last_revision %>
-      , <%= number_to_human_size(file.last_revision.size) %>, <%= l(:label_dmsf_version) %> <%= file.last_revision.major_version %>.<%= file.last_revision.minor_version %>
+      , <%= number_to_human_size(file.last_revision.size) %>, <%= l(:label_dmsf_version) %> <%= file.last_revision.version %>
     <% end  %>
   </p>
 <% end %>

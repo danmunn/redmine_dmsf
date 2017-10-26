@@ -58,19 +58,21 @@
             <p>
               <%= label_tag('version_0', l(:label_dmsf_version)) %>
               <%= radio_button_tag('version', 0, @revision.version == @file.last_revision.version) %>
-              <%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version %>
+              <%= @file.last_revision.version %>
               <%= l(:option_version_same) %><br/>
               <%= radio_button_tag('version', 1, @revision.major_version == @file.last_revision.major_version && @revision.minor_version != @file.last_revision.minor_version) %> 
-              <%= @file.last_revision.major_version %>.<%= @file.last_revision.minor_version + 1 %>
+              <%= DmsfUploadHelper::gui_version(@file.last_revision.major_version) %>.<%= DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(@file.last_revision.minor_version, 1)) %>
               <%= l(:option_version_minor) %><br/>
               <%= radio_button_tag('version', 2, @revision.major_version != @file.last_revision.major_version) %> 
-              <%= @file.last_revision.major_version + 1 %>.0 
+              <%= DmsfUploadHelper.gui_version(DmsfUploadHelper::increase_version(@file.last_revision.major_version, 1)) %>.0
               <%= l(:option_version_major) %><br/>
               <%= radio_button_tag('version', 3) %>        
-              <%= select_tag 'custom_version_major', options_for_select(0..99, @file.last_revision.major_version + 2),
-                             :onchange => '$("#version_3").prop("checked", true)', :class => 'dmsf_select_version' %>.
-              <%= select_tag 'custom_version_minor', options_for_select(0..99, @file.last_revision.minor_version + 1),
-                             :onchange => '$("#version_3").prop("checked", true)', :class => 'dmsf_select_version' %>
+              <%= select_tag 'custom_version_major', options_for_select(DmsfUploadHelper::major_version_select_options,
+                    DmsfUploadHelper::gui_version(DmsfUploadHelper::increase_version(@file.last_revision.major_version, 2))),
+                    :onchange => '$("#version_3").prop("checked", true)', :class => 'dmsf_select_version' %>.
+              <%= select_tag 'custom_version_minor', options_for_select(DmsfUploadHelper::minor_version_select_options,
+                    DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(@file.last_revision.minor_version, 1))),
+                    :onchange => '$("#version_3").prop("checked", true)', :class => 'dmsf_select_version' %>
               <%= l(:option_version_custom) %>
             </p>
           </div>

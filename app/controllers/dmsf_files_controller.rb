@@ -114,8 +114,8 @@ class DmsfFilesController < ApplicationController
         revision.minor_version = last_revision.minor_version
         version = params[:version].to_i
         if version == 3
-          revision.major_version = params[:custom_version_major].to_i
-          revision.minor_version = params[:custom_version_minor].to_i
+          revision.major_version = DmsfUploadHelper::db_version(params[:custom_version_major])
+          revision.minor_version = DmsfUploadHelper::db_version(params[:custom_version_minor])
         else
            revision.increase_version(version)
         end
