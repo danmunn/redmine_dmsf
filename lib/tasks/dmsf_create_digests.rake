@@ -20,7 +20,7 @@
 
 desc <<-END_DESC
 DMSF maintenance task
-  * Create missing MD5 digest for all file revisions
+  * Create missing checksum for all file revisions
 
 Available options:
   *dry_run - test, no changes to the database

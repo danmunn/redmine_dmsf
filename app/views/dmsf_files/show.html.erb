@@ -162,8 +162,8 @@
           </div>
           <% if revision.digest.present? %>
             <div class="status attribute">
-              <%= content_tag :div, 'MD5', :class => 'label' %>
-              <%= content_tag :div, revision.digest, :class => 'value wiki' %>
+              <%= content_tag :div, l(:field_digest), :class => 'label' %>
+              <%= content_tag :div, "#{revision.digest_type}: #{revision.digest}", :class => 'value wiki' %>
             </div>
           <% end %>
           <%= render 'dmsf/custom_fields', :object => revision %>

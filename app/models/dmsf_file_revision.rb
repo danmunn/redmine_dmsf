@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require 'digest/md5'
+require 'digest'
 
 class DmsfFileRevision < ActiveRecord::Base
 
@@ -290,7 +290,7 @@ class DmsfFileRevision < ActiveRecord::Base
 
   def self.create_digest(path)
     begin
-      Digest::MD5.file(path).hexdigest
+      Digest::SHA256.file(path).hexdigest
     rescue Exception => e
       Rails.logger.error e.message
       0
@@ -301,9 +301,17 @@ class DmsfFileRevision < ActiveRecord::Base
     self.digest = DmsfFileRevision.create_digest(self.disk_file)
   end
 
+  # Returns either MD5 or SHA256 depending on the way self.digest was computed
+  def digest_type
+    self.digest.size < 64 ? 'MD5' : 'SHA256' if digest.present?
+  end
+
   def tooltip
-    text = ''
-    text = self.description if self.description.present?
+    if self.description.present?
+      text = self.description
+    else
+      text = ''
+    end
     if self.comment.present?
       text += ' / ' if text.present?
       text += self.comment

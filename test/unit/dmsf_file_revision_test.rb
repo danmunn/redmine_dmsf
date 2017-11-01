@@ -29,13 +29,16 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     @revision1 = DmsfFileRevision.find_by_id 1
     @revision2 = DmsfFileRevision.find_by_id 2
     @revision5 = DmsfFileRevision.find_by_id 5
+    @revision8 = DmsfFileRevision.find_by_id 8
     @wf1 = DmsfWorkflow.find_by_id 1
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
   end
   
   def test_truth
     assert_kind_of DmsfFileRevision, @revision1
     assert_kind_of DmsfFileRevision, @revision2
     assert_kind_of DmsfFileRevision, @revision5
+    assert_kind_of DmsfFileRevision, @revision8
     assert_kind_of DmsfWorkflow, @wf1
   end
   
@@ -54,7 +57,16 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_create_digest
-    assert_equal @revision5.create_digest, 0, "MD5 should be 0, if the file is missing"
+    assert @revision1.create_digest.length > 40
+    assert_equal @revision8.create_digest, 0, 'Digest should be 0, if the file is missing'
+  end
+
+  def test_digest_type
+    # Old type MD5
+    assert_equal 'MD5', @revision1.digest_type
+    # New type SHA256
+    @revision1.create_digest
+    assert_equal 'SHA256', @revision1.digest_type
   end
   
   def test_new_storage_filename
