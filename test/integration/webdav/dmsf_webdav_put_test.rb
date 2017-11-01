@@ -155,6 +155,8 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       # Lets check for our file
       file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
       assert file, 'File test-1234 was not found in projects dmsf folder.'
+      assert file.last_revision
+      assert_equal file.last_revision.digest_type, 'SHA256'
       Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
       if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
         project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))

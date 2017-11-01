@@ -605,6 +605,8 @@ module RedmineDmsf
 
         if new_revision.save
           new_revision.copy_file_content(request.body)
+          new_revision.create_digest
+          new_revision.save
           # Notifications
           recipients = DmsfMailer.get_notify_users(project, [f])
           recipients.each do |u|
