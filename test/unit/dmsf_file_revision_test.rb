@@ -57,7 +57,8 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_create_digest
-    assert @revision1.create_digest.length > 40
+    @revision1.create_digest
+    assert_equal 'SHA256', @revision1.digest_type
     assert_equal @revision8.create_digest, 0, 'Digest should be 0, if the file is missing'
   end
 
