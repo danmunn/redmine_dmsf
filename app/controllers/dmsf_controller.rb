@@ -595,8 +595,8 @@ class DmsfController < ApplicationController
     else
       if tag
         @subfolders = []
-        folder_id = @folder.id if @folder
-        DmsfFolder.where(:project_id => @project.id, :dmsf_folder_id => folder_id, :system => false).visible.each do |f|
+        @folder = nil
+        DmsfFolder.where(:project_id => @project.id, :system => false).visible.each do |f|
           f.custom_field_values.each do |v|
             if v.custom_field_id == params[:custom_field_id].to_i
               if v.custom_field.compare_values?(v.value, params[:custom_value])
@@ -607,7 +607,7 @@ class DmsfController < ApplicationController
           end
         end
         @files = []
-        DmsfFile.where(:project_id => @project.id, :dmsf_folder_id => folder_id).visible.each do |f|
+        DmsfFile.where(:project_id => @project.id).visible.each do |f|
           r = f.last_revision
           if r
             r.custom_field_values.each do |v|
@@ -621,7 +621,8 @@ class DmsfController < ApplicationController
           end
         end
         @dir_links = []
-        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.to_s, :dmsf_folder_id => folder_id).where('target_id IS NOT NULL').visible.each do |l|
+        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.to_s).where(
+          'target_id IS NOT NULL').visible.each do |l|
           l.target_folder.custom_field_values.each do |v|
             if v.custom_field_id == params[:custom_field_id].to_i
               if v.custom_field.compare_values?(v.value, params[:custom_value])
@@ -632,7 +633,7 @@ class DmsfController < ApplicationController
           end
         end
         @file_links = []
-        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFile.model_name.to_s, :dmsf_folder_id => folder_id).visible.each do |l|
+        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFile.model_name.to_s).visible.each do |l|
           r = l.target_file.last_revision if l.target_file
           if r
             r.custom_field_values.each do |v|
