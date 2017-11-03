@@ -76,6 +76,7 @@ $onlyfiles = nil
 $onlyrepos = nil
 $env = 'production'
 $resetlog = nil
+$retryfailed = nil
 
 MIME_TYPES = {
   'application/pdf' => 'pdf',
@@ -129,7 +130,8 @@ optparse = OptionParser.new do |opts|
   opts.on('-t', '--temp-dir PATH',      'Temporary directory for indexing'){ |t| $tempdir = t }  
   opts.on('-x', '--resetlog',           'Reset index log'){  $resetlog = 1 }
   opts.on('-V', '--version',            'show version and exit') { puts VERSION; exit}
-  opts.on('-h', '--help',               'show help and exit') { puts opts; exit }  
+  opts.on('-h', '--help',               'show help and exit') { puts opts; exit }
+  opts.on('-R', '--retry-failed', 'retry files which omindex failed to extract text') { $retryfailed = 1 }
   opts.separator('')
   opts.separator('Examples:')
   opts.separator('  xapian_indexer.rb -f -s english,italian -v')
@@ -475,6 +477,7 @@ unless $onlyrepos
     end    
     cmd = "#{$omindex} -s #{lang} --db #{databasepath} #{filespath} --url / --depth-limit=0"
     cmd << ' -v' if $verbose > 0
+    cmd << ' --retry-failed' if $retryfailed
     log cmd
     system_or_raise (cmd)
   end
