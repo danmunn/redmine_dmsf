@@ -251,4 +251,26 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_equal 2, csv.size
   end
 
+  def test_storage_path
+    # Backup
+    setting = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    # Relative path
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'dmsf/files'
+    sp = DmsfFile.storage_path
+    assert_kind_of Pathname, sp
+    assert_equal Rails.root.join(Setting.plugin_redmine_dmsf['dmsf_storage_directory']).to_s, sp.to_s
+    # Empty
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = ''
+    sp = DmsfFile.storage_path
+    assert_kind_of Pathname, sp
+    assert_equal Rails.root.join(Pathname.new('files').join('dmsf')).to_s, sp.to_s
+    # Absolute path
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = '/opt/redmine'
+    sp = DmsfFile.storage_path
+    assert_kind_of Pathname, sp
+    assert_equal '/opt/redmine', sp.to_s
+    # Restore
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = setting
+  end
+
 end
