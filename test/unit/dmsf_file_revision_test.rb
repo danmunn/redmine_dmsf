@@ -171,4 +171,43 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert_equal 'A.0', @revision1.version
   end
 
+  def test_increase_version
+    # 1.0 -> 1.1
+    @revision1.major_version = 1
+    @revision1.minor_version = 0
+    @revision1.increase_version(1)
+    assert_equal 1, @revision1.major_version
+    assert_equal 1, @revision1.minor_version
+    # 1.0 -> 2.0
+    @revision1.major_version = 1
+    @revision1.minor_version = 0
+    @revision1.increase_version(2)
+    assert_equal 2, @revision1.major_version
+    assert_equal 0, @revision1.minor_version
+    # 1.1 -> 2.0
+    @revision1.major_version = 1
+    @revision1.minor_version = 1
+    @revision1.increase_version(2)
+    assert_equal 2, @revision1.major_version
+    assert_equal 0, @revision1.minor_version
+    # A -> A.1
+    @revision1.major_version = -('A'.ord)
+    @revision1.minor_version = -(' '.ord)
+    @revision1.increase_version(1)
+    assert_equal -('A'.ord), @revision1.major_version
+    assert_equal 1, @revision1.minor_version
+    # A -> B
+    @revision1.major_version = -('A'.ord)
+    @revision1.minor_version = -(' '.ord)
+    @revision1.increase_version(2)
+    assert_equal -('B'.ord), @revision1.major_version
+    assert_equal -(' '.ord), @revision1.minor_version
+    # A.1 -> B
+    @revision1.major_version = -('A'.ord)
+    @revision1.minor_version = 1
+    @revision1.increase_version(2)
+    assert_equal -('B'.ord), @revision1.major_version
+    assert_equal -(' '.ord), @revision1.minor_version
+  end
+
 end

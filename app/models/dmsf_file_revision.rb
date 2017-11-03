@@ -239,7 +239,7 @@ class DmsfFileRevision < ActiveRecord::Base
       when 1
         DmsfUploadHelper.increase_version(self.minor_version, 1)
       when 2
-        0
+        (self.major_version < 0) ? -(' '.ord) : 0
       else
         self.minor_version
     end
