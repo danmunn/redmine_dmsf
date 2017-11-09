@@ -381,10 +381,25 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_update_step_operators
-    put :update_step, :id => @wf1, :step => '1', :operator_step => {@wfs1.id.to_s => DmsfWorkflowStep::OPERATOR_OR.to_s}
+    put :update_step,
+        :id => @wf1,
+        :step => '1',
+        :operator_step => { @wfs1.id.to_s => DmsfWorkflowStep::OPERATOR_OR.to_s },
+        :assignee => { @wfs1.id.to_s => @wfs1.user_id.to_s }
     assert_response :redirect
     @wfs1.reload
     assert_equal @wfs1.operator, DmsfWorkflowStep::OPERATOR_OR
+  end
+
+  def test_update_step_assignee
+    put :update_step,
+        :id => @wf1,
+        :step => '1',
+        :operator_step => { @wfs1.id.to_s => DmsfWorkflowStep::OPERATOR_OR.to_s },
+        :assignee => { @wfs1.id.to_s => @user_non_member.id.to_s }
+    assert_response :redirect
+    @wfs1.reload
+    assert_equal @user_non_member.id, @wfs1.user_id
   end
 
   def test_delete_step

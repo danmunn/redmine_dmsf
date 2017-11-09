@@ -26,6 +26,7 @@ class DmsfWorkflowsController < ApplicationController
   before_action :find_project
   before_action :authorize_custom
   before_action :permissions, :only => [:new_action, :assignment, :start]
+  before_action :approver_candidates, :only => [:remove_step, :show, :reorder_steps, :add_step]
 
   layout :workflows_layout
 
@@ -425,14 +426,16 @@ class DmsfWorkflowsController < ApplicationController
         end
       end
     end
-    # Operators
+    # Operators/Assignees
     if params[:operator_step].present?
       params[:operator_step].each do |id, operator|
         step = DmsfWorkflowStep.find_by_id id
         if step
           step.operator = operator.to_i
+          step.user_id = params[:assignee][id]
           unless step.save
             flash[:error] = step.errors.full_messages.to_sentence
+            Rails.logger.error step.errors.full_messages.to_sentence
           end
         end
       end
@@ -492,4 +495,9 @@ private
       require_admin
     end
   end
+
+  def approver_candidates
+    @approving_candidates = @project ? @project.users.to_a : User.active.to_a
+  end
+
 end
