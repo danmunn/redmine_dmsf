@@ -196,7 +196,7 @@ class DmsfFilesController < ApplicationController
       commit = params[:commit] == 'yes'
       if @file.delete(commit)
         flash[:notice] = l(:notice_file_deleted)
-        if commit
+        unless commit
           log_activity('deleted')
           begin
             recipients = DmsfMailer.get_notify_users(@project, [@file])
@@ -215,7 +215,9 @@ class DmsfFilesController < ApplicationController
           end
         end
       else
-        flash[:error] = @file.errors.full_messages.join(', ')
+        msg = @file.errors.full_messages.join(', ')
+        flash[:error] = msg
+        Rails.logger.error msg
       end
     end
     if commit || (@tree_view && params[:details].blank?)
