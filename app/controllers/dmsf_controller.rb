@@ -339,10 +339,6 @@ class DmsfController < ApplicationController
 
   private
 
-  def log_activity(file, action)
-    Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{file.project.identifier}/#{file.id}"
-  end
-
   def email_entries(selected_folders, selected_files)
     begin
       zip = DmsfZip.new
@@ -363,7 +359,6 @@ class DmsfController < ApplicationController
       end
 
       zip.files.each do |f|
-        log_activity(f, 'emailing zip')
         audit = DmsfFileRevisionAccess.new
         audit.user = User.current
         audit.dmsf_file_revision = f.last_revision
@@ -390,16 +385,13 @@ class DmsfController < ApplicationController
     begin
       zip = DmsfZip.new
       zip_entries(zip, selected_folders, selected_files)
-
       zip.files.each do |f|
-        log_activity(f, 'download zip')
         audit = DmsfFileRevisionAccess.new
         audit.user = User.current
         audit.dmsf_file_revision = f.last_revision
         audit.action = DmsfFileRevisionAccess::DownloadAction
         audit.save!
       end
-
       send_file(zip.finish,
         :filename => filename_for_content_disposition("#{@project.name}-#{DateTime.now.strftime('%y%m%d%H%M%S')}.zip"),
         :type => 'application/zip',
@@ -508,9 +500,6 @@ class DmsfController < ApplicationController
     end
     # Activities
     if !deleted_files.empty?
-      deleted_files.each do |f|
-        log_activity(f, 'deleted')
-      end
       begin
         recipients = DmsfMailer.get_notify_users(@project, deleted_files)
         recipients.each do |u|

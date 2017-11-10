@@ -55,35 +55,24 @@ class DmsfFoldersCopyController < ApplicationController
     if !@target_folder.nil? && @target_folder.project != @target_project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)
     end
-
     if (@target_folder && @target_folder == @folder.dmsf_folder) ||
         (@target_folder.nil? && @folder.dmsf_folder.nil? && @target_project == @folder.project)
       flash[:error] = l(:error_target_folder_same)
       redirect_to :action => 'new', :id => @folder, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
-
     new_folder = @folder.copy_to(@target_project, @target_folder)
-
     unless new_folder.errors.empty?
       flash[:error] = "#{l(:error_folder_cannot_be_copied)}: #{new_folder.errors.full_messages.join(', ')}"
       redirect_to :action => 'new', :id => @folder, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
-
     new_folder.reload
-
     flash[:notice] = l(:notice_folder_copied)
-    log_activity(new_folder, 'was copied (is copy)')
-
     redirect_to dmsf_folder_path(:id => @target_project, :folder_id => new_folder)
   end
 
   private
-
-  def log_activity(folder, action)
-    Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{folder.project.identifier}/#{folder.id}"
-  end
 
   def find_folder
     @folder = DmsfFolder.visible.find_by_id(params[:id])

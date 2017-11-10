@@ -53,7 +53,6 @@ class DmsfFilesController < ApplicationController
       end
       check_project(@revision.dmsf_file)
       raise ActionController::MissingFile if @file.deleted?
-      log_activity('downloaded')
       access = DmsfFileRevisionAccess.new
       access.user = User.current
       access.dmsf_file_revision = @revision
@@ -164,7 +163,6 @@ class DmsfFilesController < ApplicationController
           if @file.save
             @file.set_last_revision revision
             flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
-            log_activity('new revision')
             begin
               recipients = DmsfMailer.get_notify_users(@project, [@file])
               recipients.each do |u|
@@ -197,7 +195,6 @@ class DmsfFilesController < ApplicationController
       if @file.delete(commit)
         flash[:notice] = l(:notice_file_deleted)
         unless commit
-          log_activity('deleted')
           begin
             recipients = DmsfMailer.get_notify_users(@project, [@file])
             recipients.each do |u|
@@ -235,7 +232,6 @@ class DmsfFilesController < ApplicationController
           @file.save
         end
         flash[:notice] = l(:notice_revision_deleted)
-        log_activity('deleted')
       else
         flash[:error] = @revision.errors.full_messages.join(', ')
       end
@@ -297,7 +293,6 @@ class DmsfFilesController < ApplicationController
 
   def restore
     if @file.restore
-      log_activity('restored')
       flash[:notice] = l(:notice_dmsf_file_restored)
     else
       flash[:error] = @file.errors.full_messages.to_sentence
@@ -319,10 +314,6 @@ class DmsfFilesController < ApplicationController
   end
 
   private
-
-  def log_activity(action)
-    Rails.logger.info "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{@file.project.identifier}/#{@file.id}/#{@revision.id if @revision}"
-  end
 
   def find_file
     @file = DmsfFile.find params[:id]

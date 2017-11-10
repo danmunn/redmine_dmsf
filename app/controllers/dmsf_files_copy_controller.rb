@@ -60,25 +60,19 @@ class DmsfFilesCopyController < ApplicationController
     if @target_folder && (@target_folder.project != @target_project)
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)
     end
-
     if (@target_folder && @target_folder == @file.dmsf_folder) ||
         (@target_folder.nil? && @file.dmsf_folder.nil? && @target_project == @file.project)
       flash[:error] = l(:error_target_folder_same)
       redirect_to :action => 'new', :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
-
     new_file = @file.copy_to(@target_project, @target_folder)
-
     unless new_file.errors.empty?
       flash[:error] = "#{l(:error_file_cannot_be_copied)}: #{new_file.errors.full_messages.join(', ')}"
       redirect_to :action => 'new', :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
-
     flash[:notice] = l(:notice_file_copied)
-    log_activity(new_file, 'was copied (is copy)')
-
     redirect_to dmsf_file_path(new_file)
   end
 
@@ -92,36 +86,23 @@ class DmsfFilesCopyController < ApplicationController
     if @target_folder && @target_folder.project != @target_project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)
     end
-
     if (@target_folder && @target_folder == @file.dmsf_folder) ||
         (@target_folder.nil? && @file.dmsf_folder.nil? && @target_project == @file.project)
       flash[:error] = l(:error_target_folder_same)
       redirect_to :action => 'new', :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
-
     unless @file.move_to(@target_project, @target_folder)
       flash[:error] = "#{l(:error_file_cannot_be_moved)}: #{@file.errors.full_messages.join(', ')}"
       redirect_to :action => 'new', :id => @file, :target_project_id => @target_project, :target_folder_id => @target_folder
       return
     end
-
     @file.reload
-
     flash[:notice] = l(:notice_file_moved)
-    log_activity(@file, 'was moved (is copy)')
-
     redirect_to dmsf_file_path(@file)
   end
 
 private
-
-  def log_activity(file, action)
-    if file && file.last_revision
-      Rails.logger.info
-        "#{Time.now.strftime('%Y-%m-%d %H:%M:%S')} #{User.current.login}@#{request.remote_ip}/#{request.env['HTTP_X_FORWARDED_FOR']}: #{action} dmsf://#{file.project.identifier}/#{file.id}/#{file.last_revision.id}"
-    end
-  end
 
   def find_file
     @file = DmsfFile.visible.find_by_id params[:id]
