@@ -22,7 +22,7 @@
 
 zh-TW:
   dmsf: 文件總管  # Custom fields tab title
-  label_dmsf_file_plural: 文件檔案
+  label_dmsf_file_plural: DMS 文件檔案  # Email subject & Search options
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: 尚未選取任何項目
@@ -47,7 +47,6 @@ zh-TW:
   error_at_least_one_revision_must_be_present: 至少要有一個修訂版本存在
   notice_revision_deleted: 修訂版本己經被刪除
   warning_one_of_files_locked: 其中一個檔案被鎖定了
-  notice_file_unlocked: 檔案己經解除鎖定
   notice_file_revision_created: 檔案修訂版本己建立
   notice_your_preferences_were_saved: 您的偏好設定己經儲存
   notice_your_preferences_were_not_saved: Your preferences were not saved
@@ -191,7 +190,7 @@ zh-TW:
   field_target_project: Target project
   field_target_folder: Target folder
   title_copy_or_move: Copy/Move
-  label_dmsf_folder_plural: Folders
+  label_dmsf_folder_plural: DMS Folders # Search options
   comment_moved_from: "Moved from %{source}"
   error_target_folder_same: Target folder and project are the same as current
   error_file_cannot_be_moved: "File can't be moved"

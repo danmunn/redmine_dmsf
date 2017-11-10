@@ -22,7 +22,7 @@
 
 en:
   dmsf: DMS # Custom fields tab title
-  label_dmsf_file_plural: Documents
+  label_dmsf_file_plural: DMS Documents # Email subject & Search options
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: No entries selected
@@ -47,7 +47,6 @@ en:
   error_at_least_one_revision_must_be_present: At least one revision must be present
   notice_revision_deleted: Revision deleted
   warning_one_of_files_locked: One of files locked
-  notice_file_unlocked: File unlocked
   notice_file_revision_created: File revision created
   notice_your_preferences_were_saved: Your preferences were saved
   notice_your_preferences_were_not_saved: Your preferences were not saved
@@ -191,7 +190,7 @@ en:
   field_target_project: Target project
   field_target_folder: Target folder
   title_copy_or_move: Copy/Move
-  label_dmsf_folder_plural: Folders
+  label_dmsf_folder_plural: DMS Folders # Search options
   comment_moved_from: "Moved from %{source}"
   error_target_folder_same: Target folder and project are the same as current
   error_file_cannot_be_moved: "File can't be moved"

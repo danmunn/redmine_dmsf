@@ -22,7 +22,7 @@
 
 sl:
   dmsf: Arhiv  # Custom fields tab title
-  label_dmsf_file_plural: Arhivske datoteke
+  label_dmsf_file_plural: DMS Arhivske datoteke # Email subject & Search options
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: Ničesar niste izbrali
@@ -47,7 +47,6 @@ sl:
   error_at_least_one_revision_must_be_present: Vsaj ena verzija mora obstajati
   notice_revision_deleted: Verzija izbrisana
   warning_one_of_files_locked: Ena od datotek je zaklenjena
-  notice_file_unlocked: Datoteka odklenjena
   notice_file_revision_created: Verzija datoteke kreirana
   notice_your_preferences_were_saved: Vaše nastavitve so shranjene
   notice_your_preferences_were_not_saved: Your preferences were not saved
@@ -190,8 +189,8 @@ sl:
   notice_file_moved: Datoteka premaknjena
   field_target_project: Ciljni projekt
   field_target_folder: Ciljna mapa
-  title_copy_or_move: "Kopiraj/Premakni"
-  label_dmsf_folder_plural: Arhivske mape
+  title_copy_or_move: Kopiraj/Premakni
+  label_dmsf_folder_plural: DMS Arhivske mape # Search options
   comment_moved_from: "Premaknjeno iz %{source}"
   error_target_folder_same: Ciljna mapa in projekt sta ista kot izvorna (trenutna)
   error_file_cannot_be_moved: Datoteka ne more biti premaknjena

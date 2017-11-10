@@ -22,7 +22,7 @@
 
 cs:
   dmsf: DMS  # Custom fields tab title
-  label_dmsf_file_plural: Dokumenty
+  label_dmsf_file_plural: DMS Dokumenty  # Email subject & Search options
   label_dmsf_file_revision_plural: Revize dokumentů
   label_dmsf_file_revision_access_plural: Přístupy k dokumentům
   warning_no_entries_selected: Není nic vybráno
@@ -47,7 +47,6 @@ cs:
   error_at_least_one_revision_must_be_present: Musí existovat alespoň jedna revize
   notice_revision_deleted: Revize byla smazána
   warning_one_of_files_locked: Jeden ze souborů je zamčen
-  notice_file_unlocked: Soubor byl odemčen
   notice_file_revision_created: vytvořena nová revize
   notice_your_preferences_were_saved: Vaše nastavení bylo uloženo
   notice_your_preferences_were_not_saved: Your preferences were not saved
@@ -191,7 +190,7 @@ cs:
   field_target_project: Cílový projekt
   field_target_folder: Cílová složka
   title_copy_or_move: Kopírovat/Přesunout
-  label_dmsf_folder_plural: Složky
+  label_dmsf_folder_plural: DMS Složky   # Search options
   comment_moved_from: "Přesunuto z %{source}"
   error_target_folder_same: Cílový složka a projekt jsou stejné jako aktuální
   error_file_cannot_be_moved: Soubor nemůže být přesunut

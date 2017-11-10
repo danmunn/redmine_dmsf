@@ -5,6 +5,7 @@
 # Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 #
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -19,10 +20,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
----
 hu:
   dmsf: DMS  # Custom fields tab title
-  label_dmsf_file_plural: dokumentumok
+  label_dmsf_file_plural: DMS Dokumentumok   # Email subject & Search options
   label_dmsf_file_revision_plural: Dokumtum felülvizsgálata
   label_dmsf_file_revision_access_plural: Dokumentum hozzáférései
   warning_no_entries_selected: Verzió törölve
@@ -190,7 +190,7 @@ hu:
   field_target_project: Célprojekt
   field_target_folder: Cél mappa
   title_copy_or_move: Másolás/Elmozgatás
-  label_dmsf_folder_plural: Mappák
+  label_dmsf_folder_plural: DMS Mappák   # Search options
   comment_moved_from: "Elmozgatva %{source}"
   error_target_folder_same: A cél mappa és a projekt ugyanaz, mint a jelenlegi
   error_file_cannot_be_moved: Fájl nem áthelyezhető

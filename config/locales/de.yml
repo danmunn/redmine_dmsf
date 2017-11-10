@@ -22,7 +22,7 @@
 
 de:
   dmsf: DMS # Custom fields tab title
-  label_dmsf_file_plural: Dokumente
+  label_dmsf_file_plural: DMS Dokumente # Email subject & Search options
   label_dmsf_file_revision_plural: Dokumenteversion
   label_dmsf_file_revision_access_plural: Dokumentezugriffe
   warning_no_entries_selected: Keine Einträge ausgewählt
@@ -47,7 +47,6 @@ de:
   error_at_least_one_revision_must_be_present: Es muss mindestens eine Version existieren
   notice_revision_deleted: Version gelöscht
   warning_one_of_files_locked: Eine der Dateien ist gesperrt
-  notice_file_unlocked: Dateisperre gelöst
   notice_file_revision_created: Dateiversion erstellt
   notice_your_preferences_were_saved: Deine Einstellungen wurden gespeichert
   notice_your_preferences_were_not_saved: Your preferences were not saved
@@ -191,7 +190,7 @@ de:
   field_target_project: Zielprojekt
   field_target_folder: Zielordner
   title_copy_or_move: Kopieren/Verschieben
-  label_dmsf_folder_plural: Ordner
+  label_dmsf_folder_plural: DMS Ordner   # Search options
   comment_moved_from: "Verschoben aus %{source}"
   error_target_folder_same: Zielordner und Projekt sind dieselbe wie die aktuellen.
   error_file_cannot_be_moved: Die Datei kann nicht verschoben werden.

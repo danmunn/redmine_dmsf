@@ -22,7 +22,7 @@
 
 ru:
   dmsf: DMS  # Custom fields tab title
-  label_dmsf_file_plural: Файлы
+  label_dmsf_file_plural: DMS Файлы # Email subject & Search options
   label_dmsf_file_revision_plural: Изменения документов
   label_dmsf_file_revision_access_plural: Доступы к документам
   warning_no_entries_selected: Файлы не выбраны
@@ -47,7 +47,6 @@ ru:
   error_at_least_one_revision_must_be_present: По крайней мере, одна редакция должна присутствовать
   notice_revision_deleted: Редакция удалена
   warning_one_of_files_locked: Один из файлов заблокирован
-  notice_file_unlocked: Файл разблокирован
   notice_file_revision_created: Редакция файла создана
   notice_your_preferences_were_saved: Ваши настройки были сохранены
   notice_your_preferences_were_not_saved: Your preferences were not saved
@@ -191,7 +190,7 @@ ru:
   field_target_project: Целевой проект
   field_target_folder: Целевая папка
   title_copy_or_move: Копировать/Переместить
-  label_dmsf_folder_plural: Папки
+  label_dmsf_folder_plural: DMS Папки # Search options
   comment_moved_from: "Перемещен из %{source}"
   error_target_folder_same: Целевая папка и проект совпадают с текущими
   error_file_cannot_be_moved: Файл не может быть перемещен

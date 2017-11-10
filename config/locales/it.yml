@@ -22,7 +22,7 @@
 
 it: # Italian strings thx 2 Matteo Arceci!
   dmsf: DMS  # Custom fields tab title
-  label_dmsf_file_plural: Documenti
+  label_dmsf_file_plural: DMS Documenti  # Email subject & Search options
   label_dmsf_file_revision_plural: Revisioni al documento
   label_dmsf_file_revision_access_plural: Accessi al documento
   warning_no_entries_selected: Nessun documento selezionato
@@ -47,7 +47,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   error_at_least_one_revision_must_be_present: Deve essere presente almeno una revisione
   notice_revision_deleted: Revisione cancellata
   warning_one_of_files_locked: Uno dei documenti è bloccato
-  notice_file_unlocked: Documento sbloccato
   notice_file_revision_created: Revisione del documento creata
   notice_your_preferences_were_saved: Le tue preferenze sono state salvate
   notice_your_preferences_were_not_saved: Le tue preferenze non sono state salvate
@@ -191,7 +190,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   field_target_project: Progetto di destinazione
   field_target_folder: Cartella di destinazione
   title_copy_or_move: Copia/Sposta
-  label_dmsf_folder_plural: Cartelle
+  label_dmsf_folder_plural: DMS Cartelle  # Search options
   comment_moved_from: "Spostato da %{source}"
   error_target_folder_same: La cartella di destinazione ed il progetto sono gli stessi di adesso
   error_file_cannot_be_moved: "Il documento non può essere spostato"

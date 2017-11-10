@@ -22,7 +22,7 @@
 
 fr:
   dmsf: DMS  # Custom fields tab title
-  label_dmsf_file_plural: Fichiers
+  label_dmsf_file_plural: DMS Fichiers   # Email subject & Search options
   label_dmsf_file_revision_plural: Révisions du document
   label_dmsf_file_revision_access_plural: Accès au document
   warning_no_entries_selected: Aucun fichier sélectionné
@@ -47,7 +47,6 @@ fr:
   error_at_least_one_revision_must_be_present: Au moins une révision est requise
   notice_revision_deleted: Révision supprimée
   warning_one_of_files_locked: Un des fichiers sélectionnés est verrouillé
-  notice_file_unlocked: Fichier déverrouillé
   notice_file_revision_created: La révision du fichier a été ajoutée
   notice_your_preferences_were_saved: Vos paramètres ont été enregistrés
   notice_your_preferences_were_not_saved: Your preferences were not saved
@@ -191,7 +190,7 @@ fr:
   field_target_project: Projet cible
   field_target_folder: Dossier cible
   title_copy_or_move: Copie/Déplacement
-  label_dmsf_folder_plural: Les dossiers
+  label_dmsf_folder_plural: DMS Les dossiers   # Search options
   comment_moved_from: "Déplacé depuis %{source}"
   error_target_folder_same: Le projet et le dossier cible sont identiques au projet et dossier source
   error_file_cannot_be_moved: Le fichier ne peut pas être déplacé

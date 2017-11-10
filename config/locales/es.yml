@@ -22,7 +22,7 @@
 
 es:
   dmsf: DMS  # Custom fields tab title
-  label_dmsf_file_plural: Archivos
+  label_dmsf_file_plural: DMS Archivos   # Email subject & Search options
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses
   warning_no_entries_selected: No ha seleccionado ningún ítem
@@ -47,7 +47,6 @@ es:
   error_at_least_one_revision_must_be_present: al menos una revisión debe estar presente
   notice_revision_deleted: Revision eliminada correctamente
   warning_one_of_files_locked: Uno de los archivos está bloqueado
-  notice_file_unlocked: Archivo desbloqueado
   notice_file_revision_created: Revision de archivos creada correctamente
   notice_your_preferences_were_saved: Sus preferencias han sido guardadas correctamente
   notice_your_preferences_were_not_saved: Your preferences were not saved
@@ -191,7 +190,7 @@ es:
   field_target_project: Proyecto destino
   field_target_folder: Directorio destino
   title_copy_or_move: Copiar/Mover
-  label_dmsf_folder_plural: directorio
+  label_dmsf_folder_plural: DMS Directorio   # Search options
   comment_moved_from: "Mover desde %{source}"
   error_target_folder_same: El directorio y proyecto destino son el actual
   error_file_cannot_be_moved: "Los archivos no puesen ser movidos"
