@@ -28,6 +28,8 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     @project = Project.find_by_id 1
     assert_not_nil @project
     @project.enable_module! :dmsf
+    @folder1 = DmsfFolder.find_by_id 1
+    @folder2 = DmsfFolder.find_by_id 2
     @folder4 = DmsfFolder.find_by_id 4
     @folder5 = DmsfFolder.find_by_id 5
     @folder6 = DmsfFolder.find_by_id 6
@@ -38,9 +40,12 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     manager_role.add_permission! :view_dmsf_folders
     developer_role = Role.find 2
     developer_role.add_permission! :view_dmsf_folders
+    User.current = @manager
   end
-  
+
   def test_truth
+    assert_kind_of DmsfFolder, @folder1
+    assert_kind_of DmsfFolder, @folder1
     assert_kind_of DmsfFolder, @folder4
     assert_kind_of DmsfFolder, @folder5
     assert_kind_of DmsfFolder, @folder6
@@ -179,4 +184,29 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     csv = @folder4.to_csv(columns, 0)
     assert_equal 2, csv.size
   end
+
+  def test_directory_tree
+    tree = DmsfFolder.directory_tree(@project)
+    assert tree
+    # [["Documents", nil],
+    #  ["...folder7", 7],
+    #  ["...folder1", 1],
+    #  ["......folder2", 2]
+    #  [".........folder3", 5]
+    #  ["...folder2", 2]
+    #  ["......folder3", 5]
+    #  ["...folder3", 5]
+    #  ["...folder6", 6]]
+    assert tree.to_s.include?('.........folder3'), "'.........folder3' string in the folder tree expected."
+  end
+
+  def test_folder_tree
+    tree = @folder1.folder_tree
+    assert tree
+    # [["folder1", 1],
+    #  ["...folder2", 2],
+    #  ["......folder3", 5]]
+    assert tree.to_s.include?('......folder3'), "'......folder3' string in the folder tree expected."
+  end
+
 end

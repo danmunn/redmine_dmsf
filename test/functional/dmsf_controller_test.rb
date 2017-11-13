@@ -213,4 +213,16 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_equal 'text/csv; header=present', @response.content_type
   end
 
+  def test_new_forbidden
+    @role.remove_permission! :folder_manipulation
+    get :new, :id => @project, :parent_id => nil
+    assert_response :forbidden
+  end
+
+  def test_new_forbidden
+    @role.add_permission! :folder_manipulation
+    get :new, :id => @project, :parent_id => nil
+    assert_response :success
+  end
+
 end

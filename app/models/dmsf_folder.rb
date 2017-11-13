@@ -225,10 +225,10 @@ class DmsfFolder < ActiveRecord::Base
       project = Project.find_by_id project
     end
     tree = [[l(:link_documents), nil]]
-    project.dmsf_folders.notsystem.visible(false).each do |folder|
+    DmsfFolder.where(:project_id => project.id).notsystem.visible(false).each do |folder|
       unless folder == current_folder
         tree.push(["...#{folder.title}", folder.id])
-        directory_subtree(tree, folder, 2, current_folder)
+        DmsfFolder.directory_subtree(tree, folder, 2, current_folder)
       end
     end
     return tree
@@ -236,7 +236,7 @@ class DmsfFolder < ActiveRecord::Base
 
   def folder_tree
     tree = [[self.title, self.id]]
-    DmsfFolder.directory_subtree(tree, self, 2, nil)
+    DmsfFolder.directory_subtree(tree, self, 1, nil)
     return tree
   end
 
@@ -580,10 +580,10 @@ class DmsfFolder < ActiveRecord::Base
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)
-    folder.dmsf_folders.visible(false).each do |subfolder|
+    DmsfFolder.where(:project_id => folder.project_id, :dmsf_folder_id => folder.id).notsystem.visible(false).each do |subfolder|
       unless subfolder == current_folder
         tree.push(["#{'...' * level}#{subfolder.title}", subfolder.id])
-        directory_subtree(tree, subfolder, level + 1, current_folder)
+        DmsfFolder.directory_subtree(tree, subfolder, level + 1, current_folder)
       end
     end
   end
