@@ -180,7 +180,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_to_csv
-    columns = ['id', 'title']
+    columns = %w(id title)
     csv = @folder4.to_csv(columns, 0)
     assert_equal 2, csv.size
   end
@@ -191,22 +191,19 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     # [["Documents", nil],
     #  ["...folder7", 7],
     #  ["...folder1", 1],
-    #  ["......folder2", 2]
-    #  [".........folder3", 5]
-    #  ["...folder2", 2]
-    #  ["......folder3", 5]
-    #  ["...folder3", 5]
+    #  ["......folder2", 2] - locked
     #  ["...folder6", 6]]
-    assert tree.to_s.include?('.........folder3'), "'.........folder3' string in the folder tree expected."
+    assert tree.to_s.include?('...folder1'), "'...folder3' string in the folder tree expected."
+    assert !tree.to_s.include?('......folder2'), "'......folder2' string in the folder tree not expected."
   end
 
   def test_folder_tree
     tree = @folder1.folder_tree
     assert tree
     # [["folder1", 1],
-    #  ["...folder2", 2],
-    #  ["......folder3", 5]]
-    assert tree.to_s.include?('......folder3'), "'......folder3' string in the folder tree expected."
+    #  ["...folder2", 2] - locked
+    assert tree.to_s.include?('folder1'), "'folder1' string in the folder tree expected."
+    assert !tree.to_s.include?('...folder2'), "'...folder2' string in the folder tree not expected."
   end
 
 end
