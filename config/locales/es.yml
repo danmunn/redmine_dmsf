@@ -185,20 +185,13 @@ es:
   project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: No hay proyecto para copiar el archivo
   comment_copied_from: "Copiado desde %{source}"
-  notice_file_copied: Archivo copiado
-  notice_file_moved: Archivo movido
   field_target_project: Proyecto destino
   field_target_folder: Directorio destino
   title_copy_or_move: Copiar/Mover
   label_dmsf_folder_plural: DMS Directorio   # Search options
   comment_moved_from: "Mover desde %{source}"
   error_target_folder_same: El directorio y proyecto destino son el actual
-  error_file_cannot_be_moved: "Los archivos no puesen ser movidos"
-  error_file_cannot_be_copied: "Los arvhicos no pueden ser copiados"
-  warning_no_project_to_copy_folder_to: No hay proyecto para copiar el directorio
   title_copy: Copiar
-  error_folder_cannot_be_copied: "El directorio no puede ser copiado"
-  notice_folder_copied: Directorio copiado
 
   error_max_email_filesize_exceeded: "Tamaño máximo de archivo excedido para ser enviado por email. (%{number} MB)"
   note_maximum_email_filesize: Límite máximo de archivo para ser enviado por email. 0 equivale a ilimitado. Unidad en MB.

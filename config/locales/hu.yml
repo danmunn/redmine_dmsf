@@ -185,20 +185,13 @@ hu:
   project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: Nincs projekt ahová másolható a fájl
   comment_copied_from: "Másolva  %{source}"
-  notice_file_copied: Fájl másolva
-  notice_file_moved: Fájl áthelyezve
   field_target_project: Célprojekt
   field_target_folder: Cél mappa
   title_copy_or_move: Másolás/Elmozgatás
   label_dmsf_folder_plural: DMS Mappák   # Search options
   comment_moved_from: "Elmozgatva %{source}"
   error_target_folder_same: A cél mappa és a projekt ugyanaz, mint a jelenlegi
-  error_file_cannot_be_moved: Fájl nem áthelyezhető
-  error_file_cannot_be_copied: Fájlt nem lehet másolni
-  warning_no_project_to_copy_folder_to: "Nincs projekt ahova a mappa másolható hibák miatt: %{files}"
   title_copy: Másolás
-  error_folder_cannot_be_copied: Mappa nem másolható
-  notice_folder_copied: Mappa másolásra került
 
   error_max_email_filesize_exceeded: "Túllépte a maximum fájlméretet ami emailen küldhető. (%{number} MB)"
   note_maximum_email_filesize: Korlátozza a maximális fájlméretet, amely küldhető email-ben. A 0 korlátlan méretet jelent, az érték MB-ban kerül megadásra.

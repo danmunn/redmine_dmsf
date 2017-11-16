@@ -185,20 +185,13 @@ fr:
   project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: "Le projet de destination n'est pas défini"
   comment_copied_from: "Copie effectuée depuis %{source}"
-  notice_file_copied: Fichier copié
-  notice_file_moved: Fichier déplacé
   field_target_project: Projet cible
   field_target_folder: Dossier cible
   title_copy_or_move: Copie/Déplacement
   label_dmsf_folder_plural: DMS Les dossiers   # Search options
   comment_moved_from: "Déplacé depuis %{source}"
   error_target_folder_same: Le projet et le dossier cible sont identiques au projet et dossier source
-  error_file_cannot_be_moved: Le fichier ne peut pas être déplacé
-  error_file_cannot_be_copied: Le fichier ne peut pas être copié
-  warning_no_project_to_copy_folder_to: "Le projet de destination n'est pas défini"
   title_copy: Copie
-  error_folder_cannot_be_copied: Le dossier ne peut pas être copié
-  notice_folder_copied: Dossier copié
 
   error_max_email_filesize_exceeded: "Vous avez dépassé la taille maximale des fichiers pouvant être transmis par mail (%{number} MB)"
   note_maximum_email_filesize: Taille maximale, en méga octets, des fichiers pouvant être transmis par mail. 0 indique aucune restriction
@@ -347,7 +340,7 @@ fr:
 
   label_document_url: Url
   label_last_revision_id: Révision
-    
+
   label_webdav_disable_versioning: Modèles de fichiers sans gestion de version
   note_webdav_disable_versioning: "Expression régulière qui désactive la gestion de version pour les fichiers correspondants. L'expression par défaut correspond aux fichiers temporaires créés par MsOffice."
 
@@ -355,7 +348,7 @@ fr:
   note_dmsf_keep_documents_locked: Les documents seront maintenus verrouillés après approbation.
   note_global: (global)
   field_dmsf_not_inheritable: Ne peut être hérité
-  
+
   label_webdav_use_project_names: Utiliser le nom de projet pour le dossier du projet
   note_webdav_use_project_names: "Utilise le nom du projet au lieu de l'identifiant projet pour le dossier du projet."
 

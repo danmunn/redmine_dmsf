@@ -185,20 +185,13 @@ pl:
   project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: Brak projektu do skopiowania pliku
   comment_copied_from: "Skopiowano z %{source}"
-  notice_file_copied: Plik został skopiowany
-  notice_file_moved: Plik został przeniesiony
   field_target_project: Projekt docelowy
   field_target_folder: Folder docelowy
   title_copy_or_move: Kopiuj/Przenieś
   label_dmsf_folder_plural: DMS Foldery # Search options
   comment_moved_from: "Przeniesiono z %{source}"
   error_target_folder_same: Docelowy projekt i folder są identyczne z obecnym
-  error_file_cannot_be_moved: "Plik nie może zostać przeniesiony"
-  error_file_cannot_be_copied: "Plik nie może zostać skopiowany"
-  warning_no_project_to_copy_folder_to: No project to copy folder to
   title_copy: Kopiuj
-  error_folder_cannot_be_copied: "Folder nie może zostać skopiowany"
-  notice_folder_copied: Folder został skopiowany
 
   error_max_email_filesize_exceeded: "Maksymalny rozmiar pliku załącznika email został przekroczony. (%{number} MB)"
   note_maximum_email_filesize: Maksymalny rozmiar pliku, który może zostać wysłany przez email. 0 oznacza brak ograniczeń. Rozmiar w MB.

@@ -185,20 +185,13 @@ it: # Italian strings thx 2 Matteo Arceci!
   project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: Nessun progetto nel quale copiare il documento
   comment_copied_from: "Copiato da %{source}"
-  notice_file_copied: Documento copiato
-  notice_file_moved: Documento spostato
   field_target_project: Progetto di destinazione
   field_target_folder: Cartella di destinazione
   title_copy_or_move: Copia/Sposta
   label_dmsf_folder_plural: DMS Cartelle  # Search options
   comment_moved_from: "Spostato da %{source}"
   error_target_folder_same: La cartella di destinazione ed il progetto sono gli stessi di adesso
-  error_file_cannot_be_moved: "Il documento non può essere spostato"
-  error_file_cannot_be_copied: "Il documento non può essere copiato"
-  warning_no_project_to_copy_folder_to: Nessun progetto dove copiare la cartella
   title_copy: Copia
-  error_folder_cannot_be_copied: "La cartella non può essere copiata"
-  notice_folder_copied: Cartella copiata
   
   error_max_email_filesize_exceeded: "Hai superato la dimensione massima del file per l'invio tramite e-mail. (%{number} MB)"
   note_maximum_email_filesize: Limiti di dimensione massima dei file che possono essere inviati via e-mail. 0 significa illimitato. Il numero è in MB.

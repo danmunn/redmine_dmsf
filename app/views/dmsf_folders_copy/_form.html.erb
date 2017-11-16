@@ -1,0 +1,58 @@
+<%
+# encoding: utf-8
+#
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<% if projects.present? %>
+  <%= form_tag({:action => 'copy', :id => file_or_folder}, :id => 'copyForm') do |f| %>
+    <div class="box tabular">
+      <p>
+        <%= label_tag('target_project_id', l(:field_target_project)) %>
+        <%= select_tag('target_project_id',
+                       project_tree_options_for_select(projects, :selected => target_project)) %>
+      </p>
+      <p>
+        <%= label_tag('target_folder_id', l(:field_target_folder)) %>
+        <%= select_tag('target_folder_id', options_for_select(folders,
+                                                              :selected => (target_folder.id if target_folder))) %>
+      </p>
+    </div>
+    <p>
+      <%= submit_tag(l(:button_copy), :id => 'copy_button') %>
+      <% if !file_or_folder.locked? && User.current.allowed_to?(permission, project) %>
+        <%= submit_tag(l(:button_move), :id => 'move_button') %>
+      <% end %>
+    </p>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+  $('#move_button').click(function(event) {
+    $('#copyForm').attr('action', "<%= url_for(:action => 'move', :id => file_or_folder) %>");
+    $('#copyForm').submit();
+  });
+
+  $('#target_project_id').change(function () {
+    $('#content').load("<%= url_for(:action => 'new') %>", $('#copyForm').serialize());    
+  });
+
+  $('#target_project_id').select2();
+  $('#target_folder_id').select2();
+</script>

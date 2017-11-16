@@ -103,7 +103,7 @@ if Redmine::Plugin.installed? :redmine_dmsf
     # files_copy controller
     #   /dmsf/files/<file id>/copy
     ##
-    post '/dmsf/files/:id/copy/create', :controller => 'dmsf_files_copy', :action => 'create'
+    post '/dmsf/files/:id/copy/copy', :controller => 'dmsf_files_copy', :action => 'copy'
     post '/dmsf/files/:id/copy/move', :controller => 'dmsf_files_copy', :action => 'move'
     get '/dmsf/files/:id/copy', :controller => 'dmsf_files_copy', :action => 'new', :as => 'copy_file'
 
@@ -111,8 +111,8 @@ if Redmine::Plugin.installed? :redmine_dmsf
     # folders_copy controller
     #   /dmsf/folders/<folder id>/copy
     ##
-    #verify :method => :post, :only => [:copy_to], :render => { :nothing => true, :status => :method_not_allowed }
-    post '/dmsf/folders/:id/copy/to', :controller => 'dmsf_folders_copy', :action => 'copy_to'
+    post '/dmsf/folders/:id/copy/copy', :controller => 'dmsf_folders_copy', :action => 'copy'
+    post '/dmsf/folders/:id/copy/move', :controller => 'dmsf_folders_copy', :action => 'move'
     get '/dmsf/folders/:id/copy', :controller => 'dmsf_folders_copy', :action => 'new', :as => 'copy_folder'
 
     #

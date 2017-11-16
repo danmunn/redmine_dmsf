@@ -225,11 +225,12 @@ class DmsfFolder < ActiveRecord::Base
       project = Project.find_by_id project
     end
     tree = [[l(:link_documents), nil]]
-    DmsfFolder.where(:project_id => project.id).notsystem.visible(false).each do |folder|
-      unless folder == current_folder
-        tree.push(["...#{folder.title}", folder.id])
-        DmsfFolder.directory_subtree(tree, folder, 2, current_folder)
-      end
+    folders = DmsfFolder.where(:project_id => project.id).notsystem.visible(false).to_a
+    folders.delete(current_folder)
+    folders = folders.delete_if{ |f| f.locked_for_user? }
+    folders.each do |folder|
+      tree.push(["...#{folder.title}", folder.id])
+      DmsfFolder.directory_subtree(tree, folder, 2, current_folder)
     end
     return tree
   end
@@ -580,7 +581,10 @@ class DmsfFolder < ActiveRecord::Base
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)
-    DmsfFolder.where(:project_id => folder.project_id, :dmsf_folder_id => folder.id).notsystem.visible(false).each do |subfolder|
+    folders = DmsfFolder.where(:project_id => folder.project_id, :dmsf_folder_id => folder.id).notsystem.visible(false).to_a
+    folders.delete(current_folder)
+    folders.delete_if { |f| f.locked_for_user? }
+    folders.each do |subfolder|
       unless subfolder == current_folder
         tree.push(["#{'...' * level}#{subfolder.title}", subfolder.id])
         DmsfFolder.directory_subtree(tree, subfolder, level + 1, current_folder)

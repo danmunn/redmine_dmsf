@@ -185,20 +185,13 @@ sl:
   project_module_dmsf: Arhiv  # Project module name
   warning_no_project_to_copy_file_to: Ni projekta kamor bi kopiral datoteko
   comment_copied_from: "Skopirano iz %{source}"
-  notice_file_copied: Datoteka skopirana
-  notice_file_moved: Datoteka premaknjena
   field_target_project: Ciljni projekt
   field_target_folder: Ciljna mapa
   title_copy_or_move: Kopiraj/Premakni
   label_dmsf_folder_plural: DMS Arhivske mape # Search options
   comment_moved_from: "Premaknjeno iz %{source}"
   error_target_folder_same: Ciljna mapa in projekt sta ista kot izvorna (trenutna)
-  error_file_cannot_be_moved: Datoteka ne more biti premaknjena
-  error_file_cannot_be_copied: Datoteko ni možno skopirati
-  warning_no_project_to_copy_folder_to: Ni projekta v katerega bi skopiral mapo
   title_copy: Kopiraj
-  error_folder_cannot_be_copied: Mapo se ne da skopirati
-  notice_folder_copied: Mapa skopirana
 
   error_max_email_filesize_exceeded: "Presegli ste največjo velikost datoteke za pošiljanje po email-u. (%{number} MB)"
   note_maximum_email_filesize: Omejitev največje velikosti datoteke, ki se lahko pošlje po email-u. 0 pomeni neomejeno. Količina je v MB.

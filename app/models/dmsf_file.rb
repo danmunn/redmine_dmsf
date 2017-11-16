@@ -242,11 +242,12 @@ class DmsfFile < ActiveRecord::Base
     end
     # Must invalidate source parent folder cache before moving
     RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
+    source = "#{self.project.identifier}:#{self.dmsf_path_str}"
     self.project_id = project.id
     self.dmsf_folder = folder
     new_revision = self.last_revision.clone
     new_revision.dmsf_file = self
-    new_revision.comment = l(:comment_moved_from, :source => "#{self.project.identifier}:#{self.dmsf_path_str}")
+    new_revision.comment = l(:comment_moved_from, :source => source)
     new_revision.custom_values = []
     self.last_revision.custom_values.each do |cv|
       new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
@@ -260,6 +261,7 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def copy_to_filename(project, folder, filename)
+    source = "#{project.identifier}: #{self.dmsf_path_str}"
     file = DmsfFile.new
     file.dmsf_folder = folder
     file.project_id = project.id
@@ -272,7 +274,7 @@ class DmsfFile < ActiveRecord::Base
       if File.exist? self.last_revision.disk_file
         FileUtils.cp self.last_revision.disk_file, new_revision.disk_file(false)
       end
-      new_revision.comment = l(:comment_copied_from, :source => "#{project.identifier}: #{self.dmsf_path_str}")
+      new_revision.comment = l(:comment_copied_from, :source => source)
       new_revision.custom_values = []
       self.last_revision.custom_values.each do |cv|
         new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})

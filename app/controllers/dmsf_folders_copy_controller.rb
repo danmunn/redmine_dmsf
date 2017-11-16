@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,60 +24,85 @@ class DmsfFoldersCopyController < ApplicationController
 
   before_action :find_folder
   before_action :authorize
-  before_action :permissions
-
-  def permissions
-    render_403 unless DmsfFolder.permissions?(@folder)
-    true
-  end
+  before_action :find_target_folder
+  before_action :check_target_folder, :only => [:copy, :move]
 
   def new
-    @target_project = DmsfFolder.allowed_target_projects_on_copy.detect {|p| p.id.to_s == params[:target_project_id]} if params[:target_project_id]
-    @target_project ||= @project if User.current.allowed_to?(:folder_manipulation, @project)
-    if DmsfFile.allowed_target_projects_on_copy.blank?
-      flash.now[:warning] = l(:warning_no_project_to_copy_folder_to)
-    else
-      @target_project ||= DmsfFolder.allowed_target_projects_on_copy[0]
-    end
-
+    @projects = DmsfFolder.allowed_target_projects_on_copy
+    @folders = DmsfFolder.directory_tree(@target_project, @folder)
     @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
-    @target_folder ||= @folder.dmsf_folder if @target_project == @project
-
     render :layout => !request.xhr?
   end
 
-  def copy_to
-    @target_project = DmsfFile.allowed_target_projects_on_copy.detect {|p| p.id.to_s == params[:target_project_id]} if params[:target_project_id]
-    unless @target_project
-      render_403
-      return
-    end
-    @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
-    if !@target_folder.nil? && @target_folder.project != @target_project
-      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)
-    end
-    if (@target_folder && @target_folder == @folder.dmsf_folder) ||
-        (@target_folder.nil? && @folder.dmsf_folder.nil? && @target_project == @folder.project)
-      flash[:error] = l(:error_target_folder_same)
-      redirect_to :action => 'new', :id => @folder, :target_project_id => @target_project, :target_folder_id => @target_folder
-      return
-    end
+  def copy
     new_folder = @folder.copy_to(@target_project, @target_folder)
     unless new_folder.errors.empty?
-      flash[:error] = "#{l(:error_folder_cannot_be_copied)}: #{new_folder.errors.full_messages.join(', ')}"
-      redirect_to :action => 'new', :id => @folder, :target_project_id => @target_project, :target_folder_id => @target_folder
+      flash[:error] = new_folder.errors.full_messages.join(', ')
+      redirect_to :action => 'new', :id => @folder, :target_project_id => @target_project,
+                  :target_folder_id => @target_folder
       return
     end
-    new_folder.reload
-    flash[:notice] = l(:notice_folder_copied)
+    flash[:notice] = l(:notice_successful_update)
     redirect_to dmsf_folder_path(:id => @target_project, :folder_id => new_folder)
+  end
+
+  def move
+    @folder.project = @target_project
+    @folder.dmsf_folder = @target_folder
+    unless @folder.save
+      flash[:error] = @folder.errors.full_messages.join(', ')
+      redirect_to :action => 'new', :id => @folder, :target_project_id => @target_project,
+                  :target_folder_id => @target_folder
+    else
+      flash[:notice] = l(:notice_successful_update)
+      redirect_to dmsf_folder_path(:id => @target_project, :folder_id => @folder)
+    end
   end
 
   private
 
   def find_folder
-    @folder = DmsfFolder.visible.find_by_id(params[:id])
-    @project = @folder.project if @folder
+    unless DmsfFolder.where(:id => params[:id]).exists?
+      render_404
+      return
+    end
+    @folder = DmsfFolder.visible.find params[:id]
+    @project = @folder.project
+  rescue ActiveRecord::RecordNotFound
+    render_403
+  end
+
+  def find_target_folder
+    if params[:target_project_id].present?
+      @target_project = Project.find params[:target_project_id]
+    else
+      @target_project = @project
+    end
+    if params[:target_folder_id].present?
+      @target_folder = DmsfFolder.find(params[:target_folder_id])
+      unless DmsfFolder.visible.where(:id => params[:target_folder_id]).exists?
+        render_403
+        return
+      end
+    end
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
+  def check_target_folder
+    if (@target_folder && @target_folder == @folder.dmsf_folder) ||
+      (@target_folder.nil? && @folder.dmsf_folder.nil? && @target_project == @folder.project)
+      flash[:error] = l(:error_target_folder_same)
+      redirect_to :action => :new, :id => @folder, :target_project_id => @target_project.id,
+                  :target_folder_id => @target_folder
+      return
+    end
+    if (@target_folder && (@target_folder.locked_for_user? || !DmsfFolder.permissions?(@target_folder, false))) ||
+      !@target_project.allows_to?(:folder_manipulation)
+      raise DmsfAccessError
+    end
+  rescue DmsfAccessError
+    render_403
   end
 
 end

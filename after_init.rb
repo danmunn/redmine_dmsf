@@ -21,15 +21,13 @@ def init
       pmap.permission :view_dmsf_file_revisions,
                       :read => true
       pmap.permission :view_dmsf_folders,
-                      {:dmsf => [:show],
-                       :dmsf_folders_copy => [:new, :copy_to, :move_to]},
+                      {:dmsf => [:show]},
                       :read => true
       pmap.permission :user_preferences,
                       {:dmsf_state => [:user_pref_save]}
       pmap.permission :view_dmsf_files,
                       {:dmsf => [:entries_operation, :entries_email, :download_email_entries, :tag_changed],
                        :dmsf_files => [:show, :view, :thumbnail],
-                       :dmsf_files_copy => [:new, :create, :move],
                        :dmsf_workflows => [:log]},
                       :read => true
       pmap.permission :email_documents,
@@ -37,14 +35,16 @@ def init
       pmap.permission :folder_manipulation,
                       {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock,
                                  :notify_activate, :notify_deactivate, :restore],
-                       :dmsf_folder_permissions => [:new, :append, :autocomplete_for_user]}
+                       :dmsf_folder_permissions => [:new, :append, :autocomplete_for_user],
+                       :dmsf_folders_copy => [:new, :copy, :move]}
       pmap.permission :file_manipulation,
                       {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate,
                                        :notify_deactivate, :restore],
                        :dmsf_upload => [:upload_files, :upload_file, :upload, :commit_files, :commit,
                                         :delete_dmsf_attachment, :delete_dmsf_link_attachment],
                        :dmsf_links => [:new, :create, :destroy, :restore, :autocomplete_for_project,
-                                       :autocomplete_for_folder]
+                                       :autocomplete_for_folder],
+                       :dmsf_files_copy => [:new, :copy, :move],
                       }
       pmap.permission :file_delete,
                       { :dmsf => [:trash, :delete_entries],

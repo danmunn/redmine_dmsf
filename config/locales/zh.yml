@@ -185,20 +185,13 @@ zh:
   project_module_dmsf: 文档管家  # Project module name
   warning_no_project_to_copy_file_to: No project to copy file to
   comment_copied_from: "Copied from %{source}"
-  notice_file_copied: File copied
-  notice_file_moved: File moved
   field_target_project: Target project
   field_target_folder: Target folder
   title_copy_or_move: Copy/Move
   label_dmsf_folder_plural: DMS Folders # Search options
   comment_moved_from: "Moved from %{source}"
-  error_target_folder_same: Target folder and project are the same as current
-  error_file_cannot_be_moved: "File can't be moved"
-  error_file_cannot_be_copied: "File can't be copied"
-  warning_no_project_to_copy_folder_to: No project to copy folder to
+  error_target_folder_same: Target folder and project are the same as the current one.
   title_copy: Copy
-  error_folder_cannot_be_copied: "Folder can't be copied"
-  notice_folder_copied: Folder copied
 
   error_max_email_filesize_exceeded: "You've exceeded the maximum filesize for sending via email. (%{number} MB)"
   note_maximum_email_filesize: Limits maximum filesize that can be sent via email. 0 means unlimited. Number is in MB.

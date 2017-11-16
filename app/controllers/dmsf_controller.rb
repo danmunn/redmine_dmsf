@@ -549,8 +549,6 @@ class DmsfController < ApplicationController
 
   def find_parent
     @parent = DmsfFolder.visible.find params[:parent_id] if params[:parent_id].present?
-  rescue DmsfAccessError
-    render_403
   rescue ActiveRecord::RecordNotFound
     render_404
   end

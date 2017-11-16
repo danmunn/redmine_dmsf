@@ -22,47 +22,15 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% html_title(l(:dmsf)) %>
+<%= render(:partial => '/dmsf/path', :locals => { :folder => @file.dmsf_folder, :filename => @file.title,
+                                                  :title => nil }) %>
 
-<%= render(:partial => '/dmsf/path',
-  :locals => {:folder => @file.dmsf_folder, :filename => @file.title,
-    :title => "#{l(:button_copy)}/#{l(:button_move)}"}) %>
-
-<% if DmsfFile.allowed_target_projects_on_copy.present? %>
-  <%= form_tag({:action => 'create', :id => @file}, :id => 'copyForm') do |f| %>
-    <div class="box tabular">
-      <p>
-        <%= label_tag('target_project_id', l(:field_target_project)) %>
-        <%= select_tag('target_project_id',
-           project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy,
-             :selected => @target_project)) %>
-      </p>
-      <p>
-        <%= label_tag('target_folder_id', l(:field_target_folder)) %>
-        <%= select_tag('target_folder_id',
-          options_for_select(DmsfFolder.directory_tree(@target_project),
-          :selected => (@target_folder.id if @target_folder))) %>
-      </p>
-    </div>
-    <p>
-      <%= submit_tag(l(:button_copy)) %>
-      <% if !@file.locked? && User.current.allowed_to?(:file_manipulation, @project) %>
-        <%= submit_tag(l(:button_move), :id => 'move_button') %>
-      <% end %>
-    </p>
-  <% end %>
-<% end %>
-
-<script type="text/javascript">
-  $('#move_button').click(function(event) {
-    $('#copyForm').attr('action', "<%= url_for(:action => 'move', :id => @file) %>");
-    $('#copyForm').submit();
-  });
-
-  $('#target_project_id').change(function () {
-    $('#content').load("<%= url_for(:action => 'new') %>", $('#copyForm').serialize());
-  });
-
-  $('#target_project_id').select2();
-  $('#target_folder_id').select2();
-</script>
+<%= render(:partial => '/dmsf_folders_copy/form', :locals => {
+    :projects => @projects,
+    :project => @project,
+    :target_project => @target_project,
+    :folders => @folders,
+    :file_or_folder => @file,
+    :target_folder => @target_folder,
+    :permission => :file_manipulation
+}) %>

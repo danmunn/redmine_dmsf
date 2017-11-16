@@ -185,20 +185,13 @@ pt-BR:
   project_module_dmsf: DMS
   warning_no_project_to_copy_file_to: Nenhum projeto para cópia do arquivo
   comment_copied_from: "Copiado de %{source}"
-  notice_file_copied: Arquivo copiado
-  notice_file_moved: Arquivo movido
   field_target_project: Projeto de destino
   field_target_folder: Pasta de destino
   title_copy_or_move: Copiar / Mover
   label_dmsf_folder_plural: DMS Pastas  # Search options
   comment_moved_from: "Mover de %{source}"
   error_target_folder_same: A pasta e o projeto alvo são os mesmos que os atuais
-  error_file_cannot_be_moved: "Arquivo não pode ser movido"
-  error_file_cannot_be_copied: "Arquivo não pode ser copiado"
-  warning_no_project_to_copy_folder_to: Nenhum projeto para cópia da pasta
   title_copy: Copiar
-  error_folder_cannot_be_copied: "Pasta não pode ser copiada"
-  notice_folder_copied: Pasta copiada
 
   error_max_email_filesize_exceeded: "Você excedeu o tamanho máximo do arquivo para enviar via e-mail. (%{number} MB)"
   note_maximum_email_filesize: Limita o tamanho máximo de arquivos que pode ser enviado por e-mail. 0 significa ilimitado. O número está em MB.

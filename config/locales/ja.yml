@@ -185,20 +185,13 @@ ja:
   project_module_dmsf: 文書管理  # Project module name
   warning_no_project_to_copy_file_to: ファイルをコピーするプロジェクトがありません
   comment_copied_from: "%{source} からコピーしました"
-  notice_file_copied: ファイルをコピーしました
-  notice_file_moved: ファイルを移動しました
   field_target_project: ターゲットプロジェクト
   field_target_folder: ターゲットフォルダ
   title_copy_or_move: コピー/移動
   label_dmsf_folder_plural: DMS フォルダ  # Search options
   comment_moved_from: "%{source} から移動しました"
   error_target_folder_same: コピー/移動先のフォルダとプロジェクトが現在と同じです
-  error_file_cannot_be_moved: ファイルを移動できません
-  error_file_cannot_be_copied: ファイルをコピーできません
-  warning_no_project_to_copy_folder_to: フォルダをコピーするプロジェクトがありません
   title_copy: コピー
-  error_folder_cannot_be_copied: フォルダをコピーできません
-  notice_folder_copied: フォルダをコピーしました
 
   error_max_email_filesize_exceeded: "電子メールで送信可能なファイルサイズの上限を越えています (%{number} MB)"
   note_maximum_email_filesize: "電子メールで送信可能なファイルサイズの上限。0は無制限。単位はMB。"

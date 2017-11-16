@@ -185,20 +185,13 @@ cs:
   project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: Neexistuje projekt, do kterého můžete kopírovat
   comment_copied_from: "Zkopírováno z %{source}"
-  notice_file_copied: Soubor zkopírován
-  notice_file_moved: Soubor přesunut
   field_target_project: Cílový projekt
   field_target_folder: Cílová složka
   title_copy_or_move: Kopírovat/Přesunout
   label_dmsf_folder_plural: DMS Složky   # Search options
   comment_moved_from: "Přesunuto z %{source}"
   error_target_folder_same: Cílový složka a projekt jsou stejné jako aktuální
-  error_file_cannot_be_moved: Soubor nemůže být přesunut
-  error_file_cannot_be_copied: Soubor nemůže být zkopírován
-  warning_no_project_to_copy_folder_to: Neexistuje projekt, do kterého můžete kopírovat
   title_copy: Kopírovat
-  error_folder_cannot_be_copied: Složka nemůže být zkopírována
-  notice_folder_copied: Složka zkopírována
 
   error_max_email_filesize_exceeded: "Přesáhli jste maximální velikost souboru, který lze poslat emailem. (%{number} MB)"
   note_maximum_email_filesize: Omezí se maximální velikost souboru, který může být poslán emailem. 0 znamená neomezený. Číslo je v MB.

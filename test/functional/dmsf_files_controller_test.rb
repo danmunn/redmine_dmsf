@@ -38,6 +38,7 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
   end 
   
   def test_truth
+    assert_kind_of Project, @project
     assert_kind_of DmsfFile, @file
     assert_kind_of Role, @role
   end
