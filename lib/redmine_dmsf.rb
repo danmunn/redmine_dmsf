@@ -32,7 +32,6 @@ require 'redmine_dmsf/patches/project_tabs_extended'
 require 'redmine_dmsf/patches/user_preference_patch'
 require 'redmine_dmsf/patches/user_patch'
 require 'redmine_dmsf/patches/issue_patch'
-require 'redmine_dmsf/patches/application_helper_patch'
 require 'redmine_dmsf/patches/role_patch'
 
 if defined?(EasyExtensions)
