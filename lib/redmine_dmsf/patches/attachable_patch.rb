@@ -22,28 +22,15 @@ module RedmineDmsf
   module Patches
     module AttachablePatch
 
-      def self.included(base)
-        base.send(:include, InstanceMethods)
-        base.class_eval do
-          unloadable
-          alias_method_chain :has_attachments?, :has_attachments_dms
-        end
+      ##################################################################################################################
+      # Overriden methods
+
+      def has_attachments?
+        super || (defined?(self.dmsf_files) && self.dmsf_files.any?)
       end
 
-      module InstanceMethods
-
-        def has_attachments_with_has_attachments_dms?
-          has_attachments_without_has_attachments_dms? || (defined?(self.dmsf_files) && self.dmsf_files.any?)
-        end
-
-      end
     end
   end
 end
 
- # Apply the patch
- Rails.configuration.to_prepare do
-   unless Redmine::Acts::Attachable::InstanceMethods.included_modules.include?(RedmineDmsf::Patches::AttachablePatch)
-     Redmine::Acts::Attachable::InstanceMethods.send(:include, RedmineDmsf::Patches::AttachablePatch)
-   end
- end
+Redmine::Acts::Attachable::InstanceMethods.send(:prepend, RedmineDmsf::Patches::AttachablePatch)

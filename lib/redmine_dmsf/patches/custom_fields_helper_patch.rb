@@ -20,47 +20,31 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require_dependency 'custom_fields_helper'
-
 module RedmineDmsf
   module Patches
     module CustomFieldsHelperPatch
-      def self.included(base)
-        base.send(:include, InstanceMethods)
-        base.class_eval do
-          unloadable
-          
-          alias_method_chain :render_custom_fields_tabs, :render_custom_tab
-          alias_method_chain :custom_field_type_options, :custom_tab_options          
+
+      ##################################################################################################################
+      # Overridden methods
+
+      def render_custom_fields_tabs(types)
+        cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}
+        unless CustomFieldsHelper::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
+          CustomFieldsHelper::CUSTOM_FIELDS_TABS << cf
         end
+        super(types)
       end
 
-      module InstanceMethods       
-
-        def render_custom_fields_tabs_with_render_custom_tab(types)
-          cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}          
-          unless CustomFieldsHelper::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
-            CustomFieldsHelper::CUSTOM_FIELDS_TABS << cf          
-          end
-          render_custom_fields_tabs_without_render_custom_tab(types)
+      def custom_field_type_options
+        cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}
+        unless CustomFieldsHelper::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
+          CustomFieldsHelper::CUSTOM_FIELDS_TABS << cf
         end
-
-        def custom_field_type_options_with_custom_tab_options
-          cf = {:name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index', :label => :dmsf}          
-          unless CustomFieldsHelper::CUSTOM_FIELDS_TABS.index { |f| f[:name] == cf[:name] }
-            CustomFieldsHelper::CUSTOM_FIELDS_TABS << cf          
-          end
-          custom_field_type_options_without_custom_tab_options
-        end
-      
+        super
       end
+
     end
   end
 end
 
-# Apply the patch
-Rails.configuration.to_prepare do
-  unless CustomFieldsHelper.included_modules.include?(RedmineDmsf::Patches::CustomFieldsHelperPatch)
-    CustomFieldsHelper.send(:include, RedmineDmsf::Patches::CustomFieldsHelperPatch)
-  end
-end
+CustomFieldsHelper.send(:prepend, RedmineDmsf::Patches::CustomFieldsHelperPatch)
