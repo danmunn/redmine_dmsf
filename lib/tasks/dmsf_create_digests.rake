@@ -52,7 +52,7 @@ class DmsfDigest
       rev.save unless @dry_run
       n += 1
       # Progress bar
-      print "\r#{i * 100 / count}%"
+      print "\r#{i * 1000 / count}%"
     end
     print "\r100%\n"
     # Result
