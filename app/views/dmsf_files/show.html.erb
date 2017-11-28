@@ -192,11 +192,11 @@
     }
   });
 
-  $('#file_upload').change(function() {
+  $('#file_upload_box').change(function() {
     if($("input[name='version']:checked").val() == '0') {
-      $('#fileMinorVersionRadio').prop('checked', true);
+      $('#version_1').prop('checked', true);
     }
-    $('#fileSameVersionRadio').prop('disabled', true);
+    $('#version_0').prop('disabled', true);
   });
 
   $('#newRevisionFormContentToggle').click(function() {
