@@ -252,7 +252,7 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def copy_file_content(open_file)
-    File.open(self.disk_file, 'wb') do |f|
+    File.open(self.disk_file(false), 'wb') do |f|
       while (buffer = open_file.read(8192))
         f.write(buffer)
       end
