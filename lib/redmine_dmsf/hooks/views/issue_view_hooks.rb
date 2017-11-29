@@ -30,7 +30,7 @@ module RedmineDmsf
         attach_documents_form(context)
       end
 
-      def view_issues_edit_notes_bottom(context={})
+      def view_attachments_form_top(context={})
         html = ''
         # Radio buttons
         if allowed_to_attach_documents(context[:container])
@@ -48,6 +48,7 @@ module RedmineDmsf
               html << l(:label_dmsf_attachments)
             html << '</label>'
           html << '</p>'
+          html << "<script>$( document ).ready(function() {$('.attachments-container:not(.dmsf_uploader)').parent().hide();})</script>" if User.current.pref.dmsf_attachments_upload_choice == 'DMSF'
         end
         # Upload form
         html.html_safe + attach_documents_form(context, false,
@@ -59,7 +60,7 @@ module RedmineDmsf
         show_attached_documents(context[:issue], context[:controller])
       end
 
-      def view_issues_show_attachments_bottom(context={})
+      def view_issues_show_attachments_table_bottom(context={})
         unless context[:options][:only_mails].present?
           show_attached_documents(context[:container], context[:controller], context[:attachments])
         end
@@ -138,7 +139,8 @@ module RedmineDmsf
           # Add Dmsf upload form
           container = context[:container]
           if allowed_to_attach_documents(container)
-            html = "<p style=\"#{(User.current.pref[:dmsf_attachments_upload_choice] == 'Attachments') ? 'display: none;' : ''}\">"
+            html = (description ? '<p' : '<div')
+            html << " style=\"#{(User.current.pref[:dmsf_attachments_upload_choice] == 'Attachments') ? 'display: none;' : ''}\">"
             if label
               html << "<label>#{l(:label_document_plural)}</label>"
               html << "<span class=\"attachments-container dmsf_uploader\">"
@@ -149,7 +151,7 @@ module RedmineDmsf
                   { :partial => 'dmsf_upload/form',
                     :locals => { :container => container, :multiple => true, :description => description, :awf => true }})
               html << '</span>'
-            html << '</p>'
+            html << (description ? '</p>' : '</div>')
             html.html_safe
           end
         end
@@ -256,7 +258,7 @@ module RedmineDmsf
             :locals => {:file => dmsf_file,
               :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_file.project),
               :workflows_available => DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', dmsf_file.project.id]).exists?,
-              :project => dmsf_file.project, :wf => wf, :dmsf_link_id => nil }})         
+              :project => dmsf_file.project, :wf => wf, :dmsf_link_id => nil }})
         html << '</td>'
         html << '</tr>'
         html
