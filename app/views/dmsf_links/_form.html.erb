@@ -87,7 +87,7 @@
     <% if (@type == 'link_from') && !@container %>
       <div id="link_external" style="display: none">
         <p>
-          <%= f.text_field :external_url, :required => true %>
+          <%= f.text_field :external_url, :required => false %>
         </p>
       </div>
     <% end %>
@@ -124,5 +124,11 @@
   $("input[name=external_link]:radio").change(function(){
     $("#link_internal").toggle();
     $("#link_external").toggle();
+    $("#dmsf_link_external_url").toggleClass('required', $(this).val());
+    var labelUrl = $('label[for="dmsf_link_external_url"]');
+    labelUrl.toggleClass('required', $(this).val());
+    if(labelUrl.find(".required").length == 0){
+        labelUrl.append('<span class="required"> *</span>');
+    }
   });
 </script>
