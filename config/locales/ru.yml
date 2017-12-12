@@ -369,3 +369,10 @@ ru:
 
   label_dmsf_attachments: DMS Attachments
   label_basic_attachments: Basic Attachments
+
+  easy_pages:
+    modules:
+      dmsf_locked_documents: My locked documents
+      dmsf_open_approvals: My open approvals
+    module_category:
+      easy_dms: Easy DMS

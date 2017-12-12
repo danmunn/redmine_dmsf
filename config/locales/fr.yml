@@ -369,3 +369,10 @@ fr:
 
   label_dmsf_attachments: Pièces-jointes DMS
   label_basic_attachments: Pièces-jointes standards
+
+  easy_pages:
+    modules:
+      dmsf_locked_documents: My locked documents
+      dmsf_open_approvals: My open approvals
+    module_category:
+      easy_dms: Easy DMS
