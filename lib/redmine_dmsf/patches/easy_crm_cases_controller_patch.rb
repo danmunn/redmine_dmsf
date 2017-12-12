@@ -1,30 +1,32 @@
+# encoding: utf-8
+#
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
 module RedmineDmsf
-  module EasyCrmCasesControllerPatch
+  module Patches
+    module EasyCrmCasesControllerPatch
 
-    def self.included(base)
-      base.send(:include, InstanceMethods)
-      base.class_eval do
-        unloadable
-        before_action :controller_easy_crm_cases_before_save, only: [:create, :update, :bulk_update]
-        alias_method_chain :easy_crm_after_save, :dmsf
-      end
-    end
+      ##################################################################################################################
+      # Overridden methods
 
-    module InstanceMethods
-
-      def controller_easy_crm_cases_before_save
-        easy_crm_cases = @easy_crm_cases
-        easy_crm_cases ||= [@easy_crm_case]
-        easy_crm_cases.each do |easy_crm_case|
-          easy_crm_case.save_dmsf_attachments(params[:dmsf_attachments])
-          easy_crm_case.save_dmsf_links(params[:dmsf_links])
-          easy_crm_case.save_dmsf_attachments_wfs(params[:dmsf_attachments_wfs], params[:dmsf_attachments])
-          easy_crm_case.save_dmsf_links_wfs(params[:dmsf_links_wfs])
-        end
-      end
-
-      def easy_crm_after_save_with_dmsf
-        easy_crm_after_save_without_dmsf
+      def easy_crm_after_save
+        super
         easy_crm_cases = @easy_crm_cases
         easy_crm_cases ||= [@easy_crm_case]
         easy_crm_cases.each do |easy_crm_case|
@@ -90,13 +92,24 @@ module RedmineDmsf
         end
       end
 
+      ##################################################################################################################
+      # New methods
+
+      before_action :controller_easy_crm_cases_before_save, only: [:create, :update, :bulk_update]
+
+      def controller_easy_crm_cases_before_save
+        easy_crm_cases = @easy_crm_cases
+        easy_crm_cases ||= [@easy_crm_case]
+        easy_crm_cases.each do |easy_crm_case|
+          easy_crm_case.save_dmsf_attachments(params[:dmsf_attachments])
+          easy_crm_case.save_dmsf_links(params[:dmsf_links])
+          easy_crm_case.save_dmsf_attachments_wfs(params[:dmsf_attachments_wfs], params[:dmsf_attachments])
+          easy_crm_case.save_dmsf_links_wfs(params[:dmsf_links_wfs])
+        end
+      end
+
     end
-
   end
 end
 
-Rails.configuration.to_prepare do
-  unless EasyCrmCasesController.included_modules.include?(RedmineDmsf::EasyCrmCasesControllerPatch)
-    EasyCrmCasesController.send(:include, RedmineDmsf::EasyCrmCasesControllerPatch)
-  end
-end
+EasyCrmCasesController.send(:prepend, RedmineDmsf::Patches::EasyCrmCasesControllerPatch)
