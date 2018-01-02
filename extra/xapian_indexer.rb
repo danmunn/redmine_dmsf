@@ -338,7 +338,7 @@ def convert_to_text(fpath, type)
   return text if !File.exist?(FORMAT_HANDLERS[type].split(' ').first)
   case type
     when 'pdf'    
-      text = "#{FORMAT_HANDLERS[type]} #{fpath} -"
+      text = `#{FORMAT_HANDLERS[type]} #{fpath} -`
     when /(xlsx|docx|odt|pptx)/i
       system "#{$unzip} -d #{$tempdir}/temp #{fpath} > /dev/null", :out=>'/dev/null'
       case type
@@ -358,7 +358,7 @@ def convert_to_text(fpath, type)
         log "Error: #{e.to_s} reading #{fout}", true
       end
     else
-      text = "#{FORMAT_HANDLERS[type]} #{fpath}"
+      text = `#{FORMAT_HANDLERS[type]} #{fpath}`
   end
   return text
 end
