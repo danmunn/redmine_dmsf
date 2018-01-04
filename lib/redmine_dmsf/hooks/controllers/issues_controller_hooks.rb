@@ -49,7 +49,7 @@ module RedmineDmsf
       end
 
       def controller_issues_edit_after_save(context={})
-        controller_issues_after_save(context)
+        controller_issues_after_save(context, true)
       end
 
       private
@@ -58,7 +58,9 @@ module RedmineDmsf
         if context.is_a?(Hash)
           issue = context[:issue]
           params = context[:params]
+          # Save upload preferences DMS/Attachments
           User.current.pref.update_attribute :dmsf_attachments_upload_choice, params[:dmsf_attachments_upload_choice]
+          # Save attachments
           issue.save_dmsf_attachments(params[:dmsf_attachments])
           issue.save_dmsf_links(params[:dmsf_links])
           issue.save_dmsf_attachments_wfs(params[:dmsf_attachments_wfs], params[:dmsf_attachments])
@@ -66,10 +68,37 @@ module RedmineDmsf
         end
       end
 
-      def controller_issues_after_save(context)
+      def controller_issues_after_save(context, edit = false)
         if context.is_a?(Hash)
           issue = context[:issue]
           params = context[:params]
+          # Move existing attached documents if needed
+          if edit
+            project_id = params[:issue][:project_id].to_i
+            old_project_id = context[:project].id
+            system_folder = issue.system_folder(false, old_project_id)
+            if system_folder
+              # Change the title if the issue's subject changed
+              system_folder.title = "#{issue.id} - #{issue.subject}"
+              # Move system folders if needed
+              if  system_folder.dmsf_folder
+                system_folder.dmsf_folder.project_id = project_id
+                system_folder.dmsf_folder.save!
+              end
+              system_folder.project_id = project_id
+              system_folder.save!
+              # Move documents
+              issue.dmsf_files.each do |dmsf_file|
+                dmsf_file.project_id = project_id
+                dmsf_file.save!
+              end
+              # Move links
+              issue.dmsf_links.each do | dmsf_link|
+                dmsf_link.project_id = project_id
+                dmsf_link.save!
+              end
+            end
+          end
           # Attach DMS documents
           uploaded_files = params[:dmsf_attachments]
           if uploaded_files && uploaded_files.is_a?(Hash)

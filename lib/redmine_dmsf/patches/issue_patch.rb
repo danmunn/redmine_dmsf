@@ -94,11 +94,12 @@ module RedmineDmsf
           @saved_dmsf_links_wfs || {}
         end
 
-        def system_folder(create = false)
-          parent = DmsfFolder.system.where(:project_id => self.project_id, :title => '.Issues').first
+        def system_folder(create = false, prj_id = nil)
+          prj_id ||= self.project_id
+          parent = DmsfFolder.system.where(:project_id => prj_id, :title => '.Issues').first
           if create && !parent
             parent = DmsfFolder.new
-            parent.project_id = self.project_id
+            parent.project_id = prj_id
             parent.title = '.Issues'
             parent.description = 'Documents assigned to issues'
             parent.user_id = User.anonymous.id
@@ -107,11 +108,11 @@ module RedmineDmsf
           end
           if parent
             folder = DmsfFolder.system.where(["project_id = ? AND dmsf_folder_id = ? AND title LIKE '? - %'",
-              self.project_id, parent.id, self.id]).first
+              prj_id, parent.id, self.id]).first
             if create && !folder
               folder = DmsfFolder.new
               folder.dmsf_folder_id = parent.id
-              folder.project_id = self.project_id
+              folder.project_id = prj_id
               folder.title = "#{self.id} - #{self.subject}"
               folder.user_id = User.anonymous.id
               folder.system = true
