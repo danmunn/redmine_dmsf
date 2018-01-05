@@ -1,4 +1,5 @@
 # encoding: utf-8
+# encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -50,41 +51,6 @@ class DmsfFolder < ActiveRecord::Base
   AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
   DEFAULT_COLUMNS = %w(title size modified version workflow author).freeze
 
-  scope :visible, -> (system=true) { joins(:project).joins(
-    "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
-    :deleted => STATUS_ACTIVE).where(DmsfFolder.visible_condition(system)).distinct
-  }
-  scope :deleted, -> { joins(:project).joins(
-    "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
-    :deleted => STATUS_DELETED).where(DmsfFolder.visible_condition).distinct
-  }
-  scope :system, -> { where(:system => true) }
-  scope :notsystem, -> { where(:system => false) }
-
-  acts_as_customizable
-
-  acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
-        :project_key => 'project_id',
-        :date_column => 'updated_at',
-        :permission => :view_dmsf_files,
-        :scope => self.joins(:project)
-
-  acts_as_event :title => Proc.new {|o| o.title},
-          :description => Proc.new {|o| o.description },
-          :url => Proc.new {|o| {:controller => 'dmsf', :action => 'show', :id => o.project, :folder_id => o}},
-          :datetime => Proc.new {|o| o.updated_at },
-          :author => Proc.new {|o| o.user }
-
-  validates :title, :presence => true
-  validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted],
-    conditions: -> { where(:deleted => STATUS_ACTIVE) }
-  validates_format_of :title, :with => INVALID_CHARACTERS,
-    :message => l(:error_contains_invalid_character)
-  validate :check_cycle
-  validates_length_of :description, :maximum => 65535
-
-  before_create :default_values
-
   def self.visible_condition(system=true)
     Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
       if user.id && user.logged?
@@ -104,6 +70,41 @@ class DmsfFolder < ActiveRecord::Base
       end
     end
   end
+
+  scope :visible, -> (system=true) { joins(:project).joins(
+    "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
+    :deleted => STATUS_ACTIVE).where(DmsfFolder.visible_condition(system)).distinct
+  }
+  scope :deleted, -> { joins(:project).joins(
+    "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
+    :deleted => STATUS_DELETED).where(DmsfFolder.visible_condition).distinct
+  }
+  scope :system, -> { where(:system => true) }
+  scope :notsystem, -> { where(:system => false) }
+
+  acts_as_customizable
+
+  acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
+        :project_key => 'project_id',
+        :date_column => 'updated_at',
+        :permission => :view_dmsf_files,
+        :scope => DmsfFolder.visible
+
+  acts_as_event :title => Proc.new {|o| o.title},
+          :description => Proc.new {|o| o.description },
+          :url => Proc.new {|o| {:controller => 'dmsf', :action => 'show', :id => o.project, :folder_id => o}},
+          :datetime => Proc.new {|o| o.updated_at },
+          :author => Proc.new {|o| o.user }
+
+  validates :title, :presence => true
+  validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted],
+    conditions: -> { where(:deleted => STATUS_ACTIVE) }
+  validates_format_of :title, :with => INVALID_CHARACTERS,
+    :message => l(:error_contains_invalid_character)
+  validate :check_cycle
+  validates_length_of :description, :maximum => 65535
+
+  before_create :default_values
 
   def self.permissions?(folder, allow_system = true)
     # Administrator?

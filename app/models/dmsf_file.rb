@@ -314,6 +314,7 @@ class DmsfFile < ActiveRecord::Base
     scope = scope.where(limit_options) unless limit_options.blank?
     scope = scope.where(project_conditions.join(' AND '))
     results = scope.where(find_options).uniq.to_a
+    results.delete_if{ |x| !DmsfFolder.permissions?(x.dmsf_folder) }
 
     if !options[:titles_only] && $xapian_bindings_available
       database = nil
@@ -331,7 +332,7 @@ class DmsfFile < ActiveRecord::Base
         enquire = Xapian::Enquire.new(database)
 
         query_string = tokens.join(' ')
-        qp = Xapian::QueryParser.new()
+        qp = Xapian::QueryParser.new
         stemmer = Xapian::Stem.new(lang)
         qp.stemmer = stemmer
         qp.database = database
@@ -370,7 +371,7 @@ class DmsfFile < ActiveRecord::Base
 
               dmsf_file = DmsfFile.visible.where(limit_options).where(:id => id_attribute).first
 
-              if dmsf_file
+              if dmsf_file && DmsfFolder.permissions?(dmsf_file.dmsf_folder)
                 if user.allowed_to?(:view_dmsf_files, dmsf_file.project) &&
                     (project_ids.blank? || (project_ids.include?(dmsf_file.project_id)))
                     Redmine::Search.cache_store.write("DmsfFile-#{dmsf_file.id}",
