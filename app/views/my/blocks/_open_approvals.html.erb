@@ -34,7 +34,9 @@
     <% end %>
   <% end %>
 <% end %>
-<h3><%= l(:open_approvals)%> (<%= assignments.count %>)</h3>
+<% unless defined?(EasyExtensions) %>
+  <h3><%= l(:open_approvals)%> (<%= assignments.count %>)</h3>
+<% end %>
 <% if assignments.any? %>
   <%= form_tag({}) do %>
     <table class="list">
