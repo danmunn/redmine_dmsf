@@ -30,7 +30,9 @@
   'JOIN dmsf_locks ON dmsf_files.id = dmsf_locks.entity_id').where(
   ['dmsf_locks.entity_type = ? AND dmsf_locks.user_id = ? AND (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > ?)',
    0, @user.id, Time.now]).all if @user %>
-<h3><%= l(:locked_documents)%> (<%= folders.count %>/<%=  files.count %>)</h3>
+<% unless defined?(EasyExtensions) %>
+  <h3><%= l(:locked_documents)%> (<%= folders.count %>/<%=  files.count %>)</h3>
+<% end %>
 <% if folders.any? || files.any?%>
   <%= form_tag({}) do %>
     <table class="list">
