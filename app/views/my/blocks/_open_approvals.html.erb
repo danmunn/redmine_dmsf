@@ -23,8 +23,9 @@
 <% assignments = Array.new %>
 <% if @user %>
   <% all_assignments = DmsfWorkflowStepAssignment.joins(
-    'LEFT JOIN dmsf_workflow_step_actions ON dmsf_workflow_step_assignments.id = dmsf_workflow_step_actions.dmsf_workflow_step_assignment_id').where(
-    :dmsf_workflow_step_assignments => { :user_id => @user.id }, :dmsf_workflow_step_actions => { :id => nil }) %>
+      'LEFT JOIN dmsf_workflow_step_actions ON dmsf_workflow_step_assignments.id = dmsf_workflow_step_actions.dmsf_workflow_step_assignment_id').where(
+      :dmsf_workflow_step_assignments => { :user_id => @user.id }).where(
+      ['dmsf_workflow_step_actions.id IS NULL OR dmsf_workflow_step_actions.action = ?', DmsfWorkflowStepAction::ACTION_DELEGATE]) %>
   <% all_assignments.each do |assignment| %>
     <% if assignment.dmsf_file_revision.dmsf_file.last_revision &&
         !assignment.dmsf_file_revision.dmsf_file.last_revision.deleted? &&
