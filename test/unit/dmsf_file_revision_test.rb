@@ -210,4 +210,11 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert_equal -(' '.ord), @revision1.minor_version
   end
 
+  def description_max_length
+    @revision1.description = 2.megabytes * 'a'
+    assert !@revision1.save
+    @revision1.description = 1.megabyte * 'a'
+    assert @revision1.save
+  end
+
 end
