@@ -70,8 +70,8 @@ else
     require File.expand_path('../app/models/easy_page_modules/easy_dms/epm_dmsf_locked_documents', __FILE__)
     require File.expand_path('../app/models/easy_page_modules/easy_dms/epm_dmsf_open_approvals', __FILE__)
 
-    EpmDmsfLockedDocuments.register_to_all(:plugin => :easy_dms)
-    EpmDmsfOpenApprovals.register_to_all(:plugin => :easy_dms)
+    EpmDmsfLockedDocuments.register_to_scope(:user, :plugin => :easy_dms)
+    EpmDmsfOpenApprovals.register_to_scope(:user, :plugin => :easy_dms)
 
     EasyExtensions::AfterInstallScripts.add do
       page = EasyPage.where(:page_name => 'project-overview').first
