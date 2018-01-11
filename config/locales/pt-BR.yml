@@ -332,9 +332,6 @@ pt-BR:
   label_full_text: Full-text search
   link_extension: Ext
 
-  label_memcached_servers: Endereço do servidor Memcached
-  text_memcached_servers: Apenas um único servidor é suportado, se vazio, o cache está desabilitado. Depois de alterado, o aplicativo deve ser reiniciado!
-
   label_webdav_ignore: Modelo de arquivos ignorados
   note_webdav_ignore: Uma expressão regular com nomes de arquivos para serem ignorados por requisições PUT.
 

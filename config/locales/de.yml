@@ -332,9 +332,6 @@ de:
   label_full_text: Full-text search
   link_extension: Ext
 
-  label_memcached_servers: Memcached Server Adresse
-  text_memcached_servers: Only a single server is supported, if empty then caching is disabled. After changing this, the application must be restarted!
-
   label_webdav_ignore: Ignored files patterns
   note_webdav_ignore: A regular expresion with filenames to ignore by PUT requests.
     
