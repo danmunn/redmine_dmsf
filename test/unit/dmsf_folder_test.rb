@@ -143,6 +143,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_save_and_destroy_with_cache
+    Setting.plugin_redmine_dmsf['dmsf_webdav_caching_enabled'] = '1'
     Rails.cache.clear
     # save
     cache_key = @folder4.propfind_cache_key
