@@ -212,6 +212,15 @@
   </em>
 </p>
 
+<p>
+  <%= content_tag(:label, l(:label_caching_enabled)) %>
+  <%= check_box_tag('settings[dmsf_webdav_caching_enabled]', false, @settings['dmsf_webdav_caching_enabled']) %>
+  <em class="info">
+    <%= l(:note_webdav_cahing_enabled) %> <br/>
+    <%= l(:label_default)%>: <%= l(:general_text_No)%>
+  </em>
+</p>
+
 <hr/>
 <em class="info">
   <%= l(:label_full_text) %>

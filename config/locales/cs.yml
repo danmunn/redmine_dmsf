@@ -359,6 +359,9 @@ cs:
   label_dmsf_attachments: DMS přílohy
   label_basic_attachments: Souborové přílohy
 
+  label_caching_enabled: Povolit použití vyrovnávací paměti
+  note_webdav_cahing_enabled: Odpovědi na požadavek PROPFIND jsou ukládány do vyrovnávací paměti za účelem zrychlení WebDAV komunikace.
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

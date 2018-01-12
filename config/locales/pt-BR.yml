@@ -359,6 +359,9 @@ pt-BR:
   label_dmsf_attachments: DMS Attachments
   label_basic_attachments: Basic Attachments
 
+  label_caching_enabled: Caching enabled
+  note_webdav_cahing_enabled: PROPFIND responses are cached in order to speed up WebDAV communication
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

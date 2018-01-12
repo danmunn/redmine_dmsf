@@ -21,35 +21,39 @@
 
 module RedmineDmsf
   module Webdav
+
     class Cache
+
       def self.read(name, options = nil)
-        Rails.cache.read(name, options)
+        Rails.cache.read(name, options) if Setting.plugin_redmine_dmsf['dmsf_webdav_caching_enabled'] == '1'
       end
 
       def self.write(name, value, options = nil)
-        Rails.cache.write(name, value, options)
+        Rails.cache.write(name, value, options) if Setting.plugin_redmine_dmsf['dmsf_webdav_caching_enabled'] == '1'
       end
 
       def self.delete(name, options = nil)
-        Rails.cache.delete(name, options)
+        Rails.cache.delete(name, options) if Setting.plugin_redmine_dmsf['dmsf_webdav_caching_enabled'] == '1'
       end
 
       def self.exist?(name, options = nil)
-        Rails.cache.exist?(name, options)
+        (Setting.plugin_redmine_dmsf['dmsf_webdav_caching_enabled'] == '1') && Rails.cache.exist?(name, options)
       end
 
       def self.clear
-        Rails.cache.clear
+        Rails.cache.clear if Setting.plugin_redmine_dmsf['dmsf_webdav_caching_enabled'] == '1'
       end
       
       def self.invalidate_item(key)
-        return if key.blank?
-        # Write an .invalid entry to notify anyone that is currently creating a response
-        self.write("#{key}.invalid", expires_in: 60.seconds)
-        # Delete any existing entry in the cache
-        self.delete(key)
+        if (Setting.plugin_redmine_dmsf['dmsf_webdav_caching_enabled'] == '1') && (!key.blank?)
+          # Write an .invalid entry to notify anyone that is currently creating a response
+          self.write("#{key}.invalid", expires_in: 60.seconds)
+          # Delete any existing entry in the cache
+          self.delete(key)
+        end
       end
 
     end
+
   end
 end

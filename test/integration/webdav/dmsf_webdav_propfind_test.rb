@@ -46,6 +46,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
     @project1_uri = Addressable::URI.escape(@project1_name)
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
+    Setting.plugin_redmine_dmsf['dmsf_webdav_caching_enabled'] = '1'
     RedmineDmsf::Webdav::Cache.clear
   end
   
@@ -318,6 +319,15 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
     assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}.invalid")
     assert RedmineDmsf::Webdav::Cache.exist?("PROPSTATS/#{@project1.identifier}/#{@folder1.title}")
+  end
+
+  def test_webdav_caching_disabled
+    Setting.plugin_redmine_dmsf['dmsf_webdav_caching_enabled'] = '0'
+    log_user 'admin', 'admin' # login as admin
+    xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_DEPTH => '1'})
+    assert_response 207 # MultiStatus
+    # Verify that everything exists in the cache as it should
+    assert !RedmineDmsf::Webdav::Cache.exist?("PROPFIND/#{@project1.id}")
   end
   
 end

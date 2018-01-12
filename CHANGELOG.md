@@ -1,6 +1,11 @@
 Changelog for Redmine DMSF
 ==========================
 
+1.6.1 *2018-??-??*
+------------------
+
+    WebDAV caching optionable in the plugin settings. Default is off.
+
 1.6.0 *2017-09-12*
 ------------------
 
