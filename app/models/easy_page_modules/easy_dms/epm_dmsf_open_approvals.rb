@@ -28,4 +28,8 @@ class EpmDmsfOpenApprovals < EasyPageModule
     {}
   end
 
+  def registered_in_plugin
+    'redmine_dmsf'
+  end
+
 end
