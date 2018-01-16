@@ -70,23 +70,8 @@ else
     require File.expand_path('../app/models/easy_page_modules/easy_dms/epm_dmsf_locked_documents', __FILE__)
     require File.expand_path('../app/models/easy_page_modules/easy_dms/epm_dmsf_open_approvals', __FILE__)
 
-    EpmDmsfLockedDocuments.register_to_scope(:user, :plugin => :easy_dms)
-    EpmDmsfOpenApprovals.register_to_scope(:user, :plugin => :easy_dms)
-
-    EasyExtensions::AfterInstallScripts.add do
-      page = EasyPage.where(:page_name => 'project-overview').first
-      page_template = page.default_template if page
-
-      unless page_template
-        page_template = EasyPageTemplate.create(:easy_pages_id => page.id, :template_name => 'Default template',
-                                                :description => 'Default template', :is_default => true)
-        EasyPageTemplateModule.create_template_module(page, page_template, EpmDmsfLockedDocuments.first,
-                                                      'top-left', HashWithIndifferentAccess.new, 1)
-        EasyPageTemplateModule.create_template_module(page, page_template, EpmDmsfOpenApprovals.first,
-                                                      'top-left', HashWithIndifferentAccess.new, 1)
-      end
-    end
-
+    EpmDmsfLockedDocuments.register_to_scope(:user, :plugin => :redmine_dmsf)
+    EpmDmsfOpenApprovals.register_to_scope(:user, :plugin => :redmine_dmsf)
   end
 end
 
