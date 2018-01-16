@@ -4,7 +4,7 @@
 #
 # Redmine Xapian is a Redmine plugin to allow attachments searches by content.
 #
-# Copyright (C) 2010    Xabier Elkano
+# Copyright © 2010    Xabier Elkano
 # Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
