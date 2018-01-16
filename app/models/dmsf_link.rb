@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfLink < ActiveRecord::Base
-  unloadable
+
   include ActiveModel::Validations
 
   belongs_to :project

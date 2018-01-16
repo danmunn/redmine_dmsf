@@ -29,7 +29,6 @@ rescue LoadError
 end
 
 class DmsfFile < ActiveRecord::Base
-  unloadable
 
   include RedmineDmsf::Lockable
 

@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfWorkflowsController < ApplicationController
-  unloadable
+
   model_object DmsfWorkflow
 
   before_action :find_model_object, :except => [:create, :new, :index, :assign, :assignment]

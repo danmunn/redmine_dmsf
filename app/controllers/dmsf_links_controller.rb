@@ -19,7 +19,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfLinksController < ApplicationController
-  unloadable
 
   model_object DmsfLink
   before_action :find_model_object, :only => [:destroy, :restore]

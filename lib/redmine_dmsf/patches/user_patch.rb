@@ -25,8 +25,6 @@ module RedmineDmsf
       def self.included(base) # :nodoc:
         base.send(:include, InstanceMethods)
         base.class_eval do
-          unloadable
-
           before_destroy :remove_dmsf_references
         end
       end

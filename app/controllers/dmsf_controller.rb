@@ -22,7 +22,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfController < ApplicationController
-  unloadable
 
   before_action :find_project
   before_action :authorize, :except => [:expand_folder]

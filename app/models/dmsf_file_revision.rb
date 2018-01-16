@@ -23,7 +23,6 @@ require 'digest'
 
 class DmsfFileRevision < ActiveRecord::Base
 
-  unloadable
   belongs_to :dmsf_file
   belongs_to :source_revision, :class_name => 'DmsfFileRevision', :foreign_key => 'source_dmsf_file_revision_id'
   belongs_to :user
