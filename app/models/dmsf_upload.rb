@@ -36,7 +36,7 @@ class DmsfUpload
   attr_accessor :tempfile_path
 
   def disk_file
-    "#{DmsfHelper.temp_dir}/#{self.disk_filename}"
+    DmsfHelper.temp_dir.join(self.disk_filename).to_s
   end
 
   def self.create_from_uploaded_attachment(project, folder, uploaded_file)

@@ -342,7 +342,7 @@ class DmsfController < ApplicationController
       zip = DmsfZip.new
       zip_entries(zip, selected_folders, selected_files)
 
-      zipped_content = "#{DmsfHelper.temp_dir}/#{DmsfHelper.temp_filename('dmsf_email_sent_documents.zip')}";
+      zipped_content = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_email_sent_documents.zip'))
 
       File.open(zipped_content, 'wb') do |f|
         zip_file = File.open(zip.finish, 'rb')

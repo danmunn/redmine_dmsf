@@ -170,7 +170,7 @@ en:
   label_number_of_folders: Folders
   label_number_of_documents: Documents
   error_file_storage_directory_does_not_exist: "File storage directory doesn't exist and can't be created"
-  error_file_can_not_be_created: "File can't be created in storage directory"
+  error_file_can_not_be_created: "Files can't be created in storage directory"
   error_wrong_zip_encoding: Wrong Zip encoding
   warning_xapian_not_available: Xapian not available
   menu_dmsf: DMS  # Project tab title
@@ -361,6 +361,10 @@ en:
 
   label_caching_enabled: Caching enabled
   note_webdav_cahing_enabled: PROPFIND responses are cached in order to speed up WebDAV communication
+
+  label_tmpdir: Temporary file path
+  error_file_tmpdir_does_not_exist: "Temporary file path doesn't exist and can't be created"
+  error_tmpfile_can_not_be_created: "Files can't be created in temporary file path directory"
 
   easy_pages:
     modules:

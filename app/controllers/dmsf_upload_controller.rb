@@ -67,7 +67,7 @@ class DmsfUploadController < ApplicationController
       return
     end
     @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
-    @tempfile_path = "#{DmsfHelper.temp_dir}/#{@disk_filename}"
+    @tempfile_path = DmsfHelper.temp_dir.join(@disk_filename).to_s
     File.open(@tempfile_path, 'wb') do |f|
       if params[:file].respond_to?(:read)
         while (buffer = @tempfile.read(8192))

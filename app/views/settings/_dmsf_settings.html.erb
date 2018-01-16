@@ -64,16 +64,16 @@
     storage_dir = @settings['dmsf_storage_directory'].strip if @settings['dmsf_storage_directory'].present?
     storage_dir = 'dmsf' if storage_dir.blank?
   %>
-  <%= text_field_tag 'settings[dmsf_storage_directory]', storage_dir, :size => 50 %>
+  <%= text_field_tag 'settings[dmsf_storage_directory]', storage_dir, :size => 256 %>
   <em class="info">
     <%= l(:label_default) %>: dmsf
   </em>
 </p>
 <% unless File.exist?(DmsfFile.storage_path) %>
   <% begin %>
-     <% Dir.mkdir(DmsfFile.storage_path) %>
+     <% FileUtils.mkdir_p DmsfFile.storage_path %>
   <% rescue %>
-    <p class="warning"><%= l(:error_file_storage_directory_does_not_exist) %></p> 
+    <p class="warning"><%= l(:error_file_storage_directory_does_not_exist) %></p>
   <% end %>
 <% end %>
 <% testfilename = DmsfFile.storage_path.join('test.test') %>
@@ -83,6 +83,37 @@
     <% end %>
   <% rescue %>
     <p class="warning"><%= l(:error_file_can_not_be_created) %></p>
+  <%	ensure %>
+    <% File.delete(testfilename) if File.exist?(testfilename) %>
+  <% end %>
+<% end %>
+
+<p>
+  <%=  content_tag(:label, l(:label_tmpdir)) %>
+  <%
+    tmpdir = @settings['dmsf_tmpdir'].strip if @settings['dmsf_tmpdir'].present?
+    tmpdir = Dir.tmpdir if tmpdir.blank?
+  %>
+  <%= text_field_tag 'settings[dmsf_tmpdir]', tmpdir, :size => 256 %>
+  <em class="info">
+    <%= l(:label_default) %>: <%= Dir.tmpdir %>
+  </em>
+</p>
+<% unless File.exist?(tmpdir) %>
+  <% begin %>
+    <% FileUtils.mkdir_p tmpdir %>
+  <% rescue %>
+    <p class="warning"><%= l(:error_file_tmpdir_does_not_exist) %></p>
+  <% end %>
+<% end %>
+<% path = Pathname.new(tmpdir) %>
+<% testfilename = path.join('test.test') %>
+<% if File.exist?(tmpdir) %>
+  <%	begin %>
+    <% File.open(testfilename, 'wb') do |file| %>
+    <% end %>
+  <% rescue %>
+    <p class="warning"><%= l(:error_tmpfile_can_not_be_created) %></p>
   <%	ensure %>
     <% File.delete(testfilename) if File.exist?(testfilename) %>
   <% end %>

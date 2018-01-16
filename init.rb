@@ -55,7 +55,8 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_keep_documents_locked' => false,
               'dmsf_act_as_attachable' => false,
               'dmsf_show_system_folders' => false,
-              'dmsf_webdav_caching_enabled' => false
+              'dmsf_webdav_caching_enabled' => false,
+              'dmsf_tmpdir' => Dir.tmpdir
             }
 
   # Uncomment to remove the original Documents from searching (replaced with DMSF)

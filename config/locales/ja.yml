@@ -362,6 +362,10 @@ ja:
   label_caching_enabled: Caching enabled
   note_webdav_cahing_enabled: PROPFIND responses are cached in order to speed up WebDAV communication
 
+  label_tmpdir: Temporary file path
+  error_file_tmpdir_does_not_exist: "Temporary file path doesn't exist and can't be created"
+  error_tmpfile_can_not_be_created: "Files can't be created in temporary file path directory"
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

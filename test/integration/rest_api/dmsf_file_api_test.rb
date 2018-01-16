@@ -77,7 +77,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
 
   def test_upload_document
     timestamp = DateTime.now.strftime('%y%m%d%H%M')
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path("./dmsf_test-#{timestamp}", DmsfHelper.temp_dir)
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = DmsfHelper.temp_dir.join("dmsf_test-#{timestamp}").to_s
     FileUtils.mkdir_p(Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
     @role.add_permission! :file_manipulation
     token = Token.create!(:user => @jsmith, :action => 'api')

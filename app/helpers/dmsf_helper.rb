@@ -27,13 +27,18 @@ module DmsfHelper
   include Redmine::I18n
 
   def self.temp_dir
-    Dir.tmpdir
+    if Setting.plugin_redmine_dmsf['dmsf_tmpdir'].present?
+      tmpdir = Pathname.new(Setting.plugin_redmine_dmsf['dmsf_tmpdir'])
+    else
+      tmpdir = Pathname.new(Dir.tmpdir)
+    end
+    tmpdir
   end
 
   def self.temp_filename(filename)
     filename = sanitize_filename(filename)
     timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
-    while File.exist?(File.join(temp_dir, "#{timestamp}_#{filename}"))
+    while self.temp_dir.join("#{timestamp}_#{filename}").exist?
       timestamp.succ!
     end
     "#{timestamp}_#{filename}"

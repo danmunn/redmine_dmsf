@@ -362,6 +362,10 @@ cs:
   label_caching_enabled: Povolit použití vyrovnávací paměti
   note_webdav_cahing_enabled: Odpovědi na požadavek PROPFIND jsou ukládány do vyrovnávací paměti za účelem zrychlení WebDAV komunikace.
 
+  label_tmpdir: Adresář pro dočasné soubory
+  error_file_tmpdir_does_not_exist: "Adresář pro dočasné soubory neexistuje a nemůže být vytvořen"
+  error_tmpfile_can_not_be_created: "Nelze vytvořit soubor v adresáři pro dočasné soubory"
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents
