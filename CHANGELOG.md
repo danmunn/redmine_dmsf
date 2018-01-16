@@ -5,6 +5,7 @@ Changelog for Redmine DMSF
 ------------------
 
     WebDAV caching optionable in the plugin settings. Default is off.
+    Javascript on pages is loaded asynchronously.
 
 1.6.0 *2017-09-12*
 ------------------

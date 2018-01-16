@@ -45,12 +45,11 @@
   </div>
 <% end %>
 
-<script type="text/javascript">
+<%# TODO: late_javascript_tag is not working here %>
+<%= javascript_tag do %>
   var originalUploaderContent;
   var uploader = $('#dmsf_uploader');
-
   originalUploaderContent = uploader.html();
-
   $('#uploader_select').change(function() {
     if($(this).val() === '2') {
       uploader.html(originalUploaderContent);
@@ -59,19 +58,16 @@
       initPlUploader(uploader);
     }
   });
-
   initPlUploader(uploader);
-
-  var dmsfFileFieldCount = 1; 
-</script>
+  var dmsfFileFieldCount = 1;
+<% end %>
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'plupload/jquery.ui.plupload.css', :plugin => 'redmine_dmsf' %>  
   <%= javascript_include_tag 'plupload/js/plupload.full.min.js', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag 'plupload/js/jquery.ui.plupload/jquery.ui.plupload.js', :plugin => 'redmine_dmsf' %>
   <%= javascript_include_tag(js_url, :plugin => 'redmine_dmsf') %>
-
-  <script type="text/javascript">
+  <%= javascript_tag do %>
     function initPlUploader(uploader) {
       uploader.html('<div></div>');
       uploader = $('div', uploader);
@@ -84,20 +80,16 @@
         // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
         dragdrop: true,
         multipart_params : { authenticity_token : $('input[name=authenticity_token]').val() },
-
         // Rename files by clicking on their titles
         rename: true,
-        
         // Views to activate
         views: {
             list: true,
             thumbs: true, // Show thumbs
             active: 'thumbs'
         },
-        
         // Flash settings
         flash_swf_url : '<%= plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.swf') %>',
-
         // Silverlight settings
         silverlight_xap_url : '<%= plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.xap') %>'
       });
@@ -142,5 +134,5 @@
         return true;
       });
     }
-  </script>
+  <% end %>
 <% end %>

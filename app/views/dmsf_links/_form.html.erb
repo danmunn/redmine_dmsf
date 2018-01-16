@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-18 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@
         <%= select_tag('dmsf_link[target_project_id]',
           project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy,
           :selected => @dmsf_link.target_project), :style => "width=100%") %>
-        <%= javascript_tag do %>
+        <%= late_javascript_tag do %>
             $('#dmsf_link_target_project_id').change(function(){
               $.ajax({
                 url: '<%= autocomplete_for_project_dmsf_link_path(@project, :format => 'js') %>',
@@ -65,7 +65,7 @@
         <%= select_tag('dmsf_link[target_folder_id]',
           folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
           :selected => @target_folder_id)) %>
-        <%= javascript_tag do %>
+        <%= late_javascript_tag do %>
             $('#dmsf_link_target_folder_id').change(function(){
               $.ajax({
                 url: '<%= autocomplete_for_folder_dmsf_link_path(@project, :format => 'js') %>',
@@ -104,7 +104,7 @@
   </p>
 <% end %>
 
-<script type="text/javascript">
+<%= late_javascript_tag do %>
   <%# Select2 extension, TODO: in case of a modal window, select2 makes problems %>
   <% unless modal %>
     $('#dmsf_link_target_project_id').select2();
@@ -115,9 +115,8 @@
   $('#dmsf_link_target_file_id').change(function () {
     var linkName = $('#dmsf_link_name');
     var name = linkName.val();
-
     if(name == '') {
-        linkName.val($('#dmsf_link_target_file_id option:selected').text().replace(/\./g, ''));
+      linkName.val($('#dmsf_link_target_file_id option:selected').text().replace(/\./g, ''));
     }
   });
   <%# Internal/External link switch %>
@@ -128,7 +127,7 @@
     var labelUrl = $('label[for="dmsf_link_external_url"]');
     labelUrl.toggleClass('required', $(this).val());
     if(labelUrl.find(".required").length == 0){
-        labelUrl.append('<span class="required"> *</span>');
+      labelUrl.append('<span class="required"> *</span>');
     }
   });
-</script>
+<% end %>

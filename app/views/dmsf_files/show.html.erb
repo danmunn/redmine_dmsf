@@ -5,7 +5,7 @@
 #
 # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-18 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -179,26 +179,23 @@
 
 <span class="pagination"><%= pagination_links_full @revision_pages, @file.dmsf_file_revisions.visible.count %></span>
 
-<script type="text/javascript">
+<%= late_javascript_tag do %>
   $('a.delete-revision').click(function(event) {
     if(!window.confirm('<%= l(:text_are_you_sure) %>')) {
       event.preventDefault();
     }
   });
-
   $('a.delete-entry').click(function(event) {
     if(!window.confirm('<%= l(:text_are_you_sure) %>')) {
       event.preventDefault();
     }
   });
-
   $('#file_upload_box').change(function() {
     if($("input[name='version']:checked").val() == '0') {
       $('#version_1').prop('checked', true);
     }
     $('#version_0').prop('disabled', true);
   });
-
   $('#newRevisionFormContentToggle').click(function() {
     if($('#newRevisionFormContent').is(':visible')) {
       $(this).text('[+]');
@@ -209,19 +206,18 @@
       $('#newRevisionFormContent').show();
     }
   });
-
   $('.dmsf_list').dataTable({
     'bJQueryUI': true,
     'oLanguage': {
       'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
     }
   });
-</script>
+<% end %>
 <% if @revision.valid? && @file.valid? %>
-  <script type="text/javascript">
+  <%= late_javascript_tag do %>
     $('#newRevisionFormContentToggle').text('[+]');
     $('#newRevisionFormContent').hide();
-  </script>
+  <% end %>
 <% end %>
 
 <% content_for :header_tags do %>

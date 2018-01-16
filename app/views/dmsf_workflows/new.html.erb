@@ -45,9 +45,9 @@
   <%= f.submit l(:button_create) %>
 <% end %>
 
-<script type="text/javascript">
+<%= late_javascript_tag do %>
   $('#dmsf_workflow_id').change(function () {
     $('#content').load("<%= @project ? url_for(:action => 'new', :project_id => @project.id) : url_for(:action => 'new') %>", $('#new_dmsf_workflow').serialize());
   });
   $('#dmsf_workflow_id').select2();
-</script>
+<% end %>

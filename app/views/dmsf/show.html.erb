@@ -5,7 +5,7 @@
   #
   # Copyright (C) 2011    Vít Jonáš <vit.jonas@gmail.com>
   # Copyright (C) 2012    Daniel Munn <dan.munn@munnster.co.uk>
-  # Copyright (C) 2011-17 Karel Pičman <karel.picman@kontron.com>
+  # Copyright (C) 2011-18 Karel Pičman <karel.picman@kontron.com>
   #
   # This program is free software; you can redistribute it and/or
   # modify it under the terms of the GNU General Public License
@@ -119,23 +119,21 @@
     </div>
 <% end %>
 
-<script type="text/javascript">
-    $('#entries_delete_button').click(function() {
-        if(window.confirm("<%= l(:text_are_you_sure) %>")) {
+<%= late_javascript_tag do %>
+    $('#entries_delete_button').click(function () {
+        if (window.confirm("<%= l(:text_are_you_sure) %>")) {
             $('#entries_form').attr('action', "<%= delete_entries_path(:id => @project, :folder_id => @folder) %>");
             $('#entries_form').submit();
         }
     });
-
     $('.list_cf').change(function() {
         $('#entries_form').attr('action', "<%= tag_changed_path(:id => @project, :folder_id => @folder) %>");
         $('#entries_form').submit();
     });
-
     $('#check_all_entries').click(function() {
         $('input[type=checkbox]', $('#browser > tbody')).prop('checked', this.checked);
     });
-</script>
+<% end %>
 
 <% content_for :header_tags do %>
     <%= javascript_include_tag 'bowser.min.js', :plugin => 'redmine_dmsf' %>
@@ -153,8 +151,8 @@
     <% size = DmsfFolder.get_column_position('size') %>
     <% modified = DmsfFolder.get_column_position('modified') %>
 
-    <script type="text/javascript">
-        $(document).ready(function() {
+    <%= late_javascript_tag do %>
+        EASY.schedule.main(function() {
             $('#browser').dataTable({
                 'bJQueryUI': true,
                 'oLanguage': {
@@ -211,7 +209,7 @@
                 $(this).removeAttr('data-submitted');
             });
         });
-    </script>
+    <% end %>
 <% end %>
 
 <% if (@file_manipulation_allowed && !@locked_for_user && !@system_folder) %>

@@ -7,9 +7,8 @@
     <%= hidden_field_tag :project_id, @project.id %>
 
   <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>
-  <%= javascript_tag "observeSearchfield('user_search', 'users_for_users', '#{ escape_javascript url_for(:controller => 'dmsf_folder_permissions',
-                 :action => 'autocomplete_for_user',
-                 :project_id => @project) }')" %>
+  <%= late_javascript_tag "observeSearchfield('user_search', 'users_for_users', '#{ escape_javascript url_for(
+    :controller => 'dmsf_folder_permissions', :action => 'autocomplete_for_user', :project_id => @project) }')" %>
 
   <div id="users_for_watcher">
     <%= render_principals_for_new_folder_permissions(@principals) %>

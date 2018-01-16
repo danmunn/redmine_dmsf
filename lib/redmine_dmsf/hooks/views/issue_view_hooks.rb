@@ -48,7 +48,9 @@ module RedmineDmsf
               html << l(:label_dmsf_attachments)
             html << '</label>'
           html << '</p>'
-          html << "<script>$( document ).ready(function() {$('.attachments-container:not(.dmsf_uploader)').parent().hide();})</script>" if User.current.pref.dmsf_attachments_upload_choice == 'DMSF'
+          if User.current.pref.dmsf_attachments_upload_choice == 'DMSF'
+            html << late_javascript_tag("$(document).ready(function() {$('.attachments-container:not(.dmsf_uploader)').parent().hide();})")
+          end
         end
         # Upload form
         html.html_safe + attach_documents_form(context, false,

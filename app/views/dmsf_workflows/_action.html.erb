@@ -44,7 +44,7 @@
   <p>
     <%= label_tag 'delegate', l(:label_dmsf_wokflow_action_delegate) %><br/>
     <%= text_field_tag 'user_search', nil %>    
-    <%= javascript_tag "observeSearchfield('user_search', null, '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@dmsf_workflow, :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id], :dmsf_file_revision_id => params[:dmsf_file_revision_id]) }')" %>
+    <%= late_javascript_tag "observeSearchfield('user_search', null, '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@dmsf_workflow, :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id], :dmsf_file_revision_id => params[:dmsf_file_revision_id]) }')" %>
     <div id="dmsf_users_for_delegate">
       <%= render_principals_for_new_dmsf_workflow_users(
         @dmsf_workflow, params[:dmsf_workflow_step_assignment_id], params[:dmsf_file_revision_id]) %>
