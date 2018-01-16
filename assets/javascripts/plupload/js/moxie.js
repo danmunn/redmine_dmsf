@@ -8613,7 +8613,7 @@ define("moxie/runtime/html5/image/ImageInfo", [
 /**
 (The MIT License)
 
-Copyright (c) 2012 Shinichi Tomita <shinichi.tomita@gmail.com>;
+Copyright © 2012 Shinichi Tomita <shinichi.tomita@gmail.com>;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -8642,7 +8642,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * which causes unexpected subsampling when drawing it in canvas.
  * By using this library, you can safely render the image with proper stretching.
  *
- * Copyright (c) 2012 Shinichi Tomita <shinichi.tomita@gmail.com>
+ * Copyright © 2012 Shinichi Tomita <shinichi.tomita@gmail.com>
  * Released under the MIT license
  */
 

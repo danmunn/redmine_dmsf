@@ -1,6 +1,6 @@
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2012 Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright © 2012 Daniel Munn <dan.munn@munnster.co.uk>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
