@@ -26,39 +26,39 @@ class DmsfZip
   attr_reader :files
 
   def initialize()
-    @zip = Tempfile.new(['dmsf_zip','.zip'])
-    @zip.chmod(0644)
+    @zip = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_zip.zip'))
     @zip_file = Zip::OutputStream.new(@zip.path)
     @files = []
     @folders = []
   end
 
   def finish
-    @zip_file.close if @zip_file
-    @zip.path if @zip
+    @zip_file.close
+    @zip.path
   end
 
   def close
-    @zip_file.close if @zip_file
-    @zip.close if @zip
+    @zip_file.close
+    @zip.close
   end
 
   def add_file(file, member, root_path = nil)
     unless @files.include?(file)
       string_path = file.dmsf_folder.nil? ? '' : "#{file.dmsf_folder.dmsf_path_str}/"
       string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
-      
       if member && !member.title_format.nil? && !member.title_format.empty?
         string_path += file.formatted_name(member.title_format)
       else
         string_path += file.formatted_name(Setting.plugin_redmine_dmsf['dmsf_global_title_format'])
       end
-      @zip_file.put_next_entry(string_path)
-      File.open(file.last_revision.disk_file, 'rb') do |f|
-        while (buffer = f.read(8192))
-          @zip_file.write(buffer)
-        end
-      end
+      zip_entry = ::Zip::Entry.new(@zip_file, string_path, nil, nil, nil, nil, nil, nil,
+                                   ::Zip::DOSTime.at(file.last_revision.updated_at))
+      @zip_file.put_next_entry(zip_entry)
+       File.open(file.last_revision.disk_file, 'rb') do |f|
+         while (buffer = f.read(8192))
+           @zip_file.write(buffer)
+         end
+       end
       @files << file
     end
   end
@@ -67,7 +67,9 @@ class DmsfZip
     unless @folders.include?(folder)
       string_path = "#{folder.dmsf_path_str}/"
       string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
-      @zip_file.put_next_entry(string_path)
+      zip_entry = ::Zip::Entry.new(@zip_file, string_path, nil, nil, nil, nil, nil, nil,
+                                   ::Zip::DOSTime.at(folder.modified))
+      @zip_file.put_next_entry(zip_entry)
       @folders << folder
       folder.dmsf_folders.visible.each { |subfolder| self.add_folder(subfolder, member, root_path) }
       folder.dmsf_files.visible.each { |file| self.add_file(file, member, root_path) }

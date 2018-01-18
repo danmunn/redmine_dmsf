@@ -375,7 +375,7 @@ class DmsfController < ApplicationController
     rescue Exception
       raise
     ensure
-      zip.close if zip
+      zip.close
     end
   end
 
@@ -397,7 +397,7 @@ class DmsfController < ApplicationController
     rescue Exception
       raise
     ensure
-      zip.close if zip
+      zip.close
     end
   end
 
