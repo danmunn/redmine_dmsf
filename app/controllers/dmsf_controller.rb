@@ -369,13 +369,15 @@ class DmsfController < ApplicationController
         :folders => selected_folders,
         :files => selected_files,
         :subject => "#{@project.name} #{l(:label_dmsf_file_plural).downcase}",
-        :from => "#{User.current.name} <#{User.current.mail}>"
+        :from => Setting.plugin_redmine_dmsf['dmsf_documents_email_from'].blank? ?
+          "#{User.current.name} <#{User.current.mail}>" : Setting.plugin_redmine_dmsf['dmsf_documents_email_from'],
+        :reply_to => Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
       }
       render :action => 'email_entries'
     rescue Exception
       raise
     ensure
-      zip.close
+      zip.close if zip
     end
   end
 
@@ -397,7 +399,7 @@ class DmsfController < ApplicationController
     rescue Exception
       raise
     ensure
-      zip.close
+      zip.close if zip
     end
   end
 

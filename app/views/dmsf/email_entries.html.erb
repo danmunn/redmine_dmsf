@@ -33,6 +33,7 @@
   <%= hidden_field_tag('email[folders]', @email_params[:folders].to_json) %>
   <%= hidden_field_tag('email[files]', @email_params[:files].to_json) %>
   <%= hidden_field_tag('email[from]', @email_params[:from]) %>
+  <%= hidden_field_tag('email[reply_to]', @email_params[:reply_to]) %>
   <div class="box tabular">
     <p>
       <%= label_tag('', l(:label_email_from)) %>      
@@ -53,9 +54,11 @@
     <p>
       <%= label_tag('', l(:label_email_documents)) %>
       <span>
-        <%= link_to 'Documents.zip', download_email_entries_path(:id => @project, :folder_id => @folder, :path => @email_params[:zipped_content]) %>       
+        <%= link_to 'Documents.zip', download_email_entries_path(:id => @project, :folder_id => @folder,
+                                                                 :path => @email_params[:zipped_content]) %>
         <%= l(:label_or) %>
-        <%= check_box_tag('email[links_only]', 1, false, :onchange => "$('#public_url').toggle()") %> <%= l(:label_links_only) %>
+        <%= check_box_tag('email[links_only]', 1, Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'],
+                          :onchange => "$('#public_url').toggle()") %> <%= l(:label_links_only) %>
         <%= render(:partial => 'dmsf_public_urls/new') %>
       </span>
     </p>

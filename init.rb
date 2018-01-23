@@ -56,7 +56,10 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_act_as_attachable' => false,
               'dmsf_show_system_folders' => false,
               'dmsf_webdav_caching_enabled' => false,
-              'dmsf_tmpdir' => Dir.tmpdir
+              'dmsf_tmpdir' => Dir.tmpdir,
+              'dmsf_documents_email_from' => '',
+              'dmsf_documents_email_reply_to' => '',
+              'dmsf_documents_email_links_only' => false
             }
 
   # Uncomment to remove the original Documents from searching (replaced with DMSF)

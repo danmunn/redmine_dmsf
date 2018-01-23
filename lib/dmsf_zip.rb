@@ -26,20 +26,19 @@ class DmsfZip
   attr_reader :files
 
   def initialize()
-    @zip = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_zip.zip'))
-    @zip_file = Zip::OutputStream.new(@zip.path)
+    @zip_path = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_zip.zip'))
+    @zip_file = Zip::OutputStream.new(@zip_path)
     @files = []
     @folders = []
   end
 
   def finish
     @zip_file.close
-    @zip.path
+    @zip_path
   end
 
   def close
     @zip_file.close
-    @zip.close
   end
 
   def add_file(file, member, root_path = nil)
