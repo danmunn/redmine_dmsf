@@ -225,4 +225,31 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_response :success
   end
 
+  def test_email_entries_email_from
+    Setting.plugin_redmine_dmsf['dmsf_documents_email_from'] = 'karel.picman@kontron.com'
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
+    @role.add_permission! :view_dmsf_files
+    get :entries_operation, :id => @project, :email_entries => 'Email', :files => [@file1.id]
+    assert_response :success
+    assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_from']
+  end
+
+  def test_email_entries_reply_to
+    Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to'] = 'karel.picman@kontron.com'
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
+    @role.add_permission! :view_dmsf_files
+    get :entries_operation, :id => @project, :email_entries => 'Email', :files => [@file1.id]
+    assert_response :success
+    assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
+  end
+
+  def test_email_entries_links_only
+    Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] = '1'
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
+    @role.add_permission! :view_dmsf_files
+    get :entries_operation, :id => @project, :email_entries => 'Email', :files => [@file1.id]
+    assert_response :success
+    assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only']
+  end
+
 end
