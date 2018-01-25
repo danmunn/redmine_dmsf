@@ -20,9 +20,9 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<h3 class="title"><%= l(:label_user_search) %></h3>
+<h3 class="title"><%= l(:label_email_address_add) %></h3>
 
-<%= form_tag(append_dmsf_folder_permissions_path,
+<%= form_tag(append_email_dmsf_path,
              :remote => true,
              :method => :post,
              :id => 'new-user-form') do %>
@@ -30,10 +30,10 @@
 
   <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>
   <%= late_javascript_tag "observeSearchfield('user_search', 'users_for_users', '#{ escape_javascript url_for(
-    :controller => 'dmsf_folder_permissions', :action => 'autocomplete_for_user', :project_id => @project) }')" %>
+    :controller => 'dmsf', :action => 'autocomplete_for_user', :project_id => @project) }')" %>
 
   <div id="users_for_watcher">
-    <%= render_principals_for_new_folder_permissions(@principals) %>
+    <%= render_principals_for_new_email(@principals) %>
   </div>
 
   <p class="buttons">

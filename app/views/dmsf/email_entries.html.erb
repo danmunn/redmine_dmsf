@@ -41,7 +41,11 @@
     </p>
     <p>
       <%= label_tag('email[to]', l(:label_email_to)) %>
-      <%= text_field_tag('email[to]', @email_params[:to], :style => 'width: 90%;', :required => true) %>
+      <span>
+        <%= text_field_tag('email[to]', @email_params[:to], :style => 'width: 90%;', :required => true) %>
+        <%= link_to l(:button_add), add_email_dmsf_path(:project_id => @project),
+          :title => l(:label_email_address_add), :class => 'icon icon-add', :remote => true %>
+      </span>
     </p>
     <p>
       <%= label_tag('email[cc]', l(:label_email_cc)) %>

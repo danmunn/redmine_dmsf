@@ -24,7 +24,8 @@ class DmsfController < ApplicationController
 
   before_action :find_project
   before_action :authorize, :except => [:expand_folder]
-  before_action :find_folder, :except => [:new, :create, :edit_root, :save_root]
+  before_action :find_folder, :except => [:new, :create, :edit_root, :save_root, :add_email, :append_email,
+                                          :autocomplete_for_user]
   before_action :find_parent, :only => [:new, :create]
   before_action :tree_view, :only => [:delete, :show]
   before_action :permissions
@@ -335,7 +336,30 @@ class DmsfController < ApplicationController
      redirect_to :back
   end
 
+  def add_email
+    @principals = users_for_new_users
+    # respond_to do |format|
+    #   format.js
+    # end
+  end
+
+  def append_email
+    @principals = Principal.where(:id => params[:user_ids]).to_a
+    head 200 if @principals.blank?
+  end
+
+  def autocomplete_for_user
+    @principals = users_for_new_users
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
+
+  def users_for_new_users
+    Principal.active.visible.member_of(@project).like(params[:q]).order(:type, :lastname).to_a
+  end
 
   def email_entries(selected_folders, selected_files)
     begin
@@ -564,8 +588,6 @@ class DmsfController < ApplicationController
     copy
   end
 
-  private
-
   def get_display_params
     @system_folder = @folder && @folder.system
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
@@ -667,4 +689,3 @@ class DmsfController < ApplicationController
   end
 
 end
-

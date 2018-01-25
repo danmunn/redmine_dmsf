@@ -182,4 +182,8 @@ module DmsfHelper
     end
   end
 
+  def render_principals_for_new_email(users)
+    principals_check_box_tags 'user_ids[]', users
+  end
+
 end

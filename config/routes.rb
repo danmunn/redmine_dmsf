@@ -49,6 +49,9 @@ if Redmine::Plugin.installed? :redmine_dmsf
     get '/projects/:id/dmsf/trash', :controller => 'dmsf', :action => 'trash', :as => 'trash_dmsf'
     get '/projects/:id/dmsf/restore', :controller => 'dmsf', :action => 'restore', :as => 'restore_dmsf'
     post '/projects/:id/dmsf/expand_folder', :controller => 'dmsf', :action => 'expand_folder', :as => 'expand_folder_dmsf'
+    get '/projects/:id/dmsf/add_email', :controller => 'dmsf', :action => 'add_email', :as => 'add_email_dmsf'
+    post '/projects/:id/dmsf/append_email', :controller => 'dmsf', :action => 'append_email', :as => 'append_email_dmsf'
+    get '/projects/:id/dmsf/autocomplete_for_user', :controller => 'dmsf', :action => 'autocomplete_for_user'
 
     #
     # dmsf_state controller
