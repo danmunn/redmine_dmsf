@@ -252,4 +252,37 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only']
   end
 
+  def test_add_email_forbidden
+    xhr :get, :add_email, id: @project.id
+    assert_response :forbidden
+  end
+
+  def test_add_email
+    @role.add_permission! :view_dmsf_files
+    xhr :get, :add_email, id: @project.id
+    assert_response :success
+  end
+
+  def test_append_email_forbidden
+    post :append_email, :id => @project, :user_ids => @project.members.collect{ |m| m.user.id }, :format => 'js'
+    assert_response :forbidden
+  end
+
+  def test_append_email_forbidden
+    @role.add_permission! :view_dmsf_files
+    post :append_email, :id => @project, :user_ids => @project.members.collect{ |m| m.user.id }, :format => 'js'
+    assert_response :success
+  end
+
+  def test_autocomplete_for_user_forbidden
+    xhr :get, :autocomplete_for_user, id: @project.id
+    assert_response :forbidden
+  end
+
+  def test_autocomplete_for_user
+    @role.add_permission! :view_dmsf_files
+    xhr :get, :autocomplete_for_user, id: @project
+    assert_response :success
+  end
+
 end

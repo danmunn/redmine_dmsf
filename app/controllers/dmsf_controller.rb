@@ -338,9 +338,6 @@ class DmsfController < ApplicationController
 
   def add_email
     @principals = users_for_new_users
-    # respond_to do |format|
-    #   format.js
-    # end
   end
 
   def append_email
