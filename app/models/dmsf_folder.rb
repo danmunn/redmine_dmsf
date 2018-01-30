@@ -349,6 +349,7 @@ class DmsfFolder < ActiveRecord::Base
 
   # Number of items in the folder
   def items
+    Rails.logger.info ">>> #{dmsf_files.visible.where(:project_id => self.project_id).to_sql}"
     dmsf_folders.visible.where(:project_id => self.project_id).count +
     dmsf_files.visible.where(:project_id => self.project_id).count +
     dmsf_links.visible.where(:project_id => self.project_id).count
@@ -451,35 +452,6 @@ class DmsfFolder < ActiveRecord::Base
     pos += 1
     return pos if column == 'version_calculated'
     nil
-  end
-
-  def save(*args)
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-    super(*args)
-  end
-  
-  def save!(*args)
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-    super(*args)
-  end
-
-  def destroy
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-    super
-  end
-
-  def destroy!
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-    super
-  end
-  
-  def propfind_cache_key
-    if dmsf_folder_id.nil?
-      # Folder is in project root
-      return "PROPFIND/#{project_id}"
-    else
-      return "PROPFIND/#{project_id}/#{dmsf_folder_id}"
-    end
   end
 
   include ActionView::Helpers::NumberHelper

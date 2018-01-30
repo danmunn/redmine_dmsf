@@ -239,8 +239,6 @@ class DmsfFile < ActiveRecord::Base
       errors[:base] << l(:error_file_is_locked)
       return false
     end
-    # Must invalidate source parent folder cache before moving
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
     source = "#{self.project.identifier}:#{self.dmsf_path_str}"
     self.project_id = project.id
     self.dmsf_folder = folder
@@ -476,35 +474,6 @@ class DmsfFile < ActiveRecord::Base
       end
     end
     nil
-  end
-
-  def save(*args)
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-    super(*args)
-  end
-  
-  def save!(*args)
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-    super(*args)
-  end
-  
-  def destroy
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-    super
-  end
-
-  def destroy!
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-    super
-  end
-  
-  def propfind_cache_key
-    unless dmsf_folder_id
-      # File is in project root
-      return "PROPFIND/#{self.project_id}"
-    else
-      return "PROPFIND/#{self.project_id}/#{self.dmsf_folder_id}"
-    end
   end
 
   def extension

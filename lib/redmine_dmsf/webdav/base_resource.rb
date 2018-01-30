@@ -27,11 +27,13 @@ module RedmineDmsf
       include Redmine::I18n
       include ActionView::Helpers::NumberHelper
 
-      def initialize(*args)
-        webdav_setting = Setting.plugin_redmine_dmsf['dmsf_webdav']
-        raise NotFound if webdav_setting.nil? || webdav_setting.empty?
+      attr_reader :public_path
+
+      def initialize(path, request, response, options)
+        raise NotFound unless Setting.plugin_redmine_dmsf['dmsf_webdav'].present?
         @project = nil
-        super(*args)
+        @public_path = "#{options[:root_uri_path]}#{path}"
+        super(path, request, response, options)
       end
 
       DIR_FILE = "<tr><td class=\"name\"><a href=\"%s\">%s</a></td><td class=\"size\">%s</td><td class=\"type\">%s</td><td class=\"mtime\">%s</td></tr>"
@@ -49,16 +51,6 @@ module RedmineDmsf
       def special_type
         nil
       end
-      
-      # Base attribute overriding in order to allow non-ascii characters in path
-      def path
-        @path.force_encoding('utf-8')
-      end
-      
-      # Base attribute overriding in order to allow non-ascii characters in path
-      def public_path
-        @public_path.force_encoding('utf-8')
-      end
 
       # Generate HTML for Get requests, or Head requests if no_body is true
       def html_display
@@ -66,7 +58,7 @@ module RedmineDmsf
         Confict unless collection?        
         entities = children.map{|child| 
           DIR_FILE % [
-            child.public_path, 
+            "#{@options[:root_uri_path]}#{child.path}",
             child.long_name || child.name, 
             child.collection? ? '' : number_to_human_size(child.content_length),
             child.special_type || child.content_type, 
@@ -80,34 +72,24 @@ module RedmineDmsf
           '',
           '',
         ] + entities if parent        
-        @response.body << index_page % [ path.empty? ? '/' : path, path.empty? ? '/' : path, entities ]
+        @response.body << index_page % [ @path.empty? ? '/' : @path, @path.empty? ? '/' : @path, entities ]
       end
 
       # Run method through proxy class - ensuring always compatible child is generated      
       def child(name)
-        new_public = public_path.dup
-        new_public = new_public + '/' unless new_public[-1,1] == '/'
-        new_public = '/' + new_public unless new_public[0,1] == '/'
-        new_path = path.dup
+        new_path = @path.dup
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
-        @__proxy.class.new("#{new_public}#{name}", "#{new_path}#{name}", request, response, options.merge(:user => @user))
+        @__proxy.class.new("#{new_path}#{name}", request, response, @options.merge(:user => @user))
       end
       
       def child_project(p)
         project_display_name = ProjectResource.create_project_name(p)
-        
-        new_public = public_path.dup
-        new_public = new_public + '/' unless new_public[-1,1] == '/'
-        new_public = '/' + new_public unless new_public[0,1] == '/'
-        new_public += project_display_name
-        
-        new_path = path.dup
+        new_path = @path.dup
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
         new_path += project_display_name
-        
-        @__proxy.class.new("#{new_public}", "#{new_path}", request, response, options.merge(:user => @user))
+        @__proxy.class.new(new_path, request, response, @options.merge(:user => @user))
       end
 
       def parent
@@ -118,47 +100,85 @@ module RedmineDmsf
 
       # Override index_page from DAV4Rack::Resource
       def index_page
-        return <<-PAGE
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<head>  
-  <title>Index of %s</title>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <style type='text/css'>
-    table { width:100%%; }
-    .name { text-align:left; }
-    .size { text-align: center; }
-    .type { text-align: center; width: 11em; }
-    .mtime { width:15em; }
-  </style>
-</head>
-<body>
-  <h1>Index of %s</h1>
-  <hr/>
-  <table>
-    <tr>
-      <th class='name'>Name</th>
-      <th class='size'>Size</th>
-      <th class='type'>Type</th>
-      <th class='mtime'>Last Modified</th>
-    </tr>
-  %s
-  </table>
-  <hr/>
-</body>
-</html>
-        PAGE
+        return %{
+          <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+          <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+          <head>
+            <title>Index of %s</title>
+            <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+            <style type='text/css'>
+              table { width:100%%; }
+              .name { text-align:left; }
+              .size { text-align: center; }
+              .type { text-align: center; width: 11em; }
+              .mtime { width:15em; }
+            </style>
+          </head>
+          <body>
+            <h1>Index of %s</h1>
+            <hr/>
+            <table>
+              <tr>
+                <th class='name'>Name</th>
+                <th class='size'>Size</th>
+                <th class='type'>Type</th>
+                <th class='mtime'>Last Modified</th>
+              </tr>
+            %s
+            </table>
+            <hr/>
+          </body>
+          </html>
+        }
+      end
+
+      # response:: parent Ox::Element
+      # stats:: Array of stats
+      # Build propstats response
+      def propstats(response, stats)
+        return if stats.empty?
+        stats.each do |status, props|
+          propstat = Ox::Element.new(D_PROPSTAT)
+          prop = Ox::Element.new(D_PROP)
+
+          props.each do |element, value|
+
+            name = element[:name]
+            if prefix = prefix_for(element[:ns_href])
+              ### TODO: A DMSF plugin workaround
+              if prefix =~ /^unknow/
+                next
+              end
+              ###
+              name = "#{prefix}:#{name}"
+            end
+
+            prop_element = Ox::Element.new(name)
+            ox_append prop_element, value, prefix: prefix
+            prop << prop_element
+
+          end
+
+          propstat << prop
+          propstat << ox_element(D_STATUS, "#{http_version} #{status.status_line}")
+
+          response << propstat
+        end
+      end
+
+      def options(request, response)
+        return NotFound if ((@path.length > 1) && ((!project) || (!project.module_enabled?('dmsf'))))
+        if @__proxy.read_only
+          response['Allow'] ||= 'OPTIONS,HEAD,GET,PROPFIND'
+        end
+        OK
       end
 
     protected
     
       def basename
-        File.basename(path)
-      end
-
-      def dirname
-        File.dirname(path)
+        File.basename(@path)
       end
 
       # Return instance of Project based on the path
@@ -185,11 +205,11 @@ module RedmineDmsf
 
       # Make it easy to find the path without project in it.
       def projectless_path
-        '/' + path.split('/').drop(2).join('/')
+        '/' + @path.split('/').drop(2).join('/')
       end
 
       def path_prefix
-        public_path.gsub(/#{Regexp.escape(path)}$/, '')
+        @public_path.gsub(/#{Regexp.escape(path)}$/, '')
       end
 
     end

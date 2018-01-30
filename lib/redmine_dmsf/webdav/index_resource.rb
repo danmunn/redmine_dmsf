@@ -23,8 +23,8 @@ module RedmineDmsf
   module Webdav
     class IndexResource < BaseResource
 
-      def initialize(*args)
-        super(*args)
+      def initialize(path, request, response, options)
+        super(path, request, response, options)
         @projects = nil
       end
       

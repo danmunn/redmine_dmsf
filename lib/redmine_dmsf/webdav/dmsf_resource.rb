@@ -25,27 +25,17 @@ require 'addressable/uri'
 module RedmineDmsf
   module Webdav
     class DmsfResource < BaseResource
+      include Redmine::I18n
 
-      def initialize(*args)
+      def initialize(path, request, response, options)
         @folder = nil
         @file = nil
-        super(*args)
+        super(path, request, response, options)
       end
 
       # Here we make sure our folder and file methods are not aliased - it should shave a few cycles off of processing
       def setup
         @skip_alias |= [ :folder, :file ]
-      end
-
-      # Here we hook into the fact that resources can have a pre-execution routine run for them
-      # Our sole job here is to ensure that any write functionality is restricted to relevent configuration
-      before do |resource, method_name|
-        # If our method is not one of the following, there is no point continuing.
-        if [ :put, :make_collection, :move, :copy, :delete, :lock, :unlock, :set_property ].include?(method_name)
-          webdav_setting = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
-          webdav_setting = 'WEBDAV_READ_ONLY' unless webdav_setting
-          raise BadGateway if webdav_setting == 'WEBDAV_READ_ONLY'
-        end
       end
 
       # Gather collection of objects that denote current entities child entities
@@ -69,11 +59,12 @@ module RedmineDmsf
 
       # Does the object exist?
       # If it is either a folder or a file, then it exists
-      #  - 2012-06-15: Only if you're allowed to browse the project
-      #  - 2012-06-18: Issue #5, ensure item is only listed if project is enabled for dmsf
       def exist?
-        project && project.module_enabled?('dmsf') && (folder || file) &&
-          (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project))
+        # # Allow anonymous HEAD requests from MsOffice
+        # return true if @request.request_method.downcase == 'head' && !@request.user_agent.nil? &&
+        #   request.user_agent.downcase.include?('microsoft office')
+        self.project && self.project.module_enabled?('dmsf') && (self.folder || self.file) &&
+          (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, self.project))
       end
 
       def really_exist?
@@ -89,7 +80,7 @@ module RedmineDmsf
       def folder
         unless @folder
           return nil unless project
-          f = parent.folder
+          #f = parent.folder
           @folder = DmsfFolder.visible.where(:project_id => project.id, :title => basename,
             :dmsf_folder_id => parent.folder ? parent.folder.id : nil).first
         end
@@ -236,12 +227,11 @@ module RedmineDmsf
       # Behavioural differences between collection and single entity
       # TODO: Support overwrite between both types of entity, and implement better checking
       def move(dest, overwrite)
+        dest = @__proxy.class.new(dest, @request, @response, @options.merge(:user => @user))
         # All of this should carry across the ResourceProxy frontend, we ensure this to
         # prevent unexpected errors
         resource = dest.is_a?(ResourceProxy) ? dest.resource : dest
-
         return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil?
-
         parent = resource.parent
         raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
 
@@ -255,9 +245,6 @@ module RedmineDmsf
           if dest.exist?
             MethodNotAllowed
           else
-            # Must invalidate source parent folder cache before moving
-            RedmineDmsf::Webdav::Cache.invalidate_item(folder.propfind_cache_key)
-            
             if(parent.projectless_path == '/') #Project root
               folder.dmsf_folder_id = nil
             else
@@ -322,8 +309,6 @@ module RedmineDmsf
             else
               if (project == resource.project) && (file.last_revision.size == 0)
                 # Moving a zero sized file within the same project, just update the dmsf_folder
-                # Must invalidate source parent folder cache before moving
-                RedmineDmsf::Webdav::Cache.invalidate_item(file.propfind_cache_key)
                 file.dmsf_folder = f
               else
                 return InternalServerError unless file.move_to(resource.project, f)
@@ -347,8 +332,8 @@ module RedmineDmsf
       #
       # Behavioural differences between collection and single entity
       # TODO: Support overwrite between both types of entity, and an integrative copy where destination exists for collections
-      def copy(dest, overwrite)
-
+      def copy(dest, overwrite, depth)
+        dest = @__proxy.class.new(dest, @request, @response, @options.merge(:user => @user))
         # All of this should carry across the ResourceProxy frontend, we ensure this to
         # prevent unexpected errors
         if dest.is_a?(ResourceProxy)
@@ -386,7 +371,7 @@ module RedmineDmsf
           Created
         else
           if dest.exist?
-            methodNotAllowed
+            MethodNotAllowed
             # Files cannot be merged at this point, until a decision is made on how to merge them
             # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
           else
@@ -619,71 +604,29 @@ module RedmineDmsf
         Created
       end
 
-      # get_property
-      # Overriding the base definition (extending it really) with functionality
-      # for lock information to be presented
-      def get_property(element)
-        raise NotImplemented if (element[:ns_href] != 'DAV:')
-        unless folder
-          return NotFound unless (file && file.last_revision)
-        end
-        case element[:name]
-        when 'supportedlock'
-          supportedlock
-        when 'lockdiscovery'
-          lockdiscovery
-        else
-          super
-        end
-      end
-
-      # Available properties
-      def properties
-        %w(creationdate displayname getlastmodified getetag resourcetype getcontenttype getcontentlength supportedlock lockdiscovery).collect do |prop|
-          {:name => prop, :ns_href => 'DAV:'}
-        end
-      end
-
       def project_id
         self.project.id if self.project
       end
 
-      private
-      # Prepare file for download using Rack functionality:
-      # Download (see RedmineDmsf::Webdav::Download) extends Rack::File to allow single-file
-      # implementation of service for request, which allows for us to pipe a single file through
-      # also best-utilising DAV4Rack's implementation.
-      def download
-        raise NotFound unless (file && file.last_revision && file.last_revision.disk_file(false))
-        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder))
-
-        # If there is no range (start of ranged download, or direct download) then we log the
-        # file access, so we can properly keep logged information
-        if @request.env['HTTP_RANGE'].nil?
-          access = DmsfFileRevisionAccess.new
-          access.user = User.current
-          access.dmsf_file_revision = file.last_revision
-          access.action = DmsfFileRevisionAccess::DownloadAction
-          access.save!
+      # array of lock info hashes
+      # required keys are :time, :token, :depth
+      # other valid keys are :scope, :type, :root and :owner
+      def lockdiscovery
+        entity = file || folder
+        return [] unless entity.locked?
+        if entity.dmsf_folder && entity.dmsf_folder.locked?
+          entity.lock.reverse[0].folder.locks(false) # longwinded way of getting base items locks
+        else
+          entity.lock(false)
         end
-        Download.new(file.last_revision.disk_file)
       end
 
-      # As the name suggests, we're returning lock recovery information for requested resource
-      def lockdiscovery
+      # returns an array of activelock ox elements
+      def lockdiscovery_xml
         x = Nokogiri::XML::DocumentFragment.parse ''
-        entity = file || folder
-        return nil unless entity.locked?
-
-        if entity.dmsf_folder && entity.dmsf_folder.locked?
-          locks = entity.lock.reverse[0].folder.locks(false) # longwinded way of getting base items locks
-        else
-          locks = entity.lock(false)
-        end
-
         Nokogiri::XML::Builder.with(x) do |doc|
           doc.lockdiscovery {
-            locks.each do |lock|
+            lockdiscovery.each do |lock|
               next if lock.expired?
               doc.activelock {
                 doc.locktype { doc.write }
@@ -716,22 +659,24 @@ module RedmineDmsf
         x
       end
 
-      # As the name suggests, we're returning locks supported by our implementation
-      def supportedlock
-        x = Nokogiri::XML::DocumentFragment.parse ''
-        Nokogiri::XML::Builder.with(x) do |doc|
-          doc.supportedlock {
-            doc.lockentry {
-              doc.lockscope { doc.exclusive }
-              doc.locktype { doc.write }
-            }
-            doc.lockentry {
-              doc.lockscope { doc.shared }
-              doc.locktype { doc.write }
-            }
-          }
+      private
+      # Prepare file for download using Rack functionality:
+      # Download (see RedmineDmsf::Webdav::Download) extends Rack::File to allow single-file
+      # implementation of service for request, which allows for us to pipe a single file through
+      # also best-utilising DAV4Rack's implementation.
+      def download
+        raise NotFound unless (file && file.last_revision && file.last_revision.disk_file(false))
+        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder))
+        # If there is no range (start of ranged download, or direct download) then we log the
+        # file access, so we can properly keep logged information
+        if @request.env['HTTP_RANGE'].nil?
+          access = DmsfFileRevisionAccess.new
+          access.user = User.current
+          access.dmsf_file_revision = file.last_revision
+          access.action = DmsfFileRevisionAccess::DownloadAction
+          access.save!
         end
-        x
+        File.new(file.last_revision.disk_file)
       end
 
 private

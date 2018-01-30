@@ -111,7 +111,6 @@ class DmsfFileRevision < ActiveRecord::Base
       dependencies = DmsfFileRevision.where(:disk_filename => self.disk_filename).count
       File.delete(self.disk_file) if dependencies <= 1 && File.exist?(self.disk_file)
     end
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
     super
   end
 
@@ -317,20 +316,6 @@ class DmsfFileRevision < ActiveRecord::Base
       text += self.comment
     end
     ActionView::Base.full_sanitizer.sanitize(text)
-  end
-  
-  def save(*args)
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-    super(*args)
-  end
-
-  def save!(*args)
-    RedmineDmsf::Webdav::Cache.invalidate_item(propfind_cache_key)
-    super(*args)
-  end
-  
-  def propfind_cache_key
-    dmsf_file.propfind_cache_key
   end
 
   def workflow_tooltip

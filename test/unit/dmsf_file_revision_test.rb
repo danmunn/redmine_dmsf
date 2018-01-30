@@ -125,35 +125,6 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     
     assert_not_equal r1.disk_filename, r2.disk_filename, "The disk filename should not be equal for two revisions."
   end
-  
-  def test_save_and_destroy_with_cache
-    Setting.plugin_redmine_dmsf['dmsf_webdav_caching_enabled'] = '1'
-    Rails.cache.clear
-    # save
-    cache_key = @revision1.propfind_cache_key
-    RedmineDmsf::Webdav::Cache.write(cache_key, "")
-    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    @revision1.save
-    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
-    # destroy
-    RedmineDmsf::Webdav::Cache.write(cache_key, "")
-    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    @revision1.destroy
-    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    # save!
-    cache_key = @revision2.propfind_cache_key
-    RedmineDmsf::Webdav::Cache.write(cache_key, "")
-    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    @revision2.save!
-    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-  end
 
   def test_workflow_tooltip
     @revision2.set_workflow @wf1.id, 'start'

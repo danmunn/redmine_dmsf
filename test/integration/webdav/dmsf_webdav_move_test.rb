@@ -113,15 +113,6 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     assert_response 404 # NotFound
   end
 
-  def test_move_wrong_destination
-    new_name = "#{@file1.name}.moved"
-    assert_no_difference '@file1.dmsf_file_revisions.count' do
-      xml_http_request :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil,
-        @jsmith.merge!({:destination => "http://www.wrong-url.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
-      assert_response 502 # BadGateway
-    end
-  end
-
   def test_move_to_new_filename
     if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
       new_name = "#{@file1.name}.moved"

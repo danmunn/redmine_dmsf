@@ -142,44 +142,6 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
                  "The expected position of the 'version_calculated' column is 14"
   end
 
-  def test_save_and_destroy_with_cache
-    Setting.plugin_redmine_dmsf['dmsf_webdav_caching_enabled'] = '1'
-    Rails.cache.clear
-    # save
-    cache_key = @folder4.propfind_cache_key
-    RedmineDmsf::Webdav::Cache.write(cache_key, '')
-    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    @folder4.save
-    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
-    # destroy
-    RedmineDmsf::Webdav::Cache.write(cache_key, '')
-    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    @folder4.destroy
-    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    #RedmineDmsf::Webdav::Cache.cache.clear
-    # save!
-    cache_key = @folder5.propfind_cache_key
-    RedmineDmsf::Webdav::Cache.write(cache_key, '')
-    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    @folder5.save!
-    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    RedmineDmsf::Webdav::Cache.delete("#{cache_key}.invalid")
-    # destroy!
-    RedmineDmsf::Webdav::Cache.write(cache_key, '')
-    assert RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert !RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-    @folder5.destroy!
-    assert !RedmineDmsf::Webdav::Cache.exist?(cache_key)
-    assert RedmineDmsf::Webdav::Cache.exist?("#{cache_key}.invalid")
-  end
-
   def test_to_csv
     columns = %w(id title)
     csv = @folder4.to_csv(columns, 0)

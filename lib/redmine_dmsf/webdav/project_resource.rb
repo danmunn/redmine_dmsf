@@ -22,9 +22,10 @@
 module RedmineDmsf
   module Webdav
     class ProjectResource < BaseResource
+      include Redmine::I18n
 
-      def initialize(*args)
-        super(*args)
+      def initialize(path, request, response, options)
+        super path, request, response, options
         @children = nil
       end
       
@@ -104,13 +105,6 @@ module RedmineDmsf
       def file
         nil
       end
-      
-      # Available properties
-      def properties
-        %w(creationdate displayname getlastmodified getetag resourcetype getcontenttype getcontentlength supportedlock lockdiscovery).collect do |prop|
-          {:name => prop, :ns_href => 'DAV:'}
-        end
-      end
 
       def project_id
 	      self.project.id if self.project
@@ -122,7 +116,7 @@ module RedmineDmsf
       def self.create_project_name(p)
         use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
         if use_project_names
-          # 1. Invalid characters are replaced with a dot.
+          # 1. Invalid characters are replaced with dots.
           # 2. Two or more dots in a row are replaced with a single dot.
           # (3. Windows WebClient does not like a dot at the end, but since the project id tag is appended this is not a problem.)
           "#{p.name.gsub(INVALID_CHARACTERS, '.').gsub(/\.{2,}/, '.')} #{p.id}" if p

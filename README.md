@@ -260,14 +260,8 @@ Before installing ensure that the Redmine instance is stopped.
         Example:
             
             rake redmine:dmsf_alert_approvals RAILS_ENV="production"   
-                     
-    III) To clears the Webdav Cache
-                     
-         Example:
-         
-            rake redmine:dmsf_clear_webdav_cache RAILS_ENV="production"
-            
-    IV) To create missing MD5 digest for all file revisions
+                        
+    III) To create missing MD5 digest for all file revisions
             
         Available options:
         
@@ -278,7 +272,7 @@ Before installing ensure that the Redmine instance is stopped.
           bundle exec rake redmine:dmsf_create_digests RAILS_ENV="production"
           bundle exec rake redmine:dmsf_create_digests dry_run=1 RAILS_ENV="production"
           
-    V) To maintain DMSF
+    IV) To maintain DMSF
         
         * Remove all files with no database record from the document directory
         * Remove all links project_id = -1 (added links to an issue which hasn't been created)
@@ -308,17 +302,6 @@ Example of cron job (once per hour at 8th minute):
     8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f
 
 See redmine_dmsf/extra/xapian_indexer.rb for help.
-
-### WebDAV caching (optional)
-Creating the file lists for the WebDAV takes a lot of resources, for folders with many files it can take several seconds
-and for clients that don't cache the lists (Windows WebClient!) a new list must be created every time you browse into that folder, even if nothing has changed in the folder so browsing a WebDAV share in Windows is not a pleasant experience.
-By enabling caching the response time can be significantly reduced from several seconds for folders with hundreds of items down to a few milliseconds.
-
-To enable caching you must have a memcached server installed.
-Follow the installation instructions at <https://github.com/memcached/memcached/wiki>, write the address/ip to the memcached server in the DMSF plugin configuration and then restart Redmine.
-If you installed your memcached server on the same machine as your Redmine installation then you can use 'localhost' as the memcached server address.
-Only one server is supported, and it has only been tested using 'localhost'.
-To disable caching just clear the memcached server address and restart Redmine.
 
 Uninstalling DMSF
 -----------------

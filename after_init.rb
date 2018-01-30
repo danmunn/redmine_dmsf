@@ -88,3 +88,6 @@ ActionDispatch::Reloader.to_prepare do
   Redmine::Activity.register :dmsf_file_revision_accesses, :default => false
   Redmine::Activity.register :dmsf_file_revisions
 end
+
+# WebDAV
+Rails.configuration.middleware.insert_before ActionDispatch::Cookies, RedmineDmsf::Webdav::CustomMiddleware

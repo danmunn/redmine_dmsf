@@ -245,7 +245,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     @file1.reload
     assert !@file1.deleted?, "File #{@file1.name} is expected to exist"
   end
-  
+
   def test_non_versioned_file
     Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] = '\.tmp$'
     if Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] == '\.tmp$'

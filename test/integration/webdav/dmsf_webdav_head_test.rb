@@ -30,6 +30,7 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
     @project1 = Project.find_by_id 1
+    @project1.enable_module!('dmsf')
     @project2 = Project.find_by_id 2
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
@@ -41,7 +42,7 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     User.current = nil    
   end
   
-  def test_truth    
+  def test_truth
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
   end
@@ -56,7 +57,7 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     head "/dmsf/webdav/#{@project1.identifier}", nil, @admin
     assert_response :success
     check_headers_exist
-    
+
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
       head "/dmsf/webdav/#{@project1.identifier}", nil, @admin
@@ -66,36 +67,16 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     end
   end
 
-  def test_head_responds_anonymous_msoffice_user_agent
-    head "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-    assert_response :success
-    check_headers_exist
-    
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-      head "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-      assert_response 404
-      head "/dmsf/webdav/#{@project1_uri}", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-      assert_response :success
-    end
-  end
-
-  def test_head_responds_anonymous_other_user_agent
-    head "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => 'Other'}
-    assert_response 401
-    check_headers_dont_exist
-  end
-
   # Note:
-  #   At present we use Rack to serve the file, this makes life easy however it removes the Etag 
-  #   header and invalidates the test - where as a folder listing will always not include a last-modified 
-  #   (but may include an etag, so there is an allowance for a 1 in 2 failure rate on (optionally) required 
+  #   At present we use Rack to serve the file, this makes life easy however it removes the Etag
+  #   header and invalidates the test - where as a folder listing will always not include a last-modified
+  #   (but may include an etag, so there is an allowance for a 1 in 2 failure rate on (optionally) required
   #   headers)
-  def test_head_responds_to_file    
+  def test_head_responds_to_file
     head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
     assert_response :success
     check_headers_exist # Note it'll allow 1 out of the 3 expected to fail
-    
+
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
       head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
@@ -105,19 +86,19 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     end
   end
 
-  def test_head_responds_to_file_anonymous_msoffice_user_agent
-    head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-    assert_response :success
-    check_headers_exist # Note it'll allow 1 out of the 3 expected to fail
-    
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-      head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-      assert_response 404
-      head "/dmsf/webdav/#{@project1_uri}/test.txt", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-      assert_response :success
-    end
-  end
+  # def test_head_responds_to_file_anonymous_msoffice_user_agent
+  #   head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
+  #   assert_response :success
+  #   check_headers_exist # Note it'll allow 1 out of the 3 expected to fail
+  #
+  #   Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+  #   if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
+  #     head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil,{:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
+  #     assert_response 404
+  #     head "/dmsf/webdav/#{@project1_uri}/test.txt", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
+  #     assert_response :success
+  #   end
+  # end
 
   def test_head_responds_to_file_anonymous_other_user_agent
     head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, {:HTTP_USER_AGENT => 'Other'}
@@ -130,30 +111,30 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     assert_response :missing
     check_headers_dont_exist
   end
-  
-  def test_head_fails_when_file_not_found_anonymous_msoffice_user_agent
-    head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-    assert_response :missing
-    check_headers_dont_exist
-  end
-  
+
+  # def test_head_fails_when_file_not_found_anonymous_msoffice_user_agent
+  #   head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
+  #   assert_response :missing
+  #   check_headers_dont_exist
+  # end
+
   def test_head_fails_when_file_not_found_anonymous_other_user_agent
     head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", nil, {:HTTP_USER_AGENT => 'Other'}
     assert_response 401
     check_headers_dont_exist
   end
-  
+
   def test_head_fails_when_folder_not_found
     head '/dmsf/webdav/folder_not_here', nil, @admin
     assert_response :missing
     check_headers_dont_exist
   end
 
-  def test_head_fails_when_folder_not_found_anonymous_msoffice_user_agent
-    head '/dmsf/webdav/folder_not_here', nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-    assert_response :missing
-    check_headers_dont_exist
-  end
+  # def test_head_fails_when_folder_not_found_anonymous_msoffice_user_agent
+  #   head '/dmsf/webdav/folder_not_here', nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
+  #   assert_response :missing
+  #   check_headers_dont_exist
+  # end
 
   def test_head_fails_when_folder_not_found_anonymous_other_user_agent
     head '/dmsf/webdav/folder_not_here', nil, {:HTTP_USER_AGENT => 'Other'}
@@ -168,9 +149,9 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
   end
 
   private
- 
+
   def check_headers_exist
-    assert !(response.headers.nil? || response.headers.empty?), 
+    assert !(response.headers.nil? || response.headers.empty?),
       'Head returned without headers' # Headers exist?
     values = {}
     values[:etag] = { :optional => true, :content => response.headers['Etag'] }

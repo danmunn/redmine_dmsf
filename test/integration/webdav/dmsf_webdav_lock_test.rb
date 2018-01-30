@@ -74,25 +74,38 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
       # Time travel, will make the usec part of the time 0
       travel_to create_time do
         # Lock file
-        xml_http_request :lock, "/dmsf/webdav/#{@project1.identifier}/#{file.name}",
-          "<?xml version=\"1.0\" encoding=\"utf-8\" ?>
-    <d:lockinfo xmlns:d=\"DAV:\">
+        xml = %{<?xml version="1.0" encoding="utf-8" ?>
+    <d:lockinfo xmlns:d="DAV:">
       <d:lockscope><d:exclusive/></d:lockscope>
       <d:locktype><d:write/></d:locktype>
       <d:owner>jsmith</d:owner>
-    </d:lockinfo>",
-          @jsmith.merge!({:HTTP_DEPTH => 'infinity',
-                          :HTTP_TIMEOUT => 'Infinite',})
+    </d:lockinfo>}
+        xml_http_request :lock, "/dmsf/webdav/#{@project1.identifier}/#{file.name}", xml,
+          @jsmith.merge!({:HTTP_DEPTH => 'infinity', :HTTP_TIMEOUT => 'Infinite',})
         assert_response :success
         # Verify the response
-        assert_match '<D:lockscope><D:exclusive/></D:lockscope>', response.body
-        assert_match '<D:locktype><D:write/></D:locktype>', response.body
-        assert_match '<D:depth>infinity</D:depth>', response.body
+        # <?xml version=\"1.0\"?>
+        # <d:prop xmlns:d=\"DAV:\">
+        #   <d:lockdiscovery>
+        #     <d:activelock>
+        #       <d:lockscope>exclusive</d:lockscope>
+        #       <d:locktype>write</d:locktype>
+        #       <d:depth>infinity</d:depth>
+        #       <d:timeout>Second-604800</d:timeout>
+        #       <d:locktoken>
+        #         <d:href>f5762389-6b49-4482-9a4b-ff1c8f975765</d:href>
+        #       </d:locktoken>
+        #     </d:activelock>
+        #   </d:lockdiscovery>
+        # </d:prop>
+        assert_match '<d:lockscope>exclusive</d:lockscope>', response.body
+        assert_match '<d:locktype>write</d:locktype>', response.body
+        assert_match '<d:depth>infinity</d:depth>', response.body
         # 1.week = 7*24*3600=604800 seconds
-        assert_match '<D:timeout>Second-604800</D:timeout>', response.body
-        assert_match(/<D:locktoken><D:href>([a-z0-9\-]+)<\/D:href><\/D:locktoken>/, response.body)
+        assert_match '<d:timeout>Second-604800</d:timeout>', response.body
+        assert_match(/<d:locktoken><d:href>([a-z0-9\-]+)<\/d:href><\/d:locktoken>/, response.body)
         # Extract the locktoken, needed when refreshing the lock
-        response.body.match(/<D:locktoken><D:href>([a-z0-9\-]+)<\/D:href><\/D:locktoken>/)
+        response.body.match(/<d:locktoken><d:href>([a-z0-9\-]+)<\/d:href><\/d:locktoken>/)
         locktoken=$1
         # Verify the lock in the db
         l = DmsfFile.find_by_id(1).lock.first
@@ -109,7 +122,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
                             :HTTP_IF => "(#{locktoken})"})
           assert_response :success
           # 1.week = 7*24*3600=604800 seconds
-          assert_match '<D:timeout>Second-604800</D:timeout>', response.body
+          assert_match '<d:timeout>Second-604800</d:timeout>', response.body
           # Verify the lock in the db
           l = DmsfFile.find_by_id(1).lock.first
           assert_equal l.created_at, create_time

@@ -3,9 +3,10 @@ Changelog for Redmine DMSF
 
 1.6.1 *2018-??-??*
 ------------------
-
-    WebDAV caching optionable in the plugin settings. Default is off.
+        
     Javascript on pages is loaded asynchronously.
+    Obsolete Dav4Rack gem replaced with an up to date fork by Planio (Consequently WebDAV caching has been removed, sorry...).
+    Project members can be chosen as recipients when sending documents by email.
 
 1.6.0 *2017-09-12*
 ------------------

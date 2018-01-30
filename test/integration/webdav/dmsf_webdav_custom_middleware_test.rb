@@ -2,7 +2,6 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -19,35 +18,22 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require 'time'
-require 'rack/utils'
-require 'rack/mime'
+require File.expand_path('../../../test_helper', __FILE__)
 
-module RedmineDmsf
-  module Webdav
-    class Download < Rack::File
-      def initialize(root, cache_control = nil)
-        @path = root
-        @cache_control = cache_control
-      end
+class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
 
-      def _call(env)
-        unless ALLOWED_VERBS.include? env['REQUEST_METHOD']
-          return fail(405, 'Method Not Allowed')
-        end
-
-        available = begin
-          F.file?(@path) && F.readable?(@path)
-        rescue SystemCallError
-          false
-        end
-
-        if available
-          serving(env)
-        else
-          fail(404, "File not found: #{@path}")
-        end
-      end
-    end
+  def setup
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
   end
+
+  def test_options_for_root_path
+    xml_http_request  :options, '/'
+    assert_response :success
+  end
+
+  def test_options_for_dmsf_root_path
+    xml_http_request  :options, '/dmsf'
+    assert_response :success
+  end
+
 end

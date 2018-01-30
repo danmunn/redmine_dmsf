@@ -118,19 +118,6 @@ if Redmine::Plugin.installed? :redmine_dmsf
     post '/dmsf/folders/:id/copy/move', :controller => 'dmsf_folders_copy', :action => 'move'
     get '/dmsf/folders/:id/copy', :controller => 'dmsf_folders_copy', :action => 'new', :as => 'copy_folder'
 
-    #
-    # DAV4Rack implementation of Webdav
-    dav_engine = DAV4Rack::Handler.new(
-      :root_uri_path => "#{Redmine::Utils::relative_url_root}/dmsf/webdav",
-      :resource_class => RedmineDmsf::Webdav::ResourceProxy,
-      :controller_class => RedmineDmsf::Webdav::Controller,
-      :log_to => Rails.logger
-    )
-    mount dav_engine, :at => '/dmsf/webdav'
-    mount dav_engine, :at => '/', :via => :options
-    mount dav_engine, :at => '/', :via => :propfind
-    mount dav_engine, :at => '/dmsf', :via => :propfind
-
     # Approval workflow
     resources :dmsf_workflows do
       member do
