@@ -349,7 +349,6 @@ class DmsfFolder < ActiveRecord::Base
 
   # Number of items in the folder
   def items
-    Rails.logger.info ">>> #{dmsf_files.visible.where(:project_id => self.project_id).to_sql}"
     dmsf_folders.visible.where(:project_id => self.project_id).count +
     dmsf_files.visible.where(:project_id => self.project_id).count +
     dmsf_links.visible.where(:project_id => self.project_id).count
