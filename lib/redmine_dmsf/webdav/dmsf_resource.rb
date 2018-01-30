@@ -60,9 +60,6 @@ module RedmineDmsf
       # Does the object exist?
       # If it is either a folder or a file, then it exists
       def exist?
-        # # Allow anonymous HEAD requests from MsOffice
-        # return true if @request.request_method.downcase == 'head' && !@request.user_agent.nil? &&
-        #   request.user_agent.downcase.include?('microsoft office')
         self.project && self.project.module_enabled?('dmsf') && (self.folder || self.file) &&
           (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, self.project))
       end

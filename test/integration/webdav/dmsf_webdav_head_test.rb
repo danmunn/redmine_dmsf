@@ -86,20 +86,6 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     end
   end
 
-  # def test_head_responds_to_file_anonymous_msoffice_user_agent
-  #   head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-  #   assert_response :success
-  #   check_headers_exist # Note it'll allow 1 out of the 3 expected to fail
-  #
-  #   Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-  #   if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-  #     head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil,{:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-  #     assert_response 404
-  #     head "/dmsf/webdav/#{@project1_uri}/test.txt", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-  #     assert_response :success
-  #   end
-  # end
-
   def test_head_responds_to_file_anonymous_other_user_agent
     head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, {:HTTP_USER_AGENT => 'Other'}
     assert_response 401
@@ -112,12 +98,6 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     check_headers_dont_exist
   end
 
-  # def test_head_fails_when_file_not_found_anonymous_msoffice_user_agent
-  #   head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-  #   assert_response :missing
-  #   check_headers_dont_exist
-  # end
-
   def test_head_fails_when_file_not_found_anonymous_other_user_agent
     head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", nil, {:HTTP_USER_AGENT => 'Other'}
     assert_response 401
@@ -129,12 +109,6 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     assert_response :missing
     check_headers_dont_exist
   end
-
-  # def test_head_fails_when_folder_not_found_anonymous_msoffice_user_agent
-  #   head '/dmsf/webdav/folder_not_here', nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-  #   assert_response :missing
-  #   check_headers_dont_exist
-  # end
 
   def test_head_fails_when_folder_not_found_anonymous_other_user_agent
     head '/dmsf/webdav/folder_not_here', nil, {:HTTP_USER_AGENT => 'Other'}
