@@ -34,6 +34,8 @@ module RedmineDmsf
       attr_reader :read_only
 
       def initialize(*args)
+        # Return 404 - NotFound if WebDAV is not enabled
+        raise NotFound unless Setting.plugin_redmine_dmsf['dmsf_webdav'].present?
         super(*args)
         pinfo = path.split('/').drop(1)
         if (pinfo.length == 0) # If this is the base_path, we're at root

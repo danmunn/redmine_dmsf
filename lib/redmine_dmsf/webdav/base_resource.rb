@@ -30,7 +30,6 @@ module RedmineDmsf
       attr_reader :public_path
 
       def initialize(path, request, response, options)
-        raise NotFound unless Setting.plugin_redmine_dmsf['dmsf_webdav'].present?
         @project = nil
         @public_path = "#{options[:root_uri_path]}#{path}"
         super(path, request, response, options)

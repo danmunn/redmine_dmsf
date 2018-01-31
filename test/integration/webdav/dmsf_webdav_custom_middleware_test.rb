@@ -36,4 +36,10 @@ class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
   end
 
+  def test_webdav_not_enabled
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = nil
+    xml_http_request  :options, '/dmsf/webdav'
+    assert_response 404
+  end
+
 end
