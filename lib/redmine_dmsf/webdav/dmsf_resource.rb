@@ -442,8 +442,9 @@ module RedmineDmsf
                 e.add_failure @path, Conflict
                 raise e
               end
-              http_if = http_if.slice(1, http_if.length - 2)
-              l = DmsfLock.find(http_if)
+              if http_if =~ /([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})/
+                l = DmsfLock.find($1)
+              end
               unless l
                 e = DAV4Rack::LockFailure.new
                 e.add_failure @path, Conflict
@@ -478,7 +479,11 @@ module RedmineDmsf
         if (token.nil? || token.empty? || token == "<(null)>" || User.current.anonymous?)
           BadRequest
         else
-          token = token.slice(1, token.length - 2)
+          if token =~ /([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})/
+            token = $1
+          else
+            return BadRequest
+          end
           begin
             entity = file ? file : folder
             l = DmsfLock.find(token)
