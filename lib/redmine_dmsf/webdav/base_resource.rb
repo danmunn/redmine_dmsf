@@ -132,40 +132,6 @@ module RedmineDmsf
         }
       end
 
-      # response:: parent Ox::Element
-      # stats:: Array of stats
-      # Build propstats response
-      def propstats(response, stats)
-        return if stats.empty?
-        stats.each do |status, props|
-          propstat = Ox::Element.new(D_PROPSTAT)
-          prop = Ox::Element.new(D_PROP)
-
-          props.each do |element, value|
-
-            name = element[:name]
-            if prefix = prefix_for(element[:ns_href])
-              ### TODO: A DMSF plugin workaround
-              if prefix =~ /^unknow/
-                next
-              end
-              ###
-              name = "#{prefix}:#{name}"
-            end
-
-            prop_element = Ox::Element.new(name)
-            ox_append prop_element, value, prefix: prefix
-            prop << prop_element
-
-          end
-
-          propstat << prop
-          propstat << ox_element(D_STATUS, "#{http_version} #{status.status_line}")
-
-          response << propstat
-        end
-      end
-
       def options(request, response)
         return NotFound if ((@path.length > 1) && ((!project) || (!project.module_enabled?('dmsf'))))
         if @__proxy.read_only
