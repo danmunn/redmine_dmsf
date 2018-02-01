@@ -26,7 +26,6 @@ gem 'rubyzip', '>= 1.0.0'
 gem 'zip-zip'
 gem 'simple_enum'
 gem 'uuidtools'
-#gem 'dav4rack'
 gem 'dav4rack', git: 'https://github.com/picman/dav4rack.git', branch: 'master'
 gem 'dalli'
 unless %w(easyproject easy_gantt).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
