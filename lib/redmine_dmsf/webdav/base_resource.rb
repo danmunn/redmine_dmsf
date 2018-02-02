@@ -97,41 +97,6 @@ module RedmineDmsf
         return p.resource.nil? ? p : p.resource
       end
 
-      # Override index_page from DAV4Rack::Resource
-      def index_page
-        return %{
-          <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-                  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-          <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-          <head>
-            <title>Index of %s</title>
-            <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-            <style type='text/css'>
-              table { width:100%%; }
-              .name { text-align:left; }
-              .size { text-align: center; }
-              .type { text-align: center; width: 11em; }
-              .mtime { width:15em; }
-            </style>
-          </head>
-          <body>
-            <h1>Index of %s</h1>
-            <hr/>
-            <table>
-              <tr>
-                <th class='name'>Name</th>
-                <th class='size'>Size</th>
-                <th class='type'>Type</th>
-                <th class='mtime'>Last Modified</th>
-              </tr>
-            %s
-            </table>
-            <hr/>
-          </body>
-          </html>
-        }
-      end
-
       def options(request, response)
         return NotFound if ((@path.length > 1) && ((!project) || (!project.module_enabled?('dmsf'))))
         if @__proxy.read_only
