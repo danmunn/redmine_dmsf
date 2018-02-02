@@ -23,7 +23,8 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
 
-  fixtures :users, :projects, :roles, :members, :member_roles,:enabled_modules, :dmsf_folders
+  fixtures :users, :projects, :roles, :members, :member_roles,:enabled_modules, :dmsf_folders,
+           :email_addresses
 
   def setup
     @project1 = Project.find_by_id 1
@@ -39,7 +40,7 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     @user_non_member = User.find_by_id 3
     @role_manager = Role.where(:name => 'Manager').first
     User.current = nil
-    @request.session[:user_id] = 2  # John Smith - manager
+    @request.session[:user_id] = @user_member.id  # John Smith - manager
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
     @project1.enable_module!(:dmsf)
     @role_manager.add_permission! :folder_manipulation
@@ -114,6 +115,20 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     assert_nil flash[:error]
   end
 
+  def test_copy_to_another_project
+    @request.session[:user_id] = @user_admin.id
+    @project2.enable_module!(:dmsf)
+    assert_equal @project1.id, @folder1.project_id
+    post :copy, :id => @folder1.id, :target_project_id => @project2.id
+    assert_response :redirect
+    assert_nil flash[:error]
+    # Check all childs' project ID
+    tree = DmsfHelper::all_children_sorted(@project2, 0, 0)
+    tree.each do |f, pos|
+      assert_equal @project2.id, f.project_id
+    end
+  end
+
   def test_copy_the_same_target
     post :copy, :id => @folder1.id, :target_project_id => @folder1.project.id, :target_folder_id => @folder1.dmsf_folder
     assert_equal flash[:error], l(:error_target_folder_same)
@@ -181,6 +196,20 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
   def test_move_to_as_non_member
     post :move, :id => @folder1.id, :target_project_id => @project2.id, :target_folder_id => nil
     assert_response :forbidden
+  end
+
+  def test_move_to_another_project
+    @request.session[:user_id] = @user_admin.id
+    @project2.enable_module!(:dmsf)
+    assert_equal @project1.id, @folder1.project_id
+    post :move, :id => @folder1.id, :target_project_id => @project2.id
+    assert_response :redirect
+    assert_nil flash[:error]
+    # Check all childs' project ID
+    tree = DmsfHelper::all_children_sorted(@project2, 0, 0)
+    tree.each do |f, pos|
+      assert_equal @project2.id, f.project_id
+    end
   end
 
 end
