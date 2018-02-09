@@ -136,9 +136,8 @@
 <% end %>
 
 <% content_for :header_tags do %>
-    <%= javascript_include_tag 'bowser.min.js', :plugin => 'redmine_dmsf' %>
-    <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>
-    <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>
+    <%= stylesheet_link_tag 'jquery.dataTables/datatables.min.css', :plugin => 'redmine_dmsf' %>
+    <%= javascript_include_tag 'jquery.dataTables/datatables.min.js', :plugin => 'redmine_dmsf' %>
 
     <% title = DmsfFolder.get_column_position('title') %>
     <% position = DmsfFolder.get_column_position('position') %>
@@ -153,35 +152,39 @@
 
     <%= late_javascript_tag do %>
         EASY.schedule.main(function() {
-            $('#browser').dataTable({
-                'bJQueryUI': true,
-                'oLanguage': {
-                    'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
+            $("#browser").dataTable({
+                responsive: {
+                    details: false
                 },
-                'bAutoWidth': false,
-                'bPaginate': false,
+                language: {
+                    url: "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
+                },
+                autoWidth: false,
+                paginate: false,
                 <% if title %>
-                'aaSorting': [[<%= title %>, 'asc']],
+                  order: [[<%= title %>, "asc"]],
                 <% end %>
-                'aaSortingFixed': [[ <%= position %>, 'asc']],
-                'aoColumnDefs': [
-                    { 'bSearchable': false, 'aTargets': [0, <%= commands %>, <%= position %>, <%= size_calculated %>, <%= modified_calculated %>, <%= version_calculated %>] },
-                    { 'bSortable': false, 'aTargets': [0, <%= commands %>] }
+                sortingFixed: [[ <%= position %>, "asc"]],
+                columnDefs: [
+                    { responsivePriority: 1, targets: <%= title %> },
+                    { responsivePriority: 2, targets: <%= commands %> },
+                    { searchable: false, targets: [0, <%= commands %>, <%= position %>, <%= size_calculated %>, <%= modified_calculated %>, <%= version_calculated %>] },
+                    { sortable: false, targets: [0, <%= commands %>] }
                     <% if size %>
-                    ,{ 'iDataSort': <%= size_calculated %>, 'aTargets': [ <%= size %> ] }
+                    ,{ iDataSort: <%= size_calculated %>, targets: [ <%= size %> ] }
                     <% end %>
                     <% if modified %>
-                    ,{ 'iDataSort': <%= modified_calculated %>, 'aTargets': [ <%= modified %> ] }
+                    ,{ iDataSort: <%= modified_calculated %>, targets: [ <%= modified %> ] }
                     <% end %>
                     <% if version %>
-                    ,{ 'iDataSort': <%= version_calculated %>, 'aTargets': [ <%= version %> ] }
+                    ,{ iDataSort: <%= version_calculated %>, targets: [ <%= version %> ] }
                     <% end %>
                 ],
-                'fnInitComplete': function() {
-                    $('#dmsf_buttons').prependTo($('#browser_wrapper div.fg-toolbar')[0]);
-                    $('#dmsf_tag').prependTo($('#browser_wrapper div.fg-toolbar')[0]);
+                "fnInitComplete": function() {
+                    $("#dmsf_buttons").prependTo($("#browser_wrapper div.fg-toolbar")[0]);
+                    $("#dmsf_tag").prependTo($("#browser_wrapper div.fg-toolbar")[0]);
                 },
-                'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+                "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
                     <% if @tree_view %>
                     <% if @folder %>
                     return "<%= "#{l(:label_number_of_folders)}: #{@folder.deep_folder_count} #{l(:label_number_of_documents)}: #{@folder.deep_file_count}" %>";
@@ -194,19 +197,19 @@
                 }
             });
 
-            $('[data-downloadurl]').each(function() {
-                var url = this.getAttribute('data-downloadurl');
+            $("[data-downloadurl]").each(function() {
+                var url = this.getAttribute("data-downloadurl");
                 if (this.addEventListener) {
-                    this.addEventListener('dragstart', function(e) {
+                    this.addEventListener("dragstart", function(e) {
                         if (e.dataTransfer) {
-                            e.dataTransfer.setData('DownloadURL', url);
+                            e.dataTransfer.setData("DownloadURL", url);
                         }
                     },false);
                 }
             });
 
-            $('#entries_form').submit(function () {
-                $(this).removeAttr('data-submitted');
+            $("#entries_form").submit(function () {
+                $(this).removeAttr("data-submitted");
             });
         });
     <% end %>

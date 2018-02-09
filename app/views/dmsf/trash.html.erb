@@ -179,8 +179,8 @@
 <% end %>
 
 <% content_for :header_tags do %>
-  <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>
+  <%= stylesheet_link_tag 'jquery.dataTables/datatables.min.css', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag 'jquery.dataTables/datatables.min.js', :plugin => 'redmine_dmsf' %>
 
   <% title = DmsfFolder.get_column_position('title') %>
   <% position = DmsfFolder.get_column_position('position') %>
@@ -196,40 +196,44 @@
   <%= late_javascript_tag do %>
       EASY.schedule.main(function() {
           $('#browser').dataTable({
-        'bJQueryUI': true,
-        'oLanguage': {
-                'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
-        },
-        'bAutoWidth': false,
-        'bPaginate': false,
-          <% if title %>
-          'aaSorting': [[<%= title %>, 'asc']],
-          <% end %>
-          'aaSortingFixed': [[ <%= position %>, 'asc']],
-          'aoColumnDefs': [
-              { 'bSearchable': false, 'aTargets': [0, <%= commands %>, <%= position %>, <%= size_calculated %>, <%= modified_calculated %>, <%= version_calculated %>] },
-              { 'bSortable': false, 'aTargets': [0, <%= commands %>] }
-              <% if size %>
-              ,{ 'iDataSort': <%= size_calculated %>, 'aTargets': [ <%= size %> ] }
-              <% end %>
-              <% if modified %>
-              ,{ 'iDataSort': <%= modified_calculated %>, 'aTargets': [ <%= modified %> ] }
-              <% end %>
-              <% if version %>
-              ,{ 'iDataSort': <%= version_calculated %>, 'aTargets': [ <%= version %> ] }
-              <% end %>
-          ],
-        'fnInitComplete': function() {
-           $('div.dmsf_controls').prependTo($('#browser_wrapper div.fg-toolbar')[0]);
-        },
-        'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-           return "<%= l(:label_number_of_folders)%>: <%= @subfolders.count + @dir_links.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count + @file_links.count + @url_links.count %>";
-        }
-      });
+            responsive: {
+              details: false
+            },
+            language: {
+                    url: "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
+            },
+            autoWidth: false,
+            paginate: false,
+            <% if title %>
+              order: [[<%= title %>, "asc"]],
+            <% end %>
+            sortingFixed: [[ <%= position %>, "asc"]],
+            columnDefs: [
+                { responsivePriority: 1, targets: <%= title %> },
+                { responsivePriority: 2, targets: <%= commands %> },
+                { searchable: false, targets: [0, <%= commands %>, <%= position %>, <%= size_calculated %>, <%= modified_calculated %>, <%= version_calculated %>] },
+                { sortable: false, targets: [0, <%= commands %>] }
+                <% if size %>
+                  ,{ iDataSort: <%= size_calculated %>, targets: [ <%= size %> ] }
+                <% end %>
+                <% if modified %>
+                  ,{ iDataSort: <%= modified_calculated %>, targets: [ <%= modified %> ] }
+                <% end %>
+                <% if version %>
+                  ,{ iDataSort: <%= version_calculated %>, targets: [ <%= version %> ] }
+                <% end %>
+            ],
+            "fnInitComplete": function() {
+               $("div.dmsf_controls").prependTo($("#browser_wrapper div.fg-toolbar")[0]);
+            },
+            "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+               return "<%= l(:label_number_of_folders)%>: <%= @subfolders.count + @dir_links.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count + @file_links.count + @url_links.count %>";
+            }
+          });
 
-      $('#entries_form').submit(function () {
-          $(this).removeAttr('data-submitted');
-      });
+          $("#entries_form").submit(function () {
+              $(this).removeAttr("data-submitted");
+          });
     });
   <% end %>
 <% end %>

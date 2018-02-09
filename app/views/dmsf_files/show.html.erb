@@ -207,9 +207,8 @@
     }
   });
   $('.dmsf_list').dataTable({
-    'bJQueryUI': true,
-    'oLanguage': {
-      'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
+    language: {
+      url: "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
     }
   });
 <% end %>
@@ -221,6 +220,6 @@
 <% end %>
 
 <% content_for :header_tags do %>
-  <%= stylesheet_link_tag 'jquery.dataTables/jquery-ui.dataTables.css', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag 'jquery.dataTables/jquery.dataTables.min.js', :plugin => 'redmine_dmsf' %>
+  <%= stylesheet_link_tag 'jquery.dataTables/datatables.min.css', :plugin => 'redmine_dmsf' %>
+  <%= javascript_include_tag 'jquery.dataTables/datatables.min.js', :plugin => 'redmine_dmsf' %>
 <% end %>

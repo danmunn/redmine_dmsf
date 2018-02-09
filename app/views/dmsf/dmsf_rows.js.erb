@@ -28,38 +28,38 @@ hideOnLoad();
 <% modified = DmsfFolder.get_column_position('modified') %>
 
 $('#browser').dataTable({
-  'bJQueryUI': true,
-  'oLanguage': {
-    'sUrl': "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
+  responsive: {
+      details: false
   },
-  'bAutoWidth': false,
-  'bPaginate': false,
+  language: {
+    url: "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
+  },
+  autoWidth: false,
+  paginate: false,
   <% if title %>
-  'aaSorting': [[<%= title %>, 'asc']],
+    order: [[<%= title %>, "asc"]],
   <% end %>
-  'aaSortingFixed': [[ <%= position %>, 'asc']],
-  'aoColumnDefs': [
-      { 'bSearchable': false, 'aTargets': [0, <%= commands %>, <%= position %>, <%= size_calculated %>, <%= modified_calculated %>, <%= version_calculated %>] },
-      { 'bSortable': false, 'aTargets': [0, <%= commands %>] }
+  sortingFixed: [[ <%= position %>, "asc"]],
+  columnDefs: [
+      { searchable: false, targets: [0, <%= commands %>, <%= position %>, <%= size_calculated %>, <%= modified_calculated %>, <%= version_calculated %>] },
+      { sortable: false, targets: [0, <%= commands %>] }
       <% if size %>
-      ,{ 'iDataSort': <%= size_calculated %>, 'aTargets': [ <%= size %> ] }
+        ,{ iDataSort: <%= size_calculated %>, targets: [ <%= size %> ] }
       <% end %>
       <% if modified %>
-      ,{ 'iDataSort': <%= modified_calculated %>, 'aTargets': [ <%= modified %> ] }
+        ,{ iDataSort: <%= modified_calculated %>, targets: [ <%= modified %> ] }
       <% end %>
       <% if version %>
-      ,{ 'iDataSort': <%= version_calculated %>, 'aTargets': [ <%= version %> ] }
+        ,{ iDataSort: <%= version_calculated %>, targets: [ <%= version %> ] }
       <% end %>
   ],
-  'fnInitComplete': function() {
-    $(dmsfButtons).prependTo($('#browser_wrapper div.fg-toolbar')[0]);
-
+  "fnInitComplete": function() {
+    $(dmsfButtons).prependTo($("#browser_wrapper div.fg-toolbar")[0]);
     if($(dmsfTag) != null) {
-
-        $(dmsfTag).prependTo($('#browser_wrapper div.fg-toolbar')[0]);
+        $(dmsfTag).prependTo($("#browser_wrapper div.fg-toolbar")[0]);
     }
   },
-  'fnInfoCallback': function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+  "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
     return browserInfo;
   }
 });

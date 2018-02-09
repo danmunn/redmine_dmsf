@@ -137,7 +137,7 @@
     :locals => {:file => file, :file_approval_allowed => @file_approval_allowed,
                 :workflows_available => @workflows_available, :project => project, :wf => wf, :dmsf_link_id => nil }) %>
 </td>
-<td class="hol"><%= position %></td>
-<td class="hol"><%= file.last_revision.size %></td>
-<td class="hol"><%= file.last_revision.updated_at.to_i %></td>
-<td class="hol"><%= file.last_revision.iversion %></td>
+<td class="none"><%= position %></td>
+<td class="none"><%= file.last_revision.size %></td>
+<td class="none"><%= file.last_revision.updated_at.to_i %></td>
+<td class="none"><%= file.last_revision.iversion %></td>

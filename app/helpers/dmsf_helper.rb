@@ -60,7 +60,9 @@ module DmsfHelper
   def self.filetype_css(filename)
     extension = File.extname(filename)
     extension = extension[1, extension.length-1]
-    if File.exist?("#{File.dirname(__FILE__)}/../../assets/images/filetypes/#{extension}.png")
+    path = File.join(Rails.root, 'public',
+      File.join(Redmine::Utils.relative_url_root, 'plugin_assets', 'redmine_dmsf', 'images', 'filetypes', "#{extension}.png"))
+    if File.exist?(path)
       cls = "filetype-#{extension}";
     else
       cls = Redmine::MimeType.css_class_of(filename)
@@ -70,27 +72,27 @@ module DmsfHelper
   end
 
   def plugin_asset_path(plugin, asset_type, source)
-    "#{Redmine::Utils.relative_url_root}/plugin_assets/#{plugin}/#{asset_type}/#{source}"
+    File.join(Redmine::Utils.relative_url_root, 'plugin_assets', plugin.to_s, asset_type, source)
   end
 
   def json_url
     if I18n.locale
-      ret = "jquery.dataTables/#{I18n.locale}.json"
-      path = "#{File.dirname(__FILE__)}/../../assets/javascripts/#{ret}"
+      ret = File.join('jquery.dataTables', 'locales', "#{I18n.locale}.json")
+      path = File.join(Rails.root, 'public', plugin_asset_path(:redmine_dmsf, 'javascripts', ret))
       return ret if File.exist?(path)
       Rails.logger.warn "#{path} not found"
     end
-    'jquery.dataTables/en.json'
+    File.join 'jquery.dataTables', 'locales', 'en.json'
   end
 
   def js_url
     if I18n.locale
-      ret = "plupload/js/i18n/#{I18n.locale}.js"
-      path = "#{File.dirname(__FILE__)}/../../assets/javascripts/#{ret}"
+      ret = File.join('plupload', 'js', 'i18n', "#{I18n.locale}.js")
+      path = File.join(Rails.root, 'public', plugin_asset_path(:redmine_dmsf, 'javascripts', ret))
       return ret if File.exist?(path)
       Rails.logger.warn "#{path} not found"
     end
-    'plupload/js/i18n/en.js'
+    File.join 'plupload', 'js', 'i18n', 'en.js'
   end
 
   def self.visible_folders(folders, project)
