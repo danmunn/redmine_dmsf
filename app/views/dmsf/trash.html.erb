@@ -32,8 +32,8 @@
 
 <%= error_messages_for('dmsf_workflow') %>
 
-<%= form_tag({:action => :entries_operation, :id => @project, :folder_id => @folder}, :method => :post,
-  :class => 'dmsf_entries', :id => 'entries_form') do %>
+<%= form_tag(entries_operations_dmsf_path(:id => @project, :folder_id => @folder), :method => :post,
+  :class => 'dmsf_entries', :id => 'entries_form', :data => {:cm_url => dmsf_context_menu_path}) do %>
   <%= hidden_field_tag('action') %>
   <div class="dmsf_controls" style="float: left">
     <% if @file_manipulation_allowed && @folder_manipulation_allowed %>
@@ -88,8 +88,9 @@
       </tr>
     </thead>
   <tbody>
+  <% classes = 'dir hascontextmenu' %>
   <% @subfolders.each do |subfolder| %>
-    <tr class="dir">
+    <tr class="<%= classes %>">
       <%= render(:partial => 'dir_trash',
         :locals => {
           :project => @project,
@@ -100,8 +101,9 @@
           :title => subfolder.title }) %>
     </tr>
   <% end %>
+  <% classes = 'dmsf_gray hascontextmenu' %>
   <% @dir_links.each do |link| %>
-    <tr class="dmsf_gray">
+    <tr class="<%= classes %>">
       <%= render(:partial => 'dir_trash',
         :locals => {
           :project => link.target_project,
@@ -112,12 +114,13 @@
           :title => link.name }) %>
     </tr>
   <% end %>
+  <% classes = 'file hascontextmenu' %>
   <% @files.each do |file| %>
     <% unless file.last_revision %>
       <% Rails.logger.error "Error: dmsf_file id #{file.id} has no revision!" %>
       <% next %>
     <% end %>
-    <tr class="file">
+    <tr class="<%= classes %>">
       <%= render(:partial => 'file_trash', :locals => {
           :project => @project,
           :file => file,
@@ -127,6 +130,7 @@
           :title => file.title }) %>
     </tr>
   <% end %>
+  <% classes = 'dmsf_gray hascontextmenu' %>
   <% @file_links.each do |link| %>
     <% unless link.target_file %>
         <% Rails.logger.error "Error: dmsf_link id #{link.id} has no target file!" %>
@@ -136,7 +140,7 @@
       <% Rails.logger.error "Error: dmsf_file id #{link.target_id} has no revision!" %>
       <% next %>
     <% end %>
-    <tr class="dmsf_gray">
+    <tr class="<%= classes %>">
       <%= render(:partial => 'file_trash', :locals => {
           :project => link.target_project,
           :file => link.target_file,
@@ -147,7 +151,7 @@
     </tr>
   <% end %>
   <% @url_links.each do |link| %>
-      <tr class="dmsf_gray">
+    <tr class="<%= classes %>">
           <%= render(:partial => 'url_trash', :locals => {
                                                      :project => link.target_project,
                                                      :file => link.target_file,
@@ -161,6 +165,8 @@
   </table>
   </div>
 <% end %>
+
+<%= context_menu %>
 
 <%= late_javascript_tag do %>
   $('#entries_delete_button').click(function() {

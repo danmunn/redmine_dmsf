@@ -37,7 +37,8 @@ def init
                       {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock,
                                  :notify_activate, :notify_deactivate, :restore],
                        :dmsf_folder_permissions => [:new, :append, :autocomplete_for_user],
-                       :dmsf_folders_copy => [:new, :copy, :move]}
+                       :dmsf_folders_copy => [:new, :copy, :move],
+                       :dmsf_context_menus => [:dmsf]}
       pmap.permission :file_manipulation,
                       {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate,
                                        :notify_deactivate, :restore],
@@ -46,7 +47,7 @@ def init
                        :dmsf_links => [:new, :create, :destroy, :restore, :autocomplete_for_project,
                                        :autocomplete_for_folder],
                        :dmsf_files_copy => [:new, :copy, :move],
-                      }
+                       :dmsf_context_menus => [:dmsf]}
       pmap.permission :file_delete,
                       { :dmsf => [:trash, :delete_entries],
                         :dmsf_files => [:delete]}

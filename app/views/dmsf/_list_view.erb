@@ -64,8 +64,9 @@
     </tr>
   </thead>
   <tbody>
+  <% classes = 'dir hascontextmenu' %>
   <% @subfolders.each do |subfolder| %>
-    <tr class="dir <%= 'dmsf_system' if subfolder.system %> <%= 'dmsf_system_closed' if subfolder.issue && subfolder.issue.closed? %>">
+    <tr class="<%= classes %> <%= 'dmsf_system' if subfolder.system %> <%= 'dmsf_system_closed' if subfolder.issue && subfolder.issue.closed? %>">
       <%= render(:partial => 'dir',
         :locals => {
           :project => @project,
@@ -77,12 +78,13 @@
           :position => 0 }) %>
     </tr>
   <% end %>
+  <% classes = 'dmsf_gray hascontextmenu' %>
   <% @dir_links.each do |link| %>
     <% unless link.target_project %>
       <% Rails.logger.error "Error: dmsf_link id #{link.id} has no target!" %>
       <% next %>
     <% end %>
-    <tr class="dmsf_gray">
+    <tr class="<%= classes %>">
       <%= render(:partial => 'dir',
         :locals => {
           :project => link.target_project,
@@ -94,12 +96,13 @@
           :position => 0}) %>
     </tr>
   <% end %>
+  <% classes = 'file hascontextmenu' %>
   <% @files.each do |file| %>
     <% unless file.last_revision %>
       <% Rails.logger.error "Error: dmsf_file id #{file.id} has no revision!" %>
       <% next %>
     <% end %>
-    <tr class="file">
+    <tr class="<%= classes %>">
       <%= render(:partial => 'file', :locals => {
           :project => @project,
           :file => file,
@@ -110,24 +113,25 @@
           :position => 1 }) %>
     </tr>
   <% end %>
+  <% classes = 'dmsf_gray hascontextmenu' %>
   <% @file_links.each do |link| %>
     <% unless link.target_file.last_revision %>
       <% Rails.logger.error "Error: dmsf_file id #{link.target_id} has no revision!" %>
       <% next %>
-      <% end %>
-      <tr class="dmsf_gray">
-        <%= render(:partial => 'file', :locals => {
-            :project => link.target_project,
-            :file => link.target_file,
-            :link => link,
-            :id => link.id,
-            :name => 'file_links[]',
-            :title => link.name,
-            :position => 1}) %>
-      </tr>
+    <% end %>
+    <tr class="<%= classes %>">
+      <%= render(:partial => 'file', :locals => {
+          :project => link.target_project,
+          :file => link.target_file,
+          :link => link,
+          :id => link.id,
+          :name => 'file_links[]',
+          :title => link.name,
+          :position => 1}) %>
+    </tr>
     <% end %>
     <% @url_links.each do |link| %>
-      <tr class="dmsf_gray">
+      <tr class="<%= classes %>">
         <%= render(:partial => 'url', :locals => {
             :project => link.target_project,
             :file => link.target_file,

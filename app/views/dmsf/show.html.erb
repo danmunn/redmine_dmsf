@@ -84,7 +84,7 @@
 <%= error_messages_for('dmsf_workflow') %>
 
 <%= form_tag(entries_operations_dmsf_path(:id => @project, :folder_id => @folder), :method => :post,
-             :class => 'dmsf_entries', :id => 'entries_form') do %>
+             :class => 'dmsf_entries', :id => 'entries_form', :data => {:cm_url => dmsf_context_menu_path}) do %>
     <%= hidden_field_tag('action') %>
     <div id="dmsf_buttons" class="dmsf_controls" style="float: left">
       <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries') if @file_view_allowed %>
@@ -118,6 +118,8 @@
       <% end %>
     </div>
 <% end %>
+
+<%= context_menu %>
 
 <%= late_javascript_tag do %>
     $('#entries_delete_button').click(function () {
