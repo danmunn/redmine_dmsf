@@ -22,8 +22,8 @@
 
 <ul>
     <li>
-      <% if @file && @file.last_revision %>
-        <% url = "ms-word:ofe|u|#{Setting.protocol.strip}://#{Setting.host_name.strip}/#{Addressable::URI.escape(@file.project.identifier)}/" %>
+      <% if @file && @file.last_revision && @file.last_revision.protocol %>
+        <% url = "#{@file.last_revision.protocol}:ofe|u|#{Setting.protocol.strip}://#{Setting.host_name.strip}/dmsf/webdav/#{Addressable::URI.escape(@file.project.identifier)}/" %>
         <% if @file.dmsf_folder %>
           <% url << @file.dmsf_folder.dmsf_path_str %>
         <% end %>

@@ -34,6 +34,16 @@ class DmsfFileRevision < ActiveRecord::Base
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
 
+  PROTOCOLS = {
+    'application/msword' => 'ms-word',
+    'application/vnd.ms-excel' => 'ms-excel',
+    'application/vnd.ms-powerpoint' => 'ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'ms-word',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'ms-excel',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.slideshow' => 'ms-powerpoint'
+  }.freeze
+
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }
 
@@ -338,6 +348,13 @@ class DmsfFileRevision < ActiveRecord::Base
       end
     end
     tooltip
+  end
+
+  def protocol
+    unless @protocol
+      @protocol = PROTOCOLS[self.mime_type]
+    end
+    @protocol
   end
 
 end
