@@ -64,10 +64,10 @@
   <% if @file_delete_allowed %>
     <%= link_to_if(@file_delete_allowed, '', dmsf_link_path(:id => link, :commit => 'yes'),
       :data => {:confirm => l(:text_are_you_sure)}, :method => :delete,
-      :title => l(:title_delete), :class => "icon icon-delete" ) %>
+      :title => l(:title_delete), :class => "icon icon-del" ) %>
   <% end %>
 </td>
-<td class="hol">1</td>
-<td class="hol"></td>
-<td class="hol">link.updated_at.to_i</td>
-<td class="hol"></td>
+<td class="none">1</td>
+<td class="none"></td>
+<td class="none">link.updated_at.to_i</td>
+<td class="none"></td>

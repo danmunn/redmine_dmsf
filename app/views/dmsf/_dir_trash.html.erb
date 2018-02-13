@@ -75,7 +75,7 @@
         :data => {:confirm => l(:text_are_you_sure)},
         :method => :delete,
         :title => l(:title_delete),
-        :class => 'icon-only icon-delete') %>
+        :class => 'icon-only icon-del') %>
     <% else %>
       <%= link_to('', delete_dmsf_path(:id => project, :folder_id => subfolder, :commit => 'yes'),
         :data => {:confirm => l(:text_are_you_sure)},
