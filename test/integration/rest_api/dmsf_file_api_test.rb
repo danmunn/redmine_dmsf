@@ -99,7 +99,6 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
       <attachments>
        <folder_id/>
        <uploaded_file>
-         <disk_filename>test.txt</disk_filename>
          <name>test.txt</name>
          <title>test.txt</title>
          <description>REST API</description>
@@ -109,16 +108,20 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
        </uploaded_file>
       </attachments>
     }
-    post "/projects/#{@project1.id}/dmsf/commit.xml?&key=#{token.value}", payload, {"CONTENT_TYPE" => 'application/xml'}
+    assert_difference 'DmsfFileRevision.count', +1 do
+      post "/projects/#{@project1.id}/dmsf/commit.xml?&key=#{token.value}", payload, {"CONTENT_TYPE" => 'application/xml'}
+    end
     #<?xml version="1.0" encoding="UTF-8"?>
     #<dmsf_files total_count="1" type="array">
     # <file>
     #   <id>17229</id>
     #   <name>test.txt</name>
     # </file>
-    # </dmsf_files>
+    # </dmsf_files> #
     assert_select 'dmsf_files > file > name', :text => 'test.txt'
     assert_response :success
+    revision = DmsfFileRevision.order(:id).last
+    assert revision && revision.size > 0
     begin
       FileUtils.rm_rf Setting.plugin_redmine_dmsf['dmsf_storage_directory']
     rescue Exception => e
