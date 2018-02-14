@@ -33,47 +33,47 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     @project1.enable_module! :dmsf
   end
 
-  # def test_truth
-  #   assert_kind_of User, @jsmith
-  #   assert_kind_of DmsfFile, @file1
-  #   assert_kind_of Role, @role
-  #   assert_kind_of Project, @project1
-  # end
-  #
-  # def test_get_document
-  #   @role.add_permission! :view_dmsf_files
-  #   token = Token.create!(:user => @jsmith, :action => 'api')
-  #   #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml
-  #   get "/dmsf/files/#{@file1.id}.xml?key=#{token.value}"
-  #   assert_response :success
-  #   assert_equal 'application/xml', @response.content_type
-  #   #<?xml version="1.0" encoding="UTF-8"?>
-  #   # <dmsf_file>
-  #   #   <id>1</id>
-  #   #   <name>test.txt</name>
-  #   #   <project_id>1</project_id>
-  #   #   <version>1.0</version>
-  #   #   <mime_type>text/plain</mime_type>
-  #   #   <digest>81dc9bdb52d04dc20036dbd8313ed055</digest>
-  #   #   <size>4</size>
-  #   #   <description>Some file :-)</description>
-  #   #   <content_url>http://www.example.com/dmsf/files/1/download</content_url>
-  #   # </dmsf_file>
-  #   assert_select 'dmsf_file > id', :text => @file1.id.to_s
-  #   assert_select 'dmsf_file > name', :text => @file1.name
-  #   assert_select 'dmsf_file > project_id', :text => @file1.project_id.to_s
-  #   assert_select 'dmsf_file > version', :text => "#{@file1.last_revision.version}"
-  #   assert_select 'dmsf_file > mime_type', :text => @file1.last_revision.mime_type
-  #   assert_select 'dmsf_file > digest', :text => @file1.last_revision.digest
-  #   assert_select 'dmsf_file > size', :text => @file1.last_revision.size.to_s
-  #   assert_select 'dmsf_file > description', :text => @file1.last_revision.description
-  #   assert_select 'dmsf_file > content_url', :text => "http://www.example.com/dmsf/files/#{@file1.id}/download"
-  #   #curl -v -H "Content-Type: application/octet-stream" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/41532/download > file.txt
-  #   Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
-  #   get "/dmsf/files/#{@file1.id}/download.xml?key=#{token.value}"
-  #   assert_response :success
-  #   assert_equal '1234', @response.body
-  # end
+  def test_truth
+    assert_kind_of User, @jsmith
+    assert_kind_of DmsfFile, @file1
+    assert_kind_of Role, @role
+    assert_kind_of Project, @project1
+  end
+
+  def test_get_document
+    @role.add_permission! :view_dmsf_files
+    token = Token.create!(:user => @jsmith, :action => 'api')
+    #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml
+    get "/dmsf/files/#{@file1.id}.xml?key=#{token.value}"
+    assert_response :success
+    assert_equal 'application/xml', @response.content_type
+    #<?xml version="1.0" encoding="UTF-8"?>
+    # <dmsf_file>
+    #   <id>1</id>
+    #   <name>test.txt</name>
+    #   <project_id>1</project_id>
+    #   <version>1.0</version>
+    #   <mime_type>text/plain</mime_type>
+    #   <digest>81dc9bdb52d04dc20036dbd8313ed055</digest>
+    #   <size>4</size>
+    #   <description>Some file :-)</description>
+    #   <content_url>http://www.example.com/dmsf/files/1/download</content_url>
+    # </dmsf_file>
+    assert_select 'dmsf_file > id', :text => @file1.id.to_s
+    assert_select 'dmsf_file > name', :text => @file1.name
+    assert_select 'dmsf_file > project_id', :text => @file1.project_id.to_s
+    assert_select 'dmsf_file > version', :text => "#{@file1.last_revision.version}"
+    assert_select 'dmsf_file > mime_type', :text => @file1.last_revision.mime_type
+    assert_select 'dmsf_file > digest', :text => @file1.last_revision.digest
+    assert_select 'dmsf_file > size', :text => @file1.last_revision.size.to_s
+    assert_select 'dmsf_file > description', :text => @file1.last_revision.description
+    assert_select 'dmsf_file > content_url', :text => "http://www.example.com/dmsf/files/#{@file1.id}/download"
+    #curl -v -H "Content-Type: application/octet-stream" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/41532/download > file.txt
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
+    get "/dmsf/files/#{@file1.id}/download.xml?key=#{token.value}"
+    assert_response :success
+    assert_equal '1234', @response.body
+  end
 
   def test_upload_document
     timestamp = DateTime.now.strftime('%y%m%d%H%M')
