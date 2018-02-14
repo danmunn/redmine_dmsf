@@ -122,6 +122,7 @@ class DmsfUploadController < ApplicationController
         if upload
           uploaded_file[:disk_filename] = upload.disk_filename
           uploaded_file[:tempfile_path] = upload.tempfile_path
+          uploaded_file[:size] = upload.size
         end
       end
       commit_files_internal uploaded_files
