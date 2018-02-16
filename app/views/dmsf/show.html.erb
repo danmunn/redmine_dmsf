@@ -86,16 +86,18 @@
 <%= form_tag(entries_operations_dmsf_path(:id => @project, :folder_id => @folder), :method => :post,
              :class => 'dmsf_entries', :id => 'entries_form', :data => {:cm_url => dmsf_context_menu_path}) do %>
     <%= hidden_field_tag('action') %>
-    <div id="dmsf_buttons" class="dmsf_controls" style="float: left">
-      <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries',
-                     :class => 'toggle-selection') if @file_view_allowed %>
-      <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries',
-                     :class => 'toggle-selection') if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
-      <% if @file_delete_allowed %>
-          <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries',
-                         :class => 'toggle-selection') if @file_delete_allowed %>
-      <% end %>
-    </div>
+    <% if !@system_folder %>
+      <div id="dmsf_buttons" class="dmsf_controls" style="float: left">
+        <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries',
+                       :class => 'toggle-selection') if @file_view_allowed %>
+        <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries',
+                       :class => 'toggle-selection') if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
+        <% if @file_delete_allowed %>
+            <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries',
+                           :class => 'toggle-selection') if @file_delete_allowed %>
+        <% end %>
+      </div>
+    <% end %>
     <% unless @system_folder %>
         <% values = @folder ? @folder.custom_field_values : DmsfFolder.new.custom_field_values %>
         <% unless values.empty? %>

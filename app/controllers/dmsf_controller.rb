@@ -100,11 +100,19 @@ class DmsfController < ApplicationController
 
   def entries_operation
     # Download/Email
-    selected_folders = params[:ids].select{ |x| x =~ /folder-\d+/ }.map{ |x| $1.to_i if x =~ /folder-(\d+)/ }
-    selected_files = params[:ids].select{ |x| x =~ /file-\d+/ }.map{ |x| $1.to_i if x =~ /file-(\d+)/ }
-    selected_dir_links = params[:ids].select{ |x| x =~ /folder-link-\d+/ }.map{ |x| $1.to_i if x =~ /folder-link-(\d+)/ }
-    selected_file_links = params[:ids].select{ |x| x =~ /file-link-\d+/ }.map{ |x| $1.to_i if x =~ /file-link-(\d+)/ }
-    selected_url_links = params[:ids].select{ |x| x =~ /url-link-\d+/ }.map{ |x| $1.to_i if x =~ /url-link-(\d+)/ }
+    if params[:ids].present?
+      selected_folders = params[:ids].select{ |x| x =~ /folder-\d+/ }.map{ |x| $1.to_i if x =~ /folder-(\d+)/ }
+      selected_files = params[:ids].select{ |x| x =~ /file-\d+/ }.map{ |x| $1.to_i if x =~ /file-(\d+)/ }
+      selected_dir_links = params[:ids].select{ |x| x =~ /folder-link-\d+/ }.map{ |x| $1.to_i if x =~ /folder-link-(\d+)/ }
+      selected_file_links = params[:ids].select{ |x| x =~ /file-link-\d+/ }.map{ |x| $1.to_i if x =~ /file-link-(\d+)/ }
+      selected_url_links = params[:ids].select{ |x| x =~ /url-link-\d+/ }.map{ |x| $1.to_i if x =~ /url-link-(\d+)/ }
+    else
+      selected_folders = []
+      selected_files = []
+      selected_dir_links = []
+      selected_file_links = []
+      selected_url_links = []
+    end
 
     if selected_folders.blank? && selected_files.blank? &&
       selected_dir_links.blank? && selected_file_links.blank? &&
@@ -143,6 +151,7 @@ class DmsfController < ApplicationController
       redirect_to :back
     else
       download_entries(selected_folders, selected_files)
+      redirect_to :back
     end
   rescue FileNotFound
     render_404
@@ -359,47 +368,45 @@ class DmsfController < ApplicationController
   end
 
   def email_entries(selected_folders, selected_files)
-    begin
-      zip = DmsfZip.new
-      zip_entries(zip, selected_folders, selected_files)
+    zip = DmsfZip.new
+    zip_entries(zip, selected_folders, selected_files)
 
-      zipped_content = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_email_sent_documents.zip'))
+    zipped_content = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_email_sent_documents.zip'))
 
-      File.open(zipped_content, 'wb') do |f|
-        zip_file = File.open(zip.finish, 'rb')
-        while (buffer = zip_file.read(8192))
-          f.write(buffer)
-        end
+    File.open(zipped_content, 'wb') do |f|
+      zip_file = File.open(zip.finish, 'rb')
+      while (buffer = zip_file.read(8192))
+        f.write(buffer)
       end
-
-      max_filesize = Setting.plugin_redmine_dmsf['dmsf_max_email_filesize'].to_f
-      if max_filesize > 0 && File.size(zipped_content) > max_filesize * 1048576
-        raise EmailMaxFileSize
-      end
-
-      zip.files.each do |f|
-        audit = DmsfFileRevisionAccess.new
-        audit.user = User.current
-        audit.dmsf_file_revision = f.last_revision
-        audit.action = DmsfFileRevisionAccess::EmailAction
-        audit.save!
-      end
-
-      @email_params = {
-        :zipped_content => zipped_content,
-        :folders => selected_folders,
-        :files => selected_files,
-        :subject => "#{@project.name} #{l(:label_dmsf_file_plural).downcase}",
-        :from => Setting.plugin_redmine_dmsf['dmsf_documents_email_from'].blank? ?
-          "#{User.current.name} <#{User.current.mail}>" : Setting.plugin_redmine_dmsf['dmsf_documents_email_from'],
-        :reply_to => Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
-      }
-      render :action => 'email_entries'
-    rescue Exception
-      raise
-    ensure
-      zip.close if zip
     end
+
+    max_filesize = Setting.plugin_redmine_dmsf['dmsf_max_email_filesize'].to_f
+    if max_filesize > 0 && File.size(zipped_content) > max_filesize * 1048576
+      raise EmailMaxFileSize
+    end
+
+    zip.files.each do |f|
+      audit = DmsfFileRevisionAccess.new
+      audit.user = User.current
+      audit.dmsf_file_revision = f.last_revision
+      audit.action = DmsfFileRevisionAccess::EmailAction
+      audit.save!
+    end
+
+    @email_params = {
+      :zipped_content => zipped_content,
+      :folders => selected_folders,
+      :files => selected_files,
+      :subject => "#{@project.name} #{l(:label_dmsf_file_plural).downcase}",
+      :from => Setting.plugin_redmine_dmsf['dmsf_documents_email_from'].blank? ?
+        "#{User.current.name} <#{User.current.mail}>" : Setting.plugin_redmine_dmsf['dmsf_documents_email_from'],
+      :reply_to => Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
+    }
+    render :action => 'email_entries'
+  rescue Exception
+    raise
+  ensure
+    zip.close if zip
   end
 
   def download_entries(selected_folders, selected_files)

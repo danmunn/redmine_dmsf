@@ -55,6 +55,7 @@ if Redmine::Plugin.installed? :redmine_dmsf
 
     # dmsf_context_menu_controller
     match '/projects/:id/dmsf/context_menu', :to => 'dmsf_context_menus#dmsf', :as => 'dmsf_context_menu', :via => [:get, :post]
+    match '/projects/:id/dmsf/trash/context_menu', :to => 'dmsf_context_menus#trash', :as => 'dmsf_trash_context_menu', :via => [:get, :post]
 
     #
     # dmsf_state controller

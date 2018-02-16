@@ -21,8 +21,24 @@
 %>
 
 <ul>
+  <li>
+    <%= context_menu_link l(:button_download), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
+      :ids => params[:ids], :download_entries => true), :method => :post, :class => 'icon-download',
+      :disabled => @disabled %>
+  </li>
+  <li>
+    <%= context_menu_link l(:field_mail), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
+      :ids => params[:ids], :email_entries => true), :method => :post, :class => 'icon-email',
+      :disabled => @disabled %>
+  </li>
+  <li>
+    <%= context_menu_link l(:button_delete), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
+      :ids => params[:ids], :destroy_entries => true), :method => :post, :class => 'icon-del',
+      :disabled => @disabled %>
+  </li>
+  <% if @file %>
     <li>
-      <% if @file && @file.last_revision && @file.last_revision.protocol %>
+      <% if @file.last_revision && @file.last_revision.protocol %>
         <% url = "#{@file.last_revision.protocol}:ofe|u|#{Setting.protocol.strip}://#{Setting.host_name.strip}/dmsf/webdav/#{Addressable::URI.escape(@file.project.identifier)}/" %>
         <% if @file.dmsf_folder %>
           <% url << @file.dmsf_folder.dmsf_path_str %>
@@ -31,4 +47,5 @@
       <% end %>
       <%= context_menu_link l(:button_edit), url, :class => 'icon-edit', :disabled => url.blank? %>
     </li>
+  <% end %>
 </ul>

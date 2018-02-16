@@ -49,8 +49,9 @@ def init
                        :dmsf_files_copy => [:new, :copy, :move],
                        :dmsf_context_menus => [:dmsf]}
       pmap.permission :file_delete,
-                      { :dmsf => [:trash, :delete_entries],
-                        :dmsf_files => [:delete]}
+                      {:dmsf => [:trash, :delete_entries],
+                       :dmsf_files => [:delete],
+                       :dmsf_trash_context_menus => [:trash]}
       pmap.permission :force_file_unlock, {}
       pmap.permission :file_approval,
                       {:dmsf_workflows => [:action, :new_action, :autocomplete_for_user, :start, :assign, :assignment]}

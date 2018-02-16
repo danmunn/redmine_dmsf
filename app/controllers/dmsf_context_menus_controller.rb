@@ -22,19 +22,45 @@ class DmsfContextMenusController < ApplicationController
 
   helper :context_menus
 
+  before_action :find_project
+  before_action :find_folder
+  before_action :find_file, :except => [:trash]
+
   def dmsf
-    selected_files = params[:ids].select{ |x| x =~ /file-\d+/ }.map{ |x| $1.to_i if x =~ /file-(\d+)/ }
-    selected_file_links = params[:ids].select{ |x| x =~ /file-link-\d+/ }.map{ |x| $1.to_i if x =~ /file-link-(\d+)/ }
-    selected_file_links.each do |id|
-      link = DmsfLink.find_by_id id
-      selected_files << link.target_id if link && !selected_files.include?(link.target_id.to_s)
-    end
-    if (selected_files.size == 1) && (params[:ids].size == 1)
-      @file = DmsfFile.find selected_files[0]
-    end
+    @disabled = params[:ids].blank?
     render :layout => false
   rescue ActiveRecord::RecordNotFound
     render_404
+  end
+
+  def trash
+    render :layout => false
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
+  private
+
+  def find_folder
+    @folder = DmsfFolder.find params[:folder_id] if params[:folder_id].present?
+  rescue DmsfAccessError
+    render_403
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
+  def find_file
+    if params[:ids].present?
+      selected_files = params[:ids].select{ |x| x =~ /file-\d+/ }.map{ |x| $1.to_i if x =~ /file-(\d+)/ }
+      selected_file_links = params[:ids].select{ |x| x =~ /file-link-\d+/ }.map{ |x| $1.to_i if x =~ /file-link-(\d+)/ }
+      selected_file_links.each do |id|
+        link = DmsfLink.find_by_id id
+        selected_files << link.target_id if link && !selected_files.include?(link.target_id.to_s)
+      end
+      if (selected_files.size == 1) && (params[:ids].size == 1)
+        @file = DmsfFile.find selected_files[0]
+      end
+    end
   end
 
 end

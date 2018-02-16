@@ -41,19 +41,19 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert_kind_of DmsfFileRevision, @revision8
     assert_kind_of DmsfWorkflow, @wf1
   end
-  
-  def test_delete_restore      
-    @revision5.delete false    
-    assert @revision5.deleted?, 
+
+  def test_delete_restore
+    @revision5.delete false
+    assert @revision5.deleted?,
       "File revision #{@revision5.name} hasn't been deleted"
-    @revision5.restore    
-    assert !@revision5.deleted?, 
+    @revision5.restore
+    assert !@revision5.deleted?,
       "File revision #{@revision5.name} hasn't been restored"
-  end    
-  
-  def test_destroy       
+  end
+
+  def test_destroy
     @revision5.delete true
-    assert_nil DmsfFileRevision.find_by_id @revision5.id    
+    assert_nil DmsfFileRevision.find_by_id @revision5.id
   end
 
   def test_create_digest
@@ -69,7 +69,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     @revision1.create_digest
     assert_equal 'SHA256', @revision1.digest_type
   end
-  
+
   def test_new_storage_filename
     # Create a file.
     f = DmsfFile.new
@@ -78,7 +78,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     f.dmsf_folder = nil
     f.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
     f.save
-    
+
     # Create two new revisions, r1 and r2
     r1 = DmsfFileRevision.new
     r1.minor_version = 0
@@ -91,13 +91,13 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     r1.comment = nil
     r1.mime_type = nil
     r1.size = 4
-    
+
     r2 = r1.clone
     r2.minor_version = 1
-    
+
     assert r1.valid?
     assert r2.valid?
-    
+
     # This is a very stupid since the generation and storing of files below must be done during the
     # same second, so wait until the microsecond part of the DateTime is less than 10 ms, should be
     # plenty of time to do the rest then.
@@ -109,7 +109,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
         end
         sleep 0.01
     end
-    
+
     # First, generate the r1 storage filename and save the file
     r1.disk_filename = r1.new_storage_filename
     assert r1.save
@@ -117,12 +117,12 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     File.open(r1.disk_file, 'wb') do |f|
         f.write('1234')
     end
-    
+
     # Directly after the file has been stored generate the r2 storage filename.
     # Hopefully the seconds part of the DateTime.now has not changed and the generated filename will
     # be on the same second but it should then be increased by 1.
     r2.disk_filename = r2.new_storage_filename
-    
+
     assert_not_equal r1.disk_filename, r2.disk_filename, "The disk filename should not be equal for two revisions."
   end
 
@@ -182,11 +182,45 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert_equal -(' '.ord), @revision1.minor_version
   end
 
-  def description_max_length
-    @revision1.description = 2.megabytes * 'a'
+  def test_description_max_length
+    @revision1.description = 'a' * 2.megabytes
     assert !@revision1.save
-    @revision1.description = 1.megabyte * 'a'
+    @revision1.description = 'a' * 1.megabyte
     assert @revision1.save
+  end
+
+  def test_protocol_txt
+    assert !@revision1.protocol
+  end
+
+  def test_protocol_doc
+    @revision1.mime_type = Redmine::MimeType.of('test.doc')
+    assert_equal 'ms-word', @revision1.protocol
+  end
+
+  def test_protocol_docx
+    @revision1.mime_type = Redmine::MimeType.of('test.docx')
+    assert_equal 'ms-word', @revision1.protocol
+  end
+
+  def test_protocol_odt
+    @revision1.mime_type = Redmine::MimeType.of('test.odt')
+    assert_equal 'ms-word', @revision1.protocol
+  end
+
+  def test_protocol_xls
+    @revision1.mime_type = Redmine::MimeType.of('test.xls')
+    assert_equal 'ms-excel', @revision1.protocol
+  end
+
+  def test_protocol_xlsx
+    @revision1.mime_type = Redmine::MimeType.of('test.xlsx')
+    assert_equal 'ms-excel', @revision1.protocol
+  end
+
+  def test_protocol_ods
+    @revision1.mime_type = Redmine::MimeType.of('test.ods')
+    assert_equal 'ms-excel', @revision1.protocol
   end
 
 end

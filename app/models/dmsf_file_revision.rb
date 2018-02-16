@@ -36,12 +36,16 @@ class DmsfFileRevision < ActiveRecord::Base
 
   PROTOCOLS = {
     'application/msword' => 'ms-word',
+    'application/excel' => 'ms-excel',
     'application/vnd.ms-excel' => 'ms-excel',
     'application/vnd.ms-powerpoint' => 'ms-powerpoint',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'ms-word',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'ms-excel',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'ms-powerpoint',
-    'application/vnd.openxmlformats-officedocument.presentationml.slideshow' => 'ms-powerpoint'
+    'application/vnd.openxmlformats-officedocument.presentationml.slideshow' => 'ms-powerpoint',
+    'application/vnd.oasis.opendocument.spreadsheet' => 'ms-excel',
+    'application/vnd.oasis.opendocument.text' => 'ms-word',
+    'application/vnd.oasis.opendocument.presentation' => 'ms-powerpoint',
   }.freeze
 
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }

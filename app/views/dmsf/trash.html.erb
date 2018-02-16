@@ -33,7 +33,7 @@
 <%= error_messages_for('dmsf_workflow') %>
 
 <%= form_tag(entries_operations_dmsf_path(:id => @project, :folder_id => @folder), :method => :post,
-  :class => 'dmsf_entries', :id => 'entries_form', :data => {:cm_url => dmsf_context_menu_path}) do %>
+  :class => 'dmsf_entries', :id => 'entries_form', :data => {:cm_url => dmsf_trash_context_menu_path}) do %>
   <%= hidden_field_tag('action') %>
   <div class="dmsf_controls" style="float: left">
     <% if @file_manipulation_allowed && @folder_manipulation_allowed %>
@@ -99,7 +99,7 @@
           :subfolder => subfolder,
           :link => nil,
           :id => subfolder.id,
-          :name => 'subfolders[]',
+          :name => 'folder',
           :title => subfolder.title }) %>
     </tr>
   <% end %>
@@ -112,7 +112,7 @@
           :subfolder => link.target_folder,
           :link => link,
           :id => link.id,
-          :name => 'dir_links[]',
+          :name => 'folder-link',
           :title => link.name }) %>
     </tr>
   <% end %>
@@ -128,7 +128,7 @@
           :file => file,
           :link => nil,
           :id => file.id,
-          :name => 'files[]',
+          :name => 'file',
           :title => file.title }) %>
     </tr>
   <% end %>
@@ -148,7 +148,7 @@
           :file => link.target_file,
           :link => link,
           :id => link.id,
-          :name => 'file_links[]',
+          :name => 'file-link',
           :title => link.name }) %>
     </tr>
   <% end %>

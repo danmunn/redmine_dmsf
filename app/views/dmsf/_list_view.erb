@@ -24,7 +24,9 @@
   <thead>
     <tr>
       <th class="dmsf_checkbox dmsf_th">
-        <input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
+        <% if !@system_folder %>
+          <input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
+        <% end %>
       </th>
       <% if DmsfFolder.is_column_on?('id') %>
           <th class="dmsf_th">#</th>

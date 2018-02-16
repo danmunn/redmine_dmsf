@@ -140,8 +140,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_delete_restore_entries_forbidden
     # Missing permissions
     get :entries_operation, :id => @project, :delete_entries => 'Delete',
-      :subfolders => [@folder1.id.to_s], :files => [@file1.id.to_s],
-      :dir_links => [@folder_link1.id.to_s], :file_links => [@file_link2.id.to_s]
+        :ids => ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]
     assert_response :forbidden
   end
 
@@ -150,8 +149,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @request.env['HTTP_REFERER'] = dmsf_folder_path(:id => @project.id)
     @role.add_permission! :view_dmsf_files
     get :entries_operation, :id => @project, :delete_entries => 'Delete',
-      :subfolders => [@folder1.id.to_s], :files => [@file1.id.to_s],
-      :dir_links => [@folder_link1.id.to_s], :file_links => [@file_link2.id.to_s]
+      :ids => ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]
     assert_response :redirect
     assert_equal flash[:error].to_s, l(:error_folder_is_not_empty)
   end
@@ -162,8 +160,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :view_dmsf_files
     flash[:error] = nil
     get :entries_operation, :id => @project, :delete_entries => 'Delete',
-      :subfolders => [], :files => [@file1.id.to_s],
-      :dir_links => [], :file_links => [@file_link2.id.to_s]
+        :ids => ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]
     assert_response :redirect
     assert_nil flash[:error]
   end
@@ -173,8 +170,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :view_dmsf_files
     @request.env['HTTP_REFERER'] = trash_dmsf_path(:id => @project.id)
     get :entries_operation, :id => @project, :restore_entries => 'Restore',
-      :subfolders => [], :files => [@file1.id.to_s],
-      :dir_links => [], :file_links => [@file_link2.id.to_s]
+        :ids => ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]
     assert_response :redirect
     assert_nil flash[:error]
   end
@@ -229,7 +225,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     Setting.plugin_redmine_dmsf['dmsf_documents_email_from'] = 'karel.picman@kontron.com'
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
     @role.add_permission! :view_dmsf_files
-    get :entries_operation, :id => @project, :email_entries => 'Email', :files => [@file1.id]
+    get :entries_operation, :id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]
     assert_response :success
     assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_from']
   end
@@ -238,7 +234,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to'] = 'karel.picman@kontron.com'
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
     @role.add_permission! :view_dmsf_files
-    get :entries_operation, :id => @project, :email_entries => 'Email', :files => [@file1.id]
+    get :entries_operation, :id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]
     assert_response :success
     assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
   end
@@ -247,7 +243,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] = '1'
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
     @role.add_permission! :view_dmsf_files
-    get :entries_operation, :id => @project, :email_entries => 'Email', :files => [@file1.id]
+    get :entries_operation, :id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]
     assert_response :success
     assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only']
   end

@@ -24,8 +24,10 @@
   <thead>
     <tr>
       <th class="dmsf_checkbox dmsf_th">
-        <%= check_box_tag 'check_all', '', false, :class => 'toggle-selection',
+        <% if !@system_folder %>
+          <%= check_box_tag 'check_all', '', false, :class => 'toggle-selection',
                           :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+        <% end %>
       </th>
       <% if DmsfFolder.is_column_on?('id') %>
           <th class="dmsf_th">#</th>
