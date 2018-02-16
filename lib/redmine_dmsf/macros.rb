@@ -1,4 +1,4 @@
-# encoding: utf-8
+ # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -37,7 +37,11 @@ Redmine::WikiFormatting::Macros.register do
     end
     if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
       file_view_url = url_for(:controller => :dmsf_files, :action => 'view', :id => file, :download => args[2])
-      return link_to(h(args[1] ? args[1] : file.title),
+      title = args[1] ?  args[1] : file.title
+      title.gsub!(/\A"|"\z/,'') # Remove apostrophes
+      title.gsub!(/\A'|'\z/,'')
+      title = file.title if title.empty?
+      return link_to(h(title),
         file_view_url,
         :target => '_blank',
         :title => h(revision.tooltip),
@@ -57,7 +61,11 @@ Redmine::WikiFormatting::Macros.register do
     else
       folder = DmsfFolder.visible.find args[0].strip
       if User.current && User.current.allowed_to?(:view_dmsf_folders, folder.project)
-        return link_to h(args[1] ? args[1] : folder.title),
+        title = args[1] ?  args[1] : folder.title
+        title.gsub!(/\A"|"\z/,'') # Remove apostrophes
+        title.gsub!(/\A'|'\z/,'')
+        title = folder.title if title.empty?
+        return link_to h(title),
           dmsf_folder_url(folder.project, :folder_id => folder)
       else
         raise l(:notice_not_authorized)
