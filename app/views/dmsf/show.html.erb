@@ -115,13 +115,11 @@
             </div>
         <% end %>
     <% end %>
-    <div class="autoscroll">
-      <% if @tree_view %>
-          <%= render(:partial => 'tree_view') %>
-      <% else %>
-          <%= render(:partial => 'list_view') %>
-      <% end %>
-    </div>
+    <% if @tree_view %>
+        <%= render(:partial => 'tree_view') %>
+    <% else %>
+        <%= render(:partial => 'list_view') %>
+    <% end %>
 <% end %>
 
 <%= context_menu %>
