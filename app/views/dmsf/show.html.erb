@@ -87,10 +87,13 @@
              :class => 'dmsf_entries', :id => 'entries_form', :data => {:cm_url => dmsf_context_menu_path}) do %>
     <%= hidden_field_tag('action') %>
     <div id="dmsf_buttons" class="dmsf_controls" style="float: left">
-      <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries') if @file_view_allowed %>
-      <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries') if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
-      <% if @file_delete_allowed%>
-          <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries') if @file_delete_allowed %>
+      <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries',
+                     :class => 'toggle-selection') if @file_view_allowed %>
+      <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries',
+                     :class => 'toggle-selection') if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
+      <% if @file_delete_allowed %>
+          <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries',
+                         :class => 'toggle-selection') if @file_delete_allowed %>
       <% end %>
     </div>
     <% unless @system_folder %>
@@ -132,9 +135,6 @@
         $('#entries_form').attr('action', "<%= tag_changed_path(:id => @project, :folder_id => @folder) %>");
         $('#entries_form').submit();
     });
-    $('#check_all_entries').click(function() {
-        $('input[type=checkbox]', $('#browser > tbody')).prop('checked', this.checked);
-    });
 <% end %>
 
 <% content_for :header_tags do %>
@@ -155,6 +155,7 @@
     <%= late_javascript_tag do %>
         EASY.schedule.main(function() {
             $("#browser").dataTable({
+                orderClasses: false,
                 responsive: {
                     details: false
                 },

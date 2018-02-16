@@ -37,9 +37,11 @@
   <%= hidden_field_tag('action') %>
   <div class="dmsf_controls" style="float: left">
     <% if @file_manipulation_allowed && @folder_manipulation_allowed %>
-      <%= submit_tag(l(:title_restore), :title => l(:title_restore_checked), :name => 'restore_entries') %>
+      <%= submit_tag(l(:title_restore), :title => l(:title_restore_checked), :name => 'restore_entries',
+                     :class => 'toggle-selection') %>
       <% if @file_delete_allowed%>
-        <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'destroy_entries') %>
+        <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'destroy_entries',
+                       :class => 'toggle-selection') %>
       <% end %>
     <% end %>
   </div>
@@ -157,7 +159,7 @@
                                                      :file => link.target_file,
                                                      :link => link,
                                                      :id => link.id,
-                                                     :name => 'url_links[]',
+                                                     :name => 'url-link',
                                                      :title => link.name }) %>
       </tr>
   <% end %>
@@ -179,9 +181,6 @@
     $('#entries_form').attr('action', "<%= tag_changed_path(:id => @project, :folder_id => @folder) %>");
     $('#entries_form').submit();
   });
-  $('#check_all_entries').click(function() {
-    $('input[type=checkbox]', $('#browser > tbody')).prop('checked', this.checked);
-  });
 <% end %>
 
 <% content_for :header_tags do %>
@@ -202,6 +201,7 @@
   <%= late_javascript_tag do %>
       EASY.schedule.main(function() {
           $('#browser').dataTable({
+            orderClasses: false,
             responsive: {
               details: false
             },

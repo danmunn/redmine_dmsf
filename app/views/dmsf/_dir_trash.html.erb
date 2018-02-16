@@ -20,8 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<td class="dmsf_checkbox"><%= check_box_tag(name, id, false, 
-  :title => l(:title_check_for_restore_or_delete), :id => "subfolder_#{id}") %></td>
+<td class="dmsf_checkbox"><%= check_box_tag('ids[]', "#{name}-#{id}", false, :id => "subfolder_#{id}") %></td>
 <% if DmsfFolder.is_column_on?('id') %>
     <td class="id"><%= link_to(subfolder.id, edit_dmsf_path(:id => project, :folder_id => subfolder)) %></td>
 <% end %>

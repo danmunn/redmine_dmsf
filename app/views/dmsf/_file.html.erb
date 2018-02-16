@@ -22,8 +22,7 @@
 
 <% wf = DmsfWorkflow.find_by_id(file.last_revision.dmsf_workflow_id) if file.last_revision.dmsf_workflow_id %>
 
-<td class="dmsf_checkbox"><%= check_box_tag(name, id, false,
-  :title => l(:title_check_for_zip_download_or_email), :id => "file_#{id}") %></td>
+<td class="dmsf_checkbox"><%= check_box_tag('ids[]', "#{name}-#{id}", false, :id => "file_#{id}") %></td>
 <% if DmsfFolder.is_column_on?('id') %>
     <td class="id"><%= link_to(file.id, dmsf_file_path(:id => file)) %></td>
 <% end %>

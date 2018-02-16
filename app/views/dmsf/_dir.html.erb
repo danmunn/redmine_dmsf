@@ -22,7 +22,7 @@
 
 <td class="dmsf_checkbox">
   <% unless (subfolder && subfolder.system) %>
-    <%= check_box_tag(name, id, false, :title => l(:title_check_for_zip_download_or_email), :id => "subfolder_#{id}") %>
+    <%= check_box_tag('ids[]', "#{name}-#{id}", false, :id => "subfolder_#{id}") %>
   <% end %>
 </td>
 <% if DmsfFolder.is_column_on?('id') %>

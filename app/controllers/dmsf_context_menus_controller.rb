@@ -23,15 +23,13 @@ class DmsfContextMenusController < ApplicationController
   helper :context_menus
 
   def dmsf
-    selected_files = params[:files] || []
-    selected_file_links = params[:file_links] || []
-    if selected_file_links.present?
-      selected_file_links.each do |id|
-        link = DmsfLink.find_by_id id
-        selected_files << link.target_id if link && !selected_files.include?(link.target_id.to_s)
-      end
+    selected_files = params[:ids].select{ |x| x =~ /file-\d+/ }.map{ |x| $1.to_i if x =~ /file-(\d+)/ }
+    selected_file_links = params[:ids].select{ |x| x =~ /file-link-\d+/ }.map{ |x| $1.to_i if x =~ /file-link-(\d+)/ }
+    selected_file_links.each do |id|
+      link = DmsfLink.find_by_id id
+      selected_files << link.target_id if link && !selected_files.include?(link.target_id.to_s)
     end
-    if selected_files.size == 1
+    if (selected_files.size == 1) && (params[:ids].size == 1)
       @file = DmsfFile.find selected_files[0]
     end
     render :layout => false

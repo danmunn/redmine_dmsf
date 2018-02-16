@@ -73,7 +73,7 @@
           :subfolder => subfolder,
           :link => nil,
           :id => subfolder.id,
-          :name => 'subfolders[]',
+          :name => 'folder',
           :title => subfolder.title,
           :position => 0 }) %>
     </tr>
@@ -91,7 +91,7 @@
           :subfolder => link.target_folder,
           :link => link,
           :id => link.id,
-          :name => 'dir_links[]',
+          :name => 'folder-link',
           :title => link.name,
           :position => 0}) %>
     </tr>
@@ -108,7 +108,7 @@
           :file => file,
           :link => nil,
           :id => file.id,
-          :name => 'files[]',
+          :name => 'file',
           :title => file.title,
           :position => 1 }) %>
     </tr>
@@ -125,7 +125,7 @@
           :file => link.target_file,
           :link => link,
           :id => link.id,
-          :name => 'file_links[]',
+          :name => 'file-link',
           :title => link.name,
           :position => 1}) %>
     </tr>
@@ -137,7 +137,7 @@
             :file => link.target_file,
             :link => link,
             :id => link.id,
-            :name => 'file_links[]',
+            :name => 'url-link',
             :title => link.name,
             :position => 1}) %>
       </tr>

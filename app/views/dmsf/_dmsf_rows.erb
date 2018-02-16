@@ -47,7 +47,7 @@
                          :subfolder => obj,
                          :link => nil,
                          :id => obj.id,
-                         :name => 'subfolders[]',
+                         :name => 'folder',
                          :title => obj.title,
                          :onclick => onclick,
                          :position => position}) %>
@@ -64,7 +64,7 @@
                          :subfolder => obj.target_folder,
                          :link => obj,
                          :id => obj.id,
-                         :name => 'dir_links[]',
+                         :name => 'folder-link',
                          :title => obj.name,
                          :onclick => onclick,
                          :position => position}) %>
@@ -80,7 +80,7 @@
               :file => obj,
               :link => nil,
               :id => obj.id,
-              :name => 'files[]',
+              :name => 'file',
               :title => obj.title,
               :onclick => onclick,
               :position => position}) %>
@@ -96,7 +96,7 @@
               :file => obj.target_file,
               :link => obj,
               :id => obj.id,
-              :name => 'file_links[]',
+              :name => 'file-link',
               :title => obj.name,
               :onclick => onclick,
               :position => position}) %>
@@ -108,7 +108,7 @@
               :file => obj.target_file,
               :link => obj,
               :id => obj.id,
-              :name => 'file_links[]',
+              :name => 'file-link',
               :title => obj.name,
               :onclick => onclick,
               :position => position}) %>

@@ -100,11 +100,11 @@ class DmsfController < ApplicationController
 
   def entries_operation
     # Download/Email
-    selected_folders = params[:subfolders] || []
-    selected_files = params[:files] || []
-    selected_dir_links = params[:dir_links] || []
-    selected_file_links = params[:file_links] || []
-    selected_url_links = params[:url_links] || []
+    selected_folders = params[:ids].select{ |x| x =~ /folder-\d+/ }.map{ |x| $1.to_i if x =~ /folder-(\d+)/ }
+    selected_files = params[:ids].select{ |x| x =~ /file-\d+/ }.map{ |x| $1.to_i if x =~ /file-(\d+)/ }
+    selected_dir_links = params[:ids].select{ |x| x =~ /folder-link-\d+/ }.map{ |x| $1.to_i if x =~ /folder-link-(\d+)/ }
+    selected_file_links = params[:ids].select{ |x| x =~ /file-link-\d+/ }.map{ |x| $1.to_i if x =~ /file-link-(\d+)/ }
+    selected_url_links = params[:ids].select{ |x| x =~ /url-link-\d+/ }.map{ |x| $1.to_i if x =~ /url-link-(\d+)/ }
 
     if selected_folders.blank? && selected_files.blank? &&
       selected_dir_links.blank? && selected_file_links.blank? &&
@@ -118,7 +118,7 @@ class DmsfController < ApplicationController
       (params[:email_entries].present? || params[:download_entries].present?)
         selected_dir_links.each do |id|
           link = DmsfLink.find_by_id id
-          selected_folders << link.target_id if link && !selected_folders.include?(link.target_id.to_s)
+          selected_folders << link.target_id if link && !selected_folders.include?(link.target_id)
       end
     end
 
@@ -126,7 +126,7 @@ class DmsfController < ApplicationController
       (params[:email_entries].present? || params[:download_entries].present?)
         selected_file_links.each do |id|
           link = DmsfLink.find_by_id id
-          selected_files << link.target_id if link && !selected_files.include?(link.target_id.to_s)
+          selected_files << link.target_id if link && !selected_files.include?(link.target_id)
       end
     end
 
@@ -403,50 +403,44 @@ class DmsfController < ApplicationController
   end
 
   def download_entries(selected_folders, selected_files)
-    begin
-      zip = DmsfZip.new
-      zip_entries(zip, selected_folders, selected_files)
-      zip.files.each do |f|
-        audit = DmsfFileRevisionAccess.new
-        audit.user = User.current
-        audit.dmsf_file_revision = f.last_revision
-        audit.action = DmsfFileRevisionAccess::DownloadAction
-        audit.save!
-      end
-      send_file(zip.finish,
-        :filename => filename_for_content_disposition("#{@project.name}-#{DateTime.now.strftime('%y%m%d%H%M%S')}.zip"),
-        :type => 'application/zip',
-        :disposition => 'attachment')
-    rescue Exception
-      raise
-    ensure
-      zip.close if zip
+    zip = DmsfZip.new
+    zip_entries(zip, selected_folders, selected_files)
+    zip.files.each do |f|
+      audit = DmsfFileRevisionAccess.new
+      audit.user = User.current
+      audit.dmsf_file_revision = f.last_revision
+      audit.action = DmsfFileRevisionAccess::DownloadAction
+      audit.save!
     end
+    send_file(zip.finish,
+      :filename => filename_for_content_disposition("#{@project.name}-#{DateTime.now.strftime('%y%m%d%H%M%S')}.zip"),
+      :type => 'application/zip',
+      :disposition => 'attachment')
+  rescue Exception
+    raise
+  ensure
+    zip.close if zip
   end
 
   def zip_entries(zip, selected_folders, selected_files)
     member = Member.where(:user_id => User.current.id, :project_id => @project.id).first
-    if selected_folders && selected_folders.is_a?(Array)
-      selected_folders.each do |selected_folder_id|
-        folder = DmsfFolder.visible.find_by_id selected_folder_id
-        if folder
-          zip.add_folder(folder, member, (folder.dmsf_folder.dmsf_path_str if folder.dmsf_folder))
-        else
-          raise FileNotFound
-        end
+    selected_folders.each do |selected_folder_id|
+      folder = DmsfFolder.visible.find_by_id selected_folder_id
+      if folder
+        zip.add_folder(folder, member, (folder.dmsf_folder.dmsf_path_str if folder.dmsf_folder))
+      else
+        raise FileNotFound
       end
     end
-    if selected_files && selected_files.is_a?(Array)
-      selected_files.each do |selected_file_id|
-        file = DmsfFile.visible.find_by_id selected_file_id
-        unless file && file.last_revision && File.exist?(file.last_revision.disk_file)
-          raise FileNotFound
-        end
-        unless (file.project == @project) || User.current.allowed_to?(:view_dmsf_files, file.project)
-          raise DmsfAccessError
-        end
-        zip.add_file(file, member, (file.dmsf_folder.dmsf_path_str if file.dmsf_folder)) if file
+    selected_files.each do |selected_file_id|
+      file = DmsfFile.visible.find_by_id selected_file_id
+      unless file && file.last_revision && File.exist?(file.last_revision.disk_file)
+        raise FileNotFound
       end
+      unless (file.project == @project) || User.current.allowed_to?(:view_dmsf_files, file.project)
+        raise DmsfAccessError
+      end
+      zip.add_file(file, member, (file.dmsf_folder.dmsf_path_str if file.dmsf_folder)) if file
     end
     max_files = Setting.plugin_redmine_dmsf['dmsf_max_file_download'].to_i
     if max_files > 0 && zip.files.length > max_files
