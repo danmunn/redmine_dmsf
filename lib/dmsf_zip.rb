@@ -45,8 +45,8 @@ class DmsfZip
     unless @files.include?(file)
       string_path = file.dmsf_folder.nil? ? '' : "#{file.dmsf_folder.dmsf_path_str}/"
       string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
-      if member && !member.title_format.nil? && !member.title_format.empty?
-        string_path += file.formatted_name(member.title_format)
+      if member && !member.dmsf_title_format.nil? && !member.dmsf_title_format.empty?
+        string_path += file.formatted_name(member.dmsf_title_format)
       else
         string_path += file.formatted_name(Setting.plugin_redmine_dmsf['dmsf_global_title_format'])
       end

@@ -21,7 +21,7 @@
 <% member = @project.members.where(:user_id => User.current.id).first %>
 <% if member %>
   <% mail_notification = member.dmsf_mail_notification %>
-  <% title_format = member.title_format %>
+  <% title_format = member.dmsf_title_format %>
 <% end %>
 
 <%= form_tag(dmsf_user_pref_save_path(@project)) do %>

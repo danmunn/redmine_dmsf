@@ -30,8 +30,8 @@ class DmsfStateController < ApplicationController
     member = @project.members.where(:user_id => User.current.id).first
     if member
       member.dmsf_mail_notification = params[:email_notify]
-      member.title_format = params[:title_format]
-      if format_valid?(member.title_format) && member.save
+      member.dmsf_title_format = params[:title_format]
+      if format_valid?(member.dmsf_title_format) && member.save
         flash[:notice] = l(:notice_your_preferences_were_saved)
       else
         flash[:error] = l(:notice_your_preferences_were_not_saved)

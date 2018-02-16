@@ -393,8 +393,8 @@ class DmsfFile < ActiveRecord::Base
 
   def display_name
     member = Member.where(:user_id => User.current.id, :project_id => self.project_id).first
-    if member && !member.title_format.nil? && !member.title_format.empty?
-      title_format = member.title_format
+    if member && !member.dmsf_title_format.nil? && !member.dmsf_title_format.empty?
+      title_format = member.dmsf_title_format
     else
       title_format = Setting.plugin_redmine_dmsf['dmsf_global_title_format']
     end
