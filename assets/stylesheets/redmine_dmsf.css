@@ -19,7 +19,14 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-/* DMSF table.list modifications */
+#browser {
+    border-bottom: none;
+}
+
+#browser_wrapper .ui-toolbar {
+    margin-right: -2px;
+}
+
 .dmsf_list .dmsf_th {
   border: none;
 }
@@ -36,8 +43,8 @@
 .list .dmsf_modified {
 	min-width: 127px;
 	width: 127px;
-  font-size: 0.8em;
-  text-align: left;
+    font-size: 0.8em;
+    text-align: left;
 }
 
 .dmsf_modified img {
@@ -46,22 +53,22 @@
 
 .list .dmsf_title {
 	width: 40%;
-  text-align: left;
+    text-align: left;
 }
 
 .list .dmsf_buttons {
 	min-width: 96px;
 	width: 96px;
-  text-align: left;
+    text-align: left;
 }
 
 .list .dmsf_checkbox {
-  width: 15px;
-  padding: 2px 0 0 0;
+    width: 15px;
+    padding: 2px 0 0 0;
 }
 
 .list .dmsf_checkbox input {
-  padding:0px;
+    padding:0px;
 }
 
 .list .dmsf_checkbox .DataTables_sort_wrapper {
@@ -91,8 +98,8 @@ table.display thead th div.DataTables_sort_wrapper span {
 
 .dmsf_filename {
 	padding: 0 10px 0 10px;
-  float: right;
-  font-size: 0.8em;
+    float: right;
+    font-size: 0.8em;
 	white-space: nowrap;
 }
 
@@ -103,7 +110,7 @@ table.display thead th div.DataTables_sort_wrapper span {
 
 .dmsf_author {
 	font-size: 0.8em;
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 .dmsf_version {
