@@ -24,7 +24,7 @@
   <li>
     <%= context_menu_link l(:button_download), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
       :ids => params[:ids], :download_entries => true), :method => :post, :class => 'icon-download',
-      :disabled => @disabled %>
+      :id => 'dmsf-cm-download', :disabled => @disabled %>
   </li>
   <li>
     <%= context_menu_link l(:field_mail), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
@@ -33,7 +33,7 @@
   </li>
   <li>
     <%= context_menu_link l(:button_delete), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
-      :ids => params[:ids], :destroy_entries => true), :method => :post, :class => 'icon-del',
+      :ids => params[:ids], :delete_entries => true), :method => :post, :class => 'icon-del',
       :disabled => @disabled %>
   </li>
   <% if @file %>
@@ -49,3 +49,9 @@
     </li>
   <% end %>
 </ul>
+
+<%= late_javascript_tag do %>
+  $('#dmsf-cm-download').click(function (event) {
+    contextMenuHide();
+  });
+<% end %>

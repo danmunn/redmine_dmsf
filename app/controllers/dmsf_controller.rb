@@ -138,29 +138,29 @@ class DmsfController < ApplicationController
       end
     end
 
-    if params[:email_entries].present?
-      email_entries(selected_folders, selected_files)
-    elsif params[:restore_entries].present?
-      restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links)
-      redirect_to :back
-    elsif params[:delete_entries].present?
-      delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, false)
-      redirect_to :back
-    elsif params[:destroy_entries].present?
-      delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, true)
-      redirect_to :back
-    else
-      download_entries(selected_folders, selected_files)
-      redirect_to :back
+    begin
+      if params[:email_entries].present?
+        email_entries(selected_folders, selected_files)# and return
+      elsif params[:restore_entries].present?
+        restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links)
+        redirect_to :back
+      elsif params[:delete_entries].present?
+        delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, false)
+        redirect_to :back
+      elsif params[:destroy_entries].present?
+        delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, true)
+        redirect_to :back
+      else
+        download_entries(selected_folders, selected_files)
+      end
+    rescue FileNotFound
+      render_404 #and return
+    rescue DmsfAccessError
+      render_403 # and return
+    rescue Exception => e
+      flash[:error] = e.message
+      Rails.logger.error e.message
     end
-  rescue FileNotFound
-    render_404
-  rescue DmsfAccessError
-    render_403
-  rescue Exception => e
-    flash[:error] = e.message
-    Rails.logger.error e.message
-    redirect_to :back
   end
 
   def tag_changed
