@@ -47,13 +47,9 @@ Dependencies
 
 ### Full-text search (optional)
 
-If you want to use fulltext search abilities, install xapian-omega and ruby-xapian packages. In case of using of Bitnami 
+If you want to use fulltext search abilities, install xapian packages. In case of using of Bitnami 
 stack or Ruby installed via RVM it might be necessary to install Xapian bindings from sources. See https://xapian.org
  for details. 
- 
-```
-sudo apt-get install xapian-omega ruby-xapian
-```
 
 To index some files with omega you may have to install some other packages like
 xpdf, antiword, ...
@@ -99,24 +95,21 @@ You can use following commands to install some of the required indexing tools:
 On Debian use:
 
 ```
-sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils \
- antiword unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi \
- djview djview3 uuid uuid-dev xz-utils libemail-outlook-message-perl
+sudo apt-get install xapian-omega ruby-xapian libxapian-dev xpdf poppler-utils antiword unzip catdoc libwpd-tools \
+libwps-tools gzip unrtf catdvi djview djview3 uuid uuid-dev xz-utils libemail-outlook-message-perl
 ```
 
 On Ubuntu use:
 
 ```
-sudo apt-get install xapian-omega libxapian-dev xpdf poppler-utils antiword \
- unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi djview djview3 \
- uuid uuid-dev xz-utils libemail-outlook-message-perl
+sudo apt-get install xapian-omega ruby-xapian libxapian-dev xpdf poppler-utils antiword  unzip catdoc libwpd-tools \
+libwps-tools gzip unrtf catdvi djview djview3 uuid uuid-dev xz-utils libemail-outlook-message-perl
 ```
 
 On CentOS use:
 ```
-sudo yum install xapian-omega libxapian-dev xpdf poppler-utils antiword \
- unzip catdoc libwpd-tools libwps-tools gzip unrtf catdvi djview djview3 \
- uuid uuid-dev xz libemail-outlook-message-perl
+sudo yum install xapian-binding libxapian-dev xpdf poppler-utils antiword unzip catdoc libwpd-tools libwps-tools gzip \
+unrtf catdvi djview djview3 uuid uuid-dev xz libemail-outlook-message-perl
 ```
 
 Usage
