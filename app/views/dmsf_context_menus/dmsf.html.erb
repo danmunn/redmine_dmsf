@@ -34,7 +34,7 @@
   <li>
     <%= context_menu_link l(:button_delete), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
       :ids => params[:ids], :delete_entries => true), :method => :post, :class => 'icon-del',
-      :disabled => @disabled %>
+      :data => { :confirm => l(:text_are_you_sure) }, :id => 'dmsf-cm-delete', :disabled => @disabled %>
   </li>
   <% if @file %>
     <li>
@@ -52,6 +52,10 @@
 
 <%= late_javascript_tag do %>
   $('#dmsf-cm-download').click(function (event) {
+    contextMenuHide();
+  });
+
+  $('#dmsf-cm-delete').click(function (event) {
     contextMenuHide();
   });
 <% end %>

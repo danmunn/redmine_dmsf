@@ -23,10 +23,17 @@
 <ul>
    <li>
     <%= context_menu_link l(:button_delete), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
-      :ids => params[:ids], :destroy_entries => true), :method => :post, :class => 'icon-del' %>
+      :ids => params[:ids], :destroy_entries => true), :method => :post, :class => 'icon-del', :id => 'dmsf-cm-delete',
+      :data => { :confirm => l(:text_are_you_sure) } %>
   </li>
   <li>
     <%= context_menu_link l(:title_restore), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
       :ids => params[:ids], :restore_entries => true), :method => :post, :class => 'icon-cancel' %>
   </li>
 </ul>
+
+<%= late_javascript_tag do %>
+  $('#dmsf-cm-delete').click(function (event) {
+    contextMenuHide();
+  });
+<% end %>

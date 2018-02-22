@@ -89,12 +89,12 @@
     <% if !@system_folder %>
       <div id="dmsf_buttons" class="dmsf_controls" style="float: left">
         <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries',
-                       :class => 'toggle-selection') if @file_view_allowed %>
+          :class => 'toggle-selection') if @file_view_allowed %>
         <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries',
-                       :class => 'toggle-selection') if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
+          :class => 'toggle-selection') if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
         <% if @file_delete_allowed %>
-            <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries',
-                           :class => 'toggle-selection') if @file_delete_allowed %>
+          <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries',
+            :class => 'toggle-selection', :data => { :confirm => l(:text_are_you_sure) }) if @file_delete_allowed %>
         <% end %>
       </div>
     <% end %>
@@ -124,19 +124,6 @@
 
 <%= context_menu %>
 
-<%= late_javascript_tag do %>
-    $('#entries_delete_button').click(function () {
-        if (window.confirm("<%= l(:text_are_you_sure) %>")) {
-            $('#entries_form').attr('action', "<%= delete_entries_path(:id => @project, :folder_id => @folder) %>");
-            $('#entries_form').submit();
-        }
-    });
-    $('.list_cf').change(function() {
-        $('#entries_form').attr('action', "<%= tag_changed_path(:id => @project, :folder_id => @folder) %>");
-        $('#entries_form').submit();
-    });
-<% end %>
-
 <% content_for :header_tags do %>
     <%= stylesheet_link_tag 'jquery.dataTables/datatables.min.css', :plugin => 'redmine_dmsf' %>
     <%= javascript_include_tag 'jquery.dataTables/datatables.min.js', :plugin => 'redmine_dmsf' %>
@@ -153,68 +140,74 @@
     <% modified = DmsfFolder.get_column_position('modified') %>
 
     <%= late_javascript_tag do %>
-        EASY.schedule.main(function() {
-            $("#browser").dataTable({
-                orderClasses: false,
-                responsive: {
-                    details: false
-                },
-                language: {
-                    url: "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
-                },
-                autoWidth: false,
-                paginate: false,
-                <% if title %>
-                  order: [[<%= title %>, "asc"]],
+      $("#browser").dataTable({
+          orderClasses: false,
+          responsive: {
+              details: false
+          },
+          language: {
+              url: "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
+          },
+          autoWidth: false,
+          paginate: false,
+          <% if title %>
+            order: [[<%= title %>, "asc"]],
+          <% end %>
+          sortingFixed: [[ <%= position %>, "asc"]],
+          columnDefs: [
+              { responsivePriority: 1, targets: <%= title %> },
+              { responsivePriority: 2, targets: <%= commands %> },
+              { searchable: false, targets: [0, <%= commands %>, <%= position %>, <%= size_calculated %>, <%= modified_calculated %>, <%= version_calculated %>] },
+              { sortable: false, targets: [0, <%= commands %>] }
+              <% if size %>
+                ,{ iDataSort: <%= size_calculated %>, targets: [ <%= size %> ] }
+              <% end %>
+              <% if modified %>
+                ,{ iDataSort: <%= modified_calculated %>, targets: [ <%= modified %> ] }
+              <% end %>
+              <% if version %>
+                ,{ iDataSort: <%= version_calculated %>, targets: [ <%= version %> ] }
+              <% end %>
+          ],
+          "fnInitComplete": function() {
+            var browserFilter = $("#browser_filter");
+            $("#dmsf_buttons").insertBefore(browserFilter);
+            $("#dmsf_tag").insertBefore(browserFilter);
+          },
+          "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+              <% if @tree_view %>
+                <% if @folder %>
+                  return "<%= "#{l(:label_number_of_folders)}: #{@folder.deep_folder_count} #{l(:label_number_of_documents)}: #{@folder.deep_file_count}" %>";
+                <% else %>
+                  return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFolder').count}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => ['DmsfFile', 'DmsfUrl']).count}" %>";
                 <% end %>
-                sortingFixed: [[ <%= position %>, "asc"]],
-                columnDefs: [
-                    { responsivePriority: 1, targets: <%= title %> },
-                    { responsivePriority: 2, targets: <%= commands %> },
-                    { searchable: false, targets: [0, <%= commands %>, <%= position %>, <%= size_calculated %>, <%= modified_calculated %>, <%= version_calculated %>] },
-                    { sortable: false, targets: [0, <%= commands %>] }
-                    <% if size %>
-                    ,{ iDataSort: <%= size_calculated %>, targets: [ <%= size %> ] }
-                    <% end %>
-                    <% if modified %>
-                    ,{ iDataSort: <%= modified_calculated %>, targets: [ <%= modified %> ] }
-                    <% end %>
-                    <% if version %>
-                    ,{ iDataSort: <%= version_calculated %>, targets: [ <%= version %> ] }
-                    <% end %>
-                ],
-                "fnInitComplete": function() {
-                    $("#dmsf_buttons").prependTo($("#browser_wrapper div.fg-toolbar")[0]);
-                    $("#dmsf_tag").prependTo($("#browser_wrapper div.fg-toolbar")[0]);
-                },
-                "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-                    <% if @tree_view %>
-                    <% if @folder %>
-                    return "<%= "#{l(:label_number_of_folders)}: #{@folder.deep_folder_count} #{l(:label_number_of_documents)}: #{@folder.deep_file_count}" %>";
-                    <% else %>
-                    return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFolder').count}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => ['DmsfFile', 'DmsfUrl']).count}" %>";
-                    <% end %>
-                    <% else %>
-                    return "<%= "#{l(:label_number_of_folders)}: #{@subfolders.count + @dir_links.count}, #{l(:label_number_of_documents)}: #{@files.count + @file_links.count + @url_links.count}" %>";
-                    <% end %>
-                }
-            });
+              <% else %>
+                return "<%= "#{l(:label_number_of_folders)}: #{@subfolders.count + @dir_links.count}, #{l(:label_number_of_documents)}: #{@files.count + @file_links.count + @url_links.count}" %>";
+              <% end %>
+          }
+      });
 
-            $("[data-downloadurl]").each(function() {
-                var url = this.getAttribute("data-downloadurl");
-                if (this.addEventListener) {
-                    this.addEventListener("dragstart", function(e) {
-                        if (e.dataTransfer) {
-                            e.dataTransfer.setData("DownloadURL", url);
-                        }
-                    },false);
-                }
-            });
+      $("[data-downloadurl]").each(function() {
+          var url = this.getAttribute("data-downloadurl");
+          if (this.addEventListener) {
+              this.addEventListener("dragstart", function(e) {
+                  if (e.dataTransfer) {
+                      e.dataTransfer.setData("DownloadURL", url);
+                  }
+              },false);
+          }
+      });
 
-            $("#entries_form").submit(function () {
-                $(this).removeAttr("data-submitted");
-            });
-        });
+      var entriesForm = $('#entries_form');
+
+      entriesForm.submit(function () {
+          $(this).removeAttr("data-submitted");
+      });
+
+      $('.list_cf').change(function() {
+        entriesForm.attr('action', "<%= tag_changed_path(:id => @project, :folder_id => @folder) %>");
+        entriesForm.submit();
+      });
     <% end %>
 <% end %>
 
