@@ -285,7 +285,9 @@ function dmsfSetupFileDrop() {
     }
 }
 
-EASY.schedule.late(function () {
-    dmsfSetupFileDrop();
-    $(document).on("erui_new_dom", dmsfSetupFileDrop);
-});
+$( document ).ready(function() {
+    EASY.schedule.late(function () {
+        dmsfSetupFileDrop();
+        $(document).on("erui_new_dom", dmsfSetupFileDrop);
+    });
+})
