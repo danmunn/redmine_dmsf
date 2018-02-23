@@ -108,8 +108,8 @@ libwps-tools gzip unrtf catdvi djview djview3 uuid uuid-dev xz-utils libemail-ou
 
 On CentOS use:
 ```
-sudo yum install xapian-binding libxapian-dev xpdf poppler-utils antiword unzip catdoc libwpd-tools libwps-tools gzip \
-unrtf catdvi djview djview3 uuid uuid-dev xz libemail-outlook-message-perl
+sudo yum install xapian-core xapian-bindings-ruby libxapian-dev xpdf poppler-utils antiword unzip catdoc libwpd-tools \
+libwps-tools gzip unrtf catdvi djview djview3 uuid uuid-dev xz libemail-outlook-message-perl
 ```
 
 Usage

@@ -54,7 +54,7 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
 
   def test_mkcol_fails_to_create_folder_at_root_level
     xml_http_request  :mkcol, '/dmsf/webdav/test1', nil, @admin
-    assert_response :error # 501 - Not Implemented at this level
+    assert_response 405 # 405 - Method Not Allowed
   end
 
   def test_should_not_succeed_on_a_non_existant_project

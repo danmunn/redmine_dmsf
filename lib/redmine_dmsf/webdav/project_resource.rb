@@ -98,6 +98,11 @@ module RedmineDmsf
         OK
       end
 
+      def make_collection
+        # It's not allowed to create folders on project level
+        MethodNotAllowed
+      end
+
       def folder
         nil
       end
