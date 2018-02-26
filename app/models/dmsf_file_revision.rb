@@ -95,6 +95,16 @@ class DmsfFileRevision < ActiveRecord::Base
     end
   end
 
+  def obsolete()
+    if self.dmsf_file.locked_for_user?
+      errors[:base] << l(:error_file_is_locked)
+      return false
+    end
+    
+    self.workflow = DmsfWorkflow::STATE_OBSOLETE
+    save
+  end
+
   def restore
     self.deleted = DmsfFile::STATUS_ACTIVE
     self.deleted_by_user = nil
@@ -207,6 +217,8 @@ class DmsfFileRevision < ActiveRecord::Base
         str + l(:title_assigned)
       when DmsfWorkflow::STATE_REJECTED
         str + l(:title_rejected)
+      when DmsfWorkflow::STATE_OBSOLETE
+        str + l(:title_obsolete)
       else
         str + l(:title_none)
     end
