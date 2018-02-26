@@ -24,8 +24,8 @@ class DmsfFilesController < ApplicationController
 
   menu_item :dmsf
 
-  before_action :find_file, :except => [:delete_revision]
-  before_action :find_revision, :only => [:delete_revision]
+  before_action :find_file, :except => [:delete_revision, :obsolete_revision]
+  before_action :find_revision, :only => [:delete_revision, :obsolete_revision]
   before_action :authorize
   before_action :tree_view, :only => [:delete]
   before_action :permissions
@@ -234,6 +234,18 @@ class DmsfFilesController < ApplicationController
         end
         flash[:notice] = l(:notice_revision_deleted)
         log_activity('deleted')
+      else
+        flash[:error] = @revision.errors.full_messages.join(', ')
+      end
+    end
+    redirect_to :action => 'show', :id => @file
+  end
+
+  def obsolete_revision
+    if @revision
+      if @revision.obsolete()
+        flash[:notice] = l(:notice_revision_obsoleted)
+        log_activity('obsoleted')
       else
         flash[:error] = @revision.errors.full_messages.join(', ')
       end

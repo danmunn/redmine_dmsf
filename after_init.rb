@@ -39,7 +39,7 @@ def init
                                  :notify_activate, :notify_deactivate, :restore],
                        :dmsf_folder_permissions => [:new, :append, :autocomplete_for_user]}
       pmap.permission :file_manipulation,
-                      {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate,
+                      {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :obsolete_revision, :notify_activate,
                                        :notify_deactivate, :restore],
                        :dmsf_upload => [:upload_files, :upload_file, :upload, :commit_files, :commit,
                                         :delete_dmsf_attachment, :delete_dmsf_link_attachment],
