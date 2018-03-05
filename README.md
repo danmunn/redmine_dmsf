@@ -322,4 +322,4 @@ Additional Documentation
 
 ---
 
-Special thanks to [![JetBreains logo](jetbrains-variant-3.svg =59x68)](https://www.jetbrains.com/) for providing an excelent IDE.
+Special thanks to <a href="https://jetbrains.com"><img src="jetbrains-variant-3.svg" alt="JetBrains logo" style="width: 59px; height: 68px;"/></a> for providing an excelent IDE.
