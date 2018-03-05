@@ -82,7 +82,7 @@
                        :max_concurrent_uploads => Redmine::Configuration['max_concurrent_ajax_uploads'].to_i,
                        :upload_path => dmsf_uploads_path(:format => 'js'),
                        :description_placeholder => l(:label_optional_description),
-                       :project => "#{@project.identifier}",
+                       :project => @project ? "#{@project.identifier}" : "",
                        :description => description,
                        :awf => awf
                    } %>
