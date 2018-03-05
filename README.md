@@ -319,3 +319,7 @@ Additional Documentation
 
 [CHANGELOG.md](CHANGELOG.md) - Project changelog
 [dmsf_user_guide.odt](dmsf_user_guide.odt) - User's guide
+
+---
+
+Special thanks to [![JetBreains logo](jetbrains-variant-3.png)](https://www.jetbrains.com/) for providing an excelent IDE.
