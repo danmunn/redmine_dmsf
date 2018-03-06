@@ -138,6 +138,7 @@
     <% version_calculated = DmsfFolder.get_column_position('version_calculated') %>
     <% size = DmsfFolder.get_column_position('size') %>
     <% modified = DmsfFolder.get_column_position('modified') %>
+    <% clear_title = DmsfFolder.get_column_position('clear_title') %>
 
     <%= late_javascript_tag do %>
       $("#browser").dataTable({
@@ -157,8 +158,11 @@
           columnDefs: [
               { responsivePriority: 1, targets: <%= title %> },
               { responsivePriority: 2, targets: <%= commands %> },
-              { searchable: false, targets: [0, <%= commands %>, <%= position %>, <%= size_calculated %>, <%= modified_calculated %>, <%= version_calculated %>] },
+              { searchable: false, targets: [0, <%= commands %>, <%= position %>, <%= size_calculated %>, <%= modified_calculated %>, <%= version_calculated %>, <%= clear_title %>] },
               { sortable: false, targets: [0, <%= commands %>] }
+              <% if title %>
+                ,{ iDataSort: <%= clear_title %>, targets: [ <%= title %> ] }
+              <% end %>
               <% if size %>
                 ,{ iDataSort: <%= size_calculated %>, targets: [ <%= size %> ] }
               <% end %>

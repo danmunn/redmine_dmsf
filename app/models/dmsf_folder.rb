@@ -441,15 +441,18 @@ class DmsfFolder < ActiveRecord::Base
     # 11 - (position)
     pos += 1
     return pos if column == 'position'
-    # 12 - (size)
+    # 12 - (size calculated)
     pos += 1
     return pos if column == 'size_calculated'
-    # 13 - (modified)
+    # 13 - (modified calculated)
     pos += 1
     return pos if column == 'modified_calculated'
-    # 14 - (version)
+    # 14 - (version calculated)
     pos += 1
     return pos if column == 'version_calculated'
+    # 15 - (clear title)
+    pos += 1
+    return pos if column == 'clear_title'
     nil
   end
 
