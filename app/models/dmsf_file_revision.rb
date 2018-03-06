@@ -153,13 +153,16 @@ class DmsfFileRevision < ActiveRecord::Base
   
   def storage_base_path
     time = self.created_at || DateTime.now
-    path = time.strftime('%Y/%m')
-    DmsfFile.storage_path.join path
+    DmsfFile.storage_path.join(time.strftime('%Y')).join(time.strftime('%m'))
   end
 
   def disk_file(search_if_not_exists = true)
     path = self.storage_base_path
-    FileUtils.mkdir_p(path) unless File.exist?(path)
+    begin
+      FileUtils.mkdir_p(path) unless File.exist?(path)
+    rescue Exception => e
+      Rails.logger.error e.message
+    end
     filename = path.join(self.disk_filename)
     if search_if_not_exists
       unless File.exist?(filename)
