@@ -119,60 +119,45 @@ DMSF is designed to act as project module, so it must be checked as an enabled m
 
 Search will now automatically search DMSF content when a Redmine search is performed, additionally a "Documents" and "Folders" check box will be visible, allowing you to search DMSF content exclusively.
 
-###Linking DMSF files from Wiki entries:
+Linking DMSF files from Wiki entries
+------------------------------------
 
-####Link to a document with id 17:
-`{{dmsf(17)}}`
+Link to a document with id 17: `{{dmsf(17)}}`
 
-####Link to a document with id 17 with link text "File"
-`{{dmsf(17, File)}}`
+Link to a document with id 17 with link text "File": `{{dmsf(17, File)}}`
 
-####Link to the details of a document with id 17
-`{{dmsfd(17)}}`
+Link to the details of a document with id 17: `{{dmsfd(17)}}`
 
-####Link to the description of a document with id 17
-`{{dmsfdesc(17)}}`
+Link to the description of a document with id 17: `{{dmsfdesc(17)}}`
 
-####Link to the preview of 5 lines from a document with id 17
-`{{dmsft(17, 5)}}`
+Link to the preview of 5 lines from a document with id 17: `{{dmsft(17, 5)}}`
 
-####An inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...
-`{{dmsf_image(8)}}`
+Inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...: `{{dmsf_image(8)}}`
 
-####An inline picture with custom size
-`{{dmsf_image(8, size=300)}}`
+Inline picture with custom size: `{{dmsf_image(8, size=300)}}`
 
-####An inline picture with custom size
-`{{dmsf_image(8, size=50%)}}`
+Inline picture with custom size: `{{dmsf_image(8, size=50%)}}`
 
-####An inline picture with custom height
-`{{dmsf_image(8, height=300)}}`
+Inline picture with custom height: `{{dmsf_image(8, height=300)}}`
 
-####An inline picture with custom width
-`{{dmsf_image(8, width=300)}}`
+Inline picture with custom width: `{{dmsf_image(8, width=300)}}`
 
-####An inline picture with custom size
-`{{dmsf_image(8, size=640x480)}}`
+Inline picture with custom size: `{{dmsf_image(8, size=640x480)}}`
 
-####A thumbnail with height of 200px
-`{{dmsftn(8)}}`
+Thumbnail with height of 200px: `{{dmsftn(8)}}`
 
-####A thumbnail with custom size
-`{{dmsftn(8, size=300)}}`
+Thumbnail with custom size: `{{dmsftn(8, size=300)}}`
 
-####Approval workflow status of a document with id 8
-`{{dmsfw(8)}}`
-
+Approval workflow status of a document with id 8: `{{dmsfw(8)}}`
 
 The DMSF document/revision id can be found in document details.
 
-###Linking DMSF folders from Wiki entries:
+Linking DMSF folders from Wiki entries
+--------------------------------------
 
-####Link to a folder with id 5:
-`{{dmsff(5)}}`
+Link to a folder with id 5: `{{dmsff(5)}}`
 
-####Link to a folder with id 5 with link text "Folder"
-`{{dmsff(5, Folder)}}`
+Link to a folder with id 5 with link text "Folder": `{{dmsff(5, Folder)}}`
 
 The DMSF folder id can be found in the link when opening folders within Redmine.
 
