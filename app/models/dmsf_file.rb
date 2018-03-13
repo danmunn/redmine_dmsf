@@ -97,7 +97,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def self.storage_path
-    path = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    path = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].try(:strip)
     if path.blank?
       path = Pathname.new('files').join('dmsf').to_s
     else

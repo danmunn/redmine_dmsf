@@ -142,7 +142,11 @@ class DmsfFileRevision < ActiveRecord::Base
 
   def disk_file(search_if_not_exists = true)
     path = self.storage_base_path
-    FileUtils.mkdir_p(path) unless File.exist?(path)
+    begin
+      FileUtils.mkdir_p(path) unless File.exist?(path)
+    rescue StandardError => e
+      Rails.logger.error e.message
+    end
     filename = path.join(self.disk_filename)
     if search_if_not_exists
       unless File.exist?(filename)
