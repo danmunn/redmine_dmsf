@@ -95,8 +95,10 @@ module RedmineDmsf
   end
 end
 
-Rails.configuration.to_prepare do
-  unless EasyCrmCasesController.included_modules.include?(RedmineDmsf::EasyCrmCasesControllerPatch)
-    EasyCrmCasesController.send(:include, RedmineDmsf::EasyCrmCasesControllerPatch)
+if Redmine::Plugin.installed?(:easy_crm)
+  Rails.configuration.to_prepare do
+    unless EasyCrmCasesController.included_modules.include?(RedmineDmsf::EasyCrmCasesControllerPatch)
+      EasyCrmCasesController.send(:include, RedmineDmsf::EasyCrmCasesControllerPatch)
+    end
   end
 end

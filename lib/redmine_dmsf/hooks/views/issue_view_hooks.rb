@@ -71,7 +71,9 @@ module RedmineDmsf
       end
 
       def view_issues_show_thumbnails(context={})
-        show_thumbnails(context[:container], context[:controller])
+        unless context[:options][:only_mails].present?
+          show_thumbnails(context[:container], context[:controller])
+        end
       end
 
       def view_issues_dms_thumbnails(context={})
