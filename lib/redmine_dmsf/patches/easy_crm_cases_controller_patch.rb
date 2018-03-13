@@ -112,4 +112,6 @@ module RedmineDmsf
   end
 end
 
-EasyCrmCasesController.send(:prepend, RedmineDmsf::Patches::EasyCrmCasesControllerPatch)
+if Redmine::Plugin.installed?(:easy_crm)
+  EasyCrmCasesController.send(:prepend, RedmineDmsf::Patches::EasyCrmCasesControllerPatch)
+end

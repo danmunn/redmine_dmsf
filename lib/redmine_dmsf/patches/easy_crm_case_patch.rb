@@ -177,9 +177,10 @@ module RedmineDmsf
   end
 end
 
-# Apply patch
-Rails.configuration.to_prepare do
-  unless EasyCrmCase.included_modules.include?(RedmineDmsf::Patches::EasyCrmCasePatch)
-    EasyCrmCase.send(:include, RedmineDmsf::Patches::EasyCrmCasePatch)
+if Redmine::Plugin.installed?(:easy_crm)
+  Rails.configuration.to_prepare do
+    unless EasyCrmCase.included_modules.include?(RedmineDmsf::Patches::EasyCrmCasePatch)
+      EasyCrmCase.send(:include, RedmineDmsf::Patches::EasyCrmCasePatch)
+    end
   end
 end
