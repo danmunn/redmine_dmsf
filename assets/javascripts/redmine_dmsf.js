@@ -154,3 +154,77 @@ function dmsfExpandRows(EL, parentRow, url) {
       alert('An error in rows expanding');
   });
 }
+
+/* Plupload */
+function initPlUploader(uploader, formUrl, maxFileSize, maxFileCount, flashUrl, silverLightUrl) {
+    uploader.html('<div></div>');
+    uploader = $('div', uploader);
+    uploader.plupload({
+        runtimes : 'html5,flash,silverlight,html4',
+        url : formUrl,
+        max_file_size : maxFileSize,
+        max_file_count: maxFileCount,
+        multipart: true,
+        // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
+        dragdrop: true,
+        multipart_params : { authenticity_token : $('input[name=authenticity_token]').val() },
+        // Rename files by clicking on their titles
+        rename: true,
+        // Views to activate
+        views: {
+            list: true,
+            thumbs: true, // Show thumbs
+            active: 'thumbs'
+        },
+        // Flash settings
+        flash_swf_url : flashUrl,
+        // Silverlight settings
+        silverlight_xap_url : silverLightUrl
+    });
+    $('.plupload_scroll', uploader).resizable({
+        handles: 's'
+    });
+    var pluploader = uploader.plupload('getUploader');
+
+    pluploader.bind('FileUploaded', function(pluploader, file, response) {
+        var responseObject = $.parseJSON(response.response);
+        if (responseObject == null) { //Bug: on Firefox folders entries act unexpectedly.
+            file.status = plupload.FAILED;
+            pluploader.trigger('UploadProgress', file);
+            pluploader.trigger('QueueChanged');
+        } else {
+            if (responseObject.error == null) {
+                var disk_filename_input = $('<input/>').attr('type', 'hidden')
+                    .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][disk_filename]')
+                    .val(responseObject.disk_filename);
+                uploader.append(disk_filename_input);
+                var content_type_input = $('<input/>').attr('type', 'hidden')
+                    .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][content_type]')
+                    .val(responseObject.content_type);
+                uploader.append(content_type_input);
+                var original_filename_input = $('<input/>').attr('type', 'hidden')
+                    .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][original_filename]')
+                    .val(responseObject.original_filename);
+                uploader.append(original_filename_input);
+                var tempfile_path = $('<input/>').attr('type', 'hidden')
+                    .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][tempfile_path]')
+                    .val(responseObject.tempfile_path);
+                uploader.append(tempfile_path);
+            } else {
+                file.status = plupload.FAILED;
+                pluploader.trigger('UploadProgress', file);
+                pluploader.trigger('QueueChanged');
+            }
+        }
+        if(pluploader.total.uploaded == pluploader.files.length) {
+            $('#uploadform').submit();
+        }
+        else if((pluploader.total.uploaded + pluploader.total.failed) == pluploader.files.length) {
+            setTimeout(function() {$('#uploadform').submit();}, 2000);
+        }
+        else {
+            window.dmsfFileFieldCount++;
+        }
+        return true;
+    });
+}

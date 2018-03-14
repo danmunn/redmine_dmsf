@@ -45,6 +45,14 @@
   </div>
 <% end %>
 
+<%
+  form_url = url_for({:controller => 'dmsf_upload', :action => 'upload_file', :id => @project})
+  max_file_size = "#{@ajax_upload_size}mb"
+  max_file_count = Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i if Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i > 0
+  flash_url = plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.swf')
+  silver_light_url = plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.xap')
+%>
+
 <%= late_javascript_tag do %>
   var originalUploaderContent;
   var uploader = $('#dmsf_uploader');
@@ -54,10 +62,24 @@
       uploader.html(originalUploaderContent);
       dmsfSetupFileDrop();
     } else {
-      initPlUploader(uploader);
+      initPlUploader(
+        uploader,
+        '<%= form_url %>',
+        '<%= max_file_size %>',
+        '<%= max_file_count %>',
+        '<%= flash_url %>',
+        '<%= silver_light_url %>'
+      );
     }
   });
-  initPlUploader(uploader);
+  initPlUploader(
+    uploader,
+    '<%= form_url %>',
+    '<%= max_file_size %>',
+    '<%= max_file_count %>',
+    '<%= flash_url %>',
+    '<%= silver_light_url %>'
+  );
   window.dmsfFileFieldCount = 1;
 <% end %>
 
@@ -66,72 +88,4 @@
   <%= javascript_include_tag 'plupload/js/plupload.full.min.js', :plugin => :redmine_dmsf, defer: true %>
   <%= javascript_include_tag 'plupload/js/jquery.ui.plupload/jquery.ui.plupload.js', :plugin => :redmine_dmsf, defer: true %>
   <%= javascript_include_tag(js_url, :plugin => :redmine_dmsf, defer: true) %>
-  <%= late_javascript_tag do %>
-    function initPlUploader(uploader) {
-      uploader.html('<div></div>');
-      uploader = $('div', uploader);
-      uploader.plupload({
-        runtimes : 'html5,flash,silverlight,html4',
-        url : '<%= url_for({:controller => 'dmsf_upload', :action => 'upload_file', :id => @project}) %>',
-        max_file_size : '<%= "#{@ajax_upload_size}mb" %>',
-        max_file_count: '<%= Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i if Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i > 0 %>',
-        multipart: true,
-        // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
-        dragdrop: true,
-        multipart_params : { authenticity_token : $('input[name=authenticity_token]').val() },
-        // Rename files by clicking on their titles
-        rename: true,
-        // Views to activate
-        views: {
-            list: true,
-            thumbs: true, // Show thumbs
-            active: 'thumbs'
-        },
-        // Flash settings
-        flash_swf_url : '<%= plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.swf') %>',
-        // Silverlight settings
-        silverlight_xap_url : '<%= plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.xap') %>'
-      });
-      $('.plupload_scroll',uploader).resizable({
-        handles: 's'
-      });
-      var pluploader = uploader.plupload('getUploader');
-
-      pluploader.bind('FileUploaded', function(pluploader, file, response) {
-        var responseObject = $.parseJSON(response.response);
-        if (responseObject == null) { //Bug: on Firefox folders entries act unexpectedly.
-          file.status = plupload.FAILED;
-          pluploader.trigger('UploadProgress', file);
-          pluploader.trigger('QueueChanged');
-        } else {
-          if (responseObject.error == null) {
-            var disk_filename_input = $('<input/>').attr('type', 'hidden')
-                    .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][disk_filename]')
-                    .val(responseObject.disk_filename);
-            uploader.append(disk_filename_input);
-            var content_type_input = $('<input/>').attr('type', 'hidden')
-                    .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][content_type]')
-                    .val(responseObject.content_type);
-            uploader.append(content_type_input);
-            var original_filename_input = $('<input/>').attr('type', 'hidden')
-                    .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][original_filename]')
-                    .val(responseObject.original_filename);
-            uploader.append(original_filename_input);
-            var tempfile_path = $('<input/>').attr('type', 'hidden')
-                .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][tempfile_path]')
-                .val(responseObject.tempfile_path);
-            uploader.append(tempfile_path);
-          } else {
-              file.status = plupload.FAILED;              
-              pluploader.trigger('UploadProgress', file);
-              pluploader.trigger('QueueChanged');             
-          }
-        }
-        if(pluploader.total.uploaded == pluploader.files.length) $('#uploadform').submit();
-        else if((pluploader.total.uploaded + pluploader.total.failed) == pluploader.files.length) setTimeout(function() {$('#uploadform').submit();}, 2000);
-        else window.dmsfFileFieldCount++;
-        return true;
-      });
-    }
-  <% end %>
 <% end %>
