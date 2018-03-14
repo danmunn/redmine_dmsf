@@ -45,8 +45,7 @@
   </div>
 <% end %>
 
-<%# TODO: late_javascript_tag is not working here %>
-<%= javascript_tag do %>
+<%= late_javascript_tag do %>
   var originalUploaderContent;
   var uploader = $('#dmsf_uploader');
   originalUploaderContent = uploader.html();
@@ -59,15 +58,15 @@
     }
   });
   initPlUploader(uploader);
-  var dmsfFileFieldCount = 1;
+  window.dmsfFileFieldCount = 1;
 <% end %>
 
 <% content_for :header_tags do %>
-  <%= stylesheet_link_tag 'plupload/jquery.ui.plupload.css', :plugin => 'redmine_dmsf' %>  
-  <%= javascript_include_tag 'plupload/js/plupload.full.min.js', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag 'plupload/js/jquery.ui.plupload/jquery.ui.plupload.js', :plugin => 'redmine_dmsf' %>
-  <%= javascript_include_tag(js_url, :plugin => 'redmine_dmsf') %>
-  <%= javascript_tag do %>
+  <%= stylesheet_link_tag 'plupload/jquery.ui.plupload.css', :plugin => :redmine_dmsf %>
+  <%= javascript_include_tag 'plupload/js/plupload.full.min.js', :plugin => :redmine_dmsf, defer: true %>
+  <%= javascript_include_tag 'plupload/js/jquery.ui.plupload/jquery.ui.plupload.js', :plugin => :redmine_dmsf, defer: true %>
+  <%= javascript_include_tag(js_url, :plugin => :redmine_dmsf, defer: true) %>
+  <%= late_javascript_tag do %>
     function initPlUploader(uploader) {
       uploader.html('<div></div>');
       uploader = $('div', uploader);
@@ -107,19 +106,19 @@
         } else {
           if (responseObject.error == null) {
             var disk_filename_input = $('<input/>').attr('type', 'hidden')
-                    .attr('name', 'uploaded[' + dmsfFileFieldCount + '][disk_filename]')
+                    .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][disk_filename]')
                     .val(responseObject.disk_filename);
             uploader.append(disk_filename_input);
             var content_type_input = $('<input/>').attr('type', 'hidden')
-                    .attr('name', 'uploaded[' + dmsfFileFieldCount + '][content_type]')
+                    .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][content_type]')
                     .val(responseObject.content_type);
             uploader.append(content_type_input);
             var original_filename_input = $('<input/>').attr('type', 'hidden')
-                    .attr('name', 'uploaded[' + dmsfFileFieldCount + '][original_filename]')
+                    .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][original_filename]')
                     .val(responseObject.original_filename);
             uploader.append(original_filename_input);
             var tempfile_path = $('<input/>').attr('type', 'hidden')
-                .attr('name', 'uploaded[' + dmsfFileFieldCount + '][tempfile_path]')
+                .attr('name', 'uploaded[' + window.dmsfFileFieldCount + '][tempfile_path]')
                 .val(responseObject.tempfile_path);
             uploader.append(tempfile_path);
           } else {
@@ -130,7 +129,7 @@
         }
         if(pluploader.total.uploaded == pluploader.files.length) $('#uploadform').submit();
         else if((pluploader.total.uploaded + pluploader.total.failed) == pluploader.files.length) setTimeout(function() {$('#uploadform').submit();}, 2000);
-        else dmsfFileFieldCount++;
+        else window.dmsfFileFieldCount++;
         return true;
       });
     }

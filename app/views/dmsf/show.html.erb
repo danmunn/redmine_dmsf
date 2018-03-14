@@ -125,8 +125,8 @@
 <%= context_menu %>
 
 <% content_for :header_tags do %>
-    <%= stylesheet_link_tag 'jquery.dataTables/datatables.min.css', :plugin => 'redmine_dmsf' %>
-    <%= javascript_include_tag 'jquery.dataTables/datatables.min.js', :plugin => 'redmine_dmsf' %>
+    <%= stylesheet_link_tag 'jquery.dataTables/datatables.min.css', :plugin => :redmine_dmsf %>
+    <%= javascript_include_tag 'jquery.dataTables/datatables.min.js', :plugin => :redmine_dmsf, defer: true %>
 
     <% title = DmsfFolder.get_column_position('title') %>
     <% position = DmsfFolder.get_column_position('position') %>
