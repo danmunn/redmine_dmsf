@@ -95,7 +95,7 @@ module RedmineDmsf
       ##################################################################################################################
       # New methods
 
-      before_action :controller_easy_crm_cases_before_save, only: [:create, :update, :bulk_update]
+      EasyCrmCasesController::before_action :controller_easy_crm_cases_before_save, only: [:create, :update, :bulk_update]
 
       def controller_easy_crm_cases_before_save
         easy_crm_cases = @easy_crm_cases
