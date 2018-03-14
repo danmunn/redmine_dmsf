@@ -26,8 +26,17 @@ gem 'rubyzip', '>= 1.0.0'
 gem 'zip-zip'
 gem 'simple_enum'
 gem 'uuidtools'
-gem 'dav4rack', git: 'https://github.com/planio-gmbh/dav4rack.git', branch: 'master'
 gem 'dalli'
+
+# Redmine extensions
 unless %w(easyproject easy_gantt).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
   gem 'redmine_extensions', '~> 0.2.5'
 end
+
+# Dav4Rack
+gem 'rake'
+gem 'mongo'
+gem 'unicorn'
+gem 'byebug', platforms: :mri
+gem 'ruby-prof'
+gem 'ox'

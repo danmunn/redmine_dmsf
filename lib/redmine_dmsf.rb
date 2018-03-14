@@ -41,6 +41,7 @@ if defined?(EasyExtensions)
 end
 
 # Load up classes that make up our WebDAV solution ontop of DAV4Rack
+require 'dav4rack'
 require 'redmine_dmsf/webdav/custom_middleware'
 require 'redmine_dmsf/webdav/base_resource'
 require 'redmine_dmsf/webdav/dmsf_resource'

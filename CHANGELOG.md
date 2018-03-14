@@ -6,6 +6,10 @@ Changelog for Redmine DMSF
         
     Javascript on pages is loaded asynchronously
     Obsolete Dav4Rack gem replaced with an up to date fork by Planio (Consequently WebDAV caching has been removed, sorry...)
+        Instead of usage their gem in the Gemfile:
+            gem 'dav4rack', git: 'https://github.com/planio-gmbh/dav4rack.git', branch: 'master'
+        The library is a part of the project (lib/dav4rack).
+        Cloned from gem https://github.com/planio-gmbh/dav4rack.git    
     Project members can be chosen as recipients when sending documents by email
     Responsive view
     Direct editing of document in MS Office
