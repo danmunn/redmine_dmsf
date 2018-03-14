@@ -24,9 +24,11 @@ DMSF maintenance task
 
 Available options:
   *dry_run - test, no changes to the database
+  *forceSHA256 - replace old MD5 with SHA256
 
 Example:
   bundle exec rake redmine:dmsf_create_digests RAILS_ENV="production"
+  bundle exec rake redmine:dmsf_create_digests forceSHA256=1 RAILS_ENV="production"
   bundle exec rake redmine:dmsf_create_digests dry_run=1 RAILS_ENV="production"
 END_DESC
 
@@ -41,10 +43,11 @@ class DmsfDigest
 
   def initialize
     @dry_run = ENV['dry_run']
+    @force_sha256 = ENV['forceSHA256']
   end
 
   def create_digests
-    revisions = DmsfFileRevision.where("digest IS NULL OR digest = ''").all
+    revisions = DmsfFileRevision.where(['digest IS NULL OR length(digest) < ?', @force_sha256 ? 64 : 32]).all
     count = revisions.count
     n = 0
     revisions.each_with_index do |rev, i|
