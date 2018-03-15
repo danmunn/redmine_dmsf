@@ -183,9 +183,9 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_description_max_length
-    @revision1.description = 'a' * 2.megabytes
+    @revision1.description = 'a' * 2.kilobytes
     assert !@revision1.save
-    @revision1.description = 'a' * 1.megabyte
+    @revision1.description = 'a' * 1.kilobyte
     assert @revision1.save
   end
 
