@@ -34,9 +34,4 @@ unless %w(easyproject easy_gantt).any? { |plugin| Dir.exist?(File.expand_path(".
 end
 
 # Dav4Rack
-gem 'rake'
-gem 'mongo'
-gem 'unicorn'
-gem 'byebug', platforms: :mri
-gem 'ruby-prof'
 gem 'ox'
