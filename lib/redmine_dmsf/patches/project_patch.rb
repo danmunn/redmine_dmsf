@@ -42,29 +42,30 @@ module RedmineDmsf
 
       ##################################################################################################################
       # New methods
+      def self.prepended(base)
+        base.class_eval do
+          has_many :dmsf_files, -> { where(dmsf_folder_id: nil).order(:name) },
+            :class_name => 'DmsfFile', :foreign_key => 'project_id', :dependent => :destroy
+          has_many :dmsf_folders, ->{ where(:dmsf_folder_id => nil).order(:title) },
+            :class_name => 'DmsfFolder', :foreign_key => 'project_id', :dependent => :destroy
+          has_many :dmsf_workflows, :dependent => :destroy
+          has_many :folder_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFolder' },
+            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+          has_many :file_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFile' },
+            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+          has_many :url_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfUrl' },
+            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+          has_many :dmsf_links, -> { where dmsf_folder_id: nil },
+            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
 
-      Project.include Redmine::NestedSet::Traversing
+          before_save :set_default_dmsf_notification
 
-      Project.has_many :dmsf_files, -> { where(dmsf_folder_id: nil).order(:name) },
-                       :class_name => 'DmsfFile', :foreign_key => 'project_id', :dependent => :destroy
-      Project.has_many :dmsf_folders, ->{ where(:dmsf_folder_id => nil).order(:title) },
-                       :class_name => 'DmsfFolder', :foreign_key => 'project_id', :dependent => :destroy
-      Project.has_many :dmsf_workflows, :dependent => :destroy
-      Project.has_many :folder_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFolder' },
-                       :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
-      Project.has_many :file_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFile' },
-                       :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
-      Project.has_many :url_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfUrl' },
-                       :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
-      Project.has_many :dmsf_links, -> { where dmsf_folder_id: nil },
-                       :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+          validates_length_of :dmsf_description, :maximum => 65535
 
-      Project.before_save :set_default_dmsf_notification
-
-      Project.validates_length_of :dmsf_description, :maximum => 65535
-
-      Project.const_set(:ATTACHABLE_DMS_AND_ATTACHMENTS, 1)
-      Project.const_set(:ATTACHABLE_ATTACHMENTS, 2)
+          const_set(:ATTACHABLE_DMS_AND_ATTACHMENTS, 1)
+          const_set(:ATTACHABLE_ATTACHMENTS, 2)
+        end
+      end
 
       def set_default_dmsf_notification
         if self.new_record?
@@ -114,4 +115,5 @@ module RedmineDmsf
   end
 end
 
-Project.send(:prepend, RedmineDmsf::Patches::ProjectPatch)
+RedmineExtensions::PatchManager.register_model_patch 'Project',
+  'RedmineDmsf::Patches::ProjectPatch', prepend: true

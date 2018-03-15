@@ -95,7 +95,11 @@ module RedmineDmsf
       ##################################################################################################################
       # New methods
 
-      EasyCrmCasesController::before_action :controller_easy_crm_cases_before_save, only: [:create, :update, :bulk_update]
+      def self.prepended(base)
+        base.class_eval do
+          before_action :controller_easy_crm_cases_before_save, only: [:create, :update, :bulk_update]
+        end
+      end
 
       def controller_easy_crm_cases_before_save
         easy_crm_cases = @easy_crm_cases
@@ -112,6 +116,6 @@ module RedmineDmsf
   end
 end
 
-if Redmine::Plugin.installed?(:easy_crm)
-  EasyCrmCasesController.send(:prepend, RedmineDmsf::Patches::EasyCrmCasesControllerPatch)
-end
+RedmineExtensions::PatchManager.register_controller_patch 'EasyCrmCasesController',
+  'RedmineDmsf::Patches::EasyCrmCasesControllerPatch', prepend: true,
+  if: proc { Redmine::Plugin.installed?(:easy_crm) }
