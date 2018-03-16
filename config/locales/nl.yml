@@ -1,0 +1,375 @@
+# encoding: utf-8
+#
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright (C) 2011-18 Karel Pičman <karel.picman@kontron.com>
+#
+#
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+nl:
+  dmsf: Easy DMS
+  label_dmsf_file_plural: Documenten
+  label_dmsf_file_revision_plural: Document revisies
+  label_dmsf_file_revision_access_plural: Document toegang
+  warning_no_entries_selected: Geen  invoer geselecteerd
+  error_email_to_must_be_entered: E-mail Naar moet worden ingevuld
+  warning_file_already_locked: Bestand al vergrendeld
+  notice_file_locked: Bestand vergrendeld
+  warning_file_not_locked: Bestand niet vergrendeld
+  notice_file_unlocked: Bestand vergrendeld
+  error_only_user_that_locked_file_can_unlock_it: Alleen de gebruiker die het bestand heeft vergrendeld kan het ontgrendelen
+  error_max_files_exceeded: "Limiet voor %{number} tegelijk gedownloade bestanden overschreden"
+  error_entry_project_does_not_match_current_project: Invoer project is niet gelijk aan huidig project
+  notice_folder_created: Map aangemaakt
+  error_folder_creation_failed: Map aanmaken mislukt
+  error_folder_title_must_be_entered: Titel moet worden ingevoerd
+  notice_folder_deleted: Map verwijderd
+  error_folder_is_not_empty: Map is niet leeg
+  error_folder_title_is_already_used: Titel is al in gebruik
+  notice_folder_details_were_saved: Gegevens map zijn opgeslagen
+  error_folder_is_locked: Map is vergrendeld
+  error_file_is_locked: Map is vergrendeld
+  notice_file_deleted: Map verwijderd
+  error_at_least_one_revision_must_be_present: Er moet ten minste een revisie aanwezig zijn
+  notice_revision_deleted: Revisie verwijderd
+  warning_one_of_files_locked: Een van de bestanden vergrendeld
+  notice_file_revision_created: Bestandsrevisie aangemaakt
+  notice_your_preferences_were_saved: Uw voorkeuren zijn opgeslagen
+  notice_your_preferences_were_not_saved: Uw voorkeuren zijn niet opgeslagen
+  warning_folder_notifications_already_activated: Meldingen map zijn al geactiveerd
+  notice_folder_notifications_activated: Meldingen map geactiveerd
+  warning_folder_notifications_already_deactivated: Meldingen map al gedeactiveerd
+  notice_folder_notifications_deactivated: Meldingen map gedeactiveerd
+  warning_file_notifications_already_activated: Meldingen bestand al geactiveerd
+  notice_file_notifications_activated: Meldingen bestand geactiveerd
+  warning_file_notifications_already_deactivated: Meldingen bestand al gedeactiveerd
+  notice_file_notifications_deactivated: Meldingen bestand gedeactiveerd
+  link_details: "%{title} details"
+  link_edit: "Aanpassen %{title}"
+  submit_create: Aanmaken
+  link_create_folder: Maak map
+  title_check_uncheck_all_for_zip_download_or_email: Vink Aan/Uit voor alle zip, download of e-mail
+  title_check_uncheck_all_for_restore_or_delete: Vink Aan/Uit voor alle herstel of verwijder
+  link_title: Titel
+  link_size: Bestandsgrootte
+  link_modified: Aangepast
+  link_ver: Ver.
+  link_author: Auteur
+  title_check_for_zip_download_or_email: Vink voor zip, download of email
+  title_check_for_restore_or_delete: Vink voor herstel of verwijder
+  title_delete: Verwijder
+  title_notifications_active_deactivate: "Notificaties actief: Deactiveren"
+  title_notifications_not_active_activate: "Notificaties niet actief: Activeren"
+  title_title_version_version_download: "%{title} versie %{version} downloaden"
+  title_locked_by_user: "Vergrendeld door %{user}"
+  title_locked_by_you: Vergrendeld door u
+  title_waiting_for_approval: Wacht op goedkeuring
+  title_approved: Goedgekeurd
+  title_unlock_file: Ontgrendel om wijzigingen door andere leden toe te staan
+  title_lock_file: Vergrendel om wijzigingen door andere leden te voorkomen
+  title_download_checked: Download aangevinkt in Zip archief
+  title_send_checked_by_email: Verzending aangevinkt door e-mail
+  link_user_preferences: Easy DMS project voorkeuren
+  heading_send_documents_by_email: Verstuur documenten per e-mail
+  label_email_from: Van
+  label_email_to: Aan
+  label_email_cc: CC
+  label_email_subject: Onderwerp
+  label_email_documents: Documenten
+  label_email_body: Body
+  label_email_send: Verzenden
+  title_notifications_active: Meldingen actief
+  label_upload: Uploaden
+  heading_new_folder: Nieuwe Map
+  label_title: Titel
+  label_description: Beschrijving
+  submit_save: Opslaan
+  info_file_locked: Bestand vergrendeld
+  label_notifications: Meldingen
+  select_option_default: Standaard
+  select_option_deactivated: Gedeactiveerd
+  select_option_activated: Geactiveerd
+  label_title_format: Titel format
+  text_title_format: "Document titel format voor download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Voorbeeld: %t_%v"
+  title_save_preferences: Sla voorkeuren op
+  heading_revisions: Revisies
+  title_download: Downloaden
+  title_delete_revision: Verwijder revisie
+  label_created: Aangemaakt
+  label_changed: Gewijzigd
+  info_changed_by_user: "%{changed} door"
+  label_filename: Bestandsnaam
+  label_mime: Mime
+  label_size: Grootte
+  heading_new_revision: Nieuwe Revisie
+  option_version_same: Hetzelfde
+  option_version_minor: Beperkt
+  option_version_major: Belangrijk
+  option_version_custom: Aangepast
+  label_new_content: Nieuwe inhoud
+  label_maximum_files_upload: Maximale bestandsupload
+  note_maximum_number_of_files_uploaded: Beperkt maximaal aantal bestanden dat tegelijkertijd geupload kan worden. 0 betekent onbeperkt.
+  label_maximum_files_download: Maximaal aantal bestanden download
+  note_maximum_number_of_files_downloaded: Beperkt maximaal aantal bestanden gedownload in zip of verzonden via e-mail. 0 betekent onbeperkt.
+  label_file_storage_directory: Overzicht bestandenopslag
+  label_index_database: Index database
+  label_stemming_language: Stemming Language
+  note_possible_values: Mogelijke waardes
+  note_pass_none_to_disable_stemming: "geef 'geen' in om stemming uit te schakelen"
+  label_stem_strategy: Stem strategie
+  option_stem_none: Stem geen (standaard)
+  option_stem_some: Stem sommige
+  option_stem_all: Stem alle
+  label_stemming_description: Dit bepaalt hoe de query het stemming algorithm zal toepassen. De standaard waarde is STEM_NONE. De mogelijke waardes zijn
+  note_do_not_stem: Voer geen stemming uit.
+  note_stem_some: "Zoek naar stemmed vormen van voorwaarden, behalve voor diegenen die beginnen met een hoofdletter, of worden gevolgd door bepaalde tekens, of zijn gebruikt door operators die positionele informatie nodig hebben. Stemmed termen worden voorafgegaan door 'Z'."
+  note_stem_all: "Zoek naar gestemde vormen van alle woorden (let op: geen voorvoegsel 'Z' toegevoegd)."
+  note_stemming_applied: Let op, het stemming algoritme wordt alleen toegepast op woorden in probabilistische velden - boolean filter termen zijn nooit stemmed.
+  label_default_notifications: Standaard bestand notificaties
+  heading_uploaded_files: Geuploade Bestanden
+  submit_commit: Indienen
+  link_documents: Documenten
+  permission_view_dmsf_file_revision_accesses: Bekijk downloads in Activiteiten stroom
+  permission_view_dmsf_file_revisions: Bekijk revisies in Activiteiten stroom
+  permission_view_dmsf_folders: Doorzoek documenten
+  permission_user_preferences: Gebruikersvoorkeuren
+  permission_view_dmsf_files: Bekijk documenten
+  permission_folder_manipulation: Map manipulatie
+  permission_file_manipulation: Bestand manipulatie
+  permission_force_file_unlock: Dwing ontrendeling bestand
+  permission_manage_workflows: Beheer workflows
+  permission_file_delete: Verwijder documenten
+  permission_display_system_folders: Display system folders
+  label_file: Bestand
+  field_folder: Map
+  error_create_cycle_in_folder_dependency: maak cyclus in de map afhankelijkheid
+  error_contains_invalid_character: bevat ongeldige teken(s)
+  error_file_commit_require_uploaded_file: Bestand indienen vereist geüpload bestand
+  warning_some_files_were_not_commited: Sommige bestanden zijn niet ingediend door
+  error_user_has_not_right_delete_folder: Gebruiker heeft geen recht om mappen te verwijderen
+  error_user_has_not_right_delete_file: Gebruiker heeft geen recht om bestand te verwijderen
+  notice_entries_deleted: Inzendingen verwijderd
+  warning_some_entries_were_not_deleted: "Enkele inzendingen zijn niet verwijderd: %{entries}"
+  title_delete_checked: Verwijdering gecontroleerd
+  title_items: items
+  title_filename_for_download: Bestandsnaam gebruikt voor download of in Zip archief
+  label_number_of_folders: Mappen
+  label_number_of_documents: Documenten
+  error_file_storage_directory_does_not_exist: Bestandsopslag directory bestaat niet en kan niet aangemaakt worden
+  error_file_can_not_be_created: Bestand kan niet aangemaakt worden in opslag directory
+  error_wrong_zip_encoding: Onjuiste Zip encoding
+  warning_xapian_not_available: Xapian niet beschikbaar
+  menu_dmsf: Easy DMS
+  label_physical_file_delete: Fysiek bestand verwijderen
+  user_is_not_project_member: U bent geen lid van het project
+  heading_access_downloads_emails: Downloads/E-mails
+  heading_access_first: Eerst
+  heading_access_last: Laatst
+  label_dmsf_updated: Bijgewerkt
+  label_dmsf_downloaded: Gedownload
+  title_total_size_of_all_files: Totale grootte van alle bestanden onder deze map
+  project_module_dmsf: Easy DMS
+  warning_no_project_to_copy_file_to: Geen project om bestand naar te kopiëren
+  comment_copied_from: "Gekopieerd van %{source}"
+  field_target_project: Doelproject
+  field_target_folder: Doelmap
+  title_copy_or_move: Kopieer/Verplaats
+  label_dmsf_folder_plural: Mappen # Search options
+  comment_moved_from: "Verplaatst van %{source}"
+  error_target_folder_same: Doelmap en project zijn hetzelfde als huidige
+  title_copy: Kopieer
+
+  error_max_email_filesize_exceeded: "U heeft de maximale bestandsgrootte voor verzending via e-mail overschreden. (%{number} MB)"
+  note_maximum_email_filesize: Beperkt maximale bestandsgrootte die verzonden kan worden via e-mail. 0 betekent onbeperkt. Getal is in MB.
+  label_maximum_email_filesize: Maximale grootte e-mail bijlage
+  header_minimum_filesize: Bestandsfout.
+  error_minimum_filesize: "Het bestand %{file} is 0 bytes en wordt niet bijgevoegd."
+  parent_directory: Ouder directory
+  note_webdav: "Webdav kan indien ingeschakeld worden gevonden op %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
+  label_webdav: Webdav functionaliteit
+  label_dmsf_plural: "Kopieer Documenten en mappen (%{files} bestanden in %{folders} mappen)"
+
+  warning_folder_already_locked: Deze map is al vergrendeld
+  notice_folder_locked: Deze map is succesvol vergrendeld
+  warning_folder_not_locked: Helaas kon deze map niet vergrendeld worden
+  notice_folder_unlocked: De map is succesvol vergrendeld
+  error_only_user_that_locked_folder_can_unlock_it: U bent niet geautoriseerd om deze map te ontgrendelen
+  title_unlock_folder: Ontgrendel om wijzigingen door andere gebruikers toe te staan
+  title_lock_folder: Vergrendel om wijzigingen door andere leden te voorkomen
+
+  select_option_webdav_readonly: Alleen-lezen
+  select_option_webdav_readwrite: Lezen/Schrijven
+  label_webdav_strategy: Webdav strategie
+  note_webdav_strategy: Staat de administrator toe om te beslissen of webdav een alleen-lezen of lezen-schrijven platform is voor eindgebruikers.
+
+  error_unable_delete_dmsf_workflow: Kon workflow niet verwijderen
+  error_empty_note: De notitie kan niet leeg zijn
+  error_workflow_assign: Er is een fout opgetreden bij het toewijzen
+  error_cannot_start_workflow: Workflow kan niet gestart worden
+  error_cannot_renumber_steps: Stappen kunnen niet opnieuw genummerd worden
+  label_dmsf_workflow_new: Nieuwe goedkeuring workflow
+  field_label_dmsf_workflow: Goedkeuring Workflow
+  field_label_dmsf_workflow_name: Goedkeuring workflow naam
+  label_dmsf_workflow_plural: Goedkeuring workflows
+  label_dmsf_workflow_plural_num: "Goedkeuring workflows (%{count})"
+  label_dmsf_workflow_step: Stap
+  label_dmsf_workflow_step_plural: Stappen
+  label_dmsf_workflow_approval: Goedkeuring
+  label_dmsf_workflow_approval_plural: Goedkeuringen
+  label_dmsf_wokflow_action_approve: Goedkeuren
+  label_dmsf_wokflow_action_reject: Afwijzen
+  label_dmsf_wokflow_action_delegate: Toewijzen aan
+  label_dmsf_wokflow_action_assign: Een goedkeuring workflow toewijzen
+  label_dmsf_wokflow_action_start: Start workflow
+  label_dmsf_workflow_add_approver: Voeg een nieuwe goedkeurder toe moet een logische functie
+  label_or: of
+  label_action: Actie
+  label_note: Notitie
+  title_none: Geen
+  title_rejection: Afwijzing
+  title_delegation: Delegatie
+  title_assignment: Toewijzing
+  title_start: Start
+  title_dmsf_workflow_log: Goedkeuring Workflow Log
+  title_assigned: Toegewezen
+  title_approval: Goedkeuring
+  title_rejected: Afgewezen
+  dmsf_and: EN
+  dmsf_or: OF
+  dmsf_new_step: Nieuwe stap
+  dmsf_new_step_or_approver: Nieuw stap of Nieuwe goedkeurder
+  message_dmsf_wokflow_note: Uw notitie...
+  info_revision: "r%{rev}"
+  link_workflow: Workflow
+  notice_workflow_started: Goedkeuring workflow succesvol gestart
+  text_email_subject_approved: goedgekeurd
+  text_email_subject_rejected: afgewezen
+  text_email_subject_delegated: gedelegeerd
+  text_email_subject_requires_approval: vereist uw goedkeuring
+  text_email_subject_updated: bijgewerkt
+  text_email_subject_started: gestart
+  text_email_finished_approved: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist afgerond en het document is goedgekeurd."
+  text_email_finished_rejected: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist afgerond en het document is afgewezen vanwege '%{notice}'."
+  text_email_finished_delegated: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist gedelegeerd omdat '%{notice}' en er wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap."
+  text_email_finished_step: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document heeft zojuist een van de goedkeurende stappen afgerond en er wordt verwacht dat u een goedkeuring doet in de volgenden goedkeuringsstap."
+  text_email_finished_step_short: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document heeft zojuist een van de goedkeuringsstappen afgerond."
+  text_email_started: "De goedkeurende workflow '%{name}' toegewezen aan '%{filename}' document is zojuist gestart en er wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap."
+  text_email_to_proceed: Klik om door te gaan om het het vinkjes icoon naast het document in
+  text_email_to_see_history: Klik om de goedkeuringsgeschiedenis te bekijken op de workflow status van het document in
+  text_email_to_see_status: Klik om de huidige status van de goedkeuring workflow te bekijken op het workflow status document in
+
+  title_create_link: Maak een symbolische link
+  label_link_from: Link van
+  label_link_to: Link naar
+  label_notifications_on: Notificaties AAN
+  label_notifications_off: Notificaties UIT
+  field_target_file: Bronbestand
+  title_download_entries: Download indieningen
+  label_external: Extern
+
+  label_link_name: Link naam
+  field_external_url: URL
+  label_target_folder: Doelmap
+  label_source_folder: Bronmap
+  label_target_project: Doelproject
+  label_source_project: Bronproject
+
+  text_email_doc_updated_subject: Bijgewerkte documenten
+  text_email_doc_updated: heeft zojuist de documenten bijgewerkt van
+  text_email_doc_follows: als volgt
+  text_email_doc_deleted_subject: Documenten verwijderd
+  text_email_doc_deleted: heeft zojuist documenten verwijderd van
+  label_links_only: alleen links
+
+  label_display_notified_recipients: Toon genotificeerde ontvangers
+  note_display_notified_recipients: De gebruiker wordt geïnformeerd over alle ontvangers van de verzonden e-mail notificatie.
+  warning_email_notifications: "E-mail notificaties verzonden naar %{to}"
+
+  link_trash_bin: Prullenmand
+  title_restore: Herstel
+  notice_dmsf_file_restored: Het document is succesvol hersteld
+  notice_dmsf_folder_restored: De map is succesvol hersteld
+  notice_dmsf_link_restored: De link is succesvol hersteld
+  title_restore_checked: Herstel gecontroleerd
+  error_parent_folder: De ouder map bestaat niet
+
+  error_resource_or_parent_locked: Vergrendelen niet afgerond - bron (of ouder) is vergrendeld
+  error_parent_locked: Vergrendelen niet afgerond - bron ouder is vergrendeld
+  error_resource_locked: Vergrendelen niet afgerond - bron is vergrendeld
+  error_lock_exclusively: Vergrendelen niet mogelijk op een reeds vergrendelde bron
+  error_unlock_parent_locked: Ontgrendelen mislukt - bron ouder is vergrendeld
+
+  field_dmsf_tree_view: Navigeer door mappen in een boom
+  label_dmsf_version: Versie
+
+  locked_documents: Vergrendelde documenten
+  open_approvals: Open goedkeuringen
+
+  label_maximum_ajax_upload_filesize: Maximale bestandsgrootte te uploaden via AJAX
+  note_maximum_ajax_upload_filesize: Beperkt maximale bestandsgrootte die geupload kan worden via standaard AJAX interface of het Redmine standaard upload formulier moet worden gebruikt. Getal is in MB.
+  label_classic: Klassiek
+  label_drag_drop: Modern
+
+  error_maximum_upload_filecount: "Er kunnen niet meer dan %{filecount} bestand(en) worden geupload."
+
+  label_public_urls: Public URLs valid to
+
+  label_webdav: WebDAV
+  label_full_text: Full-text search
+  link_extension: Ext
+
+  label_webdav_ignore: Ignored files patterns
+  note_webdav_ignore: A regular expresion with filenames to ignore by PUT requests.
+
+  label_document_url: Url
+  label_last_revision_id: Revision
+
+  label_webdav_disable_versioning: No versioning files patterns
+  note_webdav_disable_versioning: A regular expression that disables versioning for matching files.
+
+  label_dmsf_keep_documents_locked: Keep documents locked
+  note_dmsf_keep_documents_locked: Documents will be kept locked when approved
+  note_global: (global)
+  field_dmsf_not_inheritable: Not inheritable
+
+  label_webdav_use_project_names: Use project name for project folder
+  note_webdav_use_project_names: Use project names instead of project identifier for project folders.
+
+  label_last_approver: Last approver
+
+  label_act_as_attachable: Act as attachable
+  note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+
+  label_user_search_add: Search for user to add
+
+  label_dmsf_attachments: DMS Attachments
+  label_basic_attachments: Basic Attachments
+
+  label_tmpdir: Temporary file path
+  error_file_tmpdir_does_not_exist: "Temporary file path doesn't exist and can't be created"
+  error_tmpfile_can_not_be_created: "Files can't be created in temporary file path directory"
+
+  label_email_from_override: From
+  text_email_from_override: The user currently logged in
+  label_email_reply_to: Reply-to
+
+  easy_pages:
+    modules:
+      dmsf_locked_documents: My locked documents
+      dmsf_open_approvals: My open approvals
+    module_category:
+      easy_dms: Easy DMS
