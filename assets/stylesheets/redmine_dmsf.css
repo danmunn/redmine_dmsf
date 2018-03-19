@@ -96,6 +96,10 @@ table.display thead th div.DataTables_sort_wrapper span {
 	font-size: 0.9em;
 }
 
+#browser_filter.dataTables_filter{
+    float:none;
+}
+
 .dmsf_filename {
 	padding: 0 10px 0 10px;
     float: right;
