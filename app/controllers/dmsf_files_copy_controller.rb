@@ -77,7 +77,7 @@ private
     end
     if params[:target_folder_id].present?
       @target_folder = DmsfFolder.visible.find(params[:target_folder_id])
-      unless DmsfFolder.visible.where(params[:target_folder_id]).exists?
+      unless DmsfFolder.visible.where(:id => params[:target_folder_id]).exists?
         render_403
         return
       end
