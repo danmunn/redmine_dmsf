@@ -16,7 +16,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# You shoultext_email_to_see_status: "승인된 작업 흐름 상태를 확인하기 위해 작업 흐름 상태를 클릭하세요" %r - 수정사항). 예시: %t_%v"d have received a copy of the GNU General Public License
+# You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
@@ -104,7 +104,7 @@ ko:
   select_option_deactivated: 비활성화
   select_option_activated: 활성화
   label_title_format: 제목 포맷
-  text_title_format: 다운로드 한 문서 제목 포맷 (%t - 제목, %f - 파일, %d - 날짜, %v - 버전, %i - ID, %r - 수정사항). 예시: %t_%v
+  text_title_format: "다운로드 한 문서 제목 포맷 (%t - 제목, %f - 파일, %d - 날짜, %v - 버전, %i - ID, %r - 수정사항). 예시: %t_%v"
   title_save_preferences: 선호사항 저장
   heading_revisions: 수정
   title_download: 다운로드
@@ -136,8 +136,8 @@ ko:
   option_stem_all: 모든 스템
   label_stemming_description: 쿼리 파서가 스테밍 알고리즘을 적용하는 방법을 조절합니다. 기본값은 STEM_NONE입니다. 가능한 값은 다음과 같습니다.
   note_do_not_stem: 스테밍 사용하지 않기
-  note_stem_some: 대문자로 시작하거나, 특정 문자가 붙거나, 위치 정보가 필요한 실행되는 것들을 제외한 스템 양식을 검색하세요. 스템용어 앞에는 'Z'가 붙습니다.
-  note_stem_all: 모든 단어의 스템 양식을 검색하기 (참고: 'Z'가 앞에 추가되지 않음).
+  note_stem_some: "대문자로 시작하거나, 특정 문자가 붙거나, 위치 정보가 필요한 실행되는 것들을 제외한 스템 양식을 검색하세요. 스템용어 앞에는 'Z'가 붙습니다."
+  note_stem_all: "모든 단어의 스템 양식을 검색하기 (참고: 'Z'가 앞에 추가되지 않음)."
   note_stemming_applied: 스테밍 알고리즘은 확률 필드의 단어에만 적용됩니다. 불 방식의 필터는 스템을 사용할 수 없습니다.
   label_default_notifications: 파일 영구설정 알림
   heading_uploaded_files: 업로드 된 파일
@@ -264,10 +264,10 @@ ko:
   text_email_subject_started: 시작됨
   text_email_finished_approved: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었으며문서가 승인되었습니다."
   text_email_finished_rejected: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해 문서가 반려되었습니다."
-  text_email_finished_delegated: "%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해 위임되었으며, 사용자는 현재 승인 과정에서 승인하셔야 합니다."
-  text_email_finished_step: "%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만,  승인단계 중 한개가 승인되었으며 사용자께서 다음 승인 단계를 승인하셔야 합니다"
-  text_email_finished_step_short: "%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었으며, 승인 단계 중 한 단계가 완료되었습니다."
-  text_email_started: "%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 시작되었으며, 사용자께서는 현재 승인 단계에서 승인을 하셔야 합니다."
+  text_email_finished_delegated: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해 위임되었으며, 사용자는 현재 승인 과정에서 승인하셔야 합니다."
+  text_email_finished_step: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만,  승인단계 중 한개가 승인되었으며 사용자께서 다음 승인 단계를 승인하셔야 합니다"
+  text_email_finished_step_short: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었으며, 승인 단계 중 한 단계가 완료되었습니다."
+  text_email_started: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 시작되었으며, 사용자께서는 현재 승인 단계에서 승인을 하셔야 합니다."
   text_email_to_proceed: 다음으로 진행하기 위해 문서 옆에 있는 체크 박스 아이콘을 클릭하세요
   text_email_to_see_history: 승인 내역을 확인하기 위해 작업 흐름 상태 문서를 클릭하세요
   text_email_to_see_status: 승인된 작업 흐름 상태를 확인하기 위해 작업 흐름 상태를 클릭하세요
