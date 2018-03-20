@@ -28,5 +28,10 @@ gem 'simple_enum'
 gem 'uuidtools'
 gem 'dalli'
 
+# Redmine extensions
+unless %w(easyproject easy_gantt).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
+  gem 'redmine_extensions', '~> 0.2.5'
+end
+
 # Dav4Rack
 gem 'ox'
