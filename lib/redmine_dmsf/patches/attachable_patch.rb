@@ -34,4 +34,4 @@ module RedmineDmsf
 end
 
 RedmineExtensions::PatchManager.register_helper_patch 'Redmine::Acts::Attachable::InstanceMethods',
-  'RedmineDmsf::Patches::AttachablePatch', prepend: true
+    'RedmineDmsf::Patches::AttachablePatch', prepend: true

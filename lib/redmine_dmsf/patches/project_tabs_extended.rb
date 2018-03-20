@@ -41,5 +41,9 @@ module RedmineDmsf
   end
 end
 
-RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
-  'RedmineDmsf::Patches::ProjectTabsExtended', prepend: true
+if defined?(EasyExtensions)
+  RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
+    'RedmineDmsf::Patches::ProjectTabsExtended', prepend: true
+else
+  ProjectsHelper.send(:prepend, RedmineDmsf::Patches::ProjectTabsExtended)
+end
