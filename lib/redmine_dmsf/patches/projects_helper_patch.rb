@@ -20,7 +20,7 @@
 
 module RedmineDmsf
   module Patches
-    module ProjectTabsExtended
+    module ProjectHelperPatch
 
       ##################################################################################################################
       # Overridden methods
@@ -41,9 +41,5 @@ module RedmineDmsf
   end
 end
 
-if defined?(EasyExtensions)
-  RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
-    'RedmineDmsf::Patches::ProjectTabsExtended', prepend: true
-else
-  ProjectsHelper.send(:prepend, RedmineDmsf::Patches::ProjectTabsExtended)
-end
+RedmineExtensions::PatchManager.register_concern_patch 'ProjectsHelper',
+    'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true

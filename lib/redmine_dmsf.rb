@@ -26,9 +26,8 @@ DMSF_MAX_NOTIFICATION_RECEIVERS_INFO = 10
 
 # Plugin's patches
 require 'redmine_dmsf/patches/custom_fields_helper_patch'
-require 'redmine_dmsf/patches/acts_as_customizable'
+require 'redmine_dmsf/patches/projects_helper_patch'
 require 'redmine_dmsf/patches/project_patch'
-require 'redmine_dmsf/patches/project_tabs_extended'
 require 'redmine_dmsf/patches/user_preference_patch'
 require 'redmine_dmsf/patches/user_patch'
 require 'redmine_dmsf/patches/issue_patch'

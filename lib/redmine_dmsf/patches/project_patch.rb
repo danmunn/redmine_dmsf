@@ -115,9 +115,5 @@ module RedmineDmsf
   end
 end
 
-if defined?(EasyExtensions)
-  RedmineExtensions::PatchManager.register_model_patch 'Project',
+RedmineExtensions::PatchManager.register_model_patch 'Project',
     'RedmineDmsf::Patches::ProjectPatch', prepend: true
-else
-  Project.send(:prepend, RedmineDmsf::Patches::ProjectPatch)
-end

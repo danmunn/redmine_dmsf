@@ -47,9 +47,5 @@ module RedmineDmsf
   end
 end
 
-if defined?(EasyExtensions)
-  RedmineExtensions::PatchManager.register_helper_patch 'CustomFieldsHelper',
+RedmineExtensions::PatchManager.register_concern_patch 'CustomFieldsHelper',
     'RedmineDmsf::Patches::CustomFieldsHelperPatch', prepend: true
-else
-  CustomFieldsHelper.send(:prepend, RedmineDmsf::Patches::CustomFieldsHelperPatch)
-end

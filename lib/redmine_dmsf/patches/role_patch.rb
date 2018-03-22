@@ -22,22 +22,20 @@ module RedmineDmsf
   module Patches
     module RolePatch
 
-      def self.included(base) # :nodoc:
-        base.send(:include, InstanceMethods)
+      ##################################################################################################################
+      # New methods
+
+      def self.included(base)
         base.class_eval do
           before_destroy :remove_dmsf_references
         end
       end
 
-      module InstanceMethods
-
-        def remove_dmsf_references
-          return if self.id.nil?
-          substitute = Role.anonymous
-          DmsfFolderPermission.where(:object_id => self.id, :object_type => 'Role').update_all(
-            :object_id => substitute.id)
-        end
-
+      def remove_dmsf_references
+        return if self.id.nil?
+        substitute = Role.anonymous
+        DmsfFolderPermission.where(:object_id => self.id, :object_type => 'Role').update_all(
+          :object_id => substitute.id)
       end
 
     end
@@ -45,8 +43,5 @@ module RedmineDmsf
 end
 
 # Apply patch
-Rails.configuration.to_prepare do
-  unless Role.included_modules.include?(RedmineDmsf::Patches::RolePatch)
-    Role.send(:include, RedmineDmsf::Patches::RolePatch)
-  end
-end
+RedmineExtensions::PatchManager.register_model_patch 'Role',
+  'RedmineDmsf::Patches::RolePatch', prepend: true

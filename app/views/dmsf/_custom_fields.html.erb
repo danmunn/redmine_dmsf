@@ -24,13 +24,15 @@
 
 <% if object %>
   <div>
-    <% object.show_custom_field_values.each do |custom_value| %>
-      <div class="status attribute">
-        <%= content_tag :div, h(custom_value.custom_field.name), :class => 'label' %>
-        <div class="value">
-          <%= show_value custom_value %>
+    <% object.custom_field_values.each do |custom_value| %>
+      <% if !custom_value.value.blank? %>
+        <div class="status attribute">
+          <%= content_tag :div, h(custom_value.custom_field.name), :class => 'label' %>
+          <div class="value">
+            <%= show_value custom_value %>
+          </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
   </div>
 <% end %>

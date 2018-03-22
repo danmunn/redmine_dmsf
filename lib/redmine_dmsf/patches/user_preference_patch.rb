@@ -22,31 +22,29 @@ module RedmineDmsf
   module Patches
     module UserPreference
 
+      ##################################################################################################################
+      # New methods
+
       def self.included(base)
-        base.send(:include, InstanceMethods)
         base.class_eval do
           safe_attributes 'dmsf_tree_view', 'dmsf_attachments_upload_choice' if self.included_modules.include?(Redmine::SafeAttributes)
         end
       end
 
-      module InstanceMethods
+      def dmsf_tree_view
+        self[:dmsf_tree_view] || '1'
+      end
 
-        def dmsf_tree_view
-          self[:dmsf_tree_view] || '1'
-        end
+      def dmsf_tree_view=(value)
+        self[:dmsf_tree_view] = value
+      end
 
-        def dmsf_tree_view=(value)
-          self[:dmsf_tree_view] = value
-        end
+      def dmsf_attachments_upload_choice
+        self[:dmsf_attachments_upload_choice] || 'DMSF'
+      end
 
-        def dmsf_attachments_upload_choice
-          self[:dmsf_attachments_upload_choice] || 'DMSF'
-        end
-
-        def dmsf_attachments_upload_choice=(value)
-          self[:dmsf_attachments_upload_choice] = value
-        end
-
+      def dmsf_attachments_upload_choice=(value)
+        self[:dmsf_attachments_upload_choice] = value
       end
 
     end
@@ -54,8 +52,5 @@ module RedmineDmsf
 end
 
 # Apply patch
-Rails.configuration.to_prepare do
-  unless UserPreference.included_modules.include?(RedmineDmsf::Patches::UserPreference)
-    UserPreference.send(:include, RedmineDmsf::Patches::UserPreference)
-  end
-end
+RedmineExtensions::PatchManager.register_model_patch 'UserPreference',
+  'RedmineDmsf::Patches::UserPreference'
