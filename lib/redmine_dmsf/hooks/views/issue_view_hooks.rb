@@ -100,7 +100,7 @@ module RedmineDmsf
       private
 
       def allowed_to_attach_documents(container)
-        container &&
+        container && container.respond_to?(:saved_dmsf_attachments) && container.project &&
           User.current.allowed_to?(:file_manipulation, container.project) &&
           Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
           (container.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
