@@ -175,6 +175,5 @@ module RedmineDmsf
   end
 end
 
-RedmineExtensions::PatchManager.register_model_patch 'EasyCrmCasePatch',
-  'RedmineDmsf::Patches::RedmineDmsf::Patches::EasyCrmCasePatch',
-                if: proc { Redmine::Plugin.installed?(:easy_crm) }
+RedmineExtensions::PatchManager.register_model_patch 'EasyCrmCase',
+  'RedmineDmsf::Patches::EasyCrmCasePatch', if: proc { Redmine::Plugin.installed?(:easy_crm) }

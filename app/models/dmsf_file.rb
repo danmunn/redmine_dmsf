@@ -268,13 +268,30 @@ class DmsfFile < ActiveRecord::Base
       new_revision = self.last_revision.clone
       new_revision.dmsf_file = file
       new_revision.disk_filename = new_revision.new_storage_filename
+      # Assign the same workflow if it's a global one or we are in the same project
+      new_revision.workflow = nil
+      new_revision.dmsf_workflow_id = nil
+      new_revision.dmsf_workflow_assigned_by = nil
+      new_revision.dmsf_workflow_assigned_at = nil
+      new_revision.dmsf_workflow_started_by = nil
+      new_revision.dmsf_workflow_started_at = nil
+      if self.last_revision.dmsf_workflow_id
+        wf = DmsfWorkflow.where(:id => self.last_revision.dmsf_workflow_id).first
+        if wf && (wf.project.nil? || (wf.project.id == project.id))
+          new_revision.set_workflow(wf.id, nil)
+          new_revision.assign_workflow(wf.id)
+        end
+      end
       if File.exist? self.last_revision.disk_file
         FileUtils.cp self.last_revision.disk_file, new_revision.disk_file(false)
       end
       new_revision.comment = l(:comment_copied_from, :source => source)
       new_revision.custom_values = []
       self.last_revision.custom_values.each do |cv|
-        new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
+        v = CustomValue.new
+        v.custom_field = cv.custom_field
+        v.value = cv.value
+        new_revision.custom_values << v
       end
       file.delete(true) unless new_revision.save
     end

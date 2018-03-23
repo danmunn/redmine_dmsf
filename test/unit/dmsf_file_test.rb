@@ -22,13 +22,14 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFileTest < RedmineDmsf::Test::UnitTest
-  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles, :members,
-           :member_roles, :dmsf_locks, :issues, :dmsf_links
+  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles,
+           :members, :member_roles, :dmsf_locks, :issues, :dmsf_links, :dmsf_workflows, :dmsf_workflow_steps
 
   def setup
     @admin = User.find_by_id 1
     @jsmith = User.find_by_id 2
     @project1 = Project.find_by_id 1
+    @project2 = Project.find_by_id 2
     @file1 = DmsfFile.find_by_id 1
     @file2 = DmsfFile.find_by_id 2
     @file3 = DmsfFile.find_by_id 3
@@ -39,6 +40,8 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     @file8 = DmsfFile.find_by_id 8
     @folder1 = DmsfFolder.find_by_id 1
     @issue1 = Issue.find_by_id 1
+    @wf1 = DmsfWorkflow.find_by_id 1
+    @wf2 = DmsfWorkflow.find_by_id 2
     User.current = nil
   end
 
@@ -46,6 +49,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_kind_of User, @admin
     assert_kind_of User, @jsmith
     assert_kind_of Project, @project1
+    assert_kind_of Project, @project2
     assert_kind_of DmsfFile, @file1
     assert_kind_of DmsfFile, @file2
     assert_kind_of DmsfFile, @file3
@@ -56,6 +60,8 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_kind_of DmsfFile, @file8
     assert_kind_of DmsfFolder, @folder1
     assert_kind_of Issue, @issue1
+    assert_kind_of DmsfWorkflow, @wf1
+    assert_kind_of DmsfWorkflow, @wf2
   end
 
   def test_project_file_count_differs_from_project_visibility_count
@@ -146,13 +152,55 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   
   def test_copy_to_filename
     assert_no_difference '@file1.dmsf_file_revisions.count' do
-      new_file = @file1.copy_to_filename(@file1.project, nil, "new_file.txt")
+      new_file = @file1.copy_to_filename(@file1.project, nil, 'new_file.txt')
       assert_not_equal new_file.id, @file1.id
       assert_nil new_file.dmsf_folder_id
       assert_nil @file1.dmsf_folder_id
       assert_not_equal new_file.name, @file1.name
       assert_equal new_file.dmsf_file_revisions.count, 1
+      assert_nil new_file.last_revision.workflow
+      assert_nil new_file.last_revision.dmsf_workflow_id
+      assert_nil new_file.last_revision.dmsf_workflow_assigned_by
+      assert_nil new_file.last_revision.dmsf_workflow_assigned_at
+      assert_nil new_file.last_revision.dmsf_workflow_started_by
+      assert_nil new_file.last_revision.dmsf_workflow_started_at
     end
+  end
+
+  def test_copy_to_filename_with_global_workflow
+    @file1.last_revision.set_workflow(@wf2.id, nil)
+    @file1.last_revision.assign_workflow(@wf2.id)
+    new_file = @file1.copy_to_filename(@project2, nil, 'new_file.txt')
+    assert_equal DmsfWorkflow::STATE_ASSIGNED, new_file.last_revision.workflow
+    assert_equal @wf2.id, new_file.last_revision.dmsf_workflow_id
+    assert_equal User.current.id, new_file.last_revision.dmsf_workflow_assigned_by
+    assert new_file.last_revision.dmsf_workflow_assigned_at
+    assert_nil new_file.last_revision.dmsf_workflow_started_by
+    assert_nil new_file.last_revision.dmsf_workflow_started_at
+  end
+
+  def test_copy_to_filename_with_workflow_to_the_same_project
+    @file1.last_revision.set_workflow(@wf1.id, nil)
+    @file1.last_revision.assign_workflow(@wf1.id)
+    new_file = @file1.copy_to_filename(@project1, nil, 'new_file.txt')
+    assert_equal DmsfWorkflow::STATE_ASSIGNED, new_file.last_revision.workflow
+    assert_equal @wf1.id, new_file.last_revision.dmsf_workflow_id
+    assert_equal User.current.id, new_file.last_revision.dmsf_workflow_assigned_by
+    assert new_file.last_revision.dmsf_workflow_assigned_at
+    assert_nil new_file.last_revision.dmsf_workflow_started_by
+    assert_nil new_file.last_revision.dmsf_workflow_started_at
+  end
+
+  def test_copy_to_filename_with_workflow_to_other_project
+    @file1.last_revision.set_workflow(@wf1.id, nil)
+    @file1.last_revision.assign_workflow(@wf1.id)
+    new_file = @file1.copy_to_filename(@project2, nil, 'new_file.txt')
+    assert_nil new_file.last_revision.workflow
+    assert_nil new_file.last_revision.dmsf_workflow_id
+    assert_nil new_file.last_revision.dmsf_workflow_assigned_by
+    assert_nil new_file.last_revision.dmsf_workflow_assigned_at
+    assert_nil new_file.last_revision.dmsf_workflow_started_by
+    assert_nil new_file.last_revision.dmsf_workflow_started_at
   end
   
   def test_copy_to
