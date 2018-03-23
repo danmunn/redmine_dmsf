@@ -62,8 +62,6 @@ ko:
   link_edit: "%{title} 수정"
   submit_create: 작성
   link_create_folder: 폴더 작성
-  title_check_uncheck_all_for_zip_download_or_email: Zip, 다운로드 혹은 이메일을 위한 모든 파일 체크/체크
-  title_check_uncheck_all_for_restore_or_delete: 복구 혹은 삭제된 모든 파일 체크/ 체크 해제
   link_title: 제목
   link_size: 사이즈
   link_modified: 수정됨

@@ -62,8 +62,6 @@ ru:
   link_edit: "Редактировать %{title}"
   submit_create: Создать
   link_create_folder: Создать папку
-  title_check_uncheck_all_for_zip_download_or_email: Выбрать/Снять все документы для того, чтобы скачать или отправить их по электронной почте
-  title_check_uncheck_all_for_restore_or_delete: Выбрать/Снять все документы для восстановления или удаления
   link_title: Название
   link_size: Размер
   link_modified: Изменен

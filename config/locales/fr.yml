@@ -62,8 +62,6 @@ fr:
   link_edit: "Modification du dossier %{title}"
   submit_create: Ajouter
   link_create_folder: Créer un sous-dossier
-  title_check_uncheck_all_for_zip_download_or_email: Sélectionner/Ignorer tous les documents pour le téléchargement ou pour la transmission par mail
-  title_check_uncheck_all_for_restore_or_delete: Sélectionner/Ignorer pour restaurer ou supprimer
   link_title: Titre
   link_size: Taille
   link_modified: Modifié

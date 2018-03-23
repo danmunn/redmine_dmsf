@@ -62,8 +62,6 @@ sl:
   link_edit: "Uredi %{title}"
   submit_create: Kreiraj
   link_create_folder: Kreiraj mapo
-  title_check_uncheck_all_for_zip_download_or_email: "Označi/Odznači vse za Zip prenašanje ali email"
-  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
   link_title: Naslov
   link_size: Velikost
   link_modified: Spremenjeno

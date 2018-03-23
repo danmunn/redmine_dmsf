@@ -62,8 +62,6 @@ zh:
   link_edit: "编辑 %{title}"
   submit_create: 创建
   link_create_folder: 创建文件夹
-  title_check_uncheck_all_for_zip_download_or_email: 全选/全不选（zip下载或邮件发送）
-  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
   link_title: 主题
   link_size: 大小
   link_modified: 修改日期

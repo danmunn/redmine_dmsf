@@ -62,8 +62,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   link_edit: "Modifica %{title}"
   submit_create: Creato
   link_create_folder: Creata cartella
-  title_check_uncheck_all_for_zip_download_or_email: Seleziona/Deseleziona tutto per lo zip, download o email
-  title_check_uncheck_all_for_restore_or_delete: Seleziona/Deseleziona tutto per ripristinare o cancellare
   link_title: Nome documento
   link_size: Dimensioni
   link_modified: Modificato

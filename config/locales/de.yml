@@ -62,8 +62,6 @@ de:
   link_edit: "Bearbeite %{title}"
   submit_create: Erstellen
   link_create_folder: Ordner erstellen
-  title_check_uncheck_all_for_zip_download_or_email: Wähle alle/keine für ZIP-Download bzw. Email
-  title_check_uncheck_all_for_restore_or_delete: Wähle alle/keine für Rückstellen oder Löschen
   link_title: Titel
   link_size: Größe
   link_modified: Geändert

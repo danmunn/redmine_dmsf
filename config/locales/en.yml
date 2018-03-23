@@ -62,8 +62,6 @@ en:
   link_edit: "Edit %{title}"
   submit_create: Create
   link_create_folder: Create folder
-  title_check_uncheck_all_for_zip_download_or_email: Check/Uncheck all for zip, download or email
-  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
   link_title: Title
   link_size: Size
   link_modified: Modified

@@ -62,8 +62,6 @@ nl:
   link_edit: "Aanpassen %{title}"
   submit_create: Aanmaken
   link_create_folder: Maak map
-  title_check_uncheck_all_for_zip_download_or_email: Vink Aan/Uit voor alle zip, download of e-mail
-  title_check_uncheck_all_for_restore_or_delete: Vink Aan/Uit voor alle herstel of verwijder
   link_title: Titel
   link_size: Bestandsgrootte
   link_modified: Aangepast

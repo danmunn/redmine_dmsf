@@ -62,8 +62,6 @@ hu:
   link_edit: "%{title} szerkesztése"
   submit_create: Létrehozás
   link_create_folder: Mappa létrehozása
-  title_check_uncheck_all_for_zip_download_or_email: Mind kijelölése / Kijelölés megszüntetése
-  title_check_uncheck_all_for_restore_or_delete: Mind kijelölése / Kijelölés megszüntetése visszaállításra vagy törlésre
   link_title: Cím
   link_size: Méret
   link_modified: Módosított

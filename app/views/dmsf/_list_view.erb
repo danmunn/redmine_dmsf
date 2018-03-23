@@ -25,7 +25,8 @@
     <tr>
       <th class="dmsf_checkbox dmsf_th">
         <% if !@system_folder %>
-          <input id="check_all_entries" title="<%= l(:title_check_uncheck_all_for_zip_download_or_email) %>" type="checkbox" />
+          <%= check_box_tag 'check_all', '', false, :class => 'toggle-selection',
+                            :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
         <% end %>
       </th>
       <% if DmsfFolder.is_column_on?('id') %>

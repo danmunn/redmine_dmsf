@@ -62,8 +62,6 @@ pt-BR:
   link_edit: "Editar %{title}"
   submit_create: Criar
   link_create_folder: Criar pasta
-  title_check_uncheck_all_for_zip_download_or_email: Marcar / Desmarcar tudo para download ou enviar por e-mail
-  title_check_uncheck_all_for_restore_or_delete: Marcar / Desmarcar tudo para restaurar ou deletar
   link_title: Taxonomia
   link_size: Tamanho do arquivo
   link_modified: Última modificação

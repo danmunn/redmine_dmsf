@@ -62,8 +62,6 @@ cs:
   link_edit: "Upravit %{title}"
   submit_create: Vytvořit
   link_create_folder: Vytvořit složku
-  title_check_uncheck_all_for_zip_download_or_email: Vybrat/Nevybrat vše pro stažení jako zip nebo emailem
-  title_check_uncheck_all_for_restore_or_delete: Vybrat/Nevybrat vše pro obnovení nebo smazání
   link_title: Název
   link_size: Velikost
   link_modified: Změněno

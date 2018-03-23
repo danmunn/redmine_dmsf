@@ -62,8 +62,6 @@ zh-TW:
   link_edit: "編輯 %{title}"
   submit_create: 建立
   link_create_folder: 建立資料夾
-  title_check_uncheck_all_for_zip_download_or_email: 全選/全不選（下載或電子郵件發送）
-  title_check_uncheck_all_for_restore_or_delete: Check/Uncheck all for restore or delete
   link_title: 標題
   link_size: 檔案大小
   link_modified: 修改日期
