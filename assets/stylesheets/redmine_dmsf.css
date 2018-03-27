@@ -234,7 +234,7 @@ div.dmsf_revision_inner_box .attribute .label {
 .icon-file.filetype-mpp { background-image: url(../images/filetypes/mpp.png); }
 .icon-file.filetype-odt { background-image: url(../images/filetypes/odt.png); }
 .icon-file.filetype-ods { background-image: url(../images/filetypes/ods.png); }
-.icon-file.filetype-ott { background-image: url(../images/filetypes/odt.png); }
+.icon-file.filetype-ott { background-image: url(../images/filetypes/ott.png); }
 .icon-file.filetype-odp { background-image: url(../images/filetypes/odp.png); }
 .icon-file.filetype-odg { background-image: url(../images/filetypes/odg.png); }
 
@@ -248,7 +248,7 @@ div.dmsf_revision_inner_box .attribute .label {
 .dmsf_gray .icon-file.filetype-vsdx { background-image: url(../images/filetypes/vsd_gray.png); }
 .dmsf_gray .icon-file.filetype-mpp { background-image: url(../images/filetypes/mpp_gray.png); }
 .dmsf_gray .icon-file.filetype-odt { background-image: url(../images/filetypes/odt_gray.png); }
-.dmsf_gray .icon-file.filetype-ott { background-image: url(../images/filetypes/odt_gray.png); }
+.dmsf_gray .icon-file.filetype-ott { background-image: url(../images/filetypes/ott_gray.png); }
 .dmsf_gray .icon-file.filetype-ods { background-image: url(../images/filetypes/ods_gray.png); }
 .dmsf_gray .icon-file.filetype-odp { background-image: url(../images/filetypes/odp_gray.png); }
 .dmsf_gray .icon-file.filetype-odg { background-image: url(../images/filetypes/odg_gray.png); }
