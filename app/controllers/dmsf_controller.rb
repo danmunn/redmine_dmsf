@@ -157,7 +157,7 @@ class DmsfController < ApplicationController
       render_404 #and return
     rescue DmsfAccessError
       render_403 # and return
-    rescue Exception => e
+    rescue StandardError => e
       flash[:error] = e.message
       Rails.logger.error e.message
     end
@@ -423,7 +423,7 @@ class DmsfController < ApplicationController
       :filename => filename_for_content_disposition("#{@project.name}-#{DateTime.now.strftime('%y%m%d%H%M%S')}.zip"),
       :type => 'application/zip',
       :disposition => 'attachment')
-  rescue Exception
+  rescue StandardError
     raise
   ensure
     zip.close if zip
@@ -447,7 +447,7 @@ class DmsfController < ApplicationController
       unless (file.project == @project) || User.current.allowed_to?(:view_dmsf_files, file.project)
         raise DmsfAccessError
       end
-      zip.add_file(file, member, (file.dmsf_folder.dmsf_path_str if file.dmsf_folder)) if file
+      zip.add_file(file, member, (file.dmsf_folder.dmsf_path_str if file.dmsf_folder))
     end
     max_files = Setting.plugin_redmine_dmsf['dmsf_max_file_download'].to_i
     if max_files > 0 && zip.files.length > max_files

@@ -43,7 +43,10 @@ class DmsfZip
 
   def add_file(file, member, root_path = nil)
     unless @files.include?(file)
-      string_path = file.dmsf_folder.nil? ? '' : "#{file.dmsf_folder.dmsf_path_str}/"
+      unless file && file.last_revision && File.exist?(file.last_revision.disk_file)
+        raise FileNotFound
+      end
+      string_path = file.dmsf_folder.nil? ? '' : (file.dmsf_folder.dmsf_path_str + File::SEPARATOR)
       string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
       if member && !member.dmsf_title_format.nil? && !member.dmsf_title_format.empty?
         string_path += file.formatted_name(member.dmsf_title_format)
@@ -64,7 +67,7 @@ class DmsfZip
 
   def add_folder(folder, member, root_path = nil)
     unless @folders.include?(folder)
-      string_path = "#{folder.dmsf_path_str}/"
+      string_path = folder.dmsf_path_str + File::SEPARATOR
       string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path
       zip_entry = ::Zip::Entry.new(@zip_file, string_path, nil, nil, nil, nil, nil, nil,
                                    ::Zip::DOSTime.at(folder.modified))
