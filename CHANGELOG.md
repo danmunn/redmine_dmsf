@@ -1,18 +1,55 @@
 Changelog for Redmine DMSF
 ==========================
 
-1.6.1 *2018-??-??*
+1.6.1 *2018-04-03*
 ------------------
         
     Javascript on pages is loaded asynchronously
-    Obsolete Dav4Rack gem replaced with an up to date fork by Planio (Consequently WebDAV caching has been removed, sorry...)
-        Instead of usage their gem in the Gemfile:
-            gem 'dav4rack', git: 'https://github.com/planio-gmbh/dav4rack.git', branch: 'master'
-        The library is a part of the project (lib/dav4rack).
+    Obsolete Dav4Rack gem replaced with an up to date fork by Planio (Consequently WebDAV caching has been removed, sorry...)        
         Cloned from gem https://github.com/planio-gmbh/dav4rack.git    
     Project members can be chosen as recipients when sending documents by email
-    Responsive view
+    Responsive view (optimized for mobile devices)
     Direct editing of document in MS Office
+    Korean & Dutch localisation
+    Move folder feature
+    Document versions can contain letters
+    
+IMPORTANT
+
+1. `alias_method_chain` has been replaced with `prepend`. Not directly but using `RedmineExtensions::PatchManager`.
+   Consequently, there might occure conficts with plugins which overwrite the same methods.    
+    
+* Bug: #839 - Webdav not working type: bug
+* New: #838 - Rake task for regenerating document's digests
+* Bug: #831 - ActionView::Template::Error, when i am creating issue from the list of all projects
+* Bug: #830 - ActiveRecord::StatementInvalid: Mysql2::Error: Table 'dmsf_file_revisions' doesn't exist
+* Bug: #827 - Can't see files via WebDav, but see them via web-portal
+* New: #823 - Office URI Scheme for direct editing of MS Office files
+* New: #821 - Security Issue (Mail-Spoofing)
+* Bug: #817 - The check for approval is not displayed
+* Bug: #812 - Moving Issue to other project does not move attached documents in DMS
+* Bug: #807 - alias_method_chain is deprecated
+* Bug: #805 - Missing access check in search results
+* New: #804 - Move folder
+* New: #803 - 'Create folder' takes a very long time
+* New: #802 - def log_activity functions
+* New: #801 - Editing user in an approval workflow step
+* New: #793 - Support for letters as the major version
+* New: #790 - Confusing search options titles
+* Bug: #789 - Mail Notification for deletion missing
+* Bug: #784 - Document digist is not calculated when uploading via WebDAV
+* New: #783 - Redmine uses SHA256 instead of MD5 for file digests
+* New: #736 - Setting tmp folder path via ENV
+* New: #726 - Keep the modification date of the file
+* Bug: #716 - Microsoft Office webdav save throwing some UTF8 filename problems
+* Bug: #708 - Configuration of the email sending form
+* Bug: #687 - Not sorting correctly by the column title
+* New: #682 - Responsive view
+* New: #637 - Case of blank filetitle with revision id
+* New: #628 - To rename members.title_format to members.dmsf_title_format
+* Bug: #616 - An attempt to create a folder in the root causes an infinite loop
+* New: #492 - Does the redmine_dmsf support to choose the members of current project when email?
+* New: #231 - Better referencing macro
 
 1.6.0 *2017-09-12*
 ------------------

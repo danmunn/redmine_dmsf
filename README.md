@@ -1,13 +1,13 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.6.1 devel** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **1.6.1** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
 Redmine DMSF now comes bundled with Webdav functionality: if switched on within plugin settings this will be accessible from /dmsf/webdav.
 
-Webdav functionality is provided through DAV4Rack gem.
+Webdav functionality is provided through DAV4Rack library.
 
 Initial development was for Kontron AG R&D department and it is released as open source thanks to their generosity.  
 Project home: <http://code.google.com/p/redmine-dmsf/>
@@ -239,15 +239,17 @@ Before installing ensure that the Redmine instance is stopped.
             
             rake redmine:dmsf_alert_approvals RAILS_ENV="production"   
                         
-    III) To create missing MD5 digest for all file revisions
+    III) To create missing checksums for all document revisions
             
         Available options:
         
-          *dry_run - test, no changes to the database
+          *dry_run - test, no changes to the database          
+          *forceSHA256 - replace old MD5 with SHA256
         
         Example:
         
           bundle exec rake redmine:dmsf_create_digests RAILS_ENV="production"
+          bundle exec rake redmine:dmsf_create_digests forceSHA256=1 RAILS_ENV="production"
           bundle exec rake redmine:dmsf_create_digests dry_run=1 RAILS_ENV="production"
           
     IV) To maintain DMSF
