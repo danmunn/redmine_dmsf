@@ -73,7 +73,7 @@ module RedmineDmsf
           issue = context[:issue]
           params = context[:params]
           # Move existing attached documents if needed
-          if edit
+          if edit && params[:issue]
             project_id = params[:issue][:project_id].to_i
             old_project_id = context[:project].id
             system_folder = issue.system_folder(false, old_project_id)
