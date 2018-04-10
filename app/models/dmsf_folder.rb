@@ -87,7 +87,7 @@ class DmsfFolder < ActiveRecord::Base
         :project_key => 'project_id',
         :date_column => 'updated_at',
         :permission => :view_dmsf_files,
-        :scope => DmsfFolder.visible
+        :scope => Proc.new { DmsfFolder.visible }
 
   acts_as_event :title => Proc.new {|o| o.title},
           :description => Proc.new {|o| o.description },
