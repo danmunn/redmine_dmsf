@@ -280,8 +280,9 @@
 <% begin %>
   <% require 'xapian' %>
   <% xapian_disabled = false %>
-<% rescue LoadError %>
-  <p class="warning"><%= l(:warning_xapian_not_available) %></p> 
+<% rescue LoadError => e %>
+  <p class="warning"><%= l(:warning_xapian_not_available) %></p>
+  <% Rails.logger.warn e.message %>
   <% xapian_disabled = true %>
 <% end %>
 

@@ -22,9 +22,10 @@
 begin
   require 'xapian'
   $xapian_bindings_available = true
-rescue LoadError
+rescue LoadError => e
   Rails.logger.warn %{No Xapian search engine interface for Ruby installed => Full-text search won't be available.
                       Install a ruby-xapian package or an alternative Xapian binding (https://xapian.org).}
+  Rails.logger.warn e.message
   $xapian_bindings_available = false
 end
 
