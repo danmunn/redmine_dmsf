@@ -41,5 +41,5 @@ module RedmineDmsf
   end
 end
 
-RedmineExtensions::PatchManager.register_concern_patch 'ProjectsHelper',
+RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
     'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true
