@@ -52,7 +52,7 @@
     <% end %>
     <% # Email %>
     <%= link_to('', entries_operations_dmsf_path(:id => dmsf_file.project_id, :email_entries => 'email',
-      :files => [dmsf_file.id]), :method => :post, :title => l(:heading_send_documents_by_email),
+      :ids => ["file-#{dmsf_file.id}"]), :method => :post, :title => l(:heading_send_documents_by_email),
       :class => 'icon-only icon-email-disabled') %>
     <% # Lock %>
     <% if !dmsf_file.locked? %>
