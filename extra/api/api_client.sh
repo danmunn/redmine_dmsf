@@ -26,9 +26,11 @@
 
 # BOTH XML and JSON formats are supported.
 # Just replace .xml with .json
+#
+# Uncomment a corresponding line to the case you would like to test
 
 # 1. List of documents in a given folder or the root folder
-curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/projects/12/dmsf.xml
+#curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/projects/12/dmsf.xml
 #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/projects/12/dmsf.xml?folder_id=5155
 
 # 2. Get a document
@@ -42,11 +44,11 @@ curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:
 #curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif
 #curl -v -H "Content-Type: application/xml" -X POST --data "@file.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/commit.xml
 
-# 5. list folder contents & check folder existence (by folder title)
+# 5. List folder content & check folder existence (by folder title)
 # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_title=Updated%20title
 
-# 6. list folder contents & check folder existence (by folder id)
-# curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KE" http://localhost:3000/projects/1/dmsf.json?folder_id=3
+# 6. List folder content & check folder existence (by folder id)
+# curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_id=3
 # both returns 404 not found, or json with following structure:
 # {  
 #   "dmsf":{  
@@ -67,7 +69,7 @@ curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:
 #   }
 #}
 
-# 7. update folder
+# 7. Update a folder
 # curl -v -H "Content-Type: application/json" -X POST --data "@update-folder-payload.json" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000//projects/#{project_id}/dmsf/save.json?folder_id=#{folder_id}
 
 # update-folder-payload.json 
@@ -77,3 +79,15 @@ curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:
 #       "description": description
 #      },
 #    }
+
+# 8. Delete a folder
+# a) Move to trash only
+#  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/2387/dmsf/delete.xml?folder_id=#{folder_id}
+# b) Delete permanently
+#  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} "http://localhost:3000/projects/2387/dmsf/delete.xml?folder_id=#{folder_id}&commit=yes"
+
+# 8. Delete a file
+# a) Move to trash only
+#  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
+# b) Delete permanently
+#  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml?commit=yes"

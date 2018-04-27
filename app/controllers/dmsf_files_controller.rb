@@ -29,7 +29,7 @@ class DmsfFilesController < ApplicationController
   before_action :tree_view, :only => [:delete]
   before_action :permissions
 
-  accept_api_auth :show, :view
+  accept_api_auth :show, :view, :delete
 
   helper :all
   helper :dmsf_workflows
@@ -191,7 +191,8 @@ class DmsfFilesController < ApplicationController
   def delete
     if @file
       commit = params[:commit] == 'yes'
-      if @file.delete(commit)
+      result = @file.delete(commit)
+      if result
         flash[:notice] = l(:notice_file_deleted)
         unless commit
           begin
@@ -216,10 +217,15 @@ class DmsfFilesController < ApplicationController
         Rails.logger.error msg
       end
     end
-    if commit || (@tree_view && params[:details].blank?)
-      redirect_to :back
-    else
-      redirect_to dmsf_folder_path(:id => @project, :folder_id => @file.dmsf_folder)
+    respond_to do |format|
+      format.html {
+        if commit || (@tree_view && params[:details].blank?)
+          redirect_to :back
+        else
+          redirect_to dmsf_folder_path(:id => @project, :folder_id => @file.dmsf_folder)
+        end
+      }
+      format.api { result ? render_api_ok : render_validation_errors(@file) }
     end
   end
 

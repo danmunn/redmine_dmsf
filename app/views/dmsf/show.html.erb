@@ -221,7 +221,7 @@
 
 <% unless @system_folder %>
     <% other_formats_links do |f| %>
-        <%= f.link_to 'CSV', :url => params, :onclick => "showModal('csv-export-options', '350px'); return false;" %>
+        <%= f.link_to 'CSV', :onclick => "showModal('csv-export-options', '350px'); return false;" %>
     <% end %>
 <% end %>
 

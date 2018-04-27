@@ -30,7 +30,7 @@ class DmsfController < ApplicationController
   before_action :tree_view, :only => [:delete, :show]
   before_action :permissions
 
-  accept_api_auth :show, :create, :save
+  accept_api_auth :show, :create, :save, :delete
 
   skip_before_action :verify_authenticity_token,  if: -> { request.headers['HTTP_X_REDMINE_API_KEY'].present? }
 
@@ -251,15 +251,21 @@ class DmsfController < ApplicationController
 
   def delete
     commit = params[:commit] == 'yes'
-    if @folder.delete(commit)
+    result = @folder.delete(commit)
+    if result
       flash[:notice] = l(:notice_folder_deleted)
     else
       flash[:error] = @folder.errors.full_messages.to_sentence
     end
-    if commit || @tree_view
-      redirect_to :back
-    else
-      redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder.dmsf_folder)
+    respond_to do |format|
+      format.html {
+        if commit || @tree_view
+          redirect_to :back
+        else
+          redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder.dmsf_folder)
+        end
+      }
+      format.api { result ? render_api_ok : render_validation_errors(@folder) }
     end
   end
 

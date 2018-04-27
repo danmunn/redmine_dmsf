@@ -21,12 +21,14 @@
 require File.expand_path('../../../test_helper', __FILE__)
 
 class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
+  include Redmine::I18n
 
   fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :projects, :users, :members, :roles,
            :member_roles
 
   def setup
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
+    @admin = User.find_by_id 1
     @jsmith = User.find_by_id 2
     @file1 = DmsfFile.find_by_id 1
     @folder1 = DmsfFolder.find_by_id 1
@@ -37,6 +39,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_truth
+    assert_kind_of User, @admin
     assert_kind_of User, @jsmith
     assert_kind_of DmsfFolder, @folder1
     assert_kind_of DmsfFile, @file1
@@ -91,7 +94,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
         <dmsf_folder_id/>
       </dmsf_folder>
     }
-    post "/projects/#{@project1.id}/dmsf/create.xml?&key=#{token.value}", payload, {'CONTENT_TYPE' => 'application/xml'}
+    post "/projects/#{@project1.id}/dmsf/create.xml?key=#{token.value}", payload, {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_folder>
@@ -193,6 +196,55 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #   <description>A folder updated via REST API</description>
     # </dmsf_folder>
     assert_select 'dmsf_folder > title', :text => 'rest_api'
+  end
+
+  def test_delete_folder
+    @role.add_permission! :folder_manipulation
+    token = Token.create!(:user => @jsmith, :action => 'api')
+    # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
+    delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
+         {'CONTENT_TYPE' => 'application/xml'}
+    assert_response :success
+    @folder1.reload
+    assert_equal DmsfFolder::STATUS_DELETED, @folder1.deleted
+    assert_equal User.current, @folder1.deleted_by_user
+  end
+
+  def test_delete_folder_no_permission
+    token = Token.create!(:user => @jsmith, :action => 'api')
+    # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
+    delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
+           {'CONTENT_TYPE' => 'application/xml'}
+    assert_response :forbidden
+  end
+
+  def test_delete_folder_commit_yes
+    @role.add_permission! :folder_manipulation
+    token = Token.create!(:user => @jsmith, :action => 'api')
+    # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
+    delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}&commit=yes",
+           {'CONTENT_TYPE' => 'application/xml'}
+    assert_response :success
+    assert_nil DmsfFolder.find_by_id(@folder1.id)
+  end
+
+  def test_delete_folder_locked
+    @role.add_permission! :folder_manipulation
+    User.current = @admin
+    @folder1.lock!
+    User.current = @jsmith
+    token = Token.create!(:user => @jsmith, :action => 'api')
+    # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
+    delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
+         {'CONTENT_TYPE' => 'application/xml'}
+    assert_response 422
+    # <?xml version="1.0" encoding="UTF-8"?>
+    # <errors type="array">
+    #   <error>Folder is locked</error>
+    # </errors>
+    assert_select 'errors > error', :text => l(:error_folder_is_locked)
+    @folder1.reload
+    assert_equal DmsfFolder::STATUS_ACTIVE, @folder1.deleted
   end
 
 end
