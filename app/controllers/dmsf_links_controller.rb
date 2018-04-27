@@ -148,7 +148,7 @@ class DmsfLinksController < ApplicationController
           end
         end
       }
-      format.api { result ? render_api_ok : render_validation_errors(@dmsf_link) }
+      format.api { render_validation_errors(@dmsf_link) unless result }
       format.js
     end
   end

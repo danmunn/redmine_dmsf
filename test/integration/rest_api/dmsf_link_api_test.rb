@@ -63,6 +63,12 @@ class DmsfLinkApiTest < RedmineDmsf::Test::IntegrationTest
     }
     post "/dmsf_links.xml?key=#{token.value}", payload, {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
+    # <?xml version="1.0" encoding="UTF-8"?>
+    # <dmsf_link>
+    #   <id>1243</id>
+    #   <title>test</title>
+    # </dmsf_link>
+    assert_select 'dmsf_link > title', :text => name
     assert_equal 1, DmsfLink.where(:name => name, :project_id => @project1.id).count
   end
 end

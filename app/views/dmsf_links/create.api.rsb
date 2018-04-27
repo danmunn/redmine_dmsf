@@ -1,0 +1,4 @@
+api.dmsf_link do
+  api.id @dmsf_link.id
+  api.title @dmsf_link.title
+end
