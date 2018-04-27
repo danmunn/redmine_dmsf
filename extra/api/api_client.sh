@@ -86,8 +86,11 @@
 # b) Delete permanently
 #  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} "http://localhost:3000/projects/2387/dmsf/delete.xml?folder_id=#{folder_id}&commit=yes"
 
-# 8. Delete a file
+# 9. Delete a file
 # a) Move to trash only
 #  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
 # b) Delete permanently
 #  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml?commit=yes"
+
+# 10. Create a symbolic link
+# curl -v -H "Content-Type: application/xml" -X POST --data "@link.xml" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf_links.xml
