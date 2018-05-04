@@ -117,15 +117,15 @@ module RedmineDmsf
           pinfo = @path.split('/').drop(1)
           if pinfo.length > 0
             if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-              if pinfo.first =~ /(\d)$/
+              if pinfo.first =~ /(\d+)$/
                 @project = Project.find_by_id($1)
-                Rails.logger.warn {"WebDAV ERROR: No project found on path '#{@path}'"} unless @project
+                Rails.logger.error("No project found on path '#{@path}'") unless @project
               end
             else
               begin
                 @project = Project.find(pinfo.first)
               rescue Exception => e
-                Rails.logger.warn e.message
+                Rails.logger.error e.message
               end
             end
           end
