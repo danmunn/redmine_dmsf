@@ -32,6 +32,7 @@
 # 1. List of documents in a given folder or the root folder
 #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/projects/12/dmsf.xml
 #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/projects/12/dmsf.xml?folder_id=5155
+#curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} "http://localhost:3000/projects/12/dmsf.xml?limit=2&offset=1"
 
 # 2. Get a document
 #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml

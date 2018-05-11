@@ -32,6 +32,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @jsmith = User.find_by_id 2
     @file1 = DmsfFile.find_by_id 1
     @folder1 = DmsfFolder.find_by_id 1
+    @folder6 = DmsfFolder.find_by_id 6
     Setting.rest_api_enabled = '1'
     @role = Role.find_by_id 1
     @project1 = Project.find_by_id 1
@@ -42,6 +43,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     assert_kind_of User, @admin
     assert_kind_of User, @jsmith
     assert_kind_of DmsfFolder, @folder1
+    assert_kind_of DmsfFolder, @folder6
     assert_kind_of DmsfFile, @file1
     assert_kind_of Role, @role
     assert_kind_of Project, @project1
@@ -55,31 +57,76 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     assert_equal 'application/xml', @response.content_type
     # <?xml version="1.0" encoding="UTF-8"?>
-    # <dmsf>
-    #   <dmsf_folders total_count="2" type="array">
-    #     <folder>
+    #   <dmsf>
+    #     <dmsf_folders total_count="3" type="array">
+    #       <folder>
     #       <id>1</id>
-    #       <title>folder1</title>
-    #     </folder>
-    #     <folder>
-    #       <id>6</id>
+    #         <title>folder1</title>
+    #       </folder>
+    #       <folder>
+    #         <id>6</id>
     #       <title>folder6</title>
-    #     </folder>
-    #   </dmsf_folders>
-    #   <dmsf_files total_count="1" type="array">
-    #     <file>
+    #       </folder>
+    #       <folder>
+    #       <id>7</id>
+    #         <title>folder7</title>
+    #       </folder>
+    #     </dmsf_folders>
+    #     <dmsf_files total_count="4" type="array">
+    #       <file>
+    #       <id>9</id>
+    #         <name>myfile.txt</name>
+    #       </file>
+    #       <file>
+    #         <id>8</id>
+    #       <name>test.pdf</name>
+    #       </file>
+    #       <file>
     #       <id>1</id>
-    #       <name>test.txt</name>
-    #     </file>
-    #   </dmsf_files>
-    #   <dmsf_links total_count="0" type="array">
-    # </dmsf_links>
+    #         <name>test.txt</name>
+    #       </file>
+    #       <file>
+    #         <id>10</id>
+    #       <name>zero.txt</name>
+    #       </file>
+    #     </dmsf_files>
+    #     <dmsf_links total_count="0" type="array">
+    #     </dmsf_links>
     # </dmsf>
     assert_select 'dmsf > dmsf_folders > folder > id', :text => @folder1.id.to_s
     assert_select 'dmsf > dmsf_folders > folder > title', :text => @folder1.title.to_s
     assert_select 'dmsf > dmsf_files > file > id', :text => @file1.id.to_s
     assert_select 'dmsf > dmsf_files > file > name', :text => @file1.name.to_s
+  end
 
+  def test_list_folder_limit_and_offset
+    @role.add_permission! :view_dmsf_folders
+    token = Token.create!(:user => @jsmith, :action => 'api')
+    #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} "http://localhost:3000/dmsf/files/17216.xml?limit=1&offset=1"
+    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&limit=1&offset=2"
+    assert_response :success
+    assert_equal 'application/xml', @response.content_type
+    #   <?xml version="1.0" encoding="UTF-8"?>
+    #   <dmsf>
+    #     <dmsf_folders total_count="1" type="array">
+    #       <folder>
+    #       <id>6</id>
+    #         <title>folder6</title>
+    #       </folder>
+    #     </dmsf_folders>
+    #     <dmsf_files total_count="1" type="array">
+    #       <file>
+    #       <id>1</id>
+    #         <name>test.txt</name>
+    #       </file>
+    #     </dmsf_files>
+    #     <dmsf_links total_count="0" type="array">
+    #     </dmsf_links>
+    # </dmsf>
+    assert_select 'dmsf > dmsf_folders', :count => 1
+    assert_select 'dmsf > dmsf_folders > folder > id', :text => @folder6.id.to_s
+    assert_select 'dmsf > dmsf_folders > folder > title', :text => @folder6.title.to_s
+    assert_select 'dmsf > dmsf_files', :count => 1
   end
 
   def test_create_folder

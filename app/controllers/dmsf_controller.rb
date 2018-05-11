@@ -662,19 +662,34 @@ class DmsfController < ApplicationController
         @url_links = []
       else
         if @folder
-          @subfolders = @folder.dmsf_folders.visible.to_a
+          @subfolders = @folder.dmsf_folders.visible
           @files = @folder.dmsf_files.visible
           @dir_links = @folder.folder_links.visible
           @file_links = @folder.file_links.visible
           @url_links = @folder.url_links.visible
           @locked_for_user = @folder.locked_for_user?
         else
-          @subfolders = @project.dmsf_folders.visible.to_a
+          @subfolders = @project.dmsf_folders.visible
           @files = @project.dmsf_files.visible
           @dir_links = @project.folder_links.visible
           @file_links = @project.file_links.visible
           @url_links = @project.url_links.visible
           @locked_for_user = false
+        end
+        # Limit and offset for REST API calls
+        if params[:limit].present?
+          @subfolders = @subfolders.limit(params[:limit])
+          @files = @files.limit(params[:limit])
+          @dir_links = @dir_links.limit(params[:limit])
+          @file_links = @file_links.limit(params[:limit])
+          @url_links = @url_links.limit(params[:limit])
+        end
+        if params[:offset].present?
+          @subfolders = @subfolders.offset(params[:offset])
+          @files = @files.offset(params[:offset])
+          @dir_links = @dir_links.offset(params[:offset])
+          @file_links = @file_links.offset(params[:offset])
+          @url_links = @url_links.offset(params[:offset])
         end
       end
       # Remove system folders you are not allowed to see because you are not allowed to see the issue or you are not
