@@ -143,9 +143,7 @@ module RedmineDmsf
       #
       # If instance is a collection, calls html_display (defined in base_resource.rb) which cycles through children for display
       # File will only be presented for download if user has permission to view files
-      ##
       def get(request, response)
-        raise NotFound unless exist?
         raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder))
         if collection?
           html_display
@@ -668,7 +666,7 @@ module RedmineDmsf
       # also best-utilising DAV4Rack's implementation.
       def download
         disk_file = file.last_revision.disk_file
-        raise NotFound unless (file && file.last_revision && disk_file && File.exist?(disk_file))
+        raise NotFound unless file.last_revision && disk_file && File.exist?(disk_file)
         raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder))
         # If there is no range (start of ranged download, or direct download) then we log the
         # file access, so we can properly keep logged information
