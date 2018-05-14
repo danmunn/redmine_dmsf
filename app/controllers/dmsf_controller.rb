@@ -32,8 +32,6 @@ class DmsfController < ApplicationController
 
   accept_api_auth :show, :create, :save, :delete
 
-  skip_before_action :verify_authenticity_token,  if: -> { request.headers['HTTP_X_REDMINE_API_KEY'].present? }
-
   helper :all
   helper :dmsf_folder_permissions
 
@@ -258,13 +256,13 @@ class DmsfController < ApplicationController
       flash[:error] = @folder.errors.full_messages.to_sentence
     end
     respond_to do |format|
-      format.html {
+      format.html do
         if commit || @tree_view
           redirect_to :back
         else
           redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder.dmsf_folder)
         end
-      }
+      end
       format.api { result ? render_api_ok : render_validation_errors(@folder) }
     end
   end
@@ -661,21 +659,13 @@ class DmsfController < ApplicationController
         end
         @url_links = []
       else
-        if @folder
-          @subfolders = @folder.dmsf_folders.visible
-          @files = @folder.dmsf_files.visible
-          @dir_links = @folder.folder_links.visible
-          @file_links = @folder.file_links.visible
-          @url_links = @folder.url_links.visible
-          @locked_for_user = @folder.locked_for_user?
-        else
-          @subfolders = @project.dmsf_folders.visible
-          @files = @project.dmsf_files.visible
-          @dir_links = @project.folder_links.visible
-          @file_links = @project.file_links.visible
-          @url_links = @project.url_links.visible
-          @locked_for_user = false
-        end
+        scope = @folder ? @folder : @project
+        @locked_for_user = @folder && @folder.locked_for_user?
+        @subfolders = scope.dmsf_folders.visible
+        @files = scope.dmsf_files.visible
+        @dir_links = scope.folder_links.visible
+        @file_links = scope.file_links.visible
+        @url_links = scope.url_links.visible
         # Limit and offset for REST API calls
         if params[:limit].present?
           @subfolders = @subfolders.limit(params[:limit])

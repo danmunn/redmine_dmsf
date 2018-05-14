@@ -218,13 +218,13 @@ class DmsfFilesController < ApplicationController
       end
     end
     respond_to do |format|
-      format.html {
+      format.html do
         if commit || (@tree_view && params[:details].blank?)
           redirect_to :back
         else
           redirect_to dmsf_folder_path(:id => @project, :folder_id => @file.dmsf_folder)
         end
-      }
+      end
       format.api { result ? render_api_ok : render_validation_errors(@file) }
     end
   end

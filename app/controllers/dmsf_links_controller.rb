@@ -31,8 +31,6 @@ class DmsfLinksController < ApplicationController
 
   accept_api_auth :create
 
-  skip_before_action :verify_authenticity_token, if: -> { request.headers['HTTP_X_REDMINE_API_KEY'].present? }
-
   def permissions
     if @dmsf_link
       render_403 unless DmsfFolder.permissions?(@dmsf_link.dmsf_folder)
