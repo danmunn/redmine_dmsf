@@ -175,7 +175,7 @@ module RedmineDmsf
           f.dmsf_folder_id = parent_folder
           f.project = project
           f.user = User.current
-          f.save ? OK : Conflict
+          f.save ? Created : Conflict
         else
           UnsupportedMediaType
         end
