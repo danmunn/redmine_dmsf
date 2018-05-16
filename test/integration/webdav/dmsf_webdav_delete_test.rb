@@ -42,6 +42,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
+    @project1.enable_module! :dmsf # Flag module enabled
     User.current = nil    
   end
   
@@ -90,6 +91,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_dmsf_not_enabled
+    @project1.disable_module! :dmsf
     delete "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @jsmith
     assert_response :missing # Item does not exist, as project is not enabled.
   end
@@ -101,16 +103,13 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_unlocked_file
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @admin
-      assert_response :success # If its in the 20x range it's acceptable, should be 204.
-      @file1.reload
-      assert @file1.deleted?, "File #{@file1.name} hasn't been deleted"
-    end
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @admin
+    assert_response :success # If its in the 20x range it's acceptable, should be 204.
+    @file1.reload
+    assert @file1.deleted?, "File #{@file1.name} hasn't been deleted"
   end
 
   def test_unathorized_user
-    @project1.enable_module! :dmsf # Flag module enabled
     delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
     assert_response :missing # Without folder_view permission, he will not even be aware of its existence.
     @file1.reload
@@ -118,18 +117,14 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_unathorized_user_forbidden
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      @project1.enable_module! :dmsf # Flag module enabled
-      @role.add_permission! :view_dmsf_folders
-      delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
-      assert_response :forbidden # Now jsmith's role has view_folder rights, however they do not hold file manipulation rights.
-      @file1.reload
-      assert !@file1.deleted?, "File #{@file1.name} is expected to exist"
-    end
+    @role.add_permission! :view_dmsf_folders
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
+    assert_response :forbidden # Now jsmith's role has view_folder rights, however they do not hold file manipulation rights.
+    @file1.reload
+    assert !@file1.deleted?, "File #{@file1.name} is expected to exist"
   end
 
   def test_view_folder_not_allowed
-    @project1.enable_module! :dmsf # Flag module enabled
     @role.add_permission! :file_manipulation
     delete "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", nil, @jsmith
     assert_response :missing # Without folder_view permission, he will not even be aware of its existence.
@@ -138,94 +133,79 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_folder_manipulation_not_allowed
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      @project1.enable_module! :dmsf # Flag module enabled
-      @role.add_permission! :view_dmsf_folders
-      delete "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", nil, @jsmith
-      assert_response :forbidden # Without manipulation permission, action is forbidden.
-      @folder1.reload
-      assert !@folder1.deleted?, "Foler #{@folder1.title} is expected to exist"
-    end
+    @role.add_permission! :view_dmsf_folders
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", nil, @jsmith
+    assert_response :forbidden # Without manipulation permission, action is forbidden.
+    @folder1.reload
+    assert !@folder1.deleted?, "Foler #{@folder1.title} is expected to exist"
   end
 
   def test_folder_delete_by_admin
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      @project1.enable_module! :dmsf # Flag module enabled
-      delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @admin
-      assert_response :success
-      @folder6.reload
-      assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
-    end
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @admin
+    assert_response :success
+    @folder6.reload
+    assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
   end
 
   def test_folder_delete_by_user
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      @role.add_permission! :view_dmsf_folders
-      @role.add_permission! :folder_manipulation
-      @project1.enable_module! :dmsf # Flag module enabled
-      delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
-      assert_response :success
-      @folder6.reload
-      assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
-    end
+    @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :folder_manipulation
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
+    assert_response :success
+    @folder6.reload
+    assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
   end
 
   def test_folder_delete_by_user_with_project_names
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-      @role.add_permission! :view_dmsf_folders
-      @role.add_permission! :folder_manipulation
-      @project1.enable_module! :dmsf # Flag module enabled
-      delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
-      assert_response 404
-      p1name_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-      delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", nil, @jsmith
-      assert_response :success
-      @folder6.reload
-      assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
-    end
+    @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :folder_manipulation
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
+    assert_response 404
+    p1name_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", nil, @jsmith
+    assert_response :success
+    @folder6.reload
+    assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
   end
 
   def test_file_delete_by_administrator
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      @project1.enable_module! :dmsf
-      delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @admin
-      assert_response :success
-      @file1.reload
-      assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
-    end
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @admin
+    assert_response :success
+    @file1.reload
+    assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
   end
 
   def test_file_delete_by_user
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      @project1.enable_module! :dmsf
-      @role.add_permission! :view_dmsf_folders
-      @role.add_permission! :file_delete
-      delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
-      assert_response :success
-      @file1.reload
-      assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
-    end
+    @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :file_delete
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
+    assert_response :success
+    @file1.reload
+    assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
   end
 
   def test_file_delete_by_user_with_project_names
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-      @project1.enable_module! :dmsf
-      @role.add_permission! :view_dmsf_folders
-      @role.add_permission! :file_delete
-      delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
-      assert_response 404
-      p1name_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-      delete "/dmsf/webdav/#{p1name_uri}/#{@file1.name}", nil, @jsmith
-      assert_response :success
-      @file1.reload
-      assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
-    end
+    @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :file_delete
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
+    assert_response 404
+    p1name_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    delete "/dmsf/webdav/#{p1name_uri}/#{@file1.name}", nil, @jsmith
+    assert_response :success
+    @file1.reload
+    assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
+  end
+
+  def test_folder_delete_fragments
+    @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :folder_manipulation
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}/#frament=HTTP/1.1", nil, @jsmith
+    assert_response 400 # BadRequest
   end
 
   def test_locked_folder
-    @project1.enable_module! :dmsf # Flag module enabled
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :folder_manipulation
     @folder6.lock!
@@ -236,7 +216,6 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_locked_file
-    @project1.enable_module! :dmsf
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :file_delete
     @file1.lock!
@@ -248,15 +227,12 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
 
   def test_non_versioned_file
     Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] = '\.tmp$'
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] == '\.tmp$'
-      @project1.enable_module! :dmsf
-      @role.add_permission! :view_dmsf_folders
-      @role.add_permission! :file_delete
-      delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
-      assert_response :success
-      # The file should be destroyed
-      assert_nil DmsfFile.visible.find_by_id @file1.id
-    end
+    @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :file_delete
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil, @jsmith
+    assert_response :success
+    # The file should be destroyed
+    assert_nil DmsfFile.visible.find_by_id @file1.id
   end
 
 end
