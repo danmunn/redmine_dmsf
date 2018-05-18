@@ -77,7 +77,6 @@ module RedmineDmsf
       def folder
         unless @folder
           return nil unless project
-          #f = parent.folder
           @folder = DmsfFolder.visible.where(:project_id => project.id, :title => basename,
             :dmsf_folder_id => parent.folder ? parent.folder.id : nil).first
         end
@@ -236,6 +235,11 @@ module RedmineDmsf
         raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
 
         if collection?
+
+          if dest.exist?
+            return overwrite ? NotImplemented : PreconditionFailed
+          end
+
           # At the moment we don't support cross project destinations
           return MethodNotImplemented unless (project.id == resource.project.id)
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
@@ -243,7 +247,7 @@ module RedmineDmsf
 
           # Current object is a folder, so now we need to figure out information about Destination
           if dest.exist?
-            MethodNotAllowed
+            return overwrite ? NotImplemented : PreconditionFailed
           else
             if(parent.projectless_path == '/') #Project root
               folder.dmsf_folder_id = nil
@@ -260,6 +264,7 @@ module RedmineDmsf
               User.current.allowed_to?(:folder_manipulation, resource.project)
 
           if dest.exist?
+            return PreconditionFailed unless overwrite
             if (project == resource.project) && file.name.match(/.\.tmp$/i)
               # Renaming a *.tmp file to an existing file in the same project, probably Office that is saving a file.
               Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename} (exists), possible MSOffice rename from .tmp when saving"
@@ -290,7 +295,7 @@ module RedmineDmsf
             else
               # Files cannot be merged at this point, until a decision is made on how to merge them
               # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
-              MethodNotAllowed
+              NotImplemented
             end
           else
             if(parent.projectless_path == '/') #Project root
@@ -322,7 +327,7 @@ module RedmineDmsf
               file.name = resource.basename
 
               # Save Changes
-              (file.last_revision.save! && file.save!) ? Created : PreconditionFailed
+              (file.last_revision.save && file.save) ? Created : PreconditionFailed
             end
           end
         end
@@ -347,10 +352,13 @@ module RedmineDmsf
         parent = resource.parent
         raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
 
-        if collection?
-          # Current object is a folder, so now we need to figure out information about Destination
-          return MethodNotAllowed if(dest.exist?)
+        if dest.exist?
+          return overwrite ? NotImplemented : PreconditionFailed
+        end
 
+        return Conflict unless dest.parent.exist?
+
+        if collection?
           # Permission check if they can manipulate folders and view folders
           # Can they:
           #  Manipulate folders on destination project :folder_manipulation
@@ -370,37 +378,32 @@ module RedmineDmsf
           return PreconditionFailed if new_folder.nil? || new_folder.id.nil?
           Created
         else
-          if dest.exist?
-            MethodNotAllowed
-            # Files cannot be merged at this point, until a decision is made on how to merge them
-            # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
+          # Permission check if they can manipulate folders and view folders
+          # Can they:
+          #  Manipulate files on destination project   :file_manipulation
+          #  View files on destination project         :view_dmsf_files
+          #  View files on the source project          :view_dmsf_files
+          raise Forbidden unless User.current.admin? ||
+             (User.current.allowed_to?(:file_manipulation, resource.project) &&
+              User.current.allowed_to?(:view_dmsf_files, resource.project) &&
+              User.current.allowed_to?(:view_dmsf_files, project))
+
+          if(parent.projectless_path == '/') #Project root
+            f = nil
           else
-            # Permission check if they can manipulate folders and view folders
-            # Can they:
-            #  Manipulate files on destination project   :file_manipulation
-            #  View files on destination project         :view_dmsf_files
-            #  View files on the source project          :view_dmsf_files
-            raise Forbidden unless User.current.admin? ||
-               (User.current.allowed_to?(:file_manipulation, resource.project) &&
-                User.current.allowed_to?(:view_dmsf_files, resource.project) &&
-                User.current.allowed_to?(:view_dmsf_files, project))
-
-            if(parent.projectless_path == '/') #Project root
-              f = nil
-            else
-              return PreconditionFailed unless parent.exist? && parent.folder
-              f = parent.folder
-            end
-            return PreconditionFailed unless exist? && file
-            return InternalServerError unless file.copy_to(resource.project, f)
-
-            # Update Revision and names of file [We can link to old physical resource, as it's not changed]
-            file.last_revision.name = resource.basename if file.last_revision
-            file.name = resource.basename
-
-            # Save Changes
-            (file.last_revision.save! && file.save!) ? Created : PreconditionFailed
+            return PreconditionFailed unless parent.exist? && parent.folder
+            f = parent.folder
           end
+          return PreconditionFailed unless exist? && file
+          new_file = file.copy_to(resource.project, f)
+          return InternalServerError unless (new_file && new_file.last_revision)
+
+          # Update Revision and names of file [We can link to old physical resource, as it's not changed]
+          new_file.last_revision.name = resource.basename
+          new_file.name = resource.basename
+
+          # Save Changes
+          (new_file.last_revision.save && new_file.save) ? Created : PreconditionFailed
         end
       end
 

@@ -200,7 +200,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
         assert_no_difference '@file1.dmsf_file_revisions.count' do
           xml_http_request :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", nil,
             @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
-          assert_response 405 # MethodNotAllowed
+          assert_response 501 # NotImplemented
         end
       end
     end

@@ -58,7 +58,7 @@ class DmsfFile < ActiveRecord::Base
   validate :validates_name_uniqueness
 
   def validates_name_uniqueness
-    existing_file = DmsfFile.visible.findn_file_by_name(self.project_id, self.dmsf_folder, self.name)
+    existing_file = DmsfFile.select(:id).findn_file_by_name(self.project_id, self.dmsf_folder, self.name)
     errors.add(:name, l('activerecord.errors.messages.taken')) unless (existing_file.nil? || existing_file.id == self.id)
   end
 
@@ -259,9 +259,8 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def copy_to_filename(project, folder, filename)
-    source = "#{project.identifier}: #{self.dmsf_path_str}"
     file = DmsfFile.new
-    file.dmsf_folder = folder
+    file.dmsf_folder_id = folder.id if folder
     file.project_id = project.id
     file.name = filename
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
@@ -286,7 +285,7 @@ class DmsfFile < ActiveRecord::Base
       if File.exist? self.last_revision.disk_file
         FileUtils.cp self.last_revision.disk_file, new_revision.disk_file(false)
       end
-      new_revision.comment = l(:comment_copied_from, :source => source)
+      new_revision.comment = l(:comment_copied_from, :source => "#{project.identifier}: #{self.dmsf_path_str}")
       new_revision.custom_values = []
       self.last_revision.custom_values.each do |cv|
         v = CustomValue.new
@@ -294,9 +293,19 @@ class DmsfFile < ActiveRecord::Base
         v.value = cv.value
         new_revision.custom_values << v
       end
-      file.delete(true) unless new_revision.save
+      unless new_revision.save
+        Rails.logger.error new_revision.errors.full_messages.to_sentence
+        file.delete(true)
+        file = nil
+      else
+        file.set_last_revision new_revision
+      end
+    else
+      Rails.logger.error file.errors.full_messages.to_sentence
+      file.delete(true)
+      file = nil
     end
-    return file
+    file
   end
 
   # To fulfill searchable module expectations
