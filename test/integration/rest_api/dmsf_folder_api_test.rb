@@ -32,7 +32,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @jsmith = User.find_by_id 2
     @file1 = DmsfFile.find_by_id 1
     @folder1 = DmsfFolder.find_by_id 1
-    @folder6 = DmsfFolder.find_by_id 6
+    @folder7 = DmsfFolder.find_by_id 7
     Setting.rest_api_enabled = '1'
     @role = Role.find_by_id 1
     @project1 = Project.find_by_id 1
@@ -43,7 +43,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     assert_kind_of User, @admin
     assert_kind_of User, @jsmith
     assert_kind_of DmsfFolder, @folder1
-    assert_kind_of DmsfFolder, @folder6
+    assert_kind_of DmsfFolder, @folder7
     assert_kind_of DmsfFile, @file1
     assert_kind_of Role, @role
     assert_kind_of Project, @project1
@@ -110,8 +110,8 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #   <dmsf>
     #     <dmsf_folders total_count="1" type="array">
     #       <folder>
-    #       <id>6</id>
-    #         <title>folder6</title>
+    #       <id>7</id>
+    #         <title>folder7</title>
     #       </folder>
     #     </dmsf_folders>
     #     <dmsf_files total_count="1" type="array">
@@ -123,9 +123,10 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #     <dmsf_links total_count="0" type="array">
     #     </dmsf_links>
     # </dmsf>
+    puts @response.body
     assert_select 'dmsf > dmsf_folders', :count => 1
-    assert_select 'dmsf > dmsf_folders > folder > id', :text => @folder6.id.to_s
-    assert_select 'dmsf > dmsf_folders > folder > title', :text => @folder6.title.to_s
+    assert_select 'dmsf > dmsf_folders > folder > id', :text => @folder7.id.to_s
+    assert_select 'dmsf > dmsf_folders > folder > title', :text => @folder7.title.to_s
     assert_select 'dmsf > dmsf_files', :count => 1
   end
 

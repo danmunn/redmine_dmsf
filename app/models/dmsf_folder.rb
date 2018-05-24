@@ -58,9 +58,9 @@ class DmsfFolder < ActiveRecord::Base
         group_ids = -1 if group_ids.blank?
         allowed = (system && role.allowed_to?(:display_system_folders)) ? 1 : 0
         %{
-          (#{permissions}.object_id IS NULL) OR
+          ((#{permissions}.object_id IS NULL) OR
           (#{permissions}.object_id = #{role.id} AND #{permissions}.object_type = 'Role') OR
-          ((#{permissions}.object_id = #{user.id} OR #{permissions}.object_id IN (#{group_ids})) AND #{permissions}.object_type = 'User') AND
+          ((#{permissions}.object_id = #{user.id} OR #{permissions}.object_id IN (#{group_ids})) AND #{permissions}.object_type = 'User')) AND
           (#{folders}.system = #{DmsfFolder.connection.quoted_false} OR 1 = #{allowed})
         }
       else
