@@ -59,14 +59,12 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     # The role has got permissions
     User.current = @manager
     assert_equal 6, DmsfFolder.where(:project_id => 1).count
-    assert_equal 6, DmsfFolder.visible.where(:project_id => 1).count
+    assert_equal 5, DmsfFolder.visible.where(:project_id => 1).count
     # The user has got permissions
     User.current = @developer
-    # TODO: Travis fails here
-    #assert_equal 6, DmsfFolder.visible.where(:project_id => 1).count
     # Hasn't got permissions for @folder7
     @folder7.dmsf_folder_permissions.where(:object_type => 'User').delete_all
-    assert_equal 5, DmsfFolder.visible.where(:project_id => 1).count
+    assert_equal 4, DmsfFolder.visible.where(:project_id => 1).count
   end
 
   def test_permissions
