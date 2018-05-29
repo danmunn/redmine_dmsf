@@ -113,7 +113,7 @@ optparse = OptionParser.new do |opts|
   opts.separator('')
   opts.separator('Options:')
   opts.on('-s', '--stemming_lang a,b,c', Array,'Comma separated list of stemming languages for indexing') { |s| $stem_langs = s }  
-  opts.on('-v', '--verbose',            'verbose') {$verbose += 1}}
+  opts.on('-v', '--verbose',            'verbose') {$verbose += 1}
   opts.on('-e', '--environment ENV',    'Rails ENVIRONMENT (development, testing or production), default production') { |e| $env = e}
   opts.on('-t', '--temp-dir PATH',      'Temporary directory for indexing'){ |t| $tempdir = t }
   opts.on('-V', '--version',            'show version and exit') { puts VERSION; exit}
