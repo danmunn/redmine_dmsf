@@ -32,8 +32,10 @@ sl:
   warning_file_not_locked: Datoteka ni zaklenjena
   notice_file_unlocked: Datoteka odklenjena
   error_only_user_that_locked_file_can_unlock_it: Samo oseba, ki je zaklenila datoteko, jo lahko odklene.
+
   error_max_files_exceeded: "Max %{number} datotek za istočasno nalaganje je preseženo."
   error_entry_project_does_not_match_current_project: Projekt se ujema s trenutno nastavljenim projektom
+
   notice_folder_created: Mapa kreirana
   error_folder_creation_failed: Mape ne morem kreirati
   error_folder_title_must_be_entered: Naslov mora biti vnešen
@@ -51,12 +53,16 @@ sl:
   notice_your_preferences_were_saved: Vaše nastavitve so shranjene
   notice_your_preferences_were_not_saved: Your preferences were not saved
   warning_folder_notifications_already_activated: Obveščanje o mapi je že aktivno
+
   notice_folder_notifications_activated: Obveščanje o mapi je aktivirano
   warning_folder_notifications_already_deactivated: Obveščanje o mapi je že neaktivno
+
   notice_folder_notifications_deactivated: Obveščanje o mapi je deaktivirano
   warning_file_notifications_already_activated: Obveščanje o datoteki je že aktivno
+
   notice_file_notifications_activated: Obveščanje o datoteki je aktivirano
   warning_file_notifications_already_deactivated: Obveščanje o datoteki je že deaktivirano
+
   notice_file_notifications_deactivated: Obveščanje o datoteki je deaktivirano
   link_details: "%{title} podrobnosti"
   link_edit: "Uredi %{title}"
@@ -69,6 +75,7 @@ sl:
   link_author: Autor
   title_check_for_zip_download_or_email: Označi za zip prenašanje ali email
   title_check_for_restore_or_delete: Check for restore or delete
+
   title_delete: Izbriši
   title_notifications_active_deactivate: "Obveščanje aktivno: Deaktiviraj"
   title_notifications_not_active_activate: "Obveščanje ni aktivno: Aktiviraj"
@@ -102,7 +109,8 @@ sl:
   select_option_deactivated: Deaktivirano
   select_option_activated: Aktivirano
   label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r -
+    revision). Example: %t_%v"
   title_save_preferences: Save preferences
   heading_revisions: Verzije
   title_download: Prenesi dol
@@ -121,8 +129,10 @@ sl:
   label_new_content: Nova vsebina
   label_maximum_files_upload: Maximum naloženih datotek
   note_maximum_number_of_files_uploaded: Omejitev največjega števila datotek za nalaganje naenkrat. 0 pomeni neomejeno.
+
   label_maximum_files_download: Maximum datotek za prenos dol.
-  note_maximum_number_of_files_downloaded: Omejitev največjega števila prenešenih datotek v zip formatu ali poslanih po emailu. 0 pomeni neomejeno.
+  note_maximum_number_of_files_downloaded: Omejitev največjega števila prenešenih datotek v zip formatu ali poslanih po
+    emailu. 0 pomeni neomejeno.
   label_file_storage_directory: Direktorij za datoteke
   label_index_database: Index podatkovna baza
   label_stemming_language: Jezik za korenjenje besed (stemming)
@@ -132,11 +142,11 @@ sl:
   option_stem_none: Izklop korenjenja (privzeto)
   option_stem_some: Korenjenje nekaterih besed
   option_stem_all: Korenjenje vseh besed
-  label_stemming_description: Način kako parser uporablja algoritm za korenjenje besed. Privzeta vrednost je STEM_NONE. Možne vrednosti so
-  note_do_not_stem: Ne koreni besed.
-  note_stem_some: "Išči korene besed razen tistih, ki se začnejo z veliko začetnico, ali pa jim sledijo določene črke, ali so označene z operatorji, ki rabijo informacijo o poziciji črk. Korenjene besede so označene s predpono 'Z'."
-  note_stem_all: "Išči korene za vse besede (opomba: brez dodajanja 'Z' predpone)."
-  note_stemming_applied: "V vednost: algoritmi za korenjenje se uporabljajo samo na besedah po verjetnostnih poljih - V logičnih besednih povezavah se besede ne koreni."
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+    of terms except for those which start with a capital letter, or are followed by certain characters
+    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Privzeti status obveščanja za datoteke
   heading_uploaded_files: Naložene datoteke
   submit_commit: Shrani
@@ -157,9 +167,13 @@ sl:
   error_create_cycle_in_folder_dependency: naredi ciklično odvisnost med mapami
   error_contains_invalid_character: vsebuje nedovoljene znake
   error_file_commit_require_uploaded_file: Ukaz zahteva naloženo datoteko
+
   warning_some_files_were_not_commited: "Nekatere datoteke niso shranje zaradi napak v validaciji: %{files}"
+
   error_user_has_not_right_delete_folder: Uporabnik nima privilegija brisati mapo
+
   error_user_has_not_right_delete_file: Uporabnik nima privilegija brisati datoteke
+
   notice_entries_deleted: Izbrane enote izbrisane
   warning_some_entries_were_not_deleted: "Nekatere enote niso izbrisane: %{entries}"
   title_delete_checked: Izbriši izbrano
@@ -168,6 +182,7 @@ sl:
   label_number_of_folders: Mapa
   label_number_of_documents: Dokumentacija
   error_file_storage_directory_does_not_exist: Mapa za datoteke ne obstaja in se je ne da kreirat
+
   error_file_can_not_be_created: Datoteke se ne da kreirat v mapi
   error_wrong_zip_encoding: Napačen Zip nabor znakov
   warning_xapian_not_available: Xapian ni na voljo
@@ -192,12 +207,15 @@ sl:
   title_copy: Kopiraj
 
   error_max_email_filesize_exceeded: "Presegli ste največjo velikost datoteke za pošiljanje po email-u. (%{number} MB)"
-  note_maximum_email_filesize: Omejitev največje velikosti datoteke, ki se lahko pošlje po email-u. 0 pomeni neomejeno. Količina je v MB.
+
+  note_maximum_email_filesize: Omejitev največje velikosti datoteke, ki se lahko pošlje po email-u. 0 pomeni neomejeno.
+    Količina je v MB.
   label_maximum_email_filesize: Največja velikost email priponke
   header_minimum_filesize: Datotečna napaka.
   error_minimum_filesize: "Datoteka %{file} je 0 bytov in ne bo pripeta."
   parent_directory: Nadrejena mapa
   note_webdav: "Webdav po vklopu lahko najdete na %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
+
   label_webdav: Webdav delovanje
   label_dmsf_plural: "Kopiraj Arhivske datoteke in mape (%{files} datoteke v %{folders} mape)"
 
@@ -207,12 +225,15 @@ sl:
   notice_folder_unlocked: Mapa je uspešno odklenjena
   error_only_user_that_locked_folder_can_unlock_it: Nimate privilegijev, da bi odklenili to mapo
   title_unlock_folder: Odkleni, da bi drugim članom omogočil spreminjanje
+
   title_lock_folder: Zakleni, da bi drugim članom preprečil spreminjanje
 
   select_option_webdav_readonly: Beri (izključno)
   select_option_webdav_readwrite: "Beri/Piši"
   label_webdav_strategy: Webdav strategija
-  note_webdav_strategy: "Omogoči administratorju da odloči ali je webdav platforma na voljo izključno za branje ali beri/piši za končne uporabnike."
+
+  note_webdav_strategy: "Omogoči administratorju da odloči ali je webdav platforma na voljo izključno za branje ali
+    beri/piši za končne uporabnike."
 
   error_unable_delete_dmsf_workflow: Unable to delete the workflow
   error_empty_note: "The note can't be empty"
@@ -260,15 +281,23 @@ sl:
   text_email_subject_requires_approval: requires your approval
   text_email_subject_updated: updated
   text_email_subject_started: started
-  text_email_finished_approved: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been approved."
-  text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been finished and the document has been rejected because of '%{notice}'."
-  text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
-  text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps and you are expected to do an approval in the next approval step."
-  text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of the approval steps."
-  text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you are expected to do an approval in the current approval step."
+  text_email_finished_approved: "The approval workflow '%{name}' assigned to '%{filename}' document has just been
+    finished and the document has been approved."
+  text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been
+    finished and the document has been rejected because of '%{notice}'."
+  text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been
+    delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
+  text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of
+    the approval steps and you are expected to do an approval in the next approval step."
+  text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished
+    one of the approval steps."
+  text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you
+    are expected to do an approval in the current approval step."
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
-  text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document in
+
+  text_email_to_see_status: To see the current status of the approval workflow click on the workflow status the document
+    in
 
   title_create_link: Create a symbolic link
   label_link_from: Link from
@@ -295,6 +324,7 @@ sl:
 
   label_display_notified_recipients: Display notified recipients
   note_display_notified_recipients: The user will be informed about all recipients of just sent the email notification.
+
   warning_email_notifications: "Email notifications sent to %{to}"
 
   link_trash_bin: Trash bin
@@ -318,7 +348,9 @@ sl:
   open_approvals: Open approvals
 
   label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
-  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise Redmine standard upload form must be used. Number is in MB.
+  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise
+    Redmine standard upload form must be used. Number is in MB.
+
   label_classic: Classic
   label_drag_drop: Modern
 
@@ -337,7 +369,8 @@ sl:
   label_last_revision_id: Revision
     
   label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern matches temporary files created by MsOffice.
+  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern
+    matches temporary files created by MsOffice.
 
   label_dmsf_keep_documents_locked: Keep documents locked
   note_dmsf_keep_documents_locked: Documents will be kept locked when approved
@@ -364,6 +397,12 @@ sl:
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
+
+  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
+    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
+    option needs to have been used at index time.
+    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

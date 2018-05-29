@@ -31,9 +31,11 @@ de:
   notice_file_locked: Datei gesperrt
   warning_file_not_locked: Datei nicht gesperrt
   notice_file_unlocked: Datei freigegeben
-  error_only_user_that_locked_file_can_unlock_it: Nur der Benutzer, der die Datei gesperrt hat, kann sie auch wieder freigeben
+  error_only_user_that_locked_file_can_unlock_it: Nur der Benutzer, der die Datei gesperrt hat, kann sie auch wieder
+    freigeben
   error_max_files_exceeded: "Grenze für %{number} gleichzeitig heruntergeladene Dateien überschritten"
   error_entry_project_does_not_match_current_project: Eingangsprojekt entspricht nicht aktuellem Projekt
+
   notice_folder_created: Ordner erstellt
   error_folder_creation_failed: Ordnererstellung fehlgeschlagen
   error_folder_title_must_be_entered: Es muss ein Titel angegeben werden
@@ -51,12 +53,16 @@ de:
   notice_your_preferences_were_saved: Deine Einstellungen wurden gespeichert
   notice_your_preferences_were_not_saved: Your preferences were not saved
   warning_folder_notifications_already_activated: Ordnerbenachrichtigungen sind schon aktiviert
+
   notice_folder_notifications_activated: Ordnerbenachrichtigungen aktiviert
   warning_folder_notifications_already_deactivated: Ordnerbenachrichtigungen sind schon deaktiviert
+
   notice_folder_notifications_deactivated: Ordnerbenachrichtigungen deaktiviert
   warning_file_notifications_already_activated: Dateibenachrichtigungen sind schon aktiviert
+
   notice_file_notifications_activated: Dateibenachrichtigungen aktiviert
   warning_file_notifications_already_deactivated: Dateibenachrichtigungen sind schon deaktiviert
+
   notice_file_notifications_deactivated: Dateibenachrichtigungen deaktiviert
   link_details: "%{title} Details"
   link_edit: "Bearbeite %{title}"
@@ -69,6 +75,7 @@ de:
   link_author: Autor
   title_check_for_zip_download_or_email: Wähle für ZIP-Download bzw. Email
   title_check_for_restore_or_delete: Wähle für Rückstellen oder Löschen
+
   title_delete: Löschen
   title_notifications_active_deactivate: "Benachrichtigungen sind aktiv: Ausschalten"
   title_notifications_not_active_activate: "Benachrichtigungen sind nicht aktiv: Einschalten"
@@ -102,7 +109,8 @@ de:
   select_option_deactivated: Aus
   select_option_activated: Ein
   label_title_format: Title format
-  text_title_format: "Format des Dokumente-Titels für Speichern (%t - Titel, %f - Datei, %d - Datum, %v - Version, %i - ID, %r - Revision). z.B.: %t_%v"
+  text_title_format: "Format des Dokumente-Titels für Speichern (%t - Titel, %f - Datei, %d - Datum, %v - Version, %i -
+    ID, %r - Revision). z.B.: %t_%v"
   title_save_preferences: Einstellungen speichern
   heading_revisions: Versionen
   title_download: Download
@@ -120,9 +128,11 @@ de:
   label_new_content: Neuer Inhalt
   label_maximum_files_upload: Maximal zulässige Anzahl der hochgeladenen Dateien
   option_version_custom: Benutzerdefinierte
-  note_maximum_number_of_files_uploaded: Beschränkt die maximale Anzahl der  Dateien, die auf einmal hochgeladen werden können. 0 bedeutet unbeschränkt.
+  note_maximum_number_of_files_uploaded: Beschränkt die maximale Anzahl der  Dateien, die auf einmal hochgeladen werden
+    können. 0 bedeutet unbeschränkt.
   label_maximum_files_download: Maximal zulässige Anzahl der Dateien, die heruntergeladen werden können.
-  note_maximum_number_of_files_downloaded: Beschränkt die maximale Anzahl, der Dateien, die auf einmal heruntergeladen werden können. (per ZIP oder Mail). 0 bedeutet unbeschränkt.
+  note_maximum_number_of_files_downloaded: Beschränkt die maximale Anzahl, der Dateien, die auf einmal heruntergeladen
+    werden können. (per ZIP oder Mail). 0 bedeutet unbeschränkt.
   label_file_storage_directory: Verzeichnis für die Dateiablage
   label_index_database: Index Datenbank
   label_stemming_language: Stemming-Sprache
@@ -132,11 +142,11 @@ de:
   option_stem_none: reduziere nichts (Voreinstellung)
   option_stem_some: reduziere manches
   option_stem_all: reduziere alles
-  label_stemming_description: Diese Einstellung beeinflusst, wie der Parser den Stemming-Algorithmus anwendet. Voreingestellt ist STEM_NONE. Die möglichen Werte sind
-  note_do_not_stem: Kein Stemming durchführen.
-  note_stem_some: Suche nach reduzierten Formen aller Wörter mit Ausnahme von Wörtern, die mit einem Großbuchstaben beginnen,von bestimmten Zeichen gefolgt werden oder von einem Operator verwendet werden, die Positionsinformationen  braucht. Reduzierten Formen wird ein 'Z' vorangestellt.
-  note_stem_all: "Suche nach reduzierten Formen aller Wörter (Achtung: Kein 'Z'-Präfix wird hinzugefügt)."
-  note_stemming_applied: Beachten Sie, dass der Stemming- Algorithmus nur bei Wörtern in Wahrscheinlichkeitsfeldern angewendet wird - boolesche Filtereinstellungen werden nie reduziert.
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+    of terms except for those which start with a capital letter, or are followed by certain characters
+    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Standardmäßge Dateibenachrichtigungen
   heading_uploaded_files: Hochgeladene Dateien
   submit_commit: OK
@@ -157,9 +167,13 @@ de:
   error_create_cycle_in_folder_dependency: Zirkelabhängigkeit in der Ordnerstruktur erstellt
   error_contains_invalid_character: enthält ungültige Zeichen
   error_file_commit_require_uploaded_file: Der Commit erfordet eine hochladene Datei
+
   warning_some_files_were_not_commited: "Einige Dateien wurden wegen Validierungsfehlern nicht commitet: %{files}"
+
   error_user_has_not_right_delete_folder: Der Nutzer hat kein Recht die Ordner zu löschen.
+
   error_user_has_not_right_delete_file: Der Nutzer hat kein Recht die Datei zu löschen.
+
   notice_entries_deleted: Einträge löschen
   warning_some_entries_were_not_deleted: "Enige Einträge wurden nicht gelöscht: %{entries}"
   title_delete_checked: Löschen ausgewählt
@@ -167,7 +181,8 @@ de:
   title_filename_for_download: Dateiname beim Herunterladen oder in ZIP-Archiv verwenden
   label_number_of_folders: Ordner
   label_number_of_documents: Dokumente
-  error_file_storage_directory_does_not_exist: Der Dateiablageordner existiert nicht auf dem Server und kann nicht erstellt werden.
+  error_file_storage_directory_does_not_exist: Der Dateiablageordner existiert nicht auf dem Server und kann nicht
+    erstellt werden.
   error_file_can_not_be_created: Datei kann nicht in dem gewählten Ordner erstellt werden.
   error_wrong_zip_encoding: Falsche ZIP-Kodierung
   warning_xapian_not_available: Xapian steht nicht zur Verfügung
@@ -192,12 +207,15 @@ de:
   title_copy: Kopieren
 
   error_max_email_filesize_exceeded: "Maximale Dateigröße der Anlage wurde überschritten. (%{number} MB)"
-  note_maximum_email_filesize: Maximale Dateigröße der Anhänge, die per E-mail verschickt werden können. 0 bedeutet keinen Limit. Angabe in MB.
+
+  note_maximum_email_filesize: Maximale Dateigröße der Anhänge, die per E-mail verschickt werden können. 0 bedeutet
+    keinen Limit. Angabe in MB.
   label_maximum_email_filesize: Maximale Dateigröße der Anhänge
   header_minimum_filesize: Dateifehler wegen minimaler Dateigröße.
   error_minimum_filesize: "Die Datei %{file} ist 0 Bytes groß und wird deswegen nicht angehängt."
   parent_directory: übergeordnetes Verzeichnis
-  note_webdav: "Nach der Aktivierung von WebDav kann der Dienst über die URL %{protocol}://%{domain}/dmsf/webdav/[project identifier] erreicht werden."
+  note_webdav: "Nach der Aktivierung von WebDav kann der Dienst über die URL
+    %{protocol}://%{domain}/dmsf/webdav/[project identifier] erreicht werden."
   label_webdav: Webdav Funktionalität
   label_dmsf_plural: "Kopieren von Dateien und Ordnern (%{files} Dateien in %{folders} Ordnern)"
 
@@ -206,13 +224,16 @@ de:
   warning_folder_not_locked: Der Ordner konnte nicht gesperrt werden
   notice_folder_unlocked: Der Ordner wurde erfolgreich entsperrt
   error_only_user_that_locked_folder_can_unlock_it: Sie haben keine Berechtigung zur Entsperrung des Ordners
+
   title_unlock_folder: Ordner zur Bearbeitung durch andere Benutzer entsperren
   title_lock_folder: Ordner zum Schutz vor Bearbeitung durch andere Benutzer sperren
 
   select_option_webdav_readonly: nur Lesen
   select_option_webdav_readwrite: Lesen/Schreiben
   label_webdav_strategy: Webdav Strategie
-  note_webdav_strategy: Erlaubt dem Administrator den Wechsel der WebDav Rolle für die Endbenutzer zwischen Nur-Lesen oder Lesen-und-Schreiben.
+
+  note_webdav_strategy: Erlaubt dem Administrator den Wechsel der WebDav Rolle für die Endbenutzer zwischen Nur-Lesen
+    oder Lesen-und-Schreiben.
 
   error_unable_delete_dmsf_workflow: Konnte den Workflow nicht löschen
   error_empty_note: Die Notiz darf nicht leer sein.
@@ -260,15 +281,23 @@ de:
   text_email_subject_requires_approval: benötigt deine Genehmigung
   text_email_subject_updated: bearbeitet
   text_email_subject_started: gestartet
-  text_email_finished_approved: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist abgeschlossen und die Datei wurde genehmigt."
-  text_email_finished_rejected: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist abgeschlossen, aber die Datei wurde abgelehnt, weil: '%{notice}'."
-  text_email_finished_delegated: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' wurde an dich deligiert, weil: '%{notice}' und weil deine Zustimmung im aktuellen Genehmigungsschritt benötigt wird."
-  text_email_finished_step: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade einen Zustimmungsschritt abgeschlossen und im nächsten Genehmigungsschritt wird deine Zustimmung benötigt."
-  text_email_finished_step_short: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade einen Genehmigungsschritt abgeschlossen."
-  text_email_started: "Der Genehmigungs-Workflow '%{name}' zugewiesen an '%{filename}' wurde gestartet und im aktuellen Genehmigungsschritt wird deine Zustimmung benötigt."
+  text_email_finished_approved: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist
+    abgeschlossen und die Datei wurde genehmigt."
+  text_email_finished_rejected: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist
+    abgeschlossen, aber die Datei wurde abgelehnt, weil: '%{notice}'."
+  text_email_finished_delegated: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' wurde an
+    dich deligiert, weil: '%{notice}' und weil deine Zustimmung im aktuellen Genehmigungsschritt benötigt wird."
+  text_email_finished_step: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade einen
+    Zustimmungsschritt abgeschlossen und im nächsten Genehmigungsschritt wird deine Zustimmung benötigt."
+  text_email_finished_step_short: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade
+    einen Genehmigungsschritt abgeschlossen."
+  text_email_started: "Der Genehmigungs-Workflow '%{name}' zugewiesen an '%{filename}' wurde gestartet und im aktuellen
+    Genehmigungsschritt wird deine Zustimmung benötigt."
   text_email_to_proceed: Um fortzufahren klicke auf das Häckchen neben der Datei in
-  text_email_to_see_history: Um den Verlauf des Genehmigungs-Workflows zu sehen klicke auf den Workflowstatus zur Datei in
-  text_email_to_see_status: Um den aktuellen Status des Genehmigungs-Workflows zu sehen klicke auf den Workflowstatus zur Datei in
+  text_email_to_see_history: Um den Verlauf des Genehmigungs-Workflows zu sehen klicke auf den Workflowstatus zur Datei
+    in
+  text_email_to_see_status: Um den aktuellen Status des Genehmigungs-Workflows zu sehen klicke auf den Workflowstatus
+    zur Datei in
 
   title_create_link: Verknüpfung anlegen
   label_link_from: Link von
@@ -294,7 +323,8 @@ de:
   label_links_only: nur Verknüpfungen
 
   label_display_notified_recipients: Zeige benachrichtigte Empfänger
-  note_display_notified_recipients: Der User wird über über den Empfang der E-mail Benachrichtigungen von allen Empfängern informiert.
+  note_display_notified_recipients: Der User wird über über den Empfang der E-mail Benachrichtigungen von allen
+    Empfängern informiert.
   warning_email_notifications: "Emailbenachrichtigung wurde gesendet an %{to}"
 
   link_trash_bin: Papierkorb
@@ -318,7 +348,9 @@ de:
   open_approvals: Offene Genehmigungs-Workflows
 
   label_maximum_ajax_upload_filesize: Maximale Dateigröße für den Upload via AJAX
-  note_maximum_ajax_upload_filesize: Maximale Dateigröße für den Upload über die AJAX-Schnittstelle. Für größere Dateien muss der Standard-Uploader von Redmine verwendet werden. Angabe in MB.
+  note_maximum_ajax_upload_filesize: Maximale Dateigröße für den Upload über die AJAX-Schnittstelle. Für größere Dateien
+    muss der Standard-Uploader von Redmine verwendet werden. Angabe in MB.
+
   label_classic: Klassisch
   label_drag_drop: Modern
 
@@ -332,9 +364,13 @@ de:
 
   label_webdav_ignore: Ignored files patterns
   note_webdav_ignore: A regular expresion with filenames to ignore by PUT requests.
+
+  label_document_url: Url
+  label_last_revision_id: Version
     
   label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern matches temporary files created by MsOffice.
+  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern
+    matches temporary files created by MsOffice.
 
   label_dmsf_keep_documents_locked: Keep documents locked
   note_dmsf_keep_documents_locked: Documents will be kept locked when approved
@@ -361,6 +397,12 @@ de:
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
+
+  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
+    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
+    option needs to have been used at index time.
+    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

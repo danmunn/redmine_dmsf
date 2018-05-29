@@ -355,7 +355,10 @@ class DmsfFile < ActiveRecord::Base
       if database
         enquire = Xapian::Enquire.new(database)
 
-        query_string = tokens.join(' ')
+        # Combine the rest of the command line arguments with spaces between
+        # them, so that simple queries don't have to be quoted at the shell
+        # level.
+        query_string = tokens.map{ |x| !(x[-1,1].eql?'*')? x+'*': x }.join(' ')
         qp = Xapian::QueryParser.new
         stemmer = Xapian::Stem.new(lang)
         qp.stemmer = stemmer
@@ -376,7 +379,10 @@ class DmsfFile < ActiveRecord::Base
           qp.default_op = Xapian::Query::OP_OR
         end
 
-        query = qp.parse_query(query_string)
+        flags = Xapian::QueryParser::FLAG_WILDCARD
+        flags |= Xapian::QueryParser::FLAG_CJK_NGRAM if Setting.plugin_redmine_dmsf['enable_cjk_ngrams']
+
+        query = qp.parse_query(query_string, flags)
 
         enquire.query = query
         matchset = enquire.mset(0, 1000)

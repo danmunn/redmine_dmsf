@@ -32,8 +32,10 @@ hu:
   warning_file_not_locked: Fájl nincs lezárva
   notice_file_unlocked: Fájl kinyitva
   error_only_user_that_locked_file_can_unlock_it: Csak az tudja kinyitni a fájlt aki bezárta
+
   error_max_files_exceeded: "Túllépte az egyszerre letölthető fájlok %{number} számának korlátozását"
   error_entry_project_does_not_match_current_project: Az állomány projektje nem egyezik a jelenlegi projekttel
+
   notice_folder_created: Mappa létrehozása sikerült
   error_folder_creation_failed: Mappa létrehozása nem sikerült
   error_folder_title_must_be_entered: Cím beírása kötelező
@@ -51,12 +53,16 @@ hu:
   notice_your_preferences_were_saved: A preferenciái mentése kerültek
   notice_your_preferences_were_not_saved: Preferenciái nem lettek mentve
   warning_folder_notifications_already_activated: Mappa értesítések már be vannak kapcsolva
+
   notice_folder_notifications_activated: Mappa értesítések bekapcsolva
   warning_folder_notifications_already_deactivated: Mappa értesítések már ki vannak kapcsolva
+
   notice_folder_notifications_deactivated: Mappa értesítések ki vannak kapcsolva
   warning_file_notifications_already_activated: File értesítések már bekapcsolva
+
   notice_file_notifications_activated: Fájl értesítések aktiválva
   warning_file_notifications_already_deactivated: Fájl értesítések már bekapcsolva
+
   notice_file_notifications_deactivated: Fájl értesítések kikapcsolva
   link_details: "%{title} részletek"
   link_edit: "%{title} szerkesztése"
@@ -68,7 +74,8 @@ hu:
   link_ver: Verzió
   link_author: Szerző
   title_check_for_zip_download_or_email: Kijelölés tömörítésre, letöltésre vagy email-ben küldésre
-  title_check_for_restore_or_delete: Kijelölés visszaállításra vagy törlésre tömörítésre, letöltésre vagy email-ben küldésre
+  title_check_for_restore_or_delete: Kijelölés visszaállításra vagy törlésre tömörítésre, letöltésre vagy email-ben
+    küldésre
   title_delete: Törlés
   title_notifications_active_deactivate: "Értesítések bekapcsolva: Kikapcsolás"
   title_notifications_not_active_activate: "Értesítések nincsnek bekapcsolva: Bekapcsolás"
@@ -102,7 +109,8 @@ hu:
   select_option_deactivated: Deaktivált
   select_option_activated: Aktivált
   label_title_format: Cím formátum
-  text_title_format: "Dokumentum címformátum a letöltéshez (%t - cím, %f - fájl, %d - dátum, %v - verzió, %i - ID, %r - revízió) Például: t_%v"
+  text_title_format: "Dokumentum címformátum a letöltéshez (%t - cím, %f - fájl, %d - dátum, %v - verzió, %i - ID, %r -
+    revízió) Például: t_%v"
   title_save_preferences: Preferenciák mentése
   heading_revisions: Verziók
   title_download: Letöltés
@@ -121,8 +129,10 @@ hu:
   label_new_content: Új tartalom
   label_maximum_files_upload: Maximum feltölthető fájlok
   note_maximum_number_of_files_uploaded: Egyszerre feltölthető fájlok maximum száma. 0 korlátlan fájlfeltöltést jelent.
+
   label_maximum_files_download: Maximálisan feltölthető fájlok
-  note_maximum_number_of_files_downloaded: Maximálisan letölthető zip fájlok, vagy emailek. 0 korlátlan letöltést jelent.
+  note_maximum_number_of_files_downloaded: Maximálisan letölthető zip fájlok, vagy emailek. 0 korlátlan letöltést
+    jelent.
   label_file_storage_directory: Fájl tárolókönyvtár
   label_index_database: Index database
   label_stemming_language: Törzs nyelv
@@ -132,11 +142,11 @@ hu:
   option_stem_none: Nincs csonkolás (alapértelmezett)
   option_stem_some: Részleges csonkolás
   option_stem_all: Teljes csonkolás
-  label_stemming_description: "Ez a beállítás szabályozza, hogy a lekérdezés hogyan fogja alkalmazni a csonkoló algoritmust. Az alapértelmezett érték: STEM_NONE. A lehetséges értékek"
-  note_do_not_stem: Ne végezzen csonkolást
-  note_stem_some: Keressen a szótöveket, kivéve ha nagy kezdőbetűvel kezdődik a szó, vagy bizonyos karakterek követik, vagy ha a szó helyőrző operátorokat használ. A csonkolt kifejezések 'Z'-vel kerülnek jelölésre.
-  note_stem_all: Minden szó csonkolt formáját keresse meg (nincs 'Z' jelzés)
-  note_stemming_applied: Figyelem, a csonkolást végző algoritmus csak a lehetséges mezőkkel rendelkező szavakra érvényes, a Boole kifejezéseken sosem végez csonkolást.
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+    of terms except for those which start with a capital letter, or are followed by certain characters
+    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Fájl alapértelmezett értesítések
   heading_uploaded_files: Feltöltött fájlok
   submit_commit: Beíratás (commit)
@@ -157,9 +167,13 @@ hu:
   error_create_cycle_in_folder_dependency: hurok létrehozása a könyvtárstruktúrában
   error_contains_invalid_character: érvénytelen karaktereket tartalmaz
   error_file_commit_require_uploaded_file: Fájl beíratáshoz szükséges a feltöltött fájl
-  warning_some_files_were_not_commited: "Néhány fájl nem került beíratásra validálási locked_documents: Zárolt dokumentum"
+
+  warning_some_files_were_not_commited: "Néhány fájl nem került beíratásra validálási locked_documents: Zárolt
+    dokumentum"
   error_user_has_not_right_delete_folder: A felhasználónak nincs jogosultsága a mappa törléséhez
+
   error_user_has_not_right_delete_file: Felhasználónak nincs jogosultsága a fájl törléséhez.
+
   notice_entries_deleted: Állományok törölve
   warning_some_entries_were_not_deleted: "Néhány állomány nem került törlésre %{entries}"
   title_delete_checked: Ellenőrzöttek törlése
@@ -168,6 +182,7 @@ hu:
   label_number_of_folders: Mappák
   label_number_of_documents: Dokumentumok
   error_file_storage_directory_does_not_exist: A fájl tárolómappa nem létezik és nem hozható létre
+
   error_file_can_not_be_created: A fájl nem hozható létre a tárolómappában
   error_wrong_zip_encoding: Nem megfelelő Zip kódolás
   warning_xapian_not_available: Xapian nem elérhető
@@ -192,12 +207,15 @@ hu:
   title_copy: Másolás
 
   error_max_email_filesize_exceeded: "Túllépte a maximum fájlméretet ami emailen küldhető. (%{number} MB)"
-  note_maximum_email_filesize: Korlátozza a maximális fájlméretet, amely küldhető email-ben. A 0 korlátlan méretet jelent, az érték MB-ban kerül megadásra.
+
+  note_maximum_email_filesize: Korlátozza a maximális fájlméretet, amely küldhető email-ben. A 0 korlátlan méretet
+    jelent, az érték MB-ban kerül megadásra.
   label_maximum_email_filesize: Emailhez csatolható fájl maximum mérete.
   header_minimum_filesize: Fájl hiba.
   error_minimum_filesize: "A fájl %{file} 0 bájt, ezért nem lesz csatolva."
   parent_directory: Szülő könyvtár
   note_webdav: "Webdav aktiválása után itt található %{protocol}://%{domain}/dmsf/webdav/[projekt azonosító]"
+
   label_webdav: Webdav funkciók
   label_dmsf_plural: "Dokumentumok és mappák (%{files}  másolása a %{folders} mappákba"
 
@@ -206,13 +224,16 @@ hu:
   warning_folder_not_locked: Sajnos, a mappát nem lehet zárolni
   notice_folder_unlocked: A mappa sikeresen feloldva
   error_only_user_that_locked_folder_can_unlock_it: Önnek nincs jogosultsága a mappa megnyitásához
+
   title_unlock_folder: Feloldás, hogy mások is szerkeszteni tudjanak
   title_lock_folder: Mappa zárolása, hogy más felhasználók ne tudjanak változtatást végrehajtani
 
   select_option_webdav_readonly: Csak-olvasásra
   select_option_webdav_readwrite: Olvas/Ír
   label_webdav_strategy: Webdav stratégia
+
   note_webdav_strategy: Engedélyezi az adminisztrátornak, hogy dönthessen a felhasználók
+
 
   error_unable_delete_dmsf_workflow: Workflow törlése nem lehetséges
   error_empty_note: A feljegyzés nem lehet üres
@@ -260,15 +281,24 @@ hu:
   text_email_subject_requires_approval: Ön jóváhagyása szükséges
   text_email_subject_updated: frissített
   text_email_subject_started: elkezdett
-  text_email_finished_approved: "A '%{name}' jóváhagyási workflow amely a '%{filename}'  dokumentumhoz került hozzárendelésre, befejeződött és a dokumentum jóváhagyásra került."
-  text_email_finished_rejected: "A '%{name}' jóváhagyási workflow amely a '%{filename}' dokumentumhoz került hozzárendelésre, befejeződött és visszautasításra került a következő üzenettel: '%{notice}'."
-  text_email_finished_delegated: "A '%{name}' jóváhagyási workflow amely a '%{filename}'  dokumentumhoz került hozzárendelésre, Önhöz került az alábbi megjegyzés '%{notice}' miatt és a jelenlegi lépésben az Ön jóváhagyására vár."
-  text_email_finished_step: "A '%{name}' jóváhagyási workflow-ban amely a '%{filename}' dokumentumhoz került hozzárendelésre, egy lépés teljesült és a következő lépésben lépésben az Ön jóváhagyására vár."
-  text_email_finished_step_short: "A '%{name}' jóváhagyási workflow-ban amely a '%{filename}'  dokumentumhoz került hozzárendelésre, egy lépés teljesült a folyamatban."
-  text_email_started: "A '%{name}' jóváhagyási workflow amely a '%{filename}' dokumentumhoz került hozzárendelésre, elindult és a jelenlegi lépésben az Ön jóváhagyására vár."
+  text_email_finished_approved: "A '%{name}' jóváhagyási workflow amely a '%{filename}'  dokumentumhoz került
+    hozzárendelésre, befejeződött és a dokumentum jóváhagyásra került."
+  text_email_finished_rejected: "A '%{name}' jóváhagyási workflow amely a '%{filename}' dokumentumhoz került
+    hozzárendelésre, befejeződött és visszautasításra került a következő üzenettel: '%{notice}'."
+  text_email_finished_delegated: "A '%{name}' jóváhagyási workflow amely a '%{filename}'  dokumentumhoz került
+    hozzárendelésre, Önhöz került az alábbi megjegyzés '%{notice}' miatt és a jelenlegi lépésben az Ön jóváhagyására
+      vár."
+  text_email_finished_step: "A '%{name}' jóváhagyási workflow-ban amely a '%{filename}' dokumentumhoz került
+    hozzárendelésre, egy lépés teljesült és a következő lépésben lépésben az Ön jóváhagyására vár."
+  text_email_finished_step_short: "A '%{name}' jóváhagyási workflow-ban amely a '%{filename}'  dokumentumhoz került
+    hozzárendelésre, egy lépés teljesült a folyamatban."
+  text_email_started: "A '%{name}' jóváhagyási workflow amely a '%{filename}' dokumentumhoz került hozzárendelésre,
+    elindult és a jelenlegi lépésben az Ön jóváhagyására vár."
   text_email_to_proceed: A folytatáshoz kattintson a négyzetre a dokumentum mellett
-  text_email_to_see_history: Ha meg akarja nézni a jóváhagyási előzményeket, akkor kattintson a dokumentumon belül a workflow státuszra
-  text_email_to_see_status: Ha meg szeretné nézni a jóváhagyási folyamatot kattintson a dokumentumon belül a workflow státuszra
+  text_email_to_see_history: Ha meg akarja nézni a jóváhagyási előzményeket, akkor kattintson a dokumentumon belül a
+    workflow státuszra
+  text_email_to_see_status: Ha meg szeretné nézni a jóváhagyási folyamatot kattintson a dokumentumon belül a workflow
+    státuszra
 
   title_create_link: Szimbolikus link létrehozása (symlink)
   label_link_from: Hivatkozás innen
@@ -318,7 +348,10 @@ hu:
   open_approvals: Nyitott jóváhagyások
 
   label_maximum_ajax_upload_filesize: Maximum méretű fájl feltöltése AJAX-on keresztül lehetésges
-  note_maximum_ajax_upload_filesize: Korlározza a maximális fájlméretet, amelyet a hagyományos AJAX interfészen keresztül lehet feltölteni. Egyéb esetben a szoftver a saját feltöltő űrlapját használja. A szám MB-ben értendő. számára csak olvasható vagy írható-olvasható webdav felületről
+  note_maximum_ajax_upload_filesize: Korlározza a maximális fájlméretet, amelyet a hagyományos AJAX interfészen
+    keresztül lehet feltölteni. Egyéb esetben a szoftver a saját feltöltő űrlapját használja. A szám MB-ben értendő.
+      számára csak olvasható vagy írható-olvasható webdav felületről
+
   label_classic: Klasszikus
   label_drag_drop: Drag&Drop
 
@@ -364,6 +397,12 @@ hu:
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
+
+  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
+    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
+    option needs to have been used at index time.
+    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

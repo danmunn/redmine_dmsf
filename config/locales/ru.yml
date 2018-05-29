@@ -31,9 +31,11 @@ ru:
   notice_file_locked: Файл заблокирован
   warning_file_not_locked: Файл не заблокирован
   notice_file_unlocked: Файл разблокирован
-  error_only_user_that_locked_file_can_unlock_it: Только пользователь, который заблокировал файл, может его разблокировать
+  error_only_user_that_locked_file_can_unlock_it: Только пользователь, который заблокировал файл, может его
+    разблокировать
   error_max_files_exceeded: "Ограничение для %{number} одновременно загружаемых файлов превышено"
-  error_entry_project_does_not_match_current_project: Проект, которому принадлежит файл, не соответсвует текущему проекту
+  error_entry_project_does_not_match_current_project: Проект, которому принадлежит файл, не соответсвует текущему
+    проекту
   notice_folder_created: Папка создана
   error_folder_creation_failed: Папку не удалось создать
   error_folder_title_must_be_entered: Нужно указать название папки
@@ -51,12 +53,16 @@ ru:
   notice_your_preferences_were_saved: Ваши настройки были сохранены
   notice_your_preferences_were_not_saved: Your preferences were not saved
   warning_folder_notifications_already_activated: Уведомления папки уже включены
+
   notice_folder_notifications_activated: Уведомления папки включены
   warning_folder_notifications_already_deactivated: Уведомления папки уже отключены
+
   notice_folder_notifications_deactivated: Уведомления папки отключены
   warning_file_notifications_already_activated: Уведомления файла уже включены
+
   notice_file_notifications_activated: Уведомления файла включены
   warning_file_notifications_already_deactivated: Уведомления файла уже отключены
+
   notice_file_notifications_deactivated: Уведомления файла отключены
   link_details: "Подробности %{title}"
   link_edit: "Редактировать %{title}"
@@ -69,6 +75,7 @@ ru:
   link_author: Автор
   title_check_for_zip_download_or_email: Выберите документы, которые нужно скачать или отправить их по электронной почте
   title_check_for_restore_or_delete: Отметка удаления или восстановления
+
   title_delete: Удалить
   title_notifications_active_deactivate: "Уведомления включены: Отключить"
   title_notifications_not_active_activate: "Уведомления не включены: Включить"
@@ -102,7 +109,8 @@ ru:
   select_option_deactivated: Отключено
   select_option_activated: Включено
   label_title_format: Формат заголовка
-  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r -
+    revision). Example: %t_%v"
   title_save_preferences: Сохранить настройки
   heading_revisions: Редакции
   title_download: Скачать
@@ -120,9 +128,11 @@ ru:
   option_version_custom: Пользовательская
   label_new_content: Новое содержание
   label_maximum_files_upload: Максимальное количество файлов для загрузки
-  note_maximum_number_of_files_uploaded: Ограничивает максимальное количество файлов, которое может быть загружено за один раз. 0 означает отсутствие ограничений.
+  note_maximum_number_of_files_uploaded: Ограничивает максимальное количество файлов, которое может быть загружено за
+    один раз. 0 означает отсутствие ограничений.
   label_maximum_files_download: Максимальное количество файлов для скачивания
-  note_maximum_number_of_files_downloaded: Ограничивает максимальное количество файлов, которое может быть скачано или отправлено по почте за один раз. 0 означает отсутствие ограничений.
+  note_maximum_number_of_files_downloaded: Ограничивает максимальное количество файлов, которое может быть скачано или
+    отправлено по почте за один раз. 0 означает отсутствие ограничений.
   label_file_storage_directory: Каталог для хранения файлов
   label_index_database: Индексная база данных
   label_stemming_language: Язык для стемминга
@@ -132,11 +142,11 @@ ru:
   option_stem_none: Нет (По умолчанию)
   option_stem_some: Некоторые
   option_stem_all: Все
-  label_stemming_description: Это контролирует как парсер запросов будет применять алгоритм стемминга. Значением по умолчанию есть STEM_NONE. Возможны следующие значения
-  note_do_not_stem: Не выполнять никакого стемминга."
-  note_stem_some: "Искать обусловленные формы терминов за исключением тех, которые начинаются с большой буквы, или следуют после определенных символов, или используются с операторами, которым нужна информация о позиции. Обусловленные термины имеют префикс 'Z'."
-  note_stem_all: "Искать обусловленные формы всех слов (примечание: Префикс 'Z' не добавляется)."
-  note_stemming_applied: Обратите внимание на то, что алгоритм стемминга применяется только к словам в вероятностных областях — логическое фильтрирует термины, которые никогда не обусловлены.
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+    of terms except for those which start with a capital letter, or are followed by certain characters
+    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Значение по умолчанию для уведомлений
   heading_uploaded_files: Загруженные файлы
   submit_commit: Зафиксировать
@@ -157,9 +167,13 @@ ru:
   error_create_cycle_in_folder_dependency: создать циклическую зависимость в папке
   error_contains_invalid_character: содержит недопустимые символы
   error_file_commit_require_uploaded_file: Чтобы зафиксировать файл нужно для начала его загрузить
+
   warning_some_files_were_not_commited: "Некоторые файлы не были зафиксированы через ошибки валидации: %{files}"
+
   error_user_has_not_right_delete_folder: Пользователь не имеет нужных прав для удаления папки
+
   error_user_has_not_right_delete_file: Пользователь не имеет нужных прав для удаления файла
+
   notice_entries_deleted: Файлы удалены
   warning_some_entries_were_not_deleted: "Некоторые файлы не были удалены: %{entries}"
   title_delete_checked: Удалить выбранные документы
@@ -168,6 +182,7 @@ ru:
   label_number_of_folders: Папок
   label_number_of_documents: Документов
   error_file_storage_directory_does_not_exist: Каталог для хранения файлов не существует и не может быть создан
+
   error_file_can_not_be_created: Файл не может быть создан в каталоге хранения файлов
   error_wrong_zip_encoding: Неверная кодировка zip
   warning_xapian_not_available: Xapian не доступен
@@ -191,13 +206,16 @@ ru:
   error_target_folder_same: Целевая папка и проект совпадают с текущими
   title_copy: Копировать
 
-  error_max_email_filesize_exceeded: "Вы превысили максимальный размер для отправки по электронной почте. (%{number} Мб)"
-  note_maximum_email_filesize: "Ограничение максимального размера файла, который можно отправить по электронной почте. 0 означает отсутствие ограничений. Значение в мегабайтах."
+  error_max_email_filesize_exceeded: "Вы превысили максимальный размер для отправки по электронной почте.
+    (%{number} Мб)"
+  note_maximum_email_filesize: "Ограничение максимального размера файла, который можно отправить по электронной почте.
+    0 означает отсутствие ограничений. Значение в мегабайтах."
   label_maximum_email_filesize: "Максимальный размер вложения в письме"
   header_minimum_filesize: "Ошибка файла."
   error_minimum_filesize: "Файла %{file} является пустым и он не будет прикреплен."
   parent_directory: "Родительская директория"
   note_webdav: "После включения, WebDAV можно найти по адресу %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
+
   label_webdav: "Функциональность WebDAV"
   label_dmsf_plural: "Скопировать файлы и папки (%{files} файлов в %{folders} папках)"
 
@@ -205,14 +223,17 @@ ru:
   notice_folder_locked: "Папка была успешно заблокирована"
   warning_folder_not_locked: "К сожалению, папка не может быть заблокирована"
   notice_folder_unlocked: "Папка была успешно разблокирована"
-  error_only_user_that_locked_folder_can_unlock_it: "Только пользователь, который заблокировал папку, может её разблокировать"
+  error_only_user_that_locked_folder_can_unlock_it: "Только пользователь, который заблокировал папку, может её
+    разблокировать"
   title_unlock_folder: "Разблокируйте папку, чтобы разрешить изменение её другими участниками"
   title_lock_folder: "Заблокируйте папку, чтобы запретить ёё изменение другими участниками"
 
   select_option_webdav_readonly: "Только для чтения"
   select_option_webdav_readwrite: "Чтение/Запись"
   label_webdav_strategy: "Стратегия WebDAV"
-  note_webdav_strategy: "Позволяет администратору решить в каком режиме предоставить доступ к WebDAV для конечных пользователей (Только для чтения или Чтение+Запись)."
+
+  note_webdav_strategy: "Позволяет администратору решить в каком режиме предоставить доступ к WebDAV для конечных
+    пользователей (Только для чтения или Чтение+Запись)."
 
   error_unable_delete_dmsf_workflow: Невозможно удалить процесс согласование
   error_empty_note: Примечание не может быть пустым
@@ -260,15 +281,23 @@ ru:
   text_email_subject_requires_approval: ребует вашего участия
   text_email_subject_updated: обновлен
   text_email_subject_started: запущен
-  text_email_finished_approved: "Процесс согласования '%{name}' документа '%{filename}' только что завершился и документ был согласован."
-  text_email_finished_rejected: "Процесс согласования '%{name}' документа '%{filename}' только что завершился и документ был отклонен по причине '%{notice}'."
-  text_email_finished_delegated: "Процесс согласования '%{name}' документа '%{filename}' только что был делегирован по причине '%{notice}' и от Вас ожидается согласование."
-  text_email_finished_step: "Процесс согласования '%{name}' документа '%{filename}' только что завершил один из шагов согласования и ожидает Вашего соглсования."
-  text_email_finished_step_short: "Процесс согласования '%{name}' документа '%{filename}' только что завершил один из шагов согласования."
-  text_email_started: "Процесс согласования '%{name}' документа '%{filename}'  только что начался и ожидает Вашего соглсования."
+  text_email_finished_approved: "Процесс согласования '%{name}' документа '%{filename}' только что завершился и документ
+    был согласован."
+  text_email_finished_rejected: "Процесс согласования '%{name}' документа '%{filename}' только что завершился и документ
+    был отклонен по причине '%{notice}'."
+  text_email_finished_delegated: "Процесс согласования '%{name}' документа '%{filename}' только что был делегирован по
+    причине '%{notice}' и от Вас ожидается согласование."
+  text_email_finished_step: "Процесс согласования '%{name}' документа '%{filename}' только что завершил один из шагов
+    согласования и ожидает Вашего соглсования."
+  text_email_finished_step_short: "Процесс согласования '%{name}' документа '%{filename}' только что завершил один из
+    шагов согласования."
+  text_email_started: "Процесс согласования '%{name}' документа '%{filename}'  только что начался и ожидает Вашего
+    соглсования."
   text_email_to_proceed: Для продолжения поставьте отметку рядом с документом в
   text_email_to_see_history: Для просмотра истории согласования нажмите статус согласования документа в
+
   text_email_to_see_status: Для просмотра текущего статуса согласования нажмите статус согласования документа в
+
 
   title_create_link: Создать символическую ссылку
   label_link_from: Ссылка из
@@ -294,7 +323,8 @@ ru:
   label_links_only: только ссылки
 
   label_display_notified_recipients: Показывать получателей, получивших уведомление
-  note_display_notified_recipients: Пользователь будет проинфмораирован о всех получателях, кому было направлено уведомление.
+  note_display_notified_recipients: Пользователь будет проинфмораирован о всех получателях, кому было направлено
+    уведомление.
   warning_email_notifications: "Уведомление отправлено %{to}"
 
   link_trash_bin: Корзина
@@ -318,7 +348,9 @@ ru:
   open_approvals: Открытые согласования
 
   label_maximum_ajax_upload_filesize: Максимальный размер файла, загружаемого посредством AJAX
-  note_maximum_ajax_upload_filesize: Превышает максимальный размер файла, загружаемого посредством интерфейса AJAX, для загрузки можно использовать стандартную форму Redmine. Размер указан в MB.
+  note_maximum_ajax_upload_filesize: Превышает максимальный размер файла, загружаемого посредством интерфейса AJAX, для
+    загрузки можно использовать стандартную форму Redmine. Размер указан в MB.
+
   label_classic: Обычный
   label_drag_drop: Перетаскивание
 
@@ -337,7 +369,8 @@ ru:
   label_last_revision_id: Revision
     
   label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern matches temporary files created by MsOffice.
+  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern
+    matches temporary files created by MsOffice.
 
   label_dmsf_keep_documents_locked: Keep documents locked
   note_dmsf_keep_documents_locked: Documents will be kept locked when approved
@@ -364,6 +397,12 @@ ru:
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
+
+  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
+    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
+    option needs to have been used at index time.
+    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

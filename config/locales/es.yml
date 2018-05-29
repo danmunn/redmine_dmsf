@@ -31,9 +31,11 @@ es:
   notice_file_locked: Archivo bloqueado
   warning_file_not_locked: Archivo no bloqueado
   notice_file_unlocked: Archivo desbloqueado
-  error_only_user_that_locked_file_can_unlock_it: Solo los usuarios que bloquearon previamente al archivo lo pueden desbloquear
+  error_only_user_that_locked_file_can_unlock_it: Solo los usuarios que bloquearon previamente al archivo lo pueden
+    desbloquear
   error_max_files_exceeded: "Se excedio el numero permitido de archivos bajados de manera simultánea:"
-  error_entry_project_does_not_match_current_project: Las entradas del proyecto no concuerdan con el proyecto seleccionado
+  error_entry_project_does_not_match_current_project: Las entradas del proyecto no concuerdan con el proyecto
+    seleccionado
   notice_folder_created: Carpeta creada satisfactoriamente
   error_folder_creation_failed: La creacion de la carpeta ha fallado
   error_folder_title_must_be_entered: Debe ingresar un título
@@ -50,13 +52,17 @@ es:
   notice_file_revision_created: Revision de archivos creada correctamente
   notice_your_preferences_were_saved: Sus preferencias han sido guardadas correctamente
   notice_your_preferences_were_not_saved: Your preferences were not saved
-  warning_folder_notifications_already_activated: Las notificaciones de la carpeta seleccionada ya están activadas previamente
+  warning_folder_notifications_already_activated: Las notificaciones de la carpeta seleccionada ya están activadas
+    previamente
   notice_folder_notifications_activated: Notificaciones de carpeta activadas
-  warning_folder_notifications_already_deactivated: Las notificaciones de la carpeta seleccionada ya están desactivadas previamente
+  warning_folder_notifications_already_deactivated: Las notificaciones de la carpeta seleccionada ya están desactivadas
+    previamente
   notice_folder_notifications_deactivated: Notificaciones de carpeta desactivadas
-  warning_file_notifications_already_activated: Las notificaciones del archivo seleccionado ya estaban activadas previamente
+  warning_file_notifications_already_activated: Las notificaciones del archivo seleccionado ya estaban activadas
+    previamente
   notice_file_notifications_activated: Notificación de archivo activado
-  warning_file_notifications_already_deactivated: Las notificaciones del archivo seleccionado ya estaban desactivadas previamente
+  warning_file_notifications_already_deactivated: Las notificaciones del archivo seleccionado ya estaban desactivadas
+    previamente
   notice_file_notifications_deactivated: Notificación de archivo desactivada
   link_details: "%{title} detalles"
   link_edit: "Editar %{title}"
@@ -69,6 +75,7 @@ es:
   link_author: Autor
   title_check_for_zip_download_or_email: Tildar para crear Zip o enviarlo por email
   title_check_for_restore_or_delete: Check for restore or delete
+
   title_delete: Eliminar
   title_notifications_active_deactivate: "Notificaciones Activas: Desactivadas"
   title_notifications_not_active_activate: "Notificacciones No Activas: Activadas"
@@ -102,7 +109,8 @@ es:
   select_option_deactivated: Desactivado
   select_option_activated: Activado
   label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r -
+    revision). Example: %t_%v"
   title_save_preferences: Guardar Preferencias
   heading_revisions: Revisiones
   title_download: Descargar
@@ -120,9 +128,11 @@ es:
   option_version_custom: Custom
   label_new_content: Nuevo contenido
   label_maximum_files_upload: Número máximo de archivos de subida
-  note_maximum_number_of_files_uploaded: Número de límite máximo de archivos para una sola subida. 0 equivale a ilimitado.
+  note_maximum_number_of_files_uploaded: Número de límite máximo de archivos para una sola subida. 0 equivale a
+    ilimitado.
   label_maximum_files_download: Número máximo de archivos para descargar
-  note_maximum_number_of_files_downloaded: Número de límite máximo de archivos para una sola descarga en Zip o enviado por email. 0 equivale a ilimitdo.
+  note_maximum_number_of_files_downloaded: Número de límite máximo de archivos para una sola descarga en Zip o enviado
+    por email. 0 equivale a ilimitdo.
   label_file_storage_directory: Directorio de almacenamiento de archivos
   label_index_database: Indice de base de datos
   label_stemming_language: Stemming language
@@ -132,11 +142,11 @@ es:
   option_stem_none: Stem none (default)
   option_stem_some: Stem some
   option_stem_all: Stem all
-  label_stemming_description: This controls how the query parser will apply the stemming algorithm. The default value is STEM_NONE. The possible values are
-  note_do_not_stem: "Don't perform any stemming."
-  note_stem_some: Search for stemmed forms of terms except for those which start with a capital letter, or are followed by certain characters, or are used with operators which need positional information. Stemmed terms are prefixed with 'Z'.
-  note_stem_all: "Search for stemmed forms of all words (note: no 'Z' prefix is added)."
-  note_stemming_applied: Note that the stemming algorithm is only applied to words in probabilistic fields - boolean filter terms are never stemmed.
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+    of terms except for those which start with a capital letter, or are followed by certain characters
+    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Notificación por defecto de archivo
   heading_uploaded_files: Archivos subidos
   submit_commit: Commit
@@ -157,9 +167,13 @@ es:
   error_create_cycle_in_folder_dependency: crear ciclo en dependencia de directorio
   error_contains_invalid_character: contiene caracter(es) inválido(s)
   error_file_commit_require_uploaded_file: El commit requiere archivos subidos
+
   warning_some_files_were_not_commited: "Algunos archivos no fueron registrados por un error de validación: %{files}"
+
   error_user_has_not_right_delete_folder: "No tiene permisos para eliminar el directorio"
+
   error_user_has_not_right_delete_file: "No tiene permisos para eliminar el archivo"
+
   notice_entries_deleted: Entradas eliminadas
   warning_some_entries_were_not_deleted: "Algunas entradas no fueron eliminadas: %{entries}"
   title_delete_checked: Eliminación chequeada
@@ -168,6 +182,7 @@ es:
   label_number_of_folders: Directorios
   label_number_of_documents: Documentos
   error_file_storage_directory_does_not_exist: "El directorio destino no existe y no puede ser creado"
+
   error_file_can_not_be_created: "El archivo no puede ser creado en el directorio destino"
   error_wrong_zip_encoding: Codificación erronea de Zip
   warning_xapian_not_available: Xapian no disponible
@@ -192,12 +207,15 @@ es:
   title_copy: Copiar
 
   error_max_email_filesize_exceeded: "Tamaño máximo de archivo excedido para ser enviado por email. (%{number} MB)"
-  note_maximum_email_filesize: Límite máximo de archivo para ser enviado por email. 0 equivale a ilimitado. Unidad en MB.
+
+  note_maximum_email_filesize: Límite máximo de archivo para ser enviado por email. 0 equivale a ilimitado. Unidad en
+    MB.
   label_maximum_email_filesize: Tamaño máximo de adjunto en email
   header_minimum_filesize: Error en archivo.
   error_minimum_filesize: "El archivo %{file} tiene 0 bytes de tamaño y no será adjuntado."
   parent_directory: Directorio padre
-  note_webdav: "Si Webdav está habilitado, se puede encontrar en %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
+  note_webdav: "Si Webdav está habilitado, se puede encontrar en %{protocol}://%{domain}/dmsf/webdav/[project
+    identifier]"
   label_webdav: Funcionalidad Webdav
   label_dmsf_plural: "Copiar archivos y directorios (%{files} archivos en %{folders} directorios)"
 
@@ -206,13 +224,16 @@ es:
   warning_folder_not_locked: Desafortunadamente, el directorio no se pudo bloquear
   notice_folder_unlocked: El directorio se desbloqueó exitosamente
   error_only_user_that_locked_folder_can_unlock_it: No está autorizado para desbloquearel directorio
+
   title_unlock_folder: Desbloquear para que sea editado por otros miembros
   title_lock_folder: Bloquear para evitar que sea editado por otros miembros
 
   select_option_webdav_readonly: Solo Lectura
   select_option_webdav_readwrite: Lectura/Escritura
   label_webdav_strategy: Estrategia Webdav
-  note_webdav_strategy: Habilitar el administrador para configurar si la plataforma webdav es solo lectura o lectura-escritura para los usuarios finales.
+
+  note_webdav_strategy: Habilitar el administrador para configurar si la plataforma webdav es solo lectura o
+    lectura-escritura para los usuarios finales.
 
   error_unable_delete_dmsf_workflow: Incapaz de eliminar el flujo de trabajo
   error_empty_note: "La nota no puede estar vacía"
@@ -260,15 +281,23 @@ es:
   text_email_subject_requires_approval: requiere su aprobación
   text_email_subject_updated: actualizado
   text_email_subject_started: comenzado
-  text_email_finished_approved: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de ser terminado y él ha sido aprobado."
-  text_email_finished_rejected: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de ser terminado y él ha sido rechazado por el siguiente motivo '%{notice}'."
-  text_email_finished_delegated: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de ser delegado por '%{notice}' y se espera que haga una aprobación en la etapa de aprobación actual."
-  text_email_finished_step: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de terminar uno de los pasos de aprobación y se espera que haga una aprobación en el siguiente paso."
-  text_email_finished_step_short: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de finalizar uno de los pasos de aprobación."
-  text_email_started: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de iniciarse y se espera que haga una aprobación en la etapa de aprobación actual."
+  text_email_finished_approved: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba
+    de ser terminado y él ha sido aprobado."
+  text_email_finished_rejected: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba
+    de ser terminado y él ha sido rechazado por el siguiente motivo '%{notice}'."
+  text_email_finished_delegated: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba
+    de ser delegado por '%{notice}' y se espera que haga una aprobación en la etapa de aprobación actual."
+  text_email_finished_step: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de
+    terminar uno de los pasos de aprobación y se espera que haga una aprobación en el siguiente paso."
+  text_email_finished_step_short: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba
+    de finalizar uno de los pasos de aprobación."
+  text_email_started: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de
+    iniciarse y se espera que haga una aprobación en la etapa de aprobación actual."
   text_email_to_proceed: "Para continuar, haga clic en el icono de la casilla de verificación al lado del documento"
-  text_email_to_see_history: "Para ver el historial de aprobación haga clic en el estado del flujo de trabajo del documento"
-  text_email_to_see_status: "Para ver el estado actual del flujo de trabajo de aprobación, haga clic en el estado del flujo de trabajo del documento"
+  text_email_to_see_history: "Para ver el historial de aprobación haga clic en el estado del flujo de trabajo del
+    documento"
+  text_email_to_see_status: "Para ver el estado actual del flujo de trabajo de aprobación, haga clic en el estado del
+    flujo de trabajo del documento"
 
   title_create_link: "Crear un enlace simbólico"
   label_link_from: Enlace desde
@@ -294,7 +323,8 @@ es:
   label_links_only: Solo enlaces
 
   label_display_notified_recipients: Mostrar destinatarios notificados
-  note_display_notified_recipients: "El usuario será informado de todos los destinatarios a los que acaba de enviar la notificación por correo electrónico"
+  note_display_notified_recipients: "El usuario será informado de todos los destinatarios a los que acaba de enviar la
+    notificación por correo electrónico"
   warning_email_notifications: "Notificaciones de email enviadas a %{to}"
 
   link_trash_bin: Tacho
@@ -318,7 +348,9 @@ es:
   open_approvals: Aprobaciones abiertas
 
   label_maximum_ajax_upload_filesize: "El máximo tamaño de archivo para subir por AJAX"
-  note_maximum_ajax_upload_filesize: "El límite máximo de tamaño de archivo que puede ser subido por la interfaz AJAX estandar, de lo contrario se debe utilizar el formulario estandar de Redmine. El número es en MB."
+  note_maximum_ajax_upload_filesize: "El límite máximo de tamaño de archivo que puede ser subido por la interfaz AJAX
+    estandar, de lo contrario se debe utilizar el formulario estandar de Redmine. El número es en MB."
+
   label_classic: Classic
   label_drag_drop: Modern
 
@@ -337,7 +369,8 @@ es:
   label_last_revision_id: Revision
     
   label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern matches temporary files created by MsOffice.
+  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern
+    matches temporary files created by MsOffice.
 
   label_dmsf_keep_documents_locked: Keep documents locked
   note_dmsf_keep_documents_locked: Documents will be kept locked when approved
@@ -364,6 +397,12 @@ es:
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
+
+  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
+    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
+    option needs to have been used at index time.
+    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

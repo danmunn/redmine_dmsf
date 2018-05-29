@@ -31,9 +31,11 @@ nl:
   notice_file_locked: Bestand vergrendeld
   warning_file_not_locked: Bestand niet vergrendeld
   notice_file_unlocked: Bestand vergrendeld
-  error_only_user_that_locked_file_can_unlock_it: Alleen de gebruiker die het bestand heeft vergrendeld kan het ontgrendelen
+  error_only_user_that_locked_file_can_unlock_it: Alleen de gebruiker die het bestand heeft vergrendeld kan het
+    ontgrendelen
   error_max_files_exceeded: "Limiet voor %{number} tegelijk gedownloade bestanden overschreden"
   error_entry_project_does_not_match_current_project: Invoer project is niet gelijk aan huidig project
+
   notice_folder_created: Map aangemaakt
   error_folder_creation_failed: Map aanmaken mislukt
   error_folder_title_must_be_entered: Titel moet worden ingevoerd
@@ -51,12 +53,16 @@ nl:
   notice_your_preferences_were_saved: Uw voorkeuren zijn opgeslagen
   notice_your_preferences_were_not_saved: Uw voorkeuren zijn niet opgeslagen
   warning_folder_notifications_already_activated: Meldingen map zijn al geactiveerd
+
   notice_folder_notifications_activated: Meldingen map geactiveerd
   warning_folder_notifications_already_deactivated: Meldingen map al gedeactiveerd
+
   notice_folder_notifications_deactivated: Meldingen map gedeactiveerd
   warning_file_notifications_already_activated: Meldingen bestand al geactiveerd
+
   notice_file_notifications_activated: Meldingen bestand geactiveerd
   warning_file_notifications_already_deactivated: Meldingen bestand al gedeactiveerd
+
   notice_file_notifications_deactivated: Meldingen bestand gedeactiveerd
   link_details: "%{title} details"
   link_edit: "Aanpassen %{title}"
@@ -69,6 +75,7 @@ nl:
   link_author: Auteur
   title_check_for_zip_download_or_email: Vink voor zip, download of email
   title_check_for_restore_or_delete: Vink voor herstel of verwijder
+
   title_delete: Verwijder
   title_notifications_active_deactivate: "Notificaties actief: Deactiveren"
   title_notifications_not_active_activate: "Notificaties niet actief: Activeren"
@@ -102,7 +109,8 @@ nl:
   select_option_deactivated: Gedeactiveerd
   select_option_activated: Geactiveerd
   label_title_format: Titel format
-  text_title_format: "Document titel format voor download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Voorbeeld: %t_%v"
+  text_title_format: "Document titel format voor download (%t - title, %f - file, %d - date, %v - version, %i - ID,
+    %r - revision). Voorbeeld: %t_%v"
   title_save_preferences: Sla voorkeuren op
   heading_revisions: Revisies
   title_download: Downloaden
@@ -120,9 +128,11 @@ nl:
   option_version_custom: Aangepast
   label_new_content: Nieuwe inhoud
   label_maximum_files_upload: Maximale bestandsupload
-  note_maximum_number_of_files_uploaded: Beperkt maximaal aantal bestanden dat tegelijkertijd geupload kan worden. 0 betekent onbeperkt.
+  note_maximum_number_of_files_uploaded: Beperkt maximaal aantal bestanden dat tegelijkertijd geupload kan worden. 0
+    betekent onbeperkt.
   label_maximum_files_download: Maximaal aantal bestanden download
-  note_maximum_number_of_files_downloaded: Beperkt maximaal aantal bestanden gedownload in zip of verzonden via e-mail. 0 betekent onbeperkt.
+  note_maximum_number_of_files_downloaded: Beperkt maximaal aantal bestanden gedownload in zip of verzonden via e-mail.
+    0 betekent onbeperkt.
   label_file_storage_directory: Overzicht bestandenopslag
   label_index_database: Index database
   label_stemming_language: Stemming Language
@@ -132,11 +142,11 @@ nl:
   option_stem_none: Stem geen (standaard)
   option_stem_some: Stem sommige
   option_stem_all: Stem alle
-  label_stemming_description: Dit bepaalt hoe de query het stemming algorithm zal toepassen. De standaard waarde is STEM_NONE. De mogelijke waardes zijn
-  note_do_not_stem: Voer geen stemming uit.
-  note_stem_some: "Zoek naar stemmed vormen van voorwaarden, behalve voor diegenen die beginnen met een hoofdletter, of worden gevolgd door bepaalde tekens, of zijn gebruikt door operators die positionele informatie nodig hebben. Stemmed termen worden voorafgegaan door 'Z'."
-  note_stem_all: "Zoek naar gestemde vormen van alle woorden (let op: geen voorvoegsel 'Z' toegevoegd)."
-  note_stemming_applied: Let op, het stemming algoritme wordt alleen toegepast op woorden in probabilistische velden - boolean filter termen zijn nooit stemmed.
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+    of terms except for those which start with a capital letter, or are followed by certain characters
+    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Standaard bestand notificaties
   heading_uploaded_files: Geuploade Bestanden
   submit_commit: Indienen
@@ -157,9 +167,13 @@ nl:
   error_create_cycle_in_folder_dependency: maak cyclus in de map afhankelijkheid
   error_contains_invalid_character: bevat ongeldige teken(s)
   error_file_commit_require_uploaded_file: Bestand indienen vereist geüpload bestand
+
   warning_some_files_were_not_commited: Sommige bestanden zijn niet ingediend door
+
   error_user_has_not_right_delete_folder: Gebruiker heeft geen recht om mappen te verwijderen
+
   error_user_has_not_right_delete_file: Gebruiker heeft geen recht om bestand te verwijderen
+
   notice_entries_deleted: Inzendingen verwijderd
   warning_some_entries_were_not_deleted: "Enkele inzendingen zijn niet verwijderd: %{entries}"
   title_delete_checked: Verwijdering gecontroleerd
@@ -168,6 +182,7 @@ nl:
   label_number_of_folders: Mappen
   label_number_of_documents: Documenten
   error_file_storage_directory_does_not_exist: Bestandsopslag directory bestaat niet en kan niet aangemaakt worden
+
   error_file_can_not_be_created: Bestand kan niet aangemaakt worden in opslag directory
   error_wrong_zip_encoding: Onjuiste Zip encoding
   warning_xapian_not_available: Xapian niet beschikbaar
@@ -191,13 +206,16 @@ nl:
   error_target_folder_same: Doelmap en project zijn hetzelfde als huidige
   title_copy: Kopieer
 
-  error_max_email_filesize_exceeded: "U heeft de maximale bestandsgrootte voor verzending via e-mail overschreden. (%{number} MB)"
-  note_maximum_email_filesize: Beperkt maximale bestandsgrootte die verzonden kan worden via e-mail. 0 betekent onbeperkt. Getal is in MB.
+  error_max_email_filesize_exceeded: "U heeft de maximale bestandsgrootte voor verzending via e-mail overschreden.
+    (%{number} MB)"
+  note_maximum_email_filesize: Beperkt maximale bestandsgrootte die verzonden kan worden via e-mail. 0 betekent
+    onbeperkt. Getal is in MB.
   label_maximum_email_filesize: Maximale grootte e-mail bijlage
   header_minimum_filesize: Bestandsfout.
   error_minimum_filesize: "Het bestand %{file} is 0 bytes en wordt niet bijgevoegd."
   parent_directory: Ouder directory
-  note_webdav: "Webdav kan indien ingeschakeld worden gevonden op %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
+  note_webdav: "Webdav kan indien ingeschakeld worden gevonden op %{protocol}://%{domain}/dmsf/webdav/[project
+    identifier]"
   label_webdav: Webdav functionaliteit
   label_dmsf_plural: "Kopieer Documenten en mappen (%{files} bestanden in %{folders} mappen)"
 
@@ -206,13 +224,16 @@ nl:
   warning_folder_not_locked: Helaas kon deze map niet vergrendeld worden
   notice_folder_unlocked: De map is succesvol vergrendeld
   error_only_user_that_locked_folder_can_unlock_it: U bent niet geautoriseerd om deze map te ontgrendelen
+
   title_unlock_folder: Ontgrendel om wijzigingen door andere gebruikers toe te staan
   title_lock_folder: Vergrendel om wijzigingen door andere leden te voorkomen
 
   select_option_webdav_readonly: Alleen-lezen
   select_option_webdav_readwrite: Lezen/Schrijven
   label_webdav_strategy: Webdav strategie
-  note_webdav_strategy: Staat de administrator toe om te beslissen of webdav een alleen-lezen of lezen-schrijven platform is voor eindgebruikers.
+
+  note_webdav_strategy: Staat de administrator toe om te beslissen of webdav een alleen-lezen of lezen-schrijven
+    platform is voor eindgebruikers.
 
   error_unable_delete_dmsf_workflow: Kon workflow niet verwijderen
   error_empty_note: De notitie kan niet leeg zijn
@@ -260,15 +281,23 @@ nl:
   text_email_subject_requires_approval: vereist uw goedkeuring
   text_email_subject_updated: bijgewerkt
   text_email_subject_started: gestart
-  text_email_finished_approved: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist afgerond en het document is goedgekeurd."
-  text_email_finished_rejected: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist afgerond en het document is afgewezen vanwege '%{notice}'."
-  text_email_finished_delegated: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist gedelegeerd omdat '%{notice}' en er wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap."
-  text_email_finished_step: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document heeft zojuist een van de goedkeurende stappen afgerond en er wordt verwacht dat u een goedkeuring doet in de volgenden goedkeuringsstap."
-  text_email_finished_step_short: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document heeft zojuist een van de goedkeuringsstappen afgerond."
-  text_email_started: "De goedkeurende workflow '%{name}' toegewezen aan '%{filename}' document is zojuist gestart en er wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap."
+  text_email_finished_approved: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist
+    afgerond en het document is goedgekeurd."
+  text_email_finished_rejected: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist
+    afgerond en het document is afgewezen vanwege '%{notice}'."
+  text_email_finished_delegated: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist
+    gedelegeerd omdat '%{notice}' en er wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap."
+  text_email_finished_step: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document heeft zojuist een
+    van de goedkeurende stappen afgerond en er wordt verwacht dat u een goedkeuring doet in de volgenden
+      goedkeuringsstap."
+  text_email_finished_step_short: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document heeft zojuist
+    een van de goedkeuringsstappen afgerond."
+  text_email_started: "De goedkeurende workflow '%{name}' toegewezen aan '%{filename}' document is zojuist gestart en er
+    wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap."
   text_email_to_proceed: Klik om door te gaan om het het vinkjes icoon naast het document in
   text_email_to_see_history: Klik om de goedkeuringsgeschiedenis te bekijken op de workflow status van het document in
-  text_email_to_see_status: Klik om de huidige status van de goedkeuring workflow te bekijken op het workflow status document in
+  text_email_to_see_status: Klik om de huidige status van de goedkeuring workflow te bekijken op het workflow status
+    document in
 
   title_create_link: Maak een symbolische link
   label_link_from: Link van
@@ -294,7 +323,8 @@ nl:
   label_links_only: alleen links
 
   label_display_notified_recipients: Toon genotificeerde ontvangers
-  note_display_notified_recipients: De gebruiker wordt geïnformeerd over alle ontvangers van de verzonden e-mail notificatie.
+  note_display_notified_recipients: De gebruiker wordt geïnformeerd over alle ontvangers van de verzonden e-mail
+    notificatie.
   warning_email_notifications: "E-mail notificaties verzonden naar %{to}"
 
   link_trash_bin: Prullenmand
@@ -318,7 +348,9 @@ nl:
   open_approvals: Open goedkeuringen
 
   label_maximum_ajax_upload_filesize: Maximale bestandsgrootte te uploaden via AJAX
-  note_maximum_ajax_upload_filesize: Beperkt maximale bestandsgrootte die geupload kan worden via standaard AJAX interface of het Redmine standaard upload formulier moet worden gebruikt. Getal is in MB.
+  note_maximum_ajax_upload_filesize: Beperkt maximale bestandsgrootte die geupload kan worden via standaard AJAX
+    interface of het Redmine standaard upload formulier moet worden gebruikt. Getal is in MB.
+
   label_classic: Klassiek
   label_drag_drop: Modern
 
@@ -338,6 +370,7 @@ nl:
 
   label_webdav_disable_versioning: No versioning files patterns
   note_webdav_disable_versioning: A regular expression that disables versioning for matching files.
+
 
   label_dmsf_keep_documents_locked: Keep documents locked
   note_dmsf_keep_documents_locked: Documents will be kept locked when approved
@@ -364,6 +397,12 @@ nl:
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
+
+  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
+    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
+    option needs to have been used at index time.
+    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

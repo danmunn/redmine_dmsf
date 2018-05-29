@@ -32,8 +32,10 @@ ja:
   warning_file_not_locked: ファイルはロックされていません
   notice_file_unlocked: ファイルをロック解除しました
   error_only_user_that_locked_file_can_unlock_it: ファイルをロックしたユーザだけがロック解除できます
+
   error_max_files_exceeded: "同時にダウンロードできるファイル数の上限 %{number} を超えています"
   error_entry_project_does_not_match_current_project: 指定したプロジェクトは現在のプロジェクトと一致しません
+
   notice_folder_created: フォルダを作成しました
   error_folder_creation_failed: フォルダを作成できません
   error_folder_title_must_be_entered: タイトルが必要です
@@ -51,12 +53,16 @@ ja:
   notice_your_preferences_were_saved: あなたの設定を保存しました
   notice_your_preferences_were_not_saved: Your preferences were not saved
   warning_folder_notifications_already_activated: フォルダ通知は既に有効です
+
   notice_folder_notifications_activated: フォルダ通知を有効にしました
   warning_folder_notifications_already_deactivated: フォルダ通知は既に無効です
+
   notice_folder_notifications_deactivated: フォルダ通知を無効にしました
   warning_file_notifications_already_activated: ファイル通知は既に有効です
+
   notice_file_notifications_activated: ファイル通知を有効にしました
   warning_file_notifications_already_deactivated: ファイル通知は既に無効です
+
   notice_file_notifications_deactivated: ファイル通知を無効にしました
   link_details: "%{title} の詳細を表示します"
   link_edit: "%{title} を編集します"
@@ -69,6 +75,7 @@ ja:
   link_ver: バージョン
   link_author: 作成者
   title_check_for_zip_download_or_email: Zip ダウンロードまたは電子メールをチェックします
+
   title_delete: 削除します
   title_notifications_active_deactivate: "通知は有効です: 無効にする"
   title_notifications_not_active_activate: "通知は無効です: 有効にする"
@@ -102,7 +109,8 @@ ja:
   select_option_deactivated: 無効
   select_option_activated: 有効
   label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision). Example: %t_%v"
+  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r -
+    revision). Example: %t_%v"
   title_save_preferences: 設定を保存します
   heading_revisions: リビジョン
   title_download: ダウンロードします
@@ -121,8 +129,10 @@ ja:
   label_new_content: 新規コンテンツ
   label_maximum_files_upload: 最大ファイルアップロード数
   note_maximum_number_of_files_uploaded: 一度にアップロードできるファイル数の上限。0は無制限。
+
   label_maximum_files_download: 最大ファイルダウンロード数
   note_maximum_number_of_files_downloaded: Zip でダウンロードできる、または電子メールで送られるファイル数の上限。0は無制限。
+
   label_file_storage_directory: ファイル保存フォルダ
   label_index_database: インデックスデータベース
   label_stemming_language: 語幹抽出する言語
@@ -132,11 +142,11 @@ ja:
   option_stem_none: Stem none (既定値)
   option_stem_some: Stem some
   option_stem_all: Stem all
-  label_stemming_description: クエリ解釈ルーチンがどのように語幹抽出アルゴリズムを適用するかを制御します。既定値は、STEM_NONE です。設定可能な値は次のものです。
-  note_do_not_stem: 語幹抽出しません。
-  note_stem_some: "大文字から始まる、特定の文字の後に続く、あるいは位置情報を必要とするオペレーターと共に使われる語を除くそれ以外の語の語幹を検索します。語幹抽出された語は、先頭に 'Z' が付きます。"
-  note_stem_all: "すべての語の語幹を検索します。(注: 先頭に 'Z' は付きません。)"
-  note_stemming_applied: 語幹抽出アルゴリズムは、確率を測る対象の位置にある語にしか適用できない (論理演算子の用語自体は語幹抽出されない) ことにご注意ください。
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+    of terms except for those which start with a capital letter, or are followed by certain characters
+    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: ファイル通知の既定値
   heading_uploaded_files: アップロードされたファイル
   submit_commit: コミット
@@ -157,9 +167,13 @@ ja:
   error_create_cycle_in_folder_dependency: フォルダの依存関係が循環しています
   error_contains_invalid_character: 無効な文字を含んでいます
   error_file_commit_require_uploaded_file: コミットするには、まずファイルをアップロードしてください
+
   warning_some_files_were_not_commited: "いくつかのファイルは、バリデーションエラーのためにコミットされませんでした: %{files}"
+
   error_user_has_not_right_delete_folder: ユーザにフォルダを削除する権限がありません
+
   error_user_has_not_right_delete_file: ユーザにファイルを削除する権限がありません
+
   notice_entries_deleted: エントリーを削除しました
   warning_some_entries_were_not_deleted: "いくつかのエントリーは削除されませんでした: %{entries}"
   title_delete_checked: チェックしたものを削除します
@@ -168,6 +182,7 @@ ja:
   label_number_of_folders: フォルダ
   label_number_of_documents: 文書
   error_file_storage_directory_does_not_exist: ファイル保存フォルダが存在せず作ることもできません
+
   error_file_can_not_be_created: ファイルを保存フォルダに作ることができません
   error_wrong_zip_encoding: Zip エンコーディングが正しくありません
   warning_xapian_not_available: Xapian が利用できる状態になっていません
@@ -192,12 +207,15 @@ ja:
   title_copy: コピー
 
   error_max_email_filesize_exceeded: "電子メールで送信可能なファイルサイズの上限を越えています (%{number} MB)"
+
   note_maximum_email_filesize: "電子メールで送信可能なファイルサイズの上限。0は無制限。単位はMB。"
+
   label_maximum_email_filesize: "電子メール添付ファイルサイズ上限"
   header_minimum_filesize: "ファイルエラー"
   error_minimum_filesize: " %{file} のサイズは0バイトのため添付することはできません。"
   parent_directory: "親ディレクトリ"
   note_webdav: "Webdavを有効にすると %{protocol}://%{domain}/dmsf/webdav/[project identifier] で閲覧することができます"
+
   label_webdav: "Webdav機能"
   label_dmsf_plural: "ファイルとフォルダをコピーします (%{files} files in %{folders} folders)"
 
@@ -206,13 +224,16 @@ ja:
   warning_folder_not_locked: "フォルダをロックすることができませんでした"
   notice_folder_unlocked: "フォルダのロックを解除しました"
   error_only_user_that_locked_folder_can_unlock_it: "このフォルダのロックを解除する権限がありません"
+
   title_unlock_folder: "ロックを解除し他メンバが更新できるようにします"
   title_lock_folder: "ロックし他メンバとの競合を回避します"
 
   select_option_webdav_readonly: "Read-only"
   select_option_webdav_readwrite: "Read/Write"
   label_webdav_strategy: "Webdavアクセス制御"
+
   note_webdav_strategy: "Webdavを使ったアクセスの制御（Read-onlyまたはRead/Write）を決定します。"
+
 
   error_unable_delete_dmsf_workflow: そのワークフローの削除はできません
   error_empty_note: コメント欄が空です
@@ -261,14 +282,22 @@ ja:
   text_email_subject_updated: が更新されました
   text_email_subject_started: が開始されました"
   text_email_finished_approved: "承認ワークフロー '%{name}' において '%{filename}' が承認されました。"
+
   text_email_finished_rejected: "承認ワークフロー '%{name}' において '%{filename}' が否認されました。理由：'%{notice}'。"
-  text_email_finished_delegated: "承認ワークフロー '%{name}' において代理承認が依頼されました。承認対象 '%{filename}' の内容をご確認の上、承認・否認のご判断をお願い致します（依頼主コメント：'%{notice}'）。"
-  text_email_finished_step: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}' の内容をご確認の上、承認・否認のご判断をお願い致します。"
+
+  text_email_finished_delegated: "承認ワークフロー '%{name}' において代理承認が依頼されました。承認対象 '%{filename}'
+    の内容をご確認の上、承認・否認のご判断をお願い致します（依頼主コメント：'%{notice}'）。"
+  text_email_finished_step: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}'
+    の内容をご確認の上、承認・否認のご判断をお願い致します。"
   text_email_finished_step_short: "承認ワークフロー '%{name}' において '%{filename}' の承認ステップが一つ終了しました。"
-  text_email_started: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}' の内容をご確認の上、承認・否認のご判断をお願い致します。"
+
+  text_email_started: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}'
+    の内容をご確認の上、承認・否認のご判断をお願い致します。"
   text_email_to_proceed: 次のURLを開き内容を確認の上、右端のチェックマークをクリックし承認・否認の選択をしてください。
   text_email_to_see_history: 次のURLで承認ワークフローの履歴を確認することができます。
+
   text_email_to_see_status: 次のURLで承認ワークフローのステータスを確認することができます。
+
 
   title_create_link: シンボリックリンクを作成します
   label_link_from: リンク生成(from)
@@ -295,6 +324,7 @@ ja:
 
   label_display_notified_recipients: 通知受信者の表示
   note_display_notified_recipients: 電子メールで通知したすべてのユーザの情報を表示します。
+
   warning_email_notifications: "%{to} へ電子メールで通知しました"
 
   link_trash_bin: ゴミ箱
@@ -318,7 +348,9 @@ ja:
   open_approvals: 未承認
 
   label_maximum_ajax_upload_filesize: アップロードファイルサイズ上限
-  note_maximum_ajax_upload_filesize: アップロード可能なファイルサイズの上限。AjaxおよびRedmineの仕様に制限される（2ギガバイト程度までは確認済み）単位はMB。
+  note_maximum_ajax_upload_filesize: アップロード可能なファイルサイズの上限。AjaxおよびRedmineの仕様に制限される
+    （2ギガバイト程度までは確認済み）単位はMB。
+
   label_classic: Classic
   label_drag_drop: Modern
 
@@ -337,7 +369,8 @@ ja:
   label_last_revision_id: Revision
     
   label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern matches temporary files created by MsOffice.
+  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern
+    matches temporary files created by MsOffice.
 
   label_dmsf_keep_documents_locked: Keep documents locked
   note_dmsf_keep_documents_locked: Documents will be kept locked when approved
@@ -364,6 +397,12 @@ ja:
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
+
+  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
+    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
+    option needs to have been used at index time.
+    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

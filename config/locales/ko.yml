@@ -32,8 +32,10 @@ ko:
   warning_file_not_locked: 파일이 잠겨있지 않습니다
   notice_file_unlocked: 파일 잠금해제
   error_only_user_that_locked_file_can_unlock_it: 파일을 잠근 사용자만 잠금해제를 할 수 있습니다
+
   error_max_files_exceeded: "동시에 다운받을 수 있는 파일 %{number} 제한이 초과되었습니다"
   error_entry_project_does_not_match_current_project: 입력하신 프로젝트는 현재 프로젝트와 일치하지 않습니다
+
   notice_folder_created: 폴더 생성됨
   error_folder_creation_failed: 폴더 생성 실패
   error_folder_title_must_be_entered: 제목을 입력하여야 합니다
@@ -51,12 +53,16 @@ ko:
   notice_your_preferences_were_saved: 사용자의 선호도가 저장되었습니다
   notice_your_preferences_were_not_saved: 사용자의 선호도는 저장되지 않았습니다
   warning_folder_notifications_already_activated: 폴더 알림이 이미 활성화 되어 있습니다
+
   notice_folder_notifications_activated: 폴더 알림이 활성화되었습니다
   warning_folder_notifications_already_deactivated: 폴더 알림이 이미 비활성화 되었습니다
+
   notice_folder_notifications_deactivated: 폴더 알림이 비활성화 되었습니다
   warning_file_notifications_already_activated: 파일 알림이 이미 활성화 되었습니다
+
   notice_file_notifications_activated: 파일 알림이 활성화 되었습니다
   warning_file_notifications_already_deactivated: 파일 알림이 이미 비활성화 되었습니다
+
   notice_file_notifications_deactivated: 파일 알림이 비활성화 되었습니다
   link_details: "%{title} 상세내역"
   link_edit: "%{title} 수정"
@@ -69,6 +75,7 @@ ko:
   link_author: 작성자
   title_check_for_zip_download_or_email: Zip, 다운로드 혹은 이메일 체크
   title_check_for_restore_or_delete: 복구되거나 삭제된 파일 체크
+
   title_delete: 삭제
   title_notifications_active_deactivate: "알림 활성화: 비활성화"
   title_notifications_not_active_activate: "알림 비활성화: 활성화"
@@ -102,7 +109,8 @@ ko:
   select_option_deactivated: 비활성화
   select_option_activated: 활성화
   label_title_format: 제목 포맷
-  text_title_format: "다운로드 한 문서 제목 포맷 (%t - 제목, %f - 파일, %d - 날짜, %v - 버전, %i - ID, %r - 수정사항). 예시: %t_%v"
+  text_title_format: "다운로드 한 문서 제목 포맷 (%t - 제목, %f - 파일, %d - 날짜, %v - 버전, %i - ID, %r - 수정사항). 예시:
+    %t_%v"
   title_save_preferences: 선호사항 저장
   heading_revisions: 수정
   title_download: 다운로드
@@ -121,8 +129,10 @@ ko:
   label_new_content: 새로운 콘텐츠
   label_maximum_files_upload: 최대 파일이 업로드 되었습니다
   note_maximum_number_of_files_uploaded: 한번에 업로드 할 수 있는 최대 파일 수 제한. 0 는 무제한을 의미합니다.
+
   label_maximum_files_download: 다운로드 할 수 있는 최대 파일 수
   note_maximum_number_of_files_downloaded: Zip 혹은 이메일을 통해 다운로드 할 수 있는 최대 파일 수 제한.
+
   label_file_storage_directory: 파일 저장 장소
   label_index_database: 인덱스 데이터 베이스
   label_stemming_language: 스테밍 언어
@@ -132,11 +142,11 @@ ko:
   option_stem_none: 스템 없음 (영구설정)
   option_stem_some: 몇몇 스템
   option_stem_all: 모든 스템
-  label_stemming_description: 쿼리 파서가 스테밍 알고리즘을 적용하는 방법을 조절합니다. 기본값은 STEM_NONE입니다. 가능한 값은 다음과 같습니다.
-  note_do_not_stem: 스테밍 사용하지 않기
-  note_stem_some: "대문자로 시작하거나, 특정 문자가 붙거나, 위치 정보가 필요한 실행되는 것들을 제외한 스템 양식을 검색하세요. 스템용어 앞에는 'Z'가 붙습니다."
-  note_stem_all: "모든 단어의 스템 양식을 검색하기 (참고: 'Z'가 앞에 추가되지 않음)."
-  note_stemming_applied: 스테밍 알고리즘은 확률 필드의 단어에만 적용됩니다. 불 방식의 필터는 스템을 사용할 수 없습니다.
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+    of terms except for those which start with a capital letter, or are followed by certain characters
+    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: 파일 영구설정 알림
   heading_uploaded_files: 업로드 된 파일
   submit_commit: 커밋
@@ -157,9 +167,13 @@ ko:
   error_create_cycle_in_folder_dependency: 폴더 종속에 규칙 생성
   error_contains_invalid_character: 사용이 불가능한 문자(들) 포함
   error_file_commit_require_uploaded_file: 파일은 업로드 파일이 필요합니다
+
   warning_some_files_were_not_commited: "다음 오류로 인하여 파일을 실행할 수 없습니다: %{files}"
+
   error_user_has_not_right_delete_folder: 사용자는 폴더를 삭제할 수 없습니다
+
   error_user_has_not_right_delete_file: 사용자는 파일을 삭제할 수 없습니다
+
   notice_entries_deleted: 엔트리 삭제됨
   warning_some_entries_were_not_deleted: "몇몇 엔트리는 삭제할 수 없습니다: %{entries}"
   title_delete_checked: 체크된 항목 삭제
@@ -168,6 +182,7 @@ ko:
   label_number_of_folders: 폴더
   label_number_of_documents: 문서
   error_file_storage_directory_does_not_exist: 파일 저장공간이 존재하지 않거나 생성되지 못했습니다
+
   error_file_can_not_be_created: 저장 공간에 파일을 생성할 수 없습니다
   error_wrong_zip_encoding: 올바르지 않은 Zip 인코딩
   warning_xapian_not_available: Xapian을 사용할 수 없습니다
@@ -192,12 +207,15 @@ ko:
   title_copy: 복사
 
   error_max_email_filesize_exceeded: "이메일을 이용해 발송할 수 있는 최대 파일 크기를 초과했습니다. (%{number} 메가바이트)"
+
   note_maximum_email_filesize: 이메일을 통해 발송할 수있는 최대 파일 크기를 초과했습니다. 0는 무제한을 의미합니다. 숫자는메가바이트 입니다.
+
   label_maximum_email_filesize: 최대 이메일 첨부파일 크기
   header_minimum_filesize: 파일 오류.
   error_minimum_filesize: "파일 %{file}는 0바이트이며 첨부할 수 없습니다."
   parent_directory: 상위 디렉토리
   note_webdav: "활성화 된 Webdav는 %{protocol}에서 확인할 수 있습니다://%{domain}/dmsf/webdav/[project identifier]"
+
   label_webdav: Webdav 기능
   label_dmsf_plural: "문서 및 폴더 복사 (%{folders} 폴더의  %{files} 파일들)"
 
@@ -206,13 +224,16 @@ ko:
   warning_folder_not_locked: 안타깝게도 이 폴더를 잠글 수 없습니다
   notice_folder_unlocked: 이 폴더를 성공적으로 잠갔습니다
   error_only_user_that_locked_folder_can_unlock_it: 이 폴더를 잠금해제 할 수 없습니다
+
   title_unlock_folder: 다른 회원이 변경할 수 있도록 잠금해제
   title_lock_folder: 다른 회원이 변경할 수 없도록 잠금
 
   select_option_webdav_readonly: 읽기 전용
   select_option_webdav_readwrite: 읽기/쓰기
   label_webdav_strategy: Webdav 전략
+
   note_webdav_strategy: 관리자가 Webdav 최종 사용자를 위한 플랫폼 (읽기 전용 혹은 읽기 / 쓰기) 을 결정할 수 있습니다.
+
 
   error_unable_delete_dmsf_workflow: 작업 흐름 삭제 불가
   error_empty_note: 이 노트에 내용을 추가하세요
@@ -261,14 +282,22 @@ ko:
   text_email_subject_updated: 업데이트 됨
   text_email_subject_started: 시작됨
   text_email_finished_approved: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었으며문서가 승인되었습니다."
-  text_email_finished_rejected: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해 문서가 반려되었습니다."
-  text_email_finished_delegated: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해 위임되었으며, 사용자는 현재 승인 과정에서 승인하셔야 합니다."
-  text_email_finished_step: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만,  승인단계 중 한개가 승인되었으며 사용자께서 다음 승인 단계를 승인하셔야 합니다"
-  text_email_finished_step_short: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었으며, 승인 단계 중 한 단계가 완료되었습니다."
-  text_email_started: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 시작되었으며, 사용자께서는 현재 승인 단계에서 승인을 하셔야 합니다."
+
+  text_email_finished_rejected: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해
+    문서가 반려되었습니다."
+  text_email_finished_delegated: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해
+    위임되었으며, 사용자는 현재 승인 과정에서 승인하셔야 합니다."
+  text_email_finished_step: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만,  승인단계 중 한개가
+    승인되었으며 사용자께서 다음 승인 단계를 승인하셔야 합니다"
+  text_email_finished_step_short: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었으며, 승인 단계 중 한
+    단계가 완료되었습니다."
+  text_email_started: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 시작되었으며, 사용자께서는 현재 승인 단계에서
+    승인을 하셔야 합니다."
   text_email_to_proceed: 다음으로 진행하기 위해 문서 옆에 있는 체크 박스 아이콘을 클릭하세요
   text_email_to_see_history: 승인 내역을 확인하기 위해 작업 흐름 상태 문서를 클릭하세요
+
   text_email_to_see_status: 승인된 작업 흐름 상태를 확인하기 위해 작업 흐름 상태를 클릭하세요
+
 
   title_create_link: 문양이 있는 링크 만들기
   label_link_from: 의 링크
@@ -295,6 +324,7 @@ ko:
 
   label_display_notified_recipients: 알림 수신인 보기
   note_display_notified_recipients: 사용자는 모든 수신자에게 이메일 통지를 발송합니다
+
   warning_email_notifications: "%{to} 에게 이메일 알림 발송됨"
 
   link_trash_bin: 휴지통
@@ -318,7 +348,9 @@ ko:
   open_approvals: 승인 열기
 
   label_maximum_ajax_upload_filesize: AJAX 를 이용하여 업로드 할 수 있는 최대 파일 크기
-  note_maximum_ajax_upload_filesze: AJAX 인터테이스를 통해 업로드 할 수 있는 최대 파일이 제한됩니다. 이를 사용하지 않는다면, Redmine 표준 업로드 양식을 사용하셔야 합니다. 숫자는 메가바이트를 의미합니다. 0는 무제한을 의미합니다.
+  note_maximum_ajax_upload_filesze: AJAX 인터테이스를 통해 업로드 할 수 있는 최대 파일이 제한됩니다. 이를 사용하지 않는다면, Redmine
+    표준 업로드 양식을 사용하셔야 합니다. 숫자는 메가바이트를 의미합니다. 0는 무제한을 의미합니다.
+
   label_classic: 일반
   label_drag_drop: 드래그 & 드롭
 
@@ -338,6 +370,7 @@ ko:
 
   label_webdav_disable_versioning: No versioning files patterns
   note_webdav_disable_versioning: A regular expression that disables versioning for matching files.
+
 
   label_dmsf_keep_documents_locked: Keep documents locked
   note_dmsf_keep_documents_locked: Documents will be kept locked when approved
@@ -364,6 +397,12 @@ ko:
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
+
+  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
+    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
+    option needs to have been used at index time.
+    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

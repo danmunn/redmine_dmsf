@@ -32,8 +32,10 @@ it: # Italian strings thx 2 Matteo Arceci!
   warning_file_not_locked: Documento non bloccato
   notice_file_unlocked: Documento sbloccato
   error_only_user_that_locked_file_can_unlock_it: Solo chi ha bloccato il documento può sbloccarlo
+
   error_max_files_exceeded: "Superato il limite di %{number} documenti per il download simultaneo"  
   error_entry_project_does_not_match_current_project: "Il progetto non corrisponde al progetto corrente"
+
   notice_folder_created: Cartella creata
   error_folder_creation_failed: Creazione cartella fallita
   error_folder_title_must_be_entered: Deve essere inserito il titolo
@@ -51,12 +53,16 @@ it: # Italian strings thx 2 Matteo Arceci!
   notice_your_preferences_were_saved: Le tue preferenze sono state salvate
   notice_your_preferences_were_not_saved: Le tue preferenze non sono state salvate
   warning_folder_notifications_already_activated: La notifica su cartella è già attiva
+
   notice_folder_notifications_activated: La notifica su cartella è stata attivata
   warning_folder_notifications_already_deactivated: La notifica su cartella è già disattiva
+
   notice_folder_notifications_deactivated: La notifica su cartella è stat disattivata
   warning_file_notifications_already_activated: La notifica su documento è già attiva
+
   notice_file_notifications_activated: La notifica su documento è stata attivata
   warning_file_notifications_already_deactivated: La notifica su documento è già disattiva
+
   notice_file_notifications_deactivated: La notifica su documento è disattiva
   link_details: "%{title} dettagli"
   link_edit: "Modifica %{title}"
@@ -69,6 +75,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   link_author: Autore
   title_check_for_zip_download_or_email: Seleziona per zip, download o email
   title_check_for_restore_or_delete: Seleziona per ripristinare o cancellare
+
   title_delete: Cancella
   title_notifications_active_deactivate: "Notifiche attive: Disattiva"
   title_notifications_not_active_activate: "Notifiche disattivate: Attiva"
@@ -102,7 +109,8 @@ it: # Italian strings thx 2 Matteo Arceci!
   select_option_deactivated: Disattivato
   select_option_activated: Attivato
   label_title_format: Titolo formattato
-  text_title_format: "Titolo del documento formattato per il download (%t - titolo, %d - data, %v - versione, %i - ID, %r - revisione). Esempio: %t_%v"
+  text_title_format: "Titolo del documento formattato per il download (%t - titolo, %d - data, %v - versione, %i - ID,
+    %r - revisione). Esempio: %t_%v"
   title_save_preferences: Salva preferenze
   heading_revisions: Revisioni
   title_download: Download
@@ -120,9 +128,11 @@ it: # Italian strings thx 2 Matteo Arceci!
   option_version_custom: Personalizzata
   label_new_content: Nuovo contenuto
   label_maximum_files_upload: Limite di caricamento
-  note_maximum_number_of_files_uploaded: Limita il numero massimo di documenti caricati alla volta. 0 significa senza limiti.
+  note_maximum_number_of_files_uploaded: Limita il numero massimo di documenti caricati alla volta. 0 significa senza
+    limiti.
   label_maximum_files_download: Numero massimo di documenti scaricabili
-  note_maximum_number_of_files_downloaded: Limita il numero massimo di documenti scaricabili in archivio zip o spediti via email. 0 significa senza limiti.
+  note_maximum_number_of_files_downloaded: Limita il numero massimo di documenti scaricabili in archivio zip o spediti
+    via email. 0 significa senza limiti.
   label_file_storage_directory: Cartella dei documenti
   label_index_database: Indice database
   label_stemming_language: Linguaggio di Stemming
@@ -132,11 +142,11 @@ it: # Italian strings thx 2 Matteo Arceci!
   option_stem_none: Stem nulla (default)
   option_stem_some: Stem qualcosa
   option_stem_all: Stem tutto
-  label_stemming_description: Questo controlla come il parser delle query applica l'algoritmo di Stemming. Il valore di default è STEM_NONE. I valori possibili sono
-  note_do_not_stem: "Non fare alcun stemming."
-  note_stem_some: Cerca per termini 'Stemmed' ad eccezione di quelli che iniziano con la lettera maiuscola, o sono seguiti da alcuni caratteri, o vengono utilizzati con gli operatori che hanno bisogno di informazioni di posizione. I termini 'Stemmed' hanno il prefisso 'Z'.
-  note_stem_all: "Cerca per termini 'Stemmed' di tutte le parole (nota: non viene aggiunto alcun prefisso 'Z')."
-  note_stemming_applied: Si noti che l'algoritmo di 'Stemming' viene applicato solo alle parole nei campi probabilistici - termini con filtro booleano non sono compresi.
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+    of terms except for those which start with a capital letter, or are followed by certain characters
+    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Notifica di default dei documenti
   heading_uploaded_files: Documenti caricati
   submit_commit: Invia/Salva
@@ -156,10 +166,14 @@ it: # Italian strings thx 2 Matteo Arceci!
   field_folder: Cartella
   error_create_cycle_in_folder_dependency: crea un ciclo nella dipendenza della cartella
   error_contains_invalid_character: contiene carattere(i) non validi
-  error_file_commit_require_uploaded_file: L'aggiornamento del documento richiede un documento già caricato in precedenza
-  warning_some_files_were_not_commited: "Alcuni documenti non sono stati aggiornati a causa di errori di validazione: %{files}"
+  error_file_commit_require_uploaded_file: L'aggiornamento del documento richiede un documento già caricato in
+    precedenza
+  warning_some_files_were_not_commited: "Alcuni documenti non sono stati aggiornati a causa di errori di validazione:
+    %{files}"
   error_user_has_not_right_delete_folder: "L'utente non ha i diritti per eliminare le cartelle"
+
   error_user_has_not_right_delete_file: "L'utente non ha i diritti per eliminare il documento"
+
   notice_entries_deleted: Voci eliminate
   warning_some_entries_were_not_deleted: "Alcune voci non sono state eliminate: %{entries}"  
   title_delete_checked: Elimina i selezionati
@@ -168,6 +182,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_number_of_folders: Cartelle
   label_number_of_documents: Documenti
   error_file_storage_directory_does_not_exist: "La cartella di archiviazione non esiste e non può essere creata"
+
   error_file_can_not_be_created: "Il documento non può essere creato nella cartella di archiviazione"
   error_wrong_zip_encoding: Errato encoding dello Zip
   warning_xapian_not_available: Xapian non disponibile
@@ -191,13 +206,16 @@ it: # Italian strings thx 2 Matteo Arceci!
   error_target_folder_same: La cartella di destinazione ed il progetto sono gli stessi di adesso
   title_copy: Copia
   
-  error_max_email_filesize_exceeded: "Hai superato la dimensione massima del file per l'invio tramite e-mail. (%{number} MB)"
-  note_maximum_email_filesize: Limiti di dimensione massima dei file che possono essere inviati via e-mail. 0 significa illimitato. Il numero è in MB.
+  error_max_email_filesize_exceeded: "Hai superato la dimensione massima del file per l'invio tramite e-mail.
+    (%{number} MB)"
+  note_maximum_email_filesize: Limiti di dimensione massima dei file che possono essere inviati via e-mail. 0 significa
+    illimitato. Il numero è in MB.
   label_maximum_email_filesize: Dimensione massima degli allegati delle e-mail
   header_minimum_filesize: Errore file.
   error_minimum_filesize: "Il file %{file} è 0 bytes e non sarà allegato."
   parent_directory: Cartella superiore
-  note_webdav: "Una volta abilitato il Webdav può essere contattato sul percorso %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
+  note_webdav: "Una volta abilitato il Webdav può essere contattato sul percorso
+    %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Funzionalità Webdav
   label_dmsf_plural: "Copia documenti e cartelle (%{files} documenti in %{folders} cartelle)"
 
@@ -206,14 +224,17 @@ it: # Italian strings thx 2 Matteo Arceci!
   warning_folder_not_locked: Purtroppo la cartella non può essere bloccata
   notice_folder_unlocked: La cartella è stata sbloccata
   error_only_user_that_locked_folder_can_unlock_it: Non sei autorizzato a sbloccare questa cartella
+
   title_unlock_folder: Sblocca per consentire modifiche agli altri membri
   title_lock_folder: Blocca per evitare modifiche da parte di altri membri
 
   select_option_webdav_readonly: Sola lettura
   select_option_webdav_readwrite: Lettura/Scrittura
   label_webdav_strategy: Strategia Webdav
-  note_webdav_strategy: Abilita l'amministratore a decidere se Webdav è di sola lettura oppure lettura-scrittura per gli utenti finali.
-  
+
+  note_webdav_strategy: Abilita l'amministratore a decidere se Webdav è di sola lettura oppure lettura-scrittura per gli
+    utenti finali.
+
   error_unable_delete_dmsf_workflow: Impossibile eliminare il flusso di lavoro
   error_empty_note: "La nota non può essere vuota"
   error_workflow_assign: C'è stato un errore durante l'assegnazione
@@ -260,15 +281,23 @@ it: # Italian strings thx 2 Matteo Arceci!
   text_email_subject_requires_approval: "Approvazione di flusso di lavoro %{name} richiede la tua approvazione"
   text_email_subject_updated: "Approvazione di flusso di lavoro %{name} aggiornato"
   text_email_subject_started: "Approvazione di flusso di lavoro %{name} inizializzato" 
-  text_email_finished_approved: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata completata ed il documento è stato approvato."
-  text_email_finished_rejected: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata completata ma il documento è stato rifiutato a causa di '%{notice}'."
-  text_email_finished_delegated: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata delegata a causa di '%{notice}' e sei tenuto ad approvare nel passo corrente."
-  text_email_finished_step: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' ha completato uno dei passi di approvazione e sei tenuto ad approvare il prossimo passo."
-  text_email_finished_step_short: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' ha completato uno dei passi di approvazione."
-  text_email_started: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stato inizializzato e sei tenuto ad approvare il passo corrente."
+  text_email_finished_approved: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata
+    completata ed il documento è stato approvato."
+  text_email_finished_rejected: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata
+    completata ma il documento è stato rifiutato a causa di '%{notice}'."
+  text_email_finished_delegated: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata
+    delegata a causa di '%{notice}' e sei tenuto ad approvare nel passo corrente."
+  text_email_finished_step: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' ha completato uno
+    dei passi di approvazione e sei tenuto ad approvare il prossimo passo."
+  text_email_finished_step_short: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' ha completato
+    uno dei passi di approvazione."
+  text_email_started: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stato inizializzato e
+    sei tenuto ad approvare il passo corrente."
   text_email_to_proceed: Per proseguire clicca sull'icona checkbox a fianco del documento
   text_email_to_see_history: Per vedere la storia di approvazione clicca sullo stato del flusso di lavoro del documento
-  text_email_to_see_status: Per vedere lo stato attuale del flusso di lavoro di approvazione clicca sullo stato del flusso di lavoro del documento
+
+  text_email_to_see_status: Per vedere lo stato attuale del flusso di lavoro di approvazione clicca sullo stato del
+    flusso di lavoro del documento
   
   title_create_link: Crea un collegamento
   label_link_from: Collegamento da
@@ -295,6 +324,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   
   label_display_notified_recipients: Visualizza i destinatari notificati
   note_display_notified_recipients: L'utente sarà informato di tutti i destinatari appena inviato la notifica e-mail.
+
   warning_email_notifications: "Notifica email inviata a %{to}"
   
   link_trash_bin: Cestino
@@ -318,7 +348,9 @@ it: # Italian strings thx 2 Matteo Arceci!
   open_approvals: Approvazioni aperte
 
   label_maximum_ajax_upload_filesize: Dimensione massima dei documenti caricabili tramite AJAX
-  note_maximum_ajax_upload_filesize: Limita la dimensione massima dei documenti che possono essere caricati tramite interfaccia standard AJAX altrimenti sarà necessario utilizzare il modulo standard di Redmine. Il numero è espresso in MB.
+  note_maximum_ajax_upload_filesize: Limita la dimensione massima dei documenti che possono essere caricati tramite
+    interfaccia standard AJAX altrimenti sarà necessario utilizzare il modulo standard di Redmine. Il numero è espresso
+      in MB.
   label_classic: Classic
   label_drag_drop: Modern
 
@@ -337,7 +369,8 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_last_revision_id: Revision
     
   label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern matches temporary files created by MsOffice.
+  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern
+    matches temporary files created by MsOffice.
 
   label_dmsf_keep_documents_locked: Keep documents locked
   note_dmsf_keep_documents_locked: Documents will be kept locked when approved
@@ -364,6 +397,12 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
+
+  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
+    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
+    option needs to have been used at index time.
+    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

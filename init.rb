@@ -59,7 +59,8 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_tmpdir' => Dir.tmpdir,
               'dmsf_documents_email_from' => '',
               'dmsf_documents_email_reply_to' => '',
-              'dmsf_documents_email_links_only' => false
+              'dmsf_documents_email_links_only' => false,
+              'enable_cjk_ngrams' => true
             }
 
   # Uncomment to remove the original Documents from searching (replaced with DMSF)
