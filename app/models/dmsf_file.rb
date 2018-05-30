@@ -275,12 +275,10 @@ class DmsfFile < ActiveRecord::Base
       new_revision.dmsf_workflow_assigned_at = nil
       new_revision.dmsf_workflow_started_by = nil
       new_revision.dmsf_workflow_started_at = nil
-      if self.last_revision.dmsf_workflow_id
-        wf = DmsfWorkflow.where(:id => self.last_revision.dmsf_workflow_id).first
-        if wf && (wf.project.nil? || (wf.project.id == project.id))
-          new_revision.set_workflow(wf.id, nil)
-          new_revision.assign_workflow(wf.id)
-        end
+      wf = last_revision.dmsf_workflow
+      if wf && (wf.project.nil? || (wf.project.id == project.id))
+        new_revision.set_workflow(wf.id, nil)
+        new_revision.assign_workflow(wf.id)
       end
       if File.exist? self.last_revision.disk_file
         FileUtils.cp self.last_revision.disk_file, new_revision.disk_file(false)
@@ -486,12 +484,21 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def owner?(user)
-    self.last_revision && (self.last_revision.user == user)
+    last_revision && (last_revision.user == user)
   end
 
   def involved?(user)
-    self.dmsf_file_revisions.each do |file_revision|
+    dmsf_file_revisions.each do |file_revision|
       return true if file_revision.user == user
+    end
+    false
+  end
+
+  def assigned?(user)
+    if last_revision && last_revision.dmsf_workflow
+      last_revision.dmsf_workflow.next_assignments(last_revision.id).each do |assignment|
+        return true if assignment.user == user
+      end
     end
     false
   end
@@ -510,7 +517,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def extension
-    File.extname(self.last_revision.disk_filename).strip.downcase[1..-1] if self.last_revision
+    File.extname(last_revision.disk_filename).strip.downcase[1..-1] if last_revision
   end
 
   include ActionView::Helpers::NumberHelper

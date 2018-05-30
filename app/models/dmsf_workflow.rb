@@ -221,7 +221,7 @@ class DmsfWorkflow < ActiveRecord::Base
     assignments = self.next_assignments revision.id
     recipients = assignments.collect{ |a| a.user }
     recipients.uniq!
-    recipients = recipients & DmsfMailer.get_notify_users(project)
+    recipients = recipients & DmsfMailer.get_notify_users(project, [revision.dmsf_file], true)
     recipients.each do |user|
       DmsfMailer.workflow_notification(
         user,
