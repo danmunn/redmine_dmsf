@@ -125,7 +125,7 @@ module RedmineDmsf
         files = []
         folder = self.system_folder
         if folder
-          files = folder.dmsf_files.to_a
+          files = folder.dmsf_files.visible
         end
         files
       end
@@ -134,7 +134,7 @@ module RedmineDmsf
         links = []
         folder = self.system_folder
         if folder
-          links = folder.dmsf_links
+          links = folder.dmsf_links.visible
         end
         links
       end
