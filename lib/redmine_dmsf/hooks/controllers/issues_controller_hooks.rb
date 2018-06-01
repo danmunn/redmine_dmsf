@@ -79,7 +79,7 @@ module RedmineDmsf
             system_folder = issue.system_folder(false, old_project_id)
             if system_folder
               # Change the title if the issue's subject changed
-              system_folder.title = "#{issue.id} - #{issue.subject}"
+              system_folder.title = "#{issue.id} - #{DmsfFolder::get_valid_title(issue.subject)}"
               # Move system folders if needed
               if  system_folder.dmsf_folder
                 system_folder.dmsf_folder.project_id = project_id

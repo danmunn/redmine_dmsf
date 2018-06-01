@@ -167,4 +167,10 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert !tree.to_s.include?('...folder2'), "'...folder2' string in the folder tree not expected."
   end
 
+  def test_get_valid_title
+    assert_equal '1052-6024 . U_CPLD_5M240Z_SMT_MBGA100_1.8V_-40',
+      DmsfFolder::get_valid_title('1052-6024 : U_CPLD_5M240Z_SMT_MBGA100_1.8V_-40...')
+    assert_equal 'test', DmsfFolder::get_valid_title("test#{DmsfFolder::INVALID_CHARACTERS}")
+  end
+
 end

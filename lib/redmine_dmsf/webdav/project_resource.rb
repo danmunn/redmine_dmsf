@@ -112,23 +112,19 @@ module RedmineDmsf
       end
 
       def project_id
-	      self.project.id if self.project
+	      project.id if project
       end
 
-      # Characters that MATCH this regex will be replaced with dots, no more than one dot in a row.
-      INVALID_CHARACTERS = /[\/\\\?":<>#%\*\[\]]/.freeze # = / \ ? " : < > # % * [ ]
-
-      def self.create_project_name(p)
-        use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-        if use_project_names
-          # 1. Invalid characters are replaced with dots.
-          # 2. Two or more dots in a row are replaced with a single dot.
-          # (3. Windows WebClient does not like a dot at the end, but since the project id tag is appended this is not a problem.)
-          "#{p.name.gsub(INVALID_CHARACTERS, '.').gsub(/\.{2,}/, '.')} #{p.id}" if p
-        else
-          p.identifier if p
-        end
+      def self.create_project_name(project)
+        if project
+          if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+            "#{DmsfFolder::get_valid_title(project.name)} #{project.id}"
+          else
+            project.identifier
+          end
+         end
       end
+
     end
   end
 end

@@ -43,7 +43,7 @@ class DmsfFolder < ActiveRecord::Base
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
   has_many :dmsf_folder_permissions, :dependent => :destroy
 
-  INVALID_CHARACTERS = /\A[^\[\]\/\\\?":<>#%\*]*\z/.freeze
+  INVALID_CHARACTERS = '\[\]\/\\\?":<>#%\*'.freeze
   STATUS_DELETED = 1.freeze
   STATUS_ACTIVE = 0.freeze
   AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
@@ -97,7 +97,7 @@ class DmsfFolder < ActiveRecord::Base
   validates :title, :presence => true
   validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted],
     conditions: -> { where(:deleted => STATUS_ACTIVE) }
-  validates_format_of :title, :with => INVALID_CHARACTERS,
+  validates_format_of :title, :with => /\A[^#{INVALID_CHARACTERS}]*\z/,
     :message => l(:error_contains_invalid_character)
   validate :check_cycle
   validates_length_of :description, :maximum => 65535
@@ -549,6 +549,13 @@ class DmsfFolder < ActiveRecord::Base
     end
     # Save
     self.save
+  end
+
+  def self.get_valid_title(title)
+    # 1. Invalid characters are replaced with dots.
+    # 2. Two or more dots in a row are replaced with a single dot.
+    # 3. Windows' WebClient does not like a dot at the end.
+    title.gsub(/[#{INVALID_CHARACTERS}]/, '.').gsub(/\.{2,}/, '.').chomp('.')
   end
 
   private

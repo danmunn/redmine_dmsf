@@ -112,7 +112,7 @@ module RedmineDmsf
             folder = DmsfFolder.new
             folder.dmsf_folder_id = parent.id
             folder.project_id = prj_id
-            folder.title = "#{self.id} - #{self.subject}"
+            folder.title = "#{self.id} - #{DmsfFolder::get_valid_title(self.subject)}"
             folder.user_id = User.anonymous.id
             folder.system = true
             folder.save

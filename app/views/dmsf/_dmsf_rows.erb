@@ -86,7 +86,7 @@
               :position => position}) %>
         </tr>
     <% elsif obj.is_a?(DmsfLink) && (obj.target_type == 'DmsfFile') %>
-        <% unless obj.target_file.last_revision %>
+        <% unless obj.target_file && obj.target_file.last_revision %>
             <% Rails.logger.error "Error: dmsf_file id #{obj.target_id} has no revision!" %>
             <% next %>
         <% end %>
