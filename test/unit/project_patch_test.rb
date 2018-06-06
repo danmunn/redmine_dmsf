@@ -67,8 +67,8 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
 
   def test_dmsf_count
     hash = @project1.dmsf_count
-    assert_equal 9, hash[:files]
-    assert_equal 7, hash[:folders]
+    assert_equal 10, hash[:files]
+    assert_equal 8, hash[:folders]
   end
 
   def test_copy_approval_workflows

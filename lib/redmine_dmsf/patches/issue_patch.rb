@@ -93,7 +93,7 @@ module RedmineDmsf
         @saved_dmsf_links_wfs || {}
       end
 
-      def system_folder(create = false, prj_id = nil)
+      def main_system_folder(create = false, prj_id = nil)
         prj_id ||= self.project_id
         parent = DmsfFolder.system.where(:project_id => prj_id, :title => '.Issues').first
         if create && !parent
@@ -105,6 +105,12 @@ module RedmineDmsf
           parent.system = true
           parent.save
         end
+        parent
+      end
+
+      def system_folder(create = false, prj_id = nil)
+        prj_id ||= self.project_id
+        parent = main_system_folder(create, prj_id)
         if parent
           folder = DmsfFolder.system.where(["project_id = ? AND dmsf_folder_id = ? AND title LIKE '? - %'",
             prj_id, parent.id, self.id]).first

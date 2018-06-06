@@ -90,3 +90,12 @@ dmsf_files_010:
   notification:       false
   deleted:            0
   deleted_by_user_id: NULL
+
+dmsf_files_011:
+  id:                 11
+  project_id:         1
+  dmsf_folder_id:     9
+  name:               'zero.txt'
+  notification:       false
+  deleted:            0
+  deleted_by_user_id: NULL

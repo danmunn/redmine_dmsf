@@ -55,3 +55,11 @@ dmsf_folders_008:
   dmsf_folder_id: NULL
   user_id:        1
   system:         true
+
+dmsf_folders_009:
+  id:             9
+  title:          1 - Cannot print recipes
+  project_id:     1
+  dmsf_folder_id: 8
+  user_id:        1
+  system:         true

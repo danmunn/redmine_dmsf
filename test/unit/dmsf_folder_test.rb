@@ -58,7 +58,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   def test_visiblity
     # The role has got permissions
     User.current = @manager
-    assert_equal 6, DmsfFolder.where(:project_id => 1).count
+    assert_equal 7, DmsfFolder.where(:project_id => 1).count
     assert_equal 5, DmsfFolder.visible.where(:project_id => 1).count
     # The user has got permissions
     User.current = @developer
