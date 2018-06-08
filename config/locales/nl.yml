@@ -162,6 +162,8 @@ nl:
   permission_manage_workflows: Beheer workflows
   permission_file_delete: Verwijder documenten
   permission_display_system_folders: Display system folders
+  permission_file_approval: File approval
+  permission_email_documents: Email documents
   label_file: Bestand
   field_folder: Map
   error_create_cycle_in_folder_dependency: maak cyclus in de map afhankelijkheid

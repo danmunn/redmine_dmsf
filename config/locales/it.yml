@@ -162,6 +162,8 @@ it: # Italian strings thx 2 Matteo Arceci!
   permission_manage_workflows: Gestisci i flussi di lavoro
   permission_file_delete: Elimina i documenti
   permission_display_system_folders: Display system folders
+  permission_file_approval: File approval
+  permission_email_documents: Email documents
   label_file: Documento
   field_folder: Cartella
   error_create_cycle_in_folder_dependency: crea un ciclo nella dipendenza della cartella

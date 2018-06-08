@@ -162,6 +162,8 @@ de:
   permission_manage_workflows: Workflows verwalten
   permission_file_delete: Datei löschen
   permission_display_system_folders: Display system folders
+  permission_file_approval: File approval
+  permission_email_documents: Email documents
   label_file: Datei
   field_folder: Ordner
   error_create_cycle_in_folder_dependency: Zirkelabhängigkeit in der Ordnerstruktur erstellt

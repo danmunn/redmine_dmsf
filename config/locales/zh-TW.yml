@@ -162,6 +162,8 @@ zh-TW:
   permission_manage_workflows: Manage workflows
   permission_file_delete: Delete documents
   permission_display_system_folders: Display system folders
+  permission_file_approval: File approval
+  permission_email_documents: Email documents
   label_file: 檔案
   field_folder: 資料夾
   error_create_cycle_in_folder_dependency: 資料夾之間的關係，不得為一個cycle循環。

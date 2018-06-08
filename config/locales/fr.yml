@@ -162,6 +162,8 @@ fr:
   permission_manage_workflows: Gérer les flux de validation
   permission_file_delete: Supprimer les documents
   permission_display_system_folders: Afficher les dossiers système
+  permission_file_approval: File approval
+  permission_email_documents: Email documents
   label_file: Fichier
   field_folder: Dossier
   error_create_cycle_in_folder_dependency: Crée une dépendance cyclique du dossier

@@ -162,6 +162,8 @@ ru:
   permission_manage_workflows: Управление согласованиями
   permission_file_delete: Удаление документов
   permission_display_system_folders: Display system folders
+  permission_file_approval: File approval
+  permission_email_documents: Email documents
   label_file: Файл
   field_folder: Папка
   error_create_cycle_in_folder_dependency: создать циклическую зависимость в папке

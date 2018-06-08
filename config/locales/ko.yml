@@ -162,6 +162,8 @@ ko:
   permission_manage_workflows: 작업 흐름 관리
   permission_file_delete: 문서 삭제
   permission_display_system_folders: Display system folders
+  permission_file_approval: File approval
+  permission_email_documents: Email documents
   label_file: 파일
   field_folder: 폴더
   error_create_cycle_in_folder_dependency: 폴더 종속에 규칙 생성

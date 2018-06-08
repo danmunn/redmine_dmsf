@@ -162,6 +162,8 @@ pl:
   permission_manage_workflows: Zarządzaj procesami
   permission_file_delete: Usuń dokumenty
   permission_display_system_folders: Display system folders
+  permission_file_approval: File approval
+  permission_email_documents: Email documents
   label_file: Plik
   field_folder: Folder
   error_create_cycle_in_folder_dependency: utworzono pętlę zależności pomiędzy folderami
