@@ -211,7 +211,7 @@ pl:
   error_max_email_filesize_exceeded: "Maksymalny rozmiar pliku załącznika email został przekroczony. (%{number} MB)"
 
   note_maximum_email_filesize: Maksymalny rozmiar pliku, który może zostać wysłany przez email. 0 oznacza brak
-  ograniczeń. Rozmiar w MB.
+    ograniczeń. Rozmiar w MB.
   label_maximum_email_filesize: Maksymalny rozmiar załącznika email
   header_minimum_filesize: Błąd pliku.
   error_minimum_filesize: "Plik %{file} ma 0 bytes i nie zostanie załączony."
