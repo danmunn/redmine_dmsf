@@ -520,7 +520,7 @@ class DmsfFolder < ActiveRecord::Base
     # Attributes
     self.title = params[:dmsf_folder][:title].strip
     self.description = params[:dmsf_folder][:description].strip
-    self.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
+    self.dmsf_folder_id = params[:parent_id]
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
       params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
