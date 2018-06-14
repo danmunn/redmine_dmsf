@@ -29,7 +29,7 @@ require 'optparse'
 ########################################################################################################################
 
 # Redmine installation directory
-$redmine_root = '/opt/redmine'
+$redmine_root = File.expand_path('../../../../', __FILE__)
 
 # DMSF document location $redmine_root/$files
 $files = 'dmsf'
@@ -40,8 +40,8 @@ $scriptindex = '/usr/bin/scriptindex'
 # omindex binary path
 $omindex = '/usr/bin/omindex'
 
-# Directory containing xapian databases for omindex (Attachments indexing)
-$dbrootpath = '/var/tmp/dmsf-index'
+# Directory containing Xapian databases for omindex (Attachments indexing)
+$dbrootpath = File.expand_path('dmsf_index', $redmine_root)
 
 # Verbose output, values of 0 no verbose, greater than 0 verbose output
 $verbose = 0

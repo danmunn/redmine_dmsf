@@ -43,7 +43,7 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_max_email_filesize' => '0',
               'dmsf_max_ajax_upload_filesize' => '100',
               'dmsf_storage_directory' => 'files/dmsf',
-              'dmsf_index_database' => 'files/dmsf_index',
+              'dmsf_index_database' => File.expand_path('dmsf_index', Rails.root),
               'dmsf_stemming_lang' => 'english',
               'dmsf_stemming_strategy' => 'STEM_NONE',
               'dmsf_webdav' => '1',

@@ -290,7 +290,7 @@
   <%= content_tag(:label, l(:label_index_database)) %>
   <%= text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], :disabled => xapian_disabled, :size => 50 %>
   <em class="info">
-    <%= l(:label_default) %>: <%= "#{Rails.root}/files/dmsf_index" %>
+    <%= l(:label_default) %>: <%= File.expand_path('dmsf_index', Rails.root) %>
   </em>
 </p>
 
