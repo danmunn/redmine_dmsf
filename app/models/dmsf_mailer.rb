@@ -106,7 +106,7 @@ class DmsfMailer < Mailer
           when 'only_my_events'
             author = false
             files.each do |file|
-              if file.involved?(notify_user) || file.assignee?(notify_user)
+              if file.involved?(notify_user) || file.assigned?(notify_user)
                 author = true
                 break
               end
