@@ -1,5 +1,5 @@
 
 test:
   adapter: sqlite3
-  database: test
+  database: db/test.sqlite3
   timeout: 500
