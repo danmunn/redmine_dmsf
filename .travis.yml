@@ -26,6 +26,9 @@ sudo: false
 rvm:      
   - 2.4
 
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test CHARACTER SET utf8mb4;'
+
 install:
 
 script:
