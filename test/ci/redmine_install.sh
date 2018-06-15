@@ -1,73 +1,68 @@
 #!/bin/bash
+# encoding: utf-8
 #
-# This script is almost entirely built on the build script from redmine_backlogs
-# Please see: https://github.com/backlogs/redmine_backlogs
+# Redmine plugin for Document Management System "Features"
 #
+# Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-if [[ -e "$HOME/.dmsf.rc" ]]; then
-source "$HOME/.dmsf.rc"
-fi
-
-if [[ ! "$WORKSPACE" = /* ]] ||
-   [[ ! "$PATH_TO_REDMINE" = /* ]] ||
-   [[ ! "$PATH_TO_DMSF" = /* ]];
-then
-echo "You should set"\
-       " WORKSPACE, PATH_TO_REDMINE, PATH_TO_DMSF"\
-       " environment variables"
-  echo "You set:"\
-       "$WORKSPACE"\
-       "$PATH_TO_REDMINE"\
-       "$PATH_TO_DMSF"
-  exit 1;
-fi
-
-export PATH_TO_PLUGINS=./plugins
-export GENERATE_SECRET=generate_secret_token
-export MIGRATE_PLUGINS=redmine:plugins:migrate
 export REDMINE_GIT_REPO=git://github.com/redmine/redmine.git
 export REDMINE_GIT_TAG=3.4-stable
-export BUNDLE_GEMFILE=$PATH_TO_REDMINE/Gemfile
 
-clone_redmine()
+clone()
 {
-  set -e # exit if clone fails
+  # Exit if the cloning fails
+  set -e
+
   rm -rf $PATH_TO_REDMINE
   git clone -b $REDMINE_GIT_TAG --depth=100 --quiet $REDMINE_GIT_REPO $PATH_TO_REDMINE
-  cd $PATH_TO_REDMINE
-  git checkout $REDMINE_GIT_TAG  
 }
 
-run_tests()
+test()
 {
-  # exit if tests fail
+  # Exit if a test fails
   set -e
 
   cd $PATH_TO_REDMINE
 
   # create tmp/cache folder (required for Rails 3)
   # https://github.com/rails/rails/issues/5376
-  bundle exec rake tmp:create
+  #bundle exec rake tmp:create
 
   # Run tests within application
-  bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf
-  bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf
-  bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf
+  bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf RAILS_ENV=test
+  bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf RAILS_ENV=test
+  bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf RAILS_ENV=test
 }
 
 uninstall()
 {
-  set -e # exit if migrate fails
+  # Exit if the migration fails
+  set -e
 
   cd $PATH_TO_REDMINE
 
   # clean up database
-  bundle exec rake $MIGRATE_PLUGINS NAME=redmine_dmsf VERSION=0 RAILS_ENV=test  
+  bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf VERSION=0 RAILS_ENV=test
 }
 
-run_install()
+install()
 {
-  # Exit if install fails
+  # Exit if the installation fails
   set -e
 
   # cd to redmine folder
@@ -75,7 +70,7 @@ run_install()
   echo current directory is `pwd`
 
   # Create a link to the dmsf plugin
-  ln -sf $PATH_TO_DMSF $PATH_TO_PLUGINS/redmine_dmsf
+  ln -sf $PATH_TO_DMSF plugins/redmine_dmsf
   
   # Install gems
   mkdir -p vendor/bundle
@@ -84,10 +79,7 @@ run_install()
   cp $WORKSPACE/database.yml config/
 
   # Not ideal, but at present Travis-CI will not install with xapian enabled:
-  #     configure: error: Neither uuid/uuid.h nor uuid.h found - required for brass, 
-  #         chert and flint (you may need to install the uuid-dev, libuuid-devel or e2fsprogs-devel package
-  # sudo apt-get install uuid-dev => sudo not allowed
-  bundle install --path vendor/bundle --without xapian  
+  bundle install --path vendor/bundle --without xapian rmagick development
 
   # Run Redmine database migrations
   bundle exec rake db:migrate RAILS_ENV=test --trace  
@@ -96,18 +88,18 @@ run_install()
   bundle exec rake redmine:load_default_data REDMINE_LANG=en RAILS_ENV=test
 
   # generate session store/secret token
-  bundle exec rake $GENERATE_SECRET
+  bundle exec rake generate_secret_token RAILS_ENV=test
   
   # Run the plugin database migrations
-  bundle exec rake $MIGRATE_PLUGINS RAILS_ENV=test  
+  bundle exec rake redmine:plugins:migrate RAILS_ENV=test
 }
 
-while getopts :irtu opt
+while getopts :ictu opt
 do case "$opt" in
-  r) clone_redmine; exit 0;;
-  i) run_install; exit 0;;
-  t) run_tests; exit 0;;
+  c) clone; exit 0;;
+  i) install; exit 0;;
+  t) test; exit 0;;
   u) uninstall; exit 0;;
-  [?]) echo "i: install; r: clone redmine; t: run tests; u: uninstall";;
+  [?]) echo "i: install; c: clone redmine; t: run tests; u: uninstall";;
   esac
 done
