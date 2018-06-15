@@ -24,7 +24,7 @@ language: ruby
 sudo: false
 
 rvm:      
-  - 2.3
+  - 2.4
 
 install: 'echo skip bundle install'
 
@@ -32,8 +32,8 @@ script:
   - export WORKSPACE=`pwd`/workspace
   - export PATH_TO_DMSF=`pwd`
   - export PATH_TO_REDMINE=$WORKSPACE/redmine
-  - mkdir -p $WORKSPACE
-  - cp -f config/database.yml.travis $WORKSPACE/database.yml
+  - mkdir -p ${WORKSPACE}
+  - cp -f config/database.yml.travis ${WORKSPACE}/database.yml
   - bash -x ./test/ci/redmine_install.sh -c
   - bash -x ./test/ci/redmine_install.sh -i
   - bash -x ./test/ci/redmine_install.sh -t
@@ -43,3 +43,6 @@ env:
   - RAILS_ENV=test
 
 cache: bundler
+
+gemfile:
+  - ${PATH_TO_REDMINE}/Gemfile
