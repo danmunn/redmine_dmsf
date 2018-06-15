@@ -22,6 +22,7 @@
 language: ruby
 
 sudo: true
+
 dist: trusty
 
 rvm:      
@@ -61,3 +62,6 @@ gemfile:
 services:
   - mysql
   - postgresql
+
+addons:
+  mariadb: '10.3'
