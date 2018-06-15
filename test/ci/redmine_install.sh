@@ -44,9 +44,9 @@ test()
   #bundle exec rake tmp:create
 
   # Run tests within application
-  bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf
-  bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf
-  bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf
+  bundle exec rake redmine:plugins:test:units
+  bundle exec rake redmine:plugins:test:functionals
+  bundle exec rake redmine:plugins:test:integration
 }
 
 uninstall()
@@ -57,7 +57,7 @@ uninstall()
   cd $PATH_TO_REDMINE
 
   # clean up database
-  bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf VERSION=0
+  bundle exec rake redmine:plugins:migrate VERSION=0
 }
 
 install()
@@ -71,15 +71,13 @@ install()
 
   # Create a link to the dmsf plugin
   ln -sf $PATH_TO_DMSF plugins/redmine_dmsf
-  
-  # Install gems
-  mkdir -p vendor/bundle
-
+    
   # Copy database.yml
   cp $WORKSPACE/database.yml config/
 
+  # Install gems
   # Not ideal, but at present Travis-CI will not install with xapian enabled:
-  bundle install --path vendor/bundle --without xapian rmagick development
+  bundle install --without xapian rmagick development
 
   # Run Redmine database migrations
   bundle exec rake db:migrate --trace

@@ -26,7 +26,7 @@ sudo: false
 rvm:      
   - 2.4
 
-install: 'echo skip bundle install'
+install:
 
 script:
   - export WORKSPACE=`pwd`/workspace
@@ -41,6 +41,7 @@ script:
 
 env:
   - RAILS_ENV=test
+  - NAME=redmine_dmsf
 
 cache: bundler
 
