@@ -27,9 +27,9 @@ rvm:
   - 2.4
 
 before_install:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS test CHARACTER SET utf8mb4;'
   - mysql -e 'set global innodb_file_format = `BARRACUDA`;
   - mysql -e 'set global innodb_large_prefix = `ON`;
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test CHARACTER SET utf8mb4;'
   - psql -c 'create database test;' -U postgres
 
 install:
