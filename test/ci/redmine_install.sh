@@ -39,14 +39,10 @@ test()
 
   cd $PATH_TO_REDMINE
 
-  # create tmp/cache folder (required for Rails 3)
-  # https://github.com/rails/rails/issues/5376
-  #bundle exec rake tmp:create
-
   # Run tests within application
-  bundle exec rake redmine:plugins:test:units
-  bundle exec rake redmine:plugins:test:functionals
-  bundle exec rake redmine:plugins:test:integration
+  bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf RAILS_ENV=test
+  bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf RAILS_ENV=test
+  bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf RAILS_ENV=test
 }
 
 uninstall()
@@ -57,7 +53,7 @@ uninstall()
   cd $PATH_TO_REDMINE
 
   # clean up database
-  bundle exec rake redmine:plugins:migrate VERSION=0
+  bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf VERSION=0 RAILS_ENV=test
 }
 
 install()
@@ -71,25 +67,25 @@ install()
 
   # Create a link to the dmsf plugin
   ln -sf $PATH_TO_DMSF plugins/redmine_dmsf
-    
+
   # Copy database.yml
   cp $WORKSPACE/database.yml config/
 
   # Install gems
   # Not ideal, but at present Travis-CI will not install with xapian enabled:
-  bundle install --without xapian rmagick development
+  bundle install --without xapian rmagick development RAILS_ENV=test
 
   # Run Redmine database migrations
-  bundle exec rake db:migrate --trace
+  bundle exec rake db:migrate --trace RAILS_ENV=test
 
   # Load Redmine database default data  
-  bundle exec rake redmine:load_default_data REDMINE_LANG=en
+  bundle exec rake redmine:load_default_data REDMINE_LANG=en RAILS_ENV=test
 
   # generate session store/secret token
-  bundle exec rake generate_secret_token
+  bundle exec rake generate_secret_token RAILS_ENV=test
   
   # Run the plugin database migrations
-  bundle exec rake redmine:plugins:migrate
+  bundle exec rake redmine:plugins:migrate RAILS_ENV=test
 }
 
 while getopts :ictu opt

@@ -33,17 +33,22 @@ script:
   - export PATH_TO_DMSF=`pwd`
   - export PATH_TO_REDMINE=$WORKSPACE/redmine
   - mkdir -p ${WORKSPACE}
-  - cp -f config/database.yml.travis ${WORKSPACE}/database.yml
+  - cp -f ./test/ci/${DB}.yml ${WORKSPACE}/database.yml
   - bash -x ./test/ci/redmine_install.sh -c
   - bash -x ./test/ci/redmine_install.sh -i
   - bash -x ./test/ci/redmine_install.sh -t
   - bash -x ./test/ci/redmine_install.sh -u
 
 env:
-  - RAILS_ENV=test
-  - NAME=redmine_dmsf
+  - DB=sqlite
+  - DB=mysql
+  - DB=postgres
 
 cache: bundler
 
 gemfile:
   - ${PATH_TO_REDMINE}/Gemfile
+
+services:
+  - mysql
+  - postgresql
