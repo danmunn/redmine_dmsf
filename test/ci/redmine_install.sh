@@ -44,9 +44,9 @@ test()
   #bundle exec rake tmp:create
 
   # Run tests within application
-  bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf RAILS_ENV=test
-  bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf RAILS_ENV=test
-  bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf RAILS_ENV=test
+  bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf
+  bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf
+  bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf
 }
 
 uninstall()
@@ -57,7 +57,7 @@ uninstall()
   cd $PATH_TO_REDMINE
 
   # clean up database
-  bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf VERSION=0 RAILS_ENV=test
+  bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf VERSION=0
 }
 
 install()
@@ -82,16 +82,16 @@ install()
   bundle install --path vendor/bundle --without xapian rmagick development
 
   # Run Redmine database migrations
-  bundle exec rake db:migrate RAILS_ENV=test --trace  
+  bundle exec rake db:migrate --trace
 
   # Load Redmine database default data  
-  bundle exec rake redmine:load_default_data REDMINE_LANG=en RAILS_ENV=test
+  bundle exec rake redmine:load_default_data REDMINE_LANG=en
 
   # generate session store/secret token
-  bundle exec rake generate_secret_token RAILS_ENV=test
+  bundle exec rake generate_secret_token
   
   # Run the plugin database migrations
-  bundle exec rake redmine:plugins:migrate RAILS_ENV=test
+  bundle exec rake redmine:plugins:migrate
 }
 
 while getopts :ictu opt

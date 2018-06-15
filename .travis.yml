@@ -38,3 +38,8 @@ script:
   - bash -x ./test/ci/redmine_install.sh -i
   - bash -x ./test/ci/redmine_install.sh -t
   - bash -x ./test/ci/redmine_install.sh -u
+
+env:
+  - RAILS_ENV=test
+
+cache: bundler
