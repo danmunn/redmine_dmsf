@@ -91,6 +91,10 @@
             delete_revision_path(revision),
             :data => {:confirm => l(:text_are_you_sure)},
             :title => l(:title_delete_revision) if @file_delete_allowed && (@file.dmsf_file_revisions.visible.count > 1) %>
+          <%= link_to image_tag('/../../plugin_assets/redmine_dmsf/images/obsolete.png'),
+            obsolete_revision_path(revision),
+            :data => {:confirm => l(:text_are_you_sure)},
+            :title => l(:title_obsolete_revision) if @file_delete_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
         </div>
         <i><%= l(:info_revision, :rev => revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>

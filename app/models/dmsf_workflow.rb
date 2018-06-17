@@ -62,6 +62,7 @@ class DmsfWorkflow < ActiveRecord::Base
   STATE_WAITING_FOR_APPROVAL = 1
   STATE_APPROVED = 2
   STATE_REJECTED = 4
+  STATE_OBSOLETE = 5
 
   STATUS_LOCKED = 0
   STATUS_ACTIVE = 1
@@ -239,5 +240,5 @@ class DmsfWorkflow < ActiveRecord::Base
       end
     end
   end
-
+  
 end

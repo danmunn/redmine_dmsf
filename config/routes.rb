@@ -88,6 +88,7 @@ if Redmine::Plugin.installed? :redmine_dmsf
     post '/dmsf/files/:id/delete', :controller => 'dmsf_files', :action => 'delete', :as => 'delete_dmsf_files'
     post '/dmsf/files/:id/revision/create', :controller => 'dmsf_files', :action => 'create_revision'
     get '/dmsf/files/:id/revision/delete', :controller => 'dmsf_files', :action => 'delete_revision', :as => 'delete_revision'
+    get '/dmsf/files/:id/revision/obsolete', :controller => 'dmsf_files', :action => 'obsolete_revision', :as => 'obsolete_revision'
     get '/dmsf/files/:id/download', :to => 'dmsf_files#view', :download => '', :as => 'download_dmsf_file' # Otherwise will not route nil into the download param
     get '/dmsf/files/:id/view', :to => 'dmsf_files#view', :as => 'view_dmsf_file'
     get '/dmsf/files/:id', :controller => 'dmsf_files', :action => 'show', :as => 'dmsf_file'
