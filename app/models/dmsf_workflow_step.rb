@@ -31,8 +31,8 @@ class DmsfWorkflowStep < ActiveRecord::Base
   validates_uniqueness_of :user_id, :scope => [:dmsf_workflow_id, :step]
   validates_length_of :name, :maximum => 30
 
-  OPERATOR_OR  = 0.freeze
-  OPERATOR_AND = 1.freeze
+  OPERATOR_OR  = 0
+  OPERATOR_AND = 1
 
   def soperator
     DmsfWorkflowStep.soperator(self.operator)

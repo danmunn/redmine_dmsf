@@ -28,8 +28,8 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
 
   validates :dmsf_file_revision, :presence => true
 
-  DownloadAction = 0.freeze
-  EmailAction = 1.freeze
+  DownloadAction = 0
+  EmailAction = 1
 
   acts_as_event :title => Proc.new {|ra| "#{l(:label_dmsf_downloaded)}: #{ra.dmsf_file.dmsf_path_str}"},
     :url => Proc.new {|ra| {:controller => 'dmsf_files', :action => 'show', :id => ra.dmsf_file}},

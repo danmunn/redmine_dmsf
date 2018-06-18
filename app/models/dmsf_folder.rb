@@ -44,8 +44,8 @@ class DmsfFolder < ActiveRecord::Base
   has_many :dmsf_folder_permissions, :dependent => :destroy
 
   INVALID_CHARACTERS = '\[\]\/\\\?":<>#%\*'.freeze
-  STATUS_DELETED = 1.freeze
-  STATUS_ACTIVE = 0.freeze
+  STATUS_DELETED = 1
+  STATUS_ACTIVE = 0
   AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
   DEFAULT_COLUMNS = %w(title size modified version workflow author).freeze
 

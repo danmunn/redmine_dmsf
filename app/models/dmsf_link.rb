@@ -47,8 +47,8 @@ class DmsfLink < ActiveRecord::Base
     end
   end
 
-  STATUS_DELETED = 1.freeze
-  STATUS_ACTIVE = 0.freeze
+  STATUS_DELETED = 1
+  STATUS_ACTIVE = 0
 
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }

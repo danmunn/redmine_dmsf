@@ -45,8 +45,8 @@ class DmsfFile < ActiveRecord::Base
     :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
   has_many :dmsf_public_urls, :dependent => :destroy
 
-  STATUS_DELETED = 1.freeze
-  STATUS_ACTIVE = 0.freeze
+  STATUS_DELETED = 1
+  STATUS_ACTIVE = 0
 
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }
