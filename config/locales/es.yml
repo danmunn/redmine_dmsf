@@ -48,6 +48,7 @@ es:
   notice_file_deleted: Archivo borrado
   error_at_least_one_revision_must_be_present: al menos una revisión debe estar presente
   notice_revision_deleted: Revision eliminada correctamente
+  notice_revision_obsoleted: Revision obsoletada correctamente
   warning_one_of_files_locked: Uno de los archivos está bloqueado
   notice_file_revision_created: Revision de archivos creada correctamente
   notice_your_preferences_were_saved: Sus preferencias han sido guardadas correctamente
@@ -115,6 +116,7 @@ es:
   heading_revisions: Revisiones
   title_download: Descargar
   title_delete_revision: Eliminar revisión
+  title_obsolete_revision: Obsoletar revisión
   label_created: Creado
   label_changed: Modificado
   info_changed_by_user: "%{changed} por"
@@ -269,6 +271,7 @@ es:
   title_assigned: Asignado
   title_approval: Aprobar
   title_rejected: Rechazado
+  title_obsolete: Obsoleto
   dmsf_and: Y
   dmsf_or: O
   dmsf_new_step: Nuevo Paso

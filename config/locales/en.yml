@@ -48,6 +48,7 @@ en:
   notice_file_deleted: File deleted
   error_at_least_one_revision_must_be_present: At least one revision must be present
   notice_revision_deleted: Revision deleted
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: One of files locked
   notice_file_revision_created: File revision created
   notice_your_preferences_were_saved: Your preferences were saved
@@ -115,6 +116,7 @@ en:
   heading_revisions: Revisions
   title_download: Download
   title_delete_revision: Delete revision
+  title_obsolete_revision: Obsolete revision
   label_created: Created
   label_changed: Changed
   info_changed_by_user: "%{changed} by"
@@ -270,6 +272,7 @@ en:
   title_assigned: Assigned
   title_approval: Approval
   title_rejected: Rejected
+  title_obsolete: Obsolete
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: New step
