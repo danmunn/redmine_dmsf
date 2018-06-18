@@ -48,6 +48,7 @@ sl:
   notice_file_deleted: Datoteka izbrisana
   error_at_least_one_revision_must_be_present: Vsaj ena verzija mora obstajati
   notice_revision_deleted: Verzija izbrisana
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: Ena od datotek je zaklenjena
   notice_file_revision_created: Verzija datoteke kreirana
   notice_your_preferences_were_saved: Vaše nastavitve so shranjene
@@ -115,6 +116,7 @@ sl:
   heading_revisions: Verzije
   title_download: Prenesi dol
   title_delete_revision: Izbriši verzijo
+  title_obsolete_revision: Obsolete revision
   label_created: Narejeno
   label_changed: Spremenjeno
   info_changed_by_user: "%{changed} po"
@@ -269,6 +271,7 @@ sl:
   title_assigned: Assigned
   title_approval: Approval
   title_rejected: Rejected
+  title_obsolete: Obsolete
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: New step

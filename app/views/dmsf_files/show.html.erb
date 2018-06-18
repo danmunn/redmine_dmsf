@@ -25,7 +25,7 @@
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
-  <% if User.current.allowed_to?(:file_manipulation, @project) %>
+  <% if @file_manipulation_allowed %>
     <% unless @file.locked_for_user? %>
       <% unless @file.locked? %>
         <%= link_to(l(:button_lock), lock_dmsf_files_path(:id => @file),
@@ -64,7 +64,7 @@
 <%= render(:partial => '/dmsf/path',
   :locals => {:folder => @file.dmsf_folder, :filename => @file.title, :title => nil}) %>
 
-<% if User.current.allowed_to?(:file_manipulation, @file.project) && !@file.locked_for_user? %>
+<% if @file_manipulation_allowed && !@file.locked_for_user? %>
   <%= error_messages_for('file') %>
   <%= error_messages_for('revision') %>
   <%= render(:partial => 'file_new_revision') %>
@@ -94,7 +94,7 @@
           <%= link_to image_tag('/../../plugin_assets/redmine_dmsf/images/obsolete.png'),
             obsolete_revision_path(revision),
             :data => {:confirm => l(:text_are_you_sure)},
-            :title => l(:title_obsolete_revision) if @file_delete_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
+            :title => l(:title_obsolete_revision) if @file_manipulation_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
         </div>
         <i><%= l(:info_revision, :rev => revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>
@@ -174,7 +174,7 @@
         </div>
       </div>
       <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">
-        <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if User.current.allowed_to?(:file_manipulation, @file.project) %>
+        <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if @file_manipulation_allowed %>
       </div>
     </div>
   </div>

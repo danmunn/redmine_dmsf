@@ -48,6 +48,7 @@ nl:
   notice_file_deleted: Map verwijderd
   error_at_least_one_revision_must_be_present: Er moet ten minste een revisie aanwezig zijn
   notice_revision_deleted: Revisie verwijderd
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: Een van de bestanden vergrendeld
   notice_file_revision_created: Bestandsrevisie aangemaakt
   notice_your_preferences_were_saved: Uw voorkeuren zijn opgeslagen
@@ -115,6 +116,7 @@ nl:
   heading_revisions: Revisies
   title_download: Downloaden
   title_delete_revision: Verwijder revisie
+  title_obsolete_revision: Obsolete revision
   label_created: Aangemaakt
   label_changed: Gewijzigd
   info_changed_by_user: "%{changed} door"
@@ -269,6 +271,7 @@ nl:
   title_assigned: Toegewezen
   title_approval: Goedkeuring
   title_rejected: Afgewezen
+  title_obsolete: Obsolete
   dmsf_and: EN
   dmsf_or: OF
   dmsf_new_step: Nieuwe stap

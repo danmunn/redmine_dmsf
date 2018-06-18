@@ -119,7 +119,7 @@
   <% end %>
   <% classes = 'dmsf_gray hascontextmenu' %>
   <% @file_links.each do |link| %>
-    <% unless link.target_file.last_revision %>
+    <% unless link.target_file && link.target_file.last_revision %>
       <% Rails.logger.error "Error: dmsf_file id #{link.target_id} has no revision!" %>
       <% next %>
     <% end %>

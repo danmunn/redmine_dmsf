@@ -48,6 +48,7 @@ pt-BR:
   notice_file_deleted: Arquivo excluído
   error_at_least_one_revision_must_be_present: Deve existir pelo menos uma revisão
   notice_revision_deleted: Revisão excluída
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: Um dos arquivos bloqueados
   notice_file_revision_created: Revisão do arquivo criado
   notice_your_preferences_were_saved: Suas atualizações foram salvas
@@ -115,6 +116,7 @@ pt-BR:
   heading_revisions: Revisões
   title_download: Download
   title_delete_revision: Revisão excluída
+  title_obsolete_revision: Obsolete revision
   label_created: Criado
   label_changed: Alterado
   info_changed_by_user: "%{changed} por"
@@ -269,6 +271,7 @@ pt-BR:
   title_assigned: Atribuído
   title_approval: Aprovado
   title_rejected: Rejeitado
+  title_obsolete: Obsolete
   dmsf_and: E
   dmsf_or: OU
   dmsf_new_step: Novo passo

@@ -91,5 +91,16 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     assert_response :redirect
     assert_equal 0, flash[:error].size
   end
+
+  def test_obsolete_revision_ok
+    @role.add_permission! :file_manipulation
+    get :obsolete_revision, :id => @file.last_revision.id
+    assert_redirected_to :action => 'show', :id => @file
+  end
+
+  def test_obsolete_revision_missing_permissions
+    get :obsolete_revision, :id => @file.last_revision.id
+    assert :forbiden
+  end
   
 end

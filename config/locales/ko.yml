@@ -49,6 +49,7 @@ ko:
   error_at_least_one_revision_must_be_present: 적어도 한개의 수정사항이 있어야 합니다
   notice_revision_deleted: 수정사항 삭제됨
   warning_one_of_files_locked: 파일 중 한개가 잠겨있습니다
+  notice_revision_obsoleted: Revision obsoleted
   notice_file_revision_created: 수정된 파일이 생성되었습니다
   notice_your_preferences_were_saved: 사용자의 선호도가 저장되었습니다
   notice_your_preferences_were_not_saved: 사용자의 선호도는 저장되지 않았습니다
@@ -115,6 +116,7 @@ ko:
   heading_revisions: 수정
   title_download: 다운로드
   title_delete_revision: 수정사항 삭제
+  title_obsolete_revision: Obsolete revision
   label_created: 생성됨
   label_changed: 변경됨
   info_changed_by_user: "가 %{changed}함"
@@ -269,6 +271,7 @@ ko:
   title_assigned: 할당됨
   title_approval: 승인
   title_rejected: 반려
+  title_obsolete: Obsolete
   dmsf_and: 및
   dmsf_or: 혹은
   dmsf_new_step: 새로운 스텝

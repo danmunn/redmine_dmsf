@@ -48,6 +48,7 @@ hu:
   notice_file_deleted: Törölt fájl
   error_at_least_one_revision_must_be_present: Legalább egy verziónak szükséges lennie
   notice_revision_deleted: Verzió törölve
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: Az egyik fájl zárolva van
   notice_file_revision_created: Fájl verzió létrehozva
   notice_your_preferences_were_saved: A preferenciái mentése kerültek
@@ -115,6 +116,7 @@ hu:
   heading_revisions: Verziók
   title_download: Letöltés
   title_delete_revision: Verzió törlése
+  title_obsolete_revision: Obsolete revision
   label_created: Létrehozott
   label_changed: Változtatott
   info_changed_by_user: "%{changed} általa"
@@ -269,6 +271,7 @@ hu:
   title_assigned: Kiosztott
   title_approval: Jóváhagyás
   title_rejected: Visszautasított
+  title_obsolete: Obsolete
   dmsf_and: ÉS
   dmsf_or: VAGY
   dmsf_new_step: Új lépés

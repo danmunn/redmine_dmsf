@@ -114,7 +114,6 @@ class DmsfFileRevision < ActiveRecord::Base
       errors[:base] << l(:error_file_is_locked)
       return false
     end
-    
     self.workflow = DmsfWorkflow::STATE_OBSOLETE
     save
   end
