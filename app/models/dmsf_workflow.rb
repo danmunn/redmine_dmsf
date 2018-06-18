@@ -57,15 +57,14 @@ class DmsfWorkflow < ActiveRecord::Base
     end
   end
 
-  STATE_NONE = nil
-  STATE_ASSIGNED = 3
-  STATE_WAITING_FOR_APPROVAL = 1
-  STATE_APPROVED = 2
-  STATE_REJECTED = 4
-  STATE_OBSOLETE = 5
+  STATE_ASSIGNED = 3.freeze
+  STATE_WAITING_FOR_APPROVAL = 1.freeze
+  STATE_APPROVED = 2.freeze
+  STATE_REJECTED = 4.freeze
+  STATE_OBSOLETE = 5.freeze
 
-  STATUS_LOCKED = 0
-  STATUS_ACTIVE = 1
+  STATUS_LOCKED = 0.freeze
+  STATUS_ACTIVE = 1.freeze
 
   def participiants
     users = Array.new

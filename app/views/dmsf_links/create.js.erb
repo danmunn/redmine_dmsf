@@ -30,7 +30,7 @@ var awf = false;
 <% file = @dmsf_link.target_file %>
 <% if file && !file.locked? && User.current.allowed_to?(:file_approval, file.project) %>
   <% revision = file.last_revision %>
-  <% if revision && (revision.workflow == DmsfWorkflow::STATE_NONE) %>
+  <% if revision && revision.workflow.nil? %>
     awf = true;
   <% end %>
 <% end %>
