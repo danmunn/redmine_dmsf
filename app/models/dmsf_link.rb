@@ -31,6 +31,7 @@ class DmsfLink < ActiveRecord::Base
   validates_length_of :name, :maximum => 255
   validates_length_of :external_url, :maximum => 255
   validate :validate_url
+  validates :project, :presence => true
 
   def validate_url
     if self.target_type == 'DmsfUrl'

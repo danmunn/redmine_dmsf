@@ -20,10 +20,13 @@
 
 class DmsfWorkflowStep < ActiveRecord::Base
   belongs_to :dmsf_workflow
+  belongs_to :user
+
   has_many :dmsf_workflow_step_assignments, :dependent => :destroy
-  validates :dmsf_workflow_id, :presence => true
+
+  validates :dmsf_workflow, :presence => true
   validates :step, :presence => true
-  validates :user_id, :presence => true
+  validates :user, :presence => true
   validates :operator, :presence => true
   validates_uniqueness_of :user_id, :scope => [:dmsf_workflow_id, :step]
   validates_length_of :name, :maximum => 30
@@ -37,10 +40,6 @@ class DmsfWorkflowStep < ActiveRecord::Base
 
   def self.soperator(operator)
     operator == 1 ? l(:dmsf_and) : l(:dmsf_or)
-  end
-
-  def user
-    User.find(user_id)
   end
 
   def assign(dmsf_file_revision_id)

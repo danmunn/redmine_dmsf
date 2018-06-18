@@ -69,6 +69,7 @@ class DmsfFileRevision < ActiveRecord::Base
   validates_format_of :name, :with => /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/,
     :message => l(:error_contains_invalid_character)
   validates :description, length: { maximum: 1.kilobyte }
+  validates :dmsf_file, :presence => true
 
   def project
     self.dmsf_file.project if self.dmsf_file

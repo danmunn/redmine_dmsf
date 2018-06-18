@@ -26,6 +26,8 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
   delegate :dmsf_file, :to => :dmsf_file_revision, :allow_nil => false
   delegate :project, :to => :dmsf_file, :allow_nil => false
 
+  validates :dmsf_file_revision, :presence => true
+
   DownloadAction = 0.freeze
   EmailAction = 1.freeze
 

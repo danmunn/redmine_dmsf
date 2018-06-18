@@ -22,6 +22,8 @@ class DmsfFolderPermission < ActiveRecord::Base
 
   belongs_to :dmsf_folder
 
+  validates :dmsf_folder, :presence => true
+
   scope :users, -> { where(:object_type => User.model_name.to_s) }
   scope :roles, -> { where(:object_type => Role.model_name.to_s) }
 

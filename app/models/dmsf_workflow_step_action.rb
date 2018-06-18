@@ -23,17 +23,18 @@ class DmsfWorkflowStepAction < ActiveRecord::Base
   belongs_to :dmsf_workflow_step_assignment
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
 
-  validates :dmsf_workflow_step_assignment_id, :presence => true
+  validates :dmsf_workflow_step_assignment, :presence => true
   validates :action, :presence => true
   validates :note, :presence => true, :unless => lambda { self.action == DmsfWorkflowStepAction::ACTION_APPROVE }
   validates :author_id, :presence => true
-  validates_uniqueness_of :dmsf_workflow_step_assignment_id, :scope => [:action], :unless => lambda {self.action == DmsfWorkflowStepAction::ACTION_DELEGATE}
+  validates_uniqueness_of :dmsf_workflow_step_assignment_id, :scope => [:action],
+                          :unless => lambda {self.action == DmsfWorkflowStepAction::ACTION_DELEGATE}
 
-  ACTION_APPROVE = 1
-  ACTION_REJECT = 2
-  ACTION_DELEGATE = 3
-  ACTION_ASSIGN = 4
-  ACTION_START = 5
+  ACTION_APPROVE = 1.freeze
+  ACTION_REJECT = 2.freeze
+  ACTION_DELEGATE = 3.freeze
+  ACTION_ASSIGN = 4.freeze
+  ACTION_START = 5.freeze
 
   def initialize(*args)
     super
