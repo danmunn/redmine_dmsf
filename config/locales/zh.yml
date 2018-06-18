@@ -48,6 +48,7 @@ zh:
   notice_file_deleted: 文件已删除
   error_at_least_one_revision_must_be_present: 至少一个修订版本必须存在
   notice_revision_deleted: 修订版本已删除
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: 其中一个文件被锁定
   notice_file_revision_created: 文件修订版本已创建
   notice_your_preferences_were_saved: 您的偏好设定已保存
@@ -115,6 +116,7 @@ zh:
   heading_revisions: 修订版本
   title_download: 下载
   title_delete_revision: 删除此修订
+  title_obsolete_revision: Obsolete revision
   label_created: 创建
   label_changed: 修改
   info_changed_by_user: "%{changed} by"
@@ -269,6 +271,7 @@ zh:
   title_assigned: Assigned
   title_approval: Approval
   title_rejected: Rejected
+  title_obsolete: Obsolete
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: New step

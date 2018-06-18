@@ -53,7 +53,7 @@
         <% else %>
             <span class="icon"></span>
         <% end %>
-    <% when DmsfWorkflow::STATE_APPROVED, DmsfWorkflow::STATE_REJECTED %>
+    <% when DmsfWorkflow::STATE_APPROVED, DmsfWorkflow::STATE_REJECTED, DmsfWorkflow::STATE_OBSOLETE %>
         <span class="icon-only"></span>
     <% else %>
         <% if workflows_available %>

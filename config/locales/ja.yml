@@ -49,6 +49,7 @@ ja:
   error_at_least_one_revision_must_be_present: 少なくとも１つのリビジョンが必要です
   notice_revision_deleted: リビジョンを削除しました
   warning_one_of_files_locked: ファイルのうちの１つがロックされています
+  notice_revision_obsoleted: Revision obsoleted
   notice_file_revision_created: ファイルのリビジョンを作成しました
   notice_your_preferences_were_saved: あなたの設定を保存しました
   notice_your_preferences_were_not_saved: Your preferences were not saved
@@ -115,6 +116,7 @@ ja:
   heading_revisions: リビジョン
   title_download: ダウンロードします
   title_delete_revision: リビジョンを削除します
+  title_obsolete_revision: Obsolete revision
   label_created: 作成者/日時
   label_changed: 更新者/日時
   info_changed_by_user: "/ %{changed}"
@@ -269,6 +271,7 @@ ja:
   title_assigned: アサイン
   title_approval: 承認
   title_rejected: 否認
+  title_obsolete: Obsolete
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: 新規ステップ

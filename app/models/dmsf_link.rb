@@ -31,6 +31,7 @@ class DmsfLink < ActiveRecord::Base
   validates_length_of :name, :maximum => 255
   validates_length_of :external_url, :maximum => 255
   validate :validate_url
+  validates :project, :presence => true
 
   def validate_url
     if self.target_type == 'DmsfUrl'
@@ -46,8 +47,8 @@ class DmsfLink < ActiveRecord::Base
     end
   end
 
-  STATUS_DELETED = 1.freeze
-  STATUS_ACTIVE = 0.freeze
+  STATUS_DELETED = 1
+  STATUS_ACTIVE = 0
 
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }

@@ -57,7 +57,6 @@ class DmsfWorkflow < ActiveRecord::Base
     end
   end
 
-  STATE_NONE = nil
   STATE_ASSIGNED = 3
   STATE_WAITING_FOR_APPROVAL = 1
   STATE_APPROVED = 2

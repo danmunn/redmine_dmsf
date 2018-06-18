@@ -48,6 +48,7 @@ fr:
   notice_file_deleted: Le fichier a été supprimé
   error_at_least_one_revision_must_be_present: Au moins une révision est requise
   notice_revision_deleted: Révision supprimée
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: Un des fichiers sélectionnés est verrouillé
   notice_file_revision_created: La révision du fichier a été ajoutée
   notice_your_preferences_were_saved: Vos paramètres ont été enregistrés
@@ -115,6 +116,7 @@ fr:
   heading_revisions: Révisions
   title_download: Télécharger
   title_delete_revision: Supprimer la révision
+  title_obsolete_revision: Obsolete revision
   label_created: Créé
   label_changed: Modifié
   info_changed_by_user: "%{changed} par"
@@ -269,6 +271,7 @@ fr:
   title_assigned: Assigné
   title_approval: Approbation
   title_rejected: Rejeté
+  title_obsolete: Obsolete
   dmsf_and: ET
   dmsf_or: OU
   dmsf_new_step: Nouvelle étape

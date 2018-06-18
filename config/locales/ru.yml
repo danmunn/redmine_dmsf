@@ -48,6 +48,7 @@ ru:
   notice_file_deleted: Файл удален
   error_at_least_one_revision_must_be_present: По крайней мере, одна редакция должна присутствовать
   notice_revision_deleted: Редакция удалена
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: Один из файлов заблокирован
   notice_file_revision_created: Редакция файла создана
   notice_your_preferences_were_saved: Ваши настройки были сохранены
@@ -115,6 +116,7 @@ ru:
   heading_revisions: Редакции
   title_download: Скачать
   title_delete_revision: Удалить редакцию
+  title_obsolete_revision: Obsolete revision
   label_created: Создан
   label_changed: Изменен
   info_changed_by_user: "%{changed} пользователем"
@@ -269,6 +271,7 @@ ru:
   title_assigned: Назначен
   title_approval: Согласован
   title_rejected: Отклонен
+  title_obsolete: Obsolete
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: Новый шаг

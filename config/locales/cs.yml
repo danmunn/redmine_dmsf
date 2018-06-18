@@ -48,6 +48,7 @@ cs:
   notice_file_deleted: Soubor byl smazán
   error_at_least_one_revision_must_be_present: Musí existovat alespoň jedna revize
   notice_revision_deleted: Revize byla smazána
+  notice_revision_obsoleted: Revize je zastaralá
   warning_one_of_files_locked: Jeden ze souborů je zamčen
   notice_file_revision_created: vytvořena nová revize
   notice_your_preferences_were_saved: Vaše nastavení bylo uloženo
@@ -115,6 +116,7 @@ cs:
   heading_revisions: Revize
   title_download: Stáhnout
   title_delete_revision: Smazat revizi
+  title_obsolete_revision: Označit revizi jako zastaralou
   label_created: Vytvořeno
   label_changed: Změněno
   info_changed_by_user: "%{changed} uživatelem"
@@ -269,6 +271,7 @@ cs:
   title_assigned: Přiřazený
   title_approval: Schválený
   title_rejected: Zamítnutý
+  title_obsolete: Zastaralá
   dmsf_and: A
   dmsf_or: NEBO
   dmsf_new_step: Nový krok

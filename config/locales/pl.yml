@@ -48,6 +48,7 @@ pl:
   notice_file_deleted: Plik został usunięty
   error_at_least_one_revision_must_be_present: Musi istnieć co najmniej jedna wersja
   notice_revision_deleted: Wersja usunięta
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: Jeden z plików jest zablokowany
   notice_file_revision_created: Utworzono wersję pliku
   notice_your_preferences_were_saved: Twoje preferencje zostały zapisane
@@ -115,6 +116,7 @@ pl:
   heading_revisions: Wersje
   title_download: Pobierz
   title_delete_revision: Usuń wersję
+  title_obsolete_revision: Obsolete revision
   label_created: Utworzono
   label_changed: Zmieniono
   info_changed_by_user: "%{changed} przez"
@@ -269,6 +271,7 @@ pl:
   title_assigned: Przydzielony
   title_approval: Akceptacja
   title_rejected: Odrzucony
+  title_obsolete: Obsolete
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: Nowy krok

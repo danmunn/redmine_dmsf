@@ -48,6 +48,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   notice_file_deleted: Il documento è stato cancellato
   error_at_least_one_revision_must_be_present: Deve essere presente almeno una revisione
   notice_revision_deleted: Revisione cancellata
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: Uno dei documenti è bloccato
   notice_file_revision_created: Revisione del documento creata
   notice_your_preferences_were_saved: Le tue preferenze sono state salvate
@@ -115,6 +116,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   heading_revisions: Revisioni
   title_download: Download
   title_delete_revision: Cancella revisione
+  title_obsolete_revision: Obsolete revision
   label_created: Creato
   label_changed: Modificato
   info_changed_by_user: "%{changed} da"
@@ -269,6 +271,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   title_assigned: Assegnato
   title_approval: Approvazione
   title_rejected: Rifiutato
+  title_obsolete: Obsolete
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: Nuovo passo

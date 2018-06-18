@@ -48,6 +48,7 @@ de:
   notice_file_deleted: Datei gelöscht
   error_at_least_one_revision_must_be_present: Es muss mindestens eine Version existieren
   notice_revision_deleted: Version gelöscht
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: Eine der Dateien ist gesperrt
   notice_file_revision_created: Dateiversion erstellt
   notice_your_preferences_were_saved: Deine Einstellungen wurden gespeichert
@@ -115,6 +116,7 @@ de:
   heading_revisions: Versionen
   title_download: Download
   title_delete_revision: Lösche Version
+  title_obsolete_revision: Obsolete revision
   label_created: Erstellt
   label_changed: Geändert
   info_changed_by_user: "%{changed} von"
@@ -269,6 +271,7 @@ de:
   title_assigned: Zugewiesen
   title_approval: Genehmigt
   title_rejected: Abgelehnt
+  title_obsolete: Obsolete
   dmsf_and: UND
   dmsf_or: ODER
   dmsf_new_step: Neuer Schritt

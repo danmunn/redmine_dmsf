@@ -45,8 +45,8 @@ class DmsfFile < ActiveRecord::Base
     :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
   has_many :dmsf_public_urls, :dependent => :destroy
 
-  STATUS_DELETED = 1.freeze
-  STATUS_ACTIVE = 0.freeze
+  STATUS_DELETED = 1
+  STATUS_ACTIVE = 0
 
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }
@@ -54,7 +54,7 @@ class DmsfFile < ActiveRecord::Base
   validates :name, :presence => true
   validates_format_of :name, :with => /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/,
     :message => l(:error_contains_invalid_character)
-
+  validates :project, :presence => true
   validate :validates_name_uniqueness
 
   def validates_name_uniqueness

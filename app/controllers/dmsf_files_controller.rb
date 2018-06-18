@@ -246,7 +246,7 @@ class DmsfFilesController < ApplicationController
 
   def obsolete_revision
     if @revision
-      if @revision.obsolete()
+      if @revision.obsolete
         flash[:notice] = l(:notice_revision_obsoleted)
       else
         flash[:error] = @revision.errors.full_messages.join(', ')
