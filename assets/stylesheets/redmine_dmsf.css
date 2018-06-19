@@ -356,3 +356,12 @@ div.dmsf_revision_inner_box .attribute .label {
 
 #dmsf_links_attachments_fields span {display:block; white-space:nowrap;}
 #dmsf_links_attachments_fields input.filename {border:0; height:1.8em; width:250px; color:#555; background-color:inherit; background:url(../../../images/link.png) no-repeat 1px 50%; padding-left:18px;}
+
+/* New link form*/
+#dmsf_link_target_file_id, #dmsf_link_target_folder_id, #dmsf_link_target_project_id{
+    min-width: 40%;
+}
+
+#dmsf_link_name{
+    min-width: 38%;
+}
