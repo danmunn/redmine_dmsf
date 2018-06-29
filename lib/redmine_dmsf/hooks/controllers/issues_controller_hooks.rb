@@ -73,7 +73,7 @@ module RedmineDmsf
           issue = context[:issue]
           params = context[:params]
           controller = context[:controller]
-          if edit && params[:issue]
+          if edit && params[:issue] && params[:issue][:project_id].present?
             project_id = params[:issue][:project_id].to_i
             old_project_id = context[:project].id
             # Sync the title with the issue's subject
