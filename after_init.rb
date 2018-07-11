@@ -82,6 +82,10 @@ ActionDispatch::Reloader.to_prepare do
   # Rubyzip configuration
   Zip.unicode_names = true
 
+  # DMS custom fields
+  CustomFieldsHelper::CUSTOM_FIELDS_TABS << { :name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index',
+                                              :label => :dmsf }
+
   Redmine::Search.map do |search|
     search.register :dmsf_files
     search.register :dmsf_folders
