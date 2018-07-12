@@ -34,7 +34,10 @@ module RedmineDmsf
               :resource_class => RedmineDmsf::Webdav::ResourceProxy,
               :log_to => Rails.logger,
               :allow_unauthenticated_options_on_root => true,
-              :namespaces => { 'http://apache.org/dav/props/' => 'd' }
+              :namespaces => {
+                'http://apache.org/dav/props/' => 'd',
+                'http://ucb.openoffice.org/dav/props/' => 'd'
+              }
             )
           end
         }.to_app
