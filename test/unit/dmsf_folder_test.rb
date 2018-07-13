@@ -65,6 +65,10 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     # Hasn't got permissions for @folder7
     @folder7.dmsf_folder_permissions.where(:object_type => 'User').delete_all
     assert_equal 4, DmsfFolder.visible.where(:project_id => 1).count
+    # Anonymous user
+    User.current = User.anonymous
+    @project.add_default_member User.anonymous
+    assert_equal 5, DmsfFolder.visible.where(:project_id => 1).count
   end
 
   def test_permissions
