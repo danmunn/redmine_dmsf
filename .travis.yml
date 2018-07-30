@@ -31,18 +31,21 @@ rvm:
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS test CHARACTER SET utf8mb4;'
   - psql -c 'create database test;' -U postgres
-
-install:
-
-script:
   - export WORKSPACE=`pwd`/workspace
   - export PATH_TO_DMSF=`pwd`
   - export PATH_TO_REDMINE=$WORKSPACE/redmine
+  - export BUNDLE_GEMFILE=$PATH_TO_REDMINE/Gemfile
   - mkdir -p ${WORKSPACE}
   - cp -f ./test/ci/${DB}.yml ${WORKSPACE}/database.yml
   - bash -x ./test/ci/redmine_install.sh -c
   - bash -x ./test/ci/redmine_install.sh -i
+
+install:
+
+script:
   - bash -x ./test/ci/redmine_install.sh -t
+
+after_script:
   - bash -x ./test/ci/redmine_install.sh -u
 
 env:
@@ -51,9 +54,6 @@ env:
   - DB=postgres
 
 cache: bundler
-
-gemfile:
-  - ${PATH_TO_REDMINE}/Gemfile
 
 services:
   - mysql
