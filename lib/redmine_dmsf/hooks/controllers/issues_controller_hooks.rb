@@ -84,8 +84,6 @@ module RedmineDmsf
                 controller.flash[:error] = old_system_folder.errors.full_messages.to_sentence
                 Rails.logger.error old_system_folder.errors.full_messages.to_sentence
               end
-            else
-              Rails.logger.error "No system folder found for issue ##{issue.id}."
             end
             # Move documents, links and folders if needed
             if project_id != old_project_id
