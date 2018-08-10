@@ -72,30 +72,45 @@ module RedmineDmsf
         if context.is_a?(Hash)
           issue = context[:issue]
           params = context[:params]
-          # Move existing attached documents if needed
-          if edit && params[:issue]
+          controller = context[:controller]
+          if edit && params[:issue] && params[:issue][:project_id].present?
             project_id = params[:issue][:project_id].to_i
             old_project_id = context[:project].id
-            system_folder = issue.system_folder(false, old_project_id)
-            if system_folder
-              # Change the title if the issue's subject changed
-              system_folder.title = "#{issue.id} - #{issue.subject}"
-              # Move system folders if needed
-              if  system_folder.dmsf_folder
-                system_folder.dmsf_folder.project_id = project_id
-                system_folder.dmsf_folder.save!
+            # Sync the title with the issue's subject
+            old_system_folder = issue.system_folder(false, old_project_id)
+            if old_system_folder
+              old_system_folder.title = "#{issue.id} - #{DmsfFolder::get_valid_title(issue.subject)}"
+              unless old_system_folder.save
+                controller.flash[:error] = old_system_folder.errors.full_messages.to_sentence
+                Rails.logger.error old_system_folder.errors.full_messages.to_sentence
               end
-              system_folder.project_id = project_id
-              system_folder.save!
-              # Move documents
-              issue.dmsf_files.each do |dmsf_file|
-                dmsf_file.project_id = project_id
-                dmsf_file.save!
-              end
-              # Move links
-              issue.dmsf_links.each do | dmsf_link|
-                dmsf_link.project_id = project_id
-                dmsf_link.save!
+            end
+            # Move documents, links and folders if needed
+            if project_id != old_project_id
+              if old_system_folder
+                new_main_system_folder = issue.main_system_folder(true)
+                if new_main_system_folder
+                  old_system_folder.dmsf_folder_id = new_main_system_folder.id
+                  old_system_folder.project_id = project_id
+                  unless old_system_folder.save
+                    controller.flash[:error] = old_system_folder.errors.full_messages.to_sentence
+                    Rails.logger.error old_system_folder.errors.full_messages.to_sentence
+                  end
+                  issue.dmsf_files.each do |dmsf_file|
+                    dmsf_file.project_id = project_id
+                    unless dmsf_file.save
+                      controller.flash[:error] = dmsf_file.errors.full_messages.to_sentence
+                      Rails.logger.error dmsf_file.errors.full_messages.to_sentence
+                    end
+                  end
+                  issue.dmsf_links.each do | dmsf_link|
+                    dmsf_link.project_id = project_id
+                    unless dmsf_link.save
+                      controller.flash[:error] = dmsf_link.errors.full_messages.to_sentence
+                      Rails.logger.error dmsf_link.errors.full_messages.to_sentence
+                    end
+                  end
+                end
               end
             end
           end

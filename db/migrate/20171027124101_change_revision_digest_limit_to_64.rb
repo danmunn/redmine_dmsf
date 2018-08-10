@@ -19,10 +19,15 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class ChangeRevisionDigestLimitTo64 < ActiveRecord::Migration
+
   def up
     change_column :dmsf_file_revisions, :digest, :string, limit: 64
   end
+
   def down
-    change_column :dmsf_file_revisions, :digest, :string, limit: 40
+    # Mysql2::Error: Data too long for column 'digest'
+    # Recalculation of checksums for all revisions is technically possible but costs are to high.
+    #change_column :dmsf_file_revisions, :digest, :string, limit: 40
   end
+
 end

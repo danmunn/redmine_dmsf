@@ -34,8 +34,7 @@ module RedmineDmsf
       def save_dmsf_attachments(dmsf_attachments)
         @saved_dmsf_attachments = []
         if dmsf_attachments
-          dmsf_attachments = dmsf_attachments.map(&:last)
-          dmsf_attachments.each do |dmsf_attachment|
+          dmsf_attachments.each do |_, dmsf_attachment|
             a = Attachment.find_by_token(dmsf_attachment[:token])
             @saved_dmsf_attachments << a if a
           end
@@ -49,8 +48,7 @@ module RedmineDmsf
       def save_dmsf_links(dmsf_links)
         @saved_dmsf_links = []
         if dmsf_links
-          ids = dmsf_links.map(&:last)
-          ids.each do |id|
+          dmsf_links.each do |_, id|
             l = DmsfLink.find_by_id(id)
             @saved_dmsf_links << l if l
           end
@@ -93,7 +91,7 @@ module RedmineDmsf
         @saved_dmsf_links_wfs || {}
       end
 
-      def system_folder(create = false, prj_id = nil)
+      def main_system_folder(create = false, prj_id = nil)
         prj_id ||= self.project_id
         parent = DmsfFolder.system.where(:project_id => prj_id, :title => '.Issues').first
         if create && !parent
@@ -105,6 +103,12 @@ module RedmineDmsf
           parent.system = true
           parent.save
         end
+        parent
+      end
+
+      def system_folder(create = false, prj_id = nil)
+        prj_id ||= self.project_id
+        parent = main_system_folder(create, prj_id)
         if parent
           folder = DmsfFolder.system.where(["project_id = ? AND dmsf_folder_id = ? AND title LIKE '? - %'",
             prj_id, parent.id, self.id]).first
@@ -112,7 +116,7 @@ module RedmineDmsf
             folder = DmsfFolder.new
             folder.dmsf_folder_id = parent.id
             folder.project_id = prj_id
-            folder.title = "#{self.id} - #{self.subject}"
+            folder.title = "#{self.id} - #{DmsfFolder::get_valid_title(self.subject)}"
             folder.user_id = User.anonymous.id
             folder.system = true
             folder.save
@@ -125,7 +129,7 @@ module RedmineDmsf
         files = []
         folder = self.system_folder
         if folder
-          files = folder.dmsf_files.to_a
+          files = folder.dmsf_files.visible
         end
         files
       end
@@ -134,7 +138,7 @@ module RedmineDmsf
         links = []
         folder = self.system_folder
         if folder
-          links = folder.dmsf_links
+          links = folder.dmsf_links.visible
         end
         links
       end

@@ -149,7 +149,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_equal 0, @file4.referenced_links.count
     @file4.dmsf_folder.lock!
   end
-  
+
   def test_copy_to_filename
     assert_no_difference '@file1.dmsf_file_revisions.count' do
       new_file = @file1.copy_to_filename(@file1.project, nil, 'new_file.txt')
@@ -202,7 +202,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_nil new_file.last_revision.dmsf_workflow_started_by
     assert_nil new_file.last_revision.dmsf_workflow_started_at
   end
-  
+
   def test_copy_to
     assert_no_difference '@file1.dmsf_file_revisions.count' do
       new_file = @file1.copy_to(@file1.project, @folder1)
@@ -283,6 +283,29 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_equal '/opt/redmine', sp.to_s
     # Restore
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = setting
+  end
+
+  def test_owner
+    assert @file1.owner?(@file1.last_revision.user)
+    assert !@file1.owner?(@jsmith)
+    @file1.last_revision.user = @jsmith
+    assert @file1.owner?(@jsmith)
+  end
+
+  def test_involved
+    assert @file1.involved?(@file1.last_revision.user)
+    assert !@file1.involved?(@jsmith)
+    @file1.dmsf_file_revisions[1].user = @jsmith
+    assert @file1.involved?(@jsmith)
+  end
+
+  def test_assigned
+    assert !@file1.assigned?(@admin)
+    assert !@file1.assigned?(@jsmith)
+    @file1.last_revision.set_workflow(@wf1.id, nil)
+    @file1.last_revision.assign_workflow(@wf1.id)
+    assert @file1.assigned?(@admin)
+    assert @file1.assigned?(@jsmith)
   end
 
 end

@@ -21,7 +21,7 @@
 module DmsfUploadHelper
   include Redmine::I18n
 
-  def self.commit_files_internal(commited_files, project, folder, controller)
+  def self.commit_files_internal(commited_files, project, folder, controller = nil)
     failed_uploads = []
     files = []
     if commited_files && commited_files.is_a?(Hash)
@@ -109,7 +109,7 @@ module DmsfUploadHelper
             end
           rescue Exception => e
             Rails.logger.error e.message
-            controller.flash[:error] = e.message
+            controller.flash[:error] = e.message if controller
             failed_uploads.push(file)
           end
         else
@@ -148,7 +148,7 @@ module DmsfUploadHelper
             unless recipients.empty?
               to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
               to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-              controller.flash[:warning] = l(:warning_email_notifications, :to => to)
+              controller.flash[:warning] = l(:warning_email_notifications, :to => to) if controller
             end
           end
         rescue Exception => e
@@ -156,7 +156,7 @@ module DmsfUploadHelper
         end
       end
     end
-    if failed_uploads.present?
+    if failed_uploads.present? && controller
       controller.flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u['name']}.join(', '))
     end
     [files, failed_uploads]

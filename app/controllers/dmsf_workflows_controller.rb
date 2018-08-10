@@ -72,7 +72,7 @@ class DmsfWorkflowsController < ApplicationController
               end
               if revision.workflow == DmsfWorkflow::STATE_APPROVED
                 # Just approved
-                recipients = DmsfMailer.get_notify_users(@project, [revision.dmsf_file])
+                recipients = DmsfMailer.get_notify_users(@project, [revision.dmsf_file], true)
                 recipients.each do |user|
                   DmsfMailer.workflow_notification(
                     user,
@@ -94,7 +94,7 @@ class DmsfWorkflowsController < ApplicationController
                 recipients = @dmsf_workflow.participiants
                 recipients.push User.find_by_id revision.dmsf_workflow_assigned_by
                 recipients.uniq!
-                recipients = recipients & DmsfMailer.get_notify_users(@project, [revision.dmsf_file])
+                recipients = recipients & DmsfMailer.get_notify_users(@project, [revision.dmsf_file], true)
                 recipients.each do |user|
                   DmsfMailer.workflow_notification(
                     user,
@@ -117,7 +117,7 @@ class DmsfWorkflowsController < ApplicationController
               if action.action == DmsfWorkflowStepAction::ACTION_DELEGATE
                 # Delegation
                 delegate = User.find_by_id params[:step_action].to_i / 10
-                if DmsfMailer.get_notify_users(@project).include?(delegate)
+                if DmsfMailer.get_notify_users(@project, [revision.dmsf_file], true).include?(delegate)
                   DmsfMailer.workflow_notification(
                     delegate,
                     @dmsf_workflow,
@@ -137,7 +137,7 @@ class DmsfWorkflowsController < ApplicationController
                   if assignments.first.dmsf_workflow_step.step != action.dmsf_workflow_step_assignment.dmsf_workflow_step.step
                     # Next step
                     assignments.each do |assignment|
-                      if assignment.user && DmsfMailer.get_notify_users(@project).include?(assignment.user)
+                      if assignment.user && DmsfMailer.get_notify_users(@project, [revision.dmsf_file], true).include?(assignment.user)
                         DmsfMailer.workflow_notification(
                           assignment.user,
                           @dmsf_workflow,
@@ -148,7 +148,7 @@ class DmsfWorkflowsController < ApplicationController
                       end
                     end
                     to = User.find_by_id revision.dmsf_workflow_assigned_by
-                    if to && DmsfMailer.get_notify_users(@project).include?(to)
+                    if to && DmsfMailer.get_notify_users(@project, [revision.dmsf_file], true).include?(to)
                       DmsfMailer.workflow_notification(
                         to,
                         @dmsf_workflow,
@@ -161,7 +161,7 @@ class DmsfWorkflowsController < ApplicationController
                       recipients = assignments.collect{ |a| a.user }
                       recipients << to if to
                       recipients.uniq!
-                      recipients = recipients & DmsfMailer.get_notify_users(@project)
+                      recipients = recipients & DmsfMailer.get_notify_users(@project, [revision.dmsf_file], true)
                       unless recipients.empty?
                         to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                         to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')

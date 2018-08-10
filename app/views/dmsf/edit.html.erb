@@ -70,14 +70,7 @@
   <div class="box tabular">    
     <p>                
       <%= f.text_field(:title, :required => true) %>
-    </p>  
-    <p>
-      <%= f.select(:dmsf_folder_id, 
-        options_for_select(DmsfFolder.directory_tree(@project, @folder), 	
-        :selected => @parent? @parent.id : (@pathfolder.id if @pathfolder)),
-      :label => l(:field_folder))                           
-      %>
-    </p>          
+    </p>
     <p>      
       <%= f.text_area :description, :rows => 8, :class => 'wiki-edit' %>
     </p>

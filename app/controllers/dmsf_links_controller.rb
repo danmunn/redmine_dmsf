@@ -21,11 +21,15 @@
 class DmsfLinksController < ApplicationController
 
   model_object DmsfLink
+
   before_action :find_model_object, :only => [:destroy, :restore]
   before_action :find_link_project
   before_action :authorize
   before_action :permissions
+
   protect_from_forgery except: :new
+
+  accept_api_auth :create
 
   def permissions
     if @dmsf_link
@@ -103,7 +107,8 @@ class DmsfLinksController < ApplicationController
         @dmsf_link.target_type = DmsfFolder.model_name.to_s
       end
       @dmsf_link.name = params[:dmsf_link][:name]
-      if @dmsf_link.save
+      result = @dmsf_link.save
+      if result
         flash[:notice] = l(:notice_successful_create)
       else
         flash[:error] = @dmsf_link.errors.full_messages.to_sentence
@@ -122,7 +127,8 @@ class DmsfLinksController < ApplicationController
         @dmsf_link.target_type = DmsfFolder.model_name.to_s
       end
       @dmsf_link.name = params[:dmsf_link][:name]
-      if @dmsf_link.save
+      result = @dmsf_link.save
+      if result
         flash[:notice] = l(:notice_successful_create)
       else
         flash[:error] = @dmsf_link.errors.full_messages.to_sentence
@@ -140,6 +146,7 @@ class DmsfLinksController < ApplicationController
           end
         end
       }
+      format.api { render_validation_errors(@dmsf_link) unless result }
       format.js
     end
   end
@@ -191,7 +198,6 @@ class DmsfLinksController < ApplicationController
       else
         pid = params[:project_id]
       end
-      Rails.logger.error("pid #{pid}")
       @project = Project.find(pid)
     end
   rescue ActiveRecord::RecordNotFound

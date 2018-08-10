@@ -11,27 +11,36 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-module RedmineDmsf
-  module Patches
-    module AttachablePatch
+require File.expand_path('../../test_helper', __FILE__)
 
-      ##################################################################################################################
-      # Overriden methods
+class AttachablePatchTest < RedmineDmsf::Test::UnitTest
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :issues
 
-      def has_attachments?
-        super || (defined?(self.dmsf_files) && self.dmsf_files.any?)
-      end
+  def setup
+    @issue1 = Issue.find_by_id 1
+    @issue2 = Issue.find_by_id 2
+  end
 
+  def test_truth
+    assert_kind_of Issue, @issue1
+    assert_kind_of Issue, @issue2
+  end
+
+  def test_has_attachmets
+    if defined?(EasyExtensions)
+      assert @issue1.has_attachments?
+      assert !@issue2.has_attachments?
+    else
+      assert @issue1.dmsf_files.any?
+      assert !@issue2.dmsf_files.any?
     end
   end
-end
 
-RedmineExtensions::PatchManager.register_patch_to_be_first 'Redmine::Acts::Attachable::InstanceMethods',
-    'RedmineDmsf::Patches::AttachablePatch', prepend: true, first: true
+end

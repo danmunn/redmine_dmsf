@@ -281,4 +281,28 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_response :success
   end
 
+  def test_create_folder_in_root
+    @role.add_permission! :folder_manipulation
+    @role.add_permission! :view_dmsf_folders
+    assert_difference 'DmsfFolder.count', +1 do
+      post :create, :id => @project.id, :dmsf_folder => {
+        :title => 'New folder',
+        :description => 'Unit tests'
+      }
+    end
+    assert_redirected_to dmsf_folder_path(:id => @project, :folder_id => nil)
+  end
+
+  def test_create_folder
+    @role.add_permission! :folder_manipulation
+    @role.add_permission! :view_dmsf_folders
+    assert_difference 'DmsfFolder.count', +1 do
+      post :create, :id => @project.id, :parent_id => @folder1.id, :dmsf_folder => {
+        :title => 'New folder',
+        :description => 'Unit tests'
+      }
+    end
+    assert_redirected_to dmsf_folder_path(:id => @project, :folder_id => @folder1)
+  end
+
 end

@@ -31,9 +31,11 @@ fr:
   notice_file_locked: Fichier verrouillé
   warning_file_not_locked: Fichier déverrouillé
   notice_file_unlocked: Fichier déverrouillé
-  error_only_user_that_locked_file_can_unlock_it: "Le fichier ne peut être déverrouillé que par celui qui l'a verrouillé"
+  error_only_user_that_locked_file_can_unlock_it: "Le fichier ne peut être déverrouillé que par celui qui l'a
+    verrouillé"
   error_max_files_exceeded: Le nombre de fichiers pouvant être téléchargés simultanément est dépassé
   error_entry_project_does_not_match_current_project: "Le projet saisi ne correspond pas au projet courant"
+
   notice_folder_created: Dossier créé
   error_folder_creation_failed: Erreur de création du dossier
   error_folder_title_must_be_entered: Le titre du document est requis
@@ -46,17 +48,22 @@ fr:
   notice_file_deleted: Le fichier a été supprimé
   error_at_least_one_revision_must_be_present: Au moins une révision est requise
   notice_revision_deleted: Révision supprimée
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: Un des fichiers sélectionnés est verrouillé
   notice_file_revision_created: La révision du fichier a été ajoutée
   notice_your_preferences_were_saved: Vos paramètres ont été enregistrés
   notice_your_preferences_were_not_saved: Your preferences were not saved
   warning_folder_notifications_already_activated: Les notifications du dossier sont déjà activées
+
   notice_folder_notifications_activated: Les notifications du dossier ont été activées
   warning_folder_notifications_already_deactivated: Les notifications du dossier sont déjà désactivées
+
   notice_folder_notifications_deactivated: Les notifications des dossier ont été désactivés
   warning_file_notifications_already_activated: Les notifications du fichier sont déjà désactivés
+
   notice_file_notifications_activated: Les notifications du fichier ont été activées
   warning_file_notifications_already_deactivated: Les notifications du fichier sont déjà désactivées
+
   notice_file_notifications_deactivated: Les notifications du fichier ont été désactivés
   link_details: "Détails de %{title}"
   link_edit: "Modification du dossier %{title}"
@@ -69,6 +76,7 @@ fr:
   link_author: Auteur
   title_check_for_zip_download_or_email: Sélectionner pour le téléchargement ou la transmission par mail
   title_check_for_restore_or_delete: Sélectionner pour restaurer ou supprimer
+
   title_delete: Supprimer
   title_notifications_active_deactivate: "Notifications activées : cliquer pour désactiver"
   title_notifications_not_active_activate: "Notifications désactivées : cliquer pour activer"
@@ -102,11 +110,13 @@ fr:
   select_option_deactivated: Désactivé
   select_option_activated: Activé
   label_title_format: Format du titre
-  text_title_format: "Format du titre du document pour le téléchargement (%t - titre, %f - fichier, %d - date, %v - version, %i - ID, %r - révision). Example: %t_%v"
+  text_title_format: "Format du titre du document pour le téléchargement (%t - titre, %f - fichier, %d - date, %v -
+    version, %i - ID, %r - révision). Example: %t_%v"
   title_save_preferences: Enregistrer les préférences
   heading_revisions: Révisions
   title_download: Télécharger
   title_delete_revision: Supprimer la révision
+  title_obsolete_revision: Obsolete revision
   label_created: Créé
   label_changed: Modifié
   info_changed_by_user: "%{changed} par"
@@ -120,9 +130,11 @@ fr:
   option_version_custom: (personnalisée)
   label_new_content: Nouvelle version du fichier
   label_maximum_files_upload: Nombre maximal de documents pouvant être transmis
-  note_maximum_number_of_files_uploaded: Nombre maximal de documents pouvant être transmis en une fois. La valeur 0 signifie illimité.
+  note_maximum_number_of_files_uploaded: Nombre maximal de documents pouvant être transmis en une fois. La valeur 0
+    signifie illimité.
   label_maximum_files_download: Nombre maximal de fichiers pouvant être téléchargés
-  note_maximum_number_of_files_downloaded: Nombre maximal de documents pouvant être téléchargés ou transmis par mail en une fois. La valeur 0 signifie illimité.
+  note_maximum_number_of_files_downloaded: Nombre maximal de documents pouvant être téléchargés ou transmis par mail en
+    une fois. La valeur 0 signifie illimité.
   label_file_storage_directory: Dossier de stockage des documents
   label_index_database: Indexer la base de données
   label_stemming_language: Méthode de racinisation
@@ -132,11 +144,11 @@ fr:
   option_stem_none: Aucun suffixe(défaut)
   option_stem_some: Quelques suffixes
   option_stem_all: Tous les suffixes
-  label_stemming_description: "Ce paramètre contrôle l'algorithme de racinisation appliqué par le requêteur. La valeur par défaut est STEM_NONE. Les paramètres disponibles sont"
-  note_do_not_stem: "N'effectuer aucune transformation"
-  note_stem_some: "Rechercher des stemmes pour tous les mots sauf ceux qui commencent par des majuscules, ceux suivis d'un certain nombre de caractères ou ceux utilisés avec des opérateurs nécessitant des informations contextuelles. Les stemmes doivent être préfixées par 'Z'."
-  note_stem_all: "Rechercher toutes les racines de tous les mots (note : le préfix 'Z' ne sera pas ajouté)."
-  note_stemming_applied: Il est à noter que l'algorithme de racinisation ne sera appliqué qu'aux mots dans les champs de probabilité - Les filtres booléans ne seront pas racinisés.
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+    of terms except for those which start with a capital letter, or are followed by certain characters
+    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Notifications par défaut du document
   heading_uploaded_files: Document(s) transmis
   submit_commit: Appliquer
@@ -152,14 +164,20 @@ fr:
   permission_manage_workflows: Gérer les flux de validation
   permission_file_delete: Supprimer les documents
   permission_display_system_folders: Afficher les dossiers système
+  permission_file_approval: File approval
+  permission_email_documents: Email documents
   label_file: Fichier
   field_folder: Dossier
   error_create_cycle_in_folder_dependency: Crée une dépendance cyclique du dossier
   error_contains_invalid_character: Contient un(des) caractère(s) invalide(s)
   error_file_commit_require_uploaded_file: "Transmission des fichiers nécessaire avant l'enregistrement"
+
   warning_some_files_were_not_commited: "Erreur d'enregsitrement de certains fichiers %{files}"
-  error_user_has_not_right_delete_folder: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression du dossier"
-  error_user_has_not_right_delete_file: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression du dossier"
+
+  error_user_has_not_right_delete_folder: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression
+    du dossier"
+  error_user_has_not_right_delete_file: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression
+    du dossier"
   notice_entries_deleted: Elément(s) supprimé(s)
   warning_some_entries_were_not_deleted: "Certains éléments n'ont pas été supprimés : %{entries}"
   title_delete_checked: Supprimer les éléments sélectionnés
@@ -167,7 +185,8 @@ fr:
   title_filename_for_download: "Nom du fichier à utiliser lors du téléchargement ou de l'archive ZIP"
   label_number_of_folders: Dossiers
   label_number_of_documents: Fichiers
-  error_file_storage_directory_does_not_exist: Le répertoire de stockage des fichiers n'existe pas ou n'a pas pu être créé
+  error_file_storage_directory_does_not_exist: Le répertoire de stockage des fichiers n'existe pas ou n'a pas pu être
+    créé
   error_file_can_not_be_created: "Le fichier n'a pas pu être enregistré dans le répertoire de stockage"
   error_wrong_zip_encoding: Mauvais jeu de caractères pour la transformation du nom du ZIP
   warning_xapian_not_available: Le module Xapian est indisponible
@@ -191,13 +210,16 @@ fr:
   error_target_folder_same: Le projet et le dossier cible sont identiques au projet et dossier source
   title_copy: Copie
 
-  error_max_email_filesize_exceeded: "Vous avez dépassé la taille maximale des fichiers pouvant être transmis par mail (%{number} MB)"
-  note_maximum_email_filesize: Taille maximale, en méga octets, des fichiers pouvant être transmis par mail. 0 indique aucune restriction
+  error_max_email_filesize_exceeded: "Vous avez dépassé la taille maximale des fichiers pouvant être transmis par mail
+    (%{number} MB)"
+  note_maximum_email_filesize: Taille maximale, en méga octets, des fichiers pouvant être transmis par mail. 0 indique
+    aucune restriction
   label_maximum_email_filesize: Taille maximale du fichier attaché
   header_minimum_filesize: Erreur de fichier.
   error_minimum_filesize: "Le fichier %{file} est vide. Il ne sera pas transmis."
   parent_directory: Dossier parent
-  note_webdav: "Après l'activation du module Webdav, celui-ci sera accessible par %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
+  note_webdav: "Après l'activation du module Webdav, celui-ci sera accessible par
+    %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
   label_webdav: Module Webdav
   label_dmsf_plural: "Copier les fichiers et les dossiers (%{files} fichiers dans %{folders} dossiers)"
 
@@ -206,13 +228,16 @@ fr:
   warning_folder_not_locked: Echec du verrouillage du dossier
   notice_folder_unlocked: Le dossier a été déverrouillé
   error_only_user_that_locked_folder_can_unlock_it: "Vous n'êtes autorisé à déverrouiller ce dossier"
+
   title_unlock_folder: Déverrouiller afin de permettre la modification par les membres du projet
   title_lock_folder: "Verrouiller afin d'empêcher les modifications du dossier"
 
   select_option_webdav_readonly: Lecture
   select_option_webdav_readwrite: Lecture/Écriture
   label_webdav_strategy: Accès Webdav
-  note_webdav_strategy: "Permet à l'administrateur d'autoriser les utilisateurs au module Webdav en letcure seule ou en lecture et écriture."
+
+  note_webdav_strategy: "Permet à l'administrateur d'autoriser les utilisateurs au module Webdav en letcure seule ou en
+    lecture et écriture."
 
   error_unable_delete_dmsf_workflow: Impossible de supprimer le flux de validation
   error_empty_note: La note ne peut pas être vide
@@ -246,6 +271,7 @@ fr:
   title_assigned: Assigné
   title_approval: Approbation
   title_rejected: Rejeté
+  title_obsolete: Obsolete
   dmsf_and: ET
   dmsf_or: OU
   dmsf_new_step: Nouvelle étape
@@ -260,15 +286,23 @@ fr:
   text_email_subject_requires_approval: requiert votre approbation
   text_email_subject_updated: mis à jour
   text_email_subject_started: démarré
-  text_email_finished_approved: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer et le document a été approuvé."
-  text_email_finished_rejected: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer et le document a été rejeté pour la raison '%{notice}'."
-  text_email_finished_delegated: "Le flux de validation '%{name}' assigné au document '%{filename}' a été délégué pour la raison '%{notice}' et vous êtes tenu d'approuver l'étape actuelle."
-  text_email_finished_step: "Le flux de validation '%{name}' assigné au document '%{filename}' a passé une des étapes d'approbation et vous êtes tenu d'approuver l'étape suivante."
-  text_email_finished_step_short: "Le flux de validation '%{name}' assigné au document '%{filename}' a passé une des étapes d'approbation."
-  text_email_started: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de démarrer et vous êtes tenu d'approuver l'étape actuelle."
+  text_email_finished_approved: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer
+    et le document a été approuvé."
+  text_email_finished_rejected: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer
+    et le document a été rejeté pour la raison '%{notice}'."
+  text_email_finished_delegated: "Le flux de validation '%{name}' assigné au document '%{filename}' a été délégué pour
+    la raison '%{notice}' et vous êtes tenu d'approuver l'étape actuelle."
+  text_email_finished_step: "Le flux de validation '%{name}' assigné au document '%{filename}' a passé une des étapes
+    d'approbation et vous êtes tenu d'approuver l'étape suivante."
+  text_email_finished_step_short: "Le flux de validation '%{name}' assigné au document '%{filename}' a passé une des
+    étapes d'approbation."
+  text_email_started: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de démarrer et vous êtes
+    tenu d'approuver l'étape actuelle."
   text_email_to_proceed: "Pour ce faire, cliquez sur l'icône de validation à côté du document dans"
   text_email_to_see_history: "Pour consulter l'historique de validation, cliquez sur le statut du flux du document dans"
-  text_email_to_see_status: Pour consulter le statut actuel du flux de validation, cliquez sur le statut du flux du document dans
+
+  text_email_to_see_status: Pour consulter le statut actuel du flux de validation, cliquez sur le statut du flux du
+    document dans
 
   title_create_link: Créer un lien symbolique
   label_link_from: Lien depuis
@@ -294,7 +328,8 @@ fr:
   label_links_only: liens seulement
 
   label_display_notified_recipients: Afficher les destinataires notifiés
-  note_display_notified_recipients: "L'utilisateur sera informé de tous les destinataires à qui un email de notifcation a été envoyé"
+  note_display_notified_recipients: "L'utilisateur sera informé de tous les destinataires à qui un email de notifcation
+    a été envoyé"
   warning_email_notifications: "Email de notification envoyé à %{to}"
 
   link_trash_bin: Corbeille
@@ -318,7 +353,9 @@ fr:
   open_approvals: Approbations en attente
 
   label_maximum_ajax_upload_filesize: Taille maximale de fichier pour téléversement via AJAX
-  note_maximum_ajax_upload_filesize: "Taille maximale, en méga octets, de fichier pour téléversement via l'interface standard AJAX. Sinon l'interface standard de Redmine doit être utilisée."
+  note_maximum_ajax_upload_filesize: "Taille maximale, en méga octets, de fichier pour téléversement via l'interface
+    standard AJAX. Sinon l'interface standard de Redmine doit être utilisée."
+
   label_classic: Classique
   label_drag_drop: Moderne
 
@@ -337,7 +374,8 @@ fr:
   label_last_revision_id: Révision
 
   label_webdav_disable_versioning: Modèles de fichiers sans gestion de version
-  note_webdav_disable_versioning: "Expression régulière qui désactive la gestion de version pour les fichiers correspondants. L'expression par défaut correspond aux fichiers temporaires créés par MsOffice."
+  note_webdav_disable_versioning: "Expression régulière qui désactive la gestion de version pour les fichiers
+    correspondants. L'expression par défaut correspond aux fichiers temporaires créés par MsOffice."
 
   label_dmsf_keep_documents_locked: Garder les documents verrouillés
   note_dmsf_keep_documents_locked: Les documents seront maintenus verrouillés après approbation.
@@ -364,6 +402,12 @@ fr:
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
+
+  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
+    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
+    option needs to have been used at index time.
+    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

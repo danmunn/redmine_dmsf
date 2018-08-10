@@ -280,8 +280,9 @@
 <% begin %>
   <% require 'xapian' %>
   <% xapian_disabled = false %>
-<% rescue LoadError %>
-  <p class="warning"><%= l(:warning_xapian_not_available) %></p> 
+<% rescue LoadError => e %>
+  <p class="warning"><%= l(:warning_xapian_not_available) %></p>
+  <% Rails.logger.warn e.message %>
   <% xapian_disabled = true %>
 <% end %>
 
@@ -289,7 +290,7 @@
   <%= content_tag(:label, l(:label_index_database)) %>
   <%= text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], :disabled => xapian_disabled, :size => 50 %>
   <em class="info">
-    <%= l(:label_default) %>: <%= "#{Rails.root}/files/dmsf_index" %>
+    <%= l(:label_default) %>: <%= File.expand_path('dmsf_index', Rails.root) %>
   </em>
 </p>
 
@@ -309,10 +310,14 @@
   <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_SOME', @settings['dmsf_stemming_strategy'] == 'STEM_SOME', :disabled => xapian_disabled  %> <%= l(:option_stem_some) %><br/>
   <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_ALL', @settings['dmsf_stemming_strategy'] == 'STEM_ALL', :disabled => xapian_disabled  %> <%= l(:option_stem_all) %><br/>
   <em class="info">
-    <%= l(:label_stemming_description) %>:<br/>    
-    &nbsp;&nbsp;STEM_NONE: <%= l(:note_do_not_stem) %><br/>
-    &nbsp;&nbsp;STEM_SOME: <%= l(:note_stem_some) %><br/>
-    &nbsp;&nbsp;STEM_ALL: <%= l(:note_stem_all) %><br/>    
-    <%= l(:note_stemming_applied) %>
+    <%= l(:text_stemming_info) %>
+  </em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_enable_cjk_ngrams)) %>
+  <%= check_box_tag 'settings[enable_cjk_ngrams]', true, @settings['enable_cjk_ngrams'] == 'true' %>
+  <em class="info">
+    <%= l(:text_enable_cjk_ngrams) %>
   </em>
 </p>

@@ -21,6 +21,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
+  include Redmine::I18n
+
   fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles, :members,
            :member_roles, :enabled_modules, :enumerations, :dmsf_locks, :dmsf_workflows, :dmsf_workflow_steps,
            :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions
@@ -31,6 +33,8 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     @revision5 = DmsfFileRevision.find_by_id 5
     @revision8 = DmsfFileRevision.find_by_id 8
     @wf1 = DmsfWorkflow.find_by_id 1
+    @admin = User.find_by_id 1
+    @jsmith = User.find_by_id 2
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
   end
   
@@ -40,6 +44,8 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert_kind_of DmsfFileRevision, @revision5
     assert_kind_of DmsfFileRevision, @revision8
     assert_kind_of DmsfWorkflow, @wf1
+    assert_kind_of User, @admin
+    assert_kind_of User, @jsmith
   end
 
   def test_delete_restore
@@ -221,6 +227,20 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   def test_protocol_ods
     @revision1.mime_type = Redmine::MimeType.of('test.ods')
     assert_equal 'ms-excel', @revision1.protocol
+  end
+
+  def test_obsolete
+    assert @revision1.obsolete
+    assert_equal DmsfWorkflow::STATE_OBSOLETE, @revision1.workflow
+  end
+
+  def test_obsolete_locked
+    User.current = @admin
+    @revision1.dmsf_file.lock!
+    User.current = @jsmith
+    assert !@revision1.obsolete
+    assert_equal 1, @revision1.errors.count
+    @revision1.errors.full_messages.to_sentence.include?(l(:error_file_is_locked))
   end
 
 end

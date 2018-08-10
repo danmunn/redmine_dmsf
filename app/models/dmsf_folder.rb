@@ -43,29 +43,25 @@ class DmsfFolder < ActiveRecord::Base
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
   has_many :dmsf_folder_permissions, :dependent => :destroy
 
-  INVALID_CHARACTERS = /\A[^\[\]\/\\\?":<>#%\*]*\z/.freeze
-  STATUS_DELETED = 1.freeze
-  STATUS_ACTIVE = 0.freeze
+  INVALID_CHARACTERS = '\[\]\/\\\?":<>#%\*'.freeze
+  STATUS_DELETED = 1
+  STATUS_ACTIVE = 0
   AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
   DEFAULT_COLUMNS = %w(title size modified version workflow author).freeze
 
   def self.visible_condition(system=true)
     Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
-      if user.id && user.logged?
-        permissions = "#{DmsfFolderPermission.table_name}"
-        folders = "#{DmsfFolder.table_name}"
-        group_ids = user.group_ids.join(',')
-        group_ids = -1 if group_ids.blank?
-        allowed = (system && role.allowed_to?(:display_system_folders)) ? 1 : 0
-        %{
-          (#{permissions}.object_id IS NULL) OR
-          (#{permissions}.object_id = #{role.id} AND #{permissions}.object_type = 'Role') OR
-          ((#{permissions}.object_id = #{user.id} OR #{permissions}.object_id IN (#{group_ids})) AND #{permissions}.object_type = 'User') AND
-          (#{folders}.system = #{DmsfFolder.connection.quoted_false} OR 1 = #{allowed})
-        }
-      else
-        '0 = 1'
-      end
+      permissions = "#{DmsfFolderPermission.table_name}"
+      folders = "#{DmsfFolder.table_name}"
+      group_ids = user.group_ids.join(',')
+      group_ids = -1 if group_ids.blank?
+      allowed = (system && role.allowed_to?(:display_system_folders)) ? 1 : 0
+      %{
+        ((#{permissions}.object_id IS NULL) OR
+        (#{permissions}.object_id = #{role.id} AND #{permissions}.object_type = 'Role') OR
+        ((#{permissions}.object_id = #{user.id} OR #{permissions}.object_id IN (#{group_ids})) AND #{permissions}.object_type = 'User')) AND
+        (#{folders}.system = #{DmsfFolder.connection.quoted_false} OR 1 = #{allowed})
+      }
     end
   end
 
@@ -97,10 +93,11 @@ class DmsfFolder < ActiveRecord::Base
   validates :title, :presence => true
   validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted],
     conditions: -> { where(:deleted => STATUS_ACTIVE) }
-  validates_format_of :title, :with => INVALID_CHARACTERS,
+  validates_format_of :title, :with => /\A[^#{INVALID_CHARACTERS}]*\z/,
     :message => l(:error_contains_invalid_character)
   validate :check_cycle
   validates_length_of :description, :maximum => 65535
+  validates :project, :presence => true
 
   before_create :default_values
 
@@ -520,7 +517,7 @@ class DmsfFolder < ActiveRecord::Base
     # Attributes
     self.title = params[:dmsf_folder][:title].strip
     self.description = params[:dmsf_folder][:description].strip
-    self.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
+    self.dmsf_folder_id = params[:parent_id]
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
       params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
@@ -549,6 +546,13 @@ class DmsfFolder < ActiveRecord::Base
     end
     # Save
     self.save
+  end
+
+  def self.get_valid_title(title)
+    # 1. Invalid characters are replaced with dots.
+    # 2. Two or more dots in a row are replaced with a single dot.
+    # 3. Windows' WebClient does not like a dot at the end.
+    title.gsub(/[#{INVALID_CHARACTERS}]/, '.').gsub(/\.{2,}/, '.').chomp('.')
   end
 
   private

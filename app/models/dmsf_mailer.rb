@@ -86,9 +86,9 @@ class DmsfMailer < Mailer
     end
   end
 
-  def self.get_notify_users(project, files = [])
+  def self.get_notify_users(project, files = [], force_notification = false)
     return [] unless project.active?
-    if files.present?
+    if !force_notification && files.present?
       notify_files = files.select { |file| file.notify? }
       return [] if notify_files.empty?
     end
@@ -106,21 +106,30 @@ class DmsfMailer < Mailer
           when 'only_my_events'
             author = false
             files.each do |file|
-              if file.involved?(notify_user)
+              if file.involved?(notify_user) || file.assigned?(notify_user)
                 author = true
                 break
               end
             end
             author
-          when 'only_owner', 'only_assigned'
-            author = false
+          when 'only_owner'
+            owner = false
             files.each do |file|
               if file.owner?(notify_user)
-                author = true
+                owner = true
                 break
               end
             end
-            author
+            owner
+          when 'only_assigned'
+            assignee = false
+            files.each do |file|
+              if file.assigned?(notify_user)
+                assignee = true
+                break
+              end
+            end
+            assignee
           else
             false
           end

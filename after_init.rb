@@ -40,8 +40,8 @@ def init
                        :dmsf_folders_copy => [:new, :copy, :move],
                        :dmsf_context_menus => [:dmsf]}
       pmap.permission :file_manipulation,
-                      {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :notify_activate,
-                                       :notify_deactivate, :restore],
+                      {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :obsolete_revision,
+                                       :notify_activate, :notify_deactivate, :restore],
                        :dmsf_upload => [:upload_files, :upload_file, :upload, :commit_files, :commit,
                                         :delete_dmsf_attachment, :delete_dmsf_link_attachment],
                        :dmsf_links => [:new, :create, :destroy, :restore, :autocomplete_for_project,
@@ -81,6 +81,10 @@ end
 ActionDispatch::Reloader.to_prepare do
   # Rubyzip configuration
   Zip.unicode_names = true
+
+  # DMS custom fields
+  CustomFieldsHelper::CUSTOM_FIELDS_TABS << { :name => 'DmsfFileRevisionCustomField', :partial => 'custom_fields/index',
+                                              :label => :dmsf }
 
   Redmine::Search.map do |search|
     search.register :dmsf_files

@@ -21,10 +21,12 @@
 require File.expand_path('../../../test_helper', __FILE__)
 
 class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
+  include Redmine::I18n
 
   fixtures :projects, :users, :dmsf_files, :dmsf_file_revisions, :members, :roles, :member_roles
 
   def setup
+    @admin = User.find_by_id 1
     @jsmith = User.find_by_id 2
     @file1 = DmsfFile.find_by_id 1
     Setting.rest_api_enabled = '1'
@@ -34,6 +36,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_truth
+    assert_kind_of User, @admin
     assert_kind_of User, @jsmith
     assert_kind_of DmsfFile, @file1
     assert_kind_of Role, @role
@@ -109,7 +112,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
       </attachments>
     }
     assert_difference 'DmsfFileRevision.count', +1 do
-      post "/projects/#{@project1.id}/dmsf/commit.xml?&key=#{token.value}", payload, {"CONTENT_TYPE" => 'application/xml'}
+      post "/projects/#{@project1.id}/dmsf/commit.xml?key=#{token.value}", payload, {"CONTENT_TYPE" => 'application/xml'}
     end
     #<?xml version="1.0" encoding="UTF-8"?>
     #<dmsf_files total_count="1" type="array">
@@ -128,4 +131,50 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
       error e.message
     end
   end
+
+  def test_delete_file
+    @role.add_permission! :file_delete
+    token = Token.create!(:user => @jsmith, :action => 'api')
+    # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
+    delete "/dmsf/files/#{@file1.id}.xml?key=#{token.value}", {'CONTENT_TYPE' => 'application/xml'}
+    assert_response :success
+    @file1.reload
+    assert_equal DmsfFile::STATUS_DELETED, @file1.deleted
+    assert_equal User.current, @file1.deleted_by_user
+  end
+
+  def test_delete_file_no_permissions
+    token = Token.create!(:user => @jsmith, :action => 'api')
+    # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
+    delete "/dmsf/files/#{@file1.id}.xml?key=#{token.value}", {'CONTENT_TYPE' => 'application/xml'}
+    assert_response :forbidden
+  end
+
+  def test_delete_folder_commit_yes
+    @role.add_permission! :file_delete
+    token = Token.create!(:user => @jsmith, :action => 'api')
+    # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml&commit=yes
+    delete "/dmsf/files/#{@file1.id}.xml?key=#{token.value}&commit=yes", {'CONTENT_TYPE' => 'application/xml'}
+    assert_response :success
+    assert_nil DmsfFile.find_by_id(@file1.id)
+  end
+
+  def test_delete_file_locked
+    @role.add_permission! :file_delete
+    User.current = @admin
+    @file1.lock!
+    User.current = @jsmith
+    token = Token.create!(:user => @jsmith, :action => 'api')
+    # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
+    delete "/dmsf/files/#{@file1.id}.xml?key=#{token.value}", {'CONTENT_TYPE' => 'application/xml'}
+    assert_response 422
+    # <?xml version="1.0" encoding="UTF-8"?>
+    # <errors type="array">
+    #   <error>Locked by Admin</error>
+    # </errors>
+    assert_select 'errors > error', :text => l(:title_locked_by_user, user: @admin.name)
+    @file1.reload
+    assert_equal DmsfFile::STATUS_ACTIVE, @file1.deleted
+  end
+
 end

@@ -57,11 +57,11 @@ class DmsfWorkflow < ActiveRecord::Base
     end
   end
 
-  STATE_NONE = nil
   STATE_ASSIGNED = 3
   STATE_WAITING_FOR_APPROVAL = 1
   STATE_APPROVED = 2
   STATE_REJECTED = 4
+  STATE_OBSOLETE = 5
 
   STATUS_LOCKED = 0
   STATUS_ACTIVE = 1
@@ -221,7 +221,7 @@ class DmsfWorkflow < ActiveRecord::Base
     assignments = self.next_assignments revision.id
     recipients = assignments.collect{ |a| a.user }
     recipients.uniq!
-    recipients = recipients & DmsfMailer.get_notify_users(project)
+    recipients = recipients & DmsfMailer.get_notify_users(project, [revision.dmsf_file], true)
     recipients.each do |user|
       DmsfMailer.workflow_notification(
         user,
@@ -235,9 +235,9 @@ class DmsfWorkflow < ActiveRecord::Base
       unless recipients.blank?
         to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
         to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-        controller.flash[:warning] = l(:warning_email_notifications, :to => to)
+        controller.flash[:warning] = l(:warning_email_notifications, :to => to) if controller
       end
     end
   end
-
+  
 end

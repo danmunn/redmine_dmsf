@@ -70,25 +70,25 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
   def test_validate_workflow_id_presence
     @wfs1.dmsf_workflow_id = nil
     assert !@wfs1.save
-    assert_equal 1, @wfs1.errors.count        
+    assert@wfs1.errors.count > 0
   end
   
   def test_validate_step_presence
     @wfs1.step = nil
     assert !@wfs1.save
-    assert_equal 1, @wfs1.errors.count        
+    assert @wfs1.errors.count > 0
   end
   
   def test_validate_user_id_presence
     @wfs1.user_id = nil
     assert !@wfs1.save
-    assert_equal 1, @wfs1.errors.count        
+    assert@wfs1.errors.count > 0
   end
   
   def test_validate_operator_presence
     @wfs1.operator = nil
     assert !@wfs1.save
-    assert_equal 1, @wfs1.errors.count        
+    assert @wfs1.errors.count > 0
   end
   
   def test_validate_user_id_uniqueness
@@ -96,7 +96,7 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
     @wfs2.dmsf_workflow_id = @wfs1.dmsf_workflow_id
     @wfs2.step = @wfs1.step
     assert !@wfs2.save
-    assert_equal 1, @wfs2.errors.count        
+    assert @wfs2.errors.count > 0
   end
 
   def test_validate_name_length

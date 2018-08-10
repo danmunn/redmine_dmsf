@@ -22,9 +22,10 @@
 begin
   require 'xapian'
   $xapian_bindings_available = true
-rescue LoadError
+rescue LoadError => e
   Rails.logger.warn %{No Xapian search engine interface for Ruby installed => Full-text search won't be available.
                       Install a ruby-xapian package or an alternative Xapian binding (https://xapian.org).}
+  Rails.logger.warn e.message
   $xapian_bindings_available = false
 end
 
@@ -44,20 +45,20 @@ class DmsfFile < ActiveRecord::Base
     :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
   has_many :dmsf_public_urls, :dependent => :destroy
 
-  STATUS_DELETED = 1.freeze
-  STATUS_ACTIVE = 0.freeze
+  STATUS_DELETED = 1
+  STATUS_ACTIVE = 0
 
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }
 
   validates :name, :presence => true
-  validates_format_of :name, :with => DmsfFolder::INVALID_CHARACTERS,
+  validates_format_of :name, :with => /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/,
     :message => l(:error_contains_invalid_character)
-
+  validates :project, :presence => true
   validate :validates_name_uniqueness
 
   def validates_name_uniqueness
-    existing_file = DmsfFile.visible.findn_file_by_name(self.project_id, self.dmsf_folder, self.name)
+    existing_file = DmsfFile.select(:id).findn_file_by_name(self.project_id, self.dmsf_folder, self.name)
     errors.add(:name, l('activerecord.errors.messages.taken')) unless (existing_file.nil? || existing_file.id == self.id)
   end
 
@@ -258,9 +259,8 @@ class DmsfFile < ActiveRecord::Base
   end
   
   def copy_to_filename(project, folder, filename)
-    source = "#{project.identifier}: #{self.dmsf_path_str}"
     file = DmsfFile.new
-    file.dmsf_folder = folder
+    file.dmsf_folder_id = folder.id if folder
     file.project_id = project.id
     file.name = filename
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
@@ -275,17 +275,15 @@ class DmsfFile < ActiveRecord::Base
       new_revision.dmsf_workflow_assigned_at = nil
       new_revision.dmsf_workflow_started_by = nil
       new_revision.dmsf_workflow_started_at = nil
-      if self.last_revision.dmsf_workflow_id
-        wf = DmsfWorkflow.where(:id => self.last_revision.dmsf_workflow_id).first
-        if wf && (wf.project.nil? || (wf.project.id == project.id))
-          new_revision.set_workflow(wf.id, nil)
-          new_revision.assign_workflow(wf.id)
-        end
+      wf = last_revision.dmsf_workflow
+      if wf && (wf.project.nil? || (wf.project.id == project.id))
+        new_revision.set_workflow(wf.id, nil)
+        new_revision.assign_workflow(wf.id)
       end
       if File.exist? self.last_revision.disk_file
         FileUtils.cp self.last_revision.disk_file, new_revision.disk_file(false)
       end
-      new_revision.comment = l(:comment_copied_from, :source => source)
+      new_revision.comment = l(:comment_copied_from, :source => "#{project.identifier}: #{self.dmsf_path_str}")
       new_revision.custom_values = []
       self.last_revision.custom_values.each do |cv|
         v = CustomValue.new
@@ -293,9 +291,19 @@ class DmsfFile < ActiveRecord::Base
         v.value = cv.value
         new_revision.custom_values << v
       end
-      file.delete(true) unless new_revision.save
+      unless new_revision.save
+        Rails.logger.error new_revision.errors.full_messages.to_sentence
+        file.delete(true)
+        file = nil
+      else
+        file.set_last_revision new_revision
+      end
+    else
+      Rails.logger.error file.errors.full_messages.to_sentence
+      file.delete(true)
+      file = nil
     end
-    return file
+    file
   end
 
   # To fulfill searchable module expectations
@@ -345,7 +353,10 @@ class DmsfFile < ActiveRecord::Base
       if database
         enquire = Xapian::Enquire.new(database)
 
-        query_string = tokens.join(' ')
+        # Combine the rest of the command line arguments with spaces between
+        # them, so that simple queries don't have to be quoted at the shell
+        # level.
+        query_string = tokens.map{ |x| !(x[-1,1].eql?'*')? x+'*': x }.join(' ')
         qp = Xapian::QueryParser.new
         stemmer = Xapian::Stem.new(lang)
         qp.stemmer = stemmer
@@ -366,7 +377,10 @@ class DmsfFile < ActiveRecord::Base
           qp.default_op = Xapian::Query::OP_OR
         end
 
-        query = qp.parse_query(query_string)
+        flags = Xapian::QueryParser::FLAG_WILDCARD
+        flags |= Xapian::QueryParser::FLAG_CJK_NGRAM if Setting.plugin_redmine_dmsf['enable_cjk_ngrams']
+
+        query = qp.parse_query(query_string, flags)
 
         enquire.query = query
         matchset = enquire.mset(0, 1000)
@@ -470,12 +484,21 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def owner?(user)
-    self.last_revision && (self.last_revision.user == user)
+    last_revision && (last_revision.user == user)
   end
 
   def involved?(user)
-    self.dmsf_file_revisions.each do |file_revision|
+    dmsf_file_revisions.each do |file_revision|
       return true if file_revision.user == user
+    end
+    false
+  end
+
+  def assigned?(user)
+    if last_revision && last_revision.dmsf_workflow
+      last_revision.dmsf_workflow.next_assignments(last_revision.id).each do |assignment|
+        return true if assignment.user == user
+      end
     end
     false
   end
@@ -494,7 +517,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def extension
-    File.extname(self.last_revision.disk_filename).strip.downcase[1..-1] if self.last_revision
+    File.extname(last_revision.disk_filename).strip.downcase[1..-1] if last_revision
   end
 
   include ActionView::Helpers::NumberHelper

@@ -1,0 +1,5 @@
+
+test:
+  adapter: postgresql
+  database: test
+  encoding: utf8

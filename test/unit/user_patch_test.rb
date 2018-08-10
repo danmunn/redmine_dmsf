@@ -22,6 +22,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class UserPatchTest < RedmineDmsf::Test::UnitTest
   fixtures :users, :projects, :dmsf_files, :dmsf_file_revisions, :dmsf_folders, :dmsf_links
+
   def setup
     @user2 = User.find_by_id 2
   end

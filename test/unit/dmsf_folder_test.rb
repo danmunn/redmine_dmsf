@@ -58,14 +58,16 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   def test_visiblity
     # The role has got permissions
     User.current = @manager
-    assert_equal 6, DmsfFolder.where(:project_id => 1).count
-    assert_equal 6, DmsfFolder.visible.where(:project_id => 1).count
+    assert_equal 7, DmsfFolder.where(:project_id => 1).count
+    assert_equal 5, DmsfFolder.visible.where(:project_id => 1).count
     # The user has got permissions
     User.current = @developer
-    # TODO: Travis fails here
-    #assert_equal 6, DmsfFolder.visible.where(:project_id => 1).count
     # Hasn't got permissions for @folder7
     @folder7.dmsf_folder_permissions.where(:object_type => 'User').delete_all
+    assert_equal 4, DmsfFolder.visible.where(:project_id => 1).count
+    # Anonymous user
+    User.current = User.anonymous
+    @project.add_default_member User.anonymous
     assert_equal 5, DmsfFolder.visible.where(:project_id => 1).count
   end
 
@@ -167,6 +169,12 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     #  ["...folder2", 2] - locked
     assert tree.to_s.include?('folder1'), "'folder1' string in the folder tree expected."
     assert !tree.to_s.include?('...folder2'), "'...folder2' string in the folder tree not expected."
+  end
+
+  def test_get_valid_title
+    assert_equal '1052-6024 . U_CPLD_5M240Z_SMT_MBGA100_1.8V_-40',
+      DmsfFolder::get_valid_title('1052-6024 : U_CPLD_5M240Z_SMT_MBGA100_1.8V_-40...')
+    assert_equal 'test', DmsfFolder::get_valid_title("test#{DmsfFolder::INVALID_CHARACTERS}")
   end
 
 end

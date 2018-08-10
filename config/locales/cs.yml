@@ -32,8 +32,10 @@ cs:
   warning_file_not_locked: Soubor není zamčen
   notice_file_unlocked: Soubor byl odemčen
   error_only_user_that_locked_file_can_unlock_it: Soubor může být odemčen pouze uživatelem, který ho zamkl
+
   error_max_files_exceeded: "Limit pro %{number} najednou stažených souborů je překročen"
   error_entry_project_does_not_match_current_project: Zadaný projekt neodpovídá aktuálnímu projektu
+
   notice_folder_created: Složka byla vytvořena
   error_folder_creation_failed: Vytváření složky selhalo
   error_folder_title_must_be_entered: Musí být zadán název
@@ -46,17 +48,22 @@ cs:
   notice_file_deleted: Soubor byl smazán
   error_at_least_one_revision_must_be_present: Musí existovat alespoň jedna revize
   notice_revision_deleted: Revize byla smazána
+  notice_revision_obsoleted: Revize je zastaralá
   warning_one_of_files_locked: Jeden ze souborů je zamčen
   notice_file_revision_created: vytvořena nová revize
   notice_your_preferences_were_saved: Vaše nastavení bylo uloženo
   notice_your_preferences_were_not_saved: Your preferences were not saved
   warning_folder_notifications_already_activated: Notifikace složky již byly aktivovány
+
   notice_folder_notifications_activated: Notifikace složky byly aktivovány
   warning_folder_notifications_already_deactivated: Notifikace složky již byly deaktivovány
+
   notice_folder_notifications_deactivated: Notifikace složky byly deaktivovány
   warning_file_notifications_already_activated: Notifikace souboru již byly aktivovány
+
   notice_file_notifications_activated: Notifikace souboru byly aktivovány
   warning_file_notifications_already_deactivated: Notifikace souboru již byly deaktivovány
+
   notice_file_notifications_deactivated: Notifikace souboru byly deaktivovány
   link_details: "%{title} detaily"
   link_edit: "Upravit %{title}"
@@ -69,6 +76,7 @@ cs:
   link_author: Autor
   title_check_for_zip_download_or_email: Vybrat pro stažení jako zip nebo emailem
   title_check_for_restore_or_delete: Vybrat pro obnovení nebo smazání
+
   title_delete: Smazat
   title_notifications_active_deactivate: "Notifikace aktivní: Deaktivovat"
   title_notifications_not_active_activate: "Notifikace nejsou aktivní: Aktivovat"
@@ -102,11 +110,13 @@ cs:
   select_option_deactivated: Deaktivováno
   select_option_activated: Aktivováno
   label_title_format: Formát názvu
-  text_title_format: "Formát názvu souboru pro stažení (%t - název, %f - soubor, %d - datum, %v - verze, %i - ID, %r - revize). Např.: %t_%v"
+  text_title_format: "Formát názvu souboru pro stažení (%t - název, %f - soubor, %d - datum, %v - verze, %i - ID, %r -
+    revize). Např.: %t_%v"
   title_save_preferences: Uložit nastavení
   heading_revisions: Revize
   title_download: Stáhnout
   title_delete_revision: Smazat revizi
+  title_obsolete_revision: Označit revizi jako zastaralou
   label_created: Vytvořeno
   label_changed: Změněno
   info_changed_by_user: "%{changed} uživatelem"
@@ -121,8 +131,10 @@ cs:
   label_new_content: Nový obsah
   label_maximum_files_upload: Maximální počet najednou nahraných souborů
   note_maximum_number_of_files_uploaded: Maximální počet najednou nahraných souborů. 0 znamená bez omezení.
+
   label_maximum_files_download: Maximální počet najednou stažených souborů
-  note_maximum_number_of_files_downloaded: Maximální počet najednou stažených souborů jako Zip nebo odeslaných emailem. 0 znamená bez omezení.
+  note_maximum_number_of_files_downloaded: Maximální počet najednou stažených souborů jako Zip nebo odeslaných emailem.
+    0 znamená bez omezení.
   label_file_storage_directory: Složka pro uložení souborů
   label_index_database: Index databáze
   label_stemming_language: "Jazyk pro 'Stemming'"
@@ -132,12 +144,12 @@ cs:
   option_stem_none: Stem nic (výchozí)
   option_stem_some: Stem něco
   option_stem_all: Stem vše
-  label_stemming_description: Tímto je určeno, jak analyzátor dotazu aplikuje algoritmus Stemmingu. Výchozí hodnota je STEM_NONE. Dostupné hodnoty jsou
-  note_do_not_stem: Žádný stemming.
-  note_stem_some: "Hledej stemmed formy výrazů kromě těch, které začínají velkým písmenem nebo jsou následovány určitými znaky nebo jsou použity s operátory, které vyžadují informaci o pozici. Stemmed výrazy začínají písmenem 'Z'."
-  note_stem_all: "Hledej stemmed formy všech slov (poznámka: 'Z' prefix není přidán)."
-  note_stemming_applied: Poznámka, že algoritmus stemingu je aplikován pouze na slova v pravděpodobnostních polích - výrazy pravda/nepravda nejsou stemovány.
-  label_default_notifications: Výchozí notifikace souboru
+  text_stemming_info: "Tímto se řídí, jak parser dotazů použije stemovací algoritmus. Výchozí hodnota je STEM_NONE.
+    Možné hodnoty jsou: STEM_NONE - Neaplikuj žádný steming, STEM_SOME - Použij stemování pro výrazy kromě těch, které
+    začínají velkým písmenem nebo jsou následovány určitýmy znaky('/@<>=*[{\"') nebo jsou použité s operátory, které
+    vyžadují informaci o pozici. Stemované výrazy začínají písmenem 'Z', STEM_ALL - Hledej stemové výrazy ve všech
+    slovech (prefix 'Z' není přidán)"
+  label_default_notifications: Výchozí notifikace pro soubory
   heading_uploaded_files: Nahrané soubory
   submit_commit: Potvrdit
   link_documents: Dokumenty
@@ -152,14 +164,20 @@ cs:
   permission_manage_workflows: Spravovat schvalovací procesy
   permission_file_delete: Mazat dokumenty
   permission_display_system_folders: Zobrazit systémové adresáře
+  permission_file_approval: File approval
+  permission_email_documents: Email documents
   label_file: Soubor
   field_folder: Složka
   error_create_cycle_in_folder_dependency: vytvořit smyčku v závislostech složky
   error_contains_invalid_character: obsahuje neplatné znaky
   error_file_commit_require_uploaded_file: Potvrzení vyžaduje nahraný soubor
+
   warning_some_files_were_not_commited: "Některé soubory nebyly potvrzené z důvodu chyb při validaci: %{files}"
+
   error_user_has_not_right_delete_folder: Uživatel nemá právo mazat složky
+
   error_user_has_not_right_delete_file: Uživatel nemá právo mazat soubor
+
   notice_entries_deleted: Položky smazány
   warning_some_entries_were_not_deleted: "Některé položky nebyly smazány: %{entries}"
   title_delete_checked: Smaž vybrané
@@ -168,6 +186,7 @@ cs:
   label_number_of_folders: Složky
   label_number_of_documents: Dokumenty
   error_file_storage_directory_does_not_exist: Cílová složka neexistuje a nemůže být vytvořena
+
   error_file_can_not_be_created: Nelze vytvořit soubor v cílové složce
   error_wrong_zip_encoding: Chybné kódování Zipu
   warning_xapian_not_available: Xapian není k dostupný
@@ -191,13 +210,16 @@ cs:
   error_target_folder_same: Cílový složka a projekt jsou stejné jako aktuální
   title_copy: Kopírovat
 
-  error_max_email_filesize_exceeded: "Přesáhli jste maximální velikost souboru, který lze poslat emailem. (%{number} MB)"
-  note_maximum_email_filesize: Omezí se maximální velikost souboru, který může být poslán emailem. 0 znamená neomezený. Číslo je v MB.
+  error_max_email_filesize_exceeded: "Přesáhli jste maximální velikost souboru, který lze poslat emailem.
+    (%{number} MB)"
+  note_maximum_email_filesize: Omezí se maximální velikost souboru, který může být poslán emailem. 0 znamená neomezený.
+    Číslo je v MB.
   label_maximum_email_filesize: Maximální velikost souboru emailu
   header_minimum_filesize: Chyba souboru.
   error_minimum_filesize: "Soubor %{file} má nulovou velikost a nebude přiložen."
   parent_directory: Nadřazená složka
   note_webdav: "Webdav je po aktivaci k dispozici na %{protocol}://%{domain}/dmsf/webdav/[identifikátor projektu]"
+
   label_webdav: Webdav functionalita
   label_dmsf_plural: "Kopíruj dokumenty a složky (%{files} souborů v %{folders} složkách)"
 
@@ -206,13 +228,16 @@ cs:
   warning_folder_not_locked: Složku nelze zamknout
   notice_folder_unlocked: Složka byla odemčena
   error_only_user_that_locked_folder_can_unlock_it: Nemáte oprávnění k odemknutí této složky
+
   title_unlock_folder: Odemknout
   title_lock_folder: Zamknout
 
   select_option_webdav_readonly: Pouze pro čtení
   select_option_webdav_readwrite: Čtení/Zápis
   label_webdav_strategy: Webdav strategie
+
   note_webdav_strategy: Umožní administrátorovi rozhodnout, zdali je webdav pouze pro čtení nebo i pro zápis.
+
 
   error_unable_delete_dmsf_workflow: Nelze smazat schvalovací proces
   error_empty_note: Musí být vyplněn komentář
@@ -246,6 +271,7 @@ cs:
   title_assigned: Přiřazený
   title_approval: Schválený
   title_rejected: Zamítnutý
+  title_obsolete: Zastaralá
   dmsf_and: A
   dmsf_or: NEBO
   dmsf_new_step: Nový krok
@@ -260,15 +286,23 @@ cs:
   text_email_subject_requires_approval: očekává Vaše schválení
   text_email_subject_updated: aktualizován
   text_email_subject_started: spuštěn
-  text_email_finished_approved: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl právě ukončen a dokument je schválen."
-  text_email_finished_rejected: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl dokončen a dokument byl zamítnut, protože '%{notice}'."
-  text_email_finished_delegated: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl delegován, protože '%{notice}' a od Vás se očekává schválení v aktuálním schvalovacím kroku."
-  text_email_finished_step: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' právě ukončil jeden ze schvalovacích kroků a od Vás se očekává schválení v dalším schvalovacím kroku."
-  text_email_finished_step_short: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' právě ukončil jeden ze schvalovacích kroků."
-  text_email_started: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl zahájen a od Vás se očekává schválení v aktuálním schvalovacím kroku."
+  text_email_finished_approved: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl právě ukončen a
+    dokument je schválen."
+  text_email_finished_rejected: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl dokončen a
+    dokument byl zamítnut, protože '%{notice}'."
+  text_email_finished_delegated: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl delegován,
+    protože '%{notice}' a od Vás se očekává schválení v aktuálním schvalovacím kroku."
+  text_email_finished_step: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' právě ukončil jeden ze
+    schvalovacích kroků a od Vás se očekává schválení v dalším schvalovacím kroku."
+  text_email_finished_step_short: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' právě ukončil jeden
+    ze schvalovacích kroků."
+  text_email_started: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl zahájen a od Vás se očekává
+    schválení v aktuálním schvalovacím kroku."
   text_email_to_proceed: Pro schválení klikněte na zaškrtávací ikonku vedle dokumentu v
   text_email_to_see_history: Pro zobrazení historie schvalovacího procesu klikněte na status dokumentu v
+
   text_email_to_see_status: Pro zobrazení aktuálního stavu schvalovacího procesu klikněte na status dokumentu v
+
 
   title_create_link: Vytvořit symbolický odkaz
   label_link_from: Odkaz z
@@ -295,6 +329,7 @@ cs:
 
   label_display_notified_recipients: Zobrazit příjemce notifikací
   note_display_notified_recipients: Uživatel bude informován o příjemcích právě odeslané emailové notifikace.
+
   warning_email_notifications: "Notifikační email poslán na uživatele %{to}"
 
   link_trash_bin: Koš
@@ -318,7 +353,9 @@ cs:
   open_approvals: Procesy ke schválení
 
   label_maximum_ajax_upload_filesize: Maximální velikost souboru nahratelná přes AJAX
-  note_maximum_ajax_upload_filesize: Omezuje velikost souboru, který může být nahrán přes standardní rozhraní AJAX, jinak se použije standardní rozhraní Redminu. Číslo je v MB.
+  note_maximum_ajax_upload_filesize: Omezuje velikost souboru, který může být nahrán přes standardní rozhraní AJAX,
+    jinak se použije standardní rozhraní Redminu. Číslo je v MB.
+
   label_classic: Klasický
   label_drag_drop: Moderní
 
@@ -337,7 +374,8 @@ cs:
   label_last_revision_id: Revize
   
   label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern matches temporary files created by MsOffice.
+  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern
+    matches temporary files created by MsOffice.
 
   label_dmsf_keep_documents_locked: Ponechat dokumenty zamčené
   note_dmsf_keep_documents_locked: Dokumenty zůstanou i po schválení zamčené.
@@ -350,7 +388,7 @@ cs:
   label_last_approver: Poslední schvalovatel
 
   label_act_as_attachable: Jako příloha
-  note_dmsf_act_as_attachable: Umožní přikládat dokumenty k objektům např. úkolům.
+  note_dmsf_act_as_attachable: Umožní přikládat dokumenty k objektům např. k úkolům.
 
   label_user_search_add: Vyhledej uživatele pro přidání
 
@@ -364,6 +402,12 @@ cs:
   label_email_from_override: Od
   text_email_from_override: aktuálně přihlášený uživatel
   label_email_reply_to: Odpovědět komu
+
+  label_enable_cjk_ngrams: Povolit generování n-gramů pro CJK texty
+  text_enable_cjk_ngrams: "Pokud je povoleno, sekvence čínských nebo japonských znaků jsou rozděleny  do jednotlivých
+    znaků nebo skupin znaků. Znaky si nesou informaci o své pozici. Znaky psané latinkou jsou rozděleny normálně do
+    slov. Odpovídající proměná prostředí musí být použita při indexaci.
+    např.: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

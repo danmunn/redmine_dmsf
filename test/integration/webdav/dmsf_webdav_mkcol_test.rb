@@ -103,14 +103,14 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
       @project1.enable_module! :dmsf
       @role.add_permission! :folder_manipulation
       xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", nil, @jsmith
-      assert_response :success
+      assert_response 201 # Created
       Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
       if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
         project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
         xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test2", nil, @jsmith
         assert_response 404
         xml_http_request :mkcol, "/dmsf/webdav/#{project1_uri}/test3", nil, @jsmith
-        assert_response :success
+        assert_response 201 # Created
       end
     end
   end

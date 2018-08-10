@@ -32,8 +32,10 @@ pt-BR:
   warning_file_not_locked: Arquivo não bloqueado
   notice_file_unlocked: Arquivo desbloqueado
   error_only_user_that_locked_file_can_unlock_it: Apenas o usuário que bloqueou o arquivo pode desbloqueá-lo
+
   error_max_files_exceeded: "Limite %{number} para arquivo baixados automaticamente"
   error_entry_project_does_not_match_current_project: "Projeto de entrada não corresponde ao projeto atual"
+
   notice_folder_created: Pasta criada
   error_folder_creation_failed: Erro na criação da pasta
   error_folder_title_must_be_entered: Título deve ser digitado
@@ -46,17 +48,22 @@ pt-BR:
   notice_file_deleted: Arquivo excluído
   error_at_least_one_revision_must_be_present: Deve existir pelo menos uma revisão
   notice_revision_deleted: Revisão excluída
+  notice_revision_obsoleted: Revision obsoleted
   warning_one_of_files_locked: Um dos arquivos bloqueados
   notice_file_revision_created: Revisão do arquivo criado
   notice_your_preferences_were_saved: Suas atualizações foram salvas
   notice_your_preferences_were_not_saved: Suas preferências não foram salvas
   warning_folder_notifications_already_activated: Notificações de pasta atualizadas
+
   notice_folder_notifications_activated: Notificações da pasta ativas
   warning_folder_notifications_already_deactivateNd: Notificações da pasta desativadas
+
   notice_folder_notifications_deactivated: Notificações da pasta desativadas
   warning_file_notifications_already_activated: Notificações de arquivo ativadas
+
   notice_file_notifications_activated: Notificações de arquivo ativadas
   warning_file_notifications_already_deactivated: Notificações de arquivo já desativadas
+
   notice_file_notifications_deactivated: Notificações de arquivo desativadas
   link_details: "%{title} detalhes"
   link_edit: "Editar %{title}"
@@ -69,6 +76,7 @@ pt-BR:
   link_author: Autor
   title_check_for_zip_download_or_email: Marcar para download ou enviar por e-mail
   title_check_for_restore_or_delete: Marcar para restaurar ou excluir
+
   title_delete: Excluir
   title_notifications_active_deactivate: "Notificações ativas: Desativar"
   title_notifications_not_active_activate: "Notificações não ativas: Ativar"
@@ -102,11 +110,13 @@ pt-BR:
   select_option_deactivated: Desativado
   select_option_activated: Ativado
   label_title_format: 'Formato do Título'
-  text_title_format: "Formato do título do documento para download (%t - título, %f - arquivo, %d - data, %v - versão, %i - ID, %r - revisão). Exemplo: %t_%v"
+  text_title_format: "Formato do título do documento para download (%t - título, %f - arquivo, %d - data, %v - versão,
+    %i - ID, %r - revisão). Exemplo: %t_%v"
   title_save_preferences: Salvar preferências
   heading_revisions: Revisões
   title_download: Download
   title_delete_revision: Revisão excluída
+  title_obsolete_revision: Obsolete revision
   label_created: Criado
   label_changed: Alterado
   info_changed_by_user: "%{changed} por"
@@ -121,8 +131,10 @@ pt-BR:
   label_new_content: Novo conteúdo
   label_maximum_files_upload: Máximo de arquivos para upload
   note_maximum_number_of_files_uploaded: Limite máximo de arquivos carregados de uma única vez.
+
   label_maximum_files_download: Máximo de download de arquivos
   note_maximum_number_of_files_downloaded: Limite máximo de arquivos para download ou envio por e-mail de uma única vez.
+
   label_file_storage_directory: Diretório de armazenamento de arquivos
   label_index_database: Index database
   label_stemming_language: Stemming language
@@ -132,11 +144,11 @@ pt-BR:
   option_stem_none: Stem none (default)
   option_stem_some: Stem some
   option_stem_all: Stem all
-  label_stemming_description: Isso controla como o analisador de consulta aplicará o algoritmo de derivação. O valor padrão é STEM_NONE. Os valores possíveis são
-  note_do_not_stem: "Não execute nenhuma derivação."
-  note_stem_some: "Procure por formas derivadas dos termos, exceto aqueles que iniciam com letra maiúscula ou são seguidos por certos caracteres ou são usados com operadores que necessitam informação de posição. Termos derivados são prefixados com 'Z'."
-  note_stem_all: "Procure por formas derivadas de todas as palavras (nota: não é adicionado um prefixo 'Z')."
-  note_stemming_applied: Observe que o algoritmo de derivação só é aplicado a palavras em campos probabilísticos - os termos de filtro booleanos nunca são gerados.
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+    of terms except for those which start with a capital letter, or are followed by certain characters
+    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Notificações padrões de arquivo
   heading_uploaded_files: Arquivos enviados
   submit_commit: Salvar
@@ -152,14 +164,20 @@ pt-BR:
   permission_manage_workflows: Administrar workflows
   permission_file_delete: Excluir arquivos
   permission_display_system_folders: Display system folders
+  permission_file_approval: File approval
+  permission_email_documents: Email documents
   label_file: Arquivo
   field_folder: Pasta
   error_create_cycle_in_folder_dependency: Dependência entre pastas
   error_contains_invalid_character: Contém caracteres inválidos
   error_file_commit_require_uploaded_file: É necessário carregar um arquivo
+
   warning_some_files_were_not_commited: "O(s) arquivo(s) não foram salvos: %{files}"
+
   error_user_has_not_right_delete_folder: "Usuário não possui permissão para excluir pastas"
+
   error_user_has_not_right_delete_file: "Usuário não possui permissão para excluir arquivos"
+
   notice_entries_deleted: Excluído com sucesso
   warning_some_entries_were_not_deleted: "Não foi possível excluir os seguintes arquivos: %{entries}"
   title_delete_checked: Excluir documento ou arquivo selecionado
@@ -167,7 +185,8 @@ pt-BR:
   title_filename_for_download: Nome do arquivo utilizado para for download ou arquivo compactado
   label_number_of_folders: Pastas
   label_number_of_documents: Documentos
-  error_file_storage_directory_does_not_exist: "O diretório de armazenamento de arquivo não existe e não pode ser criado"
+  error_file_storage_directory_does_not_exist: "O diretório de armazenamento de arquivo não existe e não pode ser
+    criado"
   error_file_can_not_be_created: "O arquivo não pode ser criado"
   error_wrong_zip_encoding: Código Zip errado
   warning_xapian_not_available: Xapian não disponível
@@ -192,12 +211,15 @@ pt-BR:
   title_copy: Copiar
 
   error_max_email_filesize_exceeded: "Você excedeu o tamanho máximo do arquivo para enviar via e-mail. (%{number} MB)"
-  note_maximum_email_filesize: Limita o tamanho máximo de arquivos que pode ser enviado por e-mail. 0 significa ilimitado. O número está em MB.
+
+  note_maximum_email_filesize: Limita o tamanho máximo de arquivos que pode ser enviado por e-mail. 0 significa
+    ilimitado. O número está em MB.
   label_maximum_email_filesize: Tamanho máximo do anexo de e-mail
   header_minimum_filesize: Erro de arquivo.
   error_minimum_filesize: "O arquivo %{file} é 0 bytes e não será anexado."
   parent_directory: Diretório Pai
-  note_webdav: "Webdav uma vez habilitado pode ser encontrado em %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
+  note_webdav: "Webdav uma vez habilitado pode ser encontrado em %{protocol}://%{domain}/dmsf/webdav/[project
+    identifier]"
   label_webdav: Webdav functionality
   label_dmsf_plural: "Copiar documentos e pastas (%{files} documentos em %{folders} pastas)"
 
@@ -206,13 +228,16 @@ pt-BR:
   warning_folder_not_locked: A pasta não pode ser bloqueada
   notice_folder_unlocked: A pasta foi desbloqueada com sucesso
   error_only_user_that_locked_folder_can_unlock_it: Você não está autorizado a desbloquear esta pasta
+
   title_unlock_folder: Clique aqui para desbloquear e permitir alterações por outros usuários
   title_lock_folder: Clique aqui para impedir alterações por outros usuários
 
   select_option_webdav_readonly: Read-only
   select_option_webdav_readwrite: Read/Write
   label_webdav_strategy: Webdav strategy
-  note_webdav_strategy: Permite que o administrador decida se o webdav é uma plataforma read-only ou read-write para usuários finais.
+
+  note_webdav_strategy: Permite que o administrador decida se o webdav é uma plataforma read-only ou read-write para
+    usuários finais.
 
   error_unable_delete_dmsf_workflow: Não foi possível excluir o workflow
   error_empty_note: "No caso de reprovação o preenchimento do camo notas é obrigatório"
@@ -246,6 +271,7 @@ pt-BR:
   title_assigned: Atribuído
   title_approval: Aprovado
   title_rejected: Rejeitado
+  title_obsolete: Obsolete
   dmsf_and: E
   dmsf_or: OU
   dmsf_new_step: Novo passo
@@ -260,15 +286,23 @@ pt-BR:
   text_email_subject_requires_approval: requer sua aprovação
   text_email_subject_updated: atualizado
   text_email_subject_started: iniciado
-  text_email_finished_approved: "O workflow de aprovação'%{name}' definido para o documento '%{filename}' foi finalizado e o documento foi aprovado."
-  text_email_finished_rejected: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi finalizado e o documento foi reprovado devido a '%{notice}'."
-  text_email_finished_delegated: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi atribuido pois '%{notice}' e está aguardando a sua aprovação na etapa atual."
-  text_email_finished_step: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi aprovado na etapa anterior e está aguardando a sua aprovação na etapa atual."
-  text_email_finished_step_short: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi aprovado em uma das suas etapas de aprovação."
-  text_email_started: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi iniciado e está aguardando a sua aprovação na etapa atual."
+  text_email_finished_approved: "O workflow de aprovação'%{name}' definido para o documento '%{filename}' foi finalizado
+    e o documento foi aprovado."
+  text_email_finished_rejected: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi
+    finalizado e o documento foi reprovado devido a '%{notice}'."
+  text_email_finished_delegated: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi
+    atribuido pois '%{notice}' e está aguardando a sua aprovação na etapa atual."
+  text_email_finished_step: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi aprovado na
+    etapa anterior e está aguardando a sua aprovação na etapa atual."
+  text_email_finished_step_short: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi
+    aprovado em uma das suas etapas de aprovação."
+  text_email_started: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi iniciado e está
+    aguardando a sua aprovação na etapa atual."
   text_email_to_proceed: Para dar continuidade ao fluxo, clique no íncone ao lado do documento
-  text_email_to_see_history: Para visualizar o histórico de workflow de aprovação clique no status do workflow disponível ao lado do documento
-  text_email_to_see_status: Para visualizar o status atual do workflow de aprovação, clique no status de fluxo de trabalho do documento
+  text_email_to_see_history: Para visualizar o histórico de workflow de aprovação clique no status do workflow
+    disponível ao lado do documento
+  text_email_to_see_status: Para visualizar o status atual do workflow de aprovação, clique no status de fluxo de
+    trabalho do documento
 
   title_create_link: Crie um link simbólico
   label_link_from: Link de
@@ -294,7 +328,8 @@ pt-BR:
   label_links_only: links apenas
 
   label_display_notified_recipients: Mostrar destinatários notificados
-  note_display_notified_recipients: O usuário será informado sobre todos os destinatários que enviou a notificação por e-mail.
+  note_display_notified_recipients: O usuário será informado sobre todos os destinatários que enviou a notificação por
+    e-mail.
   warning_email_notifications: "Notificações de e-mail enviadas para %{to}"
 
   link_trash_bin: Lixeira
@@ -318,7 +353,9 @@ pt-BR:
   open_approvals: Aprovações abertas
 
   label_maximum_ajax_upload_filesize: Tamanha máximo de arquivo carregável via AJAX
-  note_maximum_ajax_upload_filesize: Limita o tamanho máximo do arquivo que pode ser carregado através da interface AJAX padrão, caso contrário o formulário de upload padrão da Redmine deve ser usado. O número está em MB.
+  note_maximum_ajax_upload_filesize: Limita o tamanho máximo do arquivo que pode ser carregado através da interface AJAX
+    padrão, caso contrário o formulário de upload padrão da Redmine deve ser usado. O número está em MB.
+
   label_classic: Classic
   label_drag_drop: Modern
 
@@ -337,7 +374,8 @@ pt-BR:
   label_last_revision_id: Revisão
     
   label_webdav_disable_versioning: Não há modelo de arquivos de versão
-  note_webdav_disable_versioning: Uma expressão regular que desabilita o controle de versão para os arquivos correspondentes. O modelo padrão corresponde aos arquivos temporários criados pelo MsOffice.
+  note_webdav_disable_versioning: Uma expressão regular que desabilita o controle de versão para os arquivos
+    correspondentes. O modelo padrão corresponde aos arquivos temporários criados pelo MsOffice.
 
   label_dmsf_keep_documents_locked: Manter documentos bloqueados
   note_dmsf_keep_documents_locked: Documentos serão mantidos bloqueados quando aprovados
@@ -364,6 +402,12 @@ pt-BR:
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
+
+  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
+    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
+    option needs to have been used at index time.
+    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   easy_pages:
     modules:

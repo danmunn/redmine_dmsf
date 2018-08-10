@@ -66,9 +66,10 @@ class DmsfFileRevision < ActiveRecord::Base
       joins("JOIN #{Project.table_name} ON #{Project.table_name}.id = #{DmsfFile.table_name}.project_id").visible
 
   validates :title, :presence => true
-  validates_format_of :name, :with => DmsfFolder::INVALID_CHARACTERS,
+  validates_format_of :name, :with => /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/,
     :message => l(:error_contains_invalid_character)
   validates :description, length: { maximum: 1.kilobyte }
+  validates :dmsf_file, :presence => true
 
   def project
     self.dmsf_file.project if self.dmsf_file
@@ -107,6 +108,15 @@ class DmsfFileRevision < ActiveRecord::Base
       self.deleted_by_user = User.current
       save
     end
+  end
+
+  def obsolete()
+    if self.dmsf_file.locked_for_user?
+      errors[:base] << l(:error_file_is_locked)
+      return false
+    end
+    self.workflow = DmsfWorkflow::STATE_OBSOLETE
+    save
   end
 
   def restore
@@ -227,6 +237,8 @@ class DmsfFileRevision < ActiveRecord::Base
         str + l(:title_assigned)
       when DmsfWorkflow::STATE_REJECTED
         str + l(:title_rejected)
+      when DmsfWorkflow::STATE_OBSOLETE
+        str + l(:title_obsolete)
       else
         str + l(:title_none)
     end

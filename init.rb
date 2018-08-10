@@ -32,7 +32,7 @@ Redmine::Plugin.register :redmine_dmsf do
   end
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
-  version '1.6.1'
+  version '1.6.2 devel'
 
   requires_redmine :version_or_higher => '3.4.0'
 
@@ -43,7 +43,7 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_max_email_filesize' => '0',
               'dmsf_max_ajax_upload_filesize' => '100',
               'dmsf_storage_directory' => 'files/dmsf',
-              'dmsf_index_database' => 'files/dmsf_index',
+              'dmsf_index_database' => File.expand_path('dmsf_index', Rails.root),
               'dmsf_stemming_lang' => 'english',
               'dmsf_stemming_strategy' => 'STEM_NONE',
               'dmsf_webdav' => '1',
@@ -59,7 +59,8 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_tmpdir' => Dir.tmpdir,
               'dmsf_documents_email_from' => '',
               'dmsf_documents_email_reply_to' => '',
-              'dmsf_documents_email_links_only' => false
+              'dmsf_documents_email_links_only' => false,
+              'enable_cjk_ngrams' => true
             }
 
   # Uncomment to remove the original Documents from searching (replaced with DMSF)
