@@ -81,7 +81,7 @@ Redmine::WikiFormatting::Macros.register do
     raise ArgumentError if args.length < 1 # Requires file id
     file = DmsfFile.visible.find args[0].strip
     if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
-      return link_to file.title, dmsf_file_path(:id => file)
+      return link_to(h(args[1] ? args[1] : file.title), dmsf_file_path(:id => file))
     else
       raise l(:notice_not_authorized)
     end
