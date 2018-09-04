@@ -81,14 +81,14 @@ Redmine::WikiFormatting::Macros.register do
     raise ArgumentError if args.length < 1 # Requires file id
     file = DmsfFile.visible.find args[0].strip
     if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
-      return link_to file.title, dmsf_file_path(:id => file)
+      return link_to(h(args[1] ? args[1] : file.title), dmsf_file_path(:id => file))
     else
       raise l(:notice_not_authorized)
     end
   end
 
-  # dmsfdesc - link to the document's description
-  desc "Wiki link to DMSF document description:\n\n" +
+  # dmsfdesc - text referring to the document's description
+  desc "Text referring to DMSF document description:\n\n" +
          "{{dmsfdesc(document_id)}}\n\n" +
          "_document_id_ can be found in the document's details."
   macro :dmsfdesc do |obj, args|
@@ -96,6 +96,34 @@ Redmine::WikiFormatting::Macros.register do
     file = DmsfFile.visible.find args[0].strip
     if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
       return textilizable(file.description)
+    else
+      raise l(:notice_not_authorized)
+    end
+  end
+
+  # dmsfversion - text referring to the document's version
+  desc "Text referring to DMSF document version:\n\n" +
+         "{{dmsfversion(document_id)}}\n\n" +
+         "_document_id_ can be found in the document's details."
+  macro :dmsfversion do |obj, args|
+    raise ArgumentError if args.length < 1 # Requires file id
+    file = DmsfFile.visible.find args[0].strip
+    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
+      return textilizable(file.version)
+    else
+      raise l(:notice_not_authorized)
+    end
+  end
+
+  # dmsflastupdate - text referring to the document's last update date
+  desc "Text referring to DMSF document last update date:\n\n" +
+         "{{dmsflastupdate(document_id)}}\n\n" +
+         "_document_id_ can be found in the document's details."
+  macro :dmsflastupdate do |obj, args|
+    raise ArgumentError if args.length < 1 # Requires file id
+    file = DmsfFile.visible.find args[0].strip
+    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
+      return textilizable(format_time(file.last_revision.updated_at))
     else
       raise l(:notice_not_authorized)
     end
