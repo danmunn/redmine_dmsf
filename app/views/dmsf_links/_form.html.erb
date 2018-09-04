@@ -36,43 +36,53 @@
         <%= radio_button_tag(:external_link, 'true', false) %>  <%= l(:label_external) %>
       </p>
     <% end %>
-    <div id="link_internal">
-      <p>
-        <% if @type == 'link_from' %>
-          <label for="dmsf_link[target_project_id]"><%= l(:label_source_project) %></label>
-        <% else %>
-          <label for="dmsf_link[target_project_id]"><%= l(:label_target_project) %></label>
-        <% end %>
-        <%= select_tag('dmsf_link[target_project_id]',
-          project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy,
-          :selected => @dmsf_link.target_project), :style => "width=100%") %>
-        <%= late_javascript_tag do %>
-            $('#dmsf_link_target_project_id').change(function(){
-              $.ajax({
-                url: '<%= autocomplete_for_project_dmsf_link_path(@project, :format => 'js') %>',
-                type: 'get',
-                data: $('#new_dmsf_link').serialize()
+    <div id="dmsf_link_internal">
+      <% unless @fast_links && (@type == 'link_to') %>
+        <p>
+          <% if @type == 'link_from' %>
+            <label for="dmsf_link[target_project_id]"><%= l(:label_source_project) %></label>
+          <% else %>
+            <label for="dmsf_link[target_project_id]"><%= l(:label_target_project) %></label>
+          <% end %>
+          <%= select_tag('dmsf_link[target_project_id]',
+            project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy,
+            :selected => @dmsf_link.target_project)) %>
+          <%= late_javascript_tag do %>
+              $('#dmsf_link_target_project_id').change(function(){
+                $.ajax({
+                  url: '<%= autocomplete_for_project_dmsf_link_path(@project, :format => 'js') %>',
+                  type: 'get',
+                  data: $('#new_dmsf_link').serialize()
+                });
               });
-            });
-        <% end %>
-      </p>
+          <% end %>
+        </p>
+      <% end %>
       <p>
         <% if @type == 'link_from' %>
           <%= label_tag('dmsf_link[target_folder_id]', l(:label_source_folder)) %>
         <% else %>
-          <%= label_tag('dmsf_link[target_folder_id]', l(:label_target_folder)) %>
+          <label for="dmsf_link_target_folder_id">
+            <%= "#{l(:label_target_folder)} #" %>
+            <span class="required">*</span>
+          </label>
+          <% if @fast_links %>
+            <%= text_field_tag 'dmsf_link[target_folder_id]', '', :required => true, :max_length => 255 %>
+          <% end %>
         <% end %>
-        <%= select_tag('dmsf_link[target_folder_id]',
-          folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
-          :selected => @target_folder_id)) %>
-        <%= late_javascript_tag do %>
-            $('#dmsf_link_target_folder_id').change(function(){
-              $.ajax({
-                url: '<%= autocomplete_for_folder_dmsf_link_path(@project, :format => 'js') %>',
-                type: 'get',
-                data: $('#new_dmsf_link').serialize()
+        <% unless @fast_links && (@type == 'link_to') %>
+          <%= select_tag('dmsf_link[target_folder_id]',
+            folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
+            :selected => @target_folder_id)) %>
+          <%= late_javascript_tag do %>
+              $('#dmsf_link_target_folder_id').change(function(){
+                $.ajax({
+                  url: '<%= autocomplete_for_folder_dmsf_link_path(@project, :format => 'js') %>',
+                  type: 'get',
+                  data: $('#new_dmsf_link').serialize()
+                });
               });
-            });
+          <% end %>
         <% end %>
       </p>
       <% if @type == 'link_from' %>
@@ -85,7 +95,7 @@
       <% end %>
     </div>
     <% if (@type == 'link_from') && !@container %>
-      <div id="link_external" style="display: none">
+      <div id="dmsf_link_external">
         <p>
           <%= f.text_field :external_url, :required => false %>
         </p>
@@ -106,7 +116,7 @@
 
 <%= late_javascript_tag do %>
   <%# Select2 extension, TODO: in case of a modal window, select2 makes problems %>
-  <% unless modal %>
+  <% unless modal || @fast_links %>
     $('#dmsf_link_target_project_id').select2();
     $('#dmsf_link_target_folder_id').select2();
     $('#dmsf_link_target_file_id').select2();
@@ -121,8 +131,8 @@
   });
   <%# Internal/External link switch %>
   $("input[name=external_link]:radio").change(function(){
-    $("#link_internal").toggle();
-    $("#link_external").toggle();
+    $("#dmsf_link_internal").toggle();
+    $("#dmsf_link_external").toggle();
     $("#dmsf_link_external_url").toggleClass('required', $(this).val());
     var labelUrl = $('label[for="dmsf_link_external_url"]');
     labelUrl.toggleClass('required', $(this).val());

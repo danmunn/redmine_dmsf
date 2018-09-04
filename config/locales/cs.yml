@@ -409,6 +409,10 @@ cs:
     slov. Odpovídající proměná prostředí musí být použita při indexaci.
     např.: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
+  label_dmsf_fast_links: Rychlé odkazy
+  text_dmsf_fast_links_info: Při vytváření odkazů budete moci zadat přímo ID cílového adresáře za účelem zrychlení
+  procesu vytváření odkazů.
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

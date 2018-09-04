@@ -18,27 +18,39 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
-<% member = @project.members.where(:user_id => User.current.id).first %>
+<% member = Member.find_by_project_id_and_user_id(@project.id, User.current.id) %>
 <% if member %>
   <% mail_notification = member.dmsf_mail_notification %>
   <% title_format = member.dmsf_title_format %>
+  <% fast_links = member.dmsf_fast_links %>
+<% else %>
+  <% mail_notification = false %>
+  <% title_format = '' %>
+  <% fast_links = false %>
 <% end %>
 
 <%= form_tag(dmsf_user_pref_save_path(@project)) do %>
   <fieldset class="box tabular">
     <legend><%= l(:link_user_preferences) %></legend>
     <p>
-      <%= content_tag(:label, "#{l(:label_notifications)}:") %>      
+      <%= content_tag(:label, l(:label_notifications)) %>
       <%= select_tag(
         'email_notify', 
         options_for_select([[l(:select_option_default), nil], 
         [l(:select_option_activated), true], [l(:select_option_deactivated), false]], 
-        :selected => mail_notification)) %>      
+        :selected => mail_notification)) %>
     </p>
     <p>
-      <%= content_tag(:label, "#{l(:label_title_format)}:") %>
+      <%= content_tag(:label, l(:label_title_format)) %>
       <%= text_field_tag 'title_format', title_format, :size => 10 %>
       <em class="info"><%= l(:text_title_format) %></em>
+    </p>
+    <p>
+      <%= content_tag(:label, l(:label_dmsf_fast_links)) %>
+      <%= check_box_tag('fast_links', 1, fast_links) %>
+      <em class="info">
+        <%= l(:text_dmsf_fast_links_info) %>
+      </em>
     </p>
   </fieldset>
   <% if Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] %>

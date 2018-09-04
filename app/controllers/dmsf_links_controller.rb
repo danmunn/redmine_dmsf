@@ -46,12 +46,13 @@ class DmsfLinksController < ApplicationController
 
   def new
     @dmsf_link = DmsfLink.new
+    member = Member.find_by_project_id_and_user_id(params[:project_id], User.current.id)
+    @fast_links = member && member.dmsf_fast_links
     @dmsf_link.project_id = params[:project_id]
     @dmsf_link.dmsf_folder_id = params[:dmsf_folder_id]
     @dmsf_file_id = params[:dmsf_file_id]
     @type = params[:type]
     @dmsf_link.target_project_id = params[:project_id]
-    @dmsf_link.project_id = params[:project_id]
     @target_folder_id = params[:dmsf_folder_id].to_i if params[:dmsf_folder_id].present?
     if @type == 'link_to'
       if @dmsf_file_id
@@ -115,9 +116,18 @@ class DmsfLinksController < ApplicationController
       end
     else
       # Link to
-      @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
       @dmsf_link.dmsf_folder_id = DmsfLinksHelper.is_a_number?(
         params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
+      if params[:dmsf_link][:target_project_id].present?
+        @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
+      else
+        target_folder = DmsfFolder.find_by_id(params[:dmsf_link][:target_folder_id])
+        unless target_folder
+          render_404
+          return
+        end
+        @dmsf_link.project_id = target_folder.project_id
+      end
       @dmsf_link.target_project_id = params[:dmsf_link][:project_id]
       if params[:dmsf_link][:dmsf_file_id].present?
         @dmsf_link.target_id = params[:dmsf_link][:dmsf_file_id]

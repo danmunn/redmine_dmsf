@@ -31,6 +31,7 @@ class DmsfStateController < ApplicationController
     if member
       member.dmsf_mail_notification = params[:email_notify]
       member.dmsf_title_format = params[:title_format]
+      member.dmsf_fast_links = params[:fast_links].present?
       if format_valid?(member.dmsf_title_format) && member.save
         flash[:notice] = l(:notice_your_preferences_were_saved)
       else
