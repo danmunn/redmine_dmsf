@@ -220,7 +220,6 @@ ru:
   parent_directory: "Родительская директория"
   note_webdav: "После включения, WebDAV можно найти по адресу %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
 
-  label_webdav: "Функциональность WebDAV"
   label_dmsf_plural: "Скопировать файлы и папки (%{files} файлов в %{folders} папках)"
 
   warning_folder_already_locked: "Эта папка уже заблокирована"

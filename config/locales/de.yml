@@ -220,7 +220,6 @@ de:
   parent_directory: übergeordnetes Verzeichnis
   note_webdav: "Nach der Aktivierung von WebDav kann der Dienst über die URL
     %{protocol}://%{domain}/dmsf/webdav/[project identifier] erreicht werden."
-  label_webdav: Webdav Funktionalität
   label_dmsf_plural: "Kopieren von Dateien und Ordnern (%{files} Dateien in %{folders} Ordnern)"
 
   warning_folder_already_locked: Dieser Ordner ist bereits gesperrt

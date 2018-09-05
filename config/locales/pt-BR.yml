@@ -220,7 +220,6 @@ pt-BR:
   parent_directory: Diretório Pai
   note_webdav: "Webdav uma vez habilitado pode ser encontrado em %{protocol}://%{domain}/dmsf/webdav/[project
     identifier]"
-  label_webdav: Webdav functionality
   label_dmsf_plural: "Copiar documentos e pastas (%{files} documentos em %{folders} pastas)"
 
   warning_folder_already_locked: Esta pasta já está bloqueada

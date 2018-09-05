@@ -220,7 +220,6 @@ cs:
   parent_directory: Nadřazená složka
   note_webdav: "Webdav je po aktivaci k dispozici na %{protocol}://%{domain}/dmsf/webdav/[identifikátor projektu]"
 
-  label_webdav: Webdav functionalita
   label_dmsf_plural: "Kopíruj dokumenty a složky (%{files} souborů v %{folders} složkách)"
 
   warning_folder_already_locked: Tato složka je již zamčená

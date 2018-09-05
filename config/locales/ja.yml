@@ -220,7 +220,6 @@ ja:
   parent_directory: "親ディレクトリ"
   note_webdav: "Webdavを有効にすると %{protocol}://%{domain}/dmsf/webdav/[project identifier] で閲覧することができます"
 
-  label_webdav: "Webdav機能"
   label_dmsf_plural: "ファイルとフォルダをコピーします (%{files} files in %{folders} folders)"
 
   warning_folder_already_locked: "このフォルダは既にロックされています"

@@ -220,7 +220,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   parent_directory: Cartella superiore
   note_webdav: "Una volta abilitato il Webdav può essere contattato sul percorso
     %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
-  label_webdav: Funzionalità Webdav
   label_dmsf_plural: "Copia documenti e cartelle (%{files} documenti in %{folders} cartelle)"
 
   warning_folder_already_locked: Questa cartella è già bloccata

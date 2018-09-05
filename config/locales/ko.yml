@@ -220,7 +220,6 @@ ko:
   parent_directory: 상위 디렉토리
   note_webdav: "활성화 된 Webdav는 %{protocol}에서 확인할 수 있습니다://%{domain}/dmsf/webdav/[project identifier]"
 
-  label_webdav: Webdav 기능
   label_dmsf_plural: "문서 및 폴더 복사 (%{folders} 폴더의  %{files} 파일들)"
 
   warning_folder_already_locked: 이 폴더는 이미 잠겨있습니다
