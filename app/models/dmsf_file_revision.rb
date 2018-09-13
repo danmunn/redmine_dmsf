@@ -66,6 +66,8 @@ class DmsfFileRevision < ActiveRecord::Base
       joins("JOIN #{Project.table_name} ON #{Project.table_name}.id = #{DmsfFile.table_name}.project_id").visible
 
   validates :title, :presence => true
+  validates :major_version, :presence => true
+  validates :minor_version, :presence => true
   validates_format_of :name, :with => /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/,
     :message => l(:error_contains_invalid_character)
   validates :description, length: { maximum: 1.kilobyte }
