@@ -65,13 +65,10 @@ class DmsfFileRevision < ActiveRecord::Base
     :scope => DmsfFileRevision.joins(:dmsf_file).
       joins("JOIN #{Project.table_name} ON #{Project.table_name}.id = #{DmsfFile.table_name}.project_id").visible
 
-  validates :title, :presence => true
-  validates :major_version, :presence => true
-  validates :minor_version, :presence => true
+  validates_presence_of  :title, :major_version, :minor_version, :dmsf_file
   validates_format_of :name, :with => /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/,
     :message => l(:error_contains_invalid_character)
   validates :description, length: { maximum: 1.kilobyte }
-  validates :dmsf_file, :presence => true
 
   def project
     self.dmsf_file.project if self.dmsf_file

@@ -28,7 +28,7 @@ class DmsfWorkflow < ActiveRecord::Base
   scope :status, lambda { |arg| where(arg.blank? ? nil : {:status => arg.to_i}) }
 
   validate :name_validation
-  validates :name, :presence => true
+  validates_presence_of :name
   validates_length_of :name, :maximum => 255
 
   def name_validation

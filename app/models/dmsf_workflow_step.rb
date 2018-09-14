@@ -24,10 +24,7 @@ class DmsfWorkflowStep < ActiveRecord::Base
 
   has_many :dmsf_workflow_step_assignments, :dependent => :destroy
 
-  validates :dmsf_workflow, :presence => true
-  validates :step, :presence => true
-  validates :user, :presence => true
-  validates :operator, :presence => true
+  validates_presence_of :dmsf_workflow, :step, :user, :operator
   validates_uniqueness_of :user_id, :scope => [:dmsf_workflow_id, :step]
   validates_length_of :name, :maximum => 30
 

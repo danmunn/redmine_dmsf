@@ -51,10 +51,9 @@ class DmsfFile < ActiveRecord::Base
   scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
   scope :deleted, -> { where(:deleted => STATUS_DELETED) }
 
-  validates :name, :presence => true
+  validates_presence_of  :name, :project
   validates_format_of :name, :with => /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/,
     :message => l(:error_contains_invalid_character)
-  validates :project, :presence => true
   validate :validates_name_uniqueness
 
   def validates_name_uniqueness

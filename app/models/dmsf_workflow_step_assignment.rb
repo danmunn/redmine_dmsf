@@ -25,7 +25,7 @@ class DmsfWorkflowStepAssignment < ActiveRecord::Base
 
   has_many :dmsf_workflow_step_actions, :dependent => :destroy
 
-  validates :dmsf_workflow_step, :dmsf_file_revision, :presence => true
+  validates_presence_of :dmsf_workflow_step, :dmsf_file_revision
   validates_uniqueness_of :dmsf_workflow_step_id, :scope => [:dmsf_file_revision_id]
 
   def add?(dmsf_file_revision_id)

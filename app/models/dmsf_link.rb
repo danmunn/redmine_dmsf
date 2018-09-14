@@ -27,11 +27,10 @@ class DmsfLink < ActiveRecord::Base
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   belongs_to :user
 
-  validates :name, :presence => true
+  validates_presence_of :name, :project
   validates_length_of :name, :maximum => 255
   validates_length_of :external_url, :maximum => 255
   validate :validate_url
-  validates :project, :presence => true
 
   def validate_url
     if self.target_type == 'DmsfUrl'

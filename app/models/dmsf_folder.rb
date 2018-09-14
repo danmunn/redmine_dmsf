@@ -90,14 +90,13 @@ class DmsfFolder < ActiveRecord::Base
           :datetime => Proc.new {|o| o.updated_at },
           :author => Proc.new {|o| o.user }
 
-  validates :title, :presence => true
+  validates_presence_of  :title, :project
   validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted],
     conditions: -> { where(:deleted => STATUS_ACTIVE) }
   validates_format_of :title, :with => /\A[^#{INVALID_CHARACTERS}]*\z/,
     :message => l(:error_contains_invalid_character)
   validate :check_cycle
   validates_length_of :description, :maximum => 65535
-  validates :project, :presence => true
 
   before_create :default_values
 

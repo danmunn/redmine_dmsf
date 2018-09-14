@@ -240,7 +240,20 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     User.current = @jsmith
     assert !@revision1.obsolete
     assert_equal 1, @revision1.errors.count
-    @revision1.errors.full_messages.to_sentence.include?(l(:error_file_is_locked))
+    assert @revision1.errors.full_messages.to_sentence.include?(l(:error_file_is_locked))
+  end
+
+  def test_minor_version_cannot_be_nil
+    @revision1.minor_version = nil
+    assert !@revision1.save
+    assert @revision1.errors.full_messages.to_sentence.include?('Minor version cannot be blank')
+  end
+
+  def test_major_version_cannot_be_nil
+    @revision1.major_version = nil
+    assert !@revision1.save
+    puts @revision1.errors.full_messages.to_sentence
+    assert @revision1.errors.full_messages.to_sentence.include?('Major version cannot be blank')
   end
 
 end
