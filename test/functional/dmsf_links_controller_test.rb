@@ -21,6 +21,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
+  include Redmine::I18n
 
   fixtures :users, :email_addresses, :projects, :members, :dmsf_files, 
     :dmsf_file_revisions, :dmsf_folders, :dmsf_links, :roles, :member_roles
@@ -110,8 +111,18 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
   end
   
   def test_new    
-    get :new, :project_id => @project1.id
+    get :new, :project_id => @project1.id, :type => 'link_to'
     assert_response :success
+    assert_select 'label', { :text => l(:label_target_project) }
+  end
+
+  def test_new_fast_links_enabled
+    member = Member.where(:user_id => @user_member.id, :project_id =>  @project1.id).first
+    assert member
+    member.update_attribute :dmsf_fast_links, true
+    get :new, :project_id => @project1.id, :type => 'link_to'
+    assert_response :success
+    assert_select 'label', { :count => 0, :text => l(:label_target_project) }
   end
   
   def test_create_file_link_from_f1

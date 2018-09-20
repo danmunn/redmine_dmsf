@@ -123,7 +123,6 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #     <dmsf_links total_count="0" type="array">
     #     </dmsf_links>
     # </dmsf>
-    puts @response.body
     assert_select 'dmsf > dmsf_folders', :count => 1
     assert_select 'dmsf > dmsf_folders > folder > id', :text => @folder7.id.to_s
     assert_select 'dmsf > dmsf_folders > folder > title', :text => @folder7.title.to_s

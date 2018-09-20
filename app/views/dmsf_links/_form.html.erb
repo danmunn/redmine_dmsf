@@ -63,7 +63,7 @@
           <%= label_tag('dmsf_link[target_folder_id]', l(:label_source_folder)) %>
         <% else %>
           <label for="dmsf_link_target_folder_id">
-            <%= "#{l(:label_target_folder)} #" %>
+            <%= l(:label_target_folder) %> <%= ' #' if @fast_links %>
             <span class="required">*</span>
           </label>
           <% if @fast_links %>
