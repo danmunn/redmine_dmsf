@@ -220,7 +220,7 @@ class DmsfFolder < ActiveRecord::Base
       project = Project.find_by_id project
     end
     tree = [[l(:link_documents), nil]]
-    folders = DmsfFolder.where(:project_id => project.id).notsystem.visible(false).to_a
+    folders = DmsfFolder.where(:project_id => project.id).visible(false).to_a
     folders.delete(current_folder)
     folders = folders.delete_if{ |f| f.locked_for_user? }
     folders.each do |folder|
