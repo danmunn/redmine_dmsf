@@ -50,7 +50,7 @@
           <%= late_javascript_tag do %>
               $('#dmsf_link_target_project_id').change(function(){
                 $.ajax({
-                  url: '<%= autocomplete_for_project_dmsf_link_path(@project, :format => 'js') %>',
+                  url: '<%= escape_javascript autocomplete_for_project_dmsf_link_path(@project, :format => 'js') %>',
                   type: 'get',
                   data: $('#new_dmsf_link').serialize()
                 });
@@ -70,14 +70,14 @@
             <%= text_field_tag 'dmsf_link[target_folder_id]', '', :required => true, :max_length => 255 %>
           <% end %>
         <% end %>
-        <% unless @fast_links && (@type == 'link_to') %>
+        <% if !@fast_links || (@type != 'link_to') %>
           <%= select_tag('dmsf_link[target_folder_id]',
             folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
             :selected => @target_folder_id)) %>
           <%= late_javascript_tag do %>
               $('#dmsf_link_target_folder_id').change(function(){
                 $.ajax({
-                  url: '<%= autocomplete_for_folder_dmsf_link_path(@project, :format => 'js') %>',
+                  url: '<%= escape_javascript autocomplete_for_folder_dmsf_link_path(@project, :format => 'js') %>',
                   type: 'get',
                   data: $('#new_dmsf_link').serialize()
                 });

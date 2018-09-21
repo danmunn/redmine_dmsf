@@ -21,7 +21,6 @@
 class FastLinks < ActiveRecord::Migration
   def self.up
     add_column :members, :dmsf_fast_links, :boolean, :default => false, :null => false
-    Member.update_all(:dmsf_fast_links => false)
   end
 
   def self.down

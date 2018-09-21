@@ -46,7 +46,7 @@ class DmsfLinksController < ApplicationController
 
   def new
     @dmsf_link = DmsfLink.new
-    member = Member.find_by_project_id_and_user_id(params[:project_id], User.current.id)
+    member = Member.find_by(project_id: params[:project_id], user_id: User.current.id)
     @fast_links = member && member.dmsf_fast_links
     @dmsf_link.project_id = params[:project_id]
     @dmsf_link.dmsf_folder_id = params[:dmsf_folder_id]
@@ -121,7 +121,7 @@ class DmsfLinksController < ApplicationController
       if params[:dmsf_link][:target_project_id].present?
         @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
       else
-        target_folder = DmsfFolder.find_by_id(params[:dmsf_link][:target_folder_id])
+        target_folder = DmsfFolder.find_by(id: params[:dmsf_link][:target_folder_id])
         unless target_folder
           render_404
           return
