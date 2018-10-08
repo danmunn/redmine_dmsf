@@ -36,7 +36,7 @@ end
 # Dav4Rack
 gem 'ox'
 
-if Dir.exist?(File.expand_path("../../easy_extensions", __FILE__))
+if Dir.exist?(File.expand_path('../../easy_extensions', __FILE__))
   group :default, :rys do
     gem 'dmsf_easy_query', git: 'git@git.easy.cz:platform-2.0/features/dmsf_easy_query.git', branch: 'master'
   end
