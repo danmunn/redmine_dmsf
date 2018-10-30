@@ -68,7 +68,7 @@
             <span id="step-index-<%= index %>-approvers">
               <% stps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact %>
               <% stps.each_with_index do |step, j| %>
-                <% if (j != 0) || (stps.count > 1) %>
+                <% if (j != 0)%>
                   <b><%= step.soperator %></b>
                 <% end %>
                 <%= link_to_user step.user %>
