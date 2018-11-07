@@ -29,7 +29,7 @@ class ApprovalWorkflowStdFields < ActiveRecord::Migration
     DmsfWorkflow.all.each(&:touch)
     # Set created_on and author_id
     admin_ids = User.active.where(admin: true).limit(1).ids
-    DmsfWorkflow.update_all(created_on: :updated_on, author_id: admin_ids.first)
+    DmsfWorkflow.update_all(['created_on = updated_on, author_id = ?', admin_ids.first])
   end
 
   def down
