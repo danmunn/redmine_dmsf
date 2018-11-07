@@ -20,7 +20,7 @@
 
 class AddIndexToDmsfFiles < ActiveRecord::Migration
 
-  def chnage
+  def change
     add_index :dmsf_files, :project_id, name: :index_dmsf_files_on_project_id
   end
 
