@@ -4,8 +4,8 @@ module DAV4Rack
     def initialize(args={})
       @args = args
       @store = nil
-      @args[:created_at] = Time.now
-      @args[:updated_at] = Time.now
+      @args[:created_at] = Time.current
+      @args[:updated_at] = Time.current
     end
     
     def store
@@ -24,7 +24,7 @@ module DAV4Rack
     end
     
     def remaining_timeout
-      @args[:timeout].to_i - (Time.now.to_i - @args[:created_at].to_i)
+      @args[:timeout].to_i - (Time.current.to_i - @args[:created_at].to_i)
     end
     
     def method_missing(*args)

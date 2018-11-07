@@ -25,15 +25,15 @@ module DAV4Rack
     end
     
     def creation_date
-      Time.now
+      Time.current
     end
 
     def last_modified
-      Time.now
+      Time.current
     end
     
     def last_modified=(time)
-      Time.now
+      Time.current
     end
 
     def etag

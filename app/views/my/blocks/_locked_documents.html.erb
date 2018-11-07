@@ -25,11 +25,11 @@
 <% folders = DmsfFolder.visible.joins(
   'JOIN dmsf_locks ON dmsf_folders.id = dmsf_locks.entity_id').where(
   ['dmsf_locks.entity_type = ? AND dmsf_locks.user_id = ? AND (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > ?)',
-   1, @user.id, Time.now]).all if @user %>
+   1, @user.id, Time.current]).all if @user %>
 <% files = DmsfFile.visible.joins(
   'JOIN dmsf_locks ON dmsf_files.id = dmsf_locks.entity_id').where(
   ['dmsf_locks.entity_type = ? AND dmsf_locks.user_id = ? AND (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > ?)',
-   0, @user.id, Time.now]).all if @user %>
+   0, @user.id, Time.current]).all if @user %>
 <% unless defined?(EasyExtensions) %>
   <h3><%= l(:locked_documents)%> (<%= folders.count %>/<%=  files.count %>)</h3>
 <% end %>

@@ -36,7 +36,7 @@ class DmsfFolderPermissionsController < ApplicationController
 
   def append
     @principals = Principal.where(id: params[:user_ids]).to_a
-    head :success if @principals.blank?
+    head :ok if @principals.blank?
   end
 
   def autocomplete_for_user

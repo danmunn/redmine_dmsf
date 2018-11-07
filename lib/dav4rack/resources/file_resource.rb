@@ -42,7 +42,7 @@ module DAV4Rack
 
     # Set the time of last modification.
     def last_modified=(time)
-      ::File.utime(Time.now, time, file_path)
+      ::File.utime(Time.current, time, file_path)
     end
 
     # Return an Etag, an unique hash value for this resource.

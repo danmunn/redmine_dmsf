@@ -6,11 +6,11 @@ folder_link:
   target_type: DmsfFolder
   name: folder1_link
   project_id: 1
-  dmsf_folder_id: NULL
+  dmsf_folder_id: nil
   deleted: 0
-  deleted_by_user_id: NULL
-  created_at: <%= DateTime.now() %>
-  updated_at: <%= DateTime.now() %>
+  deleted_by_user_id: nil
+  created_at: <%= DateTime.current %>
+  updated_at: <%= DateTime.current %>
   
 file_link:
   id: 2
@@ -21,9 +21,9 @@ file_link:
   project_id: 1
   dmsf_folder_id: 1
   deleted: 0
-  deleted_by_user_id: NULL
-  created_at: <%= DateTime.now() %>
-  updated_at: <%= DateTime.now() %>
+  deleted_by_user_id: nil
+  created_at: <%= DateTime.current %>
+  updated_at: <%= DateTime.current %>
 
 folder_link2:
   id: 3
@@ -32,11 +32,11 @@ folder_link2:
   target_type: DmsfFolder
   name: folder4_link
   project_id: 2
-  dmsf_folder_id: NULL
+  dmsf_folder_id: nil
   deleted: 0
-  deleted_by_user_id: NULL
-  created_at: <%= DateTime.now() %>
-  updated_at: <%= DateTime.now() %>
+  deleted_by_user_id: nil
+  created_at: <%= DateTime.current %>
+  updated_at: <%= DateTime.current %>
   
 file_link2:
   id: 4
@@ -45,11 +45,11 @@ file_link2:
   target_type: DmsfFile
   name: test_link
   project_id: 1
-  dmsf_folder_id: NULL
+  dmsf_folder_id: nil
   deleted: 0
-  deleted_by_user_id: NULL
-  created_at: <%= DateTime.now() %>
-  updated_at: <%= DateTime.now() %>
+  deleted_by_user_id: nil
+  created_at: <%= DateTime.current %>
+  updated_at: <%= DateTime.current %>
 
 url_link:
   id: 5
@@ -60,6 +60,6 @@ url_link:
   project_id: 1
   external_url: 'https://www.kontron.com'
   deleted: 0
-  deleted_by_user_id: NULL
-  created_at: <%= DateTime.now() %>
-  updated_at: <%= DateTime.now() %>
+  deleted_by_user_id: nil
+  created_at: <%= DateTime.current %>
+  updated_at: <%= DateTime.current %>
