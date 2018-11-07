@@ -23,12 +23,17 @@ require File.expand_path('../../../test_helper', __FILE__)
 class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
 
   def setup
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
+    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
+  end
+
+  def teardown
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
   end
 
   def test_options_for_root_path
     xml_http_request  :options, '/'
-    assert_response :success
+    assert_response :not_found
   end
 
   def test_options_for_dmsf_root_path
@@ -39,7 +44,7 @@ class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
   def test_webdav_not_enabled
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = nil
     xml_http_request  :options, '/dmsf/webdav'
-    assert_response 404
+    assert_response :not_found
   end
 
 end

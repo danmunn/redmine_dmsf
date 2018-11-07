@@ -19,11 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class AddDmsfNotInheritableToCustomFields < ActiveRecord::Migration
-  def up
-    add_column :custom_fields, :dmsf_not_inheritable, :boolean, :null => true
+
+  def change
+    add_column :custom_fields, :dmsf_not_inheritable, :boolean, null: true
   end
 
-  def down
-    remove_column :custom_fields, :dmsf_not_inheritable
-  end
 end

@@ -25,17 +25,16 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   fixtures :projects, :users, :email_addresses, :dmsf_folders, :roles, :members, :member_roles, :dmsf_folder_permissions
          
   def setup
-    @project = Project.find_by_id 1
-    assert_not_nil @project
+    @project = Project.find 1
     @project.enable_module! :dmsf
-    @folder1 = DmsfFolder.find_by_id 1
-    @folder2 = DmsfFolder.find_by_id 2
-    @folder4 = DmsfFolder.find_by_id 4
-    @folder5 = DmsfFolder.find_by_id 5
-    @folder6 = DmsfFolder.find_by_id 6
-    @folder7 = DmsfFolder.find_by_id 7
-    @manager = User.find_by_id 2
-    @developer = User.find_by_id 3
+    @folder1 = DmsfFolder.find 1
+    @folder2 = DmsfFolder.find 2
+    @folder4 = DmsfFolder.find 4
+    @folder5 = DmsfFolder.find 5
+    @folder6 = DmsfFolder.find 6
+    @folder7 = DmsfFolder.find 7
+    @manager = User.find 2
+    @developer = User.find 3
     manager_role = Role.find 1
     manager_role.add_permission! :view_dmsf_folders
     developer_role = Role.find 2
@@ -58,17 +57,17 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   def test_visiblity
     # The role has got permissions
     User.current = @manager
-    assert_equal 7, DmsfFolder.where(:project_id => 1).count
-    assert_equal 5, DmsfFolder.visible.where(:project_id => 1).count
+    assert_equal 7, DmsfFolder.where(project_id: 1).all.size
+    assert_equal 5, DmsfFolder.visible.where(project_id: 1).all.size
     # The user has got permissions
     User.current = @developer
     # Hasn't got permissions for @folder7
     @folder7.dmsf_folder_permissions.where(:object_type => 'User').delete_all
-    assert_equal 4, DmsfFolder.visible.where(:project_id => 1).count
+    assert_equal 4, DmsfFolder.visible.where(project_id: 1).all.size
     # Anonymous user
     User.current = User.anonymous
     @project.add_default_member User.anonymous
-    assert_equal 5, DmsfFolder.visible.where(:project_id => 1).count
+    assert_equal 5, DmsfFolder.visible.where(project_id: 1).all.size
   end
 
   def test_permissions
@@ -93,7 +92,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
 
   def test_destroy
     @folder6.delete true
-    assert_nil DmsfFolder.find_by_id(@folder6.id)
+    assert_nil DmsfFolder.find_by(id: @folder6.id)
   end
 
   def test_is_column_on_default

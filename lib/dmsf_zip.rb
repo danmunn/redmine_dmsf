@@ -25,7 +25,7 @@ class DmsfZip
 
   attr_reader :files
 
-  def initialize()
+  def initialize
     @zip_path = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_zip.zip'))
     @zip_file = Zip::OutputStream.new(@zip_path)
     @files = []
@@ -73,8 +73,8 @@ class DmsfZip
                                    ::Zip::DOSTime.at(folder.modified))
       @zip_file.put_next_entry(zip_entry)
       @folders << folder
-      folder.dmsf_folders.visible.each { |subfolder| self.add_folder(subfolder, member, root_path) }
-      folder.dmsf_files.visible.each { |file| self.add_file(file, member, root_path) }
+      folder.dmsf_folders.visible.each { |subfolder| add_folder(subfolder, member, root_path) }
+      folder.dmsf_files.visible.each { |file| add_file(file, member, root_path) }
     end
   end
 

@@ -111,12 +111,12 @@ module RedmineDmsf
         if defined?(container.dmsf_files) && User.current.allowed_to?(:view_dmsf_files, container.project) &&
           Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
           (container.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
-          for dmsf_file in container.dmsf_files
+          container.dmsf_files.each do |dmsf_file|
             if dmsf_file.last_revision
               links << [dmsf_file, nil, dmsf_file.created_at]
             end
           end
-          for dmsf_link in container.dmsf_links
+          container.dmsf_links.each do |dmsf_link|
             dmsf_file = dmsf_link.target_file
             if dmsf_file && dmsf_file.last_revision
               links << [dmsf_file, dmsf_link, dmsf_link.created_at]
@@ -165,11 +165,11 @@ module RedmineDmsf
         # Add list of attached documents
         links = get_links(container)
         if links.present?
-          unless defined?(EasyExtensions)
-            controller.send(:render_to_string, {:partial => 'dmsf_files/links',
-              :locals => { :links => links, :thumbnails => Setting.thumbnails_enabled? }})
-          else
+          if defined?(EasyExtensions)
             attachment_rows(links, container, controller, attachments)
+          else
+            controller.send(:render_to_string, {:partial => 'dmsf_files/links',
+                                                :locals => {:links => links, :thumbnails => Setting.thumbnails_enabled?}})
           end
         end
       end
@@ -237,27 +237,27 @@ module RedmineDmsf
           else
             html << "<span class=\"icon icon-unlock\" title=\"#{dmsf_file.get_locked_title}\"></span>"
           end
-          unless dmsf_file.locked?
-            # Notifications
-            if dmsf_file.notification
-              html << link_to('',notify_deactivate_dmsf_files_path(:id => dmsf_file),
-                :title => l(:title_notifications_active_deactivate), :class => 'icon icon-email')
-            else
-              html << link_to('',notify_activate_dmsf_files_path(:id => dmsf_file),
-                :title => l(:title_notifications_not_active_activate), :class => 'icon icon-email-add')
-            end
-            # Delete
-            if issue.attributes_editable?  && User.current.allowed_to?(:file_delete, dmsf_file.project)
-              html << link_to('',
-                link ? dmsf_link_path(link, :commit => 'yes') : dmsf_file_path(:id => dmsf_file, :commit => 'yes'),
-                :data => {:confirm => l(:text_are_you_sure)}, :method => :delete, :title => l(:title_delete),
-                :class => 'icon icon-del')
-            end
+        if dmsf_file.locked?
+          html << '<span class="icon"></span>' * 2
+        else
+          # Notifications
+          if dmsf_file.notification
+            html << link_to('', notify_deactivate_dmsf_files_path(:id => dmsf_file),
+                            :title => l(:title_notifications_active_deactivate), :class => 'icon icon-email')
           else
-            html << '<span class="icon"></span>' * 2
+            html << link_to('', notify_activate_dmsf_files_path(:id => dmsf_file),
+                            :title => l(:title_notifications_not_active_activate), :class => 'icon icon-email-add')
           end
+          # Delete
+          if issue.attributes_editable? && User.current.allowed_to?(:file_delete, dmsf_file.project)
+            html << link_to('',
+                            link ? dmsf_link_path(link, :commit => 'yes') : dmsf_file_path(:id => dmsf_file, :commit => 'yes'),
+                            :data => {:confirm => l(:text_are_you_sure)}, :method => :delete, :title => l(:title_delete),
+                            :class => 'icon icon-del')
+          end
+        end
           # Approval workflow
-          wf = DmsfWorkflow.find_by_id(dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id
+          wf = DmsfWorkflow.find_by(id: dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id
           html << controller.send(:render_to_string, {:partial => 'dmsf_workflows/approval_workflow_button',
             :locals => {:file => dmsf_file,
               :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_file.project),

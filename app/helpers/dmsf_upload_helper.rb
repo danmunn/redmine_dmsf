@@ -35,15 +35,7 @@ module DmsfUploadHelper
           file = link.target_file if link
         end
 
-        unless file
-          file = DmsfFile.new
-          file.project_id = project.id
-          file.name = name
-          file.dmsf_folder = folder
-          file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
-          new_revision.minor_version = 0
-          new_revision.major_version = 0
-        else
+        if file
           if file.last_revision
             last_revision = file.last_revision
             new_revision.source_revision = last_revision
@@ -53,6 +45,14 @@ module DmsfUploadHelper
             new_revision.minor_version = 0
             new_revision.major_version = 0
           end
+        else
+          file = DmsfFile.new
+          file.project_id = project.id
+          file.name = name
+          file.dmsf_folder = folder
+          file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
+          new_revision.minor_version = 0
+          new_revision.major_version = 0
         end
 
         if file.locked_for_user?
@@ -117,7 +117,7 @@ module DmsfUploadHelper
         end
         # Approval workflow
         if commited_file[:workflow_id].present?
-          wf = DmsfWorkflow.find_by_id commited_file[:workflow_id]
+          wf = DmsfWorkflow.find_by(id: commited_file[:workflow_id])
           if wf
             # Assign the workflow
             new_revision.set_workflow(wf.id, 'assign')
@@ -138,13 +138,13 @@ module DmsfUploadHelper
         end
       end
       # Notifications
-      if ((folder && folder.notification?) || (!folder && project.dmsf_notification?))
+      if (folder && folder.notification?) || (!folder && project.dmsf_notification?)
         begin
           recipients = DmsfMailer.get_notify_users(project, files)
           recipients.each do |u|
             DmsfMailer.files_updated(u, project, files).deliver
           end
-          if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
+          if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
             unless recipients.empty?
               to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
               to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')

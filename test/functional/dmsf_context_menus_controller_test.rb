@@ -27,12 +27,11 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
            :dmsf_files, :dmsf_file_revisions
 
   def setup
-    @user_member = User.find_by_id 2 # John Smith - manager
-    @project1 = Project.find_by_id 1
-    assert_not_nil @project1
+    @user_member = User.find 2 # John Smith - manager
+    @project1 = Project.find 1
     @project1.enable_module! :dmsf
-    @file1 = DmsfFile.find_by_id 1
-    @folder1 = DmsfFolder.find_by_id 1
+    @file1 = DmsfFile.find 1
+    @folder1 = DmsfFolder.find 1
     User.current = nil
     @request.session[:user_id] = @user_member.id
   end

@@ -168,8 +168,6 @@ es:
   permission_email_documents: Email documents
   label_file: Archivo
   field_folder: Directorio
-  error_create_cycle_in_folder_dependency: crear ciclo en dependencia de directorio
-  error_contains_invalid_character: contiene caracter(es) inválido(s)
   error_file_commit_require_uploaded_file: El commit requiere archivos subidos
 
   warning_some_files_were_not_commited: "Algunos archivos no fueron registrados por un error de validación: %{files}"
@@ -418,3 +416,8 @@ es:
       dmsf_open_approvals: My open approvals
     module_category:
       easy_dms: Easy DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: contiene caracter(es) inválido(s)

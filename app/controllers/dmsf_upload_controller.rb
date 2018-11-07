@@ -114,7 +114,7 @@ class DmsfUploadController < ApplicationController
     @files = []
     attachments = params[:attachments]
     if attachments && attachments.is_a?(Hash)
-      @folder = DmsfFolder.visible.find_by_id attachments[:folder_id].to_i if attachments[:folder_id].present?
+      @folder = DmsfFolder.visible.find_by(id: attachments[:folder_id]) if attachments[:folder_id].present?
       # standard file input uploads
       uploaded_files = attachments.select { |key, value| key == 'uploaded_file'}
       uploaded_files.each_value do |uploaded_file|

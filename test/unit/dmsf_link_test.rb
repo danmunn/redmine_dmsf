@@ -26,13 +26,13 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     :dmsf_folders, :dmsf_links
 
   def setup
-    @project1 = Project.find_by_id 1
-    @folder1 = DmsfFolder.find_by_id 1
-    @folder2 = DmsfFolder.find_by_id 2
-    @file1 = DmsfFile.find_by_id 1
-    @file4 = DmsfFile.find_by_id 4
-    @folder_link = DmsfLink.find_by_id 1
-    @file_link = DmsfLink.find_by_id 2
+    @project1 = Project.find 1
+    @folder1 = DmsfFolder.find 1
+    @folder2 = DmsfFolder.find 2
+    @file1 = DmsfFile.find 1
+    @file4 = DmsfFile.find 4
+    @folder_link = DmsfLink.find 1
+    @file_link = DmsfLink.find 2
   end
   
   def test_truth
@@ -52,8 +52,8 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     folder_link.target_type = DmsfFolder.model_name.to_s
     folder_link.name = 'folder1_link2'
     folder_link.project_id = @project1.id
-    folder_link.created_at = DateTime.now()
-    folder_link.updated_at = DateTime.now()
+    folder_link.created_at = DateTime.current
+    folder_link.updated_at = DateTime.current
     assert folder_link.save, folder_link.errors.full_messages.to_sentence
   end
   
@@ -64,8 +64,8 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     file_link.target_type = DmsfFile.model_name.to_s
     file_link.name = 'file1_link2'
     file_link.project_id = @project1.id
-    file_link.created_at = DateTime.now()
-    file_link.updated_at = DateTime.now()
+    file_link.created_at = DateTime.current
+    file_link.updated_at = DateTime.current
     assert file_link.save, file_link.errors.full_messages.to_sentence
   end
     
@@ -76,8 +76,8 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     external_link.target_type = 'DmsfUrl'
     external_link.name = 'DMSF plugin'
     external_link.project_id = @project1.id
-    external_link.created_at = DateTime.now()
-    external_link.updated_at = DateTime.now()
+    external_link.created_at = DateTime.current
+    external_link.updated_at = DateTime.current
     assert external_link.save, external_link.errors.full_messages.to_sentence
   end
   
@@ -85,14 +85,14 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     @folder_link.name = 'a' * 256
     assert !@folder_link.save, 
       "Folder link #{@folder_link.name} should have not been saved"
-    assert_equal 1, @folder_link.errors.count        
+    assert_equal 1, @folder_link.errors.size
   end
   
   def test_validate_name_presence
     @folder_link.name = ''
     assert !@folder_link.save,
       "Folder link #{@folder_link.name} should have not been saved"
-    assert_equal 1, @folder_link.errors.count        
+    assert_equal 1, @folder_link.errors.size
   end
   
   def test_validate_external_url_length
@@ -100,7 +100,7 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     @file_link.external_url = 'https://localhost/' + 'a' * 256
     assert !@file_link.save, 
       "External URL link #{@file_link.name} should have not been saved"
-    assert_equal 1, @file_link.errors.count        
+    assert_equal 1, @file_link.errors.size
   end
   
   def test_validate_external_url_presence
@@ -108,7 +108,7 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     @file_link.external_url = ''
     assert !@file_link.save,
       "External URL link #{@file_link.name} should have not been saved"
-    assert_equal 1, @file_link.errors.count        
+    assert_equal 1, @file_link.errors.size
   end
     
   def test_validate_external_url
@@ -116,19 +116,19 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     @file_link.external_url = 'htt ps://abc.xyz'
     assert !@file_link.save, 
       "External URL link #{@file_link.name} should have not been saved"
-    assert_equal 1, @file_link.errors.count
+    assert_equal 1, @file_link.errors.size
   end
    
   def test_belongs_to_project
     @project1.destroy
-    assert_nil DmsfLink.find_by_id 1
-    assert_nil DmsfLink.find_by_id 2
+    assert_nil DmsfLink.find_by(id: 1)
+    assert_nil DmsfLink.find_by(id: 2)
   end
 
   def test_belongs_to_dmsf_folder
     @folder1.destroy
-    assert_nil DmsfLink.find_by_id 1
-    assert_nil DmsfLink.find_by_id 2
+    assert_nil DmsfLink.find_by(id: 1)
+    assert_nil DmsfLink.find_by(id: 2)
   end
   
   def test_target_folder_id
@@ -173,7 +173,7 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_path
-    assert_equal 'folder1/folder2/test.txt', @file_link.path
+    assert_equal 'folder1/folder2/test4.txt', @file_link.path
     assert_equal 'folder1', @folder_link.path
   end
    
@@ -228,17 +228,17 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
   
   def test_destroy_file_link    
     assert @file_link.delete(true), @file_link.errors.full_messages.to_sentence
-    assert_nil DmsfLink.find_by_id @file_link.id
+    assert_nil DmsfLink.find_by(id: @file_link.id)
   end
     
   def test_destroy_folder_link
     assert @folder_link.delete(true), 
       @folder_link.errors.full_messages.to_sentence
-    assert_nil DmsfLink.find_by_id @folder_link.id
+    assert_nil DmsfLink.find_by(id: @folder_link.id)
   end
 
   def test_to_csv
-    columns = ['id', 'title']
+    columns = %w(id title)
     csv = @file_link.to_csv(columns, 0)
     assert_equal 0, csv.size
     @file_link.target_type = 'DmsfUrl'

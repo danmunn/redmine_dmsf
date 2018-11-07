@@ -27,7 +27,7 @@ module RedmineDmsf
 
       def self.included(base)
         base.class_eval do
-          before_destroy :remove_dmsf_references
+          before_destroy :remove_dmsf_references, prepend: true
         end
       end
 

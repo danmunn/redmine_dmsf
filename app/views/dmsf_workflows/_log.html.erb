@@ -23,7 +23,7 @@
 <h3 class="title"><%= l(:title_dmsf_workflow_log) %></h3>
 <p>
   <% if params[:dmsf_file_revision_id].present? %>
-    <% revision = DmsfFileRevision.find_by_id(params[:dmsf_file_revision_id]) %>
+    <% revision = DmsfFileRevision.find_by(id: params[:dmsf_file_revision_id]) %>
       <% if revision %>
         <div class="dmsf_log_header_box">                    
           <div class="dmsf_log_header_left">
@@ -44,7 +44,7 @@
             <thead><tr>
               <th></th>
               <th><%= l(:label_dmsf_workflow_step) %></th>
-              <th><%= l(:label_user) %> </th>
+              <th><%= l(:label_user) %></th>
               <th><%= l(:label_action) %></th>
               <th><%= l(:link_workflow) %></th>
               <th><%= l(:label_note) %></th>
@@ -52,18 +52,18 @@
             </tr></thead>
             <tbody>
             <tr id="step-0" class="even">
-                <td class="id"/>
-                <td/>
-                <td/>
-                <td/>
+              <td class="id"></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td><%= DmsfWorkflowStepAction.workflow_str(0) %></td>
                 <td class="dmsf_note"></td>
-                <td/>
+                <td></td>
               </tr>
               <tr id="step-1" class="odd">
                 <td class="id"></td>
-                <td/>
-                <td><%= link_to_user User.find_by_id(revision.dmsf_workflow_assigned_by) if revision.dmsf_workflow_assigned_by %></td>
+                <td></td>
+                <td><%= link_to_user User.find_by(id: revision.dmsf_workflow_assigned_by) if revision.dmsf_workflow_assigned_by %></td>
                 <td><%= DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_ASSIGN) %></td>
                 <td><%= DmsfWorkflowStepAction.workflow_str(DmsfWorkflowStepAction::ACTION_ASSIGN) %></td>
                 <td class="dmsf_note"></td>
@@ -71,8 +71,8 @@
               </tr>  
               <tr id="step-2" class="even">
                 <td class="id"></td>
-                <td/>
-                <td><%= link_to_user User.find_by_id(revision.dmsf_workflow_started_by) if revision.dmsf_workflow_started_by %></td>
+                <td></td>
+                <td><%= link_to_user User.find_by(id: revision.dmsf_workflow_started_by) if revision.dmsf_workflow_started_by %></td>
                 <td><%= DmsfWorkflowStepAction.action_str(DmsfWorkflowStepAction::ACTION_START) %></td>
                 <td><%= DmsfWorkflowStepAction.workflow_str(DmsfWorkflowStepAction::ACTION_START) if revision.dmsf_workflow_started_by %></td>
                 <td class="dmsf_note"></td>
@@ -86,10 +86,10 @@
                   <td class="id"><%= row['step'] unless row['step'] == last_step %></td>
                   <% last_step = row['step'] %>
                   <td class="name"><%= row['name'] %></td>
-                  <td><%= link_to_user User.find_by_id(row['author_id'].present? ? row['author_id'] : row['user_id']) %></td>
+                  <td><%= link_to_user User.find_by(id: row['author_id'].present? ? row['author_id'] : row['user_id']) %></td>
                   <td><%= DmsfWorkflowStepAction.action_str(row['action']) %></td>
                   <td>                    
-                    <% if((row['step'].to_i == @dmsf_workflow.dmsf_workflow_steps.last.step) && (revision.workflow == DmsfWorkflow::STATE_APPROVED) && (row['action'] != DmsfWorkflowStepAction::ACTION_DELEGATE)) %>
+                    <% if (row['step'].to_i == @dmsf_workflow.dmsf_workflow_steps.last.step) && (revision.workflow == DmsfWorkflow::STATE_APPROVED) && (row['action'] != DmsfWorkflowStepAction::ACTION_DELEGATE) %>
                       <%= l(:title_approved) %>
                     <% else %>
                       <%= DmsfWorkflowStepAction.workflow_str(row['action']) %>

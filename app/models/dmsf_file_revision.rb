@@ -48,8 +48,8 @@ class DmsfFileRevision < ActiveRecord::Base
     'application/vnd.oasis.opendocument.presentation' => 'ms-powerpoint',
   }.freeze
 
-  scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
-  scope :deleted, -> { where(:deleted => STATUS_DELETED) }
+  scope :visible, -> { where(deleted: STATUS_ACTIVE) }
+  scope :deleted, -> { where(deleted: STATUS_DELETED) }
 
   acts_as_customizable
   acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.dmsf_file.dmsf_path_str}"},
@@ -65,17 +65,19 @@ class DmsfFileRevision < ActiveRecord::Base
     :scope => DmsfFileRevision.joins(:dmsf_file).
       joins("JOIN #{Project.table_name} ON #{Project.table_name}.id = #{DmsfFile.table_name}.project_id").visible
 
-  validates_presence_of  :title, :major_version, :minor_version, :dmsf_file
-  validates_format_of :name, :with => /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/,
-    :message => l(:error_contains_invalid_character)
+  validates :title, presence: true
+  validates :major_version, presence: true
+  validates :minor_version, presence: true
+  validates :dmsf_file, presence: true
+  validates :name, dmsf_file_name: true
   validates :description, length: { maximum: 1.kilobyte }
 
   def project
-    self.dmsf_file.project if self.dmsf_file
+    dmsf_file.project if dmsf_file
   end
 
   def folder
-    self.dmsf_file.dmsf_folder if self.dmsf_file
+    dmsf_file.dmsf_folder if dmsf_file
   end
 
   def self.remove_extension(filename)
@@ -87,21 +89,21 @@ class DmsfFileRevision < ActiveRecord::Base
   end
  
   def self.easy_activity_custom_project_scope(scope, options, event_type)
-    scope.where(:dmsf_files => { :project_id => options[:project_ids] })
+    scope.where(:dmsf_files => { project_id: options[:project_ids] })
   end
 
   def delete(commit = false, force = true)
-    if self.dmsf_file.locked_for_user?
+    if dmsf_file.locked_for_user?
       errors[:base] << l(:error_file_is_locked)
       return false
     end
-    if !commit && (!force && (self.dmsf_file.dmsf_file_revisions.length <= 1))
+    if !commit && (!force && (dmsf_file.dmsf_file_revisions.length <= 1))
       errors[:base] << l(:error_at_least_one_revision_must_be_present)
       return false
     end
 
     if commit
-      self.destroy
+      destroy
     else
       self.deleted = DmsfFile::STATUS_DELETED
       self.deleted_by_user = User.current
@@ -109,8 +111,8 @@ class DmsfFileRevision < ActiveRecord::Base
     end
   end
 
-  def obsolete()
-    if self.dmsf_file.locked_for_user?
+  def obsolete
+    if dmsf_file.locked_for_user?
       errors[:base] << l(:error_file_is_locked)
       return false
     end
@@ -125,14 +127,13 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def destroy
-    dependent = DmsfFileRevision.where(:source_dmsf_file_revision_id => self.id).all
-    dependent.each do |d|
-      d.source_revision = self.source_revision
+    DmsfFileRevision.where(source_dmsf_file_revision_id: id).find_each do |d|
+      d.source_revision = source_revision
       d.save!
     end
     if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
-      dependencies = DmsfFileRevision.where(:disk_filename => self.disk_filename).count
-      File.delete(self.disk_file) if dependencies <= 1 && File.exist?(self.disk_file)
+      dependencies = DmsfFileRevision.where(disk_filename: disk_filename).all.size
+      File.delete(disk_file) if dependencies <= 1 && File.exist?(disk_file)
     end
     super
   end
@@ -149,35 +150,34 @@ class DmsfFileRevision < ActiveRecord::Base
   #   custom SQL into a temporary object
   #
   def access_grouped
-    self.dmsf_file_revision_access.select('user_id, COUNT(*) AS count, MIN(created_at) AS first_at, MAX(created_at) AS last_at').group('user_id')
+    dmsf_file_revision_access.select('user_id, COUNT(*) AS count, MIN(created_at) AS first_at, MAX(created_at) AS last_at').group('user_id')
   end
 
   def version
-    ver = DmsfUploadHelper::gui_version(self.major_version).to_s
-    if -self.minor_version != ' '.ord
-      ver << ".#{DmsfUploadHelper::gui_version(self.minor_version)}"
+    ver = DmsfUploadHelper::gui_version(major_version).to_s
+    if -minor_version != ' '.ord
+      ver << ".#{DmsfUploadHelper::gui_version(minor_version)}"
     end
     ver
   end
   
   def storage_base_path
-    time = self.created_at || DateTime.now
+    time = created_at || DateTime.current
     DmsfFile.storage_path.join(time.strftime('%Y')).join(time.strftime('%m'))
   end
 
   def disk_file(search_if_not_exists = true)
-    path = self.storage_base_path
+    path = storage_base_path
     begin
       FileUtils.mkdir_p(path) unless File.exist?(path)
     rescue StandardError => e
       Rails.logger.error e.message
     end
-    filename = path.join(self.disk_filename)
+    filename = path.join(disk_filename)
     if search_if_not_exists
       unless File.exist?(filename)
         # Let's search for the physical file in source revisions
-        revisions = self.dmsf_file.dmsf_file_revisions.where(['id < ?', self.id]).order(:id => :desc)
-        revisions.each do |rev|
+        dmsf_file.dmsf_file_revisions.where(['id < ?', id]).order(created_at: :desc).each do |rev|
           filename = rev.disk_file
           break if File.exist?(filename)
         end
@@ -187,45 +187,45 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def new_storage_filename
-    raise DmsfAccessError, 'File id is not set' unless self.dmsf_file.id
-    filename = DmsfHelper.sanitize_filename(self.name)
-    timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
-    while File.exist?(storage_base_path.join("#{timestamp}_#{self.dmsf_file.id}_#{filename}"))
+    raise DmsfAccessError, 'File id is not set' unless dmsf_file.id
+    filename = DmsfHelper.sanitize_filename(name)
+    timestamp = DateTime.current.strftime('%y%m%d%H%M%S')
+    while File.exist?(storage_base_path.join("#{timestamp}_#{dmsf_file.id}_#{filename}"))
       timestamp.succ!
     end
-    "#{timestamp}_#{self.dmsf_file.id}_#{filename}"
+    "#{timestamp}_#{dmsf_file.id}_#{filename}"
   end
 
   def detect_content_type
-    content_type = self.mime_type
-    content_type = Redmine::MimeType.of(self.disk_filename) if content_type.blank?
+    content_type = mime_type
+    content_type = Redmine::MimeType.of(disk_filename) if content_type.blank?
     content_type = 'application/octet-stream' if content_type.blank?
     content_type.to_s
   end
 
   def clone
     new_revision = DmsfFileRevision.new
-    new_revision.dmsf_file = self.dmsf_file
-    new_revision.disk_filename = self.disk_filename
-    new_revision.size = self.size
-    new_revision.mime_type = self.mime_type
-    new_revision.title = self.title
-    new_revision.description = self.description
-    new_revision.workflow = self.workflow
-    new_revision.major_version = self.major_version
-    new_revision.minor_version = self.minor_version
+    new_revision.dmsf_file = dmsf_file
+    new_revision.disk_filename = disk_filename
+    new_revision.size = size
+    new_revision.mime_type = mime_type
+    new_revision.title = title
+    new_revision.description = description
+    new_revision.workflow = workflow
+    new_revision.major_version = major_version
+    new_revision.minor_version = minor_version
     new_revision.source_revision = self
     new_revision.user = User.current
-    new_revision.name = self.name
-    new_revision.digest = self.digest
+    new_revision.name = name
+    new_revision.digest = digest
     new_revision
   end
 
   def workflow_str(name)
     str = ''
     if name && dmsf_workflow_id
-      wf = DmsfWorkflow.find_by_id(dmsf_workflow_id)
-      str = "#{wf.name} - " if wf
+      names = DmsfWorkflow.find_by(id: dmsf_workflow_id).pluck(:name)
+      str = "#{names.first} - " if names.any?
     end
     case workflow
       when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
@@ -248,38 +248,38 @@ class DmsfFileRevision < ActiveRecord::Base
     if commit == 'start'
       self.workflow = DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
       self.dmsf_workflow_started_by = User.current.id if User.current
-      self.dmsf_workflow_started_at = DateTime.now
+      self.dmsf_workflow_started_at = DateTime.current
     else
       self.workflow = DmsfWorkflow::STATE_ASSIGNED
       self.dmsf_workflow_assigned_by = User.current.id if User.current
-      self.dmsf_workflow_assigned_at = DateTime.now
+      self.dmsf_workflow_assigned_at = DateTime.current
     end
   end
 
   def assign_workflow(dmsf_workflow_id)
-    wf = DmsfWorkflow.find_by_id(dmsf_workflow_id)
+    wf = DmsfWorkflow.find_by(id: dmsf_workflow_id)
     wf.assign(self.id) if wf && self.id
   end
 
   def increase_version(version_to_increase)
     self.minor_version = case version_to_increase
       when 1
-        DmsfUploadHelper.increase_version(self.minor_version, 1)
+        DmsfUploadHelper.increase_version(minor_version, 1)
       when 2
-        (self.major_version < 0) ? -(' '.ord) : 0
+        (major_version < 0) ? -(' '.ord) : 0
       else
-        self.minor_version
+        minor_version
     end
     self.major_version = case version_to_increase
       when 2
-        DmsfUploadHelper::increase_version(self.major_version, 1)
+        DmsfUploadHelper::increase_version(major_version, 1)
       else
         major_version
     end
   end
 
   def copy_file_content(open_file)
-    File.open(self.disk_file(false), 'wb') do |f|
+    File.open(disk_file(false), 'wb') do |f|
       while (buffer = open_file.read(8192))
         f.write(buffer)
       end
@@ -292,25 +292,25 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def iversion
-    parts = self.version.split '.'
+    parts = version.split '.'
     parts.size == 2 ? parts[0].to_i * 1000 + parts[1].to_i : 0
   end
 
   def formatted_name(format)
-    return self.name if format.blank?
-    if self.name =~ /(.*)(\..*)$/
+    return name if format.blank?
+    if name =~ /(.*)(\..*)$/
       filename = $1
       ext = $2
     else
-      filename = self.name
+      filename = name
     end
     format2 = format.dup
-    format2.sub!('%t', self.title)
+    format2.sub!('%t', title)
     format2.sub!('%f', filename)
-    format2.sub!('%d', self.updated_at.strftime('%Y%m%d%H%M%S'))
-    format2.sub!('%v', self.version)
-    format2.sub!('%i', self.dmsf_file.id.to_s)
-    format2.sub!('%r', self.id.to_s)
+    format2.sub!('%d', updated_at.strftime('%Y%m%d%H%M%S'))
+    format2.sub!('%v', version)
+    format2.sub!('%i', dmsf_file.id.to_s)
+    format2.sub!('%r', id.to_s)
     format2 += ext if ext
     format2
   end
@@ -325,33 +325,33 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def create_digest
-    self.digest = DmsfFileRevision.create_digest(self.disk_file)
+    self.digest = DmsfFileRevision.create_digest(disk_file)
   end
 
   # Returns either MD5 or SHA256 depending on the way self.digest was computed
   def digest_type
-    self.digest.size < 64 ? 'MD5' : 'SHA256' if digest.present?
+    digest.size < 64 ? 'MD5' : 'SHA256' if digest.present?
   end
 
   def tooltip
-    if self.description.present?
-      text = self.description
+    if description.present?
+      text = description
     else
       text = ''
     end
-    if self.comment.present?
+    if comment.present?
       text += ' / ' if text.present?
-      text += self.comment
+      text += comment
     end
     ActionView::Base.full_sanitizer.sanitize(text)
   end
 
   def workflow_tooltip
     tooltip = ''
-    if self.dmsf_workflow
+    if dmsf_workflow
       case workflow
         when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, DmsfWorkflow::STATE_ASSIGNED
-          assignments = self.dmsf_workflow.next_assignments(self.id)
+          assignments = dmsf_workflow.next_assignments(id)
           if assignments
             assignments.each_with_index do |assignment, index|
               tooltip << ', ' if index > 0
@@ -360,8 +360,8 @@ class DmsfFileRevision < ActiveRecord::Base
           end
         when DmsfWorkflow::STATE_APPROVED, DmsfWorkflow::STATE_REJECTED
           action = DmsfWorkflowStepAction.joins(:dmsf_workflow_step_assignment).where(
-            :dmsf_workflow_step_assignments => { :dmsf_file_revision_id => self.id }).order(
-            'dmsf_workflow_step_actions.id').last
+            :dmsf_workflow_step_assignments => { :dmsf_file_revision_id => id }).order(
+            'dmsf_workflow_step_actions.created_at').last
           tooltip << action.author.name if action
       end
     end
@@ -370,7 +370,7 @@ class DmsfFileRevision < ActiveRecord::Base
 
   def protocol
     unless @protocol
-      @protocol = PROTOCOLS[self.mime_type]
+      @protocol = PROTOCOLS[mime_type]
     end
     @protocol
   end

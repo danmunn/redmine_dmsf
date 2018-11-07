@@ -66,7 +66,7 @@ class DmsfController < ApplicationController
       format.csv  {
         filename = @project.name
         filename << "_#{@folder.title}" if @folder
-        filename << DateTime.now.strftime('_%Y%m%d%H%M%S.csv')
+        filename << DateTime.current.strftime('_%Y%m%d%H%M%S.csv')
         send_data(DmsfHelper.dmsf_to_csv(@folder ? @folder : @project, params[:settings][:dmsf_columns]),
                   :type => 'text/csv; header=present', :filename => filename)
       }
@@ -77,11 +77,11 @@ class DmsfController < ApplicationController
     @folder_manipulation_allowed = User.current.allowed_to? :folder_manipulation, @project
     @file_manipulation_allowed = User.current.allowed_to? :file_manipulation, @project
     @file_delete_allowed = User.current.allowed_to? :file_delete, @project
-    @subfolders = DmsfFolder.deleted.where(:project_id => @project.id)
-    @files = DmsfFile.deleted.where(:project_id => @project.id)
-    @dir_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.to_s)
-    @file_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => DmsfFile.model_name.to_s)
-    @url_links = DmsfLink.deleted.where(:project_id => @project.id, :target_type => 'DmsfUrl')
+    @subfolders = DmsfFolder.deleted.where(project_id: @project.id)
+    @files = DmsfFile.deleted.where(project_id: @project.id)
+    @dir_links = DmsfLink.deleted.where(project_id: @project.id, target_type: DmsfFolder.model_name.to_s)
+    @file_links = DmsfLink.deleted.where(project_id: @project.id, target_type: DmsfFile.model_name.to_s)
+    @url_links = DmsfLink.deleted.where(project_id: @project.id, target_type: 'DmsfUrl')
   end
 
   def download_email_entries
@@ -123,16 +123,16 @@ class DmsfController < ApplicationController
     if selected_dir_links.present? &&
       (params[:email_entries].present? || params[:download_entries].present?)
         selected_dir_links.each do |id|
-          link = DmsfLink.find_by_id id
-          selected_folders << link.target_id if link && !selected_folders.include?(link.target_id)
+          target_id = DmsfLink.find_by(id: id).pluck(:target_id).first
+          selected_folders << target_id if target_id && !selected_folders.include?(target_id)
       end
     end
 
     if selected_file_links.present? &&
       (params[:email_entries].present? || params[:download_entries].present?)
         selected_file_links.each do |id|
-          link = DmsfLink.find_by_id id
-          selected_files << link.target_id if link && !selected_files.include?(link.target_id)
+          target_id = DmsfLink.find_by(id: id).pluck(:target_id).first
+          selected_files << target_id if target_id && !selected_files.include?(target_id)
       end
     end
 
@@ -178,7 +178,7 @@ class DmsfController < ApplicationController
     if params[:email][:to].strip.blank?
       flash[:error] = l(:error_email_to_must_be_entered)
     else
-      DmsfMailer.send_documents(@project, User.current, params[:email]).deliver
+      DmsfMailer.send_documents(@project, params[:email]).deliver
       File.delete(params[:email][:zipped_content])
       flash[:notice] = l(:notice_email_sent, params[:email][:to])
     end
@@ -195,7 +195,7 @@ class DmsfController < ApplicationController
     @parent = @folder.dmsf_folder
     @pathfolder = copy_folder(@folder)
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
-    @users = Principal.active.where(:id => @folder.dmsf_folder_permissions.users.map{ |p| p.object_id })
+    @users = Principal.active.where(id: @folder.dmsf_folder_permissions.users.map{ |p| p.object_id })
   end
 
   def create
@@ -292,14 +292,14 @@ class DmsfController < ApplicationController
   end
 
   def notify_activate
-    if((@folder && @folder.notification) || (@folder.nil? && @project.dmsf_notification))
+    if (@folder && @folder.notification) || (@folder.nil? && @project.dmsf_notification)
       flash[:warning] = l(:warning_folder_notifications_already_activated)
     else
       if @folder
         @folder.notify_activate
       else
         @project.dmsf_notification = true
-        @project.save
+        @project.save!
       end
       flash[:notice] = l(:notice_folder_notifications_activated)
     end
@@ -307,14 +307,14 @@ class DmsfController < ApplicationController
   end
 
   def notify_deactivate
-    if((@folder && !@folder.notification) || (@folder.nil? && !@project.dmsf_notification))
+    if (@folder && !@folder.notification) || (@folder.nil? && !@project.dmsf_notification)
       flash[:warning] = l(:warning_folder_notifications_already_deactivated)
     else
       if @folder
         @folder.notify_deactivate
       else
         @project.dmsf_notification = nil
-        @project.save
+        @project.save!
       end
       flash[:notice] = l(:notice_folder_notifications_deactivated)
     end
@@ -354,8 +354,8 @@ class DmsfController < ApplicationController
   end
 
   def append_email
-    @principals = Principal.where(:id => params[:user_ids]).to_a
-    head 200 if @principals.blank?
+    @principals = Principal.where(id: params[:user_ids]).to_a
+    head :success if @principals.blank?
   end
 
   def autocomplete_for_user
@@ -424,7 +424,7 @@ class DmsfController < ApplicationController
       audit.save!
     end
     send_file(zip.finish,
-      :filename => filename_for_content_disposition("#{@project.name}-#{DateTime.now.strftime('%y%m%d%H%M%S')}.zip"),
+      :filename => filename_for_content_disposition("#{@project.name}-#{DateTime.current.strftime('%y%m%d%H%M%S')}.zip"),
       :type => 'application/zip',
       :disposition => 'attachment')
   rescue StandardError
@@ -434,9 +434,9 @@ class DmsfController < ApplicationController
   end
 
   def zip_entries(zip, selected_folders, selected_files)
-    member = Member.where(:user_id => User.current.id, :project_id => @project.id).first
+    member = Member.where(user_id: User.current.id, project_id: @project.id).first
     selected_folders.each do |selected_folder_id|
-      folder = DmsfFolder.visible.find_by_id selected_folder_id
+      folder = DmsfFolder.visible.find_by(id: selected_folder_id)
       if folder
         zip.add_folder(folder, member, (folder.dmsf_folder.dmsf_path_str if folder.dmsf_folder))
       else
@@ -444,7 +444,7 @@ class DmsfController < ApplicationController
       end
     end
     selected_files.each do |selected_file_id|
-      file = DmsfFile.visible.find_by_id selected_file_id
+      file = DmsfFile.visible.find_by(id: selected_file_id)
       unless file && file.last_revision && File.exist?(file.last_revision.disk_file)
         raise FileNotFound
       end
@@ -463,7 +463,7 @@ class DmsfController < ApplicationController
   def restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links)
     # Folders
     selected_folders.each do |id|
-      folder = DmsfFolder.find_by_id id
+      folder = DmsfFolder.find_by(id: id)
       if folder
         unless folder.restore
           flash[:error] = folder.errors.full_messages.to_sentence
@@ -474,7 +474,7 @@ class DmsfController < ApplicationController
     end
     # Files
     selected_files.each do |id|
-      file = DmsfFile.find_by_id id
+      file = DmsfFile.find_by(id: id)
       if file
         unless file.restore
           flash[:error] = file.errors.full_messages.to_sentence
@@ -485,7 +485,7 @@ class DmsfController < ApplicationController
     end
     # Links
     (selected_dir_links + selected_file_links + selected_url_links).each do |id|
-      link = DmsfLink.find_by_id id
+      link = DmsfLink.find_by(id: id)
       if link
         unless link.restore
           flash[:error] = link.errors.full_messages.to_sentence
@@ -499,7 +499,7 @@ class DmsfController < ApplicationController
   def delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, commit)
     # Folders
     selected_folders.each do |id|
-      folder = DmsfFolder.find_by_id id
+      folder = DmsfFolder.find_by(id: id)
       if folder
         unless folder.delete commit
           flash[:error] = folder.errors.full_messages.to_sentence
@@ -513,7 +513,7 @@ class DmsfController < ApplicationController
     deleted_files = []
     not_deleted_files = []
     selected_files.each do |id|
-      file = DmsfFile.find_by_id id
+      file = DmsfFile.find_by(id: id)
       if file
         if file.delete(commit)
           deleted_files << file unless commit
@@ -525,13 +525,13 @@ class DmsfController < ApplicationController
       end
     end
     # Activities
-    if !deleted_files.empty?
+    unless deleted_files.empty?
       begin
         recipients = DmsfMailer.get_notify_users(@project, deleted_files)
         recipients.each do |u|
           DmsfMailer.files_deleted(u, @project, deleted_files).deliver
         end
-        if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
+        if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
           unless recipients.empty?
             to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
             to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
@@ -547,7 +547,7 @@ class DmsfController < ApplicationController
     end
     # Links
     (selected_dir_links + selected_file_links + selected_url_links).each do |id|
-      link = DmsfLink.find_by_id id
+      link = DmsfLink.find_by(id: id)
       link.delete commit if link
     end
     if flash[:error].blank? && flash[:warning].blank?
@@ -607,7 +607,7 @@ class DmsfController < ApplicationController
       if tag
         @subfolders = []
         @folder = nil
-        DmsfFolder.where(:project_id => @project.id, :system => false).visible.each do |f|
+        DmsfFolder.where(project_id: @project.id, system: false).visible.find_each do |f|
           f.custom_field_values.each do |v|
             if v.custom_field_id == params[:custom_field_id].to_i
               if v.custom_field.compare_values?(v.value, params[:custom_value])
@@ -618,7 +618,7 @@ class DmsfController < ApplicationController
           end
         end
         @files = []
-        DmsfFile.where(:project_id => @project.id).visible.each do |f|
+        DmsfFile.where(project_id: @project.id).visible.find_each do |f|
           r = f.last_revision
           if r
             r.custom_field_values.each do |v|
@@ -632,8 +632,8 @@ class DmsfController < ApplicationController
           end
         end
         @dir_links = []
-        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFolder.model_name.to_s).where(
-          'target_id IS NOT NULL').visible.each do |l|
+        DmsfLink.where(project_id: @project.id, target_type: DmsfFolder.model_name.to_s).where.not(
+          target_id: nil).visible.find_each do |l|
           l.target_folder.custom_field_values.each do |v|
             if v.custom_field_id == params[:custom_field_id].to_i
               if v.custom_field.compare_values?(v.value, params[:custom_value])
@@ -644,7 +644,7 @@ class DmsfController < ApplicationController
           end
         end
         @file_links = []
-        DmsfLink.where(:project_id => @project.id, :target_type => DmsfFile.model_name.to_s).visible.each do |l|
+        DmsfLink.where(project_id: @project.id, target_type: DmsfFile.model_name.to_s).visible.find_each do |l|
           r = l.target_file.last_revision if l.target_file
           if r
             r.custom_field_values.each do |v|
@@ -692,9 +692,9 @@ class DmsfController < ApplicationController
     # Trash
     @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed &&
       @file_delete_allowed && !@locked_for_user && !@folder
-    @trash_enabled = DmsfFolder.deleted.where(:project_id => @project.id).any? ||
-      DmsfFile.deleted.where(:project_id => @project.id).any? ||
-      DmsfLink.deleted.where(:project_id => @project.id).any?
+    @trash_enabled = DmsfFolder.deleted.where(project_id: @project.id).exists? ||
+      DmsfFile.deleted.where(project_id: @project.id).exists? ||
+      DmsfLink.deleted.where(project_id: @project.id).exists?
   end
 
 end

@@ -42,10 +42,10 @@ module DmsfLinksHelper
   def files_for_select(project_id, folder_id)
     files = []
     if folder_id && (folder_id != '0')
-      folder = DmsfFolder.find_by_id folder_id
+      folder = DmsfFolder.find_by(id: folder_id)
       files = folder.dmsf_files.visible.to_a if folder
     elsif project_id
-      project = Project.find_by_id project_id
+      project = Project.find_by(id: project_id)
       files = project.dmsf_files.visible.to_a if project
     end
     files

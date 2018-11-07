@@ -19,18 +19,21 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfFileContainer < ActiveRecord::Migration
+
   def up
     remove_index :dmsf_files, :project_id
     rename_column :dmsf_files, :project_id, :container_id
-    add_column :dmsf_files, :container_type, :string, :limit => 30, :null => false, :default => 'Project'
-    DmsfFile.update_all(:container_type => 'Project')
-    add_index :dmsf_files, [:container_id, :container_type]
+    add_column :dmsf_files, :container_type, :string, limit: 30, null: false,
+               default: 'Project'
+    DmsfFile.update_all container_type: 'Project'
+    add_index :dmsf_files, [:container_id, :container_type], name: :index_dmsf_files_on_container_id_container_type
   end
 
   def down
     remove_index :dmsf_files, [:container_id, :container_type]
     remove_column :dmsf_files, :container_type
     rename_column :dmsf_files, :container_id, :project_id
-    add_index :dmsf_files, :project_id
+    add_index :dmsf_files, :project_id, name: :index_dmsf_files_on_project_id
   end
+
 end

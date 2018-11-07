@@ -49,7 +49,9 @@ dmsfAddLink.nextLinkId = 1000;
 
 function dmsfAddFile(inputEl, file, eagerUpload) {
 
-    if ($('#dmsf_attachments_fields').children().length < 10) {
+    var attachments = $('#dmsf_attachments_fields');
+
+    if (attachments.children().length < 10) {
 
         var attachmentId = dmsfAddFile.nextAttachmentId++;
         var fileSpan = $('<span>', { id: 'dmsf_attachments_' + attachmentId, 'class': 'attachment' });
@@ -82,11 +84,11 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
                 fileSpan.append(iconWf);
             }
 
-            $('#dmsf_attachments_fields').append(fileSpan);
+            attachments.append(fileSpan);
         }
         else{
             fileSpan.append(fileName);
-            $('#dmsf_attachments_fields').append(fileSpan);
+            attachments.append(fileSpan);
             $('#dmsf_file_revision_name').val(file.name);
         }
 

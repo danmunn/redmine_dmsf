@@ -24,11 +24,10 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
   fixtures :projects, :dmsf_files, :dmsf_file_revisions, :dmsf_links, :dmsf_folders, :dmsf_workflows, :users
 
   def setup
-    @project1 = Project.find_by_id 1
-    @project2 = Project.find_by_id 2
-    @project3 = Project.find_by_id 3
-    admin = User.find 1
-    User.current = admin
+    @project1 = Project.find 1
+    @project2 = Project.find 2
+    @project3 = Project.find 3
+    User.current = User.find 1
   end
 
   def test_truth
@@ -72,29 +71,29 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_copy_approval_workflows
-    assert_equal 1, @project1.dmsf_workflows.count
-    assert_equal 0, @project2.dmsf_workflows.count
+    assert_equal 1, @project1.dmsf_workflows.all.size
+    assert_equal 0, @project2.dmsf_workflows.all.size
     @project2.copy_approval_workflows(@project1)
-    assert_equal 1, @project2.dmsf_workflows.count
+    assert_equal 1, @project2.dmsf_workflows.all.size
   end
 
   def test_copy_dmsf
-    assert_equal 4, @project1.dmsf_files.visible.count
-    assert_equal 4, @project1.dmsf_folders.visible.count
-    assert_equal 1, @project1.file_links.visible.count
-    assert_equal 1, @project1.folder_links.visible.count
-    assert_equal 1, @project1.url_links.visible.count
-    assert_equal 0, @project3.dmsf_files.visible.count
-    assert_equal 0, @project3.dmsf_folders.count
-    assert_equal 0, @project3.file_links.visible.count
-    assert_equal 0, @project3.folder_links.visible.count
-    assert_equal 0, @project3.url_links.visible.count
+    assert_equal 4, @project1.dmsf_files.visible.all.size
+    assert_equal 4, @project1.dmsf_folders.visible.all.size
+    assert_equal 1, @project1.file_links.visible.all.size
+    assert_equal 1, @project1.folder_links.visible.all.size
+    assert_equal 1, @project1.url_links.visible.all.size
+    assert_equal 0, @project3.dmsf_files.visible.all.size
+    assert_equal 0, @project3.dmsf_folders.all.size
+    assert_equal 0, @project3.file_links.visible.all.size
+    assert_equal 0, @project3.folder_links.visible.all.size
+    assert_equal 0, @project3.url_links.visible.all.size
     @project3.copy_dmsf(@project1)
-    assert_equal 4, @project3.dmsf_files.visible.count
-    assert_equal 4, @project3.dmsf_folders.count
-    assert_equal 1, @project3.file_links.visible.count
-    assert_equal 1, @project3.folder_links.visible.count
-    assert_equal 1, @project3.url_links.visible.count
+    assert_equal 4, @project3.dmsf_files.visible.all.size
+    assert_equal 4, @project3.dmsf_folders.all.size
+    assert_equal 1, @project3.file_links.visible.all.size
+    assert_equal 1, @project3.folder_links.visible.all.size
+    assert_equal 1, @project3.url_links.visible.all.size
   end
 
 end

@@ -57,7 +57,7 @@ class DmsfFilesController < ApplicationController
       access.dmsf_file_revision = @revision
       access.action = DmsfFileRevisionAccess::DownloadAction
       access.save!
-      member = Member.where(:user_id => User.current.id, :project_id => @file.project.id).first
+      member = Member.where(user_id: User.current.id, project_id: @file.project.id).first
       if member && !member.dmsf_title_format.nil? && !member.dmsf_title_format.empty?
         title_format = member.dmsf_title_format
       else
@@ -118,7 +118,15 @@ class DmsfFilesController < ApplicationController
            revision.increase_version(version)
         end
         file_upload = params[:dmsf_attachments]['1'] if params[:dmsf_attachments].present?
-        unless file_upload
+        if file_upload
+          upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, file_upload)
+          if upload
+            revision.size = upload.size
+            revision.disk_filename = revision.new_storage_filename
+            revision.mime_type = upload.mime_type
+            revision.digest = DmsfFileRevision.create_digest upload.tempfile_path
+          end
+        else
           revision.size = last_revision.size
           revision.disk_filename = last_revision.disk_filename
           revision.mime_type = last_revision.mime_type
@@ -126,14 +134,6 @@ class DmsfFilesController < ApplicationController
             revision.digest = DmsfFileRevision.create_digest last_revision.disk_file
           else
             revision.digest = last_revision.digest
-          end
-        else
-          upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, file_upload)
-          if upload
-            revision.size = upload.size
-            revision.disk_filename = revision.new_storage_filename
-            revision.mime_type = upload.mime_type
-            revision.digest = DmsfFileRevision.create_digest upload.tempfile_path
           end
         end
 
@@ -167,7 +167,7 @@ class DmsfFilesController < ApplicationController
               recipients.each do |u|
                 DmsfMailer.files_updated(u, @project, [@file]).deliver
               end
-              if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
+              if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
                 unless recipients.empty?
                   to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                   to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
@@ -200,7 +200,7 @@ class DmsfFilesController < ApplicationController
             recipients.each do |u|
               DmsfMailer.files_deleted(u, @project, [@file]).deliver
             end
-            if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
+            if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
               unless recipients.empty?
                 to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                 to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
@@ -234,7 +234,7 @@ class DmsfFilesController < ApplicationController
       if @revision.delete(true)
         if @file.name != @file.last_revision.name
           @file.name = @file.last_revision.name
-          @file.save
+          @file.save!
         end
         flash[:notice] = l(:notice_revision_deleted)
       else

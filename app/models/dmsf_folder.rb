@@ -30,14 +30,14 @@ class DmsfFolder < ActiveRecord::Base
 
   has_many :dmsf_folders, -> { order :title }, :dependent => :destroy
   has_many :dmsf_files, :dependent => :destroy
-  has_many :folder_links, -> { where(:target_type => 'DmsfFolder').order(:name) },
+  has_many :folder_links, -> { where(target_type: 'DmsfFolder').order(:name) },
     :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
-  has_many :file_links, -> { where :target_type => 'DmsfFile' },
+  has_many :file_links, -> { where(target_type: 'DmsfFile') },
     :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
-  has_many :url_links, -> { where :target_type => 'DmsfUrl' },
+  has_many :url_links, -> { where(target_type: 'DmsfUrl') },
     :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
   has_many :dmsf_links, :dependent => :destroy
-  has_many :referenced_links, -> { where :target_type => 'DmsfFolder' },
+  has_many :referenced_links, -> { where(target_type: 'DmsfFolder') },
     :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
   has_many :locks, -> { where(entity_type:  1).order("#{DmsfLock.table_name}.updated_at DESC") },
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
@@ -67,18 +67,18 @@ class DmsfFolder < ActiveRecord::Base
 
   scope :visible, -> (system=true) { joins(:project).joins(
     "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
-    :deleted => STATUS_ACTIVE).where(DmsfFolder.visible_condition(system)).distinct
+    deleted: STATUS_ACTIVE).where(DmsfFolder.visible_condition(system)).distinct
   }
   scope :deleted, -> { joins(:project).joins(
     "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
-    :deleted => STATUS_DELETED).where(DmsfFolder.visible_condition).distinct
+    deleted: STATUS_DELETED).where(DmsfFolder.visible_condition).distinct
   }
-  scope :system, -> { where(:system => true) }
-  scope :notsystem, -> { where(:system => false) }
+  scope :system, -> { where(system: true) }
+  scope :notsystem, -> { where(system: false) }
 
   acts_as_customizable
 
-  acts_as_searchable :columns => ["#{self.table_name}.title", "#{self.table_name}.description"],
+  acts_as_searchable :columns => ["#{table_name}.title", "#{table_name}.description"],
         :project_key => 'project_id',
         :date_column => 'updated_at',
         :permission => :view_dmsf_files,
@@ -90,13 +90,11 @@ class DmsfFolder < ActiveRecord::Base
           :datetime => Proc.new {|o| o.updated_at },
           :author => Proc.new {|o| o.user }
 
-  validates_presence_of  :title, :project
+  validates :title, presence: true, dmsf_file_name: true
+  validates :project, presence: true
   validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted],
-    conditions: -> { where(:deleted => STATUS_ACTIVE) }
-  validates_format_of :title, :with => /\A[^#{INVALID_CHARACTERS}]*\z/,
-    :message => l(:error_contains_invalid_character)
-  validate :check_cycle
-  validates_length_of :description, :maximum => 65535
+    conditions: -> { where(deleted: STATUS_ACTIVE) }
+  validates :description, length: { maximum: 65535 }
 
   before_create :default_values
 
@@ -105,7 +103,7 @@ class DmsfFolder < ActiveRecord::Base
     return true if (User.current.admin? || folder.nil?)
     # System folder?
     if folder && folder.system
-      return false if !(allow_system || User.current.allowed_to?(:display_system_folders, folder.project))
+      return false unless allow_system || User.current.allowed_to?(:display_system_folders, folder.project)
       return false if folder.issue && !folder.issue.visible?(User.current)
     end
     # Permissions?
@@ -125,61 +123,48 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def default_values
-    if Setting.plugin_redmine_dmsf['dmsf_default_notifications'] == '1' && !self.system
+    if Setting.plugin_redmine_dmsf['dmsf_default_notifications'] == '1' && !system
       self.notification = true
     end
   end
 
-  def check_cycle
-    folders = []
-    self.dmsf_folders.each {|f| folders.push(f)}
-    self.dmsf_folders.each do |folder|
-      if folder == self.dmsf_folder
-        errors.add(:folder, l(:error_create_cycle_in_folder_dependency))
-        return false
-      end
-      folder.dmsf_folders.each {|f| folders.push(f)}
-    end
-    return true
-  end
-
   def self.find_by_title(project, folder, title)
     if folder
-      visible.where(:project_id => project.id, :dmsf_folder_id => nil, :title => title).first
+      visible.where(project_id: project.id, dmsf_folder_id: nil, title: title).first
     else
-      visible.where(:project_id => project.id, :dmsf_folder_id => folder.id, :title => title).first
+      visible.where(project_id: project.id, dmsf_folder_id: folder.id, title: title).first
     end
   end
 
   def delete(commit)
-    if self.locked?
+    if locked?
       errors[:base] << l(:error_folder_is_locked)
       return false
-    elsif !self.dmsf_folders.visible.empty? || !self.dmsf_files.visible.empty? || !self.dmsf_links.visible.empty?
+    elsif !dmsf_folders.visible.empty? || !dmsf_files.visible.empty? || !dmsf_links.visible.empty?
       errors[:base] << l(:error_folder_is_not_empty)
       return false
     end
     if commit
-      self.destroy
+      destroy
     else
       self.deleted = STATUS_DELETED
       self.deleted_by_user = User.current
-      self.save
+      save!
     end
   end
 
   def deleted?
-    self.deleted == STATUS_DELETED
+    deleted == STATUS_DELETED
   end
 
   def restore
-    if self.dmsf_folder_id && (self.dmsf_folder.nil? || self.dmsf_folder.deleted?)
+    if dmsf_folder_id && (nil? || dmsf_folder.deleted?)
       errors[:base] << l(:error_parent_folder)
       return false
     end
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
-    self.save
+    save!
   end
 
   def dmsf_path
@@ -193,34 +178,31 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def dmsf_path_str
-    path = self.dmsf_path
+    path = dmsf_path
     string_path = path.map { |element| element.title }
     string_path.join('/')
   end
 
   def notify?
-    return true if self.notification
-    return true if self.dmsf_folder && self.dmsf_folder.notify?
-    return true if !self.dmsf_folder && self.project.dmsf_notification
-    return false
+    return true if notification
+    return true if dmsf_folder && dmsf_folder.notify?
+    return true if !dmsf_folder && project.dmsf_notification
+    false
   end
 
   def notify_deactivate
     self.notification = nil
-    self.save!
+    save!
   end
 
   def notify_activate
     self.notification = true
-    self.save!
+    save!
   end
 
   def self.directory_tree(project, current_folder = nil)
-    unless project.is_a? Project
-      project = Project.find_by_id project
-    end
     tree = [[l(:link_documents), nil]]
-    folders = DmsfFolder.where(:project_id => project.id).visible(false).to_a
+    folders = DmsfFolder.where(project_id: project.id).visible(false).to_a
     folders.delete(current_folder)
     folders = folders.delete_if{ |f| f.locked_for_user? }
     folders.each do |folder|
@@ -231,9 +213,9 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def folder_tree
-    tree = [[self.title, self.id]]
+    tree = [[title, id]]
     DmsfFolder.directory_subtree(tree, self, 1, nil)
-    return tree
+    tree
   end
 
   def self.file_list(files)
@@ -246,21 +228,21 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def deep_file_count
-    file_count = self.dmsf_files.visible.count
-    self.dmsf_folders.visible.each { |subfolder| file_count += subfolder.deep_file_count }
-    file_count + self.file_links.visible.count + self.url_links.visible.count
+    file_count = dmsf_files.visible.all.size
+    dmsf_folders.visible.each { |subfolder| file_count += subfolder.deep_file_count }
+    file_count + file_links.visible.all.size + url_links.visible.all.size
   end
 
   def deep_folder_count
-    folder_count = self.dmsf_folders.visible.count
-    self.dmsf_folders.visible.each { |subfolder| folder_count += subfolder.deep_folder_count }
-    folder_count + self.folder_links.visible.count
+    folder_count = dmsf_folders.visible.all.size
+    dmsf_folders.visible.each { |subfolder| folder_count += subfolder.deep_folder_count }
+    folder_count + folder_links.visible.all.size
   end
 
   def deep_size
     size = 0
-    self.dmsf_files.visible.each {|file| size += file.size}
-    self.dmsf_folders.visible.each {|subfolder| size += subfolder.deep_size}
+    dmsf_files.visible.each {|file| size += file.size}
+    dmsf_folders.visible.each {|subfolder| size += subfolder.deep_size}
     size
   end
 
@@ -282,42 +264,42 @@ class DmsfFolder < ActiveRecord::Base
     new_folder = DmsfFolder.new
     new_folder.dmsf_folder = folder ? folder : nil
     new_folder.project = folder ? folder.project : project
-    new_folder.title = self.title
-    new_folder.description = self.description
+    new_folder.title = title
+    new_folder.description = description
     new_folder.user = User.current
 
     new_folder.custom_values = []
-    self.custom_values.each do |cv|
+    custom_values.each do |cv|
       new_folder.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
     end
 
     return new_folder unless new_folder.save
 
-    self.dmsf_files.visible.each do |f|
+    dmsf_files.visible.each do |f|
       f.copy_to project, new_folder
     end
 
-    self.dmsf_folders.visible.each do |s|
+    dmsf_folders.visible.each do |s|
       s.copy_to project, new_folder
     end
 
-    self.folder_links.visible.each do |l|
+    folder_links.visible.each do |l|
       l.copy_to project, new_folder
     end
 
-    self.file_links.visible.each do |l|
+    file_links.visible.each do |l|
       l.copy_to project, new_folder
     end
 
-    self.url_links.visible.each do |l|
+    url_links.visible.each do |l|
       l.copy_to project, new_folder
     end
 
-    self.dmsf_folder_permissions.each do |p|
+    dmsf_folder_permissions.each do |p|
       p.copy_to new_folder
     end
 
-    return new_folder
+    new_folder
   end
 
   # Overrides Redmine::Acts::Customizable::InstanceMethods#available_custom_fields
@@ -329,24 +311,24 @@ class DmsfFolder < ActiveRecord::Base
     last_update = updated_at
     time = DmsfFolder.where(
       ['project_id = ? AND dmsf_folder_id = ? AND updated_at > ?',
-       self.project_id, self.id, last_update]).maximum(:updated_at)
+       project_id, id, last_update]).maximum(:updated_at)
     last_update = time if time
     time = DmsfFile.where(
       ['project_id = ? AND dmsf_folder_id = ? AND updated_at > ?',
-       self.project_id, self.id, last_update]).maximum(:updated_at)
+       project_id, id, last_update]).maximum(:updated_at)
     last_update = time if time
     time = DmsfLink.where(
       ['project_id = ? AND dmsf_folder_id = ? AND updated_at > ?',
-       self.project_id, self.id, last_update]).maximum(:updated_at)
+       project_id, id, last_update]).maximum(:updated_at)
     last_update = time if time
     last_update
   end
 
   # Number of items in the folder
   def items
-    dmsf_folders.visible.where(:project_id => self.project_id).count +
-    dmsf_files.visible.where(:project_id => self.project_id).count +
-    dmsf_links.visible.where(:project_id => self.project_id).count
+    dmsf_folders.visible.where(project_id: project_id).all.size +
+    dmsf_files.visible.where(project_id: project_id).all.size +
+    dmsf_links.visible.where(project_id: project_id).all.size
   end
   
   def self.is_column_on?(column)
@@ -356,7 +338,7 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def custom_value(custom_field)
-    self.custom_field_values.each do |cv|
+    custom_field_values.each do |cv|
       return cv.value if cv.custom_field == custom_field
     end
     nil
@@ -424,8 +406,7 @@ class DmsfFolder < ActiveRecord::Base
       return nil if column == 'author'
     end
     # 9 - custom fields
-    cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField')
-    cfs.each do |c|
+    CustomField.where(type: 'DmsfFileRevisionCustomField').each do |c|
       if DmsfFolder.is_column_on?(c.name)
         pos += 1
       end
@@ -457,44 +438,43 @@ class DmsfFolder < ActiveRecord::Base
   def to_csv(columns, level)
     csv = []
     # Project
-    csv << self.project.name if columns.include?(l(:field_project))
+    csv << project.name if columns.include?(l(:field_project))
     # Id
-    csv << self.id if columns.include?('id')
+    csv << id if columns.include?('id')
     # Title
-    csv << self.title.insert(0, '  ' * level) if columns.include?('title')
+    csv << title.insert(0, '  ' * level) if columns.include?('title')
     # Extension
     csv << '' if columns.include?('extension')
     # Size
     csv << '' if columns.include?('size')
     # Modified
-    csv << format_time(self.updated_at) if columns.include?('modified')
+    csv << format_time(updated_at) if columns.include?('modified')
     # Version
     csv << '' if columns.include?('version')
     # Workflow
     csv << '' if columns.include?('workflow')
     # Author
-    csv << self.user.name if columns.include?('author')
+    csv << user.name if columns.include?('author')
     # Last approver
     csv << '' if columns.include?(l(:label_last_approver))
     # Url
     if columns.include?(l(:label_document_url))
       default_url_options[:host] = Setting.host_name
-      csv << url_for(:controller => :dmsf, :action => 'show', :id => self.project_id, :folder_id => self.id)
+      csv << url_for(:controller => :dmsf, :action => 'show', :id => project_id, :folder_id => id)
     end
     # Revision
     csv << '' if columns.include?(l(:label_last_revision_id))
     # Custom fields
-    cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position)
-    cfs.each do |c|
-      csv << self.custom_value(c) if columns.include?(c.name)
+    CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c|
+      csv << custom_value(c) if columns.include?(c.name)
     end
     csv
   end
 
   def get_locked_title
-    if self.locked_for_user?
-      if self.lock.reverse[0].user
-        return l(:title_locked_by_user, :user => self.lock.reverse[0].user)
+    if locked_for_user?
+      if lock.reverse[0].user
+        return l(:title_locked_by_user, :user => lock.reverse[0].user)
       else
         return l(:notice_account_unknown_email)
       end
@@ -504,9 +484,9 @@ class DmsfFolder < ActiveRecord::Base
 
   def issue
     unless @issue
-      if self.system
-        issue_id = self.title.to_i
-        @issue = Issue.find_by_id(issue_id) if issue_id > 0
+      if system
+        issue_id = title.to_i
+        @issue = Issue.find_by(id: issue_id) if issue_id > 0
       end
     end
     @issue
@@ -520,18 +500,18 @@ class DmsfFolder < ActiveRecord::Base
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
       params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
-        self.custom_field_values[i].value = v[1]
+        custom_field_values[i].value = v[1]
       end
     end
     # Permissions
-    self.dmsf_folder_permissions.delete_all
+    dmsf_folder_permissions.delete_all
     if params[:permissions]
       if params[:permissions][:role_ids]
         params[:permissions][:role_ids].each do |role_id|
           permission = DmsfFolderPermission.new
           permission.object_id = role_id
           permission.object_type = Role.model_name.to_s
-          self.dmsf_folder_permissions << permission
+          dmsf_folder_permissions << permission
         end
       end
       if params[:permissions][:user_ids]
@@ -539,12 +519,12 @@ class DmsfFolder < ActiveRecord::Base
           permission = DmsfFolderPermission.new
           permission.object_id = user_id
           permission.object_type = User.model_name.to_s
-          self.dmsf_folder_permissions << permission
+          dmsf_folder_permissions << permission
         end
       end
     end
     # Save
-    self.save
+    save!
   end
 
   def self.get_valid_title(title)
@@ -557,7 +537,7 @@ class DmsfFolder < ActiveRecord::Base
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)
-    folders = DmsfFolder.where(:project_id => folder.project_id, :dmsf_folder_id => folder.id).notsystem.visible(false).to_a
+    folders = DmsfFolder.where(project_id: folder.project_id, dmsf_folder_id: folder.id).notsystem.visible(false).to_a
     folders.delete(current_folder)
     folders.delete_if { |f| f.locked_for_user? }
     folders.each do |subfolder|

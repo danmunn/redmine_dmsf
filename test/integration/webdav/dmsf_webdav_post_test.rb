@@ -27,20 +27,24 @@ class DmsfWebdavPostTest < RedmineDmsf::Test::IntegrationTest
 
   def setup
     @admin = credentials 'admin'
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'    
+    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
+  end
+
+  def teardown
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
   end
   
   # Test that any post request is authenticated
   def test_post_request_authenticated
     post '/dmsf/webdav/'
-    assert_response 401 # 401 Unauthorized
+    assert_response :unauthorized
   end
 
   # Test post is not implemented
   def test_post_not_implemented
     post '/dmsf/webdav/', nil, @admin
-    assert_response :error # 501 Not Implemented
+    assert_response :not_implemented
   end
   
 end

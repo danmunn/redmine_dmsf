@@ -34,7 +34,7 @@ module RedmineDmsf
         if context.is_a?(Hash)
           issue = context[:issue]
           params = context[:params]
-          copied_from = Issue.find_by_id(params[:copy_from]) if params[:copy_from].present?
+          copied_from = Issue.find_by(id: params[:copy_from]) if params[:copy_from].present?
           # Save documents
           if copied_from
             copied_from.dmsf_files.each do |dmsf_file|

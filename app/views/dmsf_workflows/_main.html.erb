@@ -43,12 +43,12 @@
   <table class="list">
     <thead><tr>
       <th><%=l(:field_name)%></th>    
-      <th></th>
+      <th/>
     </tr></thead>
     <tbody>
-      <% for workflow in @workflows %>
+      <% @workflows.each do |workflow| %>
         <tr id="workflow-<%= workflow.id %>" class="dmsf_workflows <%= workflow.active? ? 'active' : 'locked' %>">
-          <td class="name"><%= link_to(h(workflow.name), dmsf_workflow_path(workflow)) %></td>          
+          <td class="name"><%= link_to(h(workflow.name), dmsf_workflow_path(workflow)) %></td>
           <td class="buttons">
             <%= change_status_link(workflow) unless @project %>
             <%= delete_link dmsf_workflow_path(workflow) %>

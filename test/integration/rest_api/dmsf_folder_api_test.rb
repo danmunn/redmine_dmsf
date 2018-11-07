@@ -27,16 +27,28 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
            :member_roles
 
   def setup
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
-    @admin = User.find_by_id 1
-    @jsmith = User.find_by_id 2
-    @file1 = DmsfFile.find_by_id 1
-    @folder1 = DmsfFolder.find_by_id 1
-    @folder7 = DmsfFolder.find_by_id 7
+    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../../fixtures/dmsf', __FILE__)
+    FileUtils.cp_r(File.expand_path('../../../fixtures/files', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
+    @admin = User.find 1
+    @jsmith = User.find 2
+    @file1 = DmsfFile.find 1
+    @folder1 = DmsfFolder.find 1
+    @folder7 = DmsfFolder.find 7
     Setting.rest_api_enabled = '1'
-    @role = Role.find_by_id 1
-    @project1 = Project.find_by_id 1
+    @role = Role.find_by(name: 'Manager')
+    @project1 = Project.find 1
     @project1.enable_module! :dmsf
+  end
+
+  def teardown
+    # Delete our tmp folder
+    begin
+      FileUtils.rm_rf DmsfFile.storage_path
+    rescue Exception => e
+      error e.message
+    end
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
   end
 
   def test_truth
@@ -133,14 +145,12 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :folder_manipulation
     token = Token.create!(:user => @jsmith, :action => 'api')
     #curl -v -H "Content-Type: application/xml" -X POST --data "@folder.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/create.xml
-    payload = %{
-      <?xml version="1.0" encoding="utf-8" ?>
-      <dmsf_folder>
-        <title>rest_api</title>
-        <description>A folder created via REST API</description>
-        <dmsf_folder_id/>
-      </dmsf_folder>
-    }
+    payload = %{<?xml version="1.0" encoding="utf-8" ?>
+                <dmsf_folder>
+                  <title>rest_api</title>
+                  <description>A folder created via REST API</description>
+                  <dmsf_folder_id/>
+                </dmsf_folder>}
     post "/projects/#{@project1.id}/dmsf/create.xml?key=#{token.value}", payload, {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
@@ -184,7 +194,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_title=Updated%20title
     get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&folder_title=xxx"
-    assert_response :missing
+    assert_response :not_found
   end
 
   def test_find_folder_by_id
@@ -220,20 +230,18 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KE" http://localhost:3000/projects/1/dmsf.json?folder_id=3
     get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&folder_id=99999999999"
-    assert_response :missing
+    assert_response :not_found
   end
 
   def test_update_folder
     @role.add_permission! :folder_manipulation
     token = Token.create!(:user => @jsmith, :action => 'api')
     #curl -v -H "Content-Type: application/json" -X POST --data "@update-folder-payload.json" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000//projects/#{project_id}/dmsf/save.json
-    payload = %{
-      <?xml version="1.0" encoding="utf-8" ?>
-        <dmsf_folder>
-          <title>rest_api</title>
-          <description>A folder updated via REST API</description>
-        </dmsf_folder>
-    }
+    payload = %{<?xml version="1.0" encoding="utf-8" ?>
+                <dmsf_folder>
+                  <title>rest_api</title>
+                  <description>A folder updated via REST API</description>
+                </dmsf_folder>}
     post "/projects/#{@project1.id}/dmsf/save.xml?folder_id=1&key=#{token.value}", payload, {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
@@ -272,7 +280,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}&commit=yes",
            {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
-    assert_nil DmsfFolder.find_by_id(@folder1.id)
+    assert_nil DmsfFolder.find_by(id: @folder1.id)
   end
 
   def test_delete_folder_locked

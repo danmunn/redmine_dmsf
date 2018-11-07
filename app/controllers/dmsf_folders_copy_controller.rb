@@ -48,20 +48,20 @@ class DmsfFoldersCopyController < ApplicationController
   def move
     @folder.project = @target_project
     @folder.dmsf_folder = @target_folder
-    unless @folder.save
+    if @folder.save
+      flash[:notice] = l(:notice_successful_update)
+      redirect_to dmsf_folder_path(:id => @target_project, :folder_id => @folder)
+    else
       flash[:error] = @folder.errors.full_messages.join(', ')
       redirect_to :action => 'new', :id => @folder, :target_project_id => @target_project,
                   :target_folder_id => @target_folder
-    else
-      flash[:notice] = l(:notice_successful_update)
-      redirect_to dmsf_folder_path(:id => @target_project, :folder_id => @folder)
     end
   end
 
   private
 
   def find_folder
-    unless DmsfFolder.where(:id => params[:id]).exists?
+    unless DmsfFolder.where(id: params[:id]).exists?
       render_404
       return
     end
@@ -79,7 +79,7 @@ class DmsfFoldersCopyController < ApplicationController
     end
     if params[:target_folder_id].present?
       @target_folder = DmsfFolder.find(params[:target_folder_id])
-      unless DmsfFolder.visible.where(:id => params[:target_folder_id]).exists?
+      unless DmsfFolder.visible.where(id: params[:target_folder_id]).exists?
         render_403
         return
       end

@@ -76,8 +76,7 @@
         <% if DmsfFolder.is_column_on?('author') %>
           <th class="dmsf_th"><%= l(:link_author) %></th>
         <% end %>
-        <% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
-        <% cfs.each do |c| %>
+        <% CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c| %>
             <% if DmsfFolder.is_column_on?(c.name) %>
                 <th class="dmsf_th"><%= h(c.name) %></th>
             <% end %>

@@ -34,15 +34,15 @@ class DmsfFolderPermissionTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_scope
-    assert_equal 2, DmsfFolderPermission.count
+    assert_equal 2, DmsfFolderPermission.all.size
   end
 
   def test_scope_users
-    assert_equal 1, DmsfFolderPermission.users.count
+    assert_equal 1, DmsfFolderPermission.users.all.size
   end
 
   def test_scope_roles
-    assert_equal 1, DmsfFolderPermission.roles.count
+    assert_equal 1, DmsfFolderPermission.roles.all.size
   end
 
   def test_copy_to

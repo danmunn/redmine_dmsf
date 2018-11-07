@@ -19,13 +19,16 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class ApprovalWorkflowStatus < ActiveRecord::Migration
-  def self.up
-    add_column :dmsf_workflows, :status, :integer, :null => false, :default => DmsfWorkflow::STATUS_ACTIVE
+
+  def up
+    add_column :dmsf_workflows, :status, :integer, null: false,
+               default: DmsfWorkflow::STATUS_ACTIVE
     DmsfWorkflow.reset_column_information
-    DmsfWorkflow.all.each {|wf| wf.update_attribute(:status, DmsfWorkflow::STATUS_ACTIVE)}
+    DmsfWorkflow.all.each { |wf| wf.update_attribute(:status, DmsfWorkflow::STATUS_ACTIVE) }
   end
 
-  def self.down
+  def down
     remove_column :dmsf_workflows, :status        
   end
+
 end

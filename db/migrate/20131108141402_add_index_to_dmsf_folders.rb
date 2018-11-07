@@ -19,11 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class AddIndexToDmsfFolders < ActiveRecord::Migration
-  def self.up    
-    add_index :dmsf_folders, :project_id
+
+  def change
+    add_index :dmsf_folders, :project_id, name: :index_dmsf_folders_on_project_id
   end
 
-  def self.down    
-    remove_index :dmsf_folders, :project_id
-  end
 end

@@ -22,7 +22,7 @@
 
 <td class="dmsf_checkbox"><%= check_box_tag('ids[]', "#{name}-#{id}", false) %></td>
 <% if DmsfFolder.is_column_on?('id') %>
-    <td class="id"></td>
+  <td class="id"></td>
 <% end %>
 <% if DmsfFolder.is_column_on?('title') %>
   <td class="dmsf_title">
@@ -51,8 +51,7 @@
 <% if DmsfFolder.is_column_on?('author') %>
   <td class="dmsf_author"><%= h(link.user) %></td>
 <% end %>
-<% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
-<% cfs.each do |c| %>
+<% CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c| %>
   <% if DmsfFolder.is_column_on?(c.name) %>
     <td class="dmsf_cf"></td>
   <% end %>

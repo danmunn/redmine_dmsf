@@ -19,13 +19,15 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfDescriptionLimit < ActiveRecord::Migration
+
   def up
-    change_column :projects, :dmsf_description, :text, :null => true, :limit => 65535
-    change_column :dmsf_folders, :description, :text,:null => true, :limit => 65535
+    change_column :projects, :dmsf_description, :text, null: true, limit: 65535
+    change_column :dmsf_folders, :description, :text, null: true, limit: 65535
   end
 
   def down
     change_column :projects, :dmsf_description, :text
     change_column :dmsf_folders, :description, :text
   end
+
 end

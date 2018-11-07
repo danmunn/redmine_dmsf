@@ -82,7 +82,7 @@ module RedmineDmsf
               end
             end
           end
-          copied_from = EasyCrmCase.find_by_id(params[:copy_from]) if params[:copy_from].present?
+          copied_from = EasyCrmCase.find_by(id: params[:copy_from]) if params[:copy_from].present?
           # Save documents
           if copied_from
             copied_from.dmsf_files.each do |dmsf_file|

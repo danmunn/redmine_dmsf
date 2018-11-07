@@ -93,8 +93,8 @@ module RedmineDmsf
 
       def parent
         p = @__proxy.parent
-        return nil if p.nil? 
-        return p.resource.nil? ? p : p.resource
+        return nil unless p
+        p.resource.nil? ? p : p.resource
       end
 
       def options(request, response)
@@ -118,7 +118,7 @@ module RedmineDmsf
           if pinfo.length > 0
             if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
               if pinfo.first =~ /(\d+)$/
-                @project = Project.find_by_id($1)
+                @project = Project.find_by(id: $1)
                 Rails.logger.error("No project found on path '#{@path}'") unless @project
               end
             else

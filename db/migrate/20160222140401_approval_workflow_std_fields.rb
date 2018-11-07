@@ -19,7 +19,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class ApprovalWorkflowStdFields < ActiveRecord::Migration
-  def self.up
+
+  def up
     add_column :dmsf_workflows, :updated_on, :timestamp
     add_column :dmsf_workflows, :created_on, :datetime
     add_column :dmsf_workflows, :author_id, :integer
@@ -27,13 +28,14 @@ class ApprovalWorkflowStdFields < ActiveRecord::Migration
     # Set updated_on
     DmsfWorkflow.all.each(&:touch)
     # Set created_on and author_id
-    admin = User.active.where(admin: true).first
-    DmsfWorkflow.update_all "created_on = updated_on, author_id = #{admin.id}" if admin
+    admin_ids = User.active.where(admin: true).limit(1).ids
+    DmsfWorkflow.update_all(created_on: :updated_on, author_id: admin_ids.first)
   end
 
-  def self.down
+  def down
     remove_column :dmsf_workflows, :updated_on
     remove_column :dmsf_workflows, :created_on
     remove_column :dmsf_workflows, :author_id
   end
+
 end

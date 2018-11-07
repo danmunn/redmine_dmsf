@@ -168,8 +168,6 @@ nl:
   permission_email_documents: Email documents
   label_file: Bestand
   field_folder: Map
-  error_create_cycle_in_folder_dependency: maak cyclus in de map afhankelijkheid
-  error_contains_invalid_character: bevat ongeldige teken(s)
   error_file_commit_require_uploaded_file: Bestand indienen vereist geüpload bestand
 
   warning_some_files_were_not_commited: Sommige bestanden zijn niet ingediend door
@@ -418,3 +416,8 @@ nl:
       dmsf_open_approvals: My open approvals
     module_category:
       easy_dms: Easy DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: bevat ongeldige teken(s)

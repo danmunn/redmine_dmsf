@@ -105,7 +105,7 @@ class DmsfConvertDocuments
             end
           end
 
-          folders << folder;
+          folders << folder
 
           files = []          
           document.attachments.each do |attachment|

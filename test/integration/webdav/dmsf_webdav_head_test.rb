@@ -29,17 +29,34 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
   def setup  
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
-    @project1 = Project.find_by_id 1
+    @project1 = Project.find 1
     @project1.enable_module!('dmsf')
-    @project2 = Project.find_by_id 2
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
+    @project2 = Project.find 2
+    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
+    @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    # Temporarily enable project names
+    @dmsf_webdav_use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     @project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
+    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../../fixtures/dmsf', __FILE__)
+    FileUtils.cp_r(File.expand_path('../../../fixtures/files', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
     User.current = nil    
+  end
+
+  def teardown
+    # Delete our tmp folder
+    begin
+      FileUtils.rm_rf DmsfFile.storage_path
+    rescue Exception => e
+      error e.message
+    end
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
+    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
   end
   
   def test_truth
@@ -49,7 +66,7 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
 
   def test_head_requires_authentication
     head "/dmsf/webdav/#{@project1.identifier}"
-    assert_response 401
+    assert_response :unauthorized
     check_headers_dont_exist
   end
 
@@ -57,14 +74,11 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     head "/dmsf/webdav/#{@project1.identifier}", nil, @admin
     assert_response :success
     check_headers_exist
-
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-      head "/dmsf/webdav/#{@project1.identifier}", nil, @admin
-      assert_response 404
-      head "/dmsf/webdav/#{@project1_uri}", nil, @admin
-      assert_response :success
-    end
+    head "/dmsf/webdav/#{@project1.identifier}", nil, @admin
+    assert_response :not_found
+    head "/dmsf/webdav/#{@project1_uri}", nil, @admin
+    assert_response :success
   end
 
   # Note:
@@ -76,49 +90,46 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
     assert_response :success
     check_headers_exist # Note it'll allow 1 out of the 3 expected to fail
-
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-      head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
-      assert_response 404
-      head "/dmsf/webdav/#{@project1_uri}/test.txt", nil, @admin
-      assert_response :success
-    end
+    head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
+    assert_response :not_found
+    head "/dmsf/webdav/#{@project1_uri}/test.txt", nil, @admin
+    assert_response :success
   end
 
   def test_head_responds_to_file_anonymous_other_user_agent
     head "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, {:HTTP_USER_AGENT => 'Other'}
-    assert_response 401
+    assert_response :unauthorized
     check_headers_dont_exist
   end
 
   def test_head_fails_when_file_not_found
     head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", nil, @admin
-    assert_response :missing
+    assert_response :not_found
     check_headers_dont_exist
   end
 
   def test_head_fails_when_file_not_found_anonymous_other_user_agent
     head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", nil, {:HTTP_USER_AGENT => 'Other'}
-    assert_response 401
+    assert_response :unauthorized
     check_headers_dont_exist
   end
 
   def test_head_fails_when_folder_not_found
     head '/dmsf/webdav/folder_not_here', nil, @admin
-    assert_response :missing
+    assert_response :not_found
     check_headers_dont_exist
   end
 
   def test_head_fails_when_folder_not_found_anonymous_other_user_agent
     head '/dmsf/webdav/folder_not_here', nil, {:HTTP_USER_AGENT => 'Other'}
-    assert_response 401
+    assert_response :unauthorized
     check_headers_dont_exist
   end
 
   def test_head_fails_when_project_is_not_enabled_for_dmsf
     head "/dmsf/webdav/#{@project2.identifier}/test.txt", nil, @jsmith
-    assert_response :missing
+    assert_response :not_found
     check_headers_dont_exist
   end
 
@@ -134,7 +145,7 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     single_optional = false
     values.each do |key,val|
       if val.is_a?(Hash)
-        if (val[:optional].nil? || !val[:optional])
+        if val[:optional].nil? || !val[:optional]
            assert(!(val[:content].nil? || val[:content].empty?), "Expected header #{key} was empty." ) if single_optional
         else
           single_optional = true
@@ -148,7 +159,7 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
   def check_headers_dont_exist
     assert !(response.headers.nil? || response.headers.empty?), 'Head returned without headers' # Headers exist?
     values = {}
-    values[:etag] = response.headers['Etag'];
+    values[:etag] = response.headers['Etag']
     values[:last_modified] = response.headers['Last-Modified']
     values.each do |key,val|
       assert (val.nil? || val.empty?), "Expected header #{key} should be empty."

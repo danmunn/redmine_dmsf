@@ -168,8 +168,6 @@ pt-BR:
   permission_email_documents: Email documents
   label_file: Arquivo
   field_folder: Pasta
-  error_create_cycle_in_folder_dependency: Dependência entre pastas
-  error_contains_invalid_character: Contém caracteres inválidos
   error_file_commit_require_uploaded_file: É necessário carregar um arquivo
 
   warning_some_files_were_not_commited: "O(s) arquivo(s) não foram salvos: %{files}"
@@ -418,3 +416,8 @@ pt-BR:
       dmsf_open_approvals: My open approvals
     module_category:
       easy_dms: Easy DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: Contém caracteres inválidos

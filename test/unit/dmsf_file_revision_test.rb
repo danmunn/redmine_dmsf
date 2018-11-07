@@ -28,19 +28,33 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
            :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions
          
   def setup
-    @revision1 = DmsfFileRevision.find_by_id 1
-    @revision2 = DmsfFileRevision.find_by_id 2
-    @revision5 = DmsfFileRevision.find_by_id 5
-    @revision8 = DmsfFileRevision.find_by_id 8
-    @wf1 = DmsfWorkflow.find_by_id 1
-    @admin = User.find_by_id 1
-    @jsmith = User.find_by_id 2
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
+    @revision1 = DmsfFileRevision.find 1
+    @revision2 = DmsfFileRevision.find 2
+    @revision3 = DmsfFileRevision.find 3
+    @revision5 = DmsfFileRevision.find 5
+    @revision8 = DmsfFileRevision.find 8
+    @wf1 = DmsfWorkflow.find 1
+    @admin = User.find 1
+    @jsmith = User.find 2
+    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../fixtures/dmsf', __FILE__)
+    FileUtils.cp_r(File.expand_path('../../fixtures/files', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
+  end
+
+  def teardown
+    # Delete our tmp folder
+    begin
+      FileUtils.rm_rf DmsfFile.storage_path
+    rescue Exception => e
+      error e.message
+    end
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
   end
   
   def test_truth
     assert_kind_of DmsfFileRevision, @revision1
     assert_kind_of DmsfFileRevision, @revision2
+    assert_kind_of DmsfFileRevision, @revision3
     assert_kind_of DmsfFileRevision, @revision5
     assert_kind_of DmsfFileRevision, @revision8
     assert_kind_of DmsfWorkflow, @wf1
@@ -59,7 +73,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
 
   def test_destroy
     @revision5.delete true
-    assert_nil DmsfFileRevision.find_by_id @revision5.id
+    assert_nil DmsfFileRevision.find_by(id: @revision5.id)
   end
 
   def test_create_digest
@@ -108,10 +122,10 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     # same second, so wait until the microsecond part of the DateTime is less than 10 ms, should be
     # plenty of time to do the rest then.
     wait_timeout = 2000
-    while (DateTime.now.usec > 10*1000)
+    while DateTime.current.usec > 10000
         wait_timeout -= 10
         if wait_timeout <= 0
-            flunk "Waited too long."
+            flunk 'Waited too long.'
         end
         sleep 0.01
     end
@@ -125,11 +139,10 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     end
 
     # Directly after the file has been stored generate the r2 storage filename.
-    # Hopefully the seconds part of the DateTime.now has not changed and the generated filename will
+    # Hopefully the seconds part of the DateTime.current has not changed and the generated filename will
     # be on the same second but it should then be increased by 1.
     r2.disk_filename = r2.new_storage_filename
-
-    assert_not_equal r1.disk_filename, r2.disk_filename, "The disk filename should not be equal for two revisions."
+    assert_not_equal r1.disk_filename, r2.disk_filename, 'The disk filename should not be equal for two revisions.'
   end
 
   def test_workflow_tooltip

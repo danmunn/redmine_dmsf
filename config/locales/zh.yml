@@ -43,7 +43,7 @@ zh:
   error_folder_is_not_empty: 非空文件夹
   error_folder_title_is_already_used: 标题已经被使用
   notice_folder_details_were_saved: 文件夹详细信息已保存
-  error_file_is_locked: Folder is locked
+  error_folder_is_locked: 資料夾己經鎖定
   error_file_is_locked: 文件被锁定
   notice_file_deleted: 文件已删除
   error_at_least_one_revision_must_be_present: 至少一个修订版本必须存在
@@ -168,7 +168,6 @@ zh:
   permission_email_documents: Email documents
   label_file: 文件
   field_folder: 件夹
-  error_create_cycle_in_folder_dependency: create cycle in folder dependency
   error_contains_invalid_character: 含有无效字符
   error_file_commit_require_uploaded_file: 文件提交要求上传文件
 
@@ -418,3 +417,8 @@ zh:
       dmsf_open_approvals: My open approvals
     module_category:
       easy_dms: Easy DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: 含有无效字符

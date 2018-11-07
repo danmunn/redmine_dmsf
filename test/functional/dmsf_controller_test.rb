@@ -28,20 +28,19 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     :dmsf_files, :dmsf_file_revisions, :dmsf_folder_permissions, :dmsf_locks
 
   def setup
-    @project = Project.find_by_id 1
-    assert_not_nil @project
+    @project = Project.find 1
     @project.enable_module! :dmsf
-    @folder1 = DmsfFolder.find_by_id 1
-    @folder2 = DmsfFolder.find_by_id 2
-    @folder4 = DmsfFolder.find_by_id 4
-    @file1 = DmsfFile.find_by_id 1
-    @file_link2 = DmsfLink.find_by_id 4
-    @folder_link1 = DmsfLink.find_by_id 1
-    @role = Role.find_by_id 1
-    @custom_field = CustomField.find_by_id 21
-    @custom_value = CustomValue.find_by_id 21
-    @folder7 = DmsfFolder.find_by_id 7
-    @manager = User.find_by_id 2 #1
+    @folder1 = DmsfFolder.find 1
+    @folder2 = DmsfFolder.find 2
+    @folder4 = DmsfFolder.find 4
+    @file1 = DmsfFile.find 1
+    @file_link2 = DmsfLink.find 4
+    @folder_link1 = DmsfLink.find 1
+    @role = Role.find 1
+    @custom_field = CustomField.find 21
+    @custom_value = CustomValue.find 21
+    @folder7 = DmsfFolder.find 7
+    @manager = User.find 2 #1
     User.current = nil
     @request.session[:user_id] = @manager.id
   end
@@ -204,7 +203,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_show_csv
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders
-    get :show, :id => @project.id, :format => 'csv', :settings => {:dmsf_columns => ['id', 'title']}
+    get :show, id: @project.id, format: 'csv', :settings => { dmsf_columns: %w(id title) }
     assert_response :success
     assert_equal 'text/csv; header=present', @response.content_type
   end
@@ -215,7 +214,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_response :forbidden
   end
 
-  def test_new_forbidden
+  def test_new
     @role.add_permission! :folder_manipulation
     get :new, :id => @project, :parent_id => nil
     assert_response :success
@@ -240,7 +239,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_email_entries_links_only
-    Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] = '1'
+    Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] = true
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
     @role.add_permission! :view_dmsf_files
     get :entries_operation, :id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]
@@ -264,7 +263,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_response :forbidden
   end
 
-  def test_append_email_forbidden
+  def test_append_email
     @role.add_permission! :view_dmsf_files
     post :append_email, :id => @project, :user_ids => @project.members.collect{ |m| m.user.id }, :format => 'js'
     assert_response :success

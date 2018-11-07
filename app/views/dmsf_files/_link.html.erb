@@ -66,7 +66,7 @@
     <% else %>
       <span class="icon-only icon-unlock" title="<%= dmsf_file.get_locked_title %>"></span>
     <% end %>
-    <% unless dmsf_file.locked? %>
+    <% if !dmsf_file.locked? %>
       <% # Notifications %>
       <% if dmsf_file.notification %>
         <%= link_to('', notify_deactivate_dmsf_files_path(:id => dmsf_file),
@@ -91,7 +91,7 @@
       <span class="icon-only"></span>
     <% end %>
     <% # Approval workflow %>
-    <% wf = DmsfWorkflow.find_by_id(dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id %>
+    <% wf = DmsfWorkflow.find_by(id: dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id %>
     <%= render(:partial => 'dmsf_workflows/approval_workflow_button',
       :locals => {:file => dmsf_file,
          :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_file.project),

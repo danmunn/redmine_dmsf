@@ -29,14 +29,32 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   def setup
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
-    @project1 = Project.find_by_id 1
-    @project2 = Project.find_by_id 2
-    @role = Role.find_by_id 1 # Manager
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
+    @project1 = Project.find 1
+    @project2 = Project.find 2
+    @role = Role.find_by(name: 'Manager')
+    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
+    @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
+    @dmsf_webdav_use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
+    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../../fixtures/dmsf', __FILE__)
+    FileUtils.cp_r(File.expand_path('../../../fixtures/files', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
     User.current = nil
+  end
+
+  def teardown
+    # Delete our tmp folder
+    begin
+      FileUtils.rm_rf DmsfFile.storage_path
+    rescue Exception => e
+      error e.message
+    end
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
+    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
   end
 
   def test_truth
@@ -47,12 +65,12 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
 
   def test_should_deny_anonymous
     get '/dmsf/webdav'
-    assert_response 401
+    assert_response :unauthorized
   end
 
   def test_should_deny_failed_authentication
     get '/dmsf/webdav', nil, credentials('admin', 'badpassword')
-    assert_response 401
+    assert_response :unauthorized
   end
 
   def test_should_permit_authenticated_user
@@ -64,15 +82,12 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     get '/dmsf/webdav', nil, @admin
     assert_response :success
     assert !response.body.match(@project1.identifier).nil?, "Expected to find project #{@project1.identifier} in return data"
-    
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-      project1_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-      get '/dmsf/webdav', nil, @admin
-      assert_response :success
-      assert_no_match @project1.identifier, response.body
-      assert_match project1_uri, response.body
-    end
+    project1_uri = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+    get '/dmsf/webdav', nil, @admin
+    assert_response :success
+    assert_no_match @project1.identifier, response.body
+    assert_match project1_uri, response.body
   end
 
   def test_should_not_list_non_dmsf_enabled_project
@@ -84,50 +99,47 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   def test_should_return_status_404_when_project_does_not_exist
     @project1.enable_module! :dmsf # Flag module enabled
     get '/dmsf/webdav/project_does_not_exist', nil, @jsmith
-    assert_response :missing
+    assert_response :not_found
   end
 
   def test_should_return_status_404_when_dmsf_not_enabled
     get "/dmsf/webdav/#{@project2.identifier}", nil, @jsmith
-    assert_response :missing
+    assert_response :not_found
   end
 
   def test_download_file_from_dmsf_enabled_project
     get "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
     assert_response :success
-    
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-      project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-      get "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
-      assert_response 404
-      get "/dmsf/webdav/#{project1_uri}/test.txt", nil, @admin
-      assert_response :success
-    end
+    project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    get "/dmsf/webdav/#{@project1.identifier}/test.txt", nil, @admin
+    assert_response :not_found
+    get "/dmsf/webdav/#{project1_uri}/test.txt", nil, @admin
+    assert_response :success
   end
 
   def test_should_list_dmsf_contents_within_project
     get "/dmsf/webdav/#{@project1.identifier}", nil, @admin
     assert_response :success
-    folder = DmsfFolder.find_by_id 1
-    assert folder
+    folder = DmsfFolder.find_by(id: 1)
+    assert_not_nil folder
     assert response.body.match(folder.title),
       "Expected to find #{folder.title} in return data"
-    file = DmsfFile.find_by_id 1
-    assert file
+    file = DmsfFile.find_by(id: 1)
+    assert_not_nil file
     assert response.body.match(file.name),
       "Expected to find #{file.name} in return data"
   end
 
   def test_user_assigned_to_project_dmsf_module_not_enabled
     get "/dmsf/webdav/#{@project1.identifier}", nil, @jsmith
-    assert_response :missing
+    assert_response :not_found
   end
 
   def test_user_assigned_to_project_folder_forbidden
     @project2.enable_module! :dmsf # Flag module enabled
     get "/dmsf/webdav/#{@project1.identifier}", nil, @jsmith
-    assert_response :missing
+    assert_response :not_found
   end
 
   def test_user_assigned_to_project_folder_ok

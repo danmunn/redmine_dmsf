@@ -38,9 +38,11 @@ module DmsfWorkflowsHelper
         :class => 'objects-selection')
     end
 
-    links = pagination_links_full(principal_pages, principal_count, :per_page_links => false) {|text, parameters, options|
-      link_to text, autocomplete_for_user_dmsf_workflow_path(workflow, parameters.merge(:q => params[:q], :format => 'js')), :remote => true
-    }
+    links = pagination_links_full(principal_pages, principal_count, :per_page_links => false) do |text, parameters, options|
+      link_to text,
+              autocomplete_for_user_dmsf_workflow_path(workflow, parameters.merge(:q => params[:q], :format => 'js')),
+              remote: true
+    end
 
     s + content_tag('span', links, :class => 'pagination')
   end
@@ -72,7 +74,7 @@ module DmsfWorkflowsHelper
     options << ['', 0]
     DmsfWorkflow.active.sorted.all.each do |wf|
       if wf.project_id
-        prj = Project.find_by_id wf.project_id
+        prj = Project.find_by(id: wf.project_id)
         if User.current.allowed_to?(:manage_workflows, prj)
           # Local approval workflows
           if prj

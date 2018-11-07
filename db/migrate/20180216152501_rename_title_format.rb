@@ -20,11 +20,11 @@
 
 class RenameTitleFormat < ActiveRecord::Migration
 
-  def self.up
+  def up
     rename_column :members, :title_format, :dmsf_title_format
   end
 
-  def self.down
+  def down
     rename_column :members, :dmsf_title_format, :title_format
   end
 

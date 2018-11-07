@@ -21,46 +21,45 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 Redmine::Plugin.register :redmine_dmsf do
-  unless Redmine::Plugin.installed?(:easy_extensions)
-    name 'DMSF'
-    url 'http://www.redmine.org/plugins/dmsf'
-    author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
-  else
+  if Redmine::Plugin.installed?(:easy_extensions)
     name 'Easy DMS'
     url 'https://www.easyredmine.com'
     author_url 'https://www.easyredmine.com'
+  else
+    name 'DMSF'
+    url 'http://www.redmine.org/plugins/dmsf'
+    author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   end
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
   version '1.6.2 devel'
 
-  requires_redmine :version_or_higher => '3.4.0'
+  requires_redmine version_or_higher: '3.4.0'
 
-  settings  :partial => 'settings/dmsf_settings',
-            :default => {
-              'dmsf_max_file_upload' => '0',
-              'dmsf_max_file_download' => '0',
-              'dmsf_max_email_filesize' => '0',
-              'dmsf_max_ajax_upload_filesize' => '100',
+  settings partial: 'settings/dmsf_settings',
+            default: {
+              'dmsf_max_file_upload' => 0,
+              'dmsf_max_file_download' => 0,
+              'dmsf_max_email_filesize' => 0,
+              'dmsf_max_ajax_upload_filesize' => 100,
               'dmsf_storage_directory' => 'files/dmsf',
               'dmsf_index_database' => File.expand_path('dmsf_index', Rails.root),
               'dmsf_stemming_lang' => 'english',
               'dmsf_stemming_strategy' => 'STEM_NONE',
               'dmsf_webdav' => '1',
-              'dmsf_display_notified_recipients' => 0,
+              'dmsf_display_notified_recipients' => nil,
               'dmsf_global_title_format' => '',
               'dmsf_columns' => %w(title size modified version workflow author),
               'dmsf_webdav_ignore' => '^(\._|\.DS_Store$|Thumbs.db$)',
               'dmsf_webdav_disable_versioning' => '^\~\$|\.tmp$',
-              'dmsf_keep_documents_locked' => false,
-              'dmsf_act_as_attachable' => false,
-              'dmsf_show_system_folders' => false,
-              'dmsf_webdav_caching_enabled' => false,
+              'dmsf_keep_documents_locked' => nil,
+              'dmsf_act_as_attachable' => nil,
               'dmsf_tmpdir' => Dir.tmpdir,
               'dmsf_documents_email_from' => '',
               'dmsf_documents_email_reply_to' => '',
-              'dmsf_documents_email_links_only' => false,
-              'enable_cjk_ngrams' => true
+              'dmsf_documents_email_links_only' => nil,
+              'dmsf_enable_cjk_ngrams' => nil,
+              'dmsf_webdav_use_project_names' => nil
             }
 
   # Uncomment to remove the original Documents from searching (replaced with DMSF)

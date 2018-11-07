@@ -23,39 +23,11 @@ class DmsfWorkflow < ActiveRecord::Base
   belongs_to :author, :class_name => 'User'
 
   scope :sorted, lambda { order(:name => :asc) }
-  scope :global, lambda { where(:project_id => nil) }
-  scope :active, lambda { where(:status => STATUS_ACTIVE) }
+  scope :global, lambda { where(project_id: nil) }
+  scope :active, lambda { where(status: STATUS_ACTIVE) }
   scope :status, lambda { |arg| where(arg.blank? ? nil : {:status => arg.to_i}) }
 
-  validate :name_validation
-  validates_presence_of :name
-  validates_length_of :name, :maximum => 255
-
-  def name_validation
-    if self.project_id
-      if self.id
-        if (DmsfWorkflow.where(['(project_id IS NULL OR (project_id = ? AND id != ?)) AND name = ?',
-            self.project_id, self.id, self.name]).exists?)
-          errors.add(:name, l('activerecord.errors.messages.taken'))
-        end
-      else
-        if (DmsfWorkflow.where(['(project_id IS NULL OR project_id = ?) AND name = ?',
-            self.project_id, self.name]).exists?)
-          errors.add(:name, l('activerecord.errors.messages.taken'))
-        end
-      end
-    else
-      if self.id
-        if DmsfWorkflow.where(['name = ? AND id != ?', self.name, self.id]).exists?
-          errors.add(:name, l('activerecord.errors.messages.taken'))
-        end
-      else
-        if DmsfWorkflow.where(:name => self.name).exists?
-          errors.add(:name, l('activerecord.errors.messages.taken'))
-        end
-      end
-    end
-  end
+  validates :name, presence: true, length: { maximum: 255 }, dmsf_workflow_name: true
 
   STATE_ASSIGNED = 3
   STATE_WAITING_FOR_APPROVAL = 1
@@ -68,18 +40,18 @@ class DmsfWorkflow < ActiveRecord::Base
 
   def participiants
     users = Array.new
-    self.dmsf_workflow_steps.each do |step|
+    dmsf_workflow_steps.each do |step|
       users << step.user unless users.include? step.user
     end
     users
   end
 
   def self.workflows(project)
-    project ? where(:project_id => project) : where('project_id IS NULL')
+    where(project_id: project)
   end
 
   def project
-    Project.find_by_id(project_id) if project_id
+    Project.find_by(id: project_id) if project_id
   end
 
   def to_s
@@ -100,7 +72,7 @@ class DmsfWorkflow < ActiveRecord::Base
           end
         end
       end
-    return true
+    true
   end
 
   def delegates(q, dmsf_workflow_step_assignment_id, dmsf_file_revision_id)
@@ -123,32 +95,30 @@ class DmsfWorkflow < ActiveRecord::Base
 
   def next_assignments(dmsf_file_revision_id)
     results = Array.new
-    nsteps = self.dmsf_workflow_steps.collect{|s| s.step}.uniq
+    nsteps = dmsf_workflow_steps.collect{ |s| s.step }.uniq
     nsteps.each do |i|
       step_is_finished = false
-      steps = self.dmsf_workflow_steps.collect{|s| s.step == i ? s : nil}.compact
+      steps = dmsf_workflow_steps.collect{ |s| s.step == i ? s : nil }.compact
       steps.each do |step|
-        step.dmsf_workflow_step_assignments.each do |assignment|
-          if assignment.dmsf_file_revision_id == dmsf_file_revision_id
-            assignment.dmsf_workflow_step_actions.each do |action|
-              case action.action
-              when DmsfWorkflowStepAction::ACTION_APPROVE
-                step_is_finished = true
-                # Try to find another unfinished AND step
-                exists = false
-                stps = self.dmsf_workflow_steps.collect{|s| (s.step == i && s.operator == DmsfWorkflowStep::OPERATOR_AND) ? s : nil}.compact
-                stps.each do |s|
-                  s.dmsf_workflow_step_assignments.each do |a|
-                    exists = a.add?(dmsf_file_revision_id)
-                    break if exists
-                  end
+        step.dmsf_workflow_step_assignments.where(dmsf_file_revision_id: dmsf_file_revision_id).find_each do |assignment|
+          assignment.dmsf_workflow_step_actions.find_each do |action|
+            case action.action
+            when DmsfWorkflowStepAction::ACTION_APPROVE
+              step_is_finished = true
+              # Try to find another unfinished AND step
+              exists = false
+              stps = dmsf_workflow_steps.collect{ |s| (s.step == i && s.operator == DmsfWorkflowStep::OPERATOR_AND) ? s : nil }.compact
+              stps.each do |s|
+                s.dmsf_workflow_step_assignments.where(dmsf_file_revision_id: dmsf_file_revision_id).find_each do |a|
+                  exists = a.add?(dmsf_file_revision_id)
                   break if exists
                 end
-                step_is_finished = false if exists
-                break
-              when DmsfWorkflowStepAction::ACTION_REJECT
-                return Array.new
+                break if exists
               end
+              step_is_finished = false if exists
+              break
+            when DmsfWorkflowStepAction::ACTION_REJECT
+              return Array.new
             end
           end
           break if step_is_finished
@@ -157,7 +127,7 @@ class DmsfWorkflow < ActiveRecord::Base
       end
       unless step_is_finished
         steps.each do |step|
-          step.dmsf_workflow_step_assignments.each do |assignment|
+          step.dmsf_workflow_step_assignments.find_each do |assignment|
             results << assignment if assignment.add?(dmsf_file_revision_id)
           end
         end
@@ -175,50 +145,53 @@ class DmsfWorkflow < ActiveRecord::Base
 
   def try_finish(revision, action, user_id)
     case action.action
-      when DmsfWorkflowStepAction::ACTION_APPROVE
-        assignments = self.next_assignments revision.id
+    when DmsfWorkflowStepAction::ACTION_APPROVE
+        assignments = next_assignments(revision.id)
         return false unless assignments.empty?
-        revision.update_attribute(:workflow, DmsfWorkflow::STATE_APPROVED)
+        revision.workflow = DmsfWorkflow::STATE_APPROVED
+        revision.save!
         return true
       when DmsfWorkflowStepAction::ACTION_REJECT
-        revision.update_attribute(:workflow, DmsfWorkflow::STATE_REJECTED)
+        revision.workflow = DmsfWorkflow::STATE_REJECTED
+        revision.save!
         return true
       when DmsfWorkflowStepAction::ACTION_DELEGATE
-        self.dmsf_workflow_steps.each do |step|
+        dmsf_workflow_steps.each do |step|
           step.dmsf_workflow_step_assignments.each do |assignment|
             if assignment.id == action.dmsf_workflow_step_assignment_id
-              assignment.update_attribute(:user_id, user_id)
+              assignment.user_id = user_id
+              assignment.save!
               return false
             end
           end
         end
     end
-    return false
+    false
   end
 
   def copy_to(project, name = nil)
-    new_wf = self.dup
+    new_wf = dup
     new_wf.name = name if name
     new_wf.project_id = project ? project.id : nil
     new_wf.author = User.current
     if new_wf.save
-      self.dmsf_workflow_steps.each do |step|
+      dmsf_workflow_steps.each do |step|
         step.copy_to(new_wf)
       end
     end
-    return new_wf
+    new_wf
   end
 
   def locked?
-    self.status == STATUS_LOCKED
+    status == STATUS_LOCKED
   end
 
   def active?
-    self.status == STATUS_ACTIVE
+    status == STATUS_ACTIVE
   end
 
   def notify_users(project, revision, controller)
-    assignments = self.next_assignments revision.id
+    assignments = next_assignments(revision.id)
     recipients = assignments.collect{ |a| a.user }
     recipients.uniq!
     recipients = recipients & DmsfMailer.get_notify_users(project, [revision.dmsf_file], true)
@@ -231,7 +204,7 @@ class DmsfWorkflow < ActiveRecord::Base
         :text_email_started,
         :text_email_to_proceed).deliver
     end
-    if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
+    if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
       unless recipients.blank?
         to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
         to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')

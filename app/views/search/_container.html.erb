@@ -22,8 +22,8 @@
 
 <% dmsf_file_or_folder = object %>
 <% if dmsf_file_or_folder.dmsf_folder_id %>
-  <% dmsf_folder = DmsfFolder.find_by_id dmsf_file_or_folder.dmsf_folder_id %>
-  <% title = dmsf_folder.title if dmsf_folder %>
+  <% titles = DmsfFolder.where(id: dmsf_file_or_folder.dmsf_folder_id).pluck(:title) %>
+  <% title = titles.first %>
 <% else %>
   <% title = dmsf_file_or_folder.project.name %>
 <% end %>

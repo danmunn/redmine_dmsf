@@ -19,11 +19,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class TitleNotNull < ActiveRecord::Migration
+
   def up
-    change_column :dmsf_file_revisions, :title, :string, :null => false
+    change_column :dmsf_file_revisions, :title, :string, null: false
   end
 
   def down
-    change_column :dmsf_file_revisions, :title, :string, :null => true
+    change_column :dmsf_file_revisions, :title, :string, null: true
   end
+
 end

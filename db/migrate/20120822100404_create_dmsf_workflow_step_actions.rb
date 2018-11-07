@@ -19,20 +19,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class CreateDmsfWorkflowStepActions < ActiveRecord::Migration
-  def self.up
+
+  def change
     create_table :dmsf_workflow_step_actions do |t|
-      t.references :dmsf_workflow_step_assignment, :null => false
-      t.integer :action, :null => false
+      t.references :dmsf_workflow_step_assignment, null: false
+      t.integer :action, null: false
       t.text :note      
-      t.timestamp :created_at, :null => false
-      t.integer :author_id, :null => false
+      t.timestamp :created_at, null: false
+      t.integer :author_id, null: false
     end
     add_index :dmsf_workflow_step_actions, 
       :dmsf_workflow_step_assignment_id,
       # The default index name exceeds the index name limit
-      {:name => 'idx_dmsf_wfstepact_on_wfstepassign_id'}
+      name: :idx_dmsf_wfstepact_on_wfstepassign_id
   end
-  def self.down
-    drop_table :dmsf_workflow_step_actions
-  end
+
 end

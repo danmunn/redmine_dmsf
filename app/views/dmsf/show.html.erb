@@ -86,7 +86,7 @@
 <%= form_tag(entries_operations_dmsf_path(:id => @project, :folder_id => @folder), :method => :post,
              :class => 'dmsf_entries', :id => 'entries_form', :data => {:cm_url => dmsf_context_menu_path}) do %>
     <%= hidden_field_tag('action') %>
-    <% if !@system_folder %>
+    <% unless @system_folder %>
       <div id="dmsf_buttons" class="dmsf_controls" style="float: left">
         <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries',
           :class => 'toggle-selection') if @file_view_allowed %>
@@ -183,7 +183,7 @@
                 <% if @folder %>
                   return "<%= "#{l(:label_number_of_folders)}: #{@folder.deep_folder_count} #{l(:label_number_of_documents)}: #{@folder.deep_file_count}" %>";
                 <% else %>
-                  return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFolder').count}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => ['DmsfFile', 'DmsfUrl']).count}" %>";
+                  return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFolder').count}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => %w(DmsfFile DmsfUrl)).count}" %>";
                 <% end %>
               <% else %>
                 return "<%= "#{l(:label_number_of_folders)}: #{@subfolders.count + @dir_links.count}, #{l(:label_number_of_documents)}: #{@files.count + @file_links.count + @url_links.count}" %>";
@@ -215,7 +215,7 @@
     <% end %>
 <% end %>
 
-<% if (@file_manipulation_allowed && !@locked_for_user && !@system_folder) %>
+<% if @file_manipulation_allowed && !@locked_for_user && !@system_folder %>
     <%= render(:partial => 'dmsf_upload/multi_upload', :local => { :lbl => true }) %>
 <% end %>
 

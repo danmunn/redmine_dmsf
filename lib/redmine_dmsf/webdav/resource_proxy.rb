@@ -35,12 +35,12 @@ module RedmineDmsf
 
       def initialize(*args)
         # Return 404 - NotFound if WebDAV is not enabled
-        raise NotFound unless Setting.plugin_redmine_dmsf['dmsf_webdav'].present?
+        raise NotFound unless Setting.plugin_redmine_dmsf['dmsf_webdav']
         super(*args)
         pinfo = path.split('/').drop(1)
-        if (pinfo.length == 0) # If this is the base_path, we're at root
+        if pinfo.length == 0 # If this is the base_path, we're at root
           @resource_c = IndexResource.new(*args)
-        elsif (pinfo.length == 1) # This is the first level, and as such, project path
+        elsif pinfo.length == 1 # This is the first level, and as such, project path
           @resource_c = ProjectResource.new(*args)
         else # We made it all the way to DMSF Data
           @resource_c = DmsfResource.new(*args)
@@ -51,7 +51,7 @@ module RedmineDmsf
 
       def authenticate(username, password)
         User.current = User.try_to_login(username, password)
-        return User.current && !User.current.anonymous?
+        User.current && !User.current.anonymous?
       end
 
       def options(request, response)

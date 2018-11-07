@@ -26,13 +26,12 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
   fixtures :users, :email_addresses, :projects, :members, :roles, :member_roles
 
   def setup
-    @user_admin = User.find_by_id 1 # Redmine admin
-    @user_member = User.find_by_id 2 # John Smith - manager
-    @user_non_member = User.find_by_id 3 # Dave Lopper    
-    @project = Project.find_by_id 1
-    assert_not_nil @project
+    @user_admin = User.find 1 # Redmine admin
+    @user_member = User.find 2 # John Smith - manager
+    @user_non_member = User.find 3 # Dave Lopper
+    @project = Project.find 1
     @project.enable_module! :dmsf
-    @role_manager = Role.find_by_name('Manager')    
+    @role_manager = Role.find_by(name: 'Manager')
     User.current = nil
   end
   

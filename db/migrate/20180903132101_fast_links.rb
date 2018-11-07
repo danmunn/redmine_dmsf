@@ -19,11 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class FastLinks < ActiveRecord::Migration
-  def self.up
-    add_column :members, :dmsf_fast_links, :boolean, :default => false, :null => false
+
+  def change
+    add_column :members, :dmsf_fast_links, :boolean, default: false, null: false
   end
 
-  def self.down
-    remove_column :members, :dmsf_fast_links
-  end
 end

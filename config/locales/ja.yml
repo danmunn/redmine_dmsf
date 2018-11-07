@@ -168,8 +168,6 @@ ja:
   permission_email_documents: Email documents
   label_file: ファイル
   field_folder: フォルダ
-  error_create_cycle_in_folder_dependency: フォルダの依存関係が循環しています
-  error_contains_invalid_character: 無効な文字を含んでいます
   error_file_commit_require_uploaded_file: コミットするには、まずファイルをアップロードしてください
 
   warning_some_files_were_not_commited: "いくつかのファイルは、バリデーションエラーのためにコミットされませんでした: %{files}"
@@ -418,3 +416,8 @@ ja:
       dmsf_open_approvals: My open approvals
     module_category:
       easy_dms: Easy DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: 無効な文字を含んでいます

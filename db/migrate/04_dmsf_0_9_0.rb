@@ -1,6 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011   Vít Jonáš <vit.jonas@gmail.com>
+# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,21 +18,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class Dmsf090 < ActiveRecord::Migration
-  def self.up
+
+  def up
     add_column :members, :dmsf_mail_notification, :boolean
     drop_table :dmsf_user_prefs
   end
 
-  def self.down
+  def own
     remove_column :members, :dmsf_mail_notification
-    
     create_table :dmsf_user_prefs do |t|
-      t.references :project, :null => false
-      t.references :user, :null => false
-      
+      t.references :project, null: false
+      t.references :user, null: false
       t.boolean :email_notify
-      
-      t.timestamps  :null => false
+      t.timestamps  null: false
     end
   end
 

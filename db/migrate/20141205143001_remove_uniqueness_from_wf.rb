@@ -19,7 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class RemoveUniquenessFromWf < ActiveRecord::Migration
+
   def up      
     remove_index(:dmsf_workflows, :name) if index_exists?(:dmsf_workflows, :name)
-  end  
+  end
+
 end

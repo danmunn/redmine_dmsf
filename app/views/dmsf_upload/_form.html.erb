@@ -23,7 +23,7 @@
 <span id="dmsf_attachments_fields">
   <% if defined?(container) && container && container.saved_dmsf_attachments.present? %>
     <% container.saved_dmsf_attachments.each_with_index do |attachment, i| %>
-      <span id="dmsf_attachments_p<%= i %>", class="attachment">
+      <span id="dmsf_attachments_p<%= i %>" class="attachment">
           <%= hidden_field_tag "dmsf_attachments[p#{i}][token]", "#{attachment.token}" %>
           <%= text_field_tag("dmsf_attachments[p#{i}][filename]", attachment.filename, :class => 'filename') %>
           <%= text_field_tag("dmsf_attachments[p#{i}][description]", attachment.description, :maxlength => 255,
@@ -32,7 +32,7 @@
                 :method => 'delete', :remote => true, :class => 'remove-upload icon-only icon-del') %>
           <% wf = container.saved_dmsf_attachments_wfs[attachment.id] %>
           <% if wf %>
-              <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="icon-only icon-wf-assigned"></a>
+          <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="icon-only icon-wf-assigned"></a>
               <%= hidden_field_tag("dmsf_attachments_wfs[p#{i}]", wf.id) if wf %>
           <% else %>
               <%= link_to('',  assign_dmsf_workflow_path(:id => container.project.id, :project_id => container.project.id,
@@ -47,14 +47,14 @@
 <span id="dmsf_links_attachments_fields">
 <% if defined?(container) && container && container.saved_dmsf_links.present? %>
     <% container.saved_dmsf_links.each_with_index do |dmsf_link, index| %>
-        <span id="dmsf_links_attachments_<%= index %>", class="attachment">
+        <span id="dmsf_links_attachments_<%= index %>" class="attachment">
           <input name="dmsf_links[<%= index %>]" value="<%= dmsf_link.id %>" type="hidden">
           <input type="text" class='filename readonly' value="<%= dmsf_link.name %>">
            <%= link_to('', dmsf_link_attachment_path(dmsf_link, :link_id => "#{index}", :format => 'js'),
                       :method => 'delete', :remote => true, :class => 'remove-upload icon-only icon-del') %>
             <% wf = container.saved_dmsf_links_wfs[dmsf_link.id] %>
             <% if wf %>
-              <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="modify-upload icon-only icon-wf-assigned"></a>
+            <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="modify-upload icon-only icon-wf-assigned"></a>
                 <%= hidden_field_tag("dmsf_links_wfs[#{dmsf_link.id}]", wf.id) if wf %>
             <% else %>
               <%= render(:partial => 'dmsf_workflows/approval_workflow_button',

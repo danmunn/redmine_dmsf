@@ -21,7 +21,7 @@
 %>
 
 <% if projects.present? %>
-  <%= form_tag({:action => 'copy', :id => file_or_folder}, :id => 'copyForm') do |f| %>
+  <%= form_tag({:action => 'copy', :id => file_or_folder}, :id => 'copyForm') do %>
     <div class="box tabular">
       <p>
         <%= label_tag('target_project_id', l(:field_target_project)) %>

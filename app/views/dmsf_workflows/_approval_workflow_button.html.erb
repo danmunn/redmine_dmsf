@@ -26,7 +26,7 @@
         <% if wf %>
             <% assignments = wf.next_assignments(file.last_revision.id) %>
             <% index = assignments.find_index{|assignment| assignment.user_id == User.current.id} if assignments %>
-            <% if index %>
+            <% if assignments && index %>
                 <%= link_to('',
                             action_dmsf_workflow_path(
                                 :project_id => project.id,
@@ -37,7 +37,7 @@
                             :remote => true,
                             :class => "icon-only icon-wf-waiting") %>
             <% else %>
-                <span class="icon-only"></span>
+              <span class="icon-only"></span>
             <% end %>
         <% else %>
             <span class="icon-only"></span>

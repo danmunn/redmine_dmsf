@@ -1,4 +1,4 @@
-# encode: utf-8
+ # encode: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -27,57 +27,43 @@ class DmsfLink < ActiveRecord::Base
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
   belongs_to :user
 
-  validates_presence_of :name, :project
-  validates_length_of :name, :maximum => 255
-  validates_length_of :external_url, :maximum => 255
-  validate :validate_url
-
-  def validate_url
-    if self.target_type == 'DmsfUrl'
-      begin
-        if self.external_url.present?
-          URI.parse self.external_url
-        else
-          errors.add :external_url, :invalid
-        end
-      rescue URI::InvalidURIError
-        errors.add :external_url, :invalid
-      end
-    end
-  end
+  validates :name, presence: true, length: { maximum: 255 }
+  validates :project, presence: true
+  validates :external_url, length: { maximum: 255 }
+  validates :external_url, dmsf_url: true
 
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
 
-  scope :visible, -> { where(:deleted => STATUS_ACTIVE) }
-  scope :deleted, -> { where(:deleted => STATUS_DELETED) }
+  scope :visible, -> { where(deleted: STATUS_ACTIVE) }
+  scope :deleted, -> { where(deleted: STATUS_DELETED) }
 
   def target_folder_id
-    if self.target_type == DmsfFolder.model_name.to_s
-      self.target_id
+    if target_type == DmsfFolder.model_name.to_s
+      target_id
     else
-      f = DmsfFile.find_by_id self.target_id
-      f.dmsf_folder_id if f
+      dmsf_folder_ids = DmsfFile.where(id: target_id).pluck(:dmsf_folder_id)
+      dmsf_folder_ids.first
     end
   end
 
   def target_folder
     unless @target_folder
-      if self.target_folder_id
-        @target_folder = DmsfFolder.find_by_id self.target_folder_id
+      if target_folder_id
+        @target_folder = DmsfFolder.find_by(id: target_folder_id)
       end
     end
     @target_folder
   end
 
   def target_file_id
-    self.target_id if self.target_type == DmsfFile.model_name.to_s
+    target_id if target_type == DmsfFile.model_name.to_s
   end
 
   def target_file
     unless @target_file
-      if self.target_file_id
-        @target_file = DmsfFile.find_by_id self.target_file_id
+      if target_file_id
+        @target_file = DmsfFile.find_by(id: target_file_id)
       end
     end
     @target_file
@@ -85,22 +71,20 @@ class DmsfLink < ActiveRecord::Base
 
   def target_project
     unless @target_project
-      @target_project = Project.find_by_id self.target_project_id
+      @target_project = Project.find_by(id: target_project_id)
     end
     @target_project
   end
 
   def folder
-    unless @folder
-      if self.dmsf_folder_id
-        @folder = DmsfFolder.find_by_id self.dmsf_folder_id
-      end
+    if !@folder && dmsf_folder_id
+      @folder = DmsfFolder.find_by(id: dmsf_folder_id)
     end
     @folder
   end
 
   def title
-    self.name
+    name
   end
 
   def self.find_link_by_file_name(project, folder, filename)
@@ -115,12 +99,12 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def path
-    if self.target_type == DmsfFile.model_name.to_s
-      path = self.target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.display_name : element.title }.join('/') if self.target_file
+    if target_type == DmsfFile.model_name.to_s
+      path = target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.display_name : element.title }.join('/') if target_file
     else
-      path = self.target_folder ? self.target_folder.dmsf_path_str : ''
+      path = target_folder ? target_folder.dmsf_path_str : ''
     end
-    path.insert(0, "#{self.target_project.name}:") if self.project_id != self.target_project_id
+    path.insert(0, "#{target_project.name}:") if project_id != target_project_id
     if path && path.length > 50
       return "#{path[0, 25]}...#{path[-25, 25]}"
     end
@@ -129,29 +113,29 @@ class DmsfLink < ActiveRecord::Base
 
   def copy_to(project, folder)
     link = DmsfLink.new
-    link.target_project_id = self.target_project_id
-    link.target_id = self.target_id
-    link.target_type = self.target_type
-    link.name = self.name
-    link.external_url = self.external_url
+    link.target_project_id = target_project_id
+    link.target_id = target_id
+    link.target_type = target_type
+    link.name = name
+    link.external_url = external_url
     link.project_id = project.id
     link.dmsf_folder_id = folder ? folder.id : nil
-    link.save
+    link.save!
     link
   end
 
   def container
-    if self.folder && self.folder.system
-      Issue.where(:id => self.folder.title.to_i).first
+    if folder && folder.system
+      Issue.find_by(id: folder.title)
     end
   end
 
   def delete(commit = false)
     if commit
-      if self.container.is_a?(Issue)
-        self.container.dmsf_file_removed(self.target_file)
+      if container.is_a?(Issue)
+        container.dmsf_file_removed(target_file)
       end
-      self.destroy
+      destroy
     else
       self.deleted = STATUS_DELETED
       self.deleted_by_user = User.current
@@ -160,7 +144,7 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def restore
-    if self.dmsf_folder_id && (self.dmsf_folder.nil? || self.dmsf_folder.deleted?)
+    if dmsf_folder_id && (dmsf_folder.nil? || dmsf_folder.deleted?)
       errors[:base] << l(:error_parent_folder)
       return false
     end
@@ -170,7 +154,7 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def is_folder?
-    self.target_type == 'DmsfFolder'
+    target_type == 'DmsfFolder'
   end
 
   def is_file?
@@ -179,34 +163,33 @@ class DmsfLink < ActiveRecord::Base
 
   def to_csv(columns, level)
     csv = []
-    if self.target_type == 'DmsfUrl'
+    if target_type == 'DmsfUrl'
       # Project
-      csv << self.project.name if columns.include?(l(:field_project))
+      csv << project.name if columns.include?(l(:field_project))
       # Id
-      csv << self.id if columns.include?('id')
+      csv << id if columns.include?('id')
       # Title
-      csv << self.title.insert(0, ' ' * level) if columns.include?('title')
+      csv << title.insert(0, ' ' * level) if columns.include?('title')
       # Extension
       csv << '' if columns.include?('extension')
       # Size
       csv << '' if columns.include?('size')
       # Modified
-      csv << format_time(self.updated_at) if columns.include?('modified')
+      csv << format_time(updated_at) if columns.include?('modified')
       # Version
       csv << '' if columns.include?('version')
       # Workflow
       csv << '' if columns.include?('workflow')
       # Author
-      csv << self.user.name if columns.include?('author')
+      csv << user.name if columns.include?('author')
       # Last approver
       csv << '' if columns.include?(l(:label_last_approver))
       # Url
-      csv << self.external_url if columns.include?(l(:label_document_url))
+      csv << external_url if columns.include?(l(:label_document_url))
       # Revision
       csv << '' if columns.include?(l(:label_last_revision_id))
       # Custom fields
-      cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position)
-      cfs.each do |c|
+      CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c|
         csv << '' if columns.include?(c.name)
       end
     end

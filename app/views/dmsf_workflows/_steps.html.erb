@@ -47,7 +47,7 @@
         <th></th>
         <th><%= l(:label_dmsf_workflow_step) %></th>
         <th><%= l(:label_dmsf_workflow_approval_plural) %></th>
-        <th></th>
+        <th>/th>
       </tr></thead>
       <tbody>
       <% steps.each do |i|%>
@@ -74,9 +74,9 @@
                 <%= link_to_user step.user %>
               <% end %>
             </span>
-            <div id="<%= "step-index-#{index}-approvers-form" %>", class="hol">
+            <div id="<%= "step-index-#{index}-approvers-form" %>" class="hol">
                 <div class="dmsf_parent_container">
-                  <% stps.each_with_index do |step, j| %>
+                  <% stps.each do |step| %>
                       <div class="dmsf_child_container">
                         <label>
                           <%= radio_button_tag "operator_step[#{step.id}]", DmsfWorkflowStep::OPERATOR_AND,

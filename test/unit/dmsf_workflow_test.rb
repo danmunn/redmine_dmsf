@@ -27,24 +27,24 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions
 
   def setup    
-    @wf1 = DmsfWorkflow.find_by_id 1
-    @wf2 = DmsfWorkflow.find_by_id 2 
-    @wf3 = DmsfWorkflow.find_by_id 3 
-    @wfs1 = DmsfWorkflowStep.find_by_id 1
-    @wfs2 = DmsfWorkflowStep.find_by_id 2
-    @wfs3 = DmsfWorkflowStep.find_by_id 3
-    @wfs4 = DmsfWorkflowStep.find_by_id 4
-    @wfs5 = DmsfWorkflowStep.find_by_id 5
-    @wfsa1 = DmsfWorkflowStepAssignment.find_by_id 1
-    @wfsac1 = DmsfWorkflowStepAction.find_by_id 1
-    @revision1 = DmsfFileRevision.find_by_id 1
-    @revision2 = DmsfFileRevision.find_by_id 2
-    @project = Project.find_by_id 2
-    @project5 = Project.find_by_id 5
+    @wf1 = DmsfWorkflow.find 1
+    @wf2 = DmsfWorkflow.find 2
+    @wf3 = DmsfWorkflow.find 3
+    @wfs1 = DmsfWorkflowStep.find 1
+    @wfs2 = DmsfWorkflowStep.find 2
+    @wfs3 = DmsfWorkflowStep.find 3
+    @wfs4 = DmsfWorkflowStep.find 4
+    @wfs5 = DmsfWorkflowStep.find 5
+    @wfsa1 = DmsfWorkflowStepAssignment.find 1
+    @wfsac1 = DmsfWorkflowStepAction.find 1
+    @revision1 = DmsfFileRevision.find 1
+    @revision2 = DmsfFileRevision.find 2
+    @project = Project.find 2
+    @project5 = Project.find 5
   end
   
-  def test_truth    
-    assert_kind_of DmsfWorkflow, @wf1        
+  def test_truth
+    assert_kind_of DmsfWorkflow, @wf1
     assert_kind_of DmsfWorkflow, @wf2
     assert_kind_of DmsfWorkflow, @wf3
     assert_kind_of DmsfWorkflowStep, @wfs1
@@ -59,14 +59,14 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     assert_kind_of Project, @project
     assert_kind_of Project, @project5
   end
-  
+
   def test_create
     workflow = DmsfWorkflow.new
     workflow.name = 'wf'
     assert workflow.save, workflow.errors.full_messages.to_sentence
   end
-  
-  def test_update    
+
+  def test_update
     @wf1.name = 'wf1a'
     @wf1.project_id = 5
     assert @wf1.save, @wf1.errors.full_messages.to_sentence
@@ -74,38 +74,38 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     assert_equal 'wf1a', @wf1.name
     assert_equal 5, @wf1.project_id
   end
-  
+
   def test_validate_name_length
     @wf1.name = 'a' * 256
     assert !@wf1.save
-    assert_equal 1, @wf1.errors.count        
+    assert_equal 1, @wf1.errors.count
   end
-  
+
   def test_validate_name_presence
     @wf1.name = ''
     assert !@wf1.save
-    assert_equal 1, @wf1.errors.count        
+    assert_equal 1, @wf1.errors.count
   end
-  
-  def test_validate_name_uniqueness_globaly   
+
+  def test_validate_name_uniqueness_globaly
     @wf2.name = @wf1.name
     assert !@wf2.save
-    assert_equal 1, @wf2.errors.count        
+    assert_equal 1, @wf2.errors.count
   end
-  
+
   def test_validate_name_uniqueness_localy
     @wf2.name = @wf1.name
     @wf2.project_id = @wf1.project_id
     assert !@wf2.save
-    assert_equal 1, @wf2.errors.count        
+    assert_equal 1, @wf2.errors.count
   end
-  
-  def test_destroy      
+
+  def test_destroy
     @wf1.destroy
-    assert_nil DmsfWorkflow.find_by_id(1)
-    assert_nil DmsfWorkflowStep.find_by_id(@wfs1.id)
+    assert_nil DmsfWorkflow.find_by(id: 1)
+    assert_nil DmsfWorkflowStep.find_by(id: @wfs1.id)
   end
-  
+
   def test_project
     # Global workflow
     assert_nil @wf2.project
@@ -113,12 +113,12 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     @wf2.project_id = 5
     assert @wf2.project
   end
-  
+
   def test_to_s
     assert_equal @wf1.name, @wf1.to_s
-  end    
-  
-  def test_reorder_steps_highest    
+  end
+
+  def test_reorder_steps_highest
     @wf1.reorder_steps(3, 1)
     @wfs1.reload
     @wfs2.reload
@@ -129,10 +129,10 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     assert_equal @wfs1.step, 2
     assert_equal @wfs4.step, 2
     assert_equal @wfs2.step, 3
-    assert_equal @wfs3.step, 3        
+    assert_equal @wfs3.step, 3
   end
-  
-  def test_reorder_steps_higher    
+
+  def test_reorder_steps_higher
     @wf1.reorder_steps(3, 2)
     @wfs1.reload
     @wfs2.reload
@@ -143,90 +143,102 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     assert_equal @wfs4.step, 1
     assert_equal @wfs5.step, 2
     assert_equal @wfs2.step, 3
-    assert_equal @wfs3.step, 3        
+    assert_equal @wfs3.step, 3
   end
-  
-  def test_reorder_steps_lower   
+
+  def test_reorder_steps_lower
     @wf1.reorder_steps(1, 2)
     @wfs1.reload
     @wfs2.reload
     @wfs3.reload
     @wfs4.reload
-    @wfs5.reload    
+    @wfs5.reload
     assert_equal @wfs2.step, 1
-    assert_equal @wfs3.step, 1    
+    assert_equal @wfs3.step, 1
     assert_equal @wfs1.step, 2
     assert_equal @wfs4.step, 2
     assert_equal @wfs5.step, 3
   end
-  
-  def test_reorder_steps_lowest    
+
+  def test_reorder_steps_lowest
     @wf1.reorder_steps(1, 3)
     @wfs1.reload
     @wfs2.reload
     @wfs3.reload
     @wfs4.reload
-    @wfs5.reload    
+    @wfs5.reload
     assert_equal @wfs2.step, 1
-    assert_equal @wfs3.step, 1    
+    assert_equal @wfs3.step, 1
     assert_equal @wfs5.step, 2
     assert_equal @wfs1.step, 3
     assert_equal @wfs4.step, 3
-  end    
-  
-  def test_delegates    
-    delegates = @wf1.delegates(nil, nil, nil)
-    assert_equal(delegates.all.count + 1, @project5.users.all.count)
-    delegates = @wf1.delegates('Dave', nil, nil)        
-    assert_equal delegates.size, 1
-    delegates = @wf1.delegates(nil, @wfsa1.id, 2)        
-    assert !delegates.any?{|user| user.id == @wfsa1.user_id}
-    assert delegates.any?{|user| user.id == 8}    
   end
-  
-  def test_next_assignments    
+
+  def test_delegates
+    delegates = @wf1.delegates(nil, nil, nil)
+    assert_equal(delegates.size + 1, @project5.users.size)
+    delegates = @wf1.delegates('Dave', nil, nil)
+    assert_equal delegates.size, 1
+    delegates = @wf1.delegates(nil, @wfsa1.id, 2)
+    assert !delegates.any?{ |user| user.id == @wfsa1.user_id }
+    assert delegates.any?{ |user| user.id == 8 }
+  end
+
+  def test_next_assignments
     assignments = @wf1.next_assignments(2)
     assert_equal assignments.size, 1
-    assert_equal assignments[0].user_id, 2    
+    assert_equal assignments[0].user_id, 2
   end
-  
+
   def test_assign
-    @wf1.assign(1)
-    @wf1.dmsf_workflow_steps.each do |step|
-      assert_kind_of DmsfWorkflowStepAssignment, DmsfWorkflowStepAssignment.where(
-        :dmsf_workflow_step_id => step.id, :dmsf_file_revision_id => 1).first
-    end    
+    @wf2.assign @revision2.id
+    @wf2.dmsf_workflow_steps.each do |step|
+      assert DmsfWorkflowStepAssignment.where(dmsf_workflow_step_id: step.id, dmsf_file_revision_id: @revision2.id).exists?
+    end
   end
   
-  def test_try_finish        
-    @revision1.set_workflow @wf1.id, 'start'        
-    @wf1.try_finish @revision1, @wfsac1, User.current.id
+  def test_try_finish_yes
+    # The forkflow is waiting for an approval
+    assert_equal DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, @revision1.workflow
+    # Do the approval
+    wsa = DmsfWorkflowStepAction.new
+    wsa.dmsf_workflow_step_assignment_id = 9
+    wsa.action = DmsfWorkflowStepAction::ACTION_APPROVE
+    wsa.author_id = User.current.id
+    assert wsa.save
+    # The workflow is finished
+    assert @wf1.try_finish(@revision1, @wfsac1, User.current.id)
     @revision1.reload
-    assert_equal @revision1.workflow, DmsfWorkflow::STATE_APPROVED
-    @revision2.set_workflow @wf1.id, 'start'        
-    @wf1.try_finish @revision2, @wfsac1, User.current.id
-    assert_equal @revision2.workflow, DmsfWorkflow::STATE_WAITING_FOR_APPROVAL    
+    assert_equal DmsfWorkflow::STATE_APPROVED, @revision1.workflow
+  end
+
+  def test_try_finish_no
+    # The forkflow is waiting for an approval
+    assert_equal DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, @revision1.workflow
+    # The workflow is not finished
+    assert !@wf1.try_finish(@revision1, @wfsac1, User.current.id)
+    @revision1.reload
+    assert_equal DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, @revision1.workflow
   end
   
   def test_participiants
-    participiants = @wf1.participiants    
-    assert_equal participiants.count, 2
+    assert_equal @wf1.participiants.count, 2
   end
-  
-  def test_locked    
+
+  def test_locked
     assert @wf3.locked?, "#{@wf2.name} status is #{@wf3.status}"
   end
-  
+
   def test_active
     assert @wf1.active?, "#{@wf1.name} status is #{@wf1.status}"
   end
-  
+
   def test_scope_active
-    assert_equal DmsfWorkflow.count, (DmsfWorkflow.active.count + 1)
+    assert_equal DmsfWorkflow.count, (DmsfWorkflow.active.all.size + 1)
   end
-  
-  def test_scope_status    
-    assert_equal 1, DmsfWorkflow.status(DmsfWorkflow::STATUS_LOCKED).count
+
+  def test_scope_status
+    assert_equal 1, DmsfWorkflow.status(DmsfWorkflow::STATUS_LOCKED).all.size
   end
 
   def test_copy_to

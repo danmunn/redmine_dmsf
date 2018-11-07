@@ -25,7 +25,13 @@ class DmsfPublicUrlsControllerTest < RedmineDmsf::Test::TestCase
   fixtures :dmsf_files, :dmsf_file_revisions, :dmsf_public_urls
   
   def setup
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
+    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../fixtures/dmsf', __FILE__)
+    FileUtils.cp_r(File.expand_path('../../fixtures/files', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
+  end
+
+  def teardown
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
   end
 
   def test_show_valid_url
@@ -35,12 +41,12 @@ class DmsfPublicUrlsControllerTest < RedmineDmsf::Test::TestCase
 
   def test_show_url_width_invalid_token
     get :show, :token => 'f8d33e21914a433b280fdc94450ee212'
-    assert_response :missing
+    assert_response :not_found
   end
 
   def test_show_url_that_has_expired
     get :show, :token => 'e8d33e21914a433b280fdc94450ee212'
-    assert_response :missing
+    assert_response :not_found
   end
 
 end

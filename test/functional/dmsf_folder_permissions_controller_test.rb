@@ -25,13 +25,12 @@ class DmsfFolderPermissionsControllerTest < RedmineDmsf::Test::TestCase
            :email_addresses
 
   def setup
-    @project1 = Project.find_by_id 1
-    assert_not_nil @project1
+    @project1 = Project.find 1
     @project1.enable_module! :dmsf
-    @folder7 = DmsfFolder.find_by_id 7
-    @manager = User.find_by_id 2
-    @developer = User.find_by_id 3
-    @manager_role = Role.find_by_id 1
+    @folder7 = DmsfFolder.find 7
+    @manager = User.find 2
+    @developer = User.find 3
+    @manager_role = Role.find 1
     User.current = nil
     @request.session[:user_id] = @manager.id
     @manager_role.add_permission! :view_dmsf_folders

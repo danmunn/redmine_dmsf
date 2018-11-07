@@ -19,12 +19,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class AddExternal < ActiveRecord::Migration
+
   def up
-    change_column :dmsf_links, :target_id, :integer, :null => true
-    add_column :dmsf_links, :external_url, :string, :null => true    
+    change_column :dmsf_links, :target_id, :integer, null: true
+    add_column :dmsf_links, :external_url, :string, null: true
   end
 
   def down    
     remove_column :dmsf_links, :external_url    
   end
+
 end

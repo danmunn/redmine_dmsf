@@ -19,16 +19,18 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class TrashBin < ActiveRecord::Migration
+
   def up  
     # DMSF - project's root folder notification
-    add_column :dmsf_folders, :deleted, :boolean, :default => false, :null => false
+    add_column :dmsf_folders, :deleted, :boolean, default: false, null: false
     add_column :dmsf_folders, :deleted_by_user_id, :integer
     DmsfFolder.reset_column_information
-    DmsfFolder.update_all(:deleted => false)
+    DmsfFolder.update_all(deleted: false)
   end
   
   def down
     remove_column :dmsf_folders, :deleted
     remove_column :dmsf_folders, :deleted_by_user_id
   end
+
 end

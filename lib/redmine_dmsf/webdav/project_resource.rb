@@ -33,11 +33,11 @@ module RedmineDmsf
         unless @children          
           @children = []
           if project
-            project.dmsf_folders.select(:title).visible.map do |p|
-              @children.push child(p.title)
+            project.dmsf_folders.visible.pluck(:title).each do |title|
+              @children.push child(title)
             end
-            project.dmsf_files.select(:name).visible.map do |p|
-              @children.push child(p.name)              
+            project.dmsf_files.visible.pluck(:name).each do |name|
+              @children.push child(name)
             end
           end
         end

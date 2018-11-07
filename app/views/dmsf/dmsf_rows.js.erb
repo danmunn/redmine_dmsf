@@ -1,15 +1,17 @@
 // Store DMSF controls
 var dmsfButtons = $('#dmsf_buttons')[0].outerHTML;
 var browserInfo = $('#browser_info').text();
+var tag = $('#dmsf_tag');
 var dmsfTag;
+var browser = $("#browser");
 
-if(($('#dmsf_tag') != null) && $('#dmsf_tag')[0] != null) {
+if((tag != null) && tag[0] != null) {
 
-    dmsfTag = $('#dmsf_tag')[0].outerHTML
+    dmsfTag = tag[0].outerHTML
 }
 
 // Destroy the original dataTable
-$("#browser").dataTable().fnDestroy();
+browser.dataTable().fnDestroy();
 
 // Add rows
 $('#<%= params[:row_id] %>').after('<%= escape_javascript(render(:partial => 'dmsf/dmsf_rows')) %>');
@@ -27,7 +29,7 @@ hideOnLoad();
 <% size = DmsfFolder.get_column_position('size') %>
 <% modified = DmsfFolder.get_column_position('modified') %>
 
-$('#browser').dataTable({
+browser.dataTable({
   orderClasses: false,
   responsive: {
       details: false
@@ -55,10 +57,11 @@ $('#browser').dataTable({
       <% end %>
   ],
   "fnInitComplete": function() {
-    $(dmsfButtons).prependTo($("#browser_wrapper div.fg-toolbar")[0]);
-    if($(dmsfTag) != null) {
-        $(dmsfTag).prependTo($("#browser_wrapper div.fg-toolbar")[0]);
-    }
+      var wrapper = $("#browser_wrapper div.fg-toolbar")[0];
+      $(dmsfButtons).prependTo(wrapper);
+      if($(dmsfTag) != null) {
+        $(dmsfTag).prependTo(wrapper);
+      }
   },
   "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
     return browserInfo;
@@ -66,4 +69,4 @@ $('#browser').dataTable({
 });
 
 // Hot fix
-$('#browser').attr('style', 'width: 100%');
+browser.attr('style', 'width: 100%');

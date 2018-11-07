@@ -25,15 +25,15 @@ class MigrateDocuments < ActiveRecord::Migration
     DmsfFileRevision.find_each do |dmsf_file_revision|
       if dmsf_file_revision.dmsf_file
         if dmsf_file_revision.dmsf_file.project
-          origin = self.disk_file(dmsf_file_revision)
+          origin = disk_file(dmsf_file_revision)
           if origin
             if File.exist?(origin)
               target = dmsf_file_revision.disk_file(false)
               if target
-                unless File.exist?(target)
+                if !File.exist?(target)
                   begin
                     FileUtils.mv origin, target, :verbose => true
-                    folder = self.storage_base_path(dmsf_file_revision)
+                    folder = storage_base_path(dmsf_file_revision)
                     Dir.rmdir(folder) if (folder && (Dir.entries(folder).size == 2))
                   rescue Exception => e
                     msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: #{e.message}"
@@ -81,9 +81,13 @@ class MigrateDocuments < ActiveRecord::Migration
           origin = dmsf_file_revision.disk_file(false)
           if origin
             if File.exist?(origin)
-              target = self.disk_file(dmsf_file_revision)
+              target = disk_file(dmsf_file_revision)
               if target
-                unless File.exist?(target)
+                if File.exist?(target)
+                  msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: Target '#{target}' exists"
+                  say msg
+                  Rails.logger.error msg
+                else
                   begin
                     FileUtils.mv origin, target, :verbose => true
                     folder = dmsf_file_revision.storage_base_path
@@ -93,10 +97,6 @@ class MigrateDocuments < ActiveRecord::Migration
                     say msg
                     Rails.logger.error msg
                   end
-                else
-                  msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: Target '#{target}' exists"
-                  say msg
-                  Rails.logger.error msg
                 end
               else
                 msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: target = nil"

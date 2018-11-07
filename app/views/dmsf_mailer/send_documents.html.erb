@@ -28,10 +28,10 @@
   <% files = [] %>
   <% if @folders.present? %>
     <% JSON.parse(@folders).each do |id| %>
-      <% folder = DmsfFolder.find_by_id id %>
+      <% folder = DmsfFolder.find_by(id: id) %>
       <% if folder %>
         <% folder.folder_tree.each do |name, i| %>
-          <% dir = DmsfFolder.find_by_id i %>
+          <% dir = DmsfFolder.find_by(id: i) %>
           <% if dir && !folders.include?(dir) %>
             <br/>
             <%= link_to(h(dir.dmsf_path_str), dmsf_folder_path(:id => dir.project_id, :folder_id => dir.id, :only_path => false)) %>

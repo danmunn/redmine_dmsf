@@ -28,8 +28,8 @@ module RedmineDmsf
         if context.is_a?(Hash) 
           question = context[:question]
           if question.present?
-            if question.match(/^D(\d+)$/) && DmsfFile.visible.find_by_id($1.to_i)
-              return { :controller => 'dmsf_files', :action => 'show', :id => $1.to_i }
+            if question.match(/^D(\d+)$/) && DmsfFile.visible.find_by(id: $1).exists?
+              return dmsf_file_path(:id => $1)
             end
           end
         end        

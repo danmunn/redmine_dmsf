@@ -19,22 +19,31 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class Dmsf120 < ActiveRecord::Migration
+class DmsfWorkflowNameValidator  < ActiveModel::EachValidator
 
-  def up
-    add_column :dmsf_file_revisions, :project_id, :integer, null: true
-    DmsfFileRevision.reset_column_information
-    DmsfFileRevision.find_each do |revision|
-      if revision.dmsf_file
-        revision.project_id = revision.dmsf_file.project.id
-        revision.save!
+  def validate_each(record, attribute, value)
+    if record.project_id
+      if record.id
+        if DmsfWorkflow.where(['(project_id IS NULL OR (project_id = ? AND id != ?)) AND name = ?',
+                                record.project_id, record.id, value]).exists?
+          record.errors.add attribute, :taken
+        end
+      else
+        if DmsfWorkflow.where(['(project_id IS NULL OR project_id = ?) AND name = ?', record.project_id, value]).exists?
+          record.errors.add attribute, :taken
+        end
+      end
+    else
+      if record.id
+        if DmsfWorkflow.where(['name = ? AND id != ?', value, record.id]).exists?
+          record.errors.add attribute, :taken
+        end
+      else
+        if DmsfWorkflow.where(name: value).exists?
+          record.errors.add attribute, :taken
+        end
       end
     end
-    change_column :dmsf_file_revisions, :project_id, :integer, null: false
-  end
-
-  def down
-    remove_column :dmsf_file_revisions, :project_id
   end
 
 end

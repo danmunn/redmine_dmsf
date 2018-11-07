@@ -20,11 +20,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class AddRevisionToDmsfLock < ActiveRecord::Migration
-  def up
-    add_column :dmsf_locks, :revision, :integer, :null => true
+
+  def change
+    add_column :dmsf_locks, :revision, :integer, null: true
   end
 
-  def down
-    remove_column :dmsf_locks, :revision
-  end
 end

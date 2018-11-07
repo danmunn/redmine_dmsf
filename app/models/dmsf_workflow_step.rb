@@ -24,15 +24,18 @@ class DmsfWorkflowStep < ActiveRecord::Base
 
   has_many :dmsf_workflow_step_assignments, :dependent => :destroy
 
-  validates_presence_of :dmsf_workflow, :step, :user, :operator
-  validates_uniqueness_of :user_id, :scope => [:dmsf_workflow_id, :step]
-  validates_length_of :name, :maximum => 30
+  validates :dmsf_workflow, presence: true
+  validates :step, presence: true
+  validates :user, presence: true
+  validates :operator, presence: true
+  validates_uniqueness_of :user_id, scope: [:dmsf_workflow_id, :step]
+  validates :name, length: { maximum: 30 }
 
   OPERATOR_OR  = 0
   OPERATOR_AND = 1
 
   def soperator
-    DmsfWorkflowStep.soperator(self.operator)
+    DmsfWorkflowStep.soperator(operator)
   end
 
   def self.soperator(operator)
@@ -40,15 +43,15 @@ class DmsfWorkflowStep < ActiveRecord::Base
   end
 
   def assign(dmsf_file_revision_id)
-    step_assignment = DmsfWorkflowStepAssignment.new(
-      :dmsf_workflow_step_id => id,
-      :user_id => user_id,
-      :dmsf_file_revision_id => dmsf_file_revision_id)
-    step_assignment.save
+    step_assignment = DmsfWorkflowStepAssignment.new
+    step_assignment.dmsf_workflow_step_id = id
+    step_assignment.user_id = user_id
+    step_assignment.dmsf_file_revision_id = dmsf_file_revision_id
+    step_assignment.save!
   end
 
   def is_finished?(dmsf_file_revision_id)
-    self.dmsf_workflow_step_assignments.each do |assignment|
+    dmsf_workflow_step_assignments.each do |assignment|
       if assignment.dmsf_file_revision_id == dmsf_file_revision_id
         if assignment.dmsf_workflow_step_actions.empty?
           return false
@@ -61,9 +64,10 @@ class DmsfWorkflowStep < ActiveRecord::Base
   end
 
   def copy_to(workflow)
-    new_step = self.dup
+    new_step = dup
     new_step.dmsf_workflow_id = workflow.id
-    new_step.save
-    return new_step
+    new_step.save!
+    new_step
   end
+
 end

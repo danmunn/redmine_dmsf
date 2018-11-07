@@ -26,9 +26,9 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
   fixtures :dmsf_workflow_steps, :dmsf_workflow_step_actions
   
   def setup
-    @wfsac1 = DmsfWorkflowStepAction.find(1)
-    @wfsac2 = DmsfWorkflowStepAction.find(2)
-    @wfsac3 = DmsfWorkflowStepAction.find(3)
+    @wfsac1 = DmsfWorkflowStepAction.find 1
+    @wfsac2 = DmsfWorkflowStepAction.find 2
+    @wfsac3 = DmsfWorkflowStepAction.find 3
   end
   
   def test_truth
@@ -95,24 +95,24 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_validate_dmsf_workflow_step_assignment_id_uniqueness    
-    @wfsac2.dmsf_workflow_step_assignment_id = @wfsac1.dmsf_workflow_step_assignment_id;
-    @wfsac2.action = @wfsac1.action;
+    @wfsac2.dmsf_workflow_step_assignment_id = @wfsac1.dmsf_workflow_step_assignment_id
+    @wfsac2.action = @wfsac1.action
     assert !@wfsac2.save
     assert_equal 1, @wfsac2.errors.count  
     @wfsac1.action = DmsfWorkflowStepAction::ACTION_REJECT
-    @wfsac2.action = @wfsac1.action;
+    @wfsac2.action = @wfsac1.action
     assert @wfsac1.save, @wfsac1.errors.full_messages.to_sentence
     assert !@wfsac2.save
     assert_equal 1, @wfsac2.errors.count
     @wfsac1.action = DmsfWorkflowStepAction::ACTION_DELEGATE
     assert @wfsac1.save
-    @wfsac2.action = @wfsac1.action;
+    @wfsac2.action = @wfsac1.action
     assert @wfsac2.save
   end
   
   def test_destroy  
     @wfsac1.destroy
-    assert_nil DmsfWorkflowStepAction.find_by_id(1)    
+    assert_nil DmsfWorkflowStepAction.find_by(id: 1)
   end  
 
   def test_is_finished

@@ -23,25 +23,26 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFileTest < RedmineDmsf::Test::UnitTest
   fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles,
-           :members, :member_roles, :dmsf_locks, :issues, :dmsf_links, :dmsf_workflows, :dmsf_workflow_steps
+           :members, :member_roles, :dmsf_locks, :issues, :dmsf_links, :dmsf_workflows, :dmsf_workflow_steps,
+           :dmsf_workflow_step_assignments
 
   def setup
-    @admin = User.find_by_id 1
-    @jsmith = User.find_by_id 2
-    @project1 = Project.find_by_id 1
-    @project2 = Project.find_by_id 2
-    @file1 = DmsfFile.find_by_id 1
-    @file2 = DmsfFile.find_by_id 2
-    @file3 = DmsfFile.find_by_id 3
-    @file4 = DmsfFile.find_by_id 4
-    @file5 = DmsfFile.find_by_id 5
-    @file6 = DmsfFile.find_by_id 6
-    @file7 = DmsfFile.find_by_id 7
-    @file8 = DmsfFile.find_by_id 8
-    @folder1 = DmsfFolder.find_by_id 1
-    @issue1 = Issue.find_by_id 1
-    @wf1 = DmsfWorkflow.find_by_id 1
-    @wf2 = DmsfWorkflow.find_by_id 2
+    @admin = User.find 1
+    @jsmith = User.find 2
+    @project1 = Project.find 1
+    @project2 = Project.find 2
+    @file1 = DmsfFile.find 1
+    @file2 = DmsfFile.find 2
+    @file3 = DmsfFile.find 3
+    @file4 = DmsfFile.find 4
+    @file5 = DmsfFile.find 5
+    @file6 = DmsfFile.find 6
+    @file7 = DmsfFile.find 7
+    @file8 = DmsfFile.find 8
+    @folder1 = DmsfFolder.find 1
+    @issue1 = Issue.find 1
+    @wf1 = DmsfWorkflow.find 1
+    @wf2 = DmsfWorkflow.find 2
     User.current = nil
   end
 
@@ -65,7 +66,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_project_file_count_differs_from_project_visibility_count
-    assert_not_same(@project1.dmsf_files.count, @project1.dmsf_files.visible.count)
+    assert_not_same(@project1.dmsf_files.all.size, @project1.dmsf_files.visible.all.size)
   end
 
   def test_project_dmsf_file_listing_contains_deleted_items
@@ -113,8 +114,8 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_delete_restore
-    assert_equal 1, @file4.dmsf_file_revisions.visible.count
-    assert_equal 2, @file4.referenced_links.visible.count
+    assert_equal 1, @file4.dmsf_file_revisions.visible.all.size
+    assert_equal 2, @file4.referenced_links.visible.all.size
   end
 
   def test_delete
@@ -122,9 +123,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     @file4.dmsf_folder.unlock!
     assert @file4.delete(false), @file4.errors.full_messages.to_sentence
     assert @file4.deleted?, "File #{@file4.name} is not deleted"
-    assert_equal 0, @file4.dmsf_file_revisions.visible.count
+    assert_equal 0, @file4.dmsf_file_revisions.visible.all.size
     # Links should not be deleted
-    assert_equal 2, @file4.referenced_links.visible.count
+    assert_equal 2, @file4.referenced_links.visible.all.size
     @file4.dmsf_folder.lock!
   end
 
@@ -134,19 +135,19 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert @file4.delete(false), @file4.errors.full_messages.to_sentence
     @file4.restore
     assert !@file4.deleted?, "File #{@file4} hasn't been restored"
-    assert_equal 1, @file4.dmsf_file_revisions.visible.count
-    assert_equal 2, @file4.referenced_links.visible.count
+    assert_equal 1, @file4.dmsf_file_revisions.visible.all.size
+    assert_equal 2, @file4.referenced_links.visible.all.size
     @file4.dmsf_folder.lock!
   end
 
   def test_destroy
     User.current = @admin
     @file4.dmsf_folder.unlock!
-    assert_equal 1, @file4.dmsf_file_revisions.visible.count
-    assert_equal 2, @file4.referenced_links.visible.count
+    assert_equal 1, @file4.dmsf_file_revisions.visible.all.size
+    assert_equal 2, @file4.referenced_links.visible.all.size
     @file4.delete true
-    assert_equal 0, @file4.dmsf_file_revisions.count
-    assert_equal 0, @file4.referenced_links.count
+    assert_equal 0, @file4.dmsf_file_revisions.all.size
+    assert_equal 0, @file4.referenced_links.all.size
     @file4.dmsf_folder.lock!
   end
 
@@ -157,7 +158,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
       assert_nil new_file.dmsf_folder_id
       assert_nil @file1.dmsf_folder_id
       assert_not_equal new_file.name, @file1.name
-      assert_equal new_file.dmsf_file_revisions.count, 1
+      assert_equal new_file.dmsf_file_revisions.all.size, 1
       assert_nil new_file.last_revision.workflow
       assert_nil new_file.last_revision.dmsf_workflow_id
       assert_nil new_file.last_revision.dmsf_workflow_assigned_by
@@ -180,9 +181,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_copy_to_filename_with_workflow_to_the_same_project
-    @file1.last_revision.set_workflow(@wf1.id, nil)
-    @file1.last_revision.assign_workflow(@wf1.id)
-    new_file = @file1.copy_to_filename(@project1, nil, 'new_file.txt')
+    @file7.last_revision.set_workflow(@wf1.id, nil)
+    @file7.last_revision.assign_workflow(@wf1.id)
+    new_file = @file7.copy_to_filename(@project1, nil, 'new_file.txt')
     assert_equal DmsfWorkflow::STATE_ASSIGNED, new_file.last_revision.workflow
     assert_equal @wf1.id, new_file.last_revision.dmsf_workflow_id
     assert_equal User.current.id, new_file.last_revision.dmsf_workflow_assigned_by
@@ -192,9 +193,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_copy_to_filename_with_workflow_to_other_project
-    @file1.last_revision.set_workflow(@wf1.id, nil)
-    @file1.last_revision.assign_workflow(@wf1.id)
-    new_file = @file1.copy_to_filename(@project2, nil, 'new_file.txt')
+    @file7.last_revision.set_workflow(@wf1.id, nil)
+    @file7.last_revision.assign_workflow(@wf1.id)
+    new_file = @file7.copy_to_filename(@project2, nil, 'new_file.txt')
     assert_nil new_file.last_revision.workflow
     assert_nil new_file.last_revision.dmsf_workflow_id
     assert_nil new_file.last_revision.dmsf_workflow_assigned_by
@@ -210,7 +211,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
       assert_not_equal @file1.dmsf_folder_id, @folder1.id
       assert_equal new_file.dmsf_folder_id, @folder1.id
       assert_equal new_file.name, @file1.name
-      assert_equal new_file.dmsf_file_revisions.count, 1
+      assert_equal new_file.dmsf_file_revisions.all.size, 1
     end
   end
 
@@ -258,7 +259,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_to_csv
-    columns = ['id', 'title']
+    columns = %w(id title)
     csv = @file1.to_csv(columns, 0)
     assert_equal 2, csv.size
   end
@@ -302,10 +303,10 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   def test_assigned
     assert !@file1.assigned?(@admin)
     assert !@file1.assigned?(@jsmith)
-    @file1.last_revision.set_workflow(@wf1.id, nil)
-    @file1.last_revision.assign_workflow(@wf1.id)
-    assert @file1.assigned?(@admin)
-    assert @file1.assigned?(@jsmith)
+    @file7.last_revision.set_workflow(@wf1.id, nil)
+    @file7.last_revision.assign_workflow(@wf1.id)
+    assert @file7.assigned?(@admin)
+    assert @file7.assigned?(@jsmith)
   end
 
 end

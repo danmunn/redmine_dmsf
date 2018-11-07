@@ -10,7 +10,6 @@
     "sInfoThousands": " ",
     "sLoadingRecords": "Lastar...",
     "sLengthMenu": "Syn _MENU_ linjer",
-    "sLoadingRecords": "Lastar...",
     "sProcessing": "Lastar...",
     "sSearch": "S&oslash;k:",
     "sUrl": "",
@@ -20,7 +19,7 @@
         "sPrevious": "Forrige",
         "sNext": "Neste",
         "sLast": "Siste"
-    }
+    },
     "oAria": {
         "sSortAscending": ": aktiver for å sortere kolonna stigande",
         "sSortDescending": ": aktiver for å sortere kolonna synkande"

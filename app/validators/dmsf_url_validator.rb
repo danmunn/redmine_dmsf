@@ -2,6 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
+# Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -18,16 +19,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class CreateDmsfWorkflowSteps < ActiveRecord::Migration
+class DmsfUrlValidator  < ActiveModel::EachValidator
 
-  def change
-    create_table :dmsf_workflow_steps do |t|
-      t.references :dmsf_workflow, null: false
-      t.integer :step, null: false
-      t.references :user, null: false
-      t.integer :operator, null: false
+  def validate_each(record, attribute, value)
+    if record.target_type == 'DmsfUrl'
+      begin
+        if value.present?
+          URI.parse value
+        else
+          record.errors.add attribute, :invalid
+        end
+      rescue URI::InvalidURIError
+        record.errors.add attribute, :invalid
+      end
     end
-    add_index :dmsf_workflow_steps, :dmsf_workflow_id, name: :index_dmsf_workflow_steps_on_dmsf_workflow_id
   end
 
 end

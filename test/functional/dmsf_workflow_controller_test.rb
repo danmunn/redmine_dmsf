@@ -28,28 +28,27 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     :dmsf_file_revisions, :dmsf_files
 
   def setup
-    @user_admin = User.find_by_id 1 # Redmine admin
-    @user_member = User.find_by_id 2 # John Smith - manager
-    @user_non_member = User.find_by_id 3 # Dave Lopper
-    @role_manager = Role.find_by_name('Manager')
+    @user_admin = User.find 1 # Redmine admin
+    @user_member = User.find 2 # John Smith - manager
+    @user_non_member = User.find 3 # Dave Lopper
+    @role_manager = Role.find_by(name: 'Manager')
     @role_manager.add_permission! :file_manipulation
     @role_manager.add_permission! :manage_workflows
     @role_manager.add_permission! :file_approval
-    @wfs1 = DmsfWorkflowStep.find_by_id 1 # step 1
-    @wfs2 = DmsfWorkflowStep.find_by_id 2 # step 2
-    @wfs3 = DmsfWorkflowStep.find_by_id 3 # step 1
-    @wfs4 = DmsfWorkflowStep.find_by_id 4 # step 2
-    @wfs5 = DmsfWorkflowStep.find_by_id 5 # step 3
-    @project1 = Project.find_by_id 1
+    @wfs1 = DmsfWorkflowStep.find 1 # step 1
+    @wfs2 = DmsfWorkflowStep.find 2 # step 2
+    @wfs3 = DmsfWorkflowStep.find 3 # step 1
+    @wfs4 = DmsfWorkflowStep.find 4 # step 2
+    @wfs5 = DmsfWorkflowStep.find 5 # step 3
+    @project1 = Project.find 1
     @project1.enable_module! :dmsf
-    @wf1 = DmsfWorkflow.find_by_id 1
-    @wf3 = DmsfWorkflow.find_by_id 3
-    @wfsa2 = DmsfWorkflowStepAssignment.find_by_id 2
-    @revision1 = DmsfFileRevision.find_by_id 1
-    @revision2 = DmsfFileRevision.find_by_id 2
-    @revision3 = DmsfFileRevision.find_by_id 3
-    @file1 = DmsfFile.find_by_id 1
-    @file2 = DmsfFile.find_by_id 2
+    @wf1 = DmsfWorkflow.find 1
+    @wf3 = DmsfWorkflow.find 3
+    @wfsa2 = DmsfWorkflowStepAssignment.find 2
+    @revision1 = DmsfFileRevision.find 1
+    @revision2 = DmsfFileRevision.find 2
+    @file1 = DmsfFile.find 1
+    @file2 = DmsfFile.find 2
     @request.env['HTTP_REFERER'] = dmsf_folder_path(:id => @project1.id)
     User.current = nil
     @request.session[:user_id] = @user_member.id
@@ -71,7 +70,6 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_kind_of DmsfWorkflowStepAssignment, @wfsa2
     assert_kind_of DmsfFileRevision, @revision1
     assert_kind_of DmsfFileRevision, @revision2
-    assert_kind_of DmsfFileRevision, @revision3
     assert_kind_of DmsfFile, @file1
     assert_kind_of DmsfFile, @file2
   end
@@ -200,7 +198,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
            :user_ids => [@user_non_member.id]
     end
     assert_response :success
-    ws = DmsfWorkflowStep.order(:id => :desc).first
+    ws = DmsfWorkflowStep.order(id: :desc).first
     assert_equal @wf1.id, ws.dmsf_workflow_id
     assert_equal 1, ws.step
     assert_equal '1st step', ws.name

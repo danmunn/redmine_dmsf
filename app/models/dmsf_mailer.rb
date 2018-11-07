@@ -50,7 +50,7 @@ class DmsfMailer < Mailer
     end
   end
 
-  def send_documents(project, user, email_params)
+  def send_documents(project, email_params)
     redmine_headers 'Project' => project.identifier if project
     @body = email_params[:body]
     @links_only = email_params[:links_only] == '1'

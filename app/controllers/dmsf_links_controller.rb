@@ -56,11 +56,11 @@ class DmsfLinksController < ApplicationController
     @target_folder_id = params[:dmsf_folder_id].to_i if params[:dmsf_folder_id].present?
     if @type == 'link_to'
       if @dmsf_file_id
-        file = DmsfFile.find_by_id @dmsf_file_id
-        @dmsf_link.name = file.title if file
+        names = DmsfFile.where(id: @dmsf_file_id).pluck(:name)
+        @dmsf_link.name = names.first if names.any?
       else
-        folder = DmsfFolder.find_by_id @target_folder_id
-        @dmsf_link.name = folder.title if folder
+        titles = DmsfFolder.where(id: @target_folder_id).pluck(:title)
+        @dmsf_link.name = titles.first if titles.any?
       end
     end
     @container = params[:container]
@@ -96,7 +96,7 @@ class DmsfLinksController < ApplicationController
         @dmsf_link.dmsf_folder_id = nil
       end
       @dmsf_link.target_project_id = params[:dmsf_link][:target_project_id]
-      if (params[:external_link] == 'true')
+      if params[:external_link] == 'true'
         @dmsf_link.external_url = params[:dmsf_link][:external_url]
         @dmsf_link.target_type = 'DmsfUrl'
       elsif params[:dmsf_link][:target_file_id].present?
@@ -121,12 +121,12 @@ class DmsfLinksController < ApplicationController
       if params[:dmsf_link][:target_project_id].present?
         @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
       else
-        target_folder = DmsfFolder.find_by(id: params[:dmsf_link][:target_folder_id])
-        unless target_folder
+        project_id = DmsfFolder.find_by(id: params[:dmsf_link][:target_folder_id]).pluck(:project_id).first
+        unless project_id
           render_404
           return
         end
-        @dmsf_link.project_id = target_folder.project_id
+        @dmsf_link.project_id = project_id
       end
       @dmsf_link.target_project_id = params[:dmsf_link][:project_id]
       if params[:dmsf_link][:dmsf_file_id].present?

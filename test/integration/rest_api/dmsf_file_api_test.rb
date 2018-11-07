@@ -26,12 +26,12 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   fixtures :projects, :users, :dmsf_files, :dmsf_file_revisions, :members, :roles, :member_roles
 
   def setup
-    @admin = User.find_by_id 1
-    @jsmith = User.find_by_id 2
-    @file1 = DmsfFile.find_by_id 1
+    @admin = User.find 1
+    @jsmith = User.find 2
+    @file1 = DmsfFile.find 1
     Setting.rest_api_enabled = '1'
-    @role = Role.find_by_id 1
-    @project1 = Project.find_by_id 1
+    @role = Role.find_by(name: 'Manager')
+    @project1 = Project.find 1
     @project1.enable_module! :dmsf
   end
 
@@ -75,11 +75,11 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
     get "/dmsf/files/#{@file1.id}/download.xml?key=#{token.value}"
     assert_response :success
-    assert_equal '1234', @response.body
+    assert_equal '123', @response.body
   end
 
   def test_upload_document
-    timestamp = DateTime.now.strftime('%y%m%d%H%M')
+    timestamp = DateTime.current.strftime('%y%m%d%H%M')
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = DmsfHelper.temp_dir.join("dmsf_test-#{timestamp}").to_s
     FileUtils.mkdir_p(Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
     @role.add_permission! :file_manipulation
@@ -97,20 +97,18 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     ftoken = xml['upload']['token']
     assert_not_nil ftoken
     #curl -v -H "Content-Type: application/xml" -X POST --data "@file.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/commit.xml
-    payload = %{
-      <?xml version="1.0" encoding="utf-8" ?>
-      <attachments>
-       <folder_id/>
-       <uploaded_file>
-         <name>test.txt</name>
-         <title>test.txt</title>
-         <description>REST API</description>
-         <comment>From API</comment>
-         <version/>
-         <token>#{ftoken}</token>
-       </uploaded_file>
-      </attachments>
-    }
+    payload = %{<?xml version="1.0" encoding="utf-8" ?>
+                <attachments>
+                 <folder_id/>
+                 <uploaded_file>
+                   <name>test.txt</name>
+                   <title>test.txt</title>
+                   <description>REST API</description>
+                   <comment>From API</comment>
+                   <version/>
+                   <token>#{ftoken}</token>
+                 </uploaded_file>
+                </attachments>}
     assert_difference 'DmsfFileRevision.count', +1 do
       post "/projects/#{@project1.id}/dmsf/commit.xml?key=#{token.value}", payload, {"CONTENT_TYPE" => 'application/xml'}
     end
@@ -123,7 +121,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     # </dmsf_files> #
     assert_select 'dmsf_files > file > name', :text => 'test.txt'
     assert_response :success
-    revision = DmsfFileRevision.order(:id).last
+    revision = DmsfFileRevision.order(:created_at).last
     assert revision && revision.size > 0
     begin
       FileUtils.rm_rf Setting.plugin_redmine_dmsf['dmsf_storage_directory']
@@ -156,7 +154,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml&commit=yes
     delete "/dmsf/files/#{@file1.id}.xml?key=#{token.value}&commit=yes", {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
-    assert_nil DmsfFile.find_by_id(@file1.id)
+    assert_nil DmsfFile.find_by(id: @file1.id)
   end
 
   def test_delete_file_locked

@@ -19,16 +19,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class CreateDmsfFolderPermissions < ActiveRecord::Migration
-  def up
+
+  def change
     create_table :dmsf_folder_permissions do |t|
       t.references :dmsf_folder
-      t.integer :object_id, :null => false
-      t.string :object_type, :limit => 30, :null => false
+      t.integer :object_id, null: false
+      t.string :object_type, limit: 30, null: false
     end
-    add_index :dmsf_folder_permissions, :dmsf_folder_id
+    add_index :dmsf_folder_permissions, :dmsf_folder_id, name: :index_dmsf_folder_permissions_on_dmsf_folder_id
   end
-  
-  def self.down
-    drop_table :dmsf_folder_permissions
-  end
+
 end

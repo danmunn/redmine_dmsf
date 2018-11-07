@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% wf = DmsfWorkflow.find_by_id(file.last_revision.dmsf_workflow_id) if file.last_revision.dmsf_workflow_id %>
+<% wf = DmsfWorkflow.find_by(id: file.last_revision.dmsf_workflow_id) if file.last_revision.dmsf_workflow_id %>
 
 <td class="dmsf_checkbox"><%= check_box_tag('ids[]', "#{name}-#{id}", false, :id => "file_#{id}") %></td>
 <% if DmsfFolder.is_column_on?('id') %>
@@ -76,8 +76,7 @@
 <% if DmsfFolder.is_column_on?('author') %>
   <td class="dmsf_author"><%= h(file.last_revision.user) %></td>
 <% end %>
-<% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
-<% cfs.each do |c| %>
+<% CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c| %>
     <% if DmsfFolder.is_column_on?(c.name) %>
         <td class="dmsf_cf">
           <%= file.custom_value(c) %>
@@ -100,7 +99,7 @@
     <% else %>
       <span class="icon-only icon-unlock" title="<%= file.get_locked_title %>"></span>
     <% end %>
-    <% unless file.locked? %>
+    <% if !file.locked? %>
       <% if file.notification %>
         <%= link_to('', notify_deactivate_dmsf_files_path(:id => file),
           :title => l(:title_notifications_active_deactivate),

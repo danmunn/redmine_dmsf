@@ -79,11 +79,11 @@ module DAV4Rack
       @namespaces = (options[:namespaces] || {}).merge({DAV_NAMESPACE => DAV_NAMESPACE_NAME})
       @request = request
       @response = response
-      unless(options.has_key?(:lock_class))
-        @lock_class = LockStore
-      else
+      if (options.has_key?(:lock_class))
         @lock_class = options[:lock_class]
         raise NameError.new("Unknown lock type constant provided: #{@lock_class}") unless @lock_class.nil? || defined?(@lock_class)
+      else
+        @lock_class = LockStore
       end
       @options = options
       @max_timeout = options[:max_timeout] || 86400

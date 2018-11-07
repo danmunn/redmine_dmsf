@@ -19,11 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class AddUserToLinks < ActiveRecord::Migration
-  def up
+
+  def change
     add_column :dmsf_links, :user_id, :integer
   end
 
-  def down
-    remove_column :dmsf_links, :user_id
-  end
 end

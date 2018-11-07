@@ -40,7 +40,7 @@
   </td>
 <% end %>
 <% if DmsfFolder.is_column_on?('extension') %>
-    <td class="dmsf_extension"></td>
+  <td class="dmsf_extension"></td>
 <% end %>
 <% if DmsfFolder.is_column_on?('size') %>
   <td class="dmsf_size"></td>
@@ -57,8 +57,7 @@
 <% if DmsfFolder.is_column_on?('author') %>
   <td class="dmsf_author"><%= h(link.user) %></td>
 <% end %>
-<% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
-<% cfs.each do |c| %>
+<% CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c| %>
     <% if DmsfFolder.is_column_on?(c.name) %>
         <td class="dmsf_cf"></td>
     <% end %>

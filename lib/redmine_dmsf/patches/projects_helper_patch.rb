@@ -34,7 +34,7 @@ module RedmineDmsf
            :partial => 'dmsf_workflows/main', :label => :label_dmsf_workflow_plural}
         ]
         tabs.concat(dmsf_tabs.select {|dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project)})
-        return tabs
+        tabs
       end
 
     end

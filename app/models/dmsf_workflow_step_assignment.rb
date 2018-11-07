@@ -25,13 +25,14 @@ class DmsfWorkflowStepAssignment < ActiveRecord::Base
 
   has_many :dmsf_workflow_step_actions, :dependent => :destroy
 
-  validates_presence_of :dmsf_workflow_step, :dmsf_file_revision
-  validates_uniqueness_of :dmsf_workflow_step_id, :scope => [:dmsf_file_revision_id]
+  validates :dmsf_workflow_step, presence: true
+  validates :dmsf_file_revision, presence: true
+  validates_uniqueness_of :dmsf_workflow_step_id, scope: [:dmsf_file_revision_id]
 
   def add?(dmsf_file_revision_id)
-    if self.dmsf_file_revision_id == dmsf_file_revision_id
+    if dmsf_file_revision_id == dmsf_file_revision_id
       add = true
-      self.dmsf_workflow_step_actions.each do |action|
+      dmsf_workflow_step_actions.each do |action|
         if action.is_finished?
           add = false
           break

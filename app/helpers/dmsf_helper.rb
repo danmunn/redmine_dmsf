@@ -37,8 +37,8 @@ module DmsfHelper
 
   def self.temp_filename(filename)
     filename = sanitize_filename(filename)
-    timestamp = DateTime.now.strftime("%y%m%d%H%M%S")
-    while self.temp_dir.join("#{timestamp}_#{filename}").exist?
+    timestamp = DateTime.current.strftime('%y%m%d%H%M%S')
+    while temp_dir.join("#{timestamp}_#{filename}").exist?
       timestamp.succ!
     end
     "#{timestamp}_#{filename}"
@@ -101,16 +101,16 @@ module DmsfHelper
       User.current.allowed_to?(:display_system_folders, project)
     folders.reject{ |folder|
       if folder.system
-        unless allowed
-          true
-        else
+        if allowed
           issue_id = folder.title.to_i
           if issue_id > 0
-            issue = Issue.find_by_id issue_id
+            issue = Issue.find_by(id: issue_id)
             issue && !issue.visible?(User.current)
           else
             false
           end
+        else
+          true
         end
       else
         false
@@ -123,11 +123,11 @@ module DmsfHelper
     nodes = visible_folders(parent.dmsf_folders.visible.to_a, parent.is_a?(Project) ? parent : parent.project) + parent.dmsf_links.visible + parent.dmsf_files.visible
     # Alphabetical and type sort
     nodes.sort! do |x, y|
-      if ((x.is_a?(DmsfFolder) || (x.is_a?(DmsfLink) && x.is_folder?)) &&
-            (y.is_a?(DmsfFile) || (y.is_a?(DmsfLink) && y.is_file?)))
+      if (x.is_a?(DmsfFolder) || (x.is_a?(DmsfLink) && x.is_folder?)) &&
+            (y.is_a?(DmsfFile) || (y.is_a?(DmsfLink) && y.is_file?))
         -1
-      elsif ((x.is_a?(DmsfFile) || (x.is_a?(DmsfLink) && x.is_file?)) &&
-            (y.is_a?(DmsfFolder) || (y.is_a?(DmsfLink) && y.is_folder?)))
+      elsif (x.is_a?(DmsfFile) || (x.is_a?(DmsfLink) && x.is_file?)) &&
+            (y.is_a?(DmsfFolder) || (y.is_a?(DmsfLink) && y.is_folder?))
         1
       else
         x.title.downcase <=> y.title.downcase

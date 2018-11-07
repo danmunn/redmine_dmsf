@@ -19,12 +19,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class UpdateProjects < ActiveRecord::Migration
-  def self.up
+
+  def change
     # DMSF - project's root folder notification
     add_column :projects, :dmsf_notification, :boolean
   end
-  
-  def self.down
-    remove_column :projects, :dmsf_notification
-  end
+
 end

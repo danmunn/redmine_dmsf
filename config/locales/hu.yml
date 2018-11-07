@@ -168,8 +168,6 @@ hu:
   permission_email_documents: Email documents
   label_file: Fájl
   field_folder: Mappa
-  error_create_cycle_in_folder_dependency: hurok létrehozása a könyvtárstruktúrában
-  error_contains_invalid_character: érvénytelen karaktereket tartalmaz
   error_file_commit_require_uploaded_file: Fájl beíratáshoz szükséges a feltöltött fájl
 
   warning_some_files_were_not_commited: "Néhány fájl nem került beíratásra validálási locked_documents: Zárolt
@@ -418,3 +416,8 @@ hu:
       dmsf_open_approvals: My open approvals
     module_category:
       easy_dms: Easy DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: érvénytelen karaktereket tartalmaz

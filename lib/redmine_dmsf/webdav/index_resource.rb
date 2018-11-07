@@ -33,7 +33,7 @@ module RedmineDmsf
           @projects = []
           Project.select(:id, :identifier, :name).has_module(:dmsf).where(
             Project.allowed_to_condition(
-              User.current, :view_dmsf_folders)).order('lft').each do |p|
+              User.current, :view_dmsf_folders)).order('lft').find_each do |p|
             @projects << child_project(p)
           end
         end
@@ -45,11 +45,11 @@ module RedmineDmsf
       end
 
       def creation_date
-        Time.now
+        Time.current
       end
 
       def last_modified
-        Time.now
+        Time.current
       end
 
       # Index resource ALWAYS exists
@@ -63,7 +63,7 @@ module RedmineDmsf
       end
 
       def etag
-        sprintf('%x-%x-%x', children.count, 4096, Time.now.to_i)
+        sprintf('%x-%x-%x', children.count, 4096, Time.current.to_i)
       end
 
       def content_type

@@ -54,11 +54,11 @@ class DmsfContextMenusController < ApplicationController
       selected_files = params[:ids].select{ |x| x =~ /file-\d+/ }.map{ |x| $1.to_i if x =~ /file-(\d+)/ }
       selected_file_links = params[:ids].select{ |x| x =~ /file-link-\d+/ }.map{ |x| $1.to_i if x =~ /file-link-(\d+)/ }
       selected_file_links.each do |id|
-        link = DmsfLink.find_by_id id
-        selected_files << link.target_id if link && !selected_files.include?(link.target_id.to_s)
+        target_id = DmsfLink.find_by(id: id).pluck(:target_id).first
+        selected_files << target_id if target_id && !selected_files.include?(target_id)
       end
       if (selected_files.size == 1) && (params[:ids].size == 1)
-        @file = DmsfFile.find selected_files[0]
+        @file = DmsfFile.find_by(id: selected_files[0])
       end
     end
   end

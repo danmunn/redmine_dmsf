@@ -26,8 +26,8 @@ class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
     :dmsf_workflow_step_assignments
   
   def setup
-    @wfsa1 = DmsfWorkflowStepAssignment.find(1)
-    @wfsa2 = DmsfWorkflowStepAssignment.find(2)
+    @wfsa1 = DmsfWorkflowStepAssignment.find 1
+    @wfsa2 = DmsfWorkflowStepAssignment.find 2
   end
   
   def test_truth
@@ -75,8 +75,8 @@ class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
   
   def test_destroy  
     @wfsa1.destroy
-    assert_nil DmsfWorkflowStepAssignment.find_by_id(1)
-    assert_nil DmsfWorkflowStepAction.find_by_id(1)
+    assert_nil DmsfWorkflowStepAssignment.find_by(id: 1)
+    assert_nil DmsfWorkflowStepAction.find_by(id: 1)
   end
   
 end

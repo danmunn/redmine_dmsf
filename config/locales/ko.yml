@@ -168,8 +168,6 @@ ko:
   permission_email_documents: Email documents
   label_file: 파일
   field_folder: 폴더
-  error_create_cycle_in_folder_dependency: 폴더 종속에 규칙 생성
-  error_contains_invalid_character: 사용이 불가능한 문자(들) 포함
   error_file_commit_require_uploaded_file: 파일은 업로드 파일이 필요합니다
 
   warning_some_files_were_not_commited: "다음 오류로 인하여 파일을 실행할 수 없습니다: %{files}"
@@ -418,3 +416,8 @@ ko:
       dmsf_open_approvals: My open approvals
     module_category:
       easy_dms: Easy DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: 사용이 불가능한 문자(들) 포함

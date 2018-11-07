@@ -26,37 +26,37 @@
 
 <div class="contextual">
   <% if @file_manipulation_allowed %>
-    <% unless @file.locked_for_user? %>
-      <% unless @file.locked? %>
-        <%= link_to(l(:button_lock), lock_dmsf_files_path(:id => @file),
-          :title => l(:title_lock_file), :class => 'icon icon-lock') %>
-      <% else %>
+    <% if @file.locked_for_user? %>
+      <% if User.current.allowed_to?(:force_file_unlock, @project) %>
         <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
-          :title => l(:title_unlock_file), :class => 'icon icon-unlock') %>
+                       :title => l(:title_unlock_file), :class => 'icon icon-unlock')%>
+      <% end %>
+    <% else %>
+      <% if @file.locked? %>
+        <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
+                       :title => l(:title_unlock_file), :class => 'icon icon-unlock') %>
+      <% else %>
+        <%= link_to(l(:button_lock), lock_dmsf_files_path(:id => @file),
+                    :title => l(:title_lock_file), :class => 'icon icon-lock') %>
       <% end %>
       <% if @file.notification %>
         <%= link_to(l(:label_notifications_off),
-          notify_deactivate_dmsf_files_path(:id => @file),
-          :title => l(:title_notifications_active_deactivate),
-          :class => 'icon icon-email') %>
+                    notify_deactivate_dmsf_files_path(:id => @file),
+                    :title => l(:title_notifications_active_deactivate),
+                    :class => 'icon icon-email') %>
       <% else %>
         <%= link_to(l(:label_notifications_on),
-          notify_activate_dmsf_files_path(:id => @file),
-          :title => l(:title_notifications_not_active_activate),
-          :class => 'icon icon-email-add') %>
+                    notify_activate_dmsf_files_path(:id => @file),
+                    :title => l(:title_notifications_not_active_activate),
+                    :class => 'icon icon-email-add') %>
       <% end %>
       <%= link_to(l(:label_link_to),
-        new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @file.dmsf_folder ? @file.dmsf_folder.id : nil, :dmsf_file_id => @file.id, :type => 'link_to'),
-        :title => l(:title_create_link),
-        :class => 'icon icon-link') %>
+                  new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @file.dmsf_folder ? @file.dmsf_folder.id : nil, :dmsf_file_id => @file.id, :type => 'link_to'),
+                  :title => l(:title_create_link),
+                  :class => 'icon icon-link') %>
       <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(:id => @file),
-        :title => l(:title_copy), :class => 'icon icon-copy') %>
+                  :title => l(:title_copy), :class => 'icon icon-copy') %>
       <%= delete_link(dmsf_file_path(:id => @file, :details => true)) if @file_delete_allowed %>
-    <% else %>
-      <% if User.current.allowed_to?(:force_file_unlock, @project) %>
-        <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
-          :title => l(:title_unlock_file), :class => 'icon icon-unlock')%>
-      <% end %>
     <% end %>
   <% end %>
 </div>
@@ -127,7 +127,7 @@
             <%= content_tag :div, l(:label_size), :class => 'label' %>
             <%= content_tag :div, number_to_human_size(revision.size), :class => 'value' %>
           </div>
-          <% wf = DmsfWorkflow.find_by_id(revision.dmsf_workflow_id) %>
+          <% wf = DmsfWorkflow.find_by(id: revision.dmsf_workflow_id) %>
           <% if wf %>
             <div class="status attribute">
               <%= content_tag :div, l(:label_workflow), :class => 'label' %>

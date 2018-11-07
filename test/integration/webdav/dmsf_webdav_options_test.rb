@@ -29,11 +29,20 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   def setup
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
-    @project1 = Project.find_by_id 1
-    @project2 = Project.find_by_id 2
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
+    @project1 = Project.find 1
+    @project2 = Project.find 2
+    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
+    @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
+    @dmsf_webdav_use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
+  end
+
+  def teardown
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
+    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
   end
   
   def test_truth
@@ -81,26 +90,26 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
 
   def test_options_requires_authentication_for_non_root_request
     xml_http_request :options, "/dmsf/webdav/#{@project1.identifier}"
-    assert_response 401 # Unauthorized
+    assert_response :unauthorized
   end
 
   def test_un_authenticated_options_returns_expected_allow_header
     xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}"
-    assert_response 401
+    assert_response :unauthorized
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
     assert_nil response.headers['Allow'] , 'Allow header should not exist'
   end
 
   def test_un_authenticated_options_returns_expected_dav_header
     xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}"
-    assert_response 401
+    assert_response :unauthorized
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
     assert_nil response.headers['Dav'] , 'Dav header should not exist'
   end
 
   def test_un_authenticated_options_returns_expected_ms_auth_via_header
     xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}"
-    assert_response 401
+    assert_response :unauthorized
     assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
     assert_nil response.headers['Ms-Author-Via'] , 'Ms-Author-Via header should not exist'
   end
@@ -131,7 +140,7 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
 
   def test_un_authenticated_options_for_msoffice_user_agent
     xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => 'Microsoft Office Word 2014'}
-    assert_response 401
+    assert_response :unauthorized
   end
 
   def test_authenticated_options_for_msoffice_user_agent
@@ -142,7 +151,7 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
 
   def test_un_authenticated_options_for_other_user_agent
     xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, {:HTTP_USER_AGENT => 'Other'}
-    assert_response 401
+    assert_response :unauthorized
   end
 
   def test_authenticated_options_for_other_user_agent
@@ -151,7 +160,7 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     xml_http_request  :options, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_USER_AGENT => 'Other'})
-    assert_response 404
+    assert_response :not_found
     xml_http_request  :options, "/dmsf/webdav/#{project1_uri}", nil, @admin.merge!({:HTTP_USER_AGENT => 'Other'})
     assert_response :success
   end
@@ -159,12 +168,12 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   def test_authenticated_options_returns_404_for_non_dmsf_enabled_items
     @project2.disable_module! :dmsf
     xml_http_request  :options, "/dmsf/webdav/#{@project2.identifier}", nil, @jsmith
-    assert_response 404
+    assert_response :not_found
   end
 
   def test_authenticated_options_returns_404_for_not_found
     xml_http_request  :options, '/dmsf/webdav/does-not-exist', nil, @jsmith
-    assert_response 404
+    assert_response :not_found
   end
 
 end

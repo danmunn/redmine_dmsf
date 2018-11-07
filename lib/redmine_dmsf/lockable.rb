@@ -40,7 +40,7 @@ module RedmineDmsf
       if tree
         ret = ret | (self.dmsf_folder.locks.empty? ? self.dmsf_folder.lock : self.dmsf_folder.locks) if dmsf_folder
       end
-      return ret
+      ret
     end
 
     def lock!(scope = :scope_exclusive, type = :type_write, expire = nil)
@@ -73,7 +73,7 @@ module RedmineDmsf
       l.save!
       reload
       locks.reload
-      return l
+      l
     end
 
     def unlockable?
@@ -93,7 +93,7 @@ module RedmineDmsf
         next if locks.empty?
         locks.each do |lock|
           next if lock.expired? # In case we're in between updates
-          if (lock.lock_scope == :scope_exclusive && b_shared.nil?)
+          if lock.lock_scope == :scope_exclusive && b_shared.nil?
             return true if (!lock.user) || (lock.user.id != User.current.id)
           else
             b_shared = true if b_shared.nil?
@@ -117,7 +117,7 @@ module RedmineDmsf
           self.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, self.project) && !force_file_unlock_allowed)
 
         # Now we need to determine lock type and do the needful
-        if (existing.count == 1 && existing[0].lock_scope == :exclusive)
+        if (existing.count == 1) && (existing[0].lock_scope == :exclusive)
           existing[0].destroy
         else
           b_destroyed = false
@@ -131,7 +131,7 @@ module RedmineDmsf
           # At first it was going to be allowed for someone with force_file_unlock to delete all shared by default
           # Instead, they by default remove themselves from shared lock, and everyone from shared lock if they're not
           # on said lock
-          if (!b_destroyed && (User.current.allowed_to?(:force_file_unlock, self.project) || force_file_unlock_allowed))
+          if !b_destroyed && (User.current.allowed_to?(:force_file_unlock, self.project) || force_file_unlock_allowed)
             locks.delete_all
           end
         end

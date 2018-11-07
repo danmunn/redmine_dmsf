@@ -74,12 +74,10 @@ class DmsfMaintenance
   end
 
   def documents
-    DmsfFile.all.each do |f|
+    DmsfFile.find_each do |f|
       r = f.last_revision
       if r.nil? || (!File.exist?(r.disk_file))
         @documents_to_delete << f
-        folder = f.dmsf_folder ? f.dmsf_folder.dmsf_path_str : ''
-        project = f.project ? f.project.name : '<nil>'
         puts "\t#{r.disk_file}\n" if r
       end
     end

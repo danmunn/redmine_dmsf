@@ -41,7 +41,7 @@ function dmsfToggle(EL, PM, url)
     dmsfExpandRows(EL, selectedRow, url);
   }
 
-  for(i = 0; i < elsLen; i++)
+  for(var i = 0; i < elsLen; i++)
   {
     if(cpattern.test(els[i].id))
     {
@@ -65,7 +65,7 @@ function dmsfToggle(EL, PM, url)
 
     if(pattern.test(els[i].className))
     {
-      var cnames = els[i].className;
+      let cnames = els[i].className;
 
       cnames = cnames.replace(/dmsf_hidden/g,'');
 
@@ -89,7 +89,7 @@ function dmsfToggle(EL, PM, url)
 
     if(!(hide.test(els[i].className)))
     {
-      var cnames = els[i].className;
+      let cnames = els[i].className;
 
       cnames = cnames.replace(/odd/g,'');
       cnames = cnames.replace(/even/g,'');
@@ -110,14 +110,14 @@ function dmsfToggle(EL, PM, url)
 
   if (collapse.test(selectedRow.className))
   {
-    var cnames = selectedRow.className;
+    let cnames = selectedRow.className;
 
     cnames = cnames.replace(/dmsf_collapsed/,'dmsf_expanded');
     selectedRow.className = cnames;
   }
   else
   {
-    var cnames = selectedRow.className;
+    let cnames = selectedRow.className;
 
     cnames = cnames.replace(/dmsf_expanded/,'dmsf_collapsed');
     selectedRow.className = cnames;

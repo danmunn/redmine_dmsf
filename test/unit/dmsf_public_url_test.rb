@@ -25,12 +25,9 @@ class DmsfPublicUrlsTest < RedmineDmsf::Test::UnitTest
   fixtures :dmsf_files, :dmsf_file_revisions, :dmsf_public_urls, :users
 
   def setup
-    @file1 = DmsfFile.find_by_id 1
-    assert_not_nil @file1
-    @dmsf_public_url1 = DmsfPublicUrl.find_by_id 1
-    assert_not_nil @dmsf_public_url1
-    @user2 = User.find_by_id 2
-    assert_not_nil @user2
+    @file1 = DmsfFile.find 1
+    @dmsf_public_url1 = DmsfPublicUrl.find 1
+    @user2 = User.find 2
   end
   
   def test_truth
@@ -43,14 +40,14 @@ class DmsfPublicUrlsTest < RedmineDmsf::Test::UnitTest
     url = DmsfPublicUrl.new
     url.dmsf_file = @file1
     url.user = @user2
-    url.expire_at = DateTime.now() + 1.day
+    url.expire_at = DateTime.current + 1.day
     assert url.save, url.errors.full_messages.to_sentence
     assert_not_nil url.token
   end
    
   def test_belongs_to_file
     @file1.destroy
-    assert_nil DmsfPublicUrl.find_by_id 1
+    assert_nil DmsfPublicUrl.find_by(id: 1)
   end
 
 end

@@ -29,15 +29,33 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
   def setup
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
-    @project1 = Project.find_by_id 1
-    @project2 = Project.find_by_id 2
-    @role = Role.find_by_id 1 # Manager
-    @folder6 = DmsfFolder.find_by_id 6    
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
+    @project1 = Project.find 1
+    @project2 = Project.find 2
+    @role = Role.find_by(name: 'Manager')
+    @folder6 = DmsfFolder.find 6
+    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
+    @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
+    @dmsf_webdav_use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
+    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../../fixtures/dmsf', __FILE__)
+    FileUtils.cp_r(File.expand_path('../../../fixtures/files', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
     User.current = nil        
+  end
+
+  def teardown
+    # Delete our tmp folder
+    begin
+      FileUtils.rm_rf DmsfFile.storage_path
+    rescue Exception => e
+      error e.message
+    end
+    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
+    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
   end
 
   def test_truth
@@ -49,70 +67,56 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
 
   def test_mkcol_requires_authentication
     xml_http_request  :mkcol, '/dmsf/webdav/test1'
-    assert_response 401
+    assert_response :unauthorized
   end
 
   def test_mkcol_fails_to_create_folder_at_root_level
     xml_http_request  :mkcol, '/dmsf/webdav/test1', nil, @admin
-    assert_response 405 # 405 - Method Not Allowed
+    assert_response :method_not_allowed
   end
 
   def test_should_not_succeed_on_a_non_existant_project
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      xml_http_request  :mkcol, '/dmsf/webdav/project_doesnt_exist/test1', nil, @admin
-      assert_response :missing # Not found
-    end
+    xml_http_request  :mkcol, '/dmsf/webdav/project_doesnt_exist/test1', nil, @admin
+    assert_response :not_found
   end
 
   def test_should_not_succed_on_a_non_dmsf_enabled_project
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/folder", nil, @jsmith
-      assert_response :forbidden
-    end
+    xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/folder", nil, @jsmith
+    assert_response :forbidden
   end
 
   def test_should_not_create_folder_without_permissions
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      @project1.enable_module! :dmsf # Flag module enabled
-      xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/folder", nil, @jsmith
-      assert_response :forbidden
-    end
+    @project1.enable_module! :dmsf # Flag module enabled
+    xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/folder", nil, @jsmith
+    assert_response :forbidden
   end
 
   def test_should_fail_to_create_folder_that_already_exists
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      @project1.enable_module! :dmsf # Flag module enabled
-      @role.add_permission! :folder_manipulation
-      @role.add_permission! :view_dmsf_folders
-      xml_http_request :mkcol,
-        "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
-      assert_response 405 # Method not Allowed
-    end
+    @project1.enable_module! :dmsf # Flag module enabled
+    @role.add_permission! :folder_manipulation
+    @role.add_permission! :view_dmsf_folders
+    xml_http_request :mkcol,
+      "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", nil, @jsmith
+    assert_response :method_not_allowed
   end
 
   def test_should_fail_to_create_folder_for_user_without_rights
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      @project1.enable_module! :dmsf # Flag module enabled
-      xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", nil, @jsmith
-      assert_response :forbidden
-    end
+    @project1.enable_module! :dmsf # Flag module enabled
+    xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", nil, @jsmith
+    assert_response :forbidden
   end
 
   def test_should_create_folder_for_non_admin_user_with_rights
-    if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_WRITE'
-      @project1.enable_module! :dmsf
-      @role.add_permission! :folder_manipulation
-      xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", nil, @jsmith
-      assert_response 201 # Created
-      Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-      if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] == true
-        project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-        xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test2", nil, @jsmith
-        assert_response 404
-        xml_http_request :mkcol, "/dmsf/webdav/#{project1_uri}/test3", nil, @jsmith
-        assert_response 201 # Created
-      end
-    end
+    @project1.enable_module! :dmsf
+    @role.add_permission! :folder_manipulation
+    xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", nil, @jsmith
+    assert_response :success # Created
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+    project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    xml_http_request :mkcol, "/dmsf/webdav/#{@project1.identifier}/test2", nil, @jsmith
+    assert_response :not_found
+    xml_http_request :mkcol, "/dmsf/webdav/#{project1_uri}/test3", nil, @jsmith
+    assert_response :success # Created
   end
   
 end

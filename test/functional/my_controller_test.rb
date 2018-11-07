@@ -28,8 +28,7 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
     :dmsf_file_revisions, :dmsf_folders, :dmsf_files, :dmsf_locks
 
   def setup
-    @user_member = User.find_by_id 2
-    assert_not_nil @user_member
+    @user_member = User.find 2
     User.current = nil
     @request.session[:user_id] = @user_member.id    
   end 
@@ -45,7 +44,7 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
     assert_response :success
     unless defined?(EasyExtensions)
       assert_select 'div#list-top' do
-        assert_select 'h3', { :text => "#{l(:open_approvals)} (0)" }
+        assert_select 'h3', { :text => "#{l(:open_approvals)} (3)" }
       end
     end
   end

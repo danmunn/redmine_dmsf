@@ -24,6 +24,11 @@ DMSF_MAX_NOTIFICATION_RECEIVERS_INFO = 10
 
 # DMSF libraries
 
+# Validators
+require_dependency '../validators/dmsf_file_name_validator'
+require_dependency '../validators/dmsf_workflow_name_validator'
+require_dependency '../validators/dmsf_url_validator'
+
 # Plugin's patches
 require 'redmine_dmsf/patches/projects_helper_patch'
 require 'redmine_dmsf/patches/project_patch'
@@ -48,12 +53,12 @@ require 'redmine_dmsf/webdav/project_resource'
 require 'redmine_dmsf/webdav/resource_proxy'
 
 # Exceptions
-require 'redmine_dmsf/errors/dmsf_access_error.rb'
-require 'redmine_dmsf/errors/dmsf_content_error.rb'
-require 'redmine_dmsf/errors/dmsf_email_max_file_error.rb'
-require 'redmine_dmsf/errors/dmsf_file_not_found_error.rb'
-require 'redmine_dmsf/errors/dmsf_lock_error.rb'
-require 'redmine_dmsf/errors/dmsf_zip_max_file_error.rb'
+require 'redmine_dmsf/errors/dmsf_access_error'
+require 'redmine_dmsf/errors/dmsf_content_error'
+require 'redmine_dmsf/errors/dmsf_email_max_file_error'
+require 'redmine_dmsf/errors/dmsf_file_not_found_error'
+require 'redmine_dmsf/errors/dmsf_lock_error'
+require 'redmine_dmsf/errors/dmsf_zip_max_file_error'
 
 # Hooks
 require 'redmine_dmsf/hooks/controllers/search_controller_hooks'

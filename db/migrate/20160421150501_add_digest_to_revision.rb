@@ -19,11 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class AddDigestToRevision < ActiveRecord::Migration
+
   def up
-    add_column :dmsf_file_revisions, :digest, :string, :limit => 40, :default => '', :null => false
+    add_column :dmsf_file_revisions, :digest, :string, limit: 40, default: '', null: false
   end
 
-  def down
-    remove_column :dmsf_file_revisions, :digest
-  end
 end

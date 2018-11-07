@@ -2,6 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
+# Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -18,16 +19,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class CreateDmsfWorkflowSteps < ActiveRecord::Migration
+class DmsfFileNameValidator  < ActiveModel::EachValidator
 
-  def change
-    create_table :dmsf_workflow_steps do |t|
-      t.references :dmsf_workflow, null: false
-      t.integer :step, null: false
-      t.references :user, null: false
-      t.integer :operator, null: false
+  def validate_each(record, attribute, value)
+    unless value =~ /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/
+      record.errors.add attribute, :error_contains_invalid_character
     end
-    add_index :dmsf_workflow_steps, :dmsf_workflow_id, name: :index_dmsf_workflow_steps_on_dmsf_workflow_id
   end
 
 end

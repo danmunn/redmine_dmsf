@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class AddDmsfFileLastRevisionIdToDmsfLock < ActiveRecord::Migration
+
   def up
     rename_column :dmsf_locks, :revision, :dmsf_file_last_revision_id
   end
@@ -27,4 +28,5 @@ class AddDmsfFileLastRevisionIdToDmsfLock < ActiveRecord::Migration
   def down
     rename_column :dmsf_locks, :dmsf_file_last_revision_id, :revision
   end
+
 end

@@ -19,11 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class AddIndexToDmsfLock < ActiveRecord::Migration
-  def self.up    
-    add_index :dmsf_locks, :entity_id
+
+  def change
+    add_index :dmsf_locks, :entity_id, name: :index_dmsf_locks_on_entity_id
   end
 
-  def self.down    
-    remove_index :dmsf_locks, :entity_id
-  end
 end

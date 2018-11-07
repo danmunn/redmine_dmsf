@@ -64,9 +64,7 @@ def init
   end
 end
 
-unless Redmine::Plugin.installed?(:easy_extensions)
-  init
-else
+if Redmine::Plugin.installed?(:easy_extensions)
   ActiveSupport.on_load(:easyproject, yield: true) do
     init
 
@@ -76,6 +74,8 @@ else
     EpmDmsfLockedDocuments.register_to_scope(:user, :plugin => :redmine_dmsf)
     EpmDmsfOpenApprovals.register_to_scope(:user, :plugin => :redmine_dmsf)
   end
+else
+  init
 end
 
 ActionDispatch::Reloader.to_prepare do

@@ -157,7 +157,7 @@ Redmine::WikiFormatting::Macros.register do
     size = options[:size]
     width = options[:width]
     height = options[:height]
-    if file = DmsfFile.find_by_id(file_id)
+    if file = DmsfFile.find_by(id: file_id)
       unless User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
         raise l(:notice_not_authorized)
       end
@@ -191,7 +191,7 @@ Redmine::WikiFormatting::Macros.register do
     size = options[:size]
     width = options[:width]
     height = options[:height]
-    if file = DmsfFile.find_by_id(file_id)
+    if file = DmsfFile.find_by(id: file_id)
       unless User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
         raise l(:notice_not_authorized)
       end

@@ -168,8 +168,7 @@ pl:
   permission_email_documents: Email documents
   label_file: Plik
   field_folder: Folder
-  error_create_cycle_in_folder_dependency: utworzono pętlę zależności pomiędzy folderami
-  error_contains_invalid_character: zawiera nieprawidłowe znaki
+
   error_file_commit_require_uploaded_file: Commit pliku wymaga jego uprzedniego przesłania
 
   warning_some_files_were_not_commited: "Niektóre pliki nie zostały zacommitowane ze względu na błędy walidacji:
@@ -418,3 +417,8 @@ pl:
       dmsf_open_approvals: My open approvals
     module_category:
       easy_dms: Easy DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: zawiera nieprawidłowe znaki

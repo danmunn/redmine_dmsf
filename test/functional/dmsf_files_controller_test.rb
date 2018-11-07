@@ -27,15 +27,26 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     :enabled_modules, :dmsf_file_revisions
 
   def setup
-    @project = Project.find_by_id 1
-    assert_not_nil @project
+    @project = Project.find 1
     @project.enable_module! :dmsf    
-    @file = DmsfFile.find_by_id 1    
-    @role = Role.find_by_id 1
+    @file = DmsfFile.find 1
+    @role = Role.find 1
     User.current = nil
     @request.session[:user_id] = 2
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
-  end 
+    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../fixtures/dmsf', __FILE__)
+    FileUtils.cp_r(File.expand_path('../../fixtures/files', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
+  end
+
+  def teardown
+    # Delete our tmp folder
+    begin
+      FileUtils.rm_rf DmsfFile.storage_path
+    rescue Exception => e
+      error e.message
+    end
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
+  end
   
   def test_truth
     assert_kind_of Project, @project

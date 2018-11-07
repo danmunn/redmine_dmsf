@@ -27,21 +27,30 @@ class IssuesControllerTest < RedmineDmsf::Test::TestCase
            :enabled_modules, :enumerations, :issue_statuses
 
   def setup
-    @user_manager = User.find_by_id 2
-    assert_not_nil @user_manager
-    @project1 = Project.find_by_id 1
-    assert_not_nil @project1
+    @user_manager = User.find 2
+    @project1 = Project.find 1
     @project1.enable_module! :dmsf
     @project1.enable_module! :issue_tracking
-    @project2 = Project.find_by_id 2
-    assert_not_nil @project2
+    @project2 = Project.find 2
     @project2.enable_module! :dmsf
     @project2.enable_module! :issue_tracking
-    @issue1 = Issue.find_by_id 1
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
+    @issue1 = Issue.find 1
+    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../fixtures/dmsf', __FILE__)
+    FileUtils.cp_r(File.expand_path('../../fixtures/files', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
     User.current = nil
     @request.session[:user_id] = @user_manager.id
-  end 
+  end
+
+  def teardown
+    # Delete our tmp folder
+    begin
+      FileUtils.rm_rf DmsfFile.storage_path
+    rescue Exception => e
+      error e.message
+    end
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
+  end
   
   def test_truth
     assert_kind_of Project, @project1
@@ -58,9 +67,9 @@ class IssuesControllerTest < RedmineDmsf::Test::TestCase
     main_system_folder = @issue1.main_system_folder
     assert main_system_folder
     assert_equal @project1.id, main_system_folder.project_id
-    put :update, :id => @issue1.id, :issue => { :project_id => @project2.id, :tracker_id => '1', :priority_id => '6',
-        :category_id => '3' }
-    assert_redirected_to :action => 'show', :id => @issue1.id
+    put :update, id: @issue1.id, issue: { project_id: @project2.id, tracker_id: '1', priority_id: '6',
+        category_id: '3' }
+    assert_redirected_to action: 'show', id: @issue1.id
     @issue1.reload
     assert_equal @project2.id, @issue1.project.id
     system_folder = @issue1.system_folder

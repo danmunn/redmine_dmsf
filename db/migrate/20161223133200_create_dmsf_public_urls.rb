@@ -19,18 +19,16 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class CreateDmsfPublicUrls < ActiveRecord::Migration
+
   def change
     create_table :dmsf_public_urls do |t|
-      t.string :token, :null => false, :limit => 32
-      t.references :dmsf_file, :null => false
-      t.references :user, :null => false
-      t.datetime :expire_at, :null => false
+      t.string :token, null: false, limit: 32
+      t.references :dmsf_file, null: false
+      t.references :user, null: false
+      t.datetime :expire_at, null: false
       t.timestamps
     end
-    add_index :dmsf_public_urls, :token
+    add_index :dmsf_public_urls, :token, name: :index_dmsf_public_urls_on_token
   end
-  
-  def self.down
-    drop_table :dmsf_public_urls
-  end
+
 end

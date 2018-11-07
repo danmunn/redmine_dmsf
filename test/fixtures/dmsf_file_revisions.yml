@@ -9,7 +9,7 @@ dmsf_file_revisions_001:
   mime_type:                     text/plain
   title:                         "Test File"
   description:                   'Some file :-)'
-  workflow:                      NULL
+  workflow:                      1 # DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
   minor_version:                 0
   major_version:                 1
   comment:                       NULL
@@ -26,8 +26,8 @@ dmsf_file_revisions_002:
   id:                            2
   dmsf_file_id:                  2
   source_dmsf_file_revision_id:  NULL
-  name:                          "test.txt"  
-  disk_filename:                 "test.txt"
+  name:                          "test2.txt"
+  disk_filename:                 "test2.txt"
   size:                          4
   mime_type:                     text/plain
   title:                         "Test File"
@@ -69,8 +69,8 @@ dmsf_file_revisions_004:
   id:                           4
   dmsf_file_id:                 4
   source_dmsf_file_revision_id: NULL
-  name:                         'test.txt'  
-  disk_filename:                'test.txt'
+  name:                         'test4.txt'
+  disk_filename:                'test4.txt'
   size:                         4
   mime_type:                    text/plain
   title:                        'Test File'
@@ -90,8 +90,8 @@ dmsf_file_revisions_005:
   id:                            5
   dmsf_file_id:                  1
   source_dmsf_file_revision_id:  NULL
-  name:                          "test.txt"  
-  disk_filename:                 "test.txt"
+  name:                          "test5.txt"
+  disk_filename:                 "test5.txt"
   size:                          4
   mime_type:                     text/plain
   title:                         "Test File"
@@ -154,7 +154,7 @@ dmsf_file_revisions_008:
   dmsf_file_id:                  9
   source_dmsf_file_revision_id:  NULL
   name:                          "myfile.txt"  
-  disk_filename:                 "myfile.txt"
+  disk_filename:                 "myfile.txt" # The file is not physicaly present
   size:                          0
   mime_type:                     text/plain
   title:                         "My File"

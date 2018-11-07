@@ -27,24 +27,35 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
            :email_addresses
 
   def setup
-    @project1 = Project.find_by_id 1
-    @project2 = Project.find_by_id 2
-    @project5 = Project.find_by_id 5
-    assert_not_nil @project1
+    @project1 = Project.find 1
+    @project2 = Project.find 2
+    @project5 = Project.find 5
     @project1.enable_module! :dmsf
-    @folder1 = DmsfFolder.find_by_id 1
-    @folder2 = DmsfFolder.find_by_id 2
-    @folder6 = DmsfFolder.find_by_id 6
-    @user_admin = User.find_by_id 1
-    @user_member = User.find_by_id 2
-    @user_non_member = User.find_by_id 3
+    @folder1 = DmsfFolder.find 1
+    @folder2 = DmsfFolder.find 2
+    @folder6 = DmsfFolder.find 6
+    @user_admin = User.find 1
+    @user_member = User.find 2
+    @user_non_member = User.find 3
     @role_manager = Role.where(:name => 'Manager').first
     User.current = nil
     @request.session[:user_id] = @user_member.id  # John Smith - manager
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
+    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../fixtures/dmsf', __FILE__)
+    FileUtils.cp_r(File.expand_path('../../fixtures/files', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
     @project1.enable_module!(:dmsf)
     @role_manager.add_permission! :folder_manipulation
     @role_manager.add_permission! :view_dmsf_folders
+  end
+
+  def teardown
+    # Delete our tmp folder
+    begin
+      FileUtils.rm_rf DmsfFile.storage_path
+    rescue Exception => e
+      error e.message
+    end
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
   end
 
   def test_truth

@@ -22,8 +22,9 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class IssuePatchTest < RedmineDmsf::Test::UnitTest
   fixtures :projects, :dmsf_files, :dmsf_file_revisions, :issues
+
   def setup
-    @issue1 = Issue.find_by_id 1
+    @issue1 = Issue.find 1
   end
 
   def test_truth

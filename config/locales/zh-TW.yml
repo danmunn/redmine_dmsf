@@ -168,8 +168,6 @@ zh-TW:
   permission_email_documents: Email documents
   label_file: 檔案
   field_folder: 資料夾
-  error_create_cycle_in_folder_dependency: 資料夾之間的關係，不得為一個cycle循環。
-  error_contains_invalid_character: 內有非法字元
   error_file_commit_require_uploaded_file: 檔案提交，需要上傳檔案。
 
   warning_some_files_were_not_commited: "部份檔案因為驗証失敗無法提交: %{files}"
@@ -418,3 +416,8 @@ zh-TW:
       dmsf_open_approvals: My open approvals
     module_category:
       easy_dms: Easy DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: 內有非法字元

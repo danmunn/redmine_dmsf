@@ -227,19 +227,17 @@ module DAV4Rack
     end
 
     def lock(args)
-      unless(parent_exists?)
-        Conflict
-      else
+      if (parent_exists?)
         lock_check(args[:type])
         lock = FileResourceLock.explicit_locks(@path, root, :scope => args[:scope], :kind => args[:type], :user => @user)
-        unless(lock)
+        unless (lock)
           token = UUIDTools::UUID.random_create.to_s
           lock = FileResourceLock.generate(@path, @user, token, root)
           lock.scope = args[:scope]
           lock.kind = args[:type]
           lock.owner = args[:owner]
           lock.depth = args[:depth]
-          if(args[:timeout])
+          if (args[:timeout])
             lock.timeout = args[:timeout] <= @max_timeout && args[:timeout] > 0 ? args[:timeout] : @max_timeout
           else
             lock.timeout = @default_timeout
@@ -255,6 +253,8 @@ module DAV4Rack
           status
         end
         [lock.remaining_timeout, lock.token]
+      else
+        Conflict
       end
     end
 

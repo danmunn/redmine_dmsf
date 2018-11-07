@@ -3,6 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,12 +20,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class CreateDmsfWorkflows < ActiveRecord::Migration
-  def self.up
+
+  def up
     create_table :dmsf_workflows do |t|
-      t.string :name, :null => false
+      t.string :name, null: false
       t.references :project    
     end
-    add_index :dmsf_workflows, [:name], :unique => true
+    add_index :dmsf_workflows, [:name], unique: true, name: :index_dmsf_workflows_on_name
         
     change_table :dmsf_file_revisions do |t|
       t.references :dmsf_workflow
@@ -35,12 +37,13 @@ class CreateDmsfWorkflows < ActiveRecord::Migration
     end
   end
   
-  def self.down
+  def down
     remove_column :dmsf_file_revisions, :dmsf_workflow_id
     remove_column :dmsf_file_revisions, :dmsf_workflow_assigned_by
     remove_column :dmsf_file_revisions, :dmsf_workflow_assigned_at
     remove_column :dmsf_file_revisions, :dmsf_workflow_started_by
     remove_column :dmsf_file_revisions, :dmsf_workflow_started_at
     drop_table :dmsf_workflows
-  end    
+  end
+
 end

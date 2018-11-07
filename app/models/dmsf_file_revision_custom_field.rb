@@ -35,7 +35,7 @@ class DmsfFileRevisionCustomField < CustomField
           return true
         end
       end
-      return false
+      false
     else
       x == y
     end

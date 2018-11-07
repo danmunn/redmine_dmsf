@@ -19,11 +19,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class LargeFiles < ActiveRecord::Migration
+
   def up    
-    change_column :dmsf_file_revisions, :size, :bigint, :null => true
+    change_column :dmsf_file_revisions, :size, :bigint, null: true
   end
 
   def down
-    change_column :dmsf_file_revisions, :size, :int, :null => true
+    change_column :dmsf_file_revisions, :size, :int, null: true
   end
 end

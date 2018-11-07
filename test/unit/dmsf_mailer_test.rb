@@ -26,11 +26,11 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
   fixtures :users, :projects, :dmsf_files, :dmsf_workflows, :dmsf_file_revisions, :members
 
   def setup
-    @user2 = User.find_by_id 2
-    @file1 = DmsfFile.find_by_id 1
-    @wf1 = DmsfWorkflow.find_by_id 1
-    @rev2 = DmsfFileRevision.find_by_id 2
-    @project1 = Project.find_by_id 1
+    @user2 = User.find 2
+    @file1 = DmsfFile.find 1
+    @wf1 = DmsfWorkflow.find 1
+    @rev2 = DmsfFileRevision.find 2
+    @project1 = Project.find 1
   end
 
   def test_truth
@@ -64,7 +64,7 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
     email_params[:expired_at] = Date.today
     email_params[:folders] = nil
     email_params[:files] = "[\"#{@file1.id}\"]"
-    email = DmsfMailer.send_documents(@file1.project, @user2, email_params).deliver
+    email = DmsfMailer.send_documents(@file1.project, email_params).deliver
     assert email
     assert text_part(email).body.include? body
     assert html_part(email).body.include? body

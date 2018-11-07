@@ -168,8 +168,6 @@ fr:
   permission_email_documents: Email documents
   label_file: Fichier
   field_folder: Dossier
-  error_create_cycle_in_folder_dependency: Crée une dépendance cyclique du dossier
-  error_contains_invalid_character: Contient un(des) caractère(s) invalide(s)
   error_file_commit_require_uploaded_file: "Transmission des fichiers nécessaire avant l'enregistrement"
 
   warning_some_files_were_not_commited: "Erreur d'enregsitrement de certains fichiers %{files}"
@@ -418,3 +416,8 @@ fr:
       dmsf_open_approvals: My open approvals
     module_category:
       easy_dms: Easy DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: contient un(des) caractère(s) invalide(s)

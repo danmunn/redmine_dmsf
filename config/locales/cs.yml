@@ -168,8 +168,6 @@ cs:
   permission_email_documents: Email documents
   label_file: Soubor
   field_folder: Složka
-  error_create_cycle_in_folder_dependency: vytvořit smyčku v závislostech složky
-  error_contains_invalid_character: obsahuje neplatné znaky
   error_file_commit_require_uploaded_file: Potvrzení vyžaduje nahraný soubor
 
   warning_some_files_were_not_commited: "Některé soubory nebyly potvrzené z důvodu chyb při validaci: %{files}"
@@ -418,3 +416,8 @@ cs:
       dmsf_open_approvals: My open approvals
     module_category:
       easy_dms: Easy DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: obsahuje neplatné znaky

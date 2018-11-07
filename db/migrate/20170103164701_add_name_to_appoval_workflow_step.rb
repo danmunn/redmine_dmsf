@@ -19,11 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class AddNameToAppovalWorkflowStep < ActiveRecord::Migration
-  def up
-    add_column :dmsf_workflow_steps, :name, :string, :limit => 30, :null => true
+
+  def change
+    add_column :dmsf_workflow_steps, :name, :string, limit: 30, null: true
   end
 
-  def down
-    remove_column :dmsf_workflow_steps, :name
-  end
 end

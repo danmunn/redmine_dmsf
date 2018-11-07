@@ -28,10 +28,10 @@
   <% files = [] %>
   <% if @folders.present? %>
     <% JSON.parse(@folders).each do |id| %>
-      <% folder = DmsfFolder.find_by_id id %>
+      <% folder = DmsfFolder.find_by(id: id) %>
       <% if folder && !folders.include?(folder) %>
         <% folder.folder_tree.each do |name, i| %>
-          <% dir = DmsfFolder.find_by_id i %>
+          <% dir = DmsfFolder.find_by(id: i) %>
           <% if dir %>
             <%= dir.dmsf_path_str %>
             <% dir.dmsf_files.each do |file| %>

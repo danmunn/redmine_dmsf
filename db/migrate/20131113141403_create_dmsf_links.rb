@@ -19,22 +19,20 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class CreateDmsfLinks < ActiveRecord::Migration
+
   def change
     create_table :dmsf_links do |t|
-      t.integer :target_project_id, :null => false
-      t.integer :target_id, :null => false
-      t.string :target_type, :limit => 10, :null => false
-      t.string :name, :null => false
-      t.references :project, :null => false
+      t.integer :target_project_id, null: false
+      t.integer :target_id, null: false
+      t.string :target_type, limit: 10, null: false
+      t.string :name, null: false
+      t.references :project, null: false
       t.references :dmsf_folder
-      t.boolean :deleted, :default => false, :null => false
+      t.boolean :deleted, default: false, null: false
       t.integer :deleted_by_user_id
-      t.timestamps :null => false
+      t.timestamps null: false
     end
-    add_index :dmsf_links, :project_id   
+    add_index :dmsf_links, :project_id, name: :index_dmsf_links_on_project_id
   end
-  
-  def self.down
-    drop_table :dmsf_links
-  end
+
 end

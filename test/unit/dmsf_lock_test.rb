@@ -30,8 +30,8 @@ class DmsfLockTest < RedmineDmsf::Test::UnitTest
     @lock = dmsf_locks(:dmsf_locks_001)
     @folder2 = dmsf_folders(:dmsf_folders_002)
     @file4 = dmsf_files(:dmsf_files_004)
-    @jsmith = User.find_by_id 2
-    @admin = User.find_by_id 1
+    @jsmith = User.find 2
+    @admin = User.find 1
   end
 
   def test_truth
@@ -61,7 +61,7 @@ class DmsfLockTest < RedmineDmsf::Test::UnitTest
     if @lock.file
       assert_kind_of DmsfFile, @lock.file
     else
-      assert_kind_of DmsfFolder @lock.folder
+      assert_kind_of DmsfFolder, @lock.folder
     end
   end
 
@@ -117,9 +117,9 @@ class DmsfLockTest < RedmineDmsf::Test::UnitTest
     User.current = @jsmith
     lock = DmsfLock.new
     assert !lock.expired?
-    lock.expires_at = Time.now
+    lock.expires_at = Time.current
     assert lock.expired?
-    lock.expires_at = Time.now + 1.hour
+    lock.expires_at = Time.current + 1.hour
     assert !lock.expired?
   end
 

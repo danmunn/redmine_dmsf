@@ -27,11 +27,12 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
     :dmsf_file_revisions
 
   def setup 
-    @wfs1 = DmsfWorkflowStep.find(1)
-    @wfs2 = DmsfWorkflowStep.find(2)
-    @wfs5 = DmsfWorkflowStep.find(5)
-    @revision1 = DmsfFileRevision.find_by_id 1
-    @wf2 = DmsfWorkflow.find(2)
+    @wfs1 = DmsfWorkflowStep.find 1
+    @wfs2 = DmsfWorkflowStep.find 2
+    @wfs5 = DmsfWorkflowStep.find 5
+    @revision1 = DmsfFileRevision.find 1
+    @revision2 = DmsfFileRevision.find 2
+    @wf2 = DmsfWorkflow.find 2
   end
   
   def test_truth
@@ -39,6 +40,7 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
     assert_kind_of DmsfWorkflowStep, @wfs2
     assert_kind_of DmsfWorkflowStep, @wfs5
     assert_kind_of DmsfFileRevision, @revision1
+    assert_kind_of DmsfFileRevision, @revision2
     assert_kind_of DmsfWorkflow, @wf2
   end
   
@@ -106,10 +108,10 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_destroy
-    assert DmsfWorkflowStepAssignment.where(:dmsf_workflow_step_id => @wfs2.id).all.count > 0
+    assert DmsfWorkflowStepAssignment.where(dmsf_workflow_step_id: @wfs2.id).all.size > 0
     @wfs2.destroy
-    assert_nil DmsfWorkflowStep.find_by_id(2)
-    assert_equal DmsfWorkflowStepAssignment.where(:dmsf_workflow_step_id => @wfs2.id).all.count, 0
+    assert_nil DmsfWorkflowStep.find_by(id: 2)
+    assert_equal DmsfWorkflowStepAssignment.where(dmsf_workflow_step_id: @wfs2.id).all.size, 0
   end
   
   def test_soperator
@@ -117,18 +119,16 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
   end
   
   def test_user
-    assert_equal @wfs1.user, User.find_by_id(@wfs1.user_id)
+    assert_equal @wfs1.user, User.find_by(id: @wfs1.user_id)
   end
   
   def test_assign
-    @wfs5.assign(@revision1.id)
-    assert DmsfWorkflowStepAssignment.where(
-      :dmsf_workflow_step_id => @wfs5.id, 
-      :dmsf_file_revision_id => @revision1.id).first
+    @wfs5.assign(@revision2.id)
+    assert DmsfWorkflowStepAssignment.where(dmsf_workflow_step_id: @wfs5.id, dmsf_file_revision_id: @revision2.id).exists?
   end
 
   def test_copy_to
-    wfs = @wfs1.copy_to(@wf2);
+    wfs = @wfs1.copy_to(@wf2)
     assert_equal wfs.dmsf_workflow_id, @wf2.id
     assert_equal wfs.step, @wfs1.step
     assert_equal wfs.name, @wfs1.name

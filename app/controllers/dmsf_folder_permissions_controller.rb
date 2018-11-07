@@ -35,8 +35,8 @@ class DmsfFolderPermissionsController < ApplicationController
   end
 
   def append
-    @principals = Principal.where(:id => params[:user_ids]).to_a
-    head 200 if @principals.blank?
+    @principals = Principal.where(id: params[:user_ids]).to_a
+    head :success if @principals.blank?
   end
 
   def autocomplete_for_user
@@ -60,7 +60,7 @@ class DmsfFolderPermissionsController < ApplicationController
 
   def find_folder
     if params[:dmsf_folder_id]
-      @dmsf_folder = DmsfFolder.visible.find_by_id(params[:dmsf_folder_id])
+      @dmsf_folder = DmsfFolder.visible.find_by(id: params[:dmsf_folder_id])
     end
   end
 

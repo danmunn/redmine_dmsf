@@ -27,7 +27,7 @@ module RedmineDmsf
 
       def self.included(base)
         base.class_eval do
-          before_destroy :delete_system_folder
+          before_destroy :delete_system_folder, prepend: true
         end
       end
 
@@ -55,7 +55,7 @@ module RedmineDmsf
         if dmsf_links
           ids = dmsf_links.map(&:last)
           ids.each do |id|
-            l = DmsfLink.find_by_id(id)
+            l = DmsfLink.find_by(id: id)
             @saved_dmsf_links << l if l
           end
         end
@@ -72,7 +72,7 @@ module RedmineDmsf
             attachment = dmsf_attachments[attachment_id]
             if attachment
               a = Attachment.find_by_token(attachment[:token])
-              wf = DmsfWorkflow.find_by_id approval_workflow_id
+              wf = DmsfWorkflow.find_by(id: approval_workflow_id)
               @dmsf_attachments_wfs[a.id] = wf if wf && a
             end
           end
@@ -87,7 +87,7 @@ module RedmineDmsf
         if dmsf_links_wfs
           @saved_dmsf_links_wfs = {}
           dmsf_links_wfs.each do |dmsf_link_id, approval_workflow_id|
-            wf = DmsfWorkflow.find_by_id approval_workflow_id
+            wf = DmsfWorkflow.find_by(id: approval_workflow_id)
             @saved_dmsf_links_wfs[dmsf_link_id.to_i] = wf if wf
           end
         end
@@ -98,7 +98,7 @@ module RedmineDmsf
       end
 
       def system_folder(create = false)
-        parent = DmsfFolder.system.where(:project_id => self.project_id, :title => '.CRM cases').first
+        parent = DmsfFolder.system.where(project_id: self.project_id, title: '.CRM cases').first
         if create && !parent
           parent = DmsfFolder.new
           parent.project_id = self.project_id

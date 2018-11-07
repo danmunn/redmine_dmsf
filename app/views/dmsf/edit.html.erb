@@ -26,13 +26,13 @@
 
 <div class="contextual">
   <% if !@folder.new_record? && User.current.allowed_to?(:folder_manipulation, @project) && !@folder.system %>
-    <% unless @folder.locked? %>
-      <%= link_to(l(:button_lock), lock_dmsf_path(:id => @project, :folder_id => @folder),
-        :title => l(:title_lock_file), :class => 'icon icon-lock') %>
-    <% else %>
+    <% if @folder.locked? %>
       <%= link_to_if(@folder.unlockable? && (!@folder.locked_for_user? || @force_file_unlock_allowed), l(:button_unlock),
         unlock_dmsf_path(:id => @project, :folder_id => @folder),
-        :title => l(:title_unlock_file), :class => 'icon icon-unlock')%>
+      :title => l(:title_unlock_file), :class => 'icon icon-unlock') %>
+    <% else %>
+      <%= link_to(l(:button_lock), lock_dmsf_path(:id => @project, :folder_id => @folder),
+      :title => l(:title_lock_file), :class => 'icon icon-lock') %>
     <% end %>
     <% unless @folder.locked? %>
       <% if @folder.notification %>
@@ -77,7 +77,7 @@
     <p>
       <%= label_tag '', l(:label_permissions) %>
       <% User.current.managed_roles(@project).each do |role| %>
-          <% checked = @folder.dmsf_folder_permissions.roles.exists?(:object_id => role.id) %>
+          <% checked = @folder.dmsf_folder_permissions.roles.exists?(object_id: role.id) %>
           <label class="inline"><%= check_box_tag 'permissions[role_ids][]', role.id, checked, :id => nil %> <%= role %></label>
       <% end %>
       <span id="user_permissions">
@@ -95,7 +95,7 @@
           :method => 'get' %>
       </span>
     </p>
-    <% values = @folder ? @folder.custom_field_values : @parent ? @parent.custom_field_values : DmsfFolder.new.custom_field_values %>
+    <% values = @folder ? @folder.custom_field_values : (@parent ? @parent.custom_field_values : DmsfFolder.new.custom_field_values) %>
     <% values.each do |value| %>
       <p><%= custom_field_tag_with_label(:dmsf_folder, value) %></p>
     <% end %>    

@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
-<% member = Member.find_by_project_id_and_user_id(@project.id, User.current.id) %>
+<% member = Member.find_by(project_id: @project.id, user_id: User.current.id) %>
 <% if member %>
   <% mail_notification = member.dmsf_mail_notification %>
   <% title_format = member.dmsf_title_format %>

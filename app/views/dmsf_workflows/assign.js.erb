@@ -20,6 +20,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-$('#ajax-modal').html('<%= escape_javascript(render :partial => 'assign') %>');
+var modal = $('#ajax-modal');
+
+modal.html('<%= escape_javascript(render :partial => 'assign') %>');
 showModal('ajax-modal', '30%');
-$('#ajax-modal').addClass('assignment');
+modal.addClass('assignment');

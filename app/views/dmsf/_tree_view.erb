@@ -24,7 +24,7 @@
   <thead>
     <tr>
       <th class="dmsf_checkbox dmsf_th">
-        <% if !@system_folder %>
+        <% unless @system_folder %>
           <%= check_box_tag 'check_all', '', false, :class => 'toggle-selection',
                           :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
         <% end %>
@@ -53,8 +53,7 @@
       <% if DmsfFolder.is_column_on?('author') %>
         <th class ="dmsf_th"><%= l(:link_author) %></th>
       <% end %>
-      <% cfs = CustomField.where(:type => 'DmsfFileRevisionCustomField').order(:position) %>
-      <% cfs.each do |c| %>
+      <% CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c| %>
           <% if DmsfFolder.is_column_on?(c.name) %>
               <th class="dmsf_th"><%= c.name %></th>
           <% end %>

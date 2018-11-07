@@ -46,7 +46,7 @@ class DmsfLock < ActiveRecord::Base
   end
 
   def expired?
-    return expires_at && (expires_at <= Time.now)
+    expires_at && (expires_at <= Time.current)
   end
 
   def generate_uuid
@@ -65,7 +65,7 @@ class DmsfLock < ActiveRecord::Base
   end
 
   def self.find_by_param(*args)
-    self.find(*args)
+    find(*args)
   end
 
 end

@@ -19,9 +19,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class NotificationsNullable < ActiveRecord::Migration
+
   def up      
-    change_column :projects, :dmsf_notification, :boolean, :default => false, :null => true
-    change_column :dmsf_folders, :notification, :boolean, :default => false, :null => true
-    change_column :dmsf_files, :notification, :boolean, :default => false, :null => true
-  end    
+    change_column :projects, :dmsf_notification, :boolean, default: false, null: true
+    change_column :dmsf_folders, :notification, :boolean, default: false, null: true
+    change_column :dmsf_files, :notification, :boolean, default: false, null: true
+  end
+
 end

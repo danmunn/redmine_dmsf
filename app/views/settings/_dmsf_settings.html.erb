@@ -79,8 +79,7 @@
 <% testfilename = DmsfFile.storage_path.join('test.test') %>
 <% if File.exist?(storage_dir) %>
   <%	begin %>
-    <% File.open(testfilename, 'wb') do |file| %>
-    <% end %>
+    <% File.open(testfilename, 'wb') %>
   <% rescue %>
     <p class="warning"><%= l(:error_file_can_not_be_created) %></p>
   <%	ensure %>
@@ -110,8 +109,7 @@
 <% testfilename = path.join('test.test') %>
 <% if File.exist?(tmpdir) %>
   <%	begin %>
-    <% File.open(testfilename, 'wb') do |file| %>
-    <% end %>
+    <% File.open(testfilename, 'wb') %>
   <% rescue %>
     <p class="warning"><%= l(:error_tmpfile_can_not_be_created) %></p>
   <%	ensure %>
@@ -316,7 +314,7 @@
 
 <p>
   <%= content_tag(:label, l(:label_enable_cjk_ngrams)) %>
-  <%= check_box_tag 'settings[enable_cjk_ngrams]', true, @settings['enable_cjk_ngrams'] == 'true' %>
+  <%= check_box_tag 'settings[enable_cjk_ngrams]', true, @settings['dmsf_enable_cjk_ngrams'] %>
   <em class="info">
     <%= l(:text_enable_cjk_ngrams) %>
   </em>

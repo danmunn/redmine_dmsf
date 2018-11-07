@@ -26,7 +26,7 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
   delegate :dmsf_file, :to => :dmsf_file_revision, :allow_nil => false
   delegate :project, :to => :dmsf_file, :allow_nil => false
 
-  validates_presence_of :dmsf_file_revision
+  validates :dmsf_file_revision, presence: true
 
   DownloadAction = 0
   EmailAction = 1
@@ -44,5 +44,5 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
     :scope => DmsfFileRevisionAccess.
       joins(:dmsf_file_revision).joins("JOIN #{DmsfFile.table_name} ON dmsf_files.id = dmsf_file_revisions.dmsf_file_id").
       joins("JOIN #{Project.table_name} on dmsf_files.project_id = projects.id").
-      where(:dmsf_files => { :deleted => DmsfFile::STATUS_ACTIVE })
+      where(:dmsf_files => { deleted: DmsfFile::STATUS_ACTIVE })
 end

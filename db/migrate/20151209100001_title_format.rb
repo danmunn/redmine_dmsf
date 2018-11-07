@@ -19,11 +19,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class TitleFormat < ActiveRecord::Migration
-  def self.up
-    add_column :members, :title_format, :text, :null => true, :limit => 100
+
+  def change
+    add_column :members, :title_format, :text, null: true, limit: 100
   end
 
-  def self.down
-    remove_column :members, :title_format        
-  end
 end
