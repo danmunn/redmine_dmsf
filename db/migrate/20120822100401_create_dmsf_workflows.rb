@@ -26,7 +26,7 @@ class CreateDmsfWorkflows < ActiveRecord::Migration
       t.string :name, null: false
       t.references :project    
     end
-    add_index :dmsf_workflows, [:name], unique: true, name: :index_dmsf_workflows_on_name
+    add_index :dmsf_workflows, [:name], unique: true
         
     change_table :dmsf_file_revisions do |t|
       t.references :dmsf_workflow

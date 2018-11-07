@@ -21,7 +21,7 @@
 class AddIndexToDmsfFileRevision < ActiveRecord::Migration
 
   def change
-    add_index :dmsf_file_revisions, :dmsf_file_id, name: :index_dmsf_file_revisions_on_dmsf_file_id
+    add_index :dmsf_file_revisions, :dmsf_file_id
   end
 
 end

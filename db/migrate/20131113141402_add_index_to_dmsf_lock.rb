@@ -21,7 +21,7 @@
 class AddIndexToDmsfLock < ActiveRecord::Migration
 
   def change
-    add_index :dmsf_locks, :entity_id, name: :index_dmsf_locks_on_entity_id
+    add_index :dmsf_locks, :entity_id
   end
 
 end

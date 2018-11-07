@@ -26,7 +26,7 @@ class CreateDmsfFolderPermissions < ActiveRecord::Migration
       t.integer :object_id, null: false
       t.string :object_type, limit: 30, null: false
     end
-    add_index :dmsf_folder_permissions, :dmsf_folder_id, name: :index_dmsf_folder_permissions_on_dmsf_folder_id
+    add_index :dmsf_folder_permissions, :dmsf_folder_id
   end
 
 end

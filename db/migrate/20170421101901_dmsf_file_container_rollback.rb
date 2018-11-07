@@ -63,7 +63,7 @@ class DmsfFileContainerRollback < ActiveRecord::Migration
     remove_index :dmsf_files, [:container_id, :container_type]
     remove_column :dmsf_files, :container_type
     rename_column :dmsf_files, :container_id, :project_id
-    add_index :dmsf_files, :project_id, name: :index_dmsf_files_on_project_id
+    add_index :dmsf_files, :project_id
     # Initialize system folder_flag to dmsf_folders
     DmsfFolder.where(id: new_folder_ids).update_all(system: true)
   end
@@ -88,7 +88,7 @@ class DmsfFileContainerRollback < ActiveRecord::Migration
       end
     end
     remove_column :dmsf_files, :project_id # temporarily added for the save method
-    add_index :dmsf_files, [:container_id, :container_type], name: :index_dmsf_files_on_container_id_container_type
+    add_index :dmsf_files, [:container_id, :container_type]
     # dmsf_folders
     DmsfFolder.where(system: true).delete_all
     remove_column :dmsf_folders, :system

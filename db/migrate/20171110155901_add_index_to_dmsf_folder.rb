@@ -21,7 +21,7 @@
 class AddIndexToDmsfFolder < ActiveRecord::Migration
 
   def change
-    add_index :dmsf_folders, :dmsf_folder_id, name: :index_dmsf_folders_on_dmsf_folder_id
+    add_index :dmsf_folders, :dmsf_folder_id
   end
 
 end

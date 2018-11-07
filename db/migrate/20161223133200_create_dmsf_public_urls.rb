@@ -28,7 +28,7 @@ class CreateDmsfPublicUrls < ActiveRecord::Migration
       t.datetime :expire_at, null: false
       t.timestamps
     end
-    add_index :dmsf_public_urls, :token, name: :index_dmsf_public_urls_on_token
+    add_index :dmsf_public_urls, :token
   end
 
 end

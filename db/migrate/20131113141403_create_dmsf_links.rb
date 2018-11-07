@@ -32,7 +32,7 @@ class CreateDmsfLinks < ActiveRecord::Migration
       t.integer :deleted_by_user_id
       t.timestamps null: false
     end
-    add_index :dmsf_links, :project_id, name: :index_dmsf_links_on_project_id
+    add_index :dmsf_links, :project_id
   end
 
 end

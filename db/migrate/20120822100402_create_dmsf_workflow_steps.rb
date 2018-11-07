@@ -27,7 +27,7 @@ class CreateDmsfWorkflowSteps < ActiveRecord::Migration
       t.references :user, null: false
       t.integer :operator, null: false
     end
-    add_index :dmsf_workflow_steps, :dmsf_workflow_id, name: :index_dmsf_workflow_steps_on_dmsf_workflow_id
+    add_index :dmsf_workflow_steps, :dmsf_workflow_id
   end
 
 end
