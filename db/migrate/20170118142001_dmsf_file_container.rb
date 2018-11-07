@@ -33,7 +33,7 @@ class DmsfFileContainer < ActiveRecord::Migration
     remove_index :dmsf_files, [:container_id, :container_type]
     remove_column :dmsf_files, :container_type
     rename_column :dmsf_files, :container_id, :project_id
-    remove_index :dmsf_files, :project_id, name: :index_dmsf_files_on_project_id
+    remove_index :dmsf_files, :project_id
   end
 
 end
