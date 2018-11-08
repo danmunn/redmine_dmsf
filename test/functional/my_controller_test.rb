@@ -23,9 +23,9 @@ require File.expand_path('../../test_helper', __FILE__)
 class MyControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
     
-  fixtures :users, :email_addresses, :user_preferences, :projects,
-    :dmsf_workflows, :dmsf_workflow_steps, :dmsf_workflow_step_assignments, 
-    :dmsf_file_revisions, :dmsf_folders, :dmsf_files, :dmsf_locks
+  fixtures :users, :email_addresses, :user_preferences, :projects, :dmsf_workflows, :dmsf_workflow_steps,
+           :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions, :dmsf_file_revisions, :dmsf_folders,
+           :dmsf_files, :dmsf_locks
 
   def setup
     @user_member = User.find 2
@@ -44,7 +44,7 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
     assert_response :success
     unless defined?(EasyExtensions)
       assert_select 'div#list-top' do
-        assert_select 'h3', { :text => "#{l(:open_approvals)} (3)" }
+        assert_select 'h3', { :text => "#{l(:open_approvals)} (1)" }
       end
     end
   end
