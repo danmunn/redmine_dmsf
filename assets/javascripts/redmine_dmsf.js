@@ -136,7 +136,7 @@ function dmsfExpandRows(EL, parentRow, url) {
     idnt = result[1];
   }
 
-  var pos = $(parentRow).find('#dmsf_position').text();
+  var pos = $(parentRow).find('.dmsf_position').text();
 
   $.ajax({
     url: url,
