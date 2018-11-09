@@ -38,32 +38,6 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
   end
   
   def test_page_with_open_approvals_block
-    ### Postgres test
-    all_assignments = DmsfWorkflowStepAssignment.joins(
-      'LEFT JOIN dmsf_workflow_step_actions ON dmsf_workflow_step_assignments.id = dmsf_workflow_step_actions.dmsf_workflow_step_assignment_id').where(
-      :dmsf_workflow_step_assignments => { :user_id => @user_member.id }).where(
-      ['dmsf_workflow_step_actions.id IS NULL OR dmsf_workflow_step_actions.action = ?', DmsfWorkflowStepAction::ACTION_DELEGATE])
-    puts all_assignments.to_sql
-    puts "all assignments count: #{all_assignments.all.size}"
-    assignments = []
-    all_assignments.find_each do |assignment|
-      puts assignment.id
-      puts assignment.dmsf_file_revision.dmsf_file.last_revision.present?
-      puts assignment.dmsf_file_revision.dmsf_file.last_revision.deleted?
-      puts assignment.dmsf_file_revision.workflow
-      puts "#{assignment.dmsf_file_revision.id} == #{assignment.dmsf_file_revision.dmsf_file.last_revision.id}"
-      if assignment.dmsf_file_revision.dmsf_file.last_revision &&
-        !assignment.dmsf_file_revision.dmsf_file.last_revision.deleted? &&
-        (assignment.dmsf_file_revision.workflow == DmsfWorkflow::STATE_WAITING_FOR_APPROVAL) &&
-        (assignment.dmsf_file_revision.id == assignment.dmsf_file_revision.dmsf_file.last_revision.id)
-        assignments << assignment
-        puts 'yes'
-      else
-        puts 'no'
-      end
-    end
-    puts "open assignments count: #{assignments.size}"
-    ###
     @user_member.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
     @user_member.pref.save!    
     get :page

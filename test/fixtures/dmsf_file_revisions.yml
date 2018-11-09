@@ -96,7 +96,7 @@ dmsf_file_revisions_005:
   mime_type:                     text/plain
   title:                         "Test File"
   description:                   NULL
-  workflow:                      NULL
+  workflow:                      1 # DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
   minor_version:                 0
   major_version:                 1
   comment:                       NULL
@@ -105,7 +105,7 @@ dmsf_file_revisions_005:
   user_id:                       1
   dmsf_workflow_assigned_by:     NULL
   dmsf_workflow_started_by:      NULL
-  created_at:                    2017-04-18 14:52:27 +02:00
+  created_at:                    2017-04-18 14:52:28 +02:00
 
 dmsf_file_revisions_006:
   id:                            6
