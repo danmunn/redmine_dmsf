@@ -270,32 +270,38 @@ class DmsfFolder < ActiveRecord::Base
 
     new_folder.custom_values = []
     custom_values.each do |cv|
-      new_folder.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
+      v = CustomValue.new
+      v.custom_field = cv.custom_field
+      v.value = cv.value
+      new_folder.custom_values << v
     end
 
-    return new_folder unless new_folder.save
+    unless new_folder.save
+      Rails.logger.error new_folder.errors.full_messages.to_sentence
+      return new_folder
+    end
 
-    dmsf_files.visible.each do |f|
+    dmsf_files.visible.find_each do |f|
       f.copy_to project, new_folder
     end
 
-    dmsf_folders.visible.each do |s|
+    dmsf_folders.visible.find_each do |s|
       s.copy_to project, new_folder
     end
 
-    folder_links.visible.each do |l|
+    folder_links.visible.find_each do |l|
       l.copy_to project, new_folder
     end
 
-    file_links.visible.each do |l|
+    file_links.visible.find_each do |l|
       l.copy_to project, new_folder
     end
 
-    url_links.visible.each do |l|
+    url_links.visible.find_each do |l|
       l.copy_to project, new_folder
     end
 
-    dmsf_folder_permissions.each do |p|
+    dmsf_folder_permissions.find_each do |p|
       p.copy_to new_folder
     end
 
