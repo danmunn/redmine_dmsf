@@ -47,11 +47,19 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
     puts "all assignments count: #{all_assignments.all.size}"
     assignments = []
     all_assignments.find_each do |assignment|
+      puts assignment.id
+      puts assignment.dmsf_file_revision.dmsf_file.last_revision.present?
+      puts assignment.dmsf_file_revision.dmsf_file.last_revision.deleted?
+      puts assignment.dmsf_file_revision.workflow
+      puts "#{assignment.dmsf_file_revision.id} == #{assignment.dmsf_file_revision.dmsf_file.last_revision.id}"
       if assignment.dmsf_file_revision.dmsf_file.last_revision &&
         !assignment.dmsf_file_revision.dmsf_file.last_revision.deleted? &&
         (assignment.dmsf_file_revision.workflow == DmsfWorkflow::STATE_WAITING_FOR_APPROVAL) &&
-        (assignment.dmsf_file_revision == assignment.dmsf_file_revision.dmsf_file.last_revision)
+        (assignment.dmsf_file_revision.id == assignment.dmsf_file_revision.dmsf_file.last_revision.id)
         assignments << assignment
+        puts 'yes'
+      else
+        puts 'no'
       end
     end
     puts "open assignments count: #{assignments.size}"
