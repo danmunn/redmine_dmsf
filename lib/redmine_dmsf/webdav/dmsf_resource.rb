@@ -239,7 +239,7 @@ module RedmineDmsf
           end
 
           # At the moment we don't support cross project destinations
-          return MethodNotImplemented unless (project.id == resource.project.id)
+          return NotImplemented unless (project.id == resource.project.id)
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           raise Forbidden unless DmsfFolder.permissions?(folder, false)
 

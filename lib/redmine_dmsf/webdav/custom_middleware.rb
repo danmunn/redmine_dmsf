@@ -60,7 +60,7 @@ module RedmineDmsf
           # plain HTTP is going on.
           if (env['REQUEST_METHOD'].present? && ('OPTIONS'.casecmp(env['REQUEST_METHOD']) == 0)) &&
               (env['PATH_INFO'].present? && env['PATH_INFO'].start_with?('/dmsf')) # *
-            [ '200', { :Allow => 'OPTIONS,HEAD,GET,PUT,POST,DELETE' }, [''] ]
+            [ '200', { 'Allow' => 'OPTIONS,HEAD,GET,PUT,POST,DELETE' }, [''] ]
             # * This's a new condition in order to not process WebDAV request which doesn't belong to DMS. But, it might
             # case problems when acessing /dmsf and consequently /
           else
