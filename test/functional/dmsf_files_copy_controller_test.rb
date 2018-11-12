@@ -42,7 +42,7 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
     @request.session[:user_id] = 2  # John Smith - manager
     @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../fixtures/dmsf', __FILE__)
-    FileUtils.cp_r(File.expand_path('../../fixtures/files', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
+    FileUtils.cp_r File.expand_path('../../fixtures/files', __FILE__), DmsfFile.storage_path
     @project1.enable_module!(:dmsf)
     @role_manager.add_permission! :file_manipulation
     @role_manager.add_permission! :view_dmsf_folders

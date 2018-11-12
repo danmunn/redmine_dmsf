@@ -45,7 +45,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
     @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../../fixtures/dmsf', __FILE__)
-    FileUtils.cp_r(File.expand_path('../../../fixtures/files', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
+    FileUtils.cp_r File.expand_path('../../../fixtures/files', __FILE__), DmsfFile.storage_path
     @project1.enable_module! :dmsf # Flag module enabled
     User.current = nil    
   end
