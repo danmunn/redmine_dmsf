@@ -127,7 +127,7 @@ class DmsfWorkflow < ActiveRecord::Base
       end
       unless step_is_finished
         steps.each do |step|
-          step.dmsf_workflow_step_assignments.find_each do |assignment|
+          step.dmsf_workflow_step_assignments.where(dmsf_file_revision_id: dmsf_file_revision_id).find_each do |assignment|
             results << assignment if assignment.add?(dmsf_file_revision_id)
           end
         end

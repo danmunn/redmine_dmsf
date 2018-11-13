@@ -36,15 +36,28 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
   def test_truth    
     assert_kind_of User, @user_member    
   end
-  
-  def test_page_with_open_approvals_block
+
+  def test_page_with_open_approvals_one_approval
+    DmsfFileRevision.delete_all(id: 5)
     @user_member.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
-    @user_member.pref.save!    
+    @user_member.pref.save!
     get :page
     assert_response :success
     unless defined?(EasyExtensions)
       assert_select 'div#list-top' do
         assert_select 'h3', { :text => "#{l(:open_approvals)} (1)" }
+      end
+    end
+  end
+
+  def test_page_with_open_approvals_no_approval
+    @user_member.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
+    @user_member.pref.save!
+    get :page
+    assert_response :success
+    unless defined?(EasyExtensions)
+      assert_select 'div#list-top' do
+        assert_select 'h3', { :text => "#{l(:open_approvals)} (0)" }
       end
     end
   end
