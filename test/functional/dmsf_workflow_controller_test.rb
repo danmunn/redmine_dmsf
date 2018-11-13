@@ -370,12 +370,10 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_update_step_name
-    put :update_step, :id => @wf1, :step => @wfs2.step.to_s, :dmsf_workflow => {:name => 'new_name'}
+    put :update_step, id: @wf1.id, step: @wfs2.step, dmsf_workflow: { step_name: 'new_name'}
     assert_response :redirect
     @wfs2.reload
-    assert_equal @wfs2.name, 'new_name'
-    @wfs3.reload
-    assert_equal @wfs3.name, 'new_name'
+    assert_equal 'new_name', @wfs2.name
   end
 
   def test_update_step_operators
