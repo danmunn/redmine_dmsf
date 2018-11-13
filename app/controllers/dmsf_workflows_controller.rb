@@ -416,15 +416,17 @@ class DmsfWorkflowsController < ApplicationController
     # Name
     if params[:dmsf_workflow].present?
       index = params[:step].to_i
-      name =  params[:dmsf_workflow][:name]
       step = @dmsf_workflow.dmsf_workflow_steps[index]
-      step.name = name
+      step.name = params[:dmsf_workflow][:step_name]
       if step.save
-        @dmsf_workflow.dmsf_workflow_steps.each do |s|
-          if s.step == step.step
-            s.name = step.name
-            s.save!
+        s = @dmsf_workflow.dmsf_workflow_steps.find_by(step: step.step)
+        if s
+          s.name = step.name
+          unless s.save
+            flash[:error] = s.errors.full_messages.to_sentence
           end
+        else
+          render_404
         end
       else
         flash[:error] = step.errors.full_messages.to_sentence

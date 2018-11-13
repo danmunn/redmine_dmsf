@@ -30,7 +30,7 @@
   <%= error_messages_for 'workflow' %>
   <div class="box tabular">
     <p>
-      <%= f.text_field :name, :required => true %>
+      <%= f.text_field :name, required: true %>
       <%= f.submit l(:button_save) %>
     </p>
   </div>
@@ -38,7 +38,7 @@
 
 <div class="tab-content" id="tab-content-members">
   <p>
-    <%= link_to l(:dmsf_new_step_or_approver), new_step_dmsf_workflow_path(@dmsf_workflow), :remote => true, :class => 'icon icon-add' %>
+    <%= link_to l(:dmsf_new_step_or_approver), new_step_dmsf_workflow_path(@dmsf_workflow), remote: true, class: 'icon icon-add' %>
   </p>
   <% steps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq %>
   <% if steps.any? %>
@@ -47,34 +47,46 @@
         <th></th>
         <th><%= l(:label_dmsf_workflow_step) %></th>
         <th><%= l(:label_dmsf_workflow_approval_plural) %></th>
-        <th>/th>
+        <th></th>
       </tr></thead>
       <tbody>
-      <% steps.each do |i|%>
+      <% steps.each do |i| %>
         <tr id="step-<%= i %>" class="step">
           <% index = @dmsf_workflow.dmsf_workflow_steps.order(:id).index{ |s| s.step == i } %>
-          <%= form_for(@dmsf_workflow,
-           :url => update_step_dmsf_workflow_path(:step => index),
-           :method => :put,
-           :html => {:id => "step-index-#{index}-form", :class => 'hol'}) do |f| %>
           <td class="id"><%= i %></td>
           <td class="name">
             <span id="step-index-<%= index %>-name"><%= @dmsf_workflow.dmsf_workflow_steps[index].name if index %></span>
             <div id="<%= "step-index-#{index}-name-form" %>" class="hol">
-              <%= f.text_field(:name, :value => @dmsf_workflow.dmsf_workflow_steps[index].name) %>
+              <%= form_for(@dmsf_workflow,
+                           :url => update_step_dmsf_workflow_path(step: index),
+                           :method => :put,
+                           :html => { id: "step-index-name-#{index}-form" }) do |f| %>
+                <%= f.text_field(:step_name, value: @dmsf_workflow.dmsf_workflow_steps[index].name, id: "dmsf_workflow_step_name_#{index}") %>
+                <p>
+                  <%= submit_tag l(:button_change), :class => 'small' %>
+                  <%= link_to_function(
+                          l(:button_cancel),
+                          "$('#step-index-#{index}-name').show(); $('#step-index-#{index}-approvers').show(); $('#step-index-#{index}-name-form').hide(); $('#step-index-#{index}-approvers-form').hide();")
+                  %>
+                </p>
+              <% end %>
             </div>
           </td>
           <td>
             <span id="step-index-<%= index %>-approvers">
-              <% stps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| (s.step == i) ? s : nil}.compact %>
+              <% stps = @dmsf_workflow.dmsf_workflow_steps.collect{ |s| (s.step == i) ? s : nil }.compact %>
               <% stps.each_with_index do |step, j| %>
-                <% if (j != 0) || (stps.count > 1) %>
+                <% if (j > 0) || (step.operator != DmsfWorkflowStep::OPERATOR_AND) %>
                   <b><%= step.soperator %></b>
                 <% end %>
                 <%= link_to_user step.user %>
               <% end %>
             </span>
             <div id="<%= "step-index-#{index}-approvers-form" %>" class="hol">
+              <%= form_for(@dmsf_workflow,
+                           :url => update_step_dmsf_workflow_path(step: index),
+                           :method => :put,
+                           :html => {:id => "step-index-operator-#{index}-form"}) do |_| %>
                 <div class="dmsf_parent_container">
                   <% stps.each do |step| %>
                       <div class="dmsf_child_container">
@@ -90,12 +102,12 @@
                           <%= DmsfWorkflowStep.soperator(DmsfWorkflowStep::OPERATOR_OR) %>
                         </label>
                         <br/>
-                        &nbsp;<%= delete_link delete_step_dmsf_workflow_path(:step => step.id) %>
+                        &nbsp;<%= delete_link delete_step_dmsf_workflow_path(step: step.id) %>
                       </div>
                       <div class="dmsf_child_container">
                         <%= select_tag "assignee[#{step.id}]",
                                         principals_options_for_select(@approving_candidates | [step.user], step.user),
-                                        :include_blank => false %>
+                                        include_blank: false %>
                       </div>
                   <% end %>
                 </div>
@@ -106,18 +118,18 @@
                         "$('#step-index-#{index}-name').show(); $('#step-index-#{index}-approvers').show(); $('#step-index-#{index}-name-form').hide(); $('#step-index-#{index}-approvers-form').hide();")
                   %>
                 </p>
+                <% end %>
             </div>
+            </td>
+            <td class="buttons">
+              <%= reorder_handle(@dmsf_workflow, url: url_for(action: 'edit', id: @dmsf_workflow, step: i) ) %>
+              <%= link_to_function l(:button_edit),
+                     "$('#step-index-#{index}-name').hide(); $('#step-index-#{index}-approvers').hide(); $('#step-index-#{index}-name-form').show(); $('#step-index-#{index}-approvers-form').show();",
+                     :class => 'icon icon-edit' %>
+              <%= delete_link edit_dmsf_workflow_path(@dmsf_workflow, step: i) %>
+            </td>
           <% end %>
-          </td>
-          <td class="buttons">
-            <%= reorder_handle(@dmsf_workflow, :url => url_for(:action => 'edit', :id => @dmsf_workflow, :step => i) ) %>
-            <%= link_to_function l(:button_edit),
-                   "$('#step-index-#{index}-name').hide(); $('#step-index-#{index}-approvers').hide(); $('#step-index-#{index}-name-form').show(); $('#step-index-#{index}-approvers-form').show();",
-                   :class => 'icon icon-edit' %>
-            <%= delete_link edit_dmsf_workflow_path(@dmsf_workflow, :step => i) %>
-          </td>
         </tr>
-      <% end %>
       </tbody>
     </table>
   <% else %>
