@@ -353,7 +353,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
 
   def test_start
     @revision2.dmsf_workflow_id = @wf1.id
-    get :start, :id => @revision2.dmsf_workflow_id,:dmsf_file_revision_id => @revision2.id
+    get :start, :id => @revision2.dmsf_workflow_id, :dmsf_file_revision_id => @revision2.id
     assert_redirected_to dmsf_folder_path(:id => @project1.id)
   end
 
@@ -372,8 +372,14 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   def test_update_step_name
     put :update_step, id: @wf1.id, step: @wfs2.step, dmsf_workflow: { step_name: 'new_name'}
     assert_response :redirect
+    # All steps in the same step must be renamed
     @wfs2.reload
     assert_equal 'new_name', @wfs2.name
+    @wfs3.reload
+    assert_equal 'new_name', @wfs3.name
+    # But not in others
+    @wfs1.reload
+    assert_equal '1st step', @wfs1.name
   end
 
   def test_update_step_operators

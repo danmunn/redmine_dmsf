@@ -1,12 +1,5 @@
 ---
-wfs2:
-  id: 2
-  dmsf_workflow_id: 1
-  step: 2
-  name: '2nd step'
-  user_id: 2
-  operator: 1 
-  
+
 wfs1:
   id: 1
   dmsf_workflow_id: 1
@@ -14,6 +7,14 @@ wfs1:
   name: '1st step'
   user_id: 1
   operator: 0
+
+wfs2:
+  id: 2
+  dmsf_workflow_id: 1
+  step: 2
+  name: '2nd step'
+  user_id: 2
+  operator: 1
   
 wfs3:
   id: 3
