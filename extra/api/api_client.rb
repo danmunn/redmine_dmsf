@@ -36,6 +36,7 @@ FILE_ID = 41532
 file = DmsfFile.find FILE_ID
 if file
   puts file.id
+  puts file.title
   puts file.name
   puts file.version  
   puts file.project_id  

@@ -33,6 +33,19 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     @role = Role.find_by(name: 'Manager')
     @project1 = Project.find 1
     @project1.enable_module! :dmsf
+    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../../fixtures/dmsf', __FILE__)
+    FileUtils.cp_r File.expand_path('../../../fixtures/files', __FILE__), DmsfFile.storage_path
+  end
+
+  def teardown
+    # Delete our tmp folder
+    begin
+      FileUtils.rm_rf DmsfFile.storage_path
+    rescue Exception => e
+      error e.message
+    end
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
   end
 
   def test_truth
@@ -53,6 +66,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     #<?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_file>
     #   <id>1</id>
+    #   <title>test.txt</title>
     #   <name>test.txt</name>
     #   <project_id>1</project_id>
     #   <version>1.0</version>
@@ -62,17 +76,17 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     #   <description>Some file :-)</description>
     #   <content_url>http://www.example.com/dmsf/files/1/download</content_url>
     # </dmsf_file>
-    assert_select 'dmsf_file > id', :text => @file1.id.to_s
-    assert_select 'dmsf_file > name', :text => @file1.name
-    assert_select 'dmsf_file > project_id', :text => @file1.project_id.to_s
-    assert_select 'dmsf_file > version', :text => "#{@file1.last_revision.version}"
-    assert_select 'dmsf_file > mime_type', :text => @file1.last_revision.mime_type
-    assert_select 'dmsf_file > digest', :text => @file1.last_revision.digest
-    assert_select 'dmsf_file > size', :text => @file1.last_revision.size.to_s
-    assert_select 'dmsf_file > description', :text => @file1.last_revision.description
-    assert_select 'dmsf_file > content_url', :text => "http://www.example.com/dmsf/files/#{@file1.id}/download"
+    assert_select 'dmsf_file > id', text: @file1.id.to_s
+    assert_select 'dmsf_file > title', text: @file1.title
+    assert_select 'dmsf_file > name', text: @file1.name
+    assert_select 'dmsf_file > project_id', text: @file1.project_id.to_s
+    assert_select 'dmsf_file > version', text: @file1.last_revision.version
+    assert_select 'dmsf_file > mime_type', text: @file1.last_revision.mime_type
+    assert_select 'dmsf_file > digest', text: @file1.last_revision.digest
+    assert_select 'dmsf_file > size', text: @file1.last_revision.size.to_s
+    assert_select 'dmsf_file > description', text: @file1.last_revision.description
+    assert_select 'dmsf_file > content_url', text: "http://www.example.com/dmsf/files/#{@file1.id}/download"
     #curl -v -H "Content-Type: application/octet-stream" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/41532/download > file.txt
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../../fixtures/files', __FILE__
     get "/dmsf/files/#{@file1.id}/download.xml?key=#{token.value}"
     assert_response :success
     assert_equal '123', @response.body
@@ -80,8 +94,6 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
 
   def test_upload_document
     timestamp = DateTime.current.strftime('%y%m%d%H%M')
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = DmsfHelper.temp_dir.join("dmsf_test-#{timestamp}").to_s
-    FileUtils.mkdir_p(Setting.plugin_redmine_dmsf['dmsf_storage_directory'])
     @role.add_permission! :file_manipulation
     token = Token.create!(:user => @jsmith, :action => 'api')
     #curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif
@@ -123,11 +135,6 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     revision = DmsfFileRevision.order(:created_at).last
     assert revision && revision.size > 0
-    begin
-      FileUtils.rm_rf Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    rescue Exception => e
-      error e.message
-    end
   end
 
   def test_delete_file
