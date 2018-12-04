@@ -35,7 +35,7 @@ Redmine::WikiFormatting::Macros.register do
         raise ActiveRecord::RecordNotFound
       end
     end
-    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
+    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project, { id: file.id })
       file_view_url = url_for(:controller => :dmsf_files, :action => 'view', :id => file, :download => args[2])
       title = args[1] ?  args[1] : file.title
       title.gsub!(/\A"|"\z/,'') # Remove apostrophes
