@@ -1,8 +1,36 @@
 Changelog for Redmine DMSF
 ==========================
 
-1.6.2 *????-??-??*
+1.6.2 *2018-12-04*
 ------------------
+
+    REST API
+        doc/folder deletion
+        doc's title property added
+        creating links
+        limit & offset parameters added for pagination
+    Speed up
+        Fast links option
+        Folder edit's form
+    Approval workflow
+        Obsolete state added
+
+* Bug: #907 - label_webdav is duplicated in local files
+* New: #887 - REST API 'Get document' : 'title' property is missing in response
+* Bug: #885 - Open Remote in LibreOffice
+* Bug: #881 - DMSF access for anonymous users
+* New: #878 - Enlarge "Link To" form fields
+* Bug: #867 - Attached documents remain by issues after they had been deleted in the main Document view
+* Bug: #866 - A problem by attaching documents to issues
+* New: #857 - Xapian not indexing repository if project configuration is blank
+* New: #855 - Workflow notification missing
+* New: #852 - Create symbolic link using REST API
+* New: #850 - REST API and pagination on collection resources
+* New: #847 - REST API and delete Folder/document type: enhancement
+* New: #823 - Office URI Scheme for direct editing of MS Office files
+* Bug: #818 - Xapian not available
+* New: #803 - 'Create folder' takes a very long time
+* New: #798 - Possibility of Obsolete an Approved Version of a Document
 
 1.6.1 *2018-04-03*
 ------------------
@@ -22,7 +50,7 @@ IMPORTANT
 1. `alias_method_chain` has been replaced with `prepend`. Not directly but using `RedmineExtensions::PatchManager`.
    Consequently, there might occure conficts with plugins which overwrite the same methods.    
     
-* Bug: #839 - Webdav not working type: bug
+* Bug: #839 - Webdav not working
 * New: #838 - Rake task for regenerating document's digests
 * Bug: #831 - ActionView::Template::Error, when i am creating issue from the list of all projects
 * Bug: #830 - ActiveRecord::StatementInvalid: Mysql2::Error: Table 'dmsf_file_revisions' doesn't exist

@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.6.1** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **1.6.2** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -10,13 +10,13 @@ Redmine DMSF now comes bundled with Webdav functionality: if switched on within 
 Webdav functionality is provided through DAV4Rack library.
 
 Initial development was for Kontron AG R&D department and it is released as open source thanks to their generosity.  
-Project home: <http://code.google.com/p/redmine-dmsf/>
+Project home: <https://code.google.com/p/redmine-dmsf/>
 
 Redmine Document Management System "Features" plugin is distributed under GNU General Public License v2 (GPL).  
-Redmine is a flexible project management web application, released under the terms of the GNU General Public License v2 (GPL) at <http://www.redmine.org/>
+Redmine is a flexible project management web application, released under the terms of the GNU General Public License v2 (GPL) at <https://www.redmine.org/>
 
 Further information about the GPL license can be found at
-<http://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1>
+<https://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1>
 
 Features
 --------
