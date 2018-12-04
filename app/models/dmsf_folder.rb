@@ -180,7 +180,7 @@ class DmsfFolder < ActiveRecord::Base
   def dmsf_path_str
     path = dmsf_path
     string_path = path.map { |element| element.title }
-    string_path.join('/')
+    File.join string_path
   end
 
   def notify?

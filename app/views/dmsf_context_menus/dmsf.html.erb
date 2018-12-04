@@ -39,9 +39,9 @@
   <% if @file %>
     <li>
       <% if @file.last_revision && @file.last_revision.protocol %>
-        <% url = "#{@file.last_revision.protocol}:ofe|u|#{Setting.protocol.strip}://#{Setting.host_name.strip}/dmsf/webdav/#{Addressable::URI.escape(@file.project.identifier)}/" %>
+        <% url = "#{@file.last_revision.protocol}:ofe|u|#{Setting.protocol.strip}://#{Setting.host_name.strip}/dmsf/webdav/#{Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@file.project))}/" %>
         <% if @file.dmsf_folder %>
-          <% url << @file.dmsf_folder.dmsf_path_str %>
+          <% url << "#{@file.dmsf_folder.dmsf_path_str}/" %>
         <% end %>
         <% url << @file.name %>
       <% end %>
