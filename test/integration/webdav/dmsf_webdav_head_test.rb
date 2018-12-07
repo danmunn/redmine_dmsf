@@ -41,8 +41,8 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     @project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
     @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../../fixtures/dmsf', __FILE__)
-    FileUtils.cp_r File.expand_path('../../../fixtures/files', __FILE__), DmsfFile.storage_path
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
+    FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
     User.current = nil    
   end
 

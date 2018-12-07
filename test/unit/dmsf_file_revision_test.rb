@@ -37,8 +37,8 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     @admin = User.find 1
     @jsmith = User.find 2
     @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../fixtures/dmsf', __FILE__)
-    FileUtils.cp_r File.expand_path('../../fixtures/files', __FILE__), DmsfFile.storage_path
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
+    FileUtils.cp_r File.join(File.expand_path('../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
   end
 
   def teardown
@@ -265,7 +265,6 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   def test_major_version_cannot_be_nil
     @revision1.major_version = nil
     assert !@revision1.save
-    puts @revision1.errors.full_messages.to_sentence
     assert @revision1.errors.full_messages.to_sentence.include?('Major version cannot be blank')
   end
 

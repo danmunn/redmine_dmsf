@@ -33,7 +33,7 @@ class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
 
   def test_options_for_root_path
     xml_http_request  :options, '/'
-    assert_response :not_found
+    assert_response defined?(EasyExtensions) ? :method_not_allowed : :not_found
   end
 
   def test_options_for_dmsf_root_path

@@ -43,6 +43,19 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @manager = User.find 2 #1
     User.current = nil
     @request.session[:user_id] = @manager.id
+    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
+    FileUtils.cp_r File.join(File.expand_path('../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
+  end
+
+  def teardown
+    # Delete our tmp folder
+    begin
+      FileUtils.rm_rf DmsfFile.storage_path
+    rescue Exception => e
+      error e.message
+    end
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
   end
 
   def test_truth
@@ -222,7 +235,6 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_email_entries_email_from
     Setting.plugin_redmine_dmsf['dmsf_documents_email_from'] = 'karel.picman@kontron.com'
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
     @role.add_permission! :view_dmsf_files
     get :entries_operation, :id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]
     assert_response :success
@@ -231,7 +243,6 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_email_entries_reply_to
     Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to'] = 'karel.picman@kontron.com'
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
     @role.add_permission! :view_dmsf_files
     get :entries_operation, :id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]
     assert_response :success
@@ -240,7 +251,6 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_email_entries_links_only
     Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] = true
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path '../../fixtures/files', __FILE__
     @role.add_permission! :view_dmsf_files
     get :entries_operation, :id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]
     assert_response :success

@@ -112,7 +112,7 @@ module RedmineDmsf
       end
 
       def project_id
-	 project.id if project
+	      project.id if project
       end
 
       def self.create_project_name(project)
@@ -122,7 +122,7 @@ module RedmineDmsf
           else
             project.identifier
           end
-         end
+        end
       end
 
     end

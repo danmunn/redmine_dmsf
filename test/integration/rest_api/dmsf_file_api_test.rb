@@ -35,8 +35,8 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     @project1.enable_module! :dmsf
     @token = Token.create!(user: @jsmith, action: 'api')
     @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../../fixtures/dmsf', __FILE__)
-    FileUtils.cp_r File.expand_path('../../../fixtures/files', __FILE__), DmsfFile.storage_path
+    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
+    FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
   end
 
   def teardown
@@ -87,9 +87,6 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     assert_select 'dmsf_file > description', text: @file1.last_revision.description
     assert_select 'dmsf_file > content_url', text: "http://www.example.com/dmsf/files/#{@file1.id}/download"
     #curl -v -H "Content-Type: application/octet-stream" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/41532/download > file.txt
-    # TODO: Somehow the setting has lost...
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.expand_path('../../../fixtures/dmsf', __FILE__)
-    assert_equal File.expand_path('../../../fixtures/dmsf', __FILE__), Setting.plugin_redmine_dmsf['dmsf_storage_directory']
     get "/dmsf/files/#{@file1.id}/download.xml?key=#{@token.value}"
     assert_response :success
     assert_equal '123', @response.body
