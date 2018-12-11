@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class Dmsf090 < ActiveRecord::Migration
+class Dmsf090 < ActiveRecord::Migration[4.2]
 
   def up
     add_column :members, :dmsf_mail_notification, :boolean

@@ -42,14 +42,14 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_files_updated
-    email = DmsfMailer.files_updated(@user2, @file1.project, [@file1]).deliver
+    email = DmsfMailer.files_updated(@user2, @file1.project, [@file1]).deliver_now
     assert email
     assert text_part(email).body.include? @file1.project.name
     assert html_part(email).body.include? @file1.project.name
   end
 
   def test_files_deleted
-    email = DmsfMailer.files_deleted(@user2, @file1.project, [@file1]).deliver
+    email = DmsfMailer.files_deleted(@user2, @file1.project, [@file1]).deliver_now
     assert email
     assert text_part(email).body.include? @file1.project.name
     assert html_part(email).body.include? @file1.project.name
@@ -64,7 +64,7 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
     email_params[:expired_at] = Date.today
     email_params[:folders] = nil
     email_params[:files] = "[\"#{@file1.id}\"]"
-    email = DmsfMailer.send_documents(@file1.project, email_params).deliver
+    email = DmsfMailer.send_documents(@user2, @file1.project, email_params)
     assert email
     assert text_part(email).body.include? body
     assert html_part(email).body.include? body
@@ -72,7 +72,7 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
 
   def test_workflow_notification
     email = DmsfMailer.workflow_notification(@user2, @wf1, @rev2, :text_email_subject_started, :text_email_started,
-                                             :text_email_to_proceed)
+                                             :text_email_to_proceed).deliver_now
     assert email
     assert text_part(email).body.include? l(:text_email_subject_started)
     assert html_part(email).body.include? l(:text_email_subject_started)

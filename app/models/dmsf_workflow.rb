@@ -195,15 +195,13 @@ class DmsfWorkflow < ActiveRecord::Base
     recipients = assignments.collect{ |a| a.user }
     recipients.uniq!
     recipients = recipients & DmsfMailer.get_notify_users(project, [revision.dmsf_file], true)
-    recipients.each do |user|
-      DmsfMailer.workflow_notification(
-        user,
+    DmsfMailer.deliver_workflow_notification(
+        recipients,
         self,
         revision,
         :text_email_subject_started,
         :text_email_started,
-        :text_email_to_proceed).deliver
-    end
+        :text_email_to_proceed)
     if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
       unless recipients.blank?
         to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')

@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class RemoveUniquenessFromWf < ActiveRecord::Migration
+class RemoveUniquenessFromWf < ActiveRecord::Migration[4.2]
 
   def up      
     remove_index(:dmsf_workflows, :name) if index_exists?(:dmsf_workflows, :name)

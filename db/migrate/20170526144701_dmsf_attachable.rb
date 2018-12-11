@@ -18,14 +18,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfAttachable < ActiveRecord::Migration
+class DmsfAttachable < ActiveRecord::Migration[4.2]
 
   def up
     # DMSF - project's root folder notification
     add_column :projects, :dmsf_act_as_attachable, :integer, default: 1, null: false
     Project.update_all dmsf_act_as_attachable: 1
   end
-  
+
   def down
     remove_column :projects, :dmsf_act_as_attachable
   end

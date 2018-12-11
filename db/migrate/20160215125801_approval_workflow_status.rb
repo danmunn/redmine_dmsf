@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class ApprovalWorkflowStatus < ActiveRecord::Migration
+class ApprovalWorkflowStatus < ActiveRecord::Migration[4.2]
 
   def up
     add_column :dmsf_workflows, :status, :integer, null: false,

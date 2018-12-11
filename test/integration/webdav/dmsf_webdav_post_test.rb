@@ -43,7 +43,7 @@ class DmsfWebdavPostTest < RedmineDmsf::Test::IntegrationTest
 
   # Test post is not implemented
   def test_post_not_implemented
-    post '/dmsf/webdav/', nil, @admin
+    post '/dmsf/webdav/', :params => nil, :headers => @admin
     assert_response :not_implemented
   end
   

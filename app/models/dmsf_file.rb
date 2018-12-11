@@ -85,7 +85,7 @@ class DmsfFile < ActiveRecord::Base
     end
   end
 
-  def initialize
+  def initialize(*args)
     @project = nil
     super
   end

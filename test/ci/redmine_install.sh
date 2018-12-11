@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 export REDMINE_GIT_REPO=git://github.com/redmine/redmine.git
-export REDMINE_GIT_TAG=3.4-stable
+export REDMINE_GIT_TAG=4.0-stable
 
 clone()
 {

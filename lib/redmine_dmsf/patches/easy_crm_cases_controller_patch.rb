@@ -32,7 +32,7 @@ module RedmineDmsf
         easy_crm_cases.each do |easy_crm_case|
           # Attach DMS documents
           uploaded_files = params[:dmsf_attachments]
-          if uploaded_files && uploaded_files.is_a?(Hash)
+          if uploaded_files
             system_folder = easy_crm_case.system_folder(true)
             uploaded_files.each do |key, uploaded_file|
               upload = DmsfUpload.create_from_uploaded_attachment(easy_crm_case.project, system_folder, uploaded_file)

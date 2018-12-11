@@ -32,18 +32,18 @@ class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_options_for_root_path
-    xml_http_request  :options, '/'
+    process :options, '/'
     assert_response defined?(EasyExtensions) ? :method_not_allowed : :not_found
   end
 
   def test_options_for_dmsf_root_path
-    xml_http_request  :options, '/dmsf'
+    process :options, '/dmsf'
     assert_response :success
   end
 
   def test_webdav_not_enabled
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = nil
-    xml_http_request  :options, '/dmsf/webdav'
+    process :options, '/dmsf/webdav'
     assert_response :not_found
   end
 

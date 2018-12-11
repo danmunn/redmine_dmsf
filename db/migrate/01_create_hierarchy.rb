@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class CreateHierarchy < ActiveRecord::Migration
+class CreateHierarchy < ActiveRecord::Migration[4.2]
 
   def change
     create_table :dmsf_folders do |t|

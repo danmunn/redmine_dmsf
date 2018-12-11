@@ -44,7 +44,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
     
   def test_dmsf
-    get :dmsf, :id => @project1.id, :ids => ["file-#{@file1.id}"]
+    get :dmsf, :params => {:id => @project1.id, :ids => ["file-#{@file1.id}"]}
     assert_response :success
     assert_select 'a.icon-edit', :text => l(:button_edit)
     assert_select 'a.icon-del', :text => l(:button_delete)
@@ -53,7 +53,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_no_edit
-    get :dmsf, :id => @project1.id, :ids => ["folder-#{@folder1.id}"]
+    get :dmsf, :params => {:id => @project1.id, :ids => ["folder-#{@folder1.id}"]}
     assert_response :success
     assert_select 'a.icon-edit', :text => l(:button_edit), :count => 0
     assert_select 'a.icon-del', :text => l(:button_delete)
@@ -62,7 +62,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_trash
-    get :trash, :id => @project1.id, :ids => ["file-#{@file1.id}"]
+    get :trash, :params => {:id => @project1.id, :ids => ["file-#{@file1.id}"]}
     assert_response :success
     assert_select 'a.icon-cancel', :text => l(:title_restore)
     assert_select 'a.icon-del', :text => l(:button_delete)

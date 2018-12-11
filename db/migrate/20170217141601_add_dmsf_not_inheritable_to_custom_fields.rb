@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class AddDmsfNotInheritableToCustomFields < ActiveRecord::Migration
+class AddDmsfNotInheritableToCustomFields < ActiveRecord::Migration[4.2]
 
   def change
     add_column :custom_fields, :dmsf_not_inheritable, :boolean, null: true

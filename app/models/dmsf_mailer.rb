@@ -24,6 +24,13 @@ require 'mailer'
 class DmsfMailer < Mailer
   layout 'mailer'
 
+  def self.deliver_files_updated(project, files)
+    users = get_notify_users(project, files)
+    users.each do |user|
+      files_updated(user, project, files).deliver_later
+    end
+  end
+
   def files_updated(user, project, files)
     if user && project && files.count > 0
       files = files.select { |file| file.notify? }
@@ -34,6 +41,13 @@ class DmsfMailer < Mailer
       set_language_if_valid user.language
       mail :to => user.mail,
         :subject => "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
+    end
+  end
+
+  def self.deliver_files_deleted(project, files)
+    users = get_notify_users(project, files)
+    users.each do |user|
+      files_deleted(user, project, files).deliver_later
     end
   end
 
@@ -50,7 +64,11 @@ class DmsfMailer < Mailer
     end
   end
 
-  def send_documents(project, email_params)
+  def self.deliver_send_documents(project, email_params)
+    send_documents(email_params[:to], project, email_params).deliver_later
+  end
+
+  def send_documents(user, project, email_params)
     redmine_headers 'Project' => project.identifier if project
     @body = email_params[:body]
     @links_only = email_params[:links_only] == '1'
@@ -63,8 +81,14 @@ class DmsfMailer < Mailer
       zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
       attachments['Documents.zip'] = { :content_type => 'application/zip', :content => zipped_content_data }
     end
-    mail :to => email_params[:to], :cc => email_params[:cc],
+    mail :to => user, :cc => email_params[:cc],
       :subject => email_params[:subject], 'From' => email_params[:from], 'Reply-To' => email_params[:reply_to]
+  end
+
+  def self.deliver_workflow_notification(users, workflow, revision, subject_id, text1_id, text2_id, notice = nil)
+    users.each do |user|
+      workflow_notification(user, workflow, revision, subject_id.to_s, text1_id.to_s, text2_id.to_s, notice).deliver_later
+    end
   end
 
   def workflow_notification(user, workflow, revision, subject_id, text1_id, text2_id, notice = nil)

@@ -59,7 +59,7 @@ class DmsfLinkApiTest < RedmineDmsf::Test::IntegrationTest
                   <external_url></external_url>
                   <name>#{name}</name>
                 </dmsf_link>}
-    post "/dmsf_links.xml?key=#{token.value}", payload, {'CONTENT_TYPE' => 'application/xml'}
+    post "/dmsf_links.xml?key=#{token.value}", :params => payload, :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_link>

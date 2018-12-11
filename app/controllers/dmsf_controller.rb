@@ -178,7 +178,7 @@ class DmsfController < ApplicationController
     if params[:email][:to].strip.blank?
       flash[:error] = l(:error_email_to_must_be_entered)
     else
-      DmsfMailer.send_documents(@project, params[:email]).deliver
+      DmsfMailer.deliver_send_documents(@project, params[:email])
       File.delete(params[:email][:zipped_content])
       flash[:notice] = l(:notice_email_sent, params[:email][:to])
     end
@@ -527,10 +527,7 @@ class DmsfController < ApplicationController
     # Activities
     unless deleted_files.empty?
       begin
-        recipients = DmsfMailer.get_notify_users(@project, deleted_files)
-        recipients.each do |u|
-          DmsfMailer.files_deleted(u, @project, deleted_files).deliver
-        end
+        DmsfMailer.deliver_files_deleted(@project, deleted_files)
         if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
           unless recipients.empty?
             to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')

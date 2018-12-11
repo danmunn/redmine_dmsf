@@ -35,17 +35,17 @@ class DmsfPublicUrlsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_show_valid_url
-    get :show, :token => 'd8d33e21914a433b280fdc94450ee212'
+    get :show, :params => {:token => 'd8d33e21914a433b280fdc94450ee212'}
     assert_response :success
   end
 
   def test_show_url_width_invalid_token
-    get :show, :token => 'f8d33e21914a433b280fdc94450ee212'
+    get :show, :params => {:token => 'f8d33e21914a433b280fdc94450ee212'}
     assert_response :not_found
   end
 
   def test_show_url_that_has_expired
-    get :show, :token => 'e8d33e21914a433b280fdc94450ee212'
+    get :show, :params => {:token => 'e8d33e21914a433b280fdc94450ee212'}
     assert_response :not_found
   end
 

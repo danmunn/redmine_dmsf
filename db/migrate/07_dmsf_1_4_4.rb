@@ -20,7 +20,7 @@
 require 'fileutils'
 require 'uuidtools'
 
-class Dmsf144 < ActiveRecord::Migration
+class Dmsf144 < ActiveRecord::Migration[4.2]
 
   class DmsfFileLock < ActiveRecord::Base
     belongs_to :file, class_name: 'DmsfFile', foreign_key: 'dmsf_file_id'

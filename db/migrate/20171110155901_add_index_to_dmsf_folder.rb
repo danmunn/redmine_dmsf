@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class AddIndexToDmsfFolder < ActiveRecord::Migration
+class AddIndexToDmsfFolder < ActiveRecord::Migration[4.2]
 
   def change
     add_index :dmsf_folders, :dmsf_folder_id

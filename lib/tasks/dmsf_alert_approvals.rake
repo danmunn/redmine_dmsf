@@ -49,13 +49,13 @@ class DmsfAlertApprovals
         if dry_run
           puts "#{assignment.user.name} <#{assignment.user.mail}>"
         else
-          DmsfMailer.workflow_notification(
-            assignment.user, 
+          DmsfMailer.deliver_workflow_notification(
+            [assignment.user],
             workflow, 
             revision,
             :text_email_subject_requires_approval,
             :text_email_finished_step,
-            :text_email_to_proceed).deliver
+            :text_email_to_proceed)
         end
       end      
     end

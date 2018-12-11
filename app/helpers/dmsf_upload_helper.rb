@@ -24,9 +24,9 @@ module DmsfUploadHelper
   def self.commit_files_internal(commited_files, project, folder, controller = nil)
     failed_uploads = []
     files = []
-    if commited_files && commited_files.is_a?(Hash)
+    if commited_files
       failed_uploads = []
-      commited_files.each_value do |commited_file|
+      commited_files.each do |_, commited_file|
         name = commited_file[:name]
         new_revision = DmsfFileRevision.new
         file = DmsfFile.visible.find_file_by_name(project, folder, name)
@@ -140,10 +140,7 @@ module DmsfUploadHelper
       # Notifications
       if (folder && folder.notification?) || (!folder && project.dmsf_notification?)
         begin
-          recipients = DmsfMailer.get_notify_users(project, files)
-          recipients.each do |u|
-            DmsfMailer.files_updated(u, project, files).deliver
-          end
+          DmsfMailer.deliver_files_updated(project, files)
           if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
             unless recipients.empty?
               to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')

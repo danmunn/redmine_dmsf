@@ -38,7 +38,7 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_page_with_open_approvals_one_approval
-    DmsfFileRevision.delete_all(id: 5)
+    DmsfFileRevision.where(id: 5).delete_all
     @user_member.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
     @user_member.pref.save!
     get :page
