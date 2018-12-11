@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class MigrateDocuments < ActiveRecord::Migration
+class MigrateDocuments < ActiveRecord::Migration[4.2]
 
   def up
     # Migrate all documents from dmsf/p_{project identifier} to dmsf/{year}/{month}

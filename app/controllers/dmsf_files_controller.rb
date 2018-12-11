@@ -163,10 +163,7 @@ class DmsfFilesController < ApplicationController
             @file.set_last_revision revision
             flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
             begin
-              recipients = DmsfMailer.get_notify_users(@project, [@file])
-              recipients.each do |u|
-                DmsfMailer.files_updated(u, @project, [@file]).deliver
-              end
+              DmsfMailer.deliver_files_updated(@project, [@file])
               if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
                 unless recipients.empty?
                   to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
@@ -196,10 +193,7 @@ class DmsfFilesController < ApplicationController
         flash[:notice] = l(:notice_file_deleted)
         unless commit
           begin
-            recipients = DmsfMailer.get_notify_users(@project, [@file])
-            recipients.each do |u|
-              DmsfMailer.files_deleted(u, @project, [@file]).deliver
-            end
+            DmsfMailer.deliver_files_deleted(@project, [@file])
             if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
               unless recipients.empty?
                 to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')

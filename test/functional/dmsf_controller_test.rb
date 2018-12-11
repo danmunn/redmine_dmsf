@@ -74,7 +74,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_edit_folder_forbidden
     # Missing permissions
-    get :edit, :id => @project, :folder_id => @folder1
+    get :edit, :params => {:id => @project, :folder_id => @folder1}
     assert_response :forbidden
   end
 
@@ -82,7 +82,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Permissions OK
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :folder_manipulation
-    get :edit, :id => @project, :folder_id => @folder1
+    get :edit, :params => {:id => @project, :folder_id => @folder1}
     assert_response :success
     assert_select 'label', { :text => @custom_field.name }
     assert_select 'option', { :value => @custom_value.value }
@@ -90,28 +90,28 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_trash_forbidden
     # Missing permissions
-    get :trash, :id => @project
+    get :trash, :params => {:id => @project}
     assert_response :forbidden
   end
 
   def test_trash_allowed
     # Permissions OK
     @role.add_permission! :file_delete
-    get :trash, :id => @project
+    get :trash, :params => {:id => @project}
     assert_response :success
     assert_select 'h2', { :text => l(:link_trash_bin) }
   end
 
   def test_delete_forbidden
     # Missing permissions
-    get :delete, :id => @project, :folder_id => @folder1.id, :commit => false
+    get :delete, :params => {:id => @project, :folder_id => @folder1.id, :commit => false}
     assert_response :forbidden
   end
 
   def test_delete_not_empty
     # Permissions OK but the folder is not empty
     @role.add_permission! :folder_manipulation
-    get :delete, :id => @project, :folder_id => @folder1.id, :commit => false
+    get :delete, :params => {:id => @project, :folder_id => @folder1.id, :commit => false}
     assert_response :redirect
     assert_include l(:error_folder_is_not_empty), flash[:error]
   end
@@ -119,7 +119,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_delete_locked
     # Permissions OK but the folder is locked
     @role.add_permission! :folder_manipulation
-    get :delete, :id => @project, :folder_id => @folder2.id, :commit => false
+    get :delete, :params => {:id => @project, :folder_id => @folder2.id, :commit => false}
     assert_response :redirect
     assert_include l(:error_folder_is_locked), flash[:error]
   end
@@ -127,7 +127,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_delete_ok
     # Empty and not locked folder
     @role.add_permission! :folder_manipulation
-    get :delete, :id => @project, :folder_id => @folder4.id, :commit => false
+    get :delete, :params => {:id => @project, :folder_id => @folder4.id, :commit => false}
     assert_response :redirect
   end
 
@@ -135,7 +135,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Missing permissions
     @folder4.deleted = 1
     @folder4.save
-    get :restore, :id => @project, :folder_id => @folder4.id
+    get :restore, :params => {:id => @project, :folder_id => @folder4.id}
     assert_response :forbidden
   end
 
@@ -145,14 +145,14 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :folder_manipulation
     @folder4.deleted = 1
     @folder4.save
-    get :restore, :id => @project, :folder_id => @folder4.id
+    get :restore, :params => {:id => @project, :folder_id => @folder4.id}
     assert_response :redirect
   end
 
   def test_delete_restore_entries_forbidden
     # Missing permissions
-    get :entries_operation, :id => @project, :delete_entries => 'Delete',
-        :ids => ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]
+    get :entries_operation, :params => {:id => @project, :delete_entries => 'Delete',
+        :ids => ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :forbidden
   end
 
@@ -160,8 +160,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Permissions OK but the folder is not empty
     @request.env['HTTP_REFERER'] = dmsf_folder_path(:id => @project.id)
     @role.add_permission! :view_dmsf_files
-    get :entries_operation, :id => @project, :delete_entries => 'Delete',
-      :ids => ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]
+    get :entries_operation, :params => {:id => @project, :delete_entries => 'Delete',
+      :ids => ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :redirect
     assert_equal flash[:error].to_s, l(:error_folder_is_not_empty)
   end
@@ -171,8 +171,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @request.env['HTTP_REFERER'] = dmsf_folder_path(:id => @project.id)
     @role.add_permission! :view_dmsf_files
     flash[:error] = nil
-    get :entries_operation, :id => @project, :delete_entries => 'Delete',
-        :ids => ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]
+    get :entries_operation, :params => {:id => @project, :delete_entries => 'Delete',
+        :ids => ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :redirect
     assert_nil flash[:error]
   end
@@ -181,8 +181,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Restore
     @role.add_permission! :view_dmsf_files
     @request.env['HTTP_REFERER'] = trash_dmsf_path(:id => @project.id)
-    get :entries_operation, :id => @project, :restore_entries => 'Restore',
-        :ids => ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]
+    get :entries_operation, :params => {:id => @project, :restore_entries => 'Restore',
+        :ids => ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :redirect
     assert_nil flash[:error]
   end
@@ -190,7 +190,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_show
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders
-    get :show, :id => @project.id
+    get :show, :params => {:id => @project.id}
     assert_response :success
     assert_select 'tr.dmsf_tree', :count => 0
   end
@@ -198,7 +198,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_show_tag
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders
-    get :show, :id => @project.id, :custom_field_id => 21, :custom_value => 'Technical documentation'
+    get :show, :params => {:id => @project.id, :custom_field_id => 21, :custom_value => 'Technical documentation'}
     assert_response :success
     assert_select 'tr.dmsf_tree', :count => 0
   end
@@ -208,7 +208,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :view_dmsf_folders
     @manager.pref[:dmsf_tree_view] = '1'
     @manager.preference.save
-    get :show, :id => @project.id
+    get :show, :params => {:id => @project.id}
     assert_response :success
     assert_select 'tr.dmsf_tree'
   end
@@ -216,27 +216,27 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_show_csv
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders
-    get :show, id: @project.id, format: 'csv', :settings => { dmsf_columns: %w(id title) }
+    get :show, :params => {id: @project.id, format: 'csv', :settings => { dmsf_columns: %w(id title) }}
     assert_response :success
     assert_equal 'text/csv; header=present', @response.content_type
   end
 
   def test_new_forbidden
     @role.remove_permission! :folder_manipulation
-    get :new, :id => @project, :parent_id => nil
+    get :new, :params => {:id => @project, :parent_id => nil}
     assert_response :forbidden
   end
 
   def test_new
     @role.add_permission! :folder_manipulation
-    get :new, :id => @project, :parent_id => nil
+    get :new, :params => {:id => @project, :parent_id => nil}
     assert_response :success
   end
 
   def test_email_entries_email_from
     Setting.plugin_redmine_dmsf['dmsf_documents_email_from'] = 'karel.picman@kontron.com'
     @role.add_permission! :view_dmsf_files
-    get :entries_operation, :id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]
+    get :entries_operation, :params => {:id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]}
     assert_response :success
     assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_from']
   end
@@ -244,49 +244,49 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_email_entries_reply_to
     Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to'] = 'karel.picman@kontron.com'
     @role.add_permission! :view_dmsf_files
-    get :entries_operation, :id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]
+    get :entries_operation, :params => {:id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]}
     assert_response :success
     assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
   end
 
   def test_email_entries_links_only
-    Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] = true
+    Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] = '1'
     @role.add_permission! :view_dmsf_files
-    get :entries_operation, :id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]
+    get :entries_operation, :params => {:id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]}
     assert_response :success
     assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only']
   end
 
   def test_add_email_forbidden
-    xhr :get, :add_email, id: @project.id
+    get :add_email, :params => {id: @project.id}, :xhr => true
     assert_response :forbidden
   end
 
   def test_add_email
     @role.add_permission! :view_dmsf_files
-    xhr :get, :add_email, id: @project.id
+    get :add_email, :params => {id: @project.id}, :xhr => true
     assert_response :success
   end
 
   def test_append_email_forbidden
-    post :append_email, :id => @project, :user_ids => @project.members.collect{ |m| m.user.id }, :format => 'js'
+    post :append_email, :params => {:id => @project, :user_ids => @project.members.collect{ |m| m.user.id }, :format => 'js'}
     assert_response :forbidden
   end
 
   def test_append_email
     @role.add_permission! :view_dmsf_files
-    post :append_email, :id => @project, :user_ids => @project.members.collect{ |m| m.user.id }, :format => 'js'
+    post :append_email, :params => {:id => @project, :user_ids => @project.members.collect{ |m| m.user.id }, :format => 'js'}
     assert_response :success
   end
 
   def test_autocomplete_for_user_forbidden
-    xhr :get, :autocomplete_for_user, id: @project.id
+    get :autocomplete_for_user, :params => {id: @project.id}, :xhr => true
     assert_response :forbidden
   end
 
   def test_autocomplete_for_user
     @role.add_permission! :view_dmsf_files
-    xhr :get, :autocomplete_for_user, id: @project
+    get :autocomplete_for_user, :params => {id: @project}, :xhr => true
     assert_response :success
   end
 
@@ -294,10 +294,10 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :folder_manipulation
     @role.add_permission! :view_dmsf_folders
     assert_difference 'DmsfFolder.count', +1 do
-      post :create, :id => @project.id, :dmsf_folder => {
+      post :create, :params => {:id => @project.id, :dmsf_folder => {
         :title => 'New folder',
         :description => 'Unit tests'
-      }
+      }}
     end
     assert_redirected_to dmsf_folder_path(:id => @project, :folder_id => nil)
   end
@@ -306,10 +306,10 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :folder_manipulation
     @role.add_permission! :view_dmsf_folders
     assert_difference 'DmsfFolder.count', +1 do
-      post :create, :id => @project.id, :parent_id => @folder1.id, :dmsf_folder => {
+      post :create, :params => {:id => @project.id, :parent_id => @folder1.id, :dmsf_folder => {
         :title => 'New folder',
         :description => 'Unit tests'
-      }
+      }}
     end
     assert_redirected_to dmsf_folder_path(:id => @project, :folder_id => @folder1)
   end

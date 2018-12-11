@@ -23,6 +23,8 @@
 require_dependency 'zip'
 require_dependency File.dirname(__FILE__) + '/lib/redmine_dmsf.rb'
 
+ActiveSupport::Dependencies.autoload_paths << File.join(File.dirname(__FILE__), 'app', 'validators')
+
 def init
   # Administration menu extension
   Redmine::MenuManager.map :admin_menu do |menu|
@@ -100,7 +102,7 @@ else
   init
 end
 
-ActionDispatch::Reloader.to_prepare do
+RedmineExtensions::Reloader.to_prepare do
   # Rubyzip configuration
   Zip.unicode_names = true
 

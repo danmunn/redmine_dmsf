@@ -73,55 +73,55 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
 
   def test_authorize_admin
     @request.session[:user_id] = @user_admin.id
-    get :new, :id => @folder1.id
+    get :new, :params => {:id => @folder1.id}
     assert_response :success
     assert_template 'new'
   end
 
   def test_authorize_non_member
     @request.session[:user_id] = @user_non_member.id
-    get :new, :id => @folder1.id
+    get :new, :params => {:id => @folder1.id}
     assert_response :forbidden
   end
 
   def test_authorize_member_no_module
     @project1.disable_module!(:dmsf)
-    get :new, :id => @folder1.id
+    get :new, :params => {:id => @folder1.id}
     assert_response :forbidden
   end
 
   def test_authorize_forbidden
     @role_manager.remove_permission! :folder_manipulation
-    get :new, :id => @folder1.id
+    get :new, :params => {:id => @folder1.id}
     assert_response :forbidden
   end
 
   def test_target_folder
-    get :new, :id => @folder1.id, :target_folder_id => @folder2.id
+    get :new, :params => {:id => @folder1.id, :target_folder_id => @folder2.id}
     assert_response :success
     assert_template 'new'
   end
 
   def test_target_folder_forbidden
     @role_manager.remove_permission! :view_dmsf_folders
-    get :new, :id => @folder1.id, :target_folder_id => @folder2.id
+    get :new, :params => {:id => @folder1.id, :target_folder_id => @folder2.id}
     assert_response :forbidden
   end
 
   def test_target_project
-    get :new, :id => @folder1.id, :target_project_id => @project1.id
+    get :new, :params => {:id => @folder1.id, :target_project_id => @project1.id}
     assert_response :success
     assert_template 'new'
   end
 
   def test_new
-    get :new, :id => @folder1.id
+    get :new, :params => {:id => @folder1.id}
     assert_response :success
     assert_template 'new'
   end
 
   def test_copy
-    post :copy, :id => @folder1.id, :target_project_id => @project1.id, :target_folder_id => @folder6.id
+    post :copy, :params => {:id => @folder1.id, :target_project_id => @project1.id, :target_folder_id => @folder6.id}
     assert_response :redirect
     assert_nil flash[:error]
   end
@@ -130,7 +130,7 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     @request.session[:user_id] = @user_admin.id
     @project2.enable_module!(:dmsf)
     assert_equal @project1.id, @folder1.project_id
-    post :copy, :id => @folder1.id, :target_project_id => @project2.id
+    post :copy, :params => {:id => @folder1.id, :target_project_id => @project2.id}
     assert_response :redirect
     assert_nil flash[:error]
     # Check all childs' project ID
@@ -141,71 +141,71 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_copy_the_same_target
-    post :copy, :id => @folder1.id, :target_project_id => @folder1.project.id, :target_folder_id => @folder1.dmsf_folder
+    post :copy, :params => {:id => @folder1.id, :target_project_id => @folder1.project.id, :target_folder_id => @folder1.dmsf_folder}
     assert_equal flash[:error], l(:error_target_folder_same)
     assert_redirected_to :action => 'new', :target_project_id => @folder1.project.id,
                          :target_folder_id => @folder1.dmsf_folder
   end
 
   def test_copy_to_locked_folder
-    post :copy, :id => @folder1.id, :target_project_id => @folder1.project.id, :target_folder_id => @folder2.id
+    post :copy, :params => {:id => @folder1.id, :target_project_id => @folder1.project.id, :target_folder_id => @folder2.id}
     assert_response :forbidden
   end
 
   def test_copy_to_dmsf_not_enabled
-    post :copy, :id => @folder1.id, :target_project_id => @project5.id, :target_folder_id => nil
+    post :copy, :params => {:id => @folder1.id, :target_project_id => @project5.id, :target_folder_id => nil}
     assert_response :forbidden
   end
 
   def test_copy_to_dmsf_enabled
     @project5.enable_module!(:dmsf)
-    post :copy, :id => @folder1.id, :target_project_id => @project5.id, :target_folder_id => nil
+    post :copy, :params => {:id => @folder1.id, :target_project_id => @project5.id, :target_folder_id => nil}
     assert_response :redirect
     assert_nil flash[:error]
   end
 
   def test_copy_to_as_non_member
-    post :copy, :id => @folder1.id, :target_project_id => @project2.id, :target_folder_id => nil
+    post :copy, :params => {:id => @folder1.id, :target_project_id => @project2.id, :target_folder_id => nil}
     assert_response :forbidden
   end
 
   def test_move
-    post :move, :id => @folder1.id, :target_project_id => @project1.id, :target_folder_id => @folder6.id
+    post :move, :params => {:id => @folder1.id, :target_project_id => @project1.id, :target_folder_id => @folder6.id}
     assert_response :redirect
     assert_nil flash[:error]
   end
 
   def test_move_the_same_target
-    post :move, :id => @folder1.id, :target_project_id => @folder1.project.id, :target_folder_id => @folder1.dmsf_folder
+    post :move, :params => {:id => @folder1.id, :target_project_id => @folder1.project.id, :target_folder_id => @folder1.dmsf_folder}
     assert_equal flash[:error], l(:error_target_folder_same)
     assert_redirected_to :action => 'new', :target_project_id => @folder1.project.id, :target_folder_id => @folder1.dmsf_folder
   end
 
   def test_move_to_locked
     @folder1.lock!
-    post :move, :id => @folder1.id, :target_project_id => @folder1.project.id, :target_folder_id => @folder2.id
+    post :move, :params => {:id => @folder1.id, :target_project_id => @folder1.project.id, :target_folder_id => @folder2.id}
     assert_response :forbidden
   end
 
   def test_move_to_locked_folder
-    post :move, :id => @folder1.id, :target_project_id => @folder2.project.id, :target_folder_id => @folder2.id
+    post :move, :params => {:id => @folder1.id, :target_project_id => @folder2.project.id, :target_folder_id => @folder2.id}
     assert_response :forbidden
   end
 
   def test_move_to_dmsf_not_enabled
-    post :move, :id => @folder1.id, :target_project_id => @project5.id, :target_folder_id => nil
+    post :move, :params => {:id => @folder1.id, :target_project_id => @project5.id, :target_folder_id => nil}
     assert_response :forbidden
   end
 
   def test_move_to_dmsf_enabled
     @project5.enable_module!(:dmsf)
-    post :move, :id => @folder1.id, :target_project_id => @project5.id, :target_folder_id => nil
+    post :move, :params => {:id => @folder1.id, :target_project_id => @project5.id, :target_folder_id => nil}
     assert_response :redirect
     assert_nil flash[:error]
   end
 
   def test_move_to_as_non_member
-    post :move, :id => @folder1.id, :target_project_id => @project2.id, :target_folder_id => nil
+    post :move, :params => {:id => @folder1.id, :target_project_id => @project2.id, :target_folder_id => nil}
     assert_response :forbidden
   end
 
@@ -213,7 +213,7 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     @request.session[:user_id] = @user_admin.id
     @project2.enable_module!(:dmsf)
     assert_equal @project1.id, @folder1.project_id
-    post :move, :id => @folder1.id, :target_project_id => @project2.id
+    post :move, :params => {:id => @folder1.id, :target_project_id => @project2.id}
     assert_response :redirect
     assert_nil flash[:error]
     # Check all childs' project ID

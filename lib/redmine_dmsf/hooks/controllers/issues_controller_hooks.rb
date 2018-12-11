@@ -116,7 +116,7 @@ module RedmineDmsf
           end
           # Attach DMS documents
           uploaded_files = params[:dmsf_attachments]
-          if uploaded_files && uploaded_files.is_a?(Hash)
+          if uploaded_files
             system_folder = issue.system_folder(true)
             uploaded_files.each do |key, uploaded_file|
               upload = DmsfUpload.create_from_uploaded_attachment(issue.project, system_folder, uploaded_file)

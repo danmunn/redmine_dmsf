@@ -42,16 +42,16 @@ class DmsfUploadController < ApplicationController
   def upload_files
     uploaded_files = params[:dmsf_attachments]
     @uploads = []
-    if uploaded_files && uploaded_files.is_a?(Hash)
+    if uploaded_files
       # standard file input uploads
-      uploaded_files.each_value do |uploaded_file|
+      uploaded_files.each do |_, uploaded_file|
         upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
         @uploads.push(upload) if upload
       end
     else
       # plupload multi upload completed
       uploaded = params[:uploaded]
-      if uploaded && uploaded.is_a?(Hash)
+      if uploaded
         uploaded.each_value do |uploaded_file|
           @uploads.push(DmsfUpload.new(@project, @folder, uploaded_file))
         end
@@ -113,11 +113,11 @@ class DmsfUploadController < ApplicationController
   def commit
     @files = []
     attachments = params[:attachments]
-    if attachments && attachments.is_a?(Hash)
+    if attachments
       @folder = DmsfFolder.visible.find_by(id: attachments[:folder_id]) if attachments[:folder_id].present?
       # standard file input uploads
       uploaded_files = attachments.select { |key, value| key == 'uploaded_file'}
-      uploaded_files.each_value do |uploaded_file|
+      uploaded_files.each do |_, uploaded_file|
         upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
         if upload
           uploaded_file[:disk_filename] = upload.disk_filename
