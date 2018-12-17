@@ -202,7 +202,8 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.directory_tree(project, current_folder = nil)
     tree = [[l(:link_documents), nil]]
-    folders = DmsfFolder.where(project_id: project.id).visible(false).to_a
+    project_id = (project.is_a?(Project)) ? project.id : project
+    folders = DmsfFolder.where(project_id: project_id).visible(false).to_a
     folders.delete(current_folder)
     folders = folders.delete_if{ |f| f.locked_for_user? }
     folders.each do |folder|
