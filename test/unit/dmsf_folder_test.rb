@@ -161,6 +161,18 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert !tree.to_s.include?('......folder2'), "'......folder2' string in the folder tree not expected."
   end
 
+  def test_directory_tree_id
+    tree = DmsfFolder.directory_tree(@project.id)
+    assert tree
+    # [["Documents", nil],
+    #  ["...folder7", 7],
+    #  ["...folder1", 1],
+    #  ["......folder2", 2] - locked
+    #  ["...folder6", 6]]
+    assert tree.to_s.include?('...folder1'), "'...folder3' string in the folder tree expected."
+    assert !tree.to_s.include?('......folder2'), "'......folder2' string in the folder tree not expected."
+  end
+
   def test_folder_tree
     tree = @folder1.folder_tree
     assert tree
