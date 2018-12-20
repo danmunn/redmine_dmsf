@@ -18,22 +18,26 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class EpmDmsfLockedDocuments < EasyPageModule
+if defined?(EasyExtensions)
 
-  def category_name
-    @category_name ||= 'easy_dms'
-  end
+  class EpmDmsfLockedDocuments < EasyPageModule
 
-  def get_show_data(settings, user, page_context = {})
-    {}
-  end
+    def category_name
+      @category_name ||= 'easy_dms'
+    end
 
-  def get_edit_data(settings, user, page_context = {})
-    {}
-  end
+    def get_show_data(settings, user, page_context = {})
+      {}
+    end
 
-  def registered_in_plugin
-    'redmine_dmsf'
+    def get_edit_data(settings, user, page_context = {})
+      {}
+    end
+
+    def registered_in_plugin
+      'redmine_dmsf'
+    end
+
   end
 
 end

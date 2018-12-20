@@ -34,9 +34,17 @@ module RedmineDmsf
         end
         super(table_names)
       end
-      
+
       def setup
-        @request = ActionController::TestRequest.new
+        if ::Rails::VERSION::MAJOR >= 5
+          if ::Rails::VERSION::MINOR >= 1
+            @request = ActionController::TestRequest.create(self.class.controller_class)
+          else
+            @request = ActionController::TestRequest.create
+          end
+        else
+          @request = ActionController::TestRequest.new
+        end
         @response = ActionController::TestResponse.new
       end
       

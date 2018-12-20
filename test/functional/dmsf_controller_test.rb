@@ -113,7 +113,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :folder_manipulation
     get :delete, :params => {:id => @project, :folder_id => @folder1.id, :commit => false}
     assert_response :redirect
-    assert_include l(:error_folder_is_not_empty), flash[:error]
+    assert_include l(:error_folder_is_not_empty), flash[:errors]
   end
 
   def test_delete_locked
@@ -121,7 +121,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :folder_manipulation
     get :delete, :params => {:id => @project, :folder_id => @folder2.id, :commit => false}
     assert_response :redirect
-    assert_include l(:error_folder_is_locked), flash[:error]
+    assert_include l(:error_folder_is_locked), flash[:errors]
   end
 
   def test_delete_ok
@@ -163,18 +163,18 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     get :entries_operation, :params => {:id => @project, :delete_entries => 'Delete',
       :ids => ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :redirect
-    assert_equal flash[:error].to_s, l(:error_folder_is_not_empty)
+    assert_equal flash[:errors].to_s, l(:error_folder_is_not_empty)
   end
 
   def test_delete_restore_entries_ok
     # Permissions OK
     @request.env['HTTP_REFERER'] = dmsf_folder_path(:id => @project.id)
     @role.add_permission! :view_dmsf_files
-    flash[:error] = nil
+    flash[:errors] = nil
     get :entries_operation, :params => {:id => @project, :delete_entries => 'Delete',
         :ids => ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
   end
 
   def test_restore_entries
@@ -184,7 +184,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     get :entries_operation, :params => {:id => @project, :restore_entries => 'Restore',
         :ids => ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
   end
 
   def test_show

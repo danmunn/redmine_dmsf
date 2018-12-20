@@ -123,7 +123,7 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
   def test_copy
     post :copy, :params => {:id => @folder1.id, :target_project_id => @project1.id, :target_folder_id => @folder6.id}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
   end
 
   def test_copy_to_another_project
@@ -132,7 +132,7 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     assert_equal @project1.id, @folder1.project_id
     post :copy, :params => {:id => @folder1.id, :target_project_id => @project2.id}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
     # Check all childs' project ID
     tree = DmsfHelper::all_children_sorted(@project2, 0, 0)
     tree.each do |f, pos|
@@ -142,7 +142,7 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
 
   def test_copy_the_same_target
     post :copy, :params => {:id => @folder1.id, :target_project_id => @folder1.project.id, :target_folder_id => @folder1.dmsf_folder}
-    assert_equal flash[:error], l(:error_target_folder_same)
+    assert_equal flash[:errors], l(:error_target_folder_same)
     assert_redirected_to :action => 'new', :target_project_id => @folder1.project.id,
                          :target_folder_id => @folder1.dmsf_folder
   end
@@ -161,7 +161,7 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     @project5.enable_module!(:dmsf)
     post :copy, :params => {:id => @folder1.id, :target_project_id => @project5.id, :target_folder_id => nil}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
   end
 
   def test_copy_to_as_non_member
@@ -172,12 +172,12 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
   def test_move
     post :move, :params => {:id => @folder1.id, :target_project_id => @project1.id, :target_folder_id => @folder6.id}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
   end
 
   def test_move_the_same_target
     post :move, :params => {:id => @folder1.id, :target_project_id => @folder1.project.id, :target_folder_id => @folder1.dmsf_folder}
-    assert_equal flash[:error], l(:error_target_folder_same)
+    assert_equal flash[:errors], l(:error_target_folder_same)
     assert_redirected_to :action => 'new', :target_project_id => @folder1.project.id, :target_folder_id => @folder1.dmsf_folder
   end
 
@@ -201,7 +201,7 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     @project5.enable_module!(:dmsf)
     post :move, :params => {:id => @folder1.id, :target_project_id => @project5.id, :target_folder_id => nil}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
   end
 
   def test_move_to_as_non_member
@@ -215,7 +215,7 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     assert_equal @project1.id, @folder1.project_id
     post :move, :params => {:id => @folder1.id, :target_project_id => @project2.id}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
     # Check all childs' project ID
     tree = DmsfHelper::all_children_sorted(@project2, 0, 0)
     tree.each do |f, pos|

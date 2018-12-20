@@ -73,7 +73,7 @@ class DmsfFolder < ActiveRecord::Base
     "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
     deleted: STATUS_DELETED).where(DmsfFolder.visible_condition).distinct
   }
-  scope :system, -> { where(system: true) }
+  scope :issystem, -> { where(system: true) }
   scope :notsystem, -> { where(system: false) }
 
   acts_as_customizable
@@ -506,8 +506,10 @@ class DmsfFolder < ActiveRecord::Base
     self.dmsf_folder_id = params[:parent_id]
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
-      params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
-        custom_field_values[i].value = v[1]
+      i = 0
+      params[:dmsf_folder][:custom_field_values].each do |param|
+        custom_field_values[i].value = param[1]
+        i += 1
       end
     end
     # Permissions

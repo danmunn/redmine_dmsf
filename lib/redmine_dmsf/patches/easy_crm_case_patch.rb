@@ -98,7 +98,7 @@ module RedmineDmsf
       end
 
       def system_folder(create = false)
-        parent = DmsfFolder.system.where(project_id: self.project_id, title: '.CRM cases').first
+        parent = DmsfFolder.issystem.find_by(project_id: self.project_id, title: '.CRM cases')
         if create && !parent
           parent = DmsfFolder.new
           parent.project_id = self.project_id
@@ -109,7 +109,7 @@ module RedmineDmsf
           parent.save
         end
         if parent
-          folder = DmsfFolder.system.where(['project_id = ? AND dmsf_folder_id = ? AND CAST(title AS DECIMAL) = ?',
+          folder = DmsfFolder.issystem.where(['project_id = ? AND dmsf_folder_id = ? AND CAST(title AS DECIMAL) = ?',
             self.project_id, parent.id, self.id]).first
           if create && !folder
             folder = DmsfFolder.new

@@ -122,12 +122,12 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
   def test_copy
     post :copy, :params => {:id => @file1.id, :target_project_id => @project1.id, :target_folder_id => @folder1.id}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
   end
 
   def test_copy_the_same_target
     post :copy, :params => {:id => @file1.id, :target_project_id => @file1.project.id, :target_folder_id => @file1.dmsf_folder}
-    assert_equal flash[:error], l(:error_target_folder_same)
+    assert_equal flash[:errors], l(:error_target_folder_same)
     assert_redirected_to :action => 'new', :target_project_id => @file1.project.id, :target_folder_id => @file1.dmsf_folder
   end
 
@@ -146,7 +146,7 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
     @project5.enable_module!(:dmsf)
     post :copy, :params => {:id => @file1.id, :target_project_id => @project5.id, :target_folder_id => nil}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
   end
 
   def test_copy_to_as_non_member
@@ -157,12 +157,12 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
   def test_move
     post :move, :params => {:id => @file1.id, :target_project_id => @project1.id, :target_folder_id => @folder1.id}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
   end
 
   def test_move_the_same_target
     post :move, :params => {:id => @file1.id, :target_project_id => @file1.project.id, :target_folder_id => @file1.dmsf_folder}
-    assert_equal flash[:error], l(:error_target_folder_same)
+    assert_equal flash[:errors], l(:error_target_folder_same)
     assert_redirected_to :action => 'new', :target_project_id => @file1.project.id, :target_folder_id => @file1.dmsf_folder
   end
 
@@ -170,7 +170,7 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
     @file1.lock!
     post :move, :params => {:id => @file1.id, :target_project_id => @file1.project.id, :target_folder_id => @folder1.id}
     assert_response :redirect
-    assert_equal l(:error_file_is_locked), flash[:error]
+    assert_equal l(:error_file_is_locked), flash[:errors]
   end
 
   def test_move_to_locked_folder
@@ -188,7 +188,7 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
     @project5.enable_module!(:dmsf)
     post :move, :params => {:id => @file1.id, :target_project_id => @project5.id, :target_folder_id => nil}
     assert_response :redirect
-    assert_nil flash[:error]
+    assert_nil flash[:errors]
   end
 
   def test_move_to_as_non_member

@@ -20,12 +20,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-# Load the normal Rails helper
-#require File.expand_path("#{Rails.root}/test/test_helper")
-
-# Use fixtures from redmine
-#ActiveSupport::TestCase.fixture_path = "#{Rails.root}/test/fixtures"
-
 module RedmineDmsf
   module Test
     class UnitTest < ActiveSupport::TestCase

@@ -31,19 +31,6 @@ class DmsfMailer < Mailer
     end
   end
 
-  def files_updated(user, project, files)
-    if user && project && files.count > 0
-      files = files.select { |file| file.notify? }
-      redmine_headers 'Project' => project.identifier if project
-      @files = files
-      @project = project
-      message_id project
-      set_language_if_valid user.language
-      mail :to => user.mail,
-        :subject => "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
-    end
-  end
-
   def self.deliver_files_deleted(project, files)
     users = get_notify_users(project, files)
     users.each do |user|
@@ -51,62 +38,13 @@ class DmsfMailer < Mailer
     end
   end
 
-  def files_deleted(user, project, files)
-    if user && files.count > 0
-      files = files.select { |file| file.notify? }
-      redmine_headers 'Project' => project.identifier if project
-      @files = files
-      @project = project
-      message_id project
-      set_language_if_valid user.language
-      mail :to => user.mail,
-        :subject => "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_deleted_subject)}"
-    end
-  end
-
   def self.deliver_send_documents(project, email_params)
     send_documents(email_params[:to], project, email_params).deliver_later
-  end
-
-  def send_documents(user, project, email_params)
-    redmine_headers 'Project' => project.identifier if project
-    @body = email_params[:body]
-    @links_only = email_params[:links_only] == '1'
-    @public_urls = email_params[:public_urls] == '1'
-    @expired_at = email_params[:expired_at]
-    @folders = email_params[:folders]
-    @files = email_params[:files]
-
-    unless @links_only
-      zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
-      attachments['Documents.zip'] = { :content_type => 'application/zip', :content => zipped_content_data }
-    end
-    mail :to => user, :cc => email_params[:cc],
-      :subject => email_params[:subject], 'From' => email_params[:from], 'Reply-To' => email_params[:reply_to]
   end
 
   def self.deliver_workflow_notification(users, workflow, revision, subject_id, text1_id, text2_id, notice = nil)
     users.each do |user|
       workflow_notification(user, workflow, revision, subject_id.to_s, text1_id.to_s, text2_id.to_s, notice).deliver_later
-    end
-  end
-
-  def workflow_notification(user, workflow, revision, subject_id, text1_id, text2_id, notice = nil)
-    if user && workflow && revision
-      if revision.dmsf_file && revision.dmsf_file.project
-        @project = revision.dmsf_file.project
-        redmine_headers 'Project' => @project.identifier
-      end
-      set_language_if_valid user.language
-      @user = user
-      message_id workflow
-      @workflow = workflow
-      @revision = revision
-      @text1 = l(text1_id, :name => workflow.name, :filename => revision.dmsf_file.name, :notice => notice)
-      @text2 = l(text2_id)
-      @notice = notice
-      mail :to => user.mail,
-        :subject => "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)}"
     end
   end
 
@@ -164,6 +102,70 @@ class DmsfMailer < Mailer
     end
 
     notify_members.collect { |m| m.user }.uniq
+  end
+
+  private
+
+  def workflow_notification(user, workflow, revision, subject_id, text1_id, text2_id, notice = nil)
+    if user && workflow && revision
+      if revision.dmsf_file && revision.dmsf_file.project
+        @project = revision.dmsf_file.project
+        redmine_headers 'Project' => @project.identifier
+      end
+      set_language_if_valid user.language
+      @user = user
+      message_id workflow
+      @workflow = workflow
+      @revision = revision
+      @text1 = l(text1_id, :name => workflow.name, :filename => revision.dmsf_file.name, :notice => notice)
+      @text2 = l(text2_id)
+      @notice = notice
+      mail :to => user.mail,
+           :subject => "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)}"
+    end
+  end
+
+  def send_documents(user, project, email_params)
+    redmine_headers 'Project' => project.identifier if project
+    @body = email_params[:body]
+    @links_only = email_params[:links_only] == '1'
+    @public_urls = email_params[:public_urls] == '1'
+    @expired_at = email_params[:expired_at]
+    @folders = email_params[:folders]
+    @files = email_params[:files]
+
+    unless @links_only
+      zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
+      attachments['Documents.zip'] = { :content_type => 'application/zip', :content => zipped_content_data }
+    end
+    mail :to => user, :cc => email_params[:cc],
+         :subject => email_params[:subject], 'From' => email_params[:from], 'Reply-To' => email_params[:reply_to]
+  end
+
+  def files_deleted(user, project, files)
+    if user && files.count > 0
+      files = files.select { |file| file.notify? }
+      redmine_headers 'Project' => project.identifier if project
+      @files = files
+      @project = project
+      message_id project
+      set_language_if_valid user.language
+      mail :to => user.mail,
+           :subject => "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_deleted_subject)}"
+    end
+  end
+
+  def files_updated(user, project, files)
+    if user && project && files.count > 0
+      files = files.select { |file| file.notify? }
+      redmine_headers 'Project' => project.identifier if project
+      @files = files
+      @project = project
+      message_id project
+      set_language_if_valid user.language
+      mail :to => user.mail,
+           :subject => "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
+    end
   end
 
 end

@@ -52,7 +52,7 @@ require 'redmine_dmsf/webdav/index_resource'
 require 'redmine_dmsf/webdav/project_resource'
 require 'redmine_dmsf/webdav/resource_proxy'
 
-# Exceptions
+# Errors
 require 'redmine_dmsf/errors/dmsf_access_error'
 require 'redmine_dmsf/errors/dmsf_content_error'
 require 'redmine_dmsf/errors/dmsf_email_max_file_error'

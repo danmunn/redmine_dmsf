@@ -171,7 +171,7 @@ class DmsfWorkflowsController < ApplicationController
           end
           flash[:notice] = l(:notice_successful_update)
         elsif action.action != DmsfWorkflowStepAction::ACTION_APPROVE && action.note.blank?
-          flash[:error] = l(:error_empty_note)
+          flash[:errors] = l(:error_empty_note)
         end
       end
     end
@@ -203,12 +203,12 @@ class DmsfWorkflowsController < ApplicationController
                   flash[:notice] = l(:notice_successful_update)
                 end
               else
-                flash[:error] = l(:error_workflow_assign)
+                flash[:errors] = l(:error_workflow_assign)
               end
             end
           end
         rescue StandardError => e
-          flash[:error] = e.message
+          flash[:errors] = e.message
         end
         redirect_to :back
         return
@@ -293,7 +293,7 @@ class DmsfWorkflowsController < ApplicationController
           redirect_to dmsf_workflows_path
         end
       else
-        flash[:error] = @dmsf_workflow.errors.full_messages.to_sentence
+        flash[:errors] = @dmsf_workflow.errors.full_messages.to_sentence
         redirect_to dmsf_workflow_path(@dmsf_workflow)
       end
     else
@@ -306,7 +306,7 @@ class DmsfWorkflowsController < ApplicationController
       @dmsf_workflow.destroy
       flash[:notice] = l(:notice_successful_delete)
     rescue
-      flash[:error] = l(:error_unable_delete_dmsf_workflow)
+      flash[:errors] = l(:error_unable_delete_dmsf_workflow)
     end
     if @project
       redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
@@ -350,11 +350,11 @@ class DmsfWorkflowsController < ApplicationController
           if ws.save
             @dmsf_workflow.dmsf_workflow_steps << ws
           else
-            flash[:error] = ws.errors.full_messages.to_sentence
+            flash[:errors] = ws.errors.full_messages.to_sentence
           end
         end
       else
-        flash[:error] = l(:error_workflow_assign)
+        flash[:errors] = l(:error_workflow_assign)
       end
     end
     respond_to do |format|
@@ -372,7 +372,7 @@ class DmsfWorkflowsController < ApplicationController
         if n > params[:step].to_i
           ws.step = n - 1
           unless ws.save
-            flash[:error] = l(:notice_cannot_renumber_steps)
+            flash[:errors] = l(:notice_cannot_renumber_steps)
           end
         end
       end
@@ -383,7 +383,7 @@ class DmsfWorkflowsController < ApplicationController
   def reorder_steps
     if request.put?
       unless @dmsf_workflow.reorder_steps(params[:step].to_i, params[:dmsf_workflow][:position].to_i)
-        flash[:error] = l(:notice_cannot_renumber_steps)
+        flash[:errors] = l(:notice_cannot_renumber_steps)
       end
     end
     respond_to do |format|
@@ -402,7 +402,7 @@ class DmsfWorkflowsController < ApplicationController
         @dmsf_workflow.notify_users(@project, revision, self)
         flash[:notice] = l(:notice_workflow_started)
       else
-        flash[:error] = l(:notice_cannot_start_workflow)
+        flash[:errors] = l(:notice_cannot_start_workflow)
       end
     end
     redirect_to :back
@@ -418,11 +418,11 @@ class DmsfWorkflowsController < ApplicationController
         @dmsf_workflow.dmsf_workflow_steps.where(step: step.step).find_each do |s|
           s.name = step.name
           unless s.save
-            flash[:error] = s.errors.full_messages.to_sentence
+            flash[:errors] = s.errors.full_messages.to_sentence
           end
         end
       else
-        flash[:error] = step.errors.full_messages.to_sentence
+        flash[:errors] = step.errors.full_messages.to_sentence
       end
     end
     # Operators/Assignees
@@ -433,7 +433,7 @@ class DmsfWorkflowsController < ApplicationController
           step.operator = operator.to_i
           step.user_id = params[:assignee][id]
           unless step.save
-            flash[:error] = step.errors.full_messages.to_sentence
+            flash[:errors] = step.errors.full_messages.to_sentence
             Rails.logger.error step.errors.full_messages.to_sentence
           end
         end

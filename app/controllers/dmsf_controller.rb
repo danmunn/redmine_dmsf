@@ -93,7 +93,7 @@ class DmsfController < ApplicationController
         :type => 'application/zip',
         :disposition => 'attachment')
     rescue Exception => e
-      flash[:error] = e.message
+      flash[:errors] = e.message
   end
 
   def entries_operation
@@ -156,7 +156,7 @@ class DmsfController < ApplicationController
     rescue DmsfAccessError
       render_403 # and return
     rescue StandardError => e
-      flash[:error] = e.message
+      flash[:errors] = e.message
       Rails.logger.error e.message
     end
   end
@@ -176,7 +176,7 @@ class DmsfController < ApplicationController
 
   def entries_email
     if params[:email][:to].strip.blank?
-      flash[:error] = l(:error_email_to_must_be_entered)
+      flash[:errors] = l(:error_email_to_must_be_entered)
     else
       DmsfMailer.deliver_send_documents(@project, params[:email])
       File.delete(params[:email][:zipped_content])
@@ -253,7 +253,7 @@ class DmsfController < ApplicationController
     if result
       flash[:notice] = l(:notice_folder_deleted)
     else
-      flash[:error] = @folder.errors.full_messages.to_sentence
+      flash[:errors] = @folder.errors.full_messages.to_sentence
     end
     respond_to do |format|
       format.html do
@@ -271,7 +271,7 @@ class DmsfController < ApplicationController
     if @folder.restore
       flash[:notice] = l(:notice_dmsf_folder_restored)
     else
-      flash[:error] = @folder.errors.full_messages.to_sentence
+      flash[:errors] = @folder.errors.full_messages.to_sentence
     end
     redirect_to :back
   end
@@ -285,7 +285,7 @@ class DmsfController < ApplicationController
       if @project.save
         flash[:notice] = l(:notice_folder_details_were_saved)
       else
-        flash[:error] = @project.errors.full_messages.to_sentence
+        flash[:errors] = @project.errors.full_messages.to_sentence
       end
     end
     redirect_to dmsf_folder_path(:id => @project)
@@ -343,7 +343,7 @@ class DmsfController < ApplicationController
         @folder.unlock!
         flash[:notice] = l(:notice_folder_unlocked)
       else
-        flash[:error] = l(:error_only_user_that_locked_folder_can_unlock_it)
+        flash[:errors] = l(:error_only_user_that_locked_folder_can_unlock_it)
       end
     end
      redirect_to :back
@@ -466,7 +466,7 @@ class DmsfController < ApplicationController
       folder = DmsfFolder.find_by(id: id)
       if folder
         unless folder.restore
-          flash[:error] = folder.errors.full_messages.to_sentence
+          flash[:errors] = folder.errors.full_messages.to_sentence
         end
       else
         raise FileNotFound
@@ -477,7 +477,7 @@ class DmsfController < ApplicationController
       file = DmsfFile.find_by(id: id)
       if file
         unless file.restore
-          flash[:error] = file.errors.full_messages.to_sentence
+          flash[:errors] = file.errors.full_messages.to_sentence
         end
       else
         raise FileNotFound
@@ -488,7 +488,7 @@ class DmsfController < ApplicationController
       link = DmsfLink.find_by(id: id)
       if link
         unless link.restore
-          flash[:error] = link.errors.full_messages.to_sentence
+          flash[:errors] = link.errors.full_messages.to_sentence
         end
       else
         raise FileNotFound
@@ -502,7 +502,7 @@ class DmsfController < ApplicationController
       folder = DmsfFolder.find_by(id: id)
       if folder
         unless folder.delete commit
-          flash[:error] = folder.errors.full_messages.to_sentence
+          flash[:errors] = folder.errors.full_messages.to_sentence
           return
         end
       elsif !commit
@@ -547,7 +547,7 @@ class DmsfController < ApplicationController
       link = DmsfLink.find_by(id: id)
       link.delete commit if link
     end
-    if flash[:error].blank? && flash[:warning].blank?
+    if flash[:errors].blank? && flash[:warning].blank?
       flash[:notice] = l(:notice_entries_deleted)
     end
   end
