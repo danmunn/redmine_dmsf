@@ -279,13 +279,13 @@ It is necessary to index DMSF files with omindex before searching attempts to re
 
   1. Change the configuration part of redmine_dmsf/extra/xapian_indexer.rb file according to your environment.
      (The path to the index database set in xapian_indexer.rb must corresponds to the path set in the plugin's settings.)   
-  2. Run `ruby redmine_dmsf/extra/xapian_indexer.rb -vf`
+  2. Run `ruby redmine_dmsf/extra/xapian_indexer.rb -v`
 
 This command should be run on regular basis (e.g. from cron)
 
 Example of cron job (once per hour at 8th minute):
     
-    8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f
+    8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb
 
 See redmine_dmsf/extra/xapian_indexer.rb for help.
 
