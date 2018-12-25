@@ -82,8 +82,10 @@ module DmsfUploadHelper
         new_revision.digest = DmsfFileRevision.create_digest commited_file[:tempfile_path]
 
         if commited_file[:custom_field_values].present?
-          commited_file[:custom_field_values].each_with_index do |v, i|
-            new_revision.custom_field_values[i].value = v[1]
+          i = 0
+          commited_file[:custom_field_values].each do |_, v|
+            new_revision.custom_field_values[i].value = v
+            i = i + 1
           end
         end
 

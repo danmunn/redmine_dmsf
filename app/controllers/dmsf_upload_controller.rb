@@ -52,7 +52,7 @@ class DmsfUploadController < ApplicationController
       # plupload multi upload completed
       uploaded = params[:uploaded]
       if uploaded
-        uploaded.each_value do |uploaded_file|
+        uploaded.each do |_, uploaded_file|
           @uploads.push(DmsfUpload.new(@project, @folder, uploaded_file))
         end
       end
