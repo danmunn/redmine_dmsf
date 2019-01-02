@@ -83,12 +83,12 @@
   <% rescue %>
     <p class="warning"><%= l(:error_file_can_not_be_created) %></p>
   <%	ensure %>
-    <% File.delete(testfilename) if File.exist?(testfilename) %>
+    <% FileUtils.rm_rf(testfilename) %>
   <% end %>
 <% end %>
 
 <p>
-  <%=  content_tag(:label, l(:label_tmpdir)) %>
+  <%= content_tag(:label, l(:label_tmpdir)) %>
   <%
     tmpdir = @settings['dmsf_tmpdir'].strip if @settings['dmsf_tmpdir'].present?
     tmpdir = Dir.tmpdir if tmpdir.blank?
