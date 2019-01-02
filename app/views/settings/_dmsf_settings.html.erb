@@ -78,11 +78,11 @@
 <% end %>
 <% testfilename = DmsfFile.storage_path.join('test.test') %>
 <% if File.exist?(storage_dir) %>
-  <%	begin %>
-    <% File.open(testfilename, 'wb') %>
+  <% begin %>
+    <% File.open(testfilename, 'wb') {} %>
   <% rescue %>
     <p class="warning"><%= l(:error_file_can_not_be_created) %></p>
-  <%	ensure %>
+  <% ensure %>
     <% FileUtils.rm_f(testfilename) %>
   <% end %>
 <% end %>
@@ -108,12 +108,12 @@
 <% path = Pathname.new(tmpdir) %>
 <% testfilename = path.join('test.test') %>
 <% if File.exist?(tmpdir) %>
-  <%	begin %>
-    <% File.open(testfilename, 'wb') %>
+  <% begin %>
+    <% File.open(testfilename, 'wb') {} %>
   <% rescue %>
     <p class="warning"><%= l(:error_tmpfile_can_not_be_created) %></p>
-  <%	ensure %>
-    <% File.delete(testfilename) if File.exist?(testfilename) %>
+  <% ensure %>
+    <% FileUtils.rm_f(testfilename) %>
   <% end %>
 <% end %>
 

@@ -378,9 +378,10 @@ class DmsfController < ApplicationController
     zipped_content = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_email_sent_documents.zip'))
 
     File.open(zipped_content, 'wb') do |f|
-      zip_file = File.open(zip.finish, 'rb')
-      while (buffer = zip_file.read(8192))
-        f.write(buffer)
+      File.open(zip.finish, 'rb') do |zip_file|
+        while (buffer = zip_file.read(8192))
+          f.write(buffer)
+        end
       end
     end
 
