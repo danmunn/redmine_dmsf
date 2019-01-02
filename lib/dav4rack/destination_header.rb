@@ -5,24 +5,13 @@ module DAV4Rack
 
     attr_reader :host, :path, :path_info
 
-    def initialize(value, script_name: nil)
-      @script_name = script_name.to_s
-      @value = value.to_s.strip
-      parse
-    end
-
-    def parse
-      uri = Addressable::URI.parse @value
-
+    # uri is expected to be a DAV4Rack::Uri instance
+    def initialize(uri)
       @host = uri.host
-      @path = Addressable::URI.unencode uri.path
-
-      if @script_name
-        if @path =~ /\A(?<path>#{Regexp.escape @script_name}(?<path_info>\/.*))\z/
-          @path_info = $~[:path_info]
-        else
-          raise ArgumentError, 'invalid destination header value'
-        end
+      @path = uri.path
+      unless @path_info = uri.path_info
+        # nil path info means path is outside the realm of script_name
+        raise ArgumentError, "invalid destination header value: #{uri.to_s}"
       end
     end
 
@@ -30,7 +19,7 @@ module DAV4Rack
     def validate(host: nil, resource_path: nil)
       if host and self.host and self.host != host
         DAV4Rack::HTTPStatus::BadGateway
-      elsif self.path == resource_path
+      elsif resource_path and self.path_info == resource_path
         DAV4Rack::HTTPStatus::Forbidden
       end
     end

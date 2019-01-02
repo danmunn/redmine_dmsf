@@ -208,8 +208,12 @@ module DAV4Rack
       NotImplemented
     end
 
+    # HTTP HEAD request.
+    #
+    # Like GET, but without content. Override if you set custom headers in GET
+    # to set them here as well.
     def head(request, response)
-       #no-op, but called by the controller
+      OK
     end
 
     # HTTP PUT request.
