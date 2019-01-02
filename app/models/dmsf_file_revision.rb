@@ -133,7 +133,7 @@ class DmsfFileRevision < ActiveRecord::Base
     end
     if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
       dependencies = DmsfFileRevision.where(disk_filename: disk_filename).all.size
-      File.delete(disk_file) if dependencies <= 1 && File.exist?(disk_file)
+      FileUtils.rm_f(disk_file) if dependencies <= 1
     end
     super
   end

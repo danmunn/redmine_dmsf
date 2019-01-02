@@ -139,8 +139,10 @@ class DmsfFilesController < ApplicationController
 
         # Custom fields
         if params[:dmsf_file_revision][:custom_field_values].present?
-          params[:dmsf_file_revision][:custom_field_values].each_with_index do |v, i|
-            revision.custom_field_values[i].value = v[1]
+          i = 0
+          params[:dmsf_file_revision][:custom_field_values].each do |_, v|
+            revision.custom_field_values[i].value = v
+            i = i + 1
           end
         end
 
@@ -149,14 +151,22 @@ class DmsfFilesController < ApplicationController
         if revision.save
           revision.assign_workflow(params[:dmsf_workflow_id])
           if upload
-            FileUtils.mv(upload.tempfile_path, revision.disk_file(false))
+            begin
+              FileUtils.mv(upload.tempfile_path, revision.disk_file(false))
+            rescue StandardError => e
+              Rails.logger.error e.message
+              flash[:error] = e.message
+              revision.destroy
+              redirect_to :back
+              return
+            end
           end
           if @file.locked? && !@file.locks.empty?
             begin
               @file.unlock!
               flash[:notice] = "#{l(:notice_file_unlocked)}, "
             rescue Exception => e
-              logger.error "Cannot unlock the file: #{e.message}"
+              Rails.logger.error "Cannot unlock the file: #{e.message}"
             end
           end
           if @file.save
@@ -172,7 +182,7 @@ class DmsfFilesController < ApplicationController
                 end
               end
             rescue Exception => e
-              logger.error "Could not send email notifications: #{e.message}"
+              Rails.logger.error "Could not send email notifications: #{e.message}"
             end
           else
             flash[:errors] = @file.errors.full_messages.join(', ')

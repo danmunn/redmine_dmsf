@@ -83,7 +83,7 @@
   <% rescue %>
     <p class="warning"><%= l(:error_file_can_not_be_created) %></p>
   <%	ensure %>
-    <% FileUtils.rm_rf(testfilename) %>
+    <% FileUtils.rm_f(testfilename) %>
   <% end %>
 <% end %>
 
