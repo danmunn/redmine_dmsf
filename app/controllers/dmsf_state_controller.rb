@@ -49,7 +49,7 @@ class DmsfStateController < ApplicationController
   private
   
   def format_valid?(format)
-    format.blank? || ((format =~ /%(t|d|v|i|r)/) && format.length < 256)
+    format.blank? || ((/%(t|d|v|i|r)/.match?(format)) && format.length < 256)
   end
 
 end
