@@ -29,7 +29,6 @@ rvm:
   - 2.5
 
 before_install:
-  - gem install bundler
   - mysql -e 'CREATE DATABASE IF NOT EXISTS test CHARACTER SET utf8mb4;'
   - psql -c 'create database test;' -U postgres
   - export WORKSPACE=`pwd`/workspace
