@@ -22,7 +22,7 @@
 class DmsfFileNameValidator  < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
-    unless value =~ /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/
+    unless /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/.match?(value)
       record.errors.add attribute, :error_contains_invalid_character
     end
   end

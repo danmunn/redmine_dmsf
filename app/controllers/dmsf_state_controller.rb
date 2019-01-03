@@ -27,7 +27,7 @@ class DmsfStateController < ApplicationController
   before_action :authorize
 
   def user_pref_save
-    member = @project.members.where(user_id: User.current.id).first
+    member = @project.members.find_by(user_id: User.current.id)
     if member
       member.dmsf_mail_notification = params[:email_notify]
       member.dmsf_title_format = params[:title_format]
@@ -49,7 +49,7 @@ class DmsfStateController < ApplicationController
   private
   
   def format_valid?(format)
-    format.blank? || ((format =~ /%(t|d|v|i|r)/) && format.length < 256)
+    format.blank? || ((/%(t|d|v|i|r)/.match?(format)) && format.length < 256)
   end
 
 end

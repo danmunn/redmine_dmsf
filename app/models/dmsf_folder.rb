@@ -130,9 +130,9 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.find_by_title(project, folder, title)
     if folder
-      visible.where(project_id: project.id, dmsf_folder_id: nil, title: title).first
+      visible.find_by(project_id: project.id, dmsf_folder_id: nil, title: title)
     else
-      visible.where(project_id: project.id, dmsf_folder_id: folder.id, title: title).first
+      visible.find_by(project_id: project.id, dmsf_folder_id: folder.id, title: title)
     end
   end
 
