@@ -402,8 +402,8 @@ class DmsfController < ApplicationController
       :folders => selected_folders,
       :files => selected_files,
       :subject => "#{@project.name} #{l(:label_dmsf_file_plural).downcase}",
-      :from => Setting.plugin_redmine_dmsf['dmsf_documents_email_from'].blank? ?
-        "#{User.current.name} <#{User.current.mail}>" : Setting.plugin_redmine_dmsf['dmsf_documents_email_from'],
+      :from => Setting.plugin_redmine_dmsf['dmsf_documents_email_from'].presence ||
+        "#{User.current.name} <#{User.current.mail}>",
       :reply_to => Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
     }
     render :action => 'email_entries'
@@ -434,7 +434,7 @@ class DmsfController < ApplicationController
   end
 
   def zip_entries(zip, selected_folders, selected_files)
-    member = Member.where(user_id: User.current.id, project_id: @project.id).first
+    member = Member.find_by(user_id: User.current.id, project_id: @project.id)
     selected_folders.each do |selected_folder_id|
       folder = DmsfFolder.visible.find_by(id: selected_folder_id)
       if folder
@@ -684,7 +684,7 @@ class DmsfController < ApplicationController
       @subfolders = DmsfHelper.visible_folders(@subfolders, @project)
     end
 
-    @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].present? ? Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'] : 100
+    @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].presence || 100
 
     # Trash
     @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed &&

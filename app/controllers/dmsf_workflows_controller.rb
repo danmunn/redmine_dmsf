@@ -339,7 +339,7 @@ class DmsfWorkflowsController < ApplicationController
       end
       operator = (params[:commit] == l(:dmsf_and)) ? DmsfWorkflowStep::OPERATOR_AND : DmsfWorkflowStep::OPERATOR_OR
       user_ids = User.where(id: params[:user_ids]).ids
-      if user_ids.count > 0
+      if user_ids.any?
         user_ids.each do |user_id|
           ws = DmsfWorkflowStep.new
           ws.dmsf_workflow_id = @dmsf_workflow.id

@@ -52,7 +52,7 @@ class DmsfMailer < Mailer
   end
 
   def files_deleted(user, project, files)
-    if user && files.count > 0
+    if user && files.any?
       redmine_headers 'Project' => project.identifier if project
       @files = files
       @project = project
