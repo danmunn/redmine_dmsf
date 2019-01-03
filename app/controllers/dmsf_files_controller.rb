@@ -57,7 +57,7 @@ class DmsfFilesController < ApplicationController
       access.dmsf_file_revision = @revision
       access.action = DmsfFileRevisionAccess::DownloadAction
       access.save!
-      member = Member.where(user_id: User.current.id, project_id: @file.project.id).first
+      member = Member.find_by(user_id: User.current.id, project_id: @file.project.id)
       if member && !member.dmsf_title_format.nil? && !member.dmsf_title_format.empty?
         title_format = member.dmsf_title_format
       else
