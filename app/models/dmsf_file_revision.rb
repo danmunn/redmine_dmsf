@@ -224,7 +224,7 @@ class DmsfFileRevision < ActiveRecord::Base
   def workflow_str(name)
     str = ''
     if name && dmsf_workflow_id
-      names = DmsfWorkflow.find_by(id: dmsf_workflow_id).pluck(:name)
+      names = DmsfWorkflow.where(id: dmsf_workflow_id).pluck(:name)
       str = "#{names.first} - " if names.any?
     end
     case workflow

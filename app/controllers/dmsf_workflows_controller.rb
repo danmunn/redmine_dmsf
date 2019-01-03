@@ -253,7 +253,7 @@ class DmsfWorkflowsController < ApplicationController
     if params[:dmsf_workflow] && params[:dmsf_workflow][:name].present?
       @dmsf_workflow.name = params[:dmsf_workflow][:name]
     elsif params[:dmsf_workflow] && params[:dmsf_workflow][:id].present?
-      names = DmsfWorkflow.find_by(id: params[:dmsf_workflow][:id]).pluck(:name)
+      names = DmsfWorkflow.where(id: params[:dmsf_workflow][:id]).pluck(:name)
       @dmsf_workflow.name = names.first
     end
 
