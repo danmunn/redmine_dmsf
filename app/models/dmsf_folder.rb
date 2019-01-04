@@ -543,7 +543,40 @@ class DmsfFolder < ActiveRecord::Base
     title.gsub(/[#{INVALID_CHARACTERS}]/, '.').gsub(/\.{2,}/, '.').chomp('.')
   end
 
+  def permission_for_role(role)
+    options = Hash.new
+    options[:checked] = false
+    options[:disabled] = false
+    permission_for_role_recursive(self, role, options)
+    options[:disabled] = false unless options[:checked]
+    options.values
+  end
+
+  def permissions_users
+    users = Array.new
+    permissions_users_recursive(self, users, false)
+    users
+  end
+
   private
+
+  def permission_for_role_recursive(folder, role, options)
+    options[:checked] = folder.dmsf_folder_permissions.roles.exists?(object_id: role.id)
+    if !options[:checked] && folder.dmsf_folder && !folder.dmsf_folder.deleted?
+      options[:disabled] = true
+      permission_for_role_recursive(folder.dmsf_folder, role, options)
+    end
+  end
+
+  def permissions_users_recursive(folder, users, disabled)
+    if folder
+      usrs = Principal.active.where(id: folder.dmsf_folder_permissions.users.map{ |p| p.object_id })
+      usrs.each do |u|
+        users << [u, disabled]
+      end
+      permissions_users_recursive(folder.dmsf_folder, users, true)
+    end
+  end
 
   def self.directory_subtree(tree, folder, level, current_folder)
     folders = DmsfFolder.where(project_id: folder.project_id, dmsf_folder_id: folder.id).notsystem.visible(false).to_a

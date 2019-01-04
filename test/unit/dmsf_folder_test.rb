@@ -22,7 +22,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFolderTest < RedmineDmsf::Test::UnitTest
-  fixtures :projects, :users, :email_addresses, :dmsf_folders, :roles, :members, :member_roles, :dmsf_folder_permissions
+  fixtures :projects, :users, :email_addresses, :dmsf_folders, :roles, :members, :member_roles,
+           :dmsf_folder_permissions
          
   def setup
     @project = Project.find 1
@@ -35,8 +36,8 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     @folder7 = DmsfFolder.find 7
     @manager = User.find 2
     @developer = User.find 3
-    manager_role = Role.find 1
-    manager_role.add_permission! :view_dmsf_folders
+    @manager_role = Role.find 1
+    @manager_role.add_permission! :view_dmsf_folders
     developer_role = Role.find 2
     developer_role.add_permission! :view_dmsf_folders
     User.current = @manager
@@ -52,6 +53,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert_kind_of Project, @project
     assert_kind_of User, @manager
     assert_kind_of User, @developer
+    assert_kind_of Role, @manager_role
   end
 
   def test_visiblity
@@ -186,6 +188,19 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert_equal '1052-6024 . U_CPLD_5M240Z_SMT_MBGA100_1.8V_-40',
       DmsfFolder::get_valid_title('1052-6024 : U_CPLD_5M240Z_SMT_MBGA100_1.8V_-40...')
     assert_equal 'test', DmsfFolder::get_valid_title("test#{DmsfFolder::INVALID_CHARACTERS}")
+  end
+
+  def test_permission_for_role
+    checked, disabled = @folder7.permission_for_role(@manager_role)
+    assert checked
+    assert !disabled
+  end
+
+  def test_permissions_users
+    users = @folder7.permissions_users
+    assert users.any?
+    assert users[0]
+    assert !users[1]
   end
 
 end

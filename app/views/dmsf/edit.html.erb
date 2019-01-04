@@ -77,12 +77,16 @@
     <p>
       <%= label_tag '', l(:label_permissions) %>
       <% User.current.managed_roles(@project).each do |role| %>
-          <% checked = @folder.dmsf_folder_permissions.roles.exists?(object_id: role.id) %>
-          <label class="inline"><%= check_box_tag 'permissions[role_ids][]', role.id, checked, :id => nil %> <%= role %></label>
+        <% checked, disabled = @folder.permission_for_role(role) %>
+        <label class="inline">
+          <%= check_box_tag 'permissions[role_ids][]', role.id, checked, disabled: disabled, id: nil %>
+          <%= role %>
+        </label>
       <% end %>
       <span id="user_permissions">
         <br/>
-        <% checkboxes = users_checkboxes(@users) %>
+        <% users = @folder.permissions_users %>
+        <% checkboxes = users_checkboxes(users) %>
         <%= checkboxes %>
       </span>
         <% if checkboxes.present? %>

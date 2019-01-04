@@ -195,7 +195,6 @@ class DmsfController < ApplicationController
     @parent = @folder.dmsf_folder
     @pathfolder = copy_folder(@folder)
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
-    @users = Principal.active.where(id: @folder.dmsf_folder_permissions.users.map{ |p| p.object_id })
   end
 
   def create
