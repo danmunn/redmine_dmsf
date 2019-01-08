@@ -257,6 +257,23 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only']
   end
 
+  def test_entries_email
+    @role.add_permission! :view_dmsf_files
+    zip_file_path = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_email_sent_documents.zip'))
+    FileUtils.touch(zip_file_path)
+    assert File.exist?(zip_file_path)
+    get :entries_email, :params => {:id => @project, :email =>
+        {
+          :to => 'to@test.com', :from => 'from@test.com', :subject => 'subject', :body => 'body', :expired_at => '2015-01-01',
+          :folders => [], :files => [@file1.id], :zipped_content => zip_file_path
+        }
+    }
+    assert_redirected_to dmsf_folder_path(:id => @project)
+    assert !File.exist?(zip_file_path)
+  ensure
+    FileUtils.rm_rf(zip_file_path)
+  end
+
   def test_add_email_forbidden
     get :add_email, :params => {id: @project.id}, :xhr => true
     assert_response :forbidden
