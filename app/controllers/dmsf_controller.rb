@@ -122,18 +122,12 @@ class DmsfController < ApplicationController
 
     if selected_dir_links.present? &&
       (params[:email_entries].present? || params[:download_entries].present?)
-        selected_dir_links.each do |id|
-          target_id = DmsfLink.find_by(id: id).pluck(:target_id).first
-          selected_folders << target_id if target_id && !selected_folders.include?(target_id)
-      end
+        selected_folders = DmsfLink.where(id: selected_dir_links).pluck(:target_id) | selected_folders
     end
 
     if selected_file_links.present? &&
       (params[:email_entries].present? || params[:download_entries].present?)
-        selected_file_links.each do |id|
-          target_id = DmsfLink.find_by(id: id).pluck(:target_id).first
-          selected_files << target_id if target_id && !selected_files.include?(target_id)
-      end
+        selected_files = DmsfLink.where(id: selected_file_links).pluck(:target_id) | selected_files
     end
 
     begin
