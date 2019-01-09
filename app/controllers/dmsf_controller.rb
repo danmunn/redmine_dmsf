@@ -178,7 +178,7 @@ class DmsfController < ApplicationController
     if params[:email][:to].strip.blank?
       flash[:errors] = l(:error_email_to_must_be_entered)
     else
-      DmsfMailer.deliver_send_documents(@project, params[:email])
+      DmsfMailer.deliver_send_documents(@project, params[:email].permit!)
       File.delete(params[:email][:zipped_content])
       flash[:notice] = l(:notice_email_sent, params[:email][:to])
     end
