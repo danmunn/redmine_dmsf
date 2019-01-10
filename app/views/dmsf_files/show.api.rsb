@@ -12,4 +12,5 @@ api.dmsf_file do
     api.description @file.last_revision.description
   end
   api.content_url download_dmsf_file_url(@file)
+  api.revisions @file.dmsf_file_revisions.visible[@revision_pages.offset, @revision_pages.per_page].each
 end
