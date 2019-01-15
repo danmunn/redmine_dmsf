@@ -5,5 +5,30 @@ api.dmsf_file do
   api.project_id @file.project_id
   api.dmsf_folder_id @file.dmsf_folder_id if @file.dmsf_folder_id
   api.content_url download_dmsf_file_url(@file)
-  api.revisions @file.dmsf_file_revisions.visible[@revision_pages.offset, @revision_pages.per_page].each
+  api.array :dmsf_file_revisions do
+    @file.dmsf_file_revisions.each do |r|
+      api.dmsf_file_revision do
+        api.id r.id
+        api.source_dmsf_file_revision_id r.source_dmsf_file_revision_id
+        api.name r.name
+        api.content_url view_dmsf_file_url(@file, download: r)
+        api.size r.size
+        api.mime_type r.mime_type
+        api.title r.title
+        api.description r.description
+        api.workflow r.workflow
+        api.version "#{r.major_version}.#{r.minor_version}"
+        api.comment r.comment
+        api.user_id r.user_id
+        api.created_at r.created_at
+        api.updated_at r.updated_at
+        api.dmsf_workflow_id r.dmsf_workflow_id
+        api.dmsf_workflow_assigned_by r.dmsf_workflow_assigned_by
+        api.dmsf_workflow_assigned_at r.dmsf_workflow_assigned_at
+        api.dmsf_workflow_started_by r.dmsf_workflow_started_by
+        api.dmsf_workflow_started_at r.dmsf_workflow_started_at
+        api.digest r.digest
+      end
+    end
+  end
 end
