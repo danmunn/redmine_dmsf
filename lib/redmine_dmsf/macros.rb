@@ -131,7 +131,7 @@ Redmine::WikiFormatting::Macros.register do
 
   # dmsft - link to the document's content preview
   desc "Wiki link to DMSF document's content preview:\n\n" +
-           "{{dmsft(file_id)}}\n\n" +
+           "{{dmsft(file_id, line_counts)}}\n\n" +
        "_file_id_ can be found in the document's details."
   macro :dmsft do |obj, args|
     raise ArgumentError if args.length < 2 # Requires file id and lines number
