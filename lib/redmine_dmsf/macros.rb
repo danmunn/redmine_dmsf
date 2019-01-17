@@ -53,8 +53,8 @@ Redmine::WikiFormatting::Macros.register do
 
   # dmsff - link to a folder
   desc "Wiki link to DMSF folder:\n\n" +
-           "{{dmsff(folder_id [, title])}}\n\n" +
-       "_folder_id_ may be missing. _folder_id_ can be found in the link for folder opening."
+           "{{dmsff([folder_id [, title]])}}\n\n" +
+       "_folder_id_ can be found in the link for folder opening. Without arguments return link to main folder 'Documents'"
   macro :dmsff do |obj, args|
     if args.length < 1
       return link_to l(:link_documents), dmsf_folder_url(@project)
@@ -75,7 +75,7 @@ Redmine::WikiFormatting::Macros.register do
 
   # dmsfd - link to the document's details
   desc "Wiki link to DMSF document details:\n\n" +
-           "{{dmsfd(document_id)}}\n\n" +
+           "{{dmsfd(document_id [, title])}}\n\n" +
        "_document_id_ can be found in the document's details."
   macro :dmsfd do |obj, args|
     raise ArgumentError if args.length < 1 # Requires file id
@@ -130,9 +130,9 @@ Redmine::WikiFormatting::Macros.register do
   end
 
   # dmsft - link to the document's content preview
-  desc "Wiki link to DMSF document's content preview:\n\n" +
+  desc "Text referring to DMSF text document content:\n\n" +
            "{{dmsft(file_id, lines_count)}}\n\n" +
-       "_file_id_ can be found in the document's details."
+       "_file_id_ can be found in the document's details. _lines_count_ indicate quantity of lines to show."
   macro :dmsft do |obj, args|
     raise ArgumentError if args.length < 2 # Requires file id and lines number
     file = DmsfFile.visible.find args[0].strip
@@ -146,10 +146,10 @@ Redmine::WikiFormatting::Macros.register do
   # dmsf_image - link to an image
   desc "Wiki DMSF image:\n\n" +
              "{{dmsf_image(file_id)}}\n" +
-             "{{dmsf_image(file_id, size=300)}} -- with custom title and size\n" +
-             "{{dmsf_image(file_id, height=300)}} -- with custom title and height (auto width)\n" +
-             "{{dmsf_image(file_id, width=300)}} -- with custom title and width (auto height)\n" +
-             "{{dmsf_image(file_id, size=640x480)}}"
+             "{{dmsf_image(file_id, size=300)}} -- with and size 300x300\n" +
+             "{{dmsf_image(file_id, height=300)}} -- with height (auto width)\n" +
+             "{{dmsf_image(file_id, width=300)}} -- with width (auto height)\n" +
+             "{{dmsf_image(file_id, size=640x480)}} -- with and size 640x480"
   macro :dmsf_image do |obj, args|
     args, options = extract_macro_options(args, :size, :width, :height, :title)
     file_id = args.first
@@ -179,11 +179,11 @@ Redmine::WikiFormatting::Macros.register do
 
   # dmsftn - link to an image thumbnail
   desc "Wiki DMSF thumbnail:\n\n" +
-             "{{dmsftn(file_id)}}\n" +
-             "{{dmsftn(file_id, size=300)}} -- with custom title and size\n" +
-             "{{dmsftn(file_id, height=300)}} -- with custom title and height (auto width)\n" +
-             "{{dmsftn(file_id, width=300)}} -- with custom title and width (auto height)\n" +
-             "{{dmsftn(file_id, size=640x480)}}"
+             "{{dmsftn(file_id)}} -- with default height 200(auto width)\n" +
+             "{{dmsftn(file_id, size=300)}} -- with size 300x300\n" +
+             "{{dmsftn(file_id, height=300)}} -- with height (auto width)\n" +
+             "{{dmsftn(file_id, width=300)}} -- with width (auto height)\n" +
+             "{{dmsftn(file_id, size=640x480)}} -- with and size 640x480"
   macro :dmsftn do |obj, args|
     args, options = extract_macro_options(args, :size, :width, :height, :title)
     file_id = args.first
@@ -217,7 +217,7 @@ Redmine::WikiFormatting::Macros.register do
   end
 
   # dmsfw - link to a document's approval workflow status
-  desc "Wiki link to DMSF document's approval workflow status:\n\n" +
+  desc "Text referring to DMSF document's approval workflow status:\n\n" +
            "{{dmsfw(file_id)}}\n\n" +
        "_file_id_ can be found in the document's details."
   macro :dmsfw do |obj, args|
