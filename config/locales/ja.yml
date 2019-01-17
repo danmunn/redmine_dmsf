@@ -26,12 +26,12 @@ ja:
   label_dmsf_file_revision_plural: 文書管理ファイルリビジョン
   label_dmsf_file_revision_access_plural: 文書管理ファイルアクセス
   warning_no_entries_selected: エントリーが選ばれていません
-  error_email_to_must_be_entered: 電子メールの To は省略できません
+  error_email_to_must_be_entered: メールの宛先は省略できません
   warning_file_already_locked: ファイルは既にロックされています
   notice_file_locked: ファイルをロックしました
   warning_file_not_locked: ファイルはロックされていません
   notice_file_unlocked: ファイルをロック解除しました
-  error_only_user_that_locked_file_can_unlock_it: ファイルをロックしたユーザだけがロック解除できます
+  error_only_user_that_locked_file_can_unlock_it: ファイルをロックしたユーザーだけがロック解除できます
 
   error_max_files_exceeded: "同時にダウンロードできるファイル数の上限 %{number} を超えています"
   error_entry_project_does_not_match_current_project: 指定したプロジェクトは現在のプロジェクトと一致しません
@@ -43,16 +43,16 @@ ja:
   error_folder_is_not_empty: フォルダが空ではありません
   error_folder_title_is_already_used: タイトルは既に使われています
   notice_folder_details_were_saved: フォルダの詳細を保存しました
-  error_folder_is_locked: Folder is locked
+  error_folder_is_locked: フォルダはロックされています
   error_file_is_locked: ファイルはロックされています
   notice_file_deleted: ファイルを削除しました
   error_at_least_one_revision_must_be_present: 少なくとも１つのリビジョンが必要です
   notice_revision_deleted: リビジョンを削除しました
-  warning_one_of_files_locked: ファイルのうちの１つがロックされています
   notice_revision_obsoleted: Revision obsoleted
+  warning_one_of_files_locked: ファイルのうちの１つがロックされています
   notice_file_revision_created: ファイルのリビジョンを作成しました
-  notice_your_preferences_were_saved: あなたの設定を保存しました
-  notice_your_preferences_were_not_saved: Your preferences were not saved
+  notice_your_preferences_were_saved: 設定を保存しました
+  notice_your_preferences_were_not_saved: 設定が保存されていません
   warning_folder_notifications_already_activated: フォルダ通知は既に有効です
 
   notice_folder_notifications_activated: フォルダ通知を有効にしました
@@ -65,36 +65,36 @@ ja:
   warning_file_notifications_already_deactivated: ファイル通知は既に無効です
 
   notice_file_notifications_deactivated: ファイル通知を無効にしました
-  link_details: "%{title} の詳細を表示します"
-  link_edit: "%{title} を編集します"
+  link_details: "%{title} の詳細を表示"
+  link_edit: "%{title} を編集"
   submit_create: 作成
   link_create_folder: フォルダ作成
-  title_check_for_restore_or_delete: 復元または削除をチェックします
   link_title: タイトル
   link_size: サイズ
   link_modified: 更新日時
   link_ver: バージョン
   link_author: 作成者
-  title_check_for_zip_download_or_email: Zip ダウンロードまたは電子メールをチェックします
+  title_check_for_zip_download_or_email: Zip圧縮してダウンロードまたはメールするにはチェック
+  title_check_for_restore_or_delete: 復元または削除するにはチェック
 
-  title_delete: 削除します
+  title_delete: 削除する
   title_notifications_active_deactivate: "通知は有効です: 無効にする"
   title_notifications_not_active_activate: "通知は無効です: 有効にする"
-  title_title_version_version_download: "%{title} のバージョン %{version} をダウンロードします"
+  title_title_version_version_download: "%{title} のバージョン %{version} をダウンロードする"
   title_locked_by_user: "%{user} によってロックされています"
   title_locked_by_you: あなたがロックしています
   title_waiting_for_approval: 承認待ち
   title_approved: 承認済み
-  title_unlock_file: ロック解除して他のメンバーの変更を許可します
-  title_lock_file: ロックして他のメンバーの変更を禁止します
-  title_download_checked: チェックしたものを Zip アーカイブでダウンロードします
-  title_send_checked_by_email: チェックしたものを電子メールで送信します
-  link_user_preferences: プロジェクトの文書管理設定
-  heading_send_documents_by_email: 電子メールによる文書の送信
-  label_email_from: From
-  label_email_to: To
+  title_unlock_file: ロック解除して他のメンバーの変更を許可する
+  title_lock_file: ロックして他のメンバーの変更を禁止する
+  title_download_checked: チェックしたアイテムをZipアーカイブでダウンロードする
+  title_send_checked_by_email: チェックしたアイテムをメールで送信する
+  link_user_preferences: 文書管理の設定
+  heading_send_documents_by_email: メールで文書を送信する
+  label_email_from: 差出人
+  label_email_to: 宛先
   label_email_cc: CC
-  label_email_subject: 表題
+  label_email_subject: 件名
   label_email_documents: 文書
   label_email_body: 本文
   label_email_send: 送信
@@ -109,31 +109,31 @@ ja:
   select_option_default: 既定値
   select_option_deactivated: 無効
   select_option_activated: 有効
-  label_title_format: Title format
-  text_title_format: "Document title format for download (%t - title, %f - file, %d - date, %v - version, %i - ID, %r -
-    revision). Example: %t_%v"
-  title_save_preferences: 設定を保存します
+  label_title_format: タイトル形式
+  text_title_format: "ダウンロード時の文書タイトル形式 (%t - タイトル, %f - ファイル名, %d - 日時, %v - バージョン, %i - ID, %r -
+    リビジョン)。 例: %t_%v"
+  title_save_preferences: 設定を保存する
   heading_revisions: リビジョン
-  title_download: ダウンロードします
-  title_delete_revision: リビジョンを削除します
+  title_download: ダウンロードする
+  title_delete_revision: リビジョンを削除する
   title_obsolete_revision: Obsolete revision
   label_created: 作成者/日時
   label_changed: 更新者/日時
   info_changed_by_user: "/ %{changed}"
   label_filename: ファイル名
-  label_mime: Mime
+  label_mime: 種類
   label_size: サイズ
   heading_new_revision: 新しいリビジョン
   option_version_same: 変更なし
   option_version_minor: マイナー
   option_version_major: メジャー
-  option_version_custom: Custom
+  option_version_custom: カスタム
   label_new_content: 新規コンテンツ
   label_maximum_files_upload: 最大ファイルアップロード数
   note_maximum_number_of_files_uploaded: 一度にアップロードできるファイル数の上限。0は無制限。
 
   label_maximum_files_download: 最大ファイルダウンロード数
-  note_maximum_number_of_files_downloaded: Zip でダウンロードできる、または電子メールで送られるファイル数の上限。0は無制限。
+  note_maximum_number_of_files_downloaded: Zip でダウンロードできる、またはメールで送信できるファイル数の上限。0は無制限。
 
   label_file_storage_directory: ファイル保存フォルダ
   label_index_database: インデックスデータベース
@@ -141,9 +141,9 @@ ja:
   note_possible_values: 取りうる値
   note_pass_none_to_disable_stemming: 語幹抽出を無効にするには 'none' を設定します。
   label_stem_strategy: 抽出方針
-  option_stem_none: Stem none (既定値)
+  option_stem_none: 抽出しない (既定値)
   option_stem_some: Stem some
-  option_stem_all: Stem all
+  option_stem_all: すべて抽出
   text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
     STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
     of terms except for those which start with a capital letter, or are followed by certain characters
@@ -156,49 +156,49 @@ ja:
   permission_view_dmsf_file_revision_accesses: ダウンロード履歴の表示
   permission_view_dmsf_file_revisions: リビジョン履歴の表示
   permission_view_dmsf_folders: ファイルの一覧
-  permission_user_preferences: ユーザ設定
+  permission_user_preferences: ユーザー設定
   permission_view_dmsf_files: ファイルの表示
   permission_folder_manipulation: フォルダの操作
   permission_file_manipulation: ファイルの操作
   permission_force_file_unlock: ファイルの強制ロック解除
-  permission_manage_workflows: ワークフロー管理
+  permission_manage_workflows: ワークフローの管理
   permission_file_delete: ファイルの削除
-  permission_display_system_folders: Display system folders
-  permission_file_approval: File approval
-  permission_email_documents: Email documents
+  permission_display_system_folders: システムフォルダを表示
+  permission_file_approval: ファイルの承認
+  permission_email_documents: 文書をメールで送信
   label_file: ファイル
   field_folder: フォルダ
   error_file_commit_require_uploaded_file: コミットするには、まずファイルをアップロードしてください
 
   warning_some_files_were_not_commited: "いくつかのファイルは、バリデーションエラーのためにコミットされませんでした: %{files}"
 
-  error_user_has_not_right_delete_folder: ユーザにフォルダを削除する権限がありません
+  error_user_has_not_right_delete_folder: ユーザーにフォルダを削除する権限がありません
 
-  error_user_has_not_right_delete_file: ユーザにファイルを削除する権限がありません
+  error_user_has_not_right_delete_file: ユーザーにファイルを削除する権限がありません
 
   notice_entries_deleted: エントリーを削除しました
   warning_some_entries_were_not_deleted: "いくつかのエントリーは削除されませんでした: %{entries}"
-  title_delete_checked: チェックしたものを削除します
-  title_items: items
+  title_delete_checked: チェックしたアイテムを削除する
+  title_items: アイテム
   title_filename_for_download: ファイル名はダウンロードまたは Zip アーカイブに使われます
   label_number_of_folders: フォルダ
   label_number_of_documents: 文書
-  error_file_storage_directory_does_not_exist: ファイル保存フォルダが存在せず作ることもできません
+  error_file_storage_directory_does_not_exist: ファイルの保存フォルダが存在せず、作成もできません
 
-  error_file_can_not_be_created: ファイルを保存フォルダに作ることができません
+  error_file_can_not_be_created: ファイルを保存フォルダに作成できません
   error_wrong_zip_encoding: Zip エンコーディングが正しくありません
-  warning_xapian_not_available: Xapian が利用できる状態になっていません
+  warning_xapian_not_available: Xapian は利用できません
   menu_dmsf: 文書管理  # Project tab title
   label_physical_file_delete: 物理ファイルの削除
   user_is_not_project_member: あなたはプロジェクトのメンバーではありません
-  heading_access_downloads_emails: ダウンロード/電子メール
+  heading_access_downloads_emails: ダウンロード/メール
   heading_access_first: 初回アクセス
   heading_access_last: 最終アクセス
   label_dmsf_updated: 文書管理 更新
   label_dmsf_downloaded: 文書管理 ダウンロード
   title_total_size_of_all_files: このフォルダにある全ファイルの合計サイズ
   project_module_dmsf: 文書管理  # Project module name
-  warning_no_project_to_copy_file_to: ファイルをコピーするプロジェクトがありません
+  warning_no_project_to_copy_file_to: ファイルのコピー先プロジェクトが存在しません
   comment_copied_from: "%{source} からコピーしました"
   field_target_project: ターゲットプロジェクト
   field_target_folder: ターゲットフォルダ
@@ -208,17 +208,17 @@ ja:
   error_target_folder_same: コピー/移動先のフォルダとプロジェクトが現在と同じです
   title_copy: コピー
 
-  error_max_email_filesize_exceeded: "電子メールで送信可能なファイルサイズの上限を越えています (%{number} MB)"
+  error_max_email_filesize_exceeded: "メールで送信可能なファイルサイズの上限を越えています (%{number} MB)"
 
-  note_maximum_email_filesize: "電子メールで送信可能なファイルサイズの上限。0は無制限。単位はMB。"
+  note_maximum_email_filesize: "メールで送信可能なファイルサイズの上限。0は無制限。単位はMB。"
 
-  label_maximum_email_filesize: "電子メール添付ファイルサイズ上限"
+  label_maximum_email_filesize: "メール添付ファイルサイズ上限"
   header_minimum_filesize: "ファイルエラー"
   error_minimum_filesize: " %{file} のサイズは0バイトのため添付することはできません。"
-  parent_directory: "親ディレクトリ"
-  note_webdav: "Webdavを有効にすると %{protocol}://%{domain}/dmsf/webdav/[project identifier] で閲覧することができます"
+  parent_directory: "親フォルダ"
+  note_webdav: "WebDAVを有効にすると %{protocol}://%{domain}/dmsf/webdav/[project identifier] で閲覧することができます"
 
-  label_dmsf_plural: "ファイルとフォルダをコピーします (%{files} files in %{folders} folders)"
+  label_dmsf_plural: "ファイルとフォルダをコピーします (%{files} ファイルを含む %{folders} フォルダ)"
 
   warning_folder_already_locked: "このフォルダは既にロックされています"
   notice_folder_locked: "フォルダをロックしました"
@@ -226,14 +226,14 @@ ja:
   notice_folder_unlocked: "フォルダのロックを解除しました"
   error_only_user_that_locked_folder_can_unlock_it: "このフォルダのロックを解除する権限がありません"
 
-  title_unlock_folder: "ロックを解除し他メンバが更新できるようにします"
-  title_lock_folder: "ロックし他メンバとの競合を回避します"
+  title_unlock_folder: "他のメンバーの変更を許可するためにロック解除する"
+  title_lock_folder: "他のメンバーによる変更を禁止するためにロックする"
 
-  select_option_webdav_readonly: "Read-only"
-  select_option_webdav_readwrite: "Read/Write"
-  label_webdav_strategy: "Webdavアクセス制御"
+  select_option_webdav_readonly: "読み取り専用"
+  select_option_webdav_readwrite: "読み書き可能"
+  label_webdav_strategy: "WebDAVアクセス制御"
 
-  note_webdav_strategy: "Webdavを使ったアクセスの制御（Read-onlyまたはRead/Write）を決定します。"
+  note_webdav_strategy: "WebDAVを使ったアクセスの制御（読み取り専用または読み書き可能）を決定します。"
 
 
   error_unable_delete_dmsf_workflow: そのワークフローの削除はできません
@@ -272,7 +272,7 @@ ja:
   dmsf_and: AND
   dmsf_or: OR
   dmsf_new_step: 新規ステップ
-  dmsf_new_step_or_approver: 新規ステップ or New approver
+  dmsf_new_step_or_approver: 新規ステップまたは新規承認者
   message_dmsf_wokflow_note: コメント
   info_revision: "r%{rev}"
   link_workflow: ワークフロー
@@ -301,15 +301,15 @@ ja:
   text_email_to_see_status: 次のURLで承認ワークフローのステータスを確認することができます。
 
 
-  title_create_link: シンボリックリンクを作成します
-  label_link_from: リンク生成(from)
-  label_link_to: リンク生成(to)
+  title_create_link: シンボリックリンクを作成する
+  label_link_from: リンク元
+  label_link_to: リンク先
   label_notifications_on: 通知オン
   label_notifications_off: 通知オフ
   field_target_file: リンク元ファイル
-  title_download_entries: ダウンロード記録
+  title_download_entries: ダウンロード履歴
   label_external: 外部
-  label_internal: Internal
+  label_internal: 内部
 
   label_link_name: リンク名
   field_external_url: URL
@@ -318,31 +318,31 @@ ja:
   label_target_project: リンク先プロジェクト
   label_source_project: リンク元プロジェクト
 
-  text_email_doc_updated_subject: プロジェクトのファイルが更新されました
+  text_email_doc_updated_subject: ファイルが更新されました
   text_email_doc_updated: が次のファイルを更新しました。
   text_email_doc_follows: 対象ファイル：
-  text_email_doc_deleted_subject: プロジェクトのファイルが削除されました
-  text_email_doc_deleted: が次のプロジェクトのファイルを削除しました。
+  text_email_doc_deleted_subject: ファイルが削除されました
+  text_email_doc_deleted: が次のファイルを削除しました。
   label_links_only: リンクのみ
 
   label_display_notified_recipients: 通知受信者の表示
-  note_display_notified_recipients: 電子メールで通知したすべてのユーザの情報を表示します。
+  note_display_notified_recipients: メールで通知したすべてのユーザーの情報を表示します。
 
-  warning_email_notifications: "%{to} へ電子メールで通知しました"
+  warning_email_notifications: "%{to} へメールで通知しました"
 
   link_trash_bin: ゴミ箱
   title_restore: 復元
   notice_dmsf_file_restored: ファイルを復元しました
   notice_dmsf_folder_restored: フォルダを復元しました
   notice_dmsf_link_restored: リンクを復元しました
-  title_restore_checked: チェックしたものを復元します
-  error_parent_folder: "親フォルダが存在しません"
+  title_restore_checked: チェックしたアイテムを復元する
+  error_parent_folder: 親フォルダが存在しません
 
-  error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
-  error_parent_locked: Unable to complete lock - resource parent is locked
-  error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: Unable to lock exclusively an already-locked resource
-  error_unlock_parent_locked: Unlock failed - resource parent is locked
+  error_resource_or_parent_locked: ロックを完了できません - リソース(または親フォルダ)がロックされています
+  error_parent_locked: ロックを完了できません - リソースの親フォルダがロックされています
+  error_resource_locked: ロックを完了できません - リソースがロックされています
+  error_lock_exclusively: 既にロックされているリソースを排他的にロックできません
+  error_unlock_parent_locked: ロック解除に失敗しました - リソースの親フォルダがロックされています
 
   field_dmsf_tree_view: Navigate folders in a tree
   label_dmsf_version: バージョン
@@ -354,67 +354,66 @@ ja:
   note_maximum_ajax_upload_filesize: アップロード可能なファイルサイズの上限。AjaxおよびRedmineの仕様に制限される
     （2ギガバイト程度までは確認済み）単位はMB。
 
-  label_classic: Classic
-  label_drag_drop: Modern
+  label_classic: クラシック
+  label_drag_drop: モダン
 
-  error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."
+  error_maximum_upload_filecount: 一度にアップロードできるファイルは %{files} つまでです。
 
-  label_public_urls: Public URLs valid to
+  label_public_urls: 公開用URL
 
   label_webdav: WebDAV
-  label_full_text: Full-text search
-  link_extension: Ext
+  label_full_text: 全文検索
+  link_extension: 拡張子
 
-  label_webdav_ignore: Ignored files patterns
-  note_webdav_ignore: A regular expresion with filenames to ignore by PUT requests.
+  label_webdav_ignore: 無視するファイルパターン
+  note_webdav_ignore: PUTリクエスト時に無視するファイル名を正規表現で指定します。
 
-  label_document_url: Url
-  label_last_revision_id: Revision
+  label_document_url: URL
+  label_last_revision_id: リビジョン
     
-  label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern
-    matches temporary files created by MsOffice.
+  label_webdav_disable_versioning: バージョン管理を無視するファイルパターン
+  note_webdav_disable_versioning: 正規表現にマッチしたファイルのバージョン管理を無効にします。デフォルトのパターンは
+    MS Officeによって作成される一時ファイルにマッチします。
 
-  label_dmsf_keep_documents_locked: Keep documents locked
-  note_dmsf_keep_documents_locked: Documents will be kept locked when approved
+  label_dmsf_keep_documents_locked: 文書をロックしたままにする
+  note_dmsf_keep_documents_locked: 承認されると文書もロックされた状態にする
   note_global: (global)
-  field_dmsf_not_inheritable: Not inheritable
+  field_dmsf_not_inheritable: 継承しない
   
-  label_webdav_use_project_names: Use project name for project folder
-  note_webdav_use_project_names: Use project names instead of project identifier for project folders.
+  label_webdav_use_project_names: プロジェクトフォルダにプロジェクト名を使用
+  note_webdav_use_project_names: プロジェクト識別子の代わりに、プロジェクト名をプロジェクトフォルダとして使用する。
 
-  label_last_approver: Last approver
+  label_last_approver: 最終承認者
 
-  label_act_as_attachable: Act as attachable
-  note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+  label_act_as_attachable: 貼り付けを許可
+  note_dmsf_act_as_attachable: 文書を「チケット」などに貼り付けることを許可します。
 
-  label_user_search_add: Search for user to add
+  label_user_search_add: 追加するユーザーを検索
 
-  label_dmsf_attachments: DMS Attachments
-  label_basic_attachments: Basic Attachments
+  label_dmsf_attachments: DMS 添付ファイル
+  label_basic_attachments: 標準 添付ファイル
 
-  label_tmpdir: Temporary file path
-  error_file_tmpdir_does_not_exist: "Temporary file path doesn't exist and can't be created"
-  error_tmpfile_can_not_be_created: "Files can't be created in temporary file path directory"
+  label_tmpdir: 一時フォルダのパス
+  error_file_tmpdir_does_not_exist: 指定された一時フォルダが存在せず、作成もできません
+  error_tmpfile_can_not_be_created: 指定された一時フォルダにファイルを作成できません
 
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to
 
-  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
+  label_enable_cjk_ngrams: CJKテキストから n-grams の生成を有効にする
   text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
     unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
     option needs to have been used at index time.
     e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
-  label_dmsf_fast_links: Fast links
-  text_dmsf_fast_links_info: You will be able to manually enter a target folder's ID when creating links in order to speed
-    up the process of creating links.
+  label_dmsf_fast_links: 高速リンク
+  text_dmsf_fast_links_info: ターゲットフォルダのIDを手動で入力することで、リンク作成時のプロセスを高速化することができます。
 
   easy_pages:
     modules:
-      dmsf_locked_documents: My locked documents
-      dmsf_open_approvals: My open approvals
+      dmsf_locked_documents: 自分がロック中の文書
+      dmsf_open_approvals: 自分が未承認の文書
     module_category:
       easy_dms: Easy DMS
 
