@@ -310,6 +310,7 @@ hu:
   field_target_file: Forrás file
   title_download_entries: Bejegyzések letöltése
   label_external: Külső
+  label_internal: Internal
 
   label_link_name: Link elnevezése
   field_external_url: URL

@@ -309,6 +309,7 @@ ru:
   field_target_file: Исходный файл
   title_download_entries: Скачать записи
   label_external: Внешнюю
+  label_internal: Internal
 
   label_link_name: Наименование ссылки
   field_external_url: URL

@@ -309,6 +309,7 @@ nl:
   field_target_file: Bronbestand
   title_download_entries: Download indieningen
   label_external: Extern
+  label_internal: Internal
 
   label_link_name: Link naam
   field_external_url: URL

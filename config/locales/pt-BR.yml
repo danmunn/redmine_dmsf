@@ -309,6 +309,7 @@ pt-BR:
   field_target_file: Arquivo fonte
   title_download_entries: Download entries
   label_external: External
+  label_internal: Internal
 
   label_link_name: Link name
   field_external_url: URL
