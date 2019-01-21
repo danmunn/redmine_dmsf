@@ -309,6 +309,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   field_target_file: Scarica sorgente
   title_download_entries: Scarica documenti
   label_external: Esterno
+  label_internal: Internal
 
   label_link_name: Nome del collegamento
   field_external_url: URL

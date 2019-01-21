@@ -309,6 +309,7 @@ es:
   field_target_file: Archivo fuente
   title_download_entries: Entradas de descarga
   label_external: External
+  label_internal: Internal
 
   label_link_name: Nombre de enlace
   field_external_url: URL

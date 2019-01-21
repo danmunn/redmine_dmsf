@@ -309,6 +309,7 @@ ja:
   field_target_file: リンク元ファイル
   title_download_entries: ダウンロード記録
   label_external: 外部
+  label_internal: Internal
 
   label_link_name: リンク名
   field_external_url: URL

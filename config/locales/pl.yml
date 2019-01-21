@@ -310,6 +310,7 @@ pl:
   field_target_file: Plik źródłowy
   title_download_entries: Pobrane
   label_external: External
+  label_internal: Internal
 
   label_link_name: Nazwa odnośnika
   field_external_url: URL
