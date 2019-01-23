@@ -113,7 +113,7 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     
   def test_validate_external_url
     @file_link.target_type = 'DmsfUrl'
-    @file_link.external_url = 'htt ps://abc.xyz'
+    @file_link.external_url = ''
     assert !@file_link.save, 
       "External URL link #{@file_link.name} should have not been saved"
     assert_equal 1, @file_link.errors.size
