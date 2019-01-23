@@ -25,7 +25,8 @@ class DmsfUrlValidator  < ActiveModel::EachValidator
     if record.target_type == 'DmsfUrl'
       begin
         if value.present?
-          # TODO : This prevents from entering valid URLs with non-ASCII characters sue as: 'https://www.google.com/search?q=寿司'
+          # TODO : This prevents from entering valid URLs with non-ASCII characters such as:
+          # 'https://www.google.com/search?q=寿司'
           #URI.parse value
         else
           record.errors.add attribute, :invalid
