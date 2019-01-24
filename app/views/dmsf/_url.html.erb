@@ -34,7 +34,11 @@
           :target => '_blank',
           :class => 'icon icon-link') %>
     <div class="dmsf_filename" title="<%= l(:label_target_folder) %>">
-      <%= link.external_url %>
+      <% if link.external_url && link.external_url.length > 50 %>
+        <%= "#{link.external_url[0, 25]}...#{link.external_url[-25, 25]}" %>
+      <% else %>
+        <%= link.external_url %>
+      <% end %>
     </div>
     <%= '</span>'.html_safe if @tree_view %>
   </td>
