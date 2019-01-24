@@ -30,7 +30,13 @@
       link.external_url,
       :target => '_blank',
       :class => 'icon icon-link') %>
-    <div class="dmsf_filename" title="<%= l(:label_target_folder)%>"><%= link.external_url %></div>
+    <div class="dmsf_filename" title="<%= l(:label_target_folder)%>">
+      <% if link.external_url && link.external_url.length > 50 %>
+        <%= "#{link.external_url[0, 25]}...#{link.external_url[-25, 25]}" %>
+      <% else %>
+        <%= link.external_url %>
+      <% end %>
+    </div>
   </td>
 <% end %>
 <% if DmsfFolder.is_column_on?('extension') %>
