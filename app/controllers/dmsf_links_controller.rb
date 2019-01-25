@@ -112,7 +112,9 @@ class DmsfLinksController < ApplicationController
       if result
         flash[:notice] = l(:notice_successful_create)
       else
-        flash[:errors] = @dmsf_link.errors.full_messages.to_sentence
+        msg = @dmsf_link.errors.full_messages.to_sentence
+        flash[:errors] = msg
+        Rails.logger.error msg
       end
     else
       # Link to
