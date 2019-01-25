@@ -28,7 +28,7 @@ class DmsfLink < ActiveRecord::Base
   belongs_to :user
 
   validates :name, presence: true, length: { maximum: 255 }
-  validates :project, presence: true
+  #validates :project, presence: true
   validates :external_url, length: { maximum: 255 }
   validates :external_url, dmsf_url: true
 
