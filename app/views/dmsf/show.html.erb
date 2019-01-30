@@ -68,8 +68,13 @@
                   :title => l(:link_create_folder),
                   :class => 'icon icon-add') unless @locked_for_user %>
   <% end %>
-  <%= link_to_if(@trash_enabled, l(:link_trash_bin), trash_dmsf_path(@project),
-                 :title => l(:link_trash_bin), :class => 'icon icon-del') if @trash_visible %>
+  <% if @trash_enabled %>
+    <%= link_to l(:link_trash_bin), trash_dmsf_path(@project), title: l(:link_trash_bin), class: 'icon icon-del' %>
+  <% else %>
+    <span class="icon icon-del">
+      <%= l(:link_trash_bin) %>
+    </span>
+  <% end %>
 </div>
 
 <%= render(:partial => 'path',
