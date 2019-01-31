@@ -41,12 +41,9 @@ module RedmineDmsf
   end
 end
 
-# if Redmine::Plugin.installed?(:easy_extensions)
-#   RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
-#     'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true
-# else
-#   RedmineExtensions::PatchManager.register_patch_to_be_first 'ProjectsHelper',
-#   'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true, first: true
-# end
-
-ProjectsController.send :helper, RedmineDmsf::Patches::ProjectHelperPatch
+if Redmine::Plugin.installed?(:easy_extensions)
+  RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
+    'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true
+else
+  ProjectsController.send :helper, RedmineDmsf::Patches::ProjectHelperPatch
+end
