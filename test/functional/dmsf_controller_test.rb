@@ -33,6 +33,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @folder1 = DmsfFolder.find 1
     @folder2 = DmsfFolder.find 2
     @folder4 = DmsfFolder.find 4
+    @folderý = DmsfFolder.find 7
     @file1 = DmsfFile.find 1
     @file_link2 = DmsfLink.find 4
     @folder_link1 = DmsfLink.find 1
@@ -63,6 +64,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_kind_of DmsfFolder, @folder1
     assert_kind_of DmsfFolder, @folder2
     assert_kind_of DmsfFolder, @folder4
+    assert_kind_of DmsfFolder, @folder7
     assert_kind_of DmsfFile, @file1
     assert_kind_of DmsfLink, @file_link2
     assert_kind_of DmsfLink, @folder_link1
@@ -149,16 +151,17 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_response :redirect
   end
 
-  def test_delete_restore_entries_forbidden
+  def test_delete_entries_forbidden
     # Missing permissions
     get :entries_operation, :params => {:id => @project, :delete_entries => 'Delete',
         :ids => ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :forbidden
   end
 
-  def test_delete_restore_not_empty
+  def test_delete_not_empty
     # Permissions OK but the folder is not empty
     @request.env['HTTP_REFERER'] = dmsf_folder_path(:id => @project.id)
+    @role.add_permission! :folder_manipulation
     @role.add_permission! :view_dmsf_files
     get :entries_operation, :params => {:id => @project, :delete_entries => 'Delete',
       :ids => ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]}
@@ -166,13 +169,14 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_equal flash[:errors].to_s, l(:error_folder_is_not_empty)
   end
 
-  def test_delete_restore_entries_ok
+  def test_delete_entries_ok
     # Permissions OK
     @request.env['HTTP_REFERER'] = dmsf_folder_path(:id => @project.id)
     @role.add_permission! :view_dmsf_files
+    @role.add_permission! :folder_manipulation
     flash[:errors] = nil
     get :entries_operation, :params => {:id => @project, :delete_entries => 'Delete',
-        :ids => ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
+        :ids => ["folder-#{@folder7.id}", "file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :redirect
     assert_nil flash[:errors]
   end

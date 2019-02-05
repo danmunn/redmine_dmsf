@@ -493,6 +493,7 @@ class DmsfController < ApplicationController
   def delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, commit)
     # Folders
     selected_folders.each do |id|
+      raise DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
       folder = DmsfFolder.find_by(id: id)
       if folder
         unless folder.delete commit
