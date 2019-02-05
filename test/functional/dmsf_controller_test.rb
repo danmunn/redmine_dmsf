@@ -33,7 +33,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @folder1 = DmsfFolder.find 1
     @folder2 = DmsfFolder.find 2
     @folder4 = DmsfFolder.find 4
-    @folderý = DmsfFolder.find 7
+    @folder7 = DmsfFolder.find 7
     @file1 = DmsfFile.find 1
     @file_link2 = DmsfLink.find 4
     @folder_link1 = DmsfLink.find 1
