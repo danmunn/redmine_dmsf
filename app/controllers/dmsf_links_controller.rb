@@ -123,12 +123,12 @@ class DmsfLinksController < ApplicationController
       if params[:dmsf_link][:target_project_id].present?
         @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
       else
-        project_id = DmsfFolder.find_by(id: params[:dmsf_link][:target_folder_id]).pluck(:project_id).first
-        unless project_id
+        project_ids = DmsfFolder.where(id: params[:dmsf_link][:target_folder_id]).pluck(:project_id)
+        unless project_ids.any?
           render_404
           return
         end
-        @dmsf_link.project_id = project_id
+        @dmsf_link.project_id = project_ids.first
       end
       @dmsf_link.target_project_id = params[:dmsf_link][:project_id]
       if params[:dmsf_link][:dmsf_file_id].present?
