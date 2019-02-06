@@ -71,7 +71,7 @@ class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
   def down
     # dmsf_files
     file_folder_ids = DmsfFile.joins(:dmsf_folder).where(dmsf_folders: { system: true }).pluck(
-        'dmsf_files.id, cast(dmsf_folders.title as decimal)')
+        'dmsf_files.id, dmsf_folders.title')
     remove_index :dmsf_files, :project_id
     rename_column :dmsf_files, :project_id, :container_id
     # Temporarily added for the save method
@@ -82,7 +82,7 @@ class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
     file_folder_ids.each do |id, container_id|
       file = DmsfFile.find_by(id: id)
       if file
-        file.container_id = container_id
+        file.container_id = container_id.to_i
         file.container_type = 'Issue'
         file.save!
       end
