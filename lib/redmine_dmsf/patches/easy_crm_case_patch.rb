@@ -109,8 +109,8 @@ module RedmineDmsf
           parent.save
         end
         if parent
-          folder = DmsfFolder.issystem.where(["project_id = ? AND dmsf_folder_id = ? AND title LIKE '? - %'",
-            prj_id, parent.id, self.id]).first
+          folder = DmsfFolder.system.where(["project_id = ? AND dmsf_folder_id = ? AND title LIKE '? - %'",
+            self.project_id, parent.id, self.id]).first
           if create && !folder
             folder = DmsfFolder.new
             folder.dmsf_folder_id = parent.id
