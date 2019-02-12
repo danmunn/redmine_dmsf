@@ -24,7 +24,7 @@ class Dmsf090 < ActiveRecord::Migration[4.2]
     drop_table :dmsf_user_prefs
   end
 
-  def own
+  def down
     remove_column :members, :dmsf_mail_notification
     create_table :dmsf_user_prefs do |t|
       t.references :project, null: false
