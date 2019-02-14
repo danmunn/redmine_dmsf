@@ -86,7 +86,7 @@ class DmsfMailer < Mailer
 
   def self.deliver_workflow_notification(users, workflow, revision, subject_id, text1_id, text2_id, notice = nil)
     users.each do |user|
-      workflow_notification(user, workflow, revision, subject_id.to_s, text1_id.to_s, text2_id.to_s, notice).deliver_later
+      workflow_notification(user, workflow, revision, subject_id.to_s, text1_id.to_s, text2_id.to_s, notice).deliver_now
     end
   end
 
