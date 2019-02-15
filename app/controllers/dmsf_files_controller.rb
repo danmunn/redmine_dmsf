@@ -173,9 +173,9 @@ class DmsfFilesController < ApplicationController
             @file.set_last_revision revision
             flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
             begin
-              DmsfMailer.deliver_files_updated(@project, [@file])
+              recipients = DmsfMailer.deliver_files_updated(@project, [@file])
               if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
-                unless recipients.empty?
+                if recipients.any?
                   to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                   to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
                   flash[:warning] = l(:warning_email_notifications, :to => to)
@@ -203,9 +203,9 @@ class DmsfFilesController < ApplicationController
         flash[:notice] = l(:notice_file_deleted)
         unless commit
           begin
-            DmsfMailer.deliver_files_deleted(@project, [@file])
+            recipients = DmsfMailer.deliver_files_deleted(@project, [@file])
             if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
-              unless recipients.empty?
+              if recipients.any?
                 to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                 to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
                 flash[:warning] = l(:warning_email_notifications, :to => to)

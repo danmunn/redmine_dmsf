@@ -30,6 +30,7 @@ class DmsfMailer < Mailer
     users.each do |user|
       files_updated(user, project, files).deliver_later
     end
+    users
   end
 
   def files_updated(user, project, files)
@@ -49,6 +50,7 @@ class DmsfMailer < Mailer
     users.each do |user|
       files_deleted(user, project, files).deliver_later
     end
+    users
   end
 
   def files_deleted(user, project, files)

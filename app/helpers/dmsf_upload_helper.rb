@@ -142,7 +142,7 @@ module DmsfUploadHelper
       # Notifications
       if (folder && folder.notification?) || (!folder && project.dmsf_notification?)
         begin
-          DmsfMailer.deliver_files_updated(project, files)
+          recipients = DmsfMailer.deliver_files_updated(project, files)
           if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
             unless recipients.empty?
               to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')

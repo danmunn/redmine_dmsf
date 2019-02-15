@@ -38,12 +38,12 @@ Features
   * Document tagging
   * Trash bin
   * Documents attachable to issues
-  * Compatible with Redmine 3.4.x
+  * Compatible with Redmine 4.0.x
 
 Dependencies
 ------------
   
-  * Redmine 3.4.0 or higher
+  * Redmine 4.0.0 or higher
 
 ### Full-text search (optional)
 
@@ -216,7 +216,7 @@ Before installing ensure that the Redmine instance is stopped.
 1. In case of upgrade BACKUP YOUR DATABASE first
 2. Put redmine_dmsf plugin directory into plugins.
 3. Install dependencies: `bundle install`.
-4. Initialize/Update database: `bundle exec rake redmine:plugins:migrate RAILS_ENV="production"`.
+4. Initialize/Update database: `bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf RAILS_ENV="production"`.
 5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
 6. Restart the web server.
 7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure.

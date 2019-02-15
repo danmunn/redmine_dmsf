@@ -522,9 +522,9 @@ class DmsfController < ApplicationController
     # Activities
     unless deleted_files.empty?
       begin
-        DmsfMailer.deliver_files_deleted(@project, deleted_files)
+        recipients = DmsfMailer.deliver_files_deleted(@project, deleted_files)
         if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
-          unless recipients.empty?
+          if recipients.any?
             to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
             to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
             flash[:warning] = l(:warning_email_notifications, :to => to)
