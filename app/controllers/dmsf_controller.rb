@@ -21,6 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfController < ApplicationController
+  include RedmineDmsf::DmsfZip
 
   before_action :find_project
   before_action :authorize, :except => [:expand_folder]
@@ -365,7 +366,7 @@ class DmsfController < ApplicationController
   end
 
   def email_entries(selected_folders, selected_files)
-    zip = DmsfZip.new
+    zip = Zip.new
     zip_entries(zip, selected_folders, selected_files)
 
     zipped_content = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_email_sent_documents.zip'))
@@ -408,7 +409,7 @@ class DmsfController < ApplicationController
   end
 
   def download_entries(selected_folders, selected_files)
-    zip = DmsfZip.new
+    zip = Zip.new
     zip_entries(zip, selected_folders, selected_files)
     zip.files.each do |f|
       audit = DmsfFileRevisionAccess.new
