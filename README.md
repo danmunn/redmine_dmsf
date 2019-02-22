@@ -211,14 +211,20 @@ There's a patch (tested with Redmine 3.4.2) that helps you to modify all help fi
 Setup / Upgrade
 ---------------
 
-Before installing ensure that the Redmine instance is stopped.
+You can either clone the master branch or download the latest zipped version. Before installing ensure that the Redmine instance is stopped.
 
-1. In case of upgrade BACKUP YOUR DATABASE first
-2. Put redmine_dmsf plugin directory into plugins.
+    git clone git@github.com:danmunn/redmine_dmsf.git
+       
+    wget https://github.com/danmunn/redmine_dmsf/archive/master.zip
+
+1. In case of upgrade **BACKUP YOUR DATABASE, ORIGINAL PLUGIN AND THE FOLDER WITH DOCUMENTS** first!!!
+2. Put redmine_dmsf plugin directory into plugins. The plugins sub-directory must be named just **redmine_dmsf**. In case
+   of need rename _redmine_dmsf-x.y.z_ to *redmine_dmsf*.
+3. **Go to the redmine directory** `cd redmine`   
 3. Install dependencies: `bundle install`.
 4. Initialize/Update database: `bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf RAILS_ENV="production"`.
 5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
-6. Restart the web server.
+6. Restart the web server. e.g. `service apache2 restart`
 7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure.
 8. Assign DMSF permissions to appropriate roles.
 9. There are a few rake tasks:
