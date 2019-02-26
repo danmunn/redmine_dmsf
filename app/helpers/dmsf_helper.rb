@@ -101,7 +101,7 @@ module DmsfHelper
     allowed = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
       (project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS) &&
       User.current.allowed_to?(:display_system_folders, project)
-    folders.reject{ |folder|
+    folders.reject do |folder|
       if folder.system
         if allowed
           issue_id = folder.title.to_i
@@ -117,7 +117,7 @@ module DmsfHelper
       else
         false
       end
-    }
+    end
   end
 
   def self.all_children_sorted(parent, pos, ident)

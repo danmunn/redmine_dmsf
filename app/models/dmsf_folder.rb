@@ -51,17 +51,19 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.visible_condition(system=true)
     Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
-      permissions = "#{DmsfFolderPermission.table_name}"
-      folders = "#{DmsfFolder.table_name}"
-      group_ids = user.group_ids.join(',')
-      group_ids = -1 if group_ids.blank?
-      allowed = (system && role.allowed_to?(:display_system_folders)) ? 1 : 0
-      %{
-        ((#{permissions}.object_id IS NULL) OR
-        (#{permissions}.object_id = #{role.id} AND #{permissions}.object_type = 'Role') OR
-        ((#{permissions}.object_id = #{user.id} OR #{permissions}.object_id IN (#{group_ids})) AND #{permissions}.object_type = 'User')) AND
-        (#{folders}.system = #{DmsfFolder.connection.quoted_false} OR 1 = #{allowed})
-      }
+      if role.member?
+        permissions = "#{DmsfFolderPermission.table_name}"
+        folders = "#{DmsfFolder.table_name}"
+        group_ids = user.group_ids.join(',')
+        group_ids = -1 if group_ids.blank?
+        allowed = (system && role.allowed_to?(:display_system_folders)) ? 1 : 0
+        %{
+          ((#{permissions}.object_id IS NULL) OR
+          (#{permissions}.object_id = #{role.id} AND #{permissions}.object_type = 'Role') OR
+          ((#{permissions}.object_id = #{user.id} OR #{permissions}.object_id IN (#{group_ids})) AND #{permissions}.object_type = 'User')) AND
+          (#{folders}.system = #{DmsfFolder.connection.quoted_false} OR 1 = #{allowed})
+        }
+      end
     end
   end
 
@@ -564,7 +566,8 @@ class DmsfFolder < ActiveRecord::Base
     options[:checked] = folder.dmsf_folder_permissions.roles.exists?(object_id: role.id)
     if !options[:checked] && folder.dmsf_folder && !folder.dmsf_folder.deleted?
       options[:disabled] = true
-      permission_for_role_recursive(folder.dmsf_folder, role, options)
+      # TODO: No inheritance
+      #permission_for_role_recursive(folder.dmsf_folder, role, options)
     end
   end
 
@@ -574,7 +577,8 @@ class DmsfFolder < ActiveRecord::Base
       usrs.each do |u|
         users << [u, disabled]
       end
-      permissions_users_recursive(folder.dmsf_folder, users, true)
+      # TODO: No inheritance
+      #permissions_users_recursive(folder.dmsf_folder, users, true)
     end
   end
 
