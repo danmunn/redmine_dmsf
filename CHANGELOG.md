@@ -1,6 +1,30 @@
 Changelog for Redmine DMSF
 ==========================
 
+2.0.0 *2019-02-28*
+------------------
+
+    Compatibility with Redmine 4.0
+    Russian localization updated
+    
+* Bug: #976 - Can't link document to issue with column in subject
+* Bug: #969 - About the DMSF folder search logic
+* Bug: #966 - folder_manipulation permission
+* Bug: #965 - tag column missing in the dms_file_revision_table
+* Bug: #959 - crete symbolic link error
+* Bug: #956 - About "External" of "Link from"
+* Bug: #950 - Wrong description, missing argument for macro {{dmsft}}
+* Bug: #940 - dav4rack license
+* Bug: #937 - Documents upload if disk is full
+* Bug: #936 - Then go to configuration an internal error #500 appear
+* Bug: #935 - Upload failure for 2.0
+* Bug: #934 - problem to get reversion error
+* Bug: #933 - změny v xapian_indexer
+* Bug: #932 - undefined method `to_prepare' for ActionDispatch::Reloader:Class (Redmine 4.0 / Rails 5)
+* Bug: #929 - Problems in revision history
+* New: #928 - About Redmine 4.0.0
+* New: #576 - Installation problem 1.5.7 (step 4 of the guide)
+
 1.6.2 *2018-12-04*
 ------------------
 
