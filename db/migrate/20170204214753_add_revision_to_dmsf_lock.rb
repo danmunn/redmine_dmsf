@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 # Copyright © 2016-17 carlolars
 #
 # This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class AddRevisionToDmsfLock < ActiveRecord::Migration
+class AddRevisionToDmsfLock < ActiveRecord::Migration[4.2]
 
   def change
     add_column :dmsf_locks, :revision, :integer, null: true

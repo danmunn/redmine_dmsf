@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ module DmsfWorkflowsHelper
     options = Array.new
     options << [l(:dmsf_new_step), 0]
     steps.each do |step|
-      options << [step.name.present? ? step.name : step.step.to_s, step.step]
+      options << [step.name.presence || step.step.to_s, step.step]
     end
     options_for_select(options, 0)
   end

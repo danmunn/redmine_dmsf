@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -63,29 +63,67 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     get "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}"
     assert_response :success
     assert_equal 'application/xml', @response.content_type
-    #<?xml version="1.0" encoding="UTF-8"?>
+    # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_file>
     #   <id>1</id>
-    #   <title>test.txt</title>
+    #   <title>Test File</title>
     #   <name>test.txt</name>
     #   <project_id>1</project_id>
-    #   <version>1.0</version>
-    #   <mime_type>text/plain</mime_type>
-    #   <digest>81dc9bdb52d04dc20036dbd8313ed055</digest>
-    #   <size>4</size>
-    #   <description>Some file :-)</description>
     #   <content_url>http://www.example.com/dmsf/files/1/download</content_url>
+    #   <dmsf_file_revisions type="array">
+    #     <dmsf_file_revision>
+    #       <id>5</id>
+    #       <source_dmsf_file_revision_id/>
+    #       <name>test5.txt</name>
+    #       <content_url>http://www.example.com/dmsf/files/1/view?download=5</content_url>
+    #       <size>4</size>
+    #       <mime_type>text/plain</mime_type>
+    #       <title>Test File</title>
+    #       <description/>
+    #       <workflow>1</workflow>
+    #       <version>1.0</version>
+    #       <comment/>
+    #       <user_id>1</user_id>
+    #       <created_at>2017-04-18T12:52:28Z</created_at>
+    #       <updated_at>2019-01-15T15:56:15Z</updated_at>
+    #       <dmsf_workflow_id/>
+    #       <dmsf_workflow_assigned_by/>
+    #       <dmsf_workflow_assigned_at/>
+    #       <dmsf_workflow_started_by/>
+    #       <dmsf_workflow_started_at/>
+    #       <digest></digest>
+    #     </dmsf_file_revision>
+    #     <dmsf_file_revision>
+    #       <id>1</id>
+    #       <source_dmsf_file_revision_id/>
+    #       <name>test.txt</name>
+    #       <content_url>http://www.example.com/dmsf/files/1/view?download=1</content_url>
+    #       <size>4</size>
+    #       <mime_type>text/plain</mime_type>
+    #       <title>Test File</title>
+    #       <description>Some file :-)</description>
+    #       <workflow>1</workflow>
+    #       <version>1.0</version>
+    #       <comment/>
+    #       <user_id>1</user_id>
+    #       <created_at>2017-04-18T12:52:27Z</created_at>
+    #       <updated_at>2019-01-15T15:56:15Z</updated_at>
+    #       <dmsf_workflow_id/>
+    #       <dmsf_workflow_assigned_by>1</dmsf_workflow_assigned_by>
+    #       <dmsf_workflow_assigned_at/>
+    #       <dmsf_workflow_started_by>1</dmsf_workflow_started_by>
+    #       <dmsf_workflow_started_at/>
+    #       <digest>81dc9bdb52d04dc20036dbd8313ed055</digest>
+    #     </dmsf_file_revision>
+    #   </dmsf_file_revisions>
     # </dmsf_file>
+    #puts response.body
     assert_select 'dmsf_file > id', text: @file1.id.to_s
     assert_select 'dmsf_file > title', text: @file1.title
     assert_select 'dmsf_file > name', text: @file1.name
     assert_select 'dmsf_file > project_id', text: @file1.project_id.to_s
-    assert_select 'dmsf_file > version', text: @file1.last_revision.version
-    assert_select 'dmsf_file > mime_type', text: @file1.last_revision.mime_type
-    assert_select 'dmsf_file > digest', text: @file1.last_revision.digest
-    assert_select 'dmsf_file > size', text: @file1.last_revision.size.to_s
-    assert_select 'dmsf_file > description', text: @file1.last_revision.description
     assert_select 'dmsf_file > content_url', text: "http://www.example.com/dmsf/files/#{@file1.id}/download"
+    assert_select 'dmsf_file > dmsf_file_revisions > dmsf_file_revision', @file1.dmsf_file_revisions.all.size
     #curl -v -H "Content-Type: application/octet-stream" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/41532/download > file.txt
     get "/dmsf/files/#{@file1.id}/download.xml?key=#{@token.value}"
     assert_response :success
@@ -95,7 +133,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   def test_upload_document
     @role.add_permission! :file_manipulation
     #curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif
-    post "/projects/#{@project1.id}/dmsf/upload.xml?filename=test.txt&key=#{@token.value}", 'File content', {"CONTENT_TYPE" => 'application/octet-stream'}
+    post "/projects/#{@project1.id}/dmsf/upload.xml?filename=test.txt&key=#{@token.value}", :params => 'File content', :headers => {"CONTENT_TYPE" => 'application/octet-stream'}
     assert_response :created
     assert_equal 'application/xml', response.content_type
     #<?xml version="1.0" encoding="UTF-8"?>
@@ -120,7 +158,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
                  </uploaded_file>
                 </attachments>}
     assert_difference 'DmsfFileRevision.count', +1 do
-      post "/projects/#{@project1.id}/dmsf/commit.xml?key=#{@token.value}", payload, {"CONTENT_TYPE" => 'application/xml'}
+      post "/projects/#{@project1.id}/dmsf/commit.xml?key=#{@token.value}", :params => payload, :headers => {"CONTENT_TYPE" => 'application/xml'}
     end
     #<?xml version="1.0" encoding="UTF-8"?>
     #<dmsf_files total_count="1" type="array">
@@ -138,7 +176,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   def test_delete_file
     @role.add_permission! :file_delete
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
-    delete "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}", {'CONTENT_TYPE' => 'application/xml'}
+    delete "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}", :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     @file1.reload
     assert_equal DmsfFile::STATUS_DELETED, @file1.deleted
@@ -148,14 +186,14 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   def test_delete_file_no_permissions
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
-    delete "/dmsf/files/#{@file1.id}.xml?key=#{token.value}", {'CONTENT_TYPE' => 'application/xml'}
+    delete "/dmsf/files/#{@file1.id}.xml?key=#{token.value}", :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :forbidden
   end
 
   def test_delete_folder_commit_yes
     @role.add_permission! :file_delete
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml&commit=yes
-    delete "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}&commit=yes", {'CONTENT_TYPE' => 'application/xml'}
+    delete "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}&commit=yes", :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     assert_nil DmsfFile.find_by(id: @file1.id)
   end
@@ -166,7 +204,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     @file1.lock!
     User.current = @jsmith
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
-    delete "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}", {'CONTENT_TYPE' => 'application/xml'}
+    delete "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}", :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response 422
     # <?xml version="1.0" encoding="UTF-8"?>
     # <errors type="array">

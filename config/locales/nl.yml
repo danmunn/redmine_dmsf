@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 #
 #
@@ -309,6 +309,7 @@ nl:
   field_target_file: Bronbestand
   title_download_entries: Download indieningen
   label_external: Extern
+  label_internal: Internal
 
   label_link_name: Link naam
   field_external_url: URL

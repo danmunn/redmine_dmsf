@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ class DmsfFilesController < ApplicationController
       access.dmsf_file_revision = @revision
       access.action = DmsfFileRevisionAccess::DownloadAction
       access.save!
-      member = Member.where(user_id: User.current.id, project_id: @file.project.id).first
+      member = Member.find_by(user_id: User.current.id, project_id: @file.project.id)
       if member && !member.dmsf_title_format.nil? && !member.dmsf_title_format.empty?
         title_format = member.dmsf_title_format
       else
@@ -95,7 +95,7 @@ class DmsfFilesController < ApplicationController
   def create_revision
     if params[:dmsf_file_revision]
       if @file.locked_for_user?
-        flash[:error] = l(:error_file_is_locked)
+        flash[:errors] = l(:error_file_is_locked)
       else
         revision = DmsfFileRevision.new
         revision.title = params[:dmsf_file_revision][:title]
@@ -139,8 +139,10 @@ class DmsfFilesController < ApplicationController
 
         # Custom fields
         if params[:dmsf_file_revision][:custom_field_values].present?
-          params[:dmsf_file_revision][:custom_field_values].each_with_index do |v, i|
-            revision.custom_field_values[i].value = v[1]
+          i = 0
+          params[:dmsf_file_revision][:custom_field_values].each do |_, v|
+            revision.custom_field_values[i].value = v
+            i = i + 1
           end
         end
 
@@ -149,39 +151,44 @@ class DmsfFilesController < ApplicationController
         if revision.save
           revision.assign_workflow(params[:dmsf_workflow_id])
           if upload
-            FileUtils.mv(upload.tempfile_path, revision.disk_file(false))
+            begin
+              FileUtils.mv(upload.tempfile_path, revision.disk_file(false))
+            rescue StandardError => e
+              Rails.logger.error e.message
+              flash[:error] = e.message
+              revision.destroy
+              redirect_to :back
+              return
+            end
           end
           if @file.locked? && !@file.locks.empty?
             begin
               @file.unlock!
               flash[:notice] = "#{l(:notice_file_unlocked)}, "
             rescue Exception => e
-              logger.error "Cannot unlock the file: #{e.message}"
+              Rails.logger.error "Cannot unlock the file: #{e.message}"
             end
           end
           if @file.save
             @file.set_last_revision revision
             flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
             begin
-              recipients = DmsfMailer.get_notify_users(@project, [@file])
-              recipients.each do |u|
-                DmsfMailer.files_updated(u, @project, [@file]).deliver
-              end
+              recipients = DmsfMailer.deliver_files_updated(@project, [@file])
               if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
-                unless recipients.empty?
+                if recipients.any?
                   to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                   to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
                   flash[:warning] = l(:warning_email_notifications, :to => to)
                 end
               end
             rescue Exception => e
-              logger.error "Could not send email notifications: #{e.message}"
+              Rails.logger.error "Could not send email notifications: #{e.message}"
             end
           else
-            flash[:error] = @file.errors.full_messages.join(', ')
+            flash[:errors] = @file.errors.full_messages.join(', ')
           end
         else
-          flash[:error] = revision.errors.full_messages.join(', ')
+          flash[:errors] = revision.errors.full_messages.join(', ')
         end
       end
     end
@@ -196,12 +203,9 @@ class DmsfFilesController < ApplicationController
         flash[:notice] = l(:notice_file_deleted)
         unless commit
           begin
-            recipients = DmsfMailer.get_notify_users(@project, [@file])
-            recipients.each do |u|
-              DmsfMailer.files_deleted(u, @project, [@file]).deliver
-            end
+            recipients = DmsfMailer.deliver_files_deleted(@project, [@file])
             if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
-              unless recipients.empty?
+              if recipients.any?
                 to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                 to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
                 flash[:warning] = l(:warning_email_notifications, :to => to)
@@ -213,7 +217,7 @@ class DmsfFilesController < ApplicationController
         end
       else
         msg = @file.errors.full_messages.join(', ')
-        flash[:error] = msg
+        flash[:errors] = msg
         Rails.logger.error msg
       end
     end
@@ -238,7 +242,7 @@ class DmsfFilesController < ApplicationController
         end
         flash[:notice] = l(:notice_revision_deleted)
       else
-        flash[:error] = @revision.errors.full_messages.join(', ')
+        flash[:errors] = @revision.errors.full_messages.join(', ')
       end
     end
     redirect_to :action => 'show', :id => @file
@@ -249,7 +253,7 @@ class DmsfFilesController < ApplicationController
       if @revision.obsolete
         flash[:notice] = l(:notice_revision_obsoleted)
       else
-        flash[:error] = @revision.errors.full_messages.join(', ')
+        flash[:errors] = @revision.errors.full_messages.join(', ')
       end
     end
     redirect_to :action => 'show', :id => @file
@@ -263,7 +267,7 @@ class DmsfFilesController < ApplicationController
         @file.lock!
         flash[:notice] = l(:notice_file_locked)
       rescue Exception => e
-        flash[:error] = e.message
+        flash[:errors] = e.message
       end
     end
     redirect_to :back
@@ -278,10 +282,10 @@ class DmsfFilesController < ApplicationController
           @file.unlock!
           flash[:notice] = l(:notice_file_unlocked)
         rescue Exception => e
-          flash[:error] = e.message
+          flash[:errors] = e.message
         end
       else
-        flash[:error] = l(:error_only_user_that_locked_file_can_unlock_it)
+        flash[:errors] = l(:error_only_user_that_locked_file_can_unlock_it)
       end
     end
     redirect_to :back
@@ -311,7 +315,7 @@ class DmsfFilesController < ApplicationController
     if @file.restore
       flash[:notice] = l(:notice_dmsf_file_restored)
     else
-      flash[:error] = @file.errors.full_messages.to_sentence
+      flash[:errors] = @file.errors.full_messages.to_sentence
     end
     redirect_to :back
   end

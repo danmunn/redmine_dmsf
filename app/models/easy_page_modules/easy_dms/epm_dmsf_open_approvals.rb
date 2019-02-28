@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,18 +18,22 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class EpmDmsfOpenApprovals < EasyPageModule
+if defined?(EasyExtensions)
 
-  def category_name
-    @category_name ||= 'easy_dms'
-  end
+  class EpmDmsfOpenApprovals < EasyPageModule
 
-  def get_show_data(settings, user, page_context = {})
-    {}
-  end
+    def category_name
+      @category_name ||= 'easy_dms'
+    end
 
-  def registered_in_plugin
-    'redmine_dmsf'
+    def get_show_data(settings, user, page_context = {})
+      {}
+    end
+
+    def registered_in_plugin
+      'redmine_dmsf'
+    end
+
   end
 
 end

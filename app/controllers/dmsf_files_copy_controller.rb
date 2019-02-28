@@ -1,7 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ class DmsfFilesCopyController < ApplicationController
   def copy
     new_file = @file.copy_to(@target_project, @target_folder)
     unless new_file.errors.empty?
-      flash[:error] = new_file.errors.full_messages.join(', ')
+      flash[:errors] = new_file.errors.full_messages.join(', ')
       redirect_to :action => 'new', :id => @file, :target_project_id => @target_project,
                   :target_folder_id => @target_folder
       return
@@ -47,7 +47,7 @@ class DmsfFilesCopyController < ApplicationController
 
   def move
     unless @file.move_to(@target_project, @target_folder)
-      flash[:error] = @file.errors.full_messages.join(', ')
+      flash[:errors] = @file.errors.full_messages.join(', ')
       redirect_to :action => 'new', :id => @file, :target_project_id => @target_project,
                   :target_folder_id => @target_folder
       return
@@ -89,7 +89,7 @@ private
   def check_target_folder
     if (@target_folder && @target_folder == @file.dmsf_folder) ||
       (@target_folder.nil? && @file.dmsf_folder.nil? && @target_project == @file.project)
-      flash[:error] = l(:error_target_folder_same)
+      flash[:errors] = l(:error_target_folder_same)
       redirect_to :action => :new, :id => @file, :target_project_id => @target_project.id,
                   :target_folder_id => @target_folder
       return

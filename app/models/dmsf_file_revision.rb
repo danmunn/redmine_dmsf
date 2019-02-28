@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -133,7 +133,7 @@ class DmsfFileRevision < ActiveRecord::Base
     end
     if Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
       dependencies = DmsfFileRevision.where(disk_filename: disk_filename).all.size
-      File.delete(disk_file) if dependencies <= 1 && File.exist?(disk_file)
+      FileUtils.rm_f(disk_file) if dependencies <= 1
     end
     super
   end

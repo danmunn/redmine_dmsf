@@ -4,7 +4,7 @@
 #
 # Copyright © 2011    Terrence Miller
 # Copyright © 2013    Christian Wetting <christian.wetting@kontron.com>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -309,6 +309,7 @@ de:
   field_target_file: Quelldatei
   title_download_entries: Download entries
   label_external: Extern
+  label_internal: Internal
 
   label_link_name: Name der Verknüpfung
   field_external_url: URL

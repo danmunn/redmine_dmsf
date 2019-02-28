@@ -2,7 +2,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -45,6 +45,5 @@ if Redmine::Plugin.installed?(:easy_extensions)
   RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
     'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true
 else
-  RedmineExtensions::PatchManager.register_patch_to_be_first 'ProjectsHelper',
-  'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true, first: true
+  ProjectsController.send :helper, RedmineDmsf::Patches::ProjectHelperPatch
 end

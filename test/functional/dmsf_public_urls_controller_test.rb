@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright © 2011-19 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -35,17 +35,17 @@ class DmsfPublicUrlsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_show_valid_url
-    get :show, :token => 'd8d33e21914a433b280fdc94450ee212'
+    get :show, :params => {:token => 'd8d33e21914a433b280fdc94450ee212'}
     assert_response :success
   end
 
   def test_show_url_width_invalid_token
-    get :show, :token => 'f8d33e21914a433b280fdc94450ee212'
+    get :show, :params => {:token => 'f8d33e21914a433b280fdc94450ee212'}
     assert_response :not_found
   end
 
   def test_show_url_that_has_expired
-    get :show, :token => 'e8d33e21914a433b280fdc94450ee212'
+    get :show, :params => {:token => 'e8d33e21914a433b280fdc94450ee212'}
     assert_response :not_found
   end
 

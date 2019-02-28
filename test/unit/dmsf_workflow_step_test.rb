@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -72,25 +72,25 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
   def test_validate_workflow_id_presence
     @wfs1.dmsf_workflow_id = nil
     assert !@wfs1.save
-    assert@wfs1.errors.count > 0
+    assert @wfs1.errors.any?
   end
   
   def test_validate_step_presence
     @wfs1.step = nil
     assert !@wfs1.save
-    assert @wfs1.errors.count > 0
+    assert @wfs1.errors.any?
   end
   
   def test_validate_user_id_presence
     @wfs1.user_id = nil
     assert !@wfs1.save
-    assert@wfs1.errors.count > 0
+    assert @wfs1.errors.any?
   end
   
   def test_validate_operator_presence
     @wfs1.operator = nil
     assert !@wfs1.save
-    assert @wfs1.errors.count > 0
+    assert @wfs1.errors.any?
   end
   
   def test_validate_user_id_uniqueness
@@ -98,7 +98,7 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
     @wfs2.dmsf_workflow_id = @wfs1.dmsf_workflow_id
     @wfs2.step = @wfs1.step
     assert !@wfs2.save
-    assert @wfs2.errors.count > 0
+    assert @wfs2.errors.any?
   end
 
   def test_validate_name_length

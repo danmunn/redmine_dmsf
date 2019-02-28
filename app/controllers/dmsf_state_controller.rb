@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ class DmsfStateController < ApplicationController
   before_action :authorize
 
   def user_pref_save
-    member = @project.members.where(user_id: User.current.id).first
+    member = @project.members.find_by(user_id: User.current.id)
     if member
       member.dmsf_mail_notification = params[:email_notify]
       member.dmsf_title_format = params[:title_format]
@@ -35,7 +35,7 @@ class DmsfStateController < ApplicationController
       if format_valid?(member.dmsf_title_format) && member.save
         flash[:notice] = l(:notice_your_preferences_were_saved)
       else
-        flash[:error] = l(:notice_your_preferences_were_not_saved)
+        flash[:errors] = l(:notice_your_preferences_were_not_saved)
       end
     else
       flash[:warning] = l(:user_is_not_project_member)
@@ -49,7 +49,7 @@ class DmsfStateController < ApplicationController
   private
   
   def format_valid?(format)
-    format.blank? || ((format =~ /%(t|d|v|i|r)/) && format.length < 256)
+    format.blank? || ((/%(t|d|v|i|r)/.match?(format)) && format.length < 256)
   end
 
 end

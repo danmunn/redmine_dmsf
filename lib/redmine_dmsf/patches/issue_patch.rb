@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -93,7 +93,7 @@ module RedmineDmsf
 
       def main_system_folder(create = false, prj_id = nil)
         prj_id ||= self.project_id
-        parent = DmsfFolder.system.find_by(project_id: prj_id, title: '.Issues')
+        parent = DmsfFolder.issystem.find_by(project_id: prj_id, title: '.Issues')
         if create && !parent
           parent = DmsfFolder.new
           parent.project_id = prj_id
@@ -110,7 +110,7 @@ module RedmineDmsf
         prj_id ||= self.project_id
         parent = main_system_folder(create, prj_id)
         if parent
-          folder = DmsfFolder.system.where(["project_id = ? AND dmsf_folder_id = ? AND title LIKE '? - %'",
+          folder = DmsfFolder.issystem.where(["project_id = ? AND dmsf_folder_id = ? AND title LIKE '? - %'",
             prj_id, parent.id, self.id]).first
           if create && !folder
             folder = DmsfFolder.new

@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -67,8 +67,8 @@ class IssuesControllerTest < RedmineDmsf::Test::TestCase
     main_system_folder = @issue1.main_system_folder
     assert main_system_folder
     assert_equal @project1.id, main_system_folder.project_id
-    put :update, id: @issue1.id, issue: { project_id: @project2.id, tracker_id: '1', priority_id: '6',
-        category_id: '3' }
+    put :update, :params => {id: @issue1.id, issue: { project_id: @project2.id, tracker_id: '1', priority_id: '6',
+        category_id: '3' }}
     assert_redirected_to action: 'show', id: @issue1.id
     @issue1.reload
     assert_equal @project2.id, @issue1.project.id

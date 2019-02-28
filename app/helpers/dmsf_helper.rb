@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -48,11 +48,13 @@ module DmsfHelper
     # get only the filename, not the whole path
     just_filename = File.basename(filename.gsub('\\\\', '/'))
     # replace all non alphanumeric, hyphens or periods with underscore
-    just_filename = just_filename.gsub(/[^\w\.\-]/,'_')
-    unless just_filename =~ %r{^[a-zA-Z0-9_\.\-]*$}
+    just_filename.gsub!(/[^\w\.\-]/, '_')
+    unless %r{^[a-zA-Z0-9_\.\-]*$}.match?(just_filename)
       # keep the extension if any
-      extension = $1 if just_filename =~ %r{(\.[a-zA-Z0-9]+)$}
-      just_filename = Digest::SHA256.hexdigest(just_filename)  << extension
+      if just_filename =~ %r{(\.[a-zA-Z0-9]+)$}
+        extension = $1
+        just_filename = Digest::SHA256.hexdigest(just_filename) << extension
+      end
     end
     just_filename
   end
@@ -99,7 +101,7 @@ module DmsfHelper
     allowed = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
       (project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS) &&
       User.current.allowed_to?(:display_system_folders, project)
-    folders.reject{ |folder|
+    folders.reject do |folder|
       if folder.system
         if allowed
           issue_id = folder.title.to_i
@@ -115,7 +117,7 @@ module DmsfHelper
       else
         false
       end
-    }
+    end
   end
 
   def self.all_children_sorted(parent, pos, ident)

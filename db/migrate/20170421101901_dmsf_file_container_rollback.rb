@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfFileContainerRollback < ActiveRecord::Migration
+class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
 
   def up
     # Add system folder_flag to dmsf_folders
@@ -71,7 +71,7 @@ class DmsfFileContainerRollback < ActiveRecord::Migration
   def down
     # dmsf_files
     file_folder_ids = DmsfFile.joins(:dmsf_folder).where(dmsf_folders: { system: true }).pluck(
-        'dmsf_files.id, cast(dmsf_folders.title as decimal)')
+        'dmsf_files.id, dmsf_folders.title')
     remove_index :dmsf_files, :project_id
     rename_column :dmsf_files, :project_id, :container_id
     # Temporarily added for the save method
@@ -79,10 +79,10 @@ class DmsfFileContainerRollback < ActiveRecord::Migration
     add_column :dmsf_files, :container_type, :string, limit: 30, null: false,
                default: 'Project'
     DmsfFile.update_all(:container_type => 'Project')
-    file_folder_ids.each do |id, container_id|
+    file_folder_ids.each do |id, title|
       file = DmsfFile.find_by(id: id)
-      if file
-        file.container_id = container_id
+      if file && (title =~ /(^\d+) - .*/)
+        file.container_id = $1.to_i
         file.container_type = 'Issue'
         file.save!
       end

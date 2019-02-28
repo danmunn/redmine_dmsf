@@ -1,7 +1,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012 Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 require 'fileutils'
 require 'uuidtools'
 
-class Dmsf144 < ActiveRecord::Migration
+class Dmsf144 < ActiveRecord::Migration[4.2]
 
   class DmsfFileLock < ActiveRecord::Base
     belongs_to :file, class_name: 'DmsfFile', foreign_key: 'dmsf_file_id'

@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,7 +28,9 @@ class DmsfLink < ActiveRecord::Base
   belongs_to :user
 
   validates :name, presence: true, length: { maximum: 255 }
-  validates :project, presence: true
+  # There can be project_id = -1 when attaching links to an issue. The project_id is assigned later when saving the
+  # issue.
+  #validates :project, presence: true
   validates :external_url, length: { maximum: 255 }
   validates :external_url, dmsf_url: true
 

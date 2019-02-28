@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@lbcfree.net>
+# Copyright © 2011-19 Karel Pičman <karel.picman@lbcfree.net>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -111,12 +111,17 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     assert_equal 1, @file_link.errors.size
   end
     
-  def test_validate_external_url
+  def test_validate_external_url_invalid
     @file_link.target_type = 'DmsfUrl'
     @file_link.external_url = 'htt ps://abc.xyz'
-    assert !@file_link.save, 
-      "External URL link #{@file_link.name} should have not been saved"
+    assert !@file_link.save, "External URL link #{@file_link.name} should have not been saved"
     assert_equal 1, @file_link.errors.size
+  end
+
+  def test_validate_external_url_valid
+    @file_link.target_type = 'DmsfUrl'
+    @file_link.external_url = 'https://www.google.com/search?q=寿司'
+    assert @file_link.save
   end
    
   def test_belongs_to_project

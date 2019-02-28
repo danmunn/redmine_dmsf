@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@konton.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@konton.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 
 class DmsfFolderPermissionsController < ApplicationController
 
-  before_action :find_folder, :only => [:destroy]
+  before_action :find_folder, only: [:destroy, :new, :autocomplete_for_user]
   before_action :find_project
   before_action :authorize
   before_action :permissions
@@ -49,7 +49,10 @@ class DmsfFolderPermissionsController < ApplicationController
   private
 
   def users_for_new_users
-    Principal.active.visible.member_of(@project).like(params[:q]).order(:type, :lastname).to_a
+    users = @dmsf_folder.permissions_users
+    ids = users.collect{ |u| u[0].id }
+    Principal.active.visible.member_of(@project).like(params[:q]).where(['id NOT IN (?)', ids.join(',')]).order(
+      :type, :lastname).to_a
   end
 
   def find_project

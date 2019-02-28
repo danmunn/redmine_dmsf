@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_page_with_open_approvals_one_approval
-    DmsfFileRevision.delete_all(id: 5)
+    DmsfFileRevision.where(id: 5).delete_all
     @user_member.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
     @user_member.pref.save!
     get :page

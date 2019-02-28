@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -112,7 +112,9 @@ class DmsfLinksController < ApplicationController
       if result
         flash[:notice] = l(:notice_successful_create)
       else
-        flash[:error] = @dmsf_link.errors.full_messages.to_sentence
+        msg = @dmsf_link.errors.full_messages.to_sentence
+        flash[:errors] = msg
+        Rails.logger.error msg
       end
     else
       # Link to
@@ -121,12 +123,12 @@ class DmsfLinksController < ApplicationController
       if params[:dmsf_link][:target_project_id].present?
         @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
       else
-        project_id = DmsfFolder.find_by(id: params[:dmsf_link][:target_folder_id]).pluck(:project_id).first
-        unless project_id
+        project_ids = DmsfFolder.where(id: params[:dmsf_link][:target_folder_id]).pluck(:project_id)
+        unless project_ids.any?
           render_404
           return
         end
-        @dmsf_link.project_id = project_id
+        @dmsf_link.project_id = project_ids.first
       end
       @dmsf_link.target_project_id = params[:dmsf_link][:project_id]
       if params[:dmsf_link][:dmsf_file_id].present?
@@ -141,7 +143,7 @@ class DmsfLinksController < ApplicationController
       if result
         flash[:notice] = l(:notice_successful_create)
       else
-        flash[:error] = @dmsf_link.errors.full_messages.to_sentence
+        flash[:errors] = @dmsf_link.errors.full_messages.to_sentence
       end
     end
     respond_to do |format|
@@ -169,7 +171,7 @@ class DmsfLinksController < ApplicationController
         flash[:notice] = l(:notice_successful_delete)
       else
         @dmsf_link.errors.each do |e, msg|
-          flash[:error] = msg
+          flash[:errors] = msg
         end
       end
     end

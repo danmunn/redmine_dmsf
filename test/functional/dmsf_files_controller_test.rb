@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -57,60 +57,60 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
   def test_show_file_ok
     # Permissions OK
     @role.add_permission! :view_dmsf_files
-    get :show, :id => @file.id
+    get :show, :params => {:id => @file.id}
     assert_response :success
   end
 
   def test_show_file_forbidden
     # Missing permissions
-    get :show, :id => @file.id
+    get :show, :params => {:id => @file.id}
     assert_response :forbidden
   end
   
   def test_view_file_ok
     # Permissions OK
     @role.add_permission! :view_dmsf_files    
-    get :view, :id => @file.id   
+    get :view, :params => {:id => @file.id}
     assert_response :success
   end
       
   def test_view_file_forbidden
     # Missing permissions
-    get :view, :id => @file.id
+    get :view, :params => {:id => @file.id}
     assert_response :forbidden
   end
 
   def delete_forbidden
     # Missing permissions
-    delete @file, :commit => false
+    delete @file, :params => {:commit => false}
     assert_response :forbidden
   end
 
   def delete_locked
     # Permissions OK but the file is locked
     @role.add_permission! :file_delete
-    delete @file, :commit => false
+    delete @file, :params => {:commit => false}
     assert_response :redirect
-    assert_include l(:error_file_is_locked), flash[:error]
+    assert_include l(:error_file_is_locked), flash[:errors]
   end
 
   def delete_ok
     # Permissions OK and not locked
-    flash[:error].clear
+    flash[:errors].clear
     @file.unlock!
-    delete @file, :commit => false
+    delete @file, :params => {:commit => false}
     assert_response :redirect
-    assert_equal 0, flash[:error].size
+    assert_equal 0, flash[:errors].size
   end
 
   def test_obsolete_revision_ok
     @role.add_permission! :file_manipulation
-    get :obsolete_revision, :id => @file.last_revision.id
+    get :obsolete_revision, :params => {:id => @file.last_revision.id}
     assert_redirected_to :action => 'show', :id => @file
   end
 
   def test_obsolete_revision_missing_permissions
-    get :obsolete_revision, :id => @file.last_revision.id
+    get :obsolete_revision, :params => {:id => @file.last_revision.id}
     assert :forbiden
   end
   

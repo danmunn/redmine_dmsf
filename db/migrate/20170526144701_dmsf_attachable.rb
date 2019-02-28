@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,14 +18,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfAttachable < ActiveRecord::Migration
+class DmsfAttachable < ActiveRecord::Migration[4.2]
 
   def up
     # DMSF - project's root folder notification
     add_column :projects, :dmsf_act_as_attachable, :integer, default: 1, null: false
     Project.update_all dmsf_act_as_attachable: 1
   end
-  
+
   def down
     remove_column :projects, :dmsf_act_as_attachable
   end

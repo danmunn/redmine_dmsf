@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@ class DmsfFile < ActiveRecord::Base
     end
   end
 
-  def initialize
+  def initialize(*args)
     @project = nil
     super
   end
@@ -391,7 +391,7 @@ class DmsfFile < ActiveRecord::Base
               next if dmsf_attrs.length == 0 || id_attribute == 0
               next unless results.select{|f| f.id.to_s == id_attribute}.empty?
 
-              dmsf_file = DmsfFile.visible.where(limit_options).where(id: id_attribute).first
+              dmsf_file = DmsfFile.visible.where(limit_options).find_by(id: id_attribute)
 
               if dmsf_file && DmsfFolder.permissions?(dmsf_file.dmsf_folder)
                 if user.allowed_to?(:view_dmsf_files, dmsf_file.project) &&
@@ -417,7 +417,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def display_name
-    member = Member.where(user_id: User.current.id, project_id: project_id).first
+    member = Member.find_by(user_id: User.current.id, project_id: project_id)
     if member && !member.dmsf_title_format.nil? && !member.dmsf_title_format.empty?
       title_format = member.dmsf_title_format
     else

@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 class DmsfFileNameValidator  < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
-    unless value =~ /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/
+    unless /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/.match?(value)
       record.errors.add attribute, :error_contains_invalid_character
     end
   end

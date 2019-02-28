@@ -4,7 +4,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ require 'redmine_dmsf/webdav/index_resource'
 require 'redmine_dmsf/webdav/project_resource'
 require 'redmine_dmsf/webdav/resource_proxy'
 
-# Exceptions
+# Errors
 require 'redmine_dmsf/errors/dmsf_access_error'
 require 'redmine_dmsf/errors/dmsf_content_error'
 require 'redmine_dmsf/errors/dmsf_email_max_file_error'

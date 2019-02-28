@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ module RedmineDmsf
             if old_system_folder
               old_system_folder.title = "#{issue.id} - #{DmsfFolder::get_valid_title(issue.subject)}"
               unless old_system_folder.save
-                controller.flash[:error] = old_system_folder.errors.full_messages.to_sentence
+                controller.flash[:errors] = old_system_folder.errors.full_messages.to_sentence
                 Rails.logger.error old_system_folder.errors.full_messages.to_sentence
               end
             end
@@ -93,20 +93,20 @@ module RedmineDmsf
                   old_system_folder.dmsf_folder_id = new_main_system_folder.id
                   old_system_folder.project_id = project_id
                   unless old_system_folder.save
-                    controller.flash[:error] = old_system_folder.errors.full_messages.to_sentence
+                    controller.flash[:errors] = old_system_folder.errors.full_messages.to_sentence
                     Rails.logger.error old_system_folder.errors.full_messages.to_sentence
                   end
                   issue.dmsf_files.each do |dmsf_file|
                     dmsf_file.project_id = project_id
                     unless dmsf_file.save
-                      controller.flash[:error] = dmsf_file.errors.full_messages.to_sentence
+                      controller.flash[:errors] = dmsf_file.errors.full_messages.to_sentence
                       Rails.logger.error dmsf_file.errors.full_messages.to_sentence
                     end
                   end
                   issue.dmsf_links.each do | dmsf_link|
                     dmsf_link.project_id = project_id
                     unless dmsf_link.save
-                      controller.flash[:error] = dmsf_link.errors.full_messages.to_sentence
+                      controller.flash[:errors] = dmsf_link.errors.full_messages.to_sentence
                       Rails.logger.error dmsf_link.errors.full_messages.to_sentence
                     end
                   end
@@ -116,7 +116,7 @@ module RedmineDmsf
           end
           # Attach DMS documents
           uploaded_files = params[:dmsf_attachments]
-          if uploaded_files && uploaded_files.is_a?(Hash)
+          if uploaded_files
             system_folder = issue.system_folder(true)
             uploaded_files.each do |key, uploaded_file|
               upload = DmsfUpload.create_from_uploaded_attachment(issue.project, system_folder, uploaded_file)

@@ -2,7 +2,7 @@
 * Redmine plugin for Document Management System "Features"
 *
 * Copyright © 2011    Vit Jonas <vit.jonas@gmail.com>
-* Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+* Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -285,12 +285,12 @@ div.dmsf_revision_inner_box .attribute .label {
 .dmsf_hidden { display:none; }
 .dmsf_tree span.dmsf_expander { cursor: pointer; }
 .dmsf_tree.dmsf_expanded td.dmsf_title span {
-  background: url(../images/bullet_arrow_down.png) no-repeat 0 50%;
+  background: url(../../../images/arrow_down.png) no-repeat 0 50%;
   padding-left: 16px;
 }
 .dmsf_tree.dmsf_child .dmsf_title span { padding-left: 16px; }
 .dmsf_tree.dmsf_collapsed .dmsf_title span {
-  background: url(../../../images/bullet_arrow_right.png) no-repeat 0 50%;
+  background: url(../../../images/arrow_right.png) no-repeat 0 50%;
   padding-left: 16px;
 }
 .dmsf_tree.idnt-1 .dmsf_title {padding-left: 1.5em;}

@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright (C) 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -309,6 +309,7 @@ ko:
   field_target_file: 소스 파일
   title_download_entries: 다운로드 엔트리
   label_external: 외부
+  label_internal: Internal
 
   label_link_name: 링크 이름
   field_external_url: URL

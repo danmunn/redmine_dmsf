@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 #
 #
@@ -310,6 +310,7 @@ hu:
   field_target_file: Forrás file
   title_download_entries: Bejegyzések letöltése
   label_external: Külső
+  label_internal: Internal
 
   label_link_name: Link elnevezése
   field_external_url: URL

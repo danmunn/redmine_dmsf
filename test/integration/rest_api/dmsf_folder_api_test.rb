@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -151,7 +151,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
                   <description>A folder created via REST API</description>
                   <dmsf_folder_id/>
                 </dmsf_folder>}
-    post "/projects/#{@project1.id}/dmsf/create.xml?key=#{token.value}", payload, {'CONTENT_TYPE' => 'application/xml'}
+    post "/projects/#{@project1.id}/dmsf/create.xml?key=#{token.value}", :params => payload, :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_folder>
@@ -242,7 +242,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
                   <title>rest_api</title>
                   <description>A folder updated via REST API</description>
                 </dmsf_folder>}
-    post "/projects/#{@project1.id}/dmsf/save.xml?folder_id=1&key=#{token.value}", payload, {'CONTENT_TYPE' => 'application/xml'}
+    post "/projects/#{@project1.id}/dmsf/save.xml?folder_id=1&key=#{token.value}", :params => payload, :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_folder>
@@ -258,7 +258,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
     delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
-         {'CONTENT_TYPE' => 'application/xml'}
+         :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     @folder1.reload
     assert_equal DmsfFolder::STATUS_DELETED, @folder1.deleted
@@ -269,7 +269,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
     delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
-           {'CONTENT_TYPE' => 'application/xml'}
+           :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :forbidden
   end
 
@@ -278,7 +278,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
     delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}&commit=yes",
-           {'CONTENT_TYPE' => 'application/xml'}
+           :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     assert_nil DmsfFolder.find_by(id: @folder1.id)
   end
@@ -291,7 +291,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
     delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
-         {'CONTENT_TYPE' => 'application/xml'}
+         :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response 422
     # <?xml version="1.0" encoding="UTF-8"?>
     # <errors type="array">

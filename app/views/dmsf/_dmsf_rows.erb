@@ -3,7 +3,7 @@
   #
   # Redmine plugin for Document Management System "Features"
   #
-  # Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+  # Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
   #
   # This program is free software; you can redistribute it and/or
   # modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 <% parent = @folder ? @folder : @project %>
 <% DmsfHelper.all_children_sorted(parent, @pos, @idnt).each do |obj, position| %>
     <% classes = "dmsf_tree idnt-#{@idnt} hascontextmenu" %>
-    <% if obj.is_a?(DmsfFolder) && ((obj.dmsf_folders.visible.count > 0) || (obj.dmsf_files.visible.count > 0) || (obj.dmsf_links.visible.count > 0)) %>
+    <% if obj.is_a?(DmsfFolder) && ((obj.dmsf_folders.visible.any?) || (obj.dmsf_files.visible.any?) || (obj.dmsf_links.visible.any?)) %>
         <% classes += ' idnt dmsf_collapsed dmsf-not-loaded' %>
         <% id = "id='#{obj.id}span'".html_safe %>
         <% onclick = "onclick=\"dmsfToggle('#{obj.id}','#{obj.id}span','#{escape_javascript(expand_folder_dmsf_path)}')\"" %>

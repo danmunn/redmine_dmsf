@@ -4,7 +4,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rubyzip', '>= 1.0.0'
+gem 'rubyzip', '>= 1.1.3'
 gem 'zip-zip'
 gem 'simple_enum'
 gem 'uuidtools'
@@ -35,3 +35,7 @@ end
 
 # Dav4Rack
 gem 'ox'
+
+group :test do
+  gem 'rails-controller-testing'
+end

@@ -5,7 +5,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -77,12 +77,16 @@
     <p>
       <%= label_tag '', l(:label_permissions) %>
       <% User.current.managed_roles(@project).each do |role| %>
-          <% checked = @folder.dmsf_folder_permissions.roles.exists?(object_id: role.id) %>
-          <label class="inline"><%= check_box_tag 'permissions[role_ids][]', role.id, checked, :id => nil %> <%= role %></label>
+        <% checked, disabled = @folder.permission_for_role(role) %>
+        <label class="inline">
+          <%= check_box_tag 'permissions[role_ids][]', role.id, checked, disabled: disabled, id: nil %>
+          <%= role %>
+        </label>
       <% end %>
       <span id="user_permissions">
         <br/>
-        <% checkboxes = users_checkboxes(@users) %>
+        <% users = @folder.permissions_users %>
+        <% checkboxes = users_checkboxes(users) %>
         <%= checkboxes %>
       </span>
         <% if checkboxes.present? %>

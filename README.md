@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **1.6.2** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **2.0.0** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -38,12 +38,12 @@ Features
   * Document tagging
   * Trash bin
   * Documents attachable to issues
-  * Compatible with Redmine 3.4.x
+  * Compatible with Redmine 4.0.x
 
 Dependencies
 ------------
   
-  * Redmine 3.4.0 or higher
+  * Redmine 4.0.0 or higher
 
 ### Full-text search (optional)
 
@@ -211,14 +211,20 @@ There's a patch (tested with Redmine 3.4.2) that helps you to modify all help fi
 Setup / Upgrade
 ---------------
 
-Before installing ensure that the Redmine instance is stopped.
+You can either clone the master branch or download the latest zipped version. Before installing ensure that the Redmine instance is stopped.
 
-1. In case of upgrade BACKUP YOUR DATABASE first
-2. Put redmine_dmsf plugin directory into plugins.
+    git clone git@github.com:danmunn/redmine_dmsf.git
+       
+    wget https://github.com/danmunn/redmine_dmsf/archive/master.zip
+
+1. In case of upgrade **BACKUP YOUR DATABASE, ORIGINAL PLUGIN AND THE FOLDER WITH DOCUMENTS** first!!!
+2. Put redmine_dmsf plugin directory into plugins. The plugins sub-directory must be named just **redmine_dmsf**. In case
+   of need rename _redmine_dmsf-x.y.z_ to *redmine_dmsf*.
+3. **Go to the redmine directory** `cd redmine`   
 3. Install dependencies: `bundle install`.
-4. Initialize/Update database: `bundle exec rake redmine:plugins:migrate RAILS_ENV="production"`.
+4. Initialize/Update database: `bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf RAILS_ENV="production"`.
 5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
-6. Restart the web server.
+6. Restart the web server. e.g. `service apache2 restart`
 7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure.
 8. Assign DMSF permissions to appropriate roles.
 9. There are a few rake tasks:
@@ -279,13 +285,13 @@ It is necessary to index DMSF files with omindex before searching attempts to re
 
   1. Change the configuration part of redmine_dmsf/extra/xapian_indexer.rb file according to your environment.
      (The path to the index database set in xapian_indexer.rb must corresponds to the path set in the plugin's settings.)   
-  2. Run `ruby redmine_dmsf/extra/xapian_indexer.rb -vf`
+  2. Run `ruby redmine_dmsf/extra/xapian_indexer.rb -v`
 
 This command should be run on regular basis (e.g. from cron)
 
 Example of cron job (once per hour at 8th minute):
     
-    8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb -f
+    8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb
 
 See redmine_dmsf/extra/xapian_indexer.rb for help.
 

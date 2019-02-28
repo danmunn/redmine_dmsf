@@ -3,6 +3,7 @@
 require 'uri'
 require 'addressable/uri'
 require 'dav4rack/logger'
+require 'dav4rack/uri'
 
 module DAV4Rack
   class Request < Rack::Request
@@ -84,7 +85,7 @@ module DAV4Rack
     # Destination header
     def destination
       @destination ||= if h = get_header('HTTP_DESTINATION')
-        DestinationHeader.new h, script_name: script_name
+        DestinationHeader.new DAV4Rack::Uri.new(h, script_name: script_name)
       end
     end
 
@@ -121,6 +122,13 @@ module DAV4Rack
         path << '/'
       end
       "#{script_name}#{expand_path path}"
+    end
+
+    # returns the given path, but with the leading script_name removed. Will
+    # return nil if the path does not begin with the script_name
+    def path_info_for(full_path, script_name: self.script_name)
+      uri = DAV4Rack::Uri.new full_path, script_name: script_name
+      return uri.path_info
     end
 
     # expands '/foo/../bar' to '/bar'

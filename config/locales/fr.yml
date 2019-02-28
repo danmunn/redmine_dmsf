@@ -5,7 +5,7 @@
 # Copyright © 2011   Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012   Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright © 2014   Atmis
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -309,6 +309,7 @@ fr:
   field_target_file: Fichier source
   title_download_entries: Historique des téléchargements
   label_external: Externe
+  label_internal: Internal
 
   label_link_name: Nom du lien
   field_external_url: Adresse Internet

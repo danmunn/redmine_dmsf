@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ class DmsfLinkApiTest < RedmineDmsf::Test::IntegrationTest
                   <external_url></external_url>
                   <name>#{name}</name>
                 </dmsf_link>}
-    post "/dmsf_links.xml?key=#{token.value}", payload, {'CONTENT_TYPE' => 'application/xml'}
+    post "/dmsf_links.xml?key=#{token.value}", :params => payload, :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_link>

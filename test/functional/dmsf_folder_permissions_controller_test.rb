@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -46,20 +46,22 @@ class DmsfFolderPermissionsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_new
-    xhr :get, :new, :project_id => @project1, :format => 'js'
+    get :new, params: { project_id: @project1, dmsf_folder_id: @folder7, format: 'js'}, xhr: true
     assert_response :success
     assert_template 'new'
     assert_equal 'text/javascript', response.content_type
   end
 
   def test_autocomplete_for_user
-    xhr :get, :autocomplete_for_user, :project_id => @project1, :q => 'smi', :format => 'js'
+    get :autocomplete_for_user, params: { project_id: @project1, dmsf_folder_id: @folder7, q: 'smi', format: 'js'},
+        xhr: true
     assert_response :success
     assert_include 'John Smith', response.body
   end
 
   def test_append
-    xhr :get, :new, :project_id => @project1, :user_ids => [@manager.id], :format => 'js'
+    get :new, params: { project_id: @project1, dmsf_folder_id: @folder7, user_ids: [@manager.id], format: 'js'},
+        xhr: true
     assert_response :success
     assert_template 'new'
     assert_equal 'text/javascript', response.content_type

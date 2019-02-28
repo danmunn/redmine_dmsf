@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-18 Karel Pičman <karel.picman@konton.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@konton.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -51,17 +51,19 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.visible_condition(system=true)
     Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
-      permissions = "#{DmsfFolderPermission.table_name}"
-      folders = "#{DmsfFolder.table_name}"
-      group_ids = user.group_ids.join(',')
-      group_ids = -1 if group_ids.blank?
-      allowed = (system && role.allowed_to?(:display_system_folders)) ? 1 : 0
-      %{
-        ((#{permissions}.object_id IS NULL) OR
-        (#{permissions}.object_id = #{role.id} AND #{permissions}.object_type = 'Role') OR
-        ((#{permissions}.object_id = #{user.id} OR #{permissions}.object_id IN (#{group_ids})) AND #{permissions}.object_type = 'User')) AND
-        (#{folders}.system = #{DmsfFolder.connection.quoted_false} OR 1 = #{allowed})
-      }
+      if role.member?
+        permissions = "#{DmsfFolderPermission.table_name}"
+        folders = "#{DmsfFolder.table_name}"
+        group_ids = user.group_ids.join(',')
+        group_ids = -1 if group_ids.blank?
+        allowed = (system && role.allowed_to?(:display_system_folders)) ? 1 : 0
+        %{
+          ((#{permissions}.object_id IS NULL) OR
+          (#{permissions}.object_id = #{role.id} AND #{permissions}.object_type = 'Role') OR
+          ((#{permissions}.object_id = #{user.id} OR #{permissions}.object_id IN (#{group_ids})) AND #{permissions}.object_type = 'User')) AND
+          (#{folders}.system = #{DmsfFolder.connection.quoted_false} OR 1 = #{allowed})
+        }
+      end
     end
   end
 
@@ -73,7 +75,7 @@ class DmsfFolder < ActiveRecord::Base
     "LEFT JOIN #{DmsfFolderPermission.table_name} ON #{DmsfFolder.table_name}.id = #{DmsfFolderPermission.table_name}.dmsf_folder_id").where(
     deleted: STATUS_DELETED).where(DmsfFolder.visible_condition).distinct
   }
-  scope :system, -> { where(system: true) }
+  scope :issystem, -> { where(system: true) }
   scope :notsystem, -> { where(system: false) }
 
   acts_as_customizable
@@ -130,9 +132,9 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.find_by_title(project, folder, title)
     if folder
-      visible.where(project_id: project.id, dmsf_folder_id: nil, title: title).first
+      visible.find_by(project_id: project.id, dmsf_folder_id: nil, title: title)
     else
-      visible.where(project_id: project.id, dmsf_folder_id: folder.id, title: title).first
+      visible.find_by(project_id: project.id, dmsf_folder_id: folder.id, title: title)
     end
   end
 
@@ -506,8 +508,10 @@ class DmsfFolder < ActiveRecord::Base
     self.dmsf_folder_id = params[:parent_id]
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
-      params[:dmsf_folder][:custom_field_values].each_with_index do |v, i|
-        custom_field_values[i].value = v[1]
+      i = 0
+      params[:dmsf_folder][:custom_field_values].each do |param|
+        custom_field_values[i].value = param[1]
+        i += 1
       end
     end
     # Permissions
@@ -541,7 +545,42 @@ class DmsfFolder < ActiveRecord::Base
     title.gsub(/[#{INVALID_CHARACTERS}]/, '.').gsub(/\.{2,}/, '.').chomp('.')
   end
 
+  def permission_for_role(role)
+    options = Hash.new
+    options[:checked] = false
+    options[:disabled] = false
+    permission_for_role_recursive(self, role, options)
+    options[:disabled] = false unless options[:checked]
+    options.values
+  end
+
+  def permissions_users
+    users = Array.new
+    permissions_users_recursive(self, users, false)
+    users
+  end
+
   private
+
+  def permission_for_role_recursive(folder, role, options)
+    options[:checked] = folder.dmsf_folder_permissions.roles.exists?(object_id: role.id)
+    if !options[:checked] && folder.dmsf_folder && !folder.dmsf_folder.deleted?
+      options[:disabled] = true
+      # TODO: No inheritance
+      #permission_for_role_recursive(folder.dmsf_folder, role, options)
+    end
+  end
+
+  def permissions_users_recursive(folder, users, disabled)
+    if folder
+      usrs = Principal.active.where(id: folder.dmsf_folder_permissions.users.map{ |p| p.object_id })
+      usrs.each do |u|
+        users << [u, disabled]
+      end
+      # TODO: No inheritance
+      #permissions_users_recursive(folder.dmsf_folder, users, true)
+    end
+  end
 
   def self.directory_subtree(tree, folder, level, current_folder)
     folders = DmsfFolder.where(project_id: folder.project_id, dmsf_folder_id: folder.id).notsystem.visible(false).to_a

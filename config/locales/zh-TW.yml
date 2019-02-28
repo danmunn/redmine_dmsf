@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 # Copyright © 2013    Aecho Liu <aecho1028@gmail.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -309,6 +309,7 @@ zh-TW:
   field_target_file: Source file
   title_download_entries: Download entries
   label_external: External
+  label_internal: Internal
 
   label_link_name: Link name
   field_external_url: URL

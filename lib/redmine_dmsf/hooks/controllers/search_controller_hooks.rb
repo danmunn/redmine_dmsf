@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,13 +23,14 @@ module RedmineDmsf
     include Redmine::Hook
     
     class ControllerSearchHook < RedmineDmsf::Hooks::Listener
+      include Rails.application.routes.url_helpers
                         
       def controller_search_quick_jump(context={})
         if context.is_a?(Hash) 
           question = context[:question]
           if question.present?
-            if question.match(/^D(\d+)$/) && DmsfFile.visible.find_by(id: $1).exists?
-              return dmsf_file_path(:id => $1)
+            if question.match(/^D(\d+)$/) && DmsfFile.visible.where(id: $1).exists?
+              return dmsf_file_path(id: $1)
             end
           end
         end        

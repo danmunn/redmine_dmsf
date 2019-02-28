@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -57,20 +57,21 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     log_user 'admin', 'admin' # login as admin
     assert !User.current.anonymous?, 'Current user is anonymous'
     assert @file1.lock!, "File failed to be locked by #{User.current.name}"
-    xml_http_request :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}",
+    process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params =>
       %{<?xml version=\"1.0\" encoding=\"utf-8\" ?>
         <d:lockinfo xmlns:d=\"DAV:\">
           <d:lockscope><d:exclusive/></d:lockscope>
           <d:locktype><d:write/></d:locktype>
           <d:owner>jsmith</d:owner>
         </d:lockinfo>},
-      @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
+      :headers => @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
     assert_response :locked
   end
   
   def test_lock_file
     create_time = Time.utc(2000, 1, 2, 3, 4, 5)
     refresh_time = Time.utc(2000, 1, 2, 6, 7, 8)
+    locktoken = nil
 
     # Time travel, will make the usec part of the time 0
     travel_to create_time do
@@ -81,8 +82,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
                   <d:locktype><d:write/></d:locktype>
                   <d:owner>jsmith</d:owner>
                 </d:lockinfo>}
-      xml_http_request :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", xml,
-        @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
+      process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => xml,
+        :headers => @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
       assert_response :success
       # Verify the response
       # <?xml version=\"1.0\"?>
@@ -113,22 +114,22 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
       assert_equal create_time, l.created_at
       assert_equal create_time, l.updated_at
       assert_equal (create_time + 1.week), l.expires_at
+    end
 
-      travel_to refresh_time do
-        # Refresh lock
-        xml_http_request :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}",
-          nil,
-          @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_IF: locktoken })
-        assert_response :success
-        # 1.week = 7*24*3600=604800 seconds
-        assert_match '<d:timeout>Second-604800</d:timeout>', response.body
-        # Verify the lock in the db
-        @file1.reload
-        l = @file1.lock.first
-        assert_equal create_time, l.created_at
-        assert_equal refresh_time, l.updated_at
-        assert_equal (refresh_time + 1.week), l.expires_at
-      end
+    travel_to refresh_time do
+      # Refresh lock
+      process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}",
+        :params => nil,
+        :headers => @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_IF: locktoken })
+      assert_response :success
+      # 1.week = 7*24*3600=604800 seconds
+      assert_match '<d:timeout>Second-604800</d:timeout>', response.body
+      # Verify the lock in the db
+      @file1.reload
+      l = @file1.lock.first
+      assert_equal create_time, l.created_at
+      assert_equal refresh_time, l.updated_at
+      assert_equal (refresh_time + 1.week), l.expires_at
     end
   end
 

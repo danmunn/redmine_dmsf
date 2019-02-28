@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -199,10 +199,7 @@ module RedmineDmsf
             destroy = false
           end
           if file.delete(destroy)
-            recipients = DmsfMailer.get_notify_users(project, [file])
-            recipients.each do |u|
-              DmsfMailer.files_deleted(u, project, [file]).deliver
-            end
+            DmsfMailer.deliver_files_deleted(project, [file])
             NoContent
           else
             Conflict
@@ -599,10 +596,7 @@ module RedmineDmsf
           new_revision.create_digest
           new_revision.save
           # Notifications
-          recipients = DmsfMailer.get_notify_users(project, [f])
-          recipients.each do |u|
-            DmsfMailer.files_updated(u, project, [f]).deliver
-          end
+          DmsfMailer.deliver_files_updated(project, [f])
         else
           raise InternalServerError
         end

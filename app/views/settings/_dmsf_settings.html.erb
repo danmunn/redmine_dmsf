@@ -5,7 +5,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -78,17 +78,17 @@
 <% end %>
 <% testfilename = DmsfFile.storage_path.join('test.test') %>
 <% if File.exist?(storage_dir) %>
-  <%	begin %>
-    <% File.open(testfilename, 'wb') %>
+  <% begin %>
+    <% File.open(testfilename, 'wb') {} %>
   <% rescue %>
     <p class="warning"><%= l(:error_file_can_not_be_created) %></p>
-  <%	ensure %>
-    <% File.delete(testfilename) if File.exist?(testfilename) %>
+  <% ensure %>
+    <% FileUtils.rm_f(testfilename) %>
   <% end %>
 <% end %>
 
 <p>
-  <%=  content_tag(:label, l(:label_tmpdir)) %>
+  <%= content_tag(:label, l(:label_tmpdir)) %>
   <%
     tmpdir = @settings['dmsf_tmpdir'].strip if @settings['dmsf_tmpdir'].present?
     tmpdir = Dir.tmpdir if tmpdir.blank?
@@ -108,12 +108,12 @@
 <% path = Pathname.new(tmpdir) %>
 <% testfilename = path.join('test.test') %>
 <% if File.exist?(tmpdir) %>
-  <%	begin %>
-    <% File.open(testfilename, 'wb') %>
+  <% begin %>
+    <% File.open(testfilename, 'wb') {} %>
   <% rescue %>
     <p class="warning"><%= l(:error_tmpfile_can_not_be_created) %></p>
-  <%	ensure %>
-    <% File.delete(testfilename) if File.exist?(testfilename) %>
+  <% ensure %>
+    <% FileUtils.rm_f(testfilename) %>
   <% end %>
 <% end %>
 

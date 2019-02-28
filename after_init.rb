@@ -4,7 +4,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
 
 require_dependency 'zip'
 require_dependency File.dirname(__FILE__) + '/lib/redmine_dmsf.rb'
+
+ActiveSupport::Dependencies.autoload_paths << File.join(File.dirname(__FILE__), 'app', 'validators')
 
 def init
   # Administration menu extension
@@ -100,7 +102,7 @@ else
   init
 end
 
-ActionDispatch::Reloader.to_prepare do
+RedmineExtensions::Reloader.to_prepare do
   # Rubyzip configuration
   Zip.unicode_names = true
 

@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -63,26 +63,26 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_propfind_denied_for_anonymous
-    xml_http_request :propfind, '/dmsf/webdav/', nil, {:HTTP_DEPTH => '0'}
+    process :propfind, '/dmsf/webdav/', :params => nil, :headers => {:HTTP_DEPTH => '0'}
     assert_response :unauthorized
   end
 
   def test_propfind_depth0_on_root_for_non_member
-    xml_http_request :propfind, '/dmsf/webdav/', nil, @jsmith.merge!({:HTTP_DEPTH => '0'})
+    process :propfind, '/dmsf/webdav/', :params => nil, :headers => @jsmith.merge!({:HTTP_DEPTH => '0'})
     assert_response :multi_status
     assert response.body.include?('<d:href>http://www.example.com:80/dmsf/webdav/</d:href>')
     assert response.body.include?('<d:displayname>/</d:displayname>')
   end
 
   def test_propfind_depth1_on_root_for_non_member
-    xml_http_request :propfind, '/dmsf/webdav/', nil, @jsmith.merge!({:HTTP_DEPTH => '1'})
+    process :propfind, '/dmsf/webdav/', :params => nil, :headers => @jsmith.merge!({:HTTP_DEPTH => '1'})
     assert_response :multi_status
     assert response.body.include?('<d:href>http://www.example.com:80/dmsf/webdav/</d:href>')
     assert response.body.include?( '<d:displayname>/</d:displayname>')
   end
 
   def test_propfind_depth0_on_root_for_admin
-    xml_http_request :propfind, '/dmsf/webdav/', nil, @admin.merge!({:HTTP_DEPTH => '0'})
+    process :propfind, '/dmsf/webdav/', :params => nil, :headers => @admin.merge!({:HTTP_DEPTH => '0'})
     assert_response :multi_status
     assert response.body.include?('<d:href>http://www.example.com:80/dmsf/webdav/</d:href>')
     assert response.body.include?('<d:displayname>/</d:displayname>')
@@ -90,7 +90,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
 
   def test_propfind_depth1_on_root_for_admin_with_project_names
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    xml_http_request :propfind, '/dmsf/webdav/', nil, @admin.merge!({:HTTP_DEPTH => '1'})
+    process :propfind, '/dmsf/webdav/', :params => nil, :headers => @admin.merge!({:HTTP_DEPTH => '1'})
     assert_response :multi_status
     assert response.body.include?('<d:href>http://www.example.com:80/dmsf/webdav/</d:href>')
     assert response.body.include?('<d:displayname>/</d:displayname>')
@@ -103,12 +103,12 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_propfind_depth0_on_project1_for_non_member
-    xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil, @jsmith.merge!({:HTTP_DEPTH => '0'})
+    process :propfind, "/dmsf/webdav/#{@project1.identifier}", :params => nil, :headers => @jsmith.merge!({:HTTP_DEPTH => '0'})
     assert_response :not_found
   end
 
   def test_propfind_depth0_on_project1_for_admin
-    xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_DEPTH => '0'})
+    process :propfind, "/dmsf/webdav/#{@project1.identifier}", :params => nil, :headers => @admin.merge!({:HTTP_DEPTH => '0'})
     assert_response :multi_status
     assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</d:href>")
     assert response.body.include?("<d:displayname>#{@project1.identifier}</d:displayname>")
@@ -116,16 +116,16 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
 
   def test_propfind_depth0_on_project1_for_admin_with_project_names
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_DEPTH => '0'})
+    process :propfind, "/dmsf/webdav/#{@project1.identifier}", :params => nil, :headers => @admin.merge!({:HTTP_DEPTH => '0'})
     assert_response :not_found
-    xml_http_request :propfind, "/dmsf/webdav/#{@project1_uri}", nil, @admin.merge!({:HTTP_DEPTH => '0'})
+    process :propfind, "/dmsf/webdav/#{@project1_uri}", :params => nil, :headers => @admin.merge!({:HTTP_DEPTH => '0'})
     assert_response :multi_status
     assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</d:href>")
     assert response.body.include?("<d:displayname>#{@project1_name}</d:displayname>")
   end
 
   def test_propfind_depth1_on_project1_for_admin
-    xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_DEPTH => '1'})
+    process :propfind, "/dmsf/webdav/#{@project1.identifier}", :params => nil, :headers => @admin.merge!({:HTTP_DEPTH => '1'})
     assert_response :multi_status
     # Project
     assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</d:href>")
@@ -146,9 +146,9 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
 
   def test_propfind_depth1_on_project1_for_admin_with_project_names
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    xml_http_request :propfind, "/dmsf/webdav/#{@project1.identifier}", nil, @admin.merge!({:HTTP_DEPTH => '1'})
+    process :propfind, "/dmsf/webdav/#{@project1.identifier}", :params => nil, :headers => @admin.merge!({:HTTP_DEPTH => '1'})
     assert_response :not_found
-    xml_http_request :propfind, "/dmsf/webdav/#{@project1_uri}", nil, @admin.merge!({:HTTP_DEPTH => '1'})
+    process :propfind, "/dmsf/webdav/#{@project1_uri}", :params => nil, :headers => @admin.merge!({:HTTP_DEPTH => '1'})
     assert_response :multi_status
     # Project
     assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</d:href>")
@@ -171,7 +171,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     @project1.save!
     project1_new_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
     project1_new_uri = Addressable::URI.escape(project1_new_name)
-    xml_http_request :propfind, "/dmsf/webdav/#{project1_new_uri}", nil, @admin.merge!({:HTTP_DEPTH => '1'})
+    process :propfind, "/dmsf/webdav/#{project1_new_uri}", :params => nil, :headers => @admin.merge!({:HTTP_DEPTH => '1'})
     assert_response :multi_status
     assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{project1_new_uri}/</d:href>")
     assert response.body.include?("<d:displayname>#{project1_new_name}</d:displayname>")

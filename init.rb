@@ -4,7 +4,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-18 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -32,9 +32,9 @@ Redmine::Plugin.register :redmine_dmsf do
   end
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
-  version '1.6.2'
+  version '2.0.0'
 
-  requires_redmine version_or_higher: '3.4.0'
+  requires_redmine version_or_higher: '4.0.0'
 
   settings partial: 'settings/dmsf_settings',
             default: {
@@ -62,8 +62,9 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_webdav_use_project_names' => nil
             }
 
-  # Uncomment to remove the original Documents from searching (replaced with DMSF)
+  # Uncomment to remove the original Documents from searching and project's modules (replaced with DMSF)
   # Redmine::Search.available_search_types.delete('documents')
+  # Redmine::AccessControl.available_project_modules.delete(:documents)
 end
 
 unless Redmine::Plugin.installed?(:easy_extensions)
