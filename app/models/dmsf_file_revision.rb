@@ -52,10 +52,11 @@ class DmsfFileRevision < ActiveRecord::Base
   scope :deleted, -> { where(deleted: STATUS_DELETED) }
 
   acts_as_customizable
-  acts_as_event :title => Proc.new {|o| "#{l(:label_dmsf_updated)}: #{o.dmsf_file.dmsf_path_str}"},
+  acts_as_event :title => Proc.new {|o| (o.source_dmsf_file_revision_id.present? ? "#{l(:label_dmsf_updated)}" : "#{l(:label_created)}") +
+                                          ": #{o.dmsf_file.dmsf_path_str}"},
     :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.dmsf_file}},
     :datetime => Proc.new {|o| o.updated_at },
-    :description => Proc.new {|o| o.comment },
+    :description => Proc.new {|o| o.description + "\n" + o.comment },
     :author => Proc.new {|o| o.user }
 
   acts_as_activity_provider :type => 'dmsf_file_revisions',
