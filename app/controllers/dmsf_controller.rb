@@ -133,7 +133,7 @@ class DmsfController < ApplicationController
 
     begin
       if params[:email_entries].present?
-        email_entries(selected_folders, selected_files)# and return
+        email_entries(selected_folders, selected_files)
       elsif params[:restore_entries].present?
         restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links)
         redirect_to :back
@@ -147,9 +147,9 @@ class DmsfController < ApplicationController
         download_entries(selected_folders, selected_files)
       end
     rescue FileNotFound
-      render_404 #and return
+      render_404
     rescue DmsfAccessError
-      render_403 # and return
+      render_403
     rescue StandardError => e
       flash[:errors] = e.message
       Rails.logger.error e.message
@@ -158,15 +158,15 @@ class DmsfController < ApplicationController
 
   def tag_changed
     # Tag filter
-    if params[:dmsf_folder] && params[:dmsf_folder][:custom_field_values].present?
+    params[:dmsf_folder][:custom_field_values].each do |key, value|
       redirect_to dmsf_folder_path(
-        :id => @project,
-        :folder_id => @folder,
-        :custom_field_id => params[:dmsf_folder][:custom_field_values].first[0],
-        :custom_value => params[:dmsf_folder][:custom_field_values].first[1])
-    else
-      redirect_to :back
+        id: @project,
+        folder_id: @folder,
+        custom_field_id: key,
+        custom_value: value)
+      return
     end
+    redirect_to :back
   end
 
   def entries_email
