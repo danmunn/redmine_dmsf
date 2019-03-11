@@ -117,6 +117,10 @@ RedmineExtensions::Reloader.to_prepare do
 
   Redmine::Activity.register :dmsf_file_revision_accesses, :default => false
   Redmine::Activity.register :dmsf_file_revisions
+
+  # Uncomment to remove the original Documents from searching and project's modules (replaced with DMSF)
+  # Redmine::Search.available_search_types.delete('documents')
+  # Redmine::AccessControl.available_project_modules.delete(:documents)
 end
 
 # WebDAV

@@ -61,10 +61,6 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_enable_cjk_ngrams' => nil,
               'dmsf_webdav_use_project_names' => nil
             }
-
-  # Uncomment to remove the original Documents from searching and project's modules (replaced with DMSF)
-  # Redmine::Search.available_search_types.delete('documents')
-  # Redmine::AccessControl.available_project_modules.delete(:documents)
 end
 
 unless Redmine::Plugin.installed?(:easy_extensions)
