@@ -26,7 +26,8 @@ module RedmineDmsf
       # Overriden methods
 
       def has_attachments?
-        super || (defined?(self.dmsf_files) && self.dmsf_files.any?)
+        super || (defined?(self.dmsf_files) && self.dmsf_files.any?) ||
+            (defined?(self.dmsf_links) && self.dmsf_links.any?)
       end
 
     end
