@@ -59,7 +59,7 @@
 <% CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c| %>
     <% if DmsfFolder.is_column_on?(c.name) %>
         <td class="dmsf_cf">
-          <%= file.custom_value(c) %>
+          <%= show_value file.custom_value(c) %>
         </td>
     <% end %>
 <% end %>

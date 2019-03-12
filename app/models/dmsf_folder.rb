@@ -348,7 +348,9 @@ class DmsfFolder < ActiveRecord::Base
 
   def custom_value(custom_field)
     custom_field_values.each do |cv|
-      return cv.value if cv.custom_field == custom_field
+      if cv.custom_field == custom_field
+        return cv
+      end
     end
     nil
   end
@@ -475,7 +477,7 @@ class DmsfFolder < ActiveRecord::Base
     csv << '' if columns.include?(l(:label_last_revision_id))
     # Custom fields
     CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c|
-      csv << custom_value(c) if columns.include?(c.name)
+      csv << custom_value(c).value if columns.include?(c.name)
     end
     csv
   end
