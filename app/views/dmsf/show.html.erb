@@ -88,43 +88,46 @@
 
 <%= error_messages_for('dmsf_workflow') %>
 
-<%= form_tag(entries_operations_dmsf_path(:id => @project, :folder_id => @folder), :method => :post,
-             :class => 'dmsf_entries', :id => 'entries_form', :data => {:cm_url => dmsf_context_menu_path}) do %>
-    <%= hidden_field_tag('action') %>
-    <% unless @system_folder %>
-      <div id="dmsf_buttons" class="dmsf_controls" style="float: left">
-        <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries',
-          :class => 'toggle-selection') if @file_view_allowed %>
-        <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries',
-          :class => 'toggle-selection') if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
-        <% if @file_delete_allowed %>
-          <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries',
-            :class => 'toggle-selection', :data => { :confirm => l(:text_are_you_sure) }) if @file_delete_allowed %>
-        <% end %>
-      </div>
+<<%= form_tag(entries_operations_dmsf_path(:id => @project, :folder_id => @folder), :method => :post,
+              :class => 'dmsf_entries', :id => 'entries_form', :data => {:cm_url => dmsf_context_menu_path}) do %>
+  <%= hidden_field_tag('action') %>
+  <% unless @system_folder %>
+    <div id="dmsf_buttons" class="dmsf_controls" style="float: left">
+      <%= submit_tag(l(:button_download), :title => l(:title_download_checked), :name => 'download_entries',
+                     :class => 'toggle-selection') if @file_view_allowed %>
+      <%= submit_tag(l(:field_mail), :title => l(:title_send_checked_by_email), :name => 'email_entries',
+                     :class => 'toggle-selection') if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
+      <% if @file_delete_allowed %>
+        <%= submit_tag(l(:button_delete), :title => l(:title_delete_checked), :name => 'delete_entries',
+                       :class => 'toggle-selection', :data => { :confirm => l(:text_are_you_sure) }) if @file_delete_allowed %>
+      <% end %>
+    </div>
+  <% end %>
+  <% unless @system_folder %>
+    <% values = @folder ? @folder.custom_field_values : DmsfFolder.new.custom_field_values %>
+    <% unless values.empty? %>
+      <% values.sort! { |a, b| a.custom_field.position <=> b.custom_field.position } %>
+      <% custom_value = values.first %>
+      <% if custom_value.custom_field.format.is_a?(Redmine::FieldFormat::ListFormat) %>
+        <div id="dmsf_tag" class="dmsf_controls" style="float: right">
+          <% custom_value.custom_field.is_required = false %>
+          <% custom_value.value = params[:custom_value].present? ? params[:custom_value] : '' %>
+          <%= h(custom_value.custom_field.name) %>:
+          <%= custom_value.custom_field.format.edit_tag(self,
+                                                        custom_field_tag_id(:dmsf_folder, custom_value.custom_field),
+                                                        custom_field_tag_name(:dmsf_folder, custom_value.custom_field),
+                                                        custom_value,
+                                                        :class => "#{custom_value.custom_field.field_format}_cf",
+                                                        :style => 'width: auto') %>
+        </div>
+      <% end %>
     <% end %>
-    <% unless @system_folder %>
-        <% values = @folder ? @folder.custom_field_values : DmsfFolder.new.custom_field_values %>
-        <% unless values.empty? %>
-            <div id="dmsf_tag" class="dmsf_controls" style="float: right">
-              <% custom_value = values.first %>
-              <% custom_value.custom_field.is_required = false %>
-              <% custom_value.value = params[:custom_value].present? ? params[:custom_value] : '' %>
-              <%= h(custom_value.custom_field.name) %>:
-              <%= custom_value.custom_field.format.edit_tag(self,
-                custom_field_tag_id(:dmsf_folder, custom_value.custom_field),
-                custom_field_tag_name(:dmsf_folder, custom_value.custom_field),
-                custom_value,
-                :class => "#{custom_value.custom_field.field_format}_cf",
-                :style => 'width: auto') %>
-            </div>
-        <% end %>
-    <% end %>
-    <% if @tree_view %>
-        <%= render(:partial => 'tree_view') %>
-    <% else %>
-        <%= render(:partial => 'list_view') %>
-    <% end %>
+  <% end %>
+  <% if @tree_view %>
+    <%= render(:partial => 'tree_view') %>
+  <% else %>
+    <%= render(:partial => 'list_view') %>
+  <% end %>
 <% end %>
 
 <%= context_menu %>
