@@ -66,7 +66,7 @@ class DmsfMailer < Mailer
   end
 
   def self.deliver_send_documents(project, email_params)
-    send_documents(User.current, project, email_params).deliver_later
+    send_documents(User.current, project, email_params).deliver_now
   end
 
   def send_documents(_, project, email_params)
