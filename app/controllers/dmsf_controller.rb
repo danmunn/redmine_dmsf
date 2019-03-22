@@ -158,13 +158,10 @@ class DmsfController < ApplicationController
 
   def tag_changed
     # Tag filter
-    params[:dmsf_folder][:custom_field_values].each do |key, value|
-      redirect_to dmsf_folder_path(
-        id: @project,
-        folder_id: @folder,
-        custom_field_id: key,
-        custom_value: value)
-      return
+    if params[:dmsf_folder]
+      params[:dmsf_folder][:custom_field_values].each do |key, value|
+        return redirect_to dmsf_folder_path id: @project, folder_id: @folder, custom_field_id: key, custom_value: value
+      end
     end
     redirect_to :back
   end
