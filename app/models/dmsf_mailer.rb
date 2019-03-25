@@ -38,6 +38,7 @@ class DmsfMailer < Mailer
       redmine_headers 'Project' => project.identifier if project
       @files = files
       @project = project
+      @author = files.first.last_revision.user if files.first.last_revision
       message_id project
       set_language_if_valid user.language
       mail :to => user.mail, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
@@ -58,6 +59,7 @@ class DmsfMailer < Mailer
       redmine_headers 'Project' => project.identifier if project
       @files = files
       @project = project
+      @author = files.first.deleted_by_user
       message_id project
       set_language_if_valid user.language
       mail :to => user.mail,
@@ -65,11 +67,11 @@ class DmsfMailer < Mailer
     end
   end
 
-  def self.deliver_send_documents(project, email_params)
+  def self.deliver_send_documents(project, email_params, author)
     send_documents(User.current, project, email_params).deliver_now
   end
 
-  def send_documents(_, project, email_params)
+  def send_documents(_, project, email_params, author)
     redmine_headers 'Project' => project.identifier if project
     @body = email_params[:body]
     @links_only = email_params[:links_only] == '1'
@@ -77,7 +79,7 @@ class DmsfMailer < Mailer
     @expired_at = email_params[:expired_at]
     @folders = email_params[:folders]
     @files = email_params[:files]
-
+    @author = author
     unless @links_only
       zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
       attachments['Documents.zip'] = { :content_type => 'application/zip', :content => zipped_content_data }
@@ -106,6 +108,7 @@ class DmsfMailer < Mailer
       @text1 = l(text1_id, :name => workflow.name, :filename => revision.dmsf_file.name, :notice => notice)
       @text2 = l(text2_id)
       @notice = notice
+      @author = User.find_by(id: revision.dmsf_workflow_assigned_by)
       mail :to => user.mail,
            :subject => "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)}"
     end
