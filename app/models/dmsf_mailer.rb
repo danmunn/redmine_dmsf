@@ -38,6 +38,7 @@ class DmsfMailer < Mailer
       redmine_headers 'Project' => project.identifier if project
       @files = files
       @project = project
+      @author = files.first.last_revision.user if files.first.last_revision
       message_id project
       set_language_if_valid user.language
       mail :to => user.mail, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
@@ -58,6 +59,7 @@ class DmsfMailer < Mailer
       redmine_headers 'Project' => project.identifier if project
       @files = files
       @project = project
+      @author = files.first.deleted_by_user
       message_id project
       set_language_if_valid user.language
       mail :to => user.mail,
@@ -106,6 +108,7 @@ class DmsfMailer < Mailer
       @text1 = l(text1_id, :name => workflow.name, :filename => revision.dmsf_file.name, :notice => notice)
       @text2 = l(text2_id)
       @notice = notice
+      @author = User.find_by(id: revision.dmsf_workflow_assigned_by)
       mail :to => user.mail,
            :subject => "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)}"
     end
