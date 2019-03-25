@@ -21,7 +21,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
     
-<%= @author.name %> <%= l(:text_email_doc_deleted) %> <%= @project.name %> <%= l(:text_email_doc_follows) if @author %>
+<%= @author.name %> <%= l(:text_email_doc_deleted) %> <%= @project.name %> <%= l(:text_email_doc_follows) %>
 <% @files.each do |file| %>  
   <%= h(file.dmsf_path_str) %> (<%= file.name %>)
   <%  if file.last_revision %>
