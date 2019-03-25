@@ -25,8 +25,8 @@ class DmsfMailer < Mailer
   layout 'mailer'
 
   def self.deliver_files_updated(project, files)
-    files = files.select { |file| file.notify? }
     users = get_notify_users(project, files)
+    files = files.select { |file| file.notify? }
     users.each do |user|
       files_updated(user, project, files).deliver_later
     end
@@ -47,8 +47,8 @@ class DmsfMailer < Mailer
   end
 
   def self.deliver_files_deleted(project, files)
-    files = files.select { |file| file.notify? }
     users = get_notify_users(project, files)
+    files = files.select { |file| file.notify? }
     users.each do |user|
       files_deleted(user, project, files).deliver_later
     end
