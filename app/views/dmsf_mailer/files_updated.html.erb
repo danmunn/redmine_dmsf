@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.%>
 
-<%= link_to User.current, user_url(User.current) %> <%= l(:text_email_doc_updated) %>
+<%= link_to @author, user_url(@author) %> <%= l(:text_email_doc_updated) %>
 <%= link_to @project, project_url(@project) %> <%= l(:text_email_doc_follows) %>
 <% @files.each do |file| %>
 <p>

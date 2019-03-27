@@ -25,8 +25,8 @@ class DmsfMailer < Mailer
   layout 'mailer'
 
   def self.deliver_files_updated(project, files)
-    files = files.select { |file| file.notify? }
     users = get_notify_users(project, files)
+    files = files.select { |file| file.notify? }
     users.each do |user|
       files_updated(user, project, files).deliver_later
     end
@@ -39,6 +39,7 @@ class DmsfMailer < Mailer
       @files = files
       @project = project
       @author = files.first.last_revision.user if files.first.last_revision
+      @author = User.anonymous unless @author
       message_id project
       set_language_if_valid user.language
       mail :to => user.mail, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
@@ -46,8 +47,8 @@ class DmsfMailer < Mailer
   end
 
   def self.deliver_files_deleted(project, files)
-    files = files.select { |file| file.notify? }
     users = get_notify_users(project, files)
+    files = files.select { |file| file.notify? }
     users.each do |user|
       files_deleted(user, project, files).deliver_later
     end
@@ -60,6 +61,7 @@ class DmsfMailer < Mailer
       @files = files
       @project = project
       @author = files.first.deleted_by_user
+      @author = User.anonymous unless @author
       message_id project
       set_language_if_valid user.language
       mail :to => user.mail,
@@ -67,11 +69,11 @@ class DmsfMailer < Mailer
     end
   end
 
-  def self.deliver_send_documents(project, email_params)
-    send_documents(User.current, project, email_params).deliver_now
+  def self.deliver_send_documents(project, email_params, author)
+    send_documents(User.current, project, email_params, author).deliver_now
   end
 
-  def send_documents(_, project, email_params)
+  def send_documents(_, project, email_params, author)
     redmine_headers 'Project' => project.identifier if project
     @body = email_params[:body]
     @links_only = email_params[:links_only] == '1'
@@ -79,7 +81,7 @@ class DmsfMailer < Mailer
     @expired_at = email_params[:expired_at]
     @folders = email_params[:folders]
     @files = email_params[:files]
-
+    @author = author
     unless @links_only
       zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
       attachments['Documents.zip'] = { :content_type => 'application/zip', :content => zipped_content_data }
@@ -109,6 +111,7 @@ class DmsfMailer < Mailer
       @text2 = l(text2_id)
       @notice = notice
       @author = User.find_by(id: revision.dmsf_workflow_assigned_by)
+      @author = User.anonymous unless @author
       mail :to => user.mail,
            :subject => "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)}"
     end

@@ -88,6 +88,20 @@ table.display thead th div.DataTables_sort_wrapper span {
 	display: block;
 }
 
+/* Comptibility with Easy SW: sorting icons are not visible do */
+.ui-state-default .ui-icon {
+    background-image: url("../../../stylesheets/jquery/images/ui-icons_759fcf_256x240.png");
+}
+
+.ui-icon-triangle-1-n {
+    background-position: 0 -16px;
+}
+
+.ui-icon-triangle-1-s {
+    background-position: -64px -16px;
+}
+/* end */
+
 .dmsf_controls,
 .dmsf_controls input,
 .dmsf_controls select,

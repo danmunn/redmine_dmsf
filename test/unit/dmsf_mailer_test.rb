@@ -73,7 +73,7 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
     email_params[:expired_at] = DateTime.current.to_s
     email_params[:folders] = nil
     email_params[:files] = "[\"#{@file1.id}\"]"
-    DmsfMailer.deliver_send_documents(@file1.project, email_params)
+    DmsfMailer.deliver_send_documents(@file1.project, email_params, User.current)
     email = last_email
     assert text_part(email).body.include? body
     assert html_part(email).body.include? body
