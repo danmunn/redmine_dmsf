@@ -47,7 +47,7 @@ class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
       folder = DmsfFolder.new
       folder.project_id = issue.project.id
       folder.dmsf_folder_id = parent.id
-      folder.title = "#{issue.id} - #{issue.subject}"
+      folder.title = "#{issue.id} - #{DmsfFolder.get_valid_title(issue.subject)}"
       folder.user_id = User.anonymous.id
       folder.save!
       new_folder_ids << folder.id
