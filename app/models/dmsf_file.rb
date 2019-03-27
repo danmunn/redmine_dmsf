@@ -265,9 +265,9 @@ class DmsfFile < ActiveRecord::Base
       # Assign the same workflow if it's a global one or we are in the same project
       new_revision.workflow = nil
       new_revision.dmsf_workflow_id = nil
-      new_revision.dmsf_workflow_assigned_by = nil
+      new_revision.dmsf_workflow_assigned_by_user_id = nil
       new_revision.dmsf_workflow_assigned_at = nil
-      new_revision.dmsf_workflow_started_by = nil
+      new_revision.dmsf_workflow_started_by_user_id = nil
       new_revision.dmsf_workflow_started_at = nil
       wf = last_revision.dmsf_workflow
       if wf && (wf.project.nil? || (wf.project.id == project.id))

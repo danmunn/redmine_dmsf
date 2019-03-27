@@ -43,7 +43,7 @@
             <span class="icon-only"></span>
         <% end %>
     <% when DmsfWorkflow::STATE_ASSIGNED %>
-        <% if User.current && (file.last_revision.dmsf_workflow_assigned_by == User.current.id) && wf %>
+        <% if User.current && (file.last_revision.dmsf_workflow_assigned_by_user == User.current) && wf %>
             <%= link_to('',
                         start_dmsf_workflow_path(
                             :id => file.last_revision.dmsf_workflow_id,

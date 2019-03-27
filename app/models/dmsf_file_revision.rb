@@ -24,12 +24,14 @@ require 'digest'
 class DmsfFileRevision < ActiveRecord::Base
 
   belongs_to :dmsf_file
-  belongs_to :source_revision, :class_name => 'DmsfFileRevision', :foreign_key => 'source_dmsf_file_revision_id'
+  belongs_to :source_revision, class_name: 'DmsfFileRevision', foreign_key: 'source_dmsf_file_revision_id'
   belongs_to :user
-  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+  belongs_to :deleted_by_user, class_name: 'User', foreign_key: 'deleted_by_user_id'
+  belongs_to :dmsf_workflow_started_by_user, class_name: 'User', foreign_key: 'dmsf_workflow_started_by_user_id'
+  belongs_to :dmsf_workflow_assigned_by_user, class_name: 'User', foreign_key: 'dmsf_workflow_assigned_by_user_id'
   belongs_to :dmsf_workflow
-  has_many :dmsf_file_revision_access, :dependent => :destroy
-  has_many :dmsf_workflow_step_assignment, :dependent => :destroy
+  has_many :dmsf_file_revision_access, dependent: :destroy
+  has_many :dmsf_workflow_step_assignment, dependent: :destroy
 
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
@@ -248,11 +250,11 @@ class DmsfFileRevision < ActiveRecord::Base
     self.dmsf_workflow_id = dmsf_workflow_id
     if commit == 'start'
       self.workflow = DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
-      self.dmsf_workflow_started_by = User.current.id if User.current
+      self.dmsf_workflow_started_by_user = User.current
       self.dmsf_workflow_started_at = DateTime.current
     else
       self.workflow = DmsfWorkflow::STATE_ASSIGNED
-      self.dmsf_workflow_assigned_by = User.current.id if User.current
+      self.dmsf_workflow_assigned_by_user = User.current
       self.dmsf_workflow_assigned_at = DateTime.current
     end
   end

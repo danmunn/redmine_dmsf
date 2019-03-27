@@ -90,7 +90,7 @@ class DmsfWorkflowsController < ApplicationController
               else
                 # Just rejected
                 recipients = @dmsf_workflow.participiants
-                recipients.push User.find_by(id: revision.dmsf_workflow_assigned_by)
+                recipients.push revision.dmsf_workflow_assigned_by_user
                 recipients.uniq!
                 recipients = recipients & DmsfMailer.get_notify_users(@project, [revision.dmsf_file], true)
                 DmsfMailer.deliver_workflow_notification(
@@ -143,7 +143,7 @@ class DmsfWorkflowsController < ApplicationController
                           :text_email_to_proceed)
                       end
                     end
-                    to = User.find_by(id: revision.dmsf_workflow_assigned_by)
+                    to = revision.dmsf_workflow_assigned_by_user
                     if to && DmsfMailer.get_notify_users(@project, [revision.dmsf_file], true).include?(to)
                       DmsfMailer.deliver_workflow_notification(
                         [to],

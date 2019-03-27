@@ -87,9 +87,9 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     #       <created_at>2017-04-18T12:52:28Z</created_at>
     #       <updated_at>2019-01-15T15:56:15Z</updated_at>
     #       <dmsf_workflow_id/>
-    #       <dmsf_workflow_assigned_by/>
+    #       <dmsf_workflow_assigned_by_user_id/>
     #       <dmsf_workflow_assigned_at/>
-    #       <dmsf_workflow_started_by/>
+    #       <dmsf_workflow_started_by_user_id/>
     #       <dmsf_workflow_started_at/>
     #       <digest></digest>
     #     </dmsf_file_revision>
@@ -109,9 +109,9 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     #       <created_at>2017-04-18T12:52:27Z</created_at>
     #       <updated_at>2019-01-15T15:56:15Z</updated_at>
     #       <dmsf_workflow_id/>
-    #       <dmsf_workflow_assigned_by>1</dmsf_workflow_assigned_by>
+    #       <dmsf_workflow_assigned_by_user_id>1</dmsf_workflow_assigned_by_user_id>
     #       <dmsf_workflow_assigned_at/>
-    #       <dmsf_workflow_started_by>1</dmsf_workflow_started_by>
+    #       <dmsf_workflow_started_by_user_id>1</dmsf_workflow_started_by_user_id>
     #       <dmsf_workflow_started_at/>
     #       <digest>81dc9bdb52d04dc20036dbd8313ed055</digest>
     #     </dmsf_file_revision>

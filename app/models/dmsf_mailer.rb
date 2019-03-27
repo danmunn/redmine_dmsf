@@ -110,7 +110,7 @@ class DmsfMailer < Mailer
       @text1 = l(text1_id, :name => workflow.name, :filename => revision.dmsf_file.name, :notice => notice)
       @text2 = l(text2_id)
       @notice = notice
-      @author = User.find_by(id: revision.dmsf_workflow_assigned_by)
+      @author = revision.dmsf_workflow_assigned_by_user
       @author = User.anonymous unless @author
       mail :to => user.mail,
            :subject => "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)}"

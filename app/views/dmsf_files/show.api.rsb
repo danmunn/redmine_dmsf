@@ -24,9 +24,9 @@ api.dmsf_file do
         api.created_at r.created_at
         api.updated_at r.updated_at
         api.dmsf_workflow_id r.dmsf_workflow_id
-        api.dmsf_workflow_assigned_by r.dmsf_workflow_assigned_by
+        api.dmsf_workflow_assigned_by_user_id r.dmsf_workflow_assigned_by_user_id
         api.dmsf_workflow_assigned_at r.dmsf_workflow_assigned_at
-        api.dmsf_workflow_started_by r.dmsf_workflow_started_by
+        api.dmsf_workflow_started_by_user_id r.dmsf_workflow_started_by_user_id
         api.dmsf_workflow_started_at r.dmsf_workflow_started_at
         api.digest r.digest
       end

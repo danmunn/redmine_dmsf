@@ -36,6 +36,8 @@ class UserPatchTest < RedmineDmsf::Test::UnitTest
     @user2.destroy
     assert_equal 0, DmsfFileRevisionAccess.where(user_id: id).all.size
     assert_equal 0, DmsfFileRevision.where(user_id: id).all.size
+    assert_equal 0, DmsfFileRevision.where(dmsf_workflow_assigned_by_user_id: id).all.size
+    assert_equal 0, DmsfFileRevision.where(dmsf_workflow_started_by_user_id: id).all.size
     assert_equal 0, DmsfFile.where(deleted_by_user_id: id).all.size
     assert_equal 0, DmsfFolder.where(user_id: id).all.size
     assert_equal 0, DmsfFolder.where(deleted_by_user_id: id).all.size

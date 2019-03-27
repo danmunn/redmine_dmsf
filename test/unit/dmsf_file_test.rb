@@ -161,9 +161,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
       assert_equal new_file.dmsf_file_revisions.all.size, 1
       assert_nil new_file.last_revision.workflow
       assert_nil new_file.last_revision.dmsf_workflow_id
-      assert_nil new_file.last_revision.dmsf_workflow_assigned_by
+      assert_nil new_file.last_revision.dmsf_workflow_assigned_by_user_id
       assert_nil new_file.last_revision.dmsf_workflow_assigned_at
-      assert_nil new_file.last_revision.dmsf_workflow_started_by
+      assert_nil new_file.last_revision.dmsf_workflow_started_by_user_id
       assert_nil new_file.last_revision.dmsf_workflow_started_at
     end
   end
@@ -174,9 +174,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     new_file = @file1.copy_to_filename(@project2, nil, 'new_file.txt')
     assert_equal DmsfWorkflow::STATE_ASSIGNED, new_file.last_revision.workflow
     assert_equal @wf2.id, new_file.last_revision.dmsf_workflow_id
-    assert_equal User.current.id, new_file.last_revision.dmsf_workflow_assigned_by
+    assert_equal User.current, new_file.last_revision.dmsf_workflow_assigned_by_user
     assert new_file.last_revision.dmsf_workflow_assigned_at
-    assert_nil new_file.last_revision.dmsf_workflow_started_by
+    assert_nil new_file.last_revision.dmsf_workflow_started_by_user_id
     assert_nil new_file.last_revision.dmsf_workflow_started_at
   end
 
@@ -186,9 +186,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     new_file = @file7.copy_to_filename(@project1, nil, 'new_file.txt')
     assert_equal DmsfWorkflow::STATE_ASSIGNED, new_file.last_revision.workflow
     assert_equal @wf1.id, new_file.last_revision.dmsf_workflow_id
-    assert_equal User.current.id, new_file.last_revision.dmsf_workflow_assigned_by
+    assert_equal User.current, new_file.last_revision.dmsf_workflow_assigned_by_user
     assert new_file.last_revision.dmsf_workflow_assigned_at
-    assert_nil new_file.last_revision.dmsf_workflow_started_by
+    assert_nil new_file.last_revision.dmsf_workflow_started_by_user_id
     assert_nil new_file.last_revision.dmsf_workflow_started_at
   end
 
@@ -198,9 +198,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     new_file = @file7.copy_to_filename(@project2, nil, 'new_file.txt')
     assert_nil new_file.last_revision.workflow
     assert_nil new_file.last_revision.dmsf_workflow_id
-    assert_nil new_file.last_revision.dmsf_workflow_assigned_by
+    assert_nil new_file.last_revision.dmsf_workflow_assigned_by_user_id
     assert_nil new_file.last_revision.dmsf_workflow_assigned_at
-    assert_nil new_file.last_revision.dmsf_workflow_started_by
+    assert_nil new_file.last_revision.dmsf_workflow_started_by_user_id
     assert_nil new_file.last_revision.dmsf_workflow_started_at
   end
 
