@@ -397,9 +397,9 @@ ja:
   error_file_tmpdir_does_not_exist: 指定された一時フォルダが存在せず、作成もできません
   error_tmpfile_can_not_be_created: 指定された一時フォルダにファイルを作成できません
 
-  label_email_from_override: From
-  text_email_from_override: The user currently logged in
-  label_email_reply_to: Reply-to
+  label_email_from_override: 差出人
+  text_email_from_override: 現在ログインしているユーザー
+  label_email_reply_to: 返信先
 
   label_enable_cjk_ngrams: CJKテキストから n-grams の生成を有効にする
   text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
