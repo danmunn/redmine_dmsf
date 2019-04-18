@@ -25,16 +25,16 @@ class StatusDeleted < ActiveRecord::Migration[4.2]
       when /postgresql/
         execute 'ALTER TABLE dmsf_folders ALTER deleted DROP DEFAULT;'
         change_column :dmsf_folders, :deleted,
-                      'INTEGER USING CASE WHEN TRUE THEN 1 ELSE 0 END', null: false, default: DmsfFolder::STATUS_ACTIVE
+                      'INTEGER USING CASE deleted WHEN TRUE THEN 1 ELSE 0 END', null: false, default: DmsfFolder::STATUS_ACTIVE
         execute 'ALTER TABLE dmsf_files ALTER deleted DROP DEFAULT;'
-        change_column :dmsf_files, :deleted, 'INTEGER USING CASE WHEN TRUE THEN 1 ELSE 0 END',
+        change_column :dmsf_files, :deleted, 'INTEGER USING CASE deleted WHEN TRUE THEN 1 ELSE 0 END',
                       null: false, default: DmsfFile::STATUS_ACTIVE
         execute 'ALTER TABLE dmsf_file_revisions ALTER deleted DROP DEFAULT;'
         change_column :dmsf_file_revisions, :deleted,
-                      'INTEGER USING CASE WHEN TRUE THEN 1 ELSE 0 END', null: false, default: DmsfFileRevision::STATUS_ACTIVE
+                      'INTEGER USING CASE deleted WHEN TRUE THEN 1 ELSE 0 END', null: false, default: DmsfFileRevision::STATUS_ACTIVE
         execute 'ALTER TABLE dmsf_links ALTER deleted DROP DEFAULT;'
         change_column :dmsf_links, :deleted,
-                      'INTEGER USING CASE WHEN TRUE THEN 1 ELSE 0 END', null: false, default: DmsfLink::STATUS_ACTIVE
+                      'INTEGER USING CASE deleted WHEN TRUE THEN 1 ELSE 0 END', null: false, default: DmsfLink::STATUS_ACTIVE
       else
         change_column :dmsf_folders, :deleted, :integer, default: DmsfFolder::STATUS_ACTIVE
         change_column :dmsf_files, :deleted, :integer, default: DmsfFile::STATUS_ACTIVE
