@@ -23,7 +23,7 @@ module RedmineDmsf
   module Test
     class IntegrationTest < Redmine::IntegrationTest
       def self.fixtures(*table_names)
-        dir = File.join( File.dirname(__FILE__), '../../../test/fixtures')
+        dir = File.join( File.dirname(__FILE__), '/fixtures')
         table_names.each do |x|          
           ActiveRecord::FixtureSet.create_fixtures(dir, x) if File.exist?("#{dir}/#{x}.yml")
         end
