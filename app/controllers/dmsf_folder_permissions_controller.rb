@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-19 Karel Pičman <karel.picman@konton.com>
+# Copyright © 2011-19 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 
 class DmsfFolderPermissionsController < ApplicationController
 
-  before_action :find_folder, only: [:destroy, :new, :autocomplete_for_user]
+  before_action :find_folder, only: [:destroy, :new, :autocomplete_for_user], if: -> { params[:dmsf_folder_id].present?}
   before_action :find_project
   before_action :authorize
   before_action :permissions
@@ -49,22 +49,29 @@ class DmsfFolderPermissionsController < ApplicationController
   private
 
   def users_for_new_users
-    users = @dmsf_folder.permissions_users
-    ids = users.collect{ |u| u[0].id }
-    Principal.active.visible.member_of(@project).like(params[:q]).where(['id NOT IN (?)', ids.join(',')]).order(
-      :type, :lastname).to_a
+    scope = Principal.active.visible.member_of(@project).like(params[:q]).order(:type, :lastname)
+    if @dmsf_folder
+      users = @dmsf_folder.permissions_users
+      ids = users.collect{ |u| u[0].id }
+      scope = scope.where(['id NOT IN (?)', ids.join(',')]).order(:type, :lastname)
+    end
+    scope.to_a
   end
 
   def find_project
-    if params[:project_id]
-      @project = Project.visible.find_by_param(params[:project_id])
-    end
+    @project = Project.visible.find_by_param(params[:project_id])
+  rescue DmsfAccessError
+    render_403
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
 
   def find_folder
-    if params[:dmsf_folder_id]
-      @dmsf_folder = DmsfFolder.visible.find_by(id: params[:dmsf_folder_id])
-    end
+    @dmsf_folder = DmsfFolder.visible.find_by!(id: params[:dmsf_folder_id])
+  rescue DmsfAccessError
+    render_403
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
 
 end
