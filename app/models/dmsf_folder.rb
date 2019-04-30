@@ -537,7 +537,7 @@ class DmsfFolder < ActiveRecord::Base
       end
     end
     # Save
-    save!
+    save
   end
 
   def self.get_valid_title(title)
