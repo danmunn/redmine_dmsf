@@ -32,6 +32,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @project.enable_module! :dmsf
     @folder1 = DmsfFolder.find 1
     @folder2 = DmsfFolder.find 2
+    @folder3 = DmsfFolder.find 3
     @folder4 = DmsfFolder.find 4
     @folder7 = DmsfFolder.find 7
     @file1 = DmsfFile.find 1
@@ -63,6 +64,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_kind_of Project, @project
     assert_kind_of DmsfFolder, @folder1
     assert_kind_of DmsfFolder, @folder2
+    assert_kind_of DmsfFolder, @folder3
     assert_kind_of DmsfFolder, @folder4
     assert_kind_of DmsfFolder, @folder7
     assert_kind_of DmsfFile, @file1
@@ -129,7 +131,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_delete_ok
     # Empty and not locked folder
     @role.add_permission! :folder_manipulation
-    get :delete, :params => {:id => @project, :folder_id => @folder4.id, :commit => false}
+    get :delete, :params => {:id => @project, :folder_id => @folder1.id, :commit => false}
     assert_response :redirect
   end
 
@@ -145,9 +147,9 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Permissions OK
     @request.env['HTTP_REFERER'] = trash_dmsf_path(:id => @project.id)
     @role.add_permission! :folder_manipulation
-    @folder4.deleted = 1
-    @folder4.save
-    get :restore, :params => {:id => @project, :folder_id => @folder4.id}
+    @folder1.deleted = 1
+    @folder1.save
+    get :restore, :params => {:id => @project, :folder_id => @folder1.id}
     assert_response :redirect
   end
 
@@ -225,6 +227,14 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_equal 'text/csv', @response.content_type
   end
 
+  def test_show_folder_doesnt_correspond_the_project
+    @role.add_permission! :view_dmsf_files
+    @role.add_permission! :view_dmsf_folders
+    # project1 X project2.folder3
+    get :show, :params => {:id => @project.id, :folder_id => @folder3.id}
+    assert_response :not_found
+  end
+
   def test_new_forbidden
     @role.remove_permission! :folder_manipulation
     get :new, :params => {:id => @project, :parent_id => nil}
@@ -272,7 +282,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
           :folders => [], :files => [@file1.id], :zipped_content => zip_file_path
         }
     }
-    assert_redirected_to dmsf_folder_path(:id => @project)
+    assert_redirected_to dmsf_folder_path(id: @project)
     assert !File.exist?(zip_file_path)
   ensure
     FileUtils.rm_rf(zip_file_path)

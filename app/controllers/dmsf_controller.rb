@@ -546,7 +546,7 @@ class DmsfController < ApplicationController
   end
 
   def find_folder
-    @folder = DmsfFolder.find params[:folder_id] if params[:folder_id].present?
+    @folder = DmsfFolder.find_by!(id: params[:folder_id], project_id: @project.id) if params[:folder_id].present?
   rescue DmsfAccessError
     render_403
   rescue ActiveRecord::RecordNotFound
@@ -554,13 +554,10 @@ class DmsfController < ApplicationController
   end
 
   def find_folder_by_title
-    # find by title has to be scoped to project
-    project = Project.find(params[:id])
-    @folder = DmsfFolder.find_by(title: params[:folder_title], project_id: project.id) if params[:folder_title].present?
-  rescue DmsfAccessError
-    render_403
-  rescue ActiveRecord::RecordNotFound
-    render_404
+    if !@folder && params[:folder_title].present?
+      @folder = DmsfFolder.find_by(title: params[:folder_title], project_id: @project.id)
+      render_404 unless @folder
+    end
   end
 
   def find_parent

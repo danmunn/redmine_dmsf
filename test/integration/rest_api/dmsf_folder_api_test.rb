@@ -65,7 +65,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     token = Token.create!(:user => @jsmith, :action => 'api')
     #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml
-    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}"
+    get "/projects/#{@project1.identifier}/dmsf.xml?key=#{token.value}"
     assert_response :success
     assert_equal 'application/xml', @response.content_type
     # <?xml version="1.0" encoding="UTF-8"?>
@@ -115,7 +115,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     token = Token.create!(:user => @jsmith, :action => 'api')
     #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} "http://localhost:3000/dmsf/files/17216.xml?limit=1&offset=1"
-    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&limit=1&offset=2"
+    get "/projects/#{@project1.identifier}/dmsf.xml?key=#{token.value}&limit=1&offset=2"
     assert_response :success
     assert_equal 'application/xml', @response.content_type
     #   <?xml version="1.0" encoding="UTF-8"?>
@@ -151,7 +151,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
                   <description>A folder created via REST API</description>
                   <dmsf_folder_id/>
                 </dmsf_folder>}
-    post "/projects/#{@project1.id}/dmsf/create.xml?key=#{token.value}", :params => payload, :headers => {'CONTENT_TYPE' => 'application/xml'}
+    post "/projects/#{@project1.identifier}/dmsf/create.xml?key=#{token.value}", :params => payload, :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_folder>
@@ -165,7 +165,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_title=Updated%20title
-    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&folder_title=#{@folder1.title}"
+    get "/projects/#{@project1.identifier}/dmsf.xml?key=#{token.value}&folder_title=#{@folder1.title}"
     assert_response :success
     assert_equal 'application/xml', @response.content_type
     # <?xml version="1.0" encoding="UTF-8"?>
@@ -193,7 +193,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_title=Updated%20title
-    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&folder_title=xxx"
+    get "/projects/#{@project1.identifier}/dmsf.xml?key=#{token.value}&folder_title=xxx"
     assert_response :not_found
   end
 
@@ -201,7 +201,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KE" http://localhost:3000/projects/1/dmsf.json?folder_id=3
-    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&folder_id=#{@folder1.id}"
+    get "/projects/#{@project1.identifier}/dmsf.xml?key=#{token.value}&folder_id=#{@folder1.id}"
     assert_response :success
     assert_equal 'application/xml', @response.content_type
     # <?xml version="1.0" encoding="UTF-8"?>
@@ -229,7 +229,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KE" http://localhost:3000/projects/1/dmsf.json?folder_id=3
-    get "/projects/#{@project1.id}/dmsf.xml?key=#{token.value}&folder_id=99999999999"
+    get "/projects/#{@project1.identifier}/dmsf.xml?key=#{token.value}&folder_id=none"
     assert_response :not_found
   end
 
@@ -242,7 +242,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
                   <title>rest_api</title>
                   <description>A folder updated via REST API</description>
                 </dmsf_folder>}
-    post "/projects/#{@project1.id}/dmsf/save.xml?folder_id=1&key=#{token.value}", :params => payload, :headers => {'CONTENT_TYPE' => 'application/xml'}
+    post "/projects/#{@project1.identifier}/dmsf/save.xml?folder_id=1&key=#{token.value}", :params => payload, :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_folder>
@@ -257,7 +257,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :folder_manipulation
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
-    delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
+    delete "/projects/#{@project1.identifier}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
          :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     @folder1.reload
@@ -268,16 +268,17 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
   def test_delete_folder_no_permission
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
-    delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
+    delete "/projects/#{@project1.identifier}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
            :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :forbidden
   end
 
   def test_delete_folder_commit_yes
     @role.add_permission! :folder_manipulation
+    assert !@folder1.locked?
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
-    delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}&commit=yes",
+    delete "/projects/#{@project1.identifier}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}&commit=yes",
            :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response :success
     assert_nil DmsfFolder.find_by(id: @folder1.id)
@@ -290,7 +291,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     User.current = @jsmith
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
-    delete "/projects/#{@project1.id}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
+    delete "/projects/#{@project1.identifier}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",
          :headers => {'CONTENT_TYPE' => 'application/xml'}
     assert_response 422
     # <?xml version="1.0" encoding="UTF-8"?>
