@@ -28,7 +28,7 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
   end  
 
   def up
-    #A dd our entity_type column (used with our entity type)
+    # Add our entity_type column (used with our entity type)
     add_column :dmsf_file_locks, :entity_type, :integer, null: true
     # Add our lock relevent columns (ENUM) - null (till we upgrade data)
     add_column :dmsf_file_locks, :lock_type_cd, :integer, null: true
@@ -72,7 +72,7 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
     # Not sure if this is the right place to do this, as its file manipulation, not database (strictly)
     say 'Completing one-time file migration ...'
     begin
-      DmsfFileRevision.visible.find_each do |rev|
+      DmsfFileRevision.find_each do |rev|
         next unless rev.project
         existing = DmsfFile.storage_path.join rev.disk_filename
         new_path = rev.disk_file(false)
@@ -120,7 +120,7 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
     # Not sure if this is the right place to do this, as its file manipulation, not database (stricly)
     begin
       say 'restoring old file-structure'
-      DmsfFileRevision.visible.find_each do |rev|
+      DmsfFileRevision.find_each do |rev|
         next unless rev.project
         project = rev.project.identifier.gsub(/[^\w\.\-]/, '_')
         existing = DmsfFile.storage_path.join("p_#{project}/#{rev.disk_filename}")
