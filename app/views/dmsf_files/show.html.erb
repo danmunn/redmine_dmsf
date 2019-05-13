@@ -113,9 +113,11 @@
             <div class="status attribute">
               <%= content_tag :div, l(:label_description), :class => 'label' %>
               <% text = textilizable(revision.description) %>
-              <% if text =~ /^<p>(.*)<\/p>$/ %>
-                  <% text = $1 %>
-               <% end %>
+              <%# If there is <p> tag, the text is moved one column to the right by Redmin's CSS. A new line causes double new line. %>
+              <% text.gsub! '<p>', '' %>
+              <% text.gsub! '</p>', '' %>
+              <% text.gsub! "\n\n", '<br/>' %>
+              <% text.gsub! "\n\t", '<br/>' %>
               <%= content_tag :div, text.html_safe, :class => 'value wiki' %>
             </div>
           <% end %>
