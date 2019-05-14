@@ -187,15 +187,8 @@
             $("#dmsf_tag").insertBefore(browserFilter);
           },
           "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-              <% if @tree_view %>
-                <% if @folder %>
-                  return "<%= "#{l(:label_number_of_folders)}: #{@folder.deep_folder_count} #{l(:label_number_of_documents)}: #{@folder.deep_file_count}" %>";
-                <% else %>
-                  return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => 'DmsfFolder').count}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(:project_id => @project.id).count + DmsfLink.visible.where(:project_id => @project.id, :target_type => %w(DmsfFile DmsfUrl)).count}" %>";
-                <% end %>
-              <% else %>
-                return "<%= "#{l(:label_number_of_folders)}: #{@subfolders.count + @dir_links.count}, #{l(:label_number_of_documents)}: #{@files.count + @file_links.count + @url_links.count}" %>";
-              <% end %>
+            <% folder_id = @folder ? @folder.id : nil %>
+            return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(project_id: @project.id, dmsf_folder_id: folder_id).all.size + DmsfLink.visible.where(project_id: @project.id, dmsf_folder_id: folder_id, target_type: 'DmsfFolder').all.size}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(project_id: @project.id, dmsf_folder_id: folder_id).all.size + DmsfLink.visible.where(project_id: @project.id, dmsf_folder_id: folder_id, target_type: %w(DmsfFile DmsfUrl)).all.size}" %>";
           }
       });
 
