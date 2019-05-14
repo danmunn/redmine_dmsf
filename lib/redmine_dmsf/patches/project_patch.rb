@@ -76,12 +76,10 @@ module RedmineDmsf
       end
 
       def dmsf_count
-        file_count = self.dmsf_files.visible.count + self.file_links.visible.count
-        folder_count = self.dmsf_folders.visible.count + self.folder_links.visible.count
-        self.dmsf_folders.visible.each do |f|
-          file_count += f.deep_file_count
-          folder_count += f.deep_folder_count
-        end
+        file_count = DmsfFiles.where(project_id: id).all.size +
+            DmsfLinks.where(project_id: id, target_type: %(DmsfFile DmsfUrl)).all.size
+        folder_count = DmsfFolders.where(project_id: id).all.size +
+            DmsfLinks.where(project_id: id, target_type: 'DmsfFolder').all.size
         { :files => file_count, :folders => folder_count }
       end
 

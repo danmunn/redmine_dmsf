@@ -230,25 +230,6 @@ class DmsfFolder < ActiveRecord::Base
     options
   end
 
-  def deep_file_count
-    file_count = dmsf_files.visible.all.size
-    dmsf_folders.visible.each { |subfolder| file_count += subfolder.deep_file_count }
-    file_count + file_links.visible.all.size + url_links.visible.all.size
-  end
-
-  def deep_folder_count
-    folder_count = dmsf_folders.visible.all.size
-    dmsf_folders.visible.each { |subfolder| folder_count += subfolder.deep_folder_count }
-    folder_count + folder_links.visible.all.size
-  end
-
-  def deep_size
-    size = 0
-    dmsf_files.visible.each {|file| size += file.size}
-    dmsf_folders.visible.each {|subfolder| size += subfolder.deep_size}
-    size
-  end
-
   # Returns an array of projects that current user can copy folder to
   def self.allowed_target_projects_on_copy
     projects = []
