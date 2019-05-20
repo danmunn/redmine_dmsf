@@ -363,6 +363,7 @@ class DmsfController < ApplicationController
   end
 
   def email_entries(selected_folders, selected_files)
+    raise DmsfAccessError unless User.current.allowed_to?(:email_documents, @project)
     zip = Zip.new
     zip_entries(zip, selected_folders, selected_files)
 
@@ -506,6 +507,7 @@ class DmsfController < ApplicationController
     deleted_files = []
     not_deleted_files = []
     selected_files.each do |id|
+      raise DmsfAccessError unless User.current.allowed_to?(:file_delete, @project)
       file = DmsfFile.find_by(id: id)
       if file
         if file.delete(commit)
@@ -536,7 +538,13 @@ class DmsfController < ApplicationController
       flash[:warning] = l(:warning_some_entries_were_not_deleted, :entries => not_deleted_files.map{|e| e.title}.join(', '))
     end
     # Links
-    (selected_dir_links + selected_file_links + selected_url_links).each do |id|
+    selected_dir_links.each do |id|
+      raise DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
+      link = DmsfLink.find_by(id: id)
+      link.delete commit if link
+    end
+    (selected_file_links + selected_url_links).each do |id|
+      raise DmsfAccessError unless User.current.allowed_to?(:file_delete, @project)
       link = DmsfLink.find_by(id: id)
       link.delete commit if link
     end
@@ -680,11 +688,12 @@ class DmsfController < ApplicationController
     @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].presence || 100
 
     # Trash
-    @trash_visible = @folder_manipulation_allowed && @file_manipulation_allowed &&
+    visible = @folder_manipulation_allowed && @file_manipulation_allowed &&
       @file_delete_allowed && !@locked_for_user && !@folder
-    @trash_enabled = DmsfFolder.deleted.where(project_id: @project.id).exists? ||
+    enabled = DmsfFolder.deleted.where(project_id: @project.id).exists? ||
       DmsfFile.deleted.where(project_id: @project.id).exists? ||
       DmsfLink.deleted.where(project_id: @project.id).exists?
+    @trash_enabled = visible && enabled
   end
 
 end
