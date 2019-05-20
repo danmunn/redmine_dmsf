@@ -241,10 +241,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_email_entries_email_from_forbidden
     Setting.plugin_redmine_dmsf['dmsf_documents_email_from'] = 'karel.picman@kontron.com'
     @role.add_permission! :view_dmsf_files
-    @role.add_permission! :email_documents
-    get :entries_operation, :params => {:id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]}
+    get :entries_operation, params: {id: @project, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
     assert_response :forbidden
-    assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_from']
   end
 
   def test_email_entries_email_from
