@@ -176,6 +176,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @request.env['HTTP_REFERER'] = dmsf_folder_path(:id => @project.id)
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :folder_manipulation
+    @role.add_permission! :file_delete
     flash[:errors] = nil
     get :entries_operation, :params => {:id => @project, :delete_entries => 'Delete',
         :ids => ["folder-#{@folder7.id}", "file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
@@ -247,9 +248,17 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_response :success
   end
 
+  def test_email_entries_email_from_forbidden
+    Setting.plugin_redmine_dmsf['dmsf_documents_email_from'] = 'karel.picman@kontron.com'
+    @role.add_permission! :view_dmsf_files
+    get :entries_operation, params: {id: @project, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
+    assert_response :forbidden
+  end
+
   def test_email_entries_email_from
     Setting.plugin_redmine_dmsf['dmsf_documents_email_from'] = 'karel.picman@kontron.com'
     @role.add_permission! :view_dmsf_files
+    @role.add_permission! :email_documents
     get :entries_operation, :params => {:id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]}
     assert_response :success
     assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_from']
@@ -258,6 +267,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_email_entries_reply_to
     Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to'] = 'karel.picman@kontron.com'
     @role.add_permission! :view_dmsf_files
+    @role.add_permission! :email_documents
     get :entries_operation, :params => {:id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]}
     assert_response :success
     assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
@@ -266,6 +276,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_email_entries_links_only
     Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] = '1'
     @role.add_permission! :view_dmsf_files
+    @role.add_permission! :email_documents
     get :entries_operation, :params => {:id => @project, :email_entries => 'Email', :ids => ["file-#{@file1.id}"]}
     assert_response :success
     assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only']
