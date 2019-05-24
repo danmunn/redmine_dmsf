@@ -37,8 +37,8 @@ module RedmineDmsf
           ret << lock unless lock.expired?
         end
       end
-      if tree
-        ret = ret | (self.dmsf_folder.locks.empty? ? self.dmsf_folder.lock : self.dmsf_folder.locks) if dmsf_folder
+      if tree && dmsf_folder
+        ret = ret | (dmsf_folder.locks.empty? ? dmsf_folder.lock : dmsf_folder.locks)
       end
       ret
     end
