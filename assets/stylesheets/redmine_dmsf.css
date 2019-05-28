@@ -379,3 +379,7 @@ div.dmsf_revision_inner_box .attribute .label {
 #dmsf_link_external{
     display: none;
 }
+
+.dmsf_attachments_label{
+    vertical-align: middle;
+}

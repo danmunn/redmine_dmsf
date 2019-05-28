@@ -35,21 +35,25 @@ module RedmineDmsf
         # Radio buttons
         if allowed_to_attach_documents(context[:container])
           html << '<p>'
-            html << '<label class="inline">'
+            classes = 'inline'
+            html << "<label class=\"#{classes}\">"
               html << radio_button_tag('dmsf_attachments_upload_choice', 'Attachments',
                     User.current.pref.dmsf_attachments_upload_choice == 'Attachments',
-                    onchange: "$('.attachments-container').parent().show(); $('.dmsf_uploader').parent().hide(); return false;")
+                    onchange: "$('.attachments-container:not(.dmsf_uploader)').show(); $('.dmsf_uploader').parent().hide(); return false;")
               html << l(:label_basic_attachments)
             html << '</label>'
-            html << '<label class="inline">'
+            unless context[:container] && context[:container].new_record?
+              classes << ' dmsf_attachments_label'
+            end
+            html << "<label class=\"#{classes}\">"
               html << radio_button_tag('dmsf_attachments_upload_choice', 'DMSF',
                     User.current.pref.dmsf_attachments_upload_choice == 'DMSF',
-                    onchange: "$('.attachments-container').parent().hide(); $('.dmsf_uploader').parent().show(); return false;")
+                    onchange: "$('.attachments-container:not(.dmsf_uploader)').hide(); $('.dmsf_uploader').parent().show(); return false;")
               html << l(:label_dmsf_attachments)
             html << '</label>'
           html << '</p>'
           if User.current.pref.dmsf_attachments_upload_choice == 'DMSF'
-            html << context[:hook_caller].late_javascript_tag("$('.attachments-container:not(.dmsf_uploader)').parent().hide();")
+            html << context[:hook_caller].late_javascript_tag("$('.attachments-container:not(.dmsf_uploader)').hide();")
           end
         end
         # Upload form
