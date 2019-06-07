@@ -123,7 +123,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_delete_locked
     # Permissions OK but the folder is locked
     @role.add_permission! :folder_manipulation
-    get :delete, :params => {:id => @project, :folder_id => @folder2.id, :commit => false}
+    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project.id, folder_id: @folder2.id)
+    get :delete, params: { id: @project, folder_id: @folder2.id, commit: false}
     assert_response :redirect
     assert_include l(:error_folder_is_locked), flash[:errors]
   end
@@ -131,7 +132,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_delete_ok
     # Empty and not locked folder
     @role.add_permission! :folder_manipulation
-    get :delete, :params => {:id => @project, :folder_id => @folder1.id, :commit => false}
+    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project.id, folder_id: @folder1.id)
+    get :delete, params: { id: @project, folder_id: @folder1.id, commit: false }
     assert_response :redirect
   end
 
@@ -197,27 +199,27 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_show
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders
-    get :show, :params => {:id => @project.id}
+    get :show, params: { id: @project.id }
     assert_response :success
-    assert_select 'tr.dmsf_tree', :count => 0
+    assert_select 'tr.dmsf_tree'
   end
 
   def test_show_tag
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders
-    get :show, :params => {:id => @project.id, :custom_field_id => 21, :custom_value => 'Technical documentation'}
+    get :show, params: { id: @project.id, custom_field_id: 21, custom_value: 'Technical documentation' }
     assert_response :success
-    assert_select 'tr.dmsf_tree', :count => 0
+    assert_select 'tr.dmsf_tree', count: 0
   end
 
   def test_show_tree_view
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders
-    @manager.pref[:dmsf_tree_view] = '1'
+    @manager.pref.dmsf_tree_view = '0'
     @manager.preference.save
-    get :show, :params => {:id => @project.id}
+    get :show, params: { id: @project.id }
     assert_response :success
-    assert_select 'tr.dmsf_tree'
+    assert_select 'tr.dmsf_tree', count: 0
   end
 
   def test_show_csv
