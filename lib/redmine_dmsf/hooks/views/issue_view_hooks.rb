@@ -93,7 +93,7 @@ module RedmineDmsf
       end
 
       def view_issues_edit_notes_bottom_style(context={})
-        if (User.current.pref[:dmsf_attachments_upload_choice] == 'Attachments') ||
+        if (User.current.pref.dmsf_attachments_upload_choice == 'Attachments') ||
           !allowed_to_attach_documents(context[:container])
           ''
         else
@@ -148,7 +148,7 @@ module RedmineDmsf
           container = context[:container]
           if allowed_to_attach_documents(container)
             html = (description ? '<p' : '<div')
-            html << " style=\"#{(User.current.pref[:dmsf_attachments_upload_choice] == 'Attachments') ? 'display: none;' : ''}\">"
+            html << " style=\"#{(User.current.pref.dmsf_attachments_upload_choice == 'Attachments') ? 'display: none;' : ''}\">"
             if label
               html << "<label>#{l(:label_document_plural)}</label>"
               html << "<span class=\"attachments-container dmsf_uploader\">"

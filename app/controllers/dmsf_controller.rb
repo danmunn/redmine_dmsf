@@ -576,7 +576,7 @@ class DmsfController < ApplicationController
 
   def tree_view
     tag = params[:custom_field_id].present? && params[:custom_value].present?
-    @tree_view = (User.current.pref[:dmsf_tree_view] == '1') && (!%w(atom xml json).include?(params[:format])) && !tag
+    @tree_view = (User.current.pref.dmsf_tree_view == '1') && (!%w(atom xml json).include?(params[:format])) && !tag
   end
 
   def copy_folder(folder)
