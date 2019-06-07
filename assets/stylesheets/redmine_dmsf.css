@@ -88,6 +88,11 @@ table.display thead th div.DataTables_sort_wrapper span {
 	display: block;
 }
 
+/* Move 10-25-50-100 entries in Download entries data table to the visible area */
+div.dataTables_length label {
+    margin-left: -24px;
+}
+
 /* Comptibility with Easy SW: sorting icons are not visible do */
 .ui-state-default .ui-icon {
     background-image: url("../../../stylesheets/jquery/images/ui-icons_759fcf_256x240.png");
