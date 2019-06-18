@@ -123,7 +123,7 @@ class DmsfMailer < Mailer
       notify_files = files.select { |file| file.notify? }
       return [] if notify_files.empty?
     end
-    notify_members = project.members.select do |notify_member|
+    notify_members = project.members.active.select do |notify_member|
       notify_user = notify_member.user
       if notify_user == User.current && notify_user.pref.no_self_notified
         false

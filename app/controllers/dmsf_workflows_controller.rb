@@ -112,7 +112,7 @@ class DmsfWorkflowsController < ApplicationController
             else
               if action.action == DmsfWorkflowStepAction::ACTION_DELEGATE
                 # Delegation
-                delegate = User.find_by(id: params[:step_action].to_i / 10)
+                delegate = User.active.find_by(id: params[:step_action].to_i / 10)
                 if DmsfMailer.get_notify_users(@project, [revision.dmsf_file], true).include?(delegate)
                   DmsfMailer.deliver_workflow_notification(
                     [delegate],
