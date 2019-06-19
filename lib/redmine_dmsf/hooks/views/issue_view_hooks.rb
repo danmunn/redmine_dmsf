@@ -170,7 +170,7 @@ module RedmineDmsf
         links = get_links(container)
         if links.present?
           if defined?(EasyExtensions)
-            attachment_rows(links, container, controller, attachments)
+            attachment_rows(links, container, controller)
           else
             controller.send(:render_to_string, {:partial => 'dmsf_files/links',
                                                 :locals => {:links => links, :thumbnails => Setting.thumbnails_enabled?}})
@@ -178,12 +178,9 @@ module RedmineDmsf
         end
       end
 
-      def attachment_rows(links, issue, controller, attachments)
+      def attachment_rows(links, issue, controller)
         if links.any?
-          html = '<tbody>'
-          if attachments.any?
-            html << "<tr><th colspan=\"4\">#{l(:label_dmsf_attachments)} (#{links.count})</th></tr>"
-          end
+          html = "<tbody><tr><th colspan=\"4\">#{l(:label_dmsf_attachments)} (#{links.count})</th></tr>"
           links.each do |dmsf_file, link, create_at|
             html << attachment_row(dmsf_file, link, issue, controller)
           end
