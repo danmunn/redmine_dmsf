@@ -359,7 +359,7 @@ module DAV4Rack
 
     # Name of the resource
     def name
-      File.basename(path)
+      ::File.basename(path)
     end
 
     # Name of the resource to be displayed to the client
@@ -449,7 +449,7 @@ module DAV4Rack
     def parent
       return nil if @path == '/'
       unless @path.to_s.empty?
-        new_for_path File.split(@path).first
+        new_for_path ::File.split(@path).first
       end
     end
 
