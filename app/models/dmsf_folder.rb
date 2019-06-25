@@ -39,7 +39,7 @@ class DmsfFolder < ActiveRecord::Base
   has_many :dmsf_links, :dependent => :destroy
   has_many :referenced_links, -> { where(target_type: 'DmsfFolder') },
     :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
-  has_many :locks, -> { where(entity_type:  1).order("#{DmsfLock.table_name}.updated_at DESC") },
+  has_many :locks, -> { where(entity_type:  1).order(updated_at: :desc) },
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
   has_many :dmsf_folder_permissions, :dependent => :destroy
 

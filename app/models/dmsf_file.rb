@@ -37,9 +37,9 @@ class DmsfFile < ActiveRecord::Base
   belongs_to :dmsf_folder
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
 
-  has_many :dmsf_file_revisions, -> { order("#{DmsfFileRevision.table_name}.created_at DESC, #{DmsfFileRevision.table_name}.id DESC") },
-    :dependent => :destroy
-  has_many :locks, -> { where(entity_type: 0).order("#{DmsfLock.table_name}.updated_at DESC") },
+  has_many :dmsf_file_revisions, -> { order(created_at: :desc, id: :desc) },
+           :dependent => :destroy
+  has_many :locks, -> { where(entity_type: 0).order(updated_at: :desc) },
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
   has_many :referenced_links, -> { where target_type: DmsfFile.model_name.to_s},
     :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy

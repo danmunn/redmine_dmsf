@@ -1,3 +1,4 @@
 /redmine_dmsf.iml
 /test/fixtures/files/**
 !/test/fixtures/files/2017/**
+Gemfile.lock
