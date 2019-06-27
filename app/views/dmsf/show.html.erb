@@ -157,6 +157,9 @@
           language: {
               url: "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
           },
+          oLanguage: {
+            sSearch: "<%= l(:description_filter) %>:"
+          },
           autoWidth: false,
           paginate: false,
           <% if title %>
