@@ -184,9 +184,10 @@ function initPlUploader(uploader, formUrl, maxFileSize, maxFileCount, flashUrl, 
     $('.plupload_scroll', uploader).resizable({
         handles: 's'
     });
+
     var pluploader = uploader.plupload('getUploader');
 
-    pluploader.bind('FileUploaded', function(pluploader, file, response) {
+    pluploader.bind('FileUploaded', function(up, file, response) {
         var responseObject = $.parseJSON(response.response);
         if (responseObject == null) { //Bug: on Firefox folders entries act unexpectedly.
             file.status = plupload.FAILED;
@@ -216,15 +217,11 @@ function initPlUploader(uploader, formUrl, maxFileSize, maxFileCount, flashUrl, 
                 pluploader.trigger('QueueChanged');
             }
         }
-        if(pluploader.total.uploaded == pluploader.files.length) {
-            $('#uploadform').submit();
-        }
-        else if((pluploader.total.uploaded + pluploader.total.failed) == pluploader.files.length) {
-            setTimeout(function() {$('#uploadform').submit();}, 2000);
-        }
-        else {
-            window.dmsfFileFieldCount++;
-        }
+        window.dmsfFileFieldCount++;
         return true;
+    });
+
+    pluploader.bind('UploadComplete', function(up, files) {
+        $('#uploadform').submit();
     });
 }
