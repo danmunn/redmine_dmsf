@@ -366,16 +366,7 @@ class DmsfController < ApplicationController
     raise DmsfAccessError unless User.current.allowed_to?(:email_documents, @project)
     zip = Zip.new
     zip_entries(zip, selected_folders, selected_files)
-
-    zipped_content = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_email_sent_documents.zip'))
-
-    File.open(zipped_content, 'wb') do |f|
-      File.open(zip.finish, 'rb') do |zip_file|
-        while (buffer = zip_file.read(8192))
-          f.write(buffer)
-        end
-      end
-    end
+    zipped_content = zip.finish
 
     max_filesize = Setting.plugin_redmine_dmsf['dmsf_max_email_filesize'].to_f
     if max_filesize > 0 && File.size(zipped_content) > max_filesize * 1048576

@@ -29,15 +29,15 @@ module RedmineDmsf
       attr_reader :files
 
       def initialize
-        @zip_path = DmsfHelper.temp_dir.join(DmsfHelper.temp_filename('dmsf_zip.zip'))
-        @zip_file = ::Zip::OutputStream.new(@zip_path)
+        @temp_file = Tempfile.new(%w(dmsf_zip_ .zip), DmsfHelper.temp_dir)
+        @zip_file = ::Zip::OutputStream.open(@temp_file)
         @files = []
         @folders = []
       end
 
       def finish
         @zip_file.close
-        @zip_path
+        @temp_file.path
       end
 
       def close
