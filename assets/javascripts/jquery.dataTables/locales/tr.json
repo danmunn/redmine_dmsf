@@ -1,5 +1,3 @@
-
-
 {
 	"sDecimal":        ",",
 	"sEmptyTable":     "Tabloda herhangi bir veri mevcut değil",
@@ -22,5 +20,12 @@
 	"oAria": {
 		"sSortAscending":  ": artan sütun sıralamasını aktifleştir",
 		"sSortDescending": ": azalan sütun sıralamasını aktifleştir"
+	},
+	"select": {
+		"rows": {
+			"_": "%d kayıt seçildi",
+			"0": "",
+			"1": "1 kayıt seçildi"
+		}
 	}
 }
