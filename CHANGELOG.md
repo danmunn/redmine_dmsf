@@ -1,6 +1,30 @@
 Changelog for Redmine DMSF
 ==========================
 
+2.4.1 *2019-09-02*
+------------------
+
+    Compatibility with Redmine 4.0
+    Japanese localization updated
+    Plupload & DataTables libraries upgraded
+     
+* Bug: #1017 - Multiple zip files are filling the tmp folder
+* Bug: #1015 - WebDAV client error
+* Bug: #1013 - Approval workflow notifications are sent to locked users
+* Bug: #1008 - Description field trunkates on blank line
+* Bug: #1004 - Wrong revision order after upgrading to DMSF 1.6.2 
+* Bug: #1003 - Wrong file structure on migrate
+* Bug: #1002 - New folder with empty titlle => Error 500
+* Bug: #1001 - User Permission problem (can't choose user)
+* Bug: #995  - All files and folders deleted during migration
+* Bug: #992  - No such file to load -- mime/types.rb (LoadError)
+* Bug: #988  - Failure to Update DMSF from 1.5.9 to 2.0.0 during migrate
+* New: #987  - Update Japanese translation
+* Bug: #986  - I can not send file by mail
+* Bug: #984  - Uninitialized constant Redmine::IntegrationTest NameError
+* Bug: #980  - Copy of root folder to subfolder causes web crash
+* Bug: #932  - Undefined method `to_prepare' for ActionDispatch::Reloader:Class (Redmine 4.0 / Rails 5)
+
 2.0.0 *2019-02-28*
 ------------------
 
