@@ -289,6 +289,9 @@ div.dmsf_revision_inner_box .attribute .label {
 .dmsf_gray .icon-file.application-zip { background-image: url(../images/filetypes/zip_gray.png); }
 .dmsf_gray .icon-file.application-x-gzip { background-image: url(../images/filetypes/zip_gray.png); }
 
+/* Activities */
+.icon-dmsf-file-revision { background-image: url(../../../images/document.png); }
+
 /* Links */
 .dmsf_gray { color: #AAA }
 .dmsf_gray a, .dmsf_gray a:link, .dmsf_gray a:visited{ color: #484848; text-decoration: none; }

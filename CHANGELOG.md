@@ -7,7 +7,8 @@ Changelog for Redmine DMSF
     Compatibility with Redmine 4.0
     Japanese localization updated
     Plupload & DataTables libraries upgraded
-     
+   
+* Bug: #1019 - Internal Erro 500 when enable "Act as attachable" and access Activity page
 * Bug: #1017 - Multiple zip files are filling the tmp folder
 * Bug: #1015 - WebDAV client error
 * Bug: #1013 - Approval workflow notifications are sent to locked users

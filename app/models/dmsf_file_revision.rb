@@ -58,7 +58,7 @@ class DmsfFileRevision < ActiveRecord::Base
                                           ": #{o.dmsf_file.dmsf_path_str}"},
     :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.dmsf_file}},
     :datetime => Proc.new {|o| o.updated_at },
-    :description => Proc.new {|o| o.description + "\n" + o.comment },
+    :description => Proc.new { |o| "#{o.description}\n#{o.comment}" },
     :author => Proc.new {|o| o.user }
 
   acts_as_activity_provider :type => 'dmsf_file_revisions',
