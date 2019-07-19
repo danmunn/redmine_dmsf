@@ -226,8 +226,9 @@ You can either clone the master branch or download the latest zipped version. Be
 5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
 6. Restart the web server. e.g. `service apache2 restart`
 7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure.
-8. Assign DMSF permissions to appropriate roles.
-9. There are a few rake tasks:
+8. Don't forget to grant permissions for DMSF in Administration -> Roles and permissions
+9. Assign DMSF permissions to appropriate roles.
+10. There are a few rake tasks:
 
     I) To convert documents from the standard Redmine document module
 
