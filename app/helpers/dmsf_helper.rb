@@ -62,8 +62,7 @@ module DmsfHelper
   def self.filetype_css(filename)
     extension = File.extname(filename)
     extension = extension[1, extension.length-1]
-    path = File.join(Rails.root, 'public',
-      File.join(Redmine::Utils.relative_url_root, 'plugin_assets', 'redmine_dmsf', 'images', 'filetypes', "#{extension}.png"))
+    path = File.join(Redmine::Plugin.public_directory, ['redmine_dmsf', 'images', 'filetypes', "#{extension}.png"])
     if File.exist?(path)
       cls = "filetype-#{extension}";
     else
@@ -74,27 +73,23 @@ module DmsfHelper
   end
 
   def plugin_asset_path(plugin, asset_type, source)
-    File.join(Redmine::Utils.relative_url_root, 'plugin_assets', plugin.to_s, asset_type, source)
+    File.join('/plugin_assets', plugin.to_s, asset_type, source)
   end
 
   def json_url
-    if I18n.locale
-      ret = File.join('jquery.dataTables', 'locales', "#{I18n.locale}.json")
-      path = File.join(Rails.root, 'public', plugin_asset_path(:redmine_dmsf, 'javascripts', ret))
-      return ret if File.exist?(path)
-      Rails.logger.warn "#{path} not found"
-    end
-    File.join 'jquery.dataTables', 'locales', 'en.json'
+    locale = I18n.locale || 'en'
+    ret = File.join('jquery.dataTables', 'locales', "#{locale}.json")
+    path = File.join('public', plugin_asset_path(:redmine_dmsf, 'javascripts', ret))
+    return ret if File.exist?(path)
+    Rails.logger.warn "#{path} not found"
   end
 
   def js_url
-    if I18n.locale
-      ret = File.join('plupload', 'js', 'i18n', "#{I18n.locale}.js")
-      path = File.join(Rails.root, 'public', plugin_asset_path(:redmine_dmsf, 'javascripts', ret))
-      return ret if File.exist?(path)
-      Rails.logger.warn "#{path} not found"
-    end
-    File.join 'plupload', 'js', 'i18n', 'en.js'
+    locale = I18n.locale || 'en'
+    ret = File.join('plupload', 'js', 'i18n', "#{locale}.js")
+    path = File.join('public', plugin_asset_path(:redmine_dmsf, 'javascripts', ret))
+    return ret if File.exist?(path)
+    Rails.logger.warn "#{path} not found"
   end
 
   def self.visible_folders(folders, project)
