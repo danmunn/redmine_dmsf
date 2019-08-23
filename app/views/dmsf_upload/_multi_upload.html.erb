@@ -50,7 +50,6 @@
   max_file_size = "#{@ajax_upload_size}mb"
   max_file_count = Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i if Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i > 0
   flash_url = plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.swf')
-  silver_light_url = plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.xap')
 %>
 
 <%= late_javascript_tag do %>
@@ -67,8 +66,7 @@
         '<%= form_url %>',
         '<%= max_file_size %>',
         '<%= max_file_count %>',
-        '<%= flash_url %>',
-        '<%= silver_light_url %>'
+        '<%= flash_url %>'
       );
     }
   });
@@ -77,8 +75,7 @@
     '<%= form_url %>',
     '<%= max_file_size %>',
     '<%= max_file_count %>',
-    '<%= flash_url %>',
-    '<%= silver_light_url %>'
+    '<%= flash_url %>'
   );
   window.dmsfFileFieldCount = 1;
 <% end %>

@@ -156,11 +156,11 @@ function dmsfExpandRows(EL, parentRow, url) {
 }
 
 /* Plupload */
-function initPlUploader(uploader, formUrl, maxFileSize, maxFileCount, flashUrl, silverLightUrl) {
+function initPlUploader(uploader, formUrl, maxFileSize, maxFileCount, flashUrl) {
     uploader.html('<div></div>');
     uploader = $('div', uploader);
     uploader.plupload({
-        runtimes : 'html5,flash,silverlight,html4',
+        runtimes : 'html5,flash,html4',
         url : formUrl,
         max_file_size : maxFileSize,
         max_file_count: maxFileCount,
@@ -177,9 +177,7 @@ function initPlUploader(uploader, formUrl, maxFileSize, maxFileCount, flashUrl, 
             active: 'thumbs'
         },
         // Flash settings
-        flash_swf_url : flashUrl,
-        // Silverlight settings
-        silverlight_xap_url : silverLightUrl
+        flash_swf_url : flashUrl
     });
     $('.plupload_scroll', uploader).resizable({
         handles: 's'
