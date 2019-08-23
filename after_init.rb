@@ -25,7 +25,7 @@ require_dependency File.dirname(__FILE__) + '/lib/redmine_dmsf.rb'
 
 ActiveSupport::Dependencies.autoload_paths << File.join(File.dirname(__FILE__), 'app', 'validators')
 
-def init
+def dmsf_init
   # Administration menu extension
   Redmine::MenuManager.map :admin_menu do |menu|
     menu.push :dmsf_approvalworkflows, :dmsf_workflows_path, :caption => :label_dmsf_workflow_plural,
@@ -90,7 +90,7 @@ end
 
 if Redmine::Plugin.installed?(:easy_extensions)
   ActiveSupport.on_load(:easyproject, yield: true) do
-    init
+    dmsf_init
 
     require File.expand_path('../app/models/easy_page_modules/easy_dms/epm_dmsf_locked_documents', __FILE__)
     require File.expand_path('../app/models/easy_page_modules/easy_dms/epm_dmsf_open_approvals', __FILE__)
@@ -99,7 +99,7 @@ if Redmine::Plugin.installed?(:easy_extensions)
     EpmDmsfOpenApprovals.register_to_scope(:user, :plugin => :redmine_dmsf)
   end
 else
-  init
+  dmsf_init
 end
 
 RedmineExtensions::Reloader.to_prepare do
