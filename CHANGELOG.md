@@ -4,7 +4,7 @@ Changelog for Redmine DMSF
 2.4.1 *2019-09-13*
 ------------------
 
-    Compatibility with Redmine 4.0
+    Compatibility with Redmine 4.0.4
     Japanese localization updated
     Plupload & DataTables libraries upgraded
      
