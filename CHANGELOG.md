@@ -1,17 +1,21 @@
 Changelog for Redmine DMSF
 ==========================
 
-2.4.1 *2019-09-02*
+2.4.1 *2019-09-13*
 ------------------
 
     Compatibility with Redmine 4.0
     Japanese localization updated
     Plupload & DataTables libraries upgraded
-   
+     
+* Bug: #1033 - Bitnami Redmine 4.0.4
+* New: #1032 - Deprecate silverlight support?
+* New: #1023 - Project menu is not displayed in Redmine 4.0.3 
 * Bug: #1019 - Internal Erro 500 when enable "Act as attachable" and access Activity page
 * Bug: #1017 - Multiple zip files are filling the tmp folder
 * Bug: #1015 - WebDAV client error
 * Bug: #1013 - Approval workflow notifications are sent to locked users
+* Bug: #1010 - Installing Redmine in a sub URI
 * Bug: #1008 - Description field trunkates on blank line
 * Bug: #1004 - Wrong revision order after upgrading to DMSF 1.6.2 
 * Bug: #1003 - Wrong file structure on migrate
@@ -25,6 +29,8 @@ Changelog for Redmine DMSF
 * Bug: #984  - Uninitialized constant Redmine::IntegrationTest NameError
 * Bug: #980  - Copy of root folder to subfolder causes web crash
 * Bug: #932  - Undefined method `to_prepare' for ActionDispatch::Reloader:Class (Redmine 4.0 / Rails 5)
+* Bug: #918 - Some local json file doesn't load
+* Bug: #905 - Custom Fields of type 'url' are displayed "as plain text" in document listing.
 
 2.0.0 *2019-02-28*
 ------------------
