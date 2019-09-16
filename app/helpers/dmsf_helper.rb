@@ -80,16 +80,22 @@ module DmsfHelper
     locale = I18n.locale || 'en'
     ret = File.join('jquery.dataTables', 'locales', "#{locale}.json")
     path = File.join('public', plugin_asset_path(:redmine_dmsf, 'javascripts', ret))
-    return ret if File.exist?(path)
-    Rails.logger.warn "#{path} not found"
+    unless File.exist?(path)
+      Rails.logger.warn "#{path} not found"
+      ret = File.join('jquery.dataTables', 'locales', 'en.json')
+    end
+    ret
   end
 
   def js_url
     locale = I18n.locale || 'en'
     ret = File.join('plupload', 'js', 'i18n', "#{locale}.js")
     path = File.join('public', plugin_asset_path(:redmine_dmsf, 'javascripts', ret))
-    return ret if File.exist?(path)
-    Rails.logger.warn "#{path} not found"
+    unless File.exist?(path)
+      Rails.logger.warn "#{path} not found"
+      ret = File.join('plupload', 'js', 'i18n', 'en.js')
+    end
+    ret
   end
 
   def self.visible_folders(folders, project)
