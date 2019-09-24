@@ -30,6 +30,9 @@ class DmsfController < ApplicationController
   before_action :find_parent, :only => [:new, :create]
   before_action :tree_view, :only => [:delete, :show]
   before_action :permissions
+  
+  # also try to lookup folder by title if this is API call
+  before_action :find_folder_by_title, :only => [:show], :if => :api_request?
 
   accept_api_auth :show, :create, :save, :delete
 
@@ -52,8 +55,6 @@ class DmsfController < ApplicationController
   end
 
   def show
-    # also try to lookup folder by title if this is API call
-    find_folder_by_title if [:xml, :json].include? request.format.to_sym
     get_display_params
     if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
       render_404
