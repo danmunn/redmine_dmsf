@@ -231,7 +231,7 @@ module RedmineDmsf
           # Lock
           if !dmsf_file.locked?
             html << link_to('', lock_dmsf_files_path(:id => dmsf_file),
-            :title => l(:title_loc_file), :class => 'icon icon-lock')
+            :title => l(:title_lock_file), :class => 'icon icon-lock')
           elsif dmsf_file.unlockable? && (!dmsf_file.locked_for_user? || User.current.allowed_to?(:force_file_unlock, dmsf_file.project))
             html << link_to('', unlock_dmsf_files_path(:id => dmsf_file),
               :title => dmsf_file.get_locked_title, :class => 'icon icon-unlock')
