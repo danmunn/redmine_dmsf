@@ -171,7 +171,7 @@ class DmsfWorkflowsController < ApplicationController
           end
           flash[:notice] = l(:notice_successful_update)
         elsif action.action != DmsfWorkflowStepAction::ACTION_APPROVE && action.note.blank?
-          flash[:errors] = l(:error_empty_note)
+          flash[:error] = l(:error_empty_note)
         end
       end
     end
