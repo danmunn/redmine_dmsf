@@ -52,6 +52,15 @@ module RedmineDmsf
         controller_issues_after_save(context, true)
       end
 
+      def controller_issues_bulk_edit_before_save(context={})
+        controller_issues_before_save(context)
+      end
+
+      # Unfortunately this hook is missing in Redmine. It's called in Easy Redmine only.
+      def controller_issues_bulk_edit_after_save(context={})
+        controller_issues_after_save(context, true)
+      end
+
       private
 
       def controller_issues_before_save(context)
@@ -73,8 +82,8 @@ module RedmineDmsf
           issue = context[:issue]
           params = context[:params]
           controller = context[:controller]
-          if edit && params[:issue] && params[:issue][:project_id].present?
-            project_id = params[:issue][:project_id].to_i
+          if edit && ((params[:issue] && params[:issue][:project_id].present?) || context[:new_project])
+            project_id = context[:new_project] ? context[:new_project].id : params[:issue][:project_id].to_i
             old_project_id = context[:project].id
             # Sync the title with the issue's subject
             old_system_folder = issue.system_folder(false, old_project_id)
