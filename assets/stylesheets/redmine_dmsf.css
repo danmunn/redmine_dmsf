@@ -94,7 +94,9 @@ div.dataTables_length label {
 }
 
 /* Comptibility with Easy SW: sorting icons are not visible do */
-.ui-state-default .ui-icon {
+.ui-state-default .ui-icon,
+.ui-icon-circle-plus,
+.ui-icon-circle-arrow-e {
     background-image: url("../../../stylesheets/jquery/images/ui-icons_759fcf_256x240.png");
 }
 
@@ -111,11 +113,11 @@ div.dataTables_length label {
 .dmsf_controls input,
 .dmsf_controls select,
 .dmsf_entries #browser_filter.dataTables_filter,
-.dmsf_entries #browser_filter.dataTables_filter input{
+.dmsf_entries #browser_filter.dataTables_filter input {
 	font-size: 0.9em;
 }
 
-#browser_filter.dataTables_filter{
+#browser_filter.dataTables_filter {
     float:none;
 }
 
