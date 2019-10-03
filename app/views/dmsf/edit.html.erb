@@ -76,10 +76,10 @@
     </p>
     <p>
       <%= label_tag '', l(:label_permissions) %>
-      <% User.current.managed_roles(@project).each do |role| %>
-        <% checked, disabled = @folder.permission_for_role(role) %>
+      <% Role.givable.each do |role| %>
+        <% checked = @folder.permission_for_role(role) %>
         <label class="inline">
-          <%= check_box_tag 'permissions[role_ids][]', role.id, checked, disabled: disabled, id: nil %>
+          <%= check_box_tag 'permissions[role_ids][]', role.id, checked, id: nil %>
           <%= role %>
         </label>
       <% end %>

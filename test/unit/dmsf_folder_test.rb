@@ -191,16 +191,13 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_permission_for_role
-    checked, disabled = @folder7.permission_for_role(@manager_role)
+    checked = @folder7.permission_for_role(@manager_role)
     assert checked
-    assert !disabled
   end
 
   def test_permissions_users
     users = @folder7.permissions_users
-    assert users.any?
-    assert users[0]
-    assert !users[1]
+    assert_equal 1,  users.size
   end
 
 end

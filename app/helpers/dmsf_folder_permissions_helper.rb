@@ -24,9 +24,8 @@ module DmsfFolderPermissionsHelper
   def users_checkboxes(users)
     s = ''
      users.each do |user|
-      user = [user, false] unless user.is_a?(Array)
-      content = check_box_tag('permissions[user_ids][]', user[0].id, true, disabled: user[1],  id: nil) + user[0].name
-      s << content_tag(:label, content, id: "user_permission_ids_#{user[0].id}", class: 'inline')
+      content = check_box_tag('permissions[user_ids][]', user.id, true, id: nil) + user.name
+      s << content_tag(:label, content, id: "user_permission_ids_#{user.id}", class: 'inline')
      end
      s.html_safe
    end
