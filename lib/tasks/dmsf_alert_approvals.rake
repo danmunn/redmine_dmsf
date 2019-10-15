@@ -22,7 +22,7 @@ desc <<-END_DESC
 Alert all users who are expected to do an approval in the current approval steps
 
 Available options:
-  *dry_run - No email, just print list of recipients to the console
+  * dry_run - No email, just print list of recipients to the console
 
 Example:
   rake redmine:dmsf_alert_approvals RAILS_ENV="production"
@@ -39,13 +39,16 @@ class DmsfAlertApprovals
 
   def self.alert
     dry_run = ENV['dry_run']
-    revisions = DmsfFileRevision.visible.where(:workflow => DmsfWorkflow::STATE_WAITING_FOR_APPROVAL)
+    revisions = DmsfFileRevision.visible.joins(:dmsf_file).joins('JOIN projects ON projects.id = dmsf_files.project_id').where(
+        dmsf_file_revisions: { workflow: DmsfWorkflow::STATE_WAITING_FOR_APPROVAL },
+        projects: { status: Project::STATUS_ACTIVE})
     revisions.each do |revision|
       next unless revision.dmsf_file.last_revision == revision
       workflow = DmsfWorkflow.find_by_id revision.dmsf_workflow_id
       next unless workflow
       assignments = workflow.next_assignments revision.id
       assignments.each do |assignment|
+        next unless assignment.user.active?
         if dry_run
           puts "#{assignment.user.name} <#{assignment.user.mail}>"
         else
