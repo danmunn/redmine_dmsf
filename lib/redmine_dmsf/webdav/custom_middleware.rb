@@ -27,14 +27,15 @@ module RedmineDmsf
 
       def initialize(app)
         @rails_app = app
+        path = File.join(Redmine::Utils::relative_url_root, 'dmsf','webdav')
         @dav_app = Rack::Builder.new{
-          map '/dmsf/webdav/' do
+          map path do
             run DAV4Rack::Handler.new(
-              :root_uri_path => File.join(Redmine::Utils::relative_url_root, 'dmsf','webdav'),
-              :resource_class => RedmineDmsf::Webdav::ResourceProxy,
-              :log_to => Rails.logger,
-              :allow_unauthenticated_options_on_root => true,
-              :namespaces => {
+              root_uri_path: path,
+              resource_class: RedmineDmsf::Webdav::ResourceProxy,
+              log_to: Rails.logger,
+              allow_unauthenticated_options_on_root: true,
+              namespaces: {
                 'http://apache.org/dav/props/' => 'd',
                 'http://ucb.openoffice.org/dav/props/' => 'd'
               }
