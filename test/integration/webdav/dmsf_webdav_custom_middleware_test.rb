@@ -47,4 +47,9 @@ class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
     assert_response :not_found
   end
 
+  def test_webdav_enabled
+    process :options, '/dmsf/webdav'
+    assert_response :success
+  end
+
 end
