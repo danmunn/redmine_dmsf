@@ -536,6 +536,19 @@ class DmsfFolder < ActiveRecord::Base
     Principal.active.where(id: self.dmsf_folder_permissions.users.map{ |p| p.object_id })
   end
 
+  def inherited_permissions_from
+    folder = self.dmsf_folder
+    if folder
+      if folder.dmsf_folder_permissions.any?
+        folder
+      else
+        folder.inherited_permissions_from
+      end
+    else
+      nil
+    end
+  end
+
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)

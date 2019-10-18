@@ -168,7 +168,6 @@ zh:
   permission_email_documents: Email documents
   label_file: 文件
   field_folder: 件夹
-  error_contains_invalid_character: 含有无效字符
   error_file_commit_require_uploaded_file: 文件提交要求上传文件
 
   warning_some_files_were_not_commited: "某些文件因验证错误未能被提交: %{files}"
@@ -411,6 +410,8 @@ zh:
   label_dmsf_fast_links: Fast links
   text_dmsf_fast_links_info: You will be able to manually enter a target folder's ID when creating links in order to speed
     up the process of creating links.
+
+  label_inherited_permissions: Inherited permissions
 
   easy_pages:
     modules:

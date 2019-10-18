@@ -411,6 +411,8 @@ cs:
   text_dmsf_fast_links_info: Při vytváření odkazů budete moci zadat přímo ID cílového adresáře za účelem zrychlení
     procesu vytváření odkazů.
 
+  label_inherited_permissions: Zděděná práva
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

@@ -75,6 +75,28 @@
       <%= f.text_area :description, :rows => 8, :class => 'wiki-edit' %>
     </p>
     <p>
+      <% dir = @folder.inherited_permissions_from %>
+      <% if dir %>
+        <%= label_tag '', l(:label_inherited_permissions) %>
+        <% Role.givable.each do |role| %>
+          <% checked = dir.permission_for_role(role) %>
+          <% if checked %>
+            <label class="inline">
+              <%= check_box_tag 'inherited_permissions[role_ids][]', role.id, checked, disabled: 'disabled', id: nil %>
+              <%= role %>
+            </label>
+          <% end %>
+        <% end %>
+        <span id="inherited_user_permissions">
+          <br/>
+          <% users = dir.permissions_users %>
+          <% checkboxes = users_checkboxes(users, true) %>
+          <%= checkboxes %>
+        </span>
+        <% if checkboxes.present? %>
+          <br/>
+        <% end %>
+      <% end %>
       <%= label_tag '', l(:label_permissions) %>
       <% Role.givable.each do |role| %>
         <% checked = @folder.permission_for_role(role) %>

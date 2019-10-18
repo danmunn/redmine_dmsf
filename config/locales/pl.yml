@@ -168,7 +168,6 @@ pl:
   permission_email_documents: Email documents
   label_file: Plik
   field_folder: Folder
-
   error_file_commit_require_uploaded_file: Commit pliku wymaga jego uprzedniego przesłania
 
   warning_some_files_were_not_commited: "Niektóre pliki nie zostały zacommitowane ze względu na błędy walidacji:
@@ -411,6 +410,8 @@ pl:
   label_dmsf_fast_links: Fast links
   text_dmsf_fast_links_info: You will be able to manually enter a target folder's ID when creating links in order to speed
     up the process of creating links.
+
+  label_inherited_permissions: Inherited permissions
 
   easy_pages:
     modules:

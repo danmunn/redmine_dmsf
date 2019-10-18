@@ -410,6 +410,9 @@ ja:
   label_dmsf_fast_links: 高速リンク
   text_dmsf_fast_links_info: ターゲットフォルダのIDを手動で入力することで、リンク作成時のプロセスを高速化することができます。
 
+
+  label_inherited_permissions: Inherited permissions
+
   easy_pages:
     modules:
       dmsf_locked_documents: 自分がロック中の文書

@@ -411,6 +411,8 @@ it: # Italian strings thx 2 Matteo Arceci!
   text_dmsf_fast_links_info: You will be able to manually enter a target folder's ID when creating links in order to speed
     up the process of creating links.
 
+  label_inherited_permissions: Inherited permissions
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents
