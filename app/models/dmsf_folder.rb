@@ -109,19 +109,17 @@ class DmsfFolder < ActiveRecord::Base
       return false if folder.issue && !folder.issue.visible?(User.current)
     end
     # Permissions?
-    if !folder.dmsf_folder || DmsfFolder.permissions?(folder.dmsf_folder, allow_system)
-      if folder.dmsf_folder_permissions.any?
-        role_ids = User.current.roles_for_project(folder.project).map{ |r| r.id }
-        role_permission_ids = folder.dmsf_folder_permissions.roles.map{ |p| p.object_id }
-        return true if (role_ids & role_permission_ids).any?
-        principal_ids = folder.dmsf_folder_permissions.users.map{ |p| p.object_id }
-        return true if principal_ids.include?(User.current.id)
-        user_group_ids = User.current.groups.map{ |g| g.id }
-        return true if (principal_ids & user_group_ids).any?
-        return false
-      end
+    if folder.dmsf_folder_permissions.any?
+      role_ids = User.current.roles_for_project(folder.project).map{ |r| r.id }
+      role_permission_ids = folder.dmsf_folder_permissions.roles.map{ |p| p.object_id }
+      return true if (role_ids & role_permission_ids).any?
+      principal_ids = folder.dmsf_folder_permissions.users.map{ |p| p.object_id }
+      return true if principal_ids.include?(User.current.id)
+      user_group_ids = User.current.groups.map{ |g| g.id }
+      return true if (principal_ids & user_group_ids).any?
+      return false
     end
-    true
+    DmsfFolder.permissions?(folder.dmsf_folder, allow_system)
   end
 
   def default_values
@@ -531,41 +529,14 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def permission_for_role(role)
-    options = Hash.new
-    options[:checked] = false
-    options[:disabled] = false
-    permission_for_role_recursive(self, role, options)
-    options[:disabled] = false unless options[:checked]
-    options.values
+    self.dmsf_folder_permissions.roles.exists?(object_id: role.id)
   end
 
   def permissions_users
-    users = Array.new
-    permissions_users_recursive(self, users, false)
-    users
+    Principal.active.where(id: self.dmsf_folder_permissions.users.map{ |p| p.object_id })
   end
 
   private
-
-  def permission_for_role_recursive(folder, role, options)
-    options[:checked] = folder.dmsf_folder_permissions.roles.exists?(object_id: role.id)
-    if !options[:checked] && folder.dmsf_folder && !folder.dmsf_folder.deleted?
-      options[:disabled] = true
-      # TODO: No inheritance
-      #permission_for_role_recursive(folder.dmsf_folder, role, options)
-    end
-  end
-
-  def permissions_users_recursive(folder, users, disabled)
-    if folder
-      usrs = Principal.active.where(id: folder.dmsf_folder_permissions.users.map{ |p| p.object_id })
-      usrs.each do |u|
-        users << [u, disabled]
-      end
-      # TODO: No inheritance
-      #permissions_users_recursive(folder.dmsf_folder, users, true)
-    end
-  end
 
   def self.directory_subtree(tree, folder, level, current_folder)
     folders = DmsfFolder.where(project_id: folder.project_id, dmsf_folder_id: folder.id).notsystem.visible(false).to_a
