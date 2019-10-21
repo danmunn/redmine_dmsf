@@ -31,9 +31,9 @@
                       :class => 'icon icon-edit') %>
       <% elsif !@locked_for_user %>
           <%= link_to(l(:button_edit),
-                      edit_dmsf_path(:id => @project, :folder_id => @folder),
-                      :title => l(:link_edit, :title => h(@folder.title)),
-                      :class => 'icon icon-edit') %>
+                      edit_dmsf_path(id: @project, folder_id: @folder, redirect_to_folder_id: @folder.id),
+                      title: l(:link_edit, title: h(@folder.title)),
+                      class: 'icon icon-edit') %>
       <% end %>
       <% if @folder && (!@locked_for_user || User.current.allowed_to?(:force_file_unlock, @project)) %>
           <% if @folder.locked? %>

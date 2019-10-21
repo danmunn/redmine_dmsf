@@ -188,6 +188,7 @@ class DmsfController < ApplicationController
     @parent = @folder.dmsf_folder
     @pathfolder = copy_folder(@folder)
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
+    @redirect_to_folder_id = params[:redirect_to_folder_id]
   end
 
   def create
@@ -205,10 +206,10 @@ class DmsfController < ApplicationController
       format.html {
         if saved
           flash[:notice] = l(:notice_folder_created)
-          redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder.dmsf_folder)
+          redirect_to dmsf_folder_path(id: @project, folder_id: @folder.dmsf_folder)
         else
           @pathfolder = @parent
-          render :action => 'edit'
+          render action: 'edit'
         end
       }
     end
@@ -217,13 +218,13 @@ class DmsfController < ApplicationController
 
   def save
     unless params[:dmsf_folder]
-      redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
+      redirect_to dmsf_folder_path(id: @project, folder_id: @folder)
       return
     end
     @pathfolder = copy_folder(@folder)
     saved = @folder.update_from_params(params)
     respond_to do |format|
-      format.api  {
+      format.api {
         unless saved
           render_validation_errors(@folder)
         end
@@ -231,9 +232,11 @@ class DmsfController < ApplicationController
       format.html {
         if saved
           flash[:notice] = l(:notice_folder_details_were_saved)
-          redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder.dmsf_folder)
+          redirect_to_folder_id = params[:dmsf_folder][:redirect_to_folder_id]
+          redirect_to_folder_id = @folder.dmsf_folder.id if(@folder.dmsf_folder && redirect_to_folder_id.blank?)
+          redirect_to dmsf_folder_path(id: @project, folder_id: redirect_to_folder_id)
         else
-          render :action => 'edit'
+          render action: 'edit'
         end
       }
     end

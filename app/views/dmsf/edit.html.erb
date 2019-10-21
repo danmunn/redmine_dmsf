@@ -67,6 +67,7 @@
 <%= labelled_form_for(@folder, :url => {:action => create ? 'create' : 'save', :id => @project, :folder_id => @folder, :parent_id => @parent},
   :html => {:method=>:post}) do |f| %>
   <%= error_messages_for(@folder) %>
+  <%= f.hidden_field :redirect_to_folder_id, value: @redirect_to_folder_id %>
   <div class="box tabular">    
     <p>                
       <%= f.text_field(:title, :required => true) %>

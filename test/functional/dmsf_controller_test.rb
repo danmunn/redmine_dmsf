@@ -86,10 +86,27 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Permissions OK
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :folder_manipulation
-    get :edit, :params => {:id => @project, :folder_id => @folder1}
+    get :edit, params: { id: @project, folder_id: @folder1}
     assert_response :success
-    assert_select 'label', { :text => @custom_field.name }
-    assert_select 'option', { :value => @custom_value.value }
+    assert_select 'label', { text: @custom_field.name }
+    assert_select 'option', { value: @custom_value.value }
+  end
+
+  def test_edit_folder_redirection_to_the_parent_folder
+    @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :folder_manipulation
+    post :save, params: { id: @project, folder_id: @folder2.id, parent_id: @folder2.dmsf_folder.id,
+                          dmsf_folder: { title: @folder2.title, description: @folder2.description} }
+    assert_redirected_to dmsf_folder_path(id: @project, folder_id: @folder2.dmsf_folder.id)
+  end
+
+  def test_edit_folder_redirection_to_the_same_folder
+    @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :folder_manipulation
+    post :save, params: { id: @project, folder_id: @folder2.id, parent_id: @folder2.dmsf_folder.id,
+                          dmsf_folder: { title: @folder2.title, description: @folder2.description,
+                                         redirect_to_folder_id: @folder2.id } }
+    assert_redirected_to dmsf_folder_path(id: @project, folder_id: @folder2.id)
   end
 
   def test_trash_forbidden
