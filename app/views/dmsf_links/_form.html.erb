@@ -121,12 +121,23 @@
     $('#dmsf_link_target_folder_id').select2();
     $('#dmsf_link_target_file_id').select2();
   <% end %>
-  <%# Suggest a link name when a file is selected %>
+  <%# Suggest a link's name when a file is selected %>
   $('#dmsf_link_target_file_id').change(function () {
     var linkName = $('#dmsf_link_name');
     var name = linkName.val();
+    var dirName = $('#dmsf_link_target_folder_id option:selected').text().replace(/\./g, '')
+    var fileName = $('#dmsf_link_target_file_id option:selected').text().replace(/\./g, '')
+    if((name == '') || name == dirName) {
+      linkName.val(fileName);
+    }
+  });
+  <%# Suggest a link's name when a folder is selected %>
+  $('#dmsf_link_target_folder_id').change(function () {
+    var linkName = $('#dmsf_link_name');
+    var name = linkName.val();
+    var dirName = $('#dmsf_link_target_folder_id option:selected').text().replace(/\./g, '')
     if(name == '') {
-      linkName.val($('#dmsf_link_target_file_id option:selected').text().replace(/\./g, ''));
+      linkName.val(dirName);
     }
   });
   <%# Internal/External link switch %>
