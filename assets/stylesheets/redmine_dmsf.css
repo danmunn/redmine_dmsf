@@ -21,6 +21,14 @@
 
 #browser {
     border-bottom: none;
+    display: none;
+}
+
+#dmsf_buttons,
+#dmsf_tag,
+#dmsf_uploader,
+#dmsf_uploader_header {
+    display: none;
 }
 
 #browser_wrapper .ui-toolbar {

@@ -221,6 +221,8 @@
       ],
       "fnInitComplete": function() {
         $("#dmsf_buttons").insertBefore($("#browser_filter"));
+        $("#browser").show();
+        $("#dmsf_buttons").show();
       },
       "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
          return "<%= l(:label_number_of_folders)%>: <%= @subfolders.count + @dir_links.count %>, <%= l(:label_number_of_documents)%>: <%= @files.count + @file_links.count + @url_links.count %>";

@@ -186,6 +186,11 @@
             var browserFilter = $("#browser_filter");
             $("#dmsf_buttons").insertBefore(browserFilter);
             $("#dmsf_tag").insertBefore(browserFilter);
+            $("#browser").show();
+            $("#dmsf_buttons").show();
+            $("#dmsf_tag").show();
+            $("#dmsf_uploader").show();
+            $("#dmsf_uploader_header").show();
           },
           "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
             <% folder_id = @folder ? @folder.id : nil %>
