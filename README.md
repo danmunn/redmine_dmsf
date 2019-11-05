@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **2.4.1** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **2.4.2** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -278,6 +278,15 @@ You can either clone the master branch or download the latest zipped version. Be
         
           rake redmine:dmsf_maintenance RAILS_ENV="production"
           rake redmine:dmsf_maintenance dry_run=1 RAILS_ENV="production"
+
+### Installation in a sub-uri
+
+In order to documents and folders are available via WebDAV in case that the Redmine is configured to be run in a sub-uri 
+it's necessary to add the following configuration option into your `config/additional_environment.rb`:
+
+```ruby
+config.relative_url_root = '/redmine'
+```
 
 ### Full-text search
 If you want to use full-text search features, you must setup file content indexing.
