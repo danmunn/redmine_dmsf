@@ -27,7 +27,7 @@ module RedmineDmsf
 
       def initialize(app)
         @rails_app = app
-        path = File.join(Redmine::Utils::relative_url_root, 'dmsf','webdav')
+        path = File.join(Redmine::Utils::relative_url_root, %w(dmsf webdav))
         @dav_app = Rack::Builder.new{
           map path do
             run DAV4Rack::Handler.new(
@@ -57,16 +57,18 @@ module RedmineDmsf
         # it will return a 404 along with the X-Cascade header set to 'pass'.
         if (status == 404) && (headers['X-Cascade'] == 'pass')
           # The MS web redirector webdav client likes to go up a level and try
-          # OPTIONS there. We catch that here and respond telling it that just
+          # OPTIONS and PROPFIND there. We catch that here and respond telling it that just
           # plain HTTP is going on.
-          if (env['REQUEST_METHOD'].present? && ('OPTIONS'.casecmp(env['REQUEST_METHOD']) == 0)) &&
-              (env['PATH_INFO'].present? && env['PATH_INFO'].start_with?('/dmsf')) # *
-            [ '200', { 'Allow' => 'OPTIONS,HEAD,GET,PUT,POST,DELETE' }, [''] ]
-            # * This's a new condition in order to not process WebDAV request which doesn't belong to DMS. But, it might
-            # case problems when acessing /dmsf and consequently /
+          if %w(/ /dmsf).include?(env['PATH_INFO'])
+            if 'OPTIONS'.casecmp(env['REQUEST_METHOD']) == 0
+              [ '200', { 'Allow' => 'OPTIONS,HEAD,GET,PUT,POST,DELETE' }, [''] ]
+            elsif 'PROPFIND'.casecmp(env['REQUEST_METHOD']) == 0
+              [ '404', {}, [''] ]
+            else
+              @rails_app.call env # let Rails handle the request
+            end
           else
-            # let Rails handle the request
-            @rails_app.call env
+            @rails_app.call env # let Rails handle the request
           end
         else
           [status, headers, body]
