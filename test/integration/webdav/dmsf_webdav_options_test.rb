@@ -176,14 +176,4 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     assert_response :not_found
   end
 
-  def test_ms_redirector_workaround_dmsf
-    process :options, '/dmsf', params: nil, headers: @jsmith
-    assert_response :success
-  end
-
-  def test_ms_redirector_workaround_root
-    process :options, '/', params: nil, headers: @jsmith
-    assert_response :success
-  end
-
 end

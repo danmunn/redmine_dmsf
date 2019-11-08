@@ -177,14 +177,4 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert response.body.include?("<d:displayname>#{project1_new_name}</d:displayname>")
   end
 
-  def test_ms_redirector_workaround_dmsf
-    process :propfind, '/dmsf', params: nil, headers: @jsmith
-    assert_response :not_found
-  end
-
-  def test_ms_redirector_workaround_root
-    process :propfind, '/', params: nil, headers: @jsmith
-    assert_response :not_found
-  end
-
 end
