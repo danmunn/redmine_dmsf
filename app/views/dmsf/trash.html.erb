@@ -33,7 +33,7 @@
 <%= form_tag(entries_operations_dmsf_path(:id => @project, :folder_id => @folder), :method => :post,
   :class => 'dmsf_entries', :id => 'entries_form', :data => {:cm_url => dmsf_trash_context_menu_path}) do %>
   <%= hidden_field_tag('action') %>
-  <div id="dmsf_buttons"  class="dmsf_controls" style="float: left">
+  <div id="dmsf_buttons"  class="dmsf_controls">
     <% if @file_manipulation_allowed && @folder_manipulation_allowed %>
       <%= submit_tag l(:title_restore), :title => l(:title_restore_checked), :name => 'restore_entries',
         :class => 'toggle-selection' %>

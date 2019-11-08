@@ -125,6 +125,14 @@ div.dataTables_length label {
 	font-size: 0.9em;
 }
 
+#dmsf_buttons.dmsf_controls {
+    float: left
+}
+
+#dmsf_tag.dmsf_controls {
+    float: right
+}
+
 #browser_filter.dataTables_filter {
     float:none;
 }
