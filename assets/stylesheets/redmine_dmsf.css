@@ -24,6 +24,12 @@
     display: none;
 }
 
+#dmsf_ajax_loading.ajax-loading {
+    background:url(../../../images/loading.gif) no-repeat 0 50%;
+    width: 16px;
+    height: 16px;
+}
+
 #dmsf_buttons,
 #dmsf_tag,
 #dmsf_uploader,

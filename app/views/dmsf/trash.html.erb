@@ -30,6 +30,7 @@
   </div>
 </div>
 
+<div id="dmsf_ajax_loading" class="ajax-loading"></div>
 <%= form_tag(entries_operations_dmsf_path(:id => @project, :folder_id => @folder), :method => :post,
   :class => 'dmsf_entries', :id => 'entries_form', :data => {:cm_url => dmsf_trash_context_menu_path}) do %>
   <%= hidden_field_tag('action') %>
@@ -221,6 +222,7 @@
       ],
       "fnInitComplete": function() {
         $("#dmsf_buttons").insertBefore($("#browser_filter"));
+        $("#dmsf_ajax_loading").hide();
         $("#browser").show();
         $("#dmsf_buttons").show();
       },
