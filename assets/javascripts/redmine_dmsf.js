@@ -156,6 +156,17 @@ function dmsfExpandRows(EL, parentRow, url) {
 }
 
 /* Plupload */
+function dmsf_plupload_toggle(button, second_button) {
+    if(button.hasClass('ui-state-default')) {
+        button.removeClass('ui-state-default');
+        button.addClass('ui-state-active');
+        button.attr('aria-pressed', 'true');
+        second_button.removeClass('ui-state-active');
+        second_button.addClass('ui-state-default');
+        second_button.attr('aria-pressed', 'false');
+    }
+}
+
 function initPlUploader(uploader, formUrl, maxFileSize, maxFileCount, flashUrl) {
     uploader.html('<div></div>');
     uploader = $('div', uploader);
@@ -221,5 +232,44 @@ function initPlUploader(uploader, formUrl, maxFileSize, maxFileCount, flashUrl) 
 
     pluploader.bind('UploadComplete', function(up, files) {
         $('#uploadform').submit();
+    });
+
+    pluploader.bind('PostInit', function() {
+        /* This is a workaround for EasyRedmine.
+           There are radio buttons with texts instead of buttons with icons. */
+        var list = $("label.plupload_button[data-view='list']");
+        if(list.attr('role') != 'button') {
+            var thumbs = $("label.plupload_button[data-view='thumbs']");
+            if (list) {
+                list.text('');
+                list.attr('title', 'List');
+                list.attr('role', 'button');
+                list.attr('aria-pressed', 'false');
+                list.removeClass('ui-checkboxradio-radio-label ui-checkboxradio-checked ui-state-active ui-controlgroup-item ui-checkboxradio-label');
+                list.addClass('ui-button-icon-only ui-state-default ui-corner-left');
+                list.html(`
+                    <span class="ui-button-text">List</span>
+                    <span class="ui-button-icon-secondary ui-icon ui-icon-grip-dotted-horizontal"></span>
+                `)
+                list.click(function () {
+                    dmsf_plupload_toggle(list, thumbs);
+                });
+            }
+            if (thumbs) {
+                thumbs.text('');
+                thumbs.attr('title', 'Thumbnails');
+                thumbs.attr('role', 'button');
+                thumbs.attr('aria-pressed', 'true');
+                thumbs.removeClass('ui-checkboxradio-radio-label ui-checkboxradio-checked ui-controlgroup-item ui-checkboxradio-label');
+                thumbs.addClass('ui-button-icon-only ui-corner-right');
+                thumbs.html(`
+                    <span class="ui-button-text">Thumbnails</span>
+                    <span class="ui-button-icon-secondary ui-icon ui-icon-image"></span>
+                `)
+                thumbs.click(function () {
+                    dmsf_plupload_toggle(thumbs, list);
+                });
+            }
+        }
     });
 }
