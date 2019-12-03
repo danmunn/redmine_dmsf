@@ -208,11 +208,11 @@ module RedmineDmsf
             :title => h(dmsf_file.last_revision.try(:tooltip)),
             'data-downloadurl' => "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}")
           html << "<span class=\"size\">(#{number_to_human_size(dmsf_file.last_revision.size)})</span>"
-          html << " - #{dmsf_file.description}" unless dmsf_file.description.blank?
+          html << " - #{h(dmsf_file.description)}" unless dmsf_file.description.blank?
         html << '</td>'
         # Author, updated at
         html << '<td>'
-          html << "<span class=\"author\">#{dmsf_file.last_revision.user}, #{format_time(dmsf_file.last_revision.updated_at)}</span>"
+          html << "<span class=\"author\">#{h(dmsf_file.last_revision.user)}, #{format_time(dmsf_file.last_revision.updated_at)}</span>"
         html << '</td>'
         # Command icons
         html << '<td class="fast-icons easy-query-additional-ending-buttons hide-when-print">'

@@ -112,7 +112,7 @@
           <% if revision.description.present? %>
             <div class="status attribute">
               <%= content_tag :div, l(:label_description), :class => 'label' %>
-              <% text = clean_wiki_text(textilizable(revision.description)) %>
+              <% text = clean_wiki_text(textilizable(h revision.description)) %>
               <%= content_tag :div, text.html_safe, :class => 'value wiki' %>
             </div>
           <% end %>
@@ -141,7 +141,7 @@
           <% if revision.comment.present? %>
             <div class="status attribute">
               <%= content_tag :div, l(:label_comment), :class => 'label' %>
-              <% text = clean_wiki_text(textilizable(revision.comment)) %>
+              <% text = clean_wiki_text(textilizable(h revision.comment)) %>
               <%= content_tag :div, text.html_safe, :class => 'value wiki' %>
             </div>
           <% end %>
