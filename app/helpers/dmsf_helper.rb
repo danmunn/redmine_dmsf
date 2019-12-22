@@ -191,4 +191,11 @@ module DmsfHelper
     principals_check_box_tags 'user_ids[]', users
   end
 
+  # Replace specifics characters with their ASCII version + 'z' in order to fix the wrong ordering
+  # e.g. 'č' -> 'cz'
+  def clear_title(title)
+    title.gsub!(/[ěščřýáíéůúďťňĚŠČŘÝÁÍÉÚŮĎŤŇ]/) { |c| c + 'z' }
+    title.tr('ěščřýáíéůúďťňĚŠČŘÝÁÍÉÚŮĎŤŇ', 'escryaieuudtnESCRYAIEUUDTN')
+  end
+
 end
