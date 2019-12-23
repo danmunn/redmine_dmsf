@@ -133,11 +133,6 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     post :copy, :params => {:id => @folder1.id, :target_project_id => @project2.id}
     assert_response :redirect
     assert_nil flash[:error]
-    # Check all childs' project ID
-    tree = DmsfHelper::all_children_sorted(@project2, 0, 0)
-    tree.each do |f, pos|
-      assert_equal @project2.id, f.project_id
-    end
   end
 
   def test_copy_the_same_target
@@ -216,11 +211,6 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     post :move, :params => {:id => @folder1.id, :target_project_id => @project2.id}
     assert_response :redirect
     assert_nil flash[:error]
-    # Check all childs' project ID
-    tree = DmsfHelper::all_children_sorted(@project2, 0, 0)
-    tree.each do |f, pos|
-      assert_equal @project2.id, f.project_id
-    end
   end
 
 end
