@@ -98,32 +98,10 @@ module DmsfHelper
     ret
   end
 
-  def self.visible_folders(folders, project)
-    allowed = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
-      (project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS) &&
-      User.current.allowed_to?(:display_system_folders, project)
-    folders.reject do |folder|
-      if folder.system
-        if allowed
-          issue_id = folder.title.to_i
-          if issue_id > 0
-            issue = Issue.find_by(id: issue_id)
-            issue && !issue.visible?(User.current)
-          else
-            false
-          end
-        else
-          true
-        end
-      else
-        false
-      end
-    end
-  end
-
-  def self.all_children_sorted(parent, pos, ident)
+  def all_children_sorted(parent, pos, ident)
     # Folders && files && links
-    nodes = visible_folders(parent.dmsf_folders.visible.to_a, parent.is_a?(Project) ? parent : parent.project) + parent.dmsf_links.visible + parent.dmsf_files.visible
+    nodes = DmsfFolder::visible_folders(parent.dmsf_folders.visible.to_a, parent.is_a?(Project) ? parent : parent.project) +
+        parent.dmsf_links.visible + parent.dmsf_files.visible
     # Alphabetical and type sort
     nodes.sort! do |x, y|
       if (x.is_a?(DmsfFolder) || (x.is_a?(DmsfLink) && x.is_folder?)) &&
@@ -133,7 +111,7 @@ module DmsfHelper
             (y.is_a?(DmsfFolder) || (y.is_a?(DmsfLink) && y.is_folder?))
         1
       else
-        x.title.downcase <=> y.title.downcase
+        clear_title(x.title).downcase <=> clear_title(y.title).downcase
       end
     end
     # Calculate position
@@ -154,7 +132,6 @@ module DmsfHelper
   end
 
   def self.dmsf_to_csv(parent, columns)
-    #Redmine::Export::CSV.generate do |csv|
     CSV.generate(:force_quotes => true, :encoding => 'UTF-8') do |csv|
       # Header
       csv << columns.map { |c| c.capitalize }
@@ -194,8 +171,8 @@ module DmsfHelper
   # Replace specifics characters with their ASCII version + 'z' in order to fix the wrong ordering
   # e.g. 'č' -> 'cz'
   def clear_title(title)
-    title.gsub!(/[ěščřýáíéůúďťňĚŠČŘÝÁÍÉÚŮĎŤŇ]/) { |c| c + 'z' }
-    title.tr('ěščřýáíéůúďťňĚŠČŘÝÁÍÉÚŮĎŤŇ', 'escryaieuudtnESCRYAIEUUDTN')
+    str = title.gsub(/[ěščřýáíéůúďťňĚŠČŘÝÁÍÉÚŮĎŤŇ]/) { |c| c + 'z' }
+    str.tr('ěščřýáíéůúďťňĚŠČŘÝÁÍÉÚŮĎŤŇ', 'escryaieuudtnESCRYAIEUUDTN')
   end
 
 end

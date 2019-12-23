@@ -674,7 +674,7 @@ class DmsfController < ApplicationController
       end
       # Remove system folders you are not allowed to see because you are not allowed to see the issue or you are not
       # permitted to see system folders
-      @subfolders = DmsfHelper.visible_folders(@subfolders, @project)
+      @subfolders = DmsfFolder.visible_folders(@subfolders, @project)
     end
 
     @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].presence || 100

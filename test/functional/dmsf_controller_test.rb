@@ -244,7 +244,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :view_dmsf_folders
     get :show, :params => {id: @project.id, format: 'csv', :settings => { dmsf_columns: %w(id title) }}
     assert_response :success
-    assert_equal 'text/csv', @response.content_type
+    assert_equal 'text/csv; header=present', @response.content_type
   end
 
   def test_show_folder_doesnt_correspond_the_project

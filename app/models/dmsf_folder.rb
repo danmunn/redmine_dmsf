@@ -549,6 +549,29 @@ class DmsfFolder < ActiveRecord::Base
     end
   end
 
+  def self.visible_folders(folders, project)
+    allowed = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
+        (project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS) &&
+        User.current.allowed_to?(:display_system_folders, project)
+    folders.reject do |folder|
+      if folder.system
+        if allowed
+          issue_id = folder.title.to_i
+          if issue_id > 0
+            issue = Issue.find_by(id: issue_id)
+            issue && !issue.visible?(User.current)
+          else
+            false
+          end
+        else
+          true
+        end
+      else
+        false
+      end
+    end
+  end
+
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)
