@@ -84,7 +84,7 @@ module RedmineDmsf
           controller = context[:controller]
           if edit && ((params[:issue] && params[:issue][:project_id].present?) || context[:new_project])
             project_id = context[:new_project] ? context[:new_project].id : params[:issue][:project_id].to_i
-            old_project_id = context[:project].id
+            old_project_id = context[:project] ? context[:project].id : project_id
             # Sync the title with the issue's subject
             old_system_folder = issue.system_folder(false, old_project_id)
             if old_system_folder
