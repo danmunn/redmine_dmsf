@@ -111,7 +111,7 @@ module DmsfHelper
             (y.is_a?(DmsfFolder) || (y.is_a?(DmsfLink) && y.is_folder?))
         1
       else
-        clear_title(x.title).downcase <=> clear_title(y.title).downcase
+        clear_title(x.title) <=> clear_title(y.title)
       end
     end
     # Calculate position
@@ -172,7 +172,7 @@ module DmsfHelper
   # e.g. 'č' -> 'cz'
   def clear_title(title)
     str = title.gsub(/[ěščřýáíéůúďťňĚŠČŘÝÁÍÉÚŮĎŤŇ]/) { |c| c + 'z' }
-    str.tr('ěščřýáíéůúďťňĚŠČŘÝÁÍÉÚŮĎŤŇ', 'escryaieuudtnESCRYAIEUUDTN')
+    str.tr('ěščřýáíéůúďťňĚŠČŘÝÁÍÉÚŮĎŤŇ', 'escryaieuudtnESCRYAIEUUDTN').downcase
   end
 
 end
