@@ -52,6 +52,9 @@ env:
   - DB=sqlite
   - DB=mysql
   - DB=postgres
+  - DB=sqlite   REDMINE_GIT_TAG=4.1-stable
+  - DB=mysql    REDMINE_GIT_TAG=4.1-stable
+  - DB=postgres REDMINE_GIT_TAG=4.1-stable
 
 cache: bundler
 
