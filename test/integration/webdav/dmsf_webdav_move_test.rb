@@ -33,11 +33,11 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
     FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
     @admin = credentials 'admin'
-    @admin_user = User.find_by_login('admin')
+    @admin_user = User.find_by_login(+'admin')
     @admin_user.terms_accepted = true
     @admin_user.save
     @jsmith = credentials 'jsmith'
-    @jsmith_user = User.find_by_login('jsmith')
+    @jsmith_user = User.find_by_login(+'jsmith')
     @jsmith_user.terms_accepted = true
     @jsmith_user.save
     @project1 = Project.find 1
