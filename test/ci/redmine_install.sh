@@ -20,8 +20,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-export REDMINE_GIT_REPO=git://github.com/redmine/redmine.git
-export REDMINE_GIT_TAG=4.0-stable
+if [[ ! -v REDMINE_GIT_REPO ]]; then
+  export REDMINE_GIT_REPO=git://github.com/redmine/redmine.git
+fi
+if [[ ! -v REDMINE_GIT_TAG ]]; then
+  export REDMINE_GIT_TAG=4.0-stable
+fi
 
 clone()
 {
