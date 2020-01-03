@@ -30,9 +30,6 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     
   def setup
     @admin = credentials 'admin'
-    @admin_user = User.find_by_login(+'admin')
-    @admin_user.terms_accepted = true
-    @admin_user.save
     @jsmith = credentials 'jsmith'
     @project1 = Project.find 1
     @file1 = DmsfFile.find 1

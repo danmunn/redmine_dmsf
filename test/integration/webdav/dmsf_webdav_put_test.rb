@@ -34,9 +34,6 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
-    @jsmith_user = User.find_by_login(+'jsmith')
-    @jsmith_user.terms_accepted = true
-    @jsmith_user.save
     @project1 = Project.find 1
     @project2 = Project.find 2
     @role = Role.find_by(name: 'Manager')
