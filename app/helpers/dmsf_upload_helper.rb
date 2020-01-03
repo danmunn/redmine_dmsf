@@ -157,7 +157,8 @@ module DmsfUploadHelper
       end
     end
     if failed_uploads.present? && controller
-      controller.flash[:warning] = l(:warning_some_files_were_not_commited, :files => failed_uploads.map{|u| u['name']}.join(', '))
+      controller.flash[:warning] = l(:warning_some_files_were_not_commited,
+                                     files: failed_uploads.map{ |u| u['name'] }.join(', '))
     end
     [files, failed_uploads]
   end
@@ -167,9 +168,9 @@ module DmsfUploadHelper
     (0..99).to_a + ('A'..'Y').to_a - ['O']
   end
 
-  # 0..99, ' '
+  # 0..999, ' '
   def self.minor_version_select_options
-    (0..99).to_a + [' ']
+    (0..999).to_a + [' ']
   end
 
   # 1 -> 2, -1 -> -2, A -> B
@@ -177,7 +178,7 @@ module DmsfUploadHelper
     return number if ((version == ' ') || ((-version) == ' '.ord))
     if Integer(version)
       if version >= 0
-        if (version + number) < 100
+        if (version + number) < 1000
           version + number
         else
           version
