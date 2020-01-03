@@ -34,6 +34,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
+    @jsmith_user = User.find_by(login: 'jsmith')
     @project1 = Project.find 1
     @project2 = Project.find 2
     @role = Role.find_by(name: 'Manager')
@@ -62,6 +63,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
     assert_kind_of Role, @role
+    assert_kind_of User, @jsmith_user
   end
 
   def test_put_denied_unless_authenticated_root

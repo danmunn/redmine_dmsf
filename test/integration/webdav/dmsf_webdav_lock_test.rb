@@ -31,6 +31,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
   def setup
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
+    @admin_user = User.find_by(login: 'admin')
     @project1 = Project.find 1
     @file1 = DmsfFile.find 1
     # Fix permissions for jsmith's role
@@ -52,6 +53,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     assert_kind_of Project, @project1
     assert_kind_of DmsfFile, @file1
     assert_kind_of Role, @role
+    assert_kind_of User, @admin_user
   end
   
   def test_lock_file_already_locked_by_other

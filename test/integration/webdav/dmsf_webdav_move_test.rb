@@ -34,6 +34,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
+    @jsmith_user = User.find_by(login: 'jsmith')
+    @admin_user = User.find_by(login: 'admin')
     @project1 = Project.find 1
     @file1 = DmsfFile.find 1
     @file10 = DmsfFile.find 10
@@ -70,6 +72,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     assert_kind_of DmsfFile, @file1
     assert_kind_of DmsfFile, @file10
     assert_kind_of DmsfFolder, @folder1
+    assert_kind_of User, @jsmith_user
+    assert_kind_of User, @admin_user
   end
 
   def test_move_denied_for_anonymous
