@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -63,7 +64,7 @@ class DmsfFile < ActiveRecord::Base
                     Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")
                   else
                     # Set desc to an empty string if o.description is nil
-                    desc = o.description.nil? ? '' : o.description
+                    desc = o.description.nil? ? +'' : +o.description
                     desc += ' / ' if o.description.present? && o.last_revision.comment.present?
                     desc += o.last_revision.comment if o.last_revision.comment.present?
                   end
@@ -150,7 +151,7 @@ class DmsfFile < ActiveRecord::Base
         self.deleted_by_user = User.current
         save
       end
-    rescue Exception => e
+    rescue => e
       Rails.logger.error e.message
       errors[:base] << e.message
       return false
@@ -239,10 +240,10 @@ class DmsfFile < ActiveRecord::Base
     self.dmsf_folder = folder
     new_revision = last_revision.clone
     new_revision.dmsf_file = self
-    new_revision.comment = l(:comment_moved_from, :source => source)
+    new_revision.comment = l(:comment_moved_from, source: source)
     new_revision.custom_values = []
     last_revision.custom_values.each do |cv|
-      new_revision.custom_values << CustomValue.new({:custom_field => cv.custom_field, :value => cv.value})
+      new_revision.custom_values << CustomValue.new({ custom_field: cv.custom_field, value: cv.value })
     end
     set_last_revision(new_revision)
     save && new_revision.save
@@ -339,7 +340,7 @@ class DmsfFile < ActiveRecord::Base
         databasepath = File.join(
           Setting.plugin_redmine_dmsf['dmsf_index_database'].strip, lang)
         database = Xapian::Database.new(databasepath)
-      rescue Exception => e
+      rescue => e
         Rails.logger.error "REDMINE_XAPIAN ERROR: Xapian database is not properly set, initiated or it's corrupted."
         Rails.logger.error e.message
       end
@@ -448,7 +449,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def preview(limit)
-    result = 'No preview available'
+    result = +'No preview available'
     if text?
       begin
         f = File.new(last_revision.disk_file)
@@ -462,7 +463,7 @@ class DmsfFile < ActiveRecord::Base
               result << line
           end
         end
-      rescue Exception => e
+      rescue => e
         result = e.message
       end
     end

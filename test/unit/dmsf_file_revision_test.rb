@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -45,7 +46,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     # Delete our tmp folder
     begin
       FileUtils.rm_rf DmsfFile.storage_path
-    rescue Exception => e
+    rescue => e
       error e.message
     end
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
@@ -105,8 +106,8 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     r1.major_version = 1
     r1.dmsf_file = f
     r1.user = User.current
-    r1.name = "Testfile.txt"
-    r1.title = DmsfFileRevision.filename_to_title('Testfile.txt')
+    r1.name = 'Testfile.txt'
+    r1.title = DmsfFileRevision.filename_to_title(r1.name)
     r1.description = nil
     r1.comment = nil
     r1.mime_type = nil

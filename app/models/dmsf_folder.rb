@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -43,7 +44,7 @@ class DmsfFolder < ActiveRecord::Base
     :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
   has_many :dmsf_folder_permissions, :dependent => :destroy
 
-  INVALID_CHARACTERS = '\[\]\/\\\?":<>#%\*'.freeze
+  INVALID_CHARACTERS = '\[\]\/\\\?":<>#%\*'
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
   AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
@@ -52,16 +53,14 @@ class DmsfFolder < ActiveRecord::Base
   def self.visible_condition(system=true)
     Project.allowed_to_condition(User.current, :view_dmsf_folders) do |role, user|
       if role.member?
-        permissions = "#{DmsfFolderPermission.table_name}"
-        folders = "#{DmsfFolder.table_name}"
         group_ids = user.group_ids.join(',')
         group_ids = -1 if group_ids.blank?
         allowed = (system && role.allowed_to?(:display_system_folders)) ? 1 : 0
         %{
-          ((#{permissions}.object_id IS NULL) OR
-          (#{permissions}.object_id = #{role.id} AND #{permissions}.object_type = 'Role') OR
-          ((#{permissions}.object_id = #{user.id} OR #{permissions}.object_id IN (#{group_ids})) AND #{permissions}.object_type = 'User')) AND
-          (#{folders}.system = #{DmsfFolder.connection.quoted_false} OR 1 = #{allowed})
+          ((#{DmsfFolderPermission.table_name}.object_id IS NULL) OR
+          (#{DmsfFolderPermission.table_name}.object_id = #{role.id} AND #{DmsfFolderPermission.table_name}.object_type = 'Role') OR
+          ((#{DmsfFolderPermission.table_name}.object_id = #{user.id} OR #{DmsfFolderPermission.table_name}.object_id IN (#{group_ids})) AND #{DmsfFolderPermission.table_name}.object_type = 'User')) AND
+          (#{DmsfFolder.table_name}.system = #{DmsfFolder.connection.quoted_false} OR 1 = #{allowed})
         }
       end
     end

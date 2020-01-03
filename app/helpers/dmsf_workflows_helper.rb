@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -92,19 +93,19 @@ module DmsfWorkflowsHelper
   end
 
   def principals_radio_button_tags(name, principals)
-    s = ''
+    s = +''
     principals.each do |principal|
-      s << "<label>#{ radio_button_tag name, principal.id * 10, false, :id => nil } #{h principal}</label>\n"
+      s << "<label>#{ radio_button_tag name, principal.id * 10, false, id: nil } #{h principal}</label>\n"
     end
     s.html_safe
   end
 
   def change_status_link(workflow)
-    url = { :controller => 'dmsf_workflows', :action => 'update', :id => workflow.id }
+    url = { controller: 'dmsf_workflows', action: 'update', id: workflow.id }
     if workflow.locked?
-      link_to l(:button_unlock), url.merge(:dmsf_workflow => {:status => DmsfWorkflow::STATUS_ACTIVE}), :method => :put, :class => 'icon icon-unlock'
+      link_to l(:button_unlock), url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_ACTIVE }), method: :put, class: 'icon icon-unlock'
     else
-      link_to l(:button_lock), url.merge(:dmsf_workflow => {:status => DmsfWorkflow::STATUS_LOCKED}), :method => :put, :class => 'icon icon-lock'
+      link_to l(:button_lock), url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_LOCKED }), method: :put, class: 'icon icon-lock'
     end
   end
 

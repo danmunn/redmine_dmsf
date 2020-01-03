@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -45,7 +46,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     # Delete our tmp folder
     begin
       FileUtils.rm_rf DmsfFile.storage_path
-    rescue Exception => e
+    rescue => e
       error e.message
     end
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
@@ -262,7 +263,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     @folder1.reload
     assert_equal DmsfFolder::STATUS_DELETED, @folder1.deleted
-    assert_equal User.current, @folder1.deleted_by_user
+    assert_equal @jsmith, @folder1.deleted_by_user
   end
 
   def test_delete_folder_no_permission
@@ -288,7 +289,6 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :folder_manipulation
     User.current = @admin
     @folder1.lock!
-    User.current = @jsmith
     token = Token.create!(:user => @jsmith, :action => 'api')
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
     delete "/projects/#{@project1.identifier}/dmsf/delete.xml?key=#{token.value}&folder_id=#{@folder1.id}",

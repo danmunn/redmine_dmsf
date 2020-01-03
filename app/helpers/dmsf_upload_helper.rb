@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 # 
 # Redmine plugin for Document Management System "Features"
 #
@@ -109,7 +110,7 @@ module DmsfUploadHelper
             if file.container.is_a?(Issue)
               file.container.dmsf_file_added(file)
             end
-          rescue Exception => e
+          rescue => e
             Rails.logger.error e.message
             controller.flash[:errors] = e.message if controller
             failed_uploads.push(file)
@@ -150,7 +151,7 @@ module DmsfUploadHelper
               controller.flash[:warning] = l(:warning_email_notifications, :to => to) if controller
             end
           end
-        rescue Exception => e
+        rescue => e
           Rails.logger.error "Could not send email notifications: #{e.message}"
         end
       end

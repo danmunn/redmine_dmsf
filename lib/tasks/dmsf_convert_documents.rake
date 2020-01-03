@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 # 
 # Redmine plugin for Document Management System "Features"
 #
@@ -97,7 +98,7 @@ class DmsfConvertDocuments
             begin
               folder.save!
               puts "Created folder: #{folder.title}"
-            rescue Exception => e
+            rescue => e
               puts "Creating folder: #{folder.title} failed"
               puts e
               fail = true
@@ -176,7 +177,7 @@ class DmsfConvertDocuments
               attachment.destroy unless dry
 
               puts "Created file: #{file.name}" unless dry
-            rescue Exception => e
+            rescue => e
               puts "Creating file: #{attachment.filename} failed"
               puts e
               fail = true

@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -35,7 +36,7 @@ class DmsfPublicUrlsController < ApplicationController
                   :filename => filename_for_content_disposition(revision.name),
                   :type => revision.detect_content_type,
                   :disposition => dmsf_public_url.dmsf_file.disposition)
-      rescue Exception => e
+      rescue => e
         Rails.logger.error e.message
         render_404
       end

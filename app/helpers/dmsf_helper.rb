@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -64,7 +65,7 @@ module DmsfHelper
     extension = extension[1, extension.length-1]
     path = File.join(Redmine::Plugin.public_directory, ['redmine_dmsf', 'images', 'filetypes', "#{extension}.png"])
     if File.exist?(path)
-      cls = "filetype-#{extension}";
+      cls = +"filetype-#{extension}";
     else
       cls = Redmine::MimeType.css_class_of(filename)
     end

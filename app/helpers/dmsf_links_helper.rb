@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 # 
 # Redmine plugin for Document Management System "Features"
 #
@@ -21,7 +22,7 @@
 module DmsfLinksHelper    
   
   def folder_tree_options_for_select(folder_tree, options = {})
-    s = ''
+    s = +''
     folder_tree.each do |name, id|      
       tag_options = {:value => id}
       if id == options[:selected]

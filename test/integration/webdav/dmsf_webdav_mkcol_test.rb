@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -49,7 +50,7 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
     # Delete our tmp folder
     begin
       FileUtils.rm_rf DmsfFile.storage_path
-    rescue Exception => e
+    rescue => e
       error e.message
     end
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav

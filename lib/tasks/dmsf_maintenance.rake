@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -47,7 +48,7 @@ namespace :redmine do
       else
         m.clean
       end             
-    rescue Exception => e
+    rescue => e
       puts e.message
     end
   end

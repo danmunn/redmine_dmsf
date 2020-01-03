@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -203,7 +204,7 @@ class DmsfFileRevision < ActiveRecord::Base
     content_type = mime_type
     content_type = Redmine::MimeType.of(disk_filename) if content_type.blank?
     content_type = 'application/octet-stream' if content_type.blank?
-    content_type.to_s
+    content_type
   end
 
   def clone
@@ -307,13 +308,13 @@ class DmsfFileRevision < ActiveRecord::Base
     else
       filename = name
     end
-    format2 = format.dup
-    format2.sub!('%t', title)
-    format2.sub!('%f', filename)
-    format2.sub!('%d', updated_at.strftime('%Y%m%d%H%M%S'))
-    format2.sub!('%v', version)
-    format2.sub!('%i', dmsf_file.id.to_s)
-    format2.sub!('%r', id.to_s)
+    format2 = format
+    format2 = format2.sub('%t', title)
+    format2 = format2.sub('%f', filename)
+    format2 = format2.sub('%d', updated_at.strftime('%Y%m%d%H%M%S'))
+    format2 = format2.sub('%v', version)
+    format2 = format2.sub('%i', dmsf_file.id.to_s)
+    format2 = format2.sub('%r', id.to_s)
     format2 += ext if ext
     format2
   end
@@ -321,7 +322,7 @@ class DmsfFileRevision < ActiveRecord::Base
   def self.create_digest(path)
     begin
       Digest::SHA256.file(path).hexdigest
-    rescue Exception => e
+    rescue => e
       Rails.logger.error e.message
       0
     end
@@ -340,7 +341,7 @@ class DmsfFileRevision < ActiveRecord::Base
     if description.present?
       text = description
     else
-      text = ''
+      text = +''
     end
     if comment.present?
       text += ' / ' if text.present?
@@ -350,7 +351,7 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def workflow_tooltip
-    tooltip = ''
+    tooltip = +''
     if dmsf_workflow
       case workflow
         when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, DmsfWorkflow::STATE_ASSIGNED

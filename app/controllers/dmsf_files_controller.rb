@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -72,7 +73,7 @@ class DmsfFilesController < ApplicationController
     rescue DmsfAccessError => e
       Rails.logger.error e.message
       render_403
-    rescue Exception => e
+    rescue => e
       Rails.logger.error e.message
       render_404
     end
@@ -165,7 +166,7 @@ class DmsfFilesController < ApplicationController
             begin
               @file.unlock!
               flash[:notice] = "#{l(:notice_file_unlocked)}, "
-            rescue Exception => e
+            rescue => e
               Rails.logger.error "Cannot unlock the file: #{e.message}"
             end
           end
@@ -181,7 +182,7 @@ class DmsfFilesController < ApplicationController
                   flash[:warning] = l(:warning_email_notifications, :to => to)
                 end
               end
-            rescue Exception => e
+            rescue => e
               Rails.logger.error "Could not send email notifications: #{e.message}"
             end
           else
@@ -211,7 +212,7 @@ class DmsfFilesController < ApplicationController
                 flash[:warning] = l(:warning_email_notifications, :to => to)
               end
             end
-          rescue Exception => e
+          rescue => e
             Rails.logger.error "Could not send email notifications: #{e.message}"
           end
         end
@@ -266,7 +267,7 @@ class DmsfFilesController < ApplicationController
       begin
         @file.lock!
         flash[:notice] = l(:notice_file_locked)
-      rescue Exception => e
+      rescue => e
         flash[:errors] = e.message
       end
     end
@@ -281,7 +282,7 @@ class DmsfFilesController < ApplicationController
         begin
           @file.unlock!
           flash[:notice] = l(:notice_file_unlocked)
-        rescue Exception => e
+        rescue => e
           flash[:errors] = e.message
         end
       else

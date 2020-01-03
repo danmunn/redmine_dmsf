@@ -94,7 +94,7 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
         end
       end
       say 'Action was successful'
-    rescue Exception => e
+    rescue => e
       say 'Action was not successful'
       puts e.message
       puts e.backtrace.inspect # See issue #86

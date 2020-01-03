@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -95,7 +96,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     User.current = @admin
     @file1.lock!
     assert !@file1.locked_for_user?,
-      "#{@file1.name} is locked for #{User.current.name}"
+      "#{@file1.name} is locked for #{User.current}"
     @file1.unlock!
   end
 
@@ -104,7 +105,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     @file1.lock!
     User.current = @jsmith
     assert @file1.locked_for_user?,
-      "#{@file1.name} is locked for #{User.current.name}"
+      "#{@file1.name} is locked for #{User.current}"
     User.current = @admin
     @file1.unlock!
   end

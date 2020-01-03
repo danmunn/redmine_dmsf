@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -29,6 +30,9 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     
   def setup
     @admin = credentials 'admin'
+    @admin_user = User.find_by_login('admin')
+    @admin_user.terms_accepted = true
+    @admin_user.save
     @jsmith = credentials 'jsmith'
     @project1 = Project.find 1
     @file1 = DmsfFile.find 1
@@ -55,10 +59,10 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
   
   def test_lock_file_already_locked_by_other
     log_user 'admin', 'admin' # login as admin
-    assert !User.current.anonymous?, 'Current user is anonymous'
-    assert @file1.lock!, "File failed to be locked by #{User.current.name}"
-    process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params =>
-      %{<?xml version=\"1.0\" encoding=\"utf-8\" ?>
+    User.current = @admin_user
+    assert @file1.lock!, "File failed to be locked by #{User.current}"
+    process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params:
+        %{<?xml version=\"1.0\" encoding=\"utf-8\" ?>
         <d:lockinfo xmlns:d=\"DAV:\">
           <d:lockscope><d:exclusive/></d:lockscope>
           <d:locktype><d:write/></d:locktype>
@@ -82,8 +86,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
                   <d:locktype><d:write/></d:locktype>
                   <d:owner>jsmith</d:owner>
                 </d:lockinfo>}
-      process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => xml,
-        :headers => @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
+      process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: xml,
+        headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
       assert_response :success
       # Verify the response
       # <?xml version=\"1.0\"?>

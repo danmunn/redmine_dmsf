@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -30,7 +31,7 @@ module RedmineDmsf
             str = context[:controller].send(:render_to_string, :partial => 'search/container',
               :locals => { :object => context[:entity] })
             if str
-              html = '<p class=\"file-detail-container\"><span><strong>'
+              html = +'<p class=\"file-detail-container\"><span><strong>'
               if context[:entity].dmsf_folder_id
                 html << context[:entity].class.human_attribute_name(:folder)
               else

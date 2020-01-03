@@ -35,7 +35,7 @@ module RedmineDmsf
         # Radio buttons
         if allowed_to_attach_documents(context[:container])
           html << '<p>'
-            classes = 'inline'
+            classes = +'inline'
             html << "<label class=\"#{classes}\">"
               html << radio_button_tag('dmsf_attachments_upload_choice', 'Attachments',
                     User.current.pref.dmsf_attachments_upload_choice == 'Attachments',
@@ -180,7 +180,7 @@ module RedmineDmsf
 
       def attachment_rows(links, issue, controller)
         if links.any?
-          html = "<tbody><tr><th colspan=\"4\">#{l(:label_dmsf_attachments)} (#{links.count})</th></tr>"
+          html = +"<tbody><tr><th colspan=\"4\">#{l(:label_dmsf_attachments)} (#{links.count})</th></tr>"
           links.each do |dmsf_file, link, create_at|
             html << attachment_row(dmsf_file, link, issue, controller)
           end
@@ -191,9 +191,9 @@ module RedmineDmsf
 
       def attachment_row(dmsf_file, link, issue, controller)
         if link
-          html = '<tr class="dmsf_gray">'
+          html = +'<tr class="dmsf_gray">'
         else
-          html = '<tr>'
+          html = +'<tr>'
         end
         # Checkbox
         show_checkboxes = true #options[:show_checkboxes].nil? ? true : options[:show_checkboxes]

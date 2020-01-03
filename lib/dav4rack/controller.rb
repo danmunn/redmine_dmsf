@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'uri'
 require 'dav4rack/destination_header'
 require 'dav4rack/request'

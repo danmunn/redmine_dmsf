@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -175,7 +176,7 @@ class DmsfLinksController < ApplicationController
         end
       end
     end
-    rescue Exception => e
+    rescue => e
       errors[:base] << e.message
       return false
     end

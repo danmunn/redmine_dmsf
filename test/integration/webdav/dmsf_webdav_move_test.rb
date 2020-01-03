@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -32,7 +33,13 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
     FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
     @admin = credentials 'admin'
+    @admin_user = User.find_by_login('admin')
+    @admin_user.terms_accepted = true
+    @admin_user.save
     @jsmith = credentials 'jsmith'
+    @jsmith_user = User.find_by_login('jsmith')
+    @jsmith_user.terms_accepted = true
+    @jsmith_user.save
     @project1 = Project.find 1
     @file1 = DmsfFile.find 1
     @file10 = DmsfFile.find 10
@@ -47,7 +54,6 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
     @dmsf_webdav_use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-    
     super
   end
 
@@ -55,7 +61,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     # Delete our tmp folder
     begin
       FileUtils.rm_rf DmsfFile.storage_path
-    rescue Exception => e
+    rescue => e
       error e.message
     end
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
@@ -75,8 +81,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
   def test_move_denied_for_anonymous
     new_name = "#{@file1.name}.moved"
     assert_no_difference '@file1.dmsf_file_revisions.count' do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil,
-        :headers => {:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"}
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: { destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}" }
       assert_response :unauthorized
     end
   end
@@ -85,8 +91,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     @role.remove_permission! :folder_manipulation
     new_name = "#{@file1.name}.moved"
     assert_no_difference '@file1.dmsf_file_revisions.count' do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: @jsmith.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}" })
       assert_response :forbidden
     end
   end
@@ -95,8 +101,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     @role.remove_permission! :folder_manipulation
     new_name = "#{@file1.name}.moved"
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil,
-        :headers => @admin.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: @admin.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}" })
       assert_response :created
       f = DmsfFile.find_file_by_name @project1, nil, "#{new_name}"
       assert f, "Moved file '#{new_name}' not found in project."
@@ -104,16 +110,16 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_move_non_existent_file
-    process :move, "/dmsf/webdav/#{@project1.identifier}/not_a_file.txt", :params => nil,
-      :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/moved_file.txt"})
+    process :move, "/dmsf/webdav/#{@project1.identifier}/not_a_file.txt", params: nil,
+      headers: @jsmith.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/moved_file.txt" })
     assert_response :not_found # NotFound
   end
 
   def test_move_to_new_filename
     new_name = "#{@file1.name}.moved"
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: @jsmith.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}" })
       assert_response :created
       f = DmsfFile.find_file_by_name @project1, nil, "#{new_name}"
       assert f, "Moved file '#{new_name}' not found in project."
@@ -125,8 +131,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     new_name = "#{@file1.name}.moved"
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
-      process :move, "/dmsf/webdav/#{project1_uri}/#{@file1.name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{project1_uri}/#{new_name}"})
+      process :move, "/dmsf/webdav/#{project1_uri}/#{@file1.name}", params: nil,
+        headers: @jsmith.merge!({ destination: "http://www.example.com/dmsf/webdav/#{project1_uri}/#{new_name}" })
       assert_response :created
       f = DmsfFile.find_file_by_name @project1, nil, "#{new_name}"
       assert f, "Moved file '#{new_name}' not found in project."
@@ -136,8 +142,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
   def test_move_zero_sized_to_new_filename
     new_name = "#{@file10.name}.moved"
     assert_no_difference '@file10.dmsf_file_revisions.count' do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file10.name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file10.name}", params: nil,
+        headers: @jsmith.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}" })
       assert_response :created
       f = DmsfFile.find_file_by_name @project1, nil, "#{new_name}"
       assert f, "Moved file '#{new_name}' not found in project."
@@ -146,8 +152,9 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
 
   def test_move_to_new_folder
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}/#{@file1.name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: @jsmith.merge!({
+          destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}/#{@file1.name}" })
       assert_response :created
       @file1.reload
       assert_equal @folder1.id, @file1.dmsf_folder_id
@@ -158,8 +165,9 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
-      process :move, "/dmsf/webdav/#{project1_uri}/#{@file1.name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{project1_uri}/#{@folder1.title}/#{@file1.name}"})
+      process :move, "/dmsf/webdav/#{project1_uri}/#{@file1.name}", params: nil,
+        headers: @jsmith.merge!({
+          destination: "http://www.example.com/dmsf/webdav/#{project1_uri}/#{@folder1.title}/#{@file1.name}" })
       assert_response :created
       @file1.reload
       assert_equal @folder1.id, @file1.dmsf_folder_id
@@ -168,8 +176,9 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
 
   def test_move_zero_sized_to_new_folder
     assert_no_difference '@file10.dmsf_file_revisions.count' do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file10.name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}/#{@file10.name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file10.name}", params: nil,
+        headers: @jsmith.merge!({
+          destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}/#{@file10.name}" })
       assert_response :created
       @file10.reload
       assert_equal @folder1.id, @file10.dmsf_folder_id
@@ -182,8 +191,9 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     new_name = "#{file9.name}"
     assert_no_difference 'file9.dmsf_file_revisions.count' do
       assert_no_difference '@file1.dmsf_file_revisions.count' do
-        process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil,
-          :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
+        process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+          headers: @jsmith.merge!({
+            destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
         assert_response :not_implemented # NotImplemented
       end
     end
@@ -191,46 +201,46 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
 
   def test_move_when_file_is_locked_by_other
     log_user 'admin', 'admin' # login as admin
-    assert !User.current.anonymous?, 'Current user is anonymous'
-    assert @file1.lock!, "File failed to be locked by #{User.current.name}"
+    User.current = @admin_user
+    assert @file1.lock!, "File failed to be locked by #{User.current}"
     new_name = "#{@file1.name}.moved"
     assert_no_difference '@file1.dmsf_file_revisions.count' do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: @jsmith.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}" })
       assert_response :locked
     end
   end
 
   def test_move_when_file_is_locked_by_other_and_user_is_admin
     log_user 'jsmith', 'jsmith' # login as jsmith
-    assert !User.current.anonymous?, 'Current user is anonymous'
-    assert @file1.lock!, "File failed to be locked by #{User.current.name}"
+    User.current = @jsmith_user
+    assert @file1.lock!, "File failed to be locked by #{User.current}"
 
     new_name = "#{@file1.name}.moved"
     assert_no_difference '@file1.dmsf_file_revisions.count' do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil,
-        :headers => @admin.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: @admin.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}" })
       assert_response :locked
     end
   end
 
   def test_move_when_file_is_locked_by_user
     log_user 'jsmith', 'jsmith' # login as jsmith
-    assert !User.current.anonymous?, 'Current user is anonymous'
-    assert @file1.lock!, "File failed to be locked by #{User.current.name}"
+    User.current = @jsmith_user
+    assert @file1.lock!, "File failed to be locked by #{User.current}"
 
     # Move once
     new_name = "#{@file1.name}.m1"
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: @jsmith.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}" })
       assert_response :success # Created
     end
     # Move twice, make sure that the MsOffice store sequence is not disrupting normal move
     new_name2 = "#{new_name}.m2"
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{new_name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name2}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{new_name}", params: nil,
+        headers: @jsmith.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name2}" })
       assert_response :success # Created
     end
   end
@@ -243,33 +253,35 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     # 4. Delete YYY.tmp.
     # Verify that steps 2 and 3 work.
     log_user 'jsmith', 'jsmith' # login as jsmith
-    assert !User.current.anonymous?, 'Current user is anonymous'
-    assert @file1.lock!, "File failed to be locked by #{User.current.name}"
+    User.current = @jsmith_user
+    assert @file1.lock!, "File failed to be locked by #{User.current}"
 
     # First save while the file is locked, should create new revision
     temp_file_name = 'AAAAAAAA.tmp'
 
     # Make sure that the temp-file does not exist.
-    temp_file = DmsfFile.find_file_by_name @project1, nil, "#{temp_file_name}"
+    temp_file = DmsfFile.find_file_by_name @project1, nil, temp_file_name
     assert !temp_file, "File '#{temp_file_name}' should not exist yet."
 
     # Move the original file to AAAAAAAA.tmp. The original file should not changed but a new file should be created.
     assert_no_difference '@file1.dmsf_file_revisions.count' do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{temp_file_name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: @jsmith.merge!({
+          destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{temp_file_name}" })
       assert_response :success # Created
     end
 
     # Verify that a new file has been created
-    temp_file = DmsfFile.find_file_by_name @project1, nil, "#{temp_file_name}"
+    temp_file = DmsfFile.find_file_by_name @project1, nil, temp_file_name
     assert temp_file, "File '#{temp_file_name}' not found, move failed."
     assert_equal temp_file.dmsf_file_revisions.count,1
     assert_not_equal temp_file.id, @file1.id
 
     # Move a temporary file (use AAAAAAAA.tmp) to the original file.
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{temp_file_name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@file1.name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{temp_file_name}", params: nil,
+        headers: @jsmith.merge!({
+          destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@file1.name}" })
       assert_response :success # Created
     end
 
@@ -277,26 +289,28 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     temp_file_name = 'BBBBBBBB.tmp'
 
     # Make sure that the temp-file does not exist.
-    temp_file = DmsfFile.find_file_by_name @project1, nil, "#{temp_file_name}"
+    temp_file = DmsfFile.find_file_by_name @project1, nil, temp_file_name
     assert !temp_file, "File '#{temp_file_name}' should not exist yet."
 
     # Move the original file to BBBBBBBB.tmp. The original file should not change but a new file should be created.
     assert_no_difference '@file1.dmsf_file_revisions.count' do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{temp_file_name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: @jsmith.merge!({
+          destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{temp_file_name}" })
       assert_response :success # Created
     end
 
     # Verify that a new file has been created
-    temp_file = DmsfFile.find_file_by_name @project1, nil, "#{temp_file_name}"
+    temp_file = DmsfFile.find_file_by_name @project1, nil, temp_file_name
     assert temp_file, "File '#{temp_file_name}' not found, move failed."
     assert_equal temp_file.dmsf_file_revisions.count,1
     assert_not_equal temp_file.id, @file1.id
 
     # Move a temporary file (use BBBBBBBB.tmp) to the original file.
     assert_no_difference '@file1.dmsf_file_revisions.count' do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{temp_file_name}", :params => nil,
-        :headers => @jsmith.merge!({:destination => "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@file1.name}"})
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{temp_file_name}", params: nil,
+        headers: @jsmith.merge!({
+          destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@file1.name}" })
       assert_response :success # Created
     end
   end

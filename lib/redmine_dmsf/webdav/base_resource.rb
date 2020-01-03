@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -54,7 +55,7 @@ module RedmineDmsf
 
       # Generate HTML for Get requests, or Head requests if no_body is true
       def html_display
-        @response.body = ''
+        @response.body = +''
         Confict unless collection?        
         entities = children.map{|child| 
           DIR_FILE % [
@@ -77,19 +78,19 @@ module RedmineDmsf
 
       # Run method through proxy class - ensuring always compatible child is generated      
       def child(name)
-        new_path = @path.dup
+        new_path = @path
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
-        @__proxy.class.new("#{new_path}#{name}", request, response, @options.merge(:user => @user))
+        @__proxy.class.new("#{new_path}#{name}", request, response, @options.merge(user: @user))
       end
       
       def child_project(p)
         project_display_name = ProjectResource.create_project_name(p)
-        new_path = @path.dup
+        new_path = +@path
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
         new_path += project_display_name
-        @__proxy.class.new(new_path, request, response, @options.merge(:user => @user))
+        @__proxy.class.new(new_path, request, response, @options.merge(user: @user))
       end
 
       def parent
@@ -125,7 +126,7 @@ module RedmineDmsf
             else
               begin
                 @project = Project.find(pinfo.first)
-              rescue Exception => e
+              rescue => e
                 Rails.logger.error e.message
               end
             end

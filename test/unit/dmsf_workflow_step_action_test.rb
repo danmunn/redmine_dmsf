@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -50,7 +51,7 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
   def test_update    
     @wfsac1.dmsf_workflow_step_assignment_id = 2    
     @wfsac1.action = DmsfWorkflowStepAction::ACTION_REJECT
-    @wfsac1.note = 'Rejection'    
+    @wfsac1.note = 'Rejection'
     assert @wfsac1.save, !@wfsac1.errors.full_messages.to_sentence
     @wfsac1.reload   
     assert_equal 2, @wfsac1.dmsf_workflow_step_assignment_id    

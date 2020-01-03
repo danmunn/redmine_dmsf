@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -94,7 +95,7 @@ class DmsfController < ApplicationController
         :filename => 'Documents.zip',
         :type => 'application/zip',
         :disposition => 'attachment')
-    rescue Exception => e
+    rescue => e
       flash[:errors] = e.message
   end
 
@@ -525,7 +526,7 @@ class DmsfController < ApplicationController
             flash[:warning] = l(:warning_email_notifications, :to => to)
           end
         end
-      rescue Exception => e
+      rescue => e
         Rails.logger.error "Could not send email notifications: #{e.message}"
       end
     end

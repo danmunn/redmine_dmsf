@@ -1,6 +1,7 @@
 #!/usr/bin/ruby -W0
 
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -60,7 +61,7 @@ $databasepath = nil
 $env = 'production'
 $retryfailed = nil
 
-VERSION = '0.2'.freeze
+VERSION = '0.2'
 
 optparse = OptionParser.new do |opts|
   opts.banner = 'Usage: xapian_indexer.rb [OPTIONS...]'
@@ -132,12 +133,12 @@ $stem_langs.each do | lang |
     log "#{databasepath} does not exist, creating ..."
     begin
       FileUtils.mkdir_p databasepath
-    rescue Exception => e
+    rescue => e
       log e.message, true
       exit 1
     end
   end
-  cmd = "#{$omindex} -s #{lang} --db #{databasepath} #{filespath} --url / --depth-limit=0"
+  cmd = +"#{$omindex} -s #{lang} --db #{databasepath} #{filespath} --url / --depth-limit=0"
   cmd << ' -v' if $verbose > 0
   cmd << ' --retry-failed' if $retryfailed
   log cmd
