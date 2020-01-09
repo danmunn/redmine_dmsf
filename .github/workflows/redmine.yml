@@ -1,0 +1,37 @@
+name: Redmine
+on:
+  push:
+  pull_request:
+
+jobs:
+  one:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby:
+          - v2.6.x
+        redmine:
+          - 4.1-stable
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup System
+        run: |
+          sudo apt-get update
+          sudo apt-get install libsqlite3-dev
+
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+
+      - name: Update gems
+        run: |
+          gem update --system
+
+      - name: Redmine plugin test
+        uses: two-pack/redmine-plugin-test-action@v1
+        with:
+          plugin-name: redmine_dmsf
+          redmine_version: ${{ matrix.redmine }}
