@@ -208,7 +208,7 @@ class DmsfWorkflowsController < ApplicationController
               end
             end
           end
-        rescue StandardError => e
+        rescue => e
           flash[:errors] = e.message
         end
         redirect_to :back

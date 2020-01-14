@@ -153,8 +153,8 @@ class DmsfFilesController < ApplicationController
           revision.assign_workflow(params[:dmsf_workflow_id])
           if upload
             begin
-              FileUtils.mv(upload.tempfile_path, revision.disk_file(false))
-            rescue StandardError => e
+              FileUtils.mv upload.tempfile_path, revision.disk_file(false)
+            rescue => e
               Rails.logger.error e.message
               flash[:error] = e.message
               revision.destroy
