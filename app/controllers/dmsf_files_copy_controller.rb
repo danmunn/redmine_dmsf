@@ -39,7 +39,7 @@ class DmsfFilesCopyController < ApplicationController
   def copy
     new_file = @file.copy_to(@target_project, @target_folder)
     unless new_file.errors.empty?
-      flash[:error] = new_file.errors.full_messages.join(', ')
+      flash[:error] = new_file.errors.full_messages.to_sentence
       redirect_to :action => 'new', :id => @file, :target_project_id => @target_project,
                   :target_folder_id => @target_folder
       return
@@ -50,7 +50,7 @@ class DmsfFilesCopyController < ApplicationController
 
   def move
     unless @file.move_to(@target_project, @target_folder)
-      flash[:error] = @file.errors.full_messages.join(', ')
+      flash[:error] = @file.errors.full_messages.to_sentence
       redirect_to :action => 'new', :id => @file, :target_project_id => @target_project,
                   :target_folder_id => @target_folder
       return

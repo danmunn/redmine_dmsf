@@ -89,14 +89,14 @@ class DmsfController < ApplicationController
 
   def download_email_entries
     # IE has got a tendency to cache files
-    expires_in(0.year, "must-revalidate" => true)
+    expires_in(0.year, 'must-revalidate' => true)
     send_file(
         params[:path],
-        :filename => 'Documents.zip',
-        :type => 'application/zip',
-        :disposition => 'attachment')
+        filename: 'Documents.zip',
+        type: 'application/zip',
+        disposition: 'attachment')
     rescue => e
-      flash[:errors] = e.message
+      flash[:error] = e.message
   end
 
   def entries_operation
@@ -153,7 +153,7 @@ class DmsfController < ApplicationController
     rescue DmsfAccessError
       render_403
     rescue StandardError => e
-      flash[:errors] = e.message
+      flash[:error] = e.message
       Rails.logger.error e.message
     end
   end
@@ -170,7 +170,7 @@ class DmsfController < ApplicationController
 
   def entries_email
     if params[:email][:to].strip.blank?
-      flash[:errors] = l(:error_email_to_must_be_entered)
+      flash[:error] = l(:error_email_to_must_be_entered)
     else
       DmsfMailer.deliver_send_documents(@project, params[:email].permit!, User.current)
       File.delete(params[:email][:zipped_content])
@@ -249,7 +249,7 @@ class DmsfController < ApplicationController
     if result
       flash[:notice] = l(:notice_folder_deleted)
     else
-      flash[:errors] = @folder.errors.full_messages.to_sentence
+      flash[:error] = @folder.errors.full_messages.to_sentence
     end
     respond_to do |format|
       format.html do
@@ -267,7 +267,7 @@ class DmsfController < ApplicationController
     if @folder.restore
       flash[:notice] = l(:notice_dmsf_folder_restored)
     else
-      flash[:errors] = @folder.errors.full_messages.to_sentence
+      flash[:error] = @folder.errors.full_messages.to_sentence
     end
     redirect_to :back
   end
@@ -281,7 +281,7 @@ class DmsfController < ApplicationController
       if @project.save
         flash[:notice] = l(:notice_folder_details_were_saved)
       else
-        flash[:errors] = @project.errors.full_messages.to_sentence
+        flash[:error] = @project.errors.full_messages.to_sentence
       end
     end
     redirect_to dmsf_folder_path(:id => @project)
@@ -339,7 +339,7 @@ class DmsfController < ApplicationController
         @folder.unlock!
         flash[:notice] = l(:notice_folder_unlocked)
       else
-        flash[:errors] = l(:error_only_user_that_locked_folder_can_unlock_it)
+        flash[:error] = l(:error_only_user_that_locked_folder_can_unlock_it)
       end
     end
      redirect_to :back
@@ -455,7 +455,7 @@ class DmsfController < ApplicationController
       folder = DmsfFolder.find_by(id: id)
       if folder
         unless folder.restore
-          flash[:errors] = folder.errors.full_messages.to_sentence
+          flash[:error] = folder.errors.full_messages.to_sentence
         end
       else
         raise FileNotFound
@@ -466,7 +466,7 @@ class DmsfController < ApplicationController
       file = DmsfFile.find_by(id: id)
       if file
         unless file.restore
-          flash[:errors] = file.errors.full_messages.to_sentence
+          flash[:error] = file.errors.full_messages.to_sentence
         end
       else
         raise FileNotFound
@@ -477,7 +477,7 @@ class DmsfController < ApplicationController
       link = DmsfLink.find_by(id: id)
       if link
         unless link.restore
-          flash[:errors] = link.errors.full_messages.to_sentence
+          flash[:error] = link.errors.full_messages.to_sentence
         end
       else
         raise FileNotFound
@@ -492,7 +492,7 @@ class DmsfController < ApplicationController
       folder = DmsfFolder.find_by(id: id)
       if folder
         unless folder.delete commit
-          flash[:errors] = folder.errors.full_messages.to_sentence
+          flash[:error] = folder.errors.full_messages.to_sentence
           return
         end
       elsif !commit
@@ -544,7 +544,7 @@ class DmsfController < ApplicationController
       link = DmsfLink.find_by(id: id)
       link.delete commit if link
     end
-    if flash[:errors].blank? && flash[:warning].blank?
+    if flash[:error].blank? && flash[:warning].blank?
       flash[:notice] = l(:notice_entries_deleted)
     end
   end

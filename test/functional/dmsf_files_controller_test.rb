@@ -90,18 +90,18 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
   def delete_locked
     # Permissions OK but the file is locked
     @role.add_permission! :file_delete
-    delete @file, :params => {:commit => false}
+    delete @file, params: { commit: false }
     assert_response :redirect
-    assert_include l(:error_file_is_locked), flash[:errors]
+    assert_include l(:error_file_is_locked), flash[:error]
   end
 
   def delete_ok
     # Permissions OK and not locked
-    flash[:errors].clear
+    flash[:error].clear
     @file.unlock!
-    delete @file, :params => {:commit => false}
+    delete @file, params: { commit: false }
     assert_response :redirect
-    assert_equal 0, flash[:errors].size
+    assert_equal 0, flash[:error].size
   end
 
   def test_obsolete_revision_ok

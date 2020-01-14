@@ -39,7 +39,7 @@ class DmsfFoldersCopyController < ApplicationController
   def copy
     new_folder = @folder.copy_to(@target_project, @target_folder)
     unless new_folder.errors.empty?
-      flash[:error] = new_folder.errors.full_messages.join(', ')
+      flash[:error] = new_folder.errors.full_messages.to_sentence
       redirect_to :action => 'new', :id => @folder, :target_project_id => @target_project,
                   :target_folder_id => @target_folder
       return
@@ -55,7 +55,7 @@ class DmsfFoldersCopyController < ApplicationController
       flash[:notice] = l(:notice_successful_update)
       redirect_to dmsf_folder_path(:id => @target_project, :folder_id => @folder)
     else
-      flash[:error] = @folder.errors.full_messages.join(', ')
+      flash[:error] = @folder.errors.full_messages.to_sentence
       redirect_to :action => 'new', :id => @folder, :target_project_id => @target_project,
                   :target_folder_id => @target_folder
     end

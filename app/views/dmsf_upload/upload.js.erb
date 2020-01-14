@@ -23,7 +23,7 @@
 var fileSpan = $('#dmsf_attachments_<%= j params[:attachment_id] %>');
 <% if @attachment.new_record? %>
   fileSpan.hide();
-  alert("<%= escape_javascript @attachment.errors.full_messages.join(', ') %>");
+  alert("<%= escape_javascript @attachment.errors.full_messages.to_sentence %>");
 <% else %>
 $('<input>', { type: 'hidden', name: 'dmsf_attachments[<%= j params[:attachment_id] %>][token]' } ).val('<%= j @attachment.token %>').appendTo(fileSpan);
 fileSpan.find('a.dmsf-remove-upload')

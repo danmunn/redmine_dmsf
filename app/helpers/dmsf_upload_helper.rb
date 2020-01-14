@@ -112,7 +112,7 @@ module DmsfUploadHelper
             end
           rescue => e
             Rails.logger.error e.message
-            controller.flash[:errors] = e.message if controller
+            controller.flash[:error] = e.message if controller
             failed_uploads.push(file)
           end
         else

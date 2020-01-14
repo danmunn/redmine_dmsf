@@ -133,9 +133,9 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_delete_not_empty
     # Permissions OK but the folder is not empty
     @role.add_permission! :folder_manipulation
-    get :delete, :params => {:id => @project, :folder_id => @folder1.id, :commit => false}
+    get :delete, params: { id: @project, folder_id: @folder1.id, commit: false}
     assert_response :redirect
-    assert_include l(:error_folder_is_not_empty), flash[:errors]
+    assert_include l(:error_folder_is_not_empty), flash[:error]
   end
 
   def test_delete_locked
@@ -144,7 +144,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project.id, folder_id: @folder2.id)
     get :delete, params: { id: @project, folder_id: @folder2.id, commit: false}
     assert_response :redirect
-    assert_include l(:error_folder_is_locked), flash[:errors]
+    assert_include l(:error_folder_is_locked), flash[:error]
   end
 
   def test_delete_ok
@@ -185,10 +185,10 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @request.env['HTTP_REFERER'] = dmsf_folder_path(:id => @project.id)
     @role.add_permission! :folder_manipulation
     @role.add_permission! :view_dmsf_files
-    get :entries_operation, :params => {:id => @project, :delete_entries => 'Delete',
-      :ids => ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]}
+    get :entries_operation, params: { id: @project, delete_entries: 'Delete',
+      ids: ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :redirect
-    assert_equal flash[:errors].to_s, l(:error_folder_is_not_empty)
+    assert_equal flash[:error].to_s, l(:error_folder_is_not_empty)
   end
 
   def test_delete_entries_ok
@@ -197,21 +197,22 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :folder_manipulation
     @role.add_permission! :file_delete
-    flash[:errors] = nil
-    get :entries_operation, :params => {:id => @project, :delete_entries => 'Delete',
-        :ids => ["folder-#{@folder7.id}", "file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
+    flash[:error] = nil
+    get :entries_operation, params: { id: @project, delete_entries: 'Delete',
+        ids: ["folder-#{@folder7.id}", "file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :redirect
-    assert_nil flash[:errors]
+    assert_nil flash[:error]
   end
 
   def test_restore_entries
     # Restore
     @role.add_permission! :view_dmsf_files
     @request.env['HTTP_REFERER'] = trash_dmsf_path(:id => @project.id)
-    get :entries_operation, :params => {:id => @project, :restore_entries => 'Restore',
-        :ids => ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
+    flash[:error] = nil
+    get :entries_operation, params: { id: @project, restore_entries: 'Restore',
+        ids: ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
     assert_response :redirect
-    assert_nil flash[:errors]
+    assert_nil flash[:error]
   end
 
   def test_show

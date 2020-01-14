@@ -96,7 +96,7 @@ class DmsfFilesController < ApplicationController
   def create_revision
     if params[:dmsf_file_revision]
       if @file.locked_for_user?
-        flash[:errors] = l(:error_file_is_locked)
+        flash[:error] = l(:error_file_is_locked)
       else
         revision = DmsfFileRevision.new
         revision.title = params[:dmsf_file_revision][:title]
@@ -186,10 +186,10 @@ class DmsfFilesController < ApplicationController
               Rails.logger.error "Could not send email notifications: #{e.message}"
             end
           else
-            flash[:errors] = @file.errors.full_messages.join(', ')
+            flash[:error] = @file.errors.full_messages.to_sentence
           end
         else
-          flash[:errors] = revision.errors.full_messages.join(', ')
+          flash[:error] = revision.errors.full_messages.to_sentence
         end
       end
     end
@@ -217,8 +217,8 @@ class DmsfFilesController < ApplicationController
           end
         end
       else
-        msg = @file.errors.full_messages.join(', ')
-        flash[:errors] = msg
+        msg = @file.errors.full_messages.to_sentence
+        flash[:error] = msg
         Rails.logger.error msg
       end
     end
@@ -243,10 +243,10 @@ class DmsfFilesController < ApplicationController
         end
         flash[:notice] = l(:notice_revision_deleted)
       else
-        flash[:errors] = @revision.errors.full_messages.join(', ')
+        flash[:error] = @revision.errors.full_messages.to_sentence
       end
     end
-    redirect_to :action => 'show', :id => @file
+    redirect_to action: 'show', id: @file
   end
 
   def obsolete_revision
@@ -254,10 +254,10 @@ class DmsfFilesController < ApplicationController
       if @revision.obsolete
         flash[:notice] = l(:notice_revision_obsoleted)
       else
-        flash[:errors] = @revision.errors.full_messages.join(', ')
+        flash[:error] = @revision.errors.full_messages.to_sentence
       end
     end
-    redirect_to :action => 'show', :id => @file
+    redirect_to action: 'show', id: @file
   end
 
   def lock
@@ -268,7 +268,7 @@ class DmsfFilesController < ApplicationController
         @file.lock!
         flash[:notice] = l(:notice_file_locked)
       rescue => e
-        flash[:errors] = e.message
+        flash[:error] = e.message
       end
     end
     redirect_to :back
@@ -283,10 +283,10 @@ class DmsfFilesController < ApplicationController
           @file.unlock!
           flash[:notice] = l(:notice_file_unlocked)
         rescue => e
-          flash[:errors] = e.message
+          flash[:error] = e.message
         end
       else
-        flash[:errors] = l(:error_only_user_that_locked_file_can_unlock_it)
+        flash[:error] = l(:error_only_user_that_locked_file_can_unlock_it)
       end
     end
     redirect_to :back
@@ -316,7 +316,7 @@ class DmsfFilesController < ApplicationController
     if @file.restore
       flash[:notice] = l(:notice_dmsf_file_restored)
     else
-      flash[:errors] = @file.errors.full_messages.to_sentence
+      flash[:error] = @file.errors.full_messages.to_sentence
     end
     redirect_to :back
   end

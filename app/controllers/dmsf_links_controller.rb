@@ -114,7 +114,7 @@ class DmsfLinksController < ApplicationController
         flash[:notice] = l(:notice_successful_create)
       else
         msg = @dmsf_link.errors.full_messages.to_sentence
-        flash[:errors] = msg
+        flash[:error] = msg
         Rails.logger.error msg
       end
     else
@@ -144,7 +144,7 @@ class DmsfLinksController < ApplicationController
       if result
         flash[:notice] = l(:notice_successful_create)
       else
-        flash[:errors] = @dmsf_link.errors.full_messages.to_sentence
+        flash[:error] = @dmsf_link.errors.full_messages.to_sentence
       end
     end
     respond_to do |format|
@@ -172,7 +172,7 @@ class DmsfLinksController < ApplicationController
         flash[:notice] = l(:notice_successful_delete)
       else
         @dmsf_link.errors.each do |e, msg|
-          flash[:errors] = msg
+          flash[:error] = msg
         end
       end
     end

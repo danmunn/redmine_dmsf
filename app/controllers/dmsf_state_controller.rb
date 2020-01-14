@@ -36,7 +36,7 @@ class DmsfStateController < ApplicationController
       if format_valid?(member.dmsf_title_format) && member.save
         flash[:notice] = l(:notice_your_preferences_were_saved)
       else
-        flash[:errors] = l(:notice_your_preferences_were_not_saved)
+        flash[:error] = l(:notice_your_preferences_were_not_saved)
       end
     else
       flash[:warning] = l(:user_is_not_project_member)
