@@ -28,75 +28,74 @@
   <% if @file_manipulation_allowed %>
     <% if @file.locked_for_user? %>
       <% if User.current.allowed_to?(:force_file_unlock, @project) %>
-        <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
-                       :title => l(:title_unlock_file), :class => 'icon icon-unlock')%>
+        <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(id:  @file),
+                       title: l(:title_unlock_file), class: 'icon icon-unlock')%>
       <% end %>
     <% else %>
       <% if @file.locked? %>
-        <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(:id => @file),
-                       :title => l(:title_unlock_file), :class => 'icon icon-unlock') %>
+        <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(id: @file),
+                       title: l(:title_unlock_file), class: 'icon icon-unlock') %>
       <% else %>
-        <%= link_to(l(:button_lock), lock_dmsf_files_path(:id => @file),
-                    :title => l(:title_lock_file), :class => 'icon icon-lock') %>
+        <%= link_to(l(:button_lock), lock_dmsf_files_path(id: @file),
+                    title: l(:title_lock_file), class: 'icon icon-lock') %>
       <% end %>
       <% if @file.notification %>
         <%= link_to(l(:label_notifications_off),
-                    notify_deactivate_dmsf_files_path(:id => @file),
-                    :title => l(:title_notifications_active_deactivate),
-                    :class => 'icon icon-email') %>
+                    notify_deactivate_dmsf_files_path(id: @file),
+                    title: l(:title_notifications_active_deactivate),
+                    class: 'icon icon-email') %>
       <% else %>
         <%= link_to(l(:label_notifications_on),
-                    notify_activate_dmsf_files_path(:id => @file),
-                    :title => l(:title_notifications_not_active_activate),
-                    :class => 'icon icon-email-add') %>
+                    notify_activate_dmsf_files_path(id: @file),
+                    title: l(:title_notifications_not_active_activate),
+                    class: 'icon icon-email-add') %>
       <% end %>
       <%= link_to(l(:label_link_to),
-                  new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @file.dmsf_folder ? @file.dmsf_folder.id : nil, :dmsf_file_id => @file.id, :type => 'link_to'),
-                  :title => l(:title_create_link),
-                  :class => 'icon icon-link') %>
-      <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(:id => @file),
-                  :title => l(:title_copy), :class => 'icon icon-copy') %>
-      <%= delete_link(dmsf_file_path(:id => @file, :details => true)) if @file_delete_allowed %>
+                  new_dmsf_link_path(project_id: @project.id, dmsf_folder_id: @file.dmsf_folder ? @file.dmsf_folder.id : nil, dmsf_file_id: @file.id, type: 'link_to'),
+                  title: l(:title_create_link),
+                  class: 'icon icon-link') %>
+      <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: @file),
+                  title: l(:title_copy), class: 'icon icon-copy') %>
+      <%= delete_link(dmsf_file_path(id: @file, details: true)) if @file_delete_allowed %>
     <% end %>
   <% end %>
 </div>
 
-<%= render(:partial => '/dmsf/path',
-  :locals => {:folder => @file.dmsf_folder, :filename => @file.title, :title => nil}) %>
+<%= render(partial: '/dmsf/path', locals: { folder: @file.dmsf_folder, filename: @file.title, title: nil}) %>
 
 <% if @file_manipulation_allowed && !@file.locked_for_user? %>
   <%= error_messages_for('file') %>
   <%= error_messages_for('revision') %>
-  <%= render(:partial => 'file_new_revision') %>
+  <%= render(partial: 'file_new_revision') %>
 <% end %>
 
-<div class="dmsf_id_box tabular">
-  <%= label_tag('', l(:label_document)) %>
-  <%= "##{@file.id}" %>
+<div class="dmsf_id_box">
+  <strong><%= label_tag('', l(:label_document)) %></strong>
+  #<%= "#{@file.id}" %>
 </div>
 
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.dmsf_file_revisions.visible[@revision_pages.offset, @revision_pages.per_page].each do |revision| %>
-  <div class="dmsf_revision_box tabular dataTables_wrapper">
+  <div class="dmsf_revision_box dataTables_wrapper">
     <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">
       <div class="dataTables_lenght">
         <div id="dmsf_tag" class="dmsf_controls">
           <%= link_to_function image_tag('group.png'),
             "$('#revision_access-#{revision.id}').toggle()",
-            :title => l(:title_download_entries) %>
+            title: l(:title_download_entries) %>
           <%= link_to image_tag('download.png'),
-            view_dmsf_file_path(@file, :download => revision),
-            :title => l(:title_title_version_version_download, :title => h(revision.title), :version => revision.version) %>
+            view_dmsf_file_path(@file, download: revision),
+              title: l(:title_title_version_version_download, title: h(revision.title), version: revision.version) %>
           <%= link_to image_tag('close_hl.png'),
             obsolete_revision_path(revision),
-            :data => {:confirm => l(:text_are_you_sure)},
-            :title => l(:title_obsolete_revision) if @file_manipulation_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
+              data: { confirm: l(:text_are_you_sure) },
+              title: l(:title_obsolete_revision) if @file_manipulation_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
           <%= link_to image_tag('delete.png'),
             delete_revision_path(revision),
-            :data => {:confirm => l(:text_are_you_sure)},
-            :title => l(:title_delete_revision) if @file_delete_allowed && (@file.dmsf_file_revisions.visible.count > 1) %>
+              data: { confirm: l(:text_are_you_sure) },
+              title: l(:title_delete_revision) if @file_delete_allowed && (@file.dmsf_file_revisions.visible.count > 1) %>
         </div>
-        <i><%= l(:info_revision, :rev => revision.id) %></i>
+        <i><%= l(:info_revision, rev: revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>
         <%= l(:info_changed_by_user, :changed => format_time(revision.updated_at)) %>
         <%= link_to(revision.user.name, user_path(revision.user)) if revision.user %>
@@ -106,69 +105,69 @@
       <div class="splitcontent">
         <div class="splitcontentleft">
             <div class="status attribute">
-              <%= content_tag :div, l(:label_title), :class => 'label' %>
-              <%= content_tag :div, h(revision.title), :class => 'value' %>
+              <%= content_tag :div, l(:label_title), class: 'label' %>
+              <%= content_tag :div, h(revision.title), class: 'value' %>
             </div>
           <% if revision.description.present? %>
             <div class="status attribute">
-              <%= content_tag :div, l(:label_description), :class => 'label' %>
+              <%= content_tag :div, l(:label_description), class: 'label' %>
               <% text = clean_wiki_text(textilizable(h revision.description)) %>
-              <%= content_tag :div, text.html_safe, :class => 'value wiki' %>
+              <%= content_tag :div, text.html_safe, class: 'value wiki' %>
             </div>
           <% end %>
           <div class="status attribute">
-            <%= content_tag :div, l(:label_dmsf_version), :class => 'label' %>
-            <%= content_tag :div, "#{revision.version}", :class => 'value' %>
+            <%= content_tag :div, l(:label_dmsf_version), class: 'label' %>
+            <%= content_tag :div, "#{revision.version}", class: 'value' %>
           </div>
           <div class="status attribute">
-            <%= content_tag :div, l(:label_size), :class => 'label' %>
-            <%= content_tag :div, number_to_human_size(revision.size), :class => 'value' %>
+            <%= content_tag :div, l(:label_size), class: 'label' %>
+            <%= content_tag :div, number_to_human_size(revision.size), class: 'value' %>
           </div>
           <% wf = DmsfWorkflow.find_by(id: revision.dmsf_workflow_id) %>
           <% if wf %>
             <div class="status attribute">
-              <%= content_tag :div, l(:label_workflow), :class => 'label' %>
+              <%= content_tag :div, l(:label_workflow), class: 'label' %>
               <div class="value">
                 <%= "#{wf.name} - " %>
                 <%= link_to(revision.workflow_str(false),
-                  log_dmsf_workflow_path(:project_id => @project.id,
-                    :id => wf.id, :dmsf_file_revision_id => revision.id),
-                  :title => revision.workflow_tooltip,
-                  :remote => true) %>
+                  log_dmsf_workflow_path(project_id: @project.id,
+                    id: wf.id, dmsf_file_revision_id: revision.id),
+                    title: revision.workflow_tooltip,
+                    remote: true) %>
               </div>
             </div>
           <% end %>
           <% if revision.comment.present? %>
             <div class="status attribute">
-              <%= content_tag :div, l(:label_comment), :class => 'label' %>
+              <%= content_tag :div, l(:label_comment), class: 'label' %>
               <% text = clean_wiki_text(textilizable(h revision.comment)) %>
-              <%= content_tag :div, text.html_safe, :class => 'value wiki' %>
+              <%= content_tag :div, text.html_safe, class: 'value wiki' %>
             </div>
           <% end %>
         </div>
         <div class="splitcontentright">
           <div class="status attribute">
-            <%= content_tag :div, l(:label_file), :class => 'label' %>
+            <%= content_tag :div, l(:label_file), class: 'label' %>
             <div class="value">
               <% path = "#{revision.dmsf_file.dmsf_folder.dmsf_path_str}/" if revision.dmsf_file.dmsf_folder %>
               <%= h("#{path}#{revision.name}") %>
             </div>
           </div>
           <div class="status attribute">
-            <%= content_tag :div, l(:label_mime), :class => 'label' %>
-            <%= content_tag :div, revision.mime_type, :class => 'value' %>
+            <%= content_tag :div, l(:label_mime), class: 'label' %>
+            <%= content_tag :div, revision.mime_type, class: 'value' %>
           </div>
           <% if revision.digest.present? %>
             <div class="status attribute">
-              <%= content_tag :div, l(:field_digest), :class => 'label' %>
-              <%= content_tag :div, "#{revision.digest_type}: #{revision.digest}", :class => 'value wiki' %>
+              <%= content_tag :div, l(:field_digest), class: 'label' %>
+              <%= content_tag :div, "#{revision.digest_type}: #{revision.digest}", class: 'value wiki' %>
             </div>
           <% end %>
-          <%= render 'dmsf/custom_fields', :object => revision %>
+          <%= render 'dmsf/custom_fields', object: revision %>
         </div>
       </div>
       <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">
-        <%= render(:partial => 'revision_access', :locals => {:revision => revision}) if @file_manipulation_allowed %>
+        <%= render(:partial => 'revision_access', locals: { revision: revision }) if @file_manipulation_allowed %>
       </div>
     </div>
   </div>
@@ -178,6 +177,8 @@
 <span class="pagination"><%= pagination_links_full @revision_pages, @file.dmsf_file_revisions.visible.count %></span>
 
 <%= late_javascript_tag do %>
+  $('.dmsf_controls').show();
+  $('#browser').show();
   $('a.delete-revision').click(function(event) {
     if(!window.confirm('<%= l(:text_are_you_sure) %>')) {
       event.preventDefault();
@@ -207,6 +208,9 @@
   $('.dmsf_list').dataTable({
     language: {
       url: "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
+    },
+    oLanguage: {
+      sSearch: "<%= l(:description_filter) %>:"
     }
   });
 <% end %>
@@ -218,6 +222,6 @@
 <% end %>
 
 <% content_for :header_tags do %>
-  <%= stylesheet_link_tag 'jquery.dataTables/datatables.min.css', :plugin => :redmine_dmsf %>
-  <%= javascript_include_tag 'jquery.dataTables/datatables.min.js', :plugin => :redmine_dmsf, defer: true %>
+  <%= stylesheet_link_tag 'jquery.dataTables/datatables.min.css', plugin: :redmine_dmsf %>
+  <%= javascript_include_tag 'jquery.dataTables/datatables.min.js', plugin: :redmine_dmsf, defer: true %>
 <% end %>

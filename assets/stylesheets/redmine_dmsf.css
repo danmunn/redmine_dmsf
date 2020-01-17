@@ -102,11 +102,6 @@ table.display thead th div.DataTables_sort_wrapper span {
 	display: block;
 }
 
-/* Move 10-25-50-100 entries in Download entries data table to the visible area */
-div.dataTables_length label {
-    margin-left: -24px;
-}
-
 /* Comptibility with Easy SW: sorting icons are not visible do */
 .ui-state-default .ui-icon,
 .ui-icon-circle-plus,
@@ -129,6 +124,14 @@ div.dataTables_length label {
 .dmsf_entries #browser_filter.dataTables_filter,
 .dmsf_entries #browser_filter.dataTables_filter input {
 	font-size: 0.9em;
+}
+
+/* Revision's downloads box */
+.dmsf_revision_box .dataTables_length label,
+.dmsf_revision_box .dataTables_length select,
+.dmsf_revision_box .dataTables_filter label,
+.dmsf_revision_box .dataTables_filter input {
+    font-weight: normal;
 }
 
 #dmsf_buttons.dmsf_controls {
@@ -223,14 +226,10 @@ div.dmsf_revision_inner_box .attribute .label {
 .dmsf_id_box {
   float: right;
   white-space: nowrap;
-  line-height: 1.5em;
+  line-height: 24px;
   color: #505050;
   margin-top: 5px;
   padding-left: 10px;
-}
-
-.dmsf_revision_box .ui-widget-header {
-    font-weight: normal;
 }
 
 .dmsf_log_header_box{
