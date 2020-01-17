@@ -22,6 +22,7 @@
 #browser.dmsf_list {
     border-bottom: none;
     display: none;
+    padding-right: 1px;
 }
 
 #dmsf_ajax_loading.ajax-loading {
