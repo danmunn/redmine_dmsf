@@ -34,7 +34,7 @@ class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
 
   def test_options_for_root_path
     process :options, '/'
-    assert_response :success
+    assert_response defined?(EasyExtensions) ? :method_not_allowed : :success
   end
 
   def test_options_for_dmsf_root_path
@@ -44,7 +44,7 @@ class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
 
   def test_propfind_for_root_path
     process :propfind, '/'
-    assert_response :not_found
+    assert_response defined?(EasyExtensions) ? :method_not_allowed : :not_found
   end
 
   def test_propfind_for_dmsf_root_path
