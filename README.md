@@ -38,12 +38,12 @@ Features
   * Document tagging
   * Trash bin
   * Documents attachable to issues
-  * Compatible with Redmine 4.0.x
+  * Compatible with Redmine 4.1.x
 
 Dependencies
 ------------
   
-  * Redmine 4.0.0 or higher
+  * Redmine 4.1.0 or higher
 
 ### Full-text search (optional)
 

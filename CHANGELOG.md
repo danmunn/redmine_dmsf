@@ -1,10 +1,31 @@
 Changelog for Redmine DMSF
 ==========================
 
-2.4.2 *????-??-??*
+2.4.2 *2020-01-21*
 ------------------
 
     Compatibility with Redmine 4.1
+    Chinese localisation updated
+        
+* New: #1072 - Fix deprecation multiple gemfile sources
+* New: #1069 - Minor version is limited to 99 max - I recommend to change the limit to 999
+* New: #1068 - [travis] test redmine 4.1.0
+* New: #1067 - update redmine extensions
+* New: #1066 - Create zh-TW.json
+* Bug: #1065 - Installation error version 2.4.1
+* Bug: #1064 - Wrong sorting of Czech characters
+* Bug: #1060 - XSS fix
+* Bug: #1058 - DMS form flickering on page reload
+* New: #1055 - Autofill of folder link name
+* New: #1054 - Displaying of inherited permission in Folder permissions
+* Bug: #1052 - Accessible even if WebDAV is disabled
+* Bug: #1051 - redmine:dmsf_alert_approvals rake task on closed projects
+* Bug: #1046 - Redirect to parent folder after folder edit
+* Bug: #1041 - Download button gets disabled after first download
+* Bug: #1038 - Webdav not open file
+* Bug: #932  - Undefined method 'to_prepare' for ActionDispatch::Reloader:Class (Redmine 4.0 / Rails 5)
+* Bug: #913  - ActionController::RoutingError (No route matches [PROPFIND] "/")
+* New #908   - Wrapping problem in Issue view
 
 2.4.1 *2019-09-13*
 ------------------
