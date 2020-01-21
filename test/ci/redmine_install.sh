@@ -24,7 +24,7 @@ if [[ ! -v REDMINE_GIT_REPO ]]; then
   export REDMINE_GIT_REPO=git://github.com/redmine/redmine.git
 fi
 if [[ ! -v REDMINE_GIT_TAG ]]; then
-  export REDMINE_GIT_TAG=4.0-stable
+  export REDMINE_GIT_TAG=4.1-stable
 fi
 
 clone()

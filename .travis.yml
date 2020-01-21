@@ -26,7 +26,7 @@ sudo: true
 dist: xenial
 
 rvm:      
-  - 2.5
+  - 2.6
 
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS test CHARACTER SET utf8mb4;'
@@ -49,9 +49,6 @@ after_script:
   - bash -x ./test/ci/redmine_install.sh -u
 
 env:
-  - DB=sqlite
-  - DB=mysql
-  - DB=postgres
   - DB=sqlite   REDMINE_GIT_TAG=4.1-stable
   - DB=mysql    REDMINE_GIT_TAG=4.1-stable
   - DB=postgres REDMINE_GIT_TAG=4.1-stable
@@ -63,4 +60,4 @@ services:
   - postgresql
 
 addons:
-  mariadb: '10.3'
+  mariadb: '10.4'
