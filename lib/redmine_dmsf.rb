@@ -26,9 +26,9 @@ DMSF_MAX_NOTIFICATION_RECEIVERS_INFO = 10
 # DMSF libraries
 
 # Validators
-require_dependency '../validators/dmsf_file_name_validator'
-require_dependency '../validators/dmsf_workflow_name_validator'
-require_dependency '../validators/dmsf_url_validator'
+require_dependency File.dirname(__FILE__) + '/../app/validators/dmsf_file_name_validator'
+require_dependency File.dirname(__FILE__) + '/../app/validators/dmsf_workflow_name_validator'
+require_dependency File.dirname(__FILE__) + '/../app/validators/dmsf_url_validator'
 
 # Plugin's patches
 require 'redmine_dmsf/patches/projects_helper_patch'
