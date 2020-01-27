@@ -60,4 +60,4 @@ services:
   - postgresql
 
 addons:
-  mariadb: '10.4'
+  mariadb: '10.3'
