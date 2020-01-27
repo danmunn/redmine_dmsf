@@ -31,12 +31,12 @@ module RedmineDmsf
       def project_settings_tabs
         tabs = super
         dmsf_tabs = [
-          {:name => 'dmsf', :action => {:controller => 'dmsf_state', :action => 'user_pref_save'},
-           :partial => 'dmsf_state/user_pref', :label => :menu_dmsf},
-          {:name => 'dmsf_workflow', :action => {:controller => 'dmsf_workflows', :action => 'index'},
-           :partial => 'dmsf_workflows/main', :label => :label_dmsf_workflow_plural}
+          { name: 'dmsf', action: { controller: 'dmsf_state', action: 'user_pref_save' },
+          partial: 'dmsf_state/user_pref', label: :menu_dmsf },
+          { name: 'dmsf_workflow', action: { controller: 'dmsf_workflows', action: 'index' },
+          partial: 'dmsf_workflows/main', label: :label_dmsf_workflow_plural }
         ]
-        tabs.concat(dmsf_tabs.select {|dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project)})
+        tabs.concat(dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project)} )
         tabs
       end
 
@@ -44,9 +44,5 @@ module RedmineDmsf
   end
 end
 
-if Redmine::Plugin.installed?(:easy_extensions)
-  RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
-    'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true
-else
-  ProjectsController.send :helper, RedmineDmsf::Patches::ProjectHelperPatch
-end
+RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
+  'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true
