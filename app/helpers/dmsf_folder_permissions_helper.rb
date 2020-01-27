@@ -23,7 +23,7 @@
 module DmsfFolderPermissionsHelper
 
   def users_checkboxes(users, inherited = false)
-    s = ''
+    s = +''
     id = inherited ? 'inherited_permissions[user_ids][]' : 'permissions[user_ids][]'
      users.each do |user|
       content = check_box_tag(id, user.id, true, disabled: inherited, id: nil) + user.name

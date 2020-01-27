@@ -53,8 +53,10 @@ class DmsfFolderPermissionsController < ApplicationController
     scope = Principal.active.visible.member_of(@project).like(params[:q]).order(:type, :lastname)
     if @dmsf_folder
       users = @dmsf_folder.permissions_users
-      ids = users.collect{ |u| u.id }
-      scope = scope.where(['id NOT IN (?)', ids.join(',')]).order(:type, :lastname)
+      if(users.any?)
+        ids = users.collect{ |u| u.id }
+        scope = scope.where.not(id: ids)
+      end
     end
     scope.to_a
   end
