@@ -598,7 +598,7 @@ class DmsfController < ApplicationController
   end
 
   def get_display_params
-    @rlf = cookies[:dmsf_switch_rlf]
+    @rlf = cookies[:dmsf_switch_rlf] == 'true'
     @system_folder = @folder && @folder.system
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)

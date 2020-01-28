@@ -23,68 +23,72 @@
 %>
 
 <div id="dmsf_uploader_header">
-  <div class="dmsf_upload_select">
-    <select id="uploader_select">
-     <option value="1">
-        <%= l(:label_drag_drop) %>
-      </option>
-      <option value="2">
-        <%= l(:label_classic) %>
-      </option>
-    </select>
-  </div>
+  <% unless @rlf %>
+    <div class="dmsf_upload_select">
+      <select id="uploader_select">
+       <option value="1">
+          <%= l(:label_drag_drop) %>
+        </option>
+        <option value="2">
+          <%= l(:label_classic) %>
+        </option>
+      </select>
+    </div>
+  <% end %>
 
   <h3><%= l(:label_upload) %></h3>
 </div>
-<%= form_tag({:controller => 'dmsf_upload', :action => 'upload_files', :id => @project, :folder_id => @folder},
-             :id => 'uploadform', :method => :post, :multipart => true) do %>
+<%= form_tag({ controller: 'dmsf_upload', action: 'upload_files', id: @project, folder_id: @folder },
+             id: 'uploadform', method: :post, multipart: true) do %>
   <div id="dmsf_uploader">
     <span class="dmsf_uploader">
-      <%= render :partial => 'dmsf_upload/form',
-                 :locals => { :multiple => true, :container => nil, :description => true, :awf => false } %>
+      <%= render partial: 'dmsf_upload/form',
+                 locals: { multiple: true, container: nil, description: true, awf: false } %>
     </span>
     <%= submit_tag l(:label_upload) %>
   </div>
 <% end %>
 
-<%
-  form_url = url_for({:controller => 'dmsf_upload', :action => 'upload_file', :id => @project})
-  max_file_size = "#{@ajax_upload_size}mb"
-  max_file_count = Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i if Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i > 0
-  flash_url = plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.swf')
-%>
+<% unless @rlf %>
+  <%
+    form_url = url_for({:controller => 'dmsf_upload', :action => 'upload_file', :id => @project})
+    max_file_size = "#{@ajax_upload_size}mb"
+    max_file_count = Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i if Setting.plugin_redmine_dmsf['dmsf_max_file_upload'].to_i > 0
+    flash_url = plugin_asset_path(:redmine_dmsf, 'javascripts', 'plupload/js/Moxie.swf')
+  %>
 
-<%= late_javascript_tag do %>
-  var originalUploaderContent;
-  var uploader = $('#dmsf_uploader');
-  originalUploaderContent = uploader.html();
-  $('#uploader_select').change(function() {
-    if($(this).val() === '2') {
-      uploader.html(originalUploaderContent);
-      dmsfSetupFileDrop();
-    } else {
-      initPlUploader(
-        uploader,
-        '<%= form_url %>',
-        '<%= max_file_size %>',
-        '<%= max_file_count %>',
-        '<%= flash_url %>'
-      );
-    }
-  });
-  initPlUploader(
-    uploader,
-    '<%= form_url %>',
-    '<%= max_file_size %>',
-    '<%= max_file_count %>',
-    '<%= flash_url %>'
-  );
-  window.dmsfFileFieldCount = 1;
-<% end %>
+  <%= late_javascript_tag do %>
+    var originalUploaderContent;
+    var uploader = $('#dmsf_uploader');
+    originalUploaderContent = uploader.html();
+    $('#uploader_select').change(function() {
+      if($(this).val() === '2') {
+        uploader.html(originalUploaderContent);
+        dmsfSetupFileDrop();
+      } else {
+        initPlUploader(
+          uploader,
+          '<%= form_url %>',
+          '<%= max_file_size %>',
+          '<%= max_file_count %>',
+          '<%= flash_url %>'
+        );
+      }
+    });
+    initPlUploader(
+      uploader,
+      '<%= form_url %>',
+      '<%= max_file_size %>',
+      '<%= max_file_count %>',
+      '<%= flash_url %>'
+    );
+    window.dmsfFileFieldCount = 1;
+  <% end %>
 
-<% content_for :header_tags do %>
-  <%= stylesheet_link_tag 'plupload/jquery.ui.plupload.css', :plugin => :redmine_dmsf %>
-  <%= javascript_include_tag 'plupload/js/plupload.full.min.js', :plugin => :redmine_dmsf, defer: true %>
-  <%= javascript_include_tag 'plupload/js/jquery.ui.plupload/jquery.ui.plupload.js', :plugin => :redmine_dmsf, defer: true %>
-  <%= javascript_include_tag(js_url, :plugin => :redmine_dmsf, defer: true) %>
+  <% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'plupload/jquery.ui.plupload.css', :plugin => :redmine_dmsf %>
+    <%= javascript_include_tag 'plupload/js/plupload.full.min.js', :plugin => :redmine_dmsf, defer: true %>
+    <%= javascript_include_tag 'plupload/js/jquery.ui.plupload/jquery.ui.plupload.js', :plugin => :redmine_dmsf, defer: true %>
+    <%= javascript_include_tag(js_url, :plugin => :redmine_dmsf, defer: true) %>
+  <% end %>
 <% end %>
