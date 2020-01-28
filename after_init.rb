@@ -49,7 +49,10 @@ def dmsf_init
                       {:dmsf => [:show]},
                       :read => true
       pmap.permission :user_preferences,
-                      {:dmsf_state => [:user_pref_save]}
+                      {
+                            dmsf_state: [:user_pref_save],
+                            dmsf: [:switch_rlf]
+                           }
       pmap.permission :view_dmsf_files,
                       {:dmsf => [:entries_operation, :entries_email, :download_email_entries, :tag_changed, :add_email,
                                  :append_email, :autocomplete_for_user],

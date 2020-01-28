@@ -413,6 +413,9 @@ cs:
 
   label_inherited_permissions: Zděděná práva
 
+  label_switch_rlf: Přepni do/z Redmine vzhledu
+  button_switch: Přepni vzhled
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

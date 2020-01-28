@@ -55,7 +55,23 @@ class DmsfController < ApplicationController
     end
   end
 
+  def switch_rlf
+    rlf = params[:rlf] == 'true'
+    cookie_options = {
+        value: !rlf,
+        expires: 1.year.from_now,
+        path: (RedmineApp::Application.config.relative_url_root || '/'),
+        secure: request.ssl?,
+        httponly: true
+    }
+    cookies[:dmsf_switch_rlf] = cookie_options
+
+    Rails.logger.info ">>> RLF set: #{cookies[:dmsf_switch_rlf]}"
+    redirect_to dmsf_folder_path(id: @project, folder_id: @folder)
+  end
+
   def show
+    Rails.logger.info ">>> RLF get: #{cookies[:dmsf_switch_rlf]}"
     get_display_params
     if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
       render_404
@@ -582,6 +598,7 @@ class DmsfController < ApplicationController
   end
 
   def get_display_params
+    @rlf = cookies[:dmsf_switch_rlf]
     @system_folder = @folder && @folder.system
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)

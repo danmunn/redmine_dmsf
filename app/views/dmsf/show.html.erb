@@ -24,7 +24,10 @@
 
 <% html_title l(:dmsf) %>
 <div class="contextual">
-  <% if @folder_manipulation_allowed && !@system_folder %>
+    <%= link_to(l(:button_switch), switch_rlf_dmsf_path(id: @project, rlf: @rlf),
+              title: l(:label_switch_rlf),
+              class: 'icon icon-plugins') %>
+    <% if @folder_manipulation_allowed && !@system_folder %>
       <% if @folder.nil? %>
           <%= link_to(l(:button_edit), edit_root_dmsf_path(:id => @project),
                       :title => l(:link_edit, :title => l(:link_documents)),

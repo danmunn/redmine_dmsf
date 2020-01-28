@@ -413,6 +413,9 @@ pl:
 
   label_inherited_permissions: Inherited permissions
 
+  label_switch_rlf: Switch Redmine look and feel design
+  button_switch: Switch design
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

@@ -44,6 +44,7 @@ if Redmine::Plugin.installed? :redmine_dmsf
     get '/projects/:id/dmsf/lock', :controller => 'dmsf', :action => 'lock', :as => 'lock_dmsf'
     get '/projects/:id/dmsf/unlock', :controller => 'dmsf', :action => 'unlock', :as => 'unlock_dmsf'
     get '/projects/:id/dmsf/', :controller => 'dmsf', :action => 'show', :as => 'dmsf_folder'
+    get '/projects/:id/dmsf/rlf', controller: 'dmsf', action: 'switch_rlf', as: 'switch_rlf_dmsf'
     get '/projects/:id/dmsf/new', :controller => 'dmsf', :action => 'new', :as => 'new_dmsf'
     get '/projects/:id/dmsf/edit', :controller => 'dmsf', :action => 'edit', :as => 'edit_dmsf'
     get '/projects/:id/dmsf/edit/root', :controller => 'dmsf', :action => 'edit_root', :as => 'edit_root_dmsf'
