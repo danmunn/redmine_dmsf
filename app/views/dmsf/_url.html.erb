@@ -66,21 +66,7 @@
         <td class="dmsf_cf"></td>
     <% end %>
 <% end %>
-<td class="dmsf_buttons">
-  <span class="icon"></span>
-  <span class="icon"></span>
-  <span class="icon"></span>
-  <% if @file_delete_allowed %>
-    <%= link_to('',
-      dmsf_link_path(link),
-      :data => {:confirm => l(:text_are_you_sure)},
-      :method => :delete,
-      :title => l(:title_delete),
-        :class => "icon icon-del") %>
-  <% else %>
-    <span class="icon"></span>
-  <% end %>
-</td>
+<td class="dmsf_buttons"><%= link_to_context_menu %></td>
 <td class="none"><%= position %> </td>
 <td class="none"></td>
 <td class="none">link.updated_at.to_i</td>

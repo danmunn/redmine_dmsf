@@ -139,7 +139,7 @@ class DmsfFolder < ActiveRecord::Base
     if locked?
       errors[:base] << l(:error_folder_is_locked)
       return false
-    elsif !dmsf_folders.visible.empty? || !dmsf_files.visible.empty? || !dmsf_links.visible.empty?
+    elsif !empty?
       errors[:base] << l(:error_folder_is_not_empty)
       return false
     end
@@ -150,6 +150,10 @@ class DmsfFolder < ActiveRecord::Base
       self.deleted_by_user = User.current
       save!
     end
+  end
+
+  def empty?
+    !(dmsf_folders.visible.exists? || dmsf_files.visible.exists? || dmsf_links.visible.exists?)
   end
 
   def deleted?
@@ -163,7 +167,7 @@ class DmsfFolder < ActiveRecord::Base
     end
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
-    save!
+    save
   end
 
   def dmsf_path

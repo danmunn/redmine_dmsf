@@ -77,7 +77,6 @@ nl:
   title_check_for_zip_download_or_email: Vink voor zip, download of email
   title_check_for_restore_or_delete: Vink voor herstel of verwijder
 
-  title_delete: Verwijder
   title_notifications_active_deactivate: "Notificaties actief: Deactiveren"
   title_notifications_not_active_activate: "Notificaties niet actief: Activeren"
   title_title_version_version_download: "%{title} versie %{version} downloaden"
@@ -248,7 +247,6 @@ nl:
   label_dmsf_workflow_plural_num: "Goedkeuring workflows (%{count})"
   label_dmsf_workflow_step: Stap
   label_dmsf_workflow_step_plural: Stappen
-  label_dmsf_workflow_approval: Goedkeuring
   label_dmsf_workflow_approval_plural: Goedkeuringen
   label_dmsf_wokflow_action_approve: Goedkeuren
   label_dmsf_wokflow_action_reject: Afwijzen
@@ -415,6 +413,7 @@ nl:
 
   label_switch_rlf: Switch Redmine look and feel design
   button_switch: Switch design
+  button_edit_content: Edit content
 
   easy_pages:
     modules:

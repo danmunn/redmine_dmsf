@@ -20,20 +20,18 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<ul>
-  <% if @dmsf_file || @dmsf_link %>
-    <%= render(partial: 'file_trash', locals: { project: @project, folder: @folder, dmsf_file: @dmsf_file,
-                                                dmsf_link: @dmsf_link, allowed_delete: @allowed_delete,
-                                                allowed_restore: @allowed_restore }) %>
-  <% elsif @dmsf_folder %>
-    <%= render(partial: 'folder_trash', locals: { project: @project, folder: @folder, dmsf_folder: @dmsf_folder,
-                                                  dmsf_link: @dmsf_link, allowed: @allowed }) %>
-  <% else %>
-    <%= render(partial: 'multiple_trash', locals: { project: @project, folder: @folder, allowed: @allowed }) %>
-  <% end %>
-</ul>
-<%= late_javascript_tag do %>
-  $('#dmsf-cm-delete').click(function (event) {
-    contextMenuHide();
-  });
-<% end %>
+<li>
+  <%= context_menu_link l(:button_download), entries_operations_dmsf_path(id: project, folder_id: folder,
+    ids: params[:ids], download_entries: true), method: :post, class: 'icon icon-download', disabled: false %>
+</li>
+<li>
+  <%= context_menu_link l(:field_mail), entries_operations_dmsf_path(id: project, folder_id: folder,
+    ids: params[:ids], email_entries: true), method: :post, class: 'icon icon-email',
+    disabled: !email_allowed %>
+</li>
+<li>
+  <%= context_menu_link l(:button_delete), entries_operations_dmsf_path(id: project, folder_id: folder,
+    ids: params[:ids], delete_entries: true), method: :post, class: 'icon icon-del',
+    data: { confirm: l(:text_are_you_sure) }, id: 'dmsf-cm-delete',
+    disabled: !allowed %>
+</li>

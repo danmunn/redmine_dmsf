@@ -77,7 +77,6 @@ zh-TW:
   title_check_for_zip_download_or_email: 選取檔案 (下載或電子郵件發送)
   title_check_for_restore_or_delete: Check for restore or delete
 
-  title_delete: 刪除
   title_notifications_active_deactivate: "通知啟用中: 點擊關閉通知"
   title_notifications_not_active_activate: "通知關閉中: 點擊啟用通知"
   title_title_version_version_download: " 版本: %{version} 檔案: %{title} 下載"
@@ -248,7 +247,6 @@ zh-TW:
   label_dmsf_workflow_plural_num: 批准流程 (%{count})
   label_dmsf_workflow_step: 步驟
   label_dmsf_workflow_step_plural: 步驟
-  label_dmsf_workflow_approval: 批准
   label_dmsf_workflow_approval_plural: 批准
   label_dmsf_wokflow_action_approve: 批准
   label_dmsf_wokflow_action_reject: 拒絕
@@ -415,6 +413,7 @@ zh-TW:
 
   label_switch_rlf: Switch Redmine look and feel design
   button_switch: Switch design
+  button_edit_content: Edit content
 
   easy_pages:
     modules:

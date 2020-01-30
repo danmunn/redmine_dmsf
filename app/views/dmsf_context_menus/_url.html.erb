@@ -20,20 +20,7 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<ul>
-  <% if @dmsf_file || @dmsf_link %>
-    <%= render(partial: 'file_trash', locals: { project: @project, folder: @folder, dmsf_file: @dmsf_file,
-                                                dmsf_link: @dmsf_link, allowed_delete: @allowed_delete,
-                                                allowed_restore: @allowed_restore }) %>
-  <% elsif @dmsf_folder %>
-    <%= render(partial: 'folder_trash', locals: { project: @project, folder: @folder, dmsf_folder: @dmsf_folder,
-                                                  dmsf_link: @dmsf_link, allowed: @allowed }) %>
-  <% else %>
-    <%= render(partial: 'multiple_trash', locals: { project: @project, folder: @folder, allowed: @allowed }) %>
-  <% end %>
-</ul>
-<%= late_javascript_tag do %>
-  $('#dmsf-cm-delete').click(function (event) {
-    contextMenuHide();
-  });
-<% end %>
+<li>
+  <%= context_menu_link l(:button_delete), dmsf_link_path(dmsf_link), method: :delete, class: 'icon icon-del',
+                        data: { confirm: l(:text_are_you_sure) }, id: 'dmsf-cm-delete', disabled: !allowed %>
+</li>

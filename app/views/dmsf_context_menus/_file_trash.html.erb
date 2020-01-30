@@ -20,20 +20,14 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<ul>
-  <% if @dmsf_file || @dmsf_link %>
-    <%= render(partial: 'file_trash', locals: { project: @project, folder: @folder, dmsf_file: @dmsf_file,
-                                                dmsf_link: @dmsf_link, allowed_delete: @allowed_delete,
-                                                allowed_restore: @allowed_restore }) %>
-  <% elsif @dmsf_folder %>
-    <%= render(partial: 'folder_trash', locals: { project: @project, folder: @folder, dmsf_folder: @dmsf_folder,
-                                                  dmsf_link: @dmsf_link, allowed: @allowed }) %>
-  <% else %>
-    <%= render(partial: 'multiple_trash', locals: { project: @project, folder: @folder, allowed: @allowed }) %>
-  <% end %>
-</ul>
-<%= late_javascript_tag do %>
-  $('#dmsf-cm-delete').click(function (event) {
-    contextMenuHide();
-  });
-<% end %>
+<li>
+  <%= context_menu_link l(:title_restore),
+                        dmsf_link ? restore_dmsf_link_path(id: dmsf_link) : restore_dmsf_file_path(id: dmsf_file),
+                        class: 'icon icon-cancel', disabled: !allowed_restore %>
+</li>
+<li>
+  <%= context_menu_link l(:button_delete),
+                        dmsf_link ? dmsf_link_path(id: dmsf_link, commit: 'yes') : dmsf_file_path(id: dmsf_file, commit: 'yes'),
+                        data: { confirm: l(:text_are_you_sure) }, method: :delete, class: 'icon icon-del',
+                        id: 'dmsf-cm-delete', disabled: !allowed_delete %>
+</li>

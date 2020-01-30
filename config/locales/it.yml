@@ -77,7 +77,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   title_check_for_zip_download_or_email: Seleziona per zip, download o email
   title_check_for_restore_or_delete: Seleziona per ripristinare o cancellare
 
-  title_delete: Cancella
   title_notifications_active_deactivate: "Notifiche attive: Disattiva"
   title_notifications_not_active_activate: "Notifiche disattivate: Attiva"
   title_title_version_version_download: "%{title} versione %{version} download"
@@ -248,7 +247,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_dmsf_workflow_plural_num: Approvazioni flusso di lavoro (%{count})
   label_dmsf_workflow_step: Passo
   label_dmsf_workflow_step_plural: Passi
-  label_dmsf_workflow_approval: Approvazione
   label_dmsf_workflow_approval_plural: Approvazioni
   label_dmsf_wokflow_action_approve: Approva
   label_dmsf_wokflow_action_reject: Rifiuta
@@ -415,6 +413,7 @@ it: # Italian strings thx 2 Matteo Arceci!
 
   label_switch_rlf: Switch Redmine look and feel design
   button_switch: Switch design
+  button_edit_content: Edit content
 
   easy_pages:
     modules:

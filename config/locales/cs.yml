@@ -77,7 +77,6 @@ cs:
   title_check_for_zip_download_or_email: Vybrat pro stažení jako zip nebo emailem
   title_check_for_restore_or_delete: Vybrat pro obnovení nebo smazání
 
-  title_delete: Smazat
   title_notifications_active_deactivate: "Notifikace aktivní: Deaktivovat"
   title_notifications_not_active_activate: "Notifikace nejsou aktivní: Aktivovat"
   title_title_version_version_download: "%{title} verze %{version} stáhnout"
@@ -248,7 +247,6 @@ cs:
   label_dmsf_workflow_plural_num: Schvalovací procesy (%{count})
   label_dmsf_workflow_step: Krok
   label_dmsf_workflow_step_plural: Kroky
-  label_dmsf_workflow_approval: Schválení
   label_dmsf_workflow_approval_plural: Schválení
   label_dmsf_wokflow_action_approve: Schválit
   label_dmsf_wokflow_action_reject: Odmítnout
@@ -415,6 +413,7 @@ cs:
 
   label_switch_rlf: Přepni do/z Redmine vzhledu
   button_switch: Přepni vzhled
+  button_edit_content: Upravit obsah
 
   easy_pages:
     modules:

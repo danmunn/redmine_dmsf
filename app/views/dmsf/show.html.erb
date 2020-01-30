@@ -82,8 +82,7 @@
   <% end %>
 </div>
 
-<%= render(:partial => 'path',
-           :locals => {:folder => @folder, :filename => nil, :title => nil}) %>
+<%= render partial: 'path', locals: { folder: @folder, filename: nil, title: nil } %>
 
 <div class="dmsf-header">
   <div class="wiki">

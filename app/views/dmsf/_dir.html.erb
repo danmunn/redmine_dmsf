@@ -79,51 +79,7 @@
         </td>
     <% end %>
 <% end %>
-<td class="dmsf_buttons">
-  <% if @folder_manipulation_allowed && !(subfolder && subfolder.system) %>
-    <% if subfolder && subfolder.locked? %>
-      <span class="icon-only"></span>
-      <% if subfolder.unlockable? && (!subfolder.locked_for_user? || @force_file_unlock_allowed) %>
-        <%= link_to('', unlock_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => subfolder.get_locked_title,
-          :class => 'icon-only icon-unlock') %>
-      <% else %>
-        <span class="icon-only icon-unlock" title="<%= subfolder.get_locked_title %>"></span>
-      <% end %>
-    <% else %>
-      <% if subfolder %>
-        <%= link_to('', edit_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:link_edit, :title => h(subfolder.title)),
-          :class => 'icon-only icon-edit') %>
-      <% else %>
-        <%= link_to('', edit_root_dmsf_path(:id => @project),
-          :title => l(:link_edit, :title => l(:link_documents)),
-          :class => 'icon-only icon-edit') %>
-      <% end %>
-      <% if subfolder %>
-        <%= link_to('', lock_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:title_lock_file),
-          :class => 'icon-only icon-lock') %>
-      <% else %>
-        <span class="icon-only"></span>
-      <% end %>
-      <% if (subfolder && subfolder.notification) || (!subfolder && project.dmsf_notification) %>
-        <%= link_to('', notify_deactivate_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:title_notifications_active_deactivate),
-          :class => 'icon-only icon-email') %>
-      <% else %>
-        <%= link_to('', notify_activate_dmsf_path(:id => project, :folder_id => subfolder),
-          :title => l(:title_notifications_not_active_activate),
-          :class => 'icon-only icon-email-add') %>
-      <% end %>
-      <%= link_to('', link ? dmsf_link_path(link) : delete_dmsf_path(:id => project, :folder_id => subfolder),
-        :data => {:confirm => l(:text_are_you_sure)},
-        :title => l(:title_delete),
-        :method => :delete,
-        :class => 'icon-only icon-del') %>
-    <% end %>
-  <% end %>
-</td>
+<td class="dmsf_buttons"><%= link_to_context_menu %></td>
 <td class="dmsf_position none"><%= position %></td>
 <td class="none">0</td>
 <td class="none"><%= subfolder.modified.to_i if subfolder %></td>

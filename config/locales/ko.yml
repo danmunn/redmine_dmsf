@@ -77,7 +77,6 @@ ko:
   title_check_for_zip_download_or_email: Zip, 다운로드 혹은 이메일 체크
   title_check_for_restore_or_delete: 복구되거나 삭제된 파일 체크
 
-  title_delete: 삭제
   title_notifications_active_deactivate: "알림 활성화: 비활성화"
   title_notifications_not_active_activate: "알림 비활성화: 활성화"
   title_title_version_version_download: "%{title} 버전 %{version} 다운로드"
@@ -248,7 +247,6 @@ ko:
   label_dmsf_workflow_plural_num: "승인된 작업 흐름 (%{count})"
   label_dmsf_workflow_step: 단계
   label_dmsf_workflow_step_plural: 단계들
-  label_dmsf_workflow_approval: 승인
   label_dmsf_workflow_approval_plural: 승인들
   label_dmsf_wokflow_action_approve: 승인
   label_dmsf_wokflow_action_reject: 반려
@@ -415,6 +413,7 @@ ko:
 
   label_switch_rlf: Switch Redmine look and feel design
   button_switch: Switch design
+  button_edit_content: Edit content
 
   easy_pages:
     modules:

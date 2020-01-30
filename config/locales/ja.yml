@@ -77,7 +77,6 @@ ja:
   title_check_for_zip_download_or_email: Zip圧縮してダウンロードまたはメールするにはチェック
   title_check_for_restore_or_delete: 復元または削除するにはチェック
 
-  title_delete: 削除する
   title_notifications_active_deactivate: "通知は有効です: 無効にする"
   title_notifications_not_active_activate: "通知は無効です: 有効にする"
   title_title_version_version_download: "%{title} のバージョン %{version} をダウンロードする"
@@ -248,7 +247,6 @@ ja:
   label_dmsf_workflow_plural_num: 承認ワークフロー数 (%{count})
   label_dmsf_workflow_step: ステップ
   label_dmsf_workflow_step_plural: ステップ
-  label_dmsf_workflow_approval: 承認
   label_dmsf_workflow_approval_plural: 承認
   label_dmsf_wokflow_action_approve: 承認
   label_dmsf_wokflow_action_reject: 否認
@@ -415,6 +413,7 @@ ja:
 
   label_switch_rlf: Switch Redmine look and feel design
   button_switch: Switch design
+  button_edit_content: Edit content
 
   easy_pages:
     modules:

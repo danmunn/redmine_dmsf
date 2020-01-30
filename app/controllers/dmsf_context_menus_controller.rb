@@ -25,17 +25,48 @@ class DmsfContextMenusController < ApplicationController
 
   before_action :find_project
   before_action :find_folder
-  before_action :find_file, :except => [:trash]
+  before_action :find_dmsf_file
+  before_action :find_dmsf_folder
 
   def dmsf
-    @disabled = params[:ids].blank?
-    render :layout => false
+    if @dmsf_file
+      @locked = @dmsf_file.locked?
+      @unlockable = @dmsf_file.unlockable? && (!@dmsf_file.locked_for_user?) &&
+          User.current.allowed_to?(:force_file_unlock, @project)
+      @allowed = User.current.allowed_to? :file_manipulation, @project
+      @email_allowed = User.current.allowed_to?(:email_documents, @project)
+    elsif @dmsf_folder
+      @locked = @dmsf_folder.locked?
+      @unlockable = @dmsf_folder.unlockable? && (!@dmsf_folder.locked_for_user?) &&
+          User.current.allowed_to?(:force_file_unlock, @project)
+      @allowed = User.current.allowed_to?(:folder_manipulation, @project)
+      @email_allowed = User.current.allowed_to?(:email_documents, @project)
+    elsif @dmsf_link
+      @allowed = User.current.allowed_to? :file_manipulation, @project
+    else
+      @allowed = User.current.allowed_to?(:folder_manipulation, @project) &&
+          User.current.allowed_to?(:file_delete, @project)
+      @email_allowed = User.current.allowed_to?(:email_documents, @project)
+    end
+    render layout: false
   rescue ActiveRecord::RecordNotFound
     render_404
   end
 
   def trash
-    render :layout => false
+    if @dmsf_file
+      @allowed_restore = User.current.allowed_to? :file_manipulation, @project
+      @allowed_delete = User.current.allowed_to? :file_delete, @project
+    elsif @dmsf_folder
+      @allowed = User.current.allowed_to?(:folder_manipulation, @project)
+    elsif @dmsf_link
+      @allowed_restore = User.current.allowed_to? :file_manipulation, @project
+      @allowed_delete = User.current.allowed_to? :file_delete, @project
+    else
+      @allowed = User.current.allowed_to?(:folder_manipulation, @project) &&
+          User.current.allowed_to?(:file_manipulation, @project)
+    end
+    render layout: false
   rescue ActiveRecord::RecordNotFound
     render_404
   end
@@ -50,16 +81,24 @@ class DmsfContextMenusController < ApplicationController
     render_404
   end
 
-  def find_file
-    if params[:ids].present?
-      selected_files = params[:ids].select{ |x| x =~ /file-\d+/ }.map{ |x| $1.to_i if x =~ /file-(\d+)/ }
-      selected_file_links = params[:ids].select{ |x| x =~ /file-link-\d+/ }.map{ |x| $1.to_i if x =~ /file-link-(\d+)/ }
-      selected_file_links.each do |id|
-        target_id = DmsfLink.where(id: id).pluck(:target_id).first
-        selected_files << target_id if target_id && !selected_files.include?(target_id)
+  def find_dmsf_file
+    if (params[:ids].size == 1) && (!@dmsf_folder)
+      if params[:ids][0] =~ /file-(\d+)/
+        @dmsf_file = DmsfFile.find_by(id: $1)
+      elsif params[:ids][0] =~ /(file|url)-link-(\d+)/
+        @dmsf_link = DmsfLink.find_by(id: $2)
+        @dmsf_file = DmsfFile.find_by(id: @dmsf_link.target_id) if @dmsf_link && @dmsf_link.target_type != 'DmsfUrl'
       end
-      if (selected_files.size == 1) && (params[:ids].size == 1)
-        @file = DmsfFile.find_by(id: selected_files[0])
+    end
+  end
+
+  def find_dmsf_folder
+    if (params[:ids].size == 1) && (!@dmsf_file)
+      if params[:ids][0] =~ /folder-(\d+)/
+        @dmsf_folder = DmsfFolder.find_by(id: $1)
+      elsif params[:ids][0] =~ /folder-link-(\d+)/
+        @dmsf_link = DmsfLink.find_by(id: $1)
+        @dmsf_folder = DmsfFolder.find_by(id: @dmsf_link.target_id) if @dmsf_link
       end
     end
   end

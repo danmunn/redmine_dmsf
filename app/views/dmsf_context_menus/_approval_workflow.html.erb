@@ -1,0 +1,52 @@
+<%
+  # encoding: utf-8
+  #
+  # Redmine plugin for Document Management System "Features"
+  #
+  # Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+  #
+  # This program is free software; you can redistribute it and/or
+  # modify it under the terms of the GNU General Public License
+  # as published by the Free Software Foundation; either version 2
+  # of the License, or (at your option) any later version.
+  #
+  # This program is distributed in the hope that it will be useful,
+  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  # GNU General Public License for more details.
+  #
+  # You should have received a copy of the GNU General Public License
+  # along with this program; if not, write to the Free Software
+  # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<% workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', project.id]).exists? %>
+<% wf = DmsfWorkflow.find_by(id: dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id %>
+<% file_approval_allowed = User.current.allowed_to?(:file_approval, project) %>
+<% allowed = User.current && (dmsf_file.last_revision.dmsf_workflow_assigned_by_user == User.current) && wf %>
+
+<% if file_approval_allowed %>
+  <% case dmsf_file.last_revision.workflow %>
+    <% when DmsfWorkflow::STATE_WAITING_FOR_APPROVAL %>
+        <% if wf %>
+          <% assignments = wf.next_assignments(dmsf_file.last_revision.id) %>
+          <% index = assignments.find_index{ |assignment| assignment.user_id == User.current.id } if assignments %>
+          <%= context_menu_link l(:title_approval), action_dmsf_workflow_path(project_id: project.id, id: wf.id,
+                                                                              dmsf_workflow_step_assignment_id: assignments[index].id,
+                                                                              dmsf_file_revision_id: dmsf_file.last_revision.id),
+                                remote: true, class: 'icon icon-ok', id: 'dmsf-cm-workflow',
+                                disabled: !assignments || !index %>
+      <% end %>
+    <% when DmsfWorkflow::STATE_ASSIGNED %>
+      <%= context_menu_link l(:title_start), start_dmsf_workflow_path(id: dmsf_file.last_revision.dmsf_workflow_id,
+                                                                      dmsf_file_revision_id: dmsf_file.last_revision.id),
+                            class: 'icon icon-ok', disabled: !allowed %>
+    <% when DmsfWorkflow::STATE_APPROVED, DmsfWorkflow::STATE_REJECTED, DmsfWorkflow::STATE_OBSOLETE %>
+        <%# %>
+    <% else %>
+        <%= context_menu_link l(:title_assignment), assign_dmsf_workflow_path(id: project.id, project_id: project.id,
+                                                                              dmsf_file_revision_id: dmsf_file.last_revision.id),
+                              remote: true, class: 'icon icon-ok', id: 'dmsf-cm-workflow',
+                              disabled: locked || !workflows_available %>
+    <% end %>
+<% end %>

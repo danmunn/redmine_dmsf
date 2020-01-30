@@ -253,7 +253,7 @@ module RedmineDmsf
           if issue.attributes_editable? && User.current.allowed_to?(:file_delete, dmsf_file.project)
             html << link_to('',
                             link ? dmsf_link_path(link, :commit => 'yes') : dmsf_file_path(:id => dmsf_file, :commit => 'yes'),
-                            :data => {:confirm => l(:text_are_you_sure)}, :method => :delete, :title => l(:title_delete),
+                            :data => {:confirm => l(:text_are_you_sure)}, :method => :delete, :title => l(:button_delete),
                             :class => 'icon icon-del')
           end
         end

@@ -21,43 +21,27 @@
 %>
 
 <ul>
-  <li>
-    <%= context_menu_link l(:button_download), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
-      :ids => params[:ids], :download_entries => true), :method => :post, :class => 'icon icon-download',
-      :id => 'dmsf-cm-download', :disabled => @disabled %>
-  </li>
-  <li>
-    <%= context_menu_link l(:field_mail), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
-      :ids => params[:ids], :email_entries => true), :method => :post, :class => 'icon icon-email',
-      :disabled => @disabled || (!User.current.allowed_to?(:email_documents, @project)) %>
-  </li>
-  <li>
-    <%= context_menu_link l(:button_delete), entries_operations_dmsf_path(:id => @project, :folder_id => @folder,
-      :ids => params[:ids], :delete_entries => true), :method => :post, :class => 'icon icon-del',
-      :data => { :confirm => l(:text_are_you_sure) }, :id => 'dmsf-cm-delete',
-      :disabled => @disabled || ((!User.current.allowed_to?(:folder_manipulation, @project)) &&
-          (!User.current.allowed_to?(:file_delete, @project)))%>
-  </li>
-  <% if @file %>
-    <li>
-      <% if @file.last_revision && @file.last_revision.protocol %>
-        <% url = "#{@file.last_revision.protocol}:ofe|u|#{Setting.protocol.strip}://#{Setting.host_name.strip}/dmsf/webdav/#{Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@file.project))}/" %>
-        <% if @file.dmsf_folder %>
-          <% url << "#{@file.dmsf_folder.dmsf_path_str}/" %>
-        <% end %>
-        <% url << @file.name %>
-      <% end %>
-      <%= context_menu_link l(:button_edit), url, :class => 'icon icon-edit', :disabled => url.blank? %>
-    </li>
+  <% if @dmsf_file %>
+    <%= render(partial: 'file', locals: { project: @project, folder: @folder, dmsf_file: @dmsf_file,
+                                          dmsf_link: @dmsf_link, locked: @locked, unlockable: @unlockable,
+                                          allowed: @allowed, email_allowed: @email_allowed }) %>
+  <% elsif @dmsf_folder %>
+    <%= render(partial: 'folder', locals: { project: @project, folder: @folder, dmsf_folder: @dmsf_folder,
+                                            dmsf_link: @dmsf_link, locked: @locked, unlockable: @unlockable,
+                                            allowed: @allowed, email_allowed: @email_allowed }) %>
+  <% elsif @dmsf_link %>
+    <%= render(partial: 'url', locals: { dmsf_link: @dmsf_link, allowed: @allowed }) %>
+  <% else %>
+    <%= render(partial: 'multiple', locals: { project: @project, folder: @folder, allowed: @allowed,
+                                              email_allowed: @email_allowed }) %>
   <% end %>
 </ul>
 
 <%= late_javascript_tag do %>
-  $('#dmsf-cm-download').click(function (event) {
+  $('#dmsf-cm-delete').click(function (event) {
     contextMenuHide();
   });
-
-  $('#dmsf-cm-delete').click(function (event) {
+  $('#dmsf-cm-workflow').click(function (event) {
     contextMenuHide();
   });
 <% end %>

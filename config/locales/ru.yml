@@ -77,7 +77,6 @@ ru:
   title_check_for_zip_download_or_email: Выберите документы, которые нужно скачать или отправить их по электронной почте
   title_check_for_restore_or_delete: Выберите документы для удаления или восстановления
 
-  title_delete: Удалить
   title_notifications_active_deactivate: "Уведомления включены: Отключить"
   title_notifications_not_active_activate: "Уведомления не включены: Включить"
   title_title_version_version_download: "Скачать %{title} редакции %{version}"
@@ -248,7 +247,6 @@ ru:
   label_dmsf_workflow_plural_num: Процессы согласования (%{count})
   label_dmsf_workflow_step: Шаг
   label_dmsf_workflow_step_plural: Шаги
-  label_dmsf_workflow_approval: Утверждение
   label_dmsf_workflow_approval_plural: Утверждения
   label_dmsf_wokflow_action_approve: Согласовать
   label_dmsf_wokflow_action_reject: Отклонить
@@ -415,6 +413,7 @@ ru:
 
   label_switch_rlf: Switch Redmine look and feel design
   button_switch: Switch design
+  button_edit_content: Edit content
 
   easy_pages:
     modules:

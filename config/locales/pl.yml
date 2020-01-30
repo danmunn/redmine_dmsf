@@ -77,7 +77,6 @@ pl:
   title_check_for_zip_download_or_email: Zaznacz aby pobrać plik zip lub wysłać email
   title_check_for_restore_or_delete: Check for restore or delete
 
-  title_delete: Usuń
   title_notifications_active_deactivate: "Powiadomienia aktywne: Wyłącz"
   title_notifications_not_active_activate: "Powiadomienia wyłączone: Aktywuj"
   title_title_version_version_download: "pobierz %{title} wersja %{version}"
@@ -248,7 +247,6 @@ pl:
   label_dmsf_workflow_plural_num: Procesy akceptacji (%{count})
   label_dmsf_workflow_step: Krok
   label_dmsf_workflow_step_plural: Kroki
-  label_dmsf_workflow_approval: Akceptacja
   label_dmsf_workflow_approval_plural: Akceptacje
   label_dmsf_wokflow_action_approve: Zaakceptuj
   label_dmsf_wokflow_action_reject: Odrzuć
@@ -415,6 +413,7 @@ pl:
 
   label_switch_rlf: Switch Redmine look and feel design
   button_switch: Switch design
+  button_edit_content: Edit content
 
   easy_pages:
     modules:

@@ -77,7 +77,6 @@ hu:
   title_check_for_zip_download_or_email: Kijelölés tömörítésre, letöltésre vagy email-ben küldésre
   title_check_for_restore_or_delete: Kijelölés visszaállításra vagy törlésre tömörítésre, letöltésre vagy email-ben
     küldésre
-  title_delete: Törlés
   title_notifications_active_deactivate: "Értesítések bekapcsolva: Kikapcsolás"
   title_notifications_not_active_activate: "Értesítések nincsnek bekapcsolva: Bekapcsolás"
   title_title_version_version_download: "%{title} verzió %{version} letöltés"
@@ -248,7 +247,6 @@ hu:
   label_dmsf_workflow_plural_num: "Jóváhagyási workflow-k (%{count})"
   label_dmsf_workflow_step: Lépés
   label_dmsf_workflow_step_plural: Lépések
-  label_dmsf_workflow_approval: Jóváhagyás
   label_dmsf_workflow_approval_plural: Jóváhagyások
   label_dmsf_wokflow_action_approve: Jóváhagyás
   label_dmsf_wokflow_action_assign: Jóváhagyási workflow hozzárendelése
@@ -415,6 +413,7 @@ hu:
 
   label_switch_rlf: Switch Redmine look and feel design
   button_switch: Switch design
+  button_edit_content: Edit content
 
   easy_pages:
     modules:
