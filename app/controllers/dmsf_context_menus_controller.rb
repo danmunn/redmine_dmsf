@@ -35,8 +35,6 @@ class DmsfContextMenusController < ApplicationController
           User.current.allowed_to?(:force_file_unlock, @project))
       @allowed = User.current.allowed_to? :file_manipulation, @project
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
-      Rails.logger.info ">>> #{User.current}"
-      Rails.logger.info ">>> #{@locked}, #{@unlockable}, #{@allowed}, #{@email_allowed}"
     elsif @dmsf_folder
       @locked = @dmsf_folder.locked?
       @unlockable = @dmsf_folder.unlockable? && (!@dmsf_folder.locked_for_user?) &&
