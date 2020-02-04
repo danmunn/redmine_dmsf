@@ -34,22 +34,22 @@ class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
 
   def test_options_for_root_path
     process :options, '/'
-    assert_response :not_found
+    assert_response :method_not_allowed
   end
 
   def test_options_for_dmsf_root_path
     process :options, '/dmsf'
-    assert_response :not_found
+    assert_response :method_not_allowed
   end
 
   def test_propfind_for_root_path
     process :propfind, '/'
-    assert_response :not_found
+    assert_response :method_not_allowed
   end
 
   def test_propfind_for_dmsf_root_path
     process :propfind, '/dmsf'
-    assert_response :not_found
+    assert_response :method_not_allowed
   end
 
   def test_webdav_not_enabled
