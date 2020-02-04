@@ -71,15 +71,14 @@ module RedmineDmsf
 
       # Is this entity a folder?
       def collection?
-        folder.present? # No need to check if entity exists, as false is returned if entity does not exist anyways
+        !folder.nil?
       end
 
       # Check if current entity is a folder and return DmsfFolder object if found (nil if not)
       def folder
         unless @folder
-          return nil unless project
-          @folder = DmsfFolder.visible.where(:project_id => project.id, :title => basename,
-            :dmsf_folder_id => parent.folder ? parent.folder.id : nil).first
+          @folder = DmsfFolder.visible.where(project_id: project.id, title: basename,
+            dmsf_folder_id: parent.folder ? parent.folder.id : nil).first if project
         end
         @folder
       end

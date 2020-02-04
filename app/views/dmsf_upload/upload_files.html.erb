@@ -24,8 +24,8 @@
 
 <% html_title l(:dmsf) %>
 
-<%= render(:partial => '/dmsf/path', 
-  :locals => {:folder => @folder, :filename => nil, :title => l(:heading_uploaded_files)}) %>
+<%= render(partial: '/dmsf/path',
+  locals: { folder: @folder, filename: nil, title: l(:heading_uploaded_files) }) %>
 
 <% if (@folder && @folder.description.present?) || @project.dmsf_description.present? %>
   <div class="wiki">
@@ -33,16 +33,18 @@
   </div>
 <% end %>
 
-<%= form_tag({:action => 'commit_files', :id => @project, :folder_id => @folder},
-  :method => :post) do %>  
-  <% @uploads.each_with_index do |upload, i| %>
-    <% if upload.locked %>
-      <%= render(:partial => 'upload_file_locked', :locals => {:upload => upload, :i => i}) %>
-    <% else %>
-      <%= render(:partial => 'upload_file', :locals => {:upload => upload, :i => i}) %>
+<% unless@uploads.empty? %>
+  <%= form_tag({ action: 'commit_files', id: @project, folder_id: @folder },
+    method: :post) do %>
+    <% @uploads.each_with_index do |upload, i| %>
+      <% if upload.locked %>
+        <%= render(partial: 'upload_file_locked', locals: { upload: upload, i: i }) %>
+      <% else %>
+        <%= render(partial: 'upload_file', locals: { upload: upload, i: i }) %>
+      <% end %>
     <% end %>
+    <div class="form-actions">
+      <%= submit_tag l(:submit_commit), class: 'button-positive' %>
+    </div>
   <% end %>
-  <div class="form-actions">
-    <%= submit_tag l(:submit_commit), :class => 'button-positive' %>
-  </div>
 <% end %>

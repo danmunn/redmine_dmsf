@@ -86,7 +86,7 @@ module RedmineDmsf
       
       def child_project(p)
         project_display_name = ProjectResource.create_project_name(p)
-        new_path = +@path
+        new_path = @path
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
         new_path += project_display_name

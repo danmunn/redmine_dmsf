@@ -36,6 +36,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     @folder1 = DmsfFolder.find 1
     @folder5 = DmsfFolder.find 5
     @file_link2 = DmsfLink.find 2
+    @file_link6 = DmsfLink.find 6
     @folder_link1 = DmsfLink.find 1
     @url_link5 = DmsfLink.find 5
     User.current = nil
@@ -51,6 +52,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     assert_kind_of DmsfFolder, @folder1
     assert_kind_of DmsfFolder, @folder5
     assert_kind_of DmsfLink, @file_link2
+    assert_kind_of DmsfLink, @file_link6
     assert_kind_of DmsfLink, @folder_link1
     assert_kind_of DmsfLink, @url_link5
     assert_kind_of Role, @role1
@@ -160,7 +162,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_file_link
     get :dmsf, params: {
-        id: @file_link2.project.id, folder_id: @file_link2.dmsf_folder.id, ids: ["file-link-#{@file_link2.id}"] }
+        id: @file_link6.project.id, folder_id: @file_link6.dmsf_folder, ids: ["file-link-#{@file_link6.id}"] }
     assert_response :success
     assert_select 'a.icon-edit', text: l(:button_edit)
     assert_select 'a.icon-lock', text: l(:button_lock)
@@ -172,7 +174,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file_link_locked
-    @file_link2.target_file.lock!
+    assert @file_link2.target_file.locked?
     get :dmsf, params: {
         id: @file_link2.project.id, folder_id: @file_link2.dmsf_folder.id, ids: ["file-link-#{@file_link2.id}"] }
     assert_response :success
@@ -190,7 +192,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_folder
-    get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
+    get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
     assert_response :success
     assert_select 'a.icon-edit', text: l(:button_edit)
     assert_select 'a.icon-lock', text: l(:button_lock)
@@ -208,7 +210,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_folder_locked
-    @folder5.lock!
+    assert @folder5.locked?
     get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
     assert_response :success
     assert_select 'a.icon-edit.disabled', text: l(:button_edit)
@@ -228,7 +230,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_folder_manipulation_permmissions_off
     @role1.remove_permission! :folder_manipulation
-    get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
+    get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
     assert_response :success
     assert_select 'a.icon-edit.disabled', text: l(:button_edit)
     assert_select 'a.icon-lock.disabled', text: l(:button_lock)
@@ -238,7 +240,8 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_folder_manipulation_permmissions_on
     @role1.add_permission! :folder_manipulation
-    get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
+    #assert !@folder5.locked?
+    get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
     assert_response :success
     assert_select 'a:not(icon-edit.disabled)', text: l(:button_edit)
     assert_select 'a:not(icon-lock.disabled)', text: l(:button_lock)

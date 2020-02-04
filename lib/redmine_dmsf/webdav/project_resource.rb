@@ -46,15 +46,11 @@ module RedmineDmsf
       end      
 
       def exist?
-        return false if (project.nil? || User.current.anonymous?)                        
-        return false unless project.module_enabled?('dmsf')        
-        User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project)
+        really_exist? && User.current.allowed_to?(:view_dmsf_folders, project)
       end
 
       def really_exist?
-        return false if project.nil?
-        return false unless project.module_enabled?('dmsf')    
-        true
+        project && project.module_enabled?('dmsf')
       end
 
       def collection?
@@ -62,11 +58,11 @@ module RedmineDmsf
       end
 
       def creation_date
-        project.created_on unless project.nil?
+        project.created_on if project
       end
 
       def last_modified
-        project.updated_on unless project.nil?
+        project.updated_on if project
       end
 
       def etag
@@ -78,7 +74,7 @@ module RedmineDmsf
       end
 
       def long_name
-        project.name unless project.nil?
+        project.name if project
       end
 
       def content_type

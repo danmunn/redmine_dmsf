@@ -31,15 +31,15 @@ class DmsfContextMenusController < ApplicationController
   def dmsf
     if @dmsf_file
       @locked = @dmsf_file.locked?
-      @unlockable = @dmsf_file.unlockable? && (!@dmsf_file.locked_for_user? ||
-          User.current.allowed_to?(:force_file_unlock, @project))
       @allowed = User.current.allowed_to? :file_manipulation, @project
+      @unlockable = @allowed && @dmsf_file.unlockable? && (!@dmsf_file.locked_for_user? ||
+          User.current.allowed_to?(:force_file_unlock, @project))
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
     elsif @dmsf_folder
       @locked = @dmsf_folder.locked?
-      @unlockable = @dmsf_folder.unlockable? && (!@dmsf_folder.locked_for_user?) &&
-          User.current.allowed_to?(:force_file_unlock, @project)
       @allowed = User.current.allowed_to?(:folder_manipulation, @project)
+      @unlockable = @allowed && @dmsf_folder.unlockable? && (!@dmsf_folder.locked_for_user?) &&
+          User.current.allowed_to?(:force_file_unlock, @project)
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
     elsif @dmsf_link
       @allowed = User.current.allowed_to? :file_manipulation, @project

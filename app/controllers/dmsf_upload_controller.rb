@@ -58,6 +58,9 @@ class DmsfUploadController < ApplicationController
         end
       end
     end
+    if @uploads.empty?
+      flash.now[:error] = l(:label_attachment) + ' ' + l('activerecord.errors.messages.invalid')
+    end
   end
 
   # async single file upload handling

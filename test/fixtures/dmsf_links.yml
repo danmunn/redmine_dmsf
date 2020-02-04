@@ -54,11 +54,23 @@ file_link2:
 url_link:
   id: 5
   target_project_id: 1
-  target_id: 4
   target_type: DmsfUrl
   name: url_link
   project_id: 1
   external_url: 'https://www.kontron.com'
+  deleted: 0
+  deleted_by_user_id: NULL
+  created_at: <%= DateTime.current %>
+  updated_at: <%= DateTime.current %>
+
+file_link3:
+  id: 6
+  target_project_id: 1
+  target_id: 1
+  target_type: DmsfFile
+  name: file1_link
+  project_id: 1
+  dmsf_folder_id: NULL
   deleted: 0
   deleted_by_user_id: NULL
   created_at: <%= DateTime.current %>

@@ -118,7 +118,6 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     #     </dmsf_file_revision>
     #   </dmsf_file_revisions>
     # </dmsf_file>
-    #puts response.body
     assert_select 'dmsf_file > id', text: @file1.id.to_s
     assert_select 'dmsf_file > title', text: @file1.title
     assert_select 'dmsf_file > name', text: @file1.name
