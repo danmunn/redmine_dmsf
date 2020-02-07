@@ -72,7 +72,7 @@
 <% if DmsfFolder.is_column_on?('author') %>
   <td class="dmsf_author"><%= h(subfolder.user) if subfolder %></td>
 <% end %>
-<% CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c| %>
+<% DmsfFileRevisionCustomField.visible.order(:position).each do |c| %>
     <% if DmsfFolder.is_column_on?(c.name) %>
         <td class="dmsf_cf">
           <%= show_value(subfolder.custom_value(c)) if subfolder %>

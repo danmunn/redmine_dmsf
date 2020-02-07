@@ -317,6 +317,7 @@ class DmsfFolder < ActiveRecord::Base
     last_update
   end
 
+
   # Number of items in the folder
   def items
     dmsf_folders.visible.where(project_id: project_id).all.size +
@@ -401,7 +402,7 @@ class DmsfFolder < ActiveRecord::Base
       return nil if column == 'author'
     end
     # 9 - custom fields
-    CustomField.where(type: 'DmsfFileRevisionCustomField').each do |c|
+    DmsfFileRevisionCustomField.visible.each do |c|
       if DmsfFolder.is_column_on?(c.name)
         pos += 1
       end
@@ -460,7 +461,7 @@ class DmsfFolder < ActiveRecord::Base
     # Revision
     csv << '' if columns.include?(l(:label_last_revision_id))
     # Custom fields
-    CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c|
+    DmsfFileRevisionCustomField.visible.order(:position).each do |c|
       csv << custom_value(c).value if columns.include?(c.name)
     end
     csv
@@ -573,6 +574,10 @@ class DmsfFolder < ActiveRecord::Base
         false
       end
     end
+  end
+
+  def css_classes
+      'dir'
   end
 
   private

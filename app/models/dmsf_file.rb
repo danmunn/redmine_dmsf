@@ -580,7 +580,7 @@ class DmsfFile < ActiveRecord::Base
       end
     end
     # Custom fields
-    CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c|
+    DmsfFileRevisionCustomField.visible.order(:position).each do |c|
       csv << custom_value(c).value if columns.include?(c.name)
     end
     csv

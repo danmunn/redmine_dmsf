@@ -414,6 +414,8 @@ en:
   label_switch_rlf: Switch Redmine look and feel design
   button_switch: Switch design
   button_edit_content: Edit content
+  field_workflow: Workflow
+  field_modified: Updated
 
   easy_pages:
     modules:

@@ -37,8 +37,10 @@ class DmsfController < ApplicationController
 
   accept_api_auth :show, :create, :save, :delete
 
-  helper :all
+  helper :all # TODO: Is it needed?
   helper :dmsf_folder_permissions
+  helper :queries
+  include QueriesHelper
 
   def permissions
     render_403 unless DmsfFolder.permissions?(@folder, false)
@@ -71,7 +73,31 @@ class DmsfController < ApplicationController
   end
 
   def show
-    Rails.logger.info ">>> RLF get: #{cookies[:dmsf_switch_rlf]}"
+    @rlf = cookies[:dmsf_switch_rlf] == 'true'
+    if @rlf
+      @query = DmsfQuery.new(name: 'Dmsf', dmsf_folder: @folder, project: @project)
+      if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
+        render_404
+        return
+      end
+      respond_to do |format|
+        format.html {
+          @dmsf_count = @query.dmsf_count
+          @dmsf_pages = Paginator.new @issue_count, per_page_option, params['page']
+          @dmsf_nodes = @query.dmsf_nodes(offset: @dmsf_pages.offset, limit: @dmsf_pages.per_page)
+          render layout: !request.xhr?
+        }
+        format.api
+        format.csv  {
+          filename = @project.name
+          filename << "_#{@folder.title}" if @folder
+          filename << DateTime.current.strftime('_%Y%m%d%H%M%S.csv')
+          send_data(DmsfHelper.dmsf_to_csv(@folder ? @folder : @project, params[:settings][:dmsf_columns]),
+                    :type => 'text/csv; header=present', :filename => filename)
+        }
+      end
+      return
+    end
     get_display_params
     if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
       render_404

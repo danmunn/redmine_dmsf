@@ -414,3 +414,7 @@ div.dmsf_revision_inner_box .attribute .label {
 .dmsf_attachments_label{
     vertical-align: middle;
 }
+
+#dmsf_csv_export_options {
+    display: none;
+}

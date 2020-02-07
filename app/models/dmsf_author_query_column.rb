@@ -1,5 +1,5 @@
-<%
-# encoding: utf-8
+# encode: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,23 +18,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-%>
+#
 
-<p>
-  <%= content_tag(:label, l(:field_column_names)) %>
-  <% columns = DmsfFolder::AVAILABLE_COLUMNS.dup %>
-  <% columns.concat(extra_columns) if defined?(extra_columns) %>
-  <% index = columns.index(l(:field_project)) %>
-  <%# Move Project to the second position %>
-  <% if index %>
-    <% columns.insert(0, columns.delete_at(index)) %>
-  <% end %>
-  <% cfs = DmsfFileRevisionCustomField.visible.order(:position) %>
-  <% columns.concat(cfs.map{ |c| c.name }) %>
-  <% selected_columns = DmsfFolder::DEFAULT_COLUMNS if selected_columns.blank? %>
-  <% columns.each_with_index do |column, i| %>
-    <%= check_box_tag('settings[dmsf_columns][]', column, selected_columns.include?(column), id: "dmsf_column_#{i}") %>
-    <%= h column.capitalize %>
-    <br/>
-  <% end %>
-</p>
+class DmsfAuthorQueryColumn < QueryColumn
+
+  def value_object(object)
+    "#{object.firstname} #{object.lastname}"
+  end
+
+end

@@ -414,6 +414,8 @@ cs:
   label_switch_rlf: Přepni do/z Redmine vzhledu
   button_switch: Přepni vzhled
   button_edit_content: Upravit obsah
+  field_workflow: Workflow
+  field_modified: Aktualizoval
 
   easy_pages:
     modules:

@@ -53,7 +53,7 @@
       <% if DmsfFolder.is_column_on?('author') %>
         <th class ="dmsf_th"><%= l(:link_author) %></th>
       <% end %>
-      <% CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c| %>
+      <% DmsfFileRevisionCustomField.visible.order(:position).each do |c| %>
           <% if DmsfFolder.is_column_on?(c.name) %>
               <th class="dmsf_th"><%= c.name %></th>
           <% end %>

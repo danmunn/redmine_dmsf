@@ -32,6 +32,7 @@ require_dependency File.dirname(__FILE__) + '/../app/validators/dmsf_url_validat
 
 # Plugin's patches
 require 'redmine_dmsf/patches/projects_helper_patch'
+require 'redmine_dmsf/patches/queries_helper_patch'
 require 'redmine_dmsf/patches/project_patch'
 require 'redmine_dmsf/patches/user_preference_patch'
 require 'redmine_dmsf/patches/user_patch'

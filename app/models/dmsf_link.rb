@@ -192,7 +192,7 @@ class DmsfLink < ActiveRecord::Base
       # Revision
       csv << '' if columns.include?(l(:label_last_revision_id))
       # Custom fields
-      CustomField.where(type: 'DmsfFileRevisionCustomField').order(:position).each do |c|
+      DmsfFileRevisionCustomField.visible.order(:position).each do |c|
         csv << '' if columns.include?(c.name)
       end
     end

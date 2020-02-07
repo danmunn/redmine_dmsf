@@ -1,0 +1,57 @@
+<%
+# encoding: utf-8
+#
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright © 2011-20   Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<% query_options = nil unless defined?(query_options) %>
+<% query_options ||= {} %>
+
+<%= form_tag({}, data: { cm_url: dmsf_context_menu_path }) do %>
+  <%= hidden_field_tag 'back_url', url_for( params: request.query_parameters), id: nil %>
+  <%= query_columns_hidden_tags(query) %>
+  <div class="autoscroll">
+    <table class="list dmsf odd-even <%= query.css_classes %>">
+      <thead>
+      <tr>
+        <th class="checkbox hide-when-print">
+          <%= check_box_tag 'check_all', '', false, class: 'toggle-selection',
+                            title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+        </th>
+        <% query.inline_columns.each do |column| %>
+          <%= column_header(query, column, query_options) %>
+        <% end %>
+        <th class="buttons"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% level = 0 %>
+      <% query.dmsf_nodes.each do |node| %>
+        <tr id="node-<%= node.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= node.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
+          <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", node.id, false, id: nil) %></td>
+          <% query.inline_columns.each do |column| %>
+            <%= content_tag('td', column_content(column, node), class: column.css_classes) %>
+          <% end %>
+          <td class="buttons"><%= link_to_context_menu %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

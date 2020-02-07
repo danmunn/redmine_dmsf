@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -20,21 +21,32 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-gem 'rubyzip', '>= 1.1.3'
-gem 'zip-zip'
-gem 'simple_enum'
-gem 'uuidtools'
-gem 'dalli'
-gem 'active_record_union'
+module RedmineDmsf
+  module Patches
+    module QueriesHelperPatch
 
-# Redmine extensions
-unless %w(easyproject easy_gantt).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
-  gem 'redmine_extensions', '~> 0.3.9'
+      ##################################################################################################################
+      # Overridden methods
+
+      def column_value(column, item, value)
+        case column.name
+        when :title
+          case item.type
+          when 'DmsfFile', 'DmsfFileLink'
+            h(value) + content_tag('div', item.filename, class: 'dmsf_filename', title: l(:title_filename_for_download))
+          else
+            h(value)
+          end
+        when :size
+          number_to_human_size(value)
+        else
+          super column, item, value
+        end
+      end
+
+    end
+  end
 end
 
-# Dav4Rack
-gem 'ox'
-
-group :test do
-  gem 'rails-controller-testing'
-end
+RedmineExtensions::PatchManager.register_helper_patch 'QueriesHelper',
+  'RedmineDmsf::Patches::QueriesHelperPatch', prepend: true

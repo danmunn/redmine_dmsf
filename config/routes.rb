@@ -165,8 +165,10 @@ if Redmine::Plugin.installed? :redmine_dmsf
       end
     end
 
-    # WebDAV
-    match '/', to: lambda { |env| [405, {}, [env.to_s]] }, via: [:propfind, :options]
+    # WebDAV workaround for clients checking WebDAV availability in the root
+    if Redmine::Plugin.installed?(:easy_extensions)
+      match '/', to: lambda { |env| [405, {}, [env.to_s]] }, via: [:propfind, :options]
+    end
     match '/dmsf', to: lambda { |env| [405, {}, [env.to_s]] }, via: [:propfind, :options]
   end
 end
