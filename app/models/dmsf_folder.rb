@@ -577,7 +577,13 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def css_classes
-      'dir'
+    classes = ['dir']
+    if title =~ /^\./
+      classes << 'dmsf_system'
+    elsif ['DmsfFolderLink', 'DmsfFileLink'].include?(type)
+      classes << 'dmsf_gray'
+    end
+    classes.join(' ')
   end
 
   private

@@ -29,16 +29,59 @@ module RedmineDmsf
       # Overridden methods
 
       def column_value(column, item, value)
+        unless item.is_a? DmsfFolder
+          return super column, item, value
+        end
         case column.name
-        when :title
+        when :id
           case item.type
           when 'DmsfFile', 'DmsfFileLink'
-            h(value) + content_tag('div', item.filename, class: 'dmsf_filename', title: l(:title_filename_for_download))
+            link_to h(value), dmsf_file_path(id: item.id)
+          when 'DmsfFolder', 'DmsfFolderLink'
+            if(item.id)
+              link_to h(value), edit_dmsf_path(id: item.project_id, folder_id: item.id)
+            else
+              link_to h(item.project_id), edit_root_dmsf_path(id: item.project_id)
+             end
+          else
+            h(value)
+          end
+        when :author
+          link_to "#{item.firstname} #{item.lastname}", user_path(id: value)
+        when :title
+          case item.type
+          when 'DmsfFolder', 'DmsfFolderLink'
+            link_to(h(value),
+              dmsf_folder_path(id: item.project_id, folder_id: item.id),
+              class: 'icon icon-folder',
+              title: h(value)) +
+              content_tag('div', item.filename, class: 'dmsf_filename', title: l(:title_filename_for_download))
+          when 'DmsfFile', 'DmsfFileLink'
+            file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: item.id })
+            content_type = Redmine::MimeType.of(value)
+            content_type = 'application/octet-stream' if content_type.blank?
+            link_to(h(value),
+                 file_view_url,
+                 target: '_blank',
+                 class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}",
+                 title: h(value),
+                 'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}") +
+                content_tag('div', item.filename, class: 'dmsf_filename', title: l(:title_filename_for_download))
+          when 'DmsfUrlLink'
+            link_to(h(value), item.filename, target: '_blank', class: 'icon icon-link') +
+                content_tag('div', item.filename, class: 'dmsf_filename', title: l(:title_filename_for_download))
           else
             h(value)
           end
         when :size
           number_to_human_size(value)
+        when :workflow
+          if value
+            link_to h(DmsfWorkflowStepAction.workflow_str(value)),
+                log_dmsf_workflow_path(project_id: item.project_id, id: item.workflow_id,
+                                       dmsf_file_revision_id: item.revision_id),
+                remote: true
+          end
         else
           super column, item, value
         end

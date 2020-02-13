@@ -416,6 +416,8 @@ en:
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Updated
+  field_extension: Ext.
+  field_updated: Updated
 
   easy_pages:
     modules:

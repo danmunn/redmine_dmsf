@@ -22,26 +22,27 @@
 
 class DmsfQuery < Query
 
-  attr_accessor :dmsf_folder, :project
+  attr_accessor :dmsf_folder_id, :deleted
+
+  self.queried_class = DmsfFolder
+  self.view_permission = :view_dmsf_files
 
   # Standard columns
   self.available_columns = [
       QueryColumn.new(:id, sortable: 'id', caption: '#'),
-      DmsfTitleQueryColumn.new(:title, frozen: true),
-      QueryColumn.new(:extension),
-      QueryColumn.new(:size),
-      DmsfModifiedQueryColumn.new(:modified),
-      DmsfVersionQueryColumn.new(:version),
-      QueryColumn.new(:workflow),
-      DmsfAuthorQueryColumn.new(:author),
+      DmsfTitleQueryColumn.new(:title, sortable: 'title', frozen: true),
+      QueryColumn.new(:extension, sortable: 'extension'),
+      QueryColumn.new(:size, sortable: 'size'),
+      DmsfModifiedQueryColumn.new(:modified, sortable: 'updated'),
+      DmsfVersionQueryColumn.new(:version, sortable: 'major_version, minor_version'),
+      QueryColumn.new(:workflow, sortable: 'workflow'),
+      QueryColumn.new(:author, sortable: 'firstname, lastname')
   ]
 
   def initialize(attributes)
     super attributes
     self.sort_criteria = []
     self.filters = {}
-    @deleted = false
-    @dmsf_folder_id = @dmsf_folder ? @dmsf_folder.id : nil
   end
 
   ######################################################################################################################
@@ -51,7 +52,12 @@ class DmsfQuery < Query
   def available_columns
     unless @available_columns
       @available_columns = self.class.available_columns.dup
-      @available_columns += DmsfFileRevisionCustomField.visible.collect { |cf| QueryCustomFieldColumn.new(cf) }
+      @available_columns += DmsfFileRevisionCustomField.visible.collect do |cf|
+        c = QueryCustomFieldColumn.new(cf)
+        # We would like to prevent grouping in the Option form
+        c.groupable = false
+        c
+      end
     end
     @available_columns
   end
@@ -72,19 +78,22 @@ class DmsfQuery < Query
   end
 
   def default_sort_criteria
-    [['title', 'desc']]
+    [['title', 'ASC']]
   end
 
   def base_scope
     unless @scope
-      @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_files_scope, dmsf_file_links_scope, dmsf_url_links_scope].inject(:union_all)
+      @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_files_scope, dmsf_file_links_scope, dmsf_url_links_scope].
+          inject(:union_all)
     end
     @scope
   end
 
   # Returns the issue count
   def dmsf_count
-    base_scope.count
+    base_scope.
+        where(statement).
+        count
   rescue ::ActiveRecord::StatementInvalid => e
     raise StatementInvalid.new(e.message)
   end
@@ -93,11 +102,57 @@ class DmsfQuery < Query
     'DmsfQuery'
   end
 
+  def initialize_available_filters
+    add_available_filter 'author', type: :list, values: lambda { author_values }
+    add_available_filter 'title', type: :text
+    add_available_filter 'updated', type: :date_past
+    add_custom_fields_filters(DmsfFileRevisionCustomField.all)
+  end
+
+  def statement
+    unless @statement
+      filters_clauses = []
+      filters.each_key do |field|
+        v = values_for(field).clone
+        next unless v and !v.empty?
+        operator = operator_for(field)
+        if field == 'author'
+          if v.delete('me')
+              v.push(User.current.id.to_s)
+          end
+        end
+        filters_clauses << '(' + sql_for_field(field, operator, v, queried_table_name, field) + ')'
+      end
+      filters_clauses.reject!(&:blank?)
+      if filters_clauses.any?
+        @statement = filters_clauses.join(' AND ').
+            gsub("#{queried_class.table_name}.", '')
+        DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, name|
+          @statement.gsub!("cf_#{id}", "`#{name}`")
+        end
+        end
+    end
+    @statement
+  end
+
   ######################################################################################################################
   # New
 
   def dmsf_nodes(options={})
-    nodes = base_scope.
+    order_option = ['sort', group_by_sort_order, (options[:order] || sort_clause[0]), 'title'].flatten.reject(&:blank?)
+    if order_option.size > 2
+      DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, name|
+        order_option[1].gsub!("COALESCE(cf_#{id}.value, '')", "`#{name}`")
+      end
+      order_option[1].gsub!(',', " #{$1},")
+      if order_option[1] =~ /(DESC|ASC)$/
+        order_option[1].gsub!(',', " #{$1},")
+      end
+    end
+
+    base_scope.
+        where(statement).
+        order(order_option).
         limit(options[:limit]).
         offset(options[:offset])
   end
@@ -116,20 +171,24 @@ class DmsfQuery < Query
     DmsfFolder.
         select(%{
           dmsf_folders.id AS id,
+          dmsf_folders.project_id AS project_id,
+          NULL AS revision_id,
           dmsf_folders.title AS title,
           NULL AS filename,
-          NULL AS extensions,
+          NULL AS extension,
           NULL AS size,
           dmsf_folders.updated_at AS updated,
           NULL AS major_version,
           NULL AS minor_version,
           NULL AS workflow,
+          NULL AS workflow_id,
           users.firstname AS firstname,
-	        users.lastname AS lastname,
+          users.lastname AS lastname,
+          users.id AS author,
           'DmsfFolder' AS type,
           0 AS sort #{cf_columns}}).
         joins('LEFT JOIN users ON dmsf_folders.user_id = users.id').
-        where(dmsf_folders: { project_id: @project.id, dmsf_folder_id: @dmsf_folder_id, deleted: @deleted })
+        where(dmsf_folders: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
   end
 
   def dmsf_folder_links_scope
@@ -140,22 +199,26 @@ class DmsfQuery < Query
     DmsfLink.
         select(%{
           dmsf_folders.id AS id,
-          dmsf_folders.title AS title,
-          NULL AS filename,
-          NULL AS extensions,
+          COALESCE(dmsf_folders.project_id, dmsf_links.project_id) AS project_id,
+          NULL AS revision_id,
+          dmsf_links.name AS title,
+          dmsf_folders.title AS filename,
+          NULL AS extension,
           NULL AS size,
-          dmsf_folders.updated_at AS updated,
+          COALESCE(dmsf_folders.updated_at, dmsf_links.updated_at) AS updated,
           NULL AS major_version,
           NULL AS minor_version,
           NULL AS workflow,
+          NULL AS workflow_id,
           users.firstname AS firstname,
-	        users.lastname AS lastname,
+          users.lastname AS lastname,
+          users.id AS author,
           'DmsfFolderLink' AS type,
           0 AS sort #{cf_columns}}).
-        joins('JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
-        joins('LEFT JOIN users ON dmsf_folders.user_id = users.id ').
-        where(dmsf_links: { target_type: 'DmsfFolder', project_id: @project.id, dmsf_folder_id: @dmsf_folder_id,
-                            deleted: @deleted })
+        joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
+        joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)').
+        where(dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, dmsf_folder_id: dmsf_folder_id,
+                            deleted: deleted })
   end
 
   def dmsf_files_scope
@@ -166,22 +229,26 @@ class DmsfQuery < Query
     DmsfFile.
         select(%{
           dmsf_files.id AS id,
-          dmsf_file_revisions.name AS title,
-          dmsf_file_revisions.disk_filename AS filename,
-          SUBSTR(dmsf_file_revisions.disk_filename, POSITION('.' IN dmsf_file_revisions.disk_filename) + 1, LENGTH(dmsf_file_revisions.disk_filename) - POSITION('.' IN dmsf_file_revisions.disk_filename)) AS extensions,
+          dmsf_files.project_id AS project_id,
+          dmsf_file_revisions.id AS revision_id,
+          dmsf_file_revisions.title AS title,
+          dmsf_file_revisions.name AS filename,
+          SUBSTR(dmsf_file_revisions.disk_filename, POSITION('.' IN dmsf_file_revisions.disk_filename) + 1, LENGTH(dmsf_file_revisions.disk_filename) - POSITION('.' IN dmsf_file_revisions.disk_filename)) AS extension,
           dmsf_file_revisions.size AS size,
           dmsf_file_revisions.updated_at AS updated,
           dmsf_file_revisions.major_version AS major_version,
 	        dmsf_file_revisions.minor_version AS minor_version,
           dmsf_file_revisions.workflow AS workflow,
+          dmsf_file_revisions.dmsf_workflow_id AS workflow_id,
           users.firstname AS firstname,
-	        users.lastname AS lastname,
+          users.lastname AS lastname,
+          users.id AS author,
           'DmsfFile' AS type,
           1 AS sort #{cf_columns}}).
         joins(:dmsf_file_revisions).
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
         where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)').
-        where(dmsf_files: { project_id: @project.id, dmsf_folder_id: @dmsf_folder_id, deleted: @deleted })
+        where(dmsf_files: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
   end
 
   def dmsf_file_links_scope
@@ -192,23 +259,27 @@ class DmsfQuery < Query
     DmsfLink.
         select(%{
           dmsf_files.id AS id,
+          dmsf_files.project_id AS project_id,
+          dmsf_file_revisions.id AS revision_id,
           dmsf_links.name AS title,
-          dmsf_file_revisions.disk_filename AS filename,
-          SUBSTR(dmsf_file_revisions.disk_filename, POSITION('.' IN dmsf_file_revisions.disk_filename) + 1, LENGTH(dmsf_file_revisions.disk_filename) - POSITION('.' IN dmsf_file_revisions.disk_filename)) AS extensions,
+          dmsf_file_revisions.name AS filename,
+          SUBSTR(dmsf_file_revisions.disk_filename, POSITION('.' IN dmsf_file_revisions.disk_filename) + 1, LENGTH(dmsf_file_revisions.disk_filename) - POSITION('.' IN dmsf_file_revisions.disk_filename)) AS extension,
           dmsf_file_revisions.size AS size,
           dmsf_file_revisions.updated_at AS updated,
           dmsf_file_revisions.major_version AS major_version,
 	        dmsf_file_revisions.minor_version AS minor_version,
           dmsf_file_revisions.workflow AS workflow,
+          dmsf_file_revisions.dmsf_workflow_id AS workflow_id,
           users.firstname AS firstname,
-	        users.lastname AS lastname,
+          users.lastname AS lastname,
+          users.id AS author,
           'DmsfFileLink' AS type,
           1 AS sort #{cf_columns}}).
         joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id').
         joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
         where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)').
-        where(dmsf_files: { project_id: @project.id, dmsf_folder_id: @dmsf_folder_id, deleted: @deleted })
+        where(dmsf_files: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
   end
 
   def dmsf_url_links_scope
@@ -219,20 +290,24 @@ class DmsfQuery < Query
     DmsfLink.
         select(%{
           dmsf_links.id AS id,
+          dmsf_links.project_id AS project_id,
+          NULL AS revision_id,
           dmsf_links.name AS title,
           dmsf_links.external_url AS filename,
-          NULL AS extensions,
+          NULL AS extension,
           NULL AS size,
           dmsf_links.updated_at AS updated,
 	        NULL AS major_version,
           NULL AS minor_version,
           NULL AS workflow,
+          NULL AS workflow_id,
           users.firstname AS firstname,
-	        users.lastname AS lastname,
+          users.lastname AS lastname,
+          users.id AS author,
           'DmsfUrlLink' AS type,
           1 AS sort #{cf_columns}}).
         joins('LEFT JOIN users ON dmsf_links.user_id = users.id ').
-        where(target_type: 'DmsfUrl', project_id: @project.id,  dmsf_folder_id: @dmsf_folder_id, deleted: @deleted)
+        where(target_type: 'DmsfUrl', project_id: project.id,  dmsf_folder_id: dmsf_folder_id, deleted: deleted)
   end
 
 end

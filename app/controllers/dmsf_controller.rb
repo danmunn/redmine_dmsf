@@ -75,7 +75,12 @@ class DmsfController < ApplicationController
   def show
     @rlf = cookies[:dmsf_switch_rlf] == 'true'
     if @rlf
-      @query = DmsfQuery.new(name: 'Dmsf', dmsf_folder: @folder, project: @project)
+      use_session = !request.format.csv?
+      @query = retrieve_query(DmsfQuery, use_session)
+      @query.dmsf_folder_id = @folder ? @folder.id : nil
+      @query.deleted = false
+      #@query.project = @project
+      #@query = DmsfQuery.new(name: 'Dmsf', dmsf_folder: @folder, project: @project)
       if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
         render_404
         return
