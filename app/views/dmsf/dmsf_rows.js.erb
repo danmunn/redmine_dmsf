@@ -60,7 +60,6 @@ browser.dataTable({
       <% end %>
   ],
   "fnInitComplete": function() {
-      //alert("fnInitComplete");
       var wrapper = $("#browser_wrapper div.fg-toolbar")[0];
       $(dmsfButtons).prependTo(wrapper);
       if($(dmsfTag) != null) {
