@@ -16,6 +16,9 @@ browser.dataTable().fnDestroy();
 // Add rows
 $('#<%= params[:row_id] %>').after('<%= escape_javascript(render(:partial => 'dmsf/dmsf_rows')) %>');
 hideOnLoad();
+$('#dmsf_uploader').hide();
+$('#dmsf_uploader_header').hide();
+$("#dmsf_ajax_loading").show();
 
 // Reinitialize the dataTable
 <% title = DmsfFolder.get_column_position('title') %>
@@ -63,6 +66,9 @@ browser.dataTable({
         $(dmsfTag).prependTo(wrapper);
       }
       $("#browser").show();
+      $('#dmsf_uploader').show();
+      $('#dmsf_uploader_header').show();
+      $("#dmsf_ajax_loading").hide();
   },
   "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
     return browserInfo;
