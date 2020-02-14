@@ -44,7 +44,11 @@
       <% level = 0 %>
       <% query.dmsf_nodes.each do |node| %>
         <tr id="node-<%= node.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= node.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
-          <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", node.id, false, id: nil) %></td>
+          <td class="checkbox hide-when-print">
+            <% unless node.title =~ /^\./ %>
+              <%= check_box_tag('ids[]', node.id, false, id: nil) %>
+            <% end %>
+          </td>
           <% query.inline_columns.each do |column| %>
             <%= content_tag('td', column_content(column, node), class: column.css_classes) %>
           <% end %>

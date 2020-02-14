@@ -75,12 +75,19 @@ class DmsfController < ApplicationController
   def show
     @rlf = cookies[:dmsf_switch_rlf] == 'true'
     if @rlf
+      @system_folder = @folder && @folder.system
+      @locked_for_user = @folder && @folder.locked_for_user?
+      #@folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
+      @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
+      #@file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
+      #@file_view_allowed = User.current.allowed_to?(:view_dmsf_files, @project)
+      #@force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
+      #@workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).exists?
+      #@file_approval_allowed = User.current.allowed_to?(:file_approval, @project)
       use_session = !request.format.csv?
       @query = retrieve_query(DmsfQuery, use_session)
       @query.dmsf_folder_id = @folder ? @folder.id : nil
       @query.deleted = false
-      #@query.project = @project
-      #@query = DmsfQuery.new(name: 'Dmsf', dmsf_folder: @folder, project: @project)
       if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
         render_404
         return
@@ -88,7 +95,7 @@ class DmsfController < ApplicationController
       respond_to do |format|
         format.html {
           @dmsf_count = @query.dmsf_count
-          @dmsf_pages = Paginator.new @issue_count, per_page_option, params['page']
+          @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
           @dmsf_nodes = @query.dmsf_nodes(offset: @dmsf_pages.offset, limit: @dmsf_pages.per_page)
           render layout: !request.xhr?
         }

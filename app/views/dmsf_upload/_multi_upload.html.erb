@@ -36,7 +36,10 @@
     </div>
   <% end %>
 
+<% unless rlf %>
   <h3><%= l(:label_upload) %></h3>
+<% end %>
+
 </div>
 <%= form_tag({ controller: 'dmsf_upload', action: 'upload_files', id: @project, folder_id: @folder },
              id: 'uploadform', method: :post, multipart: true) do %>
@@ -49,7 +52,12 @@
   </div>
 <% end %>
 
-<% unless @rlf %>
+<% if rlf %>
+  <%= late_javascript_tag do %>
+    $("#dmsf_uploader").show();
+    $("#dmsf_uploader_header").show();
+  <% end %>
+<% else %>
   <%
     form_url = url_for({:controller => 'dmsf_upload', :action => 'upload_file', :id => @project})
     max_file_size = "#{@ajax_upload_size}mb"

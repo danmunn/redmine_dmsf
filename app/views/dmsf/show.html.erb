@@ -95,6 +95,7 @@
     <%= render partial: 'queries/query_form' %>
   <% end %>
   <%= render partial: 'query_list', locals: { query: @query } %>
+  <span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>
 <% else %>
   <div id="dmsf_ajax_loading" class="ajax-loading"></div>
   <%= form_tag(entries_operations_dmsf_path(id: @project, folder_id: @folder), method: :post,
@@ -138,8 +139,6 @@
       <%= render(:partial => 'list_view') %>
     <% end %>
   <% end %>
-
-  <%= context_menu %>
 
   <% content_for :header_tags do %>
       <%= stylesheet_link_tag 'jquery.dataTables/datatables.min.css', :plugin => :redmine_dmsf %>
@@ -233,11 +232,14 @@
         });
       <% end %>
   <% end %>
-
-  <% if @file_manipulation_allowed && !@locked_for_user && !@system_folder %>
-      <%= render(:partial => 'dmsf_upload/multi_upload', local: { rlf: @rlf }) %>
-  <% end %>
 <% end %>
+
+<%= context_menu %>
+
+<% if @file_manipulation_allowed && !@locked_for_user && !@system_folder %>
+    <%= render(:partial => 'dmsf_upload/multi_upload', locals: { rlf: @rlf }) %>
+<% end %>
+
 <% unless (@folder && @folder.system) %>
     <% other_formats_links do |f| %>
         <%= f.link_to 'CSV', onclick: "showModal('dmsf_csv_export_options', '350px'); return false;" %>
