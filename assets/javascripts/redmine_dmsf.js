@@ -247,10 +247,7 @@ function initPlUploader(uploader, formUrl, maxFileSize, maxFileCount, flashUrl) 
                 list.attr('aria-pressed', 'false');
                 list.removeClass('ui-checkboxradio-radio-label ui-checkboxradio-checked ui-state-active ui-controlgroup-item ui-checkboxradio-label');
                 list.addClass('ui-button-icon-only ui-state-default ui-corner-left');
-                list.html(`
-                    <span class="ui-button-text">List</span>
-                    <span class="ui-button-icon-secondary ui-icon ui-icon-grip-dotted-horizontal"></span>
-                `)
+                list.html("<span class='ui-button-text'>List</span><span class='ui-button-icon-secondary ui-icon ui-icon-grip-dotted-horizontal'></span>");
                 list.click(function () {
                     dmsf_plupload_toggle(list, thumbs);
                 });
@@ -262,10 +259,7 @@ function initPlUploader(uploader, formUrl, maxFileSize, maxFileCount, flashUrl) 
                 thumbs.attr('aria-pressed', 'true');
                 thumbs.removeClass('ui-checkboxradio-radio-label ui-checkboxradio-checked ui-controlgroup-item ui-checkboxradio-label');
                 thumbs.addClass('ui-button-icon-only ui-corner-right');
-                thumbs.html(`
-                    <span class="ui-button-text">Thumbnails</span>
-                    <span class="ui-button-icon-secondary ui-icon ui-icon-image"></span>
-                `)
+                thumbs.html("<span class='ui-button-text'>Thumbnails</span><span class='ui-button-icon-secondary ui-icon ui-icon-image'></span>");
                 thumbs.click(function () {
                     dmsf_plupload_toggle(thumbs, list);
                 });
