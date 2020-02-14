@@ -105,7 +105,7 @@ class DmsfLink < ActiveRecord::Base
     if target_type == DmsfFile.model_name.to_s
       path = target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.display_name : element.title }.join('/') if target_file
     else
-      path = target_folder ? target_folder.dmsf_path_str : ''
+      path = target_folder ? target_folder.dmsf_path_str : +''
     end
     path.insert(0, "#{target_project.name}:") if project_id != target_project_id
     if path && path.length > 50
