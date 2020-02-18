@@ -23,8 +23,8 @@
 <% query_options = nil unless defined?(query_options) %>
 <% query_options ||= {} %>
 
-<%= form_tag({}, data: { cm_url: dmsf_context_menu_path }) do %>
-  <%= hidden_field_tag 'back_url', url_for( params: request.query_parameters), id: nil %>
+<%= form_tag({}, data: { cm_url: query.deleted ? dmsf_trash_context_menu_path : dmsf_context_menu_path }) do %>
+  <%= hidden_field_tag 'back_url', url_for(params: request.query_parameters), id: nil %>
   <%= query_columns_hidden_tags(query) %>
   <div class="autoscroll">
     <table class="list dmsf odd-even <%= query.css_classes %>">
@@ -43,16 +43,17 @@
       <tbody>
       <% level = 0 %>
       <% query.dmsf_nodes.each do |node| %>
-        <tr id="node-<%= node.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> <%= node.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
+        <% system = node.title =~ /^\./ %>
+        <tr id="node-<%= node.id %>" class="<%= cycle('odd', 'even') %> <%= node.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
           <td class="checkbox hide-when-print">
-            <% unless node.title =~ /^\./ %>
-              <%= check_box_tag('ids[]', node.id, false, id: nil) %>
-            <% end %>
+            <%= check_box_tag('ids[]', "#{node.type}-#{node.id}", false, id: nil) unless system %>
           </td>
           <% query.inline_columns.each do |column| %>
             <%= content_tag('td', column_content(column, node), class: column.css_classes) %>
           <% end %>
-          <td class="buttons"><%= link_to_context_menu %></td>
+          <td class="buttons">
+            <%= link_to_context_menu unless system %>
+          </td>
         </tr>
       <% end %>
       </tbody>

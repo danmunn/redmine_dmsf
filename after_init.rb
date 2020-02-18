@@ -71,7 +71,7 @@ def dmsf_init
                       {:dmsf_files => [:create_revision, :lock, :unlock, :delete_revision, :obsolete_revision,
                                        :notify_activate, :notify_deactivate, :restore],
                        :dmsf_upload => [:upload_files, :upload_file, :upload, :commit_files, :commit,
-                                        :delete_dmsf_attachment, :delete_dmsf_link_attachment],
+                                        :delete_dmsf_attachment, :delete_dmsf_link_attachment, :multi_upload],
                        :dmsf_links => [:new, :create, :destroy, :restore, :autocomplete_for_project,
                                        :autocomplete_for_folder],
                        :dmsf_files_copy => [:new, :copy, :move],

@@ -35,9 +35,9 @@ module RedmineDmsf
         case column.name
         when :id
           case item.type
-          when 'DmsfFile', 'DmsfFileLink'
+          when 'file', 'file-link'
             link_to h(value), dmsf_file_path(id: item.id)
-          when 'DmsfFolder', 'DmsfFolderLink'
+          when 'folder', 'folder-link'
             if(item.id)
               link_to h(value), edit_dmsf_path(id: item.project_id, folder_id: item.id)
             else
@@ -50,13 +50,13 @@ module RedmineDmsf
           link_to "#{item.firstname} #{item.lastname}", user_path(id: value)
         when :title
           case item.type
-          when 'DmsfFolder', 'DmsfFolderLink'
+          when 'folder', 'folder-link'
             link_to(h(value),
               dmsf_folder_path(id: item.project_id, folder_id: item.id),
               class: 'icon icon-folder',
               title: h(value)) +
               content_tag('div', item.filename, class: 'dmsf_filename', title: l(:title_filename_for_download))
-          when 'DmsfFile', 'DmsfFileLink'
+          when 'file', 'file-link'
             file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: item.id })
             content_type = Redmine::MimeType.of(value)
             content_type = 'application/octet-stream' if content_type.blank?
@@ -67,7 +67,7 @@ module RedmineDmsf
                  title: h(value),
                  'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}") +
                 content_tag('div', item.filename, class: 'dmsf_filename', title: l(:title_filename_for_download))
-          when 'DmsfUrlLink'
+          when 'url-link'
             link_to(h(value), item.filename, target: '_blank', class: 'icon icon-link') +
                 content_tag('div', item.filename, class: 'dmsf_filename', title: l(:title_filename_for_download))
           else

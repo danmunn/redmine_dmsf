@@ -580,8 +580,11 @@ class DmsfFolder < ActiveRecord::Base
     classes = ['dir']
     if title =~ /^\./
       classes << 'dmsf_system'
-    elsif ['DmsfFolderLink', 'DmsfFileLink'].include?(type)
-      classes << 'dmsf_gray'
+    else
+      classes << 'hascontextmenu'
+      if ['folder-link', 'file-link'].include?(type)
+        classes << 'dmsf_gray'
+      end
     end
     classes.join(' ')
   end

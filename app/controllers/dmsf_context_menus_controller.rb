@@ -82,7 +82,7 @@ class DmsfContextMenusController < ApplicationController
   end
 
   def find_dmsf_file
-    if (params[:ids].size == 1) && (!@dmsf_folder)
+    if (params[:ids].present? && (params[:ids].size == 1)) && (!@dmsf_folder)
       if params[:ids][0] =~ /file-(\d+)/
         @dmsf_file = DmsfFile.find_by(id: $1)
       elsif params[:ids][0] =~ /(file|url)-link-(\d+)/
@@ -93,7 +93,7 @@ class DmsfContextMenusController < ApplicationController
   end
 
   def find_dmsf_folder
-    if (params[:ids].size == 1) && (!@dmsf_file)
+    if (params[:ids].present? && (params[:ids].size == 1)) && (!@dmsf_file)
       if params[:ids][0] =~ /folder-(\d+)/
         @dmsf_folder = DmsfFolder.find_by(id: $1)
       elsif params[:ids][0] =~ /folder-link-(\d+)/

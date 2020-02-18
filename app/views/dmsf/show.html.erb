@@ -24,9 +24,13 @@
 
 <% html_title l(:dmsf) %>
 <div class="contextual">
-    <%= link_to(l(:button_switch), switch_rlf_dmsf_path(id: @project, rlf: @rlf),
+  <%= link_to(l(:button_switch), switch_rlf_dmsf_path(id: @project, rlf: @rlf),
               title: l(:label_switch_rlf),
               class: 'icon icon-plugins') %>
+  <% if @rlf && @file_manipulation_allowed && !@locked_for_user && !@system_folder %>
+    <%= link_to l(:label_attachment_new), multi_dmsf_upload_path(id: @project, dmsf_folder_id: @folder),
+                class: 'icon icon-add' %>
+  <% end %>
     <%= actions_dropdown do %>
       <% if @folder_manipulation_allowed && !@system_folder %>
         <% if @folder.nil? %>
@@ -236,7 +240,7 @@
 
 <%= context_menu %>
 
-<% if @file_manipulation_allowed && !@locked_for_user && !@system_folder %>
+<% if !@rlf && @file_manipulation_allowed && !@locked_for_user && !@system_folder %>
     <%= render(:partial => 'dmsf_upload/multi_upload', locals: { rlf: @rlf }) %>
 <% end %>
 

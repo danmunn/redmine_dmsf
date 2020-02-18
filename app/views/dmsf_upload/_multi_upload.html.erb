@@ -36,9 +36,7 @@
     </div>
   <% end %>
 
-<% unless rlf %>
-  <h3><%= l(:label_upload) %></h3>
-<% end %>
+<h3><%= l(:button_add) %></h3>
 
 </div>
 <%= form_tag({ controller: 'dmsf_upload', action: 'upload_files', id: @project, folder_id: @folder },

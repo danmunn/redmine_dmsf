@@ -168,7 +168,7 @@ class DmsfQuery < Query
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id, :name).each do |id, name|
       cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS `#{name}`"
     end
-    DmsfFolder.
+    scope = DmsfFolder.
         select(%{
           dmsf_folders.id AS id,
           dmsf_folders.project_id AS project_id,
@@ -185,10 +185,14 @@ class DmsfQuery < Query
           users.firstname AS firstname,
           users.lastname AS lastname,
           users.id AS author,
-          'DmsfFolder' AS type,
+          'folder' AS type,
           0 AS sort #{cf_columns}}).
-        joins('LEFT JOIN users ON dmsf_folders.user_id = users.id').
-        where(dmsf_folders: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
+        joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
+    if deleted
+      scope.where(dmsf_folders: { project_id: project.id, deleted: deleted })
+    else
+      scope.where(dmsf_folders: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
+    end
   end
 
   def dmsf_folder_links_scope
@@ -196,7 +200,7 @@ class DmsfQuery < Query
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id, :name).each do |id, name|
       cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS `#{name}`"
     end
-    DmsfLink.
+    scope = DmsfLink.
         select(%{
           dmsf_folders.id AS id,
           COALESCE(dmsf_folders.project_id, dmsf_links.project_id) AS project_id,
@@ -213,12 +217,16 @@ class DmsfQuery < Query
           users.firstname AS firstname,
           users.lastname AS lastname,
           users.id AS author,
-          'DmsfFolderLink' AS type,
+          'folder-link' AS type,
           0 AS sort #{cf_columns}}).
         joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
-        joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)').
-        where(dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, dmsf_folder_id: dmsf_folder_id,
-                            deleted: deleted })
+        joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)')
+    if deleted
+      scope.where(dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, deleted: deleted })
+    else
+      scope.where(dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, dmsf_folder_id: dmsf_folder_id,
+                          deleted: deleted })
+    end
   end
 
   def dmsf_files_scope
@@ -226,7 +234,7 @@ class DmsfQuery < Query
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id, :name).each do |id, name|
       cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_files.id) AS `#{name}`"
     end
-    DmsfFile.
+    scope = DmsfFile.
         select(%{
           dmsf_files.id AS id,
           dmsf_files.project_id AS project_id,
@@ -243,12 +251,16 @@ class DmsfQuery < Query
           users.firstname AS firstname,
           users.lastname AS lastname,
           users.id AS author,
-          'DmsfFile' AS type,
+          'file' AS type,
           1 AS sort #{cf_columns}}).
         joins(:dmsf_file_revisions).
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
-        where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)').
-        where(dmsf_files: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
+        where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)')
+    if deleted
+      scope.where(dmsf_files: { project_id: project.id, deleted: deleted })
+    else
+      scope.where(dmsf_files: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
+    end
   end
 
   def dmsf_file_links_scope
@@ -256,7 +268,7 @@ class DmsfQuery < Query
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id, :name).each do |id, name|
       cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_files.id) AS `#{name}`"
     end
-    DmsfLink.
+    scope = DmsfLink.
         select(%{
           dmsf_files.id AS id,
           dmsf_files.project_id AS project_id,
@@ -273,13 +285,17 @@ class DmsfQuery < Query
           users.firstname AS firstname,
           users.lastname AS lastname,
           users.id AS author,
-          'DmsfFileLink' AS type,
+          'file-link' AS type,
           1 AS sort #{cf_columns}}).
         joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id').
         joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
-        where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)').
-        where(dmsf_files: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
+        where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)')
+    if deleted
+      scope.where(dmsf_files: { project_id: project.id, deleted: deleted })
+    else
+      scope.where(dmsf_files: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
+    end
   end
 
   def dmsf_url_links_scope
@@ -287,7 +303,7 @@ class DmsfQuery < Query
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:name).each do |name|
       cf_columns << ",NULL AS `#{name}`"
     end
-    DmsfLink.
+    scope = DmsfLink.
         select(%{
           dmsf_links.id AS id,
           dmsf_links.project_id AS project_id,
@@ -304,10 +320,14 @@ class DmsfQuery < Query
           users.firstname AS firstname,
           users.lastname AS lastname,
           users.id AS author,
-          'DmsfUrlLink' AS type,
+          'url-link' AS type,
           1 AS sort #{cf_columns}}).
-        joins('LEFT JOIN users ON dmsf_links.user_id = users.id ').
-        where(target_type: 'DmsfUrl', project_id: project.id,  dmsf_folder_id: dmsf_folder_id, deleted: deleted)
+        joins('LEFT JOIN users ON dmsf_links.user_id = users.id ')
+    if deleted
+      scope.where(target_type: 'DmsfUrl', project_id: project.id, deleted: deleted)
+    else
+      scope.where(target_type: 'DmsfUrl', project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted)
+    end
   end
 
 end

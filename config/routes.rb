@@ -70,6 +70,7 @@ if Redmine::Plugin.installed? :redmine_dmsf
     #   /projects/<project>/dmsf/upload - dmsf_upload controller
     ##
 
+    get '/projects/:id/dmsf/upload/multi_upload', controller: 'dmsf_upload', action: 'multi_upload', as: 'multi_dmsf_upload'
     post '/projects/:id/dmsf/upload/files', :controller => 'dmsf_upload', :action => 'upload_files'
     post '/projects/:id/dmsf/upload/file', :controller => 'dmsf_upload', :action => 'upload_file'
     post '/projects/:id/dmsf/upload', :controller => 'dmsf_upload', :action => 'upload'
