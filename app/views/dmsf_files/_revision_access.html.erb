@@ -22,23 +22,49 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<table id="browser" class="display list dmsf_list">
-  <thead>
-    <tr>
-      <th class="dmsf_th"><%= l(:field_user) %></th>
-      <th class="dmsf_th"><%= l(:heading_access_downloads_emails) %></th>
-      <th class="dmsf_th"><%= l(:heading_access_first) %></th>
-      <th class="dmsf_th"><%= l(:heading_access_last) %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% revision.access_grouped.each do |access| %>
+<% if query %>
+  <% query_options = nil unless defined?(query_options) %>
+  <% query_options ||= {} %>
+  <div class="autoscroll">
+    <table class="list dmsf odd-even <%= query.css_classes %>">
+      <thead>
       <tr>
-        <td class="dmsf_author"><%= link_to_user(access.user) %></td>
-        <td class="dmsf_version"><%= access.count %></td>
-        <td class="dmsf_modified"><%= format_time(access.first_at) %></td>
-        <td class="dmsf_modified"><%= format_time(access.last_at) %></td>
+        <% query.inline_columns.each do |column| %>
+          <%= column_header(query, column, query_options) %>
+        <% end %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+      </thead>
+      <tbody>
+      <% query.accesses.each do |access| %>
+        <tr>
+          <% query.inline_columns.each do |column| %>
+            <%= content_tag('td', column_content(column, access), class: column.css_classes) %>
+          <% end %>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <span class="pagination"><%= pagination_links_full revision_access_pages, revision_access_count %></span>
+<% else %>
+  <table id="browser" class="display list dmsf_list">
+    <thead>
+      <tr>
+        <th class="dmsf_th"><%= l(:field_user) %></th>
+        <th class="dmsf_th"><%= l(:heading_access_downloads_emails) %></th>
+        <th class="dmsf_th"><%= l(:heading_access_first) %></th>
+        <th class="dmsf_th"><%= l(:heading_access_last) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% DmsfFileRevisionAccess.access_grouped.where(dmsf_file_revision_id: revision.id).each do |access| %>
+        <tr>
+          <td class="dmsf_author"><%= link_to_user(access.user) %></td>
+          <td class="dmsf_version"><%= access.count %></td>
+          <td class="dmsf_modified"><%= format_time(access.first_at) %></td>
+          <td class="dmsf_modified"><%= format_time(access.last_at) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -24,8 +24,12 @@ class DmsfFileRevisionAccess < ActiveRecord::Base
 
   belongs_to :dmsf_file_revision
   belongs_to :user
+
   delegate :dmsf_file, :to => :dmsf_file_revision, :allow_nil => false
   delegate :project, :to => :dmsf_file, :allow_nil => false
+
+  # TODO: dmsf_file_revision_accesses.dmsf_file_revision_id should be a key
+  scope :access_grouped, -> { select('user_id, COUNT(*) AS count, MIN(created_at) AS first_at, MAX(created_at) AS last_at').group('user_id') }
 
   validates :dmsf_file_revision, presence: true
 

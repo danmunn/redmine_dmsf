@@ -142,21 +142,6 @@ class DmsfFileRevision < ActiveRecord::Base
     super
   end
 
-  # In a static call, we find the first matched record on base object type and
-  # then run the access_grouped call against it
-  def self.access_grouped(revision_id)
-    DmsfFileRevision.find(revision_id).first.access_grouped
-  end
-
-  # Get grouped data from dmsf_file_revision_access about file interactions
-  # - 22-06-2012 - Rather than calling a static, we should use the access
-  #   (has_many) to re-run a query - it makes more sense then executing
-  #   custom SQL into a temporary object
-  #
-  def access_grouped
-    dmsf_file_revision_access.select('user_id, COUNT(*) AS count, MIN(created_at) AS first_at, MAX(created_at) AS last_at').group('user_id')
-  end
-
   def version
     ver = DmsfUploadHelper::gui_version(major_version).to_s
     if -minor_version != ' '.ord

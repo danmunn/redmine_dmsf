@@ -167,7 +167,11 @@
         </div>
       </div>
       <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">
-        <%= render(:partial => 'revision_access', locals: { revision: revision }) if @file_manipulation_allowed %>
+        <% if @file_manipulation_allowed %>
+          <%= render partial: 'revision_access', locals: { revision: revision, query: @query,
+                                                           revision_access_count: @revision_access_count,
+                                                           revision_access_pages: @revision_access_pages } %>
+        <% end %>
       </div>
     </div>
   </div>

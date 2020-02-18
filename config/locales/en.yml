@@ -418,6 +418,9 @@ en:
   field_modified: Updated
   field_extension: Ext.
   field_updated: Updated
+  field_count: Downloads/Email
+  field_first_at: First
+  field_last_at: Last
 
   easy_pages:
     modules:
