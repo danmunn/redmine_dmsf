@@ -577,15 +577,23 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def css_classes
-    classes = ['dir']
-    if title =~ /^\./
+    classes = []
+
+    if type =~ /^\./
       classes << 'dmsf_system'
     else
       classes << 'hascontextmenu'
-      if ['folder-link', 'file-link'].include?(type)
+      if type =~ /^folder/
+        classes << 'dmsf-droppable'
+        classes << 'dmsf-draggable'
+      else
+        classes << 'dmsf-draggable'
+      end
+      if type =~ /link$/
         classes << 'dmsf_gray'
       end
     end
+
     classes.join(' ')
   end
 

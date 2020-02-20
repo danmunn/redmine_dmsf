@@ -292,9 +292,9 @@ class DmsfQuery < Query
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
         where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)')
     if deleted
-      scope.where(dmsf_files: { project_id: project.id, deleted: deleted })
+      scope.where(project_id: project.id, deleted: deleted)
     else
-      scope.where(dmsf_files: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
+      scope.where(project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted)
     end
   end
 

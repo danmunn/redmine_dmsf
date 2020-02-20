@@ -62,8 +62,8 @@ def dmsf_init
       pmap.permission :email_documents,
                       {:dmsf_public_urls => [:create]}
       pmap.permission :folder_manipulation,
-                      {:dmsf => [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock,
-                                 :notify_activate, :notify_deactivate, :restore],
+                      { dmsf: [:new, :create, :delete, :edit, :save, :edit_root, :save_root, :lock, :unlock,
+                                 :notify_activate, :notify_deactivate, :restore, :drop],
                        :dmsf_folder_permissions => [:new, :append, :autocomplete_for_user],
                        :dmsf_folders_copy => [:new, :copy, :move],
                        :dmsf_context_menus => [:dmsf]}

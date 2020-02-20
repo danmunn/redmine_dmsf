@@ -54,6 +54,7 @@ if Redmine::Plugin.installed? :redmine_dmsf
     get '/projects/:id/dmsf/add_email', :controller => 'dmsf', :action => 'add_email', :as => 'add_email_dmsf'
     post '/projects/:id/dmsf/append_email', :controller => 'dmsf', :action => 'append_email', :as => 'append_email_dmsf'
     get '/projects/:id/dmsf/autocomplete_for_user', :controller => 'dmsf', :action => 'autocomplete_for_user'
+    put '/projects/:id/dmsf', controller: 'dmsf', action: 'drop'
 
     # dmsf_context_menu_controller
     match '/projects/:id/dmsf/context_menu', :to => 'dmsf_context_menus#dmsf', :as => 'dmsf_context_menu', :via => [:get, :post]

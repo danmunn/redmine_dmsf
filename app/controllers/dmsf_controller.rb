@@ -431,6 +431,46 @@ class DmsfController < ApplicationController
     end
   end
 
+  # Move the dragged object to the given destination
+  def drop
+    result = false
+    if params[:dmsf_folder].present? && params[:dmsf_folder][:drag_id].present? && params[:dmsf_folder][:drop_id].present?
+      if params[:dmsf_folder][:drag_id] =~ /(.+)-(\d+)/
+        type = $1
+        id = $2
+        if params[:dmsf_folder][:drop_id] =~ /^folder.*-(\d+)/
+          case type
+          when 'file'
+            dmsf_file = DmsfFile.find_by(id: id)
+            dmsf_folder = DmsfFolder.find_by(id: $1)
+            if dmsf_file && dmsf_folder
+              result = dmsf_file.move_to(dmsf_file.project, dmsf_folder)
+            end
+          when 'folder'
+            dmsf_folder = DmsfFolder.find_by(id: id)
+            if dmsf_folder
+              dmsf_folder.dmsf_folder_id = $1;
+              result = dmsf_folder.save
+            end
+          when 'file-link', 'folder-link', 'url-link'
+            dmsf_link = DmsfLink.find_by(id: id)
+            if dmsf_link
+              dmsf_link.dmsf_folder_id = $1;
+              result = dmsf_link.save
+            end
+          end
+        end
+      end
+    end
+    respond_to do |format|
+      if result
+        format.js { head 200 }
+      else
+        format.js { head 422 }
+      end
+    end
+  end
+
   private
 
   def users_for_new_users
@@ -659,7 +699,7 @@ class DmsfController < ApplicationController
     @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
     @file_view_allowed = User.current.allowed_to?(:view_dmsf_files, @project)
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
-    @workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).exists?
+    @workflows_available = DmsfWorkflow.where(project_id: @project.id).or(DmsfWorkflow.where(project_id: nil)).exists?
     @file_approval_allowed = User.current.allowed_to?(:file_approval, @project)
     tag = params[:custom_field_id].present? && params[:custom_value].present?
     @extra_columns = [l(:label_last_approver), l(:field_project), l(:label_document_url), l(:label_last_revision_id)]

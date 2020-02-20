@@ -76,7 +76,7 @@ module RedmineDmsf
         when :size
           number_to_human_size(value)
         when :workflow
-          if value
+          if value && item.workflow_id
             link_to h(DmsfWorkflowStepAction.workflow_str(value)),
                 log_dmsf_workflow_path(project_id: item.project_id, id: item.workflow_id,
                                        dmsf_file_revision_id: item.revision_id),
