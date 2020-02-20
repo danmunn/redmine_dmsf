@@ -87,7 +87,9 @@
             },
             complete: function(jqXHR, textStatus, errorThrown){
               handle.removeClass("ui-state-highlight ajax-loading")
-              ui.draggable.remove();
+              if(textStatus == 'success'){
+                ui.draggable.remove();
+              }
             }
           });
         }
