@@ -578,8 +578,7 @@ class DmsfFolder < ActiveRecord::Base
 
   def css_classes
     classes = []
-
-    if type =~ /^\./
+    if title =~ /^\./
       classes << 'dmsf_system'
     else
       classes << 'hascontextmenu'
@@ -593,7 +592,6 @@ class DmsfFolder < ActiveRecord::Base
         classes << 'dmsf_gray'
       end
     end
-
     classes.join(' ')
   end
 

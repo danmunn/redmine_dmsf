@@ -52,12 +52,7 @@
             <%= content_tag 'td', column_content(column, node), class: column.css_classes %>
           <% end %>
           <td class="buttons">
-            <% unless system %>
-              <% unless query.deleted %>
-                <%= content_tag 'span', '', class: 'icon-only icon-sort-handle sort-handle', title: l(:button_move) %>
-              <% end %>
-              <%= link_to_context_menu %>
-            <% end %>
+            <%= link_to_context_menu %>
           </td>
         </tr>
       <% end %>
