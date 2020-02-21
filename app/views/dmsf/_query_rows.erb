@@ -1,0 +1,74 @@
+<%
+  # encoding: utf-8
+  #
+  # Redmine plugin for Document Management System "Features"
+  #
+  # Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+  #
+  # This program is free software; you can redistribute it and/or
+  # modify it under the terms of the GNU General Public License
+  # as published by the Free Software Foundation; either version 2
+  # of the License, or (at your option) any later version.
+  #
+  # This program is distributed in the hope that it will be useful,
+  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  # GNU General Public License for more details.
+  #
+  # You should have received a copy of the GNU General Public License
+  # along with this program; if not, write to the Free Software
+  # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<% query.dmsf_nodes.each do |node| %>
+  <% system = node.title =~ /^\./ %>
+  <% @idnt ||= 0 %>
+  <tr id="<%= node.id %>span" class="<%= cycle('odd', 'even') %> <%= node.css_classes %> <%= params[:classes] %> <%= @idnt > 0 ? "idnt idnt-#{@idnt}" : nil %>">
+    <td class="checkbox hide-when-print">
+      <%= check_box_tag('ids[]', "#{node.type}-#{node.id}", false, id: nil) unless system %>
+    </td>
+    <% query.inline_columns.each do |column| %>
+      <%= content_tag 'td', column_content(column, node), class: column.css_classes %>
+    <% end %>
+    <td class="buttons">
+      <%= link_to_context_menu %>
+    </td>
+  </tr>
+<% end %>
+
+<% unless query.deleted %>
+  <%= late_javascript_tag do %>
+    $(function() {
+      $(".dmsf-draggable").draggable({
+        axis: "y",
+        revert: "invalid"
+      });
+      $(".dmsf-droppable" ).droppable({
+        drop: function(event, ui) {
+          var handle = $(this);
+          var dragObjectId = ui.draggable.find("td").find("input").val()
+          var dropObjectId = handle.find("td").find("input").val();
+          var data = {};
+          handle.addClass("ui-state-highlight ajax-loading")
+          data['dmsf_folder'] = { drag_id: dragObjectId, drop_id: dropObjectId};
+          $.ajax({
+            url: '<%= dmsf_folder_url(query.project) %>',
+            type: 'put',
+            dataType: 'script',
+            data: data,
+            error: function(jqXHR, textStatus, errorThrown){
+              alert(textStatus + " " + jqXHR.status);
+              ui.draggable.animate(ui.draggable.data("ui-draggable").originalPosition, "slow");
+            },
+            complete: function(jqXHR, textStatus, errorThrown){
+              handle.removeClass("ui-state-highlight ajax-loading")
+              if(textStatus == 'success'){
+                ui.draggable.remove(  );
+              }
+            }
+          });
+        }
+      });
+    });
+  <% end %>
+<% end %>

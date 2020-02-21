@@ -50,7 +50,10 @@ function dmsfToggle(EL, PM, url)
 
       spanid = els[i].id;
       classid = spanid;
-      classid = classid.match(/(\w+)span/)[1];
+      m = classid.match(/(\w+)span/);
+      if(m) {
+          classid = m[1];
+      }
       classid = new RegExp(classid);
 
       if(tmpclassid.test(els[i].className) && (tmpspanid.toString() !== PM.toString()))
@@ -130,13 +133,25 @@ function dmsfExpandRows(EL, parentRow, url) {
   parentRow.className = parentRow.className.replace(/dmsf-not-loaded/, '');
 
   var idnt = 0;
-  var result = parentRow.className.match(/idnt-(\d+)/);
+  var pos = $(parentRow).find('.dmsf_position').text();
+  var classes = '';
+  var m = parentRow.className.match(/idnt-(\d+)/);
 
-  if(result){
-    idnt = result[1];
+  if(m){
+    idnt = m[1];
   }
 
-  var pos = $(parentRow).find('.dmsf_position').text();
+  m = parentRow.className.match(/((\d|\s)+) idnt/);
+
+  if(m){
+      classes = m[1]
+  }
+
+  m = parentRow.id.match(/^(\d+)/);
+
+  if(m){
+      classes = classes + ' ' + m[1]
+  }
 
   $.ajax({
     url: url,
@@ -146,7 +161,9 @@ function dmsfExpandRows(EL, parentRow, url) {
       folder_id: EL,
       row_id: parentRow.id,
       idnt: idnt,
-      pos: pos}
+      pos: pos,
+      classes: classes
+    }
   }).done(function(data) {
       eval(data);
   })

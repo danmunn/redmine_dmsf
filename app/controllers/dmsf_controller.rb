@@ -25,7 +25,7 @@ class DmsfController < ApplicationController
   include RedmineDmsf::DmsfZip
 
   before_action :find_project
-  before_action :authorize, :except => [:expand_folder]
+  before_action :authorize, :except => [:expand_folder, :exp_folder]
   before_action :find_folder, :except => [:new, :create, :edit_root, :save_root, :add_email, :append_email,
                                           :autocomplete_for_user]
   before_action :find_parent, :only => [:new, :create]
@@ -54,6 +54,16 @@ class DmsfController < ApplicationController
     @pos = params[:pos].present? ? params[:pos].to_f : 0.0
     respond_to do |format|
       format.js { render :action => 'dmsf_rows' }
+    end
+  end
+
+  def exp_folder
+    @idnt = params[:idnt].present? ? params[:idnt].to_i + 1 : 0
+    @query = retrieve_query(DmsfQuery, true)
+    @query.dmsf_folder_id = @folder.id
+    @query.deleted = false
+    respond_to do |format|
+      format.js { render action: 'query_rows' }
     end
   end
 
