@@ -41,7 +41,8 @@
     $(function() {
       $(".dmsf-draggable").draggable({
         axis: "y",
-        revert: "invalid"
+        revert: "invalid",
+        zIndex: 100
       });
       $(".dmsf-droppable" ).droppable({
         drop: function(event, ui) {
@@ -63,7 +64,15 @@
             complete: function(jqXHR, textStatus, errorThrown){
               handle.removeClass("ui-state-highlight ajax-loading")
               if(textStatus == 'success'){
-                ui.draggable.remove(  );
+                if(!handle.hasClass('dmsf-not-loaded')){
+                  var m = handle.attr("id").match(/^(\d+)span$/);
+                  if(m){
+                    $('.' + m[1]).remove();
+                    handle.removeClass("dmsf_expanded");
+                    handle.addClass("dmsf_collapsed dmsf-not-loaded");
+                  }
+                  ui.draggable.remove();
+                }
               }
             }
           });
