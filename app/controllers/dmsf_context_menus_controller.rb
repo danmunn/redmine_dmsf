@@ -41,11 +41,16 @@ class DmsfContextMenusController < ApplicationController
       @unlockable = @allowed && @dmsf_folder.unlockable? && (!@dmsf_folder.locked_for_user?) &&
           User.current.allowed_to?(:force_file_unlock, @project)
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
-    elsif @dmsf_link
+    elsif @dmsf_link # url link
+      @locked = false
+      @unlockable = false
       @allowed = User.current.allowed_to? :file_manipulation, @project
-    else
-      @allowed = User.current.allowed_to?(:folder_manipulation, @project) &&
-          User.current.allowed_to?(:file_delete, @project)
+      @email_allowed = false
+    else # multiple selection
+      @locked = false
+      @unlockable = false
+      @allowed = User.current.allowed_to?(:file_manipulation, @project) &&
+          User.current.allowed_to?(:folder_manipulation, @project)
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
     end
     render layout: false
@@ -58,13 +63,16 @@ class DmsfContextMenusController < ApplicationController
       @allowed_restore = User.current.allowed_to? :file_manipulation, @project
       @allowed_delete = User.current.allowed_to? :file_delete, @project
     elsif @dmsf_folder
-      @allowed = User.current.allowed_to?(:folder_manipulation, @project)
-    elsif @dmsf_link
+      @allowed_restore = User.current.allowed_to? :folder_manipulation, @project
+      @allowed_delete = @allowed_restore
+    elsif @dmsf_link # url link
       @allowed_restore = User.current.allowed_to? :file_manipulation, @project
       @allowed_delete = User.current.allowed_to? :file_delete, @project
-    else
-      @allowed = User.current.allowed_to?(:folder_manipulation, @project) &&
-          User.current.allowed_to?(:file_manipulation, @project)
+    else # multiple selection
+      @allowed_restore = User.current.allowed_to?(:file_manipulation, @project) &&
+          User.current.allowed_to?(:folder_manipulation, @project)
+      @allowed_delete = User.current.allowed_to?(:file_delete, @project) &&
+          User.current.allowed_to?(:folder_manipulation, @project)
     end
     render layout: false
   rescue ActiveRecord::RecordNotFound
@@ -87,7 +95,7 @@ class DmsfContextMenusController < ApplicationController
         @dmsf_file = DmsfFile.find_by(id: $1)
       elsif params[:ids][0] =~ /(file|url)-link-(\d+)/
         @dmsf_link = DmsfLink.find_by(id: $2)
-        @dmsf_file = DmsfFile.find_by(id: @dmsf_link.target_id) if @dmsf_link && @dmsf_link.target_type != 'DmsfUrl'
+        @dmsf_file = DmsfFile.find_by(id: @dmsf_link.target_id) if @dmsf_link && (@dmsf_link.target_type != 'DmsfUrl')
       end
     end
   end

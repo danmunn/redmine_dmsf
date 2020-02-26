@@ -23,7 +23,7 @@
 <% query.dmsf_nodes.each do |node| %>
   <% system = node.title =~ /^\./ %>
   <% @idnt ||= 0 %>
-  <tr id="<%= node.id %>span" class="<%= cycle('odd', 'even') %> <%= node.css_classes %> <%= params[:classes] %> <%= @idnt > 0 ? "idnt idnt-#{@idnt}" : nil %>">
+  <tr id="<%= node.id %>span" class="<%= cycle('odd', 'even') %> <%= node.css_classes(query.deleted) %> <%= params[:classes] %> <%= @idnt > 0 ? "idnt idnt-#{@idnt}" : nil %>">
     <td class="checkbox hide-when-print">
       <%= check_box_tag('ids[]', "#{node.type}-#{node.id}", false, id: nil) unless system %>
     </td>

@@ -29,7 +29,8 @@
     <%= render(partial: 'folder_trash', locals: { project: @project, folder: @folder, dmsf_folder: @dmsf_folder,
                                                   dmsf_link: @dmsf_link, allowed: @allowed }) %>
   <% else %>
-    <%= render(partial: 'multiple_trash', locals: { project: @project, folder: @folder, allowed: @allowed }) %>
+    <%= render(partial: 'multiple_trash', locals: { project: @project, folder: @folder, allowed_delete: @allowed_delete,
+                                                    allowed_restore: @allowed_restore }) %>
   <% end %>
 </ul>
 <%= late_javascript_tag do %>

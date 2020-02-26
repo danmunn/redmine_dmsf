@@ -202,7 +202,7 @@ class DmsfQuery < Query
     end
     scope = DmsfLink.
         select(%{
-          dmsf_folders.id AS id,
+          dmsf_links.id AS id,
           COALESCE(dmsf_folders.project_id, dmsf_links.project_id) AS project_id,
           NULL AS revision_id,
           dmsf_links.name AS title,
@@ -270,7 +270,7 @@ class DmsfQuery < Query
     end
     scope = DmsfLink.
         select(%{
-          dmsf_files.id AS id,
+          dmsf_links.id AS id,
           dmsf_files.project_id AS project_id,
           dmsf_file_revisions.id AS revision_id,
           dmsf_links.name AS title,

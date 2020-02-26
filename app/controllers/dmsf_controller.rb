@@ -105,7 +105,6 @@ class DmsfController < ApplicationController
         format.html {
           @dmsf_count = @query.dmsf_count
           @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
-          #@dmsf_nodes = @query.dmsf_nodes(offset: @dmsf_pages.offset, limit: @dmsf_pages.per_page)
           render layout: !request.xhr?
         }
         format.api
@@ -151,7 +150,6 @@ class DmsfController < ApplicationController
         format.html {
           @dmsf_count = @query.dmsf_count
           @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
-          #@dmsf_nodes = @query.dmsf_nodes(offset: @dmsf_pages.offset, limit: @dmsf_pages.per_page)
           render layout: !request.xhr?
         }
       end

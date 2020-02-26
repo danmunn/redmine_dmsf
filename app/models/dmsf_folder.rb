@@ -576,24 +576,36 @@ class DmsfFolder < ActiveRecord::Base
     end
   end
 
-  def css_classes
-    classes = %w(dmsf_tree)
-    if type == 'folder'
-      classes << 'dmsf_collapsed'
-      classes << 'dmsf-not-loaded'
-    else
-      classes << 'dmsf_child'
-    end
-    if title =~ /^\./
-      classes << 'dmsf_system'
-    else
-      classes << 'hascontextmenu'
-      classes << 'dmsf-draggable'
-      if type =~ /^folder/
-        classes << 'dmsf-droppable'
+  def css_classes(trash)
+    classes = []
+    if trash
+      if title =~ /^\./
+        classes << 'dmsf_system'
+      else
+        classes << 'hascontextmenu'
+        if type =~ /link$/
+          classes << 'dmsf_gray'
+        end
       end
-      if type =~ /link$/
-        classes << 'dmsf_gray'
+    else
+      classes << 'dmsf_tree'
+      if type == 'folder'
+        classes << 'dmsf_collapsed'
+        classes << 'dmsf-not-loaded'
+      else
+        classes << 'dmsf_child'
+      end
+      if title =~ /^\./
+        classes << 'dmsf_system'
+      else
+        classes << 'hascontextmenu'
+        classes << 'dmsf-draggable'
+        if type =~ /^folder/
+          classes << 'dmsf-droppable'
+        end
+        if type =~ /link$/
+          classes << 'dmsf_gray'
+        end
       end
     end
     classes.join(' ')

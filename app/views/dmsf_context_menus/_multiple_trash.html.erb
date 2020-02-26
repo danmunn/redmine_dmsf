@@ -22,10 +22,10 @@
 
 <li>
   <%= context_menu_link l(:title_restore), entries_operations_dmsf_path(id: project, folder_id: folder,
-    ids: params[:ids], restore_entries: true), method: :post, class: 'icon icon-cancel', disabled: !allowed %>
+    ids: params[:ids], restore_entries: true), method: :post, class: 'icon icon-cancel', disabled: !allowed_restore %>
 </li>
 <li>
   <%= context_menu_link l(:button_delete), entries_operations_dmsf_path(id: project, folder_id: folder,
     ids: params[:ids], destroy_entries: true), method: :post, class: 'icon icon-del',
-    data: { confirm: l(:text_are_you_sure) }, id: 'dmsf-cm-delete', disabled: !allowed %>
+    data: { confirm: l(:text_are_you_sure) }, id: 'dmsf-cm-delete', disabled: !allowed_delete %>
 </li>
