@@ -39,6 +39,21 @@ class DmsfWorkflow < ActiveRecord::Base
   STATUS_LOCKED = 0
   STATUS_ACTIVE = 1
 
+  def self.workflow_str(workflow)
+    case workflow
+    when STATE_WAITING_FOR_APPROVAL
+      l(:title_waiting_for_approval)
+    when STATE_APPROVED
+      l(:title_approved)
+    when STATE_ASSIGNED
+      l(:title_assigned)
+    when STATE_REJECTED
+      l(:title_rejected)
+    when DmsfWorkflow::STATE_OBSOLETE
+      l(:title_obsolete)
+    end
+  end
+
   def participiants
     users = Array.new
     dmsf_workflow_steps.each do |step|

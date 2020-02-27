@@ -23,8 +23,8 @@
 %>
 
 <div class="box tabular">
-  <strong><%= l(:heading_new_revision) %> <a href="#" id="newRevisionFormContentToggle">[-]</a></strong>
-  <div id="newRevisionFormContent">
+  <strong><%= l(:heading_new_revision) %> <a href="#" id="new_revision_form_content_toggle">[+]</a></strong>
+  <div id="new_revision_form_content">
     <% if @file.locked_for_user? %>
       <p class="warning"><%= l(:info_file_locked) %></p>
     <% else %>

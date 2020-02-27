@@ -21,6 +21,6 @@
 
 var modal = $('#ajax-modal');
 
-modal.html('<%= escape_javascript(render :partial => 'log', :locals => {:workflow => @dmsf_workflow}) %>');
+modal.html('<%= escape_javascript(render partial: 'log', locals: { workflow:  @dmsf_workflow, revision: @revision }) %>');
 showModal('ajax-modal', '90%');
 modal.addClass('workflow-log');

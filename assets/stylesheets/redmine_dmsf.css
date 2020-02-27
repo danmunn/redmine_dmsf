@@ -196,6 +196,10 @@ table.display thead th div.DataTables_sort_wrapper span {
 .dmsf_workflows.locked a { color: #aaa; }
 
 /* DMSF revision box */
+#new_revision_form_content {
+    display: none;
+}
+
 .dmsf_revision_box {
   padding: 0 0 0 0;
   margin-bottom: 10px;

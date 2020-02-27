@@ -233,6 +233,18 @@ class DmsfWorkflowsController < ApplicationController
   end
 
   def log
+    if params[:dmsf_file_revision_id].present?
+      @revision = DmsfFileRevision.find_by(id: params[:dmsf_file_revision_id])
+    elsif params[:dmsf_file_id].present?
+      dmsf_file = DmsfFile.find_by(id: params[:dmsf_file_id])
+      @revision = dmsf_file.last_revision if dmsf_file
+    elsif params[:dmsf_link_id].present?
+      dmsf_link = DmsfLink.find_by(id: params[:dmsf_link_id])
+      if dmsf_link
+        dmsf_file = dmsf_link.target_file
+        @revision = dmsf_file.last_revision
+      end
+    end
     respond_to do |format|
       format.html
       format.js

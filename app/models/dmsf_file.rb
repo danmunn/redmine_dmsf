@@ -239,6 +239,12 @@ class DmsfFile < ActiveRecord::Base
     self.project_id = project.id
     self.dmsf_folder = folder
     new_revision = last_revision.clone
+    new_revision.workflow = nil
+    new_revision.dmsf_workflow_id = nil
+    new_revision.dmsf_workflow_assigned_by_user_id = nil
+    new_revision.dmsf_workflow_assigned_at = nil
+    new_revision.dmsf_workflow_started_by_user_id = nil
+    new_revision.dmsf_workflow_started_at = nil
     new_revision.dmsf_file = self
     new_revision.comment = l(:comment_moved_from, source: source)
     new_revision.custom_values = []

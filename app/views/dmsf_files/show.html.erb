@@ -79,21 +79,25 @@
   <div class="dmsf_revision_box dataTables_wrapper">
     <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">
       <div class="dataTables_lenght">
-        <div id="dmsf_tag" class="dmsf_controls">
-          <%= link_to_function image_tag('group.png'),
-            "$('#revision_access-#{revision.id}').toggle()",
-            title: l(:title_download_entries) %>
-          <%= link_to image_tag('download.png'),
-            view_dmsf_file_path(@file, download: revision),
-              title: l(:title_title_version_version_download, title: h(revision.title), version: revision.version) %>
-          <%= link_to image_tag('close_hl.png'),
-            obsolete_revision_path(revision),
-              data: { confirm: l(:text_are_you_sure) },
-              title: l(:title_obsolete_revision) if @file_manipulation_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
-          <%= link_to image_tag('delete.png'),
-            delete_revision_path(revision),
-              data: { confirm: l(:text_are_you_sure) },
-              title: l(:title_delete_revision) if @file_delete_allowed && (@file.dmsf_file_revisions.visible.count > 1) %>
+        <div id="dmsf_tag" class="dmsf_controls contextual">
+          <%= actions_dropdown do %>
+            <%= link_to_function l(:title_download_entries),
+                  "$('#revision_access-#{revision.id}').toggle()",
+                  class: 'icon icon-group' %>
+            <%= link_to l(:title_download),
+                  view_dmsf_file_path(@file, download: revision),
+                  title: l(:title_title_version_version_download, title: h(revision.title), version: revision.version),
+                  class: 'icon icon-download' %>
+            <%= link_to l(:title_obsolete_revision),
+                  obsolete_revision_path(revision),
+                  data: { confirm: l(:text_are_you_sure) },
+                  class: 'icon icon-close' if @file_manipulation_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
+            <%= link_to l(:button_delete),
+                  delete_revision_path(revision),
+                  data: { confirm: l(:text_are_you_sure) },
+                  title: l(:title_delete_revision),
+                  class: 'icon icon-del' if @file_delete_allowed && (@file.dmsf_file_revisions.visible.count > 1) %>
+          <% end %>
         </div>
         <i><%= l(:info_revision, rev: revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>
@@ -199,14 +203,14 @@
     }
     $('#version_0').prop('disabled', true);
   });
-  $('#newRevisionFormContentToggle').click(function() {
-    if($('#newRevisionFormContent').is(':visible')) {
+  $('#new_revision_form_content_toggle').click(function() {
+    if($('#new_revision_form_content').is(':visible')) {
       $(this).text('[+]');
-      $('#newRevisionFormContent').hide();
+      $('#new_revision_form_content').hide();
     }
     else {
       $(this).text('[-]');
-      $('#newRevisionFormContent').show();
+      $('#new_revision_form_content').show();
     }
   });
   $('.dmsf_list').dataTable({
@@ -217,12 +221,6 @@
       sSearch: "<%= l(:description_filter) %>:"
     }
   });
-<% end %>
-<% if @revision.valid? && @file.valid? %>
-  <%= late_javascript_tag do %>
-    $('#newRevisionFormContentToggle').text('[+]');
-    $('#newRevisionFormContent').hide();
-  <% end %>
 <% end %>
 
 <% content_for :header_tags do %>

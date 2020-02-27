@@ -186,8 +186,10 @@ class DmsfQuery < Query
           users.lastname AS lastname,
           users.id AS author,
           'folder' AS type,
+          dmsf_folders.deleted AS deleted,
           0 AS sort #{cf_columns}}).
-        joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
+        joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')#.
+    #visible(!deleted)
     if deleted
       scope.where(dmsf_folders: { project_id: project.id, deleted: deleted })
     else
@@ -218,6 +220,7 @@ class DmsfQuery < Query
           users.lastname AS lastname,
           users.id AS author,
           'folder-link' AS type,
+          dmsf_links.deleted AS deleted,
           0 AS sort #{cf_columns}}).
         joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
         joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)')
@@ -252,6 +255,7 @@ class DmsfQuery < Query
           users.lastname AS lastname,
           users.id AS author,
           'file' AS type,
+          dmsf_files.deleted AS deleted,
           1 AS sort #{cf_columns}}).
         joins(:dmsf_file_revisions).
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
@@ -286,6 +290,7 @@ class DmsfQuery < Query
           users.lastname AS lastname,
           users.id AS author,
           'file-link' AS type,
+          dmsf_links.deleted AS deleted,
           1 AS sort #{cf_columns}}).
         joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id').
         joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
@@ -321,6 +326,7 @@ class DmsfQuery < Query
           users.lastname AS lastname,
           users.id AS author,
           'url-link' AS type,
+          dmsf_links.deleted AS deleted,
           1 AS sort #{cf_columns}}).
         joins('LEFT JOIN users ON dmsf_links.user_id = users.id ')
     if deleted
