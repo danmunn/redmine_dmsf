@@ -38,8 +38,7 @@ var span = input.parent();
     "<input name='dmsf_attachments_wfs[<%= @attachment_id %>]' value='<%= @dmsf_workflow_id %>' type='hidden'>");
 <% end %>
 
-var a = span.children("a.icon-wf-none");
+var a = span.children("a.icon-ok");
 
-a.attr("class", "icon icon-wf-assigned");
 a.attr("href", "javascript:void(0);");
 a.attr("title", "<%= l(:title_assigned) %>");

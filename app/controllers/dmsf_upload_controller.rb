@@ -40,10 +40,6 @@ class DmsfUploadController < ApplicationController
     true
   end
 
-  def multi_upload
-    @rlf = cookies[:dmsf_switch_rlf] == 'true'
-  end
-
   def upload_files
     uploaded_files = params[:dmsf_attachments]
     @uploads = []

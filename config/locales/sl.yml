@@ -128,9 +128,6 @@ sl:
   option_version_major: Major
   option_version_custom: Custom
   label_new_content: Nova vsebina
-  label_maximum_files_upload: Maximum naloženih datotek
-  note_maximum_number_of_files_uploaded: Omejitev največjega števila datotek za nalaganje naenkrat. 0 pomeni neomejeno.
-
   label_maximum_files_download: Maximum datotek za prenos dol.
   note_maximum_number_of_files_downloaded: Omejitev največjega števila prenešenih datotek v zip formatu ali poslanih po
     emailu. 0 pomeni neomejeno.
@@ -348,13 +345,6 @@ sl:
   locked_documents: Locked documents
   open_approvals: Open approvals
 
-  label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
-  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise
-    Redmine standard upload form must be used. Number is in MB.
-
-  label_classic: Classic
-  label_drag_drop: Modern
-
   error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."
 
   label_public_urls: Public URLs valid to
@@ -411,8 +401,6 @@ sl:
 
   label_inherited_permissions: Inherited permissions
 
-  label_switch_rlf: Switch Redmine look and feel design
-  button_switch: Switch design
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Updated

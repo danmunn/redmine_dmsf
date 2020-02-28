@@ -128,9 +128,6 @@ nl:
   option_version_major: Belangrijk
   option_version_custom: Aangepast
   label_new_content: Nieuwe inhoud
-  label_maximum_files_upload: Maximale bestandsupload
-  note_maximum_number_of_files_uploaded: Beperkt maximaal aantal bestanden dat tegelijkertijd geupload kan worden. 0
-    betekent onbeperkt.
   label_maximum_files_download: Maximaal aantal bestanden download
   note_maximum_number_of_files_downloaded: Beperkt maximaal aantal bestanden gedownload in zip of verzonden via e-mail.
     0 betekent onbeperkt.
@@ -348,13 +345,6 @@ nl:
   locked_documents: Vergrendelde documenten
   open_approvals: Open goedkeuringen
 
-  label_maximum_ajax_upload_filesize: Maximale bestandsgrootte te uploaden via AJAX
-  note_maximum_ajax_upload_filesize: Beperkt maximale bestandsgrootte die geupload kan worden via standaard AJAX
-    interface of het Redmine standaard upload formulier moet worden gebruikt. Getal is in MB.
-
-  label_classic: Klassiek
-  label_drag_drop: Modern
-
   error_maximum_upload_filecount: "Er kunnen niet meer dan %{filecount} bestand(en) worden geupload."
 
   label_public_urls: Public URLs valid to
@@ -411,8 +401,6 @@ nl:
 
   label_inherited_permissions: Inherited permissions
 
-  label_switch_rlf: Switch Redmine look and feel design
-  button_switch: Switch design
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Updated

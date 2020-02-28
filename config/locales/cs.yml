@@ -128,9 +128,6 @@ cs:
   option_version_major: Hlavní
   option_version_custom: Vlastní
   label_new_content: Nový obsah
-  label_maximum_files_upload: Maximální počet najednou nahraných souborů
-  note_maximum_number_of_files_uploaded: Maximální počet najednou nahraných souborů. 0 znamená bez omezení.
-
   label_maximum_files_download: Maximální počet najednou stažených souborů
   note_maximum_number_of_files_downloaded: Maximální počet najednou stažených souborů jako Zip nebo odeslaných emailem.
     0 znamená bez omezení.
@@ -348,13 +345,6 @@ cs:
   locked_documents: Zamčené dokumenty
   open_approvals: Procesy ke schválení
 
-  label_maximum_ajax_upload_filesize: Maximální velikost souboru nahratelná přes AJAX
-  note_maximum_ajax_upload_filesize: Omezuje velikost souboru, který může být nahrán přes standardní rozhraní AJAX,
-    jinak se použije standardní rozhraní Redminu. Číslo je v MB.
-
-  label_classic: Klasický
-  label_drag_drop: Moderní
-
   error_maximum_upload_filecount: "Nelze nahrát více než %{filecount} soubor(ů)."
 
   label_public_urls: Veřejné URL platné do
@@ -411,8 +401,6 @@ cs:
 
   label_inherited_permissions: Zděděná práva
 
-  label_switch_rlf: Přepni do/z Redmine vzhledu
-  button_switch: Přepni vzhled
   button_edit_content: Upravit obsah
   field_workflow: Workflow
   field_modified: Aktualizoval

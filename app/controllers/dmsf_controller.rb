@@ -67,65 +67,25 @@ class DmsfController < ApplicationController
     end
   end
 
-  def switch_rlf
-    rlf = params[:rlf] == 'true'
-    cookie_options = {
-        value: !rlf,
-        expires: 1.year.from_now,
-        path: (RedmineApp::Application.config.relative_url_root || '/'),
-        secure: request.ssl?,
-        httponly: true
-    }
-    cookies[:dmsf_switch_rlf] = cookie_options
-    redirect_to dmsf_folder_path(id: @project, folder_id: @folder)
-  end
-
   def show
-    @rlf = cookies[:dmsf_switch_rlf] == 'true'
-    if @rlf
-      @system_folder = @folder && @folder.system
-      @locked_for_user = @folder && @folder.locked_for_user?
-      @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
-      @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
-      #@file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
-      #@file_view_allowed = User.current.allowed_to?(:view_dmsf_files, @project)
-      #@force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
-      #@workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', @project.id]).exists?
-      #@file_approval_allowed = User.current.allowed_to?(:file_approval, @project)
-      @trash_enabled = @folder_manipulation_allowed && @file_manipulation_allowed
-      use_session = !request.format.csv?
-      @query = retrieve_query(DmsfQuery, use_session)
-      @query.dmsf_folder_id = @folder ? @folder.id : nil
-      @query.deleted = false
-      if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
-        render_404
-        return
-      end
-      respond_to do |format|
-        format.html {
-          @dmsf_count = @query.dmsf_count
-          @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
-          render layout: !request.xhr?
-        }
-        format.api
-        format.csv  {
-          filename = @project.name
-          filename << "_#{@folder.title}" if @folder
-          filename << DateTime.current.strftime('_%Y%m%d%H%M%S.csv')
-          send_data(DmsfHelper.dmsf_to_csv(@folder ? @folder : @project, params[:settings][:dmsf_columns]),
-                    :type => 'text/csv; header=present', :filename => filename)
-        }
-      end
-      return
-    end
-    get_display_params
+    @system_folder = @folder && @folder.system
+    @locked_for_user = @folder && @folder.locked_for_user?
+    @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
+    @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
+    @trash_enabled = @folder_manipulation_allowed && @file_manipulation_allowed
+    use_session = !request.format.csv?
+    @query = retrieve_query(DmsfQuery, use_session)
+    @query.dmsf_folder_id = @folder ? @folder.id : nil
+    @query.deleted = false
     if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
       render_404
       return
     end
     respond_to do |format|
       format.html {
-        render :layout => !request.xhr?
+        @dmsf_count = @query.dmsf_count
+        @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
+        render layout: !request.xhr?
       }
       format.api
       format.csv  {
@@ -133,36 +93,24 @@ class DmsfController < ApplicationController
         filename << "_#{@folder.title}" if @folder
         filename << DateTime.current.strftime('_%Y%m%d%H%M%S.csv')
         send_data(DmsfHelper.dmsf_to_csv(@folder ? @folder : @project, params[:settings][:dmsf_columns]),
-                  :type => 'text/csv; header=present', :filename => filename)
+                  type: 'text/csv; header=present', filename: filename)
       }
     end
   end
 
   def trash
-    @rlf = cookies[:dmsf_switch_rlf] == 'true'
-    if @rlf
-      @folder_manipulation_allowed = User.current.allowed_to? :folder_manipulation, @project
-      @file_manipulation_allowed = User.current.allowed_to? :file_manipulation, @project
-      @file_delete_allowed = User.current.allowed_to? :file_delete, @project
-      @query = retrieve_query(DmsfQuery, true)
-      @query.deleted = true
-      respond_to do |format|
-        format.html {
-          @dmsf_count = @query.dmsf_count
-          @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
-          render layout: !request.xhr?
-        }
-      end
-      return
-    end
     @folder_manipulation_allowed = User.current.allowed_to? :folder_manipulation, @project
     @file_manipulation_allowed = User.current.allowed_to? :file_manipulation, @project
     @file_delete_allowed = User.current.allowed_to? :file_delete, @project
-    @subfolders = DmsfFolder.deleted.where(project_id: @project.id)
-    @files = DmsfFile.deleted.where(project_id: @project.id)
-    @dir_links = DmsfLink.deleted.where(project_id: @project.id, target_type: DmsfFolder.model_name.to_s)
-    @file_links = DmsfLink.deleted.where(project_id: @project.id, target_type: DmsfFile.model_name.to_s)
-    @url_links = DmsfLink.deleted.where(project_id: @project.id, target_type: 'DmsfUrl')
+    @query = retrieve_query(DmsfQuery, true)
+    @query.deleted = true
+    respond_to do |format|
+      format.html {
+        @dmsf_count = @query.dmsf_count
+        @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
+        render layout: !request.xhr?
+      }
+    end
   end
 
   def download_email_entries
@@ -697,115 +645,6 @@ class DmsfController < ApplicationController
     copy = folder.clone
     copy.id = folder.id
     copy
-  end
-
-  def get_display_params
-    @rlf = cookies[:dmsf_switch_rlf] == 'true'
-    @system_folder = @folder && @folder.system
-    @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
-    @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
-    @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
-    @file_view_allowed = User.current.allowed_to?(:view_dmsf_files, @project)
-    @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
-    @workflows_available = DmsfWorkflow.where(project_id: @project.id).or(DmsfWorkflow.where(project_id: nil)).exists?
-    @file_approval_allowed = User.current.allowed_to?(:file_approval, @project)
-    tag = params[:custom_field_id].present? && params[:custom_value].present?
-    @extra_columns = [l(:label_last_approver), l(:field_project), l(:label_document_url), l(:label_last_revision_id)]
-    if @tree_view
-      @locked_for_user = false
-    else
-      if tag
-        @subfolders = []
-        @folder = nil
-        DmsfFolder.where(project_id: @project.id, system: false).visible.find_each do |f|
-          f.custom_field_values.each do |v|
-            if v.custom_field_id == params[:custom_field_id].to_i
-              if v.custom_field.compare_values?(v.value, params[:custom_value])
-                @subfolders << f
-                break
-              end
-            end
-          end
-        end
-        @files = []
-        DmsfFile.where(project_id: @project.id).visible.find_each do |f|
-          r = f.last_revision
-          if r
-            r.custom_field_values.each do |v|
-              if v.custom_field_id == params[:custom_field_id].to_i
-                if v.custom_field.compare_values?(v.value, params[:custom_value])
-                  @files << f
-                  break
-                end
-              end
-            end
-          end
-        end
-        @dir_links = []
-        DmsfLink.where(project_id: @project.id, target_type: DmsfFolder.model_name.to_s).where.not(
-          target_id: nil).visible.find_each do |l|
-          l.target_folder.custom_field_values.each do |v|
-            if v.custom_field_id == params[:custom_field_id].to_i
-              if v.custom_field.compare_values?(v.value, params[:custom_value])
-                @dir_links << l
-                break
-              end
-            end
-          end
-        end
-        @file_links = []
-        DmsfLink.where(project_id: @project.id, target_type: DmsfFile.model_name.to_s).visible.find_each do |l|
-          r = l.target_file.last_revision if l.target_file
-          if r
-            r.custom_field_values.each do |v|
-              if v.custom_field_id == params[:custom_field_id].to_i
-                if v.custom_field.compare_values?(v.value, params[:custom_value])
-                  @file_links << l
-                  break
-                end
-              end
-            end
-          end
-        end
-        @url_links = []
-      else
-        scope = @folder ? @folder : @project
-        @locked_for_user = @folder && @folder.locked_for_user?
-        @subfolders = scope.dmsf_folders.visible
-        @files = scope.dmsf_files.visible
-        @dir_links = scope.folder_links.visible
-        @file_links = scope.file_links.visible
-        @url_links = scope.url_links.visible
-        # Limit and offset for REST API calls
-        if params[:limit].present?
-          @subfolders = @subfolders.limit(params[:limit])
-          @files = @files.limit(params[:limit])
-          @dir_links = @dir_links.limit(params[:limit])
-          @file_links = @file_links.limit(params[:limit])
-          @url_links = @url_links.limit(params[:limit])
-        end
-        if params[:offset].present?
-          @subfolders = @subfolders.offset(params[:offset])
-          @files = @files.offset(params[:offset])
-          @dir_links = @dir_links.offset(params[:offset])
-          @file_links = @file_links.offset(params[:offset])
-          @url_links = @url_links.offset(params[:offset])
-        end
-      end
-      # Remove system folders you are not allowed to see because you are not allowed to see the issue or you are not
-      # permitted to see system folders
-      @subfolders = DmsfFolder.visible_folders(@subfolders, @project)
-    end
-
-    @ajax_upload_size = Setting.plugin_redmine_dmsf['dmsf_max_ajax_upload_filesize'].presence || 100
-
-    # Trash
-    visible = @folder_manipulation_allowed && @file_manipulation_allowed &&
-      @file_delete_allowed && !@locked_for_user && !@folder
-    enabled = DmsfFolder.deleted.where(project_id: @project.id).exists? ||
-      DmsfFile.deleted.where(project_id: @project.id).exists? ||
-      DmsfLink.deleted.where(project_id: @project.id).exists?
-    @trash_enabled = visible && enabled
   end
 
 end

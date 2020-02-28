@@ -27,14 +27,6 @@
 </em>
 
 <p>
-  <%= content_tag(:label, l(:label_maximum_files_upload)) %>
-  <%= text_field_tag 'settings[dmsf_max_file_upload]', @settings['dmsf_max_file_upload'], :size => 10 %>
-  <em class="info">
-    <%= l(:note_maximum_number_of_files_uploaded) %> <%= l(:label_default) %>: 0    
-  </em>
-</p>
-
-<p>
   <%= content_tag(:label, l(:label_maximum_files_download)) %>
   <%= text_field_tag 'settings[dmsf_max_file_download]', @settings['dmsf_max_file_download'], :size => 10 %>
   <em class="info">
@@ -47,14 +39,6 @@
   <%= text_field_tag 'settings[dmsf_max_email_filesize]', @settings['dmsf_max_email_filesize'], :size => 10 %>
   <em class="info">
     <%= l(:note_maximum_email_filesize) %> <%= l(:label_default) %>: 0  
-  </em>
-</p>
-
-<p>
-  <%= content_tag(:label, l(:label_maximum_ajax_upload_filesize)) %>  
-  <%= text_field_tag 'settings[dmsf_max_ajax_upload_filesize]', @settings['dmsf_max_ajax_upload_filesize'], :size => 10 %>
-  <em class="info">
-    <%= l(:note_maximum_ajax_upload_filesize) %> <%= l(:label_default) %>: 100
   </em>
 </p>
 

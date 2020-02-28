@@ -127,8 +127,6 @@ de:
   option_version_minor: Unterversion
   option_version_major: Hauptversion
   label_new_content: Neuer Inhalt
-  label_maximum_files_upload: Maximal zulässige Anzahl der hochgeladenen Dateien
-  option_version_custom: Benutzerdefinierte
   note_maximum_number_of_files_uploaded: Beschränkt die maximale Anzahl der  Dateien, die auf einmal hochgeladen werden
     können. 0 bedeutet unbeschränkt.
   label_maximum_files_download: Maximal zulässige Anzahl der Dateien, die heruntergeladen werden können.
@@ -348,13 +346,6 @@ de:
   locked_documents: Gesperrte Dateien
   open_approvals: Offene Genehmigungs-Workflows
 
-  label_maximum_ajax_upload_filesize: Maximale Dateigröße für den Upload via AJAX
-  note_maximum_ajax_upload_filesize: Maximale Dateigröße für den Upload über die AJAX-Schnittstelle. Für größere Dateien
-    muss der Standard-Uploader von Redmine verwendet werden. Angabe in MB.
-
-  label_classic: Klassisch
-  label_drag_drop: Modern
-
   error_maximum_upload_filecount: "Nicht mehr als %{filecount} Datai(en) kann man hochladen."
 
   label_public_urls: Öffentliches URLs gültig bis
@@ -411,8 +402,6 @@ de:
 
   label_inherited_permissions: Inherited permissions
 
-  label_switch_rlf: Switch Redmine look and feel design
-  button_switch: Switch design
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Updated

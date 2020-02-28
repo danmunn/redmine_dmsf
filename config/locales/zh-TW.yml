@@ -128,9 +128,6 @@ zh-TW:
   option_version_major: Major
   option_version_custom: Custom
   label_new_content: 新的檔案內容
-  label_maximum_files_upload: 最大上傳檔案數量
-  note_maximum_number_of_files_uploaded: 同時間所能上傳的，最大檔案數量限制。 0 表示沒有限制。
-
   label_maximum_files_download: 最大下載檔案數量
   note_maximum_number_of_files_downloaded: 同時間所能下載的，最大檔案數量限制，(下載或電子郵件發送)。 0 表示沒有限制。
 
@@ -348,13 +345,6 @@ zh-TW:
   locked_documents: Locked documents
   open_approvals: Open approvals
 
-  label_maximum_ajax_upload_filesize: Maximum file size uploadable via AJAX
-  note_maximum_ajax_upload_filesize: Limits maximum file size that can uploaded via standard AJAX interface otherwise
-    Redmine standard upload form must be used. Number is in MB.
-
-  label_classic: Classic
-  label_drag_drop: Modern
-
   error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."
 
   label_public_urls: Public URLs valid to
@@ -411,8 +401,6 @@ zh-TW:
 
   label_inherited_permissions: Inherited permissions
 
-  label_switch_rlf: Switch Redmine look and feel design
-  button_switch: Switch design
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Updated

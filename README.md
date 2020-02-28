@@ -25,8 +25,7 @@ Features
   * Document versioning / revision history
   * Email notifications for directories and/or documents
   * Document locking
-  * Multi (drag/drop depending on browser) upload/download
-  * Multi download via zip
+  * Multi (drag/drop depending on browser) upload/download  
   * Direct document or document link sending via email
   * Configurable document approval workflow
   * Document access auditing
@@ -34,8 +33,7 @@ Features
   * Wiki macros for quick content linking
   * Full read/write webdav functionality
   * Optional document content full-text search
-  * Documents and folders symbolic links
-  * Document tagging
+  * Documents and folders symbolic links  
   * Trash bin
   * Documents attachable to issues
   * Compatible with Redmine 4.1.x

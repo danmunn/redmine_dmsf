@@ -128,9 +128,6 @@ pt-BR:
   option_version_major: Major
   option_version_custom: Personalizado
   label_new_content: Novo conteúdo
-  label_maximum_files_upload: Máximo de arquivos para upload
-  note_maximum_number_of_files_uploaded: Limite máximo de arquivos carregados de uma única vez.
-
   label_maximum_files_download: Máximo de download de arquivos
   note_maximum_number_of_files_downloaded: Limite máximo de arquivos para download ou envio por e-mail de uma única vez.
 
@@ -348,13 +345,6 @@ pt-BR:
   locked_documents: Documentos bloqueados
   open_approvals: Aprovações abertas
 
-  label_maximum_ajax_upload_filesize: Tamanha máximo de arquivo carregável via AJAX
-  note_maximum_ajax_upload_filesize: Limita o tamanho máximo do arquivo que pode ser carregado através da interface AJAX
-    padrão, caso contrário o formulário de upload padrão da Redmine deve ser usado. O número está em MB.
-
-  label_classic: Classic
-  label_drag_drop: Modern
-
   error_maximum_upload_filecount: "Não mais que %{filecount} arquivo(s) pode(m) ser carregado(s)."
 
   label_public_urls: URLs públicas válidas para
@@ -411,8 +401,6 @@ pt-BR:
 
   label_inherited_permissions: Inherited permissions
 
-  label_switch_rlf: Switch Redmine look and feel design
-  button_switch: Switch design
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Updated

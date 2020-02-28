@@ -127,9 +127,6 @@ ko:
   option_version_major: 중요한
   option_version_custom: 임의의
   label_new_content: 새로운 콘텐츠
-  label_maximum_files_upload: 최대 업로드 개수
-  note_maximum_number_of_files_uploaded: 한번에 업로드 할 수 있는 최대 파일 수 제한. 0은 무제한을 나타냅니다.
-
   label_maximum_files_download: 최대 다운로드 개수
   note_maximum_number_of_files_downloaded: Zip 혹은 전자 우편을 통해 다운로드 할 수 있는 최대 파일 수 제한. 0은 무제한을 나타냅니다.
 
@@ -346,12 +343,6 @@ ko:
   locked_documents: 잠긴 문서
   open_approvals: 승인 열기
 
-  label_maximum_ajax_upload_filesize: Ajax를 이용하여 업로드 할 수 있는 최대 파일 크기
-  note_maximum_ajax_upload_filesize: 레드마인 표준 업로드를 사용하는 경우를 제외하고 Ajax 인터페이스로 업로드 할 때의 최대 파일 크기를 제한합니다. 단위는 MiB이며, 0은 무제한을 의미합니다.
-
-  label_classic: 일반
-  label_drag_drop: 드래그 & 드롭
-
   error_maximum_upload_filecount: "%{filecount}가 넘는 파일을 업로드 할 수 없습니다."
 
   label_public_urls: Public URLs valid to
@@ -404,8 +395,6 @@ ko:
 
   label_inherited_permissions: 상속된 권한
 
-  label_switch_rlf: Switch Redmine look and feel design
-  button_switch: Switch design
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Updated

@@ -128,9 +128,6 @@ hu:
   option_version_major: Fő
   option_version_custom: Egyedi
   label_new_content: Új tartalom
-  label_maximum_files_upload: Maximum feltölthető fájlok
-  note_maximum_number_of_files_uploaded: Egyszerre feltölthető fájlok maximum száma. 0 korlátlan fájlfeltöltést jelent.
-
   label_maximum_files_download: Maximálisan feltölthető fájlok
   note_maximum_number_of_files_downloaded: Maximálisan letölthető zip fájlok, vagy emailek. 0 korlátlan letöltést
     jelent.
@@ -348,14 +345,6 @@ hu:
   locked_documents: Locked documents
   open_approvals: Nyitott jóváhagyások
 
-  label_maximum_ajax_upload_filesize: Maximum méretű fájl feltöltése AJAX-on keresztül lehetésges
-  note_maximum_ajax_upload_filesize: Korlározza a maximális fájlméretet, amelyet a hagyományos AJAX interfészen
-    keresztül lehet feltölteni. Egyéb esetben a szoftver a saját feltöltő űrlapját használja. A szám MB-ben értendő.
-      számára csak olvasható vagy írható-olvasható webdav felületről
-
-  label_classic: Klasszikus
-  label_drag_drop: Drag&Drop
-
   error_maximum_upload_filecount: "Nem több, mint %{filecount} fájl tölthető fel."
 
   label_public_urls: Public URLs valid to
@@ -411,8 +400,6 @@ hu:
 
   label_inherited_permissions: Inherited permissions
 
-  label_switch_rlf: Switch Redmine look and feel design
-  button_switch: Switch design
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Updated

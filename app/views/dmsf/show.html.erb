@@ -24,10 +24,7 @@
 
 <% html_title l(:dmsf) %>
 <div class="contextual">
-  <%= link_to(l(:button_switch), switch_rlf_dmsf_path(id: @project, rlf: @rlf),
-              title: l(:label_switch_rlf),
-              class: 'icon icon-plugins') %>
-  <% if @rlf && @file_manipulation_allowed && !@locked_for_user && !@system_folder %>
+  <% if @file_manipulation_allowed && !@locked_for_user && !@system_folder %>
     <%= link_to l(:label_attachment_new), multi_dmsf_upload_path(id: @project, dmsf_folder_id: @folder),
                 class: 'icon icon-add' %>
   <% end %>
@@ -94,155 +91,13 @@
   </div>
 </div>
 
-<% if @query %>
-  <%= form_tag(dmsf_folder_path(d: @project, folder_id: @folder), method: :get, id: 'query_form') do %>
-    <%= render partial: 'queries/query_form' %>
-  <% end %>
-  <%= render partial: 'query_list', locals: { query: @query } %>
-  <span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>
-<% else %>
-  <div id="dmsf_ajax_loading" class="ajax-loading"></div>
-  <%= form_tag(entries_operations_dmsf_path(id: @project, folder_id: @folder), method: :post,
-                class: 'dmsf_entries', id: 'entries_form', data: { cm_url: dmsf_context_menu_path }) do %>
-    <%= hidden_field_tag('action') %>
-    <% unless @system_folder %>
-      <div id="dmsf_buttons" class="dmsf_controls">
-        <%= submit_tag(l(:button_download), title: l(:title_download_checked), name: 'download_entries',
-          class: 'toggle-selection', data: { disable_with: false }) if @file_view_allowed %>
-        <%= submit_tag(l(:field_mail), title: l(:title_send_checked_by_email), name: 'email_entries', class: 'toggle-selection',
-          data: { disable_with: false }) if (@file_view_allowed && User.current.allowed_to?(:email_documents, @project)) %>
-        <% if @file_delete_allowed %>
-          <%= submit_tag(l(:button_delete), title: l(:title_delete_checked), name: 'delete_entries', class: 'toggle-selection',
-            data: { confirm: l(:text_are_you_sure), disable_with: false }) if @file_delete_allowed %>
-        <% end %>
-      </div>
-    <% end %>
-    <% unless @system_folder %>
-      <% values = @folder ? @folder.custom_field_values : DmsfFolder.new.custom_field_values %>
-      <% unless values.empty? %>
-        <% values.sort! { |a, b| a.custom_field.position <=> b.custom_field.position } %>
-        <% custom_value = values.first %>
-        <% if custom_value.custom_field.format.is_a?(Redmine::FieldFormat::ListFormat) %>
-          <div id="dmsf_tag" class="dmsf_controls">
-            <% custom_value.custom_field.is_required = false %>
-            <% custom_value.value = params[:custom_value].present? ? params[:custom_value] : '' %>
-            <%= h(custom_value.custom_field.name) %>:
-            <%= custom_value.custom_field.format.edit_tag(self,
-                                                          custom_field_tag_id(:dmsf_folder, custom_value.custom_field),
-                                                          custom_field_tag_name(:dmsf_folder, custom_value.custom_field),
-                                                          custom_value,
-                                                          :class => "#{custom_value.custom_field.field_format}_cf",
-                                                          :style => 'width: auto') %>
-          </div>
-        <% end %>
-      <% end %>
-    <% end %>
-    <% if @tree_view %>
-      <%= render(:partial => 'tree_view') %>
-    <% else %>
-      <%= render(:partial => 'list_view') %>
-    <% end %>
-  <% end %>
-
-  <% content_for :header_tags do %>
-      <%= stylesheet_link_tag 'jquery.dataTables/datatables.min.css', :plugin => :redmine_dmsf %>
-      <%= javascript_include_tag 'jquery.dataTables/datatables.min.js', :plugin => :redmine_dmsf, defer: true %>
-
-      <% title = DmsfFolder.get_column_position('title') %>
-      <% position = DmsfFolder.get_column_position('position') %>
-      <% commands = DmsfFolder.get_column_position('commands') %>
-      <% position = DmsfFolder.get_column_position('position') %>
-      <% version = DmsfFolder.get_column_position('version') %>
-      <% size_calculated = DmsfFolder.get_column_position('size_calculated') %>
-      <% modified_calculated = DmsfFolder.get_column_position('modified_calculated') %>
-      <% version_calculated = DmsfFolder.get_column_position('version_calculated') %>
-      <% size = DmsfFolder.get_column_position('size') %>
-      <% modified = DmsfFolder.get_column_position('modified') %>
-      <% clear_title = DmsfFolder.get_column_position('clear_title') %>
-
-      <%= late_javascript_tag do %>
-        $("#browser").dataTable({
-            orderClasses: false,
-            responsive: {
-                details: false
-            },
-            language: {
-                url: "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
-            },
-            oLanguage: {
-              sSearch: "<%= l(:description_filter) %>:"
-            },
-            autoWidth: false,
-            paginate: false,
-            <% if title %>
-              order: [[<%= title %>, "asc"]],
-            <% end %>
-            sortingFixed: [[ <%= position %>, "asc"]],
-            columnDefs: [
-                { responsivePriority: 1, targets: <%= title %> },
-                { responsivePriority: 2, targets: <%= commands %> },
-                { searchable: false, targets: [0, <%= commands %>, <%= position %>, <%= size_calculated %>, <%= modified_calculated %>, <%= version_calculated %>, <%= clear_title %>] },
-                { sortable: false, targets: [0, <%= commands %>] }
-                <% if title %>
-                  ,{ iDataSort: <%= clear_title %>, targets: [ <%= title %> ] }
-                <% end %>
-                <% if size %>
-                  ,{ iDataSort: <%= size_calculated %>, targets: [ <%= size %> ] }
-                <% end %>
-                <% if modified %>
-                  ,{ iDataSort: <%= modified_calculated %>, targets: [ <%= modified %> ] }
-                <% end %>
-                <% if version %>
-                  ,{ iDataSort: <%= version_calculated %>, targets: [ <%= version %> ] }
-                <% end %>
-            ],
-            "fnInitComplete": function() {
-              var browserFilter = $("#browser_filter");
-              $("#dmsf_buttons").insertBefore(browserFilter);
-              $("#dmsf_tag").insertBefore(browserFilter);
-              $("#dmsf_ajax_loading").hide();
-              $("#browser").show();
-              $("#dmsf_buttons").show();
-              $("#dmsf_tag").show();
-              $("#dmsf_uploader").show();
-              $("#dmsf_uploader_header").show();
-            },
-            "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-              <% folder_id = @folder ? @folder.id : nil %>
-              return "<%= "#{l(:label_number_of_folders)}: #{DmsfFolder.visible.where(project_id: @project.id, dmsf_folder_id: folder_id).all.size + DmsfLink.visible.where(project_id: @project.id, dmsf_folder_id: folder_id, target_type: 'DmsfFolder').all.size}, #{l(:label_number_of_documents)}: #{DmsfFile.visible.where(project_id: @project.id, dmsf_folder_id: folder_id).all.size + DmsfLink.visible.where(project_id: @project.id, dmsf_folder_id: folder_id, target_type: %w(DmsfFile DmsfUrl)).all.size}" %>";
-            }
-        });
-
-        $("[data-downloadurl]").each(function() {
-            var url = this.getAttribute("data-downloadurl");
-            if (this.addEventListener) {
-                this.addEventListener("dragstart", function(e) {
-                    if (e.dataTransfer) {
-                        e.dataTransfer.setData("DownloadURL", url);
-                    }
-                },false);
-            }
-        });
-
-        var entriesForm = $('#entries_form');
-
-        entriesForm.submit(function () {
-            $(this).removeAttr("data-submitted");
-        });
-
-        $('.list_cf').change(function() {
-          entriesForm.attr('action', "<%= tag_changed_path(:id => @project, :folder_id => @folder) %>");
-          entriesForm.submit();
-        });
-      <% end %>
-  <% end %>
+<%= form_tag(dmsf_folder_path(d: @project, folder_id: @folder), method: :get, id: 'query_form') do %>
+  <%= render partial: 'queries/query_form' %>
 <% end %>
+<%= render partial: 'query_list', locals: { query: @query } %>
+<span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>
 
 <%= context_menu %>
-
-<% if !@rlf && @file_manipulation_allowed && !@locked_for_user && !@system_folder %>
-    <%= render(:partial => 'dmsf_upload/multi_upload', locals: { rlf: @rlf }) %>
-<% end %>
 
 <% unless (@folder && @folder.system) %>
     <% other_formats_links do |f| %>

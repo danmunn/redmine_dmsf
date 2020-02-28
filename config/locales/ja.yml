@@ -128,9 +128,6 @@ ja:
   option_version_major: メジャー
   option_version_custom: カスタム
   label_new_content: 新規コンテンツ
-  label_maximum_files_upload: 最大ファイルアップロード数
-  note_maximum_number_of_files_uploaded: 一度にアップロードできるファイル数の上限。0は無制限。
-
   label_maximum_files_download: 最大ファイルダウンロード数
   note_maximum_number_of_files_downloaded: Zip でダウンロードできる、またはメールで送信できるファイル数の上限。0は無制限。
 
@@ -348,13 +345,6 @@ ja:
   locked_documents: ロック中
   open_approvals: 未承認
 
-  label_maximum_ajax_upload_filesize: アップロードファイルサイズ上限
-  note_maximum_ajax_upload_filesize: アップロード可能なファイルサイズの上限。AjaxおよびRedmineの仕様に制限される
-    （2ギガバイト程度までは確認済み）単位はMB。
-
-  label_classic: クラシック
-  label_drag_drop: モダン
-
   error_maximum_upload_filecount: 一度にアップロードできるファイルは %{files} つまでです。
 
   label_public_urls: 公開用URL
@@ -411,8 +401,6 @@ ja:
 
   label_inherited_permissions: Inherited permissions
 
-  label_switch_rlf: Switch Redmine look and feel design
-  button_switch: Switch design
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Updated

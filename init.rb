@@ -39,10 +39,8 @@ Redmine::Plugin.register :redmine_dmsf do
 
   settings partial: 'settings/dmsf_settings',
             default: {
-              'dmsf_max_file_upload' => 0,
               'dmsf_max_file_download' => 0,
               'dmsf_max_email_filesize' => 0,
-              'dmsf_max_ajax_upload_filesize' => 100,
               'dmsf_storage_directory' => 'files/dmsf',
               'dmsf_index_database' => File.expand_path('dmsf_index', Rails.root),
               'dmsf_stemming_lang' => 'english',

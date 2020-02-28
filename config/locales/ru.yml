@@ -128,9 +128,6 @@ ru:
   option_version_major: Значительные изменения
   option_version_custom: Пользовательская
   label_new_content: Новое содержание
-  label_maximum_files_upload: Максимальное количество файлов для загрузки
-  note_maximum_number_of_files_uploaded: Ограничивает максимальное количество файлов, которое может быть загружено за
-    один раз. 0 означает отсутствие ограничений.
   label_maximum_files_download: Максимальное количество файлов для скачивания
   note_maximum_number_of_files_downloaded: Ограничивает максимальное количество файлов, которое может быть скачано или
     отправлено по почте за один раз. 0 означает отсутствие ограничений.
@@ -348,13 +345,6 @@ ru:
   locked_documents: Заблокированные документы
   open_approvals: Открытые согласования
 
-  label_maximum_ajax_upload_filesize: Максимальный размер файла, загружаемого посредством AJAX
-  note_maximum_ajax_upload_filesize: Максимальный размер файла, загружаемого посредством интерфейса AJAX, для
-    загрузки можно использовать стандартную форму Redmine. Размер указан в MB.
-
-  label_classic: Обычный
-  label_drag_drop: Перетаскивание
-
   error_maximum_upload_filecount: "Не более %{filecount} файла(ов) может быть загружено."
 
   label_public_urls: Ссылка действительна до
@@ -411,8 +401,6 @@ ru:
 
   label_inherited_permissions: Inherited permissions
 
-  label_switch_rlf: Switch Redmine look and feel design
-  button_switch: Switch design
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Updated

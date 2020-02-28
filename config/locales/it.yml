@@ -128,9 +128,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   option_version_major: Maggiore
   option_version_custom: Personalizzata
   label_new_content: Nuovo contenuto
-  label_maximum_files_upload: Limite di caricamento
-  note_maximum_number_of_files_uploaded: Limita il numero massimo di documenti caricati alla volta. 0 significa senza
-    limiti.
   label_maximum_files_download: Numero massimo di documenti scaricabili
   note_maximum_number_of_files_downloaded: Limita il numero massimo di documenti scaricabili in archivio zip o spediti
     via email. 0 significa senza limiti.
@@ -348,13 +345,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   locked_documents: Documenti bloccati
   open_approvals: Approvazioni aperte
 
-  label_maximum_ajax_upload_filesize: Dimensione massima dei documenti caricabili tramite AJAX
-  note_maximum_ajax_upload_filesize: Limita la dimensione massima dei documenti che possono essere caricati tramite
-    interfaccia standard AJAX altrimenti sarà necessario utilizzare il modulo standard di Redmine. Il numero è espresso
-      in MB.
-  label_classic: Classic
-  label_drag_drop: Modern
-
   error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."
 
   label_public_urls: Public URLs valid to
@@ -411,8 +401,6 @@ it: # Italian strings thx 2 Matteo Arceci!
 
   label_inherited_permissions: Inherited permissions
 
-  label_switch_rlf: Switch Redmine look and feel design
-  button_switch: Switch design
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Updated

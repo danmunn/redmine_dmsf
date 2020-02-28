@@ -36,7 +36,7 @@ function dmsfAddLink(linksSpan, linkId, linkName, title, project, awf) {
         if(awf) {
 
             var iconWf = $('<a>').attr({href: "/dmsf_workflows/" + project + "/assign?dmsf_link_id=" + linkId,
-                'class': 'modify-upload icon-only icon-wf-none', 'data-remote': 'true', 'title': title});
+                'class': 'modify-upload icon-only icon-ok', 'data-remote': 'true', 'title': title});
 
             linkSpan.append(iconWf);
         }
@@ -78,7 +78,7 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
             if($(inputEl).data('awf')) {
 
                 var iconWf = $('<a>').attr({href: '/dmsf_workflows/' + $(inputEl).attr(
-                    'data-project') + "/assign?attachment_id=" + attachmentId, 'class': 'modify-upload icon-only icon-wf-none',
+                    'data-project') + "/assign?attachment_id=" + attachmentId, 'class': 'modify-upload icon-only icon-ok',
                     'data-remote': 'true'});
 
                 fileSpan.append(iconWf);
