@@ -116,40 +116,32 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     # 1 - id
     assert_nil DmsfFolder.get_column_position('id'), "The column 'id' is on?"
     # 2 - title
-    assert_equal DmsfFolder.get_column_position('title'), 1, "The expected position of the 'title' column is 2"
-    # 3 - extension
-    assert_nil DmsfFolder.get_column_position('extensions'), "The column 'extensions' is on?"
-    # 4 - size
-    assert_equal DmsfFolder.get_column_position('size'), 2, "The expected position of the 'size' column is 4"
-    # 5 - modified
-    assert_equal DmsfFolder.get_column_position('modified'), 3, "The expected position of the 'modified' column is 5"
-    # 6 - version
-    assert_equal DmsfFolder.get_column_position('version'), 4, "The expected position of the 'version' column is 6"
-    # 7 - workflow
-    assert_equal DmsfFolder.get_column_position('workflow'), 5, "The expected position of the 'workflow' column is 7"
-    # 8 - author
-    assert_equal DmsfFolder.get_column_position('author'), 6, "The expected position of the 'workflow' column is 8"
-    # 9 - custom fields
+    assert_equal DmsfFolder.get_column_position('title'), 1, "The expected position of the 'title' column is 1"
+    # 3 - size
+    assert_equal DmsfFolder.get_column_position('size'), 2, "The expected position of the 'size' column is 2"
+    # 4 - modified
+    assert_equal DmsfFolder.get_column_position('modified'), 3, "The expected position of the 'modified' column is 3"
+    # 5 - version
+    assert_equal DmsfFolder.get_column_position('version'), 4, "The expected position of the 'version' column is 4"
+    # 6 - workflow
+    assert_equal DmsfFolder.get_column_position('workflow'), 5, "The expected position of the 'workflow' column is 5"
+    # 7 - author
+    assert_equal DmsfFolder.get_column_position('author'), 6, "The expected position of the 'workflow' column is 6"
+    # 8 - custom fields
     assert_nil DmsfFolder.get_column_position('Tag'), "The column 'Tag' is on?"
-    # 10- commands
-    assert_equal DmsfFolder.get_column_position('commands'), 7, "The expected position of the 'commands' column is 10"
-    # 11- (position)
-    assert_equal DmsfFolder.get_column_position('position'), 8, "The expected position of the 'position' column is 11"
-    # 12- (size)
+    # 9 - commands
+    assert_equal DmsfFolder.get_column_position('commands'), 7, "The expected position of the 'commands' column is 7"
+    # 10 - position
+    assert_equal DmsfFolder.get_column_position('position'), 8, "The expected position of the 'position' column is 8"
+    # 11 - size
     assert_equal DmsfFolder.get_column_position('size_calculated'), 9,
-                 "The expected position of the 'size_calculated' column is 12"
-    # 13- (modified)
+                 "The expected position of the 'size_calculated' column is 9"
+    # 12 - modified
     assert_equal DmsfFolder.get_column_position('modified_calculated'), 10,
-                 "The expected position of the 'modified_calculated' column is 13"
-    # 14- (version)
+                 "The expected position of the 'modified_calculated' column is 10"
+    # 13 - version
     assert_equal DmsfFolder.get_column_position('version_calculated'), 11,
-                 "The expected position of the 'version_calculated' column is 14"
-  end
-
-  def test_to_csv
-    columns = %w(id title)
-    csv = @folder4.to_csv(columns, 0)
-    assert_equal 2, csv.size
+                 "The expected position of the 'version_calculated' column is 11"
   end
 
   def test_directory_tree

@@ -243,13 +243,4 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     assert_nil DmsfLink.find_by(id: @folder_link.id)
   end
 
-  def test_to_csv
-    columns = %w(id title)
-    csv = @file_link.to_csv(columns, 0)
-    assert_equal 0, csv.size
-    @file_link.target_type = 'DmsfUrl'
-    csv = @file_link.to_csv(columns, 0)
-    assert_equal 2, csv.size
-  end
-  
 end

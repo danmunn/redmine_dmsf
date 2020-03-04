@@ -259,12 +259,6 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_nil DmsfFile.find_file_by_name(@issue1, nil, 'test.odt')
   end
 
-  def test_to_csv
-    columns = %w(id title)
-    csv = @file1.to_csv(columns, 0)
-    assert_equal 2, csv.size
-  end
-
   def test_storage_path
     setting = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'

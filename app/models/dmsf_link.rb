@@ -164,39 +164,4 @@ class DmsfLink < ActiveRecord::Base
     !is_folder?
   end
 
-  def to_csv(columns, level)
-    csv = []
-    if target_type == 'DmsfUrl'
-      # Project
-      csv << project.name if columns.include?(l(:field_project))
-      # Id
-      csv << id if columns.include?('id')
-      # Title
-      csv << title.insert(0, ' ' * level) if columns.include?('title')
-      # Extension
-      csv << '' if columns.include?('extension')
-      # Size
-      csv << '' if columns.include?('size')
-      # Modified
-      csv << format_time(updated_at) if columns.include?('modified')
-      # Version
-      csv << '' if columns.include?('version')
-      # Workflow
-      csv << '' if columns.include?('workflow')
-      # Author
-      csv << user.name if columns.include?('author')
-      # Last approver
-      csv << '' if columns.include?(l(:label_last_approver))
-      # Url
-      csv << external_url if columns.include?(l(:label_document_url))
-      # Revision
-      csv << '' if columns.include?(l(:label_last_revision_id))
-      # Custom fields
-      DmsfFileRevisionCustomField.visible.order(:position).each do |c|
-        csv << '' if columns.include?(c.name)
-      end
-    end
-    csv
-  end
-
 end

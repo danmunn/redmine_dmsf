@@ -47,7 +47,7 @@ class DmsfFolder < ActiveRecord::Base
   INVALID_CHARACTERS = '\[\]\/\\\?":<>#%\*'
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
-  AVAILABLE_COLUMNS = %w(id title extension size modified version workflow author).freeze
+  AVAILABLE_COLUMNS = %w(id title size modified version workflow author).freeze
   DEFAULT_COLUMNS = %w(title size modified version workflow author).freeze
 
   def self.visible_condition(system=true)
@@ -359,42 +359,35 @@ class DmsfFolder < ActiveRecord::Base
     else
       return nil if column == 'title'
     end
-    # 3 - extension
-    if dmsf_columns.include?('extension')
-      pos += 1
-      return pos if column == 'extension'
-    else
-      return nil if column == 'extension'
-    end
-    # 4 - size
+    # 3 - size
     if dmsf_columns.include?('size')
       pos += 1
       return pos if column == 'size'
     else
       return nil if column == 'size'
     end
-    # 5 - modified
+    # 4 - modified
     if dmsf_columns.include?('modified')
       pos += 1
       return pos if column == 'modified'
     else
       return nil if column == 'modified'
     end
-    # 6 - version
+    # 5 - version
     if dmsf_columns.include?('version')
       pos += 1
       return pos if column == 'version'
     else
       return nil if column == 'version'
     end
-    # 7 - workflow
+    # 6 - workflow
     if dmsf_columns.include?('workflow')
       pos += 1
       return pos if column == 'workflow'
     else
       return nil if column == 'workflow'
     end
-    # 8 - author
+    # 7 - author
     if dmsf_columns.include?('author')
       pos += 1
       return pos if column == 'author'
@@ -407,64 +400,25 @@ class DmsfFolder < ActiveRecord::Base
         pos += 1
       end
     end
-    # 10 - commands
+    # 8 - commands
     pos += 1
     return pos if column == 'commands'
-    # 11 - (position)
+    # 9 - (position)
     pos += 1
     return pos if column == 'position'
-    # 12 - (size calculated)
+    # 10 - (size calculated)
     pos += 1
     return pos if column == 'size_calculated'
-    # 13 - (modified calculated)
+    # 11 - (modified calculated)
     pos += 1
     return pos if column == 'modified_calculated'
-    # 14 - (version calculated)
+    # 12 - (version calculated)
     pos += 1
     return pos if column == 'version_calculated'
-    # 15 - (clear title)
+    # 13 - (clear title)
     pos += 1
     return pos if column == 'clear_title'
     nil
-  end
-
-  include ActionView::Helpers::NumberHelper
-  include Rails.application.routes.url_helpers
-
-  def to_csv(columns, level)
-    csv = []
-    # Project
-    csv << project.name if columns.include?(l(:field_project))
-    # Id
-    csv << id if columns.include?('id')
-    # Title
-    csv << title.insert(0, '  ' * level) if columns.include?('title')
-    # Extension
-    csv << '' if columns.include?('extension')
-    # Size
-    csv << '' if columns.include?('size')
-    # Modified
-    csv << format_time(updated_at) if columns.include?('modified')
-    # Version
-    csv << '' if columns.include?('version')
-    # Workflow
-    csv << '' if columns.include?('workflow')
-    # Author
-    csv << user.name if columns.include?('author')
-    # Last approver
-    csv << '' if columns.include?(l(:label_last_approver))
-    # Url
-    if columns.include?(l(:label_document_url))
-      default_url_options[:host] = Setting.host_name
-      csv << url_for(controller: :dmsf, action: 'show', id: project_id, folder_id: id)
-    end
-    # Revision
-    csv << '' if columns.include?(l(:label_last_revision_id))
-    # Custom fields
-    DmsfFileRevisionCustomField.visible.order(:position).each do |c|
-      csv << custom_value(c).value if columns.include?(c.name)
-    end
-    csv
   end
 
   def get_locked_title

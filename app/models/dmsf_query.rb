@@ -31,7 +31,6 @@ class DmsfQuery < Query
   self.available_columns = [
       QueryColumn.new(:id, sortable: 'id', caption: '#'),
       DmsfTitleQueryColumn.new(:title, sortable: 'title', frozen: true),
-      QueryColumn.new(:extension, sortable: 'extension'),
       QueryColumn.new(:size, sortable: 'size'),
       DmsfModifiedQueryColumn.new(:modified, sortable: 'updated'),
       DmsfVersionQueryColumn.new(:version, sortable: 'major_version, minor_version'),
@@ -175,7 +174,6 @@ class DmsfQuery < Query
           NULL AS revision_id,
           dmsf_folders.title AS title,
           NULL AS filename,
-          NULL AS extension,
           NULL AS size,
           dmsf_folders.updated_at AS updated,
           NULL AS major_version,
@@ -209,7 +207,6 @@ class DmsfQuery < Query
           NULL AS revision_id,
           dmsf_links.name AS title,
           dmsf_folders.title AS filename,
-          NULL AS extension,
           NULL AS size,
           COALESCE(dmsf_folders.updated_at, dmsf_links.updated_at) AS updated,
           NULL AS major_version,
@@ -244,7 +241,6 @@ class DmsfQuery < Query
           dmsf_file_revisions.id AS revision_id,
           dmsf_file_revisions.title AS title,
           dmsf_file_revisions.name AS filename,
-          SUBSTR(dmsf_file_revisions.disk_filename, POSITION('.' IN dmsf_file_revisions.disk_filename) + 1, LENGTH(dmsf_file_revisions.disk_filename) - POSITION('.' IN dmsf_file_revisions.disk_filename)) AS extension,
           dmsf_file_revisions.size AS size,
           dmsf_file_revisions.updated_at AS updated,
           dmsf_file_revisions.major_version AS major_version,
@@ -257,7 +253,7 @@ class DmsfQuery < Query
           'file' AS type,
           dmsf_files.deleted AS deleted,
           1 AS sort #{cf_columns}}).
-        joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
+        joins(:dmsf_file_revisions).
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
         where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)')
     if deleted
@@ -279,7 +275,6 @@ class DmsfQuery < Query
           dmsf_file_revisions.id AS revision_id,
           dmsf_links.name AS title,
           dmsf_file_revisions.name AS filename,
-          SUBSTR(dmsf_file_revisions.disk_filename, POSITION('.' IN dmsf_file_revisions.disk_filename) + 1, LENGTH(dmsf_file_revisions.disk_filename) - POSITION('.' IN dmsf_file_revisions.disk_filename)) AS extension,
           dmsf_file_revisions.size AS size,
           dmsf_file_revisions.updated_at AS updated,
           dmsf_file_revisions.major_version AS major_version,
@@ -315,7 +310,6 @@ class DmsfQuery < Query
           NULL AS revision_id,
           dmsf_links.name AS title,
           dmsf_links.external_url AS filename,
-          NULL AS extension,
           NULL AS size,
           dmsf_links.updated_at AS updated,
 	        NULL AS major_version,
