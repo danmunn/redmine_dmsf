@@ -32,7 +32,7 @@ class MigrateDocuments < ActiveRecord::Migration[4.2]
               if target
                 if !File.exist?(target)
                   begin
-                    FileUtils.mv origin, target, :verbose => true
+                    FileUtils.mv origin, target, verbose: true
                     folder = storage_base_path(dmsf_file_revision)
                     Dir.rmdir(folder) if (folder && (Dir.entries(folder).size == 2))
                   rescue => e
@@ -89,7 +89,7 @@ class MigrateDocuments < ActiveRecord::Migration[4.2]
                   Rails.logger.error msg
                 else
                   begin
-                    FileUtils.mv origin, target, :verbose => true
+                    FileUtils.mv origin, target, verbose: true
                     folder = dmsf_file_revision.storage_base_path
                     Dir.rmdir(folder) if (folder && (Dir.entries(folder).size == 2))
                   rescue => e

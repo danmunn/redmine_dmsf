@@ -101,7 +101,7 @@ def system_or_raise(command)
   if $verbose > 0
     raise "\"#{command}\" failed" unless system command
   else
-    raise "\"#{command}\" failed" unless system command, :out => '/dev/null'
+    raise "\"#{command}\" failed" unless system command, out: '/dev/null'
   end
 end
 

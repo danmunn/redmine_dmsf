@@ -22,6 +22,6 @@
 
 var modal = $('#ajax-modal');
 
-modal.html('<%= escape_javascript(render :partial => 'action', :locals => {:workflow => @dmsf_workflow}) %>');
+modal.html('<%= escape_javascript(render partial: 'action', locals: { workflow: @dmsf_workflow }) %>');
 showModal('ajax-modal', '35%');
 modal.addClass('new-action');

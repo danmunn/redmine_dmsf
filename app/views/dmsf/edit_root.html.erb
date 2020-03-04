@@ -28,27 +28,24 @@
   <% if User.current.allowed_to?(:folder_manipulation, @project) %>    
     <% if @project.dmsf_notification %>        
       <%= link_to(l(:label_notifications_off), 
-        notify_deactivate_dmsf_path(:id => @project),
-        :title => l(:title_notifications_active_deactivate), 
-        :class => 'icon icon-email') %>
+        notify_deactivate_dmsf_path(id: @project),
+          title: l(:title_notifications_active_deactivate),
+          class: 'icon icon-email') %>
     <% else %>        
       <%= link_to(l(:label_notifications_on),
-        notify_activate_dmsf_path(:id => @project),
-        :title => l(:title_notifications_active_deactivate), 
-        :class => 'icon icon-email-add') %>
+        notify_activate_dmsf_path(id: @project),
+          title: l(:title_notifications_active_deactivate),
+          class: 'icon icon-email-add') %>
     <% end %>  
   <% end %>
 </div>
 
-<%= render(:partial => 'path', 
-  :locals => {:folder => nil, :filename => nil, :title => nil}) %>  
+<%= render partial: 'path', locals: { folder: nil, filename: nil, title: nil } %>
 
-<%= labelled_form_for(@project, :url => {:action => 'save_root', :id => @project},
-  :html => {:method => :post}) do |f| %>
+<%= labelled_form_for(@project, url: { action: 'save_root', id: @project }, html: { method: :post }) do |f| %>
   <div class="box tabular">
     <p>      
-      <%= f.text_area(:dmsf_description, :rows => 8, :class => 'wiki-edit', 
-        :label => l(:field_description)) %>    
+      <%= f.text_area :dmsf_description, rows: 8, class: 'wiki-edit', label: l(:field_description) %>
     </p>
   </div>
   <%= f.submit l(:submit_save) %>

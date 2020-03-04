@@ -28,8 +28,8 @@
     <% if @file.locked_for_user? %>
       <p class="warning"><%= l(:info_file_locked) %></p>
     <% else %>
-      <%= labelled_form_for(@revision, :url => { :action => 'create_revision', :id => @file },
-            :html => { :method => :post, :multipart => true, :id => 'new_revision_form' }) do |f| %>
+      <%= labelled_form_for(@revision, url: { action: 'create_revision', id: @file },
+            html: { method: :post, multipart: true, id: 'new_revision_form' }) do |f| %>
         <div class="clear">
           <div class="splitcontentleft">
             <p>              
@@ -38,12 +38,12 @@
           </div>
           <div class="splitcontentright">
             <p>              
-              <%= f.text_field(:name, :label => l(:label_file)) %>
+              <%= f.text_field :name, label: l(:label_file) %>
             </p>
           </div>
         </div>
         <p>          
-          <%= f.text_area(:description, :rows => 6, :class => 'wiki-edit') %>        
+          <%= f.text_area :description, rows: 6, class: 'wiki-edit' %>
         </p>
         <div class="clear">
           <div class="splitcontentright">
@@ -69,23 +69,23 @@
               <%= radio_button_tag('version', 3) %>        
               <%= select_tag 'custom_version_major', options_for_select(DmsfUploadHelper::major_version_select_options,
                     DmsfUploadHelper::gui_version(DmsfUploadHelper::increase_version(@file.last_revision.major_version, 2))),
-                    :onchange => '$("#version_3").prop("checked", true)', :class => 'dmsf_select_version' %>.
+                    onchange: '$("#version_3").prop("checked", true)', class: 'dmsf_select_version' %>.
               <%= select_tag 'custom_version_minor', options_for_select(DmsfUploadHelper::minor_version_select_options,
                     DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(@file.last_revision.minor_version, 1))),
-                    :onchange => '$("#version_3").prop("checked", true)', :class => 'dmsf_select_version' %>
+                    onchange: '$("#version_3").prop("checked", true)', class: 'dmsf_select_version' %>
               <%= l(:option_version_custom) %>
             </p>
           </div>
         </div>
         <div class="box" id="file_upload_box">
           <p>
-            <%= label_tag('file_upload', l(:label_new_content)) %>
-            <%= render :partial => 'dmsf_upload/form',
-                       :locals => { :multiple => false, :container => nil, :description => false, :awf => false } %>
+            <%= label_tag 'file_upload', l(:label_new_content) %>
+            <%= render partial: 'dmsf_upload/form',
+                       locals: { multiple: false, container: nil, description: false, awf: false } %>
           </p>
         </div>
         <p>          
-          <%= f.text_area(:comment, :rows => 2, :label => l(:label_comment), :class => 'wiki-edit') %>
+          <%= f.text_area :comment, rows: 2, label: l(:label_comment), class: 'wiki-edit' %>
         </p>          
         <%= f.submit l(:submit_create) %>
       <% end %>

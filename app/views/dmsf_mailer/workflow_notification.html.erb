@@ -23,10 +23,9 @@
 <p>
   <%= @text2 %>
   <% if @revision.dmsf_file.dmsf_folder %>
-  <%=   link_to @revision.dmsf_file.dmsf_folder.title,
-      dmsf_folder_url(:id => @revision.dmsf_file.project, :folder_id => @revision.dmsf_file.dmsf_folder) %>
+  <%= link_to @revision.dmsf_file.dmsf_folder.title,
+      dmsf_folder_url(id: @revision.dmsf_file.project, folder_id: @revision.dmsf_file.dmsf_folder) %>
   <% else %>
-  <%=  link_to l(:link_documents),
-      dmsf_folder_url(:id => @revision.dmsf_file.project) %>
+  <%=  link_to l(:link_documents), dmsf_folder_url(id: @revision.dmsf_file.project) %>
   <% end %>.
 </p>

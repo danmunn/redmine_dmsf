@@ -82,7 +82,7 @@ class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
     add_column :dmsf_files, :project_id, :int, null: true
     add_column :dmsf_files, :container_type, :string, limit: 30, null: false,
                default: 'Project'
-    DmsfFile.update_all(:container_type => 'Project')
+    DmsfFile.update_all(container_type: 'Project')
     file_folder_ids.each do |id, title|
       file = DmsfFile.find_by(id: id)
       if file && (title =~ /(^\d+) - .*/)

@@ -30,10 +30,10 @@
           <% images.each do |file| %>
               <div>
                 <% if link_to # Redmine classic %>
-                    <%= link_to image_tag(dmsf_thumbnail_path(file)), view_dmsf_file_path(file), :alt => file.title %>
+                    <%= link_to image_tag(dmsf_thumbnail_path(file)), view_dmsf_file_path(file), alt: file.title %>
                 <% else # jQuery gallery %>
                     <%= image_tag(dmsf_thumbnail_path(file),
-                      { :'data-fullsrc' => view_dmsf_file_path(file), :alt => file.title }) %>
+                      { :'data-fullsrc' => view_dmsf_file_path(file), alt: file.title }) %>
                 <% end %>
               </div>
           <% end %>

@@ -25,15 +25,13 @@ class DmsfController < ApplicationController
   include RedmineDmsf::DmsfZip
 
   before_action :find_project
-  before_action :authorize, :except => [:expand_folder, :exp_folder]
-  before_action :find_folder, :except => [:new, :create, :edit_root, :save_root, :add_email, :append_email,
+  before_action :authorize, except: [:expand_folder]
+  before_action :find_folder, except: [:new, :create, :edit_root, :save_root, :add_email, :append_email,
                                           :autocomplete_for_user]
-  before_action :find_parent, :only => [:new, :create]
-  before_action :tree_view, :only => [:delete, :show]
+  before_action :find_parent, only: [:new, :create]
   before_action :permissions
-  
   # also try to lookup folder by title if this is API call
-  before_action :find_folder_by_title, :only => [:show], :if => :api_request?
+  before_action :find_folder_by_title, only: [:show]
 
   accept_api_auth :show, :create, :save, :delete
 
@@ -48,16 +46,6 @@ class DmsfController < ApplicationController
   end
 
   def expand_folder
-    @tree_view = true
-    get_display_params
-    @idnt = params[:idnt].present? ? params[:idnt].to_i + 1 : 0
-    @pos = params[:pos].present? ? params[:pos].to_f : 0.0
-    respond_to do |format|
-      format.js { render :action => 'dmsf_rows' }
-    end
-  end
-
-  def exp_folder
     @idnt = params[:idnt].present? ? params[:idnt].to_i + 1 : 0
     @query = retrieve_query(DmsfQuery, true)
     @query.dmsf_folder_id = @folder.id
@@ -89,11 +77,7 @@ class DmsfController < ApplicationController
       }
       format.api
       format.csv  {
-        filename = @project.name
-        filename << "_#{@folder.title}" if @folder
-        filename << DateTime.current.strftime('_%Y%m%d%H%M%S.csv')
-        send_data(DmsfHelper.dmsf_to_csv(@folder ? @folder : @project, params[:settings][:dmsf_columns]),
-                  type: 'text/csv; header=present', filename: filename)
+        send_data query_to_csv(@query.dmsf_nodes, @query), type: 'text/csv; header=present', filename: 'dmsf.csv'
       }
     end
   end
@@ -202,13 +186,13 @@ class DmsfController < ApplicationController
       File.delete(params[:email][:zipped_content])
       flash[:notice] = l(:notice_email_sent, params[:email][:to])
     end
-    redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder)
+    redirect_to dmsf_folder_path(id: @project, folder_id: @folder)
   end
 
   def new
     @folder = DmsfFolder.new
     @pathfolder = @parent
-    render :action => 'edit'
+    render action: 'edit'
   end
 
   def edit
@@ -279,10 +263,10 @@ class DmsfController < ApplicationController
     end
     respond_to do |format|
       format.html do
-        if commit || @tree_view
+        if commit
           redirect_to :back
         else
-          redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder.dmsf_folder)
+          redirect_to dmsf_folder_path(id: @project, folder_id: @folder.dmsf_folder)
         end
       end
       format.api { result ? render_api_ok : render_validation_errors(@folder) }
@@ -310,7 +294,7 @@ class DmsfController < ApplicationController
         flash[:error] = @project.errors.full_messages.to_sentence
       end
     end
-    redirect_to dmsf_folder_path(:id => @project)
+    redirect_to dmsf_folder_path(id: @project)
   end
 
   def notify_activate
@@ -405,13 +389,13 @@ class DmsfController < ApplicationController
           when 'folder'
             dmsf_folder = DmsfFolder.find_by(id: id)
             if dmsf_folder
-              dmsf_folder.dmsf_folder_id = $1;
+              dmsf_folder.dmsf_folder_id = $1
               result = dmsf_folder.save
             end
           when 'file-link', 'folder-link', 'url-link'
             dmsf_link = DmsfLink.find_by(id: id)
             if dmsf_link
-              dmsf_link.dmsf_folder_id = $1;
+              dmsf_link.dmsf_folder_id = $1
               result = dmsf_link.save
             end
           end
@@ -453,15 +437,15 @@ class DmsfController < ApplicationController
     end
 
     @email_params = {
-      :zipped_content => zipped_content,
-      :folders => selected_folders,
-      :files => selected_files,
-      :subject => "#{@project.name} #{l(:label_dmsf_file_plural).downcase}",
-      :from => Setting.plugin_redmine_dmsf['dmsf_documents_email_from'].presence ||
+      zipped_content: zipped_content,
+      folders: selected_folders,
+      files: selected_files,
+      subject: "#{@project.name} #{l(:label_dmsf_file_plural).downcase}",
+      from: Setting.plugin_redmine_dmsf['dmsf_documents_email_from'].presence ||
         "#{User.current.name} <#{User.current.mail}>",
-      :reply_to => Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
+      reply_to: Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
     }
-    render :action => 'email_entries'
+    render action: 'email_entries'
   rescue Exception
     raise
   ensure
@@ -479,9 +463,9 @@ class DmsfController < ApplicationController
       audit.save!
     end
     send_file(zip.finish,
-      :filename => filename_for_content_disposition("#{@project.name}-#{DateTime.current.strftime('%y%m%d%H%M%S')}.zip"),
-      :type => 'application/zip',
-      :disposition => 'attachment')
+      filename: filename_for_content_disposition("#{@project.name}-#{DateTime.current.strftime('%y%m%d%H%M%S')}.zip"),
+      type: 'application/zip',
+      disposition: 'attachment')
   rescue StandardError
     raise
   ensure
@@ -589,7 +573,7 @@ class DmsfController < ApplicationController
           if recipients.any?
             to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
             to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-            flash[:warning] = l(:warning_email_notifications, :to => to)
+            flash[:warning] = l(:warning_email_notifications, to: to)
           end
         end
       rescue => e
@@ -597,7 +581,8 @@ class DmsfController < ApplicationController
       end
     end
     unless not_deleted_files.empty?
-      flash[:warning] = l(:warning_some_entries_were_not_deleted, :entries => not_deleted_files.map{|e| e.title}.join(', '))
+      flash[:warning] = l(:warning_some_entries_were_not_deleted, entries: not_deleted_files.map{ |f| f.title }.
+          join(', '))
     end
     # Links
     selected_dir_links.each do |id|
@@ -624,7 +609,7 @@ class DmsfController < ApplicationController
   end
 
   def find_folder_by_title
-    if !@folder && params[:folder_title].present?
+    if api_request? && !@folder && params[:folder_title].present?
       @folder = DmsfFolder.find_by(title: params[:folder_title], project_id: @project.id)
       render_404 unless @folder
     end
@@ -634,11 +619,6 @@ class DmsfController < ApplicationController
     @parent = DmsfFolder.visible.find params[:parent_id] if params[:parent_id].present?
   rescue ActiveRecord::RecordNotFound
     render_404
-  end
-
-  def tree_view
-    tag = params[:custom_field_id].present? && params[:custom_value].present?
-    @tree_view = (User.current.pref.dmsf_tree_view == '1') && (!%w(atom xml json).include?(params[:format])) && !tag
   end
 
   def copy_folder(folder)

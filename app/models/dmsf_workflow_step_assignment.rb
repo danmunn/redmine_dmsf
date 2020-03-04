@@ -20,11 +20,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfWorkflowStepAssignment < ActiveRecord::Base
+
   belongs_to :dmsf_workflow_step
   belongs_to :user
   belongs_to :dmsf_file_revision
 
-  has_many :dmsf_workflow_step_actions, :dependent => :destroy
+  has_many :dmsf_workflow_step_actions, dependent: :destroy
 
   validates :dmsf_workflow_step, presence: true
   validates :dmsf_file_revision, presence: true
@@ -43,4 +44,5 @@ class DmsfWorkflowStepAssignment < ActiveRecord::Base
     end
     false
   end
+
 end

@@ -22,25 +22,22 @@
 
 <h3 class="title"><%= l(:field_label_dmsf_workflow) %></h3>
 <% remote = params[:dmsf_link_id] || params[:attachment_id] %>
-<%= form_tag({:controller => 'dmsf_workflows', :action => 'assignment'},
-              :method => :post, :id => 'assignment-form', :remote => remote) do %>
+<%= form_tag({ controller: 'dmsf_workflows', action: 'assignment' }, method: :post, id: 'assignment-form',
+             remote: remote) do %>
   <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>
   <%= hidden_field_tag :dmsf_link_id, params[:dmsf_link_id] %>
   <%= hidden_field_tag :attachment_id, params[:attachment_id] %>
   <p>
-    <%= label_tag('workflow', "#{l(:link_workflow)}:") %>
-    <%= select_tag(
-        'dmsf_workflow_id',
-        dmsf_workflows_for_select(@project, nil))%>
+    <%= label_tag 'workflow', "#{l(:link_workflow)}:" %>
+    <%= select_tag 'dmsf_workflow_id', dmsf_workflows_for_select(@project, nil)%>
   </p>
   <% if (!remote) && User.current.allowed_to?(:manage_workflows, @project) %>
     <p>
-      <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(:project_id => @project.id),
-        :class => 'icon icon-add' %>
+      <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(project_id: @project.id), class: 'icon icon-add' %>
     </p>
   <% end %>
   <p class="buttons">
-    <%= submit_tag l(:button_submit), :name => 'commit', :onclick => 'hideModal(this);' %>
-    <%= submit_tag l(:button_cancel), :name => 'commit', :onclick => 'hideModal(this);' %>
+    <%= submit_tag l(:button_submit), name: 'commit', onclick: 'hideModal(this);' %>
+    <%= submit_tag l(:button_cancel), name: 'commit', onclick: 'hideModal(this);' %>
   </p>
 <% end %>

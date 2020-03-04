@@ -340,7 +340,6 @@ de:
   error_lock_exclusively: Unable to lock exclusively an already-locked resource
   error_unlock_parent_locked: Unlock failed - resource parent is locked
 
-  field_dmsf_tree_view: Ordner in der Baumstruktur durchstöbern
   label_dmsf_version: Version
 
   locked_documents: Gesperrte Dateien

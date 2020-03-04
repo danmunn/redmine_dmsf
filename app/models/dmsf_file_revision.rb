@@ -55,18 +55,18 @@ class DmsfFileRevision < ActiveRecord::Base
   scope :deleted, -> { where(deleted: STATUS_DELETED) }
 
   acts_as_customizable
-  acts_as_event :title => Proc.new {|o| (o.source_dmsf_file_revision_id.present? ? "#{l(:label_dmsf_updated)}" : "#{l(:label_created)}") +
+  acts_as_event title: Proc.new {|o| (o.source_dmsf_file_revision_id.present? ? "#{l(:label_dmsf_updated)}" : "#{l(:label_created)}") +
                                           ": #{o.dmsf_file.dmsf_path_str}"},
-    :url => Proc.new {|o| {:controller => 'dmsf_files', :action => 'show', :id => o.dmsf_file}},
-    :datetime => Proc.new {|o| o.updated_at },
-    :description => Proc.new { |o| "#{o.description}\n#{o.comment}" },
-    :author => Proc.new {|o| o.user }
+    url: Proc.new { |o| { controller: 'dmsf_files', action: 'show', id: o.dmsf_file } },
+    datetime: Proc.new {|o| o.updated_at },
+    description: Proc.new { |o| "#{o.description}\n#{o.comment}" },
+    author: Proc.new { |o| o.user }
 
-  acts_as_activity_provider :type => 'dmsf_file_revisions',
-    :timestamp => "#{DmsfFileRevision.table_name}.updated_at",
-    :author_key => "#{DmsfFileRevision.table_name}.user_id",
-    :permission => :view_dmsf_file_revisions,
-    :scope => DmsfFileRevision.joins(:dmsf_file).
+  acts_as_activity_provider type: 'dmsf_file_revisions',
+    timestamp: "#{DmsfFileRevision.table_name}.updated_at",
+    author_key: "#{DmsfFileRevision.table_name}.user_id",
+    permission: :view_dmsf_file_revisions,
+    scope: DmsfFileRevision.joins(:dmsf_file).
       joins("JOIN #{Project.table_name} ON #{Project.table_name}.id = #{DmsfFile.table_name}.project_id").visible
 
   validates :title, presence: true
@@ -93,7 +93,7 @@ class DmsfFileRevision < ActiveRecord::Base
   end
  
   def self.easy_activity_custom_project_scope(scope, options, event_type)
-    scope.where(:dmsf_files => { project_id: options[:project_ids] })
+    scope.where(dmsf_files: { project_id: options[:project_ids] })
   end
 
   def delete(commit = false, force = true)
@@ -349,7 +349,7 @@ class DmsfFileRevision < ActiveRecord::Base
           end
         when DmsfWorkflow::STATE_APPROVED, DmsfWorkflow::STATE_REJECTED
           action = DmsfWorkflowStepAction.joins(:dmsf_workflow_step_assignment).where(
-            :dmsf_workflow_step_assignments => { :dmsf_file_revision_id => id }).order(
+            dmsf_workflow_step_assignments: { dmsf_file_revision_id: id }).order(
             'dmsf_workflow_step_actions.created_at').last
           tooltip << action.author.name if action
       end

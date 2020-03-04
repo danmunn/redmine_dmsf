@@ -27,5 +27,5 @@
 <% else %>
   <% title = dmsf_file_or_folder.project.name %>
 <% end %>
-<%= link_to(h(title), dmsf_folder_path(:id => dmsf_file_or_folder.project,
-  :folder_id => dmsf_file_or_folder.dmsf_folder_id), :class => 'icon icon-folder') %>
+<%= link_to h(title), dmsf_folder_path(id: dmsf_file_or_folder.project,
+      folder_id: dmsf_file_or_folder.dmsf_folder_id), class: 'icon icon-folder' %>

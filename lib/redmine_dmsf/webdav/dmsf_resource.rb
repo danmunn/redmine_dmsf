@@ -221,7 +221,7 @@ module RedmineDmsf
       # Behavioural differences between collection and single entity
       # TODO: Support overwrite between both types of entity, and implement better checking
       def move(dest, overwrite)
-        dest = @__proxy.class.new(dest, @request, @response, @options.merge(:user => @user))
+        dest = @__proxy.class.new(dest, @request, @response, @options.merge(user: @user))
         # All of this should carry across the ResourceProxy frontend, we ensure this to
         # prevent unexpected errors
         resource = dest.is_a?(ResourceProxy) ? dest.resource : dest
@@ -333,7 +333,7 @@ module RedmineDmsf
       # Behavioural differences between collection and single entity
       # TODO: Support overwrite between both types of entity, and an integrative copy where destination exists for collections
       def copy(dest, overwrite, depth)
-        dest = @__proxy.class.new(dest, @request, @response, @options.merge(:user => @user))
+        dest = @__proxy.class.new(dest, @request, @response, @options.merge(user: @user))
         # All of this should carry across the ResourceProxy frontend, we ensure this to
         # prevent unexpected errors
         if dest.is_a?(ResourceProxy)

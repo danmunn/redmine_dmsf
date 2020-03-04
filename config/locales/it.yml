@@ -339,7 +339,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   error_lock_exclusively: impossibile bloccare in modo esclusivo una risorsa già bloccata
   error_unlock_parent_locked: Sblocco fallito - la risorsa superiore è bloccata
 
-  field_dmsf_tree_view: Navigate folders in a tree
   label_dmsf_version: Version
 
   locked_documents: Documenti bloccati

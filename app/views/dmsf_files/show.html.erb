@@ -22,46 +22,46 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% html_title(l(:dmsf)) %>
+<% html_title l(:dmsf) %>
 
 <div class="contextual">
   <% if @file_manipulation_allowed %>
     <% if @file.locked_for_user? %>
       <% if User.current.allowed_to?(:force_file_unlock, @project) %>
-        <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(id:  @file),
-                       title: l(:title_unlock_file), class: 'icon icon-unlock')%>
+        <%= link_to_if @file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(id:  @file),
+                       title: l(:title_unlock_file), class: 'icon icon-unlock' %>
       <% end %>
     <% else %>
       <% if @file.locked? %>
-        <%= link_to_if(@file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(id: @file),
-                       title: l(:title_unlock_file), class: 'icon icon-unlock') %>
+        <%= link_to_if @file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(id: @file),
+                       title: l(:title_unlock_file), class: 'icon icon-unlock' %>
       <% else %>
-        <%= link_to(l(:button_lock), lock_dmsf_files_path(id: @file),
-                    title: l(:title_lock_file), class: 'icon icon-lock') %>
+        <%= link_to l(:button_lock), lock_dmsf_files_path(id: @file),
+                    title: l(:title_lock_file), class: 'icon icon-lock' %>
       <% end %>
       <% if @file.notification %>
-        <%= link_to(l(:label_notifications_off),
+        <%= link_to l(:label_notifications_off),
                     notify_deactivate_dmsf_files_path(id: @file),
                     title: l(:title_notifications_active_deactivate),
-                    class: 'icon icon-email') %>
+                    class: 'icon icon-email' %>
       <% else %>
-        <%= link_to(l(:label_notifications_on),
+        <%= link_to l(:label_notifications_on),
                     notify_activate_dmsf_files_path(id: @file),
                     title: l(:title_notifications_not_active_activate),
-                    class: 'icon icon-email-add') %>
+                    class: 'icon icon-email-add' %>
       <% end %>
-      <%= link_to(l(:label_link_to),
+      <%= link_to l(:label_link_to),
                   new_dmsf_link_path(project_id: @project.id, dmsf_folder_id: @file.dmsf_folder ? @file.dmsf_folder.id : nil, dmsf_file_id: @file.id, type: 'link_to'),
                   title: l(:title_create_link),
-                  class: 'icon icon-link') %>
-      <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: @file),
-                  title: l(:title_copy), class: 'icon icon-copy') %>
+                  class: 'icon icon-link' %>
+      <%= link_to "#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: @file),
+                  title: l(:title_copy), class: 'icon icon-copy' %>
       <%= delete_link(dmsf_file_path(id: @file, details: true)) if @file_delete_allowed %>
     <% end %>
   <% end %>
 </div>
 
-<%= render(partial: '/dmsf/path', locals: { folder: @file.dmsf_folder, filename: @file.title, title: nil}) %>
+<%= render partial: '/dmsf/path', locals: { folder: @file.dmsf_folder, filename: @file.title, title: nil} %>
 
 <% if @file_manipulation_allowed && !@file.locked_for_user? %>
   <%= error_messages_for('file') %>
@@ -76,7 +76,7 @@
 
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.dmsf_file_revisions.visible[@revision_pages.offset, @revision_pages.per_page].each do |revision| %>
-  <div class="dmsf_revision_box dataTables_wrapper">
+  <div class="dmsf_revision_box">
     <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">
       <div class="dataTables_lenght">
         <div id="dmsf_tag" class="dmsf_controls contextual">
@@ -101,7 +101,7 @@
         </div>
         <i><%= l(:info_revision, rev: revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>
-        <%= l(:info_changed_by_user, :changed => format_time(revision.updated_at)) %>
+        <%= l(:info_changed_by_user, changed: format_time(revision.updated_at)) %>
         <%= link_to(revision.user.name, user_path(revision.user)) if revision.user %>
       </div>
     </div>
@@ -185,8 +185,6 @@
 <span class="pagination"><%= pagination_links_full @revision_pages, @file.dmsf_file_revisions.visible.count %></span>
 
 <%= late_javascript_tag do %>
-  $('.dmsf_controls').show();
-  $('#browser').show();
   $('a.delete-revision').click(function(event) {
     if(!window.confirm('<%= l(:text_are_you_sure) %>')) {
       event.preventDefault();
@@ -213,17 +211,4 @@
       $('#new_revision_form_content').show();
     }
   });
-  $('.dmsf_list').dataTable({
-    language: {
-      url: "<%= plugin_asset_path(:redmine_dmsf, 'javascripts', json_url) %>"
-    },
-    oLanguage: {
-      sSearch: "<%= l(:description_filter) %>:"
-    }
-  });
-<% end %>
-
-<% content_for :header_tags do %>
-  <%= stylesheet_link_tag 'jquery.dataTables/datatables.min.css', plugin: :redmine_dmsf %>
-  <%= javascript_include_tag 'jquery.dataTables/datatables.min.js', plugin: :redmine_dmsf, defer: true %>
 <% end %>

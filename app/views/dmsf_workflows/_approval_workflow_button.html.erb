@@ -27,15 +27,13 @@
             <% assignments = wf.next_assignments(file.last_revision.id) %>
             <% index = assignments.find_index{|assignment| assignment.user_id == User.current.id} if assignments %>
             <% if assignments && index %>
-                <%= link_to('',
-                            action_dmsf_workflow_path(
-                                :project_id => project.id,
-                                :id => wf.id,
-                                :dmsf_workflow_step_assignment_id => assignments[index].id,
-                                :dmsf_file_revision_id => file.last_revision.id),
-                            :title => l(:title_waiting_for_approval),
-                            :remote => true,
-                            :class => 'icon-only icon-ok') %>
+                <%= link_to '',
+                            action_dmsf_workflow_path(project_id: project.id, id: wf.id,
+                                                      dmsf_workflow_step_assignment_id: assignments[index].id,
+                                                      dmsf_file_revision_id: file.last_revision.id),
+                            title: l(:title_waiting_for_approval),
+                            remote: true,
+                            class: 'icon-only icon-ok' %>
             <% else %>
               <span class="icon-only"></span>
             <% end %>
@@ -44,12 +42,11 @@
         <% end %>
     <% when DmsfWorkflow::STATE_ASSIGNED %>
         <% if User.current && (file.last_revision.dmsf_workflow_assigned_by_user == User.current) && wf %>
-            <%= link_to('',
-                        start_dmsf_workflow_path(
-                            :id => file.last_revision.dmsf_workflow_id,
-                            :dmsf_file_revision_id => file.last_revision.id),
-                        :title => l(:label_dmsf_wokflow_action_start),
-                        :class => 'icon-only icon-ok') %>
+            <%= link_to '',
+                        start_dmsf_workflow_path(id: file.last_revision.dmsf_workflow_id,
+                                                 dmsf_file_revision_id: file.last_revision.id),
+                        title: l(:label_dmsf_wokflow_action_start),
+                        class: 'icon-only icon-ok' %>
         <% else %>
             <span class="icon"></span>
         <% end %>
@@ -57,19 +54,14 @@
         <span class="icon-only"></span>
     <% else %>
         <% if workflows_available %>
-          <%= link_to('',
+          <%= link_to '',
             dmsf_link_id ?
-              assign_dmsf_workflow_path(
-                  :id => project.id,
-                  :project_id => project.id,
-                  :dmsf_link_id => dmsf_link_id) :
-              assign_dmsf_workflow_path(
-                  :id => project.id,
-                  :project_id => project.id,
-                  :dmsf_file_revision_id => file.last_revision.id),
-            :title => l(:label_dmsf_wokflow_action_assign),
-            :remote => true,
-            :class => 'icon-only icon-ok') %>
+              assign_dmsf_workflow_path(id: project.id, project_id: project.id, dmsf_link_id: dmsf_link_id) :
+              assign_dmsf_workflow_path(id: project.id, project_id: project.id,
+                                        dmsf_file_revision_id: file.last_revision.id),
+            title: l(:label_dmsf_wokflow_action_assign),
+            remote: true,
+            class: 'icon-only icon-ok' %>
         <% else %>
             <span class="icon-only"></span>
         <% end %>

@@ -70,7 +70,7 @@ module RedmineDmsf
             if item.deleted && (item.deleted > 0)
               tag = content_tag('span', value, class: 'icon icon-folder')
             else
-              tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle('#{item.id}','#{item.id}span','#{escape_javascript(exp_folder_dmsf_path)}')\"></span>".html_safe +
+              tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle('#{item.id}','#{item.id}span','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe +
               link_to(h(value),
                 dmsf_folder_path(id: item.project_id, folder_id: item.id),
                 class: 'icon icon-folder',
@@ -116,7 +116,7 @@ module RedmineDmsf
             h(value)
           end
         when :size
-          number_to_human_size(value)
+          number_to_human_size value
         when :workflow
           if value
             if item.workflow_id && (!(item.deleted && (item.deleted > 0)))
@@ -134,6 +134,19 @@ module RedmineDmsf
           end
         else
           super column, item, value
+        end
+      end
+
+      def csv_value(column, object, value)
+        case column.name
+        when :size
+          ActiveSupport::NumberHelper.number_to_human_size value
+        when :workflow
+          DmsfWorkflow.workflow_str(value.to_i)
+        when :author
+          "#{object.firstname} #{object.lastname}"
+        else
+          super column, object, value
         end
       end
 

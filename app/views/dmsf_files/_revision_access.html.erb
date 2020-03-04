@@ -29,7 +29,7 @@
     <thead>
     <tr>
       <% query.inline_columns.each do |column| %>
-        <%= column_header(query, column, query_options) %>
+        <%= column_header query, column, query_options %>
       <% end %>
     </tr>
     </thead>
@@ -37,7 +37,7 @@
     <% query.accesses.each do |access| %>
       <tr>
         <% query.inline_columns.each do |column| %>
-          <%= content_tag('td', column_content(column, access), class: column.css_classes) %>
+          <%= content_tag 'td', column_content(column, access), class: column.css_classes %>
         <% end %>
       </tr>
     <% end %>

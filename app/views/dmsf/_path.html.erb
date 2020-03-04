@@ -22,17 +22,17 @@
 
 <h2>
   <% if folder %>    
-    <%= link_to l(:link_documents), dmsf_folder_path(:id => @project) %>
+    <%= link_to l(:link_documents), dmsf_folder_path(id: @project) %>
     <% folder.dmsf_path.each do |path_element| %>
       /    
       <% if filename.blank? && (path_element == folder.dmsf_path.last) %>
         <%= h(path_element.title) %>
       <% else %>      
-        <%= link_to h(path_element.title), dmsf_folder_path(:id => @project, :folder_id => path_element) %>
+        <%= link_to h(path_element.title), dmsf_folder_path(id: @project, folder_id: path_element) %>
       <% end %>
     <% end %>
   <% else %>
-     <%= link_to l(:link_documents), dmsf_folder_path(:id => @project) %>
+     <%= link_to l(:link_documents), dmsf_folder_path(id: @project) %>
   <% end %>
   <% if filename %>
     /

@@ -84,51 +84,51 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_failed_authentication_global
-    delete '/dmsf/webdav', :params => nil, :headers => credentials('admin', 'badpassword')
+    delete '/dmsf/webdav', params: nil, headers: credentials('admin', 'badpassword')
     assert_response :unauthorized
   end
 
   def test_failed_authentication
-    delete "/dmsf/webdav/#{@project1.identifier}", :params => nil, :headers => credentials('admin', 'badpassword')
+    delete "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: credentials('admin', 'badpassword')
     assert_response :unauthorized
   end
 
   def test_root_folder
-    delete '/dmsf/webdav', :params => nil, :headers => @admin
+    delete '/dmsf/webdav', params: nil, headers: @admin
     assert_response :not_implemented
   end
 
   def test_delete_not_empty_folder
-    put "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", :params => nil, :headers => @admin
+    put "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", params: nil, headers: @admin
     assert_response :forbidden
   end
 
   def test_not_existed_project
-    delete '/dmsf/webdav/not_a_project/file.txt', :params => nil, :headers => @admin
+    delete '/dmsf/webdav/not_a_project/file.txt', params: nil, headers: @admin
     assert_response :not_found
   end
 
   def test_dmsf_not_enabled
     @project1.disable_module! :dmsf
-    delete "/dmsf/webdav/#{@project1.identifier}/test.txt", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @jsmith
     assert_response :not_found # Item does not exist, as project is not enabled.
   end
 
   def test_delete_when_ro
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_ONLY'
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil, :headers => @admin
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @admin
     assert_response :bad_gateway # Item does not exist, as project is not enabled.
   end
 
   def test_unlocked_file
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil, :headers => @admin
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @admin
     assert_response :no_content
     @file1.reload
     assert @file1.deleted?, "File #{@file1.name} hasn't been deleted"
   end
 
   def test_unathorized_user
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @jsmith
     assert_response :not_found # Without folder_view permission, he will not even be aware of its existence.
     @file1.reload
     assert !@file1.deleted?, "File #{@file1.name} is expected to exist"
@@ -136,7 +136,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
 
   def test_unathorized_user_forbidden
     @role.add_permission! :view_dmsf_folders
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @jsmith
     assert_response :forbidden # Now jsmith's role has view_folder rights, however they do not hold file manipulation rights.
     @file1.reload
     assert !@file1.deleted?, "File #{@file1.name} is expected to exist"
@@ -144,7 +144,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
 
   def test_view_folder_not_allowed
     @role.add_permission! :file_manipulation
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", params: nil, headers: @jsmith
     assert_response :not_found # Without folder_view permission, he will not even be aware of its existence.
     @folder1.reload
     assert !@folder1.deleted?, "Folder #{@folder1.title} is expected to exist"
@@ -152,14 +152,14 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
 
   def test_folder_manipulation_not_allowed
     @role.add_permission! :view_dmsf_folders
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", params: nil, headers: @jsmith
     assert_response :forbidden # Without manipulation permission, action is forbidden.
     @folder1.reload
     assert !@folder1.deleted?, "Foler #{@folder1.title} is expected to exist"
   end
 
   def test_folder_delete_by_admin
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", :params => nil, :headers => @admin
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", params: nil, headers: @admin
     assert_response :success
     @folder6.reload
     assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
@@ -168,7 +168,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   def test_folder_delete_by_user
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :folder_manipulation
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", params: nil, headers: @jsmith
     assert_response :success
     @folder6.reload
     assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
@@ -178,17 +178,17 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :folder_manipulation
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", params: nil, headers: @jsmith
     assert_response :not_found
     p1name_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-    delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", params: nil, headers: @jsmith
     assert_response :success
     @folder6.reload
     assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
   end
 
   def test_file_delete_by_administrator
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil, :headers => @admin
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @admin
     assert_response :success
     @file1.reload
     assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
@@ -197,7 +197,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   def test_file_delete_by_user
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :file_delete
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @jsmith
     assert_response :success
     @file1.reload
     assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
@@ -207,10 +207,10 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :file_delete
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @jsmith
     assert_response :not_found
     p1name_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-    delete "/dmsf/webdav/#{p1name_uri}/#{@file1.name}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{p1name_uri}/#{@file1.name}", params: nil, headers: @jsmith
     assert_response :success
     @file1.reload
     assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
@@ -219,7 +219,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   def test_folder_delete_fragments
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :folder_manipulation
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}/#frament=HTTP/1.1", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}/#frament=HTTP/1.1", params: nil, headers: @jsmith
     assert_response :bad_request
   end
 
@@ -227,7 +227,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :folder_manipulation
     @folder6.lock!
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", params: nil, headers: @jsmith
     assert_response :locked
     @folder6.reload
     assert !@folder6.deleted?, "Folder #{@folder6.title} is expected to exist"
@@ -237,7 +237,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :file_delete
     @file1.lock!
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @jsmith
     assert_response :locked
     @file1.reload
     assert !@file1.deleted?, "File #{@file1.name} is expected to exist"
@@ -246,7 +246,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   def test_non_versioned_file
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :file_delete
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", :params => nil, :headers => @jsmith
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @jsmith
     assert_response :success
     # The file should be destroyed
     assert_nil DmsfFile.visible.find_by(id: @file1.id)

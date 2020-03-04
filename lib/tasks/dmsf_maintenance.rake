@@ -91,7 +91,7 @@ class DmsfMaintenance
     puts "\n#{@files_to_delete.count} files havn't got a coresponding revision and can be deleted."
     puts "#{number_to_human_size(size)} can be released.\n\n"
     # Links
-    size = DmsfLink.where(:project_id => -1).count
+    size = DmsfLink.where(project_id: -1).count
     puts "#{size} links can be deleted.\n\n"
     # Documents
     puts "#{@documents_to_delete.size} corrupted documents.\n\n"
@@ -107,8 +107,8 @@ class DmsfMaintenance
     puts "\n#{@files_to_delete.count} files hadn't got a coresponding revision and have been be deleted."
     puts "#{number_to_human_size(size)} has been released\n\n"
     # Links
-    size = DmsfLink.where(:project_id => -1).count
-    DmsfLink.where(:project_id => -1).delete_all
+    size = DmsfLink.where(project_id: -1).count
+    DmsfLink.where(project_id: -1).delete_all
     puts "#{size} links have been deleted.\n\n"
   end
   
@@ -117,7 +117,7 @@ class DmsfMaintenance
   def check_file(file)
     name = Pathname.new(file).basename.to_s
     if name =~ /^\d+_\d+_.*/
-      n = DmsfFileRevision.where(:disk_filename => name).count
+      n = DmsfFileRevision.where(disk_filename: name).count
       unless n > 0
         @files_to_delete << file 
         puts "\t#{file}\t#{number_to_human_size(File.size(file))}"

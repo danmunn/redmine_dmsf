@@ -22,6 +22,6 @@
 
 var modal = $('#ajax-modal');
 
-modal.html("<%= escape_javascript(render :partial => 'dmsf/add_email') %>");
+modal.html("<%= escape_javascript(render partial: 'dmsf/add_email') %>");
 showModal('ajax-modal', '400px');
 modal.addClass('new-user');

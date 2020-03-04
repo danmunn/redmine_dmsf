@@ -24,10 +24,9 @@ class DmsfFilesController < ApplicationController
 
   menu_item :dmsf
 
-  before_action :find_file, :except => [:delete_revision, :obsolete_revision]
-  before_action :find_revision, :only => [:delete_revision, :obsolete_revision]
+  before_action :find_file, except: [:delete_revision, :obsolete_revision]
+  before_action :find_revision, only: [:delete_revision, :obsolete_revision]
   before_action :authorize
-  before_action :tree_view, :only => [:delete]
   before_action :permissions
 
   accept_api_auth :show, :view, :delete
@@ -70,9 +69,9 @@ class DmsfFilesController < ApplicationController
       # IE has got a tendency to cache files
       expires_in(0.year, 'must-revalidate' => true)
       send_file(@revision.disk_file,
-        :filename => filename_for_content_disposition(@revision.formatted_name(title_format)),
-        :type => @revision.detect_content_type,
-        :disposition => @revision.dmsf_file.disposition)
+        filename: filename_for_content_disposition(@revision.formatted_name(title_format)),
+        type: @revision.detect_content_type,
+        disposition: @revision.dmsf_file.disposition)
     rescue DmsfAccessError => e
       Rails.logger.error e.message
       render_403
@@ -94,7 +93,7 @@ class DmsfFilesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        render :layout => !request.xhr?
+        render layout: !request.xhr?
       }
       format.api
     end
@@ -186,7 +185,7 @@ class DmsfFilesController < ApplicationController
                 if recipients.any?
                   to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                   to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-                  flash[:warning] = l(:warning_email_notifications, :to => to)
+                  flash[:warning] = l(:warning_email_notifications, to: to)
                 end
               end
             rescue => e
@@ -216,7 +215,7 @@ class DmsfFilesController < ApplicationController
               if recipients.any?
                 to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                 to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-                flash[:warning] = l(:warning_email_notifications, :to => to)
+                flash[:warning] = l(:warning_email_notifications, to: to)
               end
             end
           rescue => e
@@ -231,11 +230,7 @@ class DmsfFilesController < ApplicationController
     end
     respond_to do |format|
       format.html do
-        if commit || (@tree_view && params[:details].blank?)
-          redirect_to :back
-        else
-          redirect_to dmsf_folder_path(:id => @project, :folder_id => @file.dmsf_folder)
-        end
+        redirect_to dmsf_folder_path(id: @project, folder_id: @file.dmsf_folder)
       end
       format.api { result ? render_api_ok : render_validation_errors(@file) }
     end
@@ -332,9 +327,9 @@ class DmsfFilesController < ApplicationController
     if @file.image? && tbnail = @file.thumbnail(:size => params[:size])
       if stale?(:etag => tbnail)
         send_file tbnail,
-                  :filename => filename_for_content_disposition(@file.last_revision.disk_file),
-                  :type => @file.last_revision.detect_content_type,
-                  :disposition => 'inline'
+                  filename: filename_for_content_disposition(@file.last_revision.disk_file),
+                  type: @file.last_revision.detect_content_type,
+                  disposition: 'inline'
       end
     else
       head 404
@@ -362,11 +357,6 @@ class DmsfFilesController < ApplicationController
     if entry && entry.project != @project
       raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)
     end
-  end
-
-  def tree_view
-    tag = params[:custom_field_id].present? && params[:custom_value].present?
-    @tree_view = (User.current.pref.dmsf_tree_view == '1') && (!%w(atom xml json).include?(params[:format])) && !tag
   end
 
 end

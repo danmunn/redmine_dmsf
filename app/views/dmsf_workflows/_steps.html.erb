@@ -21,7 +21,7 @@
 %>
 
 <% if @dmsf_workflow.project %>
-  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(@project, :tab => 'dmsf_workflow') %> &#187; <%=h @dmsf_workflow %></h2>
+  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(@project, tab: 'dmsf_workflow') %> &#187; <%=h @dmsf_workflow %></h2>
 <% else %>
   <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=h @dmsf_workflow %></h2>
 <% end %>
@@ -57,13 +57,11 @@
           <td class="name">
             <span id="step-index-<%= index %>-name"><%= @dmsf_workflow.dmsf_workflow_steps[index].name if index %></span>
             <div id="<%= "step-index-#{index}-name-form" %>" class="hol">
-              <%= form_for(@dmsf_workflow,
-                           :url => update_step_dmsf_workflow_path(step: index),
-                           :method => :put,
-                           :html => { id: "step-index-name-#{index}-form" }) do |f| %>
+              <%= form_for(@dmsf_workflow, url: update_step_dmsf_workflow_path(step: index), method: :put,
+                           html: { id: "step-index-name-#{index}-form" }) do |f| %>
                 <%= f.text_field(:step_name, value: @dmsf_workflow.dmsf_workflow_steps[index].name, id: "dmsf_workflow_step_name_#{index}") %>
                 <p>
-                  <%= submit_tag l(:button_change), :class => 'small' %>
+                  <%= submit_tag l(:button_change), class: 'small' %>
                   <%= link_to_function(
                           l(:button_cancel),
                           "$('#step-index-#{index}-name').show(); $('#step-index-#{index}-approvers').show(); $('#step-index-#{index}-name-form').hide(); $('#step-index-#{index}-approvers-form').hide();")
@@ -83,10 +81,8 @@
               <% end %>
             </span>
             <div id="<%= "step-index-#{index}-approvers-form" %>" class="hol">
-              <%= form_for(@dmsf_workflow,
-                           :url => update_step_dmsf_workflow_path(step: index),
-                           :method => :put,
-                           :html => {:id => "step-index-operator-#{index}-form"}) do |_| %>
+              <%= form_for(@dmsf_workflow, url: update_step_dmsf_workflow_path(step: index), method: :put,
+                           html: { id: "step-index-operator-#{index}-form"}) do |_| %>
                 <div class="dmsf_parent_container">
                   <% stps.each do |step| %>
                       <div class="dmsf_child_container">
@@ -112,10 +108,9 @@
                   <% end %>
                 </div>
                 <p>
-                  <%= submit_tag l(:button_change), :class => 'small' %>
-                  <%= link_to_function(
-                        l(:button_cancel),
-                        "$('#step-index-#{index}-name').show(); $('#step-index-#{index}-approvers').show(); $('#step-index-#{index}-name-form').hide(); $('#step-index-#{index}-approvers-form').hide();")
+                  <%= submit_tag l(:button_change), class: 'small' %>
+                  <%= link_to_function l(:button_cancel),
+                        "$('#step-index-#{index}-name').show(); $('#step-index-#{index}-approvers').show(); $('#step-index-#{index}-name-form').hide(); $('#step-index-#{index}-approvers-form').hide();"
                   %>
                 </p>
                 <% end %>
@@ -125,8 +120,8 @@
               <%= reorder_handle(@dmsf_workflow, url: url_for(action: 'edit', id: @dmsf_workflow, step: i) ) %>
               <%= link_to_function l(:button_edit),
                      "$('#step-index-#{index}-name').hide(); $('#step-index-#{index}-approvers').hide(); $('#step-index-#{index}-name-form').show(); $('#step-index-#{index}-approvers-form').show();",
-                     :class => 'icon icon-edit' %>
-              <%= delete_link edit_dmsf_workflow_path(@dmsf_workflow, step: i) %>
+                     class: 'icon icon-edit' %>
+              <%= delete_link edit_dmsf_workflow_path @dmsf_workflow, step: i %>
             </td>
           <% end %>
         </tr>

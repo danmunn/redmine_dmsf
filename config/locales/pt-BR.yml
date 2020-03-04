@@ -339,7 +339,6 @@ pt-BR:
   error_lock_exclusively: Não é possível bloquear exclusivamente um recurso já bloqueado
   error_unlock_parent_locked: Falha no desbloqueio - o recurso pai está bloqueado
 
-  field_dmsf_tree_view: Navegação de pastas em árvore
   label_dmsf_version: Versão
 
   locked_documents: Documentos bloqueados

@@ -339,7 +339,6 @@ nl:
   error_lock_exclusively: Vergrendelen niet mogelijk op een reeds vergrendelde bron
   error_unlock_parent_locked: Ontgrendelen mislukt - bron ouder is vergrendeld
 
-  field_dmsf_tree_view: Navigeer door mappen in een boom
   label_dmsf_version: Versie
 
   locked_documents: Vergrendelde documenten

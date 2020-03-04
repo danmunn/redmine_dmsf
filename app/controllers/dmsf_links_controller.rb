@@ -23,7 +23,7 @@ class DmsfLinksController < ApplicationController
 
   model_object DmsfLink
 
-  before_action :find_model_object, :only => [:destroy, :restore]
+  before_action :find_model_object, only: [:destroy, :restore]
   before_action :find_link_project
   before_action :authorize
   before_action :permissions
@@ -150,12 +150,12 @@ class DmsfLinksController < ApplicationController
     respond_to do |format|
       format.html {
         if params[:dmsf_link][:type] == 'link_from'
-          redirect_to dmsf_folder_path(:id => @project.id, :folder_id => @dmsf_link.dmsf_folder_id)
+          redirect_to dmsf_folder_path(id: @project.id, folder_id: @dmsf_link.dmsf_folder_id)
         else
           if params[:dmsf_link][:dmsf_file_id].present?
             redirect_to dmsf_file_path(@dmsf_link.target_file)
           else
-            redirect_to edit_dmsf_path(:id => params[:dmsf_link][:project_id], :folder_id => params[:dmsf_link][:dmsf_folder_id])
+            redirect_to edit_dmsf_path(id: params[:dmsf_link][:project_id], folder_id: params[:dmsf_link][:dmsf_folder_id])
           end
         end
       }

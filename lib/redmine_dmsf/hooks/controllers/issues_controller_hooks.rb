@@ -160,12 +160,12 @@ module RedmineDmsf
               wf = issue.saved_dmsf_links_wfs[l.id]
               if wf
                 # Assign the workflow
-                revision.set_workflow(wf.id, 'assign')
-                revision.assign_workflow(wf.id)
+                revision.set_workflow wf.id, 'assign'
+                revision.assign_workflow wf.id
                 # Start the workflow
-                revision.set_workflow(wf.id, 'start')
+                revision.set_workflow wf.id, 'start'
                 if revision.save
-                  wf.notify_users(issue.project, revision, context[:controller])
+                  wf.notify_users issue.project, revision, context[:controller]
                   begin
                     file.lock!
                   rescue DmsfLockError => e

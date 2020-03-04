@@ -35,8 +35,7 @@ module RedmineDmsf
       def remove_dmsf_references
         return if self.id.nil?
         substitute = Role.anonymous
-        DmsfFolderPermission.where(:object_id => self.id, :object_type => 'Role').update_all(
-          :object_id => substitute.id)
+        DmsfFolderPermission.where(object_id: self.id, object_type: 'Role').update_all object_id: substitute.id
       end
 
     end

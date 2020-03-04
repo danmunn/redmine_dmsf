@@ -30,22 +30,22 @@ module DmsfWorkflowsHelper
     # Delegation
     if dmsf_workflow_step_assignment_id
       s = content_tag('div',
-        content_tag('div', principals_radio_button_tags('step_action', principals), :id => 'users_for_delegate'),
-        :class => 'objects-selection')
+        content_tag('div', principals_radio_button_tags('step_action', principals), id: 'users_for_delegate'),
+        class: 'objects-selection')
     # New step
     else
       s = content_tag('div',
-        content_tag('div', principals_check_box_tags('user_ids[]', principals), :id => 'users'),
-        :class => 'objects-selection')
+        content_tag('div', principals_check_box_tags('user_ids[]', principals), id: 'users'),
+        class: 'objects-selection')
     end
 
-    links = pagination_links_full(principal_pages, principal_count, :per_page_links => false) do |text, parameters, options|
+    links = pagination_links_full(principal_pages, principal_count, per_page_links: false) do |text, parameters, options|
       link_to text,
-              autocomplete_for_user_dmsf_workflow_path(workflow, parameters.merge(:q => params[:q], :format => 'js')),
+              autocomplete_for_user_dmsf_workflow_path(workflow, parameters.merge(q: params[:q], format: 'js')),
               remote: true
     end
 
-    s + content_tag('span', links, :class => 'pagination')
+    s + content_tag('span', links, class: 'pagination')
   end
 
   def dmsf_workflow_steps_options_for_select(steps)
@@ -67,7 +67,7 @@ module DmsfWorkflowsHelper
         options << ["#{wf.name} #{l(:note_global)}", wf.id]
       end
     end
-    options_for_select(options, :selected => dmsf_workflow_id)
+    options_for_select(options, selected: dmsf_workflow_id)
   end
 
   def dmsf_all_workflows_for_select(dmsf_workflow_id)
@@ -89,7 +89,7 @@ module DmsfWorkflowsHelper
         options << ["#{wf.name} #{l(:note_global)}", wf.id]
       end
     end
-    options_for_select(options, :selected => dmsf_workflow_id)
+    options_for_select(options, selected: dmsf_workflow_id)
   end
 
   def principals_radio_button_tags(name, principals)

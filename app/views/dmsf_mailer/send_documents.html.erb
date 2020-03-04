@@ -34,7 +34,7 @@
           <% dir = DmsfFolder.find_by(id: i) %>
           <% if dir && !folders.include?(dir) %>
             <br/>
-            <%= link_to(h(dir.dmsf_path_str), dmsf_folder_path(:id => dir.project_id, :folder_id => dir.id, :only_path => false)) %>
+            <%= link_to h(dir.dmsf_path_str), dmsf_folder_path(id: dir.project_id, folder_id: dir.id, only_path: false) %>
             <br/><br/>
             <% dir.dmsf_files.each do |file| %>
               <% unless files.include?(file) %>
@@ -44,8 +44,8 @@
                   <% dmsf_public_url.user = @author %>
                   <% dmsf_public_url.expire_at = @expired_at %>
                   <% dmsf_public_url.save %>
-                  <%= link_to(h(file.title), dmsf_public_urls_url(:token => dmsf_public_url.token)) %>
-                   (<%= link_to(h(file.name),  dmsf_public_urls_url(:token => dmsf_public_url.token)) %>)
+                  <%= link_to h(file.title), dmsf_public_urls_url(token: dmsf_public_url.token) %>
+                   (<%= link_to h(file.name),  dmsf_public_urls_url(token: dmsf_public_url.token) %>)
                 <% else %>
                   <%= link_to(h(file.title), dmsf_file_url(file)) %>
                   &nbsp;(<%= link_to(h(file.name), dmsf_file_url(file)) %>)
@@ -71,11 +71,11 @@
           <% dmsf_public_url.user = @author %>
           <% dmsf_public_url.expire_at = @expired_at %>
           <% dmsf_public_url.save %>
-          <%= link_to(h(file.title), dmsf_public_urls_url(:token => dmsf_public_url.token)) %>
-          &nbsp;(<%= link_to(h(file.name),  dmsf_public_urls_url(:token => dmsf_public_url.token)) %>)
+          <%= link_to h(file.title), dmsf_public_urls_url(token: dmsf_public_url.token) %>
+          &nbsp;(<%= link_to h(file.name),  dmsf_public_urls_url(token: dmsf_public_url.token) %>)
         <% else %>
-          <%= link_to(h(file.title), dmsf_file_url(file)) %>
-          &nbsp;(<%= link_to(h(file.name), dmsf_file_url(file)) %>)
+          <%= link_to h(file.title), dmsf_file_url(file) %>
+          &nbsp;(<%= link_to h(file.name), dmsf_file_url(file) %>)
         <% end %>
         <br/>
         <% files << file %>

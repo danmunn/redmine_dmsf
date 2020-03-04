@@ -20,13 +20,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfWorkflow < ActiveRecord::Base
+
   has_many :dmsf_workflow_steps, -> { order(step: :asc, operator: :desc) }, dependent: :destroy
-  belongs_to :author, :class_name => 'User'
+  belongs_to :author, class_name: 'User'
 
   scope :sorted, lambda { order(name: :asc) }
   scope :global, lambda { where(project_id: nil) }
   scope :active, lambda { where(status: STATUS_ACTIVE) }
-  scope :status, lambda { |arg| where(arg.blank? ? nil : {:status => arg.to_i}) }
+  scope :status, lambda { |arg| where(arg.blank? ? nil : { status: arg.to_i }) }
 
   validates :name, presence: true, length: { maximum: 255 }, dmsf_workflow_name: true
 
@@ -222,7 +223,7 @@ class DmsfWorkflow < ActiveRecord::Base
       unless recipients.blank?
         to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
         to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-        controller.flash[:warning] = l(:warning_email_notifications, :to => to) if controller
+        controller.flash[:warning] = l(:warning_email_notifications, to: to) if controller
       end
     end
   end

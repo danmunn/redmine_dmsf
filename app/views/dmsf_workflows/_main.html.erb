@@ -20,30 +20,28 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% @workflows = DmsfWorkflow.active.sorted.where(:project_id => @project.id) if @project && @workflows.nil?  %>  
+<% @workflows = DmsfWorkflow.active.sorted.where(project_id: @project.id) if @project && @workflows.nil?  %>
 
 <% unless @project %>
   <div class="contextual">  
-    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path, :class => 'icon icon-add' %>
+    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path, class: 'icon icon-add' %>
   </div>
-  
   <h2><%=l(:label_dmsf_workflow_plural)%></h2>
-  
-  <%= form_tag(dmsf_workflows_path, :method => :get) do %>
+  <%= form_tag(dmsf_workflows_path, method: :get) do %>
     <fieldset>
       <legend><%= l(:label_filter_plural) %></legend>
       <label for='status'><%= l(:field_status) %>:</label>
-      <%= select_tag 'status', workflows_status_options_for_select(@status), :class => 'small', :onchange => 'this.form.submit(); return false;' %>
+      <%= select_tag 'status', workflows_status_options_for_select(@status), class: 'small',
+                     onchange: 'this.form.submit(); return false;' %>
     </fieldset>    
-  <% end %>
-  &nbsp;
+  <% end %>&nbsp;
 <% end %>  
 
 <% if @workflows.any? %>  
   <table class="list">
     <thead><tr>
-      <th><%=l(:field_name)%></th>    
-      <th/>
+      <th><%= l(:field_name) %></th>
+      <th></th>
     </tr></thead>
     <tbody>
       <% @workflows.each do |workflow| %>
@@ -62,7 +60,9 @@
 <% end %>
 
 <% if @project %>
-  <p><%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(:project_id => @project.id), :class => 'icon icon-add' %></p>
+  <p>
+    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(project_id: @project.id), class: 'icon icon-add' %>
+  </p>
 <% else %>
   <% if @workflow_pages %>
     <span class="pagination"><%= pagination_links_full @workflow_pages %></span>

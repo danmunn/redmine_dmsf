@@ -48,7 +48,7 @@ class DmsfDigest
   end
 
   def create_digests
-    revisions = DmsfFileRevision.where(['digest IS NULL OR length(digest) < ?', @force_sha256 ? 64 : 32]).all
+    revisions = DmsfFileRevision.where(['digest IS NULL OR length(digest) < ?', @force_sha256 ? 64 : 32])
     count = revisions.count
     n = 0
     revisions.each_with_index do |rev, i|

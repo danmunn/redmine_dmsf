@@ -339,7 +339,6 @@ fr:
   error_lock_exclusively: Impossible de verrouiller de manière exclusive une ressource déjà verrouillée
   error_unlock_parent_locked: Echec du déverrouillage - la ressource parente est verrouillée
 
-  field_dmsf_tree_view: Vue arborescente des dossiers
   label_dmsf_version: Version
 
   locked_documents: Documents verrouillés

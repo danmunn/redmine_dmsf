@@ -27,28 +27,28 @@
 </em>
 
 <p>
-  <%= content_tag(:label, l(:label_maximum_files_download)) %>
-  <%= text_field_tag 'settings[dmsf_max_file_download]', @settings['dmsf_max_file_download'], :size => 10 %>
+  <%= content_tag :label, l(:label_maximum_files_download) %>
+  <%= text_field_tag 'settings[dmsf_max_file_download]', @settings['dmsf_max_file_download'], size: 10 %>
   <em class="info">
     <%= l(:note_maximum_number_of_files_downloaded) %> <%= l(:label_default) %>: 0
   </em>
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_maximum_email_filesize)) %>
-  <%= text_field_tag 'settings[dmsf_max_email_filesize]', @settings['dmsf_max_email_filesize'], :size => 10 %>
+  <%= content_tag :label, l(:label_maximum_email_filesize) %>
+  <%= text_field_tag 'settings[dmsf_max_email_filesize]', @settings['dmsf_max_email_filesize'], size: 10 %>
   <em class="info">
     <%= l(:note_maximum_email_filesize) %> <%= l(:label_default) %>: 0  
   </em>
 </p>
 
 <p>
-  <%=  content_tag(:label, l(:label_file_storage_directory)) %>
+  <%=  content_tag :label, l(:label_file_storage_directory) %>
   <% 
     storage_dir = @settings['dmsf_storage_directory'].strip if @settings['dmsf_storage_directory'].present?
     storage_dir = 'dmsf' if storage_dir.blank?
   %>
-  <%= text_field_tag 'settings[dmsf_storage_directory]', storage_dir, :size => 256 %>
+  <%= text_field_tag 'settings[dmsf_storage_directory]', storage_dir, size: 256 %>
   <em class="info">
     <%= l(:label_default) %>: dmsf
   </em>
@@ -67,7 +67,7 @@
   <% rescue %>
     <p class="warning"><%= l(:error_file_can_not_be_created) %></p>
   <% ensure %>
-    <% FileUtils.rm_f(testfilename) %>
+    <% FileUtils.rm_f testfilename %>
   <% end %>
 <% end %>
 
@@ -77,7 +77,7 @@
     tmpdir = @settings['dmsf_tmpdir'].strip if @settings['dmsf_tmpdir'].present?
     tmpdir = Dir.tmpdir if tmpdir.blank?
   %>
-  <%= text_field_tag 'settings[dmsf_tmpdir]', tmpdir, :size => 256 %>
+  <%= text_field_tag 'settings[dmsf_tmpdir]', tmpdir, size: 256 %>
   <em class="info">
     <%= l(:label_default) %>: <%= Dir.tmpdir %>
   </em>
@@ -102,48 +102,48 @@
 <% end %>
 
 <p>
-  <%= content_tag(:label, l(:label_physical_file_delete)) %>
-  <%= check_box_tag('settings[dmsf_really_delete_files]', true, @settings['dmsf_really_delete_files']) %>
+  <%= content_tag :label, l(:label_physical_file_delete) %>
+  <%= check_box_tag 'settings[dmsf_really_delete_files]', true, @settings['dmsf_really_delete_files'] %>
   <em class="info">
     <%= l(:label_default)%>: <%= l(:general_text_No)%>
   </em>
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_default_notifications)) %>
-  <%= select_tag('settings[dmsf_default_notifications]', 
+  <%= content_tag :label, l(:label_default_notifications) %>
+  <%= select_tag 'settings[dmsf_default_notifications]',
     options_for_select([
                     [l(:select_option_deactivated), nil], 
                     [l(:select_option_activated), '1']], 
-                    :selected => @settings['dmsf_default_notifications'])) %>
+                    selected: @settings['dmsf_default_notifications']) %>
   <em class="info">
     <%= l(:label_default) %>: <%= l(:select_option_deactivated) %>
   </em>
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_display_notified_recipients)) %>
-  <%= select_tag('settings[dmsf_display_notified_recipients]',
+  <%= content_tag :label, l(:label_display_notified_recipients) %>
+  <%= select_tag 'settings[dmsf_display_notified_recipients]',
     options_for_select([
       [l(:select_option_deactivated), nil],
       [l(:select_option_activated), '1']],
-      :selected => @settings['dmsf_display_notified_recipients'])) %>
+      selected: @settings['dmsf_display_notified_recipients']) %>
   <em class="info">
     <%= l(:note_display_notified_recipients).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_deactivated) %>
   </em>
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_title_format)) %>  
-  <%= text_field_tag 'settings[dmsf_global_title_format]', @settings['dmsf_global_title_format'], :size => 10 %>
+  <%= content_tag :label, l(:label_title_format) %>
+  <%= text_field_tag 'settings[dmsf_global_title_format]', @settings['dmsf_global_title_format'], size: 10 %>
   <em class="info">
     <%= l(:text_title_format) %>
   </em>
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_act_as_attachable)) %>
-  <%= check_box_tag('settings[dmsf_act_as_attachable]', true, @settings['dmsf_act_as_attachable']) %>
+  <%= content_tag :label, l(:label_act_as_attachable) %>
+  <%= check_box_tag 'settings[dmsf_act_as_attachable]', true, @settings['dmsf_act_as_attachable'] %>
   <em class="info">
     <%= l(:note_dmsf_act_as_attachable) %><br/>
     <%= l(:label_default) %>: <%= l(:general_text_No) %>
@@ -155,7 +155,7 @@
   <%= l(:menu_dmsf) %> <%= l(:field_column_names) %>
 </em>
 
-<%= render(:partial => 'settings/dmsf_columns', :locals => { :selected_columns => @settings['dmsf_columns'] }) %>
+<%= render partial: 'settings/dmsf_columns', locals: { selected_columns: @settings['dmsf_columns'] } %>
 
 <hr/>
 <em class="info">
@@ -163,24 +163,24 @@
 </em>
 
 <p>
-  <%= content_tag(:label, l(:label_email_from_override)) %>
-  <%= text_field_tag 'settings[dmsf_documents_email_from]', @settings['dmsf_documents_email_from'], :size => 128 %>
+  <%= content_tag :label, l(:label_email_from_override) %>
+  <%= text_field_tag 'settings[dmsf_documents_email_from]', @settings['dmsf_documents_email_from'], size: 128 %>
   <em class="info">
     <%= l(:label_default) %>: <%= l(:text_email_from_override) %>
   </em>
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_email_reply_to)) %>
-  <%= text_field_tag 'settings[dmsf_documents_email_reply_to]', @settings['dmsf_documents_email_reply_to'], :size => 128 %>
+  <%= content_tag :label, l(:label_email_reply_to) %>
+  <%= text_field_tag 'settings[dmsf_documents_email_reply_to]', @settings['dmsf_documents_email_reply_to'], size: 128 %>
   <em class="info">
     <%= l(:label_default) %>: <%= "''" %>
   </em>
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_links_only).capitalize) %>
-  <%= check_box_tag('settings[dmsf_documents_email_links_only]', true, @settings['dmsf_documents_email_links_only']) %>
+  <%= content_tag :label, l(:label_links_only).capitalize %>
+  <%= check_box_tag 'settings[dmsf_documents_email_links_only]', true, @settings['dmsf_documents_email_links_only'] %>
   <em class="info">
     <%= l(:label_default) %>: <%= l(:general_text_No) %>
   </em>
@@ -192,8 +192,8 @@
 </em>
 
 <p>
-  <%= content_tag(:label, l(:label_dmsf_keep_documents_locked)) %>
-  <%= check_box_tag('settings[dmsf_keep_documents_locked]', false, @settings['dmsf_keep_documents_locked']) %>
+  <%= content_tag :label, l(:label_dmsf_keep_documents_locked) %>
+  <%= check_box_tag 'settings[dmsf_keep_documents_locked]', false, @settings['dmsf_keep_documents_locked'] %>
   <em class="info">
     <%= l(:note_dmsf_keep_documents_locked) %><br/>
     <%= l(:label_default)%>: <%= l(:general_text_No)%>
@@ -206,24 +206,25 @@
 </em>
 
 <p>
-  <%= content_tag(:label, l(:label_webdav)) %>
-  <%= select_tag('settings[dmsf_webdav]',
+  <%= content_tag :label, l(:label_webdav) %>
+  <%= select_tag 'settings[dmsf_webdav]',
     options_for_select([
       [l(:select_option_deactivated), nil],
       [l(:select_option_activated), '1']],
-      :selected => @settings['dmsf_webdav'])) %>
+      selected: @settings['dmsf_webdav']) %>
   <em class="info">
-    <%= l(:note_webdav, :protocol => Setting.protocol, :domain => Setting.host_name).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_activated) %>
+    <%= l(:note_webdav, protocol: Setting.protocol, domain: Setting.host_name).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_activated) %>
   </em>  
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_webdav_strategy)) %>
-  <%= select_tag('settings[dmsf_webdav_strategy]',
+  <%= content_tag :label, l(:label_webdav_strategy) %>
+  <%= select_tag'settings[dmsf_webdav_strategy]',
     options_for_select([
       [l(:select_option_webdav_readonly), 'WEBDAV_READ_ONLY'],
       [l(:select_option_webdav_readwrite), 'WEBDAV_READ_WRITE']],
-      :selected => @settings['dmsf_webdav_strategy'])) %><br/>
+      selected: @settings['dmsf_webdav_strategy']) %>
+  <br/>
   <em class="info">
     <%= l(:note_webdav_strategy).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_webdav_readonly) %>
   </em>
@@ -231,14 +232,14 @@
 
 <p>
   <%= content_tag(:label, l(:label_webdav_ignore)) %>
-  <%= text_field_tag 'settings[dmsf_webdav_ignore]', @settings['dmsf_webdav_ignore'], :size => 50 %>
+  <%= text_field_tag 'settings[dmsf_webdav_ignore]', @settings['dmsf_webdav_ignore'], size: 50 %>
   <em class="info">
     <%= l(:note_webdav_ignore) %> <%= l(:label_default) %>: ^(\._|\.DS_Store$|Thumbs.db$)
   </em>
 </p>
 <p>
-  <%= content_tag(:label, l(:label_webdav_disable_versioning)) %>
-  <%= text_field_tag 'settings[dmsf_webdav_disable_versioning]', @settings['dmsf_webdav_disable_versioning'], :size => 50 %>
+  <%= content_tag :label, l(:label_webdav_disable_versioning) %>
+  <%= text_field_tag 'settings[dmsf_webdav_disable_versioning]', @settings['dmsf_webdav_disable_versioning'], size: 50 %>
   <em class="info">
     <%= l(:note_webdav_disable_versioning) %> <br/>
     <%= l(:label_default) %>: ^\~\$|\.tmp$
@@ -246,8 +247,8 @@
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_webdav_use_project_names)) %>
-  <%= check_box_tag('settings[dmsf_webdav_use_project_names]', true, @settings['dmsf_webdav_use_project_names']) %>
+  <%= content_tag :label, l(:label_webdav_use_project_names) %>
+  <%= check_box_tag 'settings[dmsf_webdav_use_project_names]', true, @settings['dmsf_webdav_use_project_names'] %>
   <em class="info">
 	<%= l(:note_webdav_use_project_names) %> <br/>
     <%= l(:label_default)%>: <%= l(:general_text_No)%>
@@ -269,8 +270,9 @@
 <% end %>
 
 <p>
-  <%= content_tag(:label, l(:label_index_database)) %>
-  <%= text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], :disabled => xapian_disabled, :size => 50 %>
+  <%= content_tag :label, l(:label_index_database) %>
+  <%= text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], disabled: xapian_disabled,
+                     size: 50 %>
   <em class="info">
     <%= l(:label_default) %>: <%= File.expand_path('dmsf_index', Rails.root) %>
   </em>
@@ -279,25 +281,28 @@
 <% stem_langs = %w(danish dutch english finnish french german hungarian italian norwegian portuguese romanian russian spanish swedish turkish) %>
 
 <p>  
-  <%= content_tag(:label, l(:label_stemming_language)) %>
-  <%= select_tag('settings[dmsf_stemming_lang]', options_for_select(stem_langs, @settings['dmsf_stemming_lang']))%>
+  <%= content_tag :label, l(:label_stemming_language) %>
+  <%= select_tag 'settings[dmsf_stemming_lang]', options_for_select(stem_langs, @settings['dmsf_stemming_lang']) %>
   <em class="info">
     <%= l(:note_possible_values) %>: <%= stem_langs.join(', ') %>. <%= "#{l(:label_default)}: #{stem_langs[2]}" %>
   </em>
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_stem_strategy)) %>
-  <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_NONE', @settings['dmsf_stemming_strategy'] == 'STEM_NONE', :disabled => xapian_disabled, :checked => true  %> <%= l(:option_stem_none) %><br/>
-  <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_SOME', @settings['dmsf_stemming_strategy'] == 'STEM_SOME', :disabled => xapian_disabled  %> <%= l(:option_stem_some) %><br/>
-  <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_ALL', @settings['dmsf_stemming_strategy'] == 'STEM_ALL', :disabled => xapian_disabled  %> <%= l(:option_stem_all) %><br/>
+  <%= content_tag :label, l(:label_stem_strategy) %>
+  <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_NONE', @settings['dmsf_stemming_strategy'] == 'STEM_NONE',
+                       disabled: xapian_disabled, checked: true %> <%= l(:option_stem_none) %><br/>
+  <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_SOME', @settings['dmsf_stemming_strategy'] == 'STEM_SOME',
+                       disabled: xapian_disabled  %> <%= l(:option_stem_some) %><br/>
+  <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_ALL', @settings['dmsf_stemming_strategy'] == 'STEM_ALL',
+                       disabled: xapian_disabled  %> <%= l(:option_stem_all) %><br/>
   <em class="info">
     <%= l(:text_stemming_info) %>
   </em>
 </p>
 
 <p>
-  <%= content_tag(:label, l(:label_enable_cjk_ngrams)) %>
+  <%= content_tag :label, l(:label_enable_cjk_ngrams) %>
   <%= check_box_tag 'settings[enable_cjk_ngrams]', true, @settings['dmsf_enable_cjk_ngrams'] %>
   <em class="info">
     <%= l(:text_enable_cjk_ngrams) %>

@@ -39,12 +39,12 @@ class DmsfFile < ActiveRecord::Base
   belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
 
   has_many :dmsf_file_revisions, -> { order(created_at: :desc, id: :desc) },
-           :dependent => :destroy
+           dependent: :destroy
   has_many :locks, -> { where(entity_type: 0).order(updated_at: :desc) },
-    :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
+    class_name: 'DmsfLock', foreign_key: 'entity_id', :dependent => :destroy
   has_many :referenced_links, -> { where target_type: DmsfFile.model_name.to_s},
-    :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
-  has_many :dmsf_public_urls, :dependent => :destroy
+    class_name: 'DmsfLink', foreign_key: 'target_id', dependent: :destroy
+  has_many :dmsf_public_urls, dependent: :destroy
 
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
@@ -54,11 +54,11 @@ class DmsfFile < ActiveRecord::Base
 
   validates :name, presence: true, dmsf_file_name: true
   validates :project, presence: true
-  validates_uniqueness_of :name, :scope => [:dmsf_folder_id, :project_id, :deleted],
+  validates_uniqueness_of :name, scope: [:dmsf_folder_id, :project_id, :deleted],
     conditions: -> { where(deleted: STATUS_ACTIVE) }
 
-  acts_as_event :title => Proc.new { |o| o.name },
-                :description => Proc.new { |o|
+  acts_as_event title: Proc.new { |o| o.name },
+                description: Proc.new { |o|
                   desc = Redmine::Search.cache_store.fetch("DmsfFile-#{o.id}")
                   if desc
                     Redmine::Search.cache_store.delete("DmsfFile-#{o.id}")
@@ -70,13 +70,13 @@ class DmsfFile < ActiveRecord::Base
                   end
                   desc
                 },
-                :url => Proc.new { |o| {:controller => 'dmsf_files', :action => 'view', :id => o} },
-                :datetime => Proc.new { |o| o.updated_at },
-                :author => Proc.new { |o| o.last_revision.user }
+                url: Proc.new { |o| { controller: 'dmsf_files', action: 'view', id: o } },
+                datetime: Proc.new { |o| o.updated_at },
+                author: Proc.new { |o| o.last_revision.user }
 
-  acts_as_searchable :columns => ["#{table_name}.name", "#{DmsfFileRevision.table_name}.title", "#{DmsfFileRevision.table_name}.description", "#{DmsfFileRevision.table_name}.comment"],
-    :project_key => 'project_id',
-    :date_column => "#{table_name}.updated_at"
+  acts_as_searchable columns: ["#{table_name}.name", "#{DmsfFileRevision.table_name}.title", "#{DmsfFileRevision.table_name}.description", "#{DmsfFileRevision.table_name}.comment"],
+    project_key: 'project_id',
+    date_column: "#{table_name}.updated_at"
 
   before_create :default_values
 
@@ -132,7 +132,7 @@ class DmsfFile < ActiveRecord::Base
     if locked_for_user? && (!User.current.allowed_to?(:force_file_unlock, project))
       Rails.logger.info l(:error_file_is_locked)
       if lock.reverse[0].user
-        errors[:base] << l(:title_locked_by_user, :user => lock.reverse[0].user)
+        errors[:base] << l(:title_locked_by_user, user: lock.reverse[0].user)
       else
         errors[:base] << l(:error_file_is_locked)
       end
@@ -284,7 +284,7 @@ class DmsfFile < ActiveRecord::Base
       if File.exist? last_revision.disk_file
         FileUtils.cp last_revision.disk_file, new_revision.disk_file(false)
       end
-      new_revision.comment = l(:comment_copied_from, :source => "#{project.identifier}: #{dmsf_path_str}")
+      new_revision.comment = l(:comment_copied_from, source: "#{project.identifier}: #{dmsf_path_str}")
       new_revision.custom_values = []
       last_revision.custom_values.each do |cv|
         v = CustomValue.new
@@ -575,7 +575,7 @@ class DmsfFile < ActiveRecord::Base
     # Url
     if columns.include?(l(:label_document_url))
       default_url_options[:host] = Setting.host_name
-      csv << url_for(:controller => :dmsf_files, :action => 'view', :id => id)
+      csv << url_for(controller: :dmsf_files, action: 'view', id: id)
     end
     # Revision
     if columns.include?(l(:label_last_revision_id))
@@ -618,7 +618,7 @@ class DmsfFile < ActiveRecord::Base
   def get_locked_title
     if locked_for_user?
       if lock.reverse[0].user
-        return l(:title_locked_by_user, :user => lock.reverse[0].user)
+        return l(:title_locked_by_user, user: lock.reverse[0].user)
       else
         return l(:notice_account_unknown_email)
       end

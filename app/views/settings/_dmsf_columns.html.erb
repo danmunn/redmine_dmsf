@@ -33,7 +33,7 @@
   <% columns.concat(cfs.map{ |c| c.name }) %>
   <% selected_columns = DmsfFolder::DEFAULT_COLUMNS if selected_columns.blank? %>
   <% columns.each_with_index do |column, i| %>
-    <%= check_box_tag('settings[dmsf_columns][]', column, selected_columns.include?(column), id: "dmsf_column_#{i}") %>
+    <%= check_box_tag 'settings[dmsf_columns][]', column, selected_columns.include?(column), id: "dmsf_column_#{i}" %>
     <%= h column.capitalize %>
     <br/>
   <% end %>

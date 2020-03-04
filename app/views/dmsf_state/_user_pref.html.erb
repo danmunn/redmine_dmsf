@@ -34,20 +34,19 @@
     <legend><%= l(:link_user_preferences) %></legend>
     <p>
       <%= content_tag(:label, l(:label_notifications)) %>
-      <%= select_tag(
-        'email_notify', 
+      <%= select_tag 'email_notify',
         options_for_select([[l(:select_option_default), nil], 
         [l(:select_option_activated), true], [l(:select_option_deactivated), false]], 
-        :selected => mail_notification)) %>
+        selected: mail_notification) %>
     </p>
     <p>
-      <%= content_tag(:label, l(:label_title_format)) %>
-      <%= text_field_tag 'title_format', title_format, :size => 10 %>
+      <%= content_tag :label, l(:label_title_format) %>
+      <%= text_field_tag 'title_format', title_format, size: 10 %>
       <em class="info"><%= l(:text_title_format) %></em>
     </p>
     <p>
-      <%= content_tag(:label, l(:label_dmsf_fast_links)) %>
-      <%= check_box_tag('fast_links', 1, fast_links) %>
+      <%= content_tag :label, l(:label_dmsf_fast_links) %>
+      <%= check_box_tag 'fast_links', 1, fast_links %>
       <em class="info">
         <%= l(:text_dmsf_fast_links_info) %>
       </em>
@@ -58,14 +57,13 @@
       <legend><%= l(:field_project) %> <%= l(:label_preferences) %></legend>
       <p>
         <%= content_tag(:label, "#{l(:label_act_as_attachable)}:") %>
-        <%= select_tag(
-                'act_as_attachable',
+        <%= select_tag 'act_as_attachable',
                 options_for_select([
                     [l(:label_attachment_plural) + ' & ' + l(:menu_dmsf), Project::ATTACHABLE_DMS_AND_ATTACHMENTS],
                     [l(:label_attachment_plural), Project::ATTACHABLE_ATTACHMENTS],
-                ],:selected => @project.dmsf_act_as_attachable)) %>
+                ], selected: @project.dmsf_act_as_attachable) %>
       </p>
     </fieldset>
   <% end %>
-  <%= submit_tag(l(:submit_save), :title => l(:title_save_preferences)) %>
+  <%= submit_tag l(:submit_save), title: l(:title_save_preferences) %>
 <% end %>

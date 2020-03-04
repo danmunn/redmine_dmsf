@@ -339,7 +339,6 @@ hu:
   error_lock_exclusively: Nem lehetséges kivételként zárolni egy már zárolt erőforrást
   error_unlock_parent_locked: Feloldás sikertelen - szülő erőforrás zárolva
 
-  field_dmsf_tree_view: Mappák közötti navigálás fastruktúrában
   label_dmsf_version: Verzió
 
   locked_documents: Locked documents

@@ -26,23 +26,23 @@ class DmsfFolder < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :dmsf_folder
-  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+  belongs_to :deleted_by_user, class_name: 'User', foreign_key: 'deleted_by_user_id'
   belongs_to :user
 
-  has_many :dmsf_folders, -> { order :title }, :dependent => :destroy
-  has_many :dmsf_files, :dependent => :destroy
+  has_many :dmsf_folders, -> { order :title }, dependent: :destroy
+  has_many :dmsf_files, dependent: :destroy
   has_many :folder_links, -> { where(target_type: 'DmsfFolder').order(:name) },
-    :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
+    class_name: 'DmsfLink', foreign_key: 'dmsf_folder_id', dependent: :destroy
   has_many :file_links, -> { where(target_type: 'DmsfFile') },
-    :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
+    class_name: 'DmsfLink', foreign_key: 'dmsf_folder_id', dependent: :destroy
   has_many :url_links, -> { where(target_type: 'DmsfUrl') },
-    :class_name => 'DmsfLink', :foreign_key => 'dmsf_folder_id', :dependent => :destroy
-  has_many :dmsf_links, :dependent => :destroy
+    class_name: 'DmsfLink', foreign_key: 'dmsf_folder_id', dependent: :destroy
+  has_many :dmsf_links, dependent: :destroy
   has_many :referenced_links, -> { where(target_type: 'DmsfFolder') },
-    :class_name => 'DmsfLink', :foreign_key => 'target_id', :dependent => :destroy
+    class_name: 'DmsfLink', foreign_key: 'target_id', dependent: :destroy
   has_many :locks, -> { where(entity_type:  1).order(updated_at: :desc) },
-    :class_name => 'DmsfLock', :foreign_key => 'entity_id', :dependent => :destroy
-  has_many :dmsf_folder_permissions, :dependent => :destroy
+    class_name: 'DmsfLock', foreign_key: 'entity_id', dependent: :destroy
+  has_many :dmsf_folder_permissions, dependent: :destroy
 
   INVALID_CHARACTERS = '\[\]\/\\\?":<>#%\*'
   STATUS_DELETED = 1
@@ -79,21 +79,21 @@ class DmsfFolder < ActiveRecord::Base
 
   acts_as_customizable
 
-  acts_as_searchable :columns => ["#{table_name}.title", "#{table_name}.description"],
-        :project_key => 'project_id',
-        :date_column => 'updated_at',
-        :permission => :view_dmsf_files,
-        :scope => Proc.new { DmsfFolder.visible }
+  acts_as_searchable columns: ["#{table_name}.title", "#{table_name}.description"],
+        project_key: 'project_id',
+        date_column: 'updated_at',
+        permission: :view_dmsf_files,
+        scope: Proc.new { DmsfFolder.visible }
 
-  acts_as_event :title => Proc.new {|o| o.title},
-          :description => Proc.new {|o| o.description },
-          :url => Proc.new {|o| {:controller => 'dmsf', :action => 'show', :id => o.project, :folder_id => o}},
-          :datetime => Proc.new {|o| o.updated_at },
-          :author => Proc.new {|o| o.user }
+  acts_as_event title: Proc.new { |o| o.title },
+          description: Proc.new { |o| o.description },
+          url: Proc.new { |o| { controller: 'dmsf', action: 'show', id: o.project, folder_id: o } },
+          datetime: Proc.new { |o| o.updated_at },
+          author: Proc.new { |o| o.user }
 
   validates :title, presence: true, dmsf_file_name: true
   validates :project, presence: true
-  validates_uniqueness_of :title, :scope => [:dmsf_folder_id, :project_id, :deleted],
+  validates_uniqueness_of :title, scope: [:dmsf_folder_id, :project_id, :deleted],
     conditions: -> { where(deleted: STATUS_ACTIVE) }
   validates :description, length: { maximum: 65535 }
 
@@ -226,7 +226,7 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.file_list(files)
     options = Array.new
-    options.push ['', nil, :label => 'none']
+    options.push ['', nil, label: 'none']
     files.each do |f|
       options.push [f.title, f.id]
     end
@@ -456,7 +456,7 @@ class DmsfFolder < ActiveRecord::Base
     # Url
     if columns.include?(l(:label_document_url))
       default_url_options[:host] = Setting.host_name
-      csv << url_for(:controller => :dmsf, :action => 'show', :id => project_id, :folder_id => id)
+      csv << url_for(controller: :dmsf, action: 'show', id: project_id, folder_id: id)
     end
     # Revision
     csv << '' if columns.include?(l(:label_last_revision_id))
@@ -470,7 +470,7 @@ class DmsfFolder < ActiveRecord::Base
   def get_locked_title
     if locked_for_user?
       if lock.reverse[0].user
-        return l(:title_locked_by_user, :user => lock.reverse[0].user)
+        return l(:title_locked_by_user, user: lock.reverse[0].user)
       else
         return l(:notice_account_unknown_email)
       end

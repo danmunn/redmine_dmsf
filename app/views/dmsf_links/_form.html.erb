@@ -22,13 +22,13 @@
 
 <h3 class="title"><%= l(:title_create_link) %></h3>
 
-<%= labelled_form_for @dmsf_link, :remote => modal do |f| %>
+<%= labelled_form_for @dmsf_link, remote: modal do |f| %>
   <%= error_messages_for @dmsf_link %>
-  <%= f.hidden_field :project_id, :value => @dmsf_link.project_id %>
-  <%= f.hidden_field :dmsf_folder_id, :value => @dmsf_link.dmsf_folder_id if @dmsf_link.dmsf_folder_id %>
-  <%= f.hidden_field :type, :value => @type %>
-  <%= f.hidden_field :dmsf_file_id, :value => @dmsf_file_id %>
-  <%= f.hidden_field(:container, :value => @container) if @container %>
+  <%= f.hidden_field :project_id, value: @dmsf_link.project_id %>
+  <%= f.hidden_field :dmsf_folder_id, value: @dmsf_link.dmsf_folder_id if @dmsf_link.dmsf_folder_id %>
+  <%= f.hidden_field :type, value: @type %>
+  <%= f.hidden_field :dmsf_file_id, value: @dmsf_file_id %>
+  <%= f.hidden_field(:container, value: @container) if @container %>
   <div class="box tabular">
     <% if (@type == 'link_from') && !@container %>
       <p>
@@ -46,11 +46,11 @@
           <% end %>
           <%= select_tag('dmsf_link[target_project_id]',
             project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy,
-            :selected => @dmsf_link.target_project)) %>
+            selected: @dmsf_link.target_project)) %>
           <%= late_javascript_tag do %>
               $('#dmsf_link_target_project_id').change(function(){
                 $.ajax({
-                  url: '<%= escape_javascript autocomplete_for_project_dmsf_link_path(@project, :format => 'js') %>',
+                  url: '<%= escape_javascript autocomplete_for_project_dmsf_link_path(@project, format: 'js') %>',
                   type: 'get',
                   data: $('#new_dmsf_link').serialize()
                 });
@@ -67,17 +67,17 @@
             <span class="required">*</span>
           </label>
           <% if @fast_links %>
-            <%= text_field_tag 'dmsf_link[target_folder_id]', '', :required => true, :max_length => 255 %>
+            <%= text_field_tag 'dmsf_link[target_folder_id]', '', required: true, max_length: 255 %>
           <% end %>
         <% end %>
         <% if !@fast_links || (@type != 'link_to') %>
           <%= select_tag('dmsf_link[target_folder_id]',
             folder_tree_options_for_select(DmsfFolder.directory_tree(@dmsf_link.target_project),
-            :selected => @target_folder_id)) %>
+            selected: @target_folder_id)) %>
           <%= late_javascript_tag do %>
               $('#dmsf_link_target_folder_id').change(function(){
                 $.ajax({
-                  url: '<%= escape_javascript autocomplete_for_folder_dmsf_link_path(@project, :format => 'js') %>',
+                  url: '<%= escape_javascript autocomplete_for_folder_dmsf_link_path(@project, format: 'js') %>',
                   type: 'get',
                   data: $('#new_dmsf_link').serialize()
                 });
@@ -90,24 +90,24 @@
           <%= label_tag('dmsf_link[target_file_id]', l(:field_target_file)) %>
           <% files = files_for_select(@dmsf_link.target_project.id, @target_folder_id) %>
           <%= select_tag('dmsf_link[target_file_id]',
-            options_for_select(DmsfFolder.file_list(files)), :required => modal) %>
+            options_for_select(DmsfFolder.file_list(files)), required: modal) %>
         </p>
       <% end %>
     </div>
     <% if (@type == 'link_from') && !@container %>
       <div id="dmsf_link_external">
         <p>
-          <%= f.text_field :external_url, :required => false %>
+          <%= f.text_field :external_url, required: false %>
         </p>
       </div>
     <% end %>
     <p>
-      <%= f.text_field :name, :required => true, :max_length => 255 %>
+      <%= f.text_field :name, required: true, max_length: 255 %>
     </p>
   </div>
   <p>
     <% if modal %>
-        <%= f.submit l(:button_create), :onclick => 'hideModal(this);' %>
+        <%= f.submit l(:button_create), onclick: 'hideModal(this);' %>
     <% else %>
         <%= f.submit l(:button_create) %>
     <% end %>

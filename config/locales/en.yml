@@ -339,7 +339,6 @@ en:
   error_lock_exclusively: Unable to lock exclusively an already-locked resource
   error_unlock_parent_locked: Unlock failed - resource parent is locked
 
-  field_dmsf_tree_view: Navigate folders in a tree
   label_dmsf_version: Version
 
   locked_documents: Locked documents

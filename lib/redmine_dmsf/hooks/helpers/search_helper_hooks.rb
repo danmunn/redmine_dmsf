@@ -28,8 +28,8 @@ module RedmineDmsf
       def helper_easy_extensions_search_helper_patch(context={})
         case context[:entity].event_type
           when 'dmsf-file', 'dmsf-folder'
-            str = context[:controller].send(:render_to_string, :partial => 'search/container',
-              :locals => { :object => context[:entity] })
+            str = context[:controller].send(:render_to_string, partial: 'search/container',
+              locals: { object: context[:entity] })
             if str
               html = +'<p class=\"file-detail-container\"><span><strong>'
               if context[:entity].dmsf_folder_id

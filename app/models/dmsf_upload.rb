@@ -44,11 +44,11 @@ class DmsfUpload
     a = Attachment.find_by_token(uploaded_file[:token])
     if a
       uploaded = {
-        :disk_filename => DmsfHelper.temp_filename(a.filename),
-        :content_type => a.content_type,
-        :original_filename => a.filename,
-        :comment => uploaded_file[:description],
-        :tempfile_path => a.diskfile
+        disk_filename: DmsfHelper.temp_filename(a.filename),
+        content_type: a.content_type,
+        original_filename: a.filename,
+        comment: uploaded_file[:description],
+        tempfile_path: a.diskfile
       }
       DmsfUpload.new(project, folder, uploaded)
     else
@@ -104,7 +104,7 @@ class DmsfUpload
       present_custom_fields = file.last_revision.custom_values.collect(&:custom_field).uniq
       file.last_revision.available_custom_fields.each do |cf|
         unless present_custom_fields.include?(cf)
-          @custom_values << CustomValue.new({:custom_field => cf, :value => cf.default_value}) if cf.default_value
+          @custom_values << CustomValue.new({ custom_field: cf, value: cf.default_value}) if cf.default_value
         end
       end
     end

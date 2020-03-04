@@ -74,27 +74,27 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
   
   def test_authorize_admin    
     @request.session[:user_id] = @user_admin.id
-    get :new, :params => {:project_id => @project1.id}
+    get :new, params: { project_id: @project1.id }
     assert_response :success
     assert_template 'new'   
   end
 
   def test_authorize_non_member
     @request.session[:user_id] = @user_non_member.id
-    get :new, :params => {:project_id => @project2.id}
+    get :new, params: { project_id: @project2.id }
     assert_response :forbidden
   end
     
   def test_authorize_member_ok
     @request.session[:user_id] = @user_member.id
-    get :new, :params => {:project_id => @project1.id}
+    get :new, params: { project_id: @project1.id }
     assert_response :success
   end
   
   def test_authorize_member_no_module
     # Without the module
     @project1.disable_module!(:dmsf)    
-    get :new, :params => {:project_id => @project1.id}
+    get :new, params: { project_id: @project1.id }
     assert_response :forbidden    
   end
   
@@ -102,152 +102,152 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     # Without permissions
     @project1.enable_module!(:dmsf)
     @role_manager.remove_permission! :file_manipulation
-    get :new, :params => {:project_id => @project1.id}
+    get :new, params: { project_id: @project1.id }
     assert_response :forbidden    
   end
   
   def test_new    
-    get :new, :params => {:project_id => @project1.id, :type => 'link_to'}
+    get :new, params: { project_id: @project1.id, type: 'link_to'}
     assert_response :success
-    assert_select 'label', { :text => l(:label_target_project) }
+    assert_select 'label', { text: l(:label_target_project) }
   end
 
   def test_new_fast_links_enabled
-    member = Member.where(:user_id => @user_member.id, :project_id =>  @project1.id).first
+    member = Member.where(user_id: @user_member.id, project_id: @project1.id).first
     assert member
     member.update_attribute :dmsf_fast_links, true
-    get :new, :params => {:project_id => @project1.id, :type => 'link_to'}
+    get :new, params: { project_id: @project1.id, type: 'link_to'}
     assert_response :success
-    assert_select 'label', { :count => 0, :text => l(:label_target_project) }
+    assert_select 'label', { count: 0, text: l(:label_target_project) }
   end
   
   def test_create_file_link_from_f1
     # 1. File link in a folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id, 
-        :target_project_id => @project2.id,
-        :dmsf_folder_id => @folder1.id,
-        :target_file_id => @file6.id,
-        :target_folder_id => @folder3.id,
-        :name => 'file_link',
-        :type => 'link_from'
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id, 
+        target_project_id: @project2.id,
+        dmsf_folder_id: @folder1.id,
+        target_file_id: @file6.id,
+        target_folder_id: @folder3.id,
+        name: 'file_link',
+        type: 'link_from'
       }}
     end    
-    assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1.id, folder_id: @folder1.id)
   end
   
   def test_create_file_link_from_f2
     # 2. File link in a folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id, 
-        :dmsf_folder_id => @folder1.id,
-        :target_project_id => @project2.id,        
-        :target_file_id => @file2.id,
-        :target_folder_id => 'Documents',
-        :name => 'file_link',
-        :type => 'link_from'
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id, 
+        dmsf_folder_id: @folder1.id,
+        target_project_id: @project2.id,        
+        target_file_id: @file2.id,
+        target_folder_id: 'Documents',
+        name: 'file_link',
+        type: 'link_from'
       }}
     end    
-    assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1.id, folder_id: @folder1.id)
   end
   
   def test_create_file_link_from_f3
     # 3. File link in a root folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id, 
-        :target_project_id => @project2.id,        
-        :target_file_id => @file6.id,
-        :target_folder_id => @folder3.id,
-        :name => 'file_link',
-        :type => 'link_from'
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id, 
+        target_project_id: @project2.id,        
+        target_file_id: @file6.id,
+        target_folder_id: @folder3.id,
+        name: 'file_link',
+        type: 'link_from'
       }}
     end    
-    assert_redirected_to dmsf_folder_path(:id => @project1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1.id)
   end
   
   def test_create_file_link_from_f4
     # 4. File link in a root folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id, 
-        :target_project_id => @project2.id,        
-        :target_file_id => @file2.id,        
-        :name => 'file_link',
-        :type => 'link_from'
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id, 
+        target_project_id: @project2.id,        
+        target_file_id: @file2.id,        
+        name: 'file_link',
+        type: 'link_from'
       }}
     end
-    assert_redirected_to dmsf_folder_path(:id => @project1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1.id)
   end
 
   def test_create_folder_link_from_d1
     # 1. Folder link in a folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id, 
-        :dmsf_folder_id => @folder1.id,
-        :target_project_id => @project2.id,        
-        :target_folder_id => @folder3.id,
-        :name => 'folder_link',
-        :type => 'link_from'
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id, 
+        dmsf_folder_id: @folder1.id,
+        target_project_id: @project2.id,        
+        target_folder_id: @folder3.id,
+        name: 'folder_link',
+        type: 'link_from'
       }}
     end    
-    assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1.id, folder_id: @folder1.id)
   end
     
   def test_create_folder_link_from_d2
     # 2. Folder link in a folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id, 
-        :dmsf_folder_id => @folder1.id,
-        :target_project_id => @project2.id,        
-        :name => 'folder_link',
-        :type => 'link_from'
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id, 
+        dmsf_folder_id: @folder1.id,
+        target_project_id: @project2.id,        
+        name: 'folder_link',
+        type: 'link_from'
       }}
     end    
-    assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1.id, folder_id: @folder1.id)
   end
     
   def test_create_folder_link_from_d3
     # 3. Folder link in a root folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id,         
-        :target_project_id => @project2.id,                
-        :target_folder_id => @folder3.id,
-        :name => 'folder_link',
-        :type => 'link_from'
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id,         
+        target_project_id: @project2.id,                
+        target_folder_id: @folder3.id,
+        name: 'folder_link',
+        type: 'link_from'
       }}
     end    
-    assert_redirected_to dmsf_folder_path(:id => @project1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1.id)
   end
     
   def test_create_folder_link_from_d4
     # 4. Folder link in a root folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id, 
-        :target_project_id => @project2.id,                
-        :name => 'folder_link',
-        :type => 'link_from'
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id, 
+        target_project_id: @project2.id,                
+        name: 'folder_link',
+        type: 'link_from'
       }}
     end
-    assert_redirected_to dmsf_folder_path(:id => @project1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1.id)
   end
   
   def test_create_file_link_to_f1
     # 1. File link to a root folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id,
-        :dmsf_file_id => @file1.id,
-        :target_project_id => @project2.id,
-        :target_folder_id => @folder3.id,        
-        :name => 'file_link',
-        :type => 'link_to'
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id,
+        dmsf_file_id: @file1.id,
+        target_project_id: @project2.id,
+        target_folder_id: @folder3.id,        
+        name: 'file_link',
+        type: 'link_to'
       }}
     end
     assert_redirected_to dmsf_file_path(@file1)        
@@ -256,14 +256,14 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
   def test_create_file_link_to_f2
     # 2. File link to a folder from another folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project2.id,         
-        :dmsf_folder_id => @folder3.id,
-        :target_project_id => @project1.id,
-        :target_folder_id => @folder1.id,
-        :dmsf_file_id => @file6.id,
-        :name => 'file_link',
-        :type => 'link_to'
+      post :create, params: { dmsf_link: {
+        project_id: @project2.id,         
+        dmsf_folder_id: @folder3.id,
+        target_project_id: @project1.id,
+        target_folder_id: @folder1.id,
+        dmsf_file_id: @file6.id,
+        name: 'file_link',
+        type: 'link_to'
       }}
     end
     assert_redirected_to dmsf_file_path(@file6)
@@ -272,12 +272,12 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
   def test_create_file_link_to_f3
     # 3. File link to a root folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project2.id,                 
-        :target_project_id => @project1.id,        
-        :dmsf_file_id => @file6.id,
-        :name => 'file_link',
-        :type => 'link_to'
+      post :create, params: { dmsf_link: {
+        project_id: @project2.id,                 
+        target_project_id: @project1.id,        
+        dmsf_file_id: @file6.id,
+        name: 'file_link',
+        type: 'link_to'
       }}
     end
     assert_redirected_to dmsf_file_path(@file6)
@@ -286,13 +286,13 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
   def test_create_file_link_to_f4
     # 4. File link to a folder from another root folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project2.id,         
-        :dmsf_folder_id => @folder3.id,
-        :target_project_id => @project1.id,        
-        :dmsf_file_id => @file6.id,
-        :name => 'file_link',
-        :type => 'link_to'
+      post :create, params: { dmsf_link: {
+        project_id: @project2.id,         
+        dmsf_folder_id: @folder3.id,
+        target_project_id: @project1.id,        
+        dmsf_file_id: @file6.id,
+        name: 'file_link',
+        type: 'link_to'
       }}
     end
     assert_redirected_to dmsf_file_path(@file6)
@@ -300,66 +300,66 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
   
   def test_create_external_link_from
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id,        
-        :target_project_id => @project1.id,        
-        :name => 'file_link',
-        :external_link => 'true',
-        :type => 'link_from'        
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id,        
+        target_project_id: @project1.id,        
+        name: 'file_link',
+        external_link: 'true',
+        type: 'link_from'        
       }}
     end
-    assert_redirected_to dmsf_folder_path(:id => @project1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1.id)
   end
   
   def test_create_folder_link_to_f1
     # 1. Folder link to a root folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id,         
-        :dmsf_folder_id => @folder1.id,
-        :target_project_id => @project2.id,        
-        :name => 'folder_link',
-        :type => 'link_to'
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id,         
+        dmsf_folder_id: @folder1.id,
+        target_project_id: @project2.id,        
+        name: 'folder_link',
+        type: 'link_to'
       }}
     end
-    assert_redirected_to edit_dmsf_path(:id => @project1.id, :folder_id => @folder1.id)
+    assert_redirected_to edit_dmsf_path(id: @project1.id, folder_id: @folder1.id)
   end
   
   def test_create_folder_link_to_f2
     # 2. Folder link to a folder
     assert_difference 'DmsfLink.count', +1 do    
-      post :create, :params => {:dmsf_link => {
-        :project_id => @project1.id,         
-        :dmsf_folder_id => @folder1.id,
-        :target_project_id => @project2.id,
-        :target_folder_id => @folder3.id,        
-        :name => 'folder_link',
-        :type => 'link_to'
+      post :create, params: { dmsf_link: {
+        project_id: @project1.id,         
+        dmsf_folder_id: @folder1.id,
+        target_project_id: @project2.id,
+        target_folder_id: @folder3.id,        
+        name: 'folder_link',
+        type: 'link_to'
       }}
     end
-    assert_redirected_to edit_dmsf_path(:id => @project1.id, :folder_id => @folder1.id)               
+    assert_redirected_to edit_dmsf_path(id: @project1.id, folder_id: @folder1.id)               
   end
   
   def test_destroy          
     assert_difference 'DmsfLink.visible.count', -1 do
-      delete :destroy, :params => {:project_id => @project1.id, :id => @file_link.id}
+      delete :destroy, params: { project_id: @project1.id, id: @file_link.id }
     end
-    assert_redirected_to dmsf_folder_path(:id => @project1.id, :folder_id => @folder1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1.id, folder_id: @folder1.id)
   end
   
   def test_restore_forbidden
     # Missing permissions
-    @request.env['HTTP_REFERER'] = trash_dmsf_path(:id => @project1.id)        
+    @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1.id)        
     @role_manager.remove_permission! :file_manipulation
-    get :restore, :params => {:project_id => @project1.id, :id => @file_link.id}
+    get :restore, params: { project_id: @project1.id, id: @file_link.id }
     assert_response :forbidden
   end
     
   def test_restore_ok
     # Permissions OK
-    @request.env['HTTP_REFERER'] = trash_dmsf_path(:id => @project1.id)        
+    @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1.id)        
     @role_manager.add_permission! :file_manipulation
-    get :restore, :params => {:project_id => @project1.id, :id => @file_link.id}
+    get :restore, params: { project_id: @project1.id, id: @file_link.id }
     assert_response :redirect
   end
 

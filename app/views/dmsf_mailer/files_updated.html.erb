@@ -22,14 +22,12 @@
 <%= link_to @project, project_url(@project) %> <%= l(:text_email_doc_follows) %>
 <% @files.each do |file| %>
 <p>
-  <%= link_to(h(file.dmsf_path_str),
-    dmsf_file_url(file, :download => '')) %> 
+  <%= link_to h(file.dmsf_path_str), dmsf_file_url(file, download: '') %>
   (<%= file.name %>),
   <%= number_to_human_size(file.last_revision.size) %>,
   <%= l(:label_dmsf_version) %> <%= file.last_revision.version %>,
   <%= "#{file.last_revision.workflow_str(true)}," if file.last_revision.workflow_str(true) != l(:title_none) %>
-  <%= link_to(l(:link_details, :title => h(file.title)),
-    dmsf_file_url(file)) %>    
+  <%= link_to l(:link_details, title: h(file.title)), dmsf_file_url(file) %>
   <% if file.last_revision.comment.present? %>
     <br/><span style="font-size: 0.9em">&nbsp;&nbsp;&nbsp;&nbsp;<em><%= h(file.last_revision.comment) %></em></span>
   <% end %>

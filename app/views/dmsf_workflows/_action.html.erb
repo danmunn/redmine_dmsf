@@ -22,8 +22,7 @@
 
 <h3 class="title"><%= l(:field_label_dmsf_workflow) %></h3>
 
-<%= form_tag({:controller => 'dmsf_workflows', :action => 'new_action'},              
-      :method => :post, :id => 'new-action-form') do %> 
+<%= form_tag({ controller: 'dmsf_workflows', action: 'new_action'}, method: :post, id: 'new-action-form') do %>
   <%= hidden_field_tag :dmsf_workflow_step_assignment_id, params[:dmsf_workflow_step_assignment_id] %>
   <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>
   <p>
@@ -38,13 +37,13 @@
       <%= l(:label_dmsf_wokflow_action_reject) %>
     </label>    
     <br/>
-    <%= text_area_tag :note, '', :placeholder => l(:message_dmsf_wokflow_note), :style => 'width: 90%' %>
+    <%= text_area_tag :note, '', placeholder: l(:message_dmsf_wokflow_note), style: 'width: 90%' %>
   </p>
 
   <div>
     <%= label_tag 'delegate', l(:label_dmsf_wokflow_action_delegate) %><br/>
     <%= text_field_tag 'user_search', nil %>    
-    <%= late_javascript_tag "observeSearchfield('user_search', null, '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@dmsf_workflow, :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id], :dmsf_file_revision_id => params[:dmsf_file_revision_id]) }')" %>
+    <%= late_javascript_tag "observeSearchfield('user_search', null, '#{escape_javascript autocomplete_for_user_dmsf_workflow_path(@dmsf_workflow, dmsf_workflow_step_assignment_id: params[:dmsf_workflow_step_assignment_id], dmsf_file_revision_id: params[:dmsf_file_revision_id])}')" %>
     <div id="dmsf_users_for_delegate">
       <%= render_principals_for_new_dmsf_workflow_users(
         @dmsf_workflow, params[:dmsf_workflow_step_assignment_id], params[:dmsf_file_revision_id]) %>
@@ -52,7 +51,7 @@
   </div>
   
   <p class="buttons">
-    <%= submit_tag l(:button_submit), :name => 'commit', :onclick => 'hideModal(this);' %>
-    <%= submit_tag l(:button_cancel), :name => 'commit', :onclick => 'hideModal(this);' %>
+    <%= submit_tag l(:button_submit), name: 'commit', onclick: 'hideModal(this);' %>
+    <%= submit_tag l(:button_cancel), name: 'commit', onclick: 'hideModal(this);' %>
   </p>
 <% end %>

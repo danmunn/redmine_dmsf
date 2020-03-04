@@ -47,22 +47,22 @@ module RedmineDmsf
       def self.prepended(base)
         base.class_eval do
           has_many :dmsf_files, -> { where(dmsf_folder_id: nil).order(:name) },
-            :class_name => 'DmsfFile', :foreign_key => 'project_id', :dependent => :destroy
-          has_many :dmsf_folders, ->{ where(:dmsf_folder_id => nil).order(:title) },
-            :class_name => 'DmsfFolder', :foreign_key => 'project_id', :dependent => :destroy
-          has_many :dmsf_workflows, :dependent => :destroy
+            class_name: 'DmsfFile', foreign_key: 'project_id', dependent: :destroy
+          has_many :dmsf_folders, ->{ where(dmsf_folder_id: nil).order(:title) },
+            class_name: 'DmsfFolder', foreign_key: 'project_id', dependent: :destroy
+          has_many :dmsf_workflows, dependent: :destroy
           has_many :folder_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFolder' },
-            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+            class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
           has_many :file_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFile' },
-            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+            class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
           has_many :url_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfUrl' },
-            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+            class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
           has_many :dmsf_links, -> { where dmsf_folder_id: nil },
-            :class_name => 'DmsfLink', :foreign_key => 'project_id', :dependent => :destroy
+            class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
 
           before_save :set_default_dmsf_notification
 
-          validates_length_of :dmsf_description, :maximum => 65535
+          validates_length_of :dmsf_description, maximum: 65535
 
           const_set(:ATTACHABLE_DMS_AND_ATTACHMENTS, 1)
           const_set(:ATTACHABLE_ATTACHMENTS, 2)
@@ -82,7 +82,7 @@ module RedmineDmsf
             DmsfLink.where(project_id: id, target_type: %(DmsfFile DmsfUrl)).all.size
         folder_count = DmsfFolder.where(project_id: id).all.size +
             DmsfLink.where(project_id: id, target_type: 'DmsfFolder').all.size
-        { :files => file_count, :folders => folder_count }
+        { files: file_count, folders: folder_count }
       end
 
       # Simple yet effective approach to copying things

@@ -339,7 +339,6 @@ cs:
   error_lock_exclusively: Nelze zamknout již zamčený objekt
   error_unlock_parent_locked: Nelze odemknout - nadřazený objekt je zamčený
 
-  field_dmsf_tree_view: Zobrazit složky jako stromovou strukturu
   label_dmsf_version: Verze
 
   locked_documents: Zamčené dokumenty

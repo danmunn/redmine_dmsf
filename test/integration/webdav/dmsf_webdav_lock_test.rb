@@ -67,7 +67,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
           <d:locktype><d:write/></d:locktype>
           <d:owner>jsmith</d:owner>
         </d:lockinfo>},
-      :headers => @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
+      headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
     assert_response :locked
   end
   
@@ -122,8 +122,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     travel_to refresh_time do
       # Refresh lock
       process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}",
-        :params => nil,
-        :headers => @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_IF: locktoken })
+        params: nil,
+        headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_IF: locktoken })
       assert_response :success
       # 1.week = 7*24*3600=604800 seconds
       assert_match '<d:timeout>Second-604800</d:timeout>', response.body

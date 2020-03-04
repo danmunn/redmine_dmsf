@@ -27,25 +27,24 @@ class DmsfFoldersCopyController < ApplicationController
   before_action :find_folder
   before_action :authorize
   before_action :find_target_folder
-  before_action :check_target_folder, :only => [:copy, :move]
+  before_action :check_target_folder, only: [:copy, :move]
 
   def new
     @projects = DmsfFolder.allowed_target_projects_on_copy
     @folders = DmsfFolder.directory_tree(@target_project, @folder)
     @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
-    render :layout => !request.xhr?
+    render layout: !request.xhr?
   end
 
   def copy
     new_folder = @folder.copy_to(@target_project, @target_folder)
     unless new_folder.errors.empty?
       flash[:error] = new_folder.errors.full_messages.to_sentence
-      redirect_to :action => 'new', :id => @folder, :target_project_id => @target_project,
-                  :target_folder_id => @target_folder
+      redirect_to action: 'new', id: @folder, target_project_id: @target_project, target_folder_id: @target_folder
       return
     end
     flash[:notice] = l(:notice_successful_update)
-    redirect_to dmsf_folder_path(:id => @target_project, :folder_id => new_folder)
+    redirect_to dmsf_folder_path(id: @target_project, folder_id: new_folder)
   end
 
   def move
@@ -53,11 +52,10 @@ class DmsfFoldersCopyController < ApplicationController
     @folder.dmsf_folder = @target_folder
     if @folder.save
       flash[:notice] = l(:notice_successful_update)
-      redirect_to dmsf_folder_path(:id => @target_project, :folder_id => @folder)
+      redirect_to dmsf_folder_path(id: @target_project, folder_id: @folder)
     else
       flash[:error] = @folder.errors.full_messages.to_sentence
-      redirect_to :action => 'new', :id => @folder, :target_project_id => @target_project,
-                  :target_folder_id => @target_folder
+      redirect_to action: 'new', id: @folder, target_project_id: @target_project, target_folder_id: @target_folder
     end
   end
 
@@ -95,8 +93,7 @@ class DmsfFoldersCopyController < ApplicationController
     if (@target_folder && @target_folder == @folder.dmsf_folder) ||
       (@target_folder.nil? && @folder.dmsf_folder.nil? && @target_project == @folder.project)
       flash[:error] = l(:error_target_folder_same)
-      redirect_to :action => :new, :id => @folder, :target_project_id => @target_project.id,
-                  :target_folder_id => @target_folder
+      redirect_to action: :new, id: @folder, target_project_id: @target_project.id, target_folder_id: @target_folder
       return
     end
     if (@target_folder && (@target_folder.locked_for_user? || !DmsfFolder.permissions?(@target_folder, false))) ||

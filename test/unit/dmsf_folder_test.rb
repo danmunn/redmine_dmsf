@@ -65,7 +65,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     # The user has got permissions
     User.current = @developer
     # Hasn't got permissions for @folder7
-    @folder7.dmsf_folder_permissions.where(:object_type => 'User').delete_all
+    @folder7.dmsf_folder_permissions.where(object_type: 'User').delete_all
     assert_equal 4, DmsfFolder.visible.where(project_id: 1).all.size
     # Anonymous user
     User.current = User.anonymous
@@ -76,7 +76,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   def test_permissions
     User.current = @developer
     assert DmsfFolder.permissions?(@folder7)
-    @folder7.dmsf_folder_permissions.where(:object_type => 'User').delete_all
+    @folder7.dmsf_folder_permissions.where(object_type: 'User').delete_all
     @folder7.reload
     assert !DmsfFolder.permissions?(@folder7)
   end

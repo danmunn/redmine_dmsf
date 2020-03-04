@@ -19,37 +19,6 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#browser.dmsf_list {
-    border-bottom: none;
-    display: none;
-    padding-right: 1px;
-}
-
-#dmsf_ajax_loading.ajax-loading {
-    background:url(../../../images/loading.gif) no-repeat 0 50%;
-    width: 16px;
-    height: 16px;
-}
-
-#browser_wrapper .ui-toolbar {
-    margin-right: -2px;
-}
-
-.dmsf_list .dmsf_th {
-  border: none;
-}
-
-.list .dmsf_modified {
-	min-width: 127px;
-	width: 127px;
-    font-size: 0.8em;
-    text-align: left;
-}
-
-.dmsf_modified img {
-	vertical-align:text-top;
-}
-
 .list .dmsf_title {
 	width: 40%;
     text-align: left;
@@ -235,8 +204,38 @@ div.dmsf_revision_inner_box .attribute .label {
 
 /* DMSF tree view */
 .dmsf_hidden { display:none; }
-.dmsf_odd {background-color:#f6f7f8;}
-.dmsf_even {background-color: #fff;}
+.dmsf_tree span.dmsf_expander { cursor: pointer; }
+.dmsf_tree.dmsf_expanded td.dmsf_title span {
+    background: url(../../../images/arrow_down.png) no-repeat 0 50%;
+    padding-left: 16px;
+}
+.dmsf_tree.dmsf_child .dmsf_title span { padding-left: 16px; }
+.dmsf_tree.dmsf_collapsed .dmsf_title span {
+    background: url(../../../images/arrow_right.png) no-repeat 0 50%;
+    padding-left: 16px;
+}
+.dmsf_tree.idnt-1 .dmsf_title { padding-left: 1.5em; }
+.dmsf_tree.idnt-2 .dmsf_title { padding-left: 2em; }
+.dmsf_tree.idnt-3 .dmsf_title { padding-left: 2.5em; }
+.dmsf_tree.idnt-4 .dmsf_title { padding-left: 3em; }
+.dmsf_tree.idnt-5 .dmsf_title { padding-left: 3.5em; }
+.dmsf_tree.idnt-6 .dmsf_title { padding-left: 4em; }
+.dmsf_tree.idnt-7 .dmsf_title { padding-left: 4.5em; }
+.dmsf_tree.idnt-8 .dmsf_title { padding-left: 5em; }
+.dmsf_tree.idnt-9 .dmsf_title { padding-left: 5.5em; }
+
+.dmsf_select_version {
+    max-width: 50px;
+}
+
+.dmsf_parent_container {
+    overflow: hidden;
+}
+
+.dmsf_child_container {
+    float: left;
+    text-align: left;
+}
 
 .dmsf_select_version {
     max-width: 50px;

@@ -72,13 +72,13 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_head_responds_with_authentication
-    head "/dmsf/webdav/#{@project1.identifier}", :params => nil, :headers => @admin
+    head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
     assert_response :success
     check_headers_exist
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    head "/dmsf/webdav/#{@project1.identifier}", :params => nil, :headers => @admin
+    head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
     assert_response :not_found
-    head "/dmsf/webdav/#{@project1_uri}", :params => nil, :headers => @admin
+    head "/dmsf/webdav/#{@project1_uri}", params: nil, headers: @admin
     assert_response :success
   end
 
@@ -88,48 +88,48 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
   #   (but may include an etag, so there is an allowance for a 1 in 2 failure rate on (optionally) required
   #   headers)
   def test_head_responds_to_file
-    head "/dmsf/webdav/#{@project1.identifier}/test.txt", :params => nil, :headers => @admin
+    head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
     assert_response :success
     check_headers_exist # Note it'll allow 1 out of the 3 expected to fail
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    head "/dmsf/webdav/#{@project1.identifier}/test.txt", :params => nil, :headers => @admin
+    head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
     assert_response :not_found
-    head "/dmsf/webdav/#{@project1_uri}/test.txt", :params => nil, :headers => @admin
+    head "/dmsf/webdav/#{@project1_uri}/test.txt", params: nil, headers: @admin
     assert_response :success
   end
 
   def test_head_responds_to_file_anonymous_other_user_agent
-    head "/dmsf/webdav/#{@project1.identifier}/test.txt", :params => nil, :headers => {:HTTP_USER_AGENT => 'Other'}
+    head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: { HTTP_USER_AGENT: 'Other' }
     assert_response :unauthorized
     check_headers_dont_exist
   end
 
   def test_head_fails_when_file_not_found
-    head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", :params => nil, :headers => @admin
+    head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", params: nil, headers: @admin
     assert_response :not_found
     check_headers_dont_exist
   end
 
   def test_head_fails_when_file_not_found_anonymous_other_user_agent
-    head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", :params => nil, :headers => {:HTTP_USER_AGENT => 'Other'}
+    head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", params: nil, headers: { HTTP_USER_AGENT: 'Other' }
     assert_response :unauthorized
     check_headers_dont_exist
   end
 
   def test_head_fails_when_folder_not_found
-    head '/dmsf/webdav/folder_not_here', :params => nil, :headers => @admin
+    head '/dmsf/webdav/folder_not_here', params: nil, headers: @admin
     assert_response :not_found
     check_headers_dont_exist
   end
 
   def test_head_fails_when_folder_not_found_anonymous_other_user_agent
-    head '/dmsf/webdav/folder_not_here', :params => nil, :headers => {:HTTP_USER_AGENT => 'Other'}
+    head '/dmsf/webdav/folder_not_here', params: nil, headers: { HTTP_USER_AGENT: 'Other' }
     assert_response :unauthorized
     check_headers_dont_exist
   end
 
   def test_head_fails_when_project_is_not_enabled_for_dmsf
-    head "/dmsf/webdav/#{@project2.identifier}/test.txt", :params => nil, :headers => @jsmith
+    head "/dmsf/webdav/#{@project2.identifier}/test.txt", params: nil, headers: @jsmith
     assert_response :not_found
     check_headers_dont_exist
   end
@@ -140,9 +140,9 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     assert !(response.headers.nil? || response.headers.empty?),
       'Head returned without headers' # Headers exist?
     values = {}
-    values[:etag] = { :optional => true, :content => response.headers['Etag'] }
+    values[:etag] = { optional: true, content: response.headers['Etag'] }
     values[:content_type] = response.headers['Content-Type']
-    values[:last_modified] = { :optional => true, :content => response.headers['Last-Modified'] }
+    values[:last_modified] = { optional: true, content: response.headers['Last-Modified'] }
     single_optional = false
     values.each do |key,val|
       if val.is_a?(Hash)

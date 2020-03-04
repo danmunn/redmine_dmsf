@@ -26,8 +26,7 @@ class ZipMaxFilesError < StandardError
     if message.present?
       super message
     else
-      super l(:error_max_files_exceeded, 
-        :number => Setting.plugin_redmine_dmsf['dmsf_max_file_download'])
+      super l(:error_max_files_exceeded, number: Setting.plugin_redmine_dmsf['dmsf_max_file_download'])
     end
   end
 end

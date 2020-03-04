@@ -339,7 +339,6 @@ ru:
   error_lock_exclusively: Невозможно эксклюзивно заблокировать уже заблокированный ресурс
   error_unlock_parent_locked: Разблокировка не удалась - родительская запись заблокирована
 
-  field_dmsf_tree_view: Навигация по папкам в виде дерева
   label_dmsf_version: Версия
 
   locked_documents: Заблокированные документы

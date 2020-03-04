@@ -28,16 +28,8 @@ module RedmineDmsf
 
       def self.included(base)
         base.class_eval do
-          safe_attributes 'dmsf_tree_view', 'dmsf_attachments_upload_choice' if self.included_modules.include?(Redmine::SafeAttributes)
+          safe_attributes 'dmsf_attachments_upload_choice' if self.included_modules.include?(Redmine::SafeAttributes)
         end
-      end
-
-      def dmsf_tree_view
-        self[:dmsf_tree_view] || '1'
-      end
-
-      def dmsf_tree_view=(value)
-        self[:dmsf_tree_view] = value
       end
 
       def dmsf_attachments_upload_choice

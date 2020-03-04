@@ -339,7 +339,6 @@ ja:
   error_lock_exclusively: 既にロックされているリソースを排他的にロックできません
   error_unlock_parent_locked: ロック解除に失敗しました - リソースの親フォルダがロックされています
 
-  field_dmsf_tree_view: Navigate folders in a tree
   label_dmsf_version: バージョン
 
   locked_documents: ロック中

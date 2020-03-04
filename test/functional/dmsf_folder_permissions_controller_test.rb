@@ -47,21 +47,21 @@ class DmsfFolderPermissionsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_new
-    get :new, params: { project_id: @project1, dmsf_folder_id: @folder7, format: 'js'}, xhr: true
+    get :new, params: { project_id: @project1, dmsf_folder_id: @folder7, format: 'js' }, xhr: true
     assert_response :success
     assert_template 'new'
     assert_equal 'text/javascript', response.content_type
   end
 
   def test_autocomplete_for_user
-    get :autocomplete_for_user, params: { project_id: @project1, dmsf_folder_id: @folder7, q: 'smi', format: 'js'},
+    get :autocomplete_for_user, params: { project_id: @project1, dmsf_folder_id: @folder7, q: 'smi', format: 'js' },
         xhr: true
     assert_response :success
     assert_include 'John Smith', response.body
   end
 
   def test_append
-    get :new, params: { project_id: @project1, dmsf_folder_id: @folder7, user_ids: [@manager.id], format: 'js'},
+    get :new, params: { project_id: @project1, dmsf_folder_id: @folder7, user_ids: [@manager.id], format: 'js' },
         xhr: true
     assert_response :success
     assert_template 'new'

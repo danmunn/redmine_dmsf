@@ -25,7 +25,7 @@ class DmsfLink < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :dmsf_folder
-  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+  belongs_to :deleted_by_user, class_name: 'User', foreign_key: 'deleted_by_user_id'
   belongs_to :user
 
   validates :name, presence: true, length: { maximum: 255 }
@@ -92,9 +92,9 @@ class DmsfLink < ActiveRecord::Base
 
   def self.find_link_by_file_name(project, folder, filename)
     links = DmsfLink.where(
-      :project_id => project.id,
-      :dmsf_folder_id => folder ? folder.id : nil,
-      :target_type => DmsfFile.model_name.to_s).visible.all
+      project_id: project.id,
+      dmsf_folder_id: folder ? folder.id : nil,
+      target_type: DmsfFile.model_name.to_s).visible.all
     links.each do |link|
       return link if link.target_file && (link.target_file.name == filename)
     end
@@ -142,7 +142,7 @@ class DmsfLink < ActiveRecord::Base
     else
       self.deleted = STATUS_DELETED
       self.deleted_by_user = User.current
-      save(:validate => false)
+      save validate: false
     end
   end
 
@@ -153,7 +153,7 @@ class DmsfLink < ActiveRecord::Base
     end
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
-    save(:validate => false)
+    save validate: false
   end
 
   def is_folder?

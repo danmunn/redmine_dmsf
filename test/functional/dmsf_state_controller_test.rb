@@ -48,9 +48,8 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
     # Member    
     @request.session[:user_id] = @user_member.id
     @role_manager.add_permission! :user_preferences
-    post :user_pref_save, :params => {:id => @project.id, :email_notify => 1,
-      :title_format => '%t_%v'}
-    assert_redirected_to settings_project_path(@project, :tab => 'dmsf')        
+    post :user_pref_save, params: { id: @project.id, email_notify: 1, title_format: '%t_%v' }
+    assert_redirected_to settings_project_path(@project, tab: 'dmsf')
     assert_not_nil flash[:notice]
     assert_equal flash[:notice], l(:notice_your_preferences_were_saved)
   end
@@ -58,8 +57,7 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
   def test_user_pref_save_member_forbidden
     # Member
     @request.session[:user_id] = @user_member.id    
-    post :user_pref_save, :params => {:id => @project.id, :email_notify => 1,
-      :title_format => '%t_%v'}
+    post :user_pref_save, params: { id: @project.id, email_notify: 1, title_format: '%t_%v' }
     assert_response :forbidden
   end
   
@@ -67,8 +65,7 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
     # Non Member
     @request.session[:user_id] = @user_non_member.id
     @role_manager.add_permission! :user_preferences
-    post :user_pref_save, :params => {:id => @project.id, :email_notify => 1,
-      :title_format => '%t_%v'}
+    post :user_pref_save, params: { id: @project.id, email_notify: 1, title_format: '%t_%v' }
     assert_response :forbidden
   end
   
@@ -76,9 +73,8 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
     # Admin - non member
     @request.session[:user_id] = @user_admin.id
     @role_manager.add_permission! :user_preferences
-    post :user_pref_save, :params => {:id => @project.id, :email_notify => 1,
-      :title_format => '%t_%v'}
-    assert_redirected_to settings_project_path(@project, :tab => 'dmsf')        
+    post :user_pref_save, params: { id: @project.id, email_notify: 1, title_format: '%t_%v' }
+    assert_redirected_to settings_project_path(@project, tab: 'dmsf')
     assert_not_nil flash[:warning]
     assert_equal flash[:warning], l(:user_is_not_project_member)
   end

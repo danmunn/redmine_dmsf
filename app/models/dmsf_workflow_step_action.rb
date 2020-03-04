@@ -22,12 +22,12 @@
 class DmsfWorkflowStepAction < ActiveRecord::Base
 
   belongs_to :dmsf_workflow_step_assignment
-  belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
+  belongs_to :author, class_name: 'User', foreign_key: 'author_id'
 
   validates :dmsf_workflow_step_assignment, presence: true
   validates :action, presence: true
   validates :author_id, presence: true
-  validates :note, presence: true, :unless => lambda { action == DmsfWorkflowStepAction::ACTION_APPROVE }
+  validates :note, presence: true, unless: lambda { action == DmsfWorkflowStepAction::ACTION_APPROVE }
   validates_uniqueness_of :dmsf_workflow_step_assignment_id, scope: [:action],
                           unless: lambda { action == DmsfWorkflowStepAction::ACTION_DELEGATE }
 

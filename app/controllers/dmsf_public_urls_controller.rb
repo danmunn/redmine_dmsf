@@ -22,8 +22,8 @@
 class DmsfPublicUrlsController < ApplicationController
 
   model_object DmsfPublicUrl
-  before_action :authorize, :only => [:create]
-  skip_before_action :check_if_login_required, :only => [:show]
+  before_action :authorize, only: [:create]
+  skip_before_action :check_if_login_required, only: [:show]
 
   def show
     dmsf_public_url = DmsfPublicUrl.where('token = ? AND expire_at >= ?', params[:token], DateTime.current).first
@@ -31,11 +31,11 @@ class DmsfPublicUrlsController < ApplicationController
       revision = dmsf_public_url.dmsf_file.last_revision
       begin
         # IE has got a tendency to cache files
-        expires_in(0.year, "must-revalidate" => true)
+        expires_in(0.year, 'must-revalidate' => true)
         send_file(revision.disk_file,
-                  :filename => filename_for_content_disposition(revision.name),
-                  :type => revision.detect_content_type,
-                  :disposition => dmsf_public_url.dmsf_file.disposition)
+                  filename: filename_for_content_disposition(revision.name),
+                  type: revision.detect_content_type,
+                  disposition: dmsf_public_url.dmsf_file.disposition)
       rescue => e
         Rails.logger.error e.message
         render_404

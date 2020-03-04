@@ -25,19 +25,19 @@
     <% container.saved_dmsf_attachments.each_with_index do |attachment, i| %>
       <span id="dmsf_attachments_p<%= i %>" class="attachment">
           <%= hidden_field_tag "dmsf_attachments[p#{i}][token]", "#{attachment.token}" %>
-          <%= text_field_tag("dmsf_attachments[p#{i}][filename]", attachment.filename, :class => 'filename') %>
-          <%= text_field_tag("dmsf_attachments[p#{i}][description]", attachment.description, :maxlength => 255,
-              :placeholder => l(:label_optional_description), :class => 'description') if description %>
-          <%= link_to('', dmsf_attachment_path(attachment, :attachment_id => "p#{i}", :format => 'js'),
-                :method => 'delete', :remote => true, :class => 'remove-upload icon-only icon-del') %>
+          <%= text_field_tag("dmsf_attachments[p#{i}][filename]", attachment.filename, class: 'filename') %>
+          <%= text_field_tag("dmsf_attachments[p#{i}][description]", attachment.description, maxlength: 255,
+              placeholder: l(:label_optional_description), class: 'description') if description %>
+          <%= link_to '', dmsf_attachment_path(attachment, attachment_id: "p#{i}", format: 'js'),
+                method: 'delete', remote: true, class: 'remove-upload icon-only icon-del' %>
           <% wf = container.saved_dmsf_attachments_wfs[attachment.id] %>
           <% if wf %>
           <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="icon-only icon-ok"></a>
               <%= hidden_field_tag("dmsf_attachments_wfs[p#{i}]", wf.id) if wf %>
           <% else %>
-              <%= link_to('',  assign_dmsf_workflow_path(:id => container.project.id, :project_id => container.project.id,
-                :attachment_id => i + 1), :title => l(:label_dmsf_wokflow_action_assign),
-                :remote => true, :class => 'modify-upload icon-only icon-ok') %>
+              <%= link_to '',  assign_dmsf_workflow_path(id: container.project.id, project_id: container.project.id,
+                attachment_id: i + 1), title: l(:label_dmsf_wokflow_action_assign),
+                remote: true, class: 'modify-upload icon-only icon-ok' %>
           <% end %>
       </span>
     <% end %>
@@ -50,19 +50,19 @@
         <span id="dmsf_links_attachments_<%= index %>" class="attachment">
           <input name="dmsf_links[<%= index %>]" value="<%= dmsf_link.id %>" type="hidden">
           <input type="text" class='filename readonly' value="<%= dmsf_link.name %>">
-           <%= link_to('', dmsf_link_attachment_path(dmsf_link, :link_id => "#{index}", :format => 'js'),
-                      :method => 'delete', :remote => true, :class => 'remove-upload icon-only icon-del') %>
+           <%= link_to '', dmsf_link_attachment_path(dmsf_link, link_id: "#{index}", :format => 'js'),
+                      method: 'delete', remote: true, class: 'remove-upload icon-only icon-del' %>
             <% wf = container.saved_dmsf_links_wfs[dmsf_link.id] %>
             <% if wf %>
             <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="modify-upload icon-only icon-ok"></a>
                 <%= hidden_field_tag("dmsf_links_wfs[#{dmsf_link.id}]", wf.id) if wf %>
             <% else %>
-              <%= render(:partial => 'dmsf_workflows/approval_workflow_button',
-                 :locals => {:file => dmsf_link.target_file,
-                             :file_approval_allowed => User.current.allowed_to?(:file_approval, dmsf_link.target_file.project),
-                             :workflows_available => DmsfWorkflow.where(
+              <%= render partial: 'dmsf_workflows/approval_workflow_button',
+                 locals: { file: dmsf_link.target_file,
+                           file_approval_allowed: User.current.allowed_to?(:file_approval, dmsf_link.target_file.project),
+                           workflows_available: DmsfWorkflow.where(
                                  ['project_id = ? OR project_id IS NULL', dmsf_link.target_file.project_id]).exists?,
-                             :project => dmsf_link.target_file.project, :wf => wf, :dmsf_link_id => dmsf_link.id }) %>
+                           project: dmsf_link.target_file.project, wf: wf, dmsf_link_id: dmsf_link.id } %>
             <% end %>
         </span>
     <% end %>
@@ -71,27 +71,27 @@
 
 <span class="dmsf_add_attachment add_attachment">
   <%= file_field_tag 'dmsf_attachments[dummy][file]',
-                   :id => nil,
-                   :class => 'file_selector',
-                   :multiple => multiple,
-                   :onchange => "dmsfAddInputFiles(this);",
-                   :data => {
-                       :max_file_size => Setting.attachment_max_size.to_i.kilobytes,
-                       :max_file_size_message => l(:error_attachment_too_big,
-                       :max_size => number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)),
-                       :max_concurrent_uploads => Redmine::Configuration['max_concurrent_ajax_uploads'].to_i,
-                       :upload_path => dmsf_uploads_path(:format => 'js'),
-                       :description_placeholder => l(:label_optional_description),
-                       :project => @project ? "#{@project.identifier}" : "",
-                       :description => description,
-                       :awf => awf
+                   id: nil,
+                   class: 'file_selector',
+                   multiple: multiple,
+                   onchange: 'dmsfAddInputFiles(this);',
+                   data: {
+                       max_file_size: Setting.attachment_max_size.to_i.kilobytes,
+                       max_file_size_message: l(:error_attachment_too_big,
+                       max_size: number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)),
+                       max_concurrent_uploads: Redmine::Configuration['max_concurrent_ajax_uploads'].to_i,
+                       upload_path: dmsf_uploads_path(format: 'js'),
+                       description_placeholder: l(:label_optional_description),
+                       project: @project ? "#{@project.identifier}" : '',
+                       description: description,
+                       awf: awf
                    } %>
 </span>
 <% if defined?(container) && container %>
     <span class="dmsf_add_link">
         <%= link_to l(:label_link_from),
-                    new_dmsf_link_path(:project_id => container.project.id, :type => 'link_from', :container => container.class.name),
-                    :title => l(:title_create_link), :class => 'icon icon-add file_selector', :remote => true %>
+                    new_dmsf_link_path(project_id: container.project.id, type: 'link_from', container: container.class.name),
+                    title: l(:title_create_link), class: 'icon icon-add file_selector', remote: true %>
       </span>
 <% end %>
 <span class="info">

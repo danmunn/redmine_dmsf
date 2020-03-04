@@ -46,7 +46,7 @@ class DmsfLinkApiTest < RedmineDmsf::Test::IntegrationTest
 
   def test_create_link
     @role.add_permission! :file_manipulation
-    token = Token.create!(:user => @jsmith, :action => 'api')
+    token = Token.create!(user: @jsmith, action: 'api')
     name = 'REST API link test'
     # curl -v -H "Content-Type: application/xml" -X POST --data "@link.xml" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf_links.xml
     payload = %{<?xml version="1.0" encoding="utf-8" ?>
@@ -60,14 +60,14 @@ class DmsfLinkApiTest < RedmineDmsf::Test::IntegrationTest
                   <external_url></external_url>
                   <name>#{name}</name>
                 </dmsf_link>}
-    post "/dmsf_links.xml?key=#{token.value}", :params => payload, :headers => {'CONTENT_TYPE' => 'application/xml'}
+    post "/dmsf_links.xml?key=#{token.value}", params: payload, headers: { 'CONTENT_TYPE' => 'application/xml' }
     assert_response :success
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_link>
     #   <id>1243</id>
     #   <title>test</title>
     # </dmsf_link>
-    assert_select 'dmsf_link > title', :text => name
-    assert_equal 1, DmsfLink.where(:name => name, :project_id => @project1.id).count
+    assert_select 'dmsf_link > title', text: name
+    assert_equal 1, DmsfLink.where(name: name, project_id: @project1.id).count
   end
 end

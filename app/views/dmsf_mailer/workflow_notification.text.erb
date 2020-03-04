@@ -22,7 +22,7 @@
 <%= @user.name %>,
 <%= @text1 %>
 <% if @revision.dmsf_file.dmsf_folder %>
-<%=  @text2  %> <%=  dmsf_folder_url(:id => @revision.dmsf_file.project, :folder_id => @revision.dmsf_file.dmsf_folder) %>.
+<%= @text2 %> <%= dmsf_folder_url(id: @revision.dmsf_file.project, folder_id: @revision.dmsf_file.dmsf_folder) %>.
 <% else %>
-<%=  @text2  %> <%=  dmsf_folder_url(:id => @revision.dmsf_file.project) %>.
+<%= @text2 %> <%= dmsf_folder_url(id: @revision.dmsf_file.project) %>.
 <% end %>

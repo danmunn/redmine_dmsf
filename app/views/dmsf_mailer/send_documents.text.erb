@@ -42,7 +42,7 @@
                   <% dmsf_public_url.user = @author %>
                   <% dmsf_public_url.expire_at = @expired_at %>
                   <% dmsf_public_url.save %>
-                  <%= dmsf_public_urls_url(:token => dmsf_public_url.token) %>
+                  <%= dmsf_public_urls_url(token: dmsf_public_url.token) %>
                 <% else %>
                   <%= dmsf_file_url(file) %>
                 <% end %>
@@ -64,7 +64,7 @@
           <% dmsf_public_url.user = @author %>
           <% dmsf_public_url.expire_at = @expired_at %>
           <% dmsf_public_url.save %>
-          <%= dmsf_public_urls_url(:token => dmsf_public_url.token) %>
+          <%= dmsf_public_urls_url(token: dmsf_public_url.token) %>
         <% else %>
           <%= dmsf_file_url(file) %>
         <% end %>

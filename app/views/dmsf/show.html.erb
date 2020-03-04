@@ -31,47 +31,47 @@
     <%= actions_dropdown do %>
       <% if @folder_manipulation_allowed && !@system_folder %>
         <% if @folder.nil? %>
-            <%= link_to(l(:button_edit), edit_root_dmsf_path(:id => @project),
-                        :title => l(:link_edit, :title => l(:link_documents)),
-                        :class => 'icon icon-edit') %>
+            <%= link_to l(:button_edit), edit_root_dmsf_path(id: @project),
+                        title: l(:link_edit, title: l(:link_documents)),
+                        class: 'icon icon-edit' %>
         <% elsif !@locked_for_user %>
-            <%= link_to(l(:button_edit),
+            <%= link_to l(:button_edit),
                         edit_dmsf_path(id: @project, folder_id: @folder, redirect_to_folder_id: @folder.id),
                         title: l(:link_edit, title: h(@folder.title)),
-                        class: 'icon icon-edit') %>
+                        class: 'icon icon-edit' %>
         <% end %>
         <% if @folder && (!@locked_for_user || User.current.allowed_to?(:force_file_unlock, @project)) %>
             <% if @folder.locked? %>
-                <%= link_to_if(@folder.unlockable?, l(:button_unlock),
-                               unlock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-                               :title => l(:title_unlock_folder), :class => 'icon icon-unlock')  %>
+                <%= link_to_if @folder.unlockable?, l(:button_unlock),
+                               unlock_dmsf_path(id: @project, folder_id: @folder, current: request.url),
+                               title: l(:title_unlock_folder), class: 'icon icon-unlock' %>
             <% else %>
                 <%= link_to(l(:button_lock),
-                            lock_dmsf_path(:id => @project, :folder_id => @folder, :current => request.url),
-                            :title => l(:title_lock_folder), :class => 'icon icon-lock') %>
+                            lock_dmsf_path(id: @project, folder_id: @folder, current: request.url),
+                            title: l(:title_lock_folder), class: 'icon icon-lock') %>
             <% end %>
         <% end %>
         <% if !@locked_for_user && ((@folder && @folder.notification) || (!@folder && @project.dmsf_notification)) %>
-            <%= link_to(l(:label_notifications_off),
-                        notify_deactivate_dmsf_path(:id => @project, :folder_id => @folder),
-                        :title => l(:title_notifications_active_deactivate),
-                        :class => 'icon icon-email') %>
+            <%= link_to l(:label_notifications_off),
+                        notify_deactivate_dmsf_path(id: @project, folder_id: @folder),
+                        title: l(:title_notifications_active_deactivate),
+                        class: 'icon icon-email' %>
         <% else %>
-            <%= link_to(l(:label_notifications_on),
-                        notify_activate_dmsf_path(:id => @project, :folder_id => @folder),
-                        :title => l(:title_notifications_not_active_activate),
-                        :class => 'icon icon-email-add') %>
+            <%= link_to l(:label_notifications_on),
+                        notify_activate_dmsf_path(id: @project, folder_id: @folder),
+                        title: l(:title_notifications_not_active_activate),
+                        class: 'icon icon-email-add' %>
         <% end %>
         <% if @file_manipulation_allowed && !@locked_for_user %>
-            <%= link_to(l(:label_link_from),
-                        new_dmsf_link_path(:project_id => @project.id, :dmsf_folder_id => @folder ? @folder.id : @folder,
-                          :type => 'link_from'), :title => l(:title_create_link),
-                          :class => 'icon icon-link') %>
+            <%= link_to l(:label_link_from),
+                        new_dmsf_link_path(project_id: @project.id, dmsf_folder_id: @folder ? @folder.id : @folder,
+                          type: 'link_from'), title: l(:title_create_link),
+                          class: 'icon icon-link' %>
         <% end %>
         <%= link_to(l(:link_create_folder),
-                    new_dmsf_path(:id => @project, :parent_id => @folder),
-                    :title => l(:link_create_folder),
-                    :class => 'icon icon-add') unless @locked_for_user %>
+                    new_dmsf_path(id: @project, parent_id: @folder),
+                    title: l(:link_create_folder),
+                    class: 'icon icon-add') unless @locked_for_user %>
     <% end %>
     <% if @trash_enabled %>
       <%= link_to l(:link_trash_bin), trash_dmsf_path(@project), title: l(:link_trash_bin), class: 'icon icon-del' %>
@@ -101,22 +101,6 @@
 
 <% unless (@folder && @folder.system) %>
     <% other_formats_links do |f| %>
-        <%= f.link_to 'CSV', onclick: "showModal('dmsf_csv_export_options', '350px'); return false;" %>
+      <%= f.link_to 'CSV', url: { action: :show, id: @project, dmsf_folder_id: @folder } %>
     <% end %>
 <% end %>
-
-<div id="dmsf_csv_export_options">
-  <h3 class="title"><%= l(:label_export_options, export_format: 'CSV') %></h3>
-  <%= form_tag(dmsf_folder_path(id: @project, format: 'csv'), method: :get, id: 'csv-export-form') do %>
-      <%= hidden_field_tag(:folder_id, @folder.id) if @folder %>
-      <div class="tabular">
-        <%= render(partial: 'settings/dmsf_columns',
-                   locals: { selected_columns: Setting.plugin_redmine_dmsf['dmsf_columns'],
-                             extra_columns: @extra_columns ? @extra_columns : @query.extra_columns }) %>
-      </div>
-      <p class="buttons">
-        <%= submit_tag l(:button_export), name: nil, onclick: "hideModal(this);" %>
-        <%= submit_tag l(:button_cancel), name: nil, onclick: "hideModal(this);", type: 'button' %>
-      </p>
-  <% end %>
-</div>

@@ -22,14 +22,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<%= render(:partial => '/dmsf/path', :locals => { :folder => @folder, :filename => nil, :title => nil }) %>
+<%= render partial: '/dmsf/path', locals: { folder: @folder, filename: nil, title: nil } %>
 
-<%= render(:partial => '/dmsf_folders_copy/form', :locals => {
-      :projects => @projects,
-      :project => @project,
-      :target_project => @target_project,
-      :folders => @folders,
-      :file_or_folder => @folder,
-      :target_folder => @target_folder,
-      :permission => :folder_manipulation
-  }) %>
+<%= render partial: '/dmsf_folders_copy/form', locals: {
+      projects: @projects,
+      project: @project,
+      target_project: @target_project,
+      folders: @folders,
+      file_or_folder: @folder,
+      target_folder: @target_folder,
+      permission: :folder_manipulation } %>

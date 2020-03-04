@@ -58,32 +58,32 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
   def test_show_file_ok
     # Permissions OK
     @role.add_permission! :view_dmsf_files
-    get :show, :params => {:id => @file.id}
+    get :show, params: { id: @file.id }
     assert_response :success
   end
 
   def test_show_file_forbidden
     # Missing permissions
-    get :show, :params => {:id => @file.id}
+    get :show, params: { id: @file.id }
     assert_response :forbidden
   end
   
   def test_view_file_ok
     # Permissions OK
     @role.add_permission! :view_dmsf_files    
-    get :view, :params => {:id => @file.id}
+    get :view, params: { id: @file.id }
     assert_response :success
   end
       
   def test_view_file_forbidden
     # Missing permissions
-    get :view, :params => {:id => @file.id}
+    get :view, params: { id: @file.id }
     assert_response :forbidden
   end
 
   def delete_forbidden
     # Missing permissions
-    delete @file, :params => {:commit => false}
+    delete @file, params: { commit: false }
     assert_response :forbidden
   end
 
@@ -106,12 +106,12 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
 
   def test_obsolete_revision_ok
     @role.add_permission! :file_manipulation
-    get :obsolete_revision, :params => {:id => @file.last_revision.id}
-    assert_redirected_to :action => 'show', :id => @file
+    get :obsolete_revision, params: { id: @file.last_revision.id }
+    assert_redirected_to action: 'show', id: @file
   end
 
   def test_obsolete_revision_missing_permissions
-    get :obsolete_revision, :params => {:id => @file.last_revision.id}
+    get :obsolete_revision, params: { id: @file.last_revision.id }
     assert :forbiden
   end
   

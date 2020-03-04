@@ -22,11 +22,10 @@ module RedmineDmsf
       include Redmine::I18n
 
       def view_projects_form(context={})
-        context[:controller].send(:render_to_string, {
-          :partial => 'hooks/redmine_dmsf/view_projects_form',
-          :locals => context
-        })
-
+        context[:controller].send :render_to_string, {
+          partial: 'hooks/redmine_dmsf/view_projects_form',
+          locals: context
+        }
       end
 
     end

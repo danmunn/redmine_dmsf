@@ -21,23 +21,21 @@
 %>
 
 <% if projects.present? %>
-  <%= form_tag({:action => 'copy', :id => file_or_folder}, :id => 'copyForm') do %>
+  <%= form_tag({ action: 'copy', id: file_or_folder}, id: 'copyForm') do %>
     <div class="box tabular">
       <p>
-        <%= label_tag('target_project_id', l(:field_target_project)) %>
-        <%= select_tag('target_project_id',
-                       project_tree_options_for_select(projects, :selected => target_project)) %>
+        <%= label_tag 'target_project_id', l(:field_target_project) %>
+        <%= select_tag 'target_project_id', project_tree_options_for_select(projects, selected: target_project) %>
       </p>
       <p>
-        <%= label_tag('target_folder_id', l(:field_target_folder)) %>
-        <%= select_tag('target_folder_id', options_for_select(folders,
-                                                              :selected => (target_folder.id if target_folder))) %>
+        <%= label_tag 'target_folder_id', l(:field_target_folder) %>
+        <%= select_tag 'target_folder_id', options_for_select(folders, selected: (target_folder.id if target_folder)) %>
       </p>
     </div>
     <p>
-      <%= submit_tag(l(:button_copy), :id => 'copy_button') %>
+      <%= submit_tag l(:button_copy), id: 'copy_button' %>
       <% if !file_or_folder.locked? && User.current.allowed_to?(permission, project) %>
-        <%= submit_tag(l(:button_move), :id => 'move_button') %>
+        <%= submit_tag l(:button_move), id: 'move_button' %>
       <% end %>
     </p>
   <% end %>
@@ -45,11 +43,11 @@
 
 <%= late_javascript_tag do %>
   $('#move_button').click(function(event) {
-    $('#copyForm').attr('action', "<%= url_for(:action => 'move', :id => file_or_folder) %>");
+    $('#copyForm').attr('action', "<%= url_for(action: 'move', id: file_or_folder) %>");
     $('#copyForm').submit();
   });
   $('#target_project_id').change(function () {
-    $('#content').load("<%= url_for(:action => 'new') %>", $('#copyForm').serialize());
+    $('#content').load("<%= url_for(action: 'new') %>", $('#copyForm').serialize());
   });
   $('#target_project_id').select2();
   $('#target_folder_id').select2();

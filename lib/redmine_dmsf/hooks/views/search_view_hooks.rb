@@ -23,8 +23,8 @@ module RedmineDmsf
 
       def view_search_index_container(context={})
         if context[:object].is_a?(DmsfFile) || context[:object].is_a?(DmsfFolder)
-          str = context[:controller].send(:render_to_string, :partial => 'search/container',
-            :locals => { :object => context[:object] })
+          str = context[:controller].send(:render_to_string, partial: 'search/container',
+            locals: { object: context[:object] })
           if str
             " #{str} /"
           end

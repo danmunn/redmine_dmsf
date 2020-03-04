@@ -23,18 +23,18 @@
 <fieldset class="box">
   <legend><%= l(:label_dmsf_workflow_add_approver) %></legend>
   <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>    
-  <%= late_javascript_tag "observeSearchfield('user_search', null, '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@dmsf_workflow, :dmsf_workflow_step_assignment_id => nil, :dmsf_file_revision_id => nil, :project_id => @project ? @project.id : nil) }')" %>
+  <%= late_javascript_tag "observeSearchfield('user_search', null, '#{ escape_javascript autocomplete_for_user_dmsf_workflow_path(@dmsf_workflow, dmsf_workflow_step_assignment_id: nil, dmsf_file_revision_id: nil, project_id: @project ? @project.id : nil) }')" %>
   <div id="dmsf_users_for_delegate">
-    <%= render_principals_for_new_dmsf_workflow_users(@dmsf_workflow) %>
+    <%= render_principals_for_new_dmsf_workflow_users @dmsf_workflow %>
   </div>
 </fieldset>
 
 <fieldset class="box">
   <legend><%= l(:label_dmsf_workflow_step) %></legend>
   <%= select_tag 'step', dmsf_workflow_steps_options_for_select(@steps),
-    :id => 'selected_step', :onchange => "$('#dmsf_step_name').toggle(this.value == 0);", :style => 'max-width: 40%' %>
+    id: 'selected_step', onchange: "$('#dmsf_step_name').toggle(this.value == 0);", style: 'max-width: 40%' %>
   <span id="dmsf_step_name">&nbsp;
     <%= label_tag 'name', l(:field_name) %>
-    <%= text_field_tag 'name', nil, :maxlength => 30, :style => 'max-width: 40%' %>
+    <%= text_field_tag 'name', nil, maxlength: 30, style: 'max-width: 40%' %>
   </span>
 </fieldset>

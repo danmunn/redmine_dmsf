@@ -22,6 +22,6 @@
 
 var modal = $('#ajax-modal');
 
-modal.html('<%= escape_javascript(render :partial => 'assign') %>');
+modal.html('<%= escape_javascript(render partial: 'assign') %>');
 showModal('ajax-modal', '30%');
 modal.addClass('assignment');

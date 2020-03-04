@@ -163,9 +163,9 @@ module RedmineDmsf
         init_journal(User.current)
         key = (added_or_removed == :removed ? :old_value : :value)
         current_journal.details << JournalDetail.new(
-          :property => 'dmsf_file',
-          :prop_key => dmsf_file.id,
-          key => dmsf_file.title
+          property: 'dmsf_file',
+          prop_key: dmsf_file.id,
+          key: dmsf_file.title
         )
         current_journal.save
       end

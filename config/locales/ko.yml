@@ -337,7 +337,6 @@ ko:
   error_lock_exclusively: 이미 잠겨있는 리소스를 잠글 수 없습니다
   error_unlock_parent_locked: 잠금 실패 - 리소스 상위 파일이 잠겨있습니다
 
-  field_dmsf_tree_view: 트리에서 폴더 검색
   label_dmsf_version: 버전
 
   locked_documents: 잠긴 문서

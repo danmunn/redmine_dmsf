@@ -37,15 +37,15 @@ Redmine::WikiFormatting::Macros.register do
       end
     end
     if User.current && User.current.allowed_to?(:view_dmsf_files, file.project, { id: file.id })
-      file_view_url = url_for(:controller => :dmsf_files, :action => 'view', :id => file, :download => args[2])
+      file_view_url = url_for(controller: :dmsf_files, action: 'view', id: file, download: args[2])
       title = args[1] ?  args[1] : file.title
       title.gsub!(/\A"|"\z/,'') # Remove apostrophes
       title.gsub!(/\A'|'\z/,'')
       title = file.title if title.empty?
       return link_to(h(title),
         file_view_url,
-        :target => '_blank',
-        :title => h(revision.tooltip),
+        target: '_blank',
+        title: h(revision.tooltip),
         'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}")
     else
       raise l(:notice_not_authorized)
@@ -67,7 +67,7 @@ Redmine::WikiFormatting::Macros.register do
         title.gsub!(/\A'|'\z/,'')
         title = folder.title if title.empty?
         return link_to h(title),
-          dmsf_folder_url(folder.project, :folder_id => folder)
+          dmsf_folder_url(folder.project, folder_id: folder)
       else
         raise l(:notice_not_authorized)
       end
@@ -82,7 +82,7 @@ Redmine::WikiFormatting::Macros.register do
     raise ArgumentError if args.length < 1 # Requires file id
     file = DmsfFile.visible.find args[0].strip
     if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
-      return link_to(h(args[1] ? args[1] : file.title), dmsf_file_path(:id => file))
+      return link_to(h(args[1] ? args[1] : file.title), dmsf_file_path(id: file))
     else
       raise l(:notice_not_authorized)
     end
@@ -163,15 +163,15 @@ Redmine::WikiFormatting::Macros.register do
         raise l(:notice_not_authorized)
       end
       raise 'Not supported image format' unless file.image?
-      url = url_for(:controller => :dmsf_files, :action => 'view', :id => file)
+      url = url_for(controller: :dmsf_files, action: 'view', id: file)
       if size && size.include?('%')
-        image_tag(url, :alt => file.title, :width => size, :height => size)
+        image_tag url, alt: file.title, width: size, height: size
       elsif height
-        image_tag(url, :alt => file.title, :width => 'auto', :height => height)
+        image_tag url, alt: file.title, width: 'auto', height: height
       elsif width
-        image_tag(url, :alt => file.title, :width => width, :height => 'auto')
+        image_tag url, alt: file.title, width: width, height: 'auto'
       else
-        image_tag(url, :alt => file.title, :size => size)
+        image_tag url, alt: file.title, size: size
       end
     else
       raise "Document ID #{file_id} not found"
@@ -197,21 +197,21 @@ Redmine::WikiFormatting::Macros.register do
         raise l(:notice_not_authorized)
       end
       raise 'Not supported image format' unless file.image?
-      url = url_for(:controller => :dmsf_files, :action => 'view', :id => file)
-      file_view_url = url_for(:controller => :dmsf_files, :action => 'view', :id => file, :download => args[2])
+      url = url_for(controller: :dmsf_files, action: 'view', id: file)
+      file_view_url = url_for(controller: :dmsf_files, action: 'view', id: file, download: args[2])
       if size
-        img = image_tag(url, :alt => file.title, :size => size)
+        img = image_tag(url, alt: file.title, size: size)
       elsif height
-        img = image_tag(url, :alt => file.title, :width => 'auto', :height => height)
+        img = image_tag(url, alt: file.title, width: 'auto', height: height)
       elsif width
-        img = image_tag(url, :alt => file.title, :width => width, :height => 'auto')
+        img = image_tag(url, alt: file.title, width: width, height: 'auto')
       else
-        img = image_tag(url, :alt => file.title, :width => 'auto', :height => 200)
+        img = image_tag(url, alt: file.title, width: 'auto', height: 200)
       end
-      link_to(img,
-        file_view_url, :target => '_blank',
-        :title => h(file.last_revision.try(:tooltip)),
-        'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}")
+      link_to img,
+        file_view_url, target: '_blank',
+        title: h(file.last_revision.try(:tooltip)),
+        'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}"
     else
       raise "Document ID #{file_id} not found"
     end

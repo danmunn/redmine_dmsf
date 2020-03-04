@@ -24,11 +24,13 @@ class DmsfUploadController < ApplicationController
 
   menu_item :dmsf
 
-  before_action :find_project, :except => [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
-  before_action :authorize, :except => [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
-  before_action :authorize_global, :only => [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
-  before_action :find_folder, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
-  before_action :permissions, :except => [:upload_file, :upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :find_project, except: [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :authorize, except: [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :authorize_global, only: [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :find_folder, except: [:upload_file, :upload, :commit, :delete_dmsf_attachment,
+                                       :delete_dmsf_link_attachment]
+  before_action :permissions, except: [:upload_file, :upload, :commit, :delete_dmsf_attachment,
+                                       :delete_dmsf_link_attachment]
 
   helper :all
   helper :dmsf_workflows
@@ -48,14 +50,6 @@ class DmsfUploadController < ApplicationController
       uploaded_files.each do |_, uploaded_file|
         upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
         @uploads.push(upload) if upload
-      end
-    else
-      # plupload multi upload completed
-      uploaded = params[:uploaded]
-      if uploaded
-        uploaded.each do |_, uploaded_file|
-          @uploads.push(DmsfUpload.new(@project, @folder, uploaded_file))
-        end
       end
     end
     if @uploads.empty?
@@ -81,7 +75,7 @@ class DmsfUploadController < ApplicationController
         f.write(@tempfile)
       end
     end
-    render :layout => false
+    render layout: false
   end
 
   # REST API and Redmine attachment form
@@ -91,7 +85,7 @@ class DmsfUploadController < ApplicationController
       return
     end
 
-    @attachment = Attachment.new(:file => request.raw_post)
+    @attachment = Attachment.new(file: request.raw_post)
     @attachment.author = User.current
     @attachment.filename = params[:filename].presence || Redmine::Utils.random_hex(16)
     @attachment.content_type = params[:content_type].presence
@@ -101,7 +95,7 @@ class DmsfUploadController < ApplicationController
       format.js
       format.api {
         if saved
-          render :action => 'upload', :status => :created
+          render action: 'upload', status: :created
         else
           render_validation_errors(@attachment)
         end
@@ -154,7 +148,7 @@ class DmsfUploadController < ApplicationController
     respond_to do |format|
       format.js
       format.api  { render_validation_errors(failed_uploads) unless failed_uploads.empty? }
-      format.html { redirect_to dmsf_folder_path(:id => @project, :folder_id => @folder) }
+      format.html { redirect_to dmsf_folder_path(id: @project, folder_id: @folder) }
     end
   end
 

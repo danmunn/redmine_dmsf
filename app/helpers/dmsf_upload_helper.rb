@@ -148,7 +148,7 @@ module DmsfUploadHelper
             unless recipients.empty?
               to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
               to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-              controller.flash[:warning] = l(:warning_email_notifications, :to => to) if controller
+              controller.flash[:warning] = l(:warning_email_notifications, to: to) if controller
             end
           end
         rescue => e

@@ -24,7 +24,7 @@ module DmsfLinksHelper
   def folder_tree_options_for_select(folder_tree, options = {})
     s = +''
     folder_tree.each do |name, id|      
-      tag_options = {:value => id}
+      tag_options = { value: id }
       if id == options[:selected]
         tag_options[:selected] = 'selected'
       else

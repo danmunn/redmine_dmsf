@@ -23,11 +23,11 @@ class DmsfWorkflowsController < ApplicationController
 
   model_object DmsfWorkflow
 
-  before_action :find_model_object, :except => [:create, :new, :index, :assign, :assignment]
+  before_action :find_model_object, except: [:create, :new, :index, :assign, :assignment]
   before_action :find_project
   before_action :authorize_custom
-  before_action :permissions, :only => [:new_action, :assignment, :start]
-  before_action :approver_candidates, :only => [:remove_step, :show, :reorder_steps, :add_step]
+  before_action :permissions, only: [:new_action, :assignment, :start]
+  before_action :approver_candidates, only: [:remove_step, :show, :reorder_steps, :add_step]
 
   layout :workflows_layout
 
@@ -47,7 +47,7 @@ class DmsfWorkflowsController < ApplicationController
 
   def index
     @status = params[:status] || 1
-    @workflow_pages, @workflows = paginate DmsfWorkflow.status(@status).global.sorted, :per_page => 25
+    @workflow_pages, @workflows = paginate DmsfWorkflow.status(@status).global.sorted, per_page: 25
   end
 
   def action
@@ -56,9 +56,9 @@ class DmsfWorkflowsController < ApplicationController
   def new_action
     if params[:commit] == l(:button_submit)
       action = DmsfWorkflowStepAction.new(
-        :dmsf_workflow_step_assignment_id => params[:dmsf_workflow_step_assignment_id],
-        :action => (params[:step_action].to_i >= 10) ? DmsfWorkflowStepAction::ACTION_DELEGATE : params[:step_action],
-        :note => params[:note])
+        dmsf_workflow_step_assignment_id: params[:dmsf_workflow_step_assignment_id],
+        action: (params[:step_action].to_i >= 10) ? DmsfWorkflowStepAction::ACTION_DELEGATE : params[:step_action],
+        note: params[:note])
       if request.post?
         if action.save
           revision = DmsfFileRevision.find_by(id: params[:dmsf_file_revision_id])
@@ -85,7 +85,7 @@ class DmsfWorkflowsController < ApplicationController
                   unless recipients.blank?
                     to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                     to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-                    flash[:warning] = l(:warning_email_notifications, :to => to)
+                    flash[:warning] = l(:warning_email_notifications, to: to)
                   end
                 end
               else
@@ -106,7 +106,7 @@ class DmsfWorkflowsController < ApplicationController
                   unless recipients.blank?
                     to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                     to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-                    flash[:warning] = l(:warning_email_notifications, :to => to)
+                    flash[:warning] = l(:warning_email_notifications, to: to)
                   end
                 end
               end
@@ -124,7 +124,7 @@ class DmsfWorkflowsController < ApplicationController
                     :text_email_to_proceed,
                     action.note)
                   if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
-                    flash[:warning] = l(:warning_email_notifications, :to => delegate.name)
+                    flash[:warning] = l(:warning_email_notifications, to: delegate.name)
                   end
                 end
               else
@@ -162,7 +162,7 @@ class DmsfWorkflowsController < ApplicationController
                       unless recipients.empty?
                         to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                         to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-                        flash[:warning] = l(:warning_email_notifications, :to => to)
+                        flash[:warning] = l(:warning_email_notifications, to: to)
                       end
                     end
                   end
@@ -266,7 +266,7 @@ class DmsfWorkflowsController < ApplicationController
       @dmsf_workflow.name = names.first
     end
 
-    render :layout => !request.xhr?
+    render layout: !request.xhr?
   end
 
   def create
@@ -285,19 +285,19 @@ class DmsfWorkflowsController < ApplicationController
     if request.post? && @dmsf_workflow && @dmsf_workflow.valid?
       flash[:notice] = l(:notice_successful_create)
       if @project
-        redirect_to settings_project_path(@project, :tab => 'dmsf_workflow')
+        redirect_to settings_project_path(@project, tab: 'dmsf_workflow')
       else
         redirect_to dmsf_workflows_path
       end
     else
-      render :action => 'new'
+      render action: 'new'
     end
   end
 
   def update
     if params[:dmsf_workflow]
-      res = @dmsf_workflow.update_attributes({:name => params[:dmsf_workflow][:name]}) if params[:dmsf_workflow][:name].present?
-      res = @dmsf_workflow.update_attributes({:status => params[:dmsf_workflow][:status]}) if params[:dmsf_workflow][:status].present?
+      res = @dmsf_workflow.update_attributes({ name: params[:dmsf_workflow][:name] }) if params[:dmsf_workflow][:name].present?
+      res = @dmsf_workflow.update_attributes({ status: params[:dmsf_workflow][:status] }) if params[:dmsf_workflow][:status].present?
       if res
         flash[:notice] = l(:notice_successful_update)
         if @project
