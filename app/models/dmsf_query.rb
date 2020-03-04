@@ -128,7 +128,7 @@ class DmsfQuery < Query
         @statement = filters_clauses.join(' AND ').
             gsub("#{queried_class.table_name}.", '')
         DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, name|
-          @statement.gsub!("cf_#{id}", "`#{name}`")
+          @statement.gsub!("cf_#{id}", "\"#{name}\"")
         end
         end
     end
@@ -142,7 +142,7 @@ class DmsfQuery < Query
     order_option = ['sort', group_by_sort_order, (options[:order] || sort_clause[0]), 'title'].flatten.reject(&:blank?)
     if order_option.size > 2
       DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, name|
-        order_option[1].gsub!("COALESCE(cf_#{id}.value, '')", "`#{name}`")
+        order_option[1].gsub!("COALESCE(cf_#{id}.value, '')", "\"#{name}\"")
       end
       order_option[1].gsub!(',', " #{$1},")
       if order_option[1] =~ /(DESC|ASC)$/
@@ -166,7 +166,7 @@ class DmsfQuery < Query
   def dmsf_folders_scope
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id, :name).each do |id, name|
-      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS `#{name}`"
+      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS \"#{name}\""
     end
     scope = DmsfFolder.
         select(%{
@@ -200,7 +200,7 @@ class DmsfQuery < Query
   def dmsf_folder_links_scope
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id, :name).each do |id, name|
-      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS `#{name}`"
+      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS \"#{name}\""
     end
     scope = DmsfLink.
         select(%{
@@ -235,7 +235,7 @@ class DmsfQuery < Query
   def dmsf_files_scope
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id, :name).each do |id, name|
-      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_files.id) AS `#{name}`"
+      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_files.id) AS \"#{name}\""
     end
     scope = DmsfFile.
         select(%{
@@ -270,7 +270,7 @@ class DmsfQuery < Query
   def dmsf_file_links_scope
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id, :name).each do |id, name|
-      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_files.id) AS `#{name}`"
+      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_files.id) AS \"#{name}\""
     end
     scope = DmsfLink.
         select(%{
@@ -306,7 +306,7 @@ class DmsfQuery < Query
   def dmsf_url_links_scope
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:name).each do |name|
-      cf_columns << ",NULL AS `#{name}`"
+      cf_columns << ",NULL AS \"#{name}\""
     end
     scope = DmsfLink.
         select(%{
