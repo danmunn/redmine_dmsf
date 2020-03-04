@@ -23,6 +23,6 @@
 
 <span id="public_url" <%= "class='hol'" unless Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] %>">
     <%= check_box_tag 'email[public_urls]', 1, false %> <%= l(:label_public_urls) %>
-    <%= date_field_tag('email[expired_at]', '', value: (DateTime.current + 3.days).to_date, size: 10, readonly: true) +
+    <%= date_field_tag('email[expired_at]', '', value: (DateTime.current + 3.days).to_date, size: 10) +
         calendar_for('email_expired_at') %>
 </span>
