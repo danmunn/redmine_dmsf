@@ -257,7 +257,7 @@ class DmsfQuery < Query
           'file' AS type,
           dmsf_files.deleted AS deleted,
           1 AS sort #{cf_columns}}).
-        joins(:dmsf_file_revisions).
+        joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
         where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)')
     if deleted
