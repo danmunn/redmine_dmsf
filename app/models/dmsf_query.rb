@@ -174,7 +174,7 @@ class DmsfQuery < Query
           CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
           dmsf_folders.title AS title,
           NULL AS filename,
-          NULL AS size,
+          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
           dmsf_folders.updated_at AS updated,
           NULL AS major_version,
           NULL AS minor_version,
