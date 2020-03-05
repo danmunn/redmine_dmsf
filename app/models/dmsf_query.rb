@@ -171,7 +171,7 @@ class DmsfQuery < Query
         select(%{
           dmsf_folders.id AS id,
           dmsf_folders.project_id AS project_id,
-          NULL AS revision_id,
+          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
           dmsf_folders.title AS title,
           NULL AS filename,
           NULL AS size,
