@@ -92,7 +92,6 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     get "/projects/#{@project1.identifier}/dmsf.xml?key=#{token.value}&limit=1&offset=2"
     assert_response :success
     assert_equal 'application/xml', @response.content_type
-    puts response.body
     #   <?xml version="1.0" encoding="UTF-8"?>
     #   <dmsf>
     #     <dmsf_nodes total_count="1" type="array">
