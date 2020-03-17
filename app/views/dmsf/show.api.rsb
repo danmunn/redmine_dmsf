@@ -1,7 +1,7 @@
 api.dmsf do
 
-  api.array :dmsf_nodes, api_meta(total_count: @query.dmsf_nodes.count) do
-    @query.dmsf_nodes.each do |node|
+  api.array :dmsf_nodes, api_meta(total_count: @query.dmsf_nodes(offset: @offset, limit: @limit).count) do
+    @query.dmsf_nodes(offset: @offset, limit: @limit).each do |node|
       api.node do
         api.id node.id
         api.title node.title

@@ -218,9 +218,28 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_show
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :file_manipulation
     get :show, params: { id: @project.id }
     assert_response :success
-    assert_select 'tr.dmsf_tree'
+    # New file link
+    assert_select 'a.icon-add'
+    # Filters
+    assert_select 'fieldset#filters'
+    # Options
+    assert_select 'fieldset#options'
+    # The main table
+    assert_select 'table.dmsf'
+    # CSV export
+    assert_select 'a.csv'
+  end
+
+  def test_show_without_file_manipulation
+    @role.add_permission! :view_dmsf_files
+    @role.add_permission! :view_dmsf_folders
+    get :show, params: { id: @project.id }
+    assert_response :success
+    # New file link should be missing
+    assert_select 'a.icon-add', false, 'Adding files is not allowed'
   end
 
   def test_show_csv

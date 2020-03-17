@@ -94,7 +94,7 @@
 <%= form_tag(dmsf_folder_path(d: @project, folder_id: @folder), method: :get, id: 'query_form') do %>
   <%= render partial: 'queries/query_form' %>
 <% end %>
-<%= render partial: 'query_list', locals: { query: @query } %>
+<%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages } %>
 <span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>
 
 <%= context_menu %>

@@ -1,2 +1,2 @@
 // Add rows
-$('#<%= params[:row_id] %>').after('<%= escape_javascript(render(partial: 'dmsf/query_rows', locals: { query: @query })) %>');
+$('#<%= params[:row_id] %>').after('<%= escape_javascript(render(partial: 'dmsf/query_rows', locals: { query: @query, dmsf_pages: nil })) %>');

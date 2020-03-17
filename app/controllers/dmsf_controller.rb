@@ -75,7 +75,9 @@ class DmsfController < ApplicationController
         @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
         render layout: !request.xhr?
       }
-      format.api
+      format.api {
+        @offset, @limit = api_offset_and_limit
+      }
       format.csv  {
         send_data query_to_csv(@query.dmsf_nodes, @query), type: 'text/csv; header=present', filename: 'dmsf.csv'
       }

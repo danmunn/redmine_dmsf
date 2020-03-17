@@ -92,6 +92,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     get "/projects/#{@project1.identifier}/dmsf.xml?key=#{token.value}&limit=1&offset=2"
     assert_response :success
     assert_equal 'application/xml', @response.content_type
+    puts response.body
     #   <?xml version="1.0" encoding="UTF-8"?>
     #   <dmsf>
     #     <dmsf_nodes total_count="1" type="array">
@@ -99,10 +100,11 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #         <id>7</id>
     #         <title>folder7</title>
     #         <type>folder</type>
+    #         <filename/>
     #       </node>
     #     </dmsf_nodes>
     # </dmsf>
-    assert_select 'dmsf > dmsf_nodes', count: 1
+    assert_select 'dmsf > dmsf_nodes > node', count: 1
     assert_select 'dmsf > dmsf_nodes > node > id', text: @folder7.id.to_s
     assert_select 'dmsf > dmsf_nodes > node > title', text: @folder7.title
   end

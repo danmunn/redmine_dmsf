@@ -20,7 +20,12 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% query.dmsf_nodes.each do |node| %>
+<% options = {} %>
+<% if dmsf_pages %>
+  <% options[:offset] = dmsf_pages.offset %>
+  <% options[:limit] = dmsf_pages.per_page %>
+<% end %>
+<% query.dmsf_nodes(options).each do |node| %>
   <% system = node.title =~ /^\./ %>
   <% @idnt ||= 0 %>
   <tr id="<%= node.id %>span" class="<%= cycle('odd', 'even') %> <%= node.css_classes(query.deleted) %> <%= params[:classes] %> <%= @idnt > 0 ? "idnt idnt-#{@idnt}" : nil %>">
