@@ -403,6 +403,10 @@ cs:
   button_edit_content: Upravit obsah
   field_workflow: Workflow
   field_modified: Aktualizoval
+  field_updated: Aktualizováno
+  field_count: Stažebí/E-mail
+  field_first_at: První
+  field_last_at: Poslední
 
   easy_pages:
     modules:

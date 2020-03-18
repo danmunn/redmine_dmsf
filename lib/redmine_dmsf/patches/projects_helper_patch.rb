@@ -36,7 +36,7 @@ module RedmineDmsf
           { name: 'dmsf_workflow', action: { controller: 'dmsf_workflows', action: 'index' },
           partial: 'dmsf_workflows/main', label: :label_dmsf_workflow_plural }
         ]
-        tabs.concat(dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project)} )
+        tabs.concat(dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project) })
         tabs
       end
 
@@ -44,5 +44,9 @@ module RedmineDmsf
   end
 end
 
-RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
-  'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true
+if Redmine::Plugin.installed?(:easy_extensions)
+  RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
+    'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true
+else
+  ProjectsController.send :helper, RedmineDmsf::Patches::ProjectHelperPatch
+end
