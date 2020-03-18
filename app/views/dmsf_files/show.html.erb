@@ -39,24 +39,26 @@
         <%= link_to l(:button_lock), lock_dmsf_files_path(id: @file),
                     title: l(:title_lock_file), class: 'icon icon-lock' %>
       <% end %>
-      <% if @file.notification %>
-        <%= link_to l(:label_notifications_off),
-                    notify_deactivate_dmsf_files_path(id: @file),
-                    title: l(:title_notifications_active_deactivate),
-                    class: 'icon icon-email' %>
-      <% else %>
-        <%= link_to l(:label_notifications_on),
-                    notify_activate_dmsf_files_path(id: @file),
-                    title: l(:title_notifications_not_active_activate),
-                    class: 'icon icon-email-add' %>
+      <%= actions_dropdown do %>
+        <% if @file.notification %>
+          <%= link_to l(:label_notifications_off),
+                      notify_deactivate_dmsf_files_path(id: @file),
+                      title: l(:title_notifications_active_deactivate),
+                      class: 'icon icon-email' %>
+        <% else %>
+          <%= link_to l(:label_notifications_on),
+                      notify_activate_dmsf_files_path(id: @file),
+                      title: l(:title_notifications_not_active_activate),
+                      class: 'icon icon-email-add' %>
+        <% end %>
+        <%= link_to l(:label_link_to),
+                    new_dmsf_link_path(project_id: @project.id, dmsf_folder_id: @file.dmsf_folder ? @file.dmsf_folder.id : nil, dmsf_file_id: @file.id, type: 'link_to'),
+                    title: l(:title_create_link),
+                    class: 'icon icon-link' %>
+        <%= link_to "#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: @file),
+                    title: l(:title_copy), class: 'icon icon-copy' %>
+        <%= delete_link(dmsf_file_path(id: @file, details: true)) if @file_delete_allowed %>
       <% end %>
-      <%= link_to l(:label_link_to),
-                  new_dmsf_link_path(project_id: @project.id, dmsf_folder_id: @file.dmsf_folder ? @file.dmsf_folder.id : nil, dmsf_file_id: @file.id, type: 'link_to'),
-                  title: l(:title_create_link),
-                  class: 'icon icon-link' %>
-      <%= link_to "#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: @file),
-                  title: l(:title_copy), class: 'icon icon-copy' %>
-      <%= delete_link(dmsf_file_path(id: @file, details: true)) if @file_delete_allowed %>
     <% end %>
   <% end %>
 </div>
@@ -77,28 +79,28 @@
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.dmsf_file_revisions.visible[@revision_pages.offset, @revision_pages.per_page].each do |revision| %>
   <div class="dmsf_revision_box">
-    <div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">
-      <div class="dataTables_lenght">
-        <div id="dmsf_tag" class="dmsf_controls contextual">
-          <%= actions_dropdown do %>
-            <%= link_to_function l(:title_download_entries),
-                  "$('#revision_access-#{revision.id}').toggle()",
-                  class: 'icon icon-group' %>
-            <%= link_to l(:title_download),
-                  view_dmsf_file_path(@file, download: revision),
-                  title: l(:title_title_version_version_download, title: h(revision.title), version: revision.version),
-                  class: 'icon icon-download' %>
-            <%= link_to l(:title_obsolete_revision),
-                  obsolete_revision_path(revision),
-                  data: { confirm: l(:text_are_you_sure) },
-                  class: 'icon icon-close' if @file_manipulation_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
-            <%= link_to l(:button_delete),
-                  delete_revision_path(revision),
-                  data: { confirm: l(:text_are_you_sure) },
-                  title: l(:title_delete_revision),
-                  class: 'icon icon-del' if @file_delete_allowed && (@file.dmsf_file_revisions.visible.count > 1) %>
-          <% end %>
-        </div>
+    <div id="dmsf_widget_header" class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">
+      <div class="dmsf_controls contextual">
+        <%= actions_dropdown do %>
+          <%= link_to_function l(:title_download_entries),
+                "$('#revision_access-#{revision.id}').toggle()",
+                class: 'icon icon-group' %>
+          <%= link_to l(:title_download),
+                view_dmsf_file_path(@file, download: revision),
+                title: l(:title_title_version_version_download, title: h(revision.title), version: revision.version),
+                class: 'icon icon-download' %>
+          <%= link_to l(:title_obsolete_revision),
+                obsolete_revision_path(revision),
+                data: { confirm: l(:text_are_you_sure) },
+                class: 'icon icon-close' if @file_manipulation_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
+          <%= link_to l(:button_delete),
+                delete_revision_path(revision),
+                data: { confirm: l(:text_are_you_sure) },
+                title: l(:title_delete_revision),
+                class: 'icon icon-del' if @file_delete_allowed && (@file.dmsf_file_revisions.visible.count > 1) %>
+        <% end %>
+      </div>
+      <div id="dmsf_widget_header_text">
         <i><%= l(:info_revision, rev: revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>
         <%= l(:info_changed_by_user, changed: format_time(revision.updated_at)) %>

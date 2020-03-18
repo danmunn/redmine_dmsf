@@ -71,11 +71,7 @@
 }
 
 .dmsf_revision_box {
-  padding: 0 0 0 0;
-  margin-bottom: 10px;
   background-color:#f6f6f6;
-  color:#505050;
-  line-height:1.5em;
 }
 
 .dmsf_revision_inner_box {
@@ -114,11 +110,20 @@ div.dmsf_revision_inner_box .attribute .label {
     float: left;
 }
 
-.dmsf_log_header_box label{
+.dmsf_log_header_box label {
   font-weight: bold;
   margin-left: 0;
   margin-right: 3px;
   padding: 3px 0 3px 0;
+}
+
+#dmsf_widget_header {
+    font-weight: normal;
+    padding: 0 10px 0 10px;
+}
+
+#dmsf_widget_header_text {
+    padding: 5px 0 0 0;
 }
 
 /* Command icons */

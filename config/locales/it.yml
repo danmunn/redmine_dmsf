@@ -402,11 +402,11 @@ it: # Italian strings thx 2 Matteo Arceci!
 
   button_edit_content: Edit content
   field_workflow: Workflow
-  field_modified: Updated
-  field_updated: Updated
-  field_count: Downloads/Email
+  field_modified: Date
+  field_count: D/L
   field_first_at: First
   field_last_at: Last
+  field_size: Size
 
   easy_pages:
     modules:

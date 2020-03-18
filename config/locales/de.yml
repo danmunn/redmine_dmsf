@@ -113,7 +113,7 @@ de:
     ID, %r - Revision). z.B.: %t_%v"
   title_save_preferences: Einstellungen speichern
   heading_revisions: Versionen
-  title_download: Download
+  title_download: Speichern
   title_delete_revision: Lösche Version
   title_obsolete_revision: Obsolete revision
   label_created: Erstellt
@@ -303,7 +303,7 @@ de:
   label_notifications_on: Benachrichtigungen ein
   label_notifications_off: Benachrichtigungen aus
   field_target_file: Quelldatei
-  title_download_entries: Download entries
+  title_download_entries: Speicherung
   label_external: Extern
   label_internal: Internal
 
@@ -385,9 +385,9 @@ de:
   error_file_tmpdir_does_not_exist: "Temporary file path doesn't exist and can't be created"
   error_tmpfile_can_not_be_created: "Files can't be created in temporary file path directory"
 
-  label_email_from_override: From
+  label_email_from_override: Von
   text_email_from_override: The user currently logged in
-  label_email_reply_to: Reply-to
+  label_email_reply_to: Antwort an
 
   label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
   text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
@@ -401,13 +401,13 @@ de:
 
   label_inherited_permissions: Inherited permissions
 
-  button_edit_content: Edit content
+  button_edit_content: Bearbeiten den Inhalt
   field_workflow: Workflow
-  field_modified: Updated
-  field_updated: Updated
-  field_count: Downloads/Email
-  field_first_at: First
-  field_last_at: Last
+  field_modified: Datum
+  field_count: Speicherung
+  field_first_at: Erste
+  field_last_at: Letzte
+  field_size: Größe
 
   easy_pages:
     modules:

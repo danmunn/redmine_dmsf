@@ -402,11 +402,11 @@ cs:
 
   button_edit_content: Upravit obsah
   field_workflow: Workflow
-  field_modified: Aktualizoval
-  field_updated: Aktualizováno
-  field_count: Stažebí/E-mail
+  field_modified: Datum
+  field_count: Stažení
   field_first_at: První
   field_last_at: Poslední
+  field_size: Velikost
 
   easy_pages:
     modules:
