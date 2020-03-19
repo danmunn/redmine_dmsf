@@ -92,7 +92,7 @@ class DmsfFileRevision < ActiveRecord::Base
     remove_extension(filename).gsub(/_+/, ' ');
   end
  
-  def self.easy_activity_custom_project_scope(scope, options, event_type)
+  def self.easy_activity_custom_project_scope(scope, options, _)
     scope.where(dmsf_files: { project_id: options[:project_ids] })
   end
 

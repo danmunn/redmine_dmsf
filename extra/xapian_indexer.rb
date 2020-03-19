@@ -142,7 +142,7 @@ $stem_langs.each do | lang |
   cmd << ' -v' if $verbose > 0
   cmd << ' --retry-failed' if $retryfailed
   log cmd
-  system_or_raise (cmd)
+  system_or_raise cmd
 end
 log 'Redmine DMS documents indexed'
 

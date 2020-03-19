@@ -39,7 +39,7 @@ module RedmineDmsf
             html << "<label class=\"#{classes}\">"
               html << radio_button_tag('dmsf_attachments_upload_choice', 'Attachments',
                     User.current.pref.dmsf_attachments_upload_choice == 'Attachments',
-                    onchange: "$('.attachments-container:not(.dmsf_uploader)').show(); $('.dmsf_uploader').parent().hide(); return false;")
+                    onchange: "$('.attachments-container:not(.dmsf-uploader)').show(); $('.dmsf-uploader').parent().hide(); return false;")
               html << l(:label_basic_attachments)
             html << '</label>'
             unless context[:container] && context[:container].new_record?
@@ -48,12 +48,12 @@ module RedmineDmsf
             html << "<label class=\"#{classes}\">"
               html << radio_button_tag('dmsf_attachments_upload_choice', 'DMSF',
                     User.current.pref.dmsf_attachments_upload_choice == 'DMSF',
-                    onchange: "$('.attachments-container:not(.dmsf_uploader)').hide(); $('.dmsf_uploader').parent().show(); return false;")
+                    onchange: "$('.attachments-container:not(.dmsf-uploader)').hide(); $('.dmsf-uploader').parent().show(); return false;")
               html << l(:label_dmsf_attachments)
             html << '</label>'
           html << '</p>'
           if User.current.pref.dmsf_attachments_upload_choice == 'DMSF'
-            html << context[:hook_caller].late_javascript_tag("$('.attachments-container:not(.dmsf_uploader)').hide();")
+            html << context[:hook_caller].late_javascript_tag("$('.attachments-container:not(.dmsf-uploader)').hide();")
           end
         end
         # Upload form
@@ -151,9 +151,9 @@ module RedmineDmsf
             html << " style=\"#{(User.current.pref.dmsf_attachments_upload_choice == 'Attachments') ? 'display: none;' : ''}\">"
             if label
               html << "<label>#{l(:label_document_plural)}</label>"
-              html << "<span class=\"attachments-container dmsf_uploader\">"
+              html << "<span class=\"attachments-container dmsf-uploader\">"
             else
-              html << "<span class=\"attachments-container dmsf_uploader\" style=\"border: 2px dashed #dfccaf; background: none;\">"
+              html << "<span class=\"attachments-container dmsf-uploader\" style=\"border: 2px dashed #dfccaf; background: none;\">"
             end
                 html << context[:controller].send(:render_to_string,
                   { partial: 'dmsf_upload/form',
@@ -191,7 +191,7 @@ module RedmineDmsf
 
       def attachment_row(dmsf_file, link, issue, controller)
         if link
-          html = +'<tr class="dmsf_gray">'
+          html = +'<tr class="dmsf-gray">'
         else
           html = +'<tr>'
         end

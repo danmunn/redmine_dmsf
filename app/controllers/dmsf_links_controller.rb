@@ -171,7 +171,7 @@ class DmsfLinksController < ApplicationController
       if @dmsf_link.delete(commit)
         flash[:notice] = l(:notice_successful_delete)
       else
-        @dmsf_link.errors.each do |e, msg|
+        @dmsf_link.errors.each do |_, msg|
           flash[:error] = msg
         end
       end

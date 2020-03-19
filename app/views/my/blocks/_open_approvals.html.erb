@@ -96,7 +96,7 @@
                 <% end %>
               <% end %>
             </td>
-            <td class="dmsf_buttons">
+            <td class="dmsf-buttons">
               <%= render partial: 'dmsf_workflows/approval_workflow_button',
                          locals: { file: assignment.dmsf_file_revision.dmsf_file,
                                    file_approval_allowed: User.current.allowed_to?(:file_approval,

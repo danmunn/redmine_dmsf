@@ -23,9 +23,9 @@
 <% if links.present? %>
   <hr/>
   <strong><%= l(:menu_dmsf) %></strong>
-  <div class="attachments dmsf_parent_container">
+  <div class="attachments dmsf-parent-container">
     <% # DMS documents & links %>
-    <% links.each do |dmsf_file, link, create_at| %>
+    <% links.each do |dmsf_file, link, _| %>
         <%= render partial: 'dmsf_files/link', locals: { dmsf_file: dmsf_file, link: link } %>
     <% end %>
     <%= render partial: 'dmsf_files/thumbnails', locals: { links: links, thumbnails: thumbnails, link_to: true } %>

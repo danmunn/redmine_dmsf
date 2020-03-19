@@ -71,16 +71,16 @@
   <%= render(partial: 'file_new_revision') %>
 <% end %>
 
-<div class="dmsf_id_box">
+<div class="dmsf-id-box">
   <strong><%= label_tag('', l(:label_document)) %></strong>
   #<%= "#{@file.id}" %>
 </div>
 
 <h3><%= l(:heading_revisions) %></h3>
 <% @file.dmsf_file_revisions.visible[@revision_pages.offset, @revision_pages.per_page].each do |revision| %>
-  <div class="dmsf_revision_box">
-    <div id="dmsf_widget_header" class="fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">
-      <div class="dmsf_controls contextual">
+  <div class="dmsf-revision-box">
+    <div class="dmsf-widget-header fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">
+      <div class="dmsf-controls contextual">
         <%= actions_dropdown do %>
           <%= link_to_function l(:title_download_entries),
                 "$('#revision_access-#{revision.id}').toggle()",
@@ -100,14 +100,14 @@
                 class: 'icon icon-del' if @file_delete_allowed && (@file.dmsf_file_revisions.visible.count > 1) %>
         <% end %>
       </div>
-      <div id="dmsf_widget_header_text">
+      <div class="dmsf-widget-header-text">
         <i><%= l(:info_revision, rev: revision.id) %></i>
         <%= (revision.source_revision.nil? ? l(:label_created) : l(:label_changed)).downcase %>
         <%= l(:info_changed_by_user, changed: format_time(revision.updated_at)) %>
         <%= link_to(revision.user.name, user_path(revision.user)) if revision.user %>
       </div>
     </div>
-    <div class="attributes dmsf_revision_inner_box">
+    <div class="attributes dmsf-revision-inner-box">
       <div class="splitcontent">
         <div class="splitcontentleft">
             <div class="status attribute">

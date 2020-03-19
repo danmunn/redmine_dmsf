@@ -42,7 +42,7 @@ module RedmineDmsf
               link_to h(value), dmsf_file_path(id: item.id)
             end
           when 'folder', 'folder-link'
-            if(item.id)
+            if item.id
               if item.deleted && (item.deleted > 0)
                 super column, item, value
               else
@@ -76,7 +76,7 @@ module RedmineDmsf
                 class: 'icon icon-folder',
                 title: h(value))
             end
-            tag + content_tag('div', item.filename, class: 'dmsf_filename', title: l(:title_filename_for_download))
+            tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
           when 'folder-link'
             if item.deleted && (item.deleted > 0)
               tag = content_tag('span', value, class: 'icon icon-folder')
@@ -87,7 +87,7 @@ module RedmineDmsf
                       class: 'icon icon-folder',
                       title: h(value))
             end
-            tag + content_tag('div', item.filename, class: 'dmsf_filename', title: l(:label_target_folder))
+            tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:label_target_folder))
           when 'file', 'file-link'
             if item.deleted && (item.deleted > 0)
               tag = content_tag('span', value, class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}")
@@ -103,7 +103,7 @@ module RedmineDmsf
                    title: h(value),
                    'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}")
             end
-            tag + content_tag('div', item.filename, class: 'dmsf_filename', title: l(:title_filename_for_download))
+            tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
           when 'url-link'
             if item.deleted && (item.deleted > 0)
               tag = content_tag('span', value, class: 'icon icon-link')
@@ -111,7 +111,7 @@ module RedmineDmsf
               tag = "<span class=\"dmsf_expander\"></span>".html_safe +
                   link_to(h(value), item.filename, target: '_blank', class: 'icon icon-link')
             end
-            tag + content_tag('div', item.filename, class: 'dmsf_filename', title: l(:field_url))
+            tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:field_url))
           else
             h(value)
           end

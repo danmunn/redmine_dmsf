@@ -23,8 +23,8 @@
 <h3 class="title"><%= l(:title_dmsf_workflow_log) %></h3>
 <p>
     <% if revision %>
-      <div class="dmsf_log_header_box">
-        <div class="dmsf_log_header_left">
+      <div class="dmsf-log-header-box">
+        <div class="dmsf-log-header-left">
           <%= label_tag 'workflow_name', "#{l(:link_workflow)} #{l(:field_name).downcase} " %>
           <% if User.current.allowed_to?(:manage_workflows, @dmsf_workflow.project) %>
             <%= link_to @dmsf_workflow.name, dmsf_workflow_path(@dmsf_workflow) %>

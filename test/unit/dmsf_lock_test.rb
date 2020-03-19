@@ -78,13 +78,13 @@ class DmsfLockTest < RedmineDmsf::Test::UnitTest
  
   def test_locked_folder_cannot_be_unlocked_by_someone_without_rights_or_anon    
     User.current = nil
-    assert_no_difference ('@folder2.lock.count') do
+    assert_no_difference('@folder2.lock.count') do
       assert_raise DmsfLockError do
         @folder2.unlock!
       end
     end
     User.current = @jsmith
-     assert_no_difference ('@folder2.lock.count') do
+     assert_no_difference('@folder2.lock.count') do
       assert_raise DmsfLockError do
         @folder2.unlock!
       end

@@ -99,7 +99,7 @@
 
 <%= context_menu %>
 
-<% unless (@folder && @folder.system) %>
+<% unless @folder && @folder.system %>
     <% other_formats_links do |f| %>
       <%= f.link_to 'CSV', url: { action: :show, id: @project, dmsf_folder_id: @folder } %>
     <% end %>

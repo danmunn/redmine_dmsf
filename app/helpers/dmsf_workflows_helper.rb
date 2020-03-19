@@ -39,7 +39,7 @@ module DmsfWorkflowsHelper
         class: 'objects-selection')
     end
 
-    links = pagination_links_full(principal_pages, principal_count, per_page_links: false) do |text, parameters, options|
+    links = pagination_links_full(principal_pages, principal_count, per_page_links: false) do |text, parameters, _|
       link_to text,
               autocomplete_for_user_dmsf_workflow_path(workflow, parameters.merge(q: params[:q], format: 'js')),
               remote: true

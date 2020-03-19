@@ -19,41 +19,26 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-.list .dmsf_title {
+.list .dmsf-title {
 	width: 40%;
     text-align: left;
 }
 
-.list .dmsf_buttons {
+.list .dmsf-buttons {
 	min-width: 18px;
 }
 
-.list .dmsf_checkbox {
-    width: 15px;
-    padding: 2px 0 0 0;
-}
-
-.list .dmsf_checkbox input {
-    padding: 0;
-}
-
-.dmsf_entries {
-	margin-bottom: 10px;
-	display: block;
-}
-
 /* Revision's downloads box */
-
-#dmsf_buttons.dmsf_controls {
+#dmsf_buttons.dmsf-controls {
     float: left
 }
 
-.dmsf_uploader span[id*="dmsf_"] .filename {
+.dmsf-uploader span[id*="dmsf_"] .filename {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
 }
 
-.dmsf_filename {
+.dmsf-filename {
     padding: 0 10px 0 10px;
     float: right;
     font-size: 0.8em;
@@ -63,36 +48,36 @@
 /* Approval workflow */
 #dmsf_users_for_delegate { height: 200px; overflow:auto; }
 #dmsf_users_for_delegate label { display: block; }
-.dmsf_workflows.locked a { color: #aaa; }
+.dmsf-workflows.locked a { color: #aaa; }
 
 /* DMSF revision box */
 #new_revision_form_content {
     display: none;
 }
 
-.dmsf_revision_box {
+.dmsf-revision-box {
   background-color:#f6f6f6;
 }
 
-.dmsf_revision_inner_box {
+.dmsf-revision-inner-box {
   border: 1px solid #e4e4e4;
   padding: 10px;
 }
 
-div.dmsf_revision_inner_box .attribute {
+div.dmsf-revision-inner-box .attribute {
     padding-left: 180px;
     clear: left;
     min-height: 1.8em;
 }
 
-div.dmsf_revision_inner_box .attribute .label {
+div.dmsf-revision-inner-box .attribute .label {
     width: 170px;
     margin-left: -180px;
     font-weight: bold;
     float: left;
 }
 
-.dmsf_id_box {
+.dmsf-id-box {
   float: right;
   white-space: nowrap;
   line-height: 24px;
@@ -101,28 +86,28 @@ div.dmsf_revision_inner_box .attribute .label {
   padding-left: 10px;
 }
 
-.dmsf_log_header_box{
+.dmsf-log-header-box{
   padding:6px;
   margin-bottom: 10px;
 }
-.dmsf_log_header_left {
+.dmsf-log-header-left {
     width: 50%;
     float: left;
 }
 
-.dmsf_log_header_box label {
+.dmsf-log-header-box label {
   font-weight: bold;
   margin-left: 0;
   margin-right: 3px;
   padding: 3px 0 3px 0;
 }
 
-#dmsf_widget_header {
+.dmsf-widget-header {
     font-weight: normal;
     padding: 0 10px 0 10px;
 }
 
-#dmsf_widget_header_text {
+.dmsf-widget-header-text {
     padding: 5px 0 0 0;
 }
 
@@ -136,9 +121,8 @@ div.dmsf_revision_inner_box .attribute .label {
     height: 16px;
 }
 
-.dmsf_gray .icon-folder { background-image: url(../images/folder_gray.png); }
-.dmsf_system .icon-folder { background-image: url(../images/folder_system.png); }
-.dmsf_system_closed .icon-folder { background-image: url(../images/folder_system_closed.png); }
+.dmsf-gray .icon-folder { background-image: url(../images/folder_gray.png); }
+.dmsf-system .icon-folder { background-image: url(../images/folder_system.png); }
 
 .icon-file.filetype-doc, .icon-file.filetype-docx { background-image: url(../images/filetypes/doc.png); }
 .icon-file.filetype-xls, .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls.png); }
@@ -151,55 +135,55 @@ div.dmsf_revision_inner_box .attribute .label {
 .icon-file.filetype-odp { background-image: url(../images/filetypes/odp.png); }
 .icon-file.filetype-odg { background-image: url(../images/filetypes/odg.png); }
 
-.dmsf_gray .icon-file.filetype-doc { background-image: url(../images/filetypes/doc_gray.png); }
-.dmsf_gray .icon-file.filetype-docx { background-image: url(../images/filetypes/doc_gray.png); }
-.dmsf_gray .icon-file.filetype-xls { background-image: url(../images/filetypes/xls_gray.png); }
-.dmsf_gray .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls_gray.png); }
-.dmsf_gray .icon-file.filetype-ppt { background-image: url(../images/filetypes/ppt_gray.png); }
-.dmsf_gray .icon-file.filetype-pptx { background-image: url(../images/filetypes/ppt_gray.png); }
-.dmsf_gray .icon-file.filetype-vsd { background-image: url(../images/filetypes/vsd_gray.png); }
-.dmsf_gray .icon-file.filetype-vsdx { background-image: url(../images/filetypes/vsd_gray.png); }
-.dmsf_gray .icon-file.filetype-mpp { background-image: url(../images/filetypes/mpp_gray.png); }
-.dmsf_gray .icon-file.filetype-odt { background-image: url(../images/filetypes/odt_gray.png); }
-.dmsf_gray .icon-file.filetype-ott { background-image: url(../images/filetypes/ott_gray.png); }
-.dmsf_gray .icon-file.filetype-ods { background-image: url(../images/filetypes/ods_gray.png); }
-.dmsf_gray .icon-file.filetype-odp { background-image: url(../images/filetypes/odp_gray.png); }
-.dmsf_gray .icon-file.filetype-odg { background-image: url(../images/filetypes/odg_gray.png); }
+.dmsf-gray .icon-file.filetype-doc { background-image: url(../images/filetypes/doc_gray.png); }
+.dmsf-gray .icon-file.filetype-docx { background-image: url(../images/filetypes/doc_gray.png); }
+.dmsf-gray .icon-file.filetype-xls { background-image: url(../images/filetypes/xls_gray.png); }
+.dmsf-gray .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls_gray.png); }
+.dmsf-gray .icon-file.filetype-ppt { background-image: url(../images/filetypes/ppt_gray.png); }
+.dmsf-gray .icon-file.filetype-pptx { background-image: url(../images/filetypes/ppt_gray.png); }
+.dmsf-gray .icon-file.filetype-vsd { background-image: url(../images/filetypes/vsd_gray.png); }
+.dmsf-gray .icon-file.filetype-vsdx { background-image: url(../images/filetypes/vsd_gray.png); }
+.dmsf-gray .icon-file.filetype-mpp { background-image: url(../images/filetypes/mpp_gray.png); }
+.dmsf-gray .icon-file.filetype-odt { background-image: url(../images/filetypes/odt_gray.png); }
+.dmsf-gray .icon-file.filetype-ott { background-image: url(../images/filetypes/ott_gray.png); }
+.dmsf-gray .icon-file.filetype-ods { background-image: url(../images/filetypes/ods_gray.png); }
+.dmsf-gray .icon-file.filetype-odp { background-image: url(../images/filetypes/odp_gray.png); }
+.dmsf-gray .icon-file.filetype-odg { background-image: url(../images/filetypes/odg_gray.png); }
 
-.dmsf_gray .icon-file.text-x-c { background-image: url(../images/filetypes/c_gray.png); }
-.dmsf_gray .icon-file.text-x-csharp { background-image: url(../images/filetypes/csharp_gray.png); }
-.dmsf_gray .icon-file.text-x-java { background-image: url(../images/filetypes/java_gray.png); }
-.dmsf_gray .icon-file.text-x-javascript { background-image: url(../images/filetypes/js_gray.png); }
-.dmsf_gray .icon-file.text-x-php { background-image: url(../images/filetypes/php_gray.png); }
-.dmsf_gray .icon-file.text-x-ruby { background-image: url(../images/filetypes/ruby_gray.png); }
-.dmsf_gray .icon-file.text-xml { background-image: url(../images/filetypes/xml_gray.png); }
-.dmsf_gray .icon-file.text-css { background-image: url(../images/filetypes/css_gray.png); }
-.dmsf_gray .icon-file.text-html { background-image: url(../images/filetypes/html_gray.png); }
-.dmsf_gray .icon-file.image-gif { background-image: url(../images/filetypes/image_gray.png); }
-.dmsf_gray .icon-file.image-jpeg { background-image: url(../images/filetypes/image_gray.png); }
-.dmsf_gray .icon-file.image-png { background-image: url(../images/filetypes/image_gray.png); }
-.dmsf_gray .icon-file.image-tiff { background-image: url(../images/filetypes/image_gray.png); }
-.dmsf_gray .icon-file.application-pdf { background-image: url(../images/filetypes/pdf_gray.png); }
-.dmsf_gray .icon-file.application-zip { background-image: url(../images/filetypes/zip_gray.png); }
-.dmsf_gray .icon-file.application-x-gzip { background-image: url(../images/filetypes/zip_gray.png); }
+.dmsf-gray .icon-file.text-x-c { background-image: url(../images/filetypes/c_gray.png); }
+.dmsf-gray .icon-file.text-x-csharp { background-image: url(../images/filetypes/csharp_gray.png); }
+.dmsf-gray .icon-file.text-x-java { background-image: url(../images/filetypes/java_gray.png); }
+.dmsf-gray .icon-file.text-x-javascript { background-image: url(../images/filetypes/js_gray.png); }
+.dmsf-gray .icon-file.text-x-php { background-image: url(../images/filetypes/php_gray.png); }
+.dmsf-gray .icon-file.text-x-ruby { background-image: url(../images/filetypes/ruby_gray.png); }
+.dmsf-gray .icon-file.text-xml { background-image: url(../images/filetypes/xml_gray.png); }
+.dmsf-gray .icon-file.text-css { background-image: url(../images/filetypes/css_gray.png); }
+.dmsf-gray .icon-file.text-html { background-image: url(../images/filetypes/html_gray.png); }
+.dmsf-gray .icon-file.image-gif { background-image: url(../images/filetypes/image_gray.png); }
+.dmsf-gray .icon-file.image-jpeg { background-image: url(../images/filetypes/image_gray.png); }
+.dmsf-gray .icon-file.image-png { background-image: url(../images/filetypes/image_gray.png); }
+.dmsf-gray .icon-file.image-tiff { background-image: url(../images/filetypes/image_gray.png); }
+.dmsf-gray .icon-file.application-pdf { background-image: url(../images/filetypes/pdf_gray.png); }
+.dmsf-gray .icon-file.application-zip { background-image: url(../images/filetypes/zip_gray.png); }
+.dmsf-gray .icon-file.application-x-gzip { background-image: url(../images/filetypes/zip_gray.png); }
 
 /* Activities */
 .icon-dmsf-file-revision { background-image: url(../../../images/document.png); }
 
 /* Links */
-.dmsf_gray { color: #AAA }
+.dmsf-gray { color: #AAA }
 
-.dmsf_gray a, .dmsf_gray a:link, .dmsf_gray a:visited {
+.dmsf-gray a, .dmsf-gray a:link, .dmsf-gray a:visited {
     color: #484848;
     text-decoration: none;
 }
 
 /* System folders */
-.dmsf_system {
+.dmsf-system {
     color: #5C82AD
 }
 
-.dmsf_system a, .dmsf_gray a:link, .dmsf_gray a:visited {
+.dmsf-system a, .dmsf-gray a:link, .dmsf-gray a:visited {
     color: #484848;
     text-decoration: none;
 }
@@ -208,55 +192,42 @@ div.dmsf_revision_inner_box .attribute .label {
 .icon-dmsf-file { background-image: url(../../../images/document.png); }
 
 /* DMSF tree view */
-.dmsf_hidden { display:none; }
-.dmsf_tree span.dmsf_expander { cursor: pointer; }
-.dmsf_tree.dmsf_expanded td.dmsf_title span {
+.dmsf-hidden { display:none; }
+.dmsf-tree span.dmsf_expander { cursor: pointer; }
+.dmsf-tree.dmsf_expanded td.dmsf-title span {
     background: url(../../../images/arrow_down.png) no-repeat 0 50%;
     padding-left: 16px;
 }
-.dmsf_tree.dmsf_child .dmsf_title span { padding-left: 16px; }
-.dmsf_tree.dmsf_collapsed .dmsf_title span {
+.dmsf-tree.dmsf_child .dmsf-title span { padding-left: 16px; }
+.dmsf-tree.dmsf_collapsed .dmsf-title span {
     background: url(../../../images/arrow_right.png) no-repeat 0 50%;
     padding-left: 16px;
 }
-.dmsf_tree.idnt-1 .dmsf_title { padding-left: 1.5em; }
-.dmsf_tree.idnt-2 .dmsf_title { padding-left: 2em; }
-.dmsf_tree.idnt-3 .dmsf_title { padding-left: 2.5em; }
-.dmsf_tree.idnt-4 .dmsf_title { padding-left: 3em; }
-.dmsf_tree.idnt-5 .dmsf_title { padding-left: 3.5em; }
-.dmsf_tree.idnt-6 .dmsf_title { padding-left: 4em; }
-.dmsf_tree.idnt-7 .dmsf_title { padding-left: 4.5em; }
-.dmsf_tree.idnt-8 .dmsf_title { padding-left: 5em; }
-.dmsf_tree.idnt-9 .dmsf_title { padding-left: 5.5em; }
+.dmsf-tree.idnt-1 .dmsf-title { padding-left: 1.5em; }
+.dmsf-tree.idnt-2 .dmsf-title { padding-left: 2em; }
+.dmsf-tree.idnt-3 .dmsf-title { padding-left: 2.5em; }
+.dmsf-tree.idnt-4 .dmsf-title { padding-left: 3em; }
+.dmsf-tree.idnt-5 .dmsf-title { padding-left: 3.5em; }
+.dmsf-tree.idnt-6 .dmsf-title { padding-left: 4em; }
+.dmsf-tree.idnt-7 .dmsf-title { padding-left: 4.5em; }
+.dmsf-tree.idnt-8 .dmsf-title { padding-left: 5em; }
+.dmsf-tree.idnt-9 .dmsf-title { padding-left: 5.5em; }
 
-.dmsf_select_version {
+.dmsf-select-version {
     max-width: 50px;
 }
 
-.dmsf_parent_container {
+.dmsf-parent-container {
     overflow: hidden;
 }
 
-.dmsf_child_container {
-    float: left;
-    text-align: left;
-}
-
-.dmsf_select_version {
-    max-width: 50px;
-}
-
-.dmsf_parent_container {
-    overflow: hidden;
-}
-
-.dmsf_child_container {
+.dmsf-child-container {
     float: left;
     text-align: left;
 }
 
 /* DMSF file upload */
-.dmsf_uploader {
+.dmsf-uploader {
     padding:10px;
     margin-bottom: 20px;
     background-color:#f6f6f6;
@@ -270,16 +241,9 @@ div.dmsf_revision_inner_box .attribute .label {
     overflow: hidden;
 }
 
-.dmsf_add_link {
+.dmsf-add-link {
     display: block;
     float: right;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.dmsf_add_file {
-    display: block;
-    float: left;
     margin-top: 10px;
     margin-bottom: 10px;
 }

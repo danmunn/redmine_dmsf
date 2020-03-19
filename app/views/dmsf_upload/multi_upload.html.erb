@@ -25,7 +25,7 @@
 <%= form_tag({ controller: 'dmsf_upload', action: 'upload_files', id: @project, folder_id: @folder },
              id: 'uploadform', method: :post, multipart: true) do %>
   <div>
-    <span class="dmsf_uploader">
+    <span class="dmsf-uploader">
       <%= render partial: 'dmsf_upload/form',
                  locals: { multiple: true, container: nil, description: true, awf: false } %>
     </span>

@@ -83,9 +83,9 @@
             <div id="<%= "step-index-#{index}-approvers-form" %>" class="hol">
               <%= form_for(@dmsf_workflow, url: update_step_dmsf_workflow_path(step: index), method: :put,
                            html: { id: "step-index-operator-#{index}-form"}) do |_| %>
-                <div class="dmsf_parent_container">
+                <div class="dmsf-parent-container">
                   <% stps.each do |step| %>
-                      <div class="dmsf_child_container">
+                      <div class="dmsf-child-container">
                         <label>
                           <%= radio_button_tag "operator_step[#{step.id}]", DmsfWorkflowStep::OPERATOR_AND,
                             step.operator == DmsfWorkflowStep::OPERATOR_AND %>
@@ -100,7 +100,7 @@
                         <br/>
                         &nbsp;<%= delete_link delete_step_dmsf_workflow_path(step: step.id) %>
                       </div>
-                      <div class="dmsf_child_container">
+                      <div class="dmsf-child-container">
                         <%= select_tag "assignee[#{step.id}]",
                                         principals_options_for_select(@approving_candidates | [step.user], step.user),
                                         include_blank: false %>

@@ -130,7 +130,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_response :forbidden
   end
 
-  def test_delete_not_empty
+  def test_delete_with_parmission_but_not_empty
     # Permissions OK but the folder is not empty
     @role.add_permission! :folder_manipulation
     get :delete, params: { id: @project, folder_id: @folder1.id, commit: false}

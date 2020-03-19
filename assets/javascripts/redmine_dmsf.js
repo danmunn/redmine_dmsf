@@ -22,35 +22,35 @@
 /* Function to allow the projects to show up as a tree */
 function dmsfToggle(EL, PM, url)
 {
-  var els = document.querySelectorAll('tr.dmsf_tree');
-  var elsLen = els.length;
-  var pattern = new RegExp("(^|\\s)" + EL + "(\\s|$)");
-  var cpattern = new RegExp('span');
-  var expand = new RegExp('dmsf_expanded');
-  var collapse = new RegExp('dmsf_collapsed');
-  var hide = new RegExp('dmsf_hidden');
-  var spanid = PM;
-  var classid = new RegExp('junk');
-  var oddeventoggle = 0;
+  let els = document.querySelectorAll('tr.dmsf-tree');
+  let elsLen = els.length;
+  let pattern = new RegExp("(^|\\s)" + EL + "(\\s|$)");
+  let cpattern = new RegExp('span');
+  let expand = new RegExp('dmsf_expanded');
+  let collapse = new RegExp('dmsf_collapsed');
+  let hide = new RegExp('dmsf-hidden');
+  let spanid = PM;
+  let classid = new RegExp('junk');
+  let oddeventoggle = 0;
 
   // Expand not yet loaded selected row
-  var selectedRow = document.getElementById(PM);
+  let selectedRow = document.getElementById(PM);
 
   if(selectedRow.className.indexOf('dmsf-not-loaded') >= 0){
 
     dmsfExpandRows(EL, selectedRow, url);
   }
 
-  for(var i = 0; i < elsLen; i++)
+  for(let i = 0; i < elsLen; i++)
   {
     if(cpattern.test(els[i].id))
     {
-      var tmpspanid = spanid;
-      var tmpclassid = classid;
+      let tmpspanid = spanid;
+      let tmpclassid = classid;
 
       spanid = els[i].id;
       classid = spanid;
-      m = classid.match(/(\w+)span/);
+      let m = classid.match(/(\w+)span/);
       if(m) {
           classid = m[1];
       }
@@ -70,11 +70,11 @@ function dmsfToggle(EL, PM, url)
     {
       let cnames = els[i].className;
 
-      cnames = cnames.replace(/dmsf_hidden/g,'');
+      cnames = cnames.replace(/dmsf-hidden/g,'');
 
       if(expand.test(selectedRow.className))
       {
-        cnames += ' dmsf_hidden';
+        cnames += ' dmsf-hidden';
       }
       else
       {
@@ -82,7 +82,7 @@ function dmsfToggle(EL, PM, url)
         {
           if(collapse.test(document.getElementById(spanid).className))
           {
-            cnames += ' dmsf_hidden';
+            cnames += ' dmsf-hidden';
           }
         }
       }
@@ -132,10 +132,10 @@ function dmsfExpandRows(EL, parentRow, url) {
 
   parentRow.className = parentRow.className.replace(/dmsf-not-loaded/, '');
 
-  var idnt = 0;
-  var pos = $(parentRow).find('.dmsf_position').text();
-  var classes = '';
-  var m = parentRow.className.match(/idnt-(\d+)/);
+  let idnt = 0;
+  let pos = $(parentRow).find('.dmsf_position').text();
+  let classes = '';
+  let m = parentRow.className.match(/idnt-(\d+)/);
 
   if(m){
     idnt = m[1];

@@ -23,7 +23,7 @@
 class DmsfTitleQueryColumn < QueryColumn
 
   def css_classes
-    'dmsf_title'
+    'dmsf-title'
   end
 
 end

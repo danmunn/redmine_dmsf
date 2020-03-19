@@ -114,7 +114,7 @@ class DmsfUploadController < ApplicationController
     if attachments
       @folder = DmsfFolder.visible.find_by(id: attachments[:folder_id]) if attachments[:folder_id].present?
       # standard file input uploads
-      uploaded_files = attachments.select { |key, value| key == 'uploaded_file'}
+      uploaded_files = attachments.select { |key, _| key == 'uploaded_file'}
       uploaded_files.each do |_, uploaded_file|
         upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
         if upload

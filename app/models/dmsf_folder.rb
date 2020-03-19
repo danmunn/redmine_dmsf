@@ -534,15 +534,15 @@ class DmsfFolder < ActiveRecord::Base
     classes = []
     if trash
       if title =~ /^\./
-        classes << 'dmsf_system'
+        classes << 'dmsf-system'
       else
         classes << 'hascontextmenu'
         if type =~ /link$/
-          classes << 'dmsf_gray'
+          classes << 'dmsf-gray'
         end
       end
     else
-      classes << 'dmsf_tree'
+      classes << 'dmsf-tree'
       if type == 'folder'
         classes << 'dmsf_collapsed'
         classes << 'dmsf-not-loaded'
@@ -550,7 +550,7 @@ class DmsfFolder < ActiveRecord::Base
         classes << 'dmsf_child'
       end
       if title =~ /^\./
-        classes << 'dmsf_system'
+        classes << 'dmsf-system'
       else
         classes << 'hascontextmenu'
         classes << 'dmsf-draggable'
@@ -558,7 +558,7 @@ class DmsfFolder < ActiveRecord::Base
           classes << 'dmsf-droppable'
         end
         if type =~ /link$/
-          classes << 'dmsf_gray'
+          classes << 'dmsf-gray'
         end
       end
     end
