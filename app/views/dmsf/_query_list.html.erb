@@ -27,13 +27,18 @@
   <%= hidden_field_tag 'back_url', url_for(params: request.query_parameters), id: nil %>
   <%= query_columns_hidden_tags(query) %>
   <div class="autoscroll">
-    <table class="list dmsf odd-even <%= query.css_classes %>">
+    <table class="list dmsf odd-even <%= query.css_classes %> context_menu-container" data-hascontextmenu="true">
       <thead>
       <tr>
-        <th class="checkbox hide-when-print">
-          <%= check_box_tag 'check_all', '', false, class: 'toggle-selection',
-                            title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
-        </th>
+        <% if defined?(EasyExtensions) %>
+          <%# Easy checkbox %>
+          <%= content_tag :th, link_to_function('', 'EASY.contextMenu.toggleIssuesSelection($(this))',
+               title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}", class: 'icon icon-checked') %>
+        <% else %>
+          <th class="checkbox hide-when-print">
+            <%= check_box_tag 'check_all', '', false, class: 'toggle-selection', title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+          </th>
+        <% end %>
         <% query.inline_columns.each do |column| %>
           <%= column_header(query, column, query_options) %>
         <% end %>

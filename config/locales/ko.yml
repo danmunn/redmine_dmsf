@@ -402,6 +402,7 @@ ko:
   button_edit_content: 내용 편집
   field_workflow: 작업 흐름
   field_modified: 수정 날짜
+  field_updated: 수정 날짜
   field_count: 다운로드
   field_first_at: 처음
   field_last_at: 마지막

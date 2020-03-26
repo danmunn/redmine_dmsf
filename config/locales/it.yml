@@ -403,6 +403,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   button_edit_content: Edit content
   field_workflow: Workflow
   field_modified: Date
+  field_updated: Date
   field_count: D/L
   field_first_at: First
   field_last_at: Last

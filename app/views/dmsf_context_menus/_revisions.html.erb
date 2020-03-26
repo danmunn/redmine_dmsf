@@ -1,0 +1,40 @@
+<%
+  # encoding: utf-8
+  #
+  # Redmine plugin for Document Management System "Features"
+  #
+  # Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+  #
+  # This program is free software; you can redistribute it and/or
+  # modify it under the terms of the GNU General Public License
+  # as published by the Free Software Foundation; either version 2
+  # of the License, or (at your option) any later version.
+  #
+  # This program is distributed in the hope that it will be useful,
+  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  # GNU General Public License for more details.
+  #
+  # You should have received a copy of the GNU General Public License
+  # along with this program; if not, write to the Free Software
+  # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<% if file.notification %>
+  <%= link_to l(:label_notifications_off),
+              notify_deactivate_dmsf_files_path(id: file),
+              title: l(:title_notifications_active_deactivate),
+              class: 'icon icon-email' %>
+<% else %>
+  <%= link_to l(:label_notifications_on),
+              notify_activate_dmsf_files_path(id: file),
+              title: l(:title_notifications_not_active_activate),
+              class: 'icon icon-email-add' %>
+<% end %>
+<%= link_to l(:label_link_to),
+            new_dmsf_link_path(project_id: project.id, dmsf_folder_id: file.dmsf_folder ? file.dmsf_folder.id : nil, dmsf_file_id: file.id, type: 'link_to'),
+            title: l(:title_create_link),
+            class: 'icon icon-link' %>
+<%= link_to "#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: file),
+            title: l(:title_copy), class: 'icon icon-copy' %>
+<%= delete_link(dmsf_file_path(id: file, details: true)) if file_delete_allowed %>

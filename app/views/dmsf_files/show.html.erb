@@ -39,31 +39,20 @@
         <%= link_to l(:button_lock), lock_dmsf_files_path(id: @file),
                     title: l(:title_lock_file), class: 'icon icon-lock' %>
       <% end %>
-      <%= actions_dropdown do %>
-        <% if @file.notification %>
-          <%= link_to l(:label_notifications_off),
-                      notify_deactivate_dmsf_files_path(id: @file),
-                      title: l(:title_notifications_active_deactivate),
-                      class: 'icon icon-email' %>
-        <% else %>
-          <%= link_to l(:label_notifications_on),
-                      notify_activate_dmsf_files_path(id: @file),
-                      title: l(:title_notifications_not_active_activate),
-                      class: 'icon icon-email-add' %>
+      <% if defined?(EasyExtensions) %>
+        <%= render partial: 'dmsf_context_menus/revisions',
+                   locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed } %>
+      <% else %>
+        <%= actions_dropdown do %>
+          <%= render partial: 'dmsf_context_menus/revisions',
+                     locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed } %>
         <% end %>
-        <%= link_to l(:label_link_to),
-                    new_dmsf_link_path(project_id: @project.id, dmsf_folder_id: @file.dmsf_folder ? @file.dmsf_folder.id : nil, dmsf_file_id: @file.id, type: 'link_to'),
-                    title: l(:title_create_link),
-                    class: 'icon icon-link' %>
-        <%= link_to "#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: @file),
-                    title: l(:title_copy), class: 'icon icon-copy' %>
-        <%= delete_link(dmsf_file_path(id: @file, details: true)) if @file_delete_allowed %>
       <% end %>
     <% end %>
   <% end %>
 </div>
 
-<%= render partial: '/dmsf/path', locals: { folder: @file.dmsf_folder, filename: @file.title, title: nil} %>
+<%= render partial: '/dmsf/path', locals: { folder: @file.dmsf_folder, filename: @file.title, title: nil } %>
 
 <% if @file_manipulation_allowed && !@file.locked_for_user? %>
   <%= error_messages_for('file') %>
@@ -81,23 +70,16 @@
   <div class="dmsf-revision-box">
     <div class="dmsf-widget-header fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix">
       <div class="dmsf-controls contextual">
-        <%= actions_dropdown do %>
-          <%= link_to_function l(:title_download_entries),
-                "$('#revision_access-#{revision.id}').toggle()",
-                class: 'icon icon-group' %>
-          <%= link_to l(:title_download),
-                view_dmsf_file_path(@file, download: revision),
-                title: l(:title_title_version_version_download, title: h(revision.title), version: revision.version),
-                class: 'icon icon-download' %>
-          <%= link_to l(:title_obsolete_revision),
-                obsolete_revision_path(revision),
-                data: { confirm: l(:text_are_you_sure) },
-                class: 'icon icon-close' if @file_manipulation_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
-          <%= link_to l(:button_delete),
-                delete_revision_path(revision),
-                data: { confirm: l(:text_are_you_sure) },
-                title: l(:title_delete_revision),
-                class: 'icon icon-del' if @file_delete_allowed && (@file.dmsf_file_revisions.visible.count > 1) %>
+        <% if defined?(EasyExtensions) %>
+          <%= render partial: 'dmsf_context_menus/revision_actions',
+                     locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed,
+                               file_manipulation_allowed: @file_manipulation_allowed, revision: @revision } %>
+        <% else %>
+          <%= actions_dropdown do %>
+            <%= render partial: 'dmsf_context_menus/revision_actions',
+                       locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed,
+                                 file_manipulation_allowed: @file_manipulation_allowed, revision: @revision } %>
+          <% end %>
         <% end %>
       </div>
       <div class="dmsf-widget-header-text">

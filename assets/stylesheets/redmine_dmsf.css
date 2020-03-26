@@ -111,6 +111,15 @@ div.dmsf-revision-inner-box .attribute .label {
     padding: 5px 0 0 0;
 }
 
+.dmsf-revision-access { /* EasyExtension */
+    margin-left: 0;
+    margin-right: 0;
+}
+
+div.dmsf-controls .dmsf-revision-action-button { /* EasyExtension */
+    border-style: none;
+}
+
 /* Command icons */
 .icon-link { background-image: url(../../../images/link.png); }
 .icon-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
@@ -203,15 +212,15 @@ div.dmsf-revision-inner-box .attribute .label {
     background: url(../../../images/arrow_right.png) no-repeat 0 50%;
     padding-left: 16px;
 }
-.dmsf-tree.idnt-1 .dmsf-title { padding-left: 1.5em; }
-.dmsf-tree.idnt-2 .dmsf-title { padding-left: 2em; }
-.dmsf-tree.idnt-3 .dmsf-title { padding-left: 2.5em; }
-.dmsf-tree.idnt-4 .dmsf-title { padding-left: 3em; }
-.dmsf-tree.idnt-5 .dmsf-title { padding-left: 3.5em; }
-.dmsf-tree.idnt-6 .dmsf-title { padding-left: 4em; }
-.dmsf-tree.idnt-7 .dmsf-title { padding-left: 4.5em; }
-.dmsf-tree.idnt-8 .dmsf-title { padding-left: 5em; }
-.dmsf-tree.idnt-9 .dmsf-title { padding-left: 5.5em; }
+.dmsf-tree.idnt-1 td.dmsf-title { padding-left: 2.5em; }
+.dmsf-tree.idnt-2 td.dmsf-title { padding-left: 3em; }
+.dmsf-tree.idnt-3 td.dmsf-title { padding-left: 3.5em; }
+.dmsf-tree.idnt-4 td.dmsf-title { padding-left: 4em; }
+.dmsf-tree.idnt-5 td.dmsf-title { padding-left: 4.5em; }
+.dmsf-tree.idnt-6 td.dmsf-title { padding-left: 5em; }
+.dmsf-tree.idnt-7 td.dmsf-title { padding-left: 5.5em; }
+.dmsf-tree.idnt-8 td.dmsf-title { padding-left: 6em; }
+.dmsf-tree.idnt-9 td.dmsf-title { padding-left: 6.5em; }
 
 .dmsf-select-version {
     max-width: 50px;
@@ -314,3 +323,13 @@ div.dmsf-revision-inner-box .attribute .label {
 #dmsf_csv_export_options {
     display: none;
 }
+
+/* EasyExtensions - font icons */
+.icon-actions::before {
+    content: "\F1D8" !important;
+}
+
+/*.icon-only {
+    overflow: hidden;
+    display: inline-block;
+}*/
