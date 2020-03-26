@@ -86,10 +86,10 @@ class DmsfFilesController < ApplicationController
     @file_delete_allowed = User.current.allowed_to?(:file_delete, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @revision_pages = Paginator.new @file.dmsf_file_revisions.visible.count, params['per_page'] ? params['per_page'].to_i : 25, params['page']
-    @revision_access_query = retrieve_query(DmsfFileRevisionAccessQuery, true)
-    @revision_access_query.revision_id = @revision.id
-    @revision_access_count = @revision_access_query.access_count
-    @revision_access_pages = Paginator.new @revision_access_count, per_page_option, params['page']
+    #@revision_access_query = retrieve_query(DmsfFileRevisionAccessQuery, false)
+    # @revision_access_query.revision_id = @revision.id
+    # @revision_access_count = @revision_access_query.access_count
+    # @revision_access_pages = Paginator.new @revision_access_count, per_page_option, params['page']
 
     respond_to do |format|
       format.html {

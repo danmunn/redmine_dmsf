@@ -73,12 +73,12 @@
         <% if defined?(EasyExtensions) %>
           <%= render partial: 'dmsf_context_menus/revision_actions',
                      locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed,
-                               file_manipulation_allowed: @file_manipulation_allowed, revision: @revision } %>
+                               file_manipulation_allowed: @file_manipulation_allowed, revision: revision } %>
         <% else %>
           <%= actions_dropdown do %>
             <%= render partial: 'dmsf_context_menus/revision_actions',
                        locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed,
-                                 file_manipulation_allowed: @file_manipulation_allowed, revision: @revision } %>
+                                 file_manipulation_allowed: @file_manipulation_allowed, revision: revision } %>
           <% end %>
         <% end %>
       </div>
@@ -156,9 +156,14 @@
       </div>
       <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">
         <% if @file_manipulation_allowed %>
-          <%= render partial: 'revision_access', locals: { revision: revision, query: @query,
-                                                           revision_access_count: @revision_access_count,
-                                                           revision_access_pages: @revision_access_pages } %>
+          <% revision_access_query = DmsfFileRevisionAccessQuery.new %>
+          <% revision_access_query.revision_id = revision.id  %>
+          <% revision_access_count = revision_access_query.access_count  %>
+          <% revision_access_pages = Redmine::Pagination::Paginator.new revision_access_count,
+               Setting.per_page_options_array.first || 25, params['page'] %>
+          <%= render partial: 'revision_access', locals: { revision: revision, query: revision_access_query,
+                                                           revision_access_count: revision_access_count,
+                                                           revision_access_pages: revision_access_pages } %>
         <% end %>
       </div>
     </div>
