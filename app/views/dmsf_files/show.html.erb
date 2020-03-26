@@ -154,7 +154,7 @@
           <%= render 'dmsf/custom_fields', object: revision %>
         </div>
       </div>
-      <div id="<%= "revision_access-#{revision.id}" %>" style="display:none">
+      <div id="<%= "revision_access_#{revision.id}" %>">
         <% if @file_manipulation_allowed %>
           <% revision_access_query = DmsfFileRevisionAccessQuery.new %>
           <% revision_access_query.revision_id = revision.id  %>

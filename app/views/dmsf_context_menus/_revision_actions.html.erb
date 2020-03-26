@@ -21,7 +21,7 @@
 %>
 
 <%= link_to_function l(:title_download_entries),
-                     "$('#revision_access-#{revision.id}').toggle()",
+                     "$('#revision_access_#{revision.id}').toggle(); $('.drdn.expanded').removeClass('expanded');",
                      class: 'icon icon-group dmsf-revision-action-button' %>
 <%= link_to l(:title_download),
             view_dmsf_file_path(file, download: revision),
