@@ -29,6 +29,8 @@
       <%= render partial: 'dmsf_upload/form',
                  locals: { multiple: true, container: nil, description: true, awf: false } %>
     </span>
-    <%= submit_tag l(:label_upload) %>
+    <div class="form-actions">
+      <%= submit_tag l(:label_upload), class: 'button-positive' %>
+    </div>
   </div>
 <% end %>
