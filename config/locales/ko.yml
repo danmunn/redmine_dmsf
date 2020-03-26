@@ -1,10 +1,10 @@
-
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright (C) 2011-19 Karel Pičman <karel.picman@kontron.com>
-#
+# Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -89,7 +89,7 @@ ko:
   title_download_checked: Zip 압축하여 다운로드
   title_send_checked_by_email: 전자 우편에서 발송 체크
   link_user_preferences: DMS 프로젝트 선호도
-  heading_send_documents_by_email: 전자 우편로 문서 발송
+  heading_send_documents_by_email: 전자 우편으로 문서 발송
   label_email_from: 보낸이
   label_email_to: 수신인
   label_email_cc: 참조
@@ -110,6 +110,7 @@ ko:
   select_option_activated: 활성화
   label_title_format: 제목 포맷
   text_title_format: "다운로드한 문서 제목 포맷 (%t - 제목, %f - 파일, %d - 날짜, %v - 버전, %i - ID, %r - 수정사항). 예시: %t_%v"
+
   title_save_preferences: 선호 사항 저장
   heading_revisions: 수정
   title_download: 다운로드
@@ -130,8 +131,8 @@ ko:
   label_maximum_files_download: 최대 다운로드 개수
   note_maximum_number_of_files_downloaded: Zip 혹은 전자 우편을 통해 다운로드 할 수 있는 최대 파일 수 제한. 0은 무제한을 나타냅니다.
 
-  label_file_storage_directory: 파일 저장 장소
-  label_index_database: 인덱스 데이터 베이스
+  label_file_storage_directory: 파일 저장 디렉터리
+  label_index_database: 데이터베이스 색인
   label_stemming_language: 형태소 분석 언어
   note_possible_values: 가능한 값
   note_pass_none_to_disable_stemming: "형태소 분석을 비활성화하기 위해선 '없음'을 선택"
@@ -142,7 +143,7 @@ ko:
   text_stemming_info: "이 설정은 질의 해석기가 어떻게 형태소 분석 알고리즘을 적용할 것인지를 선택합니다. 기본값은 '없음'입니다.
     가능한 값들은 다음과 같습니다:
     없음 - 형태소 분석을 수행하지 않습니다,
-    부분적 - 대문자로 시작하거나 특정 문자(현재:'/@<>=*[{\"')가 뒤 따르거나 위치 정보가 필요한 연산자와 함께 사용되는 단어를 제외하고 형태소 분석을 합니다. 형태소 양식 앞에는 'Z' 접두어가 붙습니다.
+    부분적 - 대문자로 시작하거나 특정 문자(현재:'/@<>=*[{\"')가 뒤 따르거나 위치 정보가 필요한 연산자와 함께 사용되는 단어를 제외하고 형태소 분석을 합니다. 형태소 양식 앞에는 'Z' 접두어가 붙습니다,
     모두 - 모든 단어에 대해 형태소 분석을 합니다 (참고: 'Z' 접두어가 붙지 않음)."
   label_default_notifications: 파일 기본 알림
   heading_uploaded_files: 업로드 된 파일
@@ -160,7 +161,7 @@ ko:
   permission_file_delete: 문서 삭제
   permission_display_system_folders: 시스템 폴더를 표시
   permission_file_approval: 승인된 파일
-  permission_email_documents: 전자 우편 문서
+  permission_email_documents: 전자 우편 전송
   label_file: 파일
   field_folder: 폴더
   error_file_commit_require_uploaded_file: 파일은 업로드 파일이 필요합니다
@@ -230,6 +231,7 @@ ko:
 
   note_webdav_strategy: 관리자가 WebDAV 최종 사용자를 위한 권한(읽기 전용 혹은 읽기/쓰기)을 결정할 수 있습니다.
 
+
   error_unable_delete_dmsf_workflow: 작업 흐름 삭제 불가
   error_empty_note: 이 노트에 내용을 추가하세요
   error_workflow_assign: 지정하는 동안 오류가 발생했습니다
@@ -278,16 +280,16 @@ ko:
   text_email_subject_started: 시작됨
   text_email_finished_approved: "'%{filename}' 문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었으며 문서가 승인되었습니다."
 
-  text_email_finished_rejected: "'%{filename}' 문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해
-    문서가 반려되었습니다."
-  text_email_finished_delegated: "'%{filename}' 문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해
-    위임되었으며, 사용자는 현재 승인 과정에서 승인하셔야 합니다."
-  text_email_finished_step: "'%{filename}' 문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, 승인 단계 중 한 개가
-    승인되었으며 사용자께서 다음 승인 단계를 승인하셔야 합니다"
-  text_email_finished_step_short: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었으며, 승인 단계 중 한
-    단계가 완료되었습니다."
-  text_email_started: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 시작되었으며, 사용자께서는 현재 승인 단계에서
-    승인을 하셔야 합니다."
+  text_email_finished_rejected: "'%{filename}' 문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해 문서가 반려되었습니다."
+
+  text_email_finished_delegated: "'%{filename}' 문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해 위임되었으며, 사용자는 현재 승인 과정에서 승인하셔야 합니다."
+
+  text_email_finished_step: "'%{filename}' 문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, 승인 단계 중 한 개가 승인되었으며 사용자께서 다음 승인 단계를 승인하셔야 합니다"
+
+  text_email_finished_step_short: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었으며, 승인 단계 중 한 단계가 완료되었습니다."
+
+  text_email_started: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 시작되었으며, 사용자께서는 현재 승인 단계에서 승인을 하셔야 합니다."
+
   text_email_to_proceed: 다음으로 진행하기 위해 문서 옆에 있는 체크 상지 아이콘을 클릭하세요
   text_email_to_see_history: 승인 내역을 확인하기 위해 작업 흐름 상태 문서를 클릭하세요
 
@@ -344,11 +346,11 @@ ko:
 
   error_maximum_upload_filecount: "%{filecount}가 넘는 파일을 업로드 할 수 없습니다."
 
-  label_public_urls: Public URLs valid to
+  label_public_urls: 유효한 공개 URL
 
   label_webdav: WebDAV
   label_full_text: 전문 검색
-  link_extension: Ext
+  link_extension: 확장자
 
   label_webdav_ignore: 무시되는 파일 패턴
   note_webdav_ignore: PUT 요청에서 무시할 파일 이름의 정규 표현식입니다.
@@ -357,7 +359,7 @@ ko:
   label_last_revision_id: 리비전
 
   label_webdav_disable_versioning: 버전 관리되지 않는 파일 패턴
-  note_webdav_disable_versioning: 일치하는 파일에 대해 버전 관리를 비활성화하는 정규 표현식입니다.
+  note_webdav_disable_versioning: 일치하는 파일에 대해 버전 관리를 비활성화하는 정규 표현식입니다. 기본 패턴은 MS 오피스 소프트웨어에서 생성하는 임시 파일들에 일치합니다.
 
 
   label_dmsf_keep_documents_locked: 문서를 잠긴 상태로 유지
@@ -389,18 +391,21 @@ ko:
   label_enable_cjk_ngrams: CJK 텍스트로부터 n-gram 생성을 활성화
   text_enable_cjk_ngrams: "이 기능을 사용하면 CJK 문자 범위가 유니그램과 바이그램으로 분할되고, 유니그램은 위치 정보를 전달합니다. CJK 범위 외의 문자는 일반적인 단어로 분할됩니다. 해당 옵션은 색인 시점에 사용됩니다. 예: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
+
+
+
   label_dmsf_fast_links: 빠른 링크
   text_dmsf_fast_links_info: 링크 생성을 더 빨리할 수 있도록 링크 생성 시에 대상 폴더의 식별자를 직접 입력할 수 있게 됩니다.
 
   label_inherited_permissions: 상속된 권한
 
-  button_edit_content: Edit content
-  field_workflow: Workflow
-  field_modified: Date
-  field_count: D/L
-  field_first_at: First
-  field_last_at: Last
-  field_size: Size
+  button_edit_content: 내용 편집
+  field_workflow: 작업 흐름
+  field_modified: 수정 날짜
+  field_count: 다운로드
+  field_first_at: 처음
+  field_last_at: 마지막
+  field_size: 크기
 
   easy_pages:
     modules:
@@ -412,4 +417,4 @@ ko:
   activerecord:
     errors:
       messages:
-        error_contains_invalid_character: 사용이 불가능한 문자(들) 포함
+        error_contains_invalid_character: 사용이 불가능한 문자들을 포함
