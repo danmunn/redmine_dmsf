@@ -154,5 +154,5 @@ module RedmineDmsf
   end
 end
 
-RedmineExtensions::PatchManager.register_helper_patch 'QueriesHelper',
+RedmineExtensions::PatchManager.register_helper_patch 'ProjectsQueriesHelper',
   'RedmineDmsf::Patches::QueriesHelperPatch', prepend: true
