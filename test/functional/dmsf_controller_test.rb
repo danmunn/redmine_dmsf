@@ -222,7 +222,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     get :show, params: { id: @project.id }
     assert_response :success
     # New file link
-    assert_select 'a.icon-add'
+    assert_select 'a[href$=?]', '/dmsf/upload/multi_upload'
     # Filters
     assert_select 'fieldset#filters'
     # Options
@@ -239,7 +239,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     get :show, params: { id: @project.id }
     assert_response :success
     # New file link should be missing
-    assert_select 'a.icon-add', false, 'Adding files is not allowed'
+    assert_select 'a[href$=?]', '/dmsf/upload/multi_upload', count: 0
   end
 
   def test_show_csv
