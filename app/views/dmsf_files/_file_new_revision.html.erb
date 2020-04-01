@@ -86,8 +86,10 @@
         </div>
         <p>          
           <%= f.text_area :comment, rows: 2, label: l(:label_comment), class: 'wiki-edit' %>
-        </p>          
-        <%= f.submit l(:submit_create) %>
+        </p>
+        <div class="form-actions">
+          <%= f.submit l(:button_create), class: 'button-positive' %>
+        </div>
       <% end %>
     <% end %>   
   </div>  

@@ -67,7 +67,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   notice_file_notifications_deactivated: La notifica su documento è disattiva
   link_details: "%{title} dettagli"
   link_edit: "Modifica %{title}"
-  submit_create: Creato
   link_create_folder: Creata cartella
   link_title: Nome documento
   link_size: Dimensioni

@@ -67,7 +67,6 @@ ja:
   notice_file_notifications_deactivated: ファイル通知を無効にしました
   link_details: "%{title} の詳細を表示"
   link_edit: "%{title} を編集"
-  submit_create: 作成
   link_create_folder: フォルダ作成
   link_title: タイトル
   link_size: サイズ

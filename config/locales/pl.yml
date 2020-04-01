@@ -67,7 +67,6 @@ pl:
   notice_file_notifications_deactivated: Wyłączono powiadomienia dla pliku
   link_details: "szczegóły %{title}"
   link_edit: "Edytuj %{title}"
-  submit_create: Utwórz
   link_create_folder: Utwórz folder
   link_title: Tytuł
   link_size: Rozmiar

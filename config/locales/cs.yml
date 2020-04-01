@@ -67,7 +67,6 @@ cs:
   notice_file_notifications_deactivated: Notifikace souboru byly deaktivovány
   link_details: "%{title} detaily"
   link_edit: "Upravit %{title}"
-  submit_create: Vytvořit
   link_create_folder: Vytvořit složku
   link_title: Název
   link_size: Velikost

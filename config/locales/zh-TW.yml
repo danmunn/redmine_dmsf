@@ -67,7 +67,6 @@ zh-TW:
   notice_file_notifications_deactivated: 檔案通知己關閉
   link_details: "%{title} 描述"
   link_edit: "編輯 %{title}"
-  submit_create: 建立
   link_create_folder: 建立資料夾
   link_title: 標題
   link_size: 檔案大小

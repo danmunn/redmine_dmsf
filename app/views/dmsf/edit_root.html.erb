@@ -47,8 +47,10 @@
     <p>      
       <%= f.text_area :dmsf_description, rows: 8, class: 'wiki-edit', label: l(:field_description) %>
     </p>
+    <div class="form-actions">
+      <%= f.submit l(:submit_save), class: 'button-positive' %>
+    </div>
   </div>
-  <%= f.submit l(:submit_save) %>
 <% end %>
 
 <%= wikitoolbar_for 'project_dmsf_description' %>

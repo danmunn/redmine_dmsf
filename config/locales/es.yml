@@ -67,7 +67,6 @@ es:
   notice_file_notifications_deactivated: Notificación de archivo desactivada
   link_details: "%{title} detalles"
   link_edit: "Editar %{title}"
-  submit_create: Crear
   link_create_folder: Crear Directorio
   link_title: Titulo
   link_size: Tamaño

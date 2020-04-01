@@ -26,8 +26,7 @@ module RedmineDmsf
 
       # TODO: *.css are twice there
       def view_layouts_base_html_head(context={})
-        #return if defined?(EasyExtensions)
-        return unless context[:controller].class.name.match?(/^Dmsf/)
+        return unless context[:controller].class.name.match?(/^(Dmsf|Projects)/)
         meta = "\n".html_safe + stylesheet_link_tag('redmine_dmsf.css', plugin: :redmine_dmsf) +
         "\n".html_safe + stylesheet_link_tag('select2.min.css', plugin: :redmine_dmsf) +
         "\n".html_safe + javascript_include_tag('select2.min.js', plugin: :redmine_dmsf, defer: true) +
@@ -37,21 +36,9 @@ module RedmineDmsf
         if defined?(EasyExtensions)
           meta << "\n".html_safe + javascript_include_tag('jquery-2.2.4-ui-1.11.0-ujs-5.2.3', 'application')
           meta << "\n".html_safe + javascript_include_tag('context_menu', 'application')
-          #meta << "\n".html_safe + javascript_include_tag('responsive', 'application')
         end
         meta
       end
-
-      # def easy_extensions_javascripts_hook(context={})
-      #   context[:template].require_asset('select2.min.js')
-      #   context[:template].require_asset('redmine_dmsf.js')
-      #   context[:template].require_asset('attachments_dmsf.js')
-      # end
-      #
-      # def easy_extensions_stylesheets_hook(context={})
-      #   context[:template].require_asset('redmine_dmsf.css')
-      #   context[:template].require_asset('select2.min.css')
-      # end
 
     end
   end

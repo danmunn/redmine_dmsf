@@ -67,7 +67,6 @@ fr:
   notice_file_notifications_deactivated: Les notifications du fichier ont été désactivés
   link_details: "Détails de %{title}"
   link_edit: "Modification du dossier %{title}"
-  submit_create: Ajouter
   link_create_folder: Créer un sous-dossier
   link_title: Titre
   link_size: Taille

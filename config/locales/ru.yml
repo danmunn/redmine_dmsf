@@ -67,7 +67,6 @@ ru:
   notice_file_notifications_deactivated: Уведомления файла отключены
   link_details: "Подробности %{title}"
   link_edit: "Редактировать %{title}"
-  submit_create: Создать
   link_create_folder: Создать папку
   link_title: Название
   link_size: Размер

@@ -67,7 +67,6 @@ en:
   notice_file_notifications_deactivated: File notifications deactivated
   link_details: "%{title} details"
   link_edit: "Edit %{title}"
-  submit_create: Create
   link_create_folder: Create folder
   link_title: Title
   link_size: Size

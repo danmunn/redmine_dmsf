@@ -67,7 +67,6 @@ ko:
   notice_file_notifications_deactivated: 파일 알림이 비활성화 되었습니다
   link_details: "%{title} 상세 내역"
   link_edit: "%{title} 수정"
-  submit_create: 작성
   link_create_folder: 폴더 작성
   link_title: 제목
   link_size: 크기

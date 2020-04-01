@@ -67,7 +67,6 @@ hu:
   notice_file_notifications_deactivated: Fájl értesítések kikapcsolva
   link_details: "%{title} részletek"
   link_edit: "%{title} szerkesztése"
-  submit_create: Létrehozás
   link_create_folder: Mappa létrehozása
   link_title: Cím
   link_size: Méret

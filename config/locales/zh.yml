@@ -67,7 +67,6 @@ zh:
   notice_file_notifications_deactivated: 文件通知注销
   link_details: "%{title} 详情"
   link_edit: "编辑 %{title}"
-  submit_create: 创建
   link_create_folder: 创建文件夹
   link_title: 主题
   link_size: 大小

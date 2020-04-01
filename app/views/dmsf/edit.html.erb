@@ -127,8 +127,10 @@
     <% values.each do |value| %>
       <p><%= custom_field_tag_with_label(:dmsf_folder, value) %></p>
     <% end %>    
-  </div>  
-  <p><%= submit_tag(create ? l(:submit_create) : l(:submit_save)) %></p>
+  </div>
+  <div class="form-actions">
+    <%= submit_tag(create ? l(:button_create) : l(:submit_save), class: 'button-positive') %>
+  </div>
 <% end %>
 
 <%= wikitoolbar_for 'dmsf_folder_description' %>

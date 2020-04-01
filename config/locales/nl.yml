@@ -67,7 +67,6 @@ nl:
   notice_file_notifications_deactivated: Meldingen bestand gedeactiveerd
   link_details: "%{title} details"
   link_edit: "Aanpassen %{title}"
-  submit_create: Aanmaken
   link_create_folder: Maak map
   link_title: Titel
   link_size: Bestandsgrootte

@@ -67,7 +67,6 @@ de:
   notice_file_notifications_deactivated: Dateibenachrichtigungen deaktiviert
   link_details: "%{title} Details"
   link_edit: "Bearbeite %{title}"
-  submit_create: Erstellen
   link_create_folder: Ordner erstellen
   link_title: Titel
   link_size: Größe

@@ -67,7 +67,6 @@ pt-BR:
   notice_file_notifications_deactivated: Notificações de arquivo desativadas
   link_details: "%{title} detalhes"
   link_edit: "Editar %{title}"
-  submit_create: Criar
   link_create_folder: Criar pasta
   link_title: Taxonomia
   link_size: Tamanho do arquivo

@@ -336,12 +336,18 @@ div[id*="revision_access_"] {
     display: none;
 }
 
+/* Email form */
+[id^='email_'].dmsf-full-width  {
+    width: 90%;
+    max-width: 90%;
+}
+
 /* EasyExtensions - font icons */
 .icon-actions::before {
     content: "\F1D8" !important;
 }
 
-/*.icon-only {
-    overflow: hidden;
-    display: inline-block;
-}*/
+/* EasyExtensions - Approval workflows */
+#tab-content-dmsf_workflow table.list ~ p .button {
+    margin-top: 10px;
+}

@@ -26,7 +26,7 @@
   <div class="contextual">  
     <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path, class: 'icon icon-add' %>
   </div>
-  <h2><%=l(:label_dmsf_workflow_plural)%></h2>
+  <h2><%= l(:label_dmsf_workflow_plural)%></h2>
   <%= form_tag(dmsf_workflows_path, method: :get) do %>
     <fieldset>
       <legend><%= l(:label_filter_plural) %></legend>
@@ -61,7 +61,8 @@
 
 <% if @project %>
   <p>
-    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(project_id: @project.id), class: 'icon icon-add' %>
+    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(project_id: @project.id),
+                class: 'button button-positive icon icon-add' %>
   </p>
 <% else %>
   <% if @workflow_pages %>

@@ -33,7 +33,7 @@
   <fieldset class="box tabular">
     <legend><%= l(:link_user_preferences) %></legend>
     <p>
-      <%= content_tag(:label, l(:label_notifications)) %>
+      <%= content_tag :label, l(:label_notifications) %>
       <%= select_tag 'email_notify',
         options_for_select([[l(:select_option_default), nil], 
         [l(:select_option_activated), true], [l(:select_option_deactivated), false]], 
@@ -65,5 +65,7 @@
       </p>
     </fieldset>
   <% end %>
-  <%= submit_tag l(:submit_save), title: l(:title_save_preferences) %>
+  <div class="form-actions">
+    <%= submit_tag l(:submit_save), title: l(:title_save_preferences), class: 'button-positive' %>
+  </div>
 <% end %>

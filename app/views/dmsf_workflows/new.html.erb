@@ -39,11 +39,13 @@
       <%= f.text_field :name, required: true %>
     </p>
     <p>
-      <%= f.select(:id, dmsf_all_workflows_for_select(params[:dmsf_workflow] ? params[:dmsf_workflow][:id] : nil),
-        label: l(:label_copy_workflow_from)) %>
+      <%= f.select :id, dmsf_all_workflows_for_select(params[:dmsf_workflow] ? params[:dmsf_workflow][:id] : nil),
+        label: l(:label_copy_workflow_from) %>
     </p>
+    <div class="form-actions">
+      <%= f.submit l(:button_create), class: 'button-positive' %>
+    </div>
   </div>
-  <%= f.submit l(:button_create) %>
 <% end %>
 
 <%= late_javascript_tag do %>

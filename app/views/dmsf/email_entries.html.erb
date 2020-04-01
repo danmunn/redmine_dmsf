@@ -27,34 +27,34 @@
 <%= render partial: 'path', locals: { folder: @folder, filename: nil, title: l(:heading_send_documents_by_email) } %>
 
 <%= form_tag(email_entries_path(id: @project, folder_id: @folder), { method: :post }) do %>
-  <%= hidden_field_tag('email[zipped_content]', @email_params[:zipped_content]) %>
-  <%= hidden_field_tag('email[folders]', @email_params[:folders].to_json) %>
-  <%= hidden_field_tag('email[files]', @email_params[:files].to_json) %>
-  <%= hidden_field_tag('email[from]', @email_params[:from]) %>
-  <%= hidden_field_tag('email[reply_to]', @email_params[:reply_to]) %>
+  <%= hidden_field_tag 'email[zipped_content]', @email_params[:zipped_content] %>
+  <%= hidden_field_tag 'email[folders]', @email_params[:folders].to_json %>
+  <%= hidden_field_tag 'email[files]', @email_params[:files].to_json %>
+  <%= hidden_field_tag 'email[from]', @email_params[:from] %>
+  <%= hidden_field_tag 'email[reply_to]', @email_params[:reply_to] %>
   <div class="box tabular">
     <p>
-      <%= label_tag('', l(:label_email_from)) %>      
-      <%= text_field_tag('email[from_disabled]', @email_params[:from], style: 'width: 90%;', disabled: true) %>
+      <%= label_tag '', l(:label_email_from) %>
+      <%= text_field_tag 'email[from_disabled]', @email_params[:from], class: 'dmsf-full-width', disabled: true %>
     </p>
     <p>
-      <%= label_tag('email[to]', l(:label_email_to)) %>
+      <%= label_tag 'email[to]', l(:label_email_to) %>
       <span>
-        <%= text_field_tag('email[to]', @email_params[:to], style: 'width: 90%;', required: true) %>
+        <%= text_field_tag 'email[to]', @email_params[:to], class: 'dmsf-full-width', required: true %>
         <%= link_to l(:button_add), add_email_dmsf_path(project_id: @project),
           title: l(:label_email_address_add), class: 'icon icon-add', remote: true %>
       </span>
     </p>
     <p>
-      <%= label_tag('email[cc]', l(:label_email_cc)) %>
-      <%= text_field_tag('email[cc]', @email_params[:cc], style: 'width: 90%;') %>
+      <%= label_tag 'email[cc]', l(:label_email_cc) %>
+      <%= text_field_tag 'email[cc]', @email_params[:cc], class: 'dmsf-full-width' %>
     </p>
     <p>
-      <%= label_tag('email[subject]', l(:label_email_subject)) %>
-      <%= text_field_tag('email[subject]', @email_params[:subject], style: 'width: 90%;') %>
+      <%= label_tag 'email[subject]', l(:label_email_subject) %>
+      <%= text_field_tag 'email[subject]', @email_params[:subject], class: 'dmsf-full-width' %>
     </p>
     <p>
-      <%= label_tag('', l(:label_email_documents)) %>
+      <%= label_tag '', l(:label_email_documents) %>
       <span>
         <%= link_to 'Documents.zip', download_email_entries_path(id: @project, folder_id: @folder,
                                                                  path: @email_params[:zipped_content]) %>
@@ -67,11 +67,13 @@
       </span>
     </p>
     <p>
-      <%= label_tag('email[body]', l(:label_email_body)) %>
-      <%= text_area_tag('email[body]', @email_params['body'], rows: '20', style: 'width: 90%;') %>
-    </p>    
+      <%= label_tag 'email[body]', l(:label_email_body) %>
+      <%= text_area_tag 'email[body]', @email_params['body'], rows: '20', class: 'dmsf-full-width' %>
+    </p>
+    <div class="form-actions">
+      <%= submit_tag l(:label_email_send), class: 'button-positive' %>
+    </div>
   </div>
-  <p><%= submit_tag(l(:label_email_send)) %></p>
 <% end %>
 
 <%= wikitoolbar_for 'email_body' %>

@@ -104,14 +104,14 @@
     <p>
       <%= f.text_field :name, required: true, max_length: 255 %>
     </p>
+    <div class="form-actions">
+      <% if modal %>
+          <%= f.submit l(:button_create), class: 'button-positive', onclick: 'hideModal(this);' %>
+      <% else %>
+          <%= f.submit l(:button_create), class: 'button-positive' %>
+      <% end %>
+    </div>
   </div>
-  <p>
-    <% if modal %>
-        <%= f.submit l(:button_create), onclick: 'hideModal(this);' %>
-    <% else %>
-        <%= f.submit l(:button_create) %>
-    <% end %>
-  </p>
 <% end %>
 
 <%= late_javascript_tag do %>

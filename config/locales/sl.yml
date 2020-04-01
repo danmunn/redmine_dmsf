@@ -67,7 +67,6 @@ sl:
   notice_file_notifications_deactivated: Obveščanje o datoteki je deaktivirano
   link_details: "%{title} podrobnosti"
   link_edit: "Uredi %{title}"
-  submit_create: Kreiraj
   link_create_folder: Kreiraj mapo
   link_title: Naslov
   link_size: Velikost
