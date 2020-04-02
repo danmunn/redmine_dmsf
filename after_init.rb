@@ -30,7 +30,7 @@ def dmsf_init
   # Administration menu extension
   Redmine::MenuManager.map :admin_menu do |menu|
     menu.push :dmsf_approvalworkflows, :dmsf_workflows_path, caption: :label_dmsf_workflow_plural,
-              html: { class: 'icon icon-approvalworkflows' }, if: Proc.new { |_| User.current.admin? }
+              html: { class: 'icon icon-workflows' }, if: Proc.new { |_| User.current.admin? }
   end
 
   Redmine::MenuManager.map :project_menu do |menu|
