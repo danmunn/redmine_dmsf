@@ -165,7 +165,15 @@ function dmsfExpandRows(EL, parentRow, url) {
       classes: classes
     }
   }).done(function(data) {
-      eval(data);
+      // Hide the expanding icon if there are no childern
+      if(data.indexOf(' ' +  m[1] + ' ') < 0){
+        $(parentRow).removeClass('dmsf_expanded');
+        $(parentRow).addClass('dmsf_child');
+      }
+      else {
+        // Add child rows
+        eval(data);
+      }
   })
   .fail(function() {
       alert('An error in rows expanding');

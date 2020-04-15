@@ -32,6 +32,7 @@ class DmsfController < ApplicationController
   before_action :permissions
   # also try to lookup folder by title if this is API call
   before_action :find_folder_by_title, only: [:show]
+  before_action :get_query, only: [:expand_folder, :show, :trash]
 
   accept_api_auth :show, :create, :save, :delete
 
@@ -47,7 +48,7 @@ class DmsfController < ApplicationController
 
   def expand_folder
     @idnt = params[:idnt].present? ? params[:idnt].to_i + 1 : 0
-    @query = retrieve_query(DmsfQuery, true)
+    #@query = retrieve_query(DmsfQuery, true)
     @query.dmsf_folder_id = @folder.id
     @query.deleted = false
     respond_to do |format|
@@ -61,8 +62,8 @@ class DmsfController < ApplicationController
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @trash_enabled = @folder_manipulation_allowed && @file_manipulation_allowed
-    use_session = !request.format.csv?
-    @query = retrieve_query(DmsfQuery, use_session)
+    #use_session = !request.format.csv?
+    #@query = retrieve_query(DmsfQuery, use_session)
     @query.dmsf_folder_id = @folder ? @folder.id : nil
     @query.deleted = false
     if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
@@ -88,7 +89,7 @@ class DmsfController < ApplicationController
     @folder_manipulation_allowed = User.current.allowed_to? :folder_manipulation, @project
     @file_manipulation_allowed = User.current.allowed_to? :file_manipulation, @project
     @file_delete_allowed = User.current.allowed_to? :file_delete, @project
-    @query = retrieve_query(DmsfQuery, true)
+    #@query = retrieve_query(DmsfQuery, true)
     @query.deleted = true
     respond_to do |format|
       format.html {
@@ -627,6 +628,16 @@ class DmsfController < ApplicationController
     copy = folder.clone
     copy.id = folder.id
     copy
+  end
+
+  def get_query
+    if Redmine::Plugin.installed?(:easy_extensions)
+      @query = DmsfQuery.new
+      @query.project = @project
+    else
+      use_session = !request.format.csv?
+      @query = retrieve_query(DmsfQuery, use_session)
+    end
   end
 
 end
