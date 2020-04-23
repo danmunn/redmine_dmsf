@@ -22,29 +22,29 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% html_title(l(:dmsf)) %>
+<% html_title l(:dmsf) %>
 
 <div class="contextual">
   <% if !@folder.new_record? && User.current.allowed_to?(:folder_manipulation, @project) && !@folder.system %>
     <% if @folder.locked? %>
-      <%= link_to_if(@folder.unlockable? && (!@folder.locked_for_user? || @force_file_unlock_allowed), l(:button_unlock),
+      <%= link_to_if @folder.unlockable? && (!@folder.locked_for_user? || @force_file_unlock_allowed), l(:button_unlock),
         unlock_dmsf_path(id: @project, folder_id: @folder),
-      title: l(:title_unlock_file), class: 'icon icon-unlock') %>
+      title: l(:title_unlock_file), class: 'icon icon-unlock' %>
     <% else %>
-      <%= link_to(l(:button_lock), lock_dmsf_path(id: @project, folder_id: @folder),
-        title: l(:title_lock_file), class: 'icon icon-lock') %>
+      <%= link_to l(:button_lock), lock_dmsf_path(id: @project, folder_id: @folder),
+        title: l(:title_lock_file), class: 'icon icon-lock' %>
     <% end %>
     <% unless @folder.locked? %>
       <% if @folder.notification %>
-        <%= link_to(l(:label_notifications_off),
+        <%= link_to l(:label_notifications_off),
          notify_deactivate_dmsf_path(id: @project, folder_id: @folder),
           title: l(:title_notifications_active_deactivate),
-          class: 'icon icon-email') %>
+          class: 'icon icon-email' %>
       <% else %>
-        <%= link_to(l(:label_notifications_on),
+        <%= link_to l(:label_notifications_on),
           notify_activate_dmsf_path(id: @project, folder_id: @folder),
           title: l(:title_notifications_not_active_activate),
-          class: 'icon icon-email-add') %>
+          class: 'icon icon-email-add' %>
       <% end %>
     <% end %>
     <% unless @folder.locked? %>
@@ -61,12 +61,12 @@
 
 <%= labelled_form_for(@folder,
                       url: { action: create ? 'create' : 'save', id: @project, folder_id: @folder, parent_id: @parent},
-                      html: { method: :post}) do |f| %>
-  <%= error_messages_for(@folder) %>
+                      html: { method: :post }) do |f| %>
+  <%= error_messages_for @folder %>
   <%= f.hidden_field :redirect_to_folder_id, value: @redirect_to_folder_id %>
   <div class="box tabular">    
     <p>                
-      <%= f.text_field(:title, required: true) %>
+      <%= f.text_field :title, required: true %>
     </p>
     <p>      
       <%= f.text_area :description, rows: 8, class: 'wiki-edit' %>
@@ -120,11 +120,11 @@
     </p>
     <% values = @folder ? @folder.custom_field_values : (@parent ? @parent.custom_field_values : DmsfFolder.new.custom_field_values) %>
     <% values.each do |value| %>
-      <p><%= custom_field_tag_with_label(:dmsf_folder, value) %></p>
+      <p><%= custom_field_tag_with_label :dmsf_folder, value %></p>
     <% end %>    
   </div>
   <div class="form-actions">
-    <%= submit_tag(create ? l(:button_create) : l(:submit_save), class: 'button-positive') %>
+    <%= submit_tag create ? l(:button_create) : l(:submit_save), class: 'button-positive' %>
   </div>
 <% end %>
 

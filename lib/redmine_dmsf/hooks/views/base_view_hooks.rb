@@ -32,9 +32,7 @@ module RedmineDmsf
         "\n".html_safe + javascript_include_tag('select2.min.js', plugin: :redmine_dmsf, defer: true) +
         "\n".html_safe + javascript_include_tag('redmine_dmsf.js', plugin: :redmine_dmsf, defer: true) +
         "\n".html_safe + javascript_include_tag('attachments_dmsf.js', plugin: :redmine_dmsf, defer: true)
-        # TODO: Why it's not included by EasyExtensions?
         if defined?(EasyExtensions)
-          meta << "\n".html_safe + javascript_include_tag('jquery-2.2.4-ui-1.11.0-ujs-5.2.3', 'application')
           meta << "\n".html_safe + javascript_include_tag('context_menu', 'application')
         end
         meta
