@@ -127,14 +127,6 @@ class DmsfFolder < ActiveRecord::Base
     end
   end
 
-  def self.find_by_title(project, folder, title)
-    if folder
-      visible.find_by(project_id: project.id, dmsf_folder_id: nil, title: title)
-    else
-      visible.find_by(project_id: project.id, dmsf_folder_id: folder.id, title: title)
-    end
-  end
-
   def delete(commit)
     if locked?
       errors[:base] << l(:error_folder_is_locked)

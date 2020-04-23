@@ -212,7 +212,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
 
   def test_copy_to
     assert @folder1.copy_to(@project2, nil)
-    assert DmsfFolder.find_by_title(@project2, nil, @folder1.title)
+    assert DmsfFolder.find_by(project_id: @project2.id, title: @folder1.title)
   end
 
 end
