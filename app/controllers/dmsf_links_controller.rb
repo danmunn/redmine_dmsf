@@ -155,7 +155,8 @@ class DmsfLinksController < ApplicationController
           if params[:dmsf_link][:dmsf_file_id].present?
             redirect_to dmsf_file_path(@dmsf_link.target_file)
           else
-            redirect_to edit_dmsf_path(id: params[:dmsf_link][:project_id], folder_id: params[:dmsf_link][:dmsf_folder_id])
+            folder = @dmsf_link.target_folder.dmsf_folder if @dmsf_link.target_folder
+            redirect_to dmsf_folder_path(id: @project, folder_id: folder)
           end
         end
       }

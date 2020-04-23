@@ -30,13 +30,13 @@ class DmsfController < ApplicationController
                                           :autocomplete_for_user]
   before_action :find_parent, only: [:new, :create]
   before_action :permissions
-  # also try to lookup folder by title if this is API call
+  # Also try to lookup folder by title if this is an API call
   before_action :find_folder_by_title, only: [:show]
   before_action :get_query, only: [:expand_folder, :show, :trash]
 
   accept_api_auth :show, :create, :save, :delete
 
-  helper :all # TODO: Is it needed?
+  helper :custom_fields
   helper :dmsf_folder_permissions
   helper :queries
   include QueriesHelper
@@ -48,7 +48,6 @@ class DmsfController < ApplicationController
 
   def expand_folder
     @idnt = params[:idnt].present? ? params[:idnt].to_i + 1 : 0
-    #@query = retrieve_query(DmsfQuery, true)
     @query.dmsf_folder_id = @folder.id
     @query.deleted = false
     respond_to do |format|
@@ -62,8 +61,6 @@ class DmsfController < ApplicationController
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @trash_enabled = @folder_manipulation_allowed && @file_manipulation_allowed
-    #use_session = !request.format.csv?
-    #@query = retrieve_query(DmsfQuery, use_session)
     @query.dmsf_folder_id = @folder ? @folder.id : nil
     @query.deleted = false
     if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
@@ -89,7 +86,6 @@ class DmsfController < ApplicationController
     @folder_manipulation_allowed = User.current.allowed_to? :folder_manipulation, @project
     @file_manipulation_allowed = User.current.allowed_to? :file_manipulation, @project
     @file_delete_allowed = User.current.allowed_to? :file_delete, @project
-    #@query = retrieve_query(DmsfQuery, true)
     @query.deleted = true
     respond_to do |format|
       format.html {
@@ -604,9 +600,7 @@ class DmsfController < ApplicationController
   end
 
   def find_folder
-    @folder = DmsfFolder.find_by!(id: params[:folder_id], project_id: @project.id) if params[:folder_id].present?
-  rescue DmsfAccessError
-    render_403
+    @folder = DmsfFolder.find(params[:folder_id]) if params[:folder_id].present?
   rescue ActiveRecord::RecordNotFound
     render_404
   end

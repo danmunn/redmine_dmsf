@@ -22,36 +22,40 @@
 
 <li>
   <%= context_menu_link l(:button_edit), edit_dmsf_path(id: project, folder_id: dmsf_folder),
-              class: 'icon icon-edit',
-              disabled: !allowed || locked %>
+              class: 'icon icon-edit', disabled: !allowed || locked %>
+</li>
+<li>
+  <%= context_menu_link "#{l(:button_copy)}/#{l(:button_move)}", copy_folder_path(id: dmsf_folder),
+            class: 'icon icon-copy', disabled: !allowed || locked %>
+</li>
+<li>
+  <%= context_menu_link l(:label_link_to),
+              new_dmsf_link_path(project_id: project.id, dmsf_folder_id: dmsf_folder.id, type: 'link_to'),
+              class: 'icon icon-link', disabled: !allowed || locked %>
 </li>
 <li>
   <% if locked %>
     <%= context_menu_link l(:button_unlock), unlock_dmsf_path(id: project, folder_id: dmsf_folder),
-                          class: 'icon icon-unlock',
-                          disabled: !allowed || !unlockable %>
+                          class: 'icon icon-unlock', disabled: !allowed || !unlockable %>
   <% else %>
     <%= context_menu_link l(:button_lock), lock_dmsf_path(id: project, folder_id: dmsf_folder),
-              class: 'icon icon-lock',
-              disabled: !allowed %>
+              class: 'icon icon-lock', disabled: !allowed %>
     <% end %>
 </li>
 <li>
   <% if dmsf_folder.notification %>
     <%= context_menu_link l(:label_notifications_off), notify_deactivate_dmsf_path(id: project, folder_id: dmsf_folder),
-              class: 'icon icon-email',
-              disabled: !allowed || locked || !dmsf_folder.notification? %>
+              class: 'icon icon-email', disabled: !allowed || locked || !dmsf_folder.notification? %>
   <% else %>
     <%= context_menu_link l(:label_notifications_on), notify_activate_dmsf_path(id: project, folder_id: dmsf_folder),
-              class: 'icon icon-email-add',
-              disabled: !allowed || locked || dmsf_folder.notification? %>
+              class: 'icon icon-email-add', disabled: !allowed || locked || dmsf_folder.notification? %>
   <% end %>
 </li>
 <li>
   <%= context_menu_link l(:button_delete),
               dmsf_link ? dmsf_link_path(dmsf_link) : delete_dmsf_path(id: project, folder_id: dmsf_folder),
               data: { confirm: l(:text_are_you_sure) }, method: :delete, class: 'icon icon-del', id: 'dmsf-cm-delete',
-              disabled: !allowed || locked || !dmsf_folder.empty? %>
+              disabled: !allowed || locked || (dmsf_link ? false : !dmsf_folder.empty?) %>
 </li>
 <li>
   <%= context_menu_link l(:button_download), entries_operations_dmsf_path(id: project, folder_id: folder,

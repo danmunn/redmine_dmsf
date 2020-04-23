@@ -83,8 +83,6 @@ class DmsfContextMenusController < ApplicationController
 
   def find_folder
     @folder = DmsfFolder.find params[:folder_id] if params[:folder_id].present?
-  rescue DmsfAccessError
-    render_403
   rescue ActiveRecord::RecordNotFound
     render_404
   end

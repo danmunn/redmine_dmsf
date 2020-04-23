@@ -79,13 +79,6 @@ class DmsfLink < ActiveRecord::Base
     @target_project
   end
 
-  def folder
-    if !@folder && dmsf_folder_id
-      @folder = DmsfFolder.find_by(id: dmsf_folder_id)
-    end
-    @folder
-  end
-
   def title
     name
   end
@@ -114,6 +107,12 @@ class DmsfLink < ActiveRecord::Base
     path
   end
 
+  def move_to(target_project, target_folder)
+    self.project = target_project
+    self.dmsf_folder = target_folder
+    save
+  end
+
   def copy_to(project, folder)
     link = DmsfLink.new
     link.target_project_id = target_project_id
@@ -128,8 +127,8 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def container
-    if folder && folder.system
-      Issue.find_by(id: folder.title)
+    if dmsf_folder && dmsf_folder.system
+      Issue.find_by id: dmsf_folder.title
     end
   end
 

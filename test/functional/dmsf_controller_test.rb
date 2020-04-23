@@ -253,9 +253,10 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_show_folder_doesnt_correspond_the_project
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders
-    # project1 X project2.folder3
+    # Despite the fact that project != @folder3.project
+    assert @project != @folder3.project
     get :show, params: { id: @project.id, folder_id: @folder3.id }
-    assert_response :not_found
+    assert_response :success
   end
 
   def test_new_forbidden

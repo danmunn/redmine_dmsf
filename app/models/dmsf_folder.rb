@@ -247,6 +247,23 @@ class DmsfFolder < ActiveRecord::Base
     projects
   end
 
+  def move_to(target_project, target_folder)
+    if self.project != target_project
+      dmsf_files.visible.find_each do |f|
+        f.move_to target_project, f.dmsf_folder
+      end
+      dmsf_folders.visible.find_each do |s|
+        s.move_to target_project, s.dmsf_folder
+      end
+      dmsf_links.visible.find_each do |l|
+        l.move_to target_project, l.dmsf_folder
+      end
+      self.project = target_project
+    end
+    self.dmsf_folder = target_folder
+    save
+  end
+
   def copy_to(project, folder)
     new_folder = DmsfFolder.new
     new_folder.dmsf_folder = folder ? folder : nil
@@ -254,7 +271,6 @@ class DmsfFolder < ActiveRecord::Base
     new_folder.title = title
     new_folder.description = description
     new_folder.user = User.current
-
     new_folder.custom_values = []
     custom_values.each do |cv|
       v = CustomValue.new
@@ -262,36 +278,22 @@ class DmsfFolder < ActiveRecord::Base
       v.value = cv.value
       new_folder.custom_values << v
     end
-
     unless new_folder.save
       Rails.logger.error new_folder.errors.full_messages.to_sentence
       return new_folder
     end
-
     dmsf_files.visible.find_each do |f|
       f.copy_to project, new_folder
     end
-
     dmsf_folders.visible.find_each do |s|
       s.copy_to project, new_folder
     end
-
-    folder_links.visible.find_each do |l|
+    dmsf_links.visible.find_each do |l|
       l.copy_to project, new_folder
     end
-
-    file_links.visible.find_each do |l|
-      l.copy_to project, new_folder
-    end
-
-    url_links.visible.find_each do |l|
-      l.copy_to project, new_folder
-    end
-
     dmsf_folder_permissions.find_each do |p|
       p.copy_to new_folder
     end
-
     new_folder
   end
 

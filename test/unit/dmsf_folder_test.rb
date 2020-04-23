@@ -27,8 +27,10 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
            :dmsf_folder_permissions
          
   def setup
-    @project = Project.find 1
-    @project.enable_module! :dmsf
+    @project1 = Project.find 1
+    @project1.enable_module! :dmsf
+    @project2 = Project.find 2
+    @project2.enable_module! :dmsf
     @folder1 = DmsfFolder.find 1
     @folder2 = DmsfFolder.find 2
     @folder4 = DmsfFolder.find 4
@@ -51,7 +53,8 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert_kind_of DmsfFolder, @folder5
     assert_kind_of DmsfFolder, @folder6
     assert_kind_of DmsfFolder, @folder7
-    assert_kind_of Project, @project
+    assert_kind_of Project, @project1
+    assert_kind_of Project, @project2
     assert_kind_of User, @manager
     assert_kind_of User, @developer
     assert_kind_of Role, @manager_role
@@ -69,7 +72,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert_equal 4, DmsfFolder.visible.where(project_id: 1).all.size
     # Anonymous user
     User.current = User.anonymous
-    @project.add_default_member User.anonymous
+    @project1.add_default_member User.anonymous
     assert_equal 5, DmsfFolder.visible.where(project_id: 1).all.size
   end
 
@@ -145,7 +148,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_directory_tree
-    tree = DmsfFolder.directory_tree(@project)
+    tree = DmsfFolder.directory_tree(@project1)
     assert tree
     # [["Documents", nil],
     #  ["...folder7", 7],
@@ -157,7 +160,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_directory_tree_id
-    tree = DmsfFolder.directory_tree(@project.id)
+    tree = DmsfFolder.directory_tree(@project1.id)
     assert tree
     # [["Documents", nil],
     #  ["...folder7", 7],
@@ -191,6 +194,25 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   def test_permissions_users
     users = @folder7.permissions_users
     assert_equal 1,  users.size
+  end
+
+  def test_move_to
+    assert @folder1.move_to(@project2, nil)
+    assert_equal @project2, @folder1.project
+    @folder1.dmsf_folders.each do |d|
+      assert_equal @project2, d.project
+    end
+    @folder1.dmsf_files.each do |f|
+      assert_equal @project2, f.project
+    end
+    @folder1.dmsf_links.each do |l|
+      assert_equal @project2, l.project
+    end
+  end
+
+  def test_copy_to
+    assert @folder1.copy_to(@project2, nil)
+    assert DmsfFolder.find_by_title(@project2, nil, @folder1.title)
   end
 
 end

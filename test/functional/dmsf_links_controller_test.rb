@@ -322,7 +322,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
         type: 'link_to'
       }}
     end
-    assert_redirected_to edit_dmsf_path(id: @project1.id, folder_id: @folder1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder1.dmsf_folder)
   end
   
   def test_create_folder_link_to_f2
@@ -337,7 +337,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
         type: 'link_to'
       }}
     end
-    assert_redirected_to edit_dmsf_path(id: @project1.id, folder_id: @folder1.id)               
+    assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder1.dmsf_folder)
   end
   
   def test_destroy          

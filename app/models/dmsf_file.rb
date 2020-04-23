@@ -235,8 +235,12 @@ class DmsfFile < ActiveRecord::Base
       errors[:base] << l(:error_file_is_locked)
       return false
     end
+    unless last_revision
+      errors[:base] << l(:error_at_least_one_revision_must_be_present)
+      return false
+    end
     source = "#{project.identifier}:#{dmsf_path_str}"
-    self.project_id = project.id
+    self.project = project
     self.dmsf_folder = folder
     new_revision = last_revision.clone
     new_revision.workflow = nil
@@ -251,12 +255,12 @@ class DmsfFile < ActiveRecord::Base
     last_revision.custom_values.each do |cv|
       new_revision.custom_values << CustomValue.new({ custom_field: cv.custom_field, value: cv.value })
     end
-    set_last_revision(new_revision)
+    set_last_revision new_revision
     save && new_revision.save
   end
 
   def copy_to(project, folder = nil)
-    copy_to_filename(project, folder, name)
+    copy_to_filename project, folder, name
   end
   
   def copy_to_filename(project, folder, filename)

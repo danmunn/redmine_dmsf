@@ -37,13 +37,16 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     @jsmith_user = User.find_by(login: 'jsmith')
     @admin_user = User.find_by(login: 'admin')
     @project1 = Project.find 1
+    @project1.enable_module! :dmsf
+    @project2 = Project.find 2
+    @project2.enable_module! :dmsf
     @file1 = DmsfFile.find 1
     @file10 = DmsfFile.find 10
     @folder1 = DmsfFolder.find 1
-    # Fix permissions for jsmith's role
-    @role = Role.find 1 #
+    @role = Role.find 1
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :folder_manipulation
+    @role.add_permission! :file_manipulation
     @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
     @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
@@ -68,6 +71,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
 
   def test_truth
     assert_kind_of Project, @project1
+    assert_kind_of Project, @project2
     assert_kind_of Role, @role
     assert_kind_of DmsfFile, @file1
     assert_kind_of DmsfFile, @file10
@@ -85,8 +89,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     end
   end
 
-  def test_move_to_new_filename_without_folder_manipulation_permission
-    @role.remove_permission! :folder_manipulation
+  def test_move_to_new_filename_without_file_manipulation_permission
+    @role.remove_permission! :file_manipulation
     new_name = "#{@file1.name}.moved"
     assert_no_difference '@file1.dmsf_file_revisions.count' do
       process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
@@ -95,8 +99,8 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     end
   end
 
-  def test_move_to_new_filename_without_folder_manipulation_permission_as_admin
-    @role.remove_permission! :folder_manipulation
+  def test_move_to_new_filename_without_file_manipulation_permission_as_admin
+    @role.remove_permission! :file_manipulation
     new_name = "#{@file1.name}.moved"
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
       process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
@@ -105,6 +109,37 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
       f = DmsfFile.find_file_by_name @project1, nil, "#{new_name}"
       assert f, "Moved file '#{new_name}' not found in project."
     end
+  end
+
+  def test_without_folder_manipulation_permission
+    @role.remove_permission! :folder_manipulation
+    new_name = "#{@folder1.title}.moved"
+    process :move, "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", params: nil,
+            headers: @jsmith.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}" })
+    assert_response :forbidden
+  end
+
+  def test_without_folder_manipulation_permission_as_admin
+    @role.remove_permission! :folder_manipulation
+    new_name = "#{@folder1.title}.moved"
+    process :move, "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", params: nil,
+            headers: @admin.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}" })
+    assert_response :created
+  end
+
+  def test_move_folder_to_another_project
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", params: nil,
+        headers: @admin.merge!({ destination: "http://www.example.com/dmsf/webdav/#{@project2.identifier}/#{@folder1.title}" })
+      assert_response :created
+      @folder1.dmsf_folders.each do |d|
+        assert_equal @project2, d.project
+      end
+      @folder1.dmsf_files.each do |f|
+        assert_equal @project2, f.project
+      end
+      @folder1.dmsf_links.each do |l|
+        assert_equal @project2, l.project
+      end
   end
 
   def test_move_non_existent_file
@@ -242,7 +277,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
       assert_response :success # Created
     end
   end
-  
+
   def test_move_msoffice_save_locked_file
     # When some versions of MsOffice save a file they use the following sequence:
     # 1. Save changes to a new temporary document, XXX.tmp

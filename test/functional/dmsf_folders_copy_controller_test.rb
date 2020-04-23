@@ -170,6 +170,12 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     assert_nil flash[:error]
   end
 
+  def test_move_to_another_project
+    post :move, params: { id: @folder1.id, target_project_id: @project2.id, target_folder_id: 'Documents' }
+    assert_response :redirect
+    assert_nil flash[:error]
+  end
+
   def test_move_the_same_target
     post :move, params: { id: @folder1.id, target_project_id: @folder1.project.id, target_folder_id: @folder1.dmsf_folder }
     assert_equal flash[:error], l(:error_target_folder_same)

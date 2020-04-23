@@ -189,9 +189,13 @@ class DmsfQuery < Query
         joins('LEFT JOIN users ON dmsf_folders.user_id = users.id').
         visible(!deleted)
     if deleted
-      scope.where(dmsf_folders: { project_id: project.id, deleted: deleted })
+      scope.where dmsf_folders: { project_id: project.id, deleted: deleted }
     else
-      scope.where(dmsf_folders: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
+      if dmsf_folder_id
+        scope.where dmsf_folders: { dmsf_folder_id: dmsf_folder_id, deleted: deleted }
+      else
+        scope.where dmsf_folders: { project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
+      end
     end
   end
 
@@ -204,7 +208,7 @@ class DmsfQuery < Query
         select(%{
           dmsf_links.id AS id,
           COALESCE(dmsf_folders.project_id, dmsf_links.project_id) AS project_id,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
+          dmsf_links.target_id AS revision_id,
           dmsf_links.name AS title,
           dmsf_folders.title AS filename,
           CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
@@ -222,10 +226,13 @@ class DmsfQuery < Query
         joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
         joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)')
     if deleted
-      scope.where(dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, deleted: deleted })
+      scope.where dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, deleted: deleted }
     else
-      scope.where(dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, dmsf_folder_id: dmsf_folder_id,
-                          deleted: deleted })
+      if dmsf_folder_id
+        scope.where dmsf_links: { target_type: 'DmsfFolder', dmsf_folder_id: dmsf_folder_id, deleted: deleted }
+      else
+        scope.where dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
+      end
     end
   end
 
@@ -257,9 +264,14 @@ class DmsfQuery < Query
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
         where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)')
     if deleted
-      scope.where(dmsf_files: { project_id: project.id, deleted: deleted })
+      scope.where dmsf_files: { project_id: project.id, deleted: deleted }
     else
-      scope.where(dmsf_files: { project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted })
+      # Consider files belonging to the folder but with wrong project (#1106)
+      if dmsf_folder_id
+        scope.where dmsf_files: { dmsf_folder_id: dmsf_folder_id, deleted: deleted }
+      else
+        scope.where dmsf_files: { project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
+      end
     end
   end
 
@@ -272,7 +284,7 @@ class DmsfQuery < Query
         select(%{
           dmsf_links.id AS id,
           dmsf_files.project_id AS project_id,
-          dmsf_file_revisions.id AS revision_id,
+          dmsf_files.id AS revision_id,
           dmsf_links.name AS title,
           dmsf_file_revisions.name AS filename,
           dmsf_file_revisions.size AS size,
@@ -292,9 +304,13 @@ class DmsfQuery < Query
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
         where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)')
     if deleted
-      scope.where(project_id: project.id, deleted: deleted)
+      scope.where project_id: project.id, deleted: deleted
     else
-      scope.where(project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted)
+      if dmsf_folder_id
+        scope.where dmsf_folder_id: dmsf_folder_id, deleted: deleted
+      else
+        scope.where project_id: project.id, dmsf_folder_id: nil, deleted: deleted
+      end
     end
   end
 
@@ -324,9 +340,13 @@ class DmsfQuery < Query
           1 AS sort #{cf_columns}}).
         joins('LEFT JOIN users ON dmsf_links.user_id = users.id ')
     if deleted
-      scope.where(target_type: 'DmsfUrl', project_id: project.id, deleted: deleted)
+      scope.where target_type: 'DmsfUrl', project_id: project.id, deleted: deleted
     else
-      scope.where(target_type: 'DmsfUrl', project_id: project.id, dmsf_folder_id: dmsf_folder_id, deleted: deleted)
+      if dmsf_folder_id
+        scope.where target_type: 'DmsfUrl', dmsf_folder_id: dmsf_folder_id, deleted: deleted
+      else
+        scope.where target_type: 'DmsfUrl', project_id: project.id, dmsf_folder_id: nil, deleted: deleted
+      end
     end
   end
 

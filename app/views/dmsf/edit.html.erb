@@ -47,11 +47,6 @@
           class: 'icon icon-email-add') %>
       <% end %>
     <% end %>
-    <%= link_to(l(:label_link_to),
-      new_dmsf_link_path(project_id: @project.id, dmsf_folder_id: @folder.id, type: 'link_to'),
-      title: l(:title_create_link), class: 'icon icon-link') %>
-    <%= link_to("#{l(:button_copy)}/#{l(:button_move)}", copy_folder_path(id: @folder),
-      title: l(:title_copy), class: 'icon icon-copy') %>
     <% unless @folder.locked? %>
       <%= link_to(l(:button_delete), delete_dmsf_path(id: @project, folder_id: @folder),
         data: { confirm: l(:text_are_you_sure) },

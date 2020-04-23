@@ -31,7 +31,7 @@ module RedmineDmsf
       def initialize(path, request, response, options)
         @folder = nil
         @file = nil
-        super(path, request, response, options)
+        super path, request, response, options
       end
 
       # Here we make sure our folder and file methods are not aliased - it should shave a few cycles off of processing
@@ -227,64 +227,52 @@ module RedmineDmsf
         resource = dest.is_a?(ResourceProxy) ? dest.resource : dest
         return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil?
         parent = resource.parent
-        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
-
+        if !parent.exist? || (!User.current.admin? && (!DmsfFolder.permissions?(folder, false) ||
+            !DmsfFolder.permissions?(parent.folder, false)))
+          raise Forbidden
+        end
         if collection?
-
           if dest.exist?
             return overwrite ? NotImplemented : PreconditionFailed
           end
-
-          # At the moment we don't support cross project destinations
-          return NotImplemented unless (project.id == resource.project.id)
-          raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
-          raise Forbidden unless DmsfFolder.permissions?(folder, false)
-
+          if !User.current.admin? && (!User.current.allowed_to?(:folder_manipulation, project) ||
+              !User.current.allowed_to?(:folder_manipulation, resource.project))
+            raise Forbidden
+          end
           # Current object is a folder, so now we need to figure out information about Destination
           if dest.exist?
             return overwrite ? NotImplemented : PreconditionFailed
           else
-            if parent.projectless_path == '/' # Project root
-              folder.dmsf_folder_id = nil
-            else
-              return PreconditionFailed unless parent.exist? && parent.folder
-                folder.dmsf_folder_id = parent.folder.id
-            end
-            folder.title = resource.basename
-            folder.save ? Created : PreconditionFailed
+            folder.move_to(resource.project, parent.folder) ? Created : PreconditionFailed
           end
         else
-          raise Forbidden unless User.current.admin? ||
-              User.current.allowed_to?(:folder_manipulation, project) ||
-              User.current.allowed_to?(:folder_manipulation, resource.project)
-
+          if !User.current.admin? && (!User.current.allowed_to?(:file_manipulation, project) ||
+              !User.current.allowed_to?(:file_manipulation, resource.project))
+            raise Forbidden
+          end
           if dest.exist?
             return PreconditionFailed unless overwrite
             if (project == resource.project) && file.name.match(/.\.tmp$/i)
               # Renaming a *.tmp file to an existing file in the same project, probably Office that is saving a file.
               Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename} (exists), possible MSOffice rename from .tmp when saving"
-              
               if resource.file.last_revision.size == 0 || reuse_version_for_locked_file(resource.file)
                 # Last revision in the destination has zero size so reuse that revision
                 new_revision = resource.file.last_revision
               else
                 # Create a new revison by cloning the last revision in the destination
                 new_revision = resource.file.last_revision.clone
-                new_revision.increase_version(1)
+                new_revision.increase_version 1
               end
-
               # The file on disk must be renamed from .tmp to the correct filetype or else Xapian won't know how to index.
               # Copy file.last_revision.disk_file to new_revision.disk_file
               new_revision.size = file.last_revision.size
               new_revision.disk_filename = new_revision.new_storage_filename
               Rails.logger.info "WebDAV MOVE: Copy file #{file.last_revision.disk_filename} -> #{new_revision.disk_filename}"
               File.open(file.last_revision.disk_file, 'rb') do |f|
-                new_revision.copy_file_content(f)
+                new_revision.copy_file_content f
               end
-
               # Save
               new_revision.save && resource.file.save
-
               # Delete (and destroy) the file that should have been renamed and return what should have been returned in case of a copy
               file.delete(true) ? Created : PreconditionFailed
             else
@@ -300,11 +288,10 @@ module RedmineDmsf
               f = parent.folder
             end
             return PreconditionFailed unless exist? && file
-            
             if (project == resource.project) && resource.basename.match(/.\.tmp$/i)
               Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename}, possible MSOffice rename to .tmp when saving."
               # Renaming the file to X.tmp, might be Office that is saving a file. Keep the original file.
-              file.copy_to_filename(resource.project, f, resource.basename)
+              file.copy_to_filename resource.project, f, resource.basename
               Created
             else
               if (project == resource.project) && (file.last_revision.size == 0)
@@ -313,14 +300,12 @@ module RedmineDmsf
               else
                 return InternalServerError unless file.move_to(resource.project, f)
               end
-
               # Update Revision and names of file [We can link to old physical resource, as it's not changed]
               if file.last_revision
                 file.last_revision.name = resource.basename
                 file.last_revision.title = DmsfFileRevision.filename_to_title(resource.basename)
               end
               file.name = resource.basename
-
               # Save Changes
               (file.last_revision.save && file.save) ? Created : PreconditionFailed
             end

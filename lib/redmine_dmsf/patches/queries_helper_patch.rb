@@ -76,7 +76,7 @@ module RedmineDmsf
             else
               tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle('#{item.id}','#{item.id}span','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe +
               link_to(h(value),
-                dmsf_folder_path(id: item.project_id, folder_id: item.id),
+                dmsf_folder_path(id: item.project, folder_id: item.id),
                 class: 'icon icon-folder',
                 title: h(value))
             end
@@ -86,8 +86,9 @@ module RedmineDmsf
               tag = content_tag('span', value, class: 'icon icon-folder')
             else
               tag = "<span class=\"dmsf_expander\"></span>".html_safe +
+              # For links we use revision_id containing dmsf_folder.id in fact
               link_to(h(value),
-                      dmsf_folder_path(id: item.project_id, folder_id: item.id),
+                      dmsf_folder_path(id: item.project, folder_id: item.revision_id),
                       class: 'icon icon-folder',
                       title: h(value))
             end
@@ -96,7 +97,8 @@ module RedmineDmsf
             if item.deleted && (item.deleted > 0)
               tag = content_tag('span', value, class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}")
             else
-              file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: item.id })
+              # For links we use revision_id containing dmsf_file.id in fact
+              file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: (item.type == 'file') ? item.id : item.revision_id })
               content_type = Redmine::MimeType.of(value)
               content_type = 'application/octet-stream' if content_type.blank?
               tag = "<span class=\"dmsf_expander\"></span>".html_safe +
