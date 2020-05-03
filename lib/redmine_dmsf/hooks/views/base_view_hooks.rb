@@ -33,7 +33,7 @@ module RedmineDmsf
         "\n".html_safe + javascript_include_tag('redmine_dmsf.js', plugin: :redmine_dmsf, defer: true) +
         "\n".html_safe + javascript_include_tag('attachments_dmsf.js', plugin: :redmine_dmsf, defer: true)
         if defined?(EasyExtensions)
-          meta << "\n".html_safe + javascript_include_tag('context_menu', 'application')
+          meta << "\n".html_safe + javascript_include_tag('context_menu', 'application', defer: true)
         end
         meta
       end
