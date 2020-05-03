@@ -160,5 +160,9 @@ module RedmineDmsf
   end
 end
 
-RedmineExtensions::PatchManager.register_helper_patch 'QueriesHelper',
-  'RedmineDmsf::Patches::QueriesHelperPatch', prepend: true
+if Redmine::Plugin.installed?(:easy_extensions)
+  RedmineExtensions::PatchManager.register_helper_patch 'QueriesHelper',
+    'RedmineDmsf::Patches::QueriesHelperPatch', prepend: true
+else
+  DmsfController.send :helper, RedmineDmsf::Patches::QueriesHelperPatch
+end
