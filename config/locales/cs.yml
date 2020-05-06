@@ -408,6 +408,8 @@ cs:
   field_last_at: Poslední
   field_size: Velikost
 
+  label_add_width: Přidat s
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

@@ -407,6 +407,8 @@ ko:
   field_last_at: 마지막
   field_size: 크기
 
+  label_add_width: Add with
+
   easy_pages:
     modules:
       dmsf_locked_documents: 내 잠긴 파일

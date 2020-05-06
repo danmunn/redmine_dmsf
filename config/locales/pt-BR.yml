@@ -408,6 +408,8 @@ pt-BR:
   field_last_at: Last
   field_size: Size
 
+  label_add_width: Add with
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

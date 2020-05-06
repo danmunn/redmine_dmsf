@@ -38,3 +38,11 @@
     <%= text_field_tag 'name', nil, maxlength: 30, style: 'max-width: 40%' %>
   </span>
 </fieldset>
+
+<%= late_javascript_tag do %>
+  $("div#users input:checkbox").on("change", function(){
+    let n = $("div#users input[type='checkbox']:checked").length;
+    $("#add-step-and:submit").prop("disabled", n < 1);
+    $("#add-step-or:submit").prop("disabled", n < 2);
+  });
+<% end %>

@@ -409,6 +409,8 @@ de:
   field_last_at: Letzte
   field_size: Größe
 
+  label_add_width: Zugeben mit
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

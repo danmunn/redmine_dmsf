@@ -22,11 +22,12 @@
 
 <h3 class="title"><%= l(:dmsf_new_step) %></h3>
 
-<%= labelled_form_for(@dmsf_workflow, { url: edit_dmsf_workflow_path(@dmsf_workflow), method: :post}) do |f| %>
+<%= labelled_form_for(@dmsf_workflow, { url: edit_dmsf_workflow_path(@dmsf_workflow), method: :post }) do |f| %>
   <%= render partial: 'new_step_form' %>
   <p class="buttons">
-    <%= f.submit l(:dmsf_and), id: 'add-step-and' %>
-    <%= f.submit l(:dmsf_or), id: 'add-step-or' %>
-    <%= f.submit l(:button_cancel), name: nil, onclick: 'hideModal(this);', type: 'button', class: 'button' %>
+    <%= l(:label_add_width) %>
+    <%= f.submit l(:dmsf_and), id: 'add-step-and', disabled: true %>
+    <%= f.submit l(:dmsf_or), id: 'add-step-or', disabled: true %>
+    <%= link_to_function l(:button_cancel), 'hideModal(this);' %>
   </p>
 <% end %>
