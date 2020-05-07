@@ -32,9 +32,11 @@ module RedmineDmsf
 
       def view_attachments_form_top(context={})
         html = ''
+        container = context[:container]
+        description = defined?(EasyExtensions) && EasySetting.value('attachment_description')
         # Radio buttons
-        if allowed_to_attach_documents(context[:container])
-          html << '<p>'
+        if allowed_to_attach_documents(container) && allowed_to_attach_attachments(container)
+          html << (description ? '<p' : '<div')
             classes = +'inline'
             html << "<label class=\"#{classes}\">"
               html << radio_button_tag('dmsf_attachments_upload_choice', 'Attachments',
@@ -42,7 +44,7 @@ module RedmineDmsf
                     onchange: "$('.attachments-container:not(.dmsf-uploader)').show(); $('.dmsf-uploader').parent().hide(); return false;")
               html << l(:label_basic_attachments)
             html << '</label>'
-            unless context[:container] && context[:container].new_record?
+            unless container && container.new_record?
               classes << ' dmsf_attachments_label'
             end
             html << "<label class=\"#{classes}\">"
@@ -51,14 +53,19 @@ module RedmineDmsf
                     onchange: "$('.attachments-container:not(.dmsf-uploader)').hide(); $('.dmsf-uploader').parent().show(); return false;")
               html << l(:label_dmsf_attachments)
             html << '</label>'
-          html << '</p>'
+          html << (description ? '</p>' : '</div>')
           if User.current.pref.dmsf_attachments_upload_choice == 'DMSF'
             html << context[:hook_caller].late_javascript_tag("$('.attachments-container:not(.dmsf-uploader)').hide();")
           end
         end
         # Upload form
-        html.html_safe + attach_documents_form(context, false,
-          defined?(EasyExtensions) && EasySetting.value('attachment_description'))
+        if allowed_to_attach_documents(container)
+          html << attach_documents_form(context, false, description)
+        end
+        unless allowed_to_attach_attachments(container)
+          html << context[:hook_caller].late_javascript_tag("$('.attachments-container:not(.dmsf-uploader)').hide();")
+        end
+        html.html_safe
       end
 
       def view_issues_show_description_bottom(context={})
@@ -93,8 +100,8 @@ module RedmineDmsf
       end
 
       def view_issues_edit_notes_bottom_style(context={})
-        if (User.current.pref.dmsf_attachments_upload_choice == 'Attachments') ||
-          !allowed_to_attach_documents(context[:container])
+        if ((User.current.pref.dmsf_attachments_upload_choice == 'Attachments') ||
+          !allowed_to_attach_documents(context[:container])) && allowed_to_attach_attachments(context[:container])
           ''
         else
           'display: none'
@@ -108,6 +115,13 @@ module RedmineDmsf
           User.current.allowed_to?(:file_manipulation, container.project) &&
           Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
           (container.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
+      end
+
+      def allowed_to_attach_attachments(container)
+        unless defined?(EasyExtensions)
+          true
+        end
+        container.project && container.project.module_enabled?(:documents)
       end
 
       def get_links(container)
@@ -148,7 +162,7 @@ module RedmineDmsf
           container = context[:container]
           if allowed_to_attach_documents(container)
             html = (description ? '<p' : '<div')
-            html << " style=\"#{(User.current.pref.dmsf_attachments_upload_choice == 'Attachments') ? 'display: none;' : ''}\">"
+            html << " style=\"#{(User.current.pref.dmsf_attachments_upload_choice == 'Attachments') && allowed_to_attach_attachments(container) ? 'display: none;' : ''}\">"
             if label
               html << "<label>#{l(:label_document_plural)}</label>"
               html << "<span class=\"attachments-container dmsf-uploader\">"
