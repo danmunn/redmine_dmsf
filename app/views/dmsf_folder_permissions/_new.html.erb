@@ -30,8 +30,8 @@
   <div id="users_for_watcher">
     <%= render_principals_for_new_folder_permissions @principals %>
   </div>
-  <p class="buttons">
-    <%= submit_tag l(:button_add), name: nil, onclick: 'hideModal(this);' %>
+  <div class="form-actions">
+    <%= submit_tag l(:button_add), onclick: 'hideModal(this);', class: 'button-positive' %>
     <%= link_to_function l(:button_cancel), "hideModal(this);" %>
-  </p>
+  </div>
 <% end %>
