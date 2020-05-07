@@ -48,19 +48,19 @@
       <% end %>
     <% end %>
     <% unless @folder.locked? %>
-      <%= link_to(l(:button_delete), delete_dmsf_path(id: @project, folder_id: @folder),
+      <%= link_to l(:button_delete), delete_dmsf_path(id: @project, folder_id: @folder),
         data: { confirm: l(:text_are_you_sure) },
-        title: l(:button_delete), class: 'icon icon-del', method: :delete) %>
+        title: l(:button_delete), class: 'icon icon-del', method: :delete %>
     <% end %>
   <% end %>
 </div>
 
 <% create = @pathfolder == @parent %>
 <%= render partial: 'path',
-           locals: { folder: @pathfolder, filename: create ? l(:heading_new_folder) : nil, title: nil} %>
+           locals: { folder: @pathfolder, filename: create ? l(:heading_new_folder) : nil, title: nil } %>
 
 <%= labelled_form_for(@folder,
-                      url: { action: create ? 'create' : 'save', id: @project, folder_id: @folder, parent_id: @parent},
+                      url: { action: create ? 'create' : 'save', id: @project, folder_id: @folder, parent_id: @parent },
                       html: { method: :post }) do |f| %>
   <%= error_messages_for @folder %>
   <%= f.hidden_field :redirect_to_folder_id, value: @redirect_to_folder_id %>
@@ -94,7 +94,7 @@
           <br/>
         <% end %>
       <% end %>
-      <%= label_tag '', l(:label_permissions) %>
+      <%= label_tag '', l(:label_dmsf_permissions) %>
       <% Role.givable.each do |role| %>
         <% checked = @folder.permission_for_role(role) %>
         <label class="inline">

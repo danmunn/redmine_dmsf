@@ -396,7 +396,8 @@ cs:
   text_dmsf_fast_links_info: Při vytváření odkazů budete moci zadat přímo ID cílového adresáře za účelem zrychlení
     procesu vytváření odkazů.
 
-  label_inherited_permissions: Zděděná práva
+  label_dmsf_permissions: Vyhrazený přístup pro
+  label_inherited_permissions: Zděděný přístup pro
 
   button_edit_content: Upravit obsah
   field_workflow: Workflow

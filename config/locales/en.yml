@@ -396,7 +396,8 @@ en:
   text_dmsf_fast_links_info: You will be able to manually enter a target folder's ID when creating links in order to speed
     up the process of creating links.
 
-  label_inherited_permissions: Inherited permissions
+  label_dmsf_permissions: Prohibit Access for
+  label_inherited_permissions: Inherited Access for
 
   button_edit_content: Edit content
   field_workflow: Workflow
