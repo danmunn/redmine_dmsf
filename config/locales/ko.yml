@@ -146,7 +146,6 @@ ko:
     모두 - 모든 단어에 대해 형태소 분석을 합니다 (참고: 'Z' 접두어가 붙지 않음)."
   label_default_notifications: 파일 기본 알림
   heading_uploaded_files: 업로드 된 파일
-  submit_commit: 커밋
   link_documents: 문서
   permission_view_dmsf_file_revision_accesses: 활동 스트림에서 다운로드 확인하기
   permission_view_dmsf_file_revisions: 활동 스트림에서 수정사항 확인하기

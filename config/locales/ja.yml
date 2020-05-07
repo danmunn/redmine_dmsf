@@ -146,7 +146,6 @@ ja:
     with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: ファイル通知の既定値
   heading_uploaded_files: アップロードされたファイル
-  submit_commit: コミット
   link_documents: 文書
   permission_view_dmsf_file_revision_accesses: ダウンロード履歴の表示
   permission_view_dmsf_file_revisions: リビジョン履歴の表示

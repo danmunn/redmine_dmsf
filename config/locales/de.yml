@@ -147,7 +147,6 @@ de:
     with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Standardmäßge Dateibenachrichtigungen
   heading_uploaded_files: Hochgeladene Dateien
-  submit_commit: OK
   link_documents: Dateien
   permission_view_dmsf_file_revision_accesses: Betrachte Dokumentezugriffe in Aktivitäten
   permission_view_dmsf_file_revisions: Betrachte Dokumenteversion in Aktivitäten

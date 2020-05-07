@@ -146,7 +146,6 @@ pl:
     with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Domyślne powiadomienia plików
   heading_uploaded_files: Przesłane pliki
-  submit_commit: Zatwierdź
   link_documents: Dokumenty
   permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
   permission_view_dmsf_file_revisions: View revisions in Activity stream

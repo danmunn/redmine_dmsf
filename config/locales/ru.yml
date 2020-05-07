@@ -146,7 +146,6 @@ ru:
     with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Значение по умолчанию для уведомлений
   heading_uploaded_files: Загруженные файлы
-  submit_commit: Зафиксировать
   link_documents: Документы
   permission_view_dmsf_file_revision_accesses: Показывать загрзуки файлов в ленте активности
   permission_view_dmsf_file_revisions: Показывать изменение файлов в ленте активности

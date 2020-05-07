@@ -146,7 +146,6 @@ nl:
     with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Standaard bestand notificaties
   heading_uploaded_files: Geuploade Bestanden
-  submit_commit: Indienen
   link_documents: Documenten
   permission_view_dmsf_file_revision_accesses: Bekijk downloads in Activiteiten stroom
   permission_view_dmsf_file_revisions: Bekijk revisies in Activiteiten stroom

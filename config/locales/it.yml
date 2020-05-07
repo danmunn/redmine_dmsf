@@ -146,7 +146,6 @@ it: # Italian strings thx 2 Matteo Arceci!
     with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Notifica di default dei documenti
   heading_uploaded_files: Documenti caricati
-  submit_commit: Invia/Salva
   link_documents: Documenti
   permission_view_dmsf_file_revision_accesses: Visualizza i download nel flusso di attività
   permission_view_dmsf_file_revisions: Visualizza le revisioni nel flusso di attività

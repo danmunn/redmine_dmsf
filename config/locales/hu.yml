@@ -146,7 +146,6 @@ hu:
     with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: Fájl alapértelmezett értesítések
   heading_uploaded_files: Feltöltött fájlok
-  submit_commit: Beíratás (commit)
   link_documents: Dokumentumok
   permission_view_dmsf_file_revision_accesses: Letöltések megjelenítése a tevékenységi listában
   permission_view_dmsf_file_revisions: Verziók megjelenítése a tevékenységi listában

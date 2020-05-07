@@ -146,7 +146,6 @@ zh-TW:
     with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: 檔案通知預設
   heading_uploaded_files: 上傳檔案
-  submit_commit: 提交
   link_documents: 文件檔案
   permission_view_dmsf_file_revision_accesses: View downloads in Activity stream
   permission_view_dmsf_file_revisions: View revisions in Activity stream
