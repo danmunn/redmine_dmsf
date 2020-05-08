@@ -24,7 +24,6 @@ module RedmineDmsf
 
     class DmsfViewListener < Redmine::Hook::ViewListener
 
-      # TODO: *.css are twice there
       def view_layouts_base_html_head(context={})
         return unless /^(Dmsf|Projects)/.match?(context[:controller].class.name)
         meta = "\n".html_safe + stylesheet_link_tag('redmine_dmsf.css', plugin: :redmine_dmsf) +

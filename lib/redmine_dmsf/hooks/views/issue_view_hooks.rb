@@ -121,7 +121,7 @@ module RedmineDmsf
         unless defined?(EasyExtensions)
           true
         end
-        container.project && container.project.module_enabled?(:documents)
+        container && container.project && container.project.module_enabled?(:documents)
       end
 
       def get_links(container)
