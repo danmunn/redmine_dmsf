@@ -344,7 +344,21 @@ div[id*="revision_access_"] {
 
 /* EasyExtensions - font icons */
 .icon-actions::before {
-    content: "\F1D8" !important;
+    content: "\F1D8";
+}
+
+table.dmsf a.sort {
+    padding-right: 16px;
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+}
+
+table.dmsf a.sort.desc.icon.icon-sorted-asc {
+    background-image: url("../../../images/arrow_up.png") !important;
+}
+
+table.dmsf a.sort.asc.icon.icon-sorted-desc {
+    background-image: url("../../../images/arrow_down.png") !important;
 }
 
 /* EasyExtensions - Approval workflows */

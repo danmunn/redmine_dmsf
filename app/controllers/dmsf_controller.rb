@@ -625,11 +625,10 @@ class DmsfController < ApplicationController
   end
 
   def get_query
+    use_session = !request.format.csv?
     if Redmine::Plugin.installed?(:easy_extensions)
-      @query = DmsfQuery.new
-      @query.project = @project
+      @query = retrieve_query_without_easy_extensions(DmsfQuery, use_session)
     else
-      use_session = !request.format.csv?
       @query = retrieve_query(DmsfQuery, use_session)
     end
   end
