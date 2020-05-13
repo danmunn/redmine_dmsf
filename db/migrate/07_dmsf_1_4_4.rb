@@ -43,7 +43,7 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
     #               data into it, which should enable us to run checks we need, not as
     #               efficient, however compatible across the board.
     DmsfFileLock.reset_column_information
-    DmsfFileLock.select('MAX(id), id').order('MAX(id) DESC').group(:dmsf_file_id, :id).find do |lock|
+    DmsfFileLock.select('MAX(id), id').order(Arel.sql('MAX(id) DESC')).group(:dmsf_file_id, :id).find do |lock|
       lock.reload 
       if lock.locked
         do_not_delete << lock.id
