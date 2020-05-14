@@ -28,7 +28,7 @@ Redmine::Plugin.register :redmine_dmsf do
     author_url 'https://www.easyredmine.com'
   else
     name 'DMSF'
-    url 'https://www.redmine.org/plugins/dmsf'
+    url 'https://www.redmine.org/plugins/redmine_dmsf'
     author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   end
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
