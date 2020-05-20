@@ -413,7 +413,7 @@ class DmsfController < ApplicationController
   private
 
   def users_for_new_users
-    Principal.active.visible.member_of(@project).like(params[:q]).order(:type, :lastname).to_a
+    User.active.visible.member_of(@project).like(params[:q]).order(:type, :lastname).to_a
   end
 
   def email_entries(selected_folders, selected_files)
