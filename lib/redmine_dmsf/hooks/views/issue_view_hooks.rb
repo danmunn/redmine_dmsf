@@ -36,7 +36,7 @@ module RedmineDmsf
         description = defined?(EasyExtensions) && EasySetting.value('attachment_description')
         # Radio buttons
         if allowed_to_attach_documents(container) && allowed_to_attach_attachments(container)
-          html << (description ? '<p' : '<div')
+          html << (description ? '<p>' : '<div>')
             classes = +'inline'
             html << "<label class=\"#{classes}\">"
               html << radio_button_tag('dmsf_attachments_upload_choice', 'Attachments',
@@ -119,9 +119,12 @@ module RedmineDmsf
 
       def allowed_to_attach_attachments(container)
         unless defined?(EasyExtensions)
-          true
+          return true
         end
-        container && container.project && container.project.module_enabled?(:documents)
+        if allowed_to_attach_documents(container) && (!container.project.module_enabled?(:documents))
+          return false
+        end
+        true
       end
 
       def get_links(container)

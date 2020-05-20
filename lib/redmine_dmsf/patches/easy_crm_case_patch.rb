@@ -160,11 +160,12 @@ module RedmineDmsf
 
       # Adds a journal detail for an attachment that was added or removed
       def journalize_dmsf_file(dmsf_file, added_or_removed)
+        key = (added_or_removed == :removed ? :old_value : :value)
         init_journal(User.current)
         current_journal.details << JournalDetail.new(
           property: 'dmsf_file',
           prop_key: dmsf_file.id,
-          key: dmsf_file.title
+          key => dmsf_file.title
         )
         current_journal.save
       end
