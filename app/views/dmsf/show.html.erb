@@ -22,6 +22,12 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
+<% if defined?(EasyExtensions) %>
+  <% content_for :header_tags do %>
+    <%= javascript_include_tag 'context_menu', 'application', defer: true %>
+  <% end %>
+<% end %>
+
 <% html_title l(:dmsf) %>
 <div class="contextual">
   <% if @file_manipulation_allowed && !@locked_for_user && !@system_folder %>
