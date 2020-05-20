@@ -59,10 +59,6 @@
                                    type: 'link_from'), title: l(:title_create_link),
                 class: 'icon icon-link' %>
   <% end %>
-  <%= link_to(l(:link_create_folder),
-              new_dmsf_path(id: project, parent_id: folder),
-              title: l(:link_create_folder),
-              class: 'icon icon-add') unless locked_for_user %>
 <% end %>
 <% if trash_enabled %>
   <%= link_to l(:link_trash_bin), trash_dmsf_path(project), title: l(:link_trash_bin), class: 'icon icon-del' %>

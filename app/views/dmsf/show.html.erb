@@ -30,9 +30,15 @@
 
 <% html_title l(:dmsf) %>
 <div class="contextual">
-  <% if @file_manipulation_allowed && !@locked_for_user && !@system_folder %>
-    <%= link_to l(:label_attachment_new), multi_dmsf_upload_path(id: @project, folder_id: @folder),
-                class: 'icon icon-add' %>
+  <% unless @locked_for_user || @system_folder  %>
+    <% if @file_manipulation_allowed %>
+      <%= link_to l(:label_attachment_new), multi_dmsf_upload_path(id: @project, folder_id: @folder),
+              class: 'icon icon-add' %>
+    <% end %>
+    <% if @folder_manipulation_allowed %>
+      <%= link_to l(:link_create_folder), new_dmsf_path(id: @project, parent_id: @folder),
+              title: l(:link_create_folder), class: 'icon icon-add' %>
+    <% end %>
   <% end %>
   <% if defined?(EasyExtensions) %>
     <%= render partial: 'dmsf_context_menus/main', locals: {
