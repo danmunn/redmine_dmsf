@@ -1,5 +1,5 @@
-<%
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,32 +18,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-%>
+#
+module RedmineDmsf
+  module Patches
+    module QueriesControllerPatch
 
-<% if defined?(EasyExtensions) %>
-  <% content_for :header_tags do %>
-    <%= javascript_include_tag 'context_menu', 'application', defer: true %>
-  <% end %>
-<% end %>
+      ##################################################################################################################
+      # New methods
 
-<% html_title l(:dmsf) %>
+      private
 
-<h2><%= l(:link_trash_bin) %></h2>
+      def redirect_to_dmsf_query(options)
+          redirect_to dmsf_folder_path(@project, options)
+      end
 
-<div class="dmsf-header">
-  <div class="wiki">
-    <%= textilizable @project.dmsf_description %>
-  </div>
-</div>
+    end
+  end
+end
 
-<%= form_tag(trash_dmsf_path(id: @project), method: :get, id: 'query_form') do %>
-  <%= render partial: 'queries/query_form' %>
-<% end %>
-<%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages } %>
-<span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>
-
-<%= context_menu %>
-
-<% content_for :sidebar do %>
-  <%= render partial: 'dmsf/sidebar' %>
-<% end %>
+RedmineExtensions::PatchManager.register_controller_patch 'QueriesController',
+  'RedmineDmsf::Patches::QueriesControllerPatch', prepend: true

@@ -84,3 +84,7 @@
       <%= f.link_to 'CSV', url: { action: :show, id: @project, dmsf_folder_id: @folder } %>
     <% end %>
 <% end %>
+
+<% content_for :sidebar do %>
+  <%= render partial: 'dmsf/sidebar' %>
+<% end %>

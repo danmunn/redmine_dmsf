@@ -38,6 +38,7 @@ require 'redmine_dmsf/patches/user_preference_patch'
 require 'redmine_dmsf/patches/user_patch'
 require 'redmine_dmsf/patches/issue_patch'
 require 'redmine_dmsf/patches/role_patch'
+require 'redmine_dmsf/patches/queries_controller_patch'
 
 if defined?(EasyExtensions)
   require 'redmine_dmsf/patches/easy_crm_case_patch'
