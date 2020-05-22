@@ -164,6 +164,7 @@ class DmsfController < ApplicationController
     rescue StandardError => e
       flash[:error] = e.message
       Rails.logger.error e.message
+      return redirect_back(fallback_location: dmsf_folder_path(id: @project, folder_id: @folder))
     end
   end
 
