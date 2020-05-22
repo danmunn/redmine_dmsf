@@ -294,6 +294,16 @@ class DmsfFolder < ActiveRecord::Base
     DmsfFileRevisionCustomField.all
   end
 
+  def custom_values
+    # We need to response with DmsfFileRevision custom values if DmsfFolder just cover files in the union of the main view
+    if self.respond_to?(:type)
+      if /^file/.match?(type)
+        return CustomValue.where(customized_type: 'DmsfFileRevision', customized_id: revision_id)
+      end
+    end
+    super
+  end
+
   def modified
     last_update = updated_at
     time = DmsfFolder.where(

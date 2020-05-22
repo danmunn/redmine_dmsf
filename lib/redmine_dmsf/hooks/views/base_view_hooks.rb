@@ -25,7 +25,7 @@ module RedmineDmsf
     class DmsfViewListener < Redmine::Hook::ViewListener
       
       def view_layouts_base_html_head(context={})
-        return unless context[:controller].class.name.match?(/^(Dmsf|Projects)/)
+        return unless /^(Dmsf|Projects|Issues)/.match?(context[:controller].class.name)
         "\n".html_safe + stylesheet_link_tag('redmine_dmsf.css', plugin: :redmine_dmsf) +
         "\n".html_safe + stylesheet_link_tag('select2.min.css', plugin: :redmine_dmsf) +
         "\n".html_safe + javascript_include_tag('select2.min.js', plugin: :redmine_dmsf, defer: true) +
