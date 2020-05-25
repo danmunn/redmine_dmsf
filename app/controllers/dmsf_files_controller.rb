@@ -53,7 +53,7 @@ class DmsfFilesController < ApplicationController
         @revision = DmsfFileRevision.find(params[:download].to_i)
         raise DmsfAccessError if @revision.dmsf_file != @file
       end
-      check_project(@revision.dmsf_file)
+      check_project @revision.dmsf_file
       raise ActionController::MissingFile if @file.deleted?
       access = DmsfFileRevisionAccess.new
       access.user = User.current
@@ -68,10 +68,10 @@ class DmsfFilesController < ApplicationController
       end
       # IE has got a tendency to cache files
       expires_in(0.year, 'must-revalidate' => true)
-      send_file(@revision.disk_file,
+      send_file @revision.disk_file,
         filename: filename_for_content_disposition(@revision.formatted_name(title_format)),
         type: @revision.detect_content_type,
-        disposition: @revision.dmsf_file.disposition)
+        disposition: params[:disposition].present? ? params[:disposition] : @revision.dmsf_file.disposition
     rescue DmsfAccessError => e
       Rails.logger.error e.message
       render_403

@@ -24,7 +24,7 @@
                      "$('#revision_access_#{revision.id}').toggle(); $('.drdn.expanded').removeClass('expanded');",
                      class: 'icon icon-group dmsf-revision-action-button' %>
 <%= link_to l(:title_download),
-            view_dmsf_file_path(file, download: revision),
+            view_dmsf_file_path(file, download: revision, disposition: 'attachment'),
             title: l(:title_title_version_version_download, title: h(revision.title), version: revision.version),
             class: 'icon icon-download dmsf-revision-action-button' %>
 <%= link_to l(:title_obsolete_revision),

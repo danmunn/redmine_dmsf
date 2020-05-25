@@ -51,8 +51,8 @@
     <%= render(partial: 'approval_workflow', locals: { dmsf_file: dmsf_file, project: project, locked: locked }) %>
 </li>
 <li>
-<%= context_menu_link l(:button_download), view_dmsf_file_path(dmsf_file), class: 'icon icon-download',
-                      disabled: false %>
+<%= context_menu_link l(:button_download), view_dmsf_file_path(dmsf_file, disposition: 'attachment'),
+                      class: 'icon icon-download', disabled: false %>
 </li>
 <li>
 <%= context_menu_link l(:field_mail), entries_operations_dmsf_path(id: @project, folder_id: folder,
