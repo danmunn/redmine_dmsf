@@ -67,6 +67,7 @@ module RedmineDmsf
       def controller_issues_before_save(context)
         if context.is_a?(Hash)
           issue = context[:issue]
+          @new_object = issue.new_record?
           params = context[:params]
           # Save upload preferences DMS/Attachments
           User.current.pref.update_attribute :dmsf_attachments_upload_choice, params[:dmsf_attachments_upload_choice]
@@ -144,7 +145,7 @@ module RedmineDmsf
               end
             end
             DmsfUploadHelper.commit_files_internal uploaded_files, issue.project, system_folder,
-             context[:controller]
+             context[:controller], @new_object, issue
           end
           # Attach DMS links
           issue.saved_dmsf_links.each do |l|
@@ -154,7 +155,7 @@ module RedmineDmsf
             if system_folder
               l.project_id = system_folder.project_id
               l.dmsf_folder_id = system_folder.id
-              if l.save
+              if l.save && (!@new_object)
                 issue.dmsf_file_added file
               end
               wf = issue.saved_dmsf_links_wfs[l.id]

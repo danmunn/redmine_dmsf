@@ -50,7 +50,8 @@ module RedmineDmsf
                 end
               end
             end
-            DmsfUploadHelper.commit_files_internal uploaded_files, easy_crm_case.project, system_folder, self
+            DmsfUploadHelper.commit_files_internal uploaded_files, easy_crm_case.project, system_folder, self,
+                                                   false, easy_crm_case
           end
           # Attach DMS links
           easy_crm_case.saved_dmsf_links.each do |l|

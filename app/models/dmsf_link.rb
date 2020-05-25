@@ -126,17 +126,8 @@ class DmsfLink < ActiveRecord::Base
     link
   end
 
-  def container
-    if dmsf_folder && dmsf_folder.system
-      Issue.find_by id: dmsf_folder.title
-    end
-  end
-
   def delete(commit = false)
     if commit
-      if container.is_a?(Issue)
-        container.dmsf_file_removed(target_file)
-      end
       destroy
     else
       self.deleted = STATUS_DELETED

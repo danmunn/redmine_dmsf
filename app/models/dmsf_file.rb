@@ -142,9 +142,6 @@ class DmsfFile < ActiveRecord::Base
       # Revisions and links of a deleted file SHOULD be deleted too
       dmsf_file_revisions.each { |r| r.delete(commit, true) }
       if commit
-        if container.is_a?(Issue)
-          container.dmsf_file_removed(self)
-        end
         destroy
       else
         self.deleted = STATUS_DELETED
@@ -553,15 +550,6 @@ class DmsfFile < ActiveRecord::Base
       end
     end
     l(:title_unlock_file)
-  end
-
-  def container
-    unless @container
-      if dmsf_folder && dmsf_folder.system
-        @container = Issue.find_by(id: dmsf_folder.title.to_i)
-      end
-    end
-    @container
   end
 
 end

@@ -147,15 +147,11 @@ module RedmineDmsf
       end
 
       def dmsf_file_added(dmsf_file)
-        unless dmsf_file.new_record?
-          self.journalize_dmsf_file(dmsf_file, :added)
-        end
+        self.journalize_dmsf_file dmsf_file, :added
       end
 
       def dmsf_file_removed(dmsf_file)
-        unless dmsf_file.new_record?
-          self.journalize_dmsf_file(dmsf_file, :removed)
-        end
+        self.journalize_dmsf_file dmsf_file, :removed
       end
 
       # Adds a journal detail for an attachment that was added or removed

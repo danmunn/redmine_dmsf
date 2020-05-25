@@ -22,7 +22,7 @@
 module DmsfUploadHelper
   include Redmine::I18n
 
-  def self.commit_files_internal(commited_files, project, folder, controller = nil)
+  def self.commit_files_internal(commited_files, project, folder, controller = nil, new_object = false, container = nil)
     failed_uploads = []
     files = []
     if commited_files
@@ -106,29 +106,29 @@ module DmsfUploadHelper
             FileUtils.mv commited_file[:tempfile_path], new_revision.disk_file(false)
             FileUtils.chmod 'u=wr,g=r', new_revision.disk_file(false)
             file.set_last_revision new_revision
-            files.push(file)
-            if file.container.is_a?(Issue)
-              file.container.dmsf_file_added(file)
+            files.push file
+            if container && container.is_a?(Issue) && (!new_object)
+              container.dmsf_file_added file
             end
           rescue => e
             Rails.logger.error e.message
             controller.flash[:error] = e.message if controller
-            failed_uploads.push(file)
+            failed_uploads.push file
           end
         else
-          failed_uploads.push(commited_file)
+          failed_uploads.push commited_file
         end
         # Approval workflow
         if commited_file[:workflow_id].present?
           wf = DmsfWorkflow.find_by(id: commited_file[:workflow_id])
           if wf
             # Assign the workflow
-            new_revision.set_workflow(wf.id, 'assign')
-            new_revision.assign_workflow(wf.id)
+            new_revision.set_workflow wf.id, 'assign'
+            new_revision.assign_workflow wf.id
             # Start the workflow
-            new_revision.set_workflow(wf.id, 'start')
+            new_revision.set_workflow wf.id, 'start'
             if new_revision.save
-              wf.notify_users(project, new_revision, controller)
+              wf.notify_users project, new_revision, controller
               begin
                 file.lock!
               rescue DmsfLockError => e
