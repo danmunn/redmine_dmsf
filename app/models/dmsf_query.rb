@@ -94,7 +94,7 @@ class DmsfQuery < Query
         where(statement).
         count
   rescue ::ActiveRecord::StatementInvalid => e
-    raise StatementInvalid.new(e.message)
+    raise StatementInvalid.new e.message
   end
 
   def type
@@ -105,7 +105,7 @@ class DmsfQuery < Query
     add_available_filter 'author', type: :list, values: lambda { author_values }
     add_available_filter 'title', type: :text
     add_available_filter 'updated', type: :date_past
-    add_custom_fields_filters(DmsfFileRevisionCustomField.all)
+    add_custom_fields_filters DmsfFileRevisionCustomField.all
   end
 
   def statement
@@ -117,19 +117,13 @@ class DmsfQuery < Query
         operator = operator_for(field)
         if field == 'author'
           if v.delete('me')
-              v.push(User.current.id.to_s)
+              v.push User.current.id.to_s
           end
         end
         filters_clauses << '(' + sql_for_field(field, operator, v, queried_table_name, field) + ')'
       end
       filters_clauses.reject!(&:blank?)
-      if filters_clauses.any?
-        @statement = filters_clauses.join(' AND ').
-            gsub("#{queried_class.table_name}.", '')
-        DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, name|
-          @statement.gsub!("cf_#{id}", "\"#{name}\"")
-        end
-        end
+      @statement = filters_clauses.any? ? filters_clauses.join(' AND ') : nil
     end
     @statement
   end
@@ -148,7 +142,6 @@ class DmsfQuery < Query
         order_option[1].gsub!(',', " #{$1},")
       end
     end
-
     base_scope.
         where(statement).
         order(order_option).
@@ -163,6 +156,12 @@ class DmsfQuery < Query
   private
 
   def dmsf_folders_scope
+    cf_columns = +''
+    if filters.any?
+      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+        cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
+      end
+    end
     scope = DmsfFolder.
         select(%{
           dmsf_folders.id AS id,
@@ -181,13 +180,15 @@ class DmsfQuery < Query
           users.id AS author,
           'folder' AS type,
           dmsf_folders.deleted AS deleted,
-          0 AS sort}).
+          0 AS sort #{cf_columns}}).
         joins('LEFT JOIN users ON dmsf_folders.user_id = users.id').
         visible(!deleted)
     if deleted
       scope.where dmsf_folders: { project_id: project.id, deleted: deleted }
     else
-      if dmsf_folder_id
+      if filters.any?
+        scope.where dmsf_folders: { project_id: project.id, deleted: deleted }
+      elsif dmsf_folder_id
         scope.where dmsf_folders: { dmsf_folder_id: dmsf_folder_id, deleted: deleted }
       else
         scope.where dmsf_folders: { project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
@@ -196,6 +197,12 @@ class DmsfQuery < Query
   end
 
   def dmsf_folder_links_scope
+    cf_columns = +''
+    if filters.any?
+      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+        cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
+      end
+    end
     scope = DmsfLink.
         select(%{
           dmsf_links.id AS id,
@@ -214,13 +221,15 @@ class DmsfQuery < Query
           users.id AS author,
           'folder-link' AS type,
           dmsf_links.deleted AS deleted,
-          0 AS sort}).
+          0 AS sort #{cf_columns}}).
         joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
         joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)')
     if deleted
       scope.where dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, deleted: deleted }
     else
-      if dmsf_folder_id
+      if filters.any?
+        scope.where dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, deleted: deleted }
+      elsif dmsf_folder_id
         scope.where dmsf_links: { target_type: 'DmsfFolder', dmsf_folder_id: dmsf_folder_id, deleted: deleted }
       else
         scope.where dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
@@ -229,6 +238,12 @@ class DmsfQuery < Query
   end
 
   def dmsf_files_scope
+    cf_columns = +''
+    if filters.any?
+      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+        cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
+      end
+    end
     scope = DmsfFile.
         select(%{
           dmsf_files.id AS id,
@@ -247,15 +262,16 @@ class DmsfQuery < Query
           users.id AS author,
           'file' AS type,
           dmsf_files.deleted AS deleted,
-          1 AS sort}).
+          1 AS sort #{cf_columns}}).
         joins(:dmsf_file_revisions).
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
         where('dmsf_file_revisions.created_at = (SELECT MAX(r.created_at) FROM dmsf_file_revisions r WHERE r.dmsf_file_id = dmsf_file_revisions.dmsf_file_id)')
     if deleted
       scope.where dmsf_files: { project_id: project.id, deleted: deleted }
     else
-      # Consider files belonging to the folder but with wrong project (#1106)
-      if dmsf_folder_id
+      if filters.any?
+        scope.where dmsf_files: { project_id: project.id, deleted: deleted }
+      elsif dmsf_folder_id
         scope.where dmsf_files: { dmsf_folder_id: dmsf_folder_id, deleted: deleted }
       else
         scope.where dmsf_files: { project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
@@ -264,6 +280,12 @@ class DmsfQuery < Query
   end
 
   def dmsf_file_links_scope
+    cf_columns = +''
+    if filters.any?
+      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+        cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
+      end
+    end
     scope = DmsfLink.
         select(%{
           dmsf_links.id AS id,
@@ -282,7 +304,7 @@ class DmsfQuery < Query
           users.id AS author,
           'file-link' AS type,
           dmsf_links.deleted AS deleted,
-          1 AS sort}).
+          1 AS sort #{cf_columns}}).
         joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id').
         joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
@@ -290,7 +312,9 @@ class DmsfQuery < Query
     if deleted
       scope.where project_id: project.id, deleted: deleted
     else
-      if dmsf_folder_id
+      if filters.any?
+        scope.where project_id: project.id, deleted: deleted
+      elsif dmsf_folder_id
         scope.where dmsf_folder_id: dmsf_folder_id, deleted: deleted
       else
         scope.where project_id: project.id, dmsf_folder_id: nil, deleted: deleted
@@ -299,6 +323,12 @@ class DmsfQuery < Query
   end
 
   def dmsf_url_links_scope
+    cf_columns = +''
+    if filters.any?
+      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+        cf_columns << ",NULL AS cf_#{id}"
+      end
+    end
     scope = DmsfLink.
         select(%{
           dmsf_links.id AS id,
@@ -317,12 +347,14 @@ class DmsfQuery < Query
           users.id AS author,
           'url-link' AS type,
           dmsf_links.deleted AS deleted,
-          1 AS sort}).
+           1 AS sort #{cf_columns}}).
         joins('LEFT JOIN users ON dmsf_links.user_id = users.id ')
     if deleted
       scope.where target_type: 'DmsfUrl', project_id: project.id, deleted: deleted
     else
-      if dmsf_folder_id
+      if filters.any?
+        scope.where target_type: 'DmsfUrl', project_id: project.id, deleted: deleted
+      elsif dmsf_folder_id
         scope.where target_type: 'DmsfUrl', dmsf_folder_id: dmsf_folder_id, deleted: deleted
       else
         scope.where target_type: 'DmsfUrl', project_id: project.id, dmsf_folder_id: nil, deleted: deleted

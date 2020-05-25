@@ -25,11 +25,20 @@ module RedmineDmsf
     class DmsfViewListener < Redmine::Hook::ViewListener
 
       def view_custom_fields_form_dmsf_file_revision_custom_field(context={})
+        html = ''
         if context.is_a?(Hash) && context[:form]
           # Add the inheritable option
           f = context[:form]
-          "<p>#{f.check_box :dmsf_not_inheritable}</p>"
+          html = "<p>#{f.check_box(:dmsf_not_inheritable)}</p>"
+          # Add is filter option
+          if context[:custom_field]
+            custom_field = context[:custom_field]
+            if custom_field.format.is_filter_supported
+              html << "<p>#{f.check_box(:is_filter)}</p>"
+            end
+          end
         end
+        html.html_safe
       end
 
     end
