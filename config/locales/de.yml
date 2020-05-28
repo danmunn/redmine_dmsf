@@ -52,7 +52,7 @@ de:
   warning_one_of_files_locked: Eine der Dateien ist gesperrt
   notice_file_revision_created: Dateiversion erstellt
   notice_your_preferences_were_saved: Deine Einstellungen wurden gespeichert
-  notice_your_preferences_were_not_saved: Your preferences were not saved
+  notice_your_preferences_were_not_saved: Deine Einstellungen wurden nicht gespeichert
   warning_folder_notifications_already_activated: Ordnerbenachrichtigungen sind schon aktiviert
 
   notice_folder_notifications_activated: Ordnerbenachrichtigungen aktiviert
@@ -87,7 +87,7 @@ de:
   title_lock_file: Sperre um Änderungen anderer Nutzer zu verhindern
   title_download_checked: Download der ausgewählten Dateien in einem ZIP-Archiv
   title_send_checked_by_email: Sende gewählte Dateien per Email
-  link_user_preferences: Deine DMS Projekt Einstellungen
+  link_user_preferences: DMS Einstellungen
   heading_send_documents_by_email: Sende Dateien per Email
   label_email_from: Von
   label_email_to: An
@@ -112,8 +112,8 @@ de:
     ID, %r - Revision). z.B.: %t_%v"
   title_save_preferences: Einstellungen speichern
   heading_revisions: Versionen
-  title_download: Speichern
-  title_delete_revision: Lösche Version
+  title_download: Herunterladen
+  title_delete_revision: Version löschen
   title_obsolete_revision: Obsolete revision
   label_created: Erstellt
   label_changed: Geändert
@@ -137,44 +137,44 @@ de:
   note_possible_values: Mögliche Werte
   note_pass_none_to_disable_stemming: "schreibe 'none', um die Normalformreduktion zu unterdrücken"
   label_stem_strategy: Normalformreduktionsform
-  option_stem_none: reduziere nichts (Voreinstellung)
-  option_stem_some: reduziere manches
-  option_stem_all: reduziere alles
-  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
-    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
-    of terms except for those which start with a capital letter, or are followed by certain characters
-    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
-    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
+  option_stem_none: NICHTS (Voreinstellung)
+  option_stem_some: MANCHES
+  option_stem_all: ALLES
+  text_stemming_info: "Dies kontrolliert wie der Parser den Stemming-Algorithmus anwendet. Der Standartwert ist 'NICHTS'. 
+    Die möglichen Werte sind: 'NICHTS' -  Kein Stemming anwenden, 'MANCHES' - Suche nach Stammformreduktionen von Begriffen
+    mit Ausnahme von Begriffen die mit Grossbuchstaben starten oder die bestimmte Zeichen enthalten ('/@<>=*[{\"'),
+    oder bei welchen mathematische Operatoren vorkommen. Begriffe in der Stammformreduktion weisen ein führendes 'Z' auf,
+    'ALLES' - Suche nach allen Stammformreduktionen von sämtlichen Begriffen (Hinweis: es ist kein führendes 'Z' vorhanden)."
   label_default_notifications: Standardmäßge Dateibenachrichtigungen
   heading_uploaded_files: Hochgeladene Dateien
   link_documents: Dateien
-  permission_view_dmsf_file_revision_accesses: Betrachte Dokumentezugriffe in Aktivitäten
-  permission_view_dmsf_file_revisions: Betrachte Dokumenteversion in Aktivitäten
-  permission_view_dmsf_folders: Durchforste Dateien
+  permission_view_dmsf_file_revision_accesses: Dokumentzugriffe in Aktivitäten anzeigen
+  permission_view_dmsf_file_revisions: Dokumentversion in Aktivitäten anzeigen
+  permission_view_dmsf_folders: Dateien und Ordner durchsuchen
   permission_user_preferences: Benutzereinstellungen
-  permission_view_dmsf_files: Betrachte Dateien
+  permission_view_dmsf_files: Dateien anzeigen
   permission_folder_manipulation: Ordner bearbeiten
   permission_file_manipulation: Dateien bearbeiten
   permission_force_file_unlock: Erzwinge Aufhebung der Dateisperre
   permission_manage_workflows: Workflows verwalten
   permission_file_delete: Datei löschen
-  permission_display_system_folders: Display system folders
-  permission_file_approval: File approval
-  permission_email_documents: Email documents
+  permission_display_system_folders: Systemordner anzeigen
+  permission_file_approval: Dateien freigeben
+  permission_email_documents: Mailversand von Dokumenten
   label_file: Datei
   field_folder: Ordner
   error_file_commit_require_uploaded_file: Der Commit erfordet eine hochladene Datei
 
   warning_some_files_were_not_commited: "Einige Dateien wurden wegen Validierungsfehlern nicht commitet: %{files}"
 
-  error_user_has_not_right_delete_folder: Der Nutzer hat kein Recht die Ordner zu löschen.
+  error_user_has_not_right_delete_folder: Der Nutzer hat kein Recht den Ordner zu löschen.
 
   error_user_has_not_right_delete_file: Der Nutzer hat kein Recht die Datei zu löschen.
 
   notice_entries_deleted: Einträge löschen
   warning_some_entries_were_not_deleted: "Enige Einträge wurden nicht gelöscht: %{entries}"
   title_delete_checked: Löschen ausgewählt
-  title_items: items
+  title_items: Objekte
   title_filename_for_download: Dateiname beim Herunterladen oder in ZIP-Archiv verwenden
   label_number_of_folders: Ordner
   label_number_of_documents: Dokumente
@@ -256,13 +256,13 @@ de:
   title_none: Niemand
   title_rejection: Ablehnung
   title_delegation: Deligierung
-  title_assignment: Zuweisung
+  title_assignment: Workflow starten
   title_start: Start
   title_dmsf_workflow_log: Genehmigungs-Workflow Verlauf
   title_assigned: Zugewiesen
   title_approval: Genehmigt
   title_rejected: Abgelehnt
-  title_obsolete: Obsolete
+  title_obsolete: Obsolet
   dmsf_and: UND
   dmsf_or: ODER
   dmsf_new_step: Neuer Schritt
@@ -296,12 +296,12 @@ de:
     zur Datei in
 
   title_create_link: Verknüpfung anlegen
-  label_link_from: Link von
-  label_link_to: Verlinke mit
+  label_link_from: Verknüpfung anlegen
+  label_link_to: Verknüpfung anlegen
   label_notifications_on: Benachrichtigungen ein
   label_notifications_off: Benachrichtigungen aus
   field_target_file: Quelldatei
-  title_download_entries: Speicherung
+  title_download_entries: Downloads anzeigen
   label_external: Extern
   label_internal: Internal
 
@@ -320,23 +320,22 @@ de:
   label_links_only: nur Verknüpfungen
 
   label_display_notified_recipients: Zeige benachrichtigte Empfänger
-  note_display_notified_recipients: Der User wird über über den Empfang der E-mail Benachrichtigungen von allen
-    Empfängern informiert.
+  note_display_notified_recipients: Der Benutzer wird darüber informiert, wer die Empfänger der E-mail-Benachrichtigungen sind.
   warning_email_notifications: "Emailbenachrichtigung wurde gesendet an %{to}"
 
   link_trash_bin: Papierkorb
-  title_restore: Restore
-  notice_dmsf_file_restored: The document has been successfully restored
-  notice_dmsf_folder_restored: The folder has been successfully restored
-  notice_dmsf_link_restored: The link has been successfully restored
-  title_restore_checked: Restore checked
-  error_parent_folder: "The parent folder doesn't exist"
+  title_restore: Wiederherstellen
+  notice_dmsf_file_restored: Das Dokument konnte erfolgreich wiederhergestellt werden.
+  notice_dmsf_folder_restored: Der Ordner konnte erfolgreich wiederhergestellt werden.
+  notice_dmsf_link_restored: Der Link konnte erfolgreich wiederhergestellt werden.
+  title_restore_checked: Wiederherstellung geprüft
+  error_parent_folder: "Der übergeordnete Ordner existiert nicht"
 
-  error_resource_or_parent_locked: Unable to complete lock - resource (or parent) is locked
-  error_parent_locked: Unable to complete lock - resource parent is locked
-  error_resource_locked: Unable to complete lock - resource is locked
-  error_lock_exclusively: Unable to lock exclusively an already-locked resource
-  error_unlock_parent_locked: Unlock failed - resource parent is locked
+  error_resource_or_parent_locked: Sperrung nicht möglich - die Ressource ist bereits gesperrt
+  error_parent_locked: Sperrung nicht möglich - die übergeordnete Ressource ist bereits gesperrt
+  error_resource_locked: Sperrung nicht möglich - die Ressource ist bereits gesperrt
+  error_lock_exclusively: Exklusive Sperrung nicht möglich - die Ressource ist bereits gesperrt
+  error_unlock_parent_locked: Entsperrung fehlgeschlagen - übergeordnete Ressource ist gesperrt
 
   label_dmsf_version: Version
 
@@ -348,43 +347,43 @@ de:
   label_public_urls: Öffentliches URLs gültig bis
 
   label_webdav: WebDAV
-  label_full_text: Full-text search
+  label_full_text: Volltext-Suche
   link_extension: Ext
 
-  label_webdav_ignore: Ignored files patterns
-  note_webdav_ignore: A regular expresion with filenames to ignore by PUT requests.
+  label_webdav_ignore: Zu ignorierende Dateien
+  note_webdav_ignore: Regulärer Ausdruck (regular expresion) mit Dateiname, die bei PUT-Requests ignoriert wird.
 
   label_document_url: Url
   label_last_revision_id: Version
     
-  label_webdav_disable_versioning: No versioning files patterns
-  note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern
-    matches temporary files created by MsOffice.
+  label_webdav_disable_versioning: Keine Versionen erstellen bei
+  note_webdav_disable_versioning: Regulärer Ausdruck (regular expression) bei denen die Datei-Versionierung ausgeschaltet wird. Die Standardeinstellung
+    berücksichtigt temporäre Dateien von MS Office.
 
-  label_dmsf_keep_documents_locked: Keep documents locked
-  note_dmsf_keep_documents_locked: Documents will be kept locked when approved
+  label_dmsf_keep_documents_locked: Dokumente gesperrt halten
+  note_dmsf_keep_documents_locked: Dokumente werden nach der Genehmigung gesperrt gelassen
   note_global: (global)
-  field_dmsf_not_inheritable: Not inheritable
+  field_dmsf_not_inheritable: Nicht vererbar
   
-  label_webdav_use_project_names: Use project name for project folder
-  note_webdav_use_project_names: Use project names instead of project identifier for project folders.
+  label_webdav_use_project_names: Projekt-Name für den Projektordner verwenden
+  note_webdav_use_project_names: Anstelle der Projekt-Kennung wird der Projekt-Name als Projektordner im Dateisystem verwendet.
 
-  label_last_approver: Last approver
+  label_last_approver: Letzter Genehmiger approver
 
   label_act_as_attachable: Act as attachable
   note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
 
-  label_user_search_add: Search for user to add
+  label_user_search_add: Benutzer suchen
 
   label_dmsf_attachments: DMS Anhänge
-  label_basic_attachments: Dateianhängen
+  label_basic_attachments: Dateianhänge
 
-  label_tmpdir: Temporary file path
-  error_file_tmpdir_does_not_exist: "Temporary file path doesn't exist and can't be created"
-  error_tmpfile_can_not_be_created: "Files can't be created in temporary file path directory"
+  label_tmpdir: Temporärer Dateipfad
+  error_file_tmpdir_does_not_exist: "Temporärer Dateipfad existiert nicht und kann nicht erstellt werden."
+  error_tmpfile_can_not_be_created: "Dateien können nicht im temporären Dateipfad erstellt werden."
 
   label_email_from_override: Von
-  text_email_from_override: The user currently logged in
+  text_email_from_override: Der angemeldete Benutzer
   label_email_reply_to: Antwort an
 
   label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
@@ -393,18 +392,17 @@ de:
     option needs to have been used at index time.
     e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
-  label_dmsf_fast_links: Fast links
-  text_dmsf_fast_links_info: You will be able to manually enter a target folder's ID when creating links in order to speed
-    up the process of creating links.
+  label_dmsf_fast_links: Schnelle Verknüpfung
+  text_dmsf_fast_links_info: Ermöglicht durch Eingabe der Ordner-ID auf einfache Art und Weise eine Verknüpfung auf den Zielordner zu erstellen.
 
-  label_dmsf_permissions: Prohibit Access for
-  label_inherited_permissions: Inherited Access for
+  label_dmsf_permissions: Zugriff einschränken für
+  label_inherited_permissions: Zugriff vererbt für
 
-  button_edit_content: Bearbeiten den Inhalt
+  button_edit_content: Dokument bearbeiten
   field_workflow: Workflow
   field_modified: Datum
   field_updated: Datum
-  field_count: Speicherung
+  field_count: Anzahl Downloads
   field_first_at: Erste
   field_last_at: Letzte
   field_size: Größe
@@ -413,8 +411,8 @@ de:
 
   easy_pages:
     modules:
-      dmsf_locked_documents: My locked documents
-      dmsf_open_approvals: My open approvals
+      dmsf_locked_documents: Von mir gesperrte Dokumente
+      dmsf_open_approvals: Offene Genehmigungen
     module_category:
       easy_dms: Easy DMS
 
