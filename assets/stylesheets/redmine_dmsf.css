@@ -372,3 +372,8 @@ table.dmsf a.sort.asc.icon.icon-sorted-desc {
 #tab-content-dmsf_workflow table.list ~ p .button {
     margin-top: 10px;
 }
+
+/* EasyExtension - Query filters */
+#dmsf_query_form .collapsed#filters {
+    opacity: 1;
+}

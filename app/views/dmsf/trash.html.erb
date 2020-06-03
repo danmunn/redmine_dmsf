@@ -36,7 +36,7 @@
   </div>
 </div>
 
-<%= form_tag(trash_dmsf_path(id: @project), method: :get, id: 'query_form') do %>
+<%= form_tag(trash_dmsf_path(id: @project), method: :get, id: 'dmsf_query_form') do %>
   <%= render partial: 'queries/query_form' %>
 <% end %>
 <%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages } %>
