@@ -174,6 +174,7 @@ class DmsfFilesController < ApplicationController
           end
           if @file.save
             @file.set_last_revision revision
+            Redmine::Hook.call_hook :dmsf_helper_upload_after_commit, { file: @file }
             flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
             begin
               recipients = DmsfMailer.deliver_files_updated(@project, [@file])
