@@ -33,7 +33,7 @@ Redmine::Plugin.register :redmine_dmsf do
   end
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
-  version '2.4.3 devel'
+  version '2.4.3'
   
   requires_redmine version_or_higher: '4.1.0'
 
