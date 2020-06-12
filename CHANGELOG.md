@@ -6,6 +6,7 @@ Changelog for Redmine DMSF
 
     Redmine's look&feel 
     Implementation of folders movement between projects (WebDAV)
+    Korean localization updated
     
 
 * New: #1129 - New UI: Optimize Actions Menu

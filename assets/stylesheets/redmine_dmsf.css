@@ -374,6 +374,6 @@ table.dmsf a.sort.asc.icon.icon-sorted-desc {
 }
 
 /* EasyExtension - Query filters */
-#dmsf_query_form .collapsed#filters {
+#query_form.dmsf-query-form .collapsed#filters {
     opacity: 1;
 }

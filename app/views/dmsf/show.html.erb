@@ -71,7 +71,7 @@
   </div>
 </div>
 
-<%= form_tag(dmsf_folder_path(d: @project, folder_id: @folder), method: :get, id: 'dmsf_query_form') do %>
+<%= form_tag(dmsf_folder_path(d: @project, folder_id: @folder), method: :get, id: 'query_form', class: 'dmsf-query-form') do %>
   <%= render partial: 'queries/query_form' %>
 <% end %>
 <%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages } %>
