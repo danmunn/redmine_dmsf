@@ -549,10 +549,10 @@ class DmsfFolder < ActiveRecord::Base
     else
       classes << 'dmsf-tree'
       if type == 'folder'
-        classes << 'dmsf_collapsed'
+        classes << 'dmsf-collapsed'
         classes << 'dmsf-not-loaded'
       else
-        classes << 'dmsf_child'
+        classes << 'dmsf-child'
       end
       if title =~ /^\./
         classes << 'dmsf-system'

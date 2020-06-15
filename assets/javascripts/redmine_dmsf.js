@@ -20,134 +20,98 @@
 */
 
 /* Function to allow the projects to show up as a tree */
-function dmsfToggle(EL, PM, url)
+function dmsfToggle(el, id, url)
 {
-  let els = document.querySelectorAll('tr.dmsf-tree');
-  let elsLen = els.length;
-  let pattern = new RegExp("(^|\\s)" + EL + "(\\s|$)");
-  let cpattern = new RegExp('span');
-  let expand = new RegExp('dmsf_expanded');
-  let collapse = new RegExp('dmsf_collapsed');
-  let hide = new RegExp('dmsf-hidden');
-  let spanid = PM;
-  let classid = new RegExp('junk');
+  // Expand not yet loaded selected row
+  let selectedRow = $(el).parents('tr').first();
+  let expand = $(selectedRow).hasClass('dmsf-collapsed');
+
+  if(selectedRow.hasClass('dmsf-child')){
+
+    return;
+  }
+
+  if(selectedRow.hasClass('dmsf-not-loaded')){
+
+    dmsfExpandRows(id, selectedRow, url);
+  }
+
+  if(expand) {
+
+    $(selectedRow).switchClass('dmsf-collapsed', 'dmsf-expanded');
+  }
+  else {
+
+    $(selectedRow).switchClass('dmsf-expanded', 'dmsf-collapsed');
+  }
+
+  // Hide collapsed rows and reset odd/even rows background colour
   let oddeventoggle = 0;
 
-  // Expand not yet loaded selected row
-  let selectedRow = document.getElementById(PM);
+  $("tr.dmsf-tree").each(function(i, tr){
 
-  if(selectedRow.className.indexOf('dmsf-not-loaded') >= 0){
+    // Visiblity
+    if($(tr).hasClass(id)) {
 
-    dmsfExpandRows(EL, selectedRow, url);
-  }
+      if (expand) {
 
-  for(let i = 0; i < elsLen; i++)
-  {
-    if(cpattern.test(els[i].id))
-    {
-      let tmpspanid = spanid;
-      let tmpclassid = classid;
+        // Display only children with expanded parent
+        m = $(tr).attr('class').match(/(\d+) idnt/);
 
-      spanid = els[i].id;
-      classid = spanid;
-      let m = classid.match(/(\w+)span/);
-      if(m) {
-          classid = m[1];
-      }
-      classid = new RegExp(classid);
+        if(m){
 
-      if(tmpclassid.test(els[i].className) && (tmpspanid.toString() !== PM.toString()))
-      {
-        if(collapse.test(document.getElementById(tmpspanid).className))
-        {
-          spanid = tmpspanid;
-          classid = tmpclassid;
-        }
-      }
-    }
+          if($("#" + m[1] + "span").hasClass('dmsf-expanded')){
 
-    if(pattern.test(els[i].className))
-    {
-      let cnames = els[i].className;
-
-      cnames = cnames.replace(/dmsf-hidden/g,'');
-
-      if(expand.test(selectedRow.className))
-      {
-        cnames += ' dmsf-hidden';
-      }
-      else
-      {
-        if((spanid.toString() !== PM.toString()) && (classid.test(els[i].className)))
-        {
-          if(collapse.test(document.getElementById(spanid).className))
-          {
-            cnames += ' dmsf-hidden';
+            $(tr).removeClass('dmsf-hidden');
           }
         }
-      }
 
-      els[i].className = cnames;
+      } else {
+
+        if(!$(tr).hasClass('dmsf-hidden')) {
+
+          $(tr).addClass('dmsf-hidden');
+        }
+      }
     }
 
-    if(!(hide.test(els[i].className)))
-    {
-      let cnames = els[i].className;
+    // Background
+    $(tr).removeClass('even');
+    $(tr).removeClass('odd');
 
-      cnames = cnames.replace(/odd/g,'');
-      cnames = cnames.replace(/even/g,'');
+    if (oddeventoggle === 0) {
 
-      if(oddeventoggle === 0)
-      {
-        cnames += ' odd';
-      }
-      else
-      {
-        cnames += ' even';
-      }
-
-      oddeventoggle ^= 1;
-      els[i].className = cnames;
+      $(tr).addClass('odd');
     }
-  }
+    else {
 
-  if (collapse.test(selectedRow.className))
-  {
-    let cnames = selectedRow.className;
+      $(tr).addClass('even');
+    }
 
-    cnames = cnames.replace(/dmsf_collapsed/,'dmsf_expanded');
-    selectedRow.className = cnames;
-  }
-  else
-  {
-    let cnames = selectedRow.className;
-
-    cnames = cnames.replace(/dmsf_expanded/,'dmsf_collapsed');
-    selectedRow.className = cnames;
-  }
+    oddeventoggle ^= 1;
+  });
 }
 
 /* Add child rows */
-function dmsfExpandRows(EL, parentRow, url) {
+function dmsfExpandRows(id, parentRow, url) {
 
-  parentRow.className = parentRow.className.replace(/dmsf-not-loaded/, '');
+  $(parentRow).removeClass('dmsf-not-loaded');
 
   let idnt = 0;
-  let pos = $(parentRow).find('.dmsf_position').text();
   let classes = '';
-  let m = parentRow.className.match(/idnt-(\d+)/);
+  let m = $(parentRow).attr('class').match(/idnt-(\d+)/);
 
   if(m){
     idnt = m[1];
   }
 
-  m = parentRow.className.match(/((\d|\s)+) idnt/);
+  m = $(parentRow).attr('class').match(/((\d|\s)+) idnt/);
 
   if(m){
       classes = m[1]
   }
 
-  m = parentRow.id.match(/^(\d+)/);
+  m = $(parentRow).attr('id').match(/^(\d+)/);
 
   if(m){
       classes = classes + ' ' + m[1]
@@ -158,17 +122,21 @@ function dmsfExpandRows(EL, parentRow, url) {
     type: 'post',
     dataType: 'html',
     data: {
-      folder_id: EL,
-      row_id: parentRow.id,
+      folder_id: id,
+      row_id: $(parentRow).attr('id'),
       idnt: idnt,
-      pos: pos,
       classes: classes
     }
   }).done(function(data) {
-      // Hide the expanding icon if there are no childern
-      if(data.indexOf(' ' +  m[1] + ' ') < 0){
-        $(parentRow).removeClass('dmsf_expanded');
-        $(parentRow).addClass('dmsf_child');
+      // Hide the expanding icon if there are no children
+      if( m && (data.indexOf(' ' +  m[1] + ' ') < 0)) {
+
+        $(parentRow).removeClass('dmsf-expanded');
+
+        if(!$(parentRow).hasClass('dmsf-child')) {
+
+          $(parentRow).addClass('dmsf-child');
+        }
       }
       else {
         // Add child rows

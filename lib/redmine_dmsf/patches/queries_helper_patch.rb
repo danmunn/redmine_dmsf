@@ -74,7 +74,7 @@ module RedmineDmsf
             if item.deleted && (item.deleted > 0)
               tag = content_tag('span', value, class: 'icon icon-folder')
             else
-              tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle('#{item.id}','#{item.id}span','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe +
+              tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle(this, '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe +
               link_to(h(value),
                 dmsf_folder_path(id: item.project, folder_id: item.id),
                 class: 'icon icon-folder',

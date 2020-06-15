@@ -27,8 +27,9 @@
 <% end %>
 <% query.dmsf_nodes(options).each do |node| %>
   <% system = node.title =~ /^\./ %>
+  <% id = (node.type == 'folder') ? "#{node.id}span" : "#{node.id}item" %>
   <% @idnt ||= 0 %>
-  <tr id="<%= node.id %>span" class="<%= cycle('odd', 'even') %> <%= node.css_classes(query.deleted) %> <%= params[:classes] %> <%= @idnt > 0 ? "idnt idnt-#{@idnt}" : nil %>">
+  <tr id="<%= id %>" class="<%= cycle('odd', 'even') %> <%= node.css_classes(query.deleted) %> <%= params[:classes] %> <%= @idnt > 0 ? "idnt idnt-#{@idnt}" : nil %>">
     <td class="checkbox hide-when-print">
       <%= check_box_tag('ids[]', "#{node.type}-#{node.id}", false, id: nil) unless system %>
     </td>
@@ -79,8 +80,8 @@
                   var m = handle.attr("id").match(/^(\d+)span$/);
                   if(m){
                     $('.' + m[1]).remove();
-                    handle.removeClass("dmsf_expanded");
-                    handle.addClass("dmsf_collapsed dmsf-not-loaded");
+                    handle.removeClass("dmsf-expanded");
+                    handle.addClass("dmsf-collapsed dmsf-not-loaded");
                   }
                   ui.draggable.remove();
                 }
