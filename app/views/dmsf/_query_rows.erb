@@ -79,8 +79,8 @@
                   var m = handle.attr("id").match(/^(\d+)span$/);
                   if(m){
                     $('.' + m[1]).remove();
-                    handle.removeClass("dmsf_expanded");
-                    handle.addClass("dmsf_collapsed dmsf-not-loaded");
+                    handle.removeClass("dmsf-expanded");
+                    handle.addClass("dmsf-collapsed dmsf-not-loaded");
                   }
                   ui.draggable.remove();
                 }
