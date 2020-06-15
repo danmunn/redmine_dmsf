@@ -129,9 +129,14 @@ function dmsfExpandRows(id, parentRow, url) {
     }
   }).done(function(data) {
       // Hide the expanding icon if there are no children
-      if(data.indexOf(' ' +  m[1] + ' ') < 0){
+      if( m && (data.indexOf(' ' +  m[1] + ' ') < 0)) {
+
         $(parentRow).removeClass('dmsf-expanded');
-        $(parentRow).addClass('dmsf-child');
+
+        if(!$(parentRow).hasClass('dmsf-child')) {
+
+          $(parentRow).addClass('dmsf-child');
+        }
       }
       else {
         // Add child rows
