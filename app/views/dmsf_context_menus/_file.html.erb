@@ -28,11 +28,15 @@
   <%= link_to "#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: dmsf_file),
               title: l(:title_copy), class: 'icon icon-copy', disabled: !dmsf_link.nil?  %>
 </li>
-<%= link_to l(:label_link_to),
-            new_dmsf_link_path(project_id: project.id,
-                               dmsf_folder_id: dmsf_file.dmsf_folder ? dmsf_file.dmsf_folder.id : nil,
-                               dmsf_file_id: dmsf_file.id, type: 'link_to'),
-            title: l(:title_create_link), class: 'icon icon-link' %>
+<% unless dmsf_link %>
+  <li>
+    <%= link_to l(:label_link_to),
+              new_dmsf_link_path(project_id: project.id,
+                                 dmsf_folder_id: dmsf_file.dmsf_folder ? dmsf_file.dmsf_folder.id : nil,
+                                 dmsf_file_id: dmsf_file.id, type: 'link_to'),
+              title: l(:title_create_link), class: 'icon icon-link' %>
+  </li>
+<% end %>
 <li>
     <% if locked %>
       <%= context_menu_link l(:button_unlock), unlock_dmsf_files_path(id: dmsf_file), class: 'icon icon-unlock',
