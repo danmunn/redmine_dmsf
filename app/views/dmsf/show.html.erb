@@ -71,7 +71,7 @@
   </div>
 </div>
 
-<%= form_tag(dmsf_folder_path(d: @project, folder_id: @folder), method: :get, id: 'query_form', class: 'dmsf-query-form') do %>
+<%= form_tag(dmsf_folder_path(id: @project, folder_id: @folder), method: :get, id: 'query_form', class: 'dmsf-query-form') do %>
   <%= render partial: 'queries/query_form' %>
 <% end %>
 <%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages } %>
@@ -81,7 +81,7 @@
 
 <% unless @folder && @folder.system %>
     <% other_formats_links do |f| %>
-      <%= f.link_to 'CSV', url: { action: :show, id: @project, dmsf_folder_id: @folder } %>
+      <%= f.link_to 'CSV', url: { action: :show, id: @project, folder_id: @folder } %>
     <% end %>
 <% end %>
 

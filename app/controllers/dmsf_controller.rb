@@ -40,6 +40,8 @@ class DmsfController < ApplicationController
   helper :dmsf_folder_permissions
   helper :queries
   include QueriesHelper
+  helper :dmsf_queries
+  include DmsfQueriesHelper
 
   def permissions
     render_403 unless DmsfFolder.permissions?(@folder, false)
@@ -626,11 +628,10 @@ class DmsfController < ApplicationController
   end
 
   def get_query
-    use_session = !request.format.csv?
     if Redmine::Plugin.installed?(:easy_extensions)
-      @query = retrieve_query_without_easy_extensions(DmsfQuery, use_session)
+      @query = retrieve_query_without_easy_extensions(DmsfQuery, true)
     else
-      @query = retrieve_query(DmsfQuery, use_session)
+      @query = retrieve_query(DmsfQuery, true)
     end
   end
 
