@@ -38,7 +38,7 @@ class DmsfQuery < Query
       QueryColumn.new(:author, sortable: 'firstname, lastname')
   ]
 
-  def initialize(attributes)
+  def initialize(attributes=nil, *args)
     super attributes
     self.sort_criteria = []
     self.filters = {}
