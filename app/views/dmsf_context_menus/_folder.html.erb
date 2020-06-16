@@ -28,11 +28,13 @@
   <%= context_menu_link "#{l(:button_copy)}/#{l(:button_move)}", copy_folder_path(id: dmsf_folder),
             class: 'icon icon-copy', disabled: !allowed || locked %>
 </li>
-<li>
-  <%= context_menu_link l(:label_link_to),
-              new_dmsf_link_path(project_id: project.id, dmsf_folder_id: dmsf_folder.id, type: 'link_to'),
-              class: 'icon icon-link', disabled: !allowed || locked %>
-</li>
+<% unless dmsf_link %>
+  <li>
+    <%= context_menu_link l(:label_link_to),
+                new_dmsf_link_path(project_id: project.id, dmsf_folder_id: dmsf_folder.id, type: 'link_to'),
+                class: 'icon icon-link' %>
+  </li>
+<% end %>
 <li>
   <% if locked %>
     <%= context_menu_link l(:button_unlock), unlock_dmsf_path(id: project, folder_id: dmsf_folder),
