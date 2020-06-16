@@ -185,7 +185,11 @@ class DmsfController < ApplicationController
       flash[:error] = l(:error_email_to_must_be_entered)
     else
       DmsfMailer.deliver_send_documents(@project, params[:email].permit!, User.current)
-      File.delete(params[:email][:zipped_content])
+      if(File.exist?(params[:email][:zipped_content]))
+        File.delete(params[:email][:zipped_content])
+      else
+        flash[:error] = l(:header_minimum_filesize)
+      end
       flash[:notice] = l(:notice_email_sent, params[:email][:to])
     end
     redirect_to dmsf_folder_path(id: @project, folder_id: @folder)

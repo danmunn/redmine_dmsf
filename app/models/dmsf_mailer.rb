@@ -84,8 +84,12 @@ class DmsfMailer < Mailer
     @files = email_params[:files]
     @author = author
     unless @links_only
-      zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
-      attachments['Documents.zip'] = { content_type: 'application/zip', content: zipped_content_data }
+      if File.exist?(email_params[:zipped_content])
+        zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
+        attachments['Documents.zip'] = { content_type: 'application/zip', content: zipped_content_data }
+      else
+        Rails.logger.error "Cannot attach #{email_params[:zipped_content]}, it doesn't exist."
+      end
     end
     mail to: email_params[:to], cc: email_params[:cc], subject: email_params[:subject], 'From' => email_params[:from],
          'Reply-To' => email_params[:reply_to]
