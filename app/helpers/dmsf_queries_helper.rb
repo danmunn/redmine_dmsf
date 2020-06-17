@@ -56,9 +56,14 @@ module DmsfQueriesHelper
       end
     when :author
       if value
-        link_to "#{item.firstname} #{item.lastname}", user_path(id: value)
+        user = User.find_by(id: value)
+        if user
+          link_to user.name, user_path(id: value)
+        else
+          super column, item, value
+        end
       else
-        return super column, item, value
+        super column, item, value
       end
     when :title
       if defined?(EasyExtensions)
@@ -146,9 +151,14 @@ module DmsfQueriesHelper
     when :workflow
       DmsfWorkflow.workflow_str value.to_i
     when :author
-      "#{object.firstname} #{object.lastname}"
-    else
-      super column, object, value
+      if value
+        user = User.find_by(id: value)
+        if user
+          user.name
+        else
+          super column, object, value
+        end
+      end
     end
   end
 
