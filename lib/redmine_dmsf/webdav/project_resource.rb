@@ -34,9 +34,20 @@ module RedmineDmsf
         unless @children          
           @children = []
           if project
+            # Sub-projects
+            # project.children.select(:id, :identifier, :name).has_module(:dmsf).where(
+            #     Project.allowed_to_condition(
+            #         User.current, :view_dmsf_folders)).order('lft').pluck(:name).each do |name|
+            #   @children.push child(name)
+            project.children.visible.select(:id, :identifier, :name).has_module(:dmsf).where(
+                Project.allowed_to_condition(User.current, :view_dmsf_folders)).find_each do |p|
+                  @children << child_project(p)
+            end
+            # Folders
             project.dmsf_folders.visible.pluck(:title).each do |title|
               @children.push child(title)
             end
+            # Files
             project.dmsf_files.visible.pluck(:name).each do |name|
               @children.push child(name)
             end

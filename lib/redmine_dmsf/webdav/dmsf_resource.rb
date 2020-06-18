@@ -31,12 +31,13 @@ module RedmineDmsf
       def initialize(path, request, response, options)
         @folder = nil
         @file = nil
+        @subproject = nil
         super path, request, response, options
       end
 
       # Here we make sure our folder and file methods are not aliased - it should shave a few cycles off of processing
       def setup
-        @skip_alias |= [ :folder, :file ]
+        @skip_alias |= [ :folder, :file, :subproject ]
       end
 
       # Gather collection of objects that denote current entities child entities
@@ -46,11 +47,27 @@ module RedmineDmsf
       def children
         unless @children
           @children = []
-          if collection?
+          if folder
+            # Folders
             folder.dmsf_folders.visible.pluck(:title).each do |title|
               @children.push child(title)
             end
+            # Files
             folder.dmsf_files.visible.pluck(:name).each do |name|
+              @children.push child(name)
+            end
+          elsif subproject
+            # Projects
+            subproject.children.visible.select(:id, :identifier, :name).has_module(:dmsf).where(
+                Project.allowed_to_condition(User.current, :view_dmsf_folders)).find_each do |p|
+              @children << child_project(p)
+            end
+            # Folders
+            subproject.dmsf_folders.visible.pluck(:title).each do |title|
+              @children.push child(title)
+            end
+            # Files
+            subproject.dmsf_files.visible.pluck(:name).each do |name|
               @children.push child(name)
             end
           end
@@ -61,17 +78,17 @@ module RedmineDmsf
       # Does the object exist?
       # If it is either a folder or a file, then it exists
       def exist?
-        project && project.module_enabled?('dmsf') && (folder || file) &&
+        project && project.module_enabled?('dmsf') && (folder || file || subproject) &&
           (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project))
       end
 
       def really_exist?
-        project && project.module_enabled?('dmsf') && (folder || file)
+        project && project.module_enabled?('dmsf') && (folder || file || subproject)
       end
 
       # Is this entity a folder?
       def collection?
-        !folder.nil?
+        folder || subproject
       end
 
       # Check if current entity is a folder and return DmsfFolder object if found (nil if not)
@@ -86,10 +103,25 @@ module RedmineDmsf
       # Check if the current entity exists as a file (DmsfFile), and returns corresponding object if found (nil otherwise)
       def file
         unless @file
-          return nil unless project # Again if entity project is nil, it cannot exist in context of this object
-          @file = DmsfFile.find_file_by_name(project, parent.folder, basename)
+          @file = DmsfFile.find_file_by_name(project, parent.folder, basename) if project
         end
         @file
+      end
+
+      def subproject
+        unless @subproject
+          @subproject = Project.visible.where(parent_id: parent_project.id, name: basename).first if parent_project
+        end
+        @subproject
+      end
+
+      def parent_project
+        unless @parent_project
+          if /\/(.+)\/#{project.identifier}\/?$/.match(@path)
+            @parent_project = Project.visible.where(identifier: $1).first
+          end
+        end
+        @parent_project
       end
 
       # Return the content type of file
@@ -99,6 +131,8 @@ module RedmineDmsf
           'inode/directory'
         elsif file && file.last_revision
           file.last_revision.detect_content_type
+        elsif subproject
+          'inode/directory'
         else
           NotFound
         end
@@ -109,6 +143,8 @@ module RedmineDmsf
           folder.created_at
         elsif file
           file.created_at
+        elsif subproject
+          subproject.created_on
         else
           NotFound
         end
@@ -119,6 +155,8 @@ module RedmineDmsf
           folder.updated_at
         elsif file && file.last_revision
           file.last_revision.updated_at
+        elsif subproject
+          subproject.updated_on
         else
           NotFound
         end
@@ -135,7 +173,11 @@ module RedmineDmsf
       end
 
       def special_type
-        l(:field_folder) if folder
+        if folder
+          l(:field_folder)
+        elsif subproject
+          l(:field_project)
+        end
       end
 
       # Process incoming GET request

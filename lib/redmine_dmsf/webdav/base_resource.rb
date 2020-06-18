@@ -34,7 +34,7 @@ module RedmineDmsf
         raise NotFound if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
         @project = nil
         @public_path = "#{options[:root_uri_path]}#{path}"
-        super(path, request, response, options)
+        super path, request, response, options
       end
 
       DIR_FILE = "<tr><td class=\"name\"><a href=\"%s\">%s</a></td><td class=\"size\">%s</td><td class=\"type\">%s</td><td class=\"mtime\">%s</td></tr>"
@@ -81,16 +81,17 @@ module RedmineDmsf
         new_path = @path
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
-        @__proxy.class.new("#{new_path}#{name}", request, response, @options.merge(user: @user))
+        @__proxy.class.new "#{new_path}#{name}", request, response, @options.merge(user: @user)
       end
       
       def child_project(p)
         project_display_name = ProjectResource.create_project_name(p)
         new_path = @path
+        #new_path = +'/'
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
         new_path += project_display_name
-        @__proxy.class.new(new_path, request, response, @options.merge(user: @user))
+        @__proxy.class.new new_path, request, response, @options.merge(user: @user)
       end
 
       def parent
@@ -110,26 +111,35 @@ module RedmineDmsf
     protected
     
       def basename
-        File.basename(@path)
+        File.basename @path
       end
 
       # Return instance of Project based on the path
       def project
         unless @project
-          pinfo = @path.split('/').drop(1)
-          if pinfo.length > 0
-            if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-              if pinfo.first =~ /(\d+)$/
-                @project = Project.find_by(id: $1)
-                Rails.logger.error("No project found on path '#{@path}'") unless @project
-              end
-            else
-              begin
-                @project = Project.find(pinfo.first)
-              rescue => e
-                Rails.logger.error e.message
+          i = 1
+          while true
+            pinfo = @path.split('/').drop(i)
+            if pinfo.length > 0
+              if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+                if pinfo.first =~ /(\d+)$/
+                  prj = Project.visible.find_by(id: $1)
+                  Rails.logger.error("No project found on path '#{@path}'") unless prj
+                end
+              else
+                begin
+                  scope = Project.visible.where(identifier: pinfo.first)
+                  scope = scope.where(parent_id: @project.id) if @project
+                  prj = scope.first
+                rescue => e
+                  Rails.logger.error e.message
+                end
               end
             end
+            break unless prj
+            i = i + 1
+            @project = prj
+            prj = nil
           end
         end
         @project
@@ -137,6 +147,7 @@ module RedmineDmsf
 
       # Make it easy to find the path without project in it.
       def projectless_path
+        # TODO:
         '/' + @path.split('/').drop(2).join('/')
       end
 
