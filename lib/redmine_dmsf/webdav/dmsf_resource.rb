@@ -58,10 +58,7 @@ module RedmineDmsf
             end
           elsif subproject
             # Projects
-            subproject.children.visible.select(:id, :identifier, :name).has_module(:dmsf).where(
-                Project.allowed_to_condition(User.current, :view_dmsf_folders)).find_each do |p|
-              @children << child_project(p)
-            end
+            load_projects subproject.children
             # Folders
             subproject.dmsf_folders.visible.pluck(:title).each do |title|
               @children.push child(title)

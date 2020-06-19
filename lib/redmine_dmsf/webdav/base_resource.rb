@@ -34,6 +34,7 @@ module RedmineDmsf
         raise NotFound if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
         @project = nil
         @public_path = "#{options[:root_uri_path]}#{path}"
+        @children = nil
         super path, request, response, options
       end
 
@@ -87,7 +88,6 @@ module RedmineDmsf
       def child_project(p)
         project_display_name = ProjectResource.create_project_name(p)
         new_path = @path
-        #new_path = +'/'
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
         new_path += project_display_name
@@ -152,7 +152,40 @@ module RedmineDmsf
       end
 
       def path_prefix
-        @public_path.gsub(/#{Regexp.escape(path)}$/, '')
+        @public_path.gsub /#{Regexp.escape(path)}$/, ''
+      end
+
+      def load_projects(project_scope)
+        project_scope
+            .where.not(status: Project::STATUS_ARCHIVED)
+            .find_each do |p|
+          if dmsf_visible?(p) || dmsf_enabled?(p)
+            @children << child_project(p)
+          end
+        end
+      end
+
+      private
+
+      def dmsf_enabled?(prj)
+        prj.module_enabled?(:dmsf) && Project.allowed_to_condition(User.current, :view_dmsf_folders)
+      end
+
+      def dmsf_visible?(prj)
+        Rails.cache.fetch("#{prj.cache_key_with_version}/dmsf-visible", expires_in: 12.hours) do
+          dmsf_visible_recursive? prj
+        end
+      end
+
+      def dmsf_visible_recursive?(prj)
+        prj.children.each do |p|
+          if dmsf_enabled?(p)
+            return true
+          else
+            return dmsf_visible?(p)
+          end
+        end
+        false
       end
 
     end

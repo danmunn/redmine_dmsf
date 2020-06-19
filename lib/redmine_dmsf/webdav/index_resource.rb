@@ -26,19 +26,14 @@ module RedmineDmsf
 
       def initialize(path, request, response, options)
         super(path, request, response, options)
-        @projects = nil
       end
       
       def children
-        unless @projects
-          @projects = []
-          Project.visible.select(:id, :identifier, :name).has_module(:dmsf).where(
-            Project.allowed_to_condition(
-              User.current, :view_dmsf_folders)).find_each do |p|
-            @projects << child_project(p)
-          end
+        unless @children
+          @children = []
+          load_projects Project.where(parent_id: nil)
         end
-        @projects
+        @children
       end
 
       def collection?

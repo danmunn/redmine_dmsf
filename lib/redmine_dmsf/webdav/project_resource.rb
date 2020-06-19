@@ -27,7 +27,6 @@ module RedmineDmsf
 
       def initialize(path, request, response, options)
         super path, request, response, options
-        @children = nil
       end
       
       def children
@@ -35,14 +34,7 @@ module RedmineDmsf
           @children = []
           if project
             # Sub-projects
-            # project.children.select(:id, :identifier, :name).has_module(:dmsf).where(
-            #     Project.allowed_to_condition(
-            #         User.current, :view_dmsf_folders)).order('lft').pluck(:name).each do |name|
-            #   @children.push child(name)
-            project.children.visible.select(:id, :identifier, :name).has_module(:dmsf).where(
-                Project.allowed_to_condition(User.current, :view_dmsf_folders)).find_each do |p|
-                  @children << child_project(p)
-            end
+            load_projects project.children
             # Folders
             project.dmsf_folders.visible.pluck(:title).each do |title|
               @children.push child(title)
