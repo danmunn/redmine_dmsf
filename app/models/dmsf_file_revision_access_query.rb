@@ -35,7 +35,7 @@ class DmsfFileRevisionAccessQuery < Query
       QueryColumn.new(:last_at, frozen: true)
   ]
 
-  def initialize(attributes)
+  def initialize(attributes=nil, *args)
     super attributes
     self.sort_criteria = []
     self.filters = {}
