@@ -132,7 +132,7 @@ class DmsfQuery < Query
   # New
 
   def dmsf_nodes(options={})
-    order_option = ['sort', group_by_sort_order, (options[:order] || sort_clause[0]), 'title'].flatten.reject(&:blank?)
+    order_option = ['sort', group_by_sort_order, (options[:order] || sort_clause[0])].flatten.reject(&:blank?)
     if order_option.size > 2
       DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, name|
         order_option[1].gsub!("COALESCE(cf_#{id}.value, '')", "\"#{name}\"")
