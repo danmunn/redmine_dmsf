@@ -73,8 +73,6 @@ class DmsfFileRevisionAccessQuery < Query
     @available_columns
   end
 
-  #alias default_columns_names available_columns
-
   ######################################################################################################################
   # New
 
@@ -82,7 +80,7 @@ class DmsfFileRevisionAccessQuery < Query
     base_scope.
         access_grouped.
         joins(:user).
-        order('`count` DESC').
+        order(Arel.sql('COUNT(*) DESC')).
         limit(options[:limit]).
         offset(options[:offset])
   end
