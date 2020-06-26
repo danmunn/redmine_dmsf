@@ -41,7 +41,7 @@ class DmsfQuery < Query
   def initialize(attributes=nil, *args)
     super attributes
     self.sort_criteria = []
-    self.filters = {}
+    self.filters ||= { 'title' => { operator: '~', values: ['']} }
   end
 
   ######################################################################################################################
@@ -82,7 +82,6 @@ class DmsfQuery < Query
 
   def base_scope
     unless @scope
-      statement # We need statement before scope due to the current folder filtering
       @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_files_scope, dmsf_file_links_scope, dmsf_url_links_scope].
           inject(:union_all)
     end
@@ -122,6 +121,8 @@ class DmsfQuery < Query
           if v.delete('me')
             v.push User.current.id.to_s
           end
+        when 'title'
+          next if v.include?('')
         end
         filters_clauses << '(' + sql_for_field(field, operator, v, queried_table_name, field) + ')'
       end
@@ -160,7 +161,7 @@ class DmsfQuery < Query
 
   def dmsf_folders_scope
     cf_columns = +''
-    if filters.any?
+    if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
         cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
       end
@@ -189,7 +190,7 @@ class DmsfQuery < Query
     if dmsf_folder_id
       scope.where dmsf_folders: { dmsf_folder_id: dmsf_folder_id, deleted: deleted }
     else
-      if filters.any? || deleted
+      if statement.present? || deleted
         scope.where dmsf_folders: { project_id: project.id, deleted: deleted }
       else
         scope.where dmsf_folders: { project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
@@ -199,7 +200,7 @@ class DmsfQuery < Query
 
   def dmsf_folder_links_scope
     cf_columns = +''
-    if filters.any?
+    if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
         cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
       end
@@ -228,7 +229,7 @@ class DmsfQuery < Query
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfFolder', dmsf_folder_id: dmsf_folder_id, deleted: deleted }
     else
-      if filters.any? || deleted
+      if statement.present? || deleted
         scope.where dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, deleted: deleted }
       else
         scope.where dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
@@ -238,7 +239,7 @@ class DmsfQuery < Query
 
   def dmsf_files_scope
     cf_columns = +''
-    if filters.any?
+    if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
         cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
       end
@@ -268,7 +269,7 @@ class DmsfQuery < Query
       if dmsf_folder_id
         scope.where dmsf_files: { dmsf_folder_id: dmsf_folder_id, deleted: deleted }
       else
-        if filters.any? || deleted
+        if statement.present? || deleted
           scope.where dmsf_files: { project_id: project.id, deleted: deleted }
         else
           scope.where dmsf_files: { project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
@@ -278,7 +279,7 @@ class DmsfQuery < Query
 
   def dmsf_file_links_scope
     cf_columns = +''
-    if filters.any?
+    if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
         cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
       end
@@ -309,7 +310,7 @@ class DmsfQuery < Query
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfFile', dmsf_folder_id: dmsf_folder_id, deleted: deleted }
     else
-      if filters.any? || deleted
+      if statement.present? || deleted
         scope.where dmsf_links: { target_type: 'DmsfFile', project_id: project.id, deleted: deleted }
       else
         scope.where dmsf_links: { target_type: 'DmsfFile', project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
@@ -320,7 +321,7 @@ class DmsfQuery < Query
 
   def dmsf_url_links_scope
     cf_columns = +''
-    if filters.any?
+    if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
         cf_columns << ",NULL AS cf_#{id}"
       end
@@ -348,7 +349,7 @@ class DmsfQuery < Query
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfUrl', dmsf_folder_id: dmsf_folder_id, deleted: deleted }
     else
-      if filters.any? || deleted
+      if statement.present? || deleted
         scope.where dmsf_links: { target_type: 'DmsfUrl', project_id: project.id, deleted: deleted }
       else
         scope.where dmsf_links: { target_type: 'DmsfUrl', project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
