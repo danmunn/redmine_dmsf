@@ -158,20 +158,14 @@
         <% if @file_manipulation_allowed %>
           <% revision_access_query = DmsfFileRevisionAccessQuery.new %>
           <% revision_access_query.revision_id = revision.id  %>
-          <% revision_access_count = revision_access_query.access_count  %>
-          <% revision_access_pages = Redmine::Pagination::Paginator.new revision_access_count,
-               Setting.per_page_options_array.first || 25, params['page'] %>
-          <%= render partial: 'revision_access', locals: { revision: revision, query: revision_access_query,
-                                                           revision_access_count: revision_access_count,
-                                                           revision_access_pages: revision_access_pages } %>
+          <%= render partial: 'revision_access', locals: { revision: revision, query: revision_access_query } %>
         <% end %>
       </div>
     </div>
   </div>
   <br/>
 <% end %>
-
-<span class="pagination"><%= pagination_links_full @revision_pages, @file.dmsf_file_revisions.visible.count %></span>
+<span class="pagination"><%= pagination_links_full @revision_pages, @revision_count %></span>
 
 <%= late_javascript_tag do %>
   $('a.delete-revision').click(function(event) {

@@ -49,6 +49,9 @@ after_script:
   - bash -x ./test/ci/redmine_install.sh -u
 
 env:
+  - DB=sqlite   REDMINE_GIT_TAG=4.0-stable
+  - DB=mysql    REDMINE_GIT_TAG=4.0-stable
+  - DB=postgres REDMINE_GIT_TAG=4.0-stable
   - DB=sqlite   REDMINE_GIT_TAG=4.1-stable
   - DB=mysql    REDMINE_GIT_TAG=4.1-stable
   - DB=postgres REDMINE_GIT_TAG=4.1-stable
