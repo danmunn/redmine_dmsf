@@ -22,7 +22,7 @@
 
 <li>
   <%= context_menu_link l(:button_edit), dmsf_file_path(id: dmsf_file), class: 'icon icon-edit',
-                        disabled: !allowed || locked %>
+                        disabled: !allowed || (locked && !unlockable) %>
 </li>
 <li>
   <%= link_to "#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: dmsf_file),
@@ -40,6 +40,7 @@
 <li>
     <% if locked %>
       <%= context_menu_link l(:button_unlock), unlock_dmsf_files_path(id: dmsf_file), class: 'icon icon-unlock',
+                            title: l(:title_locked_by_user, user: dmsf_file.locked_by),
                             disabled: !allowed || !unlockable %>
     <% else %>
       <%= context_menu_link l(:button_lock), lock_dmsf_files_path(id: dmsf_file), class: 'icon icon-lock',

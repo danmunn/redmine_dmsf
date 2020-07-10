@@ -80,7 +80,6 @@ zh:
   title_notifications_not_active_activate: "通知无效:点击激活通知"
   title_title_version_version_download: " 下载‘%{title}’版本‘%{version}’"
   title_locked_by_user: "%{user}锁定"
-  title_locked_by_you: 您锁定
   title_waiting_for_approval: 待批准
   title_approved: 已批准
   title_unlock_file: 解除锁定允许其他成员修改

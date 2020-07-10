@@ -219,10 +219,13 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @role.add_permission! :view_dmsf_files
     @role.add_permission! :view_dmsf_folders
     @role.add_permission! :file_manipulation
+    @role.add_permission! :folder_manipulation
     get :show, params: { id: @project.id }
     assert_response :success
     # New file link
     assert_select 'a[href$=?]', '/dmsf/upload/multi_upload'
+    # New folder link
+    assert_select 'a[href$=?]', '/dmsf/new'
     # Filters
     assert_select 'fieldset#filters'
     # Options

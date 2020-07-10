@@ -1,10 +1,13 @@
 Changelog for Redmine DMSF
 ==========================
 
-2.4.4 *????-??-??*
+2.4.4 *2020-07-10*
 ------------------
 
-    ?
+    Maintenance release
+
+* New: #1144 - Who has locked the document information is missing.
+* Bug: #1142 - How to configure "Direct document or document link sending via email"?
 
 2.4.3 *2020-06-12*
 ------------------

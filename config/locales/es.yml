@@ -80,7 +80,6 @@ es:
   title_notifications_not_active_activate: "Notificacciones No Activas: Activadas"
   title_title_version_version_download: "%{title} version %{version} descargar"
   title_locked_by_user: "bloqueado por %{user}"
-  title_locked_by_you: Bloqueado por ti
   title_waiting_for_approval: Esperando Aprobación
   title_approved: Aprobado
   title_unlock_file: Desbloquear para que otros miembros puedan editarlo

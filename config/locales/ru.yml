@@ -80,7 +80,6 @@ ru:
   title_notifications_not_active_activate: "Уведомления не включены: Включить"
   title_title_version_version_download: "Скачать %{title} редакции %{version}"
   title_locked_by_user: "Заблокировано пользователем %{user}"
-  title_locked_by_you: Заблокировано Вами
   title_waiting_for_approval: Ожидается утверждение
   title_approved: Утверждено
   title_unlock_file: Разблокируйте файл, чтобы разрешить его изменение другими участниками

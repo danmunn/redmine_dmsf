@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **2.4.4 devel** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **2.4.4** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
@@ -36,12 +36,12 @@ Features
   * Documents and folders symbolic links  
   * Trash bin
   * Documents attachable to issues
-  * Compatible with Redmine 4.1.x
+  * Compatible with Redmine 4.0.x and 4.1.x
 
 Dependencies
 ------------
   
-  * Redmine 4.1.0 or higher
+  * Redmine 4.0.0 or higher
 
 ### Full-text search (optional)
 
@@ -224,7 +224,7 @@ You can either clone the master branch or download the latest zipped version. Be
     
     `RAILS_ENV=production bundle exec rake db:migrate`
     
-    `RAILS_ENV=production bundle exec rake plugins:migrate NAME=redmine_dmsf`
+    `RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf`
 5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
 6. Restart the web server, e.g. `systemctl apache2 restart`
 7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure.

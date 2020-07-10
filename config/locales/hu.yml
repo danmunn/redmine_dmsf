@@ -80,7 +80,6 @@ hu:
   title_notifications_not_active_activate: "Értesítések nincsnek bekapcsolva: Bekapcsolás"
   title_title_version_version_download: "%{title} verzió %{version} letöltés"
   title_locked_by_user: "Zárolva %{user}"
-  title_locked_by_you: Ön zárolta
   title_waiting_for_approval: Elfogadásra vár
   title_approved: Elfogadva
   title_unlock_file: Zárolás megszüntetése, hogy más felhasználók is változtatni tudjanak

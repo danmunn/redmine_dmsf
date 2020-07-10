@@ -69,18 +69,30 @@ class DmsfController < ApplicationController
       render_404
       return
     end
-    respond_to do |format|
-      format.html {
-        @dmsf_count = @query.dmsf_count
-        @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
-        render layout: !request.xhr?
-      }
-      format.api {
-        @offset, @limit = api_offset_and_limit
-      }
-      format.csv  {
-        send_data query_to_csv(@query.dmsf_nodes, @query), type: 'text/csv; header=present', filename: 'dmsf.csv'
-      }
+    if @query.valid?
+      respond_to do |format|
+        format.html {
+          @dmsf_count = @query.dmsf_count
+          @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
+          render layout: !request.xhr?
+        }
+        format.api {
+          @offset, @limit = api_offset_and_limit
+        }
+        format.csv  {
+          send_data query_to_csv(@query.dmsf_nodes, @query), type: 'text/csv; header=present', filename: 'dmsf.csv'
+        }
+      end
+    else
+      respond_to do |format|
+        format.html {
+          @dmsf_count = 0
+          @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
+          render layout: !request.xhr?
+        }
+        format.any(:atom, :csv, :pdf) { head 422 }
+        format.api { render_validation_errors(@query) }
+      end
     end
   end
 

@@ -72,10 +72,21 @@
 </div>
 
 <%= form_tag(dmsf_folder_path(id: @project, folder_id: @folder), method: :get, id: 'query_form', class: 'dmsf-query-form') do %>
-  <%= render partial: 'queries/query_form' %>
+  <%= hidden_field_tag('folder_id', @folder.id) if @folder %>
+  <% if defined?(EasyExtensions) %>
+    <%= render partial: 'dmsf_queries/query_form' %>
+  <% else %>
+    <%= render partial: 'queries/query_form' %>
+  <% end %>
 <% end %>
-<%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages } %>
-<span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>
+<% if @query.valid? %>
+  <% if @dmsf_count == 0 %>
+    <p class="nodata"><%= l(:label_no_data) %></p>
+  <% else %>
+    <%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages } %>
+    <span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>
+  <% end %>
+<% end %>
 
 <%= context_menu %>
 

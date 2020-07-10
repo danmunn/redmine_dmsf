@@ -41,7 +41,7 @@ class DmsfUpload
   end
 
   def self.create_from_uploaded_attachment(project, folder, uploaded_file)
-    a = Attachment.find_by_token(uploaded_file[:token])
+    a = Attachment.find_by_token(uploaded_file[:token]) if uploaded_file[:token].present?
     if a
       uploaded = {
         disk_filename: DmsfHelper.temp_filename(a.filename),
@@ -50,7 +50,7 @@ class DmsfUpload
         comment: uploaded_file[:description],
         tempfile_path: a.diskfile
       }
-      DmsfUpload.new(project, folder, uploaded)
+      DmsfUpload.new project, folder, uploaded
     else
       Rails.logger.error "An attachment not found by its token: #{uploaded_file[:token]}"
       nil

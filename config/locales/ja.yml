@@ -80,7 +80,6 @@ ja:
   title_notifications_not_active_activate: "通知は無効です: 有効にする"
   title_title_version_version_download: "%{title} のバージョン %{version} をダウンロードする"
   title_locked_by_user: "%{user} によってロックされています"
-  title_locked_by_you: あなたがロックしています
   title_waiting_for_approval: 承認待ち
   title_approved: 承認済み
   title_unlock_file: ロック解除して他のメンバーの変更を許可する

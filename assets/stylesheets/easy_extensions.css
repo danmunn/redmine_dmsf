@@ -65,3 +65,13 @@ table.dmsf a.sort.asc.icon.icon-sorted-desc {
 #query_form.dmsf-query-form .collapsed#filters {
     opacity: 1;
 }
+
+#query_form.dmsf-query-form .add-filter {
+    float: right;
+    text-align: right;
+    vertical-align: top;
+}
+
+#query_form.dmsf-query-form td.values span:first-child {
+    display: inline !important;
+}

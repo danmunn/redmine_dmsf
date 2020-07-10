@@ -80,7 +80,6 @@ fr:
   title_notifications_not_active_activate: "Notifications désactivées : cliquer pour activer"
   title_title_version_version_download: "Télécharger la version %{version} de %{title}"
   title_locked_by_user: "Verrouillé par %{user}"
-  title_locked_by_you: Verrouillé par vous-même
   title_waiting_for_approval: Attente de validation
   title_approved: Validé
   title_unlock_file: Déverrouiller afin de permettre la modification par les membres du projet

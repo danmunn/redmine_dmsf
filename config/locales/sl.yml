@@ -80,7 +80,6 @@ sl:
   title_notifications_not_active_activate: "Obveščanje ni aktivno: Aktiviraj"
   title_title_version_version_download: "%{title} verzija %{version} prenesi dol"
   title_locked_by_user: "Zaklenil %{user}"
-  title_locked_by_you: Zaklenili ste
   title_waiting_for_approval: V postopku odobritve
   title_approved: Odobreno
   title_unlock_file: Odkleni drugim članom za posodabljanje

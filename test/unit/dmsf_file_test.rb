@@ -291,4 +291,11 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert @file7.assigned?(@jsmith)
   end
 
+  def test_locked_by
+    # Locked file
+    assert_equal @jsmith.name, @file2.locked_by
+    # Unlocked file
+    assert_equal '', @file1.locked_by
+  end
+
 end

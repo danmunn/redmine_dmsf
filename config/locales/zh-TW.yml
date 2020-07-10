@@ -80,7 +80,6 @@ zh-TW:
   title_notifications_not_active_activate: "通知關閉中: 點擊啟用通知"
   title_title_version_version_download: " 版本: %{version} 檔案: %{title} 下載"
   title_locked_by_user: "被使用者%{user}，鎖定了。"
-  title_locked_by_you: 被您鎖定了。
   title_waiting_for_approval: 等待批准
   title_approved: 已經被批准
   title_unlock_file: 解除鎖定。允許其它使用者修改。

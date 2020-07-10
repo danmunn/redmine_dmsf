@@ -91,8 +91,21 @@ class DmsfMailer < Mailer
         Rails.logger.error "Cannot attach #{email_params[:zipped_content]}, it doesn't exist."
       end
     end
-    mail to: email_params[:to], cc: email_params[:cc], subject: email_params[:subject], 'From' => email_params[:from],
-         'Reply-To' => email_params[:reply_to]
+    skip_no_self_notified = false
+    begin
+      # We need to switch off no_self_notified temporarily otherwise the email won't be sent
+      if (author == User.current) && author.pref.no_self_notified
+        author.pref.no_self_notified = false
+        skip_no_self_notified = true
+      end
+      res = mail(to: email_params[:to], cc: email_params[:cc], subject: email_params[:subject], 'From' => email_params[:from],
+           'Reply-To' => email_params[:reply_to])
+    ensure
+      if skip_no_self_notified
+        author.pref.no_self_notified = true
+      end
+    end
+    res
   end
 
   def self.deliver_workflow_notification(users, workflow, revision, subject_id, text1_id, text2_id, notice = nil)

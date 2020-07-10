@@ -80,7 +80,6 @@ it: # Italian strings thx 2 Matteo Arceci!
   title_notifications_not_active_activate: "Notifiche disattivate: Attiva"
   title_title_version_version_download: "%{title} versione %{version} download"
   title_locked_by_user: "Bloccato da %{user}"
-  title_locked_by_you: Bloccato da te
   title_waiting_for_approval: In attesa di Approvazione
   title_approved: Approvato
   title_unlock_file: Sblocca per consentire modifiche degli altri membri
