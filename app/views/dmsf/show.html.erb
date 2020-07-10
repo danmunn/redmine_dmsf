@@ -75,8 +75,14 @@
   <%= hidden_field_tag('folder_id', @folder.id) if @folder %>
   <%= render partial: 'queries/query_form' %>
 <% end %>
-<%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages } %>
-<span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>
+<% if @query.valid? %>
+  <% if @dmsf_count == 0 %>
+    <p class="nodata"><%= l(:label_no_data) %></p>
+  <% else %>
+    <%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages } %>
+    <span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>
+  <% end %>
+<% end %>
 
 <%= context_menu %>
 

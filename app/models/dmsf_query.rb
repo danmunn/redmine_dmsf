@@ -132,6 +132,12 @@ class DmsfQuery < Query
     @statement
   end
 
+  def validate_query_filters
+    # Skip validation for empty title (default filter)
+    filters.delete('title')
+    super
+  end
+
   ######################################################################################################################
   # New
 
