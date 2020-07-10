@@ -80,7 +80,6 @@ cs:
   title_notifications_not_active_activate: "Notifikace nejsou aktivní: Aktivovat"
   title_title_version_version_download: "%{title} verze %{version} stáhnout"
   title_locked_by_user: "Zamčeno uživatelem %{user}"
-  title_locked_by_you: Zamčeno Vámi
   title_waiting_for_approval: Čeká na schválení
   title_approved: Schváleno
   title_unlock_file: Odemknout a umožnit změny ostatním uživatelům

@@ -80,7 +80,6 @@ de:
   title_notifications_not_active_activate: "Benachrichtigungen sind nicht aktiv: Einschalten"
   title_title_version_version_download: "%{title} Version %{version} Download"
   title_locked_by_user: "Gesperrt von %{user}"
-  title_locked_by_you: Gesperrt von dir
   title_waiting_for_approval: Warte auf Zustimmung
   title_approved: Zugestimmt
   title_unlock_file: Hebe Sperre auf um Änderungen anderer Nutzer zu ermöglichen

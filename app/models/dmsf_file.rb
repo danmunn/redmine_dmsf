@@ -128,6 +128,16 @@ class DmsfFile < ActiveRecord::Base
     deleted == STATUS_DELETED
   end
 
+  def locked_by
+    if lock && lock.reverse[0]
+      user = lock.reverse[0].user
+      if user
+        return (user == User.current) ? l(:label_me) : user.name
+      end
+    end
+    ''
+  end
+
   def delete(commit)
     if locked_for_user? && (!User.current.allowed_to?(:force_file_unlock, project))
       Rails.logger.info l(:error_file_is_locked)

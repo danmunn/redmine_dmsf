@@ -80,7 +80,6 @@ ko:
   title_notifications_not_active_activate: "알림 비활성화: 활성화"
   title_title_version_version_download: "%{title} 버전 %{version} 다운로드"
   title_locked_by_user: "%{user} 에 의해 잠겨짐"
-  title_locked_by_you: 사용자에 의해 잠겨짐
   title_waiting_for_approval: 승인을 기다리는 중
   title_approved: 승인됨
   title_unlock_file: 다른 구성원들의 변경 허가 잠금 해제
