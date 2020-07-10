@@ -41,7 +41,7 @@ class DmsfQuery < Query
   def initialize(attributes=nil, *args)
     super attributes
     self.sort_criteria = []
-      #self.filters ||= { 'title' => { operator: '~', values: ['']} }
+    self.filters ||= { 'title' => { operator: '~', values: ['']} }
   end
 
   ######################################################################################################################
