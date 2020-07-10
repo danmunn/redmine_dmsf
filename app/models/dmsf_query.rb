@@ -41,7 +41,7 @@ class DmsfQuery < Query
   def initialize(attributes=nil, *args)
     super attributes
     self.sort_criteria = []
-    self.filters ||= { 'title' => { operator: '~', values: ['']} }
+      #self.filters ||= { 'title' => { operator: '~', values: ['']} }
   end
 
   ######################################################################################################################
@@ -134,8 +134,10 @@ class DmsfQuery < Query
 
   def validate_query_filters
     # Skip validation for empty title (default filter)
-    filters.delete('title')
+    filter = filters.delete('title')
     super
+    # Add it back
+    filters['title'] = filter if filter
   end
 
   ######################################################################################################################
