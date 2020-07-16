@@ -27,6 +27,7 @@
   <%= hidden_field_tag "commited_files[#{i}][tempfile_path]", upload.tempfile_path %>
   <%= hidden_field_tag "commited_files[#{i}][size]", upload.size %>
   <%= hidden_field_tag "commited_files[#{i}][mime_type]", upload.mime_type %>
+  <%= hidden_field_tag "commited_files[#{i}][digest]", upload.digest %>
   <div class="clear">
     <div class="splitcontentleft">
       <p>

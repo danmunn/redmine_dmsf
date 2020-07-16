@@ -28,6 +28,7 @@
   <%= hidden_field_tag "commited_files[#{i}][size]", upload.size %>
   <%= hidden_field_tag "commited_files[#{i}][mime_type]", upload.mime_type %>
   <%= hidden_field_tag "commited_files[#{i}][name]", upload.name %>
+  <%= hidden_field_tag "commited_files[#{i}][digest]", upload.digest %>
   <p class="warning"><%= l(:info_file_locked) %></p>
   <div class="clear">
     <div class="splitcontentleft">

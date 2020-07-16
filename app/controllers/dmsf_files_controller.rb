@@ -128,17 +128,11 @@ class DmsfFilesController < ApplicationController
             revision.size = upload.size
             revision.disk_filename = revision.new_storage_filename
             revision.mime_type = upload.mime_type
-            revision.digest = DmsfFileRevision.create_digest upload.tempfile_path
           end
         else
           revision.size = last_revision.size
           revision.disk_filename = last_revision.disk_filename
           revision.mime_type = last_revision.mime_type
-          if last_revision.digest.blank?
-            revision.digest = DmsfFileRevision.create_digest last_revision.disk_file
-          else
-            revision.digest = last_revision.digest
-          end
         end
 
         # Custom fields

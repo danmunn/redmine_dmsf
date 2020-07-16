@@ -268,11 +268,19 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def copy_file_content(open_file)
+    sha = Digest::SHA256.new
     File.open(disk_file(false), 'wb') do |f|
-      while (buffer = open_file.read(8192))
-        f.write(buffer)
+      if open_file.respond_to?(:read)
+        while (buffer = open_file.read(8192))
+          f.write buffer
+          sha.update buffer
+        end
+      else
+        f.write open_file
+        sha.update open_file
       end
     end
+    self.digest = sha.hexdigest
   end
 
   # Overrides Redmine::Acts::Customizable::InstanceMethods#available_custom_fields
@@ -302,19 +310,6 @@ class DmsfFileRevision < ActiveRecord::Base
     format2 = format2.sub('%r', id.to_s)
     format2 += ext if ext
     format2
-  end
-
-  def self.create_digest(path)
-    begin
-      Digest::SHA256.file(path).hexdigest
-    rescue => e
-      Rails.logger.error e.message
-      0
-    end
-  end
-
-  def create_digest
-    self.digest = DmsfFileRevision.create_digest(disk_file)
   end
 
   # Returns either MD5 or SHA256 depending on the way self.digest was computed

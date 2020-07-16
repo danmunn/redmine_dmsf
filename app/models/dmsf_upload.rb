@@ -35,6 +35,7 @@ class DmsfUpload
   attr_accessor :workflow
   attr_accessor :custom_values
   attr_accessor :tempfile_path
+  attr_accessor :digest
 
   def disk_file
     DmsfHelper.temp_dir.join(disk_filename).to_s
@@ -48,7 +49,8 @@ class DmsfUpload
         content_type: a.content_type,
         original_filename: a.filename,
         comment: uploaded_file[:description],
-        tempfile_path: a.diskfile
+        tempfile_path: a.diskfile,
+        digest: a.digest
       }
       DmsfUpload.new project, folder, uploaded
     else
@@ -74,6 +76,7 @@ class DmsfUpload
       Rails.logger.error "Cannot find #{uploaded[:tempfile_path]}"
     end
     @tempfile_path = uploaded[:tempfile_path]
+    @digest = uploaded[:digest]
 
     if file.nil? || file.last_revision.nil?
       @title = DmsfFileRevision.filename_to_title(@name)

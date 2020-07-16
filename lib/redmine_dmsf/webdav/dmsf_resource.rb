@@ -578,7 +578,6 @@ module RedmineDmsf
 
         if new_revision.save
           new_revision.copy_file_content(request.body)
-          new_revision.create_digest
           new_revision.save
           # Notifications
           DmsfMailer.deliver_files_updated(project, [f])
