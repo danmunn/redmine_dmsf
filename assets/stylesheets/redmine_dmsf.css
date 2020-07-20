@@ -319,6 +319,10 @@ div[id*="revision_access_"] {
     padding-left: 18px;
 }
 
+.dmfs-box-tabular {
+    padding-top: 10px
+}
+
 /* New link form */
 #dmsf_link_target_file_id, #dmsf_link_target_folder_id, #dmsf_link_target_project_id, #dmsf_link_name{
     min-width: 40%;

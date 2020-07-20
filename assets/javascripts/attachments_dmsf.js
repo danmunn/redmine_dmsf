@@ -113,7 +113,7 @@ function dmsfAjaxUpload(file, attachmentId, fileSpan, inputEl) {
 
     function onProgress(e) {
         if(e.lengthComputable) {
-            this.progressbar( 'value', e.loaded * 100 / e.total );
+            this.progressbar('value', e.loaded * 100 / e.total);
         }
     }
 
@@ -132,11 +132,11 @@ function dmsfAjaxUpload(file, attachmentId, fileSpan, inputEl) {
             .fail(function(result) {
                 progressSpan.text(result.statusText);
             }).always(function() {
-            dmsfAjaxUpload.uploading--;
-            fileSpan.removeClass('ajax-loading');
-            let form = fileSpan.parents('form');
-            if ((form.queue('upload').length == 0) && (dmsfAjaxUpload.uploading == 0)) {
-                $('input:submit', form).removeAttr('disabled');
+                dmsfAjaxUpload.uploading--;
+                fileSpan.removeClass('ajax-loading');
+                let form = fileSpan.parents('form');
+                if ((form.queue('upload').length == 0) && (dmsfAjaxUpload.uploading == 0)) {
+                    $('input:submit', form).removeAttr('disabled');
             }
             form.dequeue('upload');
         });
@@ -162,13 +162,6 @@ function dmsfRemoveFileLbl() {
 
     return false;
 }
-
-/*function dmsfRemoveFile() {
-
-    $(this).parent('span').parent('span').remove();
-
-    return false;
-}*/
 
 function dmsfUploadBlob(blob, uploadUrl, attachmentId, options) {
 

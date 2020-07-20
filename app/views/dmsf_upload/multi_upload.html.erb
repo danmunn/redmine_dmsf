@@ -23,7 +23,7 @@
 <%= render partial: '/dmsf/path',
            locals: { folder: @folder, filename: nil, title: l(:label_attachment_new) } %>
 <%= form_tag({ controller: 'dmsf_upload', action: 'upload_files', id: @project, folder_id: @folder },
-             id: 'uploadform', method: :post, multipart: true) do %>
+             { id: 'uploadform', multipart: true }) do %>
   <div class="box tabular">
     <span class="dmsf-uploader">
       <%= render partial: 'dmsf_upload/form',
