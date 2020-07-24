@@ -392,6 +392,7 @@ class DmsfController < ApplicationController
   # Move the dragged object to the given destination
   def drop
     result = false
+    object = nil
     if params[:dmsf_folder].present? && params[:dmsf_folder][:drag_id].present? && params[:dmsf_folder][:drop_id].present?
       if params[:dmsf_folder][:drag_id] =~ /(.+)-(\d+)/
         type = $1
@@ -399,22 +400,20 @@ class DmsfController < ApplicationController
         if params[:dmsf_folder][:drop_id] =~ /^folder.*-(\d+)/
           case type
           when 'file'
-            dmsf_file = DmsfFile.find_by(id: id)
-            dmsf_folder = DmsfFolder.find_by(id: $1)
-            if dmsf_file && dmsf_folder
-              result = dmsf_file.move_to(dmsf_file.project, dmsf_folder)
-            end
+            object = DmsfFile.find_by(id: id)
           when 'folder'
-            dmsf_folder = DmsfFolder.find_by(id: id)
-            if dmsf_folder
-              dmsf_folder.dmsf_folder_id = $1
-              result = dmsf_folder.save
-            end
+            object = DmsfFolder.find_by(id: id)
           when 'file-link', 'folder-link', 'url-link'
-            dmsf_link = DmsfLink.find_by(id: id)
-            if dmsf_link
-              dmsf_link.dmsf_folder_id = $1
-              result = dmsf_link.save
+            object = DmsfLink.find_by(id: id)
+          end
+          dmsf_folder = DmsfFolder.find_by(id: $1)
+          if object && dmsf_folder
+            if dmsf_folder == object.dmsf_folder
+              object.errors[:base] << l(:error_target_folder_same)
+            elsif object.dmsf_folder.locked_for_user?
+              object.errors[:base] << l(:error_folder_is_locked)
+            else
+              result = object.move_to(dmsf_folder.project, dmsf_folder)
             end
           end
         end
@@ -424,7 +423,13 @@ class DmsfController < ApplicationController
       if result
         format.js { head 200 }
       else
-        format.js { head 422 }
+        format.js {
+          if object
+            flash.now[:error] = object.errors.full_messages.to_sentence
+          else
+            head 422
+          end
+        }
       end
     end
   end
