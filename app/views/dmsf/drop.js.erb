@@ -3,8 +3,6 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -22,10 +20,4 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-{
-  "original_filename":"<%= @tempfile.original_filename.html_safe %>",
-  "content_type":     "<%= @tempfile.content_type.gsub('"', '').html_safe %>",
-  "disk_filename":    "<%= @disk_filename.html_safe %>",
-  "tempfile_path":    "<%= @tempfile_path.html_safe %>"
-  "digest":           "<%= @digest.html_safe %>"
-}
+throw new Error("<%= j flash[:error] %>");

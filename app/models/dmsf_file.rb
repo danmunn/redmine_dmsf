@@ -240,10 +240,12 @@ class DmsfFile < ActiveRecord::Base
   def move_to(project, folder)
     if locked_for_user?
       errors[:base] << l(:error_file_is_locked)
+      Rails.logger.error l(:error_file_is_locked)
       return false
     end
     unless last_revision
       errors[:base] << l(:error_at_least_one_revision_must_be_present)
+      Rails.logger.error l(:error_at_least_one_revision_must_be_present)
       return false
     end
     source = "#{project.identifier}:#{dmsf_path_str}"

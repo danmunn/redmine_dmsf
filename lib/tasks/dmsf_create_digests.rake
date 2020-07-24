@@ -35,25 +35,38 @@ END_DESC
 
 namespace :redmine do
   task :dmsf_create_digests => :environment do
-    m = DmsfDigest.new
-    m.create_digests
+    m = DmsfCreateDigest.new
+    m.dmsf_create_digests
   end
 end
 
-class DmsfDigest
+class DmsfCreateDigest
 
   def initialize
     @dry_run = ENV['dry_run']
     @force_sha256 = ENV['forceSHA256']
   end
 
-  def create_digests
+  def dmsf_create_digests
     revisions = DmsfFileRevision.where(['digest IS NULL OR length(digest) < ?', @force_sha256 ? 64 : 32])
     count = revisions.count
     n = 0
     revisions.each_with_index do |rev, i|
-      rev.create_digest
-      rev.save unless @dry_run
+      if File.exist?(rev.disk_file)
+        sha = Digest::SHA256.new
+        file = File.new rev.disk_file, 'r'
+        if file.respond_to?(:read)
+          while (buffer = file.read(8192))
+            sha.update buffer
+          end
+        else
+          sha.update @temp_file
+        end
+        rev.digest = sha.hexdigest
+        rev.save unless @dry_run
+      else
+        puts "#{rev.disk_file} not found"
+      end
       n += 1
       # Progress bar
       print "\r#{i * 100 / count}%"

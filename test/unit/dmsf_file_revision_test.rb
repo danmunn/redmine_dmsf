@@ -77,18 +77,9 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert_nil DmsfFileRevision.find_by(id: @revision5.id)
   end
 
-  def test_create_digest
-    @revision1.create_digest
-    assert_equal 'SHA256', @revision1.digest_type
-    assert_equal @revision8.create_digest, 0, 'Digest should be 0, if the file is missing'
-  end
-
   def test_digest_type
     # Old type MD5
     assert_equal 'MD5', @revision1.digest_type
-    # New type SHA256
-    @revision1.create_digest
-    assert_equal 'SHA256', @revision1.digest_type
   end
 
   def test_new_storage_filename

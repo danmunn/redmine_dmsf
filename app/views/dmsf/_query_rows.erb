@@ -70,7 +70,7 @@
             dataType: 'script',
             data: data,
             error: function(jqXHR, textStatus, errorThrown){
-              alert(textStatus + " " + jqXHR.status);
+              alert(errorThrown);
               ui.draggable.animate(ui.draggable.data("ui-draggable").originalPosition, "slow");
             },
             complete: function(jqXHR, textStatus, errorThrown){
@@ -85,6 +85,7 @@
                   }
                   ui.draggable.remove();
                 }
+                window.location.reload();
               }
             }
           });

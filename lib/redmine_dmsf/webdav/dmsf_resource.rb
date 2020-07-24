@@ -603,9 +603,9 @@ module RedmineDmsf
         # Phusion passenger does not have a method "length" in its model
         # however, includes a size method - so we instead use reflection
         # to determine best approach to problem
-        if request.body.respond_to? 'length'
+        if request.body.respond_to?(:length)
           new_revision.size = request.body.length
-        elsif request.body.respond_to? 'size'
+        elsif request.body.respond_to?(:size)
           new_revision.size = request.body.size
         else
           new_revision.size = request.content_length # Bad Guess
@@ -616,11 +616,10 @@ module RedmineDmsf
         new_revision.disk_filename = new_revision.new_storage_filename unless reuse_revision
 
         if new_revision.save
-          new_revision.copy_file_content(request.body)
-          new_revision.create_digest
+          new_revision.copy_file_content request.body
           new_revision.save
           # Notifications
-          DmsfMailer.deliver_files_updated(project, [f])
+          DmsfMailer.deliver_files_updated project, [f]
         else
           raise InternalServerError
         end

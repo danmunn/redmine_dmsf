@@ -80,7 +80,7 @@ module DmsfUploadHelper
         end
         new_revision.mime_type = commited_file[:mime_type]
         new_revision.size = commited_file[:size]
-        new_revision.digest = DmsfFileRevision.create_digest commited_file[:tempfile_path]
+        new_revision.digest = commited_file[:digest]
 
         if commited_file[:custom_field_values].present?
           i = 0
@@ -96,12 +96,12 @@ module DmsfUploadHelper
           new_revision.disk_filename = new_revision.new_storage_filename
         else
           Rails.logger.error (new_revision.errors.full_messages + file.errors.full_messages).to_sentence
-          failed_uploads.push(commited_file)
+          failed_uploads.push commited_file
           next
         end
 
         if new_revision.save
-          new_revision.assign_workflow(commited_file[:dmsf_workflow_id])
+          new_revision.assign_workflow commited_file[:dmsf_workflow_id]
           begin
             FileUtils.mv commited_file[:tempfile_path], new_revision.disk_file(false)
             FileUtils.chmod 'u=wr,g=r', new_revision.disk_file(false)

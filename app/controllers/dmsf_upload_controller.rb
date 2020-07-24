@@ -27,10 +27,8 @@ class DmsfUploadController < ApplicationController
   before_action :find_project, except: [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
   before_action :authorize, except: [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
   before_action :authorize_global, only: [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
-  before_action :find_folder, except: [:upload_file, :upload, :commit, :delete_dmsf_attachment,
-                                       :delete_dmsf_link_attachment]
-  before_action :permissions, except: [:upload_file, :upload, :commit, :delete_dmsf_attachment,
-                                       :delete_dmsf_link_attachment]
+  before_action :find_folder, except: [:upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :permissions, except: [:upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
 
   helper :all
   helper :dmsf_workflows
@@ -57,27 +55,6 @@ class DmsfUploadController < ApplicationController
     end
   end
 
-  # async single file upload handling
-  def upload_file
-    @tempfile = params[:file]
-    unless @tempfile.original_filename
-      render_404
-      return
-    end
-    @disk_filename = DmsfHelper.temp_filename(@tempfile.original_filename)
-    @tempfile_path = DmsfHelper.temp_dir.join(@disk_filename).to_s
-    File.open(@tempfile_path, 'wb') do |f|
-      if params[:file].respond_to?(:read)
-        while (buffer = @tempfile.read(8192))
-          f.write(buffer)
-        end
-      else
-        f.write(@tempfile)
-      end
-    end
-    render layout: false
-  end
-
   # REST API and Redmine attachment form
   def upload
     unless request.content_type == 'application/octet-stream'
@@ -85,7 +62,7 @@ class DmsfUploadController < ApplicationController
       return
     end
 
-    @attachment = Attachment.new(file: request.raw_post)
+    @attachment = Attachment.new(file: request.body)
     @attachment.author = User.current
     @attachment.filename = params[:filename].presence || Redmine::Utils.random_hex(16)
     @attachment.content_type = params[:content_type].presence
@@ -124,6 +101,7 @@ class DmsfUploadController < ApplicationController
           uploaded_file[:disk_filename] = upload.disk_filename
           uploaded_file[:tempfile_path] = upload.tempfile_path
           uploaded_file[:size] = upload.size
+          uploaded_file[:digest] = upload.digest
         end
       end
       commit_files_internal uploaded_files
