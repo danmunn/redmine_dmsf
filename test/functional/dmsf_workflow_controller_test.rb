@@ -36,6 +36,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     @role_manager.add_permission! :file_manipulation
     @role_manager.add_permission! :manage_workflows
     @role_manager.add_permission! :file_approval
+    @role_manager.add_permission! :view_dmsf_files
     @wfs1 = DmsfWorkflowStep.find 1 # step 1
     @wfs2 = DmsfWorkflowStep.find 2 # step 2
     @wfs3 = DmsfWorkflowStep.find 3 # step 1
@@ -411,6 +412,33 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     @wfs3.reload
     assert_equal @wfs3.name, name
     assert_response :redirect
+  end
+
+  def test_log_non_member
+    @request.session[:user_id] = @user_non_member.id
+    get :log, params: { id: @wf1.id, project_id: @project1.id, dmsf_file_id: @file1.id, format: 'js' }, xhr: true
+    assert_response :forbidden
+  end
+
+  def test_log_member_local_wf
+    @request.session[:user_id] = @user_member.id
+    get :log, params: { id: @wf1.id, project_id: @project1.id, dmsf_file_id: @file1.id, format: 'js' }, xhr: true
+    assert_response :success
+    assert_template :log
+  end
+
+  def test_log_member_global_wf
+    @request.session[:user_id] = @user_member.id
+    get :log, params: { id: @wf3.id, project_id: @project1.id, dmsf_file_id: @file1.id, format: 'js' }, xhr: true
+    assert_response :success
+    assert_template :log
+  end
+
+  def test_log_admin
+    @request.session[:user_id] = @user_admin.id
+    get :log, params: { id: @wf1.id, project_id: @project1.id, dmsf_file_id: @file1.id, format: 'js' }, xhr: true
+    assert_response :success
+    assert_template :log
   end
 
 end
