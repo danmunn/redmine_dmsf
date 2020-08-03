@@ -99,3 +99,12 @@ dmsf_files_011:
   notification:       false
   deleted:            0
   deleted_by_user_id: NULL
+
+dmsf_files_012:
+  id:                 12
+  project_id:         3
+  dmsf_folder_id:     NULL
+  name:               'test.txt'
+  notification:       false
+  deleted:            0
+  deleted_by_user_id: NULL

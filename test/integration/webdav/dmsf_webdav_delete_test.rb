@@ -34,10 +34,13 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     @jsmith = credentials 'jsmith'
     @project1 = Project.find 1
     @project2 = Project.find 2
+    @project3 = Project.find 3 # Sub-project of project 1
     @role = Role.find_by(name: 'Manager')
     @folder1 = DmsfFolder.find 1
     @folder6 = DmsfFolder.find 6
+    @folder10 = DmsfFolder.find 10
     @file1 = DmsfFile.find 1
+    @file12 = DmsfFile.find 12
     @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
     @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
@@ -47,7 +50,8 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
     FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
-    @project1.enable_module! :dmsf # Flag module enabled
+    @project1.enable_module! :dmsf # Enable DMSF module
+    @project3.enable_module! :dmsf
     User.current = nil    
   end
 
@@ -67,9 +71,12 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   def test_truth
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
+    assert_kind_of Project, @project3
     assert_kind_of DmsfFolder, @folder1
     assert_kind_of DmsfFolder, @folder6
+    assert_kind_of DmsfFolder, @folder10
     assert_kind_of DmsfFile, @file1
+    assert_kind_of DmsfFile, @file12
     assert_kind_of Role, @role
   end
 
@@ -250,6 +257,20 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     # The file should be destroyed
     assert_nil DmsfFile.visible.find_by(id: @file1.id)
+  end
+
+  def test_file_delete_in_subproject
+    @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :file_delete
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: nil, headers: @admin
+    assert_response :success
+  end
+
+  def test_folder_delete_in_subproject
+    @role.add_permission! :view_dmsf_folders
+    @role.add_permission! :folder_delete
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil, headers: @admin
+    assert_response :success
   end
 
 end

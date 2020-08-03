@@ -31,7 +31,9 @@ module RedmineDmsf
       attr_reader :public_path
 
       def initialize(path, request, response, options)
-        raise NotFound if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
+        if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
+          raise NotFound
+        end
         @project = nil
         @public_path = "#{options[:root_uri_path]}#{path}"
         @children = nil
@@ -101,7 +103,9 @@ module RedmineDmsf
       end
 
       def options(request, response)
-        return NotFound if ((@path.length > 1) && ((!project) || (!project.module_enabled?('dmsf'))))
+        if ((@path.length > 1) && ((!project) || (!project.module_enabled?('dmsf'))))
+          return NotFound
+        end
         if @__proxy.read_only
           response['Allow'] ||= 'OPTIONS,HEAD,GET,PROPFIND'
         end

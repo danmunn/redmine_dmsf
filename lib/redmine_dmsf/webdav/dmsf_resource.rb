@@ -238,7 +238,7 @@ module RedmineDmsf
             destroy = false
           end
           if file.delete(destroy)
-            DmsfMailer.deliver_files_deleted(project, [file])
+            DmsfMailer.deliver_files_deleted project, [file]
             NoContent
           else
             Conflict
@@ -580,7 +580,7 @@ module RedmineDmsf
             end
           end
         else
-          raise BadRequest unless (parent.projectless_path == '/' || (parent.exist? && parent.folder))
+          #raise BadRequest unless (parent.projectless_path == '/' || (parent.exist? && parent.folder))
           f = DmsfFile.new
           f.project_id = project.id
           f.name = basename
