@@ -480,16 +480,20 @@ private
       if @dmsf_workflow.project # Project workflow
         @project = @dmsf_workflow.project
       else # Global workflow
-        revision = DmsfFileRevision.find_by(id: params[:dmsf_file_revision_id])
-        @project = revision.dmsf_file.project if revision && revision.dmsf_file
+        if params[:dmsf_file_revision_id].present?
+          revision = DmsfFileRevision.find_by(id: params[:dmsf_file_revision_id])
+          @project = revision.dmsf_file.project if revision && revision.dmsf_file
+        else
+          @project = Project.find params[:project_id] if params[:project_id].present?
+        end
       end
     else
-      if params[:dmsf_workflow]
+      if params[:dmsf_workflow].present?
         @project = Project.find params[:dmsf_workflow][:project_id]
-      elsif params[:project_id]
+      elsif params[:project_id].present?
         @project = Project.find params[:project_id]
       else
-        @project = Project.find params[:id]
+        @project = Project.find(params[:id]) if params[:id].present?
       end
     end
   rescue ActiveRecord::RecordNotFound
