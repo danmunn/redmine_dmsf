@@ -74,7 +74,7 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
   def test_copy_approval_workflows
     assert_equal 1, @project1.dmsf_workflows.all.size
     assert_equal 0, @project2.dmsf_workflows.all.size
-    @project2.copy_approval_workflows(@project1)
+    @project2.copy_approval_workflows @project1
     assert_equal 1, @project2.dmsf_workflows.all.size
   end
 
@@ -84,14 +84,14 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
     assert_equal 2, @project1.file_links.visible.all.size
     assert_equal 1, @project1.folder_links.visible.all.size
     assert_equal 1, @project1.url_links.visible.all.size
-    assert_equal 0, @project3.dmsf_files.visible.all.size
-    assert_equal 0, @project3.dmsf_folders.all.size
+    assert_equal 1, @project3.dmsf_files.visible.all.size
+    assert_equal 1, @project3.dmsf_folders.all.size
     assert_equal 0, @project3.file_links.visible.all.size
     assert_equal 0, @project3.folder_links.visible.all.size
     assert_equal 0, @project3.url_links.visible.all.size
-    @project3.copy_dmsf(@project1)
+    @project3.copy_dmsf @project1
     assert_equal 4, @project3.dmsf_files.visible.all.size
-    assert_equal 4, @project3.dmsf_folders.all.size
+    assert_equal 5, @project3.dmsf_folders.all.size
     assert_equal 2, @project3.file_links.visible.all.size
     assert_equal 1, @project3.folder_links.visible.all.size
     assert_equal 1, @project3.url_links.visible.all.size
