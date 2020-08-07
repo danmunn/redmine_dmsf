@@ -67,7 +67,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
     Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
   end
-  
+
   def test_truth
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
@@ -191,7 +191,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", params: nil, headers: @jsmith
     assert_response :success
     @folder6.reload
-    assert @folder6.deleted?, "Folder #{@folder1.title} is not expected to exist"
+    assert @folder6.deleted?, "Folder #{@folder6.title} is not expected to exist"
   end
 
   def test_file_delete_by_administrator
@@ -259,18 +259,20 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     assert_nil DmsfFile.visible.find_by(id: @file1.id)
   end
 
-  def test_file_delete_in_subproject
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :file_delete
+  def test_delete_file_in_subproject
     delete "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: nil, headers: @admin
     assert_response :success
   end
 
-  def test_folder_delete_in_subproject
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :folder_delete
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil, headers: @admin
+  def test_delete_folder_in_subproject
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil,
+           headers: @admin
     assert_response :success
+  end
+
+  def test_delete_subproject
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}", params: nil, headers: @admin
+    assert_response :method_not_allowed
   end
 
 end

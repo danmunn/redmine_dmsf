@@ -31,8 +31,13 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
     @project1 = Project.find 1
+    @project1.enable_module! :dmsf
     @project2 = Project.find 2
+    @project3 = Project.find 3
+    @project3.enable_module! :dmsf
     @role = Role.find_by(name: 'Manager')
+    @role.add_permission! :folder_manipulation
+    @role.add_permission! :view_dmsf_folders
     @folder6 = DmsfFolder.find 6
     @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
@@ -62,6 +67,7 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
   def test_truth
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
+    assert_kind_of Project, @project3
     assert_kind_of Role, @role
     assert_kind_of DmsfFolder, @folder6
   end
@@ -82,36 +88,26 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_should_not_succed_on_a_non_dmsf_enabled_project
+    @project1.disable_module! :dmsf
     process :mkcol, "/dmsf/webdav/#{@project1.identifier}/folder", params: nil, headers: @jsmith
-    assert_response :forbidden
+    assert_response :not_found
   end
 
   def test_should_not_create_folder_without_permissions
-    @project1.enable_module! :dmsf # Flag module enabled
+    @role.remove_permission! :folder_manipulation
     process :mkcol, "/dmsf/webdav/#{@project1.identifier}/folder", params: nil, headers: @jsmith
     assert_response :forbidden
   end
 
   def test_should_fail_to_create_folder_that_already_exists
-    @project1.enable_module! :dmsf # Flag module enabled
-    @role.add_permission! :folder_manipulation
-    @role.add_permission! :view_dmsf_folders
     process :mkcol,
       "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", params: nil, headers: @jsmith
     assert_response :method_not_allowed
   end
 
-  def test_should_fail_to_create_folder_for_user_without_rights
-    @project1.enable_module! :dmsf # Flag module enabled
-    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", params: nil, headers: @jsmith
-    assert_response :forbidden
-  end
-
   def test_should_create_folder_for_non_admin_user_with_rights
-    @project1.enable_module! :dmsf
-    @role.add_permission! :folder_manipulation
     process :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", params: nil, headers: @jsmith
-    assert_response :success # Created
+    assert_response :success
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     process :mkcol, "/dmsf/webdav/#{@project1.identifier}/test2", params: nil, headers: @jsmith
@@ -119,5 +115,11 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
     process :mkcol, "/dmsf/webdav/#{project1_uri}/test3", params: nil, headers: @jsmith
     assert_response :success # Created
   end
-  
+
+  def test_create_folder_in_subproject
+    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/test1", params: nil,
+            headers: @admin
+    assert_response :success
+  end
+
 end

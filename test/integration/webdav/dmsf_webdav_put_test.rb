@@ -37,6 +37,8 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     @jsmith_user = User.find_by(login: 'jsmith')
     @project1 = Project.find 1
     @project2 = Project.find 2
+    @project3 = Project.find 3
+    @project3.enable_module! :dmsf
     @role = Role.find_by(name: 'Manager')
     @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
@@ -62,6 +64,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   def test_truth
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
+    assert_kind_of Project, @project3
     assert_kind_of Role, @role
     assert_kind_of User, @jsmith_user
   end
@@ -343,6 +346,13 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       assert_response :created
     end
     Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] = original
+  end
+
+  def test_put_into_subproject
+    put "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/test-1234.txt", params: '1234',
+        headers: @admin.merge!({ content_type: :text })
+    assert_response :created
+    assert DmsfFile.find_by(project_id: @project3.id, dmsf_folder: nil, name: 'test-1234.txt')
   end
   
 end

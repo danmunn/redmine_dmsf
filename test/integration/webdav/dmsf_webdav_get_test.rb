@@ -32,6 +32,10 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     @jsmith = credentials 'jsmith'
     @project1 = Project.find 1
     @project2 = Project.find 2
+    @project3 = Project.find 3
+    @file1 = DmsfFile.find 1
+    @folder10 = DmsfFolder.find 10
+    @file12 = DmsfFile.find 12
     @role = Role.find_by(name: 'Manager')
     @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
@@ -61,6 +65,10 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   def test_truth
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
+    assert_kind_of Project, @project3
+    assert_kind_of DmsfFile, @file1
+    assert_kind_of DmsfFile, @file12
+    assert_kind_of DmsfFolder, @folder10
     assert_kind_of Role, @role
   end
 
@@ -166,6 +174,18 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
    @role.add_permission! :view_dmsf_files
    get "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @jsmith
    assert_response :success
+  end
+
+  def test_get_file_in_subproject
+     @project3.enable_module! :dmsf # Flag module enabled
+     get "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: nil, headers: @admin
+     assert_response :success
+  end
+
+  def test_get_folder_in_subproject
+    @project3.enable_module! :dmsf # Flag module enabled
+    get "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil, headers: @admin
+    assert_response :success
   end
 
 end

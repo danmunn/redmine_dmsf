@@ -31,9 +31,7 @@ module RedmineDmsf
       attr_reader :public_path
 
       def initialize(path, request, response, options)
-        if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
-          raise NotFound
-        end
+        raise NotFound if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
         @project = nil
         @public_path = "#{options[:root_uri_path]}#{path}"
         @children = nil
@@ -122,13 +120,17 @@ module RedmineDmsf
       def project
         unless @project
           i = 1
+          project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
           while true
             pinfo = @path.split('/').drop(i)
             if pinfo.length > 0
-              if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-                if pinfo.first =~ /(\d+)$/
+              if project_names
+                if pinfo.first =~ / (\d+)$/
                   prj = Project.visible.find_by(id: $1)
-                  Rails.logger.error("No project found on path '#{@path}'") unless prj
+                  if prj
+                    # Check again whether it's really the project and not a folder with a number as a suffix
+                    prj = nil unless  pinfo.first =~ /^#{prj.name}/
+                  end
                 end
               else
                 begin
@@ -140,7 +142,10 @@ module RedmineDmsf
                 end
               end
             end
-            break unless prj
+            unless prj
+              @projectless_path = '/' + @path.split('/').drop(i).join('/')
+              break
+            end
             i = i + 1
             @project = prj
             prj = nil
@@ -151,8 +156,8 @@ module RedmineDmsf
 
       # Make it easy to find the path without project in it.
       def projectless_path
-        # TODO:
-        '/' + @path.split('/').drop(2).join('/')
+        project # Initialization
+        @projectless_path
       end
 
       def path_prefix

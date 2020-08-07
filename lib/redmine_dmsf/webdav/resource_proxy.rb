@@ -39,7 +39,7 @@ module RedmineDmsf
         unless Setting.plugin_redmine_dmsf['dmsf_webdav']
           raise NotFound
         end
-        super(*args)
+        super *args
         pinfo = path.split('/').drop(1)
         if pinfo.length == 0 # If this is the base_path, we're at root
           @resource_c = IndexResource.new(*args)
@@ -110,12 +110,12 @@ module RedmineDmsf
       end
 
       def get(request, response)
-        @resource_c.get(request, response)
+        @resource_c.get request, response
       end
 
       def put(request, response)
         raise BadGateway if @read_only
-        @resource_c.put(request, response)
+        @resource_c.put request, response
       end
 
       def delete
@@ -125,12 +125,12 @@ module RedmineDmsf
 
       def copy(dest, overwrite, depth)
         raise BadGateway if @read_only
-        @resource_c.copy(dest, overwrite, depth)
+        @resource_c.copy dest, overwrite, depth
       end
 
       def move(dest, overwrite = false)
         raise BadGateway if @read_only
-        @resource_c.move(dest, overwrite)
+        @resource_c.move dest, overwrite
       end
 
       def make_collection
@@ -144,16 +144,16 @@ module RedmineDmsf
 
       def lock(args)
         raise BadGateway if @read_only
-        @resource_c.lock(args)
+        @resource_c.lock args
       end
 
       def lock_check(lock_scope = nil)
-        @resource_c.lock_check(lock_scope)
+        @resource_c.lock_check lock_scope
       end
 
       def unlock(token)
         raise BadGateway if @read_only
-        @resource_c.unlock(token)
+        @resource_c.unlock token
       end
 
       def name
@@ -169,7 +169,7 @@ module RedmineDmsf
       end
 
       def get_property(element)
-        @resource_c.get_property(element)
+        @resource_c.get_property element
       end
 
       def properties
@@ -177,7 +177,7 @@ module RedmineDmsf
       end
 
       def propstats(response, stats)
-        @resource_c.propstats(response, stats)
+        @resource_c.propstats response, stats
       end
     end
   end

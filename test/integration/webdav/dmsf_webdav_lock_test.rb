@@ -23,7 +23,7 @@
 require File.expand_path('../../../test_helper', __FILE__)
 require 'fileutils'
 
-class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
+class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
 
   fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles,
     :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
@@ -33,7 +33,12 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     @jsmith = credentials 'jsmith'
     @admin_user = User.find_by(login: 'admin')
     @project1 = Project.find 1
+    @project1.enable_module! 'dmsf'
+    @project3 = Project.find 3
+    @project3.enable_module! 'dmsf'
     @file1 = DmsfFile.find 1
+    @file12 = DmsfFile.find 12
+    @folder10 = DmsfFolder.find 10
     # Fix permissions for jsmith's role
     @role = Role.find_by(name: 'Manager')
     @role.add_permission! :view_dmsf_folders
@@ -42,6 +47,12 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
     @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
+    @xml = %{<?xml version="1.0" encoding="utf-8" ?>
+              <d:lockinfo xmlns:d="DAV:">
+                <d:lockscope><d:exclusive/></d:lockscope>
+                <d:locktype><d:write/></d:locktype>
+                <d:owner>jsmith</d:owner>
+              </d:lockinfo>}
   end
 
   def teardown
@@ -51,26 +62,23 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
 
   def test_truth
     assert_kind_of Project, @project1
+    assert_kind_of Project, @project3
     assert_kind_of DmsfFile, @file1
+    assert_kind_of DmsfFile, @file12
+    assert_kind_of DmsfFolder, @folder10
     assert_kind_of Role, @role
     assert_kind_of User, @admin_user
   end
-  
+
   def test_lock_file_already_locked_by_other
     log_user 'admin', 'admin' # login as admin
     User.current = @admin_user
     assert @file1.lock!, "File failed to be locked by #{User.current}"
-    process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params:
-        %{<?xml version=\"1.0\" encoding=\"utf-8\" ?>
-        <d:lockinfo xmlns:d=\"DAV:\">
-          <d:lockscope><d:exclusive/></d:lockscope>
-          <d:locktype><d:write/></d:locktype>
-          <d:owner>jsmith</d:owner>
-        </d:lockinfo>},
+    process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: @xml,
       headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
     assert_response :locked
   end
-  
+
   def test_lock_file
     create_time = Time.utc(2000, 1, 2, 3, 4, 5)
     refresh_time = Time.utc(2000, 1, 2, 6, 7, 8)
@@ -79,13 +87,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     # Time travel, will make the usec part of the time 0
     travel_to create_time do
       # Lock file
-      xml = %{<?xml version="1.0" encoding="utf-8" ?>
-                <d:lockinfo xmlns:d="DAV:">
-                  <d:lockscope><d:exclusive/></d:lockscope>
-                  <d:locktype><d:write/></d:locktype>
-                  <d:owner>jsmith</d:owner>
-                </d:lockinfo>}
-      process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: xml,
+      process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: @xml,
         headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
       assert_response :success
       # Verify the response
@@ -134,6 +136,25 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
       assert_equal refresh_time, l.updated_at
       assert_equal (refresh_time + 1.week), l.expires_at
     end
+  end
+
+  def test_lock_file_in_subproject
+    process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: @xml,
+            headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
+    assert_response :success
+  end
+
+  def test_lock_folder_in_subproject
+    process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: @xml,
+            headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
+    assert_response :success
+  end
+
+  def test_lock_subproject
+    process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}", params: @xml,
+            headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
+    assert_response :multi_status
+    assert_match '<d:status>HTTP/1.1 405 Method Not Allowed</d:status>', response.body
   end
 
 end

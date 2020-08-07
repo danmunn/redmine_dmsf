@@ -32,6 +32,8 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     @jsmith = credentials 'jsmith'
     @project1 = Project.find 1
     @project2 = Project.find 2
+    @project3 = Project.find 3
+    @project3.enable_module! :dmsf
     @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
     @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
@@ -45,10 +47,11 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
   end
-  
+
   def test_truth
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
+    assert_kind_of Project, @project3
   end
 
   def test_options_requires_no_authentication_for_root_level
@@ -175,6 +178,11 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   def test_authenticated_options_returns_404_for_not_found
     process :options, '/dmsf/webdav/does-not-exist', params: nil, headers: @jsmith
     assert_response :not_found
+  end
+
+  def test_options_for_subproject
+    process :options, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}", params: nil, headers: @admin
+    assert_response :success
   end
 
 end

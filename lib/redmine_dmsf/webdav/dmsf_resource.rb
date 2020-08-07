@@ -107,18 +107,23 @@ module RedmineDmsf
 
       def subproject
         unless @subproject
-          @subproject = Project.visible.where(parent_id: parent_project.id, name: basename).first if parent_project
+          if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+            if basename =~ / (\d+)$/
+              @subproject = Project.visible.where(id: $1, parent_id: parent_project.id).first
+              if @subproject
+                # Check again whether it's really the project and not a folder with a number as a suffix
+                @subproject = nil unless basename =~ /^#{@subproject.name}/
+              end
+            end
+          else
+            @subproject = Project.visible.where(parent_id: parent_project.id, identifier: basename).first if parent_project
+          end
         end
         @subproject
       end
 
       def parent_project
-        unless @parent_project
-          if /\/(.+)\/#{project.identifier}\/?$/.match(@path)
-            @parent_project = Project.visible.where(identifier: $1).first
-          end
-        end
-        @parent_project
+        project&.parent
       end
 
       # Return the content type of file
@@ -282,6 +287,11 @@ module RedmineDmsf
           if dest.exist?
             return overwrite ? NotImplemented : PreconditionFailed
           else
+            # Change the title
+            return MethodNotAllowed unless folder # Moving sub-project not enabled
+            folder.title = resource.basename
+            return PreconditionFailed unless folder.save
+            # Move to a new destination
             folder.move_to(resource.project, parent.folder) ? Created : PreconditionFailed
           end
         else
@@ -452,6 +462,11 @@ module RedmineDmsf
         end
         lock_check(args[:scope])
         entity = file ? file : folder
+        unless entity
+          e = DAV4Rack::LockFailure.new
+          e.add_failure @path, MethodNotAllowed
+          raise e
+        end
         begin
           if entity.locked? && entity.locked_for_user?
             raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
@@ -704,7 +719,8 @@ module RedmineDmsf
         File.new disk_file
       end
 
-private
+      private
+
       def reuse_version_for_locked_file(file)
         locks = file.lock
         locks.each do |lock|

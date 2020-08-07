@@ -31,8 +31,11 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     @admin = credentials 'admin'
     @jsmith = credentials 'jsmith'
     @project1 = Project.find 1
-    @project1.enable_module!('dmsf')
+    @project1.enable_module! 'dmsf'
     @project2 = Project.find 2
+    @project3 = Project.find 3
+    @folder10 = DmsfFolder.find 10
+    @file12 = DmsfFile.find 12
     @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
     @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
@@ -63,6 +66,9 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
   def test_truth
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
+    assert_kind_of Project, @project3
+    assert_kind_of DmsfFolder, @folder10
+    assert_kind_of DmsfFile, @file12
   end
 
   def test_head_requires_authentication
@@ -132,6 +138,18 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     head "/dmsf/webdav/#{@project2.identifier}/test.txt", params: nil, headers: @jsmith
     assert_response :not_found
     check_headers_dont_exist
+  end
+
+  def test_head_file_in_subproject
+      @project3.enable_module! :dmsf # Flag module enabled
+      head "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: nil, headers: @admin
+      assert_response :success
+    end
+
+  def test_head_folder_in_subproject
+    @project3.enable_module! :dmsf # Flag module enabled
+    head "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil, headers: @admin
+    assert_response :success
   end
 
   private
