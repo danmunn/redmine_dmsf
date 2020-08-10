@@ -52,14 +52,9 @@ module RedmineDmsf
       def exist?
         true
       end
-      
-      # Index resource ALWAYS really exists
-      def really_exist?
-        true
-      end
 
       def etag
-        sprintf('%x-%x-%x', children.count, 4096, Time.current.to_i)
+        sprintf '%x-%x-%x', children.count, 4096, Time.current.to_i
       end
 
       def content_type

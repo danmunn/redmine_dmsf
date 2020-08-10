@@ -49,35 +49,31 @@ module RedmineDmsf
       end      
 
       def exist?
-        really_exist? && User.current.allowed_to?(:view_dmsf_folders, project)
-      end
-
-      def really_exist?
-        project && project.module_enabled?('dmsf')
+        project&.visible?
       end
 
       def collection?
-        exist?
+        true
       end
 
       def creation_date
-        project.created_on if project
+        project&.created_on
       end
 
       def last_modified
-        project.updated_on if project
+        project&.updated_on
       end
 
       def etag
-        sprintf('%x-%x-%x', 0, 4096, last_modified.to_i)
+        sprintf '%x-%x-%x', 0, 4096, last_modified.to_i
       end
 
       def name
-        ProjectResource.create_project_name(project)
+        ProjectResource.create_project_name project
       end
 
       def long_name
-        project.name if project
+        project&.name
       end
 
       def content_type

@@ -85,10 +85,6 @@ module RedmineDmsf
         @resource_c.exist?
       end
 
-      def really_exist?
-        @resource_c.really_exist?
-      end
-
       def creation_date
         @resource_c.creation_date
       end
@@ -179,6 +175,8 @@ module RedmineDmsf
       def propstats(response, stats)
         @resource_c.propstats response, stats
       end
+
     end
+
   end
 end

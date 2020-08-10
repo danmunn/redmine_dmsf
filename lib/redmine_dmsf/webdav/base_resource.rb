@@ -24,6 +24,7 @@ require 'dav4rack'
 
 module RedmineDmsf
   module Webdav
+
     class BaseResource < DAV4Rack::Resource
       include Redmine::I18n
       include ActionView::Helpers::NumberHelper
@@ -101,9 +102,6 @@ module RedmineDmsf
       end
 
       def options(request, response)
-        if ((@path.length > 1) && ((!project) || (!project.module_enabled?('dmsf'))))
-          return NotFound
-        end
         if @__proxy.read_only
           response['Allow'] ||= 'OPTIONS,HEAD,GET,PROPFIND'
         end
@@ -165,36 +163,9 @@ module RedmineDmsf
       end
 
       def load_projects(project_scope)
-        project_scope
-            .where.not(status: Project::STATUS_ARCHIVED)
-            .find_each do |p|
-          if dmsf_visible?(p) || dmsf_enabled?(p)
+        project_scope.visible.find_each do |p|
             @children << child_project(p)
-          end
         end
-      end
-
-      private
-
-      def dmsf_enabled?(prj)
-        prj.module_enabled?(:dmsf) && Project.allowed_to_condition(User.current, :view_dmsf_folders)
-      end
-
-      def dmsf_visible?(prj)
-        Rails.cache.fetch("#{prj.cache_key_with_version}/dmsf-visible", expires_in: 12.hours) do
-          dmsf_visible_recursive? prj
-        end
-      end
-
-      def dmsf_visible_recursive?(prj)
-        prj.children.each do |p|
-          if dmsf_enabled?(p)
-            return true
-          else
-            return dmsf_visible?(p)
-          end
-        end
-        false
       end
 
     end

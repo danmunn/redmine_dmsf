@@ -59,13 +59,19 @@ module RedmineDmsf
           elsif subproject
             # Projects
             load_projects subproject.children
-            # Folders
-            subproject.dmsf_folders.visible.pluck(:title).each do |title|
-              @children.push child(title)
-            end
-            # Files
-            subproject.dmsf_files.visible.pluck(:name).each do |name|
-              @children.push child(name)
+            if project && project.module_enabled?('dmsf')
+              # Folders
+              if User.current.allowed_to?(:view_dmsf_folders, project)
+                subproject.dmsf_folders.visible.pluck(:title).each do |title|
+                  @children.push child(title)
+                end
+              end
+              # Files
+              if User.current.allowed_to?(:view_dmsf_files, project)
+                subproject.dmsf_files.visible.pluck(:name).each do |name|
+                  @children.push child(name)
+                end
+              end
             end
           end
         end
@@ -73,14 +79,10 @@ module RedmineDmsf
       end
 
       # Does the object exist?
-      # If it is either a folder or a file, then it exists
+      # If it is either a subproject or a folder or a file, then it exists
       def exist?
-        project && project.module_enabled?('dmsf') && (folder || file || subproject) &&
-          (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project))
-      end
-
-      def really_exist?
-        project && project.module_enabled?('dmsf') && (folder || file || subproject)
+        subproject || (project && project.module_enabled?('dmsf') && (folder || file) &&
+          (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project)))
       end
 
       # Is this entity a folder?
