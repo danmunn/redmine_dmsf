@@ -35,13 +35,19 @@ module RedmineDmsf
           if project
             # Sub-projects
             load_projects project.children
-            # Folders
-            project.dmsf_folders.visible.pluck(:title).each do |title|
-              @children.push child(title)
-            end
-            # Files
-            project.dmsf_files.visible.pluck(:name).each do |name|
-              @children.push child(name)
+            if project.module_enabled?(:dmsf)
+              # Folders
+              if User.current.allowed_to?(:view_dmsf_folders, project)
+                project.dmsf_folders.visible.pluck(:title).each do |title|
+                  @children.push child(title)
+                end
+              end
+              # Files
+              if User.current.allowed_to?(:view_dmsf_files, project)
+                project.dmsf_files.visible.pluck(:name).each do |name|
+                  @children.push child(name)
+                end
+              end
             end
           end
         end

@@ -59,7 +59,7 @@ module RedmineDmsf
           elsif subproject
             # Projects
             load_projects subproject.children
-            if project && project.module_enabled?('dmsf')
+            if subproject.module_enabled?(:dmsf)
               # Folders
               if User.current.allowed_to?(:view_dmsf_folders, project)
                 subproject.dmsf_folders.visible.pluck(:title).each do |title|

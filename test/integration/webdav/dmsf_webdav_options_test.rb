@@ -161,23 +161,10 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   def test_authenticated_options_for_other_user_agent
     process :options, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin.merge!({ HTTP_USER_AGENT: 'Other' })
     assert_response :success
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+
     project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-    process :options, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin.merge!({ HTTP_USER_AGENT: 'Other' })
-    assert_response :not_found
     process :options, "/dmsf/webdav/#{project1_uri}", params: nil, headers: @admin.merge!({ HTTP_USER_AGENT: 'Other' })
     assert_response :success
-  end
-
-  def test_authenticated_options_returns_404_for_non_dmsf_enabled_items
-    @project2.disable_module! :dmsf
-    process :options, "/dmsf/webdav/#{@project2.identifier}", params: nil, headers: @jsmith
-    assert_response :not_found
-  end
-
-  def test_authenticated_options_returns_404_for_not_found
-    process :options, '/dmsf/webdav/does-not-exist', params: nil, headers: @jsmith
-    assert_response :not_found
   end
 
   def test_options_for_subproject

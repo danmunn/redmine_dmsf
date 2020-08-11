@@ -117,6 +117,18 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
 
   def test_propfind_depth0_on_project1_for_non_member
     process :propfind, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @jsmith.merge!({ HTTP_DEPTH: '0' })
+    assert_response :success
+  end
+
+  def test_propfind_depth0_on_folder1_for_non_member
+    process :propfind, "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", params: nil,
+            headers: @jsmith.merge!({ HTTP_DEPTH: '0' })
+    assert_response :not_found
+  end
+
+  def test_propfind_depth0_on_file1_for_non_member
+    process :propfind, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+            headers: @jsmith.merge!({ HTTP_DEPTH: '0' })
     assert_response :not_found
   end
 
