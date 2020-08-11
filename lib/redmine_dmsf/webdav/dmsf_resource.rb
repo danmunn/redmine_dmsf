@@ -455,11 +455,13 @@ module RedmineDmsf
         unless (parent.projectless_path == '/') || parent_exists?
           e = DAV4Rack::LockFailure.new
           e.add_failure @path, Conflict
+          puts ">>> #{parent.projectless_path}, #{parent_exists?}"
           raise e
         end
         unless exist?
           e = DAV4Rack::LockFailure.new
           e.add_failure @path, NotFound
+          puts ">>> exist? false"
           raise e
         end
         lock_check(args[:scope])
@@ -467,10 +469,12 @@ module RedmineDmsf
         unless entity
           e = DAV4Rack::LockFailure.new
           e.add_failure @path, MethodNotAllowed
+          puts ">>> entity nil"
           raise e
         end
         begin
           if entity.locked? && entity.locked_for_user?
+            puts ">>> lock failure"
             raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
           else
             # If scope and type are not defined, the only thing we can
@@ -482,14 +486,17 @@ module RedmineDmsf
               if http_if.blank?
                 e = DAV4Rack::LockFailure.new
                 e.add_failure @path, Conflict
+                puts ">>> http_if blank"
                 raise e
               end
+              l = nil
               if http_if =~ /([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})/
                 l = DmsfLock.find_by(uuid: $1)
               end
               unless l
                 e = DAV4Rack::LockFailure.new
                 e.add_failure @path, Conflict
+                puts ">>> lock not found"
                 raise e
               end
               l.expires_at = Time.current + 1.week
@@ -509,6 +516,7 @@ module RedmineDmsf
         rescue DmsfLockError
           e = DAV4Rack::LockFailure.new
           e.add_failure @path, Conflict
+          puts ">>> DmsfLockError"
           raise e
         end
       end
