@@ -119,8 +119,10 @@ module RedmineDmsf
         unless @project
           i = 1
           project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+          puts ">>> path: #{@path}"
           while true
             pinfo = @path.split('/').drop(i)
+            puts ">>> pinfo: #{pinfo} - #{i}"
             if pinfo.length > 0
               if project_names
                 if pinfo.first =~ / (\d+)$/
@@ -132,9 +134,11 @@ module RedmineDmsf
                 end
               else
                 begin
+                  puts ">>> pinfo.first: #{pinfo.first}"
                   scope = Project.visible.where(identifier: pinfo.first)
                   scope = scope.where(parent_id: @project.id) if @project
                   prj = scope.first
+                  puts ">>> prj: #{prj.identifier}" if prj
                 rescue => e
                   Rails.logger.error e.message
                 end
@@ -142,6 +146,7 @@ module RedmineDmsf
             end
             unless prj
               @projectless_path = '/' + @path.split('/').drop(i).join('/')
+              puts ">>> less_path: #{@path.split('/').drop(i)} - #{i}"
               break
             end
             i = i + 1
@@ -154,7 +159,8 @@ module RedmineDmsf
 
       # Make it easy to find the path without project in it.
       def projectless_path
-        project # Initialization
+        puts ">>> projectless_path ###"
+        self.project # Initialization
         @projectless_path
       end
 
