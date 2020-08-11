@@ -452,10 +452,14 @@ module RedmineDmsf
 
       # Lock
       def lock(args)
-        unless (parent.projectless_path == '/') || parent_exists?
+        puts ">>> #{parent}"
+        puts ">>> #{parent.projectless_path}"
+        puts ">>> #{parent_exists?}"
+        puts ">>> #{@path}"
+        if parent.nil? || ((parent.projectless_path != '/') && (!parent.exists?))
           e = DAV4Rack::LockFailure.new
           e.add_failure @path, Conflict
-          puts ">>> #{parent.projectless_path}, #{parent_exists?}"
+          puts ">>> #{parent.projectless_path}, #{parent&.exists?}"
           raise e
         end
         unless exist?
