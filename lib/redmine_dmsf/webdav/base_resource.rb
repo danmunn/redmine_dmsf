@@ -34,6 +34,7 @@ module RedmineDmsf
       def initialize(path, request, response, options)
         raise NotFound if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
         @project = nil
+        @projectless_path = nil
         @public_path = "#{options[:root_uri_path]}#{path}"
         @children = nil
         super path, request, response, options
@@ -119,7 +120,7 @@ module RedmineDmsf
         unless @project
           i = 1
           project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-          puts ">>> path: #{@path}"
+          puts ">>> path: #{@path} - #{project_names}"
           while true
             pinfo = @path.split('/').drop(i)
             puts ">>> pinfo: #{pinfo} - #{i}"
@@ -129,7 +130,7 @@ module RedmineDmsf
                   prj = Project.visible.find_by(id: $1)
                   if prj
                     # Check again whether it's really the project and not a folder with a number as a suffix
-                    prj = nil unless  pinfo.first =~ /^#{prj.name}/
+                    prj = nil unless pinfo.first =~ /^#{prj.name}/
                   end
                 end
               else
@@ -145,8 +146,8 @@ module RedmineDmsf
               end
             end
             unless prj
-              @projectless_path = '/' + @path.split('/').drop(i).join('/')
-              puts ">>> less_path: #{@path.split('/').drop(i)} - #{i}"
+              @projectless_path = '/' + @path.split('/').drop(i + 1).join('/')
+              puts ">>> less_path: #{@projectless_path} - #{i}"
               break
             end
             i = i + 1
