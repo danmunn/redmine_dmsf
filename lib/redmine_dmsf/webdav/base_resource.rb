@@ -120,6 +120,7 @@ module RedmineDmsf
           i = 1
           project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
           while true
+            prj = nil
             pinfo = @path.split('/').drop(i)
             if pinfo.length > 0
               if project_names
@@ -137,7 +138,6 @@ module RedmineDmsf
             break unless prj
             i = i + 1
             @project = prj
-            prj = nil
           end
         end
         @project
@@ -148,6 +148,7 @@ module RedmineDmsf
         i = 1
         project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
         while true
+          prj = nil
           pinfo = @path.split('/').drop(i)
           if pinfo.length > 0
             if project_names
@@ -164,9 +165,7 @@ module RedmineDmsf
           end
           return '/' + @path.split('/').drop(i).join('/') unless prj
           i = i + 1
-          prj = nil
         end
-        puts ">>> Error: #{@path}"
       end
 
       def path_prefix
