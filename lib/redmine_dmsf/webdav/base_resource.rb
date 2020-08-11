@@ -34,7 +34,6 @@ module RedmineDmsf
       def initialize(path, request, response, options)
         raise NotFound if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
         @project = nil
-        @projectless_path = nil
         @public_path = "#{options[:root_uri_path]}#{path}"
         @children = nil
         super path, request, response, options
@@ -120,10 +119,8 @@ module RedmineDmsf
         unless @project
           i = 1
           project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-          puts ">>> path: #{@path} - #{project_names}"
           while true
             pinfo = @path.split('/').drop(i)
-            puts ">>> pinfo: #{pinfo} - #{i}"
             if pinfo.length > 0
               if project_names
                 if pinfo.first =~ / (\d+)$/
@@ -134,22 +131,10 @@ module RedmineDmsf
                   end
                 end
               else
-                begin
-                  puts ">>> pinfo.first: #{pinfo.first}"
-                  scope = Project.visible.where(identifier: pinfo.first)
-                  scope = scope.where(parent_id: @project.id) if @project
-                  prj = scope.first
-                  puts ">>> prj: #{prj.identifier}" if prj
-                rescue => e
-                  Rails.logger.error e.message
-                end
+                prj = Project.visible.find_by(identifier: pinfo.first)
               end
             end
-            unless prj
-              @projectless_path = '/' + @path.split('/').drop(i + 1).join('/')
-              puts ">>> less_path: #{@projectless_path} - #{i}"
-              break
-            end
+            break unless prj
             i = i + 1
             @project = prj
             prj = nil
@@ -160,9 +145,28 @@ module RedmineDmsf
 
       # Make it easy to find the path without project in it.
       def projectless_path
-        puts ">>> projectless_path ###"
-        self.project # Initialization
-        @projectless_path
+        i = 1
+        project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+        while true
+          pinfo = @path.split('/').drop(i)
+          if pinfo.length > 0
+            if project_names
+              if pinfo.first =~ / (\d+)$/
+                prj = Project.visible.find_by(id: $1)
+                if prj
+                  # Check again whether it's really the project and not a folder with a number as a suffix
+                  prj = nil unless pinfo.first =~ /^#{prj.name}/
+                end
+              end
+            else
+              prj = Project.visible.find_by(identifier: pinfo.first)
+            end
+          end
+          return '/' + @path.split('/').drop(i).join('/') unless prj
+          i = i + 1
+          prj = nil
+        end
+        puts ">>> Error: #{@path}"
       end
 
       def path_prefix

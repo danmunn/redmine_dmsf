@@ -471,7 +471,6 @@ module RedmineDmsf
         end
         begin
           if entity.locked? && entity.locked_for_user?
-            puts ">>> lock failure"
             raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
           else
             # If scope and type are not defined, the only thing we can
@@ -599,7 +598,6 @@ module RedmineDmsf
             end
           end
         else
-          #raise BadRequest unless (parent.projectless_path == '/' || (parent.exist? && parent.folder))
           f = DmsfFile.new
           f.project_id = project.id
           f.name = basename
