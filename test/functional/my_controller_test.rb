@@ -29,19 +29,21 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
            :dmsf_files, :dmsf_locks
 
   def setup
-    @user_member = User.find 2
+    @admin = User.find 1
+    @jsmith = User.find 2
     User.current = nil
-    @request.session[:user_id] = @user_member.id    
+    @request.session[:user_id] = @jsmith.id    
   end 
   
-  def test_truth    
-    assert_kind_of User, @user_member    
+  def test_truth
+    assert_kind_of User, @admin
+    assert_kind_of User, @jsmith    
   end
 
   def test_page_with_open_approvals_one_approval
     DmsfFileRevision.where(id: 5).delete_all
-    @user_member.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
-    @user_member.pref.save!
+    @jsmith.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
+    @jsmith.pref.save!
     get :page
     assert_response :success
     unless defined?(EasyExtensions)
@@ -52,8 +54,8 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_page_with_open_approvals_no_approval
-    @user_member.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
-    @user_member.pref.save!
+    @jsmith.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
+    @jsmith.pref.save!
     get :page
     assert_response :success
     unless defined?(EasyExtensions)
@@ -63,9 +65,10 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
     end
   end
   
-  def test_page_with_open_locked_documents    
-    @user_member.pref[:my_page_layout] = { 'top' => ['locked_documents'] }
-    @user_member.pref.save!    
+  def test_page_with_open_locked_documents
+    @request.session[:user_id] = @admin.id
+    @admin.pref[:my_page_layout] = { 'top' => ['locked_documents'] }
+    @admin.pref.save!
     get :page
     assert_response :success
     unless defined?(EasyExtensions)

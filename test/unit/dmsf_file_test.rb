@@ -285,15 +285,15 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   def test_assigned
     assert !@file1.assigned?(@admin)
     assert !@file1.assigned?(@jsmith)
-    @file7.last_revision.set_workflow(@wf1.id, nil)
-    @file7.last_revision.assign_workflow(@wf1.id)
+    @file7.last_revision.set_workflow @wf1.id, nil
+    @file7.last_revision.assign_workflow @wf1.id
     assert @file7.assigned?(@admin)
     assert @file7.assigned?(@jsmith)
   end
 
   def test_locked_by
     # Locked file
-    assert_equal @jsmith.name, @file2.locked_by
+    assert_equal @admin.name, @file2.locked_by
     # Unlocked file
     assert_equal '', @file1.locked_by
   end

@@ -24,7 +24,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   fixtures :projects, :users, :email_addresses, :dmsf_folders, :roles, :members, :member_roles,
-           :dmsf_folder_permissions
+           :dmsf_folder_permissions, :dmsf_locks
          
   def setup
     @project1 = Project.find 1
@@ -33,40 +33,42 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     @project2.enable_module! :dmsf
     @folder1 = DmsfFolder.find 1
     @folder2 = DmsfFolder.find 2
+    @folder3 = DmsfFolder.find 3
     @folder4 = DmsfFolder.find 4
     @folder5 = DmsfFolder.find 5
     @folder6 = DmsfFolder.find 6
     @folder7 = DmsfFolder.find 7
-    @manager = User.find 2
-    @developer = User.find 3
-    @manager_role = Role.find 1
+    @jsmith = User.find 2 # Manager
+    @dlopper = User.find 3 # Developer
+    @manager_role = Role.find_by(name: 'Manager')
     @manager_role.add_permission! :view_dmsf_folders
     developer_role = Role.find 2
     developer_role.add_permission! :view_dmsf_folders
-    User.current = @manager
+    User.current = @jsmith
   end
 
   def test_truth
     assert_kind_of DmsfFolder, @folder1
-    assert_kind_of DmsfFolder, @folder1
+    assert_kind_of DmsfFolder, @folder2
+    assert_kind_of DmsfFolder, @folder3
     assert_kind_of DmsfFolder, @folder4
     assert_kind_of DmsfFolder, @folder5
     assert_kind_of DmsfFolder, @folder6
     assert_kind_of DmsfFolder, @folder7
     assert_kind_of Project, @project1
     assert_kind_of Project, @project2
-    assert_kind_of User, @manager
-    assert_kind_of User, @developer
+    assert_kind_of User, @jsmith
+    assert_kind_of User, @dlopper
     assert_kind_of Role, @manager_role
   end
 
   def test_visiblity
     # The role has got permissions
-    User.current = @manager
+    User.current = @jsmith
     assert_equal 7, DmsfFolder.where(project_id: 1).all.size
     assert_equal 5, DmsfFolder.visible.where(project_id: 1).all.size
     # The user has got permissions
-    User.current = @developer
+    User.current = @dlopper
     # Hasn't got permissions for @folder7
     @folder7.dmsf_folder_permissions.where(object_type: 'User').delete_all
     assert_equal 4, DmsfFolder.visible.where(project_id: 1).all.size
@@ -77,7 +79,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_permissions
-    User.current = @developer
+    User.current = @dlopper
     assert DmsfFolder.permissions?(@folder7)
     @folder7.dmsf_folder_permissions.where(object_type: 'User').delete_all
     @folder7.reload
@@ -148,34 +150,45 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_directory_tree
+    User.current = @admin
+    @folder7.lock!
+    User.current = @jsmith
+    assert @folder7.locked_for_user?
     tree = DmsfFolder.directory_tree(@project1)
     assert tree
     # [["Documents", nil],
-    #  ["...folder7", 7],
     #  ["...folder1", 1],
-    #  ["......folder2", 2] - locked
+    #  ["......folder2", 2]
+    #  [".........folder5", 5],
     #  ["...folder6", 6]]
-    assert tree.to_s.include?('...folder1'), "'...folder3' string in the folder tree expected."
-    assert !tree.to_s.include?('......folder2'), "'......folder2' string in the folder tree not expected."
+    #  ["...folder7", 7] - locked
+    assert tree.to_s.include?('...folder1'), "'...folder1' string in the folder tree expected."
+    assert !tree.to_s.include?('...folder7'), "'...folder7' string in the folder tree not expected."
   end
 
   def test_directory_tree_id
+    User.current = @admin
+    @folder7.lock!
+    User.current = @jsmith
+    assert @folder7.locked_for_user?
     tree = DmsfFolder.directory_tree(@project1.id)
     assert tree
     # [["Documents", nil],
-    #  ["...folder7", 7],
     #  ["...folder1", 1],
-    #  ["......folder2", 2] - locked
+    #  ["......folder2", 2]
+    #  [".........folder5", 5],
     #  ["...folder6", 6]]
-    assert tree.to_s.include?('...folder1'), "'...folder3' string in the folder tree expected."
-    assert !tree.to_s.include?('......folder2'), "'......folder2' string in the folder tree not expected."
+    #  ["...folder7", 7] - locked
+    assert tree.to_s.include?('...folder1'), "'...folder1' string in the folder tree expected."
+    assert !tree.to_s.include?('...folder7'), "'...folder7' string in the folder tree not expected."
   end
 
   def test_folder_tree
+    User.current = @admin
     tree = @folder1.folder_tree
     assert tree
     # [["folder1", 1],
-    #  ["...folder2", 2] - locked
+    #  ["...folder2", 2] - locked for admin
     assert tree.to_s.include?('folder1'), "'folder1' string in the folder tree expected."
     assert !tree.to_s.include?('...folder2'), "'...folder2' string in the folder tree not expected."
   end

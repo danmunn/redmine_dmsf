@@ -452,7 +452,7 @@ module RedmineDmsf
 
       # Lock
       def lock(args)
-        if parent.nil? || ((parent.projectless_path != '/') && (!parent.exists?))
+        if parent.nil? || ((parent.projectless_path != '/') && (!parent.exist?))
           e = DAV4Rack::LockFailure.new
           e.add_failure @path, Conflict
           raise e
@@ -462,7 +462,7 @@ module RedmineDmsf
           e.add_failure @path, NotFound
           raise e
         end
-        lock_check(args[:scope])
+        lock_check args[:scope]
         entity = file ? file : folder
         unless entity
           e = DAV4Rack::LockFailure.new
@@ -502,7 +502,7 @@ module RedmineDmsf
             scope = "scope_#{(args[:scope] || 'exclusive')}".to_sym
             type = "type_#{(args[:type] || 'write')}".to_sym
 
-            #l should be the instance of the lock we've just created
+            # l should be the instance of the lock we've just created
             l = entity.lock!(scope, type, Time.current + 1.weeks)
             @response['Lock-Token'] = l.uuid
             [1.week.to_i, l.uuid]

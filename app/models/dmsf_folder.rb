@@ -197,22 +197,21 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.directory_tree(project, current_folder = nil)
     tree = [[l(:link_documents), nil]]
-    project_id = (project.is_a?(Project)) ? project.id : project
-    folders = DmsfFolder.where(project_id: project_id, dmsf_folder_id: nil).visible(false).to_a
+    project = Project.find(project) unless project.is_a?(Project)
+    folders = project.dmsf_folders.visible(false).to_a
     # TODO: This prevents copying folders into its sub-folders too. It should be allowed.
     folders.delete(current_folder)
-    #
     folders = folders.delete_if{ |f| f.locked_for_user? }
     folders.each do |folder|
-      tree.push(["...#{folder.title}", folder.id])
-      DmsfFolder.directory_subtree(tree, folder, 2, current_folder)
+      tree.push ["...#{folder.title}", folder.id]
+      DmsfFolder.directory_subtree tree, folder, 2, current_folder
     end
     return tree
   end
 
   def folder_tree
     tree = [[title, id]]
-    DmsfFolder.directory_subtree(tree, self, 1, nil)
+    DmsfFolder.directory_subtree tree, self, 1, nil
     tree
   end
 
@@ -567,19 +566,19 @@ class DmsfFolder < ActiveRecord::Base
         end
       end
     end
-    classes.join(' ')
+    classes.join ' '
   end
 
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)
-    folders = DmsfFolder.where(project_id: folder.project_id, dmsf_folder_id: folder.id).notsystem.visible(false).to_a
-    folders.delete(current_folder)
+    folders = folder.dmsf_folders.notsystem.visible(false).to_a
+    folders.delete current_folder
     folders.delete_if { |f| f.locked_for_user? }
     folders.each do |subfolder|
       unless subfolder == current_folder
-        tree.push(["#{'...' * level}#{subfolder.title}", subfolder.id])
-        DmsfFolder.directory_subtree(tree, subfolder, level + 1, current_folder)
+        tree.push ["#{'...' * level}#{subfolder.title}", subfolder.id]
+        DmsfFolder.directory_subtree tree, subfolder, level + 1, current_folder
       end
     end
   end

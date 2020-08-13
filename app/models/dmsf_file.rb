@@ -36,7 +36,7 @@ class DmsfFile < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :dmsf_folder
-  belongs_to :deleted_by_user, :class_name => 'User', :foreign_key => 'deleted_by_user_id'
+  belongs_to :deleted_by_user, class_name: 'User', foreign_key: 'deleted_by_user_id'
 
   has_many :dmsf_file_revisions, -> { order(created_at: :desc, id: :desc) },
            dependent: :destroy

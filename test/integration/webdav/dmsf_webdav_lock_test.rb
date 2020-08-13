@@ -26,7 +26,7 @@ require 'fileutils'
 class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
 
   fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles,
-    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
     
   def setup
     @admin = credentials 'admin'
@@ -34,9 +34,13 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
     @admin_user = User.find_by(login: 'admin')
     @project1 = Project.find 1
     @project1.enable_module! 'dmsf'
+    @project2 = Project.find 2
+    @project2.enable_module! 'dmsf'
     @project3 = Project.find 3
     @project3.enable_module! 'dmsf'
     @file1 = DmsfFile.find 1
+    @file2 = DmsfFile.find 2
+    @file9 = DmsfFile.find 9
     @file12 = DmsfFile.find 12
     @folder10 = DmsfFolder.find 10
     # Fix permissions for jsmith's role
@@ -53,6 +57,7 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
                 <d:locktype><d:write/></d:locktype>
                 <d:owner>jsmith</d:owner>
               </d:lockinfo>}
+    User.current = nil
   end
 
   def teardown
@@ -62,8 +67,11 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
 
   def test_truth
     assert_kind_of Project, @project1
+    assert_kind_of Project, @project2
     assert_kind_of Project, @project3
     assert_kind_of DmsfFile, @file1
+    assert_kind_of DmsfFile, @file2
+    assert_kind_of DmsfFile, @file9
     assert_kind_of DmsfFile, @file12
     assert_kind_of DmsfFolder, @folder10
     assert_kind_of Role, @role
@@ -71,12 +79,11 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_lock_file_already_locked_by_other
-    log_user 'admin', 'admin' # login as admin
-    User.current = @admin_user
-    assert @file1.lock!, "File failed to be locked by #{User.current}"
-    process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: @xml,
-      headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
-    assert_response :locked
+    log_user 'jsmith', 'jsmith'
+    process :lock, "/dmsf/webdav/#{@project2.identifier}/#{@file2.name}", params: @xml,
+      headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
+    assert_response :multi_status
+    assert_match '<d:status>HTTP/1.1 409 Conflict</d:status>', response.body
   end
 
   def test_lock_file
@@ -87,7 +94,7 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
     # Time travel, will make the usec part of the time 0
     travel_to create_time do
       # Lock file
-      process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: @xml,
+      process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file9.name}", params: @xml,
         headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
       assert_response :success
       # Verify the response
@@ -115,7 +122,8 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
       response.body.match(/<d:locktoken><d:href>([a-z0-9\-]+)<\/d:href><\/d:locktoken>/)
       locktoken = $1
       # Verify the lock in the db
-      l = @file1.lock.first
+      @file9.reload
+      l = @file9.lock.first
       assert_equal create_time, l.created_at
       assert_equal create_time, l.updated_at
       assert_equal (create_time + 1.week), l.expires_at
@@ -123,15 +131,15 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
 
     travel_to refresh_time do
       # Refresh lock
-      process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}",
+      process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file9.name}",
         params: nil,
         headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_IF: locktoken })
       assert_response :success
       # 1.week = 7*24*3600=604800 seconds
       assert_match '<d:timeout>Second-604800</d:timeout>', response.body
       # Verify the lock in the db
-      @file1.reload
-      l = @file1.lock.first
+      @file9.reload
+      l = @file9.lock.first
       assert_equal create_time, l.created_at
       assert_equal refresh_time, l.updated_at
       assert_equal (refresh_time + 1.week), l.expires_at

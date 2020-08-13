@@ -2,23 +2,15 @@
 dmsf_locks_001:
   id:                 1
   entity_id:          2
-  user_id:            1
-  entity_type:        0
+  user_id:            1 # admin
+  entity_type:        0 # DmsfFile
   lock_type_cd:       0
   lock_scope_cd:      0
   
 dmsf_locks_002:
   id:                 2
   entity_id:          2
-  user_id:            1
-  entity_type:        1
-  lock_type_cd:       0
-  lock_scope_cd:      0
-  
-dmsf_locks_003:
-  id:                 3
-  entity_id:          2
-  user_id:            2
-  entity_type:        0
+  user_id:            2 # jsmith
+  entity_type:        1 # DmsfFolder
   lock_type_cd:       0
   lock_scope_cd:      0

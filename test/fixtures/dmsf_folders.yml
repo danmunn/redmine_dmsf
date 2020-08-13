@@ -15,7 +15,7 @@ dmsf_folders_002:
 
 dmsf_folders_003:
   id:             3
-  title:          folder2.1
+  title:          folder3
   project_id:     2
   dmsf_folder_id: NULL
   user_id:        1
@@ -29,7 +29,7 @@ dmsf_folders_004:
 
 dmsf_folders_005:
   id:             5
-  title:          folder3
+  title:          folder5
   project_id:     1
   dmsf_folder_id: 2
   user_id:        1

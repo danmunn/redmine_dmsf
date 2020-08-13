@@ -88,8 +88,8 @@ private
   end
 
   def check_target_folder
-    if (@target_folder && @target_folder == @file.dmsf_folder) ||
-      (@target_folder.nil? && @file.dmsf_folder.nil? && @target_project == @file.project)
+    if (@target_folder && (@target_folder == @file.dmsf_folder)) ||
+      (@target_folder.nil? && @file.dmsf_folder.nil? && (@target_project == @file.project))
       flash[:error] = l(:error_target_folder_same)
       redirect_to action: :new, id: @file, target_project_id: @target_project.id, target_folder_id: @target_folder
       return
