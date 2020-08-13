@@ -6,6 +6,7 @@ dmsf_locks_001:
   entity_type:        0 # DmsfFile
   lock_type_cd:       0
   lock_scope_cd:      0
+  uuid:               <%= UUIDTools::UUID.random_create.to_s %>
   
 dmsf_locks_002:
   id:                 2
@@ -14,3 +15,4 @@ dmsf_locks_002:
   entity_type:        1 # DmsfFolder
   lock_type_cd:       0
   lock_scope_cd:      0
+  uuid:               <%= UUIDTools::UUID.random_create.to_s %>

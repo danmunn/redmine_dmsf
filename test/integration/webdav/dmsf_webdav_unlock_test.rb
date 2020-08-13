@@ -26,7 +26,7 @@ require 'fileutils'
 class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
 
   fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles,
-    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
     
   def setup
     @admin = credentials 'admin'
@@ -35,11 +35,15 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
     @jsmith_user = User.find_by(login: 'jsmith')
     @project1 = Project.find 1
     @project1.enable_module! 'dmsf'
+    @project2 = Project.find 2
+    @project2.enable_module! 'dmsf'
     @project3 = Project.find 3
     @project3.enable_module! 'dmsf'
-    @file1 = DmsfFile.find 1
+    @file2 = DmsfFile.find 2
+    @file9 = DmsfFile.find 9
     @file12 = DmsfFile.find 12
-    @folder1 = DmsfFolder.find 1
+    @folder2 = DmsfFolder.find 2
+    @folder6 = DmsfFolder.find 6
     @folder10 = DmsfFolder.find 10
     # Fix permissions for jsmith's role
     @role = Role.find_by(name: 'Manager')
@@ -60,10 +64,13 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
 
   def test_truth
     assert_kind_of Project, @project1
+    assert_kind_of Project, @project2
     assert_kind_of Project, @project3
-    assert_kind_of DmsfFile, @file1
+    assert_kind_of DmsfFile, @file2
+    assert_kind_of DmsfFile, @file9
     assert_kind_of DmsfFile, @file12
-    assert_kind_of DmsfFolder, @folder1
+    assert_kind_of DmsfFolder, @folder2
+    assert_kind_of DmsfFolder, @folder6
     assert_kind_of DmsfFolder, @folder10
     assert_kind_of Role, @role
     assert_kind_of User, @admin_user
@@ -71,53 +78,67 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_unlock_file
-    log_user 'jsmith', 'jsmith' # login as jsmith
-    User.current = @jsmith_user
-    l = @file1.lock!
-    assert l, "File failed to be locked by #{User.current}"
-    process :unlock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
-            headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
+    log_user 'admin', 'admin'
+    l = @file2.locks.first
+    process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
+            headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
     assert_response :success
   end
 
   def test_unlock_file_locked_by_someone_else
-    log_user 'jsmith', 'jsmith' # login as jsmith
-    User.current = @admin_user
-    l = @file1.lock!
-    assert l, "File failed to be locked by #{User.current}"
-    process :unlock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+    log_user 'jsmith', 'jsmith'
+    l = @file2.locks.first
+    process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
             headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
-    assert_response :forbidden
+    assert_response :not_found
   end
 
   def test_unlock_file_with_invalid_token
-    log_user 'jsmith', 'jsmith' # login as jsmith
-    User.current = @jsmith_user
-    l = @file1.lock!
-    assert l, "File failed to be locked by #{User.current}"
-    process :unlock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
-            headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: 'invalid_token' })
+    log_user 'admin', 'admin' # login as jsmith
+    process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
+            headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: 'invalid_token' })
     assert_response :bad_request
   end
 
   def test_unlock_file_not_locked
-    log_user 'jsmith', 'jsmith' # login as jsmith
-    User.current = @jsmith_user
-    l = @file1.lock!
-    @file1.unlock!
-    process :unlock, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
-            headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
+    log_user 'admin', 'admin'
+    l = @file2.locks.first
+    process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
+            headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
+    assert_response :success
+    process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
+            headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
     assert_response :bad_request
   end
 
+  def test_unlock_folder_wrong_path
+    log_user 'jsmith', 'jsmith'
+    l = @folder2.locks.first
+    process :unlock, "/dmsf/webdav/#{@folder2.project.identifier}/#{@folder2.title}", params: nil,
+            headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
+    assert_response :not_found
+  end
+
   def test_unlock_folder
-    log_user 'jsmith', 'jsmith' # login as jsmith
-    User.current = @jsmith_user
-    l = @folder1.lock!
-    assert l, "Folder failed to be locked by #{User.current}"
-    process :unlock, "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", params: nil,
+    log_user 'jsmith', 'jsmith'
+    l = @folder2.locks.first
+    process :unlock, "/dmsf/webdav/#{@folder2.project.identifier}/#{@folder2.dmsf_folder.title}/#{@folder2.title}",
+            params: nil,
             headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
     assert_response :success
+  end
+
+  def test_unlock_folder_not_locked
+    log_user 'jsmith', 'jsmith' # login as jsmith
+    l = @folder2.locks.first
+    process :unlock, "/dmsf/webdav/#{@folder2.project.identifier}/#{@folder2.dmsf_folder.title}/#{@folder2.title}",
+            params: nil,
+            headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
+    assert_response :success
+    process :unlock, "/dmsf/webdav/#{@folder2.project.identifier}/#{@folder2.dmsf_folder.title}/#{@folder2.title}",
+            params: nil,
+            headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
+    assert_response :bad_request
   end
 
   def test_unlock_file_in_subproject
@@ -125,7 +146,8 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
     User.current = @admin_user
     l = @file12.lock!
     assert l, "File failed to be locked by #{User.current}"
-    process :unlock, "/dmsf/webdav/#{@project1.identifier}/#{@project1.identifier}/#{@file12.name}", params: nil,
+    process :unlock, "/dmsf/webdav/#{@file12.project.parent.identifier}/#{@file12.project.identifier}/#{@file12.name}",
+            params: nil,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
     assert_response :success
   end
@@ -135,7 +157,8 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
     User.current = @admin_user
     l = @folder10.lock!
     assert l, "Folder failed to be locked by #{User.current}"
-    process :unlock, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil,
+    process :unlock, "/dmsf/webdav/#{@folder10.project.parent.identifier}/#{@folder10.project.identifier}/#{@folder10.title}",
+            params: nil,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
     assert_response :success
   end
