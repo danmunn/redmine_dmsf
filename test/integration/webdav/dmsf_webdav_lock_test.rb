@@ -79,7 +79,7 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_lock_file_already_locked_by_other
-    log_user 'jsmith', 'jsmith'
+    log_user 'admin', 'admin'
     process :lock, "/dmsf/webdav/#{@project2.identifier}/#{@file2.name}", params: @xml,
       headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
     assert_response :multi_status
@@ -87,6 +87,7 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_lock_file
+    log_user 'jsmith', 'jsmith'
     create_time = Time.utc(2000, 1, 2, 3, 4, 5)
     refresh_time = Time.utc(2000, 1, 2, 6, 7, 8)
     locktoken = nil
@@ -147,18 +148,21 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_lock_file_in_subproject
+    log_user 'admin', 'admin'
     process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: @xml,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
     assert_response :success
   end
 
   def test_lock_folder_in_subproject
+    log_user 'admin', 'admin'
     process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: @xml,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
     assert_response :success
   end
 
   def test_lock_subproject
+    log_user 'admin', 'admin'
     process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}", params: @xml,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
     assert_response :multi_status
