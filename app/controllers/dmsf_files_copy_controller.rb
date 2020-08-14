@@ -60,13 +60,13 @@ class DmsfFilesCopyController < ApplicationController
 private
 
   def find_file
-    unless DmsfFile.where(id: params[:id]).exists?
-      render_404
-      return
-    end
+    raise ActiveRecord::RecordNotFound unless DmsfFile.where(id: params[:id]).exists?
     @file = DmsfFile.visible.find params[:id]
+    raise DmsfAccessError if @file.locked_for_user?
     @project = @file.project
   rescue ActiveRecord::RecordNotFound
+    render_404
+  rescue DmsfAccessError
     render_403
   end
 
@@ -78,18 +78,15 @@ private
     end
     if params[:target_folder_id].present?
       @target_folder = DmsfFolder.visible.find(params[:target_folder_id])
-      unless DmsfFolder.visible.where(id: params[:target_folder_id]).exists?
-        render_403
-        return
-      end
+      raise ActiveRecord::RecordNotFound unless DmsfFolder.visible.where(id: params[:target_folder_id]).exists?
     end
   rescue ActiveRecord::RecordNotFound
     render_404
   end
 
   def check_target_folder
-    if (@target_folder && (@target_folder == @file.dmsf_folder)) ||
-      (@target_folder.nil? && @file.dmsf_folder.nil? && (@target_project == @file.project))
+    if (@target_folder && @target_folder == @file.dmsf_folder) ||
+      (@target_folder.nil? && @file.dmsf_folder.nil? && @target_project == @file.project)
       flash[:error] = l(:error_target_folder_same)
       redirect_to action: :new, id: @file, target_project_id: @target_project.id, target_folder_id: @target_folder
       return

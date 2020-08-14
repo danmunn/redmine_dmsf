@@ -30,9 +30,9 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
 
   def setup
     @project1 = Project.find 1
+    @project1.enable_module! :dmsf
     @project2 = Project.find 2
     @project5 = Project.find 5
-    @project1.enable_module! :dmsf
     @file1 = DmsfFile.find 1
     @file2 = DmsfFile.find 2
     @folder1 = DmsfFolder.find 1
@@ -124,7 +124,7 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_copy
-    post :copy, params: { id: @file1.id, target_project_id: @project1.id, target_folder_id: @folder1.id }
+    post :copy, params: { id: @file1.id, target_project_id: @folder1.project.id, target_folder_id: @folder1.id }
     assert_response :redirect
     assert_nil flash[:error]
   end
@@ -132,37 +132,36 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
   def test_copy_the_same_target
     post :copy, params: { id: @file1.id, target_project_id: @file1.project.id, target_folder_id: @file1.dmsf_folder }
     assert_equal flash[:error], l(:error_target_folder_same)
-    assert_redirected_to action: 'new', target_project_id: @file1.project.id, target_folder_id: @file1.dmsf_folder
+    assert_redirected_to action: :new, target_project_id: @file1.project.id, target_folder_id: @file1.dmsf_folder
   end
 
   def test_copy_to_locked_folder
-    User.current = @admin
-    assert @folder2.locked_for_user?
-    User.current = nil
     @request.session[:user_id] = @admin.id
     post :copy, params: { id: @file1.id, target_project_id: @folder2.project.id, target_folder_id: @folder2.id }
     assert_response :forbidden
   end
 
   def test_copy_to_dmsf_not_enabled
-    post :copy, params: { id: @file1.id, target_project_id: @project5.id, target_folder_id: nil }
+    @project5.disable_module! :dmsf
+    post :copy, params: { id: @file1.id, target_project_id: @project5.id }
     assert_response :forbidden
   end
 
   def test_copy_to_dmsf_enabled
-    @project5.enable_module!(:dmsf)
-    post :copy, params: { id: @file1.id, target_project_id: @project5.id, target_folder_id: nil }
+    @project5.enable_module! :dmsf
+    post :copy, params: { id: @file1.id, target_project_id: @project5.id }
     assert_response :redirect
     assert_nil flash[:error]
   end
 
   def test_copy_to_as_non_member
-    post :copy, params: { id: @file1.id, target_project_id: @project2.id, target_folder_id: nil }
+    @request.session[:user_id] = @user_non_member.id
+    post :copy, params: { id: @file1.id, target_project_id: @project2.id }
     assert_response :forbidden
   end
 
   def test_move
-    post :move, params: { id: @file1.id, target_project_id: @project1.id, target_folder_id: @folder1.id }
+    post :move, params: { id: @file1.id, target_project_id: @folder1.project.id, target_folder_id: @folder1.id }
     assert_response :redirect
     assert_nil flash[:error]
   end
@@ -170,41 +169,37 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
   def test_move_the_same_target
     post :move, params: { id: @file1.id, target_project_id: @file1.project.id, target_folder_id: @file1.dmsf_folder }
     assert_equal flash[:error], l(:error_target_folder_same)
-    assert_redirected_to action: 'new', target_project_id: @file1.project.id, target_folder_id: @file1.dmsf_folder
+    assert_redirected_to action: :new, target_project_id: @file1.project.id, target_folder_id: @file1.dmsf_folder
   end
 
   def test_move_locked_file
-    User.current = @jsmith
-    assert @file2.locked_for_user?
-    User.current = nil
     @request.session[:user_id] = @jsmith.id
     post :move, params: { id: @file2.id, target_project_id: @folder1.project.id, target_folder_id: @folder1.id }
     assert_response :forbidden
   end
 
   def test_move_to_locked_folder
-    User.current = @admin
-    assert @folder2.locked_for_user?
-    User.current = nil
     @request.session[:user_id] = @admin.id
     post :move, params:  { id: @file1.id, target_project_id: @folder2.project.id, target_folder_id: @folder2.id }
     assert_response :forbidden
   end
 
   def test_move_to_dmsf_not_enabled
-    post :move, params: { id: @file1.id, target_project_id: @project5.id, target_folder_id: nil }
+    @project5.disable_module! :dmsf
+    post :move, params: { id: @file1.id, target_project_id: @project5.id }
     assert_response :forbidden
   end
 
   def test_move_to_dmsf_enabled
     @project5.enable_module! :dmsf
-    post :move, params: { id: @file1.id, target_project_id: @project5.id, target_folder_id: nil }
+    post :move, params: { id: @file1.id, target_project_id: @project5.id }
     assert_response :redirect
     assert_nil flash[:error]
   end
 
   def test_move_to_as_non_member
-    post :move, params: { id: @file1.id, target_project_id: @project2.id, target_folder_id: nil }
+    @request.session[:user_id] = @user_non_member.id
+    post :move, params: { id: @file1.id, target_project_id: @project2.id }
     assert_response :forbidden
   end
   

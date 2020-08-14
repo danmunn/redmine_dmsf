@@ -28,7 +28,6 @@ class DmsfFoldersCopyController < ApplicationController
   before_action :authorize
   before_action :find_target_folder
   before_action :check_target_folder, only: [:copy, :move]
-  before_action :check_source_folder, only: [:copy, :move]
 
   def new
     @projects = DmsfFolder.allowed_target_projects_on_copy
@@ -61,13 +60,13 @@ class DmsfFoldersCopyController < ApplicationController
   private
 
   def find_folder
-    unless DmsfFolder.where(id: params[:id]).exists?
-      render_404
-      return
-    end
+    raise ActiveRecord::RecordNotFound unless DmsfFolder.where(id: params[:id]).exists?
     @folder = DmsfFolder.visible.find params[:id]
+    raise DmsfAccessError if @folder.locked_for_user?
     @project = @folder.project
   rescue ActiveRecord::RecordNotFound
+    render_404
+  rescue DmsfAccessError
     render_403
   end
 
@@ -79,10 +78,7 @@ class DmsfFoldersCopyController < ApplicationController
     end
     if params[:target_folder_id].present?
       @target_folder = DmsfFolder.find(params[:target_folder_id])
-      unless DmsfFolder.visible.where(id: params[:target_folder_id]).exists?
-        render_403
-        return
-      end
+      raise ActiveRecord::RecordNotFound unless DmsfFolder.visible.where(id: params[:target_folder_id]).exists?
     end
   rescue ActiveRecord::RecordNotFound
     render_404
@@ -101,10 +97,6 @@ class DmsfFoldersCopyController < ApplicationController
     end
   rescue DmsfAccessError
     render_403
-  end
-
-  def check_source_folder
-    render_403 if @folder.locked_for_user?
   end
 
 end

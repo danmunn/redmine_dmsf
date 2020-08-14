@@ -312,6 +312,16 @@ class DmsfFileRevision < ActiveRecord::Base
     format2
   end
 
+  def create_digest
+    begin
+      self.digest = Digest::SHA256.file(path).hexdigest
+      puts ">>> #{self.digest}, #{self.digest.lengt}"
+    rescue => e
+      Rails.logger.error e.message
+      self.digest = 0
+    end
+  end
+
   # Returns either MD5 or SHA256 depending on the way self.digest was computed
   def digest_type
     digest.size < 64 ? 'MD5' : 'SHA256' if digest.present?

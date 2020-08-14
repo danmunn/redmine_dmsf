@@ -94,7 +94,7 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_unlock_file_with_invalid_token
-    log_user 'admin', 'admin' # login as jsmith
+    log_user 'admin', 'admin'
     process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: 'invalid_token' })
     assert_response :bad_request
