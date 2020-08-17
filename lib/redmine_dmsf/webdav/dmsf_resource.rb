@@ -29,6 +29,7 @@ module RedmineDmsf
       include Redmine::I18n
 
       def initialize(path, request, response, options)
+        puts ">>> initialize for #{path}"
         @folder = nil
         @file = nil
         @subproject = nil
@@ -452,10 +453,12 @@ module RedmineDmsf
 
       # Lock
       def lock(args)
+        puts ">>> lock: #{parent.nil?}, #{parent.projectless_path}, #{parent.exist?}"
+        puts ">>> projectless_path: #{parent.projectless_path}"
         if parent.nil? || ((parent.projectless_path != '/') && (!parent.exist?))
           e = DAV4Rack::LockFailure.new
           puts ">>> Conflict 1"
-          puts ">>> @path"
+          puts ">>> #{@path}"
           puts ">>> #{parent&.name}"
           puts ">>> #{parent&.exist?}"
           e.add_failure @path, Conflict
