@@ -454,7 +454,10 @@ module RedmineDmsf
       def lock(args)
         if parent.nil? || ((parent.projectless_path != '/') && (!parent.exist?))
           e = DAV4Rack::LockFailure.new
-          puts ">>> Conflict 1 #{parent.nil?} #{parent.projectless_path} #{parent.exist?}"
+          puts ">>> Conflict 1"
+          puts ">>> @path"
+          puts ">>> #{parent&.name}"
+          puts ">>> #{parent&.exist?}"
           e.add_failure @path, Conflict
           raise e
         end
@@ -483,7 +486,6 @@ module RedmineDmsf
               if http_if.blank?
                 e = DAV4Rack::LockFailure.new
                 e.add_failure @path, Conflict
-                puts ">>> Conflict 2 #{http_if}"
                 raise e
               end
               l = nil
@@ -493,7 +495,6 @@ module RedmineDmsf
               unless l
                 e = DAV4Rack::LockFailure.new
                 e.add_failure @path, Conflict
-                puts ">>> Conflict 3 #{$1}"
                 raise e
               end
               l.expires_at = Time.current + 1.week
@@ -513,7 +514,6 @@ module RedmineDmsf
         rescue DmsfLockError
           e = DAV4Rack::LockFailure.new
           e.add_failure @path, Conflict
-          puts ">>> Conflict 4 DmsfLockError #{@path}"
           raise e
         end
       end
