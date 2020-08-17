@@ -123,6 +123,7 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
   def test_unlock_folder
     log_user 'jsmith', 'jsmith'
     l = @folder2.locks.first
+    puts ">>> process unlock"
     process :unlock, "/dmsf/webdav/#{@folder2.project.identifier}/#{@folder2.dmsf_folder.title}/#{@folder2.title}",
             params: nil,
             headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })

@@ -525,7 +525,14 @@ module RedmineDmsf
       # Token based unlock (authenticated) will ensure that a correct token is sent, further ensuring
       # ownership of token before permitting unlock
       def unlock(token)
-        return NotFound unless exist?
+        unless exist?
+          puts ">>> exists? => false"
+          puts ">>> #{subproject&.name}"
+          puts ">>> #{folder&.title}"
+          puts ">>> #{file&.name}"
+          puts ">>> #{project&.name}"
+          return NotFound
+        end
         if token.nil? || token.empty? || (token == '<(null)>') || User.current.anonymous?
           BadRequest
         else
