@@ -93,8 +93,8 @@ module RedmineDmsf
       # Check if current entity is a folder and return DmsfFolder object if found (nil if not)
       def folder
         unless @folder
-          @folder = DmsfFolder.visible.where(project_id: project.id, title: basename,
-            dmsf_folder_id: parent&.folder&.id).first if project
+          @folder = DmsfFolder.visible.find_by(project_id: project&.id, title: basename,
+            dmsf_folder_id: parent&.folder&.id)
         end
         @folder
       end
@@ -102,7 +102,7 @@ module RedmineDmsf
       # Check if the current entity exists as a file (DmsfFile), and returns corresponding object if found (nil otherwise)
       def file
         unless @file
-          @file = DmsfFile.find_file_by_name(project, parent&.folder, basename) if project
+          @file = DmsfFile.find_file_by_name(project, parent&.folder, basename)
         end
         @file
       end
@@ -111,14 +111,14 @@ module RedmineDmsf
         unless @subproject
           if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
             if basename =~ / (\d+)$/
-              @subproject = Project.visible.where(id: $1, parent_id: parent_project&.id).first
+              @subproject = Project.visible.find_by(id: $1, parent_id: parent_project&.id)
               if @subproject
                 # Check again whether it's really the project and not a folder with a number as a suffix
                 @subproject = nil unless basename =~ /^#{@subproject.name}/
               end
             end
           else
-            @subproject = Project.visible.where(parent_id: parent_project.id, identifier: basename).first if parent_project
+            @subproject = Project.visible.find_by(parent_id: parent_project&.id, identifier: basename)
           end
         end
         @subproject

@@ -99,18 +99,15 @@ class DmsfFile < ActiveRecord::Base
       pn = Pathname.new(path)
       return pn if pn.absolute?
     end
-    Rails.root.join(path)
+    Rails.root.join path
   end
 
   def self.find_file_by_name(project, folder, name)
-    findn_file_by_name(project.id, folder, name)
+    findn_file_by_name project&.id, folder, name
   end
 
   def self.findn_file_by_name(project_id, folder, name)
-    where(
-      project_id: project_id,
-      dmsf_folder_id: folder ? folder.id : nil,
-      name: name).visible.first
+    visible.find_by project_id: project_id, dmsf_folder_id: folder&.id, name: name
   end
 
   def last_revision
