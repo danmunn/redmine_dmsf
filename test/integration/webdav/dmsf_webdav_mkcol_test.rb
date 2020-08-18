@@ -24,8 +24,7 @@ require File.expand_path('../../../test_helper', __FILE__)
 
 class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
 
-  fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles, 
-    :enabled_modules, :dmsf_folders
+  fixtures :dmsf_folders
 
   def test_mkcol_requires_authentication
     process :mkcol, '/dmsf/webdav/test1'

@@ -23,9 +23,8 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
 
-  fixtures :users, :email_addresses, :projects, :members, :roles, :member_roles, :dmsf_files,
-           :dmsf_file_revisions, :dmsf_workflows, :dmsf_workflow_steps, :dmsf_workflow_step_assignments,
-           :dmsf_workflow_step_actions
+  fixtures :dmsf_file_revisions, :dmsf_workflows, :dmsf_workflow_steps, :dmsf_workflow_step_assignments,
+           :dmsf_workflow_step_actions, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
     super

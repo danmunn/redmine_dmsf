@@ -22,11 +22,10 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
+
   include Redmine::I18n
 
-  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles,
-           :members, :member_roles, :enabled_modules, :enumerations, :dmsf_locks, :dmsf_workflows, :dmsf_workflow_steps,
-           :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions
+  fixtures :dmsf_locks, :dmsf_workflows, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
          
   def setup
     super
@@ -102,7 +101,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert r1.save
     # Just make sure the file exists
     File.open(r1.disk_file, 'wb') do |f|
-        f.write('1234')
+        f.write '1234'
     end
 
     # Directly after the file has been stored generate the r2 storage filename.

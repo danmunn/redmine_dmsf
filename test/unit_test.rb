@@ -25,6 +25,8 @@ module RedmineDmsf
   module Test
     class UnitTest < ActiveSupport::TestCase
 
+      self.fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles
+
       def setup
         @admin = User.find_by(login: 'admin')
         @jsmith = User.find_by(login: 'jsmith')
@@ -74,18 +76,21 @@ module RedmineDmsf
       # and allowing us to suppliment redmine fixtures if we need to.
       def self.fixtures(*table_names)
         dir = File.join(File.dirname(__FILE__), 'fixtures')
+        redmine_table_names = []
         table_names.each do |x|
-          ActiveRecord::FixtureSet.create_fixtures(dir, x) if File.exist?(File.join(dir, "#{x}.yml"))
+          if File.exist?(File.join(dir, "#{x}.yml"))
+            ActiveRecord::FixtureSet.create_fixtures(dir, x)
+          else
+            redmine_table_names << x
+          end
         end
-        super table_names
+        super redmine_table_names if redmine_table_names.any?
       end
 
       protected
 
       def last_email
-        mail = ActionMailer::Base.deliveries.last
-        assert_not_nil mail
-        mail
+        ActionMailer::Base.deliveries.last
       end
 
       def text_part(email)

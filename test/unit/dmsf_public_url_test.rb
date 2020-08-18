@@ -23,7 +23,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfPublicUrlsTest < RedmineDmsf::Test::UnitTest
   
-  fixtures :dmsf_files, :dmsf_file_revisions, :dmsf_public_urls, :users, :email_addresses
+  fixtures :dmsf_public_urls, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
     super

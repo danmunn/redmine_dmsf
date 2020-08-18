@@ -23,9 +23,8 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class IssuesControllerTest < RedmineDmsf::Test::TestCase
 
-  fixtures :users, :email_addresses, :user_preferences, :projects, :dmsf_file_revisions, :dmsf_folders,
-           :dmsf_files, :projects, :issues, :versions, :trackers, :projects_trackers, :roles, :members, :member_roles,
-           :enabled_modules, :enumerations, :issue_statuses
+  fixtures :user_preferences, :issues, :versions, :trackers, :projects_trackers, :issue_statuses,
+    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :enumerations
 
   def setup
     super

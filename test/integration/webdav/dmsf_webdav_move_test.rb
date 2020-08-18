@@ -25,8 +25,7 @@ require 'fileutils'
 
 class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
 
-  fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles,
-    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def test_move_denied_for_anonymous
     new_name = "#{@file1.name}.moved"

@@ -22,9 +22,9 @@
 
 require File.expand_path('../../test_helper.rb', __FILE__)
 
-class DmsfLockTest < RedmineDmsf::Test::UnitTest  
-  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles,
-           :members, :member_roles, :enabled_modules, :enumerations, :dmsf_locks
+class DmsfLockTest < RedmineDmsf::Test::UnitTest
+
+  fixtures :dmsf_locks, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
     super

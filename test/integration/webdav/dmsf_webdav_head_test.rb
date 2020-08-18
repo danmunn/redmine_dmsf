@@ -24,8 +24,7 @@ require File.expand_path('../../../test_helper', __FILE__)
 
 class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
 
-  fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles, 
-    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def test_head_requires_authentication
     head "/dmsf/webdav/#{@project1.identifier}"

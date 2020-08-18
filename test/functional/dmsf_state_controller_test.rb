@@ -22,9 +22,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
-  include Redmine::I18n  
-    
-  fixtures :users, :email_addresses, :projects, :members, :roles, :member_roles
+  include Redmine::I18n
 
   def setup
     super

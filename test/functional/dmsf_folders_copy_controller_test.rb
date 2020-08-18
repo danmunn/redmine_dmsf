@@ -24,8 +24,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
 
-  fixtures :users, :projects, :roles, :members, :member_roles, :enabled_modules, :dmsf_folders,
-           :email_addresses, :dmsf_locks
+  fixtures :dmsf_locks
 
   def setup
     super

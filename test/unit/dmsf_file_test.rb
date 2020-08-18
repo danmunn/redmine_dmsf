@@ -23,9 +23,9 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFileTest < RedmineDmsf::Test::UnitTest
-  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles,
-           :members, :member_roles, :dmsf_locks, :issues, :dmsf_links, :dmsf_workflows, :dmsf_workflow_steps,
-           :dmsf_workflow_step_assignments
+
+  fixtures :dmsf_locks, :issues, :dmsf_links, :dmsf_workflows, :dmsf_workflow_steps,
+           :dmsf_workflow_step_assignments, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
     super
@@ -35,7 +35,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_project_file_count_differs_from_project_visibility_count
-    assert_not_same(@project1.dmsf_files.all.size, @project1.dmsf_files.visible.all.size)
+    assert_not_same @project1.dmsf_files.all.size, @project1.dmsf_files.visible.all.size
   end
 
   def test_project_dmsf_file_listing_contains_deleted_items

@@ -26,6 +26,8 @@ module RedmineDmsf
 
     class IntegrationTest < Redmine::IntegrationTest
 
+      self.fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles
+
       def setup
         @admin = credentials('admin', 'admin')
         @admin_user = User.find_by(login: 'admin')
@@ -78,10 +80,15 @@ module RedmineDmsf
 
       def self.fixtures(*table_names)
         dir = File.join(File.dirname(__FILE__), 'fixtures')
-        table_names.each do |x|          
-          ActiveRecord::FixtureSet.create_fixtures(dir, x) if File.exist?(File.join(dir, "#{x}.yml"))
+        redmine_table_names = []
+        table_names.each do |x|
+          if File.exist?(File.join(dir, "#{x}.yml"))
+            ActiveRecord::FixtureSet.create_fixtures(dir, x)
+          else
+            redmine_table_names << x
+          end
         end
-        super table_names
+        super redmine_table_names if redmine_table_names.any?
       end
 
       protected

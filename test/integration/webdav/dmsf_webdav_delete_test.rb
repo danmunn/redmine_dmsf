@@ -25,9 +25,7 @@ require File.expand_path('../../../test_helper', __FILE__)
 class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   include Redmine::I18n  
   
-    fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles,
-    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, 
-    :dmsf_locks
+    fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
    
   def test_not_authenticated
     delete '/dmsf/webdav'

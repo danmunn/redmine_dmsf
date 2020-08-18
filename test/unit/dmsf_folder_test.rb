@@ -23,8 +23,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFolderTest < RedmineDmsf::Test::UnitTest
-  fixtures :projects, :users, :email_addresses, :dmsf_folders, :roles, :members, :member_roles,
-           :dmsf_folder_permissions, :dmsf_locks
+
+  fixtures :dmsf_folder_permissions, :dmsf_locks, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
          
   def test_visiblity
     # The role has got permissions

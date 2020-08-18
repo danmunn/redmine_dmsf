@@ -25,8 +25,7 @@ require 'fileutils'
 
 class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
 
-  fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles,
-    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def test_put_denied_unless_authenticated_root
     put '/dmsf/webdav'

@@ -23,8 +23,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfLinksTest < RedmineDmsf::Test::UnitTest
   
-  fixtures :users, :email_addresses, :roles, :projects, :members, :member_roles, :dmsf_files,
-           :dmsf_file_revisions, :dmsf_folders, :dmsf_links
+  fixtures :dmsf_links, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
     super

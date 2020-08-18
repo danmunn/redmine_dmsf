@@ -25,8 +25,7 @@ require 'uri'
 
 class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
 
-  fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles, 
-    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def test_propfind_denied_for_anonymous
     process :propfind, '/dmsf/webdav/', params: nil, headers: @anonymous.merge!({ HTTP_DEPTH: '0' })

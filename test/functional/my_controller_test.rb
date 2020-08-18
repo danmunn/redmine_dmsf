@@ -22,11 +22,11 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class MyControllerTest < RedmineDmsf::Test::TestCase
+
   include Redmine::I18n
     
-  fixtures :users, :email_addresses, :user_preferences, :projects, :dmsf_workflows, :dmsf_workflow_steps,
-           :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions, :dmsf_file_revisions, :dmsf_folders,
-           :dmsf_files, :dmsf_locks
+  fixtures :user_preferences, :dmsf_workflows, :dmsf_workflow_steps, :dmsf_workflow_step_assignments,
+           :dmsf_workflow_step_actions, :dmsf_locks
 
   def setup
     super

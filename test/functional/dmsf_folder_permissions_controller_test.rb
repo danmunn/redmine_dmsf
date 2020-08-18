@@ -22,8 +22,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFolderPermissionsControllerTest < RedmineDmsf::Test::TestCase
-  fixtures :users, :dmsf_folders, :projects, :roles, :members, :member_roles, :dmsf_folder_permissions,
-           :email_addresses
+  fixtures :dmsf_folder_permissions
 
   def setup
     super

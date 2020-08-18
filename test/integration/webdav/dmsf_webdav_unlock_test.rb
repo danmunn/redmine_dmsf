@@ -25,8 +25,7 @@ require 'fileutils'
 
 class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
 
-  fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles,
-    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
 
   def test_unlock_file
     log_user 'admin', 'admin'

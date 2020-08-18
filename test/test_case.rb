@@ -25,15 +25,22 @@ module RedmineDmsf
   module Test
     class TestCase < ActionController::TestCase
 
+      self.fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles
+
       # Allow us to override the fixtures method to implement fixtures for our plugin.
       # Ultimately it allows for better integration without blowing redmine fixtures up,
       # and allowing us to suppliment redmine fixtures if we need to.
       def self.fixtures(*table_names)
         dir = File.join(File.dirname(__FILE__), 'fixtures')
+        redmine_table_names = []
         table_names.each do |x|
-          ActiveRecord::FixtureSet.create_fixtures(dir, x) if File.exist?(File.join(dir, "#{x}.yml"))
+          if File.exist?(File.join(dir, "#{x}.yml"))
+            ActiveRecord::FixtureSet.create_fixtures(dir, x)
+          else
+            redmine_table_names << x
+          end
         end
-        super table_names
+        super redmine_table_names if redmine_table_names.any?
       end
 
       def setup

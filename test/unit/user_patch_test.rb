@@ -22,8 +22,10 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class UserPatchTest < RedmineDmsf::Test::UnitTest
-  fixtures :users, :email_addresses, :projects, :dmsf_files, :dmsf_file_revisions, :dmsf_folders,
-           :dmsf_links
+
+  fixtures :dmsf_links, :dmsf_locks, :dmsf_workflows, :dmsf_workflow_steps,
+           :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions, :dmsf_folders,
+           :dmsf_files, :dmsf_file_revisions
 
   def test_remove_dmsf_references
     id = @jsmith.id

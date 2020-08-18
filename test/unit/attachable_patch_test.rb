@@ -22,17 +22,13 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class AttachablePatchTest < RedmineDmsf::Test::UnitTest
-  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :issues
+
+  fixtures :issues, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
     super
     @issue1 = Issue.find 1
     @issue2 = Issue.find 2
-  end
-
-  def test_truth
-    assert_kind_of Issue, @issue1
-    assert_kind_of Issue, @issue2
   end
 
   def test_has_attachmets

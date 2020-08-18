@@ -24,8 +24,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n  
     
-  fixtures :users, :email_addresses, :projects, :members, :roles, :member_roles, :dmsf_folders,
-           :dmsf_files, :dmsf_file_revisions, :dmsf_links
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_links
 
   def setup
     super

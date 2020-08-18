@@ -23,7 +23,7 @@ require File.expand_path('../../../test_helper', __FILE__)
 
 class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
 
-  fixtures :users, :email_addresses, :projects, :members, :roles, :member_roles, :dmsf_folders, :dmsf_files
+  fixtures :dmsf_folders, :dmsf_files
 
   def test_options_for_root_path
     process :options, '/'

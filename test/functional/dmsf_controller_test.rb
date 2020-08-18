@@ -24,9 +24,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
 
-  fixtures :users, :email_addresses, :dmsf_folders, :custom_fields,
-    :custom_values, :projects, :roles, :members, :member_roles, :dmsf_links,
-    :dmsf_files, :dmsf_file_revisions, :dmsf_folder_permissions, :dmsf_locks
+  fixtures :custom_fields, :custom_values, :dmsf_links, :dmsf_folder_permissions, :dmsf_locks
 
   def setup
     super
