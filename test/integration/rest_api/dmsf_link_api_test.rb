@@ -24,29 +24,16 @@ require File.expand_path('../../../test_helper', __FILE__)
 class DmsfLinkApiTest < RedmineDmsf::Test::IntegrationTest
   include Redmine::I18n
 
-  fixtures :projects, :users, :dmsf_files, :dmsf_file_revisions, :members, :roles, :member_roles
+  fixtures :projects, :users, :email_addresses, :dmsf_files, :dmsf_file_revisions, :members, :roles,
+           :member_roles
 
   def setup
-    @admin = User.find 1
-    @jsmith = User.find 2
-    @file1 = DmsfFile.find 1
+    super
     Setting.rest_api_enabled = '1'
-    @role = Role.find 1
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
-  end
-
-  def test_truth
-    assert_kind_of User, @admin
-    assert_kind_of User, @jsmith
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of Role, @role
-    assert_kind_of Project, @project1
   end
 
   def test_create_link
-    @role.add_permission! :file_manipulation
-    token = Token.create!(user: @jsmith, action: 'api')
+    token = Token.create!(user: @jsmith_user, action: 'api')
     name = 'REST API link test'
     # curl -v -H "Content-Type: application/xml" -X POST --data "@link.xml" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf_links.xml
     payload = %{<?xml version="1.0" encoding="utf-8" ?>

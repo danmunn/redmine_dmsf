@@ -25,13 +25,8 @@ class DmsfFolderPermissionTest < RedmineDmsf::Test::UnitTest
   fixtures :dmsf_folder_permissions, :dmsf_folders
 
   def setup
-    @folder1 = DmsfFolder.find 1
+    super
     @permission1 = DmsfFolderPermission.find 1
-  end
-
-  def test_truth
-    assert_kind_of DmsfFolder, @folder1
-    assert_kind_of DmsfFolderPermission, @permission1
   end
 
   def test_scope

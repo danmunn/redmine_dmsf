@@ -147,7 +147,6 @@ module RedmineDmsf
       def projectless_path
         i = 1
         project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-        puts ">>> project_names = #{project_names}"
         while true
           prj = nil
           pinfo = @path.split('/').drop(i)

@@ -35,16 +35,7 @@ class DmsfWorkflowStepTest < RedmineDmsf::Test::UnitTest
     @revision2 = DmsfFileRevision.find 2
     @wf2 = DmsfWorkflow.find 2
   end
-  
-  def test_truth
-    assert_kind_of DmsfWorkflowStep, @wfs1
-    assert_kind_of DmsfWorkflowStep, @wfs2
-    assert_kind_of DmsfWorkflowStep, @wfs5
-    assert_kind_of DmsfFileRevision, @revision1
-    assert_kind_of DmsfFileRevision, @revision2
-    assert_kind_of DmsfWorkflow, @wf2
-  end
-  
+
   def test_create
     wfs = DmsfWorkflowStep.new
     wfs.dmsf_workflow_id = 1

@@ -27,57 +27,6 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles,
            :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
-  def setup
-    @admin = credentials 'admin'
-    @jsmith = credentials 'jsmith'
-    @project1 = Project.find 1
-    @project2 = Project.find 2
-    @project3 = Project.find 3
-    @file1 = DmsfFile.find 1
-    @file2 = DmsfFile.find 2
-    @folder1 = DmsfFolder.find 1
-    @folder3 = DmsfFolder.find 3
-    @folder10 = DmsfFolder.find 10
-    @file12 = DmsfFile.find 12
-    @role = Role.find_by(name: 'Manager')
-    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
-    @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    @dmsf_webdav_use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
-    FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
-    User.current = nil
-  end
-
-  def teardown
-    # Delete our tmp folder
-    begin
-      FileUtils.rm_rf DmsfFile.storage_path
-    rescue => e
-      error e.message
-    end
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
-  end
-
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of Project, @project3
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of DmsfFile, @file2
-    assert_kind_of DmsfFile, @file12
-    assert_kind_of DmsfFolder, @folder1
-    assert_kind_of DmsfFolder, @folder3
-    assert_kind_of DmsfFolder, @folder10
-    assert_kind_of Role, @role
-  end
-
   def test_should_deny_anonymous
     get '/dmsf/webdav'
     assert_response :unauthorized
@@ -129,7 +78,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_should_return_status_200_when_dmsf_not_enabled_for_project
-    assert !@project2.module_enabled?('dmsf')
+    @project2.disable_module! :dmsf
     get "/dmsf/webdav/#{@project2.identifier}", params: nil, headers: @jsmith
     assert_response :success
     # Folders and files are not listed
@@ -138,8 +87,6 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_should_not_list_files_without_permissions
-    assert @project1.module_enabled?('dmsf')
-    @role.add_permission! :view_dmsf_folders
     @role.remove_permission! :view_dmsf_files
     get "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @jsmith
     assert_response :success
@@ -149,9 +96,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_should_not_list_folders_without_permissions
-    assert @project1.module_enabled?('dmsf')
     @role.remove_permission! :view_dmsf_folders
-    @role.add_permission! :view_dmsf_files
     get "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @jsmith
     assert_response :success
     # Folders are not listed
@@ -175,7 +120,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     folder = DmsfFolder.find_by(id: 1)
     assert_not_nil folder
-    assert response.body.match(folder.title),
+    assert response.body.match(@folder1.title),
            "Expected to find #{folder.title} in return data"
     file = DmsfFile.find_by(id: 1)
     assert_not_nil file
@@ -189,43 +134,33 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_user_assigned_to_archived_project
-    @project1.enable_module! :dmsf
     @project1.archive
     get "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @jsmith
     assert_response :not_found
   end
 
   def test_user_assigned_to_project_folder_ok
-    @project1.enable_module! :dmsf
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :view_dmsf_files
     get "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @jsmith
     assert_response :success
   end
 
   def test_user_assigned_to_project_file_forbidden
-    @project1.enable_module! :dmsf
-    @role.add_permission! :view_dmsf_folders
+    @role.remove_permission! :view_dmsf_files
     get "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @jsmith
     assert_response :forbidden
   end
 
   def test_user_assigned_to_project_file_ok
-    @project1.enable_module! :dmsf
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :view_dmsf_files
     get "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @jsmith
     assert_response :success
   end
 
   def test_get_file_in_subproject
-    @project3.enable_module! :dmsf
     get "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: nil, headers: @admin
     assert_response :success
   end
 
   def test_get_folder_in_subproject
-    @project3.enable_module! :dmsf
     get "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil, headers: @admin
     assert_response :success
   end

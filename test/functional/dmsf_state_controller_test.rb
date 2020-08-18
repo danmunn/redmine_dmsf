@@ -27,54 +27,37 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
   fixtures :users, :email_addresses, :projects, :members, :roles, :member_roles
 
   def setup
-    @user_admin = User.find 1 # Redmine admin
-    @user_member = User.find 2 # John Smith - manager
-    @user_non_member = User.find 3 # Dave Lopper
-    @project = Project.find 1
-    @project.enable_module! :dmsf
-    @role_manager = Role.find_by(name: 'Manager')
-    User.current = nil
+    super
+    @request.session[:user_id] = @jsmith.id
   end
-  
-  def test_truth
-    assert_kind_of User, @user_admin
-    assert_kind_of User, @user_member
-    assert_kind_of User, @user_non_member
-    assert_kind_of Project, @project        
-    assert_kind_of Role, @role_manager
-  end
-    
+
   def test_user_pref_save_member
-    # Member    
-    @request.session[:user_id] = @user_member.id
+    assert @project1
     @role_manager.add_permission! :user_preferences
-    post :user_pref_save, params: { id: @project.id, email_notify: 1, title_format: '%t_%v' }
-    assert_redirected_to settings_project_path(@project, tab: 'dmsf')
+    post :user_pref_save, params: { id: @project1.id, email_notify: 1, title_format: '%t_%v' }
+    assert_redirected_to settings_project_path(@project1, tab: 'dmsf')
     assert_not_nil flash[:notice]
     assert_equal flash[:notice], l(:notice_your_preferences_were_saved)
   end
   
   def test_user_pref_save_member_forbidden
-    # Member
-    @request.session[:user_id] = @user_member.id    
-    post :user_pref_save, params: { id: @project.id, email_notify: 1, title_format: '%t_%v' }
+    @role_manager.remove_permission! :user_preferences
+    post :user_pref_save, params: { id: @project1.id, email_notify: 1, title_format: '%t_%v' }
     assert_response :forbidden
   end
-  
+
   def test_user_pref_save_none_member
     # Non Member
-    @request.session[:user_id] = @user_non_member.id
-    @role_manager.add_permission! :user_preferences
-    post :user_pref_save, params: { id: @project.id, email_notify: 1, title_format: '%t_%v' }
+    @request.session[:user_id] = @someone.id
+    post :user_pref_save, params: { id: @project1.id, email_notify: 1, title_format: '%t_%v' }
     assert_response :forbidden
   end
-  
+
   def test_user_pref_save_admin
     # Admin - non member
-    @request.session[:user_id] = @user_admin.id
-    @role_manager.add_permission! :user_preferences
-    post :user_pref_save, params: { id: @project.id, email_notify: 1, title_format: '%t_%v' }
-    assert_redirected_to settings_project_path(@project, tab: 'dmsf')
+    @request.session[:user_id] = @admin.id
+    post :user_pref_save, params: { id: @project1.id, email_notify: 1, title_format: '%t_%v' }
+    assert_redirected_to settings_project_path(@project1, tab: 'dmsf')
     assert_not_nil flash[:warning]
     assert_equal flash[:warning], l(:user_is_not_project_member)
   end

@@ -23,11 +23,12 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
 
-  fixtures :users, :email_addresses, :projects, :members, :dmsf_files, 
-    :dmsf_file_revisions, :dmsf_workflows, :dmsf_workflow_steps, 
-    :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions
+  fixtures :users, :email_addresses, :projects, :members, :roles, :member_roles, :dmsf_files,
+           :dmsf_file_revisions, :dmsf_workflows, :dmsf_workflow_steps, :dmsf_workflow_step_assignments,
+           :dmsf_workflow_step_actions
 
-  def setup    
+  def setup
+    super
     @wf1 = DmsfWorkflow.find 1
     @wf2 = DmsfWorkflow.find 2
     @wf3 = DmsfWorkflow.find 3
@@ -40,25 +41,6 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     @wfsac1 = DmsfWorkflowStepAction.find 1
     @revision1 = DmsfFileRevision.find 1
     @revision2 = DmsfFileRevision.find 2
-    @project = Project.find 2
-    @project5 = Project.find 5
-  end
-  
-  def test_truth
-    assert_kind_of DmsfWorkflow, @wf1
-    assert_kind_of DmsfWorkflow, @wf2
-    assert_kind_of DmsfWorkflow, @wf3
-    assert_kind_of DmsfWorkflowStep, @wfs1
-    assert_kind_of DmsfWorkflowStep, @wfs2
-    assert_kind_of DmsfWorkflowStep, @wfs3
-    assert_kind_of DmsfWorkflowStep, @wfs4
-    assert_kind_of DmsfWorkflowStep, @wfs5
-    assert_kind_of DmsfWorkflowStepAssignment, @wfsa1
-    assert_kind_of DmsfWorkflowStepAction, @wfsac1
-    assert_kind_of DmsfFileRevision, @revision1
-    assert_kind_of DmsfFileRevision, @revision2
-    assert_kind_of Project, @project
-    assert_kind_of Project, @project5
   end
 
   def test_create
@@ -69,11 +51,11 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
 
   def test_update
     @wf1.name = 'wf1a'
-    @wf1.project_id = 5
+    @wf1.project_id = @project5.id
     assert @wf1.save, @wf1.errors.full_messages.to_sentence
     @wf1.reload
     assert_equal 'wf1a', @wf1.name
-    assert_equal 5, @wf1.project_id
+    assert_equal @project5.id, @wf1.project_id
   end
 
   def test_validate_name_length
@@ -111,7 +93,7 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     # Global workflow
     assert_nil @wf2.project
     # Project workflow
-    @wf2.project_id = 5
+    @wf2.project_id = @project5.id
     assert @wf2.project
   end
 
@@ -205,10 +187,10 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     wsa = DmsfWorkflowStepAction.new
     wsa.dmsf_workflow_step_assignment_id = 9
     wsa.action = DmsfWorkflowStepAction::ACTION_APPROVE
-    wsa.author_id = User.current.id
+    wsa.author_id = @jsmith.id
     assert wsa.save
     # The workflow is finished
-    assert @wf1.try_finish(@revision1, @wfsac1, User.current.id)
+    assert @wf1.try_finish(@revision1, @wfsac1, @jsmith.id)
     @revision1.reload
     assert_equal DmsfWorkflow::STATE_APPROVED, @revision1.workflow
   end
@@ -217,7 +199,7 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     # The forkflow is waiting for an approval
     assert_equal DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, @revision1.workflow
     # The workflow is not finished
-    assert !@wf1.try_finish(@revision1, @wfsac1, User.current.id)
+    assert !@wf1.try_finish(@revision1, @wfsac1, @jsmith.id)
     @revision1.reload
     assert_equal DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, @revision1.workflow
   end

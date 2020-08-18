@@ -27,55 +27,6 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
 
   fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles,
     :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
-    
-  def setup
-    @admin = credentials 'admin'
-    @jsmith = credentials 'jsmith'
-    @admin_user = User.find_by(login: 'admin')
-    @jsmith_user = User.find_by(login: 'jsmith')
-    @project1 = Project.find 1
-    @project1.enable_module! 'dmsf'
-    @project2 = Project.find 2
-    @project2.enable_module! 'dmsf'
-    @project3 = Project.find 3
-    @project3.enable_module! 'dmsf'
-    @file2 = DmsfFile.find 2
-    @file9 = DmsfFile.find 9
-    @file12 = DmsfFile.find 12
-    @folder2 = DmsfFolder.find 2
-    @folder6 = DmsfFolder.find 6
-    @folder10 = DmsfFolder.find 10
-    # Fix permissions for jsmith's role
-    @role = Role.find_by(name: 'Manager')
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :folder_manipulation
-    @role.add_permission! :view_dmsf_files
-    @role.add_permission! :file_manipulation
-    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
-    @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-  end
-
-  def teardown
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
-  end
-
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of Project, @project3
-    assert_kind_of DmsfFile, @file2
-    assert_kind_of DmsfFile, @file9
-    assert_kind_of DmsfFile, @file12
-    assert_kind_of DmsfFolder, @folder2
-    assert_kind_of DmsfFolder, @folder6
-    assert_kind_of DmsfFolder, @folder10
-    assert_kind_of Role, @role
-    assert_kind_of User, @admin_user
-    assert_kind_of User, @jsmith_user
-  end
 
   def test_unlock_file
     log_user 'admin', 'admin'
@@ -123,7 +74,6 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
   def test_unlock_folder
     log_user 'jsmith', 'jsmith'
     l = @folder2.locks.first
-    puts ">>> process unlock"
     process :unlock, "/dmsf/webdav/#{@folder2.project.identifier}/#{@folder2.dmsf_folder.title}/#{@folder2.title}",
             params: nil,
             headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })

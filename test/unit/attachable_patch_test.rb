@@ -25,6 +25,7 @@ class AttachablePatchTest < RedmineDmsf::Test::UnitTest
   fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :issues
 
   def setup
+    super
     @issue1 = Issue.find 1
     @issue2 = Issue.find 2
   end

@@ -27,51 +27,6 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
   fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles, 
     :enabled_modules, :dmsf_folders
 
-  def setup
-    @admin = credentials 'admin'
-    @jsmith = credentials 'jsmith'
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
-    @project2 = Project.find 2
-    @project3 = Project.find 3
-    @project3.enable_module! :dmsf
-    @role = Role.find_by(name: 'Manager')
-    @role.add_permission! :folder_manipulation
-    @role.add_permission! :view_dmsf_folders
-    @folder6 = DmsfFolder.find 6
-    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
-    @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    @dmsf_webdav_use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
-    FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
-    User.current = nil        
-  end
-
-  def teardown
-    # Delete our tmp folder
-    begin
-      FileUtils.rm_rf DmsfFile.storage_path
-    rescue => e
-      error e.message
-    end
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
-  end
-
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of Project, @project3
-    assert_kind_of Role, @role
-    assert_kind_of DmsfFolder, @folder6
-  end
-
   def test_mkcol_requires_authentication
     process :mkcol, '/dmsf/webdav/test1'
     assert_response :unauthorized

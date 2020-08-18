@@ -26,56 +26,20 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   fixtures :projects, :users, :email_addresses, :dmsf_folders, :roles, :members, :member_roles,
            :dmsf_folder_permissions, :dmsf_locks
          
-  def setup
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
-    @project2 = Project.find 2
-    @project2.enable_module! :dmsf
-    @folder1 = DmsfFolder.find 1
-    @folder2 = DmsfFolder.find 2
-    @folder3 = DmsfFolder.find 3
-    @folder4 = DmsfFolder.find 4
-    @folder5 = DmsfFolder.find 5
-    @folder6 = DmsfFolder.find 6
-    @folder7 = DmsfFolder.find 7
-    @jsmith = User.find 2 # Manager
-    @dlopper = User.find 3 # Developer
-    @manager_role = Role.find_by(name: 'Manager')
-    @manager_role.add_permission! :view_dmsf_folders
-    developer_role = Role.find 2
-    developer_role.add_permission! :view_dmsf_folders
-    User.current = @jsmith
-  end
-
-  def test_truth
-    assert_kind_of DmsfFolder, @folder1
-    assert_kind_of DmsfFolder, @folder2
-    assert_kind_of DmsfFolder, @folder3
-    assert_kind_of DmsfFolder, @folder4
-    assert_kind_of DmsfFolder, @folder5
-    assert_kind_of DmsfFolder, @folder6
-    assert_kind_of DmsfFolder, @folder7
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of User, @jsmith
-    assert_kind_of User, @dlopper
-    assert_kind_of Role, @manager_role
-  end
-
   def test_visiblity
     # The role has got permissions
     User.current = @jsmith
-    assert_equal 7, DmsfFolder.where(project_id: 1).all.size
-    assert_equal 5, DmsfFolder.visible.where(project_id: 1).all.size
+    assert_equal 7, DmsfFolder.where(project_id: @project1.id).all.size
+    assert_equal 5, DmsfFolder.visible.where(project_id: @project1.id).all.size
     # The user has got permissions
     User.current = @dlopper
     # Hasn't got permissions for @folder7
     @folder7.dmsf_folder_permissions.where(object_type: 'User').delete_all
-    assert_equal 4, DmsfFolder.visible.where(project_id: 1).all.size
+    assert_equal 4, DmsfFolder.visible.where(project_id: @project1.id).all.size
     # Anonymous user
     User.current = User.anonymous
     @project1.add_default_member User.anonymous
-    assert_equal 5, DmsfFolder.visible.where(project_id: 1).all.size
+    assert_equal 5, DmsfFolder.visible.where(project_id: @project1.id).all.size
   end
 
   def test_permissions
@@ -210,10 +174,11 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_move_to
+    User.current = @jsmith
     assert @folder1.move_to(@project2, nil)
     assert_equal @project2, @folder1.project
     @folder1.dmsf_folders.each do |d|
-      assert_equal @project2, d.project
+      assert_equal @project2.identifier, d.project.identifier
     end
     @folder1.dmsf_files.each do |f|
       assert_equal @project2, f.project

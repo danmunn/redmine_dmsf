@@ -23,14 +23,7 @@ require File.expand_path('../../../test_helper', __FILE__)
 
 class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
 
-  def setup
-    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
-  end
-
-  def teardown
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
-  end
+  fixtures :users, :email_addresses, :projects, :members, :roles, :member_roles, :dmsf_folders, :dmsf_files
 
   def test_options_for_root_path
     process :options, '/'

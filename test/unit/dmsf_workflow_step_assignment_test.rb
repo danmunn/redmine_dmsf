@@ -31,11 +31,6 @@ class WorkflowStepAssignmentTest < RedmineDmsf::Test::UnitTest
     @wfsa2 = DmsfWorkflowStepAssignment.find 2
   end
   
-  def test_truth
-    assert_kind_of DmsfWorkflowStepAssignment, @wfsa1
-    assert_kind_of DmsfWorkflowStepAssignment, @wfsa2
-  end
-  
   def test_create
     wfsa = DmsfWorkflowStepAssignment.new
     wfsa.dmsf_workflow_step_id = 5

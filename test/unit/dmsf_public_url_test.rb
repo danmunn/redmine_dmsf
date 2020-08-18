@@ -23,24 +23,17 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfPublicUrlsTest < RedmineDmsf::Test::UnitTest
   
-  fixtures :dmsf_files, :dmsf_file_revisions, :dmsf_public_urls, :users
+  fixtures :dmsf_files, :dmsf_file_revisions, :dmsf_public_urls, :users, :email_addresses
 
   def setup
-    @file1 = DmsfFile.find 1
+    super
     @dmsf_public_url1 = DmsfPublicUrl.find 1
-    @user2 = User.find 2
   end
-  
-  def test_truth
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of DmsfPublicUrl, @dmsf_public_url1
-    assert_kind_of User, @user2
-  end
-  
+
   def test_create
     url = DmsfPublicUrl.new
     url.dmsf_file = @file1
-    url.user = @user2
+    url.user = @jsmith
     url.expire_at = DateTime.current + 1.day
     assert url.save, url.errors.full_messages.to_sentence
     assert_not_nil url.token

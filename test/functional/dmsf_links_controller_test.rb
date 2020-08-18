@@ -28,79 +28,39 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     :dmsf_file_revisions, :dmsf_folders, :dmsf_links, :roles, :member_roles
   
   def setup
-    @user_admin = User.find 1
-    @user_member = User.find 2
-    @user_non_member = User.find 3
-    @role_manager = Role.find_by(name: 'Manager')
-    assert_not_nil @role_manager
-    @role_manager.add_permission! :file_manipulation
-    @role_developer = Role.find_by(name: 'Developer')
-    assert_not_nil @role_developer
-    @role_developer.add_permission! :file_manipulation
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
-    @project2 = Project.find 2
-    @project2.enable_module! :dmsf    
-    @folder1 = DmsfFolder.find 1 # project1/folder1
-    @folder2 = DmsfFolder.find 2 # project1/folder1/folder2
-    @folder3 = DmsfFolder.find 3 # project2/folder3
-    @file1 = DmsfFile.find 1 # project1/file1
-    @file2 = DmsfFile.find 2 # project2/file2
-    @file4 = DmsfFile.find 4 # project1/folder2/file4
-    @file6 = DmsfFile.find 6 # project2/folder3/file6
+    super
     @file_link = DmsfLink.find 1
-    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1.id, folder_id: @folder1.id)
-    @request.session[:user_id] = @user_member.id
-    User.current = nil
-  end
-  
-  def test_truth
-    assert_kind_of User, @user_admin
-    assert_kind_of User, @user_member
-    assert_kind_of User, @user_non_member
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of Role, @role_manager
-    assert_kind_of Role, @role_developer
-    assert_kind_of DmsfFolder, @folder1
-    assert_kind_of DmsfFolder, @folder2
-    assert_kind_of DmsfFolder, @folder3
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of DmsfFile, @file2
-    assert_kind_of DmsfFile, @file4
-    assert_kind_of DmsfFile, @file6
-    assert_kind_of DmsfLink, @file_link
+    @request.session[:user_id] = @jsmith.id
   end
   
   def test_authorize_admin    
-    @request.session[:user_id] = @user_admin.id
+    @request.session[:user_id] = @admin.id
     get :new, params: { project_id: @project1.id }
     assert_response :success
     assert_template 'new'   
   end
 
   def test_authorize_non_member
-    @request.session[:user_id] = @user_non_member.id
+    @request.session[:user_id] = @someone.id
     get :new, params: { project_id: @project2.id }
     assert_response :forbidden
   end
     
   def test_authorize_member_ok
-    @request.session[:user_id] = @user_member.id
+    @request.session[:user_id] = @jsmith.id
     get :new, params: { project_id: @project1.id }
     assert_response :success
   end
   
   def test_authorize_member_no_module
     # Without the module
-    @project1.disable_module!(:dmsf)    
+    @project1.disable_module! :dmsf
     get :new, params: { project_id: @project1.id }
     assert_response :forbidden    
   end
   
   def test_authorize_forbidden
     # Without permissions
-    @project1.enable_module!(:dmsf)
     @role_manager.remove_permission! :file_manipulation
     get :new, params: { project_id: @project1.id }
     assert_response :forbidden    
@@ -113,7 +73,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_new_fast_links_enabled
-    member = Member.where(user_id: @user_member.id, project_id: @project1.id).first
+    member = Member.find_by(user_id: @jsmith.id, project_id: @project1.id)
     assert member
     member.update_attribute :dmsf_fast_links, true
     get :new, params: { project_id: @project1.id, type: 'link_to'}
@@ -344,7 +304,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     assert_difference 'DmsfLink.visible.count', -1 do
       delete :destroy, params: { project_id: @project1.id, id: @file_link.id }
     end
-    assert_redirected_to dmsf_folder_path(id: @project1.id, folder_id: @folder1.id)
+    assert_redirected_to dmsf_folder_path(id: @file_link&.project, folder_id: @file_link&.dmsf_folder)
   end
   
   def test_restore_forbidden
@@ -357,8 +317,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     
   def test_restore_ok
     # Permissions OK
-    @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1.id)        
-    @role_manager.add_permission! :file_manipulation
+    @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1.id)
     get :restore, params: { project_id: @project1.id, id: @file_link.id }
     assert_response :redirect
   end

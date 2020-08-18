@@ -297,7 +297,7 @@ class DmsfController < ApplicationController
     else
       flash[:error] = @folder.errors.full_messages.to_sentence
     end
-    redirect_to :back
+    redirect_back fallback_location: trash_dmsf_path(@project)
   end
 
   def edit_root

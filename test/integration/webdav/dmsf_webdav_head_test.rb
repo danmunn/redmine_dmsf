@@ -25,51 +25,7 @@ require File.expand_path('../../../test_helper', __FILE__)
 class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
 
   fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles, 
-    :enabled_modules, :dmsf_folders
-
-  def setup  
-    @admin = credentials 'admin'
-    @jsmith = credentials 'jsmith'
-    @project1 = Project.find 1
-    @project1.enable_module! 'dmsf'
-    @project2 = Project.find 2
-    @project3 = Project.find 3
-    @folder10 = DmsfFolder.find 10
-    @file12 = DmsfFile.find 12
-    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
-    @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    @dmsf_webdav_use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    @project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
-    FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
-    User.current = nil    
-  end
-
-  def teardown
-    # Delete our tmp folder
-    begin
-      FileUtils.rm_rf DmsfFile.storage_path
-    rescue => e
-      error e.message
-    end
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
-  end
-  
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of Project, @project3
-    assert_kind_of DmsfFolder, @folder10
-    assert_kind_of DmsfFile, @file12
-  end
+    :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def test_head_requires_authentication
     head "/dmsf/webdav/#{@project1.identifier}"
@@ -81,7 +37,7 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
     assert_response :success
     check_headers_exist
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
     head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
     assert_response :not_found
     head "/dmsf/webdav/#{@project1_uri}", params: nil, headers: @admin
@@ -96,8 +52,8 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
   def test_head_responds_to_file
     head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
     assert_response :success
-    check_headers_exist # Note it'll allow 1 out of the 3 expected to fail
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
+    check_headers_exist
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
     head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
     assert_response :not_found
     head "/dmsf/webdav/#{@project1_uri}/test.txt", params: nil, headers: @admin
@@ -141,48 +97,13 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_head_file_in_subproject
-      @project3.enable_module! :dmsf # Flag module enabled
-      head "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: nil, headers: @admin
-      assert_response :success
-    end
-
-  def test_head_folder_in_subproject
-    @project3.enable_module! :dmsf # Flag module enabled
-    head "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil, headers: @admin
+    head "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: nil, headers: @admin
     assert_response :success
   end
 
-  private
-
-  def check_headers_exist
-    assert !(response.headers.nil? || response.headers.empty?),
-      'Head returned without headers' # Headers exist?
-    values = {}
-    values[:etag] = { optional: true, content: response.headers['Etag'] }
-    values[:content_type] = response.headers['Content-Type']
-    values[:last_modified] = { optional: true, content: response.headers['Last-Modified'] }
-    single_optional = false
-    values.each do |key,val|
-      if val.is_a?(Hash)
-        if val[:optional].nil? || !val[:optional]
-           assert(!(val[:content].nil? || val[:content].empty?), "Expected header #{key} was empty." ) if single_optional
-        else
-          single_optional = true
-        end
-      else
-        assert !(val.nil? || val.empty?), "Expected header #{key} was empty."
-      end
-    end
-  end
-
-  def check_headers_dont_exist
-    assert !(response.headers.nil? || response.headers.empty?), 'Head returned without headers' # Headers exist?
-    values = {}
-    values[:etag] = response.headers['Etag']
-    values[:last_modified] = response.headers['Last-Modified']
-    values.each do |key,val|
-      assert (val.nil? || val.empty?), "Expected header #{key} should be empty."
-    end
+  def test_head_folder_in_subproject
+    head "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil, headers: @admin
+    assert_response :success
   end
 
 end

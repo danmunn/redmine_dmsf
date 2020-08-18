@@ -27,33 +27,6 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles, 
     :enabled_modules, :dmsf_folders
 
-  def setup
-    @admin = credentials 'admin'
-    @jsmith = credentials 'jsmith'
-    @project1 = Project.find 1
-    @project2 = Project.find 2
-    @project3 = Project.find 3
-    @project3.enable_module! :dmsf
-    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
-    @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    @dmsf_webdav_use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-  end
-
-  def teardown
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
-  end
-
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of Project, @project3
-  end
-
   def test_options_requires_no_authentication_for_root_level
     process :options, '/dmsf/webdav'
     assert_response :success

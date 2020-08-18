@@ -29,7 +29,6 @@ module RedmineDmsf
       include Redmine::I18n
 
       def initialize(path, request, response, options)
-        puts ">>> initialize for #{path}"
         @folder = nil
         @file = nil
         @subproject = nil
@@ -453,14 +452,8 @@ module RedmineDmsf
 
       # Lock
       def lock(args)
-        puts ">>> lock: #{parent.nil?}, #{parent.projectless_path}, #{parent.exist?}"
-        puts ">>> projectless_path: #{parent.projectless_path}"
         if parent.nil? || ((parent.projectless_path != '/') && (!parent.exist?))
           e = DAV4Rack::LockFailure.new
-          puts ">>> Conflict 1"
-          puts ">>> #{@path}"
-          puts ">>> #{parent&.name}"
-          puts ">>> #{parent&.exist?}"
           e.add_failure @path, Conflict
           raise e
         end
@@ -525,14 +518,7 @@ module RedmineDmsf
       # Token based unlock (authenticated) will ensure that a correct token is sent, further ensuring
       # ownership of token before permitting unlock
       def unlock(token)
-        unless exist?
-          puts ">>> exists? => false"
-          puts ">>> #{subproject&.name}"
-          puts ">>> #{folder&.title}"
-          puts ">>> #{file&.name}"
-          puts ">>> #{project&.name}"
-          return NotFound
-        end
+        return NotFound unless exist?
         if token.nil? || token.empty? || (token == '<(null)>') || User.current.anonymous?
           BadRequest
         else

@@ -27,64 +27,6 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
 
   fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles,
     :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
-    
-  def setup
-    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
-    FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
-    @admin = credentials 'admin'
-    @jsmith = credentials 'jsmith'
-    @jsmith_user = User.find_by(login: 'jsmith')
-    @admin_user = User.find_by(login: 'admin')
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
-    @project2 = Project.find 2
-    @project2.enable_module! :dmsf
-    @project3 = Project.find 3
-    @project3.enable_module! :dmsf
-    @file1 = DmsfFile.find 1
-    @file10 = DmsfFile.find 10
-    @file12 = DmsfFile.find 12
-    @folder1 = DmsfFolder.find 1
-    @folder10 = DmsfFolder.find 10
-    @role = Role.find 1
-    @role.add_permission! :view_dmsf_folders
-    @role.add_permission! :folder_manipulation
-    @role.add_permission! :file_manipulation
-    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
-    @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    @dmsf_webdav_use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-  end
-
-  def teardown
-    # Delete our tmp folder
-    begin
-      FileUtils.rm_rf DmsfFile.storage_path
-    rescue => e
-      error e.message
-    end
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
-  end
-
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of Project, @project3
-    assert_kind_of Role, @role
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of DmsfFile, @file10
-    assert_kind_of DmsfFile, @file12
-    assert_kind_of DmsfFolder, @folder1
-    assert_kind_of DmsfFolder, @folder10
-    assert_kind_of User, @jsmith_user
-    assert_kind_of User, @admin_user
-  end
 
   def test_move_denied_for_anonymous
     new_name = "#{@file1.name}.moved"

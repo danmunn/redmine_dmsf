@@ -23,25 +23,12 @@
 require File.expand_path('../../test_helper.rb', __FILE__)
 
 class DmsfLockTest < RedmineDmsf::Test::UnitTest  
-  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, 
-    :dmsf_file_revisions, :roles, :members, :member_roles, :enabled_modules, 
-    :enumerations, :dmsf_locks
+  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles,
+           :members, :member_roles, :enabled_modules, :enumerations, :dmsf_locks
 
   def setup
+    super
     @lock = DmsfLock.find 1
-    @folder2 = DmsfFolder.find 2
-    @folder7 = DmsfFolder.find 7
-    @file4 = DmsfFile.find 4
-    @jsmith = User.find 2
-    @admin = User.find 1
-  end
-
-  def test_truth
-    assert_kind_of DmsfLock, @lock
-    assert_kind_of DmsfFile, @file4
-    assert_kind_of DmsfFolder, @folder2
-    assert_kind_of User, @jsmith
-    assert_kind_of User, @admin
   end
 
   def test_lock_type_is_enumerable
@@ -114,7 +101,6 @@ class DmsfLockTest < RedmineDmsf::Test::UnitTest
       end
     end
     @folder2.lock!
-    User.current = nil
   end
 
   def test_expired

@@ -23,27 +23,13 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfLinksTest < RedmineDmsf::Test::UnitTest
   
-  fixtures :projects, :members, :dmsf_files, :dmsf_file_revisions, 
-    :dmsf_folders, :dmsf_links
+  fixtures :users, :email_addresses, :roles, :projects, :members, :member_roles, :dmsf_files,
+           :dmsf_file_revisions, :dmsf_folders, :dmsf_links
 
   def setup
-    @project1 = Project.find 1
-    @folder1 = DmsfFolder.find 1
-    @folder2 = DmsfFolder.find 2
-    @file1 = DmsfFile.find 1
-    @file4 = DmsfFile.find 4
+    super
     @folder_link = DmsfLink.find 1
     @file_link = DmsfLink.find 2
-  end
-  
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of DmsfFolder, @folder1
-    assert_kind_of DmsfFolder, @folder2
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of DmsfFile, @file4
-    assert_kind_of DmsfLink, @folder_link
-    assert_kind_of DmsfLink, @file_link
   end
 
   def test_create_folder_link

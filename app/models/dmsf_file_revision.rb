@@ -315,7 +315,6 @@ class DmsfFileRevision < ActiveRecord::Base
   def create_digest
     begin
       self.digest = Digest::SHA256.file(path).hexdigest
-      puts ">>> #{self.digest}, #{self.digest.lengt}"
     rescue => e
       Rails.logger.error e.message
       self.digest = 0

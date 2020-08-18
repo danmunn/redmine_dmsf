@@ -32,12 +32,6 @@ class DmsfWorkflowStepActionTest < RedmineDmsf::Test::UnitTest
     @wfsac3 = DmsfWorkflowStepAction.find 3
   end
   
-  def test_truth
-    assert_kind_of DmsfWorkflowStepAction, @wfsac1
-    assert_kind_of DmsfWorkflowStepAction, @wfsac2
-    assert_kind_of DmsfWorkflowStepAction, @wfsac3
-  end
-  
   def test_create
     wfsac = DmsfWorkflowStepAction.new
     wfsac.dmsf_workflow_step_assignment_id = 1

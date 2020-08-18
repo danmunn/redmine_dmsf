@@ -24,43 +24,18 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   include Redmine::I18n
 
-  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles, :members,
-           :member_roles, :enabled_modules, :enumerations, :dmsf_locks, :dmsf_workflows, :dmsf_workflow_steps,
+  fixtures :projects, :users, :email_addresses, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :roles,
+           :members, :member_roles, :enabled_modules, :enumerations, :dmsf_locks, :dmsf_workflows, :dmsf_workflow_steps,
            :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions
          
   def setup
+    super
     @revision1 = DmsfFileRevision.find 1
     @revision2 = DmsfFileRevision.find 2
     @revision3 = DmsfFileRevision.find 3
     @revision5 = DmsfFileRevision.find 5
     @revision8 = DmsfFileRevision.find 8
     @wf1 = DmsfWorkflow.find 1
-    @admin = User.find 1
-    @jsmith = User.find 2
-    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
-    FileUtils.cp_r File.join(File.expand_path('../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
-  end
-
-  def teardown
-    # Delete our tmp folder
-    begin
-      FileUtils.rm_rf DmsfFile.storage_path
-    rescue => e
-      error e.message
-    end
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
-  end
-  
-  def test_truth
-    assert_kind_of DmsfFileRevision, @revision1
-    assert_kind_of DmsfFileRevision, @revision2
-    assert_kind_of DmsfFileRevision, @revision3
-    assert_kind_of DmsfFileRevision, @revision5
-    assert_kind_of DmsfFileRevision, @revision8
-    assert_kind_of DmsfWorkflow, @wf1
-    assert_kind_of User, @admin
-    assert_kind_of User, @jsmith
   end
 
   def test_delete_restore

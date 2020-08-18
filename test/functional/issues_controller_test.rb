@@ -28,35 +28,9 @@ class IssuesControllerTest < RedmineDmsf::Test::TestCase
            :enabled_modules, :enumerations, :issue_statuses
 
   def setup
-    @user_manager = User.find 2
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
-    @project1.enable_module! :issue_tracking
-    @project2 = Project.find 2
-    @project2.enable_module! :dmsf
-    @project2.enable_module! :issue_tracking
+    super
     @issue1 = Issue.find 1
-    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
-    FileUtils.cp_r File.join(File.expand_path('../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
-    User.current = nil
-    @request.session[:user_id] = @user_manager.id
-  end
-
-  def teardown
-    # Delete our tmp folder
-    begin
-      FileUtils.rm_rf DmsfFile.storage_path
-    rescue => e
-      error e.message
-    end
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
-  end
-  
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of Issue, @issue1
+    @request.session[:user_id] = @jsmith.id
   end
 
   def test_put_update_with_project_change

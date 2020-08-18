@@ -29,56 +29,24 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     :dmsf_file_revisions, :dmsf_files
 
   def setup
-    @user_admin = User.find 1 # Redmine admin
-    @user_member = User.find 2 # John Smith - manager
-    @user_non_member = User.find 3 # Dave Lopper
-    @role_manager = Role.find_by(name: 'Manager')
-    @role_manager.add_permission! :file_manipulation
-    @role_manager.add_permission! :manage_workflows
-    @role_manager.add_permission! :file_approval
-    @role_manager.add_permission! :view_dmsf_files
+    super
     @wfs1 = DmsfWorkflowStep.find 1 # step 1
     @wfs2 = DmsfWorkflowStep.find 2 # step 2
     @wfs3 = DmsfWorkflowStep.find 3 # step 1
     @wfs4 = DmsfWorkflowStep.find 4 # step 2
     @wfs5 = DmsfWorkflowStep.find 5 # step 3
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
     @wf1 = DmsfWorkflow.find 1
     @wf3 = DmsfWorkflow.find 3
     @wfsa2 = DmsfWorkflowStepAssignment.find 2
     @revision1 = DmsfFileRevision.find 1
     @revision2 = DmsfFileRevision.find 2
-    @file1 = DmsfFile.find 1
-    @file2 = DmsfFile.find 2
     @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1.id)
-    User.current = nil
-    @request.session[:user_id] = @user_member.id
-  end
-
-  def test_truth
-    assert_kind_of User, @user_admin
-    assert_kind_of User, @user_member
-    assert_kind_of User, @user_non_member
-    assert_kind_of Role, @role_manager
-    assert_kind_of DmsfWorkflowStep, @wfs1
-    assert_kind_of DmsfWorkflowStep, @wfs2
-    assert_kind_of DmsfWorkflowStep, @wfs3
-    assert_kind_of DmsfWorkflowStep, @wfs4
-    assert_kind_of DmsfWorkflowStep, @wfs5
-    assert_kind_of Project, @project1
-    assert_kind_of DmsfWorkflow, @wf1
-    assert_kind_of DmsfWorkflow, @wf3
-    assert_kind_of DmsfWorkflowStepAssignment, @wfsa2
-    assert_kind_of DmsfFileRevision, @revision1
-    assert_kind_of DmsfFileRevision, @revision2
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of DmsfFile, @file2
+    @request.session[:user_id] = @jsmith.id
   end
 
   def test_authorize_admin
     # Admin
-    @request.session[:user_id] = @user_admin.id
+    @request.session[:user_id] = @admin.id
     get :index
     assert_response :success
     assert_template 'index'
@@ -86,7 +54,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
 
   def test_authorize_member
     # Non member
-    @request.session[:user_id] = @user_non_member.id
+    @request.session[:user_id] = @someone.id
     get :index, params: { project_id: @project1.id }
     assert_response :forbidden
   end
@@ -136,7 +104,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_index_administration
-    @request.session[:user_id] = @user_admin.id
+    @request.session[:user_id] = @admin.id
     get :index
     assert_response :success
     assert_template 'index'
@@ -161,7 +129,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_unlock
-    @request.session[:user_id] = @user_admin.id
+    @request.session[:user_id] = @admin.id
     put :update, params: { id: @wf3.id, dmsf_workflow: { status: DmsfWorkflow::STATUS_ACTIVE }}
     @wf3.reload
     assert @wf3.active?, "#{@wf3.name} status is #{@wf3.status}"
@@ -197,14 +165,14 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   def test_add_step
     assert_difference 'DmsfWorkflowStep.count', +1 do
       post :add_step, params: { commit: l(:dmsf_or), step: 1, name: '1st step', id: @wf1.id,
-           user_ids: [@user_non_member.id] }
+           user_ids: [@someone.id] }
     end
     assert_response :success
     ws = DmsfWorkflowStep.order(id: :desc).first
     assert_equal @wf1.id, ws.dmsf_workflow_id
     assert_equal 1, ws.step
     assert_equal '1st step', ws.name
-    assert_equal @user_non_member.id, ws.user_id
+    assert_equal @someone.id, ws.user_id
     assert_equal DmsfWorkflowStep::OPERATOR_OR, ws.operator
   end
 
@@ -329,14 +297,14 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       id: @wf1.id,
       dmsf_workflow_step_assignment_id: @wfsa2.id,
       dmsf_file_revision_id: @revision2.id,
-      step_action: @user_admin.id * 10,
+      step_action: @admin.id * 10,
       note: 'Delegated because...'})
     assert_redirected_to dmsf_folder_path(id: @project1.id)
     assert DmsfWorkflowStepAction.where(
       dmsf_workflow_step_assignment_id: @wfsa2.id,
       action: DmsfWorkflowStepAction::ACTION_DELEGATE).first
     @wfsa2.reload
-    assert_equal @wfsa2.user_id, @user_admin.id
+    assert_equal @wfsa2.user_id, @admin.id
   end
 
   def test_assign
@@ -398,10 +366,10 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
         id: @wf1,
         step: '1',
         operator_step: { @wfs1.id.to_s => DmsfWorkflowStep::OPERATOR_OR.to_s },
-        assignee: { @wfs1.id.to_s => @user_non_member.id.to_s }}
+        assignee: { @wfs1.id.to_s => @someone.id.to_s }}
     assert_response :redirect
     @wfs1.reload
-    assert_equal @user_non_member.id, @wfs1.user_id
+    assert_equal @someone.id, @wfs1.user_id
   end
 
   def test_delete_step
@@ -415,27 +383,27 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_log_non_member
-    @request.session[:user_id] = @user_non_member.id
+    @request.session[:user_id] = @someone.id
     get :log, params: { id: @wf1.id, project_id: @project1.id, dmsf_file_id: @file1.id, format: 'js' }, xhr: true
     assert_response :forbidden
   end
 
   def test_log_member_local_wf
-    @request.session[:user_id] = @user_member.id
+    @request.session[:user_id] = @jsmith.id
     get :log, params: { id: @wf1.id, project_id: @project1.id, dmsf_file_id: @file1.id, format: 'js' }, xhr: true
     assert_response :success
     assert_template :log
   end
 
   def test_log_member_global_wf
-    @request.session[:user_id] = @user_member.id
+    @request.session[:user_id] = @jsmith.id
     get :log, params: { id: @wf3.id, project_id: @project1.id, dmsf_file_id: @file1.id, format: 'js' }, xhr: true
     assert_response :success
     assert_template :log
   end
 
   def test_log_admin
-    @request.session[:user_id] = @user_admin.id
+    @request.session[:user_id] = @admin.id
     get :log, params: { id: @wf1.id, project_id: @project1.id, dmsf_file_id: @file1.id, format: 'js' }, xhr: true
     assert_response :success
     assert_template :log

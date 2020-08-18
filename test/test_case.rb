@@ -29,26 +29,70 @@ module RedmineDmsf
       # Ultimately it allows for better integration without blowing redmine fixtures up,
       # and allowing us to suppliment redmine fixtures if we need to.
       def self.fixtures(*table_names)
-        dir = File.join( File.dirname(__FILE__), '/fixtures')
+        dir = File.join(File.dirname(__FILE__), 'fixtures')
         table_names.each do |x|
-          ActiveRecord::FixtureSet.create_fixtures(dir, x) if File.exist?("#{dir}/#{x}.yml")
+          ActiveRecord::FixtureSet.create_fixtures(dir, x) if File.exist?(File.join(dir, "#{x}.yml"))
         end
-        super(table_names)
+        super table_names
       end
 
       def setup
-        if ::Rails::VERSION::MAJOR >= 5
-          if ::Rails::VERSION::MINOR >= 1
-            @request = ActionController::TestRequest.create(self.class.controller_class)
-          else
-            @request = ActionController::TestRequest.create
-          end
-        else
-          @request = ActionController::TestRequest.new
+        @admin = User.find_by(login: 'admin')
+        @jsmith = User.find_by(login: 'jsmith')
+        @dlopper = User.find_by(login: 'dlopper')
+        @someone = User.find_by(login: 'someone')
+        @project1 = Project.find 1
+        Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
+        @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+        @project1_uri = Addressable::URI.escape(@project1_name)
+        @project2 = Project.find 2
+        @project3 = Project.find 3
+        [@project1, @project2, @project3].each do |project|
+          project.enable_module! :dmsf
+          project.enable_module! :issue_tracking
         end
-        @response = ActionController::TestResponse.new
+        @file1 = DmsfFile.find 1
+        @file2 = DmsfFile.find 2
+        @file6 = DmsfFile.find 6
+        @file9 = DmsfFile.find 9
+        @file10 = DmsfFile.find 10
+        @file12 = DmsfFile.find 12
+        @folder1 = DmsfFolder.find 1
+        @folder2 = DmsfFolder.find 2
+        @folder3 = DmsfFolder.find 3
+        @folder4 = DmsfFolder.find 4
+        @folder5 = DmsfFolder.find 5
+        @folder6 = DmsfFolder.find 6
+        @folder7 = DmsfFolder.find 7
+        @role_manager = Role.find_by(name: 'Manager')
+        @role_developer = Role.find_by(name: 'Developer')
+        [@role_manager, @role_developer].each do |role|
+          role.add_permission! :view_dmsf_folders
+          role.add_permission! :folder_manipulation
+          role.add_permission! :view_dmsf_files
+          role.add_permission! :file_manipulation
+          role.add_permission! :file_delete
+          role.add_permission! :email_documents
+          role.add_permission! :manage_workflows
+          role.add_permission! :file_approval
+        end
+        Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
+        Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
+        Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
+        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
+        FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
+        User.current = nil
       end
-      
+
+      def teardown
+        # Delete our tmp folder
+        begin
+          FileUtils.rm_rf DmsfFile.storage_path
+        rescue => e
+          error e.message
+        end
+      end
+
     end
   end
 end

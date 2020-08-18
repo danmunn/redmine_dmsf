@@ -28,34 +28,13 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
            :dmsf_files, :dmsf_file_revisions, :dmsf_links
 
   def setup
-    @user_member = User.find 2 # John Smith - manager
-    @user_member3 = User.find 3 # Foo
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
-    @file1 = DmsfFile.find 1
-    @folder1 = DmsfFolder.find 1
-    @folder5 = DmsfFolder.find 5
+    super
     @file_link2 = DmsfLink.find 2
     @file_link6 = DmsfLink.find 6
     @folder_link1 = DmsfLink.find 1
     @url_link5 = DmsfLink.find 5
     User.current = nil
-    @request.session[:user_id] = @user_member.id
-    @role1 = Role.find 1 # Manager
-  end
-  
-  def test_truth
-    assert_kind_of User, @user_member
-    assert_kind_of User, @user_member3
-    assert_kind_of Project, @project1
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of DmsfFolder, @folder1
-    assert_kind_of DmsfFolder, @folder5
-    assert_kind_of DmsfLink, @file_link2
-    assert_kind_of DmsfLink, @file_link6
-    assert_kind_of DmsfLink, @folder_link1
-    assert_kind_of DmsfLink, @url_link5
-    assert_kind_of Role, @role1
+    @request.session[:user_id] = @jsmith.id
   end
 
   def test_dmsf_file
@@ -71,8 +50,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file_locked
-    @file1.lock!
-    get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
+    get :dmsf, params: { id: @file2.project.id, ids: ["file-#{@file2.id}"] }
     assert_response :success
     assert_select 'a.icon-edit.disabled', text: l(:button_edit)
     assert_select 'a.icon-unlock', text: l(:button_unlock)
@@ -82,23 +60,14 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file_locked_force_unlock_permission_off
-    l = @file1.lock!
-    l.user = @user_member3
-    l.save
-    @role1.remove_permission! :force_file_unlock
-    @role1.add_permission! :file_manipulation
-    get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
+    get :dmsf, params: { id: @file2.project.id, ids: ["file-#{@file2.id}"] }
     assert_response :success
     assert_select 'a.icon-unlock.disabled', text: l(:button_unlock)
   end
 
   def test_dmsf_file_locked_force_unlock_permission_on
-    l = @file1.lock!
-    l.user = @user_member3
-    l.save
-    @role1.add_permission! :force_file_unlock
-    @role1.add_permission! :file_manipulation
-    get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
+    @role_developer.add_permission! :force_file_unlock
+    get :dmsf, params: { id: @file2.project.id, ids: ["file-#{@file2.id}"] }
     assert_response :success
     assert_select 'a.icon-unlock.disabled', text: l(:button_unlock), count: 0
   end
@@ -112,7 +81,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file_manipulation_permission_off
-    @role1.remove_permission! :file_manipulation
+    @role_manager.remove_permission! :file_manipulation
     get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_select 'a.icon-edit.disabled', text: l(:button_edit)
@@ -122,7 +91,6 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file_manipulation_permission_on
-    @role1.add_permission! :file_manipulation
     get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_select 'a:not(icon-edit.disabled)', text: l(:button_edit)
@@ -132,28 +100,27 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file_email_permission_off
-    @role1.remove_permission! :email_document
+    @role_manager.remove_permission! :email_documents
     get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_select 'a.icon-email.disabled', text: l(:field_mail)
   end
 
   def test_dmsf_file_email_permission_on
-    @role1.remove_permission! :email_document
+    @role_manager.remove_permission! :email_document
     get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_select 'a:not(icon-email.disabled)', text: l(:field_mail)
   end
 
   def test_dmsf_file_delete_permission_off
-    @role1.remove_permission! :file_delete
+    @role_manager.remove_permission! :file_manipulation
     get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_select 'a.icon-del.disabled', text: l(:button_delete)
   end
 
   def test_dmsf_file_delete_permission_on
-    @role1.remove_permission! :file_delete
     get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_select 'a:not(icon-del.disabled)', text: l(:button_delete)
@@ -229,7 +196,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_folder_manipulation_permmissions_off
-    @role1.remove_permission! :folder_manipulation
+    @role_manager.remove_permission! :folder_manipulation
     get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
     assert_response :success
     assert_select 'a.icon-edit.disabled', text: l(:button_edit)
@@ -239,8 +206,6 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_folder_manipulation_permmissions_on
-    @role1.add_permission! :folder_manipulation
-    #assert !@folder5.locked?
     get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
     assert_response :success
     assert_select 'a:not(icon-edit.disabled)', text: l(:button_edit)
@@ -250,14 +215,13 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_folder_email_permmissions_off
-    @role1.remove_permission! :email_documents
+    @role_manager.remove_permission! :email_documents
     get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
     assert_response :success
     assert_select 'a.icon-email.disabled', text: l(:field_mail)
   end
 
   def test_dmsf_folder_email_permmissions_on
-    @role1.add_permission! :email_documents
     get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
     assert_response :success
     assert_select 'a:not(icon-email.disabled)', text: l(:field_mail)
@@ -306,7 +270,8 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_trash_file_manipulation_permissions_off
-    @role1.remove_permission! :file_manipulation
+    @role_manager.remove_permission! :file_delete
+    @role_manager.remove_permission! :file_manipulation
     get :trash, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_select 'a.icon-cancel.disabled', text: l(:title_restore)
@@ -314,7 +279,6 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_trash_file_manipulation_permissions_on
-    @role1.add_permission! :file_manipulation
     get :trash, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_select 'a:not(icon-cancel.disabled)', text: l(:title_restore)
@@ -322,14 +286,13 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_trash_file_delete_permissions_off
-    @role1.remove_permission! :file_delete
+    @role_manager.remove_permission! :file_delete
     get :trash, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_select 'a.icon-del.disabled', text: l(:button_delete)
   end
 
   def test_trash_file_delete_permissions_on
-    @role1.add_permission! :file_delete
     get :trash, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_select 'a:not(icon-del.disabled)', text: l(:button_delete)
@@ -343,7 +306,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_trash_folder_manipulation_permissions_off
-    @role1.remove_permission! :folder_manipulation
+    @role_manager.remove_permission! :folder_manipulation
     get :trash, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
     assert_response :success
     assert_select 'a.icon-cancel.disabled', text: l(:title_restore)
@@ -351,7 +314,6 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_trash_folder_manipulation_permissions_on
-    @role1.add_permission! :folder_manipulation
     get :trash, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
     assert_response :success
     assert_select 'a:not(icon-cancel.disabled)', text: l(:title_restore)

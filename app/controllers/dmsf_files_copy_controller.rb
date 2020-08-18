@@ -38,8 +38,8 @@ class DmsfFilesCopyController < ApplicationController
 
   def copy
     new_file = @file.copy_to(@target_project, @target_folder)
-    unless new_file.errors.empty?
-      flash[:error] = new_file.errors.full_messages.to_sentence
+    if new_file.nil? || new_file.errors.present?
+      flash[:error] = new_file ? new_file.errors.full_messages.to_sentence : @file.errors.full_messages.to_sentence
       redirect_to action: 'new', id: @file, target_project_id: @target_project, target_folder_id: @target_folder
       return
     end

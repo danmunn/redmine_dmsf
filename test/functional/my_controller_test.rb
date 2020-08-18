@@ -29,15 +29,8 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
            :dmsf_files, :dmsf_locks
 
   def setup
-    @admin = User.find 1
-    @jsmith = User.find 2
-    User.current = nil
+    super
     @request.session[:user_id] = @jsmith.id    
-  end 
-  
-  def test_truth
-    assert_kind_of User, @admin
-    assert_kind_of User, @jsmith    
   end
 
   def test_page_with_open_approvals_one_approval

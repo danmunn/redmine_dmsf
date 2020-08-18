@@ -28,67 +28,20 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
   fixtures :projects, :users, :email_addresses, :members, :member_roles, :roles, 
     :enabled_modules, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
-  def setup
-    @admin = credentials 'admin'
-    @jsmith = credentials 'jsmith'
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
-    @project2 = Project.find 2
-    @project2.enable_module! :dmsf
-    @project3 = Project.find 3
-    @project3.enable_module! :dmsf
-    @folder1 = DmsfFolder.find 1
-    @folder6 = DmsfFolder.find 6
-    @folder10 = DmsfFolder.find 10
-    @file1 = DmsfFile.find 1
-    @file9 = DmsfFile.find 9
-    @file10 = DmsfFile.find 10
-    @file12 = DmsfFile.find 12
-    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
-    @dmsf_webdav_strategy = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    # Temporarily enable project names to generate names for project1
-    @dmsf_webdav_use_project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-    @project1_uri = Addressable::URI.escape(@project1_name)
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = false
-  end
-
-  def teardown
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = @dmsf_webdav_strategy
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = @dmsf_webdav_use_project_names
-  end
-
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of Project, @project3
-    assert_kind_of DmsfFolder, @folder1
-    assert_kind_of DmsfFolder, @folder6
-    assert_kind_of DmsfFolder, @folder10
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of DmsfFile, @file9
-    assert_kind_of DmsfFile, @file10
-    assert_kind_of DmsfFile, @file12
-  end
-
   def test_propfind_denied_for_anonymous
-    process :propfind, '/dmsf/webdav/', params: nil, headers: { HTTP_DEPTH: '0' }
+    process :propfind, '/dmsf/webdav/', params: nil, headers: @anonymous.merge!({ HTTP_DEPTH: '0' })
     assert_response :unauthorized
   end
 
-  def test_propfind_depth0_on_root_for_non_member
+  def test_propfind_depth0_on_root_for_user
     process :propfind, '/dmsf/webdav/', params: nil, headers: @jsmith.merge!({ HTTP_DEPTH: '0' })
     assert_response :multi_status
     assert response.body.include?('<d:href>http://www.example.com:80/dmsf/webdav/</d:href>')
     assert response.body.include?('<d:displayname>/</d:displayname>')
   end
 
-  def test_propfind_depth1_on_root_for_non_member
-    process :propfind, '/dmsf/webdav/', params: nil, headers: @jsmith.merge!({ HTTP_DEPTH: '1' })
+  def test_propfind_depth1_on_root_for_user
+    process :propfind, '/dmsf/webdav/', params: nil, headers: @someone.merge!({ HTTP_DEPTH: '1' })
     assert_response :multi_status
     assert response.body.include?('<d:href>http://www.example.com:80/dmsf/webdav/</d:href>')
     assert response.body.include?( '<d:displayname>/</d:displayname>')
@@ -116,19 +69,19 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_propfind_depth0_on_project1_for_non_member
-    process :propfind, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @jsmith.merge!({ HTTP_DEPTH: '0' })
+    process :propfind, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @someone.merge!({ HTTP_DEPTH: '0' })
     assert_response :success
   end
 
   def test_propfind_depth0_on_folder1_for_non_member
     process :propfind, "/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}", params: nil,
-            headers: @jsmith.merge!({ HTTP_DEPTH: '0' })
+            headers: @someone.merge!({ HTTP_DEPTH: '0' })
     assert_response :not_found
   end
 
   def test_propfind_depth0_on_file1_for_non_member
     process :propfind, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
-            headers: @jsmith.merge!({ HTTP_DEPTH: '0' })
+            headers: @someone.merge!({ HTTP_DEPTH: '0' })
     assert_response :not_found
   end
 

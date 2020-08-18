@@ -26,24 +26,8 @@ class DmsfFolderPermissionsControllerTest < RedmineDmsf::Test::TestCase
            :email_addresses
 
   def setup
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
-    @folder7 = DmsfFolder.find 7
-    @manager = User.find 2
-    @developer = User.find 3
-    @manager_role = Role.find 1
-    User.current = nil
-    @request.session[:user_id] = @manager.id
-    @manager_role.add_permission! :view_dmsf_folders
-    @manager_role.add_permission! :folder_manipulation
-  end
-
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of DmsfFolder, @folder7
-    assert_kind_of User, @manager
-    assert_kind_of User, @developer
-    assert_kind_of Role, @manager_role
+    super
+    @request.session[:user_id] = @jsmith.id
   end
 
   def test_new
@@ -57,11 +41,11 @@ class DmsfFolderPermissionsControllerTest < RedmineDmsf::Test::TestCase
     get :autocomplete_for_user, params: { project_id: @project1, dmsf_folder_id: @folder7, q: 'smi', format: 'js' },
         xhr: true
     assert_response :success
-    assert_include 'John Smith', response.body
+    assert_include @jsmith.name, response.body
   end
 
   def test_append
-    get :new, params: { project_id: @project1, dmsf_folder_id: @folder7, user_ids: [@manager.id], format: 'js' },
+    get :new, params: { project_id: @project1, dmsf_folder_id: @folder7, user_ids: [@jsmith.id], format: 'js' },
         xhr: true
     assert_response :success
     assert_template 'new'

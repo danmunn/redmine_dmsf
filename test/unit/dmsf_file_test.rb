@@ -28,42 +28,10 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
            :dmsf_workflow_step_assignments
 
   def setup
-    @admin = User.find 1
-    @jsmith = User.find 2
-    @project1 = Project.find 1
-    @project2 = Project.find 2
-    @file1 = DmsfFile.find 1
-    @file2 = DmsfFile.find 2
-    @file3 = DmsfFile.find 3
-    @file4 = DmsfFile.find 4
-    @file5 = DmsfFile.find 5
-    @file6 = DmsfFile.find 6
-    @file7 = DmsfFile.find 7
-    @file8 = DmsfFile.find 8
-    @folder1 = DmsfFolder.find 1
+    super
     @issue1 = Issue.find 1
     @wf1 = DmsfWorkflow.find 1
     @wf2 = DmsfWorkflow.find 2
-    User.current = nil
-  end
-
-  def test_truth
-    assert_kind_of User, @admin
-    assert_kind_of User, @jsmith
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of DmsfFile, @file2
-    assert_kind_of DmsfFile, @file3
-    assert_kind_of DmsfFile, @file4
-    assert_kind_of DmsfFile, @file5
-    assert_kind_of DmsfFile, @file6
-    assert_kind_of DmsfFile, @file7
-    assert_kind_of DmsfFile, @file8
-    assert_kind_of DmsfFolder, @folder1
-    assert_kind_of Issue, @issue1
-    assert_kind_of DmsfWorkflow, @wf1
-    assert_kind_of DmsfWorkflow, @wf2
   end
 
   def test_project_file_count_differs_from_project_visibility_count
@@ -94,20 +62,12 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
 
   def test_file_locked_is_not_locked_for_user_who_locked
     User.current = @admin
-    @file1.lock!
-    assert !@file1.locked_for_user?,
-      "#{@file1.name} is locked for #{User.current}"
-    @file1.unlock!
+    assert !@file2.locked_for_user?, "#{@file2.name} is locked for #{User.current}"
   end
 
   def test_file_locked_is_locked_for_user_who_didnt_lock
-    User.current = @admin
-    @file1.lock!
     User.current = @jsmith
-    assert @file1.locked_for_user?,
-      "#{@file1.name} is locked for #{User.current}"
-    User.current = @admin
-    @file1.unlock!
+    assert @file2.locked_for_user?, "#{@file1.name} is locked for #{User.current}"
   end
 
   def test_file_with_no_locks_reported_unlocked
@@ -127,7 +87,6 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_equal 0, @file4.dmsf_file_revisions.visible.all.size
     # Links should not be deleted
     assert_equal 2, @file4.referenced_links.visible.all.size
-    @file4.dmsf_folder.lock!
   end
 
   def test_restore
@@ -138,7 +97,6 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert !@file4.deleted?, "File #{@file4} hasn't been restored"
     assert_equal 1, @file4.dmsf_file_revisions.visible.all.size
     assert_equal 2, @file4.referenced_links.visible.all.size
-    @file4.dmsf_folder.lock!
   end
 
   def test_destroy
@@ -149,7 +107,6 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     @file4.delete true
     assert_equal 0, @file4.dmsf_file_revisions.all.size
     assert_equal 0, @file4.referenced_links.all.size
-    @file4.dmsf_folder.lock!
   end
 
   def test_copy_to_filename

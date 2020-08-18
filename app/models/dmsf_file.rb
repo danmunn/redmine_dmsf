@@ -305,6 +305,7 @@ class DmsfFile < ActiveRecord::Base
       if new_revision.save
         file.set_last_revision new_revision
       else
+        errors[:base] << new_revision.errors.full_messages.to_sentence
         Rails.logger.error new_revision.errors.full_messages.to_sentence
         file.delete(true)
         file = nil

@@ -24,42 +24,16 @@ require File.expand_path('../../../test_helper', __FILE__)
 class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   include Redmine::I18n
 
-  fixtures :projects, :users, :dmsf_files, :dmsf_file_revisions, :members, :roles, :member_roles
+  fixtures :projects, :users, :email_addresses, :dmsf_files, :dmsf_file_revisions, :members, :roles,
+           :member_roles, :dmsf_locks
 
   def setup
-    @admin = User.find 1
-    @jsmith = User.find 2
-    @file1 = DmsfFile.find 1
+    super
     Setting.rest_api_enabled = '1'
-    @role = Role.find_by(name: 'Manager')
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
-    @token = Token.create!(user: @jsmith, action: 'api')
-    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
-    FileUtils.cp_r File.join(File.expand_path('../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
-  end
-
-  def teardown
-    # Delete our tmp folder
-    begin
-      FileUtils.rm_rf DmsfFile.storage_path
-    rescue => e
-      error e.message
-    end
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
-  end
-
-  def test_truth
-    assert_kind_of User, @admin
-    assert_kind_of User, @jsmith
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of Role, @role
-    assert_kind_of Project, @project1
+    @token = Token.create!(user: @jsmith_user, action: 'api')
   end
 
   def test_get_document
-    @role.add_permission! :view_dmsf_files
     #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml
     get "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}"
     assert_response :success
@@ -131,7 +105,6 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_upload_document
-    @role.add_permission! :file_manipulation
     #curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif
     post "/projects/#{@project1.id}/dmsf/upload.xml?filename=test.txt&key=#{@token.value}", params: 'File content', headers: { "CONTENT_TYPE" => 'application/octet-stream' }
     assert_response :created
@@ -174,24 +147,23 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_delete_file
-    @role.add_permission! :file_delete
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
     delete "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}", headers: { 'CONTENT_TYPE' => 'application/xml' }
     assert_response :success
     @file1.reload
     assert_equal DmsfFile::STATUS_DELETED, @file1.deleted
-    assert_equal @jsmith, @file1.deleted_by_user
+    assert_equal @jsmith_user, @file1.deleted_by_user
   end
 
   def test_delete_file_no_permissions
-    token = Token.create!(user: @jsmith, action: 'api')
+    @role.remove_permission! :file_delete
+    token = Token.create!(user: @jsmith_user, action: 'api')
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
     delete "/dmsf/files/#{@file1.id}.xml?key=#{token.value}", headers: { 'CONTENT_TYPE' => 'application/xml' }
     assert_response :forbidden
   end
 
   def test_delete_folder_commit_yes
-    @role.add_permission! :file_delete
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml&commit=yes
     delete "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}&commit=yes", headers: { 'CONTENT_TYPE' => 'application/xml' }
     assert_response :success
@@ -199,9 +171,9 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_delete_file_locked
-    @role.add_permission! :file_delete
-    User.current = @admin
+    User.current = @admin_user
     @file1.lock!
+    User.current = nil
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
     delete "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}", headers: { 'CONTENT_TYPE' => 'application/xml' }
     assert_response 422
@@ -209,7 +181,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     # <errors type="array">
     #   <error>Locked by Admin</error>
     # </errors>
-    assert_select 'errors > error', text: l(:title_locked_by_user, user: @admin.name)
+    assert_select 'errors > error', text: l(:title_locked_by_user, user: @admin_user.name)
     @file1.reload
     assert_equal DmsfFile::STATUS_ACTIVE, @file1.deleted
   end

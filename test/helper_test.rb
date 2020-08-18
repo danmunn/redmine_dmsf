@@ -29,11 +29,11 @@ module RedmineDmsf
       # Ultimately it allows for better integration without blowing redmine fixtures up,
       # and allowing us to suppliment redmine fixtures if we need to.
       def self.fixtures(*table_names)
-        dir = File.join( File.dirname(__FILE__), '/fixtures')
+        dir = File.join(File.dirname(__FILE__), 'fixtures')
         table_names.each do |x|
-          ActiveRecord::FixtureSet.create_fixtures(dir, x) if File.exist?("#{dir}/#{x}.yml")
+          ActiveRecord::FixtureSet.create_fixtures(dir, x) if File.exist?(File.join(dir, "#{x}.yml"))
         end
-        super(table_names)
+        super table_names
       end      
     end
   end

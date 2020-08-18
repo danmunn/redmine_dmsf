@@ -26,17 +26,7 @@ class DmsfWebdavPostTest < RedmineDmsf::Test::IntegrationTest
 
   fixtures :users, :email_addresses
 
-  def setup
-    @admin = credentials 'admin'
-    @dmsf_webdav = Setting.plugin_redmine_dmsf['dmsf_webdav']
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = true
-  end
-
-  def teardown
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = @dmsf_webdav
-  end
-  
-  # Test that any post request is authenticated
+   # Test that any post request is authenticated
   def test_post_request_authenticated
     post '/dmsf/webdav/'
     assert_response :unauthorized

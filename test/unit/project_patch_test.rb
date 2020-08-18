@@ -22,20 +22,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class ProjectPatchTest < RedmineDmsf::Test::UnitTest
-  fixtures :projects, :dmsf_files, :dmsf_file_revisions, :dmsf_links, :dmsf_folders, :dmsf_workflows, :users
-
-  def setup
-    @project1 = Project.find 1
-    @project2 = Project.find 2
-    @project3 = Project.find 3
-    User.current = User.find 1
-  end
-
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of Project, @project3
-  end
+  fixtures :projects, :dmsf_files, :dmsf_file_revisions, :dmsf_links, :dmsf_folders, :dmsf_workflows,
+           :users, :email_addresses, :dmsf_locks, :roles, :members, :member_roles
 
   def test_project_has_dmsf_files
     assert @project1.respond_to?(:dmsf_files)
@@ -79,8 +67,9 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_copy_dmsf
+    User.current = @jsmith
     assert_equal 4, @project1.dmsf_files.visible.all.size
-    assert_equal 4, @project1.dmsf_folders.visible.all.size
+    assert_equal 3, @project1.dmsf_folders.visible.all.size
     assert_equal 2, @project1.file_links.visible.all.size
     assert_equal 1, @project1.folder_links.visible.all.size
     assert_equal 1, @project1.url_links.visible.all.size
@@ -91,7 +80,7 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
     assert_equal 0, @project3.url_links.visible.all.size
     @project3.copy_dmsf @project1
     assert_equal 4, @project3.dmsf_files.visible.all.size
-    assert_equal 5, @project3.dmsf_folders.all.size
+    assert_equal 0, @project3.dmsf_folders.visible.all.size
     assert_equal 2, @project3.file_links.visible.all.size
     assert_equal 1, @project3.folder_links.visible.all.size
     assert_equal 1, @project3.url_links.visible.all.size

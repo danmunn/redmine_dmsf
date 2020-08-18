@@ -29,49 +29,8 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
     :enabled_modules, :dmsf_file_revisions, :dmsf_folders, :dmsf_locks
 
   def setup
-    @project1 = Project.find 1
-    @project1.enable_module! :dmsf
-    @project2 = Project.find 2
-    @project5 = Project.find 5
-    @file1 = DmsfFile.find 1
-    @file2 = DmsfFile.find 2
-    @folder1 = DmsfFolder.find 1
-    @folder2 = DmsfFolder.find 2
-    @admin = User.find 1
-    @jsmith = User.find 2
-    @user_non_member = User.find 3
-    @role_manager = Role.find_by(name: 'Manager')
-    User.current = nil
+    super
     @request.session[:user_id] = @jsmith.id
-    @dmsf_storage_directory = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
-    FileUtils.cp_r File.join(File.expand_path('../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
-    @role_manager.add_permission! :file_manipulation
-    @role_manager.add_permission! :view_dmsf_folders
-  end
-
-  def teardown
-    # Delete our tmp folder
-    begin
-      FileUtils.rm_rf DmsfFile.storage_path
-    rescue => e
-      error e.message
-    end
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = @dmsf_storage_directory
-  end
-
-  def test_truth
-    assert_kind_of Project, @project1
-    assert_kind_of Project, @project2
-    assert_kind_of Project, @project5
-    assert_kind_of DmsfFile, @file1
-    assert_kind_of DmsfFile, @file2
-    assert_kind_of DmsfFolder, @folder1
-    assert_kind_of DmsfFolder, @folder2
-    assert_kind_of User, @admin
-    assert_kind_of User, @jsmith
-    assert_kind_of User, @user_non_member
-    assert_kind_of Role, @role_manager
   end
 
   def test_authorize_admin
@@ -82,7 +41,7 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_authorize_non_member
-    @request.session[:user_id] = @user_non_member.id
+    @request.session[:user_id] = @someone.id
     get :new, params: { id: @file1.id }
     assert_response :forbidden
   end
@@ -142,20 +101,19 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_copy_to_dmsf_not_enabled
-    @project5.disable_module! :dmsf
-    post :copy, params: { id: @file1.id, target_project_id: @project5.id }
+    @project2.disable_module! :dmsf
+    post :copy, params: { id: @file1.id, target_project_id: @project2.id }
     assert_response :forbidden
   end
 
   def test_copy_to_dmsf_enabled
-    @project5.enable_module! :dmsf
-    post :copy, params: { id: @file1.id, target_project_id: @project5.id }
+    post :copy, params: { id: @file1.id, target_project_id: @project2.id }
     assert_response :redirect
-    assert_nil flash[:error]
+    assert flash[:error].empty?
   end
 
   def test_copy_to_as_non_member
-    @request.session[:user_id] = @user_non_member.id
+    @request.session[:user_id] = @someone.id
     post :copy, params: { id: @file1.id, target_project_id: @project2.id }
     assert_response :forbidden
   end
@@ -173,7 +131,6 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_move_locked_file
-    @request.session[:user_id] = @jsmith.id
     post :move, params: { id: @file2.id, target_project_id: @folder1.project.id, target_folder_id: @folder1.id }
     assert_response :forbidden
   end
@@ -185,21 +142,20 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_move_to_dmsf_not_enabled
-    @project5.disable_module! :dmsf
-    post :move, params: { id: @file1.id, target_project_id: @project5.id }
+    @project2.disable_module! :dmsf
+    post :move, params: { id: @file9.id, target_project_id: @project2.id }
     assert_response :forbidden
   end
 
   def test_move_to_dmsf_enabled
-    @project5.enable_module! :dmsf
-    post :move, params: { id: @file1.id, target_project_id: @project5.id }
+    post :move, params: { id: @file9.id, target_project_id: @project2.id }
     assert_response :redirect
     assert_nil flash[:error]
   end
 
   def test_move_to_as_non_member
-    @request.session[:user_id] = @user_non_member.id
-    post :move, params: { id: @file1.id, target_project_id: @project2.id }
+    @request.session[:user_id] = @someone.id
+    post :move, params: { id: @file9.id, target_project_id: @project2.id }
     assert_response :forbidden
   end
   

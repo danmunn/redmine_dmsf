@@ -25,16 +25,78 @@ module RedmineDmsf
   module Test
     class UnitTest < ActiveSupport::TestCase
 
+      def setup
+        @admin = User.find_by(login: 'admin')
+        @jsmith = User.find_by(login: 'jsmith')
+        @dlopper = User.find_by(login: 'dlopper')
+        @manager_role = Role.find_by(name: 'Manager')
+        @developer_role = Role.find_by(name: 'Developer')
+        [@manager_role, @developer_role].each do |role|
+          role.add_permission! :view_dmsf_folders
+          role.add_permission! :folder_manipulation
+          role.add_permission! :view_dmsf_files
+          role.add_permission! :file_manipulation
+          role.add_permission! :file_delete
+        end
+        @project1 = Project.find 1
+        @project2 = Project.find 2
+        @project3 = Project.find 3
+        @project5 = Project.find 5
+        [@project1, @project2, @project3, @project5].each do |project|
+          project.enable_module! :dmsf
+        end
+        @file1 = DmsfFile.find 1
+        @file2 = DmsfFile.find 2
+        @file4 = DmsfFile.find 4
+        @file5 = DmsfFile.find 5
+        @file7 = DmsfFile.find 7
+        @file8 = DmsfFile.find 8
+        @folder1 = DmsfFolder.find 1
+        @folder2 = DmsfFolder.find 2
+        @folder6 = DmsfFolder.find 6
+        @folder7 = DmsfFolder.find 7
+        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
+        FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
+        User.current = nil
+      end
+
+      def teardown
+        # Delete our tmp folder
+        begin
+          FileUtils.rm_rf DmsfFile.storage_path
+        rescue => e
+          error e.message
+        end
+      end
+
       # Allow us to override the fixtures method to implement fixtures for our plugin.
       # Ultimately it allows for better integration without blowing redmine fixtures up,
       # and allowing us to suppliment redmine fixtures if we need to.
       def self.fixtures(*table_names)
-        dir = File.join( File.dirname(__FILE__), '/fixtures')
+        dir = File.join(File.dirname(__FILE__), 'fixtures')
         table_names.each do |x|
-          ActiveRecord::FixtureSet.create_fixtures(dir, x) if File.exist?("#{dir}/#{x}.yml")
+          ActiveRecord::FixtureSet.create_fixtures(dir, x) if File.exist?(File.join(dir, "#{x}.yml"))
         end
-        super(table_names)
-      end      
+        super table_names
+      end
+
+      protected
+
+      def last_email
+        mail = ActionMailer::Base.deliveries.last
+        assert_not_nil mail
+        mail
+      end
+
+      def text_part(email)
+        email.parts.detect {|part| part.content_type.include?('text/plain')}
+      end
+
+      def html_part(email)
+        email.parts.detect {|part| part.content_type.include?('text/html')}
+      end
+
     end
+
   end
 end
