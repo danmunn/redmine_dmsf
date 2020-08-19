@@ -29,7 +29,11 @@ module RedmineDmsf
       private
 
       def redirect_to_dmsf_query(options)
+        if @project
           redirect_to dmsf_folder_path(@project, options)
+        else
+          redirect_to home_path(options)
+        end
       end
 
     end
