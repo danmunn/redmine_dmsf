@@ -146,6 +146,14 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     assert_redirected_to settings_project_path(@project1, tab: 'dmsf_workflow')
   end
 
+  def test_create_with_the_same_name
+    assert_difference 'DmsfWorkflow.count', 0 do
+      post :create, params: { dmsf_workflow: { name: @wf1.name, project_id: @project1.id } }
+    end
+    assert_response :success
+    assert_select_error /#{l('activerecord.errors.messages.taken')}$/
+  end
+
   def test_update
     put :update, params: { id: @wf1.id, dmsf_workflow: { name: 'wf1a' } }
     @wf1.reload
