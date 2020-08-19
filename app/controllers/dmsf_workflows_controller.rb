@@ -279,7 +279,7 @@ class DmsfWorkflowsController < ApplicationController
         @dmsf_workflow.name = params[:dmsf_workflow][:name]
         @dmsf_workflow.project_id = @project.id if @project
         @dmsf_workflow.author = User.current
-        @dmsf_workflow.save!
+        @dmsf_workflow.save
       end
     end
     if request.post? && @dmsf_workflow && @dmsf_workflow.valid?
