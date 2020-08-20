@@ -135,7 +135,7 @@ class DmsfFile < ActiveRecord::Base
     ''
   end
 
-  def delete(commit)
+  def delete(commit = false)
     if locked_for_user? && (!User.current.allowed_to?(:force_file_unlock, project))
       Rails.logger.info l(:error_file_is_locked)
       if lock.reverse[0].user

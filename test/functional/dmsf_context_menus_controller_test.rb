@@ -169,12 +169,6 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a.icon-email', text: l(:field_mail)
   end
 
-  def test_dmsf_folder_not_empty
-    get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
-    assert_response :success
-    assert_select 'a.icon-del.disabled', text: l(:button_delete)
-  end
-
   def test_dmsf_folder_locked
     assert @folder5.locked?
     get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
@@ -232,7 +226,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a.icon-edit', text: l(:button_edit)
     assert_select 'a.icon-lock', text: l(:button_lock)
     assert_select 'a.icon-email-add', text: l(:label_notifications_on)
-    assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    assert_select 'a.icon-del', text: l(:button_delete)
     assert_select 'a.icon-download', text: l(:button_download)
     assert_select 'a.icon-email', text: l(:field_mail)
   end

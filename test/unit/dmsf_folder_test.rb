@@ -24,7 +24,13 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFolderTest < RedmineDmsf::Test::UnitTest
 
-  fixtures :dmsf_folder_permissions, :dmsf_locks, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+  fixtures :dmsf_folder_permissions, :dmsf_locks, :dmsf_folders, :dmsf_files, :dmsf_file_revisions,
+    :dmsf_links
+
+  def setup
+    super
+    @link2 = DmsfLink.find 2
+  end
          
   def test_visiblity
     # The role has got permissions
@@ -55,6 +61,16 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert @folder6.deleted?, "Folder #{@folder6} hasn't been deleted"
   end
 
+  def test_delete_recursively
+    assert @folder1.delete(false), @folder1.errors.full_messages.to_sentence
+    # First&second level
+    [@folder1, @folder2].each do |folder|
+      assert_equal folder.dmsf_folders.all.size, folder.dmsf_folders.collect(&:deleted?).size
+      assert_equal folder.dmsf_files.all.size, folder.dmsf_files.collect(&:deleted?).size
+      assert_equal folder.dmsf_links.all.size, folder.dmsf_links.collect(&:deleted?).size
+    end
+  end
+
   def test_restore
     assert @folder6.delete(false), @folder6.errors.full_messages.to_sentence
     assert @folder6.deleted?, "Folder #{@folder6} hasn't been deleted"
@@ -62,9 +78,37 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert !@folder6.deleted?, "Folder #{@folder6} hasn't been restored"
   end
 
+  def test_restore_recursively
+    # Delete
+    assert @folder1.delete(false), @folder1.errors.full_messages.to_sentence
+    # Restore
+    assert @folder1.restore, @folder1.errors.full_messages.to_sentence
+    assert !@folder1.deleted?, "Folder #{@folder1} hasn't been restored"
+    # First level
+    assert !@folder2.deleted?, "Folder #{@folder2} hasn't been restored"
+    assert !@link2.deleted?, "Link #{@link2} hasn't been restored"
+    # Second level
+    assert !@file4.deleted?, "File #{@file4} hasn't been restored"
+  end
+
   def test_destroy
+    folder6_id = @folder6.id
     @folder6.delete true
-    assert_nil DmsfFolder.find_by(id: @folder6.id)
+    assert_nil DmsfFolder.find_by(id: folder6_id)
+  end
+
+  def test_destroy_recursively
+    folder1_id = @folder1.id
+    folder2_id = @folder2.id
+    link2_id = @link2.id
+    file4_id = @file4.id
+    @folder1.delete true
+    assert_nil DmsfFolder.find_by(id: folder1_id)
+    # First level
+    assert_nil DmsfFolder.find_by(id: folder2_id)
+    assert_nil DmsfLink.find_by(id: link2_id)
+    # Second level
+    assert_nil DmsfFile.find_by(id: file4_id)
   end
 
   def test_is_column_on_default

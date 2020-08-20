@@ -40,7 +40,6 @@ hu:
   error_folder_creation_failed: Mappa létrehozása nem sikerült
   error_folder_title_must_be_entered: Cím beírása kötelező
   notice_folder_deleted: Mappa törlésre került
-  error_folder_is_not_empty: Mappa nem üres
   error_folder_title_is_already_used: A címet már használják
   notice_folder_details_were_saved: Mappa részleteit mentésre kerültek
   error_folder_is_locked: Mappa zárolva

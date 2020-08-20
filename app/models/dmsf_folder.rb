@@ -127,25 +127,25 @@ class DmsfFolder < ActiveRecord::Base
     end
   end
 
-  def delete(commit)
+  def delete(commit = false)
     if locked?
       errors[:base] << l(:error_folder_is_locked)
-      return false
-    elsif !empty?
-      errors[:base] << l(:error_folder_is_not_empty)
       return false
     end
     if commit
       destroy
     else
-      self.deleted = STATUS_DELETED
-      self.deleted_by_user = User.current
-      save!
+      delete_recursively
     end
   end
 
-  def empty?
-    !(dmsf_folders.visible.exists? || dmsf_files.visible.exists? || dmsf_links.visible.exists?)
+  def delete_recursively
+    self.deleted = STATUS_DELETED
+    self.deleted_by_user = User.current
+    save!
+    self.dmsf_files.each(&:delete)
+    self.dmsf_links.each(&:delete)
+    self.dmsf_folders.each(&:delete_recursively)
   end
 
   def deleted?
@@ -153,13 +153,20 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def restore
-    if dmsf_folder_id && (nil? || dmsf_folder.deleted?)
+    if dmsf_folder&.deleted?
       errors[:base] << l(:error_parent_folder)
       return false
     end
+    restore_recursively
+  end
+
+  def restore_recursively
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
-    save
+    save!
+    self.dmsf_files.each(&:restore)
+    self.dmsf_links.each(&:restore)
+    self.dmsf_folders.each(&:restore_recursively)
   end
 
   def dmsf_path
@@ -180,7 +187,7 @@ class DmsfFolder < ActiveRecord::Base
 
   def notify?
     return true if notification
-    return true if dmsf_folder && dmsf_folder.notify?
+    return true if dmsf_folder&.notify?
     return true if !dmsf_folder && project.dmsf_notification
     false
   end

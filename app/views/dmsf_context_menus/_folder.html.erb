@@ -67,5 +67,5 @@
   <%= context_menu_link l(:button_delete),
                         dmsf_link ? dmsf_link_path(dmsf_link) : delete_dmsf_path(id: project, folder_id: dmsf_folder),
                         data: { confirm: l(:text_are_you_sure) }, method: :delete, class: 'icon icon-del', id: 'dmsf-cm-delete',
-                        disabled: !allowed || locked || (dmsf_link ? false : !dmsf_folder.empty?) %>
+                        disabled: !allowed || locked %>
 </li>

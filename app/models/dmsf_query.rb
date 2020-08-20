@@ -193,8 +193,12 @@ class DmsfQuery < Query
           'folder' AS type,
           dmsf_folders.deleted AS deleted,
           0 AS sort #{cf_columns}}).
-        joins('LEFT JOIN users ON dmsf_folders.user_id = users.id').
-        visible(!deleted)
+        joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
+    if deleted
+      scope = scope.deleted
+    else
+      scope = scope.visible
+    end
     if dmsf_folder_id
       scope.where dmsf_folders: { dmsf_folder_id: dmsf_folder_id, deleted: deleted }
     else

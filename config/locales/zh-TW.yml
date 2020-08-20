@@ -40,7 +40,6 @@ zh-TW:
   error_folder_creation_failed: 資料夾建立失敗
   error_folder_title_must_be_entered: 請輸入標題
   notice_folder_deleted: 資料夾己刪除
-  error_folder_is_not_empty: 資料夾尚未清空
   error_folder_title_is_already_used: 標題己經被使用了
   notice_folder_details_were_saved: 資料夾描述己儲存
   error_folder_is_locked: 資料夾己經鎖定

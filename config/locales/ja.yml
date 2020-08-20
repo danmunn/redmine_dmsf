@@ -40,7 +40,6 @@ ja:
   error_folder_creation_failed: フォルダを作成できません
   error_folder_title_must_be_entered: タイトルが必要です
   notice_folder_deleted: フォルダを削除しました
-  error_folder_is_not_empty: フォルダが空ではありません
   error_folder_title_is_already_used: タイトルは既に使われています
   notice_folder_details_were_saved: フォルダの詳細を保存しました
   error_folder_is_locked: フォルダはロックされています

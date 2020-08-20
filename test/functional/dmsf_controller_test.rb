@@ -23,17 +23,19 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
+  include Rails.application.routes.url_helpers
 
   fixtures :custom_fields, :custom_values, :dmsf_links, :dmsf_folder_permissions, :dmsf_locks
 
   def setup
     super
-    @file_link2 = DmsfLink.find 4
-    @folder_link1 = DmsfLink.find 1
+    @link2 = DmsfLink.find 2
+    @link1 = DmsfLink.find 1
     @custom_field = CustomField.find 21
     @custom_value = CustomValue.find 21
     User.current = nil
     @request.session[:user_id] = @jsmith.id
+    default_url_options[:host] = 'http://example.com'
   end
   
   def test_edit_folder_forbidden
@@ -78,18 +80,21 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'h2', { text: l(:link_trash_bin) }
   end
 
+  def test_trash
+    @folder1.delete false
+    get :trash, params: { id: @project1 }
+    assert_response :success
+    assert_select 'a', href:  dmsf_folder_path(id: @folder1.project.id, folder_id: @folder1.id)
+    assert_select 'a', href:  dmsf_folder_path(id: @folder2.project.id, folder_id: @folder2.id)
+    assert_select 'a', href: url_for(controller: :dmsf_files, action: 'view', id: @file4.id, only_path: true)
+    assert_select 'a', href: url_for(controller: :dmsf_files, action: 'view', id: @link2.target_id, only_path: true)
+  end
+
   def test_delete_forbidden
     # Missing permissions
     @role_manager.remove_permission! :folder_manipulation
     get :delete, params: { id: @project1, folder_id: @folder1.id, commit: false }
     assert_response :forbidden
-  end
-
-  def test_delete_with_parmission_but_not_empty
-    # Permissions OK but the folder is not empty
-    get :delete, params: { id: @project1, folder_id: @folder1.id, commit: false}
-    assert_response :redirect
-    assert_include l(:error_folder_is_not_empty), flash[:error]
   end
 
   def test_delete_locked
@@ -129,17 +134,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Missing permissions
     @role_manager.remove_permission! :folder_manipulation
     get :entries_operation, params: { id: @project1, delete_entries: 'Delete',
-        ids: ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"] }
+        ids: ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@link1.id}", "file-link-#{@link2.id}"] }
     assert_response :forbidden
-  end
-
-  def test_delete_not_empty
-    # Permissions OK but the folder is not empty
-    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1.id)
-    get :entries_operation, params: { id: @project1, delete_entries: 'Delete',
-      ids: ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@folder_link1.id}", "file-link-#{@file_link2.id}"]}
-    assert_response :redirect
-    assert_equal flash[:error].to_s, l(:error_folder_is_not_empty)
   end
 
   def test_delete_entries_ok
@@ -147,7 +143,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1.id)
     flash[:error] = nil
     get :entries_operation, params: { id: @project1, delete_entries: 'Delete',
-        ids: ["folder-#{@folder7.id}", "file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
+        ids: ["folder-#{@folder7.id}", "file-#{@file1.id}", "file-link-#{@link2.id}"]}
     assert_response :redirect
     assert_nil flash[:error]
   end
@@ -157,7 +153,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1.id)
     flash[:error] = nil
     get :entries_operation, params: { id: @project1, restore_entries: 'Restore',
-        ids: ["file-#{@file1.id}", "file-link-#{@file_link2.id}"]}
+        ids: ["file-#{@file1.id}", "file-link-#{@link2.id}"]}
     assert_response :redirect
     assert_nil flash[:error]
   end

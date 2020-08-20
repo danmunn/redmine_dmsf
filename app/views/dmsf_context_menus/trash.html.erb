@@ -27,7 +27,8 @@
                                                 allowed_restore: @allowed_restore }) %>
   <% elsif @dmsf_folder %>
     <%= render(partial: 'folder_trash', locals: { project: @project, folder: @folder, dmsf_folder: @dmsf_folder,
-                                                  dmsf_link: @dmsf_link, allowed: @allowed }) %>
+                                                  dmsf_link: @dmsf_link, allowed_delete: @allowed_delete,
+                                                  allowed_restore: @allowed_restore }) %>
   <% else %>
     <%= render(partial: 'multiple_trash', locals: { project: @project, folder: @folder, allowed_delete: @allowed_delete,
                                                     allowed_restore: @allowed_restore }) %>
