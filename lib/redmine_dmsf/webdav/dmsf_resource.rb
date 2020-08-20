@@ -589,13 +589,8 @@ module RedmineDmsf
             new_revision = last_revision
             reuse_revision = true
           else
-            new_revision = DmsfFileRevision.new
+            new_revision = last_revision ? last_revision.dup : DmsfFileRevision.new
             new_revision.source_revision = last_revision
-            if last_revision
-              new_revision.major_version = last_revision.major_version
-              new_revision.minor_version = last_revision.minor_version
-              new_revision.workflow = last_revision.workflow
-            end
           end
         else
           f = DmsfFile.new
@@ -606,14 +601,12 @@ module RedmineDmsf
           new_revision = DmsfFileRevision.new
           new_revision.minor_version = 0
           new_revision.major_version = 0
+          new_revision.title = DmsfFileRevision.filename_to_title(basename)
         end
 
         new_revision.dmsf_file = f
         new_revision.user = User.current
         new_revision.name = basename
-        new_revision.title = DmsfFileRevision.filename_to_title(basename)
-        new_revision.description = nil
-        new_revision.comment = nil
         new_revision.increase_version(1) unless reuse_revision
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
 

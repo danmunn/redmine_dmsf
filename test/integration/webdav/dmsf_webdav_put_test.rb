@@ -270,5 +270,18 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     assert_response :created
     assert DmsfFile.find_by(project_id: @project3.id, dmsf_folder: nil, name: 'test-1234.txt')
   end
+
+  def test_put_keep_title
+    assert @file1.last_revision.size != 0
+    @file1.last_revision.title = 'Keep that title'
+    assert @file1.last_revision.save
+    assert_difference '@file1.dmsf_file_revisions.count', +1 do
+      put "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: '1234',
+          headers: @jsmith.merge!({ content_type: :text })
+      assert_response :created
+    end
+    @file1.last_revision.reload
+    assert_equal @file1.last_revision.title, 'Keep that title'
+  end
   
 end
