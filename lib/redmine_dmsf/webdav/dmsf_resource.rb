@@ -589,8 +589,18 @@ module RedmineDmsf
             new_revision = last_revision
             reuse_revision = true
           else
-            new_revision = last_revision ? last_revision.dup : DmsfFileRevision.new
-            new_revision.source_revision = last_revision
+            if last_revision
+              new_revision = last_revision.dup
+              new_revision.source_revision = last_revision
+            else
+              new_revision = DmsfFileRevision.new
+            end
+            # Custom fields
+            i = 0
+            last_revision.custom_field_values.each do |custom_value|
+              new_revision.custom_field_values[i].value = custom_value
+              i = i + 1
+            end
           end
         else
           f = DmsfFile.new
@@ -620,8 +630,11 @@ module RedmineDmsf
         else
           new_revision.size = request.content_length # Bad Guess
         end
-        
-        raise InternalServerError unless new_revision.valid? && f.save
+
+        if new_revision.valid? && (!f.save)
+          Rails.logger.error f.errors.full_messages.to_sentence
+          raise InternalServerError
+        end
 
         new_revision.disk_filename = new_revision.new_storage_filename unless reuse_revision
 
@@ -641,6 +654,7 @@ module RedmineDmsf
           # Notifications
           DmsfMailer.deliver_files_updated project, [f]
         else
+          Rails.logger.error new_revision.errors.full_messages.to_sentence
           raise InternalServerError
         end
 

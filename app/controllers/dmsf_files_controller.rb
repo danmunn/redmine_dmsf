@@ -128,6 +128,7 @@ class DmsfFilesController < ApplicationController
             revision.size = upload.size
             revision.disk_filename = revision.new_storage_filename
             revision.mime_type = upload.mime_type
+            revision.digest = upload.digest
           end
         else
           revision.size = last_revision.size

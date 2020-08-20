@@ -25,7 +25,12 @@ require 'fileutils'
 
 class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
 
-  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :custom_fields, :custom_values
+
+  def setup
+    super
+    @cv22 = CustomValue.find(22)
+  end
 
   def test_put_denied_unless_authenticated_root
     put '/dmsf/webdav'
@@ -272,7 +277,6 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_put_keep_title
-    assert @file1.last_revision.size != 0
     @file1.last_revision.title = 'Keep that title'
     assert @file1.last_revision.save
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
@@ -282,6 +286,18 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     end
     @file1.last_revision.reload
     assert_equal @file1.last_revision.title, 'Keep that title'
+  end
+
+  def test_put_keep_custom_field_values
+    @file1.last_revision.custom_values << @cv22
+    assert @file1.last_revision.save
+    assert_difference '@file1.dmsf_file_revisions.count', +1 do
+      put "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: '1234',
+          headers: @jsmith.merge!({ content_type: :text })
+      assert_response :created
+    end
+    @file1.last_revision.reload
+    assert_equal @file1.last_revision.custom_values.first.value, @cv22.value
   end
   
 end
