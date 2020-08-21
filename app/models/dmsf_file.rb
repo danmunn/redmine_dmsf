@@ -460,6 +460,9 @@ class DmsfFile < ActiveRecord::Base
     last_revision && (Redmine::MimeType.of(last_revision.disk_filename) == 'application/pdf')
   end
 
+  def video?
+    last_revision && Redmine::MimeType.is_type?('video', last_revision.disk_filename)
+  end
 
   def disposition
     (image? || pdf?) ? 'inline' : 'attachment'

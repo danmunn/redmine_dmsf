@@ -152,6 +152,18 @@ Thumbnail with height of 200px: `{{dmsftn(8)}}`
 
 Thumbnail with custom size: `{{dmsftn(8, size=300)}}`
 
+Inline video of the file with id 8; it must be an image file such as MP4: `{{dmsf_video(9)}}`
+
+Inline video with custom size: `{{dmsf_video(9, size=300)}}`
+
+Inline video with custom size: `{{dmsf_video(9, size=50%)}}`
+
+Inline video with custom height: `{{dmsf_video(9, height=300)}}`
+
+Inline video with custom width: `{{dmsf_video(9, width=300)}}`
+
+Inline video with custom size: `{{dmsf_video(9, size=640x480)}}`
+
 Approval workflow status of a document with id 8: `{{dmsfw(8)}}`
 
 The DMSF document/revision id can be found in document details.

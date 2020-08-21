@@ -209,6 +209,12 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert @file8.pdf?
   end
 
+  def test_video
+    assert !@file1.video?
+    @file1.last_revision.disk_filename = 'test.mp4'
+    assert @file1.video?
+  end
+
   def test_findn_file_by_name
     assert DmsfFile.find_file_by_name(@project1, nil, 'test.txt')
     assert_nil DmsfFile.find_file_by_name(@project1, nil, 'test.odt')

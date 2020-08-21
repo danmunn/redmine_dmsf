@@ -178,6 +178,40 @@ Redmine::WikiFormatting::Macros.register do
     end
   end
 
+  # dmsf_video - link to a video
+  desc "Wiki DMSF image:\n\n" +
+           "{{dmsf_video(file_id)}}\n" +
+           "{{dmsf_video(file_id, size=300)}} -- with and size 300x300\n" +
+           "{{dmsf_video(file_id, height=300)}} -- with height (auto width)\n" +
+           "{{dmsf_video(file_id, width=300)}} -- with width (auto height)\n" +
+           "{{dmsf_video(file_id, size=640x480)}} -- with and size 640x480"
+  macro :dmsf_video do |obj, args|
+    args, options = extract_macro_options(args, :size, :width, :height, :title)
+    file_id = args.first
+    raise 'DMSF document ID required' unless file_id.present?
+    size = options[:size]
+    width = options[:width]
+    height = options[:height]
+    if file = DmsfFile.find_by(id: file_id)
+      unless User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
+        raise l(:notice_not_authorized)
+      end
+      raise 'Not supported video format' unless file.video?
+      url = url_for(controller: :dmsf_files, action: 'view', id: file)
+      if size && size.include?('%')
+        video_tag url, controls: true, alt: file.title, width: size, height: size
+      elsif height
+        video_tag url, controls: true, alt: file.title, width: 'auto', height: height
+      elsif width
+        video_tag url, controls: true, alt: file.title, width: width, height: 'auto'
+      else
+        video_tag url, controls: true, alt: file.title, size: size
+      end
+    else
+      raise "Document ID #{file_id} not found"
+    end
+  end
+
   # dmsftn - link to an image thumbnail
   desc "Wiki DMSF thumbnail:\n\n" +
              "{{dmsftn(file_id)}} -- with default height 200(auto width)\n" +
