@@ -465,7 +465,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def disposition
-    (image? || pdf?) ? 'inline' : 'attachment'
+    (image? || pdf? || video?) ? 'inline' : 'attachment'
   end
 
   def preview(limit)

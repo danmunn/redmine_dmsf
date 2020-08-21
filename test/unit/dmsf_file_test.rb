@@ -186,9 +186,15 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_disposition
+    # Text
     assert_equal 'attachment', @file1.disposition
+    # Image
     assert_equal 'inline', @file7.disposition
+    # PDF
     assert_equal 'inline', @file8.disposition
+    # Video
+    @file1.last_revision.disk_filename = 'test.mp4'
+    assert_equal 'inline', @file1.disposition
   end
 
   def test_image
