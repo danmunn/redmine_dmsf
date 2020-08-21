@@ -631,6 +631,12 @@ module RedmineDmsf
           new_revision.size = request.content_length # Bad Guess
         end
 
+        # Ignore 1b files sent for authentication
+        if Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'].present? && (new_revision.size == 1)
+          Rails.logger.info "1b file '#{basename}' sent for authentication ignored"
+          return NoContent
+        end
+
         if new_revision.valid? && (!f.save)
           Rails.logger.error f.errors.full_messages.to_sentence
           raise InternalServerError

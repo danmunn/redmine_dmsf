@@ -252,7 +252,6 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       assert_response :created
     end
 
-    original = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
     Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] = '.dump$'
     put "/dmsf/webdav/#{@project1.identifier}/file3.dump", params: '1234', headers: credentials
     assert_response :success
@@ -266,7 +265,6 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       put "/dmsf/webdav/#{@project1.identifier}/file3.dump", params: '9ABC', headers: credentials
       assert_response :created
     end
-    Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] = original
   end
 
   def test_put_into_subproject
@@ -298,6 +296,20 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     end
     @file1.last_revision.reload
     assert_equal @file1.last_revision.custom_values.first.value, @cv22.value
+  end
+
+  def test_ignore_1b_files_on
+    Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'] = '1'
+    put "/dmsf/webdav/#{@project1.identifier}/1bfile.txt", params: '1',
+        headers: @jsmith.merge!({ content_type: :text })
+    assert_response :no_content
+  end
+
+  def test_ignore_1b_files_off
+    Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'] = ''
+    put "/dmsf/webdav/#{@project1.identifier}/1bfile.txt", params: '1',
+        headers: @jsmith.merge!({ content_type: :text })
+    assert_response :created
   end
   
 end
