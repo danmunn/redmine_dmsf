@@ -19,23 +19,18 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class DmsfQueriesHelperTest < RedmineDmsf::Test::HelperTest
-  include DmsfQueriesHelper
+class DmsfHelperTest < RedmineDmsf::Test::HelperTest
+  include DmsfHelper
+
   fixtures :dmsf_folders
 
-
-  def test_csv_value
-    c_size = QueryColumn.new(:size)
-    c_author = QueryColumn.new(:author)
-    c_workflow = QueryColumn.new(:workflow)
-    assert_equal '1 KB', csv_value(c_size, nil, 1024)
-    assert_equal 'John Smith', csv_value(c_author, @jsmith, @jsmith.id)
-    assert_equal 'Approved', csv_value(c_workflow, nil, DmsfWorkflow::STATE_APPROVED)
-  end
-
-  def test_column_value
-    c_size = QueryColumn.new(:size)
-    assert_equal '1 KB', csv_value(c_size, @folder1, 1024)
+  def test_webdav_url
+    base_url = ["#{Setting.protocol}:/", Setting.host_name, 'dmsf', 'webdav'].join('/')
+    assert_equal "#{base_url}/", webdav_url(nil, nil)
+    assert_equal "#{base_url}/ecookbook/", webdav_url(@project1, nil)
+    assert_equal "#{base_url}/ecookbook/folder1/", webdav_url(@project1, @folder1)
+    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
+    assert_equal "#{base_url}/eCookbook 1/", webdav_url(@project1, nil)
   end
 
 end

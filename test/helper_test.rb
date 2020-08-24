@@ -25,6 +25,8 @@ module RedmineDmsf
   module Test
     class HelperTest < ActiveSupport::TestCase
 
+      fixtures :users, :email_addresses, :projects
+
       # Allow us to override the fixtures method to implement fixtures for our plugin.
       # Ultimately it allows for better integration without blowing redmine fixtures up,
       # and allowing us to suppliment redmine fixtures if we need to.
@@ -39,7 +41,14 @@ module RedmineDmsf
           end
         end
         super redmine_table_names if redmine_table_names.any?
-      end      
+      end
+
+      def setup
+        @jsmith = User.find 2
+        @project1 = Project.find 1
+        @folder1 = DmsfFolder.find 1
+        Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
+      end
     end
   end
 end

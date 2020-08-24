@@ -83,6 +83,9 @@
 <% unless @folder && @folder.system %>
     <% other_formats_links do |f| %>
       <%= f.link_to 'CSV', url: { action: :show, id: @project, folder_id: @folder } %>
+      <span>
+        <%= link_to 'WebDAV', webdav_url(@project, @folder) %>
+      </span>
     <% end %>
 <% end %>
 

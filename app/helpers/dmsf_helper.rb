@@ -81,4 +81,23 @@ module DmsfHelper
     principals_check_box_tags 'user_ids[]', users
   end
 
+  def webdav_url(project, folder)
+    url = ["#{Setting.protocol}:/", Setting.host_name, 'dmsf', 'webdav']
+    if project
+      url << RedmineDmsf::Webdav::ProjectResource.create_project_name(project)
+      if folder
+        folders = [folder]
+        while folder.dmsf_folder do
+          folders << folder
+          folder = folder.dmsf_folder
+        end
+        folders.reverse.each do |folder|
+          url << folder.title
+        end
+      end
+    end
+    url << ''
+    url.join '/'
+  end
+
 end
