@@ -50,12 +50,21 @@
 
 <% unless query.deleted %>
   <%= late_javascript_tag do %>
-    $(function() {
       $(".dmsf-draggable").draggable({
+        helper: function(event, ui) {
+          var ret = $(this).clone();
+          var width = $(this)[0].offsetWidth;
+          var myHelper = [];
+          myHelper.push('<table style="width: ' + width + 'px; background-color: #ffffdd;">');
+          myHelper.push(ret.html());
+          myHelper.push('</table>');
+          helper = myHelper.join('');
+          return helper;
+        },
         axis: "y",
-        revert: "invalid",
-        zIndex: 100
+        revert: "invalid"
       });
+
       $(".dmsf-droppable" ).droppable({
         drop: function(event, ui) {
           var handle = $(this);
