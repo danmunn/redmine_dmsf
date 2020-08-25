@@ -50,6 +50,8 @@
 
 <% unless query.deleted %>
   <%= late_javascript_tag do %>
+    $(function() {
+      $("table.dmsf tr").removeClass("ui-draggable-dragging ui-droppable-active ui-droppable-hover ui-draggable-handle");
       $(".dmsf-draggable").draggable({
         helper: function(event, ui) {
           var ret = $(this).clone();
@@ -64,7 +66,6 @@
         axis: "y",
         revert: "invalid"
       });
-
       $(".dmsf-droppable" ).droppable({
         drop: function(event, ui) {
           var handle = $(this);
