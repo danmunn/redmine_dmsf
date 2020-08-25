@@ -88,6 +88,7 @@ module RedmineDmsf
         Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
         Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
+        Setting.text_formatting = 'Textile'
         FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
         User.current = nil
       end

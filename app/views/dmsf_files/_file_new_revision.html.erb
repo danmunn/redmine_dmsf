@@ -42,8 +42,8 @@
             </p>
           </div>
         </div>
-        <p>          
-          <%= f.text_area :description, rows: 6, class: 'wiki-edit' %>
+        <p>
+          <%= f.text_area :description, rows: 6, class: wiki ? 'wiki-edit' : 'dmsf-description' %>
         </p>
         <div class="clear">
           <div class="splitcontentright">
@@ -84,8 +84,8 @@
                        locals: { multiple: false, container: nil, description: false, awf: false } %>
           </p>
         </div>
-        <p>          
-          <%= f.text_area :comment, rows: 2, label: l(:label_comment), class: 'wiki-edit' %>
+        <p>
+          <%= f.text_area :comment, rows: 2, label: l(:label_comment), class: wiki ? 'wiki-edit' : 'dmsf-description' %>
         </p>
         <div class="form-actions">
           <%= f.submit l(:button_create), class: 'button-positive' %>
@@ -95,4 +95,6 @@
   </div>  
 </div>
 
-<%= wikitoolbar_for 'dmsf_file_revision_description' %>
+<% if wiki %>
+  <%= wikitoolbar_for 'dmsf_file_revision_description' %>
+<% end %>

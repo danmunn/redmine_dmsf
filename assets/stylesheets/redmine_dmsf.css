@@ -132,6 +132,10 @@ div[id*="revision_access_"] {
     display: none;
 }
 
+.dmsf-description {
+    max-width: 100%;
+}
+
 /* Command icons */
 .icon-link { background-image: url(../../../images/link.png); }
 .icon-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
