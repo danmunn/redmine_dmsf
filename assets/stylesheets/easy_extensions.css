@@ -32,7 +32,7 @@
 
 /* Font icons */
 table.dmsf > tbody > tr > td a.icon-actions::before {
-    content: "\F1D8";
+    content: "\F01D8";
 }
 
 #sidebar ul > li > a.icon-only.icon-clear-query {
