@@ -57,6 +57,7 @@ url_link:
   target_type: DmsfUrl
   name: url_link
   project_id: 1
+  dmsf_folder_id: 1
   external_url: 'https://www.kontron.com'
   deleted: 0
   deleted_by_user_id: NULL

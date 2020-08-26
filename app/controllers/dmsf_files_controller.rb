@@ -26,6 +26,7 @@ class DmsfFilesController < ApplicationController
 
   before_action :find_file, except: [:delete_revision, :obsolete_revision]
   before_action :find_revision, only: [:delete_revision, :obsolete_revision]
+  before_action :find_folder, only: [:delete, :create_revision]
   before_action :authorize
   before_action :permissions
 
@@ -224,7 +225,7 @@ class DmsfFilesController < ApplicationController
     end
     respond_to do |format|
       format.html do
-        redirect_to dmsf_folder_path(id: @project, folder_id: @file.dmsf_folder)
+        redirect_to dmsf_folder_path(id: @project, folder_id: @folder)
       end
       format.api { result ? render_api_ok : render_validation_errors(@file) }
     end
@@ -343,6 +344,12 @@ class DmsfFilesController < ApplicationController
     @revision = DmsfFileRevision.visible.find params[:id]
     @file = @revision.dmsf_file
     @project = @file.project
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
+  def find_folder
+    @folder = DmsfFolder.find params[:folder_id] if params[:folder_id].present?
   rescue ActiveRecord::RecordNotFound
     render_404
   end

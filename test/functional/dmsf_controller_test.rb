@@ -107,9 +107,15 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_delete_ok
     # Empty and not locked folder
-    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1.id, folder_id: @folder1.id)
-    get :delete, params: { id: @project1, folder_id: @folder1.id, commit: false }
-    assert_response :redirect
+    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1, folder_id: @folder1.dmsf_folder)
+    get :delete, params: { id: @project1, folder_id: @folder1, parent_id: @folder1.dmsf_folder, commit: false }
+    assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder1.dmsf_folder)
+  end
+
+  def test_delete_subfolder
+    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1, folder_id: @folder2.dmsf_folder)
+    get :delete, params: { id: @project1, folder_id: @folder2, parent_id: @folder2.dmsf_folder, commit: false }
+    assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder2.dmsf_folder)
   end
 
   def test_restore_forbidden

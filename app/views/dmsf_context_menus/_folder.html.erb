@@ -59,13 +59,13 @@
     id: 'dmsf-cm-download', disabled: false %>
 </li>
 <li>
-  <%= context_menu_link l(:field_mail), entries_operations_dmsf_path(id: @project, folder_id: folder,
+  <%= context_menu_link l(:field_mail), entries_operations_dmsf_path(id: project, folder_id: folder,
     ids: params[:ids], email_entries: true), method: :post, class: 'icon icon-email',
     disabled: !email_allowed %>
 </li>
 <li>
   <%= context_menu_link l(:button_delete),
-                        dmsf_link ? dmsf_link_path(dmsf_link) : delete_dmsf_path(id: project, folder_id: dmsf_folder),
-                        data: { confirm: l(:text_are_you_sure) }, method: :delete, class: 'icon icon-del', id: 'dmsf-cm-delete',
-                        disabled: !allowed || locked %>
+    dmsf_link ? dmsf_link_path(id: dmsf_link, folder_id: folder) : delete_dmsf_path(id: project, folder_id: dmsf_folder, parent_id: folder),
+    data: { confirm: l(:text_are_you_sure) }, method: :delete, class: 'icon icon-del', id: 'dmsf-cm-delete',
+    disabled: !allowed || locked %>
 </li>

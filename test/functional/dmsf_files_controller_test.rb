@@ -58,13 +58,13 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     get :show, params: { id: @file1.id }
     assert_response :forbidden
   end
-  
+
   def test_view_file_ok
     # Permissions OK
     get :view, params: { id: @file1.id }
     assert_response :success
   end
-      
+
   def test_view_file_forbidden
     # Missing permissions
     @role_manager.remove_permission! :view_dmsf_files
@@ -75,22 +75,26 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
   def delete_forbidden
     # Missing permissions
     @role_manager.remove_permission! :file_manipulation
-    delete @file1, params: { commit: false }
+    delete :delete, params: { id: @file1, folder_id: @file1.dmsf_folder, commit: false }
     assert_response :forbidden
   end
 
   def delete_locked
     # Permissions OK but the file is locked
-    delete @file2, params: { commit: false }
+    delete :delete, params: { id: @file2, folder_id: @file2.dmsf_folder, commit: false }
     assert_response :redirect
     assert_include l(:error_file_is_locked), flash[:error]
   end
 
   def delete_ok
     # Permissions OK and not locked
-    delete @file1, params: { commit: false }
-    assert_response :redirect
-    assert_equal 0, flash[:error].size
+    delete :delete, params: { id: @file1, folder_id: @file1.dmsf_folder, commit: false }
+    assert_redirected_to dmsf_folder_path(id: @file1.project, folder_id: @file1.dmsf_folder)
+  end
+
+  def test_delete_in_subfolder
+    delete :delete, params: { id: @file4, folder_id: @file4.dmsf_folder, commit: false }
+    assert_redirected_to dmsf_folder_path(id: @file4.project, folder_id: @file4.dmsf_folder)
   end
 
   def test_obsolete_revision_ok

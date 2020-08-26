@@ -28,7 +28,7 @@ class DmsfController < ApplicationController
   before_action :authorize, except: [:expand_folder]
   before_action :find_folder, except: [:new, :create, :edit_root, :save_root, :add_email, :append_email,
                                           :autocomplete_for_user]
-  before_action :find_parent, only: [:new, :create]
+  before_action :find_parent, only: [:new, :create, :delete]
   before_action :permissions
   # Also try to lookup folder by title if this is an API call
   before_action :find_folder_by_title, only: [:show]
@@ -284,7 +284,7 @@ class DmsfController < ApplicationController
         if commit
           redirect_to :back
         else
-          redirect_to dmsf_folder_path(id: @project, folder_id: @folder.dmsf_folder)
+          redirect_to dmsf_folder_path(id: @project, folder_id: @parent)
         end
       end
       format.api { result ? render_api_ok : render_validation_errors(@folder) }

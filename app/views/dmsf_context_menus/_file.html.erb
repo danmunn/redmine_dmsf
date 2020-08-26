@@ -31,8 +31,7 @@
 <% unless dmsf_link %>
   <li>
     <%= link_to l(:label_link_to),
-              new_dmsf_link_path(project_id: project.id,
-                                 dmsf_folder_id: dmsf_file.dmsf_folder ? dmsf_file.dmsf_folder.id : nil,
+              new_dmsf_link_path(project_id: project.id, dmsf_folder_id: dmsf_file.dmsf_folder&.id,
                                  dmsf_file_id: dmsf_file.id, type: 'link_to'),
               title: l(:title_create_link), class: 'icon icon-link' %>
   </li>
@@ -80,7 +79,8 @@
                         disabled: url.blank? || locked %>
 </li>
 <li>
-  <%= context_menu_link l(:button_delete), dmsf_link ? dmsf_link_path(dmsf_link) : dmsf_file_path(dmsf_file),
-                        method: :delete, class: 'icon icon-del', data: { confirm: l(:text_are_you_sure) },
-                        id: 'dmsf-cm-delete', disabled: !allowed || locked %>
+  <%= context_menu_link l(:button_delete),
+        dmsf_link ? dmsf_link_path(id: dmsf_link, folder_id: folder) : dmsf_file_path(id: dmsf_file, folder_id: folder),
+        method: :delete, class: 'icon icon-del', data: { confirm: l(:text_are_you_sure) }, id: 'dmsf-cm-delete',
+        disabled: !allowed || locked %>
 </li>

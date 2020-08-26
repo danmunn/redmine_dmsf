@@ -73,7 +73,7 @@
   <% if @dmsf_count == 0 %>
     <p class="nodata"><%= l(:label_no_data) %></p>
   <% else %>
-    <%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages } %>
+    <%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages, folder: @folder } %>
     <span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>
   <% end %>
 <% end %>
