@@ -25,7 +25,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
   include Rails.application.routes.url_helpers
 
-  fixtures :custom_fields, :custom_values, :dmsf_links, :dmsf_folder_permissions, :dmsf_locks
+  fixtures :custom_fields, :custom_values, :dmsf_links, :dmsf_folder_permissions, :dmsf_locks,
+           :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
     super

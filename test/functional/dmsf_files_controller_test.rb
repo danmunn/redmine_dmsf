@@ -23,7 +23,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase 
   
-  fixtures :custom_fields, :custom_values, :dmsf_file_revisions
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
 
   def setup
     super

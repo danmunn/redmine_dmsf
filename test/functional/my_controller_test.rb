@@ -26,7 +26,7 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
     
   fixtures :user_preferences, :dmsf_workflows, :dmsf_workflow_steps, :dmsf_workflow_step_assignments,
-           :dmsf_workflow_step_actions, :dmsf_locks
+           :dmsf_workflow_step_actions, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
 
   def setup
     super

@@ -23,7 +23,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfPublicUrlsControllerTest < RedmineDmsf::Test::TestCase
 
-  fixtures :dmsf_public_urls
+  fixtures :dmsf_public_urls, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
   
   def test_show_valid_url
     get :show, params: { token: 'd8d33e21914a433b280fdc94450ee212' }

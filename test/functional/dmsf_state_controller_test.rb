@@ -24,6 +24,8 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
 
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+
   def setup
     super
     @request.session[:user_id] = @jsmith.id

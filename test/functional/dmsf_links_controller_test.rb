@@ -24,7 +24,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
 
-  fixtures :dmsf_links
+  fixtures :dmsf_links, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
   
   def setup
     super
