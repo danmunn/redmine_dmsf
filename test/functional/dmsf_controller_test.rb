@@ -239,7 +239,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] = '1'
     get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
     assert_response :success
-    assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only']
+    assert_select "input[id=email_links_only][value=1]"
   end
 
   def test_entries_email
