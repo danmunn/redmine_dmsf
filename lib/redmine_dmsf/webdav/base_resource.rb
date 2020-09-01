@@ -128,7 +128,7 @@ module RedmineDmsf
                   prj = Project.visible.find_by(id: $1)
                   if prj
                     # Check again whether it's really the project and not a folder with a number as a suffix
-                    prj = nil unless pinfo.first =~ /^#{prj.name}/
+                    prj = nil unless pinfo.first =~ /^#{DmsfFolder::get_valid_title(prj.name)}/
                   end
                 end
               else
@@ -156,7 +156,7 @@ module RedmineDmsf
                 prj = Project.visible.find_by(id: $1)
                 if prj
                   # Check again whether it's really the project and not a folder with a number as a suffix
-                  prj = nil unless pinfo.first =~ /^#{prj.name}/
+                  prj = nil unless pinfo.first =~ /^#{DmsfFolder::get_valid_title(prj.name)}/
                 end
               end
             else

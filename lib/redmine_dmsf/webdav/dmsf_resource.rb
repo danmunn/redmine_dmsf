@@ -114,7 +114,7 @@ module RedmineDmsf
               @subproject = Project.visible.find_by(id: $1, parent_id: parent_project&.id)
               if @subproject
                 # Check again whether it's really the project and not a folder with a number as a suffix
-                @subproject = nil unless basename =~ /^#{@subproject.name}/
+                @subproject = nil unless basename =~ /^#{DmsfFolder::get_valid_title(@subproject.name)}/
               end
             end
           else
