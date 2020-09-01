@@ -28,7 +28,7 @@ module RedmineDmsf
 
       def initialize(app)
         @rails_app = app
-        path = File.join(Redmine::Utils::relative_url_root, %w(dmsf webdav))
+        path = '/dmsf/webdav'
         @dav_app = Rack::Builder.new{
           map path do
             run DAV4Rack::Handler.new(
