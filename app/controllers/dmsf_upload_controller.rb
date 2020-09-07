@@ -41,6 +41,7 @@ class DmsfUploadController < ApplicationController
   end
 
   def upload_files
+    @wiki = Setting.text_formatting != 'HTML'
     uploaded_files = params[:dmsf_attachments]
     @uploads = []
     if uploaded_files

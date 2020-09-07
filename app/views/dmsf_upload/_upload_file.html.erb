@@ -45,7 +45,8 @@
   </div>
   <p>
     <%= label_tag "commited_files[#{i}][description]", l(:label_description) %>
-    <%= text_area_tag "commited_files[#{i}][description]", upload.description, rows: 6, class: 'wiki-edit' %>
+    <%= text_area_tag "commited_files[#{i}][description]", upload.description, rows: 6,
+                      class: wiki ? 'wiki-edit' : 'dmsf-description' %>
   </p>
   <div class="clear">
     <div class="splitcontentright">
@@ -92,8 +93,12 @@
   </div>
   <p>
     <%= label_tag "commited_files[#{i}][comment]", l(:label_comment) %>
-    <%= text_area_tag "commited_files[#{i}][comment]", upload.comment, rows: 2, class: 'wiki-edit' %>
+    <%= text_area_tag "commited_files[#{i}][comment]", upload.comment, rows: 2,
+                      class: wiki ? 'wiki-edit' : 'dmsf-description' %>
   </p>
 </div>
 
-<%= wikitoolbar_for "commited_files_#{i}_description" %>
+<% if wiki %>
+  <%= wikitoolbar_for "commited_files_#{i}_description" %>
+  <%= wikitoolbar_for "commited_files_#{i}_comment" %>
+<% end %>
