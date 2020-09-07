@@ -237,4 +237,20 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert DmsfFolder.find_by(project_id: @project2.id, title: @folder1.title)
   end
 
+  def test_valid_parent
+    @folder2.dmsf_folder = @folder1
+    assert @folder2.save
+  end
+
+  def test_valid_parent_nil
+    @folder2.dmsf_folder = nil
+    assert @folder2.save
+  end
+
+  def test_valid_parent_loop
+    @folder1.dmsf_folder = @folder2
+    # @folder2 is under @folder1 => loop!
+    assert !@folder1.save
+  end
+
 end

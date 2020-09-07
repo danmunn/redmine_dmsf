@@ -96,6 +96,7 @@ class DmsfFolder < ActiveRecord::Base
   validates_uniqueness_of :title, scope: [:dmsf_folder_id, :project_id, :deleted],
     conditions: -> { where(deleted: STATUS_ACTIVE) }
   validates :description, length: { maximum: 65535 }
+  validates :dmsf_folder, dmsf_folder_parent: true, if: Proc.new { |folder| !folder.new_record? }
 
   before_create :default_values
 
