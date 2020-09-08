@@ -145,6 +145,47 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     assert revision && revision.size > 0
   end
 
+  def test_upload_document_exceeded_attachment_max_size
+    Setting.attachment_max_size = '1'
+    #curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif
+    file_content = 'x' * 2.kilobytes
+    post "/projects/#{@project1.id}/dmsf/upload.xml?filename=test.txt&key=#{@token.value}", params: file_content,
+         headers: { "CONTENT_TYPE" => 'application/octet-stream' }
+    assert_response :created
+    assert_equal 'application/xml', response.content_type
+    #<?xml version="1.0" encoding="UTF-8"?>
+    # <upload>
+    #   <token>2.8bb2564936980e92ceec8a5759ec34a8</token>
+    # </upload>
+    xml = Hash.from_xml(response.body)
+    assert_kind_of Hash, xml['upload']
+    ftoken = xml['upload']['token']
+    assert_not_nil ftoken
+    #curl -v -H "Content-Type: application/xml" -X POST --data "@file.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/commit.xml
+    payload = %{<?xml version="1.0" encoding="utf-8" ?>
+                <attachments>
+                 <folder_id/>
+                 <uploaded_file>
+                   <name>test.txt</name>
+                   <title>test.txt</title>
+                   <description>REST API</description>
+                   <comment>From API</comment>
+                   <version/>
+                   <token>#{ftoken}</token>
+                 </uploaded_file>
+                </attachments>}
+    assert_difference 'DmsfFileRevision.count', +0 do
+      post "/projects/#{@project1.id}/dmsf/commit.xml?key=#{@token.value}", params: payload, headers: { 'CONTENT_TYPE' => 'application/xml' }
+    end
+    #<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+    # <errors type=\"array\">
+    #   <error>Size This file cannot be uploaded because it exceeds the maximum allowed file size (1 KB)</error>
+    # </errors>
+    assert_select 'error', text: 'Size ' + l(:error_attachment_too_big,
+      max_size: ActiveSupport::NumberHelper.number_to_human_size(Setting.attachment_max_size.to_i.kilobytes))
+    assert_response :unprocessable_entity
+  end
+
   def test_delete_file
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
     delete "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}", headers: { 'CONTENT_TYPE' => 'application/xml' }

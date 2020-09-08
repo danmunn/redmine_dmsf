@@ -57,7 +57,7 @@ module DmsfUploadHelper
         end
 
         if file.locked_for_user?
-          failed_uploads.push(commited_file)
+          failed_uploads.push file
           next
         end
 
@@ -92,13 +92,18 @@ module DmsfUploadHelper
 
         # Need to save file first to generate id for it in case of creation.
         # File id is needed to properly generate revision disk filename
-        if new_revision.valid? && file.save
-          new_revision.disk_filename = new_revision.new_storage_filename
-        else
-          Rails.logger.error (new_revision.errors.full_messages + file.errors.full_messages).to_sentence
-          failed_uploads.push commited_file
+        unless new_revision.valid?
+          Rails.logger.error new_revision.errors.full_messages.to_sentence
+          failed_uploads.push new_revision
           next
         end
+        unless file.save
+          Rails.logger.error file.errors.full_messages.to_sentence
+          failed_uploads.push file
+          next
+        end
+
+        new_revision.disk_filename = new_revision.new_storage_filename
 
         if new_revision.save
           new_revision.assign_workflow commited_file[:dmsf_workflow_id]
@@ -117,7 +122,7 @@ module DmsfUploadHelper
             failed_uploads.push file
           end
         else
-          failed_uploads.push commited_file
+          failed_uploads.push new_revision
         end
         # Approval workflow
         if commited_file[:workflow_id].present?

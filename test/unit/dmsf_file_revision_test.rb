@@ -234,4 +234,10 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert @revision1.errors.full_messages.to_sentence.include?('Major version cannot be blank')
   end
 
+  def test_size_validation
+    Setting.attachment_max_size = '1'
+    @revision1.size = 2.kilobytes
+    assert !@revision1.valid?
+  end
+
 end

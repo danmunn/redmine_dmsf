@@ -103,7 +103,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   def test_put_succeeds_for_non_admin_with_correct_permissions
     put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", params: '1234',
         headers: @jsmith.merge!({ content_type: :text })
-    assert_response :created # Now we have permissions
+    assert_response :created
     # Lets check for our file
     file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
     assert file, 'File test-1234 was not found in projects dmsf folder.'
@@ -310,6 +310,14 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     put "/dmsf/webdav/#{@project1.identifier}/1bfile.txt", params: '1',
         headers: @jsmith.merge!({ content_type: :text })
     assert_response :created
+  end
+
+  def test_files_exceeded_max_attachment_size
+    Setting.attachment_max_size = '1'
+    file_content = 'x' * 2.kilobytes
+    put "/dmsf/webdav/#{@project1.identifier}/2kbfile.txt", params: file_content,
+        headers: @jsmith.merge!({ content_type: :text })
+    assert_response :unprocessable_entity
   end
   
 end

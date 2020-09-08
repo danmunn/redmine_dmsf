@@ -75,6 +75,7 @@ class DmsfFileRevision < ActiveRecord::Base
   validates :dmsf_file, presence: true
   validates :name, dmsf_file_name: true
   validates :description, length: { maximum: 1.kilobyte }
+  validates :size, dmsf_max_file_size: true
 
   def project
     dmsf_file.project if dmsf_file
@@ -176,7 +177,7 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def new_storage_filename
-    raise DmsfAccessError, 'File id is not set' unless dmsf_file.id
+    raise DmsfAccessError, 'File id is not set' unless dmsf_file&.id
     filename = DmsfHelper.sanitize_filename(name)
     timestamp = DateTime.current.strftime('%y%m%d%H%M%S')
     while File.exist?(storage_base_path.join("#{timestamp}_#{dmsf_file.id}_#{filename}"))

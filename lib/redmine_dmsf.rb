@@ -27,6 +27,7 @@ DMSF_MAX_NOTIFICATION_RECEIVERS_INFO = 10
 
 # Validators
 require_dependency File.dirname(__FILE__) + '/../app/validators/dmsf_file_name_validator'
+require_dependency File.dirname(__FILE__) + '/../app/validators/dmsf_max_file_size_validator'
 require_dependency File.dirname(__FILE__) + '/../app/validators/dmsf_workflow_name_validator'
 require_dependency File.dirname(__FILE__) + '/../app/validators/dmsf_url_validator'
 require_dependency File.dirname(__FILE__) + '/../app/validators/dmsf_folder_parent_validator'
