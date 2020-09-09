@@ -144,11 +144,17 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def version
-    ver = DmsfUploadHelper::gui_version(major_version).to_s
-    if -minor_version != ' '.ord
-      ver << ".#{DmsfUploadHelper::gui_version(minor_version)}"
+    DmsfFileRevision.version major_version, minor_version
+  end
+
+  def self.version(major_version, minor_version)
+    if major_version && minor_version
+      ver = DmsfUploadHelper::gui_version(major_version).to_s
+      if -minor_version != ' '.ord
+        ver << ".#{DmsfUploadHelper::gui_version(minor_version)}"
+      end
+      ver
     end
-    ver
   end
   
   def storage_base_path
