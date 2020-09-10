@@ -56,6 +56,18 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a.icon-lock', text: l(:button_lock), count: 0
     assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
     assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    assert_select 'a.icon-file.disabled', text: l(:button_edit_content)
+  end
+
+  def test_dmsf_edit_file_locked_by_myself
+    User.current = @jsmith
+    @file1.lock!
+    User.current = nil
+    get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
+    assert_select 'a.icon-unlock', text: l(:button_unlock)
+    assert_select 'a.icon-unlock.disabled', text: l(:button_edit_content), count: 0
+    assert_select 'a.icon-file', text: l(:button_edit_content)
+    assert_select 'a.icon-file.disabled', text: l(:button_edit_content), count: 0
   end
 
   def test_dmsf_file_locked_force_unlock_permission_off

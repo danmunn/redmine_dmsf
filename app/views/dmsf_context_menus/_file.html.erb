@@ -76,7 +76,7 @@
     <% url << dmsf_file.name %>
   <% end %>
   <%= context_menu_link l(:button_edit_content), url, class: "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
-                        disabled: url.blank? || locked %>
+                        disabled: url.blank? || (locked && (!unlockable)) %>
 </li>
 <li>
   <%= context_menu_link l(:button_delete),

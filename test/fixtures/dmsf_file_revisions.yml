@@ -48,11 +48,11 @@ dmsf_file_revisions_003:
   id:                                 3
   dmsf_file_id:                       3
   source_dmsf_file_revision_id:       NULL
-  name:                               "deleted.txt"
-  disk_filename:                      "deleted.txt"
+  name:                               'deleted.txt'
+  disk_filename:                      'deleted.txt'
   size:                               4
-  mime_type:                          text/plain
-  title:                              "Test File"
+  mime_type:                          'text/plain'
+  title:                              'Test File'
   description:                        NULL
   workflow:                           NULL
   minor_version:                      0
@@ -72,7 +72,7 @@ dmsf_file_revisions_004:
   name:                               'test4.txt'
   disk_filename:                      'test4.txt'
   size:                               4
-  mime_type:                          text/plain
+  mime_type:                          'text/plain'
   title:                              'Test File'
   description:                        NULL
   workflow:                           NULL
@@ -90,16 +90,16 @@ dmsf_file_revisions_005:
   id:                                 5
   dmsf_file_id:                       1
   source_dmsf_file_revision_id:       NULL
-  name:                               "test5.txt"
-  disk_filename:                      "test5.txt"
+  name:                               'test5.txt'
+  disk_filename:                      'test5.txt'
   size:                               4
-  mime_type:                          text/plain
-  title:                              "Test File"
+  mime_type:                          'application/vnd.oasis.opendocument.text'
+  title:                              'Test File'
   description:                        NULL
   workflow:                           1 # DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
   minor_version:                      0
   major_version:                      1
-  comment:                            NULL
+  comment:                            'Wrong mime type in order to have Edit content menu item'
   deleted:                            0
   deleted_by_user_id:                 NULL
   user_id:                            1
@@ -111,11 +111,11 @@ dmsf_file_revisions_006:
   id:                                 6
   dmsf_file_id:                       7
   source_dmsf_file_revision_id:       NULL
-  name:                               "test.gif"
-  disk_filename:                      "test.gif"
+  name:                               'test.gif'
+  disk_filename:                      'test.gif'
   size:                               4
-  mime_type:                          image/gif
-  title:                              "Image"
+  mime_type:                          'image/gif'
+  title:                              'Image'
   description:                        NULL
   workflow:                           NULL
   minor_version:                      0
@@ -132,11 +132,11 @@ dmsf_file_revisions_007:
   id:                                 7
   dmsf_file_id:                       8
   source_dmsf_file_revision_id:       NULL
-  name:                               "test.pdf"
-  disk_filename:                      "test.pdf"
+  name:                               'test.pdf'
+  disk_filename:                      'test.pdf'
   size:                               4
-  mime_type:                          application/pdf
-  title:                              "PDF"
+  mime_type:                          'application/pdf'
+  title:                              'PDF'
   description:                        NULL
   workflow:                           NULL
   minor_version:                      0
@@ -153,11 +153,11 @@ dmsf_file_revisions_008:
   id:                                 8
   dmsf_file_id:                       9
   source_dmsf_file_revision_id:       NULL
-  name:                               "myfile.txt"
-  disk_filename:                      "myfile.txt" # The file is not physicaly present
+  name:                               'myfile.txt'
+  disk_filename:                      'myfile.txt' # The file is not physicaly present
   size:                               0
-  mime_type:                          text/plain
-  title:                              "My File"
+  mime_type:                          'text/plain'
+  title:                              'My File'
   description:                        NULL
   workflow:                           NULL
   minor_version:                      0
@@ -174,11 +174,11 @@ dmsf_file_revisions_009:
   id:                                 9
   dmsf_file_id:                       10
   source_dmsf_file_revision_id:       NULL
-  name:                               "zero.txt"
-  disk_filename:                      "zero.txt"
+  name:                               'zero.txt'
+  disk_filename:                      'zero.txt'
   size:                               0
-  mime_type:                          text/plain
-  title:                              "Zero Size File"
+  mime_type:                          'text/plain'
+  title:                              'Zero Size File'
   description:                        NULL
   workflow:                           NULL
   minor_version:                      0
@@ -195,11 +195,11 @@ dmsf_file_revisions_010:
   id:                                 10
   dmsf_file_id:                       5
   source_dmsf_file_revision_id:       NULL
-  name:                               "test.txt"
-  disk_filename:                      "test.txt"
+  name:                               'test.txt'
+  disk_filename:                      'test.txt'
   size:                               4
-  mime_type:                          text/plain
-  title:                              "Test File"
+  mime_type:                          'text/plain'
+  title:                              'Test File'
   description:                        'Some file :-)'
   workflow:                           1 # DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
   minor_version:                      0
@@ -217,11 +217,11 @@ dmsf_file_revisions_011:
   id:                                 11
   dmsf_file_id:                       12
   source_dmsf_file_revision_id:       NULL
-  name:                               "test.txt"
-  disk_filename:                      "test.txt"
+  name:                               'test.txt'
+  disk_filename:                      'test.txt'
   size:                               4
-  mime_type:                          text/plain
-  title:                              "Test File"
+  mime_type:                          'text/plain'
+  title:                              'Test File'
   description:                        'Some file :-)'
   workflow:                           0
   minor_version:                      0
