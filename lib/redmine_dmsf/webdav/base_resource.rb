@@ -55,13 +55,39 @@ module RedmineDmsf
         nil
       end
 
+      # Overridden
+      def index_page
+        %{
+          <!DOCTYPE html>
+          <html lang="#{current_language}">
+            <head>
+              <title>%s</title>
+              <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+            </head>
+            <body>
+              <h1>%s</h1>
+              <hr/>
+              <table>
+                <tr>
+                  <th class="name">Name</th>
+                  <th class="size">Size</th> <th class="type">Type</th>
+                  <th class="mtime">Last Modified</th>
+                </tr>
+                %s
+              </table>
+              <hr/>
+           </body>
+          </html>
+        }
+      end
+
       # Generate HTML for Get requests, or Head requests if no_body is true
       def html_display
         @response.body = +''
-        Confict unless collection?        
-        entities = children.map{|child| 
+        Confict unless collection?
+        entities = children.map{ |child|
           DIR_FILE % [
-            "#{@options[:root_uri_path]}#{child.path}",
+            "#{@options[:root_uri_path]}#{URI.encode(child.path)}",
             child.long_name || child.name, 
             child.collection? ? '' : number_to_human_size(child.content_length),
             child.special_type || child.content_type, 
@@ -69,7 +95,7 @@ module RedmineDmsf
           ]
         } * "\n"
         entities = DIR_FILE % [
-          parent.public_path,
+            URI.encode(parent.public_path),
           l(:parent_directory),
           '',
           '',
