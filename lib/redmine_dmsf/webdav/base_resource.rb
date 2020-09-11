@@ -69,9 +69,10 @@ module RedmineDmsf
               <hr/>
               <table>
                 <tr>
-                  <th class="name">Name</th>
-                  <th class="size">Size</th> <th class="type">Type</th>
-                  <th class="mtime">Last Modified</th>
+                  <th class="name">#{l(:field_name)}</th>
+                  <th class="size">#{l(:field_filesize)}</th>
+                  <th class="type">#{l(:field_type)}</th>
+                  <th class="mtime">#{l(:link_modified)}</th>
                 </tr>
                 %s
               </table>

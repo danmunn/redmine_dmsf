@@ -97,7 +97,7 @@ module DmsfHelper
       end
     end
     url << ''
-    url.join '/'
+    URI.encode(url.join '/')
   end
 
 end
