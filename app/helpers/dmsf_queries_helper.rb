@@ -159,6 +159,8 @@ module DmsfQueriesHelper
           super column, object, value
         end
       end
+    else
+      super column, object, value
     end
   end
 
