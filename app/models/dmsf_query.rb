@@ -154,11 +154,20 @@ class DmsfQuery < Query
         order_option[1].gsub!(',', " #{$1},")
       end
     end
-    base_scope.
+    items = base_scope.
         where(statement).
         order(order_option).
         limit(options[:limit]).
-        offset(options[:offset])
+        offset(options[:offset]).to_a
+    items.each do |item|
+      if item.type == 'folder'
+        dmsf_folder = DmsfFolder.find_by(id: item.id)
+        if dmsf_folder && (!DmsfFolder.permissions?(dmsf_folder, false))
+          items.delete item
+        end
+      end
+    end
+    items
   end
 
   def extra_columns

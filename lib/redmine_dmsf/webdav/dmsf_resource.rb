@@ -49,8 +49,10 @@ module RedmineDmsf
           @children = []
           if folder
             # Folders
-            folder.dmsf_folders.visible.pluck(:title).each do |title|
-              @children.push child(title)
+            folder.dmsf_folders.visible.each do |f|
+              if DmsfFolder.permissions?(f, false)
+                @children.push child(f.title)
+              end
             end
             # Files
             folder.dmsf_files.visible.pluck(:name).each do |name|
@@ -62,8 +64,10 @@ module RedmineDmsf
             if subproject.module_enabled?(:dmsf)
               # Folders
               if User.current.allowed_to?(:view_dmsf_folders, project)
-                subproject.dmsf_folders.visible.pluck(:title).each do |title|
-                  @children.push child(title)
+                subproject.dmsf_folders.visible.each do |f|
+                  if DmsfFolder.permissions?(f, false)
+                    @children.push child(f.title)
+                  end
                 end
               end
               # Files
@@ -95,6 +99,9 @@ module RedmineDmsf
         unless @folder
           @folder = DmsfFolder.visible.find_by(project_id: project&.id, title: basename,
             dmsf_folder_id: parent&.folder&.id)
+          if @folder && (!DmsfFolder.permissions?(@folder, false))
+            @folder = nil
+          end
         end
         @folder
       end
