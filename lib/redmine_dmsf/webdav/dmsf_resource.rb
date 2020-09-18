@@ -200,6 +200,7 @@ module RedmineDmsf
         if collection?
           html_display
           response['Content-Length'] = response.body.bytesize.to_s
+          response['Content-Type'] = 'text/html'
         else
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:view_dmsf_files, project)
           response.body = download # Rack based provider
