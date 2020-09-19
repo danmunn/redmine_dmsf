@@ -68,6 +68,7 @@ module RedmineDmsf
       def get(request, response)
         html_display
         response['Content-Length'] = response.body.bytesize.to_s
+        response['Content-Type'] = 'text/html'
         OK
       end
 

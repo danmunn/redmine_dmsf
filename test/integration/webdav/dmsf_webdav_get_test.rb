@@ -41,6 +41,13 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
   end
 
+  def test_should_include_response_headers
+    get '/dmsf/webdav', params: nil, headers: @admin
+    assert_response :success
+    assert_equal 'text/html', response.headers['Content-Type']
+    assert response.headers['Content-Length'].to_i > 0, "Content-Length should be > 0, but was #{response.headers['Content-Length']}"
+  end
+
   def test_should_list_dmsf_enabled_project
     get '/dmsf/webdav', params: nil, headers: @admin
     assert_response :success
