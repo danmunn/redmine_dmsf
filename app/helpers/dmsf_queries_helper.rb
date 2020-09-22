@@ -76,10 +76,7 @@ module DmsfQueriesHelper
           tag = content_tag('span', value, class: 'icon icon-folder')
         else
           tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle(this, '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe +
-          link_to(h(value),
-            dmsf_folder_path(id: item.project, folder_id: item.id),
-            class: 'icon icon-folder',
-            title: h(value))
+            link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'icon icon-folder')
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'folder-link'
@@ -88,10 +85,7 @@ module DmsfQueriesHelper
         else
           tag = "<span class=\"dmsf_expander\"></span>".html_safe +
           # For links we use revision_id containing dmsf_folder.id in fact
-          link_to(h(value),
-                  dmsf_folder_path(id: item.project, folder_id: item.revision_id),
-                  class: 'icon icon-folder',
-                  title: h(value))
+          link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.revision_id), class: 'icon icon-folder')
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:label_target_folder))
       when 'file', 'file-link'
@@ -103,12 +97,9 @@ module DmsfQueriesHelper
           content_type = Redmine::MimeType.of(value)
           content_type = 'application/octet-stream' if content_type.blank?
           tag = "<span class=\"dmsf_expander\"></span>".html_safe +
-          link_to(h(value),
-               file_view_url,
-               target: '_blank',
-               class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}",
-               title: h(value),
-               'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}")
+          link_to(h(value), file_view_url, target: '_blank',
+            class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}",
+            'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}")
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'url-link'
