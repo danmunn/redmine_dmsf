@@ -21,6 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'dav4rack'
+require 'addressable/uri'
 
 module RedmineDmsf
   module Webdav
@@ -88,7 +89,7 @@ module RedmineDmsf
         Confict unless collection?
         entities = children.map{ |child|
           DIR_FILE % [
-            "#{@options[:root_uri_path]}#{URI.encode(child.path)}",
+            "#{@options[:root_uri_path]}#{Addressable::URI.encode(child.path)}",
             child.long_name || child.name, 
             child.collection? ? '' : number_to_human_size(child.content_length),
             child.special_type || child.content_type, 
@@ -96,7 +97,7 @@ module RedmineDmsf
           ]
         } * "\n"
         entities = DIR_FILE % [
-            URI.encode(parent.public_path),
+            Addressable::URI.encode(parent.public_path),
           l(:parent_directory),
           '',
           '',

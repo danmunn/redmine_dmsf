@@ -41,13 +41,20 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
   end
 
+  def test_should_include_response_headers
+    get '/dmsf/webdav', params: nil, headers: @admin
+    assert_response :success
+    assert_equal 'text/html', response.headers['Content-Type']
+    assert response.headers['Content-Length'].to_i > 0, "Content-Length should be > 0, but was #{response.headers['Content-Length']}"
+  end
+
   def test_should_list_dmsf_enabled_project
     get '/dmsf/webdav', params: nil, headers: @admin
     assert_response :success
     assert !response.body.match(@project1.identifier).nil?,
            "Expected to find project #{@project1.identifier} in return data"
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    project1_uri = Addressable::URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     get '/dmsf/webdav', params: nil, headers: @admin
     assert_response :success
     assert_no_match @project1.identifier, response.body
