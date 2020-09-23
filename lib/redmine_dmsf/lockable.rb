@@ -52,7 +52,7 @@ module RedmineDmsf
         if (existing[0].lock_scope == :scope_shared) && (scope == :scope_shared)
           # RFC states if an item is exclusively locked and another lock is attempted we reject
           # if the item is shared locked however, we can always add another lock to it
-          if self.folder.locked?
+          if self.dmsf_folder.locked?
             raise DmsfLockError.new(l(:error_parent_locked))
           else
             existing.each do |l|
