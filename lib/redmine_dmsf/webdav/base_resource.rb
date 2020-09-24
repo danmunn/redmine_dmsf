@@ -89,7 +89,7 @@ module RedmineDmsf
         Confict unless collection?
         entities = children.map{ |child|
           DIR_FILE % [
-            "#{@options[:root_uri_path]}#{Addressable::URI.encode(child.path)}",
+            uri_encode(request.url_for(child.path)),
             child.long_name || child.name, 
             child.collection? ? '' : number_to_human_size(child.content_length),
             child.special_type || child.content_type, 
@@ -97,7 +97,7 @@ module RedmineDmsf
           ]
         } * "\n"
         entities = DIR_FILE % [
-            Addressable::URI.encode(parent.public_path),
+            uri_encode(request.url_for(parent.path)),
           l(:parent_directory),
           '',
           '',
@@ -137,6 +137,10 @@ module RedmineDmsf
       end
 
     protected
+
+      def uri_encode(uri)
+        uri.gsub(/[\(\)&]/, '(' => '%28', ')' => '%29', '&' => '&amp;')
+      end
     
       def basename
         File.basename @path
@@ -156,7 +160,7 @@ module RedmineDmsf
                   prj = Project.visible.find_by(id: $1)
                   if prj
                     # Check again whether it's really the project and not a folder with a number as a suffix
-                    prj = nil unless pinfo.first =~ /^#{DmsfFolder::get_valid_title(prj.name)}/
+                    prj = nil unless pinfo.first.start_with?(DmsfFolder::get_valid_title(prj.name))
                   end
                 end
               else
@@ -184,7 +188,7 @@ module RedmineDmsf
                 prj = Project.visible.find_by(id: $1)
                 if prj
                   # Check again whether it's really the project and not a folder with a number as a suffix
-                  prj = nil unless pinfo.first =~ /^#{DmsfFolder::get_valid_title(prj.name)}/
+                  prj = nil unless pinfo.first.start_with?(DmsfFolder::get_valid_title(prj.name))
                 end
               end
             else
