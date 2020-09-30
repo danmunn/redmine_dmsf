@@ -80,7 +80,8 @@ class DmsfController < ApplicationController
           @offset, @limit = api_offset_and_limit
         }
         format.csv  {
-          send_data query_to_csv(@query.dmsf_nodes, @query), type: 'text/csv; header=present', filename: 'dmsf.csv'
+          send_data query_to_csv(@query.dmsf_nodes, @query), type: 'text/csv; header=present',
+                    filename: 'dmsf.csv'
         }
       end
     else
