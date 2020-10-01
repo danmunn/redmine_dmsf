@@ -85,8 +85,14 @@ module RedmineDmsf
       # Does the object exist?
       # If it is either a subproject or a folder or a file, then it exists
       def exist?
-        subproject || (project && project.module_enabled?('dmsf') && (folder || file) &&
-          (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project)))
+        case @request.request_method.downcase
+        when 'mkcol'
+          (project && project.module_enabled?('dmsf') && (folder || file) &&
+              (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project)))
+        else
+          subproject || (project && project.module_enabled?('dmsf') && (folder || file) &&
+              (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project)))
+        end
       end
 
       # Is this entity a folder?
@@ -293,17 +299,12 @@ module RedmineDmsf
               !User.current.allowed_to?(:folder_manipulation, resource.project))
             raise Forbidden
           end
-          # Current object is a folder, so now we need to figure out information about Destination
-          if dest.exist?
-            return overwrite ? NotImplemented : PreconditionFailed
-          else
-            # Change the title
-            return MethodNotAllowed unless folder # Moving sub-project not enabled
-            folder.title = resource.basename
-            return PreconditionFailed unless folder.save
-            # Move to a new destination
-            folder.move_to(resource.project, parent.folder) ? Created : PreconditionFailed
-          end
+          # Change the title
+          return MethodNotAllowed unless folder # Moving sub-project not enabled
+          folder.title = resource.basename
+          return PreconditionFailed unless folder.save
+          # Move to a new destination
+          folder.move_to(resource.project, parent.folder) ? Created : PreconditionFailed
         else
           if !User.current.admin? && (!User.current.allowed_to?(:file_manipulation, project) ||
               !User.current.allowed_to?(:file_manipulation, resource.project))
