@@ -29,7 +29,7 @@ class DmsfQuery < Query
 
   # Standard columns
   self.available_columns = [
-      QueryColumn.new(:id, sortable: 'id', caption: '#'),
+      QueryColumn.new(:id, sortable: 'id', caption: +'#'),
       DmsfTitleQueryColumn.new(:title, sortable: 'title', frozen: true),
       QueryColumn.new(:size, sortable: 'size'),
       DmsfModifiedQueryColumn.new(:modified, sortable: 'updated'),
