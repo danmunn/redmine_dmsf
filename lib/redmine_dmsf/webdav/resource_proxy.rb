@@ -34,19 +34,19 @@ module RedmineDmsf
 
       attr_reader :read_only
 
-      def initialize(*args)
+      def initialize(path, request, response, options)
         # Return 404 - NotFound if WebDAV is not enabled
         unless Setting.plugin_redmine_dmsf['dmsf_webdav']
           raise NotFound
         end
-        super *args
+        super path, request, response, options
         pinfo = path.split('/').drop(1)
         if pinfo.length == 0 # If this is the base_path, we're at root
-          @resource_c = IndexResource.new(*args)
-        elsif pinfo.length == 1 # This is the first level, and as such, project path
-          @resource_c = ProjectResource.new(*args)
+          @resource_c = IndexResource.new(path, request, response, options)
+        elsif (pinfo.length == 1) || options[:project] # The first level or we know that it's a project
+          @resource_c = ProjectResource.new(path, request, response, options)
         else # We made it all the way to DMSF Data
-          @resource_c = DmsfResource.new(*args)
+          @resource_c = DmsfResource.new(path, request, response, options)
         end
         @resource_c.accessor = self if @resource_c
         @read_only = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_ONLY'

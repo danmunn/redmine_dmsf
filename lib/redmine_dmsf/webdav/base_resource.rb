@@ -120,7 +120,7 @@ module RedmineDmsf
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
         new_path += project_display_name
-        @__proxy.class.new new_path, request, response, @options.merge(user: @user)
+        @__proxy.class.new new_path, request, response, @options.merge(user: @user, project: true)
       end
 
       def parent
