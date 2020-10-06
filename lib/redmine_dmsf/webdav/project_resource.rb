@@ -71,7 +71,7 @@ module RedmineDmsf
       end
 
       def etag
-        sprintf '%x-%x-%x', 0, 4096, last_modified.to_i
+        sprintf '%x-%x-%x', 0, 4096, (last_modified ? last_modified.to_i : 0)
       end
 
       def name

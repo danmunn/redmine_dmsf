@@ -61,11 +61,11 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     assert_match project1_uri, response.body
   end
 
-  def test_should_list_non_dmsf_enabled_project
+  def test_should_not_list_non_dmsf_enabled_project
     @project2.disable_module! :dmsf
     get '/dmsf/webdav', params: nil, headers: @jsmith
     assert_response :success
-    assert response.body.match(@project2.identifier)
+    assert !response.body.match(@project2.identifier)
   end
 
   def test_should_return_status_404_when_project_does_not_exist

@@ -207,8 +207,21 @@ module RedmineDmsf
 
       def load_projects(project_scope)
         project_scope.visible.find_each do |p|
+          if dmsf_available?(p)
             @children << child_project(p)
+          end
         end
+      end
+
+      private
+
+      # Go recursively through the project tree until a dmsf enabled project is found
+      def dmsf_available?(p)
+        return true if(p.visible? && p.module_enabled?(:dmsf))
+        p.children.each do |child|
+          return true if dmsf_available?(child)
+        end
+        false
       end
 
     end
