@@ -150,21 +150,21 @@ module RedmineDmsf
       def project
         unless @project
           i = 1
-          project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
           while true
-            prj = nil
             pinfo = @path.split('/').drop(i)
+            #break if (pinfo.length == 1) && @project
+            prj = nil
             if pinfo.length > 0
-              if project_names
+              if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
                 if pinfo.first =~ / (\d+)$/
-                  prj = Project.visible.find_by(id: $1)
+                  prj = Project.visible.find_by(id: $1, parent_id: @project&.id)
                   if prj
                     # Check again whether it's really the project and not a folder with a number as a suffix
                     prj = nil unless pinfo.first.start_with?(DmsfFolder::get_valid_title(prj.name))
                   end
                 end
               else
-                prj = Project.visible.find_by(identifier: pinfo.first)
+                prj = Project.visible.find_by(identifier: pinfo.first, parent_id: @project&.id)
               end
             end
             break unless prj
@@ -178,21 +178,22 @@ module RedmineDmsf
       # Make it easy to find the path without project in it.
       def projectless_path
         i = 1
-        project_names = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+        project = nil
         while true
           prj = nil
           pinfo = @path.split('/').drop(i)
           if pinfo.length > 0
-            if project_names
+            if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
               if pinfo.first =~ / (\d+)$/
-                prj = Project.visible.find_by(id: $1)
+                prj = Project.visible.find_by(id: $1, parent_id: project&.id)
                 if prj
                   # Check again whether it's really the project and not a folder with a number as a suffix
                   prj = nil unless pinfo.first.start_with?(DmsfFolder::get_valid_title(prj.name))
                 end
               end
             else
-              prj = Project.visible.find_by(identifier: pinfo.first)
+              prj = Project.visible.find_by(identifier: pinfo.first, parent_id: project&.id)
+              project = prj
             end
           end
           return '/' + @path.split('/').drop(i).join('/') unless prj

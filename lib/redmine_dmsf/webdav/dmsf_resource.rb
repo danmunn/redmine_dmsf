@@ -224,14 +224,14 @@ module RedmineDmsf
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
           return MethodNotAllowed if exist? # If we already exist, why waste the time trying to save?
-          parent_folder = nil
+          parent_folder_id = nil
           if parent.projectless_path != '/'
             return Conflict unless parent.folder
-            parent_folder = parent.folder.id
+            parent_folder_id = parent.folder.id
           end
           f = DmsfFolder.new
           f.title = basename
-          f.dmsf_folder_id = parent_folder
+          f.dmsf_folder_id = parent_folder_id
           f.project = project
           f.user = User.current
           f.save ? Created : Conflict
@@ -287,6 +287,7 @@ module RedmineDmsf
         resource = dest.is_a?(ResourceProxy) ? dest.resource : dest
         return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil?
         parent = resource.parent
+        raise Forbidden unless resource.project.module_enabled?(:dmsf)
         if !parent.exist? || (!User.current.admin? && (!DmsfFolder.permissions?(folder, false) ||
             !DmsfFolder.permissions?(parent.folder, false)))
           raise Forbidden
