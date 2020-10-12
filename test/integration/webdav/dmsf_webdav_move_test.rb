@@ -313,6 +313,15 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
     assert_equal 'new_folder_name', @folder10.title
   end
 
+  def test_move_folder_in_subproject_to_the_same_name_as_subproject
+    process :move, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil,
+      headers: @admin.merge!({
+        destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@project3.identifier}" })
+    assert_response :created
+    @folder10.reload
+    assert_equal @project3.identifier, @folder10.title
+  end
+
   def test_move_subproject
     process :move, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}", params: nil,
       headers: @admin.merge!({

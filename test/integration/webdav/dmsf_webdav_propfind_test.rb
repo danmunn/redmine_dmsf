@@ -88,7 +88,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     process :propfind, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin.merge!({ HTTP_DEPTH: '0' })
     assert_response :multi_status
     assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</d:href>")
-    assert response.body.include?("<d:displayname>#{@project1.identifier}</d:displayname>")
+    assert response.body.include?("<d:displayname>#{RedmineDmsf::Webdav::ProjectResource::create_project_name(@project1)}</d:displayname>")
   end
 
   def test_propfind_depth0_on_project1_for_admin_with_project_names
@@ -106,7 +106,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     assert_response :multi_status
     # Project
     assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</d:href>")
-    assert response.body.include?("<d:displayname>#{@project1.identifier}</d:displayname>")
+    assert response.body.include?("<d:displayname>#{RedmineDmsf::Webdav::ProjectResource::create_project_name(@project1)}</d:displayname>")
     # Folders
     assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@folder1.title}/</d:href>")
     assert response.body.include?("<d:displayname>#{@folder1.title}</d:displayname>")
@@ -158,7 +158,7 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
             headers: @admin.merge!({ HTTP_DEPTH: '1'})
     assert_response :multi_status
     assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/</d:href>")
-    assert response.body.include?("<d:displayname>#{@project3.identifier}</d:displayname>")
+    assert response.body.include?("<d:displayname>#{RedmineDmsf::Webdav::ProjectResource::create_project_name(@project3)}</d:displayname>")
   end
 
 end

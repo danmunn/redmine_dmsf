@@ -23,10 +23,6 @@
 module RedmineDmsf
   module Webdav
     class IndexResource < BaseResource
-
-      def initialize(path, request, response, options)
-        super(path, request, response, options)
-      end
       
       def children
         unless @children
@@ -70,11 +66,6 @@ module RedmineDmsf
         response['Content-Length'] = response.body.bytesize.to_s
         response['Content-Type'] = 'text/html'
         OK
-      end
-
-      # Bugfix: Ensure that this level never indicates a parent
-      def parent
-        nil
       end
 
     end

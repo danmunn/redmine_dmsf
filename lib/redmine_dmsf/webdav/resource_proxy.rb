@@ -40,14 +40,8 @@ module RedmineDmsf
           raise NotFound
         end
         super path, request, response, options
-        pinfo = path.split('/').drop(1)
-        if pinfo.length == 0 # If this is the base_path, we're at root
-          @resource_c = IndexResource.new(path, request, response, options)
-        elsif (pinfo.length == 1) || options[:project] # The first level or we know that it's a project
-          @resource_c = ProjectResource.new(path, request, response, options)
-        else # We made it all the way to DMSF Data
-          @resource_c = DmsfResource.new(path, request, response, options)
-        end
+        rc = get_resource_class(path)
+        @resource_c = rc.new(path, request, response, options)
         @resource_c.accessor = self if @resource_c
         @read_only = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_ONLY'
       end
@@ -174,6 +168,28 @@ module RedmineDmsf
 
       def propstats(response, stats)
         @resource_c.propstats response, stats
+      end
+
+      private
+
+      def get_resource_class(path)
+        pinfo = path.split('/').drop(1)
+        return IndexResource if pinfo.length == 0
+        return ProjectResource if pinfo.length == 1
+        i = 1
+        project = nil
+        prj = nil
+        while pinfo.length > 0
+          prj = BaseResource::get_project(pinfo.first, project)
+          if prj
+            project = prj
+          else
+            break
+          end
+          i = i + 1
+          pinfo = path.split('/').drop(i)
+        end
+        prj ? ProjectResource : DmsfResource
       end
 
     end

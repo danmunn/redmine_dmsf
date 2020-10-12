@@ -25,10 +25,6 @@ module RedmineDmsf
     class ProjectResource < BaseResource
       include Redmine::I18n
 
-      def initialize(path, request, response, options)
-        super path, request, response, options
-      end
-      
       def children
         unless @children          
           @children = []
@@ -75,11 +71,11 @@ module RedmineDmsf
       end
 
       def name
-        ProjectResource.create_project_name project
+        ProjectResource.create_project_name(project)
       end
 
       def long_name
-        project&.name
+        '[' + project&.name + ']'
       end
 
       def content_type
@@ -102,28 +98,29 @@ module RedmineDmsf
       end
 
       def make_collection
-        # It's not allowed to create folders on project level
+         MethodNotAllowed
+      end
+
+      def move(dest, overwrite)
         MethodNotAllowed
       end
 
-      def folder
-        nil
+      def delete
+        MethodNotAllowed
       end
 
-      def file
-        nil
+      def lock(args)
+        e = DAV4Rack::LockFailure.new
+        e.add_failure @path, MethodNotAllowed
+        raise e
       end
 
-      def project_id
-	      project&.id
-      end
-
-      def self.create_project_name(project)
-        if project
+      def self.create_project_name(prj)
+        if prj
           if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-            "#{DmsfFolder::get_valid_title(project.name)} #{project.id}"
+            "#{DmsfFolder::get_valid_title(prj.name)} #{prj.id}"
           else
-            project.identifier
+            "[#{prj.identifier}]"
           end
         end
       end

@@ -32,6 +32,15 @@ module RedmineDmsf
 
       attr_reader :public_path
 
+      DIR_FILE = %{
+                    <tr>
+                      <td class=\"name\"><a href=\"%s\">%s</a></td>
+                      <td class=\"size\">%s</td>
+                      <td class=\"type\">%s</td>
+                      <td class=\"mtime\">%s</td>
+                    </tr>
+                   }
+
       def initialize(path, request, response, options)
         raise NotFound if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
         @project = nil
@@ -39,8 +48,6 @@ module RedmineDmsf
         @children = nil
         super path, request, response, options
       end
-
-      DIR_FILE = "<tr><td class=\"name\"><a href=\"%s\">%s</a></td><td class=\"size\">%s</td><td class=\"type\">%s</td><td class=\"mtime\">%s</td></tr>"
 
       def accessor=(klass)
         @__proxy = klass
@@ -136,69 +143,34 @@ module RedmineDmsf
         OK
       end
 
+      def project
+        get_resource_info
+        @project
+      end
+
+      def subproject
+        get_resource_info
+        @subproject
+      end
+
+      def folder
+        get_resource_info
+        @folder
+      end
+
+      def file
+        get_resource_info
+        @file
+      end
+
     protected
 
       def uri_encode(uri)
-        uri.gsub(/[\(\)&]/, '(' => '%28', ')' => '%29', '&' => '&amp;')
+        uri.gsub /[\(\)&]/, '(' => '%28', ')' => '%29', '&' => '&amp;'
       end
     
       def basename
         File.basename @path
-      end
-
-      # Return instance of Project based on the path
-      def project
-        unless @project
-          i = 1
-          while true
-            pinfo = @path.split('/').drop(i)
-            #break if (pinfo.length == 1) && @project
-            prj = nil
-            if pinfo.length > 0
-              if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-                if pinfo.first =~ / (\d+)$/
-                  prj = Project.visible.find_by(id: $1, parent_id: @project&.id)
-                  if prj
-                    # Check again whether it's really the project and not a folder with a number as a suffix
-                    prj = nil unless pinfo.first.start_with?(DmsfFolder::get_valid_title(prj.name))
-                  end
-                end
-              else
-                prj = Project.visible.find_by(identifier: pinfo.first, parent_id: @project&.id)
-              end
-            end
-            break unless prj
-            i = i + 1
-            @project = prj
-          end
-        end
-        @project
-      end
-
-      # Make it easy to find the path without project in it.
-      def projectless_path
-        i = 1
-        project = nil
-        while true
-          prj = nil
-          pinfo = @path.split('/').drop(i)
-          if pinfo.length > 0
-            if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-              if pinfo.first =~ / (\d+)$/
-                prj = Project.visible.find_by(id: $1, parent_id: project&.id)
-                if prj
-                  # Check again whether it's really the project and not a folder with a number as a suffix
-                  prj = nil unless pinfo.first.start_with?(DmsfFolder::get_valid_title(prj.name))
-                end
-              end
-            else
-              prj = Project.visible.find_by(identifier: pinfo.first, parent_id: project&.id)
-              project = prj
-            end
-          end
-          return '/' + @path.split('/').drop(i).join('/') unless prj
-          i = i + 1
-        end
       end
 
       def path_prefix
@@ -213,7 +185,63 @@ module RedmineDmsf
         end
       end
 
+      def self.get_project(name, parent_project)
+        prj = nil
+        if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+          if name =~ /^\[?.+ (\d+)\]?$/
+            prj = Project.visible.find_by(id: $1, parent_id: parent_project&.id)
+            if prj
+              # Check again whether it's really the project and not a folder with a number as a suffix
+              prj = nil unless name.include?(DmsfFolder::get_valid_title(prj.name))
+            end
+          end
+        else
+          if name =~ /^\[?([^\]]+)\]?$/
+            prj = Project.visible.find_by(identifier: $1, parent_id: parent_project&.id)
+          end
+        end
+        prj
+      end
+
       private
+
+      def get_resource_info
+        return if @project # We have already got it
+        pinfo = @path.split('/').drop(1)
+        i = 1
+        while pinfo.length > 0
+          prj = BaseResource::get_project(pinfo.first, @project)
+          if prj
+            @project = prj
+            if pinfo.length == 1
+              @subproject = @project
+              break # We're at the end
+            end
+          else
+            @subproject = nil
+            fld = get_folder(pinfo.first)
+            if fld
+              @folder = fld
+            else
+              @file = DmsfFile.find_file_by_name(@project, @folder, pinfo.first)
+              @folder = nil
+              break # We're at the end
+            end
+          end
+          i = i + 1
+          pinfo = path.split('/').drop(i)
+        end
+      end
+
+      def get_folder(name)
+        return nil unless @project
+        f = DmsfFolder.visible.find_by(project_id: @project.id, dmsf_folder_id: @folder&.id, title: name)
+        if f && (!DmsfFolder.permissions?(f, false))
+          nil
+        else
+          f
+        end
+      end
 
       # Go recursively through the project tree until a dmsf enabled project is found
       def dmsf_available?(p)
