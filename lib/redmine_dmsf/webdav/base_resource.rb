@@ -188,17 +188,20 @@ module RedmineDmsf
       def self.get_project(name, parent_project)
         prj = nil
         if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-          if name =~ /^\[?.+ (\d+)\]?$/
+          #if name =~ /^\[?.+ (\d+)\]?$/
+          if name =~ / (\d+)$/
             prj = Project.visible.find_by(id: $1, parent_id: parent_project&.id)
             if prj
               # Check again whether it's really the project and not a folder with a number as a suffix
-              prj = nil unless name.include?(DmsfFolder::get_valid_title(prj.name))
+              #prj = nil unless name.include?(DmsfFolder::get_valid_title(prj.name))
+              prj = nil unless name.start_with?(DmsfFolder::get_valid_title(prj.name))
             end
           end
         else
-          if name =~ /^\[?([^\]]+)\]?$/
-            prj = Project.visible.find_by(identifier: $1, parent_id: parent_project&.id)
-          end
+          # if name =~ /^\[?([^\]]+)\]?$/
+          #   prj = Project.visible.find_by(identifier: $1, parent_id: parent_project&.id)
+          # end
+          prj = Project.visible.find_by(identifier: name, parent_id: parent_project&.id)
         end
         prj
       end
