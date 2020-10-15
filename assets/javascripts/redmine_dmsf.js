@@ -147,3 +147,11 @@ function dmsfExpandRows(id, parentRow, url) {
       alert('An error in rows expanding');
   });
 }
+
+function noteMandatory(mandatory) {
+  let note = $('textarea#note');
+  note.prop('required', mandatory);
+  if(mandatory){
+    note.focus();
+  }
+}

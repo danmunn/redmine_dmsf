@@ -27,13 +27,13 @@
   <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>
   <p>
     <label>
-      <%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_APPROVE, true %>
+      <%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_APPROVE, true, onclick: 'noteMandatory(false);' %>
       <%= l(:label_dmsf_wokflow_action_approve) %>
     </label>
   </p>  
   <p>
     <label>
-      <%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_REJECT %>
+      <%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_REJECT, false, onclick: 'noteMandatory(true);' %>
       <%= l(:label_dmsf_wokflow_action_reject) %>
     </label>    
     <br/>
@@ -51,7 +51,7 @@
   </div>
   
   <p class="buttons">
-    <%= submit_tag l(:button_submit), name: 'commit', onclick: 'hideModal(this);' %>
-    <%= submit_tag l(:button_cancel), name: 'commit', onclick: 'hideModal(this);' %>
+    <%= submit_tag l(:button_submit), name: 'commit' %>
+    <%= submit_tag l(:button_cancel), name: 'cancel', onclick: 'hideModal(this);' %>
   </p>
 <% end %>
