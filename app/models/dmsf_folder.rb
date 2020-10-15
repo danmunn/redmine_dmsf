@@ -206,7 +206,7 @@ class DmsfFolder < ActiveRecord::Base
   def self.directory_tree(project, current_folder = nil)
     tree = [[l(:link_documents), nil]]
     project = Project.find(project) unless project.is_a?(Project)
-    folders = project.dmsf_folders.visible(false).to_a
+    folders = project.dmsf_folders.visible.to_a
     # TODO: This prevents copying folders into its sub-folders too. It should be allowed.
     folders.delete(current_folder)
     folders = folders.delete_if{ |f| f.locked_for_user? }
@@ -580,7 +580,7 @@ class DmsfFolder < ActiveRecord::Base
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)
-    folders = folder.dmsf_folders.notsystem.visible(false).to_a
+    folders = folder.dmsf_folders.visible.to_a
     folders.delete current_folder
     folders.delete_if { |f| f.locked_for_user? }
     folders.each do |subfolder|
