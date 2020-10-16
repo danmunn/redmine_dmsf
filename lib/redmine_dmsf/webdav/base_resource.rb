@@ -185,16 +185,16 @@ module RedmineDmsf
         end
       end
 
-      def self.get_project(name, parent_project)
+      def self.get_project(scope, name, parent_project)
         prj = nil
         if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
           #if name =~ /^\[?.+ (\d+)\]?$/
           if name =~ / (\d+)$/
-            #prj = Project.visible.find_by(id: $1, parent_id: parent_project&.id)
+            #prj = scope.find_by(id: $1, parent_id: parent_project&.id)
             if parent_project
-              prj = Project.visible.find_by(id: $1, parent_id: parent_project.id)
+              prj = scope.find_by(id: $1, parent_id: parent_project.id)
             else
-              prj = Project.visible.find_by(id: $1)
+              prj = scope.find_by(id: $1)
             end
             if prj
               # Check again whether it's really the project and not a folder with a number as a suffix
@@ -204,13 +204,12 @@ module RedmineDmsf
           end
         else
           # if name =~ /^\[?([^\]]+)\]?$/
-          #   prj = Project.visible.find_by(identifier: $1, parent_id: parent_project&.id)
+          #   prj = scope.find_by(identifier: $1, parent_id: parent_project&.id)
           # end
-          #prj = Project.visible.find_by(identifier: name, parent_id: parent_project&.id)
           if parent_project
-            prj = Project.visible.find_by(identifier: name, parent_id: parent_project.id)
+            prj = scope.find_by(identifier: name, parent_id: parent_project.id)
           else
-            prj = Project.visible.find_by(identifier: name)
+            prj = scope.find_by(identifier: name)
           end
         end
         prj
@@ -223,7 +222,7 @@ module RedmineDmsf
         pinfo = @path.split('/').drop(1)
         i = 1
         while pinfo.length > 0
-          prj = BaseResource::get_project(pinfo.first, @project)
+          prj = BaseResource::get_project(Project.visible, pinfo.first, @project)
           if prj
             @project = prj
             if pinfo.length == 1

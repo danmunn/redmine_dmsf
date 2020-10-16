@@ -180,7 +180,7 @@ module RedmineDmsf
         project = nil
         prj = nil
         while pinfo.length > 0
-          prj = BaseResource::get_project(pinfo.first, project)
+          prj = BaseResource::get_project(Project, pinfo.first, project)
           if prj
             project = prj
           else
