@@ -108,7 +108,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
 
   def test_move_to_new_filename_with_project_names
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     new_name = "#{@file1.name}.moved"
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
       process :move, "/dmsf/webdav/#{project1_uri}/#{@file1.name}", params: nil,
@@ -143,7 +143,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
 
   def test_move_to_new_folder_with_project_names
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     assert_difference '@file1.dmsf_file_revisions.count', +1 do
       process :move, "/dmsf/webdav/#{project1_uri}/#{@file1.name}", params: nil,
         headers: @jsmith.merge!({

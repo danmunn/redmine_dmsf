@@ -63,7 +63,7 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
     process :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", params: nil, headers: @jsmith
     assert_response :success
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     process :mkcol, "/dmsf/webdav/#{@project1.identifier}/test2", params: nil, headers: @jsmith
     assert_response :not_found
     process :mkcol, "/dmsf/webdav/#{project1_uri}/test3", params: nil, headers: @jsmith

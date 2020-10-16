@@ -96,7 +96,7 @@ module RedmineDmsf
         Confict unless collection?
         entities = children.map{ |child|
           DIR_FILE % [
-            uri_encode(request.url_for(child.path)),
+              uri_encode(request.url_for(child.path)),
             child.long_name || child.name, 
             child.collection? ? '' : number_to_human_size(child.content_length),
             child.special_type || child.content_type, 
@@ -166,7 +166,7 @@ module RedmineDmsf
     protected
 
       def uri_encode(uri)
-        uri.gsub /[\(\)&]/, '(' => '%28', ')' => '%29', '&' => '&amp;'
+        uri.gsub /[\(\)&\[\]]/, '(' => '%28', ')' => '%29', '&' => '%26', '[' => '%5B', ']' => '5D'
       end
     
       def basename
@@ -188,9 +188,7 @@ module RedmineDmsf
       def self.get_project(scope, name, parent_project)
         prj = nil
         if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-          #if name =~ /^\[?.+ (\d+)\]?$/
-          if name =~ / (\d+)$/
-            #prj = scope.find_by(id: $1, parent_id: parent_project&.id)
+          if name =~ /^\[?.+ (\d+)\]?$/
             if parent_project
               prj = scope.find_by(id: $1, parent_id: parent_project.id)
             else
@@ -198,18 +196,19 @@ module RedmineDmsf
             end
             if prj
               # Check again whether it's really the project and not a folder with a number as a suffix
-              #prj = nil unless name.include?(DmsfFolder::get_valid_title(prj.name))
-              prj = nil unless name.start_with?(DmsfFolder::get_valid_title(prj.name))
+              prj = nil unless name.start_with?('[' + DmsfFolder::get_valid_title(prj.name))
             end
           end
         else
-          # if name =~ /^\[?([^\]]+)\]?$/
-          #   prj = scope.find_by(identifier: $1, parent_id: parent_project&.id)
-          # end
-          if parent_project
-            prj = scope.find_by(identifier: name, parent_id: parent_project.id)
+          if name.start_with?('[') && name.end_with?(']')
+            identifier = name[1..-2]
           else
-            prj = scope.find_by(identifier: name)
+            identifier = name
+          end
+          if parent_project
+            prj = scope.find_by(identifier: identifier, parent_id: parent_project.id)
+          else
+            prj = scope.find_by(identifier: identifier)
           end
         end
         prj

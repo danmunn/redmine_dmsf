@@ -75,8 +75,7 @@ module RedmineDmsf
       end
 
       def long_name
-        #'[' + project&.name + ']'
-        project&.name
+        "[#{project&.name}]"
       end
 
       def content_type
@@ -119,11 +118,9 @@ module RedmineDmsf
       def self.create_project_name(prj)
         if prj
           if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-            #"[#{DmsfFolder::get_valid_title(prj.name)} #{prj.id}]"
-            "#{DmsfFolder::get_valid_title(prj.name)} #{prj.id}"
+            "[#{DmsfFolder::get_valid_title(prj.name)} #{prj.id}]"
           else
-            #"[#{prj.identifier}]"
-            prj.identifier
+            "[#{prj.identifier}]"
           end
         end
       end

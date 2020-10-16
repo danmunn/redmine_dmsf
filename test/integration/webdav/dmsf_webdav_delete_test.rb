@@ -131,7 +131,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", params: nil, headers: @jsmith
     assert_response :not_found
-    p1name_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    p1name_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", params: nil, headers: @jsmith
     assert_response :success
     @folder6.reload
@@ -156,7 +156,7 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
     delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @jsmith
     assert_response :not_found
-    p1name_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    p1name_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     delete "/dmsf/webdav/#{p1name_uri}/#{@file1.name}", params: nil, headers: @jsmith
     assert_response :success
     @file1.reload

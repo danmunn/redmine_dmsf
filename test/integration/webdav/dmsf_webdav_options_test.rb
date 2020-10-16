@@ -134,7 +134,7 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     process :options, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin.merge!({ HTTP_USER_AGENT: 'Other' })
     assert_response :success
 
-    project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     process :options, "/dmsf/webdav/#{project1_uri}", params: nil, headers: @admin.merge!({ HTTP_USER_AGENT: 'Other' })
     assert_response :success
   end

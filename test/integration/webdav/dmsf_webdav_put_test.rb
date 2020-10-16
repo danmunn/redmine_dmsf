@@ -75,7 +75,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
     assert file, 'Check for files existance'
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", params: '1234',
         headers: @admin.merge!({ content_type: :text })
     assert_response :conflict
@@ -115,7 +115,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
         headers: @jsmith.merge!({ content_type: :text })
     assert_response :conflict
 
-    project1_uri = Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+    project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     put "/dmsf/webdav/#{project1_uri}/test-1234.txt", params: '1234', headers: @jsmith.merge!({ content_type: :text })
     assert_response :created # Now we have permissions
   end

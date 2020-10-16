@@ -84,7 +84,7 @@ module DmsfHelper
   def webdav_url(project, folder)
     url = ["#{Setting.protocol}:/", Setting.host_name, 'dmsf', 'webdav']
     if project
-      url << RedmineDmsf::Webdav::ProjectResource.create_project_name(project)
+      url << ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(project))
       if folder
         folders = [folder]
         while folder.dmsf_folder do
@@ -97,7 +97,7 @@ module DmsfHelper
       end
     end
     url << ''
-    URI.encode(url.join '/')
+    url.join '/'
   end
 
 end
