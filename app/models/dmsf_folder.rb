@@ -44,7 +44,7 @@ class DmsfFolder < ActiveRecord::Base
     class_name: 'DmsfLock', foreign_key: 'entity_id', dependent: :destroy
   has_many :dmsf_folder_permissions, dependent: :destroy
 
-  INVALID_CHARACTERS = '\/\\\?":<>#%\*'
+  INVALID_CHARACTERS = '\[\]\/\\\?":<>#%\*'
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
   AVAILABLE_COLUMNS = %w(id title size modified version workflow author).freeze

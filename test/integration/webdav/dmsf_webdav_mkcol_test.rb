@@ -76,4 +76,24 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
   end
 
+  def test_create_folder_with_square_brackets_of_the_same_name_as_a_sub_project
+    project3_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project3))
+    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{project3_uri}", params: nil,
+            headers: @admin
+    assert_response :method_not_allowed
+  end
+
+  def test_create_folder_of_the_same_name_as_a_sub_project
+    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}", params: nil,
+            headers: @admin
+    assert_response :method_not_allowed
+  end
+
+  def test_create_folder_with_square_brackets
+    folder_name = ERB::Util.url_encode('[new folder]')
+    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{folder_name}", params: nil,
+            headers: @admin
+    assert_response :conflict # Square brackets are not allowed in project names
+  end
+
 end
