@@ -176,7 +176,7 @@ module RedmineDmsf
         elsif folder
           # To fullfil Litmus requirements to not delete folder if fragments are in the URL
           uri = URI(request.get_header('REQUEST_URI'))
-          raise BadRequest if uri.fragment
+          raise BadRequest if uri.fragment.present?
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           raise Forbidden unless DmsfFolder.permissions?(folder, false)
           folder.delete(false) ? NoContent : Conflict
