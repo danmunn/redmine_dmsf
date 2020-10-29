@@ -238,7 +238,7 @@ You can either clone the master branch or download the latest zipped version. Be
     
     `RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf`
 5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
-6. Restart the web server, e.g. `systemctl apache2 restart`
+6. Restart the web server, e.g. `systemctl restart apache2`
 7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure.
 8. Don't forget to grant permissions for DMSF in Administration -> Roles and permissions
 9. Assign DMSF permissions to appropriate roles.
