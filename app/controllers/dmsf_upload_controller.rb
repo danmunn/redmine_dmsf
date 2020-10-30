@@ -70,7 +70,12 @@ class DmsfUploadController < ApplicationController
     if defined?(EasyExtensions)
       @attachment.skip_description_required = true
     end
-    saved = @attachment.save
+    begin
+      Attachment.skip_callback(:commit, :after, :reuse_existing_file_if_possible)
+      saved = @attachment.save
+    ensure
+      Attachment.set_callback(:commit, :after, :reuse_existing_file_if_possible)
+    end
 
     respond_to do |format|
       format.js
