@@ -22,18 +22,17 @@
 
 <% assignments = Array.new %>
 <% if @user %>
-  <% all_assignments = DmsfWorkflowStepAssignment.joins(
-      'LEFT JOIN dmsf_workflow_step_actions ON dmsf_workflow_step_assignments.id = dmsf_workflow_step_actions.dmsf_workflow_step_assignment_id').where(
-      dmsf_workflow_step_assignments: { user_id: @user.id }).where(
-      ['dmsf_workflow_step_actions.id IS NULL OR dmsf_workflow_step_actions.action = ?', DmsfWorkflowStepAction::ACTION_DELEGATE]) %>
-  <% all_assignments.find_each do |assignment| %>
-    <% if assignment.dmsf_file_revision.dmsf_file.last_revision &&
-        !assignment.dmsf_file_revision.dmsf_file.last_revision.deleted? &&
-        (assignment.dmsf_file_revision.workflow == DmsfWorkflow::STATE_WAITING_FOR_APPROVAL) &&
-        (assignment.dmsf_file_revision == assignment.dmsf_file_revision.dmsf_file.last_revision) %>
-      <% assignments << assignment %>
-    <% end %>
-  <% end %>
+  <% all_assignments =  DmsfWorkflowStepAssignment.
+      left_outer_joins(:dmsf_workflow_step_actions).
+      joins(:dmsf_workflow_step).
+      joins(:dmsf_file_revision).
+      where(dmsf_file_revisions: { deleted: DmsfFileRevision::STATUS_ACTIVE, workflow: DmsfWorkflow::STATE_WAITING_FOR_APPROVAL }).
+      where(dmsf_workflow_step_assignments: { user_id: @user.id }).
+      where(['dmsf_workflow_step_actions.id IS NULL OR dmsf_workflow_step_actions.action = ?',
+             DmsfWorkflowStepAction::ACTION_DELEGATE]).
+      order('dmsf_workflow_step_assignments.dmsf_file_revision_id, dmsf_workflow_steps.step').to_a %>
+  <% assignments = all_assignments.delete_if { |a| (a.dmsf_file_revision != a.dmsf_file_revision.dmsf_file.last_revision) } %>
+  <% assignments.uniq! { |a| a.dmsf_file_revision } %>
 <% end %>
 <% unless defined?(EasyExtensions) %>
   <h3><%= l(:open_approvals)%> (<%= assignments.size %>)</h3>
