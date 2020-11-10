@@ -29,6 +29,24 @@ module DmsfQueriesHelper
       return super column, item, value
     end
     case column.name
+    when :modified
+      val = super(column, item, value)
+      case item.type
+      when 'file'
+        file = DmsfFile.find_by(id: item.id)
+        if file&.locked?
+          return content_tag(:span, val) +
+            content_tag(:span, '', title: l(:title_locked_by_user, user: file.locked_by), class: 'icon icon-unlock')
+        end
+      when 'folder'
+        folder = DmsfFolder.find_by(id: item.id)
+        if folder&.locked?
+          return content_tag(:span, val) +
+            content_tag(:span, '', title: l(:title_locked_by_user, user: folder.locked_by), class: 'icon icon-unlock')
+        end
+      end
+      content_tag(:span, val) +
+        content_tag(:span, '', class: 'icon icon-none')
     when :id
       case item.type
       when 'file', 'file-link'

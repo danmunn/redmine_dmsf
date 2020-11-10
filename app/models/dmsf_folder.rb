@@ -128,6 +128,16 @@ class DmsfFolder < ActiveRecord::Base
     end
   end
 
+  def locked_by
+    if lock && lock.reverse[0]
+      user = lock.reverse[0].user
+      if user
+        return (user == User.current) ? l(:label_me) : user.name
+      end
+    end
+    ''
+  end
+
   def delete(commit = false)
     if locked?
       errors[:base] << l(:error_folder_is_locked)

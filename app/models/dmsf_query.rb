@@ -29,7 +29,7 @@ class DmsfQuery < Query
 
   # Standard columns
   self.available_columns = [
-      QueryColumn.new(:id, sortable: 'id', caption: +'#'),
+      QueryColumn.new(:id, sortable: 'id', caption: +'#', frozen: false),
       DmsfTitleQueryColumn.new(:title, sortable: 'title', frozen: true),
       QueryColumn.new(:size, sortable: 'size'),
       DmsfModifiedQueryColumn.new(:modified, sortable: 'updated'),
@@ -138,6 +138,17 @@ class DmsfQuery < Query
     super
     # Add it back
     filters['title'] = filter if filter
+  end
+
+  def columns
+    cols = super
+    # Just move the optional column Id to the beginning as it isn't frozen
+    id_index = cols.index { |col| col.name == :id }
+    if id_index == 1
+      id_col = cols.delete_at(id_index)
+      cols.insert 0, id_col
+    end
+    cols
   end
 
   ######################################################################################################################
