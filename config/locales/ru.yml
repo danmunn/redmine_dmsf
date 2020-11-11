@@ -145,7 +145,7 @@ ru:
   label_default_notifications: Значение по умолчанию для уведомлений
   heading_uploaded_files: Загруженные файлы
   link_documents: Документы
-  permission_view_dmsf_file_revision_accesses: Показывать загрзуки файлов в ленте активности
+  permission_view_dmsf_file_revision_accesses: Показывать загрузки файлов в ленте активности
   permission_view_dmsf_file_revisions: Показывать изменение файлов в ленте активности
   permission_view_dmsf_folders: Просматривать папки
   permission_user_preferences: Собственные настройки для проекта
