@@ -31,10 +31,6 @@
 .dmsf-tree.idnt-9 td.dmsf-title { padding-left: 6.5em; }
 
 /* Font icons */
-table.dmsf > tbody > tr > td a.icon-actions::before {
-    content: "\F01D8";
-}
-
 #sidebar ul > li > a.icon-only.icon-clear-query {
     background-image: url(../../../images/close_hl.png);
     background-repeat: no-repeat;
