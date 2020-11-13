@@ -21,8 +21,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ru:
-  dmsf: DMSF  # Custom fields tab title
-  label_dmsf_file_plural: Файлы DMSF # Email subject & Search options
+  dmsf: DMS  # Custom fields tab title
+  label_dmsf_file_plural: Файлы DMS # Email subject & Search options
   label_dmsf_file_revision_plural: Изменения документов
   label_dmsf_file_revision_access_plural: Доступы к документам
   warning_no_entries_selected: Файлы не выбраны
@@ -85,7 +85,7 @@ ru:
   title_lock_file: Заблокируйте файл, чтобы запретить его изменение другими участниками
   title_download_checked: Скачать выбранные файлы
   title_send_checked_by_email: Отправить выбранные файлы по электронной почте
-  link_user_preferences: Ваши настройки DMSF для проекта
+  link_user_preferences: Ваши настройки DMS для проекта
   heading_send_documents_by_email: Отправить документы по электронной почте
   label_email_from: От
   label_email_to: Кому
@@ -137,11 +137,11 @@ ru:
   option_stem_none: Нет (По умолчанию)
   option_stem_some: Некоторые
   option_stem_all: Все
-  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
-    STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
-    of terms except for those which start with a capital letter, or are followed by certain characters
-    (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
-    with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
+  text_stemming_info: "Определяет, как анализатор запроса будет применять алгоритм стемминга. Значение по умолчанию:
+    STEM_NONE. Возможные значения: STEM_NONE - Не выполнять никакого стемминга, STEM_SOME - Искать словоформы за
+    исключением тех, что начинаются с прописной буквы, или завершаются определенными символами (сейчас
+    это:'/@<>=*[{\"'), или использованы с операторами, для которых требуется позиционная информация. К словоформам
+    добавляется приставка 'Z', STEM_ALL - Искать словоформы всех слов (примечание: приставка 'Z' не добавляется)."
   label_default_notifications: Значение по умолчанию для уведомлений
   heading_uploaded_files: Загруженные файлы
   link_documents: Документы
@@ -180,7 +180,7 @@ ru:
   error_file_can_not_be_created: Файл не может быть создан в каталоге хранения файлов
   error_wrong_zip_encoding: Неверная кодировка zip
   warning_xapian_not_available: Xapian не доступен
-  menu_dmsf: DMSF  # Project tab title
+  menu_dmsf: DMS  # Project tab title
   label_physical_file_delete: Физическое удаление файла
   user_is_not_project_member: Вы не являетесь участником проекта
   heading_access_downloads_emails: Скачивание / Отправка по почте
@@ -189,13 +189,13 @@ ru:
   label_dmsf_updated: Документ обновлен
   label_dmsf_downloaded: Документ скачан
   title_total_size_of_all_files: Общий размер всех файлов в этой папке
-  project_module_dmsf: DMSF  # Project module name
+  project_module_dmsf: DMS  # Project module name
   warning_no_project_to_copy_file_to: Не выбран проект, в который нужно скопировать файл
   comment_copied_from: "Скопировано из %{source}"
   field_target_project: Целевой проект
   field_target_folder: Целевая папка
   title_copy_or_move: Копировать/Переместить
-  label_dmsf_folder_plural: Папки DMSF # Search options
+  label_dmsf_folder_plural: Папки DMS # Search options
   comment_moved_from: "Перемещен из %{source}"
   error_target_folder_same: Целевая папка и проект совпадают с текущими
   title_copy: Копировать
@@ -353,7 +353,7 @@ ru:
 
   label_document_url: Url
   label_last_revision_id: ID редакции
-    
+
   label_webdav_disable_versioning: Паттерн игнорирования версионности
   note_webdav_disable_versioning: Файлы попадающие под регулярное выражение не будут иметь редакций.
     По умолчанию временные файлы MsOffice.
@@ -362,59 +362,59 @@ ru:
   note_dmsf_keep_documents_locked: Документы остануться заблокированными после утверждения
   note_global: (Глобальный)
   field_dmsf_not_inheritable: Не наследуемый
-  
+
   label_webdav_use_project_names: Имя проекта вместо идентификатора
   note_webdav_use_project_names: Использовать имя проекта вместо идентификатора для папки в WebDAV.
 
   label_last_approver: Последним рассматривал
 
   label_act_as_attachable: Разрешить вложения
-  note_dmsf_act_as_attachable: Разрешить прикреплять документы из DMSF к задачам.
+  note_dmsf_act_as_attachable: Разрешить прикреплять документы из DMS к задачам.
 
   label_user_search_add: Найти пользователя
 
-  label_dmsf_attachments: DMSF вложения
+  label_dmsf_attachments: DMS вложения
   label_basic_attachments: Базовые вложения
 
   label_tmpdir: Каталог временных файлов
-  error_file_tmpdir_does_not_exist: "Temporary file path doesn't exist and can't be created"
-  error_tmpfile_can_not_be_created: "Files can't be created in temporary file path directory"
+  error_file_tmpdir_does_not_exist: "Каталог временных файлов не существует и не может быть создан"
+  error_tmpfile_can_not_be_created: "Невозможно создавать файлы в каталоге временных файлов"
 
-  label_email_from_override: From
-  text_email_from_override: The user currently logged in
-  label_email_reply_to: Reply-to
+  label_email_from_override: От кого
+  text_email_from_override: Пользователь сейчас в системе
+  label_email_reply_to: Кому
 
-  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
-  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
-    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
-    option needs to have been used at index time.
-    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
+  label_enable_cjk_ngrams: Включить генерацию n-грамм из CJK текста
+  text_enable_cjk_ngrams: "Когда включено, последовательность CJK символов разбивается на униграммы и биграммы, при этом
+    униграммы несут позиционную информацию. Не-CJK символы разбиваются на слова как обычно. Соответствующая
+    опция должна быть использована при индексации.
+    Пример: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
-  label_dmsf_fast_links: Fast links
-  text_dmsf_fast_links_info: You will be able to manually enter a target folder's ID when creating links in order to speed
-    up the process of creating links.
+  label_dmsf_fast_links: Быстрые ссылки
+  text_dmsf_fast_links_info: Вы сможете вручную ввести ID целевого каталога при создании ссылок, чтобы ускорить
+    процесс создания ссылок.
 
-  label_dmsf_permissions: Allow access only to
-  label_inherited_permissions: Inherited Access for
+  label_dmsf_permissions: Разрешить доступ только для
+  label_inherited_permissions: Унаследованный доступ для
 
-  button_edit_content: Edit content
-  field_workflow: Workflow
-  field_modified: Date
-  field_updated: Date
-  field_count: D/L
-  field_first_at: First
-  field_last_at: Last
-  field_size: Size
+  button_edit_content: Изменить содержимое
+  field_workflow: Рабочий процесс
+  field_modified: Дата изменения
+  field_updated: Дата обновления
+  field_count: Загрузки
+  field_first_at: Первый
+  field_last_at: Последний
+  field_size: Размер
 
-  label_add_width: Add with
+  label_add_width: Добавить с
 
-  dmsf_webdav_ignore_1b_file_for_authentication: Ignore 1b file sent for authentication
-  dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
+  dmsf_webdav_ignore_1b_file_for_authentication: Игнорировать однобайтовый файл, отправляемый для аутентификации
+  dmsf_webdav_ignore_1b_file_for_authentication_info: Плагин WebDAV программы Total Commander
 
   easy_pages:
     modules:
-      dmsf_locked_documents: My locked documents
-      dmsf_open_approvals: My open approvals
+      dmsf_locked_documents: Мои заблокированные документы
+      dmsf_open_approvals: Мои открытые согласования
     module_category:
       easy_dms: Easy DMS
 
