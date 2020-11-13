@@ -180,7 +180,7 @@ module RedmineDmsf
       def load_projects(project_scope)
         scope = project_scope.visible
         scope = scope.non_templates if scope.respond_to?(:non_templates)
-        scope.visible.find_each do |p|
+        scope.find_each do |p|
           if dmsf_available?(p)
             @children << child_project(p)
           end
