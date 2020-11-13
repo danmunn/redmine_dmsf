@@ -178,7 +178,9 @@ module RedmineDmsf
       end
 
       def load_projects(project_scope)
-        project_scope.visible.find_each do |p|
+        scope = project_scope.visible
+        scope = scope.non_templates if scope.respond_to?(:non_templates)
+        scope.visible.find_each do |p|
           if dmsf_available?(p)
             @children << child_project(p)
           end
@@ -220,8 +222,10 @@ module RedmineDmsf
         return if @project # We have already got it
         pinfo = @path.split('/').drop(1)
         i = 1
+        project_scope = Project.visible
+        project_scope = project_scope.non_templates if project_scope.respond_to?(:non_templates)
         while pinfo.length > 0
-          prj = BaseResource::get_project(Project.visible, pinfo.first, @project)
+          prj = BaseResource::get_project(project_scope, pinfo.first, @project)
           if prj
             @project = prj
             if pinfo.length == 1
