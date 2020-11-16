@@ -195,6 +195,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     # Video
     @file1.last_revision.disk_filename = 'test.mp4'
     assert_equal 'inline', @file1.disposition
+    # HTML
+    @file1.last_revision.disk_filename = 'test.html'
+    assert_equal 'inline', @file1.disposition
   end
 
   def test_image
@@ -219,6 +222,12 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert !@file1.video?
     @file1.last_revision.disk_filename = 'test.mp4'
     assert @file1.video?
+  end
+
+  def test_html
+    assert !@file1.html?
+    @file1.last_revision.disk_filename = 'test.html'
+    assert @file1.html?
   end
 
   def test_findn_file_by_name

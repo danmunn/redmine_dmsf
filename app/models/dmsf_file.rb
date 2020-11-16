@@ -464,8 +464,12 @@ class DmsfFile < ActiveRecord::Base
     last_revision && Redmine::MimeType.is_type?('video', last_revision.disk_filename)
   end
 
+  def html?
+    last_revision && (Redmine::MimeType.of(last_revision.disk_filename) == 'text/html')
+  end
+
   def disposition
-    (image? || pdf? || video?) ? 'inline' : 'attachment'
+    (image? || pdf? || video? || html?) ? 'inline' : 'attachment'
   end
 
   def preview(limit)
