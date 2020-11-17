@@ -58,7 +58,7 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_documents_email_reply_to' => '',
               'dmsf_documents_email_links_only' => nil,
               'dmsf_enable_cjk_ngrams' => nil,
-              'dmsf_webdav_use_project_names' => nil,
+              'dmsf_webdav_use_project_names' => Redmine::Plugin.installed?(:easy_extensions) ? '1' : nil,
               'dmsf_webdav_ignore_1b_file_for_authentication' => '1'
             }
 end
