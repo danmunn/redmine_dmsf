@@ -24,7 +24,15 @@
 
 <% if @project.new_record? && @source_project %>
   <p>
-    <label class="block"><%= check_box_tag 'only[]', 'dmsf', true %> <%= l(:label_dmsf_plural, @source_project.dmsf_count) %></label>
-    <label class="block"><%= check_box_tag 'only[]', 'approval_workflows', true %> <%= l(:label_dmsf_workflow_plural_num, @source_project.dmsf_workflows.count) %></label>
+    <label class="block">
+      <% value = params['only'].blank? || params['only'].include?('dmsf') %>
+      <%= check_box_tag 'only[]', 'dmsf', value %>
+      <%= l(:label_dmsf_plural, @source_project.dmsf_count) %>
+    </label>
+    <label class="block">
+      <% value = params['only'].blank? || params['only'].include?('approval_workflows') %>
+      <%= check_box_tag 'only[]', 'approval_workflows', value %>
+      <%= l(:label_dmsf_workflow_plural_num, @source_project.dmsf_workflows.count) %>
+    </label>
   </p>
 <% end %>
