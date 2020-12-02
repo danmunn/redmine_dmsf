@@ -32,7 +32,7 @@ module RedmineDmsf
       def copy(project, options={})
         super(project, options)
         project = project.is_a?(Project) ? project : Project.find(project)
-        to_be_copied = %w(dmsf approval_workflows)
+        to_be_copied = %w(dmsf dmsf_folders approval_workflows)
         to_be_copied = to_be_copied & Array.wrap(options[:only]) unless options[:only].nil?
         if save
           to_be_copied.each do |name|
@@ -87,21 +87,26 @@ module RedmineDmsf
 
       # Simple yet effective approach to copying things
       def copy_dmsf(project)
-        project.dmsf_folders.visible.each do |f|
-          f.copy_to(self, nil)
-        end
+        copy_dmsf_folders project
         project.dmsf_files.visible.each do |f|
-          f.copy_to(self, nil)
-        end
-        project.folder_links.visible.each do |l|
-          l.copy_to(self, nil)
+          f.copy_to self, nil
         end
         project.file_links.visible.each do |l|
-          l.copy_to(self, nil)
+          l.copy_to self, nil
         end
         project.url_links.visible.each do |l|
-          l.copy_to(self, nil)
+          l.copy_to self, nil
         end
+      end
+
+      def copy_dmsf_folders(project)
+        project.dmsf_folders.visible.each do |f|
+          f.copy_to self, nil
+        end
+        project.folder_links.visible.each do |l|
+          l.copy_to self, nil
+        end
+
       end
 
       def copy_approval_workflows(project)

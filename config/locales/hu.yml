@@ -210,7 +210,8 @@ hu:
   parent_directory: Szülő könyvtár
   note_webdav: "Webdav aktiválása után itt található %{protocol}://%{domain}/dmsf/webdav/[projekt azonosító]"
 
-  label_dmsf_plural: "Dokumentumok és mappák (%{files}  másolása a %{folders} mappákba"
+  label_copy_dmsf: "Dokumentumok és mappák (%{files}  másolása a %{folders} mappákba)"
+  label_copy_only_dmsf_folders: "Dokumentumok és mappák (%{folders})"
 
   warning_folder_already_locked: Ez a mappa már zárolva
   notice_folder_locked: A mappa sikeresen lett zárolva

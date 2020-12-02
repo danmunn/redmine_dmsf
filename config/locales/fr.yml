@@ -210,7 +210,8 @@ fr:
   parent_directory: Dossier parent
   note_webdav: "Après l'activation du module Webdav, celui-ci sera accessible par
     %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
-  label_dmsf_plural: "Copier les fichiers et les dossiers (%{files} fichiers dans %{folders} dossiers)"
+  label_copy_dmsf: "Copier les fichiers et les dossiers (%{files} fichiers dans %{folders} dossiers)"
+  label_copy_only_dmsf_folders: "Copier que les dossiers (%{folders})"
 
   warning_folder_already_locked: Ce dossier est déjà verrouillé
   notice_folder_locked: Dossier verrouillé

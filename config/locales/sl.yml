@@ -210,7 +210,8 @@ sl:
   parent_directory: Nadrejena mapa
   note_webdav: "Webdav po vklopu lahko najdete na %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
 
-  label_dmsf_plural: "Kopiraj Arhivske datoteke in mape (%{files} datoteke v %{folders} mape)"
+  label_copy_dmsf: "Kopiraj Arhivske datoteke in mape (%{files} datoteke v %{folders} mape)"
+  label_copy_only_dmsf_folders: "Kopiraj mape (%{folders})"
 
   warning_folder_already_locked: Mapa je že zaklenjena
   notice_folder_locked: Mapa je uspešno zaklenjena

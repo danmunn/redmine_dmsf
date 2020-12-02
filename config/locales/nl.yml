@@ -210,7 +210,8 @@ nl:
   parent_directory: Ouder directory
   note_webdav: "Webdav kan indien ingeschakeld worden gevonden op %{protocol}://%{domain}/dmsf/webdav/[project
     identifier]"
-  label_dmsf_plural: "Kopieer Documenten en mappen (%{files} bestanden in %{folders} mappen)"
+  label_copy_dmsf: "Kopieer documenten en mappen (%{files} bestanden in %{folders} mappen)"
+  label_copy_only_dmsf_folders: "Kopieer mappen (%{folders})"
 
   warning_folder_already_locked: Deze map is al vergrendeld
   notice_folder_locked: Deze map is succesvol vergrendeld

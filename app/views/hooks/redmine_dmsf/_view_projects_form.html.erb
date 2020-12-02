@@ -24,10 +24,18 @@
 
 <% if @project.new_record? && @source_project %>
   <p>
+    <% counts = @source_project.dmsf_count %>
     <label class="block">
       <% value = params['only'].blank? || params['only'].include?('dmsf') %>
-      <%= check_box_tag 'only[]', 'dmsf', value %>
-      <%= l(:label_dmsf_plural, @source_project.dmsf_count) %>
+      <%= check_box_tag 'only_dmsf', 'dmsf', value, name: 'only[]',
+                        onfocus: "$('#only_dmsf_folders').prop('checked', false);" %>
+      <%= l(:label_copy_dmsf, counts) %>
+    </label>
+    <label class="block">
+      <% value = params['only'].present? && params['only'].include?('dmsf_folders') %>
+      <%= check_box_tag 'only_dmsf_folders', 'dmsf_folders', value, name: 'only[]',
+                        onfocus: "$('#only_dmsf').prop('checked', false);" %>
+      <%= l(:label_copy_only_dmsf_folders, counts) %>
     </label>
     <label class="block">
       <% value = params['only'].blank? || params['only'].include?('approval_workflows') %>

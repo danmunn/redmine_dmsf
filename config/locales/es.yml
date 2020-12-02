@@ -210,7 +210,8 @@ es:
   parent_directory: Directorio padre
   note_webdav: "Si Webdav está habilitado, se puede encontrar en %{protocol}://%{domain}/dmsf/webdav/[project
     identifier]"
-  label_dmsf_plural: "Copiar archivos y directorios (%{files} archivos en %{folders} directorios)"
+  label_copy_dmsf: "Copiar archivos y directorios (%{files} archivos en %{folders} directorios)"
+  label_copy_only_dmsf_folders: "Copiar solamente directorios (%{folders})"
 
   warning_folder_already_locked: El directorio ya se encuentra bloqueado
   notice_folder_locked: "El directorio se bloqueó exitosamente"
