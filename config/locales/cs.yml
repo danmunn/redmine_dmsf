@@ -412,6 +412,8 @@ cs:
   dmsf_webdav_ignore_1b_file_for_authentication: Ignorovat 1b soubor poslaný kvůli autentizaci
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
 
+  text_not_empty: Adresář není prázdný.
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

@@ -587,6 +587,10 @@ class DmsfFolder < ActiveRecord::Base
     classes.join ' '
   end
 
+  def empty?
+    !(dmsf_folders.visible.exists? || dmsf_files.visible.exists? || dmsf_links.visible.exists?)
+  end
+
   private
 
   def self.directory_subtree(tree, folder, level, current_folder)
