@@ -412,6 +412,8 @@ ru:
   dmsf_webdav_ignore_1b_file_for_authentication: Игнорировать однобайтовый файл, отправляемый для аутентификации
   dmsf_webdav_ignore_1b_file_for_authentication_info: Плагин WebDAV программы Total Commander
 
+  text_not_empty: The folder is not empty.
+
   easy_pages:
     modules:
       dmsf_locked_documents: Мои заблокированные документы

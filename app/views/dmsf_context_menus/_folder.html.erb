@@ -66,7 +66,8 @@
 </li>
 <li>
   <%= context_menu_link l(:button_delete),
-    dmsf_link ? dmsf_link_path(id: dmsf_link, folder_id: folder) : delete_dmsf_path(id: project, folder_id: dmsf_folder, parent_id: folder),
-    data: { confirm: l(:text_are_you_sure) }, method: :delete, class: 'icon icon-del', id: 'dmsf-cm-delete',
-    disabled: !allowed || locked %>
+    dmsf_link ? dmsf_link_path(id: dmsf_link, folder_id: folder) :
+    delete_dmsf_path(id: project, folder_id: dmsf_folder, parent_id: folder),
+    data: { confirm: "#{l(:text_are_you_sure)}\n#{l(:text_not_empty) unless dmsf_folder.empty?}" }, method: :delete,
+    class: 'icon icon-del', id: 'dmsf-cm-delete', disabled: !allowed || (locked && !dmsf_link) %>
 </li>

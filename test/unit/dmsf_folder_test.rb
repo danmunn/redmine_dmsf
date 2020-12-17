@@ -253,4 +253,9 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert !@folder1.save
   end
 
+  def test_empty
+    assert !@folder1.empty?
+    assert @folder6.empty?
+  end
+
 end

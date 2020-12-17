@@ -412,6 +412,8 @@ ja:
   dmsf_webdav_ignore_1b_file_for_authentication: Ignore 1b file sent for authentication
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
 
+  text_not_empty: The folder is not empty.
+
   easy_pages:
     modules:
       dmsf_locked_documents: 自分がロック中の文書

@@ -49,7 +49,7 @@
     <% end %>
     <% unless @folder.locked? %>
       <%= link_to l(:button_delete), delete_dmsf_path(id: @project, folder_id: @folder),
-        data: { confirm: l(:text_are_you_sure) },
+        data: { confirm: "#{l(:text_are_you_sure)}\n#{l(:text_not_empty) unless @folder.empty?}" },
         title: l(:button_delete), class: 'icon icon-del', method: :delete %>
     <% end %>
   <% end %>
