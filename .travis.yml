@@ -49,6 +49,8 @@ after_script:
   - bash -x ./test/ci/redmine_install.sh -u
 
 env:
+  global:
+  - PGPORT=5433
   - DB=sqlite   REDMINE_GIT_TAG=4.0-stable
   - DB=mysql    REDMINE_GIT_TAG=4.0-stable
   - DB=postgres REDMINE_GIT_TAG=4.0-stable
@@ -64,4 +66,8 @@ services:
 
 addons:
   mariadb: '10.5'
-  postgresql: '9.6'
+  postgresql: '10'
+  apt:
+    packages:
+      - postgresql-10
+      - postgresql-client-10
