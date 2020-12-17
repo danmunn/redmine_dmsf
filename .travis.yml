@@ -64,3 +64,4 @@ services:
 
 addons:
   mariadb: '10.5'
+  postgresql: '9.6'
