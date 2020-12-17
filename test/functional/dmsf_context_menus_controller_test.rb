@@ -160,7 +160,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a.icon-unlock', text: l(:button_unlock)
     assert_select 'a.icon-lock', text: l(:button_lock), count: 0
     assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
-    assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    assert_select 'a.icon-del', text: l(:button_delete)
   end
 
   def test_dmsf_url_link
