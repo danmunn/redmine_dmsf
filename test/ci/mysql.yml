@@ -3,6 +3,6 @@ test:
   adapter: mysql2
   database: test
   username: dmsf
-  password: "pes+kocka"
+  password: "eGCq9ueVpUH3"
   encoding: utf8mb4
   collation: utf8mb4_unicode_ci
