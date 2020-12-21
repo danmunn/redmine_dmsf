@@ -71,7 +71,7 @@ class DmsfUploadController < ApplicationController
       @attachment.skip_description_required = true
     end
     begin
-      Attachment.skip_callback(:commit, :after, :reuse_existing_file_if_possible)
+      Attachment.skip_callback(:commit, :after, :reuse_existing_file_if_possible, raise: false)
       saved = @attachment.save
     ensure
       Attachment.set_callback(:commit, :after, :reuse_existing_file_if_possible)
