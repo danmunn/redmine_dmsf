@@ -413,6 +413,8 @@ cs:
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
 
   text_not_empty: Adresář není prázdný.
+  label_scroll_down: Posunout se dolů
+  note_webdav_disabled: WebDAV je zablokovaný. Kontaktujte administrátora.
 
   easy_pages:
     modules:

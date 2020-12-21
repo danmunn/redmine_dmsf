@@ -413,6 +413,8 @@ zh:
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
 
   text_not_empty: The folder is not empty.
+  label_scroll_down: Scroll down
+  note_webdav_disabled: WebDAV is disabled. Contact the administrator.
 
   easy_pages:
     modules:
