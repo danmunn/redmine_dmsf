@@ -45,7 +45,7 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_index_database' => File.expand_path('dmsf_index', Rails.root),
               'dmsf_stemming_lang' => 'english',
               'dmsf_stemming_strategy' => 'STEM_NONE',
-              'dmsf_webdav' => (Redmine::Plugin.installed?(:easy_extensions) && EasyHostingServices::EasyMultiTenancy.activated?) ? nil : '1',
+              'dmsf_webdav' => (Redmine::Plugin.installed?(:easy_hosting_services) && EasyHostingServices::EasyMultiTenancy.activated?) ? nil : '1',
               'dmsf_display_notified_recipients' => nil,
               'dmsf_global_title_format' => '',
               'dmsf_columns' => %w(title size modified version workflow author),
