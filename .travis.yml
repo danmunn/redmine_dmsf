@@ -23,7 +23,7 @@ language: ruby
 
 sudo: true
 
-dist: focal
+dist: bionic
 
 rvm:      
   - 2.6
@@ -64,4 +64,4 @@ services:
   - postgresql
 
 addons:
-  mariadb: '10.5'
+  mariadb: '10.4'
