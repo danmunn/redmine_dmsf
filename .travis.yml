@@ -33,7 +33,6 @@ before_script:
   - sudo mysql -e "CREATE USER 'dmsf'@'localhost' IDENTIFIED BY 'eGCq9ueVpUH3'";
   - sudo mysql -e "GRANT ALL PRIVILEGES ON test.* TO 'dmsf'@'localhost'";
   - psql -c 'create database test;' -U postgres
-  - psql -c "ALTER ROLE postgres WITH PASSWORD 'ErgiLXF5Nr4M'"
   - export WORKSPACE=`pwd`/workspace
   - export PATH_TO_DMSF=`pwd`
   - export PATH_TO_REDMINE=$WORKSPACE/redmine
@@ -51,7 +50,6 @@ after_script:
 
 env:
   global:
-  - PGPORT=5433
   - DB=sqlite   REDMINE_GIT_TAG=4.0-stable
   - DB=mysql    REDMINE_GIT_TAG=4.0-stable
   - DB=postgres REDMINE_GIT_TAG=4.0-stable
@@ -67,8 +65,3 @@ services:
 
 addons:
   mariadb: '10.5'
-  postgresql: '12'
-  apt:
-    packages:
-      - postgresql-12
-      - postgresql-client-12

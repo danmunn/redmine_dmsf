@@ -2,6 +2,4 @@
 test:
   adapter: postgresql
   database: test
-  username: postgres
-  password: "ErgiLXF5Nr4M"
   encoding: utf8
