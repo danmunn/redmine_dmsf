@@ -281,13 +281,13 @@ de:
   text_email_finished_rejected: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist
     abgeschlossen, aber die Datei wurde abgelehnt, weil: '%{notice}'."
   text_email_finished_delegated: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' wurde an
-    dich deligiert, weil: '%{notice}' und weil deine Zustimmung im aktuellen Genehmigungsschritt benötigt wird."
+    dich deligiert, weil: '%{notice}' und weil deine Zustimmung im aktuellen Genehmigungsschritt '%{stepname}' benötigt wird."
   text_email_finished_step: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade einen
     Zustimmungsschritt abgeschlossen und im nächsten Genehmigungsschritt wird deine Zustimmung benötigt."
   text_email_finished_step_short: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade
     einen Genehmigungsschritt abgeschlossen."
   text_email_started: "Der Genehmigungs-Workflow '%{name}' zugewiesen an '%{filename}' wurde gestartet und im aktuellen
-    Genehmigungsschritt wird deine Zustimmung benötigt."
+    Genehmigungsschritt '%{stepname}' wird deine Zustimmung benötigt."
   text_email_to_proceed: Um fortzufahren klicke auf das Häckchen neben der Datei in
   text_email_to_see_history: Um den Verlauf des Genehmigungs-Workflows zu sehen klicke auf den Workflowstatus zur Datei
     in

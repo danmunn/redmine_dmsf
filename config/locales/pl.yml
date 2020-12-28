@@ -280,13 +280,13 @@ pl:
   text_email_finished_rejected: "Proces akceptacji '%{name}' dokumentu '%{filename}' został właśnie zakończony. Dokument
     został odrzucony z powodu '%{notice}'."
   text_email_finished_delegated: "Proces akceptacji '%{name}' dokumentu '%{filename}' został właśnie delegowany z powodu
-    '%{notice}'. Zostałeś wskazany jako akceptujący w bieżącym kroku zatwierdzania."
+    '%{notice}'. Zostałeś wskazany jako akceptujący w bieżącym kroku zatwierdzania '%{stepname}'."
   text_email_finished_step: "Zakończono krok w procesie akceptacji '%{name}' dokumentu '%{filename}'. Jesteś kolejną
     osobą decyzyjną w procesie akceptacji."
   text_email_finished_step_short: "Zakończono krok w procesie akceptacji '%{name}' dokumentu '%{filename}'."
 
   text_email_started: "Proces akceptacji '%{name}' dokuentu '%{filename}' został uruchomiony. Jesteś osobą akceptującą w
-    bieżącym kroku zatwierdzania."
+    bieżącym kroku zatwierdzania '%{stepname}'."
   text_email_to_proceed: Aby procedować zaznacz check box przy dokumencie
   text_email_to_see_history: Aby zobaczyć historię akceptacji kliknij w proces akceptacji dokumentu
 

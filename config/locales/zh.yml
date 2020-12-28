@@ -280,13 +280,13 @@ zh:
   text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been
     finished and the document has been rejected because of '%{notice}'."
   text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been
-    delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
+    delegated because of '%{notice}' and you are expected to do an approval in the current approval step '%{stepname}'."
   text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of
     the approval steps and you are expected to do an approval in the next approval step."
   text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished
     one of the approval steps."
   text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you
-    are expected to do an approval in the current approval step."
+    are expected to do an approval in the current approval step '%{stepname}'."
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
 

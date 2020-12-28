@@ -280,13 +280,13 @@ ja:
   text_email_finished_rejected: "承認ワークフロー '%{name}' において '%{filename}' が否認されました。理由：'%{notice}'。"
 
   text_email_finished_delegated: "承認ワークフロー '%{name}' において代理承認が依頼されました。承認対象 '%{filename}'
-    の内容をご確認の上、承認・否認のご判断をお願い致します（依頼主コメント：'%{notice}'）。"
+    の内容をご確認の上、承認・否認のご判断をお願い致します（依頼主コメント：'%{notice}'）。'%{stepname}'"
   text_email_finished_step: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}'
     の内容をご確認の上、承認・否認のご判断をお願い致します。"
   text_email_finished_step_short: "承認ワークフロー '%{name}' において '%{filename}' の承認ステップが一つ終了しました。"
 
   text_email_started: "承認ワークフロー '%{name}' からの承認依頼です。承認対象 '%{filename}'
-    の内容をご確認の上、承認・否認のご判断をお願い致します。"
+    の内容をご確認の上、承認・否認のご判断をお願い致します。'%{stepname}'"
   text_email_to_proceed: 次のURLを開き内容を確認の上、右端のチェックマークをクリックし承認・否認の選択をしてください。
   text_email_to_see_history: 次のURLで承認ワークフローの履歴を確認することができます。
 

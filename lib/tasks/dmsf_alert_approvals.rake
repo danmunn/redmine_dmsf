@@ -55,11 +55,14 @@ class DmsfAlertApprovals
         else
           DmsfMailer.deliver_workflow_notification(
             [assignment.user],
-            workflow, 
+            workflow,
             revision,
             :text_email_subject_requires_approval,
             :text_email_finished_step,
-            :text_email_to_proceed)
+            :text_email_to_proceed,
+            nil,
+            assignment.dmsf_workflow_step
+            )
         end
       end      
     end

@@ -280,14 +280,14 @@ nl:
   text_email_finished_rejected: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist
     afgerond en het document is afgewezen vanwege '%{notice}'."
   text_email_finished_delegated: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist
-    gedelegeerd omdat '%{notice}' en er wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap."
+    gedelegeerd omdat '%{notice}' en er wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap '%{stepname}'."
   text_email_finished_step: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document heeft zojuist een
     van de goedkeurende stappen afgerond en er wordt verwacht dat u een goedkeuring doet in de volgenden
       goedkeuringsstap."
   text_email_finished_step_short: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document heeft zojuist
     een van de goedkeuringsstappen afgerond."
   text_email_started: "De goedkeurende workflow '%{name}' toegewezen aan '%{filename}' document is zojuist gestart en er
-    wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap."
+    wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap '%{stepname}'."
   text_email_to_proceed: Klik om door te gaan om het het vinkjes icoon naast het document in
   text_email_to_see_history: Klik om de goedkeuringsgeschiedenis te bekijken op de workflow status van het document in
   text_email_to_see_status: Klik om de huidige status van de goedkeuring workflow te bekijken op het workflow status

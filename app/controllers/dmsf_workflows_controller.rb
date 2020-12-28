@@ -122,7 +122,8 @@ class DmsfWorkflowsController < ApplicationController
                     :text_email_subject_delegated,
                     :text_email_finished_delegated,
                     :text_email_to_proceed,
-                    action.note)
+                    action.note,
+                    action.dmsf_workflow_step_assignment.dmsf_workflow_step)
                   if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
                     flash[:warning] = l(:warning_email_notifications, to: delegate.name)
                   end
@@ -141,7 +142,9 @@ class DmsfWorkflowsController < ApplicationController
                           revision,
                           :text_email_subject_requires_approval,
                           :text_email_finished_step,
-                          :text_email_to_proceed)
+                          :text_email_to_proceed,
+                          nil,
+                          assignment.dmsf_workflow_step)
                       end
                     end
                     to = revision.dmsf_workflow_assigned_by_user

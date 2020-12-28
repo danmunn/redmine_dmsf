@@ -280,13 +280,13 @@ es:
   text_email_finished_rejected: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba
     de ser terminado y él ha sido rechazado por el siguiente motivo '%{notice}'."
   text_email_finished_delegated: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba
-    de ser delegado por '%{notice}' y se espera que haga una aprobación en la etapa de aprobación actual."
+    de ser delegado por '%{notice}' y se espera que haga una aprobación en la etapa de aprobación actual '%{stepname}'."
   text_email_finished_step: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de
     terminar uno de los pasos de aprobación y se espera que haga una aprobación en el siguiente paso."
   text_email_finished_step_short: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba
     de finalizar uno de los pasos de aprobación."
   text_email_started: "El flujo de trabajo de aprobación '%{name}' asignado al documento '%{filename}' acaba de
-    iniciarse y se espera que haga una aprobación en la etapa de aprobación actual."
+    iniciarse y se espera que haga una aprobación en la etapa de aprobación actual '%{stepname}'."
   text_email_to_proceed: "Para continuar, haga clic en el icono de la casilla de verificación al lado del documento"
   text_email_to_see_history: "Para ver el historial de aprobación haga clic en el estado del flujo de trabajo del
     documento"

@@ -280,13 +280,13 @@ it: # Italian strings thx 2 Matteo Arceci!
   text_email_finished_rejected: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata
     completata ma il documento è stato rifiutato a causa di '%{notice}'."
   text_email_finished_delegated: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata
-    delegata a causa di '%{notice}' e sei tenuto ad approvare nel passo corrente."
+    delegata a causa di '%{notice}' e sei tenuto ad approvare nel passo corrente '%{stepname}'."
   text_email_finished_step: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' ha completato uno
     dei passi di approvazione e sei tenuto ad approvare il prossimo passo."
   text_email_finished_step_short: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' ha completato
     uno dei passi di approvazione."
   text_email_started: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stato inizializzato e
-    sei tenuto ad approvare il passo corrente."
+    sei tenuto ad approvare il passo corrente '%{stepname}'."
   text_email_to_proceed: Per proseguire clicca sull'icona checkbox a fianco del documento
   text_email_to_see_history: Per vedere la storia di approvazione clicca sullo stato del flusso di lavoro del documento
 

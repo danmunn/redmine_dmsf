@@ -218,7 +218,9 @@ class DmsfWorkflow < ActiveRecord::Base
         revision,
         :text_email_subject_started,
         :text_email_started,
-        :text_email_to_proceed)
+        :text_email_to_proceed,
+        nil,
+        assignments.first&.dmsf_workflow_step)
     if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
       unless recipients.blank?
         to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')

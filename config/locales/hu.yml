@@ -281,13 +281,13 @@ hu:
     hozzárendelésre, befejeződött és visszautasításra került a következő üzenettel: '%{notice}'."
   text_email_finished_delegated: "A '%{name}' jóváhagyási workflow amely a '%{filename}'  dokumentumhoz került
     hozzárendelésre, Önhöz került az alábbi megjegyzés '%{notice}' miatt és a jelenlegi lépésben az Ön jóváhagyására
-      vár."
+      vár '%{stepname}'."
   text_email_finished_step: "A '%{name}' jóváhagyási workflow-ban amely a '%{filename}' dokumentumhoz került
     hozzárendelésre, egy lépés teljesült és a következő lépésben lépésben az Ön jóváhagyására vár."
   text_email_finished_step_short: "A '%{name}' jóváhagyási workflow-ban amely a '%{filename}'  dokumentumhoz került
     hozzárendelésre, egy lépés teljesült a folyamatban."
   text_email_started: "A '%{name}' jóváhagyási workflow amely a '%{filename}' dokumentumhoz került hozzárendelésre,
-    elindult és a jelenlegi lépésben az Ön jóváhagyására vár."
+    elindult és a jelenlegi lépésben az Ön jóváhagyására vár '%{stepname}'."
   text_email_to_proceed: A folytatáshoz kattintson a négyzetre a dokumentum mellett
   text_email_to_see_history: Ha meg akarja nézni a jóváhagyási előzményeket, akkor kattintson a dokumentumon belül a
     workflow státuszra

@@ -280,13 +280,13 @@ fr:
   text_email_finished_rejected: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer
     et le document a été rejeté pour la raison '%{notice}'."
   text_email_finished_delegated: "Le flux de validation '%{name}' assigné au document '%{filename}' a été délégué pour
-    la raison '%{notice}' et vous êtes tenu d'approuver l'étape actuelle."
+    la raison '%{notice}' et vous êtes tenu d'approuver l'étape actuelle '%{stepname}'."
   text_email_finished_step: "Le flux de validation '%{name}' assigné au document '%{filename}' a passé une des étapes
     d'approbation et vous êtes tenu d'approuver l'étape suivante."
   text_email_finished_step_short: "Le flux de validation '%{name}' assigné au document '%{filename}' a passé une des
     étapes d'approbation."
   text_email_started: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de démarrer et vous êtes
-    tenu d'approuver l'étape actuelle."
+    tenu d'approuver l'étape actuelle '%{stepname}'."
   text_email_to_proceed: "Pour ce faire, cliquez sur l'icône de validation à côté du document dans"
   text_email_to_see_history: "Pour consulter l'historique de validation, cliquez sur le statut du flux du document dans"
 

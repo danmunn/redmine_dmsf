@@ -280,13 +280,13 @@ pt-BR:
   text_email_finished_rejected: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi
     finalizado e o documento foi reprovado devido a '%{notice}'."
   text_email_finished_delegated: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi
-    atribuido pois '%{notice}' e está aguardando a sua aprovação na etapa atual."
+    atribuido pois '%{notice}' e está aguardando a sua aprovação na etapa atual '%{stepname}'."
   text_email_finished_step: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi aprovado na
     etapa anterior e está aguardando a sua aprovação na etapa atual."
   text_email_finished_step_short: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi
     aprovado em uma das suas etapas de aprovação."
   text_email_started: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi iniciado e está
-    aguardando a sua aprovação na etapa atual."
+    aguardando a sua aprovação na etapa atual '%{stepname}'."
   text_email_to_proceed: Para dar continuidade ao fluxo, clique no íncone ao lado do documento
   text_email_to_see_history: Para visualizar o histórico de workflow de aprovação clique no status do workflow
     disponível ao lado do documento
