@@ -108,14 +108,15 @@ class DmsfMailer < Mailer
     res
   end
 
-  def self.deliver_workflow_notification(users, workflow, revision, subject_id, text1_id, text2_id, notice = nil, step = nil)
+  def self.deliver_workflow_notification(users, workflow, revision, subject_id, text1_id, text2_id, notice = nil, tep = nil)
+    step_name = (step && step.name.present?) ? step.name : step.step
     users.each do |user|
       workflow_notification(user, workflow, revision, subject_id.to_s, text1_id.to_s, text2_id.to_s, notice,
-                            step&.name).deliver_now
+                            step_name).deliver_now
     end
   end
 
-  def workflow_notification(user, workflow, revision, subject_id, text1_id, text2_id, notice, stepname)
+  def workflow_notification(user, workflow, revision, subject_id, text1_id, text2_id, notice, step_name)
     if user && workflow && revision
       if revision.dmsf_file && revision.dmsf_file.project
         @project = revision.dmsf_file.project
@@ -126,13 +127,13 @@ class DmsfMailer < Mailer
       message_id workflow
       @workflow = workflow
       @revision = revision
-      @text1 = l(text1_id, name: workflow.name, filename: revision.dmsf_file.name, notice: notice, stepname: stepname)
+      @text1 = l(text1_id, name: workflow.name, filename: revision.dmsf_file.name, notice: notice, stepname: step_name)
       @text2 = l(text2_id)
       @notice = notice
       @author = revision.dmsf_workflow_assigned_by_user
       @author ||= User.anonymous
       mail to: user.mail,
-           subject: "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)} #{stepname}"
+           subject: "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)} #{step_name}"
     end
   end
 
