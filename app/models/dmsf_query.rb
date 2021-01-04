@@ -33,7 +33,7 @@ class DmsfQuery < Query
       DmsfTitleQueryColumn.new(:title, sortable: 'title', frozen: true),
       QueryColumn.new(:size, sortable: 'size'),
       DmsfModifiedQueryColumn.new(:modified, sortable: 'updated'),
-      DmsfVersionQueryColumn.new(:version, sortable: 'major_version, minor_version'),
+      DmsfVersionQueryColumn.new(:version, sortable: 'major_version, minor_version', caption: :label_dmsf_version),
       QueryColumn.new(:workflow, sortable: 'workflow'),
       QueryColumn.new(:author, sortable: 'firstname, lastname')
   ]
