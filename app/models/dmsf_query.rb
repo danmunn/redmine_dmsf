@@ -297,7 +297,7 @@ class DmsfQuery < Query
           1 AS sort #{cf_columns}}).
         joins(:dmsf_file_revisions).
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
-        where('dmsf_file_revisions.id = (SELECT r.id FROM dmsf_file_revisions r WHERE r.created_at = (SELECT MAX(created_at) FROM dmsf_file_revisions rr WHERE rr.dmsf_file_id = dmsf_files.id) AND r.dmsf_file_id = dmsf_files.id ORDER BY id DESC LIMIT 1)')
+        where(sub_query)
       if dmsf_folder_id
         scope.where dmsf_files: { dmsf_folder_id: dmsf_folder_id, deleted: deleted }
       else
@@ -338,7 +338,7 @@ class DmsfQuery < Query
         joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id').
         joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
-        where('dmsf_file_revisions.id = (SELECT r.id FROM dmsf_file_revisions r WHERE r.created_at = (SELECT MAX(created_at) FROM dmsf_file_revisions rr WHERE rr.dmsf_file_id = dmsf_files.id) AND r.dmsf_file_id = dmsf_files.id ORDER BY id DESC LIMIT 1)')
+        where(sub_query)
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfFile', dmsf_folder_id: dmsf_folder_id, deleted: deleted }
     else
@@ -387,7 +387,15 @@ class DmsfQuery < Query
         scope.where dmsf_links: { target_type: 'DmsfUrl', project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
       end
     end
+  end
 
+  def sub_query
+    case ActiveRecord::Base.connection.adapter_name.downcase
+    when 'sqlserver'
+      'dmsf_file_revisions.id = (SELECT TOP 1 r.id FROM dmsf_file_revisions r WHERE r.created_at = (SELECT MAX(created_at) FROM dmsf_file_revisions rr WHERE rr.dmsf_file_id = dmsf_files.id) AND r.dmsf_file_id = dmsf_files.id ORDER BY id DESC)'
+    else
+      'dmsf_file_revisions.id = (SELECT r.id FROM dmsf_file_revisions r WHERE r.created_at = (SELECT MAX(created_at) FROM dmsf_file_revisions rr WHERE rr.dmsf_file_id = dmsf_files.id) AND r.dmsf_file_id = dmsf_files.id ORDER BY id DESC LIMIT 1)'
+   end
   end
 
 end
