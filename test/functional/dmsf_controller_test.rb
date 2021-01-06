@@ -180,6 +180,25 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'table.dmsf'
     # CSV export
     assert_select 'a.csv'
+    # 'Zero Size File' document and an expander is present
+    assert_select 'a', text: @file10.title
+    assert_select 'span.dmsf_expander'
+  end
+
+  def test_show_filters_found
+    get :show, params: { id: @project1.id, f: ['title'], op: { 'title' => '~' }, v: { 'title' => ['Zero'] } }
+    assert_response :success
+    # 'Zero Size File' document
+    assert_select 'a', text: @file10.title
+    # No expander if a filter is set
+    assert_select 'span.dmsf_expander', count: 0
+  end
+
+  def test_show_filters_not_found
+    get :show, params: { id: @project1.id, f: ['title'], op: { 'title' => '~' }, v: { 'title' => ['xxx'] } }
+    assert_response :success
+    # 'Zero Size File' document
+    assert_select 'a', text: @file10.title, count: 0
   end
 
   def test_show_without_file_manipulation

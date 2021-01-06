@@ -50,20 +50,20 @@ module DmsfQueriesHelper
     when :id
       case item.type
       when 'file', 'file-link'
-        if item.deleted && (item.deleted > 0)
+        if item&.deleted > 0
           super column, item, value
         else
           link_to h(value), dmsf_file_path(id: item.id)
         end
       when 'folder', 'folder-link'
         if item.id
-          if item.deleted && (item.deleted > 0)
+          if item&.deleted > 0
             super column, item, value
           else
             link_to h(value), edit_dmsf_path(id: item.project_id, folder_id: item.id)
           end
         else
-          if item.deleted && (item.deleted > 0)
+          if item&.deleted > 0
             super column, item, item.project_id
           else
             link_to h(item.project_id), edit_root_dmsf_path(id: item.project_id)
@@ -90,42 +90,50 @@ module DmsfQueriesHelper
       end
       case item.type
       when 'folder'
-        if item.deleted && (item.deleted > 0)
+        if item&.deleted > 0
           tag = content_tag('span', value, class: 'icon icon-folder')
         else
-          tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle(this, '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe +
-            link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'icon icon-folder')
+          tag = link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'icon icon-folder')
+          unless filter_any?
+            tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle(this, '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
+          end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'folder-link'
-        if item.deleted && (item.deleted > 0)
+        if item&.deleted > 0
           tag = content_tag('span', value, class: 'icon icon-folder')
         else
-          tag = "<span class=\"dmsf_expander\"></span>".html_safe +
           # For links we use revision_id containing dmsf_folder.id in fact
-          link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.revision_id), class: 'icon icon-folder')
+          tag = link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.revision_id), class: 'icon icon-folder')
+          unless filter_any?
+            tag = "<span class=\"dmsf_expander\"></span>".html_safe + tag
+          end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:label_target_folder))
       when 'file', 'file-link'
-        if item.deleted && (item.deleted > 0)
+        if item&.deleted > 0
           tag = content_tag('span', value, class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}")
         else
           # For links we use revision_id containing dmsf_file.id in fact
           file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: (item.type == 'file') ? item.id : item.revision_id })
           content_type = Redmine::MimeType.of(value)
           content_type = 'application/octet-stream' if content_type.blank?
-          tag = "<span class=\"dmsf_expander\"></span>".html_safe +
-          link_to(h(value), file_view_url, target: '_blank',
+          tag = link_to(h(value), file_view_url, target: '_blank',
             class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}",
             'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}")
+          unless filter_any?
+            tag = "<span class=\"dmsf_expander\"></span>".html_safe + tag
+          end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'url-link'
-        if item.deleted && (item.deleted > 0)
+        if item&.deleted > 0
           tag = content_tag('span', value, class: 'icon icon-link')
         else
-          tag = "<span class=\"dmsf_expander\"></span>".html_safe +
-              link_to(h(value), item.filename, target: '_blank', class: 'icon icon-link')
+          tag = link_to(h(value), item.filename, target: '_blank', class: 'icon icon-link')
+          unless filter_any?
+            tag = "<span class=\"dmsf_expander\"></span>".html_safe + tag
+          end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:field_url))
       else
@@ -135,7 +143,7 @@ module DmsfQueriesHelper
       number_to_human_size value
     when :workflow
       if value
-        if item.workflow_id && (!(item.deleted && (item.deleted > 0)))
+        if item.workflow_id && (!(item&.deleted > 0))
           if item.type == 'file'
             url = log_dmsf_workflow_path(project_id: item.project_id, id: item.workflow_id, dmsf_file_id: item.id)
           else
@@ -171,6 +179,15 @@ module DmsfQueriesHelper
     else
       super column, object, value
     end
+  end
+
+  def filter_any?
+    if params[:v]
+      params[:v].each do |filter|
+        return true if (filter.size > 1) && filter[1].all?{ |v| v.present? }
+      end
+    end
+    false
   end
 
 end
