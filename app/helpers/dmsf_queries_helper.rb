@@ -84,10 +84,6 @@ module DmsfQueriesHelper
         super column, item, value
       end
     when :title
-      if defined?(EasyExtensions)
-        # In case of font icons there is no space
-        value = '&nbsp'.html_safe + value
-      end
       case item.type
       when 'folder'
         if item&.deleted > 0
