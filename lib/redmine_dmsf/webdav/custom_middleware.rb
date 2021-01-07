@@ -38,7 +38,8 @@ module RedmineDmsf
               allow_unauthenticated_options_on_root: true,
               namespaces: {
                 'http://apache.org/dav/props/' => 'd',
-                'http://ucb.openoffice.org/dav/props/' => 'd'
+                'http://ucb.openoffice.org/dav/props/' => 'd',
+                'SAR:' => 'd'
               }
             )
           end
