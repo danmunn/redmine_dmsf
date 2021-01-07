@@ -23,8 +23,8 @@
 de:
   dmsf: DMS # Custom fields tab title
   label_dmsf_file_plural: DMS Dokumente # Email subject & Search options
-  label_dmsf_file_revision_plural: Dokumenteversion
-  label_dmsf_file_revision_access_plural: Dokumentezugriffe
+  label_dmsf_file_revision_plural: Dokumentenversion
+  label_dmsf_file_revision_access_plural: Dokumentenzugriffe
   warning_no_entries_selected: Keine Einträge ausgewählt
   error_email_to_must_be_entered: Es muss ein Email-Empfänger angegeben werden.
   warning_file_already_locked: Datei schon gesperrt
@@ -40,18 +40,18 @@ de:
   error_folder_creation_failed: Ordnererstellung fehlgeschlagen
   error_folder_title_must_be_entered: Es muss ein Titel angegeben werden
   notice_folder_deleted: Ordner gelöscht
-  error_folder_title_is_already_used: Titel wird schon benutzt. Denk dir was Neues aus.
+  error_folder_title_is_already_used: Titel wird schon benutzt. Denken Sie sich was Neues aus.
   notice_folder_details_were_saved: Ordnerdetails wurden gespeichert
   error_folder_is_locked: Ordner ist gesperrt
   error_file_is_locked: Datei ist gesperrt
   notice_file_deleted: Datei gelöscht
   error_at_least_one_revision_must_be_present: Es muss mindestens eine Version existieren
   notice_revision_deleted: Version gelöscht
-  notice_revision_obsoleted: Revision obsoleted
+  notice_revision_obsoleted: Revision veralted
   warning_one_of_files_locked: Eine der Dateien ist gesperrt
   notice_file_revision_created: Dateiversion erstellt
-  notice_your_preferences_were_saved: Deine Einstellungen wurden gespeichert
-  notice_your_preferences_were_not_saved: Deine Einstellungen wurden nicht gespeichert
+  notice_your_preferences_were_saved: Ihre Einstellungen wurden gespeichert
+  notice_your_preferences_were_not_saved: Ihre Einstellungen wurden nicht gespeichert
   warning_folder_notifications_already_activated: Ordnerbenachrichtigungen sind schon aktiviert
 
   notice_folder_notifications_activated: Ordnerbenachrichtigungen aktiviert
@@ -112,7 +112,7 @@ de:
   heading_revisions: Versionen
   title_download: Herunterladen
   title_delete_revision: Version löschen
-  title_obsolete_revision: Obsolete revision
+  title_obsolete_revision: Veraltete Revision
   label_created: Erstellt
   label_changed: Geändert
   info_changed_by_user: "%{changed} von"
@@ -161,9 +161,9 @@ de:
   permission_email_documents: Mailversand von Dokumenten
   label_file: Datei
   field_folder: Ordner
-  error_file_commit_require_uploaded_file: Der Commit erfordet eine hochladene Datei
+  error_file_commit_require_uploaded_file: Die Übertragung erfordet eine hochladene Datei
 
-  warning_some_files_were_not_commited: "Einige Dateien wurden wegen Validierungsfehlern nicht commitet: %{files}"
+  warning_some_files_were_not_commited: "Einige Dateien wurden wegen Validierungsfehlern nicht übertragen: %{files}"
 
   error_user_has_not_right_delete_folder: Der Nutzer hat kein Recht den Ordner zu löschen.
 
@@ -183,7 +183,7 @@ de:
   warning_xapian_not_available: Xapian steht nicht zur Verfügung
   menu_dmsf: DMS  # Project tab title
   label_physical_file_delete: Datei physisch löschen
-  user_is_not_project_member: Du bist kein Projektmitglied
+  user_is_not_project_member: Sie sind kein Projektmitglied
   heading_access_downloads_emails: Downloads oder Emailversand
   heading_access_first: Erste
   heading_access_last: Letzte
@@ -245,9 +245,9 @@ de:
   label_dmsf_wokflow_action_approve: Genehmigen
   label_dmsf_wokflow_action_reject: Ablehnen
   label_dmsf_wokflow_action_delegate: Deligieren an
-  label_dmsf_wokflow_action_assign: Weise einen Genehmigungs-Workflow zu
+  label_dmsf_wokflow_action_assign: Weisen Sie einen Genehmigungs-Workflow zu
   label_dmsf_wokflow_action_start: Starte Genehmigungs-Workflow
-  label_dmsf_workflow_add_approver: "Füge einen neuen Genehmiger mit einer logischen Funktion hinzu:"
+  label_dmsf_workflow_add_approver: "Fügen Sie einen neuen Genehmiger mit einer logischen Funktion hinzu:"
   label_or: oder
   label_action: Aktion
   label_note: Notiz
@@ -265,7 +265,7 @@ de:
   dmsf_or: ODER
   dmsf_new_step: Neuer Schritt
   dmsf_new_step_or_approver: Neuer Schritt oder Neuer Genehmiger
-  message_dmsf_wokflow_note: Deine Notiz...
+  message_dmsf_wokflow_note: Ihre Notiz...
   info_revision: "r%{rev}"
   link_workflow: Workflow
   notice_workflow_started: Genehmigungs-Workflow gestartet
@@ -280,17 +280,17 @@ de:
   text_email_finished_rejected: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist
     abgeschlossen, aber die Datei wurde abgelehnt, weil: '%{notice}'."
   text_email_finished_delegated: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' wurde an
-    dich deligiert, weil: '%{notice}' und weil deine Zustimmung im aktuellen Genehmigungsschritt benötigt wird."
-  text_email_finished_step: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade einen
-    Zustimmungsschritt abgeschlossen und im nächsten Genehmigungsschritt wird deine Zustimmung benötigt."
-  text_email_finished_step_short: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat grade
+    Sie deligiert, weil: '%{notice}' und weil Ihre Zustimmung im aktuellen Genehmigungsschritt benötigt wird."
+  text_email_finished_step: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat gerade einen
+    Zustimmungsschritt abgeschlossen und im nächsten Genehmigungsschritt wird Ihre Zustimmung benötigt."
+  text_email_finished_step_short: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat gerade
     einen Genehmigungsschritt abgeschlossen."
   text_email_started: "Der Genehmigungs-Workflow '%{name}' zugewiesen an '%{filename}' wurde gestartet und im aktuellen
-    Genehmigungsschritt wird deine Zustimmung benötigt."
-  text_email_to_proceed: Um fortzufahren klicke auf das Häckchen neben der Datei in
-  text_email_to_see_history: Um den Verlauf des Genehmigungs-Workflows zu sehen klicke auf den Workflowstatus zur Datei
+    Genehmigungsschritt wird Ihre Zustimmung benötigt."
+  text_email_to_proceed: Um fortzufahren klicken Sie auf das Häckchen neben der Datei in
+  text_email_to_see_history: Um den Verlauf des Genehmigungs-Workflows zu sehen klicken Sie auf den Workflowstatus zur Datei
     in
-  text_email_to_see_status: Um den aktuellen Status des Genehmigungs-Workflows zu sehen klicke auf den Workflowstatus
+  text_email_to_see_status: Um den aktuellen Status des Genehmigungs-Workflows zu sehen klicken Sie auf den Workflowstatus
     zur Datei in
 
   title_create_link: Verknüpfung anlegen
@@ -368,8 +368,8 @@ de:
 
   label_last_approver: Letzter Genehmiger approver
 
-  label_act_as_attachable: Act as attachable
-  note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+  label_act_as_attachable: Dokumente als Anhang
+  note_dmsf_act_as_attachable: Erlaubt Dokumente als Anhang bei Objekten wie bspw. Tickets
 
   label_user_search_add: Benutzer suchen
 
@@ -384,11 +384,11 @@ de:
   text_email_from_override: Der angemeldete Benutzer
   label_email_reply_to: Antwort an
 
-  label_enable_cjk_ngrams: Enable generation of n-grams from CJK text
-  text_enable_cjk_ngrams: "With this enabled, spans of CJK characters are split into unigrams and bigrams, with the
-    unigrams carrying positional information. Non-CJK characters are split into words as normal. The corresponding
-    option needs to have been used at index time.
-    e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
+  label_enable_cjk_ngrams: Aktiviere die Erstellung von n-grams aus Koreanischen Texten
+  text_enable_cjk_ngrams: "With this enabled, Koreanische Zeichenfolgen werden in Monograms and Bigrams zerlegt.
+    Unigrams enthalten Informationen zur Position. Nicht-Koreanische Zeichenfolgen werden in Wörter zerlegt. Die entsprechende
+    Option muss beim Indexieren verwendet werden.
+    Z.B: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   label_dmsf_fast_links: Schnelle Verknüpfung
   text_dmsf_fast_links_info: Ermöglicht durch Eingabe der Ordner-ID auf einfache Art und Weise eine Verknüpfung auf den Zielordner zu erstellen.
@@ -407,8 +407,8 @@ de:
 
   label_add_width: Zugeben mit
 
-  dmsf_webdav_ignore_1b_file_for_authentication: Ignoriern 1b Datai geschickt wegen der Autorization
-  dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
+  dmsf_webdav_ignore_1b_file_for_authentication: Ignoriere 1b Dateien,die zur Authentifizierung gesendet werden
+  dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV Plugin
 
   easy_pages:
     modules:
