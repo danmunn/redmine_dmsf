@@ -2,3 +2,4 @@
 /test/fixtures/files/**
 !/test/fixtures/files/2017/**
 Gemfile.lock
+.history
