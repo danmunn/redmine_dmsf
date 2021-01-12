@@ -50,8 +50,17 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Permissions OK
     get :edit, params: { id: @project1, folder_id: @folder1}
     assert_response :success
+    # Custom fields
     assert_select 'label', { text: @custom_field.name }
     assert_select 'option', { value: @custom_value.value }
+    # Permissions - The form must contain a check box for each available role
+    roles = []
+    @project1.members.each do |m|
+      roles << m.roles
+    end
+    roles.uniq.each do |r|
+      assert_select 'input', { value: r.name }
+    end
   end
 
   def test_edit_folder_redirection_to_the_parent_folder

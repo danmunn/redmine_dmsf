@@ -75,7 +75,7 @@
       <% dir = @folder.inherited_permissions_from %>
       <% if dir %>
         <%= label_tag '', l(:label_inherited_permissions) %>
-        <% Role.givable.each do |role| %>
+        <% @project_roles.each do |role| %>
           <% checked = dir.permission_for_role(role) %>
           <% if checked %>
             <label class="inline">
@@ -95,7 +95,7 @@
         <% end %>
       <% end %>
       <%= label_tag '', l(:label_dmsf_permissions) %>
-      <% Role.givable.each do |role| %>
+      <% @project_roles.each do |role| %>
         <% checked = @folder.permission_for_role(role) %>
         <label class="inline">
           <%= check_box_tag 'permissions[role_ids][]', role.id, checked, id: nil %>
