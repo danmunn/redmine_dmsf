@@ -71,17 +71,11 @@ module RedmineDmsf
       l.entity_type = self.is_a?(DmsfFile) ? 0 : 1
       l.lock_type = type
       l.lock_scope = scope
-      ###
-      #Rails.logger.info ">>> #{scope}"
-      ###
       l.user = User.current
       l.expires_at = expire
       l.dmsf_file_last_revision_id = self.last_revision.id if self.is_a?(DmsfFile)
       l.owner = owner
       l.save!
-      # reload
-      # locks.reload
-      # l.reload
       l
     end
 
@@ -92,7 +86,6 @@ module RedmineDmsf
       (existing.empty? || (self.dmsf_folder&.locked?)) ? false : true
     end
 
-    #
     # By using the path upwards, surely this would be quicker?
     def locked_for_user?(args = nil)
       return false unless locked?
@@ -102,18 +95,8 @@ module RedmineDmsf
         next if locks.empty?
         locks.each do |lock|
           next if lock.expired? # In case we're in between updates
-
-          # if lock.owner.present? && (lock.user.to_s != lock.owner)
-          #   Rails.logger.info ">>> #{lock.user} X #{User.current} X #{lock.owner}"
-          # end
-
-          if lock.lock_scope == :scope_exclusive #&& b_shared.nil?
-            #return true if (lock.user&.id != User.current.id) || (lock.owner != (args ? args[:owner] : nil))
-            #if args && (args[:method] == 'put') && args[:owner].blank?
-            # return true if (lock.user&.id != User.current.id) #|| ((lock.owner != (args ? args[:owner] : nil)))
-            #else
+          if lock.lock_scope == :scope_exclusive
             return true if (lock.user&.id != User.current.id) || ((lock.owner != (args ? args[:owner] : nil)))
-            #end
           else
             b_shared = true if b_shared.nil?
             if b_shared && (lock.user&.id == User.current.id) && (lock.owner == (args ? args[:owner] : nil)) ||
@@ -122,24 +105,22 @@ module RedmineDmsf
             end
           end
         end
-        Rails.logger.info ">>> #{b_shared}"
         return true if b_shared
       end
-      Rails.logger.info ">>> false"
       false
     end
 
     def unlock!(force_file_unlock_allowed = false, owner = nil)
       raise DmsfLockError.new(l(:warning_file_not_locked)) unless self.locked?
       existing = self.lock(true)
-      if existing.empty? || (!self.dmsf_folder.nil? && self.dmsf_folder.locked?) # If its empty its a folder that's locked (not root)
+      # If its empty its a folder that's locked (not root)
+      if existing.empty? || (!self.dmsf_folder.nil? && self.dmsf_folder.locked?)
         raise DmsfLockError.new(l(:error_unlock_parent_locked))
       else
         # If entity is locked to you, you aren't the lock originator (or named in a shared lock) so deny action
         # Unless of course you have the rights to force an unlock
         raise DmsfLockError.new(l(:error_only_user_that_locked_file_can_unlock_it)) if (
           self.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, self.project) && !force_file_unlock_allowed)
-
         # Now we need to determine lock type and do the needful
         if (existing.count == 1) && (existing[0].lock_scope == :exclusive)
           existing[0].destroy

@@ -672,6 +672,16 @@ module RedmineDmsf
         x
       end
 
+      # Adds the given xml namespace to namespaces and returns the prefix
+      def add_namespace(ns, prefix = "unknown#{rand 65536}")
+        @__proxy.add_namespace ns, prefix
+      end
+
+      # returns the prefix for the given namespace, adding it if necessary
+      def prefix_for(ns_href)
+        @__proxy.prefix_for ns_href
+      end
+
       private
 
       # Prepare file for download using Rack functionality:

@@ -178,6 +178,24 @@ module RedmineDmsf
         @resource_c.set_property element, value
       end
 
+      # Adds the given xml namespace to namespaces and returns the prefix
+      def add_namespace(ns, prefix = "unknown#{rand 65536}")
+        if ns.present?
+          prefix = 'ns1'
+          2.step do |i|
+            break unless namespaces.has_value?(prefix)
+            prefix = "ns#{i}"
+          end
+          namespaces[ns] = prefix
+          prefix
+        end
+      end
+
+      # returns the prefix for the given namespace, adding it if necessary
+      def prefix_for(ns_href)
+        namespaces[ns_href] || add_namespace(ns_href)
+      end
+
       private
 
       def get_resource_class(path)
