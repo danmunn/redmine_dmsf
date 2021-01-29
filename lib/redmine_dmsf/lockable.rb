@@ -44,7 +44,7 @@ module RedmineDmsf
       ret
     end
 
-    def lock!(scope = :scope_exclusive, type = :type_write, expire = nil)
+    def lock!(scope = :scope_exclusive, type = :type_write, expire = nil, owner = nil)
       # Raise a lock error if entity is locked, but its not at resource level
       existing = lock(false)
       raise DmsfLockError.new(l(:error_resource_or_parent_locked)) if self.locked? && existing.empty?
@@ -56,7 +56,10 @@ module RedmineDmsf
             raise DmsfLockError.new(l(:error_parent_locked))
           else
             existing.each do |l|
-              raise DmsfLockError.new(l(:error_resource_locked)) if l.user.id == User.current.id
+              #if l.user.id == User.current.id
+              if (l.user.id == User.current.id) && (owner.nil? || (owner == l.owner))
+                raise DmsfLockError.new(l(:error_resource_locked))
+              end
             end
           end
         else
@@ -68,13 +71,17 @@ module RedmineDmsf
       l.entity_type = self.is_a?(DmsfFile) ? 0 : 1
       l.lock_type = type
       l.lock_scope = scope
+      ###
+      #Rails.logger.info ">>> #{scope}"
+      ###
       l.user = User.current
       l.expires_at = expire
       l.dmsf_file_last_revision_id = self.last_revision.id if self.is_a?(DmsfFile)
+      l.owner = owner
       l.save!
-      reload
-      locks.reload
-      l.reload
+      # reload
+      # locks.reload
+      # l.reload
       l
     end
 
@@ -82,12 +89,12 @@ module RedmineDmsf
       return false unless self.locked?
       existing = self.lock(true)
       # If its empty its a folder that's locked (not root)
-      (existing.empty? || (!self.dmsf_folder.nil? && self.dmsf_folder.locked?)) ? false : true
+      (existing.empty? || (self.dmsf_folder&.locked?)) ? false : true
     end
 
     #
     # By using the path upwards, surely this would be quicker?
-    def locked_for_user?
+    def locked_for_user?(args = nil)
       return false unless locked?
       b_shared = nil
       self.dmsf_path.each do |entity|
@@ -95,19 +102,34 @@ module RedmineDmsf
         next if locks.empty?
         locks.each do |lock|
           next if lock.expired? # In case we're in between updates
-          if lock.lock_scope == :scope_exclusive && b_shared.nil?
-            return true if (!lock.user) || (lock.user.id != User.current.id)
+
+          # if lock.owner.present? && (lock.user.to_s != lock.owner)
+          #   Rails.logger.info ">>> #{lock.user} X #{User.current} X #{lock.owner}"
+          # end
+
+          if lock.lock_scope == :scope_exclusive #&& b_shared.nil?
+            #return true if (lock.user&.id != User.current.id) || (lock.owner != (args ? args[:owner] : nil))
+            #if args && (args[:method] == 'put') && args[:owner].blank?
+            # return true if (lock.user&.id != User.current.id) #|| ((lock.owner != (args ? args[:owner] : nil)))
+            #else
+            return true if (lock.user&.id != User.current.id) || ((lock.owner != (args ? args[:owner] : nil)))
+            #end
           else
             b_shared = true if b_shared.nil?
-            b_shared = false if lock.user.id == User.current.id
+            if b_shared && (lock.user&.id == User.current.id) && (lock.owner == (args ? args[:owner] : nil)) ||
+              (args && (args[:scope] == 'shared'))
+              b_shared = false
+            end
           end
         end
+        Rails.logger.info ">>> #{b_shared}"
         return true if b_shared
       end
+      Rails.logger.info ">>> false"
       false
     end
 
-    def unlock!(force_file_unlock_allowed = false)
+    def unlock!(force_file_unlock_allowed = false, owner = nil)
       raise DmsfLockError.new(l(:warning_file_not_locked)) unless self.locked?
       existing = self.lock(true)
       if existing.empty? || (!self.dmsf_folder.nil? && self.dmsf_folder.locked?) # If its empty its a folder that's locked (not root)
@@ -124,7 +146,7 @@ module RedmineDmsf
         else
           b_destroyed = false
           existing.each do |lock|
-            if (lock.user && (lock.user.id == User.current.id)) || User.current.admin?
+            if ((lock.user&.id == User.current.id) && (lock.owner == owner)) || User.current.admin?
               lock.destroy
               b_destroyed = true
               break

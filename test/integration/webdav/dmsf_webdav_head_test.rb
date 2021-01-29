@@ -54,7 +54,7 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     check_headers_exist
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
     head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
-    assert_response :not_found
+    assert_response :conflict
     head "/dmsf/webdav/#{@project1_uri}/test.txt", params: nil, headers: @admin
     assert_response :success
   end

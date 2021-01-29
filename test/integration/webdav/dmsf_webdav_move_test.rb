@@ -166,16 +166,11 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_move_to_existing_filename
-    file9 = DmsfFile.find_by(id: 9)
-    assert file9
-    new_name = "#{file9.name}"
-    assert_no_difference 'file9.dmsf_file_revisions.count' do
-      assert_no_difference '@file1.dmsf_file_revisions.count' do
-        process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
-          headers: @jsmith.merge!({
-            destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
-        assert_response :not_implemented
-      end
+    assert_no_difference '@file9.dmsf_file_revisions.count' do
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: @jsmith.merge!({
+          destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@file9.name}"})
+      assert_response :success
     end
   end
 

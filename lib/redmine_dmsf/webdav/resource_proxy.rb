@@ -162,12 +162,20 @@ module RedmineDmsf
         @resource_c.get_property element
       end
 
+      def remove_property(element)
+        @resource_c.remove_property element
+      end
+
       def properties
         @resource_c.properties
       end
 
       def propstats(response, stats)
         @resource_c.propstats response, stats
+      end
+
+      def set_property(element, value)
+        @resource_c.set_property element, value
       end
 
       private

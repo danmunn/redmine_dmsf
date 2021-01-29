@@ -40,7 +40,7 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
     l = @file2.locks.first
     process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
             headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
-    assert_response :not_found
+    assert_response :forbidden
   end
 
   def test_unlock_file_with_invalid_token
@@ -67,7 +67,7 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
     # folder1 is missing in the path
     process :unlock, "/dmsf/webdav/#{@folder2.project.identifier}/#{@folder2.title}", params: nil,
             headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
-    assert_response :not_found
+    assert_response :forbidden
   end
 
   def test_unlock_folder

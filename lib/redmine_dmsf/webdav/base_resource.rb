@@ -118,7 +118,7 @@ module RedmineDmsf
         new_path = @path
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
-        @__proxy.class.new "#{new_path}#{name}", request, response, @options.merge(user: @user)
+        ResourceProxy.new "#{new_path}#{name}", request, response, @options.merge(user: @user)
       end
       
       def child_project(p)
@@ -127,7 +127,7 @@ module RedmineDmsf
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
         new_path += project_display_name
-        @__proxy.class.new new_path, request, response, @options.merge(user: @user, project: true)
+        ResourceProxy.new new_path, request, response, @options.merge(user: @user, project: true)
       end
 
       def parent
@@ -240,6 +240,9 @@ module RedmineDmsf
             else
               @file = DmsfFile.find_file_by_name(@project, @folder, pinfo.first)
               @folder = nil
+              unless (pinfo.length < 2 || @subproject || @folder || @file)
+                raise Conflict
+              end
               break # We're at the end
             end
           end

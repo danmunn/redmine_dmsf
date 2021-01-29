@@ -416,6 +416,8 @@ cs:
   label_scroll_down: Posunout se dolů
   note_webdav_disabled: WebDAV je zablokovaný. Kontaktujte administrátora.
 
+  dmsf_copy: "Kopie (%{n})"
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

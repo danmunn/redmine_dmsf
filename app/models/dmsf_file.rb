@@ -273,6 +273,15 @@ class DmsfFile < ActiveRecord::Base
     file = DmsfFile.new
     file.dmsf_folder_id = folder.id if folder
     file.project_id = project.id
+    if DmsfFile.where(project_id: file.project_id, dmsf_folder_id: file.dmsf_folder_id, name: filename).exists?
+      1.step do |i|
+        gen_filename = " #{filename} #{l(:dmsf_copy, n: i)}"
+        unless DmsfFile.where(project_id: file.project_id, dmsf_folder_id: file.dmsf_folder_id, name: gen_filename).exists?
+          filename = gen_filename
+          break
+        end
+      end
+    end
     file.name = filename
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
     if file.save && last_revision

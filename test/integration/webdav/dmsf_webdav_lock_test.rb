@@ -41,8 +41,7 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
     log_user 'admin', 'admin'
     process :lock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: @xml,
       headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
-    assert_response :multi_status
-    assert_match '<d:status>HTTP/1.1 409 Conflict</d:status>', response.body
+    assert_response :locked
   end
 
   def test_lock_file
@@ -50,7 +49,6 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
     create_time = Time.utc(2000, 1, 2, 3, 4, 5)
     refresh_time = Time.utc(2000, 1, 2, 6, 7, 8)
     lock_token = nil
-
     # Time travel, will make the usec part of the time 0
     travel_to create_time do
       # Lock file
@@ -62,8 +60,7 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
       # <d:prop xmlns:d=\"DAV:\">
       #   <d:lockdiscovery>
       #     <d:activelock>
-      #       <d:lockscope>exclusive</d:lockscope>
-      #       <d:locktype>write</d:locktype>
+      #       <d:lockscope><d:exclusive/></d:lockscope>
       #       <d:depth>infinity</d:depth>
       #       <d:timeout>Second-604800</d:timeout>
       #       <d:locktoken>
@@ -72,8 +69,7 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
       #     </d:activelock>
       #   </d:lockdiscovery>
       # </d:prop>
-      assert_match '<d:lockscope>exclusive</d:lockscope>', response.body
-      assert_match '<d:locktype>write</d:locktype>', response.body
+      assert_match '<d:lockscope><d:exclusive/></d:lockscope>', response.body
       assert_match '<d:depth>infinity</d:depth>', response.body
       # 1.week = 7*24*3600=604800 seconds
       assert_match '<d:timeout>Second-604800</d:timeout>', response.body
@@ -88,12 +84,14 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
       assert_equal create_time, l.updated_at
       assert_equal (create_time + 1.week), l.expires_at
     end
-
     travel_to refresh_time do
       # Refresh lock
-      process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@file9.name}",
-        params: nil,
-        headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_IF: lock_token })
+      xml = %{<?xml version="1.0" encoding="utf-8" ?>
+              <d:lockinfo xmlns:d="DAV:">
+                <d:owner>jsmith</d:owner>
+              </d:lockinfo>}
+      process :lock, "/dmsf/webdav/#{@file9.project.identifier}/#{@file9.name}", params: xml,
+        headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_IF: "(<#{lock_token}>)" })
       assert_response :success
       # 1.week = 7*24*3600=604800 seconds
       assert_match '<d:timeout>Second-604800</d:timeout>', response.body

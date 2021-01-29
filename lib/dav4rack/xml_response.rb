@@ -76,10 +76,12 @@ module DAV4Rack
 
       Ox::Element.new(D_ACTIVELOCK).tap do |activelock|
         if scope
-          activelock << ox_element(D_LOCKSCOPE, scope)
+          scope = Ox::Element.new("#{DAV_NAMESPACE_NAME}:#{scope}")
+          activelock << ox_element(D_LOCKSCOPE,  scope)
         end
         if type
-          activelock << ox_element(D_LOCKTYPE, type)
+          type = Ox::Element.new("#{DAV_NAMESPACE_NAME}:#{type}")
+          activelock << ox_element(D_LOCKTYPE)
         end
         activelock << ox_element(D_DEPTH, depth)
         activelock << ox_element(D_TIMEOUT,

@@ -320,12 +320,14 @@ module DAV4Rack
         asked[:timeout] = timeout.split(',').map{|x|x.strip}
       end
 
+      Rails.logger.info ">>> #{request.document}"
+
       ns = request.ns
       if doc = request.document and lockinfo = doc.xpath("//#{ns}lockinfo")
 
         asked[:scope] = lockinfo.xpath("//#{ns}lockscope").children.find_all{|n|n.element?}.map{|n|n.name}.first
         asked[:type] = lockinfo.xpath("#{ns}locktype").children.find_all{|n|n.element?}.map{|n|n.name}.first
-        asked[:owner] = lockinfo.xpath("//#{ns}owner/#{ns}href").children.map{|n|n.text}.first
+        asked[:owner] = lockinfo.xpath("//#{ns}owner").children.map{|n|n.text}.first
       end
 
       r = XmlResponse.new(response, resource.namespaces)

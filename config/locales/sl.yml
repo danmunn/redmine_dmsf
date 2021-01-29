@@ -416,6 +416,8 @@ sl:
   label_scroll_down: Scroll down
   note_webdav_disabled: WebDAV is disabled. Contact the administrator.
 
+  dmsf_copy: "Copy (%{n})"
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

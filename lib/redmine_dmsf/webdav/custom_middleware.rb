@@ -38,8 +38,20 @@ module RedmineDmsf
               allow_unauthenticated_options_on_root: true,
               namespaces: {
                 'http://apache.org/dav/props/' => 'd',
-                'http://ucb.openoffice.org/dav/props/' => 'd',
-                'SAR:' => 'd'
+                'http://ucb.openoffice.org/dav/props/' => 'd', # LibreOffice
+                'SAR:' => 'd',  # Cyberduck
+                'http://webdav.org/neon/litmus/' => 'd', # Litmus
+                'http://example.com/neon/litmus/' => 'ns1',
+                'http://example.com/alpha' => 'ns2',
+                'http://example.com/beta' => 'ns3',
+                'http://example.com/gamma' => 'ns4',
+                'http://example.com/delta' => 'ns5',
+                'http://example.com/epsilon' => 'ns6',
+                'http://example.com/zeta' => 'ns7',
+                'http://example.com/eta' => 'ns8',
+                'http://example.com/theta' => 'ns9',
+                'http://example.com/iota' => 'ns10',
+                'http://example.com/kappa' => 'ns11'
               }
             )
           end
