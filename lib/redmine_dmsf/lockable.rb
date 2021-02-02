@@ -76,6 +76,7 @@ module RedmineDmsf
       l.dmsf_file_last_revision_id = self.last_revision.id if self.is_a?(DmsfFile)
       l.owner = owner
       l.save!
+      reload # Reload the object being locked in order to contain just created lock when asked
       l
     end
 

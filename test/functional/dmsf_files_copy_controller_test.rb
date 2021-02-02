@@ -107,7 +107,7 @@ class DmsfFilesCopyControllerTest < RedmineDmsf::Test::TestCase
   def test_copy_to_dmsf_enabled
     post :copy, params: { id: @file1.id, target_project_id: @project2.id }
     assert_response :redirect
-    assert flash[:error].empty?
+    assert flash[:error].blank?
   end
 
   def test_copy_to_as_non_member
