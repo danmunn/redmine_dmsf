@@ -38,7 +38,7 @@ namespace :redmine do
     prj.enable_module! :dmsf
     prj.save
     # Settings
-    Settings.rest_api_enabled = true
+    Setting.rest_api_enabled = true
     # Plugin's settings
     Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
     Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
