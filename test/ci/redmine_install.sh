@@ -51,12 +51,12 @@ test()
   # Litmus
   # Run Webrick server
   bundle exec rails server webrick -e test -d
-  # Create a test project with DMS enabled via REST API
-  cp "${PATH_TO_DMSF}/test/ci/projects.xml" .
-  curl -v -H "Content-Type: application/xml" -X POST --data "@projects.xml" -u admin:admin http://localhost:3000/create.xml
-  rm projects.xml
+  # Prepare Redmine's environment for WebDAV testing
+  bundle exec rake redmine:dmsf_webdav_test_on RAILS_ENV="test"
   # Run Litmus tests
-  litmus http://localhost:3000/dmsf/webdav/c1 admin admin
+  litmus http://localhost:3000/dmsf/webdav/dmsf_test_project admin admin
+  # Clean up Redmine's environment from WebDAV testing
+  bundle exec rake redmine:dmsf_webdav_test_off RAILS_ENV="test"
   # Shutdown Webrick
   kill `cat tmp/pids/server.pid`
 }

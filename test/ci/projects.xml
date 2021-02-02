@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<project>
-  <name>c1</name>
-  <identifier>c1</identifier>
-  <enabled_module_names>dmsf</enabled_module_names>
-</project>
