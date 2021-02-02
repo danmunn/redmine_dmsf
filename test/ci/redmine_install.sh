@@ -47,6 +47,14 @@ test()
   bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf RAILS_ENV=test
   bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf RAILS_ENV=test
   bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf RAILS_ENV=test
+
+  # Litmus
+  # Run Webrick server
+  bundle exec rails server webrick -e test
+  # Create a test project with DMS enabled via REST API
+  curl -v -H "Content-Type: application/xml" -X POST --data "@projects.xml" -u admin:admin http://localhost:3000/create.xml
+  # Run Litmus tests
+  litmus http://localhost:3000/dmsf/webdav/c1 admin admin
 }
 
 uninstall()

@@ -28,6 +28,9 @@ dist: bionic
 rvm:      
   - 2.6
 
+before_install:
+  - sudo apt-get -y install litmus curl
+
 before_script:
   - sudo mysql -e 'CREATE DATABASE IF NOT EXISTS test CHARACTER SET utf8mb4;'
   - sudo mysql -e "CREATE USER 'dmsf'@'localhost' IDENTIFIED BY 'eGCq9ueVpUH3'";
@@ -65,3 +68,5 @@ services:
 
 addons:
   mariadb: '10.4'
+  apt:
+    update: true
