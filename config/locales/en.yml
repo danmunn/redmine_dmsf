@@ -417,6 +417,7 @@ en:
   note_webdav_disabled: WebDAV is disabled. Contact the administrator.
 
   dmsf_copy: "Copy (%{n})"
+  label_empty_trash_bin: Empty Trash
 
   easy_pages:
     modules:

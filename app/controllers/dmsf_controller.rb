@@ -32,7 +32,7 @@ class DmsfController < ApplicationController
   before_action :permissions
   # Also try to lookup folder by title if this is an API call
   before_action :find_folder_by_title, only: [:show]
-  before_action :get_query, only: [:expand_folder, :show, :trash]
+  before_action :get_query, only: [:expand_folder, :show, :trash, :empty_trash]
   before_action :get_project_roles, only: [:new, :edit]
 
   accept_api_auth :show, :create, :save, :delete
@@ -434,6 +434,24 @@ class DmsfController < ApplicationController
         }
       end
     end
+  end
+
+  def empty_trash
+    @query.deleted = true
+    @query.dmsf_nodes.each do |node|
+      case node.type
+      when 'folder'
+        folder = DmsfFolder.find_by(id: node.id)
+        folder.delete true
+      when 'file'
+        file = DmsfFile.find_by(id: node.id)
+        file.delete true
+      when /link$/
+        link = DmsfLink.find_by(id: node.id)
+        link.delete true
+      end
+    end
+    redirect_back_or_default trash_dmsf_path(id: @project.id)
   end
 
   private

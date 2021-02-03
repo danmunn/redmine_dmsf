@@ -417,6 +417,7 @@ cs:
   note_webdav_disabled: WebDAV je zablokovaný. Kontaktujte administrátora.
 
   dmsf_copy: "Kopie (%{n})"
+  label_empty_trash_bin: Vysypat koš
 
   easy_pages:
     modules:

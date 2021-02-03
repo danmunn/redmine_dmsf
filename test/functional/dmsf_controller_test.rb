@@ -100,6 +100,21 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a', href: url_for(controller: :dmsf_files, action: 'view', id: @link2.target_id, only_path: true)
   end
 
+  def test_empty_trash
+    get :empty_trash, params: { id: @project1.id }
+    assert_equal 0, DmsfFolder.deleted.where(project_id: @project1.id).all.size
+    assert_equal 0, DmsfFile.deleted.where(project_id: @project1.id).all.size
+    assert_equal 0, DmsfLink.deleted.where(project_id: @project1.id).all.size
+    assert_redirected_to trash_dmsf_path(id: @project1.id)
+  end
+
+  def test_empty_trash_forbidden
+    # Missing permissions
+    @role_manager.remove_permission! :file_delete
+    get :empty_trash, params: { id: @project1.id }
+    assert_response :forbidden
+  end
+
   def test_delete_forbidden
     # Missing permissions
     @role_manager.remove_permission! :folder_manipulation

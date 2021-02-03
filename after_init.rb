@@ -74,7 +74,7 @@ def dmsf_init
                        dmsf_files_copy: [:new, :copy, :move],
                        dmsf_context_menus: [:dmsf]}
       pmap.permission :file_delete,
-                      { dmsf: [:trash, :delete_entries],
+                      { dmsf: [:trash, :delete_entries, :empty_trash],
                        dmsf_files: [:delete],
                        dmsf_trash_context_menus: [:trash] }
       pmap.permission :force_file_unlock, {}

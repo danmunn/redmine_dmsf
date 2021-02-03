@@ -30,8 +30,7 @@
               class: 'icon icon-add' %>
     <% end %>
     <% if @folder_manipulation_allowed %>
-      <%= link_to l(:link_create_folder), new_dmsf_path(id: @project, parent_id: @folder),
-              title: l(:link_create_folder), class: 'icon icon-add' %>
+      <%= link_to l(:link_create_folder), new_dmsf_path(id: @project, parent_id: @folder), class: 'icon icon-add' %>
     <% end %>
   <% end %>
   <% if defined?(EasyExtensions) %>
@@ -61,7 +60,7 @@
 
 <div class="dmsf-header">
   <div class="wiki">
-    <%= textilizable(@folder ? @folder.description : @project.dmsf_description) %>
+    <%= textilizable @folder ? @folder.description : @project.dmsf_description %>
   </div>
 </div>
 
