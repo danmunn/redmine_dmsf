@@ -33,7 +33,7 @@ class DmsfController < ApplicationController
   # Also try to lookup folder by title if this is an API call
   before_action :find_folder_by_title, only: [:show]
   before_action :get_query, only: [:expand_folder, :show, :trash, :empty_trash]
-  before_action :get_project_roles, only: [:new, :edit]
+  before_action :get_project_roles, only: [:new, :edit, :create]
 
   accept_api_auth :show, :create, :save, :delete
 
