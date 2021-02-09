@@ -150,7 +150,7 @@ div[id*="revision_access_"] {
 .dmsf-system .icon-folder { background-image: url(../images/folder_system.png); }
 
 .icon-file.filetype-doc, .icon-file.filetype-docx { background-image: url(../images/filetypes/doc.png); }
-.icon-file.filetype-xls, .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls.png); }
+.icon-file.filetype-xls, .icon-file.filetype-xlsx, .icon-file.filetype-xlsm { background-image: url(../images/filetypes/xls.png); }
 .icon-file.filetype-ppt, .icon-file.filetype-pptx { background-image: url(../images/filetypes/ppt.png); }
 .icon-file.filetype-vsd, .icon-file.filetype-vsdx { background-image: url(../images/filetypes/vsd.png); }
 .icon-file.filetype-mpp { background-image: url(../images/filetypes/mpp.png); }
@@ -164,6 +164,7 @@ div[id*="revision_access_"] {
 .dmsf-gray .icon-file.filetype-docx { background-image: url(../images/filetypes/doc_gray.png); }
 .dmsf-gray .icon-file.filetype-xls { background-image: url(../images/filetypes/xls_gray.png); }
 .dmsf-gray .icon-file.filetype-xlsx { background-image: url(../images/filetypes/xls_gray.png); }
+.dmsf-gray .icon-file.filetype-xlsm { background-image: url(../images/filetypes/xls_gray.png); }
 .dmsf-gray .icon-file.filetype-ppt { background-image: url(../images/filetypes/ppt_gray.png); }
 .dmsf-gray .icon-file.filetype-pptx { background-image: url(../images/filetypes/ppt_gray.png); }
 .dmsf-gray .icon-file.filetype-vsd { background-image: url(../images/filetypes/vsd_gray.png); }

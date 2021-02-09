@@ -49,6 +49,7 @@ class DmsfFileRevision < ActiveRecord::Base
     'application/vnd.oasis.opendocument.spreadsheet' => 'ms-excel',
     'application/vnd.oasis.opendocument.text' => 'ms-word',
     'application/vnd.oasis.opendocument.presentation' => 'ms-powerpoint',
+    'application/vnd.ms-excel.sheet.macroEnabled.12' => 'ms-exel'
   }.freeze
 
   scope :visible, -> { where(deleted: STATUS_ACTIVE) }
