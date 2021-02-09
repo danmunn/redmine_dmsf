@@ -240,7 +240,6 @@ module DAV4Rack
         return MultiStatus
       end
 
-
       properties = if propfind.nil? or
                       propfind.empty? or
                       propfind.xpath("//#{ns}allprop").first
@@ -275,6 +274,7 @@ module DAV4Rack
       r.multistatus do |xml|
         xml << r.raw(prop_xml)
       end
+
       MultiStatus
     end
 
@@ -319,8 +319,6 @@ module DAV4Rack
       if timeout = request.env['Timeout']
         asked[:timeout] = timeout.split(',').map{|x|x.strip}
       end
-
-      Rails.logger.info ">>> #{request.document}"
 
       ns = request.ns
       if doc = request.document and lockinfo = doc.xpath("//#{ns}lockinfo")
