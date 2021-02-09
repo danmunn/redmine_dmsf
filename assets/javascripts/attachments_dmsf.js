@@ -266,16 +266,18 @@ function dmsfDragOutHandler(e) {
 }
 
 function dmsfSetupFileDrop() {
+
     if (window.File && window.FileList && window.ProgressEvent && window.FormData) {
 
-        $.event.fixHooks.drop = { props: [ 'dataTransfer' ] };
+        $.event.addProp('dataTransfer');
 
-        $('form span.dmsf-uploader').has('input:file').each(function() {
+        $('form span.dmsf-uploader:not(.dmsffiledroplistner)').has('input:file').each(function () {
+
             $(this).on({
                 dragover: dmsfDragOverHandler,
                 dragleave: dmsfDragOutHandler,
                 drop: dmsfHandleFileDropEvent
-            });
+            }).addClass('dmsffiledroplistner');
         });
     }
 }
