@@ -442,13 +442,13 @@ class DmsfController < ApplicationController
       case node.type
       when 'folder'
         folder = DmsfFolder.find_by(id: node.id)
-        folder.delete true
+        folder&.delete true
       when 'file'
         file = DmsfFile.find_by(id: node.id)
-        file.delete true
+        file&.delete true
       when /link$/
         link = DmsfLink.find_by(id: node.id)
-        link.delete true
+        link&.delete true
       end
     end
     redirect_back_or_default trash_dmsf_path(id: @project.id)
