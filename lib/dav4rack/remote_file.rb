@@ -107,7 +107,7 @@ module DAV4Rack
     
     # Last modified type based on provided, remote headers or current time
     def last_modified
-      @heads['last-modified'] || @modified || Time.current.httpdate
+      @heads['last-modified'] || @modified || Time.now.httpdate
     end
 
     # Builds the path for the cached file

@@ -106,7 +106,7 @@ module DAV4Rack
     end
 
     def remaining_timeout
-      t = timeout.to_i - (Time.current.to_i - created_at.to_i)
+      t = timeout.to_i - (Time.now.to_i - created_at.to_i)
       t < 0 ? 0 : t
     end
 
@@ -116,7 +116,7 @@ module DAV4Rack
         :token => token, 
         :timeout => timeout, 
         :depth => depth,
-        :created_at => Time.current,
+        :created_at => Time.now,
         :owner => owner
       }
       @store.transaction do

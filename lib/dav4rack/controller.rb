@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'uri'
 require 'dav4rack/destination_header'
 require 'dav4rack/request'
@@ -240,6 +242,7 @@ module DAV4Rack
         return MultiStatus
       end
 
+
       properties = if propfind.nil? or
                       propfind.empty? or
                       propfind.xpath("//#{ns}allprop").first
@@ -274,7 +277,6 @@ module DAV4Rack
       r.multistatus do |xml|
         xml << r.raw(prop_xml)
       end
-
       MultiStatus
     end
 

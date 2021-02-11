@@ -19,12 +19,16 @@ module DAV4Rack
     def initialize(env, options = {})
       super env
       @options = { recursive_propfind_allowed: true }.merge options
-      sanitize_path_info
+      self.path_info = expand_path path_info
     end
 
 
     def authorization?
-      !!env['HTTP_AUTHORIZATION']
+      !!authorization
+    end
+
+    def authorization
+      get_header 'HTTP_AUTHORIZATION'
     end
 
     # path relative to root uri
@@ -131,11 +135,15 @@ module DAV4Rack
       return uri.path_info
     end
 
-    # expands '/foo/../bar' to '/bar'
+    # expands '/foo/../bar' to '/bar', peserving trailing slash and normalizing
+    # consecutive slashes. adds a leading slash if missing
     def expand_path(path)
-      path.squeeze! '/'
-      path = Addressable::URI.normalize_component path, Addressable::URI::CharacterClasses::PATH
-      URI("http://example.com/").merge(path).path
+      path = path.squeeze '/'
+      path.prepend '/' unless path[0] == '/'
+      collection = path.end_with?('/')
+      path = ::File.expand_path path
+      path << '/' if collection and !path.end_with?('/')
+      path
     end
 
 
@@ -181,10 +189,6 @@ module DAV4Rack
       request_method != 'PROPFIND' or @options[:recursive_propfind_allowed]
     end
 
-    def sanitize_path_info
-      self.path_info.force_encoding 'UTF-8'
-      self.path_info = expand_path path_info
-    end
 
     def parse_request_body
       return Nokogiri.XML(body.read){ |config|
