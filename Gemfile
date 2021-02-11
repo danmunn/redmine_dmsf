@@ -35,8 +35,4 @@ source 'https://rubygems.org' do
 
   # Dav4Rack
   gem 'ox'
-
-  group :test do
-    gem 'rails-controller-testing'
-  end
 end
