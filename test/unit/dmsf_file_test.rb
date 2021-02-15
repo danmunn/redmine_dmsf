@@ -4,7 +4,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -195,6 +195,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     # Video
     @file1.last_revision.disk_filename = 'test.mp4'
     assert_equal 'inline', @file1.disposition
+    # HTML
+    @file1.last_revision.disk_filename = 'test.html'
+    assert_equal 'inline', @file1.disposition
   end
 
   def test_image
@@ -219,6 +222,12 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert !@file1.video?
     @file1.last_revision.disk_filename = 'test.mp4'
     assert @file1.video?
+  end
+
+  def test_html
+    assert !@file1.html?
+    @file1.last_revision.disk_filename = 'test.html'
+    assert @file1.html?
   end
 
   def test_findn_file_by_name

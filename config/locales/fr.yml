@@ -5,7 +5,7 @@
 # Copyright © 2011   Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012   Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright © 2014   Atmis
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -210,7 +210,8 @@ fr:
   parent_directory: Dossier parent
   note_webdav: "Après l'activation du module Webdav, celui-ci sera accessible par
     %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
-  label_dmsf_plural: "Copier les fichiers et les dossiers (%{files} fichiers dans %{folders} dossiers)"
+  label_copy_dmsf: "Copier les fichiers et les dossiers (%{files} fichiers dans %{folders} dossiers)"
+  label_copy_only_dmsf_folders: "Copier que les dossiers (%{folders})"
 
   warning_folder_already_locked: Ce dossier est déjà verrouillé
   notice_folder_locked: Dossier verrouillé
@@ -279,13 +280,13 @@ fr:
   text_email_finished_rejected: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de se terminer
     et le document a été rejeté pour la raison '%{notice}'."
   text_email_finished_delegated: "Le flux de validation '%{name}' assigné au document '%{filename}' a été délégué pour
-    la raison '%{notice}' et vous êtes tenu d'approuver l'étape actuelle."
+    la raison '%{notice}' et vous êtes tenu d'approuver l'étape actuelle '%{stepname}'."
   text_email_finished_step: "Le flux de validation '%{name}' assigné au document '%{filename}' a passé une des étapes
     d'approbation et vous êtes tenu d'approuver l'étape suivante."
   text_email_finished_step_short: "Le flux de validation '%{name}' assigné au document '%{filename}' a passé une des
     étapes d'approbation."
   text_email_started: "Le flux de validation '%{name}' assigné au document '%{filename}' vient de démarrer et vous êtes
-    tenu d'approuver l'étape actuelle."
+    tenu d'approuver l'étape actuelle '%{stepname}'."
   text_email_to_proceed: "Pour ce faire, cliquez sur l'icône de validation à côté du document dans"
   text_email_to_see_history: "Pour consulter l'historique de validation, cliquez sur le statut du flux du document dans"
 
@@ -410,6 +411,13 @@ fr:
 
   dmsf_webdav_ignore_1b_file_for_authentication: Ignore 1b file sent for authentication
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
+
+  text_not_empty: The folder is not empty.
+  label_scroll_down: Scroll down
+  note_webdav_disabled: WebDAV is disabled. Contact the administrator.
+
+  dmsf_copy: "Copy (%{n})"
+  label_empty_trash_bin: Empty Trash
 
   easy_pages:
     modules:

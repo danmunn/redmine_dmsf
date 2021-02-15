@@ -210,7 +210,8 @@ nl:
   parent_directory: Ouder directory
   note_webdav: "Webdav kan indien ingeschakeld worden gevonden op %{protocol}://%{domain}/dmsf/webdav/[project
     identifier]"
-  label_dmsf_plural: "Kopieer Documenten en mappen (%{files} bestanden in %{folders} mappen)"
+  label_copy_dmsf: "Kopieer documenten en mappen (%{files} bestanden in %{folders} mappen)"
+  label_copy_only_dmsf_folders: "Kopieer mappen (%{folders})"
 
   warning_folder_already_locked: Deze map is al vergrendeld
   notice_folder_locked: Deze map is succesvol vergrendeld
@@ -279,14 +280,14 @@ nl:
   text_email_finished_rejected: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist
     afgerond en het document is afgewezen vanwege '%{notice}'."
   text_email_finished_delegated: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document is zojuist
-    gedelegeerd omdat '%{notice}' en er wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap."
+    gedelegeerd omdat '%{notice}' en er wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap '%{stepname}'."
   text_email_finished_step: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document heeft zojuist een
     van de goedkeurende stappen afgerond en er wordt verwacht dat u een goedkeuring doet in de volgenden
       goedkeuringsstap."
   text_email_finished_step_short: "De goedkeuring workflow '%{name}' toegewezen aan '%{filename}' document heeft zojuist
     een van de goedkeuringsstappen afgerond."
   text_email_started: "De goedkeurende workflow '%{name}' toegewezen aan '%{filename}' document is zojuist gestart en er
-    wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap."
+    wordt verwacht dat u een goedkeuring doet in de huidige goedkeuringsstap '%{stepname}'."
   text_email_to_proceed: Klik om door te gaan om het het vinkjes icoon naast het document in
   text_email_to_see_history: Klik om de goedkeuringsgeschiedenis te bekijken op de workflow status van het document in
   text_email_to_see_status: Klik om de huidige status van de goedkeuring workflow te bekijken op het workflow status
@@ -410,6 +411,13 @@ nl:
 
   dmsf_webdav_ignore_1b_file_for_authentication: Ignore 1b file sent for authentication
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
+
+  text_not_empty: The folder is not empty.
+  label_scroll_down: Scroll down
+  note_webdav_disabled: WebDAV is disabled. Contact the administrator.
+
+  dmsf_copy: "Copy (%{n})"
+  label_empty_trash_bin: Empty Trash
 
   easy_pages:
     modules:

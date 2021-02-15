@@ -5,7 +5,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn  <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,6 +27,12 @@
 <%= render partial: '/dmsf/path',
       locals: { folder: @folder, filename: nil, title: l(:heading_uploaded_files) } %>
 
+<% if @uploads.size > 1 %>
+  <div class="dmsf-scroll">
+    <a class="dmsf-scroll-down" href="#footer"><%= l(:label_scroll_down) %></a>
+  </div>
+<% end %>
+
 <% if (@folder && @folder.description.present?) || @project.dmsf_description.present? %>
   <div class="wiki">
     <%= textilizable(@folder ? @folder.description : @project.dmsf_description) %>
@@ -46,4 +52,23 @@
       <%= submit_tag l(:label_upload), class: 'button-positive' %>
     </div>
   <% end %>
+<% end %>
+
+<%= late_javascript_tag do %>
+  // When the user scrolls the page, execute scrollFunction
+  window.onscroll = function() {
+    scrollFunction()
+  };
+  var scroller = $(".dmsf-scroll");
+  var firstUploadBox = $(".dmfs-box-tabular:first");
+  var offset = firstUploadBox.offset();
+  // Add the sticky class to the header when you reach its scroll position.
+  // Remove "sticky" when you leave the scroll position
+  function scrollFunction() {
+    if (window.pageYOffset > offset.top) {
+      scroller.addClass("dmsf-sticky");
+    } else {
+      scroller.removeClass("dmsf-sticky");
+    }
+  }
 <% end %>

@@ -5,7 +5,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ Redmine::Plugin.register :redmine_dmsf do
   end
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
-  version '2.4.5'
+  version '2.4.6 devel'
   
   requires_redmine version_or_higher: '4.0.0'
 
@@ -45,7 +45,7 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_index_database' => File.expand_path('dmsf_index', Rails.root),
               'dmsf_stemming_lang' => 'english',
               'dmsf_stemming_strategy' => 'STEM_NONE',
-              'dmsf_webdav' => '1',
+              'dmsf_webdav' => (Redmine::Plugin.installed?(:easy_hosting_services) && EasyHostingServices::EasyMultiTenancy.activated?) ? nil : '1',
               'dmsf_display_notified_recipients' => nil,
               'dmsf_global_title_format' => '',
               'dmsf_columns' => %w(title size modified version workflow author),
@@ -58,7 +58,7 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_documents_email_reply_to' => '',
               'dmsf_documents_email_links_only' => nil,
               'dmsf_enable_cjk_ngrams' => nil,
-              'dmsf_webdav_use_project_names' => nil,
+              'dmsf_webdav_use_project_names' => Redmine::Plugin.installed?(:easy_extensions) ? '1' : nil,
               'dmsf_webdav_ignore_1b_file_for_authentication' => '1'
             }
 end

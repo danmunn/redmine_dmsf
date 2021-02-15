@@ -4,7 +4,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
 
   def test_should_not_succeed_on_a_non_existant_project
     process :mkcol, '/dmsf/webdav/project_doesnt_exist/test1', params: nil, headers: @admin
-    assert_response :not_found
+    assert_response :conflict
   end
 
   def test_should_not_succed_on_a_non_dmsf_enabled_project
@@ -65,7 +65,7 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     process :mkcol, "/dmsf/webdav/#{@project1.identifier}/test2", params: nil, headers: @jsmith
-    assert_response :not_found
+    assert_response :conflict
     process :mkcol, "/dmsf/webdav/#{project1_uri}/test3", params: nil, headers: @jsmith
     assert_response :success # Created
   end

@@ -5,7 +5,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -32,7 +32,8 @@ class DmsfController < ApplicationController
   before_action :permissions
   # Also try to lookup folder by title if this is an API call
   before_action :find_folder_by_title, only: [:show]
-  before_action :get_query, only: [:expand_folder, :show, :trash]
+  before_action :get_query, only: [:expand_folder, :show, :trash, :empty_trash]
+  before_action :get_project_roles, only: [:new, :edit, :create]
 
   accept_api_auth :show, :create, :save, :delete
 
@@ -435,6 +436,24 @@ class DmsfController < ApplicationController
     end
   end
 
+  def empty_trash
+    @query.deleted = true
+    @query.dmsf_nodes.each do |node|
+      case node.type
+      when 'folder'
+        folder = DmsfFolder.find_by(id: node.id)
+        folder&.delete true
+      when 'file'
+        file = DmsfFile.find_by(id: node.id)
+        file&.delete true
+      when /link$/
+        link = DmsfLink.find_by(id: node.id)
+        link&.delete true
+      end
+    end
+    redirect_back_or_default trash_dmsf_path(id: @project.id)
+  end
+
   private
 
   def users_for_new_users
@@ -655,6 +674,11 @@ class DmsfController < ApplicationController
     else
       @query = retrieve_query(DmsfQuery, true)
     end
+  end
+
+  def get_project_roles
+    @project_roles = Role.givable.joins(:member_roles).joins(:members).where(
+      members: { project_id: @project.id }).distinct
   end
 
 end

@@ -152,7 +152,7 @@ Thumbnail with height of 200px: `{{dmsftn(8)}}`
 
 Thumbnail with custom size: `{{dmsftn(8, size=300)}}`
 
-Inline video of the file with id 8; it must be an image file such as MP4: `{{dmsf_video(9)}}`
+Inline video of the file with id 8; it must be a video file such as MP4: `{{dmsf_video(9)}}`
 
 Inline video with custom size: `{{dmsf_video(9, size=300)}}`
 

@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -160,7 +160,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a.icon-unlock', text: l(:button_unlock)
     assert_select 'a.icon-lock', text: l(:button_lock), count: 0
     assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
-    assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    assert_select 'a.icon-del', text: l(:button_delete)
   end
 
   def test_dmsf_url_link

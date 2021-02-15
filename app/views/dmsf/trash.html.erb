@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,13 +22,13 @@
 
 <% html_title l(:dmsf) %>
 
-<h2><%= l(:link_trash_bin) %></h2>
-
-<div class="dmsf-header">
-  <div class="wiki">
-    <%= textilizable @project.dmsf_description %>
-  </div>
+<div class="contextual">
+  <% if @file_delete_allowed %>
+    <%= link_to l(:label_empty_trash_bin), empty_trash_path(id: @project), class: 'icon icon-del' %>
+  <% end %>
 </div>
+
+<h2><%= l(:link_trash_bin) %></h2>
 
 <%= form_tag(trash_dmsf_path(id: @project), method: :get, id: 'query_form', class: 'dmsf-query-form') do %>
   <%= render partial: 'queries/query_form' %>

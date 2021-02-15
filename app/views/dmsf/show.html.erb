@@ -5,7 +5,7 @@
   #
   # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
   # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-  # Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+  # Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
   #
   # This program is free software; you can redistribute it and/or
   # modify it under the terms of the GNU General Public License
@@ -30,8 +30,7 @@
               class: 'icon icon-add' %>
     <% end %>
     <% if @folder_manipulation_allowed %>
-      <%= link_to l(:link_create_folder), new_dmsf_path(id: @project, parent_id: @folder),
-              title: l(:link_create_folder), class: 'icon icon-add' %>
+      <%= link_to l(:link_create_folder), new_dmsf_path(id: @project, parent_id: @folder), class: 'icon icon-add' %>
     <% end %>
   <% end %>
   <% if defined?(EasyExtensions) %>
@@ -61,7 +60,7 @@
 
 <div class="dmsf-header">
   <div class="wiki">
-    <%= textilizable(@folder ? @folder.description : @project.dmsf_description) %>
+    <%= textilizable @folder ? @folder.description : @project.dmsf_description %>
   </div>
 </div>
 

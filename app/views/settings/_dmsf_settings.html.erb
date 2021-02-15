@@ -5,7 +5,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -207,13 +207,20 @@
 
 <p>
   <%= content_tag :label, l(:label_webdav) %>
+  <% webdav_disabled = Redmine::Plugin.installed?(:easy_hosting_services) && EasyHostingServices::EasyMultiTenancy.activated? %>
   <%= select_tag 'settings[dmsf_webdav]',
     options_for_select([
       [l(:select_option_deactivated), nil],
       [l(:select_option_activated), '1']],
-      selected: @settings['dmsf_webdav']) %>
+      selected: @settings['dmsf_webdav'],
+      disabled: webdav_disabled) %>
   <em class="info">
-    <%= l(:note_webdav, protocol: Setting.protocol, domain: Setting.host_name).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_activated) %>
+    <% if webdav_disabled %>
+      <%= l(:note_webdav_disabled) %>
+    <% else %>
+      <%= l(:note_webdav, protocol: Setting.protocol, domain: Setting.host_name).html_safe %>
+      <%= l(:label_default) %>: <%= l(:select_option_activated) %>
+   <% end %>
   </em>  
 </p>
 

@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 # Copyright © 2013    Aecho Liu <aecho1028@gmail.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -210,8 +210,8 @@ zh-TW:
   parent_directory: 上層目錄
   note_webdav: "Webdav 啟用後，可在下列網址被找到: %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
 
-  label_dmsf_plural: "複制文件總管的檔案和資料夾。 ( 資料夾: %{folders} 檔案: %{files} )"
-
+  label_copy_dmsf: "複制文件總管的檔案和資料夾。 ( 資料夾: %{folders} 檔案: %{files} )"
+  label_copy_only_dmsf_folders: "複制文件總管的檔案和資料夾。 (%{folders})"
   warning_folder_already_locked: 這個資料夾己經被鎖定了
   notice_folder_locked: 這個資料夾己經成功地鎖定了。
   warning_folder_not_locked: 不好意思，這個資料夾無法被鎖定。
@@ -279,13 +279,13 @@ zh-TW:
   text_email_finished_rejected: "The approval workflow '%{name}' assigned to '%{filename}' document has just been
     finished and the document has been rejected because of '%{notice}'."
   text_email_finished_delegated: "The approval workflow '%{name}' assigned to '%{filename}' document has just been
-    delegated because of '%{notice}' and you are expected to do an approval in the current approval step."
+    delegated because of '%{notice}' and you are expected to do an approval in the current approval step '%{stepname}'."
   text_email_finished_step: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished one of
     the approval steps and you are expected to do an approval in the next approval step."
   text_email_finished_step_short: "The approval workflow '%{name}' assigned to '%{filename}' document has just finished
     one of the approval steps."
   text_email_started: "The approval workflow '%{name}' assigned to '%{filename}' document has just been started and you
-    are expected to do an approval in the current approval step."
+    are expected to do an approval in the current approval step '%{stepname}'."
   text_email_to_proceed: To proceed click on the check box icon next to the document in
   text_email_to_see_history: To see the approval history click on the workflow status of the document in
 
@@ -410,6 +410,13 @@ zh-TW:
 
   dmsf_webdav_ignore_1b_file_for_authentication: Ignore 1b file sent for authentication
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
+
+  text_not_empty: The folder is not empty.
+  label_scroll_down: Scroll down
+  note_webdav_disabled: WebDAV is disabled. Contact the administrator.
+
+  dmsf_copy: "Copy (%{n})"
+  label_empty_trash_bin: Empty Trash
 
   easy_pages:
     modules:

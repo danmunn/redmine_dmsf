@@ -4,7 +4,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,21 +20,23 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-gem 'zip-zip'
-gem 'simple_enum'
-gem 'uuidtools'
-gem 'dalli'
-gem 'active_record_union'
+source 'https://rubygems.org' do
+  gem 'zip-zip'
+  gem 'simple_enum'
+  gem 'uuidtools'
+  gem 'dalli'
+  gem 'active_record_union'
 
-# Redmine extensions
-unless %w(easyproject easy_gantt).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
-  gem 'redmine_extensions', '~> 0.3.9'
-  gem 'rubyzip', '>= 1.1.3'
-end
+  # Redmine extensions
+  unless %w(easyproject easy_gantt).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
+    gem 'redmine_extensions', '~> 0.3.9'
+    gem 'rubyzip', '>= 1.1.3'
 
-# Dav4Rack
-gem 'ox'
+     group :test do
+      gem 'rails-controller-testing'
+    end
+  end
 
-group :test do
-  gem 'rails-controller-testing'
+  # Dav4Rack
+  gem 'ox'
 end

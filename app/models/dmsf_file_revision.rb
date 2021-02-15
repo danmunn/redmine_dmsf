@@ -4,7 +4,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ class DmsfFileRevision < ActiveRecord::Base
     'application/vnd.oasis.opendocument.spreadsheet' => 'ms-excel',
     'application/vnd.oasis.opendocument.text' => 'ms-word',
     'application/vnd.oasis.opendocument.presentation' => 'ms-powerpoint',
+    'application/vnd.ms-excel.sheet.macroEnabled.12' => 'ms-excel'
   }.freeze
 
   scope :visible, -> { where(deleted: STATUS_ACTIVE) }

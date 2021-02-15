@@ -4,7 +4,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -251,6 +251,11 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     @folder1.dmsf_folder = @folder2
     # @folder2 is under @folder1 => loop!
     assert !@folder1.save
+  end
+
+  def test_empty
+    assert !@folder1.empty?
+    assert @folder6.empty?
   end
 
 end

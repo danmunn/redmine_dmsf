@@ -3,7 +3,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -210,7 +210,8 @@ cs:
   parent_directory: Nadřazená složka
   note_webdav: "Webdav je po aktivaci k dispozici na %{protocol}://%{domain}/dmsf/webdav/[identifikátor projektu]"
 
-  label_dmsf_plural: "Kopíruj dokumenty a složky (%{files} souborů v %{folders} složkách)"
+  label_copy_dmsf: "Kopíruj dokumenty a složky (%{files} souborů v %{folders} složkách)"
+  label_copy_only_dmsf_folders: "Kopíruj jenom a složky (%{folders})"
 
   warning_folder_already_locked: Tato složka je již zamčená
   notice_folder_locked: Složka byla úspěšně zamčena
@@ -279,13 +280,13 @@ cs:
   text_email_finished_rejected: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl dokončen a
     dokument byl zamítnut, protože '%{notice}'."
   text_email_finished_delegated: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl delegován,
-    protože '%{notice}' a od Vás se očekává schválení v aktuálním schvalovacím kroku."
+    protože '%{notice}' a od Vás se očekává schválení v aktuálním schvalovacím kroku '%{stepname}'."
   text_email_finished_step: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' právě ukončil jeden ze
     schvalovacích kroků a od Vás se očekává schválení v dalším schvalovacím kroku."
   text_email_finished_step_short: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' právě ukončil jeden
     ze schvalovacích kroků."
   text_email_started: "Schvalovací proces '%{name}' přiřazený k dokumentu '%{filename}' byl zahájen a od Vás se očekává
-    schválení v aktuálním schvalovacím kroku."
+    schválení v aktuálním schvalovacím kroku '%{stepname}'."
   text_email_to_proceed: Pro schválení klikněte na zaškrtávací ikonku vedle dokumentu v
   text_email_to_see_history: Pro zobrazení historie schvalovacího procesu klikněte na status dokumentu v
 
@@ -410,6 +411,13 @@ cs:
 
   dmsf_webdav_ignore_1b_file_for_authentication: Ignorovat 1b soubor poslaný kvůli autentizaci
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
+
+  text_not_empty: Adresář není prázdný.
+  label_scroll_down: Posunout se dolů
+  note_webdav_disabled: WebDAV je zablokovaný. Kontaktujte administrátora.
+
+  dmsf_copy: "Kopie (%{n})"
+  label_empty_trash_bin: Vysypat koš
 
   easy_pages:
     modules:

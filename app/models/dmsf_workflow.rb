@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -218,7 +218,9 @@ class DmsfWorkflow < ActiveRecord::Base
         revision,
         :text_email_subject_started,
         :text_email_started,
-        :text_email_to_proceed)
+        :text_email_to_proceed,
+        nil,
+        assignments.first&.dmsf_workflow_step)
     if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
       unless recipients.blank?
         to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')

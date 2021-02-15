@@ -2,7 +2,7 @@
 * Redmine plugin for Document Management System "Features"
 *
 * Copyright © 2011    Vit Jonas <vit.jonas@gmail.com>
-* Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+* Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -31,10 +31,6 @@
 .dmsf-tree.idnt-9 td.dmsf-title { padding-left: 6.5em; }
 
 /* Font icons */
-table.dmsf > tbody > tr > td a.icon-actions::before {
-    content: "\F01D8";
-}
-
 #sidebar ul > li > a.icon-only.icon-clear-query {
     background-image: url(../../../images/close_hl.png);
     background-repeat: no-repeat;

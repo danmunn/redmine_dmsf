@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'uri'
 require 'dav4rack/destination_header'
 require 'dav4rack/request'
@@ -325,7 +327,7 @@ module DAV4Rack
 
         asked[:scope] = lockinfo.xpath("//#{ns}lockscope").children.find_all{|n|n.element?}.map{|n|n.name}.first
         asked[:type] = lockinfo.xpath("#{ns}locktype").children.find_all{|n|n.element?}.map{|n|n.name}.first
-        asked[:owner] = lockinfo.xpath("//#{ns}owner/#{ns}href").children.map{|n|n.text}.first
+        asked[:owner] = lockinfo.xpath("//#{ns}owner").children.map{|n|n.text}.first
       end
 
       r = XmlResponse.new(response, resource.namespaces)

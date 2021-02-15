@@ -5,7 +5,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ module RedmineDmsf
       ret
     end
 
-    def lock!(scope = :scope_exclusive, type = :type_write, expire = nil)
+    def lock!(scope = :scope_exclusive, type = :type_write, expire = nil, owner = nil)
       # Raise a lock error if entity is locked, but its not at resource level
       existing = lock(false)
       raise DmsfLockError.new(l(:error_resource_or_parent_locked)) if self.locked? && existing.empty?
@@ -56,7 +56,10 @@ module RedmineDmsf
             raise DmsfLockError.new(l(:error_parent_locked))
           else
             existing.each do |l|
-              raise DmsfLockError.new(l(:error_resource_locked)) if l.user.id == User.current.id
+              #if l.user.id == User.current.id
+              if (l.user.id == User.current.id) && (owner.nil? || (owner == l.owner))
+                raise DmsfLockError.new(l(:error_resource_locked))
+              end
             end
           end
         else
@@ -71,10 +74,9 @@ module RedmineDmsf
       l.user = User.current
       l.expires_at = expire
       l.dmsf_file_last_revision_id = self.last_revision.id if self.is_a?(DmsfFile)
+      l.owner = owner
       l.save!
-      reload
-      locks.reload
-      l.reload
+      reload # Reload the object being locked in order to contain just created lock when asked
       l
     end
 
@@ -82,12 +84,11 @@ module RedmineDmsf
       return false unless self.locked?
       existing = self.lock(true)
       # If its empty its a folder that's locked (not root)
-      (existing.empty? || (!self.dmsf_folder.nil? && self.dmsf_folder.locked?)) ? false : true
+      (existing.empty? || (self.dmsf_folder&.locked?)) ? false : true
     end
 
-    #
     # By using the path upwards, surely this would be quicker?
-    def locked_for_user?
+    def locked_for_user?(args = nil)
       return false unless locked?
       b_shared = nil
       self.dmsf_path.each do |entity|
@@ -95,11 +96,14 @@ module RedmineDmsf
         next if locks.empty?
         locks.each do |lock|
           next if lock.expired? # In case we're in between updates
-          if lock.lock_scope == :scope_exclusive && b_shared.nil?
-            return true if (!lock.user) || (lock.user.id != User.current.id)
+          if lock.lock_scope == :scope_exclusive
+            return true if (lock.user&.id != User.current.id) || ((lock.owner != (args ? args[:owner] : nil)))
           else
             b_shared = true if b_shared.nil?
-            b_shared = false if lock.user.id == User.current.id
+            if b_shared && (lock.user&.id == User.current.id) && (lock.owner == (args ? args[:owner] : nil)) ||
+              (args && (args[:scope] == 'shared'))
+              b_shared = false
+            end
           end
         end
         return true if b_shared
@@ -107,24 +111,24 @@ module RedmineDmsf
       false
     end
 
-    def unlock!(force_file_unlock_allowed = false)
+    def unlock!(force_file_unlock_allowed = false, owner = nil)
       raise DmsfLockError.new(l(:warning_file_not_locked)) unless self.locked?
       existing = self.lock(true)
-      if existing.empty? || (!self.dmsf_folder.nil? && self.dmsf_folder.locked?) # If its empty its a folder that's locked (not root)
+      # If its empty its a folder that's locked (not root)
+      if existing.empty? || (!self.dmsf_folder.nil? && self.dmsf_folder.locked?)
         raise DmsfLockError.new(l(:error_unlock_parent_locked))
       else
         # If entity is locked to you, you aren't the lock originator (or named in a shared lock) so deny action
         # Unless of course you have the rights to force an unlock
         raise DmsfLockError.new(l(:error_only_user_that_locked_file_can_unlock_it)) if (
           self.locked_for_user? && !User.current.allowed_to?(:force_file_unlock, self.project) && !force_file_unlock_allowed)
-
         # Now we need to determine lock type and do the needful
         if (existing.count == 1) && (existing[0].lock_scope == :exclusive)
           existing[0].destroy
         else
           b_destroyed = false
           existing.each do |lock|
-            if (lock.user && (lock.user.id == User.current.id)) || User.current.admin?
+            if ((lock.user&.id == User.current.id) && (lock.owner == owner)) || User.current.admin?
               lock.destroy
               b_destroyed = true
               break

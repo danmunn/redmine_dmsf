@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 #
 #
@@ -210,7 +210,8 @@ hu:
   parent_directory: Szülő könyvtár
   note_webdav: "Webdav aktiválása után itt található %{protocol}://%{domain}/dmsf/webdav/[projekt azonosító]"
 
-  label_dmsf_plural: "Dokumentumok és mappák (%{files}  másolása a %{folders} mappákba"
+  label_copy_dmsf: "Dokumentumok és mappák (%{files}  másolása a %{folders} mappákba)"
+  label_copy_only_dmsf_folders: "Dokumentumok és mappák (%{folders})"
 
   warning_folder_already_locked: Ez a mappa már zárolva
   notice_folder_locked: A mappa sikeresen lett zárolva
@@ -280,13 +281,13 @@ hu:
     hozzárendelésre, befejeződött és visszautasításra került a következő üzenettel: '%{notice}'."
   text_email_finished_delegated: "A '%{name}' jóváhagyási workflow amely a '%{filename}'  dokumentumhoz került
     hozzárendelésre, Önhöz került az alábbi megjegyzés '%{notice}' miatt és a jelenlegi lépésben az Ön jóváhagyására
-      vár."
+      vár '%{stepname}'."
   text_email_finished_step: "A '%{name}' jóváhagyási workflow-ban amely a '%{filename}' dokumentumhoz került
     hozzárendelésre, egy lépés teljesült és a következő lépésben lépésben az Ön jóváhagyására vár."
   text_email_finished_step_short: "A '%{name}' jóváhagyási workflow-ban amely a '%{filename}'  dokumentumhoz került
     hozzárendelésre, egy lépés teljesült a folyamatban."
   text_email_started: "A '%{name}' jóváhagyási workflow amely a '%{filename}' dokumentumhoz került hozzárendelésre,
-    elindult és a jelenlegi lépésben az Ön jóváhagyására vár."
+    elindult és a jelenlegi lépésben az Ön jóváhagyására vár '%{stepname}'."
   text_email_to_proceed: A folytatáshoz kattintson a négyzetre a dokumentum mellett
   text_email_to_see_history: Ha meg akarja nézni a jóváhagyási előzményeket, akkor kattintson a dokumentumon belül a
     workflow státuszra
@@ -409,6 +410,13 @@ hu:
 
   dmsf_webdav_ignore_1b_file_for_authentication: Ignore 1b file sent for authentication
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
+
+  text_not_empty: The folder is not empty.
+  label_scroll_down: Scroll down
+  note_webdav_disabled: WebDAV is disabled. Contact the administrator.
+
+  dmsf_copy: "Copy (%{n})"
+  label_empty_trash_bin: Empty Trash
 
   easy_pages:
     modules:

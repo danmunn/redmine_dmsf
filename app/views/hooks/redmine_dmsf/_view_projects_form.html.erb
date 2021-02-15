@@ -5,7 +5,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,7 +24,23 @@
 
 <% if @project.new_record? && @source_project %>
   <p>
-    <label class="block"><%= check_box_tag 'only[]', 'dmsf', true %> <%= l(:label_dmsf_plural, @source_project.dmsf_count) %></label>
-    <label class="block"><%= check_box_tag 'only[]', 'approval_workflows', true %> <%= l(:label_dmsf_workflow_plural_num, @source_project.dmsf_workflows.count) %></label>
+    <% counts = @source_project.dmsf_count %>
+    <label class="block">
+      <% value = params['only'].blank? || params['only'].include?('dmsf') %>
+      <%= check_box_tag 'only_dmsf', 'dmsf', value, name: 'only[]',
+                        onfocus: "$('#only_dmsf_folders').prop('checked', false);" %>
+      <%= l(:label_copy_dmsf, counts) %>
+    </label>
+    <label class="block">
+      <% value = params['only'].present? && params['only'].include?('dmsf_folders') %>
+      <%= check_box_tag 'only_dmsf_folders', 'dmsf_folders', value, name: 'only[]',
+                        onfocus: "$('#only_dmsf').prop('checked', false);" %>
+      <%= l(:label_copy_only_dmsf_folders, counts) %>
+    </label>
+    <label class="block">
+      <% value = params['only'].blank? || params['only'].include?('approval_workflows') %>
+      <%= check_box_tag 'only[]', 'approval_workflows', value %>
+      <%= l(:label_dmsf_workflow_plural_num, @source_project.dmsf_workflows.count) %>
+    </label>
   </p>
 <% end %>

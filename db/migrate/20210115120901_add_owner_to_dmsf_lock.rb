@@ -1,11 +1,9 @@
-<%
 # encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2012    Daniel Munn  <dan.munn@munnster.co.uk>
 # Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2016-17 carlolars
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,15 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-%>
 
-<%= render partial: '/dmsf/path', locals: { folder: @folder, filename: nil, title: nil } %>
+class AddOwnerToDmsfLock < ActiveRecord::Migration[5.2]
 
-<%= render partial: '/dmsf_folders_copy/form', locals: {
-      projects: @projects,
-      project: @project,
-      target_project: @target_project,
-      folders: @folders,
-      file_or_folder: @folder,
-      target_folder: @target_folder,
-      permission: :folder_manipulation } %>
+  def change
+    add_column :dmsf_locks, :owner, :string, null: true
+  end
+
+end

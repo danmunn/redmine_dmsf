@@ -4,7 +4,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@ pt-BR:
   title_lock_file: Clique aqui para impedir alterações por outro usuário
   title_download_checked: Download em arquivo compactado
   title_send_checked_by_email: Enviar por e-mail
-  link_user_preferences: Suas preferências de projeto DMSF
+  link_user_preferences: Suas preferências de projeto DMS
   heading_send_documents_by_email: Enviar documentos por e-mail
   label_email_from: Remetente
   label_email_to: Destinatário
@@ -210,7 +210,8 @@ pt-BR:
   parent_directory: Diretório Pai
   note_webdav: "Webdav uma vez habilitado pode ser encontrado em %{protocol}://%{domain}/dmsf/webdav/[project
     identifier]"
-  label_dmsf_plural: "Copiar documentos e pastas (%{files} documentos em %{folders} pastas)"
+  label_copy_dmsf: "Copiar documentos e pastas (%{files} documentos em %{folders} pastas)"
+  label_copy_only_dmsf_folders: "Copiar pastas (%{folders})"
 
   warning_folder_already_locked: Esta pasta já está bloqueada
   notice_folder_locked: A pasta foi bloqueada com sucesso
@@ -279,13 +280,13 @@ pt-BR:
   text_email_finished_rejected: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi
     finalizado e o documento foi reprovado devido a '%{notice}'."
   text_email_finished_delegated: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi
-    atribuido pois '%{notice}' e está aguardando a sua aprovação na etapa atual."
+    atribuido pois '%{notice}' e está aguardando a sua aprovação na etapa atual '%{stepname}'."
   text_email_finished_step: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi aprovado na
     etapa anterior e está aguardando a sua aprovação na etapa atual."
   text_email_finished_step_short: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi
     aprovado em uma das suas etapas de aprovação."
   text_email_started: "O workflow de aprovação '%{name}' definido para o documento '%{filename}' foi iniciado e está
-    aguardando a sua aprovação na etapa atual."
+    aguardando a sua aprovação na etapa atual '%{stepname}'."
   text_email_to_proceed: Para dar continuidade ao fluxo, clique no íncone ao lado do documento
   text_email_to_see_history: Para visualizar o histórico de workflow de aprovação clique no status do workflow
     disponível ao lado do documento
@@ -410,6 +411,13 @@ pt-BR:
 
   dmsf_webdav_ignore_1b_file_for_authentication: Ignore 1b file sent for authentication
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
+
+  text_not_empty: The folder is not empty.
+  label_scroll_down: Scroll down
+  note_webdav_disabled: WebDAV is disabled. Contact the administrator.
+
+  dmsf_copy: "Copy (%{n})"
+  label_empty_trash_bin: Empty Trash
 
   easy_pages:
     modules:

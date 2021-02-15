@@ -4,7 +4,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 # Polish translation created by Sebastian Białas <sbialas@bs-it.pl> www.bs-it.pl
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -210,7 +210,8 @@ pl:
   parent_directory: Folder nadrzędny
   note_webdav: "Webdav once enabled can be found at %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
 
-  label_dmsf_plural: "Skopiuj pliki i foldery (%{files} plików w %{folders} folderach)"
+  label_copy_dmsf: "Skopiuj pliki i foldery (%{files} plików w %{folders} folderach)"
+  label_copy_only_dmsf_folders: "Skopiuj tylko foldery (%{folders})"
 
   warning_folder_already_locked: Folder jest już zablokowany
   notice_folder_locked: Folder został zablokowany
@@ -279,13 +280,13 @@ pl:
   text_email_finished_rejected: "Proces akceptacji '%{name}' dokumentu '%{filename}' został właśnie zakończony. Dokument
     został odrzucony z powodu '%{notice}'."
   text_email_finished_delegated: "Proces akceptacji '%{name}' dokumentu '%{filename}' został właśnie delegowany z powodu
-    '%{notice}'. Zostałeś wskazany jako akceptujący w bieżącym kroku zatwierdzania."
+    '%{notice}'. Zostałeś wskazany jako akceptujący w bieżącym kroku zatwierdzania '%{stepname}'."
   text_email_finished_step: "Zakończono krok w procesie akceptacji '%{name}' dokumentu '%{filename}'. Jesteś kolejną
     osobą decyzyjną w procesie akceptacji."
   text_email_finished_step_short: "Zakończono krok w procesie akceptacji '%{name}' dokumentu '%{filename}'."
 
   text_email_started: "Proces akceptacji '%{name}' dokuentu '%{filename}' został uruchomiony. Jesteś osobą akceptującą w
-    bieżącym kroku zatwierdzania."
+    bieżącym kroku zatwierdzania '%{stepname}'."
   text_email_to_proceed: Aby procedować zaznacz check box przy dokumencie
   text_email_to_see_history: Aby zobaczyć historię akceptacji kliknij w proces akceptacji dokumentu
 
@@ -410,6 +411,13 @@ pl:
 
   dmsf_webdav_ignore_1b_file_for_authentication: Ignore 1b file sent for authentication
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
+
+  text_not_empty: The folder is not empty.
+  label_scroll_down: Scroll down
+  note_webdav_disabled: WebDAV is disabled. Contact the administrator.
+
+  dmsf_copy: "Copy (%{n})"
+  label_empty_trash_bin: Empty Trash
 
   easy_pages:
     modules:

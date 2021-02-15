@@ -4,7 +4,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -273,6 +273,15 @@ class DmsfFile < ActiveRecord::Base
     file = DmsfFile.new
     file.dmsf_folder_id = folder.id if folder
     file.project_id = project.id
+    if DmsfFile.where(project_id: file.project_id, dmsf_folder_id: file.dmsf_folder_id, name: filename).exists?
+      1.step do |i|
+        gen_filename = " #{filename} #{l(:dmsf_copy, n: i)}"
+        unless DmsfFile.where(project_id: file.project_id, dmsf_folder_id: file.dmsf_folder_id, name: gen_filename).exists?
+          filename = gen_filename
+          break
+        end
+      end
+    end
     file.name = filename
     file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
     if file.save && last_revision
@@ -464,8 +473,12 @@ class DmsfFile < ActiveRecord::Base
     last_revision && Redmine::MimeType.is_type?('video', last_revision.disk_filename)
   end
 
+  def html?
+    last_revision && (Redmine::MimeType.of(last_revision.disk_filename) == 'text/html')
+  end
+
   def disposition
-    (image? || pdf? || video?) ? 'inline' : 'attachment'
+    (image? || pdf? || video? || html?) ? 'inline' : 'attachment'
   end
 
   def preview(limit)

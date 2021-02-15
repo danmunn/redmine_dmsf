@@ -4,7 +4,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -47,6 +47,18 @@ test()
   bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf RAILS_ENV=test
   bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf RAILS_ENV=test
   bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf RAILS_ENV=test
+
+  # Litmus
+  # Prepare Redmine's environment for WebDAV testing
+  bundle exec rake redmine:dmsf_webdav_test_on RAILS_ENV=test
+  # Run Webrick server
+  bundle exec rails server webrick -e test -d
+  # Run Litmus tests
+  litmus http://localhost:3000/dmsf/webdav/dmsf_test_project admin admin
+  # Shutdown Webrick
+  kill `cat tmp/pids/server.pid`
+  # Clean up Redmine's environment from WebDAV testing
+  bundle exec rake redmine:dmsf_webdav_test_off RAILS_ENV=test
 }
 
 uninstall()

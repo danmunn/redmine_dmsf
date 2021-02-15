@@ -5,7 +5,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@
     <% end %>
     <% unless @folder.locked? %>
       <%= link_to l(:button_delete), delete_dmsf_path(id: @project, folder_id: @folder),
-        data: { confirm: l(:text_are_you_sure) },
+        data: { confirm: "#{l(:text_are_you_sure)}\n#{l(:text_not_empty) unless @folder.empty?}" },
         title: l(:button_delete), class: 'icon icon-del', method: :delete %>
     <% end %>
   <% end %>
@@ -75,7 +75,7 @@
       <% dir = @folder.inherited_permissions_from %>
       <% if dir %>
         <%= label_tag '', l(:label_inherited_permissions) %>
-        <% Role.givable.each do |role| %>
+        <% @project_roles.each do |role| %>
           <% checked = dir.permission_for_role(role) %>
           <% if checked %>
             <label class="inline">
@@ -95,7 +95,7 @@
         <% end %>
       <% end %>
       <%= label_tag '', l(:label_dmsf_permissions) %>
-      <% Role.givable.each do |role| %>
+      <% @project_roles.each do |role| %>
         <% checked = @folder.permission_for_role(role) %>
         <label class="inline">
           <%= check_box_tag 'permissions[role_ids][]', role.id, checked, id: nil %>

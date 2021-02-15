@@ -4,7 +4,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -210,7 +210,8 @@ it: # Italian strings thx 2 Matteo Arceci!
   parent_directory: Cartella superiore
   note_webdav: "Una volta abilitato il Webdav può essere contattato sul percorso
     %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
-  label_dmsf_plural: "Copia documenti e cartelle (%{files} documenti in %{folders} cartelle)"
+  label_copy_dmsf: "Copia documenti e cartelle (%{files} documenti in %{folders} cartelle)"
+  label_copy_only_dmsf_folders: "Copia solo documenti (%{folders})"
 
   warning_folder_already_locked: Questa cartella è già bloccata
   notice_folder_locked: La cartella è stata bloccata
@@ -279,13 +280,13 @@ it: # Italian strings thx 2 Matteo Arceci!
   text_email_finished_rejected: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata
     completata ma il documento è stato rifiutato a causa di '%{notice}'."
   text_email_finished_delegated: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stata
-    delegata a causa di '%{notice}' e sei tenuto ad approvare nel passo corrente."
+    delegata a causa di '%{notice}' e sei tenuto ad approvare nel passo corrente '%{stepname}'."
   text_email_finished_step: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' ha completato uno
     dei passi di approvazione e sei tenuto ad approvare il prossimo passo."
   text_email_finished_step_short: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' ha completato
     uno dei passi di approvazione."
   text_email_started: "L'approvazione di flusso di lavoro '%{name}' assegnato a '%{filename}' è stato inizializzato e
-    sei tenuto ad approvare il passo corrente."
+    sei tenuto ad approvare il passo corrente '%{stepname}'."
   text_email_to_proceed: Per proseguire clicca sull'icona checkbox a fianco del documento
   text_email_to_see_history: Per vedere la storia di approvazione clicca sullo stato del flusso di lavoro del documento
 
@@ -410,6 +411,13 @@ it: # Italian strings thx 2 Matteo Arceci!
 
   dmsf_webdav_ignore_1b_file_for_authentication: Ignore 1b file sent for authentication
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
+
+  text_not_empty: The folder is not empty.
+  label_scroll_down: Scroll down
+  note_webdav_disabled: WebDAV is disabled. Contact the administrator.
+
+  dmsf_copy: "Copy (%{n})"
+  label_empty_trash_bin: Empty Trash
 
   easy_pages:
     modules:

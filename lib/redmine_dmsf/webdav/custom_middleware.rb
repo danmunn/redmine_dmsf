@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -35,11 +35,7 @@ module RedmineDmsf
               root_uri_path: path,
               resource_class: RedmineDmsf::Webdav::ResourceProxy,
               log_to: Rails.logger,
-              allow_unauthenticated_options_on_root: true,
-              namespaces: {
-                'http://apache.org/dav/props/' => 'd',
-                'http://ucb.openoffice.org/dav/props/' => 'd'
-              }
+              allow_unauthenticated_options_on_root: true
             )
           end
         }.to_app

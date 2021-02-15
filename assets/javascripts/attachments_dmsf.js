@@ -2,7 +2,7 @@
  *
  * Redmine plugin for Document Management System "Features"
  *
- * Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+ * Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -266,16 +266,18 @@ function dmsfDragOutHandler(e) {
 }
 
 function dmsfSetupFileDrop() {
+
     if (window.File && window.FileList && window.ProgressEvent && window.FormData) {
 
-        $.event.fixHooks.drop = { props: [ 'dataTransfer' ] };
+        $.event.addProp('dataTransfer');
 
-        $('form span.dmsf-uploader').has('input:file').each(function() {
+        $('form span.dmsf-uploader:not(.dmsffiledroplistner)').has('input:file').each(function () {
+
             $(this).on({
                 dragover: dmsfDragOverHandler,
                 dragleave: dmsfDragOutHandler,
                 drop: dmsfHandleFileDropEvent
-            });
+            }).addClass('dmsffiledroplistner');
         });
     }
 }

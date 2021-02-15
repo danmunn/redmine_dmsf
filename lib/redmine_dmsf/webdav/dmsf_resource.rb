@@ -4,7 +4,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,6 +27,38 @@ module RedmineDmsf
   module Webdav
     class DmsfResource < BaseResource
       include Redmine::I18n
+
+      def initialize(path, request, response, options)
+        super path, request, response, options
+      end
+
+      # name:: String - Property name
+      # Returns the value of the given property
+      def get_property(element)
+        if element[:ns_href] == DAV_NAMESPACE
+          super
+        else
+          get_custom_property element
+        end
+      end
+
+      # name:: String - Property name
+      # value:: New value
+      # Set the property to the given value
+      def set_property(element, value)
+        # let Resource handle DAV properties
+        if element[:ns_href] == DAV_NAMESPACE
+          super
+        else
+          set_custom_property element, value
+        end
+      end
+
+      # name:: Property name
+      # Remove the property from the resource
+      def remove_property(element)
+        Redmine::Search.cache_store.delete "#{get_property_key}-#{element[:name]}"
+      end
 
       # Gather collection of objects that denote current entities child entities
       # Used for listing directories etc, implemented basic caching because otherwise
@@ -112,7 +144,6 @@ module RedmineDmsf
       end
 
       # Process incoming GET request
-      #
       # If instance is a collection, calls html_display (defined in base_resource.rb) which cycles through children for display
       # File will only be presented for download if user has permission to view files
       def get(request, response)
@@ -129,15 +160,13 @@ module RedmineDmsf
       end
 
       # Process incoming MKCOL request
-      #
       # Create a DmsfFolder at location requested, only if parent is a folder (or root)
-      # - 2012-06-18: Ensure item is only functional if project is enabled for dmsf
+      # Ensure item is only functional if project is enabled for dmsf
       def make_collection
         if request.body.read.to_s.empty?
           raise NotFound unless project && project.module_enabled?('dmsf')
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
           raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
-          return MethodNotAllowed if exist? # If we already exist, why waste the time trying to save?
           f = DmsfFolder.new
           f.title = basename
           f.dmsf_folder_id = parent.folder&.id
@@ -150,13 +179,13 @@ module RedmineDmsf
       end
 
       # Process incoming DELETE request
-      #
       # <instance> should be of entity to be deleted, we simply follow the Dmsf entity method
       # for deletion and return of appropriate status based on outcome.
       def delete
         if file
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_delete, project)
           raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
+          raise Locked if file.locked?
           pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
           if pattern.present? && basename.match(pattern)
             # Files that are not versioned should be destroyed
@@ -174,6 +203,7 @@ module RedmineDmsf
             Conflict
           end
         elsif folder
+          raise Locked if folder.locked?
           # To fullfil Litmus requirements to not delete folder if fragments are in the URL
           uri = URI(uri_encode(request.get_header('REQUEST_URI')))
           raise BadRequest if uri.fragment.present?
@@ -186,124 +216,116 @@ module RedmineDmsf
       end
 
       # Process incoming MOVE request
-      #
       # Behavioural differences between collection and single entity
-      # TODO: Support overwrite between both types of entity, and implement better checking
-      def move(dest, overwrite)
-        dest = @__proxy.class.new(dest, @request, @response, @options.merge(user: @user))
-        # All of this should carry across the ResourceProxy frontend, we ensure this to
-        # prevent unexpected errors
-        resource = dest.is_a?(ResourceProxy) ? dest.resource : dest
-        return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil?
-        parent = resource.parent
-        raise Forbidden unless resource.project.module_enabled?(:dmsf)
+      def move(dest_path, overwrite)
+        dest = ResourceProxy.new(dest_path, @request, @response, @options.merge(user: @user))
+        return PreconditionFailed if !dest.resource.is_a?(DmsfResource) || dest.resource.project.nil?
+        parent = dest.resource.parent
+        raise Forbidden unless dest.resource.project.module_enabled?(:dmsf)
         if !parent.exist? || (!User.current.admin? && (!DmsfFolder.permissions?(folder, false) ||
             !DmsfFolder.permissions?(parent.folder, false)))
           raise Forbidden
         end
         if collection?
           if dest.exist?
-            return overwrite ? NotImplemented : PreconditionFailed
+            if overwrite
+              if folder
+                (dest.collection?)&.delete true
+              end
+            else
+              return PreconditionFailed
+            end
           end
           if !User.current.admin? && (!User.current.allowed_to?(:folder_manipulation, project) ||
-              !User.current.allowed_to?(:folder_manipulation, resource.project))
+              !User.current.allowed_to?(:folder_manipulation, dest.resource.project))
             raise Forbidden
           end
+          unless folder
+            return MethodNotAllowed # Moving sub-project not enabled
+          end
+          raise Locked if folder.locked_for_user?
           # Change the title
-          return MethodNotAllowed unless folder # Moving sub-project not enabled
-          folder.title = resource.basename
+          folder.title = dest.resource.basename
           return PreconditionFailed unless folder.save
           # Move to a new destination
-          folder.move_to(resource.project, parent.folder) ? Created : PreconditionFailed
+          folder.move_to(dest.resource.project, parent.folder) ? Created : PreconditionFailed
         else
           if !User.current.admin? && (!User.current.allowed_to?(:file_manipulation, project) ||
-              !User.current.allowed_to?(:file_manipulation, resource.project))
+              !User.current.allowed_to?(:file_manipulation, dest.resource.project))
             raise Forbidden
           end
-          if dest.exist?
+          raise Locked if file.locked_for_user?
+          if dest.exist? && (!dest.collection?)
             return PreconditionFailed unless overwrite
-            if (project == resource.project) && file.name.match(/.\.tmp$/i)
-              # Renaming a *.tmp file to an existing file in the same project, probably Office that is saving a file.
-              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename} (exists), possible MSOffice rename from .tmp when saving"
-              if resource.file.last_revision.size == 0 || reuse_version_for_locked_file(resource.file)
-                # Last revision in the destination has zero size so reuse that revision
-                new_revision = resource.file.last_revision
-              else
-                # Create a new revison by cloning the last revision in the destination
-                new_revision = resource.file.last_revision.clone
-                new_revision.increase_version 1
-              end
-              # The file on disk must be renamed from .tmp to the correct filetype or else Xapian won't know how to index.
-              # Copy file.last_revision.disk_file to new_revision.disk_file
-              new_revision.size = file.last_revision.size
-              new_revision.disk_filename = new_revision.new_storage_filename
-              Rails.logger.info "WebDAV MOVE: Copy file #{file.last_revision.disk_filename} -> #{new_revision.disk_filename}"
-              File.open(file.last_revision.disk_file, 'rb') do |f|
-                new_revision.copy_file_content f
-              end
-              # Save
-              new_revision.save && resource.file.save
-              # Delete (and destroy) the file that should have been renamed and return what should have been returned in case of a copy
-              file.delete(true) ? Created : PreconditionFailed
+            if dest.resource.file.last_revision.size == 0 || reuse_version_for_locked_file(dest.resource.file)
+              # Last revision in the destination has zero size so reuse that revision
+              new_revision = dest.resource.file.last_revision
             else
-              # Files cannot be merged at this point, until a decision is made on how to merge them
-              # ideally, we would merge revision history for both, ensuring the origin file wins with latest revision.
-              NotImplemented
+              # Create a new revison by cloning the last revision in the destination
+              new_revision = dest.resource.file.last_revision.clone
+              new_revision.increase_version 1
             end
+            # The file on disk must be renamed from .tmp to the correct filetype or else Xapian won't know how to index.
+            # Copy file.last_revision.disk_file to new_revision.disk_file
+            new_revision.size = file.last_revision.size
+            new_revision.disk_filename = new_revision.new_storage_filename
+            File.open(file.last_revision.disk_file, 'rb') do |f|
+              new_revision.copy_file_content f
+            end
+            # Save
+            new_revision.save && dest.resource.file.save
+            # Delete (and destroy) the file that should have been renamed and return what should have been returned in case of a copy
+            file.delete(true) ? Created : PreconditionFailed
           else
             return PreconditionFailed unless exist? && file
-            if (project == resource.project) && resource.basename.match(/.\.tmp$/i)
-              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{resource.basename}, possible MSOffice rename to .tmp when saving."
+            if (project == dest.resource.project) && dest.resource.basename.match(/.\.tmp$/i)
+              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{dest.resource.basename}, possible MSOffice rename to .tmp when saving."
               # Renaming the file to X.tmp, might be Office that is saving a file. Keep the original file.
-              file.copy_to_filename resource.project, parent&.folder, resource.basename
+              file.copy_to_filename dest.resource.project, parent&.folder, dest.resource.basename
               Created
             else
-              if (project == resource.project) && (file.last_revision.size == 0)
+              if (project == dest.resource.project) && (file.last_revision.size == 0)
                 # Moving a zero sized file within the same project, just update the dmsf_folder
                 file.dmsf_folder = parent&.folder
               else
-                return InternalServerError unless file.move_to(resource.project, parent&.folder)
+                return InternalServerError unless file.move_to(dest.resource.project, parent&.folder)
               end
               # Update Revision and names of file [We can link to old physical resource, as it's not changed]
               if file.last_revision
-                file.last_revision.name = resource.basename
-                file.last_revision.title = DmsfFileRevision.filename_to_title(resource.basename)
+                file.last_revision.name = dest.resource.basename
+                file.last_revision.title = DmsfFileRevision.filename_to_title(dest.resource.basename)
               end
-              file.name = resource.basename
+              file.name = dest.resource.basename
               # Save Changes
-              (file.last_revision.save && file.save) ? Created : PreconditionFailed
+              if file.last_revision.save && file.save
+                dest.exist? ? NoContent : Created
+              else
+                PreconditionFailed
+              end
             end
           end
         end
       end
 
       # Process incoming COPY request
-      #
       # Behavioural differences between collection and single entity
-      # TODO: Support overwrite between both types of entity, and an integrative copy where destination exists for collections
       def copy(dest, overwrite, depth)
-        dest = @__proxy.class.new(dest, @request, @response, @options.merge(user: @user))
-        # All of this should carry across the ResourceProxy frontend, we ensure this to
-        # prevent unexpected errors
-        if dest.is_a?(ResourceProxy)
-          resource = dest.resource
-        else
-          resource = dest
-        end
-
-        return PreconditionFailed if !resource.is_a?(DmsfResource) || resource.project.nil?
-
-        parent = resource.parent
+        dest = ResourceProxy.new(dest, @request, @response, @options.merge(user: @user))
+        return PreconditionFailed unless dest.resource.project
+        parent = dest.resource.parent
         raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
-
-        if dest.exist?
-          return overwrite ? NotImplemented : PreconditionFailed
-        end
-
         return Conflict unless dest.parent.exist?
-
+        res = Created
+        if dest.exist?
+          return Locked if dest.lockdiscovery.present?
+          if overwrite
+            dest.delete
+            res = NoContent
+          else
+            return PreconditionFailed
+          end
+        end
         return PreconditionFailed unless parent.exist? && parent.folder
-
         if collection?
           # Permission check if they can manipulate folders and view folders
           # Can they:
@@ -312,14 +334,13 @@ module RedmineDmsf
           #  View files on the source project          :view_dmsf_files
           #  View fodlers on the source project        :view_dmsf_folders
           raise Forbidden unless User.current.admin? ||
-             (User.current.allowed_to?(:folder_manipulation, resource.project) &&
-              User.current.allowed_to?(:view_dmsf_folders, resource.project) &&
+             (User.current.allowed_to?(:folder_manipulation, dest.resource.project) &&
+              User.current.allowed_to?(:view_dmsf_folders, dest.resource.project) &&
               User.current.allowed_to?(:view_dmsf_files, project) &&
               User.current.allowed_to?(:view_dmsf_folders, project))
           raise Forbidden unless DmsfFolder.permissions?(folder, false)
-
-          folder.title = resource.basename
-          new_folder = folder.copy_to(resource.project, parent.folder)
+          folder.title = dest.resource.basename
+          new_folder = folder.copy_to(dest.resource.project, parent.folder)
           return PreconditionFailed if new_folder.nil? || new_folder.id.nil?
           Created
         else
@@ -329,32 +350,67 @@ module RedmineDmsf
           #  View files on destination project         :view_dmsf_files
           #  View files on the source project          :view_dmsf_files
           raise Forbidden unless User.current.admin? ||
-             (User.current.allowed_to?(:file_manipulation, resource.project) &&
-              User.current.allowed_to?(:view_dmsf_files, resource.project) &&
+             (User.current.allowed_to?(:file_manipulation, dest.resource.project) &&
+              User.current.allowed_to?(:view_dmsf_files, dest.resource.project) &&
               User.current.allowed_to?(:view_dmsf_files, project))
-
           return PreconditionFailed unless exist? && file
-          new_file = file.copy_to(resource.project, parent&.folder)
+          new_file = file.copy_to(dest.resource.project, parent&.folder)
           return InternalServerError unless (new_file && new_file.last_revision)
-
-          # Update Revision and names of file [We can link to old physical resource, as it's not changed]
-          new_file.last_revision.name = resource.basename
-          new_file.name = resource.basename
-
+          # Update Revision and names of file (We can link to old physical resource, as it's not changed)
+          new_file.last_revision.name = dest.resource.basename
+          new_file.name = dest.resource.basename
           # Save Changes
-          (new_file.last_revision.save && new_file.save) ? Created : PreconditionFailed
+          (new_file.last_revision.save && new_file.save) ? res : PreconditionFailed
         end
       end
 
       # Lock Check
       # Check for the existence of locks
-      # At present as deletions of folders are not recursive, we do not need to extend
-      # this to cover every file, just queried
-      def lock_check(lock_scope = nil)
-        if file
-          raise Locked if file.locked_for_user?
-        elsif folder
-          raise Locked if folder.locked_for_user?
+      def lock_check(args = {})
+        entity = file || folder
+        if entity
+          refresh = args && (!args[:scope]) && (!args[:type])
+          args ||= {}
+          args[:method] = @request.request_method.downcase
+          http_if = request.get_header('HTTP_IF')
+          if http_if.present?
+            no_lock = http_if.include?('<DAV:no-lock>')
+            not_no_lock = http_if.include?('Not <DAV:no-lock>')
+            # Invalid lock token
+            if /\(<([a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+)>/.match(http_if)
+              raise PreconditionFailed unless entity.locked?
+              if $1 != entity.lock.first.uuid
+                raise Locked if entity.locked_for_user?(args)
+              end
+            else
+              if ((!no_lock || not_no_lock) && entity.locked_for_user?(args))
+                raise Locked
+              else
+                raise PreconditionFailed
+              end
+            end
+            # Invalid etag
+            if /^\(<([a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+)> \[([a-f0-9]+-[a-f0-9]+-[a-f0-9]+)\]/.match(http_if)
+              if $2 != etag
+                raise PreconditionFailed
+              else
+                return  # lock & etag
+              end
+            end
+            # no-lock
+            return if no_lock
+          end
+          if entity.locked_for_user?(args) && !refresh
+            if http_if.present?
+              case args[:method]
+              when 'put'
+                return
+              when 'proppatch'
+                return
+              end
+            end
+            raise Locked
+          end
         end
       end
 
@@ -366,11 +422,9 @@ module RedmineDmsf
           raise e
         end
         unless exist?
-          e = DAV4Rack::LockFailure.new
-          e.add_failure @path, NotFound
-          raise e
+          return super(args)
         end
-        lock_check args[:scope]
+        lock_check args
         entity = file || folder
         unless entity
           e = DAV4Rack::LockFailure.new
@@ -378,43 +432,38 @@ module RedmineDmsf
           raise e
         end
         begin
-          if entity.locked? && entity.locked_for_user?
-            raise DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
-          else
-            # If scope and type are not defined, the only thing we can
-            # logically assume is that the lock is being refreshed (office loves
-            # to do this for example, so we do a few checks, try to find the lock
-            # and ultimately extend it, otherwise we return Conflict for any failure
-            if (!args[:scope]) && (!args[:type]) # Perhaps a lock refresh
-              http_if = request.env['HTTP_IF']
-              if http_if.blank?
-                e = DAV4Rack::LockFailure.new
-                e.add_failure @path, Conflict
-                raise e
-              end
-              l = nil
-              if http_if =~ /([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})/
-                l = DmsfLock.find_by(uuid: $1)
-              end
-              unless l
-                e = DAV4Rack::LockFailure.new
-                e.add_failure @path, Conflict
-                raise e
-              end
-              l.expires_at = Time.current + 1.week
-              l.save!
-              @response['Lock-Token'] = l.uuid
-              return [1.weeks.to_i, l.uuid]
+          # If scope and type are not defined, the only thing we can
+          # logically assume is that the lock is being refreshed (office loves
+          # to do this for example, so we do a few checks, try to find the lock
+          # and ultimately extend it, otherwise we return Conflict for any failure
+          refresh = args && (!args[:scope]) && (!args[:type]) # Perhaps a lock refresh
+          if refresh
+            http_if = request.get_header('HTTP_IF')
+            if http_if.blank?
+              e = DAV4Rack::LockFailure.new
+              e.add_failure @path, Conflict
+              raise e
             end
-
-            scope = "scope_#{(args[:scope] || 'exclusive')}".to_sym
-            type = "type_#{(args[:type] || 'write')}".to_sym
-
-            # l should be the instance of the lock we've just created
-            l = entity.lock!(scope, type, Time.current + 1.weeks)
+            l = nil
+            if /([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})/.match(http_if)
+              l = DmsfLock.find_by(uuid: $1)
+            end
+            unless l
+              e = DAV4Rack::LockFailure.new
+              e.add_failure @path, Conflict
+              raise e
+            end
+            l.expires_at = Time.current + 1.week
+            l.save!
             @response['Lock-Token'] = l.uuid
-            [1.week.to_i, l.uuid]
+            return [1.weeks.to_i, l.uuid]
           end
+          scope = "scope_#{(args[:scope] || 'exclusive')}".to_sym
+          type = "type_#{(args[:type] || 'write')}".to_sym
+          # l should be the instance of the lock we've just created
+          l = entity.lock!(scope, type, Time.current + 1.weeks, args[:owner])
+          @response['Lock-Token'] = l.uuid
+          [1.week.to_i, l.uuid]
         rescue DmsfLockError
           e = DAV4Rack::LockFailure.new
           e.add_failure @path, Conflict
@@ -426,7 +475,9 @@ module RedmineDmsf
       # Token based unlock (authenticated) will ensure that a correct token is sent, further ensuring
       # ownership of token before permitting unlock
       def unlock(token)
-        return NotFound unless exist?
+        unless exist?
+          return super(token)
+        end
         if token.nil? || token.empty? || (token == '<(null)>') || User.current.anonymous?
           BadRequest
         else
@@ -436,14 +487,13 @@ module RedmineDmsf
             return BadRequest
           end
           begin
-            entity = file || folder
             l = DmsfLock.find(token)
-            return NoContent unless l
             # Additional case: if a user tries to unlock the file instead of the folder that's locked
             # This should throw forbidden as only the lock at level initiated should be unlocked
+            entity = file || folder
             return NoContent unless entity&.locked?
             l_entity = l.file || l.folder
-            if entity.locked_for_user? || (l_entity != entity)
+            if l_entity != entity
               Forbidden
             else
               entity.unlock!
@@ -456,7 +506,6 @@ module RedmineDmsf
       end
 
       # HTTP POST request.
-      #
       # Forbidden, as method should not be utilized.
       def post(request, response)
         raise Forbidden
@@ -467,7 +516,6 @@ module RedmineDmsf
         raise BadRequest if collection?
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
         raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
-
         # Ignore file name patterns given in the plugin settings
         pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore']
         pattern = /^(\._|\.DS_Store$|Thumbs.db$)/ if pattern.blank?
@@ -475,23 +523,18 @@ module RedmineDmsf
           Rails.logger.info "#{basename} ignored"
           return NoContent
         end
-
         reuse_revision = false
-
         if exist? # We're over-writing something, so ultimately a new revision
           f = file
-          
           # Disable versioning for file name patterns given in the plugin settings.
           pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
           if pattern.present? && basename.match(pattern)
             Rails.logger.info "Versioning disabled for #{basename}"
             reuse_revision = true
           end
-          
           if reuse_version_for_locked_file(file)
             reuse_revision = true
           end
-          
           last_revision = file.last_revision
           if last_revision.size == 0 || reuse_revision
             new_revision = last_revision
@@ -504,10 +547,8 @@ module RedmineDmsf
               new_revision = DmsfFileRevision.new
             end
             # Custom fields
-            i = 0
-            last_revision.custom_field_values.each do |custom_value|
+            last_revision.custom_field_values.each_with_index do |custom_value, i|
               new_revision.custom_field_values[i].value = custom_value
-              i = i + 1
             end
           end
         else
@@ -586,10 +627,10 @@ module RedmineDmsf
       def lockdiscovery
         entity = file || folder
         return [] unless entity&.locked?
-        if entity.dmsf_folder && entity.dmsf_folder.locked?
-          entity.lock.reverse[0].folder.locks(false) # longwinded way of getting base items locks
+        if entity.dmsf_folder&.locked?
+          entity.lock.reverse[0].folder.locks # longwinded way of getting base items locks
         else
-          entity.lock(false)
+          entity.lock false
         end
       end
 
@@ -632,6 +673,7 @@ module RedmineDmsf
       end
 
       private
+
       # Prepare file for download using Rack functionality:
       # Download (see RedmineDmsf::Webdav::Download) extends Rack::File to allow single-file
       # implementation of service for request, which allows for us to pipe a single file through
@@ -653,20 +695,44 @@ module RedmineDmsf
         File.new disk_file
       end
 
-      private
-
       def reuse_version_for_locked_file(file)
         locks = file.lock
         locks.each do |lock|
           next if lock.expired?
           # lock should be exclusive but just in case make sure we find this users lock
           next if lock.user != User.current
-          if lock.dmsf_file_last_revision_id < file.last_revision.id
+          if lock.dmsf_file_last_revision_id.nil? || (lock.dmsf_file_last_revision_id < file.last_revision.id)
             # At least one new revision has been created since the lock was created, reuse that revision.
             return true
           end
         end
         false
+      end
+
+      def set_custom_property(element, value)
+        if value.present?
+          Redmine::Search.cache_store.write "#{get_property_key}-#{element[:name]}",  value
+        else
+          Redmine::Search.cache_store.delete "#{get_property_key}-#{element[:name]}"
+        end
+        OK
+      end
+
+      def get_custom_property(element)
+        val = Redmine::Search.cache_store.fetch "#{get_property_key}-#{element[:name]}"
+        val.present? ? val : NotFound
+      end
+
+      def get_property_key
+        if file
+          return "DmsfFile-#{file.id}"
+        elsif folder
+          return "DmsfFolder-#{folder.id}"
+        elsif subproject
+          return "Project-#{subproject.id}"
+        else
+          return "Project-#{project.id}"
+        end
       end
       
     end

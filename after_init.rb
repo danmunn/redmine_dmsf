@@ -5,7 +5,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ def dmsf_init
                        dmsf_files_copy: [:new, :copy, :move],
                        dmsf_context_menus: [:dmsf]}
       pmap.permission :file_delete,
-                      { dmsf: [:trash, :delete_entries],
+                      { dmsf: [:trash, :delete_entries, :empty_trash],
                        dmsf_files: [:delete],
                        dmsf_trash_context_menus: [:trash] }
       pmap.permission :force_file_unlock, {}

@@ -4,7 +4,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
     l = @file2.locks.first
     process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
             headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
-    assert_response :not_found
+    assert_response :forbidden
   end
 
   def test_unlock_file_with_invalid_token
@@ -67,7 +67,7 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
     # folder1 is missing in the path
     process :unlock, "/dmsf/webdav/#{@folder2.project.identifier}/#{@folder2.title}", params: nil,
             headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
-    assert_response :not_found
+    assert_response :forbidden
   end
 
   def test_unlock_folder

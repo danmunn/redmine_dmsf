@@ -4,7 +4,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -116,7 +116,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
     project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     get "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
-    assert_response :not_found
+    assert_response :conflict
     get "/dmsf/webdav/#{project1_uri}/test.txt", params: nil, headers: @admin
     assert_response :success
   end

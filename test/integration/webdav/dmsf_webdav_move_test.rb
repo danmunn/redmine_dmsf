@@ -4,7 +4,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012   Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -166,16 +166,11 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_move_to_existing_filename
-    file9 = DmsfFile.find_by(id: 9)
-    assert file9
-    new_name = "#{file9.name}"
-    assert_no_difference 'file9.dmsf_file_revisions.count' do
-      assert_no_difference '@file1.dmsf_file_revisions.count' do
-        process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
-          headers: @jsmith.merge!({
-            destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{new_name}"})
-        assert_response :not_implemented
-      end
+    assert_no_difference '@file9.dmsf_file_revisions.count' do
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil,
+        headers: @jsmith.merge!({
+          destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@file9.name}"})
+      assert_response :success
     end
   end
 

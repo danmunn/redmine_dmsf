@@ -2,7 +2,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ module RedmineDmsf
     class DmsfViewListener < Redmine::Hook::ViewListener
       
       def view_layouts_base_html_head(context={})
-        return unless /^(Dmsf|Projects|Issues|Queries|EasyCrmCases)/.match?(context[:controller].class.name)
+        return unless /^(Dmsf|Projects|Issues|Queries|EasyCrmCases|MyController)/.match?(context[:controller].class.name)
         meta = "\n".html_safe + stylesheet_link_tag('redmine_dmsf.css', plugin: :redmine_dmsf) +
         "\n".html_safe + stylesheet_link_tag('select2.min.css', plugin: :redmine_dmsf) +
         "\n".html_safe + javascript_include_tag('select2.min.js', plugin: :redmine_dmsf, defer: true) +

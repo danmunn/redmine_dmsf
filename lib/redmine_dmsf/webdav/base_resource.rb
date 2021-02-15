@@ -4,7 +4,7 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -118,7 +118,7 @@ module RedmineDmsf
         new_path = @path
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
-        @__proxy.class.new "#{new_path}#{name}", request, response, @options.merge(user: @user)
+        ResourceProxy.new "#{new_path}#{name}", request, response, @options.merge(user: @user)
       end
       
       def child_project(p)
@@ -127,7 +127,7 @@ module RedmineDmsf
         new_path = new_path + '/' unless new_path[-1,1] == '/'
         new_path = '/' + new_path unless new_path[0,1] == '/'
         new_path += project_display_name
-        @__proxy.class.new new_path, request, response, @options.merge(user: @user, project: true)
+        ResourceProxy.new new_path, request, response, @options.merge(user: @user, project: true)
       end
 
       def parent
@@ -178,7 +178,9 @@ module RedmineDmsf
       end
 
       def load_projects(project_scope)
-        project_scope.visible.find_each do |p|
+        scope = project_scope.visible
+        scope = scope.non_templates if scope.respond_to?(:non_templates)
+        scope.find_each do |p|
           if dmsf_available?(p)
             @children << child_project(p)
           end
@@ -214,14 +216,26 @@ module RedmineDmsf
         prj
       end
 
+      # Adds the given xml namespace to namespaces and returns the prefix
+      def add_namespace(ns, prefix = "unknown#{rand 65536}")
+        @__proxy.add_namespace ns, prefix
+      end
+
+      # returns the prefix for the given namespace, adding it if necessary
+      def prefix_for(ns_href)
+        @__proxy.prefix_for ns_href
+      end
+
       private
 
       def get_resource_info
         return if @project # We have already got it
         pinfo = @path.split('/').drop(1)
         i = 1
+        project_scope = Project.visible
+        project_scope = project_scope.non_templates if project_scope.respond_to?(:non_templates)
         while pinfo.length > 0
-          prj = BaseResource::get_project(Project.visible, pinfo.first, @project)
+          prj = BaseResource::get_project(project_scope, pinfo.first, @project)
           if prj
             @project = prj
             if pinfo.length == 1
@@ -236,6 +250,9 @@ module RedmineDmsf
             else
               @file = DmsfFile.find_file_by_name(@project, @folder, pinfo.first)
               @folder = nil
+              unless (pinfo.length < 2 || @subproject || @folder || @file)
+                raise Conflict
+              end
               break # We're at the end
             end
           end

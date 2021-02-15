@@ -4,7 +4,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -210,7 +210,8 @@ ko:
   parent_directory: 상위 디렉토리
   note_webdav: "활성화된 WebDAV는 %{protocol}에서 확인할 수 있습니다://%{domain}/dmsf/webdav/[project identifier]"
 
-  label_dmsf_plural: "문서 및 폴더 복사 (%{folders} 폴더의 %{files} 파일들)"
+  label_copy_dmsf: "문서 및 폴더 복사 (%{folders} 폴더의 %{files} 파일들)"
+  label_copy_only_dmsf_folders: "문서 및 폴더 복사 (%{folders})"
 
   warning_folder_already_locked: 이 폴더는 이미 잠겨있습니다
   notice_folder_locked: 이 폴더는 성공적으로 잠겨있습니다
@@ -278,13 +279,13 @@ ko:
 
   text_email_finished_rejected: "'%{filename}' 문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해 문서가 반려되었습니다."
 
-  text_email_finished_delegated: "'%{filename}' 문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해 위임되었으며, 사용자는 현재 승인 과정에서 승인하셔야 합니다."
+  text_email_finished_delegated: "'%{filename}' 문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, '%{notice}'로 인해 위임되었으며, 사용자는 현재 승인 과정에서 승인하셔야 합니다 '%{stepname}'."
 
   text_email_finished_step: "'%{filename}' 문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었지만, 승인 단계 중 한 개가 승인되었으며 사용자께서 다음 승인 단계를 승인하셔야 합니다"
 
   text_email_finished_step_short: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 완료되었으며, 승인 단계 중 한 단계가 완료되었습니다."
 
-  text_email_started: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 시작되었으며, 사용자께서는 현재 승인 단계에서 승인을 하셔야 합니다."
+  text_email_started: "'%{filename}'문서에 지정된 승인 작업 흐름 '%{name}'이 방금 시작되었으며, 사용자께서는 현재 승인 단계에서 승인을 하셔야 합니다 '%{stepname}'."
 
   text_email_to_proceed: 다음으로 진행하기 위해 문서 옆에 있는 체크 상지 아이콘을 클릭하세요
   text_email_to_see_history: 승인 내역을 확인하기 위해 작업 흐름 상태 문서를 클릭하세요
@@ -409,6 +410,13 @@ ko:
 
   dmsf_webdav_ignore_1b_file_for_authentication: Ignore 1b file sent for authentication
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
+
+  text_not_empty: The folder is not empty.
+  label_scroll_down: Scroll down
+  note_webdav_disabled: WebDAV is disabled. Contact the administrator.
+
+  dmsf_copy: "Copy (%{n})"
+  label_empty_trash_bin: Empty Trash
 
   easy_pages:
     modules:

@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-20 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -50,8 +50,17 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Permissions OK
     get :edit, params: { id: @project1, folder_id: @folder1}
     assert_response :success
+    # Custom fields
     assert_select 'label', { text: @custom_field.name }
     assert_select 'option', { value: @custom_value.value }
+    # Permissions - The form must contain a check box for each available role
+    roles = []
+    @project1.members.each do |m|
+      roles << m.roles
+    end
+    roles.uniq.each do |r|
+      assert_select 'input', { value: r.name }
+    end
   end
 
   def test_edit_folder_redirection_to_the_parent_folder
@@ -89,6 +98,21 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a', href:  dmsf_folder_path(id: @folder2.project.id, folder_id: @folder2.id)
     assert_select 'a', href: url_for(controller: :dmsf_files, action: 'view', id: @file4.id, only_path: true)
     assert_select 'a', href: url_for(controller: :dmsf_files, action: 'view', id: @link2.target_id, only_path: true)
+  end
+
+  def test_empty_trash
+    get :empty_trash, params: { id: @project1.id }
+    assert_equal 0, DmsfFolder.deleted.where(project_id: @project1.id).all.size
+    assert_equal 0, DmsfFile.deleted.where(project_id: @project1.id).all.size
+    assert_equal 0, DmsfLink.deleted.where(project_id: @project1.id).all.size
+    assert_redirected_to trash_dmsf_path(id: @project1.id)
+  end
+
+  def test_empty_trash_forbidden
+    # Missing permissions
+    @role_manager.remove_permission! :file_delete
+    get :empty_trash, params: { id: @project1.id }
+    assert_response :forbidden
   end
 
   def test_delete_forbidden
@@ -180,6 +204,25 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'table.dmsf'
     # CSV export
     assert_select 'a.csv'
+    # 'Zero Size File' document and an expander is present
+    assert_select 'a', text: @file10.title
+    assert_select 'span.dmsf_expander'
+  end
+
+  def test_show_filters_found
+    get :show, params: { id: @project1.id, f: ['title'], op: { 'title' => '~' }, v: { 'title' => ['Zero'] } }
+    assert_response :success
+    # 'Zero Size File' document
+    assert_select 'a', text: @file10.title
+    # No expander if a filter is set
+    assert_select 'span.dmsf_expander', count: 0
+  end
+
+  def test_show_filters_not_found
+    get :show, params: { id: @project1.id, f: ['title'], op: { 'title' => '~' }, v: { 'title' => ['xxx'] } }
+    assert_response :success
+    # 'Zero Size File' document
+    assert_select 'a', text: @file10.title, count: 0
   end
 
   def test_show_without_file_manipulation
