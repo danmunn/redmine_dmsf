@@ -161,16 +161,16 @@ de:
   permission_email_documents: Mailversand von Dokumenten
   label_file: Datei
   field_folder: Ordner
-  error_file_commit_require_uploaded_file: Der Commit erfordet eine hochladene Datei
+  error_file_commit_require_uploaded_file: Das Hinzufügen erfordet eine hochgeladene Datei
 
-  warning_some_files_were_not_commited: "Einige Dateien wurden wegen Validierungsfehlern nicht commitet: %{files}"
+  warning_some_files_were_not_commited: "Einige Dateien wurden wegen Validierungsfehlern nicht hinzugefügt: %{files}"
 
   error_user_has_not_right_delete_folder: Der Nutzer hat kein Recht den Ordner zu löschen.
 
   error_user_has_not_right_delete_file: Der Nutzer hat kein Recht die Datei zu löschen.
 
   notice_entries_deleted: Einträge löschen
-  warning_some_entries_were_not_deleted: "Enige Einträge wurden nicht gelöscht: %{entries}"
+  warning_some_entries_were_not_deleted: "Einige Einträge wurden nicht gelöscht: %{entries}"
   title_delete_checked: Löschen ausgewählt
   title_items: Objekte
   title_filename_for_download: Dateiname beim Herunterladen oder in ZIP-Archiv verwenden
@@ -369,7 +369,7 @@ de:
   label_last_approver: Letzter Genehmiger approver
 
   label_act_as_attachable: Act as attachable
-  note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+  note_dmsf_act_as_attachable: Erlaubt das Hinzufügen von Dokumenten zu anderen Objekten (z.B. Tickets)
 
   label_user_search_add: Benutzer suchen
 
@@ -407,7 +407,7 @@ de:
 
   label_add_width: Zugeben mit
 
-  dmsf_webdav_ignore_1b_file_for_authentication: Ignoriern 1b Datai geschickt wegen der Autorization
+  dmsf_webdav_ignore_1b_file_for_authentication: Ignoriere 1b Datei für Authorisierung
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
 
   easy_pages:
