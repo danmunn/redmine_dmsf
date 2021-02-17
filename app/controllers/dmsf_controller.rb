@@ -51,7 +51,10 @@ class DmsfController < ApplicationController
 
   def expand_folder
     @idnt = params[:idnt].present? ? params[:idnt].to_i + 1 : 0
-    @query.dmsf_folder_id = @folder.id
+    if params[:project_id].present?
+      @query.project = Project.find_by(id: params[:project_id])
+    end
+    @query.dmsf_folder_id = @folder&.id
     @query.deleted = false
     respond_to do |format|
       format.js { render action: 'query_rows' }

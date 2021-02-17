@@ -269,7 +269,12 @@ function dmsfSetupFileDrop() {
 
     if (window.File && window.FileList && window.ProgressEvent && window.FormData) {
 
-        $.event.addProp('dataTransfer');
+        if($().jquery < '3.0.0') {
+            $.event.fixHooks.drop = {props: ['dataTransfer']};
+        }
+        else{
+            $.event.addProp('dataTransfer');
+        }
 
         $('form span.dmsf-uploader:not(.dmsffiledroplistner)').has('input:file').each(function () {
 

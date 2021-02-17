@@ -115,6 +115,19 @@ module RedmineDmsf
         end
       end
 
+      # Go recursively through the project tree until a dmsf enabled project is found
+      def dmsf_available?
+        return true if(visible? && module_enabled?(:dmsf))
+        children.each do |child|
+          return true if child.dmsf_available?
+        end
+        false
+      end
+
+      # def deleted
+      #   0
+      # end
+
     end
 
   end

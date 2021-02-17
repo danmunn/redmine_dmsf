@@ -181,7 +181,7 @@ module RedmineDmsf
         scope = project_scope.visible
         scope = scope.non_templates if scope.respond_to?(:non_templates)
         scope.find_each do |p|
-          if dmsf_available?(p)
+          if p.dmsf_available?
             @children << child_project(p)
           end
         end
@@ -269,15 +269,6 @@ module RedmineDmsf
         else
           f
         end
-      end
-
-      # Go recursively through the project tree until a dmsf enabled project is found
-      def dmsf_available?(p)
-        return true if(p.visible? && p.module_enabled?(:dmsf))
-        p.children.each do |child|
-          return true if dmsf_available?(child)
-        end
-        false
       end
 
     end

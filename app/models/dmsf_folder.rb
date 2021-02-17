@@ -565,7 +565,7 @@ class DmsfFolder < ActiveRecord::Base
       end
     else
       classes << 'dmsf-tree'
-      if type == 'folder'
+      if %(folder project).include?(type)
         classes << 'dmsf-collapsed'
         classes << 'dmsf-not-loaded'
       else
@@ -574,8 +574,10 @@ class DmsfFolder < ActiveRecord::Base
       if title =~ /^\./
         classes << 'dmsf-system'
       else
-        classes << 'hascontextmenu'
-        classes << 'dmsf-draggable'
+        if (type != 'project')
+          classes << 'hascontextmenu'
+          classes << 'dmsf-draggable'
+        end
         if type =~ /^folder/
           classes << 'dmsf-droppable'
         end

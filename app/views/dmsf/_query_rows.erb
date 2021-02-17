@@ -27,11 +27,18 @@
 <% end %>
 <% query.dmsf_nodes(options).each do |node| %>
   <% system = node.title =~ /^\./ %>
-  <% id = (node.type == 'folder') ? "#{node.id}span" : "#{node.id}item" %>
+  <% case node.type %>
+  <% when 'project'%>
+    <% id = "#{node.id}pspan" %>
+  <% when 'folder' %>
+    <% id = "#{node.id}fspan" %>
+  <% else %>
+    <% id = "#{node.id}item" %>
+  <% end %>
   <% @idnt ||= 0 %>
   <tr id="<%= id %>" class="<%= cycle('odd', 'even') %> <%= node.css_classes(query.deleted) %> <%= params[:classes] %> <%= @idnt > 0 ? "idnt idnt-#{@idnt}" : nil %>">
     <td class="checkbox hide-when-print">
-      <%= check_box_tag('ids[]', "#{node.type}-#{node.id}", false, id: nil) unless system %>
+      <%= check_box_tag('ids[]', "#{node.type}-#{node.id}", false, id: nil) unless (system || (node.type == 'project')) %>
     </td>
     <% query.inline_columns.each do |column| %>
       <%= content_tag 'td', column_content(column, node), class: column.css_classes %>

@@ -20,7 +20,7 @@
 */
 
 /* Function to allow the projects to show up as a tree */
-function dmsfToggle(el, id, url)
+function dmsfToggle(el, project_id, folder_id, url)
 {
   // Expand not yet loaded selected row
   let selectedRow = $(el).parents('tr').first();
@@ -33,15 +33,13 @@ function dmsfToggle(el, id, url)
 
   if(selectedRow.hasClass('dmsf-not-loaded')){
 
-    dmsfExpandRows(id, selectedRow, url);
+    dmsfExpandRows(project_id, folder_id, selectedRow, url);
   }
 
   if(expand) {
-
     $(selectedRow).switchClass('dmsf-collapsed', 'dmsf-expanded');
   }
   else {
-
     $(selectedRow).switchClass('dmsf-expanded', 'dmsf-collapsed');
   }
 
@@ -51,12 +49,11 @@ function dmsfToggle(el, id, url)
   $("tr.dmsf-tree").each(function(i, tr){
 
     // Visiblity
-    if($(tr).hasClass(id)) {
-
+    if($(tr).hasClass(folder_id ? (folder_id + 'f') : (project_id + 'p'))) {
       if (expand) {
 
         // Display only children with expanded parent
-        m = $(tr).attr('class').match(/(\d+) idnt/);
+        m = $(tr).attr('class').match(/(\d+(p|f)) idnt/);
 
         if(m){
 
@@ -69,7 +66,6 @@ function dmsfToggle(el, id, url)
       } else {
 
         if(!$(tr).hasClass('dmsf-hidden')) {
-
           $(tr).addClass('dmsf-hidden');
         }
       }
@@ -93,7 +89,7 @@ function dmsfToggle(el, id, url)
 }
 
 /* Add child rows */
-function dmsfExpandRows(id, parentRow, url) {
+function dmsfExpandRows(project_id, folder_id, parentRow, url) {
 
   $(parentRow).removeClass('dmsf-not-loaded');
 
@@ -105,13 +101,13 @@ function dmsfExpandRows(id, parentRow, url) {
     idnt = m[1];
   }
 
-  m = $(parentRow).attr('class').match(/((\d|\s)+) idnt/);
+  m = $(parentRow).attr('class').match(/((\d|p|f|\s)+) idnt/);
 
   if(m){
       classes = m[1]
   }
 
-  m = $(parentRow).attr('id').match(/^(\d+)/);
+  m = $(parentRow).attr('id').match(/^(\d+(p|f))/);
 
   if(m){
       classes = classes + ' ' + m[1]
@@ -122,7 +118,8 @@ function dmsfExpandRows(id, parentRow, url) {
     type: 'post',
     dataType: 'html',
     data: {
-      folder_id: id,
+      project_id: project_id,
+      folder_id: folder_id,
       row_id: $(parentRow).attr('id'),
       idnt: idnt,
       classes: classes
@@ -144,7 +141,7 @@ function dmsfExpandRows(id, parentRow, url) {
       }
   })
   .fail(function() {
-      alert('An error in rows expanding');
+      console.log('An error in rows expanding');
   });
 }
 
