@@ -578,7 +578,7 @@ class DmsfFolder < ActiveRecord::Base
           classes << 'hascontextmenu'
           classes << 'dmsf-draggable'
         end
-        if type =~ /^folder/
+        if %(project folder).include?(type)
           classes << 'dmsf-droppable'
         end
         if type =~ /link$/

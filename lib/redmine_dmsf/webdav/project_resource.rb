@@ -30,7 +30,7 @@ module RedmineDmsf
           @children = []
           if project
             # Sub-projects
-            load_projects project.children
+            load_projects(project.children) if Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders']
             if project.module_enabled?(:dmsf)
               # Folders
               if User.current.allowed_to?(:view_dmsf_folders, project)

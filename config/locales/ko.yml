@@ -417,6 +417,8 @@ ko:
 
   dmsf_copy: "Copy (%{n})"
   label_empty_trash_bin: Empty Trash
+  label_dmsf_projects_as_subfolders: Sub-projects as sub-folders
+  note_dmsf_projects_as_subfolders: Add sub-projects as sub-folders into DMS view
 
   easy_pages:
     modules:

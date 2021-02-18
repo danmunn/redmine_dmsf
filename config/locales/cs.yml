@@ -418,6 +418,8 @@ cs:
 
   dmsf_copy: "Kopie (%{n})"
   label_empty_trash_bin: Vysypat koš
+  label_dmsf_projects_as_subfolders: Podprojekty jako podaresáře
+  note_dmsf_projects_as_subfolders: Přidá podprojekty jako podadresáře do pohledu DMS
 
   easy_pages:
     modules:

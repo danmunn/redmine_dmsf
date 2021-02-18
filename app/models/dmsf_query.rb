@@ -83,7 +83,7 @@ class DmsfQuery < Query
   def base_scope
     unless @scope
       @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_projects_scope, dmsf_files_scope, dmsf_file_links_scope, dmsf_url_links_scope].
-          inject(:union_all)
+        compact.inject(:union_all)
     end
     @scope
   end
@@ -192,6 +192,7 @@ class DmsfQuery < Query
   private
 
   def dmsf_projects_scope
+    return nil unless Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders']
     cf_columns = +''
     if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
