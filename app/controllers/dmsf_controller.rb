@@ -33,7 +33,7 @@ class DmsfController < ApplicationController
   # Also try to lookup folder by title if this is an API call
   before_action :find_folder_by_title, only: [:show]
   before_action :get_query, only: [:expand_folder, :show, :trash, :empty_trash]
-  before_action :get_project_roles, only: [:new, :edit, :create]
+  before_action :get_project_roles, only: [:new, :edit, :create, :save]
 
   accept_api_auth :show, :create, :save, :delete
 
@@ -266,8 +266,10 @@ class DmsfController < ApplicationController
       format.html {
         if saved
           flash[:notice] = l(:notice_folder_details_were_saved)
-          redirect_to_folder_id = params[:dmsf_folder][:redirect_to_folder_id]
-          redirect_to_folder_id = @folder.dmsf_folder.id if(@folder.dmsf_folder && redirect_to_folder_id.blank?)
+          if @folder.project == @project
+            redirect_to_folder_id = params[:dmsf_folder][:redirect_to_folder_id]
+            redirect_to_folder_id = @folder.dmsf_folder.id if(@folder.dmsf_folder && redirect_to_folder_id.blank?)
+          end
           redirect_to dmsf_folder_path(id: @project, folder_id: redirect_to_folder_id)
         else
           render action: 'edit'
