@@ -315,7 +315,7 @@ de:
   label_links_only: nur Verknüpfungen
 
   label_display_notified_recipients: Zeige benachrichtigte Empfänger
-  note_display_notified_recipients: Der Benutzer wird darüber informiert, wer die Empfänger der E-mail-Benachrichtigungen sind.
+  note_display_notified_recipients: Der Benutzer wird darüber informiert, wer die Empfänger der E-Mail-Benachrichtigungen sind.
   warning_email_notifications: "E-Mailbenachrichtigung wurde gesendet an %{to}"
 
   link_trash_bin: Papierkorb

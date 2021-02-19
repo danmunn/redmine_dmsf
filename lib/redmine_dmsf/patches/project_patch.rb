@@ -39,6 +39,8 @@ module RedmineDmsf
             send "copy_#{name}", project
           end
           save
+        else   
+          false
         end
       end
 
