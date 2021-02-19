@@ -50,10 +50,12 @@ module RedmineDmsf
         @someone = User.find_by(login: 'someone')
         @project1 = Project.find 1
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
+        Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
         @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
         @project1_uri = Addressable::URI.escape(@project1_name)
         @project2 = Project.find 2
         @project3 = Project.find 3
+        @project4 = Project.find 4
         [@project1, @project2, @project3].each do |project|
           project.enable_module! :dmsf
           project.enable_module! :issue_tracking
@@ -88,6 +90,7 @@ module RedmineDmsf
         Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
         Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
+        Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
         Setting.text_formatting = 'Textile'
         FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
         User.current = nil

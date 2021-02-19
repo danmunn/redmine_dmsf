@@ -90,4 +90,16 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
     assert_equal 0, @project3.url_links.visible.all.size
   end
 
+  def test_dmsf_avaliable
+    # @project1
+    # L @project3
+    assert @project1.dmsf_available?
+    assert @project3.dmsf_available?
+    @project1.disable_module! :dmsf
+    assert @project3.dmsf_available?
+    @project3.disable_module! :dmsf
+    @project3.reload
+    assert !@project3.dmsf_available?
+  end
+
 end

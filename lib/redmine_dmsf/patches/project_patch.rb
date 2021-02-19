@@ -124,10 +124,6 @@ module RedmineDmsf
         false
       end
 
-      # def deleted
-      #   0
-      # end
-
     end
 
   end

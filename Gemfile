@@ -31,6 +31,10 @@ source 'https://rubygems.org' do
   unless %w(easyproject easy_gantt).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
     gem 'redmine_extensions', '~> 0.3.9'
     gem 'rubyzip', '>= 1.1.3'
+
+    group :test do
+      gem 'rails-controller-testing'
+    end
   end
 
   # Dav4Rack
