@@ -48,6 +48,7 @@ module RedmineDmsf
         @project1 = Project.find 1
         @folder1 = DmsfFolder.find 1
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
+        Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
       end
     end
   end

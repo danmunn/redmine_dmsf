@@ -37,6 +37,7 @@ module RedmineDmsf
         @anonymous = credentials('')
         @project1 = Project.find 1
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
+        Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
         @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
         @project1_uri = Addressable::URI.escape(@project1_name)
         @project2 = Project.find 2
