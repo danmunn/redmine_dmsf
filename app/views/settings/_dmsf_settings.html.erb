@@ -150,6 +150,15 @@
   </em>
 </p>
 
+<p>
+  <%= content_tag :label, l(:label_dmsf_projects_as_subfolders) %>
+  <%= check_box_tag 'settings[dmsf_projects_as_subfolders]', true, @settings['dmsf_projects_as_subfolders'] %>
+  <em class="info">
+    <%= l(:note_dmsf_projects_as_subfolders) %><br/>
+    <%= l(:label_default) %>: <%= l(:general_text_Yes) %>
+  </em>
+</p>
+
 <hr/>
 <em class="info">
   <%= l(:menu_dmsf) %> <%= l(:field_column_names) %>

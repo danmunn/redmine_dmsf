@@ -82,8 +82,8 @@ class DmsfQuery < Query
 
   def base_scope
     unless @scope
-      @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_files_scope, dmsf_file_links_scope, dmsf_url_links_scope].
-          inject(:union_all)
+      @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_projects_scope, dmsf_files_scope, dmsf_file_links_scope, dmsf_url_links_scope].
+        compact.inject(:union_all)
     end
     @scope
   end
@@ -171,11 +171,15 @@ class DmsfQuery < Query
         limit(options[:limit]).
         offset(options[:offset]).to_a
     items.each do |item|
-      if item.type == 'folder'
+      case item.type
+      when 'folder'
         dmsf_folder = DmsfFolder.find_by(id: item.id)
         if dmsf_folder && (!DmsfFolder.permissions?(dmsf_folder, false))
           items.delete item
         end
+      when 'project'
+        p = Project.find_by(id: item.id)
+        items.delete(item) unless p&.dmsf_available?
       end
     end
     items
@@ -186,6 +190,41 @@ class DmsfQuery < Query
   end
 
   private
+
+  def dmsf_projects_scope
+    return nil unless Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders']
+    cf_columns = +''
+    if statement.present?
+      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+        cf_columns << ",NULL AS cf_#{id}"
+      end
+    end
+    scope = Project.
+      select(%{
+          projects.id AS id,
+          projects.id AS project_id,
+          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
+          projects.name AS title,
+          projects.identifier AS filename,
+          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
+          projects.updated_on AS updated,
+	        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
+          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
+          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
+          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
+          '' AS firstname,
+          '' AS lastname,
+          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS author,
+          'project' AS type,
+          CAST(0 AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS deleted,
+          0 AS sort #{cf_columns}}).visible
+    if dmsf_folder_id || deleted
+      scope.where '1=0'
+    else
+      scope = scope.non_templates if scope.respond_to?(:non_templates)
+      scope.where projects: { parent_id: project.id }
+    end
+  end
 
   def dmsf_folders_scope
     cf_columns = +''
@@ -212,7 +251,7 @@ class DmsfQuery < Query
           users.id AS author,
           'folder' AS type,
           dmsf_folders.deleted AS deleted,
-          0 AS sort #{cf_columns}}).
+          1 AS sort #{cf_columns}}).
         joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
     if deleted
       scope = scope.deleted
@@ -255,7 +294,7 @@ class DmsfQuery < Query
           users.id AS author,
           'folder-link' AS type,
           dmsf_links.deleted AS deleted,
-          0 AS sort #{cf_columns}}).
+          1 AS sort #{cf_columns}}).
         joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
         joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)')
     if dmsf_folder_id
@@ -294,7 +333,7 @@ class DmsfQuery < Query
           users.id AS author,
           'file' AS type,
           dmsf_files.deleted AS deleted,
-          1 AS sort #{cf_columns}}).
+          2 AS sort #{cf_columns}}).
         joins(:dmsf_file_revisions).
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
         where(sub_query)
@@ -334,7 +373,7 @@ class DmsfQuery < Query
           users.id AS author,
           'file-link' AS type,
           dmsf_links.deleted AS deleted,
-          1 AS sort #{cf_columns}}).
+          2 AS sort #{cf_columns}}).
         joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id').
         joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
         joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
@@ -376,7 +415,7 @@ class DmsfQuery < Query
           users.id AS author,
           'url-link' AS type,
           dmsf_links.deleted AS deleted,
-           1 AS sort #{cf_columns}}).
+           2 AS sort #{cf_columns}}).
         joins('LEFT JOIN users ON dmsf_links.user_id = users.id ')
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfUrl', dmsf_folder_id: dmsf_folder_id, deleted: deleted }

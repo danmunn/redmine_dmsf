@@ -32,7 +32,7 @@ source 'https://rubygems.org' do
     gem 'redmine_extensions', '~> 0.3.9'
     gem 'rubyzip', '>= 1.1.3'
 
-     group :test do
+    group :test do
       gem 'rails-controller-testing'
     end
   end

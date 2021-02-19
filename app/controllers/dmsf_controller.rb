@@ -33,7 +33,7 @@ class DmsfController < ApplicationController
   # Also try to lookup folder by title if this is an API call
   before_action :find_folder_by_title, only: [:show]
   before_action :get_query, only: [:expand_folder, :show, :trash, :empty_trash]
-  before_action :get_project_roles, only: [:new, :edit, :create]
+  before_action :get_project_roles, only: [:new, :edit, :create, :save]
 
   accept_api_auth :show, :create, :save, :delete
 
@@ -51,7 +51,10 @@ class DmsfController < ApplicationController
 
   def expand_folder
     @idnt = params[:idnt].present? ? params[:idnt].to_i + 1 : 0
-    @query.dmsf_folder_id = @folder.id
+    if params[:project_id].present?
+      @query.project = Project.find_by(id: params[:project_id])
+    end
+    @query.dmsf_folder_id = @folder&.id
     @query.deleted = false
     respond_to do |format|
       format.js { render action: 'query_rows' }
@@ -263,8 +266,10 @@ class DmsfController < ApplicationController
       format.html {
         if saved
           flash[:notice] = l(:notice_folder_details_were_saved)
-          redirect_to_folder_id = params[:dmsf_folder][:redirect_to_folder_id]
-          redirect_to_folder_id = @folder.dmsf_folder.id if(@folder.dmsf_folder && redirect_to_folder_id.blank?)
+          if @folder.project == @project
+            redirect_to_folder_id = params[:dmsf_folder][:redirect_to_folder_id]
+            redirect_to_folder_id = @folder.dmsf_folder.id if(@folder.dmsf_folder && redirect_to_folder_id.blank?)
+          end
           redirect_to dmsf_folder_path(id: @project, folder_id: redirect_to_folder_id)
         else
           render action: 'edit'
@@ -399,7 +404,7 @@ class DmsfController < ApplicationController
       if params[:dmsf_folder][:drag_id] =~ /(.+)-(\d+)/
         type = $1
         id = $2
-        if params[:dmsf_folder][:drop_id] =~ /^folder.*-(\d+)/
+        if params[:dmsf_folder][:drop_id] =~ /^(\d+)(p|f)span$/
           case type
           when 'file'
             object = DmsfFile.find_by(id: id)
@@ -408,14 +413,25 @@ class DmsfController < ApplicationController
           when 'file-link', 'folder-link', 'url-link'
             object = DmsfLink.find_by(id: id)
           end
-          dmsf_folder = DmsfFolder.find_by(id: $1)
-          if object && dmsf_folder
-            if dmsf_folder == object.dmsf_folder
-              object.errors[:base] << l(:error_target_folder_same)
-            elsif object.dmsf_folder&.locked_for_user?
-              object.errors[:base] << l(:error_folder_is_locked)
-            else
-              result = object.move_to(dmsf_folder.project, dmsf_folder)
+          if object
+            case $2
+            when 'p'
+              project = Project.find_by(id: $1)
+              if project && User.current.allowed_to?(:file_manipulation, project) &&
+                User.current.allowed_to?(:folder_manipulation, project)
+                result = object.move_to(project, nil)
+              end
+            when 'f'
+              dmsf_folder = DmsfFolder.find_by(id: $1)
+              if dmsf_folder
+                if dmsf_folder == object.dmsf_folder
+                  object.errors[:base] << l(:error_target_folder_same)
+                elsif object.dmsf_folder&.locked_for_user?
+                  object.errors[:base] << l(:error_folder_is_locked)
+                else
+                  result = object.move_to(dmsf_folder.project, dmsf_folder)
+                end
+              end
             end
           end
         end

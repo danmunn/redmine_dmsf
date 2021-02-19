@@ -85,13 +85,19 @@ module DmsfQueriesHelper
       end
     when :title
       case item.type
+      when 'project'
+        tag = link_to(h("[#{value}]"), dmsf_folder_path(id: item.project), class: 'icon icon-folder')
+        unless filter_any?
+          tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle(this, '#{item.id}', null,'#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
+        end
+        tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'folder'
         if item&.deleted > 0
           tag = content_tag('span', value, class: 'icon icon-folder')
         else
           tag = link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'icon icon-folder')
           unless filter_any?
-            tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle(this, '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
+            tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle(this, null, '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
           end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))

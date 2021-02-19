@@ -346,4 +346,20 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder1)
   end
 
+  def test_show_with_sub_projects
+    Setting.clear_cache
+    Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = '1'
+    get :show, params: { id: @project1.id }
+    assert_response :success
+    # @project3 is as a sub-folder
+    assert_select "tr##{@project3.id}pspan", count: 1
+  end
+
+  def test_show_without_sub_projects
+    get :show, params: { id: @project1.id }
+    assert_response :success
+    # @project3 is not as a sub-folder
+    assert_select "tr##{@project3.id}pspan", count: 0
+  end
+
 end
