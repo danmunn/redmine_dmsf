@@ -53,12 +53,13 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     assert !response.body.match(@project1.identifier).nil?,
            "Expected to find project #{@project1.identifier} in return data"
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = Addressable::URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-    get '/dmsf/webdav', params: nil, headers: @admin
-    assert_response :success
-    assert_no_match @project1.identifier, response.body
-    assert_match project1_uri, response.body
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
+      project1_uri = Addressable::URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+      get '/dmsf/webdav', params: nil, headers: @admin
+      assert_response :success
+      assert_no_match @project1.identifier, response.body
+      assert_match project1_uri, response.body
+    end
   end
 
   def test_should_not_list_non_dmsf_enabled_project
@@ -113,12 +114,13 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   def test_download_file_from_dmsf_enabled_project
     get "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
     assert_response :success
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-    get "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
-    assert_response :conflict
-    get "/dmsf/webdav/#{project1_uri}/test.txt", params: nil, headers: @admin
-    assert_response :success
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
+      project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+      get "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
+      assert_response :conflict
+      get "/dmsf/webdav/#{project1_uri}/test.txt", params: nil, headers: @admin
+      assert_response :success
+    end
   end
 
   def test_should_list_dmsf_contents_within_project

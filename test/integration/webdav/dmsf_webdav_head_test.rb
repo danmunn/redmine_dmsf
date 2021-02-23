@@ -36,11 +36,12 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
     assert_response :success
     check_headers_exist
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
-    head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
-    assert_response :not_found
-    head "/dmsf/webdav/#{@project1_uri}", params: nil, headers: @admin
-    assert_response :success
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
+      head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
+      assert_response :not_found
+      head "/dmsf/webdav/#{@project1_uri}", params: nil, headers: @admin
+      assert_response :success
+    end
   end
 
   # Note:
@@ -52,11 +53,12 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
     assert_response :success
     check_headers_exist
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
-    head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
-    assert_response :conflict
-    head "/dmsf/webdav/#{@project1_uri}/test.txt", params: nil, headers: @admin
-    assert_response :success
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
+      head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
+      assert_response :conflict
+      head "/dmsf/webdav/#{@project1_uri}/test.txt", params: nil, headers: @admin
+      assert_response :success
+    end
   end
 
   def test_head_responds_to_file_anonymous_other_user_agent

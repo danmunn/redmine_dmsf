@@ -238,12 +238,11 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_storage_path
-    setting = Setting.plugin_redmine_dmsf['dmsf_storage_directory']
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = 'files/dmsf'
-    sp = DmsfFile.storage_path
-    assert_kind_of Pathname, sp
-    assert_equal Rails.root.join(Setting.plugin_redmine_dmsf['dmsf_storage_directory']).to_s, sp.to_s
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = setting
+    with_settings plugin_redmine_dmsf: {'dmsf_storage_directory' => 'files/dmsf'} do
+      sp = DmsfFile.storage_path
+      assert_kind_of Pathname, sp
+      assert_equal Rails.root.join(Setting.plugin_redmine_dmsf['dmsf_storage_directory']).to_s, sp.to_s
+    end
   end
 
   def test_owner

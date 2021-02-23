@@ -259,30 +259,34 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_email_entries_email_from_forbidden
     @role_manager.remove_permission! :email_documents
-    Setting.plugin_redmine_dmsf['dmsf_documents_email_from'] = 'karel.picman@kontron.com'
-    get :entries_operation, params: {id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
-    assert_response :forbidden
+    with_settings plugin_redmine_dmsf: {'dmsf_documents_email_from' => 'karel.picman@kontron.com'} do
+      get :entries_operation, params: {id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
+      assert_response :forbidden
+    end
   end
 
   def test_email_entries_email_from
-    Setting.plugin_redmine_dmsf['dmsf_documents_email_from'] = 'karel.picman@kontron.com'
-    get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
-    assert_response :success
-    assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_from']
+    with_settings plugin_redmine_dmsf: {'dmsf_documents_email_from' => 'karel.picman@kontron.com'} do
+      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
+      assert_response :success
+      assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_from']
+    end
   end
 
   def test_email_entries_reply_to
-    Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to'] = 'karel.picman@kontron.com'
-    get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
-    assert_response :success
-    assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
+    with_settings plugin_redmine_dmsf: {'dmsf_documents_email_reply_to' => 'karel.picman@kontron.com'} do
+      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
+      assert_response :success
+      assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
+    end
   end
 
   def test_email_entries_links_only
-    Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] = '1'
-    get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
-    assert_response :success
-    assert_select "input[id=email_links_only][value=1]"
+    with_settings plugin_redmine_dmsf: {'dmsf_documents_email_links_only' => '1'} do
+      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
+      assert_response :success
+      assert_select "input[id=email_links_only][value=1]"
+    end
   end
 
   def test_entries_email
@@ -347,12 +351,12 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_show_with_sub_projects
-    Setting.clear_cache
-    Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = '1'
-    get :show, params: { id: @project1.id }
-    assert_response :success
-    # @project3 is as a sub-folder
-    assert_select "tr##{@project3.id}pspan", count: 1
+    with_settings plugin_redmine_dmsf: {'dmsf_projects_as_subfolders' => '1'} do
+      get :show, params: { id: @project1.id }
+      assert_response :success
+      # @project3 is as a sub-folder
+      assert_select "tr##{@project3.id}pspan", count: 1
+    end
   end
 
   def test_show_without_sub_projects

@@ -36,9 +36,9 @@ module RedmineDmsf
         @someone = credentials('someone', 'foo')
         @anonymous = credentials('')
         @project1 = Project.find 1
-        Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
-        Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
-        @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+        with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1'} do
+          @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+        end
         @project1_uri = Addressable::URI.escape(@project1_name)
         @project2 = Project.find 2
         @project3 = Project.find 3
@@ -65,6 +65,7 @@ module RedmineDmsf
         Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
         Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
+        Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
         Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
         FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
         User.current = nil
@@ -75,7 +76,7 @@ module RedmineDmsf
         begin
           FileUtils.rm_rf DmsfFile.storage_path
         rescue => e
-          error e.message
+          Rails.logger.error e.message
         end
       end
 

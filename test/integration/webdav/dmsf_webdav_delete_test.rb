@@ -25,7 +25,7 @@ require File.expand_path('../../../test_helper', __FILE__)
 class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   include Redmine::I18n  
   
-    fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
    
   def test_not_authenticated
     delete '/dmsf/webdav'
@@ -69,9 +69,11 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_delete_when_ro
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_ONLY'
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @admin
-    assert_response :bad_gateway # Item does not exist, as project is not enabled.
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_strategy' => 'WEBDAV_READ_ONLY', 'dmsf_webdav' => '1'} do
+      puts Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
+      delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @admin
+      assert_response :bad_gateway # WebDAV is read only
+    end
   end
 
   def test_unlocked_file
@@ -128,14 +130,15 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_folder_delete_by_user_with_project_names
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", params: nil, headers: @jsmith
-    assert_response :conflict
-    p1name_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-    delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", params: nil, headers: @jsmith
-    assert_response :success
-    @folder6.reload
-    assert @folder6.deleted?, "Folder #{@folder6.title} is not expected to exist"
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
+      delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", params: nil, headers: @jsmith
+      assert_response :conflict
+      p1name_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+      delete "/dmsf/webdav/#{p1name_uri}/#{@folder6.title}", params: nil, headers: @jsmith
+      assert_response :success
+      @folder6.reload
+      assert @folder6.deleted?, "Folder #{@folder6.title} is not expected to exist"
+    end
   end
 
   def test_file_delete_by_administrator
@@ -153,14 +156,15 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_file_delete_by_user_with_project_names
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @jsmith
-    assert_response :conflict
-    p1name_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-    delete "/dmsf/webdav/#{p1name_uri}/#{@file1.name}", params: nil, headers: @jsmith
-    assert_response :success
-    @file1.reload
-    assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
+      delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @jsmith
+      assert_response :conflict
+      p1name_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+      delete "/dmsf/webdav/#{p1name_uri}/#{@file1.name}", params: nil, headers: @jsmith
+      assert_response :success
+      @file1.reload
+      assert @file1.deleted?, "File #{@file1.name} is not expected to exist"
+    end
   end
 
   def test_folder_delete_fragments

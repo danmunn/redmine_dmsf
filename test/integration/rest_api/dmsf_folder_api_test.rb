@@ -53,6 +53,30 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     assert_select 'dmsf > dmsf_nodes > node > type', text: 'folder'
   end
 
+  def test_list_folder_with_sub_projects
+    with_settings plugin_redmine_dmsf: {'dmsf_projects_as_subfolders' => '1'} do
+      #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml
+      get "/projects/#{@project1.identifier}/dmsf.xml?key=#{@token.value}"
+      assert_response :success
+      assert_equal 'application/xml', @response.content_type
+      # <?xml version="1.0" encoding="UTF-8"?>
+      # <dmsf>
+      #   <dmsf_nodes total_count="9" type="array">
+      #     <node>
+      #       <id>3</id>
+      #       <title>eCookbook Subproject 1</title>
+      #       <type>project</type>
+      #     </node>
+      #     ...
+      #   </dmsf_nodes>
+      # </dmsf>
+      # @project3 is as a sub-folder
+      assert_select 'dmsf > dmsf_nodes > node > id', text: @project3.id.to_s
+      assert_select 'dmsf > dmsf_nodes > node > title', text: @project3.name
+      assert_select 'dmsf > dmsf_nodes > node > type', text: 'project'
+    end
+  end
+
   def test_list_folder_limit_and_offset
     #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} "http://localhost:3000/dmsf/files/17216.xml?limit=1&offset=1"
     get "/projects/#{@project1.identifier}/dmsf.xml?key=#{@token.value}&limit=1&offset=2"

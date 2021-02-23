@@ -74,13 +74,14 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     # Lets check for our file
     file = DmsfFile.find_file_by_name @project1, nil, 'test-1234.txt'
     assert file, 'Check for files existance'
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-    put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", params: '1234',
-        headers: @admin.merge!({ content_type: :text })
-    assert_response :conflict
-    put "/dmsf/webdav/#{project1_uri}/test-1234.txt", params: '1234', headers: @admin.merge!({ content_type: :text })
-    assert_response :created
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
+      project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+      put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", params: '1234',
+          headers: @admin.merge!({ content_type: :text })
+      assert_response :conflict
+      put "/dmsf/webdav/#{project1_uri}/test-1234.txt", params: '1234', headers: @admin.merge!({ content_type: :text })
+      assert_response :created
+    end
   end
 
   def test_put_failed_as_jsmith_on_non_dmsf_enabled_project
@@ -110,14 +111,15 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     assert file.last_revision
     assert_equal 'SHA256', file.last_revision.digest_type
 
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = true
-    put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", params: '1234',
-        headers: @jsmith.merge!({ content_type: :text })
-    assert_response :conflict
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
+      put "/dmsf/webdav/#{@project1.identifier}/test-1234.txt", params: '1234',
+          headers: @jsmith.merge!({ content_type: :text })
+      assert_response :conflict
 
-    project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
-    put "/dmsf/webdav/#{project1_uri}/test-1234.txt", params: '1234', headers: @jsmith.merge!({ content_type: :text })
-    assert_response :created # Now we have permissions
+      project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
+      put "/dmsf/webdav/#{project1_uri}/test-1234.txt", params: '1234', headers: @jsmith.merge!({ content_type: :text })
+      assert_response :created # Now we have permissions
+    end
   end
 
   def test_put_writes_revision_successfully_for_unlocked_file
@@ -216,11 +218,10 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
     assert_response :no_content
     put "/dmsf/webdav/#{@project1.identifier}/Thumbs.db", params: '1234', headers: @admin.merge!({ content_type: :text })
     assert_response :no_content
-    original = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore']
-    Setting.plugin_redmine_dmsf['dmsf_webdav_ignore'] = '.dump$'
-    put "/dmsf/webdav/#{@project1.identifier}/test.dump", params: '1234', headers: @admin.merge!({ content_type: :text })
-    assert_response :no_content
-    Setting.plugin_redmine_dmsf['dmsf_webdav_ignore'] = original
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_ignore' => '.dump$', 'dmsf_webdav' => '1'} do
+      put "/dmsf/webdav/#{@project1.identifier}/test.dump", params: '1234', headers: @admin.merge!({ content_type: :text })
+      assert_response :no_content
+    end
   end
 
   def test_put_non_versioned_files
@@ -252,18 +253,19 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       assert_response :created
     end
 
-    Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'] = '.dump$'
-    put "/dmsf/webdav/#{@project1.identifier}/file3.dump", params: '1234', headers: credentials
-    assert_response :success
-    file3 = DmsfFile.find_by(project_id: @project1.id, dmsf_folder_id: nil, name: 'file3.dump')
-    assert file3
-    assert_difference 'file3.dmsf_file_revisions.count', 0 do
-      put "/dmsf/webdav/#{@project1.identifier}/file3.dump", params: '5678', headers: credentials
-      assert_response :created
-    end
-    assert_difference 'file3.dmsf_file_revisions.count', 0 do
-      put "/dmsf/webdav/#{@project1.identifier}/file3.dump", params: '9ABC', headers: credentials
-      assert_response :created
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_disable_versioning' => '.dump$', 'dmsf_webdav' => '1'} do
+      put "/dmsf/webdav/#{@project1.identifier}/file3.dump", params: '1234', headers: credentials
+      assert_response :success
+      file3 = DmsfFile.find_by(project_id: @project1.id, dmsf_folder_id: nil, name: 'file3.dump')
+      assert file3
+      assert_difference 'file3.dmsf_file_revisions.count', 0 do
+        put "/dmsf/webdav/#{@project1.identifier}/file3.dump", params: '5678', headers: credentials
+        assert_response :created
+      end
+      assert_difference 'file3.dmsf_file_revisions.count', 0 do
+        put "/dmsf/webdav/#{@project1.identifier}/file3.dump", params: '9ABC', headers: credentials
+        assert_response :created
+      end
     end
   end
 
@@ -299,17 +301,19 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_ignore_1b_files_on
-    Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'] = '1'
-    put "/dmsf/webdav/#{@project1.identifier}/1bfile.txt", params: '1',
-        headers: @jsmith.merge!({ content_type: :text })
-    assert_response :no_content
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_ignore_1b_file_for_authentication' => '1', 'dmsf_webdav' => '1'} do
+      put "/dmsf/webdav/#{@project1.identifier}/1bfile.txt", params: '1',
+          headers: @jsmith.merge!({ content_type: :text })
+      assert_response :no_content
+    end
   end
 
   def test_ignore_1b_files_off
-    Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'] = ''
-    put "/dmsf/webdav/#{@project1.identifier}/1bfile.txt", params: '1',
-        headers: @jsmith.merge!({ content_type: :text })
-    assert_response :created
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_ignore_1b_file_for_authentication' => nil, 'dmsf_webdav' => '1'} do
+      put "/dmsf/webdav/#{@project1.identifier}/1bfile.txt", params: '1',
+          headers: @jsmith.merge!({ content_type: :text })
+      assert_response :created
+    end
   end
 
   def test_files_exceeded_max_attachment_size

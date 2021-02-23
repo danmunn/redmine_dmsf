@@ -32,12 +32,13 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_options_returns_expected_allow_header_for_ro
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_ONLY'
-    process :options, '/dmsf/webdav'
-    assert_response :success
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert response.headers['Allow'] , 'Allow header is empty or does not exist'
-    assert_equal response.headers['Allow'], 'OPTIONS,HEAD,GET,PROPFIND'
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_strategy' => 'WEBDAV_READ_ONLY', 'dmsf_webdav' => '1'} do
+      process :options, '/dmsf/webdav'
+      assert_response :success
+      assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
+      assert response.headers['Allow'] , 'Allow header is empty or does not exist'
+      assert_equal response.headers['Allow'], 'OPTIONS,HEAD,GET,PROPFIND'
+    end
   end
 
   def test_options_returns_expected_allow_header_for_rw

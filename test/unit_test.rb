@@ -67,7 +67,7 @@ module RedmineDmsf
         begin
           FileUtils.rm_rf DmsfFile.storage_path
         rescue => e
-          error e.message
+          Rails.logger.error e.message
         end
       end
 

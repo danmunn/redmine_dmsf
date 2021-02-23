@@ -29,8 +29,9 @@ class DmsfHelperTest < RedmineDmsf::Test::HelperTest
     assert_equal "#{base_url}/", webdav_url(nil, nil)
     assert_equal "#{base_url}/ecookbook/", webdav_url(@project1, nil)
     assert_equal "#{base_url}/ecookbook/folder1/", webdav_url(@project1, @folder1)
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
-    assert_equal "#{base_url}/eCookbook 1/", webdav_url(@project1, nil)
+    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1'} do
+      assert_equal "#{base_url}/eCookbook 1/", webdav_url(@project1, nil)
+    end
   end
 
 end

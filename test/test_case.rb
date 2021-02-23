@@ -49,9 +49,9 @@ module RedmineDmsf
         @dlopper = User.find_by(login: 'dlopper')
         @someone = User.find_by(login: 'someone')
         @project1 = Project.find 1
-        Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '1'
-        Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
-        @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+        with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1'} do
+          @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+        end
         @project1_uri = Addressable::URI.escape(@project1_name)
         @project2 = Project.find 2
         @project3 = Project.find 3
@@ -86,9 +86,9 @@ module RedmineDmsf
           role.add_permission! :manage_workflows
           role.add_permission! :file_approval
         end
-        Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
-        Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-        Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
+        #Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
+        #Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
+        #Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
         Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
         Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
         Setting.text_formatting = 'Textile'
@@ -101,7 +101,7 @@ module RedmineDmsf
         begin
           FileUtils.rm_rf DmsfFile.storage_path
         rescue => e
-          error e.message
+          Rails.logger.error e.message
         end
       end
 
