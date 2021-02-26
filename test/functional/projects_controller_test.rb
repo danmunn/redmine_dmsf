@@ -24,7 +24,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class ProjectsControllerTest < RedmineDmsf::Test::TestCase
 
   include Redmine::I18n
-  
+
   def test_settings_dms_member
     @request.session[:user_id] = @jsmith.id
     @role_manager.add_permission! :user_preferences

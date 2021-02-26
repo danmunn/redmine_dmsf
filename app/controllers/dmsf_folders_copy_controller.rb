@@ -43,7 +43,7 @@ class DmsfFoldersCopyController < ApplicationController
       redirect_to dmsf_folder_path(id: @target_project, folder_id: new_folder)
     else
       flash[:error] = new_folder.errors.full_messages.to_sentence
-      redirect_to :back
+      redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
     end
   end
 
@@ -53,7 +53,7 @@ class DmsfFoldersCopyController < ApplicationController
       redirect_to dmsf_folder_path(id: @target_project, folder_id: @folder)
     else
       flash[:error] = @folder.errors.full_messages.to_sentence
-      redirect_to :back
+      redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
     end
   end
 

@@ -70,7 +70,6 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
 
   def test_delete_when_ro
     with_settings plugin_redmine_dmsf: {'dmsf_webdav_strategy' => 'WEBDAV_READ_ONLY', 'dmsf_webdav' => '1'} do
-      puts Setting.plugin_redmine_dmsf['dmsf_webdav_strategy']
       delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @admin
       assert_response :bad_gateway # WebDAV is read only
     end

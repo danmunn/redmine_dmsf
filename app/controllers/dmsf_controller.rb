@@ -147,7 +147,7 @@ class DmsfController < ApplicationController
       selected_dir_links.blank? && selected_file_links.blank? &&
       selected_url_links.blank?
       flash[:warning] = l(:warning_no_entries_selected)
-      redirect_to :back
+      redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
       return
     end
 
@@ -166,13 +166,13 @@ class DmsfController < ApplicationController
         email_entries(selected_folders, selected_files)
       elsif params[:restore_entries].present?
         restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links)
-        redirect_to :back
+        redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
       elsif params[:delete_entries].present?
         delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, false)
-        redirect_to :back
+        redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
       elsif params[:destroy_entries].present?
         delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, true)
-        redirect_to :back
+        redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
       else
         download_entries(selected_folders, selected_files)
       end
@@ -194,7 +194,7 @@ class DmsfController < ApplicationController
         return redirect_to dmsf_folder_path id: @project, folder_id: @folder, custom_field_id: key, custom_value: value
       end
     end
-    redirect_to :back
+    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
   end
 
   def entries_email
@@ -289,7 +289,7 @@ class DmsfController < ApplicationController
     respond_to do |format|
       format.html do
         if commit
-          redirect_to :back
+          redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
         else
           redirect_to dmsf_folder_path(id: @project, folder_id: @parent)
         end
@@ -334,7 +334,7 @@ class DmsfController < ApplicationController
       end
       flash[:notice] = l(:notice_folder_notifications_activated)
     end
-    redirect_to :back
+    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
   end
 
   def notify_deactivate
@@ -349,7 +349,7 @@ class DmsfController < ApplicationController
       end
       flash[:notice] = l(:notice_folder_notifications_deactivated)
     end
-    redirect_to :back
+    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
   end
 
   def lock
@@ -361,7 +361,7 @@ class DmsfController < ApplicationController
       @folder.lock!
       flash[:notice] = l(:notice_folder_locked)
     end
-      redirect_to :back
+      redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
   end
 
   def unlock
@@ -377,7 +377,7 @@ class DmsfController < ApplicationController
         flash[:error] = l(:error_only_user_that_locked_folder_can_unlock_it)
       end
     end
-     redirect_to :back
+     redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
   end
 
   def add_email
