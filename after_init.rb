@@ -39,7 +39,8 @@ def dmsf_init
   end
   # Main menu extension
   Redmine::MenuManager.map :top_menu do |menu|
-    menu.push :dmsf, { controller: 'dmsf', action: 'index' }, caption: :menu_dmsf
+    menu.push :dmsf, { controller: 'dmsf', action: 'index' }, caption: :menu_dmsf,
+              html: { class: 'icon-dmsf' }, if: Proc.new { User.current.logged? }
   end
 
   Redmine::AccessControl.map do |map|
