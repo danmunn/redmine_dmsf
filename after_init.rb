@@ -42,11 +42,7 @@ def dmsf_init
     menu.push :dmsf, { controller: 'dmsf', action: 'index' }, caption: :menu_dmsf
   end
 
-  # Permissions
-  #permission :view_dmsf_index, { dmsf: [:index] }
-
   Redmine::AccessControl.map do |map|
-    #map.permission :view_dmsf_index, { dmsf: [:index] }, require: :loggedin
     map.project_module :dmsf do |pmap|
       pmap.permission :view_dmsf_file_revision_accesses,
                       read: true
