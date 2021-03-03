@@ -97,7 +97,7 @@ module DmsfQueriesHelper
         else
           tag = link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'icon icon-folder')
           unless filter_any?
-            tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle(this, null, '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
+            tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle(this, '#{item.project.id}', '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
           end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
@@ -184,6 +184,8 @@ module DmsfQueriesHelper
   end
 
   def filter_any?
+    # :v - standard filters
+    # :op - custom fields filters
     [:v, :op].each do |p|
       if params[p]
         params[p].each do |filter|
