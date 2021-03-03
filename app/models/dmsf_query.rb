@@ -82,17 +82,15 @@ class DmsfQuery < Query
 
   def base_scope
     unless @scope
-      @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_projects_scope, dmsf_files_scope, dmsf_file_links_scope, dmsf_url_links_scope].
-        compact.inject(:union_all)
+      @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_projects_scope, dmsf_files_scope,
+                dmsf_file_links_scope, dmsf_url_links_scope].compact.inject(:union_all)
     end
     @scope
   end
 
   # Returns the issue count
   def dmsf_count
-    base_scope.
-        where(statement).
-        count
+    base_scope.where(statement).count
   rescue ::ActiveRecord::StatementInvalid => e
     raise StatementInvalid.new e.message
   end
@@ -192,37 +190,36 @@ class DmsfQuery < Query
   private
 
   def dmsf_projects_scope
-    return nil unless Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders']
+    return nil if(project && !Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'])
     cf_columns = +''
     if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
         cf_columns << ",NULL AS cf_#{id}"
       end
     end
-    scope = Project.
-      select(%{
-          projects.id AS id,
-          projects.id AS project_id,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
-          projects.name AS title,
-          projects.identifier AS filename,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
-          projects.updated_on AS updated,
-	        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
-          '' AS firstname,
-          '' AS lastname,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS author,
-          'project' AS type,
-          CAST(0 AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS deleted,
-          0 AS sort #{cf_columns}}).visible
+    scope = Project.select(%{
+      projects.id AS id,
+      projects.id AS project_id,
+      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
+      projects.name AS title,
+      projects.identifier AS filename,
+      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
+      projects.updated_on AS updated,
+      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
+      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
+      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
+      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
+      '' AS firstname,
+      '' AS lastname,
+      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS author,
+      'project' AS type,
+      CAST(0 AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS deleted,
+      0 AS sort #{cf_columns}}).visible
     if dmsf_folder_id || deleted
       scope.where '1=0'
     else
       scope = scope.non_templates if scope.respond_to?(:non_templates)
-      scope.where projects: { parent_id: project.id }
+      scope.where projects: { parent_id: project&.id }
     end
   end
 
@@ -233,26 +230,26 @@ class DmsfQuery < Query
         cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
       end
     end
-    scope = DmsfFolder.
-        select(%{
-          dmsf_folders.id AS id,
-          dmsf_folders.project_id AS project_id,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
-          dmsf_folders.title AS title,
-          NULL AS filename,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
-          dmsf_folders.updated_at AS updated,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
-          users.firstname AS firstname,
-          users.lastname AS lastname,
-          users.id AS author,
-          'folder' AS type,
-          dmsf_folders.deleted AS deleted,
-          1 AS sort #{cf_columns}}).
-        joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
+    scope = DmsfFolder.select(%{
+        dmsf_folders.id AS id,
+        dmsf_folders.project_id AS project_id,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
+        dmsf_folders.title AS title,
+        NULL AS filename,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
+        dmsf_folders.updated_at AS updated,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
+        users.firstname AS firstname,
+        users.lastname AS lastname,
+        users.id AS author,
+        'folder' AS type,
+        dmsf_folders.deleted AS deleted,
+        1 AS sort #{cf_columns}}).
+      joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
+    return scope.where('1=0') unless project
     if deleted
       scope = scope.deleted
     else
@@ -270,33 +267,33 @@ class DmsfQuery < Query
   end
 
   def dmsf_folder_links_scope
+    return nil unless project
     cf_columns = +''
     if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
         cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
       end
     end
-    scope = DmsfLink.
-        select(%{
-          dmsf_links.id AS id,
-          COALESCE(dmsf_folders.project_id, dmsf_links.project_id) AS project_id,
-          dmsf_links.target_id AS revision_id,
-          dmsf_links.name AS title,
-          dmsf_folders.title AS filename,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
-          COALESCE(dmsf_folders.updated_at, dmsf_links.updated_at) AS updated,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
-          users.firstname AS firstname,
-          users.lastname AS lastname,
-          users.id AS author,
-          'folder-link' AS type,
-          dmsf_links.deleted AS deleted,
-          1 AS sort #{cf_columns}}).
-        joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
-        joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)')
+    scope = DmsfLink.select(%{
+        dmsf_links.id AS id,
+        COALESCE(dmsf_folders.project_id, dmsf_links.project_id) AS project_id,
+        dmsf_links.target_id AS revision_id,
+        dmsf_links.name AS title,
+        dmsf_folders.title AS filename,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
+        COALESCE(dmsf_folders.updated_at, dmsf_links.updated_at) AS updated,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
+        users.firstname AS firstname,
+        users.lastname AS lastname,
+        users.id AS author,
+        'folder-link' AS type,
+        dmsf_links.deleted AS deleted,
+        1 AS sort #{cf_columns}}).
+      joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
+      joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)')
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfFolder', dmsf_folder_id: dmsf_folder_id, deleted: deleted }
     else
@@ -309,34 +306,34 @@ class DmsfQuery < Query
   end
 
   def dmsf_files_scope
+    return nil unless project
     cf_columns = +''
     if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
         cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
       end
     end
-    scope = DmsfFile.
-        select(%{
-          dmsf_files.id AS id,
-          dmsf_files.project_id AS project_id,
-          dmsf_file_revisions.id AS revision_id,
-          dmsf_file_revisions.title AS title,
-          dmsf_file_revisions.name AS filename,
-          dmsf_file_revisions.size AS size,
-          dmsf_file_revisions.updated_at AS updated,
-          dmsf_file_revisions.major_version AS major_version,
-	        dmsf_file_revisions.minor_version AS minor_version,
-          dmsf_file_revisions.workflow AS workflow,
-          dmsf_file_revisions.dmsf_workflow_id AS workflow_id,
-          users.firstname AS firstname,
-          users.lastname AS lastname,
-          users.id AS author,
-          'file' AS type,
-          dmsf_files.deleted AS deleted,
-          2 AS sort #{cf_columns}}).
-        joins(:dmsf_file_revisions).
-        joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
-        where(sub_query)
+    scope = DmsfFile.select(%{
+        dmsf_files.id AS id,
+        dmsf_files.project_id AS project_id,
+        dmsf_file_revisions.id AS revision_id,
+        dmsf_file_revisions.title AS title,
+        dmsf_file_revisions.name AS filename,
+        dmsf_file_revisions.size AS size,
+        dmsf_file_revisions.updated_at AS updated,
+        dmsf_file_revisions.major_version AS major_version,
+        dmsf_file_revisions.minor_version AS minor_version,
+        dmsf_file_revisions.workflow AS workflow,
+        dmsf_file_revisions.dmsf_workflow_id AS workflow_id,
+        users.firstname AS firstname,
+        users.lastname AS lastname,
+        users.id AS author,
+        'file' AS type,
+        dmsf_files.deleted AS deleted,
+        2 AS sort #{cf_columns}}).
+      joins(:dmsf_file_revisions).
+      joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
+      where(sub_query)
       if dmsf_folder_id
         scope.where dmsf_files: { dmsf_folder_id: dmsf_folder_id, deleted: deleted }
       else
@@ -349,35 +346,35 @@ class DmsfQuery < Query
   end
 
   def dmsf_file_links_scope
+    return nil unless project
     cf_columns = +''
     if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
         cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
       end
     end
-    scope = DmsfLink.
-        select(%{
-          dmsf_links.id AS id,
-          dmsf_files.project_id AS project_id,
-          dmsf_files.id AS revision_id,
-          dmsf_links.name AS title,
-          dmsf_file_revisions.name AS filename,
-          dmsf_file_revisions.size AS size,
-          dmsf_file_revisions.updated_at AS updated,
-          dmsf_file_revisions.major_version AS major_version,
-	        dmsf_file_revisions.minor_version AS minor_version,
-          dmsf_file_revisions.workflow AS workflow,
-          dmsf_file_revisions.dmsf_workflow_id AS workflow_id,
-          users.firstname AS firstname,
-          users.lastname AS lastname,
-          users.id AS author,
-          'file-link' AS type,
-          dmsf_links.deleted AS deleted,
-          2 AS sort #{cf_columns}}).
-        joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id').
-        joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
-        joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
-        where(sub_query)
+    scope = DmsfLink.select(%{
+        dmsf_links.id AS id,
+        dmsf_files.project_id AS project_id,
+        dmsf_files.id AS revision_id,
+        dmsf_links.name AS title,
+        dmsf_file_revisions.name AS filename,
+        dmsf_file_revisions.size AS size,
+        dmsf_file_revisions.updated_at AS updated,
+        dmsf_file_revisions.major_version AS major_version,
+        dmsf_file_revisions.minor_version AS minor_version,
+        dmsf_file_revisions.workflow AS workflow,
+        dmsf_file_revisions.dmsf_workflow_id AS workflow_id,
+        users.firstname AS firstname,
+        users.lastname AS lastname,
+        users.id AS author,
+        'file-link' AS type,
+        dmsf_links.deleted AS deleted,
+        2 AS sort #{cf_columns}}).
+      joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id').
+      joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
+      joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
+      where(sub_query)
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfFile', dmsf_folder_id: dmsf_folder_id, deleted: deleted }
     else
@@ -391,32 +388,32 @@ class DmsfQuery < Query
   end
 
   def dmsf_url_links_scope
+    return nil unless project
     cf_columns = +''
     if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
         cf_columns << ",NULL AS cf_#{id}"
       end
     end
-    scope = DmsfLink.
-        select(%{
-          dmsf_links.id AS id,
-          dmsf_links.project_id AS project_id,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
-          dmsf_links.name AS title,
-          dmsf_links.external_url AS filename,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
-          dmsf_links.updated_at AS updated,
-	        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
-          CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
-          users.firstname AS firstname,
-          users.lastname AS lastname,
-          users.id AS author,
-          'url-link' AS type,
-          dmsf_links.deleted AS deleted,
-           2 AS sort #{cf_columns}}).
-        joins('LEFT JOIN users ON dmsf_links.user_id = users.id ')
+    scope = DmsfLink.select(%{
+        dmsf_links.id AS id,
+        dmsf_links.project_id AS project_id,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
+        dmsf_links.name AS title,
+        dmsf_links.external_url AS filename,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
+        dmsf_links.updated_at AS updated,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
+        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
+        users.firstname AS firstname,
+        users.lastname AS lastname,
+        users.id AS author,
+        'url-link' AS type,
+        dmsf_links.deleted AS deleted,
+         2 AS sort #{cf_columns}}).
+      joins('LEFT JOIN users ON dmsf_links.user_id = users.id ')
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfUrl', dmsf_folder_id: dmsf_folder_id, deleted: deleted }
     else

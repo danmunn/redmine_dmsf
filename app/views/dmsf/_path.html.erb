@@ -32,7 +32,11 @@
       <% end %>
     <% end %>
   <% else %>
-     <%= link_to l(:link_documents), dmsf_folder_path(id: @project) %>
+    <% if @project %>
+      <%= link_to l(:link_documents), dmsf_folder_path(id: @project) %>
+    <% else %>
+      <%= l(:link_documents) %>
+    <% end %>
   <% end %>
   <% if filename %>
     /

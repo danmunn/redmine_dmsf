@@ -24,15 +24,16 @@
 class DmsfController < ApplicationController
   include RedmineDmsf::DmsfZip
 
-  before_action :find_project
-  before_action :authorize, except: [:expand_folder]
+  before_action :find_project, except: [:expand_folder, :index]
+  before_action :authorize, except: [:expand_folder, :index]
+  before_action :authorize_global, only: [:index]
   before_action :find_folder, except: [:new, :create, :edit_root, :save_root, :add_email, :append_email,
                                           :autocomplete_for_user]
   before_action :find_parent, only: [:new, :create, :delete]
   before_action :permissions
   # Also try to lookup folder by title if this is an API call
   before_action :find_folder_by_title, only: [:show]
-  before_action :get_query, only: [:expand_folder, :show, :trash, :empty_trash]
+  before_action :get_query, only: [:expand_folder, :show, :trash, :empty_trash, :index]
   before_action :get_project_roles, only: [:new, :edit, :create, :save]
 
   accept_api_auth :show, :create, :save, :delete
@@ -59,6 +60,10 @@ class DmsfController < ApplicationController
     respond_to do |format|
       format.js { render action: 'query_rows' }
     end
+  end
+
+  def index
+    show
   end
 
   def show

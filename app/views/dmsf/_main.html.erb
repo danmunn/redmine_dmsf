@@ -1,0 +1,98 @@
+<%
+  # encoding: utf-8
+  #
+  # Redmine plugin for Document Management System "Features"
+  #
+  # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
+  # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
+  # Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
+  #
+  # This program is free software; you can redistribute it and/or
+  # modify it under the terms of the GNU General Public License
+  # as published by the Free Software Foundation; either version 2
+  # of the License, or (at your option) any later version.
+  #
+  # This program is distributed in the hope that it will be useful,
+  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  # GNU General Public License for more details.
+  #
+  # You should have received a copy of the GNU General Public License
+  # along with this program; if not, write to the Free Software
+  # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<% html_title l(:dmsf) %>
+<% if @project %>
+  <div class="contextual">
+    <% unless @locked_for_user || @system_folder  %>
+      <% if @file_manipulation_allowed %>
+        <%= link_to l(:label_attachment_new), multi_dmsf_upload_path(id: @project, folder_id: @folder),
+                class: 'icon icon-add' %>
+      <% end %>
+      <% if @folder_manipulation_allowed %>
+        <%= link_to l(:link_create_folder), new_dmsf_path(id: @project, parent_id: @folder), class: 'icon icon-add' %>
+      <% end %>
+    <% end %>
+    <% if defined?(EasyExtensions) %>
+      <%= render partial: 'dmsf_context_menus/main', locals: {
+          folder_manipulation_allowed: @folder_manipulation_allowed,
+          system_folder: @system_folder,
+          folder: @folder,
+          project: @project,
+          locked_for_user: @locked_for_user,
+          file_manipulation_allowed: @file_manipulation_allowed,
+          trash_enabled: @trash_enabled } %>
+    <% else %>
+      <%= actions_dropdown do %>
+        <%= render partial: 'dmsf_context_menus/main', locals: {
+            folder_manipulation_allowed: @folder_manipulation_allowed,
+            system_folder: @system_folder,
+            folder: @folder,
+            project: @project,
+            locked_for_user: @locked_for_user,
+            file_manipulation_allowed: @file_manipulation_allowed,
+            trash_enabled: @trash_enabled } %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= render partial: 'path', locals: { folder: @folder, filename: nil, title: nil } %>
+
+<% if @project %>
+  <div class="dmsf-header">
+    <div class="wiki">
+      <%= textilizable @folder ? @folder.description : @project.dmsf_description %>
+    </div>
+  </div>
+<% end %>
+
+<%= form_tag(@project ? dmsf_folder_path(id: @project, folder_id: @folder) : dmsf_index_path,
+             method: :get, id: 'query_form', class: 'dmsf-query-form') do %>
+  <%= hidden_field_tag('folder_id', @folder.id) if @folder %>
+  <%= render partial: 'queries/query_form' %>
+<% end %>
+<% if @query.valid? %>
+  <% if @dmsf_count == 0 %>
+    <p class="nodata"><%= l(:label_no_data) %></p>
+  <% else %>
+    <%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages, folder: @folder } %>
+    <span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>
+  <% end %>
+<% end %>
+
+<%= context_menu %>
+
+<% unless @folder && @folder.system %>
+    <% other_formats_links do |f| %>
+      <%= f.link_to 'CSV', url: { action: :show, id: @project, folder_id: @folder, encoding: Encoding::UTF_8 } if @project %>
+      <span>
+        <%= link_to 'WebDAV', webdav_url(@project, @folder) %>
+      </span>
+    <% end %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= render partial: 'dmsf/sidebar' %>
+<% end %>

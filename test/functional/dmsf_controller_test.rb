@@ -366,4 +366,44 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select "tr##{@project3.id}pspan", count: 0
   end
 
+  def test_index
+    get :index
+    assert_response :success
+    # Projects
+    assert_select 'table.dmsf' do
+      assert_select 'tr' do
+        assert_select 'td.dmsf-title' do
+          assert_select 'a', text: "[#{@project1.name}]"
+          assert_select 'a', text: "[#{@project2.name}]"
+        end
+      end
+    end
+    # No context menu
+    assert_select 'div.contextual', count: 0
+    # No description
+    assert_select 'div.dmsf-header', count: 0
+    # No CSV export
+    assert_select 'a.csv', count: 0
+  end
+
+  def test_index_non_member
+    @request.session[:user_id] = @dlopper.id
+    get :index
+    assert_response :success
+    assert_select 'table.dmsf' do
+      assert_select 'tr' do
+        assert_select 'td.dmsf-title' do
+          assert_select 'a', text: "[#{@project1.name}]"
+          assert_select 'a', text: "[#{@project2.name}]", count: 0
+        end
+      end
+    end
+  end
+
+  def test_index_no_membership
+    @request.session[:user_id] = @someone.id
+    get :index
+    assert_response :forbidden
+  end
+
 end

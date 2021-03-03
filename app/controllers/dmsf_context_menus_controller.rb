@@ -23,7 +23,6 @@ class DmsfContextMenusController < ApplicationController
 
   helper :context_menus
 
-  before_action :find_project
   before_action :find_folder
   before_action :find_dmsf_file
   before_action :find_dmsf_folder
@@ -31,12 +30,14 @@ class DmsfContextMenusController < ApplicationController
   def dmsf
     if @dmsf_file
       @locked = @dmsf_file.locked?
+      @project = @dmsf_file.project
       @allowed = User.current.allowed_to? :file_manipulation, @project
       @unlockable = @allowed && @dmsf_file.unlockable? && (!@dmsf_file.locked_for_user? ||
           User.current.allowed_to?(:force_file_unlock, @project))
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
     elsif @dmsf_folder
       @locked = @dmsf_folder.locked?
+      @project = @dmsf_folder.project
       @allowed = User.current.allowed_to?(:folder_manipulation, @project)
       @unlockable = @allowed && @dmsf_folder.unlockable? && (!@dmsf_folder.locked_for_user?) &&
           User.current.allowed_to?(:force_file_unlock, @project)
@@ -44,9 +45,11 @@ class DmsfContextMenusController < ApplicationController
     elsif @dmsf_link # url link
       @locked = false
       @unlockable = false
+      @project = @dmsf_link.project
       @allowed = User.current.allowed_to? :file_manipulation, @project
       @email_allowed = false
     else # multiple selection
+      @project = get_project
       @locked = false
       @unlockable = false
       @allowed = User.current.allowed_to?(:file_manipulation, @project) &&
@@ -60,15 +63,19 @@ class DmsfContextMenusController < ApplicationController
 
   def trash
     if @dmsf_file
+      @project = @dmsf_file.project
       @allowed_restore = User.current.allowed_to? :file_manipulation, @project
       @allowed_delete = User.current.allowed_to? :file_delete, @project
     elsif @dmsf_folder
+      @project = @dmsf_folder.project
       @allowed_restore = User.current.allowed_to? :folder_manipulation, @project
       @allowed_delete = @allowed_restore
     elsif @dmsf_link # url link
+      @project = @dmsf_link.project
       @allowed_restore = User.current.allowed_to? :file_manipulation, @project
       @allowed_delete = User.current.allowed_to? :file_delete, @project
     else # multiple selection
+    @project = get_project
       @allowed_restore = User.current.allowed_to?(:file_manipulation, @project) &&
           User.current.allowed_to?(:folder_manipulation, @project)
       @allowed_delete = User.current.allowed_to?(:file_delete, @project) &&
@@ -80,6 +87,27 @@ class DmsfContextMenusController < ApplicationController
   end
 
   private
+
+  def get_project
+    prj = nil
+    params[:ids].each do |id|
+      if id =~ /file-(\d+)/
+        item = DmsfFile.find_by(id: $1)
+      elsif id =~ /(file|url)-link-(\d+)/
+        item = DmsfLink.find_by(id: $2)
+      elsif id =~ /folder-(\d+)/
+        item = DmsfFolder.find_by(id: $1)
+      elsif id =~ /folder-link-(\d+)/
+        item = DmsfLink.find_by(id: $1)
+      end
+      unless prj
+        prj = item&.project
+      else
+        return nil if(prj != item.project)
+      end
+    end
+    prj
+  end
 
   def find_folder
     @folder = DmsfFolder.find params[:folder_id] if params[:folder_id].present?

@@ -22,7 +22,7 @@
 
 <li>
   <%= context_menu_link l(:button_download), entries_operations_dmsf_path(id: project, folder_id: folder,
-    ids: params[:ids], download_entries: true), method: :post, class: 'icon icon-download', disabled: false %>
+    ids: params[:ids], download_entries: true), method: :post, class: 'icon icon-download', disabled: project.nil? %>
 </li>
 <li>
   <%= context_menu_link l(:field_mail), entries_operations_dmsf_path(id: project, folder_id: folder,

@@ -31,7 +31,7 @@
   </li>
   <li>
     <%= link_to l(:label_link_to),
-              new_dmsf_link_path(project_id: project.id, dmsf_folder_id: dmsf_file.dmsf_folder&.id,
+              new_dmsf_link_path(project_id: dmsf_file.project.id, dmsf_folder_id: dmsf_file.dmsf_folder&.id,
                                  dmsf_file_id: dmsf_file.id, type: 'link_to'),
               title: l(:title_create_link), class: 'icon icon-link' %>
   </li>
@@ -63,7 +63,7 @@
                       class: 'icon icon-download', disabled: false %>
 </li>
 <li>
-<%= context_menu_link l(:field_mail), entries_operations_dmsf_path(id: @project, folder_id: folder,
+<%= context_menu_link l(:field_mail), entries_operations_dmsf_path(id: project, folder_id: folder,
    ids: params[:ids], email_entries: true), method: :post, class: 'icon icon-email',
    disabled: !email_allowed %>
 </li>

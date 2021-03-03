@@ -36,7 +36,7 @@ if Redmine::Plugin.installed? :redmine_dmsf
     delete '/projects/:id/dmsf/delete', controller: 'dmsf', action: 'delete', as: 'delete_dmsf'
     post '/projects/:id/dmsf/save', controller: 'dmsf', action: 'save'
     post '/projects/:id/dmsf/save/root', controller: 'dmsf', action: 'save_root'
-    post '/projects/:id/dmsf/entries', controller: 'dmsf', action: 'entries_operation', as: 'entries_operations_dmsf'
+    post '/projects/dmsf/entries', controller: 'dmsf', action: 'entries_operation', as: 'entries_operations_dmsf'
     post '/projects/:id/dmsf/tag_changed', controller: 'dmsf', action: 'tag_changed', as: 'tag_changed'
     post '/projects/:id/dmsf/entries/delete', controller: 'dmsf', action: 'delete_entries', as: 'delete_entries'
     post '/projects/:id/dmsf/entries/email', to: 'dmsf#entries_email', as: 'email_entries'
@@ -49,15 +49,16 @@ if Redmine::Plugin.installed? :redmine_dmsf
     get '/projects/:id/dmsf/edit/root', controller: 'dmsf', action: 'edit_root', as: 'edit_root_dmsf'
     get '/projects/:id/dmsf/trash', controller: 'dmsf', action: 'trash', as: 'trash_dmsf'
     get '/projects/:id/dmsf/restore', controller: 'dmsf', action: 'restore', as: 'restore_dmsf'
-    post '/projects/:id/dmsf/expand_folder', controller: 'dmsf', action: 'expand_folder', as: 'expand_folder_dmsf'
-    get '/projects/:id/dmsf/add_email', controller: 'dmsf', action: 'add_email', as: 'add_email_dmsf'
-    post '/projects/:id/dmsf/append_email', controller: 'dmsf', action: 'append_email', as: 'append_email_dmsf'
-    get '/projects/:id/dmsf/autocomplete_for_user', controller: 'dmsf', action: 'autocomplete_for_user'
+    post '/projects/dmsf/expand_folder', controller: 'dmsf', action: 'expand_folder', as: 'expand_folder_dmsf'
+    get '/projects/dmsf/add_email', to: 'dmsf#add_email', as: 'add_email_dmsf'
+    post '/projects/dmsf/append_email', to: 'dmsf#append_email', as: 'append_email_dmsf'
+    get '/projects/dmsf/autocomplete_for_user', to: 'dmsf#autocomplete_for_user'
     put '/projects/:id/dmsf', controller: 'dmsf', action: 'drop'
     get '/projects/:id/dmsf/empty_trash', to: 'dmsf#empty_trash', as: 'empty_trash'
+    get '/dmsf', to: 'dmsf#index', as: 'dmsf_index'
 
     # dmsf_context_menu_controller
-    match '/projects/:id/dmsf/context_menu', to: 'dmsf_context_menus#dmsf', as: 'dmsf_context_menu', via: [:get, :post]
+    match '/projects/dmsf/context_menu', to: 'dmsf_context_menus#dmsf', as: 'dmsf_context_menu', via: [:get, :post]
     match '/projects/:id/dmsf/trash/context_menu', to: 'dmsf_context_menus#trash', as: 'dmsf_trash_context_menu', via: [:get, :post]
 
     #

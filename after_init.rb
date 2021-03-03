@@ -32,21 +32,28 @@ def dmsf_init
     menu.push :dmsf_approvalworkflows, :dmsf_workflows_path, caption: :label_dmsf_workflow_plural,
               html: { class: 'icon icon-workflows' }, if: Proc.new { |_| User.current.admin? }
   end
-
+  # Project menu extension
   Redmine::MenuManager.map :project_menu do |menu|
     menu.push :dmsf, { controller: 'dmsf', action: 'show' }, caption: :menu_dmsf, before: :documents,
               param: :id
   end
+  # Main menu extension
+  Redmine::MenuManager.map :top_menu do |menu|
+    menu.push :dmsf, { controller: 'dmsf', action: 'index' }, caption: :menu_dmsf
+  end
 
   # Permissions
+  #permission :view_dmsf_index, { dmsf: [:index] }
+
   Redmine::AccessControl.map do |map|
+    #map.permission :view_dmsf_index, { dmsf: [:index] }, require: :loggedin
     map.project_module :dmsf do |pmap|
       pmap.permission :view_dmsf_file_revision_accesses,
                       read: true
       pmap.permission :view_dmsf_file_revisions,
                       read: true
       pmap.permission :view_dmsf_folders,
-                      { dmsf: [:show] },
+                      { dmsf: [:show, :index] },
                       read: true
       pmap.permission :user_preferences,
                       { dmsf_state: [:user_pref_save] }
