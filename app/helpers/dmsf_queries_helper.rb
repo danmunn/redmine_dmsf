@@ -184,9 +184,11 @@ module DmsfQueriesHelper
   end
 
   def filter_any?
-    if params[:v]
-      params[:v].each do |filter|
-        return true if (filter.size > 1) && filter[1].all?{ |v| v.present? }
+    [:v, :op].each do |p|
+      if params[p]
+        params[p].each do |filter|
+          return true if (filter.size > 1) && filter[1].all?{ |v| v.present? }
+        end
       end
     end
     false
