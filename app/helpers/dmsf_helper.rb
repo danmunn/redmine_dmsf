@@ -86,8 +86,8 @@ module DmsfHelper
     if project
       url << ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(project))
       if folder
-        folders = [folder]
-        while folder.dmsf_folder do
+        folders = [ ]
+        while folder do
           folders << folder
           folder = folder.dmsf_folder
         end
