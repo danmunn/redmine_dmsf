@@ -86,9 +86,6 @@ module RedmineDmsf
           role.add_permission! :manage_workflows
           role.add_permission! :file_approval
         end
-        #Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
-        #Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-        #Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
         Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
         Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
         Setting.text_formatting = 'Textile'

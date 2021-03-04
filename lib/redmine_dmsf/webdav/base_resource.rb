@@ -191,11 +191,7 @@ module RedmineDmsf
         prj = nil
         if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
           if name =~ /^\[?.+ (\d+)\]?$/
-            if parent_project
-              prj = scope.find_by(id: $1, parent_id: parent_project.id)
-            else
-              prj = scope.find_by(id: $1)
-            end
+            prj = scope.find_by(id: $1, parent_id: parent_project&.id)
             if prj
               # Check again whether it's really the project and not a folder with a number as a suffix
               prj = nil unless name.start_with?('[' + DmsfFolder::get_valid_title(prj.name))
@@ -207,11 +203,7 @@ module RedmineDmsf
           else
             identifier = name
           end
-          if parent_project
-            prj = scope.find_by(identifier: identifier, parent_id: parent_project.id)
-          else
-            prj = scope.find_by(identifier: identifier)
-          end
+          prj = scope.find_by(identifier: identifier, parent_id: parent_project&.id)
         end
         prj
       end

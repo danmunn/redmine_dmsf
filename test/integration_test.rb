@@ -62,6 +62,7 @@ module RedmineDmsf
         @role.add_permission! :view_dmsf_files
         @role.add_permission! :file_manipulation
         @role.add_permission! :file_delete
+        Setting.clear_cache
         Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
         Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
