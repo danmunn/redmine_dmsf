@@ -39,7 +39,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     @wfsa2 = DmsfWorkflowStepAssignment.find 2
     @revision1 = DmsfFileRevision.find 1
     @revision2 = DmsfFileRevision.find 2
-    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1.id)
+    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1)
     @request.session[:user_id] = @jsmith.id
   end
 
