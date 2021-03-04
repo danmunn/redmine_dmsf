@@ -250,9 +250,7 @@ module RedmineDmsf
             else
               @file = DmsfFile.find_file_by_name(@project, @folder, pinfo.first)
               @folder = nil
-              unless (pinfo.length < 2 || @subproject || @folder || @file)
-                raise Conflict
-              end
+              raise Conflict unless (pinfo.length < 2 || @file)
               break # We're at the end
             end
           end
