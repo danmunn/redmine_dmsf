@@ -216,7 +216,7 @@ class DmsfQuery < Query
       CAST(0 AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS deleted,
       0 AS sort #{cf_columns}}).visible
     if dmsf_folder_id || deleted
-      scope.where '1=0'
+      scope.none
     else
       scope = scope.non_templates if scope.respond_to?(:non_templates)
       scope.where projects: { parent_id: project&.id }
@@ -249,7 +249,7 @@ class DmsfQuery < Query
         dmsf_folders.deleted AS deleted,
         1 AS sort #{cf_columns}}).
       joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
-    return scope.where('1=0') unless project
+    return scope.none unless project
     if deleted
       scope = scope.deleted
     else

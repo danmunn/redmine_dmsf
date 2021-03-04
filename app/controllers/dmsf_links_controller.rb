@@ -180,14 +180,14 @@ class DmsfLinksController < ApplicationController
       errors[:base] << e.message
       return false
     end
-    redirect_back fallback_location: dmsf_folder_path(id: @project, folder_id: @folder)
+    redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
   end
 
   def restore
     if @dmsf_link.restore
       flash[:notice] = l(:notice_dmsf_link_restored)
     end
-    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+    redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
   end
 
   private

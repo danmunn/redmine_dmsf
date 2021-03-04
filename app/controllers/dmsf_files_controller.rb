@@ -158,7 +158,7 @@ class DmsfFilesController < ApplicationController
               Rails.logger.error e.message
               flash[:error] = e.message
               revision.destroy
-              redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+              redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
               return
             end
           end
@@ -194,7 +194,7 @@ class DmsfFilesController < ApplicationController
         end
       end
     end
-    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+    redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
   end
 
   def delete
@@ -268,7 +268,7 @@ class DmsfFilesController < ApplicationController
         flash[:error] = e.message
       end
     end
-    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+    redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
   end
 
   def unlock
@@ -286,7 +286,7 @@ class DmsfFilesController < ApplicationController
         flash[:error] = l(:error_only_user_that_locked_file_can_unlock_it)
       end
     end
-    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+    redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
   end
 
   def notify_activate
@@ -296,7 +296,7 @@ class DmsfFilesController < ApplicationController
       @file.notify_activate
       flash[:notice] = l(:notice_file_notifications_activated)
     end
-    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+    redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
   end
 
   def notify_deactivate
@@ -306,7 +306,7 @@ class DmsfFilesController < ApplicationController
       @file.notify_deactivate
       flash[:notice] = l(:notice_file_notifications_deactivated)
     end
-    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+    redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
   end
 
   def restore
@@ -315,7 +315,7 @@ class DmsfFilesController < ApplicationController
     else
       flash[:error] = @file.errors.full_messages.to_sentence
     end
-    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+    redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
   end
 
   def thumbnail

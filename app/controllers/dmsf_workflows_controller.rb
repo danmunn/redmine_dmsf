@@ -180,7 +180,7 @@ class DmsfWorkflowsController < ApplicationController
         end
       end
     end
-    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+    redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
   end
 
   def assign
@@ -215,7 +215,7 @@ class DmsfWorkflowsController < ApplicationController
         rescue => e
           flash[:error] = e.message
         end
-        redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+        redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
         return
       # DMS link (attached)
       elsif params[:dmsf_link_id].present?
@@ -227,7 +227,7 @@ class DmsfWorkflowsController < ApplicationController
         @dmsf_workflow_id = params[:dmsf_workflow_id]
       end
      else
-      redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+      redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
       return
     end
     respond_to do |format|
@@ -394,7 +394,7 @@ class DmsfWorkflowsController < ApplicationController
         end
       end
     end
-    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+    redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
   end
 
   def reorder_steps
@@ -422,7 +422,7 @@ class DmsfWorkflowsController < ApplicationController
         flash[:error] = l(:notice_cannot_start_workflow)
       end
     end
-    redirect_back fallback_location: dmsf_path(id: @project, folder_id: @folder)
+    redirect_back_or_default dmsf_path(id: @project, folder_id: @folder)
   end
 
   def update_step
