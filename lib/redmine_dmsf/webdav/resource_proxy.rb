@@ -35,6 +35,8 @@ module RedmineDmsf
       attr_reader :read_only
 
       def initialize(path, request, response, options)
+        # Check the settings cache for each request
+        Setting.check_cache
         # Return 404 - NotFound if WebDAV is not enabled
         unless Setting.plugin_redmine_dmsf['dmsf_webdav']
           raise NotFound

@@ -63,8 +63,10 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
       assert !response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/</d:href>")
       assert !response.body.include?("<d:displayname>#{@project1.identifier}</d:displayname>")
       # but the project name should match
-      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</d:href>")
-      assert response.body.include?("<d:displayname>#{@project1_name}</d:displayname>")
+      project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      project1_uri = Addressable::URI.escape(project1_name)
+      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{project1_uri}/</d:href>")
+      assert response.body.include?("<d:displayname>#{project1_name}</d:displayname>")
     end
   end
 
@@ -96,10 +98,13 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
       process :propfind, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin.merge!({ HTTP_DEPTH: '0' })
       assert_response :not_found
-      process :propfind, "/dmsf/webdav/#{@project1_uri}", params: nil, headers: @admin.merge!({ HTTP_DEPTH: '0' })
+      project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      project1_uri = Addressable::URI.escape(project1_name)
+      process :propfind, "/dmsf/webdav/#{project1_uri}", params: nil, headers: @admin.merge!({ HTTP_DEPTH: '0' })
       assert_response :multi_status
-      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</d:href>")
-      assert response.body.include?("<d:displayname>#{@project1_name}</d:displayname>")
+      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{project1_uri}/</d:href>")
+      project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      assert response.body.include?("<d:displayname>#{project1_name}</d:displayname>")
     end
   end
 
@@ -127,21 +132,27 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
     with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
       process :propfind, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin.merge!({ HTTP_DEPTH: '1'})
       assert_response :not_found
-      process :propfind, "/dmsf/webdav/#{@project1_uri}", params: nil, headers: @admin.merge!({ HTTP_DEPTH: '1'})
+      project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      project1_uri = Addressable::URI.escape(project1_name)
+      process :propfind, "/dmsf/webdav/#{project1_uri}", params: nil, headers: @admin.merge!({ HTTP_DEPTH: '1'})
       assert_response :multi_status
       # Project
-      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/</d:href>")
+      project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      project1_uri = Addressable::URI.escape(project1_name)
+      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{project1_uri}/</d:href>")
       # Folders
-      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/#{@folder1.title}/</d:href>")
+      project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      project1_uri = Addressable::URI.escape(project1_name)
+      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{project1_uri}/#{@folder1.title}/</d:href>")
       assert response.body.include?("<d:displayname>#{@folder1.title}</d:displayname>")
-      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/#{@folder6.title}/</d:href>")
+      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{project1_uri}/#{@folder6.title}/</d:href>")
       assert response.body.include?("<d:displayname>#{@folder6.title}</d:displayname>")
       # Files
-      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/#{@file1.name}</d:href>")
+      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{project1_uri}/#{@file1.name}</d:href>")
       assert response.body.include?("<d:displayname>#{@file1.name}</d:displayname>")
-      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/#{@file9.name}</d:href>")
+      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{project1_uri}/#{@file9.name}</d:href>")
       assert response.body.include?("<d:displayname>#{@file9.name}</d:displayname>")
-      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1_uri}/#{@file10.name}</d:href>")
+      assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{project1_uri}/#{@file10.name}</d:href>")
       assert response.body.include?("<d:displayname>#{@file10.name}</d:displayname>")
     end
   end

@@ -39,7 +39,9 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
       head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
       assert_response :not_found
-      head "/dmsf/webdav/#{@project1_uri}", params: nil, headers: @admin
+      project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      project1_uri = Addressable::URI.escape(project1_name)
+      head "/dmsf/webdav/#{project1_uri}", params: nil, headers: @admin
       assert_response :success
     end
   end
@@ -56,7 +58,9 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
       head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
       assert_response :conflict
-      head "/dmsf/webdav/#{@project1_uri}/test.txt", params: nil, headers: @admin
+      project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      project1_uri = Addressable::URI.escape(project1_name)
+      head "/dmsf/webdav/#{project1_uri}/test.txt", params: nil, headers: @admin
       assert_response :success
     end
   end

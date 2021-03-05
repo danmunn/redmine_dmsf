@@ -36,10 +36,6 @@ module RedmineDmsf
         @someone = credentials('someone', 'foo')
         @anonymous = credentials('')
         @project1 = Project.find 1
-        with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1'} do
-          @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-        end
-        @project1_uri = Addressable::URI.escape(@project1_name)
         @project2 = Project.find 2
         @project3 = Project.find 3
         [@project1, @project2, @project3].each do |project|
@@ -62,7 +58,6 @@ module RedmineDmsf
         @role.add_permission! :view_dmsf_files
         @role.add_permission! :file_manipulation
         @role.add_permission! :file_delete
-        Setting.clear_cache
         Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
         Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
