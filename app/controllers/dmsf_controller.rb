@@ -57,12 +57,14 @@ class DmsfController < ApplicationController
     end
     @query.dmsf_folder_id = @folder&.id
     @query.deleted = false
+    @query.sub_projects = true
     respond_to do |format|
       format.js { render action: 'query_rows' }
     end
   end
 
   def index
+    @query.sub_projects = true
     show
   end
 
@@ -74,6 +76,7 @@ class DmsfController < ApplicationController
     @trash_enabled = @folder_manipulation_allowed && @file_manipulation_allowed
     @query.dmsf_folder_id = @folder ? @folder.id : nil
     @query.deleted = false
+    @query.sub_projects |= (Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] == '1')
     if (@folder && @folder.deleted?) || (params[:folder_title].present? && !@folder)
       render_404
       return

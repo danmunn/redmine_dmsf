@@ -206,7 +206,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a.csv'
     # 'Zero Size File' document and an expander is present
     assert_select 'a', text: @file10.title
-    assert_select 'span.dmsf_expander'
+    assert_select 'span.dmsf-expander'
   end
 
   def test_show_filters_found
@@ -215,7 +215,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # 'Zero Size File' document
     assert_select 'a', text: @file10.title
     # No expander if a filter is set
-    assert_select 'span.dmsf_expander', count: 0
+    assert_select 'span.dmsf-expander', count: 0
   end
 
   def test_show_filters_not_found

@@ -201,7 +201,6 @@ div[id*="revision_access_"] {
 
 .dmsf-gray a, .dmsf-gray a:link, .dmsf-gray a:visited {
     color: #484848;
-    text-decoration: none;
 }
 
 /* System folders */
@@ -209,23 +208,18 @@ div[id*="revision_access_"] {
     color: #5C82AD
 }
 
-.dmsf-system a, .dmsf-gray a:link, .dmsf-gray a:visited {
-    color: #484848;
-    text-decoration: none;
-}
-
 /* Search results */
 .icon-dmsf-file { background-image: url(../../../images/document.png); }
 
 /* DMSF tree view */
 .dmsf-hidden { display:none; }
-.dmsf-tree:not(.dmsf-child) span.dmsf_expander { cursor: pointer; }
-.dmsf-tree.dmsf-expanded td.dmsf-title span {
+.dmsf-tree:not(.dmsf-child) span.dmsf-expander { cursor: pointer; }
+.dmsf-tree.dmsf-expanded span.dmsf-expander {
     background: url(../../../images/arrow_down.png) no-repeat 0 50%;
     padding-left: 16px;
 }
-.dmsf-tree.dmsf-child .dmsf-title span { padding-left: 16px; }
-.dmsf-tree.dmsf-collapsed .dmsf-title span {
+.dmsf-tree.dmsf-child span.dmsf-expander { padding-left: 16px; }
+.dmsf-tree.dmsf-collapsed span.dmsf-expander {
     background: url(../../../images/arrow_right.png) no-repeat 0 50%;
     padding-left: 16px;
 }

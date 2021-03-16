@@ -86,9 +86,14 @@ module DmsfQueriesHelper
     when :title
       case item.type
       when 'project'
-        tag = link_to(h("[#{value}]"), dmsf_folder_path(id: item.project), class: 'icon icon-folder')
+        tag = h("[#{value}]")
+        if item.project.module_enabled?(:dmsf)
+          tag = link_to(tag, dmsf_folder_path(id: item.project), class: 'icon icon-folder')
+        else
+          tag = content_tag('span', tag, class: 'icon icon-folder')
+        end
         unless filter_any?
-          tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle(this, '#{item.id}', null,'#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
+          tag = "<span class=\"dmsf-expander\" onclick=\"dmsfToggle(this, '#{item.id}', null,'#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'folder'
@@ -97,7 +102,7 @@ module DmsfQueriesHelper
         else
           tag = link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'icon icon-folder')
           unless filter_any?
-            tag = "<span class=\"dmsf_expander\" onclick=\"dmsfToggle(this, '#{item.project.id}', '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
+            tag = "<span class=\"dmsf-expander\" onclick=\"dmsfToggle(this, '#{item.project.id}', '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
           end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
@@ -108,7 +113,7 @@ module DmsfQueriesHelper
           # For links we use revision_id containing dmsf_folder.id in fact
           tag = link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.revision_id), class: 'icon icon-folder')
           unless filter_any?
-            tag = "<span class=\"dmsf_expander\"></span>".html_safe + tag
+            tag = "<span class=\"dmsf-expander\"></span>".html_safe + tag
           end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:label_target_folder))
@@ -124,7 +129,7 @@ module DmsfQueriesHelper
             class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}",
             'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}")
           unless filter_any?
-            tag = "<span class=\"dmsf_expander\"></span>".html_safe + tag
+            tag = "<span class=\"dmsf-expander\"></span>".html_safe + tag
           end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
@@ -134,7 +139,7 @@ module DmsfQueriesHelper
         else
           tag = link_to(h(value), item.filename, target: '_blank', class: 'icon icon-link')
           unless filter_any?
-            tag = "<span class=\"dmsf_expander\"></span>".html_safe + tag
+            tag = "<span class=\"dmsf-expander\"></span>".html_safe + tag
           end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:field_url))

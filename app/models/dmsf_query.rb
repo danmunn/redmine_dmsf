@@ -22,7 +22,7 @@
 
 class DmsfQuery < Query
 
-  attr_accessor :dmsf_folder_id, :deleted
+  attr_accessor :dmsf_folder_id, :deleted, :sub_projects
 
   self.queried_class = DmsfFolder
   self.view_permission = :view_dmsf_files
@@ -190,7 +190,7 @@ class DmsfQuery < Query
   private
 
   def dmsf_projects_scope
-    return nil if(project && !Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'])
+    return nil unless sub_projects
     cf_columns = +''
     if statement.present?
       DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
