@@ -112,7 +112,7 @@ class DmsfQuery < Query
       filters_clauses = []
       filters.each_key do |field|
         v = values_for(field).clone
-        next unless v and !v.empty?
+        next unless v && !v.empty?
         operator = operator_for(field)
         case field
         when 'author'
@@ -120,7 +120,7 @@ class DmsfQuery < Query
             v.push User.current.id.to_s
           end
         when 'title'
-          next if v.include?('')
+          next if (operator == '~') && v.join.empty?
         end
         filters_clauses << '(' + sql_for_field(field, operator, v, queried_table_name, field) + ')'
       end

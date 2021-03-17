@@ -189,14 +189,13 @@ module DmsfQueriesHelper
   end
 
   def filter_any?
-    # :v - standard filters
-    # :op - custom fields filters
-    [:v, :op].each do |p|
-      if params[p]
-        params[p].each do |filter|
-          return true if (filter.size > 1) && filter[1].all?{ |v| v.present? }
-        end
+    # :v - value, :op - operator
+    size = params[:op]&.keys&.size
+    if size
+      if (size == 1) && params[:op].has_key?('title') && params[:op]['title'] == '~' && params[:v]['title'].join.empty?
+        return false
       end
+      return true
     end
     false
   end
