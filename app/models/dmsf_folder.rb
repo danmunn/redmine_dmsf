@@ -140,7 +140,7 @@ class DmsfFolder < ActiveRecord::Base
 
   def delete(commit = false)
     if locked?
-      errors[:base] << l(:error_folder_is_locked)
+      errors.add(:base, l(:error_folder_is_locked))
       return false
     end
     if commit
@@ -165,7 +165,7 @@ class DmsfFolder < ActiveRecord::Base
 
   def restore
     if dmsf_folder&.deleted?
-      errors[:base] << l(:error_parent_folder)
+      errors.add(:base, l(:error_parent_folder))
       return false
     end
     restore_recursively

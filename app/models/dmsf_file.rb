@@ -139,9 +139,9 @@ class DmsfFile < ActiveRecord::Base
     if locked_for_user? && (!User.current.allowed_to?(:force_file_unlock, project))
       Rails.logger.info l(:error_file_is_locked)
       if lock.reverse[0].user
-        errors[:base] << l(:title_locked_by_user, user: lock.reverse[0].user)
+        errors.add(:base, l(:title_locked_by_user, user: lock.reverse[0].user))
       else
-        errors[:base] << l(:error_file_is_locked)
+        errors.add(:base, l(:error_file_is_locked))
       end
       return false
     end
@@ -157,14 +157,14 @@ class DmsfFile < ActiveRecord::Base
       end
     rescue => e
       Rails.logger.error e.message
-      errors[:base] << e.message
+      errors.add(:base, e.message)
       return false
     end
   end
 
   def restore
     if dmsf_folder_id && (dmsf_folder.nil? || dmsf_folder.deleted?)
-      errors[:base] << l(:error_parent_folder)
+      errors.add(:base, l(:error_parent_folder))
       return false
     end
     dmsf_file_revisions.each { |r| r.restore }
@@ -236,12 +236,12 @@ class DmsfFile < ActiveRecord::Base
 
   def move_to(project, folder)
     if locked_for_user?
-      errors[:base] << l(:error_file_is_locked)
+      errors.add(:base, l(:error_file_is_locked))
       Rails.logger.error l(:error_file_is_locked)
       return false
     end
     unless last_revision
-      errors[:base] << l(:error_at_least_one_revision_must_be_present)
+      errors.add(:base, l(:error_at_least_one_revision_must_be_present))
       Rails.logger.error l(:error_at_least_one_revision_must_be_present)
       return false
     end
@@ -314,7 +314,7 @@ class DmsfFile < ActiveRecord::Base
       if new_revision.save
         file.set_last_revision new_revision
       else
-        errors[:base] << new_revision.errors.full_messages.to_sentence
+        errors.add(:base, new_revision.errors.full_messages.to_sentence)
         Rails.logger.error new_revision.errors.full_messages.to_sentence
         file.delete(true)
         file = nil

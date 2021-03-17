@@ -138,7 +138,7 @@ class DmsfLink < ActiveRecord::Base
 
   def restore
     if dmsf_folder_id && (dmsf_folder.nil? || dmsf_folder.deleted?)
-      errors[:base] << l(:error_parent_folder)
+      errors.add(:base, l(:error_parent_folder))
       return false
     end
     self.deleted = STATUS_ACTIVE

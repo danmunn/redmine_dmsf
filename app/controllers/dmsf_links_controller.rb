@@ -177,7 +177,7 @@ class DmsfLinksController < ApplicationController
       end
     end
     rescue => e
-      errors[:base] << e.message
+      errors.add(:base, e.message)
       return false
     end
     redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)

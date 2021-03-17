@@ -431,9 +431,9 @@ class DmsfController < ApplicationController
               dmsf_folder = DmsfFolder.find_by(id: $1)
               if dmsf_folder
                 if dmsf_folder == object.dmsf_folder
-                  object.errors[:base] << l(:error_target_folder_same)
+                  object.errors.add(:base, l(:error_target_folder_same))
                 elsif object.dmsf_folder&.locked_for_user?
-                  object.errors[:base] << l(:error_folder_is_locked)
+                  object.errors.add(:base, l(:error_folder_is_locked))
                 else
                   result = object.move_to(dmsf_folder.project, dmsf_folder)
                 end

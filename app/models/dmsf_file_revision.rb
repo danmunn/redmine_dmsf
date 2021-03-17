@@ -100,11 +100,11 @@ class DmsfFileRevision < ActiveRecord::Base
 
   def delete(commit = false, force = true)
     if dmsf_file.locked_for_user?
-      errors[:base] << l(:error_file_is_locked)
+      errors.add(:base, l(:error_file_is_locked))
       return false
     end
     if !commit && (!force && (dmsf_file.dmsf_file_revisions.length <= 1))
-      errors[:base] << l(:error_at_least_one_revision_must_be_present)
+      errors.add(:base, l(:error_at_least_one_revision_must_be_present))
       return false
     end
 
@@ -119,7 +119,7 @@ class DmsfFileRevision < ActiveRecord::Base
 
   def obsolete
     if dmsf_file.locked_for_user?
-      errors[:base] << l(:error_file_is_locked)
+      errors.add(:base, l(:error_file_is_locked))
       return false
     end
     self.workflow = DmsfWorkflow::STATE_OBSOLETE
