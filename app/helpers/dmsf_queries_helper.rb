@@ -94,6 +94,7 @@ module DmsfQueriesHelper
         end
         unless filter_any?
           tag = "<span class=\"dmsf-expander\" onclick=\"dmsfToggle(this, '#{item.id}', null,'#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
+          tag = content_tag('div', tag, class: 'row-control')
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'folder'
@@ -103,6 +104,7 @@ module DmsfQueriesHelper
           tag = link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'icon icon-folder')
           unless filter_any?
             tag = "<span class=\"dmsf-expander\" onclick=\"dmsfToggle(this, '#{item.project.id}', '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
+            tag = content_tag('div', tag, class: 'row-control')
           end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))

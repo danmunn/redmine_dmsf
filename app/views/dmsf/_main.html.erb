@@ -102,3 +102,21 @@
 <% content_for :sidebar do %>
   <%= render partial: 'dmsf/sidebar' %>
 <% end %>
+
+<% if Redmine::Plugin.installed?(:easy_extensions) %>
+  <%= late_javascript_tag do %>
+    $(function() {
+      $("p.buttons").addClass("filter-buttons form-actions");
+      let buttonApply = $("p.filter-buttons > a.icon-checked");
+      buttonApply.addClass("button-positive");
+      buttonApply.text("<%= l('easy_query.button_apply.issue') %>");
+      let buttonClear = $("p.filter-buttons > a.icon-reload");
+      buttonClear.addClass("button-negative");
+      buttonClear.text("<%= l('easy_query.label.default_fitlers') %>");
+      $("p.filter-buttons > a.icon-save").addClass("button");
+      $("p.filter-buttons > a.icon-edit").addClass("button");
+      $("p.filter-buttons > a.icon-del").addClass("button");
+      $("#query_form_with_buttons > p.buttons").show();
+    });
+  <% end %>
+<% end %>

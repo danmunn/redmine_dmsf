@@ -36,11 +36,15 @@ function dmsfToggle(el, project_id, folder_id, url)
     dmsfExpandRows(project_id, folder_id, selectedRow, url);
   }
 
+  let span = selectedRow.find('span.dmsf-expander');
+
   if(expand) {
-    $(selectedRow).switchClass('dmsf-collapsed', 'dmsf-expanded');
+    selectedRow.switchClass('dmsf-collapsed', 'dmsf-expanded');
+    span.addClass('open');
   }
   else {
-    $(selectedRow).switchClass('dmsf-expanded', 'dmsf-collapsed');
+    selectedRow.switchClass('dmsf-expanded', 'dmsf-collapsed');
+    span.removeClass('open');
   }
 
   // Hide collapsed rows and reset odd/even rows background colour
@@ -129,6 +133,7 @@ function dmsfExpandRows(project_id, folder_id, parentRow, url) {
       if( m && (data.indexOf(' ' +  m[1] + ' ') < 0)) {
 
         $(parentRow).removeClass('dmsf-expanded');
+        $(parentRow).find('div.row-control').removeClass('row-control');
 
         if(!$(parentRow).hasClass('dmsf-child')) {
 
