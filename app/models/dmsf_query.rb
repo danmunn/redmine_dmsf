@@ -156,13 +156,14 @@ class DmsfQuery < Query
     order_option = ['sort', group_by_sort_order, (options[:order] || sort_clause[0])].flatten.reject(&:blank?)
     if order_option.size > 1
       DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, name|
-        order_option[1].gsub!("COALESCE(cf_#{id}.value, '')", "\"#{name}\"")
+        order_option[1].gsub!("COALESCE(cf_#{id}.value, '')", "cf_#{id}")
       end
       order_option[1].gsub!(',', " #{$1},")
       if order_option[1] =~ /(DESC|ASC)$/
         order_option[1].gsub!(',', " #{$1},")
       end
     end
+
     items = base_scope.
         where(statement).
         order(order_option).
@@ -192,10 +193,8 @@ class DmsfQuery < Query
   def dmsf_projects_scope
     return nil unless sub_projects
     cf_columns = +''
-    if statement.present?
-      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
-        cf_columns << ",NULL AS cf_#{id}"
-      end
+    DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+      cf_columns << ",NULL AS cf_#{id}"
     end
     scope = Project.select(%{
       projects.id AS id,
@@ -225,10 +224,8 @@ class DmsfQuery < Query
 
   def dmsf_folders_scope
     cf_columns = +''
-    if statement.present?
-      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
-        cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
-      end
+    DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
     end
     scope = DmsfFolder.select(%{
         dmsf_folders.id AS id,
@@ -269,10 +266,8 @@ class DmsfQuery < Query
   def dmsf_folder_links_scope
     return nil unless project
     cf_columns = +''
-    if statement.present?
-      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
-        cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
-      end
+    DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
     end
     scope = DmsfLink.select(%{
         dmsf_links.id AS id,
@@ -308,10 +303,8 @@ class DmsfQuery < Query
   def dmsf_files_scope
     return nil unless project
     cf_columns = +''
-    if statement.present?
-      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
-        cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
-      end
+    DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
     end
     scope = DmsfFile.select(%{
         dmsf_files.id AS id,
@@ -348,10 +341,8 @@ class DmsfQuery < Query
   def dmsf_file_links_scope
     return nil unless project
     cf_columns = +''
-    if statement.present?
-      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
-        cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
-      end
+    DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
     end
     scope = DmsfLink.select(%{
         dmsf_links.id AS id,
@@ -390,10 +381,8 @@ class DmsfQuery < Query
   def dmsf_url_links_scope
     return nil unless project
     cf_columns = +''
-    if statement.present?
-      DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
-        cf_columns << ",NULL AS cf_#{id}"
-      end
+    DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
+      cf_columns << ",NULL AS cf_#{id}"
     end
     scope = DmsfLink.select(%{
         dmsf_links.id AS id,
