@@ -26,7 +26,7 @@ sudo: true
 dist: bionic
 
 rvm:      
-  - 2.6
+  - 2.7
 
 before_install:
   - sudo apt-get -y install litmus curl
@@ -53,12 +53,9 @@ after_script:
 
 env:
   global:
-  - DB=sqlite   REDMINE_GIT_TAG=4.0-stable
-  - DB=mysql    REDMINE_GIT_TAG=4.0-stable
-  - DB=postgres REDMINE_GIT_TAG=4.0-stable
-  - DB=sqlite   REDMINE_GIT_TAG=4.1-stable
-  - DB=mysql    REDMINE_GIT_TAG=4.1-stable
-  - DB=postgres REDMINE_GIT_TAG=4.1-stable
+  - DB=sqlite   REDMINE_GIT_TAG=4.2-stable
+  - DB=mysql    REDMINE_GIT_TAG=4.2-stable
+  - DB=postgres REDMINE_GIT_TAG=4.2-stable
 
 cache: bundler
 
