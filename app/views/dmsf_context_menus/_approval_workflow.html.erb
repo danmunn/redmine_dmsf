@@ -33,7 +33,7 @@
           <% assignments = wf.next_assignments(dmsf_file.last_revision.id) %>
           <% index = assignments.find_index{ |assignment| assignment.user_id == User.current.id } if assignments %>
           <% assignment_id = (index && assignments && assignments[index]) ? assignments[index].id : nil %>
-          <% if allowd_minor %>
+          <% if allowed_minor %>
             <%= context_menu_link l(:title_approval), action_dmsf_workflow_path(project_id: project.id, id: wf.id,
                                 dmsf_workflow_step_assignment_id: assignment_id,
                                 dmsf_file_revision_id: dmsf_file.last_revision.id),
@@ -48,7 +48,7 @@
           <% end %>
       <% end %>
     <% when DmsfWorkflow::STATE_ASSIGNED %>
-      <% if allowd_minor %>
+      <% if allowed_minor %>
         <%= context_menu_link l(:title_start), start_dmsf_workflow_path(id: dmsf_file.last_revision.dmsf_workflow_id,
                             dmsf_file_revision_id: dmsf_file.last_revision.id),
                             class: 'icon icon-ok', disabled: !allowed %>
