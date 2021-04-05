@@ -22,7 +22,7 @@
 
 <% workflows_available = DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', project.id]).exists? %>
 <% wf = DmsfWorkflow.find_by(id: dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id %>
-<% file_approval_allowed = User.current.allowed_to?(:file_approval, project) %>
+<% file_approval_allowed = User.current.allowed_to?(:file_approval, project) && (dmsf_file.approval_allowed_zero_minor)%>
 <% allowed = User.current && (dmsf_file.last_revision.dmsf_workflow_assigned_by_user == User.current) && wf %>
 
 <% if file_approval_allowed %>

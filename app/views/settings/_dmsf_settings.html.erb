@@ -200,6 +200,14 @@
   </em>
 </p>
 
+<p>
+  <%= content_tag(:label, l(:only_approval_zero_minor_version)) %>
+  <%= check_box_tag 'settings[only_approval_zero_minor_version]', false, @settings['only_approval_zero_minor_version'], size: 50 %>
+  <em class="info">
+    <%= l(:only_approval_zero_minor_version) %><br/> <%= l(:label_default) %>: <%= l(:general_text_No)%>
+  </em>
+</p>
+
 <hr/>
 <em class="info">
   <%= l(:label_webdav) %>
@@ -315,3 +323,5 @@
     <%= l(:text_enable_cjk_ngrams) %>
   </em>
 </p>
+
+

@@ -110,6 +110,14 @@ class DmsfFile < ActiveRecord::Base
     visible.find_by project_id: project_id, dmsf_folder_id: folder&.id, name: name
   end
 
+  def approval_allowed_zero_minor
+    if Setting.plugin_redmine_dmsf['only_approval_zero_minor_version'] 
+      return last_revision.minor_version == 0
+    else
+      return true
+    end
+  end
+
   def last_revision
     unless defined?(@last_revision)
       @last_revision = deleted? ? dmsf_file_revisions.first : dmsf_file_revisions.visible.first

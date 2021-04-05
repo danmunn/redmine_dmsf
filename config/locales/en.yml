@@ -422,3 +422,4 @@ en:
     errors:
       messages:
         error_contains_invalid_character: contains invalid character(s)
+  only_approval_zero_minor_version: only approval zero minor version
