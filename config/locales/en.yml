@@ -254,10 +254,13 @@ en:
   title_rejection: Rejection
   title_delegation: Delegation
   title_assignment: Assignment
+  title_assignment_minor: Assignment not allowed, minor != 0
   title_start: Start
+  title_start_minor: Start not allowed, minor != 0
   title_dmsf_workflow_log: Approval Workflow Log
   title_assigned: Assigned
   title_approval: Approval
+  title_approval_minor: Approval not allowed, minor != 0
   title_rejected: Rejected
   title_obsolete: Obsolete
   dmsf_and: AND
