@@ -420,6 +420,10 @@ pt-BR:
   label_empty_trash_bin: Empty Trash
   label_dmsf_projects_as_subfolders: Sub-projects as sub-folders
   note_dmsf_projects_as_subfolders: Add sub-projects as sub-folders into DMS view
+  only_approval_zero_minor_version: Only approval zero minor version
+  title_assignment_minor: Assignment not allowed, minor must be zero
+  title_start_minor: Start not allowed, minor must be zero
+  title_approval_minor: Approval not allowed, minor must be zero
 
   easy_pages:
     modules:

@@ -420,6 +420,10 @@ cs:
   label_empty_trash_bin: Vysypat koš
   label_dmsf_projects_as_subfolders: Podprojekty jako podaresáře
   note_dmsf_projects_as_subfolders: Přidá podprojekty jako podadresáře do pohledu DMS
+  only_approval_zero_minor_version: Schvalovat pouze hlavní verze
+  title_assignment_minor: Přiřazení není dovoleno, podružná verze musí být nula
+  title_start_minor: Zahájení není dovoleno, podružná verze musí být nula
+  title_approval_minor: Schválení není dovoleno, podružná verze musí být nula
 
   easy_pages:
     modules:
