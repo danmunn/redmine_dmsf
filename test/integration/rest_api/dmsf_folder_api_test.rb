@@ -24,7 +24,7 @@ require File.expand_path('../../../test_helper', __FILE__)
 class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
   include Redmine::I18n
 
-  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks, :dmsf_links
 
   def setup
     super
@@ -94,8 +94,8 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #     </dmsf_nodes>
     # </dmsf>
     assert_select 'dmsf > dmsf_nodes > node', count: 1
-    assert_select 'dmsf > dmsf_nodes > node > id', text: @folder7.id.to_s
-    assert_select 'dmsf > dmsf_nodes > node > title', text: @folder7.title
+    assert_select 'dmsf > dmsf_nodes > node > id', text: @folder6.id.to_s
+    assert_select 'dmsf > dmsf_nodes > node > title', text: @folder6.title
   end
 
   def test_create_folder

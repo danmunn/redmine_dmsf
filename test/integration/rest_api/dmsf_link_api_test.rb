@@ -24,7 +24,7 @@ require File.expand_path('../../../test_helper', __FILE__)
 class DmsfLinkApiTest < RedmineDmsf::Test::IntegrationTest
   include Redmine::I18n
 
-  fixtures :dmsf_files, :dmsf_file_revisions
+  fixtures :dmsf_files, :dmsf_file_revisions, :dmsf_links
 
   def setup
     super
