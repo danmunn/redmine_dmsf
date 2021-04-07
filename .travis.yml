@@ -26,7 +26,7 @@ sudo: true
 dist: bionic
 
 rvm:      
-  - 2.7
+  - 2.6
 
 before_install:
   - sudo apt-get -y install litmus curl
