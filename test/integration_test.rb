@@ -52,6 +52,7 @@ module RedmineDmsf
         @folder6 = DmsfFolder.find 6
         @folder7 = DmsfFolder.find 7
         @folder10 = DmsfFolder.find 10
+        @folder_link1 = DmsfLink.find 1
         @role = Role.find_by(name: 'Manager')
         @role.add_permission! :view_dmsf_folders
         @role.add_permission! :folder_manipulation

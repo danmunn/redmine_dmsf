@@ -6,7 +6,13 @@ api.dmsf do
         api.id node.id
         api.title node.title
         api.type node.type
-        api.filename node.filename
+        case node.type
+        when 'file', 'url-link'
+            api.filename node.filename
+        when 'file-link', 'folder-link'
+            api.target_id node.revision_id
+            api.target_project_id node.project_id
+        end
       end
     end
   end
