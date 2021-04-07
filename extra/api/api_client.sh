@@ -51,17 +51,7 @@
 # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_id=3
 # both returns 404 not found, or json with following structure:
 # {  
-#   "dmsf":{  
-#      "dmsf_folders":[  
-#
-#      ],
-#      "total_count":0,
-#      "dmsf_files":[  
-#
-#      ],
-#      "dmsf_links":[  
-#
-#      ],
+#   "dmsf":{
 #      "found_folder":{  
 #         "id":3,
 #         "title":"Updated title"
