@@ -102,6 +102,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     #     </node>
     #   </dmsf_nodes>
     # </dmsf>
+    puts @response.body # TODO: remove this debug message
     assert_select 'node > id', text: @folder1.id.to_s
     assert_select 'node > title', text: @folder1.title
     assert_select 'node > type', text: 'folder'
