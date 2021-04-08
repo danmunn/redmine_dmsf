@@ -394,7 +394,7 @@ class DmsfWorkflowsController < ApplicationController
         end
       end
     end
-    redirect_back_or_default dmsf_folder_path(id: @project&.id, folder_id: @folder)
+    redirect_back_or_default dmsf_workflow_path(@dmsf_workflow)
   end
 
   def reorder_steps
