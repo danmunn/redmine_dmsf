@@ -10,7 +10,7 @@ api.dmsf do
         when 'file', 'url-link'
             api.filename node.filename
         when 'file-link', 'folder-link'
-            api.target_id node.revision_id
+            api.target_id node.revision_id.to_i
             api.target_project_id node.project_id
         end
       end
