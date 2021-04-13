@@ -67,17 +67,20 @@
    ids: params[:ids], email_entries: true), method: :post, class: 'icon icon-email',
    disabled: !email_allowed %>
 </li>
-<li>
-  <% if dmsf_file.last_revision && dmsf_file.last_revision.protocol %>
-    <% url = "#{dmsf_file.last_revision.protocol}:ofe|u|#{Setting.protocol.strip}://#{Setting.host_name.strip}/dmsf/webdav/#{Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(dmsf_file.project))}/" %>
-    <% if dmsf_file.dmsf_folder %>
-      <% url << "#{dmsf_file.dmsf_folder.dmsf_path_str}/" %>
+<% if Setting.plugin_redmine_dmsf['dmsf_webdav'] == '1' %>
+  <li>
+    <% if dmsf_file.last_revision && dmsf_file.last_revision.protocol %>
+      <% url = "#{dmsf_file.last_revision.protocol}:ofe|u|#{Setting.protocol.strip}://#{Setting.host_name.strip}/dmsf/webdav/#{Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(dmsf_file.project))}/" %>
+      <% if dmsf_file.dmsf_folder %>
+        <% url << "#{dmsf_file.dmsf_folder.dmsf_path_str}/" %>
+      <% end %>
+      <% url << dmsf_file.name %>
     <% end %>
-    <% url << dmsf_file.name %>
-  <% end %>
-  <%= context_menu_link l(:button_edit_content), url, class: "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
-                        disabled: url.blank? || (locked && (!unlockable)) %>
-</li>
+    <%= context_menu_link l(:button_edit_content), url, class: "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
+          disabled: url.blank? || (locked && (!unlockable)) ||
+            (Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] != 'WEBDAV_READ_WRITE') %>
+  </li>
+<% end %>
 <li>
   <%= context_menu_link l(:button_delete),
         dmsf_link ? dmsf_link_path(id: dmsf_link, folder_id: folder) : dmsf_file_path(id: dmsf_file, folder_id: folder),

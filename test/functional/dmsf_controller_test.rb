@@ -204,9 +204,19 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'table.dmsf'
     # CSV export
     assert_select 'a.csv'
+    # WebDAV
+    assert_select 'a', text: 'WebDAV'
     # 'Zero Size File' document and an expander is present
     assert_select 'a', text: @file10.title
     assert_select 'span.dmsf-expander'
+  end
+
+  def test_show_webdav_disabled
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => nil } do
+      get :show, params: { id: @project1.id }
+      assert_response :success
+      assert_select 'a', text: 'WebDAV', count: 0
+    end
   end
 
   def test_show_filters_found

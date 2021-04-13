@@ -229,62 +229,73 @@
     options_for_select([
       [l(:select_option_deactivated), nil],
       [l(:select_option_activated), '1']],
-      selected: @settings['dmsf_webdav'],
-      disabled: webdav_disabled) %>
+      selected: webdav_disabled ? nil : @settings['dmsf_webdav']),
+    disabled: webdav_disabled,
+    onchange: "$('#dmsf_webdav_block').toggle()" %>
   <em class="info">
     <% if webdav_disabled %>
+      <% @settings['dmsf_webdav'] = nil %>
       <%= l(:note_webdav_disabled) %>
     <% else %>
       <%= l(:note_webdav, protocol: Setting.protocol, domain: Setting.host_name).html_safe %>
       <%= l(:label_default) %>: <%= l(:select_option_activated) %>
    <% end %>
-  </em>  
-</p>
-
-<p>
-  <%= content_tag :label, l(:label_webdav_strategy) %>
-  <%= select_tag'settings[dmsf_webdav_strategy]',
-    options_for_select([
-      [l(:select_option_webdav_readonly), 'WEBDAV_READ_ONLY'],
-      [l(:select_option_webdav_readwrite), 'WEBDAV_READ_WRITE']],
-      selected: @settings['dmsf_webdav_strategy']) %>
-  <br/>
-  <em class="info">
-    <%= l(:note_webdav_strategy).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_webdav_readonly) %>
   </em>
 </p>
 
-<p>
-  <%= content_tag(:label, l(:label_webdav_ignore)) %>
-  <%= text_field_tag 'settings[dmsf_webdav_ignore]', @settings['dmsf_webdav_ignore'], size: 50 %>
-  <em class="info">
-    <%= l(:note_webdav_ignore) %> <%= l(:label_default) %>: ^(\._|\.DS_Store$|Thumbs.db$)
-  </em>
-</p>
-<p>
-  <%= content_tag(:label, l(:dmsf_webdav_ignore_1b_file_for_authentication)) %>
-  <%= check_box_tag 'settings[dmsf_webdav_ignore_1b_file_for_authentication]', true, @settings['dmsf_webdav_ignore_1b_file_for_authentication'], size: 50 %>
-  <em class="info">
-    <%= l(:dmsf_webdav_ignore_1b_file_for_authentication_info) %> <%= l(:label_default) %>: <%= l(:general_text_Yes)%>
-  </em>
-</p>
-<p>
-  <%= content_tag :label, l(:label_webdav_disable_versioning) %>
-  <%= text_field_tag 'settings[dmsf_webdav_disable_versioning]', @settings['dmsf_webdav_disable_versioning'], size: 50 %>
-  <em class="info">
-    <%= l(:note_webdav_disable_versioning) %> <br/>
-    <%= l(:label_default) %>: ^\~\$|\.tmp$
-  </em>
-</p>
+<% visible_class = @settings['dmsf_webdav'].blank? ? 'dmsf-hidden' : '' %>
 
-<p>
-  <%= content_tag :label, l(:label_webdav_use_project_names) %>
-  <%= check_box_tag 'settings[dmsf_webdav_use_project_names]', true, @settings['dmsf_webdav_use_project_names'] %>
-  <em class="info">
-	<%= l(:note_webdav_use_project_names) %> <br/>
-    <%= l(:label_default)%>: <%= l(:general_text_No)%>
-  </em>
-</p>
+<div id="dmsf_webdav_block" class="<%= visible_class %>">
+  <p>
+    <%= content_tag :label, l(:label_webdav_strategy) %>
+    <%= select_tag'settings[dmsf_webdav_strategy]',
+      options_for_select([
+        [l(:select_option_webdav_readonly), 'WEBDAV_READ_ONLY'],
+        [l(:select_option_webdav_readwrite), 'WEBDAV_READ_WRITE']],
+        selected: @settings['dmsf_webdav_strategy']),
+      onchange: "$('#dmsf_webdav_ro_block').toggle()" %>
+    <br/>
+    <em class="info">
+      <%= l(:note_webdav_strategy).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_webdav_readonly) %>
+    </em>
+  </p>
+
+  <% visible_class = (@settings['dmsf_webdav_strategy'] == 'WEBDAV_READ_ONLY') ? 'dmsf-hidden' : '' %>
+
+  <div id="dmsf_webdav_ro_block" class="<%= visible_class %>">
+    <p>
+      <%= content_tag(:label, l(:label_webdav_ignore)) %>
+      <%= text_field_tag 'settings[dmsf_webdav_ignore]', @settings['dmsf_webdav_ignore'], size: 50 %>
+      <em class="info">
+        <%= l(:note_webdav_ignore) %> <%= l(:label_default) %>: ^(\._|\.DS_Store$|Thumbs.db$)
+      </em>
+    </p>
+    <p>
+      <%= content_tag(:label, l(:dmsf_webdav_ignore_1b_file_for_authentication)) %>
+      <%= check_box_tag 'settings[dmsf_webdav_ignore_1b_file_for_authentication]', true, @settings['dmsf_webdav_ignore_1b_file_for_authentication'], size: 50 %>
+      <em class="info">
+        <%= l(:dmsf_webdav_ignore_1b_file_for_authentication_info) %> <%= l(:label_default) %>: <%= l(:general_text_Yes)%>
+      </em>
+    </p>
+    <p>
+      <%= content_tag :label, l(:label_webdav_disable_versioning) %>
+      <%= text_field_tag 'settings[dmsf_webdav_disable_versioning]', @settings['dmsf_webdav_disable_versioning'], size: 50 %>
+      <em class="info">
+        <%= l(:note_webdav_disable_versioning) %> <br/>
+        <%= l(:label_default) %>: ^\~\$|\.tmp$
+      </em>
+    </p>
+
+    <p>
+      <%= content_tag :label, l(:label_webdav_use_project_names) %>
+      <%= check_box_tag 'settings[dmsf_webdav_use_project_names]', true, @settings['dmsf_webdav_use_project_names'] %>
+      <em class="info">
+      <%= l(:note_webdav_use_project_names) %> <br/>
+        <%= l(:label_default)%>: <%= l(:general_text_No)%>
+      </em>
+    </p>
+  </div>
+</div>
 
 <hr/>
 <em class="info">
@@ -339,5 +350,3 @@
     <%= l(:text_enable_cjk_ngrams) %>
   </em>
 </p>
-
-
