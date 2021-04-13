@@ -305,13 +305,13 @@ class DmsfFile < ActiveRecord::Base
       new_revision.dmsf_workflow_started_at = nil
       wf = last_revision.dmsf_workflow
       if wf && (wf.project.nil? || (wf.project.id == project.id))
-        new_revision.set_workflow(wf.id, nil)
-        new_revision.assign_workflow(wf.id)
+        new_revision.set_workflow wf.id, nil
+        new_revision.assign_workflow wf.id
       end
       if File.exist? last_revision.disk_file
         FileUtils.cp last_revision.disk_file, new_revision.disk_file(false)
       end
-      new_revision.comment = l(:comment_copied_from, source: "#{project.identifier}: #{dmsf_path_str}")
+      new_revision.comment = l(:comment_copied_from, source: "#{self.project.identifier}: #{dmsf_path_str}")
       new_revision.custom_values = []
       last_revision.custom_values.each do |cv|
         v = CustomValue.new
