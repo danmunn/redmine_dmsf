@@ -94,22 +94,22 @@ module DmsfQueriesHelper
         end
         unless filter_any?
           tag = "<span class=\"dmsf-expander\" onclick=\"dmsfToggle(this, '#{item.id}', null,'#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
-          tag = content_tag('div', tag, class: 'row-control')
+          tag = content_tag('div', tag, class: 'row-control dmsf-row-control')
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'folder'
-        if item&.deleted > 0
+        if item&.deleted?
           tag = content_tag('span', value, class: 'icon icon-folder')
         else
           tag = link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'icon icon-folder')
           unless filter_any?
             tag = "<span class=\"dmsf-expander\" onclick=\"dmsfToggle(this, '#{item.project.id}', '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
-            tag = content_tag('div', tag, class: 'row-control')
+            tag = content_tag('div', tag, class: 'row-control dmsf-row-control')
           end
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'folder-link'
-        if item&.deleted > 0
+        if item&.deleted?
           tag = content_tag('span', value, class: 'icon icon-folder')
         else
           # For links we use revision_id containing dmsf_folder.id in fact
@@ -120,7 +120,7 @@ module DmsfQueriesHelper
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:label_target_folder))
       when 'file', 'file-link'
-        if item&.deleted > 0
+        if item&.deleted?
           tag = content_tag('span', value, class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}")
         else
           # For links we use revision_id containing dmsf_file.id in fact
@@ -136,7 +136,7 @@ module DmsfQueriesHelper
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'url-link'
-        if item&.deleted > 0
+        if item&.deleted?
           tag = content_tag('span', value, class: 'icon icon-link')
         else
           tag = link_to(h(value), item.filename, target: '_blank', class: 'icon icon-link')
@@ -152,7 +152,7 @@ module DmsfQueriesHelper
       number_to_human_size value
     when :workflow
       if value
-        if item.workflow_id && (!(item&.deleted > 0))
+        if item.workflow_id && (!item&.deleted?)
           if item.type == 'file'
             url = log_dmsf_workflow_path(project_id: item.project_id, id: item.workflow_id, dmsf_file_id: item.id)
           else

@@ -78,6 +78,34 @@ td.dmsf-title a.icon-folder::before {
     color: #FFE9A2;
 }
 
+/* +/- icons */
+.dmsf-row-control {
+    width: auto;
+    margin-right: 5px;
+}
+
+.dmsf-row-control > .dmsf-expander::before {
+    content: "\F0416" !important;
+    font-family: "Material Icons";
+    display: inline-block;
+    width: 1.5em !important;
+    font-size: 1.125em;
+}
+
+.dmsf-row-control > .dmsf-expander.open::before {
+    content: "\F0375" !important;
+    font-family: "Material Icons";
+}
+
+.dmsf-row-control > span.dmsf-expander:hover::before {
+    background-color: lightgreen;
+    color: white;
+    -moz-border-radius: 5000px;
+    -webkit-border-radius: 5000px;
+    border-radius: 5000px;
+    border: 1px solid green;
+}
+
 /* Approval workflows */
 #tab-content-dmsf_workflow table.list ~ p .button {
     margin-top: 10px;
