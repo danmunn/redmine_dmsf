@@ -168,10 +168,16 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #   <found_folder>
     #     <id>1</id>
     #     <title>folder1</title>
+    #       <custom_fields>
+    #         <custom_field>
+    #           ...
+    #         <suctom_field>
+    #       </custom_fields>
     #   </found_folder>
     # </dmsf>
     assert_select 'dmsf > found_folder > id', text: @folder1.id.to_s
     assert_select 'dmsf > found_folder > title', text: @folder1.title
+    assert_select 'dmsf > found_folder > custom_fields > custom_field'
   end
 
   def test_find_folder_by_id_not_found

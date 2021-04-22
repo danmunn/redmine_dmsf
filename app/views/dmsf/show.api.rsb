@@ -21,6 +21,7 @@ api.dmsf do
     api.found_folder do
       api.id @folder.id
       api.title @folder.title
+      render_api_custom_values @folder.visible_custom_field_values, api
     end
   end
 
