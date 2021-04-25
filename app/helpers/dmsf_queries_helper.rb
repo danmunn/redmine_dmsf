@@ -137,9 +137,9 @@ module DmsfQueriesHelper
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'url-link'
         if item&.deleted?
-          tag = content_tag('span', value, class: 'icon icon-link')
+          tag = content_tag('span', value, class: 'icon dmsf-icon-link')
         else
-          tag = link_to(h(value), item.filename, target: '_blank', class: 'icon icon-link')
+          tag = link_to(h(value), item.filename, target: '_blank', class: 'icon dmsf-icon-link')
           unless filter_any?
             tag = "<span class=\"dmsf-expander\"></span>".html_safe + tag
           end

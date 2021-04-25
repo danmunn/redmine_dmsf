@@ -78,6 +78,11 @@ td.dmsf-title a.icon-folder::before {
     color: #FFE9A2;
 }
 
+.dmsf-icon-link:before {
+    content: "\F0337" !important;
+    font-family: "Material Icons";
+}
+
 /* +/- icons */
 .dmsf-row-control {
     width: auto;

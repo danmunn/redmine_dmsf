@@ -137,7 +137,7 @@ div[id*="revision_access_"] {
 }
 
 /* Command icons */
-.icon-link { background-image: url(../../../images/link.png); }
+.dmsf-icon-link { background-image: url(../../../images/link.png); }
 .icon-approvalworkflows { background-image: url(../../../images/ticket_go.png); }
 
 /* File types */
