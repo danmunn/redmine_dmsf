@@ -169,16 +169,16 @@ class DmsfQuery < Query
         order(order_option).
         limit(options[:limit]).
         offset(options[:offset]).to_a
-    items.each do |item|
+    items.delete_if do |item|
       case item.type
       when 'folder'
         dmsf_folder = DmsfFolder.find_by(id: item.id)
         if dmsf_folder && (!DmsfFolder.permissions?(dmsf_folder, false))
-          items.delete item
+          true
         end
       when 'project'
         p = Project.find_by(id: item.id)
-        items.delete(item) unless p&.dmsf_available?
+        true unless p&.dmsf_available?
       end
     end
     items
