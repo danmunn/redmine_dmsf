@@ -93,20 +93,20 @@ You can use following commands to install some of the required indexing tools:
 On Debian use:
 
 ```
-sudo apt-get install xapian-omega ruby-xapian libxapian-dev xpdf poppler-utils antiword unzip catdoc libwpd-tools \
+sudo apt-get install xapian-omega ruby-xapian libxapian-dev poppler-utils antiword unzip catdoc libwpd-tools \
 libwps-tools gzip unrtf catdvi djview djview3 uuid uuid-dev xz-utils libemail-outlook-message-perl
 ```
 
 On Ubuntu use:
 
 ```
-sudo apt-get install xapian-omega ruby-xapian libxapian-dev xpdf poppler-utils antiword  unzip catdoc libwpd-tools \
+sudo apt-get install xapian-omega ruby-xapian libxapian-dev poppler-utils antiword  unzip catdoc libwpd-tools \
 libwps-tools gzip unrtf catdvi djview djview3 uuid uuid-dev xz-utils libemail-outlook-message-perl
 ```
 
 On CentOS use:
 ```
-sudo yum install xapian-core xapian-bindings-ruby libxapian-dev xpdf poppler-utils antiword unzip catdoc libwpd-tools \
+sudo yum install xapian-core xapian-bindings-ruby libxapian-dev poppler-utils antiword unzip catdoc libwpd-tools \
 libwps-tools gzip unrtf catdvi djview djview3 uuid uuid-dev xz libemail-outlook-message-perl
 ```
 
