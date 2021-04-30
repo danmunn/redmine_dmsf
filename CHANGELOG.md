@@ -1,8 +1,44 @@
 Changelog for Redmine DMSF
 ==========================
 
+2.4.6 *2021-04-30*
+------------------
+
+    Global DMS view
+    Sub-projects as sub-folders
+    Redmine 4.2
+
+* Bug: #1243 - Fixes modification during iteration
+* New: #1241 - Get File by API with Custom Fields
+* Bug: #1238 - Ubuntu 20.04 dependencies install problem
+* New: #1232 - Allow approval workflow actions only on x.0 file versions
+* Bug: #1231 - API doesn't respond like described in the docs
+* New: #1230 - Redmine 4.2.0 support
+* Bug: #1229 - Error when sorting by a custom field
+* Bug: #1221 - WebDAV links to non top-level directories are broken
+* New: #1217 - Global DMS view type: enhancement
+* Bug: #1215 - DMS Documents > New file does not respect theme styles properly
+* Bug: #1214 - Error 500 when create new revision
+* Bug: #1213 - DMS project preferences do not save
+* New: #1211 - Highlight admin menu item and very little fix of ProjectPatch#copy
+* New: #1209 - Added some translations // Fixed typo
+* New: #1207 - Sub-projects as sub-folders
+* New: #1206 - Support for .xlsm files in Edit content
+* New - #1204: Empty trash bin function is missing
+* New: #1201 - Givable roles for folder's permissions
+* New: #1200 - Improvement of german translations
+* New: #1199 - Breakdown structure of folders if a filter is set
+* Bug: #1198 - 500 Internal error when press the DMS Modules
+* New: #1196 - Add workflow step name to mail notification
+* New: #1195 - Move to the bottom button
+* Bug: #1194 - Cannot delete a link if the linked object is locked
+
 2.4.5 *2020-11-10*
 ------------------
+
+    Sub-projects as sub-folders in WebDAV
+    Delete and restore functions for non-empty folders
+    A new wiki macro for embedded videos
 
 * Bug: #1184 - Problems uploading files with the same file name as attachments on Redmine issues
 * Bug: #1183 - Update README.md
