@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **2.4.5** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
+The current version of Redmine DMSF is **2.4.6** [![Build Status](https://api.travis-ci.org/danmunn/redmine_dmsf.png)](https://travis-ci.org/danmunn/redmine_dmsf)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
