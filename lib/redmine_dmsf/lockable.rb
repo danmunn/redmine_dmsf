@@ -97,12 +97,12 @@ module RedmineDmsf
         locks.each do |lock|
           next if lock.expired? # In case we're in between updates
           owner = args[:owner] if args
-          owner ||= User.current&.login
+          owner ||= User.current&.login if lock.owner
           if lock.lock_scope == :scope_exclusive
-            return true if (lock.user&.id != User.current.id) || (lock.owner && (lock.owner != owner))
+            return true if (lock.user&.id != User.current.id) || (lock.owner != owner)
           else
             shared = true if shared.nil?
-            if shared && (lock.user&.id == User.current.id) && (!lock.owner || (lock.owner == owner)) ||
+            if shared && (lock.user&.id == User.current.id) && (lock.owner == owner) ||
               (args && (args[:scope] == 'shared'))
               shared = false
             end
