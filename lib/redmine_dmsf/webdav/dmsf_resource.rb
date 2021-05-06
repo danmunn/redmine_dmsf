@@ -479,7 +479,6 @@ module RedmineDmsf
           return super(token)
         end
         if token.nil? || token.empty? || (token == '<(null)>') || User.current.anonymous?
-          Rails.logger.info ">>> bad token 2: #{token}"
           BadRequest
         else
           if token =~ /([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})/
