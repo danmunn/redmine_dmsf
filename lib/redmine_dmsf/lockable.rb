@@ -90,23 +90,25 @@ module RedmineDmsf
     # By using the path upwards, surely this would be quicker?
     def locked_for_user?(args = nil)
       return false unless locked?
-      b_shared = nil
+      shared = nil
       self.dmsf_path.each do |entity|
         locks = entity.locks || entity.lock(false)
         next if locks.empty?
         locks.each do |lock|
           next if lock.expired? # In case we're in between updates
+          owner = args[:owner] if args
+          owner ||= User.current&.login if lock.owner
           if lock.lock_scope == :scope_exclusive
-            return true if (lock.user&.id != User.current.id) || ((lock.owner != (args ? args[:owner] : nil)))
+            return true if (lock.user&.id != User.current.id) || (lock.owner != owner)
           else
-            b_shared = true if b_shared.nil?
-            if b_shared && (lock.user&.id == User.current.id) && (lock.owner == (args ? args[:owner] : nil)) ||
+            shared = true if shared.nil?
+            if shared && (lock.user&.id == User.current.id) && (lock.owner == owner) ||
               (args && (args[:scope] == 'shared'))
-              b_shared = false
+              shared = false
             end
           end
         end
-        return true if b_shared
+        return true if shared
       end
       false
     end
@@ -114,6 +116,7 @@ module RedmineDmsf
     def unlock!(force_file_unlock_allowed = false, owner = nil)
       raise DmsfLockError.new(l(:warning_file_not_locked)) unless self.locked?
       existing = self.lock(true)
+      destroyed = false
       # If its empty its a folder that's locked (not root)
       if existing.empty? || (!self.dmsf_folder.nil? && self.dmsf_folder.locked?)
         raise DmsfLockError.new(l(:error_unlock_parent_locked))
@@ -126,18 +129,18 @@ module RedmineDmsf
         if (existing.count == 1) && (existing[0].lock_scope == :exclusive)
           existing[0].destroy
         else
-          b_destroyed = false
           existing.each do |lock|
+            owner = User.current&.login if lock.owner && owner.nil?
             if ((lock.user&.id == User.current.id) && (lock.owner == owner)) || User.current.admin?
               lock.destroy
-              b_destroyed = true
+              destroyed = true
               break
             end
           end
           # At first it was going to be allowed for someone with force_file_unlock to delete all shared by default
           # Instead, they by default remove themselves from shared lock, and everyone from shared lock if they're not
           # on said lock
-          if !b_destroyed && (User.current.allowed_to?(:force_file_unlock, self.project) || force_file_unlock_allowed)
+          if !destroyed && (User.current.allowed_to?(:force_file_unlock, self.project) || force_file_unlock_allowed)
             locks.delete_all
           end
         end
@@ -145,6 +148,6 @@ module RedmineDmsf
       reload
       locks.reload
     end
-    true
+
   end
 end

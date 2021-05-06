@@ -58,7 +58,7 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
-    assert_response :bad_request
+    assert_response :no_content
   end
 
   def test_unlock_folder_wrong_path
@@ -89,7 +89,7 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
     process :unlock, "/dmsf/webdav/#{@folder2.project.identifier}/#{@folder2.dmsf_folder.title}/#{@folder2.title}",
             params: nil,
             headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
-    assert_response :bad_request
+    assert_response :no_content
   end
 
   def test_unlock_file_in_subproject

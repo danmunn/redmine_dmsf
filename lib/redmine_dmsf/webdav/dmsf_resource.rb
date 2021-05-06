@@ -479,6 +479,7 @@ module RedmineDmsf
           return super(token)
         end
         if token.nil? || token.empty? || (token == '<(null)>') || User.current.anonymous?
+          Rails.logger.info ">>> bad token 2: #{token}"
           BadRequest
         else
           if token =~ /([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})/
@@ -486,21 +487,20 @@ module RedmineDmsf
           else
             return BadRequest
           end
-          begin
-            l = DmsfLock.find(token)
-            # Additional case: if a user tries to unlock the file instead of the folder that's locked
-            # This should throw forbidden as only the lock at level initiated should be unlocked
-            entity = file || folder
-            return NoContent unless entity&.locked?
-            l_entity = l.file || l.folder
-            if l_entity != entity
-              Forbidden
-            else
-              entity.unlock!
-              NoContent
-            end
-          rescue
-            BadRequest
+          l = DmsfLock.find_by_uuid(token)
+          unless l
+            return NoContent
+          end
+          # Additional case: if a user tries to unlock the file instead of the folder that's locked
+          # This should throw forbidden as only the lock at level initiated should be unlocked
+          entity = file || folder
+          return NoContent unless entity&.locked?
+          l_entity = l.file || l.folder
+          if l_entity != entity
+            Forbidden
+          else
+            entity.unlock!
+            NoContent
           end
         end
       end
