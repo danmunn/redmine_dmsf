@@ -81,7 +81,7 @@ class DmsfFile < ActiveRecord::Base
   before_create :default_values
 
   def default_values
-    if (Setting.plugin_redmine_dmsf['dmsf_default_notifications'] == '1') && (!dmsf_folder || !dmsf_folder.system)
+    if Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present? && (!dmsf_folder || !dmsf_folder.system)
       self.notification = true
     end
   end

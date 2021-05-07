@@ -123,7 +123,7 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def default_values
-    if Setting.plugin_redmine_dmsf['dmsf_default_notifications'] == '1' && !system
+    if Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present? && !system
       self.notification = true
     end
   end

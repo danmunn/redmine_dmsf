@@ -73,7 +73,7 @@ module RedmineDmsf
 
       def set_default_dmsf_notification
         if self.new_record?
-          if !self.dmsf_notification && (Setting.plugin_redmine_dmsf['dmsf_default_notifications'] == '1')
+          if !self.dmsf_notification && Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
             self.dmsf_notification = true
           end
         end
