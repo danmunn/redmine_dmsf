@@ -246,6 +246,10 @@ div[id*="revision_access_"] {
     text-align: left;
 }
 
+.dmsf-row-control {
+    float: left;
+}
+
 /* DMSF file upload */
 .dmsf-uploader {
     padding:10px;
