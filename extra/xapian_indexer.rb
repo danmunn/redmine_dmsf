@@ -109,9 +109,8 @@ log "Trying to load Redmine environment <<#{$environment}>>..."
 
 begin
  require $environment
-rescue LoadError
-  log "Redmine #{$environment} cannot be loaded!! Be sure the redmine installation directory is correct!", true
-  log 'Edit script and correct path', true
+rescue LoadError => e
+  log e.message, true
   exit 1
 end
 
