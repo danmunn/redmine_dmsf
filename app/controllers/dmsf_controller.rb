@@ -47,7 +47,11 @@ class DmsfController < ApplicationController
   include DmsfQueriesHelper
 
   def permissions
-    render_403 unless DmsfFolder.permissions?(@folder, false)
+    if !DmsfFolder.permissions?(@folder, false)
+      render_403
+    elsif(@folder && (@folder.project != @project))
+      render_404
+    end
     true
   end
 

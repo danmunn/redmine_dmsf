@@ -250,10 +250,9 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_show_folder_doesnt_correspond_the_project
-    # Despite the fact that project != @folder3.project
     assert @project1 != @folder3.project
     get :show, params: { id: @project1.id, folder_id: @folder3.id }
-    assert_response :success
+    assert_response :not_found
   end
 
   def test_new_forbidden
