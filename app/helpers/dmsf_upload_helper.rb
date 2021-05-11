@@ -207,7 +207,6 @@ module DmsfUploadHelper
 
   # 1 -> 1, -65 -> A
   def self.gui_version(version)
-    version = version.to_i # catch the case where version is a BigDecimal
     return version if version >= 0
     (-version).chr
   end
