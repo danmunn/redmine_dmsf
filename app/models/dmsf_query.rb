@@ -189,6 +189,14 @@ class DmsfQuery < Query
   end
 
   private
+  
+  def get_integer_type
+    if Redmine::Database.mysql?
+      ActiveRecord::Base.connection.type_to_sql(:signed)
+    else
+      ActiveRecord::Base.connection.type_to_sql(:integer)
+    end
+  end
 
   def dmsf_projects_scope
     return nil unless sub_projects
@@ -199,20 +207,20 @@ class DmsfQuery < Query
     scope = Project.select(%{
       projects.id AS id,
       projects.id AS project_id,
-      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
+      CAST(NULL AS #{get_integer_type}) AS revision_id,
       projects.name AS title,
       projects.identifier AS filename,
-      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
+      CAST(NULL AS #{get_integer_type}) AS size,
       projects.updated_on AS updated,
-      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
-      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
-      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
-      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
+      CAST(NULL AS #{get_integer_type}) AS major_version,
+      CAST(NULL AS #{get_integer_type}) AS minor_version,
+      CAST(NULL AS #{get_integer_type}) AS workflow,
+      CAST(NULL AS #{get_integer_type}) AS workflow_id,
       '' AS firstname,
       '' AS lastname,
-      CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS author,
+      CAST(NULL AS #{get_integer_type}) AS author,
       'project' AS type,
-      CAST(0 AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS deleted,
+      CAST(0 AS #{get_integer_type}) AS deleted,
       0 AS sort #{cf_columns}}).visible
     if dmsf_folder_id || deleted
       scope.none
@@ -230,15 +238,15 @@ class DmsfQuery < Query
     scope = DmsfFolder.select(%{
         dmsf_folders.id AS id,
         dmsf_folders.project_id AS project_id,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
+        CAST(NULL AS #{get_integer_type}) AS revision_id,
         dmsf_folders.title AS title,
         NULL AS filename,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
+        CAST(NULL AS #{get_integer_type}) AS size,
         dmsf_folders.updated_at AS updated,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
+        CAST(NULL AS #{get_integer_type}) AS major_version,
+        CAST(NULL AS #{get_integer_type}) AS minor_version,
+        CAST(NULL AS #{get_integer_type}) AS workflow,
+        CAST(NULL AS #{get_integer_type}) AS workflow_id,
         users.firstname AS firstname,
         users.lastname AS lastname,
         users.id AS author,
@@ -275,12 +283,12 @@ class DmsfQuery < Query
         dmsf_links.target_id AS revision_id,
         dmsf_links.name AS title,
         dmsf_folders.title AS filename,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
+        CAST(NULL AS #{get_integer_type}) AS size,
         COALESCE(dmsf_folders.updated_at, dmsf_links.updated_at) AS updated,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
+        CAST(NULL AS #{get_integer_type}) AS major_version,
+        CAST(NULL AS #{get_integer_type}) AS minor_version,
+        CAST(NULL AS #{get_integer_type}) AS workflow,
+        CAST(NULL AS #{get_integer_type}) AS workflow_id,
         users.firstname AS firstname,
         users.lastname AS lastname,
         users.id AS author,
@@ -387,15 +395,15 @@ class DmsfQuery < Query
     scope = DmsfLink.select(%{
         dmsf_links.id AS id,
         dmsf_links.project_id AS project_id,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS revision_id,
+        CAST(NULL AS #{get_integer_type}) AS revision_id,
         dmsf_links.name AS title,
         dmsf_links.external_url AS filename,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS size,
+        CAST(NULL AS #{get_integer_type}) AS size,
         dmsf_links.updated_at AS updated,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS major_version,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS minor_version,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow,
-        CAST(NULL AS #{ActiveRecord::Base.connection.type_to_sql(:decimal)}) AS workflow_id,
+        CAST(NULL AS #{get_integer_type}) AS major_version,
+        CAST(NULL AS #{get_integer_type}) AS minor_version,
+        CAST(NULL AS #{get_integer_type}) AS workflow,
+        CAST(NULL AS #{get_integer_type}) AS workflow_id,
         users.firstname AS firstname,
         users.lastname AS lastname,
         users.id AS author,
