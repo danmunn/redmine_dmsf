@@ -1,6 +1,14 @@
 Changelog for Redmine DMSF
 ==========================
 
+2.4.7 *2021-05-12*
+------------------
+
+    Bug fixes
+
+* Bug: #1251 DMSF Security Vulnerability
+* Bug: 1249 Fix Version field interpreting int as BigDecimal
+
 2.4.6 *2021-04-30*
 ------------------
 
