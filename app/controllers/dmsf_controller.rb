@@ -49,7 +49,7 @@ class DmsfController < ApplicationController
   def permissions
     if !DmsfFolder.permissions?(@folder, false)
       render_403
-    elsif(@folder && (@folder.project != @project))
+    elsif(@folder && @project && (@folder.project != @project))
       render_404
     end
     true
