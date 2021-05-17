@@ -40,7 +40,7 @@ def dmsf_init
   # Main menu extension
   Redmine::MenuManager.map :top_menu do |menu|
     menu.push :dmsf, { controller: 'dmsf', action: 'index' }, caption: :menu_dmsf,
-              html: { class: 'icon-dmsf' },
+              html: { class: 'icon-dmsf', category: :rest_extension_modules},
               if: Proc.new { User.current.allowed_to?(:view_dmsf_folders, nil, global: true) }
   end
 
