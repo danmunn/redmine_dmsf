@@ -36,7 +36,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml
     get "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}"
     assert_response :success
-    assert_equal 'application/xml', @response.content_type
+    assert @response.content_type.match?(/^application\/xml/)
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf_file>
     #   <id>1</id>
@@ -113,7 +113,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     #curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif
     post "/projects/#{@project1.id}/dmsf/upload.xml?filename=test.txt&key=#{@token.value}", params: 'File content', headers: { "CONTENT_TYPE" => 'application/octet-stream' }
     assert_response :created
-    assert_equal 'application/xml', response.content_type
+    assert @response.content_type.match?(/^application\/xml/)
     #<?xml version="1.0" encoding="UTF-8"?>
     # <upload>
     #   <token>2.8bb2564936980e92ceec8a5759ec34a8</token>
