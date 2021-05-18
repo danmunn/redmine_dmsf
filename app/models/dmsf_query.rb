@@ -189,6 +189,15 @@ class DmsfQuery < Query
   end
 
   private
+
+  def sub_query
+    case ActiveRecord::Base.connection.adapter_name.downcase
+    when 'sqlserver'
+      'dmsf_file_revisions.id = (SELECT TOP 1 r.id FROM dmsf_file_revisions r WHERE r.created_at = (SELECT MAX(created_at) FROM dmsf_file_revisions rr WHERE rr.dmsf_file_id = dmsf_files.id) AND r.dmsf_file_id = dmsf_files.id ORDER BY id DESC)'
+    else
+      'dmsf_file_revisions.id = (SELECT r.id FROM dmsf_file_revisions r WHERE r.created_at = (SELECT MAX(created_at) FROM dmsf_file_revisions rr WHERE rr.dmsf_file_id = dmsf_files.id) AND r.dmsf_file_id = dmsf_files.id ORDER BY id DESC LIMIT 1)'
+    end
+  end
   
   def get_integer_type
     if Redmine::Database.mysql?
@@ -196,6 +205,15 @@ class DmsfQuery < Query
     else
       ActiveRecord::Base.connection.type_to_sql(:integer)
     end
+  end
+
+  def get_cf_query(id, type, table)
+    if Redmine::Database.mysql? || Redmine::Database.sqlite?
+      aggr_func = 'GROUP_CONCAT(value)'
+    else
+      aggr_func = "STRING_AGG(value, ',')"
+    end
+    ",(SELECT #{aggr_func} FROM custom_values WHERE custom_field_id = #{id} AND customized_type = '#{type}' AND customized_id = #{table}.id GROUP BY custom_field_id) AS cf_#{id}"
   end
 
   def dmsf_projects_scope
@@ -233,7 +251,7 @@ class DmsfQuery < Query
   def dmsf_folders_scope
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
-      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
+      cf_columns << get_cf_query(id, 'DmsfFolder', 'dmsf_folders')
     end
     scope = DmsfFolder.select(%{
         dmsf_folders.id AS id,
@@ -275,7 +293,7 @@ class DmsfQuery < Query
     return nil unless project
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
-      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFolder' AND customized_id = dmsf_folders.id) AS cf_#{id}"
+      cf_columns << get_cf_query(id, 'DmsfFolder', 'dmsf_folders')
     end
     scope = DmsfLink.select(%{
         dmsf_links.id AS id,
@@ -312,7 +330,7 @@ class DmsfQuery < Query
     return nil unless project
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
-      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
+      cf_columns << get_cf_query(id, 'DmsfFileRevision', 'dmsf_file_revisions')
     end
     scope = DmsfFile.select(%{
         dmsf_files.id AS id,
@@ -350,7 +368,7 @@ class DmsfQuery < Query
     return nil unless project
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
-      cf_columns << ",(SELECT value from custom_values WHERE custom_field_id = #{id} AND customized_type = 'DmsfFileRevision' AND customized_id = dmsf_file_revisions.id) AS cf_#{id}"
+      cf_columns << get_cf_query(id, 'DmsfFileRevision', 'dmsf_file_revisions')
     end
     scope = DmsfLink.select(%{
         dmsf_links.id AS id,
@@ -420,15 +438,6 @@ class DmsfQuery < Query
         scope.where dmsf_links: { target_type: 'DmsfUrl', project_id: project.id, dmsf_folder_id: nil, deleted: deleted }
       end
     end
-  end
-
-  def sub_query
-    case ActiveRecord::Base.connection.adapter_name.downcase
-    when 'sqlserver'
-      'dmsf_file_revisions.id = (SELECT TOP 1 r.id FROM dmsf_file_revisions r WHERE r.created_at = (SELECT MAX(created_at) FROM dmsf_file_revisions rr WHERE rr.dmsf_file_id = dmsf_files.id) AND r.dmsf_file_id = dmsf_files.id ORDER BY id DESC)'
-    else
-      'dmsf_file_revisions.id = (SELECT r.id FROM dmsf_file_revisions r WHERE r.created_at = (SELECT MAX(created_at) FROM dmsf_file_revisions rr WHERE rr.dmsf_file_id = dmsf_files.id) AND r.dmsf_file_id = dmsf_files.id ORDER BY id DESC LIMIT 1)'
-   end
   end
 
 end
