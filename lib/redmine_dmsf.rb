@@ -74,6 +74,7 @@ require 'redmine_dmsf/hooks/views/custom_field_view_hooks'
 require 'redmine_dmsf/hooks/views/search_view_hooks'
 require 'redmine_dmsf/hooks/helpers/issues_helper_hooks'
 require 'redmine_dmsf/hooks/helpers/search_helper_hooks'
+require 'redmine_dmsf/hooks/helpers/project_helper_hooks'
 
 # Macros
 require 'redmine_dmsf/macros'
