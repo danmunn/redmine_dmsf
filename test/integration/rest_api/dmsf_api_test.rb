@@ -36,7 +36,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     # curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/projects/12/dmsf.xml
     get "/projects/#{@project1.id}/dmsf.xml?key=#{@token.value}"
     assert_response :success
-    assert_equal 'application/xml', @response.content_type
+    assert @response.content_type.match?(/^application\/xml/)
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf>
     #   <dmsf_nodes total_count="10" type="array">

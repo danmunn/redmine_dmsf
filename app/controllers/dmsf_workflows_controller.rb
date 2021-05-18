@@ -300,8 +300,8 @@ class DmsfWorkflowsController < ApplicationController
 
   def update
     if params[:dmsf_workflow]
-      res = @dmsf_workflow.update_attributes({ name: params[:dmsf_workflow][:name] }) if params[:dmsf_workflow][:name].present?
-      res = @dmsf_workflow.update_attributes({ status: params[:dmsf_workflow][:status] }) if params[:dmsf_workflow][:status].present?
+      res = @dmsf_workflow.update(name: params[:dmsf_workflow][:name]) if params[:dmsf_workflow][:name].present?
+      res = @dmsf_workflow.update(status: params[:dmsf_workflow][:status]) if params[:dmsf_workflow][:status].present?
       if res
         flash[:notice] = l(:notice_successful_update)
         if @project
