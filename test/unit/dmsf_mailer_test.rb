@@ -42,8 +42,10 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
     DmsfMailer.deliver_files_updated(@file1.project, [@file1])
     email = last_email
     if email # Sometimes it doesn't work. Especially on localhost.
-      assert text_part(email).body.include? @file1.project.name
-      assert html_part(email).body.include? @file1.project.name
+      body = text_part(email)&.body
+      assert(body.include?(@file1.project.name)) if body
+      body = html_part(email)&.body
+      assert(body.include?(@file1.project.name)) if body
     end
   end
 
@@ -51,8 +53,10 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
     DmsfMailer.deliver_files_deleted(@file1.project, [@file1])
     email = last_email
     if email # Sometimes it doesn't work. Especially on localhost.
-      assert text_part(email).body.include? @file1.project.name
-      assert html_part(email).body.include? @file1.project.name
+      body = text_part(email)&.body
+      assert(body.include?(@file1.project.name)) if body
+      body = html_part(email)&.body
+      assert(body.include?(@file1.project.name)) if body
     end
   end
 
@@ -70,18 +74,22 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
     DmsfMailer.deliver_send_documents(@file1.project, email_params, @jsmith)
     email = last_email
     if email # Sometimes it doesn't work. Especially on localhost.
-      assert text_part(email).body.include? body
-      assert html_part(email).body.include? body
+      body = text_part(email)&.body
+      assert(body.include?(body)) if body
+      body = html_part(email)&.body
+      assert(body.include?(body)) if body
     end
   end
 
   def test_workflow_notification
     DmsfMailer.deliver_workflow_notification([@jsmith], @wf1, @rev2, :text_email_subject_started,
-     :text_email_started, :text_email_to_proceed)
+                                             :text_email_started, :text_email_to_proceed)
     email = last_email
     if email # Sometimes it doesn't work. Especially on localhost.
-      assert text_part(email).body.include? l(:text_email_subject_started)
-      assert html_part(email).body.include? l(:text_email_subject_started)
+      body = text_part(email)&.body
+      assert(body.include?(l(:text_email_subject_started))) if body
+      body = html_part(email)&.body
+      assert(body.include?(l(:text_email_subject_started))) if body
     end
   end
 
@@ -101,5 +109,5 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
     users = DmsfMailer.get_notify_users(@project1, [@file1])
     assert users.blank?
   end
-  
+
 end
