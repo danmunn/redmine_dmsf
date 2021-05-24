@@ -56,8 +56,8 @@ module DAV4Rack
       end
     end
 
-    def render_lockdiscovery(options={})
-      render_xml ox_element(D_PROP, ox_element(D_LOCKDISCOVERY, activelock(options)))
+    def render_lockdiscovery(**options)
+      render_xml ox_element(D_PROP, ox_element(D_LOCKDISCOVERY, activelock(**options)))
     end
 
     #
@@ -81,24 +81,24 @@ module DAV4Rack
 
     private
 
-    def activelock(options)
+    def activelock(time: nil, token:, depth:, scope: nil, type: nil, owner: nil, root: nil)
       Ox::Element.new(D_ACTIVELOCK).tap do |activelock|
-        if options[:scope]
-          scope = Ox::Element.new("#{DAV_NAMESPACE_NAME}:#{options[:scope]}")
-          activelock << ox_element(D_LOCKSCOPE,  scope)
+        if scope
+          value = Ox::Element.new("#{DAV_NAMESPACE_NAME}:#{scope}")
+          activelock << ox_element(D_LOCKSCOPE,  value)
         end
-        if options[:type]
-          type = Ox::Element.new("#{DAV_NAMESPACE_NAME}:#{options[:type]}")
-          activelock << ox_element(D_LOCKTYPE, type)
+        if type
+          value = Ox::Element.new("#{DAV_NAMESPACE_NAME}:#{type}")
+          activelock << ox_element(D_LOCKTYPE, value)
         end
-        activelock << ox_element(D_DEPTH, options[:depth])
-        activelock << ox_element(D_TIMEOUT, (options[:time] ? "Second-#{options[:time]}" : INFINITY))
-        token = ox_element(D_HREF, options[:token])
-        activelock << ox_element(D_LOCKTOKEN, token)
-        activelock << ox_element(D_OWNER, options[:owner]) if options[:owner]
-        if options[:root]
-          root = ox_element(D_HREF, options[:root])
-          activelock << ox_element(D_LOCKROOT, root)
+        activelock << ox_element(D_DEPTH, depth)
+        activelock << ox_element(D_TIMEOUT, (time ? "Second-#{time}" : INFINITY))
+        value = ox_element(D_HREF, token)
+        activelock << ox_element(D_LOCKTOKEN, value)
+        activelock << ox_element(D_OWNER, owner) if owner
+        if root
+          value = ox_element(D_HREF, root)
+          activelock << ox_element(D_LOCKROOT, value)
         end
       end
     end
