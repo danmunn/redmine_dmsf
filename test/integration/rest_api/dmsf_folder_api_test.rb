@@ -99,7 +99,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_create_folder
-    #curl -v -H "Content-Type: application/xml" -X POST --data "@folder.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/create.xml
+    # curl -v -H "Content-Type: application/xml" -X POST --data "@folder.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/create.xml
     payload = %{<?xml version="1.0" encoding="utf-8" ?>
                 <dmsf_folder>
                   <title>rest_api</title>
@@ -114,6 +114,25 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #   <title>rest_api</title>
     # </dmsf_folder>
     assert_select 'dmsf_folder > title', text: 'rest_api'
+  end
+
+  def test_create_subfolder
+    # curl -v -H "Content-Type: application/xml" -X POST --data "@folder.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/create.xml
+    payload = %{<?xml version="1.0" encoding="utf-8" ?>
+                <dmsf_folder>
+                  <title>rest_api</title>
+                  <description>A folder created via REST API</description>
+                  <dmsf_folder_id>#{@folder1.id}</dmsf_folder_id>
+                </dmsf_folder>}
+    post "/projects/#{@project1.identifier}/dmsf/create.xml?key=#{@token.value}", params: payload, headers: { 'CONTENT_TYPE' => 'application/xml' }
+    assert_response :success
+    # <?xml version="1.0" encoding="UTF-8"?>
+    # <dmsf_folder>
+    #   <id>8</id>
+    #   <title>rest_api</title>
+    # </dmsf_folder>
+    assert_select 'dmsf_folder > title', text: 'rest_api'
+    assert @folder1.dmsf_folders.where(title: 'rest_api').exists?
   end
 
   def test_find_folder_by_title
