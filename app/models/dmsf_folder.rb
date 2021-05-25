@@ -94,7 +94,7 @@ class DmsfFolder < ActiveRecord::Base
   validates :title, presence: true, dmsf_file_name: true
   validates :project, presence: true
   validates_uniqueness_of :title, scope: [:dmsf_folder_id, :project_id, :deleted],
-    conditions: -> { where(deleted: STATUS_ACTIVE) }
+    conditions: -> { where(deleted: STATUS_ACTIVE) }, case_sensitive: true
   validates :description, length: { maximum: 65535 }
   validates :dmsf_folder, dmsf_folder_parent: true, if: Proc.new { |folder| !folder.new_record? }
 
@@ -468,7 +468,7 @@ class DmsfFolder < ActiveRecord::Base
     # Attributes
     self.title = params[:dmsf_folder][:title].strip
     self.description = params[:dmsf_folder][:description].strip
-    self.dmsf_folder_id = params[:dmsf_folder][:dmsf_folder_id]
+    self.dmsf_folder_id = params[:parent_id].present? ? params[:parent_id] : params[:dmsf_folder][:dmsf_folder_id]
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
       i = 0

@@ -246,7 +246,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_show_csv
     get :show, params: { id: @project1.id, format: 'csv' }
     assert_response :success
-    assert @response.content_type.match?(/^text\/csv/)
+    assert @response.media_type.include?('text/csv')
   end
 
   def test_show_folder_doesnt_correspond_the_project

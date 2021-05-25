@@ -55,7 +55,7 @@ class DmsfFile < ActiveRecord::Base
   validates :name, presence: true, dmsf_file_name: true
   validates :project, presence: true
   validates_uniqueness_of :name, scope: [:dmsf_folder_id, :project_id, :deleted],
-    conditions: -> { where(deleted: STATUS_ACTIVE) }
+    conditions: -> { where(deleted: STATUS_ACTIVE) }, case_sensitive: true
 
   acts_as_event title: Proc.new { |o| o.name },
                 description: Proc.new { |o|

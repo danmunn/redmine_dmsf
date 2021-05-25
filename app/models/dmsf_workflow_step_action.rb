@@ -29,7 +29,7 @@ class DmsfWorkflowStepAction < ActiveRecord::Base
   validates :author_id, presence: true
   validates :note, presence: true, unless: lambda { action == DmsfWorkflowStepAction::ACTION_APPROVE }
   validates_uniqueness_of :dmsf_workflow_step_assignment_id, scope: [:action],
-                          unless: lambda { action == DmsfWorkflowStepAction::ACTION_DELEGATE }
+                          unless: lambda { action == DmsfWorkflowStepAction::ACTION_DELEGATE }, case_sensitive: true
 
   ACTION_APPROVE = 1
   ACTION_REJECT = 2

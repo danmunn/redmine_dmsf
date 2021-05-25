@@ -29,7 +29,7 @@ class DmsfWorkflowStepAssignment < ActiveRecord::Base
 
   validates :dmsf_workflow_step, presence: true
   validates :dmsf_file_revision, presence: true
-  validates_uniqueness_of :dmsf_workflow_step_id, scope: [:dmsf_file_revision_id]
+  validates_uniqueness_of :dmsf_workflow_step_id, scope: [:dmsf_file_revision_id], case_sensitive: true
 
   def add?(dmsf_file_revision_id)
     if dmsf_file_revision_id == dmsf_file_revision_id

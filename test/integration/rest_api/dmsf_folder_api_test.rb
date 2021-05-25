@@ -36,7 +36,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml
     get "/projects/#{@project1.identifier}/dmsf.xml?key=#{@token.value}"
     assert_response :success
-    assert @response.content_type.match?(/^application\/xml/)
+    assert @response.media_type.include?('application/xml')
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf>
     #   <dmsf_nodes total_count="7" type="array">
@@ -58,7 +58,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
       #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml
       get "/projects/#{@project1.identifier}/dmsf.xml?key=#{@token.value}"
       assert_response :success
-      assert @response.content_type.match?(/^application\/xml/)
+      assert @response.media_type.include?('application/xml')
       # <?xml version="1.0" encoding="UTF-8"?>
       # <dmsf>
       #   <dmsf_nodes total_count="9" type="array">
@@ -81,7 +81,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} "http://localhost:3000/dmsf/files/17216.xml?limit=1&offset=1"
     get "/projects/#{@project1.identifier}/dmsf.xml?key=#{@token.value}&limit=1&offset=2"
     assert_response :success
-    assert @response.content_type.match?(/^application\/xml/)
+    assert @response.media_type.include?('application/xml')
     #   <?xml version="1.0" encoding="UTF-8"?>
     #   <dmsf>
     #     <dmsf_nodes total_count="1" type="array">
@@ -139,7 +139,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_title=Updated%20title
     get "/projects/#{@project1.identifier}/dmsf.xml?key=#{@token.value}&folder_title=#{@folder1.title}"
     assert_response :success
-    assert @response.content_type.match?(/^application\/xml/)
+    assert @response.media_type.include?('application/xml')
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf>
     #   <dmsf_folders total_count="1" type="array">
@@ -171,7 +171,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KE" http://localhost:3000/projects/1/dmsf.json?folder_id=3
     get "/projects/#{@project1.identifier}/dmsf.xml?key=#{@token.value}&folder_id=#{@folder1.id}"
     assert_response :success
-    assert @response.content_type.match?(/^application\/xml/)
+    assert @response.media_type.include?('application/xml')
     # <?xml version="1.0" encoding="UTF-8"?>
     # <dmsf>
     #   <dmsf_folders total_count="1" type="array">

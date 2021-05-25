@@ -30,7 +30,7 @@ class DmsfWorkflowStep < ActiveRecord::Base
   validates :step, presence: true
   validates :user, presence: true
   validates :operator, presence: true
-  validates_uniqueness_of :user_id, scope: [:dmsf_workflow_id, :step]
+  validates_uniqueness_of :user_id, scope: [:dmsf_workflow_id, :step], case_sensitive: true
   validates :name, length: { maximum: 30 }
 
   OPERATOR_OR  = 0

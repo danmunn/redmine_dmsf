@@ -56,10 +56,10 @@ class DmsfFileRevision < ActiveRecord::Base
   scope :deleted, -> { where(deleted: STATUS_DELETED) }
 
   acts_as_customizable
-  acts_as_event title: Proc.new {|o| (o.source_dmsf_file_revision_id.present? ? "#{l(:label_dmsf_updated)}" : "#{l(:label_created)}") +
+  acts_as_event title: Proc.new { |o| (o.source_dmsf_file_revision_id.present? ? "#{l(:label_dmsf_updated)}" : "#{l(:label_created)}") +
                                           ": #{o.dmsf_file.dmsf_path_str}"},
     url: Proc.new { |o| { controller: 'dmsf_files', action: 'show', id: o.dmsf_file } },
-    datetime: Proc.new {|o| o.updated_at },
+    datetime: Proc.new { |o| o.updated_at },
     description: Proc.new { |o| "#{o.description}\n#{o.comment}" },
     author: Proc.new { |o| o.user }
 
@@ -67,8 +67,8 @@ class DmsfFileRevision < ActiveRecord::Base
     timestamp: "#{DmsfFileRevision.table_name}.updated_at",
     author_key: "#{DmsfFileRevision.table_name}.user_id",
     permission: :view_dmsf_file_revisions,
-    scope: DmsfFileRevision.joins(:dmsf_file).
-      joins("JOIN #{Project.table_name} ON #{Project.table_name}.id = #{DmsfFile.table_name}.project_id").visible
+    scope: Proc.new { DmsfFileRevision.joins(:dmsf_file).
+      joins("JOIN #{Project.table_name} ON #{Project.table_name}.id = #{DmsfFile.table_name}.project_id").visible }
 
   validates :title, presence: true
   validates :major_version, presence: true

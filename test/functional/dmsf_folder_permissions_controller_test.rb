@@ -34,7 +34,7 @@ class DmsfFolderPermissionsControllerTest < RedmineDmsf::Test::TestCase
     get :new, params: { project_id: @project1, dmsf_folder_id: @folder7, format: 'js' }, xhr: true
     assert_response :success
     assert_template 'new'
-    assert @response.content_type.match?(/^text\/javascript/)
+    assert @response.media_type.include?('text/javascript')
   end
 
   def test_autocomplete_for_user
