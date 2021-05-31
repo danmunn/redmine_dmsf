@@ -56,8 +56,7 @@ module RedmineDmsf
             raise DmsfLockError.new(l(:error_parent_locked))
           else
             existing.each do |l|
-              #if l.user.id == User.current.id
-              if (l.user.id == User.current.id) && (owner.nil? || (owner == l.owner))
+              if (l.user.id == User.current.id) && (owner.nil? || (owner.downcase == l.owner&.downcase))
                 raise DmsfLockError.new(l(:error_resource_locked))
               end
             end
@@ -99,10 +98,10 @@ module RedmineDmsf
           owner = args[:owner] if args
           owner ||= User.current&.login if lock.owner
           if lock.lock_scope == :scope_exclusive
-            return true if (lock.user&.id != User.current.id) || (lock.owner != owner)
+            return true if (lock.user&.id != User.current.id) || (lock.owner&.downcase != owner&.downcase)
           else
             shared = true if shared.nil?
-            if shared && (lock.user&.id == User.current.id) && (lock.owner == owner) ||
+            if shared && (lock.user&.id == User.current.id) && (lock.owner&.downcase == owner&.downcase) ||
               (args && (args[:scope] == 'shared'))
               shared = false
             end
@@ -132,7 +131,7 @@ module RedmineDmsf
         else
           existing.each do |lock|
             owner = User.current&.login if lock.owner && owner.nil?
-            if ((lock.user&.id == User.current.id) && (lock.owner == owner)) || User.current.admin?
+            if ((lock.user&.id == User.current.id) && (lock.owner&.downcase == owner&.downcase)) || User.current.admin?
               lock.destroy
               destroyed = true
               break
