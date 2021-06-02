@@ -640,7 +640,7 @@ class DmsfController < ApplicationController
         recipients = DmsfMailer.deliver_files_deleted(@project, deleted_files)
         if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
           if recipients.any?
-            to = recipients.collect{ |r| h(r.name) }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+            to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
             to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
             flash[:warning] = l(:warning_email_notifications, to: to)
           end
@@ -650,7 +650,7 @@ class DmsfController < ApplicationController
       end
     end
     unless not_deleted_files.empty?
-      flash[:warning] = l(:warning_some_entries_were_not_deleted, entries: not_deleted_files.map{ |f| h(f.title) }.
+      flash[:warning] = l(:warning_some_entries_were_not_deleted, entries: not_deleted_files.map{ |f| f.title }.
           join(', '))
     end
     # Links

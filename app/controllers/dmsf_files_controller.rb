@@ -150,7 +150,7 @@ class DmsfFilesController < ApplicationController
         @file.name = revision.name
 
         if revision.save
-          revision.assign_workflow(params[:dmsf_workflow_id])
+          revision.assign_workflow params[:dmsf_workflow_id]
           if upload
             begin
               FileUtils.mv upload.tempfile_path, revision.disk_file(false)
@@ -178,7 +178,7 @@ class DmsfFilesController < ApplicationController
               recipients = DmsfMailer.deliver_files_updated(@project, [@file])
               if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
                 if recipients.any?
-                  to = recipients.collect{ |r| h(r.name) }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+                  to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                   to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
                   flash[:warning] = l(:warning_email_notifications, to: to)
                 end
@@ -208,7 +208,7 @@ class DmsfFilesController < ApplicationController
             recipients = DmsfMailer.deliver_files_deleted(@project, [@file])
             if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
               if recipients.any?
-                to = recipients.collect{ |r| h(r.name) }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+                to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                 to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
                 flash[:warning] = l(:warning_email_notifications, to: to)
               end

@@ -84,7 +84,7 @@ class DmsfWorkflowsController < ApplicationController
                     :text_email_to_see_history)
                 if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
                   unless recipients.blank?
-                    to = recipients.collect{ |r| h(r.name) }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+                    to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                     to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
                     flash[:warning] = l(:warning_email_notifications, to: to)
                   end
@@ -105,7 +105,7 @@ class DmsfWorkflowsController < ApplicationController
                     action.note)
                 if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
                   unless recipients.blank?
-                    to = recipients.collect{ |r| h(r.name) }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+                    to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                     to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
                     flash[:warning] = l(:warning_email_notifications, to: to)
                   end
@@ -126,7 +126,7 @@ class DmsfWorkflowsController < ApplicationController
                     action.note,
                     action.dmsf_workflow_step_assignment.dmsf_workflow_step)
                   if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
-                    flash[:warning] = l(:warning_email_notifications, to: h(delegate.name))
+                    flash[:warning] = l(:warning_email_notifications, to: delegate.name)
                   end
                 end
               else
@@ -164,7 +164,7 @@ class DmsfWorkflowsController < ApplicationController
                       recipients.uniq!
                       recipients = recipients & DmsfMailer.get_notify_users(@project, [revision.dmsf_file], true)
                       unless recipients.empty?
-                        to = recipients.collect{ |r| h(r.name) }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
+                        to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                         to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
                         flash[:warning] = l(:warning_email_notifications, to: to)
                       end
