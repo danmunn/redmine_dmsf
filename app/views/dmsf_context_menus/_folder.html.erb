@@ -37,7 +37,7 @@
 <% end %>
 <li>
   <% if locked %>
-    <%= context_menu_link l(:button_unlock), unlock_dmsf_path(id: dmsf_folder, folder_id: dmsf_folder),
+    <%= context_menu_link l(:button_unlock), unlock_dmsf_path(id: dmsf_folder.project, folder_id: dmsf_folder),
                           title: l(:title_locked_by_user, user: dmsf_folder.locked_by),
                           class: 'icon icon-unlock', disabled: !allowed || !unlockable %>
   <% else %>
