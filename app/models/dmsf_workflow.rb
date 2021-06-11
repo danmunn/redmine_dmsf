@@ -223,8 +223,7 @@ class DmsfWorkflow < ActiveRecord::Base
         assignments.first&.dmsf_workflow_step)
     if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && controller
       unless recipients.blank?
-        to = recipients.collect{ |r| controller.__send__(:h, r.name) }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(
-          ', ')
+        to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
         to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
         controller.flash[:warning] = l(:warning_email_notifications, to: to)
       end
