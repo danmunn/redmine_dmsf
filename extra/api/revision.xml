@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dmsf_file_revision>
+        <title>test</title>
+        <name>test.sql</name>
+        <description>SQL script</description>
+        <comment>REST API</comment>
+        <custom_field_values>
+                <custom_field_value1>Validation</custom_field_value1>
+        </custom_field_values>
+</dmsf_file_revision>

@@ -1,0 +1,3 @@
+api.dmsf_file_revision do
+  api.id @file.last_revision&.id
+end

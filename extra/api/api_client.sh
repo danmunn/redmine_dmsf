@@ -44,10 +44,13 @@
 #curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif
 #curl -v -H "Content-Type: application/xml" -X POST --data "@file.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/commit.xml
 
-# 5. List folder content & check folder existence (by folder title)
+# 5. Create a new revision
+#curl -v -H "Content-Type: application/xml" -X POST --data "@revision.xml" -u ${1}:${2} http://localhost:3000/dmsf/files/232565/revision/create.xml
+
+# 6. List folder content & check folder existence (by folder title)
 # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_title=Updated%20title
 
-# 6. List folder content & check folder existence (by folder id)
+# 7. List folder content & check folder existence (by folder id)
 # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_id=3
 # both returns 404 not found, or json with following structure:
 # {  
@@ -59,7 +62,7 @@
 #   }
 #}
 
-# 7. Update a folder
+# 8. Update a folder
 # curl -v -H "Content-Type: application/json" -X POST --data "@update-folder-payload.json" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000//projects/#{project_id}/dmsf/save.json?folder_id=#{folder_id}
 
 # update-folder-payload.json 
@@ -70,17 +73,17 @@
 #      },
 #    }
 
-# 8. Delete a folder
+# 9. Delete a folder
 # a) Move to trash only
 #  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/2387/dmsf/delete.xml?folder_id=#{folder_id}
 # b) Delete permanently
 #  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} "http://localhost:3000/projects/2387/dmsf/delete.xml?folder_id=#{folder_id}&commit=yes"
 
-# 9. Delete a file
+# 10. Delete a file
 # a) Move to trash only
 #  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
 # b) Delete permanently
 #  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml?commit=yes"
 
-# 10. Create a symbolic link
+# 11. Create a symbolic link
 # curl -v -H "Content-Type: application/xml" -X POST --data "@link.xml" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf_links.xml

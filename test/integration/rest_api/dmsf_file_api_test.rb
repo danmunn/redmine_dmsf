@@ -24,7 +24,7 @@ require File.expand_path('../../../test_helper', __FILE__)
 class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   include Redmine::I18n
 
-  fixtures :dmsf_files, :dmsf_file_revisions, :dmsf_locks
+  fixtures :dmsf_files, :dmsf_file_revisions, :dmsf_locks, :custom_fields
 
   def setup
     super
@@ -198,6 +198,30 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     assert_select 'errors > error', text: l(:title_locked_by_user, user: @admin_user.name)
     @file1.reload
     assert_equal DmsfFile::STATUS_ACTIVE, @file1.deleted
+  end
+
+  def test_create_revision
+    # curl -v -H "Content-Type: application/xml" -X POST --data "@revision.xml" -u ${1}:${2} http://localhost:3000/dmfs/files/1/revision/create.xml
+    payload = %{
+      <?xml version="1.0" encoding="utf-8" ?>
+      <dmsf_file_revision>
+        <title>#{@file1.name}</title>
+        <name>#{@file1.name}</name>
+        <description>SQL script</description>
+        <comment>REST API</comment>
+        <custom_field_values>
+          <custom_field_value>User documentation</custom_field_value>
+        </custom_field_values>
+      </dmsf_file_revision>
+    }
+    post "/dmsf/files/#{@file1.id}/revision/create.xml?key=#{@token.value}", params: payload,
+         headers: { 'CONTENT_TYPE' => 'application/xml' }
+    assert_response :success
+    # <?xml version="1.0" encoding="UTF-8"?>
+    # <dmsf_file_revision>
+    #   <id>293566</id>
+    # </dmsf_file_revision>
+    assert_select 'dmsf_file_revision > id', text: @file1.last_revision.id.to_s
   end
 
 end

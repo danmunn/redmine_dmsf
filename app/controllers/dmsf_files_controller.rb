@@ -30,7 +30,7 @@ class DmsfFilesController < ApplicationController
   before_action :authorize
   before_action :permissions
 
-  accept_api_auth :show, :view, :delete
+  accept_api_auth :show, :view, :delete, :create_revision
 
   helper :custom_fields
   helper :dmsf_workflows
@@ -100,9 +100,7 @@ class DmsfFilesController < ApplicationController
 
   def create_revision
     if params[:dmsf_file_revision]
-      if @file.locked_for_user?
-        flash[:error] = l(:error_file_is_locked)
-      else
+      unless @file.locked_for_user?
         revision = DmsfFileRevision.new
         revision.title = params[:dmsf_file_revision][:title]
         revision.name = params[:dmsf_file_revision][:name]
@@ -148,6 +146,7 @@ class DmsfFilesController < ApplicationController
         end
 
         @file.name = revision.name
+        ok = true
 
         if revision.save
           revision.assign_workflow params[:dmsf_workflow_id]
@@ -158,43 +157,48 @@ class DmsfFilesController < ApplicationController
               Rails.logger.error e.message
               flash[:error] = e.message
               revision.destroy
-              redirect_back_or_default dmsf_folder_path(id: @project.id, folder_id: @folder)
-              return
+              ok = false
             end
           end
-          if @file.locked? && !@file.locks.empty?
+          if ok && @file.locked? && !@file.locks.empty?
             begin
               @file.unlock!
               flash[:notice] = "#{l(:notice_file_unlocked)}, "
             rescue => e
               Rails.logger.error "Cannot unlock the file: #{e.message}"
+              ok = false
             end
           end
-          if @file.save
+          if ok && @file.save
             @file.set_last_revision revision
             Redmine::Hook.call_hook :dmsf_helper_upload_after_commit, { file: @file }
-            flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created)
             begin
               recipients = DmsfMailer.deliver_files_updated(@project, [@file])
               if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
                 if recipients.any?
                   to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
                   to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
-                  flash[:warning] = l(:warning_email_notifications, to: to)
                 end
               end
             rescue => e
               Rails.logger.error "Could not send email notifications: #{e.message}"
             end
-          else
-            flash[:error] = @file.errors.full_messages.to_sentence
           end
-        else
-          flash[:error] = revision.errors.full_messages.to_sentence
         end
       end
     end
-    redirect_back_or_default dmsf_folder_path(id: @project.id, folder_id: @folder)
+
+    respond_to do |format|
+      format.html do
+          flash[:error] = l(:error_file_is_locked) if @file.locked_for_user?
+          flash[:warning] = l(:warning_email_notifications, to: to) if to
+          flash[:error] = @file.errors.full_messages.to_sentence if @file.errors.any?
+          flash[:error] = revision.errors.full_messages.to_sentence if revision.errors.any?
+          flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created) if ok
+          redirect_back_or_default dmsf_folder_path(id: @project.id, folder_id: @folder)
+      end
+      format.api
+    end
   end
 
   def delete
