@@ -82,7 +82,7 @@ module RedmineDmsf
     def unlockable?
       return false unless self.locked?
       existing = self.lock(true)
-      # If its empty its a folder that's locked (not root)
+      # If it's empty, it's a folder that's locked (not root)
       (existing.empty? || (self.dmsf_folder&.locked?)) ? false : true
     end
 

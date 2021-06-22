@@ -216,6 +216,23 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a.icon-del.disabled', text: l(:button_delete)
   end
 
+  def test_dmsf_folder_locked_force_unlock_permission_off
+    @request.session[:user_id] = @dlopper.id
+    get :dmsf, params: { id: @folder2.project.id, ids: ["folder-#{@folder2.id}"] }
+    assert_response :success
+    # @folder2 is locked by @jsmith, therefore @dlopper can't unlock it
+    assert_select 'a.icon-unlock.disabled', text: l(:button_unlock)
+  end
+
+  def test_dmsf_folder_locked_force_unlock_permission_om
+    @request.session[:user_id] = @dlopper.id
+    @role_developer.add_permission! :force_file_unlock
+    get :dmsf, params: { id: @folder2.project.id, ids: ["folder-#{@folder2.id}"] }
+    assert_response :success
+    # @folder2 is locked by @jsmith, but @dlopper can unlock it
+    assert_select 'a.icon-unlock.disabled', text: l(:button_unlock), count: 0
+  end
+
   def test_dmsf_folder_notification_on
     @folder5.notify_activate
     get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
