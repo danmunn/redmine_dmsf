@@ -154,6 +154,10 @@ module RedmineDmsf
           response['Content-Type'] = 'text/html'
         else
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:view_dmsf_files, project)
+          http_if_none_match = request.get_header('HTTP_IF_NONE_MATCH')
+          if http_if_none_match.present? && (http_if_none_match == etag)
+            return NotModified # MS Office 2016, PROTECTED VIEW => Enable editing?
+          end
           response.body = download # Rack based provider
         end
         OK
@@ -185,7 +189,7 @@ module RedmineDmsf
         if file
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_delete, project)
           raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
-          raise Locked if file.locked?
+          raise Locked if file.locked_for_user?
           pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
           if pattern.present? && basename.match(pattern)
             # Files that are not versioned should be destroyed
