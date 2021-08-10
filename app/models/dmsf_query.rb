@@ -67,8 +67,13 @@ class DmsfQuery < Query
       columns = available_columns
       if columns
         columns.each do |column|
-          if DmsfFolder.is_column_on?(column.name.to_s)
-            @default_column_names << column.name.to_sym
+          if column.is_a?(QueryCustomFieldColumn)
+            name = column.custom_field.name
+          else
+            name = column.name.to_s
+          end
+          if DmsfFolder.is_column_on?(name)
+            @default_column_names << column.name
           end
         end
       end
