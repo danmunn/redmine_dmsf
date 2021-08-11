@@ -127,7 +127,16 @@ class DmsfQuery < Query
         when 'title'
           next if (operator == '~') && v.join.empty?
         end
-        filters_clauses << '(' + sql_for_field(field, operator, v, queried_table_name, field) + ')'
+        if field =~ /cf_(\d+)$/
+          # custom field
+          sql_cf = +sql_for_custom_field(field, operator, v, $1)
+          sql_cf.gsub!('dmsf_folders.id  IN (SELECT dmsf_folders.id', 'dmsf_folders.customized_id  IN (SELECT dmsf_folders.customized_id');
+          sql_cf.gsub!("customized_type='DmsfFolder'", 'customized_type=dmsf_folders.customized_type')
+          sql_cf.gsub!('customized_id=dmsf_folders.id', 'customized_id=dmsf_folders.customized_id')
+          filters_clauses << sql_cf
+        else
+          filters_clauses << '(' + sql_for_field(field, operator, v, queried_table_name, field) + ')'
+        end
       end
       filters_clauses.reject!(&:blank?)
       @statement = filters_clauses.any? ? filters_clauses.join(' AND ') : nil
@@ -244,7 +253,9 @@ class DmsfQuery < Query
       CAST(NULL AS #{get_integer_type}) AS author,
       'project' AS type,
       CAST(0 AS #{get_integer_type}) AS deleted,
-      0 AS sort #{cf_columns}}).visible
+      0 AS sort#{cf_columns},
+      '' as customized_type,
+      0 as customized_id}).visible
     if dmsf_folder_id || deleted
       scope.none
     else
@@ -275,7 +286,9 @@ class DmsfQuery < Query
         users.id AS author,
         'folder' AS type,
         dmsf_folders.deleted AS deleted,
-        1 AS sort #{cf_columns}}).
+        'DmsfFolder' AS customized_type,
+        dmsf_folders.id AS customized_id,
+        1 AS sort#{cf_columns}}).
       joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
     return scope.none unless project
     if deleted
@@ -317,7 +330,9 @@ class DmsfQuery < Query
         users.id AS author,
         'folder-link' AS type,
         dmsf_links.deleted AS deleted,
-        1 AS sort #{cf_columns}}).
+        'DmsfFolder' as customized_type,
+        dmsf_folders.id as customized_id,
+        1 AS sort#{cf_columns}}).
       joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
       joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)')
     if dmsf_folder_id
@@ -354,7 +369,9 @@ class DmsfQuery < Query
         users.id AS author,
         'file' AS type,
         dmsf_files.deleted AS deleted,
-        2 AS sort #{cf_columns}}).
+        'DmsfFileRevision' as customized_type,
+        dmsf_file_revisions.id as customized_id,
+        2 AS sort#{cf_columns}}).
       joins(:dmsf_file_revisions).
       joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
       where(sub_query)
@@ -392,7 +409,9 @@ class DmsfQuery < Query
         users.id AS author,
         'file-link' AS type,
         dmsf_links.deleted AS deleted,
-        2 AS sort #{cf_columns}}).
+        'DmsfFileRevision' as customized_type,
+        dmsf_file_revisions.id as customized_id,
+        2 AS sort#{cf_columns}}).
       joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id').
       joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
       joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
@@ -432,7 +451,9 @@ class DmsfQuery < Query
         users.id AS author,
         'url-link' AS type,
         dmsf_links.deleted AS deleted,
-         2 AS sort #{cf_columns}}).
+        '' as customized_type,
+        0 as customized_id,
+        2 AS sort#{cf_columns}}).
       joins('LEFT JOIN users ON dmsf_links.user_id = users.id ')
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfUrl', dmsf_folder_id: dmsf_folder_id, deleted: deleted }
