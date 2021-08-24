@@ -172,9 +172,8 @@ class DmsfQuery < Query
       DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, name|
         order_option[1].gsub!("COALESCE(cf_#{id}.value, '')", "cf_#{id}")
       end
-      order_option[1].gsub!(',', " #{$1},")
       if order_option[1] =~ /(DESC|ASC)$/
-        order_option[1].gsub!(',', " #{$1},")
+         order_option[1].gsub!(',', " #{$1},")
       end
     end
 

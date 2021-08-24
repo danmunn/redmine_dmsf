@@ -49,26 +49,46 @@ module DmsfQueriesHelper
         content_tag(:span, '', class: 'icon icon-none')
     when :id
       case item.type
-      when 'file', 'file-link'
+      when 'file'
         if item&.deleted > 0
-          super column, item, value
+          h(value)
         else
           link_to h(value), dmsf_file_path(id: item.id)
         end
-      when 'folder', 'folder-link'
+      when 'file-link'
+        if item&.deleted > 0
+          h(item.revision_id)
+        else
+          link_to h(item.revision_id), dmsf_file_path(id: item.revision_id)
+        end
+      when 'folder'
         if item.id
           if item&.deleted > 0
-            super column, item, value
+            h(value)
           else
             link_to h(value), edit_dmsf_path(id: item.project_id, folder_id: item.id)
           end
         else
           if item&.deleted > 0
-            super column, item, item.project_id
+            h(item.project_id)
           else
             link_to h(item.project_id), edit_root_dmsf_path(id: item.project_id)
           end
-         end
+        end
+      when 'folder-link'
+        if item.id
+          if item&.deleted > 0
+            h(item.revision_id)
+          else
+            link_to h(item.revision_id), edit_dmsf_path(id: item.project_id, folder_id: item.revision_id)
+          end
+        else
+          if item&.deleted > 0
+            h(item.project_id)
+          else
+            link_to h(item.project_id), edit_root_dmsf_path(id: item.project_id)
+          end
+        end
       else
         h(value)
       end
