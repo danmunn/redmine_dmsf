@@ -27,15 +27,15 @@
 <div class="contextual">
   <% if User.current.allowed_to?(:folder_manipulation, @project) %>    
     <% if @project.dmsf_notification %>        
-      <%= link_to(l(:label_notifications_off), 
-        notify_deactivate_dmsf_path(id: @project),
+      <%= link_to l(:label_notifications_off),
+        notify_deactivate_dmsf_path(id: @project, back_url: edit_root_dmsf_path(id: @project)),
           title: l(:title_notifications_active_deactivate),
-          class: 'icon icon-email') %>
+          class: 'icon icon-email' %>
     <% else %>        
-      <%= link_to(l(:label_notifications_on),
-        notify_activate_dmsf_path(id: @project),
+      <%= link_to l(:label_notifications_on),
+        notify_activate_dmsf_path(id: @project, back_url: edit_root_dmsf_path(id: @project)),
           title: l(:title_notifications_active_deactivate),
-          class: 'icon icon-email-add') %>
+          class: 'icon icon-email-add' %>
     <% end %>  
   <% end %>
 </div>

@@ -263,7 +263,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
         step_action: DmsfWorkflowStepAction::ACTION_APPROVE,
         user_id: nil,
         note: ''})
-    assert_redirected_to dmsf_folder_path(id: @project1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1)
     assert DmsfWorkflowStepAction.where(
       dmsf_workflow_step_assignment_id: @wfsa2.id,
       action: DmsfWorkflowStepAction::ACTION_APPROVE).first
@@ -306,7 +306,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       dmsf_file_revision_id: @revision2.id,
       step_action: @admin.id * 10,
       note: 'Delegated because...'})
-    assert_redirected_to dmsf_folder_path(id: @project1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1)
     assert DmsfWorkflowStepAction.where(
       dmsf_workflow_step_assignment_id: @wfsa2.id,
       action: DmsfWorkflowStepAction::ACTION_DELEGATE).first
@@ -329,7 +329,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   def test_start
     @revision2.dmsf_workflow_id = @wf1.id
     get :start, params: { id: @revision2.dmsf_workflow_id, dmsf_file_revision_id: @revision2.id }
-    assert_redirected_to dmsf_folder_path(id: @project1.id)
+    assert_redirected_to dmsf_folder_path(id: @project1)
   end
 
   def test_assignment

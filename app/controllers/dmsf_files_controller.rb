@@ -195,7 +195,7 @@ class DmsfFilesController < ApplicationController
           flash[:error] = @file.errors.full_messages.to_sentence if @file.errors.any?
           flash[:error] = revision.errors.full_messages.to_sentence if revision.errors.any?
           flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created) if ok
-          redirect_back_or_default dmsf_folder_path(id: @project.id, folder_id: @folder)
+          redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
       end
       format.api
     end
@@ -229,7 +229,7 @@ class DmsfFilesController < ApplicationController
     end
     respond_to do |format|
       format.html do
-        redirect_to dmsf_folder_path(id: @project, folder_id: @folder)
+        redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
       end
       format.api { result ? render_api_ok : render_validation_errors(@file) }
     end
@@ -272,7 +272,7 @@ class DmsfFilesController < ApplicationController
         flash[:error] = e.message
       end
     end
-    redirect_back_or_default dmsf_folder_path(id: @project.id, folder_id: @folder)
+    redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
   end
 
   def unlock
@@ -290,7 +290,7 @@ class DmsfFilesController < ApplicationController
         flash[:error] = l(:error_only_user_that_locked_file_can_unlock_it)
       end
     end
-    redirect_back_or_default dmsf_folder_path(id: @project.id, folder_id: @folder)
+    redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
   end
 
   def notify_activate
@@ -300,7 +300,7 @@ class DmsfFilesController < ApplicationController
       @file.notify_activate
       flash[:notice] = l(:notice_file_notifications_activated)
     end
-    redirect_back_or_default dmsf_folder_path(id: @project.id, folder_id: @folder)
+    redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
   end
 
   def notify_deactivate
@@ -310,7 +310,7 @@ class DmsfFilesController < ApplicationController
       @file.notify_deactivate
       flash[:notice] = l(:notice_file_notifications_deactivated)
     end
-    redirect_back_or_default dmsf_folder_path(id: @project.id, folder_id: @folder)
+    redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
   end
 
   def restore
@@ -319,7 +319,7 @@ class DmsfFilesController < ApplicationController
     else
       flash[:error] = @file.errors.full_messages.to_sentence
     end
-    redirect_back_or_default dmsf_folder_path(id: @project.id, folder_id: @folder)
+    redirect_to trash_dmsf_path(@project)
   end
 
   def thumbnail

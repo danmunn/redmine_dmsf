@@ -22,7 +22,7 @@
 
 <h3 class="title"><%= l(:label_email_address_add) %></h3>
 
-<%= form_tag(append_email_dmsf_path(id: @project.id), remote: true, method: :post, id: 'new-user-form') do %>
+<%= form_tag(append_email_dmsf_path(id: @project), remote: true, method: :post, id: 'new-user-form') do %>
   <%= hidden_field_tag :project_id, @project.id %>
   <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>
   <%= late_javascript_tag "observeSearchfield('user_search', 'users_for_users', '#{ escape_javascript url_for(

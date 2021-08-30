@@ -35,6 +35,7 @@ class DmsfContextMenusController < ApplicationController
       @unlockable = @allowed && @dmsf_file.unlockable? && (!@dmsf_file.locked_for_user? ||
           User.current.allowed_to?(:force_file_unlock, @project))
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
+      @back_url = dmsf_folder_path(id: @project, folder_id: @dmsf_file.dmsf_folder)
     elsif @dmsf_folder
       @locked = @dmsf_folder.locked?
       @project = @dmsf_folder.project
@@ -42,12 +43,14 @@ class DmsfContextMenusController < ApplicationController
       @unlockable = @allowed && @dmsf_folder.unlockable? && (!@dmsf_folder.locked_for_user? ||
         User.current.allowed_to?(:force_file_unlock, @project))
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
+      @back_url = dmsf_folder_path(id: @project, folder_id: @dmsf_folder.dmsf_folder)
     elsif @dmsf_link # url link
       @locked = false
       @unlockable = false
       @project = @dmsf_link.project
       @allowed = User.current.allowed_to? :file_manipulation, @project
       @email_allowed = false
+      @back_url = dmsf_folder_path(id: @project, folder_id: @dmsf_link.dmsf_folder)
     else # multiple selection
       @project = get_project
       @locked = false
@@ -55,6 +58,7 @@ class DmsfContextMenusController < ApplicationController
       @allowed = User.current.allowed_to?(:file_manipulation, @project) &&
           User.current.allowed_to?(:folder_manipulation, @project)
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
+      @back_url = dmsf_folder_path(id: @project, folder_id: @dmsf_folder)
     end
     render layout: false
   rescue ActiveRecord::RecordNotFound

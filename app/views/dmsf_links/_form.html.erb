@@ -29,6 +29,7 @@
   <%= f.hidden_field :type, value: @type %>
   <%= f.hidden_field :dmsf_file_id, value: @dmsf_file_id %>
   <%= f.hidden_field(:container, value: @container) if @container %>
+  <%= hidden_field_tag 'back_url', @back_url %>
   <div class="box tabular">
     <% if (@type == 'link_from') && !@container %>
       <p>

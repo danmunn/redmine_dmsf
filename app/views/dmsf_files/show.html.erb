@@ -28,24 +28,28 @@
   <% if @file_manipulation_allowed %>
     <% if @file.locked_for_user? %>
       <% if User.current.allowed_to?(:force_file_unlock, @project) %>
-        <%= link_to_if @file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(id:  @file),
+        <%= link_to_if @file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(id:  @file,
+                       back_url: dmsf_file_path(id: @file)),
                        title: l(:title_unlock_file), class: 'icon icon-unlock' %>
       <% end %>
     <% else %>
       <% if @file.locked? %>
-        <%= link_to_if @file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(id: @file),
+        <%= link_to_if @file.unlockable?, l(:button_unlock), unlock_dmsf_files_path(id: @file,
+                       back_url: dmsf_file_path(id: @file)),
                        title: l(:title_unlock_file), class: 'icon icon-unlock' %>
       <% else %>
-        <%= link_to l(:button_lock), lock_dmsf_files_path(id: @file),
+        <%= link_to l(:button_lock), lock_dmsf_files_path(id: @file, back_url: dmsf_file_path(id: @file)),
                     title: l(:title_lock_file), class: 'icon icon-lock' %>
       <% end %>
       <% if defined?(EasyExtensions) %>
         <%= render partial: 'dmsf_context_menus/revisions',
-                   locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed } %>
+                   locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed,
+                             back_url: dmsf_file_path(id: @file)} %>
       <% else %>
         <%= actions_dropdown do %>
           <%= render partial: 'dmsf_context_menus/revisions',
-                     locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed } %>
+                     locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed,
+                               back_url: dmsf_file_path(id: @file) } %>
         <% end %>
       <% end %>
     <% end %>

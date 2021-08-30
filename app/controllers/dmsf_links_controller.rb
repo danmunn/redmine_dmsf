@@ -55,7 +55,9 @@ class DmsfLinksController < ApplicationController
     @dmsf_file_id = params[:dmsf_file_id]
     @type = params[:type]
     @dmsf_link.target_project_id = params[:project_id]
-    @target_folder_id = params[:dmsf_folder_id].to_i if params[:dmsf_folder_id].present?
+    #@target_folder_id = params[:dmsf_folder_id].to_i if params[:dmsf_folder_id].present?
+    @target_folder_id = nil
+    @back_url = params[:back_url]
     if @type == 'link_to'
       if @dmsf_file_id
         names = DmsfFile.where(id: @dmsf_file_id).pluck(:name)
@@ -151,13 +153,13 @@ class DmsfLinksController < ApplicationController
     respond_to do |format|
       format.html {
         if params[:dmsf_link][:type] == 'link_from'
-          redirect_to dmsf_folder_path(id: @project, folder_id: @dmsf_link.dmsf_folder_id)
+          redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @dmsf_link.dmsf_folder_id)
         else
           if params[:dmsf_link][:dmsf_file_id].present?
             redirect_to dmsf_file_path(@dmsf_link.target_file)
           else
             folder = @dmsf_link.target_folder.dmsf_folder if @dmsf_link.target_folder
-            redirect_to dmsf_folder_path(id: @project, folder_id: folder)
+            redirect_back_or_default dmsf_folder_path(id: @project, folder_id: folder)
           end
         end
       }
@@ -186,8 +188,10 @@ class DmsfLinksController < ApplicationController
   def restore
     if @dmsf_link.restore
       flash[:notice] = l(:notice_dmsf_link_restored)
+    else
+      flash[:error] = @dmsf_link.errors.full_messages.to_sentence
     end
-    redirect_back_or_default dmsf_folder_path(id: @project.id, folder_id: @folder)
+    redirect_to trash_dmsf_path(@project)
   end
 
   private

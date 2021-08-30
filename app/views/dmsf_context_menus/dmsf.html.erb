@@ -24,16 +24,17 @@
   <% if @dmsf_file %>
     <%= render partial: 'file', locals: { project: @project, folder: @folder, dmsf_file: @dmsf_file,
                                           dmsf_link: @dmsf_link, locked: @locked, unlockable: @unlockable,
-                                          allowed: @allowed, email_allowed: @email_allowed } %>
+                                          allowed: @allowed, email_allowed: @email_allowed, back_url: @back_url } %>
   <% elsif @dmsf_folder %>
     <%= render partial: 'folder', locals: { project: @project, folder: @folder, dmsf_folder: @dmsf_folder,
                                             dmsf_link: @dmsf_link, locked: @locked, unlockable: @unlockable,
-                                            allowed: @allowed, email_allowed: @email_allowed } %>
+                                            allowed: @allowed, email_allowed: @email_allowed, edit: false,
+                                            back_url: @back_url } %>
   <% elsif @dmsf_link %>
-    <%= render partial: 'url', locals: { dmsf_link: @dmsf_link, allowed: @allowed } %>
+    <%= render partial: 'url', locals: { dmsf_link: @dmsf_link, allowed: @allowed, back_url: @back_url } %>
   <% else %>
     <%= render partial: 'multiple', locals: { project: @project, folder: @folder, allowed: @allowed,
-                                              email_allowed: @email_allowed } %>
+                                              email_allowed: @email_allowed, back_url: @back_url } %>
   <% end %>
 </ul>
 

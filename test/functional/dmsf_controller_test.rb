@@ -105,7 +105,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_equal 0, DmsfFolder.deleted.where(project_id: @project1.id).all.size
     assert_equal 0, DmsfFile.deleted.where(project_id: @project1.id).all.size
     assert_equal 0, DmsfLink.deleted.where(project_id: @project1.id).all.size
-    assert_redirected_to trash_dmsf_path(id: @project1.id)
+    assert_redirected_to trash_dmsf_path(id: @project1)
   end
 
   def test_empty_trash_forbidden
@@ -124,7 +124,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_delete_locked
     # Permissions OK but the folder is locked
-    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1.id, folder_id: @folder2.id)
+    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1, folder_id: @folder2.id)
     get :delete, params: { id: @project1, folder_id: @folder2.id, commit: false}
     assert_response :redirect
     assert_include l(:error_folder_is_locked), flash[:error]
@@ -154,7 +154,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_restore_ok
     # Permissions OK
-    @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1.id)
+    @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1)
     @folder1.deleted = 1
     @folder1.save
     get :restore, params: { id: @project1, folder_id: @folder1.id }
@@ -171,7 +171,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_delete_entries_ok
     # Permissions OK
-    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1.id)
+    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1)
     flash[:error] = nil
     get :entries_operation, params: { id: @project1, delete_entries: 'Delete',
         ids: ["folder-#{@folder7.id}", "file-#{@file1.id}", "file-link-#{@link2.id}"]}
@@ -181,7 +181,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_restore_entries
     # Restore
-    @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1.id)
+    @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1)
     flash[:error] = nil
     get :entries_operation, params: { id: @project1, restore_entries: 'Restore',
         ids: ["file-#{@file1.id}", "file-link-#{@link2.id}"]}

@@ -33,6 +33,7 @@ class DmsfFilesCopyController < ApplicationController
     @projects = DmsfFile.allowed_target_projects_on_copy
     @folders = DmsfFolder.directory_tree(@target_project, @folder)
     @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
+    @back_url = params[:back_url]
     render layout: !request.xhr?
   end
 
@@ -40,21 +41,19 @@ class DmsfFilesCopyController < ApplicationController
     new_file = @file.copy_to(@target_project, @target_folder)
     if new_file.nil? || new_file.errors.present?
       flash[:error] = new_file ? new_file.errors.full_messages.to_sentence : @file.errors.full_messages.to_sentence
-      redirect_to action: 'new', id: @file, target_project_id: @target_project, target_folder_id: @target_folder
-      return
+    else
+      flash[:notice] = l(:notice_successful_update)
     end
-    flash[:notice] = l(:notice_successful_update)
-    redirect_to dmsf_file_path(new_file)
+    redirect_back_or_default dmsf_folder_path(id: @file.project, folder_id: @file.dmsf_folder)
   end
 
   def move
-    unless @file.move_to(@target_project, @target_folder)
+    if @file.move_to(@target_project, @target_folder)
+      flash[:notice] = l(:notice_successful_update)
+    else
       flash[:error] = @file.errors.full_messages.to_sentence
-      redirect_to action: 'new', id: @file, target_project_id: @target_project, target_folder_id: @target_folder
-      return
     end
-    flash[:notice] = l(:notice_successful_update)
-    redirect_to dmsf_file_path(@file)
+    redirect_back_or_default dmsf_folder_path(id: @file.project, folder_id: @file.dmsf_folder)
   end
 
 private
