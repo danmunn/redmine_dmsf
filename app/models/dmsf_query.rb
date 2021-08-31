@@ -170,10 +170,10 @@ class DmsfQuery < Query
     order_option = ['sort', group_by_sort_order, (options[:order] || sort_clause[0])].flatten.reject(&:blank?)
     if order_option.size > 1
       DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, name|
-        order_option[1].gsub!("COALESCE(cf_#{id}.value, '')", "cf_#{id}")
+        order_option[1].gsub!("cf_#{id}.value", "cf_#{id}")
       end
-      if order_option[1] =~ /(DESC|ASC)$/
-         order_option[1].gsub!(',', " #{$1},")
+      if order_option[1] =~ /(firstname|major_version), (lastname|minor_version) (DESC|ASC)$/
+         order_option[1].gsub!(',', " #{$3},")
       end
     end
 
