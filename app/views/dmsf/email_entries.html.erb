@@ -32,6 +32,7 @@
   <%= hidden_field_tag 'email[files]', @email_params[:files].to_json %>
   <%= hidden_field_tag 'email[from]', @email_params[:from] %>
   <%= hidden_field_tag 'email[reply_to]', @email_params[:reply_to] %>
+  <%= hidden_field_tag 'back_url', @back_url %>
   <div class="box tabular">
     <p>
       <%= label_tag '', l(:label_email_from) %>

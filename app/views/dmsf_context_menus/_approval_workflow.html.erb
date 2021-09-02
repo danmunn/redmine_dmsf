@@ -36,25 +36,27 @@
           <% if allowed_minor %>
             <%= context_menu_link l(:title_approval), action_dmsf_workflow_path(project_id: project.id, id: wf.id,
                                 dmsf_workflow_step_assignment_id: assignment_id,
-                                dmsf_file_revision_id: dmsf_file.last_revision.id),
-                                remote: true, class: 'icon icon-ok', id: 'dmsf-cm-workflow',
-                                disabled: !assignments || !index %>
+                                dmsf_file_revision_id: dmsf_file.last_revision.id,
+                                back_url: back_url),
+                 remote: true, class: 'icon icon-ok', id: 'dmsf-cm-workflow',
+                 disabled: !assignments || !index %>
           <% else %>
             <%= context_menu_link l(:title_approval_minor), action_dmsf_workflow_path(project_id: project.id, id: wf.id,
                                 dmsf_workflow_step_assignment_id: assignment_id,
-                                dmsf_file_revision_id: dmsf_file.last_revision.id),
-                                remote: true, class: 'icon icon-ok', id: 'dmsf-cm-workflow',
-                                disabled: true %>
+                                dmsf_file_revision_id: dmsf_file.last_revision.id,
+                                back_url: back_url),
+                  remote: true, class: 'icon icon-ok', id: 'dmsf-cm-workflow',
+                  disabled: true %>
           <% end %>
       <% end %>
     <% when DmsfWorkflow::STATE_ASSIGNED %>
       <% if allowed_minor %>
         <%= context_menu_link l(:title_start), start_dmsf_workflow_path(id: dmsf_file.last_revision.dmsf_workflow_id,
-                            dmsf_file_revision_id: dmsf_file.last_revision.id),
+                            dmsf_file_revision_id: dmsf_file.last_revision.id, back_url: back_url),
                             class: 'icon icon-ok', disabled: !allowed %>
       <% else %>
         <%= context_menu_link l(:title_start_minor), start_dmsf_workflow_path(id: dmsf_file.last_revision.dmsf_workflow_id,
-                            dmsf_file_revision_id: dmsf_file.last_revision.id),
+                            dmsf_file_revision_id: dmsf_file.last_revision.id, back_url: back_url),
                             class: 'icon icon-ok', disabled: true %>
       <% end %>
     <% when DmsfWorkflow::STATE_APPROVED, DmsfWorkflow::STATE_REJECTED, DmsfWorkflow::STATE_OBSOLETE %>
@@ -62,12 +64,12 @@
     <% else %>
         <% if allowed_minor %>
             <%= context_menu_link l(:title_assignment), assign_dmsf_workflow_path(id: project.id, project_id: project.id,
-                              dmsf_file_revision_id: dmsf_file.last_revision.id),
+                              dmsf_file_revision_id: dmsf_file.last_revision.id, back_url: back_url),
                               remote: true, class: 'icon icon-ok', id: 'dmsf-cm-workflow',
                               disabled: locked || !workflows_available %>
         <% else %>
             <%= context_menu_link l(:title_assignment_minor), assign_dmsf_workflow_path(id: project.id, project_id: project.id,
-                              dmsf_file_revision_id: dmsf_file.last_revision.id),
+                              dmsf_file_revision_id: dmsf_file.last_revision.id, back_url: back_url),
                               remote: true, class: 'icon icon-ok', id: 'dmsf-cm-workflow',
                               disabled: true %>
         <% end %>

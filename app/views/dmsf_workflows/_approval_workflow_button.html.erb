@@ -30,7 +30,8 @@
                 <%= link_to '',
                             action_dmsf_workflow_path(project_id: project.id, id: wf.id,
                                                       dmsf_workflow_step_assignment_id: assignments[index].id,
-                                                      dmsf_file_revision_id: file.last_revision.id),
+                                                      dmsf_file_revision_id: file.last_revision.id,
+                                                      back_url: back_url),
                             title: l(:title_waiting_for_approval),
                             remote: true,
                             class: 'icon-only icon-ok' %>
@@ -44,7 +45,8 @@
         <% if User.current && (file.last_revision.dmsf_workflow_assigned_by_user == User.current) && wf %>
             <%= link_to '',
                         start_dmsf_workflow_path(id: file.last_revision.dmsf_workflow_id,
-                                                 dmsf_file_revision_id: file.last_revision.id),
+                                                 dmsf_file_revision_id: file.last_revision.id,
+                                                 back_url: back_url),
                         title: l(:label_dmsf_wokflow_action_start),
                         class: 'icon-only icon-ok' %>
         <% else %>
@@ -56,9 +58,11 @@
         <% if workflows_available %>
           <%= link_to '',
             dmsf_link_id ?
-              assign_dmsf_workflow_path(id: project.id, project_id: project.id, dmsf_link_id: dmsf_link_id) :
+              assign_dmsf_workflow_path(id: project.id, project_id: project.id, dmsf_link_id: dmsf_link_id,
+                                        back_url: back_url) :
               assign_dmsf_workflow_path(id: project.id, project_id: project.id,
-                                        dmsf_file_revision_id: file.last_revision.id),
+                                        dmsf_file_revision_id: file.last_revision.id,
+                                        back_url: back_url),
             title: l(:label_dmsf_wokflow_action_assign),
             remote: true,
             class: 'icon-only icon-ok' %>

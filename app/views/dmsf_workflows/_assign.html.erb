@@ -27,6 +27,7 @@
   <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>
   <%= hidden_field_tag :dmsf_link_id, params[:dmsf_link_id] %>
   <%= hidden_field_tag :attachment_id, params[:attachment_id] %>
+  <%= hidden_field_tag :back_url, params[:back_url] %>
   <p>
     <%= label_tag 'workflow', "#{l(:link_workflow)}:" %>
     <%= select_tag 'dmsf_workflow_id', dmsf_workflows_for_select(@project, nil)%>

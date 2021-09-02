@@ -215,7 +215,7 @@ class DmsfController < ApplicationController
     if params[:email][:to].strip.blank?
       flash[:error] = l(:error_email_to_must_be_entered)
     else
-      DmsfMailer.deliver_send_documents(@project, params[:email].permit!, User.current)
+      DmsfMailer.deliver_send_documents @project, params[:email].permit!, User.current
       if(File.exist?(params[:email][:zipped_content]))
         File.delete(params[:email][:zipped_content])
       else
@@ -223,7 +223,7 @@ class DmsfController < ApplicationController
       end
       flash[:notice] = l(:notice_email_sent, params[:email][:to])
     end
-    redirect_to dmsf_folder_path(id: @project, folder_id: @folder)
+    redirect_back_or_default(dmsf_folder_path(id: @project, folder_id: @folder))
   end
 
   def new
@@ -515,6 +515,7 @@ class DmsfController < ApplicationController
         "#{User.current.name} <#{User.current.mail}>",
       reply_to: Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
     }
+    @back_url = params[:back_url]
     render action: 'email_entries'
   rescue Exception
     raise

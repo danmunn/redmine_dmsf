@@ -25,6 +25,7 @@
 <%= form_tag({ controller: 'dmsf_workflows', action: 'new_action'}, method: :post, id: 'new-action-form') do %>
   <%= hidden_field_tag :dmsf_workflow_step_assignment_id, params[:dmsf_workflow_step_assignment_id] %>
   <%= hidden_field_tag :dmsf_file_revision_id, params[:dmsf_file_revision_id] %>
+  <%= hidden_field_tag :back_url, params[:back_url] %>
   <p>
     <label>
       <%= radio_button_tag 'step_action', DmsfWorkflowStepAction::ACTION_APPROVE, true, onclick: 'noteMandatory(false);' %>

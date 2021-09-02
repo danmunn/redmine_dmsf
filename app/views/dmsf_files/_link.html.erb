@@ -25,12 +25,12 @@
   <p>
 <% end %>
   <% file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: dmsf_file }) %>
-  <%= link_to(h(dmsf_file.title),
+  <%= link_to h(link ? link.name : dmsf_file.title),
     file_view_url,
     target: '_blank',
     class: "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
     title: h(dmsf_file.last_revision.try(:tooltip)),
-    'data-downloadurl' => "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}") %>
+    'data-downloadurl' => "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}" %>
   <% if dmsf_file.text? || dmsf_file.image? %>
       <%= link_to l(:button_view),
         file_view_url,
@@ -44,7 +44,7 @@
   <span class="dmsf_upload_select">
     <% # Details %>
     <% if User.current.allowed_to? :file_manipulation, dmsf_file.project %>
-      <%= link_to '', dmsf_file_path(id: dmsf_file),
+      <%= link_to '', dmsf_file_path(id: dmsf_file, back_url: issue_path(@issue)),
         title: l(:link_details, title: h(dmsf_file.last_revision.title)),
         class: 'icon-only icon-edit' %>
     <% else %>
@@ -52,15 +52,15 @@
     <% end %>
     <% # Email %>
     <%= link_to '', entries_operations_dmsf_path(id: dmsf_file.project_id, email_entries: 'email',
-      ids: ["file-#{dmsf_file.id}"]), method: :post, title: l(:heading_send_documents_by_email),
+      ids: ["file-#{dmsf_file.id}"], back_url: issue_path(@issue)), method: :post, title: l(:heading_send_documents_by_email),
       class: 'icon-only icon-email-disabled' %>
     <% # Lock %>
     <% if !dmsf_file.locked? %>
-      <%= link_to '', lock_dmsf_files_path(id: dmsf_file),
+      <%= link_to '', lock_dmsf_files_path(id: dmsf_file, back_url: issue_path(@issue)),
                   title: l(:title_lock_file),
                   class: 'icon-only icon-lock' %>
     <% elsif dmsf_file.unlockable? && (!dmsf_file.locked_for_user? || User.current.allowed_to?(:force_file_unlock, dmsf_file.project)) %>
-      <%= link_to '', unlock_dmsf_files_path(id: dmsf_file),
+      <%= link_to '', unlock_dmsf_files_path(id: dmsf_file, back_url: issue_path(@issue)),
                   title: dmsf_file.get_locked_title,
                   class: 'icon-only icon-unlock' %>
     <% else %>
@@ -69,18 +69,18 @@
     <% if !dmsf_file.locked? %>
       <% # Notifications %>
       <% if dmsf_file.notification %>
-        <%= link_to '', notify_deactivate_dmsf_files_path(id: dmsf_file),
+        <%= link_to '', notify_deactivate_dmsf_files_path(id: dmsf_file, back_url: issue_path(@issue)),
                     title: l(:title_notifications_active_deactivate),
                     class: 'icon-only icon-email' %>
       <% else %>
-        <%= link_to '', notify_activate_dmsf_files_path(id: dmsf_file),
+        <%= link_to '', notify_activate_dmsf_files_path(id: dmsf_file, back_url: issue_path(@issue)),
                     title: l(:title_notifications_not_active_activate),
                     class: 'icon-only icon-email-add' %>
       <% end %>
       <% # Delete %>
       <% if @issue.attributes_editable?  && User.current.allowed_to?(:file_delete, dmsf_file.project) %>
         <%= link_to '',
-                  link ? dmsf_link_path(link, commit: 'yes') : dmsf_file_path(id: dmsf_file, commit: 'yes'),
+                  link ? dmsf_link_path(link, commit: 'yes', back_url: issue_path(@issue)) : dmsf_file_path(id: dmsf_file, commit: 'yes', back_url: issue_path(@issue)),
                   data: { confirm: l(:text_are_you_sure) },
                   method: :delete,
                   title: l(:button_delete),
@@ -96,6 +96,6 @@
       locals: { file: dmsf_file,
          file_approval_allowed: User.current.allowed_to?(:file_approval, dmsf_file.project),
          workflows_available: DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', dmsf_file.project_id]).exists?,
-         project: dmsf_file.project, wf: wf, dmsf_link_id: nil } %>
+         project: dmsf_file.project, wf: wf, dmsf_link_id: nil, back_url: issue_path(@issue) } %>
   </span>
 </p>

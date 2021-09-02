@@ -215,8 +215,8 @@ class DmsfWorkflowsController < ApplicationController
         rescue => e
           flash[:error] = e.message
         end
-        redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
-        return
+        #redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
+        #return
       # DMS link (attached)
       elsif params[:dmsf_link_id].present?
         @dmsf_link_id = params[:dmsf_link_id]
@@ -226,12 +226,14 @@ class DmsfWorkflowsController < ApplicationController
         @attachment_id = params[:attachment_id]
         @dmsf_workflow_id = params[:dmsf_workflow_id]
       end
-     else
-      redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
-      return
+      #else
+      #redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
+      #return
     end
     respond_to do |format|
-      format.html
+      format.html {
+        redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
+      }
       format.js
     end
   end
@@ -261,7 +263,6 @@ class DmsfWorkflowsController < ApplicationController
 
   def new
     @dmsf_workflow = DmsfWorkflow.new
-
     # Reload
     if params[:dmsf_workflow] && params[:dmsf_workflow][:name].present?
       @dmsf_workflow.name = params[:dmsf_workflow][:name]
@@ -269,7 +270,6 @@ class DmsfWorkflowsController < ApplicationController
       names = DmsfWorkflow.where(id: params[:dmsf_workflow][:id]).pluck(:name)
       @dmsf_workflow.name = names.first
     end
-
     render layout: !request.xhr?
   end
 

@@ -30,6 +30,7 @@
     <% else %>
       <%= labelled_form_for(@revision, url: { action: 'create_revision', id: @file },
             html: { method: :post, multipart: true, id: 'new_revision_form' }) do |f| %>
+        <%= hidden_field_tag 'back_url', params[:back_url] %>
         <div class="clear">
           <div class="splitcontentleft">
             <p>              

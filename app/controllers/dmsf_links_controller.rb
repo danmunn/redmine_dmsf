@@ -55,13 +55,12 @@ class DmsfLinksController < ApplicationController
     @dmsf_file_id = params[:dmsf_file_id]
     @type = params[:type]
     @dmsf_link.target_project_id = params[:project_id]
-    #@target_folder_id = params[:dmsf_folder_id].to_i if params[:dmsf_folder_id].present?
     @target_folder_id = nil
     @back_url = params[:back_url]
     if @type == 'link_to'
       if @dmsf_file_id
-        names = DmsfFile.where(id: @dmsf_file_id).pluck(:name)
-        @dmsf_link.name = names.first if names.any?
+        f = DmsfFile.find_by(id: @dmsf_file_id)
+        @dmsf_link.name = f&.last_revision&.title
       else
         titles = DmsfFolder.where(id: @target_folder_id).pluck(:title)
         @dmsf_link.name = titles.first if titles.any?
@@ -156,7 +155,7 @@ class DmsfLinksController < ApplicationController
           redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @dmsf_link.dmsf_folder_id)
         else
           if params[:dmsf_link][:dmsf_file_id].present?
-            redirect_to dmsf_file_path(@dmsf_link.target_file)
+            redirect_back_or_default dmsf_file_path(@dmsf_link.target_file)
           else
             folder = @dmsf_link.target_folder.dmsf_folder if @dmsf_link.target_folder
             redirect_back_or_default dmsf_folder_path(id: @project, folder_id: folder)
