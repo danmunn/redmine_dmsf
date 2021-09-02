@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dmsf_link>
   <project_id>2387</project_id>
+  <dmsf_folder_id/>
   <type>link_from</type>
-  <dmsf_file_id/>
   <target_project_id>2387</target_project_id>
-  <target_folder_id>Documents</target_folder_id>
+  <target_folder_id/>
   <target_file_id>196119</target_file_id>
   <external_url/>
   <name>test</name>
