@@ -469,6 +469,7 @@ class DmsfFolder < ActiveRecord::Base
     self.title = params[:dmsf_folder][:title].strip
     self.description = params[:dmsf_folder][:description].strip
     self.dmsf_folder_id = params[:parent_id].present? ? params[:parent_id] : params[:dmsf_folder][:dmsf_folder_id]
+    self.system = params[:dmsf_folder][:system].present?
     # Custom fields
     if params[:dmsf_folder][:custom_field_values].present?
       i = 0
