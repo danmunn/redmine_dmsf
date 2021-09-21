@@ -55,7 +55,7 @@
   </tr>
 <% end %>
 
-<% unless query.deleted || @project.nil? %>
+<% unless query.deleted || query&.project.nil? %>
   <%= late_javascript_tag do %>
     $(function() {
       $("table.dmsf tr").removeClass("ui-draggable-dragging ui-droppable-active ui-droppable-hover ui-draggable-handle");
