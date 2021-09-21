@@ -301,7 +301,12 @@ class DmsfFileRevision < ActiveRecord::Base
     parts.size == 2 ? parts[0].to_i * 1000 + parts[1].to_i : 0
   end
 
-  def formatted_name(format)
+  def formatted_name(member)
+    if member&.dmsf_title_format.present?
+      format = member.dmsf_title_format
+    else
+      format = Setting.plugin_redmine_dmsf['dmsf_global_title_format']
+    end
     return name if format.blank?
     if name =~ /(.*)(\..*)$/
       filename = $1

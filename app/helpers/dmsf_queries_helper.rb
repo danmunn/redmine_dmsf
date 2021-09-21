@@ -154,7 +154,10 @@ module DmsfQueriesHelper
             tag = "<span class=\"dmsf-expander\"></span>".html_safe + tag
           end
         end
-        tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
+        member = Member.find_by(user_id: User.current.id, project_id: item.project_id)
+        revision = DmsfFileRevision.find_by(id: item.customized_id)
+        filename = revision ? revision.formatted_name(member) : item.filename
+        tag + content_tag('div', filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
       when 'url-link'
         if item&.deleted?
           tag = content_tag('span', value, class: 'icon dmsf-icon-link')

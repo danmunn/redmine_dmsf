@@ -62,15 +62,10 @@ class DmsfFilesController < ApplicationController
       access.action = DmsfFileRevisionAccess::DownloadAction
       access.save!
       member = Member.find_by(user_id: User.current.id, project_id: @file.project.id)
-      if member && !member.dmsf_title_format.nil? && !member.dmsf_title_format.empty?
-        title_format = member.dmsf_title_format
-      else
-        title_format = Setting.plugin_redmine_dmsf['dmsf_global_title_format']
-      end
       # IE has got a tendency to cache files
       expires_in(0.year, 'must-revalidate' => true)
       send_file @revision.disk_file,
-        filename: filename_for_content_disposition(@revision.formatted_name(title_format)),
+        filename: filename_for_content_disposition(@revision.formatted_name(member)),
         type: @revision.detect_content_type,
         disposition: params[:disposition].present? ? params[:disposition] : @revision.dmsf_file.disposition
     rescue DmsfAccessError => e

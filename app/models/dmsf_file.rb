@@ -453,12 +453,7 @@ class DmsfFile < ActiveRecord::Base
 
   def display_name
     member = Member.find_by(user_id: User.current.id, project_id: project_id)
-    if member && !member.dmsf_title_format.nil? && !member.dmsf_title_format.empty?
-      title_format = member.dmsf_title_format
-    else
-      title_format = Setting.plugin_redmine_dmsf['dmsf_global_title_format']
-    end
-    fname = formatted_name(title_format)
+    fname = formatted_name(member)
     if fname.length > 50
       return "#{fname[0, 25]}...#{fname[-25, 25]}"
     end
@@ -511,9 +506,9 @@ class DmsfFile < ActiveRecord::Base
     result
   end
 
-  def formatted_name(format)
+  def formatted_name(member)
     if last_revision
-      last_revision.formatted_name(format)
+      last_revision.formatted_name(member)
     else
       name
     end
