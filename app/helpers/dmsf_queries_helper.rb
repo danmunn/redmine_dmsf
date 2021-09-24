@@ -113,7 +113,13 @@ module DmsfQueriesHelper
           tag = content_tag('span', tag, class: 'icon icon-folder')
         end
         unless filter_any?
-          tag = "<span class=\"dmsf-expander\" onclick=\"dmsfToggle(this, '#{item.id}', null,'#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
+          path = expand_folder_dmsf_path
+          columns = params['c']
+          if columns.present?
+            path << '?'
+            path << columns.map{ |column| "c[]=#{column}" }.join('&')
+          end
+          tag = "<span class=\"dmsf-expander\" onclick=\"dmsfToggle(this, '#{item.id}', null,'#{escape_javascript(path)}')\"></span>".html_safe + tag
           tag = content_tag('div', tag, class: 'row-control dmsf-row-control')
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
@@ -123,7 +129,13 @@ module DmsfQueriesHelper
         else
           tag = link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'icon icon-folder')
           unless filter_any?
-            tag = "<span class=\"dmsf-expander\" onclick=\"dmsfToggle(this, '#{item.project.id}', '#{item.id}','#{escape_javascript(expand_folder_dmsf_path)}')\"></span>".html_safe + tag
+            path = expand_folder_dmsf_path
+            columns = params['c']
+            if columns.present?
+              path << '?'
+              path << columns.map{ |column| "c[]=#{column}" }.join('&')
+            end
+            tag = "<span class=\"dmsf-expander\" onclick=\"dmsfToggle(this, '#{item.project.id}', '#{item.id}','#{escape_javascript(path)}')\"></span>".html_safe + tag
             tag = content_tag('div', tag, class: 'row-control dmsf-row-control')
           end
         end
