@@ -1,6 +1,30 @@
 Changelog for Redmine DMSF
 ==========================
 
+2.4.8 *2021-10-08*
+------------------
+
+    REST API - Create a revision, updating custom fields
+    Bug fixes
+
+* Bug: #1290 - Column is not shown. GUI is not changed
+* Bug: #1284 - 500 Error when doing Approval Workflow related actions #1260
+* Bug: #1283 - Rest API: link file to an issue
+* Bug: #1282 - Current view changed after adding new revision
+* Bug: #1280 - Problem with editing an exisiting link
+* Bug: #1279 - Error when sorting on custom field
+* Bug: #1277 - Custom field not set as default column
+* Bug: #1272 - Document tagging/filtering: filter not working when tag has multiple values
+* Bug: #1267 - Document editing from a mounted folder in MS Excel 2016
+* Bug: #1265 - Cannot unlock a folder despite :force_file_unlock permission
+* Bug: #1262 - Redmine version dependency differs between readme.md and init.rb
+* Bug: #1260 - 500 Error when doing Approval Workflow related actions
+* Bug: #1258 - Unlock folder results in 403
+* Bug: #1255 - Sub Folder creation via REST API
+* Bug: #1254 - SQL Error when trying to list certain folders
+* Bug: #1252 - WebDAV error
+* New: #1245 - Update custom fields of a file with REST API
+
 2.4.7 *2021-05-12*
 ------------------
 
