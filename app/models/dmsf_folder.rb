@@ -273,7 +273,7 @@ class DmsfFolder < ActiveRecord::Base
     save
   end
 
-  def copy_to(project, folder)
+  def copy_to(project, folder, copy_files = true)
     new_folder = DmsfFolder.new
     new_folder.dmsf_folder = folder ? folder : nil
     new_folder.project = folder ? folder.project : project
@@ -291,14 +291,16 @@ class DmsfFolder < ActiveRecord::Base
       Rails.logger.error new_folder.errors.full_messages.to_sentence
       return new_folder
     end
-    dmsf_files.visible.find_each do |f|
-      f.copy_to project, new_folder
+    if copy_files
+      dmsf_files.visible.find_each do |f|
+        f.copy_to project, new_folder
+      end
+      dmsf_links.visible.find_each do |l|
+        l.copy_to project, new_folder
+      end
     end
     dmsf_folders.visible.find_each do |s|
-      s.copy_to project, new_folder
-    end
-    dmsf_links.visible.find_each do |l|
-      l.copy_to project, new_folder
+      s.copy_to project, new_folder, copy_files
     end
     dmsf_folder_permissions.find_each do |p|
       p.copy_to new_folder

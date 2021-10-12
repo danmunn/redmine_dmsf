@@ -80,16 +80,14 @@ module RedmineDmsf
       end
 
       def dmsf_count
-        file_count = DmsfFile.where(project_id: id).all.size +
-            DmsfLink.where(project_id: id, target_type: %(DmsfFile DmsfUrl)).all.size
-        folder_count = DmsfFolder.where(project_id: id).all.size +
-            DmsfLink.where(project_id: id, target_type: 'DmsfFolder').all.size
+        file_count = DmsfFile.visible.where(project_id: id).all.size
+        folder_count = DmsfFolder.visible.where(project_id: id).all.size
         { files: file_count, folders: folder_count }
       end
 
       # Simple yet effective approach to copying things
       def copy_dmsf(project)
-        copy_dmsf_folders project
+        copy_dmsf_folders project, true
         project.dmsf_files.visible.each do |f|
           f.copy_to self, nil
         end
@@ -101,9 +99,9 @@ module RedmineDmsf
         end
       end
 
-      def copy_dmsf_folders(project)
+      def copy_dmsf_folders(project, copy_files = false)
         project.dmsf_folders.visible.each do |f|
-          f.copy_to self, nil
+          f.copy_to self, nil, copy_files
         end
         project.folder_links.visible.each do |l|
           l.copy_to self, nil
