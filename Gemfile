@@ -23,7 +23,6 @@
 source 'https://rubygems.org' do
   gem 'zip-zip'
   gem 'uuidtools'
-  gem 'dalli'
   gem 'active_record_union'
 
   # Redmine extensions
