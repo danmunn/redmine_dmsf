@@ -1,10 +1,14 @@
 Changelog for Redmine DMSF
 ==========================
 
-2.4.9 *????-??-??*
+2.4.9 *2021-11-15*
 ------------------
 
-    Maintenance release
+    Project copying DMSF options fixed.
+    Dalli dependency removed.
+
+* Bug: #1297 - Redmine KO after dalli upgrade to 3.0
+* Bug: #1296 - "Copy folders only" doesn't work properly
 
 2.4.8 *2021-10-08*
 ------------------
