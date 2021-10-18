@@ -31,8 +31,8 @@ de:
   notice_file_locked: Datei gesperrt
   warning_file_not_locked: Datei nicht gesperrt
   notice_file_unlocked: Datei freigegeben
-  error_only_user_that_locked_file_can_unlock_it: Nur der Benutzer, der die Datei gesperrt hat, kann sie auch wieder
-    freigeben
+  error_only_user_that_locked_file_can_unlock_it: Nur der Benutzer, der die Datei gesperrt hat, kann sie auch wieder freigeben
+
   error_max_files_exceeded: "Grenze für %{number} gleichzeitig heruntergeladene Dateien überschritten"
   error_entry_project_does_not_match_current_project: Eingangsprojekt entspricht nicht aktuellem Projekt
 
@@ -47,7 +47,7 @@ de:
   notice_file_deleted: Datei gelöscht
   error_at_least_one_revision_must_be_present: Es muss mindestens eine Version existieren
   notice_revision_deleted: Version gelöscht
-  notice_revision_obsoleted: Revision veralted
+  notice_revision_obsoleted: Revision veraltet
   warning_one_of_files_locked: Eine der Dateien ist gesperrt
   notice_file_revision_created: Dateiversion erstellt
   notice_your_preferences_were_saved: Ihre Einstellungen wurden gespeichert
@@ -138,9 +138,9 @@ de:
   option_stem_none: NICHTS (Voreinstellung)
   option_stem_some: MANCHES
   option_stem_all: ALLES
-  text_stemming_info: "Dies kontrolliert wie der Parser den Stemming-Algorithmus anwendet. Der Standartwert ist 'NICHTS'. 
+  text_stemming_info: "Dies kontrolliert wie der Parser den Stemming-Algorithmus anwendet. Der Standardwert ist 'NICHTS'. 
     Die möglichen Werte sind: 'NICHTS' -  Kein Stemming anwenden, 'MANCHES' - Suche nach Stammformreduktionen von Begriffen
-    mit Ausnahme von Begriffen die mit Grossbuchstaben starten oder die bestimmte Zeichen enthalten ('/@<>=*[{\"'),
+    mit Ausnahme von Begriffen die mit Großbuchstaben starten oder die bestimmte Zeichen enthalten ('/@<>=*[{\"'),
     oder bei welchen mathematische Operatoren vorkommen. Begriffe in der Stammformreduktion weisen ein führendes 'Z' auf,
     'ALLES' - Suche nach allen Stammformreduktionen von sämtlichen Begriffen (Hinweis: es ist kein führendes 'Z' vorhanden)."
   label_default_notifications: Standardmäßige Dateibenachrichtigungen
@@ -241,7 +241,7 @@ de:
   label_dmsf_workflow_approval_plural: Genehmigungen
   label_dmsf_wokflow_action_approve: Genehmigen
   label_dmsf_wokflow_action_reject: Ablehnen
-  label_dmsf_wokflow_action_delegate: Deligieren an
+  label_dmsf_wokflow_action_delegate: Delegieren an
   label_dmsf_wokflow_action_assign: Weisen Sie einen Genehmigungs-Workflow zu
   label_dmsf_wokflow_action_start: Starte Genehmigungs-Workflow
   label_dmsf_workflow_add_approver: "Fügen Sie einen neuen Genehmiger mit einer logischen Funktion hinzu:"
@@ -250,7 +250,7 @@ de:
   label_note: Notiz
   title_none: Niemand
   title_rejection: Ablehnung
-  title_delegation: Deligierung
+  title_delegation: Delegierung
   title_assignment: Workflow starten
   title_start: Start
   title_dmsf_workflow_log: Genehmigungs-Workflow Verlauf
@@ -268,7 +268,7 @@ de:
   notice_workflow_started: Genehmigungs-Workflow gestartet
   text_email_subject_approved: genehmigt
   text_email_subject_rejected: abgelehnt
-  text_email_subject_delegated: deligiert
+  text_email_subject_delegated: delegiert
   text_email_subject_requires_approval: benötigt Ihre Genehmigung
   text_email_subject_updated: bearbeitet
   text_email_subject_started: gestartet
@@ -277,7 +277,7 @@ de:
   text_email_finished_rejected: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' ist
     abgeschlossen, aber die Datei wurde abgelehnt, weil: '%{notice}'."
   text_email_finished_delegated: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' wurde an
-    Sie deligiert, weil: '%{notice}' und weil Ihre Zustimmung im aktuellen Genehmigungsschritt benötigt wird."
+    Sie delegiert, weil: '%{notice}' und weil Ihre Zustimmung im aktuellen Genehmigungsschritt benötigt wird."
   text_email_finished_step: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat gerade einen
     Zustimmungsschritt abgeschlossen und im nächsten Genehmigungsschritt wird Ihre Zustimmung benötigt."
   text_email_finished_step_short: "Der Genehmigungs-Workflow '%{name}' zugewiesen an die Datei '%{filename}' hat gerade
@@ -407,18 +407,18 @@ de:
   dmsf_webdav_ignore_1b_file_for_authentication: Ignoriere 1b Datei für Authorisierung
   dmsf_webdav_ignore_1b_file_for_authentication_info: Total Commander WebDAV plugin
 
-  text_not_empty: Der Ordner ist nich leer.
+  text_not_empty: Der Ordner ist nicht leer.
   label_scroll_down: Runterscrollen
-  note_webdav_disabled: WebDAV is disabled. Contact the administrator.
+  note_webdav_disabled: WebDAV ist deaktiviert. Administrator kontaktieren.
 
   dmsf_copy: "Kopie (%{n})"
-  label_empty_trash_bin: Empty Trash
-  label_dmsf_projects_as_subfolders: Sub-projects as sub-folders
-  note_dmsf_projects_as_subfolders: Add sub-projects as sub-folders into DMS view
-  only_approval_zero_minor_version: Only approval zero minor version
-  title_assignment_minor: Assignment not allowed, minor must be zero
-  title_start_minor: Start not allowed, minor must be zero
-  title_approval_minor: Approval not allowed, minor must be zero
+  label_empty_trash_bin: Papierkorb leeren
+  label_dmsf_projects_as_subfolders: Unterprojekte als Unterordner
+  note_dmsf_projects_as_subfolders: Unterprojekte als Unterordner in die DMS View hinzufügen
+  only_approval_zero_minor_version: Genehmigungen nur für Unterversion Null
+  title_assignment_minor: Zuordnung nicht gestattet, Unterversion muss Null lauten
+  title_start_minor: Start nicht erlaubt, Unterversion muss Null lauten
+  title_approval_minor: Genehmigung nicht erlaubt, Unterversion muss Null lauten
 
   easy_pages:
     modules:
