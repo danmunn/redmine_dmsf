@@ -162,9 +162,9 @@ en:
   field_folder: Folder
   error_file_commit_require_uploaded_file: File commit require uploaded file
 
-  warning_some_files_were_not_commited: "Some files were not commited due to validation errors: %{files}"
+  warning_some_files_were_not_commited: "Some files were not committed due to validation errors: %{files}"
 
-  error_user_has_not_right_delete_folder: "User hasn't right to delete forders"
+  error_user_has_not_right_delete_folder: "User hasn't right to delete folders"
 
   error_user_has_not_right_delete_file: "User hasn't right to delete file"
 
@@ -231,7 +231,7 @@ en:
 
   error_unable_delete_dmsf_workflow: Unable to delete the workflow
   error_empty_note: "The note can't be empty"
-  error_workflow_assign: An error occured while assigning
+  error_workflow_assign: An error occurred while assigning
   error_cannot_start_workflow: "Workflow can't be started"
   error_cannot_renumber_steps: "Steps can't be renumbered"
   label_dmsf_workflow_new: New approval workflow
@@ -350,7 +350,7 @@ en:
   link_extension: Ext
 
   label_webdav_ignore: Ignored files patterns
-  note_webdav_ignore: A regular expresion with filenames to ignore by PUT requests.
+  note_webdav_ignore: A regular expression with filenames to ignore by PUT requests.
 
   label_document_url: Url
   label_last_revision_id: Revision
