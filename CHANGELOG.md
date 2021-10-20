@@ -1,10 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-2.4.10 *????-??-??*
+2.4.10 *2021-10-20*
 ------------------
 
-    Maintenance release
+    German and English localisation improvement
+
+* Bug: #1299 - Added missing phrases in German translation, corrected typos (DE, EN)
 
 2.4.9 *2021-11-15*
 ------------------
