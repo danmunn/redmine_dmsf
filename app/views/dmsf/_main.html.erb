@@ -60,19 +60,7 @@
 
 <%= render partial: 'path', locals: { folder: @folder, filename: nil, title: nil } %>
 
-<% if @project %>
-  <div class="dmsf-header">
-    <% if @wiki %>
-      <div class="wiki">
-        <%= textilizable @folder ? @folder.description : @project.dmsf_description %>
-      </div>
-    <% else %>
-      <div class="dmsf-description">
-        <%= h @folder ? @folder.description : @project.dmsf_description %>
-      </div>
-    <% end %>
-  </div>
-<% end %>
+<%= render partial: 'description' %>
 
 <%= form_tag(@project ? dmsf_folder_path(id: @project, folder_id: @folder) : dmsf_index_path,
              method: :get, id: 'query_form', class: 'dmsf-query-form') do %>

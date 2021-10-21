@@ -33,11 +33,7 @@
   </div>
 <% end %>
 
-<% if (@folder && @folder.description.present?) || @project.dmsf_description.present? %>
-  <div class="wiki">
-    <%= textilizable(@folder ? @folder.description : @project.dmsf_description) %>
-  </div>
-<% end %>
+<%= render partial: 'dmsf/description' %>
 
 <% unless @uploads.empty? %>
   <%= form_tag({ action: 'commit_files', id: @project, folder_id: @folder }, method: :post) do %>

@@ -29,6 +29,7 @@ class DmsfUploadController < ApplicationController
   before_action :authorize_global, only: [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
   before_action :find_folder, except: [:upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
   before_action :permissions, except: [:upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :wiki, only: [:multi_upload, :upload_files]
 
   helper :all
   helper :dmsf_workflows
@@ -41,7 +42,6 @@ class DmsfUploadController < ApplicationController
   end
 
   def upload_files
-    @wiki = Setting.text_formatting != 'HTML'
     uploaded_files = params[:dmsf_attachments]
     @uploads = []
     if uploaded_files
@@ -143,6 +143,10 @@ class DmsfUploadController < ApplicationController
     @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?('folder_id')
   rescue DmsfAccessError
     render_403
+  end
+
+  def wiki
+    @wiki = Setting.text_formatting != 'HTML'
   end
 
 end
