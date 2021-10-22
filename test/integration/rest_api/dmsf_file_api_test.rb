@@ -224,4 +224,36 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     assert_select 'dmsf_file_revision > id', text: @file1.last_revision.id.to_s
   end
 
+  def test_copy_document
+    #curl -v -H "Content-Type: application/xml" -X POST --data "@file_or_folder_copy_move.xml" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf/files/1/copy/copy.xml
+    payload = %{
+      <?xml version="1.0" encoding="utf-8" ?>
+      <dmsf_file_or_folder>
+        <target_project_id>#{@project1.id}</target_project_id>
+        <target_folder_id>#{@folder1.id}</target_folder_id>
+      </dmsf_file_or_folder>
+    }
+    assert_difference('@folder1.dmsf_files.count', 1) do
+      post "/dmsf/files/#{@file1.id}/copy/copy.xml?key=#{@token.value}", params: payload,
+           headers: { 'CONTENT_TYPE' => 'application/xml' }
+    end
+    assert_response :success
+  end
+
+  def test_move_document
+    #curl -v -H "Content-Type: application/xml" -X POST --data "@file_or_folder_copy_move.xml" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf/files/1/copy/move.xml
+    payload = %{
+      <?xml version="1.0" encoding="utf-8" ?>
+      <dmsf_file_or_folder>
+        <target_project_id>#{@project1.id}</target_project_id>
+        <target_folder_id>#{@folder1.id}</target_folder_id>
+      </dmsf_file_or_folder>
+    }
+    assert_difference('@folder1.dmsf_files.count', 1) do
+      post "/dmsf/files/#{@file1.id}/copy/move.xml?key=#{@token.value}", params: payload,
+           headers: { 'CONTENT_TYPE' => 'application/xml' }
+    end
+    assert_response :success
+  end
+
 end

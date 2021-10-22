@@ -25,12 +25,14 @@
     <%= hidden_field_tag 'back_url', back_url %>
     <div class="box tabular">
       <p>
-        <%= label_tag 'target_project_id', l(:field_target_project) %>
-        <%= select_tag 'target_project_id', project_tree_options_for_select(projects, selected: target_project) %>
+        <%= label_tag 'dmsf_file_or_folder[target_project_id]', l(:field_target_project) %>
+        <%= select_tag 'dmsf_file_or_folder[target_project_id]',
+                       project_tree_options_for_select(projects, selected: target_project) %>
       </p>
       <p>
-        <%= label_tag 'target_folder_id', l(:field_target_folder) %>
-        <%= select_tag 'target_folder_id', options_for_select(folders, selected: (target_folder.id if target_folder)) %>
+        <%= label_tag 'dmsf_file_or_folder[target_folder_id]', l(:field_target_folder) %>
+        <%= select_tag 'dmsf_file_or_folder[target_folder_id]',
+                       options_for_select(folders, selected: (target_folder.id if target_folder)) %>
       </p>
     </div>
     <p>

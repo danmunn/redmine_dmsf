@@ -37,20 +37,32 @@
 #curl -v -H "Content-Type: application/xml" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/17216.xml
 #curl -v -H "Content-Type: application/octet-stream" -X GET -u ${1}:${2} http://localhost:3000/dmsf/files/41532/download > file.txt
 
-# 3. Create a folder
-#curl -v -H "Content-Type: application/xml" -X POST --data "@folder.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/create.xml
-
-# 4. Upload a document into a given folder or the root folder
+# 3. Upload a document into a given folder or the root folder
 #curl --data-binary "@cat.gif" -H "Content-Type: application/octet-stream" -X POST -u ${1}:${2} http://localhost:3000/projects/12/dmsf/upload.xml?filename=cat.gif
 #curl -v -H "Content-Type: application/xml" -X POST --data "@file.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/commit.xml
 
-# 5. Create a new revision
+# 4. Create a new revision
 #curl -v -H "Content-Type: application/xml" -X POST --data "@revision.xml" -u ${1}:${2} http://localhost:3000/dmsf/files/232565/revision/create.xml
 
-# 6. List folder content & check folder existence (by folder title)
+# 5. Copy a document
+#curl -v -H "Content-Type: application/xml" -X POST --data "@file_or_folder_copy_move.xml" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf/files/233313/copy/copy.xml
+
+# 6. Move a document
+#curl -v -H "Content-Type: application/xml" -X POST --data "@file_or_folder_copy_move.xml" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf/files/233313/copy/move.xml
+
+# 7. Delete a document
+# a) Move to trash only
+#  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
+# b) Delete permanently
+#  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml?commit=yes"
+
+# 8. Create a folder
+#curl -v -H "Content-Type: application/xml" -X POST --data "@folder.xml" -u ${1}:${2} http://localhost:3000/projects/12/dmsf/create.xml
+
+# 9. List folder content & check folder existence (by folder title)
 # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_title=Updated%20title
 
-# 7. List folder content & check folder existence (by folder id)
+# 10. List folder content & check folder existence (by folder id)
 # curl -v -H "Content-Type: application/json" -X GET -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/projects/1/dmsf.json?folder_id=3
 # both returns 404 not found, or json with following structure:
 # {  
@@ -62,7 +74,7 @@
 #   }
 #}
 
-# 8. Update a folder
+# 11. Update a folder
 # curl -v -H "Content-Type: application/json" -X POST --data "@update-folder-payload.json" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000//projects/#{project_id}/dmsf/save.json?folder_id=#{folder_id}
 
 # update-folder-payload.json 
@@ -73,17 +85,17 @@
 #      },
 #    }
 
-# 9. Delete a folder
+# 12. Copy a folder
+#curl -v -H "Content-Type: application/xml" -X POST --data "@file_or_folder_copy_move.xml" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf/folders/53075/copy/copy.xml
+
+# 13. Move a folder
+#curl -v -H "Content-Type: application/xml" -X POST --data "@file_or_folder_copy_move.xml" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf/folders/53075/copy/move.xml
+
+# 14. Delete a folder
 # a) Move to trash only
 #  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/projects/2387/dmsf/delete.xml?folder_id=#{folder_id}
 # b) Delete permanently
 #  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} "http://localhost:3000/projects/2387/dmsf/delete.xml?folder_id=#{folder_id}&commit=yes"
 
-# 10. Delete a file
-# a) Move to trash only
-#  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
-# b) Delete permanently
-#  curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml?commit=yes"
-
-# 11. Create a symbolic link
+# 15. Create a symbolic link
 # curl -v -H "Content-Type: application/xml" -X POST --data "@link.xml" -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf_links.xml

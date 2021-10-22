@@ -29,31 +29,56 @@ class DmsfFilesCopyController < ApplicationController
   before_action :find_target_folder
   before_action :check_target_folder, only: [:copy, :move]
 
+  accept_api_auth :copy, :move
+
   def new
     @projects = DmsfFile.allowed_target_projects_on_copy
     @folders = DmsfFolder.directory_tree(@target_project, @folder)
-    @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
     @back_url = params[:back_url]
     render layout: !request.xhr?
   end
 
   def copy
     new_file = @file.copy_to(@target_project, @target_folder)
-    if new_file.nil? || new_file.errors.present?
+    failure = new_file.nil? || new_file.errors.present?
+    if failure
       flash[:error] = new_file ? new_file.errors.full_messages.to_sentence : @file.errors.full_messages.to_sentence
     else
       flash[:notice] = l(:notice_successful_update)
     end
-    redirect_back_or_default dmsf_folder_path(id: @file.project, folder_id: @file.dmsf_folder)
+    respond_to do |format|
+      format.html do
+        redirect_back_or_default dmsf_folder_path(id: @file.project, folder_id: @file.dmsf_folder)
+      end
+      format.api do
+        if failure
+          render_validation_errors(new_file ? new_file : @file)
+        else
+          render_api_ok
+        end
+      end
+    end
   end
 
   def move
-    if @file.move_to(@target_project, @target_folder)
+    success = @file.move_to(@target_project, @target_folder)
+    if success
       flash[:notice] = l(:notice_successful_update)
     else
       flash[:error] = @file.errors.full_messages.to_sentence
     end
-    redirect_back_or_default dmsf_folder_path(id: @file.project, folder_id: @file.dmsf_folder)
+    respond_to do |format|
+      format.html do
+        redirect_back_or_default dmsf_folder_path(id: @file.project, folder_id: @file.dmsf_folder)
+      end
+      format.api do
+        if success
+          render_api_ok
+        else
+          render_validation_errors @file
+        end
+      end
+    end
   end
 
 private
@@ -70,15 +95,18 @@ private
   end
 
   def find_target_folder
-    if params[:target_project_id].present?
-      @target_project = Project.find params[:target_project_id]
-    else
-      @target_project = @project
-    end
     if params[:target_folder_id].present?
-      @target_folder = DmsfFolder.visible.find(params[:target_folder_id])
-      raise ActiveRecord::RecordNotFound unless DmsfFolder.visible.where(id: params[:target_folder_id]).exists?
+      target_folder_id = params[:target_folder_id]
+    elsif params[:dmsf_file_or_folder] && params[:dmsf_file_or_folder][:target_folder_id].present?
+      target_folder_id = params[:dmsf_file_or_folder][:target_folder_id]
     end
+    @target_folder = DmsfFolder.visible.find(target_folder_id) if target_folder_id
+    if params[:target_project_id].present?
+      target_project_id = params[:target_project_id]
+    elsif params[:dmsf_file_or_folder] && params[:dmsf_file_or_folder][:target_project_id].present?
+      target_project_id = params[:dmsf_file_or_folder][:target_project_id]
+    end
+    @target_project = target_project_id ? Project.visible.find(target_project_id) : @project
   rescue ActiveRecord::RecordNotFound
     render_404
   end
@@ -87,11 +115,11 @@ private
     if (@target_folder && @target_folder == @file.dmsf_folder) ||
       (@target_folder.nil? && @file.dmsf_folder.nil? && @target_project == @file.project)
       flash[:error] = l(:error_target_folder_same)
-      redirect_to action: :new, id: @file, target_project_id: @target_project.id, target_folder_id: @target_folder
+      redirect_to action: :new, id: @file, target_project_id: @target_project&.id, target_folder_id: @target_folder
       return
     end
-    if (@target_folder && (@target_folder.locked_for_user? || !DmsfFolder.permissions?(@target_folder, false))) ||
-        !@target_project.allows_to?(:file_manipulation)
+    if (@target_folder && (@target_folder.locked_for_user? || !DmsfFolder.permissions?(@target_folder,
+     false))) || !@target_project.allows_to?(:file_manipulation)
       raise DmsfAccessError
     end
   rescue DmsfAccessError
