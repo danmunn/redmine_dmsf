@@ -35,7 +35,7 @@ def dmsf_init
   # Project menu extension
   Redmine::MenuManager.map :project_menu do |menu|
     menu.push :dmsf, { controller: 'dmsf', action: 'show' }, caption: :menu_dmsf, before: :documents,
-              param: :id
+              param: :id, html: { class: 'icon icon-dmsf' }
   end
   # Main menu extension
   Redmine::MenuManager.map :top_menu do |menu|

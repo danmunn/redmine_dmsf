@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require 'pstore'
-require 'webrick/httputils'
+#require 'webrick/httputils'
 require 'dav4rack/file_resource_lock'
 require 'dav4rack/security_utils'
 

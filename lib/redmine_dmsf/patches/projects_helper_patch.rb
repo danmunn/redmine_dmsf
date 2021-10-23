@@ -44,9 +44,6 @@ module RedmineDmsf
   end
 end
 
-if Redmine::Plugin.installed?(:easy_extensions)
-  RedmineExtensions::PatchManager.register_helper_patch 'ProjectsHelper',
-    'RedmineDmsf::Patches::ProjectHelperPatch', prepend: true
-else
+unless Redmine::Plugin.installed?(:easy_extensions)
   ProjectsController.send :helper, RedmineDmsf::Patches::ProjectHelperPatch
 end
