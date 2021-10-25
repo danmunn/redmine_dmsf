@@ -252,9 +252,9 @@ class DmsfQuery < Query
       CAST(NULL AS #{get_integer_type}) AS author,
       'project' AS type,
       CAST(0 AS #{get_integer_type}) AS deleted,
-      0 AS sort#{cf_columns},
       '' as customized_type,
-      0 as customized_id}).visible
+      0 as customized_id,
+      0 AS sort#{cf_columns}}).visible
     if dmsf_folder_id || deleted
       scope.none
     else
