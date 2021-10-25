@@ -10,8 +10,8 @@ module DAV4Rack
 
   class FileResource < Resource
 
-    include WEBrick::HTTPUtils
-    #include DAV4Rack::Utils
+    #include WEBrick::HTTPUtils
+    include DAV4Rack::Utils
 
     # If this is a collection, return the child resources.
     def children
