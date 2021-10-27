@@ -76,7 +76,9 @@ class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
     # dmsf_files
     file_folder_ids = DmsfFile.joins(:dmsf_folder).where(dmsf_folders: { system: true }).pluck(
         'dmsf_files.id, dmsf_folders.title')
-    remove_index :dmsf_files, :project_id
+    if index_exists?(:dmsf_files, :project_id)
+      remove_index :dmsf_files, :project_id
+    end
     rename_column :dmsf_files, :project_id, :container_id
     # Temporarily added for the save method
     add_column :dmsf_files, :project_id, :int, null: true
@@ -92,7 +94,9 @@ class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
       end
     end
     remove_column :dmsf_files, :project_id # temporarily added for the save method
-    add_index :dmsf_files, [:container_id, :container_type]
+    unless index_exists?(:dmsf_files, [:container_id, :container_type])
+      add_index :dmsf_files, [:container_id, :container_type]
+    end
     # dmsf_folders
     DmsfFolder.where(system: true).delete_all
     remove_column :dmsf_folders, :system
