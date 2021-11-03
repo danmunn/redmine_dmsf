@@ -1,11 +1,18 @@
 Changelog for Redmine DMSF
 ==========================
 
-2.4.11 *????-??-??*
+2.4.11 *2021-11-03*
 -------------------
 
+    GitLab CI
     REST API
-        Copy and move of files and folders
+        Copy and move of documents and folders
+    PostreSQL fixed
+
+* New: #1309 - Gitlab CI
+* Bug: #1306 - Mysql2::Error: Operand should contain 1 column(s)
+* Bug: #1304 - SQL error with postgresql on top menu
+* New: #1301 - REST API for documents movement 
 
 2.4.10 *2021-10-20*
 -------------------
