@@ -1,0 +1,72 @@
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
+# The main file for GitLab Continous Integration
+
+image: docker:stable
+
+before_script:
+  - docker info
+
+stages:
+  - dmsf
+
+mariadb:
+  stage: dmsf
+  tags:
+    - docker
+  script:
+    # Create an image
+    - docker build -t dmsf_image -f Dockerfile .
+    # Run the container, optionally run some tests/apps in it
+    - docker rm -f dmsf_container 2>/dev/null || true
+    - docker run --name dmsf_container dmsf_image bash ./test/ci/ci.sh mariadb
+    # Remove the container
+    - docker rm dmsf_container
+    # Remove image
+    - docker rmi dmsf_image
+
+postgres:
+  stage: dmsf
+  tags:
+    - docker
+  script:
+    # Create an image
+    - docker build -t dmsf_image -f Dockerfile .
+    # Run the container, optionally run some tests/apps in it
+    - docker rm -f dmsf_container 2>/dev/null || true
+    - docker run --name dmsf_container dmsf_image bash ./test/ci/ci.sh postgres
+    # Remove the container
+    - docker rm dmsf_container
+    # Remove image
+    - docker rmi dmsf_image
+
+sqlite3:
+  stage: dmsf
+  tags:
+    - docker
+  script:
+    # Create an image
+    - docker build -t dmsf_image -f Dockerfile .
+    # Run the container, optionally run some tests/apps in it
+    - docker rm -f dmsf_container 2>/dev/null || true
+    - docker run --name dmsf_container dmsf_image bash ./test/ci/ci.sh sqlite3
+    # Remove the container
+    - docker rm dmsf_container
+    # Remove image
+    - docker rmi dmsf_image
