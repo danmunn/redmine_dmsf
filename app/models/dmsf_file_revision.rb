@@ -180,7 +180,7 @@ class DmsfFileRevision < ActiveRecord::Base
         end
       end
     end
-    filename
+    filename.to_s
   end
 
   def new_storage_filename
