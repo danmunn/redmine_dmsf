@@ -100,6 +100,9 @@ kill `cat tmp/pids/server.pid`
 # Clean up Redmine's environment from WebDAV testing
 RAILS_ENV=test bundle exec rake redmine:dmsf_webdav_test_off
 
+# Clean up database from the plugin changes
+bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf VERSION=0 RAILS_ENV=test
+
 case $1 in
 
   mariadb)
