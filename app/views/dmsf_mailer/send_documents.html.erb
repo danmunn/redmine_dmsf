@@ -34,7 +34,7 @@
           <% dir = DmsfFolder.find_by(id: i) %>
           <% if dir && !folders.include?(dir) %>
             <br/>
-            <%= link_to h(dir.dmsf_path_str), dmsf_folder_path(id: dir.project_id, folder_id: dir.id, only_path: false) %>
+            <%= link_to h(dir.dmsf_path_str), dmsf_folder_url(id: dir.project_id, folder_id: dir.id, only_path: false) %>
             <br/><br/>
             <% dir.dmsf_files.each do |file| %>
               <% unless files.include?(file) %>
