@@ -81,7 +81,7 @@
       <%= f.text_field :title, required: true %>
     </p>
     <p>
-      <%= f.text_area :description, rows: 8, class: @wiki ? 'wiki-edit' : 'dmsf-description' %>
+      <%= f.text_area :description, rows: 8, class: 'wiki-edit dmsf-description' %>
     </p>
     <p>
       <% dir = @folder.inherited_permissions_from %>
@@ -140,6 +140,6 @@
   </div>
 <% end %>
 
-<% if @wiki %>
+<% if Setting.text_formatting != 'HTML' %>
   <%= wikitoolbar_for 'dmsf_folder_description' %>
 <% end %>

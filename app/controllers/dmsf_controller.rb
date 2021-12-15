@@ -35,7 +35,6 @@ class DmsfController < ApplicationController
   before_action :find_folder_by_title, only: [:show]
   before_action :get_query, only: [:expand_folder, :show, :trash, :empty_trash, :index]
   before_action :get_project_roles, only: [:new, :edit, :create, :save]
-  before_action :text_formating, only: [:show, :edit, :edit_root]
 
   accept_api_auth :show, :create, :save, :delete
 
@@ -707,10 +706,6 @@ class DmsfController < ApplicationController
   def get_project_roles
     @project_roles = Role.givable.joins(:member_roles).joins(:members).where(
       members: { project_id: @project.id }).distinct
-  end
-
-  def text_formating
-    @wiki = Setting.text_formatting != 'HTML'
   end
 
 end

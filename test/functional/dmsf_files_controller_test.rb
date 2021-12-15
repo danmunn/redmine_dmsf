@@ -41,14 +41,14 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     get :show, params: { id: @file1.id }
     assert_response :success
     assert_include 'dmsf-description', response.body, 'dmsf-description class not found'
-    assert_not_include 'wiki-edit', response.body, 'wiki-edit class found'
+    assert_include 'wiki-edit', response.body, 'wiki-edit class not found'
   end
 
   def test_show_formatting_textile
     Setting.text_formatting = 'Textile'
     get :show, params: { id: @file1.id }
     assert_response :success
-    assert_not_include 'dmsf-description', response.body, 'dmsf-description class found'
+    assert_include 'dmsf-description', response.body, 'dmsf-description class not found'
     assert_include 'wiki-edit', response.body, 'wiki-edit class not found'
   end
 

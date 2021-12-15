@@ -61,7 +61,7 @@
 <% if @file_manipulation_allowed && !@file.locked_for_user? %>
   <%= error_messages_for 'file' %>
   <%= error_messages_for 'revision' %>
-  <%= render partial: 'file_new_revision', locals: { wiki: @wiki }  %>
+  <%= render partial: 'file_new_revision' %>
 <% end %>
 
 <div class="dmsf-id-box">

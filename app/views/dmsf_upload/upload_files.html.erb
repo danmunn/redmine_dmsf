@@ -41,7 +41,7 @@
       <% if upload.locked %>
         <%= render partial: 'upload_file_locked', locals: { upload: upload, i: i } %>
       <% else %>
-        <%= render partial: 'upload_file', locals: { upload: upload, i: i, wiki: @wiki } %>
+        <%= render partial: 'upload_file', locals: { upload: upload, i: i } %>
       <% end %>
     <% end %>
     <div class="form-actions">
