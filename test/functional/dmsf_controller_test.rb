@@ -255,6 +255,24 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_response :not_found
   end
 
+  def test_folder_link_to_folder
+    get :show, params: { id: @link1.project_id, folder_id: @link1.dmsf_folder_id }
+    assert_response :success
+    assert_select 'a', text: @link1.title, count: 1
+    assert_select 'a[href$=?]', "/projects/#{@link1.target_project.identifier}/dmsf?folder_id=#{@link1.target_folder.id}",
+                  count: 2 # Two because of folder1 and folder1_link
+  end
+
+  def test_folder_link_to_project
+    @link1.target_project_id = @project2.id
+    @link1.target_id = nil
+    assert @link1.save
+    get :show, params: { id: @link1.project_id, folder_id: @link1.dmsf_folder_id }
+    assert_response :success
+    assert_select 'a', text: @link1.title, count: 1
+    assert_select 'a[href$=?]', "/projects/#{@project2.identifier}/dmsf", count: 1
+  end
+
   def test_new_forbidden
     @role_manager.remove_permission! :folder_manipulation
     get :new, params: { id: @project1, parent_id: nil }

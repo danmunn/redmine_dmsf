@@ -314,7 +314,7 @@ class DmsfQuery < Query
     end
     scope = DmsfLink.select(%{
         dmsf_links.id AS id,
-        COALESCE(dmsf_folders.project_id, dmsf_links.project_id) AS project_id,
+        dmsf_links.target_project_id AS project_id,
         dmsf_links.target_id AS revision_id,
         dmsf_links.name AS title,
         dmsf_folders.title AS filename,
