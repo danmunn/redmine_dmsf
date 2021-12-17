@@ -26,9 +26,11 @@ source 'https://rubygems.org' do
   gem 'active_record_union'
 
   # Redmine extensions
+  unless Dir.exist?(File.expand_path('../../easyproject', __FILE__))
+    gem 'simple_enum'
+  end
   unless %w(easyproject easy_gantt).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
     gem 'redmine_extensions', '~> 0.3.9'
-    gem 'simple_enum'
     group :test do
       gem 'rails-controller-testing'
     end
