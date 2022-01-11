@@ -3,7 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-22 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -215,8 +215,6 @@ class DmsfWorkflowsController < ApplicationController
         rescue => e
           flash[:error] = e.message
         end
-        #redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
-        #return
       # DMS link (attached)
       elsif params[:dmsf_link_id].present?
         @dmsf_link_id = params[:dmsf_link_id]
@@ -226,9 +224,6 @@ class DmsfWorkflowsController < ApplicationController
         @attachment_id = params[:attachment_id]
         @dmsf_workflow_id = params[:dmsf_workflow_id]
       end
-      #else
-      #redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
-      #return
     end
     respond_to do |format|
       format.html {
