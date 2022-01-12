@@ -32,9 +32,13 @@ class DmsfFoldersCopyController < ApplicationController
   accept_api_auth :copy, :move
 
   def new
-    @projects = DmsfFolder.allowed_target_projects_on_copy
-    @folders = DmsfFolder.directory_tree(@target_project, @folder)
-    @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
+    member = Member.find_by(project_id: @project.id, user_id: User.current.id)
+    @fast_links = member && member.dmsf_fast_links
+    unless @fast_links
+      @projects = DmsfFolder.allowed_target_projects_on_copy
+      @folders = DmsfFolder.directory_tree(@target_project, @folder)
+      @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) unless params[:target_folder_id].blank?
+    end
     @back_url = params[:back_url]
     render layout: !request.xhr?
   end
@@ -105,6 +109,7 @@ class DmsfFoldersCopyController < ApplicationController
       target_folder_id = params[:dmsf_file_or_folder][:target_folder_id]
       @target_folder = DmsfFolder.find(target_folder_id)
       raise ActiveRecord::RecordNotFound unless DmsfFolder.visible.where(id: target_folder_id).exists?
+      @target_project = @target_folder&.project
     end
   rescue ActiveRecord::RecordNotFound
     render_404

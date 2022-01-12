@@ -32,8 +32,12 @@ class DmsfFilesCopyController < ApplicationController
   accept_api_auth :copy, :move
 
   def new
-    @projects = DmsfFile.allowed_target_projects_on_copy
-    @folders = DmsfFolder.directory_tree(@target_project, @folder)
+    member = Member.find_by(project_id: @project.id, user_id: User.current.id)
+    @fast_links = member && member.dmsf_fast_links
+    unless @fast_links
+      @projects = DmsfFile.allowed_target_projects_on_copy
+      @folders = DmsfFolder.directory_tree(@target_project, @folder)
+    end
     @back_url = params[:back_url]
     render layout: !request.xhr?
   end
@@ -105,6 +109,8 @@ private
       target_project_id = params[:target_project_id]
     elsif params[:dmsf_file_or_folder] && params[:dmsf_file_or_folder][:target_project_id].present?
       target_project_id = params[:dmsf_file_or_folder][:target_project_id]
+    else
+      target_project_id = @target_folder&.project_id
     end
     @target_project = target_project_id ? Project.visible.find(target_project_id) : @project
   rescue ActiveRecord::RecordNotFound

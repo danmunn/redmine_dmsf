@@ -20,19 +20,25 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% if projects.present? %>
+<% if projects.present? || fast_links %>
   <%= form_tag({ action: 'copy', id: file_or_folder}, id: 'copyForm') do %>
     <%= hidden_field_tag 'back_url', back_url %>
     <div class="box tabular">
+      <% unless fast_links %>
+        <p>
+          <%= label_tag 'dmsf_file_or_folder[target_project_id]', l(:field_target_project) %>
+          <%= select_tag 'dmsf_file_or_folder[target_project_id]',
+                         project_tree_options_for_select(projects, selected: target_project) %>
+        </p>
+      <% end %>
       <p>
-        <%= label_tag 'dmsf_file_or_folder[target_project_id]', l(:field_target_project) %>
-        <%= select_tag 'dmsf_file_or_folder[target_project_id]',
-                       project_tree_options_for_select(projects, selected: target_project) %>
-      </p>
-      <p>
-        <%= label_tag 'dmsf_file_or_folder[target_folder_id]', l(:field_target_folder) %>
-        <%= select_tag 'dmsf_file_or_folder[target_folder_id]',
-                       options_for_select(folders, selected: (target_folder.id if target_folder)) %>
+        <%= label_tag 'dmsf_file_or_folder[target_folder_id]', l(:field_target_folder) %><%= ' #' if fast_links %>
+        <% if fast_links %>
+          <%= text_field_tag 'dmsf_file_or_folder[target_folder_id]', '', required: true, max_length: 255 %>
+        <% else %>
+          <%= select_tag 'dmsf_file_or_folder[target_folder_id]',
+                         options_for_select(folders, selected: (target_folder.id if target_folder)) %>
+        <% end %>
       </p>
     </div>
     <p>
@@ -49,9 +55,11 @@
     $('#copyForm').attr('action', "<%= url_for(action: 'move', id: file_or_folder) %>");
     $('#copyForm').submit();
   });
-  $('#target_project_id').change(function () {
-    $('#content').load("<%= url_for(action: 'new') %>", $('#copyForm').serialize());
-  });
-  $('#target_project_id').select2();
-  $('#target_folder_id').select2();
+  <% unless fast_links %>
+    $('#target_project_id').change(function () {
+      $('#content').load("<%= url_for(action: 'new') %>", $('#copyForm').serialize());
+    });
+    $('#target_project_id').select2();
+    $('#target_folder_id').select2();
+  <% end %>
 <% end %>

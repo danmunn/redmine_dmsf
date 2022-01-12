@@ -392,7 +392,8 @@ ko:
 
 
   label_dmsf_fast_links: 빠른 링크
-  text_dmsf_fast_links_info: 링크 생성을 더 빨리할 수 있도록 링크 생성 시에 대상 폴더의 식별자를 직접 입력할 수 있게 됩니다.
+  text_dmsf_fast_links_info: You will be able to manually enter a target folder's ID when creating links or moving files
+    or folders in order to speed up the process of creating links.
 
   label_dmsf_permissions: Allow access only to
   label_inherited_permissions: Inherited Access for

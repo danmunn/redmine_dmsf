@@ -392,7 +392,8 @@ ja:
     e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   label_dmsf_fast_links: 高速リンク
-  text_dmsf_fast_links_info: ターゲットフォルダのIDを手動で入力することで、リンク作成時のプロセスを高速化することができます。
+  text_dmsf_fast_links_info: You will be able to manually enter a target folder's ID when creating links or moving files
+    or folders in order to speed up the process of creating links.
 
 
   label_dmsf_permissions: Allow access only to

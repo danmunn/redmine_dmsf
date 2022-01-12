@@ -392,8 +392,8 @@ es:
     e.g: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   label_dmsf_fast_links: Fast links
-  text_dmsf_fast_links_info: You will be able to manually enter a target folder's ID when creating links in order to speed
-    up the process of creating links.
+  text_dmsf_fast_links_info: You will be able to manually enter a target folder's ID when creating links or moving files
+    or folders in order to speed up the process of creating links.
 
   label_dmsf_permissions: Allow access only to
   label_inherited_permissions: Inherited Access for

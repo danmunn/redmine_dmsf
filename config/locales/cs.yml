@@ -393,7 +393,7 @@ cs:
 
   label_dmsf_fast_links: Rychlé odkazy
   text_dmsf_fast_links_info: Při vytváření odkazů budete moci zadat přímo ID cílového adresáře za účelem zrychlení
-    procesu vytváření odkazů.
+    procesu vytváření odkazů nebo kopírování dokumentů a adresářů.
 
   label_dmsf_permissions: Povolený přístup pro
   label_inherited_permissions: Zděděný přístup pro

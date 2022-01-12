@@ -388,7 +388,8 @@ de:
     z.B. XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   label_dmsf_fast_links: Schnelle Verknüpfung
-  text_dmsf_fast_links_info: Ermöglicht durch Eingabe der Ordner-ID auf einfache Art und Weise eine Verknüpfung auf den Zielordner zu erstellen.
+  text_dmsf_fast_links_info: Ermöglicht durch Eingabe der Ordner-ID auf einfache Art und Weise eine Verknüpfung 
+    auf den Zielordner zu erstellen.
 
   label_dmsf_permissions: Zugriff erlaubt für
   label_inherited_permissions: Zugriff vererbt für
