@@ -45,6 +45,7 @@ class DmsfController < ApplicationController
   helper :dmsf_queries
   include DmsfQueriesHelper
   helper :context_menus
+  helper :watchers
 
   def permissions
     if !DmsfFolder.permissions?(@folder, false)

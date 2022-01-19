@@ -60,10 +60,19 @@
                 class: 'icon dmsf-icon-link' %>
   <% end %>
 <% end %>
+
+<% object = folder ? folder : project %>
+<% watched = Watcher.any_watched?([object], User.current) %>
+<% css = [watcher_css([object]), watched ? 'icon icon-fav' : 'icon icon-fav-off'].join(' ') %>
+<% text = watched ? l(:button_unwatch) : l(:button_watch) %>
+<% url = watch_path(object_type: object.class.to_s.underscore, object_id: object.id) %>
+<% method = watched ? 'delete' : 'post' %>
+<%= context_menu_link text, url, method: method, class: css, disabled: !User.current.logged? %>
+
 <% if trash_enabled %>
   <%= link_to l(:link_trash_bin), trash_dmsf_path(project), title: l(:link_trash_bin), class: 'icon icon-del' %>
 <% else %>
   <span class="icon icon-del">
-        <%= l(:link_trash_bin) %>
-      </span>
+      <%= l(:link_trash_bin) %>
+  </span>
 <% end %>

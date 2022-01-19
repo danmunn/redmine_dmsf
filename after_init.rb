@@ -91,6 +91,13 @@ def dmsf_init
                                            :reorder_steps, :update, :update_step, :delete_step, :edit] }
       pmap.permission :display_system_folders,
                       read: true
+      # Watchers
+      pmap.permission :view_dmsf_folder_watchers, {}, read: true
+      pmap.permission :add_dmsf_folder_watchers, { watchers: [:new, :create, :append, :autocomplete_for_user]}
+      pmap.permission :delete_dmsf_folder_watchers, { watchers: :destroy}
+      pmap.permission :view_project_watchers, {}, read: true
+      pmap.permission :add_project_watchers, { watchers: [:new, :create, :append, :autocomplete_for_user]}
+      pmap.permission :delete_project_watchers, { watchers: :destroy}
     end
   end
 end

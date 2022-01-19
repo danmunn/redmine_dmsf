@@ -78,13 +78,12 @@ class DmsfFolder < ActiveRecord::Base
   scope :notsystem, -> { where(system: false) }
 
   acts_as_customizable
-
   acts_as_searchable columns: ["#{table_name}.title", "#{table_name}.description"],
         project_key: 'project_id',
         date_column: 'updated_at',
         permission: :view_dmsf_files,
         scope: Proc.new { DmsfFolder.visible }
-
+  acts_as_watchable
   acts_as_event title: Proc.new { |o| o.title },
           description: Proc.new { |o| o.description },
           url: Proc.new { |o| { controller: 'dmsf', action: 'show', id: o.project, folder_id: o } },
@@ -120,6 +119,13 @@ class DmsfFolder < ActiveRecord::Base
       return false
     end
     DmsfFolder.permissions?(folder.dmsf_folder, allow_system)
+  end
+
+  def initialize(*args)
+    if new_record?
+      self.watcher_user_ids = []
+    end
+    super
   end
 
   def default_values

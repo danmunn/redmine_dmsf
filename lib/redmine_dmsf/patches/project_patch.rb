@@ -29,6 +29,11 @@ module RedmineDmsf
       ##################################################################################################################
       # Overridden methods
 
+      def initialize(attributes=nil, *args)
+        self.watcher_user_ids = []
+        super
+      end
+
       def copy(project, options={})
         super(project, options)
         project = project.is_a?(Project) ? project : Project.find(project)
@@ -61,6 +66,8 @@ module RedmineDmsf
             class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
           has_many :dmsf_links, -> { where dmsf_folder_id: nil },
             class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
+
+          acts_as_watchable
 
           before_save :set_default_dmsf_notification
 
