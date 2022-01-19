@@ -39,5 +39,6 @@
 <%= link_to "#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: file, back_url: back_url),
             title: l(:title_copy), class: 'icon icon-copy' %>
 <%= link_to l(:button_download), view_dmsf_file_path(file, disposition: 'attachment'), class: 'icon icon-download' %>
+<%= render partial: 'dmsf_context_menus/watch', locals: { object: file } %>
 <%= delete_link(dmsf_file_path(id: file, details: true),
                 back_url: dmsf_folder_path(id: file.project, folder_id: file.dmsf_folder)) if file_delete_allowed %>

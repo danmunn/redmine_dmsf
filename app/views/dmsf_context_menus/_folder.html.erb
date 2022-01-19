@@ -72,14 +72,9 @@
       disabled: !email_allowed %>
   </li>
 <% end %>
-
-<% watched = Watcher.any_watched?([dmsf_folder], User.current) %>
-<% css = [watcher_css([dmsf_folder]), watched ? 'icon icon-fav' : 'icon icon-fav-off'].join(' ') %>
-<% text = watched ? l(:button_unwatch) : l(:button_watch) %>
-<% url = watch_path(object_type: dmsf_folder.class.to_s.underscore, object_id: dmsf_folder, back_url: back_url) %>
-<% method = watched ? 'delete' : 'post' %>
-<%= context_menu_link text, url, method: method, class: css, disabled: !User.current.logged? %>
-
+<li>
+  <%= render partial: 'dmsf_context_menus/watch', locals: { object: dmsf_folder } %>
+</li>
 <li>
   <%= context_menu_link l(:button_delete),
     dmsf_link ? dmsf_link_path(id: dmsf_link, folder_id: folder, back_url: back_url) :

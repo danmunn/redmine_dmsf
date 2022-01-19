@@ -36,6 +36,8 @@ class DmsfFilesController < ApplicationController
   helper :dmsf_workflows
   helper :dmsf
   helper :queries
+  helper :watchers
+  helper :context_menus
 
   include QueriesHelper
 

@@ -171,6 +171,14 @@
 <% end %>
 <span class="pagination"><%= pagination_links_full @revision_pages, @revision_count %></span>
 
+<% if @file.watchers.present? %>
+  <% content_for :sidebar do %>
+    <div id="watchers">
+      <%= render partial: 'watchers/watchers', locals: { watched: @file } %>
+    </div>
+  <% end %>
+<% end %>
+
 <%= late_javascript_tag do %>
   $('a.delete-revision').click(function(event) {
     if(!window.confirm('<%= l(:text_are_you_sure) %>')) {
