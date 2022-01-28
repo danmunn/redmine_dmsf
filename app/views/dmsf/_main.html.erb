@@ -42,7 +42,8 @@
           project: @project,
           locked_for_user: @locked_for_user,
           file_manipulation_allowed: @file_manipulation_allowed,
-          trash_enabled: @trash_enabled } %>
+          trash_enabled: @trash_enabled,
+          notifications: @notifications } %>
     <% else %>
       <%= actions_dropdown do %>
         <%= render partial: 'dmsf_context_menus/main', locals: {
@@ -52,7 +53,8 @@
             project: @project,
             locked_for_user: @locked_for_user,
             file_manipulation_allowed: @file_manipulation_allowed,
-            trash_enabled: @trash_enabled } %>
+            trash_enabled: @trash_enabled,
+            notifications: @notifications} %>
       <% end %>
     <% end %>
   </div>

@@ -80,6 +80,7 @@ class DmsfController < ApplicationController
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @trash_enabled = @folder_manipulation_allowed && @file_manipulation_allowed
+    @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
     @query.dmsf_folder_id = @folder ? @folder.id : nil
     @query.deleted = false
     @query.sub_projects |= Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'].present?

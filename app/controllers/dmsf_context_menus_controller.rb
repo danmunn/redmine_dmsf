@@ -57,6 +57,7 @@ class DmsfContextMenusController < ApplicationController
           User.current.allowed_to?(:folder_manipulation, @project)
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
     end
+    @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
     @back_url = dmsf_folder_path(id: @project, folder_id: @folder)
     render layout: false
   rescue ActiveRecord::RecordNotFound

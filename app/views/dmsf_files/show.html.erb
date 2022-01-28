@@ -44,12 +44,12 @@
       <% if defined?(EasyExtensions) %>
         <%= render partial: 'dmsf_context_menus/revisions',
                    locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed,
-                             back_url: dmsf_file_path(id: @file)} %>
+                             notifications: @notifications, back_url: dmsf_file_path(id: @file)} %>
       <% else %>
         <%= actions_dropdown do %>
           <%= render partial: 'dmsf_context_menus/revisions',
                      locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed,
-                               back_url: dmsf_file_path(id: @file) } %>
+                               notifications: @notifications, back_url: dmsf_file_path(id: @file) } %>
         <% end %>
       <% end %>
     <% end %>

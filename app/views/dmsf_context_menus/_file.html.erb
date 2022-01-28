@@ -46,15 +46,17 @@
             class: 'icon icon-lock', disabled: !allowed %>
     <% end %>
 </li>
-<li>
-  <% if dmsf_file.notification %>
-      <%= context_menu_link l(:label_notifications_off), notify_deactivate_dmsf_files_path(id: dmsf_file,
-            back_url: back_url), class: 'icon icon-email', disabled: !allowed || locked %>
-  <% else %>
-      <%= context_menu_link l(:label_notifications_on), notify_activate_dmsf_files_path(id: dmsf_file,
-            back_url: back_url), class: 'icon icon-email-add', disabled: !allowed || locked %>
-  <% end %>
-</li>
+<% if notifications %>
+  <li>
+    <% if dmsf_file.notification %>
+        <%= context_menu_link l(:label_notifications_off), notify_deactivate_dmsf_files_path(id: dmsf_file,
+              back_url: back_url), class: 'icon icon-email', disabled: !allowed || locked %>
+    <% else %>
+        <%= context_menu_link l(:label_notifications_on), notify_activate_dmsf_files_path(id: dmsf_file,
+              back_url: back_url), class: 'icon icon-email-add', disabled: !allowed || locked %>
+    <% end %>
+  </li>
+<% end %>
 <li>
     <%= render partial: 'approval_workflow', locals: { dmsf_file: dmsf_file, project: project, locked: locked,
           back_url: back_url } %>
