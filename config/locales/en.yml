@@ -428,6 +428,7 @@ en:
   label_project_watchers: Watchers
   label_dmsf_folder_watchers: Watchers
   label_dmsf_file_watchers: Watchers
+  dmsf_legacy_notifications: Legacy DMS notifications
   permission_view_dmsf_folder_watchers: View folder's watchers
   permission_add_dmsf_folder_watchers: Add folder's watchers
   permission_delete_dmsf_folder_watchers: Delete folder's watchers

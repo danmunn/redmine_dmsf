@@ -39,6 +39,7 @@ module RedmineDmsf
         def all
           notifications = super
           notifications << Redmine::Notifiable.new('dmsf_workflow_plural')
+          notifications << Redmine::Notifiable.new('dmsf_legacy_notifications')
           notifications
         end
 

@@ -203,10 +203,16 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def notify?
-    return true if notification
-    return true if dmsf_folder&.notify?
-    return true if !dmsf_folder && project.dmsf_notification
-    false
+    notification || dmsf_folder&.notify? || (!dmsf_folder && project.dmsf_notification)
+  end
+
+  def get_all_watchers(watchers)
+    watchers << notified_watchers
+    if dmsf_folder
+      watchers << dmsf_folder.notified_watchers
+    else
+      watchers << project.notified_watchers
+    end
   end
 
   def notify_deactivate

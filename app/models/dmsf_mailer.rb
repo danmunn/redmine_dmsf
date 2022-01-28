@@ -26,8 +26,7 @@ class DmsfMailer < Mailer
   layout 'mailer'
 
   def self.deliver_files_updated(project, files)
-    users = get_notify_users(project, files)
-    files = files.select { |file| file.notify? }
+    users = get_notify_users(project, files.first)
     users.each do |user|
       files_updated(user, project, files).deliver_later
     end
@@ -48,8 +47,7 @@ class DmsfMailer < Mailer
   end
 
   def self.deliver_files_deleted(project, files)
-    users = get_notify_users(project, files)
-    files = files.select { |file| file.notify? }
+    users = get_notify_users(project, file.first)
     users.each do |user|
       files_deleted(user, project, files).deliver_later
     end
@@ -137,60 +135,46 @@ class DmsfMailer < Mailer
     end
   end
 
-  def self.get_notify_users(project, files = [], force_notification = false)
+  # force_notification = true => approval workflow's notifications
+  def self.get_notify_users(project, file, force_notification = false)
     return [] unless project.active?
-    if !force_notification && files.present?
-      notify_files = files.select { |file| file.notify? }
-      return [] if notify_files.empty?
-    end
-    notify_members = project.members.active.select do |notify_member|
-      notify_user = notify_member.user
-      if notify_user == User.current && notify_user.pref.no_self_notified
-        false
-      else
-        if notify_member.dmsf_mail_notification.nil?
-          case notify_user.mail_notification
-          when 'all'
-            true
-          when 'selected'
-            notify_member.mail_notification?
-          when 'only_my_events'
-            author = false
-            files.each do |file|
-              if file.involved?(notify_user) || file.assigned?(notify_user)
-                author = true
-                break
-              end
-            end
-            author
-          when 'only_owner'
-            owner = false
-            files.each do |file|
-              if file.owner?(notify_user)
-                owner = true
-                break
-              end
-            end
-            owner
-          when 'only_assigned'
-            assignee = false
-            files.each do |file|
-              if file.assigned?(notify_user)
-                assignee = true
-                break
-              end
-            end
-            assignee
-          else
-            false
-          end
+    # Notifications
+    if (force_notification && Setting.notified_events.include?('dmsf_workflow_plural')) ||
+      (Setting.notified_events.include?('dmsf_legacy_notifications') && file&.notify?)
+      notify_members = project.members.active.select do |notify_member|
+        notify_user = notify_member.user
+        if notify_user == User.current && notify_user.pref.no_self_notified
+          false
         else
-          notify_member.dmsf_mail_notification
+          if notify_member.dmsf_mail_notification.nil?
+            case notify_user.mail_notification
+            when 'all'
+              true
+            when 'selected'
+              notify_member.mail_notification?
+            when 'only_my_events'
+              file.involved?(notify_user) || file.assigned?(notify_user)
+            when 'only_owner'
+              file.owner? notify_user
+            when 'only_assigned'
+              file.assigned? notify_user
+            else
+              false
+            end
+          else
+            notify_member.dmsf_mail_notification
+          end
         end
       end
+      users = notify_members.collect { |m| m.user }
+    else
+      users = []
     end
-
-    notify_members.collect { |m| m.user }.uniq
+    # Watchers
+    watchers = []
+    file.get_all_watchers(watchers)
+    users.concat watchers
+    users.uniq
   end
 
 end

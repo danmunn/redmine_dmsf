@@ -94,19 +94,19 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_get_notify_users
-    users = DmsfMailer.get_notify_users(@project1, [@file1])
+    users = DmsfMailer.get_notify_users(@project1, @file1)
     assert users.present?
   end
 
   def test_get_notify_users_notification_switched_off
     @file1.notify_deactivate
-    users = DmsfMailer.get_notify_users(@project1, [@file1])
+    users = DmsfMailer.get_notify_users(@project1, @file1)
     assert users.blank?
   end
 
   def test_get_notify_users_on_inactive_projects
     @project1.status = Project::STATUS_CLOSED
-    users = DmsfMailer.get_notify_users(@project1, [@file1])
+    users = DmsfMailer.get_notify_users(@project1, @file1)
     assert users.blank?
   end
 
