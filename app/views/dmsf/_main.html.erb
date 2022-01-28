@@ -95,7 +95,7 @@
   <%= render partial: 'dmsf/sidebar' %>
 
   <% project_or_folder = @folder? @folder : @project %>
-  <% if project_or_folder.watchers.present? %>
+  <% if project_or_folder&.watchers.present? %>
     <div id="watchers">
       <% if @folder %>
         <%= render partial: 'watchers/watchers', locals: { watched: @folder } %>

@@ -94,8 +94,14 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_get_notify_users
-    users = DmsfMailer.get_notify_users(@project1, @file1)
-    assert users.present?
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      users = DmsfMailer.get_notify_users(@project1, @file1)
+      assert users.present?
+    end
+    with_settings :notified_events => [] do
+      users = DmsfMailer.get_notify_users(@project1, @file1)
+      assert users.empty?
+    end
   end
 
   def test_get_notify_users_notification_switched_off

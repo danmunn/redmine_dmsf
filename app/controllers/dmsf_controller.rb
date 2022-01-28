@@ -238,6 +238,11 @@ class DmsfController < ApplicationController
     @pathfolder = copy_folder(@folder)
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
     @redirect_to_folder_id = params[:redirect_to_folder_id]
+    @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
+  end
+
+  def edit_root
+    @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
   end
 
   def create

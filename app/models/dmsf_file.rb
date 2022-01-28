@@ -215,7 +215,7 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def notify?
-    notification dmsf_folder&.notify? || (!dmsf_folder && project.dmsf_notification)
+    notification || dmsf_folder&.notify? || (!dmsf_folder && project.dmsf_notification)
   end
 
   def get_all_watchers(watchers)

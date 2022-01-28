@@ -47,7 +47,7 @@ class DmsfMailer < Mailer
   end
 
   def self.deliver_files_deleted(project, files)
-    users = get_notify_users(project, file.first)
+    users = get_notify_users(project, files.first)
     users.each do |user|
       files_deleted(user, project, files).deliver_later
     end

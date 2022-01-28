@@ -37,26 +37,30 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file
-    get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
-    assert_response :success
-    assert_select 'a.icon-edit', text: l(:button_edit)
-    assert_select 'a.icon-lock', text: l(:button_lock)
-    assert_select 'a.icon-email-add', text: l(:label_notifications_on)
-    assert_select 'a.icon-del', text: l(:button_delete)
-    assert_select 'a.icon-download', text: l(:button_download)
-    assert_select 'a.icon-email', text: l(:field_mail)
-    assert_select 'a.icon-file', text: l(:button_edit_content)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
+      assert_response :success
+      assert_select 'a.icon-edit', text: l(:button_edit)
+      assert_select 'a.icon-lock', text: l(:button_lock)
+      assert_select 'a.icon-email-add', text: l(:label_notifications_on)
+      assert_select 'a.icon-del', text: l(:button_delete)
+      assert_select 'a.icon-download', text: l(:button_download)
+      assert_select 'a.icon-email', text: l(:field_mail)
+      assert_select 'a.icon-file', text: l(:button_edit_content)
+    end
   end
 
   def test_dmsf_file_locked
-    get :dmsf, params: { id: @file2.project.id, ids: ["file-#{@file2.id}"] }
-    assert_response :success
-    assert_select 'a.icon-edit.disabled', text: l(:button_edit)
-    assert_select 'a.icon-unlock', text: l(:button_unlock)
-    assert_select 'a.icon-lock', text: l(:button_lock), count: 0
-    assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
-    assert_select 'a.icon-del.disabled', text: l(:button_delete)
-    assert_select 'a.icon-file.disabled', text: l(:button_edit_content)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @file2.project.id, ids: ["file-#{@file2.id}"] }
+      assert_response :success
+      assert_select 'a.icon-edit.disabled', text: l(:button_edit)
+      assert_select 'a.icon-unlock', text: l(:button_unlock)
+      assert_select 'a.icon-lock', text: l(:button_lock), count: 0
+      assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
+      assert_select 'a.icon-del.disabled', text: l(:button_delete)
+      assert_select 'a.icon-file.disabled', text: l(:button_edit_content)
+    end
   end
 
   def test_dmsf_edit_file_locked_by_myself
@@ -87,29 +91,35 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_file_notification_on
     @file1.notify_activate
-    get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
-    assert_response :success
-    assert_select 'a.icon-email', text: l(:label_notifications_off)
-    assert_select 'a.icon-email-add', text: l(:label_notifications_on), count: 0
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
+      assert_response :success
+      assert_select 'a.icon-email', text: l(:label_notifications_off)
+      assert_select 'a.icon-email-add', text: l(:label_notifications_on), count: 0
+    end
   end
 
   def test_dmsf_file_manipulation_permission_off
     @role_manager.remove_permission! :file_manipulation
-    get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
-    assert_response :success
-    assert_select 'a.icon-edit.disabled', text: l(:button_edit)
-    assert_select 'a.icon-lock.disabled', text: l(:button_lock)
-    assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
-    assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
+      assert_response :success
+      assert_select 'a.icon-edit.disabled', text: l(:button_edit)
+      assert_select 'a.icon-lock.disabled', text: l(:button_lock)
+      assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
+      assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    end
   end
 
   def test_dmsf_file_manipulation_permission_on
-    get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
-    assert_response :success
-    assert_select 'a:not(icon-edit.disabled)', text: l(:button_edit)
-    assert_select 'a:not(icon-lock.disabled)', text: l(:button_lock)
-    assert_select 'a:not(icon-email-add.disabled)', text: l(:label_notifications_on)
-    assert_select 'a:not(icon-del.disabled)', text: l(:button_delete)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
+      assert_response :success
+      assert_select 'a:not(icon-edit.disabled)', text: l(:button_edit)
+      assert_select 'a:not(icon-lock.disabled)', text: l(:button_lock)
+      assert_select 'a:not(icon-email-add.disabled)', text: l(:label_notifications_on)
+      assert_select 'a:not(icon-del.disabled)', text: l(:button_delete)
+    end
   end
 
   def test_dmsf_file_email_permission_off
@@ -163,28 +173,32 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file_link
-    get :dmsf, params: {
-        id: @file_link6.project.id, folder_id: @file_link6.dmsf_folder, ids: ["file-link-#{@file_link6.id}"] }
-    assert_response :success
-    assert_select 'a.icon-edit', text: l(:button_edit)
-    assert_select 'a.icon-lock', text: l(:button_lock)
-    assert_select 'a.icon-email-add', text: l(:label_notifications_on)
-    assert_select 'a.icon-del', text: l(:button_delete)
-    assert_select 'a.icon-download', text: l(:button_download)
-    assert_select 'a.icon-email', text: l(:field_mail)
-    assert_select 'a.icon-file', text: l(:button_edit_content)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: {
+          id: @file_link6.project.id, folder_id: @file_link6.dmsf_folder, ids: ["file-link-#{@file_link6.id}"] }
+      assert_response :success
+      assert_select 'a.icon-edit', text: l(:button_edit)
+      assert_select 'a.icon-lock', text: l(:button_lock)
+      assert_select 'a.icon-email-add', text: l(:label_notifications_on)
+      assert_select 'a.icon-del', text: l(:button_delete)
+      assert_select 'a.icon-download', text: l(:button_download)
+      assert_select 'a.icon-email', text: l(:field_mail)
+      assert_select 'a.icon-file', text: l(:button_edit_content)
+    end
   end
 
   def test_dmsf_file_link_locked
     assert @file_link2.target_file.locked?
-    get :dmsf, params: {
-        id: @file_link2.project.id, folder_id: @file_link2.dmsf_folder.id, ids: ["file-link-#{@file_link2.id}"] }
-    assert_response :success
-    assert_select 'a.icon-edit.disabled', text: l(:button_edit)
-    assert_select 'a.icon-unlock', text: l(:button_unlock)
-    assert_select 'a.icon-lock', text: l(:button_lock), count: 0
-    assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
-    assert_select 'a.icon-del', text: l(:button_delete)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: {
+          id: @file_link2.project.id, folder_id: @file_link2.dmsf_folder.id, ids: ["file-link-#{@file_link2.id}"] }
+      assert_response :success
+      assert_select 'a.icon-edit.disabled', text: l(:button_edit)
+      assert_select 'a.icon-unlock', text: l(:button_unlock)
+      assert_select 'a.icon-lock', text: l(:button_lock), count: 0
+      assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
+      assert_select 'a.icon-del', text: l(:button_delete)
+    end
   end
 
   def test_dmsf_url_link
@@ -194,26 +208,30 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_folder
-    get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
-    assert_response :success
-    assert_select 'a.icon-edit', text: l(:button_edit)
-    assert_select 'a.icon-lock', text: l(:button_lock)
-    assert_select 'a.icon-email-add', text: l(:label_notifications_on)
-    assert_select 'a.icon-del', text: l(:button_delete)
-    assert_select 'a:not(icon-del.disabled)', text: l(:button_delete)
-    assert_select 'a.icon-download', text: l(:button_download)
-    assert_select 'a.icon-email', text: l(:field_mail)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
+      assert_response :success
+      assert_select 'a.icon-edit', text: l(:button_edit)
+      assert_select 'a.icon-lock', text: l(:button_lock)
+      assert_select 'a.icon-email-add', text: l(:label_notifications_on)
+      assert_select 'a.icon-del', text: l(:button_delete)
+      assert_select 'a:not(icon-del.disabled)', text: l(:button_delete)
+      assert_select 'a.icon-download', text: l(:button_download)
+      assert_select 'a.icon-email', text: l(:field_mail)
+    end
   end
 
   def test_dmsf_folder_locked
     assert @folder5.locked?
-    get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
-    assert_response :success
-    assert_select 'a.icon-edit.disabled', text: l(:button_edit)
-    assert_select 'a.icon-unlock', text: l(:button_unlock)
-    assert_select 'a.icon-lock', text: l(:button_lock), count: 0
-    assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
-    assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
+      assert_response :success
+      assert_select 'a.icon-edit.disabled', text: l(:button_edit)
+      assert_select 'a.icon-unlock', text: l(:button_unlock)
+      assert_select 'a.icon-lock', text: l(:button_lock), count: 0
+      assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
+      assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    end
   end
 
   def test_dmsf_folder_locked_force_unlock_permission_off
@@ -235,29 +253,35 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_folder_notification_on
     @folder5.notify_activate
-    get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
-    assert_response :success
-    assert_select 'a.icon-email', text: l(:label_notifications_off)
-    assert_select 'a.icon-email-add', text: l(:label_notifications_on), count: 0
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
+      assert_response :success
+      assert_select 'a.icon-email', text: l(:label_notifications_off)
+      assert_select 'a.icon-email-add', text: l(:label_notifications_on), count: 0
+    end
   end
 
   def test_dmsf_folder_manipulation_permmissions_off
     @role_manager.remove_permission! :folder_manipulation
-    get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
-    assert_response :success
-    assert_select 'a.icon-edit.disabled', text: l(:button_edit)
-    assert_select 'a.icon-lock.disabled', text: l(:button_lock)
-    assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
-    assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
+      assert_response :success
+      assert_select 'a.icon-edit.disabled', text: l(:button_edit)
+      assert_select 'a.icon-lock.disabled', text: l(:button_lock)
+      assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
+      assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    end
   end
 
   def test_dmsf_folder_manipulation_permmissions_on
-    get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
-    assert_response :success
-    assert_select 'a:not(icon-edit.disabled)', text: l(:button_edit)
-    assert_select 'a:not(icon-lock.disabled)', text: l(:button_lock)
-    assert_select 'a:not(icon-email-add.disabled)', text: l(:label_notifications_on)
-    assert_select 'a:not(icon-del.disabled)', text: l(:button_delete)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
+      assert_response :success
+      assert_select 'a:not(icon-edit.disabled)', text: l(:button_edit)
+      assert_select 'a:not(icon-lock.disabled)', text: l(:button_lock)
+      assert_select 'a:not(icon-email-add.disabled)', text: l(:label_notifications_on)
+      assert_select 'a:not(icon-del.disabled)', text: l(:button_delete)
+    end
   end
 
   def test_dmsf_folder_email_permmissions_off
@@ -274,25 +298,29 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_folder_link
-    get :dmsf, params: { id: @folder_link1.project.id, ids: ["folder-#{@folder_link1.id}"] }
-    assert_response :success
-    assert_select 'a.icon-edit', text: l(:button_edit)
-    assert_select 'a.icon-lock', text: l(:button_lock)
-    assert_select 'a.icon-email-add', text: l(:label_notifications_on)
-    assert_select 'a.icon-del', text: l(:button_delete)
-    assert_select 'a.icon-download', text: l(:button_download)
-    assert_select 'a.icon-email', text: l(:field_mail)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @folder_link1.project.id, ids: ["folder-#{@folder_link1.id}"] }
+      assert_response :success
+      assert_select 'a.icon-edit', text: l(:button_edit)
+      assert_select 'a.icon-lock', text: l(:button_lock)
+      assert_select 'a.icon-email-add', text: l(:label_notifications_on)
+      assert_select 'a.icon-del', text: l(:button_delete)
+      assert_select 'a.icon-download', text: l(:button_download)
+      assert_select 'a.icon-email', text: l(:field_mail)
+    end
   end
 
   def test_dmsf_folder_link_locked
     @folder_link1.target_folder.lock!
-    get :dmsf, params: { id: @folder_link1.project.id, ids: ["folder-#{@folder_link1.id}"] }
-    assert_response :success
-    assert_select 'a.icon-edit.disabled', text: l(:button_edit)
-    assert_select 'a.icon-unlock', text: l(:button_unlock)
-    assert_select 'a.icon-lock', text: l(:button_lock), count: 0
-    assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
-    assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @folder_link1.project.id, ids: ["folder-#{@folder_link1.id}"] }
+      assert_response :success
+      assert_select 'a.icon-edit.disabled', text: l(:button_edit)
+      assert_select 'a.icon-unlock', text: l(:button_unlock)
+      assert_select 'a.icon-lock', text: l(:button_lock), count: 0
+      assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
+      assert_select 'a.icon-del.disabled', text: l(:button_delete)
+    end
   end
 
   def test_dmsf_multiple
