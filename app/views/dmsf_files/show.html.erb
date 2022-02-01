@@ -44,12 +44,12 @@
       <% if defined?(EasyExtensions) %>
         <%= render partial: 'dmsf_context_menus/revisions',
                    locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed,
-                             back_url: dmsf_file_path(id: @file)} %>
+                             notifications: @notifications, back_url: dmsf_file_path(id: @file)} %>
       <% else %>
         <%= actions_dropdown do %>
           <%= render partial: 'dmsf_context_menus/revisions',
                      locals: { project: @project, file: @file, file_delete_allowed: @file_delete_allowed,
-                               back_url: dmsf_file_path(id: @file) } %>
+                               notifications: @notifications, back_url: dmsf_file_path(id: @file) } %>
         <% end %>
       <% end %>
     <% end %>
@@ -170,6 +170,14 @@
   <br/>
 <% end %>
 <span class="pagination"><%= pagination_links_full @revision_pages, @revision_count %></span>
+
+<% if @file.watchers.present? %>
+  <% content_for :sidebar do %>
+    <div id="watchers">
+      <%= render partial: 'watchers/watchers', locals: { watched: @file } %>
+    </div>
+  <% end %>
+<% end %>
 
 <%= late_javascript_tag do %>
   $('a.delete-revision').click(function(event) {

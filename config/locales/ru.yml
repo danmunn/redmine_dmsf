@@ -425,6 +425,21 @@ ru:
   title_start_minor: Start not allowed, minor must be zero
   title_approval_minor: Approval not allowed, minor must be zero
 
+  label_project_watchers: Watchers
+  label_dmsf_folder_watchers: Watchers
+  label_dmsf_file_watchers: Watchers
+  label_dmsf_watched: Watched documents
+  dmsf_legacy_notifications: Legacy DMS notifications
+  permission_view_dmsf_folder_watchers: View folder's watchers
+  permission_add_dmsf_folder_watchers: Add folder's watchers
+  permission_delete_dmsf_folder_watchers: Delete folder's watchers
+  permission_view_dmsf_file_watchers: View document's watchers
+  permission_add_dmsf_file_watchers: Add document's watchers
+  permission_delete_dmsf_file_watchers: Delete document's watchers
+  permission_view_project_watchers: View project's watchers
+  permission_add_project_watchers: Add project's watchers
+  permission_delete_project_watchers: Delete project's watchers
+
   easy_pages:
     modules:
       dmsf_locked_documents: Мои заблокированные документы

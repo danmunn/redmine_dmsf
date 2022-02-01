@@ -46,6 +46,7 @@
                            edit: true,
                            unlockable: @folder.unlockable? && (!@folder.locked_for_user? || User.current.allowed_to?(:force_file_unlock, @project)),
                            email_allowed: User.current.allowed_to?(:email_documents, @project),
+                           notifications: @notifications,
                            back_url: edit_dmsf_url(id: @project, folder_id: @folder)
                  } %>
     <% else %>
@@ -60,6 +61,7 @@
                              edit: true,
                              unlockable: @folder.unlockable? && (!@folder.locked_for_user? || User.current.allowed_to?(:force_file_unlock, @project)),
                              email_allowed: User.current.allowed_to?(:email_documents, @project),
+                             notifications: @notifications,
                              back_url: edit_dmsf_url(id: @project, folder_id: @folder)
                    } %>
       <% end %>

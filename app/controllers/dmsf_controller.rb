@@ -45,6 +45,7 @@ class DmsfController < ApplicationController
   helper :dmsf_queries
   include DmsfQueriesHelper
   helper :context_menus
+  helper :watchers
 
   def permissions
     if !DmsfFolder.permissions?(@folder, false)
@@ -79,6 +80,7 @@ class DmsfController < ApplicationController
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @trash_enabled = @folder_manipulation_allowed && @file_manipulation_allowed
+    @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
     @query.dmsf_folder_id = @folder ? @folder.id : nil
     @query.deleted = false
     @query.sub_projects |= Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'].present?
@@ -236,6 +238,11 @@ class DmsfController < ApplicationController
     @pathfolder = copy_folder(@folder)
     @force_file_unlock_allowed = User.current.allowed_to?(:force_file_unlock, @project)
     @redirect_to_folder_id = params[:redirect_to_folder_id]
+    @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
+  end
+
+  def edit_root
+    @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
   end
 
   def create

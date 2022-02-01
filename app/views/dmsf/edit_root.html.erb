@@ -25,7 +25,7 @@
 <% html_title(l(:dmsf)) %>
 
 <div class="contextual">
-  <% if User.current.allowed_to?(:folder_manipulation, @project) %>    
+  <% if @notifications && User.current.allowed_to?(:folder_manipulation, @project) %>
     <% if @project.dmsf_notification %>        
       <%= link_to l(:label_notifications_off),
         notify_deactivate_dmsf_path(id: @project, back_url: edit_root_dmsf_path(id: @project)),

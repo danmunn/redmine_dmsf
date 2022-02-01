@@ -20,16 +20,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% folders = DmsfFolder.visible.joins(
-  'JOIN dmsf_locks ON dmsf_folders.id = dmsf_locks.entity_id').where(
-  ['dmsf_locks.entity_type = ? AND dmsf_locks.user_id = ? AND (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > ?)',
-   1, @user&.id, Time.current]) %>
-<% files = DmsfFile.visible.joins(
-  'JOIN dmsf_locks ON dmsf_files.id = dmsf_locks.entity_id').where(
-  ['dmsf_locks.entity_type = ? AND dmsf_locks.user_id = ? AND (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > ?)',
-   0, @user&.id, Time.current]) %>
-<h3><%= l(:locked_documents)%> (<%= folders.all.size %>/<%= files.all.size %>)</h3>
-<% if folders.any? || files.any?%>
+<% projects = Project.visible.has_module(:dmsf).joins(:watchers).where(
+  :watchers => { watchable_type: 'Project', user_id: @user&.id }) %>
+<% folders = DmsfFolder.visible(:dmsf).joins(:watchers).where(
+  :watchers => { watchable_type: 'DmsfFolder', user_id: @user&.id }) %>
+<% files = DmsfFile.visible.joins(:watchers).where(
+  :watchers => { watchable_type: 'DmsfFile', user_id: @user&.id }) %>
+<h3><%= l(:label_dmsf_watched)%> (<%= projects.all.size + folders.all.size %>/<%=  files.all.size %>)</h3>
+<% if projects.any? || folders.any? || files.any? %>
   <%= form_tag({}, data: { cm_url: dmsf_context_menu_path(back_url: my_page_path) }) do %>
     <table class="list context-menu-container" data-hascontextmenu="true">
       <thead>
@@ -45,6 +43,23 @@
         </tr>
       </thead>
       <tbody>
+        <% projects.each do |project| %>
+          <tr id="project-<%= project.id %>" class="hascontextmenu">
+            <td class="checkbox hide-when-print">
+              <%= check_box_tag 'ids[]', "project-#{project.id}", false, id: nil %>
+            </td>
+            <td class="project">
+              <%= link_to_project project %>
+            </td>
+            <td class="title">
+              <%= link_to_project project, jump: 'dmsf', class: 'project' %>
+            </td>
+            <td class="title"></td>
+            <td>
+              <%= link_to_context_menu %>
+            </td>
+          </tr>
+        <% end %>
         <% folders.each do |folder| %>
           <tr id="folder-<%= folder.id %>" class="hascontextmenu">
             <td class="checkbox hide-when-print">
@@ -55,19 +70,19 @@
             </td>
             <td class="title">
               <%= link_to h(folder.title), dmsf_folder_path(id: folder.project, folder_id: folder),
-                class: 'icon icon-folder' %>
+                          class: 'icon icon-folder' %>
              </td>
              <td class="title">
                <% if folder.dmsf_folder %>
-                 <%= link_to h(folder.dmsf_folder.title),
-                             dmsf_folder_path(id: folder.project, folder_id: folder.dmsf_folder) %>
+                 <%= link_to h(folder.dmsf_folder.title), dmsf_folder_path(id: folder.project, folder_id:
+                   folder.dmsf_folder) %>
                <% else %>
                   <%= link_to l(:link_documents), dmsf_folder_path(id: folder.project) %>
                <% end %>
              </td>
-             <td>
-               <%= link_to_context_menu %>
-             </td>
+            <td>
+              <%= link_to_context_menu %>
+            </td>
            </tr>
         <% end %>
         <% files.each do |file| %>
@@ -76,22 +91,22 @@
               <%= check_box_tag 'ids[]', "file-#{file.id}", false, id: nil %>
             </td>
             <td class="project">
-              <%= link_to_project file.project %>
+              <%= link_to_project(file.project) if file.project %>
             </td>
             <td class="title">
               <%= link_to h(file.title), dmsf_file_path(id: file),
                 class: "icon icon-file #{DmsfHelper.filetype_css(file.name)}" %>
             </td>
-             <td class="title">
-               <% if file.dmsf_folder %>
-                 <%= link_to h(file.dmsf_folder.title), dmsf_folder_path(id: file.project, folder_id: file.dmsf_folder) %>
-               <% else %>
-                  <%= link_to_if file.project, l(:link_documents), dmsf_folder_path(id: file.project) %>
-               <% end %>
-             </td>
-             <td>
-               <%= link_to_context_menu %>
-             </td>
+            <td class="title">
+              <% if file.dmsf_folder %>
+                <%= link_to h(file.dmsf_folder.title), dmsf_folder_path(id: file.project, folder_id: file.dmsf_folder) %>
+              <% else %>
+                <%= link_to l(:link_documents), dmsf_folder_path(id: file.project) %>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to_context_menu %>
+            </td>
            </tr>
         <% end %>
       </tbody>

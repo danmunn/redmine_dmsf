@@ -73,7 +73,7 @@ class DmsfFile < ActiveRecord::Base
                 url: Proc.new { |o| { controller: 'dmsf_files', action: 'view', id: o } },
                 datetime: Proc.new { |o| o.updated_at },
                 author: Proc.new { |o| o.last_revision.user }
-
+  acts_as_watchable
   acts_as_searchable columns: ["#{table_name}.name", "#{DmsfFileRevision.table_name}.title", "#{DmsfFileRevision.table_name}.description", "#{DmsfFileRevision.table_name}.comment"],
     project_key: 'project_id',
     date_column: "#{table_name}.updated_at"
@@ -88,6 +88,9 @@ class DmsfFile < ActiveRecord::Base
 
   def initialize(*args)
     @project = nil
+    if new_record?
+      self.watcher_user_ids = []
+    end
     super
   end
 
@@ -212,10 +215,16 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def notify?
-    return true if notification
-    return true if dmsf_folder && dmsf_folder.notify?
-    return true if !dmsf_folder && project.dmsf_notification
-    false
+    notification || dmsf_folder&.notify? || (!dmsf_folder && project.dmsf_notification)
+  end
+
+  def get_all_watchers(watchers)
+    watchers.concat notified_watchers
+    if dmsf_folder
+      watchers.concat dmsf_folder.notified_watchers
+    else
+      watchers.concat project.notified_watchers
+    end
   end
 
   def notify_deactivate

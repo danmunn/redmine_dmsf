@@ -22,10 +22,12 @@
 class DmsfContextMenusController < ApplicationController
 
   helper :context_menus
+  helper :watchers
 
   before_action :find_folder
   before_action :find_dmsf_file
   before_action :find_dmsf_folder
+  before_action :find_dmsf_project
 
   def dmsf
     if @dmsf_file
@@ -48,6 +50,12 @@ class DmsfContextMenusController < ApplicationController
       @project = @dmsf_link.project
       @allowed = User.current.allowed_to? :file_manipulation, @project
       @email_allowed = false
+    elsif @dmsf_project # project
+      @locked = false
+      @unlockable = false
+      @project = @dmsf_project
+      @allowed = User.current.allowed_to? :view_project_watchers, @project
+      @email_allowed = false
     else # multiple selection
       @project = get_project
       @locked = false
@@ -56,7 +64,12 @@ class DmsfContextMenusController < ApplicationController
           User.current.allowed_to?(:folder_manipulation, @project)
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
     end
-    @back_url = dmsf_folder_path(id: @project, folder_id: @folder)
+    if params['back_url'].present?
+      @back_url = params['back_url']
+    else
+      @back_url = dmsf_folder_path(id: @project, folder_id: @folder)
+    end
+    @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
     render layout: false
   rescue ActiveRecord::RecordNotFound
     render_404
@@ -134,6 +147,14 @@ class DmsfContextMenusController < ApplicationController
       elsif params[:ids][0] =~ /folder-link-(\d+)/
         @dmsf_link = DmsfLink.find_by(id: $1)
         @dmsf_folder = DmsfFolder.find_by(id: @dmsf_link.target_id) if @dmsf_link
+      end
+    end
+  end
+
+  def find_dmsf_project
+    if (params[:ids].present? && (params[:ids].size == 1)) && (!@dmsf_project)
+      if params[:ids][0] =~ /project-(\d+)/
+        @dmsf_project = Project.find_by(id: $1)
       end
     end
   end

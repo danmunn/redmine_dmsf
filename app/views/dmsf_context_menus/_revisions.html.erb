@@ -20,16 +20,18 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% if file.notification %>
-  <%= link_to l(:label_notifications_off),
-              notify_deactivate_dmsf_files_path(id: file, back_url: back_url),
-              title: l(:title_notifications_active_deactivate),
-              class: 'icon icon-email' %>
-<% else %>
-  <%= link_to l(:label_notifications_on),
-              notify_activate_dmsf_files_path(id: file, back_url: back_url),
-              title: l(:title_notifications_not_active_activate),
-              class: 'icon icon-email-add' %>
+<% if notifications %>
+  <% if file.notification %>
+    <%= link_to l(:label_notifications_off),
+                notify_deactivate_dmsf_files_path(id: file, back_url: back_url),
+                title: l(:title_notifications_active_deactivate),
+                class: 'icon icon-email' %>
+  <% else %>
+    <%= link_to l(:label_notifications_on),
+                notify_activate_dmsf_files_path(id: file, back_url: back_url),
+                title: l(:title_notifications_not_active_activate),
+                class: 'icon icon-email-add' %>
+  <% end %>
 <% end %>
 <%= link_to l(:label_link_to),
             new_dmsf_link_path(project_id: project.id, dmsf_folder_id: file.dmsf_folder ? file.dmsf_folder.id : nil,
@@ -39,5 +41,6 @@
 <%= link_to "#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: file, back_url: back_url),
             title: l(:title_copy), class: 'icon icon-copy' %>
 <%= link_to l(:button_download), view_dmsf_file_path(file, disposition: 'attachment'), class: 'icon icon-download' %>
+<%= render partial: 'dmsf_context_menus/watch', locals: { object: file } %>
 <%= delete_link(dmsf_file_path(id: file, details: true),
                 back_url: dmsf_folder_path(id: file.project, folder_id: file.dmsf_folder)) if file_delete_allowed %>

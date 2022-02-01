@@ -42,7 +42,8 @@
           project: @project,
           locked_for_user: @locked_for_user,
           file_manipulation_allowed: @file_manipulation_allowed,
-          trash_enabled: @trash_enabled } %>
+          trash_enabled: @trash_enabled,
+          notifications: @notifications } %>
     <% else %>
       <%= actions_dropdown do %>
         <%= render partial: 'dmsf_context_menus/main', locals: {
@@ -52,7 +53,8 @@
             project: @project,
             locked_for_user: @locked_for_user,
             file_manipulation_allowed: @file_manipulation_allowed,
-            trash_enabled: @trash_enabled } %>
+            trash_enabled: @trash_enabled,
+            notifications: @notifications} %>
       <% end %>
     <% end %>
   </div>
@@ -91,6 +93,24 @@
 
 <% content_for :sidebar do %>
   <%= render partial: 'dmsf/sidebar' %>
+
+  <% project_or_folder = @folder? @folder : @project %>
+  <% if project_or_folder&.watchers.present? %>
+    <div id="watchers">
+      <% if @folder %>
+        <%= render partial: 'watchers/watchers', locals: { watched: @folder } %>
+      <% else %>
+        <% if User.current.allowed_to?(:add_project_watchers, @project) %>
+          <div class="contextual">
+            <%= link_to l(:button_add), new_watchers_path(object_type: :project, object_id: @project.id), remote: true,
+                        method: 'get' %>
+          </div>
+        <% end %>
+        <h3><%= l(:label_project_watchers) %> (<%= @project.watcher_users.size %>)</h3>
+        <%= watchers_list @project %>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>
 
 <% if Redmine::Plugin.installed?(:easy_extensions) %>

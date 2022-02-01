@@ -103,4 +103,9 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
     assert !@project3.dmsf_available?
   end
 
+  def test_watchable
+    @project1.add_watcher @jsmith
+    assert @project1.watched_by?(@jsmith)
+  end
+
 end

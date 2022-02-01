@@ -23,13 +23,15 @@
   <% if member %>
     <fieldset class="box tabular">
       <legend><%= l(:link_user_preferences) %></legend>
-      <p>
-        <%= content_tag :label, l(:label_notifications) %>
-        <%= select_tag 'email_notify',
-          options_for_select([[l(:select_option_default), nil],
-          [l(:select_option_activated), true], [l(:select_option_deactivated), false]],
-          selected: member.dmsf_mail_notification) %>
-      </p>
+      <% if Setting.notified_events.include?('dmsf_legacy_notifications') %>
+        <p>
+          <%= content_tag :label, l(:label_notifications) %>
+          <%= select_tag 'email_notify',
+            options_for_select([[l(:select_option_default), nil],
+              [l(:select_option_activated), true], [l(:select_option_deactivated), false]],
+              selected: member.dmsf_mail_notification) %>
+        </p>
+      <% end %>
       <p>
         <%= content_tag :label, l(:label_title_format) %>
         <%= text_field_tag 'title_format', member.dmsf_title_format, size: 10 %>

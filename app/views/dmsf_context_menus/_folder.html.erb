@@ -49,17 +49,19 @@
       <% end %>
   </li>
 <% end %>
-<li>
-  <% if dmsf_folder.notification %>
-    <%= context_menu_link l(:label_notifications_off), notify_deactivate_dmsf_path(id: dmsf_folder.project,
-          folder_id: dmsf_folder, back_url: back_url), class: 'icon icon-email',
-          disabled: !allowed || locked || !dmsf_folder.notification? %>
-  <% else %>
-    <%= context_menu_link l(:label_notifications_on), notify_activate_dmsf_path(id: dmsf_folder.project,
-          folder_id: dmsf_folder, back_url: back_url), class: 'icon icon-email-add',
-          disabled: !allowed || locked || dmsf_folder.notification? %>
-  <% end %>
-</li>
+<% if notifications %>
+  <li>
+    <% if dmsf_folder.notification %>
+      <%= context_menu_link l(:label_notifications_off), notify_deactivate_dmsf_path(id: dmsf_folder.project,
+            folder_id: dmsf_folder, back_url: back_url), class: 'icon icon-email',
+            disabled: !allowed || locked || !dmsf_folder.notification? %>
+    <% else %>
+      <%= context_menu_link l(:label_notifications_on), notify_activate_dmsf_path(id: dmsf_folder.project,
+            folder_id: dmsf_folder, back_url: back_url), class: 'icon icon-email-add',
+            disabled: !allowed || locked || dmsf_folder.notification? %>
+    <% end %>
+  </li>
+<% end %>
 <% unless edit %>
   <li>
     <%= context_menu_link l(:button_download), entries_operations_dmsf_path(id: project, folder_id: folder,
@@ -72,6 +74,9 @@
       disabled: !email_allowed %>
   </li>
 <% end %>
+<li>
+  <%= render partial: 'dmsf_context_menus/watch', locals: { object: dmsf_folder } %>
+</li>
 <li>
   <%= context_menu_link l(:button_delete),
     dmsf_link ? dmsf_link_path(id: dmsf_link, folder_id: folder, back_url: back_url) :

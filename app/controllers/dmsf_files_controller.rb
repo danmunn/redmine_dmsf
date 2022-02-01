@@ -36,6 +36,8 @@ class DmsfFilesController < ApplicationController
   helper :dmsf_workflows
   helper :dmsf
   helper :queries
+  helper :watchers
+  helper :context_menus
 
   include QueriesHelper
 
@@ -83,6 +85,7 @@ class DmsfFilesController < ApplicationController
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @revision_count = @file.dmsf_file_revisions.visible.all.size
     @revision_pages = Paginator.new @revision_count, params['per_page'] ? params['per_page'].to_i : 25, params['page']
+    @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
 
     respond_to do |format|
       format.html {

@@ -46,15 +46,17 @@
             class: 'icon icon-lock', disabled: !allowed %>
     <% end %>
 </li>
-<li>
-  <% if dmsf_file.notification %>
-      <%= context_menu_link l(:label_notifications_off), notify_deactivate_dmsf_files_path(id: dmsf_file,
-            back_url: back_url), class: 'icon icon-email', disabled: !allowed || locked %>
-  <% else %>
-      <%= context_menu_link l(:label_notifications_on), notify_activate_dmsf_files_path(id: dmsf_file,
-            back_url: back_url), class: 'icon icon-email-add', disabled: !allowed || locked %>
-  <% end %>
-</li>
+<% if notifications %>
+  <li>
+    <% if dmsf_file.notification %>
+        <%= context_menu_link l(:label_notifications_off), notify_deactivate_dmsf_files_path(id: dmsf_file,
+              back_url: back_url), class: 'icon icon-email', disabled: !allowed || locked %>
+    <% else %>
+        <%= context_menu_link l(:label_notifications_on), notify_activate_dmsf_files_path(id: dmsf_file,
+              back_url: back_url), class: 'icon icon-email-add', disabled: !allowed || locked %>
+    <% end %>
+  </li>
+<% end %>
 <li>
     <%= render partial: 'approval_workflow', locals: { dmsf_file: dmsf_file, project: project, locked: locked,
           back_url: back_url } %>
@@ -82,6 +84,9 @@
             (Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] != 'WEBDAV_READ_WRITE') %>
   </li>
 <% end %>
+<li>
+  <%= render partial: 'dmsf_context_menus/watch', locals: { object: dmsf_file } %>
+</li>
 <li>
   <%= context_menu_link l(:button_delete),
         dmsf_link ? dmsf_link_path(id: dmsf_link, folder_id: folder, back_url: back_url) : dmsf_file_path(id: dmsf_file,

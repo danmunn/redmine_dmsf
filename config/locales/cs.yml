@@ -425,6 +425,21 @@ cs:
   title_start_minor: Zahájení není dovoleno, podružná verze musí být nula
   title_approval_minor: Schválení není dovoleno, podružná verze musí být nula
 
+  label_project_watchers: Sledující uživatelé
+  label_dmsf_folder_watchers: Sledující uživatelé
+  label_dmsf_file_watchers: Sledující uživatelé
+  label_dmsf_watched: Sledované dokumenty
+  dmsf_legacy_notifications: Původní DMS notifikace
+  permission_view_dmsf_folder_watchers: Zobrazit sledující složky
+  permission_add_dmsf_folder_watchers: Přidat sledujícího složky
+  permission_delete_dmsf_folder_watchers: Smazat sledující složky
+  permission_view_dmsf_file_watchers: Zobrazit sledující dokumentu
+  permission_add_dmsf_file_watchers: Přidat sledujícího dokumentu
+  permission_delete_dmsf_file_watchers: Smazat sledující dokumentu
+  permission_view_project_watchers: Zobrazit sledující projektu
+  permission_add_project_watchers: Přidat sledujícího projektu
+  permission_delete_project_watchers: Smazat sledující projektu
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

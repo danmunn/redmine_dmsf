@@ -78,13 +78,12 @@ class DmsfFolder < ActiveRecord::Base
   scope :notsystem, -> { where(system: false) }
 
   acts_as_customizable
-
   acts_as_searchable columns: ["#{table_name}.title", "#{table_name}.description"],
         project_key: 'project_id',
         date_column: 'updated_at',
         permission: :view_dmsf_files,
         scope: Proc.new { DmsfFolder.visible }
-
+  acts_as_watchable
   acts_as_event title: Proc.new { |o| o.title },
           description: Proc.new { |o| o.description },
           url: Proc.new { |o| { controller: 'dmsf', action: 'show', id: o.project, folder_id: o } },
@@ -120,6 +119,13 @@ class DmsfFolder < ActiveRecord::Base
       return false
     end
     DmsfFolder.permissions?(folder.dmsf_folder, allow_system)
+  end
+
+  def initialize(*args)
+    if new_record?
+      self.watcher_user_ids = []
+    end
+    super
   end
 
   def default_values
@@ -197,10 +203,16 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def notify?
-    return true if notification
-    return true if dmsf_folder&.notify?
-    return true if !dmsf_folder && project.dmsf_notification
-    false
+    notification || dmsf_folder&.notify? || (!dmsf_folder && project.dmsf_notification)
+  end
+
+  def get_all_watchers(watchers)
+    watchers << notified_watchers
+    if dmsf_folder
+      watchers << dmsf_folder.notified_watchers
+    else
+      watchers << project.notified_watchers
+    end
   end
 
   def notify_deactivate
@@ -577,8 +589,8 @@ class DmsfFolder < ActiveRecord::Base
       if title =~ /^\./
         classes << 'dmsf-system'
       else
+        classes << 'hascontextmenu'
         if (type != 'project')
-          classes << 'hascontextmenu'
           classes << 'dmsf-draggable'
         end
         if %(project folder).include?(type)
