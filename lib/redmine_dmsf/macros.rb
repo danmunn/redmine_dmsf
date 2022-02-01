@@ -58,7 +58,11 @@ Redmine::WikiFormatting::Macros.register do
        "_folder_id_ can be found in the link for folder opening. Without arguments return link to main folder 'Documents'"
   macro :dmsff do |obj, args|
     if args.length < 1
-      return link_to l(:link_documents), dmsf_folder_url(@project)
+      if User.current.allowed_to?(:view_dmsf_folders, @project) && @project.module_enabled?(:dmsf)
+        return link_to l(:link_documents), dmsf_folder_url(@project)
+      else
+        raise l(:notice_not_authorized)
+      end
     else
       folder = DmsfFolder.visible.find args[0].strip
       if User.current && User.current.allowed_to?(:view_dmsf_folders, folder.project)
@@ -66,8 +70,7 @@ Redmine::WikiFormatting::Macros.register do
         title.gsub!(/\A"|"\z/,'') # Remove apostrophes
         title.gsub!(/\A'|'\z/,'')
         title = folder.title if title.empty?
-        return link_to h(title),
-          dmsf_folder_url(folder.project, folder_id: folder)
+        return link_to h(title), dmsf_folder_url(folder.project, folder_id: folder)
       else
         raise l(:notice_not_authorized)
       end
