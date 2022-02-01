@@ -116,4 +116,12 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
     assert users.blank?
   end
 
+  def test_get_notify_users_with_watchers
+    @file1.add_watcher @jsmith
+    with_settings :notified_events => [] do
+      users = DmsfMailer.get_notify_users(@project1, @file1)
+      assert users.present?
+    end
+  end
+
 end

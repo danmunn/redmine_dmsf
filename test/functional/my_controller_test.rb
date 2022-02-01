@@ -57,7 +57,7 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
       end
     end
   end
-  
+
   def test_page_with_open_locked_documents
     @request.session[:user_id] = @admin.id
     @admin.pref[:my_page_layout] = { 'top' => ['locked_documents'] }
@@ -68,6 +68,19 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
       assert_select 'div#list-top' do
         assert_select 'h3', { text: "#{l(:locked_documents)} (0/1)" }
       end
+    end
+  end
+
+  def test_page_with_open_watched_documents
+    @jsmith.pref[:my_page_layout] = { 'top' => ['watched_documents'] }
+    @jsmith.pref.save!
+    @file1.add_watcher @jsmith
+    @folder1.add_watcher @jsmith
+    @project1.add_watcher @jsmith
+    get :page
+    assert_response :success
+    assert_select 'div#list-top' do
+      assert_select 'h3', { text: "#{l(:label_dmsf_watched)} (2/1)" }
     end
   end
 

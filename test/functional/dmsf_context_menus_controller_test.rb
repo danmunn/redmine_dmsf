@@ -172,6 +172,19 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     end
   end
 
+  def test_dmsf_file_watch
+    get :dmsf, params: { id: @file1.project, ids: ["file-#{@file1.id}"] }
+    assert_response :success
+    assert_select 'a.icon-fav-off', text: l(:button_watch)
+  end
+
+  def test_dmsf_file_unwatch
+    @file1.add_watcher @jsmith
+    get :dmsf, params: { id: @file1.project, ids: ["file-#{@file1.id}"] }
+    assert_response :success
+    assert_select 'a.icon-fav', text: l(:button_unwatch)
+  end
+
   def test_dmsf_file_link
     with_settings :notified_events => ['dmsf_legacy_notifications'] do
       get :dmsf, params: {
@@ -297,6 +310,19 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a:not(icon-email.disabled)', text: l(:field_mail)
   end
 
+  def test_dmsf_folder_watch
+    get :dmsf, params: { id: @folder1.project, ids: ["folder-#{@folder1.id}"] }
+    assert_response :success
+    assert_select 'a.icon-fav-off', text: l(:button_watch)
+  end
+
+  def test_dmsf_folder_unwatch
+    @folder1.add_watcher @jsmith
+    get :dmsf, params: { id: @folder1.project, ids: ["folder-#{@folder1.id}"] }
+    assert_response :success
+    assert_select 'a.icon-fav', text: l(:button_unwatch)
+  end
+
   def test_dmsf_folder_link
     with_settings :notified_events => ['dmsf_legacy_notifications'] do
       get :dmsf, params: { id: @folder_link1.project.id, ids: ["folder-#{@folder_link1.id}"] }
@@ -334,6 +360,19 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a.icon-del', text: l(:button_delete)
     assert_select 'a.icon-download', text: l(:button_download)
     assert_select 'a.icon-email', text: l(:field_mail)
+  end
+
+  def test_dmsf_project_watch
+    get :dmsf, params: { ids: ["project-#{@project1.id}"] }
+    assert_response :success
+    assert_select 'a.icon-fav-off', text: l(:button_watch)
+  end
+
+  def test_dmsf_project_unwatch
+    @project1.add_watcher @jsmith
+    get :dmsf, params: { ids: ["project-#{@project1.id}"] }
+    assert_response :success
+    assert_select 'a.icon-fav', text: l(:button_unwatch)
   end
 
   def test_trash_file

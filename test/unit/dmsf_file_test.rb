@@ -275,4 +275,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_equal '', @file1.locked_by
   end
 
+  def test_watchable
+    @file1.add_watcher @jsmith
+    assert @file1.watched_by?(@jsmith)
+  end
+
 end

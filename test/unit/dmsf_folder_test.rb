@@ -258,4 +258,9 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert @folder6.empty?
   end
 
+  def test_watchable
+    @folder1.add_watcher @jsmith
+    assert @folder1.watched_by?(@jsmith)
+  end
+
 end
