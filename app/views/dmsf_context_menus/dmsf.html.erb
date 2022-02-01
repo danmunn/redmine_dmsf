@@ -33,6 +33,8 @@
                                             notifications: @notifications, back_url: @back_url } %>
   <% elsif @dmsf_link %>
     <%= render partial: 'url', locals: { dmsf_link: @dmsf_link, allowed: @allowed, back_url: @back_url } %>
+  <% elsif @dmsf_project %>
+    <%= render partial: 'project', locals: { dmsf_project: @dmsf_project, allowed: @allowed, back_url: @back_url } %>
   <% else %>
     <%= render partial: 'multiple', locals: { project: @project, folder: @folder, allowed: @allowed,
                                               email_allowed: @email_allowed, back_url: @back_url } %>

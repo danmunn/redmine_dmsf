@@ -21,6 +21,5 @@
 %>
 
 <li>
-  <%= context_menu_link l(:button_delete), dmsf_link_path(dmsf_link), method: :delete, class: 'icon icon-del',
-                        data: { confirm: l(:text_are_you_sure) }, id: 'dmsf-cm-delete', disabled: !allowed %>
+  <%= render partial: 'dmsf_context_menus/watch', locals: { object: dmsf_project } %>
 </li>

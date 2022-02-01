@@ -589,8 +589,8 @@ class DmsfFolder < ActiveRecord::Base
       if title =~ /^\./
         classes << 'dmsf-system'
       else
+        classes << 'hascontextmenu'
         if (type != 'project')
-          classes << 'hascontextmenu'
           classes << 'dmsf-draggable'
         end
         if %(project folder).include?(type)
