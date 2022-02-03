@@ -79,9 +79,15 @@ RAILS_ENV=test REDMINE_LANG=en bundle exec rake redmine:load_default_data
 #RAILS_ENV=test bundle exec rake test
 
 # Run DMSF tests
+# Standard tests
 bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf RAILS_ENV=test
 bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf RAILS_ENV=test
 bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf RAILS_ENV=test
+# Macros
+ruby plugin/redmine_dmsf/test/unit/lib/redmine_dmsf/dmsf_macros_test.rb RAILS_ENV=test
+# Helpers
+ruby plugin/redmine_dmsf/test/helpers/dmsf_helper_test.rb RAILS_ENV=test
+ruby plugin/redmine_dmsf/test/helpers/dmsf_queries_helper_test.rb RAILS_ENV=test
 
 # Litmus
 

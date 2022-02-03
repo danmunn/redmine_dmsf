@@ -27,29 +27,25 @@ Redmine::WikiFormatting::Macros.register do
        "_file_id_ / _revision_id_ can be found in the link for file/revision download."
   macro :dmsf do |obj, args|
     raise ArgumentError if args.length < 1 # Requires file id
-    file = DmsfFile.visible.find args[0].strip
+    file = DmsfFile.visible.find args[0]
     if args[2].blank?
       revision = file.last_revision
     else
-      revision = DmsfFileRevision.find(args[2])
+      revision = DmsfFileRevision.find args[2]
       if revision.dmsf_file != file
         raise ActiveRecord::RecordNotFound
       end
     end
-    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project, { id: file.id })
-      file_view_url = url_for(controller: :dmsf_files, action: 'view', id: file, download: args[2])
-      title = args[1] ?  args[1] : file.title
-      title.gsub!(/\A"|"\z/,'') # Remove apostrophes
-      title.gsub!(/\A'|'\z/,'')
-      title = file.title if title.empty?
-      return link_to(h(title),
-        file_view_url,
-        target: '_blank',
-        title: h(revision.tooltip),
-        'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}")
-    else
+    unless User.current&.allowed_to?(:view_dmsf_files, file.project, { id: file.id })
       raise l(:notice_not_authorized)
     end
+    title = args[1].present? ?  args[1] : file.title
+    title.gsub! /\A"|"\z/, '' # Remove apostrophes
+    title.gsub! /\A'|'\z/, ''
+    title = file.title if title.empty?
+    url = view_dmsf_file_path(id: file.id, download: args[2])
+    link_to h(title), url, target: '_blank', title: h(revision.tooltip),
+      'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}"
   end
 
   # dmsff - link to a folder
@@ -64,13 +60,13 @@ Redmine::WikiFormatting::Macros.register do
         raise l(:notice_not_authorized)
       end
     else
-      folder = DmsfFolder.visible.find args[0].strip
-      if User.current && User.current.allowed_to?(:view_dmsf_folders, folder.project)
+      folder = DmsfFolder.visible.find args[0]
+      if User.current&.allowed_to?(:view_dmsf_folders, folder.project)
         title = args[1] ?  args[1] : folder.title
-        title.gsub!(/\A"|"\z/,'') # Remove apostrophes
-        title.gsub!(/\A'|'\z/,'')
+        title.gsub! /\A"|"\z/, '' # Remove leading and trailing apostrophe
+        title.gsub! /\A'|'\z/, ''
         title = folder.title if title.empty?
-        return link_to h(title), dmsf_folder_url(folder.project, folder_id: folder)
+        link_to h(title), dmsf_folder_url(folder.project, folder_id: folder)
       else
         raise l(:notice_not_authorized)
       end
@@ -83,9 +79,12 @@ Redmine::WikiFormatting::Macros.register do
        "_document_id_ can be found in the document's details."
   macro :dmsfd do |obj, args|
     raise ArgumentError if args.length < 1 # Requires file id
-    file = DmsfFile.visible.find args[0].strip
-    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
-      return link_to(h(args[1] ? args[1] : file.title), dmsf_file_path(id: file))
+    file = DmsfFile.visible.find args[0]
+    if User.current&.allowed_to?(:view_dmsf_files, file.project)
+      title = args[1].present? ?  args[1] : file.title
+      title.gsub! /\A"|"\z/, '' # Remove leading and trailing apostrophe
+      title.gsub! /\A'|'\z/, ''
+      link_to h(title), dmsf_file_path(id: file)
     else
       raise l(:notice_not_authorized)
     end
@@ -97,9 +96,9 @@ Redmine::WikiFormatting::Macros.register do
          "_document_id_ can be found in the document's details."
   macro :dmsfdesc do |obj, args|
     raise ArgumentError if args.length < 1 # Requires file id
-    file = DmsfFile.visible.find args[0].strip
-    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
-      return textilizable(file.description)
+    file = DmsfFile.visible.find args[0]
+    if User.current&.allowed_to?(:view_dmsf_files, file.project)
+      textilizable file.description
     else
       raise l(:notice_not_authorized)
     end
@@ -111,9 +110,9 @@ Redmine::WikiFormatting::Macros.register do
          "_document_id_ can be found in the document's details."
   macro :dmsfversion do |obj, args|
     raise ArgumentError if args.length < 1 # Requires file id
-    file = DmsfFile.visible.find args[0].strip
-    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
-      return textilizable(file.version)
+    file = DmsfFile.visible.find args[0]
+    if User.current&.allowed_to?(:view_dmsf_files, file.project)
+      textilizable file.version
     else
       raise l(:notice_not_authorized)
     end
@@ -125,9 +124,9 @@ Redmine::WikiFormatting::Macros.register do
          "_document_id_ can be found in the document's details."
   macro :dmsflastupdate do |obj, args|
     raise ArgumentError if args.length < 1 # Requires file id
-    file = DmsfFile.visible.find args[0].strip
-    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
-      return textilizable(format_time(file.last_revision.updated_at))
+    file = DmsfFile.visible.find args[0]
+    if User.current&.allowed_to?(:view_dmsf_files, file.project)
+      textilizable format_time(file.last_revision.updated_at)
     else
       raise l(:notice_not_authorized)
     end
@@ -136,12 +135,12 @@ Redmine::WikiFormatting::Macros.register do
   # dmsft - link to the document's content preview
   desc "Text referring to DMSF text document content:\n\n" +
            "{{dmsft(file_id, lines_count)}}\n\n" +
-       "_file_id_ can be found in the document's details. _lines_count_ indicate quantity of lines to show."
+       "_file_id_ can be found in the document's details. _lines_count_ indicates quantity of lines to show."
   macro :dmsft do |obj, args|
     raise ArgumentError if args.length < 2 # Requires file id and lines number
-    file = DmsfFile.visible.find args[0].strip
-    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
-      return file.preview(args[1].strip).gsub("\n", '<br/>').html_safe
+    file = DmsfFile.visible.find args[0]
+    if User.current&.allowed_to?(:view_dmsf_files, file.project)
+      file.preview(args[1]).gsub("\n", '<br/>').html_safe
     else
       raise l(:notice_not_authorized)
     end
@@ -150,108 +149,95 @@ Redmine::WikiFormatting::Macros.register do
   # dmsf_image - link to an image
   desc "Wiki DMSF image:\n\n" +
              "{{dmsf_image(file_id)}}\n" +
-             "{{dmsf_image(file_id, size=300)}} -- with and size 300x300\n" +
+             "{{dmsf_image(file_id, size=50%)}} -- with size 50%\n" +
+             "{{dmsf_image(file_id, size=300)}} -- with size 300\n" +
              "{{dmsf_image(file_id, height=300)}} -- with height (auto width)\n" +
              "{{dmsf_image(file_id, width=300)}} -- with width (auto height)\n" +
-             "{{dmsf_image(file_id, size=640x480)}} -- with and size 640x480"
+             "{{dmsf_image(file_id, size=640x480)}} -- with size 640x480"
   macro :dmsf_image do |obj, args|
+    raise ArgumentError if args.length < 1 # Requires file id
     args, options = extract_macro_options(args, :size, :width, :height, :title)
-    file_id = args.first
-    raise 'DMSF document ID required' unless file_id.present?
     size = options[:size]
     width = options[:width]
     height = options[:height]
-    if file = DmsfFile.find_by(id: file_id)
-      unless User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
-        raise l(:notice_not_authorized)
-      end
-      raise 'Not supported image format' unless file.image?
-      url = url_for(controller: :dmsf_files, action: 'view', id: file)
-      if size && size.include?('%')
-        image_tag url, alt: file.title, width: size, height: size
-      elsif height
-        image_tag url, alt: file.title, width: 'auto', height: height
-      elsif width
-        image_tag url, alt: file.title, width: width, height: 'auto'
-      else
-        image_tag url, alt: file.title, size: size
-      end
+    file = DmsfFile.visible.find args[0]
+    unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+      raise l(:notice_not_authorized)
+    end
+    raise 'Not supported image format' unless file.image?
+    url = view_dmsf_file_path(file)
+    if size&.include?('%')
+      image_tag url, alt: file.title, width: size, height: size
+    elsif height
+      image_tag url, alt: file.title, width: 'auto', height: height
+    elsif width
+      image_tag url, alt: file.title, width: width, height: 'auto'
     else
-      raise "Document ID #{file_id} not found"
+      image_tag url, alt: file.title, size: size
     end
   end
 
   # dmsf_video - link to a video
-  desc "Wiki DMSF image:\n\n" +
+  desc "Wiki DMSF video:\n\n" +
            "{{dmsf_video(file_id)}}\n" +
-           "{{dmsf_video(file_id, size=300)}} -- with and size 300x300\n" +
+           "{{dmsf_video(file_id, size=50%)}} -- with size 50%\n" +
+           "{{dmsf_video(file_id, size=300)}} -- with size 300x300\n" +
            "{{dmsf_video(file_id, height=300)}} -- with height (auto width)\n" +
            "{{dmsf_video(file_id, width=300)}} -- with width (auto height)\n" +
-           "{{dmsf_video(file_id, size=640x480)}} -- with and size 640x480"
+           "{{dmsf_video(file_id, size=640x480)}} -- with size 640x480"
   macro :dmsf_video do |obj, args|
+    raise ArgumentError if args.length < 1 # Requires file id
     args, options = extract_macro_options(args, :size, :width, :height, :title)
-    file_id = args.first
-    raise 'DMSF document ID required' unless file_id.present?
     size = options[:size]
     width = options[:width]
     height = options[:height]
-    if file = DmsfFile.find_by(id: file_id)
-      unless User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
-        raise l(:notice_not_authorized)
-      end
-      raise 'Not supported video format' unless file.video?
-      url = url_for(controller: :dmsf_files, action: 'view', id: file)
-      if size && size.include?('%')
-        video_tag url, controls: true, alt: file.title, width: size, height: size
-      elsif height
-        video_tag url, controls: true, alt: file.title, width: 'auto', height: height
-      elsif width
-        video_tag url, controls: true, alt: file.title, width: width, height: 'auto'
-      else
-        video_tag url, controls: true, alt: file.title, size: size
-      end
+    file = DmsfFile.visible.find args[0]
+    unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+      raise l(:notice_not_authorized)
+    end
+    raise 'Not supported video format' unless file.video?
+    url = view_dmsf_file_path(file)
+    if size&.include?('%')
+      video_tag url, controls: true, alt: file.title, width: size, height: size
+    elsif height
+      video_tag url, controls: true, alt: file.title, width: 'auto', height: height
+    elsif width
+      video_tag url, controls: true, alt: file.title, width: width, height: 'auto'
     else
-      raise "Document ID #{file_id} not found"
+      video_tag url, controls: true, alt: file.title, size: size
     end
   end
 
   # dmsftn - link to an image thumbnail
   desc "Wiki DMSF thumbnail:\n\n" +
-             "{{dmsftn(file_id)}} -- with default height 200(auto width)\n" +
+             "{{dmsftn(file_id)}} -- with default height 200 (auto width)\n" +
              "{{dmsftn(file_id, size=300)}} -- with size 300x300\n" +
              "{{dmsftn(file_id, height=300)}} -- with height (auto width)\n" +
              "{{dmsftn(file_id, width=300)}} -- with width (auto height)\n" +
-             "{{dmsftn(file_id, size=640x480)}} -- with and size 640x480"
+             "{{dmsftn(file_id, size=640x480)}} -- with size 640x480"
   macro :dmsftn do |obj, args|
+    raise ArgumentError if args.length < 1 # Requires file id
     args, options = extract_macro_options(args, :size, :width, :height, :title)
-    file_id = args.first
-    raise 'DMSF document ID required' unless file_id.present?
     size = options[:size]
     width = options[:width]
     height = options[:height]
-    if file = DmsfFile.find_by(id: file_id)
-      unless User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
-        raise l(:notice_not_authorized)
-      end
-      raise 'Not supported image format' unless file.image?
-      url = url_for(controller: :dmsf_files, action: 'view', id: file)
-      file_view_url = url_for(controller: :dmsf_files, action: 'view', id: file, download: args[2])
-      if size
-        img = image_tag(url, alt: file.title, size: size)
-      elsif height
-        img = image_tag(url, alt: file.title, width: 'auto', height: height)
-      elsif width
-        img = image_tag(url, alt: file.title, width: width, height: 'auto')
-      else
-        img = image_tag(url, alt: file.title, width: 'auto', height: 200)
-      end
-      link_to img,
-        file_view_url, target: '_blank',
-        title: h(file.last_revision.try(:tooltip)),
-        'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{file_view_url}"
-    else
-      raise "Document ID #{file_id} not found"
+    file = DmsfFile.visible.find args[0]
+    unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+      raise l(:notice_not_authorized)
     end
+    raise 'Not supported image format' unless file.image?
+    url = view_dmsf_file_path(file)
+    if size
+      img = image_tag(url, alt: file.title, size: size)
+    elsif height
+      img = image_tag(url, alt: file.title, width: 'auto', height: height)
+    elsif width
+      img = image_tag(url, alt: file.title, width: width, height: 'auto')
+    else
+      img = image_tag(url, alt: file.title, width: 'auto', height: 200)
+    end
+    link_to img, url, target: '_blank', title: h(file.last_revision.try(:tooltip)),
+      'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}"
   end
 
   # dmsfw - link to a document's approval workflow status
@@ -260,10 +246,10 @@ Redmine::WikiFormatting::Macros.register do
        "_file_id_ can be found in the document's details."
   macro :dmsfw do |obj, args|
     raise ArgumentError if args.length < 1 # Requires file id
-    file = DmsfFile.visible.find args[0].strip
-    if User.current && User.current.allowed_to?(:view_dmsf_files, file.project)
+    file = DmsfFile.visible.find args[0]
+    if User.current&.allowed_to?(:view_dmsf_files, file.project)
       raise ActiveRecord::RecordNotFound unless file.last_revision
-      return file.last_revision.workflow_str(false)
+      file.last_revision.workflow_str(false)
     else
       raise l(:notice_not_authorized)
     end

@@ -23,9 +23,10 @@
 
 module RedmineDmsf
   module Test
+
     class HelperTest < ActiveSupport::TestCase
 
-      fixtures :users, :email_addresses, :projects
+      fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles
 
       # Allow us to override the fixtures method to implement fixtures for our plugin.
       # Ultimately it allows for better integration without blowing redmine fixtures up,
@@ -45,11 +46,31 @@ module RedmineDmsf
 
       def setup
         @jsmith = User.find 2
+        @manager_role = Role.find_by(name: 'Manager')
+        @developer_role = Role.find_by(name: 'Developer')
+        [@manager_role, @developer_role].each do |role|
+          role.add_permission! :view_dmsf_folders
+          role.add_permission! :view_dmsf_files
+        end
         @project1 = Project.find 1
-        @folder1 = DmsfFolder.find 1
+        @project1.enable_module! :dmsf
+        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
         Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
+        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
+        FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
       end
+
+      def teardown
+        # Delete our tmp folder
+        begin
+          FileUtils.rm_rf DmsfFile.storage_path
+        rescue => e
+          Rails.logger.error e.message
+        end
+      end
+
     end
+
   end
 end
