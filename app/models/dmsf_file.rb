@@ -87,11 +87,11 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def initialize(*args)
+    super
     @project = nil
     if new_record?
       self.watcher_user_ids = []
     end
-    super
   end
 
   def self.storage_path

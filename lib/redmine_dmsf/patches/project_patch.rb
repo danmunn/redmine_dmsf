@@ -30,8 +30,10 @@ module RedmineDmsf
       # Overridden methods
 
       def initialize(attributes=nil, *args)
-        self.watcher_user_ids = []
         super
+        if new_record?
+          self.watcher_user_ids = []
+        end
       end
 
       def copy(project, options={})

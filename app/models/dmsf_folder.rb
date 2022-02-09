@@ -122,10 +122,10 @@ class DmsfFolder < ActiveRecord::Base
   end
 
   def initialize(*args)
+    super
     if new_record?
       self.watcher_user_ids = []
     end
-    super
   end
 
   def default_values
