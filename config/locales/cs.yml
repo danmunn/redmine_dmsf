@@ -439,6 +439,8 @@ cs:
   permission_view_project_watchers: Zobrazit sledující projektu
   permission_add_project_watchers: Přidat sledujícího projektu
   permission_delete_project_watchers: Smazat sledující projektu
+  label_dmsf_new_top_level_document: Nový kořenový DMS dokument
+  label_dmsf_new_top_level_folder: Nová kořenová DMS složka
 
   easy_pages:
     modules:

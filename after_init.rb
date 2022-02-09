@@ -36,6 +36,11 @@ def dmsf_init
   Redmine::MenuManager.map :project_menu do |menu|
     menu.push :dmsf, { controller: 'dmsf', action: 'show' }, caption: :menu_dmsf, before: :documents,
               param: :id, html: { class: 'icon icon-dmsf' }
+    # New menu extension
+    menu.push :dmsf_file, { controller: 'dmsf_upload', action: 'multi_upload'},
+              caption: :label_dmsf_new_top_level_document, parent: :new_object
+    menu.push :dmsf_folder, { controller: 'dmsf', action: 'new'}, caption: :label_dmsf_new_top_level_folder,
+              parent: :new_object
   end
   # Main menu extension
   Redmine::MenuManager.map :top_menu do |menu|

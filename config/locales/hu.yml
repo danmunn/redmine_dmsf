@@ -438,6 +438,8 @@ hu:
   permission_view_project_watchers: View project's watchers
   permission_add_project_watchers: Add project's watchers
   permission_delete_project_watchers: Delete project's watchers
+  label_dmsf_new_top_level_document: New top level DMS document
+  label_dmsf_new_top_level_folder: New top level DMS folder
 
   easy_pages:
     modules:
