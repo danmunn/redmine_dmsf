@@ -174,6 +174,9 @@ class DmsfMailer < Mailer
     watchers = []
     file.get_all_watchers(watchers)
     users.concat watchers
+    if User.current&.pref.no_self_notified
+      users.delete User.current
+    end
     users.uniq
   end
 
