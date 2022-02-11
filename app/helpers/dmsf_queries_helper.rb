@@ -122,7 +122,11 @@ module DmsfQueriesHelper
           tag = "<span class=\"dmsf-expander\" onclick=\"dmsfToggle(this, '#{item.id}', null,'#{escape_javascript(path)}')\"></span>".html_safe + tag
           tag = content_tag('div', tag, class: 'row-control dmsf-row-control')
         end
-        tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
+        tag += content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
+        if item.watched_by?(User.current)
+          tag += content_tag(:span, '', title: 'Watched', class: "icon icon-fav")
+        end
+        tag
       when 'folder'
         if item&.deleted?
           tag = content_tag('span', value, class: 'icon icon-folder')
@@ -139,7 +143,12 @@ module DmsfQueriesHelper
             tag = content_tag('div', tag, class: 'row-control dmsf-row-control')
           end
         end
-        tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
+        tag += content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
+        if !item&.deleted? && item.watched_by?(User.current)
+          tag += link_to('', watch_path(object_type: 'dmsf_folder', object_id: item.id), title: l(:button_unwatch),
+                         method: 'delete', class: 'icon icon-fav')
+        end
+        tag
       when 'folder-link'
         if item&.deleted?
           tag = content_tag('span', value, class: 'icon icon-folder')
@@ -169,7 +178,12 @@ module DmsfQueriesHelper
         member = Member.find_by(user_id: User.current.id, project_id: item.project_id)
         revision = DmsfFileRevision.find_by(id: item.customized_id)
         filename = revision ? revision.formatted_name(member) : item.filename
-        tag + content_tag('div', filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
+        tag += content_tag('div', filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
+        if (item.type == 'file') && !item&.deleted? && revision.dmsf_file&.watched_by?(User.current)
+          tag += link_to('', watch_path(object_type: 'dmsf_file', object_id: item.id), title: l(:button_unwatch),
+                         method: 'delete', class: 'icon icon-fav')
+        end
+        tag
       when 'url-link'
         if item&.deleted?
           tag = content_tag('span', value, class: 'icon dmsf-icon-link')

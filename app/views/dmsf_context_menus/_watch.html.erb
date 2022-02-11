@@ -22,7 +22,7 @@
   # Watch/unwatch menu's item
 %>
 
-<% watched = Watcher.any_watched?([object], User.current) %>
+<% watched = object.watched_by?(User.current) %>
 <% css = [watcher_css([object]), watched ? 'icon icon-fav' : 'icon icon-fav-off'].join(' ') %>
 <% text = watched ? l(:button_unwatch) : l(:button_watch) %>
 <% url = watch_path(object_type: object.class.to_s.underscore, object_id: object.id) %>
