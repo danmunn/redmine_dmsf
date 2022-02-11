@@ -123,8 +123,9 @@ module DmsfQueriesHelper
           tag = content_tag('div', tag, class: 'row-control dmsf-row-control')
         end
         tag += content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
-        if item.watched_by?(User.current)
-          tag += content_tag(:span, '', title: 'Watched', class: "icon icon-fav")
+        if item.project.watched_by?(User.current)
+          tag += link_to('', watch_path(object_type: 'project', object_id: item.project.id), title: l(:button_unwatch),
+                         method: 'delete', class: 'icon icon-fav')
         end
         tag
       when 'folder'
