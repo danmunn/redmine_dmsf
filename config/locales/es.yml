@@ -311,7 +311,7 @@ es:
   label_source_project: Proyecto fuente
 
   text_email_doc_updated_subject: Documentos actualizados
-  text_email_doc_updated: acaba de actualizar los ducumentos de
+  text_email_doc_updated: acaba de actualizar los documentos de
   text_email_doc_follows: lo siguiente
   text_email_doc_deleted_subject: Documentos eliminados
   text_email_doc_deleted: acaba de eliminar documentos de
@@ -322,7 +322,7 @@ es:
     notificación por correo electrónico"
   warning_email_notifications: "Notificaciones de email enviadas a %{to}"
 
-  link_trash_bin: Tacho
+  link_trash_bin: Papelera
   title_restore: Recuperar
   notice_dmsf_file_restored: El documento ha sido restaurado satisfactoriamente
   notice_dmsf_folder_restored: El directorio ha sido restaurado satisfactoriamente
