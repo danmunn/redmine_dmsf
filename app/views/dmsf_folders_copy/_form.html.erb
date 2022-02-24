@@ -56,10 +56,10 @@
     $('#copyForm').submit();
   });
   <% unless fast_links %>
-    $('#target_project_id').change(function () {
+    $('#dmsf_file_or_folder_target_project_id').change(function () {
       $('#content').load("<%= url_for(action: 'new') %>", $('#copyForm').serialize());
     });
-    $('#target_project_id').select2();
-    $('#target_folder_id').select2();
+    $('#dmsf_file_or_folder_target_project_id').select2();
+    $('#dmsf_file_or_folder_target_folder_id').select2();
   <% end %>
 <% end %>
