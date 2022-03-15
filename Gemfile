@@ -30,7 +30,6 @@ source 'https://rubygems.org' do
     gem 'simple_enum'
   end
   unless %w(easyproject easy_gantt).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
-    gem 'redmine_extensions', '~> 0.3.9'
     group :test do
       gem 'rails-controller-testing'
     end

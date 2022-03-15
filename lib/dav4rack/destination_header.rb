@@ -1,11 +1,11 @@
 require 'addressable/uri'
 
-module DAV4Rack
+module Dav4rack
   class DestinationHeader
 
     attr_reader :host, :path, :path_info
 
-    # uri is expected to be a DAV4Rack::Uri instance
+    # uri is expected to be a Dav4rack::Uri instance
     def initialize(uri)
       @host = uri.host
       @path = uri.path
@@ -18,9 +18,9 @@ module DAV4Rack
     # host must be the same, but path must differ
     def validate(host: nil, resource_path: nil)
       if host and self.host and self.host != host
-        DAV4Rack::HTTPStatus::BadGateway
+        Dav4rack::HttpStatus::BadGateway
       elsif resource_path and self.path_info == resource_path
-        DAV4Rack::HTTPStatus::Forbidden
+        Dav4rack::HttpStatus::Forbidden
       end
     end
 

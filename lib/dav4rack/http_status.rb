@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module DAV4Rack
+module Dav4rack
 
-  module HTTPStatus
+  module HttpStatus
 
     class Status < Exception
 

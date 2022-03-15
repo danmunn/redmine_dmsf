@@ -42,6 +42,10 @@ module RedmineDmsf
   end
 end
 
-# Apply patch
-RedmineExtensions::PatchManager.register_model_patch 'Role',
+# Apply the patch
+if Redmine::Plugin.installed?(:easy_extensions)
+  RedmineExtensions::PatchManager.register_model_patch 'Role',
   'RedmineDmsf::Patches::RolePatch', prepend: true
+else
+  Role.prepend RedmineDmsf::Patches::RolePatch
+end

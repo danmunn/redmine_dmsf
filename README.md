@@ -9,7 +9,7 @@ Redmine DMSF is Document Management System Features plugin for Redmine issue tra
 
 Redmine DMSF now comes bundled with Webdav functionality: if switched on within plugin settings this will be accessible from /dmsf/webdav.
 
-Webdav functionality is provided through DAV4Rack library.
+Webdav functionality is provided through Dav4rack library.
 
 Initial development was for Kontron AG R&D department and it is released as open source thanks to their generosity.  
 Project home: <https://code.google.com/p/redmine-dmsf/>
@@ -294,6 +294,16 @@ You can either clone the master branch or download the latest zipped version. Be
         
           rake redmine:dmsf_maintenance RAILS_ENV="production"
           rake redmine:dmsf_maintenance dry_run=1 RAILS_ENV="production"
+
+### WebDAV
+
+In order to enable WebDAV module, it is necessary to put the following code into yor `config/additional_environment.rb`
+
+```ruby
+# Redmine DMSF's WebDAV
+require File.dirname(__FILE__) + '/plugins/redmine_dmsf/lib/redmine_dmsf/webdav/custom_middleware'
+config.middleware.insert_before ActionDispatch::Cookies, RedmineDmsf::Webdav::CustomMiddleware
+```
 
 ### Installation in a sub-uri
 

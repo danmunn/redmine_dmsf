@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'dav4rack/logger'
+require File.dirname(__FILE__) + '/logger'
 
-module DAV4Rack
+module Dav4rack
   class Handler
-    include DAV4Rack::HTTPStatus
+    include Dav4rack::HttpStatus
 
     # Options:
     #
@@ -63,7 +63,7 @@ module DAV4Rack
 
 
     def setup_request(env)
-      ::DAV4Rack::Request.new env, @options
+      ::Dav4rack::Request.new env, @options
     end
 
 
@@ -72,7 +72,7 @@ module DAV4Rack
     end
 
     def controller_class
-      @options[:controller_class] || ::DAV4Rack::Controller
+      @options[:controller_class] || ::Dav4rack::Controller
     end
 
   end

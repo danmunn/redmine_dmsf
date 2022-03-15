@@ -1,6 +1,6 @@
 require 'digest'
 
-module DAV4Rack
+module Dav4rack
 
   # Implements secure string comparison methods.
   # Taken straight from ActiveSupport

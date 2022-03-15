@@ -421,7 +421,7 @@ module RedmineDmsf
       # Lock
       def lock(args)
         unless parent&.exist?
-          e = DAV4Rack::LockFailure.new
+          e = Dav4rack::LockFailure.new
           e.add_failure @path, Conflict
           raise e
         end
@@ -431,7 +431,7 @@ module RedmineDmsf
         lock_check args
         entity = file || folder
         unless entity
-          e = DAV4Rack::LockFailure.new
+          e = Dav4rack::LockFailure.new
           e.add_failure @path, MethodNotAllowed
           raise e
         end
@@ -444,7 +444,7 @@ module RedmineDmsf
           if refresh
             http_if = request.get_header('HTTP_IF')
             if http_if.blank?
-              e = DAV4Rack::LockFailure.new
+              e = Dav4rack::LockFailure.new
               e.add_failure @path, Conflict
               raise e
             end
@@ -453,7 +453,7 @@ module RedmineDmsf
               l = DmsfLock.find_by(uuid: $1)
             end
             unless l
-              e = DAV4Rack::LockFailure.new
+              e = Dav4rack::LockFailure.new
               e.add_failure @path, Conflict
               raise e
             end
@@ -468,8 +468,8 @@ module RedmineDmsf
           l = entity.lock!(scope, type, Time.current + 1.weeks, args[:owner])
           @response['Lock-Token'] = l.uuid
           [1.week.to_i, l.uuid]
-        rescue DmsfLockError => exception
-          e = DAV4Rack::LockFailure.new(exception.message)
+        rescue RedmineDmsf::Errors::DmsfLockError => exception
+          e = Dav4rack::LockFailure.new(exception.message)
           e.add_failure @path, Conflict
           raise e
         end
@@ -680,7 +680,7 @@ module RedmineDmsf
       # Prepare file for download using Rack functionality:
       # Download (see RedmineDmsf::Webdav::Download) extends Rack::File to allow single-file
       # implementation of service for request, which allows for us to pipe a single file through
-      # also best-utilising DAV4Rack's implementation.
+      # also best-utilising Dav4rack's implementation.
       def download
         raise NotFound unless file&.last_revision
         disk_file = file.last_revision.disk_file

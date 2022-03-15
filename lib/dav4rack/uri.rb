@@ -1,6 +1,6 @@
 require 'addressable/uri'
 
-module DAV4Rack
+module Dav4rack
 
   # adds a bit of parsing logic around a header URI or path value
   class Uri

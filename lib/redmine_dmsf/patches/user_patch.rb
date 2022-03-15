@@ -26,11 +26,13 @@ module RedmineDmsf
       ##################################################################################################################
       # New methods
 
-      def self.included(base)
+      def self.prepended(base)
         base.class_eval do
           before_destroy :remove_dmsf_references, prepend: true
         end
       end
+
+      private
 
       def remove_dmsf_references
         return if self.id.nil?
@@ -59,6 +61,9 @@ module RedmineDmsf
   end
 end
 
-# Apply patch
-RedmineExtensions::PatchManager.register_model_patch 'User',
-  'RedmineDmsf::Patches::UserPatch'
+# Apply the patch
+if Redmine::Plugin.installed?(:easy_extensions)
+  RedmineExtensions::PatchManager.register_model_patch 'UserPatch', 'RedmineDmsf::Patches::UserPatch'
+else
+  User.prepend RedmineDmsf::Patches::UserPatch
+end

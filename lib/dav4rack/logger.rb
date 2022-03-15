@@ -1,6 +1,6 @@
 require 'logger'
 
-module DAV4Rack
+module Dav4rack
   # This is a simple wrapper for the Logger class. It allows easy access 
   # to log messages from the library.
   class Logger

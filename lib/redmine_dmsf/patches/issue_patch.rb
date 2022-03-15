@@ -174,5 +174,9 @@ module RedmineDmsf
 end
 
 # Apply patch
-RedmineExtensions::PatchManager.register_model_patch 'Issue',
-  'RedmineDmsf::Patches::IssuePatch'
+if Redmine::Plugin.installed?(:easy_extensions)
+  RedmineExtensions::PatchManager.register_model_patch 'Issue',
+    'RedmineDmsf::Patches::IssuePatch'
+else
+  Issue.prepend RedmineDmsf::Patches::IssuePatch
+end

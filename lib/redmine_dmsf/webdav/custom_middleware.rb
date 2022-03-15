@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require 'dav4rack'
+require File.dirname(__FILE__) + '/../../dav4rack'
 
 module RedmineDmsf
   module Webdav
@@ -31,7 +31,7 @@ module RedmineDmsf
         path = '/dmsf/webdav'
         @dav_app = Rack::Builder.new{
           map path do
-            run DAV4Rack::Handler.new(
+            run Dav4rack::Handler.new(
               root_uri_path: path,
               resource_class: RedmineDmsf::Webdav::ResourceProxy,
               log_to: Rails.logger,

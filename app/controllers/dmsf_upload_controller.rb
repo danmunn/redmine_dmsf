@@ -30,8 +30,9 @@ class DmsfUploadController < ApplicationController
   before_action :find_folder, except: [:upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
   before_action :permissions, except: [:upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
 
-  helper :all
+  helper :custom_fields
   helper :dmsf_workflows
+  helper :dmsf
 
   accept_api_auth :upload, :commit
 
@@ -140,7 +141,7 @@ class DmsfUploadController < ApplicationController
 
   def find_folder
     @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?('folder_id')
-  rescue DmsfAccessError
+  rescue RedmineDmsf::Errors::DmsfAccessError
     render_403
   end
 

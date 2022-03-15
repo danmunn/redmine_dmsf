@@ -75,7 +75,7 @@ module RedmineDmsf
                   wf.notify_users(easy_crm_case.project, revision, self)
                   begin
                     file.lock!
-                  rescue DmsfLockError => e
+                  rescue RedmineDmsf::Errors::DmsfLockError => e
                     Rails.logger.warn e.message
                   end
                 else
@@ -118,6 +118,9 @@ module RedmineDmsf
   end
 end
 
-RedmineExtensions::PatchManager.register_controller_patch 'EasyCrmCasesController',
-  'RedmineDmsf::Patches::EasyCrmCasesControllerPatch', prepend: true,
-  if: proc { Redmine::Plugin.installed?(:easy_crm) }
+# Apply the patch
+if Redmine::Plugin.installed?(:easy_extensions)
+  RedmineExtensions::PatchManager.register_controller_patch 'EasyCrmCasesController',
+    'RedmineDmsf::Patches::EasyCrmCasesControllerPatch', prepend: true,
+    if: proc { Redmine::Plugin.installed?(:easy_crm) }
+end

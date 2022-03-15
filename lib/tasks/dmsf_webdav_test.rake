@@ -35,8 +35,11 @@ namespace :redmine do
     prj = Project.new
     prj.identifier = 'dmsf_test_project'
     prj.name = 'DMFS Test Project'
+    prj.description = 'A temporary project for Litmus tests'
     prj.enable_module! :dmsf
-    prj.save
+    unless prj.save
+      Rails.logger.error prj.errors.full_messages.to_sentence
+    end
     # Settings
     Setting.rest_api_enabled = true
     # Plugin's settings

@@ -31,6 +31,8 @@ class DmsfFilesCopyController < ApplicationController
 
   accept_api_auth :copy, :move
 
+  helper :dmsf
+
   def new
     member = Member.find_by(project_id: @project.id, user_id: User.current.id)
     @fast_links = member && member.dmsf_fast_links
@@ -90,11 +92,11 @@ private
   def find_file
     raise ActiveRecord::RecordNotFound unless DmsfFile.where(id: params[:id]).exists?
     @file = DmsfFile.visible.find params[:id]
-    raise DmsfAccessError if @file.locked_for_user?
+    raise RedmineDmsf::Errors::DmsfAccessError if @file.locked_for_user?
     @project = @file.project
   rescue ActiveRecord::RecordNotFound
     render_404
-  rescue DmsfAccessError
+  rescue RedmineDmsf::Errors::DmsfAccessError
     render_403
   end
 
@@ -126,9 +128,9 @@ private
     end
     if (@target_folder && (@target_folder.locked_for_user? || !DmsfFolder.permissions?(@target_folder,
      false))) || !@target_project.allows_to?(:file_manipulation)
-      raise DmsfAccessError
+      raise RedmineDmsf::Errors::DmsfAccessError
     end
-  rescue DmsfAccessError
+  rescue RedmineDmsf::Errors::DmsfAccessError
     render_403
   end
 

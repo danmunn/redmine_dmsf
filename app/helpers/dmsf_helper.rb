@@ -27,6 +27,14 @@ require 'csv'
 module DmsfHelper
   include Redmine::I18n
 
+  unless Redmine::Plugin.installed?(:easy_extensions)
+
+    def late_javascript_tag(content_or_options_with_block = nil, html_options = {}, &block)
+      javascript_tag content_or_options_with_block, html_options
+    end
+
+  end
+
   def self.temp_dir
     if Setting.plugin_redmine_dmsf['dmsf_tmpdir'].present?
       tmpdir = Pathname.new(Setting.plugin_redmine_dmsf['dmsf_tmpdir'])

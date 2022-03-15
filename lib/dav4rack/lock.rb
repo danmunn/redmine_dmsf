@@ -1,4 +1,4 @@
-module DAV4Rack
+module Dav4rack
   class Lock
     
     def initialize(args={})

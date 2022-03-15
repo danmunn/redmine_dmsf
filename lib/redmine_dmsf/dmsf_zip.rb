@@ -48,7 +48,7 @@ module RedmineDmsf
       def add_file(file, member, root_path = nil)
         unless @files.include?(file)
           unless file && file.last_revision && File.exist?(file.last_revision.disk_file)
-            raise FileNotFound
+            raise RedmineDmsf::Errors::DmsfFileNotFoundError
           end
           string_path = file.dmsf_folder.nil? ? '' : (file.dmsf_folder.dmsf_path_str + File::SEPARATOR)
           string_path = string_path[(root_path.length + 1) .. string_path.length] if root_path

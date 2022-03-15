@@ -1,6 +1,6 @@
-# DAV4Rack - Web Authoring for Rack[![Build Status](https://travis-ci.org/planio-gmbh/dav4rack.svg?branch=master)](https://travis-ci.org/planio-gmbh/dav4rack)
+# Dav4rack - Web Authoring for Rack[![Build Status](https://travis-ci.org/planio-gmbh/dav4rack.svg?branch=master)](https://travis-ci.org/planio-gmbh/dav4rack)
 
-DAV4Rack is a framework for providing WebDAV via Rack allowing content
+Dav4rack is a framework for providing WebDAV via Rack allowing content
 authoring over HTTP. It is based off the [original RackDAV
 framework](http://github.com/georgi/rack_dav) adding some useful new features:
 
@@ -21,7 +21,7 @@ are just here to use the library, enjoy!
 
 ## About this fork
 
-This is the [Planio](https://plan.io/redmine-hosting) fork of DAV4Rack. The
+This is the [Planio](https://plan.io/redmine-hosting) fork of Dav4rack. The
 master branch includes improvements and fixes done by @djgraham and
 @tim-vandecasteele in their respective forks on Github.
 
@@ -30,7 +30,7 @@ plugin, as well as improvements done by ourselves during development of an
 upcoming redmine document management plugin.
 
 Several core APIs were changed in the process so it will not be a straight
-upgrade for applications that were developed with DAV4Rack 0.3 (the last
+upgrade for applications that were developed with Dav4rack 0.3 (the last
 released Gem version).
 
 ## Install
@@ -51,7 +51,7 @@ This will give you the last officially released version, which is *very* old.
 
 ## Documentation
 
-- [DAV4Rack documentation](http://chrisroberts.github.com/dav4rack)
+- [Dav4rack documentation](http://chrisroberts.github.com/dav4rack)
 
 ## Quickstart
 
@@ -71,7 +71,7 @@ basic authentication which is used for an example. To enable it:
 
 ## Rack Handler
 
-Using DAV4Rack within a rack application is pretty simple. A very slim
+Using Dav4rack within a rack application is pretty simple. A very slim
 rackup script would look something like this:
 
 
@@ -80,15 +80,15 @@ rackup script would look something like this:
   require 'dav4rack'
 
   use Rack::CommonLogger
-  run DAV4Rack::Handler.new(root: '/path/to/public/fileshare')
+  run Dav4rack::Handler.new(root: '/path/to/public/fileshare')
 ```
 
 This will use the included FileResource and set the share path. However,
-DAV4Rack has some nifty little extras that can be enabled in the rackup script.
+Dav4rack has some nifty little extras that can be enabled in the rackup script.
 First, an example of how to use a custom resource:
 
 ```ruby
-  run DAV4Rack::Handler.new(resource_class: CustomResource,
+  run Dav4rack::Handler.new(resource_class: CustomResource,
                             custom: 'options',
                             passed: 'to resource')
 ```
@@ -106,14 +106,14 @@ specific directory: `/webdav/share/`
 
   app = Rack::Builder.new{
     map '/webdav/share/' do
-      run DAV4Rack::Handler.new(root: '/path/to/public/fileshare')
+      run Dav4rack::Handler.new(root: '/path/to/public/fileshare')
     end
   }.to_app
   run app
 ```
 
 Aside from the `Builder#map` block, notice the new option passed to the Handler's
-initialization, `:root_uri_path`. When DAV4Rack receives a request, it will
+initialization, `:root_uri_path`. When Dav4rack receives a request, it will
 automatically convert the request to the proper path and pass it to the
 resource.
 
@@ -130,13 +130,13 @@ with the last example but this time include the interceptor:
   use Rack::CommonLogger
   app = Rack::Builder.new{
     map '/webdav/share/' do
-      run DAV4Rack::Handler.new(root: '/path/to/public/fileshare')
+      run Dav4rack::Handler.new(root: '/path/to/public/fileshare')
     end
     map '/webdav/share2/' do
-      run DAV4Rack::Handler.new(resource_class: CustomResource)
+      run Dav4rack::Handler.new(resource_class: CustomResource)
     end
     map '/' do
-      use DAV4Rack::Interceptor, mappings: {
+      use Dav4rack::Interceptor, mappings: {
         '/webdav/share/' => {resource_class: FileResource, custom: 'option'},
         '/webdav/share2/' => {resource_class: CustomResource}
       }
@@ -155,7 +155,7 @@ a virtual file system view to the provided mapped paths. Once the actual
 resources have been reached, authentication will be enforced based on the
 requirements defined by the individual resource. Also note in the root map you
 can see we are running a Rails application. This is how you can easily enable
-DAV4Rack with your Rails application.
+Dav4rack with your Rails application.
 
 
 ## Custom Middleware
@@ -175,7 +175,7 @@ class CustomMiddleware
 
     @dav_app = Rack::Builder.new{
       map '/dav/' do
-        run DAV4Rack::Handler.new(resource_class: CustomResource)
+        run Dav4rack::Handler.new(resource_class: CustomResource)
       end
 
       map '/other/dav' do
@@ -217,22 +217,22 @@ Rails.configuration.middleware.insert_before ActionDispatch::Cookies, CustomMidd
 
 ## Logging
 
-DAV4Rack provides some simple logging in a Rails style format (simply for
+Dav4rack provides some simple logging in a Rails style format (simply for
 consistency) so the output should look somewhat familiar.
 
-    DAV4Rack::Handler.new(resource_class: CustomResource, log_to: '/my/log/file')
+    Dav4rack::Handler.new(resource_class: CustomResource, log_to: '/my/log/file')
 
 You can even specify the level of logging:
 
-    DAV4Rack::Handler.new(resource_class: CustomResource, log_to: ['/my/log/file', Logger::DEBUG])
+    Dav4rack::Handler.new(resource_class: CustomResource, log_to: ['/my/log/file', Logger::DEBUG])
 
 In order to use the Rails logger, just specify `log_to: Rails.logger`.
 
 ## Custom Resources
 
-Creating your own resource is easy. Simply inherit the DAV4Rack::Resource
+Creating your own resource is easy. Simply inherit the Dav4rack::Resource
 class, and start redefining all the methods you want to customize. The
-DAV4Rack::Resource class only has implementations for methods that can be
+Dav4rack::Resource class only has implementations for methods that can be
 provided extremely generically. This means that most things will require at
 least some sort of implementation. However, because the Resource is defined so
 generically, and the Controller simply passes the request on to the Resource,
@@ -242,7 +242,7 @@ it is easy to create fully virtualized resources.
 
 There are some helpers worth mentioning that make things a little easier.
 
-First of all, take note that the `request` object will be an instance of `DAV4Rack::Request`, which extends `Rack::Request` with some useful helpers.
+First of all, take note that the `request` object will be an instance of `Dav4rack::Request`, which extends `Rack::Request` with some useful helpers.
 
 ### Redirects and sending remote files
 
@@ -251,11 +251,11 @@ will accept and properly use a 302 redirect for a GET request. Most clients do
 not properly support this, which can be a real pain when working with
 virtualized files that may be located some where else, like S3. To deal with
 those clients that don't support redirects, a helper has been provided so
-resources don't have to deal with proxying themselves. The DAV4Rack::RemoteFile
+resources don't have to deal with proxying themselves. The Dav4rack::RemoteFile
 is a modified Rack::File that can do some interesting things. First, lets look
 at its most basic use:
 
-  class MyResource < DAV4Rack::Resource
+  class MyResource < Dav4rack::Resource
     def setup
       @item = method_to_fill_this_properly
     end
@@ -264,7 +264,7 @@ at its most basic use:
       if(request.client_allows_redirect?)
         response.redirect item[:url]
       else
-        response.body = DAV4Rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type)
+        response.body = Dav4rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type)
         OK
       end
     end
@@ -274,7 +274,7 @@ This is a simple proxy. When Rack receives the RemoteFile, it will pull a chunk 
 sends it to the user over and over again until the EOF is reached. This much the same method that Rack::File uses but instead we are pulling
 from a socket rather than an actual file. Now, instead of proxying these files from a remote server every time, lets cache them:
 
-    response.body = DAV4Rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type, :cache_directory => '/tmp')
+    response.body = Dav4rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type, :cache_directory => '/tmp')
 
 Providing the `:cache_directory` will let RemoteFile cache the items locally,
 and then search for them on subsequent requests before heading out to the
@@ -283,7 +283,7 @@ and last modified time. It is important to note that for services like S3, the
 path will often change, making this cache pretty worthless. To combat this, we
 can provide a reference to use instead:
 
-    response.body = DAV4Rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type, :cache_directory => '/tmp', :cache_ref => item[:static_url])
+    response.body = Dav4rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type, :cache_directory => '/tmp', :cache_ref => item[:static_url])
 
 These methods will work just fine, but it would be really nice to just let
 someone else deal with the proxying and let the process get back to dealing
@@ -320,16 +320,16 @@ applicable to other servers. First, a simplified NGINX server block:
 
 With this in place, the parameters for the RemoteFile change slightly:
 
-    response.body = DAV4Rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type, :sendfile => true)
+    response.body = Dav4rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type, :sendfile => true)
 
 The RemoteFile will automatically take care of building out the correct path and sending the proper headers. If the X-Accel-Remote-Mapping header
 is not available, you can simply pass the value:
 
-    response.body = DAV4Rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type, :sendfile => true, :sendfile_prefix => 'webdav_redirect')
+    response.body = Dav4rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type, :sendfile => true, :sendfile_prefix => 'webdav_redirect')
 
 And if you don't have the X-Sendfile-Type header set, you can fix that by changing the value of :sendfile:
 
-    response.body = DAV4Rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type, :sendfile => 'X-Accel-Redirect', :sendfile_prefix => 'webdav_redirect')
+    response.body = Dav4rack::RemoteFile.new(item[:url], :size => content_length, :mime_type => content_type, :sendfile => 'X-Accel-Redirect', :sendfile_prefix => 'webdav_redirect')
 
 And if you have none of the above because your server hasn't been configured for sendfile support, you're out of luck until it's configured.
 
@@ -359,7 +359,7 @@ to be called by the Controller, or anyone else, should be scoped protected or pr
 
 Callbacks can be called before or after a method call. For example:
 
-  class MyResource < DAV4Rack::Resource
+  class MyResource < Dav4rack::Resource
     before do |resource, method_name|
       resource.send(:my_authentication_method)
     end
@@ -379,7 +379,7 @@ In this example MyResource#my_authentication_method will be called before any pu
 line will be printed to STDOUT. Running callbacks before/after every method call is a bit much in most cases, so callbacks can be applied to specific
 methods:
 
-  class MyResource < DAV4Rack::Resource
+  class MyResource < Dav4rack::Resource
     before_get do |resource|
       puts "#{Time.now} -> Received GET request from resource: #{resource}"
     end
@@ -390,7 +390,7 @@ provided to callbacks. The method name is only provided to the generic before/af
 
 Something very handy for dealing with the mess of files OS X leaves on the system:
 
-  class MyResource < DAV4Rack::Resource
+  class MyResource < Dav4rack::Resource
     after_unlock do |resource|
       resource.delete if resource.name[0,1] == '.'
     end
@@ -400,7 +400,7 @@ Because OS X implements locking correctly, we can wait until it releases the loc
 
 Callbacks are called in the order they are defined, so you can easily build callbacks off each other. Like this example:
 
-  class MyResource < DAV4Rack::Resource
+  class MyResource < Dav4rack::Resource
     before do |resource, method_name|
       resource.DAV_authenticate unless resource.user.is_a?(User)
       raise Unauthorized unless resource.user.is_a?(User)
@@ -419,7 +419,7 @@ Something special to notice in the last example is the DAV_ prefix on authentica
 any callbacks being applied to the given method. This allows us to provide a public method that the callback can access on the resource
 without getting stuck in a loop.
 
-## Software using DAV4Rack!
+## Software using Dav4rack!
 
 * {meishi}[https://github.com/inferiorhumanorgans/meishi] - Lightweight CardDAV implementation in Rails
 * {dav4rack_ext}[https://github.com/schmurfy/dav4rack_ext] - CardDAV extension. (CalDAV planned)

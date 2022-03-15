@@ -191,9 +191,9 @@ class DmsfController < ApplicationController
       else
         download_entries(selected_folders, selected_files)
       end
-    rescue FileNotFound
+    rescue RedmineDmsf::Errors::DmsfFileNotFoundError
       render_404
-    rescue DmsfAccessError
+    rescue RedmineDmsf::Errors::DmsfAccessError
       render_403
     rescue StandardError => e
       flash[:error] = e.message
@@ -494,14 +494,14 @@ class DmsfController < ApplicationController
   end
 
   def email_entries(selected_folders, selected_files)
-    raise DmsfAccessError unless User.current.allowed_to?(:email_documents, @project)
+    raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:email_documents, @project)
     zip = Zip.new
     zip_entries(zip, selected_folders, selected_files)
     zipped_content = zip.finish
 
     max_filesize = Setting.plugin_redmine_dmsf['dmsf_max_email_filesize'].to_f
     if max_filesize > 0 && File.size(zipped_content) > max_filesize * 1048576
-      raise EmailMaxFileSize
+      raise RedmineDmsf::Errors::DmsfEmailMaxFileSizeError
     end
 
     zip.files.each do |f|
@@ -556,22 +556,22 @@ class DmsfController < ApplicationController
       if folder
         zip.add_folder(folder, member, (folder.dmsf_folder.dmsf_path_str if folder.dmsf_folder))
       else
-        raise FileNotFound
+        raise RedmineDmsf::Errors::DmsfFileNotFoundError
       end
     end
     selected_files.each do |selected_file_id|
       file = DmsfFile.visible.find_by(id: selected_file_id)
       unless file && file.last_revision && File.exist?(file.last_revision.disk_file)
-        raise FileNotFound
+        raise RedmineDmsf::Errors::DmsfFileNotFoundError
       end
       unless (file.project == @project) || User.current.allowed_to?(:view_dmsf_files, file.project)
-        raise DmsfAccessError
+        raise RedmineDmsf::Errors::DmsfAccessError
       end
       zip.add_file(file, member, (file.dmsf_folder.dmsf_path_str if file.dmsf_folder))
     end
     max_files = Setting.plugin_redmine_dmsf['dmsf_max_file_download'].to_i
     if max_files > 0 && zip.files.length > max_files
-      raise ZipMaxFilesError
+      raise RedmineDmsf::Errors::DmsfZipMaxFilesError
     end
     zip
   end
@@ -585,7 +585,7 @@ class DmsfController < ApplicationController
           flash[:error] = folder.errors.full_messages.to_sentence
         end
       else
-        raise FileNotFound
+        raise RedmineDmsf::Errors::DmsfFileNotFoundError
       end
     end
     # Files
@@ -596,7 +596,7 @@ class DmsfController < ApplicationController
           flash[:error] = file.errors.full_messages.to_sentence
         end
       else
-        raise FileNotFound
+        raise RedmineDmsf::Errors::DmsfFileNotFoundError
       end
     end
     # Links
@@ -607,7 +607,7 @@ class DmsfController < ApplicationController
           flash[:error] = link.errors.full_messages.to_sentence
         end
       else
-        raise FileNotFound
+        raise RedmineDmsf::Errors::DmsfFileNotFoundError
       end
     end
   end
@@ -615,7 +615,7 @@ class DmsfController < ApplicationController
   def delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links, commit)
     # Folders
     selected_folders.each do |id|
-      raise DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
+      raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
       folder = DmsfFolder.find_by(id: id)
       if folder
         unless folder.delete commit
@@ -623,14 +623,14 @@ class DmsfController < ApplicationController
           return
         end
       elsif !commit
-        raise FileNotFound
+        raise RedmineDmsf::Errors::DmsfFileNotFoundError
       end
     end
     # Files
     deleted_files = []
     not_deleted_files = []
     selected_files.each do |id|
-      raise DmsfAccessError unless User.current.allowed_to?(:file_delete, @project)
+      raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:file_delete, @project)
       file = DmsfFile.find_by(id: id)
       if file
         if file.delete(commit)
@@ -639,7 +639,7 @@ class DmsfController < ApplicationController
           not_deleted_files << file
         end
       elsif !commit
-        raise FileNotFound
+        raise RedmineDmsf::Errors::DmsfFileNotFoundError
       end
     end
     # Activities
@@ -663,12 +663,12 @@ class DmsfController < ApplicationController
     end
     # Links
     selected_dir_links.each do |id|
-      raise DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
+      raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
       link = DmsfLink.find_by(id: id)
       link.delete commit if link
     end
     (selected_file_links + selected_url_links).each do |id|
-      raise DmsfAccessError unless User.current.allowed_to?(:file_delete, @project)
+      raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:file_delete, @project)
       link = DmsfLink.find_by(id: id)
       link.delete commit if link
     end

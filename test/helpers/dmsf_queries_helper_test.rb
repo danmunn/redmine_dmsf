@@ -1,7 +1,9 @@
+# encoding: utf-8
 # frozen_string_literal: true
-
-# Redmine - project management software
-# Copyright (C) 2006-2019  Jean-Philippe Lang
+#
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright © 2011-22 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

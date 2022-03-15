@@ -3,7 +3,7 @@ require 'uri'
 require 'digest/sha1'
 require 'rack/file'
 
-module DAV4Rack
+module Dav4rack
   
    #FIXME unused?
   class RemoteFile < Rack::File

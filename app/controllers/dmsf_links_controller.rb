@@ -33,6 +33,8 @@ class DmsfLinksController < ApplicationController
 
   accept_api_auth :create
 
+  helper :dmsf
+
   def permissions
     if @dmsf_link
       render_403 unless DmsfFolder.permissions?(@dmsf_link.dmsf_folder)

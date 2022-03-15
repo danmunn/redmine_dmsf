@@ -110,7 +110,7 @@ module RedmineDmsf
       end
 
       def lock(args)
-        e = DAV4Rack::LockFailure.new
+        e = Dav4rack::LockFailure.new
         e.add_failure @path, MethodNotAllowed
         raise e
       end

@@ -21,21 +21,22 @@
 
 module RedmineDmsf
   module Hooks
-    include Redmine::Hook
+    module Helpers
     
-    class HelperProjectsHook < RedmineDmsf::Hooks::Listener
+      class ProjectHelperHooks < Redmine::Hook::Listener
 
-      def helper_project_settings_tabs(context)
-        dmsf_tabs = [
-          { name: 'dmsf', action: { controller: 'dmsf_state', action: 'user_pref_save' },
-            partial: 'dmsf_state/user_pref', label: :menu_dmsf },
-          { name: 'dmsf_workflow', action: { controller: 'dmsf_workflows', action: 'index' },
-            partial: 'dmsf_workflows/main', label: :label_dmsf_workflow_plural }
-        ]
-        context[:tabs].concat(dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], context[:project]) })
+        def helper_project_settings_tabs(context)
+          dmsf_tabs = [
+            { name: 'dmsf', action: { controller: 'dmsf_state', action: 'user_pref_save' },
+              partial: 'dmsf_state/user_pref', label: :menu_dmsf },
+            { name: 'dmsf_workflow', action: { controller: 'dmsf_workflows', action: 'index' },
+              partial: 'dmsf_workflows/main', label: :label_dmsf_workflow_plural }
+          ]
+          context[:tabs].concat(dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], context[:project]) })
+        end
+
       end
-                  
+
     end
-    
   end
 end

@@ -32,6 +32,8 @@ class DmsfWorkflowsController < ApplicationController
 
   layout :workflows_layout
 
+  helper :dmsf
+
   def permissions
     revision = DmsfFileRevision.find_by(id: params[:dmsf_file_revision_id]) if params[:dmsf_file_revision_id].present?
     if revision
@@ -68,7 +70,7 @@ class DmsfWorkflowsController < ApplicationController
               if revision.dmsf_file
                 begin
                   revision.dmsf_file.unlock!(true) unless Setting.plugin_redmine_dmsf['dmsf_keep_documents_locked']
-                rescue DmsfLockError => e
+                rescue RedmineDmsf::Errors::DmsfLockError => e
                   flash[:info] = e.message
                 end
               end
@@ -213,7 +215,7 @@ class DmsfWorkflowsController < ApplicationController
                 if file
                   begin
                     file.lock!
-                  rescue DmsfLockError => e
+                  rescue RedmineDmsf::Errors::DmsfLockError => e
                     Rails.logger.warn e.message
                   end
                   flash[:notice] = l(:notice_successful_update)

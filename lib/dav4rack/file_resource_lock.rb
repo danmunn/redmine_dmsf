@@ -1,6 +1,6 @@
 require 'pstore'
 
-module DAV4Rack
+module Dav4rack
   class FileResourceLock
     attr_accessor :path
     attr_accessor :token

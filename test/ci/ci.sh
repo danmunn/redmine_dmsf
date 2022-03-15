@@ -84,18 +84,18 @@ bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf RAILS_ENV=test
 bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf RAILS_ENV=test
 bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf RAILS_ENV=test
 # Macros
-ruby plugin/redmine_dmsf/test/unit/lib/redmine_dmsf/dmsf_macros_test.rb RAILS_ENV=test
+ruby plugins/redmine_dmsf/test/unit/lib/redmine_dmsf/dmsf_macros_test.rb RAILS_ENV=test
 # Helpers
-ruby plugin/redmine_dmsf/test/helpers/dmsf_helper_test.rb RAILS_ENV=test
-ruby plugin/redmine_dmsf/test/helpers/dmsf_queries_helper_test.rb RAILS_ENV=test
+ruby plugins/redmine_dmsf/test/helpers/dmsf_helper_test.rb RAILS_ENV=test
+ruby plugins/redmine_dmsf/test/helpers/dmsf_queries_helper_test.rb RAILS_ENV=test
 
 # Litmus
 
 # Prepare Redmine's environment for WebDAV testing
 RAILS_ENV=test bundle exec rake redmine:dmsf_webdav_test_on
 
-# Run Webrick server
-bundle exec rails server webrick -e test -d
+# Run an integrated Rails' server
+bundle exec rails server -e test -d
 
 # Run Litmus tests (Omit 'http' tests due to 'timeout waiting for interim response' and locks due to complex bogus conditional)
 TESTS="basic copymove props" litmus http://localhost:3000/dmsf/webdav/dmsf_test_project admin admin

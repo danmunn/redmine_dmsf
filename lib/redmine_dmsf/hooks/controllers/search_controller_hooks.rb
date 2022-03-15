@@ -21,23 +21,24 @@
 
 module RedmineDmsf
   module Hooks
-    include Redmine::Hook
+    module Controllers
     
-    class ControllerSearchHook < RedmineDmsf::Hooks::Listener
-      include Rails.application.routes.url_helpers
-                        
-      def controller_search_quick_jump(context={})
-        if context.is_a?(Hash) 
-          question = context[:question]
-          if question.present?
-            if question.match(/^D(\d+)$/) && DmsfFile.visible.where(id: $1).exists?
-              return dmsf_file_path(id: $1)
+      class SearchControllerHooks < Redmine::Hook::Listener
+        include Rails.application.routes.url_helpers
+
+        def controller_search_quick_jump(context={})
+          if context.is_a?(Hash)
+            question = context[:question]
+            if question.present?
+              if question.match(/^D(\d+)$/) && DmsfFile.visible.where(id: $1).exists?
+                return dmsf_file_path(id: $1)
+              end
             end
           end
-        end        
-      end      
-                  
+        end
+
+      end
+
     end
-    
   end
 end

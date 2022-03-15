@@ -40,5 +40,10 @@ module RedmineDmsf
   end
 end
 
-RedmineExtensions::PatchManager.register_controller_patch 'QueriesController',
+# Apply the patch
+if Redmine::Plugin.installed?(:easy_extensions)
+  RedmineExtensions::PatchManager.register_controller_patch 'QueriesController',
   'RedmineDmsf::Patches::QueriesControllerPatch', prepend: true
+else
+  QueriesController.prepend RedmineDmsf::Patches::QueriesControllerPatch
+end

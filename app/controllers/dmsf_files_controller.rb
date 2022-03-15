@@ -54,7 +54,7 @@ class DmsfFilesController < ApplicationController
         @revision = @file.last_revision
       else
         @revision = DmsfFileRevision.find(params[:download].to_i)
-        raise DmsfAccessError if @revision.dmsf_file != @file
+        raise RedmineDmsf::Errors::DmsfAccessError if @revision.dmsf_file != @file
       end
       check_project @revision.dmsf_file
       raise ActionController::MissingFile if @file.deleted?
@@ -70,7 +70,7 @@ class DmsfFilesController < ApplicationController
         filename: filename_for_content_disposition(@revision.formatted_name(member)),
         type: @revision.detect_content_type,
         disposition: params[:disposition].present? ? params[:disposition] : @revision.dmsf_file.disposition
-    rescue DmsfAccessError => e
+    rescue RedmineDmsf::Errors::DmsfAccessError => e
       Rails.logger.error e.message
       render_403
     rescue => e
@@ -357,7 +357,7 @@ class DmsfFilesController < ApplicationController
 
   def check_project(entry)
     if entry && entry.project != @project
-      raise DmsfAccessError, l(:error_entry_project_does_not_match_current_project)
+      raise RedmineDmsf::Errors::DmsfAccessError, l(:error_entry_project_does_not_match_current_project)
     end
   end
 

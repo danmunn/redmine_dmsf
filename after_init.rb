@@ -21,10 +21,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require_dependency 'zip'
-require_dependency File.dirname(__FILE__) + '/lib/redmine_dmsf.rb'
+require 'zip'
+require File.dirname(__FILE__) + '/lib/redmine_dmsf'
 
-ActiveSupport::Dependencies.autoload_paths << File.join(File.dirname(__FILE__), 'app', 'validators')
+#ActiveSupport::Dependencies.autoload_paths << File.join(File.dirname(__FILE__), 'app', 'validators')
 
 def dmsf_init
   # Administration menu extension
@@ -124,7 +124,13 @@ else
   dmsf_init
 end
 
-RedmineExtensions::Reloader.to_prepare do
+if Redmine::Plugin.installed?(:easy_extensions)
+  _class_ = RedmineExtensions
+else
+  _class_ = ActiveSupport
+end
+
+_class_::Reloader.to_prepare do
   # Rubyzip configuration
   Zip.unicode_names = true
 
@@ -144,6 +150,3 @@ RedmineExtensions::Reloader.to_prepare do
   # Redmine::Search.available_search_types.delete('documents')
   # Redmine::AccessControl.available_project_modules.delete(:documents)
 end
-
-# WebDAV
-Rails.configuration.middleware.insert_before ActionDispatch::Cookies, RedmineDmsf::Webdav::CustomMiddleware

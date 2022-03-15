@@ -184,7 +184,7 @@ class DmsfFileRevision < ActiveRecord::Base
   end
 
   def new_storage_filename
-    raise DmsfAccessError, 'File id is not set' unless dmsf_file&.id
+    raise RedmineDmsf::Errors::DmsfAccessError, 'File id is not set' unless dmsf_file&.id
     filename = DmsfHelper.sanitize_filename(name)
     timestamp = DateTime.current.strftime('%y%m%d%H%M%S')
     while File.exist?(storage_base_path.join("#{timestamp}_#{dmsf_file.id}_#{filename}"))

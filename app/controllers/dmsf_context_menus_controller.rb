@@ -23,6 +23,7 @@ class DmsfContextMenusController < ApplicationController
 
   helper :context_menus
   helper :watchers
+  helper :dmsf
 
   before_action :find_folder
   before_action :find_dmsf_file

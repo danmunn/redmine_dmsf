@@ -19,14 +19,21 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class ZipMaxFilesError < StandardError
-  include Redmine::I18n
-  
-  def initialize(message = nil)
-    if message.present?
-      super message
-    else
-      super l(:error_max_files_exceeded, number: Setting.plugin_redmine_dmsf['dmsf_max_file_download'])
+module RedmineDmsf
+  module Errors
+
+    class DmsfZipMaxFilesError < StandardError
+      include Redmine::I18n
+
+      def initialize(message = nil)
+        if message.present?
+          super message
+        else
+          super l(:error_max_files_exceeded, number: Setting.plugin_redmine_dmsf['dmsf_max_file_download'])
+        end
+      end
     end
+
   end
 end
+

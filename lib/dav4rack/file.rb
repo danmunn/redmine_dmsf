@@ -2,8 +2,8 @@ require 'time'
 require 'rack/utils'
 require 'rack/mime'
 
-module DAV4Rack
-  # DAV4Rack::File simply allows us to use Rack::File but with the
+module Dav4rack
+  # Dav4rack::File simply allows us to use Rack::File but with the
   # specific location we deem appropriate
   #
   # FIXME is that used anywhere?

@@ -1,5 +1,6 @@
-require 'dav4rack/lock'
-module DAV4Rack
+require File.dirname(__FILE__) + '/lock'
+
+module Dav4rack
   class LockStore
     class << self
       def create
@@ -58,4 +59,4 @@ module DAV4Rack
   end
 end
 
-DAV4Rack::LockStore.create
+Dav4rack::LockStore.create

@@ -23,7 +23,7 @@
 
 module RedmineDmsf
   module Patches
-    module ProjectHelperPatch
+    module ProjectsHelperPatch
 
       ##################################################################################################################
       # Overridden methods
@@ -44,6 +44,7 @@ module RedmineDmsf
   end
 end
 
+# Apply the patch
 unless Redmine::Plugin.installed?(:easy_extensions)
-  ProjectsController.send :helper, RedmineDmsf::Patches::ProjectHelperPatch
+  ProjectsController.send :helper, RedmineDmsf::Patches::ProjectsHelperPatch
 end

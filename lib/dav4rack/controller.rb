@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require 'uri'
-require 'dav4rack/destination_header'
-require 'dav4rack/request'
-require 'dav4rack/xml_elements'
-require 'dav4rack/xml_response'
+require File.dirname(__FILE__) + '/uri'
+require File.dirname(__FILE__) + '/destination_header'
+require File.dirname(__FILE__) + '/request'
+require File.dirname(__FILE__) + '/xml_elements'
+require File.dirname(__FILE__) + '/xml_response'
 
-module DAV4Rack
+module Dav4rack
 
   class Controller
-    include DAV4Rack::HTTPStatus
-    include DAV4Rack::Utils
+    include Dav4rack::HttpStatus
+    include Dav4rack::Utils
 
     attr_reader :request, :response, :resource
 
 
-    # request:: DAV4Rack::Request
+    # request:: Dav4rack::Request
     # response:: Rack::Response
     # options:: Options hash
     # Create a new Controller.
@@ -45,9 +45,9 @@ module DAV4Rack
       if skip_authorization? || authenticate
         status = process_action || OK
       else
-        status = HTTPStatus::Unauthorized
+        status = HttpStatus::Unauthorized
       end
-    rescue HTTPStatus::Status => e
+    rescue HttpStatus::Status => e
       status = e
     ensure
       if status
@@ -63,7 +63,7 @@ module DAV4Rack
     private
 
     # delegates to the handler method matching this requests http method.
-    # must return an HTTPStatus. If nil / false, the resulting status will be
+    # must return an HttpStatus. If nil / false, the resulting status will be
     # 200/OK
     def process_action
       send request.request_method.downcase
@@ -175,7 +175,9 @@ module DAV4Rack
       if request.content_length.to_i > 0
         return UnsupportedMediaType
       end
-      return MethodNotAllowed if resource.exist?
+      if resource.exist?
+        return MethodNotAllowed
+      end
 
       resource.lock_check if resource.supports_locking?
       status = resource.make_collection

@@ -21,7 +21,7 @@
 
 module RedmineDmsf
   module Patches
-    module UserPreference
+    module UserPreferencePatch
 
       ##################################################################################################################
       # New methods
@@ -44,6 +44,10 @@ module RedmineDmsf
   end
 end
 
-# Apply patch
-RedmineExtensions::PatchManager.register_model_patch 'UserPreference',
-  'RedmineDmsf::Patches::UserPreference'
+# Apply the patch
+if Redmine::Plugin.installed?(:easy_extensions)
+  RedmineExtensions::PatchManager.register_model_patch 'UserPreference',
+  'RedmineDmsf::Patches::UserPreferencePatch'
+else
+  UserPreference.prepend RedmineDmsf::Patches::UserPreferencePatch
+end

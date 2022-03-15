@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'uuidtools'
-require 'dav4rack/lock_store'
-require 'dav4rack/xml_elements'
+require File.dirname(__FILE__) + '/lock_store'
+require File.dirname(__FILE__) + '/xml_elements'
 
-module DAV4Rack
+module Dav4rack
 
   class LockFailure < RuntimeError
     attr_reader :path_status
@@ -19,8 +19,8 @@ module DAV4Rack
   end
 
   class Resource
-    include DAV4Rack::Utils
-    include DAV4Rack::XmlElements
+    include Dav4rack::Utils
+    include Dav4rack::XmlElements
 
     attr_reader :path, :request,
       :response, :propstat_relative_path, :root_xml_attributes, :namespaces
@@ -54,7 +54,7 @@ module DAV4Rack
 
     end
 
-    include DAV4Rack::HTTPStatus
+    include Dav4rack::HttpStatus
 
     # path:: Internal resource path (unescaped PATH_INFO)
     # request:: Rack::Request
@@ -288,17 +288,17 @@ module DAV4Rack
       end
       begin
         lock_check(args[:type])
-      rescue DAV4Rack::LockFailure => lock_failure
+      rescue Dav4rack::LockFailure => lock_failure
         lock.destroy
         raise lock_failure
-      rescue HTTPStatus::Status => status
+      rescue HttpStatus::Status => status
         status
       end
       [lock.remaining_timeout, lock.token]
     end
 
     # lock_scope:: scope of lock
-    # Check if resource is locked. Raise DAV4Rack::LockFailure if locks are in place.
+    # Check if resource is locked. Raise Dav4rack::LockFailure if locks are in place.
     def lock_check(lock_scope=nil)
       return unless @lock_class
       if(@lock_class.explicitly_locked?(@path))
@@ -306,7 +306,7 @@ module DAV4Rack
       elsif(@lock_class.implicitly_locked?(@path))
         if(lock_scope.to_s == 'exclusive')
           locks = @lock_class.implicit_locks(@path)
-          failure = DAV4Rack::LockFailure.new("Failed to lock: #{@path}")
+          failure = Dav4rack::LockFailure.new("Failed to lock: #{@path}")
           locks.each do |lock|
             failure.add_failure(@path, Locked)
           end

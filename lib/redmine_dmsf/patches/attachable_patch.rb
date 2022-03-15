@@ -35,5 +35,10 @@ module RedmineDmsf
   end
 end
 
-RedmineExtensions::PatchManager.register_patch_to_be_first 'Redmine::Acts::Attachable::InstanceMethods',
-    'RedmineDmsf::Patches::AttachablePatch', prepend: true, first: true
+# Apply the patch
+if Redmine::Plugin.installed?(:easy_extensions)
+  RedmineExtensions::PatchManager.register_patch_to_be_first 'Redmine::Acts::Attachable::InstanceMethods',
+   'RedmineDmsf::Patches::AttachablePatch', prepend: true, first: true
+else
+  Redmine::Acts::Attachable.prepend RedmineDmsf::Patches::AttachablePatch
+end

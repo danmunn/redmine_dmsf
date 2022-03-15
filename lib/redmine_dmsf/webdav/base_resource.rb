@@ -20,13 +20,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require 'dav4rack'
+require File.dirname(__FILE__) + '/../../dav4rack'
 require 'addressable/uri'
 
 module RedmineDmsf
   module Webdav
 
-    class BaseResource < DAV4Rack::Resource
+    class BaseResource < Dav4rack::Resource
       include Redmine::I18n
       include ActionView::Helpers::NumberHelper
 
@@ -245,7 +245,10 @@ module RedmineDmsf
             else
               @file = DmsfFile.find_file_by_name(@project, @folder, pinfo.first)
               @folder = nil
-              raise Conflict unless (pinfo.length < 2 || @file)
+              unless (pinfo.length < 2 || @file)
+                Rails.logger.error "Resource not found: #{@path}"
+                raise Conflict
+              end
               break # We're at the end
             end
           end

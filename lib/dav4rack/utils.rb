@@ -2,7 +2,7 @@
 
 require 'ostruct'
 
-module DAV4Rack
+module Dav4rack
 
   # Simple wrapper for formatted elements
   class DAVElement < OpenStruct

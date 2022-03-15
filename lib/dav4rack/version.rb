@@ -1,4 +1,4 @@
-module DAV4Rack
+module Dav4rack
   class Version
 
     attr_reader :major, :minor, :tiny

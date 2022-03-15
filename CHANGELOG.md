@@ -789,7 +789,7 @@ IMPORTANT
 1.4.1: *2012-06-15*
 -------------------
 
-* New: DAV4Rack requirement added (Gemfile makes reference to github repository for latest release).
+* New: Dav4rack requirement added (Gemfile makes reference to github repository for latest release).
 * New: Webdav functionality included, additional administrative settings added
 * Bug: #2 - extended xapian search fixed with Rails 3 compatible code.
 

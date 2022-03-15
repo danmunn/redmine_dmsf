@@ -1,7 +1,9 @@
+# encoding: utf-8
 # frozen_string_literal: true
-
-# Redmine - project management software
-# Copyright (C) 2006-2019  Jean-Philippe Lang
+#
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright © 2011-22 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,13 +26,18 @@ class DmsfHelperTest < RedmineDmsf::Test::HelperTest
 
   fixtures :dmsf_folders
 
+  def setup
+    super
+    @folder1 = DmsfFolder.find 1
+  end
+
   def test_webdav_url
     base_url = ["#{Setting.protocol}:/", Setting.host_name, 'dmsf', 'webdav'].join('/')
     assert_equal "#{base_url}/", webdav_url(nil, nil)
-    assert_equal "#{base_url}/ecookbook/", webdav_url(@project1, nil)
-    assert_equal "#{base_url}/ecookbook/folder1/", webdav_url(@project1, @folder1)
+    assert_equal "#{base_url}/%5Becookbook%5D/", webdav_url(@project1, nil)
+    assert_equal "#{base_url}/%5Becookbook%5D/folder1/", webdav_url(@project1, @folder1)
     with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1'} do
-      assert_equal "#{base_url}/eCookbook 1/", webdav_url(@project1, nil)
+      assert_equal "#{base_url}/%5BeCookbook%201%5D/", webdav_url(@project1, nil)
     end
   end
 

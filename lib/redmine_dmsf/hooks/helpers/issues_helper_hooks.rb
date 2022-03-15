@@ -21,22 +21,23 @@
 
 module RedmineDmsf
   module Hooks
-    include Redmine::Hook
+    module Helpers
     
-    class HelperIssuesHook < RedmineDmsf::Hooks::Listener
+      class IssuesHelperHooks < Redmine::Hook::Listener
 
-      def helper_issues_show_detail_after_setting(context)
-        if context.is_a?(Hash)
-          detail = context[:detail]
-          case detail.property
-            when 'dmsf_file'
-              detail.prop_key = l(:label_document)
-              detail.property = 'attachment'
+        def helper_issues_show_detail_after_setting(context)
+          if context.is_a?(Hash)
+            detail = context[:detail]
+            case detail.property
+              when 'dmsf_file'
+                detail.prop_key = l(:label_document)
+                detail.property = 'attachment'
+            end
           end
         end
+
       end
-                  
+
     end
-    
   end
 end
