@@ -24,8 +24,6 @@
 require 'zip'
 require File.dirname(__FILE__) + '/lib/redmine_dmsf'
 
-#ActiveSupport::Dependencies.autoload_paths << File.join(File.dirname(__FILE__), 'app', 'validators')
-
 def dmsf_init
   # Administration menu extension
   Redmine::MenuManager.map :admin_menu do |menu|
@@ -124,13 +122,7 @@ else
   dmsf_init
 end
 
-if Redmine::Plugin.installed?(:easy_extensions)
-  _class_ = RedmineExtensions
-else
-  _class_ = ActiveSupport
-end
-
-_class_::Reloader.to_prepare do
+Rails.application.configure do
   # Rubyzip configuration
   Zip.unicode_names = true
 
@@ -138,11 +130,13 @@ _class_::Reloader.to_prepare do
   CustomFieldsHelper::CUSTOM_FIELDS_TABS << { name: 'DmsfFileRevisionCustomField', partial: 'custom_fields/index',
                                               label: :dmsf }
 
+  # Searchable modules
   Redmine::Search.map do |search|
     search.register :dmsf_files
     search.register :dmsf_folders
   end
 
+  # Activities
   Redmine::Activity.register :dmsf_file_revision_accesses, default: false
   Redmine::Activity.register :dmsf_file_revisions
 
