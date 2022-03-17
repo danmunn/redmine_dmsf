@@ -287,8 +287,14 @@ function dmsfSetupFileDrop() {
     }
 }
 
-EASY.schedule.late(function () {
-    dmsfSetupFileDrop();
-    $(document).on("erui_new_dom", dmsfSetupFileDrop);
-});
+if(typeof EASY == "undefined"){
+    $(document).ready(dmsfSetupFileDrop);
+}
+else {
+    EASY.schedule.late(function () {
+        dmsfSetupFileDrop();
+        $(document).on("erui_new_dom", dmsfSetupFileDrop);
+    });
+}
+
 
