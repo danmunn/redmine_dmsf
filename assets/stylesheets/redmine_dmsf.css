@@ -251,6 +251,11 @@ div[id*="revision_access_"] {
 }
 
 /* DMSF file upload */
+
+span.fileover {
+    background-color: lavender;
+}
+
 .dmsf-uploader {
     padding:10px;
     margin-bottom: 20px;

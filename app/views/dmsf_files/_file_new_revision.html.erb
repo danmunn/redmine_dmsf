@@ -66,13 +66,13 @@
             </div>
           </div>
         </div>
-        <div class="box" id="file_upload_box">
-          <p>
-            <%= label_tag 'file_upload', l(:label_new_content) %>
+        <p>
+          <%= label_tag 'file_upload', l(:label_new_content) %>
+          <span class="dmsf-uploader">
             <%= render partial: 'dmsf_upload/form',
-                       locals: { multiple: false, container: nil, description: false, awf: false } %>
-          </p>
-        </div>
+                     locals: { multiple: false, container: nil, description: false, awf: false } %>
+          </span>
+        </p>
         <p>
           <%= f.text_area :comment, rows: 2, label: l(:label_comment), class: 'wiki-edit dmsf-description' %>
         </p>

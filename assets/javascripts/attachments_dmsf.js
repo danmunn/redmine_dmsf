@@ -50,8 +50,9 @@ dmsfAddLink.nextLinkId = 1000;
 function dmsfAddFile(inputEl, file, eagerUpload) {
 
     let attachments = $('#dmsf_attachments_fields');
+    let max = ($(inputEl).attr('multiple') == 'multiple') ? 10 : 1
 
-    if (attachments.children().length < 10) {
+    if (attachments.children().length < max) {
 
         let attachmentId = dmsfAddFile.nextAttachmentId++;
         let fileSpan = $('<span>', { id: 'dmsf_attachments_' + attachmentId, 'class': 'attachment' });
@@ -59,9 +60,9 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
         let fileName = $('<input>', {type: 'text', 'class': 'filename readonly',
             name: 'dmsf_attachments[' + attachmentId + '][filename]', readonly: 'readonly'}).val(file.name);
 
-        if($(inputEl).attr('multiple') == 'multiple') {
+        fileSpan.append(fileName);
 
-            fileSpan.append(fileName);
+        if($(inputEl).attr('multiple') == 'multiple') {
 
             if($(inputEl).data('description')) {
 
@@ -87,7 +88,7 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
             attachments.append(fileSpan);
         }
         else{
-            fileSpan.append(fileName);
+            fileSpan.append(iconDel.click(dmsfRemoveFileLbl));
             attachments.append(fileSpan);
             $('#dmsf_file_revision_name').val(file.name);
         }
@@ -216,15 +217,8 @@ function dmsfAddInputFiles(inputEl) {
         }
     }
 
-    if ($(inputEl).attr('multiple') == 'multiple') {
-
-        clearedFileInput.val('');
-        addFileSpan.prepend(clearedFileInput);
-    }
-    else {
-
-        addFileSpan.hide();
-    }
+    clearedFileInput.val('');
+    addFileSpan.prepend(clearedFileInput);
 }
 
 function dmsfUploadAndAttachFiles(files, inputEl) {
