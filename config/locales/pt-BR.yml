@@ -121,6 +121,7 @@ pt-BR:
   label_size: Tamanho
   heading_new_revision: Nova revisão
   option_version_same: Mesma
+  option_version_patch: Patch
   option_version_minor: Minor
   option_version_major: Major
   option_version_custom: Personalizado

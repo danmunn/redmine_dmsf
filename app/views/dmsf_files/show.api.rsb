@@ -18,7 +18,13 @@ api.dmsf_file do
         api.title r.title
         api.description r.description
         api.workflow r.workflow
-        api.version "#{r.major_version}.#{r.minor_version}"
+        if r.patch_version.present?
+          api.version "#{r.major_version}.#{r.minor_version}.#{r.patch_version}"
+        elsif r.minor_version.present?
+          api.version "#{r.major_version}.#{r.minor_version}"
+        else
+          api.version r.major_version
+        end
         api.comment r.comment
         api.user_id r.user_id
         api.created_at r.created_at

@@ -121,6 +121,7 @@ ko:
   label_size: 크기
   heading_new_revision: 새로운 수정
   option_version_same: 동일한
+  option_version_patch: Patch
   option_version_minor: 중요하지 않은
   option_version_major: 중요한
   option_version_custom: 임의의

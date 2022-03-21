@@ -3,7 +3,6 @@
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011-22 Karel Pičman <karel.picman@kontron.com>
-# Copyright © 2016-17 carlolars
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,10 +18,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class AddOwnerToDmsfLock < ActiveRecord::Migration[5.2]
+class AddPatchVersion < ActiveRecord::Migration[5.2]
 
   def change
-    add_column :dmsf_locks, :owner, :string, null: true
+    add_column :dmsf_file_revisions, :patch_version, :integer, null: true,
+               after: :minor_version
   end
 
 end

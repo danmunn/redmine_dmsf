@@ -121,6 +121,7 @@ nl:
   label_size: Grootte
   heading_new_revision: Nieuwe Revisie
   option_version_same: Hetzelfde
+  option_version_patch: Patch
   option_version_minor: Beperkt
   option_version_major: Belangrijk
   option_version_custom: Aangepast

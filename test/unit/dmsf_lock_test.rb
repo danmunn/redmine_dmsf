@@ -69,13 +69,13 @@ class DmsfLockTest < RedmineDmsf::Test::UnitTest
     @folder7.lock!
     User.current = nil
     assert_no_difference('@folder7.lock.count') do
-      assert_raise RedmineDmsf::Errors::RedmineDmsf::Errors::DmsfLockError do
+      assert_raise RedmineDmsf::Errors::DmsfLockError do
         @folder7.unlock!
       end
     end
     User.current = @jsmith
      assert_no_difference('@folder7.lock.count') do
-      assert_raise RedmineDmsf::Errors::RedmineDmsf::Errors::DmsfLockError do
+      assert_raise RedmineDmsf::Errors::DmsfLockError do
         @folder7.unlock!
       end
     end

@@ -28,7 +28,7 @@
   <%= hidden_field_tag "commited_files[#{i}][size]", upload.size %>
   <%= hidden_field_tag "commited_files[#{i}][mime_type]", upload.mime_type %>
   <%= hidden_field_tag "commited_files[#{i}][digest]", upload.digest %>
-  <div class="clear">
+  <div class="splitcontent">
     <div class="splitcontentleft">
       <p>
         <%= label_tag "commited_files[#{i}][title]", l(:label_title) %>
@@ -48,39 +48,16 @@
     <%= text_area_tag "commited_files[#{i}][description]", upload.description, rows: 6,
                       class: 'wiki-edit dmsf-description' %>
   </p>
-  <div class="clear">
-    <div class="splitcontentright">
-      <div class="custom_fields">
-        <% upload.custom_values.each do |value| %>
-            <% value.value = nil if value.custom_field.dmsf_not_inheritable %>
-            <p><%= custom_field_tag_with_label "commited_files[#{i}]", value %></p>
-        <% end %>
-      </div>
-    </div>
+  <div class="splitcontent">
     <div class="splitcontentleft">
       <p>
-        <%= label_tag "commited_files[#{i}][version]_minor", l(:label_dmsf_version) %>
-        <%= radio_button_tag "commited_files[#{i}][version]", 1, true %>
-        <%= DmsfUploadHelper::gui_version(upload.major_version) %>.<%= DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(upload.minor_version, 1)) %>
-        <%= l(:option_version_minor) %><br/>
-        <%= radio_button_tag "commited_files[#{i}][version]", 2 %>
-        <%= DmsfUploadHelper::gui_version(DmsfUploadHelper::increase_version(upload.major_version, 1)) %>.0
-        <%= l(:option_version_major) %><br/>
-        <%= radio_button_tag "commited_files[#{i}][version]", 3 %>
-        <%= select_tag "commited_files[#{i}][custom_version_major]",
-                       options_for_select(DmsfUploadHelper::major_version_select_options,
-                                          DmsfUploadHelper::gui_version(DmsfUploadHelper::increase_version(upload.major_version, 2))),
-                       onchange: "$('#commited_files_#{i}_version_3').prop('checked', true)",
-                       class: 'dmsf-select-version'%>.
-        <%= select_tag "commited_files[#{i}][custom_version_minor]",
-                       options_for_select(DmsfUploadHelper::minor_version_select_options,
-                       DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(upload.minor_version, 1))),
-                       onchange: "$('#commited_files_#{i}_version_3').prop('checked', true)",
-                       class: 'dmsf-select-version' %>
-        <%= l(:option_version_custom) %>
+        <%= render partial: 'dmsf_files/version_selector', locals: {
+            label_tag_name: "commited_files[#{i}][version]",
+            select_tag_name_patch: "commited_files[#{i}][version_patch]",
+            select_tag_name_minor: "commited_files[#{i}][version_minor]",
+            select_tag_name_major: "commited_files[#{i}][version_major]",
+            revision_or_upload: upload } %>
       </p>
-    </div>
-    <div class="splitcontentright">
       <p>
         <%= label_tag '', l(:label_mime) %>
         <%= text_field_tag :name, h(upload.mime_type), readonly: true %>
@@ -89,6 +66,14 @@
         <%= label_tag '', l(:label_size) %>
         <%= text_field_tag :name, number_to_human_size(upload.size), readonly: true %>
       </p>
+    </div>
+    <div class="splitcontentright">
+      <div class="custom_fields">
+        <% upload.custom_values.each do |value| %>
+          <% value.value = nil if value.custom_field.dmsf_not_inheritable %>
+          <p><%= custom_field_tag_with_label "commited_files[#{i}]", value %></p>
+        <% end %>
+      </div>
     </div>
   </div>
   <p>

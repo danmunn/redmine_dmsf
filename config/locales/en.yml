@@ -121,6 +121,7 @@ en:
   label_size: Size
   heading_new_revision: New Revision
   option_version_same: Same
+  option_version_patch: Patch
   option_version_minor: Minor
   option_version_major: Major
   option_version_custom: Custom

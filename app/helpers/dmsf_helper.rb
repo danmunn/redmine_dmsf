@@ -30,7 +30,7 @@ module DmsfHelper
   unless Redmine::Plugin.installed?(:easy_extensions)
 
     def late_javascript_tag(content_or_options_with_block = nil, html_options = {}, &block)
-       javascript_tag content_or_options_with_block, html_options, &block
+      javascript_tag content_or_options_with_block, html_options, &block
     end
 
   end

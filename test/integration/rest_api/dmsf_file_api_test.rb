@@ -129,9 +129,13 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
                  <uploaded_file>
                    <name>test.txt</name>
                    <title>test.txt</title>
+                   <!-- Optional -->
                    <description>REST API</description>
                    <comment>From API</comment>
-                   <version/>
+                   <version_major>A</version_major>
+                   <version_minor>1</version_minor>
+                   <version_patch>0</version_patch>
+                   <!-- End of optional -->
                    <token>#{ftoken}</token>
                  </uploaded_file>
                 </attachments>}

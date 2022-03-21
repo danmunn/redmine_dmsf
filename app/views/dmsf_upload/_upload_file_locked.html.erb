@@ -30,7 +30,7 @@
   <%= hidden_field_tag "commited_files[#{i}][name]", upload.name %>
   <%= hidden_field_tag "commited_files[#{i}][digest]", upload.digest %>
   <p class="warning"><%= l(:info_file_locked) %></p>
-  <div class="clear">
+  <div class="splitcontent">
     <div class="splitcontentleft">
       <p>
         <%= label_tag '', l(:label_title) %>
@@ -52,18 +52,7 @@
         </div>
       </p>
   <% end %>
-  <div class="clear">
-    <div class="splitcontentright">
-      <div class="custom_fields">
-        <% upload.custom_values.each do |value| %>
-            <p>
-              <%= label_tag '', h(value.custom_field.name) %>
-              <% value.value = nil if value.custom_field.dmsf_not_inheritable %>
-              <%= text_field_tag :name, h(value.value), readonly: true %>
-            </p>
-        <% end %>
-      </div>
-    </div>
+  <div class="splitcontent">
     <div class="splitcontentleft">
       <p>
         <%= label_tag '', l(:label_dmsf_version) %>
@@ -71,8 +60,6 @@
              "#{DmsfUploadHelper::gui_version(upload.major_version)}.#{DmsfUploadHelper::gui_version(upload.minor_version)}",
              readonly: true %>
       </p>
-    </div>
-    <div class="splitcontentright">
       <p>
         <%= label_tag '', l(:label_mime) %>
         <%= text_field_tag :name, h(upload.mime_type), readonly: true %>
@@ -81,6 +68,17 @@
         <%= label_tag '', l(:label_size) %>
         <%= text_field_tag :name, h(number_to_human_size(upload.size)), readonly: true %>
       </p>
+    </div>
+    <div class="splitcontentright">
+      <div class="custom_fields">
+        <% upload.custom_values.each do |value| %>
+          <p>
+            <%= label_tag '', h(value.custom_field.name) %>
+            <% value.value = nil if value.custom_field.dmsf_not_inheritable %>
+            <%= text_field_tag :name, h(value.value), readonly: true %>
+          </p>
+        <% end %>
+      </div>
     </div>
   </div>
   <% if upload.comment.present? %>

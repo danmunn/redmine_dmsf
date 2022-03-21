@@ -296,5 +296,3 @@ else {
         $(document).on("erui_new_dom", dmsfSetupFileDrop);
     });
 }
-
-

@@ -121,6 +121,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_size: Dimensioni
   heading_new_revision: Nuova revisione
   option_version_same: Stessa
+  option_version_patch: Patch
   option_version_minor: Miniore
   option_version_major: Maggiore
   option_version_custom: Personalizzata

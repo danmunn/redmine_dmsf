@@ -121,7 +121,8 @@ cs:
   label_size: Velikost
   heading_new_revision: Nová revize
   option_version_same: Stejná
-  option_version_minor: Podružná
+  option_version_patch: Revize
+  option_version_minor: Vedlejší
   option_version_major: Hlavní
   option_version_custom: Vlastní
   label_new_content: Nový obsah

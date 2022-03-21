@@ -35,16 +35,10 @@ module DmsfUploadHelper
           link = DmsfLink.find_link_by_file_name(project, folder, name)
           file = link.target_file if link
         end
-
         if file
           if file.last_revision
             last_revision = file.last_revision
             new_revision.source_revision = last_revision
-            new_revision.major_version = last_revision.major_version
-            new_revision.minor_version = last_revision.minor_version
-          else
-            new_revision.minor_version = 0
-            new_revision.major_version = 0
           end
         else
           file = DmsfFile.new
@@ -52,32 +46,20 @@ module DmsfUploadHelper
           file.name = name
           file.dmsf_folder = folder
           file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
-          new_revision.minor_version = 0
-          new_revision.major_version = 0
         end
-
         if file.locked_for_user?
           failed_uploads.push file
           next
         end
-
         new_revision.dmsf_file = file
         new_revision.user = User.current
         new_revision.name = name
         new_revision.title = commited_file[:title]
         new_revision.description = commited_file[:description]
         new_revision.comment = commited_file[:comment]
-        if commited_file[:version].present?
-          version = commited_file[:version].is_a?(Array) ? commited_file[:version][0].to_i : commited_file[:version].to_i
-        else
-          version = 1
-        end
-        if version == 3
-          new_revision.major_version = DmsfUploadHelper::db_version(commited_file[:custom_version_major])
-          new_revision.minor_version = DmsfUploadHelper::db_version(commited_file[:custom_version_minor])
-        else
-          new_revision.increase_version(version)
-        end
+        new_revision.major_version = commited_file[:version_major].present? ? DmsfUploadHelper::db_version(commited_file[:version_major]) : 1
+        new_revision.minor_version = commited_file[:version_minor].present? ? DmsfUploadHelper::db_version(commited_file[:version_minor]) : 0
+        new_revision.patch_version = commited_file[:version_patch].present? ? DmsfUploadHelper::db_version(commited_file[:version_patch]) : nil
         new_revision.mime_type = commited_file[:mime_type]
         new_revision.size = commited_file[:size]
         new_revision.digest = commited_file[:digest]
@@ -177,27 +159,32 @@ module DmsfUploadHelper
     (0..999).to_a + [' ']
   end
 
+  class <<self
+    alias_method :patch_version_select_options, :minor_version_select_options
+  end
+
   # 1 -> 2, -1 -> -2, A -> B
-  def self.increase_version(version, number)
-    return number if ((version == ' ') || ((-version) == ' '.ord))
+  def self.increase_version(version)
+    version ||= 0
+    return 1 if ((version == ' ') || ((-version) == ' '.ord))
     if Integer(version)
       if version >= 0
-        if (version + number) < 1000
-          version + number
+        if (version + 1) < 1000
+          version + 1
         else
           version
         end
       else
-        if -(version - number) < 'Z'.ord
-          version - number
+        if -(version - 1) < 'Z'.ord
+          version - 1
         else
           version
         end
       end
     end
     rescue
-      if (version.ord + number) < 'Z'.ord
-        (version.ord + number).chr
+      if (version.ord + 1) < 'Z'.ord
+        (version.ord + 1).chr
       else
         version
       end
@@ -205,12 +192,14 @@ module DmsfUploadHelper
 
   # 1 -> 1, -65 -> A
   def self.gui_version(version)
+    return ' ' unless version
     return version if version >= 0
     (-version).chr
   end
 
   # 1 -> 1, A -> -65
   def self.db_version(version)
+    return nil if(version.nil? || version == '&nbsp;')
     version.to_i if Integer(version)
   rescue
     version = ' ' if version.blank?

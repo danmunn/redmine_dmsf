@@ -267,7 +267,7 @@ module RedmineDmsf
             else
               # Create a new revison by cloning the last revision in the destination
               new_revision = dest.resource.file.last_revision.clone
-              new_revision.increase_version 1
+              new_revision.increase_version DmsfFileRevision::PATCH_VERSION
             end
             # The file on disk must be renamed from .tmp to the correct filetype or else Xapian won't know how to index.
             # Copy file.last_revision.disk_file to new_revision.disk_file
@@ -569,7 +569,7 @@ module RedmineDmsf
         new_revision.dmsf_file = f
         new_revision.user = User.current
         new_revision.name = basename
-        new_revision.increase_version(1) unless reuse_revision
+        new_revision.increase_version(DmsfFileRevision::PATCH_VERSION) unless reuse_revision
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
 
         # Phusion passenger does not have a method "length" in its model

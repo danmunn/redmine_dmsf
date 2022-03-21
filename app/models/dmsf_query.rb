@@ -33,9 +33,10 @@ class DmsfQuery < Query
       DmsfTitleQueryColumn.new(:title, sortable: 'title', frozen: true),
       QueryColumn.new(:size, sortable: 'size'),
       DmsfModifiedQueryColumn.new(:modified, sortable: 'updated'),
-      DmsfVersionQueryColumn.new(:version, sortable: 'major_version, minor_version', caption: :label_dmsf_version),
+      DmsfVersionQueryColumn.new(:version, sortable: %(major_version minor_version patch_version),
+                                 caption: :label_dmsf_version),
       QueryColumn.new(:workflow, sortable: 'workflow'),
-      QueryColumn.new(:author, sortable: 'firstname, lastname')
+      QueryColumn.new(:author, sortable: %(firstname lastname))
   ]
 
   def initialize(attributes=nil, *args)
@@ -170,10 +171,10 @@ class DmsfQuery < Query
     order_option = ['sort', group_by_sort_order, (options[:order] || sort_clause[0])].flatten.reject(&:blank?)
     if order_option.size > 1
       DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, name|
-        order_option[1].gsub!("cf_#{id}.value", "cf_#{id}")
+        order_option[1].gsub! "cf_#{id}.value", "cf_#{id}"
       end
-      if order_option[1] =~ /(firstname|major_version), (lastname|minor_version) (DESC|ASC)$/
-         order_option[1].gsub!(',', " #{$3},")
+      if order_option[1] =~ /^(firstname|major_version),? (lastname|minor_version)( patch_version)? (DESC|ASC)$/
+        order_option[1] = $3.present? ? "#{$1} #{$4}, #{$2} #{$4}, #{$3} #{$4}" : "#{$1} #{$4}, #{$2} #{$4}"
       end
     end
 
@@ -245,6 +246,7 @@ class DmsfQuery < Query
       projects.updated_on AS updated,
       CAST(NULL AS #{get_integer_type}) AS major_version,
       CAST(NULL AS #{get_integer_type}) AS minor_version,
+      CAST(NULL AS #{get_integer_type}) AS patch_version,
       CAST(NULL AS #{get_integer_type}) AS workflow,
       CAST(NULL AS #{get_integer_type}) AS workflow_id,
       '' AS firstname,
@@ -278,6 +280,7 @@ class DmsfQuery < Query
         dmsf_folders.updated_at AS updated,
         CAST(NULL AS #{get_integer_type}) AS major_version,
         CAST(NULL AS #{get_integer_type}) AS minor_version,
+        CAST(NULL AS #{get_integer_type}) AS patch_version,
         CAST(NULL AS #{get_integer_type}) AS workflow,
         CAST(NULL AS #{get_integer_type}) AS workflow_id,
         users.firstname AS firstname,
@@ -322,6 +325,7 @@ class DmsfQuery < Query
         COALESCE(dmsf_folders.updated_at, dmsf_links.updated_at) AS updated,
         CAST(NULL AS #{get_integer_type}) AS major_version,
         CAST(NULL AS #{get_integer_type}) AS minor_version,
+        CAST(NULL AS #{get_integer_type}) AS patch_version,
         CAST(NULL AS #{get_integer_type}) AS workflow,
         CAST(NULL AS #{get_integer_type}) AS workflow_id,
         users.firstname AS firstname,
@@ -361,6 +365,7 @@ class DmsfQuery < Query
         dmsf_file_revisions.updated_at AS updated,
         dmsf_file_revisions.major_version AS major_version,
         dmsf_file_revisions.minor_version AS minor_version,
+        dmsf_file_revisions.patch_version AS patch_version,
         dmsf_file_revisions.workflow AS workflow,
         dmsf_file_revisions.dmsf_workflow_id AS workflow_id,
         users.firstname AS firstname,
@@ -401,6 +406,7 @@ class DmsfQuery < Query
         dmsf_file_revisions.updated_at AS updated,
         dmsf_file_revisions.major_version AS major_version,
         dmsf_file_revisions.minor_version AS minor_version,
+        dmsf_file_revisions.patch_version AS patch_version,
         dmsf_file_revisions.workflow AS workflow,
         dmsf_file_revisions.dmsf_workflow_id AS workflow_id,
         users.firstname AS firstname,
@@ -443,6 +449,7 @@ class DmsfQuery < Query
         dmsf_links.updated_at AS updated,
         CAST(NULL AS #{get_integer_type}) AS major_version,
         CAST(NULL AS #{get_integer_type}) AS minor_version,
+        CAST(NULL AS #{get_integer_type}) AS patch_version,
         CAST(NULL AS #{get_integer_type}) AS workflow,
         CAST(NULL AS #{get_integer_type}) AS workflow_id,
         users.firstname AS firstname,

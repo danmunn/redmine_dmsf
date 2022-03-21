@@ -121,6 +121,7 @@ ja:
   label_size: サイズ
   heading_new_revision: 新しいリビジョン
   option_version_same: 変更なし
+  option_version_patch: Patch
   option_version_minor: マイナー
   option_version_major: メジャー
   option_version_custom: カスタム

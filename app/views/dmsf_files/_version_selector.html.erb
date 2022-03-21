@@ -1,0 +1,45 @@
+<%
+  # encoding: utf-8
+  #
+  # Redmine plugin for Document Management System "Features"
+  #
+  # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
+  # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
+  # Copyright © 2011-22 Karel Pičman <karel.picman@kontron.com>
+  #
+  # This program is free software; you can redistribute it and/or
+  # modify it under the terms of the GNU General Public License
+  # as published by the Free Software Foundation; either version 2
+  # of the License, or (at your option) any later version.
+  #
+  # This program is distributed in the hope that it will be useful,
+  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  # GNU General Public License for more details.
+  #
+  # You should have received a copy of the GNU General Public License
+  # along with this program; if not, write to the Free Software
+  # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<%= label_tag(label_tag_name, l(:label_dmsf_version)) %>
+<%= select_tag select_tag_name_major, options_for_select(DmsfUploadHelper::major_version_select_options,
+      DmsfUploadHelper::gui_version(revision_or_upload.major_version)),
+      class: 'dmsf-select-version' %>
+<bold>.</bold>
+<% if revision_or_upload.patch_version.present? && (DmsfUploadHelper::gui_version(revision_or_upload.patch_version) != ' ') %>
+  <%= select_tag select_tag_name_minor, options_for_select(DmsfUploadHelper::minor_version_select_options,
+        DmsfUploadHelper::gui_version(revision_or_upload.minor_version)),
+        class: 'dmsf-select-version' %>
+  <bold>.</bold>
+  <%= select_tag select_tag_name_patch, options_for_select(DmsfUploadHelper::patch_version_select_options,
+        DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(revision_or_upload.patch_version))),
+        class: 'dmsf-select-version' %>
+<% else %>
+  <%= select_tag select_tag_name_minor, options_for_select(DmsfUploadHelper::minor_version_select_options,
+        DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(revision_or_upload.minor_version))),
+        class: 'dmsf-select-version' %>
+  <bold>.</bold>
+  <%= select_tag select_tag_name_patch, options_for_select(DmsfUploadHelper::patch_version_select_options,
+    [h('&nbsp;'), '']), class: 'dmsf-select-version' %>
+<% end %>

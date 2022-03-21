@@ -121,6 +121,7 @@ de:
   label_size: Größe
   heading_new_revision: Neue Version
   option_version_same: Gleiche Version
+  option_version_patch: Patchversion
   option_version_minor: Unterversion
   option_version_major: Hauptversion
   label_new_content: Neuer Inhalt

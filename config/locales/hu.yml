@@ -121,6 +121,7 @@ hu:
   label_size: Méret
   heading_new_revision: Új változat
   option_version_same: Ugyanaz
+  option_version_patch: Patch
   option_version_minor: Kisebb
   option_version_major: Fő
   option_version_custom: Egyedi

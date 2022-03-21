@@ -129,40 +129,47 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_increase_version
+    # 1.0.0 -> 1.0.1
+    @revision1.major_version = 1
+    @revision1.minor_version = 0
+    @revision1.increase_version DmsfFileRevision::PATCH_VERSION
+    assert_equal 1, @revision1.major_version
+    assert_equal 0, @revision1.minor_version
+    assert_equal 1, @revision1.patch_version
     # 1.0 -> 1.1
     @revision1.major_version = 1
     @revision1.minor_version = 0
-    @revision1.increase_version(1)
+    @revision1.increase_version DmsfFileRevision::MINOR_VERSION
     assert_equal 1, @revision1.major_version
     assert_equal 1, @revision1.minor_version
     # 1.0 -> 2.0
     @revision1.major_version = 1
     @revision1.minor_version = 0
-    @revision1.increase_version(2)
+    @revision1.increase_version DmsfFileRevision::MAJOR_VERSION
     assert_equal 2, @revision1.major_version
     assert_equal 0, @revision1.minor_version
     # 1.1 -> 2.0
     @revision1.major_version = 1
     @revision1.minor_version = 1
-    @revision1.increase_version(2)
+    @revision1.increase_version DmsfFileRevision::MAJOR_VERSION
     assert_equal 2, @revision1.major_version
     assert_equal 0, @revision1.minor_version
     # A -> A.1
     @revision1.major_version = -('A'.ord)
     @revision1.minor_version = -(' '.ord)
-    @revision1.increase_version(1)
+    @revision1.increase_version DmsfFileRevision::MINOR_VERSION
     assert_equal -('A'.ord), @revision1.major_version
     assert_equal 1, @revision1.minor_version
     # A -> B
     @revision1.major_version = -('A'.ord)
     @revision1.minor_version = -(' '.ord)
-    @revision1.increase_version(2)
+    @revision1.increase_version DmsfFileRevision::MAJOR_VERSION
     assert_equal -('B'.ord), @revision1.major_version
     assert_equal -(' '.ord), @revision1.minor_version
     # A.1 -> B
     @revision1.major_version = -('A'.ord)
     @revision1.minor_version = 1
-    @revision1.increase_version(2)
+    @revision1.increase_version DmsfFileRevision::MAJOR_VERSION
     assert_equal -('B'.ord), @revision1.major_version
     assert_equal -(' '.ord), @revision1.minor_version
   end

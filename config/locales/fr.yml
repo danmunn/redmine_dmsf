@@ -121,6 +121,7 @@ fr:
   label_size: Taille
   heading_new_revision: Nouvelle révision
   option_version_same: (identique)
+  option_version_patch: Patch
   option_version_minor: (modification mineure)
   option_version_major: (modification majeure)
   option_version_custom: (personnalisée)

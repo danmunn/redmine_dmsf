@@ -31,6 +31,7 @@ class DmsfUpload
   attr_accessor :comment
   attr_accessor :major_version
   attr_accessor :minor_version
+  attr_accessor :patch_version
   attr_accessor :locked
   attr_accessor :workflow
   attr_accessor :custom_values
@@ -83,6 +84,7 @@ class DmsfUpload
       @description = uploaded[:comment]
       @major_version = 0
       @minor_version = 0
+      @patch_version = nil
       @workflow = nil
       file = DmsfFile.new
       file.project_id = project.id
@@ -100,6 +102,7 @@ class DmsfUpload
       end
       @major_version = last_revision.major_version
       @minor_version = last_revision.minor_version
+      @patch_version = last_revision.patch_version
       @workflow = last_revision.workflow
       @custom_values = Array.new(file.last_revision.custom_values)
 

@@ -103,21 +103,16 @@ class DmsfFilesController < ApplicationController
         revision.name = params[:dmsf_file_revision][:name]
         revision.description = params[:dmsf_file_revision][:description]
         revision.comment = params[:dmsf_file_revision][:comment]
-
         revision.dmsf_file = @file
         last_revision = @file.last_revision
         revision.source_revision = last_revision
         revision.user = User.current
 
-        revision.major_version = last_revision.major_version
-        revision.minor_version = last_revision.minor_version
-        version = params[:version].to_i
-        if version == 3
-          revision.major_version = DmsfUploadHelper::db_version(params[:custom_version_major])
-          revision.minor_version = DmsfUploadHelper::db_version(params[:custom_version_minor])
-        else
-           revision.increase_version(version)
-        end
+        # Version
+        revision.major_version = DmsfUploadHelper::db_version(params[:version_major])
+        revision.minor_version = DmsfUploadHelper::db_version(params[:version_minor])
+        revision.patch_version = DmsfUploadHelper::db_version(params[:version_patch])
+
         file_upload = params[:dmsf_attachments]['1'] if params[:dmsf_attachments].present?
         if file_upload
           upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, file_upload)
@@ -144,7 +139,6 @@ class DmsfFilesController < ApplicationController
 
         @file.name = revision.name
         ok = true
-
         if revision.save
           revision.assign_workflow params[:dmsf_workflow_id]
           if upload

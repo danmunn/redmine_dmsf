@@ -190,12 +190,6 @@
       event.preventDefault();
     }
   });
-  $('#file_upload_box').change(function() {
-    if($("input[name='version']:checked").val() == '0') {
-      $('#version_1').prop('checked', true);
-    }
-    $('#version_0').prop('disabled', true);
-  });
   $('#new_revision_form_content_toggle').click(function() {
     if($('#new_revision_form_content').is(':visible')) {
       $(this).text('[+]');

@@ -23,7 +23,7 @@
 class DmsfVersionQueryColumn < QueryColumn
 
   def value_object(object)
-    DmsfFileRevision.version object.major_version, object.minor_version
+    DmsfFileRevision.version object.major_version, object.minor_version, object.patch_version
   end
 
 end

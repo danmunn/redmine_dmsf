@@ -23,7 +23,7 @@
 %>
 
 <div class="box tabular">
-  <strong><%= l(:heading_new_revision) %> <a href="#" id="new_revision_form_content_toggle">[+]</a></strong>
+    <strong><%= l(:heading_new_revision) %> <a href="#" id="new_revision_form_content_toggle">[+]</a></strong>
   <div id="new_revision_form_content">
     <% if @file.locked_for_user? %>
       <p class="warning"><%= l(:info_file_locked) %></p>
@@ -31,14 +31,14 @@
       <%= labelled_form_for(@revision, url: { action: 'create_revision', id: @file },
             html: { method: :post, multipart: true, id: 'new_revision_form' }) do |f| %>
         <%= hidden_field_tag 'back_url', params[:back_url] %>
-        <div class="clear">
+        <div class="splitcontent">
           <div class="splitcontentleft">
-            <p>              
+            <p>
               <%= f.text_field(:title) %>
             </p>
           </div>
           <div class="splitcontentright">
-            <p>              
+            <p>
               <%= f.text_field :name, label: l(:label_file) %>
             </p>
           </div>
@@ -46,36 +46,24 @@
         <p>
           <%= f.text_area :description, rows: 6, class: 'wiki-edit dmsf-description' %>
         </p>
-        <div class="clear">
+        <div class="splitcontent">
+          <div class="splitcontentleft">
+            <p>
+              <%= render partial: 'dmsf_files/version_selector', locals: {
+                label_tag_name: 'version',
+                select_tag_name_patch: 'version_patch',
+                select_tag_name_minor: 'version_minor',
+                select_tag_name_major: 'version_major',
+                revision_or_upload: @file.last_revision } %>
+            </p>
+          </div>
           <div class="splitcontentright">
             <div class="custom_fields">
               <% @revision.custom_field_values.each do |value| %>
-                  <% value.value = nil if value.custom_field.dmsf_not_inheritable %>
-                  <p><%= custom_field_tag_with_label(:dmsf_file_revision, value) %></p>
+                <% value.value = nil if value.custom_field.dmsf_not_inheritable %>
+                <p><%= custom_field_tag_with_label(:dmsf_file_revision, value) %></p>
               <% end %>
             </div>
-          </div>
-          <div class="splitcontentleft">
-            <p>
-              <%= label_tag('version_0', l(:label_dmsf_version)) %>
-              <%= radio_button_tag('version', 0, @revision.version == @file.last_revision.version) %>
-              <%= @file.last_revision.version %>
-              <%= l(:option_version_same) %><br/>
-              <%= radio_button_tag('version', 1, @revision.major_version == @file.last_revision.major_version && @revision.minor_version != @file.last_revision.minor_version) %> 
-              <%= DmsfUploadHelper::gui_version(@file.last_revision.major_version) %>.<%= DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(@file.last_revision.minor_version, 1)) %>
-              <%= l(:option_version_minor) %><br/>
-              <%= radio_button_tag('version', 2, @revision.major_version != @file.last_revision.major_version) %> 
-              <%= DmsfUploadHelper.gui_version(DmsfUploadHelper::increase_version(@file.last_revision.major_version, 1)) %>.0
-              <%= l(:option_version_major) %><br/>
-              <%= radio_button_tag('version', 3) %>        
-              <%= select_tag 'custom_version_major', options_for_select(DmsfUploadHelper::major_version_select_options,
-                    DmsfUploadHelper::gui_version(DmsfUploadHelper::increase_version(@file.last_revision.major_version, 2))),
-                    onchange: '$("#version_3").prop("checked", true)', class: 'dmsf-select-version' %>.
-              <%= select_tag 'custom_version_minor', options_for_select(DmsfUploadHelper::minor_version_select_options,
-                    DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(@file.last_revision.minor_version, 1))),
-                    onchange: '$("#version_3").prop("checked", true)', class: 'dmsf-select-version' %>
-              <%= l(:option_version_custom) %>
-            </p>
           </div>
         </div>
         <div class="box" id="file_upload_box">
