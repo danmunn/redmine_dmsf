@@ -239,7 +239,7 @@ cs:
   field_label_dmsf_workflow: Schvalovací proces
   field_label_dmsf_workflow_name: Approval workflow name
   label_dmsf_workflow_plural: Schvalovací procesy
-  label_dmsf_workflow_plural_num: Schvalovací procesy (%{count})
+  label_dmsf_workflow_plural_num: Kopírovat schvalovací procesy (%{count})
   label_dmsf_workflow_step: Krok
   label_dmsf_workflow_step_plural: Kroky
   label_dmsf_workflow_approval_plural: Schválení

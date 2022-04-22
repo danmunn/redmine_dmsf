@@ -239,7 +239,7 @@ es:
   field_label_dmsf_workflow: "Flujo de trabajo de aprobación"
   field_label_dmsf_workflow_name: "Nombre de flujo de trabajo de aprobación"
   label_dmsf_workflow_plural: "Flujos de trabajo de aprobación"
-  label_dmsf_workflow_plural_num: Approval workflows (%{count})
+  label_dmsf_workflow_plural_num: Copy approval workflows (%{count})
   label_dmsf_workflow_step: Paso
   label_dmsf_workflow_step_plural: Pasos
   label_dmsf_workflow_approval_plural: Aprobaciones

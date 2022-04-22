@@ -236,7 +236,7 @@ de:
   field_label_dmsf_workflow: Genehmigungs-Workflow
   field_label_dmsf_workflow_name: Genehmigungs-Workflow Name
   label_dmsf_workflow_plural: Genehmigungs-Workflows
-  label_dmsf_workflow_plural_num: Genehmigungs-Workflows (%{count})
+  label_dmsf_workflow_plural_num: Kopieren Genehmigungs-Workflows (%{count})
   label_dmsf_workflow_step: Schritt
   label_dmsf_workflow_step_plural: Schritte
   label_dmsf_workflow_approval_plural: Genehmigungen
