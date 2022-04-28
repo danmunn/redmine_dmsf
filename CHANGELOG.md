@@ -1,10 +1,33 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.0 *????-??-??*
+3.0.0 *2022-04-28*
 -------------------
 
     Redmine 5.0
+    Watchable documents and folders (The original DMS notifications ar off as default. They can be activated in Administration->Settings->Email notifications.)
+    Patch version
+
+* New: #1344 - Need support Redmine 5
+* Bug: #1343 - New content input field improvement
+* Bug: #1340 - Using plugin with Redmine SVN trunk
+* Bug: #1339 - Not show action menu to unlock folder
+* Bug: #1338 - move/copy folder from project1 to project2
+* New: #1337 - Project's plus menu extension
+* New: #1336 - New file menu item
+* New: #1333 - Memory problem in 'My page' with 'Open aprovals' option
+* Bug: #1330 - Trouble with dmsff macro
+* Bug: #1329 - Problem moving a folder with locked files.
+* New: #1328 - Update de.yml
+* New: #1323 - Fast links for Copy/Move
+* Bug: #1318 - easy_gantt compatibility
+* Bug: #1317 - Wrong links to a project
+* Bug: #1314 - Fix HTTP Status 500 when emailing document link
+* Bug: #1313 - Impossible to use macro in the revision comment field.
+* New: #1312 - Update _log.html.erb
+* Bug: #1311 - Deleting the link between files and issues
+* New: #1151 - Add document revision.patch_version
+* New:  #557 - Watch Documents type: enhancement
 
 2.4.11 *2021-11-03*
 -------------------

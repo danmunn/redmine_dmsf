@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **3.0.0 devel** 
+The current version of Redmine DMSF is **3.0.0** 
 
 [![pipeline status](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/badges/devel-2.4.12/pipeline.svg)](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/pipelines/devel-2.4.12/latest)
 
@@ -24,8 +24,7 @@ Features
 --------
 
   * Directory structure
-  * Document versioning / revision history
-  * Email notifications for directories and/or documents
+  * Document versioning / revision history 
   * Document locking
   * Multi (drag/drop depending on browser) upload/download  
   * Direct document or document link sending via email
@@ -38,7 +37,7 @@ Features
   * Documents and folders symbolic links  
   * Trash bin
   * Documents attachable to issues
-  * Compatible with Redmine 4.2.x
+  * Compatible with Redmine 5.0.x
 
 Dependencies
 ------------
