@@ -3,7 +3,8 @@ Redmine DMSF Plugin
 
 The current version of Redmine DMSF is **3.0.0** 
 
-[![pipeline status](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/badges/devel-2.4.12/pipeline.svg)](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/pipelines/devel-2.4.12/latest)
+[![pipeline status](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/badges/master/pipeline.svg)](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/pipelines/master/latest)
+[![Support Ukraine Badge](https://bit.ly/support-ukraine-now)](https://github.com/support-ukraine/support-ukraine)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
