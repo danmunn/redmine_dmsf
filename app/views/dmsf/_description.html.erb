@@ -22,8 +22,17 @@
 
 <% if @project %>
   <div class="dmsf-header">
-      <div class="wiki dmsf-description">
-        <%= textilizable @folder ? @folder.description : @project.dmsf_description %>
-      </div>
+    <div class="wiki dmsf-description">
+      <%= textilizable @folder ? @folder.description : @project.dmsf_description %>
+    </div>
+    <% if @folder && @folder.custom_field_values.any? { |o| o.value.present? } %>
+      <ul>
+        <% render_custom_field_values(@folder) do |custom_field, formatted| %>
+          <li class="<%= custom_field.css_classes %>">
+            <span class="label"><%= custom_field.name %>:</span> <%= formatted %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
   </div>
 <% end %>
