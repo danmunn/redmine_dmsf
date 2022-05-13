@@ -21,6 +21,7 @@
 
 module RedmineDmsf
   module Patches
+
     module NotifiablePatch
 
       def self.prepended(base)
@@ -46,6 +47,35 @@ module RedmineDmsf
       end
 
     end
+
+    # TODO: This is just a workaround to fix alias_method usage in redmine_resources plugin, which is in conflict with
+    #   prepend and causes an infinite loop.
+    module RedmineUpNotifiablePatch
+
+      def self.included(base)
+        base.extend ClassMethods
+        base.class_eval do
+          unloadable
+          class << self
+            alias_method :all_without_resources_dmsf, :all
+            alias_method :all, :all_with_resources_dmsf
+          end
+        end
+      end
+
+      module ClassMethods
+
+        def all_with_resources_dmsf
+          notifications = all_without_resources_dmsf
+          notifications << Redmine::Notifiable.new('dmsf_workflow_plural')
+          notifications << Redmine::Notifiable.new('dmsf_legacy_notifications')
+          notifications
+        end
+
+      end
+
+    end
+
   end
 end
 
@@ -54,5 +84,11 @@ if Redmine::Plugin.installed?(:easy_extensions)
   RedmineExtensions::PatchManager.register_patch_to_be_first 'Redmine::Notifiable',
     'RedmineDmsf::Patches::NotifiablePatch', prepend: true, first: true
 else
-  Redmine::Notifiable.prepend RedmineDmsf::Patches::NotifiablePatch
+  # redmine_resources depends on redmine_contact and redmine_contacts if alphabetically sorted before redmine_dmsf
+  # in the plugin list.
+  if Redmine::Plugin.installed?(:redmine_contacts)
+    Redmine::Notifiable.send :include, RedmineDmsf::Patches::RedmineUpNotifiablePatch
+  else
+    Redmine::Notifiable.prepend RedmineDmsf::Patches::NotifiablePatch
+  end
 end
