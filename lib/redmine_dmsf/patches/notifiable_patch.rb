@@ -50,7 +50,7 @@ module RedmineDmsf
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?(:easy_extensions)
+if Redmine::Plugin.installed?(:easy_extensions) || Redmine::Plugin.installed?(:redmine_extensions)
   RedmineExtensions::PatchManager.register_patch_to_be_first 'Redmine::Notifiable',
     'RedmineDmsf::Patches::NotifiablePatch', prepend: true, first: true
 else
