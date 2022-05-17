@@ -63,9 +63,13 @@ class DmsfFilesController < ApplicationController
       access.dmsf_file_revision = @revision
       access.action = DmsfFileRevisionAccess::DownloadAction
       access.save!
+      # Allow a preview of the file by an external plugin
+      result = { processed: false }
+      call_hook(:dmsf_files_controller_before_view, { file: @revision.disk_file, result: result })
+      return if result[:processed]
       member = Member.find_by(user_id: User.current.id, project_id: @file.project.id)
       # IE has got a tendency to cache files
-      expires_in(0.year, 'must-revalidate' => true)
+      expires_in 0.year, 'must-revalidate' => true
       send_file @revision.disk_file,
         filename: filename_for_content_disposition(@revision.formatted_name(member)),
         type: @revision.detect_content_type,
@@ -162,7 +166,7 @@ class DmsfFilesController < ApplicationController
           end
           if ok && @file.save
             @file.set_last_revision revision
-            Redmine::Hook.call_hook :dmsf_helper_upload_after_commit, { file: @file }
+            call_hook :dmsf_helper_upload_after_commit, { file: @file }
             begin
               recipients = DmsfMailer.deliver_files_updated(@project, [@file])
               if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
