@@ -97,7 +97,7 @@ module DmsfUploadHelper
             if container && container.is_a?(Issue) && (!new_object)
               container.dmsf_file_added file
             end
-            call_hook :dmsf_helper_upload_after_commit, { file: file }
+            Redmine::Hook.call_hook :dmsf_helper_upload_after_commit, { file: file }
           rescue => e
             Rails.logger.error e.message
             controller.flash[:error] = e.message if controller
