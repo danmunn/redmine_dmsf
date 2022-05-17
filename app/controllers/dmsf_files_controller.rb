@@ -64,9 +64,8 @@ class DmsfFilesController < ApplicationController
       access.action = DmsfFileRevisionAccess::DownloadAction
       access.save!
       # Allow a preview of the file by an external plugin
-      result = { processed: false }
-      call_hook(:dmsf_files_controller_before_view, { file: @revision.disk_file, result: result })
-      return if result[:processed]
+      results = call_hook(:dmsf_files_controller_before_view, { file: @revision.disk_file })
+      return if results.first == true
       member = Member.find_by(user_id: User.current.id, project_id: @file.project.id)
       # IE has got a tendency to cache files
       expires_in 0.year, 'must-revalidate' => true
