@@ -443,6 +443,9 @@ cs:
   label_dmsf_new_top_level_document: Nový kořenový DMS dokument
   label_dmsf_new_top_level_folder: Nová kořenová DMS složka
 
+  label_dmsf_max_notification_receivers_info: Maximální počet zobrazených příjemců notifikace
+  note_dmsf_max_notification_receivers_info: Omezí maximální počet zobrazených příjemců e-mailové notifikace
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

@@ -61,7 +61,8 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_webdav_use_project_names' => Redmine::Plugin.installed?(:easy_extensions) ? '1' : nil,
               'dmsf_webdav_ignore_1b_file_for_authentication' => '1',
               'dmsf_projects_as_subfolders' =>  nil,
-              'only_approval_zero_minor_version' => '0'
+              'only_approval_zero_minor_version' => '0',
+              'dmsf_max_notification_receivers_info' => 10
             }
 end
 

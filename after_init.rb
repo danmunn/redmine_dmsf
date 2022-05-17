@@ -22,7 +22,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'zip'
-require File.dirname(__FILE__) + '/lib/redmine_dmsf'
+
+# All files in lib sub-folder are already loaded by Zeitwerk
+if RedmineApp::Application.config.autoloader != :zeitwerk
+  require File.dirname(__FILE__) + '/lib/redmine_dmsf'
+end
 
 def dmsf_init
   # Administration menu extension

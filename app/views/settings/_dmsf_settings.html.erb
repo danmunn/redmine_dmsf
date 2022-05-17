@@ -35,6 +35,15 @@
 </p>
 
 <p>
+  <%= content_tag :label, l(:label_dmsf_max_notification_receivers_info) %>
+  <% @settings['dmsf_max_notification_receivers_info'] ||= 10 %>
+  <%= text_field_tag 'settings[dmsf_max_notification_receivers_info]', @settings['dmsf_max_notification_receivers_info'], size: 10 %>
+  <em class="info">
+    <%= l(:note_dmsf_max_notification_receivers_info) %> <%= l(:label_default) %>: 10
+  </em>
+</p>
+
+<p>
   <%= content_tag :label, l(:label_maximum_email_filesize) %>
   <%= text_field_tag 'settings[dmsf_max_email_filesize]', @settings['dmsf_max_email_filesize'], size: 10 %>
   <em class="info">

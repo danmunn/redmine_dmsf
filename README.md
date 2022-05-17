@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **3.0.0** 
+The current version of Redmine DMSF is **3.0.1 devel** 
 
 [![pipeline status](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/badges/master/pipeline.svg)](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/pipelines/master/latest)
 [![Support Ukraine Badge](https://bit.ly/support-ukraine-now)](https://github.com/support-ukraine/support-ukraine)
@@ -241,7 +241,7 @@ You can either clone the master branch or download the latest zipped version. Be
     `RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf`
 5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
 6. Restart the web server, e.g. `systemctl restart apache2`
-7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure.
+7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure. (You should check and then save the plugin's configuration after each upgrade.)
 8. Don't forget to grant permissions for DMSF in Administration -> Roles and permissions
 9. Assign DMSF permissions to appropriate roles.
 10. There are a few rake tasks:

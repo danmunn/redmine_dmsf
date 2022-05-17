@@ -87,8 +87,8 @@ class DmsfWorkflowsController < ApplicationController
                       :text_email_to_see_history)
                   if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
                     unless recipients.blank?
-                      to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
-                      to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
+                      to = recipients.collect{ |r| r.name }.first(Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i).join(', ')
+                      to << ((recipients.count > Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i) ? ',...' : '.')
                       flash[:warning] = l(:warning_email_notifications, to: to)
                     end
                   end
@@ -110,8 +110,8 @@ class DmsfWorkflowsController < ApplicationController
                       action.note)
                   if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
                     unless recipients.blank?
-                      to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
-                      to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
+                      to = recipients.collect{ |r| r.name }.first(Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i).join(', ')
+                      to << ((recipients.count > Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i) ? ',...' : '.')
                       flash[:warning] = l(:warning_email_notifications, to: to)
                     end
                   end
@@ -176,8 +176,8 @@ class DmsfWorkflowsController < ApplicationController
                         recipients = recipients & DmsfMailer.get_notify_users(@project, revision.dmsf_file,
                                                                               true)
                         unless recipients.empty?
-                          to = recipients.collect{ |r| r.name }.first(DMSF_MAX_NOTIFICATION_RECEIVERS_INFO).join(', ')
-                          to << ((recipients.count > DMSF_MAX_NOTIFICATION_RECEIVERS_INFO) ? ',...' : '.')
+                          to = recipients.collect{ |r| r.name }.first(Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i).join(', ')
+                          to << ((recipients.count > Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i) ? ',...' : '.')
                           flash[:warning] = l(:warning_email_notifications, to: to)
                         end
                       end
