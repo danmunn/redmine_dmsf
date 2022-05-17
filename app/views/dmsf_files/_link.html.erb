@@ -20,10 +20,12 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 <% if link %>
-  <p class="dmsf-gray">
+  <% cls = 'dmsf-gray' %>
 <% else %>
-  <p>
+  <% cls = '' %>
 <% end %>
+
+<td class="<%= cls %>">
   <% file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: dmsf_file }) %>
   <%= link_to h(link ? link.name : dmsf_file.title),
     file_view_url,
@@ -31,10 +33,21 @@
     class: "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
     title: h(dmsf_file.last_revision.try(:tooltip)),
     'data-downloadurl' => "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}" %>
-  <%= " - #{dmsf_file.description}" unless dmsf_file.description.blank? %>
+</td>
+<td class="<%= cls %>">
   <span class="size">(<%= number_to_human_size dmsf_file.last_revision.size %>)</span>
+  <%= link_to '', view_dmsf_file_path(dmsf_file, download: dmsf_file.last_revision, disposition: 'attachment'),
+        title: l(:title_title_version_version_download, title: h(dmsf_file.last_revision.title),
+        version: dmsf_file.last_revision.version), class: 'icon icon-download dmsf-revision-action-button' %>
+</td>
+<td class="<%= cls %>">
+  <%= dmsf_file.description unless dmsf_file.description.blank? %>
+</td>
+<td class="<%= cls %>">
   <span class="author"><%= dmsf_file.last_revision.user %>, <%= format_time(dmsf_file.last_revision.updated_at) %></span>
-  <% # Command icons %>
+</td>
+<% # Command icons %>
+<td class="<%= cls %>">
   <span class="dmsf_upload_select">
     <% # Details %>
     <% if User.current.allowed_to? :file_manipulation, dmsf_file.project %>
@@ -94,4 +107,4 @@
          workflows_available: DmsfWorkflow.where(['project_id = ? OR project_id IS NULL', dmsf_file.project_id]).exists?,
          project: dmsf_file.project, wf: wf, dmsf_link_id: nil, back_url: issue_path(@issue) } %>
   </span>
-</p>
+</td>

@@ -22,12 +22,18 @@
 
 <% if links.present? %>
   <hr/>
-  <strong><%= l(:menu_dmsf) %></strong>
+  <p>
+    <strong><%= l(:menu_dmsf) %></strong>
+  </p>
   <div class="attachments dmsf-parent-container">
     <% # DMS documents & links %>
-    <% links.each do |dmsf_file, link, _| %>
-        <%= render partial: 'dmsf_files/link', locals: { dmsf_file: dmsf_file, link: link } %>
-    <% end %>
+    <table>
+        <% links.each do |dmsf_file, link, _| %>
+        <tr>
+          <%= render partial: 'dmsf_files/link', locals: { dmsf_file: dmsf_file, link: link } %>
+        </tr>
+        <% end %>
+    </table>
     <%= render partial: 'dmsf_files/thumbnails', locals: { links: links, thumbnails: thumbnails, link_to: true } %>
   </div>
 <% end %>
