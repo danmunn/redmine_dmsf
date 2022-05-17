@@ -488,6 +488,10 @@ class DmsfFile < ActiveRecord::Base
     (image? || pdf? || video? || html?) ? 'inline' : 'attachment'
   end
 
+  def thumbnailable?
+    image? && Redmine::Thumbnail.convert_available?
+  end
+
   def preview(limit)
     result = +'No preview available'
     if text?

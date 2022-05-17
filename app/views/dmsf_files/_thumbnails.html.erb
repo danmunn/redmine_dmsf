@@ -22,7 +22,7 @@
 
 <% # Thumbnails %>
 <% if defined?(thumbnails) && thumbnails %>
-    <% images = links.map{ |x| x[0] }.select(&:image?) %>
+    <% images = links.map{ |x| x[0] }.select(&:thumbnailable?) %>
     <% if images.any? %>
         <% if link_to # Redmine classic %>
           <div class="thumbnails">
