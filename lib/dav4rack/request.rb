@@ -143,6 +143,8 @@ module Dav4rack
       collection = path.end_with?('/')
       path = ::File.expand_path path
       path << '/' if collection and !path.end_with?('/')
+      # remove a drive letter in Windows
+      path.gsub!(/^([^\/]*)\//, '/')
       path
     end
 
