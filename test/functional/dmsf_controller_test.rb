@@ -317,7 +317,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_entries_email
-    zip_file = Tempfile.new('test', DmsfHelper::temp_dir)
+    zip_file = Tempfile.new('test', File.join(Rails.root, 'tmp'))
     get :entries_email, params:  { id: @project1, email:
         {
           to: 'to@test.com', from: 'from@test.com', subject: 'subject', body: 'body', expired_at: '2015-01-01',

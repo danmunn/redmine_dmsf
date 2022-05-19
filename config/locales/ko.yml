@@ -378,10 +378,6 @@ ko:
   label_dmsf_attachments: DMS 첨부
   label_basic_attachments: 기본 첨부
 
-  label_tmpdir: 임시 파일 경로
-  error_file_tmpdir_does_not_exist: "임시 파일 경로가 존재하지 않거나 만들 수 없습니다"
-  error_tmpfile_can_not_be_created: "임시 파일 경로 디렉터리 내에 파일을 만들 수 없습니다"
-
   label_email_from_override: 송신
   text_email_from_override: 로그인한 사용자
   label_email_reply_to: 회신

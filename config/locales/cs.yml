@@ -378,10 +378,6 @@ cs:
   label_dmsf_attachments: DMS přílohy
   label_basic_attachments: Souborové přílohy
 
-  label_tmpdir: Adresář pro dočasné soubory
-  error_file_tmpdir_does_not_exist: Adresář pro dočasné soubory neexistuje a nemůže být vytvořen
-  error_tmpfile_can_not_be_created: Nelze vytvořit soubor v adresáři pro dočasné soubory
-
   label_email_from_override: Od
   text_email_from_override: aktuálně přihlášený uživatel
   label_email_reply_to: Odpovědět komu

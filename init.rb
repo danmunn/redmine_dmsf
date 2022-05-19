@@ -53,7 +53,6 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_webdav_disable_versioning' => '^\~\$|\.tmp$',
               'dmsf_keep_documents_locked' => nil,
               'dmsf_act_as_attachable' => nil,
-              'dmsf_tmpdir' => Dir.tmpdir,
               'dmsf_documents_email_from' => '',
               'dmsf_documents_email_reply_to' => '',
               'dmsf_documents_email_links_only' => nil,

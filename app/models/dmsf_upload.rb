@@ -39,7 +39,7 @@ class DmsfUpload
   attr_accessor :digest
 
   def disk_file
-    DmsfHelper.temp_dir.join(disk_filename).to_s
+    File.join Rails.root, 'tmp', disk_filename
   end
 
   def self.create_from_uploaded_attachment(project, folder, uploaded_file)

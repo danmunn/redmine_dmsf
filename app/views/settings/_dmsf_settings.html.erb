@@ -81,36 +81,6 @@
 <% end %>
 
 <p>
-  <%= content_tag(:label, l(:label_tmpdir)) %>
-  <%
-    tmpdir = @settings['dmsf_tmpdir'].strip if @settings['dmsf_tmpdir'].present?
-    tmpdir = Dir.tmpdir if tmpdir.blank?
-  %>
-  <%= text_field_tag 'settings[dmsf_tmpdir]', tmpdir, size: 256 %>
-  <em class="info">
-    <%= l(:label_default) %>: <%= Dir.tmpdir %>
-  </em>
-</p>
-<% unless File.exist?(tmpdir) %>
-  <% begin %>
-    <% FileUtils.mkdir_p tmpdir %>
-  <% rescue %>
-    <p class="warning"><%= l(:error_file_tmpdir_does_not_exist) %></p>
-  <% end %>
-<% end %>
-<% path = Pathname.new(tmpdir) %>
-<% testfilename = path.join('test.test') %>
-<% if File.exist?(tmpdir) %>
-  <% begin %>
-    <% File.open(testfilename, 'wb') {} %>
-  <% rescue %>
-    <p class="warning"><%= l(:error_tmpfile_can_not_be_created) %></p>
-  <% ensure %>
-    <% FileUtils.rm_f testfilename %>
-  <% end %>
-<% end %>
-
-<p>
   <%= content_tag :label, l(:label_dmsf_office_bin) %>
   <%= text_field_tag 'settings[office_bin]', @settings['office_bin'], size: 10 %>
   <em class="info">

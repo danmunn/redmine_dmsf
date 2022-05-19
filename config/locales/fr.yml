@@ -378,10 +378,6 @@ fr:
   label_dmsf_attachments: Pièces-jointes DMS
   label_basic_attachments: Pièces-jointes standards
 
-  label_tmpdir: Temporary file path
-  error_file_tmpdir_does_not_exist: "Temporary file path doesn't exist and can't be created"
-  error_tmpfile_can_not_be_created: "Files can't be created in temporary file path directory"
-
   label_email_from_override: From
   text_email_from_override: The user currently logged in
   label_email_reply_to: Reply-to

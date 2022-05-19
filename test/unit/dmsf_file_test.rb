@@ -232,9 +232,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
 
   def test_findn_file_by_name
     assert DmsfFile.find_file_by_name(@project1, nil, 'test.txt')
-    assert_nil DmsfFile.find_file_by_name(@project1, nil, 'test.odt')
+    assert_nil DmsfFile.find_file_by_name(@project1, nil, 'test.ods')
     assert DmsfFile.find_file_by_name(@issue1, nil, 'test.pdf')
-    assert_nil DmsfFile.find_file_by_name(@issue1, nil, 'test.odt')
+    assert_nil DmsfFile.find_file_by_name(@issue1, nil, 'test.ods')
   end
 
   def test_storage_path

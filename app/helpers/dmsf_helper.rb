@@ -35,19 +35,10 @@ module DmsfHelper
 
   end
 
-  def self.temp_dir
-    if Setting.plugin_redmine_dmsf['dmsf_tmpdir'].present?
-      tmpdir = Pathname.new(Setting.plugin_redmine_dmsf['dmsf_tmpdir'])
-    else
-      tmpdir = Pathname.new(Dir.tmpdir)
-    end
-    tmpdir
-  end
-
   def self.temp_filename(filename)
     filename = sanitize_filename(filename)
     timestamp = DateTime.current.strftime('%y%m%d%H%M%S')
-    while temp_dir.join("#{timestamp}_#{filename}").exist?
+    while File.exist?(File.join(Rails.root, 'tmp', "#{timestamp}_#{filename}"))
       timestamp.succ!
     end
     "#{timestamp}_#{filename}"

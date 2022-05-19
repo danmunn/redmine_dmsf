@@ -374,10 +374,6 @@ de:
   label_dmsf_attachments: DMS Anhänge
   label_basic_attachments: Dateianhänge
 
-  label_tmpdir: Temporärer Dateipfad
-  error_file_tmpdir_does_not_exist: "Temporärer Dateipfad existiert nicht und kann nicht erstellt werden."
-  error_tmpfile_can_not_be_created: "Dateien können nicht im temporären Dateipfad erstellt werden."
-
   label_email_from_override: Von
   text_email_from_override: Der angemeldete Benutzer
   label_email_reply_to: Antwort an

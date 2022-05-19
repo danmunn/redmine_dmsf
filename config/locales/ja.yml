@@ -378,10 +378,6 @@ ja:
   label_dmsf_attachments: DMS 添付ファイル
   label_basic_attachments: 標準 添付ファイル
 
-  label_tmpdir: 一時フォルダのパス
-  error_file_tmpdir_does_not_exist: 指定された一時フォルダが存在せず、作成もできません
-  error_tmpfile_can_not_be_created: 指定された一時フォルダにファイルを作成できません
-
   label_email_from_override: 差出人
   text_email_from_override: 現在ログインしているユーザー
   label_email_reply_to: 返信先

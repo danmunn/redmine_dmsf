@@ -30,7 +30,7 @@ module RedmineDmsf
       attr_reader :files
 
       def initialize
-        @temp_file = Tempfile.new(%w(dmsf_zip_ .zip), DmsfHelper.temp_dir)
+        @temp_file = Tempfile.new(%w(dmsf_zip_ .zip), File.join(Rails.root, 'tmp'))
         @zip_file = ::Zip::OutputStream.open(@temp_file)
         @files = []
         @folders = []
