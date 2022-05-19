@@ -1,6 +1,11 @@
 Changelog for Redmine DMSF
 ==========================
 
+3.0.1 *????-??-??*
+-------------------
+
+    Office documents displayed inline (preview)
+
 3.0.0 *2022-04-28*
 -------------------
 

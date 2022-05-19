@@ -202,19 +202,19 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   # {{dmsft(document_id)}}
   def test_macro_dmsft
     text = textilizable("{{dmsft(#{@file1.id}, 1)}}")
-    assert_equal "<p>#{@file1.preview(1)}</p>", text
+    assert_equal "<p>#{@file1.text_preview(1)}</p>", text
   end
 
   def test_macro_dmsft_no_permissions
     @manager_role.remove_permission! :view_dmsf_files
     text = textilizable("{{dmsft(#{@file1.id}, 1)}}")
-    assert_not_equal "<p>#{@file1.preview(1)}</p>", text
+    assert_not_equal "<p>#{@file1.text_preview(1)}</p>", text
   end
 
   def test_macro_dmsft_dmsf_off
     @project1.disable_module! :dmsf
     text = textilizable("{{dmsft(#{@file1.id}, 1)}}")
-    assert_not_equal "<p>#{@file1.preview(1)}</p>", text
+    assert_not_equal "<p>#{@file1.text_preview(1)}</p>", text
   end
 
   # {{dmsf_image(file_id)}}

@@ -106,9 +106,17 @@
   <% rescue %>
     <p class="warning"><%= l(:error_tmpfile_can_not_be_created) %></p>
   <% ensure %>
-    <% FileUtils.rm_f(testfilename) %>
+    <% FileUtils.rm_f testfilename %>
   <% end %>
 <% end %>
+
+<p>
+  <%= content_tag :label, l(:label_dmsf_office_bin) %>
+  <%= text_field_tag 'settings[office_bin]', @settings['office_bin'], size: 10 %>
+  <em class="info">
+    <%= l(:note_dmsf_office_bin) %> <%= l(:label_default) %>: 'libreoffice'
+  </em>
+</p>
 
 <p>
   <%= content_tag :label, l(:label_physical_file_delete) %>

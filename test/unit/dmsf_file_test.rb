@@ -280,4 +280,17 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert @file1.watched_by?(@jsmith)
   end
 
+  def test_office_doc
+    assert @file13.office_doc?
+  end
+
+  def test_previewable
+    assert @file13.previewable?
+  end
+
+  def test_pdf_preview
+    assert_not_empty @file13.pdf_preview
+    assert_empty @file1.pdf_preview
+  end
+
 end

@@ -20,6 +20,6 @@
 
 FROM debian:latest
 RUN apt-get update
-RUN apt-get -qq install mariadb-server postgresql sqlite3 libsqlite3-dev ruby ruby-dev build-essential libmariadb-dev libpq-dev subversion git litmus
+RUN apt-get -qq install mariadb-server postgresql sqlite3 libsqlite3-dev ruby ruby-dev build-essential libmariadb-dev libpq-dev subversion git litmus libreoffice
 COPY . /app
 WORKDIR /app

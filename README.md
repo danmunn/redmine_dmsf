@@ -35,9 +35,11 @@ Features
   * Wiki macros for quick content linking
   * Full read/write webdav functionality
   * Optional document content full-text search
-  * Documents and folders symbolic links  
+  * Documents and folders' symbolic links  
   * Trash bin
   * Documents attachable to issues
+  * Office documents are displayed inline
+  * Editing of office documents
   * Compatible with Redmine 5.0.x
 
 Dependencies
@@ -111,6 +113,16 @@ On CentOS use:
 sudo yum install xapian-core xapian-bindings-ruby libxapian-dev poppler-utils antiword unzip catdoc libwpd-tools \
 libwps-tools gzip unrtf catdvi djview djview3 uuid uuid-dev xz libemail-outlook-message-perl
 ```
+
+### Inline displaying of office documents (optional)
+
+If LibreOffice binary `libreoffice` is present in the server, office documents (.odt, .ods,...) are displayed inline.
+
+`libreoffice` package is available in the most of Linux distributions, e.g. on Debain based systems:
+
+```
+sudo apt install libreoffice
+```            
 
 Usage
 -----

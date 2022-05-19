@@ -445,6 +445,9 @@ zh:
 
   label_dmsf_max_notification_receivers_info: Maximum notification receivers info
   note_dmsf_max_notification_receivers_info: Limits maximum number of displayed email notification receivers.
+  label_dmsf_office_bin: Libreoffice binary
+  note_dmsf_office_bin: A binary to convert office documents to PDF format and provide their preview. If you want
+    to prevent previews of office documents, put here 'xxx' for example.
 
   easy_pages:
     modules:

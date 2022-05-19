@@ -144,7 +144,7 @@ module RedmineDmsf
         raise ArgumentError if args.length < 2 # Requires file id and lines number
         file = DmsfFile.visible.find args[0]
         if User.current&.allowed_to?(:view_dmsf_files, file.project)
-          file.preview(args[1]).gsub("\n", '<br/>').html_safe
+          file.text_preview(args[1]).gsub("\n", '<br/>').html_safe
         else
           raise l(:notice_not_authorized)
         end

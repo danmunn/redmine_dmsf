@@ -33,7 +33,7 @@ Redmine::Plugin.register :redmine_dmsf do
   end
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
-  version '3.0.0'
+  version '3.0.1 devel'
   
   requires_redmine version_or_higher: '4.2.0'
 
@@ -62,7 +62,8 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_webdav_ignore_1b_file_for_authentication' => '1',
               'dmsf_projects_as_subfolders' =>  nil,
               'only_approval_zero_minor_version' => '0',
-              'dmsf_max_notification_receivers_info' => 10
+              'dmsf_max_notification_receivers_info' => 10,
+              'office_bin' => 'libreoffice'
             }
 end
 

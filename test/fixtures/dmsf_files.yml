@@ -108,3 +108,11 @@ dmsf_files_012:
   notification:       false
   deleted:            0
   deleted_by_user_id: NULL
+
+dmsf_files_013:
+  id:                 13
+  project_id:         1
+  dmsf_folder_id:     NULL
+  name:               'test.odt'
+  deleted:            0
+  deleted_by_user_id: NULL

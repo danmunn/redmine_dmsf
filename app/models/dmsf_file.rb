@@ -78,6 +78,9 @@ class DmsfFile < ActiveRecord::Base
     project_key: 'project_id',
     date_column: "#{table_name}.updated_at"
 
+  cattr_accessor :previews_storage_path
+  @@previews_storage_path = File.join(Rails.root, 'tmp', 'dmsf_previews')
+
   before_create :default_values
 
   def default_values
@@ -465,23 +468,34 @@ class DmsfFile < ActiveRecord::Base
   end
 
   def text?
-    last_revision && Redmine::MimeType.is_type?('text', last_revision.disk_filename)
+    Redmine::MimeType.is_type?('text', last_revision&.disk_filename)
   end
 
   def image?
-    last_revision && Redmine::MimeType.is_type?('image', last_revision.disk_filename)
+    Redmine::MimeType.is_type?('image', last_revision&.disk_filename)
   end
 
   def pdf?
-    last_revision && (Redmine::MimeType.of(last_revision.disk_filename) == 'application/pdf')
+    Redmine::MimeType.of(last_revision&.disk_filename) == 'application/pdf'
   end
 
   def video?
-    last_revision && Redmine::MimeType.is_type?('video', last_revision.disk_filename)
+    Redmine::MimeType.is_type?('video', last_revision&.disk_filename)
   end
 
   def html?
-    last_revision && (Redmine::MimeType.of(last_revision.disk_filename) == 'text/html')
+    Redmine::MimeType.of(last_revision&.disk_filename) == 'text/html'
+  end
+
+  def office_doc?
+    case File.extname(last_revision&.disk_filename)
+    when  '.odt', '.ods', '.odp', '.odg', # LibreOffice
+          '.doc', '.docx', '.docm', '.xls', '.xlsx', '.xlsm', '.ppt', '.pptx', '.pptm',  # MS Office
+          '.rtf' # Universal
+          true
+    else
+      false
+    end
   end
 
   def disposition
@@ -492,7 +506,30 @@ class DmsfFile < ActiveRecord::Base
     image? && Redmine::Thumbnail.convert_available?
   end
 
-  def preview(limit)
+  def previewable?
+    office_doc? && RedmineDmsf::Preview.office_available?
+  end
+
+  # Deletes all previews
+  def self.clear_previews
+    Dir.glob(File.join(DmsfFile.previews_storage_path, '*.pdf')).each do |file|
+      File.delete file
+    end
+  end
+
+  def pdf_preview
+    return '' unless previewable?
+    target = File.join(DmsfFile.previews_storage_path, "#{id}_#{last_revision.digest}.pdf")
+
+    begin
+      RedmineDmsf::Preview.generate last_revision.disk_file.to_s, target
+    rescue => e
+      Rails.logger.error "An error occured while generating preview for #{last_revision.disk_file} to #{target}\nException was: #{e.message}"
+      nil
+    end
+  end
+
+  def text_preview(limit)
     result = +'No preview available'
     if text?
       begin

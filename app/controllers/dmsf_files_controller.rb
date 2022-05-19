@@ -69,10 +69,15 @@ class DmsfFilesController < ApplicationController
       member = Member.find_by(user_id: User.current.id, project_id: @file.project.id)
       # IE has got a tendency to cache files
       expires_in 0.year, 'must-revalidate' => true
-      send_file @revision.disk_file,
-        filename: filename_for_content_disposition(@revision.formatted_name(member)),
-        type: @revision.detect_content_type,
-        disposition: params[:disposition].present? ? params[:disposition] : @revision.dmsf_file.disposition
+      pdf_preview = @file.pdf_preview
+      filename = filename_for_content_disposition(@revision.formatted_name(member))
+      if pdf_preview.present?
+        basename = File.basename(filename, '.*')
+        send_file pdf_preview, filename: "#{basename}.pdf", type: 'application/pdf', disposition: 'inline'
+      else
+        send_file @revision.disk_file, filename: filename, type: @revision.detect_content_type,
+          disposition: params[:disposition].present? ? params[:disposition] : @revision.dmsf_file.disposition
+      end
     rescue RedmineDmsf::Errors::DmsfAccessError => e
       Rails.logger.error e.message
       render_403

@@ -30,6 +30,11 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     @request.session[:user_id] = @jsmith.id
   end
 
+  def teardown
+    super
+    DmsfFile.clear_previews
+  end
+
   def test_show_file_ok
     # Permissions OK
     get :show, params: { id: @file1.id }
@@ -70,6 +75,13 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     @role_manager.remove_permission! :view_dmsf_files
     get :view, params: { id: @file1.id }
     assert_response :forbidden
+  end
+
+  def test_view_preview
+    get :view, params: { id: @file13.id }
+    assert_response :success
+    assert_equal 'application/pdf', @response.media_type
+    assert @response.body.starts_with?('%PDF')
   end
 
   def delete_forbidden
