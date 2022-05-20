@@ -443,7 +443,9 @@ ko:
   note_dmsf_max_notification_receivers_info: Limits maximum number of displayed email notification receivers.
   label_dmsf_office_bin: Libreoffice binary
   note_dmsf_office_bin: A binary to convert office documents to PDF format and provide their preview. If you want
-    to prevent previews of office documents, put here 'xxx' for example.
+    to prevent previews of office documents, put an empty string here. After a change, you might have to restart the
+    application to take it any effect.
+  note_dmsf_office_bin_not_available: "LibreOffice's command line binary '%{value}' not available"
 
   easy_pages:
     modules:

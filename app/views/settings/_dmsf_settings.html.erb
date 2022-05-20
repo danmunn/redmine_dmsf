@@ -83,6 +83,11 @@
 <p>
   <%= content_tag :label, l(:label_dmsf_office_bin) %>
   <%= text_field_tag 'settings[office_bin]', @settings['office_bin'], size: 10 %>
+  <% unless RedmineDmsf::Preview.office_available? %>
+    <span class="icon icon-warning">
+      <small><%= l(:note_dmsf_office_bin_not_available, @settings['office_bin']) %></small>
+    </span>
+  <% end %>
   <em class="info">
     <%= l(:note_dmsf_office_bin) %> <%= l(:label_default) %>: 'libreoffice'
   </em>
@@ -285,23 +290,26 @@
 </div>
 
 <hr/>
-<em class="info">
-  <%= l(:label_full_text) %>
-</em>
 
 <% begin %>
   <% require 'xapian' %>
   <% xapian_disabled = false %>
 <% rescue LoadError => e %>
-  <p class="warning"><%= l(:warning_xapian_not_available) %></p>
   <% Rails.logger.warn e.message %>
   <% xapian_disabled = true %>
 <% end %>
+
+<em class="info">
+  <%= l(:label_full_text) %>
+</em>
 
 <p>
   <%= content_tag :label, l(:label_index_database) %>
   <%= text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], disabled: xapian_disabled,
                      size: 50 %>
+  <% if xapian_disabled %>
+    <span class="icon icon-warning"><small><%= l(:warning_xapian_not_available) %></small></span>
+  <% end %>
   <em class="info">
     <%= l(:label_default) %>: <%= File.expand_path('dmsf_index', Rails.root) %>
   </em>
@@ -311,7 +319,8 @@
 
 <p>  
   <%= content_tag :label, l(:label_stemming_language) %>
-  <%= select_tag 'settings[dmsf_stemming_lang]', options_for_select(stem_langs, @settings['dmsf_stemming_lang']) %>
+  <%= select_tag 'settings[dmsf_stemming_lang]', options_for_select(stem_langs, @settings['dmsf_stemming_lang']),
+                 disabled: xapian_disabled %>
   <em class="info">
     <%= l(:note_possible_values) %>: <%= stem_langs.join(', ') %>. <%= "#{l(:label_default)}: #{stem_langs[2]}" %>
   </em>
@@ -332,7 +341,7 @@
 
 <p>
   <%= content_tag :label, l(:label_enable_cjk_ngrams) %>
-  <%= check_box_tag 'settings[enable_cjk_ngrams]', true, @settings['dmsf_enable_cjk_ngrams'] %>
+  <%= check_box_tag 'settings[enable_cjk_ngrams]', true, @settings['dmsf_enable_cjk_ngrams'], disabled: xapian_disabled %>
   <em class="info">
     <%= l(:text_enable_cjk_ngrams) %>
   </em>

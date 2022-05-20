@@ -23,6 +23,7 @@
 module RedmineDmsf
   module Preview
     extend Redmine::Utils::Shell
+    include Redmine::I18n
 
     OFFICE_BIN = (Setting.plugin_redmine_dmsf['office_bin'] || 'libreoffice').freeze
 
@@ -37,7 +38,7 @@ module RedmineDmsf
         @office_available = false
       end
       unless @office_available
-        logger.warn "LibreOffice's command line binary (#{OFFICE_BIN}) not available"
+        Rails.logger.warn l(:note_dmsf_office_bin_not_available, value: OFFICE_BIN, locale: :en)
       end
       @office_available
     end
@@ -54,7 +55,7 @@ module RedmineDmsf
           FileUtils.mv File.join(dir, "#{source_filename}.pdf"), File.join(dir, target_filename)
           target
         else
-          logger.error "Creating preview failed (#{$?}):\nCommand: #{cmd}"
+          Rails.logger.error "Creating preview failed (#{$?}):\nCommand: #{cmd}"
           ''
         end
       end

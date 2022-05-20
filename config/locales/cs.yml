@@ -442,8 +442,10 @@ cs:
   label_dmsf_max_notification_receivers_info: Maximální počet zobrazených příjemců notifikace
   note_dmsf_max_notification_receivers_info: Omezí maximální počet zobrazených příjemců e-mailové notifikace
   label_dmsf_office_bin: Binárka Libreofficu
-  note_dmsf_office_bin: Binárka ke konverzi kancelářských dokumentů do formátu PDF k poskytnutí jejich náhledu. Jestliže 
-    náhledy nechcete, vložte se například 'xxx'.
+  note_dmsf_office_bin: Binárka ke konverzi kancelářských dokumentů do formátu PDF k poskytnutí jejich náhledu. Jestliže
+    náhledy nechcete, vložte sem prázdný řetězec. Při změně budete muset, pravděpodobně, 
+    restartovat aplikaci.
+  note_dmsf_office_bin_not_available: "Příkaz LibreOfficu pro příkazovou řádku '%{value}' není k dispozici"
 
   easy_pages:
     modules:
