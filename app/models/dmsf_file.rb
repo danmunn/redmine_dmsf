@@ -519,12 +519,11 @@ class DmsfFile < ActiveRecord::Base
 
   def pdf_preview
     return '' unless previewable?
-    target = File.join(DmsfFile.previews_storage_path, "#{id}_#{last_revision.digest}.pdf")
-
+    target = File.join(DmsfFile.previews_storage_path, "#{File.basename(last_revision&.disk_file.to_s, '.*')}.pdf")
     begin
-      RedmineDmsf::Preview.generate last_revision.disk_file.to_s, target
+      RedmineDmsf::Preview.generate last_revision&.disk_file.to_s, target
     rescue => e
-      Rails.logger.error "An error occured while generating preview for #{last_revision.disk_file} to #{target}\nException was: #{e.message}"
+      Rails.logger.error "An error occurred while generating preview for #{last_revision&.disk_file} to #{target}\nException was: #{e.message}"
       nil
     end
   end

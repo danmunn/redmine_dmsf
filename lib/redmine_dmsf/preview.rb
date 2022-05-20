@@ -50,9 +50,6 @@ module RedmineDmsf
         dir = File.dirname(target)
         cmd = "#{shell_quote(OFFICE_BIN)} --convert-to pdf --headless --outdir #{shell_quote(dir)} #{shell_quote(source)}"
         if system(cmd)
-          source_filename = File.basename(source, '.*')
-          target_filename = File.basename(target)
-          FileUtils.mv File.join(dir, "#{source_filename}.pdf"), File.join(dir, target_filename)
           target
         else
           Rails.logger.error "Creating preview failed (#{$?}):\nCommand: #{cmd}"
