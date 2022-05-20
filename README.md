@@ -117,6 +117,9 @@ libwps-tools gzip unrtf catdvi djview djview3 uuid uuid-dev xz libemail-outlook-
 ### Inline displaying of office documents (optional)
 
 If LibreOffice binary `libreoffice` is present in the server, office documents (.odt, .ods,...) are displayed inline.
+The command must be runable by the web app's user. Test it in advance, e.g:
+
+`sudo -u www-data libreoffice --convert-to pdf my_document.odt`
 
 `libreoffice` package is available in the most of Linux distributions, e.g. on Debain based systems:
 
