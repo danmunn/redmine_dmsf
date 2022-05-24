@@ -524,7 +524,7 @@ class DmsfFile < ActiveRecord::Base
       RedmineDmsf::Preview.generate last_revision&.disk_file.to_s, target
     rescue => e
       Rails.logger.error "An error occurred while generating preview for #{last_revision&.disk_file} to #{target}\nException was: #{e.message}"
-      ''
+      nil
     end
   end
 
