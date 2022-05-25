@@ -69,12 +69,13 @@ class DmsfFilesController < ApplicationController
       member = Member.find_by(user_id: User.current.id, project_id: @file.project.id)
       # IE has got a tendency to cache files
       expires_in 0.year, 'must-revalidate' => true
-      pdf_preview = @file.pdf_preview
+      pdf_preview = (params[:disposition] != 'attachment') && params[:filename].blank? && @file.pdf_preview
       filename = filename_for_content_disposition(@revision.formatted_name(member))
       if pdf_preview.present?
         basename = File.basename(filename, '.*')
         send_file pdf_preview, filename: "#{basename}.pdf", type: 'application/pdf', disposition: 'inline'
       else
+        params[:disposition] = 'attachment' if params[:filename].present?
         send_file @revision.disk_file, filename: filename, type: @revision.detect_content_type,
           disposition: params[:disposition].present? ? params[:disposition] : @revision.dmsf_file.disposition
       end

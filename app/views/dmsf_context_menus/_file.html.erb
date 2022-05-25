@@ -62,8 +62,10 @@
           back_url: back_url } %>
 </li>
 <li>
-<%= context_menu_link l(:button_download), view_dmsf_file_path(dmsf_file, disposition: 'attachment'),
-                      class: 'icon icon-download', disabled: false %>
+  <% member = Member.find_by(user_id: User.current.id, project_id: dmsf_file.project.id) %>
+  <% filename = dmsf_file.last_revision&.formatted_name(member) %>
+  <%= context_menu_link l(:button_download), static_dmsf_file_path(dmsf_file, filename: filename),
+                        class: 'icon icon-download', disabled: false %>
 </li>
 <li>
 <%= context_menu_link l(:field_mail), entries_operations_dmsf_path(id: project, folder_id: folder,
