@@ -63,8 +63,10 @@ class DmsfWorkflowsController < ApplicationController
         action: (params[:step_action].to_i >= 10) ? DmsfWorkflowStepAction::ACTION_DELEGATE : params[:step_action],
         note: params[:note])
       if request.post?
-        if action.save
-          revision = DmsfFileRevision.find_by(id: params[:dmsf_file_revision_id])
+        revision = DmsfFileRevision.find_by(id: params[:dmsf_file_revision_id])
+        result = call_hook(:dmsf_workflow_controller_before_approval,
+                           { dmsf_file_revision: revision, step_action: params[:step_action] })
+        if (result.blank? || result.first) && action.save
           if revision
             if @dmsf_workflow.try_finish revision, action, (params[:step_action].to_i / 10)
               if revision.dmsf_file
