@@ -132,6 +132,7 @@ class DmsfUploadController < ApplicationController
 
   def commit_files_internal(commited_files)
     @files, failed_uploads = DmsfUploadHelper.commit_files_internal(commited_files, @project, @folder, self)
+    call_hook :dmsf_upload_controller_after_commit, { files: @files }
     respond_to do |format|
       format.js
       format.api  { render_validation_errors(failed_uploads) unless failed_uploads.empty? }

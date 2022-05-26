@@ -134,8 +134,8 @@ DMSF is designed to act as project module, so it must be checked as an enabled m
 
 Search will now automatically search DMSF content when a Redmine search is performed, additionally a "Documents" and "Folders" check box will be visible, allowing you to search DMSF content exclusively.
 
-Linking DMSF files from Wiki entries
-------------------------------------
+Linking DMSF files from Wiki entries (macros)
+---------------------------------------------
 
 Link to a document with id 17: `{{dmsf(17)}}`
 
@@ -185,8 +185,8 @@ Approval workflow status of a document with id 8: `{{dmsfw(8)}}`
 
 The DMSF document/revision id can be found in document details.
 
-Linking DMSF folders from Wiki entries
---------------------------------------
+Linking DMSF folders from Wiki entries (macros)
+-----------------------------------------------
 
 Link to a folder with id 5: `{{dmsff(5)}}`
 
@@ -234,11 +234,51 @@ There's a patch (tested with Redmine 3.4.2) that helps you to modify all help fi
 
 `patch -p0 < plugins/redmine_dmsf/extra/help_files_dmsf.diff`
 
+Hooks
+-----
+
+You can implement these hooks in your plugin and extend DMSF functionality in certain events.
+
+E.g.
+
+    class DmsfUploadControllerHooks < Redmine::Hook::Listener
+
+        def dmsf_upload_controller_after_commit(context={}) 
+            context[:controller].flash[:info] = 'Okay'
+        end
+
+    end
+
+**dmsf_upload_controller_after_commit**
+
+Called after all uploaded files are commited.
+
+parameters: *files*
+
+**dmsf_helper_upload_after_commit**
+
+Called after an individual file is commited. The controller is not available.
+
+Parameters: *file*
+
+**dmsf_workflow_controller_before_approval**
+
+Called before an approval. If the hook returns false, the approval is not recorded.
+
+parameters: *revision*, *step_action*
+
+**dmsf_files_controller_before_view**
+
+Allows a preview of the file by an external plugin. If the hook returns true, the file is not sent by DMSF. It is 
+expected that the file is sent by the hook.
+
+parameters: *file*
 
 Setup / Upgrade
 ---------------
 
-You can either clone the master branch or download the latest zipped version. Before installing ensure that the Redmine instance is stopped.
+You can either clone the master branch or download the latest zipped version. Before installing ensure that the Redmine 
+instance is stopped.
 
     git clone git@github.com:danmunn/redmine_dmsf.git
        
