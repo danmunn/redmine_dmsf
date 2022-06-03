@@ -124,7 +124,7 @@ The command must be runable by the web app's user. Test it in advance, e.g:
 `libreoffice` package is available in the most of Linux distributions, e.g. on Debain based systems:
 
 ```
-sudo apt install libreoffice
+sudo apt install libreoffice liblibreoffice-java
 ```            
 
 Usage
