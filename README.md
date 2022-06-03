@@ -1,7 +1,7 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **3.0.1** 
+The current version of Redmine DMSF is **3.0.2 devel** 
 
 [![pipeline status](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/badges/master/pipeline.svg)](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/pipelines/master/latest)
 [![Support Ukraine Badge](https://bit.ly/support-ukraine-now)](https://github.com/support-ukraine/support-ukraine)
