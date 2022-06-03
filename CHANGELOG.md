@@ -1,10 +1,31 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.1 *????-??-??*
+3.0.1 *2022-06-03*
 -------------------
 
-    Office documents displayed inline (preview)
+    Inline displaying of office documents
+    Custom fields displayed by folders
+    Compatibility with RedmineUp's plugins
+    Compatibility with Issue EVM plugin
+    New hooks
+
+* Bug: #1363 - Conflict with plugin redmine_issue_evm
+* New: #1361 - Progress bar modal when handling document upload
+* New: #1360 - Use Redmine's temp folder
+* New: #1359 - Add download icon
+* New: #1358 - Remove the magnifier icon
+* Bug: #1357 - Check convert available by thumbnails
+* Bug: #1356 - Remove a drive letter when using WebDAV in Windows
+* New: #1355 - Hook Request
+* Bug: #1354 - Redmine Configuration Page not working when DMSF is installed together with RedmineUp resources plugin
+* New: #1353 - Cannot preview my doc
+* Bug: #1350 - Internal Error while opening settings
+* Bug: #1349 - QueryColumn - Error
+* New: #1348 - Custom Fields not shown on folder level
+* Bug: #1345 - Conflict with RedmineUP invoice plugin
+* New: #1227 - Check if a document contains a signature
+* New: #1203 - Suggest to add document preview 
 
 3.0.0 *2022-04-28*
 -------------------
