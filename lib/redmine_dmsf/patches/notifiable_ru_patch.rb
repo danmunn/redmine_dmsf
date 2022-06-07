@@ -22,8 +22,8 @@
 module RedmineDmsf
   module Patches
 
-    # TODO: This is just a workaround to fix alias_method usage in redmine_resources plugin, which is in conflict with
-    #   prepend and causes an infinite loop with RedmineUp's Resource plugin .
+    # TODO: This is just a workaround to fix alias_method usage in RedmineUp's plugins, which is in conflict with
+    #   prepend and causes an infinite loop.
     module NotifiableRuPatch
 
       def self.included(base)
@@ -54,6 +54,7 @@ module RedmineDmsf
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?(:redmine_contacts) && !Redmine::Plugin.installed?(:easy_extensions)
+if (Redmine::Plugin.installed?(:redmine_contacts) || Redmine::Plugin.installed?(:redmine_questions)) &&
+  !Redmine::Plugin.installed?(:easy_extensions)
   Redmine::Notifiable.send :include, RedmineDmsf::Patches::NotifiableRuPatch
 end
