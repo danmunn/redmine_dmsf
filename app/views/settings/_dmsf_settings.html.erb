@@ -85,7 +85,8 @@
   <%= text_field_tag 'settings[office_bin]', @settings['office_bin'], size: 10 %>
   <% unless RedmineDmsf::Preview.office_available? %>
     <span class="icon icon-warning">
-      <small><%= l(:note_dmsf_office_bin_not_available, @settings['office_bin']) %></small>
+      <% @settings['office_bin'] = nil %>
+      <small><%= l(:note_dmsf_office_bin_not_available, @settings['office_bin'] ||= 'libreoffice') %></small>
     </span>
   <% end %>
   <em class="info">
