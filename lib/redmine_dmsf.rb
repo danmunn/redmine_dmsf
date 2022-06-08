@@ -39,10 +39,7 @@ require File.dirname(__FILE__) + '/redmine_dmsf/patches/issue_patch'
 require File.dirname(__FILE__) + '/redmine_dmsf/patches/role_patch'
 require File.dirname(__FILE__) + '/redmine_dmsf/patches/queries_controller_patch'
 
-# redmine_resources depends on redmine_contact and redmine_contacts is alphabetically sorted before redmine_dmsf
-# in the plugin list.
-if (Redmine::Plugin.installed?(:redmine_contacts) || Redmine::Plugin.installed?(:redmine_questions)) &&
-  !Redmine::Plugin.installed?(:easy_extensions)
+if RedmineDmsf::Plugin.present?(:redmine_questions) && !Redmine::Plugin.installed?(:easy_extensions)
   require File.dirname(__FILE__) + '/redmine_dmsf/patches/notifiable_ru_patch'
 else
   require File.dirname(__FILE__) + '/redmine_dmsf/patches/notifiable_patch'

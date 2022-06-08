@@ -3,6 +3,7 @@
 #
 # Redmine plugin for Document Management System "Features"
 #
+# Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2011-22 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -20,38 +21,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 module RedmineDmsf
-  module Patches
+  module Plugin
 
-    # TODO: This is just a workaround to fix alias_method usage in RedmineUp's plugins, which is in conflict with
-    #   prepend and causes an infinite loop.
-    module NotifiableRuPatch
-
-      def self.included(base)
-        base.extend ClassMethods
-        base.class_eval do
-          unloadable
-          class << self
-            alias_method :all_without_resources_dmsf, :all
-            alias_method :all, :all_with_resources_dmsf
-          end
-        end
-      end
-
-      module ClassMethods
-
-        def all_with_resources_dmsf
-          notifications = all_without_resources_dmsf
-          notifications << Redmine::Notifiable.new('dmsf_workflow_plural')
-          notifications << Redmine::Notifiable.new('dmsf_legacy_notifications')
-          notifications
-        end
-
-      end
-
+    # Checking physical presence of the plugin as Redmine::Plugin.installed? may return false due to alphabetical
+    # registering of available plugins.
+    def self.present?(id)
+      Dir.exist? File.join(Rails.root, 'plugins', id.to_s)
     end
 
   end
 end
-
-# Apply the patch
-Redmine::Notifiable.send :include, RedmineDmsf::Patches::NotifiableRuPatch

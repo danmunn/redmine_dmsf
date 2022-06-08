@@ -55,6 +55,6 @@ end
 if Redmine::Plugin.installed?(:easy_extensions)
   RedmineExtensions::PatchManager.register_patch_to_be_first 'Redmine::Notifiable',
     'RedmineDmsf::Patches::NotifiablePatch', prepend: true, first: true
-elsif !(Redmine::Plugin.installed?(:redmine_contacts) || Redmine::Plugin.installed?(:redmine_questions))
+else
   Redmine::Notifiable.prepend RedmineDmsf::Patches::NotifiablePatch
 end
