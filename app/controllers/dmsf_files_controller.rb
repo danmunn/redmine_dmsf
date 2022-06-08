@@ -207,7 +207,12 @@ class DmsfFilesController < ApplicationController
       result = @file.delete(commit)
       if result
         flash[:notice] = l(:notice_file_deleted)
-        unless commit
+        if commit
+          container = @file.container
+          if container
+            container.dmsf_file_removed @file
+          end
+        else
           begin
             recipients = DmsfMailer.deliver_files_deleted(@project, [@file])
             if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']

@@ -94,7 +94,7 @@ module DmsfUploadHelper
             FileUtils.chmod 'u=wr,g=r', new_revision.disk_file(false)
             file.set_last_revision new_revision
             files.push file
-            if container && container.is_a?(Issue) && (!new_object)
+            if container && (!new_object)
               container.dmsf_file_added file
             end
             Redmine::Hook.call_hook :dmsf_helper_upload_after_commit, { file: file }

@@ -606,7 +606,7 @@ class DmsfFile < ActiveRecord::Base
       target = File.join(Attachment.thumbnails_storage_path, "#{id}_#{last_revision.digest}_#{size}.thumb")
 
       begin
-        Redmine::Thumbnail.generate(last_revision.disk_file.to_s, target, size)
+        Redmine::Thumbnail.generate last_revision.disk_file.to_s, target, size
       rescue => e
         Rails.logger.error "An error occured while generating thumbnail for #{last_revision.disk_file} to #{target}\nException was: #{e.message}"
         nil
@@ -623,6 +623,16 @@ class DmsfFile < ActiveRecord::Base
       end
     end
     l(:title_unlock_file)
+  end
+
+  def container
+    if dmsf_folder&.system && dmsf_folder.title.match(/(^\d+)/)
+      issue_id = $1
+      parent = dmsf_folder.dmsf_folder
+      if parent && parent.title.match(/^\.(.+)s/)
+        $1.constantize.visible.find_by(id: issue_id)
+      end
+    end
   end
 
 end
