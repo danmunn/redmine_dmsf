@@ -79,12 +79,20 @@ RAILS_ENV=test REDMINE_LANG=en bundle exec rake redmine:load_default_data
 #RAILS_ENV=test bundle exec rake test
 
 # Run DMSF tests
+
+# Prepare the environment
+cp config/additional_environment.rb.example config/additional_environment.rb
+echo "# Redmine DMSF's WebDAV" >> config/additional_environment.rb
+echo "require File.dirname(__FILE__) + '/plugins/redmine_dmsf/lib/redmine_dmsf/webdav/custom_middleware'" >> config/additional_environment.rb
+echo "config.middleware.insert_before ActionDispatch::Cookies, RedmineDmsf::Webdav::CustomMiddleware" >> config/additional_environment.rb
+
 # Standard tests
 bundle exec rake redmine:plugins:test:units NAME=redmine_dmsf RAILS_ENV=test
 bundle exec rake redmine:plugins:test:functionals NAME=redmine_dmsf RAILS_ENV=test
 bundle exec rake redmine:plugins:test:integration NAME=redmine_dmsf RAILS_ENV=test
-# Macros
+# Libraries
 ruby plugins/redmine_dmsf/test/unit/lib/redmine_dmsf/dmsf_macros_test.rb RAILS_ENV=test
+ruby plugins/redmine_dmsf/test/unit/lib/redmine_dmsf/dmsf_plugin_test.rb RAILS_ENV=test
 # Helpers
 ruby plugins/redmine_dmsf/test/helpers/dmsf_helper_test.rb RAILS_ENV=test
 ruby plugins/redmine_dmsf/test/helpers/dmsf_queries_helper_test.rb RAILS_ENV=test
@@ -95,7 +103,7 @@ ruby plugins/redmine_dmsf/test/helpers/dmsf_queries_helper_test.rb RAILS_ENV=tes
 RAILS_ENV=test bundle exec rake redmine:dmsf_webdav_test_on
 
 # Run an integrated Rails' server
-bundle exec rails server -e test -d
+bundle exec rails server -u webrick -e test -d
 
 # Run Litmus tests (Omit 'http' tests due to 'timeout waiting for interim response' and locks due to complex bogus conditional)
 TESTS="basic copymove props" litmus http://localhost:3000/dmsf/webdav/dmsf_test_project admin admin
