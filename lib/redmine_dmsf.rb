@@ -39,6 +39,7 @@ require File.dirname(__FILE__) + '/redmine_dmsf/patches/issue_patch'
 require File.dirname(__FILE__) + '/redmine_dmsf/patches/role_patch'
 require File.dirname(__FILE__) + '/redmine_dmsf/patches/queries_controller_patch'
 
+# A workaround for obsolete 'alias_method' usage in RedmineUp's plugins
 if (RedmineDmsf::Plugin.present?(:redmine_questions) || Redmine::Plugin.installed?(:redmine_contacts) ||
   Redmine::Plugin.installed?(:redmine_checklist)) &&  !Redmine::Plugin.installed?(:easy_extensions)
   require File.dirname(__FILE__) + '/redmine_dmsf/patches/notifiable_ru_patch'
