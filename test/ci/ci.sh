@@ -1,7 +1,7 @@
 #!/bin/bash
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2011-22 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-21 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,12 +22,14 @@
 # Exit if any command fails
 set -e
 
-# Display the first argument (DB engine)
-echo $1
+# Display the arguments (DB engine and branch)
+echo "${1}, ${2}"
 
 # Variables
-REDMINE_REPO=http://svn.redmine.org/redmine/branches/4.2-stable/
+REDMINE_REPO=http://svn.redmine.org/redmine/branches/5.0-stable/
 REDMINE_PATH=/opt/redmine
+PLUGINS_PATH="${REDMINE_PATH}/plugins"
+DMSF_REPO=https://github.com/danmunn/redmine_dmsf.git
 
 # Init
 rm -rf "${REDMINE_PATH}"
@@ -36,10 +38,11 @@ rm -rf "${REDMINE_PATH}"
 svn export "${REDMINE_REPO}" "${REDMINE_PATH}"
 
 # Add the plugin
-ln -s /app "${REDMINE_PATH}"/plugins/redmine_dmsf
+git clone -b $2 --single-branch --no-tags "$DMSF_REPO" "${PLUGINS_PATH}/redmine_dmsf"
 
 # Prepare the database
-cp "./test/ci/$1.yml" "${REDMINE_PATH}/config/database.yml"
+cd "${REDMINE_PATH}"
+cp "${PLUGINS_PATH}/redmine_dmsf/test/ci/$1.yml" "${REDMINE_PATH}/config/database.yml"
 case $1 in
 
   mariadb)
@@ -102,7 +105,7 @@ ruby plugins/redmine_dmsf/test/helpers/dmsf_queries_helper_test.rb RAILS_ENV=tes
 # Prepare Redmine's environment for WebDAV testing
 RAILS_ENV=test bundle exec rake redmine:dmsf_webdav_test_on
 
-# Run an integrated Rails' server
+# Run Webrick server
 bundle exec rails server -u webrick -e test -d
 
 # Run Litmus tests (Omit 'http' tests due to 'timeout waiting for interim response' and locks due to complex bogus conditional)
@@ -113,9 +116,6 @@ kill `cat tmp/pids/server.pid`
 
 # Clean up Redmine's environment from WebDAV testing
 RAILS_ENV=test bundle exec rake redmine:dmsf_webdav_test_off
-
-# Clean up database from the plugin changes
-bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf VERSION=0 RAILS_ENV=test
 
 case $1 in
 
