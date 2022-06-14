@@ -1,4 +1,3 @@
-require 'digest/sha1'
 
 module Dav4rack
 

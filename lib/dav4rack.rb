@@ -25,8 +25,9 @@ require 'time'
 require 'uri'
 require 'nokogiri'
 require 'ox'
-
+require 'digest'
 require 'rack'
+
 require File.dirname(__FILE__) + '/dav4rack/utils'
 require File.dirname(__FILE__) + '/dav4rack/http_status'
 require File.dirname(__FILE__) + '/dav4rack/resource'

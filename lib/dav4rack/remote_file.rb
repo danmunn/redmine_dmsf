@@ -1,6 +1,5 @@
 require 'net/http'
 require 'uri'
-require 'digest/sha1'
 require 'rack/file'
 
 module Dav4rack

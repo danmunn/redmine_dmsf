@@ -1,5 +1,3 @@
-require 'digest'
-
 module Dav4rack
 
   # Implements secure string comparison methods.
