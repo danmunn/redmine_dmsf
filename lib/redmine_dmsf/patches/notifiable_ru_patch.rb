@@ -54,4 +54,7 @@ module RedmineDmsf
 end
 
 # Apply the patch
-Redmine::Notifiable.send :include, RedmineDmsf::Patches::NotifiableRuPatch
+if (RedmineDmsf::Plugin.present?(:redmine_questions) || Redmine::Plugin.installed?(:redmine_contacts) ||
+  Redmine::Plugin.installed?(:redmine_checklist)) &&  !Redmine::Plugin.installed?(:easy_extensions)
+  Redmine::Notifiable.send :include, RedmineDmsf::Patches::NotifiableRuPatch
+end
