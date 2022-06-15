@@ -177,12 +177,20 @@ class DmsfQuery < Query
         order_option[1] = $3.present? ? "#{$1} #{$4}, #{$2} #{$4}, #{$3} #{$4}" : "#{$1} #{$4}, #{$2} #{$4}"
       end
     end
-
-    items = base_scope.
+    case ActiveRecord::Base.connection.adapter_name.downcase
+    when 'sqlserver'
+      # This is just a workaround for #1352.
+      # limit and offset cause an error in case of MS SQL
+      items = base_scope.
+        where(statement).
+        order(order_option).to_a
+    else
+      items = base_scope.
         where(statement).
         order(order_option).
         limit(options[:limit]).
         offset(options[:offset]).to_a
+    end
     items.delete_if do |item|
       case item.type
       when 'folder'
