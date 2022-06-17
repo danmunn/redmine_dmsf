@@ -1,8 +1,17 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.2 *????-??-??*
+3.0.2 *2022-06-17*
 -------------------
+
+    MS SQL compatibility
+    RedmineUp's plugins compatibility
+
+* Bug: #1366 - 404 Not found while restoring documents from the trash bin
+* Bug: #1365 - No journal when delete / de-attach document
+* Bug: #1364 - Error while loading /settings
+* Bug: #1363 - Conflict with plugin redmine_issue_evm
+* Bug: #1352 - Error while loading list DMSF
 
 3.0.1 *2022-06-03*
 -------------------
