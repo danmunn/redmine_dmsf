@@ -443,6 +443,7 @@ de:
     application to take it any effect.
   note_dmsf_office_bin_not_available: "LibreOffice's command line binary '%{value}' not available"
 
+  label_dmsf_columns: DMS Spalten
   label_column_id: ID
   label_column_title: Titel
   label_column_size: Größe

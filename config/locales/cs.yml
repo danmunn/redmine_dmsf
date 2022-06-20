@@ -447,6 +447,7 @@ cs:
     restartovat aplikaci.
   note_dmsf_office_bin_not_available: "Příkaz LibreOfficu pro příkazovou řádku '%{value}' není k dispozici"
 
+  label_dmsf_columns: DMS sloupce
   label_column_id: ID
   label_column_title: Název
   label_column_size: Velikost
