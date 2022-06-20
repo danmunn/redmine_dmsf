@@ -447,6 +447,14 @@ fr:
     application to take it any effect.
   note_dmsf_office_bin_not_available: "LibreOffice's command line binary '%{value}' not available"
 
+  label_column_id: ID
+  label_column_title: Title
+  label_column_size: Size
+  label_column_modified: Modified
+  label_column_version: Version
+  label_column_workflow: Workflow
+  label_column_author: Author
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

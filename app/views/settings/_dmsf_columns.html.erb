@@ -26,7 +26,7 @@
   <% columns.concat(extra_columns) if defined?(extra_columns) %>
   <% index = columns.index(l(:field_project)) %>
   <%# Move Project to the second position %>
-    <% if index %>
+  <% if index %>
     <% columns.insert(0, columns.delete_at(index)) %>
   <% end %>
   <% cfs = DmsfFileRevisionCustomField.visible.order(:position) %>

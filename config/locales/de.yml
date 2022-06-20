@@ -443,6 +443,14 @@ de:
     application to take it any effect.
   note_dmsf_office_bin_not_available: "LibreOffice's command line binary '%{value}' not available"
 
+  label_column_id: ID
+  label_column_title: Titel
+  label_column_size: Größe
+  label_column_modified: Geändert
+  label_column_version: Version
+  label_column_workflow: Workflow
+  label_column_author: Autor
+
   easy_pages:
     modules:
       dmsf_locked_documents: Von mir gesperrte Dokumente

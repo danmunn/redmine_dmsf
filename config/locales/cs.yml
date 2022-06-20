@@ -447,6 +447,14 @@ cs:
     restartovat aplikaci.
   note_dmsf_office_bin_not_available: "Příkaz LibreOfficu pro příkazovou řádku '%{value}' není k dispozici"
 
+  label_column_id: ID
+  label_column_title: Název
+  label_column_size: Velikost
+  label_column_modified: Změněno
+  label_column_version: Verze
+  label_column_workflow: Schvalování
+  label_column_author: Autor
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

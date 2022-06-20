@@ -30,13 +30,13 @@ class DmsfQuery < Query
   # Standard columns
   self.available_columns = [
       QueryColumn.new(:id, sortable: 'id', caption: +'#'),
-      DmsfTitleQueryColumn.new(:title, sortable: 'title', frozen: true),
-      QueryColumn.new(:size, sortable: 'size'),
-      DmsfModifiedQueryColumn.new(:modified, sortable: 'updated'),
+      DmsfTitleQueryColumn.new(:title, sortable: 'title', frozen: true, caption: :label_column_title),
+      QueryColumn.new(:size, sortable: 'size', caption: :label_column_size),
+      DmsfModifiedQueryColumn.new(:modified, sortable: 'updated', caption: :label_column_modified),
       DmsfVersionQueryColumn.new(:version, sortable: %(major_version minor_version patch_version),
-                                 caption: :label_dmsf_version),
-      QueryColumn.new(:workflow, sortable: 'workflow'),
-      QueryColumn.new(:author, sortable: %(firstname lastname))
+                                 caption: :label_column_version),
+      QueryColumn.new(:workflow, sortable: 'workflow', caption: :label_column_workflow),
+      QueryColumn.new(:author, sortable: %(firstname lastname), caption: :label_column_author)
   ]
 
   def initialize(attributes=nil, *args)
