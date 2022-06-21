@@ -47,7 +47,7 @@ module RedmineDmsf
         title.gsub! /\A"|"\z/, '' # Remove apostrophes
         title.gsub! /\A'|'\z/, ''
         title = file.title if title.empty?
-        url = view_dmsf_file_path(id: file.id, download: args[2])
+        url = view_dmsf_file_url(id: file.id, download: args[2])
         link_to h(title), url, target: '_blank', title: h(revision.tooltip),
           'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}"
       end
@@ -169,7 +169,7 @@ module RedmineDmsf
           raise l(:notice_not_authorized)
         end
         raise 'Not supported image format' unless file.image?
-        url = view_dmsf_file_path(file)
+        url = view_dmsf_file_url(file)
         if size&.include?('%')
           image_tag url, alt: file.title, width: size, height: size
         elsif height
@@ -200,7 +200,7 @@ module RedmineDmsf
           raise l(:notice_not_authorized)
         end
         raise 'Not supported video format' unless file.video?
-        url = view_dmsf_file_path(file)
+        url = view_dmsf_file_url(file)
         if size&.include?('%')
           video_tag url, controls: true, alt: file.title, width: size, height: size
         elsif height
@@ -230,7 +230,7 @@ module RedmineDmsf
           raise l(:notice_not_authorized)
         end
         raise 'Not supported image format' unless file.image?
-        url = view_dmsf_file_path(file)
+        url = view_dmsf_file_url(file)
         if size
           img = image_tag(url, alt: file.title, size: size)
         elsif height

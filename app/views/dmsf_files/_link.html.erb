@@ -36,7 +36,7 @@
 </td>
 <td class="<%= cls %>">
   <span class="size">(<%= number_to_human_size dmsf_file.last_revision.size %>)</span>
-  <%= link_to '', view_dmsf_file_path(dmsf_file, download: dmsf_file.last_revision, disposition: 'attachment'),
+  <%= link_to '', view_dmsf_file_url(dmsf_file, download: dmsf_file.last_revision, disposition: 'attachment'),
         title: l(:title_title_version_version_download, title: h(dmsf_file.last_revision.title),
         version: dmsf_file.last_revision.version), class: 'icon icon-download dmsf-revision-action-button' %>
 </td>
