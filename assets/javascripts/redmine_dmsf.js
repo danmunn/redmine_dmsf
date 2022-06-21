@@ -133,7 +133,7 @@ function dmsfExpandRows(project_id, folder_id, parentRow, url) {
       if( m && (data.indexOf(' ' +  m[1] + ' ') < 0)) {
 
         $(parentRow).removeClass('dmsf-expanded');
-	$(parentRow).find('div.dmsf-row-control').removeClass('row-control dmsf-row-control');
+	    $(parentRow).find('div.dmsf-row-control').removeClass('row-control dmsf-row-control');
 
         if(!$(parentRow).hasClass('dmsf-child')) {
 
@@ -142,7 +142,7 @@ function dmsfExpandRows(project_id, folder_id, parentRow, url) {
       }
       else {
         // Add child rows
-        eval(data);
+        return Function('"use strict";' + data)();
       }
   })
   .fail(function() {
