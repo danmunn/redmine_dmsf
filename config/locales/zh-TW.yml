@@ -395,13 +395,13 @@ zh-TW:
   label_inherited_permissions: Inherited Access for
 
   button_edit_content: Edit content
-  field_workflow: Workflow
+  field_workflow: 流程
   field_modified: Date
   field_updated: Date
   field_count: D/L
   field_first_at: First
   field_last_at: Last
-  field_size: Size
+  field_size: 大小
 
   label_add_width: Add with
 
@@ -448,12 +448,12 @@ zh-TW:
 
   label_dmsf_columns: DMS Columns
   label_column_id: ID
-  label_column_title: Title
-  label_column_size: Size
-  label_column_modified: Modified
-  label_column_version: Version
-  label_column_workflow: Workflow
-  label_column_author: Author
+  label_column_title: 標題
+  label_column_size: 大小
+  label_column_modified: 已修改
+  label_column_version: 版本
+  label_column_workflow: 流程
+  label_column_author: 作者
 
   easy_pages:
     modules:

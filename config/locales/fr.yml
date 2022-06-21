@@ -396,13 +396,13 @@ fr:
   label_inherited_permissions: Inherited Access for
 
   button_edit_content: Edit content
-  field_workflow: Workflow
+  field_workflow: Flux
   field_modified: Date
   field_updated: Date
   field_count: D/L
   field_first_at: First
   field_last_at: Last
-  field_size: Size
+  field_size: Taille
 
   label_add_width: Add with
 
@@ -449,12 +449,12 @@ fr:
 
   label_dmsf_columns: DMS Columns
   label_column_id: ID
-  label_column_title: Title
-  label_column_size: Size
-  label_column_modified: Modified
+  label_column_title: Titre
+  label_column_size: Taille
+  label_column_modified: Modifié
   label_column_version: Version
-  label_column_workflow: Workflow
-  label_column_author: Author
+  label_column_workflow: Flux
+  label_column_author: Auteur
 
   easy_pages:
     modules:

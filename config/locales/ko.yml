@@ -449,12 +449,12 @@ ko:
 
   label_dmsf_columns: DMS Columns
   label_column_id: ID
-  label_column_title: Title
-  label_column_size: Size
-  label_column_modified: Modified
-  label_column_version: Version
-  label_column_workflow: Workflow
-  label_column_author: Author
+  label_column_title: 제목
+  label_column_size: 크기
+  label_column_modified: 변경됨
+  label_column_version: 버전
+  label_column_workflow: 업무흐름
+  label_column_author: 저자
 
   easy_pages:
     modules:

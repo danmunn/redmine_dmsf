@@ -397,13 +397,13 @@ ja:
   label_inherited_permissions: Inherited Access for
 
   button_edit_content: Edit content
-  field_workflow: Workflow
+  field_workflow: ワークフロー
   field_modified: Date
   field_updated: Date
   field_count: D/L
   field_first_at: First
   field_last_at: Last
-  field_size: Size
+  field_size: サイズ
 
   label_add_width: Add with
 
@@ -450,12 +450,12 @@ ja:
 
   label_dmsf_columns: DMS Columns
   label_column_id: ID
-  label_column_title: Title
-  label_column_size: Size
-  label_column_modified: Modified
-  label_column_version: Version
-  label_column_workflow: Workflow
-  label_column_author: Author
+  label_column_title: タイトル
+  label_column_size: サイズ
+  label_column_modified: 変更
+  label_column_version: バージョン
+  label_column_workflow: ワークフロー
+  label_column_author: 作成者
 
   easy_pages:
     modules:
