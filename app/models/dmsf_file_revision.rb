@@ -80,6 +80,10 @@ class DmsfFileRevision < ActiveRecord::Base
   validates :description, length: { maximum: 1.kilobyte }
   validates :size, dmsf_max_file_size: true
 
+  def visible?
+    deleted == STATUS_ACTIVE
+  end
+
   def project
     dmsf_file.project if dmsf_file
   end
