@@ -219,54 +219,59 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
 
   # {{dmsf_image(file_id)}}
   def test_macro_dmsf_image
+    url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id})}}")
-    link = image_tag(view_dmsf_file_url(@file7), alt: @file7.title, size: nil)
+    link = image_tag(url, alt: @file7.name, title: @file7.title, size: nil)
     assert_equal "<p>#{link}</p>", text
   end
 
   # {{dmsf_image(file_id file_id)}}
   def test_macro_dmsf_image_multiple
+    url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id} #{@file7.id})}}")
-    link = image_tag(view_dmsf_file_url(@file7), alt: @file7.title, size: nil)
+    link = image_tag(url, alt: @file7.name, title: @file7.title, size: nil)
     assert_equal "<p>#{link}#{link}</p>", text
   end
 
   def test_macro_dmsf_image_size
     size = '50%'
+    url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id}, size=#{size})}}")
-    link = image_tag(view_dmsf_file_url(@file7), alt: @file7.title, width: size, height: size)
+    link = image_tag(url, alt: @file7.name, title: @file7.title, width: size, height: size)
     assert_equal "<p>#{link}</p>", text
     size = '300'
     text = textilizable("{{dmsf_image(#{@file7.id}, size=#{size})}}")
-    link = image_tag(view_dmsf_file_url(@file7), alt: @file7.title, width: size, height: size)
+    link = image_tag(url, alt: @file7.name, title: @file7.title, width: size, height: size)
     # TODO: arguments src and with and height are swapped
     #assert_equal "<p>#{link}</p>", text
     size = '640x480'
     text = textilizable("{{dmsf_image(#{@file7.id}, size=#{size})}}")
-    link = image_tag(view_dmsf_file_url(@file7), alt: @file7.title, width: '640', height: '480')
+    link = image_tag(url, alt: @file7.name, title: @file7.title, width: '640', height: '480')
     # TODO: arguments src and with and height are swapped
     #assert_equal "<p>#{link}</p>", text
     height = '480'
     text = textilizable("{{dmsf_image(#{@file7.id}, height=#{height})}}")
-    link = image_tag(view_dmsf_file_url(@file7), alt: @file7.title, width: 'auto', height: height)
+    link = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: height)
     assert_equal "<p>#{link}</p>", text
     width = '480'
     text = textilizable("{{dmsf_image(#{@file7.id}, width=#{height})}}")
-    link = image_tag(view_dmsf_file_url(@file7), alt: @file7.title, width: width, height: 'auto')
+    link = image_tag(url, alt: @file7.name, title: @file7.title, width: width, height: 'auto')
     assert_equal "<p>#{link}</p>", text
   end
 
   def test_macro_dmsf_image_no_permissions
     @manager_role.remove_permission! :view_dmsf_files
+    url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id})}}")
-    link = image_tag(view_dmsf_file_url(@file7), alt: @file7.title, size: nil)
+    link = image_tag(url, alt: @file7.name, title: @file7.title, size: nil)
     assert_not_equal "<p>#{link}</p>", text
   end
 
   def test_macro_dmsf_image_dmsf_off
     @project1.disable_module! :dmsf
+    url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id})}}")
-    link = image_tag(view_dmsf_file_url(@file7), alt: @file7.title, size: nil)
+    link = image_tag(url, alt: @file7.name, title: @file7.title, size: nil)
     assert_not_equal "<p>#{link}</p>", text
   end
 
@@ -278,44 +283,48 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   # {{dmsf_video(file_id)}}
   def test_macro_dmsf_video
     text = textilizable("{{dmsf_video(#{@file6.id})}}")
-    link = video_tag(view_dmsf_file_url(@file6), controls: true, alt: @file6.title)
+    url = static_dmsf_file_url(@file6, @file6.last_revision.name)
+    link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title)
     assert_equal "<p>#{link}</p>", text
   end
 
-  def test_macro_dmsf_image_size
+  def test_macro_dmsf_video_size
     size = '50%'
+    url = static_dmsf_file_url(@file6, @file6.last_revision.name)
     text = textilizable("{{dmsf_video(#{@file6.id}, size=#{size})}}")
-    link = video_tag(view_dmsf_file_url(@file6), controls: true, alt: @file6.title, width: size, height: size)
+    link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title, width: size, height: size)
     assert_equal "<p>#{link}</p>", text
     size = '300'
     text = textilizable("{{dmsf_video(#{@file6.id}, size=#{size})}}")
-    link = video_tag(view_dmsf_file_url(@file6), controls: true, alt: @file6.title, width: size, height: size)
+    link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title, width: size, height: size)
     assert_equal "<p>#{link}</p>", text
     size = '640x480'
     text = textilizable("{{dmsf_video(#{@file6.id}, size=#{size})}}")
-    link = video_tag(view_dmsf_file_url(@file6), controls: true, alt: @file6.title, width: '640', height: '480')
+    link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title, width: '640', height: '480')
     assert_equal "<p>#{link}</p>", text
     height = '480'
     text = textilizable("{{dmsf_video(#{@file6.id}, height=#{height})}}")
-    link = video_tag(view_dmsf_file_url(@file6), controls: true, alt: @file6.title, width: 'auto', height: height)
+    link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title, width: 'auto', height: height)
     assert_equal "<p>#{link}</p>", text
     width = '480'
     text = textilizable("{{dmsf_video(#{@file6.id}, width=#{height})}}")
-    link = video_tag(view_dmsf_file_url(@file6), controls: true, alt: @file6.title, width: width, height: 'auto')
+    link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title, width: width, height: 'auto')
     assert_equal "<p>#{link}</p>", text
   end
 
-  def test_macro_dmsf_image_no_permissions
+  def test_macro_dmsf_video_no_permissions
     @manager_role.remove_permission! :view_dmsf_files
     text = textilizable("{{dmsf_video(#{@file6.id})}}")
-    link = video_tag(view_dmsf_file_url(@file6), controls: true, alt: @file6.title)
+    url = static_dmsf_file_url(@file6, @file6.last_revision.name)
+    link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title)
     assert_not_equal "<p>#{link}</p>", text
   end
 
-  def test_macro_dmsf_image_dmsf_off
+  def test_macro_dmsf_video_dmsf_off
      @project1.disable_module! :dmsf
     text = textilizable("{{dmsf_video(#{@file6.id})}}")
-    link = video_tag(view_dmsf_file_url(@file6), controls: true, alt: @file6.title)
+    url = static_dmsf_file_url(@file6, @file6.last_revision.name)
+    link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title)
     assert_not_equal "<p>#{link}</p>", text
   end
 
@@ -327,8 +336,8 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   # {{dmsftn(file_id)}}
   def test_macro_dmsftn
     text = textilizable("{{dmsftn(#{@file7.id})}}")
-    url = view_dmsf_file_url(@file7)
-    img = image_tag(url, alt: @file7.title, width: 'auto', height: 200)
+    url = static_dmsf_file_url(@file7, @file7.last_revision.name)
+    img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 200)
     link = link_to(img, url, target: '_blank', title: h(@file7.last_revision.try(:tooltip)),
                    'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
     assert_equal "<p>#{link}</p>", text
@@ -337,8 +346,8 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   # {{dmsftn(file_id file_id)}}
   def test_macro_dmsftn_multiple
     text = textilizable("{{dmsftn(#{@file7.id} #{@file7.id})}}")
-    url = view_dmsf_file_url(@file7)
-    img = image_tag(url, alt: @file7.title, width: 'auto', height: 200)
+    url = static_dmsf_file_url(@file7, @file7.last_revision.name)
+    img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 200)
     link = link_to(img, url, target: '_blank', title: h(@file7.last_revision.try(:tooltip)),
                    'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
     assert_equal "<p>#{link}#{link}</p>", text
@@ -346,29 +355,29 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
 
   # {{dmsftn(file_id size=300)}}
   def test_macro_dmsftn_size
-    url = view_dmsf_file_url(@file7)
+    url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     size = '300'
     text = textilizable("{{dmsftn(#{@file7.id}, size=#{size})}}")
-    img = image_tag(url, alt: @file7.title, size: size)
+    img = image_tag(url, alt: @file7.name, title: @file7.title, size: size)
     link = link_to(img, url, target: '_blank', title: h(@file7.last_revision.try(:tooltip)),
                    'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
     assert_equal "<p>#{link}</p>", text
     size = '640x480'
     text = textilizable("{{dmsftn(#{@file7.id}, size=#{size})}}")
-    img = image_tag(url, alt: @file7.title, width: 640, height: 480)
+    img = image_tag(url, alt: @file7.name, title: @file7.title, width: 640, height: 480)
     link = link_to(img, url, target: '_blank', title: h(@file7.last_revision.try(:tooltip)),
                    'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
     # TODO: arguments src and with and height are swapped
     #assert_equal "<p>#{link}</p>", text
     height = '480'
     text = textilizable("{{dmsftn(#{@file7.id}, height=#{height})}}")
-    img = image_tag(url, alt: @file7.title, width: 'auto', height: 480)
+    img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 480)
     link = link_to(img, url, target: '_blank', title: h(@file7.last_revision.try(:tooltip)),
                    'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
     assert_equal "<p>#{link}</p>", text
     width = '640'
     text = textilizable("{{dmsftn(#{@file7.id}, width=#{width})}}")
-    img = image_tag(url, alt: @file7.title, width: 640, height: 'auto')
+    img = image_tag(url, alt: @file7.name, title: @file7.title, width: 640, height: 'auto')
     link = link_to(img, url, target: '_blank', title: h(@file7.last_revision.try(:tooltip)),
                    'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
     assert_equal "<p>#{link}</p>", text
@@ -378,7 +387,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     @manager_role.remove_permission! :view_dmsf_files
     text = textilizable("{{dmsftn(#{@file7.id})}}")
     url = view_dmsf_file_url(@file7)
-    img = image_tag(url, alt: @file7.title, width: 'auto', height: 200)
+    img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 200)
     link = link_to(img, url, target: '_blank', title: h(@file7.last_revision.try(:tooltip)),
                    'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
     assert_not_equal "<p>#{link}</p>", text
@@ -388,7 +397,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     @project1.disable_module! :dmsf
     text = textilizable("{{dmsftn(#{@file7.id})}}")
     url = view_dmsf_file_url(@file7)
-    img = image_tag(url, alt: @file7.title, width: 'auto', height: 200)
+    img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 200)
     link = link_to(img, url, target: '_blank', title: h(@file7.last_revision.try(:tooltip)),
                    'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
     assert_not_equal "<p>#{link}</p>", text

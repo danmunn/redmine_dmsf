@@ -172,15 +172,17 @@ module RedmineDmsf
             raise l(:notice_not_authorized)
           end
           raise 'Not supported image format' unless file.image?
-          url = view_dmsf_file_url(file)
+          member = Member.find_by(user_id: User.current.id, project_id: file.project.id)
+          filename = file.last_revision.formatted_name(member)
+          url = static_dmsf_file_url(file, filename: filename)
           if size&.include?('%')
-            html << image_tag(url, alt: file.title, width: size, height: size)
+            html << image_tag(url, alt: filename, title: file.title, width: size, height: size)
           elsif height
-            html << image_tag(url, alt: file.title, width: 'auto', height: height)
+            html << image_tag(url, alt: filename, title: file.title, width: 'auto', height: height)
           elsif width
-            html << image_tag(url, alt: file.title, width: width, height: 'auto')
+            html << image_tag(url, alt: filename, title: file.title, width: width, height: 'auto')
           else
-            html << (image_tag url, alt: file.title, size: size)
+            html << (image_tag url, alt: filename, title: file.title, size: size)
           end
         end
         html.html_safe
@@ -205,15 +207,17 @@ module RedmineDmsf
           raise l(:notice_not_authorized)
         end
         raise 'Not supported video format' unless file.video?
-        url = view_dmsf_file_url(file)
+        member = Member.find_by(user_id: User.current.id, project_id: file.project.id)
+        filename = file.last_revision.formatted_name(member)
+        url = static_dmsf_file_url(file, filename: filename)
         if size&.include?('%')
-          video_tag url, controls: true, alt: file.title, width: size, height: size
+          video_tag url, controls: true, alt: filename, title: file.title, width: size, height: size
         elsif height
-          video_tag url, controls: true, alt: file.title, width: 'auto', height: height
+          video_tag url, controls: true, alt: filename, title: file.title, width: 'auto', height: height
         elsif width
-          video_tag url, controls: true, alt: file.title, width: width, height: 'auto'
+          video_tag url, controls: true, alt: filename, title: file.title, width: width, height: 'auto'
         else
-          video_tag url, controls: true, alt: file.title, size: size
+          video_tag url, controls: true, alt: filename, title: file.title, size: size
         end
       end
 
@@ -238,15 +242,17 @@ module RedmineDmsf
             raise l(:notice_not_authorized)
           end
           raise 'Not supported image format' unless file.image?
-          url = view_dmsf_file_url(file)
+          member = Member.find_by(user_id: User.current.id, project_id: file.project.id)
+          filename = file.last_revision.formatted_name(member)
+          url = static_dmsf_file_url(file, filename: filename)
           if size
-            img = image_tag(url, alt: file.title, size: size)
+            img = image_tag(url, alt: filename, title: file.title, size: size)
           elsif height
-            img = image_tag(url, alt: file.title, width: 'auto', height: height)
+            img = image_tag(url, alt: filename, title: file.title, width: 'auto', height: height)
           elsif width
-            img = image_tag(url, alt: file.title, width: width, height: 'auto')
+            img = image_tag(url, alt: filename, title: file.title, width: width, height: 'auto')
           else
-            img = image_tag(url, alt: file.title, width: 'auto', height: 200)
+            img = image_tag(url, alt: filename, title: file.title, width: 'auto', height: 200)
           end
           html << link_to( img, url, target: '_blank', title: h(file.last_revision.try(:tooltip)),
             'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}")
