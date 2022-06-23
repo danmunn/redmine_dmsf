@@ -155,6 +155,8 @@ Link to the preview of 5 lines from a document with id 17: `{{dmsft(17, 5)}}`
 
 Inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...: `{{dmsf_image(8)}}`
 
+Multiple inline pictures: `{{dmsf_image(8 9 10)}}`
+
 Inline picture with custom size: `{{dmsf_image(8, size=300)}}`
 
 Inline picture with custom size: `{{dmsf_image(8, size=50%)}}`
@@ -166,6 +168,8 @@ Inline picture with custom width: `{{dmsf_image(8, width=300)}}`
 Inline picture with custom size: `{{dmsf_image(8, size=640x480)}}`
 
 Thumbnail with height of 200px: `{{dmsftn(8)}}`
+
+Multiple thumbnails with height of 200px: `{{dmsftn(8 9 10)}}`
 
 Thumbnail with custom size: `{{dmsftn(8, size=300)}}`
 

@@ -164,21 +164,26 @@ module RedmineDmsf
         size = options[:size]
         width = options[:width]
         height = options[:height]
-        file = DmsfFile.visible.find args[0]
-        unless User.current&.allowed_to?(:view_dmsf_files, file.project)
-          raise l(:notice_not_authorized)
+        ids = args[0].split
+        html = +''
+        ids.each do |id|
+          file = DmsfFile.visible.find(id)
+          unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+            raise l(:notice_not_authorized)
+          end
+          raise 'Not supported image format' unless file.image?
+          url = view_dmsf_file_url(file)
+          if size&.include?('%')
+            html << image_tag(url, alt: file.title, width: size, height: size)
+          elsif height
+            html << image_tag(url, alt: file.title, width: 'auto', height: height)
+          elsif width
+            html << image_tag(url, alt: file.title, width: width, height: 'auto')
+          else
+            html << (image_tag url, alt: file.title, size: size)
+          end
         end
-        raise 'Not supported image format' unless file.image?
-        url = view_dmsf_file_url(file)
-        if size&.include?('%')
-          image_tag url, alt: file.title, width: size, height: size
-        elsif height
-          image_tag url, alt: file.title, width: 'auto', height: height
-        elsif width
-          image_tag url, alt: file.title, width: width, height: 'auto'
-        else
-          image_tag url, alt: file.title, size: size
-        end
+        html.html_safe
       end
 
       # dmsf_video - link to a video
@@ -225,23 +230,28 @@ module RedmineDmsf
         size = options[:size]
         width = options[:width]
         height = options[:height]
-        file = DmsfFile.visible.find args[0]
-        unless User.current&.allowed_to?(:view_dmsf_files, file.project)
-          raise l(:notice_not_authorized)
+        ids = args[0].split
+        html = +''
+        ids.each do |id|
+          file = DmsfFile.visible.find(id)
+          unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+            raise l(:notice_not_authorized)
+          end
+          raise 'Not supported image format' unless file.image?
+          url = view_dmsf_file_url(file)
+          if size
+            img = image_tag(url, alt: file.title, size: size)
+          elsif height
+            img = image_tag(url, alt: file.title, width: 'auto', height: height)
+          elsif width
+            img = image_tag(url, alt: file.title, width: width, height: 'auto')
+          else
+            img = image_tag(url, alt: file.title, width: 'auto', height: 200)
+          end
+          html << link_to( img, url, target: '_blank', title: h(file.last_revision.try(:tooltip)),
+            'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}")
         end
-        raise 'Not supported image format' unless file.image?
-        url = view_dmsf_file_url(file)
-        if size
-          img = image_tag(url, alt: file.title, size: size)
-        elsif height
-          img = image_tag(url, alt: file.title, width: 'auto', height: height)
-        elsif width
-          img = image_tag(url, alt: file.title, width: width, height: 'auto')
-        else
-          img = image_tag(url, alt: file.title, width: 'auto', height: 200)
-        end
-        link_to img, url, target: '_blank', title: h(file.last_revision.try(:tooltip)),
-          'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}"
+        html.html_safe
       end
 
       # dmsfw - link to a document's approval workflow status
