@@ -1,0 +1,448 @@
+# encoding: utf-8
+#
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright © 2011-22 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+fa:
+  dmsf: اسناد پیش‌رفته # Custom fields tab title
+  label_dmsf_file_plural: اسناد پیش‌رفته # Email subject & Search options
+  label_dmsf_file_revision_plural: بازبینی‌های اسناد
+  label_dmsf_file_revision_access_plural: دسترسی‌های اسناد پیش‌رفته
+  warning_no_entries_selected: هیچ موردی انتخاب نشده است
+  error_email_to_must_be_entered: گیرنده رایانامه باید وارد شده باشد
+  warning_file_already_locked: پرونده قبلا قفل شده است
+  notice_file_locked: فایل قفل شده است
+  warning_file_not_locked: فایل قفل نیست
+  notice_file_unlocked: قفل پرونده باز شد
+  error_only_user_that_locked_file_can_unlock_it: فقط کاربری که پرونده را قفل کرده است می‌تواند آن را باز کند
+
+  error_max_files_exceeded: "محدودیت %{number} پرونده دریافتی هم‌زمان رد شده است"
+  error_entry_project_does_not_match_current_project: "پروژه‌ی ورودی با پروژه‌ی جاری هم‌خوانین دارد"
+
+  notice_folder_created: پوشه ساخته شد
+  error_folder_creation_failed: ساخت پوشه با شکست مواجه شد
+  error_folder_title_must_be_entered: عنوان باید وارد شده باشد
+  notice_folder_deleted: پوشه حذف شد
+  error_folder_title_is_already_used: عنوان قبلا استفاده شده است
+  notice_folder_details_were_saved: جزئیات پوشه ذخیره شد
+  error_folder_is_locked: پوشه قفل است
+  error_file_is_locked: پرونده قفل است
+  notice_file_deleted: پرونده حذف شد
+  error_at_least_one_revision_must_be_present: حداقل یک بازبینی باید موجود باشد
+  notice_revision_deleted: بازبینی حذف شد
+  notice_revision_obsoleted: بازبینی منسوخ شد
+  warning_one_of_files_locked: یکی از پرونده‌ها قفل است
+  notice_file_revision_created: بازبینیِ پرونده ساخته شد
+  notice_your_preferences_were_saved: تنظیمات ذخیره شد
+  notice_your_preferences_were_not_saved: تنظیمات ذخیره نشد
+  warning_folder_notifications_already_activated: آگاه‌سازی پوشه قبلا فعال شده است
+
+  notice_folder_notifications_activated: آگاه‌سازی پوشه فعال شد
+  warning_folder_notifications_already_deactivated: آگاه‌سازی پوشه قبلا غیرفعال شده است
+
+  notice_folder_notifications_deactivated: آگاه‌سازی پوشه غیرفعال شد
+  warning_file_notifications_already_activated: آگاه‌سازی پرونده قبلا فعال شده است
+
+  notice_file_notifications_activated: آگاه‌سازی پرونده فعال شد
+  warning_file_notifications_already_deactivated: آگاه‌سازی پرونده قبلا غیرفعال شده است
+
+  notice_file_notifications_deactivated: آگاه‌سازی پرونده غیرفعال شد
+  link_details: "جزئیات %{title}"
+  link_edit: "ویرایش %{title}"
+  link_create_folder: ساخت پوشه
+  link_title: عنوان
+  link_size: اندازه
+  link_modified: آخرین تغییر
+  link_ver: نسخه
+  link_author: نویسنده
+  title_check_for_zip_download_or_email: انتخاب کنید؛ برای فشرده کردن، دریافت یا رایانامه
+  title_check_for_restore_or_delete: انتخاب کنید برای بازیابی یا حذف
+
+  title_notifications_active_deactivate: "آگاه‌سازی‌ها فعال است؛ برای غیرفعال کردن کلیک کنید"
+  title_notifications_not_active_activate: "آگاه‌سازی‌ها غیرفعال است؛ برای فعال کردن کلیک کنید"
+  title_title_version_version_download: "%{title} نسخه %{version} دریافت"
+  title_locked_by_user: "توسط %{user} قفل شده"
+  title_waiting_for_approval: منتظر تایید
+  title_approved: تایید شده
+  title_unlock_file: برای اجازه تغییر به سایر کاربران، قفل را باز کنید
+  title_lock_file: برای جلوگیری از تغییرات سایر کاربران، قفل کنید
+  title_download_checked: دریافت در قالب پروند فشرده
+  title_send_checked_by_email: ارسال توسط رایانامه
+  link_user_preferences: تنظیمات اسناد پیش‌رفته
+  heading_send_documents_by_email: ارسال اسناد توسط رایانامه
+  label_email_from: از
+  label_email_to: به
+  label_email_cc: رونوشت
+  label_email_subject: موضوع
+  label_email_documents: اسناد
+  label_email_body: متن رایانامه
+  label_email_send: ارسال
+  title_notifications_active: آگاه‌سازی‌ها فعال
+  label_upload: بارگذاری
+  heading_new_folder: پوشه جدید
+  label_title: عنوان
+  label_description: توضیحات
+  submit_save: ذخیره
+  info_file_locked: پرونده قفل شده!
+  label_notifications: آگاه‌سازی‌ها
+  select_option_default: پیش‌فرض
+  select_option_deactivated: غیرفعال
+  select_option_activated: فعال
+  label_title_format: قالبِ عنوان
+  text_title_format: "قالب عنوانِ پرونده، هنگام دریافت (%t - عنوان, %f - file, %d - date, %v - بازبینی, %i - ID, %r - revision). مثال: %t_%v"
+  title_save_preferences: ذخیره تنظیمات
+  heading_revisions: بازبینی‌ها
+  title_download: دریافت
+  title_delete_revision: حذف بازبینی
+  title_obsolete_revision: بازبینی منسوخ
+  label_created: ساخته شده در
+  label_changed: تغییر یافته
+  info_changed_by_user: "%{changed} توسط"
+  label_filename: نام پرونده
+  label_mime: MIME
+  label_size: اندازه
+  heading_new_revision: بازبینی جدید
+  option_version_same: مشابه
+  option_version_patch: وصله
+  option_version_minor: مینور
+  option_version_major: ماژور
+  option_version_custom: دلخواه
+  label_new_content: محتوای جدید
+  label_maximum_files_download: حداکثر تعداد پرونده‌ها برای دریافت
+  note_maximum_number_of_files_downloaded: تعداد پرونده‌هایی که به صورت هم‌زمان می‌توان دریافت کرد. 0 به معنی نامحدود است.
+  label_file_storage_directory: مسیر ذخیره‌سازی پرونده‌ها
+  label_index_database: پایگاه داده نمایه
+  label_stemming_language: زبان مورد استفاده برای نمایه‌گذاری
+  note_possible_values: مقادیر ممکن
+  note_pass_none_to_disable_stemming: "مقدار 'هیچ' برای غیرفعال کردن ریشه‌یابی"
+  label_stem_strategy: راه‌بر
+  option_stem_none: ریشه‌یابی هیچ (پیش‌فرض)
+  option_stem_some: ریشه‌یابی بعضی
+  option_stem_all: ریشه‌یابی همه
+  text_stemming_info: "این گزینه نحوه‌ی اعمال ریشه‌یابی توسط تجزیه‌کننده جستار را مشخص می‌کند. مقدار پیش‌فرض «ریشه‌یابی هیچ» است. گزینه‌های قابل انتخاب: STEM_NONE -  هیچ ریشه‌یابی‌ای انجام نمی‌شود, STEM_SOME - ریشه‌یابی را روی کلمات انجام می‌دهد مگر کلماتی که با حروف بزرگ شروع شده‌اند یا به یکی از این حروف منتهی می‌شوند.(در حال حاضر:'/@<>=*[{\"'), یا با عمل‌گرهایی استفاده شده‌اند که نیازمند اطلاعات موقعیت کاربرد هستند. کلمات مشتق شده با پیش‌وند 'Z' مشخص می‌شوند. , STEM_ALL - جستجو برای همه انواع مشتقات کلمه (نکته: پیش‌وند 'Z' اضافه نمی‌شود)."
+  label_default_notifications: آگاه‌سازی‌های پیش‌فرض پرونده‌ها
+  heading_uploaded_files: پرونده‌های بارگذاری شده
+  link_documents: اسناد
+  permission_view_dmsf_file_revision_accesses: مشاهده دریافت‌ها در «خط زمان»
+  permission_view_dmsf_file_revisions: مشاهده بازبینی‌ها در «خط زمان»
+  permission_view_dmsf_folders: مرور اسناد
+  permission_user_preferences: ترجیحات کاربر
+  permission_view_dmsf_files: مشاهده اسناد
+  permission_folder_manipulation: دستکاری پوشه
+  permission_file_manipulation: دستکاری پرونده
+  permission_force_file_unlock: بازکردن اجباری قفل پرونده
+  permission_manage_workflows: مدیریت گردش اسناد
+  permission_file_delete: حذف اسناد
+  permission_display_system_folders: نمایش پوشه‌های سیستم
+  permission_file_approval: تایید پرونده
+  permission_email_documents: ارسال اسناد با رایانامه
+  label_file: پرونده
+  field_folder: پوشه
+  error_file_commit_require_uploaded_file: ثبت پرونده، نیازمند پرونده‌ی بارگذاری شده است
+
+  warning_some_files_were_not_commited: "بعضی از پرونده‌ها به دلیل خطای اعتبارسنجی بارگذاری نشدند: %{files}"
+
+  error_user_has_not_right_delete_folder: "کاربر دسترسی حذف پوشه را ندارد"
+
+  error_user_has_not_right_delete_file: "کاربر دسترسی حذف پرونده را ندارد"
+
+  notice_entries_deleted: موارد پاک شده
+  warning_some_entries_were_not_deleted: "بعضی موارد حذف نشده‌اند': %{entries}"
+  title_delete_checked: حذف
+  title_items: موراد
+  title_filename_for_download: نام پرونده مورد استفاده برای دریافت یا داخل فایل فشرده
+  label_number_of_folders: پوشه
+  label_number_of_documents: مستند
+  error_file_storage_directory_does_not_exist: "پوشه محل ذخیره‌سازی پرونده وجود ندارد و نمی‌تواند ساخته شود."
+
+  error_file_can_not_be_created: "پرونده‌ها نمی‌توانند در پوشه‌ی ذخیره‌سازی ساخته شوند."
+  error_wrong_zip_encoding: رمزگذاری اشتباه zip
+  warning_xapian_not_available: Xapian در دسترس نیست
+  menu_dmsf: اسناد پیش‌رفته  # Project tab title
+  label_physical_file_delete: پرونده فیزیکی حذف شود
+  user_is_not_project_member: شما عضو این پروژه نیستید
+  heading_access_downloads_emails: دریافت‌ها/رایانامه‌ها
+  heading_access_first: اول
+  heading_access_last: آخر
+  label_dmsf_updated: به‌روزرسانی شد
+  label_dmsf_downloaded: دریافت شد
+  title_total_size_of_all_files: مجموع اندازه‌های پرونده‌های این پوشه
+  project_module_dmsf: اسناد پیش‌رفته  # Project module name
+  warning_no_project_to_copy_file_to: پروژه‌ای برای رونوشت پرونده‌ها نیست
+  comment_copied_from: "رونوشت از %{source}"
+  field_target_project: پروژه هدف
+  field_target_folder: پوشه هدف
+  title_copy_or_move: رونوشت/انتقال
+  label_dmsf_folder_plural: پوشه‌های اسناد پیش‌رفته # Search options
+  comment_moved_from: "منتقل شده از %{source}"
+  error_target_folder_same: پوشه مقصد و پروژه مشابه فعلی هستند.
+  title_copy: رونوشت
+
+  error_max_email_filesize_exceeded: "شما از بیش‌ترین اندازه مجاز پرونده برای ارسال توسط رایانامه فراتر رفته‌اید. (%{number} مگابایت)"
+
+  note_maximum_email_filesize: بیش‌ترین اندازه پرونده برای ارسال توسط رایانامه را محدود می‌کند. صفر به معنی نامحدود. (واحد مگابایت).
+
+  label_maximum_email_filesize: بیش‌ترین اندازه پیوست رایانامه
+  header_minimum_filesize: خطای پرونده.
+  error_minimum_filesize: "پرونده %{file} صفر بایت است و پیوست نخواهد شد."
+  parent_directory: پوشه والد
+  note_webdav: "Webdav وقتی فعال شود می‌توان آن‌را در %{protocol}://%{domain}/dmsf/webdav/[project identifier] پیدا کرد"
+
+  label_copy_dmsf: "رونوشت پرونده‌ها و پوشه‌ها (%{files} پرونده در %{folders} پوشه)"
+  label_copy_only_dmsf_folders: "فقط رونوشت از پوشه‌ها (%{folders})"
+
+  warning_folder_already_locked: این پوشه قبلا قفل شده است
+  notice_folder_locked: پوشه با موفقیت قفل شد
+  warning_folder_not_locked: متاسفانه این پوشه نمی‌تواند قفل شود
+  notice_folder_unlocked: قفل پوشه با موفقیت باز شد
+  error_only_user_that_locked_folder_can_unlock_it: شما اجازه‌ی باز کردن قفل این پوشه را ندارید
+
+  title_unlock_folder: برای امکان تغییر توسط سایرین، قفل پوشه را باز کنید
+  title_lock_folder: برای جلوگیری از تغییر توسط سایرین، پوشه را قفل کنید
+
+  select_option_webdav_readonly: فقط خواندنی
+  select_option_webdav_readwrite: خواندن/نوشتن
+  label_webdav_strategy: عمل‌کرد WebDAV
+
+  note_webdav_strategy: امکان تعیین این‌که WebDav به صورت فقط خواندنی کار کند یا نوشتن/خواندن را به راه‌بر می‌دهد.
+
+  error_unable_delete_dmsf_workflow: حذف روال تایید امکان‌پذیر نیست
+  error_empty_note: "یادداشت نمی‌تواند خالی باشد"
+  error_workflow_assign: در هنگام تخصیص، خطایی رخ داد
+  error_cannot_start_workflow: "روال تایید نمی‌تواند شروع شود"
+  error_cannot_renumber_steps: "گام‌ها نمی‌توانند دوباره شماره‌گذاری شوند"
+  label_dmsf_workflow_new: روال تایید جدید
+  field_label_dmsf_workflow: روال تایید
+  field_label_dmsf_workflow_name: نام روال تایید
+  label_dmsf_workflow_plural: روال‌های تایید
+  label_dmsf_workflow_plural_num: روال تایید (%{count})
+  label_dmsf_workflow_step: گام
+  label_dmsf_workflow_step_plural: گام‌ها
+  label_dmsf_workflow_approval_plural: تایید
+  label_dmsf_wokflow_action_approve: تایید
+  label_dmsf_wokflow_action_reject: رد
+  label_dmsf_wokflow_action_delegate: واگذار به
+  label_dmsf_wokflow_action_assign: یک روال تایید تخصیص دهید
+  label_dmsf_wokflow_action_start: شروع روال تایید
+  label_dmsf_workflow_add_approver: "یک تایید کننده جدید با یک کارکرد منطقی اضافه کنید:"
+  label_or: یا
+  label_action: عملیات
+  label_note: یادداشت
+  title_none: هیچ
+  title_rejection: رد
+  title_delegation: صدور
+  title_assignment: تخصیص
+  title_start: شروع
+  title_dmsf_workflow_log: سابقه روال تایید
+  title_assigned: تخصیص داده شده
+  title_approval: تایید
+  title_rejected: رد شده
+  title_obsolete: منسوخ
+  dmsf_and: و
+  dmsf_or: یا
+  dmsf_new_step: گام جدید
+  dmsf_new_step_or_approver: گام یا تایید کننده جدید
+  message_dmsf_wokflow_note: یادداشت شما ...
+  info_revision: "r%{rev}"
+  link_workflow: روال تایید
+  notice_workflow_started: روال تایید با موفقت شروع شد
+  text_email_subject_approved: تایید شده
+  text_email_subject_rejected: رد شده
+  text_email_subject_delegated: صادر شده
+  text_email_subject_requires_approval: نیازمند تایید شماست
+  text_email_subject_updated: به‌روزرسانی شده
+  text_email_subject_started: شروع شده
+  text_email_finished_approved: "روال تایید '%{name}' که به '%{filename}' اختصاص داده شده بود پایان یافته است و سند تایید شده است."
+  text_email_finished_rejected: "روال تایید '%{name}' که به '%{filename}' اختصاص داده شده بود پایان یافته است و سند به دلیل '%{notice}' رد شده است."
+  text_email_finished_delegated: "روال تایید '%{name}' که به پرونده '%{filename}' اختصاص یافته است، به دلیل '%{notice}' به شما واگذار شده و در این مرحله نیازمند تایید شماست."
+  text_email_finished_step: "روال تایید '%{name}' که به پرونده '%{filename}' اختصاص یافته است، یکی از مراحل تایید را گذرانده و در این مرحله نیازمند تایید شماست"
+  text_email_finished_step_short: "روال تایید '%{name}' که به پرونده '%{filename}' اختصاص یافته است، یکی از مراحل تایید را گذرانده است."
+  text_email_started: "روال تایید '%{name}' که به پرونده '%{filename}' اختصاص یافته است، شروع شده و در این مرحله نیازمند تایید شماست."
+  text_email_to_proceed: برای شروع/ادامه روی شکلک «تیک» که بعد از سند نمایش داده شده است کلیک کنید
+  text_email_to_see_history: برای مشاهده سابقه روال تایید، روی وضعیت تایید سند کلیک کنید
+
+  text_email_to_see_status: برای مشاهده وضعیت فعلی روال تایید، روی وضعیت تایید سند کلیک کنید
+
+  title_create_link: یک پیوند بسازید
+  label_link_from: پیوند از
+  label_link_to: پیوند به
+  label_notifications_on: فعال کردن آگاه‌سازی‌ها
+  label_notifications_off: غیرفعال کردن آگاه‌سازی‌ها
+  field_target_file: پرونده منبع
+  title_download_entries: گزارش دریافت‌ها
+  label_external: بیرونی
+  label_internal: داخلی
+
+  label_link_name: نام پیوند
+  field_external_url: نشانی
+  label_target_folder: پوشه مقصد
+  label_source_folder: پوشه مبدا
+  label_target_project: پروژه مقصد
+  label_source_project: پروژه مبدا
+
+  text_email_doc_updated_subject: اسناد به‌روزرسانی شدند
+  text_email_doc_updated: مستندات را ویرایش کرده است
+  text_email_doc_follows: به شرح زیر
+  text_email_doc_deleted_subject: اسناد حذف شدند
+  text_email_doc_deleted: مستندات را حذف کرده است
+  label_links_only: فقط پیوندها
+
+  label_display_notified_recipients: نمایش گیرندگان آگاه‌سازی
+  note_display_notified_recipients: کاربر از تمامی کاربرانی که آگاه‌سازی را دریافت کرده‌اند مطلع می‌شود.
+
+  warning_email_notifications: "رایانامه‌ی آگاه‌سازی به %{to} ارسال شد"
+
+  link_trash_bin: سطل بازیافت
+  title_restore: بازیابی
+  notice_dmsf_file_restored: پرونده با موفقیت بازیابی شد
+  notice_dmsf_folder_restored: پوشه با موفقیت بازیابی شد
+  notice_dmsf_link_restored: پیوند با موفقیت بازیابی شد
+  title_restore_checked: بازیابی
+  error_parent_folder: "پوشه والد وجود ندارد"
+
+  error_resource_or_parent_locked: نمی‌توان قفل کرد - منبع (یا والدش) قفل هستند
+  error_parent_locked: نمی‌توان قفل کرد - والد منبع، قفل است
+  error_resource_locked: نمی‌توان قفل کرد - منبع، قفل است
+  error_lock_exclusively: امکان قفل انحصاری یک منبعِ قفل شده، وجود ندارد
+  error_unlock_parent_locked: شکست در باز کردن قفل - والد قفل است
+
+  label_dmsf_version: نسخه
+
+  locked_documents: اسناد قفل شده
+  open_approvals: تاییدهای باز
+
+  error_maximum_upload_filecount: "بیش از %{filecount} فایل نمی‌تواند بارگذاری شود."
+
+  label_public_urls: نشانی‌های عمومی تا این تاریخ معتبرند
+
+  label_webdav: Webdav عمل‌کرد
+  label_full_text: جستجوی تمام-متن
+  link_extension: پسوند
+
+  label_webdav_ignore: الگوهای فایل‌های مستثنی
+  note_webdav_ignore: یک عبارت منظم روی نام فایل‌ها که در دستور PUT نادیده گرفته شوند.
+
+  label_document_url: نشانی
+  label_last_revision_id: بازبینی
+  
+  label_webdav_disable_versioning: هیچ الگویی برای غیرفعال کردن نسخه‌بندی نیست
+  note_webdav_disable_versioning: یک عبارت منظم که بر اساس آن مدیریت نسخه‌ها برای پرونده‌های تطبیق یافته غیرفعال می‌شود. الگوی پیش‌فرض با پرونده‌های موقتی که توسط MsOffice ساخته می‌شوند تطبیق می‌یابد.
+
+  label_dmsf_keep_documents_locked: اسناد را قفل نگه دار
+  note_dmsf_keep_documents_locked: اسناد وقتی تایید شوند قفل می‌مانند
+  note_global: (سراسری)
+  field_dmsf_not_inheritable: موروثی نیست
+  
+  label_webdav_use_project_names: استفاده از عنوان پروژه برای نام پوشه
+  note_webdav_use_project_names: استفاده از عنوان پروژه به جای شناسه‌ی پروژه‌ها برای نام پوشه‌ها.
+
+  label_last_approver: آخرین تایید کننده
+
+  label_act_as_attachable: فعالیت به عنوان پیوست‌پذیر
+  note_dmsf_act_as_attachable: اجازه می‌دهد که به اشیاء دیگر (مثل مسأله‌ها) پیوست شود
+
+  label_user_search_add: جستجوی کاربر برای اضافه کردن
+
+  label_dmsf_attachments: پیوست‌های پیش‌رفته
+  label_basic_attachments: پیوست‌های پایه
+
+  label_email_from_override: از
+  text_email_from_override: کاربر در سامانه است
+  label_email_reply_to: ارسال پاسخ به
+
+  label_enable_cjk_ngrams: فعال‌سازی ایجاد n-gram از متن CJK
+  text_enable_cjk_ngrams: "با فعال‌سازی این قسمت، نویسه‌های CJK به تک-نویسه و دو-نویسه تقسیم می‌شوند و تک-نویسه‌ها حامل اطلاعات مکانی نیز می‌باشند. نویسه‌های غیرCJK بصورت عادی به کلمات تقسیم می‌شوند."
+
+  label_dmsf_fast_links: پیوند‌های سریع
+  text_dmsf_fast_links_info: شما قادر خواهید بود که بصورت دستی شناسه پوشه مقصد را هنگامی که در حال ایجاد پیوند هستید، وارد کنید. این کار سرعت فرآیند ایجاد پیوند را تسریع می کند
+
+  label_dmsf_permissions: اجازه دسترسی فقط به
+  label_inherited_permissions: دسترسی‌های ارث‌بری شده
+
+  button_edit_content: ویرایش محتوا
+  field_workflow: روال تایید
+  field_modified: تاریخ تغییر
+  field_updated: به‌روزرسانی
+  field_count: دریافت
+  field_first_at: اولین
+  field_last_at: آخرین
+  field_size: حجم
+
+  label_add_width: اضافه با
+
+  dmsf_webdav_ignore_1b_file_for_authentication: نادیده گرفتن فایل‌های ۱بایتی که برای احراز هویت ارسال می‌شوند
+  dmsf_webdav_ignore_1b_file_for_authentication_info: افزونه WebDAV برای Total Commander
+
+  text_not_empty: پوشه خالی نیست.
+  label_scroll_down: رفتن به پایین
+  note_webdav_disabled: WebDAV غیرفعال است. با راه‌بر مطرح کنید.
+
+  dmsf_copy: "رونوشت (%{n})"
+  label_empty_trash_bin: خالی کردن
+  label_dmsf_projects_as_subfolders: زیرپروژه‌ها  به شکل زیرشاخه‌ها
+  note_dmsf_projects_as_subfolders: افزودن زیرپروژه‌ها به شکل زیرشاخه در اسناد 
+  only_approval_zero_minor_version: فقط مینور ورژن صفر امکان تخصیص روال تایید دارد
+  title_assignment_minor: تخصیص مجاز نیست، مینور باید صفر باشد.
+  title_start_minor: شروع غیر مجاز است، مینور باید صفر باشد.
+  title_approval_minor: تایید مجاز نیست، مینور باید صفر باشد.
+
+  label_project_watchers: ناظرها
+  label_dmsf_folder_watchers: ناظرها
+  label_dmsf_file_watchers: ناظرها
+  label_dmsf_watched: مستندات تحت نظارت
+  dmsf_legacy_notifications: آگاه‌سازی قدیمی
+  permission_view_dmsf_folder_watchers: مشاهده ناظرهای پوشه
+  permission_add_dmsf_folder_watchers: افزونه ناظر پوشه
+  permission_delete_dmsf_folder_watchers: حذف ناظر پوشه
+  permission_view_dmsf_file_watchers: مشاهده ناظرهای سند
+  permission_add_dmsf_file_watchers: افزودن ناظر سند
+  permission_delete_dmsf_file_watchers: حذف ناظر سند
+  permission_view_project_watchers: مشاهده ناظرهای پروژه
+  permission_add_project_watchers: افزودن ناظر پروژه
+  permission_delete_project_watchers: حذف ناظر پروژه
+  label_dmsf_new_top_level_document: سند جدید در بالاترین سطح
+  label_dmsf_new_top_level_folder: پوشه جدید در بالاترین سطح
+
+  label_dmsf_max_notification_receivers_info: بیش‌ترین تعداد نمایش دریافت‌کننده‌‌های آگاه‌سازی
+  note_dmsf_max_notification_receivers_info: تعداد نمایش داده شده از کسانی که آگاه‌سازی را دریافت می‌کنند محدود می‌کند.
+  label_dmsf_office_bin: فایل اجرایی Libreoffice
+  note_dmsf_office_bin: یک برنامه برای تبدیل اسناد به PDF و پیش‌نمایش آن‌هاست. اگر می‌خواهید جلوی ایجاد پیش‌نمایش را بگیرید این مقدار را خالی بگذارید.
+
+  note_dmsf_office_bin_not_available: "دستور '%{value}' در دسترس نیست"
+
+  label_column_id: شناسه
+  label_column_title: عنوان
+  label_column_size: حجم
+  label_column_modified: تاریخ به‌روزرسانی
+  label_column_version: نسخه
+  label_column_workflow: روال تایید
+  label_column_author: نویسنده
+
+  easy_pages:
+    modules:
+      dmsf_locked_documents: اسناد قفل شده‌ی من
+      dmsf_open_approvals: تاییدهای باز من
+    module_category:
+      easy_dms: مدیریت اسناد آسان
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: شامل نویسه‌های غیرمجاز است
