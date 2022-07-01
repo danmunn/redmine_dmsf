@@ -456,6 +456,9 @@ ko:
   label_column_workflow: 업무흐름
   label_column_author: 저자
 
+  label_dmsf_global_menu_disabled: Global DMS menu disabled
+  note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.
+
   easy_pages:
     modules:
       dmsf_locked_documents: 내 잠긴 파일

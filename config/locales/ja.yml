@@ -457,6 +457,9 @@ ja:
   label_column_workflow: ワークフロー
   label_column_author: 作成者
 
+  label_dmsf_global_menu_disabled: Global DMS menu disabled
+  note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.
+
   easy_pages:
     modules:
       dmsf_locked_documents: 自分がロック中の文書

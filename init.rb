@@ -62,7 +62,8 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_projects_as_subfolders' =>  nil,
               'only_approval_zero_minor_version' => '0',
               'dmsf_max_notification_receivers_info' => 10,
-              'office_bin' => 'libreoffice'
+              'office_bin' => 'libreoffice',
+              'dmsf_global_menu_disabled' => 0
             }
 end
 

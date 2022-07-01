@@ -151,6 +151,15 @@
   </em>
 </p>
 
+<p>
+  <%= content_tag :label, l(:label_dmsf_global_menu_disabled) %>
+  <%= check_box_tag 'settings[dmsf_global_menu_disabled]', true, @settings['dmsf_global_menu_disabled'] %>
+  <em class="info">
+    <%= l(:note_dmsf_global_menu_disabled) %><br/>
+    <%= l(:label_default) %>: <%= l(:general_text_No) %>
+  </em>
+</p>
+
 <hr/>
 <em class="info">
   <%= l(:label_dmsf_columns) %>

@@ -452,6 +452,9 @@ de:
   label_column_workflow: Workflow
   label_column_author: Autor
 
+  label_dmsf_global_menu_disabled: Global DMS menu disabled
+  note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.
+
   easy_pages:
     modules:
       dmsf_locked_documents: Von mir gesperrte Dokumente
