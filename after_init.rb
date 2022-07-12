@@ -42,7 +42,8 @@ def dmsf_init
               parent: :new_object
   end
   # Main menu extension
-  unless(defined?(Setting.plugin_redmine_dmsf) && Setting.plugin_redmine_dmsf['dmsf_global_menu_disabled'])
+  unless(ActiveRecord::Base.connection.data_source_exists?('settings') &&
+    Setting.plugin_redmine_dmsf['dmsf_global_menu_disabled'])
     Redmine::MenuManager.map :top_menu do |menu|
       menu.push :dmsf, { controller: 'dmsf', action: 'index' }, caption: :menu_dmsf, html: { class: 'icon-dmsf' },
               if: Proc.new { User.current.allowed_to?(:view_dmsf_folders, nil, global: true) }
