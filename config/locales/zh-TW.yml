@@ -340,6 +340,7 @@ zh-TW:
 
   locked_documents: Locked documents
   open_approvals: Open approvals
+  watched_documents: Watched documents
 
   error_maximum_upload_filecount: "No more than %{filecount} file(s) can be uploaded."
 

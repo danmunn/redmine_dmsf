@@ -341,6 +341,7 @@ nl:
 
   locked_documents: Vergrendelde documenten
   open_approvals: Open goedkeuringen
+  watched_documents: Watched documents
 
   error_maximum_upload_filecount: "Er kunnen niet meer dan %{filecount} bestand(en) worden geupload."
 

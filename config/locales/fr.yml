@@ -341,6 +341,7 @@ fr:
 
   locked_documents: Documents verrouillés
   open_approvals: Approbations en attente
+  watched_documents: Watched documents
 
   error_maximum_upload_filecount: "Pas plus de %{filecount} fichier(s) ne peuvent être téléversés."
 

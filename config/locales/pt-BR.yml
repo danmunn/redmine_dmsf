@@ -341,6 +341,7 @@ pt-BR:
 
   locked_documents: Documentos bloqueados
   open_approvals: Aprovações abertas
+  watched_documents: Watched documents
 
   error_maximum_upload_filecount: "Não mais que %{filecount} arquivo(s) pode(m) ser carregado(s)."
 

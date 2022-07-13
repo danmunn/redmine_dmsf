@@ -341,6 +341,7 @@ cs:
 
   locked_documents: Zamčené dokumenty
   open_approvals: Procesy ke schválení
+  watched_documents: Sledované dokumenty
 
   error_maximum_upload_filecount: "Nelze nahrát více než %{filecount} soubor(ů)."
 

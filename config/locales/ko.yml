@@ -341,6 +341,7 @@ ko:
 
   locked_documents: 잠긴 문서
   open_approvals: 승인 열기
+  watched_documents: Watched documents
 
   error_maximum_upload_filecount: "%{filecount}가 넘는 파일을 업로드 할 수 없습니다."
 
