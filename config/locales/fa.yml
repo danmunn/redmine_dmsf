@@ -327,7 +327,8 @@ fa:
 
   locked_documents: اسناد قفل شده
   open_approvals: تاییدهای باز
-
+  watched_documents: مستندات تحت نظارت
+  
   error_maximum_upload_filecount: "بیش از %{filecount} فایل نمی‌تواند بارگذاری شود."
 
   label_public_urls: نشانی‌های عمومی تا این تاریخ معتبرند
