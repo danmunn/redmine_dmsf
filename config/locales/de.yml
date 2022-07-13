@@ -337,7 +337,7 @@ de:
 
   locked_documents: Gesperrte Dateien
   open_approvals: Offene Genehmigungs-Workflows
-  watched_documents: Watched documents
+  watched_documents: Beobachtene Dokumente
 
   error_maximum_upload_filecount: "Es können nicht mehr als %{filecount} Datei(en) hochgeladen werden."
 
