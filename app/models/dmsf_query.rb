@@ -130,6 +130,7 @@ class DmsfQuery < Query
         end
         if field =~ /cf_(\d+)$/
           # custom field
+          available_filters # Initialize available filters #1380
           sql_cf = +sql_for_custom_field(field, operator, v, $1)
           sql_cf.gsub!('dmsf_folders.id  IN (SELECT dmsf_folders.id', 'dmsf_folders.customized_id  IN (SELECT dmsf_folders.customized_id');
           sql_cf.gsub!("customized_type='DmsfFolder'", 'customized_type=dmsf_folders.customized_type')
