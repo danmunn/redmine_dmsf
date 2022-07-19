@@ -1,8 +1,26 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.3 *????-??-??*
+3.0.3 *2022-07-19*
 -------------------
+
+    Security enhancement
+    Persian localisation
+    DMSF images in PDF export
+
+* Bug: ##1382 - Unable to copy or move files
+* Bug: #1381 - Update fa.yml
+* Bug: #1380 - Custom queries and Trash bin
+* New: #1377 - Create fa.yml
+* New: #1375 - Hide the link in the TOP menu
+* Bug: #1374 - Possible XSS Vulnerability by using eval()
+* Bug: #1373 - Cross-site Scripting risk in Select2 < 4.0.8
+* Bug: #1372 - Replacing view_dmsf_file_path references with view_dmsf_file_url
+* Bug: #1371 - Mail rendering of DMSF file link reports undefined method error
+* Bug: #1369 - Translate settings column names
+* Bug: #1368 - Wrong translation in Persian and probably some other languages
+* New: #1082 - More than one ID in image rendering macros
+* Bug:  #903 - Little bug in PDF image export (Redmine 3.4.6)
 
 3.0.2 *2022-06-17*
 -------------------

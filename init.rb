@@ -22,18 +22,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 Redmine::Plugin.register :redmine_dmsf do
-  if Redmine::Plugin.installed?(:easy_extensions)
-    name 'Easy DMS'
-    url 'https://www.easyredmine.com'
-    author_url 'https://www.easyredmine.com'
-  else
-    name 'DMSF'
-    url 'https://www.redmine.org/plugins/redmine_dmsf'
-    author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
-  end
+  name 'DMSF'
+  url 'https://www.redmine.org/plugins/redmine_dmsf'
+  author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
-  version '3.0.3 devel'
+  version '3.0.3'
   
   requires_redmine version_or_higher: '4.2.0'
 
