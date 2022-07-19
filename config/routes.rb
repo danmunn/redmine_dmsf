@@ -83,27 +83,7 @@ if Redmine::Plugin.installed? :redmine_dmsf
     delete '/dmsf/link_attachments/:id/delete', to: 'dmsf_upload#delete_dmsf_link_attachment', as: 'dmsf_link_attachment'
 
     #
-    # dmsf_files controller
-    #   /dmsf/files/<file id>
-    ##
-    get '/dmsf/files/:id/notify/activate', controller: 'dmsf_files', action: 'notify_activate', as: 'notify_activate_dmsf_files'
-    get '/dmsf/files/:id/notify/deactivate', controller: 'dmsf_files', action: 'notify_deactivate', as: 'notify_deactivate_dmsf_files'
-    get '/dmsf/files/:id/lock', controller: 'dmsf_files', action: 'lock', as: 'lock_dmsf_files'
-    get '/dmsf/files/:id/unlock', controller: 'dmsf_files', action: 'unlock', as: 'unlock_dmsf_files'
-    post '/dmsf/files/:id/delete', controller: 'dmsf_files', action: 'delete', as: 'delete_dmsf_files'
-    post '/dmsf/files/:id/revision/create', controller: 'dmsf_files', action: 'create_revision'
-    get '/dmsf/files/:id/revision/delete', controller: 'dmsf_files', action: 'delete_revision', as: 'delete_revision'
-    get '/dmsf/files/:id/revision/obsolete', controller: 'dmsf_files', action: 'obsolete_revision', as: 'obsolete_revision'
-    get '/dmsf/files/:id/download', to: 'dmsf_files#view', download: '', as: 'download_dmsf_file' # Otherwise will not route nil into the download param
-    get '/dmsf/files/:id/view', to: 'dmsf_files#view', as: 'view_dmsf_file'
-    get '/dmsf/files/:id', controller: 'dmsf_files', action: 'show', as: 'dmsf_file'
-    delete '/dmsf/files/:id', controller: 'dmsf_files', action: 'delete'
-    get '/dmsf/files/:id/restore', controller: 'dmsf_files', action: 'restore', as: 'restore_dmsf_file'
-    get '/dmsf/files/:id/thumbnail', to: 'dmsf_files#thumbnail', as: 'dmsf_thumbnail'
-    get '/dmsf/files/:id/:filename', to: 'dmsf_files#view', :id => /\d+/, :filename => /.*/, as: 'static_dmsf_file'
-
-    #
-    # url controller
+    # dmsf_links controller
     #   /dmsf/links/<file id>
     ##
     get '/dmsf/links/:id/restore', controller: 'dmsf_links', action: 'restore', as: 'restore_dmsf_link'
@@ -128,6 +108,26 @@ if Redmine::Plugin.installed? :redmine_dmsf
     post '/dmsf/folders/:id/copy/copy', controller: 'dmsf_folders_copy', action: 'copy'
     post '/dmsf/folders/:id/copy/move', controller: 'dmsf_folders_copy', action: 'move'
     get '/dmsf/folders/:id/copy', controller: 'dmsf_folders_copy', action: 'new', as: 'copy_folder'
+
+    #
+    # dmsf_files controller
+    #   /dmsf/files/<file id>
+    ##
+    get '/dmsf/files/:id/notify/activate', controller: 'dmsf_files', action: 'notify_activate', as: 'notify_activate_dmsf_files'
+    get '/dmsf/files/:id/notify/deactivate', controller: 'dmsf_files', action: 'notify_deactivate', as: 'notify_deactivate_dmsf_files'
+    get '/dmsf/files/:id/lock', controller: 'dmsf_files', action: 'lock', as: 'lock_dmsf_files'
+    get '/dmsf/files/:id/unlock', controller: 'dmsf_files', action: 'unlock', as: 'unlock_dmsf_files'
+    post '/dmsf/files/:id/delete', controller: 'dmsf_files', action: 'delete', as: 'delete_dmsf_files'
+    post '/dmsf/files/:id/revision/create', controller: 'dmsf_files', action: 'create_revision'
+    get '/dmsf/files/:id/revision/delete', controller: 'dmsf_files', action: 'delete_revision', as: 'delete_revision'
+    get '/dmsf/files/:id/revision/obsolete', controller: 'dmsf_files', action: 'obsolete_revision', as: 'obsolete_revision'
+    get '/dmsf/files/:id/download', to: 'dmsf_files#view', download: '', as: 'download_dmsf_file' # Otherwise will not route nil into the download param
+    get '/dmsf/files/:id/view', to: 'dmsf_files#view', as: 'view_dmsf_file'
+    get '/dmsf/files/:id', controller: 'dmsf_files', action: 'show', as: 'dmsf_file'
+    delete '/dmsf/files/:id', controller: 'dmsf_files', action: 'delete'
+    get '/dmsf/files/:id/restore', controller: 'dmsf_files', action: 'restore', as: 'restore_dmsf_file'
+    get '/dmsf/files/:id/thumbnail', to: 'dmsf_files#thumbnail', as: 'dmsf_thumbnail'
+    get '/dmsf/files/:id/:filename', to: 'dmsf_files#view', :id => /\d+/, :filename => /.*/, as: 'static_dmsf_file'
 
     # Approval workflow
     resources :dmsf_workflows do
