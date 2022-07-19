@@ -11,7 +11,7 @@ Changelog for Redmine DMSF
     Persian localisation
     DMSF images in PDF export
 
-* Bug: ##1382 - Unable to copy or move files
+* Bug: #1382 - Unable to copy or move files
 * Bug: #1381 - Update fa.yml
 * Bug: #1380 - Custom queries and Trash bin
 * New: #1377 - Create fa.yml
