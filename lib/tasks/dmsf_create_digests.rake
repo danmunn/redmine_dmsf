@@ -48,7 +48,9 @@ class DmsfCreateDigest
   end
 
   def dmsf_create_digests
-    revisions = DmsfFileRevision.where(['digest IS NULL OR length(digest) < ?', @force_sha256 ? 64 : 32])
+    revisions = DmsfFileRevision.where(['digest IS NULL OR digest = ? OR length(digest) < ?',
+      'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', #  Wrong version when uploading a document via WebDAV #1385
+      @force_sha256 ? 64 : 32])
     count = revisions.count
     n = 0
     revisions.each_with_index do |rev, i|

@@ -603,16 +603,6 @@ module RedmineDmsf
 
         if new_revision.save
           new_revision.copy_file_content request.body
-          # Digest
-          sha = Digest::SHA256.new
-          if request.body.respond_to?(:read)
-            while (buffer = request.body.read(8192))
-              sha.update buffer
-            end
-          else
-            sha.update request.body
-          end
-          new_revision.digest = sha.hexdigest
           new_revision.save
           # Notifications
           DmsfMailer.deliver_files_updated project, [f]

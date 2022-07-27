@@ -338,5 +338,16 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
       assert_response :unprocessable_entity
     end
   end
+
+  def test_put_digest
+    assert_difference '@file1.dmsf_file_revisions.count', +1 do
+      put "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: '1234',
+          headers: @jsmith.merge!({ content_type: :text })
+      assert_response :created
+    end
+    @file1.last_revision.reload
+    sha = Digest::SHA256.file(@file1.last_revision.disk_file)
+    assert_equal sha, @file1.last_revision.digest
+  end
   
 end
