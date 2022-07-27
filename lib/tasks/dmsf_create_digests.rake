@@ -55,7 +55,6 @@ class DmsfCreateDigest
     n = 0
     revisions.each_with_index do |rev, i|
       if File.exist?(rev.disk_file)
-        puts rev.digest
         file = File.new rev.disk_file, 'r'
         if file.respond_to?(:read)
           sha = Digest::SHA256.new
@@ -66,7 +65,6 @@ class DmsfCreateDigest
         else
           rev.digest = Digest::SHA256.file(rev.disk_file)
         end
-        puts rev.digest
         rev.save unless @dry_run
       else
         puts "#{rev.disk_file} not found"
