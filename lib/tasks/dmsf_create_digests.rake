@@ -51,20 +51,22 @@ class DmsfCreateDigest
     revisions = DmsfFileRevision.where(['digest IS NULL OR digest = ? OR length(digest) < ?',
       'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', #  Wrong version when uploading a document via WebDAV #1385
       @force_sha256 ? 64 : 32])
-    count = revisions.count
+    count = revisions.all.size
     n = 0
     revisions.each_with_index do |rev, i|
       if File.exist?(rev.disk_file)
-        sha = Digest::SHA256.new
+        puts rev.digest
         file = File.new rev.disk_file, 'r'
         if file.respond_to?(:read)
+          sha = Digest::SHA256.new
           while (buffer = file.read(8192))
             sha.update buffer
           end
+          rev.digest = sha.hexdigest
         else
-          sha.update @temp_file
+          rev.digest = Digest::SHA256.file(rev.disk_file)
         end
-        rev.digest = sha.hexdigest
+        puts rev.digest
         rev.save unless @dry_run
       else
         puts "#{rev.disk_file} not found"
@@ -75,7 +77,7 @@ class DmsfCreateDigest
     end
     print "\r100%\n"
     # Result
-    puts "#{n}/#{DmsfFileRevision.count} revisions updated."
+    puts "#{n}/#{count} revisions updated."
   end
 
 end
