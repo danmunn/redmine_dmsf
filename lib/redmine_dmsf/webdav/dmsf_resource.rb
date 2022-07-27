@@ -554,6 +554,15 @@ module RedmineDmsf
               new_revision.custom_field_values[i].value = custom_value
             end
           end
+          unless reuse_revision
+            if new_revision.patch_version && (new_revision.patch_version != -32)
+              new_revision.increase_version(DmsfFileRevision::PATCH_VERSION)
+            elsif new_revision.minor_version && (new_revision.minor_version != -32)
+              new_revision.increase_version(DmsfFileRevision::MINOR_VERSION)
+            else
+              new_revision.increase_version(DmsfFileRevision::MAJOR_VERSION)
+            end
+          end
         else
           f = DmsfFile.new
           f.project_id = project.id
@@ -561,7 +570,7 @@ module RedmineDmsf
           f.dmsf_folder = parent.folder
           f.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
           new_revision = DmsfFileRevision.new
-          new_revision.minor_version = 0
+          new_revision.minor_version = 1
           new_revision.major_version = 0
           new_revision.title = DmsfFileRevision.filename_to_title(basename)
         end
@@ -569,7 +578,6 @@ module RedmineDmsf
         new_revision.dmsf_file = f
         new_revision.user = User.current
         new_revision.name = basename
-        new_revision.increase_version(DmsfFileRevision::PATCH_VERSION) unless reuse_revision
         new_revision.mime_type = Redmine::MimeType.of(new_revision.name)
 
         # Phusion passenger does not have a method "length" in its model
