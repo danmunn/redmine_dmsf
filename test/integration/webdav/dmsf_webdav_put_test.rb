@@ -355,7 +355,7 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
           headers: @jsmith.merge!({ content_type: :text })
       assert_response :created
     end
-    assert_equal '1.1', @file1.last_revision.version
+    assert_equal '1.2', @file1.last_revision.version
   end
   
 end

@@ -32,11 +32,14 @@ module RedmineDmsf
       macro :dmsf do |obj, args|
         raise ArgumentError if args.length < 1 # Requires file id
         file = DmsfFile.visible.find args[0]
+        unless User.current&.allowed_to?(:view_dmsf_files, file.project, { id: file.id })
+          raise l(:notice_not_authorized)
+        end
         if args[2].blank?
           revision = file.last_revision
         else
-          revision = DmsfFileRevision.find args[2]
-          if revision.dmsf_file != file
+          revision = DmsfFileRevision.find_by(id: args[2], dmsf_file_id: args[0])
+          unless revision
             raise ActiveRecord::RecordNotFound
           end
         end
@@ -110,16 +113,23 @@ module RedmineDmsf
 
       # dmsfversion - text referring to the document's version
       desc "Text referring to DMSF document version:\n\n" +
-             "{{dmsfversion(document_id)}}\n\n" +
+             "{{dmsfversion(document_id [, revision_id])}}\n\n" +
              "_document_id_ can be found in the document's details."
       macro :dmsfversion do |obj, args|
         raise ArgumentError if args.length < 1 # Requires file id
         file = DmsfFile.visible.find args[0]
-        if User.current&.allowed_to?(:view_dmsf_files, file.project)
-          textilizable file.version
-        else
+        unless User.current&.allowed_to?(:view_dmsf_files, file.project, { id: file.id })
           raise l(:notice_not_authorized)
         end
+        if args[1].blank?
+          revision = file.last_revision
+        else
+          revision = DmsfFileRevision.find_by(id: args[1], dmsf_file_id: args[0])
+          unless revision
+            raise ActiveRecord::RecordNotFound
+          end
+        end
+        textilizable revision.version
       end
 
       # dmsflastupdate - text referring to the document's last update date

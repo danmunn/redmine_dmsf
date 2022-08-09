@@ -97,7 +97,7 @@ dmsf_file_revisions_005:
   title:                              'Test File'
   description:                        NULL
   workflow:                           1 # DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
-  minor_version:                      0
+  minor_version:                      1
   major_version:                      1
   comment:                            'Wrong mime type in order to have Edit content menu item'
   deleted:                            0

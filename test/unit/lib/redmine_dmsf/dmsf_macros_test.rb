@@ -163,10 +163,16 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     assert_not_equal "<p><p>#{@file1.description}</p></p>", text
   end
 
-  # {{dmsfversion(document_id)}}
+  # {{dmsfversion(document_id [, revision_id])}}
   def test_macro_dmsfdversion
     text = textilizable("{{dmsfversion(#{@file1.id})}}")
     assert_equal "<p><p>#{@file1.version}</p></p>", text
+  end
+
+  def test_macro_dmsfdversion
+    revision5 = DmsfFileRevision.find_by(id: 5)
+    text = textilizable("{{dmsfversion(#{@file1.id}, #{revision5.id})}}")
+    assert_equal "<p><p>#{revision5.version}</p></p>", text
   end
 
   def test_macro_dmsfdversion_no_permissions
