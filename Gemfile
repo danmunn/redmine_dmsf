@@ -29,7 +29,7 @@ source 'https://rubygems.org' do
   unless Dir.exist?(File.expand_path('../../easyproject', __FILE__))
     gem 'simple_enum'
   end
-  unless %w(easyproject easy_gantt).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
+  unless %w(easyproject easy_gantt custom_tables).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
     group :test do
       gem 'rails-controller-testing'
     end
