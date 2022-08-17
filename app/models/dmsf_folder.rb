@@ -99,6 +99,15 @@ class DmsfFolder < ActiveRecord::Base
 
   before_create :default_values
 
+  def visible?
+    if self.respond_to?(:type)
+      if /^folder/.match?(type)
+        return DmsfFolder.visible.where(id: self.id).exists?
+      end
+    end
+    true
+  end
+
   def self.permissions?(folder, allow_system = true)
     # Administrator?
     return true if (User.current.admin? || folder.nil?)

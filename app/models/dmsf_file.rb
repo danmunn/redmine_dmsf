@@ -82,15 +82,6 @@ class DmsfFile < ActiveRecord::Base
   @@previews_storage_path = File.join(Rails.root, 'tmp', 'dmsf_previews')
 
   before_create :default_values
-  
-  def visible?
-    if self.respond_to?(:type)
-      if /^folder/.match?(type)
-        return DmsfFolder.visible.where(id: self.id).exists?
-      end
-    end
-    true
-  end
 
   def default_values
     if Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present? && (!dmsf_folder || !dmsf_folder.system)
