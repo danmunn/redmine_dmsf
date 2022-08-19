@@ -78,7 +78,7 @@ class DmsfWorkflowsController < ApplicationController
               end
               if revision.workflow == DmsfWorkflow::STATE_APPROVED
                 # Just approved
-                if Setting.notified_events.include?('dmsf_workflow_action')
+                if Setting.notified_events.include?('dmsf_workflow_plural')
                   recipients = DmsfMailer.get_notify_users(@project, revision.dmsf_file, true)
                   DmsfMailer.deliver_workflow_notification(
                       recipients,
@@ -97,7 +97,7 @@ class DmsfWorkflowsController < ApplicationController
                 end
               else
                 # Just rejected
-                if Setting.notified_events.include?('dmsf_workflow_action')
+                if Setting.notified_events.include?('dmsf_workflow_plural')
                   recipients = @dmsf_workflow.participiants
                   recipients.push revision.dmsf_workflow_assigned_by_user
                   recipients.uniq!
@@ -122,7 +122,7 @@ class DmsfWorkflowsController < ApplicationController
             else
               if action.action == DmsfWorkflowStepAction::ACTION_DELEGATE
                 # Delegation
-                if Setting.notified_events.include?('dmsf_workflow_action')
+                if Setting.notified_events.include?('dmsf_workflow_plural')
                   delegate = User.active.find_by(id: params[:step_action].to_i / 10)
                   if DmsfMailer.get_notify_users(@project, revision.dmsf_file, true).include?(delegate)
                     DmsfMailer.deliver_workflow_notification(
@@ -143,7 +143,7 @@ class DmsfWorkflowsController < ApplicationController
                 # Next step
                 assignments = @dmsf_workflow.next_assignments revision.id
                 unless assignments.empty?
-                  if Setting.notified_events.include?('dmsf_workflow_action')
+                  if Setting.notified_events.include?('dmsf_workflow_plural')
                     if assignments.first.dmsf_workflow_step.step != action.dmsf_workflow_step_assignment.dmsf_workflow_step.step
                       # Next step
                       assignments.each do |assignment|
@@ -426,7 +426,7 @@ class DmsfWorkflowsController < ApplicationController
     if revision
       revision.set_workflow(@dmsf_workflow.id, params[:action])
       if revision.save
-        if Setting.notified_events.include?('dmsf_workflow_action')
+        if Setting.notified_events.include?('dmsf_workflow_plural')
           @dmsf_workflow.notify_users(@project, revision, self)
         end
         flash[:notice] = l(:notice_workflow_started)
