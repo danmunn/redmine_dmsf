@@ -1,8 +1,18 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.4 *????-??-??*
+3.0.4 *2022-08-19*
 -------------------
+
+    Version macro extension
+
+* Bug: #1392 - Issue #1388 patch
+* Bug: #1391 - Fix plugin name redmine_checklists
+* New: #1390 - Version of revision in wiki
+* Bug: #1388 - Custom field in DMS Columns
+* Bug: #1387 - Error in bundle with plugin custom table
+* Bug: #1385 - Wrong version when uploading a document via WebDAV
+* Bug: #1384 - Checksum is always the same via WebDAV type: bug
 
 3.0.3 *2022-07-19*
 -------------------

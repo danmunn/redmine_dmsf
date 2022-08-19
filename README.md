@@ -1,19 +1,19 @@
 Redmine DMSF Plugin
 ===================
 
-The current version of Redmine DMSF is **3.0.4 devel** 
+The current version of Redmine DMSF is **3.0.4** 
 
-[![pipeline status](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/badges/devel/pipeline.svg)](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/pipelines/devel/latest)
+[![pipeline status](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/badges/master/pipeline.svg)](https://gitlab.kontron.com/redmine-plugins/redmine_dmsf/pipelines/master/latest)
 [![Support Ukraine Badge](https://bit.ly/support-ukraine-now)](https://github.com/support-ukraine/support-ukraine)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
 
-Redmine DMSF now comes bundled with Webdav functionality: if switched on within plugin settings this will be accessible from /dmsf/webdav.
+Redmine DMSF now comes bundled with WebDAV functionality: if switched on within plugin settings this will be accessible from _/dmsf/webdav_.
 
-Webdav functionality is provided through Dav4rack library.
+WebDAV functionality is provided through Dav4Rack library.
 
-Initial development was for Kontron AG R&D department and it is released as open source thanks to their generosity.  
-Project home: <https://code.google.com/p/redmine-dmsf/>
+The development is supported by [Kontron](https://www.kontron.com) and has been released as open source thanks to their generosity.  
+Project home: <https://github.com/danmunn/redmine_dmsf>
 
 Redmine Document Management System "Features" plugin is distributed under GNU General Public License v2 (GPL).  
 Redmine is a flexible project management web application, released under the terms of the GNU General Public License v2 (GPL) at <https://www.redmine.org/>
@@ -33,7 +33,7 @@ Features
   * Document access auditing
   * Integration with Redmine's activity feed
   * Wiki macros for quick content linking
-  * Full read/write webdav functionality
+  * Full read/write WebDAV functionality
   * Optional document content full-text search
   * Documents and folders' symbolic links  
   * Trash bin
