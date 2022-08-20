@@ -1,8 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.4 *????-??-??*
--------------------
+3.0.5 *2022-08-20*
+------------------
+
+    Aproval wokflows notifications fix
+
+* Bug: #1394 - Email notifications for workflows are not sent
 
 3.0.4 *2022-08-19*
 -------------------
