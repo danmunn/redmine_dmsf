@@ -88,14 +88,16 @@ class DmsfQuery < Query
 
   def base_scope
     unless @scope
-      @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_projects_scope, dmsf_files_scope,
-                dmsf_file_links_scope, dmsf_url_links_scope].compact.inject(:union_all)
+      # @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_projects_scope, dmsf_files_scope,
+      #           dmsf_file_links_scope, dmsf_url_links_scope].compact.inject(:union_all)
+      @scope = [dmsf_folders_scope, dmsf_files_scope].compact.inject(:union_all)
     end
     @scope
   end
 
   # Returns the issue count
   def dmsf_count
+    Rails.logger.info ">>> #{base_scope.where(statement).to_sql}"
     base_scope.where(statement).count
   rescue ::ActiveRecord::StatementInvalid => e
     raise StatementInvalid.new e.message
@@ -132,9 +134,18 @@ class DmsfQuery < Query
           # custom field
           available_filters # Initialize available filters #1380
           sql_cf = +sql_for_custom_field(field, operator, v, $1)
-          sql_cf.gsub!('dmsf_folders.id  IN (SELECT dmsf_folders.id', 'dmsf_folders.customized_id  IN (SELECT dmsf_folders.customized_id');
-          sql_cf.gsub!("customized_type='DmsfFolder'", 'customized_type=dmsf_folders.customized_type')
-          sql_cf.gsub!('customized_id=dmsf_folders.id', 'customized_id=dmsf_folders.customized_id')
+          # This is what we get
+          # dmsf_folders.id  IN (SELECT dmsf_folders.id FROM dmsf_folders LEFT OUTER JOIN custom_values ON custom_values.customized_type='DmsfFolder' AND custom_values.customized_id=dmsf_folders.id AND custom_values.custom_field_id=1 WHERE (custom_values.value IN ('tag 1')) AND (1=1))
+          # This is what we need
+          # dmsf_folders.customized_id  IN (SELECT customized_id FROM custom_values WHERE customized_type=dmsf_folders.customized_type AND customized_id=dmsf_folders.customized_id AND custom_field_id=1 AND value IN ('tag 1'))
+          sql_cf.gsub!(' AND (1=1)', '')
+          sql_cf.gsub!(/^dmsf_folders.id/, 'dmsf_folders.customized_id')
+          sql_cf.gsub!(
+            "IN (SELECT dmsf_folders.id FROM dmsf_folders LEFT OUTER JOIN custom_values ON custom_values.customized_type='DmsfFolder' AND custom_values.customized_id=dmsf_folders.id AND custom_values.custom_field_id=",
+            "IN (SELECT customized_id FROM custom_values WHERE customized_type=dmsf_folders.customized_type AND customized_id=dmsf_folders.customized_id AND custom_field_id="
+          )
+          sql_cf.gsub!('WHERE (', 'AND ')
+          sql_cf.gsub!(/\)$/, '')
           filters_clauses << sql_cf
         else
           filters_clauses << '(' + sql_for_field(field, operator, v, queried_table_name, field) + ')'
