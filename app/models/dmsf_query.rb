@@ -88,9 +88,8 @@ class DmsfQuery < Query
 
   def base_scope
     unless @scope
-      # @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_projects_scope, dmsf_files_scope,
-      #           dmsf_file_links_scope, dmsf_url_links_scope].compact.inject(:union_all)
-      @scope = [dmsf_folders_scope, dmsf_files_scope].compact.inject(:union_all)
+      @scope = [dmsf_folders_scope, dmsf_folder_links_scope, dmsf_projects_scope, dmsf_files_scope,
+                dmsf_file_links_scope, dmsf_url_links_scope].compact.inject(:union_all)
     end
     @scope
   end
