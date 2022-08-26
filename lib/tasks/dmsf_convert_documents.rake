@@ -21,53 +21,41 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 desc <<-END_DESC
-Convert project documents to DMSF folder/file structure.
+Convert projects' Documents to DMSF folder/file structure.
 
-Converted project must have documents and may not have DMSF active!
+Converted project must have Document module enabled
 
 Available options:
-  * project - id or identifier of project (defaults to all projects)
-  * dry - true or false (default false) to perform just check without any conversion
-  * invalid - replace to perform document title invalid characters replacement for '-'
+  * project - id or identifier of a project (default to all projects)
+  * dry_run - perform just a check without any conversion  
 
 Example:
   rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
-  rake redmine:dmsf_convert_documents project=test dry=true RAILS_ENV="production"
+  rake redmine:dmsf_convert_documents project=test dry_run=1 RAILS_ENV="production"
 END_DESC
 
 class DmsfConvertDocuments
   
   def self.convert(options={})
-    dry = options[:dry] ? options[:dry] == 'true' : false
-    replace = options[:invalid] ? options[:invalid] == 'replace' : false
-    
-    projects = options[:project] ? [Project.find(options[:project])] : Project.active.to_a
-    
-    if projects
-      prjs = projects.reject {|project| project.module_enabled?('dmsf') }
-      diff = (projects - prjs)
-      if diff.count > 0
-        puts "Projects skipped due to already enabled module DMSF: #{diff.collect{|p| p.name }.join(' ,')}"
-      end
-      projects = prjs.reject {|project| !project.module_enabled?('documents') }
-      diff = (prjs - projects)
-      if diff.count > 0
-        puts "Projects skipped due to not enabled module Documents: #{diff.collect{|p| p.name }.join(' ,')}"
-      end
-      
+    projects = []
+    if options[:project]
+      p = Project.find(options[:project])
+      projects << p if p&.module_enabled?('documents')
+    else
+      projects = Project.active.has_module('documents').to_a
+    end
+    if projects.any?
       projects.each do |project|
-        puts "Processing project: #{project}"
-
-        project.enabled_module_names = (project.enabled_module_names << 'dmsf').uniq unless dry
-        project.save! unless dry
-
+        STDOUT.puts "Processing project: #{project.name}"
+        unless options[:dry_run]
+          project.enable_module! 'dmsf'
+          #project.save!
+        end
         fail = false
         folders = []
         project.documents.each do |document|
-          puts "Processing document: #{document.title}"
-
+          STDOUT.puts "Processing document: #{document.title}"
           folder = DmsfFolder.new
-
           folder.project = project
           attachment = document.attachments.reorder(created_on: :asc).first
           if attachment
@@ -75,46 +63,36 @@ class DmsfConvertDocuments
           else
             folder.user = User.active.where(admin: true).first
           end
-
-          folder.title = document.title
-          folder.title.gsub!(/[\/\\\?":<>]/, '-') if replace
-
+          folder.title = DmsfFolder.get_valid_title(document.title)
           i = 1
           suffix = ''
           while folders.index{|f| f.title == (folder.title + suffix)}
             i+=1
             suffix = "_#{i}"
           end
-
           folder.title = folder.title + suffix
           folder.description = document.description
-
-          if dry
-            puts "Dry check folder: #{folder.title}"
-            if folder.invalid?
-              folder.errors.each {|e,msg| puts "#{e}: #{msg}"}
-            end
+          if options[:dry_run]
+            STDOUT.puts "Dry run folder: #{folder.title}"
+            STDERR.puts(folder.errors.full_messages.to_sentence) if folder.invalid?
           else
             begin
               folder.save!
-              puts "Created folder: #{folder.title}"
+              STDOUT.puts "Created folder: #{folder.title}"
             rescue => e
-              puts "Creating folder: #{folder.title} failed"
-              puts e
+              STDERR.puts "Creating folder: #{folder.title} failed"
+              STDERR.puts e.message
               fail = true
               next
             end
           end
-
           folders << folder
-
           files = []          
           document.attachments.each do |attachment|
             begin
               file = DmsfFile.new
               file.project_id = project.id
               file.dmsf_folder = folder
-
               file.name = attachment.filename
               i = 1
               suffix = ''
@@ -122,27 +100,21 @@ class DmsfConvertDocuments
                 i += 1
                 suffix = "_#{i}"
               end
-
               # Need to save file first to generate id for it in case of creation. 
               # File id is needed to properly generate revision disk filename
               file.name = DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name)
-
               unless File.exist?(attachment.diskfile)
-                puts "Creating file: #{attachment.filename} failed, attachment file #{attachment.diskfile} doesn't exist"
+                STDERR.puts "Creating file: #{attachment.filename} failed, attachment file #{attachment.diskfile} doesn't exist"
                 fail = true
                 next
               end
-
-              if dry
+              if options[:dry_run]
                 file.id = attachment.id # Just to have an ID there
-                puts "Dry check file: #{file.name}"
-                if file.invalid?
-                  file.errors.each {|e, msg| puts "#{e}: #{msg}"}
-                end
+                STDOUT.puts "Dry run file: #{file.name}"
+                STDERR.puts(file.errors.full_messages.to_sentence) if file.invalid?
               else
                 file.save!
               end
-
               revision = DmsfFileRevision.new
               revision.dmsf_file = file
               revision.name = file.name              
@@ -153,43 +125,36 @@ class DmsfConvertDocuments
               revision.updated_at = attachment.created_on
               revision.major_version = 0
               revision.minor_version = 1
-              revision.comment = 'Converted from documents'
+              revision.comment = 'Converted from Documents'
               revision.mime_type = attachment.content_type
-
-              revision.disk_filename = revision.new_storage_filename              
-
-              unless dry
+              revision.disk_filename = revision.new_storage_filename
+              unless options[:dry_run]
                 FileUtils.cp attachment.diskfile, revision.disk_file(false)
                 revision.size = File.size(revision.disk_file(false))
-              end              
-
-              if dry
-                puts "Dry check revision: #{revision.title}"
-                if revision.invalid?
-                  revision.errors.each {|e, msg| puts "#{e}: #{msg}"}
-                end
+              end
+              if options[:dry_run]
+                STDOUT.puts "Dry run revision: #{revision.title}"
+                STDERR.puts(revision.errors.full_messages.to_sentence) if revision.invalid?
               else
                 revision.save!
               end
-
               files << file
-
-              attachment.destroy unless dry
-
-              puts "Created file: #{file.name}" unless dry
+              attachment.destroy unless options[:dry_run]
+              STDOUT.puts "Created file: #{file.name}" unless options[:dry_run]
             rescue => e
-              puts "Creating file: #{attachment.filename} failed"
-              puts e
+              STDERR.puts "Creating file: #{attachment.filename} failed"
+              STDERR.puts e.message
               fail = true
             end
           end
-
-          document.destroy unless dry || fail
-
+          document.destroy unless options[:dry_run] || fail
         end
-        project.enabled_module_names = project.enabled_module_names.reject {|mod| mod == 'documents'} unless dry || fail
-        project.save! unless dry
-      end      
+        unless options[:dry_run] || fail
+          project.disable_module!('documents')
+        end
+      end
+    else
+      STDERR.puts 'No project(s) with Documents module enabled found.'
     end
     
   end
@@ -198,10 +163,9 @@ end
 namespace :redmine do
   task :dmsf_convert_documents => :environment do
     options = {}
-    options[:project] = ENV['project'] if ENV['project']
-    options[:dry] = ENV['dry'] if ENV['dry']
-    options[:invalid] = ENV['invalid'] if ENV['invalid']
-
-    DmsfConvertDocuments.convert(options)
+    options[:project] = ENV['project']
+    options[:dry_run] = ENV['dry_run']
+    options[:invalid] = ENV['invalid']
+    DmsfConvertDocuments.convert options
   end
 end
