@@ -27,145 +27,193 @@ Converted project must have Document module enabled
 
 Available options:
   * project - id or identifier of a project (default to all projects)
-  * dry_run - perform just a check without any conversion  
+  * dry_run - perform just a check without any conversion
+  * issues - Convert also files attached to issues  
 
 Example:
   rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
   rake redmine:dmsf_convert_documents project=test dry_run=1 RAILS_ENV="production"
+  rake redmine:dmsf_convert_documents project=test issues=1 RAILS_ENV="production"
 END_DESC
 
 class DmsfConvertDocuments
-  
-  def self.convert(options={})
-    projects = []
-    if options[:project]
-      p = Project.find(options[:project])
-      projects << p if p&.module_enabled?('documents')
+
+  def initialize
+    @dry_run = ENV['dry_run']
+    @projects = []
+    if ENV['project']
+      p = Project.find(ENV['project'])
+      @projects << p if p&.active?
     else
-      projects = Project.active.has_module('documents').to_a
+      @projects.concat(Project.active.to_a)
     end
-    if projects.any?
-      projects.each do |project|
+    @issues = ENV['issues']
+  end
+
+  def convert_projects
+    if @projects.any?
+      @projects.each do |project|
         STDOUT.puts "Processing project: #{project.name}"
-        unless options[:dry_run]
-          project.enable_module! 'dmsf'
-          #project.save!
-        end
-        fail = false
-        folders = []
-        project.documents.each do |document|
-          STDOUT.puts "Processing document: #{document.title}"
-          folder = DmsfFolder.new
-          folder.project = project
-          attachment = document.attachments.reorder(created_on: :asc).first
-          if attachment
-            folder.user = attachment.author
-          else
-            folder.user = User.active.where(admin: true).first
-          end
-          folder.title = DmsfFolder.get_valid_title(document.title)
-          i = 1
-          suffix = ''
-          while folders.index{|f| f.title == (folder.title + suffix)}
-            i+=1
-            suffix = "_#{i}"
-          end
-          folder.title = folder.title + suffix
-          folder.description = document.description
-          if options[:dry_run]
-            STDOUT.puts "Dry run folder: #{folder.title}"
-            STDERR.puts(folder.errors.full_messages.to_sentence) if folder.invalid?
-          else
-            begin
-              folder.save!
-              STDOUT.puts "Created folder: #{folder.title}"
-            rescue => e
-              STDERR.puts "Creating folder: #{folder.title} failed"
-              STDERR.puts e.message
-              fail = true
-              next
-            end
-          end
-          folders << folder
-          files = []          
-          document.attachments.each do |attachment|
-            begin
-              file = DmsfFile.new
-              file.project_id = project.id
-              file.dmsf_folder = folder
-              file.name = attachment.filename
-              i = 1
-              suffix = ''
-              while files.index{|f| f.name == (DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name))}
-                i += 1
-                suffix = "_#{i}"
-              end
-              # Need to save file first to generate id for it in case of creation. 
-              # File id is needed to properly generate revision disk filename
-              file.name = DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name)
-              unless File.exist?(attachment.diskfile)
-                STDERR.puts "Creating file: #{attachment.filename} failed, attachment file #{attachment.diskfile} doesn't exist"
-                fail = true
-                next
-              end
-              if options[:dry_run]
-                file.id = attachment.id # Just to have an ID there
-                STDOUT.puts "Dry run file: #{file.name}"
-                STDERR.puts(file.errors.full_messages.to_sentence) if file.invalid?
-              else
-                file.save!
-              end
-              revision = DmsfFileRevision.new
-              revision.dmsf_file = file
-              revision.name = file.name              
-              revision.title = DmsfFileRevision.filename_to_title(attachment.filename)
-              revision.description = attachment.description
-              revision.user = attachment.author
-              revision.created_at = attachment.created_on
-              revision.updated_at = attachment.created_on
-              revision.major_version = 0
-              revision.minor_version = 1
-              revision.comment = 'Converted from Documents'
-              revision.mime_type = attachment.content_type
-              revision.disk_filename = revision.new_storage_filename
-              unless options[:dry_run]
-                FileUtils.cp attachment.diskfile, revision.disk_file(false)
-                revision.size = File.size(revision.disk_file(false))
-              end
-              if options[:dry_run]
-                STDOUT.puts "Dry run revision: #{revision.title}"
-                STDERR.puts(revision.errors.full_messages.to_sentence) if revision.invalid?
-              else
-                revision.save!
-              end
-              files << file
-              attachment.destroy unless options[:dry_run]
-              STDOUT.puts "Created file: #{file.name}" unless options[:dry_run]
-            rescue => e
-              STDERR.puts "Creating file: #{attachment.filename} failed"
-              STDERR.puts e.message
-              fail = true
-            end
-          end
-          document.destroy unless options[:dry_run] || fail
-        end
-        unless options[:dry_run] || fail
-          project.disable_module!('documents')
-        end
+        convert_documents(project) if project.module_enabled?('documents')
+        convert_issues(project) if (@issues && project.module_enabled?('issue_tracking'))
       end
     else
       STDERR.puts 'No project(s) with Documents module enabled found.'
     end
-    
   end
+
+  def convert_issues(project)
+    STDOUT.puts 'Issues'
+    unless Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
+      STDERR.puts "'Act as attachable' must be checked in the plugin's settings"
+      return
+    end
+    project.issues.each do |issue|
+      if issue.attachments.any?
+        STDOUT.puts "Processing: #{issue}"
+        project.enable_module!('dmsf') unless @dry_run
+        # <issue.id> - <issue.subject> folder
+        STDOUT.puts "Creating #{issue.id} - #{DmsfFolder::get_valid_title(issue.subject)} folder"
+        unless @dry_run
+          folder = issue.system_folder(true, project.id)
+        end
+        files = []
+        attachments = []
+        issue.attachments.each do |attachment|
+          @fail = false
+          create_document_from_attachment(project, folder, attachment, files)
+          attachments << attachment unless @fail
+        end
+        unless @dry_run
+          attachments.each do |attachment|
+            issue.init_journal User.anonymous
+            issue.attachments.delete attachment
+          end
+        end
+      end
+    end
+  end
+  
+  def convert_documents(project)
+    @fail = false
+    folders = []
+    if project.documents.any?
+      STDOUT.puts 'Documents'
+      project.enable_module!('dmsf') unless @dry_run
+      project.documents.each do |document|
+        STDOUT.puts "Processing document: #{document.title}"
+        folder = DmsfFolder.new
+        folder.project = project
+        attachment = document.attachments.reorder(created_on: :asc).first
+        if attachment
+          folder.user = attachment.author
+        else
+          folder.user = User.active.where(admin: true).first
+        end
+        folder.title = DmsfFolder.get_valid_title(document.title)
+        i = 1
+        suffix = ''
+        while folders.index{ |f| f.title == (folder.title + suffix) }
+          i+=1
+          suffix = "_#{i}"
+        end
+        folder.title = folder.title + suffix
+        folder.description = document.description
+        if @dry_run
+          STDOUT.puts "Dry run folder: #{folder.title}"
+          STDERR.puts(folder.errors.full_messages.to_sentence) if folder.invalid?
+        else
+          begin
+            folder.save!
+            STDOUT.puts "Created folder: #{folder.title}"
+          rescue => e
+            STDERR.puts "Creating folder: #{folder.title} failed"
+            STDERR.puts e.message
+            @fail = true
+            next
+          end
+        end
+        folders << folder
+        files = []
+        @fail = false
+        document.attachments.each do |attachment|
+          create_document_from_attachment(project, folder, attachment, files)
+        end
+        document.destroy unless @dry_run || @fail
+      end
+    end
+    unless @dry_run || @fail
+      project.disable_module!('documents')
+    end
+  end
+
+  private
+
+  def create_document_from_attachment(project, folder, attachment, files)
+    begin
+      file = DmsfFile.new
+      file.project_id = project.id
+      file.dmsf_folder = folder
+      file.name = attachment.filename
+      i = 1
+      suffix = ''
+      while files.index{ |f| f.name == (DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name)) }
+        i += 1
+        suffix = "_#{i}"
+      end
+      # Need to save file first to generate id for it in case of creation.
+      # File id is needed to properly generate revision disk filename
+      file.name = DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name)
+      unless File.exist?(attachment.diskfile)
+        STDERR.puts "Creating file: #{attachment.filename} failed, attachment file #{attachment.diskfile} doesn't exist"
+        @fail = true
+        return
+      end
+      if @dry_run
+        file.id = attachment.id # Just to have an ID there
+        STDOUT.puts "Dry run file: #{file.name}"
+        STDERR.puts(file.errors.full_messages.to_sentence) if file.invalid?
+      else
+        file.save!
+      end
+      revision = DmsfFileRevision.new
+      revision.dmsf_file = file
+      revision.name = file.name
+      revision.title = DmsfFileRevision.filename_to_title(attachment.filename)
+      revision.description = attachment.description
+      revision.user = attachment.author
+      revision.created_at = attachment.created_on
+      revision.updated_at = attachment.created_on
+      revision.major_version = 0
+      revision.minor_version = 1
+      revision.comment = "Converted from #{folder.system ? 'Issues' : 'Documents'}"
+      revision.mime_type = attachment.content_type
+      revision.disk_filename = revision.new_storage_filename
+      unless @dry_run
+        FileUtils.cp attachment.diskfile, revision.disk_file(false)
+        revision.size = File.size(revision.disk_file(false))
+      end
+      if @dry_run
+        STDOUT.puts "Dry run revision: #{revision.title}"
+        STDERR.puts(revision.errors.full_messages.to_sentence) if revision.invalid?
+      else
+        revision.save!
+      end
+      files << file
+      attachment.destroy unless @dry_run
+      STDOUT.puts "Created file: #{file.name}" unless @dry_run
+    rescue => e
+      STDERR.puts "Creating file: #{attachment.filename} failed"
+      STDERR.puts e.message
+      @fail = true
+    end
+  end
+
 end
 
 namespace :redmine do
   task :dmsf_convert_documents => :environment do
-    options = {}
-    options[:project] = ENV['project']
-    options[:dry_run] = ENV['dry_run']
-    options[:invalid] = ENV['invalid']
-    DmsfConvertDocuments.convert options
+    convert = DmsfConvertDocuments.new
+    convert.convert_projects
   end
 end
