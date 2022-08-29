@@ -58,7 +58,7 @@ class DmsfConvertDocuments
         convert_issues(project) if (@issues && project.module_enabled?('issue_tracking'))
       end
     else
-      STDERR.puts 'No project(s) with Documents module enabled found.'
+      STDERR.puts 'No active projects found.'
     end
   end
 

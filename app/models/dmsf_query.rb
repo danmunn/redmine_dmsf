@@ -96,7 +96,6 @@ class DmsfQuery < Query
 
   # Returns the issue count
   def dmsf_count
-    Rails.logger.info ">>> #{base_scope.where(statement).to_sql}"
     base_scope.where(statement).count
   rescue ::ActiveRecord::StatementInvalid => e
     raise StatementInvalid.new e.message
