@@ -26,7 +26,7 @@ module RedmineDmsf
       ##################################################################################################################
       # New methods
 
-      def self.included(base)
+      def self.prepended(base)
         base.class_eval do
           before_destroy :delete_system_folder, prepend: true
         end
