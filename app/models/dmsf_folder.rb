@@ -99,7 +99,7 @@ class DmsfFolder < ActiveRecord::Base
 
   before_create :default_values
 
-  def visible?
+  def visible?(user=User.current)
     if self.respond_to?(:type)
       if /^folder/.match?(type)
         return DmsfFolder.visible.where(id: self.id).exists?
