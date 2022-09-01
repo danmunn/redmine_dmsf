@@ -291,15 +291,26 @@ instance is stopped.
 1. In case of upgrade **BACKUP YOUR DATABASE, ORIGINAL PLUGIN AND THE FOLDER WITH DOCUMENTS** first!!!
 2. Put redmine_dmsf plugin directory into plugins. The plugins sub-directory must be named just **redmine_dmsf**. In case
    of need rename _redmine_dmsf-x.y.z_ to *redmine_dmsf*.
-3. **Go to the redmine directory** `cd redmine`   
-3. Install dependencies: `bundle install`.
+3. **Go to the redmine directory** 
+
+    `cd redmine`
+
+3. Install dependencies: 
+
+    `bundle install`
+
 4. Initialize/Update database:
-    
-    `RAILS_ENV=production bundle exec rake db:migrate`
-    
+
     `RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf`
-5. The access rights must be set for web server, example: `chown -R www-data:www-data plugins/redmine_dmsf`.
-6. Restart the web server, e.g. `systemctl restart apache2`
+
+5. The access rights must be set for web server, e.g.: 
+
+    `chown -R www-data:www-data plugins/redmine_dmsf`.
+
+6. Restart the web server, e.g.: 
+
+    `systemctl restart apache2`
+
 7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure. (You should check and then save the plugin's configuration after each upgrade.)
 8. Don't forget to grant permissions for DMSF in Administration -> Roles and permissions
 9. Assign DMSF permissions to appropriate roles.
@@ -309,9 +320,9 @@ instance is stopped.
 
         Available options:
 
-            * project  => id or identifier of project (defaults to all projects)
-            * dry  => true or false (default false) to perform just check without any conversion
-            * invalid=replace  => to perform document title invalid characters replacement for '-'
+            * project - id or identifier of a project (default to all projects)
+            * dry_run - perform just a check without any conversion
+            * issues - Convert also files attached to issues
 
         Example:
             
@@ -331,8 +342,8 @@ instance is stopped.
             
         Available options:
         
-          *dry_run - test, no changes to the database          
-          *forceSHA256 - replace old MD5 with SHA256
+          * dry_run - test, no changes to the database          
+          * forceSHA256 - replace old MD5 with SHA256
         
         Example:
         
@@ -347,7 +358,7 @@ instance is stopped.
         
         Available options:
         
-          *dry_run - No physical deletion but to list of all unused files only
+          * dry_run - No physical deletion but to list of all unused files only
         
         Example:
         
