@@ -49,6 +49,26 @@ Dependencies
 
 ### Full-text search (optional)
 
+#### Indexing
+
+If you want to use full-text search features, you must setup file content indexing.
+
+It is necessary to index DMSF files with omindex before searching attempts to receive some output:
+
+1. Change the configuration part of redmine_dmsf/extra/xapian_indexer.rb file according to your environment.
+   (The path to the index database set in xapian_indexer.rb must corresponds to the path set in the plugin's settings.)
+2. Run `ruby redmine_dmsf/extra/xapian_indexer.rb -v`
+
+This command should be run on regular basis (e.g. from cron)
+
+Example of cron job (once per hour at 8th minute):
+
+    8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb
+
+See redmine_dmsf/extra/xapian_indexer.rb for help.
+
+#### Searching
+
 If you want to use fulltext search abilities, install xapian packages. In case of using of Bitnami 
 stack or Ruby installed via RVM it might be necessary to install Xapian bindings from sources. See https://xapian.org
  for details. 
@@ -383,23 +403,6 @@ it's necessary to add the following configuration option into your `config/addit
 ```ruby
 config.relative_url_root = '/redmine'
 ```
-
-### Full-text search
-If you want to use full-text search features, you must setup file content indexing.
-
-It is necessary to index DMSF files with omindex before searching attempts to receive some output:
-
-  1. Change the configuration part of redmine_dmsf/extra/xapian_indexer.rb file according to your environment.
-     (The path to the index database set in xapian_indexer.rb must corresponds to the path set in the plugin's settings.)   
-  2. Run `ruby redmine_dmsf/extra/xapian_indexer.rb -v`
-
-This command should be run on regular basis (e.g. from cron)
-
-Example of cron job (once per hour at 8th minute):
-    
-    8 * * * * root /usr/bin/ruby redmine_dmsf/extra/xapian_indexer.rb
-
-See redmine_dmsf/extra/xapian_indexer.rb for help.
 
 Uninstalling DMSF
 -----------------
