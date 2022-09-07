@@ -24,20 +24,29 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
 
-  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :queries
 
   def setup
     super
+    @query401 = Query.find 401
     @request.session[:user_id] = @jsmith.id
   end
 
   def test_user_pref_save_member
-    assert @project1
     @role_manager.add_permission! :user_preferences
-    post :user_pref_save, params: { id: @project1.id, email_notify: 1, title_format: '%t_%v' }
+    post :user_pref_save, params: { id: @project1.id, email_notify: 1, title_format: '%t_%v', fast_links: 1,
+                                    act_as_attachable: 1, default_dmsf_query: @query401.id }
     assert_redirected_to settings_project_path(@project1, tab: 'dmsf')
     assert_not_nil flash[:notice]
     assert_equal flash[:notice], l(:notice_your_preferences_were_saved)
+    member = @project1.members.find_by(user_id: @jsmith.id)
+    assert member
+    assert_equal true, member.dmsf_mail_notification
+    assert_equal '%t_%v', member.dmsf_title_format
+    assert_equal true, member.dmsf_fast_links
+    @project1.reload
+    assert_equal 1, @project1.dmsf_act_as_attachable
+    assert_equal @query401.id, @project1.default_dmsf_query_id
   end
   
   def test_user_pref_save_member_forbidden

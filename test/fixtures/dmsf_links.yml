@@ -43,7 +43,7 @@ file_link2:
   target_project_id: 1
   target_id: 4
   target_type: DmsfFile
-  name: test_link
+  name: test_link2
   project_id: 1
   dmsf_folder_id: NULL
   deleted: 0

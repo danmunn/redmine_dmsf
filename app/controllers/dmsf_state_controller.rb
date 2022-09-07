@@ -44,6 +44,7 @@ class DmsfStateController < ApplicationController
     if Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
       @project.update_attribute :dmsf_act_as_attachable, params[:act_as_attachable]
     end
+    @project.update_attribute :default_dmsf_query_id, params[:default_dmsf_query]
     redirect_to settings_project_path(@project, tab: 'dmsf')
   end
   

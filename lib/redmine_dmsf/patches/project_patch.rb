@@ -69,6 +69,8 @@ module RedmineDmsf
           has_many :dmsf_links, -> { where dmsf_folder_id: nil },
             class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
 
+          belongs_to :default_dmsf_query, class_name: 'DmsfQuery'
+
           acts_as_watchable
 
           before_save :set_default_dmsf_notification

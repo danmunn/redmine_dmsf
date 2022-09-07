@@ -26,11 +26,7 @@ module RedmineDmsf
       ##################################################################################################################
       # New methods
 
-      def self.included(base)
-        base.class_eval do
-          safe_attributes 'dmsf_attachments_upload_choice' if self.included_modules.include?(Redmine::SafeAttributes)
-        end
-      end
+      UserPreference::safe_attributes 'dmsf_attachments_upload_choice'
 
       def dmsf_attachments_upload_choice
         self[:dmsf_attachments_upload_choice] || 'DMSF'
@@ -38,6 +34,16 @@ module RedmineDmsf
 
       def dmsf_attachments_upload_choice=(value)
         self[:dmsf_attachments_upload_choice] = value
+      end
+
+      UserPreference::safe_attributes 'default_dmsf_query'
+
+      def default_dmsf_query
+        self[:default_dmsf_query] || nil
+      end
+
+      def default_dmsf_query=(value)
+        self[:default_dmsf_query] = value
       end
 
     end

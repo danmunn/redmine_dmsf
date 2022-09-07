@@ -1,0 +1,15 @@
+---
+queries_401:
+  id: 401
+  type: DmsfQuery
+  project_id: 1
+  visibility: 2
+  name: Test
+  filters: |
+    ---
+    title:
+      :values:
+      - 'test'
+      :operator: '~'
+  user_id: 2
+  column_names:

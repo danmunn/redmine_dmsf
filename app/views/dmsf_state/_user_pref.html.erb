@@ -46,9 +46,10 @@
       </p>
     </fieldset>
   <% end %>
-  <% if Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] %>
-    <fieldset class="box tabular">
-      <legend><%= l(:field_project) %> <%= l(:label_preferences) %></legend>
+
+  <fieldset class="box tabular">
+    <legend><%= l(:field_project) %> <%= l(:label_preferences) %></legend>
+    <% if Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] %>
       <p>
         <%= content_tag(:label, "#{l(:label_act_as_attachable)}:") %>
         <%= select_tag 'act_as_attachable',
@@ -57,13 +58,18 @@
                     [l(:label_attachment_plural), Project::ATTACHABLE_ATTACHMENTS],
                 ], selected: @project.dmsf_act_as_attachable) %>
       </p>
-    </fieldset>
-  <% end %>
-  <% if member || Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] %>
-    <div class="form-actions">
-      <%= submit_tag l(:submit_save), title: l(:title_save_preferences), class: 'button-positive' %>
-    </div>
-  <% else %>
-    <p class="nodata"><%= l(:label_no_data) %></p>
-  <% end %>
+      <p>
+        <%= content_tag(:label, "#{l(:label_default_query)}:") %>
+        <% options = [[l(:label_none), nil]] %>
+        <% options.concat DmsfQuery.only_public.where(project_id: nil).pluck(:name, :id) %>
+        <%= select_tag 'default_dmsf_query',
+                       options_for_select(options, selected: @project.default_dmsf_query_id) %>
+      </p>
+    <% end %>
+  </fieldset>
+
+  <div class="form-actions">
+    <%= submit_tag l(:submit_save), title: l(:title_save_preferences), class: 'button-positive' %>
+  </div>
+
 <% end %>

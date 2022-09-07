@@ -703,10 +703,29 @@ class DmsfController < ApplicationController
   end
 
   def get_query
+    retrieve_default_query true
     if Redmine::Plugin.installed?(:easy_extensions)
       @query = retrieve_query_without_easy_extensions(DmsfQuery, true)
     else
       @query = retrieve_query(DmsfQuery, true)
+    end
+  end
+
+  def retrieve_default_query(use_session)
+    return if params[:query_id].present?
+    return if api_request?
+    return if params[:set_filter]
+
+    if params[:without_default].present?
+      params[:set_filter] = 1
+      return
+    end
+    if !params[:set_filter] && use_session && session[:issue_query]
+      query_id, project_id = session[:issue_query].values_at(:id, :project_id)
+      return if DmsfQuery.where(id: query_id).exists? && project_id == @project&.id
+    end
+    if default_query = DmsfQuery.default(project: @project)
+      params[:query_id] = default_query.id
     end
   end
 

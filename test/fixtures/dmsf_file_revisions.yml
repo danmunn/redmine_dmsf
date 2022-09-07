@@ -94,7 +94,7 @@ dmsf_file_revisions_005:
   disk_filename:                      'test5.txt'
   size:                               4
   mime_type:                          'application/vnd.oasis.opendocument.text'
-  title:                              'Test File'
+  title:                              'Test file'
   description:                        NULL
   workflow:                           1 # DmsfWorkflow::STATE_WAITING_FOR_APPROVAL
   minor_version:                      1
@@ -115,7 +115,7 @@ dmsf_file_revisions_006:
   disk_filename:                      'test.gif'
   size:                               4
   mime_type:                          'image/gif'
-  title:                              'Image'
+  title:                              'Test image'
   description:                        NULL
   workflow:                           NULL
   minor_version:                      0
@@ -136,7 +136,7 @@ dmsf_file_revisions_007:
   disk_filename:                      'test.pdf'
   size:                               4
   mime_type:                          'application/pdf'
-  title:                              'PDF'
+  title:                              'Test PDF'
   description:                        NULL
   workflow:                           NULL
   minor_version:                      0
@@ -243,7 +243,7 @@ dmsf_file_revisions_012:
   disk_filename:                      'test.mp4'
   size:                               4
   mime_type:                          'video/mp4'
-  title:                              'Video file'
+  title:                              'test video'
   description:                        'A video :-)'
   workflow:                           0
   minor_version:                      0
@@ -265,7 +265,7 @@ dmsf_file_revisions_013:
   disk_filename:                      'test.odt'
   size:                               4
   mime_type:                          'application/vnd.oasis.opendocument.text'
-  title:                              'Office document'
+  title:                              'Test office document'
   description:                        'LibreOffice text'
   workflow:                           0
   minor_version:                      0

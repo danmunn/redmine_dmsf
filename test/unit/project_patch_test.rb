@@ -53,6 +53,10 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
     assert @project1.respond_to?(:dmsf_links)
   end
 
+  def test_project_has_default_dmsf_query
+    assert @project1.respond_to?(:default_dmsf_query)
+  end
+
   def test_dmsf_count
     User.current = @jsmith
     hash = @project1.dmsf_count
