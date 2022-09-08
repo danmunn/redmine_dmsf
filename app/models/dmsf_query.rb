@@ -517,6 +517,7 @@ class DmsfQuery < Query
     end
 
     # Project's default
+    project = project[:project] if project&.is_a?(Hash)
     query = project&.default_dmsf_query
     return query if query&.visibility == VISIBILITY_PUBLIC
 

@@ -56,7 +56,17 @@ class ProjectsControllerTest < RedmineDmsf::Test::TestCase
     @role_manager.add_permission! :user_preferences
     get :settings, params: { id: @project1.id, tab: 'dmsf' }
     assert_response :success
-    assert_select 'fieldset legend', text: "#{l(:field_project)} #{l(:label_preferences)}", count: 0
+    assert_select 'label', text: l(:label_act_as_attachable), count: 0
+  end
+
+  def test_legacy_notifications
+    @request.session[:user_id] = @jsmith.id
+    @role_manager.add_permission! :user_preferences
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
+      get :settings, params: { id: @project1.id, tab: 'dmsf' }
+      assert_response :success
+      assert_select 'label', text: l(:label_notifications)
+    end
   end
 
 end

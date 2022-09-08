@@ -58,15 +58,15 @@
                     [l(:label_attachment_plural), Project::ATTACHABLE_ATTACHMENTS],
                 ], selected: @project.dmsf_act_as_attachable) %>
       </p>
-      <p>
-        <%= content_tag(:label, "#{l(:label_default_query)}:") %>
-        <% options = [[l(:label_none), nil]] %>
-        <% options.concat DmsfQuery.only_public.where(project_id: nil).pluck(:name, :id) %>
-        <%= select_tag 'default_dmsf_query',
-                       options_for_select(options, selected: @project.default_dmsf_query_id) %>
-        <em class="info"><%= l('text_allowed_queries_to_select') %></em>
-      </p>
     <% end %>
+    <p>
+      <%= content_tag(:label, "#{l(:label_default_query)}:") %>
+      <% options = [[l(:label_none), nil]] %>
+      <% options.concat DmsfQuery.only_public.where(project_id: nil).pluck(:name, :id) %>
+      <%= select_tag 'default_dmsf_query',
+                     options_for_select(options, selected: @project.default_dmsf_query_id) %>
+      <em class="info"><%= l('text_allowed_queries_to_select') %></em>
+    </p>
   </fieldset>
 
   <div class="form-actions">
