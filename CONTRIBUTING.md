@@ -11,4 +11,4 @@
 
 #### **Do you want to patch the existing code?**
 
-* Make a new fork of the current development branch (_devel-x.x.x_). Make your changes and [create a pull request](https://github.com/danmunn/redmine_dmsf/compare). Only pull requests into the **development branch** except those fixing serious errors will be accepted.
+* Make a new fork of the current development branch (_devel_). Make your changes and [create a pull request](https://github.com/danmunn/redmine_dmsf/compare). Only pull requests into the **development branch** except those fixing serious errors will be accepted.
