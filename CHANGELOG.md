@@ -1,8 +1,19 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.6 *????-??-??*
+3.0.6 *2022-09-20*
 ------------------
+
+    Default query
+    GitHub CI
+    PosgrSQL compatibility
+
+* Bug: #1401 - Duplicated steps in "New step" form
+* Bug: #1399 - Open 'watched' folder throw internal error
+* Bug: #1397 - System folder is not deleted
+* New: #1396 - Repeatable rake task to sync documents
+* Bug: #1395 - Use custom fields in filter throw error 500
+* New: #1386 - Changing default file query
 
 3.0.5 *2022-08-20*
 ------------------
