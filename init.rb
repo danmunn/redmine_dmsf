@@ -29,7 +29,7 @@ Redmine::Plugin.register :redmine_dmsf do
   description 'Document Management System Features'
   version '3.0.6'
   
-  requires_redmine version_or_higher: '4.2.0'
+  requires_redmine version_or_higher: '5.0.0'
 
   settings partial: 'settings/dmsf_settings',
             default: {
