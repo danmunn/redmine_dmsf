@@ -29,5 +29,19 @@ module RedmineDmsf
       Dir.exist? File.join(Rails.root, 'plugins', id.to_s)
     end
 
+    # Return true if a plugin that overrides Redmine::Notifiable and use the deprecated method alias_method_chain is
+    # present.
+    # It is related especially to plugins made by AplhaNode and RedmineUP.
+    def self.an_osolete_plugin_present?
+      plugins = %w(questions contacts checklists db passwords)
+      plugins.each do|plugin|
+        if Plugin.present?("redmine_#{plugin}")
+          return true
+        end
+      end
+      return false
+    end
+
   end
+
 end

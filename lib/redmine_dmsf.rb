@@ -41,8 +41,7 @@ require File.dirname(__FILE__) + '/redmine_dmsf/patches/queries_controller_patch
 require File.dirname(__FILE__) + '/redmine_dmsf/patches/pdf_patch'
 
 # A workaround for obsolete 'alias_method' usage in RedmineUp's plugins
-if (RedmineDmsf::Plugin.present?(:redmine_questions) || Redmine::Plugin.installed?(:redmine_contacts) ||
-  Redmine::Plugin.installed?(:redmine_checklists)) &&  !Redmine::Plugin.installed?(:easy_extensions)
+if RedmineDmsf::Plugin.an_osolete_plugin_present?
   require File.dirname(__FILE__) + '/redmine_dmsf/patches/notifiable_ru_patch'
 else
   require File.dirname(__FILE__) + '/redmine_dmsf/patches/notifiable_patch'
