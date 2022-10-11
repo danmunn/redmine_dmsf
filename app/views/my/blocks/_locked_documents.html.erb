@@ -29,8 +29,7 @@
   ['dmsf_locks.entity_type = ? AND dmsf_locks.user_id = ? AND (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > ?)',
    0, @user&.id, Time.current]) %>
 <h3>
-  <%= l(:locked_documents)%> (<%= "#{folders.all.size} #{l(:label_number_of_folders).downcase}" %> /
-    <%= "#{files.all.size} #{l(:label_number_of_documents).downcase}" %>)
+  <%= l(:locked_documents)%> (<%= "#{folders.all.size} #{l(:label_number_of_folders).downcase}" %> / <%= "#{files.all.size} #{l(:label_number_of_documents).downcase}" %>)
 </h3>
 <% if folders.any? || files.any?%>
   <%= form_tag({}, data: { cm_url: dmsf_context_menu_path(back_url: my_page_path) }) do %>

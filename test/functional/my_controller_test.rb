@@ -66,7 +66,8 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
     assert_response :success
     unless defined?(EasyExtensions)
       assert_select 'div#list-top' do
-        assert_select 'h3', { text: "#{l(:locked_documents)} (0/1)" }
+        assert_select 'h3', { text:
+          "#{l(:locked_documents)} (0 #{l(:label_number_of_folders).downcase} / 1 #{l(:label_number_of_documents).downcase})" }
       end
     end
   end
