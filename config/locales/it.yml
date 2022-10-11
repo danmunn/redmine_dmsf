@@ -456,6 +456,8 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_column_version: Versija
   label_column_workflow: Darbų eiga
   label_column_author: Autorius
+  label_column_description: Descrizione
+  label_column_comment: Komentaras
 
   label_dmsf_global_menu_disabled: Global DMS menu disabled
   note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.

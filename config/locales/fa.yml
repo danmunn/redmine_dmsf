@@ -435,6 +435,8 @@ fa:
   label_column_version: نسخه
   label_column_workflow: روال تایید
   label_column_author: نویسنده
+  label_column_description: توضیحات
+  label_column_comment: توضیح
 
   label_dmsf_global_menu_disabled: Global DMS menu disabled
   note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.

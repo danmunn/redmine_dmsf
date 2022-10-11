@@ -455,6 +455,8 @@ hu:
   label_column_version: Verzió
   label_column_workflow: Workflow
   label_column_author: Szerző
+  label_column_description: Leírás
+  label_column_comment: Megjegyzés
 
   label_dmsf_global_menu_disabled: Global DMS menu disabled
   note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.

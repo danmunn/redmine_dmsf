@@ -456,6 +456,8 @@ sl:
   label_column_version: Verzija
   label_column_workflow: Potek dela
   label_column_author: Avtor
+  label_column_description: Opis
+  label_column_comment: Komentar
 
   label_dmsf_global_menu_disabled: Global DMS menu disabled
   note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.

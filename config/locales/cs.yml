@@ -456,6 +456,8 @@ cs:
   label_column_version: Verze
   label_column_workflow: Schvalování
   label_column_author: Autor
+  label_column_description: Popis
+  label_column_comment: Komentář
 
   label_dmsf_global_menu_disabled: Global DMS menu disabled
   note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.

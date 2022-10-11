@@ -456,6 +456,8 @@ en:
   label_column_version: Version
   label_column_workflow: Workflow
   label_column_author: Author
+  label_column_description: Beschreibung
+  label_column_comment: Kommentar
 
   label_dmsf_global_menu_disabled: Global DMS menu disabled
   note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.

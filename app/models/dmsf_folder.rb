@@ -47,7 +47,7 @@ class DmsfFolder < ActiveRecord::Base
   INVALID_CHARACTERS = '\[\]\/\\\?":<>#%\*'
   STATUS_DELETED = 1
   STATUS_ACTIVE = 0
-  AVAILABLE_COLUMNS = %w(id title size modified version workflow author).freeze
+  AVAILABLE_COLUMNS = %w(id title size modified version workflow author description comment).freeze
   DEFAULT_COLUMNS = %w(title size modified version workflow author).freeze
 
   def self.visible_condition(system=true)

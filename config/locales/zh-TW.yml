@@ -455,6 +455,8 @@ zh-TW:
   label_column_version: 版本
   label_column_workflow: 流程
   label_column_author: 作者
+  label_column_description: 描述
+  label_column_comment: 回應
 
   label_dmsf_global_menu_disabled: Global DMS menu disabled
   note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.

@@ -29,14 +29,16 @@ class DmsfQuery < Query
 
   # Standard columns
   self.available_columns = [
-      QueryColumn.new(:id, sortable: 'id', caption: +'#'),
-      DmsfTitleQueryColumn.new(:title, sortable: 'title', frozen: true, caption: :label_column_title),
-      QueryColumn.new(:size, sortable: 'size', caption: :label_column_size),
-      DmsfModifiedQueryColumn.new(:modified, sortable: 'updated', caption: :label_column_modified),
-      DmsfVersionQueryColumn.new(:version, sortable: %(major_version minor_version patch_version),
-                                 caption: :label_column_version),
-      QueryColumn.new(:workflow, sortable: 'workflow', caption: :label_column_workflow),
-      QueryColumn.new(:author, sortable: %(firstname lastname), caption: :label_column_author)
+    QueryColumn.new(:id, sortable: 'id', caption: +'#'),
+    DmsfTitleQueryColumn.new(:title, sortable: 'title', frozen: true, caption: :label_column_title),
+    QueryColumn.new(:size, sortable: 'size', caption: :label_column_size),
+    DmsfModifiedQueryColumn.new(:modified, sortable: 'updated', caption: :label_column_modified),
+    DmsfVersionQueryColumn.new(:version, sortable: %(major_version minor_version patch_version),
+      caption: :label_column_version),
+    QueryColumn.new(:workflow, sortable: 'workflow', caption: :label_column_workflow),
+    QueryColumn.new(:author, sortable: %(firstname lastname), caption: :label_column_author),
+    QueryColumn.new(:description, sortable: 'description', caption: :label_column_description),
+    QueryColumn.new(:comment, sortable: 'comment', caption: :label_column_comment)
   ]
 
   def initialize(attributes=nil, *args)
@@ -254,26 +256,28 @@ class DmsfQuery < Query
       cf_columns << ",NULL AS cf_#{id}"
     end
     scope = Project.select(%{
-      projects.id AS id,
-      projects.id AS project_id,
-      CAST(NULL AS #{get_integer_type}) AS revision_id,
-      projects.name AS title,
-      projects.identifier AS filename,
-      CAST(NULL AS #{get_integer_type}) AS size,
-      projects.updated_on AS updated,
-      CAST(NULL AS #{get_integer_type}) AS major_version,
-      CAST(NULL AS #{get_integer_type}) AS minor_version,
-      CAST(NULL AS #{get_integer_type}) AS patch_version,
-      CAST(NULL AS #{get_integer_type}) AS workflow,
-      CAST(NULL AS #{get_integer_type}) AS workflow_id,
-      '' AS firstname,
-      '' AS lastname,
-      CAST(NULL AS #{get_integer_type}) AS author,
-      'project' AS type,
-      CAST(0 AS #{get_integer_type}) AS deleted,
-      '' as customized_type,
-      0 as customized_id,
-      0 AS sort#{cf_columns}}).visible
+        projects.id AS id,
+        projects.id AS project_id,
+        CAST(NULL AS #{get_integer_type}) AS revision_id,
+        projects.name AS title,
+        projects.identifier AS filename,
+        CAST(NULL AS #{get_integer_type}) AS size,
+        projects.updated_on AS updated,
+        CAST(NULL AS #{get_integer_type}) AS major_version,
+        CAST(NULL AS #{get_integer_type}) AS minor_version,
+        CAST(NULL AS #{get_integer_type}) AS patch_version,
+        CAST(NULL AS #{get_integer_type}) AS workflow,
+        CAST(NULL AS #{get_integer_type}) AS workflow_id,
+        '' AS firstname,
+        '' AS lastname,
+        CAST(NULL AS #{get_integer_type}) AS author,
+        'project' AS type,
+        CAST(0 AS #{get_integer_type}) AS deleted,
+        '' AS customized_type,
+        0 AS customized_id,
+        projects.description AS description,
+        '' AS comment,
+        0 AS sort#{cf_columns}}).visible
     if dmsf_folder_id || deleted
       scope.none
     else
@@ -307,6 +311,8 @@ class DmsfQuery < Query
         dmsf_folders.deleted AS deleted,
         'DmsfFolder' AS customized_type,
         dmsf_folders.id AS customized_id,
+        dmsf_folders.description AS description,
+        '' AS comment,
         1 AS sort#{cf_columns}}).
       joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
     return scope.none unless project
@@ -350,8 +356,10 @@ class DmsfQuery < Query
         users.id AS author,
         'folder-link' AS type,
         dmsf_links.deleted AS deleted,
-        'DmsfFolder' as customized_type,
-        dmsf_folders.id as customized_id,
+        'DmsfFolder' AS customized_type,
+        dmsf_folders.id AS customized_id,
+        dmsf_folders.description AS description,
+        '' AS comment,
         1 AS sort#{cf_columns}}).
       joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
       joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)')
@@ -395,8 +403,10 @@ class DmsfQuery < Query
         users.id AS author,
         'file' AS type,
         dmsf_files.deleted AS deleted,
-        'DmsfFileRevision' as customized_type,
-        dmsf_file_revisions.id as customized_id,
+        'DmsfFileRevision' AS customized_type,
+        dmsf_file_revisions.id AS customized_id,
+        dmsf_file_revisions.description AS description,
+        dmsf_file_revisions.comment AS comment,
         2 AS sort#{cf_columns}}).
       joins(:dmsf_file_revisions).
       joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
@@ -441,8 +451,10 @@ class DmsfQuery < Query
         users.id AS author,
         'file-link' AS type,
         dmsf_links.deleted AS deleted,
-        'DmsfFileRevision' as customized_type,
-        dmsf_file_revisions.id as customized_id,
+        'DmsfFileRevision' AS customized_type,
+        dmsf_file_revisions.id AS customized_id,
+        dmsf_file_revisions.description AS description,
+        dmsf_file_revisions.comment AS comment,
         2 AS sort#{cf_columns}}).
       joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id').
       joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
@@ -489,8 +501,10 @@ class DmsfQuery < Query
         users.id AS author,
         'url-link' AS type,
         dmsf_links.deleted AS deleted,
-        '' as customized_type,
-        0 as customized_id,
+        '' AS customized_type,
+        0 AS customized_id,
+        '' AS description,
+        '' AS comment,
         2 AS sort#{cf_columns}}).
       joins('LEFT JOIN users ON dmsf_links.user_id = users.id ')
     if deleted
