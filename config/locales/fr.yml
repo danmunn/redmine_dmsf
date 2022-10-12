@@ -404,6 +404,7 @@ fr:
   field_first_at: First
   field_last_at: Last
   field_size: Taille
+  field_locked: Verrouillé
 
   label_add_width: Add with
 

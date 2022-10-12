@@ -404,6 +404,7 @@ pl:
   field_first_at: First
   field_last_at: Last
   field_size: Rozmiar
+  field_locked: Zablokowany
 
   label_add_width: Add with
 

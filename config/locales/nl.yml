@@ -404,6 +404,7 @@ nl:
   field_first_at: First
   field_last_at: Last
   field_size: Grootte
+  field_locked: Vergrendeld
 
   label_add_width: Add with
 

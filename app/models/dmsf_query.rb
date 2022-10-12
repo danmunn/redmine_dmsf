@@ -101,6 +101,7 @@ class DmsfQuery < Query
 
   # Returns the count of all items
   def dmsf_count
+    Rails.logger.info ">>> #{base_scope.where(statement).to_sql}"
     base_scope.where(statement).count
   rescue ::ActiveRecord::StatementInvalid => e
     raise StatementInvalid.new e.message
@@ -110,6 +111,7 @@ class DmsfQuery < Query
     add_available_filter 'author', type: :list, values: lambda { author_values }
     add_available_filter 'title', type: :text
     add_available_filter 'updated', type: :date_past
+    add_available_filter 'locked', type: :list, values: [[l(:general_text_yes), '1'], [l(:general_text_no), '0']]
     add_custom_fields_filters DmsfFileRevisionCustomField.all
   end
 
@@ -240,6 +242,15 @@ class DmsfQuery < Query
     end
   end
 
+  def now
+    case ActiveRecord::Base.connection.adapter_name.downcase
+    when 'sqlserver'
+      'GETDATE()'
+    else
+      'NOW()'
+    end
+  end
+
   def get_cf_query(id, type, table)
     if Redmine::Database.mysql? || Redmine::Database.sqlite?
       aggr_func = 'GROUP_CONCAT(value)'
@@ -277,6 +288,7 @@ class DmsfQuery < Query
         0 AS customized_id,
         projects.description AS description,
         '' AS comment,
+        0 AS locked,
         0 AS sort#{cf_columns}}).visible
     if dmsf_folder_id || deleted
       scope.none
@@ -313,8 +325,11 @@ class DmsfQuery < Query
         dmsf_folders.id AS customized_id,
         dmsf_folders.description AS description,
         '' AS comment,
+        (case when dmsf_locks.id IS NULL then 0 else 1 end) AS locked,
         1 AS sort#{cf_columns}}).
-      joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
+      joins('LEFT JOIN users ON dmsf_folders.user_id = users.id').
+      joins("LEFT JOIN dmsf_locks ON dmsf_folders.id = dmsf_locks.entity_id AND dmsf_locks.entity_type = 1 AND
+        (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > #{now})")
     return scope.none unless project
     if deleted
       scope = scope.deleted
@@ -360,9 +375,12 @@ class DmsfQuery < Query
         dmsf_folders.id AS customized_id,
         dmsf_folders.description AS description,
         '' AS comment,
+        (case when dmsf_locks.id IS NULL then 0 else 1 end) AS locked,
         1 AS sort#{cf_columns}}).
       joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id').
-      joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)')
+      joins('LEFT JOIN users ON users.id = COALESCE(dmsf_folders.user_id, dmsf_links.user_id)').
+      joins("LEFT JOIN dmsf_locks ON dmsf_folders.id = dmsf_locks.entity_id AND dmsf_locks.entity_type = 1 AND
+        (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > #{now})")
     if deleted
       scope = scope.deleted
     else
@@ -407,9 +425,12 @@ class DmsfQuery < Query
         dmsf_file_revisions.id AS customized_id,
         dmsf_file_revisions.description AS description,
         dmsf_file_revisions.comment AS comment,
+        (case when dmsf_locks.id IS NULL then 0 else 1 end) AS locked,
         2 AS sort#{cf_columns}}).
       joins(:dmsf_file_revisions).
       joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
+      joins("LEFT JOIN dmsf_locks ON dmsf_files.id = dmsf_locks.entity_id AND dmsf_locks.entity_type = 0 AND
+        (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > #{now})").
       where(sub_query)
       if deleted
         scope = scope.deleted
@@ -422,7 +443,7 @@ class DmsfQuery < Query
         if statement.present? || deleted
           scope.where dmsf_files: { project_id: project.id }
         else
-          scope.where dmsf_files: { project_id: project.id, dmsf_folder_id: nil }
+          scope.where(dmsf_files: { project_id: project.id, dmsf_folder_id: nil })
         end
       end
   end
@@ -455,10 +476,13 @@ class DmsfQuery < Query
         dmsf_file_revisions.id AS customized_id,
         dmsf_file_revisions.description AS description,
         dmsf_file_revisions.comment AS comment,
+        (case when dmsf_locks.id IS NULL then 0 else 1 end) AS locked,
         2 AS sort#{cf_columns}}).
       joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id').
       joins('JOIN dmsf_file_revisions ON dmsf_file_revisions.dmsf_file_id = dmsf_files.id').
       joins('LEFT JOIN users ON dmsf_file_revisions.user_id = users.id ').
+      joins("LEFT JOIN dmsf_locks ON dmsf_files.id = dmsf_locks.entity_id AND dmsf_locks.entity_type = 0 AND
+        (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > #{now})").
       where(sub_query)
     if deleted
       scope = scope.deleted
@@ -505,6 +529,7 @@ class DmsfQuery < Query
         0 AS customized_id,
         '' AS description,
         '' AS comment,
+        0 AS locked,
         2 AS sort#{cf_columns}}).
       joins('LEFT JOIN users ON dmsf_links.user_id = users.id ')
     if deleted

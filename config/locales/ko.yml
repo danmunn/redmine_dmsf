@@ -404,6 +404,7 @@ ko:
   field_first_at: 처음
   field_last_at: 마지막
   field_size: 크기
+  field_locked: Locked
 
   label_add_width: Add with
 

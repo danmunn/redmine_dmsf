@@ -405,6 +405,7 @@ ja:
   field_first_at: First
   field_last_at: Last
   field_size: サイズ
+  field_locked: Locked
 
   label_add_width: Add with
 

@@ -404,6 +404,7 @@ es:
   field_first_at: First
   field_last_at: Last
   field_size: Tamaño
+  field_locked: Bloqueado
 
   label_add_width: Add with
 

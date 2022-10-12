@@ -404,6 +404,7 @@ zh:
   field_first_at: First
   field_last_at: Last
   field_size: 大小
+  field_locked: Locked
 
   label_add_width: Add with
 

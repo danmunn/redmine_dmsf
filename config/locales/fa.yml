@@ -385,6 +385,7 @@ fa:
   field_first_at: اولین
   field_last_at: آخرین
   field_size: حجم
+  field_locked: Locked
 
   label_add_width: اضافه با
 

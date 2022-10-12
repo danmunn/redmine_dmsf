@@ -404,6 +404,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   field_first_at: First
   field_last_at: Last
   field_size: Dydis
+  field_locked: Bloccato
 
   label_add_width: Add with
 
