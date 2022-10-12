@@ -246,6 +246,8 @@ class DmsfQuery < Query
     case ActiveRecord::Base.connection.adapter_name.downcase
     when 'sqlserver'
       'GETDATE()'
+    when 'sqlite3'
+      "datetime('now')"
     else
       'NOW()'
     end
