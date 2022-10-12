@@ -110,13 +110,15 @@ class DmsfFolder < ActiveRecord::Base
 
   def self.permissions?(folder, allow_system = true)
     # Administrator?
-    return true if (User.current.admin? || folder.nil?)
+    return true if (User.current&.admin? || folder.nil?)
+    # Permissions to the project?
+    return false unless User.current&.allowed_to?(:view_dmsf_folders, folder.project)
     # System folder?
     if folder && folder.system
       return false unless allow_system || User.current.allowed_to?(:display_system_folders, folder.project)
       return false if folder.issue && !folder.issue.visible?(User.current)
     end
-    # Permissions?
+    # Permissions to the folder?
     if folder.dmsf_folder_permissions.any?
       role_ids = User.current.roles_for_project(folder.project).map{ |r| r.id }
       role_permission_ids = folder.dmsf_folder_permissions.roles.map{ |p| p.object_id }

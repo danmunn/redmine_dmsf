@@ -88,7 +88,7 @@ class DmsfQuery < Query
   end
 
   def default_sort_criteria
-    [['title', 'ASC']]
+    [%(title ASC)]
   end
 
   def base_scope
@@ -101,8 +101,9 @@ class DmsfQuery < Query
 
   # Returns the count of all items
   def dmsf_count
-    Rails.logger.info ">>> #{base_scope.where(statement).to_sql}"
-    base_scope.where(statement).count
+    # We cannot use this due to the permissions
+    #base_scope.where(statement).count
+    dmsf_nodes.size
   rescue ::ActiveRecord::StatementInvalid => e
     raise StatementInvalid.new e.message
   end
@@ -117,7 +118,6 @@ class DmsfQuery < Query
 
   def statement
     unless @statement
-      @filter_dmsf_folder_id = false
       filters_clauses = []
       filters.each_key do |field|
         v = values_for(field).clone
@@ -191,7 +191,7 @@ class DmsfQuery < Query
       end
     end
     case ActiveRecord::Base.connection.adapter_name.downcase
-    when 'sqlserver'
+    when /sqlserver/i
       # This is just a workaround for #1352.
       # limit and offset cause an error in case of MS SQL
       items = base_scope.
@@ -204,16 +204,38 @@ class DmsfQuery < Query
         limit(options[:limit]).
         offset(options[:offset]).to_a
     end
+    fo = filters_on?
     items.delete_if do |item|
       case item.type
+      when 'project'
+        prj  = Project.find_by(id: item.id)
+        !prj&.dmsf_available?
       when 'folder'
         dmsf_folder = DmsfFolder.find_by(id: item.id)
-        if dmsf_folder && (!DmsfFolder.permissions?(dmsf_folder, false))
-          true
+        !DmsfFolder.permissions?(dmsf_folder, false)
+      when 'file'
+        if fo
+          dmsf_file = DmsfFile.find_by(id: item.id)
+          if dmsf_file.dmsf_folder
+            !DmsfFolder.permissions?(dmsf_file.dmsf_folder, false)
+          else
+            !dmsf_file.project.dmsf_available?
+          end
+        else
+          false
         end
-      when 'project'
-        p = Project.find_by(id: item.id)
-        true unless p&.dmsf_available?
+      when /link$/
+        if fo
+          dmsf_link = DmsfLink.find_by(id: item.id)
+          if dmsf_link.dmsf_folder
+            !dmsf_link.dmsf_folder.visible?
+            !DmsfFolder.permissions?(dmsf_link.dmsf_folder, false)
+          else
+            !dmsf_link.project.dmsf_available?
+          end
+        else
+          false
+        end
       end
     end
     items
@@ -225,9 +247,18 @@ class DmsfQuery < Query
 
   private
 
+  def filters_on?
+    filters.each_key do |field|
+      if values_for(field).any?{ |value| value.present? }
+        return true
+      end
+    end
+    return false
+  end
+
   def sub_query
     case ActiveRecord::Base.connection.adapter_name.downcase
-    when 'sqlserver'
+    when /sqlserver/i
       'dmsf_file_revisions.id = (SELECT TOP 1 r.id FROM dmsf_file_revisions r WHERE r.created_at = (SELECT MAX(created_at) FROM dmsf_file_revisions rr WHERE rr.dmsf_file_id = dmsf_files.id) AND r.dmsf_file_id = dmsf_files.id ORDER BY id DESC)'
     else
       'dmsf_file_revisions.id = (SELECT r.id FROM dmsf_file_revisions r WHERE r.created_at = (SELECT MAX(created_at) FROM dmsf_file_revisions rr WHERE rr.dmsf_file_id = dmsf_files.id) AND r.dmsf_file_id = dmsf_files.id ORDER BY id DESC LIMIT 1)'
@@ -296,7 +327,11 @@ class DmsfQuery < Query
       scope.none
     else
       scope = scope.non_templates if scope.respond_to?(:non_templates)
-      scope.where projects: { parent_id: project&.id }
+      if project.nil? && filters_on?
+        scope
+      else
+        scope.where projects: { parent_id: project&.id }
+      end
     end
   end
 
@@ -332,7 +367,6 @@ class DmsfQuery < Query
       joins('LEFT JOIN users ON dmsf_folders.user_id = users.id').
       joins("LEFT JOIN dmsf_locks ON dmsf_folders.id = dmsf_locks.entity_id AND dmsf_locks.entity_type = 1 AND
         (dmsf_locks.expires_at IS NULL OR dmsf_locks.expires_at > #{now})")
-    return scope.none unless project
     if deleted
       scope = scope.deleted
     else
@@ -341,16 +375,19 @@ class DmsfQuery < Query
     if dmsf_folder_id
       scope.where dmsf_folders: { dmsf_folder_id: dmsf_folder_id }
     else
-      if statement.present? || deleted
-        scope.where dmsf_folders: { project_id: project.id }
+      if project.nil? && filters_on?
+        scope
       else
-        scope.where dmsf_folders: { project_id: project.id, dmsf_folder_id: nil }
+        if statement.present? || deleted
+          scope.where dmsf_folders: { project_id: project&.id }
+        else
+          scope.where dmsf_folders: { project_id: project&.id, dmsf_folder_id: nil }
+        end
       end
     end
   end
 
   def dmsf_folder_links_scope
-    return nil unless project
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
       cf_columns << get_cf_query(id, 'DmsfFolder', 'dmsf_folders')
@@ -391,16 +428,19 @@ class DmsfQuery < Query
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfFolder', dmsf_folder_id: dmsf_folder_id}
     else
-      if statement.present? || deleted
-        scope.where dmsf_links: { target_type: 'DmsfFolder', project_id: project.id }
+      if project.nil? && filters_on?
+        scope
       else
-        scope.where dmsf_links: { target_type: 'DmsfFolder', project_id: project.id, dmsf_folder_id: nil }
+        if statement.present? || deleted
+          scope.where dmsf_links: { target_type: 'DmsfFolder', project_id: project&.id }
+        else
+          scope.where dmsf_links: { target_type: 'DmsfFolder', project_id: project&.id, dmsf_folder_id: nil }
+        end
       end
     end
   end
 
   def dmsf_files_scope
-    return nil unless project
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
       cf_columns << get_cf_query(id, 'DmsfFileRevision', 'dmsf_file_revisions')
@@ -442,16 +482,19 @@ class DmsfQuery < Query
       if dmsf_folder_id
         scope.where dmsf_files: { dmsf_folder_id: dmsf_folder_id }
       else
-        if statement.present? || deleted
-          scope.where dmsf_files: { project_id: project.id }
+        if project.nil? && filters_on?
+          scope
         else
-          scope.where(dmsf_files: { project_id: project.id, dmsf_folder_id: nil })
+          if statement.present? || deleted
+            scope.where dmsf_files: { project_id: project&.id }
+          else
+            scope.where(dmsf_files: { project_id: project&.id, dmsf_folder_id: nil })
+          end
         end
       end
   end
 
   def dmsf_file_links_scope
-    return nil unless project
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
       cf_columns << get_cf_query(id, 'DmsfFileRevision', 'dmsf_file_revisions')
@@ -494,17 +537,20 @@ class DmsfQuery < Query
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfFile', dmsf_folder_id: dmsf_folder_id }
     else
-      if statement.present? || deleted
-        scope.where dmsf_links: { target_type: 'DmsfFile', project_id: project.id }
+      if project.nil? && filters_on?
+        scope
       else
-        scope.where dmsf_links: { target_type: 'DmsfFile', project_id: project.id, dmsf_folder_id: nil }
+        if statement.present? || deleted
+          scope.where dmsf_links: { target_type: 'DmsfFile', project_id: project&.id }
+        else
+          scope.where dmsf_links: { target_type: 'DmsfFile', project_id: project&.id, dmsf_folder_id: nil }
+        end
       end
     end
 
   end
 
   def dmsf_url_links_scope
-    return nil unless project
     cf_columns = +''
     DmsfFileRevisionCustomField.visible.order(:position).pluck(:id).each do |id|
       cf_columns << ",NULL AS cf_#{id}"
@@ -542,10 +588,14 @@ class DmsfQuery < Query
     if dmsf_folder_id
       scope.where dmsf_links: { target_type: 'DmsfUrl', dmsf_folder_id: dmsf_folder_id }
     else
-      if statement.present? || deleted
-        scope.where dmsf_links: { target_type: 'DmsfUrl', project_id: project.id }
+      if project.nil? && filters_on?
+        scope
       else
-        scope.where dmsf_links: { target_type: 'DmsfUrl', project_id: project.id, dmsf_folder_id: nil }
+        if statement.present? || deleted
+          scope.where dmsf_links: { target_type: 'DmsfUrl', project_id: project&.id }
+        else
+          scope.where dmsf_links: { target_type: 'DmsfUrl', project_id: project&.id, dmsf_folder_id: nil }
+        end
       end
     end
   end

@@ -128,7 +128,7 @@ module RedmineDmsf
 
       # Go recursively through the project tree until a dmsf enabled project is found
       def dmsf_available?
-        return true if(visible? && module_enabled?(:dmsf))
+        return true if(visible? && module_enabled?(:dmsf) && User.current&.allowed_to?(:view_dmsf_folders, self))
         children.each do |child|
           return true if child.dmsf_available?
         end
