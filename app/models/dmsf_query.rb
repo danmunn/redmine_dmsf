@@ -181,7 +181,7 @@ class DmsfQuery < Query
   # New
 
   def dmsf_nodes(options={})
-    order_option = ['sort', group_by_sort_order, (options[:order] || sort_clause[0])].flatten.reject(&:blank?)
+    order_option = ['sort', group_by_sort_order, (options[:order] || sort_clause&.first)].flatten.reject(&:blank?)
     if order_option.size > 1
       DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, name|
         order_option[1].gsub! "cf_#{id}.value", "cf_#{id}"

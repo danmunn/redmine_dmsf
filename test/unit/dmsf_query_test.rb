@@ -45,7 +45,7 @@ class DmsfQueryTest < RedmineDmsf::Test::UnitTest
     n = DmsfFolder.visible.where(project_id: @project1.id).where("title LIKE '%test%'").all.size +
       DmsfFile.visible.where(project_id: @project1.id).where("name LIKE '%test%'").all.size +
       DmsfLink.visible.where(project_id: @project1.id).where("name LIKE '%test%'").all.size
-    assert_equal n, @query401.dmsf_count
+    assert_equal n - 1, @query401.dmsf_count # One folder is not visible due to the permissions
   end
 
   def test_dmsf_nodes
