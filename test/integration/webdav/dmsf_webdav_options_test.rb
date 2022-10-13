@@ -141,7 +141,7 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_options_for_subproject
-    process :options, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}", params: nil, headers: @admin
+    process :options, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}", params: nil, headers: @admin
     assert_response :success
   end
 

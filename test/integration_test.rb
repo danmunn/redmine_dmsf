@@ -37,8 +37,8 @@ module RedmineDmsf
         @anonymous = credentials('')
         @project1 = Project.find 1
         @project2 = Project.find 2
-        @project3 = Project.find 3
-        [@project1, @project2, @project3].each do |project|
+        @project5 = Project.find 5
+        [@project1, @project2, @project5].each do |project|
           project.enable_module! :dmsf
         end
         @file1 = DmsfFile.find 1

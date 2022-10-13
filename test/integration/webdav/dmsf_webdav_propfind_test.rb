@@ -169,11 +169,11 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_propfind_for_subproject
-    process :propfind, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}", params: nil,
+    process :propfind, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}", params: nil,
             headers: @admin.merge!({ HTTP_DEPTH: '1'})
     assert_response :multi_status
-    assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/</d:href>")
-    assert response.body.include?("<d:displayname>#{RedmineDmsf::Webdav::ProjectResource::create_project_name(@project3)}</d:displayname>")
+    assert response.body.include?("<d:href>http://www.example.com:80/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/</d:href>")
+    assert response.body.include?("<d:displayname>#{RedmineDmsf::Webdav::ProjectResource::create_project_name(@project5)}</d:displayname>")
   end
 
 end

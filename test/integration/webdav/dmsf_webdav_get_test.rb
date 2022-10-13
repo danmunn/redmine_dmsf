@@ -164,12 +164,12 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_get_file_in_subproject
-    get "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: nil, headers: @admin
+    get "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@file12.name}", params: nil, headers: @admin
     assert_response :success
   end
 
   def test_get_folder_in_subproject
-    get "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil, headers: @admin
+    get "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@folder10.title}", params: nil, headers: @admin
     assert_response :success
   end
 

@@ -96,14 +96,10 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_dmsf_avaliable
-    # @project1
-    # L @project3
+    # @project1 (:dmsf, manager)
+    #   L @project3 (:dmsf), @project4, @project5
+    User.current = @jsmith
     assert @project1.dmsf_available?
-    assert @project3.dmsf_available?
-    @project1.disable_module! :dmsf
-    assert @project3.dmsf_available?
-    @project3.disable_module! :dmsf
-    @project3.reload
     assert !@project3.dmsf_available?
   end
 

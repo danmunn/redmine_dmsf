@@ -70,9 +70,9 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
       #     ...
       #   </dmsf_nodes>
       # </dmsf>
-      # @project3 is as a sub-folder
-      assert_select 'dmsf > dmsf_nodes > node > id', text: @project3.id.to_s
-      assert_select 'dmsf > dmsf_nodes > node > title', text: @project3.name
+      # @project5 is as a sub-folder
+      assert_select 'dmsf > dmsf_nodes > node > id', text: @project5.id.to_s
+      assert_select 'dmsf > dmsf_nodes > node > title', text: @project5.name
       assert_select 'dmsf > dmsf_nodes > node > type', text: 'project'
     end
   end
@@ -94,8 +94,8 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #     </dmsf_nodes>
     # </dmsf>
     assert_select 'dmsf > dmsf_nodes > node', count: 1
-    assert_select 'dmsf > dmsf_nodes > node > id', text: @folder6.id.to_s
-    assert_select 'dmsf > dmsf_nodes > node > title', text: @folder6.title
+    assert_select 'dmsf > dmsf_nodes > node > id', text: @folder7.id.to_s
+    assert_select 'dmsf > dmsf_nodes > node > title', text: @folder7.title
   end
 
   def test_create_folder

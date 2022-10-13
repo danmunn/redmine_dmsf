@@ -381,16 +381,16 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     with_settings plugin_redmine_dmsf: {'dmsf_projects_as_subfolders' => '1'} do
       get :show, params: { id: @project1.id }
       assert_response :success
-      # @project3 is as a sub-folder
-      assert_select "tr##{@project3.id}pspan", count: 1
+      # @project5 is as a sub-folder
+      assert_select "tr##{@project5.id}pspan", count: 1
     end
   end
 
   def test_show_without_sub_projects
     get :show, params: { id: @project1.id }
     assert_response :success
-    # @project3 is not as a sub-folder
-    assert_select "tr##{@project3.id}pspan", count: 0
+    # @project5 is not as a sub-folder
+    assert_select "tr##{@project5.id}pspan", count: 0
   end
 
   def test_index

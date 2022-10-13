@@ -294,33 +294,33 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
 
   def test_move_file_in_subproject
     assert_difference '@file12.dmsf_file_revisions.count', +1 do
-      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: nil,
+      process :move, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@file12.name}", params: nil,
         headers: @admin.merge!({
-          destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/new_file_name" })
+          destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/new_file_name" })
       assert_response :created
     end
   end
 
   def test_move_folder_in_subproject
-    process :move, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil,
+    process :move, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@folder10.title}", params: nil,
       headers: @admin.merge!({
-        destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/new_folder_name" })
+        destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/new_folder_name" })
     assert_response :created
     @folder10.reload
     assert_equal 'new_folder_name', @folder10.title
   end
 
   def test_move_folder_in_subproject_to_the_same_name_as_subproject
-    process :move, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil,
+    process :move, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@folder10.title}", params: nil,
       headers: @admin.merge!({
-        destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@project3.identifier}" })
+        destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@project5.identifier}" })
     assert_response :created
     @folder10.reload
-    assert_equal @project3.identifier, @folder10.title
+    assert_equal @project5.identifier, @folder10.title
   end
 
   def test_move_subproject
-    process :move, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}", params: nil,
+    process :move, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}", params: nil,
       headers: @admin.merge!({
         destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/new_project_name" })
     assert_response :method_not_allowed

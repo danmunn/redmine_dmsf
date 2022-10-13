@@ -54,9 +54,8 @@ module RedmineDmsf
         end
         @project1_uri = Addressable::URI.escape(@project1_name)
         @project2 = Project.find 2
-        @project3 = Project.find 3
-        @project4 = Project.find 4
-        [@project1, @project2, @project3].each do |project|
+        @project5 = Project.find 5
+        [@project1, @project2, @project5].each do |project|
           project.enable_module! :dmsf
           project.enable_module! :issue_tracking
         end

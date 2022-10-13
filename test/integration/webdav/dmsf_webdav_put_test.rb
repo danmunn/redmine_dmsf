@@ -276,10 +276,10 @@ class DmsfWebdavPutTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_put_into_subproject
-    put "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/test-1234.txt", params: '1234',
+    put "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/test-1234.txt", params: '1234',
         headers: @admin.merge!({ content_type: :text })
     assert_response :created
-    assert DmsfFile.find_by(project_id: @project3.id, dmsf_folder: nil, name: 'test-1234.txt')
+    assert DmsfFile.find_by(project_id: @project5.id, dmsf_folder: nil, name: 'test-1234.txt')
   end
 
   def test_put_keep_title

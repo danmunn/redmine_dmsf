@@ -121,7 +121,7 @@ class DmsfWebdavLockTest < RedmineDmsf::Test::IntegrationTest
 
   def test_lock_subproject
     log_user 'admin', 'admin'
-    process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}", params: @xml,
+    process :lock, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}", params: @xml,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite' })
     assert_response :multi_status
     assert_match '<d:status>HTTP/1.1 405 Method Not Allowed</d:status>', response.body

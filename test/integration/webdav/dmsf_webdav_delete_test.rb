@@ -195,25 +195,25 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_delete_file_in_subproject
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@file12.name}", params: nil, headers: @admin
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@file12.name}", params: nil, headers: @admin
     assert_response :success
   end
 
   def test_delete_folder_in_subproject
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}/#{@folder10.title}", params: nil,
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@folder10.title}", params: nil,
            headers: @admin
     assert_response :success
   end
 
   def test_delete_folder_in_subproject_brackets
-    project3_uri = Addressable::URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project3))
+    project3_uri = Addressable::URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project5))
     project1_uri = Addressable::URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
     delete "/dmsf/webdav/#{project1_uri}/#{project3_uri}/#{@folder10.title}", params: nil, headers: @admin
     assert_response :success
   end
 
   def test_delete_subproject
-    delete "/dmsf/webdav/#{@project1.identifier}/#{@project3.identifier}", params: nil, headers: @admin
+    delete "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}", params: nil, headers: @admin
     assert_response :method_not_allowed
   end
 
