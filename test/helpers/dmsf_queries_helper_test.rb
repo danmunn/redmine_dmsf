@@ -23,8 +23,13 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class DmsfQueriesHelperTest < RedmineDmsf::Test::HelperTest
   include DmsfQueriesHelper
+
   fixtures :dmsf_folders
 
+  def setup
+    @folder1 = DmsfFolder.find 1
+    super
+  end
 
   def test_csv_value
     c_size = QueryColumn.new(:size)
@@ -32,7 +37,6 @@ class DmsfQueriesHelperTest < RedmineDmsf::Test::HelperTest
     c_workflow = QueryColumn.new(:workflow)
     assert_equal '1 KB', csv_value(c_size, nil, 1024)
     assert_equal 'John Smith', csv_value(c_author, @jsmith, @jsmith.id)
-    assert_equal 'Approved', csv_value(c_workflow, nil, DmsfWorkflow::STATE_APPROVED)
   end
 
   def test_column_value

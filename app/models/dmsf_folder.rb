@@ -21,9 +21,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class DmsfFolder < ActiveRecord::Base
-
   include RedmineDmsf::Lockable
-
+  
   belongs_to :project
   belongs_to :dmsf_folder
   belongs_to :deleted_by_user, class_name: 'User', foreign_key: 'deleted_by_user_id'

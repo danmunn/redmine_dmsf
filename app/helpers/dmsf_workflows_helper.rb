@@ -103,17 +103,21 @@ module DmsfWorkflowsHelper
   def change_status_link(workflow)
     url = { controller: 'dmsf_workflows', action: 'update', id: workflow.id }
     if workflow.locked?
-      link_to l(:button_unlock), url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_ACTIVE }), method: :put, class: 'icon icon-unlock'
+      link_to l(:button_unlock), url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_ACTIVE }), method: :put,
+              class: 'icon icon-unlock'
     else
-      link_to l(:button_lock), url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_LOCKED }), method: :put, class: 'icon icon-lock'
+      link_to l(:button_lock), url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_LOCKED }), method: :put,
+              class: 'icon icon-lock'
     end
   end
 
   def workflows_status_options_for_select(selected)
     worflows_count_by_status = DmsfWorkflow.global.group('status').count.to_hash
     options_for_select([[l(:label_all), ''],
-      ["#{l(:status_active)} (#{worflows_count_by_status[DmsfWorkflow::STATUS_ACTIVE].to_i})", DmsfWorkflow::STATUS_ACTIVE.to_s],
-      ["#{l(:status_locked)} (#{worflows_count_by_status[DmsfWorkflow::STATUS_LOCKED].to_i})", DmsfWorkflow::STATUS_LOCKED.to_s]], selected.to_s)
+      ["#{l(:status_active)} (#{worflows_count_by_status[DmsfWorkflow::STATUS_ACTIVE].to_i})",
+       DmsfWorkflow::STATUS_ACTIVE.to_s],
+      ["#{l(:status_locked)} (#{worflows_count_by_status[DmsfWorkflow::STATUS_LOCKED].to_i})",
+       DmsfWorkflow::STATUS_LOCKED.to_s]], selected.to_s)
   end
 
 end
