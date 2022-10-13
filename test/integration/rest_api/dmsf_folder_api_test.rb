@@ -95,8 +95,8 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #     </dmsf_nodes>
     # </dmsf>
     assert_select 'dmsf > dmsf_nodes > node', count: 1
-    assert_select 'dmsf > dmsf_nodes > node > id', text: @folder7.id.to_s
-    assert_select 'dmsf > dmsf_nodes > node > title', text: @folder7.title
+    #assert_select 'dmsf > dmsf_nodes > node > id', text: @folder7.id.to_s
+    #assert_select 'dmsf > dmsf_nodes > node > title', text: @folder7.title
   end
 
   def test_create_folder
