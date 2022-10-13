@@ -113,7 +113,9 @@ class DmsfQuery < Query
     add_available_filter 'title', type: :text
     add_available_filter 'updated', type: :date_past
     add_available_filter 'locked', type: :list, values: [[l(:general_text_yes), '1'], [l(:general_text_no), '0']]
-    add_custom_fields_filters DmsfFileRevisionCustomField.all
+    add_available_filter 'workflow', type: :list, values: [[l(:title_waiting_for_approval), '1'],
+      [l(:title_approved), '2'], [l(:title_assigned), '3'], [l(:title_rejected), '4'], [l(:title_obsolete), '5']]
+    add_custom_fields_filters DmsfFileRevisionCustomField.visible
   end
 
   def statement

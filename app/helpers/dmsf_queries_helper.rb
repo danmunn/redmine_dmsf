@@ -208,7 +208,8 @@ module DmsfQueriesHelper
           else
             url = log_dmsf_workflow_path(project_id: item.project_id, id: item.workflow_id, dmsf_link_id: item.id)
           end
-          link_to h(DmsfWorkflow.workflow_str(value.to_i)), url, remote: true
+          text, names = DmsfWorkflow.workflow_info(item.workflow, item.workflow_id, item.revision_id)
+          link_to h(text), url, remote: true, title: names
         else
           h(DmsfWorkflow.workflow_str(value.to_i))
         end
@@ -225,7 +226,12 @@ module DmsfQueriesHelper
     when :size
       ActiveSupport::NumberHelper.number_to_human_size value
     when :workflow
-      DmsfWorkflow.workflow_str value.to_i
+      if value
+        text, names = DmsfWorkflow.workflow_info(object.workflow, object.workflow_id, object.revision_id)
+        text
+      else
+        super column, object, value
+      end
     when :author
       if value
         user = User.find_by(id: value)

@@ -55,6 +55,27 @@ class DmsfWorkflow < ActiveRecord::Base
     end
   end
 
+  def self.workflow_info(workflow, workflow_id, revision_id)
+    text = ''
+    names = ''
+    dmsf_workflow = DmsfWorkflow.find_by(id: workflow_id)
+    if dmsf_workflow
+      assignments = dmsf_workflow.next_assignments(revision_id)
+      if assignments.any?
+        user_ids = assignments.map{ |a| a.user_id }
+        users = User.where(id: user_ids).all
+        names = users.map{ |u| u.name }.join(',')
+        workflow_step_id = assignments.first[:dmsf_workflow_step_id]
+        if workflow_step_id
+          step = DmsfWorkflowStep.find_by_id(workflow_step_id)
+          text = step.name if(step&.name.present?)
+        end
+      end
+    end
+    text = DmsfWorkflow.workflow_str(workflow.to_i) if(text.blank?)
+    [text, names]
+  end
+
   def participiants
     users = Array.new
     dmsf_workflow_steps.each do |step|
