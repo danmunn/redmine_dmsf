@@ -415,7 +415,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_new_step
-    get :new_step, params: { id: @wf1.id, format: 'js' }
+    get :new_step, params: { id: @wf1.id, format: 'js' }, xhr: true
     assert_response :success
     assert_template :new_step
   end
