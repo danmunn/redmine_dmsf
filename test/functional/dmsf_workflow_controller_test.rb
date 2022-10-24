@@ -396,14 +396,12 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_log_member_local_wf
-    @request.session[:user_id] = @jsmith.id
     get :log, params: { id: @wf1.id, project_id: @project1.id, dmsf_file_id: @file1.id, format: 'js' }, xhr: true
     assert_response :success
     assert_template :log
   end
 
   def test_log_member_global_wf
-    @request.session[:user_id] = @jsmith.id
     get :log, params: { id: @wf3.id, project_id: @project1.id, dmsf_file_id: @file1.id, format: 'js' }, xhr: true
     assert_response :success
     assert_template :log
@@ -414,6 +412,12 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     get :log, params: { id: @wf1.id, project_id: @project1.id, dmsf_file_id: @file1.id, format: 'js' }, xhr: true
     assert_response :success
     assert_template :log
+  end
+
+  def test_new_step
+    get :new_step, params: { id: @wf1.id }
+    assert_response :success
+    assert_template :new_step
   end
 
 end

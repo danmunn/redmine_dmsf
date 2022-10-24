@@ -21,7 +21,7 @@
 
 class DmsfWorkflow < ActiveRecord::Base
 
-  has_many :dmsf_workflow_steps, -> { order(step: :asc, operator: :desc) }, dependent: :destroy
+  has_many :dmsf_workflow_steps, -> { order(step: :asc) }, dependent: :destroy
   belongs_to :author, class_name: 'User'
 
   scope :sorted, lambda { order(name: :asc) }
