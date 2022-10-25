@@ -29,6 +29,7 @@ class DmsfWorkflowsController < ApplicationController
   before_action :authorize_custom
   before_action :permissions, only: [:new_action, :assignment, :start]
   before_action :approver_candidates, only: [:remove_step, :show, :reorder_steps, :add_step]
+  before_action :prevent_from_editing, only: [:destroy, :remove_step, :update, :add_step, :update_step, :reorder_steps]
 
   layout :workflows_layout
 
@@ -50,7 +51,8 @@ class DmsfWorkflowsController < ApplicationController
 
   def index
     @status = params[:status] || 1
-    @workflow_pages, @workflows = paginate DmsfWorkflow.status(@status).global.sorted, per_page: 25
+    @workflow_pages, @workflows = paginate(DmsfWorkflow.status(@status).global.sorted, per_page: 25)
+    @path = dmsf_workflows_path
   end
 
   def action
@@ -350,7 +352,6 @@ class DmsfWorkflowsController < ApplicationController
 
   def new_step
     @steps = @dmsf_workflow.dmsf_workflow_steps.select('step, MAX(name) AS name').group(:step)
-
     respond_to do |format|
       format.html
       format.js
@@ -360,7 +361,7 @@ class DmsfWorkflowsController < ApplicationController
   def add_step
     if request.post?
       if params[:step] == '0'
-        step = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq.count + 1
+        step = @dmsf_workflow.dmsf_workflow_steps.collect{ |s| s.step }.uniq.count + 1
       else
         step = params[:step].to_i
       end
@@ -409,7 +410,9 @@ class DmsfWorkflowsController < ApplicationController
 
   def reorder_steps
     if request.put?
-      unless @dmsf_workflow.reorder_steps(params[:step].to_i, params[:dmsf_workflow][:position].to_i)
+      if @assigned
+        error_dmsf_workflow_assigned
+      elsif !@dmsf_workflow.reorder_steps(params[:step].to_i, params[:dmsf_workflow][:position].to_i)
         flash[:error] = l(:notice_cannot_renumber_steps)
       end
     end
@@ -530,6 +533,19 @@ private
 
   def approver_candidates
     @approving_candidates = @project ? @project.users.to_a : User.active.to_a
+  end
+
+  def prevent_from_editing
+    # A workflow in use can be neither edited nor deleted
+    @assigned = DmsfFileRevision.where(dmsf_workflow_id: @dmsf_workflow.id).exists?
+    if(@assigned && (!request.put?))
+      flash[:error] = l(:error_dmsf_workflow_assigned)
+      if @project
+        redirect_back_or_default settings_project_path(@project, tab: 'dmsf_workflow')
+      else
+        redirect_back_or_default dmsf_workflows_path
+      end
+    end
   end
 
 end

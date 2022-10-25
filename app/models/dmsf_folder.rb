@@ -22,7 +22,7 @@
 
 class DmsfFolder < ActiveRecord::Base
   include RedmineDmsf::Lockable
-  
+
   belongs_to :project
   belongs_to :dmsf_folder
   belongs_to :deleted_by_user, class_name: 'User', foreign_key: 'deleted_by_user_id'

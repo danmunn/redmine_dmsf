@@ -20,13 +20,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% if @dmsf_workflow.project %>
-  <h2><%= link_to l(:label_dmsf_workflow_plural), settings_project_path(@project, tab: 'dmsf_workflow') %> &#187; <%=h @dmsf_workflow %></h2>
-<% else %>
-  <h2><%= link_to l(:label_dmsf_workflow_plural), dmsf_workflows_path %> &#187; <%=h @dmsf_workflow %></h2>
-<% end %>
+<% path = @dmsf_workflow.project ? settings_project_path(@project, tab: 'dmsf_workflow') : dmsf_workflows_path %>
+<h2><%= link_to l(:label_dmsf_workflow_plural), path %> &#187; <%=h @dmsf_workflow %></h2>
 
 <%= labelled_form_for @dmsf_workflow do |f| %>
+  <%= hidden_field_tag :back_url, dmsf_workflow_path(@dmsf_workflow) %>
   <%= error_messages_for 'workflow' %>
   <div class="box tabular">
     <p>
@@ -38,7 +36,8 @@
 
 <div id="tab-content-members">
   <p>
-    <%= link_to l(:dmsf_new_step_or_approver), new_step_dmsf_workflow_path(@dmsf_workflow), remote: true, class: 'icon icon-add' %>
+    <%= link_to l(:dmsf_new_step_or_approver), new_step_dmsf_workflow_path(@dmsf_workflow), remote: true,
+          class: 'icon icon-add' %>
   </p>
   <% steps = @dmsf_workflow.dmsf_workflow_steps.collect{|s| s.step}.uniq %>
   <% if steps.any? %>
@@ -56,10 +55,12 @@
           <td class="id"><%= i %></td>
           <td class="name">
             <span id="step-index-<%= index %>-name"><%= @dmsf_workflow.dmsf_workflow_steps[index].name if index %></span>
-            <div id="<%= "step-index-#{index}-name-form" %>" class="hol">
+            <div id="<%= "step-index-#{index}-name-form" %>">
               <%= form_for(@dmsf_workflow, url: update_step_dmsf_workflow_path(step: index), method: :put,
                            html: { id: "step-index-name-#{index}-form" }) do |f| %>
-                <%= f.text_field(:step_name, value: @dmsf_workflow.dmsf_workflow_steps[index].name, id: "dmsf_workflow_step_name_#{index}") %>
+                <%= hidden_field_tag :back_url, dmsf_workflow_path(@dmsf_workflow) %>
+                <%= f.text_field(:step_name, value: @dmsf_workflow.dmsf_workflow_steps[index].name,
+                      id: "dmsf_workflow_step_name_#{index}") %>
                 <p>
                   <%= submit_tag l(:button_change), class: 'small' %>
                   <%= link_to_function(
@@ -72,7 +73,8 @@
           </td>
           <td>
             <span id="step-index-<%= index %>-approvers">
-              <% stps = @dmsf_workflow.dmsf_workflow_steps.collect{ |s| (s.step == i) ? s : nil }.compact %>
+              <% stps = @dmsf_workflow.dmsf_workflow_steps.order(operator: :desc).
+                collect{ |s| (s.step == i) ? s : nil }.compact %>
               <% stps.each_with_index do |step, j| %>
                 <% if (j > 0) || (step.operator != DmsfWorkflowStep::OPERATOR_AND) %>
                   <b><%= step.soperator %></b>
@@ -80,9 +82,10 @@
                 <%= link_to_user step.user %>
               <% end %>
             </span>
-            <div id="<%= "step-index-#{index}-approvers-form" %>" class="hol">
+            <div id="<%= "step-index-#{index}-approvers-form" %>">
               <%= form_for(@dmsf_workflow, url: update_step_dmsf_workflow_path(step: index), method: :put,
                            html: { id: "step-index-operator-#{index}-form"}) do |_| %>
+                <%= hidden_field_tag :back_url, dmsf_workflow_path(@dmsf_workflow) %>
                 <div class="dmsf-parent-container">
                   <% stps.each do |step| %>
                       <div class="dmsf-child-container">
@@ -121,7 +124,8 @@
               <%= link_to_function l(:button_edit),
                      "$('#step-index-#{index}-name').hide(); $('#step-index-#{index}-approvers').hide(); $('#step-index-#{index}-name-form').show(); $('#step-index-#{index}-approvers-form').show();",
                      class: 'icon icon-edit' %>
-              <%= delete_link edit_dmsf_workflow_path @dmsf_workflow, step: i %>
+              <%= delete_link edit_dmsf_workflow_path(@dmsf_workflow, step: i,
+                    back_url: dmsf_workflow_path(@dmsf_workflow)) %>
             </td>
           <% end %>
         </tr>

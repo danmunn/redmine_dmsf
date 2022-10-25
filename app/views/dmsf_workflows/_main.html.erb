@@ -20,24 +20,37 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% @workflows = DmsfWorkflow.active.sorted.where(project_id: @project.id) if @project && @workflows.nil?  %>
-
-<% unless @project %>
-  <div class="contextual">  
-    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path, class: 'icon icon-add' %>
+<% if @project %>
+  <% @status = params[:status] || 1 %>
+  <% @workflows = DmsfWorkflow.status(@status).where(project_id: @project.id).sorted %>
+  <% @path = settings_project_path(@project, tab: 'dmsf_workflow') %>
+  <p>
+    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(project_id: @project&.id), class: 'icon icon-add' %>
+  </p>
+<% else %>
+  <div class="contextual">
+    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(project_id: @project&.id), class: 'icon icon-add' %>
   </div>
-  <h2><%= l(:label_dmsf_workflow_plural)%></h2>
-  <%= form_tag(dmsf_workflows_path, method: :get) do %>
-    <fieldset>
-      <legend><%= l(:label_filter_plural) %></legend>
-      <label for='status'><%= l(:field_status) %>:</label>
-      <%= select_tag 'status', workflows_status_options_for_select(@status), class: 'small',
-                     onchange: 'this.form.submit(); return false;' %>
-    </fieldset>    
-  <% end %>&nbsp;
-<% end %>  
+  <h2><%= l(:label_dmsf_workflow_plural) %></h2>
+<% end %>
 
-<% if @workflows.any? %>  
+<%= form_tag(@path, method: :get) do %>
+  <fieldset>
+    <legend><%= l(:label_filter_plural) %></legend>
+    <label for='status'><%= l(:field_status) %>:</label>
+    <%
+    worflows_count_by_status = DmsfWorkflow.where(project_id: @project&.id).group(:status).count.to_hash
+    options = options_for_select([[l(:label_all), ''],
+      ["#{l(:status_active)} (#{worflows_count_by_status[DmsfWorkflow::STATUS_ACTIVE].to_i})",
+      DmsfWorkflow::STATUS_ACTIVE.to_s],
+      ["#{l(:status_locked)} (#{worflows_count_by_status[DmsfWorkflow::STATUS_LOCKED].to_i})",
+      DmsfWorkflow::STATUS_LOCKED.to_s]], @status.to_s)
+    %>
+    <%= select_tag 'status', options, class: 'small', onchange: 'this.form.submit(); return false;' %>
+  </fieldset>
+<% end %>&nbsp;
+
+<% if @workflows.any? %>
   <table class="list">
     <thead><tr>
       <th><%= l(:field_name) %></th>
@@ -48,8 +61,15 @@
         <tr id="workflow-<%= workflow.id %>" class="dmsf-workflows <%= workflow.active? ? 'active' : 'locked' %>">
           <td class="name"><%= link_to(h(workflow.name), dmsf_workflow_path(workflow)) %></td>
           <td class="buttons">
-            <%= change_status_link(workflow) unless @project %>
-            <%= delete_link dmsf_workflow_path(workflow) %>
+            <% url = { controller: 'dmsf_workflows', action: 'update', id: workflow.id } %>
+            <% if workflow.locked? %>
+            <%= link_to l(:button_unlock), url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_ACTIVE }),
+                  method: :put, class: 'icon icon-unlock' %>
+            <% else %>
+              <%= link_to l(:button_lock), url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_LOCKED }),
+                    method: :put, class: 'icon icon-lock' %>
+            <% end %>
+            <%= delete_link dmsf_workflow_path(workflow, back_url: @path) %>
           </td>
         </tr>
       <% end %>
@@ -59,13 +79,6 @@
   <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
 
-<% if @project %>
-  <p>
-    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(project_id: @project.id),
-                class: 'button button-positive icon icon-add' %>
-  </p>
-<% else %>
-  <% if @workflow_pages %>
-    <span class="pagination"><%= pagination_links_full @workflow_pages %></span>
-  <% end %>
+<% unless @project %>
+  <span class="pagination"><%= pagination_links_full @workflow_pages %></span>
 <% end %>

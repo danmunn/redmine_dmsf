@@ -461,6 +461,7 @@ hu:
 
   label_dmsf_global_menu_disabled: Global DMS menu disabled
   note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.
+  error_dmsf_workflow_assigned: Approval workflow in use can be neither edited nor deleted.
 
   easy_pages:
     modules:

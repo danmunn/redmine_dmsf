@@ -462,6 +462,7 @@ cs:
 
   label_dmsf_global_menu_disabled: Globální DMS menu zakázáno
   note_dmsf_global_menu_disabled: Pokud je zašrtnuto, tak položka DMS není v hlavním menu.
+  error_dmsf_workflow_assigned: Použitý schvalovací proces nemůže být ani upraven ani smazán.
 
   easy_pages:
     modules:

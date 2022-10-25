@@ -54,9 +54,22 @@
 }
 
 /* Approval workflow */
-#dmsf_users_for_delegate { height: 200px; overflow:auto; }
-#dmsf_users_for_delegate label { display: block; }
-.dmsf-workflows.locked a { color: #aaa; }
+#dmsf_users_for_delegate {
+    height: 200px;
+    overflow:auto;
+}
+
+#dmsf_users_for_delegate label {
+    display: block;
+}
+
+.dmsf-workflows.locked a {
+    color: #aaa;
+}
+
+div[id^="step-index-"] {
+    display: none;
+}
 
 /* DMSF revision box */
 #new_revision_form_content {
