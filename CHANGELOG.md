@@ -1,8 +1,20 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.7 *????-??-??*
+3.0.7 *2022-11-01*
 ------------------
+
+    AlphaNode's plugins compatibility
+    Approval workflow enhancement
+    Global search
+    New filters
+
+* Bug: #1407 - Error on "New step or New Approver"
+* New: #1247 - Global DMS view - Search by title does not work
+* New: #1192 - Suggest to show Approval option in list view instead hiding it in second layer menu being folded
+* New: #1124 - New UI: Add additional filter "Locked documents"
+* New: #1118 - How can I add 'Comment' column in the file list view?
+* Bug: #880  - Removing steps of approval_workflows causes data corruption
 
 3.0.6 *2022-09-20*
 ------------------
