@@ -121,10 +121,12 @@ module RedmineDmsf
                         Rails.logger.error dmsf_link.errors.full_messages.to_sentence
                       end
                     end
-                    issue.descendants.each do |i|
-                      old_system_folder = i.system_folder(false, old_project_id)
+                  end
+                 
+                  issue.descendants.each do |i|
+                    old_system_folder = i.system_folder(false, old_project_id)
 
-                      if old_system_folder
+                    if old_system_folder
                       new_main_system_folder = i.main_system_folder(true)
 
                       if new_main_system_folder
@@ -153,7 +155,6 @@ module RedmineDmsf
                           end
                       end
                     end
-                  end
                   end
                 end
               end
