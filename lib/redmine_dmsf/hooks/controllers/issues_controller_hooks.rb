@@ -130,21 +130,21 @@ module RedmineDmsf
                       new_main_system_folder = i.main_system_folder(true)
 
                       if new_main_system_folder
-                          old_system_folder.dmsf_folder_id = new_main_system_folder.id
-                          old_system_folder.project_id = project_id
+                        old_system_folder.dmsf_folder_id = new_main_system_folder.id
+                        old_system_folder.project_id = project_id
 
-                          unless old_system_folder.save
+                        unless old_system_folder.save
                           controller.flash[:error] = old_system_folder.errors.full_messages.to_sentence
                           Rails.logger.error old_system_folder.errors.full_messages.to_sentence
-                          end
+                        end
 
-                          i.dmsf_files.each do |dmsf_file|
+                        i.dmsf_files.each do |dmsf_file|
                           dmsf_file.project_id = project_id
                           unless dmsf_file.save
-                              controller.flash[:error] = dmsf_file.errors.full_messages.to_sentence
-                              Rails.logger.error dmsf_file.errors.full_messages.to_sentence
+                            controller.flash[:error] = dmsf_file.errors.full_messages.to_sentence
+                            Rails.logger.error dmsf_file.errors.full_messages.to_sentence
                           end
-                          end
+                        end
                       end
 
                       i.dmsf_links.each do | dmsf_link|
