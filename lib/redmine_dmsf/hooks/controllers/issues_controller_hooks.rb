@@ -122,38 +122,38 @@ module RedmineDmsf
                       end
                     end
                   end
-                 
-                  issue.descendants.each do |i|
-                    old_system_folder = i.system_folder(false, old_project_id)
+                end
 
-                    if old_system_folder
-                      new_main_system_folder = i.main_system_folder(true)
+                issue.descendants.each do |i|
+                  old_system_folder = i.system_folder(false, old_project_id)
 
-                      if new_main_system_folder
-                        old_system_folder.dmsf_folder_id = new_main_system_folder.id
-                        old_system_folder.project_id = project_id
+                  if old_system_folder
+                    new_main_system_folder = i.main_system_folder(true)
 
-                        unless old_system_folder.save
-                          controller.flash[:error] = old_system_folder.errors.full_messages.to_sentence
-                          Rails.logger.error old_system_folder.errors.full_messages.to_sentence
-                        end
+                    if new_main_system_folder
+                      old_system_folder.dmsf_folder_id = new_main_system_folder.id
+                      old_system_folder.project_id = project_id
 
-                        i.dmsf_files.each do |dmsf_file|
-                          dmsf_file.project_id = project_id
-                          unless dmsf_file.save
-                            controller.flash[:error] = dmsf_file.errors.full_messages.to_sentence
-                            Rails.logger.error dmsf_file.errors.full_messages.to_sentence
-                          end
-                        end
+                      unless old_system_folder.save
+                        controller.flash[:error] = old_system_folder.errors.full_messages.to_sentence
+                        Rails.logger.error old_system_folder.errors.full_messages.to_sentence
                       end
 
-                      i.dmsf_links.each do | dmsf_link|
-                          dmsf_link.project_id = project_id
-                          unless dmsf_link.save
-                            controller.flash[:error] = dmsf_link.errors.full_messages.to_sentence
-                            Rails.logger.error dmsf_link.errors.full_messages.to_sentence
-                          end
+                      i.dmsf_files.each do |dmsf_file|
+                        dmsf_file.project_id = project_id
+                        unless dmsf_file.save
+                          controller.flash[:error] = dmsf_file.errors.full_messages.to_sentence
+                          Rails.logger.error dmsf_file.errors.full_messages.to_sentence
+                        end
                       end
+                    end
+
+                    i.dmsf_links.each do | dmsf_link|
+                        dmsf_link.project_id = project_id
+                        unless dmsf_link.save
+                          controller.flash[:error] = dmsf_link.errors.full_messages.to_sentence
+                          Rails.logger.error dmsf_link.errors.full_messages.to_sentence
+                        end
                     end
                   end
                 end
