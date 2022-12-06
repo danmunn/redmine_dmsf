@@ -27,7 +27,7 @@ Redmine::Plugin.register :redmine_dmsf do
   author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
-  version '3.0.7'
+  version '3.0.8 devel'
   
   requires_redmine version_or_higher: '5.0.0'
 
@@ -57,7 +57,7 @@ Redmine::Plugin.register :redmine_dmsf do
               'only_approval_zero_minor_version' => '0',
               'dmsf_max_notification_receivers_info' => 10,
               'office_bin' => 'libreoffice',
-              'dmsf_global_menu_disabled' => 0,
+              'dmsf_global_menu_disabled' => nil,
               'dmsf_default_query' => nil
             }
 end
