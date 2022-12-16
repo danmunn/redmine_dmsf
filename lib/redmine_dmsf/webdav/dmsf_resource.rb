@@ -194,7 +194,6 @@ module RedmineDmsf
       # <instance> should be of entity to be deleted, we simply follow the Dmsf entity method
       # for deletion and return of appropriate status based on outcome.
       def delete
-        Rails.logger.info ">>> DELETE #{@path}"
         if file
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_delete, project)
           raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
@@ -217,7 +216,7 @@ module RedmineDmsf
           end
         elsif folder
           raise Locked if folder.locked?
-          # To fullfil Litmus requirements to not delete folder if fragments are in the URL
+          # To fulfill Litmus requirements to not delete folder if fragments are in the URL
           uri = URI(uri_encode(request.get_header('REQUEST_URI')))
           raise BadRequest if uri.fragment.present?
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
@@ -231,13 +230,6 @@ module RedmineDmsf
       # Process incoming MOVE request
       # Behavioural differences between collection and single entity
       def move(dest_path, overwrite)
-        # Don't allow editors like vi to create a temporary file during saving as they deletes it later including the
-        # document's history and saves a completely new document
-        Rails.logger.info ">>> MOVE #{@path} to #{dest_path}"
-        # if("#{@path}~" == dest_path)
-        #   Rails.logger.info ">>> MethodNotAllowed"
-        #    return MethodNotAllowed
-        # end
         dest = ResourceProxy.new(dest_path, @request, @response, @options.merge(user: @user))
         return PreconditionFailed if !dest.resource.is_a?(DmsfResource) || dest.resource.project.nil?
         parent = dest.resource.parent
@@ -436,7 +428,6 @@ module RedmineDmsf
 
       # Lock
       def lock(args)
-        Rails.logger.info ">>> LOCK #{@path}"
         unless parent&.exist?
           e = Dav4rack::LockFailure.new
           e.add_failure @path, Conflict
@@ -509,7 +500,6 @@ module RedmineDmsf
       # Token based unlock (authenticated) will ensure that a correct token is sent, further ensuring
       # ownership of token before permitting unlock
       def unlock(token)
-        Rails.logger.info ">>> UNLOCK #{@path}"
         unless exist?
           return super(token)
         end
@@ -547,7 +537,6 @@ module RedmineDmsf
 
       # HTTP PUT request.
       def put(request, response)
-        Rails.logger.info ">>> PUT #{@path}"
         raise BadRequest if collection?
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
         raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
