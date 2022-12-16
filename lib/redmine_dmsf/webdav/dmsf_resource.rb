@@ -98,8 +98,12 @@ module RedmineDmsf
       # Return the content type of file
       # will return inode/directory for any collections, and appropriate for File entities
       def content_type
-        if file&.last_revision
-          file.last_revision.detect_content_type
+        if file
+          if file.last_revision
+            file.last_revision.detect_content_type
+          else
+            'application/octet-stream'
+          end
         else
           'inode/directory'
         end
@@ -118,8 +122,12 @@ module RedmineDmsf
       def last_modified
         if folder
           folder.updated_at
-        elsif file&.last_revision
-          file.last_revision.updated_at
+        elsif file
+          if file.last_revision
+            file.last_revision.updated_at
+          else
+            file.updated_at
+          end
         else
           raise NotFound
         end
@@ -186,6 +194,7 @@ module RedmineDmsf
       # <instance> should be of entity to be deleted, we simply follow the Dmsf entity method
       # for deletion and return of appropriate status based on outcome.
       def delete
+        Rails.logger.info ">>> DELETE #{@path}"
         if file
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_delete, project)
           raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
@@ -194,7 +203,7 @@ module RedmineDmsf
           if pattern.present? && basename.match(pattern)
             # Files that are not versioned should be destroyed
             destroy = true
-          elsif file.last_revision.size == 0
+          elsif (!file.last_revision) || file.last_revision.size == 0
             # Zero-sized files should be destroyed
             destroy = true
           else
@@ -222,6 +231,13 @@ module RedmineDmsf
       # Process incoming MOVE request
       # Behavioural differences between collection and single entity
       def move(dest_path, overwrite)
+        # Don't allow editors like vi to create a temporary file during saving as they deletes it later including the
+        # document's history and saves a completely new document
+        Rails.logger.info ">>> MOVE #{@path} to #{dest_path}"
+        # if("#{@path}~" == dest_path)
+        #   Rails.logger.info ">>> MethodNotAllowed"
+        #    return MethodNotAllowed
+        # end
         dest = ResourceProxy.new(dest_path, @request, @response, @options.merge(user: @user))
         return PreconditionFailed if !dest.resource.is_a?(DmsfResource) || dest.resource.project.nil?
         parent = dest.resource.parent
@@ -420,13 +436,27 @@ module RedmineDmsf
 
       # Lock
       def lock(args)
+        Rails.logger.info ">>> LOCK #{@path}"
         unless parent&.exist?
           e = Dav4rack::LockFailure.new
           e.add_failure @path, Conflict
           raise e
         end
         unless exist?
-          return super(args)
+          # A successful lock request to an unmapped URL MUST result in the creation of a locked (non-collection)
+          # resource with empty content.
+          f = create_empty_file
+          if f
+            scope = "scope_#{(args[:scope] || 'exclusive')}".to_sym
+            type = "type_#{(args[:type] || 'write')}".to_sym
+            l = f.lock!(scope, type, Time.current + 1.weeks, args[:owner])
+            @response['Lock-Token'] = l.uuid
+            return [1.week.to_i, l.uuid]
+          else
+            e = Dav4rack::LockFailure.new
+            e.add_failure @path, NotFound
+            raise e
+          end
         end
         lock_check args
         entity = file || folder
@@ -479,6 +509,7 @@ module RedmineDmsf
       # Token based unlock (authenticated) will ensure that a correct token is sent, further ensuring
       # ownership of token before permitting unlock
       def unlock(token)
+        Rails.logger.info ">>> UNLOCK #{@path}"
         unless exist?
           return super(token)
         end
@@ -516,6 +547,7 @@ module RedmineDmsf
 
       # HTTP PUT request.
       def put(request, response)
+        Rails.logger.info ">>> PUT #{@path}"
         raise BadRequest if collection?
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
         raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
@@ -734,6 +766,33 @@ module RedmineDmsf
         else
           return "Project-#{project.id}"
         end
+      end
+
+      private
+
+      def create_empty_file
+        f = DmsfFile.new
+        f.project_id = project.id
+        f.name = basename
+        f.dmsf_folder = parent.folder
+        if f.save(validate: false)  # Skip validation due to invalid characters in the filename
+          r = DmsfFileRevision.new
+          r.minor_version = 1
+          r.major_version = 0
+          r.title = DmsfFileRevision.filename_to_title(basename)
+          r.dmsf_file = f
+          r.user = User.current
+          r.name = basename
+          r.mime_type = Redmine::MimeType.of(r.name)
+          r.size = 0
+          r.digest = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+          r.disk_filename = r.new_storage_filename
+          if r.save(validate: false)  # Skip validation due to invalid characters in the filename
+            FileUtils.touch r.disk_file(false)
+            return f
+          end
+        end
+        nil
       end
       
     end
