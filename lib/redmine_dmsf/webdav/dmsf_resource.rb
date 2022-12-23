@@ -776,6 +776,11 @@ module RedmineDmsf
           r.size = 0
           r.digest = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
           r.disk_filename = r.new_storage_filename
+          r.available_custom_fields.each do |cf|  # Add default value for CFs not existing
+            if cf.default_value
+              r.custom_field_values << CustomValue.new({ custom_field: cf, value: cf.default_value})
+            end
+          end
           if r.save(validate: false)  # Skip validation due to invalid characters in the filename
             FileUtils.touch r.disk_file(false)
             return f
