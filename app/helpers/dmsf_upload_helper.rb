@@ -58,7 +58,7 @@ module DmsfUploadHelper
         new_revision.description = commited_file[:description]
         new_revision.comment = commited_file[:comment]
         new_revision.major_version = commited_file[:version_major].present? ? DmsfUploadHelper::db_version(commited_file[:version_major]) : 1
-        new_revision.minor_version = commited_file[:version_minor].present? ? DmsfUploadHelper::db_version(commited_file[:version_minor]) : 0
+        new_revision.minor_version = commited_file[:version_minor].present? ? DmsfUploadHelper::db_version(commited_file[:version_minor]) : nil
         new_revision.patch_version = commited_file[:version_patch].present? ? DmsfUploadHelper::db_version(commited_file[:version_patch]) : nil
         new_revision.mime_type = commited_file[:mime_type]
         new_revision.size = commited_file[:size]
