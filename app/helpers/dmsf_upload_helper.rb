@@ -165,7 +165,7 @@ module DmsfUploadHelper
 
   # 1 -> 2, -1 -> -2, A -> B
   def self.increase_version(version)
-    version ||= 0
+    return nil unless version
     return 1 if ((version == ' ') || ((-version) == ' '.ord))
     if Integer(version)
       if version >= 0

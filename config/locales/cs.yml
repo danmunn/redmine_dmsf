@@ -464,6 +464,8 @@ cs:
   note_dmsf_global_menu_disabled: Pokud je zašrtnuto, tak položka DMS není v hlavním menu.
   error_dmsf_workflow_assigned: Použitý schvalovací proces nemůže být ani upraven ani smazán.
 
+  label_empty_minor_version_by_default: Prázdná vedlejší verze jako výchozí
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

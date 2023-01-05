@@ -460,6 +460,8 @@ de:
   note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.
   error_dmsf_workflow_assigned: Der verwendete Genehmigungs-Workflow kann weder bearbeitet noch gelöscht werden.
 
+  label_empty_minor_version_by_default: Leere Unterversion als Standard
+
   easy_pages:
     modules:
       dmsf_locked_documents: Von mir gesperrte Dokumente

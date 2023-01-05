@@ -274,7 +274,8 @@ class DmsfFileRevision < ActiveRecord::Base
     # Patch version
     self.patch_version = case version_to_increase
       when PATCH_VERSION
-       DmsfUploadHelper.increase_version patch_version
+        patch_version = 0 unless patch_version
+        DmsfUploadHelper.increase_version patch_version
       else
         nil
     end

@@ -58,7 +58,8 @@ Redmine::Plugin.register :redmine_dmsf do
               'dmsf_max_notification_receivers_info' => 10,
               'office_bin' => 'libreoffice',
               'dmsf_global_menu_disabled' => nil,
-              'dmsf_default_query' => nil
+              'dmsf_default_query' => nil,
+              'empty_minor_version_by_default' => nil
             }
 end
 

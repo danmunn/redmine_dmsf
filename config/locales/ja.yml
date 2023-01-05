@@ -465,6 +465,8 @@ ja:
   note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.
   error_dmsf_workflow_assigned: Approval workflow in use can be neither edited nor deleted.
 
+  label_empty_minor_version_by_default: Empty minor version by default
+
   easy_pages:
     modules:
       dmsf_locked_documents: 自分がロック中の文書

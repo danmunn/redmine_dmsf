@@ -36,8 +36,13 @@
         DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(revision_or_upload.patch_version))),
         class: 'dmsf-select-version' %>
 <% else %>
-  <%= select_tag select_tag_name_minor, options_for_select(DmsfUploadHelper::minor_version_select_options,
-        DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(revision_or_upload.minor_version))),
+  <% if revision_or_upload.minor_version %>
+    <% minor_version = DmsfUploadHelper::gui_version(DmsfUploadHelper.increase_version(revision_or_upload.minor_version)) %>
+  <% else %>
+    <% minor_version = '' %>
+  <% end %>
+  <%= select_tag select_tag_name_minor,
+        options_for_select(DmsfUploadHelper::minor_version_select_options, minor_version),
         class: 'dmsf-select-version' %>
   <bold>.</bold>
   <%= select_tag select_tag_name_patch, options_for_select(DmsfUploadHelper::patch_version_select_options,

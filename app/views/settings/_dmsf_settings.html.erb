@@ -160,6 +160,14 @@
   </em>
 </p>
 
+<p>
+  <%= content_tag :label, l(:label_empty_minor_version_by_default) %>
+  <%= check_box_tag 'settings[empty_minor_version_by_default]', false, @settings['empty_minor_version_by_default'] %>
+  <em class="info">
+    <%= l(:label_default) %>: <%= l(:general_text_No) %>
+  </em>
+</p>
+
 <hr/>
 <em class="info">
   <%= l(:label_dmsf_columns) %>

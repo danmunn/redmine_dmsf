@@ -82,8 +82,13 @@ class DmsfUpload
     if file.nil? || file.last_revision.nil?
       @title = DmsfFileRevision.filename_to_title(@name)
       @description = uploaded[:comment]
-      @major_version = 0
-      @minor_version = 0
+      if Setting.plugin_redmine_dmsf['empty_minor_version_by_default']
+        @major_version = 1
+        @minor_version = nil
+      else
+        @major_version = 0
+        @minor_version = 0
+      end
       @patch_version = nil
       @workflow = nil
       file = DmsfFile.new
