@@ -30,4 +30,5 @@
     <%= pref_fields.select :default_dmsf_query,
                    options_for_select(options, selected: @user.pref.default_dmsf_query) %>
   </p>
+  <p><%= pref_fields.check_box :receive_download_notification %></p>
 <% end %>

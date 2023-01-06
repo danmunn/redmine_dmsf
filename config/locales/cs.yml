@@ -465,6 +465,10 @@ cs:
   error_dmsf_workflow_assigned: Použitý schvalovací proces nemůže být ani upraven ani smazán.
 
   label_empty_minor_version_by_default: Prázdná vedlejší verze jako výchozí
+  text_email_doc_downloaded_subject: Stažení dokumentů
+  text_email_doc_downloaded: právě stáhl dokumety projektu
+  field_default_dmsf_query: Výchozí dotaz DMS
+  field_receive_download_notification: Dostávat notifikace o stažení
 
   easy_pages:
     modules:

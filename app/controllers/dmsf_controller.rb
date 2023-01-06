@@ -505,11 +505,19 @@ class DmsfController < ApplicationController
     end
 
     zip.files.each do |f|
+      # Action
       audit = DmsfFileRevisionAccess.new
       audit.user = User.current
       audit.dmsf_file_revision = f.last_revision
       audit.action = DmsfFileRevisionAccess::EmailAction
       audit.save!
+    end
+
+    # Notification
+    begin
+      DmsfMailer.deliver_files_downloaded(@project, zip.files, request.remote_ip)
+    rescue => e
+      Rails.logger.error "Could not send email notifications: #{e.message}"
     end
 
     @email_params = {
@@ -533,11 +541,18 @@ class DmsfController < ApplicationController
     zip = Zip.new
     zip_entries(zip, selected_folders, selected_files)
     zip.files.each do |f|
+      # Action
       audit = DmsfFileRevisionAccess.new
       audit.user = User.current
       audit.dmsf_file_revision = f.last_revision
       audit.action = DmsfFileRevisionAccess::DownloadAction
       audit.save!
+    end
+    # Notifications
+    begin
+      DmsfMailer.deliver_files_downloaded(@project, zip.files, request.remote_ip)
+    rescue => e
+      Rails.logger.error "Could not send email notifications: #{e.message}"
     end
     send_file(zip.finish,
       filename: filename_for_content_disposition("#{@project.name}-#{DateTime.current.strftime('%y%m%d%H%M%S')}.zip"),

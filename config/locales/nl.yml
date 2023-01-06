@@ -465,6 +465,10 @@ nl:
   error_dmsf_workflow_assigned: Approval workflow in use can be neither edited nor deleted.
 
   label_empty_minor_version_by_default: Empty minor version by default
+  text_email_doc_downloaded_subject: Documents downloaded
+  text_email_doc_downloaded: has just downloaded documents of
+  field_default_dmsf_query: Default DMS query
+  field_receive_download_notification: Receive download notifications
 
   easy_pages:
     modules:

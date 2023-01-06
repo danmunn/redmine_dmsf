@@ -461,6 +461,10 @@ de:
   error_dmsf_workflow_assigned: Der verwendete Genehmigungs-Workflow kann weder bearbeitet noch gelöscht werden.
 
   label_empty_minor_version_by_default: Leere Unterversion als Standard
+  text_email_doc_downloaded_subject: Dokumenten wurden herunterladen
+  text_email_doc_downloaded: hat folgende Dokumente herunterladen
+  field_default_dmsf_query: Standardabfrage DMS
+  field_receive_download_notification: Bekomen Benachrichtigen über Herunterladen
 
   easy_pages:
     modules:

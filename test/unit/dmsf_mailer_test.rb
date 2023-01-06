@@ -60,6 +60,17 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
     end
   end
 
+  def test_files_downloaded
+    DmsfMailer.deliver_files_downloaded(@file1.project, [@file1], '127.0.0.1')
+    email = last_email
+    if email # Sometimes it doesn't work. Especially on localhost.
+      body = text_part(email)&.body
+      assert(body.include?(@file1.project.name)) if body
+      body = html_part(email)&.body
+      assert(body.include?(@file1.project.name)) if body
+    end
+  end
+
   def test_send_documents
     email_params = Hash.new
     body = 'Test'

@@ -46,6 +46,16 @@ module RedmineDmsf
         self[:default_dmsf_query] = value
       end
 
+      UserPreference::safe_attributes 'receive_download_notification'
+
+      def receive_download_notification
+        self[:receive_download_notification] || '0'
+      end
+
+      def receive_download_notification=(value)
+        self[:receive_download_notification] = value
+      end
+
     end
   end
 end

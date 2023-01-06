@@ -33,4 +33,8 @@ class UserPreferencePatchTest < RedmineDmsf::Test::UnitTest
     assert @jsmith.pref.respond_to?(:default_dmsf_query)
   end
 
+  def test_user_preference_has_receive_download_notification
+    assert @jsmith.pref.respond_to?(:receive_download_notification)
+  end
+
 end

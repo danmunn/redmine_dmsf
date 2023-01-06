@@ -708,11 +708,18 @@ module RedmineDmsf
         # If there is no range (start of ranged download, or direct download) then we log the
         # file access, so we can properly keep logged information
         if @request.env['HTTP_RANGE'].nil?
+          # Action
           access = DmsfFileRevisionAccess.new
           access.user = User.current
           access.dmsf_file_revision = file.last_revision
           access.action = DmsfFileRevisionAccess::DownloadAction
           access.save!
+          # Notification
+          begin
+            DmsfMailer.deliver_files_downloaded(@project, [file], @request.env['REMOTE_IP'])
+          rescue => e
+            Rails.logger.error "Could not send email notifications: #{e.message}"
+          end
         end
         File.new disk_file
       end

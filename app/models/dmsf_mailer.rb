@@ -26,46 +26,77 @@ class DmsfMailer < Mailer
   layout 'mailer'
 
   def self.deliver_files_updated(project, files)
-    users = get_notify_users(project, files.first)
-    users.each do |user|
+    hash = {}
+    files.each do |file|
+      users = get_notify_users(project, file)
+      users.each do |user|
+        (hash[user] ||=[]) << file
+      end
+    end
+    hash.each do |user, files|
       files_updated(user, project, files).deliver_later
     end
-    users
   end
 
   def files_updated(user, project, files)
-    if user && project && files.size > 0
-      redmine_headers 'Project' => project.identifier if project
-      @files = files
-      @project = project
-      @author = files.first.last_revision.user if files.first.last_revision
-      @author = User.anonymous unless @author
-      message_id project
-      set_language_if_valid user.language
-      mail to: user.mail, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
-    end
+    redmine_headers 'Project' => project.identifier if project
+    @files = files
+    @project = project
+    @author = files.first.last_revision.user if files.first.last_revision
+    @author = User.anonymous unless @author
+    message_id project
+    set_language_if_valid user.language
+    mail to: user.mail, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
   end
 
   def self.deliver_files_deleted(project, files)
-    users = get_notify_users(project, files.first)
-    users.each do |user|
+    hash = {}
+    files.each do |file|
+      users = get_notify_users(project, file)
+      users.each do |user|
+        (hash[user] ||=[]) << file
+      end
+    end
+    hash.each do |user, files|
       files_deleted(user, project, files).deliver_later
     end
-    users
   end
 
   def files_deleted(user, project, files)
-    if user && files.any?
-      redmine_headers 'Project' => project.identifier if project
-      @files = files
-      @project = project
-      @author = files.first.deleted_by_user
-      @author = User.anonymous unless @author
-      message_id project
-      set_language_if_valid user.language
-      mail to: user.mail,
-           subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_deleted_subject)}"
+    redmine_headers 'Project' => project.identifier if project
+    @files = files
+    @project = project
+    @author = files.first.deleted_by_user
+    @author = User.anonymous unless @author
+    message_id project
+    set_language_if_valid user.language
+    mail to: user.mail, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_deleted_subject)}"
+  end
+
+  def self.deliver_files_downloaded(project, files, remote_ip)
+    hash = {}
+    files.each do |file|
+      users = get_notify_users(project, file)
+      users.each do |user|
+        if user.pref.receive_download_notification == '1'
+          (hash[user] ||=[]) << file
+        end
+      end
     end
+    hash.each do |user, files|
+      files_downloaded(user, project, files, remote_ip).deliver_later
+    end
+  end
+
+  def files_downloaded(user, project, files, remote_ip)
+    redmine_headers 'Project' => project.identifier if project
+    @files = files
+    @project = project
+    @author = User.current
+    @remote_ip = remote_ip
+    message_id project
+    set_language_if_valid user.language
+    mail to: user.mail, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_downloaded_subject)}"
   end
 
   def self.deliver_send_documents(project, email_params, author)

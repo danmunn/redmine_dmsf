@@ -58,11 +58,18 @@ class DmsfFilesController < ApplicationController
       end
       check_project @revision.dmsf_file
       raise ActionController::MissingFile if @file.deleted?
+      # Action
       access = DmsfFileRevisionAccess.new
       access.user = User.current
       access.dmsf_file_revision = @revision
       access.action = DmsfFileRevisionAccess::DownloadAction
       access.save!
+      # Notifications
+      begin
+        DmsfMailer.deliver_files_downloaded(@project, [@file], request.remote_ip)
+      rescue => e
+        Rails.logger.error "Could not send email notifications: #{e.message}"
+      end
       # Allow a preview of the file by an external plugin
       results = call_hook(:dmsf_files_controller_before_view, { file: @revision.disk_file })
       return if results.first == true
