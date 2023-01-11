@@ -391,3 +391,8 @@ div.dmsf-scroll {
     width: 90%;
     max-width: 90%;
 }
+
+/* Wiki toolbar */
+.jstb_dmsf {
+    background-image: url('../images/jstoolbar/bt_dmsf.png');
+}

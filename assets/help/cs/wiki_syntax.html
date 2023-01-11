@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Wiki formatting</title>
+<link rel="stylesheet" type="text/css" href="../../../../help/wiki_syntax.css">
+</head>
+<body>
+
+<h1>DMS Syntax Reference</h1>
+
+<p>DMS přidává následující makra:</p>
+
+<dl>
+  <dt><b>Dokumenty</b></dt>
+  <dd>
+    <p><code>{{dmsf(17)}}</code> - odkaz na dokument #17</p>
+    <p><code>{{dmsf(17, File)}}</code> - odkaz na dokument #17 s textem "File"</p>
+    <p><code>{{dmsf(17, File, 10)}}</code> - odkaz na dokument #17 r10 s textem "File"</p>
+    <p><code>{{dmsfd(17)}}</code> - odkaz na detaily dokument #17</p>
+    <p><code>{{dmsfdesc(17)}}</code> - odkaz na popis dokumentu #17</p>
+  </dd>
+  <dt><b>Složky</b></dt>
+  <dd>
+    <p><code>{{dmsff(5)}}</code> - odkaz na složku #5</p>
+    <p><code>{{dmsff(5, Folder)}}</code> - odkaz na složku #5 s textem "Folder"</p>
+  </dd>
+  <dt><b>Obrázky</b></dt>
+  <dd>
+    <p><code>{{dmsf_image(8)}}</code> - vložený obrázek dokumentu #8 (dokument musí být obrázek typu JPEG, PNG,...)</p>
+    <p><code>{{dmsf_image(8, size=300)}}</code></p>
+    <p><code>{{dmsf_image(8, size=640x480)}}</code></p>
+    <p><code>{{dmsf_image(8, size=50%)}}</code></p>
+    <p><code>{{dmsf_image(8, height=300)}}</code></p>
+    <p><code>{{dmsf_image(8, width=300)}}</code> - obrázek dokumentu #8 s nastavenou velikostí</p>
+    <p><code>{{dmsftn(8)}}</code> - náhled obrázku dokumentu #8</p>
+    <p><code>{{dmsftn(8, size=300)}}</code> - náhled obrázku dokumentu #8 s nastavenou velikostí</p>
+  </dd>
+  <dt><b>Schvalovací procesy</b></dt>
+  <dd>
+    <p><code>{{dmsfw(8)}}</code> - schvalovací proces dokumentu #8</p>
+  </dd>
+</dl>
+
+<em>ID dokumentu nebo složky naleznete v jejích detailech.</em>
+
+</body>
+</html>

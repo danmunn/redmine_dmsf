@@ -31,6 +31,7 @@ require File.dirname(__FILE__) + '/../app/validators/dmsf_url_validator'
 require File.dirname(__FILE__) + '/../app/validators/dmsf_folder_parent_validator'
 
 # Plugin's patches
+require File.dirname(__FILE__) + '/redmine_dmsf/patches/formatting_helper_patch'
 require File.dirname(__FILE__) + '/redmine_dmsf/patches/projects_helper_patch'
 require File.dirname(__FILE__) + '/redmine_dmsf/patches/project_patch'
 require File.dirname(__FILE__) + '/redmine_dmsf/patches/user_preference_patch'

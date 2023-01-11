@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Wiki formatting</title>
+<link rel="stylesheet" type="text/css" href="../../../../help/wiki_syntax.css">
+</head>
+<body>
+
+<h1>DMS Syntax Reference</h1>
+
+<p>DMS adds the following builtin macros:</p>
+
+<dl>
+  <dt><b>Documents</b></dt>
+  <dd>
+    <p><code>{{dmsf(17)}}</code> - link to document #17</p>
+    <p><code>{{dmsf(17, File)}}</code> - link to document #17 with the text "File"</p>
+    <p><code>{{dmsf(17, File, 10)}}</code> - link to document #17 r10 with the text "File"</p>
+    <p><code>{{dmsfd(17)}}</code> - link to the details of document #17</p>
+    <p><code>{{dmsfdesc(17)}}</code> - link to the description of document #17</p>
+  </dd>
+  <dt><b>Folders</b></dt>
+  <dd>
+    <p><code>{{dmsff(5)}}</code> - link to folder #5</p>
+    <p><code>{{dmsff(5, Folder)}}</code> - link to folder #5 with the text "Folder"</p>
+  </dd>
+  <dt><b>Images</b></dt>
+  <dd>
+    <p><code>{{dmsf_image(8)}}</code> - inline picture of document #8; the document must be an image file such as JPEG, PNG,...</p>
+    <p><code>{{dmsf_image(8, size=300)}}</code></p>
+    <p><code>{{dmsf_image(8, size=640x480)}}</code></p>
+    <p><code>{{dmsf_image(8, size=50%)}}</code></p>
+    <p><code>{{dmsf_image(8, height=300)}}</code></p>
+    <p><code>{{dmsf_image(8, width=300)}}</code> - inline picture of document 8 with a custom size</p>
+    <p><code>{{dmsftn(8)}}</code> - thumbnail of document #8</p>
+    <p><code>{{dmsftn(8, size=300)}}</code> - thumbnail of document #8 with a custom size</p>
+  </dd>
+  <dt><b>Approval Workflow</b></dt>
+  <dd>
+    <p><code>{{dmsfw(8)}}</code> - approval workflow status of document #8</p>
+  </dd>
+</dl>
+
+<em>The document/folder's ID can be found in it's details.</em>
+
+</body>
+</html>

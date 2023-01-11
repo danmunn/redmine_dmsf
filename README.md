@@ -30,7 +30,7 @@ Features
   * Configurable document approval workflow
   * Document access auditing
   * Integration with Redmine's activity feed
-  * Wiki macros for quick content linking
+  * Wiki macros for a quick content linking
   * Full read/write WebDAV functionality
   * Optional document content full-text search
   * Documents and folders' symbolic links  
@@ -152,109 +152,11 @@ DMSF is designed to act as project module, so it must be checked as an enabled m
 
 Search will now automatically search DMSF content when a Redmine search is performed, additionally a "Documents" and "Folders" check box will be visible, allowing you to search DMSF content exclusively.
 
-Linking DMSF files from Wiki entries (macros)
+Linking DMSF object from Wiki entries (macros)
 ---------------------------------------------
 
-Link to a document with id 17: `{{dmsf(17)}}`
-
-Link to a document with id 17 with link text "File": `{{dmsf(17, File)}}`
-
-Link to the details of a document with id 17: `{{dmsfd(17)}}`
-
-Link to the details of a document with id 17 with link text "Details": `{{dmsfd(17, Details)}}`
-
-Text of the description of a document with id 17: `{{dmsfdesc(17)}}`
-
-Text referring to the version of a document with id 17: `{{dmsfversion(17)}}`
-
-Text referring to the last update date of a document with id 17: `{{dmsflastupdate(17)}}`
-
-Link to the preview of 5 lines from a document with id 17: `{{dmsft(17, 5)}}`
-
-Inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...: `{{dmsf_image(8)}}`
-
-Multiple inline pictures: `{{dmsf_image(8 9 10)}}`
-
-Inline picture with custom size: `{{dmsf_image(8, size=300)}}`
-
-Inline picture with custom size: `{{dmsf_image(8, size=50%)}}`
-
-Inline picture with custom height: `{{dmsf_image(8, height=300)}}`
-
-Inline picture with custom width: `{{dmsf_image(8, width=300)}}`
-
-Inline picture with custom size: `{{dmsf_image(8, size=640x480)}}`
-
-Thumbnail with height of 200px: `{{dmsftn(8)}}`
-
-Multiple thumbnails with height of 200px: `{{dmsftn(8 9 10)}}`
-
-Thumbnail with custom size: `{{dmsftn(8, size=300)}}`
-
-Inline video of the file with id 8; it must be a video file such as MP4: `{{dmsf_video(9)}}`
-
-Inline video with custom size: `{{dmsf_video(9, size=300)}}`
-
-Inline video with custom size: `{{dmsf_video(9, size=50%)}}`
-
-Inline video with custom height: `{{dmsf_video(9, height=300)}}`
-
-Inline video with custom width: `{{dmsf_video(9, width=300)}}`
-
-Inline video with custom size: `{{dmsf_video(9, size=640x480)}}`
-
-Approval workflow status of a document with id 8: `{{dmsfw(8)}}`
-
-The DMSF document/revision id can be found in document details.
-
-Linking DMSF folders from Wiki entries (macros)
------------------------------------------------
-
-Link to a folder with id 5: `{{dmsff(5)}}`
-
-Link to a folder with id 5 with link text "Folder": `{{dmsff(5, Folder)}}`
-
-The DMSF folder id can be found in the link when opening folders within Redmine.
-
-You can also publish Wiki help description: 
-
-In the file <redmine_root>/public/help/<language>/wiki_syntax_detailed.html, after the document link description/definition:
-
-    <ul>
-      <li>
-        DMSF:
-        <ul>
-          <li><strong>{{dmsf(17)}}</strong> (a link to the file with id 17)</li>
-          <li><strong>{{dmsf(17, File)}}</strong> (a link to the file with id 17 with the link text "File")</li>
-          <li><strong>{{dmsf(17, File, 10)}}</strong> (a link to the file with id 17 with the link text "File" and the link pointing to the revision 10)</li>
-          <li><strong>{{dmsfd(17)}}</strong> (a link to the details of the file with id 17)</li>
-          <li><strong>{{dmsfdesc(17)}}</strong> (a link to the description of the file with id 17)</li>
-          <li><strong>{{dmsff(5)}}</strong> (a link to the folder with id 5)</li>
-          <li><strong>{{dmsff(5, Folder)}}</strong> (a link to the folder with id 5 with the link text "Folder")</li>
-          <li><strong>{{dmsf_image(8)}}</strong> (an inline picture of the file with id 8; it must be an image file such as JPEG, PNG,...)</li>
-          <li><strong>{{dmsf_image(8, size=300)}}</strong> (an inline picture with custom size)</li>
-          <li><strong>{{dmsf_image(8, size=640x480)}}</strong> (an inline picture with custom size)</li>                    
-          <li><strong>{{dmsf_image(8, size=50%)}}</strong> (an inline picture with custom size)</li>          
-          <li><strong>{{dmsf_image(8, height=300)}}</strong> (an inline picture with custom size)</li>
-          <li><strong>{{dmsf_image(8, width=300)}}</strong> (an inline picture with custom size)</li>
-          <li><strong>{{dmsftn(8)}}</strong> (a thumbnail with height of 200px)</li>
-          <li><strong>{{dmsftn(8, size=300)}}</strong> (a thumbnail with custom size)</li>
-          <li><strong>{{dmsfw(8)}}</strong> (approval workflow status of a document with id 8)</li>
-        </ul>
-        The DMSF file/revision id can be found in the link for file/revision download from within Redmine.<br />
-        The DMSF folder id can be found in the link when opening folders within Redmine.
-      </li>
-    </ul>
-
-In the file <redmine_root>/public/help/<language>/wiki_syntax.html, at the end of the Redmine links section:
-
-    <tr><th></th><td>{{dmsf(83)}}</td><td>Document <a href="#">#83</a></td></tr>    
-
-There's a patch (tested with Redmine 3.4.2) that helps you to modify all help files at once. In your Redmine folder:
-
-`cd redmine`
-
-`patch -p0 < plugins/redmine_dmsf/extra/help_files_dmsf.diff`
+You can link DMSF object from Wikis using a macro tag `{{ }}`. List of available macros with their description is 
+available from the wiki's toolbar.
 
 Hooks
 -----

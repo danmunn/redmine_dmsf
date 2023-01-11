@@ -25,7 +25,7 @@ module RedmineDmsf
       class BaseViewHooks < Redmine::Hook::ViewListener
 
         def view_layouts_base_html_head(context={})
-          return unless /^(Dmsf|Projects|Issues|Queries|EasyCrmCases|MyController|SettingsController)/.match?(
+          return unless /^(Dmsf|Projects|Issues|Queries|EasyCrmCases|MyController|SettingsController|WikiController)/.match?(
             context[:controller].class.name)
           meta = "\n".html_safe + stylesheet_link_tag('redmine_dmsf.css', plugin: :redmine_dmsf) +
           "\n".html_safe + stylesheet_link_tag('select2.min.css', plugin: :redmine_dmsf) +
