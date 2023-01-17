@@ -1,0 +1,70 @@
+
+/*
+* Redmine plugin for Document Management System "Features"
+*
+* Copyright © 2011    Vit Jonas <vit.jonas@gmail.com>
+* Copyright © 2011-23 Karel Pičman <karel.picman@kontron.com>
+*
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License
+* as published by the Free Software Foundation; either version 2
+* of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
+div#contents {
+    background-color: #F2F2F2;
+}
+
+div.box {
+    border: solid 1px #FDBF3B;
+    background-color: #FFEBC1;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-bottom: 12px;
+    max-width: 90%;
+}
+
+img {
+    max-width: 85%;
+}
+
+p {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+table {
+    border: 1px solid #58585A;
+    border-collapse:collapse;
+}
+
+table th {
+    background-color: #A1BBD0;
+    font-weight: bold;
+    border: 1px solid #58585A;
+    border-collapse:collapse;
+}
+
+table td {
+    background-color: #F2F2F2;
+    border: 1px solid #58585A;
+    border-collapse:collapse;
+    padding: 4px;
+}
+
+table td.table-nowrap-column {
+    white-space: nowrap;
+}
+
+ul.no-bullets {
+    list-style-type:none;
+}

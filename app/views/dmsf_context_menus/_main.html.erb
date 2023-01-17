@@ -70,3 +70,9 @@
       <%= l(:link_trash_bin) %>
   </span>
 <% end %>
+<% lang = current_language.to_s.downcase %>
+<% path = File.join(File.dirname(__FILE__), '..', '..', '..', 'assets', 'help', lang, 'wiki_syntax.html') %>
+<% lang = 'en' unless File.exist?(path) %>
+<% url = "/plugin_assets/redmine_dmsf/help/#{lang}/dmsf_help.html" %>
+<%= link_to  l(:label_help), 'dmsf_help.html', class: 'icon icon-help',
+             onclick: "window.open('#{url}','_blank', 'width=640,height=960'); return false;" %>
