@@ -138,16 +138,14 @@ class DmsfQuery < Query
           available_filters # Initialize available filters #1380
           sql_cf = +sql_for_custom_field(field, operator, v, $1)
           # This is what we get
-          # dmsf_folders.id  IN (SELECT dmsf_folders.id FROM dmsf_folders LEFT OUTER JOIN custom_values ON custom_values.customized_type='DmsfFolder' AND custom_values.customized_id=dmsf_folders.id AND custom_values.custom_field_id=1 WHERE (custom_values.value IN ('tag 1')) AND (1=1))
+          #  SELECT ct.id FROM dmsf_folders ct LEFT OUTER JOIN custom_values ON custom_values.customized_type='DmsfFolder' AND custom_values.customized_id=ct.id AND custom_values.custom_field_id=78 WHERE dmsf_folders.id = ct.id AND   (custom_values.value IN ('A')) AND (1=1))
           # This is what we need
-          # dmsf_folders.customized_id  IN (SELECT customized_id FROM custom_values WHERE customized_type=dmsf_folders.customized_type AND customized_id=dmsf_folders.customized_id AND custom_field_id=1 AND value IN ('tag 1'))
-          sql_cf.gsub!(' AND (1=1)', '')
-          sql_cf.gsub!(/^dmsf_folders.id/, 'dmsf_folders.customized_id')
+          #  SELECT customized_id FROM custom_values WHERE customized_type=dmsf_folder.customized_type AND custom_values.customized_id=dmsf_folders.customized_id AND custom_field_id=78 AND custom_values.value IN ('A')))
+          sql_cf.gsub! ' AND (1=1)', ''
           sql_cf.gsub!(
-            "IN (SELECT dmsf_folders.id FROM dmsf_folders LEFT OUTER JOIN custom_values ON custom_values.customized_type='DmsfFolder' AND custom_values.customized_id=dmsf_folders.id AND custom_values.custom_field_id=",
-            "IN (SELECT customized_id FROM custom_values WHERE customized_type=dmsf_folders.customized_type AND customized_id=dmsf_folders.customized_id AND custom_field_id="
-          )
-          sql_cf.gsub!('WHERE (', 'AND ')
+            "SELECT ct.id FROM dmsf_folders ct LEFT OUTER JOIN custom_values ON custom_values.customized_type='DmsfFolder' AND custom_values.customized_id=ct.id AND custom_values.custom_field_id=",
+            'SELECT custom_values.customized_id FROM custom_values WHERE custom_values.customized_type=dmsf_folders.customized_type AND custom_values.customized_id=dmsf_folders.customized_id AND custom_values.custom_field_id=')
+          sql_cf.gsub! 'WHERE dmsf_folders.id = ct.id AND   (', 'AND '
           sql_cf.gsub!(/\)$/, '')
           filters_clauses << sql_cf
         else
