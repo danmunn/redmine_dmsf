@@ -142,6 +142,7 @@ class DmsfFilesController < ApplicationController
           revision.size = last_revision.size
           revision.disk_filename = last_revision.disk_filename
           revision.mime_type = last_revision.mime_type
+          revision.digest = last_revision.digest
         end
 
         # Custom fields

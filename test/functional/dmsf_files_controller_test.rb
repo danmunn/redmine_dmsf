@@ -119,5 +119,24 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     get :obsolete_revision, params: { id: @file1.last_revision.id }
     assert :forbiden
   end
+
+  def test_create_revision
+    assert_difference 'DmsfFileRevision.count', +1 do
+      post :create_revision,
+        params: {
+          id: @file1.id,
+          version_major: @file1.last_revision.major_version,
+          version_major: @file1.last_revision.minor_version + 1,
+          dmsf_file_revision: {
+            title: @file1.last_revision.title,
+            name: @file1.last_revision.name,
+            description: @file1.last_revision.description,
+            comment: 'New revision'
+          }
+      }
+    end
+    assert_redirected_to dmsf_folder_path(id: @file1.project)
+    assert_not_nil @file1.last_revision.digest
+  end
   
 end
