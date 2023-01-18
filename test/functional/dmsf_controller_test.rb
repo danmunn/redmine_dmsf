@@ -235,6 +235,16 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a', text: @file10.title, count: 0
   end
 
+  def test_show_filters_custom_field
+    get :show, params: { id: @project1.id, set_filter: '1', f: ['cf_21', ''], op: { 'cf_21' => '=' },
+                         v: { 'cf_21' => ['User documentation']} }
+    assert_response :success
+    # Folder 1 with Tag=User documentation
+    assert_select 'a', text: @folder1.title
+    # Other document/folders are not present
+    assert_select 'a', text: @file10.title, count: 0
+  end
+
   def test_show_without_file_manipulation
     @role_manager.remove_permission! :file_manipulation
     get :show, params: { id: @project1.id }

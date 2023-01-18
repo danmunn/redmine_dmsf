@@ -146,7 +146,7 @@ class DmsfQuery < Query
             "SELECT ct.id FROM dmsf_folders ct LEFT OUTER JOIN custom_values ON custom_values.customized_type='DmsfFolder' AND custom_values.customized_id=ct.id AND custom_values.custom_field_id=",
             'SELECT custom_values.customized_id FROM custom_values WHERE custom_values.customized_type=dmsf_folders.customized_type AND custom_values.customized_id=dmsf_folders.customized_id AND custom_values.custom_field_id=')
           sql_cf.gsub! 'WHERE dmsf_folders.id = ct.id AND   (', 'AND '
-          sql_cf.gsub!(/\)$/, '')
+          sql_cf.gsub! /\)$/, ''
           filters_clauses << sql_cf
         else
           filters_clauses << '(' + sql_for_field(field, operator, v, queried_table_name, field) + ')'
