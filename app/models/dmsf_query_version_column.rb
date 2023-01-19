@@ -22,10 +22,10 @@
 
 require 'query'
 
-class DmsfModifiedQueryColumn < QueryColumn
+class DmsfQueryVersionColumn < QueryColumn
 
   def value_object(object)
-    object.updated
+    DmsfFileRevision.version object.major_version, object.minor_version, object.patch_version
   end
 
 end

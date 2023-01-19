@@ -22,10 +22,10 @@
 
 require 'query'
 
-class DmsfTitleQueryColumn < QueryColumn
+class DmsfQueryModifiedColumn < QueryColumn
 
-  def css_classes
-    'dmsf-title'
+  def value_object(object)
+    object.updated
   end
 
 end

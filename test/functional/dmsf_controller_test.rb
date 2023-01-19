@@ -200,6 +200,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'fieldset#filters'
     # Options
     assert_select 'fieldset#options'
+    # Options - no "Group by"
+    assert_select 'select#group_by', count: 0
     # The main table
     assert_select 'table.dmsf'
     # CSV export

@@ -69,4 +69,8 @@ class DmsfQueryTest < RedmineDmsf::Test::UnitTest
     end
   end
 
+  def test_groupable_columns
+    assert_not @query401.groupable_columns.any?
+  end
+
 end

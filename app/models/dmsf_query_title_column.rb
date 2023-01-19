@@ -22,10 +22,10 @@
 
 require 'query'
 
-class DmsfVersionQueryColumn < QueryColumn
+class DmsfQueryTitleColumn < QueryColumn
 
-  def value_object(object)
-    DmsfFileRevision.version object.major_version, object.minor_version, object.patch_version
+  def css_classes
+    'dmsf-title'
   end
 
 end

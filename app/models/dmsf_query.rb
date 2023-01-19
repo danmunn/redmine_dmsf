@@ -30,10 +30,10 @@ class DmsfQuery < Query
   # Standard columns
   self.available_columns = [
     QueryColumn.new(:id, sortable: 'id', caption: +'#'),
-    DmsfTitleQueryColumn.new(:title, sortable: 'title', frozen: true, caption: :label_column_title),
+    DmsfQueryTitleColumn.new(:title, sortable: 'title', frozen: true, caption: :label_column_title),
     QueryColumn.new(:size, sortable: 'size', caption: :label_column_size),
-    DmsfModifiedQueryColumn.new(:modified, sortable: 'updated', caption: :label_column_modified),
-    DmsfVersionQueryColumn.new(:version, sortable: %(major_version minor_version patch_version),
+    DmsfQueryModifiedColumn.new(:modified, sortable: 'updated', caption: :label_column_modified),
+    DmsfQueryVersionColumn.new(:version, sortable: %(major_version minor_version patch_version),
       caption: :label_column_version),
     QueryColumn.new(:workflow, sortable: 'workflow', caption: :label_column_workflow),
     QueryColumn.new(:author, sortable: %(firstname lastname), caption: :label_column_author),
@@ -58,13 +58,15 @@ class DmsfQuery < Query
     unless @available_columns
       @available_columns = self.class.available_columns.dup
       @available_columns += DmsfFileRevisionCustomField.visible.collect do |cf|
-        c = QueryCustomFieldColumn.new(cf)
-        # We would like to prevent grouping in the Option form
-        c.groupable = false
-        c
+        QueryCustomFieldColumn.new(cf)
       end
     end
     @available_columns
+  end
+
+  def groupable_columns
+    # TODO: Implement grouping, then remove this method.
+    []
   end
 
   def default_columns_names
