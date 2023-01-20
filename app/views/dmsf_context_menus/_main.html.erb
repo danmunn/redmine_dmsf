@@ -71,7 +71,7 @@
   </span>
 <% end %>
 <% lang = current_language.to_s.downcase %>
-<% path = File.join(File.dirname(__FILE__), '..', '..', '..', 'assets', 'help', lang, 'wiki_syntax.html') %>
+<% path = File.join(File.dirname(__FILE__), '..', '..', '..', 'assets', 'help', lang, 'dmsf_help.html') %>
 <% lang = 'en' unless File.exist?(path) %>
 <% url = "/plugin_assets/redmine_dmsf/help/#{lang}/dmsf_help.html" %>
 <%= link_to  l(:label_help), 'dmsf_help.html', class: 'icon icon-help',
