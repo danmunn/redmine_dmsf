@@ -263,4 +263,12 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert @folder1.watched_by?(@jsmith)
   end
 
+  def test_update_from_params_with_invalid_string_sequence
+    invalid_string_sequence = "Invalid sequence\x81"
+    params = { dmsf_folder: { title: invalid_string_sequence, description: invalid_string_sequence } }
+    assert @folder1.update_from_params(params)
+    assert_equal invalid_string_sequence.scrub, @folder1.title
+    assert_equal invalid_string_sequence.scrub, @folder1.description
+  end
+
 end

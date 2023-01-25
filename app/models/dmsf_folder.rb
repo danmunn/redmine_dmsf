@@ -490,8 +490,8 @@ class DmsfFolder < ActiveRecord::Base
 
   def update_from_params(params)
     # Attributes
-    self.title = params[:dmsf_folder][:title].strip
-    self.description = params[:dmsf_folder][:description].strip
+    self.title = params[:dmsf_folder][:title].scrub.strip
+    self.description = params[:dmsf_folder][:description].scrub.strip
     self.dmsf_folder_id = params[:parent_id].present? ? params[:parent_id] : params[:dmsf_folder][:dmsf_folder_id]
     self.system = params[:dmsf_folder][:system].present?
     # Custom fields
@@ -530,7 +530,7 @@ class DmsfFolder < ActiveRecord::Base
     # 1. Invalid characters are replaced with dots.
     # 2. Two or more dots in a row are replaced with a single dot.
     # 3. Windows' WebClient does not like a dot at the end.
-    title.gsub(/[#{INVALID_CHARACTERS}]/, '.').gsub(/\.{2,}/, '.').chomp('.')
+    title.scrub.gsub(/[#{INVALID_CHARACTERS}]/, '.').gsub(/\.{2,}/, '.').chomp('.')
   end
 
   def permission_for_role(role)

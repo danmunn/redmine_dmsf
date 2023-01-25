@@ -115,10 +115,10 @@ class DmsfFilesController < ApplicationController
     if params[:dmsf_file_revision]
       unless @file.locked_for_user?
         revision = DmsfFileRevision.new
-        revision.title = params[:dmsf_file_revision][:title]
-        revision.name = params[:dmsf_file_revision][:name]
-        revision.description = params[:dmsf_file_revision][:description]
-        revision.comment = params[:dmsf_file_revision][:comment]
+        revision.title = params[:dmsf_file_revision][:title].scrub.strip
+        revision.name = params[:dmsf_file_revision][:name].scrub.strip
+        revision.description = params[:dmsf_file_revision][:description].scrub.strip
+        revision.comment = params[:dmsf_file_revision][:comment].scrub.strip
         revision.dmsf_file = @file
         last_revision = @file.last_revision
         revision.source_revision = last_revision
@@ -191,7 +191,11 @@ class DmsfFilesController < ApplicationController
             rescue => e
               Rails.logger.error "Could not send email notifications: #{e.message}"
             end
+          else
+            ok = false
           end
+        else
+          ok = false
         end
       end
     end

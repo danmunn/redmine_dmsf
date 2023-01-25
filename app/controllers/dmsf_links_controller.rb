@@ -112,7 +112,7 @@ class DmsfLinksController < ApplicationController
           params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
         @dmsf_link.target_type = DmsfFolder.model_name.to_s
       end
-      @dmsf_link.name = params[:dmsf_link][:name]
+      @dmsf_link.name = params[:dmsf_link][:name].scrub.strip
       result = @dmsf_link.save
       if result
         flash[:notice] = l(:notice_successful_create)
