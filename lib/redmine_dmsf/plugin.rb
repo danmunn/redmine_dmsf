@@ -33,7 +33,7 @@ module RedmineDmsf
     # present.
     # It is related especially to plugins made by AplhaNode and RedmineUP.
     def self.an_osolete_plugin_present?
-      plugins = %w(questions contacts checklists db passwords)
+      plugins = %w(questions contacts checklists db passwords resources)
       plugins.each do|plugin|
         if Plugin.present?("redmine_#{plugin}")
           return true
