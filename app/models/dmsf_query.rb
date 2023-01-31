@@ -90,7 +90,7 @@ class DmsfQuery < Query
   end
 
   def default_sort_criteria
-    [%(title ASC)]
+    [['title', 'ASC']]
   end
 
   def base_scope
