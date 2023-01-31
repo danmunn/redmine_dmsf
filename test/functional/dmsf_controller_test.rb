@@ -405,6 +405,13 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select "tr##{@project5.id}pspan", count: 0
   end
 
+  def test_show_default_sort_column
+    get :show, params: { id: @project1.id }
+    assert_response :success
+    # @project5 is not as a sub-folder
+    assert_select 'a.icon-sorted-desc', text: l(:label_column_title)
+  end
+
   def test_index
     get :index
     assert_response :success
