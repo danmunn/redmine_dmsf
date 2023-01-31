@@ -408,7 +408,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_show_default_sort_column
     get :show, params: { id: @project1.id }
     assert_response :success
-    # @project5 is not as a sub-folder
+    # The default column Title's header is displayed as sorted '^'
     assert_select 'a.icon-sorted-desc', text: l(:label_column_title)
   end
 
