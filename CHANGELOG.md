@@ -1,8 +1,26 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.8 *????-??-??*
+3.0.8 *2023-02-10*
 ------------------
+
+    Sorting
+    Filtering by custom fields
+    Download notifications
+    Embeded help
+    DMS macros in wiki toolbar
+
+* Bug: #1425 - Default sorting is not set
+* Bug: #1424 - Internal error while opening Settings page
+* Bug: #1423 - Check for Illegal characters in file name
+* New: #1421 - Help
+* Bug: #1419 - Missing checksum
+* Bug: #1417 - Query::StatementInvalid raised in dmsf#show when filtering custom fields with PostgreSQL database
+* New: #1414 - An empty minor version
+* Bug: #1413 - Vim edit through webdav causes lose of all file versions besides last.
+* Bug: #1408 - Lost attachment 2
+* New: #513  - Email Notification when someone downloads a file
+* New: #239  - Easy Document link macro creation 
 
 3.0.7 *2022-11-01*
 ------------------
