@@ -59,3 +59,5 @@ end
 
 # Apply the patch
 Redmine::WikiFormatting::Textile::Helper.prepend RedmineDmsf::Patches::FormattingHelperPatch
+Redmine::WikiFormatting::Markdown::Helper.prepend RedmineDmsf::Patches::FormattingHelperPatch
+Redmine::WikiFormatting::CommonMark::Helper.prepend RedmineDmsf::Patches::FormattingHelperPatch
