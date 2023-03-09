@@ -10,7 +10,7 @@ Changelog for Redmine DMSF
     Sorting
     Filtering by custom fields
     Download notifications
-    Embeded help
+    Embedded help
     DMS macros in wiki toolbar
 
 * Bug: #1425 - Default sorting is not set
