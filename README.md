@@ -326,7 +326,6 @@ Additional Documentation
 ------------------------
 
 [CHANGELOG.md](CHANGELOG.md) - Project changelog
-[dmsf_user_guide.odt](dmsf_user_guide.odt) - User's guide
 
 ---
 
