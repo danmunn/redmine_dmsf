@@ -1,8 +1,13 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.9 *????-??-??*
+3.0.9 *2023-03-10*
 ------------------
+
+    Maintenance release
+
+* Bug: #1433 - User's guide broken link
+* Bug: #1426 - Adds formatting helper to all editors
 
 3.0.8 *2023-02-10*
 ------------------
