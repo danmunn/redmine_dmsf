@@ -46,7 +46,7 @@ class DmsfMailer < Mailer
     @author = User.anonymous unless @author
     message_id project
     set_language_if_valid user.language
-    mail to: user.mail, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
+    mail to: user, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
   end
 
   def self.deliver_files_deleted(project, files)
@@ -70,7 +70,7 @@ class DmsfMailer < Mailer
     @author = User.anonymous unless @author
     message_id project
     set_language_if_valid user.language
-    mail to: user.mail, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_deleted_subject)}"
+    mail to: user, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_deleted_subject)}"
   end
 
   def self.deliver_files_downloaded(project, files, remote_ip)
@@ -96,7 +96,7 @@ class DmsfMailer < Mailer
     @remote_ip = remote_ip
     message_id project
     set_language_if_valid user.language
-    mail to: user.mail, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_downloaded_subject)}"
+    mail to: user, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_downloaded_subject)}"
   end
 
   def self.deliver_send_documents(project, email_params, author)
@@ -161,7 +161,7 @@ class DmsfMailer < Mailer
       @notice = notice
       @author = revision.dmsf_workflow_assigned_by_user
       @author ||= User.anonymous
-      mail to: user.mail,
+      mail to: user,
            subject: "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)} #{step_name}"
     end
   end
