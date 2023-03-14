@@ -25,8 +25,8 @@ module DmsfFilesHelper
     # If there is <p> tag, the text is moved one column to the right by Redmin's CSS. A new line causes double new line.
     text.gsub! '<p>', ''
     text.gsub! '</p>', ''
-    text.gsub! "\n\n", '<br/>'
-    text.gsub "\n\t", '<br/>'
+    text.gsub! "\n\n", '<br>'
+    text.gsub "\n\t", '<br>'
   end
 
 end

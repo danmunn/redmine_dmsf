@@ -94,13 +94,13 @@
                             step.operator == DmsfWorkflowStep::OPERATOR_AND %>
                           <%= DmsfWorkflowStep.soperator(DmsfWorkflowStep::OPERATOR_AND) %>
                         </label>
-                        <br/>
+                        <br>
                         <label>
                           <%= radio_button_tag "operator_step[#{step.id}]", DmsfWorkflowStep::OPERATOR_OR,
                             step.operator == DmsfWorkflowStep::OPERATOR_OR %>
                           <%= DmsfWorkflowStep.soperator(DmsfWorkflowStep::OPERATOR_OR) %>
                         </label>
-                        <br/>
+                        <br>
                         &nbsp;<%= delete_link delete_step_dmsf_workflow_path(step: step.id) %>
                       </div>
                       <div class="dmsf-child-container">

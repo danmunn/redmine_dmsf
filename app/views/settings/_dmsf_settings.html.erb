@@ -137,7 +137,7 @@
   <%= content_tag :label, l(:label_act_as_attachable) %>
   <%= check_box_tag 'settings[dmsf_act_as_attachable]', true, @settings['dmsf_act_as_attachable'] %>
   <em class="info">
-    <%= l(:note_dmsf_act_as_attachable) %><br/>
+    <%= l(:note_dmsf_act_as_attachable) %><br>
     <%= l(:label_default) %>: <%= l(:general_text_No) %>
   </em>
 </p>
@@ -146,7 +146,7 @@
   <%= content_tag :label, l(:label_dmsf_projects_as_subfolders) %>
   <%= check_box_tag 'settings[dmsf_projects_as_subfolders]', true, @settings['dmsf_projects_as_subfolders'] %>
   <em class="info">
-    <%= l(:note_dmsf_projects_as_subfolders) %><br/>
+    <%= l(:note_dmsf_projects_as_subfolders) %><br>
     <%= l(:label_default) %>: <%= l(:general_text_No) %>
   </em>
 </p>
@@ -155,7 +155,7 @@
   <%= content_tag :label, l(:label_dmsf_global_menu_disabled) %>
   <%= check_box_tag 'settings[dmsf_global_menu_disabled]', true, @settings['dmsf_global_menu_disabled'] %>
   <em class="info">
-    <%= l(:note_dmsf_global_menu_disabled) %><br/>
+    <%= l(:note_dmsf_global_menu_disabled) %><br>
     <%= l(:label_default) %>: <%= l(:general_text_No) %>
   </em>
 </p>
@@ -168,7 +168,7 @@
   </em>
 </p>
 
-<hr/>
+<hr>
 <em class="info">
   <%= l(:label_dmsf_columns) %>
 </em>
@@ -183,7 +183,7 @@
        options_for_select(options, selected: @settings['dmsf_default_query']) %>
 </p>
 
-<hr/>
+<hr>
 <em class="info">
   <%= l(:heading_send_documents_by_email) %>
 </em>
@@ -212,7 +212,7 @@
   </em>
 </p>
 
-<hr/>
+<hr>
 <em class="info">
   <%= l(:field_label_dmsf_workflow) %>
 </em>
@@ -221,7 +221,7 @@
   <%= content_tag :label, l(:label_dmsf_keep_documents_locked) %>
   <%= check_box_tag 'settings[dmsf_keep_documents_locked]', false, @settings['dmsf_keep_documents_locked'] %>
   <em class="info">
-    <%= l(:note_dmsf_keep_documents_locked) %><br/>
+    <%= l(:note_dmsf_keep_documents_locked) %><br>
     <%= l(:label_default)%>: <%= l(:general_text_No)%>
   </em>
 </p>
@@ -230,11 +230,11 @@
   <%= content_tag(:label, l(:only_approval_zero_minor_version)) %>
   <%= check_box_tag 'settings[only_approval_zero_minor_version]', false, @settings['only_approval_zero_minor_version'], size: 50 %>
   <em class="info">
-    <%= l(:only_approval_zero_minor_version) %><br/> <%= l(:label_default) %>: <%= l(:general_text_No)%>
+    <%= l(:only_approval_zero_minor_version) %><br> <%= l(:label_default) %>: <%= l(:general_text_No)%>
   </em>
 </p>
 
-<hr/>
+<hr>
 <em class="info">
   <%= l(:label_webdav) %>
 </em>
@@ -271,7 +271,7 @@
         [l(:select_option_webdav_readwrite), 'WEBDAV_READ_WRITE']],
         selected: @settings['dmsf_webdav_strategy']),
       onchange: "$('#dmsf_webdav_ro_block').toggle()" %>
-    <br/>
+    <br>
     <em class="info">
       <%= l(:note_webdav_strategy).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_webdav_readonly) %>
     </em>
@@ -298,7 +298,7 @@
       <%= content_tag :label, l(:label_webdav_disable_versioning) %>
       <%= text_field_tag 'settings[dmsf_webdav_disable_versioning]', @settings['dmsf_webdav_disable_versioning'], size: 50 %>
       <em class="info">
-        <%= l(:note_webdav_disable_versioning) %> <br/>
+        <%= l(:note_webdav_disable_versioning) %> <br>
         <%= l(:label_default) %>: ^\~\$|\.tmp$
       </em>
     </p>
@@ -307,14 +307,14 @@
       <%= content_tag :label, l(:label_webdav_use_project_names) %>
       <%= check_box_tag 'settings[dmsf_webdav_use_project_names]', true, @settings['dmsf_webdav_use_project_names'] %>
       <em class="info">
-      <%= l(:note_webdav_use_project_names) %> <br/>
+      <%= l(:note_webdav_use_project_names) %> <br>
         <%= l(:label_default)%>: <%= l(:general_text_No)%>
       </em>
     </p>
   </div>
 </div>
 
-<hr/>
+<hr>
 
 <% begin %>
   <% require 'xapian' %>
@@ -354,11 +354,11 @@
 <p>
   <%= content_tag :label, l(:label_stem_strategy) %>
   <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_NONE', @settings['dmsf_stemming_strategy'] == 'STEM_NONE',
-                       disabled: xapian_disabled, checked: true %> <%= l(:option_stem_none) %><br/>
+                       disabled: xapian_disabled, checked: true %> <%= l(:option_stem_none) %><br>
   <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_SOME', @settings['dmsf_stemming_strategy'] == 'STEM_SOME',
-                       disabled: xapian_disabled  %> <%= l(:option_stem_some) %><br/>
+                       disabled: xapian_disabled  %> <%= l(:option_stem_some) %><br>
   <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_ALL', @settings['dmsf_stemming_strategy'] == 'STEM_ALL',
-                       disabled: xapian_disabled  %> <%= l(:option_stem_all) %><br/>
+                       disabled: xapian_disabled  %> <%= l(:option_stem_all) %><br>
   <em class="info">
     <%= l(:text_stemming_info) %>
   </em>

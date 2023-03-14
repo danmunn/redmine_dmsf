@@ -34,12 +34,12 @@
   <% columns.each_with_index do |column, i| %>
     <%= check_box_tag 'settings[dmsf_columns][]', column, selected_columns.include?(column), id: "dmsf_column_#{i}" %>
     <%= l("label_column_#{column}").capitalize %>
-    <br/>
+    <br>
   <% end %>
   <% columns = cfs.map{ |c| c.name }
      columns.each_with_index do |column, i| %>
     <%= check_box_tag 'settings[dmsf_columns][]', column, selected_columns.include?(column), id: "dmsf_column_#{i}" %>
     <%= h column.capitalize %>
-    <br/>
+    <br>
   <% end %>
 </p>

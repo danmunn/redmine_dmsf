@@ -99,13 +99,13 @@
           <% end %>
         <% end %>
         <span id="inherited_user_permissions">
-          <br/>
+          <br>
           <% users = dir.permissions_users %>
           <% checkboxes = users_checkboxes(users, true) %>
           <%= checkboxes %>
         </span>
         <% if checkboxes.present? %>
-          <br/>
+          <br>
         <% end %>
       <% end %>
       <%= label_tag '', l(:label_dmsf_permissions) %>
@@ -117,13 +117,13 @@
         </label>
       <% end %>
       <span id="user_permissions">
-        <br/>
+        <br>
         <% users = @folder.permissions_users %>
         <% checkboxes = users_checkboxes(users) %>
         <%= checkboxes %>
       </span>
         <% if checkboxes.present? %>
-        <br/>
+        <br>
       <% end %>
       <span class="search_for_watchers">
         <%= link_to l(:label_user_search_add),

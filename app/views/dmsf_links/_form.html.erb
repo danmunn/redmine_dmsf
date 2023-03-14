@@ -33,7 +33,7 @@
   <div class="box tabular">
     <% if (@type == 'link_from') && !@container %>
       <p>
-        <%= radio_button_tag :external_link, 'false', true %> <%= l(:label_internal) %><br/>
+        <%= radio_button_tag :external_link, 'false', true %> <%= l(:label_internal) %><br>
         <%= radio_button_tag :external_link, 'true', false %>  <%= l(:label_external) %>
       </p>
     <% end %>

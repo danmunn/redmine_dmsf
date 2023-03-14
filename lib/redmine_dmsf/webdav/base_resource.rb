@@ -69,11 +69,11 @@ module RedmineDmsf
           <html lang="#{current_language}">
             <head>
               <title>%s</title>
-              <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+              <meta http-equiv="content-type" content="text/html; charset=utf-8">
             </head>
             <body>
               <h1>%s</h1>
-              <hr/>
+              <hr>
               <table>
                 <tr>
                   <th class="name">#{l(:field_name)}</th>
@@ -83,7 +83,7 @@ module RedmineDmsf
                 </tr>
                 %s
               </table>
-              <hr/>
+              <hr>
            </body>
           </html>
         }

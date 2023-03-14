@@ -466,10 +466,10 @@ module Dav4rack
     # Index page template for GETs on collection
     def index_page
       '<html><head> <title>%s</title>
-      <meta http-equiv="content-type" content="text/html; charset=utf-8" /></head>
-      <body> <h1>%s</h1> <hr /> <table> <tr> <th class="name">Name</th>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8"></head>
+      <body> <h1>%s</h1> <hr> <table> <tr> <th class="name">Name</th>
       <th class="size">Size</th> <th class="type">Type</th>
-      <th class="mtime">Last Modified</th> </tr> %s </table> <hr /> </body></html>'
+      <th class="mtime">Last Modified</th> </tr> %s </table> <hr> </body></html>'
     end
 
     def properties_xml_with_depth(process_properties, depth = request.depth)
