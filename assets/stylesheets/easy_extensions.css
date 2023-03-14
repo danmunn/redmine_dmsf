@@ -54,16 +54,16 @@ table.dmsf a.sort.asc.icon.icon-sorted-desc {
 
 .dmsf-tree.dmsf-expanded span.dmsf-expander {
     background: none !important;
-    padding-left: 0px !important;
+    padding-left: 0 !important;
 }
 
 .dmsf-tree.dmsf-collapsed span.dmsf-expander {
     background: none !important;
-    padding-left: 0px !important;
+    padding-left: 0 !important;
 }
 
 table.dmsf td.dmsf-title {
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 td.dmsf-title a.icon::before {
@@ -130,9 +130,9 @@ td.dmsf-title a.icon-folder::before {
 }
 
 #sidebar ul > li > a.icon-only.icon-clear-query {
-    font-size: 0px;
+    font-size: 0;
     display: inline-block;
     overflow: hidden;
-    width: 0px;
+    width: 0;
     height: 16px;
 }

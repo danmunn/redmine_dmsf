@@ -57,7 +57,7 @@ function dmsfToggle(el, project_id, folder_id, url)
       if (expand) {
 
         // Display only children with expanded parent
-        m = $(tr).attr('class').match(/(\d+(p|f)) idnt/);
+        let m = $(tr).attr('class').match(/(\d+(p|f)) idnt/);
 
         if(m){
 

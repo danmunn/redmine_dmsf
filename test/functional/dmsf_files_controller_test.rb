@@ -126,7 +126,7 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
         params: {
           id: @file1.id,
           version_major: @file1.last_revision.major_version,
-          version_major: @file1.last_revision.minor_version + 1,
+          version_minor: @file1.last_revision.minor_version + 1,
           dmsf_file_revision: {
             title: @file1.last_revision.title,
             name: @file1.last_revision.name,

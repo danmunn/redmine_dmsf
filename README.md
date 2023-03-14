@@ -215,26 +215,25 @@ instance is stopped.
 
     `cd redmine`
 
-3. Install dependencies: 
+4. Install dependencies: 
 
     `bundle install`
-
-4. Initialize/Update database:
+5. Initialize/Update database:
 
     `RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf`
 
-5. The access rights must be set for web server, e.g.: 
+6. The access rights must be set for web server, e.g.: 
 
     `chown -R www-data:www-data plugins/redmine_dmsf`.
 
-6. Restart the web server, e.g.: 
+7. Restart the web server, e.g.: 
 
     `systemctl restart apache2`
 
-7. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure. (You should check and then save the plugin's configuration after each upgrade.)
-8. Don't forget to grant permissions for DMSF in Administration -> Roles and permissions
-9. Assign DMSF permissions to appropriate roles.
-10. There are a few rake tasks:
+8. You should configure the plugin via Redmine interface: Administration -> Plugins -> DMSF -> Configure. (You should check and then save the plugin's configuration after each upgrade.)
+9. Don't forget to grant permissions for DMSF in Administration -> Roles and permissions
+10. Assign DMSF permissions to appropriate roles.
+11. There are a few rake tasks:
 
     I) To convert documents from the standard Redmine document module
 
