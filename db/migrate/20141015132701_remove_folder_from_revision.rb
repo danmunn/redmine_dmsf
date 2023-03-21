@@ -30,7 +30,7 @@ class RemoveFolderFromRevision < ActiveRecord::Migration[4.2]
     DmsfFileRevision.find_each do |revision|
       if revision.dmsf_file
         revision.dmsf_folder_id = revision.dmsf_file.dmsf_folder_id
-        revision.save!
+        revision.save validate: false
       end
     end        
   end
