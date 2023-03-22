@@ -38,7 +38,7 @@ class DmsfPluginTest < RedmineDmsf::Test::HelperTest
 
   def test_an_osolete_plugin_present_yes
     # Create a fake redmine_checklists plugin
-    path = File.join(Rails.root, 'plugins', 'redmine_checklists')
+    path = File.join(Rails.root, 'plugins', 'redmine_contacts')
     Dir.mkdir(path) unless Dir.exist?(path)
     assert RedmineDmsf::Plugin.an_osolete_plugin_present?
     Dir.rmdir(path) if Dir.exist?(path)
