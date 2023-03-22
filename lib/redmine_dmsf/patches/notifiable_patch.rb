@@ -52,9 +52,6 @@ module RedmineDmsf
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?(:easy_extensions)
-  RedmineExtensions::PatchManager.register_patch_to_be_first 'Redmine::Notifiable',
-    'RedmineDmsf::Patches::NotifiablePatch', prepend: true, first: true
-elsif !RedmineDmsf::Plugin.an_osolete_plugin_present?
+unless !RedmineDmsf::Plugin.an_osolete_plugin_present?
   Redmine::Notifiable.prepend RedmineDmsf::Patches::NotifiablePatch
 end

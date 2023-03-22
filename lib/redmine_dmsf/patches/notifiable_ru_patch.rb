@@ -54,6 +54,6 @@ module RedmineDmsf
 end
 
 # Apply the patch
-if RedmineDmsf::Plugin.an_osolete_plugin_present? && !Redmine::Plugin.installed?(:easy_extensions)
+if RedmineDmsf::Plugin.an_osolete_plugin_present?
   Redmine::Notifiable.send :include, RedmineDmsf::Patches::NotifiableRuPatch
 end

@@ -36,10 +36,12 @@ def dmsf_init
     menu.push :dmsf, { controller: 'dmsf', action: 'show' }, caption: :menu_dmsf, before: :documents,
               param: :id, html: { class: 'icon icon-dmsf' }
     # New menu extension
-    menu.push :dmsf_file, { controller: 'dmsf_upload', action: 'multi_upload'},
-              caption: :label_dmsf_new_top_level_document, parent: :new_object
-    menu.push :dmsf_folder, { controller: 'dmsf', action: 'new'}, caption: :label_dmsf_new_top_level_folder,
-              parent: :new_object
+    unless Redmine::Plugin.installed?(:easy_extensions)
+      menu.push :dmsf_file, { controller: 'dmsf_upload', action: 'multi_upload'},
+                caption: :label_dmsf_new_top_level_document, parent: :new_object
+      menu.push :dmsf_folder, { controller: 'dmsf', action: 'new'}, caption: :label_dmsf_new_top_level_folder,
+                parent: :new_object
+    end
   end
   # Main menu extension
   unless(ActiveRecord::Base.connection.data_source_exists?('settings') &&
@@ -118,8 +120,8 @@ if Redmine::Plugin.installed?(:easy_extensions)
     require File.expand_path('../app/models/easy_page_modules/easy_dms/epm_dmsf_locked_documents', __FILE__)
     require File.expand_path('../app/models/easy_page_modules/easy_dms/epm_dmsf_open_approvals', __FILE__)
 
-    EpmDmsfLockedDocuments.register_to_scope(:user, plugin: :redmine_dmsf)
-    EpmDmsfOpenApprovals.register_to_scope(:user, plugin: :redmine_dmsf)
+    EasyPageModules::EasyDms::EpmDmsfLockedDocuments.register_to_scope(:user, plugin: :redmine_dmsf)
+    EasyPageModules::EasyDms::EpmDmsfOpenApprovals.register_to_scope(:user, plugin: :redmine_dmsf)
   end
 else
   dmsf_init

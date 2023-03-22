@@ -63,7 +63,7 @@ end
 
 # Apply the patch
 if Redmine::Plugin.installed?(:easy_extensions)
-  RedmineExtensions::PatchManager.register_model_patch 'UserPatch', 'RedmineDmsf::Patches::UserPatch'
+  RedmineExtensions::PatchManager.register_model_patch 'User', 'RedmineDmsf::Patches::UserPatch'
 else
   User.prepend RedmineDmsf::Patches::UserPatch
 end
