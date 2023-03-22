@@ -285,11 +285,15 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_previewable
-    assert @file13.previewable?
+    if RedmineDmsf::Preview.office_available?
+      assert @file13.previewable?
+    end
   end
 
   def test_pdf_preview
-    assert_not_empty @file13.pdf_preview
+    if RedmineDmsf::Preview.office_available?
+      assert_not_empty @file13.pdf_preview
+    end
     assert_empty @file1.pdf_preview
   end
 
