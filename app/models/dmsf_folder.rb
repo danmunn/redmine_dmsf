@@ -107,11 +107,12 @@ class DmsfFolder < ActiveRecord::Base
     true
   end
 
-  def self.permissions?(folder, allow_system = true)
+  def self.permissions?(folder, allow_system = true, file = false)
     # Administrator?
     return true if (User.current&.admin? || folder.nil?)
     # Permissions to the project?
-    return false unless User.current&.allowed_to?(:view_dmsf_folders, folder.project)
+    # If file is true we work just with the file and not viewing the folder
+    return false unless file || User.current&.allowed_to?(:view_dmsf_folders, folder.project)
     # System folder?
     if folder && folder.system
       return false unless allow_system || User.current.allowed_to?(:display_system_folders, folder.project)
