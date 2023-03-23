@@ -43,9 +43,6 @@ module RedmineDmsf
             raise ActiveRecord::RecordNotFound
           end
         end
-        unless User.current&.allowed_to?(:view_dmsf_files, file.project, { id: file.id })
-          raise l(:notice_not_authorized)
-        end
         title = args[1].present? ?  args[1] : file.title
         title.gsub! /\A"|"\z/, '' # Remove apostrophes
         title.gsub! /\A'|'\z/, ''
