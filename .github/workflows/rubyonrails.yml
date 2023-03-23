@@ -127,7 +127,7 @@ jobs:
           cp /opt/redmine/config/additional_environment.rb.example /opt/redmine/config/additional_environment.rb
           echo "config.log_level = :info" >> /opt/redmine/config/additional_environment.rb
           echo "# Redmine DMSF's WebDAV" >> /opt/redmine/config/additional_environment.rb
-          echo "require 'plugins/redmine_dmsf/lib/redmine_dmsf/webdav/custom_middleware'" >> /opt/redmine/config/additional_environment.rb
+          echo "require \"#{Rails.root}/plugins/redmine_dmsf/lib/redmine_dmsf/webdav/custom_middleware\"" >> /opt/redmine/config/additional_environment.rb
           echo "config.middleware.insert_before ActionDispatch::Cookies, RedmineDmsf::Webdav::CustomMiddleware" >> /opt/redmine/config/additional_environment.rb
       - name: Standard tests
         # Run the tests
