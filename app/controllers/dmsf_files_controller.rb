@@ -186,8 +186,7 @@ class DmsfFilesController < ApplicationController
                 if recipients.any?
                   to = recipients.collect{ |user, _| user.name }.first(
                     Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i).join(', ')
-                  to << ((recipients.count > Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i) ?
-                           ',...' : '.')
+                  to << ((recipients.count > Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i) ? ',...' : '.')
                 end
               end
             rescue => e
@@ -233,8 +232,7 @@ class DmsfFilesController < ApplicationController
               if recipients.any?
                 to = recipients.collect{ |user, _| user.name }.first(
                   Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i).join(', ')
-                to << ((recipients.count > Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i) ?
-                         ',...' : '.')
+                to << ((recipients.count > Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i) ? ',...' : '.')
                 flash[:warning] = l(:warning_email_notifications, to: to)
               end
             end

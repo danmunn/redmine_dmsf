@@ -24,6 +24,9 @@ module EasyPageModules
 
     unless defined?(EasyExtensions)
       class EasyPageModule
+        def foo
+          'A false class'
+        end
       end
     end
 

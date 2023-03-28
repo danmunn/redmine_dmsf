@@ -135,8 +135,7 @@ module DmsfUploadHelper
           unless recipients.empty?
             to = recipients.collect{ |user, _| user.name }.first(
               Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i).join(', ')
-            to << ((recipients.count > Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i) ?
-                     ',...' : '.')
+            to << ((recipients.count > Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i) ? ',...' : '.')
             controller.flash[:warning] = l(:warning_email_notifications, to: to) if controller
           end
         end

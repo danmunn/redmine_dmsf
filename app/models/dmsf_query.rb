@@ -148,7 +148,7 @@ class DmsfQuery < Query
             "SELECT ct.id FROM dmsf_folders ct LEFT OUTER JOIN custom_values ON custom_values.customized_type='DmsfFolder' AND custom_values.customized_id=ct.id AND custom_values.custom_field_id=",
             'SELECT custom_values.customized_id FROM custom_values WHERE custom_values.customized_type=dmsf_folders.customized_type AND custom_values.customized_id=dmsf_folders.customized_id AND custom_values.custom_field_id=')
           sql_cf.gsub! 'WHERE dmsf_folders.id = ct.id AND   (', 'AND '
-          sql_cf.gsub! /\)$/, ''
+          sql_cf.gsub!(/\)$/, '')
           filters_clauses << sql_cf
         else
           filters_clauses << '(' + sql_for_field(field, operator, v, queried_table_name, field) + ')'
@@ -230,8 +230,7 @@ class DmsfQuery < Query
         if fo
           dmsf_link = DmsfLink.find_by(id: item.id)
           if dmsf_link.dmsf_folder
-            !dmsf_link.dmsf_folder.visible?
-            !DmsfFolder.permissions?(dmsf_link.dmsf_folder, false)
+            !dmsf_link.dmsf_folder.visible? || !DmsfFolder.permissions?(dmsf_link.dmsf_folder, false)
           else
             !dmsf_link.project.dmsf_available?
           end
@@ -245,6 +244,26 @@ class DmsfQuery < Query
 
   def extra_columns
     []
+  end
+
+  def self.default(project = nil, user = User.current)
+    # User's default
+    if user&.logged? && (query_id = user.pref.default_dmsf_query).present?
+      query = find_by(id: query_id)
+      return query if query&.visible?
+    end
+
+    # Project's default
+    project = project[:project] if project.is_a?(Hash)
+    query = project&.default_dmsf_query
+    return query if query&.visibility == VISIBILITY_PUBLIC
+
+    # Global default
+    if (query_id = Setting.plugin_redmine_dmsf['dmsf_default_query']).present?
+      query = find_by(id: query_id)
+      return query if query&.visibility == VISIBILITY_PUBLIC
+    end
+    nil
   end
 
   private
@@ -600,26 +619,6 @@ class DmsfQuery < Query
         end
       end
     end
-  end
-
-  def self.default(project = nil, user = User.current)
-    # User's default
-    if user&.logged? && (query_id = user.pref.default_dmsf_query).present?
-      query = find_by(id: query_id)
-      return query if query&.visible?
-    end
-
-    # Project's default
-    project = project[:project] if project&.is_a?(Hash)
-    query = project&.default_dmsf_query
-    return query if query&.visibility == VISIBILITY_PUBLIC
-
-    # Global default
-    if (query_id = Setting.plugin_redmine_dmsf['dmsf_default_query']).present?
-      query = find_by(id: query_id)
-      return query if query&.visibility == VISIBILITY_PUBLIC
-    end
-    nil
   end
 
 end

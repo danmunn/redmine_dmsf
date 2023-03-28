@@ -169,7 +169,7 @@ module DmsfQueriesHelper
           file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: (item.type == 'file') ? item.id : item.revision_id })
           content_type = Redmine::MimeType.of(value)
           content_type = 'application/octet-stream' if content_type.blank?
-          tag = link_to(h(value), file_view_url, target: '_blank',
+          tag = link_to(h(value), file_view_url, target: '_blank', rel: 'noopener',
             class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}",
             'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}")
           unless filter_any?
@@ -189,7 +189,7 @@ module DmsfQueriesHelper
         if item&.deleted?
           tag = content_tag('span', value, class: 'icon dmsf-icon-link')
         else
-          tag = link_to(h(value), item.filename, target: '_blank', class: 'icon dmsf-icon-link')
+          tag = link_to(h(value), item.filename, target: '_blank', rel: 'noopener', class: 'icon dmsf-icon-link')
           unless filter_any?
             tag = "<span class=\"dmsf-expander\"></span>".html_safe + tag
           end

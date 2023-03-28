@@ -78,10 +78,11 @@ class DmsfFile < ActiveRecord::Base
     project_key: 'project_id',
     date_column: "#{table_name}.updated_at"
 
-  cattr_accessor :previews_storage_path
-  @@previews_storage_path = File.join(Rails.root, 'tmp', 'dmsf_previews')
-
   before_create :default_values
+
+  def self.previews_storage_path
+    File.join Rails.root, 'tmp', 'dmsf_previews'
+  end
 
   def default_values
     if Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present? && (!dmsf_folder || !dmsf_folder.system)

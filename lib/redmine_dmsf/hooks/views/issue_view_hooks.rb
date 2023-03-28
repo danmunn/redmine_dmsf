@@ -220,7 +220,7 @@ module RedmineDmsf
           file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: dmsf_file})
           # Title, size
           html << '<td>'
-            html << link_to(h(dmsf_file.title),file_view_url, target: '_blank',
+            html << link_to(h(dmsf_file.title),file_view_url, target: '_blank', rel: 'noopener',
               class: "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
               title: h(dmsf_file.last_revision.try(:tooltip)),
               'data-downloadurl' => "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}")

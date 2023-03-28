@@ -39,7 +39,7 @@ END_DESC
 class DmsfConvertDocuments
 
   def initialize
-    @dry_run = ENV['dry_run']
+    @dry_run = ENV.fetch('dry_run', nil)
     @projects = []
     if ENV['project']
       p = Project.find(ENV['project'])
@@ -47,33 +47,33 @@ class DmsfConvertDocuments
     else
       @projects.concat(Project.active.to_a)
     end
-    @issues = ENV['issues']
+    @issues = ENV.fetch('issues', nil)
   end
 
   def convert_projects
     if @projects.any?
       @projects.each do |project|
-        STDOUT.puts "Processing project: #{project.name}"
+        $stdout.puts "Processing project: #{project.name}"
         convert_documents(project) if project.module_enabled?('documents')
         convert_issues(project) if (@issues && project.module_enabled?('issue_tracking'))
       end
     else
-      STDERR.puts 'No active projects found.'
+      $stderr.warn 'No active projects found.'
     end
   end
 
   def convert_issues(project)
-    STDOUT.puts 'Issues'
+    $stdout.puts 'Issues'
     unless Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
-      STDERR.puts "'Act as attachable' must be checked in the plugin's settings"
+      $stderr.warn "'Act as attachable' must be checked in the plugin's settings"
       return
     end
     project.issues.each do |issue|
       if issue.attachments.any?
-        STDOUT.puts "Processing: #{issue}"
+        $stdout.puts "Processing: #{issue}"
         project.enable_module!('dmsf') unless @dry_run
         # <issue.id> - <issue.subject> folder
-        STDOUT.puts "Creating #{issue.id} - #{DmsfFolder::get_valid_title(issue.subject)} folder"
+        $stdout.puts "Creating #{issue.id} - #{DmsfFolder::get_valid_title(issue.subject)} folder"
         unless @dry_run
           folder = issue.system_folder(true, project.id)
         end
@@ -98,10 +98,10 @@ class DmsfConvertDocuments
     @fail = false
     folders = []
     if project.documents.any?
-      STDOUT.puts 'Documents'
+      $stdout.puts 'Documents'
       project.enable_module!('dmsf') unless @dry_run
       project.documents.each do |document|
-        STDOUT.puts "Processing document: #{document.title}"
+        $stdout.puts "Processing document: #{document.title}"
         folder = DmsfFolder.new
         folder.project = project
         attachment = document.attachments.reorder(created_on: :asc).first
@@ -120,15 +120,15 @@ class DmsfConvertDocuments
         folder.title = folder.title + suffix
         folder.description = document.description
         if @dry_run
-          STDOUT.puts "Dry run folder: #{folder.title}"
-          STDERR.puts(folder.errors.full_messages.to_sentence) if folder.invalid?
+          $stdout.puts "Dry run folder: #{folder.title}"
+          $stderr.warn(folder.errors.full_messages.to_sentence) if folder.invalid?
         else
           begin
             folder.save!
-            STDOUT.puts "Created folder: #{folder.title}"
+            $stdout.puts "Created folder: #{folder.title}"
           rescue => e
-            STDERR.puts "Creating folder: #{folder.title} failed"
-            STDERR.puts e.message
+            $stderr.warn "Creating folder: #{folder.title} failed"
+            $stderr.warn e.message
             @fail = true
             next
           end
@@ -165,14 +165,14 @@ class DmsfConvertDocuments
       # File id is needed to properly generate revision disk filename
       file.name = DmsfFileRevision.remove_extension(file.name) + suffix + File.extname(file.name)
       unless File.exist?(attachment.diskfile)
-        STDERR.puts "Creating file: #{attachment.filename} failed, attachment file #{attachment.diskfile} doesn't exist"
+        $stderr.warn "Creating file: #{attachment.filename} failed, attachment file #{attachment.diskfile} doesn't exist"
         @fail = true
         return
       end
       if @dry_run
         file.id = attachment.id # Just to have an ID there
-        STDOUT.puts "Dry run file: #{file.name}"
-        STDERR.puts(file.errors.full_messages.to_sentence) if file.invalid?
+        $stdout.puts "Dry run file: #{file.name}"
+        $stderr.warn(file.errors.full_messages.to_sentence) if file.invalid?
       else
         file.save!
       end
@@ -194,17 +194,17 @@ class DmsfConvertDocuments
         revision.size = File.size(revision.disk_file(false))
       end
       if @dry_run
-        STDOUT.puts "Dry run revision: #{revision.title}"
-        STDERR.puts(revision.errors.full_messages.to_sentence) if revision.invalid?
+        $stdout.puts "Dry run revision: #{revision.title}"
+        $stderr.warn(revision.errors.full_messages.to_sentence) if revision.invalid?
       else
         revision.save!
       end
       files << file
       attachment.destroy unless @dry_run
-      STDOUT.puts "Created file: #{file.name}" unless @dry_run
+      $stdout.puts "Created file: #{file.name}" unless @dry_run
     rescue => e
-      STDERR.puts "Creating file: #{attachment.filename} failed"
-      STDERR.puts e.message
+      $stderr.warn "Creating file: #{attachment.filename} failed"
+      $stderr.warn e.message
       @fail = true
     end
   end

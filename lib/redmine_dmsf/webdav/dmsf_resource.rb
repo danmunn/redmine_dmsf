@@ -764,8 +764,6 @@ module RedmineDmsf
         end
       end
 
-      private
-
       def create_empty_file
         f = DmsfFile.new
         f.project_id = project.id

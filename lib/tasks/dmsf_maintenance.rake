@@ -37,11 +37,11 @@ namespace :redmine do
   task :dmsf_maintenance => :environment do    
     m = DmsfMaintenance.new
     begin
-      STDERR.puts "\n"
+      $stdout.puts "\n"
       Dir.chdir(DmsfFile.storage_path)
-      puts "Files...\n"
+      $stdout.puts "Files...\n"
       m.files
-      puts "Documents...\n"
+      $stdout.puts "Documents...\n"
       m.documents
       if m.dry_run
         m.result
@@ -49,7 +49,7 @@ namespace :redmine do
         m.clean
       end             
     rescue => e
-      puts e.message
+      $stderr.warn e.message
     end
   end
 end
@@ -61,7 +61,7 @@ class DmsfMaintenance
   attr_accessor :dry_run
   
   def initialize
-    @dry_run = ENV['dry_run']
+    @dry_run = ENV.fetch('dry_run', nil)
     @files_to_delete = Array.new
     @documents_to_delete = Array.new
   end 
@@ -79,7 +79,7 @@ class DmsfMaintenance
       r = f.last_revision
       if r.nil? || (!File.exist?(r.disk_file))
         @documents_to_delete << f
-        puts "\t#{r.disk_file}\n" if r
+        $stdout.puts "\t#{r.disk_file}\n" if r
       end
     end
   end
@@ -87,14 +87,14 @@ class DmsfMaintenance
   def result
     # Files    
     size = 0
-    @files_to_delete.each{ |f| size += File.size(f) }    
-    puts "\n#{@files_to_delete.count} files havn't got a coresponding revision and can be deleted."
-    puts "#{number_to_human_size(size)} can be released.\n\n"
+    @files_to_delete.each{ |f| size += File.size(f) }
+    $stdout.puts "\n#{@files_to_delete.count} files haven't got a corresponding revision and can be deleted."
+    $stdout.puts "#{number_to_human_size(size)} can be released.\n\n"
     # Links
     size = DmsfLink.where(project_id: -1).count
-    puts "#{size} links can be deleted.\n\n"
+    $stdout.puts "#{size} links can be deleted.\n\n"
     # Documents
-    puts "#{@documents_to_delete.size} corrupted documents.\n\n"
+    $stdout.puts "#{@documents_to_delete.size} corrupted documents.\n\n"
   end
   
   def clean
@@ -103,13 +103,13 @@ class DmsfMaintenance
     @files_to_delete.each do |f|            
       size += File.size(f)
       File.delete f
-    end 
-    puts "\n#{@files_to_delete.count} files hadn't got a coresponding revision and have been be deleted."
-    puts "#{number_to_human_size(size)} has been released\n\n"
+    end
+    $stdout.puts "\n#{@files_to_delete.count} files hadn't got a coresponding revision and have been be deleted."
+    $stdout.puts "#{number_to_human_size(size)} has been released\n\n"
     # Links
     size = DmsfLink.where(project_id: -1).count
     DmsfLink.where(project_id: -1).delete_all
-    puts "#{size} links have been deleted.\n\n"
+    $stdout.puts "#{size} links have been deleted.\n\n"
   end
   
   private
@@ -119,11 +119,11 @@ class DmsfMaintenance
     if name =~ /^\d+_\d+_.*/
       n = DmsfFileRevision.where(disk_filename: name).count
       unless n > 0
-        @files_to_delete << file 
-        puts "\t#{file}\t#{number_to_human_size(File.size(file))}"
+        @files_to_delete << file
+        $stdout.puts "\t#{file}\t#{number_to_human_size(File.size(file))}"
       end
     else
-      STDERR.puts "\t#{file} doesn't seem to be a DMSF file!"
+      $stderr.warn "\t#{file} doesn't seem to be a DMSF file!"
     end
   end
 

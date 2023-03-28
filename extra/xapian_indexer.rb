@@ -91,7 +91,7 @@ ENV['RAILS_ENV'] = $env
 
 def log(text, error = false)  
   if error
-    $stderr.puts text
+    $stderr.warn text
   elsif $verbose > 0    
     $stdout.puts text
   end  

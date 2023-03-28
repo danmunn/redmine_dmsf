@@ -43,8 +43,8 @@ end
 class DmsfCreateDigest
 
   def initialize
-    @dry_run = ENV['dry_run']
-    @force_sha256 = ENV['forceSHA256']
+    @dry_run = ENV.fetch('dry_run', nil)
+    @force_sha256 = ENV.fetch('forceSHA256', nil)
   end
 
   def dmsf_create_digests
@@ -75,7 +75,7 @@ class DmsfCreateDigest
     end
     print "\r100%\n"
     # Result
-    puts "#{n}/#{count} revisions updated."
+    $stdout.puts "#{n}/#{count} revisions updated."
   end
 
 end

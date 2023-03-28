@@ -43,12 +43,12 @@ module RedmineDmsf
             raise ActiveRecord::RecordNotFound
           end
         end
-        title = args[1].present? ?  args[1] : file.title
-        title.gsub! /\A"|"\z/, '' # Remove apostrophes
-        title.gsub! /\A'|'\z/, ''
+        title = (args[1].presence || file.title)
+        title.gsub!(/\A"|"\z/, '') # Remove apostrophes
+        title.gsub!(/\A'|'\z/, '')
         title = file.title if title.empty?
         url = view_dmsf_file_url(id: file.id, download: args[2])
-        link_to h(title), url, target: '_blank', title: h(revision.tooltip),
+        link_to h(title), url, target: '_blank', rel: 'noopener', title: h(revision.tooltip),
           'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}"
       end
 
@@ -66,9 +66,9 @@ module RedmineDmsf
         else
           folder = DmsfFolder.visible.find args[0]
           if User.current&.allowed_to?(:view_dmsf_folders, folder.project)
-            title = args[1] ?  args[1] : folder.title
-            title.gsub! /\A"|"\z/, '' # Remove leading and trailing apostrophe
-            title.gsub! /\A'|'\z/, ''
+            title = (args[1].presence || folder.title)
+            title.gsub!(/\A"|"\z/, '') # Remove leading and trailing apostrophe
+            title.gsub!(/\A'|'\z/, '')
             title = folder.title if title.empty?
             link_to h(title), dmsf_folder_url(folder.project, folder_id: folder)
           else
@@ -85,9 +85,9 @@ module RedmineDmsf
         raise ArgumentError if args.length < 1 # Requires file id
         file = DmsfFile.visible.find args[0]
         if User.current&.allowed_to?(:view_dmsf_files, file.project)
-          title = args[1].present? ?  args[1] : file.title
-          title.gsub! /\A"|"\z/, '' # Remove leading and trailing apostrophe
-          title.gsub! /\A'|'\z/, ''
+          title = (args[1].presence || file.title)
+          title.gsub!(/\A"|"\z/, '') # Remove leading and trailing apostrophe
+          title.gsub!(/\A'|'\z/, '')
           link_to h(title), dmsf_file_path(id: file)
         else
           raise l(:notice_not_authorized)
@@ -261,7 +261,7 @@ module RedmineDmsf
           else
             img = image_tag(url, alt: filename, title: file.title, width: 'auto', height: 200)
           end
-          html << link_to( img, url, target: '_blank', title: h(file.last_revision.try(:tooltip)),
+          html << link_to( img, url, target: '_blank', rel: 'noopener', title: h(file.last_revision.try(:tooltip)),
             'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}")
         end
         html.html_safe

@@ -1,4 +1,3 @@
-
 module Dav4rack
 
   class InterceptorResource < Resource

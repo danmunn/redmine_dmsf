@@ -39,7 +39,7 @@ end
 class DmsfAlertApprovals    
 
   def self.alert
-    dry_run = ENV['dry_run']
+    dry_run = ENV.fetch('dry_run', nil)
     revisions = DmsfFileRevision.visible.joins(:dmsf_file).joins('JOIN projects ON projects.id = dmsf_files.project_id').where(
         dmsf_file_revisions: { workflow: DmsfWorkflow::STATE_WAITING_FOR_APPROVAL },
         projects: { status: Project::STATUS_ACTIVE})
@@ -51,7 +51,7 @@ class DmsfAlertApprovals
       assignments.each do |assignment|
         next unless assignment.user.active?
         if dry_run
-          puts "#{assignment.user.name} <#{assignment.user.mail}>"
+          $stdout.puts "#{assignment.user.name} <#{assignment.user.mail}>"
         else
           DmsfMailer.deliver_workflow_notification(
             [assignment.user],
@@ -61,8 +61,7 @@ class DmsfAlertApprovals
             :text_email_finished_step,
             :text_email_to_proceed,
             nil,
-            assignment.dmsf_workflow_step
-            )
+            assignment.dmsf_workflow_step)
         end
       end      
     end

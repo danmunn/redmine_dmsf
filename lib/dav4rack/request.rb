@@ -3,7 +3,6 @@
 require File.dirname(__FILE__) + '/uri'
 require 'addressable/uri'
 require File.dirname(__FILE__) + '/logger'
-require File.dirname(__FILE__) + '/uri'
 
 module Dav4rack
   class Request < Rack::Request

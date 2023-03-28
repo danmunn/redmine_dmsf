@@ -28,20 +28,20 @@ class DmsfPluginTest < RedmineDmsf::Test::HelperTest
   end
 
   def test_present_no
-    assert !RedmineDmsf::Plugin.present?(:redmine_dmsfx)
+    assert_not RedmineDmsf::Plugin.present?(:redmine_dmsfx)
   end
 
-  def test_an_osolete_plugin_present_no
+  def test_an_obsolete_plugin_present_no
     # No such plugin is present
-    assert !RedmineDmsf::Plugin.an_osolete_plugin_present?
+    assert_not RedmineDmsf::Plugin.an_obsolete_plugin_present?
   end
 
-  def test_an_osolete_plugin_present_yes
+  def test_an_obsolete_plugin_present_yes
     # Create a fake redmine_checklists plugin
     path = File.join(Rails.root, 'plugins', 'redmine_contacts')
-    Dir.mkdir(path) unless Dir.exist?(path)
-    assert RedmineDmsf::Plugin.an_osolete_plugin_present?
-    Dir.rmdir(path) if Dir.exist?(path)
+    FileUtils.mkdir_p path
+    assert RedmineDmsf::Plugin.an_obsolete_plugin_present?
+    FileUtils.rm_rf path
   end
 
 end
