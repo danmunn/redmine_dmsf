@@ -82,7 +82,5 @@
   </p>
 </div>
 
-<% if Setting.text_formatting != 'HTML' %>
-  <%= wikitoolbar_for "commited_files_#{i}_description" %>
-  <%= wikitoolbar_for "commited_files_#{i}_comment" %>
-<% end %>
+<%= wikitoolbar_for "commited_files_#{i}_description" %>
+<%= wikitoolbar_for "commited_files_#{i}_comment" %>
