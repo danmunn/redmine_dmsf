@@ -136,3 +136,43 @@ td.dmsf-title a.icon-folder::before {
     width: 0;
     height: 16px;
 }
+
+/* Revision box */
+div.dmsf-id-box label {
+    display: inline;
+}
+
+.dmsf-widget-header-text {
+    padding: 0 !important;
+}
+
+div.dmsf-controls.contextual {
+    padding-top: 2px;
+}
+
+div.autoscroll.dmsf-revision-access {
+    width: auto;
+}
+
+/* Filters */
+#dmsf-query-form .add-filter {
+    width: 35%;
+    float: right;
+    text-align: right;
+    vertical-align: top;
+    padding-right: 10px;
+}
+
+#dmsf-query-form div.add-filter label {
+    display: inline;
+}
+
+#dmsf-query-form table#filters-table {
+    width: 60%;
+    float: left;
+}
+
+#dmsf-query-form select#add_filter_select {
+    width: auto;
+    position: static;
+}

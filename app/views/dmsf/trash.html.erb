@@ -31,7 +31,9 @@
 <h2><%= l(:link_trash_bin) %></h2>
 
 <%= form_tag(trash_dmsf_path(id: @project), method: :get, id: 'query_form', class: 'dmsf-query-form') do %>
-  <%= render partial: 'queries/query_form' %>
+  <div id="dmsf-query-form">
+    <%= render partial: 'queries/query_form' %>
+  </div>
 <% end %>
 <%= render partial: 'query_list', locals: { query: @query, dmsf_pages: @dmsf_pages } %>
 <span class="pagination"><%= pagination_links_full @dmsf_pages, @dmsf_count %></span>

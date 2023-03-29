@@ -67,7 +67,9 @@
 <%= form_tag(@project ? dmsf_folder_path(id: @project, folder_id: @folder) : dmsf_index_path,
              method: :get, id: 'query_form', class: 'dmsf-query-form') do %>
   <%= hidden_field_tag('folder_id', @folder.id) if @folder %>
-  <%= render partial: 'queries/query_form' %>
+  <div id="dmsf-query-form">
+    <%= render partial: 'queries/query_form' %>
+  </div>
 <% end %>
 <% if @query.valid? %>
   <% if @dmsf_count == 0 %>

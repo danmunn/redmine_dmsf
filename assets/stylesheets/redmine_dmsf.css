@@ -98,7 +98,7 @@ div.dmsf-revision-inner-box .attribute .label {
     float: left;
 }
 
-.dmsf-id-box {
+div.dmsf-id-box {
   float: right;
   white-space: nowrap;
   line-height: 24px;
