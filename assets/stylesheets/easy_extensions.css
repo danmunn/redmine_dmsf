@@ -176,3 +176,12 @@ div.autoscroll.dmsf-revision-access {
     width: auto;
     position: static;
 }
+
+/* Plugin's settings */
+.dmsf-info {
+    display: block;
+}
+
+.dmsf-info-title {
+    font-weight: bold;
+}
