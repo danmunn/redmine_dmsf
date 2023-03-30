@@ -129,7 +129,7 @@ class DmsfFolder < ActiveRecord::Base
       return true if (principal_ids & user_group_ids).any?
       return false
     end
-    DmsfFolder.permissions?(folder.dmsf_folder, allow_system)
+    DmsfFolder.permissions? folder.dmsf_folder, allow_system, file
   end
 
   def initialize(*args)
