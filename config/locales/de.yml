@@ -424,7 +424,7 @@ de:
   label_dmsf_folder_watchers: Beobachter
   label_dmsf_file_watchers: Beobachter
   label_dmsf_watched: Beobachtete Dokumente
-  dmsf_legacy_notifications: DMS Dokument oder Verzeichnis aktualisiert
+  label_dmsf_legacy_notifications: DMS Dokument oder Verzeichnis aktualisiert
   permission_view_dmsf_folder_watchers: Liste der Beobachter von Verzeichnissen ansehen
   permission_add_dmsf_folder_watchers: Beobachter von Verzeichnissen hinzufügen
   permission_delete_dmsf_folder_watchers: Beobachter von Verzeichnissen löschen
