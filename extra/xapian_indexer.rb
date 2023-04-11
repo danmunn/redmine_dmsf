@@ -39,7 +39,11 @@ $files = 'dmsf'
 $scriptindex = '/usr/bin/scriptindex'
 
 # omindex binary path
+# To index "non-text" files, use omindex filters
+# e.g.: tesseract OCR engine as a filter for PNG files
 $omindex = '/usr/bin/omindex'
+# $omindex += " --filter=image/png:'tesseract -l chi_sim+chi_tra %f -'"
+# $omindex += " --filter=image/jpeg:'tesseract -l chi_sim+chi_tra %f -'"
 
 # Directory containing Xapian databases for omindex (Attachments indexing)
 $dbrootpath = File.expand_path('dmsf_index', $redmine_root)
@@ -91,7 +95,7 @@ ENV['RAILS_ENV'] = $env
 
 def log(text, error = false)  
   if error
-    $stderr.warn text
+    $stderr.puts text
   elsif $verbose > 0    
     $stdout.puts text
   end  
@@ -117,12 +121,12 @@ end
 log "Redmine environment [RAILS_ENV=#{$env}] correctly loaded ..."
 
 # Indexing documents
-unless File.exist?($omindex)
-  log "#{$omindex} does not exist, exiting...", true
-  exit 1
-end
+# unless File.exist?($omindex)
+#   log "#{$omindex} does not exist, exiting...", true
+#   exit 1
+# end
 $stem_langs.each do | lang |
-  filespath = File.join($redmine_root, $files)
+  filespath = Setting.plugin_redmine_dmsf['dmsf_storage_directory'] || File.join($redmine_root, $files)
   unless File.directory?(filespath)
     log "An error while accessing #{filespath}, exiting...", true
     exit 1
