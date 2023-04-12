@@ -376,7 +376,7 @@
 
 <p>
   <%= content_tag :label, l(:label_enable_cjk_ngrams) %>
-  <%= check_box_tag 'settings[enable_cjk_ngrams]', true, @settings['dmsf_enable_cjk_ngrams'], disabled: xapian_disabled %>
+  <%= check_box_tag 'settings[dmsf_enable_cjk_ngrams]', true, @settings['dmsf_enable_cjk_ngrams'], disabled: xapian_disabled %>
   <em class="<%= klass %>">
     <%= l(:text_enable_cjk_ngrams) %>
   </em>

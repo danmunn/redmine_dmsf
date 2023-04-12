@@ -105,8 +105,8 @@ de:
   select_option_default: Voreinstellung
   select_option_deactivated: Aus
   select_option_activated: Ein
-  label_title_format: Title format
-  text_title_format: "Format des Dokumente-Titels für Speichern (%t - Titel, %f - Datei, %d - Datum, %v - Version, %i -
+  label_title_format: Titelformat
+  text_title_format: "Format für den Titel eines Dokuments beim erstmaligen Speichern (%t - Titel, %f - Datei, %d - Datum, %v - Version, %i -
     ID, %r - Revision). z.B.: %t_%v"
   title_save_preferences: Einstellungen speichern
   heading_revisions: Versionen
@@ -367,7 +367,7 @@ de:
 
   label_last_approver: Letzter Genehmiger
 
-  label_act_as_attachable: Act as attachable
+  label_act_as_attachable: DMS Anhänge
   note_dmsf_act_as_attachable: Erlaubt das Hinzufügen von Dokumenten zu anderen Objekten (z.B. Tickets)
 
   label_user_search_add: Benutzer suchen
@@ -420,30 +420,30 @@ de:
   title_start_minor: Start nicht erlaubt, Unterversion muss Null lauten
   title_approval_minor: Genehmigung nicht erlaubt, Unterversion muss Null lauten
 
-  label_project_watchers: Watchers
-  label_dmsf_folder_watchers: Watchers
-  label_dmsf_file_watchers: Watchers
-  label_dmsf_watched: Watched documents
-  dmsf_legacy_notifications: Legacy DMS notifications
-  permission_view_dmsf_folder_watchers: View folder's watchers
-  permission_add_dmsf_folder_watchers: Add folder's watchers
-  permission_delete_dmsf_folder_watchers: Delete folder's watchers
-  permission_view_dmsf_file_watchers: View document's watchers
-  permission_add_dmsf_file_watchers: Add document's watchers
-  permission_delete_dmsf_file_watchers: Delete document's watchers
-  permission_view_project_watchers: View project's watchers
-  permission_add_project_watchers: Add project's watchers
-  permission_delete_project_watchers: Delete project's watchers
-  label_dmsf_new_top_level_document: New top level DMS document
-  label_dmsf_new_top_level_folder: New top level DMS folder
+  label_project_watchers: Beobachter
+  label_dmsf_folder_watchers: Beobachter
+  label_dmsf_file_watchers: Beobachter
+  label_dmsf_watched: Beobachtete Dokumente
+  label_dmsf_legacy_notifications: DMS Dokument oder Verzeichnis aktualisiert
+  permission_view_dmsf_folder_watchers: Liste der Beobachter von Verzeichnissen ansehen
+  permission_add_dmsf_folder_watchers: Beobachter von Verzeichnissen hinzufügen
+  permission_delete_dmsf_folder_watchers: Beobachter von Verzeichnissen löschen
+  permission_view_dmsf_file_watchers: Liste der Beobachter eines Dokuments ansehen
+  permission_add_dmsf_file_watchers: Beobachter von Dokumenten hinzufügen
+  permission_delete_dmsf_file_watchers: Beobachter von Dokumenten löschen
+  permission_view_project_watchers: Liste der Beobachter vom DMS ansehen
+  permission_add_project_watchers: Beobachter vom DMS hinzufügen
+  permission_delete_project_watchers: Beobachter vom DMS löschen
+  label_dmsf_new_top_level_document: Neues DMS-Dokument auf oberster Ebene hinzufügen
+  label_dmsf_new_top_level_folder: Neues DMS-Verzeichnis auf oberster Ebene hinzufügen
 
-  label_dmsf_max_notification_receivers_info: Maximum notification receivers info
-  note_dmsf_max_notification_receivers_info: Limits maximum number of displayed email notification receivers.
-  label_dmsf_office_bin: Libreoffice binary
-  note_dmsf_office_bin: A binary to convert office documents to PDF format and provide their preview. If you want
-    to prevent previews of office documents, put an empty string here. After a change, you might have to restart the
-    application to take it any effect.
-  note_dmsf_office_bin_not_available: "LibreOffice's command line binary '%{value}' not available"
+  label_dmsf_max_notification_receivers_info: Maximale Anzahl von E-Mail-Empfängern
+  note_dmsf_max_notification_receivers_info: Begrenzt die Anzahl der angezeigten Empfänger von E-Mail-Benachrichtigungen.
+  label_dmsf_office_bin: LibreOffice Binärdatei
+  note_dmsf_office_bin: "Eine Binärdatei zum Umwandeln von Office-Dokumenten in ein PDF, um so eine Vorschau anzeigen zu können. 
+    Wenn Sie keine Vorschau anzeigen lassen möchten, geben Sie einen leeren String ein: ''. Der Server muss neu 
+    gestartet werden, damit die Änderung wirksam wird."
+  note_dmsf_office_bin_not_available: "LibreOffice's Binärdatei für die Kommandozeile '%{value}' ist nicht verfügbar."
 
   label_dmsf_columns: DMS Spalten
   label_column_id: ID
@@ -456,8 +456,8 @@ de:
   label_column_description: Beschreibung
   label_column_comment: Kommentar
 
-  label_dmsf_global_menu_disabled: Global DMS menu disabled
-  note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.
+  label_dmsf_global_menu_disabled: Globales DMS Menü deaktiviert
+  note_dmsf_global_menu_disabled: Falls ja, wird das DMS Menüelement im Top Menü nicht erscheinen.
   error_dmsf_workflow_assigned: Der verwendete Genehmigungs-Workflow kann weder bearbeitet noch gelöscht werden.
 
   label_empty_minor_version_by_default: Leere Unterversion als Standard
