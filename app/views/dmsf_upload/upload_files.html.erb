@@ -45,7 +45,10 @@
       <% end %>
     <% end %>
     <div class="form-actions">
-      <%= submit_tag l(:label_upload), class: 'button-positive', onclick: "$('#ajax-indicator').show();" %>
+      <%= submit_tag l(:label_upload),
+                     data: { cy: 'button__submit__upload-file--project' },
+                     class: 'button-positive',
+                     onclick: "$('#ajax-indicator').show();" %>
     </div>
   <% end %>
 <% end %>

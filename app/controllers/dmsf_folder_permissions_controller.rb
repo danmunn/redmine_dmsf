@@ -21,7 +21,7 @@
 
 class DmsfFolderPermissionsController < ApplicationController
 
-  before_action :find_folder, only: [:destroy, :new, :autocomplete_for_user], if: -> { params[:dmsf_folder_id].present?}
+  before_action :find_folder, only: [:destroy, :new, :autocomplete_for_user], if: -> { params[:dmsf_folder_id].present? }
   before_action :find_project
   before_action :authorize
   before_action :permissions
