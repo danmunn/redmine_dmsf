@@ -1,0 +1,110 @@
+# Redmine plugin for Custom Workflows
+#
+# Copyright © 2015-19 Anton Argirov
+# Copyright © 2019-23 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+AllCops:
+  TargetRubyVersion: 2.7
+  TargetRailsVersion: 6.1
+
+  NewCops: enable
+
+  Exclude:
+    - '**/vendor/**/*'
+
+# Enable extensions
+require:
+  - rubocop-performance
+  - rubocop-rails
+
+# Rules for DMSF
+Layout/EmptyLineAfterMagicComment:
+  Enabled: false
+
+Layout/LineLength:
+  Exclude:
+    - app/models/dmsf_query.rb
+
+Lint/ScriptPermission:
+  Exclude:
+    - extra/xapian_indexer.rb
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/BlockNesting:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Exclude:
+    - lib/dav4rack/resource.rb
+
+Rails/DynamicFindBy:
+  AllowedMethods:
+    - find_by_token
+    - find_by_param
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - app/models/dmsf_workflow.rb # update doesn't work here
+    - lib/redmine_dmsf/patches/user_patch.rb
+    - lib/redmine_dmsf/patches/role_patch.rb
+    - db/migrate/20170526144701_dmsf_attachable.rb
+    - db/migrate/20170421101901_dmsf_file_container_rollback.rb
+    - db/migrate/20170118142001_dmsf_file_container.rb
+    - db/migrate/20160222140401_approval_workflow_std_fields.rb
+    - db/migrate/20160215125801_approval_workflow_status.rb
+    - db/migrate/20140519133201_trash_bin.rb
+    - db/migrate/07_dmsf_1_4_4.rb
+
+Rails/UniqueValidationWithoutIndex:
+  Exclude:
+    - app/models/dmsf_folder.rb # TODO: Create a case insensitive index in DB migrations
+    - app/models/dmsf_file.rb
+    - app/models/dmsf_workflow_step.rb # Impossible due to steps sorting
+
+Style/ExpandPathArguments:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - init.rb
+
+Style/OpenStructUse:
+  Exclude:
+    - lib/dav4rack/utils.rb

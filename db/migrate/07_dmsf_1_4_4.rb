@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012 Daniel Munn <dan.munn@munnster.co.uk>
@@ -20,22 +22,24 @@
 require 'fileutils'
 require 'uuidtools'
 
+# Locking
 class Dmsf144 < ActiveRecord::Migration[4.2]
-
-  class DmsfFileLock < ActiveRecord::Base
+  class DmsfFileLock < ApplicationRecord
     belongs_to :file, class_name: 'DmsfFile', foreign_key: 'dmsf_file_id'
     belongs_to :user
-  end  
+  end
 
   def up
-    # Add our entity_type column (used with our entity type)
-    add_column :dmsf_file_locks, :entity_type, :integer, null: true
-    # Add our lock relevent columns (ENUM) - null (till we upgrade data)
-    add_column :dmsf_file_locks, :lock_type_cd, :integer, null: true
-    add_column :dmsf_file_locks, :lock_scope_cd, :integer, null: true
-    add_column :dmsf_file_locks, :uuid, :string, null: true, limit: 36
-    # Add our expires_at column
-    add_column :dmsf_file_locks, :expires_at, :datetime, null: true
+    change_table :dmsf_file_locks, bulk: true do |t|
+      # Add our entity_type column (used with our entity type)
+      t.add_column :entity_type, :integer, null: true
+      # Add our lock relevent columns (ENUM) - null (till we upgrade data)
+      t.add_column :lock_type_cd, :integer, null: true
+      t.add_column :lock_scope_cd, :integer, null: true
+      t.add_column :uuid, :string, null: true, limit: 36
+      # Add our expires_at column
+      t.add_column :expires_at, :datetime, null: true
+    end
     do_not_delete = []
     # - 2012-07-12: Better compatibility for postgres - query used 3 columns however
     #               only on appearing in group, find_each imposes a limit and incorrect
@@ -44,15 +48,15 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
     #               efficient, however compatible across the board.
     DmsfFileLock.reset_column_information
     DmsfFileLock.select('MAX(id), id').order(Arel.sql('MAX(id) DESC')).group(:dmsf_file_id, :id).find do |lock|
-      lock.reload 
-      if lock.locked
-        do_not_delete << lock.id
-      end
+      lock.reload
+      do_not_delete << lock.id if lock.locked
     end
     # Generate new lock Id's for whats being persisted
     do_not_delete.each do |l|
       # Find the lock
-      next unless lock = DmsfFileLock.find(l)
+      lock = DmsfFileLock.find(l)
+      next unless lock
+
       lock.uuid = UUIDTools::UUID.random_create.to_s
       lock.save!
     end
@@ -60,27 +64,30 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
     DmsfFileLock.where.not(id: do_not_delete).delete_all
     # We need to force our newly found
     say 'Applying default lock scope / type - Exclusive / Write'
-    DmsfFileLock.update_all(entity_type: 0, lock_type_cd: 0, lock_scope_cd: 0)
-    # These are not null-allowed columns
-    change_column :dmsf_file_locks, :entity_type, :integer, null: false
-    change_column :dmsf_file_locks, :lock_type_cd, :integer, null: false
-    change_column :dmsf_file_locks, :lock_scope_cd, :integer, null: false
-    # Data cleanup
-    rename_column :dmsf_file_locks, :dmsf_file_id, :entity_id
-    remove_column :dmsf_file_locks, :locked
-    rename_table :dmsf_file_locks, :dmsf_locks
+    DmsfFileLock.update_all entity_type: 0, lock_type_cd: 0, lock_scope_cd: 0
+    change_table :dmsf_file_locks, bulk: true do |t|
+      # These are not null-allowed columns
+      t.change_column :entity_type, :integer, null: false
+      t.change_column :lock_type_cd, :integer, null: false
+      t.change_column :lock_scope_cd, :integer, null: false
+      # Data cleanup
+      t.rename_column :dmsf_file_id, :entity_id
+      t.remove_column :locked
+      t.rename_table :dmsf_locks
+    end
     # Not sure if this is the right place to do this, as its file manipulation, not database (strictly)
     say 'Completing one-time file migration ...'
     begin
       DmsfFileRevision.find_each do |rev|
         next unless rev.project
+
         existing = DmsfFile.storage_path.join rev.disk_filename
-        new_path = rev.disk_file(false)
+        new_path = rev.disk_file(search_if_not_exists: false)
         begin
           if File.exist?(existing)
             if File.exist?(new_path)
               rev.disk_filename = rev.new_storage_filename
-              new_path = rev.disk_file(false)
+              new_path = rev.disk_file(search_if_not_exists: false)
               rev.save!
             end
             # Ensure the project path exists
@@ -89,15 +96,15 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
             FileUtils.mv existing, new_path
             say "Migration: #{existing} -> #{new_path} succeeded"
           end
-        rescue #Here we wrap around IO in the loop to prevent one failure ruining complete run.
+        rescue StandardError => e # Here we wrap around IO in the loop to prevent one failure ruining complete run.
           say "Migration: #{existing} -> #{new_path} failed"
+          Rails.logger.error e.message
         end
       end
       say 'Action was successful'
-    rescue => e
+    rescue StandardError => e
       say 'Action was not successful'
-      puts e.message
-      puts e.backtrace.inspect # See issue #86
+      Rails.logger.error e.message # See issue #86
       # Nothing here, we just dont want a migration to break
     end
   end
@@ -110,19 +117,22 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
     say 'Removing all expired and/or folder locks'
     DmsfFileLock.where(['expires_at < ? OR entity_type = 1', Time.current]).delete_all
     say 'Changing all records to be locked'
-    DmsfFileLock.update_all(locked: true)
-    rename_column :dmsf_file_locks, :entity_id, :dmsf_file_id
-    remove_column :dmsf_file_locks, :entity_type
-    remove_column :dmsf_file_locks, :lock_type_cd
-    remove_column :dmsf_file_locks, :lock_scope_cd
-    remove_column :dmsf_file_locks, :expires_at
-    remove_column :dmsf_file_locks, :uuid
+    DmsfFileLock.update_all locked: true
+    change_table :dmsf_file_locks, bulk: true do |t|
+      t.rename_column :entity_id, :dmsf_file_id
+      t.remove_column :entity_type
+      t.remove_column :lock_type_cd
+      t.remove_column :lock_scope_cd
+      t.remove_column :expires_at
+      t.remove_column :uuid
+    end
     # Not sure if this is the right place to do this, as its file manipulation, not database (stricly)
     begin
       say 'restoring old file-structure'
       DmsfFileRevision.find_each do |rev|
         next unless rev.project
-        project = rev.project.identifier.gsub(/[^\w\.\-]/, '_')
+
+        project = rev.project.identifier.gsub(/[^\w.\-]/, '_')
         existing = DmsfFile.storage_path.join("p_#{project}/#{rev.disk_filename}")
         new_path = DmsfFile.storage_path.join(rev.disk_filename)
         if File.exist?(existing)
@@ -134,9 +144,8 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
           FileUtils.mv existing, new_path
         end
       end
-    rescue
+    rescue StandardError
       # Nothing here, we just dont want a migration to break
     end
   end
-
 end

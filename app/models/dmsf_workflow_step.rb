@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,18 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfWorkflowStep < ActiveRecord::Base
-
+# Workflow step
+class DmsfWorkflowStep < ApplicationRecord
   belongs_to :dmsf_workflow
   belongs_to :user
 
   has_many :dmsf_workflow_step_assignments, dependent: :destroy
 
-  validates :dmsf_workflow, presence: true
   validates :step, presence: true
-  validates :user, presence: true
   validates :operator, presence: true
-  validates_uniqueness_of :user_id, scope: [:dmsf_workflow_id, :step], case_sensitive: true
+  validates :user_id, uniqueness: { scope: %i[dmsf_workflow_id step], case_sensitive: true }
   validates :name, length: { maximum: 30 }
 
   OPERATOR_OR  = 0
@@ -52,15 +49,14 @@ class DmsfWorkflowStep < ActiveRecord::Base
     step_assignment.save!
   end
 
-  def is_finished?(dmsf_file_revision_id)
+  def finished?(dmsf_file_revision_id)
     dmsf_workflow_step_assignments.each do |assignment|
-      if assignment.dmsf_file_revision_id == dmsf_file_revision_id
-        if assignment.dmsf_workflow_step_actions.empty?
-          return false
-        end
-        assignment.dmsf_workflow_step_actions.each do |act|
-          return false unless act.is_finished?
-        end
+      next if assignment.dmsf_file_revision_id == dmsf_file_revision_id
+
+      return false if assignment.dmsf_workflow_step_actions.empty?
+
+      assignment.dmsf_workflow_step_actions.each do |act|
+        return false unless act.finished?
       end
     end
   end
@@ -71,5 +67,4 @@ class DmsfWorkflowStep < ActiveRecord::Base
     new_step.save!
     new_step
   end
-
 end

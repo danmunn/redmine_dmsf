@@ -1,4 +1,3 @@
-# encode: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -18,14 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#
 
 require 'query'
 
+# Version column
 class DmsfQueryVersionColumn < QueryColumn
-
   def value_object(object)
     DmsfFileRevision.version object.major_version, object.minor_version, object.patch_version
   end
-
 end

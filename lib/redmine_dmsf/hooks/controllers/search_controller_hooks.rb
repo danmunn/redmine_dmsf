@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,23 +21,21 @@
 module RedmineDmsf
   module Hooks
     module Controllers
-    
+      # Search controller hooks
       class SearchControllerHooks < Redmine::Hook::Listener
         include Rails.application.routes.url_helpers
 
-        def controller_search_quick_jump(context={})
-          if context.is_a?(Hash)
-            question = context[:question]
-            if question.present?
-              if question.match(/^D(\d+)$/) && DmsfFile.visible.where(id: $1).exists?
-                return dmsf_file_path(id: $1)
-              end
-            end
-          end
+        def controller_search_quick_jump(context = {})
+          return unless context.is_a?(Hash)
+
+          question = context[:question]
+          return if question.blank?
+
+          return unless question.match(/^D(\d+)$/) && DmsfFile.visible.exists?(id: Regexp.last_match(1))
+
+          dmsf_file_path id: Regexp.last_match(1)
         end
-
       end
-
     end
   end
 end

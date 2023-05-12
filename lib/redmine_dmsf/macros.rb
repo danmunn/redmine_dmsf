@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -18,155 +17,154 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#
 
 module RedmineDmsf
+  # Macros
   module Macros
-
     Redmine::WikiFormatting::Macros.register do
-
       # dmsf - link to a document
-      desc "Wiki link to DMSF file:\n\n" +
-               "{{dmsf(file_id [, title [, revision_id]])}}\n\n" +
-           "_file_id_ / _revision_id_ can be found in the link for file/revision download."
-      macro :dmsf do |obj, args|
-        raise ArgumentError if args.length < 1 # Requires file id
+      desc %{Wiki link to DMSF file:
+               {{dmsf(file_id [, title [, revision_id]])}}
+           _file_id_ / _revision_id_ can be found in the link for file/revision download.}
+      macro :dmsf do |_obj, args|
+        raise ArgumentError if args.empty? # Requires file id
+
         file = DmsfFile.visible.find args[0]
         unless User.current&.allowed_to?(:view_dmsf_files, file.project, { id: file.id })
           raise l(:notice_not_authorized)
         end
+
         if args[2].blank?
           revision = file.last_revision
         else
           revision = DmsfFileRevision.find_by(id: args[2], dmsf_file_id: args[0])
-          unless revision
-            raise ActiveRecord::RecordNotFound
-          end
+          raise ActiveRecord::RecordNotFound unless revision
         end
         title = (args[1].presence || file.title)
         title.gsub!(/\A"|"\z/, '') # Remove apostrophes
         title.gsub!(/\A'|'\z/, '')
         title = file.title if title.empty?
         url = view_dmsf_file_url(id: file.id, download: args[2])
-        link_to h(title), url, target: '_blank', rel: 'noopener', title: h(revision.tooltip),
-          'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}"
+        link_to h(title), url,
+                target: '_blank',
+                rel: 'noopener',
+                title: h(revision.tooltip),
+                'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}"
       end
 
       # dmsff - link to a folder
-      desc "Wiki link to DMSF folder:\n\n" +
-               "{{dmsff([folder_id [, title]])}}\n\n" +
-           "_folder_id_ can be found in the link for folder opening. Without arguments return link to main folder 'Documents'"
-      macro :dmsff do |obj, args|
-        if args.length < 1
-          if User.current.allowed_to?(:view_dmsf_folders, @project) && @project.module_enabled?(:dmsf)
-            return link_to l(:link_documents), dmsf_folder_url(@project)
-          else
+      desc %{Wiki link to DMSF folder:
+               {{dmsff([folder_id [, title]])}}
+           _folder_id_ can be found in the link for folder opening. Without arguments return link to main folder
+           'Documents'}
+      macro :dmsff do |_obj, args|
+        if args.empty?
+          unless User.current.allowed_to?(:view_dmsf_folders, @project) && @project.module_enabled?(:dmsf)
             raise l(:notice_not_authorized)
           end
+
+          return link_to l(:link_documents), dmsf_folder_url(@project)
         else
           folder = DmsfFolder.visible.find args[0]
-          if User.current&.allowed_to?(:view_dmsf_folders, folder.project)
-            title = (args[1].presence || folder.title)
-            title.gsub!(/\A"|"\z/, '') # Remove leading and trailing apostrophe
-            title.gsub!(/\A'|'\z/, '')
-            title = folder.title if title.empty?
-            link_to h(title), dmsf_folder_url(folder.project, folder_id: folder)
-          else
-            raise l(:notice_not_authorized)
-          end
+          raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_folders, folder&.project)
+
+          title = (args[1].presence || folder.title)
+          title.gsub!(/\A"|"\z/, '') # Remove leading and trailing apostrophe
+          title.gsub!(/\A'|'\z/, '')
+          title = folder.title if title.empty?
+          link_to h(title), dmsf_folder_url(folder.project, folder_id: folder)
         end
       end
 
       # dmsfd - link to the document's details
-      desc "Wiki link to DMSF document details:\n\n" +
-               "{{dmsfd(document_id [, title])}}\n\n" +
-           "_document_id_ can be found in the document's details."
-      macro :dmsfd do |obj, args|
-        raise ArgumentError if args.length < 1 # Requires file id
+      desc %{Wiki link to DMSF document details:
+               {{dmsfd(document_id [, title])}}
+           _document_id_ can be found in the document's details.}
+      macro :dmsfd do |_obj, args|
+        raise ArgumentError if args.empty? # Requires file id
+
         file = DmsfFile.visible.find args[0]
-        if User.current&.allowed_to?(:view_dmsf_files, file.project)
-          title = (args[1].presence || file.title)
-          title.gsub!(/\A"|"\z/, '') # Remove leading and trailing apostrophe
-          title.gsub!(/\A'|'\z/, '')
-          link_to h(title), dmsf_file_path(id: file)
-        else
-          raise l(:notice_not_authorized)
-        end
+        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+
+        title = (args[1].presence || file.title)
+        title.gsub!(/\A"|"\z/, '') # Remove leading and trailing apostrophe
+        title.gsub!(/\A'|'\z/, '')
+        link_to h(title), dmsf_file_path(id: file)
       end
 
       # dmsfdesc - text referring to the document's description
-      desc "Text referring to DMSF document description:\n\n" +
-             "{{dmsfdesc(document_id)}}\n\n" +
-             "_document_id_ can be found in the document's details."
-      macro :dmsfdesc do |obj, args|
-        raise ArgumentError if args.length < 1 # Requires file id
+      desc %{Text referring to DMSF document description:
+             {{dmsfdesc(document_id)}}
+             _document_id_ can be found in the document's details.}
+      macro :dmsfdesc do |_obj, args|
+        raise ArgumentError if args.empty? # Requires file id
+
         file = DmsfFile.visible.find args[0]
-        if User.current&.allowed_to?(:view_dmsf_files, file.project)
-          textilizable file.description
-        else
-          raise l(:notice_not_authorized)
-        end
+        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+
+        textilizable file.description
       end
 
       # dmsfversion - text referring to the document's version
-      desc "Text referring to DMSF document version:\n\n" +
-             "{{dmsfversion(document_id [, revision_id])}}\n\n" +
-             "_document_id_ can be found in the document's details."
-      macro :dmsfversion do |obj, args|
-        raise ArgumentError if args.length < 1 # Requires file id
+      desc %{Text referring to DMSF document version:
+             {{dmsfversion(document_id [, revision_id])}}
+             _document_id_ can be found in the document's details.}
+      macro :dmsfversion do |_obj, args|
+        raise ArgumentError if args.empty? # Requires file id
+
         file = DmsfFile.visible.find args[0]
         unless User.current&.allowed_to?(:view_dmsf_files, file.project, { id: file.id })
           raise l(:notice_not_authorized)
         end
+
         if args[1].blank?
           revision = file.last_revision
         else
           revision = DmsfFileRevision.find_by(id: args[1], dmsf_file_id: args[0])
-          unless revision
-            raise ActiveRecord::RecordNotFound
-          end
+          raise ActiveRecord::RecordNotFound unless revision
+
         end
         textilizable revision.version
       end
 
       # dmsflastupdate - text referring to the document's last update date
-      desc "Text referring to DMSF document last update date:\n\n" +
-             "{{dmsflastupdate(document_id)}}\n\n" +
-             "_document_id_ can be found in the document's details."
-      macro :dmsflastupdate do |obj, args|
-        raise ArgumentError if args.length < 1 # Requires file id
+      desc %{Text referring to DMSF document last update date:
+             {{dmsflastupdate(document_id)}}
+             _document_id_ can be found in the document's details.}
+      macro :dmsflastupdate do |_obj, args|
+        raise ArgumentError if args.empty? # Requires file id
+
         file = DmsfFile.visible.find args[0]
-        if User.current&.allowed_to?(:view_dmsf_files, file.project)
-          textilizable format_time(file.last_revision.updated_at)
-        else
-          raise l(:notice_not_authorized)
-        end
+        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+
+        textilizable format_time(file.last_revision.updated_at)
       end
 
       # dmsft - link to the document's content preview
-      desc "Text referring to DMSF text document content:\n\n" +
-               "{{dmsft(file_id, lines_count)}}\n\n" +
-           "_file_id_ can be found in the document's details. _lines_count_ indicates quantity of lines to show."
-      macro :dmsft do |obj, args|
+      desc %{Text referring to DMSF text document content:
+               {{dmsft(file_id, lines_count)}}
+           _file_id_ can be found in the document's details. _lines_count_ indicates quantity of lines to show.}
+      macro :dmsft do |_obj, args|
         raise ArgumentError if args.length < 2 # Requires file id and lines number
+
         file = DmsfFile.visible.find args[0]
-        if User.current&.allowed_to?(:view_dmsf_files, file.project)
-          file.text_preview(args[1]).gsub("\n", '<br>').html_safe
-        else
-          raise l(:notice_not_authorized)
-        end
+        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+
+        sanitize file.text_preview(args[1]).gsub("\n", '<br>')
       end
 
       # dmsf_image - link to an image
-      desc "Wiki DMSF image:\n\n" +
-                 "{{dmsf_image(file_id)}}\n" +
-                 "{{dmsf_image(file_id, size=50%)}} -- with size 50%\n" +
-                 "{{dmsf_image(file_id, size=300)}} -- with size 300\n" +
-                 "{{dmsf_image(file_id, height=300)}} -- with height (auto width)\n" +
-                 "{{dmsf_image(file_id, width=300)}} -- with width (auto height)\n" +
-                 "{{dmsf_image(file_id, size=640x480)}} -- with size 640x480"
-      macro :dmsf_image do |obj, args|
-        raise ArgumentError if args.length < 1 # Requires file id
+      desc %{Wiki DMSF image:
+                 {{dmsf_image(file_id)}}
+                 {{dmsf_image(file_id1 file_id2 file_id3)}} -- multiple images
+                 {{dmsf_image(file_id, size=50%)}} -- with size 50%
+                 {{dmsf_image(file_id, size=300)}} -- with size 300
+                 {{dmsf_image(file_id, height=300)}} -- with height (auto width)
+                 {{dmsf_image(file_id, width=300)}} -- with width (auto height)
+                 {{dmsf_image(file_id, size=640x480)}} -- with size 640x480"}
+      macro :dmsf_image do |_obj, args|
+        raise ArgumentError if args.empty? # Requires file id
+
         args, options = extract_macro_options(args, :size, :width, :height, :title)
         size = options[:size]
         width = options[:width]
@@ -175,45 +173,44 @@ module RedmineDmsf
         html = +''
         ids.each do |id|
           file = DmsfFile.visible.find(id)
-          unless User.current&.allowed_to?(:view_dmsf_files, file.project)
-            raise l(:notice_not_authorized)
-          end
+          raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
           raise 'Not supported image format' unless file.image?
+
           member = Member.find_by(user_id: User.current.id, project_id: file.project.id)
           filename = file.last_revision.formatted_name(member)
           url = static_dmsf_file_url(file, filename: filename)
-          if size&.include?('%')
-            html << image_tag(url, alt: filename, title: file.title, width: size, height: size)
-          elsif height
-            html << image_tag(url, alt: filename, title: file.title, width: 'auto', height: height)
-          elsif width
-            html << image_tag(url, alt: filename, title: file.title, width: width, height: 'auto')
-          else
-            html << (image_tag url, alt: filename, title: file.title, size: size)
-          end
+          html << if size&.include?('%')
+                    image_tag url, alt: filename, title: file.title, width: size, height: size
+                  elsif height
+                    image_tag url, alt: filename, title: file.title, width: 'auto', height: height
+                  elsif width
+                    image_tag url, alt: filename, title: file.title, width: width, height: 'auto'
+                  else
+                    image_tag url, alt: filename, title: file.title, size: size
+                  end
         end
-        html.html_safe
+        sanitize html
       end
 
       # dmsf_video - link to a video
-      desc "Wiki DMSF video:\n\n" +
-               "{{dmsf_video(file_id)}}\n" +
-               "{{dmsf_video(file_id, size=50%)}} -- with size 50%\n" +
-               "{{dmsf_video(file_id, size=300)}} -- with size 300x300\n" +
-               "{{dmsf_video(file_id, height=300)}} -- with height (auto width)\n" +
-               "{{dmsf_video(file_id, width=300)}} -- with width (auto height)\n" +
-               "{{dmsf_video(file_id, size=640x480)}} -- with size 640x480"
-      macro :dmsf_video do |obj, args|
-        raise ArgumentError if args.length < 1 # Requires file id
+      desc %{Wiki DMSF video:
+               {{dmsf_video(file_id)}}\n" +
+               {{dmsf_video(file_id, size=50%)}} -- with size 50%
+               {{dmsf_video(file_id, size=300)}} -- with size 300x300
+               {{dmsf_video(file_id, height=300)}} -- with height (auto width)
+               {{dmsf_video(file_id, width=300)}} -- with width (auto height)
+               {{dmsf_video(file_id, size=640x480)}} -- with size 640x480}
+      macro :dmsf_video do |_obj, args|
+        raise ArgumentError if args.empty? # Requires file id
+
         args, options = extract_macro_options(args, :size, :width, :height, :title)
         size = options[:size]
         width = options[:width]
         height = options[:height]
         file = DmsfFile.visible.find args[0]
-        unless User.current&.allowed_to?(:view_dmsf_files, file.project)
-          raise l(:notice_not_authorized)
-        end
+        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
         raise 'Not supported video format' unless file.video?
+
         member = Member.find_by(user_id: User.current.id, project_id: file.project.id)
         filename = file.last_revision.formatted_name(member)
         url = static_dmsf_file_url(file, filename: filename)
@@ -229,14 +226,15 @@ module RedmineDmsf
       end
 
       # dmsftn - link to an image thumbnail
-      desc "Wiki DMSF thumbnail:\n\n" +
-                 "{{dmsftn(file_id)}} -- with default height 200 (auto width)\n" +
-                 "{{dmsftn(file_id, size=300)}} -- with size 300x300\n" +
-                 "{{dmsftn(file_id, height=300)}} -- with height (auto width)\n" +
-                 "{{dmsftn(file_id, width=300)}} -- with width (auto height)\n" +
-                 "{{dmsftn(file_id, size=640x480)}} -- with size 640x480"
-      macro :dmsftn do |obj, args|
-        raise ArgumentError if args.length < 1 # Requires file id
+      desc %{Wiki DMSF thumbnail:
+                 {{dmsftn(file_id)}} -- with default height 200 (auto width)
+                 {{dmsftn(file_id, size=300)}} -- with size 300x300
+                 {{dmsftn(file_id, height=300)}} -- with height (auto width)
+                 {{dmsftn(file_id, width=300)}} -- with width (auto height)
+                 {{dmsftn(file_id, size=640x480)}} -- with size 640x480}
+      macro :dmsftn do |_obj, args|
+        raise ArgumentError if args.empty? # Requires file id
+
         args, options = extract_macro_options(args, :size, :width, :height, :title)
         size = options[:size]
         width = options[:width]
@@ -245,44 +243,43 @@ module RedmineDmsf
         html = +''
         ids.each do |id|
           file = DmsfFile.visible.find(id)
-          unless User.current&.allowed_to?(:view_dmsf_files, file.project)
-            raise l(:notice_not_authorized)
-          end
+          raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
           raise 'Not supported image format' unless file.image?
+
           member = Member.find_by(user_id: User.current.id, project_id: file.project.id)
           filename = file.last_revision.formatted_name(member)
           url = static_dmsf_file_url(file, filename: filename)
-          if size
-            img = image_tag(url, alt: filename, title: file.title, size: size)
-          elsif height
-            img = image_tag(url, alt: filename, title: file.title, width: 'auto', height: height)
-          elsif width
-            img = image_tag(url, alt: filename, title: file.title, width: width, height: 'auto')
-          else
-            img = image_tag(url, alt: filename, title: file.title, width: 'auto', height: 200)
-          end
-          html << link_to( img, url, target: '_blank', rel: 'noopener', title: h(file.last_revision.try(:tooltip)),
-            'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}")
+          img = if size
+                  image_tag(url, alt: filename, title: file.title, size: size)
+                elsif height
+                  image_tag(url, alt: filename, title: file.title, width: 'auto', height: height)
+                elsif width
+                  image_tag(url, alt: filename, title: file.title, width: width, height: 'auto')
+                else
+                  image_tag(url, alt: filename, title: file.title, width: 'auto', height: 200)
+                end
+          html << link_to(img, url,
+                          target: '_blank',
+                          rel: 'noopener',
+                          title: h(file.last_revision.try(:tooltip)),
+                          'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}")
         end
-        html.html_safe
+        sanitize html
       end
 
       # dmsfw - link to a document's approval workflow status
-      desc "Text referring to DMSF document's approval workflow status:\n\n" +
-               "{{dmsfw(file_id)}}\n\n" +
-           "_file_id_ can be found in the document's details."
-      macro :dmsfw do |obj, args|
-        raise ArgumentError if args.length < 1 # Requires file id
+      desc %{Text referring to DMSF document's approval workflow status:
+               {{dmsfw(file_id)}}
+           _file_id_ can be found in the document's details.}
+      macro :dmsfw do |_obj, args|
+        raise ArgumentError if args.empty? # Requires file id
+
         file = DmsfFile.visible.find args[0]
-        if User.current&.allowed_to?(:view_dmsf_files, file.project)
-          raise ActiveRecord::RecordNotFound unless file.last_revision
-          file.last_revision.workflow_str(false)
-        else
-          raise l(:notice_not_authorized)
-        end
+        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+        raise ActiveRecord::RecordNotFound unless file.last_revision
+
+        file.last_revision.workflow_str(false)
       end
-
     end
-
   end
 end

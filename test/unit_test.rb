@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -23,9 +22,9 @@
 
 module RedmineDmsf
   module Test
+    # Unit test
     class UnitTest < ActiveSupport::TestCase
-
-      self.fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles
+      fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles
 
       def setup
         @admin = User.find_by(login: 'admin')
@@ -58,18 +57,16 @@ module RedmineDmsf
         @folder2 = DmsfFolder.find 2
         @folder6 = DmsfFolder.find 6
         @folder7 = DmsfFolder.find 7
-        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
+        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join('files', ['dmsf'])
         FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
         User.current = nil
       end
 
       def teardown
         # Delete our tmp folder
-        begin
-          FileUtils.rm_rf DmsfFile.storage_path
-        rescue => e
-          Rails.logger.error e.message
-        end
+        FileUtils.rm_rf DmsfFile.storage_path
+      rescue StandardError => e
+        Rails.logger.error e.message
       end
 
       # Allow us to override the fixtures method to implement fixtures for our plugin.
@@ -95,14 +92,12 @@ module RedmineDmsf
       end
 
       def text_part(email)
-        email.parts.detect {|part| part.content_type.include?('text/plain')}
+        email.parts.detect { |part| part.content_type.include?('text/plain') }
       end
 
       def html_part(email)
-        email.parts.detect {|part| part.content_type.include?('text/html')}
+        email.parts.detect { |part| part.content_type.include?('text/html') }
       end
-
     end
-
   end
 end

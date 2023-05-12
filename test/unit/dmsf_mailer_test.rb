@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Mailer tests
 class DmsfMailerTest < RedmineDmsf::Test::UnitTest
-
   include Redmine::I18n
 
   fixtures :dmsf_workflows, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
@@ -41,75 +40,75 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
   def test_files_updated
     DmsfMailer.deliver_files_updated(@file1.project, [@file1])
     email = last_email
-    if email # Sometimes it doesn't work. Especially on localhost.
-      body = text_part(email)&.body
-      assert(body.include?(@file1.project.name)) if body
-      body = html_part(email)&.body
-      assert(body.include?(@file1.project.name)) if body
-    end
+    return unless email # Sometimes it doesn't work. Especially on localhost.
+
+    body = text_part(email)&.body
+    assert(body.include?(@file1.project.name)) if body
+    body = html_part(email)&.body
+    assert(body.include?(@file1.project.name)) if body
   end
 
   def test_files_deleted
     DmsfMailer.deliver_files_deleted(@file1.project, [@file1])
     email = last_email
-    if email # Sometimes it doesn't work. Especially on localhost.
-      body = text_part(email)&.body
-      assert(body.include?(@file1.project.name)) if body
-      body = html_part(email)&.body
-      assert(body.include?(@file1.project.name)) if body
-    end
+    return unless email # Sometimes it doesn't work. Especially on localhost.
+
+    body = text_part(email)&.body
+    assert(body.include?(@file1.project.name)) if body
+    body = html_part(email)&.body
+    assert(body.include?(@file1.project.name)) if body
   end
 
   def test_files_downloaded
     DmsfMailer.deliver_files_downloaded(@file1.project, [@file1], '127.0.0.1')
     email = last_email
-    if email # Sometimes it doesn't work. Especially on localhost.
-      body = text_part(email)&.body
-      assert(body.include?(@file1.project.name)) if body
-      body = html_part(email)&.body
-      assert(body.include?(@file1.project.name)) if body
-    end
+    return unless email # Sometimes it doesn't work. Especially on localhost.
+
+    body = text_part(email)&.body
+    assert(body.include?(@file1.project.name)) if body
+    body = html_part(email)&.body
+    assert(body.include?(@file1.project.name)) if body
   end
 
   def test_send_documents
-    email_params = Hash.new
+    email_params = {}
     body = 'Test'
     email_params[:to] = @jsmith.mail
     email_params[:from] = @jsmith.mail
     email_params[:body] = body
     email_params[:links_only] = '1'
-    email_params[:public_urls] == '0'
+    email_params[:public_urls] = '0'
     email_params[:expired_at] = DateTime.current.to_s
     email_params[:folders] = nil
     email_params[:files] = "[\"#{@file1.id}\"]"
     DmsfMailer.deliver_send_documents(@file1.project, email_params, @jsmith)
     email = last_email
-    if email # Sometimes it doesn't work. Especially on localhost.
-      body = text_part(email)&.body
-      assert(body.include?(body)) if body
-      body = html_part(email)&.body
-      assert(body.include?(body)) if body
-    end
+    return unless email # Sometimes it doesn't work. Especially on localhost.
+
+    body = text_part(email)&.body
+    assert(body.include?(body)) if body
+    body = html_part(email)&.body
+    assert(body.include?(body)) if body
   end
 
   def test_workflow_notification
     DmsfMailer.deliver_workflow_notification([@jsmith], @wf1, @rev2, :text_email_subject_started,
                                              :text_email_started, :text_email_to_proceed)
     email = last_email
-    if email # Sometimes it doesn't work. Especially on localhost.
-      body = text_part(email)&.body
-      assert(body.include?(l(:text_email_subject_started))) if body
-      body = html_part(email)&.body
-      assert(body.include?(l(:text_email_subject_started))) if body
-    end
+    return unless email # Sometimes it doesn't work. Especially on localhost.
+
+    body = text_part(email)&.body
+    assert(body.include?(l(:text_email_subject_started))) if body
+    body = html_part(email)&.body
+    assert(body.include?(l(:text_email_subject_started))) if body
   end
 
   def test_get_notify_users
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
       users = DmsfMailer.get_notify_users(@project1, @file1)
       assert users.present?
     end
-    with_settings :notified_events => [] do
+    with_settings notified_events: [] do
       users = DmsfMailer.get_notify_users(@project1, @file1)
       assert users.empty?
     end
@@ -129,10 +128,9 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
 
   def test_get_notify_users_with_watchers
     @file1.add_watcher @jsmith
-    with_settings :notified_events => [] do
+    with_settings notified_events: [] do
       users = DmsfMailer.get_notify_users(@project1, @file1)
       assert users.present?
     end
   end
-
 end

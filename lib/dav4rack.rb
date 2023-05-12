@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -28,12 +27,12 @@ require 'ox'
 require 'digest'
 require 'rack'
 
-require File.dirname(__FILE__) + '/dav4rack/utils'
-require File.dirname(__FILE__) + '/dav4rack/http_status'
-require File.dirname(__FILE__) + '/dav4rack/resource'
-require File.dirname(__FILE__) + '/dav4rack/handler'
-require File.dirname(__FILE__) + '/dav4rack/controller'
+require "#{File.dirname(__FILE__)}/dav4rack/utils"
+require "#{File.dirname(__FILE__)}/dav4rack/http_status"
+require "#{File.dirname(__FILE__)}/dav4rack/resource"
+require "#{File.dirname(__FILE__)}/dav4rack/handler"
+require "#{File.dirname(__FILE__)}/dav4rack/controller"
 
 module Dav4rack
-  IS_18 = RUBY_VERSION[0,3] == '1.8'
+  IS_18 = RUBY_VERSION[0, 3] == '1.8'
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Folder permissions tests
 class DmsfFolderPermissionTest < RedmineDmsf::Test::UnitTest
-
   fixtures :dmsf_folder_permissions, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
@@ -49,5 +48,4 @@ class DmsfFolderPermissionTest < RedmineDmsf::Test::UnitTest
     assert_equal @permission1.object_id, permission.object_id
     assert_equal @permission1.object_type, permission.object_type
   end
-
 end

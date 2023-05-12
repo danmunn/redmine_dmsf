@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,12 +20,12 @@
 
 module RedmineDmsf
   module Patches
+    # User preference
     module UserPreferencePatch
-
       ##################################################################################################################
       # New methods
 
-      UserPreference::safe_attributes 'dmsf_attachments_upload_choice'
+      UserPreference.safe_attributes 'dmsf_attachments_upload_choice'
 
       def dmsf_attachments_upload_choice
         self[:dmsf_attachments_upload_choice] || 'DMSF'
@@ -36,7 +35,7 @@ module RedmineDmsf
         self[:dmsf_attachments_upload_choice] = value
       end
 
-      UserPreference::safe_attributes 'default_dmsf_query'
+      UserPreference.safe_attributes 'default_dmsf_query'
 
       def default_dmsf_query
         self[:default_dmsf_query] || nil
@@ -46,7 +45,7 @@ module RedmineDmsf
         self[:default_dmsf_query] = value
       end
 
-      UserPreference::safe_attributes 'receive_download_notification'
+      UserPreference.safe_attributes 'receive_download_notification'
 
       def receive_download_notification
         self[:receive_download_notification] || '0'
@@ -55,15 +54,13 @@ module RedmineDmsf
       def receive_download_notification=(value)
         self[:receive_download_notification] = value
       end
-
     end
   end
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?(:easy_extensions)
-  RedmineExtensions::PatchManager.register_model_patch 'UserPreference',
-  'RedmineDmsf::Patches::UserPreferencePatch'
+if Redmine::Plugin.installed?('easy_extensions')
+  RedmineExtensions::PatchManager.register_model_patch 'UserPreference', 'RedmineDmsf::Patches::UserPreferencePatch'
 else
   UserPreference.prepend RedmineDmsf::Patches::UserPreferencePatch
 end

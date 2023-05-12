@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Folder permissions controller
 class DmsfFolderPermissionsControllerTest < RedmineDmsf::Test::TestCase
-
   fixtures :dmsf_folder_permissions, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
@@ -38,18 +37,19 @@ class DmsfFolderPermissionsControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_autocomplete_for_user
-    get :autocomplete_for_user, params: { project_id: @project1, dmsf_folder_id: @folder7, q: 'smi', format: 'js' },
+    get :autocomplete_for_user,
+        params: { project_id: @project1, dmsf_folder_id: @folder7, q: 'smi', format: 'js' },
         xhr: true
     assert_response :success
     assert_include @jsmith.name, response.body
   end
 
   def test_append
-    get :new, params: { project_id: @project1, dmsf_folder_id: @folder7, user_ids: [@jsmith.id], format: 'js' },
+    get :new,
+        params: { project_id: @project1, dmsf_folder_id: @folder7, user_ids: [@jsmith.id], format: 'js' },
         xhr: true
     assert_response :success
     assert_template 'new'
-    assert @response.content_type.match?(/^text\/javascript/)
+    assert @response.content_type.match?(%r{^text/javascript})
   end
-
 end

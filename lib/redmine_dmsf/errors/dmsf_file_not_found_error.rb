@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,10 +20,9 @@
 
 module RedmineDmsf
   module Errors
-
+    # Not found error
     class DmsfFileNotFoundError < StandardError
-
+      # nothing to do
     end
-
   end
 end

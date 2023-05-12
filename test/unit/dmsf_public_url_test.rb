@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Public URL tests
 class DmsfPublicUrlsTest < RedmineDmsf::Test::UnitTest
-  
   fixtures :dmsf_public_urls, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
@@ -38,10 +37,9 @@ class DmsfPublicUrlsTest < RedmineDmsf::Test::UnitTest
     assert url.save, url.errors.full_messages.to_sentence
     assert_not_nil url.token
   end
-   
+
   def test_belongs_to_file
     @file1.destroy
     assert_nil DmsfPublicUrl.find_by(id: 1)
   end
-
 end

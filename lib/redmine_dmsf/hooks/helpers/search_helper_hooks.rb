@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,31 +21,29 @@
 module RedmineDmsf
   module Hooks
     module Helpers
-    
+      # Search helper hooks
       class SearchHelperHooks < Redmine::Hook::Listener
-
-        def helper_easy_extensions_search_helper_patch(context={})
+        def helper_easy_extensions_search_helper_patch(context = {})
           case context[:entity].event_type
-            when 'dmsf-file', 'dmsf-folder'
-              str = context[:controller].send(:render_to_string, partial: 'search/container',
-                locals: { object: context[:entity] })
-              if str
-                html = +'<p class=\"file-detail-container\"><span><strong>'
-                if context[:entity].dmsf_folder_id
-                  html << context[:entity].class.human_attribute_name(:folder)
-                else
-                  html << context[:entity].class.human_attribute_name(:project)
-                end
-                html << ':</strong>'
-                html << str
-                html << '</span></p>'
-                context[:additional_result] << html
-              end
+          when 'dmsf-file', 'dmsf-folder'
+            str = context[:controller].send(:render_to_string,
+                                            partial: 'search/container',
+                                            locals: { object: context[:entity] })
+            if str
+              html = +'<p class=\"file-detail-container\"><span><strong>'
+              html << if context[:entity].dmsf_folder_id
+                        context[:entity].class.human_attribute_name(:folder)
+                      else
+                        context[:entity].class.human_attribute_name(:project)
+                      end
+              html << ':</strong>'
+              html << str
+              html << '</span></p>'
+              context[:additional_result] << html
+            end
           end
         end
-
       end
-
     end
   end
 end

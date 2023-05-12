@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,11 +18,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Links controller
 class DmsfLinksController < ApplicationController
-
   model_object DmsfLink
 
-  before_action :find_model_object, only: [:destroy, :restore]
+  before_action :find_model_object, only: %i[destroy restore]
   before_action :find_link_project
   before_action :find_folder, only: [:destroy]
   before_action :authorize
@@ -36,9 +35,7 @@ class DmsfLinksController < ApplicationController
   helper :dmsf
 
   def permissions
-    if @dmsf_link
-      render_403 unless DmsfFolder.permissions?(@dmsf_link.dmsf_folder)
-    end
+    render_403 if @dmsf_link && !DmsfFolder.permissions?(@dmsf_link.dmsf_folder)
     true
   end
 
@@ -51,7 +48,7 @@ class DmsfLinksController < ApplicationController
   def new
     @dmsf_link = DmsfLink.new
     member = Member.find_by(project_id: params[:project_id], user_id: User.current.id)
-    @fast_links = member && member.dmsf_fast_links
+    @fast_links = member&.dmsf_fast_links
     @dmsf_link.project_id = params[:project_id]
     @dmsf_link.dmsf_folder_id = params[:dmsf_folder_id]
     @dmsf_file_id = params[:dmsf_file_id]
@@ -108,8 +105,9 @@ class DmsfLinksController < ApplicationController
         @dmsf_link.target_id = params[:dmsf_link][:target_file_id]
         @dmsf_link.target_type = DmsfFile.model_name.to_s
       else
-        @dmsf_link.target_id = DmsfLinksHelper.is_a_number?(
-          params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
+        @dmsf_link.target_id = if DmsfLinksHelper.number?(params[:dmsf_link][:target_folder_id])
+                                 params[:dmsf_link][:target_folder_id].to_i
+                               end
         @dmsf_link.target_type = DmsfFolder.model_name.to_s
       end
       @dmsf_link.name = params[:dmsf_link][:name].scrub.strip
@@ -123,8 +121,9 @@ class DmsfLinksController < ApplicationController
       end
     else
       # Link to
-      @dmsf_link.dmsf_folder_id = DmsfLinksHelper.is_a_number?(
-        params[:dmsf_link][:target_folder_id]) ? params[:dmsf_link][:target_folder_id].to_i : nil
+      @dmsf_link.dmsf_folder_id = if DmsfLinksHelper.number?(params[:dmsf_link][:target_folder_id])
+                                    params[:dmsf_link][:target_folder_id].to_i
+                                  end
       if params[:dmsf_link][:target_project_id].present?
         @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
       else
@@ -152,18 +151,16 @@ class DmsfLinksController < ApplicationController
       end
     end
     respond_to do |format|
-      format.html {
+      format.html do
         if params[:dmsf_link][:type] == 'link_from'
           redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @dmsf_link.dmsf_folder_id)
+        elsif params[:dmsf_link][:dmsf_file_id].present?
+          redirect_back_or_default dmsf_file_path(@dmsf_link.target_file)
         else
-          if params[:dmsf_link][:dmsf_file_id].present?
-            redirect_back_or_default dmsf_file_path(@dmsf_link.target_file)
-          else
-            folder = @dmsf_link.target_folder.dmsf_folder if @dmsf_link.target_folder
-            redirect_back_or_default dmsf_folder_path(id: @project, folder_id: folder)
-          end
+          folder = @dmsf_link.target_folder.dmsf_folder if @dmsf_link.target_folder
+          redirect_back_or_default dmsf_folder_path(id: @project, folder_id: folder)
         end
-      }
+      end
       format.api { render_validation_errors(@dmsf_link) unless result }
       format.js
     end
@@ -171,16 +168,16 @@ class DmsfLinksController < ApplicationController
 
   def destroy
     begin
-    if @dmsf_link
-      commit = params[:commit] == 'yes'
-      if @dmsf_link.delete(commit)
-        flash[:notice] = l(:notice_successful_delete)
-      else
-        flash[:error] = @dmsf_link.errors.full_messages.to_sentence
+      if @dmsf_link
+        commit = params[:commit] == 'yes'
+        if @dmsf_link.delete(commit: commit)
+          flash[:notice] = l(:notice_successful_delete)
+        else
+          flash[:error] = @dmsf_link.errors.full_messages.to_sentence
+        end
       end
-    end
-    rescue => e
-      errors.add(:base, e.message)
+    rescue StandardError => e
+      errors.add :base, e.message
       return false
     end
     redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
@@ -205,15 +202,15 @@ class DmsfLinksController < ApplicationController
     if @dmsf_link
       @project = @dmsf_link.project
     else
-      if params[:dmsf_link].present?
-        if params[:dmsf_link].fetch(:project_id, nil).blank?
-          pid = params[:dmsf_link].fetch(:target_project_id, nil)
-        else
-          pid = params[:dmsf_link][:project_id]
-        end
-      else
-        pid = params[:project_id]
-      end
+      pid = if params[:dmsf_link].present?
+              if params[:dmsf_link].fetch(:project_id, nil).blank?
+                params[:dmsf_link].fetch(:target_project_id, nil)
+              else
+                params[:dmsf_link][:project_id]
+              end
+            else
+              params[:project_id]
+            end
       @project = Project.find(pid)
     end
   rescue ActiveRecord::RecordNotFound
@@ -225,5 +222,4 @@ class DmsfLinksController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     render_404
   end
-
 end

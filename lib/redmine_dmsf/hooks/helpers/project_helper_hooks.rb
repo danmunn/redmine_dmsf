@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,21 +21,24 @@
 module RedmineDmsf
   module Hooks
     module Helpers
-    
+      # Project helper hooks
       class ProjectHelperHooks < Redmine::Hook::Listener
-
         def helper_project_settings_tabs(context)
           dmsf_tabs = [
-            { name: 'dmsf', action: { controller: 'dmsf_state', action: 'user_pref_save' },
-              partial: 'dmsf_state/user_pref', label: :menu_dmsf },
-            { name: 'dmsf_workflow', action: { controller: 'dmsf_workflows', action: 'index' },
-              partial: 'dmsf_workflows/main', label: :label_dmsf_workflow_plural }
+            { name: 'dmsf',
+              action: { controller: 'dmsf_state', action: 'user_pref_save' },
+              partial: 'dmsf_state/user_pref',
+              label: :menu_dmsf },
+            { name: 'dmsf_workflow',
+              action: { controller: 'dmsf_workflows', action: 'index' },
+              partial: 'dmsf_workflows/main',
+              label: :label_dmsf_workflow_plural }
           ]
-          context[:tabs].concat(dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], context[:project]) })
+          context[:tabs].concat(
+            dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], context[:project]) }
+          )
         end
-
       end
-
     end
   end
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,6 +20,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Folders copy controller
 class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
 
@@ -81,8 +81,8 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_copy
-    post :copy, params: { id: @folder1.id,
-      dmsf_file_or_folder: { target_project_id: @project1.id, target_folder_id: @folder6.id } }
+    post :copy, params: { id: @folder1.id, dmsf_file_or_folder: { target_project_id: @project1.id,
+                                                                  target_folder_id: @folder6.id } }
     assert_response :redirect
     assert_nil flash[:error]
   end
@@ -103,9 +103,8 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
 
   def test_copy_to_locked_folder
     @request.session[:user_id] = @admin.id
-    post :copy,
-      params: { id: @folder6.id, dmsf_file_or_folder: { target_project_id: @folder2.project.id,
-                                                        target_folder_id: @folder2.id } }
+    post :copy, params: { id: @folder6.id, dmsf_file_or_folder: { target_project_id: @folder2.project.id,
+                                                                  target_folder_id: @folder2.id } }
     assert_response :forbidden
   end
 
@@ -123,14 +122,14 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
 
   def test_copy_to_as_non_member
     @request.session[:user_id] = @someone.id
-    post :copy, params: { id: @folder6.id,
-      dmsf_file_or_folder: { target_project_id: @folder1.project.id, target_folder_id: @folder1.id } }
+    post :copy, params: { id: @folder6.id, dmsf_file_or_folder: { target_project_id: @folder1.project.id,
+                                                                  target_folder_id: @folder1.id } }
     assert_response :not_found
   end
 
   def test_move
-    post :move, params: { id: @folder6.id,
-      dmsf_file_or_folder: { target_project_id: @folder1.project.id, target_folder_id: @folder1.id } }
+    post :move, params: { id: @folder6.id, dmsf_file_or_folder: { target_project_id: @folder1.project.id,
+                                                                  target_folder_id: @folder1.id } }
     assert_response :redirect
     assert_nil flash[:error]
   end
@@ -149,15 +148,15 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
 
   def test_move_locked_folder
     @request.session[:user_id] = @admin.id
-    post :move, params: { id: @folder2.id,
-      dmsf_file_or_folder: { target_project_id: @folder6.project.id, target_folder_id: @folder6.id } }
+    post :move, params: { id: @folder2.id, dmsf_file_or_folder: { target_project_id: @folder6.project.id,
+                                                                  target_folder_id: @folder6.id } }
     assert_response :forbidden
   end
 
   def test_move_to_locked_folder
     @request.session[:user_id] = @admin.id
-    post :move, params: { id: @folder6.id,
-      dmsf_file_or_folder: { target_project_id: @folder2.project.id, target_folder_id: @folder2.id } }
+    post :move, params: { id: @folder6.id, dmsf_file_or_folder: { target_project_id: @folder2.project.id,
+                                                                  target_folder_id: @folder2.id } }
     assert_response :forbidden
   end
 
@@ -175,15 +174,16 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
 
   def test_move_to_as_non_member
     @request.session[:user_id] = @someone.id
-    post :move, params: { id: @folder6.id,
-      dmsf_file_or_folder: { target_project_id: @folder1.project.id, target_folder_id: @folder1.id } }
+    post :move, params: { id: @folder6.id, dmsf_file_or_folder: { target_project_id: @folder1.project.id,
+                                                                  target_folder_id: @folder1.id } }
     assert_response :not_found
   end
 
   def test_new_fast_links_enabled
     member = Member.find_by(user_id: @jsmith.id, project_id: @project1.id)
     assert member
-    member.update_attribute :dmsf_fast_links, true
+    member.dmsf_fast_links = true
+    member.save
     get :new, params: { id: @folder1.id }
     assert_response :success
     assert_select 'label', { count: 0, text: l(:label_target_project) }
@@ -196,5 +196,4 @@ class DmsfFoldersCopyControllerTest < RedmineDmsf::Test::TestCase
     assert_response :redirect
     assert_nil flash[:error]
   end
-
 end

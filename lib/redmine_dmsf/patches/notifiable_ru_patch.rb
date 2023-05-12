@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,11 +20,9 @@
 
 module RedmineDmsf
   module Patches
-
     # TODO: This is just a workaround to fix alias_method usage in RedmineUp's plugins, which is in conflict with
     #   prepend and causes an infinite loop.
     module NotifiableRuPatch
-
       def self.included(base)
         base.extend ClassMethods
         base.class_eval do
@@ -37,23 +34,18 @@ module RedmineDmsf
         end
       end
 
+      # Class methods
       module ClassMethods
-
         def all_with_resources_dmsf
           notifications = all_without_resources_dmsf
           notifications << Redmine::Notifiable.new('dmsf_workflow_plural')
           notifications << Redmine::Notifiable.new('dmsf_legacy_notifications')
           notifications
         end
-
       end
-
     end
-
   end
 end
 
 # Apply the patch
-if RedmineDmsf::Plugin.an_obsolete_plugin_present?
-  Redmine::Notifiable.include RedmineDmsf::Patches::NotifiableRuPatch
-end
+Redmine::Notifiable.include RedmineDmsf::Patches::NotifiableRuPatch if RedmineDmsf::Plugin.an_obsolete_plugin_present?

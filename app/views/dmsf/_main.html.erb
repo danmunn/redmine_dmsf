@@ -1,6 +1,4 @@
 <%
-  # encoding: utf-8
-  #
   # Redmine plugin for Document Management System "Features"
   #
   # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
@@ -91,7 +89,7 @@
       <%= f.link_to 'CSV', url: { action: :show, id: @project, folder_id: @folder, encoding: Encoding::UTF_8 } if @project %>
       <% if Setting.plugin_redmine_dmsf['dmsf_webdav'].present? %>
         <span>
-          <%= link_to 'WebDAV', webdav_url(@project, @folder) %>
+          <%= link_to 'WebDAV', webdav_url(@project, @folder), class: 'webdav' %>
         </span>
       <% end %>
     <% end %>
@@ -119,7 +117,7 @@
   <% end %>
 <% end %>
 
-<% if Redmine::Plugin.installed?(:easy_extensions) %>
+<% if Redmine::Plugin.installed?('easy_extensions') %>
   <%= late_javascript_tag do %>
     $(function() {
       $("p.buttons").addClass("filter-buttons form-actions");

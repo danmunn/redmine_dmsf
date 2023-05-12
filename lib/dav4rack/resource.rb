@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 require 'uuidtools'
-require File.dirname(__FILE__) + '/lock_store'
-require File.dirname(__FILE__) + '/xml_elements'
+require "#{File.dirname(__FILE__)}/lock_store"
+require "#{File.dirname(__FILE__)}/xml_elements"
 
 module Dav4rack
-
+  # Lock failure
   class LockFailure < RuntimeError
     attr_reader :path_status
+
     def initialize(*args)
       super(*args)
       @path_status = {}
@@ -18,40 +19,42 @@ module Dav4rack
     end
   end
 
+  # Resource
   class Resource
     include Dav4rack::Utils
     include Dav4rack::XmlElements
 
-    attr_reader :path, :request,
-      :response, :propstat_relative_path, :root_xml_attributes, :namespaces
+    attr_reader :path, :request, :response, :propstat_relative_path, :root_xml_attributes, :namespaces
+
     attr_accessor :user
-    @@blocks = {}
+
+    @blocks = {}
 
     class << self
-
       # This lets us define a bunch of before and after blocks that are
       # either called before all methods on the resource, or only specific
       # methods on the resource
+      def respond_to_missing?(_name, _include_private)
+        true
+      end
+
       def method_missing(*args, &block)
-        class_sym = self.name.to_sym
-        @@blocks[class_sym] ||= {:before => {}, :after => {}}
+        class_sym = name.to_sym
+        @@blocks[class_sym] ||= { before: {}, after: {} }
         m = args.shift
         parts = m.to_s.split('_')
         type = parts.shift.to_s.to_sym
         method = parts.empty? ? nil : parts.join('_').to_sym
-        if(@@blocks[class_sym][type] && block_given?)
-          if(method)
-            @@blocks[class_sym][type][method] ||= []
-            @@blocks[class_sym][type][method] << block
-          else
-            @@blocks[class_sym][type][:'__all__'] ||= []
-            @@blocks[class_sym][type][:'__all__'] << block
-          end
+        raise NoMethodError, "Undefined method #{m} for class #{self}" unless @@blocks[class_sym][type] && block
+
+        if method
+          @@blocks[class_sym][type][method] ||= []
+          @@blocks[class_sym][type][method] << block
         else
-          raise NoMethodError.new("Undefined method #{m} for class #{self}")
+          @@blocks[class_sym][type][:__all__] ||= []
+          @@blocks[class_sym][type][:__all__] << block
         end
       end
-
     end
 
     include Dav4rack::HttpStatus
@@ -69,39 +72,37 @@ module Dav4rack
     # NOTE: Customized Resources should not use initialize for setup. Instead
     #       use the #setup method
     def initialize(path, request, response, options)
-      if path.nil? || path.empty? || path[0] != ?/
-        raise ArgumentError, 'path must be present and start with a /'
-      end
-      @path = path
+      raise ArgumentError, 'path must be present and start with a /' if path.blank? || path[0] != '/'
 
-      @propstat_relative_path = !!options[:propstat_relative_path]
+      @path = path
+      @propstat_relative_path = !options[:propstat_relative_path].nil?
       @root_xml_attributes = options.delete(:root_xml_attributes) || {}
-      @namespaces = (options[:namespaces] || {}).merge({DAV_NAMESPACE => DAV_NAMESPACE_NAME})
+      @namespaces = (options[:namespaces] || {}).merge({ DAV_NAMESPACE => DAV_NAMESPACE_NAME })
       @request = request
       @response = response
-      unless(options.has_key?(:lock_class))
-        @lock_class = LockStore
-      else
+      if options.key?(:lock_class)
         @lock_class = options[:lock_class]
-        raise NameError.new("Unknown lock type constant provided: #{@lock_class}") unless @lock_class.nil? || defined?(@lock_class)
+        unless @lock_class.nil? || defined?(@lock_class)
+          raise NameError, "Unknown lock type constant provided: #{@lock_class}"
+        end
+      else
+        @lock_class = LockStore
       end
       @options = options
-      @max_timeout = options[:max_timeout] || 86400
+      @max_timeout = options[:max_timeout] || 86_400
       @default_timeout = options[:default_timeout] || 60
       @user = @options[:user] || request.ip
-
       setup
     end
 
     # returns a new instance for the given path
     def new_for_path(path)
-      self.class.new path, request, response,
-        @options.merge(user: @user, namespaces: @namespaces)
+      self.class.new path, request, response, @options.merge(user: @user, namespaces: @namespaces)
     end
 
     # override to implement custom authentication
     # should return true for successful authentication, false otherwise
-    def authenticate(username, password)
+    def authenticate(_username, _password)
       true
     end
 
@@ -113,16 +114,9 @@ module Dav4rack
       'Locked content'
     end
 
-
-    # override in child classes for custom setup
-    def setup
-    end
-    private :setup
-
-
     # Returns if resource supports locking
     def supports_locking?
-      false #true
+      false
     end
 
     # Returns supported lock types (an array of [lockscope, locktype] pairs)
@@ -146,16 +140,6 @@ module Dav4rack
       NotImplemented
     end
 
-    # Does the parent resource exist?
-    def parent_exists?
-      parent.exist?
-    end
-
-    # Is the parent resource a collection?
-    def parent_collection?
-      parent.collection?
-    end
-
     # Return the creation time.
     def creation_date
       raise NotImplemented
@@ -167,7 +151,7 @@ module Dav4rack
     end
 
     # Set the time of last modification.
-    def last_modified=(time)
+    def last_modified=(_time)
       # Is this correct?
       raise NotImplemented
     end
@@ -197,14 +181,14 @@ module Dav4rack
     # resources should override this to set the Allow header to indicate the
     # allowed methods. By default, all WebDAV methods are advertised on all
     # resources.
-    def options(request, response)
+    def options(_request, _response)
       OK
     end
 
     # HTTP GET request.
     #
     # Write the content of the resource to the response.body.
-    def get(request, response)
+    def get(_request, _response)
       NotImplemented
     end
 
@@ -212,21 +196,21 @@ module Dav4rack
     #
     # Like GET, but without content. Override if you set custom headers in GET
     # to set them here as well.
-    def head(request, response)
+    def head(_request, _response)
       OK
     end
 
     # HTTP PUT request.
     #
     # Save the content of the request.body.
-    def put(request, response)
+    def put(_request)
       NotImplemented
     end
 
     # HTTP POST request.
     #
     # Usually forbidden.
-    def post(request, response)
+    def post(_request, _response)
       NotImplemented
     end
 
@@ -240,14 +224,14 @@ module Dav4rack
     # HTTP COPY request.
     #
     # Copy this resource to given destination path.
-    def copy(dest_path, overwrite = false, depth = nil)
+    def copy(_dest_path)
       NotImplemented
     end
 
     # HTTP MOVE request.
     #
     # Move this resource to given destination path.
-    def move(dest_path, overwrite=false)
+    def move(_dest_path)
       NotImplemented
     end
 
@@ -268,55 +252,60 @@ module Dav4rack
 
     def lock(args)
       raise NotImplemented unless @lock_class
-      raise Conflict       unless parent_exists?
+      raise Conflict unless parent.exist?
 
-      lock_check(args[:scope])
-      lock = @lock_class.explicit_locks(@path).find{|l| l.scope == args[:scope] && l.kind == args[:type] && l.user == @user}
-      unless(lock)
+      lock_check args[:scope]
+      lock = @lock_class.explicit_locks(@path)
+                        .find { |l| l.scope == args[:scope] && l.kind == args[:type] && l.user == @user }
+      unless lock
         token = UUIDTools::UUID.random_create.to_s
         lock = @lock_class.generate(@path, @user, token)
         lock.scope = args[:scope]
         lock.kind = args[:type]
         lock.owner = args[:owner]
         lock.depth = args[:depth].is_a?(Symbol) ? args[:depth] : args[:depth].to_i
-        if(args[:timeout])
-          lock.timeout = args[:timeout] <= @max_timeout && args[:timeout] > 0 ? args[:timeout] : @max_timeout
+        if args[:timeout]
+          b = args[:timeout] <= @max_timeout && args[:timeout].positive?
+          lock.timeout = b ? args[:timeout] : @max_timeout
         else
           lock.timeout = @default_timeout
         end
-        lock.save if lock.respond_to? :save
+        lock.save if lock.respond_to?(:save)
       end
       begin
         lock_check(args[:type])
-      rescue Dav4rack::LockFailure => lock_failure
+      rescue Dav4rack::LockFailure => e
         lock.destroy
-        raise lock_failure
-      rescue HttpStatus::Status => status
-        status
+        raise e
+      rescue HttpStatus::Status => e
+        e
       end
       [lock.remaining_timeout, lock.token]
     end
 
     # lock_scope:: scope of lock
     # Check if resource is locked. Raise Dav4rack::LockFailure if locks are in place.
-    def lock_check(lock_scope=nil)
+    def lock_check(lock_scope = nil)
       return unless @lock_class
-      if(@lock_class.explicitly_locked?(@path))
-        raise Locked if @lock_class.explicit_locks(@path).find_all{|l|l.scope == 'exclusive' && l.user != @user}.size > 0
-      elsif(@lock_class.implicitly_locked?(@path))
-        if(lock_scope.to_s == 'exclusive')
+
+      if @lock_class.explicitly_locked?(@path)
+        if @lock_class.explicit_locks(@path).count { |l| l.scope == 'exclusive' && l.user != @user }.positive?
+          raise Locked
+        end
+      elsif @lock_class.implicitly_locked?(@path)
+        if lock_scope.to_s == 'exclusive'
           locks = @lock_class.implicit_locks(@path)
           failure = Dav4rack::LockFailure.new("Failed to lock: #{@path}")
-          locks.each do |lock|
-            failure.add_failure(@path, Locked)
+          locks.each do |_lock|
+            failure.add_failure @path, Locked
           end
           raise failure
         else
-          locks = @lock_class.implict_locks(@path).find_all{|l| l.scope == 'exclusive' && l.user != @user}
-          if(locks.size > 0)
+          locks = @lock_class.implict_locks(@path).find_all { |l| l.scope == 'exclusive' && l.user != @user }
+          unless locks.empty?
             failure = LockFailure.new("Failed to lock: #{@path}")
-            locks.each do |lock|
-              failure.add_failure(@path, Locked)
+            locks.each do |_lock|
+              failure.add_failure @path, Locked
             end
             raise failure
           end
@@ -330,13 +319,13 @@ module Dav4rack
       return NotImplemented unless @lock_class
 
       token = token.slice(1, token.length - 2)
-      if(token.nil? || token.empty?)
+      if token.blank?
         BadRequest
       else
         lock = @lock_class.find_by_token(token)
-        if(lock.nil? || lock.user != @user)
+        if lock.nil? || lock.user != @user
           Forbidden
-        elsif(lock.path !~ /^#{Regexp.escape(@path)}.*$/)
+        elsif !lock.path.match?(/^#{Regexp.escape(@path)}.*$/)
           Conflict
         else
           lock.destroy
@@ -344,7 +333,6 @@ module Dav4rack
         end
       end
     end
-
 
     # Create this resource as collection.
     def make_collection
@@ -359,7 +347,7 @@ module Dav4rack
 
     # Name of the resource
     def name
-      ::File.basename(path)
+      ::File.basename path
     end
 
     # Name of the resource to be displayed to the client
@@ -367,11 +355,10 @@ module Dav4rack
       name
     end
 
-
     # Available properties
     #
     # These are returned by PROPFIND without body, or with an allprop body.
-    DAV_PROPERTIES = %w(
+    DAV_PROPERTIES = %w[
       getetag
       resourcetype
       getcontenttype
@@ -379,7 +366,7 @@ module Dav4rack
       getlastmodified
       creationdate
       displayname
-    ).map{|prop| { name: prop, ns_href: DAV_NAMESPACE } }.freeze
+    ].map { |prop| { name: prop, ns_href: DAV_NAMESPACE } }.freeze
 
     def properties
       props = DAV_PROPERTIES
@@ -394,7 +381,7 @@ module Dav4rack
     #
     # this should include the names of all properties defined on the resource
     def propname_properties
-      props = self.properties
+      props = properties
       if supports_locking?
         props = props.dup if props.frozen?
         props << { name: 'lockdiscovery', ns_href: DAV_NAMESPACE }
@@ -405,18 +392,29 @@ module Dav4rack
     # name:: String - Property name
     # Returns the value of the given property
     def get_property(element)
-      return NotFound if (element[:ns_href] != DAV_NAMESPACE)
+      return NotFound if element[:ns_href] != DAV_NAMESPACE
+
       case element[:name]
-      when 'resourcetype'     then resource_type
-      when 'displayname'      then display_name
-      when 'creationdate'     then use_ms_compat_creationdate? ? creation_date.httpdate : creation_date.xmlschema
-      when 'getcontentlength' then content_length.to_s
-      when 'getcontenttype'   then content_type
-      when 'getetag'          then etag
-      when 'getlastmodified'  then last_modified.httpdate
-      when 'supportedlock'    then supported_locks_xml
-      when 'lockdiscovery'    then lockdiscovery_xml
-      else                    NotImplemented
+      when 'resourcetype'
+        resource_type
+      when 'displayname'
+        display_name
+      when 'creationdate'
+        use_ms_compat_creationdate? ? creation_date.httpdate : creation_date.xmlschema
+      when 'getcontentlength'
+        content_length.to_s
+      when 'getcontenttype'
+        content_type
+      when 'getetag'
+        etag
+      when 'getlastmodified'
+        last_modified.httpdate
+      when 'supportedlock'
+        supported_locks_xml
+      when 'lockdiscovery'
+        lockdiscovery_xml
+      else
+        NotImplemented
       end
     end
 
@@ -425,13 +423,13 @@ module Dav4rack
     # Set the property to the given value
     #
     # This default implementation does not allow any properties to be changed.
-    def set_property(element, value)
-      return Forbidden
+    def set_property(_element, _value)
+      Forbidden
     end
 
     # name:: Property name
     # Remove the property from the resource
-    def remove_property(element)
+    def remove_property(_element)
       Forbidden
     end
 
@@ -440,7 +438,7 @@ module Dav4rack
     # NOTE:: Include trailing '/' if child is collection
     def child(name)
       new_path = @path.dup
-      new_path << ?/ unless new_path[-1] == ?/
+      new_path << '/' unless new_path[-1] == '/'
       new_path << name
       new_for_path new_path
     end
@@ -448,9 +446,8 @@ module Dav4rack
     # Return parent of this resource
     def parent
       return nil if @path == '/'
-      unless @path.to_s.empty?
-        new_for_path ::File.split(@path).first
-      end
+
+      new_for_path(::File.split(@path).first) unless @path.to_s.empty?
     end
 
     # Return list of descendants
@@ -458,7 +455,7 @@ module Dav4rack
       list = []
       children.each do |child|
         list << child
-        list.concat(child.descendants)
+        list.concat child.descendants
       end
       list
     end
@@ -473,13 +470,13 @@ module Dav4rack
     end
 
     def properties_xml_with_depth(process_properties, depth = request.depth)
-      xml_with_depth self, depth do |element, ox_doc|
+      xml_with_depth(self, depth) do |element, ox_doc|
         ox_doc << element.properties_xml(process_properties)
       end
     end
 
     def propnames_xml_with_depth(depth = request.depth)
-      xml_with_depth self, depth do |element, ox_doc|
+      xml_with_depth(self, depth) do |element, ox_doc|
         ox_doc << element.propnames_xml
       end
     end
@@ -489,7 +486,7 @@ module Dav4rack
     # be returned.
     # If this is a collection, the result will end with a '/'
     def href
-      @href ||= build_href(path, collection: self.collection?)
+      @href ||= build_href(path, collection: collection?)
     end
 
     # Returns a complete URL for the given path.
@@ -508,16 +505,15 @@ module Dav4rack
     def propnames_xml
       response = Ox::Element.new(D_RESPONSE)
       response << ox_element(D_HREF, href)
-      propstats response, { OK => Hash[propname_properties.map{|p| [p,nil]}] }
+      propstats response, { OK => [propname_properties.map { |p| [p, nil] }].to_h }
       response
     end
 
     def properties_xml(process_properties)
       response = Ox::Element.new(D_RESPONSE)
       response << ox_element(D_HREF, href)
-
       process_properties.each do |type, properties|
-        propstats(response, self.send("#{type}_properties_with_status",properties))
+        propstats response, send("#{type}_properties_with_status", properties)
       end
       response
     end
@@ -537,17 +533,17 @@ module Dav4rack
 
     # returns an array of activelock ox elements
     def lockdiscovery_xml
-      if supports_locking?
-        lockdiscovery.map do |lock|
-          ox_activelock(**lock)
-        end
+      return unless supports_locking?
+
+      lockdiscovery.map do |lock|
+        ox_activelock(**lock)
       end
     end
 
     def get_properties_with_status(properties)
       stats = Hash.new { |h, k| h[k] = [] }
       properties.each do |property|
-        val = self.get_property(property[:element])
+        val = get_property(property[:element])
         if val.is_a?(Class)
           stats[val] << property[:element]
         else
@@ -560,7 +556,7 @@ module Dav4rack
     def set_properties_with_status(properties)
       stats = Hash.new { |h, k| h[k] = [] }
       properties.each do |property|
-        val = self.set_property(property[:element], property[:value])
+        val = set_property(property[:element], property[:value])
         if val.is_a?(Class)
           stats[val] << property[:element]
         else
@@ -569,7 +565,6 @@ module Dav4rack
       end
       stats
     end
-
 
     # resource:: Resource
     # elements:: Property hashes (name, namespace, children)
@@ -577,7 +572,7 @@ module Dav4rack
     def remove_properties_with_status(properties)
       stats = Hash.new { |h, k| h[k] = [] }
       properties.each do |property|
-        val = self.remove_property(property[:element])
+        val = remove_property(property[:element])
         if val.is_a?(Class)
           stats[val] << property[:element]
         else
@@ -587,52 +582,42 @@ module Dav4rack
       stats
     end
 
-
     # adds the given xml namespace to namespaces and returns the prefix
-    def add_namespace(ns, prefix = "unknown#{rand 65536}")
-      return nil if ns.nil? || ns.empty?
-      unless namespaces.key? ns
-        namespaces[ns] = prefix
-        return prefix
-      end
-    end
+    def add_namespace(namespace, prefix = "unknown#{rand 65_536}")
+      return nil if namespace.blank?
+      return if namespaces.key?(namespace)
 
+      namespaces[namespace] = prefix
+      prefix
+    end
 
     # returns the prefix for the given namespace, adding it if necessary
     def prefix_for(ns_href)
       namespaces[ns_href] || add_namespace(ns_href)
     end
 
-
     # response:: parent Ox::Element
     # stats:: Array of stats
     # Build propstats response
     def propstats(response, stats)
       return if stats.empty?
+
       stats.each do |status, props|
         propstat = Ox::Element.new(D_PROPSTAT)
         prop = Ox::Element.new(D_PROP)
-
         props.each do |element, value|
-
           name = element[:name]
-          if prefix = prefix_for(element[:ns_href])
-            name = "#{prefix}:#{name}"
-          end
-
+          prefix = prefix_for(element[:ns_href])
+          name = "#{prefix}:#{name}" if prefix
           prop_element = Ox::Element.new(name)
           ox_append prop_element, value, prefix: prefix
           prop << prop_element
-
         end
-
         propstat << prop
         propstat << ox_element(D_STATUS, "#{http_version} #{status.status_line}")
-
         response << propstat
       end
     end
-
 
     def use_compat_mkcol_response?
       @options[:compat_mkcol] || @options[:compat_all]
@@ -640,11 +625,8 @@ module Dav4rack
 
     # Returns true if using an MS client
     def use_ms_compat_creationdate?
-      if(@options[:compat_ms_mangled_creationdate] || @options[:compat_all])
-        request.is_ms_client?
-      end
+      request.ms_client? if @options[:compat_ms_mangled_creationdate] || @options[:compat_all]
     end
-
 
     # Callback function that adds additional properties to the propfind REQUEST
     # These properties will then be parsed and processed as though they were sent
@@ -655,7 +637,11 @@ module Dav4rack
       properties
     end
 
+    private
 
+    # Override in child classes for custom setup
+    def setup
+      # Nothing to do
+    end
   end
-
 end

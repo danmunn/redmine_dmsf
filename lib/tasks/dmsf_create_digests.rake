@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,38 +18,39 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-desc <<-END_DESC
-DMSF maintenance task
-  * Create missing checksums for all file revisions
+desc <<~END_DESC
+  DMSF maintenance task
+    * Create missing checksums for all file revisions
 
-Available options:
-  *dry_run - test, no changes to the database
-  *forceSHA256 - replace old MD5 with SHA256
+  Available options:
+    *dry_run - test, no changes to the database
+    *forceSHA256 - replace old MD5 with SHA256
 
-Example:
-  bundle exec rake redmine:dmsf_create_digests RAILS_ENV="production"
-  bundle exec rake redmine:dmsf_create_digests forceSHA256=1 RAILS_ENV="production"
-  bundle exec rake redmine:dmsf_create_digests dry_run=1 RAILS_ENV="production"
+  Example:
+    bundle exec rake redmine:dmsf_create_digests RAILS_ENV="production"
+    bundle exec rake redmine:dmsf_create_digests forceSHA256=1 RAILS_ENV="production"
+    bundle exec rake redmine:dmsf_create_digests dry_run=1 RAILS_ENV="production"
 END_DESC
 
 namespace :redmine do
-  task :dmsf_create_digests => :environment do
+  task dmsf_create_digests: :environment do
     m = DmsfCreateDigest.new
     m.dmsf_create_digests
   end
 end
 
+# Create digest
 class DmsfCreateDigest
-
   def initialize
     @dry_run = ENV.fetch('dry_run', nil)
     @force_sha256 = ENV.fetch('forceSHA256', nil)
   end
 
   def dmsf_create_digests
+    # Checksum is always the same via WebDAV #1384
     revisions = DmsfFileRevision.where(['digest IS NULL OR digest = ? OR length(digest) < ?',
-      'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', # Checksum is always the same via WebDAV #1384
-      @force_sha256 ? 64 : 32])
+                                        'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+                                        @force_sha256 ? 64 : 32])
     count = revisions.all.size
     n = 0
     revisions.each_with_index do |rev, i|
@@ -77,5 +77,4 @@ class DmsfCreateDigest
     # Result
     $stdout.puts "#{n}/#{count} revisions updated."
   end
-
 end

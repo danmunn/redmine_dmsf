@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,26 +20,28 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-
-if Redmine::Plugin.installed? :redmine_dmsf
+if Redmine::Plugin.installed? 'redmine_dmsf'
   RedmineApp::Application.routes.draw do
-
     #
     # dmsf controller
     #   /projects/<project>/dmsf
-    #   [As this controller also processes 'folders' it maybe better to branch into a folder route rather than leaving it as is]
+    #   [As this controller also processes 'folders' it maybe better to branch into a folder route rather than leaving
+    #    it as is]
     ##
     post '/projects/:id/dmsf/create', controller: 'dmsf', action: 'create'
     get '/projects/:id/dmsf/notify/activate', controller: 'dmsf', action: 'notify_activate', as: 'notify_activate_dmsf'
-    get '/projects/:id/dmsf/notify/deactivate', controller: 'dmsf', action: 'notify_deactivate', as: 'notify_deactivate_dmsf'
+    get '/projects/:id/dmsf/notify/deactivate', controller: 'dmsf',
+                                                action: 'notify_deactivate',
+                                                as: 'notify_deactivate_dmsf'
     delete '/projects/:id/dmsf/delete', controller: 'dmsf', action: 'delete', as: 'delete_dmsf'
     post '/projects/:id/dmsf/save', controller: 'dmsf', action: 'save'
     post '/projects/:id/dmsf/save/root', controller: 'dmsf', action: 'save_root'
     post '/projects/dmsf/entries', controller: 'dmsf', action: 'entries_operation', as: 'entries_operations_dmsf'
-    post '/projects/:id/dmsf/tag_changed', controller: 'dmsf', action: 'tag_changed', as: 'tag_changed'
     post '/projects/:id/dmsf/entries/delete', controller: 'dmsf', action: 'delete_entries', as: 'delete_entries'
     post '/projects/:id/dmsf/entries/email', to: 'dmsf#entries_email', as: 'email_entries'
-    get '/projects/:id/dmsf/entries/download_email_entries', controller: 'dmsf', action: 'download_email_entries', as: 'download_email_entries'
+    get '/projects/:id/dmsf/entries/download_email_entries', controller: 'dmsf',
+                                                             action: 'download_email_entries',
+                                                             as: 'download_email_entries'
     get '/projects/:id/dmsf/lock', controller: 'dmsf', action: 'lock', as: 'lock_dmsf'
     get '/projects/:id/dmsf/unlock', controller: 'dmsf', action: 'unlock', as: 'unlock_dmsf'
     get '/projects/:id/dmsf/', controller: 'dmsf', action: 'show', as: 'dmsf_folder'
@@ -58,8 +59,10 @@ if Redmine::Plugin.installed? :redmine_dmsf
     get '/dmsf', to: 'dmsf#index', as: 'dmsf_index'
 
     # dmsf_context_menu_controller
-    match '/projects/dmsf/context_menu', to: 'dmsf_context_menus#dmsf', as: 'dmsf_context_menu', via: [:get, :post]
-    match '/projects/:id/dmsf/trash/context_menu', to: 'dmsf_context_menus#trash', as: 'dmsf_trash_context_menu', via: [:get, :post]
+    match '/projects/dmsf/context_menu', to: 'dmsf_context_menus#dmsf', as: 'dmsf_context_menu', via: %i[get post]
+    match '/projects/:id/dmsf/trash/context_menu', to: 'dmsf_context_menus#trash',
+                                                   as: 'dmsf_trash_context_menu',
+                                                   via: %i[get post]
 
     #
     # dmsf_state controller
@@ -72,15 +75,18 @@ if Redmine::Plugin.installed? :redmine_dmsf
     #   /projects/<project>/dmsf/upload - dmsf_upload controller
     ##
 
-    get '/projects/:id/dmsf/upload/multi_upload', controller: 'dmsf_upload', action: 'multi_upload', as: 'multi_dmsf_upload'
+    get '/projects/:id/dmsf/upload/multi_upload', controller: 'dmsf_upload',
+                                                  action: 'multi_upload',
+                                                  as: 'multi_dmsf_upload'
     post '/projects/:id/dmsf/upload/files', controller: 'dmsf_upload', action: 'upload_files'
     get '/projects/:id/dmsf/upload/files', controller: 'dmsf_upload', action: 'upload_files'
     post '/projects/:id/dmsf/upload', controller: 'dmsf_upload', action: 'upload'
     post '/projects/:id/dmsf/upload/commit', controller: 'dmsf_upload', action: 'commit_files'
     post '/projects/:id/dmsf/commit', controller: 'dmsf_upload', action: 'commit'
-    match 'dmsf_uploads', to: 'dmsf_upload#upload', via: :post
+    post 'dmsf_uploads', to: 'dmsf_upload#upload'
     delete '/dmsf/attachments/:id/delete', to: 'dmsf_upload#delete_dmsf_attachment', as: 'dmsf_attachment'
-    delete '/dmsf/link_attachments/:id/delete', to: 'dmsf_upload#delete_dmsf_link_attachment', as: 'dmsf_link_attachment'
+    delete '/dmsf/link_attachments/:id/delete', to: 'dmsf_upload#delete_dmsf_link_attachment',
+                                                as: 'dmsf_link_attachment'
 
     #
     # dmsf_links controller
@@ -113,21 +119,29 @@ if Redmine::Plugin.installed? :redmine_dmsf
     # dmsf_files controller
     #   /dmsf/files/<file id>
     ##
-    get '/dmsf/files/:id/notify/activate', controller: 'dmsf_files', action: 'notify_activate', as: 'notify_activate_dmsf_files'
-    get '/dmsf/files/:id/notify/deactivate', controller: 'dmsf_files', action: 'notify_deactivate', as: 'notify_deactivate_dmsf_files'
+    get '/dmsf/files/:id/notify/activate', controller: 'dmsf_files',
+                                           action: 'notify_activate',
+                                           as: 'notify_activate_dmsf_files'
+    get '/dmsf/files/:id/notify/deactivate', controller: 'dmsf_files',
+                                             action: 'notify_deactivate',
+                                             as: 'notify_deactivate_dmsf_files'
     get '/dmsf/files/:id/lock', controller: 'dmsf_files', action: 'lock', as: 'lock_dmsf_files'
     get '/dmsf/files/:id/unlock', controller: 'dmsf_files', action: 'unlock', as: 'unlock_dmsf_files'
     post '/dmsf/files/:id/delete', controller: 'dmsf_files', action: 'delete', as: 'delete_dmsf_files'
     post '/dmsf/files/:id/revision/create', controller: 'dmsf_files', action: 'create_revision'
     get '/dmsf/files/:id/revision/delete', controller: 'dmsf_files', action: 'delete_revision', as: 'delete_revision'
-    get '/dmsf/files/:id/revision/obsolete', controller: 'dmsf_files', action: 'obsolete_revision', as: 'obsolete_revision'
-    get '/dmsf/files/:id/download', to: 'dmsf_files#view', download: '', as: 'download_dmsf_file' # Otherwise will not route nil into the download param
+    get '/dmsf/files/:id/revision/obsolete', controller: 'dmsf_files',
+                                             action: 'obsolete_revision',
+                                             as: 'obsolete_revision'
+    get '/dmsf/files/:id/download', to: 'dmsf_files#view',
+                                    download: '',
+                                    as: 'download_dmsf_file' # Otherwise will not route nil into the download param
     get '/dmsf/files/:id/view', to: 'dmsf_files#view', as: 'view_dmsf_file'
     get '/dmsf/files/:id', controller: 'dmsf_files', action: 'show', as: 'dmsf_file'
     delete '/dmsf/files/:id', controller: 'dmsf_files', action: 'delete'
     get '/dmsf/files/:id/restore', controller: 'dmsf_files', action: 'restore', as: 'restore_dmsf_file'
     get '/dmsf/files/:id/thumbnail', to: 'dmsf_files#thumbnail', as: 'dmsf_thumbnail'
-    get '/dmsf/files/:id/:filename', to: 'dmsf_files#view', :id => /\d+/, :filename => /.*/, as: 'static_dmsf_file'
+    get '/dmsf/files/:id/:filename', to: 'dmsf_files#view', id: /\d+/, filename: /.*/, as: 'static_dmsf_file'
 
     # Approval workflow
     resources :dmsf_workflows do
@@ -145,9 +159,9 @@ if Redmine::Plugin.installed? :redmine_dmsf
       end
     end
 
-    match 'dmsf_workflows/:id/edit', controller: 'dmsf_workflows', action: 'add_step', id: /\d+/, via: :post
-    match 'dmsf_workflows/:id/edit', controller: 'dmsf_workflows', action: 'remove_step', id: /\d+/, via: :delete
-    match 'dmsf_workflows/:id/edit', controller: 'dmsf_workflows', action: 'reorder_steps', id: /\d+/, via: :put
+    post 'dmsf_workflows/:id/edit', controller: 'dmsf_workflows', action: 'add_step', id: /\d+/, via: :post
+    delete 'dmsf_workflows/:id/edit', controller: 'dmsf_workflows', action: 'remove_step', id: /\d+/, via: :delete
+    put 'dmsf_workflows/:id/edit', controller: 'dmsf_workflows', action: 'reorder_steps', id: /\d+/, via: :put
 
     # Links
     resources :dmsf_links do
@@ -161,7 +175,7 @@ if Redmine::Plugin.installed? :redmine_dmsf
     # Public URLs
     resource :dmsf_public_urls
 
-     # Folder permissions
+    # Folder permissions
     resource :dmsf_folder_permissions do
       member do
         get 'autocomplete_for_user'
@@ -170,9 +184,9 @@ if Redmine::Plugin.installed? :redmine_dmsf
     end
 
     # WebDAV workaround for clients checking WebDAV availability in the root
-    unless Redmine::Plugin.installed?(:easy_extensions)
-      match '/', to: lambda { |env| [405, {}, [env.to_s]] }, via: [:propfind, :options]
+    unless Redmine::Plugin.installed?('easy_extensions')
+      match '/', to: ->(env) { [405, {}, [env.to_s]] }, via: %i[propfind options]
     end
-    match '/dmsf', to: lambda { |env| [405, {}, [env.to_s]] }, via: [:propfind, :options]
+    match '/dmsf', to: ->(env) { [405, {}, [env.to_s]] }, via: %i[propfind options]
   end
 end

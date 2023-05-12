@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -20,12 +19,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfFileNameValidator  < ActiveModel::EachValidator
+# File name validator
+class DmsfFileNameValidator < ActiveModel::EachValidator
+  ALL_INVALID_CHARACTERS = /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/.freeze
 
   def validate_each(record, attribute, value)
-    unless /\A[^#{DmsfFolder::INVALID_CHARACTERS}]*\z/.match?(value)
-      record.errors.add attribute, :error_contains_invalid_character
-    end
+    record.errors.add attribute, :error_contains_invalid_character unless ALL_INVALID_CHARACTERS.match?(value)
   end
-
 end

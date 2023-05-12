@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011   Vít Jonáš <vit.jonas@gmail.com>
@@ -17,8 +19,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Add column
 class Dmsf090 < ActiveRecord::Migration[4.2]
-
   def up
     add_column :members, :dmsf_mail_notification, :boolean
     drop_table :dmsf_user_prefs
@@ -30,8 +32,7 @@ class Dmsf090 < ActiveRecord::Migration[4.2]
       t.references :project, null: false
       t.references :user, null: false
       t.boolean :email_notify
-      t.timestamps  null: false
+      t.timestamps
     end
   end
-
 end

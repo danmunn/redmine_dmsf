@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 module RedmineDmsf
   module Patches
+    # Issue
     module IssuePatch
-
       ##################################################################################################################
       # New methods
 
@@ -34,11 +33,11 @@ module RedmineDmsf
 
       def save_dmsf_attachments(dmsf_attachments)
         @saved_dmsf_attachments = []
-        if dmsf_attachments
-          dmsf_attachments.each do |_, dmsf_attachment|
-            a = Attachment.find_by_token(dmsf_attachment[:token])
-            @saved_dmsf_attachments << a if a
-          end
+        return unless dmsf_attachments
+
+        dmsf_attachments.each do |_, dmsf_attachment|
+          a = Attachment.find_by_token(dmsf_attachment[:token])
+          @saved_dmsf_attachments << a if a
         end
       end
 
@@ -48,11 +47,11 @@ module RedmineDmsf
 
       def save_dmsf_links(dmsf_links)
         @saved_dmsf_links = []
-        if dmsf_links
-          dmsf_links.each do |_, id|
-            l = DmsfLink.find_by(id: id)
-            @saved_dmsf_links << l if l
-          end
+        return unless dmsf_links
+
+        dmsf_links.each do |_, id|
+          l = DmsfLink.find_by(id: id)
+          @saved_dmsf_links << l if l
         end
       end
 
@@ -61,16 +60,16 @@ module RedmineDmsf
       end
 
       def save_dmsf_attachments_wfs(dmsf_attachments_wfs, dmsf_attachments)
-        if dmsf_attachments_wfs
-          @dmsf_attachments_wfs = {}
-          dmsf_attachments_wfs.each do |attachment_id, approval_workflow_id|
-            attachment = dmsf_attachments[attachment_id]
-            if attachment
-              a = Attachment.find_by_token(attachment[:token])
-              wf = DmsfWorkflow.find_by(id: approval_workflow_id)
-              @dmsf_attachments_wfs[a.id] = wf if wf && a
-            end
-          end
+        return unless dmsf_attachments_wfs
+
+        @dmsf_attachments_wfs = {}
+        dmsf_attachments_wfs.each do |attachment_id, approval_workflow_id|
+          attachment = dmsf_attachments[attachment_id]
+          next unless attachment
+
+          a = Attachment.find_by_token(attachment[:token])
+          wf = DmsfWorkflow.find_by(id: approval_workflow_id)
+          @dmsf_attachments_wfs[a.id] = wf if wf && a
         end
       end
 
@@ -79,12 +78,12 @@ module RedmineDmsf
       end
 
       def save_dmsf_links_wfs(dmsf_links_wfs)
-        if dmsf_links_wfs
-          @saved_dmsf_links_wfs = {}
-          dmsf_links_wfs.each do |dmsf_link_id, approval_workflow_id|
-            wf = DmsfWorkflow.find_by(id: approval_workflow_id)
-            @saved_dmsf_links_wfs[dmsf_link_id.to_i] = wf if wf
-          end
+        return unless dmsf_links_wfs
+
+        @saved_dmsf_links_wfs = {}
+        dmsf_links_wfs.each do |dmsf_link_id, approval_workflow_id|
+          wf = DmsfWorkflow.find_by(id: approval_workflow_id)
+          @saved_dmsf_links_wfs[dmsf_link_id.to_i] = wf if wf
         end
       end
 
@@ -92,8 +91,8 @@ module RedmineDmsf
         @saved_dmsf_links_wfs || {}
       end
 
-      def main_system_folder(create = false, prj_id = nil)
-        prj_id ||= self.project_id
+      def main_system_folder(create: false, prj_id: nil)
+        prj_id ||= project_id
         parent = DmsfFolder.issystem.find_by(project_id: prj_id, title: '.Issues')
         if create && !parent
           parent = DmsfFolder.new
@@ -107,17 +106,17 @@ module RedmineDmsf
         parent
       end
 
-      def system_folder(create = false, prj_id = nil)
-        prj_id ||= self.project_id
-        parent = main_system_folder(create, prj_id)
+      def system_folder(create: false, prj_id: nil)
+        prj_id ||= project_id
+        parent = main_system_folder(create: create, prj_id: prj_id)
         if parent
-          folder = DmsfFolder.issystem.where(["project_id = ? AND dmsf_folder_id = ? AND title LIKE '? - %'",
-            prj_id, parent.id, self.id]).first
+          folder = DmsfFolder.issystem.where(["project_id = ? AND dmsf_folder_id = ? AND title LIKE '? - %'", prj_id,
+                                              parent.id, id]).first
           if create && !folder
             folder = DmsfFolder.new
             folder.dmsf_folder_id = parent.id
             folder.project_id = prj_id
-            folder.title = "#{self.id} - #{DmsfFolder::get_valid_title(self.subject)}"
+            folder.title = "#{id} - #{DmsfFolder.get_valid_title(subject)}"
             folder.user_id = User.anonymous.id
             folder.system = true
             folder.save
@@ -127,34 +126,23 @@ module RedmineDmsf
       end
 
       def dmsf_files
-        files = []
-        folder = self.system_folder
-        if folder
-          files = folder.dmsf_files.visible
-        end
-        files
+        system_folder&.dmsf_files&.visible
       end
 
       def dmsf_links
-        links = []
-        folder = self.system_folder
-        if folder
-          links = folder.dmsf_links.visible
-        end
-        links
+        system_folder&.dmsf_links&.visible
       end
 
       def delete_system_folder
-        folder = self.system_folder
-        folder.destroy if folder
+        system_folder&.destroy
       end
 
       def dmsf_file_added(dmsf_file)
-        self.journalize_dmsf_file dmsf_file, :added
+        journalize_dmsf_file dmsf_file, :added
       end
 
       def dmsf_file_removed(dmsf_file)
-        self.journalize_dmsf_file dmsf_file, :removed
+        journalize_dmsf_file dmsf_file, :removed
       end
 
       # Adds a journal detail for an attachment that was added or removed
@@ -168,15 +156,13 @@ module RedmineDmsf
         )
         current_journal.save
       end
-
     end
   end
 end
 
 # Apply patch
-if Redmine::Plugin.installed?(:easy_extensions)
-  RedmineExtensions::PatchManager.register_model_patch 'Issue',
-    'RedmineDmsf::Patches::IssuePatch'
+if Redmine::Plugin.installed?('easy_extensions')
+  RedmineExtensions::PatchManager.register_model_patch 'Issue', 'RedmineDmsf::Patches::IssuePatch'
 else
   Issue.prepend RedmineDmsf::Patches::IssuePatch
 end

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,17 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Modify columns
 class NotificationsOn < ActiveRecord::Migration[4.2]
-
-  def up  
+  def up
     # Switch on the default notifications for new projects and folders
     change_column :projects, :dmsf_notification, :boolean, default: true, null: true
     change_column :dmsf_folders, :notification, :boolean, default: true, null: false
   end
-  
+
   def down
     change_column :projects, :dmsf_notification, :boolean, default: false, null: true
     change_column :dmsf_folders, :notification, :boolean, default: false
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
@@ -17,8 +19,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Initial schema
 class CreateHierarchy < ActiveRecord::Migration[4.2]
-
   def change
     create_table :dmsf_folders do |t|
       t.references :project, null: false
@@ -27,7 +29,7 @@ class CreateHierarchy < ActiveRecord::Migration[4.2]
       t.text :description
       t.boolean :notification, default: false, null: false
       t.references :user, null: false
-      t.timestamps null: false
+      t.timestamps
     end
     create_table :dmsf_files do |t|
       t.references :project, null: false
@@ -37,7 +39,7 @@ class CreateHierarchy < ActiveRecord::Migration[4.2]
       t.boolean :notification, default: false, null: false
       t.boolean :deleted, default: false, null: false
       t.integer :deleted_by_user_id
-      t.timestamps  null: false
+      t.timestamps
     end
     create_table :dmsf_file_revisions do |t|
       t.references :dmsf_file, null: false
@@ -56,20 +58,19 @@ class CreateHierarchy < ActiveRecord::Migration[4.2]
       t.boolean :deleted, default: false, null: false
       t.integer :deleted_by_user_id
       t.references :user, null: false
-      t.timestamps  null: false
+      t.timestamps
     end
     create_table :dmsf_file_locks do |t|
       t.references :dmsf_file, null: false
       t.boolean :locked, default: false, null: false
       t.references :user, null: false
-      t.timestamps  null: false
+      t.timestamps
     end
     create_table :dmsf_user_prefs do |t|
       t.references :project, null: false
       t.references :user, null: false
       t.boolean :email_notify
-      t.timestamps null: false
+      t.timestamps
     end
   end
-
 end

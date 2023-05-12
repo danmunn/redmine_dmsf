@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,19 +20,16 @@
 
 module RedmineDmsf
   module Patches
-
+    # Notifiable
     module NotifiablePatch
-
       def self.prepended(base)
-
         class << base
           prepend ClassMethods
         end
-
       end
 
+      # Class methods
       module ClassMethods
-
         ################################################################################################################
         # Overriden methods
         #
@@ -43,15 +39,10 @@ module RedmineDmsf
           notifications << Redmine::Notifiable.new('dmsf_legacy_notifications')
           notifications
         end
-
       end
-
     end
-
   end
 end
 
 # Apply the patch
-unless RedmineDmsf::Plugin.an_obsolete_plugin_present?
-  Redmine::Notifiable.prepend RedmineDmsf::Patches::NotifiablePatch
-end
+Redmine::Notifiable.prepend RedmineDmsf::Patches::NotifiablePatch unless RedmineDmsf::Plugin.an_obsolete_plugin_present?

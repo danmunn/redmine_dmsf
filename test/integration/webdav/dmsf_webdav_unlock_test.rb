@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -23,14 +22,16 @@
 require File.expand_path('../../../test_helper', __FILE__)
 require 'fileutils'
 
+# WebDAV UNLOCK tests
 class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
-
   fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
 
   def test_unlock_file
     log_user 'admin', 'admin'
     l = @file2.locks.first
-    process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
+    process :unlock,
+            "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}",
+            params: nil,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
     assert_response :success
   end
@@ -38,25 +39,33 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
   def test_unlock_file_locked_by_someone_else
     log_user 'jsmith', 'jsmith'
     l = @file2.locks.first
-    process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
+    process :unlock,
+            "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}",
+            params: nil,
             headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
     assert_response :forbidden
   end
 
   def test_unlock_file_with_invalid_token
     log_user 'admin', 'admin'
-    process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
-            headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: 'invalid_token' })
+    process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}",
+            params: nil,
+            headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite',
+                                     HTTP_LOCK_TOKEN: 'invalid_token' })
     assert_response :bad_request
   end
 
   def test_unlock_file_not_locked
     log_user 'admin', 'admin'
     l = @file2.locks.first
-    process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
+    process :unlock,
+            "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}",
+            params: nil,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
     assert_response :success
-    process :unlock, "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}", params: nil,
+    process :unlock,
+            "/dmsf/webdav/#{@file2.project.identifier}/#{@file2.name}",
+            params: nil,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
     assert_response :no_content
   end
@@ -65,7 +74,9 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
     log_user 'jsmith', 'jsmith'
     l = @folder2.locks.first
     # folder1 is missing in the path
-    process :unlock, "/dmsf/webdav/#{@folder2.project.identifier}/#{@folder2.title}", params: nil,
+    process :unlock,
+            "/dmsf/webdav/#{@folder2.project.identifier}/#{@folder2.title}",
+            params: nil,
             headers: @jsmith.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
     assert_response :forbidden
   end
@@ -108,10 +119,10 @@ class DmsfWebdavUnlockTest < RedmineDmsf::Test::IntegrationTest
     User.current = @admin_user
     l = @folder10.lock!
     assert l, "Folder failed to be locked by #{User.current}"
-    process :unlock, "/dmsf/webdav/#{@folder10.project.parent.identifier}/#{@folder10.project.identifier}/#{@folder10.title}",
+    process :unlock,
+            "/dmsf/webdav/#{@folder10.project.parent.identifier}/#{@folder10.project.identifier}/#{@folder10.title}",
             params: nil,
             headers: @admin.merge!({ HTTP_DEPTH: 'infinity', HTTP_TIMEOUT: 'Infinite', HTTP_LOCK_TOKEN: l.uuid })
     assert_response :success
   end
-
 end

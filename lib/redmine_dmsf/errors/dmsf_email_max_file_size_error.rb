@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,7 +20,7 @@
 
 module RedmineDmsf
   module Errors
-
+    # max file size error
     class DmsfEmailMaxFileSizeError < StandardError
       include Redmine::I18n
 
@@ -33,6 +32,5 @@ module RedmineDmsf
         end
       end
     end
-
   end
 end

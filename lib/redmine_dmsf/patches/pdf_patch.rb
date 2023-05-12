@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -25,28 +24,29 @@ require 'redmine/export/pdf'
 
 module RedmineDmsf
   module Patches
+    # PDF
     module PdfPatch
-
       ##################################################################################################################
       # Overriden methods
 
       def get_image_filename(attrname)
-        if attrname =~ /\/dmsf\/files\/(\d+)\//
-          file = DmsfFile.find_by(id: $1)
-           file&.last_revision ? file.last_revision.disk_file : nil
+        if attrname =~ %r{/dmsf/files/(\d+)/}
+          file = DmsfFile.find_by(id: Regexp.last_match(1))
+          file&.last_revision ? file.last_revision.disk_file : nil
         else
           super attrname
         end
       end
-
     end
   end
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?(:easy_extensions)
+if Redmine::Plugin.installed?('easy_extensions')
   RedmineExtensions::PatchManager.register_patch_to_be_first 'Redmine::Export::PDF::ITCPDF',
-   'RedmineDmsf::Patches::PdfPatch', prepend: true, first: true
+                                                             'RedmineDmsf::Patches::PdfPatch',
+                                                             prepend: true,
+                                                             first: true
 else
   Redmine::Export::PDF::ITCPDF.prepend RedmineDmsf::Patches::PdfPatch
 end

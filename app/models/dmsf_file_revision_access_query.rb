@@ -20,8 +20,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
+# File revision access query
 class DmsfFileRevisionAccessQuery < Query
-
   attr_accessor :revision_id
 
   self.queried_class = DmsfFileRevisionAccess
@@ -29,13 +29,13 @@ class DmsfFileRevisionAccessQuery < Query
 
   # Standard columns
   self.available_columns = [
-      QueryColumn.new(:user, frozen: true),
-      QueryColumn.new(:count, frozen: true),
-      QueryColumn.new(:first_at, frozen: true),
-      QueryColumn.new(:last_at, frozen: true)
+    QueryColumn.new(:user, frozen: true),
+    QueryColumn.new(:count, frozen: true),
+    QueryColumn.new(:first_at, frozen: true),
+    QueryColumn.new(:last_at, frozen: true)
   ]
 
-  def initialize(attributes=nil, *args)
+  def initialize(attributes = nil, *_args)
     super attributes
     self.sort_criteria = []
     self.filters = {}
@@ -46,20 +46,17 @@ class DmsfFileRevisionAccessQuery < Query
   #
 
   def base_scope
-    unless @scope
-      @scope = DmsfFileRevisionAccess.
-          where(dmsf_file_revision_id: revision_id)
-    end
+    @scope ||= DmsfFileRevisionAccess.where(dmsf_file_revision_id: revision_id)
     @scope
   end
 
   # Returns the issue count
   def access_count
-    base_scope.
-        group(:user_id).
-        count.size
+    base_scope
+      .group(:user_id)
+      .count.size
   rescue ::ActiveRecord::StatementInvalid => e
-    raise StatementInvalid.new(e.message)
+    raise StatementInvalid, e.message
   end
 
   def type
@@ -67,22 +64,19 @@ class DmsfFileRevisionAccessQuery < Query
   end
 
   def available_columns
-    unless @available_columns
-      @available_columns = self.class.available_columns.dup
-    end
+    @available_columns ||= self.class.available_columns.dup
     @available_columns
   end
 
   ######################################################################################################################
   # New
 
-  def accesses(options={})
-    base_scope.
-        access_grouped.
-        joins(:user).
-        order(Arel.sql('COUNT(*) DESC')).
-        limit(options[:limit]).
-        offset(options[:offset])
+  def accesses(options = {})
+    base_scope
+      .access_grouped
+      .joins(:user)
+      .order(Arel.sql('COUNT(*) DESC'))
+      .limit(options[:limit])
+      .offset(options[:offset])
   end
-
 end

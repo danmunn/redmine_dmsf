@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,15 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Add column
 class AddExternal < ActiveRecord::Migration[4.2]
-
   def up
-    change_column :dmsf_links, :target_id, :integer, null: true
-    add_column :dmsf_links, :external_url, :string, null: true
+    change_table :dmsf_links, bulk: true do |t|
+      t.change_column :target_id, :integer, null: true
+      t.add_column :external_url, :string, null: true
+    end
   end
 
-  def down    
-    remove_column :dmsf_links, :external_url    
+  def down
+    remove_column :dmsf_links, :external_url
   end
-
 end

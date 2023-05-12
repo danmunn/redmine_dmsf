@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,17 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Add column
 class ApprovalWorkflowStatus < ActiveRecord::Migration[4.2]
-
   def up
-    add_column :dmsf_workflows, :status, :integer, null: false,
-               default: DmsfWorkflow::STATUS_ACTIVE
+    add_column :dmsf_workflows, :status, :integer,
+               null: false, default: DmsfWorkflow::STATUS_ACTIVE
     DmsfWorkflow.reset_column_information
-    DmsfWorkflow.all.each { |wf| wf.update_attribute(:status, DmsfWorkflow::STATUS_ACTIVE) }
+    DmsfWorkflow.update_all :status, DmsfWorkflow::STATUS_ACTIVE
   end
 
   def down
-    remove_column :dmsf_workflows, :status        
+    remove_column :dmsf_workflows, :status
   end
-
 end

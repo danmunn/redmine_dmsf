@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,8 +21,8 @@
 
 require File.expand_path('../../../test_helper', __FILE__)
 
+# WebDAV POST tests
 class DmsfWebdavPostTest < RedmineDmsf::Test::IntegrationTest
-
   # Test that any post request is authenticated
   def test_post_request_authenticated
     post '/dmsf/webdav/'
@@ -35,5 +34,4 @@ class DmsfWebdavPostTest < RedmineDmsf::Test::IntegrationTest
     post '/dmsf/webdav/', params: nil, headers: @admin
     assert_response :not_implemented
   end
-  
 end

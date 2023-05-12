@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,22 +18,24 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Add column
 class DmsfFileContainer < ActiveRecord::Migration[4.2]
-
   def up
-    remove_index :dmsf_files, :project_id
-    rename_column :dmsf_files, :project_id, :container_id
-    add_column :dmsf_files, :container_type, :string, limit: 30, null: false,
-               default: 'Project'
+    change_table :dmsf_files, bulk: true do |t|
+      t.remove_index :project_id
+      t.rename_column :project_id, :container_id
+      t.add_column :container_type, :string, limit: 30, null: false, default: 'Project'
+      t.add_index %i[container_id container_type]
+    end
     DmsfFile.update_all container_type: 'Project'
-    add_index :dmsf_files, [:container_id, :container_type]
   end
 
   def down
-    remove_index :dmsf_files, [:container_id, :container_type]
-    remove_column :dmsf_files, :container_type
-    rename_column :dmsf_files, :container_id, :project_id
-    add_index :dmsf_files, :project_id
+    change_table :dmsf_files, bulk: true do |t|
+      t.remove_index %i[container_id container_type]
+      t.remove_column :container_type
+      t.rename_column :container_id, :project_id
+      t.add_index :project_id
+    end
   end
-
 end

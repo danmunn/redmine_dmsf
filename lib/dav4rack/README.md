@@ -79,7 +79,7 @@ rackup script would look something like this:
   require 'rubygems'
   require 'dav4rack'
 
-  use Rack::CommonLogger
+  use Rack::CommonRails.logger
   run Dav4rack::Handler.new(root: '/path/to/public/fileshare')
 ```
 
@@ -102,7 +102,7 @@ specific directory: `/webdav/share/`
   require 'rubygems'
   require 'dav4rack'
 
-  use Rack::CommonLogger
+  use Rack::CommonRails.logger
 
   app = Rack::Builder.new{
     map '/webdav/share/' do
@@ -127,7 +127,7 @@ with the last example but this time include the interceptor:
   require 'rubygems'
   require 'dav4rack'
 
-  use Rack::CommonLogger
+  use Rack::CommonRails.logger
   app = Rack::Builder.new{
     map '/webdav/share/' do
       run Dav4rack::Handler.new(root: '/path/to/public/fileshare')
@@ -224,9 +224,9 @@ consistency) so the output should look somewhat familiar.
 
 You can even specify the level of logging:
 
-    Dav4rack::Handler.new(resource_class: CustomResource, log_to: ['/my/log/file', Logger::DEBUG])
+    Dav4rack::Handler.new(resource_class: CustomResource, log_to: ['/my/log/file', Rails.logger::DEBUG])
 
-In order to use the Rails logger, just specify `log_to: Rails.logger`.
+In order to use the Rails Rails.logger, just specify `log_to: Rails.logger`.
 
 ## Custom Resources
 

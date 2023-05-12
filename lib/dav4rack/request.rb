@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-require File.dirname(__FILE__) + '/uri'
+require "#{File.dirname(__FILE__)}/uri"
 require 'addressable/uri'
-require File.dirname(__FILE__) + '/logger'
 
 module Dav4rack
+  # Request
   class Request < Rack::Request
-
     # Root URI path for the resource
     attr_reader :root_uri_path
 
@@ -20,7 +19,6 @@ module Dav4rack
       @options = { recursive_propfind_allowed: true }.merge options
       self.path_info = expand_path path_info
     end
-
 
     def authorization?
       !!authorization
@@ -40,21 +38,16 @@ module Dav4rack
       @unescaped_path ||= self.class.unescape_path path
     end
 
-    def self.unescape_path(p)
-      p = p.dup
-      p.force_encoding 'UTF-8'
-      Addressable::URI.unencode p
+    def self.unescape_path(path)
+      path = path.dup
+      path.force_encoding 'UTF-8'
+      Addressable::URI.unencode path
     end
-
 
     # Namespace being used within XML document
     def ns(wanted_uri = XmlElements::DAV_NAMESPACE)
-      if document and
-        root = document.root and
-        ns_defs = root.namespace_definitions and
-        ns_defs.size > 0
-
-        result = ns_defs.detect{ |nd| nd.href == wanted_uri } || ns_defs.first
+      if (root = document&.root) && (ns_defs = root.namespace_definitions) && !ns_defs.empty?
+        result = ns_defs.detect { |nd| nd.href == wanted_uri } || ns_defs.first
         result = result.prefix.nil? ? 'xmlns' : result.prefix.to_s
         result += ':' unless result.empty?
         result
@@ -63,51 +56,41 @@ module Dav4rack
       end
     end
 
-
-
     # Lock token if provided by client
     def lock_token
       get_header 'HTTP_LOCK_TOKEN'
     end
 
-
     # Requested depth
     def depth
-      @http_depth ||= begin
-        if d = get_header('HTTP_DEPTH') and (d == '0' or d == '1')
-          d.to_i
+      d = get_header('HTTP_DEPTH')
+      @depth ||=
+        if %w[0 1].include?(d)
+          d
         elsif infinity_depth_allowed?
-          :infinity
+          'infinity'
         else
-          1
+          '1'
         end
-      end
     end
-
 
     # Destination header
     def destination
-      @destination ||= if h = get_header('HTTP_DESTINATION')
-        DestinationHeader.new Dav4rack::Uri.new(h, script_name: script_name)
-      end
-    end
-
-
-    # Overwrite is allowed
-    def overwrite?
-      get_header('HTTP_OVERWRITE').to_s.upcase != 'F'
+      @destination ||=
+        if (h = get_header('HTTP_DESTINATION'))
+          DestinationHeader.new Dav4rack::Uri.new(h, script_name: script_name)
+        end
     end
 
     # content_length as a Fixnum (nil if the header is unset / empty)
     def content_length
-      if length = (super || get_header('HTTP_X_EXPECTED_ENTITY_LENGTH'))
-        length.to_i
-      end
+      length = super || get_header('HTTP_X_EXPECTED_ENTITY_LENGTH')
+      length&.to_i
     end
 
     # parsed XML request body if any (Nokogiri XML doc)
     def document
-      @request_document ||= parse_request_body if content_length && content_length > 0
+      @request_document ||= parse_request_body if content_length&.positive?
     end
 
     # builds a URL for path using this requests scheme, host, port and
@@ -121,9 +104,7 @@ module Dav4rack
     # returns an url encoded, absolute path for the given relative path
     def path_for(rel_path, collection: false)
       path = Addressable::URI.encode_component rel_path, Addressable::URI::CharacterClasses::PATH
-      if collection and path[-1] != ?/
-        path << '/'
-      end
+      path << '/' if collection && path[-1] != '/'
       "#{script_name}#{expand_path path}"
     end
 
@@ -131,7 +112,7 @@ module Dav4rack
     # return nil if the path does not begin with the script_name
     def path_info_for(full_path, script_name: self.script_name)
       uri = Dav4rack::Uri.new full_path, script_name: script_name
-      return uri.path_info
+      uri.path_info
     end
 
     # expands '/foo/../bar' to '/bar', peserving trailing slash and normalizing
@@ -141,37 +122,32 @@ module Dav4rack
       path.prepend '/' unless path[0] == '/'
       collection = path.end_with?('/')
       path = ::File.expand_path path
-      path << '/' if collection and !path.end_with?('/')
+      path << '/' if collection && !path.end_with?('/')
       # remove a drive letter in Windows
-      path.gsub!(/^([^\/]*)\//, '/')
-      path
+      path.gsub %r{^([^/]*)/}, '/'
     end
-
 
     REDIRECTABLE_CLIENTS = [
       /cyberduck/i,
       /konqueror/i
-    ]
+    ].freeze
 
     # Does client allow GET redirection
     # TODO: Get a comprehensive list in here.
     # TODO: Allow this to be dynamic so users can add regexes to match if they know of a client
     # that can be supported that is not listed.
     def client_allows_redirect?
-      ua = self.user_agent
-      REDIRECTABLE_CLIENTS.any? { |re| ua =~ re }
+      REDIRECTABLE_CLIENTS.any? { |re| user_agent =~ re }
     end
-
 
     MS_CLIENTS = [
       /microsoft-webdav/i,
       /microsoft office/i
-    ]
+    ].freeze
 
     # Basic user agent testing for MS authored client
-    def is_ms_client?
-      ua = self.user_agent
-      MS_CLIENTS.any? { |re| ua =~ re }
+    def ms_client?
+      MS_CLIENTS.any? { |re| user_agent =~ re }
     end
 
     def get_header(name)
@@ -190,15 +166,11 @@ module Dav4rack
       request_method != 'PROPFIND' or @options[:recursive_propfind_allowed]
     end
 
-
     def parse_request_body
-      return Nokogiri.XML(body.read){ |config|
-        config.strict
-      } if body
-    rescue
-      Dav4rack::Logger.error $!.message
+      Nokogiri.XML(body.read, &:strict) if body
+    rescue StandardError => e
+      Rails.logger.error e.message
       raise ::Dav4rack::HttpStatus::BadRequest
     end
-
   end
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,8 +21,8 @@
 
 require File.expand_path('../../../test_helper', __FILE__)
 
+# WebDAV OPTIONS tests
 class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
-
   fixtures :dmsf_folders
 
   def test_options_requires_no_authentication_for_root_level
@@ -32,11 +31,11 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_options_returns_expected_allow_header_for_ro
-    with_settings plugin_redmine_dmsf: {'dmsf_webdav_strategy' => 'WEBDAV_READ_ONLY', 'dmsf_webdav' => '1'} do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_strategy' => 'WEBDAV_READ_ONLY', 'dmsf_webdav' => '1' } do
       process :options, '/dmsf/webdav'
       assert_response :success
-      assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-      assert response.headers['Allow'] , 'Allow header is empty or does not exist'
+      assert_not response.headers.blank?, 'Response headers are empty'
+      assert response.headers['Allow'], 'Allow header is empty or does not exist'
       assert_equal response.headers['Allow'], 'OPTIONS,HEAD,GET,PROPFIND'
     end
   end
@@ -44,8 +43,8 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   def test_options_returns_expected_allow_header_for_rw
     process :options, '/dmsf/webdav'
     assert_response :success
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert response.headers['Allow'] , 'Allow header is empty or does not exist'
+    assert_not response.headers.blank?, 'Response headers are empty'
+    assert response.headers['Allow'], 'Allow header is empty or does not exist'
     assert_equal response.headers['Allow'],
                  'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
   end
@@ -53,15 +52,15 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   def test_options_returns_expected_dav_header
     process :options, '/dmsf/webdav'
     assert_response :success
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert response.headers['Dav'] , 'Dav header is empty or does not exist'
+    assert_not response.headers.blank?, 'Response headers are empty'
+    assert response.headers['Dav'], 'Dav header is empty or does not exist'
   end
 
   def test_options_returns_expected_ms_auth_via_header
     process :options, '/dmsf/webdav'
     assert_response :success
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert response.headers['Ms-Author-Via'] , 'Ms-Author-Via header is empty or does not exist'
+    assert_not response.headers.blank?, 'Response headers are empty'
+    assert response.headers['Ms-Author-Via'], 'Ms-Author-Via header is empty or does not exist'
     assert response.headers['Ms-Author-Via'] == 'DAV', 'Ms-Author-Via header - expected: DAV'
   end
 
@@ -73,28 +72,28 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   def test_un_authenticated_options_returns_expected_allow_header
     process :options, "/dmsf/webdav/#{@project1.identifier}"
     assert_response :unauthorized
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert_nil response.headers['Allow'] , 'Allow header should not exist'
+    assert_not response.headers.blank?, 'Response headers are empty'
+    assert_nil response.headers['Allow'], 'Allow header should not exist'
   end
 
   def test_un_authenticated_options_returns_expected_dav_header
     process :options, "/dmsf/webdav/#{@project1.identifier}"
     assert_response :unauthorized
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert_nil response.headers['Dav'] , 'Dav header should not exist'
+    assert_not response.headers.blank?, 'Response headers are empty'
+    assert_nil response.headers['Dav'], 'Dav header should not exist'
   end
 
   def test_un_authenticated_options_returns_expected_ms_auth_via_header
     process :options, "/dmsf/webdav/#{@project1.identifier}"
     assert_response :unauthorized
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
-    assert_nil response.headers['Ms-Author-Via'] , 'Ms-Author-Via header should not exist'
+    assert_not response.headers.blank?, 'Response headers are empty'
+    assert_nil response.headers['Ms-Author-Via'], 'Ms-Author-Via header should not exist'
   end
 
   def test_authenticated_options_returns_expected_allow_header
     process :options, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @jsmith
     assert_response :success
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
+    assert_not response.headers.blank?, 'Response headers are empty'
     assert response.headers['Allow'], 'Allow header is empty or does not exist'
     assert_equal response.headers['Allow'],
                  'OPTIONS,HEAD,GET,PUT,POST,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK'
@@ -103,26 +102,30 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   def test_authenticated_options_returns_expected_dav_header
     process :options, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @jsmith
     assert_response :success
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
+    assert_not response.headers.blank?, 'Response headers are empty'
     assert response.headers['Dav'], 'Dav header is empty or does not exist'
   end
 
   def test_authenticated_options_returns_expected_ms_auth_via_header
     process :options, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @jsmith
     assert_response :success
-    assert !(response.headers.nil? || response.headers.empty?), 'Response headers are empty'
+    assert_not response.headers.blank?, 'Response headers are empty'
     assert response.headers['Ms-Author-Via'], 'Ms-Author-Via header is empty or does not exist'
     assert response.headers['Ms-Author-Via'] == 'DAV', 'Ms-Author-Via header - expected: DAV'
   end
 
   def test_un_authenticated_options_for_msoffice_user_agent
-    process :options, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: { HTTP_USER_AGENT: 'Microsoft Office Word 2014' }
+    process :options,
+            "/dmsf/webdav/#{@project1.identifier}",
+            params: nil,
+            headers: { HTTP_USER_AGENT: 'Microsoft Office Word 2014' }
     assert_response :unauthorized
   end
 
   def test_authenticated_options_for_msoffice_user_agent
-    process :options, "/dmsf/webdav/#{@project1.identifier}", params: nil,
-                      headers: @admin.merge!({ HTTP_USER_AGENT: 'Microsoft Office Word 2014' })
+    process :options, "/dmsf/webdav/#{@project1.identifier}",
+            params: nil,
+            headers: @admin.merge!({ HTTP_USER_AGENT: 'Microsoft Office Word 2014' })
     assert_response :success
   end
 
@@ -132,7 +135,10 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_authenticated_options_for_other_user_agent
-    process :options, "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin.merge!({ HTTP_USER_AGENT: 'Other' })
+    process :options,
+            "/dmsf/webdav/#{@project1.identifier}",
+            params: nil,
+            headers: @admin.merge!({ HTTP_USER_AGENT: 'Other' })
     assert_response :success
 
     project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
@@ -144,5 +150,4 @@ class DmsfWebdavOptionsTest < RedmineDmsf::Test::IntegrationTest
     process :options, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}", params: nil, headers: @admin
     assert_response :success
   end
-
 end

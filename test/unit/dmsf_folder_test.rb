@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,16 +21,16 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Folder tests
 class DmsfFolderTest < RedmineDmsf::Test::UnitTest
-
   fixtures :dmsf_folder_permissions, :dmsf_locks, :dmsf_folders, :dmsf_files, :dmsf_file_revisions,
-    :dmsf_links
+           :dmsf_links
 
   def setup
     super
     @link2 = DmsfLink.find 2
   end
-         
+
   def test_visiblity
     # The role has got permissions
     User.current = @jsmith
@@ -53,16 +52,16 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert DmsfFolder.permissions?(@folder7)
     @folder7.dmsf_folder_permissions.where(object_type: 'User').delete_all
     @folder7.reload
-    assert !DmsfFolder.permissions?(@folder7)
+    assert_not DmsfFolder.permissions?(@folder7)
   end
 
   def test_delete
-    assert @folder6.delete(false), @folder6.errors.full_messages.to_sentence
+    assert @folder6.delete(commit: false), @folder6.errors.full_messages.to_sentence
     assert @folder6.deleted?, "Folder #{@folder6} hasn't been deleted"
   end
 
   def test_delete_recursively
-    assert @folder1.delete(false), @folder1.errors.full_messages.to_sentence
+    assert @folder1.delete(commit: false), @folder1.errors.full_messages.to_sentence
     # First&second level
     [@folder1, @folder2].each do |folder|
       assert_equal folder.dmsf_folders.all.size, folder.dmsf_folders.collect(&:deleted?).size
@@ -72,28 +71,28 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_restore
-    assert @folder6.delete(false), @folder6.errors.full_messages.to_sentence
+    assert @folder6.delete(commit: false), @folder6.errors.full_messages.to_sentence
     assert @folder6.deleted?, "Folder #{@folder6} hasn't been deleted"
     assert @folder6.restore, @folder6.errors.full_messages.to_sentence
-    assert !@folder6.deleted?, "Folder #{@folder6} hasn't been restored"
+    assert_not @folder6.deleted?, "Folder #{@folder6} hasn't been restored"
   end
 
   def test_restore_recursively
     # Delete
-    assert @folder1.delete(false), @folder1.errors.full_messages.to_sentence
+    assert @folder1.delete(commit: false), @folder1.errors.full_messages.to_sentence
     # Restore
     assert @folder1.restore, @folder1.errors.full_messages.to_sentence
-    assert !@folder1.deleted?, "Folder #{@folder1} hasn't been restored"
+    assert_not @folder1.deleted?, "Folder #{@folder1} hasn't been restored"
     # First level
-    assert !@folder2.deleted?, "Folder #{@folder2} hasn't been restored"
-    assert !@link2.deleted?, "Link #{@link2} hasn't been restored"
+    assert_not @folder2.deleted?, "Folder #{@folder2} hasn't been restored"
+    assert_not @link2.deleted?, "Link #{@link2} hasn't been restored"
     # Second level
-    assert !@file4.deleted?, "File #{@file4} hasn't been restored"
+    assert_not @file4.deleted?, "File #{@file4} hasn't been restored"
   end
 
   def test_destroy
     folder6_id = @folder6.id
-    @folder6.delete true
+    @folder6.delete commit: true
     assert_nil DmsfFolder.find_by(id: folder6_id)
   end
 
@@ -102,7 +101,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     folder2_id = @folder2.id
     link2_id = @link2.id
     file4_id = @file4.id
-    @folder1.delete true
+    @folder1.delete commit: true
     assert_nil DmsfFolder.find_by(id: folder1_id)
     # First level
     assert_nil DmsfFolder.find_by(id: folder2_id)
@@ -113,13 +112,13 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
 
   def test_is_column_on_default
     DmsfFolder::DEFAULT_COLUMNS.each do |column|
-      assert DmsfFolder.is_column_on?(column), "The column #{column} is not on?"
+      assert DmsfFolder.column_on?(column), "The column #{column} is not on?"
     end
   end
 
   def test_is_column_on_available
     (DmsfFolder::AVAILABLE_COLUMNS - DmsfFolder::DEFAULT_COLUMNS).each do |column|
-      assert !DmsfFolder.is_column_on?(column), "The column #{column} is on?"
+      assert_not DmsfFolder.column_on?(column), "The column #{column} is on?"
     end
   end
 
@@ -171,7 +170,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     #  ["...folder6", 6]]
     #  ["...folder7", 7] - locked
     assert tree.to_s.include?('...folder1'), "'...folder1' string in the folder tree expected."
-    assert !tree.to_s.include?('...folder7'), "'...folder7' string in the folder tree not expected."
+    assert_not tree.to_s.include?('...folder7'), "'...folder7' string in the folder tree not expected."
   end
 
   def test_directory_tree_id
@@ -188,7 +187,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     #  ["...folder6", 6]]
     #  ["...folder7", 7] - locked
     assert tree.to_s.include?('...folder1'), "'...folder1' string in the folder tree expected."
-    assert !tree.to_s.include?('...folder7'), "'...folder7' string in the folder tree not expected."
+    assert_not tree.to_s.include?('...folder7'), "'...folder7' string in the folder tree not expected."
   end
 
   def test_folder_tree
@@ -198,13 +197,13 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     # [["folder1", 1],
     #  ["...folder2", 2] - locked for admin
     assert tree.to_s.include?('folder1'), "'folder1' string in the folder tree expected."
-    assert !tree.to_s.include?('...folder2'), "'...folder2' string in the folder tree not expected."
+    assert_not tree.to_s.include?('...folder2'), "'...folder2' string in the folder tree not expected."
   end
 
   def test_get_valid_title
     assert_equal '1052-6024 . U_CPLD_5M240Z_SMT_MBGA100_1.8V_-40',
-      DmsfFolder::get_valid_title('1052-6024 : U_CPLD_5M240Z_SMT_MBGA100_1.8V_-40...')
-    assert_equal 'test', DmsfFolder::get_valid_title("test#{DmsfFolder::INVALID_CHARACTERS}")
+                 DmsfFolder.get_valid_title('1052-6024 : U_CPLD_5M240Z_SMT_MBGA100_1.8V_-40...')
+    assert_equal 'test', DmsfFolder.get_valid_title("test#{DmsfFolder::INVALID_CHARACTERS}")
   end
 
   def test_permission_for_role
@@ -214,7 +213,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
 
   def test_permissions_users
     users = @folder7.permissions_users
-    assert_equal 1,  users.size
+    assert_equal 1, users.size
   end
 
   def test_move_to
@@ -250,11 +249,11 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
   def test_valid_parent_loop
     @folder1.dmsf_folder = @folder2
     # @folder2 is under @folder1 => loop!
-    assert !@folder1.save
+    assert_not @folder1.save
   end
 
   def test_empty
-    assert !@folder1.empty?
+    assert_not @folder1.empty?
     assert @folder6.empty?
   end
 
@@ -270,5 +269,4 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert_equal invalid_string_sequence.scrub, @folder1.title
     assert_equal invalid_string_sequence.scrub, @folder1.description
   end
-
 end

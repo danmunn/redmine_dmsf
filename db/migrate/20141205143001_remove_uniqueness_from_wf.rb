@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,10 +18,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Remove index
 class RemoveUniquenessFromWf < ActiveRecord::Migration[4.2]
-
-  def up      
+  def up
     remove_index(:dmsf_workflows, :name) if index_exists?(:dmsf_workflows, :name)
   end
-
 end

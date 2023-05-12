@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,38 +20,30 @@
 
 module RedmineDmsf
   module Patches
+    # Formatting helper
     module FormattingHelperPatch
-
       def heads_for_wiki_formatter
         super
         return if @dmsf_macro_list
+
         @dmsf_macro_list = []
-        Redmine::WikiFormatting::Macros.available_macros.each do |key, value|
-          if key.to_s =~ /^dmsf/
-            @dmsf_macro_list << key.to_s
-          end
+        Redmine::WikiFormatting::Macros.available_macros.each do |key, _value|
+          @dmsf_macro_list << key.to_s if key.to_s.match?(/^dmsf/)
         end
         # If localized files for the current language are not available, switch to English
         lang = current_language.to_s.downcase
         path = File.join(File.dirname(__FILE__),
                          '..', '..', '..', 'assets', 'help', lang, 'wiki_syntax.html')
-        if File.exist?(path)
-          @dmsf_macro_list << "#{lang};#{l(:label_help)}"
-        else
-          @dmsf_macro_list << "en;#{l(:label_help)}"
-        end
+        @dmsf_macro_list << File.exist?(path) ? "#{lang};#{l(:label_help)}" : "en;#{l(:label_help)}"
         path = File.join(File.dirname(__FILE__),
                          '..', '..', '..', 'assets', 'javascripts', 'lang', "dmsf_button-#{lang}.js")
-        unless File.exist?(path)
-          lang = 'en'
-        end
+        lang = 'en' unless File.exist?(path)
         content_for :header_tags do
           javascript_include_tag("lang/dmsf_button-#{lang}", plugin: 'redmine_dmsf') +
-          javascript_include_tag('dmsf_button', plugin: 'redmine_dmsf') +
+            javascript_include_tag('dmsf_button', plugin: 'redmine_dmsf') +
             javascript_tag("jsToolBar.prototype.dmsfList = #{@dmsf_macro_list.to_json};")
         end
       end
-
     end
   end
 end

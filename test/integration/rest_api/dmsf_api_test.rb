@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,6 +20,7 @@
 
 require File.expand_path('../../../test_helper', __FILE__)
 
+# DMSF API
 class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
   include Redmine::I18n
 

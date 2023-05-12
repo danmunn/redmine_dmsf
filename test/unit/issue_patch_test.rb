@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Issue tests
 class IssuePatchTest < RedmineDmsf::Test::UnitTest
-
   fixtures :issues, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
@@ -32,5 +31,4 @@ class IssuePatchTest < RedmineDmsf::Test::UnitTest
   def test_issue_has_dmsf_files
     assert @issue1.respond_to?(:dmsf_files)
   end
-
 end

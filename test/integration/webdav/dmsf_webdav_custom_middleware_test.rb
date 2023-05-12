@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../../test_helper', __FILE__)
 
+# Custom middleware test
 class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
-
   fixtures :dmsf_folders, :dmsf_files
 
   def test_options_for_root_path
@@ -46,7 +45,7 @@ class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_webdav_not_enabled
-    with_settings plugin_redmine_dmsf: {'dmsf_webdav' => nil} do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => nil } do
       process :options, '/dmsf/webdav'
       assert_response :not_found
     end
@@ -56,5 +55,4 @@ class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
     process :options, '/dmsf/webdav'
     assert_response :success
   end
-
 end

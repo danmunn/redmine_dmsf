@@ -1,4 +1,3 @@
-# encode: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,10 +21,9 @@
 
 require 'query'
 
+# Modify column
 class DmsfQueryModifiedColumn < QueryColumn
-
   def value_object(object)
     object.updated
   end
-
 end

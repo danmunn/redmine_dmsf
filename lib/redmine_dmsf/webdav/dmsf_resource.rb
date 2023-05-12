@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -25,12 +24,9 @@ require 'addressable/uri'
 
 module RedmineDmsf
   module Webdav
+    # DMSF resource
     class DmsfResource < BaseResource
       include Redmine::I18n
-
-      def initialize(path, request, response, options)
-        super path, request, response, options
-      end
 
       # name:: String - Property name
       # Returns the value of the given property
@@ -38,7 +34,7 @@ module RedmineDmsf
         if element[:ns_href] == DAV_NAMESPACE
           super
         else
-          get_custom_property element
+          custom_property element
         end
       end
 
@@ -57,7 +53,7 @@ module RedmineDmsf
       # name:: Property name
       # Remove the property from the resource
       def remove_property(element)
-        Redmine::Search.cache_store.delete "#{get_property_key}-#{element[:name]}"
+        Redmine::Search.cache_store.delete "#{property_key}-#{element[:name]}"
       end
 
       # Gather collection of objects that denote current entities child entities
@@ -70,9 +66,7 @@ module RedmineDmsf
           if folder
             # Folders
             folder.dmsf_folders.visible.each do |f|
-              if DmsfFolder.permissions?(f, false)
-                @children.push child(f.title)
-              end
+              @children.push child(f.title) if DmsfFolder.permissions?(f, allow_system: false)
             end
             # Files
             folder.dmsf_files.visible.pluck(:name).each do |name|
@@ -86,8 +80,8 @@ module RedmineDmsf
       # Does the object exist?
       # If it is either a subproject or a folder or a file, then it exists
       def exist?
-        project && project.module_enabled?('dmsf') && (subproject || folder || file) &&
-           (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project))
+        project&.module_enabled?('dmsf') && (subproject || folder || file) &&
+          (User.current.admin? || User.current.allowed_to?(:view_dmsf_folders, project))
       end
 
       # Is this entity a folder?
@@ -134,17 +128,17 @@ module RedmineDmsf
       end
 
       def etag
-        ino = 2
-        if file
-          if file.last_revision && File.exist?(file.last_revision.disk_file)
-            ino = File.stat(file.last_revision.disk_file).ino
-          end
-        end
-        sprintf '%x-%x-%x', ino, content_length,  (last_modified ? last_modified.to_i : 0)
+        ino = if file&.last_revision && File.exist?(file.last_revision.disk_file)
+                File.stat(file.last_revision.disk_file).ino
+              else
+                2
+              end
+        format '%<node>x-%<size>x-%<modified>x',
+               node: ino, size: content_length, modified: (last_modified ? last_modified.to_i : 0)
       end
 
       def content_length
-        file ? file.size : 4096;
+        file ? file.size : 4096
       end
 
       def special_type
@@ -152,20 +146,22 @@ module RedmineDmsf
       end
 
       # Process incoming GET request
-      # If instance is a collection, calls html_display (defined in base_resource.rb) which cycles through children for display
-      # File will only be presented for download if user has permission to view files
+      # If instance is a collection, calls html_display (defined in base_resource.rb) which cycles through children for
+      # display. File will only be presented for download if user has permission to view files.
       def get(request, response)
-        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder))
+        raise Forbidden unless !parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder)
+
         if collection?
           html_display
           response['Content-Length'] = response.body.bytesize.to_s
           response['Content-Type'] = 'text/html'
         else
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:view_dmsf_files, project)
+
           http_if_none_match = request.get_header('HTTP_IF_NONE_MATCH')
-          if http_if_none_match.present? && (http_if_none_match == etag)
-            return NotModified # MS Office 2016, PROTECTED VIEW => Enable editing?
-          end
+          # MS Office 2016, PROTECTED VIEW => Enable editing?
+          return NotModified if http_if_none_match.present? && (http_if_none_match == etag)
+
           response.body = download # Rack based provider
         end
         OK
@@ -176,9 +172,12 @@ module RedmineDmsf
       # Ensure item is only functional if project is enabled for dmsf
       def make_collection
         if request.body.read.to_s.empty?
-          raise NotFound unless project && project.module_enabled?('dmsf')
+          raise NotFound unless project&.module_enabled?('dmsf')
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
-          raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
+          unless !parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, allow_system: false)
+            raise Forbidden
+          end
+
           f = DmsfFolder.new
           f.title = basename
           f.dmsf_folder_id = parent.folder&.id
@@ -196,19 +195,17 @@ module RedmineDmsf
       def delete
         if file
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_delete, project)
-          raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
-          raise Locked if file.locked_for_user?
-          pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
-          if pattern.present? && basename.match(pattern)
-            # Files that are not versioned should be destroyed
-            destroy = true
-          elsif (!file.last_revision) || file.last_revision.size == 0
-            # Zero-sized files should be destroyed
-            destroy = true
-          else
-            destroy = false
+          unless !parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, allow_system: false)
+            raise Forbidden
           end
-          if file.delete(destroy)
+          raise Locked if file.locked_for_user?
+
+          pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
+          # Files that are not versioned should be destroyed
+          # Zero-sized files should be destroyed
+          b = !file.last_revision || file.last_revision.size.zero?
+          destroy = (pattern.present? && basename.match(pattern)) || b
+          if file.delete(commit: destroy)
             DmsfMailer.deliver_files_deleted project, [file]
             NoContent
           else
@@ -216,12 +213,14 @@ module RedmineDmsf
           end
         elsif folder
           raise Locked if folder.locked?
+
           # To fulfill Litmus requirements to not delete folder if fragments are in the URL
           uri = URI(uri_encode(request.get_header('REQUEST_URI')))
           raise BadRequest if uri.fragment.present?
           raise Forbidden unless User.current.admin? || User.current.allowed_to?(:folder_manipulation, project)
-          raise Forbidden unless DmsfFolder.permissions?(folder, false)
-          folder.delete(false) ? NoContent : Conflict
+          raise Forbidden unless DmsfFolder.permissions?(folder, allow_system: false)
+
+          folder.delete(commit: false) ? NoContent : Conflict
         else
           MethodNotAllowed
         end
@@ -229,36 +228,34 @@ module RedmineDmsf
 
       # Process incoming MOVE request
       # Behavioural differences between collection and single entity
-      def move(dest_path, overwrite)
+      def move(dest_path)
         dest = ResourceProxy.new(dest_path, @request, @response, @options.merge(user: @user))
         return PreconditionFailed if !dest.resource.is_a?(DmsfResource) || dest.resource.project.nil?
+
         parent = dest.resource.parent
         raise Forbidden unless dest.resource.project.module_enabled?(:dmsf)
-        if !parent.exist? || (!User.current.admin? && (!DmsfFolder.permissions?(folder, false) ||
-            !DmsfFolder.permissions?(parent.folder, false)))
+        if !parent.exist? || (!User.current.admin? && (!DmsfFolder.permissions?(folder, allow_system: false) ||
+           !DmsfFolder.permissions?(parent.folder, allow_system: false)))
           raise Forbidden
         end
+        return PreconditionFailed if dest.exist? && request.get_header('HTTP_OVERWRITE') == 'F'
+
         if collection?
           if dest.exist?
-            if overwrite
-              if folder
-                (dest.collection?)&.delete true
-              end
-            else
-              return PreconditionFailed
-            end
+            d = dest.collection?
+            d&.delete(commit: true) if folder && request.get_header('HTTP_OVERWRITE') == 'T'
           end
           if !User.current.admin? && (!User.current.allowed_to?(:folder_manipulation, project) ||
-              !User.current.allowed_to?(:folder_manipulation, dest.resource.project))
+             !User.current.allowed_to?(:folder_manipulation, dest.resource.project))
             raise Forbidden
           end
-          unless folder
-            return MethodNotAllowed # Moving sub-project not enabled
-          end
+          return MethodNotAllowed unless folder # Moving sub-project not enabled
           raise Locked if folder.locked_for_user?
+
           # Change the title
           folder.title = dest.resource.basename
           return PreconditionFailed unless folder.save
+
           # Move to a new destination
           folder.move_to(dest.resource.project, parent.folder) ? Created : PreconditionFailed
         else
@@ -267,9 +264,9 @@ module RedmineDmsf
             raise Forbidden
           end
           raise Locked if file.locked_for_user?
-          if dest.exist? && (!dest.collection?)
-            return PreconditionFailed unless overwrite
-            if dest.resource.file.last_revision.size == 0 || reuse_version_for_locked_file(dest.resource.file)
+
+          if dest.exist? && !dest.collection?
+            if dest.resource.file.last_revision.size.zero? || reuse_version_for_locked_file(dest.resource.file)
               # Last revision in the destination has zero size so reuse that revision
               new_revision = dest.resource.file.last_revision
             else
@@ -286,17 +283,21 @@ module RedmineDmsf
             end
             # Save
             new_revision.save && dest.resource.file.save
-            # Delete (and destroy) the file that should have been renamed and return what should have been returned in case of a copy
-            file.delete(true) ? Created : PreconditionFailed
+            # Delete (and destroy) the file that should have been renamed and return what should have been returned
+            # in case of a copy
+            request.get_header('HTTP_OVERWRITE') == 'T' && file.delete(commit: true) ? Created : PreconditionFailed
           else
             return PreconditionFailed unless exist? && file
+
             if (project == dest.resource.project) && dest.resource.basename.match(/.\.tmp$/i)
-              Rails.logger.info "WebDAV MOVE: #{file.name} -> #{dest.resource.basename}, possible MSOffice rename to .tmp when saving."
+              Rails.logger.info do
+                "WebDAV MOVE: #{file.name} -> #{dest.resource.basename}, possible MSOffice rename to .tmp when saving."
+              end
               # Renaming the file to X.tmp, might be Office that is saving a file. Keep the original file.
               file.copy_to_filename dest.resource.project, parent&.folder, dest.resource.basename
               Created
             else
-              if (project == dest.resource.project) && (file.last_revision.size == 0)
+              if (project == dest.resource.project) && file.last_revision.size.zero?
                 # Moving a zero sized file within the same project, just update the dmsf_folder
                 file.dmsf_folder = parent&.folder
               else
@@ -321,23 +322,28 @@ module RedmineDmsf
 
       # Process incoming COPY request
       # Behavioural differences between collection and single entity
-      def copy(dest, overwrite, depth)
+      def copy(dest)
         dest = ResourceProxy.new(dest, @request, @response, @options.merge(user: @user))
         return PreconditionFailed unless dest.resource.project
+
         parent = dest.resource.parent
-        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
+        unless !parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, allow_system: false)
+          raise Forbidden
+        end
+
         return Conflict unless dest.parent.exist?
+
         res = Created
         if dest.exist?
           return Locked if dest.lockdiscovery.present?
-          if overwrite
-            dest.delete
-            res = NoContent
-          else
-            return PreconditionFailed
-          end
+          return PreconditionFailed if request.get_header('HTTP_OVERWRITE') == 'F'
+
+          dest.delete if request.get_header('HTTP_OVERWRITE') == 'T'
+
+          res = NoContent
         end
         return PreconditionFailed unless parent.exist? && parent.folder
+
         if collection?
           # Permission check if they can manipulate folders and view folders
           # Can they:
@@ -346,14 +352,16 @@ module RedmineDmsf
           #  View files on the source project          :view_dmsf_files
           #  View fodlers on the source project        :view_dmsf_folders
           raise Forbidden unless User.current.admin? ||
-             (User.current.allowed_to?(:folder_manipulation, dest.resource.project) &&
-              User.current.allowed_to?(:view_dmsf_folders, dest.resource.project) &&
-              User.current.allowed_to?(:view_dmsf_files, project) &&
-              User.current.allowed_to?(:view_dmsf_folders, project))
-          raise Forbidden unless DmsfFolder.permissions?(folder, false)
+                                 (User.current.allowed_to?(:folder_manipulation, dest.resource.project) &&
+                                  User.current.allowed_to?(:view_dmsf_folders, dest.resource.project) &&
+                                  User.current.allowed_to?(:view_dmsf_files, project) &&
+                                  User.current.allowed_to?(:view_dmsf_folders, project))
+          raise Forbidden unless DmsfFolder.permissions?(folder, allow_system: false)
+
           folder.title = dest.resource.basename
           new_folder = folder.copy_to(dest.resource.project, parent.folder)
           return PreconditionFailed if new_folder.nil? || new_folder.id.nil?
+
           Created
         else
           # Permission check if they can manipulate folders and view folders
@@ -362,17 +370,19 @@ module RedmineDmsf
           #  View files on destination project         :view_dmsf_files
           #  View files on the source project          :view_dmsf_files
           raise Forbidden unless User.current.admin? ||
-             (User.current.allowed_to?(:file_manipulation, dest.resource.project) &&
-              User.current.allowed_to?(:view_dmsf_files, dest.resource.project) &&
-              User.current.allowed_to?(:view_dmsf_files, project))
+                                 (User.current.allowed_to?(:file_manipulation, dest.resource.project) &&
+                                  User.current.allowed_to?(:view_dmsf_files, dest.resource.project) &&
+                                  User.current.allowed_to?(:view_dmsf_files, project))
           return PreconditionFailed unless exist? && file
+
           new_file = file.copy_to(dest.resource.project, parent&.folder)
-          return InternalServerError unless (new_file && new_file.last_revision)
+          return InternalServerError unless new_file&.last_revision
+
           # Update Revision and names of file (We can link to old physical resource, as it's not changed)
           new_file.last_revision.name = dest.resource.basename
           new_file.name = dest.resource.basename
           # Save Changes
-          (new_file.last_revision.save && new_file.save) ? res : PreconditionFailed
+          new_file.last_revision.save && new_file.save ? res : PreconditionFailed
         end
       end
 
@@ -380,50 +390,43 @@ module RedmineDmsf
       # Check for the existence of locks
       def lock_check(args = {})
         entity = file || folder
-        if entity
-          refresh = args && (!args[:scope]) && (!args[:type])
-          args ||= {}
-          args[:method] = @request.request_method.downcase
-          http_if = request.get_header('HTTP_IF')
-          if http_if.present?
-            no_lock = http_if.include?('<DAV:no-lock>')
-            not_no_lock = http_if.include?('Not <DAV:no-lock>')
-            # Invalid lock token
-            if /\(<([a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+)>/.match(http_if)
-              raise PreconditionFailed unless entity.locked?
-              if $1 != entity.lock.first.uuid
-                raise Locked if entity.locked_for_user?(args)
-              end
-            else
-              if ((!no_lock || not_no_lock) && entity.locked_for_user?(args))
-                raise Locked
-              else
-                raise PreconditionFailed
-              end
-            end
-            # Invalid etag
-            if /^\(<([a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+)> \[([a-f0-9]+-[a-f0-9]+-[a-f0-9]+)\]/.match(http_if)
-              if $2 != etag
-                raise PreconditionFailed
-              else
-                return  # lock & etag
-              end
-            end
-            # no-lock
-            return if no_lock
-          end
-          if entity.locked_for_user?(args) && !refresh
-            if http_if.present?
-              case args[:method]
-              when 'put'
-                return
-              when 'proppatch'
-                return
-              end
-            end
+        return unless entity
+
+        refresh = args && (!args[:scope]) && (!args[:type])
+        args ||= {}
+        args[:method] = @request.request_method.downcase
+        http_if = request.get_header('HTTP_IF')
+        if http_if.present?
+          no_lock = http_if.include?('<DAV:no-lock>')
+          not_no_lock = http_if.include?('Not <DAV:no-lock>')
+          # Invalid lock token
+          if http_if =~ /\(<([a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+)>/
+            raise PreconditionFailed unless entity.locked?
+            raise Locked if Regexp.last_match(1) != entity.lock.first.uuid && entity.locked_for_user?(args)
+          elsif (!no_lock || not_no_lock) && entity.locked_for_user?(args)
             raise Locked
+          else
+            raise PreconditionFailed
+          end
+          # Invalid etag
+          if http_if =~ /^\(<([a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+-[a-f0-9]+)> \[([a-f0-9]+-[a-f0-9]+-[a-f0-9]+)\]/
+            return if Regexp.last_match(2) == etag # lock & etag
+
+            raise PreconditionFailed
+          end
+          # no-lock
+          return if no_lock
+
+        end
+        return unless entity.locked_for_user?(args) && !refresh
+
+        if http_if.present?
+          case args[:method]
+          when 'put', 'proppatch'
+            return
           end
         end
+        raise Locked
       end
 
       # Lock
@@ -438,9 +441,9 @@ module RedmineDmsf
           # resource with empty content.
           f = create_empty_file
           if f
-            scope = "scope_#{(args[:scope] || 'exclusive')}".to_sym
-            type = "type_#{(args[:type] || 'write')}".to_sym
-            l = f.lock!(scope, type, Time.current + 1.weeks, args[:owner])
+            scope = "scope_#{args[:scope] || 'exclusive'}".to_sym
+            type = "type_#{args[:type] || 'write'}".to_sym
+            l = f.lock!(scope, type, 1.week.from_now, args[:owner])
             @response['Lock-Token'] = l.uuid
             return [1.week.to_i, l.uuid]
           else
@@ -470,23 +473,23 @@ module RedmineDmsf
               raise e
             end
             l = nil
-            if /([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})/.match(http_if)
-              l = DmsfLock.find_by(uuid: $1)
+            if http_if =~ /([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})/
+              l = DmsfLock.find_by(uuid: Regexp.last_match(1))
             end
             unless l
               e = Dav4rack::LockFailure.new
               e.add_failure @path, Conflict
               raise e
             end
-            l.expires_at = Time.current + 1.week
+            l.expires_at = 1.week.from_now
             l.save!
             @response['Lock-Token'] = l.uuid
-            return [1.weeks.to_i, l.uuid]
+            return [1.week.to_i, l.uuid]
           end
-          scope = "scope_#{(args[:scope] || 'exclusive')}".to_sym
-          type = "type_#{(args[:type] || 'write')}".to_sym
+          scope = "scope_#{args[:scope] || 'exclusive'}".to_sym
+          type = "type_#{args[:type] || 'write'}".to_sym
           # l should be the instance of the lock we've just created
-          l = entity.lock!(scope, type, Time.current + 1.weeks, args[:owner])
+          l = entity.lock!(scope, type, 1.week.from_now, args[:owner])
           @response['Lock-Token'] = l.uuid
           [1.week.to_i, l.uuid]
         rescue RedmineDmsf::Errors::DmsfLockError => exception
@@ -500,51 +503,52 @@ module RedmineDmsf
       # Token based unlock (authenticated) will ensure that a correct token is sent, further ensuring
       # ownership of token before permitting unlock
       def unlock(token)
-        unless exist?
-          return super(token)
-        end
-        if token.nil? || token.empty? || (token == '<(null)>') || User.current.anonymous?
+        return super(token) unless exist?
+
+        if token.blank? || (token == '<(null)>') || User.current.anonymous?
           BadRequest
         else
-          if token =~ /([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})/
-            token = $1
-          else
-            return BadRequest
-          end
-          l = DmsfLock.find_by_uuid(token)
-          unless l
-            return NoContent
-          end
+          return BadRequest unless token =~ /([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})/
+
+          token = Regexp.last_match(1)
+          l = DmsfLock.find_by(uuid: token)
+          return NoContent unless l
+
           # Additional case: if a user tries to unlock the file instead of the folder that's locked
           # This should throw forbidden as only the lock at level initiated should be unlocked
           entity = file || folder
           return NoContent unless entity&.locked?
-          l_entity = l.file || l.folder
-          if l_entity != entity
-            Forbidden
-          else
+
+          l_entity = l.dmsf_file || l.dmsf_folder
+          if l_entity == entity
             entity.unlock!
             NoContent
+          else
+            Forbidden
           end
         end
       end
 
       # HTTP POST request.
       # Forbidden, as method should not be utilized.
-      def post(request, response)
+      def post(_request, _response)
         raise Forbidden
       end
 
       # HTTP PUT request.
-      def put(request, response)
+      def put(request)
         raise BadRequest if collection?
         raise Forbidden unless User.current.admin? || User.current.allowed_to?(:file_manipulation, project)
-        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, false))
+
+        unless !parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder, allow_system: false)
+          raise Forbidden
+        end
+
         # Ignore file name patterns given in the plugin settings
         pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore']
         pattern = /^(\._|\.DS_Store$|Thumbs.db$)/ if pattern.blank?
         if basename.match(pattern)
-          Rails.logger.info "#{basename} ignored"
+          Rails.logger.info { "#{basename} ignored" }
           return NoContent
         end
         reuse_revision = false
@@ -553,14 +557,12 @@ module RedmineDmsf
           # Disable versioning for file name patterns given in the plugin settings.
           pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
           if pattern.present? && basename.match(pattern)
-            Rails.logger.info "Versioning disabled for #{basename}"
+            Rails.logger.info { "Versioning disabled for #{basename}" }
             reuse_revision = true
           end
-          if reuse_version_for_locked_file(file)
-            reuse_revision = true
-          end
+          reuse_revision = true if reuse_version_for_locked_file(file)
           last_revision = file.last_revision
-          if last_revision.size == 0 || reuse_revision
+          if last_revision.size.zero? || reuse_revision
             new_revision = last_revision
             reuse_revision = true
           else
@@ -589,7 +591,7 @@ module RedmineDmsf
           f.project_id = project.id
           f.name = basename
           f.dmsf_folder = parent.folder
-          f.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
+          f.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
           new_revision = DmsfFileRevision.new
           new_revision.minor_version = 1
           new_revision.major_version = 0
@@ -604,17 +606,18 @@ module RedmineDmsf
         # Phusion passenger does not have a method "length" in its model
         # however, includes a size method - so we instead use reflection
         # to determine best approach to problem
-        if request.body.respond_to?(:length)
-          new_revision.size = request.body.length
-        elsif request.body.respond_to?(:size)
-          new_revision.size = request.body.size
-        else
-          new_revision.size = request.content_length # Bad Guess
-        end
+        new_revision.size = if request.body.respond_to?(:length)
+                              request.body.length
+                            elsif request.body.respond_to?(:size)
+                              request.body.size
+                            else
+                              request.content_length # Bad Guess
+                            end
 
         # Ignore 1b files sent for authentication
-        if Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'].present? && (new_revision.size == 1)
-          Rails.logger.warn "1b file '#{basename}' sent for authentication ignored"
+        if Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'].present? &&
+           new_revision.size == 1
+          Rails.logger.warn { "1b file '#{basename}' sent for authentication ignored" }
           return NoContent
         end
 
@@ -649,10 +652,11 @@ module RedmineDmsf
       def lockdiscovery
         entity = file || folder
         return [] unless entity&.locked?
+
         if entity.dmsf_folder&.locked?
-          entity.lock.reverse[0].folder.locks # longwinded way of getting base items locks
+          entity.lock.reverse[0].dmsf_folder.locks # longwinded way of getting base items locks
         else
-          entity.lock false
+          entity.lock tree: false
         end
       end
 
@@ -660,36 +664,34 @@ module RedmineDmsf
       def lockdiscovery_xml
         x = Nokogiri::XML::DocumentFragment.parse ''
         Nokogiri::XML::Builder.with(x) do |doc|
-          doc.lockdiscovery {
+          doc.lockdiscovery do
             lockdiscovery.each do |lock|
               next if lock.expired?
-              doc.activelock {
+
+              doc.activelock do
                 doc.locktype { doc.write }
-                doc.lockscope {
-                  if lock.lock_scope == :scope_exclusive
-                    doc.exclusive
-                  else
-                    doc.shared
-                  end
-                }
-                doc.depth lock.folder.nil? ? '0' : 'infinity'
+                doc.lockscope { lock.lock_scope == :scope_exclusive ? doc.exclusive : doc.shared }
+                doc.depth lock.dmsf_folder.nil? ? '0' : 'infinity'
                 doc.owner lock.user.to_s
                 if lock.expires_at.nil?
                   doc.timeout 'Infinite'
                 else
-                  doc.timeout "Second-#{(lock.expires_at.to_i - Time.current.to_i)}"
+                  doc.timeout "Second-#{lock.expires_at.to_i - Time.current.to_i}"
                 end
-                lock_entity = lock.folder || lock.file
-                lock_path = +"#{request.scheme}://#{request.host}:#{request.port}#{path_prefix}#{Addressable::URI.escape(lock_entity.project.identifier)}/"
-                lock_path << lock_entity.dmsf_path.map { |e| Addressable::URI.escape(e.respond_to?('name') ? e.name : e.title) }.join('/')
-                lock_path << '/' if lock_entity.is_a?(DmsfFolder) && lock_path[-1,1] != '/'
+                lock_entity = lock.dmsf_folder || lock.dmsf_file
+                lock_path = +"#{request.scheme}://#{request.host}:#{request.port}#{path_prefix}"
+                lock_path << "#{Addressable::URI.escape(lock_entity.project.identifier)}/"
+                pth = lock_entity.dmsf_path.map { |e| Addressable::URI.escape(e.respond_to?(:name) ? e.name : e.title) }
+                                 .join('/')
+                lock_path << pth
+                lock_path << '/' if lock_entity.is_a?(DmsfFolder) && lock_path[-1, 1] != '/'
                 doc.lockroot { doc.href lock_path }
                 if (lock.user.id == User.current.id) || User.current.allowed_to?(:force_file_unlock, project)
                   doc.locktoken { doc.href lock.uuid }
                 end
-              }
+              end
             end
-          }
+          end
         end
         x
       end
@@ -702,9 +704,11 @@ module RedmineDmsf
       # also best-utilising Dav4rack's implementation.
       def download
         raise NotFound unless file&.last_revision
+
         disk_file = file.last_revision.disk_file
         raise NotFound unless disk_file && File.exist?(disk_file)
-        raise Forbidden unless (!parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder))
+        raise Forbidden unless !parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder)
+
         # If there is no range (start of ranged download, or direct download) then we log the
         # file access, so we can properly keep logged information
         if @request.env['HTTP_RANGE'].nil?
@@ -712,13 +716,13 @@ module RedmineDmsf
           access = DmsfFileRevisionAccess.new
           access.user = User.current
           access.dmsf_file_revision = file.last_revision
-          access.action = DmsfFileRevisionAccess::DownloadAction
+          access.action = DmsfFileRevisionAccess::DOWNLOAD_ACTION
           access.save!
           # Notification
           begin
             DmsfMailer.deliver_files_downloaded(@project, [file], @request.env['REMOTE_IP'])
-          rescue => e
-            Rails.logger.error "Could not send email notifications: #{e.message}"
+          rescue StandardError => e
+            Rails.logger.error { "Could not send email notifications: #{e.message}" }
           end
         end
         File.new disk_file
@@ -730,6 +734,7 @@ module RedmineDmsf
           next if lock.expired?
           # lock should be exclusive but just in case make sure we find this users lock
           next if lock.user != User.current
+
           if lock.dmsf_file_last_revision_id.nil? || (lock.dmsf_file_last_revision_id < file.last_revision.id)
             # At least one new revision has been created since the lock was created, reuse that revision.
             return true
@@ -740,27 +745,27 @@ module RedmineDmsf
 
       def set_custom_property(element, value)
         if value.present?
-          Redmine::Search.cache_store.write "#{get_property_key}-#{element[:name]}",  value
+          Redmine::Search.cache_store.write "#{property_key}-#{element[:name]}", value
         else
-          Redmine::Search.cache_store.delete "#{get_property_key}-#{element[:name]}"
+          Redmine::Search.cache_store.delete "#{property_key}-#{element[:name]}"
         end
         OK
       end
 
-      def get_custom_property(element)
-        val = Redmine::Search.cache_store.fetch "#{get_property_key}-#{element[:name]}"
-        val.present? ? val : NotFound
+      def custom_property(element)
+        val = Redmine::Search.cache_store.fetch "#{property_key}-#{element[:name]}"
+        val.presence || NotFound
       end
 
-      def get_property_key
+      def property_key
         if file
-          return "DmsfFile-#{file.id}"
+          "DmsfFile-#{file.id}"
         elsif folder
-          return "DmsfFolder-#{folder.id}"
+          "DmsfFolder-#{folder.id}"
         elsif subproject
-          return "Project-#{subproject.id}"
+          "Project-#{subproject.id}"
         else
-          return "Project-#{project.id}"
+          "Project-#{project.id}"
         end
       end
 
@@ -769,7 +774,7 @@ module RedmineDmsf
         f.project_id = project.id
         f.name = basename
         f.dmsf_folder = parent.folder
-        if f.save(validate: false)  # Skip validation due to invalid characters in the filename
+        if f.save(validate: false) # Skip validation due to invalid characters in the filename
           r = DmsfFileRevision.new
           r.minor_version = 1
           r.major_version = 0
@@ -781,19 +786,18 @@ module RedmineDmsf
           r.size = 0
           r.digest = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
           r.disk_filename = r.new_storage_filename
-          r.available_custom_fields.each do |cf|  # Add default value for CFs not existing
-            if cf.default_value
-              r.custom_field_values << CustomValue.new({ custom_field: cf, value: cf.default_value})
-            end
+          r.available_custom_fields.each do |cf| # Add default value for CFs not existing
+            next unless cf.default_value
+
+            r.custom_field_values << CustomValue.new({ custom_field: cf, value: cf.default_value })
           end
           if r.save(validate: false)  # Skip validation due to invalid characters in the filename
-            FileUtils.touch r.disk_file(false)
+            FileUtils.touch r.disk_file(search_if_not_exists: false)
             return f
           end
         end
         nil
       end
-      
     end
   end
 end

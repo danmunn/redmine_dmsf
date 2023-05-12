@@ -1,6 +1,5 @@
-# encoding: utf-8
 # frozen_string_literal: true
-# 
+#
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011-23 Karel Pičman <karel.picman@kontron.com>
@@ -19,30 +18,26 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-module DmsfLinksHelper    
-  
+# Links helper
+module DmsfLinksHelper
   def folder_tree_options_for_select(folder_tree, options = {})
     s = +''
-    folder_tree.each do |name, id|      
+    folder_tree.each do |name, id|
       tag_options = { value: id }
-      if id == options[:selected]
-        tag_options[:selected] = 'selected'
-      else
-        tag_options[:selected] = nil
-      end      
+      tag_options[:selected] = 'selected' if id == options[:selected]
       s << content_tag('option', name, tag_options)
     end
-    s.html_safe
+    s
   end
-  
+
   # An integer test
-  def self.is_a_number?(s)
-    s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
+  def self.number?(str)
+    str.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/).nil?
   end
 
   def files_for_select(project_id, folder_id)
     files = []
-    if folder_id && DmsfLinksHelper::is_a_number?(folder_id)
+    if folder_id && DmsfLinksHelper.number?(folder_id)
       folder = DmsfFolder.find_by(id: folder_id)
       files = folder.dmsf_files.visible.to_a if folder
     elsif project_id
@@ -51,5 +46,4 @@ module DmsfLinksHelper
     end
     files
   end
-    
 end

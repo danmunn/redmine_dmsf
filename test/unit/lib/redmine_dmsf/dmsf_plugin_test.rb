@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../../../test_helper', __FILE__)
 
+# Plugin tests
 class DmsfPluginTest < RedmineDmsf::Test::HelperTest
-
   def test_present_yes
     assert RedmineDmsf::Plugin.present?(:redmine_dmsf)
   end
@@ -38,10 +37,9 @@ class DmsfPluginTest < RedmineDmsf::Test::HelperTest
 
   def test_an_obsolete_plugin_present_yes
     # Create a fake redmine_checklists plugin
-    path = File.join(Rails.root, 'plugins', 'redmine_contacts')
+    path = Rails.root.join('plugins/redmine_contacts')
     FileUtils.mkdir_p path
     assert RedmineDmsf::Plugin.an_obsolete_plugin_present?
     FileUtils.rm_rf path
   end
-
 end

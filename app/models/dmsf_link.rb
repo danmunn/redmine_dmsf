@@ -1,5 +1,4 @@
- # encode: utf-8
- # frozen_string_literal: true
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -19,19 +18,18 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfLink < ActiveRecord::Base
-
+# Link class
+class DmsfLink < ApplicationRecord
   include ActiveModel::Validations
 
   belongs_to :project
   belongs_to :dmsf_folder
-  belongs_to :deleted_by_user, class_name: 'User', foreign_key: 'deleted_by_user_id'
+  belongs_to :deleted_by_user, class_name: 'User'
   belongs_to :user
 
   validates :name, presence: true, length: { maximum: 255 }
   # There can be project_id = -1 when attaching links to an issue. The project_id is assigned later when saving the
   # issue.
-  #validates :project, presence: true
   validates :external_url, length: { maximum: 255 }
   validates :external_url, dmsf_url: true
 
@@ -51,11 +49,7 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def target_folder
-    unless @target_folder
-      if target_folder_id
-        @target_folder = DmsfFolder.find_by(id: target_folder_id)
-      end
-    end
+    @target_folder = DmsfFolder.find_by(id: target_folder_id) if @target_folder.nil? && target_folder_id
     @target_folder
   end
 
@@ -64,18 +58,12 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def target_file
-    unless @target_file
-      if target_file_id
-        @target_file = DmsfFile.find_by(id: target_file_id)
-      end
-    end
+    @target_file = DmsfFile.find_by(id: target_file_id) if @target_file.nil? && target_file_id
     @target_file
   end
 
   def target_project
-    unless @target_project
-      @target_project = Project.find_by(id: target_project_id)
-    end
+    @target_project ||= Project.find_by(id: target_project_id)
     @target_project
   end
 
@@ -84,26 +72,25 @@ class DmsfLink < ActiveRecord::Base
   end
 
   def self.find_link_by_file_name(project, folder, filename)
-    links = DmsfLink.where(
-      project_id: project.id,
-      dmsf_folder_id: folder ? folder.id : nil,
-      target_type: DmsfFile.model_name.to_s).visible.all
+    links = DmsfLink.where(project_id: project.id,
+                           dmsf_folder_id: folder ? folder.id : nil,
+                           target_type: DmsfFile.model_name.to_s).visible.all
     links.each do |link|
-      return link if link.target_file && (link.target_file.name == filename)
+      return link if link&.target_file&.name == filename
     end
     nil
   end
 
   def path
-    if target_type == DmsfFile.model_name.to_s
-      path = target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.display_name : element.title }.join('/') if target_file
-    else
-      path = target_folder ? target_folder.dmsf_path_str : +''
-    end
+    path = if target_type == DmsfFile.model_name.to_s && target_file
+             target_file.dmsf_path.map { |element| element.is_a?(DmsfFile) ? element.display_name : element.title }
+                        .join('/')
+           else
+             target_folder ? target_folder.dmsf_path_str : +''
+           end
     path.insert(0, "#{target_project.name}:") if project_id != target_project_id
-    if path && path.length > 50
-      return "#{path[0, 25]}...#{path[-25, 25]}"
-    end
+    return "#{path[0, 25]}...#{path[-25, 25]}" if path && path.length > 50
+
     path
   end
 
@@ -126,7 +113,7 @@ class DmsfLink < ActiveRecord::Base
     link
   end
 
-  def delete(commit = false)
+  def delete(commit: false)
     if commit
       destroy
     else
@@ -138,20 +125,12 @@ class DmsfLink < ActiveRecord::Base
 
   def restore
     if dmsf_folder_id && (dmsf_folder.nil? || dmsf_folder.deleted?)
-      errors.add(:base, l(:error_parent_folder))
+      errors.add :base, l(:error_parent_folder)
       return false
     end
+
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
     save validate: false
   end
-
-  def is_folder?
-    target_type == 'DmsfFolder'
-  end
-
-  def is_file?
-    !is_folder?
-  end
-
 end

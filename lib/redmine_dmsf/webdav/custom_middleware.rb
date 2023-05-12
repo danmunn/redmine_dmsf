@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,33 +18,32 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require File.dirname(__FILE__) + '/../../dav4rack'
-require File.dirname(__FILE__) + '/resource_proxy'
+require "#{File.dirname(__FILE__)}/../../dav4rack"
+require "#{File.dirname(__FILE__)}/resource_proxy"
 
 module RedmineDmsf
   module Webdav
-
+    # Custom middleware
     class CustomMiddleware
-
       def initialize(app)
         @rails_app = app
         path = '/dmsf/webdav'
-        @dav_app = Rack::Builder.new{
+        @dav_app = Rack::Builder.new do
           map path do
             run Dav4rack::Handler.new(
               root_uri_path: path,
               resource_class: RedmineDmsf::Webdav::ResourceProxy,
-              log_to: Rails.logger,
               allow_unauthenticated_options_on_root: true
             )
           end
-        }.to_app
+        end
+        # .to_app
       end
 
       def call(env)
         begin
           status, headers, body = @dav_app.call env
-        rescue Exception => e
+        rescue StandardError => e
           Rails.logger.error e.message
           status = e
           headers = {}
@@ -59,8 +57,6 @@ module RedmineDmsf
           [status, headers, body]
         end
       end
-
     end
-
   end
 end

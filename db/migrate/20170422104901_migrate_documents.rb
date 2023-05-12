@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,8 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Migrate documents in the file system
 class MigrateDocuments < ActiveRecord::Migration[4.2]
-
   def up
     # Migrate all documents from dmsf/p_{project identifier} to dmsf/{year}/{month}
     DmsfFileRevision.find_each do |dmsf_file_revision|
@@ -28,22 +28,22 @@ class MigrateDocuments < ActiveRecord::Migration[4.2]
           origin = disk_file(dmsf_file_revision)
           if origin
             if File.exist?(origin)
-              target = dmsf_file_revision.disk_file(false)
+              target = dmsf_file_revision.disk_file(search_if_not_exists: false)
               if target
-                if !File.exist?(target)
+                if File.exist?(target)
+                  msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: Target '#{target}' exists"
+                  say msg
+                  Rails.logger.error msg
+                else
                   begin
                     FileUtils.mv origin, target, verbose: true
                     folder = storage_base_path(dmsf_file_revision)
-                    Dir.rmdir(folder) if (folder && (Dir.entries(folder).size == 2))
-                  rescue => e
+                    Dir.rmdir(folder) if folder && (Dir.entries(folder).size == 2)
+                  rescue StandardError => e
                     msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: #{e.message}"
                     say msg
                     Rails.logger.error msg
                   end
-                else
-                  msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: Target '#{target}' exists"
-                  say msg
-                  Rails.logger.error msg
                 end
               else
                 msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: target = nil"
@@ -78,7 +78,7 @@ class MigrateDocuments < ActiveRecord::Migration[4.2]
     DmsfFileRevision.find_each do |dmsf_file_revision|
       if dmsf_file_revision.dmsf_file
         if dmsf_file_revision.dmsf_file.project
-          origin = dmsf_file_revision.disk_file(false)
+          origin = dmsf_file_revision.disk_file(search_if_not_exists: false)
           if origin
             if File.exist?(origin)
               target = disk_file(dmsf_file_revision)
@@ -91,8 +91,8 @@ class MigrateDocuments < ActiveRecord::Migration[4.2]
                   begin
                     FileUtils.mv origin, target, verbose: true
                     folder = dmsf_file_revision.storage_base_path
-                    Dir.rmdir(folder) if (folder && (Dir.entries(folder).size == 2))
-                  rescue => e
+                    Dir.rmdir(folder) if folder && (Dir.entries(folder).size == 2)
+                  rescue StandardError => e
                     msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: #{e.message}"
                     say msg
                     Rails.logger.error msg
@@ -127,13 +127,10 @@ class MigrateDocuments < ActiveRecord::Migration[4.2]
   end
 
   def storage_base_path(dmsf_file_revision)
-    if dmsf_file_revision.dmsf_file
-      if dmsf_file_revision.dmsf_file.project
-        project_base = dmsf_file_revision.dmsf_file.project.identifier.gsub(/[^\w\.\-]/,'_')
-        return "#{DmsfFile.storage_path}/p_#{project_base}"
-      end
-    end
-    nil
+    return nil unless dmsf_file_revision&.dmsf_file&.project
+
+    project_base = dmsf_file_revision.dmsf_file.project.identifier.gsub(/[^\w.\-]/, '_')
+    "#{DmsfFile.storage_path}/p_#{project_base}"
   end
 
   def disk_file(dmsf_file_revision)
@@ -144,5 +141,4 @@ class MigrateDocuments < ActiveRecord::Migration[4.2]
     end
     nil
   end
-
 end

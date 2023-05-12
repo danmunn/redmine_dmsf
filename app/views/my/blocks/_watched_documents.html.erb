@@ -26,28 +26,38 @@
   :watchers => { watchable_type: 'DmsfFolder', user_id: @user&.id }) %>
 <% files = DmsfFile.visible.joins(:watchers).where(
   :watchers => { watchable_type: 'DmsfFile', user_id: @user&.id }) %>
-<h3><%= l(:label_dmsf_watched)%> (<%= projects.all.size + folders.all.size %>/<%=  files.all.size %>)</h3>
+<% easy_extension = defined?(EasyExtensions) %>
+<% unless easy_extension %>
+  <h3><%= l(:label_dmsf_watched)%> (<%= projects.all.size + folders.all.size %>/<%=  files.all.size %>)</h3>
+<% end %>
 <% if projects.any? || folders.any? || files.any? %>
-  <%= form_tag({}, data: { cm_url: dmsf_context_menu_path(back_url: my_page_path) }) do %>
+  <%= form_tag({}, data: { cm_url: dmsf_context_menu_path }) do %>
+    <%= hidden_field_tag 'back_url', my_page_path, id: nil %>
     <table class="list context-menu-container" data-hascontextmenu="true">
       <thead>
         <tr>
-          <th class="checkbox hide-when-print">
-            <%= check_box_tag 'check_all', '', false, class: 'toggle-selection',
-                              title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
-          </th>
+          <% unless easy_extension %>
+            <th class="checkbox hide-when-print">
+              <%= check_box_tag 'check_all', '', false, class: 'toggle-selection',
+                                title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+            </th>
+          <% end %>
           <th><%= l(:field_project) %></th>
           <th><%= l(:label_document) %>/<%= l(:field_folder) %></th>
           <th><%= l(:field_folder) %></th>
-          <th></th>
+          <% unless easy_extension %>
+            <th></th>
+          <% end %>
         </tr>
       </thead>
       <tbody>
         <% projects.each do |project| %>
           <tr id="project-<%= project.id %>" class="hascontextmenu">
-            <td class="checkbox hide-when-print">
-              <%= check_box_tag 'ids[]', "project-#{project.id}", false, id: nil %>
-            </td>
+            <% unless easy_extension %>
+              <td class="checkbox hide-when-print">
+                <%= check_box_tag 'ids[]', "project-#{project.id}", false, id: nil %>
+              </td>
+            <% end %>
             <td class="project">
               <%= link_to_project project %>
             </td>
@@ -62,9 +72,11 @@
         <% end %>
         <% folders.each do |folder| %>
           <tr id="folder-<%= folder.id %>" class="hascontextmenu">
-            <td class="checkbox hide-when-print">
-              <%= check_box_tag 'ids[]', "folder-#{folder.id}", false, id: nil %>
-            </td>
+            <% unless easy_extension %>
+              <td class="checkbox hide-when-print">
+                <%= check_box_tag 'ids[]', "folder-#{folder.id}", false, id: nil %>
+              </td>
+            <% end %>
             <td class="project">
               <%= link_to_project folder.project %>
             </td>
@@ -87,9 +99,11 @@
         <% end %>
         <% files.each do |file| %>
           <tr id="file-<%= file.id %>" class="hascontextmenu">
-            <td class="checkbox hide-when-print">
-              <%= check_box_tag 'ids[]', "file-#{file.id}", false, id: nil %>
-            </td>
+            <% unless easy_extension %>
+              <td class="checkbox hide-when-print">
+                <%= check_box_tag 'ids[]', "file-#{file.id}", false, id: nil %>
+              </td>
+            <% end %>
             <td class="project">
               <%= link_to_project(file.project) if file.project %>
             </td>
@@ -104,15 +118,17 @@
                 <%= link_to l(:link_documents), dmsf_folder_path(id: file.project) %>
               <% end %>
             </td>
-            <td>
-              <%= link_to_context_menu %>
-            </td>
+            <% unless easy_extension %>
+              <td class="buttons">
+                <%= link_to_context_menu %>
+              </td>
+            <% end %>
            </tr>
         <% end %>
       </tbody>
     </table>
   <% end %>
-  <%= context_menu %>
+  <%= context_menu unless easy_extension %>
 <% else %>
   <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>

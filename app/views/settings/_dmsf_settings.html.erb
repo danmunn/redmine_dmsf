@@ -1,6 +1,4 @@
 <%
-  # encoding: utf-8
-  #
   # Redmine plugin for Document Management System "Features"
   #
   # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
@@ -251,7 +249,7 @@
 
 <p>
   <%= content_tag :label, l(:label_webdav) %>
-  <% webdav_disabled = Redmine::Plugin.installed?(:easy_hosting_services) && EasyHostingServices::EasyMultiTenancy.activated? %>
+  <% webdav_disabled = Redmine::Plugin.installed?('easy_hosting_services') && EasyHostingServices::EasyMultiTenancy.activated? %>
   <%= select_tag 'settings[dmsf_webdav]',
                  options_for_select([
                                       [l(:select_option_deactivated), nil],

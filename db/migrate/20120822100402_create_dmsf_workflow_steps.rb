@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,16 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Create table
 class CreateDmsfWorkflowSteps < ActiveRecord::Migration[4.2]
-
   def change
     create_table :dmsf_workflow_steps do |t|
       t.references :dmsf_workflow, null: false
       t.integer :step, null: false
       t.references :user, null: false
       t.integer :operator, null: false
+      t.datetime :created_at, default: -> { 'CURRENT_TIMESTAMP' }
     end
     add_index :dmsf_workflow_steps, :dmsf_workflow_id
   end
-
 end

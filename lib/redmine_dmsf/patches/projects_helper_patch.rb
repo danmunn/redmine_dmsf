@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -23,28 +22,36 @@
 
 module RedmineDmsf
   module Patches
+    # Project helper
     module ProjectsHelperPatch
-
       ##################################################################################################################
       # Overridden methods
 
       def project_settings_tabs
         tabs = super
-        dmsf_tabs = [
-          { name: 'dmsf', action: { controller: 'dmsf_state', action: 'user_pref_save' },
-          partial: 'dmsf_state/user_pref', label: :menu_dmsf },
-          { name: 'dmsf_workflow', action: { controller: 'dmsf_workflows', action: 'index' },
-          partial: 'dmsf_workflows/main', label: :label_dmsf_workflow_plural }
-        ]
-        tabs.concat(dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project) })
+        dmsf_tabs =
+          [
+            {
+              name: 'dmsf',
+              action: { controller: 'dmsf_state', action: 'user_pref_save' },
+              partial: 'dmsf_state/user_pref', label: :menu_dmsf
+            },
+            {
+              name: 'dmsf_workflow',
+              action: { controller: 'dmsf_workflows', action: 'index' },
+              partial: 'dmsf_workflows/main', label: :label_dmsf_workflow_plural
+            }
+          ]
+        tabs.concat(
+          dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project) }
+        )
         tabs
       end
-
     end
   end
 end
 
 # Apply the patch
-unless Redmine::Plugin.installed?(:easy_extensions)
+unless Redmine::Plugin.installed?('easy_extensions')
   ProjectsController.send :helper, RedmineDmsf::Patches::ProjectsHelperPatch
 end

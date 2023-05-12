@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,8 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Modify column
 class ChangeRevisionDigestLimitTo64 < ActiveRecord::Migration[4.2]
-
   def up
     change_column :dmsf_file_revisions, :digest, :string, limit: 64
   end
@@ -27,7 +27,6 @@ class ChangeRevisionDigestLimitTo64 < ActiveRecord::Migration[4.2]
   def down
     # Mysql2::Error: Data too long for column 'digest'
     # Recalculation of checksums for all revisions is technically possible but costs are to high.
-    #change_column :dmsf_file_revisions, :digest, :string, limit: 40
+    # change_column :dmsf_file_revisions, :digest, :string, limit: 40
   end
-
 end

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,8 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Modify column
 class NullMinorVersion < ActiveRecord::Migration[4.2]
-
   def up
     change_column :dmsf_file_revisions, :minor_version, :integer, null: true
   end
@@ -27,5 +27,4 @@ class NullMinorVersion < ActiveRecord::Migration[4.2]
   def down
     change_column :dmsf_file_revisions, :minor_version, :integer, null: false
   end
-
 end

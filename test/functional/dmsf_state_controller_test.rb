@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,6 +20,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# State controller
 class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
 
@@ -48,7 +48,7 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
     assert_equal 1, @project1.dmsf_act_as_attachable
     assert_equal @query401.id, @project1.default_dmsf_query_id
   end
-  
+
   def test_user_pref_save_member_forbidden
     @role_manager.remove_permission! :user_preferences
     post :user_pref_save, params: { id: @project1.id, email_notify: 1, title_format: '%t_%v' }
@@ -70,5 +70,4 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
     assert_not_nil flash[:warning]
     assert_equal flash[:warning], l(:user_is_not_project_member)
   end
-
 end

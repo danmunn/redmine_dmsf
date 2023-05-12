@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -23,27 +22,28 @@
 
 require 'simple_enum'
 
-class DmsfLock < ActiveRecord::Base
+# Lock
+class DmsfLock < ApplicationRecord
   before_create :generate_uuid
-  belongs_to :file, class_name: 'DmsfFile', foreign_key: 'entity_id'
-  belongs_to :folder, class_name: 'DmsfFolder', foreign_key: 'entity_id'
+  belongs_to :dmsf_file, foreign_key: 'entity_id', inverse_of: :locks
+  belongs_to :dmsf_folder, foreign_key: 'entity_id', inverse_of: :locks
   belongs_to :user
 
   # At the moment apparently we're only supporting a write lock?
-  as_enum :lock_type, [:type_write, :type_other]
-  as_enum :lock_scope, [:scope_exclusive, :scope_shared]
+  as_enum :lock_type, %i[type_write type_other]
+  as_enum :lock_scope, %i[scope_exclusive scope_shared]
 
   # We really loosely bind the value in the belongs_to above
   # here we just ensure the data internal to the model is correct
   # to ensure everything lists fine - it's the same as a join
   # just without running the join in the first place
-  def file
-    entity_type == 0 ? super : nil;
+  def dmsf_file
+    entity_type.zero? ? super : nil
   end
 
   # See the file, exact same scenario
-  def folder
-    entity_type == 1 ? super : nil;
+  def dmsf_folder
+    entity_type == 1 ? super : nil
   end
 
   def expired?
@@ -53,12 +53,13 @@ class DmsfLock < ActiveRecord::Base
   def generate_uuid
     self.uuid = UUIDTools::UUID.random_create.to_s
   end
-  
+
   # Let's allow our UUID to be searchable
   def self.find(*args)
-    if args.first && args.first.is_a?(String) && !args.first.match(/^\d*$/)
+    if args&.first.is_a?(String) && !args.first.match(/^\d*$/)
       lock = find_by_uuid(*args)
       raise ActiveRecord::RecordNotFound, "Couldn't find lock with uuid = #{args.first}" if lock.nil?
+
       lock
     else
       super
@@ -68,5 +69,4 @@ class DmsfLock < ActiveRecord::Base
   def self.find_by_param(*args)
     find(*args)
   end
-
 end

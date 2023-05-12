@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,8 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Rollback container
 class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
-
   def up
     # Add system folder_flag to dmsf_folders
     add_column :dmsf_folders, :system, :boolean, null: false, default: false
@@ -64,42 +64,43 @@ class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
       file.save(validate: false)
     end
     # Make DB changes in dmsf_files
-    remove_index :dmsf_files, [:container_id, :container_type]
-    remove_column :dmsf_files, :container_type
-    rename_column :dmsf_files, :container_id, :project_id
-    add_index :dmsf_files, :project_id
+    change_table :dmsf_files, bulk: true do |t|
+      t.remove_index %i[container_id container_type]
+      t.remove_column :container_type
+      t.rename_column :container_id, :project_id
+      t.add_index :project_id
+    end
     # Initialize system folder_flag to dmsf_folders
-    DmsfFolder.where(id: new_folder_ids).update_all(system: true)
+    DmsfFolder.where(id: new_folder_ids).update_all system: true
   end
 
   def down
     # dmsf_files
     file_folder_ids = DmsfFile.joins(:dmsf_folder).where(dmsf_folders: { system: true }).pluck(
-        'dmsf_files.id, dmsf_folders.title')
-    if index_exists?(:dmsf_files, :project_id)
-      remove_index :dmsf_files, :project_id
+      'dmsf_files.id, dmsf_folders.title'
+    )
+    change_table :dmsf_files, bulk: true do |t|
+      t.remove_index(:project_id) if t.index_exists?(:project_id)
+      t.rename_column :project_id, :container_id
+      # Temporarily added for the save method
+      t.add_column :project_id, :int, null: true
+      t.add_column :container_type, :string, limit: 30, null: false, default: 'Project'
     end
-    rename_column :dmsf_files, :project_id, :container_id
-    # Temporarily added for the save method
-    add_column :dmsf_files, :project_id, :int, null: true
-    add_column :dmsf_files, :container_type, :string, limit: 30, null: false,
-               default: 'Project'
-    DmsfFile.update_all(container_type: 'Project')
+    DmsfFile.update_all container_type: 'Project'
     file_folder_ids.each do |id, title|
       file = DmsfFile.find_by(id: id)
-      if file && (title =~ /(^\d+) - .*/)
-        file.container_id = $1.to_i
-        file.container_type = 'Issue'
-        file.save!
-      end
+      next unless file && (title =~ /(^\d+) - .*/)
+
+      file.container_id = Regexp.last_match(1).to_i
+      file.container_type = 'Issue'
+      file.save!
     end
-    remove_column :dmsf_files, :project_id # temporarily added for the save method
-    unless index_exists?(:dmsf_files, [:container_id, :container_type])
-      add_index :dmsf_files, [:container_id, :container_type]
+    change_table :dmsf_files, bulk: true do |t|
+      t.remove_column :project_id # temporarily added for the save method
+      t.add_index(%i[container_id container_type]) unless t.index_exists?(%i[container_id container_type])
     end
     # dmsf_folders
     DmsfFolder.where(system: true).delete_all
     remove_column :dmsf_folders, :system
   end
-
 end

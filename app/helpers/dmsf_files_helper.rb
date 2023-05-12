@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,8 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Files helper
 module DmsfFilesHelper
-
   def clean_wiki_text(text)
     # If there is <p> tag, the text is moved one column to the right by Redmin's CSS. A new line causes double new line.
     text.gsub! '<p>', ''
@@ -28,6 +27,4 @@ module DmsfFilesHelper
     text.gsub! "\n\n", '<br>'
     text.gsub "\n\t", '<br>'
   end
-
 end
-

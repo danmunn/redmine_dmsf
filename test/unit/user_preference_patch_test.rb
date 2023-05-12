@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# User preference tests
 class UserPreferencePatchTest < RedmineDmsf::Test::UnitTest
-
   fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def test_user_preference_has_dmsf_attachments_upload_choice
@@ -36,5 +35,4 @@ class UserPreferencePatchTest < RedmineDmsf::Test::UnitTest
   def test_user_preference_has_receive_download_notification
     assert @jsmith.pref.respond_to?(:receive_download_notification)
   end
-
 end

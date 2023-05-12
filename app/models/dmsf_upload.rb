@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,25 +20,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Upload
 class DmsfUpload
-  attr_accessor :name
-  attr_accessor :disk_filename
+  attr_accessor :name, :disk_filename, :mime_type, :title, :description, :comment, :major_version, :minor_version,
+                :patch_version, :locked, :workflow, :custom_values, :tempfile_path, :digest
   attr_reader   :size
-  attr_accessor :mime_type
-  attr_accessor :title
-  attr_accessor :description
-  attr_accessor :comment
-  attr_accessor :major_version
-  attr_accessor :minor_version
-  attr_accessor :patch_version
-  attr_accessor :locked
-  attr_accessor :workflow
-  attr_accessor :custom_values
-  attr_accessor :tempfile_path
-  attr_accessor :digest
 
   def disk_file
-    File.join Rails.root, 'tmp', disk_filename
+    Rails.root.join 'tmp', disk_filename
   end
 
   def self.create_from_uploaded_attachment(project, folder, uploaded_file)
@@ -55,7 +43,7 @@ class DmsfUpload
       }
       DmsfUpload.new project, folder, uploaded
     else
-      Rails.logger.error "An attachment not found by its token: #{uploaded_file[:token]}"
+      Rails.logger.error { "An attachment not found by its token: #{uploaded_file[:token]}" }
       nil
     end
   end
@@ -114,13 +102,11 @@ class DmsfUpload
       # Add default value for CFs not existing
       present_custom_fields = file.last_revision.custom_values.collect(&:custom_field).uniq
       file.last_revision.available_custom_fields.each do |cf|
-        unless present_custom_fields.include?(cf)
-          @custom_values << CustomValue.new({ custom_field: cf, value: cf.default_value}) if cf.default_value
+        if cf.default_value && present_custom_fields.exclude?(cf)
+          @custom_values << CustomValue.new({ custom_field: cf, value: cf.default_value })
         end
       end
     end
-
-    @locked = file && file.locked_for_user?
+    @locked = file&.locked_for_user?
   end
-
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -20,7 +19,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+require 'English'
+
 module RedmineDmsf
+  # Preview
   module Preview
     extend Redmine::Utils::Shell
     include Redmine::I18n
@@ -28,36 +30,31 @@ module RedmineDmsf
     OFFICE_BIN = (Setting.plugin_redmine_dmsf['office_bin'] || 'libreoffice').freeze
 
     def self.office_available?
-      if defined?(@office_available)
-        return @office_available
-      end
+      return @office_available if defined?(@office_available)
+
       begin
         `#{shell_quote OFFICE_BIN} --version`
-        @office_available = $?.success?
-      rescue
+        @office_available = $CHILD_STATUS.success?
+      rescue StandardError
         @office_available = false
       end
       unless @office_available
-        Rails.logger.warn l(:note_dmsf_office_bin_not_available, value: OFFICE_BIN, locale: :en)
+        Rails.logger.warn { l(:note_dmsf_office_bin_not_available, value: OFFICE_BIN, locale: :en) }
       end
       @office_available
     end
 
     def self.generate(source, target)
-      if File.exist?(target)
+      return target if File.exist?(target)
+
+      dir = File.dirname(target)
+      cmd = "#{shell_quote(OFFICE_BIN)} --convert-to pdf --headless --outdir #{shell_quote(dir)} #{shell_quote(source)}"
+      if system(cmd)
         target
       else
-        dir = File.dirname(target)
-        cmd = "#{shell_quote(OFFICE_BIN)} --convert-to pdf --headless --outdir #{shell_quote(dir)} #{shell_quote(source)}"
-        if system(cmd)
-          target
-        else
-          Rails.logger.error "Creating preview failed (#{$?}):\nCommand: #{cmd}"
-          ''
-        end
+        Rails.logger.error { "Creating preview failed (#{$CHILD_STATUS}):\nCommand: #{cmd}" }
+        ''
       end
     end
-
   end
-
 end

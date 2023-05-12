@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 #
 module RedmineDmsf
   module Patches
+    # Queries controller
     module QueriesControllerPatch
-
       ##################################################################################################################
       # New methods
 
@@ -35,15 +34,15 @@ module RedmineDmsf
           redirect_to home_path(options)
         end
       end
-
     end
   end
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?(:easy_extensions)
+if Redmine::Plugin.installed?('easy_extensions')
   RedmineExtensions::PatchManager.register_controller_patch 'QueriesController',
-  'RedmineDmsf::Patches::QueriesControllerPatch', prepend: true
+                                                            'RedmineDmsf::Patches::QueriesControllerPatch',
+                                                            prepend: true
 else
   QueriesController.prepend RedmineDmsf::Patches::QueriesControllerPatch
 end

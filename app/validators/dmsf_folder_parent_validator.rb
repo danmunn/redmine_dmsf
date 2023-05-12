@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,8 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfFolderParentValidator  < ActiveModel::EachValidator
-
+# Folder parent validator
+class DmsfFolderParentValidator < ActiveModel::EachValidator
   # Don't allow save folders with a parent pointing to the same folder
   def validate_each(record, attribute, value)
     folder = value
@@ -31,7 +30,6 @@ class DmsfFolderParentValidator  < ActiveModel::EachValidator
       end
       folder = folder.dmsf_folder
     end
-    return true
+    true
   end
-
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# project tests
 class ProjectPatchTest < RedmineDmsf::Test::UnitTest
-
   fixtures :dmsf_links, :dmsf_workflows, :dmsf_locks, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def test_project_has_dmsf_files
@@ -60,7 +59,7 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
   def test_dmsf_count
     User.current = @jsmith
     hash = @project1.dmsf_count
-    assert_equal 10, hash[:files]
+    assert_equal 9, hash[:files]
     assert_equal 5, hash[:folders]
   end
 
@@ -100,12 +99,11 @@ class ProjectPatchTest < RedmineDmsf::Test::UnitTest
     #   L @project3 (:dmsf), @project4, @project5
     User.current = @jsmith
     assert @project1.dmsf_available?
-    assert !@project3.dmsf_available?
+    assert_not @project3.dmsf_available?
   end
 
   def test_watchable
     @project1.add_watcher @jsmith
     assert @project1.watched_by?(@jsmith)
   end
-
 end

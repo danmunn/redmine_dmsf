@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -23,9 +22,9 @@
 
 module RedmineDmsf
   module Test
+    # Test case
     class TestCase < ActionController::TestCase
-
-      self.fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles
+      fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles
 
       # Allow us to override the fixtures method to implement fixtures for our plugin.
       # Ultimately it allows for better integration without blowing redmine fixtures up,
@@ -49,7 +48,7 @@ module RedmineDmsf
         @dlopper = User.find_by(login: 'dlopper')
         @someone = User.find_by(login: 'someone')
         @project1 = Project.find 1
-        with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1'} do
+        with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1' } do
           @project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
         end
         @project1_uri = Addressable::URI.escape(@project1_name)
@@ -86,7 +85,7 @@ module RedmineDmsf
           role.add_permission! :manage_workflows
           role.add_permission! :file_approval
         end
-        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
+        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join('files', ['dmsf'])
         Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
         Setting.text_formatting = 'Textile'
         FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
@@ -95,13 +94,10 @@ module RedmineDmsf
 
       def teardown
         # Delete our tmp folder
-        begin
-          FileUtils.rm_rf DmsfFile.storage_path
-        rescue => e
-          Rails.logger.error e.message
-        end
+        FileUtils.rm_rf DmsfFile.storage_path
+      rescue StandardError => e
+        Rails.logger.error e.message
       end
-
     end
   end
 end

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -22,18 +22,15 @@
 module RedmineDmsf
   module Hooks
     module Views
-      
+      # My account view hooks
       class MyAccountViewHooks < Redmine::Hook::ViewListener
-        
-        def view_my_account_preferences(context={})              
-          if context.is_a?(Hash) && context[:user]                    
-            context[:controller].send(
-              :render_to_string, { partial: 'hooks/redmine_dmsf/view_my_account', locals: context }).html_safe
-          end
+        def view_my_account_preferences(context = {})
+          return unless context.is_a?(Hash) && context[:user]
+
+          context[:controller].send :render_to_string,
+                                    { partial: 'hooks/redmine_dmsf/view_my_account', locals: context }
         end
-              
       end
-      
     end
   end
 end

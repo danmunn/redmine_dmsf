@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,8 +21,8 @@
 
 require File.expand_path('../../../test_helper', __FILE__)
 
+# WebDAV MKCOL tests
 class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
-
   fixtures :dmsf_folders
 
   def test_mkcol_requires_authentication
@@ -55,14 +54,16 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
 
   def test_should_fail_to_create_folder_that_already_exists
     process :mkcol,
-      "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", params: nil, headers: @jsmith
+            "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}",
+            params: nil,
+            headers: @jsmith
     assert_response :method_not_allowed
   end
 
   def test_should_create_folder_for_non_admin_user_with_rights
     process :mkcol, "/dmsf/webdav/#{@project1.identifier}/test1", params: nil, headers: @jsmith
     assert_response :success
-    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
       project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
       process :mkcol, "/dmsf/webdav/#{@project1.identifier}/test2", params: nil, headers: @jsmith
       assert_response :conflict
@@ -72,29 +73,32 @@ class DmsfWebdavMkcolTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_create_folder_in_subproject
-    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/test1", params: nil,
+    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/test1",
+            params: nil,
             headers: @admin
     assert_response :success
   end
 
   def test_create_folder_with_square_brackets_of_the_same_name_as_a_sub_project
     project3_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project5))
-    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{project3_uri}", params: nil,
+    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{project3_uri}",
+            params: nil,
             headers: @admin
     assert_response :method_not_allowed
   end
 
   def test_create_folder_of_the_same_name_as_a_sub_project
-    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}", params: nil,
+    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}",
+            params: nil,
             headers: @admin
     assert_response :method_not_allowed
   end
 
   def test_create_folder_with_square_brackets
     folder_name = ERB::Util.url_encode('[new folder]')
-    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{folder_name}", params: nil,
+    process :mkcol, "/dmsf/webdav/#{@project1.identifier}/#{folder_name}",
+            params: nil,
             headers: @admin
     assert_response :conflict # Square brackets are not allowed in project names
   end
-
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,9 +20,10 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Context menu controller
 class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
-  include Redmine::I18n  
-    
+  include Redmine::I18n
+
   fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_links
 
   def setup
@@ -37,29 +37,33 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
-      get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
-      assert_response :success
-      assert_select 'a.icon-edit', text: l(:button_edit)
-      assert_select 'a.icon-lock', text: l(:button_lock)
-      assert_select 'a.icon-email-add', text: l(:label_notifications_on)
-      assert_select 'a.icon-del', text: l(:button_delete)
-      assert_select 'a.icon-download', text: l(:button_download)
-      assert_select 'a.icon-email', text: l(:field_mail)
-      assert_select 'a.icon-file', text: l(:button_edit_content)
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
+      with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => '1', 'dmsf_webdav_strategy' => 'WEBDAV_READ_WRITE' } do
+        get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
+        assert_response :success
+        assert_select 'a.icon-edit', text: l(:button_edit)
+        assert_select 'a.icon-lock', text: l(:button_lock)
+        assert_select 'a.icon-email-add', text: l(:label_notifications_on)
+        assert_select 'a.icon-del', text: l(:button_delete)
+        assert_select 'a.icon-download', text: l(:button_download)
+        assert_select 'a.icon-email', text: l(:field_mail)
+        assert_select 'a.icon-file', text: l(:button_edit_content)
+      end
     end
   end
 
   def test_dmsf_file_locked
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
-      get :dmsf, params: { id: @file2.project.id, ids: ["file-#{@file2.id}"] }
-      assert_response :success
-      assert_select 'a.icon-edit.disabled', text: l(:button_edit)
-      assert_select 'a.icon-unlock', text: l(:button_unlock)
-      assert_select 'a.icon-lock', text: l(:button_lock), count: 0
-      assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
-      assert_select 'a.icon-del.disabled', text: l(:button_delete)
-      assert_select 'a.icon-file.disabled', text: l(:button_edit_content)
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
+      with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => '1', 'dmsf_webdav_strategy' => 'WEBDAV_READ_WRITE' } do
+        get :dmsf, params: { id: @file2.project.id, ids: ["file-#{@file2.id}"] }
+        assert_response :success
+        assert_select 'a.icon-edit.disabled', text: l(:button_edit)
+        assert_select 'a.icon-unlock', text: l(:button_unlock)
+        assert_select 'a.icon-lock', text: l(:button_lock), count: 0
+        assert_select 'a.icon-email-add.disabled', text: l(:label_notifications_on)
+        assert_select 'a.icon-del.disabled', text: l(:button_delete)
+        assert_select 'a.icon-file.disabled', text: l(:button_edit_content)
+      end
     end
   end
 
@@ -91,7 +95,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_file_notification_on
     @file1.notify_activate
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
       get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
       assert_response :success
       assert_select 'a.icon-email', text: l(:label_notifications_off)
@@ -101,7 +105,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_file_manipulation_permission_off
     @role_manager.remove_permission! :file_manipulation
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
       get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
       assert_response :success
       assert_select 'a.icon-edit.disabled', text: l(:button_edit)
@@ -112,7 +116,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file_manipulation_permission_on
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
       get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
       assert_response :success
       assert_select 'a:not(icon-edit.disabled)', text: l(:button_edit)
@@ -151,9 +155,11 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file_edit_content
-    get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
-    assert_response :success
-    assert_select 'a.dmsf-icon-file', text: l(:button_edit_content)
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => '1', 'dmsf_webdav_strategy' => 'WEBDAV_READ_WRITE' } do
+      get :dmsf, params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
+      assert_response :success
+      assert_select 'a.dmsf-icon-file', text: l(:button_edit_content)
+    end
   end
 
   def test_dmsf_file_edit_content_webdav_disabled
@@ -186,25 +192,27 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_file_link
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
-      get :dmsf, params: {
-          id: @file_link6.project.id, folder_id: @file_link6.dmsf_folder, ids: ["file-link-#{@file_link6.id}"] }
-      assert_response :success
-      assert_select 'a.icon-edit', text: l(:button_edit)
-      assert_select 'a.icon-lock', text: l(:button_lock)
-      assert_select 'a.icon-email-add', text: l(:label_notifications_on)
-      assert_select 'a.icon-del', text: l(:button_delete)
-      assert_select 'a.icon-download', text: l(:button_download)
-      assert_select 'a.icon-email', text: l(:field_mail)
-      assert_select 'a.icon-file', text: l(:button_edit_content)
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
+      with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => '1', 'dmsf_webdav_strategy' => 'WEBDAV_READ_WRITE' } do
+        get :dmsf, params: { id: @file_link6.project.id, folder_id: @file_link6.dmsf_folder,
+                             ids: ["file-link-#{@file_link6.id}"] }
+        assert_response :success
+        assert_select 'a.icon-edit', text: l(:button_edit)
+        assert_select 'a.icon-lock', text: l(:button_lock)
+        assert_select 'a.icon-email-add', text: l(:label_notifications_on)
+        assert_select 'a.icon-del', text: l(:button_delete)
+        assert_select 'a.icon-download', text: l(:button_download)
+        assert_select 'a.icon-email', text: l(:field_mail)
+        assert_select 'a.icon-file', text: l(:button_edit_content)
+      end
     end
   end
 
   def test_dmsf_file_link_locked
     assert @file_link2.target_file.locked?
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
-      get :dmsf, params: {
-          id: @file_link2.project.id, folder_id: @file_link2.dmsf_folder.id, ids: ["file-link-#{@file_link2.id}"] }
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
+      get :dmsf, params: { id: @file_link2.project.id, folder_id: @file_link2.dmsf_folder.id,
+                           ids: ["file-link-#{@file_link2.id}"] }
       assert_response :success
       assert_select 'a.icon-edit.disabled', text: l(:button_edit)
       assert_select 'a.icon-unlock', text: l(:button_unlock)
@@ -221,7 +229,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_folder
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
       get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
       assert_response :success
       assert_select 'a.icon-edit', text: l(:button_edit)
@@ -236,7 +244,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_folder_locked
     assert @folder5.locked?
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
       get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
       assert_response :success
       assert_select 'a.icon-edit.disabled', text: l(:button_edit)
@@ -266,7 +274,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_folder_notification_on
     @folder5.notify_activate
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
       get :dmsf, params: { id: @folder5.project.id, ids: ["folder-#{@folder5.id}"] }
       assert_response :success
       assert_select 'a.icon-email', text: l(:label_notifications_off)
@@ -276,7 +284,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_folder_manipulation_permmissions_off
     @role_manager.remove_permission! :folder_manipulation
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
       get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
       assert_response :success
       assert_select 'a.icon-edit.disabled', text: l(:button_edit)
@@ -287,7 +295,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_folder_manipulation_permmissions_on
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
       get :dmsf, params: { id: @folder1.project.id, ids: ["folder-#{@folder1.id}"] }
       assert_response :success
       assert_select 'a:not(icon-edit.disabled)', text: l(:button_edit)
@@ -324,7 +332,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_dmsf_folder_link
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
       get :dmsf, params: { id: @folder_link1.project.id, ids: ["folder-#{@folder_link1.id}"] }
       assert_response :success
       assert_select 'a.icon-edit', text: l(:button_edit)
@@ -338,7 +346,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_folder_link_locked
     @folder_link1.target_folder.lock!
-    with_settings :notified_events => ['dmsf_legacy_notifications'] do
+    with_settings notified_events: ['dmsf_legacy_notifications'] do
       get :dmsf, params: { id: @folder_link1.project.id, ids: ["folder-#{@folder_link1.id}"] }
       assert_response :success
       assert_select 'a.icon-edit.disabled', text: l(:button_edit)
@@ -439,5 +447,4 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a.icon-cancel', text: l(:title_restore)
     assert_select 'a.icon-del', text: l(:button_delete)
   end
-
 end

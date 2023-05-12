@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -20,15 +19,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Upload controller
 class DmsfUploadController < ApplicationController
-
   menu_item :dmsf
 
-  before_action :find_project, except: [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
-  before_action :authorize, except: [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
-  before_action :authorize_global, only: [:upload, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
-  before_action :find_folder, except: [:upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
-  before_action :permissions, except: [:upload, :commit, :delete_dmsf_attachment, :delete_dmsf_link_attachment]
+  before_action :find_project, except: %i[upload delete_dmsf_attachment delete_dmsf_link_attachment]
+  before_action :authorize, except: %i[upload delete_dmsf_attachment delete_dmsf_link_attachment]
+  before_action :authorize_global, only: %i[upload delete_dmsf_attachment delete_dmsf_link_attachment]
+  before_action :find_folder, except: %i[upload commit delete_dmsf_attachment delete_dmsf_link_attachment]
+  before_action :permissions, except: %i[upload commit delete_dmsf_attachment delete_dmsf_link_attachment]
 
   helper :custom_fields
   helper :dmsf_workflows
@@ -44,22 +43,18 @@ class DmsfUploadController < ApplicationController
   def upload_files
     uploaded_files = params[:dmsf_attachments]
     @uploads = []
-    if uploaded_files
-      # standard file input uploads
-      uploaded_files.each do |_, uploaded_file|
-        upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
-        @uploads.push(upload) if upload
-      end
+    # standard file input uploads
+    uploaded_files&.each do |_, uploaded_file|
+      upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
+      @uploads.push(upload) if upload
     end
-    if @uploads.empty?
-      flash.now[:error] = l(:label_attachment) + ' ' + l('activerecord.errors.messages.invalid')
-    end
+    flash.now[:error] = "#{l(:label_attachment)} #{l('activerecord.errors.messages.invalid')}" if @uploads.empty?
   end
 
   # REST API and Redmine attachment form
   def upload
     unless request.content_type == 'application/octet-stream'
-      head 406
+      head :not_acceptable
       return
     end
 
@@ -67,9 +62,7 @@ class DmsfUploadController < ApplicationController
     @attachment.author = User.current
     @attachment.filename = params[:filename].presence || Redmine::Utils.random_hex(16)
     @attachment.content_type = params[:content_type].presence
-    if defined?(EasyExtensions)
-      @attachment.skip_description_required = true
-    end
+    @attachment.skip_description_required = true if defined?(EasyExtensions)
     begin
       Attachment.skip_callback(:commit, :after, :reuse_existing_file_if_possible, raise: false)
       saved = @attachment.save
@@ -79,13 +72,13 @@ class DmsfUploadController < ApplicationController
 
     respond_to do |format|
       format.js
-      format.api {
+      format.api do
         if saved
           render action: 'upload', status: :created
         else
-          render_validation_errors(@attachment)
+          render_validation_errors @attachment
         end
-      }
+      end
     end
   end
 
@@ -97,21 +90,21 @@ class DmsfUploadController < ApplicationController
   def commit
     @files = []
     attachments = params[:attachments]
-    if attachments
-      @folder = DmsfFolder.visible.find_by(id: attachments[:folder_id]) if attachments[:folder_id].present?
-      # standard file input uploads
-      uploaded_files = attachments.select { |key, _| key == 'uploaded_file'}
-      uploaded_files.each do |_, uploaded_file|
-        upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
-        if upload
-          uploaded_file[:disk_filename] = upload.disk_filename
-          uploaded_file[:tempfile_path] = upload.tempfile_path
-          uploaded_file[:size] = upload.size
-          uploaded_file[:digest] = upload.digest
-        end
-      end
-      commit_files_internal uploaded_files
+    return unless attachments
+
+    @folder = DmsfFolder.visible.find_by(id: attachments[:folder_id]) if attachments[:folder_id].present?
+    # standard file input uploads
+    uploaded_files = attachments.select { |key, _| key == 'uploaded_file' }
+    uploaded_files.each do |_, uploaded_file|
+      upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
+      next unless upload
+
+      uploaded_file[:disk_filename] = upload.disk_filename
+      uploaded_file[:tempfile_path] = upload.tempfile_path
+      uploaded_file[:size] = upload.size
+      uploaded_file[:digest] = upload.digest
     end
+    commit_files_internal uploaded_files
   end
 
   def delete_dmsf_attachment
@@ -141,9 +134,8 @@ class DmsfUploadController < ApplicationController
   end
 
   def find_folder
-    @folder = DmsfFolder.visible.find(params[:folder_id]) if params.keys.include?('folder_id')
+    @folder = DmsfFolder.visible.find(params[:folder_id]) if params.key?('folder_id')
   rescue RedmineDmsf::Errors::DmsfAccessError
     render_403
   end
-
 end

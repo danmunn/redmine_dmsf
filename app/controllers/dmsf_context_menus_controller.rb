@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,8 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Context menu controller
 class DmsfContextMenusController < ApplicationController
-
   helper :context_menus
   helper :watchers
   helper :dmsf
@@ -58,18 +57,14 @@ class DmsfContextMenusController < ApplicationController
       @allowed = User.current.allowed_to? :view_project_watchers, @project
       @email_allowed = false
     else # multiple selection
-      @project = get_project
+      @project = project
       @locked = false
       @unlockable = false
       @allowed = User.current.allowed_to?(:file_manipulation, @project) &&
-          User.current.allowed_to?(:folder_manipulation, @project)
+                 User.current.allowed_to?(:folder_manipulation, @project)
       @email_allowed = User.current.allowed_to?(:email_documents, @project)
     end
-    if params['back_url'].present?
-      @back_url = params['back_url']
-    else
-      @back_url = dmsf_folder_path(id: @project, folder_id: @folder)
-    end
+    @back_url = params['back_url'].presence || dmsf_folder_path(id: @project, folder_id: @folder)
     @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
     render layout: false
   rescue ActiveRecord::RecordNotFound
@@ -90,11 +85,11 @@ class DmsfContextMenusController < ApplicationController
       @allowed_restore = User.current.allowed_to? :file_manipulation, @project
       @allowed_delete = User.current.allowed_to? :file_delete, @project
     else # multiple selection
-    @project = get_project
+      @project = project
       @allowed_restore = User.current.allowed_to?(:file_manipulation, @project) &&
-          User.current.allowed_to?(:folder_manipulation, @project)
+                         User.current.allowed_to?(:folder_manipulation, @project)
       @allowed_delete = User.current.allowed_to?(:file_delete, @project) &&
-          User.current.allowed_to?(:folder_manipulation, @project)
+                        User.current.allowed_to?(:folder_manipulation, @project)
     end
     render layout: false
   rescue ActiveRecord::RecordNotFound
@@ -103,23 +98,21 @@ class DmsfContextMenusController < ApplicationController
 
   private
 
-  def get_project
+  def project
     prj = nil
     params[:ids].each do |id|
-      if id =~ /file-(\d+)/
-        item = DmsfFile.find_by(id: $1)
-      elsif id =~ /(file|url)-link-(\d+)/
-        item = DmsfLink.find_by(id: $2)
-      elsif id =~ /folder-(\d+)/
-        item = DmsfFolder.find_by(id: $1)
-      elsif id =~ /folder-link-(\d+)/
-        item = DmsfLink.find_by(id: $1)
-      end
-      unless prj
-        prj = item&.project
-      else
-        return nil if(prj != item.project)
-      end
+      item = case id
+             when /file-(\d+)/
+               DmsfFile.find_by(id: Regexp.last_match(1))
+             when /(file|url)-link-(\d+)/
+               DmsfLink.find_by(id: Regexp.last_match(2))
+             when /folder-(\d+)/
+               DmsfFolder.find_by(id: Regexp.last_match(1))
+             when /folder-link-(\d+)/
+               DmsfLink.find_by(id: Regexp.last_match(1))
+             end
+      prj ||= item&.project
+      return nil if prj != item&.project
     end
     prj
   end
@@ -131,33 +124,33 @@ class DmsfContextMenusController < ApplicationController
   end
 
   def find_dmsf_file
-    if (params[:ids].present? && (params[:ids].size == 1)) && (!@dmsf_folder)
-      if params[:ids][0] =~ /file-(\d+)/
-        @dmsf_file = DmsfFile.find_by(id: $1)
-      elsif params[:ids][0] =~ /(file|url)-link-(\d+)/
-        @dmsf_link = DmsfLink.find_by(id: $2)
-        @dmsf_file = DmsfFile.find_by(id: @dmsf_link.target_id) if @dmsf_link && (@dmsf_link.target_type != 'DmsfUrl')
-      end
+    return unless params[:ids].present? && params[:ids].size == 1 && !@dmsf_folder
+
+    case params[:ids][0]
+    when /file-(\d+)/
+      @dmsf_file = DmsfFile.find_by(id: Regexp.last_match(1))
+    when /(file|url)-link-(\d+)/
+      @dmsf_link = DmsfLink.find_by(id: Regexp.last_match(2))
+      @dmsf_file = DmsfFile.find_by(id: @dmsf_link.target_id) if @dmsf_link && @dmsf_link.target_type != 'DmsfUrl'
     end
   end
 
   def find_dmsf_folder
-    if (params[:ids].present? && (params[:ids].size == 1)) && (!@dmsf_file)
-      if params[:ids][0] =~ /folder-(\d+)/
-        @dmsf_folder = DmsfFolder.find_by(id: $1)
-      elsif params[:ids][0] =~ /folder-link-(\d+)/
-        @dmsf_link = DmsfLink.find_by(id: $1)
-        @dmsf_folder = DmsfFolder.find_by(id: @dmsf_link.target_id) if @dmsf_link
-      end
+    return unless params[:ids].present? && params[:ids].size == 1 && !@dmsf_file
+
+    case params[:ids][0]
+    when /folder-(\d+)/
+      @dmsf_folder = DmsfFolder.find_by(id: Regexp.last_match(1))
+    when /folder-link-(\d+)/
+      @dmsf_link = DmsfLink.find_by(id: Regexp.last_match(1))
+      @dmsf_folder = DmsfFolder.find_by(id: @dmsf_link.target_id) if @dmsf_link
     end
   end
 
   def find_dmsf_project
-    if (params[:ids].present? && (params[:ids].size == 1)) && (!@dmsf_project)
-      if params[:ids][0] =~ /project-(\d+)/
-        @dmsf_project = Project.find_by(id: $1)
-      end
-    end
-  end
+    return unless params[:ids].present? && params[:ids].size == 1 && !@dmsf_project &&
+                  params[:ids][0] =~ /project-(\d+)/
 
+    @dmsf_project = Project.find_by(id: Regexp.last_match(1))
+  end
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,6 +21,7 @@
 
 require 'mailer'
 
+# Mailer
 class DmsfMailer < Mailer
   layout 'mailer'
 
@@ -30,11 +30,11 @@ class DmsfMailer < Mailer
     files.each do |file|
       users = get_notify_users(project, file)
       users.each do |user|
-        (hash[user] ||=[]) << file
+        (hash[user] ||= []) << file
       end
     end
-    hash.each do |user, files|
-      files_updated(user, project, files).deliver_later
+    hash.each do |user, docs|
+      files_updated(user, project, docs).deliver_later
     end
   end
 
@@ -43,7 +43,7 @@ class DmsfMailer < Mailer
     @files = files
     @project = project
     @author = files.first.last_revision.user if files.first.last_revision
-    @author = User.anonymous unless @author
+    @author ||= User.anonymous
     message_id project
     set_language_if_valid user.language
     mail to: user, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_updated_subject)}"
@@ -54,11 +54,11 @@ class DmsfMailer < Mailer
     files.each do |file|
       users = get_notify_users(project, file)
       users.each do |user|
-        (hash[user] ||=[]) << file
+        (hash[user] ||= []) << file
       end
     end
-    hash.each do |user, files|
-      files_deleted(user, project, files).deliver_later
+    hash.each do |user, docs|
+      files_deleted(user, project, docs).deliver_later
     end
   end
 
@@ -67,7 +67,7 @@ class DmsfMailer < Mailer
     @files = files
     @project = project
     @author = files.first.deleted_by_user
-    @author = User.anonymous unless @author
+    @author ||= User.anonymous
     message_id project
     set_language_if_valid user.language
     mail to: user, subject: "[#{@project.name} - #{l(:menu_dmsf)}] #{l(:text_email_doc_deleted_subject)}"
@@ -78,13 +78,11 @@ class DmsfMailer < Mailer
     files.each do |file|
       users = get_notify_users(project, file)
       users.each do |user|
-        if user.pref.receive_download_notification == '1'
-          (hash[user] ||=[]) << file
-        end
+        (hash[user] ||= []) << file if user.pref.receive_download_notification == '1'
       end
     end
-    hash.each do |user, files|
-      files_downloaded(user, project, files, remote_ip).deliver_later
+    hash.each do |user, docs|
+      files_downloaded(user, project, docs, remote_ip).deliver_later
     end
   end
 
@@ -114,10 +112,10 @@ class DmsfMailer < Mailer
     @author = author
     unless @links_only
       if File.exist?(email_params[:zipped_content])
-        zipped_content_data = open(email_params[:zipped_content], 'rb') { |io| io.read }
+        zipped_content_data = File.binread(email_params[:zipped_content])
         attachments['Documents.zip'] = { content_type: 'application/zip', content: zipped_content_data }
       else
-        Rails.logger.error "Cannot attach #{email_params[:zipped_content]}, it doesn't exist."
+        Rails.logger.error { "Cannot attach #{email_params[:zipped_content]}, it doesn't exist." }
       end
     end
     skip_no_self_notified = false
@@ -127,18 +125,17 @@ class DmsfMailer < Mailer
         author.pref.no_self_notified = false
         skip_no_self_notified = true
       end
-      res = mail(to: email_params[:to], cc: email_params[:cc], subject: email_params[:subject], 'From' => email_params[:from],
-           'Reply-To' => email_params[:reply_to])
+      res = mail(to: email_params[:to], cc: email_params[:cc], subject: email_params[:subject],
+                 'From' => email_params[:from], 'Reply-To' => email_params[:reply_to])
     ensure
-      if skip_no_self_notified
-        author.pref.no_self_notified = true
-      end
+      author.pref.no_self_notified = true if skip_no_self_notified
     end
     res
   end
 
-  def self.deliver_workflow_notification(users, workflow, revision, subject_id, text1_id, text2_id, notice = nil, step = nil)
-    step_name = (step && step.name.present?) ? step.name : step&.step
+  def self.deliver_workflow_notification(users, workflow, revision, subject_id, text1_id, text2_id, notice = nil,
+                                         step = nil)
+    step_name = step&.name.present? ? step.name : step&.step
     users.each do |user|
       workflow_notification(user, workflow, revision, subject_id.to_s, text1_id.to_s, text2_id.to_s, notice,
                             step_name).deliver_now
@@ -146,58 +143,58 @@ class DmsfMailer < Mailer
   end
 
   def workflow_notification(user, workflow, revision, subject_id, text1_id, text2_id, notice, step_name)
-    if user && workflow && revision
-      if revision.dmsf_file && revision.dmsf_file.project
-        @project = revision.dmsf_file.project
-        redmine_headers 'Project' => @project.identifier
-      end
-      set_language_if_valid user.language
-      @user = user
-      message_id workflow
-      @workflow = workflow
-      @revision = revision
-      @text1 = l(text1_id, name: workflow.name, filename: revision.dmsf_file.name, notice: notice, stepname: step_name)
-      @text2 = l(text2_id)
-      @notice = notice
-      @author = revision.dmsf_workflow_assigned_by_user
-      @author ||= User.anonymous
-      mail to: user,
-           subject: "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)} #{step_name}"
+    return unless user && workflow && revision
+
+    if revision.dmsf_file&.project
+      @project = revision.dmsf_file.project
+      redmine_headers 'Project' => @project.identifier
     end
+    set_language_if_valid user.language
+    @user = user
+    message_id workflow
+    @workflow = workflow
+    @revision = revision
+    @text1 = l(text1_id, name: workflow.name, filename: revision.dmsf_file.name, notice: notice, stepname: step_name)
+    @text2 = l(text2_id)
+    @notice = notice
+    @author = revision.dmsf_workflow_assigned_by_user
+    @author ||= User.anonymous
+    mail to: user,
+         subject:
+           "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)} #{step_name}"
   end
 
   # force_notification = true => approval workflow's notifications
-  def self.get_notify_users(project, file, force_notification = false)
+  def self.get_notify_users(project, file, force_notification: false)
     return [] unless project.active?
+
     # Notifications
     if (force_notification && Setting.notified_events.include?('dmsf_workflow_plural')) ||
-      (Setting.notified_events.include?('dmsf_legacy_notifications') && file&.notify?)
+       (Setting.notified_events.include?('dmsf_legacy_notifications') && file&.notify?)
       notify_members = project.members.active.select do |notify_member|
         notify_user = notify_member.user
         if notify_user == User.current && notify_user.pref.no_self_notified
           false
-        else
-          if notify_member.dmsf_mail_notification.nil?
-            case notify_user.mail_notification
-            when 'all'
-              true
-            when 'selected'
-              notify_member.mail_notification?
-            when 'only_my_events'
-              file.involved?(notify_user) || file.assigned?(notify_user)
-            when 'only_owner'
-              file.owner? notify_user
-            when 'only_assigned'
-              file.assigned? notify_user
-            else
-              false
-            end
+        elsif notify_member.dmsf_mail_notification.nil?
+          case notify_user.mail_notification
+          when 'all'
+            true
+          when 'selected'
+            notify_member.mail_notification?
+          when 'only_my_events'
+            file.involved?(notify_user) || file.assigned?(notify_user)
+          when 'only_owner'
+            file.owner? notify_user
+          when 'only_assigned'
+            file.assigned? notify_user
           else
-            notify_member.dmsf_mail_notification
+            false
           end
+        else
+          notify_member.dmsf_mail_notification
         end
       end
-      users = notify_members.collect { |m| m.user }
+      users = notify_members.collect(&:user)
     else
       users = []
     end
@@ -205,10 +202,7 @@ class DmsfMailer < Mailer
     watchers = []
     file&.get_all_watchers(watchers)
     users.concat watchers
-    if User.current && User.current.pref.no_self_notified
-      users.delete User.current
-    end
+    users.delete(User.current) if User.current&.pref&.no_self_notified
     users.uniq
   end
-
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,6 +20,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Queries helper
 class DmsfQueriesHelperTest < RedmineDmsf::Test::HelperTest
   include DmsfQueriesHelper
 
@@ -34,7 +34,6 @@ class DmsfQueriesHelperTest < RedmineDmsf::Test::HelperTest
   def test_csv_value
     c_size = QueryColumn.new(:size)
     c_author = QueryColumn.new(:author)
-    c_workflow = QueryColumn.new(:workflow)
     assert_equal '1 KB', csv_value(c_size, nil, 1024)
     assert_equal 'John Smith', csv_value(c_author, @jsmith, @jsmith.id)
   end
@@ -43,5 +42,4 @@ class DmsfQueriesHelperTest < RedmineDmsf::Test::HelperTest
     c_size = QueryColumn.new(:size)
     assert_equal '1 KB', csv_value(c_size, @folder1, 1024)
   end
-
 end

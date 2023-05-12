@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -20,26 +19,24 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Custom field
 class DmsfFileRevisionCustomField < CustomField
-
   def type_name
     :menu_dmsf
   end
 
-  def compare_values?(x, y)
-    if x.is_a?(Array) && y.is_a?(Array)
-      y.reject!{ |a| a.empty? }
-      return true if y.empty?
-      x.reject!{ |a| a.empty? }
-      y.each do |b|
-        if x.include?(b)
-          return true
-        end
+  def compare_values?(x_value, y_value)
+    if x_value.is_a?(Array) && y_value.is_a?(Array)
+      y_value.reject!(&:empty)
+      return true if y_value.empty?
+
+      x_value.reject!(&:empty?)
+      y_value.each do |b|
+        return true if x_value.include?(b)
       end
       false
     else
-      x == y
+      x_value == y_value
     end
   end
-
 end

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -21,20 +21,17 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 source 'https://rubygems.org' do
-  gem 'zip-zip'
-  gem 'uuidtools'
   gem 'active_record_union'
+  gem 'ox' # Dav4Rack
+  gem 'uuidtools'
+  gem 'zip-zip'
 
   # Redmine extensions
-  unless Dir.exist?(File.expand_path('../../easyproject', __FILE__))
-    gem 'simple_enum'
-  end
-  unless %w(easyproject easy_gantt custom_tables).any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
+  gem 'simple_enum' unless Dir.exist?(File.expand_path('../../easyproject', __FILE__))
+  unless %w[easyproject easy_gantt custom_tables]
+         .any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
     group :test do
       gem 'rails-controller-testing'
     end
   end
-
-  # Dav4Rack
-  gem 'ox'
 end

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -21,25 +21,26 @@
 module RedmineDmsf
   module Hooks
     module Views
-
+      # Base view hooks
       class BaseViewHooks < Redmine::Hook::ViewListener
+        def view_layouts_base_html_head(context = {})
+          unless /^(Dmsf|Projects|Issues|Queries|EasyCrmCases|MyController|SettingsController|WikiController)/.match?(
+            context[:controller].class.name
+          )
+            return
+          end
 
-        def view_layouts_base_html_head(context={})
-          return unless /^(Dmsf|Projects|Issues|Queries|EasyCrmCases|MyController|SettingsController|WikiController)/.match?(
-            context[:controller].class.name)
           meta = "\n".html_safe + stylesheet_link_tag('redmine_dmsf.css', plugin: :redmine_dmsf) +
-          "\n".html_safe + stylesheet_link_tag('select2.min.css', plugin: :redmine_dmsf) +
-          "\n".html_safe + javascript_include_tag('select2.min.js', plugin: :redmine_dmsf, defer: true) +
-          "\n".html_safe + javascript_include_tag('redmine_dmsf.js', plugin: :redmine_dmsf, defer: true) +
-          "\n".html_safe + javascript_include_tag('attachments_dmsf.js', plugin: :redmine_dmsf, defer: true)
+                 "\n".html_safe + stylesheet_link_tag('select2.min.css', plugin: :redmine_dmsf) +
+                 "\n".html_safe + javascript_include_tag('select2.min.js', plugin: :redmine_dmsf, defer: true) +
+                 "\n".html_safe + javascript_include_tag('redmine_dmsf.js', plugin: :redmine_dmsf, defer: true) +
+                 "\n".html_safe + javascript_include_tag('attachments_dmsf.js', plugin: :redmine_dmsf, defer: true)
           if defined?(EasyExtensions)
-            meta = meta + "\n".html_safe + stylesheet_link_tag('easy_extensions.css', plugin: :redmine_dmsf)
+            meta << ("\n".html_safe + stylesheet_link_tag('easy_extensions.css', plugin: :redmine_dmsf))
           end
           meta
         end
-
       end
-
     end
   end
 end

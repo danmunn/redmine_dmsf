@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 module RedmineDmsf
   module Patches
+    # Role
     module RolePatch
-
       ##################################################################################################################
       # New methods
 
@@ -33,19 +32,17 @@ module RedmineDmsf
       end
 
       def remove_dmsf_references
-        return if self.id.nil?
-        substitute = Role.anonymous
-        DmsfFolderPermission.where(object_id: self.id, object_type: 'Role').update_all object_id: substitute.id
-      end
+        return unless id
 
+        DmsfFolderPermission.where(object_id: id, object_type: 'Role').update_all object_id: substitute.id
+      end
     end
   end
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?(:easy_extensions)
-  RedmineExtensions::PatchManager.register_model_patch 'Role',
-  'RedmineDmsf::Patches::RolePatch', prepend: true
+if Redmine::Plugin.installed?('easy_extensions')
+  RedmineExtensions::PatchManager.register_model_patch 'Role', 'RedmineDmsf::Patches::RolePatch', prepend: true
 else
   Role.prepend RedmineDmsf::Patches::RolePatch
 end

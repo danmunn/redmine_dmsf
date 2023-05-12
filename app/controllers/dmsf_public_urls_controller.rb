@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,8 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Public URL controller
 class DmsfPublicUrlsController < ApplicationController
-
   model_object DmsfPublicUrl
   before_action :authorize, only: [:create]
   skip_before_action :check_if_login_required, only: [:show]
@@ -31,12 +30,12 @@ class DmsfPublicUrlsController < ApplicationController
       revision = dmsf_public_url.dmsf_file.last_revision
       begin
         # IE has got a tendency to cache files
-        expires_in(0.year, 'must-revalidate' => true)
+        expires_in(0.years, 'must-revalidate' => true)
         send_file(revision.disk_file,
                   filename: filename_for_content_disposition(revision.name),
                   type: revision.detect_content_type,
                   disposition: dmsf_public_url.dmsf_file.disposition)
-      rescue => e
+      rescue StandardError => e
         Rails.logger.error e.message
         render_404
       end
@@ -45,4 +44,5 @@ class DmsfPublicUrlsController < ApplicationController
     end
   end
 
+  def create; end
 end

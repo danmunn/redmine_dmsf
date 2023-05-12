@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,17 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfWorkflowStepAction < ActiveRecord::Base
-
+# Workflow step action
+class DmsfWorkflowStepAction < ApplicationRecord
   belongs_to :dmsf_workflow_step_assignment
-  belongs_to :author, class_name: 'User', foreign_key: 'author_id'
+  belongs_to :author, class_name: 'User'
 
-  validates :dmsf_workflow_step_assignment, presence: true
   validates :action, presence: true
-  validates :author_id, presence: true
-  validates :note, presence: true, unless: lambda { action == DmsfWorkflowStepAction::ACTION_APPROVE }
-  validates_uniqueness_of :dmsf_workflow_step_assignment_id, scope: [:action],
-                          unless: lambda { action == DmsfWorkflowStepAction::ACTION_DELEGATE }, case_sensitive: true
+  validates :note, presence: true, unless: -> { action == DmsfWorkflowStepAction::ACTION_APPROVE }
+  validates :dmsf_workflow_step_assignment_id,
+            unless: -> { action == DmsfWorkflowStepAction::ACTION_DELEGATE },
+            uniqueness: { scope: [:action], case_sensitive: true }
 
   ACTION_APPROVE = 1
   ACTION_REJECT = 2
@@ -42,62 +40,60 @@ class DmsfWorkflowStepAction < ActiveRecord::Base
     self.author_id = User.current.id if User.current
   end
 
-  def self.is_finished?(action)
-    action == DmsfWorkflowStepAction::ACTION_APPROVE ||
-      action == DmsfWorkflowStepAction::ACTION_REJECT
+  def self.finished?(action)
+    [DmsfWorkflowStepAction::ACTION_APPROVE, DmsfWorkflowStepAction::ACTION_REJECT].include? action
   end
 
-  def is_finished?
-    DmsfWorkflowStepAction.is_finished? action
+  def finished?
+    DmsfWorkflowStepAction.finished? action
   end
 
   def self.action_str(action)
-    if action
-      case action.to_i
-        when ACTION_APPROVE
-          l(:title_approval)
-        when ACTION_REJECT
-          l(:title_rejection)
-        when ACTION_DELEGATE
-          l(:title_delegation)
-        when ACTION_ASSIGN
-          l(:title_assignment)
-        when ACTION_START
-          l(:title_start)
-      end
+    return unless action
+
+    case action.to_i
+    when ACTION_APPROVE
+      l(:title_approval)
+    when ACTION_REJECT
+      l(:title_rejection)
+    when ACTION_DELEGATE
+      l(:title_delegation)
+    when ACTION_ASSIGN
+      l(:title_assignment)
+    when ACTION_START
+      l(:title_start)
     end
   end
 
   def self.action_type_str(action)
-    if action
-      case action.to_i
-        when ACTION_APPROVE
-          'approval'
-        when ACTION_REJECT
-          'rejection'
-        when ACTION_DELEGATE
-          'delegation'
-        when ACTION_ASSIGN
-          'assignment'
-        when ACTION_START
-          'start'
-      end
+    return unless action
+
+    case action.to_i
+    when ACTION_APPROVE
+      'approval'
+    when ACTION_REJECT
+      'rejection'
+    when ACTION_DELEGATE
+      'delegation'
+    when ACTION_ASSIGN
+      'assignment'
+    when ACTION_START
+      'start'
     end
   end
 
   def self.workflow_str(action)
-    if action
-      case action.to_i
-        when ACTION_REJECT
-          l(:title_rejected)
-        when ACTION_ASSIGN
-          l(:title_assigned)
-        when ACTION_START, ACTION_DELEGATE, ACTION_APPROVE
-          l(:title_waiting_for_approval)
-        else
-          l(:title_none)
-      end
+    return unless action
+
+    case action.to_i
+    when ACTION_REJECT
+      l(:title_rejected)
+    when ACTION_ASSIGN
+      l(:title_assigned)
+    when ACTION_START, ACTION_DELEGATE, ACTION_APPROVE
+      l(:title_waiting_for_approval)
+    else
+      l(:title_none)
     end
   end
-
 end

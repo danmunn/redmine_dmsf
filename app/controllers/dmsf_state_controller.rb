@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -20,10 +19,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# State controller
 class DmsfStateController < ApplicationController
-  
   menu_item :dmsf
-  
+
   before_action :find_project
   before_action :authorize
 
@@ -42,16 +41,15 @@ class DmsfStateController < ApplicationController
       flash[:warning] = l(:user_is_not_project_member)
     end
     if Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
-      @project.update_attribute :dmsf_act_as_attachable, params[:act_as_attachable]
+      @project.update dmsf_act_as_attachable: params[:act_as_attachable]
     end
-    @project.update_attribute :default_dmsf_query_id, params[:default_dmsf_query]
+    @project.update default_dmsf_query_id: params[:default_dmsf_query]
     redirect_to settings_project_path(@project, tab: 'dmsf')
   end
-  
-  private
-  
-  def format_valid?(format)
-    format.blank? || ((/%(t|d|v|i|r)/.match?(format)) && format.length < 256)
-  end
 
+  private
+
+  def format_valid?(format)
+    format.blank? || (/%(t|d|v|i|r)/.match?(format) && format.length < 256)
+  end
 end

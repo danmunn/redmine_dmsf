@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,8 +21,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Query tests
 class DmsfQueryTest < RedmineDmsf::Test::UnitTest
-
   fixtures :queries, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
@@ -32,7 +31,7 @@ class DmsfQueryTest < RedmineDmsf::Test::UnitTest
     User.current = @jsmith
   end
 
-  def test_type
+  def test_typetest_dmsf_nodes
     assert_equal 'DmsfQuery', @query401.type
   end
 
@@ -43,13 +42,13 @@ class DmsfQueryTest < RedmineDmsf::Test::UnitTest
 
   def test_dmsf_count
     n = DmsfFolder.visible.where(project_id: @project1.id).where("title LIKE '%test%'").all.size +
-      DmsfFile.visible.where(project_id: @project1.id).where("name LIKE '%test%'").all.size +
-      DmsfLink.visible.where(project_id: @project1.id).where("name LIKE '%test%'").all.size
+        DmsfFile.visible.where(project_id: @project1.id).where("name LIKE '%test%'").all.size +
+        DmsfLink.visible.where(project_id: @project1.id).where("name LIKE '%test%'").all.size
     assert_equal n - 1, @query401.dmsf_count # One folder is not visible due to the permissions
   end
 
   def test_dmsf_nodes
-    assert @query401.dmsf_nodes.size > 0
+    assert @query401.dmsf_nodes.any?
   end
 
   def test_default
@@ -64,7 +63,7 @@ class DmsfQueryTest < RedmineDmsf::Test::UnitTest
     @project1.default_dmsf_query_id = nil
 
     # Global
-    with_settings plugin_redmine_dmsf: {'dmsf_default_query' => @query401.id} do
+    with_settings plugin_redmine_dmsf: { 'dmsf_default_query' => @query401.id } do
       assert_equal @query401, DmsfQuery.default
     end
   end
@@ -72,5 +71,4 @@ class DmsfQueryTest < RedmineDmsf::Test::UnitTest
   def test_groupable_columns
     assert_not @query401.groupable_columns.any?
   end
-
 end

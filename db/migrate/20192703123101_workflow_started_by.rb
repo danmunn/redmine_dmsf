@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,13 +18,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Modify columns
 class WorkflowStartedBy < ActiveRecord::Migration[5.2]
-
   def change
-    rename_column :dmsf_file_revisions, :dmsf_workflow_assigned_by,
-                  :dmsf_workflow_assigned_by_user_id
-    rename_column :dmsf_file_revisions, :dmsf_workflow_started_by,
-                  :dmsf_workflow_started_by_user_id
+    change_table :dmsf_file_revisions, bulk: true do |t|
+      t.rename_column :dmsf_workflow_assigned_by, :dmsf_workflow_assigned_by_user_id
+      t.rename_column :dmsf_workflow_started_by, :dmsf_workflow_started_by_user_id
+    end
   end
-
 end

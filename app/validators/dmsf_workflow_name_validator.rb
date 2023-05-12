@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -20,31 +19,23 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfWorkflowNameValidator  < ActiveModel::EachValidator
-
+# Workflow name validator
+class DmsfWorkflowNameValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     if record.project_id
       if record.id
-        if DmsfWorkflow.where(['(project_id IS NULL OR (project_id = ? AND id != ?)) AND name = ?',
-                                record.project_id, record.id, value]).exists?
+        if DmsfWorkflow.exists?(['(project_id IS NULL OR (project_id = ? AND id != ?)) AND name = ?',
+                                 record.project_id,
+                                 record.id, value])
           record.errors.add attribute, :taken
         end
-      else
-        if DmsfWorkflow.where(['(project_id IS NULL OR project_id = ?) AND name = ?', record.project_id, value]).exists?
-          record.errors.add attribute, :taken
-        end
+      elsif DmsfWorkflow.exists?(['(project_id IS NULL OR project_id = ?) AND name = ?', record.project_id, value])
+        record.errors.add attribute, :taken
       end
-    else
-      if record.id
-        if DmsfWorkflow.where(['name = ? AND id != ?', value, record.id]).exists?
-          record.errors.add attribute, :taken
-        end
-      else
-        if DmsfWorkflow.where(name: value).exists?
-          record.errors.add attribute, :taken
-        end
-      end
+    elsif record.id
+      record.errors.add attribute, :taken if DmsfWorkflow.exists?(['name = ? AND id != ?', value, record.id])
+    elsif DmsfWorkflow.exists?(name: value)
+      record.errors.add attribute, :taken
     end
   end
-
 end

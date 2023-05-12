@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,14 +20,14 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Projects controller
 class ProjectsControllerTest < RedmineDmsf::Test::TestCase
-
   include Redmine::I18n
 
   def test_settings_dms_member
     @request.session[:user_id] = @jsmith.id
     @role_manager.add_permission! :user_preferences
-    with_settings plugin_redmine_dmsf: {'dmsf_act_as_attachable' => '1'} do
+    with_settings plugin_redmine_dmsf: { 'dmsf_act_as_attachable' => '1' } do
       get :settings, params: { id: @project1.id, tab: 'dmsf' }
     end
     assert_response :success
@@ -68,5 +67,4 @@ class ProjectsControllerTest < RedmineDmsf::Test::TestCase
       assert_select 'label', text: l(:label_notifications)
     end
   end
-
 end

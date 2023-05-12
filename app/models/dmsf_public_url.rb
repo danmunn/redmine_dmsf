@@ -19,8 +19,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfPublicUrl < ActiveRecord::Base
-
+# Public URL
+class DmsfPublicUrl < ApplicationRecord
   include ActiveModel::Validations
 
   belongs_to :dmsf_file
@@ -33,5 +33,4 @@ class DmsfPublicUrl < ActiveRecord::Base
   def generate_unique_token
     self.token ||= SecureRandom.hex(16)
   end
-
 end

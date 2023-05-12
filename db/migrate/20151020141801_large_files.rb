@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,9 +18,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Modify column
 class LargeFiles < ActiveRecord::Migration[4.2]
-
-  def up    
+  def up
     change_column :dmsf_file_revisions, :size, :bigint, null: true
   end
 

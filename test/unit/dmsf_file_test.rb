@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,8 +21,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# File tests
 class DmsfFileTest < RedmineDmsf::Test::UnitTest
-
   fixtures :dmsf_locks, :issues, :dmsf_links, :dmsf_workflows, :dmsf_workflow_steps,
            :dmsf_workflow_step_assignments, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
@@ -39,13 +38,11 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_project_dmsf_file_listing_contains_deleted_items
-    assert @project1.dmsf_files.index{ |f| f.deleted? },
-      'Expected at least one deleted item in <all items>'
+    assert @project1.dmsf_files.index(&:deleted?), 'Expected at least one deleted item in <all items>'
   end
 
   def test_project_dmsf_file_visible_listing_contains_no_deleted_items
-    assert @project1.dmsf_files.visible.index{ |f| f.deleted? }.nil?,
-      'There is a deleted file, this was unexpected'
+    assert @project1.dmsf_files.visible.index(&:deleted?).nil?, 'There is a deleted file, this was unexpected'
   end
 
   def test_known_locked_file_responds_as_being_locked
@@ -62,7 +59,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
 
   def test_file_locked_is_not_locked_for_user_who_locked
     User.current = @admin
-    assert !@file2.locked_for_user?, "#{@file2.name} is locked for #{User.current}"
+    assert_not @file2.locked_for_user?, "#{@file2.name} is locked for #{User.current}"
   end
 
   def test_file_locked_is_locked_for_user_who_didnt_lock
@@ -71,7 +68,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_file_with_no_locks_reported_unlocked
-    assert !@file1.locked?
+    assert_not @file1.locked?
   end
 
   def test_delete_restore
@@ -82,7 +79,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   def test_delete
     User.current = @admin
     @file4.dmsf_folder.unlock!
-    assert @file4.delete(false), @file4.errors.full_messages.to_sentence
+    assert @file4.delete(commit: false), @file4.errors.full_messages.to_sentence
     assert @file4.deleted?, "File #{@file4.name} is not deleted"
     assert_equal 0, @file4.dmsf_file_revisions.visible.all.size
     # Links should not be deleted
@@ -92,9 +89,9 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   def test_restore
     User.current = @admin
     @file4.dmsf_folder.unlock!
-    assert @file4.delete(false), @file4.errors.full_messages.to_sentence
+    assert @file4.delete(commit: false), @file4.errors.full_messages.to_sentence
     @file4.restore
-    assert !@file4.deleted?, "File #{@file4} hasn't been restored"
+    assert_not @file4.deleted?, "File #{@file4} hasn't been restored"
     assert_equal 1, @file4.dmsf_file_revisions.visible.all.size
     assert_equal 2, @file4.referenced_links.visible.all.size
   end
@@ -104,7 +101,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     @file4.dmsf_folder.unlock!
     assert_equal 1, @file4.dmsf_file_revisions.visible.all.size
     assert_equal 2, @file4.referenced_links.visible.all.size
-    @file4.delete true
+    @file4.delete commit: true
     assert_equal 0, @file4.dmsf_file_revisions.all.size
     assert_equal 0, @file4.referenced_links.all.size
   end
@@ -154,6 +151,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     @file7.last_revision.set_workflow(@wf1.id, nil)
     @file7.last_revision.assign_workflow(@wf1.id)
     new_file = @file7.copy_to_filename(@project2, nil, 'new_file.txt')
+    assert new_file
     assert_nil new_file.last_revision.workflow
     assert_nil new_file.last_revision.dmsf_workflow_id
     assert_nil new_file.last_revision.dmsf_workflow_assigned_by_user_id
@@ -201,31 +199,31 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_image
-    assert !@file1.image?
+    assert_not @file1.image?
     assert @file7.image?
-    assert !@file8.image?
+    assert_not @file8.image?
   end
 
   def test_text
     assert @file1.text?
-    assert !@file7.text?
-    assert !@file8.text?
+    assert_not @file7.text?
+    assert_not @file8.text?
   end
 
   def test_pdf
-    assert !@file1.pdf?
-    assert !@file7.pdf?
+    assert_not @file1.pdf?
+    assert_not @file7.pdf?
     assert @file8.pdf?
   end
 
   def test_video
-    assert !@file1.video?
+    assert_not @file1.video?
     @file1.last_revision.disk_filename = 'test.mp4'
     assert @file1.video?
   end
 
   def test_html
-    assert !@file1.html?
+    assert_not @file1.html?
     @file1.last_revision.disk_filename = 'test.html'
     assert @file1.html?
   end
@@ -238,7 +236,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_storage_path
-    with_settings plugin_redmine_dmsf: {'dmsf_storage_directory' => 'files/dmsf'} do
+    with_settings plugin_redmine_dmsf: { 'dmsf_storage_directory' => 'files/dmsf' } do
       sp = DmsfFile.storage_path
       assert_kind_of Pathname, sp
       assert_equal Rails.root.join(Setting.plugin_redmine_dmsf['dmsf_storage_directory']).to_s, sp.to_s
@@ -247,21 +245,21 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
 
   def test_owner
     assert @file1.owner?(@file1.last_revision.user)
-    assert !@file1.owner?(@jsmith)
+    assert_not @file1.owner?(@jsmith)
     @file1.last_revision.user = @jsmith
     assert @file1.owner?(@jsmith)
   end
 
   def test_involved
     assert @file1.involved?(@file1.last_revision.user)
-    assert !@file1.involved?(@jsmith)
+    assert_not @file1.involved?(@jsmith)
     @file1.dmsf_file_revisions[1].user = @jsmith
     assert @file1.involved?(@jsmith)
   end
 
   def test_assigned
-    assert !@file1.assigned?(@admin)
-    assert !@file1.assigned?(@jsmith)
+    assert_not @file1.assigned?(@admin)
+    assert_not @file1.assigned?(@jsmith)
     @file7.last_revision.set_workflow @wf1.id, nil
     @file7.last_revision.assign_workflow @wf1.id
     assert @file7.assigned?(@admin)
@@ -285,16 +283,11 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_previewable
-    if RedmineDmsf::Preview.office_available?
-      assert @file13.previewable?
-    end
+    assert(@file13.previewable?) if RedmineDmsf::Preview.office_available?
   end
 
   def test_pdf_preview
-    if RedmineDmsf::Preview.office_available?
-      assert_not_empty @file13.pdf_preview
-    end
+    assert_not_empty(@file13.pdf_preview) if RedmineDmsf::Preview.office_available?
     assert_empty @file1.pdf_preview
   end
-
 end

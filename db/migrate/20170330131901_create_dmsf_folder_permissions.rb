@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,15 +18,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Create table
 class CreateDmsfFolderPermissions < ActiveRecord::Migration[4.2]
-
   def change
     create_table :dmsf_folder_permissions do |t|
       t.references :dmsf_folder
       t.integer :object_id, null: false
       t.string :object_type, limit: 30, null: false
+      t.datetime :created_at, default: -> { 'CURRENT_TIMESTAMP' }
     end
     add_index :dmsf_folder_permissions, :dmsf_folder_id
   end
-
 end

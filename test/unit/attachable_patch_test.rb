@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Attachable tests
 class AttachablePatchTest < RedmineDmsf::Test::UnitTest
-
   fixtures :issues, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
@@ -34,11 +33,10 @@ class AttachablePatchTest < RedmineDmsf::Test::UnitTest
   def test_has_attachmets
     if defined?(EasyExtensions)
       assert @issue1.has_attachments?
-      assert !@issue2.has_attachments?
+      assert_not @issue2.has_attachments?
     else
-      assert @issue1.dmsf_files.any?
-      assert !@issue2.dmsf_files.any?
+      assert @issue1.dmsf_files.present?
+      assert @issue2.dmsf_files.blank?
     end
   end
-
 end

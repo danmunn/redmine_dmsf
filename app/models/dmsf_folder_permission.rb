@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,11 +18,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfFolderPermission < ActiveRecord::Base
-
+# Folder permission
+class DmsfFolderPermission < ApplicationRecord
   belongs_to :dmsf_folder
-
-  validates :dmsf_folder, presence: true
 
   scope :users, -> { where(object_type: User.model_name.to_s) }
   scope :roles, -> { where(object_type: Role.model_name.to_s) }
@@ -36,5 +33,4 @@ class DmsfFolderPermission < ActiveRecord::Base
     permission.save!
     permission
   end
-
 end

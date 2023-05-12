@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
 module Dav4rack
+  # XML element
   module XmlElements
-
     DAV_NAMESPACE      = 'DAV:'
     DAV_NAMESPACE_NAME = 'd'
     DAV_XML_NS         = 'xmlns:d'
-
     XML_VERSION = '1.0'
     XML_CONTENT_TYPE = 'application/xml; charset=utf-8'
 
-    %w(
+    %w[
       activelock
       depth
       error
@@ -29,8 +28,8 @@ module Dav4rack
       response
       status
       timeout
-    ).each do |name|
-      const_set "D_#{name.upcase.gsub('-', '_')}", "#{DAV_NAMESPACE_NAME}:#{name}"
+    ].each do |name|
+      const_set "D_#{name.upcase.tr('-', '_')}", "#{DAV_NAMESPACE_NAME}:#{name}"
     end
 
     INFINITY = 'infinity'
@@ -38,9 +37,7 @@ module Dav4rack
 
     def ox_element(name, content = nil)
       e = Ox::Element.new(name)
-      if content
-        e << content
-      end
+      e << content if content
       e
     end
 
@@ -51,7 +48,7 @@ module Dav4rack
       when Symbol
         element << Ox::Element.new("#{prefix}:#{value}")
       when Enumerable
-        value.each{|v| ox_append element, v, prefix: prefix }
+        value.each { |v| ox_append element, v, prefix: prefix }
       else
         element << value.to_s if value
       end
@@ -73,44 +70,32 @@ module Dav4rack
     end
 
     # returns an activelock Ox::Element for the given lock data
-    def ox_activelock(time: nil, token:, depth:,
-                      scope: nil, type: nil, owner: nil, root: nil)
-
+    def ox_activelock(time:, token:, depth:, scope: nil, type: nil, owner: nil, root: nil)
       Ox::Element.new(D_ACTIVELOCK).tap do |activelock|
-        if scope
-          activelock << ox_element(D_LOCKSCOPE, scope)
-        end
-        if type
-          activelock << ox_element(D_LOCKTYPE, type)
-        end
+        activelock << ox_element(D_LOCKSCOPE, scope) if scope
+        activelock << ox_element(D_LOCKTYPE, type) if type
         activelock << ox_element(D_DEPTH, depth)
-        activelock << ox_element(D_TIMEOUT,
-                                 (time ? "Second-#{time}" : INFINITY))
-
+        activelock << ox_element(D_TIMEOUT, time ? "Second-#{time}" : INFINITY)
         token = ox_element(D_HREF, token)
         activelock << ox_element(D_LOCKTOKEN, token)
-
-        if owner
-          activelock << ox_element(D_OWNER, owner)
-        end
-
+        activelock << ox_element(D_OWNER, owner) if owner
         if root
           root = ox_element(D_HREF, root)
           activelock << ox_element(D_LOCKROOT, root)
         end
       end
-
     end
 
     # block is called for each element (at least self, depending on depth also
     # with children / further descendants)
-    def xml_with_depth(resource, depth, &block)
-      partial_document = Ox::Document.new()
+    def xml_with_depth(resource, depth, &_block)
+      partial_document = Ox::Document.new
 
       yield resource, partial_document
 
       case depth
       when 0
+        # Nothing to do
       when 1
         resource.children.each do |child|
           yield child, partial_document
@@ -121,9 +106,7 @@ module Dav4rack
         end
       end
 
-      Ox.dump(partial_document, {indent: -1})
+      Ox.dump partial_document, { indent: -1 }
     end
-
-
   end
 end

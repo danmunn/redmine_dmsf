@@ -1,4 +1,3 @@
-# encoding: utf-8
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -470,6 +469,7 @@ de:
     modules:
       dmsf_locked_documents: Von mir gesperrte Dokumente
       dmsf_open_approvals: Offene Genehmigungen
+      dmsf_watched_documents: My watched documents
     module_category:
       easy_dms: Easy DMS
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Dav4rack
+  # XML response
   class XmlResponse
     include XmlElements
 
@@ -15,22 +16,20 @@ module Dav4rack
         xml_body["xmlns:#{prefix}"] = href
       end
 
-      xml_doc = Ox::Document.new(:version => '1.0')
+      xml_doc = Ox::Document.new(version: '1.0')
       xml_doc << xml_body
 
-      @response.body = Ox.dump(xml_doc, {indent: -1, with_xml: true})
+      @response.body = Ox.dump(xml_doc, { indent: -1, with_xml: true })
 
-      @response["Content-Type"] = 'application/xml; charset=utf-8'
-      @response["Content-Length"] = @response.body.bytesize.to_s
+      @response['Content-Type'] = 'application/xml; charset=utf-8'
+      @response['Content-Length'] = @response.body.bytesize.to_s
     end
-
 
     def multistatus
       multistatus = Ox::Element.new(D_MULTISTATUS)
       yield multistatus
       render_xml multistatus
     end
-
 
     def render_failed_precondition(status, href)
       error = Ox::Element.new(D_ERROR)
@@ -43,14 +42,11 @@ module Dav4rack
       render_xml error
     end
 
-
     def render_lock_errors(errors)
       multistatus do |xml|
         errors.each do |href, status|
           r = response href, status
-          if status.code == 423
-            r << ox_element(D_ERROR, Ox::Element.new(D_LOCK_TOKEN_SUBMITTED))
-          end
+          r << ox_element(D_ERROR, Ox::Element.new(D_LOCK_TOKEN_SUBMITTED)) if status.code == 423
           xml << r
         end
       end
@@ -81,11 +77,11 @@ module Dav4rack
 
     private
 
-    def activelock(time: nil, token:, depth:, scope: nil, type: nil, owner: nil, root: nil)
+    def activelock(time:, token:, depth:, scope: nil, type: nil, owner: nil, root: nil)
       Ox::Element.new(D_ACTIVELOCK).tap do |activelock|
         if scope
           value = Ox::Element.new("#{DAV_NAMESPACE_NAME}:#{scope}")
-          activelock << ox_element(D_LOCKSCOPE,  value)
+          activelock << ox_element(D_LOCKSCOPE, value)
         end
         if type
           value = Ox::Element.new("#{DAV_NAMESPACE_NAME}:#{type}")
@@ -102,6 +98,5 @@ module Dav4rack
         end
       end
     end
-
   end
 end

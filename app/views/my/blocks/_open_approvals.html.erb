@@ -31,30 +31,40 @@
       order('dmsf_workflow_step_assignments.dmsf_file_revision_id, dmsf_workflow_steps.step').to_a %>
 <% assignments = all_assignments.delete_if { |a| (a.dmsf_file_revision != a.dmsf_file_revision.dmsf_file.last_revision) } %>
 <% assignments.uniq! { |a| a.dmsf_file_revision } %>
-<h3><%= l(:open_approvals)%> (<%= assignments.size %>)</h3>
+<% easy_extension = defined?(EasyExtensions) %>
+<% unless easy_extension %>
+  <h3><%= l(:open_approvals)%> (<%= assignments.size %>)</h3>
+<% end %>
 <% if assignments.any? %>
-  <%= form_tag({}, data: { cm_url: dmsf_context_menu_path(back_url: my_page_path) }) do %>
+  <%= form_tag({}, data: { cm_url: dmsf_context_menu_path }) do %>
+    <%= hidden_field_tag 'back_url', my_page_path, id: nil %>
     <table class="list">
       <thead>
         <tr>
-          <th class="checkbox hide-when-print">
-            <%= check_box_tag 'check_all', '', false, class: 'toggle-selection',
-                              title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
-          </th>
+          <% unless easy_extension %>
+            <th class="checkbox hide-when-print">
+              <%= check_box_tag 'check_all', '', false, class: 'toggle-selection',
+                                title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+            </th>
+          <% end %>
           <th><%= l(:field_project) %></th>
           <th><%= l(:field_label_dmsf_workflow) %></th>
           <th><%= l(:field_status) %></th>
           <th><%= l(:label_document) %></th>
           <th><%= l(:field_folder) %></th>
-          <th></th>
+          <% unless easy_extension %>
+            <th></th>
+          <% end %>
         </tr>
       </thead>
       <tbody>
         <% assignments.each do |assignment| %>
           <tr id="file-<%= assignment.dmsf_file_revision.dmsf_file.id %>" class="hascontextmenu">
-            <td class="checkbox hide-when-print">
-              <%= check_box_tag 'ids[]', "file-#{assignment.dmsf_file_revision.dmsf_file.id}", false, id: nil %>
-            </td>
+            <% unless easy_extension %>
+              <td class="checkbox hide-when-print">
+                <%= check_box_tag 'ids[]', "file-#{assignment.dmsf_file_revision.dmsf_file.id}", false, id: nil %>
+              </td>
+            <% end %>
             <td class="project">
               <% if assignment.dmsf_file_revision.dmsf_file.project %>
                 <%= link_to_project assignment.dmsf_file_revision.dmsf_file.project %>
@@ -96,15 +106,17 @@
                 <% end %>
               <% end %>
             </td>
-            <td>
-              <%= link_to_context_menu %>
-            </td>
+            <% unless easy_extension %>
+              <td class="buttons">
+                <%= link_to_context_menu %>
+              </td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>
     </table>
   <% end %>
-  <%= context_menu %>
+  <%= context_menu unless easy_extension %>
 <% else %>
   <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>

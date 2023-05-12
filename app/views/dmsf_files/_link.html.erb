@@ -1,6 +1,4 @@
 <%
-  # encoding: utf-8
-  #
   # Redmine plugin for Document Management System "Features"
   #
   # Copyright © 2011-23 Karel Pičman <karel.picman@kontron.com>
@@ -19,11 +17,8 @@
   # along with this program; if not, write to the Free Software
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
-<% if link %>
-  <% cls = 'dmsf-gray' %>
-<% else %>
-  <% cls = '' %>
-<% end %>
+
+<% cls = link ? 'dmsf-gray' : '' %>
 
 <td class="<%= cls %>">
   <% file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: dmsf_file }) %>
@@ -69,10 +64,10 @@
                   class: 'icon-only icon-lock' %>
     <% elsif dmsf_file.unlockable? && (!dmsf_file.locked_for_user? || User.current.allowed_to?(:force_file_unlock, dmsf_file.project)) %>
       <%= link_to '', unlock_dmsf_files_path(id: dmsf_file, back_url: issue_path(@issue)),
-                  title: dmsf_file.get_locked_title,
+                  title: dmsf_file.locked_title,
                   class: 'icon-only icon-unlock' %>
     <% else %>
-      <span class="icon-only icon-unlock" title="<%= dmsf_file.get_locked_title %>"></span>
+      <span class="icon-only icon-unlock" title="<%= dmsf_file.locked_title %>"></span>
     <% end %>
     <% if !dmsf_file.locked? %>
       <% # Notifications %>

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,6 +20,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# DMSF controller
 class DmsfControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
   include Rails.application.routes.url_helpers
@@ -38,7 +38,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @request.session[:user_id] = @jsmith.id
     default_url_options[:host] = 'http://example.com'
   end
-  
+
   def test_edit_folder_forbidden
     # Missing permissions
     @role_manager.remove_permission! :folder_manipulation
@@ -48,7 +48,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_edit_folder_allowed
     # Permissions OK
-    get :edit, params: { id: @project1, folder_id: @folder1}
+    get :edit, params: { id: @project1, folder_id: @folder1 }
     assert_response :success
     # Custom fields
     assert_select 'label', { text: @custom_field.name }
@@ -65,7 +65,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_edit_folder_redirection_to_the_parent_folder
     post :save, params: { id: @project1, folder_id: @folder2.id, parent_id: @folder2.dmsf_folder.id,
-                          dmsf_folder: { title: @folder2.title, description: @folder2.description} }
+                          dmsf_folder: { title: @folder2.title, description: @folder2.description } }
     assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder2.dmsf_folder.id)
   end
 
@@ -91,7 +91,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_trash
-    @folder1.delete false
+    @folder1.delete commit: false
     get :trash, params: { id: @project1 }
     assert_response :success
     assert_select 'a', href:  dmsf_folder_path(id: @folder1.project.id, folder_id: @folder1.id)
@@ -125,7 +125,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_delete_locked
     # Permissions OK but the folder is locked
     @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1, folder_id: @folder2.id)
-    get :delete, params: { id: @project1, folder_id: @folder2.id, commit: false}
+    get :delete, params: { id: @project1, folder_id: @folder2.id, commit: false }
     assert_response :redirect
     assert_include l(:error_folder_is_locked), flash[:error]
   end
@@ -165,7 +165,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Missing permissions
     @role_manager.remove_permission! :folder_manipulation
     get :entries_operation, params: { id: @project1, delete_entries: 'Delete',
-        ids: ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@link1.id}", "file-link-#{@link2.id}"] }
+                                      ids: ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@link1.id}",
+                                            "file-link-#{@link2.id}"] }
     assert_response :forbidden
   end
 
@@ -174,7 +175,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1)
     flash[:error] = nil
     get :entries_operation, params: { id: @project1, delete_entries: 'Delete',
-        ids: ["folder-#{@folder7.id}", "file-#{@file1.id}", "file-link-#{@link2.id}"]}
+                                      ids: ["folder-#{@folder7.id}", "file-#{@file1.id}", "file-link-#{@link2.id}"] }
     assert_response :redirect
     assert_nil flash[:error]
   end
@@ -184,40 +185,42 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1)
     flash[:error] = nil
     get :entries_operation, params: { id: @project1, restore_entries: 'Restore',
-        ids: ["file-#{@file1.id}", "file-link-#{@link2.id}"]}
+                                      ids: ["file-#{@file1.id}", "file-link-#{@link2.id}"] }
     assert_response :redirect
     assert_nil flash[:error]
   end
 
   def test_show
-    get :show, params: { id: @project1.id }
-    assert_response :success
-    # New file link
-    assert_select 'a[href$=?]', '/dmsf/upload/multi_upload'
-    # New folder link
-    assert_select 'a[href$=?]', '/dmsf/new'
-    # Filters
-    assert_select 'fieldset#filters'
-    # Options
-    assert_select 'fieldset#options'
-    # Options - no "Group by"
-    assert_select 'select#group_by', count: 0
-    # The main table
-    assert_select 'table.dmsf'
-    # CSV export
-    assert_select 'a.csv'
-    # WebDAV
-    assert_select 'a', text: 'WebDAV'
-    # 'Zero Size File' document and an expander is present
-    assert_select 'a', text: @file10.title
-    assert_select 'span.dmsf-expander'
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => '1', 'dmsf_webdav_strategy' => 'WEBDAV_READ_WRITE' } do
+      get :show, params: { id: @project1.id }
+      assert_response :success
+      # New file link
+      assert_select 'a[href$=?]', '/dmsf/upload/multi_upload'
+      # New folder link
+      assert_select 'a[href$=?]', '/dmsf/new'
+      # Filters
+      assert_select 'fieldset#filters'
+      # Options
+      assert_select 'fieldset#options'
+      # Options - no "Group by"
+      assert_select 'select#group_by', count: 0
+      # The main table
+      assert_select 'table.dmsf'
+      # CSV export
+      assert_select 'a.csv'
+      # WebDAV
+      assert_select 'a.webdav', text: 'WebDAV'
+      # 'Zero Size File' document and an expander is present
+      assert_select 'a', text: @file10.title
+      assert_select 'span.dmsf-expander'
+    end
   end
 
   def test_show_webdav_disabled
     with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => nil } do
       get :show, params: { id: @project1.id }
       assert_response :success
-      assert_select 'a', text: 'WebDAV', count: 0
+      assert_select 'a.webdav', text: 'WebDAV', count: 0
     end
   end
 
@@ -239,7 +242,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_show_filters_custom_field
     get :show, params: { id: @project1.id, set_filter: '1', f: ['cf_21', ''], op: { 'cf_21' => '=' },
-                         v: { 'cf_21' => ['User documentation']} }
+                         v: { 'cf_21' => ['User documentation'] } }
     assert_response :success
     # Folder 1 with Tag=User documentation
     assert_select 'a', text: @folder1.title
@@ -271,7 +274,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     get :show, params: { id: @link1.project_id, folder_id: @link1.dmsf_folder_id }
     assert_response :success
     assert_select 'a', text: @link1.title, count: 1
-    assert_select 'a[href$=?]', "/projects/#{@link1.target_project.identifier}/dmsf?folder_id=#{@link1.target_folder.id}",
+    assert_select 'a[href$=?]',
+                  "/projects/#{@link1.target_project.identifier}/dmsf?folder_id=#{@link1.target_folder.id}",
                   count: 2 # Two because of folder1 and folder1_link
   end
 
@@ -298,44 +302,42 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_email_entries_email_from_forbidden
     @role_manager.remove_permission! :email_documents
-    with_settings plugin_redmine_dmsf: {'dmsf_documents_email_from' => 'karel.picman@kontron.com'} do
-      get :entries_operation, params: {id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
+    with_settings plugin_redmine_dmsf: { 'dmsf_documents_email_from' => 'karel.picman@kontron.com' } do
+      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"] }
       assert_response :forbidden
     end
   end
 
   def test_email_entries_email_from
-    with_settings plugin_redmine_dmsf: {'dmsf_documents_email_from' => 'karel.picman@kontron.com'} do
-      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
+    with_settings plugin_redmine_dmsf: { 'dmsf_documents_email_from' => 'karel.picman@kontron.com' } do
+      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"] }
       assert_response :success
       assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_from']
     end
   end
 
   def test_email_entries_reply_to
-    with_settings plugin_redmine_dmsf: {'dmsf_documents_email_reply_to' => 'karel.picman@kontron.com'} do
-      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
+    with_settings plugin_redmine_dmsf: { 'dmsf_documents_email_reply_to' => 'karel.picman@kontron.com' } do
+      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"] }
       assert_response :success
       assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
     end
   end
 
   def test_email_entries_links_only
-    with_settings plugin_redmine_dmsf: {'dmsf_documents_email_links_only' => '1'} do
-      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"]}
+    with_settings plugin_redmine_dmsf: { 'dmsf_documents_email_links_only' => '1' } do
+      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"] }
       assert_response :success
-      assert_select "input[id=email_links_only][value=1]"
+      assert_select 'input[id=email_links_only][value=1]'
     end
   end
 
   def test_entries_email
-    zip_file = Tempfile.new('test', File.join(Rails.root, 'tmp'))
-    get :entries_email, params:  { id: @project1, email:
-        {
-          to: 'to@test.com', from: 'from@test.com', subject: 'subject', body: 'body', expired_at: '2015-01-01',
-          folders: [], files: [@file1.id], zipped_content: zip_file.path
-        }
-    }
+    zip_file = Tempfile.new('test', Rails.root.join('tmp'))
+    get :entries_email,
+        params: { id: @project1, email: { to: 'to@test.com', from: 'from@test.com', subject: 'subject', body: 'body',
+                                          expired_at: '2015-01-01', folders: [], files: [@file1.id],
+                                          zipped_content: zip_file.path } }
     assert_redirected_to dmsf_folder_path(id: @project1)
   ensure
     zip_file.unlink
@@ -354,12 +356,13 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_append_email_forbidden
     @role_manager.remove_permission! :view_dmsf_files
-    post :append_email, params: { id: @project1, user_ids: @project1.members.collect{ |m| m.user.id }, format: 'js'}
+    post :append_email, params: { id: @project1, user_ids: @project1.members.collect { |m| m.user.id },
+                                  format: 'js' }
     assert_response :forbidden
   end
 
   def test_append_email
-    post :append_email, params: { id: @project1, user_ids: @project1.members.collect{ |m| m.user.id }, format: 'js'}
+    post :append_email, params: { id: @project1, user_ids: @project1.members.collect { |m| m.user.id }, format: 'js' }
     assert_response :success
   end
 
@@ -390,7 +393,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_show_with_sub_projects
-    with_settings plugin_redmine_dmsf: {'dmsf_projects_as_subfolders' => '1'} do
+    with_settings plugin_redmine_dmsf: { 'dmsf_projects_as_subfolders' => '1' } do
       get :show, params: { id: @project1.id }
       assert_response :success
       # @project5 is as a sub-folder
@@ -451,5 +454,4 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     get :index
     assert_response :forbidden
   end
-
 end

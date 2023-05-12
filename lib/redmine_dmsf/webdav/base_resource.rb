@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -24,24 +23,25 @@ require 'addressable/uri'
 
 module RedmineDmsf
   module Webdav
-
+    # Base resource
     class BaseResource < Dav4rack::Resource
       include Redmine::I18n
       include ActionView::Helpers::NumberHelper
 
       attr_reader :public_path
 
-      DIR_FILE = %{
+      DIR_FILE = %(
                     <tr>
                       <td class=\"name\"><a href=\"%s\">%s</a></td>
                       <td class=\"size\">%s</td>
                       <td class=\"type\">%s</td>
                       <td class=\"mtime\">%s</td>
                     </tr>
-                   }
+                   )
 
       def initialize(path, request, response, options)
         raise NotFound if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
+
         @project = nil
         @public_path = "#{options[:root_uri_path]}#{path}"
         @children = nil
@@ -64,7 +64,7 @@ module RedmineDmsf
 
       # Overridden
       def index_page
-        %{
+        %(
           <!DOCTYPE html>
           <html lang="#{current_language}">
             <head>
@@ -86,45 +86,46 @@ module RedmineDmsf
               <hr>
            </body>
           </html>
-        }
+        )
       end
 
       # Generate HTML for Get requests, or Head requests if no_body is true
       def html_display
         @response.body = +''
         Confict unless collection?
-        entities = children.map{ |child|
-          DIR_FILE % [
-              uri_encode(request.url_for(child.path)),
-            child.long_name || child.name, 
-            child.collection? ? '' : number_to_human_size(child.content_length),
-            child.special_type || child.content_type, 
-            child.last_modified
-          ]
-        } * "\n"
-        entities = DIR_FILE % [
-            uri_encode(request.url_for(parent.path)),
-          l(:parent_directory),
-          '',
-          '',
-          '',
-        ] + entities if parent        
-        @response.body << index_page % [ @path.empty? ? '/' : @path, @path.empty? ? '/' : @path, entities ]
+        entities = children.map do |child|
+          format(DIR_FILE,
+                 uri_encode(request.url_for(child.path)),
+                 child.long_name || child.name,
+                 child.collection? ? '' : number_to_human_size(child.content_length),
+                 child.special_type || child.content_type,
+                 child.last_modified)
+        end
+        entities *= "\n"
+        if parent
+          entities = format(DIR_FILE,
+                            uri_encode(request.url_for(parent.path)),
+                            l(:parent_directory),
+                            '',
+                            '',
+                            '') + entities
+        end
+        @response.body << format(index_page, @path.empty? ? '/' : @path, @path.empty? ? '/' : @path, entities)
       end
 
-      # Run method through proxy class - ensuring always compatible child is generated      
+      # Run method through proxy class - ensuring always compatible child is generated
       def child(name)
         new_path = @path
-        new_path = new_path + '/' unless new_path[-1,1] == '/'
-        new_path = '/' + new_path unless new_path[0,1] == '/'
+        new_path = "#{new_path}/" unless new_path[-1, 1] == '/'
+        new_path = "/#{new_path}" unless new_path[0, 1] == '/'
         ResourceProxy.new "#{new_path}#{name}", request, response, @options.merge(user: @user)
       end
-      
-      def child_project(p)
-        project_display_name = ProjectResource.create_project_name(p)
+
+      def child_project(project)
+        project_display_name = ProjectResource.create_project_name(project)
         new_path = @path
-        new_path = new_path + '/' unless new_path[-1,1] == '/'
-        new_path = '/' + new_path unless new_path[0,1] == '/'
+        new_path = "#{new_path}/" unless new_path[-1, 1] == '/'
+        new_path = "/#{new_path}" unless new_path[0, 1] == '/'
         new_path += project_display_name
         ResourceProxy.new new_path, request, response, @options.merge(user: @user, project: true)
       end
@@ -132,87 +133,82 @@ module RedmineDmsf
       def parent
         p = @__proxy.parent
         return nil unless p
+
         p.resource.nil? ? p : p.resource
       end
 
-      def options(request, response)
-        if @__proxy.read_only
-          response['Allow'] ||= 'OPTIONS,HEAD,GET,PROPFIND'
-        end
+      def options(_request, response)
+        response['Allow'] ||= 'OPTIONS,HEAD,GET,PROPFIND' if @__proxy.read_only
         OK
       end
 
       def project
-        get_resource_info
+        resource_info
         @project
       end
 
       def subproject
-        get_resource_info
+        resource_info
         @subproject
       end
 
       def folder
-        get_resource_info
+        resource_info
         @folder
       end
 
       def file
-        get_resource_info
+        resource_info
         @file
       end
 
-    protected
+      class << self
+        def get_project(scope, name, parent_project)
+          prj = nil
+          scope = scope.where(parent_id: parent_project.id) if parent_project
+          if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+            if name =~ /^\[?.+ (\d+)\]?$/
+              prj = scope.find_by(id: Regexp.last_match(1))
+              # Check again whether it's really the project and not a folder with a number as a suffix
+              prj = nil if prj && !name.start_with?("[#{DmsfFolder.get_valid_title(prj.name)}")
+            end
+          else
+            identifier = if name.start_with?('[') && name.end_with?(']')
+                           name[1..-2]
+                         else
+                           name
+                         end
+            prj = scope.find_by(identifier: identifier)
+          end
+          prj
+        end
+      end
+
+      protected
 
       def uri_encode(uri)
-        uri.gsub /[\(\)&\[\]]/, '(' => '%28', ')' => '%29', '&' => '%26', '[' => '%5B', ']' => '5D'
+        uri.gsub(/[()&\[\]]/, '(' => '%28', ')' => '%29', '&' => '%26', '[' => '%5B', ']' => '5D')
       end
-    
+
       def basename
         File.basename @path
       end
 
       def path_prefix
-        @public_path.gsub /#{Regexp.escape(path)}$/, ''
+        @public_path.gsub(/#{Regexp.escape(path)}$/, '')
       end
 
       def load_projects(project_scope)
         scope = project_scope.visible
         scope = scope.non_templates if scope.respond_to?(:non_templates)
         scope.find_each do |p|
-          if p.dmsf_available?
-            @children << child_project(p)
-          end
+          @children << child_project(p) if p.dmsf_available?
         end
-      end
-
-      def self.get_project(scope, name, parent_project)
-        prj = nil
-        if parent_project
-          scope = scope.where(parent_id: parent_project.id)
-        end
-        if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-          if name =~ /^\[?.+ (\d+)\]?$/
-            prj = scope.find_by(id: $1)
-            if prj
-              # Check again whether it's really the project and not a folder with a number as a suffix
-              prj = nil unless name.start_with?('[' + DmsfFolder::get_valid_title(prj.name))
-            end
-          end
-        else
-          if name.start_with?('[') && name.end_with?(']')
-            identifier = name[1..-2]
-          else
-            identifier = name
-          end
-          prj = scope.find_by(identifier: identifier)
-        end
-        prj
       end
 
       # Adds the given xml namespace to namespaces and returns the prefix
-      def add_namespace(ns, prefix = "unknown#{rand 65536}")
-        @__proxy.add_namespace ns, prefix
+      def add_namespace(namespace, prefix = "unknown#{rand 65_536}")
+        @__proxy.add_namespace namespace, prefix
       end
 
       # returns the prefix for the given namespace, adding it if necessary
@@ -222,14 +218,15 @@ module RedmineDmsf
 
       private
 
-      def get_resource_info
+      def resource_info
         return if @project # We have already got it
+
         pinfo = @path.split('/').drop(1)
         i = 1
         project_scope = Project.visible
         project_scope = project_scope.non_templates if project_scope.respond_to?(:non_templates)
-        while pinfo.length > 0
-          prj = BaseResource::get_project(project_scope, pinfo.first, @project)
+        until pinfo.empty?
+          prj = BaseResource.get_project(project_scope, pinfo.first, @project)
           if prj
             @project = prj
             if pinfo.length == 1
@@ -244,28 +241,24 @@ module RedmineDmsf
             else
               @file = DmsfFile.find_file_by_name(@project, @folder, pinfo.first)
               @folder = nil
-              unless (pinfo.length < 2 || @file)
-                Rails.logger.error "Resource not found: #{@path}"
+              unless pinfo.length < 2 || @file
+                Rails.logger.error { "Resource not found: #{@path}" }
                 raise Conflict
               end
               break # We're at the end
             end
           end
-          i = i + 1
+          i += 1
           pinfo = path.split('/').drop(i)
         end
       end
 
       def get_folder(name)
         return nil unless @project
-        f = DmsfFolder.visible.find_by(project_id: @project.id, dmsf_folder_id: @folder&.id, title: name)
-        if f && (!DmsfFolder.permissions?(f, false))
-          nil
-        else
-          f
-        end
-      end
 
+        f = DmsfFolder.visible.find_by(project_id: @project.id, dmsf_folder_id: @folder&.id, title: name)
+        f && !DmsfFolder.permissions?(f, allow_system: false) ? nil : f
+      end
     end
   end
 end

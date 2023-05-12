@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase 
-  
+# Files controller
+class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
   fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
 
   def setup
@@ -78,12 +77,12 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_view_preview
-    if RedmineDmsf::Preview.office_available?
-      get :view, params: { id: @file13.id }
-      assert_response :success
-      assert_equal 'application/pdf', @response.media_type
-      assert @response.body.starts_with?('%PDF')
-    end
+    return unless RedmineDmsf::Preview.office_available?
+
+    get :view, params: { id: @file13.id }
+    assert_response :success
+    assert_equal 'application/pdf', @response.media_type
+    assert @response.body.starts_with?('%PDF')
   end
 
   def delete_forbidden
@@ -125,20 +124,19 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
   def test_create_revision
     assert_difference 'DmsfFileRevision.count', +1 do
       post :create_revision,
-        params: {
-          id: @file1.id,
-          version_major: @file1.last_revision.major_version,
-          version_minor: @file1.last_revision.minor_version + 1,
-          dmsf_file_revision: {
-            title: @file1.last_revision.title,
-            name: @file1.last_revision.name,
-            description: @file1.last_revision.description,
-            comment: 'New revision'
-          }
-      }
+           params: {
+             id: @file1.id,
+             version_major: @file1.last_revision.major_version,
+             version_minor: @file1.last_revision.minor_version + 1,
+             dmsf_file_revision: {
+               title: @file1.last_revision.title,
+               name: @file1.last_revision.name,
+               description: @file1.last_revision.description,
+               comment: 'New revision'
+             }
+           }
     end
     assert_redirected_to dmsf_folder_path(id: @file1.project)
     assert_not_nil @file1.last_revision.digest
   end
-  
 end

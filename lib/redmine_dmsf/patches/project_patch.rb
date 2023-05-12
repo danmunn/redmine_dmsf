@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -24,29 +23,27 @@
 
 module RedmineDmsf
   module Patches
+    # Project
     module ProjectPatch
-
       ##################################################################################################################
       # Overridden methods
 
-      def initialize(attributes=nil, *args)
+      def initialize(attributes = nil, *args)
         super
-        if new_record?
-          self.watcher_user_ids = []
-        end
+        self.watcher_user_ids = [] if new_record?
       end
 
-      def copy(project, options={})
+      def copy(project, options = {})
         super(project, options)
         project = project.is_a?(Project) ? project : Project.find(project)
-        to_be_copied = %w(dmsf dmsf_folders approval_workflows)
-        to_be_copied = to_be_copied & Array.wrap(options[:only]) unless options[:only].nil?
+        to_be_copied = %w[dmsf dmsf_folders approval_workflows]
+        to_be_copied &= Array.wrap(options[:only]) if options[:only]
         if save
           to_be_copied.each do |name|
             send "copy_#{name}", project
           end
           save
-        else   
+        else
           false
         end
       end
@@ -56,18 +53,18 @@ module RedmineDmsf
       def self.prepended(base)
         base.class_eval do
           has_many :dmsf_files, -> { where(dmsf_folder_id: nil).order(:name) },
-            class_name: 'DmsfFile', foreign_key: 'project_id', dependent: :destroy
-          has_many :dmsf_folders, ->{ where(dmsf_folder_id: nil).order(:title) },
-            class_name: 'DmsfFolder', foreign_key: 'project_id', dependent: :destroy
+                   class_name: 'DmsfFile', foreign_key: 'project_id', dependent: :destroy
+          has_many :dmsf_folders, -> { where(dmsf_folder_id: nil).order(:title) },
+                   class_name: 'DmsfFolder', foreign_key: 'project_id', dependent: :destroy
           has_many :dmsf_workflows, dependent: :destroy
           has_many :folder_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFolder' },
-            class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
+                   class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
           has_many :file_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfFile' },
-            class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
+                   class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
           has_many :url_links, -> { where dmsf_folder_id: nil, target_type: 'DmsfUrl' },
-            class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
+                   class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
           has_many :dmsf_links, -> { where dmsf_folder_id: nil },
-            class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
+                   class_name: 'DmsfLink', foreign_key: 'project_id', dependent: :destroy
 
           belongs_to :default_dmsf_query, class_name: 'DmsfQuery'
 
@@ -75,19 +72,18 @@ module RedmineDmsf
 
           before_save :set_default_dmsf_notification
 
-          validates_length_of :dmsf_description, maximum: 65535
+          validates_length_of :dmsf_description, maximum: 65_535
 
-          const_set(:ATTACHABLE_DMS_AND_ATTACHMENTS, 1)
-          const_set(:ATTACHABLE_ATTACHMENTS, 2)
+          const_set :ATTACHABLE_DMS_AND_ATTACHMENTS, 1
+          const_set :ATTACHABLE_ATTACHMENTS, 2
         end
       end
 
       def set_default_dmsf_notification
-        if self.new_record?
-          if !self.dmsf_notification && Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
-            self.dmsf_notification = true
-          end
-        end
+        return unless new_record?
+        return unless !dmsf_notification && Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
+
+        self.dmsf_notification = true
       end
 
       def dmsf_count
@@ -98,7 +94,7 @@ module RedmineDmsf
 
       # Simple yet effective approach to copying things
       def copy_dmsf(project)
-        copy_dmsf_folders project, true
+        copy_dmsf_folders project, copy_files: true
         project.dmsf_files.visible.each do |f|
           f.copy_to self, nil
         end
@@ -110,14 +106,13 @@ module RedmineDmsf
         end
       end
 
-      def copy_dmsf_folders(project, copy_files = false)
+      def copy_dmsf_folders(project, copy_files: false)
         project.dmsf_folders.visible.each do |f|
-          f.copy_to self, nil, copy_files
+          f.copy_to self, nil, copy_files: copy_files
         end
         project.folder_links.visible.each do |l|
           l.copy_to self, nil
         end
-
       end
 
       def copy_approval_workflows(project)
@@ -128,22 +123,20 @@ module RedmineDmsf
 
       # Go recursively through the project tree until a dmsf enabled project is found
       def dmsf_available?
-        return true if(visible? && module_enabled?(:dmsf) && User.current&.allowed_to?(:view_dmsf_folders, self))
+        return true if visible? && module_enabled?(:dmsf) && User.current&.allowed_to?(:view_dmsf_folders, self)
+
         children.each do |child|
           return true if child.dmsf_available?
         end
         false
       end
-
     end
-
   end
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?(:easy_extensions)
-  RedmineExtensions::PatchManager.register_model_patch 'Project',
-    'RedmineDmsf::Patches::ProjectPatch', prepend: true
+if Redmine::Plugin.installed?('easy_extensions')
+  RedmineExtensions::PatchManager.register_model_patch 'Project', 'RedmineDmsf::Patches::ProjectPatch', prepend: true
 else
   Project.prepend RedmineDmsf::Patches::ProjectPatch
 end

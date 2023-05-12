@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 module RedmineDmsf
   module Patches
+    # Easy CRM case
     module EasyCrmCasePatch
-
       ##################################################################################################################
       # New methods
 
@@ -38,11 +37,11 @@ module RedmineDmsf
 
       def save_dmsf_attachments(dmsf_attachments)
         @saved_dmsf_attachments = []
-        if dmsf_attachments
-          dmsf_attachments.each do |_, dmsf_attachment|
-            a = Attachment.find_by_token(dmsf_attachment[:token])
-            @saved_dmsf_attachments << a if a
-          end
+        return unless dmsf_attachments
+
+        dmsf_attachments.each do |_, dmsf_attachment|
+          a = Attachment.find_by_token(dmsf_attachment[:token])
+          @saved_dmsf_attachments << a if a
         end
       end
 
@@ -52,11 +51,11 @@ module RedmineDmsf
 
       def save_dmsf_links(dmsf_links)
         @saved_dmsf_links = []
-        if dmsf_links
-          dmsf_links.each do |_, id|
-            l = DmsfLink.find_by(id: id)
-            @saved_dmsf_links << l if l
-          end
+        return unless dmsf_links
+
+        dmsf_links.each do |_, id|
+          l = DmsfLink.find_by(id: id)
+          @saved_dmsf_links << l if l
         end
       end
 
@@ -65,16 +64,16 @@ module RedmineDmsf
       end
 
       def save_dmsf_attachments_wfs(dmsf_attachments_wfs, dmsf_attachments)
-        if dmsf_attachments_wfs
-          @dmsf_attachments_wfs = {}
-          dmsf_attachments_wfs.each do |attachment_id, approval_workflow_id|
-            attachment = dmsf_attachments[attachment_id]
-            if attachment
-              a = Attachment.find_by_token(attachment[:token])
-              wf = DmsfWorkflow.find_by(id: approval_workflow_id)
-              @dmsf_attachments_wfs[a.id] = wf if wf && a
-            end
-          end
+        return unless dmsf_attachments_wfs
+
+        @dmsf_attachments_wfs = {}
+        dmsf_attachments_wfs.each do |attachment_id, approval_workflow_id|
+          attachment = dmsf_attachments[attachment_id]
+          next unless attachment
+
+          a = Attachment.find_by_token(attachment[:token])
+          wf = DmsfWorkflow.find_by(id: approval_workflow_id)
+          @dmsf_attachments_wfs[a.id] = wf if wf && a
         end
       end
 
@@ -83,12 +82,12 @@ module RedmineDmsf
       end
 
       def save_dmsf_links_wfs(dmsf_links_wfs)
-        if dmsf_links_wfs
-          @saved_dmsf_links_wfs = {}
-          dmsf_links_wfs.each do |dmsf_link_id, approval_workflow_id|
-            wf = DmsfWorkflow.find_by(id: approval_workflow_id)
-            @saved_dmsf_links_wfs[dmsf_link_id.to_i] = wf if wf
-          end
+        return unless dmsf_links_wfs
+
+        @saved_dmsf_links_wfs = {}
+        dmsf_links_wfs.each do |dmsf_link_id, approval_workflow_id|
+          wf = DmsfWorkflow.find_by(id: approval_workflow_id)
+          @saved_dmsf_links_wfs[dmsf_link_id.to_i] = wf if wf
         end
       end
 
@@ -96,11 +95,11 @@ module RedmineDmsf
         @saved_dmsf_links_wfs || {}
       end
 
-      def system_folder(create = false)
-        parent = DmsfFolder.issystem.find_by(project_id: self.project_id, title: '.CRM cases')
+      def system_folder(create: false)
+        parent = DmsfFolder.issystem.find_by(project_id: project_id, title: '.CRM cases')
         if create && !parent
           parent = DmsfFolder.new
-          parent.project_id = self.project_id
+          parent.project_id = project_id
           parent.title = '.CRM cases'
           parent.description = 'Documents assigned to CRM cases'
           parent.user_id = User.anonymous.id
@@ -109,12 +108,12 @@ module RedmineDmsf
         end
         if parent
           folder = DmsfFolder.issystem.where(["project_id = ? AND dmsf_folder_id = ? AND title LIKE '? - %'",
-            self.project_id, parent.id, self.id]).first
+                                              project_id, parent.id, id]).first
           if create && !folder
             folder = DmsfFolder.new
             folder.dmsf_folder_id = parent.id
-            folder.project_id = self.project_id
-            folder.title = "#{self.id} - #{self.name}"
+            folder.project_id = project_id
+            folder.title = "#{id} - #{name}"
             folder.user_id = User.anonymous.id
             folder.system = true
             folder.save
@@ -124,40 +123,29 @@ module RedmineDmsf
       end
 
       def dmsf_files
-        files = []
-        folder = self.system_folder
-        if folder
-          files = folder.dmsf_files.to_a
-        end
-        files
+        system_folder&.dmsf_files
       end
 
       def dmsf_links
-        links = []
-        folder = self.system_folder
-        if folder
-          links = folder.dmsf_links
-        end
-        links
+        system_folder&.dmsf_links
       end
 
       def delete_system_folder
-        folder = self.system_folder
-        folder.destroy if folder
+        system_folder&.destroy
       end
 
       def dmsf_file_added(dmsf_file)
-        self.journalize_dmsf_file dmsf_file, :added
+        journalize_dmsf_file dmsf_file, :added
       end
 
       def dmsf_file_removed(dmsf_file)
-        self.journalize_dmsf_file dmsf_file, :removed
+        journalize_dmsf_file dmsf_file, :removed
       end
 
       # Adds a journal detail for an attachment that was added or removed
       def journalize_dmsf_file(dmsf_file, added_or_removed)
-        key = (added_or_removed == :removed ? :old_value : :value)
-        init_journal(User.current)
+        key = added_or_removed == :removed ? :old_value : :value
+        init_journal User.current
         current_journal.details << JournalDetail.new(
           property: 'dmsf_file',
           prop_key: dmsf_file.id,
@@ -165,13 +153,12 @@ module RedmineDmsf
         )
         current_journal.save
       end
-
     end
   end
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?(:easy_extensions)
-  RedmineExtensions::PatchManager.register_model_patch 'EasyCrmCase',
-    'RedmineDmsf::Patches::EasyCrmCasePatch', if: proc { Redmine::Plugin.installed?(:easy_crm) }
+if Redmine::Plugin.installed?('easy_extensions')
+  RedmineExtensions::PatchManager.register_model_patch 'EasyCrmCase', 'RedmineDmsf::Patches::EasyCrmCasePatch',
+                                                       if: proc { Redmine::Plugin.installed?('easy_crm') }
 end

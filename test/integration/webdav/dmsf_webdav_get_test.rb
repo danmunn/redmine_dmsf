@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,8 +21,8 @@
 
 require File.expand_path('../../../test_helper', __FILE__)
 
+# WebDAV GET test
 class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
-
   fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def test_should_deny_anonymous
@@ -45,15 +44,16 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     get '/dmsf/webdav', params: nil, headers: @admin
     assert_response :success
     assert_equal 'text/html', response.headers['Content-Type']
-    assert response.headers['Content-Length'].to_i > 0, "Content-Length should be > 0, but was #{response.headers['Content-Length']}"
+    assert response.headers['Content-Length'].to_i.positive?,
+           "Content-Length should be > 0, but was #{response.headers['Content-Length']}"
   end
 
   def test_should_list_dmsf_enabled_project
     get '/dmsf/webdav', params: nil, headers: @admin
     assert_response :success
-    assert !response.body.match(@project1.identifier).nil?,
-           "Expected to find project #{@project1.identifier} in return data"
-    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
+    assert_not response.body.match(@project1.identifier).nil?,
+               "Expected to find project #{@project1.identifier} in return data"
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
       project1_uri = Addressable::URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
       get '/dmsf/webdav', params: nil, headers: @admin
       assert_response :success
@@ -66,7 +66,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     @project2.disable_module! :dmsf
     get '/dmsf/webdav', params: nil, headers: @jsmith
     assert_response :success
-    assert !response.body.match(@project2.identifier)
+    assert_not response.body.match(@project2.identifier)
   end
 
   def test_should_return_status_404_when_project_does_not_exist
@@ -114,7 +114,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   def test_download_file_from_dmsf_enabled_project
     get "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
     assert_response :success
-    with_settings plugin_redmine_dmsf: {'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1'} do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
       project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
       get "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
       assert_response :conflict
@@ -172,5 +172,4 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     get "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@folder10.title}", params: nil, headers: @admin
     assert_response :success
   end
-
 end

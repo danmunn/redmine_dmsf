@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Workflow tests
 class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
-
   fixtures :dmsf_file_revisions, :dmsf_workflows, :dmsf_workflow_steps, :dmsf_workflow_step_assignments,
            :dmsf_workflow_step_actions, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
@@ -59,26 +58,26 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
 
   def test_validate_name_length
     @wf1.name = 'a' * 256
-    assert !@wf1.save
+    assert_not @wf1.save
     assert_equal 1, @wf1.errors.count
   end
 
   def test_validate_name_presence
     @wf1.name = ''
-    assert !@wf1.save
+    assert_not @wf1.save
     assert_equal 1, @wf1.errors.count
   end
 
   def test_validate_name_uniqueness_globaly
     @wf2.name = @wf1.name
-    assert !@wf2.save
+    assert_not @wf2.save
     assert_equal 1, @wf2.errors.count
   end
 
   def test_validate_name_uniqueness_localy
     @wf2.name = @wf1.name
     @wf2.project_id = @wf1.project_id
-    assert !@wf2.save
+    assert_not @wf2.save
     assert_equal 1, @wf2.errors.count
   end
 
@@ -102,58 +101,22 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
 
   def test_reorder_steps_highest
     @wf1.reorder_steps(3, 1)
-    @wfs1.reload
-    @wfs2.reload
-    @wfs3.reload
-    @wfs4.reload
-    @wfs5.reload
-    assert_equal @wfs5.step, 1
-    assert_equal @wfs1.step, 2
-    assert_equal @wfs4.step, 2
-    assert_equal @wfs2.step, 3
-    assert_equal @wfs3.step, 3
+    assert_equal [2, 2, 3, 3, 1], @wf1.dmsf_workflow_steps.collect(&:step)
   end
 
   def test_reorder_steps_higher
     @wf1.reorder_steps(3, 2)
-    @wfs1.reload
-    @wfs2.reload
-    @wfs3.reload
-    @wfs4.reload
-    @wfs5.reload
-    assert_equal @wfs1.step, 1
-    assert_equal @wfs4.step, 1
-    assert_equal @wfs5.step, 2
-    assert_equal @wfs2.step, 3
-    assert_equal @wfs3.step, 3
+    assert_equal [1, 1, 3, 3, 2], @wf1.dmsf_workflow_steps.collect(&:step)
   end
 
   def test_reorder_steps_lower
     @wf1.reorder_steps(1, 2)
-    @wfs1.reload
-    @wfs2.reload
-    @wfs3.reload
-    @wfs4.reload
-    @wfs5.reload
-    assert_equal @wfs2.step, 1
-    assert_equal @wfs3.step, 1
-    assert_equal @wfs1.step, 2
-    assert_equal @wfs4.step, 2
-    assert_equal @wfs5.step, 3
+    assert_equal [2, 2, 1, 1, 3], @wf1.dmsf_workflow_steps.collect(&:step)
   end
 
   def test_reorder_steps_lowest
     @wf1.reorder_steps(1, 3)
-    @wfs1.reload
-    @wfs2.reload
-    @wfs3.reload
-    @wfs4.reload
-    @wfs5.reload
-    assert_equal @wfs2.step, 1
-    assert_equal @wfs3.step, 1
-    assert_equal @wfs5.step, 2
-    assert_equal @wfs1.step, 3
-    assert_equal @wfs4.step, 3
+    assert_equal [3, 3, 1, 1, 2], @wf1.dmsf_workflow_steps.collect(&:step)
   end
 
   def test_delegates
@@ -162,8 +125,8 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     delegates = @wf1.delegates('Dave', nil, nil)
     assert_equal delegates.size, 1
     delegates = @wf1.delegates(nil, @wfsa1.id, 2)
-    assert !delegates.any?{ |user| user.id == @wfsa1.user_id }
-    assert delegates.any?{ |user| user.id == 8 }
+    assert_not(delegates.any? { |user| user.id == @wfsa1.user_id })
+    assert(delegates.any? { |user| user.id == 8 })
   end
 
   def test_next_assignments
@@ -175,10 +138,10 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
   def test_assign
     @wf2.assign @revision2.id
     @wf2.dmsf_workflow_steps.each do |step|
-      assert DmsfWorkflowStepAssignment.where(dmsf_workflow_step_id: step.id, dmsf_file_revision_id: @revision2.id).exists?
+      assert DmsfWorkflowStepAssignment.exists?(dmsf_workflow_step_id: step.id, dmsf_file_revision_id: @revision2.id)
     end
   end
-  
+
   def test_try_finish_yes
     # The forkflow is waiting for an approval
     assert_equal DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, @revision1.workflow
@@ -198,11 +161,11 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     # The forkflow is waiting for an approval
     assert_equal DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, @revision1.workflow
     # The workflow is not finished
-    assert !@wf1.try_finish(@revision1, @wfsac1, @jsmith.id)
+    assert_not @wf1.try_finish(@revision1, @wfsac1, @jsmith.id)
     @revision1.reload
     assert_equal DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, @revision1.workflow
   end
-  
+
   def test_participiants
     assert_equal @wf1.participiants.count, 2
   end
@@ -228,5 +191,4 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     assert_equal wf.project_id, @project5.id
     assert_equal wf.name, "#{@wf1.name}_copy"
   end
-  
 end

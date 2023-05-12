@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -22,22 +21,19 @@
 module RedmineDmsf
   module Hooks
     module Helpers
-    
+      # Issue helper hooks
       class IssuesHelperHooks < Redmine::Hook::Listener
-
         def helper_issues_show_detail_after_setting(context)
-          if context.is_a?(Hash)
-            detail = context[:detail]
-            case detail.property
-              when 'dmsf_file'
-                detail.prop_key = l(:label_document)
-                detail.property = 'attachment'
-            end
+          return unless context.is_a?(Hash)
+
+          detail = context[:detail]
+          case detail.property
+          when 'dmsf_file'
+            detail.prop_key = l(:label_document)
+            detail.property = 'attachment'
           end
         end
-
       end
-
     end
   end
 end

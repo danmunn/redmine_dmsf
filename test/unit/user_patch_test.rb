@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# User tests
 class UserPatchTest < RedmineDmsf::Test::UnitTest
-
   fixtures :dmsf_links, :dmsf_locks, :dmsf_workflows, :dmsf_workflow_steps,
            :dmsf_workflow_step_assignments, :dmsf_workflow_step_actions, :dmsf_folders,
            :dmsf_files, :dmsf_file_revisions
@@ -37,18 +36,15 @@ class UserPatchTest < RedmineDmsf::Test::UnitTest
     assert_equal 0, DmsfFile.where(deleted_by_user_id: id).all.size
     # TODO: Expected: 0, Actual: 1 in Easy extension
     f = DmsfFolder.where(user_id: id).first
-    if(f)
-      puts "#{f.id}, #{f.title}, #{f.user_id}, #{f.deleted}"
-    end
-    #assert_equal 0, DmsfFolder.where(user_id: id).all.size
+    puts "#{f.id}, #{f.title}, #{f.user_id}, #{f.deleted}" if f
+    # assert_equal 0, DmsfFolder.where(user_id: id).all.size
     assert_equal 0, DmsfFolder.where(deleted_by_user_id: id).all.size
     assert_equal 0, DmsfLink.where(user_id: id).all.size
     assert_equal 0, DmsfLink.where(deleted_by_user_id: id).all.size
-    #assert_equal 0, DmsfLock.where(user_id: id).all.size
-    #assert_equal 0, DmsfWorkflowStepAction.where(author_id: id).all.size
-    #assert_equal 0, DmsfWorkflowStepAssignment.where(user_id: id).all.size
-    #assert_equal 0, DmsfWorkflowStep.where(user_id: id).all.size
-    #assert_equal 0, DmsfWorkflow.where(author_id: id).all.size
+    # assert_equal 0, DmsfLock.where(user_id: id).all.size
+    # assert_equal 0, DmsfWorkflowStepAction.where(author_id: id).all.size
+    # assert_equal 0, DmsfWorkflowStepAssignment.where(user_id: id).all.size
+    # assert_equal 0, DmsfWorkflowStep.where(user_id: id).all.size
+    # assert_equal 0, DmsfWorkflow.where(author_id: id).all.size
   end
-
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,12 +20,12 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# File revision tests
 class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
-
   include Redmine::I18n
 
   fixtures :dmsf_locks, :dmsf_workflows, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
-         
+
   def setup
     super
     @revision1 = DmsfFileRevision.find 1
@@ -38,16 +37,14 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_delete_restore
-    @revision5.delete false
-    assert @revision5.deleted?,
-      "File revision #{@revision5.name} hasn't been deleted"
+    @revision5.delete commit: false
+    assert @revision5.deleted?, "File revision #{@revision5.name} hasn't been deleted"
     @revision5.restore
-    assert !@revision5.deleted?,
-      "File revision #{@revision5.name} hasn't been restored"
+    assert_not @revision5.deleted?, "File revision #{@revision5.name} hasn't been restored"
   end
 
   def test_destroy
-    @revision5.delete true
+    @revision5.delete commit: true
     assert_nil DmsfFileRevision.find_by(id: @revision5.id)
   end
 
@@ -62,7 +59,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     f.project_id = 1
     f.name = 'Testfile.txt'
     f.dmsf_folder = nil
-    f.notification = !Setting.plugin_redmine_dmsf['dmsf_default_notifications'].blank?
+    f.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
     f.save
 
     # Create two new revisions, r1 and r2
@@ -87,22 +84,18 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     # This is a very stupid since the generation and storing of files below must be done during the
     # same second, so wait until the microsecond part of the DateTime is less than 10 ms, should be
     # plenty of time to do the rest then.
-    wait_timeout = 2000
-    while DateTime.current.usec > 10000
-        wait_timeout -= 10
-        if wait_timeout <= 0
-            flunk 'Waited too long.'
-        end
-        sleep 0.01
+    wait_timeout = 2_000
+    while DateTime.current.usec > 10_000
+      wait_timeout -= 10
+      flunk 'Waited too long.' if wait_timeout <= 0
+      sleep 0.01
     end
 
     # First, generate the r1 storage filename and save the file
     r1.disk_filename = r1.new_storage_filename
     assert r1.save
     # Just make sure the file exists
-    File.open(r1.disk_file, 'wb') do |f|
-        f.write '1234'
-    end
+    File.binwrite r1.disk_file, '1234'
 
     # Directly after the file has been stored generate the r2 storage filename.
     # Hopefully the seconds part of the DateTime.current has not changed and the generated filename will
@@ -120,10 +113,10 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     @revision1.major_version = 1
     @revision1.minor_version = 0
     assert_equal '1.0', @revision1.version
-    @revision1.major_version = -('A'.ord)
-    @revision1.minor_version = -(' '.ord)
+    @revision1.major_version = -'A'.ord
+    @revision1.minor_version = -' '.ord
     assert_equal 'A', @revision1.version
-    @revision1.major_version = -('A'.ord)
+    @revision1.major_version = -'A'.ord
     @revision1.minor_version = 0
     assert_equal 'A.0', @revision1.version
   end
@@ -155,34 +148,34 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert_equal 2, @revision1.major_version
     assert_equal 0, @revision1.minor_version
     # A -> A.1
-    @revision1.major_version = -('A'.ord)
-    @revision1.minor_version = -(' '.ord)
+    @revision1.major_version = -'A'.ord
+    @revision1.minor_version = -' '.ord
     @revision1.increase_version DmsfFileRevision::MINOR_VERSION
-    assert_equal -('A'.ord), @revision1.major_version
+    assert_equal(-'A'.ord, @revision1.major_version)
     assert_equal 1, @revision1.minor_version
     # A -> B
-    @revision1.major_version = -('A'.ord)
-    @revision1.minor_version = -(' '.ord)
+    @revision1.major_version = -'A'.ord
+    @revision1.minor_version = -' '.ord
     @revision1.increase_version DmsfFileRevision::MAJOR_VERSION
-    assert_equal -('B'.ord), @revision1.major_version
-    assert_equal -(' '.ord), @revision1.minor_version
+    assert_equal(-'B'.ord, @revision1.major_version)
+    assert_equal(-' '.ord, @revision1.minor_version)
     # A.1 -> B
-    @revision1.major_version = -('A'.ord)
+    @revision1.major_version = -'A'.ord
     @revision1.minor_version = 1
     @revision1.increase_version DmsfFileRevision::MAJOR_VERSION
-    assert_equal -('B'.ord), @revision1.major_version
-    assert_equal -(' '.ord), @revision1.minor_version
+    assert_equal(-'B'.ord, @revision1.major_version)
+    assert_equal(-' '.ord, @revision1.minor_version)
   end
 
   def test_description_max_length
     @revision1.description = 'a' * 2.kilobytes
-    assert !@revision1.save
+    assert_not @revision1.save
     @revision1.description = 'a' * 1.kilobyte
     assert @revision1.save
   end
 
   def test_protocol_txt
-    assert !@revision1.protocol
+    assert_not @revision1.protocol
   end
 
   def test_protocol_doc
@@ -224,21 +217,20 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     User.current = @admin
     @revision1.dmsf_file.lock!
     User.current = @jsmith
-    assert !@revision1.obsolete
+    assert_not @revision1.obsolete
     assert_equal 1, @revision1.errors.count
     assert @revision1.errors.full_messages.to_sentence.include?(l(:error_file_is_locked))
   end
 
   def test_major_version_cannot_be_nil
     @revision1.major_version = nil
-    assert !@revision1.save
+    assert_not @revision1.save
     assert @revision1.errors.full_messages.to_sentence.include?('Major version cannot be blank')
   end
 
   def test_size_validation
     Setting.attachment_max_size = '1'
     @revision1.size = 2.kilobytes
-    assert !@revision1.valid?
+    assert_not @revision1.valid?
   end
-
 end

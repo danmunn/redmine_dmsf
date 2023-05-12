@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -33,14 +32,14 @@ class DmsfFile < ActiveResource::Base
 end
 
 # 2. Get a document
-FILE_ID = 41532 
+FILE_ID = 41_532
 file = DmsfFile.find FILE_ID
 if file
   puts file.id
   puts file.title
   puts file.name
-  puts file.version  
-  puts file.project_id  
+  puts file.version
+  puts file.project_id
   puts file.content_url
 else
   puts "No file with id = #{FILE_ID} found"

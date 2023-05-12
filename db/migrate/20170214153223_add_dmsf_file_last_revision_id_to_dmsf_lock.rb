@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -19,8 +19,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Rename column
 class AddDmsfFileLastRevisionIdToDmsfLock < ActiveRecord::Migration[4.2]
-
   def up
     rename_column :dmsf_locks, :revision, :dmsf_file_last_revision_id
   end
@@ -28,5 +28,4 @@ class AddDmsfFileLastRevisionIdToDmsfLock < ActiveRecord::Migration[4.2]
   def down
     rename_column :dmsf_locks, :dmsf_file_last_revision_id, :revision
   end
-
 end

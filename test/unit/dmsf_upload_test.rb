@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -21,8 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
+# Upload tests
 class DmsfUploadTest < RedmineDmsf::Test::UnitTest
-
   fixtures :projects
 
   def setup
@@ -49,5 +48,4 @@ class DmsfUploadTest < RedmineDmsf::Test::UnitTest
       assert_equal 0, upload.minor_version
     end
   end
-
 end

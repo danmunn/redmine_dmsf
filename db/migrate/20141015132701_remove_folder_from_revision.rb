@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,12 +18,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Remove column
 class RemoveFolderFromRevision < ActiveRecord::Migration[4.2]
-
-  def up      
+  def up
     remove_column :dmsf_file_revisions, :dmsf_folder_id
   end
-  
+
   def down
     add_column :dmsf_file_revisions, :dmsf_folder_id, :integer, null: true
     DmsfFileRevision.reset_column_information
@@ -32,7 +32,6 @@ class RemoveFolderFromRevision < ActiveRecord::Migration[4.2]
         revision.dmsf_folder_id = revision.dmsf_file.dmsf_folder_id
         revision.save validate: false
       end
-    end        
+    end
   end
-
 end

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,8 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Add column
 class DmsfAttachable < ActiveRecord::Migration[4.2]
-
   def up
     # DMSF - project's root folder notification
     add_column :projects, :dmsf_act_as_attachable, :integer, default: 1, null: false
@@ -29,5 +29,4 @@ class DmsfAttachable < ActiveRecord::Migration[4.2]
   def down
     remove_column :projects, :dmsf_act_as_attachable
   end
-
 end

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
 #
@@ -18,16 +18,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# modify column
 class DmsfDescriptionLimit < ActiveRecord::Migration[4.2]
-
   def up
-    change_column :projects, :dmsf_description, :text, null: true, limit: 65535
-    change_column :dmsf_folders, :description, :text, null: true, limit: 65535
+    change_column :projects, :dmsf_description, :text, null: true, limit: 65_535
+    change_column :dmsf_folders, :description, :text, null: true, limit: 65_535
   end
 
   def down
     change_column :projects, :dmsf_description, :text
     change_column :dmsf_folders, :description, :text
   end
-
 end

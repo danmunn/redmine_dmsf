@@ -136,16 +136,16 @@ jobs:
           bundle exec rake redmine:plugins:test:units
           bundle exec rake redmine:plugins:test:functionals
           bundle exec rake redmine:plugins:test:integration
-      - name: Libraries tests
-        run: |
-          cd /opt/redmine
-          ruby plugins/redmine_dmsf/test/unit/lib/redmine_dmsf/dmsf_macros_test.rb
-          ruby plugins/redmine_dmsf/test/unit/lib/redmine_dmsf/dmsf_plugin_test.rb
       - name: Helpers tests
         run: |
           cd /opt/redmine
           ruby plugins/redmine_dmsf/test/helpers/dmsf_helper_test.rb
           ruby plugins/redmine_dmsf/test/helpers/dmsf_queries_helper_test.rb
+      - name: Rubocop
+        # Run the Rubocop tests
+        run: |
+          cd /opt/redmine                    
+          bundle exec rubocop -c plugins/redmine_dmsf/.rubocop.yml plugins/redmine_dmsf/
       - name: Litmus
         # Prepare Redmine's environment for WebDAV testing
         # Run Webrick server
@@ -156,6 +156,7 @@ jobs:
           cd /opt/redmine
           bundle exec rake redmine:dmsf_webdav_test_on
           bundle exec rails server -u webrick -e test -d
+          sleep(5)
           litmus http://localhost:3000/dmsf/webdav/dmsf_test_project admin admin
           kill `cat tmp/pids/server.pid`
           bundle exec rake redmine:dmsf_webdav_test_off

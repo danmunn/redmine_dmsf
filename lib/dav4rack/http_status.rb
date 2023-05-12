@@ -1,19 +1,17 @@
 # frozen_string_literal: true
 
 module Dav4rack
-
+  # HTTP status
   module HttpStatus
-
-    class Status < Exception
-
+    # Status
+    class Status < StandardError
       class << self
         attr_accessor :code, :reason_phrase
-        alias_method :to_i, :code
+        alias to_i code
 
         def status_line
           "#{code} #{reason_phrase}"
         end
-
       end
 
       def code
@@ -31,10 +29,9 @@ module Dav4rack
       def to_i
         self.class.to_i
       end
-
     end
 
-    StatusMessage = {
+    STATUS_MESSAGES = {
       100 => 'Continue',
       101 => 'Switching Protocols',
       102 => 'Processing',
@@ -81,20 +78,17 @@ module Dav4rack
       504 => 'Gateway Timeout',
       505 => 'HTTP Version Not Supported',
       507 => 'Insufficient Storage'
-    }
+    }.freeze
 
-    StatusClasses = { }
-
-    StatusMessage.each do |code, reason_phrase|
-      klass = Class.new(Status)
-      klass.code = code
-      klass.reason_phrase = reason_phrase
-      klass_name = reason_phrase.gsub(/[ \-]/,'')
-      const_set(klass_name, klass)
-      StatusClasses[code] = klass
-    end
-
+    STATUS_CLASSES = {}.tap do |hsh|
+      STATUS_MESSAGES.each do |code, reason_phrase|
+        klass = Class.new(Status)
+        klass.code = code
+        klass.reason_phrase = reason_phrase
+        klass_name = reason_phrase.gsub(/[ \-]/, '')
+        const_set klass_name, klass
+        hsh[code] = klass
+      end
+    end.freeze
   end
-
 end
-

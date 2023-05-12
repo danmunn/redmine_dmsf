@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -23,10 +22,9 @@
 
 module RedmineDmsf
   module Test
-
+    # Integration test
     class IntegrationTest < Redmine::IntegrationTest
-
-      self.fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles
+      fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles
 
       def setup
         @admin = credentials('admin', 'admin')
@@ -63,18 +61,16 @@ module RedmineDmsf
         Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
         Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
-        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join(%w(files dmsf))
+        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join('files', ['dmsf'])
         FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
         User.current = nil
       end
 
       def teardown
         # Delete our tmp folder
-        begin
-          FileUtils.rm_rf DmsfFile.storage_path
-        rescue => e
-          Rails.logger.error e.message
-        end
+        FileUtils.rm_rf DmsfFile.storage_path
+      rescue StandardError => e
+        Rails.logger.error e.message
       end
 
       def self.fixtures(*table_names)
@@ -93,37 +89,34 @@ module RedmineDmsf
       protected
 
       def check_headers_exist
-        assert !(response.headers.nil? || response.headers.empty?),
-               'Head returned without headers' # Headers exist?
+        assert_not response.headers.blank?, 'Head returned without headers' # Headers exist?
         values = {}
         values[:etag] = { optional: true, content: response.headers['Etag'] }
         values[:content_type] = response.headers['Content-Type']
         values[:last_modified] = { optional: true, content: response.headers['Last-Modified'] }
         single_optional = false
-        values.each do |key,val|
+        values.each do |key, val|
           if val.is_a?(Hash)
             if val[:optional].nil? || !val[:optional]
-              assert(!(val[:content].nil? || val[:content].empty?), "Expected header #{key} was empty." ) if single_optional
+              assert_not val[:content].blank?, "Expected header #{key} was empty." if single_optional
             else
               single_optional = true
             end
           else
-            assert !(val.nil? || val.empty?), "Expected header #{key} was empty."
+            assert_not val.blank?, "Expected header #{key} was empty."
           end
         end
       end
 
       def check_headers_dont_exist
-        assert !(response.headers.nil? || response.headers.empty?), 'Head returned without headers' # Headers exist?
+        assert_not response.headers.blank?, 'Head returned without headers' # Headers exist?
         values = {}
         values[:etag] = response.headers['Etag']
         values[:last_modified] = response.headers['Last-Modified']
-        values.each do |key,val|
-          assert (val.nil? || val.empty?), "Expected header #{key} should be empty."
+        values.each do |key, val|
+          assert val.blank?, "Expected header #{key} should be empty."
         end
       end
-
     end
-
   end
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
 # Redmine plugin for Document Management System "Features"
@@ -19,23 +18,21 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class DmsfWorkflowStepAssignment < ActiveRecord::Base
-
+# Workflow step assignment
+class DmsfWorkflowStepAssignment < ApplicationRecord
   belongs_to :dmsf_workflow_step
   belongs_to :user
   belongs_to :dmsf_file_revision
 
   has_many :dmsf_workflow_step_actions, dependent: :destroy
 
-  validates :dmsf_workflow_step, presence: true
-  validates :dmsf_file_revision, presence: true
-  validates_uniqueness_of :dmsf_workflow_step_id, scope: [:dmsf_file_revision_id], case_sensitive: true
+  validates :dmsf_workflow_step_id, uniqueness: { scope: [:dmsf_file_revision_id], case_sensitive: true }
 
   def add?(dmsf_file_revision_id)
-    if dmsf_file_revision_id == dmsf_file_revision_id
+    if dmsf_file_revision_id == self.dmsf_file_revision_id
       add = true
       dmsf_workflow_step_actions.each do |action|
-        if action.is_finished?
+        if action.finished?
           add = false
           break
         end
@@ -44,5 +41,4 @@ class DmsfWorkflowStepAssignment < ActiveRecord::Base
     end
     false
   end
-
 end
