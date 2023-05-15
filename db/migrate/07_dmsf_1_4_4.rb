@@ -67,12 +67,12 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
     DmsfFileLock.update_all entity_type: 0, lock_type_cd: 0, lock_scope_cd: 0
     change_table :dmsf_file_locks, bulk: true do |t|
       # These are not null-allowed columns
-      t.change_column :entity_type, :integer, null: false
-      t.change_column :lock_type_cd, :integer, null: false
-      t.change_column :lock_scope_cd, :integer, null: false
+      t.change :entity_type, :integer, null: false
+      t.change :lock_type_cd, :integer, null: false
+      t.change :lock_scope_cd, :integer, null: false
       # Data cleanup
-      t.rename_column :dmsf_file_id, :entity_id
-      t.remove_column :locked
+      t.rename :dmsf_file_id, :entity_id
+      t.remove :locked
       t.rename_table :dmsf_locks
     end
     # Not sure if this is the right place to do this, as its file manipulation, not database (strictly)
@@ -120,11 +120,11 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
     DmsfFileLock.update_all locked: true
     change_table :dmsf_file_locks, bulk: true do |t|
       t.rename_column :entity_id, :dmsf_file_id
-      t.remove_column :entity_type
-      t.remove_column :lock_type_cd
-      t.remove_column :lock_scope_cd
-      t.remove_column :expires_at
-      t.remove_column :uuid
+      t.remove :entity_type
+      t.remove :lock_type_cd
+      t.remove :lock_scope_cd
+      t.remove :expires_at
+      t.remove :uuid
     end
     # Not sure if this is the right place to do this, as its file manipulation, not database (stricly)
     begin

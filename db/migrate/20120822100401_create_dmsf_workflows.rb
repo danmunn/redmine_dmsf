@@ -39,11 +39,11 @@ class CreateDmsfWorkflows < ActiveRecord::Migration[4.2]
 
   def down
     change_table :dmsf_file_revisions, bulk: true do |t|
-      t.remove_column :dmsf_workflow_id
-      t.remove_column :dmsf_workflow_assigned_by
-      t.remove_column :dmsf_workflow_assigned_at
-      t.remove_column :dmsf_workflow_started_by
-      t.remove_column :dmsf_workflow_started_at
+      t.remove :dmsf_workflow_id
+      t.remove :dmsf_workflow_assigned_by
+      t.remove :dmsf_workflow_assigned_at
+      t.remove :dmsf_workflow_started_by
+      t.remove :dmsf_workflow_started_at
     end
     drop_table :dmsf_workflows
   end

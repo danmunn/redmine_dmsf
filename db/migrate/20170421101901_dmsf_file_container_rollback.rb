@@ -66,9 +66,9 @@ class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
     # Make DB changes in dmsf_files
     change_table :dmsf_files, bulk: true do |t|
       t.remove_index %i[container_id container_type]
-      t.remove_column :container_type
+      t.remove :container_type
       t.rename_column :container_id, :project_id
-      t.add_index :project_id
+      t.index :project_id
     end
     # Initialize system folder_flag to dmsf_folders
     DmsfFolder.where(id: new_folder_ids).update_all system: true
@@ -96,8 +96,8 @@ class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
       file.save!
     end
     change_table :dmsf_files, bulk: true do |t|
-      t.remove_column :project_id # temporarily added for the save method
-      t.add_index(%i[container_id container_type]) unless t.index_exists?(%i[container_id container_type])
+      t.remove :project_id # temporarily added for the save method
+      t.index(%i[container_id container_type]) unless t.index_exists?(%i[container_id container_type])
     end
     # dmsf_folders
     DmsfFolder.where(system: true).delete_all

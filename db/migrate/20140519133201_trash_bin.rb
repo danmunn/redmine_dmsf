@@ -32,8 +32,8 @@ class TrashBin < ActiveRecord::Migration[4.2]
 
   def down
     change_table :dmsf_folders, bulk: true do |t|
-      t.remove_column :deleted
-      t.remove_column :deleted_by_user_id
+      t.remove :deleted
+      t.remove :deleted_by_user_id
     end
   end
 end

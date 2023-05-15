@@ -23,14 +23,14 @@ class ChangeIndexInDmsfLocks < ActiveRecord::Migration[5.2]
   def up
     change_table :dmsf_locks, bulk: true do |t|
       t.remove_index :entity_id
-      t.add_index %i[entity_id entity_type]
+      t.index %i[entity_id entity_type]
     end
   end
 
   def down
     change_table :dmsf_locks, bulk: true do |t|
       t.remove_index %i[entity_id entity_type]
-      t.add_index :entity_id
+      t.index :entity_id
     end
   end
 end

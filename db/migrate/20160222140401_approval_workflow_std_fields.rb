@@ -36,9 +36,9 @@ class ApprovalWorkflowStdFields < ActiveRecord::Migration[4.2]
 
   def down
     change_table :dmsf_workflows, bulk: true do |t|
-      t.remove_column :updated_on
-      t.remove_column :created_on
-      t.remove_column :author_id
+      t.remove :updated_on
+      t.remove :created_on
+      t.remove :author_id
     end
   end
 end
