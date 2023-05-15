@@ -40,13 +40,18 @@ namespace :redmine do
     # Settings
     Setting.rest_api_enabled = true
     # Plugin's settings
-    Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
-    Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-    Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
-    Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join('files', ['dmsf'])
+    plugin_settings = ActiveSupport::HashWithIndifferentAccess.new
+    plugin_settings['dmsf_webdav'] = '1'
+    plugin_settings['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
+    plugin_settings['dmsf_storage_directory'] = File.join('files', ['dmsf'])
+    Setting.plugin_redmine_dmsf = plugin_settings
   end
 
   task dmsf_webdav_test_off: :environment do
+    # Settings
+    Setting.rest_api_enabled = false
+    # Plugin's settings
+    Setting.plugin_redmine_dmsf = nil
     prj = Project.find_by(identifier: 'dmsf_test_project')
     prj&.delete
   end
