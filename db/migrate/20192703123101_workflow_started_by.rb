@@ -22,8 +22,8 @@
 class WorkflowStartedBy < ActiveRecord::Migration[5.2]
   def change
     change_table :dmsf_file_revisions, bulk: true do |t|
-      t.rename_column :dmsf_workflow_assigned_by, :dmsf_workflow_assigned_by_user_id
-      t.rename_column :dmsf_workflow_started_by, :dmsf_workflow_started_by_user_id
+      t.rename :dmsf_workflow_assigned_by, :dmsf_workflow_assigned_by_user_id
+      t.rename :dmsf_workflow_started_by, :dmsf_workflow_started_by_user_id
     end
   end
 end

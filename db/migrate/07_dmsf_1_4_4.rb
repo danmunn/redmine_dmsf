@@ -73,8 +73,8 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
       # Data cleanup
       t.rename :dmsf_file_id, :entity_id
       t.remove :locked
-      t.rename_table :dmsf_locks
     end
+    rename_table :dmsf_file_locks, :dmsf_locks
     # Not sure if this is the right place to do this, as its file manipulation, not database (strictly)
     say 'Completing one-time file migration ...'
     begin
@@ -109,7 +109,7 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
     end
   end
 
-  def self.down
+  def down
     rename_table :dmsf_locks, :dmsf_file_locks
     add_column :dmsf_file_locks, :locked, :boolean, default: false, null: false
     # Data cleanup - delete all expired locks, or any folder locks
@@ -119,7 +119,7 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
     say 'Changing all records to be locked'
     DmsfFileLock.update_all locked: true
     change_table :dmsf_file_locks, bulk: true do |t|
-      t.rename_column :entity_id, :dmsf_file_id
+      t.rename :entity_id, :dmsf_file_id
       t.remove :entity_type
       t.remove :lock_type_cd
       t.remove :lock_scope_cd

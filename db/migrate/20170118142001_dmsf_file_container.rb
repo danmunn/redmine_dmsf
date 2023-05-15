@@ -23,7 +23,7 @@ class DmsfFileContainer < ActiveRecord::Migration[4.2]
   def up
     change_table :dmsf_files, bulk: true do |t|
       t.remove_index :project_id
-      t.rename_column :project_id, :container_id
+      t.rename :project_id, :container_id
       t.column :container_type, :string, limit: 30, null: false, default: 'Project'
       t.index %i[container_id container_type]
     end
@@ -34,7 +34,7 @@ class DmsfFileContainer < ActiveRecord::Migration[4.2]
     change_table :dmsf_files, bulk: true do |t|
       t.remove_index %i[container_id container_type]
       t.remove :container_type
-      t.rename_column :container_id, :project_id
+      t.rename :container_id, :project_id
       t.index :project_id
     end
   end
