@@ -80,8 +80,8 @@ jobs:
       - name: Install dependencies
         # Install necessary packages
         run: |
-          sudo apt update
-          sudo apt install -y litmus libreoffice
+          sudo apt-get update
+          sudo apt-get install -y litmus libreoffice
       - name: Clone Redmine
         # Get the latest stable Redmine
         run: svn export http://svn.redmine.org/redmine/branches/5.0-stable/ /opt/redmine
