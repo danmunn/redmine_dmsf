@@ -160,8 +160,8 @@ jobs:
           litmus http://localhost:3000/dmsf/webdav/dmsf_test_project admin admin
           kill `cat tmp/pids/server.pid`
           bundle exec rake redmine:dmsf_webdav_test_off
-        env:
-          TESTS: "basic copymove props"
+        #env:
+        #  TESTS: "basic copymove props"
       - name: Cleanup
         # Rollback plugin's changes to the database
         # Stop the database engine
