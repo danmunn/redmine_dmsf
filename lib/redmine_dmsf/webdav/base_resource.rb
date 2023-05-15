@@ -30,14 +30,16 @@ module RedmineDmsf
 
       attr_reader :public_path
 
-      DIR_FILE = %(
-                    <tr>
-                      <td class=\"name\"><a href=\"%s\">%s</a></td>
-                      <td class=\"size\">%s</td>
-                      <td class=\"type\">%s</td>
-                      <td class=\"mtime\">%s</td>
-                    </tr>
-                   )
+      unless const_defined?(DIR_FILE)
+        DIR_FILE = %(
+                      <tr>
+                        <td class=\"name\"><a href=\"%s\">%s</a></td>
+                        <td class=\"size\">%s</td>
+                        <td class=\"type\">%s</td>
+                        <td class=\"mtime\">%s</td>
+                      </tr>
+                     )
+      end
 
       def initialize(path, request, response, options)
         raise NotFound if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
