@@ -23,7 +23,7 @@ class AddExternal < ActiveRecord::Migration[4.2]
   def up
     change_table :dmsf_links, bulk: true do |t|
       t.change_column :target_id, :integer, null: true
-      t.add_column :external_url, :string, null: true
+      t.column :external_url, :string, null: true
     end
   end
 

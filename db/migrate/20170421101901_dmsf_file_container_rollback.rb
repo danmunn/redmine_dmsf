@@ -83,8 +83,8 @@ class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
       t.remove_index(:project_id) if t.index_exists?(:project_id)
       t.rename_column :project_id, :container_id
       # Temporarily added for the save method
-      t.add_column :project_id, :int, null: true
-      t.add_column :container_type, :string, limit: 30, null: false, default: 'Project'
+      t.column :project_id, :int, null: true
+      t.column :container_type, :string, limit: 30, null: false, default: 'Project'
     end
     DmsfFile.update_all container_type: 'Project'
     file_folder_ids.each do |id, title|

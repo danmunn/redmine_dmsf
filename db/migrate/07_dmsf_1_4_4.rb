@@ -32,13 +32,13 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
   def up
     change_table :dmsf_file_locks, bulk: true do |t|
       # Add our entity_type column (used with our entity type)
-      t.add_column :entity_type, :integer, null: true
+      t.column :entity_type, :integer, null: true
       # Add our lock relevent columns (ENUM) - null (till we upgrade data)
-      t.add_column :lock_type_cd, :integer, null: true
-      t.add_column :lock_scope_cd, :integer, null: true
-      t.add_column :uuid, :string, null: true, limit: 36
+      t.column :lock_type_cd, :integer, null: true
+      t.column :lock_scope_cd, :integer, null: true
+      t.column :uuid, :string, null: true, limit: 36
       # Add our expires_at column
-      t.add_column :expires_at, :datetime, null: true
+      t.column :expires_at, :datetime, null: true
     end
     do_not_delete = []
     # - 2012-07-12: Better compatibility for postgres - query used 3 columns however

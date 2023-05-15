@@ -22,9 +22,9 @@
 class ApprovalWorkflowStdFields < ActiveRecord::Migration[4.2]
   def up
     change_table :dmsf_workflows, bulk: true do |t|
-      t.add_column :updated_on, :timestamp
-      t.add_column :created_on, :datetime
-      t.add_column :author_id, :integer
+      t.column :updated_on, :timestamp
+      t.column :created_on, :datetime
+      t.column :author_id, :integer
     end
     DmsfWorkflow.reset_column_information
     # Set updated_on
