@@ -34,7 +34,7 @@ module RedmineDmsf
         lang = current_language.to_s.downcase
         path = File.join(File.dirname(__FILE__),
                          '..', '..', '..', 'assets', 'help', lang, 'wiki_syntax.html')
-        @dmsf_macro_list << File.exist?(path) ? "#{lang};#{l(:label_help)}" : "en;#{l(:label_help)}"
+        @dmsf_macro_list << (File.exist?(path) ? "#{lang};#{l(:label_help)}" : "en;#{l(:label_help)}")
         path = File.join(File.dirname(__FILE__),
                          '..', '..', '..', 'assets', 'javascripts', 'lang', "dmsf_button-#{lang}.js")
         lang = 'en' unless File.exist?(path)
