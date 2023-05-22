@@ -21,9 +21,9 @@
 name: "GitHub CI"
 on:
   push:
-    branches: ["rubocop"]
+    branches: ["devel"]
   pull_request:
-    branches: ["rubocop"]
+    branches: ["devel"]
 jobs:
   plugin_tests:
     strategy:
