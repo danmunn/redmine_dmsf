@@ -208,7 +208,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   # {{dmsft(document_id)}}
   def test_macro_dmsft
     text = textilizable("{{dmsft(#{@file1.id}, 1)}}")
-    assert_equal content_tag(:p, @file1.text_preview(1)), text
+    assert_equal content_tag(:p, content_tag(:pre, @file1.text_preview(1))), text
   end
 
   def test_macro_dmsft_no_permissions
@@ -228,7 +228,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id})}}")
     link = image_tag(url, alt: @file7.name, title: @file7.title, size: nil)
-    assert_equal sanitize(content_tag(:p, link)), text
+    assert_equal content_tag(:p, link), text
   end
 
   # {{dmsf_image(file_id file_id)}}
@@ -236,7 +236,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id} #{@file7.id})}}")
     link = image_tag(url, alt: @file7.name, title: @file7.title, size: nil)
-    assert_equal sanitize(content_tag(:p, safe_join([link, link]))), text
+    assert_equal content_tag(:p, safe_join([link, link])), text
   end
 
   def test_macro_dmsf_image_size
@@ -244,7 +244,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id}, size=#{size})}}")
     link = image_tag(url, alt: @file7.name, title: @file7.title, width: size, height: size)
-    assert_equal sanitize(content_tag(:p, link)), text
+    assert_equal content_tag(:p, link), text
     # TODO: arguments src and with and height are swapped
     # size = '300'
     # text = textilizable("{{dmsf_image(#{@file7.id}, size=#{size})}}")
@@ -258,11 +258,11 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     height = '480'
     text = textilizable("{{dmsf_image(#{@file7.id}, height=#{height})}}")
     link = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: height)
-    assert_equal sanitize(content_tag(:p, link)), text
+    assert_equal content_tag(:p, link), text
     width = '480'
     text = textilizable("{{dmsf_image(#{@file7.id}, width=#{height})}}")
     link = image_tag(url, alt: @file7.name, title: @file7.title, width: width, height: 'auto')
-    assert_equal sanitize(content_tag(:p, link)), text
+    assert_equal content_tag(:p, link), text
   end
 
   def test_macro_dmsf_image_no_permissions
@@ -344,8 +344,13 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     text = textilizable("{{dmsftn(#{@file7.id})}}")
     url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 200)
-    link = link_to(img, url, title: h(@file7.last_revision.try(:tooltip)))
-    assert_equal sanitize(content_tag(:p, link)), text
+    link = link_to(img,
+                   url,
+                   target: '_blank',
+                   rel: 'noopener',
+                   title: h(@file7.last_revision.try(:tooltip)),
+                   'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
+    assert_equal content_tag(:p, link), text
   end
 
   # {{dmsftn(file_id file_id)}}
@@ -353,8 +358,11 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     text = textilizable("{{dmsftn(#{@file7.id} #{@file7.id})}}")
     url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 200)
-    link = link_to(img, url, title: h(@file7.last_revision.try(:tooltip)))
-    assert_equal sanitize(content_tag(:p, safe_join([link, link]))), text
+    link = link_to(img, url, target: '_blank',
+                             rel: 'noopener',
+                             title: h(@file7.last_revision.try(:tooltip)),
+                             'data-downloadurl': 'image/gif:test.gif:http://example.com/dmsf/files/7/test.gif')
+    assert_equal content_tag(:p, link + link), text
   end
 
   # {{dmsftn(file_id size=300)}}
@@ -363,31 +371,42 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     size = '300'
     text = textilizable("{{dmsftn(#{@file7.id}, size=#{size})}}")
     img = image_tag(url, alt: @file7.name, title: @file7.title, size: size)
-    link = link_to(
-      img,
-      url,
-      target: '_blank',
-      rel: 'noopener',
-      title: h(@file7.last_revision.try(:tooltip)),
-      'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}"
-    )
-    assert_equal sanitize(content_tag(:p, link)), text
+    link = link_to(img,
+                   url,
+                   target: '_blank',
+                   rel: 'noopener',
+                   title: h(@file7.last_revision.try(:tooltip)),
+                   'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
+    assert_equal content_tag(:p, link), text
     # TODO: arguments src and with and height are swapped
     # size = '640x480'
     # text = textilizable("{{dmsftn(#{@file7.id}, size=#{size})}}")
     # img = image_tag(url, alt: @file7.name, title: @file7.title, width: 640, height: 480)
-    # link = link_to(img, url, title: h(@file7.last_revision.try(:tooltip)))
-    # assert_equal sanitize(content_tag(:p, link)), text
+    # link = link_to(img,
+    #                url,
+    #                target: '_blank',
+    #                rel: 'noopener',
+    #                title: h(@file7.last_revision.try(:tooltip)),
+    #                'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
+    assert_equal content_tag(:p, link), text
     height = '480'
     text = textilizable("{{dmsftn(#{@file7.id}, height=#{height})}}")
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 480)
-    link = link_to(img, url, title: h(@file7.last_revision.try(:tooltip)))
-    assert_equal sanitize(content_tag(:p, link)), text
+    link = link_to(img, url, target: '_blank',
+                             rel: 'noopener',
+                             title: h(@file7.last_revision.try(:tooltip)),
+                             'data-downloadurl': 'image/gif:test.gif:http://example.com/dmsf/files/7/test.gif')
+    assert_equal content_tag(:p, link), text
     width = '640'
     text = textilizable("{{dmsftn(#{@file7.id}, width=#{width})}}")
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 640, height: 'auto')
-    link = link_to(img, url, title: h(@file7.last_revision.try(:tooltip)))
-    assert_equal sanitize(content_tag(:p, link)), text
+    link = link_to(img,
+                   url,
+                   target: '_blank',
+                   rel: 'noopener',
+                   title: h(@file7.last_revision.try(:tooltip)),
+                   'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
+    assert_equal content_tag(:p, link), text
   end
 
   def test_macro_dmsftn_no_permissions
@@ -396,7 +415,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     url = view_dmsf_file_url(@file7)
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 200)
     link = link_to(img, url, title: h(@file7.last_revision.try(:tooltip)))
-    assert_not_equal sanitize(content_tag(:p, link)), text
+    assert_not_equal content_tag(:p, link), text
   end
 
   def test_macro_dmsftn_dmsf_off
@@ -405,7 +424,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     url = view_dmsf_file_url(@file7)
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 200)
     link = link_to(img, url, title: h(@file7.last_revision.try(:tooltip)))
-    assert_not_equal sanitize(content_tag(:p, link)), text
+    assert_not_equal content_tag(:p, link), text
   end
 
   def test_macro_dmsftn_not_image

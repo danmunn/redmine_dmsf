@@ -363,7 +363,7 @@ class DmsfFileRevision < ApplicationRecord
       text += ' / ' if text.present?
       text += comment
     end
-    ActionView::Base.full_sanitizer.sanitize text
+    text
   end
 
   def workflow_tooltip

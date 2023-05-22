@@ -71,7 +71,7 @@ module RedmineDmsf
           unless allowed_to_attach_attachments(container)
             html << context[:hook_caller].late_javascript_tag("$('.attachments-container:not(.dmsf-uploader)').hide();")
           end
-          sanitize html
+          html
         end
 
         def view_issues_show_description_bottom(context = {})
@@ -183,7 +183,7 @@ module RedmineDmsf
                                                                            awf: true } })
           html << '</span>'
           html << (description ? '</p>' : '</div>')
-          sanitize html
+          html
         end
 
         def show_attached_documents(container, controller, _attachments = nil)
@@ -208,7 +208,7 @@ module RedmineDmsf
             html << attachment_row(dmsf_file, link, issue, controller)
           end
           html << '</tbody>'
-          sanitize html
+          html
         end
 
         def attachment_row(dmsf_file, link, issue, controller)

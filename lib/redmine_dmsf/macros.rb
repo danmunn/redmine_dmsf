@@ -150,7 +150,7 @@ module RedmineDmsf
         file = DmsfFile.visible.find args[0]
         raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
 
-        sanitize file.text_preview(args[1]).gsub("\n", '<br>')
+        content_tag :pre, file.text_preview(args[1])
       end
 
       # dmsf_image - link to an image
@@ -170,7 +170,7 @@ module RedmineDmsf
         width = options[:width]
         height = options[:height]
         ids = args[0].split
-        html = +''
+        html = []
         ids.each do |id|
           file = DmsfFile.visible.find(id)
           raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
@@ -189,7 +189,7 @@ module RedmineDmsf
                     image_tag url, alt: filename, title: file.title, size: size
                   end
         end
-        sanitize html
+        safe_join html
       end
 
       # dmsf_video - link to a video
@@ -240,7 +240,7 @@ module RedmineDmsf
         width = options[:width]
         height = options[:height]
         ids = args[0].split
-        html = +''
+        html = []
         ids.each do |id|
           file = DmsfFile.visible.find(id)
           raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
@@ -264,7 +264,7 @@ module RedmineDmsf
                           title: h(file.last_revision.try(:tooltip)),
                           'data-downloadurl' => "#{file.last_revision.detect_content_type}:#{h(file.name)}:#{url}")
         end
-        sanitize html
+        safe_join html
       end
 
       # dmsfw - link to a document's approval workflow status
