@@ -147,7 +147,7 @@ class DmsfFilesController < ApplicationController
         i = 0
         params[:dmsf_file_revision][:custom_field_values].each do |_, v|
           revision.custom_field_values[i].value = v
-          i += i
+          i += 1
         end
       end
 
