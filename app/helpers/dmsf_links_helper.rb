@@ -21,13 +21,13 @@
 # Links helper
 module DmsfLinksHelper
   def folder_tree_options_for_select(folder_tree, options = {})
-    s = +''
+    s = []
     folder_tree.each do |name, id|
       tag_options = { value: id }
       tag_options[:selected] = 'selected' if id == options[:selected]
       s << content_tag('option', name, tag_options)
     end
-    s
+    safe_join s
   end
 
   # An integer test
