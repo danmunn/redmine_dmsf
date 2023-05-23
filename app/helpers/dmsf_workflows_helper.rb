@@ -27,26 +27,29 @@ module DmsfWorkflowsHelper
     principal_pages = Redmine::Pagination::Paginator.new principal_count, 100, params['page']
     principals = scope.offset(principal_pages.offset).limit(principal_pages.per_page).to_a
     # Delegation
-    s = if dmsf_workflow_step_assignment_id
-          content_tag(
-            'div',
-            content_tag('div', principals_radio_button_tags('step_action', principals), id: 'users_for_delegate'),
-            class: 'objects-selection'
-          )
-        # New step
-        else
-          content_tag(
-            'div',
-            content_tag('div', principals_check_box_tags('user_ids[]', principals), id: 'users'),
-            class: 'objects-selection'
-          )
-        end
+    s = []
+    s << if dmsf_workflow_step_assignment_id
+           content_tag(
+             'div',
+             content_tag('div', principals_radio_button_tags('step_action', principals),
+                         id: 'dmsf_users_for_delegate'),
+             class: 'objects-selection'
+           )
+         # New step
+         else
+           content_tag(
+             'div',
+             content_tag('div', principals_check_box_tags('user_ids[]', principals), id: 'users'),
+             class: 'objects-selection'
+           )
+         end
     links = pagination_links_full(principal_pages, principal_count, per_page_links: false) do |text, parameters, _|
       link_to text,
               autocomplete_for_user_dmsf_workflow_path(workflow, parameters.merge(q: params[:q], format: 'js')),
               remote: true
     end
-    s + content_tag('span', links, class: 'pagination')
+    s << content_tag('span', links, class: 'pagination')
+    safe_join s
   end
 
   def dmsf_workflow_steps_options_for_select(steps)
@@ -91,14 +94,14 @@ module DmsfWorkflowsHelper
   end
 
   def principals_radio_button_tags(name, principals)
-    s = +''
+    s = []
     principals.each do |principal|
-      s << content_tag(
-        'label',
-        "#{radio_button_tag(name, principal.id * 10, false, onclick: 'noteMandatory(true);', id: nil)} #{h(principal)}"
-      )
-      s << "\n"
+      n = principal.id * 10
+      id = "principal_#{n}"
+      s << radio_button_tag(name, n, false, onclick: 'noteMandatory(true);', id: id)
+      s << content_tag(:label, h(principal), for: id)
+      s << tag.br
     end
-    s
+    safe_join s
   end
 end

@@ -182,7 +182,7 @@ class DmsfFilesController < ApplicationController
             if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.any?
               max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
               to = recipients.collect { |user, _| user.name }.first(max_notifications).join(', ')
-              to << recipients.count > max_notifications ? ',...' : '.'
+              to << (recipients.count > max_notifications ? ',...' : '.')
             end
           rescue StandardError => e
             Rails.logger.error "Could not send email notifications: #{e.message}"
@@ -198,7 +198,7 @@ class DmsfFilesController < ApplicationController
     respond_to do |format|
       format.html do
         flash[:error] = l(:error_file_is_locked) if @file.locked_for_user?
-        flash[:warning] = l(:warning_email_notifications, to: to) if to
+        flash[:warning] = l(:warning_email_notifications, to: to) if to.present?
         flash[:error] = @file.errors.full_messages.to_sentence if @file.errors.any?
         flash[:error] = revision.errors.full_messages.to_sentence if revision.errors.any?
         flash[:notice] = (flash[:notice].nil? ? '' : flash[:notice]) + l(:notice_file_revision_created) if ok
@@ -223,8 +223,8 @@ class DmsfFilesController < ApplicationController
             if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.any?
               max_notification = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
               to = recipients.collect { |user, _| user.name }.first(max_notification).join(', ')
-              to << recipients.count > max_notification ? ',...' : '.'
-              flash[:warning] = l(:warning_email_notifications, to: to)
+              to << (recipients.count > max_notification ? ',...' : '.')
+              flash[:warning] = l(:warning_email_notifications, to: to) if to.present?
             end
           rescue StandardError => e
             Rails.logger.error "Could not send email notifications: #{e.message}"

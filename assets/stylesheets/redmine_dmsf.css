@@ -56,11 +56,12 @@
 /* Approval workflow */
 #dmsf_users_for_delegate {
     height: 200px;
-    overflow:auto;
+    overflow: auto;
+    column-width: auto
 }
 
 #dmsf_users_for_delegate label {
-    display: block;
+    display: unset;
 }
 
 .dmsf-workflows.locked a {

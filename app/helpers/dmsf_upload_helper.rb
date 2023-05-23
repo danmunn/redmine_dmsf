@@ -139,15 +139,10 @@ module DmsfUploadHelper
       begin
         recipients = DmsfMailer.deliver_files_updated(project, files)
         if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.any?
-          to = recipients.collect { |user, _| user.name }.first(
-            Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
-          ).join(', ')
-          to << if recipients.count > Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
-                  ',...'
-                else
-                  '.'
-                end
-          controller.flash[:warning] = l(:warning_email_notifications, to: to) if controller
+          max_recipients = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
+          to = recipients.collect { |user, _| user.name }.first(max_recipients).join(', ')
+          to << (recipients.count > max_recipients ? ',...' : '.')
+          controller.flash[:warning] = l(:warning_email_notifications, to: to) if controller && to.present?
         end
       rescue StandardError => e
         Rails.logger.error { "Could not send email notifications: #{e.message}" }

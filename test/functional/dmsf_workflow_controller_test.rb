@@ -173,7 +173,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     end
     assert_response :success
     ws = DmsfWorkflowStep.order(id: :desc).first
-    assert_equal @wf1.id, ws.dmsf_workflow_id
+    assert_equal @wf1.id, ws&.dmsf_workflow_id
     assert_equal 1, ws.step
     assert_equal '1st step', ws.name
     assert_equal @someone.id, ws.user_id
@@ -187,7 +187,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
     end
     assert_response :redirect
     ws = DmsfWorkflowStep.where(dmsf_workflow_id: @wf1.id).order(id: :asc).first
-    assert_equal 1, ws.step
+    assert_equal 1, ws&.step
   end
 
   def test_reorder_steps_to_lower
@@ -253,7 +253,7 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
   def test_action_approve
     post(
       :new_action, params: {
-        commit: l(:but19ton_submit),
+        commit: l(:button_submit),
         id: @wf1.id,
         dmsf_workflow_step_assignment_id: @wfsa2.id,
         dmsf_file_revision_id: @revision1.id,
@@ -263,10 +263,8 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       }
     )
     assert_redirected_to dmsf_folder_path(id: @project1)
-    assert DmsfWorkflowStepAction.where(
-      dmsf_workflow_step_assignment_id: @wfsa2.id,
-      action: DmsfWorkflowStepAction::ACTION_APPROVE
-    ).first
+    assert DmsfWorkflowStepAction.exists?(dmsf_workflow_step_assignment_id: @wfsa2.id,
+                                          action: DmsfWorkflowStepAction::ACTION_APPROVE)
   end
 
   def test_action_reject
@@ -281,10 +279,8 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       }
     )
     assert_response :redirect
-    assert DmsfWorkflowStepAction.where(
-      dmsf_workflow_step_assignment_id: @wfsa2.id,
-      action: DmsfWorkflowStepAction::ACTION_REJECT
-    ).first
+    assert DmsfWorkflowStepAction.exists?(dmsf_workflow_step_assignment_id: @wfsa2.id,
+                                          action: DmsfWorkflowStepAction::ACTION_REJECT)
   end
 
   def test_action
@@ -314,10 +310,8 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
       }
     )
     assert_redirected_to dmsf_folder_path(id: @project1)
-    assert DmsfWorkflowStepAction.where(
-      dmsf_workflow_step_assignment_id: @wfsa2.id,
-      action: DmsfWorkflowStepAction::ACTION_DELEGATE
-    ).first
+    assert DmsfWorkflowStepAction.exists?(dmsf_workflow_step_assignment_id: @wfsa2.id,
+                                          action: DmsfWorkflowStepAction::ACTION_DELEGATE)
     @wfsa2.reload
     assert_equal @wfsa2.user_id, @admin.id
   end

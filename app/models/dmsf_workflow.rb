@@ -57,17 +57,18 @@ class DmsfWorkflow < ApplicationRecord
   def self.workflow_info(workflow, workflow_id, revision_id)
     text = ''
     names = ''
-    dmsf_workflow = DmsfWorkflow.find_by(id: workflow_id)
-    if dmsf_workflow
-      assignments = dmsf_workflow.next_assignments(revision_id)
-      if assignments.any?
-        user_ids = assignments.map(&:user_id)
-        users = User.where(id: user_ids).all
-        names = users.map(&:name).join(',')
-        workflow_step_id = assignments.first[:dmsf_workflow_step_id]
-        if workflow_step_id
-          step = DmsfWorkflowStep.find_by(id: workflow_step_id)
-          text = step.name if step&.name.present?
+    if workflow.to_i == STATE_WAITING_FOR_APPROVAL
+      dmsf_workflow = DmsfWorkflow.find_by(id: workflow_id)
+      if dmsf_workflow
+        assignments = dmsf_workflow.next_assignments(revision_id)
+        if assignments.any?
+          user_ids = assignments.map(&:user_id)
+          names = User.where(id: user_ids).all.map(&:name).join(',')
+          workflow_step_id = assignments.first[:dmsf_workflow_step_id]
+          if workflow_step_id
+            step = DmsfWorkflowStep.find_by(id: workflow_step_id)
+            text = step.name if step&.name.present?
+          end
         end
       end
     end
@@ -250,9 +251,9 @@ class DmsfWorkflow < ApplicationRecord
     )
     return unless Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && controller && recipients.present?
 
-    to = recipients.collect(&:name)
-                   .first(Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i).join(', ')
-    to << recipients.count > Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i ? ',...' : '.'
-    controller.flash[:warning] = l(:warning_email_notifications, to: to)
+    max_recipients = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
+    to = recipients.collect(&:name).first(max_recipients).join(', ')
+    to << (recipients.count > max_recipients.to_i ? ',...' : '.')
+    controller.flash[:warning] = l(:warning_email_notifications, to: to) if controller && to.present?
   end
 end

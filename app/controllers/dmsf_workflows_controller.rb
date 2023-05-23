@@ -52,12 +52,16 @@ class DmsfWorkflowsController < ApplicationController
     @path = dmsf_workflows_path
   end
 
-  def action; end
+  def action
+    # Noting to do
+  end
 
-  def show; end
+  def show
+    # Noting to do
+  end
 
   def new_action
-    if params[:commit] != l(:button_submit) && !request.post?
+    unless params[:commit] == l(:button_submit) && request.post?
       redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
       return
     end
@@ -97,8 +101,8 @@ class DmsfWorkflowsController < ApplicationController
               if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.present?
                 max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
                 to = recipients.collect(&:name).first(max_notifications).join(', ')
-                to << recipients.count > max_notifications ? ',...' : '.'
-                flash[:warning] = l(:warning_email_notifications, to: to)
+                to << (recipients.count > max_notifications ? ',...' : '.')
+                flash[:warning] = l(:warning_email_notifications, to: to) if to.present?
               end
             end
           elsif Setting.notified_events.include?('dmsf_workflow_plural') # Just rejected
@@ -118,8 +122,8 @@ class DmsfWorkflowsController < ApplicationController
             if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.present?
               max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
               to = recipients.collect(&:name).first(max_notifications).join(', ')
-              to << recipients.count > max_notifications ? ',...' : '.'
-              flash[:warning] = l(:warning_email_notifications, to: to)
+              to << (recipients.count > max_notifications ? ',...' : '.')
+              flash[:warning] = l(:warning_email_notifications, to: to) if to.present?
             end
           end
         elsif action.action == DmsfWorkflowStepAction::ACTION_DELEGATE
@@ -185,8 +189,8 @@ class DmsfWorkflowsController < ApplicationController
               unless recipients.empty?
                 max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
                 to = recipients.collect(&:name).first(max_notifications).join(', ')
-                to << recipients.count > max_notifications ? ',...' : '.'
-                flash[:warning] = l(:warning_email_notifications, to: to)
+                to << (recipients.count > max_notifications ? ',...' : '.')
+                flash[:warning] = l(:warning_email_notifications, to: to) if to.present?
               end
             end
           end
