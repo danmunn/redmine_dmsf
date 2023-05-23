@@ -86,7 +86,7 @@
       <% if @type == 'link_from' %>
         <p>
           <%= label_tag 'dmsf_link[target_file_id]', l(:field_target_file) %>
-          <% files = files_for_select(@dmsf_link.target_project.id, @target_folder_id) %>
+          <% files = files_for_select(@dmsf_link.target_project.id) %>
           <%= select_tag 'dmsf_link[target_file_id]', options_for_select(DmsfFolder.file_list(files)), required: modal %>
         </p>
       <% end %>

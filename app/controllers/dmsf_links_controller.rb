@@ -41,7 +41,6 @@ class DmsfLinksController < ApplicationController
 
   def initialize
     @dmsf_link = nil
-    @target_folder_id = nil
     super
   end
 
@@ -54,14 +53,13 @@ class DmsfLinksController < ApplicationController
     @dmsf_file_id = params[:dmsf_file_id]
     @type = params[:type]
     @dmsf_link.target_project_id = params[:project_id]
-    @target_folder_id = nil
     @back_url = params[:back_url]
     if @type == 'link_to'
       if @dmsf_file_id
         f = DmsfFile.find_by(id: @dmsf_file_id)
         @dmsf_link.name = f&.last_revision&.title
       else
-        titles = DmsfFolder.where(id: @target_folder_id).pluck(:title)
+        titles = DmsfFolder.where(id: @dmsf_link.dmsf_folder_id).pluck(:title)
         @dmsf_link.name = titles.first if titles.any?
       end
     end
