@@ -253,7 +253,9 @@ class DmsfWorkflow < ApplicationRecord
 
     max_recipients = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
     to = recipients.collect(&:name).first(max_recipients).join(', ')
+    return if to.blank?
+
     to << (recipients.count > max_recipients.to_i ? ',...' : '.')
-    controller.flash[:warning] = l(:warning_email_notifications, to: to) if controller && to.present?
+    controller.flash[:warning] = l(:warning_email_notifications, to: to) if controller
   end
 end

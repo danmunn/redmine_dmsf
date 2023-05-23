@@ -101,8 +101,10 @@ class DmsfWorkflowsController < ApplicationController
               if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.present?
                 max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
                 to = recipients.collect(&:name).first(max_notifications).join(', ')
-                to << (recipients.count > max_notifications ? ',...' : '.')
-                flash[:warning] = l(:warning_email_notifications, to: to) if to.present?
+                if to.present?
+                  to << (recipients.count > max_notifications ? ',...' : '.')
+                  flash[:warning] = l(:warning_email_notifications, to: to)
+                end
               end
             end
           elsif Setting.notified_events.include?('dmsf_workflow_plural') # Just rejected
@@ -122,8 +124,10 @@ class DmsfWorkflowsController < ApplicationController
             if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.present?
               max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
               to = recipients.collect(&:name).first(max_notifications).join(', ')
-              to << (recipients.count > max_notifications ? ',...' : '.')
-              flash[:warning] = l(:warning_email_notifications, to: to) if to.present?
+              if to.present?
+                to << (recipients.count > max_notifications ? ',...' : '.')
+                flash[:warning] = l(:warning_email_notifications, to: to)
+              end
             end
           end
         elsif action.action == DmsfWorkflowStepAction::ACTION_DELEGATE
@@ -189,8 +193,10 @@ class DmsfWorkflowsController < ApplicationController
               unless recipients.empty?
                 max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
                 to = recipients.collect(&:name).first(max_notifications).join(', ')
-                to << (recipients.count > max_notifications ? ',...' : '.')
-                flash[:warning] = l(:warning_email_notifications, to: to) if to.present?
+                if to.present?
+                  to << (recipients.count > max_notifications ? ',...' : '.')
+                  flash[:warning] = l(:warning_email_notifications, to: to)
+                end
               end
             end
           end

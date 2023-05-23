@@ -182,7 +182,9 @@ class DmsfFilesController < ApplicationController
             if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.any?
               max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
               to = recipients.collect { |user, _| user.name }.first(max_notifications).join(', ')
-              to << (recipients.count > max_notifications ? ',...' : '.')
+              if to.present?
+                to << (recipients.count > max_notifications ? ',...' : '.')
+              end
             end
           rescue StandardError => e
             Rails.logger.error "Could not send email notifications: #{e.message}"
@@ -223,8 +225,10 @@ class DmsfFilesController < ApplicationController
             if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.any?
               max_notification = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
               to = recipients.collect { |user, _| user.name }.first(max_notification).join(', ')
-              to << (recipients.count > max_notification ? ',...' : '.')
-              flash[:warning] = l(:warning_email_notifications, to: to) if to.present?
+              if to.present?
+                to << (recipients.count > max_notification ? ',...' : '.')
+                flash[:warning] = l(:warning_email_notifications, to: to)
+              end
             end
           rescue StandardError => e
             Rails.logger.error "Could not send email notifications: #{e.message}"
