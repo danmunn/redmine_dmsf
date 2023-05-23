@@ -121,9 +121,9 @@ class DmsfLinksController < ApplicationController
       end
     else
       # Link to
-      @dmsf_link.dmsf_folder_id = if DmsfLinksHelper.number?(params[:dmsf_link][:target_folder_id])
-                                    params[:dmsf_link][:target_folder_id].to_i
-                                  end
+      if DmsfLinksHelper.number?(params[:dmsf_link][:target_folder_id])
+        @dmsf_link.dmsf_folder_id = params[:dmsf_link][:target_folder_id].to_i
+      end
       if params[:dmsf_link][:target_project_id].present?
         @dmsf_link.project_id = params[:dmsf_link][:target_project_id]
       else

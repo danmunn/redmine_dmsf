@@ -18,32 +18,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+require File.expand_path('../../test_helper', __FILE__)
+
 # Links helper
-module DmsfLinksHelper
-  def folder_tree_options_for_select(folder_tree, options = {})
-    s = []
-    folder_tree.each do |name, id|
-      tag_options = { value: id }
-      tag_options[:selected] = 'selected' if id == options[:selected]
-      s << content_tag('option', name, tag_options)
-    end
-    safe_join s
-  end
+class DmsfLinksHelperTest < RedmineDmsf::Test::HelperTest
+  include DmsfLinksHelper
 
-  # An integer test
-  def self.number?(str)
-    str&.match?(/\A\d+\Z/)
-  end
-
-  def files_for_select(project_id, folder_id)
-    files = []
-    if DmsfLinksHelper.number?(folder_id)
-      folder = DmsfFolder.find_by(id: folder_id)
-      files = folder.dmsf_files.visible.to_a if folder
-    elsif project_id
-      project = Project.find_by(id: project_id)
-      files = project.dmsf_files.visible.to_a if project
-    end
-    files
+  def test_number
+    assert DmsfLinksHelper.number?('123')
+    assert_not DmsfLinksHelper.number?('-123')
+    assert_not DmsfLinksHelper.number?('12.3')
+    assert_not DmsfLinksHelper.number?('123a')
+    assert_not DmsfLinksHelper.number?(nil)
   end
 end
