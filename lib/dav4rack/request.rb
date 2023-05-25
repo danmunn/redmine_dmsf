@@ -66,7 +66,7 @@ module Dav4rack
       @depth ||= if (d = get_header('HTTP_DEPTH')) && %w[0 1].include?(d)
                    d.to_i
                  elsif infinity_depth_allowed?
-                   :infinity
+                   'infinity'
                  else
                    1
                  end
@@ -165,7 +165,7 @@ module Dav4rack
       Nokogiri.XML(body.read, &:strict) if body
     rescue StandardError => e
       Rails.logger.error e.message
-      raise ::Dav4rack::HttpStatus::BadRequest
+      raise Dav4rack::HttpStatus::BadRequest
     end
   end
 end
