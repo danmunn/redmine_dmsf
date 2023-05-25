@@ -39,14 +39,14 @@ module Dav4rack
     end
 
     def self.unescape_path(path)
-      path = path.dup
-      path.force_encoding 'UTF-8'
-      Addressable::URI.unencode path
+      p = path.dup
+      p.force_encoding 'UTF-8'
+      Addressable::URI.unencode p
     end
 
     # Namespace being used within XML document
     def ns(wanted_uri = XmlElements::DAV_NAMESPACE)
-      if (root = document&.root) && (ns_defs = root.namespace_definitions) && !ns_defs.empty?
+      if document && (root = document.root) && (ns_defs = root.namespace_definitions) && !ns_defs.empty?
         result = ns_defs.detect { |nd| nd.href == wanted_uri } || ns_defs.first
         result = result.prefix.nil? ? 'xmlns' : result.prefix.to_s
         result += ':' unless result.empty?
@@ -63,23 +63,27 @@ module Dav4rack
 
     # Requested depth
     def depth
-      d = get_header('HTTP_DEPTH')
-      @depth ||=
-        if %w[0 1].include?(d)
-          d
-        elsif infinity_depth_allowed?
-          'infinity'
-        else
-          '1'
-        end
+      @depth ||= if (d = get_header('HTTP_DEPTH')) && %w[0 1].include?(d)
+                   d.to_i
+                 elsif infinity_depth_allowed?
+                   :infinity
+                 else
+                   1
+                 end
     end
 
     # Destination header
     def destination
-      @destination ||=
-        if (h = get_header('HTTP_DESTINATION'))
-          DestinationHeader.new Dav4rack::Uri.new(h, script_name: script_name)
-        end
+      unless @destination
+        h = get_header('HTTP_DESTINATION')
+        @destination = DestinationHeader.new Dav4rack::Uri.new(h, script_name: script_name) if h
+      end
+      @destination
+    end
+
+    # Overwrite is allowed
+    def overwrite?
+      get_header('HTTP_OVERWRITE').to_s.casecmp('F').zero?
     end
 
     # content_length as a Fixnum (nil if the header is unset / empty)
@@ -124,7 +128,7 @@ module Dav4rack
       path = ::File.expand_path path
       path << '/' if collection && !path.end_with?('/')
       # remove a drive letter in Windows
-      path.gsub %r{^([^/]*)/}, '/'
+      path.gsub(%r{^([^/]*)/}, '/')
     end
 
     REDIRECTABLE_CLIENTS = [
@@ -137,17 +141,8 @@ module Dav4rack
     # TODO: Allow this to be dynamic so users can add regexes to match if they know of a client
     # that can be supported that is not listed.
     def client_allows_redirect?
-      REDIRECTABLE_CLIENTS.any? { |re| user_agent =~ re }
-    end
-
-    MS_CLIENTS = [
-      /microsoft-webdav/i,
-      /microsoft office/i
-    ].freeze
-
-    # Basic user agent testing for MS authored client
-    def ms_client?
-      MS_CLIENTS.any? { |re| user_agent =~ re }
+      ua = user_agent
+      REDIRECTABLE_CLIENTS.any? { |re| ua =~ re }
     end
 
     def get_header(name)
