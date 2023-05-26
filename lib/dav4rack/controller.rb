@@ -179,7 +179,7 @@ module Dav4rack
     # Return response to COPY
     def copy
       return NotFound unless resource.exist?
-      return BadRequest unless request.depth == 'infinity' || request.depth == 0
+      return BadRequest unless request.depth == 'infinity' || request.depth.zero?
 
       dest = request.destination
       return BadRequest unless dest
@@ -272,7 +272,7 @@ module Dav4rack
     # wait for a success/failure response.
     def lock
       depth = request.depth
-      return BadRequest unless request.depth == 'infinity' || request.depth == 0
+      return BadRequest unless request.depth == 'infinity' || request.depth.zero?
 
       asked = { depth: depth }
       timeout = request.env['Timeout']
