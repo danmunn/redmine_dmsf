@@ -179,7 +179,7 @@ module Dav4rack
     # Return response to COPY
     def copy
       return NotFound unless resource.exist?
-      return BadRequest unless request.depth == 'infinity' || request.depth == '0'
+      return BadRequest unless request.depth == 'infinity' || request.depth == 0
 
       dest = request.destination
       return BadRequest unless dest
