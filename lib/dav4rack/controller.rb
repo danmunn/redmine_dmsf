@@ -272,7 +272,7 @@ module Dav4rack
     # wait for a success/failure response.
     def lock
       depth = request.depth
-      return BadRequest unless %w[0 infinity].include?(depth)
+      return BadRequest unless request.depth == 'infinity' || request.depth == 0
 
       asked = { depth: depth }
       timeout = request.env['Timeout']
