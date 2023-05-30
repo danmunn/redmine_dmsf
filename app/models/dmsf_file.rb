@@ -366,7 +366,7 @@ class DmsfFile < ApplicationRecord
     results = scope.where(find_options).uniq.to_a
     results.delete_if { |x| !DmsfFolder.permissions?(x.dmsf_folder) }
 
-    if !options[:titles_only]
+    unless options[:titles_only]
       database = nil
       begin
         lang = Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].strip
