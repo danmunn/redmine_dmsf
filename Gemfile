@@ -23,7 +23,9 @@
 source 'https://rubygems.org' do
   gem 'active_record_union'
   gem 'ox' # Dav4Rack
+  gem 'rake'
   gem 'uuidtools'
+  gem 'xapian-ruby'
   gem 'zip-zip'
 
   # Redmine extensions

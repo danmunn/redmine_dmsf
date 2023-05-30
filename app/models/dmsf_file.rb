@@ -19,6 +19,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+require 'xapian'
+
 # File
 class DmsfFile < ApplicationRecord
   include RedmineDmsf::Lockable
@@ -79,25 +81,6 @@ class DmsfFile < ApplicationRecord
   before_create :default_values
 
   attr_writer :last_revision
-
-  class << self
-    def xapian_bindings_available?
-      unless @xapian_bindings_available
-        begin
-          require 'xapian'
-          @xapian_bindings_available = true
-        rescue LoadError => e
-          Rails.logger.warn do
-            %{No Xapian search engine interface for Ruby installed => Full-text search won't be available.
-              Install a ruby-xapian package or an alternative Xapian binding (https://xapian.org).}
-          end
-          Rails.logger.warn { e.message }
-          @xapian_bindings_available = false
-        end
-      end
-      @xapian_bindings_available
-    end
-  end
 
   def self.previews_storage_path
     Rails.root.join 'tmp/dmsf_previews'
@@ -383,7 +366,7 @@ class DmsfFile < ApplicationRecord
     results = scope.where(find_options).uniq.to_a
     results.delete_if { |x| !DmsfFolder.permissions?(x.dmsf_folder) }
 
-    if !options[:titles_only] && xapian_bindings_available? # $xapian_bindings_available
+    if !options[:titles_only]
       database = nil
       begin
         lang = Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].strip

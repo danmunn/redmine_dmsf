@@ -125,10 +125,6 @@ end
 log "Redmine environment [RAILS_ENV=#{env}] correctly loaded ...", verbose
 
 # Indexing documents
-# unless File.exist?($omindex)
-#   log "#{$omindex} does not exist, exiting...", true
-#   exit 1
-# end
 stem_langs.each do |lang|
   filespath = Setting.plugin_redmine_dmsf['dmsf_storage_directory'] || File.join(REDMINE_ROOT, FILES)
   unless File.directory?(filespath)

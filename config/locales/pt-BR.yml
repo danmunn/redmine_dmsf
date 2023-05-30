@@ -179,7 +179,6 @@ pt-BR:
     criado"
   error_file_can_not_be_created: "O arquivo não pode ser criado"
   error_wrong_zip_encoding: Código Zip errado
-  warning_xapian_not_available: Xapian não disponível
   menu_dmsf: DMS
   label_physical_file_delete: Excluir fisicamente arquivo
   user_is_not_project_member: Você não é um membro do projeto

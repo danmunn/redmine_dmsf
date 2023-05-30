@@ -179,7 +179,6 @@ ja:
 
   error_file_can_not_be_created: ファイルを保存フォルダに作成できません
   error_wrong_zip_encoding: Zip エンコーディングが正しくありません
-  warning_xapian_not_available: Xapian は利用できません
   menu_dmsf: 文書管理  # Project tab title
   label_physical_file_delete: 物理ファイルの削除
   user_is_not_project_member: あなたはプロジェクトのメンバーではありません

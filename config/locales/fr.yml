@@ -179,7 +179,6 @@ fr:
     créé
   error_file_can_not_be_created: "Le fichier n'a pas pu être enregistré dans le répertoire de stockage"
   error_wrong_zip_encoding: Mauvais jeu de caractères pour la transformation du nom du ZIP
-  warning_xapian_not_available: Le module Xapian est indisponible
   menu_dmsf: DMS  # Project tab title
   label_physical_file_delete: Suppression des fichiers
   user_is_not_project_member: "Vous n'êtes pas un membre du projet"

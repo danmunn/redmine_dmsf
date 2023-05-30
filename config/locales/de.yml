@@ -176,7 +176,6 @@ de:
     erstellt werden.
   error_file_can_not_be_created: Datei kann nicht in dem gewählten Ordner erstellt werden.
   error_wrong_zip_encoding: Falsche ZIP-Kodierung
-  warning_xapian_not_available: Xapian steht nicht zur Verfügung
   menu_dmsf: DMS  # Project tab title
   label_physical_file_delete: Datei physisch löschen
   user_is_not_project_member: Sie sind kein Projektmitglied

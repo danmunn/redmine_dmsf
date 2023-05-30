@@ -179,7 +179,6 @@ it: # Italian strings thx 2 Matteo Arceci!
 
   error_file_can_not_be_created: "Il documento non può essere creato nella cartella di archiviazione"
   error_wrong_zip_encoding: Errato encoding dello Zip
-  warning_xapian_not_available: Xapian non disponibile
   menu_dmsf: Documenti  # Project tab title
   label_physical_file_delete: File fisico eliminato
   user_is_not_project_member: Non sei un membro del progetto

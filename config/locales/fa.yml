@@ -173,7 +173,6 @@ fa:
 
   error_file_can_not_be_created: "پرونده‌ها نمی‌توانند در پوشه‌ی ذخیره‌سازی ساخته شوند."
   error_wrong_zip_encoding: رمزگذاری اشتباه zip
-  warning_xapian_not_available: Xapian در دسترس نیست
   menu_dmsf: اسناد پیش‌رفته  # Project tab title
   label_physical_file_delete: پرونده فیزیکی حذف شود
   user_is_not_project_member: شما عضو این پروژه نیستید
