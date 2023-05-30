@@ -32,9 +32,6 @@ require:
   - rubocop-rails
 
 # Rules for DMSF
-Layout/EmptyLineAfterMagicComment:
-  Enabled: false
-
 Layout/LineLength:
   Exclude:
     - app/models/dmsf_query.rb

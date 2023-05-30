@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -W0
 
 # frozen_string_literal: true
-#
+
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2010    Xabier Elkano

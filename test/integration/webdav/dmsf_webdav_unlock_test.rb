@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2012   Daniel Munn <dan.munn@munnster.co.uk>

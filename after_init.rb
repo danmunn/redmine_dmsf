@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Redmine plugin for Document Management System "Features"
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
@@ -147,4 +147,9 @@ Rails.application.configure do
   # Uncomment to remove the original Documents from searching and project's modules (replaced with DMSF)
   # Redmine::Search.available_search_types.delete('documents')
   # Redmine::AccessControl.available_project_modules.delete(:documents)
+
+  if Redmine::Plugin.installed?('easy_extensions')
+    require "#{File.dirname(__FILE__)}/lib/redmine_dmsf/webdav/custom_middleware"
+    config.middleware.insert_before ActionDispatch::Cookies, RedmineDmsf::Webdav::CustomMiddleware
+  end
 end
