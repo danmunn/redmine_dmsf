@@ -79,7 +79,7 @@ class DmsfConvertDocuments
       attachments = []
       issue.attachments.each do |attachment|
         @fail = false
-        create_document_from_attachment(project, folder, attachment, files)
+        create_document_from_attachment(project, folder, attachment, files, issue)
         attachments << attachment unless @fail
       end
       next unless @dry_run
@@ -130,7 +130,7 @@ class DmsfConvertDocuments
         files = []
         @fail = false
         document.attachments.each do |a|
-          create_document_from_attachment(project, folder, a, files)
+          create_document_from_attachment(project, folder, a, files, document)
         end
         document.destroy unless @dry_run || @fail
       end
@@ -140,7 +140,7 @@ class DmsfConvertDocuments
 
   private
 
-  def create_document_from_attachment(project, folder, attachment, files)
+  def create_document_from_attachment(project, folder, attachment, files, container)
     file = DmsfFile.new
     file.project_id = project.id
     file.dmsf_folder = folder
@@ -178,7 +178,7 @@ class DmsfConvertDocuments
     revision.updated_at = attachment.created_on
     revision.major_version = 0
     revision.minor_version = 1
-    revision.comment = "Converted from #{folder.system ? 'Issues' : 'Documents'}"
+    revision.comment = "Converted from #{container.class.name}"
     revision.mime_type = attachment.content_type
     revision.disk_filename = revision.new_storage_filename
     unless @dry_run
