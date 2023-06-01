@@ -43,7 +43,7 @@ class DmsfUpload
       }
       DmsfUpload.new project, folder, uploaded
     else
-      Rails.logger.error { "An attachment not found by its token: #{uploaded_file[:token]}" }
+      Rails.logger.error "An attachment not found by its token: #{uploaded_file[:token]}"
       nil
     end
   end

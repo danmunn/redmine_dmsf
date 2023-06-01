@@ -115,7 +115,7 @@ class DmsfMailer < Mailer
         zipped_content_data = File.binread(email_params[:zipped_content])
         attachments['Documents.zip'] = { content_type: 'application/zip', content: zipped_content_data }
       else
-        Rails.logger.error { "Cannot attach #{email_params[:zipped_content]}, it doesn't exist." }
+        Rails.logger.error "Cannot attach #{email_params[:zipped_content]}, it doesn't exist."
       end
     end
     skip_no_self_notified = false

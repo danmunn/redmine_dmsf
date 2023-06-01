@@ -722,7 +722,7 @@ module RedmineDmsf
           begin
             DmsfMailer.deliver_files_downloaded(@project, [file], @request.env['REMOTE_IP'])
           rescue StandardError => e
-            Rails.logger.error { "Could not send email notifications: #{e.message}" }
+            Rails.logger.error "Could not send email notifications: #{e.message}"
           end
         end
         File.new disk_file

@@ -66,7 +66,7 @@ class DmsfFilesController < ApplicationController
     begin
       DmsfMailer.deliver_files_downloaded @project, [@file], request.remote_ip
     rescue StandardError => e
-      Rails.logger.error { "Could not send email notifications: #{e.message}" }
+      Rails.logger.error "Could not send email notifications: #{e.message}"
     end
     # Allow a preview of the file by an external plugin
     results = call_hook(:dmsf_files_controller_before_view, { file: @revision.disk_file })

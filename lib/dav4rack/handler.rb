@@ -45,7 +45,7 @@ module Dav4rack
 
       response.finish
     rescue StandardError => e
-      Rails.logger.error { "WebDAV Error: #{e.message}" }
+      Rails.logger.error "WebDAV Error: #{e.message}"
       raise e
     end
 

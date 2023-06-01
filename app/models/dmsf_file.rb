@@ -164,7 +164,7 @@ class DmsfFile < ApplicationRecord
         save
       end
     rescue StandardError => e
-      Rails.logger.error { e.message }
+      Rails.logger.error e.message
       errors.add :base, e.message
       false
     end
@@ -251,7 +251,7 @@ class DmsfFile < ApplicationRecord
   def move_to(project, folder)
     unless last_revision
       errors.add :base, l(:error_at_least_one_revision_must_be_present)
-      Rails.logger.error { l(:error_at_least_one_revision_must_be_present) }
+      Rails.logger.error l(:error_at_least_one_revision_must_be_present)
       return false
     end
     source = "#{self.project.identifier}:#{dmsf_path_str}"
@@ -324,12 +324,12 @@ class DmsfFile < ApplicationRecord
         file.last_revision = new_revision
       else
         errors.add :base, new_revision.errors.full_messages.to_sentence
-        Rails.logger.error { new_revision.errors.full_messages.to_sentence }
+        Rails.logger.error new_revision.errors.full_messages.to_sentence
         file.delete commit: true
         file = nil
       end
     else
-      Rails.logger.error { file.errors.full_messages.to_sentence }
+      Rails.logger.error file.errors.full_messages.to_sentence
       file.delete commit: true
       file = nil
     end
@@ -373,7 +373,7 @@ class DmsfFile < ApplicationRecord
         databasepath = File.join(Setting.plugin_redmine_dmsf['dmsf_index_database'].strip, lang)
         database = Xapian::Database.new(databasepath)
       rescue StandardError => e
-        Rails.logger.error { "REDMINE_XAPIAN ERROR: Xapian database is not properly set, initiated or it's corrupted." }
+        Rails.logger.error "REDMINE_XAPIAN ERROR: Xapian database is not properly set, initiated or it's corrupted."
         Rails.logger.error e.message
       end
 

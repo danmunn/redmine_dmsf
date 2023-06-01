@@ -52,7 +52,7 @@ module RedmineDmsf
       if system(cmd)
         target
       else
-        Rails.logger.error { "Creating preview failed (#{$CHILD_STATUS}):\nCommand: #{cmd}" }
+        Rails.logger.error "Creating preview failed (#{$CHILD_STATUS}):\nCommand: #{cmd}"
         ''
       end
     end

@@ -84,12 +84,12 @@ module DmsfUploadHelper
         # Need to save file first to generate id for it in case of creation.
         # File id is needed to properly generate revision disk filename
         unless new_revision.valid?
-          Rails.logger.error { new_revision.errors.full_messages.to_sentence }
+          Rails.logger.error new_revision.errors.full_messages.to_sentence
           failed_uploads.push new_revision
           next
         end
         unless file.save
-          Rails.logger.error { file.errors.full_messages.to_sentence }
+          Rails.logger.error file.errors.full_messages.to_sentence
           failed_uploads.push file
           next
         end
@@ -132,7 +132,7 @@ module DmsfUploadHelper
             Rails.logger.warn e.message
           end
         else
-          Rails.logger.error { l(:error_workflow_assign) }
+          Rails.logger.error l(:error_workflow_assign)
         end
       end
       # Notifications
@@ -147,7 +147,7 @@ module DmsfUploadHelper
           end
         end
       rescue StandardError => e
-        Rails.logger.error { "Could not send email notifications: #{e.message}" }
+        Rails.logger.error "Could not send email notifications: #{e.message}"
       end
     end
     if failed_uploads.present? && controller

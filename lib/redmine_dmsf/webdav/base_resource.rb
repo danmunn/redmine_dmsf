@@ -242,7 +242,7 @@ module RedmineDmsf
               @file = DmsfFile.find_file_by_name(@project, @folder, pinfo.first)
               @folder = nil
               unless pinfo.length < 2 || @file
-                Rails.logger.error { "Resource not found: #{@path}" }
+                Rails.logger.error "Resource not found: #{@path}"
                 raise Conflict
               end
               break # We're at the end

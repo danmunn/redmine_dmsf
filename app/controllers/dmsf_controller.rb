@@ -500,7 +500,7 @@ class DmsfController < ApplicationController
     begin
       DmsfMailer.deliver_files_downloaded(@project, zip.files, request.remote_ip)
     rescue StandardError => e
-      Rails.logger.error { "Could not send email notifications: #{e.message}" }
+      Rails.logger.error "Could not send email notifications: #{e.message}"
     end
 
     @email_params = {
@@ -535,7 +535,7 @@ class DmsfController < ApplicationController
     begin
       DmsfMailer.deliver_files_downloaded(@project, zip.files, request.remote_ip)
     rescue StandardError => e
-      Rails.logger.error { "Could not send email notifications: #{e.message}" }
+      Rails.logger.error "Could not send email notifications: #{e.message}"
     end
     send_file(
       zip.finish,
@@ -640,7 +640,7 @@ class DmsfController < ApplicationController
           end
         end
       rescue StandardError => e
-        Rails.logger.error { "Could not send email notifications: #{e.message}" }
+        Rails.logger.error "Could not send email notifications: #{e.message}"
       end
     end
     unless not_deleted_files.empty?

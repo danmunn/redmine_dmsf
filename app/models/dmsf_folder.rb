@@ -310,7 +310,7 @@ class DmsfFolder < ApplicationRecord
       new_folder.custom_values << v
     end
     unless new_folder.save
-      Rails.logger.error { new_folder.errors.full_messages.to_sentence }
+      Rails.logger.error new_folder.errors.full_messages.to_sentence
       return new_folder
     end
     if copy_files

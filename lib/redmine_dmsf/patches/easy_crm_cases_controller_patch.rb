@@ -78,7 +78,7 @@ module RedmineDmsf
                 Rails.logger.warn e.message
               end
             else
-              Rails.logger.error { l(:error_workflow_assign) }
+              Rails.logger.error l(:error_workflow_assign)
             end
           end
           copied_from = EasyCrmCase.find_by(id: params[:copy_from]) if params[:copy_from].present?

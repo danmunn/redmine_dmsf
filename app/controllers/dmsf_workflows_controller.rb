@@ -467,7 +467,7 @@ class DmsfWorkflowsController < ApplicationController
         next if step.save
 
         flash[:error] = step.errors.full_messages.to_sentence
-        Rails.logger.error { step.errors.full_messages.to_sentence }
+        Rails.logger.error step.errors.full_messages.to_sentence
       end
     end
     redirect_to dmsf_workflow_path(@dmsf_workflow)
