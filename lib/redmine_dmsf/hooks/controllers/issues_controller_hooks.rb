@@ -53,6 +53,8 @@ module RedmineDmsf
 
         def controller_issues_bulk_edit_before_save(context = {})
           controller_issues_before_save context
+          # Call also the after safe hook, 'cause it's missing in Redmine
+          controller_issues_after_save(context, edit: true) unless defined?(EasyExtensions)
         end
 
         # Unfortunately this hook is missing in Redmine. It's called in Easy Redmine only.
