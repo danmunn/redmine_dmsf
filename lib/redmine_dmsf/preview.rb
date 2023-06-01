@@ -38,9 +38,7 @@ module RedmineDmsf
       rescue StandardError
         @office_available = false
       end
-      unless @office_available
-        Rails.logger.warn { l(:note_dmsf_office_bin_not_available, value: OFFICE_BIN, locale: :en) }
-      end
+      Rails.logger.warn l(:note_dmsf_office_bin_not_available, value: OFFICE_BIN, locale: :en) unless @office_available
       @office_available
     end
 

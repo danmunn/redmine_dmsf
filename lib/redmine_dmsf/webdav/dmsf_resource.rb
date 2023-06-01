@@ -548,7 +548,7 @@ module RedmineDmsf
         pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore']
         pattern = /^(\._|\.DS_Store$|Thumbs.db$)/ if pattern.blank?
         if basename.match(pattern)
-          Rails.logger.info { "#{basename} ignored" }
+          Rails.logger.info "#{basename} ignored"
           return NoContent
         end
         reuse_revision = false
@@ -557,7 +557,7 @@ module RedmineDmsf
           # Disable versioning for file name patterns given in the plugin settings.
           pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
           if pattern.present? && basename.match(pattern)
-            Rails.logger.info { "Versioning disabled for #{basename}" }
+            Rails.logger.info "Versioning disabled for #{basename}"
             reuse_revision = true
           end
           reuse_revision = true if reuse_version_for_locked_file(file)
@@ -617,7 +617,7 @@ module RedmineDmsf
         # Ignore 1b files sent for authentication
         if Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'].present? &&
            new_revision.size == 1
-          Rails.logger.warn { "1b file '#{basename}' sent for authentication ignored" }
+          Rails.logger.warn "1b file '#{basename}' sent for authentication ignored"
           return NoContent
         end
 
