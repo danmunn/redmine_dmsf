@@ -464,6 +464,8 @@ de:
   field_default_dmsf_query: Standardabfrage DMS
   field_receive_download_notification: Bekomen Benachrichtigen über Herunterladen
 
+  label_remove_original_documents_module: Entfernen originelles Modul Dokumente
+
   easy_pages:
     modules:
       dmsf_locked_documents: Von mir gesperrte Dokumente

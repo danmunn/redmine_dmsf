@@ -4,6 +4,8 @@ Changelog for Redmine DMSF
 3.0.13 ????-??-??
 ------------------
 
+    An option to disable the original module Documents in the plugin's settings
+
 3.0.12 2023-03-15
 ------------------
 

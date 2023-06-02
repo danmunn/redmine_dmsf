@@ -18,25 +18,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-require File.expand_path('../../test_helper', __FILE__)
+require File.expand_path('../../../test_helper', __FILE__)
 
-# Attachable tests
-class AttachablePatchTest < RedmineDmsf::Test::UnitTest
-  fixtures :issues, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
-
-  def setup
-    super
-    @issue1 = Issue.find 1
-    @issue2 = Issue.find 2
-  end
-
-  def test_has_attachmets
-    if defined?(EasyExtensions)
-      assert @issue1.has_attachments?
-      assert_not @issue2.has_attachments?
-    else
-      assert @issue1.dmsf_files.present?
-      assert @issue2.dmsf_files.blank?
-    end
+# AccessControl patch tests
+class AccessControlPatchTest < RedmineDmsf::Test::UnitTest
+  def test_available_project_modules
+    Setting.plugin_redmine_dmsf['remove_original_documents_module'] = nil
+    assert Redmine::AccessControl.available_project_modules.include?(:documents)
+    Setting.plugin_redmine_dmsf['remove_original_documents_module'] = '1'
+    assert_not Redmine::AccessControl.available_project_modules.include?(:documents)
   end
 end

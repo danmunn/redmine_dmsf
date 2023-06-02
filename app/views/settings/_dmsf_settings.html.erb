@@ -176,6 +176,14 @@
   </em>
 </p>
 
+<p>
+  <%= content_tag :label, l(:label_remove_original_documents_module) %>
+  <%= check_box_tag 'settings[remove_original_documents_module]', false, @settings['remove_original_documents_module'] %>
+  <em class="<%= klass %>">
+    <%= l(:label_default) %>: <%= l(:general_text_No) %>
+  </em>
+</p>
+
 <hr>
 <em class="<%= title_klass %>">
   <%= l(:label_dmsf_columns) %>

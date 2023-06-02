@@ -468,6 +468,8 @@ cs:
   field_default_dmsf_query: Výchozí dotaz DMS
   field_receive_download_notification: Dostávat notifikace o stažení
 
+  label_remove_original_documents_module: Odstranit původní modul Dokumenty
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

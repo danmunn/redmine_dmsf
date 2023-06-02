@@ -468,6 +468,8 @@ it: # Italian strings thx 2 Matteo Arceci!
   field_default_dmsf_query: Default DMS query
   field_receive_download_notification: Receive download notifications
 
+  label_remove_original_documents_module: Remove the original Documents module
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

@@ -63,7 +63,8 @@ Redmine::Plugin.register :redmine_dmsf do
              'office_bin' => 'libreoffice',
              'dmsf_global_menu_disabled' => nil,
              'dmsf_default_query' => nil,
-             'empty_minor_version_by_default' => nil
+             'empty_minor_version_by_default' => nil,
+             'remove_original_documents_module' => nil
            }
 end
 
