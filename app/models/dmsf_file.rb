@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'xapian'
+require "#{File.dirname(__FILE__)}/../../lib/redmine_dmsf/lockable"
 
 # File
 class DmsfFile < ApplicationRecord
