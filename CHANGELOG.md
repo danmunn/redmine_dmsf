@@ -1,19 +1,21 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.13 ????-??-??
+3.0.13 *????-??-??*
 ------------------
 
     An option to disable the original module Documents in the plugin's settings
+    Documents preview available if the binary is available but not explicitly defined in the plugin's settings
+    Rubocop tests of the plugin's source codes
 
-3.0.12 2023-03-15
+3.0.12 *2023-03-15*
 ------------------
 
     Bug fixing
 
 * Bug: #1436 - Cannot upload new content
 
-3.0.11 2023-03-14
+3.0.11 *2023-03-14*
 ------------------
 
     Bug fixing

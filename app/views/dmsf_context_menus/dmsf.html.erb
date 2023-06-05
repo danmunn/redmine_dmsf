@@ -23,7 +23,7 @@
     <%= render partial: 'file', locals: { project: @project, folder: @folder, dmsf_file: @dmsf_file,
                                           dmsf_link: @dmsf_link, locked: @locked, unlockable: @unlockable,
                                           allowed: @allowed, email_allowed: @email_allowed,
-                                          notifications: @notifications, back_url: @back_url } %>
+                                          notifications: @notifications, preview: @preview, back_url: @back_url } %>
   <% elsif @dmsf_folder %>
     <%= render partial: 'folder', locals: { project: @project, folder: @folder, dmsf_folder: @dmsf_folder,
                                             dmsf_link: @dmsf_link, locked: @locked, unlockable: @unlockable,

@@ -27,7 +27,7 @@ module RedmineDmsf
     extend Redmine::Utils::Shell
     include Redmine::I18n
 
-    OFFICE_BIN = (Setting.plugin_redmine_dmsf['office_bin'] || 'libreoffice').freeze
+    OFFICE_BIN = (Setting.plugin_redmine_dmsf['office_bin'].presence || 'libreoffice').freeze
 
     def self.office_available?
       return @office_available if defined?(@office_available)

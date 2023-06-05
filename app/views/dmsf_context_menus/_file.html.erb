@@ -87,6 +87,12 @@
 <li>
   <%= render partial: 'dmsf_context_menus/watch', locals: { object: dmsf_file } %>
 </li>
+<% if @preview %>
+  <li>
+    <%= context_menu_link l(:label_preview), view_dmsf_file_path(dmsf_file, preview: true),
+                          class: 'icon icon-magnifier', disabled: false %>
+  </li>
+<% end %>
 <li>
   <%= context_menu_link l(:button_delete),
         dmsf_link ? dmsf_link_path(id: dmsf_link, folder_id: folder, back_url: back_url) : dmsf_file_path(id: dmsf_file,

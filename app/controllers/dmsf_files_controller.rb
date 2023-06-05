@@ -77,7 +77,7 @@ class DmsfFilesController < ApplicationController
     expires_in 0.years, 'must-revalidate' => true
     pdf_preview = (params[:disposition] != 'attachment') && params[:filename].blank? && @file.pdf_preview
     filename = filename_for_content_disposition(@revision.formatted_name(member))
-    if pdf_preview.present?
+    if pdf_preview.present? && (Setting.plugin_redmine_dmsf['office_bin'].present? || params[:preview].present?)
       basename = File.basename(filename, '.*')
       send_file pdf_preview, filename: "#{basename}.pdf", type: 'application/pdf', disposition: 'inline'
     else
