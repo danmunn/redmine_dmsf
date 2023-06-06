@@ -33,7 +33,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   notice_file_unlocked: Documento sbloccato
   error_only_user_that_locked_file_can_unlock_it: Solo chi ha bloccato il documento può sbloccarlo
 
-  error_max_files_exceeded: "Superato il limite di %{number} documenti per il download simultaneo"  
+  error_max_files_exceeded: "Superato il limite di %{number} documenti per il download simultaneo"
   error_entry_project_does_not_match_current_project: "Il progetto non corrisponde al progetto corrente"
 
   notice_folder_created: Cartella creata
@@ -41,7 +41,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   error_folder_title_must_be_entered: Deve essere inserito il titolo
   notice_folder_deleted: Cartella cancellata
   error_folder_title_is_already_used: Il titolo è già in uso
-  notice_folder_details_were_saved: I dettagli della cartella sono stati salvati  
+  notice_folder_details_were_saved: I dettagli della cartella sono stati salvati
   error_folder_is_locked: La cartella è bloccata
   error_file_is_locked: Il documento è bloccato
   notice_file_deleted: Il documento è stato cancellato
@@ -66,7 +66,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   notice_file_notifications_deactivated: La notifica su documento è disattiva
   link_details: "%{title} dettagli"
   link_edit: "Modifica %{title}"
-  link_create_folder: Creata cartella
+  link_create_folder: Crea cartella
   link_title: Nome documento
   link_size: Dimensioni
   link_modified: Modificato
@@ -170,7 +170,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   error_user_has_not_right_delete_file: "L'utente non ha i diritti per eliminare il documento"
 
   notice_entries_deleted: Voci eliminate
-  warning_some_entries_were_not_deleted: "Alcune voci non sono state eliminate: %{entries}"  
+  warning_some_entries_were_not_deleted: "Alcune voci non sono state eliminate: %{entries}"
   title_delete_checked: Elimina i selezionati
   title_items: elementi
   title_filename_for_download: Nome file utilizzato per il download o nell'archivio Zip
@@ -200,7 +200,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   comment_moved_from: "Spostato da %{source}"
   error_target_folder_same: La cartella di destinazione ed il progetto sono gli stessi di adesso
   title_copy: Copia
-  
+
   error_max_email_filesize_exceeded: "Hai superato la dimensione massima del file per l'invio tramite e-mail.
     (%{number} MB)"
   note_maximum_email_filesize: Limiti di dimensione massima dei file che possono essere inviati via e-mail. 0 significa
@@ -293,7 +293,7 @@ it: # Italian strings thx 2 Matteo Arceci!
 
   text_email_to_see_status: Per vedere lo stato attuale del flusso di lavoro di approvazione clicca sullo stato del
     flusso di lavoro del documento
-  
+
   title_create_link: Crea un collegamento
   label_link_from: Collegamento da
   label_link_to: Collegamento a
@@ -310,19 +310,19 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_source_folder: Cartella sorgente
   label_target_project: Progetto di destinazione
   label_source_project: Progetto sorgente
-  
+
   text_email_doc_updated_subject: "Documenti del progetto %{project} caricati"
   text_email_doc_updated: ha documenti appena attualizzati
   text_email_doc_follows: come segue
   text_email_doc_deleted_subject: "Documenti del progetto %{project} cancellati"
   text_email_doc_deleted: ha documenti appena eliminati
   label_links_only: solo colegamenti
-  
+
   label_display_notified_recipients: Visualizza i destinatari notificati
   note_display_notified_recipients: L'utente sarà informato di tutti i destinatari appena inviato la notifica e-mail.
 
   warning_email_notifications: "Notifica email inviata a %{to}"
-  
+
   link_trash_bin: Cestino
   title_restore: Ripristina
   notice_dmsf_file_restored: Il documento è stato ripristinato correttamente
@@ -330,14 +330,14 @@ it: # Italian strings thx 2 Matteo Arceci!
   notice_dmsf_link_restored: Il collegamento è stato ripristinato correttamente
   title_restore_checked: Ripristina selezionati
   error_parent_folder: "La cartella padre non esiste"
-  
+
   error_resource_or_parent_locked: Impossibile completare il blocco - la risorsa (o superiore) è bloccata
   error_parent_locked: Impossibile completare il blocco - la risorsa superiore è bloccata
   error_resource_locked: Impossibile completare il blocco - la risorsa è bloccata
   error_lock_exclusively: impossibile bloccare in modo esclusivo una risorsa già bloccata
   error_unlock_parent_locked: Sblocco fallito - la risorsa superiore è bloccata
 
-  label_dmsf_version: Version
+  label_dmsf_version: Versione
 
   locked_documents: Documenti bloccati
   open_approvals: Approvazioni aperte
@@ -356,7 +356,7 @@ it: # Italian strings thx 2 Matteo Arceci!
 
   label_document_url: Url
   label_last_revision_id: Revision
-    
+
   label_webdav_disable_versioning: No versioning files patterns
   note_webdav_disable_versioning: A regular expression that disables versioning for matching files. The default pattern
     matches temporary files created by MsOffice.
@@ -365,14 +365,14 @@ it: # Italian strings thx 2 Matteo Arceci!
   note_dmsf_keep_documents_locked: Documents will be kept locked when approved
   note_global: (global)
   field_dmsf_not_inheritable: Not inheritable
-  
+
   label_webdav_use_project_names: Use project name for project folder
   note_webdav_use_project_names: Use project names instead of project identifier for project folders.
 
   label_last_approver: Last approver
 
-  label_act_as_attachable: Act as attachable
-  note_dmsf_act_as_attachable: Allows to attach documents to objects e.g. issues.
+  label_act_as_attachable: Considera allegabili
+  note_dmsf_act_as_attachable: Consente di allegare documenti agli oggetti (es. segnalazioni)
 
   label_user_search_add: Search for user to add
 
@@ -396,14 +396,14 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_dmsf_permissions: Allow access only to
   label_inherited_permissions: Inherited Access for
 
-  button_edit_content: Edit content
-  field_workflow: Darbų eiga
-  field_modified: Date
-  field_updated: Date
+  button_edit_content: Modifica contenuto
+  field_workflow: Workflow
+  field_modified: Data modifica
+  field_updated: Data aggiornamento
   field_count: D/L
   field_first_at: First
   field_last_at: Last
-  field_size: Dydis
+  field_size: Dimensione
   field_locked: Bloccato
 
   label_add_width: Add with
@@ -415,7 +415,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   label_scroll_down: Scroll down
   note_webdav_disabled: WebDAV is disabled. Contact the administrator.
 
-  dmsf_copy: "Copy (%{n})"
+  dmsf_copy: "Copia (%{n})"
   label_empty_trash_bin: Empty Trash
   label_dmsf_projects_as_subfolders: Sub-projects as sub-folders
   note_dmsf_projects_as_subfolders: Add sub-projects as sub-folders into DMS view
@@ -449,16 +449,16 @@ it: # Italian strings thx 2 Matteo Arceci!
     application to take it any effect.
   note_dmsf_office_bin_not_available: "LibreOffice's command line binary '%{value}' not available"
 
-  label_dmsf_columns: DMS Columns
+  label_dmsf_columns: Colonne DMS
   label_column_id: ID
-  label_column_title: Pavadinimas
-  label_column_size: Dydis
-  label_column_modified: Pakeistas
-  label_column_version: Versija
-  label_column_workflow: Darbų eiga
-  label_column_author: Autorius
+  label_column_title: Titolo
+  label_column_size: Dimensione
+  label_column_modified: Modificato
+  label_column_version: Versione
+  label_column_workflow: Workflow
+  label_column_author: Autore
   label_column_description: Descrizione
-  label_column_comment: Komentaras
+  label_column_comment: Commenti
 
   label_dmsf_global_menu_disabled: Global DMS menu disabled
   note_dmsf_global_menu_disabled: If yes, DMS menu item is not present in the top menu.
