@@ -55,6 +55,11 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert_not DmsfFolder.permissions?(@folder7)
   end
 
+  def test_permissions_to_system_folder
+    User.current = @jsmith
+    assert DmsfFolder.permissions?(@folder8)
+  end
+
   def test_delete
     assert @folder6.delete(commit: false), @folder6.errors.full_messages.to_sentence
     assert @folder6.deleted?, "Folder #{@folder6} hasn't been deleted"
@@ -268,5 +273,12 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert @folder1.update_from_params(params)
     assert_equal invalid_string_sequence.scrub, @folder1.title
     assert_equal invalid_string_sequence.scrub, @folder1.description
+  end
+
+  def test_issystem
+    assert DmsfFolder.where(id: @folder8.id).issystem.exists?
+    @folder8.deleted = DmsfFolder::STATUS_DELETED
+    assert @folder8.save
+    assert_not DmsfFolder.where(id: @folder8.id).issystem.exists?
   end
 end

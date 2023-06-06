@@ -71,10 +71,14 @@ class DmsfConvertDocuments
       next unless issue.attachments.any?
 
       $stdout.puts "Processing: #{issue}"
-      project.enable_module!('dmsf') unless @dry_run
       # <issue.id> - <issue.subject> folder
-      $stdout.puts "Creating #{issue.id} - #{DmsfFolder.get_valid_title(issue.subject)} folder"
-      folder = issue.system_folder(create: true, prj_id: project.id) unless @dry_run
+      if @dry_run
+        $stdout.puts "Dry run #{issue.id} - #{DmsfFolder.get_valid_title(issue.subject)} folder"
+      else
+        project.enable_module!('dmsf')
+        $stdout.puts "Creating #{issue.id} - #{DmsfFolder.get_valid_title(issue.subject)} folder"
+        folder = issue.system_folder(create: true, prj_id: project.id)
+      end
       files = []
       attachments = []
       issue.attachments.each do |attachment|
@@ -82,7 +86,7 @@ class DmsfConvertDocuments
         create_document_from_attachment(project, folder, attachment, files, issue)
         attachments << attachment unless @fail
       end
-      next unless @dry_run
+      next if @dry_run
 
       attachments.each do |attachment|
         issue.init_journal User.anonymous
@@ -181,19 +185,19 @@ class DmsfConvertDocuments
     revision.comment = "Converted from #{container.class.name}"
     revision.mime_type = attachment.content_type
     revision.disk_filename = revision.new_storage_filename
-    unless @dry_run
-      FileUtils.cp attachment.diskfile, revision.disk_file(search_if_not_exists: false)
-      revision.size = File.size(revision.disk_file(search_if_not_exists: false))
-    end
     if @dry_run
       $stdout.puts "Dry run revision: #{revision.title}"
       warn(revision.errors.full_messages.to_sentence) if revision.invalid?
     else
+      FileUtils.cp attachment.diskfile, revision.disk_file(search_if_not_exists: false)
+      revision.size = File.size(revision.disk_file(search_if_not_exists: false))
       revision.save!
     end
     files << file
-    attachment.destroy unless @dry_run
-    $stdout.puts "Created file: #{file.name}" unless @dry_run
+    unless @dry_run
+      attachment.destroy
+      $stdout.puts "Created file: #{file.name}"
+    end
   rescue StandardError => e
     warn "Creating file: #{attachment.filename} failed"
     warn e.message

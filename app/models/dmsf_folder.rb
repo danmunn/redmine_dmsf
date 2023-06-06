@@ -78,8 +78,7 @@ class DmsfFolder < ApplicationRecord
       .joins("LEFT JOIN #{DmsfFolderPermission.table_name} dfp ON #{DmsfFolder.table_name}.id = dfp.dmsf_folder_id")
       .where(deleted: STATUS_DELETED).where(DmsfFolder.visible_condition).distinct
   }
-  scope :issystem, -> { where(system: true) }
-  scope :notsystem, -> { where(system: false) }
+  scope :issystem, -> { where(system: true, deleted: STATUS_ACTIVE) }
 
   acts_as_customizable
   acts_as_searchable columns: ["#{table_name}.title", "#{table_name}.description"],
@@ -119,7 +118,7 @@ class DmsfFolder < ApplicationRecord
     # System folder?
     if folder&.system
       return false unless allow_system || User.current.allowed_to?(:display_system_folders, folder.project)
-      return false unless folder.issue&.visible?(User.current)
+      return false if folder.title != '.Issues' && !folder.issue&.visible?(User.current)
     end
     # Permissions to the folder?
     if folder.dmsf_folder_permissions.any?

@@ -57,6 +57,7 @@ module RedmineDmsf
         @folder2 = DmsfFolder.find 2
         @folder6 = DmsfFolder.find 6
         @folder7 = DmsfFolder.find 7
+        @folder8 = DmsfFolder.find 8
         Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join('files', ['dmsf'])
         FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
         User.current = nil
