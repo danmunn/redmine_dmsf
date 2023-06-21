@@ -1,12 +1,26 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.0.13 *????-??-??*
+3.0.13 *2023-06-21*
 ------------------
 
-    An option to disable the original module Documents in the plugin's settings
-    Documents preview available if the binary is available but not explicitly defined in the plugin's settings
-    Rubocop tests of the plugin's source codes
+    Italien and German localisation updated
+    OCR supported in full-text search
+    Source codes of the plugin are checked with Rubocop
+
+* Bug: #1457 - Wiki Macros present a 'http' link regardless of whether redmine is configured for http or https
+* New: #1455 - (Partially) updated IT translation
+* Bug: #1454 - After file convert view permissions missing
+* Bug: #1453 - I downloaded files from devel branch and put them into plugin folder. Then I run
+* Bug: #1452 - API call "commit" not accepting "custom_version_major", "custom_version_minor" anymore?
+* Bug: #1449 - Lost attachment on bulk edit
+* Bug: #1448 - Convert documents fails
+* New: #1445 - To support OCR feature
+* Bug: #1444 - Feature/add notification labels  
+* New: #1443 - Updates german translations
+* Bug: #1439 - Error when opening Setting page
+* Bug: #1438 - Error while de-installing the plugin "Validation failed: Name contains invalid character(s)"
+* Bug: #1434 - File view permissions issue
 
 3.0.12 *2023-03-15*
 ------------------
