@@ -422,7 +422,7 @@ class DmsfFile < ApplicationRecord
           dmsf_attrs = filename.scan(%r{^([^/]+/[^_]+)_(\d+)_(.*)$})
           id_attribute = 0
           id_attribute = dmsf_attrs[0][1] if dmsf_attrs.length.positive?
-          next if dmsf_attrs.length.zero? || id_attribute.zero?
+          next if dmsf_attrs.length.zero? || id_attribute.to_i.zero?
           next unless results.select { |f| f.id.to_s == id_attribute }.empty?
 
           dmsf_file = DmsfFile.visible.where(limit_options).find_by(id: id_attribute)
