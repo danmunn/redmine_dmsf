@@ -9,7 +9,7 @@ Changelog for Redmine DMSF
 3.0.13 *2023-06-21*
 ------------------
 
-    Italien and German localisation updated
+    Italian and German localization updated
     OCR supported in full-text search
     Source codes of the plugin are checked with Rubocop
 
