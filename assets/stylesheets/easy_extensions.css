@@ -111,6 +111,50 @@ td.dmsf-title a.icon-folder::before {
     border: 1px solid green;
 }
 
+.icon-file.filetype-doc, .icon-file.filetype-docx { background-image: none; }
+.icon-file.filetype-xls, .icon-file.filetype-xlsx, .icon-file.filetype-xlsm { background-image: none; }
+.icon-file.filetype-ppt, .icon-file.filetype-pptx { background-image: none; }
+.icon-file.filetype-vsd, .icon-file.filetype-vsdx { background-image: none; }
+.icon-file.filetype-mpp { background-image: none; }
+.icon-file.filetype-odt { background-image: none; }
+.icon-file.filetype-ods { background-image: none; }
+.icon-file.filetype-ott { background-image: none; }
+.icon-file.filetype-odp { background-image: none; }
+.icon-file.filetype-odg { background-image: none; }
+
+.dmsf-gray .icon-file.filetype-doc { background-image: none; }
+.dmsf-gray .icon-file.filetype-docx { background-image: none; }
+.dmsf-gray .icon-file.filetype-xls { background-image: none; }
+.dmsf-gray .icon-file.filetype-xlsx { background-image: none; }
+.dmsf-gray .icon-file.filetype-xlsm { background-image: none; }
+.dmsf-gray .icon-file.filetype-ppt { background-image: none; }
+.dmsf-gray .icon-file.filetype-pptx { background-image: none; }
+.dmsf-gray .icon-file.filetype-vsd { background-image: none; }
+.dmsf-gray .icon-file.filetype-vsdx { background-image: none; }
+.dmsf-gray .icon-file.filetype-mpp { background-image: none; }
+.dmsf-gray .icon-file.filetype-odt { background-image: none; }
+.dmsf-gray .icon-file.filetype-ott { background-image: none; }
+.dmsf-gray .icon-file.filetype-ods { background-image: none; }
+.dmsf-gray .icon-file.filetype-odp { background-image: none; }
+.dmsf-gray .icon-file.filetype-odg { background-image: none; }
+
+.dmsf-gray .icon-file.text-x-c { background-image: none; }
+.dmsf-gray .icon-file.text-x-csharp { background-image: none; }
+.dmsf-gray .icon-file.text-x-java { background-image: none; }
+.dmsf-gray .icon-file.text-x-javascript { background-image: none; }
+.dmsf-gray .icon-file.text-x-php { background-image: none; }
+.dmsf-gray .icon-file.text-x-ruby { background-image: none; }
+.dmsf-gray .icon-file.text-xml { background-image: none; }
+.dmsf-gray .icon-file.text-css { background-image: none; }
+.dmsf-gray .icon-file.text-html { background-image: none; }
+.dmsf-gray .icon-file.image-gif { background-image: none; }
+.dmsf-gray .icon-file.image-jpeg { background-image: none; }
+.dmsf-gray .icon-file.image-png { background-image: none; }
+.dmsf-gray .icon-file.image-tiff { background-image: none; }
+.dmsf-gray .icon-file.application-pdf { background-image: none; }
+.dmsf-gray .icon-file.application-zip { background-image: none; }
+.dmsf-gray .icon-file.application-x-gzip { background-image: none; }
+
 /* Approval workflows */
 #tab-content-dmsf_workflow table.list ~ p .button {
     margin-top: 10px;
