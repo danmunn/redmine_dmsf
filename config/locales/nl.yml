@@ -162,7 +162,7 @@ nl:
   field_folder: Map
   error_file_commit_require_uploaded_file: Bestand indienen vereist geüpload bestand
 
-  warning_some_files_were_not_commited: Sommige bestanden zijn niet ingediend door
+  warning_some_files_were_not_committed: Sommige bestanden zijn niet ingediend door
 
   error_user_has_not_right_delete_folder: Gebruiker heeft geen recht om mappen te verwijderen
 

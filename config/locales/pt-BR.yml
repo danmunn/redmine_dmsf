@@ -162,7 +162,7 @@ pt-BR:
   field_folder: Pasta
   error_file_commit_require_uploaded_file: É necessário carregar um arquivo
 
-  warning_some_files_were_not_commited: "O(s) arquivo(s) não foram salvos: %{files}"
+  warning_some_files_were_not_committed: "O(s) arquivo(s) não foram salvos: %{files}"
 
   error_user_has_not_right_delete_folder: "Usuário não possui permissão para excluir pastas"
 

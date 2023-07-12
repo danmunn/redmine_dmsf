@@ -22,13 +22,13 @@
 module DmsfUploadHelper
   include Redmine::I18n
 
-  def self.commit_files_internal(commited_files, project, folder, controller = nil, container = nil, new_object: false)
+  def self.commit_files_internal(committed_files, project, folder, controller = nil, container = nil, new_object: false)
     failed_uploads = []
     files = []
-    if commited_files
+    if committed_files
       failed_uploads = []
-      commited_files.each do |_, commited_file|
-        name = commited_file[:name]
+      committed_files.each do |_, committed_file|
+        name = committed_file[:name]
         new_revision = DmsfFileRevision.new
         file = DmsfFile.visible.find_file_by_name(project, folder, name)
         unless file
@@ -55,27 +55,27 @@ module DmsfUploadHelper
         new_revision.dmsf_file = file
         new_revision.user = User.current
         new_revision.name = name
-        new_revision.title = commited_file[:title]
-        new_revision.description = commited_file[:description]
-        new_revision.comment = commited_file[:comment]
-        new_revision.major_version = if commited_file[:version_major].present?
-                                       DmsfUploadHelper.db_version commited_file[:version_major]
+        new_revision.title = committed_file[:title]
+        new_revision.description = committed_file[:description]
+        new_revision.comment = committed_file[:comment]
+        new_revision.major_version = if committed_file[:version_major].present?
+                                       DmsfUploadHelper.db_version committed_file[:version_major]
                                      else
                                        1
                                      end
-        new_revision.minor_version = if commited_file[:version_minor].present?
-                                       DmsfUploadHelper.db_version commited_file[:version_minor]
+        new_revision.minor_version = if committed_file[:version_minor].present?
+                                       DmsfUploadHelper.db_version committed_file[:version_minor]
                                      end
-        new_revision.patch_version = if commited_file[:version_patch].present?
-                                       DmsfUploadHelper.db_version commited_file[:version_patch]
+        new_revision.patch_version = if committed_file[:version_patch].present?
+                                       DmsfUploadHelper.db_version committed_file[:version_patch]
                                      end
-        new_revision.mime_type = commited_file[:mime_type]
-        new_revision.size = commited_file[:size]
-        new_revision.digest = commited_file[:digest]
+        new_revision.mime_type = committed_file[:mime_type]
+        new_revision.size = committed_file[:size]
+        new_revision.digest = committed_file[:digest]
 
-        if commited_file[:custom_field_values].present?
+        if committed_file[:custom_field_values].present?
           i = 0
-          commited_file[:custom_field_values].each do |_, v|
+          committed_file[:custom_field_values].each do |_, v|
             new_revision.custom_field_values[i].value = v
             i += 1
           end
@@ -97,9 +97,9 @@ module DmsfUploadHelper
         new_revision.disk_filename = new_revision.new_storage_filename
 
         if new_revision.save
-          new_revision.assign_workflow commited_file[:dmsf_workflow_id]
+          new_revision.assign_workflow committed_file[:dmsf_workflow_id]
           begin
-            FileUtils.mv commited_file[:tempfile_path], new_revision.disk_file(search_if_not_exists: false)
+            FileUtils.mv committed_file[:tempfile_path], new_revision.disk_file(search_if_not_exists: false)
             FileUtils.chmod 'u=wr,g=r', new_revision.disk_file(search_if_not_exists: false)
             if defined?(EasyExtensions)
               # We need to trigger Xapian indexing after the file is moved to its target destination
@@ -118,9 +118,9 @@ module DmsfUploadHelper
           failed_uploads.push new_revision
         end
         # Approval workflow
-        next if commited_file[:workflow_id].blank?
+        next if committed_file[:workflow_id].blank?
 
-        wf = DmsfWorkflow.find_by(id: commited_file[:workflow_id])
+        wf = DmsfWorkflow.find_by(id: committed_file[:workflow_id])
         next unless wf
 
         # Assign the workflow
@@ -155,7 +155,7 @@ module DmsfUploadHelper
       end
     end
     if failed_uploads.present? && controller
-      controller.flash[:warning] = l(:warning_some_files_were_not_commited,
+      controller.flash[:warning] = l(:warning_some_files_were_not_committed,
                                      files: failed_uploads.map { |u| u['name'] }.join(', '))
     end
     [files, failed_uploads]

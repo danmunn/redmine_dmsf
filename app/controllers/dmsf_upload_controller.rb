@@ -83,7 +83,7 @@ class DmsfUploadController < ApplicationController
   end
 
   def commit_files
-    commit_files_internal params[:commited_files]
+    commit_files_internal params[:committed_files]
   end
 
   # REST API file commit
@@ -123,8 +123,8 @@ class DmsfUploadController < ApplicationController
 
   private
 
-  def commit_files_internal(commited_files)
-    @files, failed_uploads = DmsfUploadHelper.commit_files_internal(commited_files, @project, @folder, self)
+  def commit_files_internal(committed_files)
+    @files, failed_uploads = DmsfUploadHelper.commit_files_internal(committed_files, @project, @folder, self)
     call_hook :dmsf_upload_controller_after_commit, { files: @files }
     respond_to do |format|
       format.js

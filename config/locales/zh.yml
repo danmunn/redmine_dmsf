@@ -162,7 +162,7 @@ zh:
   field_folder: 件夹
   error_file_commit_require_uploaded_file: 文件提交要求上传文件
 
-  warning_some_files_were_not_commited: "某些文件因验证错误未能被提交: %{files}"
+  warning_some_files_were_not_committed: "某些文件因验证错误未能被提交: %{files}"
 
   error_user_has_not_right_delete_folder: 用户没有权限删除文件夹
 

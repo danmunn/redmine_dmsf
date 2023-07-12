@@ -175,13 +175,13 @@ E.g.
 
 **dmsf_upload_controller_after_commit**
 
-Called after all uploaded files are commited.
+Called after all uploaded files are committed.
 
 parameters: *files*
 
 **dmsf_helper_upload_after_commit**
 
-Called after an individual file is commited. The controller is not available.
+Called after an individual file is committed. The controller is not available.
 
 Parameters: *file*
 

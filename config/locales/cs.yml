@@ -162,7 +162,7 @@ cs:
   field_folder: Složka
   error_file_commit_require_uploaded_file: Potvrzení vyžaduje nahraný soubor
 
-  warning_some_files_were_not_commited: "Některé soubory nebyly potvrzené z důvodu chyb při validaci: %{files}"
+  warning_some_files_were_not_committed: "Některé soubory nebyly potvrzené z důvodu chyb při validaci: %{files}"
 
   error_user_has_not_right_delete_folder: Uživatel nemá právo mazat složky
 

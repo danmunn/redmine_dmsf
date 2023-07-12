@@ -162,7 +162,7 @@ hu:
   field_folder: Mappa
   error_file_commit_require_uploaded_file: Fájl beíratáshoz szükséges a feltöltött fájl
 
-  warning_some_files_were_not_commited: "Néhány fájl nem került beíratásra validálási locked_documents: Zárolt
+  warning_some_files_were_not_committed: "Néhány fájl nem került beíratásra validálási locked_documents: Zárolt
     dokumentum"
   error_user_has_not_right_delete_folder: A felhasználónak nincs jogosultsága a mappa törléséhez
 

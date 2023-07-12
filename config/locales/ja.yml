@@ -162,7 +162,7 @@ ja:
   field_folder: フォルダ
   error_file_commit_require_uploaded_file: コミットするには、まずファイルをアップロードしてください
 
-  warning_some_files_were_not_commited: "いくつかのファイルは、バリデーションエラーのためにコミットされませんでした: %{files}"
+  warning_some_files_were_not_committed: "いくつかのファイルは、バリデーションエラーのためにコミットされませんでした: %{files}"
 
   error_user_has_not_right_delete_folder: ユーザーにフォルダを削除する権限がありません
 

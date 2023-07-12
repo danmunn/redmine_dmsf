@@ -162,7 +162,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   field_folder: Cartella
   error_file_commit_require_uploaded_file: L'aggiornamento del documento richiede un documento già caricato in
     precedenza
-  warning_some_files_were_not_commited: "Alcuni documenti non sono stati aggiornati a causa di errori di validazione:
+  warning_some_files_were_not_committed: "Alcuni documenti non sono stati aggiornati a causa di errori di validazione:
     %{files}"
   error_user_has_not_right_delete_folder: "L'utente non ha i diritti per eliminare le cartelle"
 

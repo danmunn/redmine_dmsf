@@ -162,7 +162,7 @@ ko:
   field_folder: 폴더
   error_file_commit_require_uploaded_file: 파일은 업로드 파일이 필요합니다
 
-  warning_some_files_were_not_commited: "다음 오류로 인하여 파일을 실행할 수 없습니다: %{files}"
+  warning_some_files_were_not_committed: "다음 오류로 인하여 파일을 실행할 수 없습니다: %{files}"
 
   error_user_has_not_right_delete_folder: 사용자는 폴더를 삭제할 수 없습니다
 

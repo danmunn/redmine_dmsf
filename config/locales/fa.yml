@@ -156,7 +156,7 @@ fa:
   field_folder: پوشه
   error_file_commit_require_uploaded_file: ثبت پرونده، نیازمند پرونده‌ی بارگذاری شده است
 
-  warning_some_files_were_not_commited: "بعضی از پرونده‌ها به دلیل خطای اعتبارسنجی بارگذاری نشدند: %{files}"
+  warning_some_files_were_not_committed: "بعضی از پرونده‌ها به دلیل خطای اعتبارسنجی بارگذاری نشدند: %{files}"
 
   error_user_has_not_right_delete_folder: "کاربر دسترسی حذف پوشه را ندارد"
 

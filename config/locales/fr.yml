@@ -162,7 +162,7 @@ fr:
   field_folder: Dossier
   error_file_commit_require_uploaded_file: "Transmission des fichiers nécessaire avant l'enregistrement"
 
-  warning_some_files_were_not_commited: "Erreur d'enregsitrement de certains fichiers %{files}"
+  warning_some_files_were_not_committed: "Erreur d'enregsitrement de certains fichiers %{files}"
 
   error_user_has_not_right_delete_folder: "L'utilisateur ne dispose pas des droits nécessaires permettant la suppression
     du dossier"

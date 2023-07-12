@@ -162,7 +162,7 @@ es:
   field_folder: Directorio
   error_file_commit_require_uploaded_file: El commit requiere archivos subidos
 
-  warning_some_files_were_not_commited: "Algunos archivos no fueron registrados por un error de validación: %{files}"
+  warning_some_files_were_not_committed: "Algunos archivos no fueron registrados por un error de validación: %{files}"
 
   error_user_has_not_right_delete_folder: "No tiene permisos para eliminar el directorio"
 

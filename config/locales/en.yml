@@ -162,7 +162,7 @@ en:
   field_folder: Folder
   error_file_commit_require_uploaded_file: File commit require uploaded file
 
-  warning_some_files_were_not_commited: "Some files were not committed due to validation errors: %{files}"
+  warning_some_files_were_not_committed: "Some files were not committed due to validation errors: %{files}"
 
   error_user_has_not_right_delete_folder: "User hasn't right to delete folders"
 

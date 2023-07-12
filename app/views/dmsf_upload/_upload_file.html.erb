@@ -21,39 +21,39 @@
 %>
 
 <div class="box tabular dmfs-box-tabular">
-  <%= hidden_field_tag "commited_files[#{i}][disk_filename]", upload.disk_filename %>
-  <%= hidden_field_tag "commited_files[#{i}][tempfile_path]", upload.tempfile_path %>
-  <%= hidden_field_tag "commited_files[#{i}][size]", upload.size %>
-  <%= hidden_field_tag "commited_files[#{i}][mime_type]", upload.mime_type %>
-  <%= hidden_field_tag "commited_files[#{i}][digest]", upload.digest %>
+  <%= hidden_field_tag "committed_files[#{i}][disk_filename]", upload.disk_filename %>
+  <%= hidden_field_tag "committed_files[#{i}][tempfile_path]", upload.tempfile_path %>
+  <%= hidden_field_tag "committed_files[#{i}][size]", upload.size %>
+  <%= hidden_field_tag "committed_files[#{i}][mime_type]", upload.mime_type %>
+  <%= hidden_field_tag "committed_files[#{i}][digest]", upload.digest %>
   <div class="splitcontent">
     <div class="splitcontentleft">
       <p>
-        <%= label_tag "commited_files[#{i}][title]", l(:label_title) %>
-        <%= text_field_tag "commited_files[#{i}][title]", upload.title, required:true %>
+        <%= label_tag "committed_files[#{i}][title]", l(:label_title) %>
+        <%= text_field_tag "committed_files[#{i}][title]", upload.title, required:true %>
       </p>
     </div>
     <div class="splitcontentright">
       <p>
         <%= label_tag '', l(:label_filename) %>
         <%= text_field_tag :name, h(upload.name), readonly: true %>
-        <%= hidden_field_tag "commited_files[#{i}][name]", upload.name %>
+        <%= hidden_field_tag "committed_files[#{i}][name]", upload.name %>
       </p>
     </div>
   </div>
   <p>
-    <%= label_tag "commited_files[#{i}][description]", l(:label_description) %>
-    <%= text_area_tag "commited_files[#{i}][description]", upload.description, rows: 6,
+    <%= label_tag "committed_files[#{i}][description]", l(:label_description) %>
+    <%= text_area_tag "committed_files[#{i}][description]", upload.description, rows: 6,
                       class: 'wiki-edit dmsf-description' %>
   </p>
   <div class="splitcontent">
     <div class="splitcontentleft">
       <p>
         <%= render partial: 'dmsf_files/version_selector', locals: {
-            label_tag_name: "commited_files[#{i}][version]",
-            select_tag_name_patch: "commited_files[#{i}][version_patch]",
-            select_tag_name_minor: "commited_files[#{i}][version_minor]",
-            select_tag_name_major: "commited_files[#{i}][version_major]",
+            label_tag_name: "committed_files[#{i}][version]",
+            select_tag_name_patch: "committed_files[#{i}][version_patch]",
+            select_tag_name_minor: "committed_files[#{i}][version_minor]",
+            select_tag_name_major: "committed_files[#{i}][version_major]",
             revision_or_upload: upload } %>
       </p>
       <p>
@@ -69,16 +69,16 @@
       <div class="custom_fields">
         <% upload.custom_values.each do |value| %>
           <% value.value = nil if value.custom_field.dmsf_not_inheritable %>
-          <p><%= custom_field_tag_with_label "commited_files[#{i}]", value %></p>
+          <p><%= custom_field_tag_with_label "committed_files[#{i}]", value %></p>
         <% end %>
       </div>
     </div>
   </div>
   <p>
-    <%= label_tag "commited_files[#{i}][comment]", l(:label_comment) %>
-    <%= text_area_tag "commited_files[#{i}][comment]", upload.comment, rows: 2, class: 'wiki-edit dmsf-description' %>
+    <%= label_tag "committed_files[#{i}][comment]", l(:label_comment) %>
+    <%= text_area_tag "committed_files[#{i}][comment]", upload.comment, rows: 2, class: 'wiki-edit dmsf-description' %>
   </p>
 </div>
 
-<%= wikitoolbar_for "commited_files_#{i}_description" %>
-<%= wikitoolbar_for "commited_files_#{i}_comment" %>
+<%= wikitoolbar_for "committed_files_#{i}_description" %>
+<%= wikitoolbar_for "committed_files_#{i}_comment" %>

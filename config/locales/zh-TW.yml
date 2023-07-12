@@ -162,7 +162,7 @@ zh-TW:
   field_folder: 資料夾
   error_file_commit_require_uploaded_file: 檔案提交，需要上傳檔案。
 
-  warning_some_files_were_not_commited: "部份檔案因為驗証失敗無法提交: %{files}"
+  warning_some_files_were_not_committed: "部份檔案因為驗証失敗無法提交: %{files}"
 
   error_user_has_not_right_delete_folder: 使用者沒有權限，刪除資料夾。
 

@@ -162,7 +162,7 @@ pl:
   field_folder: Folder
   error_file_commit_require_uploaded_file: Commit pliku wymaga jego uprzedniego przesłania
 
-  warning_some_files_were_not_commited: "Niektóre pliki nie zostały zacommitowane ze względu na błędy walidacji:
+  warning_some_files_were_not_committed: "Niektóre pliki nie zostały zacommitowane ze względu na błędy walidacji:
     %{files}"
   error_user_has_not_right_delete_folder: "Użytkownik nie posiada uprawnień do usuwania folderów"
 

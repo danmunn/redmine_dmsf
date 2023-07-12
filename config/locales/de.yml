@@ -162,7 +162,7 @@ de:
   label_file: Datei
   field_folder: Ordner
   error_file_commit_require_uploaded_file: Das Hinzufügen erfordet eine hochgeladene Datei
-  warning_some_files_were_not_commited: "Einige Dateien wurden wegen Validierungsfehlern nicht hinzugefügt: %{files}"
+  warning_some_files_were_not_committed: "Einige Dateien wurden wegen Validierungsfehlern nicht hinzugefügt: %{files}"
   error_user_has_not_right_delete_folder: Der Nutzer hat kein Recht den Ordner zu löschen.
   error_user_has_not_right_delete_file: Der Nutzer hat kein Recht die Datei zu löschen.
   notice_entries_deleted: Einträge löschen

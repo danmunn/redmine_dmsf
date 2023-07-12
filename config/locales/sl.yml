@@ -162,7 +162,7 @@ sl:
   field_folder: Pod mapo
   error_file_commit_require_uploaded_file: Ukaz zahteva naloženo datoteko
 
-  warning_some_files_were_not_commited: "Nekatere datoteke niso shranje zaradi napak v validaciji: %{files}"
+  warning_some_files_were_not_committed: "Nekatere datoteke niso shranje zaradi napak v validaciji: %{files}"
 
   error_user_has_not_right_delete_folder: Uporabnik nima privilegija brisati mapo
 
