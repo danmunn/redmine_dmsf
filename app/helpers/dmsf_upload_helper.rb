@@ -101,6 +101,10 @@ module DmsfUploadHelper
           begin
             FileUtils.mv commited_file[:tempfile_path], new_revision.disk_file(search_if_not_exists: false)
             FileUtils.chmod 'u=wr,g=r', new_revision.disk_file(search_if_not_exists: false)
+            if defined?(EasyExtensions)
+              # We need to trigger Xapian indexing after the file is moved to its target destination
+              file.touch
+            end
             file.last_revision = new_revision
             files.push file
             container.dmsf_file_added file if container && !new_object

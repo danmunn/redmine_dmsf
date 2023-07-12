@@ -470,6 +470,8 @@ fr:
 
   label_remove_original_documents_module: Remove the original Documents module
 
+  text_fulltext_search: 'Full-text search in documents requires presence of %{cmd1} and %{cmd2} commands on the server.'
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

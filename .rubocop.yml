@@ -1,6 +1,5 @@
-# Redmine plugin for Custom Workflows
+# Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2015-19 Anton Argirov
 # Copyright © 2019-23 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -20,6 +19,8 @@
 AllCops:
   TargetRubyVersion: 2.7
   TargetRailsVersion: 6.1
+
+  SuggestExtensions: false
 
   NewCops: enable
 
@@ -78,6 +79,7 @@ Rails/DynamicFindBy:
 
 Rails/SkipsModelValidations:
   Exclude:
+    - app/helpers/dmsf_upload_helper.rb # touch is Okay
     - app/models/dmsf_workflow.rb # update doesn't work here
     - lib/redmine_dmsf/patches/user_patch.rb
     - lib/redmine_dmsf/patches/role_patch.rb

@@ -41,6 +41,7 @@ require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/queries_controller_patch
 require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/pdf_patch"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/access_control_patch"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/search_patch"
+require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/search_controller_patch"
 
 # A workaround for obsolete 'alias_method' usage in RedmineUp's plugins
 if RedmineDmsf::Plugin.an_obsolete_plugin_present?
@@ -53,6 +54,12 @@ if defined?(EasyExtensions)
   require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/easy_crm_case_patch"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/attachable_patch"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/easy_crm_cases_controller_patch.rb"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/xapian_easy_search_helper_patch.rb"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/application_helper_patch.rb"
+
+  # Mappers
+  require "#{File.dirname(__FILE__)}/xapian_easy_search/dmsf_file_mapper.rb"
+  require "#{File.dirname(__FILE__)}/xapian_easy_search/dmsf_folder_mapper.rb"
 end
 
 # Load up classes that make up our WebDAV solution ontop of Dav4rack

@@ -597,6 +597,10 @@ class DmsfFolder < ApplicationRecord
     !(dmsf_folders.visible.exists? || dmsf_files.visible.exists? || dmsf_links.visible.exists?)
   end
 
+  def to_s
+    title
+  end
+
   class << self
     def directory_subtree(tree, folder, level, current_folder)
       folders = folder.dmsf_folders.visible.to_a
