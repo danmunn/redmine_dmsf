@@ -23,10 +23,10 @@
 source 'https://rubygems.org' do
   gem 'active_record_union'
   gem 'ox' # Dav4Rack
-  gem 'rake'
+  gem 'rake' unless Dir.exist?(File.expand_path('../../redmine_dashboard', __FILE__))
   gem 'uuidtools'
   gem 'xapian-ruby'
-  gem 'zip-zip'
+  gem 'zip-zip' unless Dir.exist?(File.expand_path('../../vault', __FILE__))
 
   # Redmine extensions
   gem 'simple_enum' unless Dir.exist?(File.expand_path('../../easyproject', __FILE__))
