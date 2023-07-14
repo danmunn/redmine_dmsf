@@ -2,6 +2,8 @@
 
 # Redmine plugin for Document Management System "Features"
 #
+# Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
 # Copyright © 2011-23 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -18,26 +20,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-module RedmineDmsf
-  module Patches
-    # ApplicationHelper patch
-    module ApplicationHelperPatch
-      ##################################################################################################################
-      # Overridden methods
-
-      def xapian_link_to_entity(entity, html_options = {})
-        case entity.is_a?
-        when DmsfFolder
-          link_to h(entity.to_s), dmsf_folder_path(id: entity.project_id, folder_id: entity), class: 'icon icon-folder'
-        when DmsfFile
-          link_to h(entity.to_s), dmsf_file_path(id: entity), class: 'icon icon-file'
-        else
-          super
-        end
-      end
+if defined?(EasyExtensions)
+  require 'xapian_easy_search/base_mapper'
+else
+  module XapianEasySearch
+    # Foo class
+    class BaseMapper
+      def foo; end
     end
   end
 end
-
-# Apply the patch
-ApplicationHelper.prepend RedmineDmsf::Patches::ApplicationHelperPatch if Redmine::Plugin.installed?('easy_extensions')

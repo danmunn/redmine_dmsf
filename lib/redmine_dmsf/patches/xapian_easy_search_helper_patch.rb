@@ -37,4 +37,6 @@ module RedmineDmsf
 end
 
 # Apply the patch
-XapianEasySearchHelper.prepend RedmineDmsf::Patches::XapianEasySearchHelperPatch
+if Redmine::Plugin.installed?('easy_extensions')
+  XapianEasySearchHelper.prepend RedmineDmsf::Patches::XapianEasySearchHelperPatch
+end
