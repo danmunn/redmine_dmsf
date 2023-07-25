@@ -1,0 +1,483 @@
+#
+# Redmine plugin for Document Management System "Features"
+#
+# Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
+# Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
+# Copyright © 2011-23 Karel Pičman <karel.picman@kontron.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+uk:
+  dmsf: DMS # Custom fields tab title - Заголовок таблиці спеціальних полів
+  label_dmsf_file_plural: DMS Documents # Email subject & Search options - Документи DMS # Тема електронного листа і опції пошуку
+  label_dmsf_file_revision_plural: Перегляд / Редакція документа
+  label_dmsf_file_revision_access_plural: Доступ до документів
+  warning_no_entries_selected: Запис не вибрано
+  error_email_to_must_be_entered: Потрібно ввести електронну адресу
+  warning_file_already_locked: Файл вже заблокований
+  notice_file_locked: Файл заблоковано
+  warning_file_not_locked: Файл не заблоковано
+  notice_file_unlocked: Файл розблоковано
+  error_only_user_that_locked_file_can_unlock_it: Лише користувач, який заблокував файл, може його розблокувати
+
+  error_max_files_exceeded: "Перевищено ліміт файлів- %{number}, які можна завантажувати одночасно"
+  error_entry_project_does_not_match_current_project: "Введений проект не відповідає поточному проекту"
+
+  notice_folder_created: Створена папка
+  error_folder_creation_failed: Не вдалося створити папку
+  error_folder_title_must_be_entered: Необхідно ввести назву
+  notice_folder_deleted: Папку видалено
+  error_folder_title_is_already_used: Назва вже використана
+  notice_folder_details_were_saved: Деталі папки збережено
+  error_folder_is_locked: Папка заблокована
+  error_file_is_locked: Файл заблокований
+  notice_file_deleted: Файл видалений
+  error_at_least_one_revision_must_be_present: Повинна бути принаймні одна редакція
+  notice_revision_deleted:  Зміни видалено
+  notice_revision_obsoleted: Зміни застарли
+  warning_one_of_files_locked: Один із файлів заблоковано
+  notice_file_revision_created: Створена нова редакція файла
+  notice_your_preferences_were_saved: Ваші налаштування були збережені
+  notice_your_preferences_were_not_saved: Ваші налаштування не були збережені
+  warning_folder_notifications_already_activated: Сповіщення про папку вже активовано
+
+  notice_folder_notifications_activated: Сповіщення про папку активовано
+  warning_folder_notifications_already_deactivated: Сповіщення про папку вже деактивовано
+
+  notice_folder_notifications_deactivated: Сповіщення про папку деактивовано
+  warning_file_notifications_already_activated: Сповіщення про файл вже активовано
+
+  notice_file_notifications_activated: Сповіщення про файл активовано
+  warning_file_notifications_already_deactivated: Сповіщення про файл вже деактивовано
+
+  notice_file_notifications_deactivated: Сповіщення про файл деактивовано
+  link_details: "Деталі %{title}"
+  link_edit: "Редагувати %{title}"
+  link_create_folder: Створити папку
+  link_title: Назва
+  link_size: Розмір
+  link_modified: Змінено
+  link_ver: Версія
+  link_author: Автор
+  title_check_for_zip_download_or_email: Перевірте архів, завантаження чи електронну адресу
+  title_check_for_restore_or_delete: Перевірте відновлення або видалення
+
+  title_notifications_active_deactivate: "Сповіщення активні: Деактивувати"
+  title_notifications_not_active_activate: "Сповіщення не активні: Активувати"
+  title_title_version_version_download: "Назва версії %{title} завантаження %{version}"
+  title_locked_by_user: "Заблоковано користувачем -%{user}"
+  title_waiting_for_approval: Очікує підтвердження
+  title_approved: Підтверджено
+  title_unlock_file: Розблокуйте, щоб дозволити зміни іншим учасникам
+  title_lock_file: Заблокуйте, щоб запобігти змінам від інших учасників
+  title_download_checked: Завантаження перевірено в Zip-архіві
+  title_send_checked_by_email: Відправити перевірене електронною поштою
+  link_user_preferences: Ваші налаштування проекту DMS
+  heading_send_documents_by_email: Надіслати документ електронною поштою
+  label_email_from: Від
+  label_email_to: Кому
+  label_email_cc: Копія
+  label_email_subject: Тема
+  label_email_documents: Документи
+  label_email_body: Тіло
+  label_email_send: Відправити
+  title_notifications_active: Сповіщення активні
+  label_upload: Вивантажити
+  heading_new_folder: Нова папка
+  label_title: Назва
+  label_description: Опис
+  submit_save: Зберегти
+  info_file_locked: Файл заблоковано!
+  label_notifications: Сповіщення
+  select_option_default: За замовчуванням
+  select_option_deactivated: Деактивовано
+  select_option_activated: Активовано
+  label_title_format: Форамт назви
+  text_title_format: "Формат назви документа для завантаження (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision)(назва-файл-дата-версія-номер-редакція). Example: %t_%v"
+
+  title_save_preferences: Зберегти зміни
+  heading_revisions: Зміни
+  title_download: Завантажити
+  title_delete_revision: Видалити зміни
+  title_obsolete_revision: Зміни застаріли
+  label_created: Створено
+  label_changed: Змінено
+  info_changed_by_user: "Змінено %{changed} by"
+  label_filename: "Ім'я файлу"
+  label_mime: Mime - Іконка
+  label_size: Size - Розмір
+  heading_new_revision: Нова редакція
+  option_version_same: Те саме
+  option_version_patch: Шлях
+  option_version_minor: Незначні
+  option_version_major: Глобальні
+  option_version_custom: Налаштовані
+  label_new_content: Новий зміст
+  label_maximum_files_download: Завантажена максимальна кількість файлів
+  note_maximum_number_of_files_downloaded: Обмежує максимальну кількість файлів, завантажених у zip або надісланих електронною поштою. 0 означає необмежений.
+
+  label_file_storage_directory: Директорія зберігання файлів
+  label_index_database: Індекс бази даних
+  label_stemming_language: Основна мова
+  note_possible_values: Можливі значення
+  note_pass_none_to_disable_stemming: "натисніть 'none'(ні), щоб вимкнути основну індикацію"
+  label_stem_strategy: Коренева стратегія
+  option_stem_none: Stem none (default)
+  option_stem_some: Stem some
+  option_stem_all: Stem all
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is  STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms of terms except for those which start with a capital letter, or are followed by certain characters (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed  with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
+  label_default_notifications: File default notifications
+  heading_uploaded_files: Вивантажені файли
+  link_documents: Документи
+  permission_view_dmsf_file_revision_accesses: Перегляд завантажень у Потоці активності
+  permission_view_dmsf_file_revisions: Перегляд змін у Потоці активності
+  permission_view_dmsf_folders: Перегляньте документи
+  permission_user_preferences: Зміни користувача
+  permission_view_dmsf_files: Переглянути документи
+  permission_folder_manipulation: Маніпуляції з папками
+  permission_file_manipulation: Маніпуляції з файлами
+  permission_force_file_unlock: Примусове розблокування файла
+  permission_manage_workflows: Керуванн робочими процесами
+  permission_file_delete: Видалити документи
+  permission_display_system_folders: Відобразити системні папки
+  permission_file_approval: Підтвердження файлу
+  permission_email_documents: Документи з електронної пошти
+  label_file: Файл
+  field_folder: Папка
+  error_file_commit_require_uploaded_file: Для збереження файлів потрібен завантажений файл
+
+  warning_some_files_were_not_commited: "Деякі файли не було зафіксовано-збережено через помилки перевірки : %{files}"
+
+  error_user_has_not_right_delete_folder: "Користувач не має права видаляти папки"
+
+  error_user_has_not_right_delete_file: "Коричтувач не має права видаляти файл"
+
+  notice_entries_deleted: Записи видалено
+  warning_some_entries_were_not_deleted: "Деякі записи було видалено : %{entries}"
+  title_delete_checked: Видалити перевірені
+  title_items: елемени
+  title_filename_for_download:  Ім'я файла використано для завантаження або в Zip-архіві
+  label_number_of_folders: Folders - Папки
+  label_number_of_documents: Documents - Документи
+  error_file_storage_directory_does_not_exist: "Каталог/Директорія зберігання файлів не існує і не може бути створений"
+
+  error_file_can_not_be_created: "Неможливо створити файли в каталозі/директорії зберігання"
+  error_wrong_zip_encoding: Неправильне Zip-кодування
+  menu_dmsf: DMS  # Project tab title - Заголовок вкладки DMS  # Project
+  label_physical_file_delete: Фізичний файл видалено
+  user_is_not_project_member: Ви не є учасником проекту
+  heading_access_downloads_emails: Завантажити/Емейл
+  heading_access_first: Перший
+  heading_access_last: Останній
+  label_dmsf_updated: Оновлений
+  label_dmsf_downloaded: Завантажений
+  title_total_size_of_all_files: Загальний розмір файлів у цій папці
+  project_module_dmsf: DMS  # Project module name - Ім'я/Назва модуля DMS  # Project
+  warning_no_project_to_copy_file_to: Немає проекту, куди можна скопіювати файл
+  comment_copied_from: "Скопійовано з %{source}"
+  field_target_project: Цільовий/Кінцевий проект
+  field_target_folder: Цільова/Кінцева папка
+  title_copy_or_move: Скопіювати/Перенести
+  label_dmsf_folder_plural: DMS Folders # Search options - Опцї пошуку папок
+  comment_moved_from: "Переміщено з %{source}"
+  error_target_folder_same: Цільова/кінцева папка і проект такі самі, як поточні
+  title_copy: Копіювати
+
+  error_max_email_filesize_exceeded: "Ви перевищили максимальний розмір файлу для надсилання електронною поштою (%{number} MB)"
+
+  note_maximum_email_filesize: Обмежує максимальний розмір файлу, який можна надіслати електронною поштою. 0 означає необмежений. Цифра в МБ
+
+  label_maximum_email_filesize: Максимальний розмір вкладення електронної пошти
+  header_minimum_filesize: Помилка файла
+  error_minimum_filesize: "Файл %{file} розміром 0 байт і не може бути прикріплений"
+  parent_directory: Батьківський каталог
+  note_webdav: "Після ввімкнення протокол Webdav можна знайти за адресою %{protocol}://%{domain}/dmsf/webdav/[project identifier]"
+
+  label_copy_dmsf: "Скопіювати документи і папки до (%{files} files in %{folders} folders)"
+  label_copy_only_dmsf_folders: "Скопіювати лише папки (%{folders})"
+
+  warning_folder_already_locked: Ця папка вже заблокована
+  notice_folder_locked: Папку успішно заблоковано
+  warning_folder_not_locked: На жаль, не вжалося розблокувати папку
+  notice_folder_unlocked: Папку успішно розблоковано
+  error_only_user_that_locked_folder_can_unlock_it: У вас немає прав для розблокування цієї папки
+
+  title_unlock_folder: Розблокуйте, щоб дозволити зміни від інших учасників
+  title_lock_folder: Заблокуйте, щоб запобігти змінам від інших учасників
+
+  select_option_webdav_readonly: Лише для читання
+  select_option_webdav_readwrite: Читання/Редагування
+  label_webdav_strategy: Стратегія Webdav
+
+  note_webdav_strategy: Дозволяє адміністратору вирішувати, чи платформа Webdav є доступною лише для читання, чи читання/редагування для кінцевих користувачів.
+
+
+  error_unable_delete_dmsf_workflow: Не вдалося видалити робочий процес
+  error_empty_note: "Примітка не може бути порожньою"
+  error_workflow_assign: Під час призначення сталася помилка
+  error_cannot_start_workflow: "Не вдалося почати робочий процес"
+  error_cannot_renumber_steps: "Не можна змінити нумерацію кроків"
+  label_dmsf_workflow_new: Новий робочий процес затвердження
+  field_label_dmsf_workflow: Робочий процес затвердження
+  field_label_dmsf_workflow_name: Назва процесу затвердження
+  label_dmsf_workflow_plural: Процеси затвердження
+  label_dmsf_workflow_plural_num: Копіювати процеси затвердження (%{count})
+  label_dmsf_workflow_step: Step - Крок
+  label_dmsf_workflow_step_plural: Кроки
+  label_dmsf_workflow_approval_plural: Затвердження
+  label_dmsf_wokflow_action_approve: Підтвердити
+  label_dmsf_wokflow_action_reject: Відхилити
+  label_dmsf_wokflow_action_delegate: Делегувати
+  label_dmsf_wokflow_action_assign: Призначити процес затвердження
+  label_dmsf_wokflow_action_start: Почати робочий процес
+  label_dmsf_workflow_add_approver: "Додайте нового затверджувача з логічною функцією"
+  label_or: or - або
+  label_action: Дія
+  label_note: Примітка
+  title_none: Жодної
+  title_rejection: Відміна
+  title_delegation: Делегування
+  title_assignment: Призначення
+  title_start: Почати
+  title_dmsf_workflow_log: Журнал робочого процесу затвердження
+  title_assigned: Призначено
+  title_approval: Підтвердження
+  title_rejected: Відхилено
+  title_obsolete: Застріло
+  dmsf_and: AND - І
+  dmsf_or: OR - АБО
+  dmsf_new_step: Новий крок
+  dmsf_new_step_or_approver: Новий крок або Новий затверджувач
+  message_dmsf_wokflow_note: Ваша примітка...
+  info_revision: "r%{rev}"
+  link_workflow: Робочий процес
+  notice_workflow_started: Підтвердження робочого процесу почалося усішно
+  text_email_subject_approved: підтверджено
+  text_email_subject_rejected: відхилено
+  text_email_subject_delegated: делеговано
+  text_email_subject_requires_approval: потрібне ваше підтвердження
+  text_email_subject_updated: оновлено
+  text_email_subject_started: почато
+  text_email_finished_approved: "Процес підтвердження '%{name}' для документа '%{filename}' щойно закінчився і документ схвалено."
+
+  text_email_finished_rejected: "Процес підтвердження '%{name}' для документа призначений '%{filename}' щойно закінчився і документ відхилено через '%{notice}'."
+
+  text_email_finished_delegated: "Процес підтвердження '%{name}' для документа '%{filename}' був делегований через '%{notice}' і ви повинні підтвердити його на відповідному кроці '%{stepname}'"
+
+  text_email_finished_step: "Робочий процес '%{name}' призначений для документу '%{filename}' затвердження щойно закінчив один із кроків підтвердження і ви повинні зробити підтвердження на наступному кроці."
+
+  text_email_finished_step_short: "Робочий процес затвердження '%{name}', призначений документу '%{filename}', щойно завершив  один із етапів затвердження."
+
+  text_email_started: "Робочий процес затвердження '%{name}', призначений документу '%{filename}', щойно розпочато, і ви     очікується, що буде виконано схвалення на поточному кроці схвалення '%{stepname}'."
+
+  text_email_to_proceed: Щоб продовжити, клацніть на іконку прапорця поруч із документом
+  text_email_to_see_history: Щоб переглянути історію підтвердження, клацніть на статус робочого процесу документа
+
+  text_email_to_see_status: Щоб переглянути поточний статус робочого процесу підтвердження, клацніть на статус робочого процесу документа у
+
+
+  title_create_link: Створити символічний лінк
+  label_link_from: Лінк від
+  label_link_to: Лінк до
+  label_notifications_on: Увімкнути сповіщення
+  label_notifications_off: Вимкнути сповіщення
+  field_target_file: Вихідний файл
+  title_download_entries: Завантажити зміни
+  label_external: Зовнішні
+  label_internal: Внутрішні
+
+  label_link_name: Назва лінку
+  field_external_url: URL
+  label_target_folder: Кінцева папка
+  label_source_folder: Вихідна папка
+  label_target_project: Кінцевий проект
+  label_source_project: Вихідний проект
+
+  text_email_doc_updated_subject: Документи оновлені
+  text_email_doc_updated: щойно актуалізовані документи від
+  text_email_doc_follows: наступним чином
+  text_email_doc_deleted_subject: Документи видалені
+  text_email_doc_deleted: щойно видалив документи від
+  label_links_only: лише посилання(лінки)
+
+  label_display_notified_recipients: Відобразити сповіщених отримувачів
+  note_display_notified_recipients: Користувач буде проінформований про всіх одержувачів щойно надісланого електронного повідомлення
+
+  warning_email_notifications: "Емейл сповіщення надіслані до %{to}"
+
+  link_trash_bin: Корзина
+  title_restore: Відновити
+  notice_dmsf_file_restored: Документ успішно відновлено
+  notice_dmsf_folder_restored: Папку успішно відновлено
+  notice_dmsf_link_restored: Посилання успішно відновлено
+  title_restore_checked: Відновлення перевірено
+  error_parent_folder: "Материнська папка не існує"
+
+  error_resource_or_parent_locked: Не вдалося завершити блокування - ресурс, вихідна (материнська) папка заблокована
+  error_parent_locked: Не вдалося завершити блокування - материнський ресурс заблоковано
+  error_resource_locked: Не вдалося завершити блокування - ресурс заблоковано
+  error_lock_exclusively: Не вдалося заблокувати винятково вже заблокований ресурс
+  error_unlock_parent_locked: Не вдалося розблокуати - ресурс заблоковано
+
+  label_dmsf_version: Версія
+
+  locked_documents: Заблоковані документи
+  open_approvals: Відкриті підтвердження
+  watched_documents: Переглянуті документи
+
+  error_maximum_upload_filecount: "Не більше ніж %{filecount} файла(ів)можуть бути вивантажені."
+
+  label_public_urls: Загальнодоступні URL-адреси дійсні до
+
+  label_webdav: WebDAV
+  label_full_text: Повнотекстовий пошук
+  link_extension: Вихід
+
+  label_webdav_ignore: Шаблони ігнорованих файлів
+  note_webdav_ignore: Типовий вираз із назвами файлів, які ігноруються запитами PUT
+
+
+
+
+  label_document_url: Url
+  label_last_revision_id: Ревізія
+
+  label_webdav_disable_versioning: Немає керування версіями шаблонами файлів
+  note_webdav_disable_versioning: Типовий вираз, який вимикає керування версіями для відповідних файлів. Стандартний шаблон відповідає тимчасовим файлам, створеним MsOffice
+
+  label_dmsf_keep_documents_locked: Залишити окументи заблокованими
+  note_dmsf_keep_documents_locked: Документи будуть залишатися заблокованими після підтвердження.
+  note_global: (global)
+  field_dmsf_not_inheritable: Поле не успадковується
+
+  label_webdav_use_project_names: Використовуйте назви проектів для папок проектів
+  note_webdav_use_project_names: Використовуйте назви проектів замість ідентифікаторів проектів для папок проектів
+
+  label_last_approver: Останній підтверджувач
+
+  label_act_as_attachable: Діяти як прикріплений
+  note_dmsf_act_as_attachable: Дозволяє прикріплювати документи до об’єктів, напр. питання.
+
+  label_user_search_add: Пошук користувача для додавання
+
+  label_dmsf_attachments: Вкладення DMS
+  label_basic_attachments: Базові вкладення
+
+  label_email_from_override: Від
+  text_email_from_override: Користувач на даний момент увійшов у систему
+  label_email_reply_to: Відповісти кому
+
+  label_enable_cjk_ngrams: Дозводити генерацію n-грам з тексту CJK
+  text_enable_cjk_ngrams: "Якщо ввімкнено цю функцію, діапазони символів CJK розбиваються на уніграми і біграми, при цьому уніграми містять позиційну інформацію. Символи, відмінні від CJK, розбиваються на слова як зазвичай. Відповідна опція повинна бути використана під час індексування                                                                         Приклад: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
+
+
+
+
+  label_dmsf_fast_links: Швидкі посилання
+  text_dmsf_fast_links_info: Ви зможете вручну ввести ідентифікатор кінцевої папки під час створення посилань або переміщення файлів чи папок, щоб пришвидшити процес створення посилань.
+
+
+
+  label_dmsf_permissions: Дозволити доступ лише
+  label_inherited_permissions: Успадкований доступ від
+
+  button_edit_content: Редагувати вміст
+  field_workflow: Робочий потік
+  field_modified: Дата модифікації
+  field_updated: Дата оновлення
+  field_count: D/L
+  field_first_at: Перший
+  field_last_at: Останній
+  field_size: Розмір
+  field_locked: Заблокований
+
+  label_add_width: Додати з
+
+  dmsf_webdav_ignore_1b_file_for_authentication: Ігнорувати 1б файл, відправлений для аутентифікації
+  dmsf_webdav_ignore_1b_file_for_authentication_info: Плагін Total Commander WebDAV
+
+  text_not_empty: Папка не порожня.
+  label_scroll_down: Пролистати донизу
+  note_webdav_disabled: WebDAV вимкнений. Зверніться до адміністратора.
+
+  dmsf_copy: "Копія (%{n})"
+  label_empty_trash_bin: Очистити кошик
+  label_dmsf_projects_as_subfolders: Суб-проекти і суб-папки
+  note_dmsf_projects_as_subfolders: Додати суб-проекти як суб-папки в перегляд DMS
+  only_approval_zero_minor_version: Лише схвалення нульової проміжної версії
+  title_assignment_minor: Призначення не дозволено, значення має дорівнювати нулю
+  title_start_minor: Початок не дозволений, значення має довівнювати нулю
+  title_approval_minor: Підтвердження не дозволене, значення має дорівнювати нулю
+
+  label_project_watchers: Хто переглядає
+  label_dmsf_folder_watchers: Хто переглядає папки
+  label_dmsf_file_watchers: Хто переглядає файли
+  label_dmsf_watched: Переглянуті документи
+  dmsf_legacy_notifications: Застарілі DMS сповіщення
+  permission_view_dmsf_folder_watchers: Переглянути тих, хто переглядав папку
+  permission_add_dmsf_folder_watchers: Додати тих, хто переглядав папку
+  permission_delete_dmsf_folder_watchers: Видалити тих, хто переглядав папку
+  permission_view_dmsf_file_watchers: Переглнути тих, хто переглядав документ
+  permission_add_dmsf_file_watchers: Додати тих, хто переглядав документ
+  permission_delete_dmsf_file_watchers: Видалити тих, хто переглядав документ
+  permission_view_project_watchers: Переглянути тих, хто переглядав проект
+  permission_add_project_watchers: Додати тих, хто переглядав проект
+  permission_delete_project_watchers: Видалити тих, хто переглядав проект
+  label_dmsf_new_top_level_document: Новий документ DMS топ рівня
+  label_dmsf_new_top_level_folder: Нова папка DMS топ рівня
+
+  label_dmsf_max_notification_receivers_info: Інформація про отримувачів максимальної кількості сповіщень
+  note_dmsf_max_notification_receivers_info: Обмежує максимальну кількість відображених отримувачів сповіщень електронною поштою
+  label_dmsf_office_bin: Libreoffice binary -
+  note_dmsf_office_bin: Двійковий файл для перетворення документів формату офіс у формат PDF і забезпечення їх попереднього перегляду. Якщо ви хочете заборонити попередній перегляд документів формату офіс, поставте тут порожній рядок. Після зміни, можливо, доведеться перезапустити програму, щоб вона почала працювати.
+
+
+  note_dmsf_office_bin_not_available: "LibreOffice's Команда не доступна '%{value}'"
+
+  label_dmsf_columns: Колонки DMS
+  label_column_id: ID
+  label_column_title: Назва
+  label_column_size: Розмір
+  label_column_modified: Змінено
+  label_column_version: Версія
+  label_column_workflow: Workflow - Робочий процес
+  label_column_author: Автор
+  label_column_description: Опис
+  label_column_comment: Коментар
+
+  label_dmsf_global_menu_disabled: Глобальне меню DMS вимкнене
+  note_dmsf_global_menu_disabled: Якщо так, об'єкт меню DMS не присутній в топ меню
+  error_dmsf_workflow_assigned: Робочий процес затвердження, який використовується, не можна ні редагувати, ні видаляти
+
+  label_empty_minor_version_by_default: Порожня версія за замовчуванням
+  text_email_doc_downloaded_subject: Документи завантажені
+  text_email_doc_downloaded: Щойно завантажив документи від
+  field_default_dmsf_query: Запит DMS за замовчуванням
+  field_receive_download_notification: Отримувати сповіщення про завантаження
+
+  label_remove_original_documents_module: Видалити модуль оригінальних документів
+
+  easy_pages:
+    modules:
+      dmsf_locked_documents: Мої заблоковані документи
+      dmsf_open_approvals: Мої відкриті дозволи
+      dmsf_watched_documents: Мої переглянуті документи
+    module_category:
+      easy_dms: Легкий DMS
+
+  activerecord:
+    errors:
+      messages:
+        error_contains_invalid_character: Містить недійсні символи
