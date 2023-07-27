@@ -105,8 +105,8 @@ uk:
   select_option_deactivated: Деактивовано
   select_option_activated: Активовано
   label_title_format: Форамт назви
-  text_title_format: "Формат назви документа для завантаження (%t - title, %f - file, %d - date, %v - version, %i - ID, %r - revision)(назва-файл-дата-версія-номер-редакція). Example: %t_%v"
-
+  text_title_format: "Формат назви документа для завантаження (%t - title, %f - file, %d - date, %v - version, %i - ID,
+   %r - revision)(назва-файл-дата-версія-номер-редакція). Example: %t_%v"
   title_save_preferences: Зберегти зміни
   heading_revisions: Зміни
   title_download: Завантажити
@@ -126,8 +126,8 @@ uk:
   option_version_custom: Налаштовані
   label_new_content: Новий зміст
   label_maximum_files_download: Завантажена максимальна кількість файлів
-  note_maximum_number_of_files_downloaded: Обмежує максимальну кількість файлів, завантажених у zip або надісланих електронною поштою. 0 означає необмежений.
-
+  note_maximum_number_of_files_downloaded: Обмежує максимальну кількість файлів, завантажених у zip або надісланих 
+    електронною поштою. 0 означає необмежений.
   label_file_storage_directory: Директорія зберігання файлів
   label_index_database: Індекс бази даних
   label_stemming_language: Основна мова
@@ -137,7 +137,11 @@ uk:
   option_stem_none: Stem none (default)
   option_stem_some: Stem some
   option_stem_all: Stem all
-  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is  STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms of terms except for those which start with a capital letter, or are followed by certain characters (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed  with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
+  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
+      STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
+      of terms except for those which start with a capital letter, or are followed by certain characters
+      (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
+      with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
   label_default_notifications: File default notifications
   heading_uploaded_files: Вивантажені файли
   link_documents: Документи
@@ -270,23 +274,23 @@ uk:
   text_email_subject_requires_approval: потрібне ваше підтвердження
   text_email_subject_updated: оновлено
   text_email_subject_started: почато
-  text_email_finished_approved: "Процес підтвердження '%{name}' для документа '%{filename}' щойно закінчився і документ схвалено."
-
-  text_email_finished_rejected: "Процес підтвердження '%{name}' для документа призначений '%{filename}' щойно закінчився і документ відхилено через '%{notice}'."
-
-  text_email_finished_delegated: "Процес підтвердження '%{name}' для документа '%{filename}' був делегований через '%{notice}' і ви повинні підтвердити його на відповідному кроці '%{stepname}'"
-
-  text_email_finished_step: "Робочий процес '%{name}' призначений для документу '%{filename}' затвердження щойно закінчив один із кроків підтвердження і ви повинні зробити підтвердження на наступному кроці."
-
-  text_email_finished_step_short: "Робочий процес затвердження '%{name}', призначений документу '%{filename}', щойно завершив  один із етапів затвердження."
-
-  text_email_started: "Робочий процес затвердження '%{name}', призначений документу '%{filename}', щойно розпочато, і ви     очікується, що буде виконано схвалення на поточному кроці схвалення '%{stepname}'."
-
+  text_email_finished_approved: "Процес підтвердження '%{name}' для документа '%{filename}' щойно закінчився і документ 
+    схвалено."
+  text_email_finished_rejected: "Процес підтвердження '%{name}' для документа призначений '%{filename}' щойно закінчився 
+    і документ відхилено через '%{notice}'."
+  text_email_finished_delegated: "Процес підтвердження '%{name}' для документа '%{filename}' був делегований через 
+    '%{notice}' і ви повинні підтвердити його на відповідному кроці '%{stepname}'"
+  text_email_finished_step: "Робочий процес '%{name}' призначений для документу '%{filename}' затвердження щойно 
+    закінчив один із кроків підтвердження і ви повинні зробити підтвердження на наступному кроці."
+  text_email_finished_step_short: "Робочий процес затвердження '%{name}', призначений документу '%{filename}', щойно 
+    завершив  один із етапів затвердження."
+  text_email_started: "Робочий процес затвердження '%{name}', призначений документу '%{filename}', щойно розпочато, і ви 
+    очікується, що буде виконано схвалення на поточному кроці схвалення '%{stepname}'."
   text_email_to_proceed: Щоб продовжити, клацніть на іконку прапорця поруч із документом
   text_email_to_see_history: Щоб переглянути історію підтвердження, клацніть на статус робочого процесу документа
 
-  text_email_to_see_status: Щоб переглянути поточний статус робочого процесу підтвердження, клацніть на статус робочого процесу документа у
-
+  text_email_to_see_status: Щоб переглянути поточний статус робочого процесу підтвердження, клацніть на статус робочого 
+    процесу документа у
 
   title_create_link: Створити символічний лінк
   label_link_from: Лінк від
@@ -348,14 +352,12 @@ uk:
   label_webdav_ignore: Шаблони ігнорованих файлів
   note_webdav_ignore: Типовий вираз із назвами файлів, які ігноруються запитами PUT
 
-
-
-
   label_document_url: Url
   label_last_revision_id: Ревізія
 
   label_webdav_disable_versioning: Немає керування версіями шаблонами файлів
-  note_webdav_disable_versioning: Типовий вираз, який вимикає керування версіями для відповідних файлів. Стандартний шаблон відповідає тимчасовим файлам, створеним MsOffice
+  note_webdav_disable_versioning: Типовий вираз, який вимикає керування версіями для відповідних файлів. Стандартний 
+    шаблон відповідає тимчасовим файлам, створеним MsOffice
 
   label_dmsf_keep_documents_locked: Залишити окументи заблокованими
   note_dmsf_keep_documents_locked: Документи будуть залишатися заблокованими після підтвердження.
@@ -380,15 +382,14 @@ uk:
   label_email_reply_to: Відповісти кому
 
   label_enable_cjk_ngrams: Дозводити генерацію n-грам з тексту CJK
-  text_enable_cjk_ngrams: "Якщо ввімкнено цю функцію, діапазони символів CJK розбиваються на уніграми і біграми, при цьому уніграми містять позиційну інформацію. Символи, відмінні від CJK, розбиваються на слова як зазвичай. Відповідна опція повинна бути використана під час індексування                                                                         Приклад: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
-
-
-
+  text_enable_cjk_ngrams: "Якщо ввімкнено цю функцію, діапазони символів CJK розбиваються на уніграми і біграми, при 
+    цьому уніграми містять позиційну інформацію. Символи, відмінні від CJK, розбиваються на слова як зазвичай. 
+    Відповідна опція повинна бути використана під час індексування
+    Приклад: XAPIAN_CJK_NGRAM=true ruby plugins/redmine_dmsf/extra/xapian_indexer.rb -fv"
 
   label_dmsf_fast_links: Швидкі посилання
-  text_dmsf_fast_links_info: Ви зможете вручну ввести ідентифікатор кінцевої папки під час створення посилань або переміщення файлів чи папок, щоб пришвидшити процес створення посилань.
-
-
+  text_dmsf_fast_links_info: Ви зможете вручну ввести ідентифікатор кінцевої папки під час створення посилань або 
+    переміщення файлів чи папок, щоб пришвидшити процес створення посилань.
 
   label_dmsf_permissions: Дозволити доступ лише
   label_inherited_permissions: Успадкований доступ від
@@ -441,8 +442,9 @@ uk:
   label_dmsf_max_notification_receivers_info: Інформація про отримувачів максимальної кількості сповіщень
   note_dmsf_max_notification_receivers_info: Обмежує максимальну кількість відображених отримувачів сповіщень електронною поштою
   label_dmsf_office_bin: Libreoffice binary -
-  note_dmsf_office_bin: Двійковий файл для перетворення документів формату офіс у формат PDF і забезпечення їх попереднього перегляду. Якщо ви хочете заборонити попередній перегляд документів формату офіс, поставте тут порожній рядок. Після зміни, можливо, доведеться перезапустити програму, щоб вона почала працювати.
-
+  note_dmsf_office_bin: Двійковий файл для перетворення документів формату офіс у формат PDF і забезпечення їх 
+    попереднього перегляду. Якщо ви хочете заборонити попередній перегляд документів формату офіс, поставте тут порожній 
+    рядок. Після зміни, можливо, доведеться перезапустити програму, щоб вона почала працювати.
 
   note_dmsf_office_bin_not_available: "LibreOffice's Команда не доступна '%{value}'"
 
@@ -468,6 +470,8 @@ uk:
   field_receive_download_notification: Отримувати сповіщення про завантаження
 
   label_remove_original_documents_module: Видалити модуль оригінальних документів
+
+  text_fulltext_search: 'Full-text search in documents requires presence of %{cmd1} and %{cmd2} commands on the server.'
 
   easy_pages:
     modules:
