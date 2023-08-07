@@ -20,8 +20,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 uk:
-  dmsf: DMS # Custom fields tab title - Заголовок таблиці спеціальних полів
-  label_dmsf_file_plural: DMS Documents # Email subject & Search options - Документи DMS # Тема електронного листа і опції пошуку
+  dmsf: ЕДО # Custom fields tab title - Заголовок таблиці спеціальних полів
+  label_dmsf_file_plural: ЕДО Документи # Email subject & Search options - Документи DMS # Тема електронного листа і опції пошуку
   label_dmsf_file_revision_plural: Перегляд / Редакція документа
   label_dmsf_file_revision_access_plural: Доступ до документів
   warning_no_entries_selected: Запис не вибрано
@@ -134,15 +134,16 @@ uk:
   note_possible_values: Можливі значення
   note_pass_none_to_disable_stemming: "натисніть 'none'(ні), щоб вимкнути основну індикацію"
   label_stem_strategy: Коренева стратегія
-  option_stem_none: Stem none (default)
-  option_stem_some: Stem some
-  option_stem_all: Stem all
-  text_stemming_info: "This controls how the query parser will apply the stemming algorithm. The default value is
-      STEM_NONE. The possible values are: STEM_NONE -  Don't perform any stemming, STEM_SOME - Search for stemmed forms
-      of terms except for those which start with a capital letter, or are followed by certain characters
-      (currently:'/@<>=*[{\"'), or are used with operators which need positional information. Stemmed terms are prefixed
-      with 'Z', STEM_ALL - Search for stemmed forms of all words (note: no 'Z' prefix is added)."
-  label_default_notifications: File default notifications
+  option_stem_none: Без стематизації (за замовченням)
+  option_stem_some: Часткова стематизація
+  option_stem_all: Повна стематизація
+  text_stemming_info: "Це налаштування визначає, як аналізатор запитів застосовуватиме алгоритм пошуку кореневої форми 
+    (стематизації). Стандартне значення – Без стематизації. Допустимі значення: Без стематизації - Не застосовувати 
+    алгоритм пошуку кореневої форми, Часткова стематизація - Пошук по кореням термінів, окрім тих, що починаються з 
+    великої літери, або супроводжуються певними символами (наразі:'/@<>=*[{\"'), або використовуються з операторами, 
+    яким потрібна інформація про місцезнаходження. Стематизовані терміни мають префікс 'Z', Повна стематизація - Шукає 
+    кореневу форму всіх слів (примітка: префікс 'Z' не додається)."
+  label_default_notifications: Файл cповіщення за умовчанням
   heading_uploaded_files: Вивантажені файли
   link_documents: Документи
   permission_view_dmsf_file_revision_accesses: Перегляд завантажень у Потоці активності
@@ -441,7 +442,7 @@ uk:
 
   label_dmsf_max_notification_receivers_info: Інформація про отримувачів максимальної кількості сповіщень
   note_dmsf_max_notification_receivers_info: Обмежує максимальну кількість відображених отримувачів сповіщень електронною поштою
-  label_dmsf_office_bin: Libreoffice binary -
+  label_dmsf_office_bin: Libreffice двійковий файл
   note_dmsf_office_bin: Двійковий файл для перетворення документів формату офіс у формат PDF і забезпечення їх 
     попереднього перегляду. Якщо ви хочете заборонити попередній перегляд документів формату офіс, поставте тут порожній 
     рядок. Після зміни, можливо, доведеться перезапустити програму, щоб вона почала працювати.
@@ -449,7 +450,7 @@ uk:
   note_dmsf_office_bin_not_available: "LibreOffice's Команда не доступна '%{value}'"
 
   label_dmsf_columns: Колонки DMS
-  label_column_id: ID
+  label_column_id: ІД
   label_column_title: Назва
   label_column_size: Розмір
   label_column_modified: Змінено
@@ -471,7 +472,7 @@ uk:
 
   label_remove_original_documents_module: Видалити модуль оригінальних документів
 
-  text_fulltext_search: 'Full-text search in documents requires presence of %{cmd1} and %{cmd2} commands on the server.'
+  text_fulltext_search: 'Повнотекстовий пошук вимагає наявності %{cmd1} та %{cmd2} команд на сервері.'
 
   easy_pages:
     modules:
