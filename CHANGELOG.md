@@ -1,10 +1,15 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.1.0 *????-??-??*
+3.1.0 *2023-08-10*
 ------------------
 
     Compatibility with Redmine 5.1
+    Ukrainian translation
+
+* New: #1461 - I want to add a Ukrainian translation to this wonderful plugin
+* Bug: #1459 - Fix .zero? error in id_attribute check
+* New: #1458 - V3.0.13 update error: Error in bundle plugins vault&dashboard
 
 3.0.13 *2023-06-21*
 ------------------
