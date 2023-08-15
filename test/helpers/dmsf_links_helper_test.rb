@@ -31,4 +31,11 @@ class DmsfLinksHelperTest < RedmineDmsf::Test::HelperTest
     assert_not DmsfLinksHelper.number?('123a')
     assert_not DmsfLinksHelper.number?(nil)
   end
+
+  def test_default_folder_id_in_files_for_select
+    project = Project.find(1)
+    assert_nothing_raised do
+      files_for_select(project.id)
+    end
+  end
 end
