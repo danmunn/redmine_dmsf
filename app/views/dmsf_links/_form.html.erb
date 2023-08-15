@@ -110,8 +110,8 @@
     </div>
   </div>
 <% end %>
-
 <%= late_javascript_tag do %>
+$(document).ready(function(){
   <%# Select2 extension, TODO: in case of a modal window, select2 makes problems %>
   <% unless modal || @fast_links %>
     $('#dmsf_link_target_project_id').select2();
@@ -148,4 +148,5 @@
       labelUrl.append('<span class="required"> *</span>');
     }
   });
+});
 <% end %>
