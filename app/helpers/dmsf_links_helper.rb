@@ -35,7 +35,7 @@ module DmsfLinksHelper
     str&.match?(/\A\d+\Z/)
   end
 
-  def files_for_select(project_id, folder_id)
+  def files_for_select(project_id, folder_id = nil)
     files = []
     if DmsfLinksHelper.number?(folder_id)
       folder = DmsfFolder.find_by(id: folder_id)

@@ -1,3 +1,4 @@
 /redmine_dmsf.iml
 Gemfile.lock
 .history
+tmp/
