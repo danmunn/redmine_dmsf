@@ -1,8 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.1.1 *????-??-??*
+3.1.1 *2023-08-17*
 ------------------
+
+    Bug fixing
+
+* Bug #1466 - Wrong number of arguments in dmsf links new 
 
 3.1.0 *2023-08-10*
 ------------------
