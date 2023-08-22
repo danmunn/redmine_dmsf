@@ -90,6 +90,8 @@ module DmsfQueriesHelper
         else
           link_to h(item.project_id), edit_root_dmsf_path(id: item.project_id)
         end
+      when 'project'
+        link_to h(item.project_id), edit_root_dmsf_path(id: item.project_id)
       else
         h(value)
       end
