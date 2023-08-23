@@ -101,7 +101,7 @@ class DmsfFolder < ApplicationRecord
 
   before_create :default_values
 
-  def visible?
+  def visible?(_user = User.current)
     return DmsfFolder.visible.exists?(id: id) if respond_to?(:type) && /^folder/.match?(type)
 
     true
