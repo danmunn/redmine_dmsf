@@ -1,8 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.1.2 *????-??-??*
+3.1.2 *2023-08-23*
 ------------------
+
+    Bug fixing
+
+* Bug #1469 - Can't access a folder under watch, but works again when unwatching the folder
 
 3.1.1 *2023-08-17*
 ------------------
