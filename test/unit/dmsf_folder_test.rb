@@ -31,7 +31,7 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     @link2 = DmsfLink.find 2
   end
 
-  def test_visiblity
+  def test_visibility
     # The role has got permissions
     User.current = @jsmith
     assert_equal 7, DmsfFolder.where(project_id: @project1.id).all.size
@@ -45,6 +45,17 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     User.current = User.anonymous
     @project1.add_default_member User.anonymous
     assert_equal 5, DmsfFolder.visible.where(project_id: @project1.id).all.size
+  end
+
+  def test_visible
+    assert @folder1.visible?
+    assert @folder1.visible?(@jsmith)
+    @folder1.deleted = DmsfFolder::STATUS_DELETED
+    class << @folder1
+      attr_accessor :type
+    end
+    @folder1.type = 'folder'
+    assert_not @folder1.visible?
   end
 
   def test_permissions
