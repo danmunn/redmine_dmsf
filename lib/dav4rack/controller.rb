@@ -281,9 +281,20 @@ module Dav4rack
       doc = request.document
       lockinfo = doc&.xpath("//#{ns}lockinfo")
       if lockinfo
+        # <D:lockinfo xmlns:D="DAV:">
+        #   <D:lockscope>
+        #     <D:exclusive/>
+        #   </D:lockscope>
+        #   <D:locktype>
+        #     <D:write/>
+        #   </D:locktype>
+        #   <D:owner>
+        #     <D:href>uraab</D:href>
+        #   </D:owner>
+        # </D:lockinfo>
         asked[:scope] = lockinfo.xpath("//#{ns}lockscope").children.find_all(&:element?).map(&:name).first
         asked[:type] = lockinfo.xpath("#{ns}locktype").children.find_all(&:element?).map(&:name).first
-        asked[:owner] = lockinfo.xpath("//#{ns}owner").children.map(&:name).first
+        asked[:owner] = lockinfo.xpath("//#{ns}owner").children.map(&:text).first
       end
 
       r = XmlResponse.new(response, resource.namespaces)
