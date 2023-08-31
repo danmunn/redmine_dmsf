@@ -33,7 +33,8 @@ module RedmineDmsf
             run Dav4rack::Handler.new(
               root_uri_path: path,
               resource_class: RedmineDmsf::Webdav::ResourceProxy,
-              allow_unauthenticated_options_on_root: true
+              allow_unauthenticated_options_on_root: true,
+              controller_class: DmsfController
             )
           end
         end
