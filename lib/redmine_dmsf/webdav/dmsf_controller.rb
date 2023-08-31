@@ -21,6 +21,7 @@
 
 module RedmineDmsf
   module Webdav
+    # DMSF controller
     class DmsfController < Dav4rack::Controller
       include Redmine::I18n
       include AbstractController::Callbacks
