@@ -107,3 +107,8 @@ Style/FrozenStringLiteralComment:
 Style/OpenStructUse:
   Exclude:
     - lib/dav4rack/utils.rb
+
+Style/OptionalBooleanParameter:
+  Exclude:
+    - lib/redmine_dmsf/field_formats/dmsf_file_format.rb
+    

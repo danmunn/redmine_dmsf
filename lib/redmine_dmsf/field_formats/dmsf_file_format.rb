@@ -42,7 +42,7 @@ module RedmineDmsf
         options
       end
 
-      def formatted_value(view, _custom_field, value, _customized: nil, _html: false)
+      def formatted_value(view, _custom_field, value, _customized = nil, _html = false)
         return '' if value.blank?
 
         dmsf_file = DmsfFile.find_by(id: value)
