@@ -21,6 +21,7 @@
 
 cs:
   dmsf: DMS  # Custom fields tab title
+  label_dmsf_file: DMS Dokument
   label_dmsf_file_plural: DMS Dokumenty  # Email subject & Search options
   label_dmsf_file_revision_plural: Revize dokumentů
   label_dmsf_file_revision_access_plural: Přístupy k dokumentům

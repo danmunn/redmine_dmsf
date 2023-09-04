@@ -21,6 +21,7 @@
 
 uk:
   dmsf: ЕДО # Custom fields tab title - Заголовок таблиці спеціальних полів
+  label_dmsf_file: ЕДО Документ
   label_dmsf_file_plural: ЕДО Документи # Email subject & Search options - Документи DMS # Тема електронного листа і опції пошуку
   label_dmsf_file_revision_plural: Перегляд / Редакція документа
   label_dmsf_file_revision_access_plural: Доступ до документів

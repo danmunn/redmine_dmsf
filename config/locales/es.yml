@@ -21,6 +21,7 @@
 
 es:
   dmsf: DMS  # Custom fields tab title
+  label_dmsf_file: DMS Archivo
   label_dmsf_file_plural: DMS Archivos   # Email subject & Search options
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses

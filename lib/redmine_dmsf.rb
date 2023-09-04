@@ -93,3 +93,6 @@ require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/helpers/project_helper_hoo
 
 # Macros
 require "#{File.dirname(__FILE__)}/redmine_dmsf/macros"
+
+# Field formats
+require "#{File.dirname(__FILE__)}/redmine_dmsf/field_formats/dmsf_file_format"

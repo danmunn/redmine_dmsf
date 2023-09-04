@@ -21,6 +21,7 @@
 
 zh:
   dmsf: 文档管家  # Custom fields tab title
+  label_dmsf_file: DMS Document
   label_dmsf_file_plural: DMS 文件檔案 # Email subject & Search options
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses

@@ -21,6 +21,7 @@
 
 fa:
   dmsf: اسناد پیش‌رفته # Custom fields tab title
+  label_dmsf_file: DMS Document
   label_dmsf_file_plural: اسناد پیش‌رفته # Email subject & Search options
   label_dmsf_file_revision_plural: بازبینی‌های اسناد
   label_dmsf_file_revision_access_plural: دسترسی‌های اسناد پیش‌رفته

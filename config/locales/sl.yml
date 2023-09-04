@@ -21,6 +21,7 @@
 
 sl:
   dmsf: Arhiv  # Custom fields tab title
+  label_dmsf_file: DMS Datoteka
   label_dmsf_file_plural: DMS Arhivske datoteke # Email subject & Search options
   label_dmsf_file_revision_plural: Document revisions
   label_dmsf_file_revision_access_plural: Document accesses

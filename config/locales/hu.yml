@@ -21,6 +21,7 @@
 
 hu:
   dmsf: DMS  # Custom fields tab title
+  label_dmsf_file: DMS Dokumtum
   label_dmsf_file_plural: DMS Dokumentumok   # Email subject & Search options
   label_dmsf_file_revision_plural: Dokumtum felülvizsgálata
   label_dmsf_file_revision_access_plural: Dokumentum hozzáférései

@@ -20,7 +20,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 nl:
-  dmsf: Easy DMS
+  dmsf: DMS
+  label_dmsf_file: DMS Document
   label_dmsf_file_plural: Documenten
   label_dmsf_file_revision_plural: Document revisies
   label_dmsf_file_revision_access_plural: Document toegang

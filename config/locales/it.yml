@@ -21,6 +21,7 @@
 
 it: # Italian strings thx 2 Matteo Arceci!
   dmsf: DMS  # Custom fields tab title
+  label_dmsf_file: DMS Documento
   label_dmsf_file_plural: DMS Documenti  # Email subject & Search options
   label_dmsf_file_revision_plural: Revisioni al documento
   label_dmsf_file_revision_access_plural: Accessi al documento

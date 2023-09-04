@@ -21,6 +21,7 @@
 
 ko:
   dmsf: DMS
+  label_dmsf_file: DMS Document
   label_dmsf_file_plural: DMS 문서
   label_dmsf_file_revision_plural: 문서 리비전
   label_dmsf_file_revision_access_plural: 문서 접근
