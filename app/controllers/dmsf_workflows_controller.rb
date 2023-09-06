@@ -22,6 +22,7 @@
 class DmsfWorkflowsController < ApplicationController
   model_object DmsfWorkflow
   menu_item :dmsf_approvalworkflows
+  self.main_menu = false
 
   before_action :find_model_object, except: %i[create new index assign assignment]
   before_action :find_project
