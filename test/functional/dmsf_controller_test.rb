@@ -496,7 +496,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_nil flash[:error]
   end
 
-  def test_entries_copy
+  def test_entries_copy_to_the_same_folder
     post :entries_operation,
          params: { id: @file1.project,
                    dmsf_entries: { target_project_id: @file1.project.id, target_folder_id: @file1.dmsf_folder },
@@ -581,10 +581,10 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   def test_entries_move_fast_links_enabled
     # Target project is not given
     post :entries_operation,
-                params: { id: @project1.id,
-                          dmsf_entries: { target_folder_id: @folder1.id },
-                          ids: ["file-#{@file1.id}"],
-                          move_entries: true }
+         params: { id: @project1.id,
+                   dmsf_entries: { target_folder_id: @folder1.id },
+                   ids: ["file-#{@file1.id}"],
+                   move_entries: true }
     assert_response :redirect
     assert_nil flash[:error]
   end

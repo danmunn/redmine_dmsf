@@ -36,7 +36,7 @@ if Redmine::Plugin.installed? 'redmine_dmsf'
     delete '/projects/:id/dmsf/delete', controller: 'dmsf', action: 'delete', as: 'delete_dmsf'
     post '/projects/:id/dmsf/save', controller: 'dmsf', action: 'save'
     post '/projects/:id/dmsf/save/root', controller: 'dmsf', action: 'save_root'
-    post '/projects/dmsf/entries', controller: 'dmsf', action: 'entries_operation', as: 'entries_operations_dmsf'
+    post '/projects/:id/dmsf/entries', controller: 'dmsf', action: 'entries_operation', as: 'entries_operations_dmsf'
     post '/projects/:id/dmsf/entries/delete', controller: 'dmsf', action: 'delete_entries', as: 'delete_entries'
     post '/projects/:id/dmsf/entries/email', to: 'dmsf#entries_email', as: 'email_entries'
     get '/projects/:id/dmsf/entries/download_email_entries', controller: 'dmsf',

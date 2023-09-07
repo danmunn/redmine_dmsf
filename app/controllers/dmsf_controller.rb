@@ -38,7 +38,7 @@ class DmsfController < ApplicationController
   before_action :find_target_folder, only: %i[copymove entries_operation]
   before_action :check_target_folder, only: [:entries_operation]
 
-  accept_api_auth :show, :create, :save, :delete
+  accept_api_auth :show, :create, :save, :delete, :entries_operation
 
   helper :custom_fields
   helper :dmsf_folder_permissions
@@ -612,17 +612,18 @@ class DmsfController < ApplicationController
     not_deleted_files = []
     if selected_files.any?
       raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:file_delete, @project)
-    end
-    selected_files.each do |id|
-      file = DmsfFile.find_by(id: id)
-      if file
-        if file.delete(commit: commit)
-          deleted_files << file unless commit
-        else
-          not_deleted_files << file
+
+      selected_files.each do |id|
+        file = DmsfFile.find_by(id: id)
+        if file
+          if file.delete(commit: commit)
+            deleted_files << file unless commit
+          else
+            not_deleted_files << file
+          end
+        elsif !commit
+          raise RedmineDmsf::Errors::DmsfFileNotFoundError
         end
-      elsif !commit
-        raise RedmineDmsf::Errors::DmsfFileNotFoundError
       end
     end
     # Activities
@@ -647,10 +648,11 @@ class DmsfController < ApplicationController
     # Links
     if selected_links.any?
       raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
-    end
-    selected_links.each do |id|
-      link = DmsfLink.find_by(id: id)
-      link&.delete commit: commit
+
+      selected_links.each do |id|
+        link = DmsfLink.find_by(id: id)
+        link&.delete commit: commit
+      end
     end
     flash[:notice] = l(:notice_entries_deleted) if flash[:error].blank? && flash[:warning].blank?
   end
@@ -685,6 +687,7 @@ class DmsfController < ApplicationController
     if (selected_folders.any? || selected_links.any?) && !User.current.allowed_to?(:file_manipulation, @project)
       raise RedmineDmsf::Errors::DmsfAccessError
     end
+
     # Folders
     selected_folders.each do |id|
       folder = DmsfFolder.find_by(id: id)
@@ -695,16 +698,12 @@ class DmsfController < ApplicationController
     # Files
     selected_files.each do |id|
       file = DmsfFile.find_by(id: id)
-      unless file.move_to(@target_project, @target_folder)
-        raise(StandardError, file.errors.full_messages.to_sentence)
-      end
+      raise(StandardError, file.errors.full_messages.to_sentence) unless file.move_to(@target_project, @target_folder)
     end
     # Links
     selected_links.each do |id|
       link = DmsfLink.find_by(id: id)
-      unless link.move_to(@target_project, @target_folder)
-        raise(StandardError, link.errors.full_messages.to_sentence)
-      end
+      raise(StandardError, link.errors.full_messages.to_sentence) unless link.move_to(@target_project, @target_folder)
     end
     flash[:notice] = l(:notice_entries_moved) if flash[:error].blank? && flash[:warning].blank?
   end
@@ -789,45 +788,44 @@ class DmsfController < ApplicationController
       @selected_folders = params[:ids].grep(/folder-\d+/).map { |x| Regexp.last_match(1).to_i if x =~ /folder-(\d+)/ }
       @selected_files = params[:ids].grep(/file-\d+/).map { |x| Regexp.last_match(1).to_i if x =~ /file-(\d+)/ }
       @selected_dir_links = params[:ids].grep(/folder-link-\d+/)
-                                       .map { |x| Regexp.last_match(1).to_i if x =~ /folder-link-(\d+)/ }
+                                        .map { |x| Regexp.last_match(1).to_i if x =~ /folder-link-(\d+)/ }
       @selected_file_links = params[:ids].grep(/file-link-\d+/)
-                                        .map { |x| Regexp.last_match(1).to_i if x =~ /file-link-(\d+)/ }
+                                         .map { |x| Regexp.last_match(1).to_i if x =~ /file-link-(\d+)/ }
       @selected_url_links = params[:ids].grep(/url-link-\d+/)
-                                       .map { |x| Regexp.last_match(1).to_i if x =~ /url-link-(\d+)/ }
+                                        .map { |x| Regexp.last_match(1).to_i if x =~ /url-link-(\d+)/ }
       @selected_links = @selected_dir_links + @selected_file_links + @selected_url_links
     else
       @selected_folders = []
       @selected_files = []
       @selected_links = []
     end
-    if params[:copy_entries].present? || params[:move_entries].present?
-      begin
-        # Prevent copying/moving to the same destination
-        folders = DmsfFolder.where(id: @selected_folders).to_a
-        files = DmsfFile.where(id: @selected_files).to_a
-        links = DmsfLink.where(id: @selected_links).to_a
-        (folders + files + links).each do |entry|
-          raise RedmineDmsf::Errors::DmsfParentError if entry.dmsf_folder == @target_folder || entry == @target_folder
-        end
-        # Prevent recursion
-        if params[:move_entries].present?
-          folders.each do |entry|
-            b = entry.any_child?(@target_folder)
-            raise RedmineDmsf::Errors::DmsfParentError if entry.any_child?(@target_folder)
-          end
-        end
-        # Check permissions
-        if (@target_folder && (@target_folder.locked_for_user? ||
-          !DmsfFolder.permissions?(@target_folder, allow_system: false))) ||
-          !@target_project.allows_to?(:folder_manipulation)
-          raise RedmineDmsf::Errors::DmsfAccessError
-        end
-      rescue RedmineDmsf::Errors::DmsfParentError
-        flash[:error] = l(:error_target_folder_same)
-        redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
-      rescue RedmineDmsf::Errors::DmsfAccessError
-        render_403
+    return unless params[:copy_entries].present? || params[:move_entries].present?
+
+    begin
+      # Prevent copying/moving to the same destination
+      folders = DmsfFolder.where(id: @selected_folders).to_a
+      files = DmsfFile.where(id: @selected_files).to_a
+      links = DmsfLink.where(id: @selected_links).to_a
+      (folders + files + links).each do |entry|
+        raise RedmineDmsf::Errors::DmsfParentError if entry.dmsf_folder == @target_folder || entry == @target_folder
       end
+      # Prevent recursion
+      if params[:move_entries].present?
+        folders.each do |entry|
+          raise RedmineDmsf::Errors::DmsfParentError if entry.any_child?(@target_folder)
+        end
+      end
+      # Check permissions
+      if (@target_folder && (@target_folder.locked_for_user? ||
+         !DmsfFolder.permissions?(@target_folder, allow_system: false))) ||
+         !@target_project.allows_to?(:folder_manipulation)
+        raise RedmineDmsf::Errors::DmsfAccessError
+      end
+    rescue RedmineDmsf::Errors::DmsfParentError
+      flash[:error] = l(:error_target_folder_same)
+      redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
+    rescue RedmineDmsf::Errors::DmsfAccessError
+      render_403
     end
   end
 end
