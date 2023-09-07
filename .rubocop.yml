@@ -111,4 +111,3 @@ Style/OpenStructUse:
 Style/OptionalBooleanParameter:
   Exclude:
     - lib/redmine_dmsf/field_formats/dmsf_file_format.rb
-    

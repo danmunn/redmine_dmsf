@@ -61,8 +61,8 @@ def dmsf_init
 
   Redmine::AccessControl.map do |map|
     map.project_module :dmsf do |pmap|
-      pmap.permission :view_dmsf_file_revision_accesses, read: true
-      pmap.permission :view_dmsf_file_revisions, read: true
+      pmap.permission :view_dmsf_file_revision_accesses, {}, read: true
+      pmap.permission :view_dmsf_file_revisions, {}, read: true
       pmap.permission :view_dmsf_folders, { dmsf: %i[show index] }, read: true
       pmap.permission :user_preferences, { dmsf_state: [:user_pref_save] }, require: :member
       pmap.permission(:view_dmsf_files,
@@ -75,9 +75,8 @@ def dmsf_init
                       { dmsf_public_urls: [:create] }
       pmap.permission :folder_manipulation,
                       { dmsf: %i[new create delete edit save edit_root save_root lock unlock notify_activate
-                                 notify_deactivate restore drop],
+                                 notify_deactivate restore drop copymove],
                         dmsf_folder_permissions: %i[new append autocomplete_for_user],
-                        dmsf_folders_copy: %i[new copy move],
                         dmsf_context_menus: [:dmsf] }
       pmap.permission :file_manipulation,
                       { dmsf_files: %i[create_revision lock unlock delete_revision obsolete_revision
@@ -85,7 +84,6 @@ def dmsf_init
                         dmsf_upload: %i[upload_files upload commit_files commit delete_dmsf_attachment
                                         delete_dmsf_link_attachment multi_upload],
                         dmsf_links: %i[new create destroy restore autocomplete_for_project autocomplete_for_folder],
-                        dmsf_files_copy: %i[new copy move],
                         dmsf_context_menus: [:dmsf] }
       pmap.permission :file_delete,
                       { dmsf: %i[trash delete_entries empty_trash],
@@ -97,8 +95,7 @@ def dmsf_init
       pmap.permission :manage_workflows,
                       { dmsf_workflows: %i[index new create destroy show new_step add_step remove_step
                                            reorder_steps update update_step delete_step edit] }
-      pmap.permission :display_system_folders,
-                      read: true
+      pmap.permission :display_system_folders, {}, read: true
       # Watchers
       pmap.permission :view_dmsf_file_watchers, {}, read: true
       pmap.permission :add_dmsf_file_watchers, { watchers: %i[new create append autocomplete_for_user] }

@@ -304,12 +304,11 @@ class DmsfFolder < ApplicationRecord
     new_folder.description = description
     new_folder.user = User.current
     new_folder.custom_values = []
-    custom_values.each do |cv|
-      v = CustomValue.new
-      v.custom_field = cv.custom_field
-      v.value = cv.value
-      new_folder.custom_values << v
-    end
+    new_folder.custom_field_values =
+      custom_field_values.inject({}) do |h, v|
+        h[v.custom_field_id] = v.value
+        h
+      end
     unless new_folder.save
       Rails.logger.error new_folder.errors.full_messages.to_sentence
       return new_folder
@@ -599,6 +598,15 @@ class DmsfFolder < ApplicationRecord
 
   def to_s
     title
+  end
+
+  # Check whether any child folder is equal to the folder
+  def any_child?(folder)
+    dmsf_folders.each do |child|
+      return true if child == folder
+      child.any_child? folder
+    end
+    false
   end
 
   class << self

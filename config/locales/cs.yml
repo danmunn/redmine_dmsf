@@ -473,6 +473,9 @@ cs:
 
   text_fulltext_search: 'Full-textové vyhledávání v dokumentech vyžaduje přítomnost %{cmd1} and %{cmd2} na serveru.'
 
+  notice_entries_copied: Kopírování se podařilo
+  notice_entries_moved: Přesun se podařil
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

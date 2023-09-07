@@ -292,4 +292,12 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert @folder8.save
     assert_not DmsfFolder.where(id: @folder8.id).issystem.exists?
   end
+
+  def test_any_child
+    # folder1
+    ## folder 2
+    # folder6
+    assert_not @folder1.any_child?(@folder6)
+    assert @folder1.any_child?(@folder2)
+  end
 end

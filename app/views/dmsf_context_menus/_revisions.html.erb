@@ -36,8 +36,8 @@
                                dmsf_file_id: file.id, type: 'link_to', back_url: back_url),
             title: l(:title_create_link),
             class: 'icon dmsf-icon-link' %>
-<%= link_to "#{l(:button_copy)}/#{l(:button_move)}", copy_file_path(id: file, back_url: back_url),
-            title: l(:title_copy), class: 'icon icon-copy' %>
+<%= context_menu_link "#{l(:button_copy)}/#{l(:button_move)}", copymove_entries_path(id: project,
+  folder_id: file.dmsf_folder, ids: ["file-#{file.id}"], back_url: back_url), class: 'icon icon-copy' %>
 <% member = Member.find_by(user_id: User.current.id, project_id: file.project.id) %>
 <% filename = file.last_revision&.formatted_name(member) %>
 <%= link_to l(:button_download), static_dmsf_file_path(file, filename: filename), class: 'icon icon-download',

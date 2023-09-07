@@ -474,6 +474,9 @@ ja:
 
   text_fulltext_search: 'Full-text search in documents requires presence of %{cmd1} and %{cmd2} commands on the server.'
 
+  notice_entries_copied: Copying has succeeded
+  notice_entries_moved: Moving has succeeded
+
   easy_pages:
     modules:
       dmsf_locked_documents: 自分がロック中の文書

@@ -475,6 +475,9 @@ uk:
 
   text_fulltext_search: 'Повнотекстовий пошук вимагає наявності %{cmd1} та %{cmd2} команд на сервері.'
 
+  notice_entries_copied: Copying has succeeded
+  notice_entries_moved: Moving has succeeded
+
   easy_pages:
     modules:
       dmsf_locked_documents: Мої заблоковані документи

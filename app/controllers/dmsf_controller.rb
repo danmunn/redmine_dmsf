@@ -35,6 +35,8 @@ class DmsfController < ApplicationController
   before_action :find_folder_by_title, only: [:show]
   before_action :query, only: %i[expand_folder show trash empty_trash index]
   before_action :project_roles, only: %i[new edit create save]
+  before_action :find_target_folder, only: %i[copymove entries_operation]
+  before_action :check_target_folder, only: [:entries_operation]
 
   accept_api_auth :show, :create, :save, :delete
 
@@ -138,59 +140,55 @@ class DmsfController < ApplicationController
     flash[:error] = e.message
   end
 
+  def copymove
+    @ids = params[:ids]
+    member = Member.find_by(project_id: @project.id, user_id: User.current.id)
+    @fast_links = member&.dmsf_fast_links
+    unless @fast_links
+      @projects = DmsfFolder.allowed_target_projects_on_copy
+      @folders = DmsfFolder.directory_tree(@target_project, @folder)
+      @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) if params[:target_folder_id].present?
+    end
+    @back_url = params[:back_url]
+    render layout: !request.xhr?
+  end
+
   def entries_operation
     # Download/Email
-    if params[:ids].present?
-      selected_folders = params[:ids].grep(/folder-\d+/).map { |x| Regexp.last_match(1).to_i if x =~ /folder-(\d+)/ }
-      selected_files = params[:ids].grep(/file-\d+/).map { |x| Regexp.last_match(1).to_i if x =~ /file-(\d+)/ }
-      selected_dir_links = params[:ids].grep(/folder-link-\d+/)
-                                       .map { |x| Regexp.last_match(1).to_i if x =~ /folder-link-(\d+)/ }
-      selected_file_links = params[:ids].grep(/file-link-\d+/)
-                                        .map { |x| Regexp.last_match(1).to_i if x =~ /file-link-(\d+)/ }
-      selected_url_links = params[:ids].grep(/url-link-\d+/)
-                                       .map { |x| Regexp.last_match(1).to_i if x =~ /url-link-(\d+)/ }
-    else
-      selected_folders = []
-      selected_files = []
-      selected_dir_links = []
-      selected_file_links = []
-      selected_url_links = []
-    end
-
-    if selected_folders.blank? &&
-       selected_files.blank? &&
-       selected_dir_links.blank? &&
-       selected_file_links.blank? &&
-       selected_url_links.blank?
+    if @selected_folders.blank? && @selected_files.blank? && @selected_links.blank?
       flash[:warning] = l(:warning_no_entries_selected)
       redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
       return
     end
 
-    if selected_dir_links.present? && (params[:email_entries].present? || params[:download_entries].present?)
-      selected_folders = DmsfLink.where(id: selected_dir_links).pluck(:target_id) | selected_folders
+    if @selected_dir_links.present? && (params[:email_entries].present? || params[:download_entries].present?)
+      @selected_folders = DmsfLink.where(id: selected_dir_links).pluck(:target_id) | @selected_folders
     end
 
-    if selected_file_links.present? && (params[:email_entries].present? || params[:download_entries].present?)
-      selected_files = DmsfLink.where(id: selected_file_links).pluck(:target_id) | selected_files
+    if @selected_file_links.present? && (params[:email_entries].present? || params[:download_entries].present?)
+      @selected_files = DmsfLink.where(id: selected_file_links).pluck(:target_id) | @selected_files
     end
 
     begin
       if params[:email_entries].present?
-        email_entries selected_folders, selected_files
+        email_entries @selected_folders, @selected_files
       elsif params[:restore_entries].present?
-        restore_entries selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links
+        restore_entries @selected_folders, @selected_files, @selected_links
         redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
       elsif params[:delete_entries].present?
-        delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links,
-                       false)
+        delete_entries @selected_folders, @selected_files, @selected_links, false
         redirect_back_or_default dmsf_folder_path id: @project, folder_id: @folder
       elsif params[:destroy_entries].present?
-        delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links,
-                       true)
+        delete_entries @selected_folders, @selected_files, @selected_links, true
+        redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
+      elsif params[:move_entries].present?
+        move_entries @selected_folders, @selected_files, @selected_links
+        redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
+      elsif params[:copy_entries].present?
+        copy_entries @selected_folders, @selected_files, @selected_links
         redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
       else
-        download_entries selected_folders, selected_files
+        download_entries @selected_folders, @selected_files
       end
     rescue RedmineDmsf::Errors::DmsfFileNotFoundError
       render_404
@@ -574,7 +572,7 @@ class DmsfController < ApplicationController
     zip
   end
 
-  def restore_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links)
+  def restore_entries(selected_folders, selected_files, selected_links)
     # Folders
     selected_folders.each do |id|
       folder = DmsfFolder.find_by(id: id)
@@ -589,7 +587,7 @@ class DmsfController < ApplicationController
       flash[:error] = file.errors.full_messages.to_sentence unless file.restore
     end
     # Links
-    (selected_dir_links + selected_file_links + selected_url_links).each do |id|
+    selected_links.each do |id|
       link = DmsfLink.find_by(id: id)
       raise RedmineDmsf::Errors::DmsfFileNotFoundError unless link
 
@@ -597,8 +595,7 @@ class DmsfController < ApplicationController
     end
   end
 
-  def delete_entries(selected_folders, selected_files, selected_dir_links, selected_file_links, selected_url_links,
-                     commit)
+  def delete_entries(selected_folders, selected_files, selected_links, commit)
     # Folders
     selected_folders.each do |id|
       raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
@@ -613,9 +610,10 @@ class DmsfController < ApplicationController
     # Files
     deleted_files = []
     not_deleted_files = []
-    selected_files.each do |id|
+    if selected_files.any?
       raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:file_delete, @project)
-
+    end
+    selected_files.each do |id|
       file = DmsfFile.find_by(id: id)
       if file
         if file.delete(commit: commit)
@@ -647,19 +645,68 @@ class DmsfController < ApplicationController
       flash[:warning] = l(:warning_some_entries_were_not_deleted, entries: not_deleted_files.map(&:title).join(', '))
     end
     # Links
-    selected_dir_links.each do |id|
+    if selected_links.any?
       raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
-
-      link = DmsfLink.find_by(id: id)
-      link&.delete commit: commit
     end
-    (selected_file_links + selected_url_links).each do |id|
-      raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:file_delete, @project)
-
+    selected_links.each do |id|
       link = DmsfLink.find_by(id: id)
       link&.delete commit: commit
     end
     flash[:notice] = l(:notice_entries_deleted) if flash[:error].blank? && flash[:warning].blank?
+  end
+
+  def copy_entries(selected_folders, selected_files, selected_links)
+    # Folders
+    selected_folders.each do |id|
+      folder = DmsfFolder.find_by(id: id)
+      new_folder = folder.copy_to(@target_project, @target_folder)
+      raise(StandardError, new_folder.errors.full_messages.to_sentence) unless new_folder.errors.empty?
+    end
+    # Files
+    selected_files.each do |id|
+      file = DmsfFile.find_by(id: id)
+      new_file = file.copy_to(@target_project, @target_folder)
+      raise(StandardError, new_file.errors.full_messages.to_sentence) unless new_file.errors.empty?
+    end
+    # Links
+    selected_links.each do |id|
+      link = DmsfLink.find_by(id: id)
+      new_link = link.copy_to(@target_project, @target_folder)
+      raise(StandardError, new_link.errors.full_messages.to_sentence) unless new_link.errors.empty?
+    end
+    flash[:notice] = l(:notice_entries_copied) if flash[:error].blank? && flash[:warning].blank?
+  end
+
+  def move_entries(selected_folders, selected_files, selected_links)
+    # Permissions
+    if selected_folders.any? && !User.current.allowed_to?(:folder_manipulation, @project)
+      raise RedmineDmsf::Errors::DmsfAccessError
+    end
+    if (selected_folders.any? || selected_links.any?) && !User.current.allowed_to?(:file_manipulation, @project)
+      raise RedmineDmsf::Errors::DmsfAccessError
+    end
+    # Folders
+    selected_folders.each do |id|
+      folder = DmsfFolder.find_by(id: id)
+      unless folder.move_to(@target_project, @target_folder)
+        raise(StandardError, folder.errors.full_messages.to_sentence)
+      end
+    end
+    # Files
+    selected_files.each do |id|
+      file = DmsfFile.find_by(id: id)
+      unless file.move_to(@target_project, @target_folder)
+        raise(StandardError, file.errors.full_messages.to_sentence)
+      end
+    end
+    # Links
+    selected_links.each do |id|
+      link = DmsfLink.find_by(id: id)
+      unless link.move_to(@target_project, @target_folder)
+        raise(StandardError, link.errors.full_messages.to_sentence)
+      end
+    end
+    flash[:notice] = l(:notice_entries_moved) if flash[:error].blank? && flash[:warning].blank?
   end
 
   def find_folder
@@ -718,5 +765,69 @@ class DmsfController < ApplicationController
   def project_roles
     @project_roles = Role.givable.joins(:member_roles).joins(:members).where(members: { project_id: @project.id })
                          .distinct
+  end
+
+  def find_target_folder
+    @target_project = if params[:dmsf_entries] && params[:dmsf_entries][:target_project_id].present?
+                        Project.find params[:dmsf_entries][:target_project_id]
+                      else
+                        @project
+                      end
+    if params[:dmsf_entries] && params[:dmsf_entries][:target_folder_id].present?
+      target_folder_id = params[:dmsf_entries][:target_folder_id]
+      @target_folder = DmsfFolder.find(target_folder_id)
+      raise ActiveRecord::RecordNotFound unless DmsfFolder.visible.exists?(id: target_folder_id)
+
+      @target_project = @target_folder&.project
+    end
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
+  def check_target_folder
+    if params[:ids].present?
+      @selected_folders = params[:ids].grep(/folder-\d+/).map { |x| Regexp.last_match(1).to_i if x =~ /folder-(\d+)/ }
+      @selected_files = params[:ids].grep(/file-\d+/).map { |x| Regexp.last_match(1).to_i if x =~ /file-(\d+)/ }
+      @selected_dir_links = params[:ids].grep(/folder-link-\d+/)
+                                       .map { |x| Regexp.last_match(1).to_i if x =~ /folder-link-(\d+)/ }
+      @selected_file_links = params[:ids].grep(/file-link-\d+/)
+                                        .map { |x| Regexp.last_match(1).to_i if x =~ /file-link-(\d+)/ }
+      @selected_url_links = params[:ids].grep(/url-link-\d+/)
+                                       .map { |x| Regexp.last_match(1).to_i if x =~ /url-link-(\d+)/ }
+      @selected_links = @selected_dir_links + @selected_file_links + @selected_url_links
+    else
+      @selected_folders = []
+      @selected_files = []
+      @selected_links = []
+    end
+    if params[:copy_entries].present? || params[:move_entries].present?
+      begin
+        # Prevent copying/moving to the same destination
+        folders = DmsfFolder.where(id: @selected_folders).to_a
+        files = DmsfFile.where(id: @selected_files).to_a
+        links = DmsfLink.where(id: @selected_links).to_a
+        (folders + files + links).each do |entry|
+          raise RedmineDmsf::Errors::DmsfParentError if entry.dmsf_folder == @target_folder || entry == @target_folder
+        end
+        # Prevent recursion
+        if params[:move_entries].present?
+          folders.each do |entry|
+            b = entry.any_child?(@target_folder)
+            raise RedmineDmsf::Errors::DmsfParentError if entry.any_child?(@target_folder)
+          end
+        end
+        # Check permissions
+        if (@target_folder && (@target_folder.locked_for_user? ||
+          !DmsfFolder.permissions?(@target_folder, allow_system: false))) ||
+          !@target_project.allows_to?(:folder_manipulation)
+          raise RedmineDmsf::Errors::DmsfAccessError
+        end
+      rescue RedmineDmsf::Errors::DmsfParentError
+        flash[:error] = l(:error_target_folder_same)
+        redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
+      rescue RedmineDmsf::Errors::DmsfAccessError
+        render_403
+      end
+    end
   end
 end

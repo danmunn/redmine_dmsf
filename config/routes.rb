@@ -42,6 +42,7 @@ if Redmine::Plugin.installed? 'redmine_dmsf'
     get '/projects/:id/dmsf/entries/download_email_entries', controller: 'dmsf',
                                                              action: 'download_email_entries',
                                                              as: 'download_email_entries'
+    get '/projects/:id/entries/copymove', to: 'dmsf#copymove', as: 'copymove_entries'
     get '/projects/:id/dmsf/lock', controller: 'dmsf', action: 'lock', as: 'lock_dmsf'
     get '/projects/:id/dmsf/unlock', controller: 'dmsf', action: 'unlock', as: 'unlock_dmsf'
     get '/projects/:id/dmsf/', controller: 'dmsf', action: 'show', as: 'dmsf_folder'

@@ -469,6 +469,9 @@ de:
 
   text_fulltext_search: 'Full-text Suche in Dokumente fordert die Existenz %{cmd1} and %{cmd2} auf dem Server.'
 
+  notice_entries_copied: Kopieren ist gelungen
+  notice_entries_moved: Verschiebung ist gelungen
+
   easy_pages:
     modules:
       dmsf_locked_documents: Von mir gesperrte Dokumente

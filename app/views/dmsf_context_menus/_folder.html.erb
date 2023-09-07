@@ -26,8 +26,8 @@
 <% end %>
 <% unless dmsf_link %>
   <li>
-    <%= context_menu_link "#{l(:button_copy)}/#{l(:button_move)}", copy_folder_path(id: dmsf_folder, back_url: back_url),
-                          class: 'icon icon-copy', disabled: !allowed || locked %>
+    <%= context_menu_link "#{l(:button_copy)}/#{l(:button_move)}", copymove_entries_path(id: project, folder_id: folder,
+      ids: ["folder-#{dmsf_folder.id}"], back_url: back_url), class: 'icon icon-copy', disabled: !allowed || locked %>
   </li>
   <li>
     <%= context_menu_link l(:label_link_to),

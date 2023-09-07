@@ -454,4 +454,138 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     get :index
     assert_response :forbidden
   end
+
+  def test_copymove_authorize_admin
+    @request.session[:user_id] = @admin.id
+    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
+    assert_response :success
+    assert_template 'copymove'
+  end
+
+  def test_copymove_authorize_non_member
+    @request.session[:user_id] = @someone.id
+    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
+    assert_response :forbidden
+  end
+
+  def test_copymove_authorize_member_no_module
+    @file1.project.disable_module! :dmsf
+    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
+    assert_response :forbidden
+  end
+
+  def test_copymove_authorize_forbidden
+    @role_manager.remove_permission! :folder_manipulation
+    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
+    assert_response :forbidden
+  end
+
+  def test_copymove_target_folder
+    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
+    assert_response :success
+    assert_template 'copymove'
+  end
+
+  def test_entries_copy
+    post :entries_operation,
+         params: { id: @file1.project,
+                   dmsf_entries: { target_project_id: @folder1.project.id, target_folder_id: @folder1.id },
+                   ids: ["file-#{@file1.id}"],
+                   copy_entries: true }
+    assert_response :redirect
+    assert_nil flash[:error]
+  end
+
+  def test_entries_copy
+    post :entries_operation,
+         params: { id: @file1.project,
+                   dmsf_entries: { target_project_id: @file1.project.id, target_folder_id: @file1.dmsf_folder },
+                   ids: ["file-#{@file1.id}"],
+                   copy_entries: true }
+    assert_response :redirect
+    assert_equal flash[:error], l(:error_target_folder_same)
+  end
+
+  def test_entries_move_recursion
+    # Move a folder under the same folder
+    post :entries_operation,
+         params: { id: @folder1.project,
+                   dmsf_entries: { target_project_id: @folder2.project.id, target_folder_id: @folder2.id },
+                   ids: ["folder-#{@folder1.id}"],
+                   move_entries: true }
+    assert_response :redirect
+    assert_equal flash[:error], l(:error_target_folder_same)
+  end
+
+  def test_entries_move_infinity
+    # Move the folder to itself
+    post :entries_operation,
+         params: { id: @folder1.project,
+                   dmsf_entries: { target_project_id: @folder2.project.id, target_folder_id: @folder2.id },
+                   ids: ["folder-#{@folder2.id}"],
+                   move_entries: true }
+    assert_response :redirect
+    assert_equal flash[:error], l(:error_target_folder_same)
+  end
+
+  def test_entries_copy_to_locked_folder
+    @request.session[:user_id] = @admin.id
+    post :entries_operation,
+         params: { id: @folder1.project,
+                   dmsf_entries: { target_project_id: @folder2.project.id, target_folder_id: @folder2.id },
+                   ids: ["file-#{@file1.id}"],
+                   move_entries: true }
+    assert_response :forbidden
+  end
+
+  def test_entries_copy_to_dmsf_not_enabled
+    @project2.disable_module! :dmsf
+    post :entries_operation,
+         params: { id: @project2.id,
+                   dmsf_entries: { target_project_id: @project2.id },
+                   ids: ["file-#{@file1.id}"],
+                   copy_entries: true }
+    assert_response :forbidden
+  end
+
+  def test_entries_copy_to_dmsf_enabled
+    post :entries_operation,
+         params: { id: @project2.id,
+                   dmsf_entries: { target_project_id: @project2.id },
+                   ids: ["file-#{@file1.id}"],
+                   copy_entries: true }
+    assert_response :redirect
+  end
+
+  def test_entries_copy_to_as_non_member
+    @request.session[:user_id] = @someone.id
+    post :entries_operation,
+         params: { id: @project2.id,
+                   dmsf_entries: { target_project_id: @project2.id },
+                   ids: ["file-#{@file1.id}"],
+                   copy_entries: true }
+    assert_response :forbidden
+  end
+
+  def test_copymove_new_fast_links_enabled
+    member = Member.find_by(user_id: @jsmith.id, project_id: @project1.id)
+    assert member
+    member.dmsf_fast_links = true
+    member.save
+    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file4.id}"] }
+    assert_response :success
+    assert_select 'label', { count: 0, text: l(:label_target_project) }
+    assert_select 'label', { count: 0, text: "#{l(:label_target_folder)}#" }
+  end
+
+  def test_entries_move_fast_links_enabled
+    # Target project is not given
+    post :entries_operation,
+                params: { id: @project1.id,
+                          dmsf_entries: { target_folder_id: @folder1.id },
+                          ids: ["file-#{@file1.id}"],
+                          move_entries: true }
+    assert_response :redirect
+    assert_nil flash[:error]
+  end
 end
