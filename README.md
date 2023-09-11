@@ -38,6 +38,7 @@ Features
   * Documents attachable to issues
   * Office documents are displayed inline
   * Editing of office documents
+  * REST API
   * Compatible with Redmine 5.0.x
 
 Dependencies

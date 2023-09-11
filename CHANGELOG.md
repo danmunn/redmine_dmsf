@@ -9,7 +9,7 @@ Changelog for Redmine DMSF
     REST API
         Entries operation (copy, move, download, delete)
 
-IMPORTANT: REST API for copying/moving has changed.
+IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.sh*.
 
 3.1.2 *2023-08-23*
 ------------------

@@ -145,4 +145,24 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     end
     assert_response :redirect
   end
+
+  def test_download_entries
+    # curl -v -H "Content-Type: application/xml" -X POST --data "" -H "X-Redmine-API-Key: ${USER_API_KEY}" \
+    # "http://localhost:3000/projects/3342/dmsf/entries.xml?ids[]=file-254566"
+    post "/projects/#{@project1.id}/dmsf/entries.xml?ids[]=file-#{@file1.id}&key=#{@token.value}",
+         params: '',
+         headers: { 'CONTENT_TYPE' => 'application/octet-stream' }
+    assert_response :success
+  end
+
+  def test_delete_entries
+    # curl -v -H "Content-Type: application/xml" -X POST --data "" -H "X-Redmine-API-Key: ${USER_API_KEY}" \
+    # "http://localhost:3000/projects/3342/dmsf/entries.xml?ids[]=file-254566&delete_entries=true"
+    assert_difference('@project1.dmsf_files.visible.count', -1) do
+      post "/projects/#{@project1.id}/dmsf/entries.xml?ids[]=file-#{@file1.id}&delete_entries=true&key=#{@token.value}",
+           params: '',
+           headers: { 'CONTENT_TYPE' => 'application/xml' }
+    end
+    assert_response :redirect
+  end
 end
