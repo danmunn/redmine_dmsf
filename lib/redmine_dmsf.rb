@@ -95,4 +95,4 @@ require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/helpers/project_helper_hoo
 require "#{File.dirname(__FILE__)}/redmine_dmsf/macros"
 
 # Field formats
-require "#{File.dirname(__FILE__)}/redmine_dmsf/field_formats/dmsf_file_format"
+require "#{File.dirname(__FILE__)}/redmine_dmsf/field_formats/dmsf_file_revision_format"

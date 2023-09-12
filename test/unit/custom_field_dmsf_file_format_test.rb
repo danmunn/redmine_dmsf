@@ -25,14 +25,14 @@ class CustomFieldDmsfFileFormatTest < RedmineDmsf::Test::UnitTest
   fixtures :custom_fields, :projects, :issues, :trackers
   def setup
     super
-    User.current = nil
+    User.current = @jsmith
     @issue = Issue.find 1
-    @field = IssueCustomField.create!(name: 'DMS Document', field_format: 'dmsf_file')
+    @field = IssueCustomField.create!(name: 'DMS Document rev.', field_format: 'dmsf_file_revision')
   end
 
   def test_possible_values_options
     n = @issue.project.dmsf_files.visible.all.size
-    @issue.project.dmsf_folders.visible.each do |f|
+    DmsfFolder.visible(false).where(project_id: @issue.project.id).each do |f|
       n += f.dmsf_files.visible.all.size
     end
     assert_equal n, @field.possible_values_options(@issue).size

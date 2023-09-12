@@ -266,7 +266,7 @@ it: # Italian strings thx 2 Matteo Arceci!
   dmsf_new_step: Nuovo passo
   dmsf_new_step_or_approver: Nuovo passo oppure Nuovo approver
   message_dmsf_wokflow_note: La tua nota...
-  info_revision: "r%{rev}"
+  info_revision: "r %{rev}"
   link_workflow: Flusso di lavoro
   notice_workflow_started: Approvazione di flusso di lavoro inizializzato
   text_email_subject_approved: "Approvazione di flusso di lavoro %{name} approvato"
@@ -475,6 +475,7 @@ it: # Italian strings thx 2 Matteo Arceci!
 
   notice_entries_copied: Copying has succeeded
   notice_entries_moved: Moving has succeeded
+  label_dmsf_file_revision: DMS Document rev.
 
   easy_pages:
     modules:

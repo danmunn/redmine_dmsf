@@ -265,7 +265,7 @@ pl:
   dmsf_new_step: Nowy krok
   dmsf_new_step_or_approver: Nowy krok lub Nowy akceptować
   message_dmsf_wokflow_note: Twoja notatka...
-  info_revision: "r%{rev}"
+  info_revision: "r %{rev}"
   link_workflow: Proces akceptacji
   notice_workflow_started: Proces akceptacji został uruchomiony
   text_email_subject_approved: został zakończony akceptacją
@@ -474,6 +474,7 @@ pl:
 
   notice_entries_copied: Copying has succeeded
   notice_entries_moved: Moving has succeeded
+  label_dmsf_file_revision: DMS Document rev.
 
   easy_pages:
     modules:

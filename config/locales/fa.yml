@@ -259,7 +259,7 @@ fa:
   dmsf_new_step: گام جدید
   dmsf_new_step_or_approver: گام یا تایید کننده جدید
   message_dmsf_wokflow_note: یادداشت شما ...
-  info_revision: "r%{rev}"
+  info_revision: "r %{rev}"
   link_workflow: روال تایید
   notice_workflow_started: روال تایید با موفقت شروع شد
   text_email_subject_approved: تایید شده
@@ -454,6 +454,7 @@ fa:
 
   notice_entries_copied: Copying has succeeded
   notice_entries_moved: Moving has succeeded
+  label_dmsf_file_revision: DMS Document rev.
 
   easy_pages:
     modules:

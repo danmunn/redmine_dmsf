@@ -266,7 +266,7 @@ pt-BR:
   dmsf_new_step: Novo passo
   dmsf_new_step_or_approver: Novo passo ou Novo aprovador
   message_dmsf_wokflow_note: Sua observação...
-  info_revision: "r%{rev}"
+  info_revision: "r %{rev}"
   link_workflow: Workflow
   notice_workflow_started: Workflow de aprovação foi iniciado com êxito
   text_email_subject_approved: aprovado
@@ -475,6 +475,7 @@ pt-BR:
 
   notice_entries_copied: Copying has succeeded
   notice_entries_moved: Moving has succeeded
+  label_dmsf_file_revision: DMS Document rev.
 
   easy_pages:
     modules:

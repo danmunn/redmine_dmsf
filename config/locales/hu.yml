@@ -266,7 +266,7 @@ hu:
   dmsf_new_step: Új lépés
   dmsf_new_step_or_approver: Új lépés vagy új jóváhagyó
   message_dmsf_wokflow_note: Saját jegyzet
-  info_revision: "r%{rev}"
+  info_revision: "r %{rev}"
   link_workflow: Workflow
   notice_workflow_started: Jóváhagyási workflow sikeresen elkezdődött
   text_email_subject_approved: elfogadott
@@ -474,6 +474,7 @@ hu:
 
   notice_entries_copied: Copying has succeeded
   notice_entries_moved: Moving has succeeded
+  label_dmsf_file_revision: DMS Document rev.
 
   easy_pages:
     modules:

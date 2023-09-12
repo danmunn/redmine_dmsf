@@ -4,7 +4,7 @@ Changelog for Redmine DMSF
 3.1.3 *????-??-??*
 ------------------
 
-    DMS Document as a new custom field type
+    DMS Document revision as a new custom field type
     Copy/Move of multiple entries
     REST API
         Entries operation (copy, move, download, delete)

@@ -266,7 +266,7 @@ cs:
   dmsf_new_step: Nový krok
   dmsf_new_step_or_approver: Nový krok nebo Nový schvalovatel
   message_dmsf_wokflow_note: Váš komentář...
-  info_revision: "r%{rev}"
+  info_revision: "r %{rev}"
   link_workflow: Schvalovací proces
   notice_workflow_started: Schvalovací proces byl úspěšně zahájen
   text_email_subject_approved: schválen
@@ -475,6 +475,7 @@ cs:
 
   notice_entries_copied: Kopírování se podařilo
   notice_entries_moved: Přesun se podařil
+  label_dmsf_file_revision: DMS Dokument rev.
 
   easy_pages:
     modules:

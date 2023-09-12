@@ -39,6 +39,7 @@ Features
   * Office documents are displayed inline
   * Editing of office documents
   * REST API
+  * DMS Document revision as a custom field type
   * Compatible with Redmine 5.0.x
 
 Dependencies

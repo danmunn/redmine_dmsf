@@ -263,7 +263,7 @@ de:
   dmsf_new_step: Neuer Schritt
   dmsf_new_step_or_approver: Neuer Schritt oder Neuer Genehmiger
   message_dmsf_wokflow_note: Ihre Notiz...
-  info_revision: "r%{rev}"
+  info_revision: "r %{rev}"
   link_workflow: Workflow
   notice_workflow_started: Genehmigungs-Workflow gestartet
   text_email_subject_approved: genehmigt
@@ -350,7 +350,7 @@ de:
   note_webdav_ignore: Regulärer Ausdruck (regular expression) mit Dateinamen, die bei PUT-Requests ignoriert werden.
 
   label_document_url: Url
-  label_last_revision_id: Version
+  label_last_revision_id: Revision
     
   label_webdav_disable_versioning: Keine Versionen erstellen bei
   note_webdav_disable_versioning: Regulärer Ausdruck (regular expression) bei denen die Datei-Versionierung ausgeschaltet wird. Die Standardeinstellung
@@ -471,6 +471,7 @@ de:
 
   notice_entries_copied: Kopieren ist gelungen
   notice_entries_moved: Verschiebung ist gelungen
+  label_dmsf_file_revision: DMS Dokument Rev.
 
   easy_pages:
     modules:

@@ -266,7 +266,7 @@ ja:
   dmsf_new_step: 新規ステップ
   dmsf_new_step_or_approver: 新規ステップまたは新規承認者
   message_dmsf_wokflow_note: コメント
-  info_revision: "r%{rev}"
+  info_revision: "r %{rev}"
   link_workflow: ワークフロー
   notice_workflow_started: 承認ワークフローが開始されました
   text_email_subject_approved: は承認されました
@@ -476,6 +476,7 @@ ja:
 
   notice_entries_copied: Copying has succeeded
   notice_entries_moved: Moving has succeeded
+  label_dmsf_file_revision: DMS Document rev.
 
   easy_pages:
     modules:

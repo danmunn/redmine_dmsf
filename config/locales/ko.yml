@@ -266,7 +266,7 @@ ko:
   dmsf_new_step: 새로운 단계
   dmsf_new_step_or_approver: 새로운 단계 혹은 새로운 승인자
   message_dmsf_wokflow_note: 사용자의 노트...
-  info_revision: "r%{rev}"
+  info_revision: "r %{rev}"
   link_workflow: 작업 흐름
   notice_workflow_started: 승인된 작업 흐름이 성공적으로 시작되었습니다
   text_email_subject_approved: 승인됨
@@ -475,6 +475,7 @@ ko:
 
   notice_entries_copied: Copying has succeeded
   notice_entries_moved: Moving has succeeded
+  label_dmsf_file_revision: DMS Document rev.
 
   easy_pages:
     modules:

@@ -267,7 +267,7 @@ uk:
   dmsf_new_step: Новий крок
   dmsf_new_step_or_approver: Новий крок або Новий затверджувач
   message_dmsf_wokflow_note: Ваша примітка...
-  info_revision: "r%{rev}"
+  info_revision: "r %{rev}"
   link_workflow: Робочий процес
   notice_workflow_started: Підтвердження робочого процесу почалося усішно
   text_email_subject_approved: підтверджено
@@ -477,6 +477,7 @@ uk:
 
   notice_entries_copied: Copying has succeeded
   notice_entries_moved: Moving has succeeded
+  label_dmsf_file_revision: DMS Document rev.
 
   easy_pages:
     modules:
