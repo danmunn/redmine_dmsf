@@ -29,24 +29,24 @@ module RedmineDmsf
       self.multiple_supported = false
       self.bulk_edit_supported = false
 
-      def edit_tag(view, tag_id, tag_name, custom_value, options={})
+      def edit_tag(view, tag_id, tag_name, custom_value, options = {})
         member = Member.find_by(user_id: User.current.id, project_id: custom_value.customized.project.id)
         if member.dmsf_fast_links?
-          view.text_field_tag(tag_name, custom_value.value, options.merge(:id => tag_id))
+          view.text_field_tag(tag_name, custom_value.value, options.merge(id: tag_id))
         else
           select_edit_tag(view, tag_id, tag_name, custom_value, options)
         end
       end
 
-      def select_edit_tag(view, tag_id, tag_name, custom_value, options={})
+      def select_edit_tag(view, tag_id, tag_name, custom_value, options = {})
         blank_option = ''.html_safe
         if custom_value.custom_field.is_required?
-          unless custom_value.custom_field.default_value.present?
+          if custom_value.custom_field.default_value.blank?
             blank_option =
               view.content_tag(
                 'option',
                 "--- #{l(:actionview_instancetag_blank_option)} ---",
-                :value => ''
+                value: ''
               )
           end
         else
@@ -72,13 +72,13 @@ module RedmineDmsf
         options
       end
 
-      def formatted_value(view, _custom_field, value, _customized = nil, _html = false)
+      def formatted_value(view, _custom_field, value, _customized = nil, _html: false)
         return '' if value.blank?
 
         revision = DmsfFileRevision.find_by(id: value)
         unless revision &&
-          User.current.allowed_to?(:view_dmsf_files, revision.dmsf_file.project) &&
-          (revision.dmsf_file.dmsf_folder.nil? || revision.dmsf_file.dmsf_folder.visible?)
+               User.current.allowed_to?(:view_dmsf_files, revision.dmsf_file.project) &&
+               (revision.dmsf_file.dmsf_folder.nil? || revision.dmsf_file.dmsf_folder.visible?)
           return ''
         end
 
