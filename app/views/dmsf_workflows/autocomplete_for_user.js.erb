@@ -18,6 +18,31 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-$('#dmsf_users_for_delegate').html('<%= escape_javascript(
+/* Get all checked users */
+var checkedBoxes = $('input[name="user_ids[]"]:checked');
+
+/* Get all hidden tags */
+var hiddenTags = $('input[name="user_ids[]"]:hidden');
+
+/* Draw the form */
+usersForDelegate = $('#dmsf_users_for_delegate');
+
+usersForDelegate.html('<%= escape_javascript(
   render_principals_for_new_dmsf_workflow_users(
     @dmsf_workflow, params[:dmsf_workflow_step_assignment_id], params[:dmsf_file_revision_id])) %>');
+
+/* Add all checked users from previous page as hidden tags */
+checkedBoxes.each(function() {
+    usersForDelegate.append('<input type="hidden" name="user_ids[]" value="' + $(this).val() + '">');
+});
+
+/* Re-add all hidden tags and re-check displayed users */
+hiddenTags.each(function() {
+    let userCheckBox = $("input[value='" + $(this).val() + "']");
+    if(userCheckBox.length) {
+        userCheckBox.prop('checked', true);
+    }
+    else {
+        usersForDelegate.append('<input type="hidden" name="user_ids[]" value="' + $(this).val() + '">');
+    }
+});
