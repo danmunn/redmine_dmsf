@@ -234,23 +234,21 @@ class DmsfFolder < ApplicationRecord
     save!
   end
 
-  def self.directory_tree(project, current_folder = nil)
+  def self.directory_tree(project)
     tree = [[l(:link_documents), nil]]
     project = Project.find(project) unless project.is_a?(Project)
     folders = project.dmsf_folders.visible.to_a
-    # TODO: This prevents copying folders into its sub-folders too. It should be allowed.
-    folders.delete current_folder
     folders.delete_if(&:locked_for_user?)
     folders.each do |folder|
       tree.push ["...#{folder.title}", folder.id]
-      DmsfFolder.directory_subtree tree, folder, 2, current_folder
+      DmsfFolder.directory_subtree tree, folder, 2
     end
     tree
   end
 
   def folder_tree
     tree = [[title, id]]
-    DmsfFolder.directory_subtree tree, self, 1, nil
+    DmsfFolder.directory_subtree tree, self, 1
     tree
   end
 
@@ -610,15 +608,12 @@ class DmsfFolder < ApplicationRecord
   end
 
   class << self
-    def directory_subtree(tree, folder, level, current_folder)
+    def directory_subtree(tree, folder, level)
       folders = folder.dmsf_folders.visible.to_a
-      folders.delete current_folder
       folders.delete_if(&:locked_for_user?)
       folders.each do |subfolder|
-        unless subfolder == current_folder
-          tree.push ["#{'...' * level}#{subfolder.title}", subfolder.id]
-          DmsfFolder.directory_subtree tree, subfolder, level + 1, current_folder
-        end
+        tree.push ["#{'...' * level}#{subfolder.title}", subfolder.id]
+        DmsfFolder.directory_subtree tree, subfolder, level + 1
       end
     end
   end

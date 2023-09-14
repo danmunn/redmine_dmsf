@@ -146,7 +146,7 @@ class DmsfController < ApplicationController
     @fast_links = member&.dmsf_fast_links
     unless @fast_links
       @projects = DmsfFolder.allowed_target_projects_on_copy
-      @folders = DmsfFolder.directory_tree(@target_project, @folder)
+      @folders = DmsfFolder.directory_tree(@target_project)
       @target_folder = DmsfFolder.visible.find(params[:target_folder_id]) if params[:target_folder_id].present?
     end
     @back_url = params[:back_url]
