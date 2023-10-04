@@ -169,7 +169,7 @@
 <% end %>
 <span class="pagination"><%= pagination_links_full @revision_pages, @revision_count %></span>
 
-<% if @file.watchers.present? %>
+<% if @file.watchers.present? && User.current.allowed_to?(:view_dmsf_file_watchers, @project) %>
   <% content_for :sidebar do %>
     <div id="watchers">
       <%= render partial: 'watchers/watchers', locals: { watched: @file } %>
