@@ -18,8 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
-require 'xapian'
 require "#{File.dirname(__FILE__)}/../../lib/redmine_dmsf/lockable"
 require 'English'
 
@@ -368,7 +366,7 @@ class DmsfFile < ApplicationRecord
     results = scope.where(find_options).uniq.to_a
     results.delete_if { |x| !DmsfFolder.permissions?(x.dmsf_folder) }
 
-    unless options[:titles_only]
+    if !options[:titles_only] && RedmineDmsf::Plugin.xapian_available?
       database = nil
       begin
         lang = Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].strip

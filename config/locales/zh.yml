@@ -180,6 +180,7 @@ zh:
 
   error_file_can_not_be_created: 文件未能在存储目录中创建
   error_wrong_zip_encoding: 不正确的Zip编码
+  warning_xapian_not_available: Xapian not available
   menu_dmsf: 文档管家  # Project tab title
   label_physical_file_delete: 物理删除文件
   user_is_not_project_member: 您不是该项目的成员

@@ -179,6 +179,7 @@ pl:
 
   error_file_can_not_be_created: "Plik nie może zostać utworzony w folderze przechowywania"
   error_wrong_zip_encoding: Złe kodowanie Zip
+  warning_xapian_not_available: Xapian niedostępny
   menu_dmsf: DMS  # Project tab title
   label_physical_file_delete: Fizyczne usuwanie plików
   user_is_not_project_member: Nie jesteś przypisany do tego projektu

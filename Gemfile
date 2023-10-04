@@ -25,7 +25,9 @@ source 'https://rubygems.org' do
   gem 'ox' # Dav4Rack
   gem 'rake' unless Dir.exist?(File.expand_path('../../redmine_dashboard', __FILE__))
   gem 'uuidtools'
-  gem 'xapian-ruby'
+  group :xapian do
+    gem 'xapian-ruby'
+  end
   gem 'zip-zip' unless Dir.exist?(File.expand_path('../../vault', __FILE__))
 
   # Redmine extensions

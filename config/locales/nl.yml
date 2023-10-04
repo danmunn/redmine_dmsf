@@ -180,6 +180,7 @@ nl:
 
   error_file_can_not_be_created: Bestand kan niet aangemaakt worden in opslag directory
   error_wrong_zip_encoding: Onjuiste Zip encoding
+  warning_xapian_not_available: Xapian niet beschikbaar
   menu_dmsf: Easy DMS
   label_physical_file_delete: Fysiek bestand verwijderen
   user_is_not_project_member: U bent geen lid van het project

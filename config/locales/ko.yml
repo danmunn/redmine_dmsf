@@ -180,6 +180,7 @@ ko:
 
   error_file_can_not_be_created: 저장 공간에 파일을 생성할 수 없습니다
   error_wrong_zip_encoding: 올바르지 않은 Zip 인코딩
+  warning_xapian_not_available: Xapian을 사용할 수 없습니다
   menu_dmsf: DMS
   label_physical_file_delete: 파일 삭제됨
   user_is_not_project_member: 이 프로젝트의 구성원이 아닙니다

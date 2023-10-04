@@ -343,46 +343,58 @@
     </em>
   </p>
 <% else %>
-  <p>
-    <%= content_tag :label, l(:label_index_database) %>
-    <%= text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], size: 50 %>
-    <em class="<%= klass %>">
-      <%= l(:label_default) %>: <%= File.expand_path('dmsf_index', Rails.root) %>
-    </em>
-  </p>
+  <% begin %>
+    <% require 'xapian' %>
+    <% xapian_disabled = false %>
+  <% rescue LoadError => e %>
+    <p class="warning"><%= l(:warning_xapian_not_available) %></p>
+    <% Rails.logger.warn e.message %>
+    <% xapian_disabled = true %>
+  <% end %>
+  <% if RedmineDmsf::Plugin.xapian_available? %>
+    <p>
+      <%= content_tag :label, l(:label_index_database) %>
+      <%= text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], size: 50 %>
+      <em class="<%= klass %>">
+        <%= l(:label_default) %>: <%= File.expand_path('dmsf_index', Rails.root) %>
+      </em>
+    </p>
 
-  <% stem_langs = %w(danish dutch english finnish french german hungarian italian norwegian portuguese romanian russian
-                     spanish swedish turkish) %>
+    <% stem_langs = %w(danish dutch english finnish french german hungarian italian norwegian portuguese romanian russian
+                       spanish swedish turkish) %>
 
-  <p>
-    <%= content_tag :label, l(:label_stemming_language) %>
-    <%= select_tag 'settings[dmsf_stemming_lang]', options_for_select(stem_langs, @settings['dmsf_stemming_lang']) %>
-    <em class="<%= klass %>">
-      <%= l(:note_possible_values) %>: <%= stem_langs.join(', ') %>. <%= "#{l(:label_default)}: #{stem_langs[2]}" %>
-    </em>
-  </p>
+    <p>
+      <%= content_tag :label, l(:label_stemming_language) %>
+      <%= select_tag 'settings[dmsf_stemming_lang]', options_for_select(stem_langs, @settings['dmsf_stemming_lang']) %>
+      <em class="<%= klass %>">
+        <%= l(:note_possible_values) %>: <%= stem_langs.join(', ') %>. <%= "#{l(:label_default)}: #{stem_langs[2]}" %>
+      </em>
+    </p>
 
-  <p>
-    <%= content_tag :label, l(:label_stem_strategy) %>
-    <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_NONE',
-                         @settings['dmsf_stemming_strategy'] == 'STEM_NONE', checked: true %> <%= l(:option_stem_none) %>
-    <br>
-    <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_SOME',
-                         @settings['dmsf_stemming_strategy'] == 'STEM_SOME' %> <%= l(:option_stem_some) %>
-    <br>
-    <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_ALL',
-                         @settings['dmsf_stemming_strategy'] == 'STEM_ALL' %> <%= l(:option_stem_all) %>
-    <br>
-    <em class="<%= klass %>">
-      <%= l(:text_stemming_info) %>
-    </em>
-  </p>
+    <p>
+      <%= content_tag :label, l(:label_stem_strategy) %>
+      <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_NONE',
+                           @settings['dmsf_stemming_strategy'] == 'STEM_NONE', checked: true %> <%= l(:option_stem_none) %>
+      <br>
+      <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_SOME',
+                           @settings['dmsf_stemming_strategy'] == 'STEM_SOME' %> <%= l(:option_stem_some) %>
+      <br>
+      <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_ALL',
+                           @settings['dmsf_stemming_strategy'] == 'STEM_ALL' %> <%= l(:option_stem_all) %>
+      <br>
+      <em class="<%= klass %>">
+        <%= l(:text_stemming_info) %>
+      </em>
+    </p>
 
-  <p>
-    <%= content_tag :label, l(:label_enable_cjk_ngrams) %>
-    <%= check_box_tag 'settings[dmsf_enable_cjk_ngrams]', true, @settings['dmsf_enable_cjk_ngrams'] %>
-    <em class="<%= klass %>">
-      <%= l(:text_enable_cjk_ngrams) %>
-    </em>
-  </p>
+    <p>
+      <%= content_tag :label, l(:label_enable_cjk_ngrams) %>
+      <%= check_box_tag 'settings[dmsf_enable_cjk_ngrams]', true, @settings['dmsf_enable_cjk_ngrams'] %>
+      <em class="<%= klass %>">
+        <%= l(:text_enable_cjk_ngrams) %>
+      </em>
+    </p>
+    <% else %>
+      <p class="warning"><%= l(:warning_xapian_not_available) %></p>
+    <% end %>
 <% end %>

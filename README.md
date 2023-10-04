@@ -220,6 +220,17 @@ instance is stopped.
 4. Install dependencies: 
 
     `bundle install`
+
+   4.1 In production environment
+
+        bundle config set --local without 'development test`
+        bundle install
+
+   4.2 Without Xapian fulltext search (on Windows)
+
+        bundle config set --local without 'xapian'
+        bundle install
+
 5. Initialize/Update database:
 
     `RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf`
