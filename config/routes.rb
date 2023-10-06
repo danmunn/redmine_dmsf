@@ -186,10 +186,12 @@ if Redmine::Plugin.installed? 'redmine_dmsf'
 
     # WebDAV workaround for clients checking WebDAV availability in the root
     unless Redmine::Plugin.installed?('easy_extensions')
-      match '/', to: ->(env) { [405, {}, ["#{env['REQUEST_METHOD']} method is not allowed"]] },
+      match '/',
+            to: ->(env) { [405, {}, ["#{env['REQUEST_METHOD']} method is not allowed"]] },
             via: %i[propfind options]
     end
-    match '/dmsf', to: ->(env) { [405, {}, ["#{env['REQUEST_METHOD']} method is not allowed"]] },
+    match '/dmsf',
+          to: ->(env) { [405, {}, ["#{env['REQUEST_METHOD']} method is not allowed"]] },
           via: %i[propfind options]
   end
 end
