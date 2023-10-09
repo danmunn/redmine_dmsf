@@ -21,10 +21,10 @@
 # Modify column
 class NullMinorVersion < ActiveRecord::Migration[4.2]
   def up
-    change_column :dmsf_file_revisions, :minor_version, :integer, null: true
+    change_column_null :dmsf_file_revisions, :minor_version, true
   end
 
   def down
-    change_column :dmsf_file_revisions, :minor_version, :integer, null: false
+    change_column_null :dmsf_file_revisions, :minor_version, false, 0
   end
 end
