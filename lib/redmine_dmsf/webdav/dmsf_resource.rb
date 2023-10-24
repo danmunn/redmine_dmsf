@@ -270,7 +270,7 @@ module RedmineDmsf
               # Last revision in the destination has zero size so reuse that revision
               new_revision = dest.resource.file.last_revision
             else
-              # Create a new revison by cloning the last revision in the destination
+              # Create a new revision by cloning the last revision in the destination
               new_revision = dest.resource.file.last_revision.clone
               new_revision.increase_version DmsfFileRevision::PATCH_VERSION
             end
