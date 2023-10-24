@@ -258,6 +258,7 @@ class DmsfFile < ApplicationRecord
     self.project = project
     self.dmsf_folder = folder
     new_revision = last_revision.clone
+    new_revision.user_id = last_revision.user_id
     new_revision.workflow = nil
     new_revision.dmsf_workflow_id = nil
     new_revision.dmsf_workflow_assigned_by_user_id = nil

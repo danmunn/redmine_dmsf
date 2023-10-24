@@ -290,4 +290,19 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_not_empty(@file13.pdf_preview) if RedmineDmsf::Preview.office_available?
     assert_empty @file1.pdf_preview
   end
+
+  def test_move_to_author
+    assert_equal @admin.id, @file1.last_revision.user_id
+    User.current = @jsmith
+    assert @file1.move_to(@folder1.project, @folder1)
+    assert_equal @admin.id, @file1.last_revision.user_id, "Author mustn't be updated when moving"
+  end
+
+  def test_copy_to_author
+    assert_equal @admin.id, @file1.last_revision.user_id
+    User.current = @jsmith
+    f = @file1.copy_to(@folder1.project, @folder1)
+    assert f
+    assert_equal @jsmith.id, f.last_revision.user_id, 'Author must be updated when copying'
+  end
 end

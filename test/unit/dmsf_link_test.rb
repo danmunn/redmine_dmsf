@@ -184,6 +184,21 @@ class DmsfLinksTest < RedmineDmsf::Test::UnitTest
     assert_equal folder_link_copy.dmsf_folder_id, @folder2.id
   end
 
+  def test_move_to_author
+    assert_equal @admin.id, @file_link.user_id
+    User.current = @jsmith
+    assert @file_link.move_to(@project1, @folder1)
+    assert_equal @admin.id, @file_link.user_id, "Author mustn't be updated when moving"
+  end
+
+  def test_copy_to_author
+    assert_equal @admin.id, @file_link.user_id
+    User.current = @jsmith
+    l = @file_link.copy_to(@project1, @folder1)
+    assert l
+    assert_equal @jsmith.id, l.user_id, 'Author must be updated when copying'
+  end
+
   def test_delete_file_link
     assert @file_link.delete(commit: false), @file_link.errors.full_messages.to_sentence
     assert @file_link.deleted?, "File link hasn't been deleted"

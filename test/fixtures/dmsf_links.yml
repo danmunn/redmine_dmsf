@@ -24,6 +24,7 @@ file_link:
   deleted_by_user_id: NULL
   created_at: <%= DateTime.current %>
   updated_at: <%= DateTime.current %>
+  user_id: 1
 
 folder_link2:
   id: 3

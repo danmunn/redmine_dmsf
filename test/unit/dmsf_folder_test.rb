@@ -252,6 +252,21 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert DmsfFolder.find_by(project_id: @project2.id, title: @folder1.title)
   end
 
+  def test_move_to_author
+    assert_equal @admin.id, @folder1.user_id
+    User.current = @jsmith
+    assert @folder1.move_to(@folder6.project, @folder6)
+    assert_equal @admin.id, @folder1.user_id, "Author mustn't be updated when moving"
+  end
+
+  def test_copy_to_author
+    assert_equal @admin.id, @folder1.user_id
+    User.current = @jsmith
+    f = @folder1.copy_to(@folder6.project, @folder6)
+    assert f
+    assert_equal @jsmith.id, f.user_id, 'Author must be updated when copying'
+  end
+
   def test_valid_parent
     @folder2.dmsf_folder = @folder1
     assert @folder2.save
