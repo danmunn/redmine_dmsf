@@ -34,7 +34,9 @@
     <% id = "#{node.id}item" %>
   <% end %>
   <% @idnt ||= 0 %>
-  <tr id="<%= id %>" class="<%= cycle('odd', 'even') %> <%= node.css_classes(query.deleted) %> <%= params[:classes] %> <%= @idnt > 0 ? "idnt idnt-#{@idnt}" : nil %>">
+  <tr id="<%= id %>" data-cy="row__<%= node.title %>--<%= node.type %>_<%= node.id %>"
+      class="<%= cycle('odd', 'even') %>
+    <%= node.css_classes(query.deleted) %> <%= params[:classes] %> <%= @idnt > 0 ? "idnt idnt-#{@idnt}" : nil %>">
     <td class="checkbox hide-when-print">
       <%= check_box_tag('ids[]', "#{node.type}-#{node.id}", false, id: nil) unless system %>
     </td>
@@ -44,7 +46,9 @@
     <td class="buttons">
       <% unless system %>
         <% if defined?(EasyExtensions) %>
-          <%= link_to '', '#', title: l(:button_actions), class: 'icon-only icon-actions js-contextmenu icon-more-horiz' %>
+          <%= link_to '', '#', title: l(:button_actions),
+                      class: 'icon-only icon-actions js-contextmenu icon-more-horiz',
+                      data: { cy: "icon__more_horiz--#{node.type}_#{node.id}" } %>
         <% else %>
           <%= link_to_context_menu %>
         <% end %>
