@@ -21,7 +21,9 @@
 %>
 
 <div class="box tabular">
-    <strong><%= l(:heading_new_revision) %> <a href="#" id="new_revision_form_content_toggle">[+]</a></strong>
+    <strong><%= l(:heading_new_revision) %>
+      <a href="#" id="new_revision_form_content_toggle" data-cy="toggle__new_revision_from_content--dmsf">[+]</a>
+    </strong>
   <div id="new_revision_form_content">
     <% if @file.locked_for_user? %>
       <p class="warning"><%= l(:info_file_locked) %></p>
@@ -75,7 +77,7 @@
           <%= f.text_area :comment, rows: 2, label: l(:label_comment), class: 'wiki-edit dmsf-description' %>
         </p>
         <div class="form-actions">
-          <%= f.submit l(:button_create), class: 'button-positive' %>
+          <%= f.submit l(:button_create), class: 'button-positive', data: { cy: "button__submit--file_dmsf"} %>
         </div>
       <% end %>
     <% end %>   

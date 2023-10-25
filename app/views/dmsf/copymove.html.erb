@@ -48,11 +48,11 @@
       </p>
     </div>
     <p>
-      <%= submit_tag l(:button_copy), id: 'copy_button' %>
+      <%= submit_tag l(:button_copy), id: 'copy_button', data: { cy: "button__copy--dmsf" } %>
       <%# TODO: Lock and proper permissions %>
       <% if User.current.allowed_to?(:folder_manipulation, @project) &&
         User.current.allowed_to?(:file_manipulation, @project)%>
-        <%= submit_tag l(:button_move), id: 'move_button' %>
+        <%= submit_tag l(:button_move), id: 'move_button', data: { cy: "button__move--dmsf" } %>
       <% end %>
     </p>
   <% end %>

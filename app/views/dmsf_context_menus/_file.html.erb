@@ -76,7 +76,7 @@
 <li>
 <%= context_menu_link l(:field_mail), entries_operations_dmsf_path(id: project, folder_id: folder,
    ids: params[:ids], email_entries: true, back_url: back_url), method: :post, class: 'icon icon-email',
-   disabled: !email_allowed %>
+                      data: { cy: "icon__email--dmsf_file_#{dmsf_file.id}" }, disabled: !email_allowed %>
 </li>
 <% if Setting.plugin_redmine_dmsf['dmsf_webdav'].present? %>
   <li>
