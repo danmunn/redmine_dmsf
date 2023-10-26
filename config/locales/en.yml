@@ -259,7 +259,7 @@ en:
   title_start: Start workflow
   title_dmsf_workflow_log: Approval Workflow Log
   title_assigned: Assigned
-  title_approval: Approved
+  title_approval: Approve document
   title_rejected: Rejected
   title_obsolete: Obsolete
   dmsf_and: AND
