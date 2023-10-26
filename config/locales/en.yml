@@ -255,11 +255,11 @@ en:
   title_none: None
   title_rejection: Rejection
   title_delegation: Delegation
-  title_assignment: Assignment
-  title_start: Start
+  title_assignment: Assign workflow
+  title_start: Start workflow
   title_dmsf_workflow_log: Approval Workflow Log
   title_assigned: Assigned
-  title_approval: Approval
+  title_approval: Approved
   title_rejected: Rejected
   title_obsolete: Obsolete
   dmsf_and: AND
