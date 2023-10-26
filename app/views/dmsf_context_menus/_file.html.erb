@@ -29,7 +29,7 @@
     <%= context_menu_link "#{l(:button_copy)}/#{l(:button_move)}",
                           copymove_entries_path(id: project, folder_id: folder, ids: ["file-#{dmsf_file.id}"],
                                                 back_url: back_url), title: l(:title_copy), class: 'icon icon-copy',
-                          data: { cy: "icon__copy--dmsf_file_#{dmsf_file.id}" } %> %>
+                          data: { cy: "icon__copy--dmsf_file_#{dmsf_file.id}" } %>
   </li>
   <li>
     <%= link_to l(:label_link_to),
