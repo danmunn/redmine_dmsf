@@ -370,7 +370,15 @@ class DmsfFile < ApplicationRecord
     if !options[:titles_only] && RedmineDmsf::Plugin.xapian_available?
       database = nil
       begin
+        unless Setting.plugin_redmine_dmsf['dmsf_stemming_lang']
+          raise StandardError, "'dmsf_stemming_lang' option is not set"
+        end
+
         lang = Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].strip
+        unless Setting.plugin_redmine_dmsf['dmsf_index_database']
+          raise StandardError, "'dmsf_index_database' option is not set"
+        end
+
         databasepath = File.join(Setting.plugin_redmine_dmsf['dmsf_index_database'].strip, lang)
         database = Xapian::Database.new(databasepath)
       rescue StandardError => e
