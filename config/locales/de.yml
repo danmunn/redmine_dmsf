@@ -252,11 +252,11 @@ de:
   title_none: Kein Workflow
   title_rejection: Ablehnung
   title_delegation: Delegierung
-  title_assignment: Workflow starten
-  title_start: Start
+  title_assignment: Workflow zuordnen
+  title_start: Workflow starten
   title_dmsf_workflow_log: Genehmigungs-Workflow Verlauf
   title_assigned: Zugewiesen
-  title_approval: Genehmigt
+  title_approval: Dokument genehmigen
   title_rejected: Abgelehnt
   title_obsolete: Veraltet
   dmsf_and: UND
