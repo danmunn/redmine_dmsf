@@ -179,7 +179,7 @@ class DmsfMailer < Mailer
           puts ">>> nok1"
           false
         elsif notify_member.dmsf_mail_notification.nil?
-          puts ">>> notify_member.mail_notification: #{notify_member.mail_notification}"
+          puts ">>> notify_member.mail_notification: #{notify_member.dmsf_mail_notification}"
           case notify_user.mail_notification
           when 'all'
             puts ">>> ok3"
