@@ -21,9 +21,9 @@
 name: "GitHub CI"
 on:
   push:
-    branches: ["devel"]
+    branches: ["test"]
   pull_request:
-    branches: ["devel"]
+    branches: ["test"]
 jobs:
   plugin_tests:
     strategy:

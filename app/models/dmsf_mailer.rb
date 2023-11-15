@@ -166,18 +166,23 @@ class DmsfMailer < Mailer
 
   # force_notification = true => approval workflow's notifications
   def self.get_notify_users(project, file, force_notification: false)
+    puts ">>> self.get_notify_users"
     return [] unless project.active?
-
+    puts ">>> ok1"
     # Notifications
     if (force_notification && Setting.notified_events.include?('dmsf_workflow_plural')) ||
        (Setting.notified_events.include?('dmsf_legacy_notifications') && file&.notify?)
+      puts ">>> ok2"
       notify_members = project.members.active.select do |notify_member|
         notify_user = notify_member.user
         if notify_user == User.current && notify_user.pref.no_self_notified
+          puts ">>> nok1"
           false
         elsif notify_member.dmsf_mail_notification.nil?
+          puts ">>> #{notify_user.mail_notification}"
           case notify_user.mail_notification
           when 'all'
+            puts ">>> ok3"
             true
           when 'selected'
             notify_member.mail_notification?
@@ -188,6 +193,7 @@ class DmsfMailer < Mailer
           when 'only_assigned'
             file.assigned? notify_user
           else
+            puts ">>> nok2"
             false
           end
         else
