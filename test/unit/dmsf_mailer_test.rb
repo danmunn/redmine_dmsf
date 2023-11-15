@@ -105,8 +105,8 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
 
   def test_get_notify_users
     with_settings notified_events: ['dmsf_legacy_notifications'] do
-      puts ">>> #{Setting.notified_events}"
-      puts ">>> #{@file1.notify?}"
+      puts ">>> Setting.notified_events: #{Setting.notified_events}"
+      puts ">>> @file1.notify?: #{@file1.notify?}"
       users = DmsfMailer.get_notify_users(@project1, @file1)
       assert users.present?
     end
