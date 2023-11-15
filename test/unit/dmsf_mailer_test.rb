@@ -35,6 +35,10 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
     ActionMailer::Base.deliveries.clear
     Setting.plain_text_mail = '0'
     Setting.default_language = 'en'
+    # Notification
+    m1 = Member.find 1
+    m1.dmsf_mail_notification = true
+    m1.save
   end
 
   def test_files_updated
@@ -104,12 +108,7 @@ class DmsfMailerTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_get_notify_users
-    m1 = Member.find 1
-    m1.dmsf_mail_notification = true
-    m1.save
     with_settings notified_events: ['dmsf_legacy_notifications'] do
-      puts ">>> Setting.notified_events: #{Setting.notified_events}"
-      puts ">>> @file1.notify?: #{@file1.notify?}"
       users = DmsfMailer.get_notify_users(@project1, @file1)
       assert users.present?
     end
