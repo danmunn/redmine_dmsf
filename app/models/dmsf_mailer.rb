@@ -167,6 +167,7 @@ class DmsfMailer < Mailer
   # force_notification = true => approval workflow's notifications
   def self.get_notify_users(project, file, force_notification: false)
     return [] unless project.active?
+
     # Notifications
     if (force_notification && Setting.notified_events.include?('dmsf_workflow_plural')) ||
        (Setting.notified_events.include?('dmsf_legacy_notifications') && file&.notify?)
