@@ -1,15 +1,29 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.1.3 *????-??-??*
+3.1.3 *2023-11-15*
 ------------------
 
     DMS Document revision as a new custom field type
     Copy/Move of multiple entries
     REST API
         Entries operation (copy, move, download, delete)
+    Compatibility with Redmine 5.1
 
 IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.sh*.
+
+* Bug: #1490 - Latest plugin version on windows: problematic dependency 'xapian-ruby'
+* Bug: #1486 - Some context menu improvements 
+* Bug: #1485 - Renames locales/ua.yml
+* Bug: #1484 - Author should be kept when moving a folder type
+* Bug: #1483 - Setting.plugin_redmine_dmsf['dmsf_index_database']: undefined method 'strip' for nil:NilClass
+* Bug: #1479 - Cannot uninstall plugin
+* Bug: #1477 - Watch permission won't work
+* New: #1474 - Removes main menu from workflows controller
+* Bug: #1473 - Edited documents cannot be unlocked
+* Bug: #1472 - Failed upgrade up to version 3.1.1 from version 3.0.12
+* New: #1248 - Make DMS document available as Type of a custom field
+* New: #1132 - Please provide a simple file operation menu 
 
 3.1.2 *2023-08-23*
 ------------------
