@@ -22,7 +22,7 @@
 # Add column
 class Dmsf090 < ActiveRecord::Migration[4.2]
   def up
-    add_column :members, :dmsf_mail_notification, :boolean
+    add_column :members, :dmsf_mail_notification, :boolean, null: false, default: false
     drop_table :dmsf_user_prefs
   end
 
@@ -31,7 +31,7 @@ class Dmsf090 < ActiveRecord::Migration[4.2]
     create_table :dmsf_user_prefs do |t|
       t.references :project, null: false
       t.references :user, null: false
-      t.boolean :email_notify
+      t.boolean :email_notify, null: false, default: false
       t.timestamps
     end
   end

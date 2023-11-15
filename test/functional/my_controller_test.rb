@@ -27,16 +27,12 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
   fixtures :user_preferences, :dmsf_workflows, :dmsf_workflow_steps, :dmsf_workflow_step_assignments,
            :dmsf_workflow_step_actions, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_locks
 
-  def setup
-    super
-    @request.session[:user_id] = @jsmith.id
-  end
-
   def test_page_with_open_approvals_one_approval
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     DmsfFileRevision.where(id: 5).delete_all
     @jsmith.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
     @jsmith.pref.save!
-    get :page
+    get '/my/page'
     assert_response :success
     return if defined?(EasyExtensions)
 
@@ -46,9 +42,10 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_page_with_open_approvals_no_approval
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @jsmith.pref[:my_page_layout] = { 'top' => ['open_approvals'] }
     @jsmith.pref.save!
-    get :page
+    get '/my/page'
     assert_response :success
     return if defined?(EasyExtensions)
 
@@ -58,10 +55,11 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_page_with_open_locked_documents
+    post '/login', params: { username: 'admin', password: 'admin' }
     @request.session[:user_id] = @admin.id
     @admin.pref[:my_page_layout] = { 'top' => ['locked_documents'] }
     @admin.pref.save!
-    get :page
+    get '/my/page'
     assert_response :success
     return if defined?(EasyExtensions)
 
@@ -73,12 +71,13 @@ class MyControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_page_with_open_watched_documents
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @jsmith.pref[:my_page_layout] = { 'top' => ['watched_documents'] }
     @jsmith.pref.save!
     @file1.add_watcher @jsmith
     @folder1.add_watcher @jsmith
     @project1.add_watcher @jsmith
-    get :page
+    get '/my/page'
     return if defined?(EasyExtensions)
 
     assert_response :success

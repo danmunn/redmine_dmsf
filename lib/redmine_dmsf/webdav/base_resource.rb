@@ -32,10 +32,10 @@ module RedmineDmsf
 
       DIR_FILE = %(
                     <tr>
-                      <td class=\"name\"><a href=\"%s\">%s</a></td>
-                      <td class=\"size\">%s</td>
-                      <td class=\"type\">%s</td>
-                      <td class=\"mtime\">%s</td>
+                      <td class="name"><a href="%s">%s</a></td>
+                      <td class="size">%s</td>
+                      <td class="type">%s</td>
+                      <td class="mtime">%s</td>
                     </tr>
                    )
 

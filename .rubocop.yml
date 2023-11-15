@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 AllCops:
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.1
   TargetRailsVersion: 6.1
 
   SuggestExtensions: false
@@ -40,6 +40,9 @@ Layout/LineLength:
 Lint/ScriptPermission:
   Exclude:
     - extra/xapian_indexer.rb
+
+Naming/BlockForwarding:
+  EnforcedStyle: explicit
 
 Metrics/AbcSize:
   Enabled: false
@@ -71,6 +74,17 @@ Metrics/PerceivedComplexity:
 Naming/AccessorMethodName:
   Exclude:
     - lib/dav4rack/resource.rb
+
+Style/HashSyntax:
+  EnforcedShorthandSyntax: either
+
+Style/ZeroLengthPredicate:
+  Exclude:
+    - lib/redmine_dmsf/webdav/dmsf_resource.rb
+
+Rails/DangerousColumnNames:
+  Exclude:
+    - db/migrate/20170330131901_create_dmsf_folder_permissions.rb
 
 Rails/DynamicFindBy:
   AllowedMethods:

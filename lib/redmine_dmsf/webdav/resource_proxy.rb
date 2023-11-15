@@ -204,7 +204,7 @@ module RedmineDmsf
 
       def get_resource_class(path)
         pinfo = path.split('/').drop(1)
-        return IndexResource if pinfo.length.zero?
+        return IndexResource if pinfo.empty?
 
         return ProjectResource if pinfo.length == 1
 

@@ -21,6 +21,7 @@
 # Add column
 class AddDmsfNotInheritableToCustomFields < ActiveRecord::Migration[4.2]
   def change
-    add_column :custom_fields, :dmsf_not_inheritable, :boolean, null: true
+    add_column :custom_fields, :dmsf_not_inheritable, :boolean,
+               null: false, default: false
   end
 end

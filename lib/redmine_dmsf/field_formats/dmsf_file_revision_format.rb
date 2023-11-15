@@ -63,7 +63,7 @@ module RedmineDmsf
         options = []
         if object&.project
           files = object.project.dmsf_files.visible.to_a
-          DmsfFolder.visible(false).where(project_id: object.project.id).each do |f|
+          DmsfFolder.visible(false).where(project_id: object.project.id).find_each do |f|
             files += f.dmsf_files.visible.to_a
           end
           files.sort! { |a, b| a.title.casecmp(b.title) }

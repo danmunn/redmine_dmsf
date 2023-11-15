@@ -4,7 +4,7 @@
 #
 # Copyright © 2011    Vít Jonáš <vit.jonas@gmail.com>
 # Copyright © 2012    Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-15 Karel Pičman <karel.picman@kontron.com>
+# Copyright © 2011-23 Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 module RedmineDmsf
   module Test
     # Test case
-    class TestCase < ActionController::TestCase
+    class TestCase < ActionDispatch::IntegrationTest
       fixtures :users, :email_addresses, :projects, :roles, :members, :member_roles
 
       # Allow us to override the fixtures method to implement fixtures for our plugin.

@@ -25,7 +25,7 @@ module RedmineDmsf
     # Checking physical presence of the plugin as Redmine::Plugin.installed? may return false due to alphabetical
     # registering of available plugins.
     def self.present?(id)
-      Dir.exist? Rails.root.join('plugins', id.to_s)
+      Rails.root.join('plugins', id.to_s).exist?
     end
 
     # Return true if a plugin that overrides Redmine::Notifiable and use the deprecated method alias_method_chain is

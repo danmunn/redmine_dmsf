@@ -29,7 +29,7 @@ class IssuesControllerTest < RedmineDmsf::Test::TestCase
   def setup
     super
     @issue1 = Issue.find 1
-    @request.session[:user_id] = @jsmith.id
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
   end
 
   def test_put_update_with_project_change
@@ -41,11 +41,8 @@ class IssuesControllerTest < RedmineDmsf::Test::TestCase
     main_system_folder = @issue1.main_system_folder
     assert main_system_folder
     assert_equal @project1.id, main_system_folder.project_id
-    put :update,
-        params: {
-          id: @issue1.id,
-          issue: { project_id: @project2.id, tracker_id: '1', priority_id: '6', category_id: '3' }
-        }
+    patch "/issues/#{@issue1.id}",
+          params: { issue: { project_id: @project2.id, tracker_id: '1', priority_id: '6', category_id: '3' } }
     assert_redirected_to action: 'show', id: @issue1.id
     @issue1.reload
     assert_equal @project2.id, @issue1.project.id

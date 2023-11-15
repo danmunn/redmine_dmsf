@@ -34,21 +34,21 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @link1 = DmsfLink.find 1
     @custom_field = CustomField.find 21
     @custom_value = CustomValue.find 21
-    User.current = nil
-    @request.session[:user_id] = @jsmith.id
-    default_url_options[:host] = 'http://example.com'
+    default_url_options[:host] = 'www.example.com'
   end
 
   def test_edit_folder_forbidden
     # Missing permissions
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :folder_manipulation
-    get :edit, params: { id: @project1, folder_id: @folder1 }
+    get "/projects/#{@project1.id}/dmsf/edit", params: { folder_id: @folder1 }
     assert_response :forbidden
   end
 
   def test_edit_folder_allowed
     # Permissions OK
-    get :edit, params: { id: @project1, folder_id: @folder1 }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.id}/dmsf/edit", params: { folder_id: @folder1.id }
     assert_response :success
     # Custom fields
     assert_select 'label', { text: @custom_field.name }
@@ -64,35 +64,42 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_edit_folder_redirection_to_the_parent_folder
-    post :save, params: { id: @project1, folder_id: @folder2.id, parent_id: @folder2.dmsf_folder.id,
-                          dmsf_folder: { title: @folder2.title, description: @folder2.description } }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    post "/projects/#{@project1.id}/dmsf/save",
+         params: { folder_id: @folder2.id, parent_id: @folder2.dmsf_folder.id,
+                   dmsf_folder: { title: @folder2.title, description: 'Updated folder' } }
     assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder2.dmsf_folder.id)
   end
 
   def test_edit_folder_redirection_to_the_same_folder
-    post :save, params: { id: @project1, folder_id: @folder2.id, parent_id: @folder2.dmsf_folder.id,
-                          dmsf_folder: { title: @folder2.title, description: @folder2.description,
-                                         redirect_to_folder_id: @folder2.id } }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    post "/projects/#{@project1.id}/dmsf/save",
+         params: { folder_id: @folder2.id, parent_id: @folder2.dmsf_folder.id,
+                   dmsf_folder: { title: @folder2.title, description: 'Updated folder',
+                                  redirect_to_folder_id: @folder2.id } }
     assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder2.id)
   end
 
   def test_trash_forbidden
     # Missing permissions
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :file_delete
-    get :trash, params: { id: @project1 }
+    get "/projects/#{@project1.id}/dmsf/trash"
     assert_response :forbidden
   end
 
   def test_trash_allowed
     # Permissions OK
-    get :trash, params: { id: @project1 }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.id}/dmsf/trash"
     assert_response :success
     assert_select 'h2', { text: l(:link_trash_bin) }
   end
 
   def test_trash
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @folder1.delete commit: false
-    get :trash, params: { id: @project1 }
+    get "/projects/#{@project1.id}/dmsf/trash"
     assert_response :success
     assert_select 'a', href:  dmsf_folder_path(id: @folder1.project.id, folder_id: @folder1.id)
     assert_select 'a', href:  dmsf_folder_path(id: @folder2.project.id, folder_id: @folder2.id)
@@ -101,7 +108,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_empty_trash
-    get :empty_trash, params: { id: @project1.id }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.id}/dmsf/empty_trash"
     assert_equal 0, DmsfFolder.deleted.where(project_id: @project1.id).all.size
     assert_equal 0, DmsfFile.deleted.where(project_id: @project1.id).all.size
     assert_equal 0, DmsfLink.deleted.where(project_id: @project1.id).all.size
@@ -110,89 +118,103 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_empty_trash_forbidden
     # Missing permissions
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :file_delete
-    get :empty_trash, params: { id: @project1.id }
+    get "/projects/#{@project1.id}/dmsf/empty_trash"
     assert_response :forbidden
   end
 
   def test_delete_forbidden
     # Missing permissions
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :folder_manipulation
-    get :delete, params: { id: @project1, folder_id: @folder1.id, commit: false }
+    delete "/projects/#{@project1.id}/dmsf/delete", params: { folder_id: @folder1.id, commit: false }
     assert_response :forbidden
   end
 
   def test_delete_locked
     # Permissions OK but the folder is locked
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1, folder_id: @folder2.id)
-    get :delete, params: { id: @project1, folder_id: @folder2.id, commit: false }
+    delete "/projects/#{@project1.id}/dmsf/delete", params: { folder_id: @folder2.id, commit: false }
     assert_response :redirect
     assert_include l(:error_folder_is_locked), flash[:error]
   end
 
   def test_delete_ok
     # Empty and not locked folder
-    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1, folder_id: @folder1.dmsf_folder)
-    get :delete, params: { id: @project1, folder_id: @folder1, parent_id: @folder1.dmsf_folder, commit: false }
-    assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder1.dmsf_folder)
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1)
+    delete "/projects/#{@project1.id}/dmsf/delete",
+           params: { folder_id: @folder1.id, commit: false }
+    assert_redirected_to dmsf_folder_path(id: @project1)
   end
 
   def test_delete_subfolder
-    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1, folder_id: @folder2.dmsf_folder)
-    get :delete, params: { id: @project1, folder_id: @folder2, parent_id: @folder2.dmsf_folder, commit: false }
-    assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder2.dmsf_folder)
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1, folder_id: @folder1.id)
+    delete "/projects/#{@folder2.project.id}/dmsf/delete",
+           params: { folder_id: @folder2.id, parent_id: @folder1.id, commit: false }
+    assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder1.id)
   end
 
   def test_restore_forbidden
     # Missing permissions
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_developer.remove_permission! :folder_manipulation
     @folder4.deleted = 1
     @folder4.save
-    get :restore, params: { id: @folder4.project.id, folder_id: @folder4.id }
+    get "/projects/#{@folder4.project.id}/dmsf/restore", params: { folder_id: @folder4.id }
     assert_response :forbidden
   end
 
   def test_restore_ok
     # Permissions OK
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1)
     @folder1.deleted = 1
     @folder1.save
-    get :restore, params: { id: @project1, folder_id: @folder1.id }
+    get "/projects/#{@project1.id}/dmsf/restore", params: { folder_id: @folder1.id }
     assert_response :redirect
   end
 
   def test_delete_entries_forbidden
     # Missing permissions
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :folder_manipulation
-    get :entries_operation, params: { id: @project1, delete_entries: 'Delete',
-                                      ids: ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@link1.id}",
-                                            "file-link-#{@link2.id}"] }
+    post "/projects/#{@project1.id}/dmsf/entries",
+         params: { delete_entries: true,
+                   ids: ["folder-#{@folder1.id}", "file-#{@file1.id}", "folder-link-#{@link1.id}",
+                         "file-link-#{@link2.id}"] }
     assert_response :forbidden
   end
 
   def test_delete_entries_ok
     # Permissions OK
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @request.env['HTTP_REFERER'] = dmsf_folder_path(id: @project1)
     flash[:error] = nil
-    get :entries_operation, params: { id: @project1, delete_entries: 'Delete',
-                                      ids: ["folder-#{@folder7.id}", "file-#{@file1.id}", "file-link-#{@link2.id}"] }
+    post "/projects/#{@project1.id}/dmsf/entries",
+         params: { delete_entries: true, ids: ["folder-#{@folder7.id}", "file-#{@file1.id}", "file-link-#{@link2.id}"] }
     assert_response :redirect
     assert_nil flash[:error]
   end
 
   def test_restore_entries
     # Restore
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @request.env['HTTP_REFERER'] = trash_dmsf_path(id: @project1)
     flash[:error] = nil
-    get :entries_operation, params: { id: @project1, restore_entries: 'Restore',
-                                      ids: ["file-#{@file1.id}", "file-link-#{@link2.id}"] }
+    post "/projects/#{@project1.id}/dmsf/entries",
+         params: { restore_entries: true, ids: ["file-#{@file1.id}", "file-link-#{@link2.id}"] }
     assert_response :redirect
     assert_nil flash[:error]
   end
 
   def test_show
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => '1', 'dmsf_webdav_strategy' => 'WEBDAV_READ_WRITE' } do
-      get :show, params: { id: @project1.id }
+      get "/projects/#{@project1.id}/dmsf"
       assert_response :success
       # New file link
       assert_select 'a[href$=?]', '/dmsf/upload/multi_upload'
@@ -217,15 +239,17 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_show_webdav_disabled
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => nil } do
-      get :show, params: { id: @project1.id }
+      get "/projects/#{@project1.id}/dmsf"
       assert_response :success
       assert_select 'a.webdav', text: 'WebDAV', count: 0
     end
   end
 
   def test_show_filters_found
-    get :show, params: { id: @project1.id, f: ['title'], op: { 'title' => '~' }, v: { 'title' => ['Zero'] } }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.id}/dmsf", params: { f: ['title'], op: { 'title' => '~' }, v: { 'title' => ['Zero'] } }
     assert_response :success
     # 'Zero Size File' document
     assert_select 'a', text: @file10.title
@@ -234,15 +258,17 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_show_filters_not_found
-    get :show, params: { id: @project1.id, f: ['title'], op: { 'title' => '~' }, v: { 'title' => ['xxx'] } }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.id}/dmsf", params: { f: ['title'], op: { 'title' => '~' }, v: { 'title' => ['xxx'] } }
     assert_response :success
     # 'Zero Size File' document
     assert_select 'a', text: @file10.title, count: 0
   end
 
   def test_show_filters_custom_field
-    get :show, params: { id: @project1.id, set_filter: '1', f: ['cf_21', ''], op: { 'cf_21' => '=' },
-                         v: { 'cf_21' => ['User documentation'] } }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.id}/dmsf",
+        params: { set_filter: '1', f: ['cf_21', ''], op: { 'cf_21' => '=' }, v: { 'cf_21' => ['User documentation'] } }
     assert_response :success
     # Folder 1 with Tag=User documentation
     assert_select 'a', text: @folder1.title
@@ -251,27 +277,31 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_show_without_file_manipulation
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :file_manipulation
-    get :show, params: { id: @project1.id }
+    get "/projects/#{@project1.id}/dmsf"
     assert_response :success
     # New file link should be missing
     assert_select 'a[href$=?]', '/dmsf/upload/multi_upload', count: 0
   end
 
   def test_show_csv
-    get :show, params: { id: @project1.id, format: 'csv' }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.id}/dmsf", params: { format: 'csv' }
     assert_response :success
     assert @response.media_type.include?('text/csv')
   end
 
   def test_show_folder_doesnt_correspond_the_project
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     assert @project1 != @folder3.project
-    get :show, params: { id: @project1.id, folder_id: @folder3.id }
+    get "/projects/#{@project1.id}/dmsf", params: { folder_id: @folder3.id }
     assert_response :not_found
   end
 
   def test_folder_link_to_folder
-    get :show, params: { id: @link1.project_id, folder_id: @link1.dmsf_folder_id }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@link1.project_id}/dmsf", params: { folder_id: @link1.dmsf_folder_id }
     assert_response :success
     assert_select 'a', text: @link1.title, count: 1
     assert_select 'a[href$=?]',
@@ -280,121 +310,140 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_folder_link_to_project
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @link1.target_project_id = @project2.id
     @link1.target_id = nil
     assert @link1.save
-    get :show, params: { id: @link1.project_id, folder_id: @link1.dmsf_folder_id }
+    get "/projects/#{@link1.project_id}/dmsf", params: { folder_id: @link1.dmsf_folder_id }
     assert_response :success
     assert_select 'a', text: @link1.title, count: 1
     assert_select 'a[href$=?]', "/projects/#{@project2.identifier}/dmsf", count: 1
   end
 
   def test_new_forbidden
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :folder_manipulation
-    get :new, params: { id: @project1, parent_id: nil }
+    get "/projects/#{@project1.id}/dmsf/new"
     assert_response :forbidden
   end
 
   def test_new
-    get :new, params: { id: @project1, parent_id: nil }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.id}/dmsf/new"
     assert_response :success
   end
 
   def test_email_entries_email_from_forbidden
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :email_documents
     with_settings plugin_redmine_dmsf: { 'dmsf_documents_email_from' => 'karel.picman@kontron.com' } do
-      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"] }
+      post "/projects/#{@project1.id}/dmsf/entries", params: { email_entries: true, ids: ["file-#{@file1.id}"] }
       assert_response :forbidden
     end
   end
 
   def test_email_entries_email_from
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     with_settings plugin_redmine_dmsf: { 'dmsf_documents_email_from' => 'karel.picman@kontron.com' } do
-      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"] }
+      post "/projects/#{@project1.id}/dmsf/entries", params: { email_entries: true, ids: ["file-#{@file1.id}"] }
       assert_response :success
       assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_from']
     end
   end
 
   def test_email_entries_reply_to
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     with_settings plugin_redmine_dmsf: { 'dmsf_documents_email_reply_to' => 'karel.picman@kontron.com' } do
-      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"] }
+      post "/projects/#{@project1.id}/dmsf/entries", params: { email_entries: true, ids: ["file-#{@file1.id}"] }
       assert_response :success
       assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
     end
   end
 
   def test_email_entries_links_only
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     with_settings plugin_redmine_dmsf: { 'dmsf_documents_email_links_only' => '1' } do
-      get :entries_operation, params: { id: @project1, email_entries: 'Email', ids: ["file-#{@file1.id}"] }
+      post "/projects/#{@project1.id}/dmsf/entries", params: { email_entries: true, ids: ["file-#{@file1.id}"] }
       assert_response :success
       assert_select 'input[id=email_links_only][value=1]'
     end
   end
 
   def test_entries_email
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     zip_file = Tempfile.new('test', Rails.root.join('tmp'))
-    get :entries_email,
-        params: { id: @project1, email: { to: 'to@test.com', from: 'from@test.com', subject: 'subject', body: 'body',
-                                          expired_at: '2015-01-01', folders: [], files: [@file1.id],
-                                          zipped_content: zip_file.path } }
+    post "/projects/#{@project1.id}/dmsf/entries/email",
+         params: { email: { to: 'to@test.com', from: 'from@test.com', subject: 'subject', body: 'body',
+                            expired_at: '2015-01-01', folders: [], files: [@file1.id],
+                            zipped_content: zip_file.path } }
     assert_redirected_to dmsf_folder_path(id: @project1)
   ensure
     zip_file.unlink
   end
 
   def test_add_email_forbidden
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :view_dmsf_files
-    get :add_email, params: { id: @project1.id }, xhr: true
+    get '/projects/dmsf/add_email', params: { id: @project1.id }, xhr: true
     assert_response :forbidden
   end
 
   def test_add_email
-    get :add_email, params: { id: @project1.id }, xhr: true
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get '/projects/dmsf/add_email', params: { id: @project1.id }, xhr: true
     assert_response :success
   end
 
   def test_append_email_forbidden
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :view_dmsf_files
-    post :append_email, params: { id: @project1, user_ids: @project1.members.collect { |m| m.user.id },
-                                  format: 'js' }
+    post '/projects/dmsf/append_email',
+         params: { id: @project1, user_ids: @project1.members.collect { |m| m.user.id }, format: 'js' }
     assert_response :forbidden
   end
 
   def test_append_email
-    post :append_email, params: { id: @project1, user_ids: @project1.members.collect { |m| m.user.id }, format: 'js' }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    post '/projects/dmsf/append_email',
+         params: { id: @project1, user_ids: @project1.members.collect { |m| m.user.id }, format: 'js' }
     assert_response :success
   end
 
   def test_autocomplete_for_user_forbidden
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :view_dmsf_files
-    get :autocomplete_for_user, params: { id: @project1.id }, xhr: true
+    get '/projects/dmsf/autocomplete_for_user', params: { id: @project1.id }, xhr: true
     assert_response :forbidden
   end
 
   def test_autocomplete_for_user
-    get :autocomplete_for_user, params: { id: @project1 }, xhr: true
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get '/projects/dmsf/autocomplete_for_user', params: { id: @project1 }, xhr: true
     assert_response :success
   end
 
   def test_create_folder_in_root
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     assert_difference 'DmsfFolder.count', +1 do
-      post :create, params: { id: @project1.id, dmsf_folder: { title: 'New folder', description: 'Unit tests' } }
+      post "/projects/#{@project1.id}/dmsf/create",
+           params: { dmsf_folder: { title: 'New folder', description: 'Unit tests' } }
     end
     assert_redirected_to dmsf_folder_path(id: @project1, folder_id: nil)
   end
 
   def test_create_folder
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     assert_difference 'DmsfFolder.count', +1 do
-      post :create, params: { id: @project1.id, parent_id: @folder1.id,
-                              dmsf_folder: { title: 'New folder', description: 'Unit tests' } }
+      post "/projects/#{@project1.id}/dmsf/create",
+           params: { parent_id: @folder1.id, dmsf_folder: { title: 'New folder', description: 'Unit tests' } }
     end
     assert_redirected_to dmsf_folder_path(id: @project1, folder_id: @folder1)
   end
 
   def test_show_with_sub_projects
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     with_settings plugin_redmine_dmsf: { 'dmsf_projects_as_subfolders' => '1' } do
-      get :show, params: { id: @project1.id }
+      get "/projects/#{@project1.id}/dmsf"
       assert_response :success
       # @project5 is as a sub-folder
       assert_select "tr##{@project5.id}pspan", count: 1
@@ -402,21 +451,24 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_show_without_sub_projects
-    get :show, params: { id: @project1.id }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.id}/dmsf"
     assert_response :success
     # @project5 is not as a sub-folder
     assert_select "tr##{@project5.id}pspan", count: 0
   end
 
   def test_show_default_sort_column
-    get :show, params: { id: @project1.id }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.id}/dmsf"
     assert_response :success
     # The default column Title's header is displayed as sorted '^'
     assert_select 'a.icon-sorted-desc', text: l(:label_column_title)
   end
 
   def test_index
-    get :index
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get '/dmsf'
     assert_response :success
     # Projects
     assert_select 'table.dmsf' do
@@ -436,8 +488,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_index_non_member
-    @request.session[:user_id] = @dlopper.id
-    get :index
+    post '/login', params: { username: 'dlopper', password: 'foo' }
+    get '/dmsf'
     assert_response :success
     assert_select 'table.dmsf' do
       assert_select 'tr' do
@@ -450,46 +502,54 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_index_no_membership
-    @request.session[:user_id] = @someone.id
-    get :index
+    post '/login', params: { username: 'someone', password: 'foo' }
+    get '/dmsf'
     assert_response :forbidden
   end
 
   def test_copymove_authorize_admin
-    @request.session[:user_id] = @admin.id
-    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
+    post '/login', params: { username: 'admin', password: 'admin' }
+    get "/projects/#{@project1.id}/entries/copymove",
+        params: { folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_template 'copymove'
   end
 
   def test_copymove_authorize_non_member
-    @request.session[:user_id] = @someone.id
-    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
+    post '/login', params: { username: 'someone', password: 'foo' }
+    get "/projects/#{@project1.id}/entries/copymove",
+        params: { folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
     assert_response :forbidden
   end
 
   def test_copymove_authorize_member_no_module
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @file1.project.disable_module! :dmsf
-    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
+    get "/projects/#{@project1.id}/entries/copymove",
+        params: { folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
     assert_response :forbidden
   end
 
   def test_copymove_authorize_forbidden
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :folder_manipulation
-    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
+    get "/projects/#{@project1.id}/entries/copymove",
+        params: { folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
     assert_response :forbidden
   end
 
   def test_copymove_target_folder
-    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.id}/entries/copymove",
+        params: { folder_id: @file1.dmsf_folder, ids: ["file-#{@file1.id}"] }
     assert_response :success
     assert_template 'copymove'
   end
 
   def test_entries_copy
-    post :entries_operation,
-         params: { id: @file1.project,
-                   dmsf_entries: { target_project_id: @folder1.project.id, target_folder_id: @folder1.id },
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    post "/projects/#{@project1.id}/dmsf/entries",
+         params: { dmsf_entries: { target_project_id: @folder1.project.id, target_folder_id: @folder1.id },
                    ids: ["file-#{@file1.id}"],
                    copy_entries: true }
     assert_response :redirect
@@ -497,9 +557,9 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_entries_copy_to_the_same_folder
-    post :entries_operation,
-         params: { id: @file1.project,
-                   dmsf_entries: { target_project_id: @file1.project.id, target_folder_id: @file1.dmsf_folder },
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    post "/projects/#{@project1.id}/dmsf/entries",
+         params: { dmsf_entries: { target_project_id: @file1.project.id, target_folder_id: @file1.dmsf_folder },
                    ids: ["file-#{@file1.id}"],
                    copy_entries: true }
     assert_response :redirect
@@ -508,9 +568,9 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_entries_move_recursion
     # Move a folder under the same folder
-    post :entries_operation,
-         params: { id: @folder1.project,
-                   dmsf_entries: { target_project_id: @folder2.project.id, target_folder_id: @folder2.id },
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    post "/projects/#{@project1.id}/dmsf/entries",
+         params: { dmsf_entries: { target_project_id: @folder2.project.id, target_folder_id: @folder2.id },
                    ids: ["folder-#{@folder1.id}"],
                    move_entries: true }
     assert_response :redirect
@@ -519,9 +579,9 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_entries_move_infinity
     # Move the folder to itself
-    post :entries_operation,
-         params: { id: @folder1.project,
-                   dmsf_entries: { target_project_id: @folder2.project.id, target_folder_id: @folder2.id },
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    post "/projects/#{@project1.id}/dmsf/entries",
+         params: { dmsf_entries: { target_project_id: @folder2.project.id, target_folder_id: @folder2.id },
                    ids: ["folder-#{@folder2.id}"],
                    move_entries: true }
     assert_response :redirect
@@ -529,50 +589,50 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_entries_copy_to_locked_folder
-    @request.session[:user_id] = @admin.id
-    post :entries_operation,
-         params: { id: @folder1.project,
-                   dmsf_entries: { target_project_id: @folder2.project.id, target_folder_id: @folder2.id },
+    post '/login', params: { username: 'admin', password: 'admin' }
+    post "/projects/#{@project1.id}/dmsf/entries",
+         params: { dmsf_entries: { target_project_id: @folder2.project.id, target_folder_id: @folder2.id },
                    ids: ["file-#{@file1.id}"],
                    move_entries: true }
     assert_response :forbidden
   end
 
   def test_entries_copy_to_dmsf_not_enabled
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @project2.disable_module! :dmsf
-    post :entries_operation,
-         params: { id: @project2.id,
-                   dmsf_entries: { target_project_id: @project2.id },
+    post "/projects/#{@project2.id}/dmsf/entries",
+         params: { dmsf_entries: { target_project_id: @project2.id },
                    ids: ["file-#{@file1.id}"],
                    copy_entries: true }
     assert_response :forbidden
   end
 
   def test_entries_copy_to_dmsf_enabled
-    post :entries_operation,
-         params: { id: @project2.id,
-                   dmsf_entries: { target_project_id: @project2.id },
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    post "/projects/#{@project2.id}/dmsf/entries",
+         params: { dmsf_entries: { target_project_id: @project2.id },
                    ids: ["file-#{@file1.id}"],
                    copy_entries: true }
     assert_response :redirect
   end
 
   def test_entries_copy_to_as_non_member
-    @request.session[:user_id] = @someone.id
-    post :entries_operation,
-         params: { id: @project2.id,
-                   dmsf_entries: { target_project_id: @project2.id },
+    post '/login', params: { username: 'someone', password: 'foo' }
+    post "/projects/#{@project2.id}/dmsf/entries",
+         params: { dmsf_entries: { target_project_id: @project2.id },
                    ids: ["file-#{@file1.id}"],
                    copy_entries: true }
     assert_response :forbidden
   end
 
   def test_copymove_new_fast_links_enabled
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     member = Member.find_by(user_id: @jsmith.id, project_id: @project1.id)
     assert member
     member.dmsf_fast_links = true
     member.save
-    get :copymove, params: { id: @file1.project, folder_id: @file1.dmsf_folder, ids: ["file-#{@file4.id}"] }
+    get "/projects/#{@project1.id}/entries/copymove",
+        params: { folder_id: @file1.dmsf_folder, ids: ["file-#{@file4.id}"] }
     assert_response :success
     assert_select 'label', { count: 0, text: l(:label_target_project) }
     assert_select 'label', { count: 0, text: "#{l(:label_target_folder)}#" }
@@ -580,9 +640,9 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_entries_move_fast_links_enabled
     # Target project is not given
-    post :entries_operation,
-         params: { id: @project1.id,
-                   dmsf_entries: { target_folder_id: @folder1.id },
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    post "/projects/#{@project1.id}/dmsf/entries",
+         params: { dmsf_entries: { target_folder_id: @folder1.id },
                    ids: ["file-#{@file1.id}"],
                    move_entries: true }
     assert_response :redirect

@@ -156,7 +156,7 @@ module DmsfUploadHelper
     end
     if failed_uploads.present? && controller
       controller.flash[:warning] = l(:warning_some_files_were_not_committed,
-                                     files: failed_uploads.map { |u| u['name'] }.join(', '))
+                                     files: failed_uploads.pluck(:name).join(', '))
     end
     [files, failed_uploads]
   end

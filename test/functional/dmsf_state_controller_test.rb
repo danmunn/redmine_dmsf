@@ -29,13 +29,14 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
   def setup
     super
     @query401 = Query.find 401
-    @request.session[:user_id] = @jsmith.id
   end
 
   def test_user_pref_save_member
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.add_permission! :user_preferences
-    post :user_pref_save, params: { id: @project1.id, email_notify: 1, title_format: '%t_%v', fast_links: 1,
-                                    act_as_attachable: 1, default_dmsf_query: @query401.id }
+    post "/projects/#{@project1.id}/dmsf/state",
+         params: { email_notify: 1, title_format: '%t_%v', fast_links: 1, act_as_attachable: 1,
+                   default_dmsf_query: @query401.id }
     assert_redirected_to settings_project_path(@project1, tab: 'dmsf')
     assert_not_nil flash[:notice]
     assert_equal flash[:notice], l(:notice_your_preferences_were_saved)
@@ -50,22 +51,23 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
   end
 
   def test_user_pref_save_member_forbidden
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :user_preferences
-    post :user_pref_save, params: { id: @project1.id, email_notify: 1, title_format: '%t_%v' }
+    post "/projects/#{@project1.id}/dmsf/state", params: { email_notify: 1, title_format: '%t_%v' }
     assert_response :forbidden
   end
 
   def test_user_pref_save_none_member
     # Non Member
-    @request.session[:user_id] = @someone.id
-    post :user_pref_save, params: { id: @project1.id, email_notify: 1, title_format: '%t_%v' }
+    post '/login', params: { username: 'someone', password: 'foo' }
+    post "/projects/#{@project1.id}/dmsf/state", params: { email_notify: 1, title_format: '%t_%v' }
     assert_response :forbidden
   end
 
   def test_user_pref_save_admin
     # Admin - non member
-    @request.session[:user_id] = @admin.id
-    post :user_pref_save, params: { id: @project1.id, email_notify: 1, title_format: '%t_%v' }
+    post '/login', params: { username: 'admin', password: 'admin' }
+    post "/projects/#{@project1.id}/dmsf/state", params: { email_notify: 1, title_format: '%t_%v' }
     assert_redirected_to settings_project_path(@project1, tab: 'dmsf')
     assert_not_nil flash[:warning]
     assert_equal flash[:warning], l(:user_is_not_project_member)

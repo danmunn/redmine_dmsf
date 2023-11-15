@@ -69,7 +69,7 @@ class CreateHierarchy < ActiveRecord::Migration[4.2]
     create_table :dmsf_user_prefs do |t|
       t.references :project, null: false
       t.references :user, null: false
-      t.boolean :email_notify
+      t.boolean :email_notify, null: false, default: false
       t.timestamps
     end
   end

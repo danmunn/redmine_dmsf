@@ -177,7 +177,7 @@ class DmsfFileRevision < ApplicationRecord
   def disk_file(search_if_not_exists: true)
     path = storage_base_path
     begin
-      FileUtils.mkdir_p(path) unless File.exist?(path)
+      FileUtils.mkdir_p(path)
     rescue StandardError => e
       Rails.logger.error e.message
     end

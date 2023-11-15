@@ -100,8 +100,8 @@ module RedmineDmsf
           links = get_links(context[:container])
           return unless links.present? && Setting.thumbnails_enabled?
 
-          images = links.map { |x| x[0] }.select(&:image?)
-          return 'yes' if images.any?
+          images = links.pluck(0).select(&:image?)
+          'yes' if images.any?
         end
 
         def view_issues_edit_notes_bottom_style(context = {})
@@ -142,7 +142,7 @@ module RedmineDmsf
               links << [dmsf_file, dmsf_link, dmsf_link.created_at] if dmsf_file&.last_revision
             end
             # Sort by 'create_at'
-            links.sort! { |x, y| x[2] <=> y[2] }
+            links.sort_by! { |a| a[2] }
           end
           links
         end

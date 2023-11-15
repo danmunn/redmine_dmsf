@@ -37,7 +37,7 @@ module DmsfHelper
   def self.temp_filename(filename)
     filename = sanitize_filename(filename)
     timestamp = DateTime.current.strftime('%y%m%d%H%M%S')
-    timestamp.succ! while File.exist?(Rails.root.join("tmp/#{timestamp}_#{filename}"))
+    timestamp.succ! while Rails.root.join("tmp/#{timestamp}_#{filename}").exist?
     "#{timestamp}_#{filename}"
   end
 
@@ -47,7 +47,7 @@ module DmsfHelper
     # Replace all non alphanumeric, hyphens or periods with underscore
     just_filename.gsub!(/[^\w.\-]/, '_')
     # Keep the extension if any
-    if !(/^[a-zA-Z0-9_.\-]*$/).match?(just_filename) && just_filename =~ /(.[a-zA-Z0-9]+)$/
+    if !/^[a-zA-Z0-9_.\-]*$/.match?(just_filename) && just_filename =~ /(.[a-zA-Z0-9]+)$/
       extension = Regexp.last_match(1)
       just_filename = Digest::SHA256.hexdigest(just_filename) << extension
     end

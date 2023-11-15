@@ -124,13 +124,13 @@ class DmsfFolder < ApplicationRecord
     if folder.dmsf_folder_permissions.any?
       role_ids = User.current.roles_for_project(folder.project).map(&:id)
       role_permission_ids = folder.dmsf_folder_permissions.roles.map(&:object_id)
-      return true if (role_ids & role_permission_ids).any?
+      return true if role_ids.intersect?(role_permission_ids)
 
       principal_ids = folder.dmsf_folder_permissions.users.map(&:object_id)
       return true if principal_ids.include?(User.current.id)
 
       user_group_ids = User.current.groups.map(&:id)
-      (principal_ids & user_group_ids).any?
+      principal_ids.intersect?(user_group_ids)
     else
       DmsfFolder.permissions? folder.dmsf_folder, allow_system: allow_system, file: file
     end
@@ -511,7 +511,7 @@ class DmsfFolder < ApplicationRecord
     save
   end
 
-  ALL_INVALID_CHARACTERS = /[#{INVALID_CHARACTERS}]/.freeze
+  ALL_INVALID_CHARACTERS = /[#{INVALID_CHARACTERS}]/
   def self.get_valid_title(title)
     # 1. Invalid characters are replaced with dots.
     # 2. Two or more dots in a row are replaced with a single dot.

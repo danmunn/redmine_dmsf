@@ -35,7 +35,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   def setup
     super
     User.current = @jsmith
-    default_url_options[:host] = 'http://example.com'
+    default_url_options[:host] = 'www.example.com'
     @file1 = DmsfFile.find_by(id: 1)
     @file6 = DmsfFile.find_by(id: 6)  # video
     @file7 = DmsfFile.find_by(id: 7)  # image
@@ -361,7 +361,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     link = link_to(img, url, target: '_blank',
                              rel: 'noopener',
                              title: h(@file7.last_revision.try(:tooltip)),
-                             'data-downloadurl': 'image/gif:test.gif:http://example.com/dmsf/files/7/test.gif')
+                             'data-downloadurl': 'image/gif:test.gif:http://www.example.com/dmsf/files/7/test.gif')
     assert_equal content_tag(:p, link + link), text
   end
 
@@ -395,7 +395,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     link = link_to(img, url, target: '_blank',
                              rel: 'noopener',
                              title: h(@file7.last_revision.try(:tooltip)),
-                             'data-downloadurl': 'image/gif:test.gif:http://example.com/dmsf/files/7/test.gif')
+                             'data-downloadurl': 'image/gif:test.gif:http://www.example.com/dmsf/files/7/test.gif')
     assert_equal content_tag(:p, link), text
     width = '640'
     text = textilizable("{{dmsftn(#{@file7.id}, width=#{width})}}")

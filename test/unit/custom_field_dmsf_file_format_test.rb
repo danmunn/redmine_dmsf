@@ -32,7 +32,7 @@ class CustomFieldDmsfFileFormatTest < RedmineDmsf::Test::UnitTest
 
   def test_possible_values_options
     n = @issue.project.dmsf_files.visible.all.size
-    DmsfFolder.visible(false).where(project_id: @issue.project.id).each do |f|
+    DmsfFolder.visible(false).where(project_id: @issue.project.id).find_each do |f|
       n += f.dmsf_files.visible.all.size
     end
     assert_equal n, @field.possible_values_options(@issue).size

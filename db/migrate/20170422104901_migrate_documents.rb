@@ -38,7 +38,7 @@ class MigrateDocuments < ActiveRecord::Migration[4.2]
                   begin
                     FileUtils.mv origin, target, verbose: true
                     folder = storage_base_path(dmsf_file_revision)
-                    Dir.rmdir(folder) if folder && (Dir.entries(folder).size == 2)
+                    Dir.rmdir(folder) if folder && Dir.empty?(folder)
                   rescue StandardError => e
                     msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: #{e.message}"
                     say msg
@@ -91,7 +91,7 @@ class MigrateDocuments < ActiveRecord::Migration[4.2]
                   begin
                     FileUtils.mv origin, target, verbose: true
                     folder = dmsf_file_revision.storage_base_path
-                    Dir.rmdir(folder) if folder && (Dir.entries(folder).size == 2)
+                    Dir.rmdir(folder) if folder && Dir.empty?(folder)
                   rescue StandardError => e
                     msg = "DmsfFileRevisions ID #{dmsf_file_revision.id}: #{e.message}"
                     say msg
@@ -136,7 +136,7 @@ class MigrateDocuments < ActiveRecord::Migration[4.2]
   def disk_file(dmsf_file_revision)
     path = storage_base_path(dmsf_file_revision)
     if path
-      FileUtils.mkdir_p(path) unless File.exist?(path)
+      FileUtils.mkdir_p(path)
       return "#{path}/#{dmsf_file_revision.disk_filename}"
     end
     nil

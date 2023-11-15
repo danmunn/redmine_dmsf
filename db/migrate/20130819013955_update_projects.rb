@@ -22,6 +22,6 @@
 class UpdateProjects < ActiveRecord::Migration[4.2]
   def change
     # DMSF - project's root folder notification
-    add_column :projects, :dmsf_notification, :boolean
+    add_column :projects, :dmsf_notification, :boolean, null: false, default: false
   end
 end

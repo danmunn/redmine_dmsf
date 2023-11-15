@@ -275,10 +275,6 @@ class DmsfWorkflowsController < ApplicationController
     end
   end
 
-  def edit
-    redirect_to dmsf_workflow_path(@dmsf_workflow)
-  end
-
   def new
     @dmsf_workflow = DmsfWorkflow.new
     # Reload
@@ -289,6 +285,10 @@ class DmsfWorkflowsController < ApplicationController
       @dmsf_workflow.name = names.first
     end
     render layout: !request.xhr?
+  end
+
+  def edit
+    redirect_to dmsf_workflow_path(@dmsf_workflow)
   end
 
   def create
@@ -399,7 +399,7 @@ class DmsfWorkflowsController < ApplicationController
   def remove_step
     if request.delete?
       DmsfWorkflowStep.where(dmsf_workflow_id: @dmsf_workflow.id, step: params[:step]).find_each do |ws|
-        @dmsf_workflow.dmsf_workflow_steps.delete(ws)
+        @dmsf_workflow.dmsf_workflow_steps.delete ws
       end
       @dmsf_workflow.dmsf_workflow_steps.each do |ws|
         n = ws.step.to_i

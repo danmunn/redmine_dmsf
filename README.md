@@ -45,7 +45,7 @@ Features
 Dependencies
 ------------
   
-  * Redmine 5.0.0 or higher
+  * Redmine 5..0 or higher
 
 ### Full-text search (optional)
 

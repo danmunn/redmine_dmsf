@@ -35,7 +35,7 @@ module RedmineDmsf
 
       def copy(project, options = {})
         super(project, options)
-        project = project.is_a?(Project) ? project : Project.find(project)
+        project = Project.find(project) unless project.is_a?(Project)
         to_be_copied = %w[dmsf dmsf_folders approval_workflows]
         to_be_copied &= Array.wrap(options[:only]) if options[:only]
         if save

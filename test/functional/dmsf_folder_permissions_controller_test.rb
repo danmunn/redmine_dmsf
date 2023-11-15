@@ -26,30 +26,32 @@ class DmsfFolderPermissionsControllerTest < RedmineDmsf::Test::TestCase
 
   def setup
     super
-    @request.session[:user_id] = @jsmith.id
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
   end
 
   def test_new
-    get :new, params: { project_id: @project1, dmsf_folder_id: @folder7, format: 'js' }, xhr: true
+    get '/dmsf_folder_permissions/new',
+        params: { project_id: @project1.id, dmsf_folder_id: @folder7.id, format: 'js' },
+        xhr: true
     assert_response :success
     assert_template 'new'
     assert @response.media_type.include?('text/javascript')
   end
 
   def test_autocomplete_for_user
-    get :autocomplete_for_user,
-        params: { project_id: @project1, dmsf_folder_id: @folder7, q: 'smi', format: 'js' },
+    get '/dmsf_folder_permissions/autocomplete_for_user',
+        params: { project_id: @project1.id, dmsf_folder_id: @folder7.id, q: 'smi', format: 'js' },
         xhr: true
     assert_response :success
     assert_include @jsmith.name, response.body
   end
 
   def test_append
-    get :new,
-        params: { project_id: @project1, dmsf_folder_id: @folder7, user_ids: [@jsmith.id], format: 'js' },
-        xhr: true
+    post '/dmsf_folder_permissions/append',
+         params: { project_id: @project1.id, dmsf_folder_id: @folder7.id, user_ids: [@jsmith.id], format: 'js' },
+         xhr: true
     assert_response :success
-    assert_template 'new'
+    assert_template 'append'
     assert @response.content_type.match?(%r{^text/javascript})
   end
 end

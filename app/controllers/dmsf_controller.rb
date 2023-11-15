@@ -512,8 +512,6 @@ class DmsfController < ApplicationController
     }
     @back_url = params[:back_url]
     render action: 'email_entries'
-  rescue StandardError
-    raise
   ensure
     zip&.close
   end
@@ -541,8 +539,6 @@ class DmsfController < ApplicationController
       type: 'application/zip',
       disposition: 'attachment'
     )
-  rescue StandardError
-    raise
   ensure
     zip&.close
   end
