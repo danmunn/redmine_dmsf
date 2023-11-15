@@ -398,14 +398,14 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     post '/login', params: { username: 'jsmith', password: 'jsmith' }
     @role_manager.remove_permission! :view_dmsf_files
     post '/projects/dmsf/append_email',
-         params: { id: @project1, user_ids: @project1.members.collect { |m| m.user.id }, format: 'js' }
+         params: { id: @project1.id, user_ids: @project1.members.collect { |m| m.user.id }, format: 'js' }
     assert_response :forbidden
   end
 
   def test_append_email
     post '/login', params: { username: 'jsmith', password: 'jsmith' }
     post '/projects/dmsf/append_email',
-         params: { id: @project1, user_ids: @project1.members.collect { |m| m.user.id }, format: 'js' }
+         params: { id: @project1.id, user_ids: @project1.members.collect { |m| m.user.id }, format: 'js' }
     assert_response :success
   end
 
@@ -418,7 +418,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_autocomplete_for_user
     post '/login', params: { username: 'jsmith', password: 'jsmith' }
-    get '/projects/dmsf/autocomplete_for_user', params: { id: @project1 }, xhr: true
+    get '/projects/dmsf/autocomplete_for_user', params: { id: @project1.id }, xhr: true
     assert_response :success
   end
 
@@ -428,7 +428,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
       post "/projects/#{@project1.id}/dmsf/create",
            params: { dmsf_folder: { title: 'New folder', description: 'Unit tests' } }
     end
-    assert_redirected_to dmsf_folder_path(id: @project1, folder_id: nil)
+    assert_redirected_to dmsf_folder_path(id: @project1.id, folder_id: nil)
   end
 
   def test_create_folder

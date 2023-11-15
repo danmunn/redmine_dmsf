@@ -263,8 +263,8 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     post '/login', params: { username: 'jsmith', password: 'jsmith' }
     assert_difference 'DmsfLink.count', +1 do
       post '/dmsf_links', params: { dmsf_link: {
-        project_id: @project2,
-        dmsf_folder_id: @folder3,
+        project_id: @project2.id,
+        dmsf_folder_id: @folder3.id,
         target_project_id: @project1.id,
         dmsf_file_id: @file6.id,
         name: 'file_link',
@@ -278,7 +278,7 @@ class DmsfLinksControllerTest < RedmineDmsf::Test::TestCase
     post '/login', params: { username: 'jsmith', password: 'jsmith' }
     assert_difference 'DmsfLink.count', +1 do
       post '/dmsf_links', params: { dmsf_link: {
-        project_id: @project1,
+        project_id: @project1.id,
         target_project_id: @project1.id,
         name: 'file_link',
         external_link: 'true',
