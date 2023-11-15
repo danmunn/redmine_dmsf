@@ -101,8 +101,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     @folder1.delete commit: false
     get "/projects/#{@project1.id}/dmsf/trash"
     assert_response :success
-    assert_select 'a', href:  dmsf_folder_path(id: @folder1.project.id, folder_id: @folder1.id)
-    assert_select 'a', href:  dmsf_folder_path(id: @folder2.project.id, folder_id: @folder2.id)
+    assert_select 'a', href:  dmsf_folder_path(id: @folder1.project, folder_id: @folder1.id)
+    assert_select 'a', href:  dmsf_folder_path(id: @folder2.project, folder_id: @folder2.id)
     assert_select 'a', href: url_for(controller: :dmsf_files, action: 'view', id: @file4.id, only_path: true)
     assert_select 'a', href: url_for(controller: :dmsf_files, action: 'view', id: @link2.target_id, only_path: true)
   end
@@ -428,7 +428,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
       post "/projects/#{@project1.id}/dmsf/create",
            params: { dmsf_folder: { title: 'New folder', description: 'Unit tests' } }
     end
-    assert_redirected_to dmsf_folder_path(id: @project1.id, folder_id: nil)
+    assert_redirected_to dmsf_folder_path(id: @project1, folder_id: nil)
   end
 
   def test_create_folder
