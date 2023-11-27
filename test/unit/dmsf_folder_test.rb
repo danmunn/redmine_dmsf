@@ -315,4 +315,13 @@ class DmsfFolderTest < RedmineDmsf::Test::UnitTest
     assert_not @folder1.any_child?(@folder6)
     assert @folder1.any_child?(@folder2)
   end
+
+  def delete_system_folder
+    # System folders
+    assert DmsfFolder.where(id: [8, 9]).exist?
+    @file_link7.destroy
+    @dmsf_file11.destroy
+    # System folders are empty and should have been deleted
+    assert_not DmsfFolder.where(id: [8, 9]).exist?
+  end
 end

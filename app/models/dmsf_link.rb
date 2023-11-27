@@ -39,6 +39,9 @@ class DmsfLink < ApplicationRecord
   scope :visible, -> { where(deleted: STATUS_ACTIVE) }
   scope :deleted, -> { where(deleted: STATUS_DELETED) }
 
+  before_destroy :delete_system_folder_before
+  after_destroy :delete_system_folder_after
+
   def target_folder_id
     if target_type == DmsfFolder.model_name.to_s
       target_id
@@ -133,5 +136,15 @@ class DmsfLink < ApplicationRecord
     self.deleted = STATUS_ACTIVE
     self.deleted_by_user = nil
     save validate: false
+  end
+
+  def delete_system_folder_before
+    @parent_folder = dmsf_folder
+  end
+
+  def delete_system_folder_after
+    return unless @parent_folder&.system && @parent_folder.dmsf_files.empty? && @parent_folder.dmsf_links.empty?
+
+    @parent_folder&.destroy
   end
 end

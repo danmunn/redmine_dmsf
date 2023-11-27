@@ -79,6 +79,8 @@ class DmsfFile < ApplicationRecord
   )
 
   before_create :default_values
+  before_destroy :delete_system_folder_before
+  after_destroy :delete_system_folder_after
 
   attr_writer :last_revision
 
@@ -95,7 +97,6 @@ class DmsfFile < ApplicationRecord
 
   def initialize(*args)
     super
-    @project = nil
     self.watcher_user_ids = [] if new_record?
   end
 
@@ -688,5 +689,15 @@ class DmsfFile < ApplicationRecord
 
   def to_s
     name
+  end
+
+  def delete_system_folder_before
+    @parent_folder = dmsf_folder
+  end
+
+  def delete_system_folder_after
+    return unless @parent_folder&.system && @parent_folder.dmsf_files.empty? && @parent_folder.dmsf_links.empty?
+
+    @parent_folder&.destroy
   end
 end

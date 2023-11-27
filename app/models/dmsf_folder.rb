@@ -100,6 +100,8 @@ class DmsfFolder < ApplicationRecord
   validates :dmsf_folder, dmsf_folder_parent: true, if: proc { |folder| !folder.new_record? }
 
   before_create :default_values
+  before_destroy :delete_system_folder_before
+  after_destroy :delete_system_folder_after
 
   def visible?(_user = User.current)
     return DmsfFolder.visible.exists?(id: id) if respond_to?(:type) && /^folder/.match?(type)
@@ -605,6 +607,16 @@ class DmsfFolder < ApplicationRecord
       child.any_child? folder
     end
     false
+  end
+
+  def delete_system_folder_before
+    @parent_folder = dmsf_folder
+  end
+
+  def delete_system_folder_after
+    return unless @parent_folder&.system && @parent_folder.dmsf_files.empty? && @parent_folder.dmsf_links.empty?
+
+    @parent_folder.destroy
   end
 
   class << self
