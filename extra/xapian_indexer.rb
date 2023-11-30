@@ -141,7 +141,7 @@ stem_langs.each do |lang|
       exit 1
     end
   end
-  cmd = +"#{OMINDEX} -s #{lang} --db #{databasepath} #{filespath} --url / --depth-limit=0"
+  cmd = +"#{OMINDEX} -s #{lang} --db #{databasepath} #{filespath}"
   cmd << ' -v' if verbose
   cmd << ' --retry-failed' if retryfailed
   log cmd, verbose
