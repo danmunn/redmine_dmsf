@@ -621,7 +621,7 @@ class DmsfFile < ApplicationRecord
     if locked_for_user?
       return l(:title_locked_by_user, user: lock.reverse[0].user) if lock.reverse[0].user
 
-      return l(:notice_account_unknown_email)
+      return "#{l(:label_user)} #{l('activerecord.errors.messages.invalid')}"
     end
     l(:title_unlock_file)
   end
