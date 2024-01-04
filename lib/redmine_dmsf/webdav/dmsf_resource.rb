@@ -439,6 +439,8 @@ module RedmineDmsf
         unless exist?
           # A successful lock request to an unmapped URL MUST result in the creation of a locked (non-collection)
           # resource with empty content.
+          return NoContent if ignore?
+
           f = create_empty_file
           if f
             scope = "scope_#{args[:scope] || 'exclusive'}".to_sym
@@ -544,13 +546,8 @@ module RedmineDmsf
           raise Forbidden
         end
 
-        # Ignore file name patterns given in the plugin settings
-        pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore']
-        pattern = /^(\._|\.DS_Store$|Thumbs.db$)/ if pattern.blank?
-        if basename.match(pattern)
-          Rails.logger.info "#{basename} ignored"
-          return NoContent
-        end
+        return NoContent if ignore?
+
         reuse_revision = false
         if exist? # We're over-writing something, so ultimately a new revision
           f = file
@@ -791,12 +788,23 @@ module RedmineDmsf
 
             r.custom_field_values << CustomValue.new({ custom_field: cf, value: cf.default_value })
           end
-          if r.save(validate: false)  # Skip validation due to invalid characters in the filename
+          if r.save(validate: false) # Skip validation due to invalid characters in the filename
             FileUtils.touch r.disk_file(search_if_not_exists: false)
             return f
           end
         end
         nil
+      end
+
+      def ignore?
+        # Ignore file name patterns given in the plugin settings
+        pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore']
+        pattern = /^(\._|\.DS_Store$|Thumbs.db$)/ if pattern.blank?
+        if basename.match(pattern)
+          Rails.logger.info "#{basename} ignored"
+          return true
+        end
+        false
       end
     end
   end
