@@ -2,8 +2,7 @@
 
 # Redmine plugin for Document Management System "Features"
 #
-# Copyright © 2012 Daniel Munn <dan.munn@munnster.co.uk>
-# Copyright © 2011-23 Karel Pičman <karel.picman@kontron.com>
+# Daniel Munn <dan.munn@munnster.co.uk>, Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
