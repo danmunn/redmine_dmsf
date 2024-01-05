@@ -31,18 +31,15 @@ require 'optparse'
 # Redmine installation directory
 REDMINE_ROOT = File.expand_path('../../../', __dir__)
 
-# DMSF document location $redmine_root/$files
+# DMSF document location REDMINE_ROOT/FILES
 FILES = 'dmsf'
-
-# scriptindex binary path
-SCRIPTINDEX = '/usr/bin/scriptindex'
 
 # omindex binary path
 # To index "non-text" files, use omindex filters
 # e.g.: tesseract OCR engine as a filter for PNG files
 OMINDEX = '/usr/bin/omindex'
-# $omindex += " --filter=image/png:'tesseract -l chi_sim+chi_tra %f -'"
-# $omindex += " --filter=image/jpeg:'tesseract -l chi_sim+chi_tra %f -'"
+# OMINDEX += " --filter=image/png:'tesseract -l chi_sim+chi_tra %f -'"
+# OMINDEX += " --filter=image/jpeg:'tesseract -l chi_sim+chi_tra %f -'"
 
 # Directory containing Xapian databases for omindex (Attachments indexing)
 DBROOTPATH = File.expand_path('dmsf_index', REDMINE_ROOT)
@@ -55,28 +52,36 @@ verbose = false
 # lovins, norwegian, porter, portuguese, romanian, russian, spanish, swedish and turkish.
 stem_langs	= ['english']
 
+ENVIRONMENT = File.join(REDMINE_ROOT, 'config/environment.rb')
+env = 'production'
+
 ########################################################################################################################
 # END Configuration parameters
 ########################################################################################################################
 
-ENVIRONMENT = File.join(REDMINE_ROOT, 'config/environment.rb')
-env = 'production'
-retryfailed = false
+retry_failed = false
+no_delete = false
+max_size = ''
+overwrite = false
 
-VERSION = '0.2'
+VERSION = '0.3'
 
 optparse = OptionParser.new do |opts|
   opts.banner = 'Usage: xapian_indexer.rb [OPTIONS...]'
   opts.separator('')
-  opts.separator('Index Redmine DMS documents')
+  opts.separator("Index Redmine's DMS documents")
   opts.separator('')
   opts.separator('')
   opts.separator('Options:')
-  opts.on('-s', '--stemming_lang a,b,c', Array,
-          'Comma separated list of stemming languages for indexing') { |s| stem_langs = s }
-  opts.on('-v', '--verbose', 'verbose') { verbose = true }
-  opts.on('-e', '--environment ENV',
-          'Rails ENVIRONMENT (development, testing or production), default production') { |e| env = e }
+  opts.on('-s', '--stemming_lang a,b,c', Array, 'Comma separated list of stemming languages for indexing') do |s|
+    stem_langs = s
+  end
+  opts.on('-v', '--verbose', 'verbose') do
+    verbose = true
+  end
+  opts.on('-e', '--environment ENV', 'Rails ENVIRONMENT(development, testing or production), default production') do |e|
+    env = e
+  end
   opts.on('-V', '--version', 'show version and exit') do
     $stdout.puts VERSION
     exit
@@ -85,7 +90,18 @@ optparse = OptionParser.new do |opts|
     $stdout.puts opts
     exit
   end
-  opts.on('-R', '--retry-failed', 'retry files which omindex failed to extract text') { retryfailed = true }
+  opts.on('-R', '--retry-failed', 'retry files which omindex failed to extract text') do
+    retry_failed = true
+  end
+  opts.on('-p', '--no-delete', 'skip the deletion of records corresponding to deleted files') do
+    no_delete = true
+  end
+  opts.on('-m', '--max-size SIZE', "maximum size of file to index(e.g.: '5M', '1G',...)") do |m|
+    max_size = m
+  end
+  opts.on('', '--overwrite', 'create the database anew instead of updating') do
+    overwrite = true
+  end
   opts.separator('')
   opts.separator('Examples:')
   opts.separator('  xapian_indexer.rb -s english,italian -v')
@@ -107,9 +123,9 @@ end
 
 def system_or_raise(command, verbose)
   if verbose
-    raise StandardError, "\"#{command}\" failed" unless system(command)
+    system command, exception: true
   else
-    raise StandardError, "\"#{command}\" failed" unless system(command, out: '/dev/null')
+    system command, out: '/dev/null', exception: true
   end
 end
 
@@ -117,36 +133,34 @@ log "Trying to load Redmine environment <<#{ENVIRONMENT}>>...", verbose
 
 begin
   require ENVIRONMENT
-rescue LoadError => e
-  log e.message, verbose, error: true
-  exit 1
-end
 
-log "Redmine environment [RAILS_ENV=#{env}] correctly loaded ...", verbose
+  log "Redmine environment [RAILS_ENV=#{env}] correctly loaded ...", verbose
 
-# Indexing documents
-stem_langs.each do |lang|
-  filespath = Setting.plugin_redmine_dmsf['dmsf_storage_directory'] || File.join(REDMINE_ROOT, FILES)
-  unless File.directory?(filespath)
-    log "An error while accessing #{filespath}, exiting...", true
-    exit 1
-  end
-  databasepath = File.join(DBROOTPATH, lang)
-  unless File.directory?(databasepath)
-    log "#{databasepath} does not exist, creating ...", verbose
-    begin
-      FileUtils.mkdir_p databasepath
-    rescue StandardError => e
-      log e.message, true
+  # Indexing documents
+  stem_langs.each do |lang|
+    filespath = Setting.plugin_redmine_dmsf['dmsf_storage_directory'] || File.join(REDMINE_ROOT, FILES)
+    unless File.directory?(filespath)
+      warn "'#{filespath}' doesn't exist."
       exit 1
     end
+    databasepath = File.join(DBROOTPATH, lang)
+    unless File.directory?(databasepath)
+      log "#{databasepath} does not exist, creating ...", verbose
+      FileUtils.mkdir_p databasepath
+    end
+    cmd = +"#{OMINDEX} -s #{lang} --db #{databasepath} #{filespath} --url / --depth-limit=0"
+    cmd << ' -v' if verbose
+    cmd << ' --retry-failed' if retry_failed
+    cmd << ' -p' if no_delete
+    cmd << " -m #{max_size}" if max_size.present?
+    cmd << ' --overwrite' if overwrite
+    log cmd, verbose
+    system_or_raise cmd, verbose
   end
-  cmd = +"#{OMINDEX} -s #{lang} --db #{databasepath} #{filespath}"
-  cmd << ' -v' if verbose
-  cmd << ' --retry-failed' if retryfailed
-  log cmd, verbose
-  system_or_raise cmd, verbose
+  log 'Redmine DMS documents indexed', verbose
+rescue LoadError => e
+  warn e.message
+  exit 1
 end
-log 'Redmine DMS documents indexed', verbose
 
 exit 0
