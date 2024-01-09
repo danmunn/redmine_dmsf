@@ -125,13 +125,21 @@ class DmsfFolder < ApplicationRecord
     if folder.dmsf_folder_permissions.any?
       role_ids = User.current.roles_for_project(folder.project).map(&:id)
       role_permission_ids = folder.dmsf_folder_permissions.roles.map(&:object_id)
-      return true if role_ids.intersection(role_permission_ids).any?
+      if RUBY_VERSION < '3.1' # intersect? method added in Ruby 3.1, though we support 2.7 too
+        return true if role_ids.intersection(role_permission_ids).any?
+      elsif role_ids.intersect?(role_permission_ids)
+        return true
+      end
 
       principal_ids = folder.dmsf_folder_permissions.users.map(&:object_id)
       return true if principal_ids.include?(User.current.id)
 
       user_group_ids = User.current.groups.map(&:id)
-      principal_ids.intersection(user_group_ids).any?
+      if RUBY_VERSION < '3.1' # intersect? method added in Ruby 3.1, though we support 2.7 too
+        principal_ids.intersection(user_group_ids).any?
+      else
+        principal_ids.intersect?(user_group_ids)
+      end
     else
       DmsfFolder.permissions? folder.dmsf_folder, allow_system: allow_system, file: file
     end
