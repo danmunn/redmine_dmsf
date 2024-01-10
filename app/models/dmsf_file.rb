@@ -119,9 +119,7 @@ class DmsfFile < ApplicationRecord
   end
 
   def approval_allowed_zero_minor
-    last_revision.minor_version.zero? if Setting.plugin_redmine_dmsf['only_approval_zero_minor_version']
-
-    true
+    Setting.plugin_redmine_dmsf['only_approval_zero_minor_version'] ? last_revision.minor_version&.zero? : true
   end
 
   def last_revision

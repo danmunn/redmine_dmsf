@@ -304,4 +304,22 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert f
     assert_equal @jsmith.id, f.last_revision.user_id, 'Author must be updated when copying'
   end
+
+  def test_approval_allowed_zero_minor_yes
+    with_settings plugin_redmine_dmsf: { 'only_approval_zero_minor_version' => true } do
+      @file1.last_revision.minor_version = 0
+      assert @file1.approval_allowed_zero_minor
+      @file1.last_revision.minor_version = 1
+      assert_not @file1.approval_allowed_zero_minor
+    end
+  end
+
+  def test_approval_allowed_zero_minor_no
+    with_settings plugin_redmine_dmsf: { 'only_approval_zero_minor_version' => nil } do
+      @file1.last_revision.minor_version = 0
+      assert @file1.approval_allowed_zero_minor
+      @file1.last_revision.minor_version = 1
+      assert @file1.approval_allowed_zero_minor
+    end
+  end
 end
