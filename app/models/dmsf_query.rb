@@ -230,7 +230,7 @@ class DmsfQuery < Query
           dmsf_link = DmsfLink.find_by(id: item.id)
           if dmsf_link.dmsf_folder
             !dmsf_link.dmsf_folder.visible? || !DmsfFolder.permissions?(dmsf_link.dmsf_folder, allow_system: false)
-          else
+          elsif dmsf_link.project
             !dmsf_link.project.dmsf_available?
           end
         else
