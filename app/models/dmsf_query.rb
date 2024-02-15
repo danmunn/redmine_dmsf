@@ -232,6 +232,8 @@ class DmsfQuery < Query
             !dmsf_link.dmsf_folder.visible? || !DmsfFolder.permissions?(dmsf_link.dmsf_folder, allow_system: false)
           elsif dmsf_link.project
             !dmsf_link.project.dmsf_available?
+          else
+            !dmsf_link.project&.dmsf_available?
           end
         else
           false
