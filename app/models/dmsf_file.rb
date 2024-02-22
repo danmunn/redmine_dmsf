@@ -42,6 +42,7 @@ class DmsfFile < ApplicationRecord
   scope :deleted, -> { where(deleted: STATUS_DELETED) }
 
   validates :name, dmsf_file_name: true
+  validates :name, length: { maximum: 255 }
   validates :name,
             uniqueness: {
               scope: %i[dmsf_folder_id project_id deleted],
