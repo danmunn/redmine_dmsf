@@ -37,7 +37,7 @@ class DmsfPluginTest < RedmineDmsf::Test::HelperTest
 
   def test_an_obsolete_plugin_present_yes
     # Create a fake redmine_checklists plugin
-    path = Rails.root.join('plugins/redmine_contacts')
+    path = Rails.root.join('plugins/redmine_resources')
     FileUtils.mkdir_p path
     assert RedmineDmsf::Plugin.an_obsolete_plugin_present?
     FileUtils.rm_rf path
