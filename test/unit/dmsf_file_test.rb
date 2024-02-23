@@ -32,6 +32,12 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     @wf2 = DmsfWorkflow.find 2
   end
 
+  def test_file_name_length_validation
+    file = DmsfFile.new(name: Array.new(256).map { 'a' }.join)
+    assert file.invalid?
+    assert_equal ['Name is too long (maximum is 255 characters)'], file.errors.full_messages
+  end
+
   def test_project_file_count_differs_from_project_visibility_count
     assert_not_same @project1.dmsf_files.all.size, @project1.dmsf_files.visible.all.size
   end

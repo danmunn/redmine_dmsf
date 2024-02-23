@@ -36,6 +36,31 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     @wf1 = DmsfWorkflow.find 1
   end
 
+  def test_file_title_length_validation
+    file = DmsfFileRevision.new(title: Array.new(256).map { 'a' }.join,
+                                name: 'Test Revision',
+                                major_version: 1)
+    assert file.invalid?
+    assert_equal ['Title is too long (maximum is 255 characters)'], file.errors.full_messages
+  end
+
+  def test_file_name_length_validation
+    file = DmsfFileRevision.new(name: Array.new(256).map { 'a' }.join,
+                                title: 'Test Revision',
+                                major_version: 1)
+    assert file.invalid?
+    assert_equal ['Name is too long (maximum is 255 characters)'], file.errors.full_messages
+  end
+
+  def test_file_disk_filename_length_validation
+    file = DmsfFileRevision.new(disk_filename: Array.new(256).map { 'a' }.join,
+                                title: 'Test Revision',
+                                name: 'Test Revision',
+                                major_version: 1)
+    assert file.invalid?
+    assert_equal ['Disk filename is too long (maximum is 255 characters)'], file.errors.full_messages
+  end
+
   def test_delete_restore
     @revision5.delete commit: false
     assert @revision5.deleted?, "File revision #{@revision5.name} hasn't been deleted"
