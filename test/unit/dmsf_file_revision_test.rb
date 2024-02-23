@@ -129,6 +129,25 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     assert_not_equal r1.disk_filename, r2.disk_filename, 'The disk filename should not be equal for two revisions.'
   end
 
+  def test_invalid_filename_extension
+    with_settings(attachment_extensions_allowed: 'txt') do
+      r1 = DmsfFileRevision.new
+      r1.minor_version = 0
+      r1.major_version = 1
+      r1.dmsf_file = @file1 # name test.txt
+      r1.user = User.current
+      r1.name = 'test.txt.png'
+      r1.title = DmsfFileRevision.filename_to_title(r1.name)
+      r1.description = nil
+      r1.comment = nil
+      r1.mime_type = nil
+      r1.size = 4
+      assert r1.invalid?
+      message = ['Attachment extension .png is not allowed']
+      assert_equal message, r1.errors.full_messages
+    end
+  end
+
   def test_workflow_tooltip
     @revision2.set_workflow @wf1.id, 'start'
     assert_equal 'John Smith', @revision2.workflow_tooltip

@@ -95,6 +95,7 @@ class DmsfFileRevision < ApplicationRecord
   validates :name, dmsf_file_name: true
   validates :name, length: { maximum: 255 }
   validates :disk_filename, length: { maximum: 255 }
+  validates :name, dmsf_file_extension: true
   validates :description, length: { maximum: 1.kilobyte }
   validates :size, dmsf_max_file_size: true
 
