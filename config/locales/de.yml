@@ -471,6 +471,8 @@ de:
   notice_entries_copied: Kopieren ist gelungen
   notice_entries_moved: Verschiebung ist gelungen
   label_dmsf_file_revision: DMS Dokument Rev.
+  error_not_supported_image_format: Nicht unterstütztes Bildformat
+  error_not_supported_video_format: Nicht unterstütztes Videoformat
 
   easy_pages:
     modules:

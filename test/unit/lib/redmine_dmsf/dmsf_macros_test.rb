@@ -50,7 +50,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
 
   def test_macro_dmsf_file_not_found
     text = textilizable('{{dmsf(99)}}')
-    assert text.include?('Error')
+    assert text.include?('{{dmsf(99)}}'), text
   end
 
   def test_macro_dmsf_no_permissions
@@ -283,7 +283,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
 
   def test_macro_dmsf_image_not_image
     text = textilizable("{{dmsf_image(#{@file1.id})}}")
-    assert text.include?('Not supported image format')
+    assert text.include?(::I18n.t(:error_not_supported_image_format))
   end
 
   # {{dmsf_video(file_id)}}
@@ -336,7 +336,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
 
   def test_macro_dmsf_video_not_video
     text = textilizable("{{dmsf_video(#{@file7.id})}}")
-    assert text.include?('Not supported video format'), text
+    assert text.include?(::I18n.t(:error_not_supported_video_format)), text
   end
 
   # {{dmsftn(file_id)}}
@@ -429,7 +429,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
 
   def test_macro_dmsftn_not_image
     text = textilizable("{{dmsftn(#{@file1.id})}}")
-    assert text.include?('Not supported image format')
+    assert text.include?(::I18n.t(:error_not_supported_image_format))
   end
 
   # {{dmsfw(file_id)}}
@@ -441,12 +441,12 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   def test_macro_dmsfw_no_permissions
     @manager_role.remove_permission! :view_dmsf_files
     text = textilizable("{{dmsfw(#{@file1.id})}}")
-    assert text.include?('Error'), text
+    assert text.include?(::I18n.t(:notice_not_authorized))
   end
 
   def test_macro_dmsfw_dmsf_off
     @project1.disable_module! :dmsf
     text = textilizable("{{dmsfw(#{@file1.id})}}")
-    assert text.include?('Error'), text
+    assert text.include?(::I18n.t(:notice_not_authorized))
   end
 end

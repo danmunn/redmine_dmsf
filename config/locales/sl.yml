@@ -476,6 +476,8 @@ sl:
   notice_entries_copied: Copying has succeeded
   notice_entries_moved: Moving has succeeded
   label_dmsf_file_revision: DMS Document rev.
+  error_not_supported_image_format: Not supported image format
+  error_not_supported_video_format: Not supported video format
 
   easy_pages:
     modules:

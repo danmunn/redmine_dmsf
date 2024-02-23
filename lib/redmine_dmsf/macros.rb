@@ -29,16 +29,17 @@ module RedmineDmsf
       macro :dmsf do |_obj, args|
         raise ArgumentError if args.empty? # Requires file id
 
-        file = DmsfFile.visible.find args[0]
+        file = DmsfFile.visible.find_by(id: args[0])
+        return "{{dmsf(#{args[0]})}}" unless file
         unless User.current&.allowed_to?(:view_dmsf_files, file.project, { id: file.id })
-          raise l(:notice_not_authorized)
+          raise ::I18n.t(:notice_not_authorized)
         end
 
         if args[2].blank?
           revision = file.last_revision
         else
           revision = DmsfFileRevision.find_by(id: args[2], dmsf_file_id: args[0])
-          raise ActiveRecord::RecordNotFound unless revision
+          return "{{dmsf(#{args[0]}, #{args[1]}, #{args[2]})}" unless revision
         end
         title = (args[1].presence || file.title)
         title.gsub!(/\A"|"\z/, '') # Remove apostrophes
@@ -60,13 +61,14 @@ module RedmineDmsf
       macro :dmsff do |_obj, args|
         if args.empty?
           unless User.current.allowed_to?(:view_dmsf_folders, @project) && @project.module_enabled?(:dmsf)
-            raise l(:notice_not_authorized)
+            raise ::I18n.t(:notice_not_authorized)
           end
 
-          return link_to l(:link_documents), dmsf_folder_url(@project)
+          return link_to ::I18n.t(:link_documents), dmsf_folder_url(@project)
         else
-          folder = DmsfFolder.visible.find args[0]
-          raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_folders, folder&.project)
+          folder = DmsfFolder.visible.find_by(id: args[0])
+          return "{{dmsff(#{args[0]})}}" unless folder
+          raise ::I18n.t(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_folders, folder.project)
 
           title = (args[1].presence || folder.title)
           title.gsub!(/\A"|"\z/, '') # Remove leading and trailing apostrophe
@@ -83,8 +85,9 @@ module RedmineDmsf
       macro :dmsfd do |_obj, args|
         raise ArgumentError if args.empty? # Requires file id
 
-        file = DmsfFile.visible.find args[0]
-        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+        file = DmsfFile.visible.find_by(id: args[0])
+        return "{{dmsfd(#{args[0]})}}" unless file
+        raise ::I18n.t(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
 
         title = (args[1].presence || file.title)
         title.gsub!(/\A"|"\z/, '') # Remove leading and trailing apostrophe
@@ -99,8 +102,9 @@ module RedmineDmsf
       macro :dmsfdesc do |_obj, args|
         raise ArgumentError if args.empty? # Requires file id
 
-        file = DmsfFile.visible.find args[0]
-        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+        file = DmsfFile.visible.find_by(id: args[0])
+        return "{{dmsfdesc(#{args[0]})}}" unless file
+        raise ::I18n.t(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
 
         textilizable file.description
       end
@@ -112,17 +116,17 @@ module RedmineDmsf
       macro :dmsfversion do |_obj, args|
         raise ArgumentError if args.empty? # Requires file id
 
-        file = DmsfFile.visible.find args[0]
+        file = DmsfFile.visible.find_by(id: args[0])
+        return "{{dmsfversion(#{args[0]})}}" unless file
         unless User.current&.allowed_to?(:view_dmsf_files, file.project, { id: file.id })
-          raise l(:notice_not_authorized)
+          raise ::I18n.t(:notice_not_authorized)
         end
 
         if args[1].blank?
           revision = file.last_revision
         else
           revision = DmsfFileRevision.find_by(id: args[1], dmsf_file_id: args[0])
-          raise ActiveRecord::RecordNotFound unless revision
-
+          return "{{dmsfversion(#{args[0]}, #{args[1]})}}" unless revision
         end
         textilizable revision.version
       end
@@ -134,8 +138,9 @@ module RedmineDmsf
       macro :dmsflastupdate do |_obj, args|
         raise ArgumentError if args.empty? # Requires file id
 
-        file = DmsfFile.visible.find args[0]
-        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+        file = DmsfFile.visible.find_by(id: args[0])
+        return "{{dmsflastupdate(#{args[0]})}}" unless file
+        raise ::I18n.t(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
 
         textilizable format_time(file.last_revision.updated_at)
       end
@@ -147,8 +152,9 @@ module RedmineDmsf
       macro :dmsft do |_obj, args|
         raise ArgumentError if args.length < 2 # Requires file id and lines number
 
-        file = DmsfFile.visible.find args[0]
-        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+        file = DmsfFile.visible.find_by(id: args[0])
+        return "{{dmsft(#{args[0]}, #{args[1]})}}" unless file
+        raise ::I18n.t(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
 
         content_tag :pre, file.text_preview(args[1])
       end
@@ -172,9 +178,13 @@ module RedmineDmsf
         ids = args[0].split
         html = []
         ids.each do |id|
-          file = DmsfFile.visible.find(id)
-          raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
-          raise 'Not supported image format' unless file.image?
+          file = DmsfFile.visible.find_by(id: id)
+          unless file
+            html << "{{dmsf_image(#{args[0]})}}"
+            next
+          end
+          raise ::I18n.t(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+          raise ::I18n.t(:error_not_supported_image_format) unless file.image?
 
           member = Member.find_by(user_id: User.current.id, project_id: file.project.id)
           filename = file.last_revision.formatted_name(member)
@@ -207,9 +217,10 @@ module RedmineDmsf
         size = options[:size]
         width = options[:width]
         height = options[:height]
-        file = DmsfFile.visible.find args[0]
-        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
-        raise 'Not supported video format' unless file.video?
+        file = DmsfFile.visible.find_by(id: args[0])
+        return "{{dmsf_video(#{args[0]})}}" unless file
+        raise ::I18n.t(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+        raise ::I18n.t(:error_not_supported_video_format) unless file.video?
 
         member = Member.find_by(user_id: User.current.id, project_id: file.project.id)
         filename = file.last_revision.formatted_name(member)
@@ -228,6 +239,7 @@ module RedmineDmsf
       # dmsftn - link to an image thumbnail
       desc %{Wiki DMSF thumbnail:
                  {{dmsftn(file_id)}} -- with default height 200 (auto width)
+                 {{dmsftn(file_id1 file_id2 file_id3)}} -- multiple thumbnails
                  {{dmsftn(file_id, size=300)}} -- with size 300x300
                  {{dmsftn(file_id, height=300)}} -- with height (auto width)
                  {{dmsftn(file_id, width=300)}} -- with width (auto height)
@@ -242,9 +254,13 @@ module RedmineDmsf
         ids = args[0].split
         html = []
         ids.each do |id|
-          file = DmsfFile.visible.find(id)
-          raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
-          raise 'Not supported image format' unless file.image?
+          file = DmsfFile.visible.find_by(id: id)
+          unless file
+            html << "{{dmsftn(#{id})}}"
+            next
+          end
+          raise ::I18n.t(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
+          raise ::I18n.t(:error_not_supported_image_format) unless file.image?
 
           member = Member.find_by(user_id: User.current.id, project_id: file.project.id)
           filename = file.last_revision.formatted_name(member)
@@ -274,9 +290,9 @@ module RedmineDmsf
       macro :dmsfw do |_obj, args|
         raise ArgumentError if args.empty? # Requires file id
 
-        file = DmsfFile.visible.find args[0]
-        raise l(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
-        raise ActiveRecord::RecordNotFound unless file.last_revision
+        file = DmsfFile.visible.find_by(id: args[0])
+        return "{{dmsfw(#{args[0]})}}" unless file
+        raise ::I18n.t(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
 
         file.last_revision.workflow_str(false)
       end

@@ -476,6 +476,8 @@ cs:
   notice_entries_copied: Kopírování se podařilo
   notice_entries_moved: Přesun se podařil
   label_dmsf_file_revision: DMS Dokument rev.
+  error_not_supported_image_format: Nepodporovaný formát obrázku
+  error_not_supported_video_format: Nepodporovaný formát videa
 
   easy_pages:
     modules:
