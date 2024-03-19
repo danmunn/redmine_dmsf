@@ -40,6 +40,7 @@ require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/pdf_patch"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/access_control_patch"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/search_patch"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/search_controller_patch"
+require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/custom_field_patch"
 
 # A workaround for obsolete 'alias_method' usage in RedmineUp's plugins
 if RedmineDmsf::Plugin.an_obsolete_plugin_present?
