@@ -72,7 +72,7 @@ optparse = OptionParser.new do |opts|
   opts.separator('')
   opts.separator('')
   opts.separator('Options:')
-  opts.on('-d', '--index_db DB_PATH', 'Absolute path to index database according plugin settings in User Interface') do |db|
+  opts.on('-d', '--index_db DB_PATH', 'Absolute path to index database according plugin settings in UI') do |db|
     db_root_path = db
   end
   opts.on('-s', '--stemming_lang a,b,c', Array, 'Comma separated list of stemming languages for indexing') do |s|
