@@ -102,9 +102,7 @@ module DmsfUploadHelper
             # If the path is not present we get it from the token
             if committed_file[:token].present?
               a = Attachment.find_by_token(committed_file[:token])
-              if a
-                committed_file[:tempfile_path] = a.diskfile
-              end
+              committed_file[:tempfile_path] = a.diskfile if a
             end
             FileUtils.mv committed_file[:tempfile_path], new_revision.disk_file(search_if_not_exists: false)
             FileUtils.chmod 'u=wr,g=r', new_revision.disk_file(search_if_not_exists: false)
