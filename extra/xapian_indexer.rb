@@ -41,7 +41,7 @@ OMINDEX = '/usr/bin/omindex'
 # OMINDEX += " --filter=image/jpeg:'tesseract -l chi_sim+chi_tra %f -'"
 
 # Directory containing Xapian databases for omindex (Attachments indexing)
-DBROOTPATH = File.expand_path('dmsf_index', REDMINE_ROOT)
+db_root_path = File.expand_path('dmsf_index', REDMINE_ROOT)
 
 # Verbose output, false/true
 verbose = false
@@ -72,6 +72,9 @@ optparse = OptionParser.new do |opts|
   opts.separator('')
   opts.separator('')
   opts.separator('Options:')
+  opts.on('-d', '--index_db DB_PATH', 'Absolute path to index database according plugin settings in UI') do |db|
+    db_root_path = db
+  end
   opts.on('-s', '--stemming_lang a,b,c', Array, 'Comma separated list of stemming languages for indexing') do |s|
     stem_langs = s
   end
@@ -104,6 +107,7 @@ optparse = OptionParser.new do |opts|
   opts.separator('')
   opts.separator('Examples:')
   opts.separator('  xapian_indexer.rb -s english,italian -v')
+  opts.separator('  xapian_indexer.rb -d $HOME/index_db -s english,italian -v')
   opts.separator('')
   opts.summary_width = 25
 end
@@ -142,7 +146,7 @@ begin
       warn "'#{filespath}' doesn't exist."
       exit 1
     end
-    databasepath = File.join(DBROOTPATH, lang)
+    databasepath = File.join(db_root_path, lang)
     unless File.directory?(databasepath)
       log "#{databasepath} does not exist, creating ...", verbose
       FileUtils.mkdir_p databasepath
