@@ -1,8 +1,24 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.1.4 *???-??-??*
+3.1.4 *2024-05-06*
 ------------------
+
+    Extended issue email notifications
+
+* New: #1515 - Adds missing safe_attribute for dmsf_not_inheritable
+* New: #1511 - Adds further validations
+* Bug: #1510 - Uncaught SyntaxError: Redeclaration of let modal in Approval Workflow Log
+* Bog: #1506 - Adminstration-settings cannot open after dmsf installed
+* Bug: #1505 - Adds an extra check in DmsfQuery#dmsf_node
+* New: #1503 - Issue notifications
+* Bug: #1501 - Problem clicking action menu (three dots) in DMS file grid
+* Bug: #1500 - Non-admin user: NoMethodError for intersect if running on Ruby 2.7.6
+* Bug: #1499 - Allow access only to xxx group , access Internal error 500
+* Bug: #1495 - DMSF doesn't ignore filepattern when LOCK and UNLOCK requests
+* Bug: #1494 - Not sending documents when sender is set to user
+* Bug: #1493 - Missing translation :notice_account_unknown_email
+* Bug: #1491 - Empty system folders
 
 3.1.3 *2023-11-15*
 ------------------
@@ -161,7 +177,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 * Bug: #1388 - Custom field in DMS Columns
 * Bug: #1387 - Error in bundle with plugin custom table
 * Bug: #1385 - Wrong version when uploading a document via WebDAV
-* Bug: #1384 - Checksum is always the same via WebDAV type: bug
+* Bug: #1384 - Checksum is always the same via WebDAV
 
 3.0.3 *2022-07-19*
 -------------------
@@ -248,7 +264,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 * New: #1312 - Update _log.html.erb
 * Bug: #1311 - Deleting the link between files and issues
 * New: #1151 - Add document revision.patch_version
-* New:  #557 - Watch Documents type: enhancement
+* New:  #557 - Watch Documents
 
 2.4.11 *2021-11-03*
 -------------------
@@ -327,7 +343,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 * New: #1230 - Redmine 4.2.0 support
 * Bug: #1229 - Error when sorting by a custom field
 * Bug: #1221 - WebDAV links to non top-level directories are broken
-* New: #1217 - Global DMS view type: enhancement
+* New: #1217 - Global DMS view
 * Bug: #1215 - DMS Documents > New file does not respect theme styles properly
 * Bug: #1214 - Error 500 when create new revision
 * Bug: #1213 - DMS project preferences do not save
@@ -514,7 +530,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 * New: #855 - Workflow notification missing
 * New: #852 - Create symbolic link using REST API
 * New: #850 - REST API and pagination on collection resources
-* New: #847 - REST API and delete Folder/document type: enhancement
+* New: #847 - REST API and delete Folder/document
 * New: #823 - Office URI Scheme for direct editing of MS Office files
 * Bug: #818 - Xapian not available
 * New: #803 - 'Create folder' takes a very long time
@@ -690,15 +706,15 @@ IMPORTANT
     Wiki macros revision: dmsfd X dmsfdesc
     Support for deleting users
         
-* Bug: #578 - A wrong title when uploading documents type: bug
-* Bug: #574 - Macro {{dmsfd(xx)}} produce blank value type: bug
-* Bug: #566 - HTML tags in the document description breaks UI type: bug 
-* Bug: #565 - Error 500 when a link to another folder is in the folder/project type: bug
-* New: #562 - New step button text type: enhancement
-* Bug: #561 - Wrong path in the document's details form type: bug
-* Bug: #560 - Trying to send mail without recipient results in error 500 type: bug
-* Bug: #558 - Deletion of a user type: bug
-* New: #443 - Drag/drop feature for new content type: enhancement
+* Bug: #578 - A wrong title when uploading documents
+* Bug: #574 - Macro {{dmsfd(xx)}} produce blank value
+* Bug: #566 - HTML tags in the document description breaks UI 
+* Bug: #565 - Error 500 when a link to another folder is in the folder/project
+* New: #562 - New step button text
+* Bug: #561 - Wrong path in the document's details form
+* Bug: #560 - Trying to send mail without recipient results in error 500
+* Bug: #558 - Deletion of a user
+* New: #443 - Drag/drop feature for new content
 
 1.5.7 *2016-08-12*
 ------------------
@@ -937,7 +953,7 @@ IMPORTANT
 * New: #179 - Workflow Log History in Detailed View
 * Bug: #187 - Approval workflow permissions 
 * New: #190 - Very slow in directories containing many files
-* Bug: #191 - Move/Copy gives undefined method for File:Class type: bug 
+* Bug: #191 - Move/Copy gives undefined method for File:Class 
 * New: #193 - French translation 
 * Bug: #194 - Workflow name link in workflow log window 
 * Bug: #195 - Workflow log not displaying all the steps 
