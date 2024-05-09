@@ -18,13 +18,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-# Files helper
-module DmsfFilesHelper
-  def clean_wiki_text(text)
-    # If there is <p> tag, the text is moved one column to the right by Redmin's CSS. A new line causes double new line.
-    text.gsub('<p>', '')
-        .gsub('</p>', '')
-        .gsub("\n\n", '<br>')
-        .gsub("\n\t", '<br>')
+require File.expand_path('../../test_helper', __FILE__)
+
+# DMSF helper
+class DmsfFilesHelperTest < RedmineDmsf::Test::HelperTest
+  include DmsfFilesHelper
+
+  def test_clean_wiki_test
+    text = "<p>xxx</p>\n\n\n\t"
+    assert_equal 'xxx<br><br>', clean_wiki_text(text)
   end
 end

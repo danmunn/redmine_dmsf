@@ -277,4 +277,29 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     @revision1.size = 2.kilobytes
     assert_not @revision1.valid?
   end
+
+  def test_visible
+    @revision1.deleted = DmsfFileRevision::STATUS_ACTIVE
+    assert @revision1.visible?
+    assert @revision1.visible?(@jsmith)
+    @revision1.deleted = DmsfFileRevision::STATUS_DELETED
+    assert_not @revision1.visible?
+    assert_not @revision1.visible?(@jsmith)
+  end
+
+  def test_params_to_hash
+    parameters = ActionController::Parameters.new({
+                                                    '78': 'A',
+                                                    '90': {
+                                                      'blank': '',
+                                                      '1': {
+                                                        'filename': 'file.txt',
+                                                        'token': 'atoken'
+                                                      }
+                                                    }
+                                                  })
+    h = DmsfFileRevision.params_to_hash(parameters)
+    assert h.is_a?(Hash)
+    assert_equal 'atoken', h['90'][:token]
+  end
 end

@@ -99,7 +99,7 @@ class DmsfFileRevision < ApplicationRecord
   validates :description, length: { maximum: 1.kilobyte }
   validates :size, dmsf_max_file_size: true
 
-  def visible?
+  def visible?(_user = nil)
     deleted == STATUS_ACTIVE
   end
 
@@ -404,5 +404,53 @@ class DmsfFileRevision < ApplicationRecord
 
     dependencies = DmsfFileRevision.where(disk_filename: disk_filename).all.size
     FileUtils.rm_f(disk_file) if dependencies <= 1
+  end
+
+  def copy_custom_field_values(values, source_revision = nil)
+    # For a new revision we need to remember attachments' ids
+    if source_revision
+      ids = []
+      source_revision.custom_field_values.each do |cv|
+        ids << cv.value if cv.custom_field.format.is_a?(Redmine::FieldFormat::AttachmentFormat)
+      end
+    end
+    # ActionParameters => Hash
+    h = DmsfFileRevision.params_to_hash(values)
+    # Super
+    self.custom_field_values = h
+    # For a new revision we need to duplicate attachments
+    return unless source_revision
+
+    i = 0
+    custom_field_values.each do |cv|
+      next unless cv.custom_field.format.is_a?(Redmine::FieldFormat::AttachmentFormat)
+
+      if cv.value.blank? && h[cv.custom_field.id.to_s].present?
+        a = Attachment.find_by(id: ids[i])
+        copy = a.copy
+        copy.save
+        cv.value = copy.id
+      end
+      i += 1
+    end
+  end
+
+  # Converts ActionParameters to an ordinary Hash
+  def self.params_to_hash(params)
+    result = {}
+    return result if params.blank?
+
+    h = params.permit!.to_hash
+    h.each do |key, value|
+      if value.is_a?(Hash)
+        value = value.except('blank')
+        _, v = value.first
+        # We need a symbols here
+        result[key] = v&.symbolize_keys
+      else
+        result[key] = value
+      end
+    end
+    result
   end
 end

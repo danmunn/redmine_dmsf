@@ -20,8 +20,6 @@
 
 # Upload helper
 module DmsfUploadHelper
-  include Redmine::I18n
-
   def self.commit_files_internal(committed_files, project, folder, controller = nil, container = nil, new_object: false)
     failed_uploads = []
     files = []
@@ -72,15 +70,8 @@ module DmsfUploadHelper
         new_revision.mime_type = committed_file[:mime_type]
         new_revision.size = committed_file[:size]
         new_revision.digest = committed_file[:digest]
-
-        if committed_file[:custom_field_values].present?
-          i = 0
-          committed_file[:custom_field_values].each do |_, v|
-            new_revision.custom_field_values[i].value = v
-            i += 1
-          end
-        end
-
+        # Custom fields
+        new_revision.copy_custom_field_values(committed_file[:custom_field_values])
         # Need to save file first to generate id for it in case of creation.
         # File id is needed to properly generate revision disk filename
         unless new_revision.valid?

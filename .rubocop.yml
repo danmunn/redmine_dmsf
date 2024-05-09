@@ -37,6 +37,10 @@ Layout/LineLength:
   Exclude:
     - app/models/dmsf_query.rb
 
+Lint/SymbolConversion:
+  Exclude:
+    - test/unit/dmsf_file_revision_test.rb
+
 Lint/ScriptPermission:
   Exclude:
     - extra/xapian_indexer.rb

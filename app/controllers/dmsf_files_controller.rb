@@ -140,16 +140,8 @@ class DmsfFilesController < ApplicationController
         revision.mime_type = last_revision.mime_type
         revision.digest = last_revision.digest
       end
-
       # Custom fields
-      if params[:dmsf_file_revision][:custom_field_values].present?
-        i = 0
-        params[:dmsf_file_revision][:custom_field_values].each do |_, v|
-          revision.custom_field_values[i].value = v
-          i += 1
-        end
-      end
-
+      revision.copy_custom_field_values(params[:dmsf_file_revision][:custom_field_values], last_revision)
       @file.name = revision.name
       ok = true
       if revision.save
