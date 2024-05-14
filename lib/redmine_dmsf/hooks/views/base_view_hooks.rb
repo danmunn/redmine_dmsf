@@ -36,7 +36,7 @@ module RedmineDmsf
                  "\n".html_safe + javascript_include_tag('redmine_dmsf.js', plugin: :redmine_dmsf, defer: true) +
                  "\n".html_safe + javascript_include_tag('attachments_dmsf.js', plugin: :redmine_dmsf, defer: true)
           if defined?(EasyExtensions)
-            meta << ("\n".html_safe + stylesheet_link_tag('easy_extensions.css', plugin: :redmine_dmsf))
+            meta << ("\n".html_safe + stylesheet_link_tag('easy_dmsf.css', plugin: :redmine_dmsf))
           end
           meta
         end

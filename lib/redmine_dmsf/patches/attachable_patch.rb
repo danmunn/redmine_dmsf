@@ -36,7 +36,7 @@ end
 
 # Apply the patch
 if Redmine::Plugin.installed?('easy_extensions')
-  RedmineExtensions::PatchManager.register_patch_to_be_first 'Redmine::Acts::Attachable::InstanceMethods',
+  EasyPatchManager.register_patch_to_be_first 'Redmine::Acts::Attachable::InstanceMethods',
                                                              'RedmineDmsf::Patches::AttachablePatch',
                                                              prepend: true,
                                                              first: true

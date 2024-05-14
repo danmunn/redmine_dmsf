@@ -33,7 +33,7 @@ end
 
 # Apply patch
 if Redmine::Plugin.installed?('easy_extensions')
-  RedmineExtensions::PatchManager.register_model_patch 'CustomField', 'RedmineDmsf::Patches::CustomFieldPatch'
+  EasyPatchManager.register_model_patch 'CustomField', 'RedmineDmsf::Patches::CustomFieldPatch'
 else
   CustomField.include RedmineDmsf::Patches::CustomFieldPatch
 end

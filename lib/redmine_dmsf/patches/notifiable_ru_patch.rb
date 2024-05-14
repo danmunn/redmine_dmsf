@@ -48,4 +48,6 @@ module RedmineDmsf
 end
 
 # Apply the patch
-Redmine::Notifiable.include RedmineDmsf::Patches::NotifiableRuPatch if RedmineDmsf::Plugin.an_obsolete_plugin_present?
+if !defined?(EasyExtensions) && RedmineDmsf::Plugin.an_obsolete_plugin_present?
+  Redmine::Notifiable.include RedmineDmsf::Patches::NotifiableRuPatch
+end

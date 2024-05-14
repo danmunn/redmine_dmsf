@@ -228,3 +228,12 @@ div.autoscroll.dmsf-revision-access {
 .dmsf-info-title {
     font-weight: bold;
 }
+
+/* Also available as */
+.other-formats a.csv::before {
+    content: "" !important;
+}
+
+.other-formats a::before {
+    content: "|" !important;
+}

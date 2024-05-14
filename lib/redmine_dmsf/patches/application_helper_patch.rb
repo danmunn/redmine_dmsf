@@ -26,10 +26,9 @@ module RedmineDmsf
       # Overridden methods
 
       def xapian_link_to_entity(entity, html_options = {})
-        case entity.is_a?
-        when DmsfFolder
+        if entity.is_a?(DmsfFolder)
           link_to h(entity.to_s), dmsf_folder_path(id: entity.project_id, folder_id: entity), class: 'icon icon-folder'
-        when DmsfFile
+        elsif entity.is_a?(DmsfFile)
           link_to h(entity.to_s), dmsf_file_path(id: entity), class: 'icon icon-file'
         else
           super

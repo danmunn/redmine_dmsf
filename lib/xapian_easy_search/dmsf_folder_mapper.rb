@@ -38,5 +38,3 @@ module XapianEasySearch
     end
   end
 end
-
-XapianEasySearch::DmsfFolderMapper.attach if Redmine::Plugin.installed?('easy_extensions')

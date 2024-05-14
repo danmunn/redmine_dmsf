@@ -116,9 +116,8 @@ module RedmineDmsf
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?('easy_extensions')
-  RedmineExtensions::PatchManager.register_controller_patch 'EasyCrmCasesController',
-                                                            'RedmineDmsf::Patches::EasyCrmCasesControllerPatch',
-                                                            prepend: true,
-                                                            if: proc { Redmine::Plugin.installed?('easy_crm') }
+if Redmine::Plugin.installed?('easy_crm')
+  EasyPatchManager.register_controller_patch 'EasyCrmCasesController',
+                                             'RedmineDmsf::Patches::EasyCrmCasesControllerPatch',
+                                             prepend: true
 end

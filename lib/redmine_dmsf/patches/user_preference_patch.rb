@@ -60,7 +60,7 @@ end
 
 # Apply the patch
 if Redmine::Plugin.installed?('easy_extensions')
-  RedmineExtensions::PatchManager.register_model_patch 'UserPreference', 'RedmineDmsf::Patches::UserPreferencePatch'
+  EasyPatchManager.register_model_patch 'UserPreference', 'RedmineDmsf::Patches::UserPreferencePatch'
 else
   UserPreference.prepend RedmineDmsf::Patches::UserPreferencePatch
 end

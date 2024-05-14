@@ -81,8 +81,6 @@ module RedmineDmsf
         end
 
         def view_issues_show_attachments_table_bottom(context = {})
-          return if context[:options][:only_mails].blank?
-
           show_attached_documents context[:container], context[:controller], context[:attachments]
         end
 
@@ -91,12 +89,10 @@ module RedmineDmsf
         end
 
         def view_issues_show_thumbnails(context = {})
-          show_thumbnails(context[:container], context[:controller]) if context[:options][:only_mails].blank?
+          show_thumbnails(context[:container], context[:controller])
         end
 
         def view_issues_dms_thumbnails(context = {})
-          return if context[:options][:only_mails].blank?
-
           links = get_links(context[:container])
           return unless links.present? && Setting.thumbnails_enabled?
 

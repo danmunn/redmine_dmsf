@@ -40,7 +40,7 @@ end
 
 # Apply the patch
 if Redmine::Plugin.installed?('easy_extensions')
-  RedmineExtensions::PatchManager.register_controller_patch 'QueriesController',
+  EasyPatchManager.register_controller_patch 'QueriesController',
                                                             'RedmineDmsf::Patches::QueriesControllerPatch',
                                                             prepend: true
 else
