@@ -48,9 +48,7 @@ end
 # Apply the patch
 if Redmine::Plugin.installed?('easy_extensions')
   EasyPatchManager.register_patch_to_be_first 'Redmine::Acts::Attachable::InstanceMethods',
-                                                             'RedmineDmsf::Patches::SearchPatch',
-                                                             prepend: true,
-                                                             first: true
+                                              'RedmineDmsf::Patches::SearchPatch', prepend: true, first: true
 else
   Redmine::Search.prepend RedmineDmsf::Patches::SearchPatch
 end

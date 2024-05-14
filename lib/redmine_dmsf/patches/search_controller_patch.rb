@@ -39,7 +39,6 @@ end
 
 # Apply the patch
 if Redmine::Plugin.installed?(:easy_extensions)
-  EasyPatchManager.register_controller_patch 'SearchController',
-                                                            'RedmineDmsf::Patches::SearchControllerPatch',
-                                                            prepend: true
+  EasyPatchManager.register_controller_patch 'SearchController', 'RedmineDmsf::Patches::SearchControllerPatch',
+                                             prepend: true
 end

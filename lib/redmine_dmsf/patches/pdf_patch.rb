@@ -43,10 +43,8 @@ end
 
 # Apply the patch
 if Redmine::Plugin.installed?('easy_extensions')
-  EasyPatchManager.register_patch_to_be_first 'Redmine::Export::PDF::ITCPDF',
-                                                             'RedmineDmsf::Patches::PdfPatch',
-                                                             prepend: true,
-                                                             first: true
+  EasyPatchManager.register_patch_to_be_first 'Redmine::Export::PDF::ITCPDF', 'RedmineDmsf::Patches::PdfPatch',
+                                              prepend: true, first: true
 else
   Redmine::Export::PDF::ITCPDF.prepend RedmineDmsf::Patches::PdfPatch
 end
