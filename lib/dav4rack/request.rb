@@ -25,7 +25,10 @@ module Dav4rack
     end
 
     def authorization
-      get_header 'HTTP_AUTHORIZATION'
+      get_header('HTTP_AUTHORIZATION') ||
+        get_header('X-HTTP_AUTHORIZATION') ||
+        get_header('X_HTTP_AUTHORIZATION') ||
+        get_header('REDIRECT_X_HTTP_AUTHORIZATION')
     end
 
     # path relative to root uri

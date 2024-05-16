@@ -56,6 +56,8 @@ if Redmine::Plugin.installed? 'redmine_dmsf'
     put '/projects/:id/dmsf', controller: 'dmsf', action: 'drop'
     get '/projects/:id/dmsf/empty_trash', to: 'dmsf#empty_trash', as: 'empty_trash'
     get '/dmsf', to: 'dmsf#index', as: 'dmsf_index'
+    get '/dmsf/digest', to: 'dmsf#digest', as: 'dmsf_digest'
+    post '/dmsf/digest', to: 'dmsf#reset_digest', as: 'dmsf_reset_digest'
 
     # dmsf_context_menu_controller
     match '/projects/dmsf/context_menu', to: 'dmsf_context_menus#dmsf', as: 'dmsf_context_menu', via: %i[get post]
@@ -97,22 +99,6 @@ if Redmine::Plugin.installed? 'redmine_dmsf'
     # Just to keep backward compatibility with old external direct links
     get '/dmsf_files/:id', controller: 'dmsf_files', action: 'show'
     get '/dmsf_files/:id/download', controller: 'dmsf_files', action: 'show', download: ''
-
-    #
-    # files_copy controller
-    #   /dmsf/files/<file id>/copy
-    ##
-    post '/dmsf/files/:id/copy/copy', controller: 'dmsf_files_copy', action: 'copy'
-    post '/dmsf/files/:id/copy/move', controller: 'dmsf_files_copy', action: 'move'
-    get '/dmsf/files/:id/copy', controller: 'dmsf_files_copy', action: 'new', as: 'copy_file'
-
-    #
-    # folders_copy controller
-    #   /dmsf/folders/<folder id>/copy
-    ##
-    post '/dmsf/folders/:id/copy/copy', controller: 'dmsf_folders_copy', action: 'copy'
-    post '/dmsf/folders/:id/copy/move', controller: 'dmsf_folders_copy', action: 'move'
-    get '/dmsf/folders/:id/copy', controller: 'dmsf_folders_copy', action: 'new', as: 'copy_folder'
 
     #
     # dmsf_files controller

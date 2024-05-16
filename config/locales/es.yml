@@ -478,6 +478,16 @@ es:
   error_not_supported_image_format: Not supported image format
   error_not_supported_video_format: Not supported video format
 
+  label_webdav_authentication: WebDAV Authentication
+  note_webdav_authentication: Basic authentication method is considered as unsecure and therefore blocked by some
+    clients. Digest authentication, on the other hand, requires users to create a DMSF WebDAV digest in their profiles
+    using a password that must by used for authentication in their WebDAV clients after that.
+  label_dmsf_webdav_digest_created_on: "Dmsf WebDAV digest created %{value} ago"
+  label_missing_dmsf_webdav_digest: Missing a Dmsf WebDAV digest
+  label_dmsf_webdav_digest: DMSF WebDAV digest
+  text_dmsf_webdav_digest_reset: You are supposed to enter your password to generate a new DMSF WebDAV digest.
+  notice_webdav_digest_reset: Your DMSF WebDAV digest was reset.
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

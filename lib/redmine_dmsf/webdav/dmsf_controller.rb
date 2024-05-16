@@ -31,6 +31,78 @@ module RedmineDmsf
         # Switch the locale to English for WebDAV requests in order to have log messages in English
         I18n.with_locale(:en, &action)
       end
+
+      def process
+        return super unless Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'] == 'Digest'
+
+        status = skip_authorization? || authenticate ? process_action || OK : Dav4rack::HttpStatus::Unauthorized
+      rescue Dav4rack::HttpStatus::Status => e
+        status = e
+      ensure
+        if status
+          response.status = status.code
+          if status.code == 401
+            time_stamp = Time.now.to_i
+            h_once = Digest::MD5.hexdigest("#{time_stamp}:#{SecureRandom.hex(32)}")
+            nonce = Base64.strict_encode64("#{time_stamp}#{h_once}")
+            response['WWW-Authenticate'] =
+              %(Digest realm="#{authentication_realm}", nonce="#{nonce}", algorithm="MD5", qop="auth")
+          end
+        end
+      end
+
+      def authenticate
+        return super unless Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'] == 'Digest'
+
+        auth_header = request.authorization.to_s
+        scheme = auth_header.split(' ', 2).first&.downcase
+        if scheme == 'digest'
+          Rails.logger.info 'Authentication: digest'
+          auth = Rack::Auth::Digest::Request.new(request.env)
+          params = auth.params
+          username = params['username']
+          response = params['response']
+          cnonce = params['cnonce']
+          nonce = params['nonce']
+          uri = params['uri']
+          qop = params['qop']
+          nc = params['nc']
+          user = User.find_by(login: username)
+          unless user
+            log_error('Digest authentication: provided user name has no match in the DB')
+            raise Unauthorized
+          end
+          token = Token.find_by(user_id: user.id, action: 'dmsf-webdav-digest')
+          if token.nil? && defined?(EasyExtensions)
+            if user.easy_digest_token_expired?
+              log_error('Digest authentication: digest token expired')
+              raise Unauthorized
+            end
+            ha1 = user.easy_digest_token
+          else
+            unless token
+              log_error("Digest authentication: no digest found for #{user}")
+              raise Unauthorized
+            end
+            ha1 = token.value
+          end
+          ha2 = Digest::MD5.hexdigest("#{request.env['REQUEST_METHOD']}:#{uri}")
+          required_response = if qop
+                                Digest::MD5.hexdigest("#{ha1}:#{nonce}:#{nc}:#{cnonce}:#{qop}:#{ha2}")
+                              else
+                                Digest::MD5.hexdigest("#{ha1}:#{nonce}:#{ha2}")
+                              end
+          if required_response == response
+            User.current = user
+          else
+            Rails.logger.error 'Digest authentication: digest response is incorrect'
+          end
+        end
+        raise Unauthorized if User.current.anonymous?
+
+        Rails.logger.info "Current user: #{User.current}, User-Agent: #{request.user_agent}"
+        User.current
+      end
     end
   end
 end

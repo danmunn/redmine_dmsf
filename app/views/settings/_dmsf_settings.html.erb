@@ -278,6 +278,17 @@
 
 <div id="dmsf_webdav_block" class="<%= visible_class %>">
   <p>
+    <%= content_tag :label, l(:label_webdav_authentication) %>
+    <% auth_types = [%w[Basic Basic], %w[Digest Digest]] %>
+    <% @settings['dmsf_webdav_authentication'] = 'Basic' if @settings['dmsf_webdav_authentication'].blank? %>
+    <%= select_tag 'settings[dmsf_webdav_authentication]',
+                   options_for_select(auth_types, @settings['dmsf_webdav_authentication']) %>
+    <em class="<%= klass %>">
+      <%= l(:note_webdav_authentication) %> <br>
+      <%= l(:label_default)%>: <%= auth_types[0][0] %>
+    </em>
+  </p>
+  <p>
     <%= content_tag :label, l(:label_webdav_strategy) %>
     <%= select_tag'settings[dmsf_webdav_strategy]',
                   options_for_select([
@@ -316,13 +327,12 @@
         <%= l(:label_default) %>: ^\~\$|\.tmp$
       </em>
     </p>
-
     <p>
       <%= content_tag :label, l(:label_webdav_use_project_names) %>
       <%= check_box_tag 'settings[dmsf_webdav_use_project_names]', true, @settings['dmsf_webdav_use_project_names'] %>
       <em class="<%= klass %>">
         <%= l(:note_webdav_use_project_names) %> <br>
-        <%= l(:label_default)%>: <%= l(:general_text_No)%>
+        <%= l(:label_default)%>: <%= l(:general_text_No) %>
       </em>
     </p>
   </div>

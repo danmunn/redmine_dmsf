@@ -199,6 +199,10 @@ module RedmineDmsf
         namespaces[ns_href] || add_namespace(ns_href)
       end
 
+      def authentication_realm
+        RedmineDmsf::Webdav::AUTHENTICATION_REALM
+      end
+
       private
 
       def get_resource_class(path)

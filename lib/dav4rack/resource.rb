@@ -505,7 +505,7 @@ module Dav4rack
     def propnames_xml
       response = Ox::Element.new(D_RESPONSE)
       response << ox_element(D_HREF, href)
-      propstats response, { OK => [propname_properties.map { |p| [p, nil] }].to_h }
+      propstats response, { OK => propname_properties.index_with { |p| [p, nil] } }
       response
     end
 

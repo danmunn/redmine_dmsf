@@ -23,6 +23,7 @@ require "#{File.dirname(__FILE__)}/resource_proxy"
 
 module RedmineDmsf
   module Webdav
+    AUTHENTICATION_REALM = 'DMSF content'
     # Custom middleware
     class CustomMiddleware
       def initialize(app)

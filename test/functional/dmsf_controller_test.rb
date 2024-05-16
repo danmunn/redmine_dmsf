@@ -648,4 +648,31 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_response :redirect
     assert_nil flash[:error]
   end
+
+  def test_digest
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get '/dmsf/digest', xhr: true
+    assert_response :success
+  end
+
+  def test_digest_unauthorized
+    get '/dmsf/digest', xhr: true
+    assert_response :unauthorized
+  end
+
+  def test_reset_digest
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    post '/dmsf/digest', params: { password: 'jsmith' }
+    assert_response :redirect
+    assert_redirected_to my_account_path
+    token = Token.find_by(user_id: @jsmith.id, action: 'dmsf-webdav-digest')
+    assert token
+    assert_equal Digest::MD5.hexdigest("jsmith:#{RedmineDmsf::Webdav::AUTHENTICATION_REALM}:jsmith"), token.value
+  end
+
+  def test_reset_digest_unauthorized
+    post '/dmsf/digest', params: { password: 'jsmith' }
+    assert_response :redirect
+    assert_redirected_to 'http://www.example.com/login?back_url=http%3A%2F%2Fwww.example.com%2Fdmsf%2Fdigest'
+  end
 end

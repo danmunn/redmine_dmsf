@@ -479,6 +479,16 @@ cs:
   error_not_supported_image_format: Nepodporovaný formát obrázku
   error_not_supported_video_format: Nepodporovaný formát videa
 
+  label_webdav_authentication: WebDAV autentifikace
+  note_webdav_authentication: Autentifikační metoda Basic není považována za bezpečnou a z toho důvodu je blokována
+    některými klienty. Metoda Digest, na druhou stranu, vyžaduje od uživatelů vytvoření DMSF WebDAV digestu v jejich
+    profilu za použití hesla, které se pak používá při autentifikaci z WebDAV klienta.
+  label_dmsf_webdav_digest_created_on: "Dmsf WebDAV digest created %{value} ago"
+  label_missing_dmsf_webdav_digest: Chybějící Dmsf WebDAV digest
+  label_dmsf_webdav_digest: DMSF WebDAV digest
+  text_dmsf_webdav_digest_reset: Je vyžadováno vaše heslo pro vygenerování nového DMSF WebDAV digestu.
+  notice_webdav_digest_reset: Váš DMSF WebDAV digest byl resetován.
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents
