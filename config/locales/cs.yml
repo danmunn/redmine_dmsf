@@ -481,8 +481,8 @@ cs:
 
   label_webdav_authentication: WebDAV autentifikace
   note_webdav_authentication: Autentifikační metoda Basic není považována za bezpečnou a z toho důvodu je blokována
-    některými klienty. Metoda Digest, na druhou stranu, vyžaduje od uživatelů vytvoření DMSF WebDAV digestu v jejich
-    profilu za použití hesla, které se pak používá při autentifikaci z WebDAV klienta.
+    některými klienty. Metoda Digest je založena na automaticky vygenerovaném digestu. Uživatelé se pak z WebDAV klienta
+    autentifijují také pomocí uživatelského jména a hesla.
   label_dmsf_webdav_digest_created_on: "Dmsf WebDAV digest created %{value} ago"
   label_missing_dmsf_webdav_digest: Chybějící Dmsf WebDAV digest
   label_dmsf_webdav_digest: DMSF WebDAV digest
