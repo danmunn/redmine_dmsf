@@ -69,19 +69,23 @@ module RedmineDmsf
           nc = params['nc']
           user = User.find_by(login: username)
           unless user
-            log_error('Digest authentication: provided user name has no match in the DB')
+            Rails.logger.error 'Digest authentication: provided user name has no match in the DB'
+            raise Unauthorized
+          end
+          unless user.active?
+            Rails.logger.error l(:notice_account_locked)
             raise Unauthorized
           end
           token = Token.find_by(user_id: user.id, action: 'dmsf-webdav-digest')
           if token.nil? && defined?(EasyExtensions)
             if user.easy_digest_token_expired?
-              log_error('Digest authentication: digest token expired')
+              Rails.logger.error "Digest authentication: #{user} is locked"
               raise Unauthorized
             end
             ha1 = user.easy_digest_token
           else
             unless token
-              log_error("Digest authentication: no digest found for #{user}")
+              Rails.logger.error "Digest authentication: no digest found for #{user}"
               raise Unauthorized
             end
             ha1 = token.value

@@ -78,6 +78,7 @@ require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_lock_error"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_zip_max_files_error"
 
 # Hooks
+require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/controllers/account_controller_hooks"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/controllers/search_controller_hooks"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/controllers/issues_controller_hooks"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/view_projects_form_hook"
