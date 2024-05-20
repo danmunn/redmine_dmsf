@@ -114,17 +114,13 @@ module RedmineDmsf
 
       # Run method through proxy class - ensuring always compatible child is generated
       def child(name)
-        new_path = @path
-        new_path = "#{new_path}/" unless new_path[-1, 1] == '/'
-        new_path = "/#{new_path}" unless new_path[0, 1] == '/'
+        new_path = normalized_path
         ResourceProxy.new "#{new_path}#{name}", request, response, @options.merge(user: @user)
       end
 
       def child_project(project)
         project_display_name = ProjectResource.create_project_name(project)
-        new_path = @path
-        new_path = "#{new_path}/" unless new_path[-1, 1] == '/'
-        new_path = "/#{new_path}" unless new_path[0, 1] == '/'
+        new_path = normalized_path
         new_path += project_display_name
         ResourceProxy.new new_path, request, response, @options.merge(user: @user, project: true)
       end
@@ -184,6 +180,13 @@ module RedmineDmsf
       end
 
       protected
+
+      # Add slash at the beginning and the end if missing
+      def normalized_path
+        new_path = @path
+        new_path << '/' unless new_path.end_with?('/')
+        new_path.start_with?('/') ? new_path : new_path.insert(0, '/')
+      end
 
       def uri_encode(uri)
         uri.gsub(/[()&\[\]]/, '(' => '%28', ')' => '%29', '&' => '%26', '[' => '%5B', ']' => '5D')
