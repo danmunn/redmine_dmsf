@@ -20,8 +20,9 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<%= render partial: "/#{File.dirname(__FILE__)}/../../../../../app/views/mailer/issue.text.erb",
-           locals: { issue: issue, issue_url: issue_url, user: user } %>
+<%# Render the original view %>
+<% view_paths.unshift Rails.root.join('app/views').to_s %>
+<%= render partial: 'issue', locals: { issue: issue, issue_url: issue_url, user: user } %>
 
 <%# DMSF extension do %>
 <% if issue.dmsf_files.any? %>

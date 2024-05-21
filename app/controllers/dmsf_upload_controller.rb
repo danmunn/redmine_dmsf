@@ -52,7 +52,7 @@ class DmsfUploadController < ApplicationController
 
   # REST API and Redmine attachment form
   def upload
-    unless request.content_type == 'application/octet-stream'
+    unless request.media_type == 'application/octet-stream'
       head :not_acceptable
       return
     end

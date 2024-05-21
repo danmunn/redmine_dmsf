@@ -20,7 +20,9 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<%= render partial: "/#{File.dirname(__FILE__)}/../../../../../app/views/my/sidebar.html.erb" %>
+<%# Render the original view %>
+<% view_paths.unshift Rails.root.join('app/views').to_s %>
+<%= render partial: 'sidebar' %>
 
 <%# DMSF extension do %>
 <% if Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'] == 'Digest' %>
