@@ -20,6 +20,8 @@
 
 # Upload helper
 module DmsfUploadHelper
+  include Redmine::I18n
+
   def self.commit_files_internal(committed_files, project, folder, controller = nil, container = nil, new_object: false)
     failed_uploads = []
     files = []

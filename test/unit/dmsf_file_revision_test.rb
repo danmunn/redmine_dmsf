@@ -150,7 +150,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
 
   def test_workflow_tooltip
     @revision2.set_workflow @wf1.id, 'start'
-    assert_equal 'John Smith', @revision2.workflow_tooltip
+    assert_equal @jsmith.name, @revision2.workflow_tooltip
   end
 
   def test_version
@@ -301,5 +301,20 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     h = DmsfFileRevision.params_to_hash(parameters)
     assert h.is_a?(Hash)
     assert_equal 'atoken', h['90'][:token]
+  end
+
+  def test_params_to_hash_empty_attachment
+    parameters = ActionController::Parameters.new({
+                                                    '78': 'A',
+                                                    '90': {
+                                                      'blank': '',
+                                                      '1': {
+                                                        'file': ''
+                                                      }
+                                                    }
+                                                  })
+    h = DmsfFileRevision.params_to_hash(parameters)
+    assert h.is_a?(Hash)
+    assert_nil h['90']
   end
 end
