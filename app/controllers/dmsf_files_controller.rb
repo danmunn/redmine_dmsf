@@ -77,11 +77,11 @@ class DmsfFilesController < ApplicationController
     # PDF preview
     pdf_preview = (params[:disposition] != 'attachment') && params[:filename].blank? && @file.pdf_preview
     filename = filename_for_content_disposition(@revision.formatted_name(member))
-    if pdf_preview.present? && (Setting.plugin_redmine_dmsf['office_bin'].present? || params[:preview].present?)
+    if !api_request? && pdf_preview.present? && (Setting.plugin_redmine_dmsf['office_bin'].present? || params[:preview].present?)
       basename = File.basename(filename, '.*')
       send_file pdf_preview, filename: "#{basename}.pdf", type: 'application/pdf', disposition: 'inline'
     # Text preview
-    elsif params[:download].blank? && (@file.size <= Setting.file_max_size_displayed.to_i.kilobyte) &&
+    elsif !api_request? && params[:download].blank? && (@file.size <= Setting.file_max_size_displayed.to_i.kilobyte) &&
           (@file.text? || @file.markdown? || @file.textile?)
       @content = File.read(@revision.disk_file, mode: 'rb')
       render action: 'document'
