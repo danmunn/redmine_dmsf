@@ -42,4 +42,10 @@ class DmsfQueriesHelperTest < RedmineDmsf::Test::HelperTest
     c_size = QueryColumn.new(:size)
     assert_equal '1 KB', csv_value(c_size, @folder1, 1024)
   end
+
+  def test_previewable
+    assert previewable?('file.txt', 'text/plain')
+    assert previewable?('main.c', 'text/x-csrc')
+    assert_not previewable?('document.odt', 'application/vnd.oasis.opendocument.text')
+  end
 end

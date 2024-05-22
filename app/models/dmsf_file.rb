@@ -465,7 +465,9 @@ class DmsfFile < ApplicationRecord
   end
 
   def text?
-    Redmine::MimeType.is_type?('text', last_revision&.disk_filename)
+    filename = last_revision&.disk_filename
+    Redmine::MimeType.is_type?('text', filename) ||
+      Redmine::SyntaxHighlighting.filename_supported?(filename)
   end
 
   def image?
@@ -495,6 +497,14 @@ class DmsfFile < ApplicationRecord
     end
   end
 
+  def markdown?
+    Redmine::MimeType.of(last_revision&.disk_filename) == 'text/markdown'
+  end
+
+  def textile?
+    Redmine::MimeType.of(last_revision&.disk_filename) == 'text/x-textile'
+  end
+
   def disposition
     image? || pdf? || video? || html? ? 'inline' : 'attachment'
   end
@@ -504,7 +514,7 @@ class DmsfFile < ApplicationRecord
   end
 
   def previewable?
-    office_doc? && RedmineDmsf::Preview.office_available?
+    office_doc? && RedmineDmsf::Preview.office_available? && size <= Setting.file_max_size_displayed.to_i.kilobyte
   end
 
   # Deletes all previews

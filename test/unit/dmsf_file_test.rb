@@ -213,6 +213,8 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert @file1.text?
     assert_not @file7.text?
     assert_not @file8.text?
+    @file1.last_revision.disk_filename = 'test.c'
+    assert @file1.text?
   end
 
   def test_pdf
@@ -231,6 +233,18 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
     assert_not @file1.html?
     @file1.last_revision.disk_filename = 'test.html'
     assert @file1.html?
+  end
+
+  def test_markdown
+    assert_not @file1.markdown?
+    @file1.last_revision.disk_filename = 'test.md'
+    assert @file1.markdown?
+  end
+
+  def test_textile
+    assert_not @file1.textile?
+    @file1.last_revision.disk_filename = 'test.textile'
+    assert @file1.textile?
   end
 
   def test_findn_file_by_name

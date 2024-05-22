@@ -1,0 +1,47 @@
+<%
+  # Redmine plugin for Document Management System "Features"
+  #
+  # Karel Pičman <karel.picman@kontron.com>
+  #
+  # This program is free software; you can redistribute it and/or
+  # modify it under the terms of the GNU General Public License
+  # as published by the Free Software Foundation; either version 2
+  # of the License, or (at your option) any later version.
+  #
+  # This program is distributed in the hope that it will be useful,
+  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  # GNU General Public License for more details.
+  #
+  # You should have received a copy of the GNU General Public License
+  # along with this program; if not, write to the Free Software
+  # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+%>
+
+<div class="contextual">
+  <%= link_to "#{l(:button_download)} (#{number_to_human_size(@file.size)})",
+              static_dmsf_file_path(@file, download: @file.last_revision, filename: @file.last_revision.disk_filename),
+              class: 'icon icon-download', disabled: false %>
+</div>
+
+<h2>
+  <%= render partial: '/dmsf/path', locals: { folder: @file.dmsf_folder, filename: @file.title, title: nil } %>
+</h2>
+
+<div class="attachments">
+  <p>
+    <%= @file.description %>
+    <span class="author">
+      <%= link_to_user @file.last_revision.user %>, <%= format_time @file.last_revision.updated_at %>
+    </span>
+  </p>
+</div>
+<div class="filecontent-container">
+  <%= yield %>
+</div>
+
+<% html_title @file.name %>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'scm' %>
+<% end %>

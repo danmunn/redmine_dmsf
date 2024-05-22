@@ -186,14 +186,15 @@ module DmsfQueriesHelper
           file_view_url = url_for(
             { controller: :dmsf_files, action: 'view', id: item.type == 'file' ? item.id : item.revision_id }
           )
-          content_type = Redmine::MimeType.of(value)
+          content_type = Redmine::MimeType.of(item.filename)
           content_type = 'application/octet-stream' if content_type.blank?
-          tag = link_to(h(value),
-                        file_view_url,
-                        target: '_blank',
-                        rel: 'noopener',
-                        class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}",
-                        'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}")
+          options = { class: "icon icon-file #{DmsfHelper.filetype_css(item.filename)}",
+                      'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}" }
+          unless previewable?(item.filename, content_type)
+            options[:target] = '_blank'
+            options[:rel] = 'noopener'
+          end
+          tag = link_to h(value), file_view_url, options
           tag = content_tag('span', '', class: 'dmsf-expander') + tag unless filter_any?
         end
         member = Member.find_by(user_id: User.current.id, project_id: item.project_id)
@@ -278,5 +279,14 @@ module DmsfQueriesHelper
       return true
     end
     false
+  end
+
+  def previewable?(filename, content_type)
+    case content_type
+    when 'text/markdown', 'text/x-textile'
+      true
+    else
+      Redmine::MimeType.is_type?('text', filename) || Redmine::SyntaxHighlighting.filename_supported?(filename)
+    end
   end
 end

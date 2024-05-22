@@ -27,4 +27,14 @@ module DmsfFilesHelper
         .gsub("\n\n", '<br>')
         .gsub("\n\t", '<br>')
   end
+
+  def render_document_content(dmsf_file, content)
+    if dmsf_file.markdown?
+      render partial: 'common/markup', locals: { markup_text_formatting: markdown_formatter, markup_text: content }
+    elsif dmsf_file.textile?
+      render partial: 'common/markup', locals: { markup_text_formatting: 'textile', markup_text: content }
+    else
+      render partial: 'common/file', locals: { content: content, filename: dmsf_file.name }
+    end
+  end
 end
