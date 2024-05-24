@@ -446,7 +446,7 @@ class DmsfFileRevision < ApplicationRecord
         value = value.except('blank')
         _, v = value.first
         # We need a symbols here
-        result[key] = if v.key?('file') && v['file'].blank?
+        result[key] = if v&.key?('file') && v['file'].blank?
                         nil
                       else
                         v&.symbolize_keys

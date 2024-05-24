@@ -23,9 +23,11 @@ require File.expand_path('../../../test_helper', __FILE__)
 # AccessControl patch tests
 class AccessControlPatchTest < RedmineDmsf::Test::UnitTest
   def test_available_project_modules
-    Setting.plugin_redmine_dmsf['remove_original_documents_module'] = nil
     assert Redmine::AccessControl.available_project_modules.include?(:documents)
-    Setting.plugin_redmine_dmsf['remove_original_documents_module'] = '1'
-    assert_not Redmine::AccessControl.available_project_modules.include?(:documents)
+    return if defined?(EasyExtensions) # It doesn't work with Easy due to alias_method_change
+
+    with_settings plugin_redmine_dmsf: { 'remove_original_documents_module' => '1' } do
+      assert_not Redmine::AccessControl.available_project_modules.include?(:documents)
+    end
   end
 end
