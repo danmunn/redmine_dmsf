@@ -69,7 +69,7 @@ module RedmineDmsf
           nc = params['nc']
           user = User.find_by(login: username)
           unless user
-            Rails.logger.error 'Digest authentication: provided user name has no match in the DB'
+            Rails.logger.error "Digest authentication: #{username} not found"
             raise Unauthorized
           end
           unless user.active?
@@ -85,7 +85,7 @@ module RedmineDmsf
             ha1 = user.easy_digest_token
           else
             unless token
-              Rails.logger.error "Digest authentication: no digest found for #{user}"
+              Rails.logger.error "Digest authentication: no digest found for #{username}"
               raise Unauthorized
             end
             ha1 = token.value
@@ -101,6 +101,8 @@ module RedmineDmsf
           else
             Rails.logger.error 'Digest authentication: digest response is incorrect'
           end
+        else
+          Rails.logger.error "Digest authentication method expected got #{scheme}"
         end
         raise Unauthorized if User.current.anonymous?
 

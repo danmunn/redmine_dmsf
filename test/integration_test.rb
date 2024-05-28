@@ -60,6 +60,7 @@ module RedmineDmsf
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
         Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
         Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join('files', ['dmsf'])
+        Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'] = 'Basic'
         FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
         User.current = nil
       end
@@ -114,6 +115,32 @@ module RedmineDmsf
         values.each do |key, val|
           assert val.blank?, "Expected header #{key} should be empty."
         end
+      end
+
+      def encode_credentials(options)
+        options.reverse_merge!(nc: '00000001', cnonce: '0a4f113b', password_is_ha1: false)
+        # Perform unauthenticated request to retrieve digest parameters to use on subsequent request
+        target = options.delete(:target) || :index
+        get target
+        assert_response :unauthorized
+        # Credentials
+        credentials = {
+          uri: target,
+          realm: RedmineDmsf::Webdav::AUTHENTICATION_REALM,
+          username: options[:username],
+          nonce: ActionController::HttpAuthentication::Digest.nonce(Rails.configuration.secret_key_base),
+          opaque: ActionController::HttpAuthentication::Digest.opaque(Rails.configuration.secret_key_base)
+        }
+        credentials.merge!(options)
+        path_info = @request.env['PATH_INFO'].to_s
+        uri = options[:uri] || path_info
+        credentials[uri] = uri
+        @request.env['ORIGINAL_FULLPATH'] = path_info
+        ha2 = Digest::MD5.hexdigest("GET:#{target}")
+        nonce = ActionController::HttpAuthentication::Digest.nonce(Rails.configuration.secret_key_base)
+        ha1 = options.delete(:digest)
+        credentials[:response] = Digest::MD5.hexdigest("#{ha1}:#{nonce}:#{ha2}")
+        "Digest #{credentials.sort_by { |x| x[0].to_s }.map { |v| "#{v[0]}=#{v[1]}" }.join(',')}"
       end
     end
   end

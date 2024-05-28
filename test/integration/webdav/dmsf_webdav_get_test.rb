@@ -34,6 +34,29 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     assert_response :unauthorized
   end
 
+  def test_digest_authentication
+    # Basic
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_authentication' => 'Basic', 'dmsf_webdav' => '1' } do
+      get '/dmsf/webdav', params: nil, headers: credentials('jsmith', 'jsmith')
+      assert_response :success
+    end
+    # Wrong digest
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_authentication' => 'Digest', 'dmsf_webdav' => '1' } do
+      get '/dmsf/webdav', params: nil, headers: credentials('jsmith', 'jsmith')
+      assert_response :unauthorized
+    end
+    # Right digest
+    digest = Digest::MD5.hexdigest("#{@jsmith_user.login}:#{RedmineDmsf::Webdav::AUTHENTICATION_REALM}:jsmith")
+    token ||= Token.create!(user_id: @jsmith_user.id, action: 'dmsf-webdav-digest')
+    token.value = digest
+    assert token.save
+    authorization = encode_credentials(username: 'jsmith', digest: digest, target: '/dmsf/webdav')
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_authentication' => 'Digest', 'dmsf_webdav' => '1' } do
+      get '/dmsf/webdav', params: nil, headers: { HTTP_AUTHORIZATION: authorization }
+      assert_response :success
+    end
+  end
+
   def test_should_permit_authenticated_user
     get '/dmsf/webdav', params: nil, headers: @admin
     assert_response :success
