@@ -1,8 +1,17 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.1.5 *????-??-??*
+3.1.5 *2024-06-04*
 ------------------
+
+    WebDAV digest authentication
+    Inline displaying of text files
+
+* Bug: #1522 - [ ] in webdav paths seem to make issues with ms-office products
+* Bug: #1518 - Mailer partial causes deprecation warning: Rendering actions with '.' in the name is deprecated
+* Bug: #1517 - The file is not uploaded to the custom file field
+* New: #1502 - Office files preview OK, but text and markdown file downloaded directly
+* New: #1464 - Basic authentication sign-in prompts are blocked by default in Microsoft 365 Apps
 
 3.1.4 *2024-05-06*
 ------------------
