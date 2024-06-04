@@ -22,7 +22,7 @@
 
 <%# Render the original view %>
 <% view_paths.unshift Rails.root.join('app/views').to_s %>
-<%= render partial: 'issue', locals: { issue: issue, issue_url: issue_url, user: user } %>
+<%= render partial: 'mailer/issue', locals: { issue: issue, issue_url: issue_url, user: user } %>
 
 <%# DMSF extension do %>
 <% if issue.dmsf_files.any? %>

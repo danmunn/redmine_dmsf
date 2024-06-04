@@ -22,7 +22,7 @@
 
 <%# Render the original view %>
 <% view_paths.unshift Rails.root.join('app/views').to_s %>
-<%= render partial: 'sidebar' %>
+<%= render partial: 'my/sidebar' %>
 
 <%# DMSF extension do %>
 <% if Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'] == 'Digest' %>
