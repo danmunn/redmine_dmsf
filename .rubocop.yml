@@ -86,6 +86,10 @@ Style/ZeroLengthPredicate:
   Exclude:
     - lib/redmine_dmsf/webdav/dmsf_resource.rb
 
+Rails/BulkChangeTable:
+  Exclude:
+    - db/migrate/20170217141601_add_dmsf_not_inheritable_to_custom_fields.rb # Easy tests
+
 Rails/DangerousColumnNames:
   Exclude:
     - db/migrate/20170330131901_create_dmsf_folder_permissions.rb
@@ -108,6 +112,11 @@ Rails/SkipsModelValidations:
     - db/migrate/20160215125801_approval_workflow_status.rb
     - db/migrate/20140519133201_trash_bin.rb
     - db/migrate/07_dmsf_1_4_4.rb
+
+Rails/ThreeStateBooleanColumn:
+  Exclude:
+    - db/migrate/04_dmsf_0_9_0.rb # Easy tests
+    - db/migrate/20170217141601_add_dmsf_not_inheritable_to_custom_fields.rb # Easy tests
 
 Rails/UniqueValidationWithoutIndex:
   Exclude:

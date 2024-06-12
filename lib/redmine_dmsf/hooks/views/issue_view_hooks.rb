@@ -36,7 +36,7 @@ module RedmineDmsf
           description = defined?(EasyExtensions) && EasySetting.value('attachment_description')
           # Radio buttons
           if allowed_to_attach_documents(container) && allowed_to_attach_attachments(container)
-            html << description ? '<p>' : '<div>'
+            html << (description ? '<p>' : '<div>')
             classes = +'inline'
             html << "<label class=\"#{classes}\">"
             onchange = %($(".attachments-container:not(.dmsf-uploader)").show();

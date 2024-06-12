@@ -21,7 +21,12 @@
 # Add column
 class Dmsf090 < ActiveRecord::Migration[4.2]
   def up
-    add_column :members, :dmsf_mail_notification, :boolean, null: false, default: false
+    if defined?(EasyExtensions)
+      add_column :members, :dmsf_mail_notification, :boolean, default: false
+    else
+      add_column :members, :dmsf_mail_notification, :boolean,
+                 null: false, default: false
+    end
     drop_table :dmsf_user_prefs
   end
 
