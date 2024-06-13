@@ -123,11 +123,11 @@ module RedmineDmsf
       end
 
       def dmsf_files
-        system_folder&.dmsf_files
+        system_folder&.dmsf_files || []
       end
 
       def dmsf_links
-        system_folder&.dmsf_links
+        system_folder&.dmsf_links || []
       end
 
       def delete_system_folder
