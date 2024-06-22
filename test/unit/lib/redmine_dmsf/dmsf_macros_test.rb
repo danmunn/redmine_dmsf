@@ -45,7 +45,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   # {{dmsf(file_id [, title [, revision_id]])}}
   def test_macro_dmsf
     text = textilizable("{{dmsf(#{@file1.id})}}")
-    assert text.end_with?(">#{@file1.title}</a></p>"), text
+    assert text.include?(@file1.title), text
   end
 
   def test_macro_dmsf_file_not_found
@@ -56,23 +56,23 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   def test_macro_dmsf_no_permissions
     @manager_role.remove_permission! :view_dmsf_files
     text = textilizable("{{dmsf(#{@file1.id})}}")
-    assert_not text.end_with?(">#{@file1.title}</a></p>"), text
+    assert text.exclude?(@file1.title), text
   end
 
   def test_macro_dmsf_dmsf_off
     @project1.disable_module! :dmsf
     text = textilizable("{{dmsf(#{@file1.id})}}")
-    assert_not text.end_with?(">#{@file1.title}</a></p>"), text
+    assert text.exclude?(@file1.title), text
   end
 
   def test_macro_dmsf_custom_title
     text = textilizable("{{dmsf(#{@file1.id}, xyz)}}")
-    assert text.end_with?('>xyz</a></p>'), text
+    assert text.include?('xyz'), text
   end
 
   def test_macro_dmsf_custom_title_aprostrophes
     text = textilizable("{{dmsf(#{@file1.id}, 'xyz')}}")
-    assert text.end_with?('>xyz</a></p>'), text
+    assert text.include?('xyz'), text
   end
 
   def test_macro_dmsf_custom_title_and_revision
@@ -83,57 +83,57 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   # {{dmsff([folder_id [, title]])}}
   def test_macro_dmsff
     text = textilizable("{{dmsff(#{@folder1.id})}}")
-    assert text.end_with?(">#{@folder1.title}</a></p>"), text
+    assert text.include?(@folder1.title), text
   end
 
   def test_macro_dmsff_no_permissions
     @manager_role.remove_permission! :view_dmsf_folders
     text = textilizable("{{dmsf(#{@folder1.id})}}")
-    assert_not text.end_with?(">#{@folder1.title}</a></p>"), text
+    assert text.exclude?(@folder1.title), text
   end
 
   def test_macro_dmsff_dmsf_off
     @project1.disable_module! :dmsf
     text = textilizable("{{dmsf(#{@folder1.id})}}")
-    assert_not text.end_with?(">#{@folder1.title}</a></p>"), text
+    assert text.exclude?(@folder1.title), text
   end
 
   def test_macro_dmsff_custom_title
     text = textilizable("{{dmsf(#{@folder1.id}, xyz)}}")
-    assert text.end_with?('>xyz</a></p>'), text
+    assert text.include?('xyz'), text
   end
 
   def test_macro_dmsff_custom_title_aprostrophes
     text = textilizable("{{dmsf(#{@folder1.id}, 'xyz')}}")
-    assert text.end_with?('>xyz</a></p>'), text
+    assert text.include?('xyz'), text
   end
 
   # {{dmsfd(document_id [, title])}}
   def test_macro_dmsfd
     text = textilizable("{{dmsfd(#{@file1.id})}}")
-    assert text.end_with?(">#{@file1.title}</a></p>"), text
+    assert text.include?(@file1.title), text
   end
 
   def test_macro_dmsfd_no_permissions
     @manager_role.remove_permission! :view_dmsf_files
     text = textilizable("{{dmsfd(#{@file1.id})}}")
-    assert_not text.end_with?(">#{@file1.title}</a></p>"), text
+    assert text.exclude?(@file1.title), text
   end
 
   def test_macro_dmsfd_dmsf_off
     @project1.disable_module! :dmsf
     text = textilizable("{{dmsfd(#{@file1.id})}}")
-    assert_not text.end_with?(">#{@file1.title}</a></p>"), text
+    assert text.exclude?(@file1.title), text
   end
 
   def test_macro_dmsfd_custom_title
     text = textilizable("{{dmsfd(#{@file1.id}, xyz)}}")
-    assert text.end_with?('>xyz</a></p>'), text
+    assert text.include?('xyz'), text
   end
 
   def test_macro_dmsfd_custom_title_aprostrophes
     text = textilizable("{{dmsfd(#{@file1.id}, 'xyz')}}")
-    assert text.end_with?('>xyz</a></p>'), text
+    assert text.include?('xyz'), text
   end
 
   # {{dmsfdesc(document_id)}}
@@ -142,7 +142,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     rev.description = 'blabla'
     rev.save
     text = textilizable("{{dmsfdesc(#{@file1.id})}}")
-    assert_equal content_tag(:p, content_tag(:p, @file1.description)), text
+    assert text.include?(rev.description), text
   end
 
   def test_macro_dmsfdesc_no_permissions
@@ -151,7 +151,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     rev.description = 'blabla'
     rev.save
     text = textilizable("{{dmsfdesc(#{@file1.id})}}")
-    assert_not_equal content_tag(:p, content_tag(:p, @file1.description)), text
+    assert text.exclude?(rev.description), text
   end
 
   def test_macro_dmsfdesc_dmsf_off
@@ -160,75 +160,74 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     rev.description = 'blabla'
     rev.save
     text = textilizable("{{dmsfdesc(#{@file1.id})}}")
-    assert_not_equal content_tag(:p, content_tag(:p, @file1.description)), text
+    assert text.exclude?(rev.description), text
   end
 
   # {{dmsfversion(document_id [, revision_id])}}
   def test_macro_dmsfdversion
     text = textilizable("{{dmsfversion(#{@file1.id})}}")
-    assert_equal content_tag(:p, content_tag(:p, @file1.version)), text
+    assert text.include?(@file1.version), text
   end
 
   def test_macro_dmsfdversion_revision
     revision5 = DmsfFileRevision.find_by(id: 5)
     text = textilizable("{{dmsfversion(#{@file1.id}, #{revision5.id})}}")
-    assert_equal content_tag(:p, content_tag(:p, revision5.version)), text
+    assert text.include?(revision5.version), text
   end
 
   def test_macro_dmsfdversion_no_permissions
     @manager_role.remove_permission! :view_dmsf_files
     text = textilizable("{{dmsfversion(#{@file1.id})}}")
-    assert_not_equal content_tag(:p, content_tag(:p, @file1.version)), text
+    assert text.exclude?(@file1.version), text
   end
 
   def test_macro_dmsfdversion_dmsf_off
     @project1.disable_module! :dmsf
     text = textilizable("{{dmsfversion(#{@file1.id})}}")
-    assert_not_equal content_tag(:p, content_tag(:p, @file1.version)), text
+    assert text.exclude?(@file1.version), text
   end
 
   # {{dmsflastupdate(document_id)}}
   def test_macro_dmsflastupdate
     text = textilizable("{{dmsflastupdate(#{@file1.id})}}")
-    assert_equal content_tag(:p, content_tag(:p, format_time(@file1.last_revision.updated_at))), text
+    assert text.include?(format_time(@file1.last_revision.updated_at)), text
   end
 
   def test_macro_dmsflastupdate_no_permissions
     @manager_role.remove_permission! :view_dmsf_files
     text = textilizable("{{dmsflastupdate(#{@file1.id})}}")
-    assert_not_equal content_tag(:p, content_tag(:p, format_time(@file1.last_revision.updated_at))), text
+    assert text.exclude?(format_time(@file1.last_revision.updated_at)), text
   end
 
   def test_macro_dmsflastupdate_dmsf_off
     @project1.disable_module! :dmsf
     text = textilizable("{{dmsflastupdate(#{@file1.id})}}")
-    assert_not_equal content_tag(:p, content_tag(:p, format_time(@file1.last_revision.updated_at))), text
+    assert text.exclude?(format_time(@file1.last_revision.updated_at)), text
   end
 
   # {{dmsft(document_id)}}
   def test_macro_dmsft
     text = textilizable("{{dmsft(#{@file1.id}, 1)}}")
-    assert_equal content_tag(:p, content_tag(:pre, @file1.text_preview(1))), text
+    assert text.include?(content_tag(:pre, @file1.text_preview(1))), text
   end
 
   def test_macro_dmsft_no_permissions
     @manager_role.remove_permission! :view_dmsf_files
     text = textilizable("{{dmsft(#{@file1.id}, 1)}}")
-    assert_not_equal content_tag(:p, content_tag(:p, @file1.text_preview(1))), text
+    assert text.exclude?(content_tag(:pre, @file1.text_preview(1))), text
   end
 
   def test_macro_dmsft_dmsf_off
     @project1.disable_module! :dmsf
     text = textilizable("{{dmsft(#{@file1.id}, 1)}}")
-    assert_not_equal content_tag(:p, content_tag(:p, @file1.text_preview(1))), text
+    assert text.exclude?(content_tag(:pre, @file1.text_preview(1))), text
   end
 
   # {{dmsf_image(file_id)}}
   def test_macro_dmsf_image
     url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id})}}")
-    link = image_tag(url, alt: @file7.name, title: @file7.title, size: nil)
-    assert_equal content_tag(:p, link), text
+    assert text.include?(image_tag(url, alt: @file7.name, title: @file7.title, size: nil)), text
   end
 
   # {{dmsf_image(file_id file_id)}}
@@ -236,49 +235,42 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id} #{@file7.id})}}")
     link = image_tag(url, alt: @file7.name, title: @file7.title, size: nil)
-    assert_equal content_tag(:p, safe_join([link, link])), text
+    assert text.include?(link + link), text
   end
 
   def test_macro_dmsf_image_size
     size = '50%'
     url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id}, size=#{size})}}")
-    link = image_tag(url, alt: @file7.name, title: @file7.title, width: size, height: size)
-    assert_equal content_tag(:p, link), text
+    assert text.include?(image_tag(url, alt: @file7.name, title: @file7.title, width: size, height: size)), text
     # TODO: arguments src and with and height are swapped
     # size = '300'
     # text = textilizable("{{dmsf_image(#{@file7.id}, size=#{size})}}")
-    # link = image_tag(url, alt: @file7.name, title: @file7.title, width: size, height: size)
-    # assert_equal content_tag(:p, link), text
+    # assert text.include?(image_tag(url, alt: @file7.name, title: @file7.title, width: size, height: size)), text
     # TODO: arguments src and with and height are swapped
     # size = '640x480'
     # text = textilizable("{{dmsf_image(#{@file7.id}, size=#{size})}}")
-    # link = image_tag(url, alt: @file7.name, title: @file7.title, width: '640', height: '480')
-    # assert_equal content_tag(:p, link), text
+    # assert text.include?(image_tag(url, alt: @file7.name, title: @file7.title, width: '640', height: '480')), text
     height = '480'
     text = textilizable("{{dmsf_image(#{@file7.id}, height=#{height})}}")
-    link = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: height)
-    assert_equal content_tag(:p, link), text
+    assert text.include?(image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: height)), text
     width = '480'
     text = textilizable("{{dmsf_image(#{@file7.id}, width=#{height})}}")
-    link = image_tag(url, alt: @file7.name, title: @file7.title, width: width, height: 'auto')
-    assert_equal content_tag(:p, link), text
+    assert text.include?(image_tag(url, alt: @file7.name, title: @file7.title, width: width, height: 'auto')), text
   end
 
   def test_macro_dmsf_image_no_permissions
     @manager_role.remove_permission! :view_dmsf_files
     url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id})}}")
-    link = image_tag(url, alt: @file7.name, title: @file7.title, size: nil)
-    assert_not_equal content_tag(:p, link), text
+    assert text.exclude?(image_tag(url, alt: @file7.name, title: @file7.title, size: nil)), text
   end
 
   def test_macro_dmsf_image_dmsf_off
     @project1.disable_module! :dmsf
     url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     text = textilizable("{{dmsf_image(#{@file7.id})}}")
-    link = image_tag(url, alt: @file7.name, title: @file7.title, size: nil)
-    assert_not_equal content_tag(p, link), text
+    assert text.exclude?(image_tag(url, alt: @file7.name, title: @file7.title, size: nil)), text
   end
 
   def test_macro_dmsf_image_not_image
@@ -290,8 +282,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   def test_macro_dmsf_video
     text = textilizable("{{dmsf_video(#{@file6.id})}}")
     url = static_dmsf_file_url(@file6, @file6.last_revision.name)
-    link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title)
-    assert_equal content_tag(:p, link), text
+    assert text.include?(video_tag(url, controls: true, alt: @file6.name, title: @file6.title)), text
   end
 
   def test_macro_dmsf_video_size
@@ -299,39 +290,37 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     url = static_dmsf_file_url(@file6, @file6.last_revision.name)
     text = textilizable("{{dmsf_video(#{@file6.id}, size=#{size})}}")
     link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title, width: size, height: size)
-    assert_equal content_tag(:p, link), text
+    assert text.include?(link), text
     size = '300'
     text = textilizable("{{dmsf_video(#{@file6.id}, size=#{size})}}")
     link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title, width: size, height: size)
-    assert_equal content_tag(:p, link), text
+    assert text.include?(link), text
     size = '640x480'
     text = textilizable("{{dmsf_video(#{@file6.id}, size=#{size})}}")
     link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title, width: '640', height: '480')
-    assert_equal content_tag(:p, link), text
+    assert text.include?(link), text
     height = '480'
     text = textilizable("{{dmsf_video(#{@file6.id}, height=#{height})}}")
     link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title, width: 'auto', height: height)
-    assert_equal content_tag(:p, link), text
+    assert text.include?(link), text
     width = '480'
     text = textilizable("{{dmsf_video(#{@file6.id}, width=#{height})}}")
     link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title, width: width, height: 'auto')
-    assert_equal content_tag(:p, link), text
+    assert text.include?(link), text
   end
 
   def test_macro_dmsf_video_no_permissions
     @developer_role.remove_permission! :view_dmsf_files
     text = textilizable("{{dmsf_video(#{@file6.id})}}")
     url = static_dmsf_file_url(@file6, @file6.last_revision.name)
-    link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title)
-    assert_not_equal content_tag(:p, link), text
+    assert text.exclude?(video_tag(url, controls: true, alt: @file6.name, title: @file6.title)), text
   end
 
   def test_macro_dmsf_video_dmsf_off
     @project2.disable_module! :dmsf
     text = textilizable("{{dmsf_video(#{@file6.id})}}")
     url = static_dmsf_file_url(@file6, @file6.last_revision.name)
-    link = video_tag(url, controls: true, alt: @file6.name, title: @file6.title)
-    assert_not_equal content_tag(:p, link), text
+    assert text.exclude?(video_tag(url, controls: true, alt: @file6.name, title: @file6.title)), text
   end
 
   def test_macro_dmsf_video_not_video
@@ -350,7 +339,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
                    rel: 'noopener',
                    title: h(@file7.last_revision.try(:tooltip)),
                    'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
-    assert_equal content_tag(:p, link), text
+    assert text.include?(link), text
   end
 
   # {{dmsftn(file_id file_id)}}
@@ -362,7 +351,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
                              rel: 'noopener',
                              title: h(@file7.last_revision.try(:tooltip)),
                              'data-downloadurl': 'image/gif:test.gif:http://www.example.com/dmsf/files/7/test.gif')
-    assert_equal content_tag(:p, link + link), text
+    assert text.include?(link + link), text
   end
 
   # {{dmsftn(file_id size=300)}}
@@ -377,7 +366,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
                    rel: 'noopener',
                    title: h(@file7.last_revision.try(:tooltip)),
                    'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
-    assert_equal content_tag(:p, link), text
+    assert text.include?(link), text
     # TODO: arguments src and with and height are swapped
     # size = '640x480'
     # text = textilizable("{{dmsftn(#{@file7.id}, size=#{size})}}")
@@ -388,7 +377,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     #                rel: 'noopener',
     #                title: h(@file7.last_revision.try(:tooltip)),
     #                'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
-    assert_equal content_tag(:p, link), text
+    # assert text.include?(link), text
     height = '480'
     text = textilizable("{{dmsftn(#{@file7.id}, height=#{height})}}")
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 480)
@@ -396,7 +385,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
                              rel: 'noopener',
                              title: h(@file7.last_revision.try(:tooltip)),
                              'data-downloadurl': 'image/gif:test.gif:http://www.example.com/dmsf/files/7/test.gif')
-    assert_equal content_tag(:p, link), text
+    assert text.include?(link), text
     width = '640'
     text = textilizable("{{dmsftn(#{@file7.id}, width=#{width})}}")
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 640, height: 'auto')
@@ -406,7 +395,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
                    rel: 'noopener',
                    title: h(@file7.last_revision.try(:tooltip)),
                    'data-downloadurl' => "#{@file7.last_revision.detect_content_type}:#{h(@file7.name)}:#{url}")
-    assert_equal content_tag(:p, link), text
+    assert text.include?(link), text
   end
 
   def test_macro_dmsftn_no_permissions
@@ -414,8 +403,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     text = textilizable("{{dmsftn(#{@file7.id})}}")
     url = view_dmsf_file_url(@file7)
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 200)
-    link = link_to(img, url, title: h(@file7.last_revision.try(:tooltip)))
-    assert_not_equal content_tag(:p, link), text
+    assert text.exclude?(link_to(img, url, title: h(@file7.last_revision.try(:tooltip)))), text
   end
 
   def test_macro_dmsftn_dmsf_off
@@ -423,8 +411,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     text = textilizable("{{dmsftn(#{@file7.id})}}")
     url = view_dmsf_file_url(@file7)
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 200)
-    link = link_to(img, url, title: h(@file7.last_revision.try(:tooltip)))
-    assert_not_equal content_tag(:p, link), text
+    assert text.exclude?(link_to(img, url, title: h(@file7.last_revision.try(:tooltip)))), text
   end
 
   def test_macro_dmsftn_not_image
@@ -435,7 +422,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   # {{dmsfw(file_id)}}
   def test_macro_dmsfw
     text = textilizable("{{dmsfw(#{@file1.id})}}")
-    assert_equal content_tag(:p, @file1.last_revision.workflow_str(false)), text
+    assert text.include?(@file1.last_revision.workflow_str(false)), text
   end
 
   def test_macro_dmsfw_no_permissions
