@@ -36,7 +36,7 @@ module RedmineDmsf
           if controller.params[:password].present?
             token = Token.find_by(user_id: user.id, action: 'dmsf-webdav-digest')
             token ||= Token.create!(user_id: user.id, action: 'dmsf-webdav-digest')
-            token.value = Digest::MD5.hexdigest(
+            token.value = ActiveSupport::Digest.hexdigest(
               "#{user.login}:#{RedmineDmsf::Webdav::AUTHENTICATION_REALM}:#{controller.params[:password]}"
             )
             token.save

@@ -46,7 +46,9 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
       assert_response :unauthorized
     end
     # Right digest
-    digest = Digest::MD5.hexdigest("#{@jsmith_user.login}:#{RedmineDmsf::Webdav::AUTHENTICATION_REALM}:jsmith")
+    digest = ActiveSupport::Digest.hexdigest(
+      "#{@jsmith_user.login}:#{RedmineDmsf::Webdav::AUTHENTICATION_REALM}:jsmith"
+    )
     token ||= Token.create!(user_id: @jsmith_user.id, action: 'dmsf-webdav-digest')
     token.value = digest
     assert token.save

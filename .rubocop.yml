@@ -79,6 +79,10 @@ Naming/AccessorMethodName:
   Exclude:
     - lib/dav4rack/resource.rb
 
+Naming/PredicateName:
+  Exclude:
+    - lib/redmine_dmsf/patches/attachable_patch.rb # Easy tests
+
 Style/HashSyntax:
   EnforcedShorthandSyntax: either
 

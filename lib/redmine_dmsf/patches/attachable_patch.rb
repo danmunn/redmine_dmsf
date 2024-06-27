@@ -23,13 +23,11 @@ module RedmineDmsf
     # Attachable
     module AttachablePatch
       ##################################################################################################################
-      # Overriden methods
+      # Overridden methods
 
-      def attachments?
+      def has_attachments?
         super || (defined?(dmsf_files) && dmsf_files.any?) || (defined?(dmsf_links) && dmsf_links.any?)
       end
-
-      alias has_attachments? attachments?
     end
   end
 end

@@ -136,10 +136,10 @@ module RedmineDmsf
         uri = options[:uri] || path_info
         credentials[uri] = uri
         @request.env['ORIGINAL_FULLPATH'] = path_info
-        ha2 = Digest::MD5.hexdigest("GET:#{target}")
+        ha2 = ActiveSupport::Digest.hexdigest("GET:#{target}")
         nonce = ActionController::HttpAuthentication::Digest.nonce(Rails.configuration.secret_key_base)
         ha1 = options.delete(:digest)
-        credentials[:response] = Digest::MD5.hexdigest("#{ha1}:#{nonce}:#{ha2}")
+        credentials[:response] = ActiveSupport::Digest.hexdigest("#{ha1}:#{nonce}:#{ha2}")
         "Digest #{credentials.sort_by { |x| x[0].to_s }.map { |v| "#{v[0]}=#{v[1]}" }.join(',')}"
       end
     end

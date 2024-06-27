@@ -667,7 +667,8 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_redirected_to my_account_path
     token = Token.find_by(user_id: @jsmith.id, action: 'dmsf-webdav-digest')
     assert token
-    assert_equal Digest::MD5.hexdigest("jsmith:#{RedmineDmsf::Webdav::AUTHENTICATION_REALM}:jsmith"), token.value
+    assert_equal ActiveSupport::Digest.hexdigest("jsmith:#{RedmineDmsf::Webdav::AUTHENTICATION_REALM}:jsmith"),
+                 token.value
   end
 
   def test_reset_digest_unauthorized

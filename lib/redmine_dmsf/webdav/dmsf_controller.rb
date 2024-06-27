@@ -43,7 +43,7 @@ module RedmineDmsf
           response.status = status.code
           if status.code == 401
             time_stamp = Time.now.to_i
-            h_once = Digest::MD5.hexdigest("#{time_stamp}:#{SecureRandom.hex(32)}")
+            h_once = ActiveSupport::Digest.hexdigest("#{time_stamp}:#{SecureRandom.hex(32)}")
             nonce = Base64.strict_encode64("#{time_stamp}#{h_once}")
             response['WWW-Authenticate'] =
               %(Digest realm="#{authentication_realm}", nonce="#{nonce}", algorithm="MD5", qop="auth")
@@ -90,11 +90,11 @@ module RedmineDmsf
             end
             ha1 = token.value
           end
-          ha2 = Digest::MD5.hexdigest("#{request.env['REQUEST_METHOD']}:#{uri}")
+          ha2 = ActiveSupport::Digest.hexdigest("#{request.env['REQUEST_METHOD']}:#{uri}")
           required_response = if qop
-                                Digest::MD5.hexdigest("#{ha1}:#{nonce}:#{nc}:#{cnonce}:#{qop}:#{ha2}")
+                                ActiveSupport::Digest.hexdigest("#{ha1}:#{nonce}:#{nc}:#{cnonce}:#{qop}:#{ha2}")
                               else
-                                Digest::MD5.hexdigest("#{ha1}:#{nonce}:#{ha2}")
+                                ActiveSupport::Digest.hexdigest("#{ha1}:#{nonce}:#{ha2}")
                               end
           if required_response == response
             User.current = user
