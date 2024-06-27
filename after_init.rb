@@ -109,7 +109,7 @@ def dmsf_init
 end
 
 if Redmine::Plugin.installed?('easy_extensions')
-  ActiveSupport.on_load(:easyproject, yield: true) do
+  Rails.application.config.after_initialize do
     dmsf_init
 
     # Register panels for My page

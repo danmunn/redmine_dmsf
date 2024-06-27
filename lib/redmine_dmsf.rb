@@ -39,7 +39,6 @@ require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/queries_controller_patch
 require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/pdf_patch"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/access_control_patch"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/search_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/search_controller_patch"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/custom_field_patch"
 
 # A workaround for obsolete 'alias_method' usage in RedmineUp's plugins
@@ -53,12 +52,6 @@ if defined?(EasyExtensions)
   require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/easy_crm_case_patch"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/attachable_patch"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/easy_crm_cases_controller_patch.rb"
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/xapian_easy_search_helper_patch.rb"
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/application_helper_patch.rb"
-
-  # Mappers
-  require "#{File.dirname(__FILE__)}/xapian_easy_search/dmsf_file_mapper.rb"
-  require "#{File.dirname(__FILE__)}/xapian_easy_search/dmsf_folder_mapper.rb"
 end
 
 # Load up classes that make up our WebDAV solution ontop of Dav4rack
@@ -78,18 +71,24 @@ require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_lock_error"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_zip_max_files_error"
 
 # Hooks
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/controllers/account_controller_hooks"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/controllers/search_controller_hooks"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/controllers/issues_controller_hooks"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/view_projects_form_hook"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/base_view_hooks"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/custom_field_view_hooks"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/issue_view_hooks"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/my_account_view_hooks"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/search_view_hooks"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/helpers/issues_helper_hooks"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/helpers/search_helper_hooks"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/helpers/project_helper_hooks"
+def require_hooks
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/controllers/issues_controller_hooks"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/view_projects_form_hook"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/base_view_hooks"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/custom_field_view_hooks"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/issue_view_hooks"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/my_account_view_hooks"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/search_view_hooks"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/helpers/issues_helper_hooks"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/helpers/search_helper_hooks"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/helpers/project_helper_hooks"
+end
+
+if defined?(EasyExtensions)
+  Rails.application.config.to_prepare { require_hooks }
+else
+  require_hooks
+end
 
 # Macros
 require "#{File.dirname(__FILE__)}/redmine_dmsf/macros"

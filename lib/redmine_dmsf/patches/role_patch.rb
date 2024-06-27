@@ -34,7 +34,7 @@ module RedmineDmsf
       def remove_dmsf_references
         return unless id
 
-        substitute = User.anonymous
+        substitute = Role.anonymous
         DmsfFolderPermission.where(object_id: id, object_type: 'Role').update_all object_id: substitute.id
       end
     end
