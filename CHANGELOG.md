@@ -1,10 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.1.7 *????-??-??*
+3.1.7 *2024-06-27*
 ------------------
 
-3.1.6 *2004-06-04*
+   Maintenance release
+
+3.1.6 *2024-06-04*
 ------------------
 
 * Bug: #1526 - Missing template, responding with 404: Missing partial twofa_backup_codes/_sidebar, application/_sidebar
