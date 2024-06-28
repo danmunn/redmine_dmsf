@@ -1,10 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.1.7 *2024-06-27*
+3.1.7 *2024-06-28*
 ------------------
 
-   Maintenance release
+    Maintenance release
+
+* Bug: #1528 - WebDAV / LDAP-User errors 
 
 3.1.6 *2024-06-04*
 ------------------
