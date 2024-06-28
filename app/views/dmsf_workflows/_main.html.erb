@@ -28,7 +28,8 @@
   </p>
 <% else %>
   <div class="contextual">
-    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(project_id: @project&.id), class: 'icon icon-add' %>
+    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(project_id: @project&.id), class: 'icon icon-add',
+                data: { cy: "button__new--dmsf-workflow" } %>
   </div>
   <h2><%= l(:label_dmsf_workflow_plural) %></h2>
 <% end %>
