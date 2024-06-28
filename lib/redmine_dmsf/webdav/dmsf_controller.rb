@@ -102,7 +102,7 @@ module RedmineDmsf
             Rails.logger.error 'Digest authentication: digest response is incorrect'
           end
         else
-          Rails.logger.error "Digest authentication method expected got #{scheme}"
+          Rails.logger.warn "Digest authentication method expected got '#{scheme}'"
         end
         raise Unauthorized if User.current.anonymous?
 
