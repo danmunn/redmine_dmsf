@@ -77,6 +77,7 @@ def require_hooks
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/base_view_hooks"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/custom_field_view_hooks"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/issue_view_hooks"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/mailer_view_hooks"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/my_account_view_hooks"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/search_view_hooks"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/helpers/issues_helper_hooks"

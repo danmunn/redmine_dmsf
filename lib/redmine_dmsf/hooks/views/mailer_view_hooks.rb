@@ -22,10 +22,18 @@
 module RedmineDmsf
   module Hooks
     module Views
-      # My account view hooks
-      class MyAccountViewHooks < Redmine::Hook::ViewListener
-        def view_my_account_preferences(context = {})
-          context[:controller].send :render_to_string, { partial: 'hooks/redmine_dmsf/view_my_account' }
+      # Mailer view hooks
+      class MailerViewHooks < Redmine::Hook::ViewListener
+        def view_mailer_issue_show_text_bottom(context = {})
+          context[:controller].send :render_to_string,
+                                    { partial: 'hooks/redmine_dmsf/view_mailer_issue',
+                                      locals: { issue: context[:issue] } }
+        end
+
+        def view_mailer_issue_show_html_bottom(context = {})
+          context[:controller].send :render_to_string,
+                                    { partial: 'hooks/redmine_dmsf/view_mailer_issue',
+                                      locals: { issue: context[:issue] } }
         end
       end
     end

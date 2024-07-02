@@ -25,10 +25,5 @@
 <%= render partial: 'mailer/issue', locals: { issue: issue, issue_url: issue_url, user: user } %>
 
 <%# DMSF extension do %>
-<% if issue.dmsf_files.any? %>
----<%= l(:label_dmsf_file_plural).ljust(37, '-') %>
-<% issue.dmsf_files.each do |f| %>
-<%= f.name %> (<%= number_to_human_size(f.last_revision.size) %>)
-<% end %>
-<% end %>
+  <%= render partial: 'hooks/redmine_dmsf/view_mailer_issue', locals: { issue: issue } %>
 <%# end %>

@@ -1,9 +1,7 @@
 <%
-  # encoding: utf-8
-  #
   # Redmine plugin for Document Management System "Features"
   #
-  # Karel Pičman <karel.picman@kontron.com>
+  # Vít Jonáš <vit.jonas@gmail.com>, Daniel Munn <dan.munn@munnster.co.uk>, Karel Pičman <karel.picman@kontron.com>
   #
   # This program is free software; you can redistribute it and/or
   # modify it under the terms of the GNU General Public License
@@ -20,10 +18,9 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<%# Render the original view %>
-<% view_paths.unshift Rails.root.join('app/views').to_s %>
-<%= render partial: 'mailer/issue', locals: { issue: issue, issue_url: issue_url, user: user } %>
-
-<%# DMSF extension do %>
-  <%= render partial: 'hooks/redmine_dmsf/view_mailer_issue', locals: { issue: issue } %>
-<%# end %>
+<% if issue.dmsf_files.any? %>
+  ---<%= l(:label_dmsf_file_plural).ljust(37, '-') %>
+  <% issue.dmsf_files.each do |f| %>
+    <%= f.name %> (<%= number_to_human_size(f.last_revision.size) %>)
+  <% end %>
+<% end %>
