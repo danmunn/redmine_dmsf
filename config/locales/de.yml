@@ -461,34 +461,34 @@ de:
   label_empty_minor_version_by_default: Leere Unterversion als Standard
   text_email_doc_downloaded_subject: Dokumenten wurden herunterladen
   text_email_doc_downloaded: hat folgende Dokumente herunterladen
-  field_default_dmsf_query: Standardabfrage DMS
-  field_receive_download_notification: Bekomen Benachrichtigen über Herunterladen
+  field_default_dmsf_query: Standard-DMS-Abfrage
+  field_receive_download_notification: Benachrichtigung über heruntergeladene Dokumente
 
-  label_remove_original_documents_module: Entfernen originelles Modul Dokumente
+  label_remove_original_documents_module: Original Projektmodule Dokumente entfernen
 
   text_fulltext_search: 'Full-text Suche in Dokumente fordert die Existenz %{cmd1} and %{cmd2} auf dem Server.'
 
   notice_entries_copied: Kopieren ist gelungen
-  notice_entries_moved: Verschiebung ist gelungen
+  notice_entries_moved: Verschieben ist gelungen
   label_dmsf_file_revision: DMS Dokument Rev.
   error_not_supported_image_format: Nicht unterstütztes Bildformat
   error_not_supported_video_format: Nicht unterstütztes Videoformat
 
-  label_webdav_authentication: WebDAV Authentication
-  note_webdav_authentication: Basic authentication method is considered as unsecure and therefore blocked by some
-    clients. Digest authentication is based on an auto-generated digest. Users use their login and password for
-    authentication in their WebDAV clients too.
-  label_dmsf_webdav_digest_created_on: "Dmsf WebDAV digest created %{value} ago"
-  label_missing_dmsf_webdav_digest: Missing a Dmsf WebDAV digest
-  label_dmsf_webdav_digest: DMSF WebDAV digest
-  text_dmsf_webdav_digest_reset: You are supposed to enter your password to generate a new DMSF WebDAV digest.
-  notice_webdav_digest_reset: Your DMSF WebDAV digest was reset.
+  label_webdav_authentication: WebDAV Authentifizierung
+  note_webdav_authentication: Die Basis-Authentifizierungsmethode gilt als unsicher und wird daher von einigen Clients blockiert
+    Die Digest-Authentifizierung basiert auf einem automatisch generierten Digest. Die Benutzer verwenden ihre Anmeldung und ihr Kennwort zur
+    Authentifizierung auch in ihren WebDAV-Clients.
+  label_dmsf_webdav_digest_created_on: "DMSF WebDAV Digest vor %{value} erstellt"
+  label_missing_dmsf_webdav_digest: DMSF WebDAV Digest fehlt
+  label_dmsf_webdav_digest: DMSF WebDAV Digest
+  text_dmsf_webdav_digest_reset: Bitte geben Sie Ihr Passwort ein, um einen neuen DMSF WebDAV Digest zu generieren.
+  notice_webdav_digest_reset: Ihr DMSF WebDAV Digest wurde zurückgesetzt.
 
   easy_pages:
     modules:
       dmsf_locked_documents: Von mir gesperrte Dokumente
       dmsf_open_approvals: Offene Genehmigungen
-      dmsf_watched_documents: My watched documents
+      dmsf_watched_documents: Meine beobachteten Dokumente
     module_category:
       easy_dms: Easy DMS
 
