@@ -478,11 +478,11 @@ de:
   note_webdav_authentication: Die Basis-Authentifizierungsmethode gilt als unsicher und wird daher von einigen Clients blockiert
     Die Digest-Authentifizierung basiert auf einem automatisch generierten Digest. Die Benutzer verwenden ihre Anmeldung und ihr Kennwort zur
     Authentifizierung auch in ihren WebDAV-Clients.
-  label_dmsf_webdav_digest_created_on: "DMSF WebDAV Digest vor %{value} erstellt"
-  label_missing_dmsf_webdav_digest: DMSF WebDAV Digest fehlt
-  label_dmsf_webdav_digest: DMSF WebDAV Digest
-  text_dmsf_webdav_digest_reset: Bitte geben Sie Ihr Passwort ein, um einen neuen DMSF WebDAV Digest zu generieren.
-  notice_webdav_digest_reset: Ihr DMSF WebDAV Digest wurde zurückgesetzt.
+  label_dmsf_webdav_digest_created_on: "DMS WebDAV Digest vor %{value} erstellt"
+  label_missing_dmsf_webdav_digest: DMS WebDAV Digest fehlt
+  label_dmsf_webdav_digest: DMS WebDAV Digest
+  text_dmsf_webdav_digest_reset: Bitte geben Sie Ihr Passwort ein, um einen neuen DMS WebDAV Digest zu generieren.
+  notice_webdav_digest_reset: Ihr DMS WebDAV Digest wurde zurückgesetzt.
 
   easy_pages:
     modules:
