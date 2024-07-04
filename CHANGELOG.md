@@ -1,8 +1,16 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.1.8 *????-??-??*
+3.1.8 *2024-07-04*
 ------------------
+
+    German translation update
+    Several bugs fixed
+
+* Bug: #1533 - Mysql2::Error::TimeoutError
+* Bug: #1532 - Target folder and project are the same as current 
+* Bug: #1531 - Fixing NoMethodError in DmsfFileRevisionFormat
+* New: #1529 - Maintenance/update german translation
 
 3.1.7 *2024-06-28*
 ------------------
