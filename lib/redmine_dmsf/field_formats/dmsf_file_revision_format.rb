@@ -30,7 +30,7 @@ module RedmineDmsf
 
       def edit_tag(view, tag_id, tag_name, custom_value, options = {})
         member = Member.find_by(user_id: User.current.id, project_id: custom_value.customized.project.id)
-        if member.dmsf_fast_links?
+        if member&.dmsf_fast_links?
           view.text_field_tag(tag_name, custom_value.value, options.merge(id: tag_id))
         else
           select_edit_tag(view, tag_id, tag_name, custom_value, options)
