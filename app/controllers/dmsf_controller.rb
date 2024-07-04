@@ -141,7 +141,7 @@ class DmsfController < ApplicationController
   end
 
   def copymove
-    @ids = params[:ids]
+    @ids = params[:ids].uniq
     member = Member.find_by(project_id: @project.id, user_id: User.current.id)
     @fast_links = member&.dmsf_fast_links
     unless @fast_links
@@ -824,7 +824,11 @@ class DmsfController < ApplicationController
       files = DmsfFile.where(id: @selected_files).to_a
       links = DmsfLink.where(id: @selected_links).to_a
       (folders + files + links).each do |entry|
-        raise RedmineDmsf::Errors::DmsfParentError if entry.dmsf_folder == @target_folder || entry == @target_folder
+        if entry.dmsf_folder
+          raise RedmineDmsf::Errors::DmsfParentError if entry.dmsf_folder == @target_folder || entry == @target_folder
+        elsif @target_folder.nil?
+          raise RedmineDmsf::Errors::DmsfParentError if entry.project == @target_project
+        end
       end
       # Prevent recursion
       if params[:move_entries].present?
