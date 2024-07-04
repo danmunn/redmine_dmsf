@@ -37,4 +37,20 @@ class CustomFieldDmsfFileFormatTest < RedmineDmsf::Test::UnitTest
     end
     assert_equal n, @field.possible_values_options(@issue).size
   end
+
+  def test_edit_tag_when_member_not_found
+    User.current = User.generate!
+    view = ActionView::Base.new(ActionController::Base.view_paths, {}, ActionController::Base.new)
+    view.extend(ApplicationHelper)
+
+    begin
+      @field.format.edit_tag(view,
+                             "issue_custom_field_values_#{@field.id}",
+                             "issue[custom_field_values][#{@field.id}]",
+                             CustomValue.create!(custom_field: @field, customized: @issue))
+      assert true
+    rescue NoMethodError => e
+      flunk "Test failure: #{e.message}"
+    end
+  end
 end
