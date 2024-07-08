@@ -99,18 +99,7 @@
   <% project_or_folder = @folder? @folder : @project %>
   <% if project_or_folder&.watchers.present? && User.current.allowed_to?(:view_dmsf_folder_watchers, @project) %>
     <div id="watchers">
-      <% if @folder %>
-        <%= render partial: 'watchers/watchers', locals: { watched: @folder } %>
-      <% else %>
-        <% if User.current.allowed_to?(:add_project_watchers, @project) %>
-          <div class="contextual">
-            <%= link_to l(:button_add), new_watchers_path(object_type: :project, object_id: @project.id), remote: true,
-                        method: 'get' %>
-          </div>
-        <% end %>
-        <h3><%= l(:label_project_watchers) %> (<%= @project.watcher_users.size %>)</h3>
-        <%= watchers_list @project %>
-      <% end %>
+      <%= render partial: 'watchers/watchers', locals: { watched: @folder ? @folder : @project } %>
     </div>
   <% end %>
 <% end %>
