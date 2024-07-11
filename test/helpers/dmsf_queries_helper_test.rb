@@ -23,8 +23,10 @@ require File.expand_path('../../test_helper', __FILE__)
 # Queries helper
 class DmsfQueriesHelperTest < RedmineDmsf::Test::HelperTest
   include DmsfQueriesHelper
+  include ActionView::Helpers::NumberHelper
+  include ActionView::Helpers::TagHelper
 
-  fixtures :dmsf_folders
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
     @folder1 = DmsfFolder.find 1
@@ -32,15 +34,21 @@ class DmsfQueriesHelperTest < RedmineDmsf::Test::HelperTest
   end
 
   def test_csv_value
-    c_size = QueryColumn.new(:size)
-    c_author = QueryColumn.new(:author)
-    assert_equal '1 KB', csv_value(c_size, nil, 1024)
-    assert_equal 'John Smith', csv_value(c_author, @jsmith, @jsmith.id)
+    # Size
+    column = QueryColumn.new(:size)
+    assert_equal '1 KB', csv_value(column, nil, 1024)
+    # Author
+    column = QueryColumn.new(:author)
+    assert_equal 'John Smith', csv_value(column, @jsmith, @jsmith.id)
   end
 
   def test_column_value
-    c_size = QueryColumn.new(:size)
-    assert_equal '1 KB', csv_value(c_size, @folder1, 1024)
+    # Size
+    column = QueryColumn.new(:size)
+    assert_equal '1 KB', column_value(column, @folder1, 1024)
+    # Comment
+    column = QueryColumn.new(:comment)
+    assert column_value(column, @folder1, '*Comment*').include?('wiki')
   end
 
   def test_previewable

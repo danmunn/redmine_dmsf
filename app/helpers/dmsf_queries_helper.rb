@@ -238,6 +238,8 @@ module DmsfQueriesHelper
       else
         super column, item, value
       end
+    when :comment
+      value.present? ? content_tag('div', textilizable(value), class: 'wiki') : ''
     else
       super column, item, value
     end
