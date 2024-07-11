@@ -29,6 +29,11 @@
 .dmsf-tree.idnt-8 td.dmsf-title { padding-left: 5em; }
 .dmsf-tree.idnt-9 td.dmsf-title { padding-left: 5.5em; }
 
+/* Unlock icon */
+span.icon-unlock {
+    margin-left: 4px;
+}
+
 /* Font icons */
 #sidebar ul > li > a.icon-only.icon-clear-query {
     background-image: url(../../../images/close_hl.png);
