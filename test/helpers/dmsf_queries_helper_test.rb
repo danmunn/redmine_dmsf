@@ -26,7 +26,7 @@ class DmsfQueriesHelperTest < RedmineDmsf::Test::HelperTest
   include ActionView::Helpers::NumberHelper
   include ActionView::Helpers::TagHelper
 
-  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+  fixtures :dmsf_folders
 
   def setup
     @folder1 = DmsfFolder.find 1
