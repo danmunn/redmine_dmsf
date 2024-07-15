@@ -23,7 +23,7 @@ module RedmineDmsf
     # AccessControll patch
     module AccessControlPatch
       ##################################################################################################################
-      # Overriden methods
+      # Overridden methods
       def self.prepended(base)
         class << base
           prepend ClassMethods

@@ -27,7 +27,7 @@ module RedmineDmsf
     # PDF
     module PdfPatch
       ##################################################################################################################
-      # Overriden methods
+      # Overridden methods
 
       def get_image_filename(attrname)
         if attrname =~ %r{/dmsf/files/(\d+)/}

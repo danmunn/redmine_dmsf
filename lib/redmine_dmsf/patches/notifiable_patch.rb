@@ -31,7 +31,7 @@ module RedmineDmsf
       # Class methods
       module ClassMethods
         ################################################################################################################
-        # Overriden methods
+        # Overridden methods
         #
         def all
           notifications = super
