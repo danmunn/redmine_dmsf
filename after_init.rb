@@ -50,7 +50,7 @@ def dmsf_init
   Redmine::MenuManager.map :top_menu do |menu|
     menu.push :dmsf, { controller: 'dmsf', action: 'index' },
               caption: :menu_dmsf,
-              html: { class: 'icon-dmsf' },
+              html: { class: 'icon-dmsf', category: :rest_extension_modules },
               if: proc {
                 User.current.allowed_to?(:view_dmsf_folders, nil, global: true) &&
                   ActiveRecord::Base.connection.data_source_exists?('settings') &&
