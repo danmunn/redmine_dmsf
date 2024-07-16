@@ -36,7 +36,7 @@ module DmsfQueriesHelper
                  content_tag(:span,
                              '',
                              title: l(:title_locked_by_user, user: file.locked_by),
-                             class: 'icon icon-unlock')
+                             class: 'icon icon-unlock dmsf-icon-unlock')
         end
       when 'folder'
         folder = DmsfFolder.find_by(id: item.id)
@@ -45,7 +45,7 @@ module DmsfQueriesHelper
                  content_tag(:span,
                              '',
                              title: l(:title_locked_by_user, user: folder.locked_by),
-                             class: 'icon icon-unlock')
+                             class: 'icon icon-unlock dmsf-icon-unlock')
         end
       end
       content_tag(:span, val) +
