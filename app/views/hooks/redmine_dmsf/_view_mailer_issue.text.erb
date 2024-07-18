@@ -21,6 +21,6 @@
 <% if issue.dmsf_files.any? %>
   ---<%= l(:label_dmsf_file_plural).ljust(37, '-') %>
   <% issue.dmsf_files.each do |f| %>
-    <%= f.name %> (<%= number_to_human_size(f.last_revision.size) %>)
+    <%= f.name %> (<%= number_to_human_size(f.last_revision.size) if f.last_revision %>)
   <% end %>
 <% end %>

@@ -23,7 +23,7 @@
   <fieldset class="attachments"><legend><%= l(:label_dmsf_file_plural) %></legend>
     <% issue.dmsf_files.each do |f| %>
       <%= link_to h(f.name), static_dmsf_file_url(f, filename: f.name) %>
-      (<%= number_to_human_size(f.last_revision.size) %>)<br>
+      (<%= number_to_human_size(f.last_revision.size) if f.last_revision %>)<br>
     <% end %>
   </fieldset>
 <% end %>
