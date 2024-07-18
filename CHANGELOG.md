@@ -1,8 +1,13 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.1.9 *????-??-??*
+3.1.9 *2024-07-18*
 ------------------
+
+    Maintenance release
+
+* Bug: #1534 - Formating is not applied to Comment column
+
 
 3.1.8 *2024-07-04*
 ------------------
