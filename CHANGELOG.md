@@ -1,8 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.2.0 *????-??-??*
+3.2.0 *2024-04-23*
 ------------------
+
+   Redmine Product plugin compatibility
+
+* Bug: #1537 - SystemStackError when Redmine Products plugin installed
 
 3.1.9 *2024-07-18*
 ------------------
