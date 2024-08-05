@@ -32,6 +32,8 @@ module RedmineDmsf
           user = context[:user]
           return unless user
 
+          return unless Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'] == 'Digest'
+
           # Updates user's DMSF WebDAV digest
           if controller.params[:password].present?
             token = Token.find_by(user_id: user.id, action: 'dmsf-webdav-digest')
