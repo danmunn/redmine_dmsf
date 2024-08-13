@@ -32,7 +32,7 @@ module RedmineDmsf
     # It is related especially to plugins made by AlphaNode and RedmineUP.
     def self.an_obsolete_plugin_present?
       plugins = %w[easyproject/easy_plugins/easy_money redmine_questions redmine_db redmine_passwords redmine_resources
-                   redmine_products]
+                   redmine_products redmine_finance]
       plugins.each do |plugin|
         return true if Plugin.present?(plugin)
       end
