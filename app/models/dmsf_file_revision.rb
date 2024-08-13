@@ -65,7 +65,7 @@ class DmsfFileRevision < ApplicationRecord
   acts_as_event(
     title: proc { |o|
       if o.source_dmsf_file_revision_id.present?
-        l(:label_dmsf_updated)
+        "#{l(:label_dmsf_updated)}: #{o.dmsf_file.dmsf_path_str}"
       else
         "#{l(:label_created)}: #{o.dmsf_file.dmsf_path_str}"
       end
