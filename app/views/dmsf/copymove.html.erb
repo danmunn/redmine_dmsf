@@ -18,7 +18,7 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<%= render partial: '/dmsf/path', locals: { folder: nil, filename: nil, title: nil } %>
+<%= render partial: '/dmsf/path', locals: { folder: @folder, filename: nil, title: nil } %>
 
 <% if @projects.present? || @fast_links %>
   <%= form_tag(entries_operations_dmsf_path, id: 'copyForm') do %>
@@ -49,7 +49,7 @@
       <%= submit_tag l(:button_copy), id: 'copy_button', data: { cy: "button__copy--dmsf" } %>
       <%# TODO: Lock and proper permissions %>
       <% if User.current.allowed_to?(:folder_manipulation, @project) &&
-        User.current.allowed_to?(:file_manipulation, @project)%>
+        User.current.allowed_to?(:file_manipulation, @project) %>
         <%= submit_tag l(:button_move), id: 'move_button', data: { cy: "button__move--dmsf" } %>
       <% end %>
     </p>
