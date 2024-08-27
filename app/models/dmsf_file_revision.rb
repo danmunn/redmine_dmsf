@@ -55,7 +55,7 @@ class DmsfFileRevision < ApplicationRecord
     'application/vnd.oasis.opendocument.spreadsheet' => 'ms-excel',
     'application/vnd.oasis.opendocument.text' => 'ms-word',
     'application/vnd.oasis.opendocument.presentation' => 'ms-powerpoint',
-    'application/vnd.ms-excel.sheet.macroEnabled.12' => 'ms-excel'
+    'application/vnd.ms-excel.sheet.macroenabled.12' => 'ms-excel'
   }.freeze
 
   scope :visible, -> { where(deleted: STATUS_ACTIVE) }
