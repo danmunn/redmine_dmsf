@@ -76,7 +76,7 @@ module RedmineDmsf
             Rails.logger.error l(:notice_account_locked)
             raise Unauthorized
           end
-          token = Token.find_by(user_id: user.id, action: 'dmsf-webdav-digest')
+          token = Token.find_by(user_id: user.id, action: 'dmsf_webdav_digest')
           if token.nil? && defined?(EasyExtensions)
             if user.easy_digest_token_expired?
               Rails.logger.error "Digest authentication: #{user} is locked"

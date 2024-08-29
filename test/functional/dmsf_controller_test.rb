@@ -665,7 +665,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     post '/dmsf/digest', params: { password: 'jsmith' }
     assert_response :redirect
     assert_redirected_to my_account_path
-    token = Token.find_by(user_id: @jsmith.id, action: 'dmsf-webdav-digest')
+    token = Token.find_by(user_id: @jsmith.id, action: 'dmsf_webdav_digest')
     assert token
     assert_equal ActiveSupport::Digest.hexdigest("jsmith:#{RedmineDmsf::Webdav::AUTHENTICATION_REALM}:jsmith"),
                  token.value

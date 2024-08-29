@@ -116,6 +116,7 @@ Rails/SkipsModelValidations:
     - db/migrate/20160215125801_approval_workflow_status.rb
     - db/migrate/20140519133201_trash_bin.rb
     - db/migrate/07_dmsf_1_4_4.rb
+    - db/migrate/20240829093801_rename_dmsf_digest_token.rb
 
 Rails/ThreeStateBooleanColumn:
   Exclude:

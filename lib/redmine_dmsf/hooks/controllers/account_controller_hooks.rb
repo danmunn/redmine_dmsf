@@ -36,8 +36,8 @@ module RedmineDmsf
 
           # Updates user's DMSF WebDAV digest
           if controller.params[:password].present?
-            token = Token.find_by(user_id: user.id, action: 'dmsf-webdav-digest')
-            token ||= Token.create!(user_id: user.id, action: 'dmsf-webdav-digest')
+            token = Token.find_by(user_id: user.id, action: 'dmsf_webdav_digest')
+            token ||= Token.create!(user_id: user.id, action: 'dmsf_webdav_digest')
             token.value = ActiveSupport::Digest.hexdigest(
               "#{user.login}:#{RedmineDmsf::Webdav::AUTHENTICATION_REALM}:#{controller.params[:password]}"
             )

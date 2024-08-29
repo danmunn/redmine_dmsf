@@ -49,7 +49,7 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     digest = ActiveSupport::Digest.hexdigest(
       "#{@jsmith_user.login}:#{RedmineDmsf::Webdav::AUTHENTICATION_REALM}:jsmith"
     )
-    token ||= Token.create!(user_id: @jsmith_user.id, action: 'dmsf-webdav-digest')
+    token ||= Token.create!(user_id: @jsmith_user.id, action: 'dmsf_webdav_digest')
     token.value = digest
     assert token.save
     authorization = encode_credentials(username: 'jsmith', digest: digest, target: '/dmsf/webdav')

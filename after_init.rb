@@ -107,6 +107,8 @@ def dmsf_init
       pmap.permission :delete_project_watchers, { watchers: :destroy }
     end
   end
+  # DMSF WebDAV digest token
+  Token.add_action :dmsf_webdav_digest, max_instances: 1, validity_time: nil
 end
 
 if Redmine::Plugin.installed?('easy_extensions')
