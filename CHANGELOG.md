@@ -1,8 +1,15 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.2.1 *????-??-??*
+3.2.1 *2024-09-02*
 ------------------
+
+    DMSF digest fix
+    Redmine finance plugin compatibility
+
+* Bug: #1541 - Missing Digest
+* Bug: #1540 - Activity stream is not showing the document name
+* Bug: #1424 - Internal error while opening Settings page
 
 3.2.0 *2024-04-23*
 ------------------
