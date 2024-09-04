@@ -75,7 +75,7 @@ class DmsfQuery < Query
       columns = available_columns
       columns&.each do |column|
         name = if column.is_a?(QueryCustomFieldColumn)
-                 column.custom_field.name
+                 column.custom_field.attributes['name']
                else
                  column.name.to_s
                end
