@@ -133,7 +133,10 @@ class DmsfFilesController < ApplicationController
       revision.minor_version = DmsfUploadHelper.db_version(params[:version_minor])
       revision.patch_version = DmsfUploadHelper.db_version(params[:version_patch])
 
-      file_upload = params[:dmsf_attachments]['1'] if params[:dmsf_attachments].present?
+      if params[:dmsf_attachments].present?
+        keys = params[:dmsf_attachments].keys
+        file_upload = params[:dmsf_attachments][keys.first] if keys&.first
+      end
       if file_upload
         upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, file_upload)
         if upload
