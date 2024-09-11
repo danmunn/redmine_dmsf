@@ -391,7 +391,7 @@ class DmsfFileRevision < ApplicationRecord
   end
 
   def protocol
-    @protocol ||= PROTOCOLS[mime_type.downcase]
+    @protocol ||= PROTOCOLS[mime_type.downcase] if mime_type
     @protocol
   end
 
