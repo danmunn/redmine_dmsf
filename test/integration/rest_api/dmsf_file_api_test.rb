@@ -160,6 +160,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     revision = DmsfFileRevision.order(:created_at).last
     assert revision.present?
+    assert_equal 'text/plain', revision.mime_type
   end
 
   def test_upload_document_exceeded_attachment_max_size

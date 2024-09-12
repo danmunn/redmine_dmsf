@@ -102,6 +102,7 @@ class DmsfUploadController < ApplicationController
       uploaded_file[:tempfile_path] = upload.tempfile_path
       uploaded_file[:size] = upload.size
       uploaded_file[:digest] = upload.digest
+      uploaded_file[:mime_type] = upload.mime_type
     end
     commit_files_internal uploaded_files
   end
