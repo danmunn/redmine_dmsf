@@ -489,6 +489,8 @@ cs:
   text_dmsf_webdav_digest_reset: Je vyžadováno vaše heslo pro vygenerování nového DMSF WebDAV digestu.
   notice_webdav_digest_reset: Váš DMSF WebDAV digest byl resetován.
 
+  label_dmsf_commit: Commit
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

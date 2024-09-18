@@ -157,7 +157,8 @@ module RedmineDmsf
           end
           # Attach DMS documents
           uploaded_files = params[:dmsf_attachments]
-          if uploaded_files
+          details = params[:committed_files]
+          if uploaded_files && details
             system_folder = issue.system_folder(create: true)
             uploaded_files.each do |key, uploaded_file|
               upload = DmsfUpload.create_from_uploaded_attachment(issue.project, system_folder, uploaded_file)
@@ -166,7 +167,11 @@ module RedmineDmsf
               uploaded_file[:disk_filename] = upload.disk_filename
               uploaded_file[:name] = upload.name
               uploaded_file[:title] = upload.title
-              uploaded_file[:version] = 1
+              uploaded_file[:description] = details[key][:description]
+              uploaded_file[:comment] = details[key][:comment]
+              uploaded_file[:version_major] = details[key][:version_major]
+              uploaded_file[:version_minor] = details[key][:version_minor]
+              uploaded_file[:version_patch] = details[key][:version_patch]
               uploaded_file[:size] = upload.size
               uploaded_file[:mime_type] = upload.mime_type
               uploaded_file[:tempfile_path] = upload.tempfile_path
@@ -174,6 +179,7 @@ module RedmineDmsf
               if params[:dmsf_attachments_wfs].present? && params[:dmsf_attachments_wfs][key].present?
                 uploaded_file[:workflow_id] = params[:dmsf_attachments_wfs][key].to_i
               end
+              uploaded_file[:custom_field_values] = details[key][:custom_field_values]
             end
             DmsfUploadHelper.commit_files_internal uploaded_files, issue.project, system_folder, context[:controller],
                                                    issue, new_object: @new_object

@@ -488,6 +488,8 @@ nl:
   text_dmsf_webdav_digest_reset: You are supposed to enter your password to generate a new DMSF WebDAV digest.
   notice_webdav_digest_reset: Your DMSF WebDAV digest was reset.
 
+  label_dmsf_commit: Commit
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents

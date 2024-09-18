@@ -484,6 +484,8 @@ de:
   text_dmsf_webdav_digest_reset: Bitte geben Sie Ihr Passwort ein, um einen neuen DMS WebDAV Digest zu generieren.
   notice_webdav_digest_reset: Ihr DMS WebDAV Digest wurde zurückgesetzt.
 
+  label_dmsf_commit: Commit
+
   easy_pages:
     modules:
       dmsf_locked_documents: Von mir gesperrte Dokumente

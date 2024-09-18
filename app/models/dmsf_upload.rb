@@ -47,7 +47,29 @@ class DmsfUpload
     end
   end
 
-  def initialize(project, folder, uploaded)
+  def initialize(project, folder = nil, uploaded = nil)
+    unless uploaded
+      @name = ''
+      @disk_filename = ''
+      @mime_type = ''
+      @size = 0
+      @tempfile_path = ''
+      @token = ''
+      @digest = ''
+      if Setting.plugin_redmine_dmsf['empty_minor_version_by_default']
+        @major_version = 1
+        @minor_version = nil
+      else
+        @major_version = 0
+        @minor_version = 0
+      end
+      @patch_version = nil
+      @workflow = nil
+      revision = DmsfFileRevision.new
+      @custom_values = revision.custom_field_values
+      return
+    end
+
     @name = uploaded[:original_filename]
 
     file = DmsfFile.find_file_by_name(project, folder, @name)

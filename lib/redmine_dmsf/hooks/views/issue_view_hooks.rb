@@ -163,8 +163,9 @@ module RedmineDmsf
           html = description ? +'<p' : +'<div'
           if User.current.pref.dmsf_attachments_upload_choice == 'Attachments' &&
              allowed_to_attach_attachments(container)
-            html << ' style="display: none;">'
+            html << ' style="display: none;"'
           end
+          html << '>'
           if label
             html << "<label>#{l(:label_document_plural)}</label>"
             html << '<span class="attachments-container dmsf-uploader">'
@@ -176,7 +177,7 @@ module RedmineDmsf
                                                                  locals: { container: container,
                                                                            multiple: true,
                                                                            description: description,
-                                                                           awf: true } })
+                                                                           awf: false } })
           html << '</span>'
           html << (description ? '</p>' : '</div>')
           html

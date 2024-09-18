@@ -45,6 +45,21 @@ function dmsfAddLink(linksSpan, linkId, linkName, title, project, awf) {
 
 dmsfAddLink.nextLinkId = 1000;
 
+/* Remove the extension and replace underscores with spaces, 'after_init.rb' -> 'after init' */
+function filenameToTitle(filename) {
+    return filename.replace(/\.[^/.]+$/, "").replace(/_+/g, " ");
+}
+
+/* File size to human readable file size, 1024 -> 1.00 KB */
+function humanFileSize(bytes) {
+    var u = 0, s= 1024;
+    while (bytes >= s || -bytes >= s) {
+        bytes /= s;
+        u++;
+    }
+    return (u ? bytes.toFixed(2) + ' ' : bytes) + ' KMGTPEZY'[u] + 'B';
+}
+
 function dmsfAddFile(inputEl, file, eagerUpload) {
 
     let attachments = $('#dmsf_attachments_fields');
@@ -62,16 +77,6 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
 
         if($(inputEl).attr('multiple') == 'multiple') {
 
-            if($(inputEl).data('description')) {
-
-                let description = $('<input>', {type: 'text', 'class': 'description',
-                    name: 'dmsf_attachments[' + attachmentId + '][description]', maxlength: 255,
-                    placeholder: $(inputEl).data('description-placeholder')
-                }).toggle(!eagerUpload);
-
-                fileSpan.append(description);
-            }
-
             fileSpan.append(iconDel.click(dmsfRemoveFileLbl));
 
             if($(inputEl).data('awf')) {
@@ -83,13 +88,45 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
                 fileSpan.append(iconWf);
             }
 
-            attachments.append(fileSpan);
+            // Details
+            let detailsForm = $(inputEl).data('dmsf-file-details-form');
+            if(detailsForm) {
+                let detailsDiv = $('<div>').attr({id: 'dmsf_attachments_details_' + attachmentId});
+                let detailsArrow = $('<a>');
+                detailsArrow.attr({href: '#', 'class': 'icon-only icon-sorted-asc', title: 'Details'});
+                detailsArrow.attr(
+                    {
+                        onclick: "$('#dmsf_attachments_details_" + attachmentId + "').toggle();" +
+                            "$(this).toggleClass('icon-sorted-asc');$(this).toggleClass('icon-sorted-desc');" +
+                            "return false;"
+                    });
+                detailsForm = detailsForm.replace(/\[0\]/g, '[' + attachmentId + ']');
+                detailsForm = detailsForm.replace(/_0/g, '_' + attachmentId);
+                detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_name" value=""',
+                    'id="committed_files_' + attachmentId + '_name" value="' + file.name + '"');
+                detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_title"',
+                    'id="committed_files_' + attachmentId + '_title" value = "' + filenameToTitle(file.name) + '"');
+                detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_size"',
+                    'id="committed_files_' + attachmentId + '_size" value = "' + humanFileSize(file.size) + '"');
+                detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_mime_type"',
+                    'id="committed_files_' + attachmentId + '_mime_type" value = "' + file.type + '"');
+                detailsDiv.append(detailsForm);
+                detailsDiv.hide();
+
+                fileSpan.append(detailsArrow)
+                attachments.append(fileSpan);
+                attachments.append(detailsDiv);
+            }
+            else {
+                attachments.append(fileSpan);
+            }
         }
         else{
             fileSpan.append(iconDel.click(dmsfRemoveFileLbl));
             attachments.append(fileSpan);
             $('#dmsf_file_revision_name').val(file.name);
         }
+        attachments.append('<br>');
 
         if(eagerUpload) {
             dmsfAjaxUpload(file, attachmentId, fileSpan, inputEl);

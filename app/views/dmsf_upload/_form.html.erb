@@ -81,8 +81,10 @@
                        upload_path: dmsf_uploads_path(format: 'js'),
                        description_placeholder: l(:label_optional_description),
                        project: @project ? "#{@project.identifier}" : '',
-                       description: description,
-                       awf: awf
+                       awf: awf,
+                       dmsf_file_details_form: container ? controller.send( :render_to_string,
+                         { partial: 'dmsf_upload/upload_file',
+                           locals: { upload: DmsfUpload.new(container.project, nil, nil), i: 0 } }) : nil
                    } %>
 </span>
 <% if defined?(container) && container %>

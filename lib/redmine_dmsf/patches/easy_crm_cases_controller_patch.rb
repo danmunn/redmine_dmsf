@@ -41,7 +41,11 @@ module RedmineDmsf
               uploaded_file[:disk_filename] = upload.disk_filename
               uploaded_file[:name] = upload.name
               uploaded_file[:title] = upload.title
-              uploaded_file[:version] = 1
+              uploaded_file[:description] = details[key][:description]
+              uploaded_file[:comment] = details[key][:comment]
+              uploaded_file[:version_major] = details[key][:version_major]
+              uploaded_file[:version_minor] = details[key][:version_minor]
+              uploaded_file[:version_patch] = details[key][:version_patch]
               uploaded_file[:size] = upload.size
               uploaded_file[:mime_type] = upload.mime_type
               uploaded_file[:tempfile_path] = upload.tempfile_path
@@ -49,6 +53,7 @@ module RedmineDmsf
               if params[:dmsf_attachments_wfs].present? && params[:dmsf_attachments_wfs][key].present?
                 uploaded_file[:workflow_id] = params[:dmsf_attachments_wfs][key].to_i
               end
+              uploaded_file[:custom_field_values] = details[key][:custom_field_values]
             end
             DmsfUploadHelper.commit_files_internal uploaded_files, easy_crm_case.project, system_folder, self,
                                                    easy_crm_case, new_object: false
