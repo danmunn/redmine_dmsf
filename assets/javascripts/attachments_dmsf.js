@@ -60,6 +60,63 @@ function humanFileSize(bytes) {
     return (u ? bytes.toFixed(2) + ' ' : bytes) + ' KMGTPEZY'[u] + 'B';
 }
 
+/* Increase version */
+function increaseVersion(version, max) {
+    let res;
+    if (version >= 0) {
+        if ((version + 1) < max) {
+            res = ++version;
+        } else {
+            res = version;
+        }
+    } else {
+        if (-(version - 1) < 90 /* 'Z' */) {
+            res = --version;
+        } else
+            res = version;
+    }
+    if (res < 0) {
+        res = String.fromCharCode(-res);    // -65 => 'A'
+    }
+    return res;
+}
+
+/* Get next version */
+function getNextVersion(filename, files) {
+    for(let i = 0; i < files.length; i++) {
+        if(filename === files[i][0]) {
+            if(files[i][3] && (files[i][3] >= 0)) {
+                return [files[i][1], files[i][2], increaseVersion(files[i][3], 1000)];
+            }
+            if(files[i][2] && (files[i][2] >= 0)) {
+                return [files[i][1], increaseVersion(files[i][2], 1000), null];
+            }
+            return [increaseVersion(files[i][1], 100), null, null];
+        }
+    }
+    return [0, 1, null];
+}
+
+/* Replace selected version */
+function replaceVersion(detailsForm, attachmentId, name, version) {
+    let index = detailsForm.search('id="committed_files_' + attachmentId + '_version_' + name + '"');
+    if (index != -1) {
+        let str = detailsForm.substring(index);
+        // Remove the original selection
+        str = str.replace('selected="selected" ', '');
+        // Select new version
+        if (version != null) {
+            str = str.replace('<option value="' + version + '">' + version + '</option>', '<option selected="selected" value="' + version + '">' + version + '</option>');
+        }
+        else {
+            let c = String.fromCharCode(160); // &nbsp;
+            str = str.replace('<option value="">' + c + '</option>', '<option selected="selected" value="">' + c + '</option>');
+        }
+        detailsForm = detailsForm.substring(0, index) + str;
+    }
+    return detailsForm;
+}
+
 function dmsfAddFile(inputEl, file, eagerUpload) {
 
     let attachments = $('#dmsf_attachments_fields');
@@ -90,36 +147,44 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
 
             // Details
             let detailsForm = $(inputEl).data('dmsf-file-details-form');
-            if(detailsForm) {
-                let detailsDiv = $('<div>').attr({id: 'dmsf_attachments_details_' + attachmentId});
-                let detailsArrow = $('<a>');
-                detailsArrow.attr({href: '#', 'class': 'icon-only icon-sorted-asc', title: 'Details'});
-                detailsArrow.attr(
-                    {
-                        onclick: "$('#dmsf_attachments_details_" + attachmentId + "').toggle();" +
-                            "$(this).toggleClass('icon-sorted-asc');$(this).toggleClass('icon-sorted-desc');" +
-                            "return false;"
-                    });
-                detailsForm = detailsForm.replace(/\[0\]/g, '[' + attachmentId + ']');
-                detailsForm = detailsForm.replace(/_0/g, '_' + attachmentId);
-                detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_name" value=""',
-                    'id="committed_files_' + attachmentId + '_name" value="' + file.name + '"');
-                detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_title"',
-                    'id="committed_files_' + attachmentId + '_title" value = "' + filenameToTitle(file.name) + '"');
-                detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_size"',
-                    'id="committed_files_' + attachmentId + '_size" value = "' + humanFileSize(file.size) + '"');
-                detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_mime_type"',
-                    'id="committed_files_' + attachmentId + '_mime_type" value = "' + file.type + '"');
-                detailsDiv.append(detailsForm);
-                detailsDiv.hide();
+            let detailsDiv = $('<div>').attr({id: 'dmsf_attachments_details_' + attachmentId});
+            let detailsArrow = $('<a>');
 
-                fileSpan.append(detailsArrow)
-                attachments.append(fileSpan);
-                attachments.append(detailsDiv);
-            }
-            else {
-                attachments.append(fileSpan);
-            }
+            detailsArrow.attr({href: '#', 'class': 'icon-only icon-sorted-asc', title: 'Details'});
+            detailsArrow.attr(
+                {
+                    onclick: "$('#dmsf_attachments_details_" + attachmentId + "').toggle();" +
+                        "$(this).toggleClass('icon-sorted-asc');$(this).toggleClass('icon-sorted-desc');" +
+                        "$('#dmsf-upload-button').hide();" +
+                        "return false;"
+                });
+            // Index
+            detailsForm = detailsForm.replace(/\[0\]/g, '[' + attachmentId + ']');
+            detailsForm = detailsForm.replace(/_0/g, '_' + attachmentId);
+            // Name
+            detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_name" value=""',
+                'id="committed_files_' + attachmentId + '_name" value="' + file.name + '"');
+            // Title
+            detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_title"',
+                'id="committed_files_' + attachmentId + '_title" value = "' + filenameToTitle(file.name) + '"');
+            // Size
+            detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_size"',
+                'id="committed_files_' + attachmentId + '_size" value = "' + humanFileSize(file.size) + '"');
+            // Mime type
+            detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_mime_type"',
+                'id="committed_files_' + attachmentId + '_mime_type" value = "' + file.type + '"');
+            // Version
+            let version = getNextVersion(file.name, $(inputEl).data('files'));
+            detailsForm = replaceVersion(detailsForm, attachmentId, 'patch', version[2]);
+            detailsForm = replaceVersion(detailsForm, attachmentId, 'minor', version[1]);
+            detailsForm = replaceVersion(detailsForm, attachmentId, 'major', version[0]);
+
+            detailsDiv.append(detailsForm);
+            detailsDiv.hide();
+
+            fileSpan.append(detailsArrow)
+            attachments.append(fileSpan);
+            attachments.append(detailsDiv);
         }
         else{
             fileSpan.append(iconDel.click(dmsfRemoveFileLbl));

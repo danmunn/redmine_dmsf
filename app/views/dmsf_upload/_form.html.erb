@@ -68,6 +68,21 @@
 </span>
 
 <span class="dmsf_add_attachment add_attachment">
+  <%
+    if defined?(container) && container
+      project = container.project
+      folder = container.system_folder
+    else
+      project = @project
+      folder = @folder
+    end
+    project_or_folder = folder ? folder : project
+    files = []
+    project_or_folder.dmsf_files.visible.each do |dmsf_file|
+      rev = dmsf_file.last_revision
+      files << [dmsf_file.name, rev.major_version, rev.minor_version, rev.patch_version ] if rev
+    end
+  %>
   <%= file_field_tag 'dmsf_attachments[dummy][file]',
                    id: nil,
                    class: 'file_selector',
@@ -80,17 +95,19 @@
                        max_concurrent_uploads: Redmine::Configuration['max_concurrent_ajax_uploads'].to_i,
                        upload_path: dmsf_uploads_path(format: 'js'),
                        description_placeholder: l(:label_optional_description),
-                       project: @project ? "#{@project.identifier}" : '',
+                       project: project.identifier,
                        awf: awf,
-                       dmsf_file_details_form: container ? controller.send( :render_to_string,
+                       dmsf_file_details_form: controller.send(:render_to_string,
                          { partial: 'dmsf_upload/upload_file',
-                           locals: { upload: DmsfUpload.new(container.project, nil, nil), i: 0 } }) : nil
-                   } %>
+                           locals: { upload: DmsfUpload.new(project, folder, nil), i: 0 } }),
+                       files: JSON.generate(files)
+                   }
+  %>
 </span>
 <% if defined?(container) && container %>
     <span class="dmsf-add-link">
         <%= link_to l(:label_link_from),
-                    new_dmsf_link_path(project_id: container.project.id, type: 'link_from', container: container.class.name),
+                    new_dmsf_link_path(project_id: project.id, type: 'link_from', container: container.class.name),
                     title: l(:title_create_link), class: 'icon icon-add file_selector', remote: true %>
       </span>
 <% end %>

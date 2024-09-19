@@ -41,13 +41,25 @@ class DmsfUploadController < ApplicationController
 
   def upload_files
     uploaded_files = params[:dmsf_attachments]
-    @uploads = []
-    # standard file input uploads
-    uploaded_files&.each do |_, uploaded_file|
-      upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
-      @uploads.push(upload) if upload
+    # Commit
+    if params[:commit] == l(:label_dmsf_commit)
+      uploaded_files&.each do |key, uploaded_file|
+        upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
+        params[:committed_files][key][:disk_filename] = upload.disk_filename
+        params[:committed_files][key][:digest] = upload.digest
+        params[:committed_files][key][:tempfile_path] = upload.tempfile_path
+      end
+      commit_files
+    # Upload
+    else
+      @uploads = []
+      # standard file input uploads
+      uploaded_files&.each do |_, uploaded_file|
+        upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
+        @uploads.push(upload) if upload
+      end
+      flash.now[:error] = "#{l(:label_attachment)} #{l('activerecord.errors.messages.invalid')}" if @uploads.empty?
     end
-    flash.now[:error] = "#{l(:label_attachment)} #{l('activerecord.errors.messages.invalid')}" if @uploads.empty?
   end
 
   # REST API and Redmine attachment form
