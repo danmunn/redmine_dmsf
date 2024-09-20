@@ -19,68 +19,48 @@
 %>
 
 <div class="box tabular dmfs-box-tabular">
-  <%= hidden_field_tag "committed_files[#{i}][disk_filename]", upload.disk_filename %>
-  <%= hidden_field_tag "committed_files[#{i}][token]", upload.token %>
-  <%= hidden_field_tag "committed_files[#{i}][size]", upload.size %>
-  <%= hidden_field_tag "committed_files[#{i}][mime_type]", upload.mime_type %>
-  <%= hidden_field_tag "committed_files[#{i}][name]", upload.name %>
-  <%= hidden_field_tag "committed_files[#{i}][digest]", upload.digest %>
   <p class="warning"><%= l(:info_file_locked) %></p>
   <div class="splitcontent">
     <div class="splitcontentleft">
       <p>
-        <%= label_tag '', l(:label_title) %>
-        <%= text_field_tag :name, h(upload.title), readonly: true %>
+        <%= label_tag "committed_files[#{i}][title]", l(:label_title) %>
+        <%= text_field_tag "committed_files[#{i}][title]", upload.title, readonly: true %>
       </p>
     </div>
     <div class="splitcontentright">
       <p>
-        <%= label_tag '', l(:label_filename) %>
-        <%= text_field_tag :name, h(upload.name), readonly: true %>
+        <%= label_tag "committed_files[#{i}][name]", l(:label_filename) %>
+        <%= text_field_tag "committed_files[#{i}][name]", upload.name, readonly: true %>
       </p>
     </div>
   </div>
-  <% if upload.description.present? %>
-      <p>
-        <%= label_tag '', l(:label_description) %>
-        <div class="wiki">
-          <%= textilizable upload.description %>
-        </div>
-      </p>
-  <% end %>
   <div class="splitcontent">
     <div class="splitcontentleft">
       <p>
-        <%= label_tag '', l(:label_dmsf_version) %>
-        <%= text_field_tag :name,
+        <%= label_tag "committed_files[#{i}][version]", l(:label_dmsf_version) %>
+        <%= text_field_tag "committed_files[#{i}][version]",
              "#{DmsfUploadHelper::gui_version(upload.major_version)}.#{DmsfUploadHelper::gui_version(upload.minor_version)}",
              readonly: true %>
       </p>
       <p>
-        <%= label_tag '', l(:label_mime) %>
-        <%= text_field_tag :name, h(upload.mime_type), readonly: true %>
+        <%= label_tag "committed_files[#{i}][mime_type]", l(:label_mime) %>
+        <%= text_field_tag "committed_files[#{i}][mime_type]", upload.mime_type, readonly: true %>
       </p>
       <p>
-        <%= label_tag '', l(:label_size) %>
-        <%= text_field_tag :name, h(number_to_human_size(upload.size)), readonly: true %>
+        <%= label_tag "committed_files[#{i}][size]", l(:label_size) %>
+        <%= text_field_tag "committed_files[#{i}][size]", number_to_human_size(upload.size), readonly: true %>
       </p>
     </div>
     <div class="splitcontentright">
       <div class="custom_fields">
         <% upload.custom_values.each do |value| %>
           <p>
-            <%= label_tag '', h(value.custom_field.name) %>
+            <%= label_tag "committed_files[#{i}][#{value.custom_field.id}]", value.custom_field.name %>
             <% value.value = nil if value.custom_field.dmsf_not_inheritable %>
-            <%= text_field_tag :name, h(value.value), readonly: true %>
+            <%= text_field_tag "committed_files[#{i}][#{value.custom_field.id}]", value.value, readonly: true %>
           </p>
         <% end %>
       </div>
     </div>
   </div>
-  <% if upload.comment.present? %>
-      <p>
-        <%= label_tag '', l(:label_comment) %>
-        <div class="wiki"><%= textilizable upload.comment %></div>
-      </p>
-  <% end %>
 </div>

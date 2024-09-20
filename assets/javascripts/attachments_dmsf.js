@@ -97,6 +97,36 @@ function getNextVersion(filename, files) {
     return [0, 1, null];
 }
 
+/* Get the current version */
+function getCurrentVersion(filename, files) {
+    for(let i = 0; i < files.length; i++) {
+        if (filename === files[i][0]) {
+            let res = '';
+            if (files[i][3] != null) {
+                res = '.' + files[i][3];
+            }
+            if (files[i][2] != null) {
+                res = '.' + files[i][2] + res;
+            }
+            if (files[i][1] != null) {
+                res = files[i][1] + res;
+            }
+            return res;
+        }
+    }
+    return '0.1.0';
+}
+
+/* Detects locked file */
+function isFileLocked(filename, files) {
+    for(let i = 0; i < files.length; i++) {
+        if (filename === files[i][0]) {
+            return files[i][4];
+        }
+    }
+    return false;
+}
+
 /* Replace selected version */
 function replaceVersion(detailsForm, attachmentId, name, version) {
     let index = detailsForm.search('id="committed_files_' + attachmentId + '_version_' + name + '"');
@@ -149,10 +179,9 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
             }
 
             // Details
-            let detailsForm = $(inputEl).data('dmsf-file-details-form');
             let detailsDiv = $('<div>').attr({id: 'dmsf_attachments_details_' + attachmentId});
             let detailsArrow = $('<a>');
-            
+
             detailsArrow.text('[+]');
             detailsArrow.attr({href: "#", 'data-cy': 'toggle__new_revision_from_content--dmsf', title: 'Details'});
             detailsArrow.attr(
@@ -164,6 +193,10 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
                         "$('#dmsf-upload-button').hide();" +
                         "return false;"
                 });
+            let files = $(inputEl).data('files');
+            let locked = isFileLocked(file.name, files);
+            let detailsForm = $(inputEl).data(locked ? 'dmsf-file-details-form-locked' : 'dmsf-file-details-form');
+
             // Index
             detailsForm = detailsForm.replace(/\[0\]/g, '[' + attachmentId + ']');
             detailsForm = detailsForm.replace(/_0/g, '_' + attachmentId);
@@ -180,10 +213,17 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
             detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_mime_type"',
                 'id="committed_files_' + attachmentId + '_mime_type" value = "' + file.type + '"');
             // Version
-            let version = getNextVersion(file.name, $(inputEl).data('files'));
-            detailsForm = replaceVersion(detailsForm, attachmentId, 'patch', version[2]);
-            detailsForm = replaceVersion(detailsForm, attachmentId, 'minor', version[1]);
-            detailsForm = replaceVersion(detailsForm, attachmentId, 'major', version[0]);
+            let version;
+            if(locked) {
+                version = getCurrentVersion(file.name, files);
+                detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_version" value="0.0"',
+                    'id="committed_files_' + attachmentId + '_version" value="' + version + '"');
+            } else {
+                version = getNextVersion(file.name, files);
+                detailsForm = replaceVersion(detailsForm, attachmentId, 'patch', version[2]);
+                detailsForm = replaceVersion(detailsForm, attachmentId, 'minor', version[1]);
+                detailsForm = replaceVersion(detailsForm, attachmentId, 'major', version[0]);
+            }
 
             detailsDiv.append(detailsForm);
             detailsDiv.hide();

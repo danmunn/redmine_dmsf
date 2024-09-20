@@ -80,7 +80,9 @@
     files = []
     project_or_folder.dmsf_files.visible.each do |dmsf_file|
       rev = dmsf_file.last_revision
-      files << [dmsf_file.name, rev.major_version, rev.minor_version, rev.patch_version ] if rev
+      if rev
+        files << [dmsf_file.name, rev.major_version, rev.minor_version, rev.patch_version, dmsf_file.locked_for_user? ]
+      end
     end
   %>
   <%= file_field_tag 'dmsf_attachments[dummy][file]',
@@ -99,6 +101,9 @@
                        awf: awf,
                        dmsf_file_details_form: controller.send(:render_to_string,
                          { partial: 'dmsf_upload/upload_file',
+                           locals: { upload: DmsfUpload.new(project, folder, nil), i: 0 } }),
+                       dmsf_file_details_form_locked: controller.send(:render_to_string,
+                         { partial: 'dmsf_upload/upload_file_locked',
                            locals: { upload: DmsfUpload.new(project, folder, nil), i: 0 } }),
                        files: JSON.generate(files)
                    }
