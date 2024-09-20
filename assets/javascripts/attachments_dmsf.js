@@ -136,11 +136,14 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
 
             fileSpan.append(iconDel.click(dmsfRemoveFileLbl));
 
-            if($(inputEl).data('awf')) {
+            if ($(inputEl).data('awf')) {
 
-                let iconWf = $('<a>').attr({href: '/dmsf-workflows/' + $(inputEl).attr(
-                    'data-project') + "/assign?attachment_id=" + attachmentId, 'class': 'modify-upload icon-only icon-ok',
-                    'data-remote': 'true'});
+                let iconWf = $('<a>').attr({
+                    href: '/dmsf-workflows/' + $(inputEl).attr(
+                        'data-project') + "/assign?attachment_id=" + attachmentId,
+                    'class': 'modify-upload icon-only icon-ok',
+                    'data-remote': 'true'
+                });
 
                 fileSpan.append(iconWf);
             }
@@ -149,12 +152,15 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
             let detailsForm = $(inputEl).data('dmsf-file-details-form');
             let detailsDiv = $('<div>').attr({id: 'dmsf_attachments_details_' + attachmentId});
             let detailsArrow = $('<a>');
-
-            detailsArrow.attr({href: '#', 'class': 'icon-only icon-sorted-asc', title: 'Details'});
+            
+            detailsArrow.text('[+]');
+            detailsArrow.attr({href: "#", 'data-cy': 'toggle__new_revision_from_content--dmsf', title: 'Details'});
             detailsArrow.attr(
                 {
-                    onclick: "$('#dmsf_attachments_details_" + attachmentId + "').toggle();" +
-                        "$(this).toggleClass('icon-sorted-asc');$(this).toggleClass('icon-sorted-desc');" +
+                    onclick: "let newRevisionForm = $('#dmsf_attachments_details_" + attachmentId + "');" +
+                        "let operator = newRevisionForm.is(':visible') ? '+' : '-';" +
+                        "newRevisionForm.toggle();" +
+                        "$(this).text('[' + operator + ']');" +
                         "$('#dmsf-upload-button').hide();" +
                         "return false;"
                 });
@@ -185,8 +191,7 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
             fileSpan.append(detailsArrow)
             attachments.append(fileSpan);
             attachments.append(detailsDiv);
-        }
-        else{
+        } else {
             fileSpan.append(iconDel.click(dmsfRemoveFileLbl));
             attachments.append(fileSpan);
             $('#dmsf_file_revision_name').val(file.name);

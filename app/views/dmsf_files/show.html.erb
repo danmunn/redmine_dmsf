@@ -187,13 +187,9 @@
     }
   });
   $('#new_revision_form_content_toggle').click(function() {
-    if($('#new_revision_form_content').is(':visible')) {
-      $(this).text('[+]');
-      $('#new_revision_form_content').hide();
-    }
-    else {
-      $(this).text('[-]');
-      $('#new_revision_form_content').show();
-    }
+    let newRevisionForm = $('#new_revision_form_content');
+    let operator = newRevisionForm.is(':visible') ? '+' : '-';
+    $(this).text('[' + operator + ']');
+    newRevisionForm.toggle();
   });
 <% end %>
