@@ -485,6 +485,7 @@ de:
   notice_webdav_digest_reset: Ihr DMS WebDAV Digest wurde zurückgesetzt.
 
   label_dmsf_commit: Commit
+  label_dmsf_upload_commit: Hochladen und Commit
 
   easy_pages:
     modules:

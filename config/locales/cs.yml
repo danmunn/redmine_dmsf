@@ -483,13 +483,14 @@ cs:
   note_webdav_authentication: Autentifikační metoda Basic není považována za bezpečnou a z toho důvodu je blokována
     některými klienty. Metoda Digest je založena na automaticky vygenerovaném digestu. Uživatelé se pak z WebDAV klienta
     autentifikují také pomocí uživatelského jména a hesla.
-  label_dmsf_webdav_digest_created_on: "Dmsf WebDAV digest created %{value} ago"
-  label_missing_dmsf_webdav_digest: Chybějící Dmsf WebDAV digest
-  label_dmsf_webdav_digest: DMSF WebDAV digest
-  text_dmsf_webdav_digest_reset: Je vyžadováno vaše heslo pro vygenerování nového DMSF WebDAV digestu.
-  notice_webdav_digest_reset: Váš DMSF WebDAV digest byl resetován.
+  label_dmsf_webdav_digest_created_on: "DMS WebDAV digest created %{value} ago"
+  label_missing_dmsf_webdav_digest: Chybějící DMS WebDAV digest
+  label_dmsf_webdav_digest: DMS WebDAV digest
+  text_dmsf_webdav_digest_reset: Je vyžadováno vaše heslo pro vygenerování nového DMS WebDAV digestu.
+  notice_webdav_digest_reset: Váš DMS WebDAV digest byl resetován.
 
-  label_dmsf_commit: Commit
+  label_dmsf_commit: Potvrdit
+  label_dmsf_upload_commit: Nahrát a potvrdit
 
   easy_pages:
     modules:

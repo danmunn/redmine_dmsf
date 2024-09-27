@@ -481,13 +481,14 @@ zh-TW:
   note_webdav_authentication: Basic authentication method is considered as unsecure and therefore blocked by some
     clients. Digest authentication is based on an auto-generated digest. Users use their login and password for
     authentication in their WebDAV clients too.
-  label_dmsf_webdav_digest_created_on: "Dmsf WebDAV digest created %{value} ago"
-  label_missing_dmsf_webdav_digest: Missing a Dmsf WebDAV digest
-  label_dmsf_webdav_digest: DMSF WebDAV digest
-  text_dmsf_webdav_digest_reset: You are supposed to enter your password to generate a new DMSF WebDAV digest.
-  notice_webdav_digest_reset: Your DMSF WebDAV digest was reset.
+  label_dmsf_webdav_digest_created_on: "DMS WebDAV digest created %{value} ago"
+  label_missing_dmsf_webdav_digest: Missing a DMS WebDAV digest
+  label_dmsf_webdav_digest: DMS WebDAV digest
+  text_dmsf_webdav_digest_reset: You are supposed to enter your password to generate a new DMS WebDAV digest.
+  notice_webdav_digest_reset: Your DMS WebDAV digest was reset.
 
   label_dmsf_commit: Commit
+  label_dmsf_upload_commit: Upload and commit
 
   easy_pages:
     modules:
