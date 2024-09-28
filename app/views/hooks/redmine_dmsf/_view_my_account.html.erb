@@ -31,7 +31,7 @@
 <% if Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'] == 'Digest' %>
   <p>
     <label for='webdav_digest_reset'><%= l(:label_dmsf_webdav_digest) %></label>
-    <% token = Token.find_by(user_id: @user.id, action: 'dmsf-webdav-digest') %>
+    <% token = Token.find_by(user_id: @user.id, action: 'dmsf_webdav_digest') %>
     <% if token %>
       <%= l(:label_dmsf_webdav_digest_created_on, distance_of_time_in_words(Time.now, token.created_on)) %>
     <% else %>
