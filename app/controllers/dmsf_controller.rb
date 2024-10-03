@@ -506,7 +506,7 @@ class DmsfController < ApplicationController
       raise RedmineDmsf::Errors::DmsfEmailMaxFileSizeError
     end
 
-    zip.files.each do |f|
+    zip.dmsf_files.each do |f|
       # Action
       audit = DmsfFileRevisionAccess.new
       audit.user = User.current
@@ -517,7 +517,7 @@ class DmsfController < ApplicationController
 
     # Notification
     begin
-      DmsfMailer.deliver_files_downloaded(@project, zip.files, request.remote_ip)
+      DmsfMailer.deliver_files_downloaded @project, zip.dmsf_files, request.remote_ip
     rescue StandardError => e
       Rails.logger.error "Could not send email notifications: #{e.message}"
     end
@@ -540,7 +540,7 @@ class DmsfController < ApplicationController
   def download_entries(selected_folders, selected_files)
     zip = Zip.new
     zip_entries(zip, selected_folders, selected_files)
-    zip.files.each do |f|
+    zip.dmsf_files.each do |f|
       # Action
       audit = DmsfFileRevisionAccess.new
       audit.user = User.current
@@ -550,7 +550,7 @@ class DmsfController < ApplicationController
     end
     # Notifications
     begin
-      DmsfMailer.deliver_files_downloaded(@project, zip.files, request.remote_ip)
+      DmsfMailer.deliver_files_downloaded @project, zip.dmsf_files, request.remote_ip
     rescue StandardError => e
       Rails.logger.error "Could not send email notifications: #{e.message}"
     end
@@ -570,7 +570,7 @@ class DmsfController < ApplicationController
       folder = DmsfFolder.visible.find_by(id: selected_folder_id)
       raise RedmineDmsf::Errors::DmsfFileNotFoundError unless folder
 
-      zip.add_folder folder, member, folder&.dmsf_folder&.dmsf_path_str
+      zip.add_dmsf_folder folder, member, folder&.dmsf_folder&.dmsf_path_str
     end
     selected_files.each do |selected_file_id|
       file = DmsfFile.visible.find_by(id: selected_file_id)
@@ -581,10 +581,10 @@ class DmsfController < ApplicationController
         raise RedmineDmsf::Errors::DmsfAccessError
       end
 
-      zip.add_file file, member, file.dmsf_folder&.dmsf_path_str
+      zip.add_dmsf_file file, member, file.dmsf_folder&.dmsf_path_str
     end
     max_files = Setting.plugin_redmine_dmsf['dmsf_max_file_download'].to_i
-    raise RedmineDmsf::Errors::DmsfZipMaxFilesError if max_files.positive? && zip.files.length > max_files
+    raise RedmineDmsf::Errors::DmsfZipMaxFilesError if max_files.positive? && zip.dmsf_files.length > max_files
 
     zip
   end

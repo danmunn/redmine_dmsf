@@ -53,10 +53,9 @@ module RedmineDmsf
         [@project1, @project2].each do |prj|
           prj.enable_module! :dmsf
         end
-        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join('files', ['dmsf'])
+        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join('files', 'dmsf')
         Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
         Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
-        Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join('files', ['dmsf'])
         FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path
       end
 

@@ -29,8 +29,7 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
   include Rails.application.routes.url_helpers
   include ActionView::Helpers::UrlHelper
 
-  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :dmsf_folders, :dmsf_files,
-           :dmsf_file_revisions
+  fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def setup
     super
