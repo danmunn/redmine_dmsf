@@ -72,7 +72,9 @@ require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_zip_max_files_error"
 
 # Hooks
 def require_hooks
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/controllers/account_controller_hooks"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/controllers/issues_controller_hooks"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/controllers/search_controller_hooks"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/view_projects_form_hook"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/base_view_hooks"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/views/custom_field_view_hooks"
