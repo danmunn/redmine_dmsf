@@ -34,9 +34,10 @@
     <% token = Token.find_by(user_id: @user.id, action: 'dmsf_webdav_digest') %>
     <% if token %>
       <%= l(:label_dmsf_webdav_digest_created_on, distance_of_time_in_words(Time.now, token.created_on)) %>
+      (<%= link_to l(:button_reset), dmsf_digest_path, remote: true, id: 'webdav_digest_reset' %>)
     <% else %>
       <%= l(:label_missing_dmsf_webdav_digest) %>
+      (<%= link_to l(:button_add), dmsf_digest_path, remote: true, id: 'webdav_digest_reset' %>)
     <% end %>
-    (<%= link_to l(:button_reset), dmsf_digest_path, remote: true, id: 'webdav_digest_reset' %>)
   </p>
 <% end %>
