@@ -42,7 +42,7 @@ class DmsfUploadController < ApplicationController
   def upload_files
     uploaded_files = params[:dmsf_attachments]
     # Commit
-    if params[:commit] == l(:label_dmsf_commit)
+    if params[:commit] == l(:label_dmsf_upload_commit)
       uploaded_files&.each do |key, uploaded_file|
         upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
         params[:committed_files][key][:disk_filename] = upload.disk_filename
