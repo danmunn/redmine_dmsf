@@ -17,5 +17,5 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-jsToolBar.strings = {};
+jsToolBar.strings = jsToolBar.strings || {};
 jsToolBar.strings['DMS'] = 'DMS';
