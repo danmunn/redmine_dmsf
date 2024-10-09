@@ -1,8 +1,18 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.2.2 *????-??-??*
+3.2.2 *2024-10-09*
 ------------------
+
+    Upload and Commit in one step
+    Documents' details in issue form
+
+* Bug: #1553 - Wiki Tool always in English after installing DMSF Plugin
+* New: #1552 - Adds further text to reset button of webdav digest
+* Bug: #1551 - Changes token action name for WebDAV digest
+* Bug: #1550 - Some controller hooks won't get loaded
+* New: #1548 - Document's details in issue form
+* Bug: #1544 - Delete uploaded file and upload a different file
 
 3.2.1 *2024-09-02*
 ------------------
