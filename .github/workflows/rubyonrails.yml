@@ -92,7 +92,7 @@ jobs:
         run: | 
           ln -s $(pwd) /opt/redmine/plugins/redmine_dmsf
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@0a29871fe2b0200a17a4497bae54fe5df0d973aa # v1.115.3
+        uses: ruby/setup-ruby@v1 # The latest major version
         with:
           bundler-cache: true
           ruby-version: '3.2'
