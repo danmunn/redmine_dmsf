@@ -64,7 +64,7 @@ class DmsfLock < ApplicationRecord
     end
   end
 
-  def self.find_by_param(*args)
-    find(*args)
+  def self.find_by_param(...)
+    find(...)
   end
 end

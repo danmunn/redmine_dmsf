@@ -31,7 +31,7 @@ class DmsfZipTest < RedmineDmsf::Test::HelperTest
     @dmsf_file1 = DmsfFile.find(1)
     @dmsf_folder2 = DmsfFolder.find(2)
     set_fixtures_attachments_directory
-    @attachment4 = Attachment.find(4)
+    @attachment6 = Attachment.find(6)
   end
 
   def teardown
@@ -53,12 +53,13 @@ class DmsfZipTest < RedmineDmsf::Test::HelperTest
   end
 
   def test_add_attachment
-    @zip.add_attachment @attachment4, @attachment4.filename
+    assert File.exist?(@attachment6.diskfile), @attachment6.diskfile
+    @zip.add_attachment @attachment6, @attachment6.filename
     assert_equal 0, @zip.dmsf_files.size
     zip_file = @zip.finish
     Zip::File.open(zip_file) do |file|
       file.each do |entry|
-        assert_equal @attachment4.filename, entry.name
+        assert_equal @attachment6.filename, entry.name
       end
     end
   end

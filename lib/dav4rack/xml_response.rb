@@ -52,8 +52,8 @@ module Dav4rack
       end
     end
 
-    def render_lockdiscovery(**options)
-      render_xml ox_element(D_PROP, ox_element(D_LOCKDISCOVERY, activelock(**options)))
+    def render_lockdiscovery(...)
+      render_xml ox_element(D_PROP, ox_element(D_LOCKDISCOVERY, activelock(...)))
     end
 
     #
