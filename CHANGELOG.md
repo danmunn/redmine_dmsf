@@ -1,8 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.2.3 *????-??-??*
+3.2.3 *2024-10-18*
 ------------------
+ 
+    Uploaded file size fix
+
+* Bug: 1556 - Wrong file size when uploading documents
 
 3.2.2 *2024-10-09*
 ------------------
