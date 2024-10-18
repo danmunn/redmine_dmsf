@@ -207,8 +207,10 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
             detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_title"',
                 'id="committed_files_' + attachmentId + '_title" value = "' + filenameToTitle(file.name) + '"');
             // Size
-            detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_size"',
-                'id="committed_files_' + attachmentId + '_size" value = "' + humanFileSize(file.size) + '"');
+            detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_human_size"',
+                'id="committed_files_' + attachmentId + '_human_size" value = "' + humanFileSize(file.size) + '"');
+            detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_size" value="0"',
+                'id="committed_files_' + attachmentId + '_size" value = "' + file.size + '"');
             // Mime type
             detailsForm = detailsForm.replace('id="committed_files_' + attachmentId + '_mime_type"',
                 'id="committed_files_' + attachmentId + '_mime_type" value = "' + file.type + '"');

@@ -47,8 +47,8 @@
         <%= text_field_tag "committed_files[#{i}][mime_type]", upload.mime_type, readonly: true %>
       </p>
       <p>
-        <%= label_tag "committed_files[#{i}][size]", l(:label_size) %>
-        <%= text_field_tag "committed_files[#{i}][size]", number_to_human_size(upload.size), readonly: true %>
+        <%= label_tag "committed_files[#{i}][human_size]", l(:label_size) %>
+        <%= text_field_tag "committed_files[#{i}][human_size]", number_to_human_size(upload.size), readonly: true %>
       </p>
     </div>
     <div class="splitcontentright">
