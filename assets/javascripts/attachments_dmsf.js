@@ -306,7 +306,11 @@ dmsfAjaxUpload.uploading = 0;
 
 function dmsfRemoveFileLbl() {
 
-    $(this).parent('span').remove();
+    let span = $(this).parent('span');
+
+    span.next('div').remove();
+    span.next('br').remove();
+    span.remove();
 
     return false;
 }
