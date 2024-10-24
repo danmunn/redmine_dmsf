@@ -274,8 +274,13 @@ module RedmineDmsf
             if issue.attributes_editable? && ((link && User.current.allowed_to?(:file_manipulation,
                                                                                 dmsf_file.project)) || (!link &&
               User.current.allowed_to?(:file_delete, dmsf_file.project)))
+              url = if link
+                      dmsf_link_path link, commit: 'yes', back_url: issue_path(issue)
+                    else
+                      dmsf_file_path id: dmsf_file, commit: 'yes', back_url: issue_path(issue)
+                    end
               html << link_to('',
-                              link ? dmsf_link_path(link, commit: 'yes', back_url: issue_path(issue)) : dmsf_file_path(id: dmsf_file, commit: 'yes', back_url: issue_path(issue)),
+                              url,
                               data: { confirm: l(:text_are_you_sure) },
                               method: :delete,
                               title: l(:button_delete),
