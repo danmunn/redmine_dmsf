@@ -1,7 +1,6 @@
-Redmine DMSF Plugin 3.2.4
-=========================
+# Redmine DMSF Plugin 3.2.5 devel
 
-[![GitHub CI](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml/badge.svg?branch=master)](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml)
+[![GitHub CI](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml/badge.svg?branch=devel)](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml)
 [![Support Ukraine Badge](https://bit.ly/support-ukraine-now)](https://github.com/support-ukraine/support-ukraine)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
@@ -19,8 +18,7 @@ Redmine is a flexible project management web application, released under the ter
 Further information about the GPL license can be found at
 <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html#SEC1>
 
-Features
---------
+## Features
 
   * Directory structure
   * Document versioning / revision history 
@@ -42,8 +40,7 @@ Features
   * DMS Document revision as a custom field type
   * Compatible with Redmine 5.0.x
 
-Dependencies
-------------
+## Dependencies
   
   * Redmine 5.0 or higher
 
@@ -134,7 +131,7 @@ sudo yum install xapian-core xapian-bindings-ruby libxapian-dev poppler-utils an
 libwps-tools gzip unrtf catdvi djview djview3 uuid uuid-dev xz libemail-outlook-message-perl
 ```
 
-### Inline displaying of office documents (optional)
+## Inline displaying of office documents (optional)
 
 If LibreOffice binary `libreoffice` is present in the server, office documents (.odt, .ods,...) are displayed inline.
 The command must be runable by the web app's user. Test it in advance, e.g:
@@ -147,21 +144,18 @@ The command must be runable by the web app's user. Test it in advance, e.g:
 sudo apt install libreoffice liblibreoffice-java
 ```            
 
-Usage
------
+## Usage
 
 DMSF is designed to act as project module, so it must be checked as an enabled module within the project settings.
 
 Search will now automatically search DMSF content when a Redmine search is performed, additionally a "Documents" and "Folders" check box will be visible, allowing you to search DMSF content exclusively.
 
-Linking DMSF object from Wiki entries (macros)
----------------------------------------------
+## Linking DMSF object from Wiki entries (macros)
 
 You can link DMSF object from Wikis using a macro tag `{{ }}`. List of available macros with their description is 
 available from the wiki's toolbar.
 
-Hooks
------
+## Hooks
 
 You can implement these hooks in your plugin and extend DMSF functionality in certain events.
 
@@ -200,8 +194,7 @@ expected that the file is sent by the hook.
 
 parameters: *file*
 
-Setup / Upgrade
----------------
+## Setup / Upgrade
 
 You can either clone the master branch or download the latest zipped version. Before installing ensure that the Redmine 
 instance is stopped.
@@ -316,8 +309,8 @@ it's necessary to add the following configuration option into your `config/addit
 config.relative_url_root = '/redmine'
 ```
 
-Uninstalling DMSF
------------------
+## Uninstalling DMSF
+
 Before uninstalling the DMSF plugin, please ensure that the Redmine instance is stopped.
 
 1. `cd [redmine-install-dir]`
@@ -326,16 +319,14 @@ Before uninstalling the DMSF plugin, please ensure that the Redmine instance is 
 
 After these steps re-start your instance of Redmine.
 
-Contributing
-------------
+## Contributing
 
 If you've added something, why not share it. Fork the repository (github.com/danmunn/redmine_dmsf), 
 make the changes and send a pull request to the maintainers.
 
 Changes with tests, and full documentation are preferred.
 
-Additional Documentation
-------------------------
+## Additional Documentation
 
 [CHANGELOG.md](CHANGELOG.md) - Project changelog
 
