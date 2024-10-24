@@ -275,7 +275,7 @@ module RedmineDmsf
                                                                                 dmsf_file.project)) || (!link &&
               User.current.allowed_to?(:file_delete, dmsf_file.project)))
               html << link_to('',
-                              link ? dmsf_link_path(link, commit: 'yes') : dmsf_file_path(id: dmsf_file, commit: 'yes'),
+                              link ? dmsf_link_path(link, commit: 'yes', back_url: issue_path(issue)) : dmsf_file_path(id: dmsf_file, commit: 'yes', back_url: issue_path(issue)),
                               data: { confirm: l(:text_are_you_sure) },
                               method: :delete,
                               title: l(:button_delete),

@@ -1,6 +1,14 @@
 Changelog for Redmine DMSF
 ==========================
 
+3.2.4 *2024-10-24*
+------------------
+
+    Multiple file upload fix
+
+* Bug: #1559 - Multiple files upload
+* Bug: #1558 - Deleting of uploaded files
+
 3.2.3 *2024-10-18*
 ------------------
  

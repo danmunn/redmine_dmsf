@@ -151,8 +151,8 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
 
     let attachments = $('#dmsf_attachments_fields');
     let max = ($(inputEl).attr('multiple') == 'multiple') ? 10 : 1
-
-    if (attachments.children().length < max) {
+    
+    if (attachments.children('.attachment').length < max) {
 
         let attachmentId = dmsfAddFile.nextAttachmentId++;
         let fileSpan = $('<span>', { id: 'dmsf_attachments_' + attachmentId, 'class': 'attachment' });
