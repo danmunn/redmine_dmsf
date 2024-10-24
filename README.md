@@ -1,4 +1,4 @@
-Redmine DMSF Plugin 3.2.3
+Redmine DMSF Plugin 3.2.4
 =========================
 
 [![GitHub CI](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml/badge.svg?branch=master)](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml)
