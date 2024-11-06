@@ -18,29 +18,20 @@
  */
 
 function dmsfAddLink(linksSpan, linkId, linkName, title, project, awf) {
-
-    if (linksSpan.children().length < 10) {
-
-        let nextLinkId = dmsfAddLink.nextLinkId++;
-        let linkSpan = $('<span>', { id: 'dmsf_links_attachments_' + nextLinkId, 'class': 'attachment' });
-        let iconDel = $('<a>').attr({href: '#', 'class': 'remove-upload icon-only icon-del'});
-        let inputId = $('<input>', {type: 'hidden', name: 'dmsf_links[' + nextLinkId + ']'}).val(linkId);
-        let inputName = $('<input>', {type: 'text', class: 'filename readonly'}).val(linkName);
-
-        linkSpan.append(inputId);
-        linkSpan.append(inputName);
-        linkSpan.append(iconDel.click(dmsfRemoveFileLbl));
-
-        if(awf) {
-
-            let iconWf = $('<a>').attr({href: "/dmsf-workflows/" + project + "/assign?dmsf_link_id=" + linkId,
-                'class': 'modify-upload icon-only icon-ok', 'data-remote': 'true', 'title': title});
-
-            linkSpan.append(iconWf);
-        }
-
-        linksSpan.append(linkSpan);
+    let nextLinkId = dmsfAddLink.nextLinkId++;
+    let linkSpan = $('<span>', { id: 'dmsf_links_attachments_' + nextLinkId, 'class': 'attachment' });
+    let iconDel = $('<a>').attr({href: '#', 'class': 'remove-upload icon-only icon-del'});
+    let inputId = $('<input>', {type: 'hidden', name: 'dmsf_links[' + nextLinkId + ']'}).val(linkId);
+    let inputName = $('<input>', {type: 'text', class: 'filename readonly'}).val(linkName);
+    linkSpan.append(inputId);
+    linkSpan.append(inputName);
+    linkSpan.append(iconDel.click(dmsfRemoveFileLbl));
+    if(awf) {
+        let iconWf = $('<a>').attr({href: "/dmsf-workflows/" + project + "/assign?dmsf_link_id=" + linkId,
+            'class': 'modify-upload icon-only icon-ok', 'data-remote': 'true', 'title': title});
+        linkSpan.append(iconWf);
     }
+    linksSpan.append(linkSpan);
 }
 
 dmsfAddLink.nextLinkId = 1000;
@@ -148,40 +139,29 @@ function replaceVersion(detailsForm, attachmentId, name, version) {
 }
 
 function dmsfAddFile(inputEl, file, eagerUpload) {
-
     let attachments = $('#dmsf_attachments_fields');
     let max = ($(inputEl).attr('multiple') == 'multiple') ? 10 : 1
-    
     if (attachments.children('.attachment').length < max) {
-
         let attachmentId = dmsfAddFile.nextAttachmentId++;
         let fileSpan = $('<span>', { id: 'dmsf_attachments_' + attachmentId, 'class': 'attachment' });
         let iconDel = $('<a>').attr({href: '#', 'class': 'remove-upload icon-only icon-del'}).toggle(!eagerUpload);
         let fileName = $('<input>', {type: 'text', 'class': 'filename readonly',
             name: 'dmsf_attachments[' + attachmentId + '][filename]', readonly: 'readonly'}).val(file.name);
-
         fileSpan.append(fileName);
-
         if($(inputEl).attr('multiple') == 'multiple') {
-
             fileSpan.append(iconDel.click(dmsfRemoveFileLbl));
-
             if ($(inputEl).data('awf')) {
-
                 let iconWf = $('<a>').attr({
                     href: '/dmsf-workflows/' + $(inputEl).attr(
                         'data-project') + "/assign?attachment_id=" + attachmentId,
                     'class': 'modify-upload icon-only icon-ok',
                     'data-remote': 'true'
                 });
-
                 fileSpan.append(iconWf);
             }
-
             // Details
             let detailsDiv = $('<div>').attr({id: 'dmsf_attachments_details_' + attachmentId});
             let detailsArrow = $('<a>');
-
             detailsArrow.text('[+]');
             detailsArrow.attr({href: "#", 'data-cy': 'toggle__new_revision_from_content--dmsf', title: 'Details'});
             detailsArrow.attr(
@@ -196,7 +176,6 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
             let files = $(inputEl).data('files');
             let locked = isFileLocked(file.name, files);
             let detailsForm = $(inputEl).data(locked ? 'dmsf-file-details-form-locked' : 'dmsf-file-details-form');
-
             // Index
             detailsForm = detailsForm.replace(/\[0\]/g, '[' + attachmentId + ']');
             detailsForm = detailsForm.replace(/_0/g, '_' + attachmentId);
@@ -226,10 +205,8 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
                 detailsForm = replaceVersion(detailsForm, attachmentId, 'minor', version[1]);
                 detailsForm = replaceVersion(detailsForm, attachmentId, 'major', version[0]);
             }
-
             detailsDiv.append(detailsForm);
             detailsDiv.hide();
-
             fileSpan.append(detailsArrow)
             attachments.append(fileSpan);
             attachments.append(detailsDiv);
@@ -239,11 +216,9 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
             $('#dmsf_file_revision_name').val(file.name);
         }
         attachments.append('<br>');
-
         if(eagerUpload) {
             dmsfAjaxUpload(file, attachmentId, fileSpan, inputEl);
         }
-
         return attachmentId;
     }
     return null;
@@ -252,29 +227,24 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
 dmsfAddFile.nextAttachmentId = 1;
 
 function dmsfAjaxUpload(file, attachmentId, fileSpan, inputEl) {
-
     function onLoadstart(e) {
         fileSpan.removeClass('ajax-waiting');
         fileSpan.addClass('ajax-loading');
         $('input:submit', $(this).parents('form')).attr('disabled', 'disabled');
     }
-
     function onProgress(e) {
         if(e.lengthComputable) {
             this.progressbar('value', e.loaded * 100 / e.total);
         }
     }
-
     function actualUpload(file, attachmentId, fileSpan, inputEl) {
-
         dmsfAjaxUpload.uploading++;
-
         dmsfUploadBlob(file, $(inputEl).data('upload-path'), attachmentId, {
             loadstartEventHandler: onLoadstart.bind(progressSpan),
             progressEventHandler: onProgress.bind(progressSpan)
         })
             .done(function(result) {
-                progressSpan.progressbar( 'value', 100 ).remove();
+                progressSpan.progressbar('value', 100).remove();
                 fileSpan.find('input.description, a').css('display', 'inline-block');
             })
             .fail(function(result) {
@@ -289,13 +259,10 @@ function dmsfAjaxUpload(file, attachmentId, fileSpan, inputEl) {
             form.dequeue('upload');
         });
     }
-
     let progressSpan = $('<div>').insertAfter(fileSpan.find('input.filename'));
     progressSpan.progressbar();
     fileSpan.addClass('ajax-waiting');
-
     let maxSyncUpload = $(inputEl).data('max-concurrent-uploads');
-
     if(maxSyncUpload == null || maxSyncUpload <= 0 || dmsfAjaxUpload.uploading < maxSyncUpload)
         actualUpload(file, attachmentId, fileSpan, inputEl);
     else
@@ -305,29 +272,23 @@ function dmsfAjaxUpload(file, attachmentId, fileSpan, inputEl) {
 dmsfAjaxUpload.uploading = 0;
 
 function dmsfRemoveFileLbl() {
-
     let span = $(this).parent('span');
-
     span.next('div').remove();
     span.next('br').remove();
     span.remove();
-
     return false;
 }
 
 function dmsfUploadBlob(blob, uploadUrl, attachmentId, options) {
-
     let actualOptions = $.extend({
         loadstartEventHandler: $.noop,
         progressEventHandler: $.noop
     }, options);
-
     uploadUrl = uploadUrl + '?attachment_id=' + attachmentId;
     if (blob instanceof window.File) {
         uploadUrl += '&filename=' + encodeURIComponent(blob.name);
         uploadUrl += '&content_type=' + encodeURIComponent(blob.type);
     }
-
     return $.ajax(uploadUrl, {
         type: 'POST',
         contentType: 'application/octet-stream',
@@ -349,10 +310,8 @@ function dmsfUploadBlob(blob, uploadUrl, attachmentId, options) {
 }
 
 function dmsfAddInputFiles(inputEl) {
-
     let clearedFileInput = $(inputEl).clone().val('');
     let addFileSpan = $('.dmsf_add_attachment');
-
     if ($.ajaxSettings.xhr().upload && inputEl.files) {
         // upload files using ajax
         dmsfUploadAndAttachFiles(inputEl.files, inputEl);
@@ -367,19 +326,19 @@ function dmsfAddInputFiles(inputEl) {
                 '#dmsf_attachments_' + attachmentId);
         }
     }
-
     clearedFileInput.val('');
     addFileSpan.prepend(clearedFileInput);
 }
 
 function dmsfUploadAndAttachFiles(files, inputEl) {
-
     let maxFileSize = $(inputEl).data('max-file-size');
     let maxFileSizeExceeded = $(inputEl).data('max-file-size-message');
     let sizeExceeded = false;
-
+    let filesLength = $('#dmsf_attachments_fields').children().length + files.length
     $.each(files, function() {
-        if (this.size && maxFileSize != null && this.size > parseInt(maxFileSize)) {sizeExceeded=true;}
+        if (this.size && maxFileSize != null && this.size > parseInt(maxFileSize)) {
+            sizeExceeded = true;
+        }
     });
     if (sizeExceeded) {
         window.alert(maxFileSizeExceeded);
@@ -388,13 +347,14 @@ function dmsfUploadAndAttachFiles(files, inputEl) {
             dmsfAddFile(inputEl, this, true);
         });
     }
+    if (filesLength > ($(inputEl).attr('multiple') == 'multiple' ? 10 : 1)) {
+        window.alert($(inputEl).data('max-number-of-files-message'));
+    }
 }
 
 function dmsfHandleFileDropEvent(e) {
-
     $(this).removeClass('fileover');
     blockEventPropagation(e);
-
     if ($.inArray('Files', e.dataTransfer.types) > -1) {
         dmsfUploadAndAttachFiles(e.dataTransfer.files, $('input:file.file_selector'));
     }
@@ -411,16 +371,13 @@ function dmsfDragOutHandler(e) {
 }
 
 function dmsfSetupFileDrop() {
-
     if (window.File && window.FileList && window.ProgressEvent && window.FormData) {
-
         if($().jquery < '3.0.0') {
             $.event.fixHooks.drop = {props: ['dataTransfer']};
         }
         else{
             $.event.addProp('dataTransfer');
         }
-
         $('form span.dmsf-uploader:not(.dmsffiledroplistner)').has('input:file').each(function () {
 
             $(this).on({
