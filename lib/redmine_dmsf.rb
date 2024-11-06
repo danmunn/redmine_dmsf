@@ -42,10 +42,18 @@ require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/search_patch"
 require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/custom_field_patch"
 
 # A workaround for obsolete 'alias_method' usage in RedmineUp's plugins
-if defined?(EasyExtensions) || RedmineDmsf::Plugin.an_obsolete_plugin_present?
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/notifiable_ru_patch"
+def require_notifiable
+  if defined?(EasyExtensions) || RedmineDmsf::Plugin.an_obsolete_plugin_present?
+    require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/notifiable_ru_patch"
+  else
+    require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/notifiable_patch"
+  end
+end
+
+if defined?(EasyExtensions)
+  Rails.application.config.to_prepare { require_notifiable }
 else
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/notifiable_patch"
+  require_notifiable
 end
 
 if defined?(EasyExtensions)
