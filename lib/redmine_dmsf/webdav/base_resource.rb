@@ -44,7 +44,7 @@ module RedmineDmsf
         @project = nil
         @public_path = "#{options[:root_uri_path]}#{path}"
         @children = nil
-        super path, request, response, options
+        super
       end
 
       def accessor=(klass)
@@ -91,7 +91,8 @@ module RedmineDmsf
       # Generate HTML for Get requests, or Head requests if no_body is true
       def html_display
         @response.body = +''
-        Confict unless collection?
+        return Conflict unless collection?
+
         entities = children.map do |child|
           format(DIR_FILE,
                  uri_encode(request.url_for(child.path)),

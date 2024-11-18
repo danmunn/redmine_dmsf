@@ -648,7 +648,7 @@ class DmsfFile < ApplicationRecord
     def sheet?
       case File.extname(last_revision&.disk_filename)
       when '.ods', # LibreOffice
-        '.xls', '.xlsx', '.xlsm'  # MS Office
+        '.xls', '.xlsx', '.xlsm' # MS Office
         true
       else
         false

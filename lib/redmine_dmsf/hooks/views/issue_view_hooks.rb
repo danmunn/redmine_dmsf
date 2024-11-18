@@ -200,7 +200,7 @@ module RedmineDmsf
         def attachment_rows(links, issue, controller)
           return unless links.any?
 
-          html = +"<tbody><tr><th colspan=\"4\">#{l(:label_dmsf_attachments)} (#{links.count})</th></tr>"
+          html = "<tbody><tr><th colspan=\"4\">#{l(:label_dmsf_attachments)} (#{links.count})</th></tr>"
           links.each do |dmsf_file, link, _created_at|
             html << attachment_row(dmsf_file, link, issue, controller)
           end

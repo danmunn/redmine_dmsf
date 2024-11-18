@@ -58,8 +58,8 @@ module RedmineDmsf
         scheme = auth_header.split(' ', 2).first&.downcase
         if scheme == 'digest'
           Rails.logger.info 'Authentication: digest'
-          auth = Rack::Auth::Digest::Request.new(request.env)
-          params = auth.params
+          digest = Digest.new(request.authorization)
+          params = digest.params
           username = params['username']
           response = params['response']
           cnonce = params['cnonce']

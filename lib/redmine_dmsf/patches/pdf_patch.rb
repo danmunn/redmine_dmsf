@@ -34,7 +34,7 @@ module RedmineDmsf
           file = DmsfFile.find_by(id: Regexp.last_match(1))
           file&.last_revision ? file.last_revision.disk_file : nil
         else
-          super attrname
+          super
         end
       end
     end

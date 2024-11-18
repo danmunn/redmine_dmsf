@@ -39,7 +39,7 @@ module RedmineDmsf
         @saved_dmsf_attachments = []
         return unless dmsf_attachments
 
-        dmsf_attachments.each do |_, dmsf_attachment|
+        dmsf_attachments.each_value do |dmsf_attachment|
           a = Attachment.find_by_token(dmsf_attachment[:token])
           @saved_dmsf_attachments << a if a
         end
@@ -53,7 +53,7 @@ module RedmineDmsf
         @saved_dmsf_links = []
         return unless dmsf_links
 
-        dmsf_links.each do |_, id|
+        dmsf_links.each_value do |id|
           l = DmsfLink.find_by(id: id)
           @saved_dmsf_links << l if l
         end

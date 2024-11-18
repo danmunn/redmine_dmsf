@@ -36,7 +36,7 @@ class DmsfFileRevisionAccessQuery < Query
   ]
 
   def initialize(attributes = nil, *_args)
-    super attributes
+    super(attributes)
     self.sort_criteria = []
     self.filters = {}
   end

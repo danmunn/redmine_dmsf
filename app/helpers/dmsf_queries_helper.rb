@@ -23,11 +23,11 @@ module DmsfQueriesHelper
   include ApplicationHelper
 
   def column_value(column, item, value)
-    return super column, item, value unless item.is_a? DmsfFolder
+    return super unless item.is_a?(DmsfFolder)
 
     case column.name
     when :modified
-      val = super(column, item, value)
+      val = super
       case item.type
       when 'file'
         file = DmsfFile.find_by(id: item.id)
@@ -99,10 +99,10 @@ module DmsfQueriesHelper
         if user
           link_to user.name, user_path(id: value)
         else
-          super column, item, value
+          super
         end
       else
-        super column, item, value
+        super
       end
     when :title
       case item.type
@@ -236,12 +236,12 @@ module DmsfQueriesHelper
           h(DmsfWorkflow.workflow_str(value.to_i))
         end
       else
-        super column, item, value
+        super
       end
     when :comment
       value.present? ? content_tag('div', textilizable(value), class: 'wiki') : ''
     else
-      super column, item, value
+      super
     end
   end
 
@@ -254,7 +254,7 @@ module DmsfQueriesHelper
         text, _names = DmsfWorkflow.workflow_info(object.workflow, object.workflow_id, object.revision_id)
         text
       else
-        super column, object, value
+        super
       end
     when :author
       if value
@@ -262,11 +262,11 @@ module DmsfQueriesHelper
         if user
           user.name
         else
-          super column, object, value
+          super
         end
       end
     else
-      super column, object, value
+      super
     end
   end
 

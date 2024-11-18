@@ -41,7 +41,7 @@ module RedmineDmsf
           revision = DmsfFileRevision.find_by(id: args[2], dmsf_file_id: args[0])
           return "{{dmsf(#{args[0]}, #{args[1]}, #{args[2]})}" unless revision
         end
-        title = (args[1].presence || file.title)
+        title = args[1].presence || file.title
         title.gsub!(/\A"|"\z/, '') # Remove apostrophes
         title.gsub!(/\A'|'\z/, '')
         title = file.title if title.empty?
@@ -70,7 +70,7 @@ module RedmineDmsf
           return "{{dmsff(#{args[0]})}}" unless folder
           raise ::I18n.t(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_folders, folder.project)
 
-          title = (args[1].presence || folder.title)
+          title = args[1].presence || folder.title
           title.gsub!(/\A"|"\z/, '') # Remove leading and trailing apostrophe
           title.gsub!(/\A'|'\z/, '')
           title = folder.title if title.empty?
@@ -89,7 +89,7 @@ module RedmineDmsf
         return "{{dmsfd(#{args[0]})}}" unless file
         raise ::I18n.t(:notice_not_authorized) unless User.current&.allowed_to?(:view_dmsf_files, file.project)
 
-        title = (args[1].presence || file.title)
+        title = args[1].presence || file.title
         title.gsub!(/\A"|"\z/, '') # Remove leading and trailing apostrophe
         title.gsub!(/\A'|'\z/, '')
         link_to h(title), dmsf_file_path(id: file)

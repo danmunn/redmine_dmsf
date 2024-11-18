@@ -53,12 +53,9 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Custom fields
     assert_select 'label', { text: @custom_field.name }
     assert_select 'option', { value: @custom_value.value }
-    # Permissions - The form must contain a check box for each available role
-    roles = []
-    @project1.members.each do |m|
-      roles << m.roles
-    end
-    roles.uniq.each do |r|
+    # Permissions - The form must contain a checkbox for each available role
+    roles = @project1.members.map(&:roles).flatten.uniq
+    roles.each do |r|
       assert_select 'input', { value: r.name }
     end
   end

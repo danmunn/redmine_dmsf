@@ -304,7 +304,7 @@ class DmsfWorkflowsController < ApplicationController
         @dmsf_workflow.save
       end
     end
-    if request.post? && @dmsf_workflow && @dmsf_workflow.valid?
+    if request.post? && @dmsf_workflow&.valid?
       flash[:notice] = l(:notice_successful_create)
       if @project
         redirect_to settings_project_path(@project, tab: 'dmsf_workflow')

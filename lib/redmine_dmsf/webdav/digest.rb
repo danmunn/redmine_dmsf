@@ -2,7 +2,7 @@
 
 # Redmine plugin for Document Management System "Features"
 #
-# Karel Pičman <karel.picman@kontron.com>
+# Daniel Munn <dan.munn@munnster.co.uk>, Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,17 +19,32 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 module RedmineDmsf
-  module Errors
-    # max file size error
-    class DmsfEmailMaxFileSizeError < StandardError
-      include Redmine::I18n
+  module Webdav
+    # Replacement for Rack::Auth::Digest
+    class Digest
+      def initialize(authorization)
+        @authorization = authorization
+      end
 
-      def initialize(message = nil)
-        if message.present?
-          super
-        else
-          super(l(:error_max_email_filesize_exceeded, number: Setting.plugin_redmine_dmsf['dmsf_max_email_filesize']))
+      def params
+        params = {}
+        parts = @authorization.split(' ', 2)
+        split_header_value(parts[1]).each do |param|
+          k, v = param.split('=', 2)
+          params[k] = dequote(v)
         end
+        params
+      end
+
+      private
+
+      def dequote(str)
+        ret = /\A"(.*)"\Z/ =~ str ? ::Regexp.last_match(1) : str.dup
+        ret.gsub(/\\(.)/, '\\1')
+      end
+
+      def split_header_value(str)
+        str.scan(/(\w+=(?:"[^"]+"|[^,]+))/n).pluck(0)
       end
     end
   end

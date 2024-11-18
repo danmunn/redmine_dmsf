@@ -58,7 +58,7 @@ module DmsfHelper
     extension = extension[1, extension.length - 1]
     path = File.join(Redmine::Plugin.public_directory, ['redmine_dmsf', 'images', 'filetypes', "#{extension}.png"])
     cls = if File.exist?(path)
-            +"filetype-#{extension}"
+            "filetype-#{extension}"
           else
             Redmine::MimeType.css_class_of filename
           end

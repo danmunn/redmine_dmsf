@@ -15,7 +15,7 @@ module Dav4rack
     # potentially expensive recursive propfinds
     #
     def initialize(env, options = {})
-      super env
+      super(env)
       @options = { recursive_propfind_allowed: true }.merge options
       self.path_info = expand_path path_info
     end

@@ -187,7 +187,7 @@ class DmsfFileRevision < ApplicationRecord
     filename = path.join(disk_filename)
     if search_if_not_exists && !File.exist?(filename)
       # Let's search for the physical file in source revisions
-      dmsf_file.dmsf_file_revisions.where(['created_at < ?', created_at]).order(created_at: :desc).each do |rev|
+      dmsf_file.dmsf_file_revisions.where(created_at: ...created_at).order(created_at: :desc).each do |rev|
         filename = rev.disk_file
         break if File.exist?(filename)
       end

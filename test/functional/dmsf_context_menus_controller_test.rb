@@ -242,7 +242,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_url_link
     post '/login', params: { username: 'jsmith', password: 'jsmith' }
-    get :'/projects/dmsf/context_menu', params: { id: @url_link5.project.id, ids: ["url-link-#{@url_link5.id}"] }
+    get '/projects/dmsf/context_menu', params: { id: @url_link5.project.id, ids: ["url-link-#{@url_link5.id}"] }
     assert_response :success
     assert_select 'a.icon-del', text: l(:button_delete)
   end

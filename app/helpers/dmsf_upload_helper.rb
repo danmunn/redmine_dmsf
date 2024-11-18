@@ -27,7 +27,7 @@ module DmsfUploadHelper
     files = []
     if committed_files
       failed_uploads = []
-      committed_files.each do |_, committed_file|
+      committed_files.each_value do |committed_file|
         name = committed_file[:name]
         new_revision = DmsfFileRevision.new
         file = DmsfFile.visible.find_file_by_name(project, folder, name)

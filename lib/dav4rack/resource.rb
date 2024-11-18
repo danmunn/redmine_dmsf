@@ -10,7 +10,7 @@ module Dav4rack
     attr_reader :path_status
 
     def initialize(*args)
-      super(*args)
+      super
       @path_status = {}
     end
 
@@ -513,7 +513,7 @@ module Dav4rack
       response = Ox::Element.new(D_RESPONSE)
       response << ox_element(D_HREF, href)
       process_properties.each do |type, properties|
-        propstats response, send("#{type}_properties_with_status", properties)
+        propstats response, send(:"#{type}_properties_with_status", properties)
       end
       response
     end

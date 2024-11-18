@@ -221,7 +221,7 @@ class DmsfWebdavMoveTest < RedmineDmsf::Test::IntegrationTest
               headers: @jsmith.merge!(
                 { destination: "http://www.example.com/dmsf/webdav/#{@project1.identifier}/#{@file9.name}" }
               )
-      assert_response 412
+      assert_response :precondition_failed
     end
   end
 

@@ -442,8 +442,8 @@ module RedmineDmsf
 
           f = create_empty_file
           if f
-            scope = "scope_#{args[:scope] || 'exclusive'}".to_sym
-            type = "type_#{args[:type] || 'write'}".to_sym
+            scope = :"scope_#{args[:scope] || 'exclusive'}"
+            type = :"type_#{args[:type] || 'write'}"
             l = f.lock!(scope, type, 1.week.from_now, args[:owner])
             @response['Lock-Token'] = l.uuid
             return [1.week.to_i, l.uuid]
@@ -487,8 +487,8 @@ module RedmineDmsf
             @response['Lock-Token'] = l.uuid
             return [1.week.to_i, l.uuid]
           end
-          scope = "scope_#{args[:scope] || 'exclusive'}".to_sym
-          type = "type_#{args[:type] || 'write'}".to_sym
+          scope = :"scope_#{args[:scope] || 'exclusive'}"
+          type = :"type_#{args[:type] || 'write'}"
           # l should be the instance of the lock we've just created
           l = entity.lock!(scope, type, 1.week.from_now, args[:owner])
           @response['Lock-Token'] = l.uuid
@@ -504,7 +504,7 @@ module RedmineDmsf
       # Token based unlock (authenticated) will ensure that a correct token is sent, further ensuring
       # ownership of token before permitting unlock
       def unlock(token)
-        return super(token) unless exist?
+        return super unless exist?
 
         if token.blank? || (token == '<(null)>') || User.current.anonymous?
           BadRequest
@@ -675,7 +675,7 @@ module RedmineDmsf
                   doc.timeout "Second-#{lock.expires_at.to_i - Time.current.to_i}"
                 end
                 lock_entity = lock.dmsf_folder || lock.dmsf_file
-                lock_path = +"#{request.scheme}://#{request.host}:#{request.port}#{path_prefix}"
+                lock_path = "#{request.scheme}://#{request.host}:#{request.port}#{path_prefix}"
                 lock_path << "#{Addressable::URI.escape(lock_entity.project.identifier)}/"
                 pth = lock_entity.dmsf_path.map { |e| Addressable::URI.escape(e.respond_to?(:name) ? e.name : e.title) }
                                  .join('/')

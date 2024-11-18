@@ -36,8 +36,7 @@ class DmsfLinkApiTest < RedmineDmsf::Test::IntegrationTest
     name = 'REST API link test'
     # curl -v -H "Content-Type: application/xml" -X POST --data "@link.xml"
     # -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000/dmsf_links.xml
-    payload = %(<?xml version="1.0" encoding="utf-8" ?>
-                <dmsf_link>
+    payload = %(<dmsf_link>
                   <project_id>#{@project1.id}</project_id>
                   <type>link_from</type>
                   <dmsf_file_id></dmsf_file_id>
