@@ -27,8 +27,8 @@ on:
 jobs:
   plugin_tests:
     strategy:
+      fail-fast: false
       matrix:
-        fail-fast: false
         engine: [mysql, postgresql, sqlite]
         include:
           - engine: mysql
