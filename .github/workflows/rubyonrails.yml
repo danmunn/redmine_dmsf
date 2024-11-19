@@ -159,7 +159,7 @@ jobs:
           bundle exec rails server -u webrick -e test -d
           sleep 5
           litmus http://localhost:3000/dmsf/webdav/dmsf_test_project admin admin
-          kill `cat tmp/pids/server.pid`
+          kill $(pgrep -f webrick)
           bundle exec rake redmine:dmsf_webdav_test_off
         env:
           TESTS: "basic copymove props"
