@@ -83,9 +83,5 @@
       <%= sprite_icon('del', l(:link_trash_bin)) %>
   </span>
 <% end %>
-<% lang = current_language.to_s.downcase %>
-<% path = File.join(File.dirname(__FILE__), '..', '..', '..', 'assets', 'help', lang, 'dmsf_help.html') %>
-<% lang = 'en' unless File.exist?(path) %>
-<% url = "/plugin_assets/redmine_dmsf/help/#{lang}/dmsf_help.html" %>
-<%= link_to sprite_icon('help', l(:label_help)), 'dmsf_help.html', class: 'icon icon-help',
-            onclick: "window.open('#{url}','_blank', 'width=640,height=960'); return false;" %>
+<%= link_to sprite_icon('help', l(:label_help)), dmsf_help_path, class: 'icon icon-help',
+            onclick: "window.open('#{dmsf_help_url}','_blank', 'width=640,height=960'); return false;" %>

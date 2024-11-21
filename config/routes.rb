@@ -177,5 +177,9 @@ if Redmine::Plugin.installed? 'redmine_dmsf'
     match '/dmsf',
           to: ->(env) { [405, {}, ["#{env['REQUEST_METHOD']} method is not allowed"]] },
           via: %i[propfind options]
+
+    # Help
+    get '/dmsf/help/wiki_syntax', controller: 'dmsf_help', action: 'show_wiki_syntax', as: 'dmsf_wiki_syntax'
+    get '/dmsf/help/dmsf_help', controller: 'dmsf_help', action: 'show_dmsf_help', as: 'dmsf_help'
   end
 end

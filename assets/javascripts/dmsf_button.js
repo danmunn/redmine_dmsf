@@ -57,8 +57,7 @@ jsToolBar.prototype.dmsfMenu = function(fn){
       let help = a[1];
       let macroItem = $('<div></div>').text(help);
       $('<li></li>').html(macroItem).appendTo(menu).mousedown(function () {
-        window.open('/plugin_assets/redmine_dmsf/help/' + lang + '/wiki_syntax.html',
-            '_blank', 'width=480,height=480');
+        window.open('/dmsf/help/wiki_syntax','_blank', 'width=480,height=480');
       });
     }
   }
