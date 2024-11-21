@@ -125,7 +125,7 @@
         <br>
       <% end %>
       <span class="search_for_watchers">
-        <%= link_to l(:label_user_search_add),
+        <%= link_to sprite_icon('add', l(:label_search_for_watchers), size: 12),
           new_dmsf_folder_permissions_path(project_id: @project, dmsf_folder_id: @folder),
           remote: true,
           method: :get %>

@@ -30,8 +30,9 @@
             obsolete_revision_path(revision),
             data: { confirm: l(:text_are_you_sure) },
             class: 'icon icon-close dmsf-revision-action-button' if file_manipulation_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
-<%= link_to sprite_icon('del', l(:button_delete)),
-            delete_revision_path(revision),
-            data: { confirm: l(:text_are_you_sure) },
-            title: l(:title_delete_revision),
-            class: 'icon icon-del dmsf-revision-action-button' if file_delete_allowed && (file.dmsf_file_revisions.visible.count > 1) %>
+<% if file_delete_allowed && (file.dmsf_file_revisions.visible.count > 1) %>
+  <%= delete_link delete_revision_path(revision),
+                  { data: { confirm: l(:text_are_you_sure) },
+                    title: l(:title_delete_revision),
+                    class: 'icon icon-del dmsf-revision-action-button' } %>
+<% end %>
