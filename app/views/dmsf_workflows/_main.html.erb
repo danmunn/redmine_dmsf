@@ -23,13 +23,13 @@
   <% @workflows = DmsfWorkflow.status(@status).where(project_id: @project.id).sorted %>
   <% @path = settings_project_path(@project, tab: 'dmsf_workflow') %>
   <p>
-    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(project_id: @project&.id), class: 'icon icon-add',
-                data: { cy: "button__new--dmsf-workflow" } %>
+    <%= link_to sprite_icon('add', l(:label_dmsf_workflow_new)), new_dmsf_workflow_path(project_id: @project&.id),
+                class: 'icon icon-add', data: { cy: "button__new--dmsf-workflow" } %>
   </p>
 <% else %>
   <div class="contextual">
-    <%= link_to l(:label_dmsf_workflow_new), new_dmsf_workflow_path(project_id: @project&.id), class: 'icon icon-add',
-                data: { cy: "button__new--dmsf-workflow" } %>
+    <%= link_to sprite_icon('add', l(:label_dmsf_workflow_new)), new_dmsf_workflow_path(project_id: @project&.id),
+                class: 'icon icon-add', data: { cy: "button__new--dmsf-workflow" } %>
   </div>
   <h2><%= l(:label_dmsf_workflow_plural) %></h2>
 <% end %>
@@ -63,11 +63,13 @@
           <td class="buttons">
             <% url = { controller: 'dmsf_workflows', action: 'update', id: workflow.id } %>
             <% if workflow.locked? %>
-            <%= link_to l(:button_unlock), url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_ACTIVE }),
-                  method: :put, class: 'icon icon-unlock' %>
+            <%= link_to sprite_icon('unlock', l(:button_unlock)),
+                        url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_ACTIVE }), method: :put,
+                        class: 'icon icon-unlock' %>
             <% else %>
-              <%= link_to l(:button_lock), url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_LOCKED }),
-                    method: :put, class: 'icon icon-lock' %>
+              <%= link_to sprite_icon('lock', l(:button_lock)),
+                          url.merge(dmsf_workflow: { status: DmsfWorkflow::STATUS_LOCKED }), method: :put,
+                          class: 'icon icon-lock' %>
             <% end %>
             <%= delete_link dmsf_workflow_path(workflow, back_url: @path) %>
           </td>

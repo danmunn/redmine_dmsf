@@ -30,83 +30,83 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     check_headers_dont_exist
   end
 
-  # def test_head_responds_with_authentication
-  #   head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
-  #   assert_response :success
-  #   check_headers_exist
-  #   with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
-  #     head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
-  #     assert_response :not_found
-  #     project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-  #     project1_uri = Addressable::URI.escape(project1_name)
-  #     head "/dmsf/webdav/#{project1_uri}", params: nil, headers: @admin
-  #     assert_response :success
-  #   end
-  # end
-  #
-  # # NOTE: At present we use Rack to serve the file, this makes life easy however it removes the Etag
-  # #   header and invalidates the test - where as a folder listing will always not include a last-modified
-  # #   (but may include an etag, so there is an allowance for a 1 in 2 failure rate on (optionally) required
-  # #   headers)
-  # def test_head_responds_to_file
-  #   head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
-  #   assert_response :success
-  #   check_headers_exist
-  #   with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
-  #     head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
-  #     assert_response :conflict
-  #     project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
-  #     project1_uri = Addressable::URI.escape(project1_name)
-  #     head "/dmsf/webdav/#{project1_uri}/test.txt", params: nil, headers: @admin
-  #     assert_response :success
-  #   end
-  # end
-  #
-  # def test_head_responds_to_file_anonymous_other_user_agent
-  #   head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: { HTTP_USER_AGENT: 'Other' }
-  #   assert_response :unauthorized
-  #   check_headers_dont_exist
-  # end
-  #
-  # def test_head_fails_when_file_not_found
-  #   head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", params: nil, headers: @admin
-  #   assert_response :not_found
-  #   check_headers_dont_exist
-  # end
-  #
-  # def test_head_fails_when_file_not_found_anonymous_other_user_agent
-  #   head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", params: nil, headers: { HTTP_USER_AGENT: 'Other' }
-  #   assert_response :unauthorized
-  #   check_headers_dont_exist
-  # end
-  #
-  # def test_head_fails_when_folder_not_found
-  #   head '/dmsf/webdav/folder_not_here', params: nil, headers: @admin
-  #   assert_response :not_found
-  #   check_headers_dont_exist
-  # end
-  #
-  # def test_head_fails_when_folder_not_found_anonymous_other_user_agent
-  #   head '/dmsf/webdav/folder_not_here', params: nil, headers: { HTTP_USER_AGENT: 'Other' }
-  #   assert_response :unauthorized
-  #   check_headers_dont_exist
-  # end
-  #
-  # def test_head_fails_when_project_is_not_enabled_for_dmsf
-  #   head "/dmsf/webdav/#{@project2.identifier}/test.txt", params: nil, headers: @jsmith
-  #   assert_response :not_found
-  #   check_headers_dont_exist
-  # end
-  #
-  # def test_head_file_in_subproject
-  #   head "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@file12.name}", params: nil, headers: @admin
-  #   assert_response :success
-  # end
-  #
-  # def test_head_folder_in_subproject
-  #   head "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@folder10.title}",
-  #        params: nil,
-  #        headers: @admin
-  #   assert_response :success
-  # end
+  def test_head_responds_with_authentication
+    head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
+    assert_response :success
+    check_headers_exist
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+      head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
+      assert_response :not_found
+      project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      project1_uri = Addressable::URI.escape(project1_name)
+      head "/dmsf/webdav/#{project1_uri}", params: nil, headers: @admin
+      assert_response :success
+    end
+  end
+
+  # NOTE: At present we use Rack to serve the file, this makes life easy however it removes the Etag
+  #   header and invalidates the test - where as a folder listing will always not include a last-modified
+  #   (but may include an etag, so there is an allowance for a 1 in 2 failure rate on (optionally) required
+  #   headers)
+  def test_head_responds_to_file
+    head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
+    assert_response :success
+    check_headers_exist
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+      head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
+      assert_response :conflict
+      project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
+      project1_uri = Addressable::URI.escape(project1_name)
+      head "/dmsf/webdav/#{project1_uri}/test.txt", params: nil, headers: @admin
+      assert_response :success
+    end
+  end
+
+  def test_head_responds_to_file_anonymous_other_user_agent
+    head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: { HTTP_USER_AGENT: 'Other' }
+    assert_response :unauthorized
+    check_headers_dont_exist
+  end
+
+  def test_head_fails_when_file_not_found
+    head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", params: nil, headers: @admin
+    assert_response :not_found
+    check_headers_dont_exist
+  end
+
+  def test_head_fails_when_file_not_found_anonymous_other_user_agent
+    head "/dmsf/webdav/#{@project1.identifier}/not_here.txt", params: nil, headers: { HTTP_USER_AGENT: 'Other' }
+    assert_response :unauthorized
+    check_headers_dont_exist
+  end
+
+  def test_head_fails_when_folder_not_found
+    head '/dmsf/webdav/folder_not_here', params: nil, headers: @admin
+    assert_response :not_found
+    check_headers_dont_exist
+  end
+
+  def test_head_fails_when_folder_not_found_anonymous_other_user_agent
+    head '/dmsf/webdav/folder_not_here', params: nil, headers: { HTTP_USER_AGENT: 'Other' }
+    assert_response :unauthorized
+    check_headers_dont_exist
+  end
+
+  def test_head_fails_when_project_is_not_enabled_for_dmsf
+    head "/dmsf/webdav/#{@project2.identifier}/test.txt", params: nil, headers: @jsmith
+    assert_response :not_found
+    check_headers_dont_exist
+  end
+
+  def test_head_file_in_subproject
+    head "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@file12.name}", params: nil, headers: @admin
+    assert_response :success
+  end
+
+  def test_head_folder_in_subproject
+    head "/dmsf/webdav/#{@project1.identifier}/#{@project5.identifier}/#{@folder10.title}",
+         params: nil,
+         headers: @admin
+    assert_response :success
+  end
 end

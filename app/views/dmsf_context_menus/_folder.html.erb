@@ -20,34 +20,39 @@
 
 <% unless edit %>
   <li>
-    <%= context_menu_link l(:button_edit), edit_dmsf_path(id: dmsf_folder.project, folder_id: dmsf_folder,
-          back_url: back_url), class: 'icon icon-edit', data: { cy: "icon__edit--dmsf_folder_#{dmsf_folder.id}" },
+    <%= context_menu_link sprite_icon('edit', l(:button_edit)),
+                          edit_dmsf_path(id: dmsf_folder.project, folder_id: dmsf_folder, back_url: back_url),
+                          class: 'icon icon-edit', data: { cy: "icon__edit--dmsf_folder_#{dmsf_folder.id}" },
           disabled: !allowed || locked %>
   </li>
 <% end %>
 <% unless dmsf_link %>
   <li>
-    <%= context_menu_link "#{l(:button_copy)}/#{l(:button_move)}", copymove_entries_path(id: project, folder_id: folder,
-      ids: ["folder-#{dmsf_folder.id}"], back_url: back_url), class: 'icon icon-copy',
-      data: { cy: "icon__copy--dmsf_folder_#{dmsf_folder.id}" }, disabled: !allowed || locked %>
+    <%= context_menu_link sprite_icon('copy', "#{l(:button_copy)}/#{l(:button_move)}"),
+                          copymove_entries_path(id: project, folder_id: folder, ids: ["folder-#{dmsf_folder.id}"],
+                                                back_url: back_url), class: 'icon icon-copy',
+                                                data: { cy: "icon__copy--dmsf_folder_#{dmsf_folder.id}" },
+                          disabled: !allowed || locked %>
   </li>
   <li>
-    <%= context_menu_link l(:label_link_to),
+    <%= context_menu_link sprite_icon('link', l(:label_link_to)),
           new_dmsf_link_path(project_id: project.id, dmsf_folder_id: dmsf_folder.id, type: 'link_to',
                              back_url: back_url), class: 'icon dmsf-icon-link',
-          data: { cy: "icon__link_to--dmsf_folder_#{dmsf_folder.id}" } %>
+                             data: { cy: "icon__link_to--dmsf_folder_#{dmsf_folder.id}" } %>
   </li>
 <% end %>
 <% unless edit %>
   <li>
     <% if locked %>
-      <%= context_menu_link l(:button_unlock), unlock_dmsf_path(id: dmsf_folder.project, folder_id: dmsf_folder,
-            back_url: back_url), title: l(:title_locked_by_user, user: dmsf_folder.locked_by),
-            class: 'icon icon-unlock', data: { cy: "icon__unlock--dmsf_folder_#{dmsf_folder.id}" },
+      <%= context_menu_link sprite_icon('unlock', l(:button_unlock)),
+                            unlock_dmsf_path(id: dmsf_folder.project, folder_id: dmsf_folder, back_url: back_url),
+                            title: l(:title_locked_by_user, user: dmsf_folder.locked_by), class: 'icon icon-unlock',
+                            data: { cy: "icon__unlock--dmsf_folder_#{dmsf_folder.id}" },
                             disabled: !allowed || !unlockable %>
     <% else %>
-      <%= context_menu_link l(:button_lock), lock_dmsf_path(id: dmsf_folder.project, folder_id: dmsf_folder,
-            back_url: back_url), class: 'icon icon-lock', data: { cy: "icon__lock--dmsf_folder_#{dmsf_folder.id}" },
+      <%= context_menu_link sprite_icon('lock', l(:button_lock)),
+                            lock_dmsf_path(id: dmsf_folder.project, folder_id: dmsf_folder, back_url: back_url),
+                            class: 'icon icon-lock', data: { cy: "icon__lock--dmsf_folder_#{dmsf_folder.id}" },
                             disabled: !allowed %>
       <% end %>
   </li>
@@ -55,28 +60,34 @@
 <% if notifications %>
   <li>
     <% if dmsf_folder.notification %>
-      <%= context_menu_link l(:label_notifications_off), notify_deactivate_dmsf_path(id: dmsf_folder.project,
-            folder_id: dmsf_folder, back_url: back_url), class: 'icon icon-email',
-                            data: { cy: "icon__email--dmsf_folder_#{dmsf_folder.id}" },
-            disabled: !allowed || locked || !dmsf_folder.notification? %>
+      <%= context_menu_link sprite_icon('email', l(:label_notifications_off)),
+                            notify_deactivate_dmsf_path(id: dmsf_folder.project, folder_id: dmsf_folder,
+                                                        back_url: back_url), class: 'icon icon-email',
+                                                        data: { cy: "icon__email--dmsf_folder_#{dmsf_folder.id}" },
+                            disabled: !allowed || locked || !dmsf_folder.notification? %>
     <% else %>
-      <%= context_menu_link l(:label_notifications_on), notify_activate_dmsf_path(id: dmsf_folder.project,
-            folder_id: dmsf_folder, back_url: back_url), class: 'icon icon-email-add',
-                            data: { cy: "icon__email_add--dmsf_folder_#{dmsf_folder.id}" },
-            disabled: !allowed || locked || dmsf_folder.notification? %>
+      <%= context_menu_link sprite_icon('email-disabled', l(:label_notifications_on)),
+                            notify_activate_dmsf_path(id: dmsf_folder.project, folder_id: dmsf_folder,
+                                                      back_url: back_url), class: 'icon icon-email-add',
+                                                      data: { cy: "icon__email_add--dmsf_folder_#{dmsf_folder.id}" },
+                            disabled: !allowed || locked || dmsf_folder.notification? %>
     <% end %>
   </li>
 <% end %>
 <% unless edit %>
   <li>
-    <%= context_menu_link l(:button_download), entries_operations_dmsf_path(id: project, folder_id: folder,
-      ids: params[:ids], download_entries: true, back_url: back_url), method: :post, class: 'icon icon-download',
+    <%= context_menu_link sprite_icon('download', l(:button_download)),
+                          entries_operations_dmsf_path(id: project, folder_id: folder, ids: params[:ids],
+                                                       download_entries: true, back_url: back_url),
+                          method: :post, class: 'icon icon-download',
                           data: { cy: "icon__download--dmsf_folder_#{dmsf_folder.id}" },
       id: 'dmsf-cm-download', disabled: false %>
   </li>
   <li>
-    <%= context_menu_link l(:field_mail), entries_operations_dmsf_path(id: dmsf_folder.project, folder_id: folder,
-      ids: params[:ids], email_entries: true, back_url: back_url), method: :post, class: 'icon icon-email',
+    <%= context_menu_link sprite_icon('email', l(:field_mail)),
+                          entries_operations_dmsf_path(id: dmsf_folder.project, folder_id: folder, ids: params[:ids],
+                                                       email_entries: true, back_url: back_url),
+                          method: :post, class: 'icon icon-email',
                           data: { cy: "icon__email--dmsf_folder_#{dmsf_folder.id}" },
       disabled: !email_allowed %>
   </li>
@@ -85,7 +96,7 @@
   <%= render partial: 'dmsf_context_menus/watch', locals: { object: dmsf_folder } %>
 </li>
 <li>
-  <%= context_menu_link l(:button_delete),
+  <%= context_menu_link sprite_icon('del', l(:button_delete)),
     dmsf_link ? dmsf_link_path(id: dmsf_link, folder_id: folder, back_url: back_url) :
     delete_dmsf_path(id: dmsf_folder.project, folder_id: dmsf_folder, parent_id: folder, back_url: back_url),
     data: { confirm: "#{l(:text_are_you_sure)}\n#{l(:text_not_empty) unless dmsf_folder.empty?}",

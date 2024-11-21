@@ -150,8 +150,7 @@ div[id*="revision_access_"] {
 }
 
 /* Command icons */
-.dmsf-icon-link { background-image: url("../../../images/link.png"); }
-.icon-approvalworkflows { background-image: url("../../../images/ticket_go.png"); }
+.dmsf-icon-link:not(:has(svg)) { background-image: url("../../../images/link.png"); }
 
 /* File types */
 .dmsf-icon-file{

@@ -19,20 +19,19 @@
 %>
 
 <li>
-  <%= context_menu_link l(:button_edit), dmsf_file_path(id: dmsf_file, back_url: back_url), class: 'icon icon-edit',
-                        data: { cy: "icon__edit--dmsf_file_#{dmsf_file.id}" },
+  <%= context_menu_link sprite_icon('edit', l(:button_edit)), dmsf_file_path(id: dmsf_file, back_url: back_url),
+                        class: 'icon icon-edit', data: { cy: "icon__edit--dmsf_file_#{dmsf_file.id}" },
                         disabled: !allowed || (locked && !unlockable) %>
-
 </li>
 <% unless dmsf_link %>
   <li>
-    <%= context_menu_link "#{l(:button_copy)}/#{l(:button_move)}",
+    <%= context_menu_link sprite_icon('copy', "#{l(:button_copy)}/#{l(:button_move)}"),
                           copymove_entries_path(id: project, folder_id: folder, ids: ["file-#{dmsf_file.id}"],
                                                 back_url: back_url), title: l(:title_copy), class: 'icon icon-copy',
                           data: { cy: "icon__copy--dmsf_file_#{dmsf_file.id}" } %>
   </li>
   <li>
-    <%= link_to l(:label_link_to),
+    <%= link_to sprite_icon('link', l(:label_link_to)),
                 new_dmsf_link_path(project_id: dmsf_file.project.id, dmsf_folder_id: dmsf_file.dmsf_folder,
                                  dmsf_file_id: dmsf_file.id, type: 'link_to', back_url: back_url),
                 title: l(:title_create_link), class: 'icon dmsf-icon-link',
@@ -41,24 +40,27 @@
 <% end %>
 <li>
     <% if locked %>
-      <%= context_menu_link l(:button_unlock), unlock_dmsf_files_path(id: dmsf_file, back_url: back_url),
+      <%= context_menu_link sprite_icon('unlock', l(:button_unlock)), unlock_dmsf_files_path(id: dmsf_file, back_url: back_url),
             class: 'icon icon-unlock', data: { cy: "icon__unlock--dmsf_file_#{dmsf_file.id}" },
             title: l(:title_locked_by_user, user: dmsf_file.locked_by), disabled: !unlockable %>
     <% else %>
-      <%= context_menu_link l(:button_lock), lock_dmsf_files_path(id: dmsf_file, back_url: back_url),
+      <%= context_menu_link sprite_icon('lock', l(:button_lock)), lock_dmsf_files_path(id: dmsf_file, back_url: back_url),
             class: 'icon icon-lock', data: { cy: "icon__lock--dmsf_file_#{dmsf_file.id}" }, disabled: !allowed %>
     <% end %>
 </li>
 <% if notifications %>
   <li>
     <% if dmsf_file.notification %>
-        <%= context_menu_link l(:label_notifications_off), notify_deactivate_dmsf_files_path(id: dmsf_file,
-              back_url: back_url), class: 'icon icon-email', data: { cy: "icon__email--dmsf_file_#{dmsf_file.id}" },
-              disabled: !allowed || locked %>
+        <%= context_menu_link sprite_icon('email', l(:label_notifications_off)),
+                              notify_deactivate_dmsf_files_path(id: dmsf_file, back_url: back_url),
+                              class: 'icon icon-email', data: { cy: "icon__email--dmsf_file_#{dmsf_file.id}" },
+                              disabled: !allowed || locked %>
     <% else %>
-        <%= context_menu_link l(:label_notifications_on), notify_activate_dmsf_files_path(id: dmsf_file,
-              back_url: back_url), class: 'icon icon-email-add',
-              data: { cy: "icon__email_add--dmsf_file_#{dmsf_file.id}" }, disabled: !allowed || locked %>
+        <%= context_menu_link sprite_icon('email-disabled', l(:label_notifications_on)),
+                              notify_activate_dmsf_files_path(id: dmsf_file, back_url: back_url),
+                              class: 'icon icon-email-add',
+                              data: { cy: "icon__email_add--dmsf_file_#{dmsf_file.id}" },
+                              disabled: !allowed || locked %>
     <% end %>
   </li>
 <% end %>
@@ -69,13 +71,16 @@
 <li>
   <% member = Member.find_by(user_id: User.current.id, project_id: dmsf_file.project.id) %>
   <% filename = dmsf_file.last_revision&.formatted_name(member) %>
-  <%= context_menu_link l(:button_download), static_dmsf_file_path(dmsf_file, filename: filename),
+  <%= context_menu_link sprite_icon('download', l(:button_download)),
+                        static_dmsf_file_path(dmsf_file, filename: filename),
                         class: 'icon icon-download', data: { cy: "icon__download--dmsf_file_#{dmsf_file.id}" },
                         disabled: false %>
 </li>
 <li>
-<%= context_menu_link l(:field_mail), entries_operations_dmsf_path(id: project, folder_id: folder,
-   ids: params[:ids], email_entries: true, back_url: back_url), method: :post, class: 'icon icon-email',
+<%= context_menu_link sprite_icon('email', l(:field_mail)),
+                      entries_operations_dmsf_path(id: project, folder_id: folder, ids: params[:ids],
+                                                   email_entries: true, back_url: back_url),
+                      method: :post, class: 'icon icon-email',
                       data: { cy: "icon__email--dmsf_file_#{dmsf_file.id}" }, disabled: !email_allowed %>
 </li>
 <% if Setting.plugin_redmine_dmsf['dmsf_webdav'].present? %>
@@ -87,9 +92,10 @@
       <% end %>
       <% url << dmsf_file.name %>
     <% end %>
-    <%= context_menu_link l(:button_edit_content), url, class: "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
-          disabled: url.blank? || (locked && !unlockable) ||
-            (Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] != 'WEBDAV_READ_WRITE') %>
+    <%= context_menu_link sprite_icon('edit', l(:button_edit_content)), url,
+                          class: "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
+                          disabled: url.blank? || (locked && !unlockable) ||
+                            (Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] != 'WEBDAV_READ_WRITE') %>
   </li>
 <% end %>
 <li>
@@ -97,12 +103,12 @@
 </li>
 <% if @preview %>
   <li>
-    <%= context_menu_link l(:label_preview), view_dmsf_file_path(dmsf_file, preview: true),
-                          class: 'icon icon-magnifier', disabled: false %>
+    <%= context_menu_link sprite_icon('zoom-in', l(:label_preview)), view_dmsf_file_path(dmsf_file, preview: true),
+                          class: 'icon icon-zoom-in', disabled: false %>
   </li>
 <% end %>
 <li>
-  <%= context_menu_link l(:button_delete),
+  <%= context_menu_link sprite_icon('del', l(:button_delete)),
         dmsf_link ? dmsf_link_path(id: dmsf_link, folder_id: folder, back_url: back_url) : dmsf_file_path(id: dmsf_file,
           folder_id: folder, back_url: back_url),
         method: :delete, class: 'icon icon-del', data: { confirm: l(:text_are_you_sure),

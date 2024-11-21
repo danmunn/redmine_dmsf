@@ -23,15 +23,13 @@
   <div class="contextual">
     <% unless @locked_for_user || @system_folder %>
       <% if @file_manipulation_allowed %>
-        <%= link_to l(:label_document_new), multi_dmsf_upload_path(id: @project, folder_id: @folder),
-                    class: 'icon icon-add',
+        <%= link_to sprite_icon('add', l(:label_document_new)),
+                    multi_dmsf_upload_path(id: @project, folder_id: @folder), class: 'icon icon-add',
                     data: { cy: 'button__new-file--dmsf' } %>
       <% end %>
       <% if @folder_manipulation_allowed %>
-        <%= link_to l(:link_create_folder),
-                    new_dmsf_path(id: @project, parent_id: @folder),
-                    class: 'icon icon-add',
-                    data: { cy: 'button__create-folder--dmsf' } %>
+        <%= link_to sprite_icon('add', l(:link_create_folder)), new_dmsf_path(id: @project, parent_id: @folder),
+                    class: 'icon icon-add', data: { cy: 'button__create-folder--dmsf' } %>
       <% end %>
     <% end %>
     <% if defined?(EasyExtensions) %>

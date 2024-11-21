@@ -27,6 +27,7 @@ def dmsf_init
   Redmine::MenuManager.map :admin_menu do |menu|
     menu.push :dmsf_approvalworkflows, :dmsf_workflows_path,
               caption: :label_dmsf_workflow_plural,
+              icon: 'workflows',
               html: { class: 'icon icon-workflows' },
               if: proc { |_| User.current.admin? }
   end

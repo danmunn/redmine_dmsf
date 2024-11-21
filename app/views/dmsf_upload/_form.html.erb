@@ -113,7 +113,7 @@
 </span>
 <% if defined?(container) && container %>
     <span class="dmsf-add-link">
-        <%= link_to l(:label_link_from),
+        <%= link_to sprite_icon('add', l(:label_link_from)),
                     new_dmsf_link_path(project_id: project.id, type: 'link_from', container: container.class.name),
                     title: l(:title_create_link), class: 'icon icon-add file_selector', remote: true %>
       </span>
