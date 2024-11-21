@@ -20,7 +20,8 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class HelpControllerTest < RedmineDmsf::Test::TestCase
+# Help controller
+class DmsfHelpControllerTest < RedmineDmsf::Test::TestCase
   fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
 
   def test_wiki_syntax

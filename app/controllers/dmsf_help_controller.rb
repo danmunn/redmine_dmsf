@@ -18,6 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# Help controller
 class DmsfHelpController < ApplicationController
   def show_wiki_syntax
     lang = current_language.to_s
