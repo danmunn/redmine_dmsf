@@ -92,8 +92,8 @@
       <% end %>
       <% url << dmsf_file.name %>
     <% end %>
-    <%= context_menu_link sprite_icon('edit', l(:button_edit_content)), url,
-                          class: "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
+    <% icon_name = icon_for_mime_type(Redmine::MimeType.css_class_of(dmsf_file.name)) %>
+    <%= context_menu_link sprite_icon(icon_name, l(:button_edit_content)), url, class: 'icon icon-file',
                           disabled: url.blank? || (locked && !unlockable) ||
                             (Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] != 'WEBDAV_READ_WRITE') %>
   </li>

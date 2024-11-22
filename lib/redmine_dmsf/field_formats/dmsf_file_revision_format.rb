@@ -84,12 +84,13 @@ module RedmineDmsf
         member = Member.find_by(user_id: User.current.id, project_id: revision.dmsf_file.project.id)
         filename = revision.formatted_name(member)
         file_view_url = view.static_dmsf_file_path(revision.dmsf_file, download: revision, filename: filename)
+        icon_name = icon_for_mime_type(Redmine::MimeType.css_class_of(revision.dmsf_file.name))
         view.link_to(
-          h(filename),
+          sprite_icon(icon_name, h(filename)),
           file_view_url,
           target: '_blank',
           rel: 'noopener',
-          class: "icon icon-file #{DmsfHelper.filetype_css(revision.dmsf_file.name)}",
+          class: 'icon icon-file',
           title: h(revision.try(:tooltip)),
           'data-downloadurl' => "#{revision.detect_content_type}:#{h(revision.dmsf_file.name)}:#{file_view_url}"
         )

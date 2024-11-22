@@ -211,16 +211,17 @@ module RedmineDmsf
         def attachment_row(dmsf_file, link, issue, controller)
           html = link ? +'<tr class="dmsf-gray">' : +'<tr>'
           # Checkbox
-          show_checkboxes = true # options[:show_checkboxes].nil? ? true : options[:show_checkboxes]
-          html << '<td></td>' if show_checkboxes
+          html << '<td></td>'
           file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: dmsf_file })
           # Title, size
           html << '<td>'
           data = "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}"
-          html << link_to(h(dmsf_file.title), file_view_url,
+          icon_name = icon_for_mime_type(Redmine::MimeType.css_class_of(item.filename))
+          html << link_to(sprite_icon(icon_name, h(dmsf_file.title)),
+                          file_view_url,
                           target: '_blank',
                           rel: 'noopener',
-                          class: "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
+                          class: 'icon icon-file',
                           title: h(dmsf_file.last_revision.try(:tooltip)),
                           'data-downloadurl' => data)
           html << "<span class=\"size\">(#{number_to_human_size(dmsf_file.last_revision.size)})</span>"
@@ -235,39 +236,41 @@ module RedmineDmsf
           html << '<td class="fast-icons easy-query-additional-ending-buttons hide-when-print">'
           # Details
           html << if User.current.allowed_to? :file_manipulation, dmsf_file.project
-                    link_to '', dmsf_file_path(id: dmsf_file),
+                    link_to sprite_icon('edit', ''), dmsf_file_path(id: dmsf_file),
                             title: l(:link_details, title: h(dmsf_file.last_revision.title)),
                             class: 'icon icon-edit'
                   else
                     '<span class="icon"></span>'
                   end
           # Email
-          html << link_to('', entries_operations_dmsf_path(id: dmsf_file.project,
-                                                           email_entries: 'email',
-                                                           files: [dmsf_file.id]),
-                          method: :post,
-                          title: l(:heading_send_documents_by_email), class: 'icon icon-email-disabled')
+          html << link_to(sprite_icon('email', ''),
+                          entries_operations_dmsf_path(id: dmsf_file.project, email_entries: 'email',
+                                                       files: [dmsf_file.id]),
+                          method: :post, title: l(:heading_send_documents_by_email), class: 'icon icon-email-disabled')
           # Lock
           html << if !dmsf_file.locked?
-                    link_to '', lock_dmsf_files_path(id: dmsf_file),
-                            title: l(:title_lock_file),
-                            class: 'icon icon-lock'
+                    link_to sprite_icon('lock', ''), lock_dmsf_files_path(id: dmsf_file),
+                            title: l(:title_lock_file), class: 'icon icon-lock'
                   elsif dmsf_file.unlockable? && (!dmsf_file.locked_for_user? ||
                     User.current.allowed_to?(:force_file_unlock, dmsf_file.project))
-                    link_to '', unlock_dmsf_files_path(id: dmsf_file),
+                    link_to sprite_icon('unlock', ''), unlock_dmsf_files_path(id: dmsf_file),
                             title: dmsf_file.locked_title, class: 'icon icon-unlock'
                   else
-                    "<span class=\"icon icon-unlock\" title=\"#{dmsf_file.locked_title}\"></span>"
+                    content_tag 'span',
+                                sprite_icon('unlock', ''),
+                                title: dmsf_file.locked_title,
+                                class: 'icon icon-unlock'
                   end
           if dmsf_file.locked?
             html << ('<span class="icon"></span>' * 2)
           else
             # Notifications
             html << if dmsf_file.notification
-                      link_to '', notify_deactivate_dmsf_files_path(id: dmsf_file),
+                      link_to sprite_icon('email', ''), notify_deactivate_dmsf_files_path(id: dmsf_file),
                               title: l(:title_notifications_active_deactivate), class: 'icon icon-email'
                     else
-                      link_to '', notify_activate_dmsf_files_path(id: dmsf_file),
+                      link_to sprite_icon('email-disabled', ''),
+                              notify_activate_dmsf_files_path(id: dmsf_file),
                               title: l(:title_notifications_not_active_activate), class: 'icon icon-email-add'
                     end
             # Delete
@@ -279,12 +282,7 @@ module RedmineDmsf
                     else
                       dmsf_file_path id: dmsf_file, commit: 'yes', back_url: issue_path(issue)
                     end
-              html << link_to('',
-                              url,
-                              data: { confirm: l(:text_are_you_sure) },
-                              method: :delete,
-                              title: l(:button_delete),
-                              class: 'icon icon-del')
+              html << delete_link(url)
             end
           end
           # Approval workflow

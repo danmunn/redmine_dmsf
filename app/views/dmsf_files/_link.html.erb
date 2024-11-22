@@ -22,11 +22,12 @@
 
 <td class="<%= cls %>">
   <% file_view_url = url_for({ controller: :dmsf_files, action: 'view', id: dmsf_file }) %>
-  <%= link_to h(link ? link.name : dmsf_file.title),
+  <% icon_name = icon_for_mime_type(Redmine::MimeType.css_class_of(dmsf_file.name)) %>
+  <%= link_to sprite_icon(icon_name, h(link ? link.name : dmsf_file.title)),
     file_view_url,
     target: '_blank',
     rel: 'noopener',
-    class: "icon icon-file #{DmsfHelper.filetype_css(dmsf_file.name)}",
+    class: 'icon icon-file',
     title: h(dmsf_file.last_revision.try(:tooltip)),
     'data-downloadurl' => "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}" %>
 </td>
@@ -47,38 +48,37 @@
   <span class="dmsf_upload_select">
     <% # Details %>
     <% if User.current.allowed_to? :file_manipulation, dmsf_file.project %>
-      <%= link_to '', dmsf_file_path(id: dmsf_file, back_url: issue_path(@issue)),
+      <%= link_to sprite_icon('edit', ''), dmsf_file_path(id: dmsf_file, back_url: issue_path(@issue)),
         title: l(:link_details, title: h(dmsf_file.last_revision.title)),
         class: 'icon-only icon-edit' %>
     <% else %>
       <span class="icon-only"></span>
     <% end %>
     <% # Email %>
-    <%= link_to '', entries_operations_dmsf_path(id: dmsf_file.project_id, email_entries: 'email',
-      ids: ["file-#{dmsf_file.id}"], back_url: issue_path(@issue)), method: :post, title: l(:heading_send_documents_by_email),
-      class: 'icon-only icon-email-disabled' %>
+    <%= link_to sprite_icon('email', ''), entries_operations_dmsf_path(id: dmsf_file.project_id, email_entries: 'email',
+                                                                       ids: ["file-#{dmsf_file.id}"],
+                                                                       back_url: issue_path(@issue)),
+                method: :post, title: l(:heading_send_documents_by_email), class: 'icon-only icon-email-disabled' %>
     <% # Lock %>
     <% if !dmsf_file.locked? %>
-      <%= link_to '', lock_dmsf_files_path(id: dmsf_file, back_url: issue_path(@issue)),
-                  title: l(:title_lock_file),
-                  class: 'icon-only icon-lock' %>
+      <%= link_to sprite_icon('lock', ''), lock_dmsf_files_path(id: dmsf_file, back_url: issue_path(@issue)),
+                  title: l(:title_lock_file), class: 'icon-only icon-lock' %>
     <% elsif dmsf_file.unlockable? && (!dmsf_file.locked_for_user? || User.current.allowed_to?(:force_file_unlock, dmsf_file.project)) %>
-      <%= link_to '', unlock_dmsf_files_path(id: dmsf_file, back_url: issue_path(@issue)),
-                  title: dmsf_file.locked_title,
-                  class: 'icon-only icon-unlock' %>
+      <%= link_to sprite_icon('unlock', ''), unlock_dmsf_files_path(id: dmsf_file, back_url: issue_path(@issue)),
+                  title: dmsf_file.locked_title, class: 'icon-only icon-unlock' %>
     <% else %>
-      <span class="icon-only icon-unlock" title="<%= dmsf_file.locked_title %>"></span>
+      <%= content_tag('span', sprite_icon('unlock', ''), title: dmsf_file.locked_title) %>
     <% end %>
     <% if !dmsf_file.locked? %>
       <% # Notifications %>
       <% if dmsf_file.notification %>
-        <%= link_to '', notify_deactivate_dmsf_files_path(id: dmsf_file, back_url: issue_path(@issue)),
-                    title: l(:title_notifications_active_deactivate),
-                    class: 'icon-only icon-email' %>
+        <%= link_to sprite_icon('email', ''), notify_deactivate_dmsf_files_path(id: dmsf_file,
+                                                                                back_url: issue_path(@issue)),
+                    title: l(:title_notifications_active_deactivate), class: 'icon-only icon-email' %>
       <% else %>
-        <%= link_to '', notify_activate_dmsf_files_path(id: dmsf_file, back_url: issue_path(@issue)),
-                    title: l(:title_notifications_not_active_activate),
-                    class: 'icon-only icon-email-add' %>
+        <%= link_to sprite_icon('email-disabled', ''), notify_activate_dmsf_files_path(id: dmsf_file,
+                                                                                       back_url: issue_path(@issue)),
+                    title: l(:title_notifications_not_active_activate), class: 'icon-only icon-email-add' %>
       <% end %>
     <% else %>
       <span class="icon-only"></span>
@@ -88,12 +88,12 @@
     <% if @issue.attributes_editable? &&
        ((link && User.current.allowed_to?(:file_manipulation, dmsf_file.project)) ||
          (!link && User.current.allowed_to?(:file_delete, dmsf_file.project))) %>
-      <%= link_to '',
-                  link ? dmsf_link_path(link, commit: 'yes', back_url: issue_path(@issue)) : dmsf_file_path(id: dmsf_file, commit: 'yes', back_url: issue_path(@issue)),
-                  data: { confirm: l(:text_are_you_sure) },
-                  method: :delete,
-                  title: l(:button_delete),
-                  class: 'icon-only icon-del' %>
+      <% url = if link
+                 dmsf_link_path(link, commit: 'yes', back_url: issue_path(@issue))
+               else
+                 dmsf_file_path(id: dmsf_file, commit: 'yes', back_url: issue_path(@issue))
+               end %>
+      <%= delete_link url %>
     <% end %>
     <% # Approval workflow %>
     <% wf = DmsfWorkflow.find_by(id: dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id %>

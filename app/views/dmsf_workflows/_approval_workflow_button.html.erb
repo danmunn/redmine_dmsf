@@ -26,7 +26,7 @@
             <% assignments = wf.next_assignments(file.last_revision.id) %>
             <% index = assignments.find_index{|assignment| assignment.user_id == User.current.id} if assignments %>
             <% if assignments && index %>
-                <%= link_to '',
+                <%= link_to sprite_icon('checked', ''),
                             action_dmsf_workflow_path(project_id: project.id, id: wf.id,
                                                       dmsf_workflow_step_assignment_id: assignments[index].id,
                                                       dmsf_file_revision_id: file.last_revision.id,
@@ -42,7 +42,7 @@
         <% end %>
     <% when DmsfWorkflow::STATE_ASSIGNED %>
         <% if User.current && (file.last_revision.dmsf_workflow_assigned_by_user == User.current) && wf %>
-            <%= link_to '',
+            <%= link_to sprite_icon('checked', ''),
                         start_dmsf_workflow_path(id: file.last_revision.dmsf_workflow_id,
                                                  dmsf_file_revision_id: file.last_revision.id,
                                                  back_url: back_url),
@@ -55,7 +55,7 @@
         <span class="icon-only"></span>
     <% else %>
         <% if workflows_available %>
-          <%= link_to '',
+          <%= link_to sprite_icon('checked', ''),
             dmsf_link_id ?
               assign_dmsf_workflow_path(id: project.id, project_id: project.id, dmsf_link_id: dmsf_link_id,
                                         back_url: back_url) :
