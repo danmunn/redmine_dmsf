@@ -416,6 +416,8 @@ class DmsfFileRevision < ApplicationRecord
     end
     # ActionParameters => Hash
     h = DmsfFileRevision.params_to_hash(values)
+    # From a REST API call we don't get "20" => "Project" but "CustomFieldValue20" => "Project"
+    h.transform_keys! { |key| key.to_i.zero? && key.to_s.match(/(\d+)/) ? :Regexp.last_match(0) : key }
     # Super
     self.custom_field_values = h
     # For a new revision we need to duplicate attachments
