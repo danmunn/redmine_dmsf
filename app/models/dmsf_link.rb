@@ -76,7 +76,7 @@ class DmsfLink < ApplicationRecord
 
   def self.find_link_by_file_name(project, folder, filename)
     links = DmsfLink.where(project_id: project.id,
-                           dmsf_folder_id: folder ? folder.id : nil,
+                           dmsf_folder_id: folder&.id,
                            target_type: DmsfFile.model_name.to_s).visible.all
     links.each do |link|
       return link if link&.target_file&.name == filename

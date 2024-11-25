@@ -114,7 +114,6 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     # curl -v -H "Content-Type: application/xml" -X POST --data "@entries.xml" -H "X-Redmine-API-Key: ${USER_API_KEY}" \
     # "http://localhost:3000/projects/3342/dmsf/entries.xml?ids[]=file-254566&copy_entries=true"
     payload = %(
-      <?xml version="1.0" encoding="utf-8" ?>
       <dmsf_entries>
         <target_project_id>#{@project1.id}</target_project_id>
         <target_folder_id>#{@folder1.id}</target_folder_id>
@@ -132,7 +131,6 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     # curl -v -H "Content-Type: application/xml" -X POST --data "@entries.xml" -H "X-Redmine-API-Key: ${USER_API_KEY}" \
     # "http://localhost:3000/projects/3342/dmsf/entries.xml?ids[]=file-254566&move_entries=true"
     payload = %(
-      <?xml version="1.0" encoding="utf-8" ?>
       <dmsf_entries>
         <target_project_id>#{@project1.id}</target_project_id>
         <target_folder_id>#{@folder1.id}</target_folder_id>

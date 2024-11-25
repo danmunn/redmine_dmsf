@@ -18,19 +18,21 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<%= link_to_function l(:title_download_entries),
+<%= link_to_function sprite_icon('group', l(:title_download_entries)),
                      "$('#revision_access_#{revision.id}').toggle(); $('.drdn.expanded').removeClass('expanded');",
                      class: 'icon icon-group dmsf-revision-action-button' %>
 <% member = Member.find_by(user_id: User.current.id, project_id: revision.dmsf_file.project.id) %>
 <% filename = revision.formatted_name(member) %>
-<%= link_to l(:button_download), static_dmsf_file_path(file, download: revision, filename: filename),
+<%= link_to sprite_icon('download', l(:button_download)),
+            static_dmsf_file_path(file, download: revision, filename: filename),
             class: 'icon icon-download', disabled: false %>
-<%= link_to l(:title_obsolete_revision),
+<%= link_to sprite_icon('close', l(:title_obsolete_revision)),
             obsolete_revision_path(revision),
             data: { confirm: l(:text_are_you_sure) },
             class: 'icon icon-close dmsf-revision-action-button' if file_manipulation_allowed && (revision.workflow == DmsfWorkflow::STATE_APPROVED) %>
-<%= link_to l(:button_delete),
-            delete_revision_path(revision),
-            data: { confirm: l(:text_are_you_sure) },
-            title: l(:title_delete_revision),
-            class: 'icon icon-del dmsf-revision-action-button' if file_delete_allowed && (file.dmsf_file_revisions.visible.count > 1) %>
+<% if file_delete_allowed && (file.dmsf_file_revisions.visible.count > 1) %>
+  <%= delete_link delete_revision_path(revision),
+                  { data: { confirm: l(:text_are_you_sure) },
+                    title: l(:title_delete_revision),
+                    class: 'icon icon-del dmsf-revision-action-button' } %>
+<% end %>

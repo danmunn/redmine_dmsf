@@ -54,7 +54,7 @@ if Redmine::Plugin.installed? 'redmine_dmsf'
     post '/projects/dmsf/append_email', to: 'dmsf#append_email', as: 'append_email_dmsf'
     get '/projects/dmsf/autocomplete_for_user', to: 'dmsf#autocomplete_for_user'
     put '/projects/:id/dmsf', controller: 'dmsf', action: 'drop'
-    get '/projects/:id/dmsf/empty_trash', to: 'dmsf#empty_trash', as: 'empty_trash'
+    delete '/projects/:id/dmsf/empty_trash', to: 'dmsf#empty_trash', as: 'empty_trash'
     get '/dmsf', to: 'dmsf#index', as: 'dmsf_index'
     get '/dmsf/digest', to: 'dmsf#digest', as: 'dmsf_digest'
     post '/dmsf/digest', to: 'dmsf#reset_digest', as: 'dmsf_reset_digest'
@@ -114,7 +114,7 @@ if Redmine::Plugin.installed? 'redmine_dmsf'
     get '/dmsf/files/:id/unlock', controller: 'dmsf_files', action: 'unlock', as: 'unlock_dmsf_files'
     post '/dmsf/files/:id/delete', controller: 'dmsf_files', action: 'delete', as: 'delete_dmsf_files'
     post '/dmsf/files/:id/revision/create', controller: 'dmsf_files', action: 'create_revision'
-    get '/dmsf/files/:id/revision/delete', controller: 'dmsf_files', action: 'delete_revision', as: 'delete_revision'
+    delete '/dmsf/files/:id/revision/delete', controller: 'dmsf_files', action: 'delete_revision', as: 'delete_revision'
     get '/dmsf/files/:id/revision/obsolete', controller: 'dmsf_files',
                                              action: 'obsolete_revision',
                                              as: 'obsolete_revision'
@@ -177,5 +177,9 @@ if Redmine::Plugin.installed? 'redmine_dmsf'
     match '/dmsf',
           to: ->(env) { [405, {}, ["#{env['REQUEST_METHOD']} method is not allowed"]] },
           via: %i[propfind options]
+
+    # Help
+    get '/dmsf/help/wiki_syntax', controller: 'dmsf_help', action: 'show_wiki_syntax', as: 'dmsf_wiki_syntax'
+    get '/dmsf/help/dmsf_help', controller: 'dmsf_help', action: 'show_dmsf_help', as: 'dmsf_help'
   end
 end

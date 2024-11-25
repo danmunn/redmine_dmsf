@@ -27,6 +27,7 @@ def dmsf_init
   Redmine::MenuManager.map :admin_menu do |menu|
     menu.push :dmsf_approvalworkflows, :dmsf_workflows_path,
               caption: :label_dmsf_workflow_plural,
+              icon: 'workflows',
               html: { class: 'icon icon-workflows' },
               if: proc { |_| User.current.admin? }
   end
@@ -54,7 +55,7 @@ def dmsf_init
               if: proc {
                 User.current.allowed_to?(:view_dmsf_folders, nil, global: true) &&
                   ActiveRecord::Base.connection.data_source_exists?('settings') &&
-                  Setting.plugin_redmine_dmsf['dmsf_global_menu_disabled'].blank?
+                  !RedmineDmsf.dmsf_global_menu_disabled?
               }
   end
 

@@ -90,12 +90,12 @@ module Dav4rack
 
     def child(name, options = {})
       new_path = path.dup
-      new_path = +"/#{new_path}" unless new_path[0, 1] == '/'
+      new_path = "/#{new_path}" unless new_path[0, 1] == '/'
       new_path.slice!(-1) if new_path[-1, 1] == '/'
       name = "/#{name}" unless name[-1, 1] == '/'
       new_path = "#{new_path}#{name}"
       new_public = public_path.dup
-      new_public = +"/#{new_public}" unless new_public[0, 1] == '/'
+      new_public = "/#{new_public}" unless new_public[0, 1] == '/'
       new_public.slice!(-1) if new_public[-1, 1] == '/'
       new_public = "#{new_public}#{name}"
       if (key = @root_paths.find { |x| new_path =~ %r{^#{Regexp.escape(x.downcase)}/?} })

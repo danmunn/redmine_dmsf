@@ -22,7 +22,7 @@
 
 <% watched = object.watched_by?(User.current) %>
 <% css = [watcher_css([object]), watched ? 'icon icon-fav' : 'icon icon-fav-off'].join(' ') %>
-<% text = watched ? l(:button_unwatch) : l(:button_watch) %>
+<% text = sprite_icon('fav', watched ? l(:button_unwatch) : l(:button_watch)) %>
 <% url = watch_path(object_type: object.class.to_s.underscore, object_id: object.id) %>
 <% method = watched ? 'delete' : 'post' %>
 <%= context_menu_link text, url, method: method, class: css, disabled: !User.current.logged? %>

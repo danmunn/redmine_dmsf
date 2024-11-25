@@ -27,7 +27,7 @@ module RedmineDmsf
         return if @dmsf_macro_list
 
         @dmsf_macro_list = []
-        Redmine::WikiFormatting::Macros.available_macros.each do |key, _value|
+        Redmine::WikiFormatting::Macros.available_macros.each_key do |key|
           @dmsf_macro_list << key.to_s if key.to_s.match?(/^dmsf/)
         end
         # If localized files for the current language are not available, switch to English
@@ -50,5 +50,4 @@ end
 
 # Apply the patch
 Redmine::WikiFormatting::Textile::Helper.prepend RedmineDmsf::Patches::FormattingHelperPatch
-Redmine::WikiFormatting::Markdown::Helper.prepend RedmineDmsf::Patches::FormattingHelperPatch
 Redmine::WikiFormatting::CommonMark::Helper.prepend RedmineDmsf::Patches::FormattingHelperPatch

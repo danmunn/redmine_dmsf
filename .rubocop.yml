@@ -45,6 +45,10 @@ Lint/ScriptPermission:
   Exclude:
     - extra/xapian_indexer.rb
 
+Lint/UselessAssignment:
+  Exclude:
+    - lib/redmine_dmsf/lockable.rb
+
 Naming/BlockForwarding:
   EnforcedStyle: explicit
 

@@ -18,19 +18,19 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-module RedmineDmsf
-  module Errors
-    # max file size error
-    class DmsfEmailMaxFileSizeError < StandardError
-      include Redmine::I18n
+# Help controller
+class DmsfHelpController < ApplicationController
+  def show_wiki_syntax
+    lang = current_language.to_s
+    template = "dmsf_help/#{lang}/wiki_syntax"
+    lang = 'en' unless lookup_context.exists?(template)
+    render template: "dmsf_help/#{lang}/wiki_syntax", layout: nil
+  end
 
-      def initialize(message = nil)
-        if message.present?
-          super
-        else
-          super(l(:error_max_email_filesize_exceeded, number: RedmineDmsf.dmsf_max_email_filesize))
-        end
-      end
-    end
+  def show_dmsf_help
+    lang = current_language.to_s
+    template = "dmsf_help/#{lang}/dmsf_help"
+    lang = 'en' unless lookup_context.exists?(template)
+    render template: "dmsf_help/#{lang}/dmsf_help", layout: nil
   end
 end

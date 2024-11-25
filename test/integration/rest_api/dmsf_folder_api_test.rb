@@ -103,8 +103,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
   def test_create_folder
     # curl -v -H "Content-Type: application/xml" -X POST --data "@folder.xml" -u ${1}:${2}
     #   http://localhost:3000/projects/12/dmsf/create.xml
-    payload = %(<?xml version="1.0" encoding="utf-8" ?>
-                <dmsf_folder>
+    payload = %(<dmsf_folder>
                   <title>rest_api</title>
                   <description>A folder created via REST API</description>
                   <dmsf_folder_id/>
@@ -124,8 +123,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
   def test_create_subfolder
     # curl -v -H "Content-Type: application/xml" -X POST --data "@folder.xml" -u ${1}:${2}
     #   http://localhost:3000/projects/12/dmsf/create.xml
-    payload = %(<?xml version="1.0" encoding="utf-8" ?>
-                <dmsf_folder>
+    payload = %(<dmsf_folder>
                   <title>rest_api</title>
                   <description>A folder created via REST API</description>
                   <dmsf_folder_id>#{@folder1.id}</dmsf_folder_id>
@@ -230,8 +228,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
   def test_update_folder
     # curl -v -H "Content-Type: application/json" -X POST --data "@update-folder-payload.json"
     #   -H "X-Redmine-API-Key: USERS_API_KEY" http://localhost:3000//projects/#{project_id}/dmsf/save.json
-    payload = %(<?xml version="1.0" encoding="utf-8" ?>
-                <dmsf_folder>
+    payload = %(<dmsf_folder>
                   <title>rest_api</title>
                   <description>A folder updated via REST API</description>
                 </dmsf_folder>)
@@ -283,7 +280,7 @@ class DmsfFolderApiTest < RedmineDmsf::Test::IntegrationTest
     #   http://localhost:3000/projects/1/dmsf/delete.xml?folder_id=3
     delete "/projects/#{@folder2.project.identifier}/dmsf/delete.xml?key=#{@token.value}&folder_id=#{@folder2.id}",
            headers: { 'CONTENT_TYPE' => 'application/xml' }
-    assert_response 422
+    assert_response :unprocessable_content
     # <?xml version="1.0" encoding="UTF-8"?>
     # <errors type="array">
     #   <error>Folder is locked</error>

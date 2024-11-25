@@ -31,7 +31,7 @@ module RedmineDmsf
         return @children unless project
 
         # Sub-projects
-        load_projects(project.children) if Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders']
+        load_projects(project.children) if RedmineDmsf.dmsf_projects_as_subfolders?
         return @children unless project.module_enabled?(:dmsf)
 
         # Folders
@@ -118,7 +118,7 @@ module RedmineDmsf
       def self.create_project_name(prj)
         return unless prj
 
-        if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+        if RedmineDmsf.dmsf_webdav_use_project_names?
           "[#{DmsfFolder.get_valid_title(prj.name)} #{prj.id}]"
         else
           "[#{prj.identifier}]"

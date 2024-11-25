@@ -187,7 +187,7 @@ class DmsfFileRevision < ApplicationRecord
     filename = path.join(disk_filename)
     if search_if_not_exists && !File.exist?(filename)
       # Let's search for the physical file in source revisions
-      dmsf_file.dmsf_file_revisions.where(['created_at < ?', created_at]).order(created_at: :desc).each do |rev|
+      dmsf_file.dmsf_file_revisions.where(created_at: ...created_at).order(created_at: :desc).each do |rev|
         filename = rev.disk_file
         break if File.exist?(filename)
       end
@@ -325,7 +325,7 @@ class DmsfFileRevision < ApplicationRecord
     format = if member&.dmsf_title_format.present?
                member.dmsf_title_format
              else
-               Setting.plugin_redmine_dmsf['dmsf_global_title_format']
+               RedmineDmsf.dmsf_global_title_format
              end
     return name if format.blank?
 
@@ -416,6 +416,8 @@ class DmsfFileRevision < ApplicationRecord
     end
     # ActionParameters => Hash
     h = DmsfFileRevision.params_to_hash(values)
+    # From a REST API call we don't get "20" => "Project" but "CustomFieldValue20" => "Project"
+    h.transform_keys! { |key| key.to_i.zero? && key.to_s.match(/(\d+)/) ? :Regexp.last_match(0) : key }
     # Super
     self.custom_field_values = h
     # For a new revision we need to duplicate attachments

@@ -371,9 +371,7 @@ class DmsfFolder < ApplicationRecord
   end
 
   def self.column_on?(column)
-    dmsf_columns = Setting.plugin_redmine_dmsf['dmsf_columns']
-    dmsf_columns ||= DmsfFolder::DEFAULT_COLUMNS
-    dmsf_columns.include? column
+    RedmineDmsf.dmsf_columns.include? column
   end
 
   def custom_value(custom_field)
@@ -385,8 +383,7 @@ class DmsfFolder < ApplicationRecord
   end
 
   def self.get_column_position(column)
-    dmsf_columns = Setting.plugin_redmine_dmsf['dmsf_columns']
-    dmsf_columns ||= DmsfFolder::DEFAULT_COLUMNS
+    dmsf_columns = RedmineDmsf.dmsf_columns
     pos = 0
     # 0 - checkbox
     # 1 - id
@@ -545,7 +542,7 @@ class DmsfFolder < ApplicationRecord
   end
 
   def self.visible_folders(folders, project)
-    allowed = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
+    allowed = RedmineDmsf.dmsf_act_as_attachable? &&
               (project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS) &&
               User.current.allowed_to?(:display_system_folders, project)
     folders.reject do |folder|

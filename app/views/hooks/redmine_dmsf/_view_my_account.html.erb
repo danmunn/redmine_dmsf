@@ -28,7 +28,7 @@
   </p>
   <p><%= pref_fields.check_box :receive_download_notification %></p>
 <% end %>
-<% if Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'] == 'Digest' %>
+<% if RedmineDmsf.dmsf_webdav_authentication == 'Digest' %>
   <p>
     <label for='webdav_digest_reset'><%= l(:label_dmsf_webdav_digest) %></label>
     <% token = Token.find_by(user_id: @user.id, action: 'dmsf_webdav_digest') %>

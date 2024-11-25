@@ -141,7 +141,7 @@ begin
 
   # Indexing documents
   stem_langs.each do |lang|
-    filespath = Setting.plugin_redmine_dmsf['dmsf_storage_directory'] || File.join(REDMINE_ROOT, FILES)
+    filespath = RedmineDmsf.dmsf_storage_directory
     unless File.directory?(filespath)
       warn "'#{filespath}' doesn't exist."
       exit 1
@@ -151,7 +151,7 @@ begin
       log "#{databasepath} does not exist, creating ...", verbose
       FileUtils.mkdir_p databasepath
     end
-    cmd = +"#{OMINDEX} -s #{lang} --db #{databasepath} #{filespath} --url / --depth-limit=0"
+    cmd = "#{OMINDEX} -s #{lang} --db #{databasepath} #{filespath} --url / --depth-limit=0"
     cmd << ' -v' if verbose
     cmd << ' --retry-failed' if retry_failed
     cmd << ' -p' if no_delete

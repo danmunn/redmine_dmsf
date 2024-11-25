@@ -23,15 +23,13 @@
   <div class="contextual">
     <% unless @locked_for_user || @system_folder %>
       <% if @file_manipulation_allowed %>
-        <%= link_to l(:label_document_new), multi_dmsf_upload_path(id: @project, folder_id: @folder),
-                    class: 'icon icon-add',
+        <%= link_to sprite_icon('add', l(:label_document_new)),
+                    multi_dmsf_upload_path(id: @project, folder_id: @folder), class: 'icon icon-add',
                     data: { cy: 'button__new-file--dmsf' } %>
       <% end %>
       <% if @folder_manipulation_allowed %>
-        <%= link_to l(:link_create_folder),
-                    new_dmsf_path(id: @project, parent_id: @folder),
-                    class: 'icon icon-add',
-                    data: { cy: 'button__create-folder--dmsf' } %>
+        <%= link_to sprite_icon('add', l(:link_create_folder)), new_dmsf_path(id: @project, parent_id: @folder),
+                    class: 'icon icon-add', data: { cy: 'button__create-folder--dmsf' } %>
       <% end %>
     <% end %>
     <% if defined?(EasyExtensions) %>
@@ -82,12 +80,12 @@
 
 <%= context_menu %>
 
-<% if !@folder&.system && (@project || Setting.plugin_redmine_dmsf['dmsf_webdav'].present?) %>
+<% if !@folder&.system && (@project || RedmineDmsf.dmsf_webdav?) %>
     <% other_formats_links do |f| %>
       <% if @project %>
         <%= f.link_to 'CSV', url: { action: :show, id: @project, folder_id: @folder, encoding: Encoding::UTF_8 } %>
       <% end %>
-      <% if Setting.plugin_redmine_dmsf['dmsf_webdav'].present? %>
+      <% if RedmineDmsf.dmsf_webdav? %>
         <span>
           <%= link_to 'WebDAV', webdav_url(@project, @folder), class: 'webdav' %>
         </span>

@@ -29,12 +29,12 @@ module Dav4rack
         "Processing WebDAV request: #{r.path} (for #{r.ip} at #{Time.current}) [#{r.request_method}]"
       end
 
-      controller = setup_controller r, response
+      controller = setup_controller(r, response)
       controller.process
       postprocess_response response
 
       # Apache wants the body dealt with, so just read it and junk it
-      buf = true
+      buf = r.body
       buf = r.body.read(8_192) while buf
 
       Rails.logger.debug { "Response String:\n#{response.body}" } if response.body.is_a?(String)

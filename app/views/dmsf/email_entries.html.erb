@@ -38,7 +38,7 @@
       <%= label_tag 'email[to]', l(:label_email_to) %>
       <span>
         <%= text_field_tag 'email[to]', @email_params[:to], class: 'dmsf-full-width', required: true %>
-        <%= link_to l(:button_add), add_email_dmsf_path(id: @project),
+        <%= link_to sprite_icon('add', l(:button_add)), add_email_dmsf_path(id: @project),
           title: l(:label_email_address_add), class: 'icon icon-add', remote: true %>
       </span>
     </p>
@@ -56,7 +56,7 @@
         <%= link_to 'Documents.zip', download_email_entries_path(id: @project, folder_id: @folder,
                                                                  path: @email_params[:zipped_content]) %>
         <%= l(:label_or) %>
-        <%= check_box_tag('email[links_only]', 1, Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'],
+        <%= check_box_tag('email[links_only]', 1, RedmineDmsf.dmsf_documents_email_links_only?,
               onchange: "$('#public_url').toggle($('#email_links_only').prop('checked'))")
         %>
         <%= l(:label_links_only) %>

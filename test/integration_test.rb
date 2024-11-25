@@ -82,7 +82,7 @@ module RedmineDmsf
             redmine_table_names << x
           end
         end
-        super redmine_table_names if redmine_table_names.any?
+        super(redmine_table_names) if redmine_table_names.any?
       end
 
       protected

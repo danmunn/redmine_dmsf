@@ -34,7 +34,7 @@ module RedmineDmsf
       module ClassMethods
         def available_project_modules
           # Removes the original Documents from project's modules (replaced with DMSF)
-          if Setting.plugin_redmine_dmsf['remove_original_documents_module']
+          if RedmineDmsf.remove_original_documents_module?
             super.reject { |m| m == :documents }
           else
             super

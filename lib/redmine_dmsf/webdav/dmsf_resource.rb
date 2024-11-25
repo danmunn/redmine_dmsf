@@ -199,11 +199,11 @@ module RedmineDmsf
           end
           raise Locked if file.locked_for_user?
 
-          pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
+          pattern = RedmineDmsf.dmsf_webdav_disable_versioning
           # Files that are not versioned should be destroyed
           # Zero-sized files should be destroyed
           b = !file.last_revision || file.last_revision.size.zero?
-          destroy = (pattern.present? && basename.match(pattern)) || b
+          destroy = basename.match(pattern) || b
           if file.delete(commit: destroy)
             DmsfMailer.deliver_files_deleted project, [file]
             NoContent
@@ -442,8 +442,8 @@ module RedmineDmsf
 
           f = create_empty_file
           if f
-            scope = "scope_#{args[:scope] || 'exclusive'}".to_sym
-            type = "type_#{args[:type] || 'write'}".to_sym
+            scope = :"scope_#{args[:scope] || 'exclusive'}"
+            type = :"type_#{args[:type] || 'write'}"
             l = f.lock!(scope, type, 1.week.from_now, args[:owner])
             @response['Lock-Token'] = l.uuid
             return [1.week.to_i, l.uuid]
@@ -487,8 +487,8 @@ module RedmineDmsf
             @response['Lock-Token'] = l.uuid
             return [1.week.to_i, l.uuid]
           end
-          scope = "scope_#{args[:scope] || 'exclusive'}".to_sym
-          type = "type_#{args[:type] || 'write'}".to_sym
+          scope = :"scope_#{args[:scope] || 'exclusive'}"
+          type = :"type_#{args[:type] || 'write'}"
           # l should be the instance of the lock we've just created
           l = entity.lock!(scope, type, 1.week.from_now, args[:owner])
           @response['Lock-Token'] = l.uuid
@@ -504,7 +504,7 @@ module RedmineDmsf
       # Token based unlock (authenticated) will ensure that a correct token is sent, further ensuring
       # ownership of token before permitting unlock
       def unlock(token)
-        return super(token) unless exist?
+        return super unless exist?
 
         if token.blank? || (token == '<(null)>') || User.current.anonymous?
           BadRequest
@@ -551,8 +551,7 @@ module RedmineDmsf
         if exist? # We're over-writing something, so ultimately a new revision
           f = file
           # Disable versioning for file name patterns given in the plugin settings.
-          pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
-          if pattern.present? && basename.match(pattern)
+          if basename.match(RedmineDmsf.dmsf_webdav_disable_versioning)
             Rails.logger.info "Versioning disabled for #{basename}"
             reuse_revision = true
           end
@@ -611,8 +610,7 @@ module RedmineDmsf
                             end
 
         # Ignore 1b files sent for authentication
-        if Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'].present? &&
-           new_revision.size == 1
+        if RedmineDmsf.dmsf_webdav_ignore_1b_file_for_authentication? && new_revision.size == 1
           Rails.logger.warn "1b file '#{basename}' sent for authentication ignored"
           return NoContent
         end
@@ -675,7 +673,7 @@ module RedmineDmsf
                   doc.timeout "Second-#{lock.expires_at.to_i - Time.current.to_i}"
                 end
                 lock_entity = lock.dmsf_folder || lock.dmsf_file
-                lock_path = +"#{request.scheme}://#{request.host}:#{request.port}#{path_prefix}"
+                lock_path = "#{request.scheme}://#{request.host}:#{request.port}#{path_prefix}"
                 lock_path << "#{Addressable::URI.escape(lock_entity.project.identifier)}/"
                 pth = lock_entity.dmsf_path.map { |e| Addressable::URI.escape(e.respond_to?(:name) ? e.name : e.title) }
                                  .join('/')
@@ -797,9 +795,7 @@ module RedmineDmsf
 
       def ignore?
         # Ignore file name patterns given in the plugin settings
-        pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore']
-        pattern = /^(\._|\.DS_Store$|Thumbs.db$)/ if pattern.blank?
-        if basename.match(pattern)
+        if basename.match(RedmineDmsf.dmsf_webdav_ignore)
           Rails.logger.info "#{basename} ignored"
           return true
         end

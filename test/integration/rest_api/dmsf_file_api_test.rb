@@ -128,8 +128,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     assert_not_nil ftoken
     # curl -v -H "Content-Type: application/xml" -X POST --data "@file.xml" -u ${1}:${2}
     #   http://localhost:3000/projects/12/dmsf/commit.xml
-    payload = %(<?xml version="1.0" encoding="utf-8" ?>
-                <attachments>
+    payload = %(<attachments>
                  <folder_id/>
                  <uploaded_file>
                    <name>test.txt</name>
@@ -206,7 +205,7 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     User.current = nil
     # curl -v -H "Content-Type: application/xml" -X DELETE -u ${1}:${2} http://localhost:3000/dmsf/files/196118.xml
     delete "/dmsf/files/#{@file1.id}.xml?key=#{@token.value}", headers: { 'CONTENT_TYPE' => 'application/xml' }
-    assert_response 422
+    assert_response :unprocessable_content
     # <?xml version="1.0" encoding="UTF-8"?>
     # <errors type="array">
     #   <error>Locked by Admin</error>
@@ -220,7 +219,6 @@ class DmsfFileApiTest < RedmineDmsf::Test::IntegrationTest
     # curl -v -H "Content-Type: application/xml" -X POST --data "@revision.xml" -u ${1}:${2}
     #   http://localhost:3000/dmfs/files/1/revision/create.xml
     payload = %(
-      <?xml version="1.0" encoding="utf-8" ?>
       <dmsf_file_revision>
         <title>#{@file1.name}</title>
         <name>#{@file1.name}</name>

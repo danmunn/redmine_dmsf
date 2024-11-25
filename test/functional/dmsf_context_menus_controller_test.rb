@@ -168,7 +168,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => '1', 'dmsf_webdav_strategy' => 'WEBDAV_READ_WRITE' } do
       get '/projects/dmsf/context_menu', params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
       assert_response :success
-      assert_select 'a.dmsf-icon-file', text: l(:button_edit_content)
+      assert_select 'a.icon-file', text: l(:button_edit_content)
     end
   end
 
@@ -177,7 +177,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => nil } do
       get '/projects/dmsf/context_menu', params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
       assert_response :success
-      assert_select 'a:not(dmsf-icon-file)'
+      assert_select 'a:not(icon-file)'
     end
   end
 
@@ -186,7 +186,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
     with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => '1', 'dmsf_webdav_strategy' => 'WEBDAV_READ_ONLY' } do
       get '/projects/dmsf/context_menu', params: { id: @file1.project.id, ids: ["file-#{@file1.id}"] }
       assert_response :success
-      assert_select 'a.dmsf-icon-file.disabled', text: l(:button_edit_content)
+      assert_select 'a.icon-file.disabled', text: l(:button_edit_content)
     end
   end
 
@@ -242,7 +242,7 @@ class DmsfContextMenusControllerTest < RedmineDmsf::Test::TestCase
 
   def test_dmsf_url_link
     post '/login', params: { username: 'jsmith', password: 'jsmith' }
-    get :'/projects/dmsf/context_menu', params: { id: @url_link5.project.id, ids: ["url-link-#{@url_link5.id}"] }
+    get '/projects/dmsf/context_menu', params: { id: @url_link5.project.id, ids: ["url-link-#{@url_link5.id}"] }
     assert_response :success
     assert_select 'a.icon-del', text: l(:button_delete)
   end

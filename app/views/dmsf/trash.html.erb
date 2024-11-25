@@ -22,7 +22,7 @@
 
 <div class="contextual">
   <% if @file_delete_allowed %>
-    <%= link_to l(:label_empty_trash_bin), empty_trash_path(id: @project), class: 'icon icon-del' %>
+    <%= delete_link empty_trash_path(id: @project), {}, l(:label_empty_trash_bin) %>
   <% end %>
 </div>
 

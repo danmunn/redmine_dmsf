@@ -91,6 +91,8 @@
                    multiple: multiple,
                    onchange: 'dmsfAddInputFiles(this);',
                    data: {
+                       max_number_of_files_message: l(:error_attachments_too_many,
+                                                      max_number_of_files: (multiple ? 10 : 1)),
                        max_file_size: Setting.attachment_max_size.to_i.kilobytes,
                        max_file_size_message: l(:error_attachment_too_big,
                        max_size: number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)),
@@ -111,7 +113,7 @@
 </span>
 <% if defined?(container) && container %>
     <span class="dmsf-add-link">
-        <%= link_to l(:label_link_from),
+        <%= link_to sprite_icon('add', l(:label_link_from)),
                     new_dmsf_link_path(project_id: project.id, type: 'link_from', container: container.class.name),
                     title: l(:title_create_link), class: 'icon icon-add file_selector', remote: true %>
       </span>

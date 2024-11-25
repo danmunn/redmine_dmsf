@@ -42,7 +42,7 @@ class DmsfQuery < Query
   ]
 
   def initialize(attributes = nil, *_args)
-    super attributes
+    super(attributes)
     self.sort_criteria = []
     self.filters ||= { 'title' => { operator: '~', values: [''] } }
     self.dmsf_folder_id = nil
@@ -182,9 +182,9 @@ class DmsfQuery < Query
   # New
 
   def dmsf_nodes(options = {})
-    order_option = ['sort', group_by_sort_order, (options[:order] || sort_clause&.first)].flatten.compact_blank
+    order_option = ['sort', group_by_sort_order, options[:order] || sort_clause&.first].flatten.compact_blank
     if order_option.size > 1
-      DmsfFileRevisionCustomField.visible.pluck(:id, :name).each do |id, _name|
+      DmsfFileRevisionCustomField.visible.pluck(:id).each do |id|
         order_option[1].gsub! "cf_#{id}.value", "cf_#{id}"
       end
       if order_option[1] =~ /^(firstname|major_version),? (lastname|minor_version)( patch_version)? (DESC|ASC)$/
@@ -258,7 +258,7 @@ class DmsfQuery < Query
     return query if query&.visibility == VISIBILITY_PUBLIC
 
     # Global default
-    if (query_id = Setting.plugin_redmine_dmsf['dmsf_default_query']).present?
+    if (query_id = RedmineDmsf.dmsf_default_query).present?
       query = find_by(id: query_id)
       return query if query&.visibility == VISIBILITY_PUBLIC
     end

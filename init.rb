@@ -24,9 +24,9 @@ Redmine::Plugin.register :redmine_dmsf do
   author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
-  version '3.2.4'
+  version '4.0.0 devel'
 
-  requires_redmine version_or_higher: '5.0.0'
+  requires_redmine version_or_higher: '6.0.0'
 
   webdav = if Redmine::Plugin.installed?('easy_hosting_services') && EasyHostingServices::EasyMultiTenancy.activated?
              '1'
@@ -56,7 +56,7 @@ Redmine::Plugin.register :redmine_dmsf do
              'dmsf_webdav_use_project_names' => use_project_names,
              'dmsf_webdav_ignore_1b_file_for_authentication' => '1',
              'dmsf_projects_as_subfolders' => nil,
-             'only_approval_zero_minor_version' => '0',
+             'only_approval_zero_minor_version' => nil,
              'dmsf_max_notification_receivers_info' => 10,
              'office_bin' => 'libreoffice',
              'dmsf_global_menu_disabled' => nil,

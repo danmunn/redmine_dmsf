@@ -38,9 +38,9 @@
     <% minor_version = '' %>
   <% end %>
   <%= select_tag select_tag_name_minor,
-        options_for_select(DmsfUploadHelper::minor_version_select_options, minor_version),
-        class: 'dmsf-select-version' %>
+                 options_for_select(DmsfUploadHelper::minor_version_select_options, minor_version),
+                 class: 'dmsf-select-version' %>
   <b>.</b>
-  <%= select_tag select_tag_name_patch, options_for_select(DmsfUploadHelper::patch_version_select_options,
-    [h('&nbsp;'), '']), class: 'dmsf-select-version' %>
+  <%= select_tag select_tag_name_patch, options_for_select(DmsfUploadHelper::patch_version_select_options, ' '),
+                 class: 'dmsf-select-version' %>
 <% end %>

@@ -20,10 +20,10 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<%# Render the original view %>
-<% view_paths.unshift Rails.root.join('app/views').to_s %>
-<%= render partial: 'mailer/issue', locals: { issue: issue, issue_url: issue_url, user: user } %>
-
-<%# DMSF extension do %>
+<% unless @dmsf_already_rendered %>
+  <% @dmsf_already_rendered = true # Prevent recursion %>
+  <%# Render the original view %>
+  <%= render partial: 'mailer/issue', locals: { issue: issue, issue_url: issue_url, user: user } %>
+  <%# DMSF extension %>
   <%= render partial: 'hooks/redmine_dmsf/view_mailer_issue', locals: { issue: issue } %>
-<%# end %>
+<% end %>

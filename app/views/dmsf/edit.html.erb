@@ -23,12 +23,15 @@
 <div class="contextual">
   <% if !@folder.new_record? && User.current.allowed_to?(:folder_manipulation, @project) && !@folder.system %>
     <% if @folder.locked? %>
-      <%= link_to_if @folder.unlockable? && (!@folder.locked_for_user? || @force_file_unlock_allowed), l(:button_unlock),
-        unlock_dmsf_path(id: @project, folder_id: @folder, back_url: edit_dmsf_url(id: @project, folder_id: @folder)),
+      <%= link_to_if @folder.unlockable? && (!@folder.locked_for_user? || @force_file_unlock_allowed),
+                     sprite_icon('unlock', l(:button_unlock)),
+                     unlock_dmsf_path(id: @project, folder_id: @folder,
+                                      back_url: edit_dmsf_url(id: @project, folder_id: @folder)),
       title: l(:title_unlock_file), class: 'icon icon-unlock' %>
     <% else %>
-      <%= link_to l(:button_lock), lock_dmsf_path(id: @project, folder_id: @folder,
-                                                  back_url: edit_dmsf_url(id: @project, folder_id: @folder)),
+      <%= link_to sprite_icon('lock', l(:button_lock)),
+                  lock_dmsf_path(id: @project, folder_id: @folder,
+                                 back_url: edit_dmsf_url(id: @project, folder_id: @folder)),
         title: l(:title_lock_file), class: 'icon icon-lock' %>
     <% end %>
     <% if defined?(EasyExtensions) %>
@@ -122,7 +125,7 @@
         <br>
       <% end %>
       <span class="search_for_watchers">
-        <%= link_to l(:label_user_search_add),
+        <%= link_to sprite_icon('add', l(:label_search_for_watchers), size: 12),
           new_dmsf_folder_permissions_path(project_id: @project, dmsf_folder_id: @folder),
           remote: true,
           method: :get %>

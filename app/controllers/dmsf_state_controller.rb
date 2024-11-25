@@ -28,7 +28,9 @@ class DmsfStateController < ApplicationController
   def user_pref_save
     member = @project.members.find_by(user_id: User.current.id)
     if member
-      member.dmsf_mail_notification = params[:email_notify]
+      if Setting.notified_events.include?('dmsf_legacy_notifications')
+        member.dmsf_mail_notification = params[:email_notify]
+      end
       member.dmsf_title_format = params[:title_format]
       member.dmsf_fast_links = params[:fast_links].present?
       if format_valid?(member.dmsf_title_format) && member.save
@@ -39,9 +41,7 @@ class DmsfStateController < ApplicationController
     else
       flash[:warning] = l(:user_is_not_project_member)
     end
-    if Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
-      @project.update dmsf_act_as_attachable: params[:act_as_attachable]
-    end
+    @project.update(dmsf_act_as_attachable: params[:act_as_attachable]) if RedmineDmsf.dmsf_act_as_attachable?
     @project.update default_dmsf_query_id: params[:default_dmsf_query]
     redirect_to settings_project_path(@project, tab: 'dmsf')
   end
