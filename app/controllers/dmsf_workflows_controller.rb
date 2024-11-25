@@ -159,9 +159,9 @@ class DmsfWorkflowsController < ApplicationController
              assignments.first.dmsf_workflow_step.step != action.dmsf_workflow_step_assignment.dmsf_workflow_step.step
             # Next step
             assignments.each do |assignment|
-              next if assignment.user.nil? || DmsfMailer.get_notify_users(@project, revision.dmsf_file,
-                                                                     force_notification: true)
-                                                   .exclude?(assignment.user)
+              next if assignment.user.nil? ||
+                      DmsfMailer.get_notify_users(@project, revision.dmsf_file, force_notification: true)
+                                .exclude?(assignment.user)
 
               DmsfMailer.deliver_workflow_notification(
                 [assignment.user],
