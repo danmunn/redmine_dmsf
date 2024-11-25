@@ -36,8 +36,8 @@ class DmsfStateControllerTest < RedmineDmsf::Test::TestCase
       post '/login', params: { username: 'jsmith', password: 'jsmith' }
       @role_manager.add_permission! :user_preferences
       post "/projects/#{@project1.id}/dmsf/state",
-          params: { email_notify: 1, title_format: '%t_%v', fast_links: 1, act_as_attachable: 1,
-                    default_dmsf_query: @query401.id }
+           params: { email_notify: 1, title_format: '%t_%v', fast_links: 1, act_as_attachable: 1,
+                     default_dmsf_query: @query401.id }
       assert_redirected_to settings_project_path(@project1, tab: 'dmsf')
       assert_not_nil flash[:notice]
       assert_equal flash[:notice], l(:notice_your_preferences_were_saved)
