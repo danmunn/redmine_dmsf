@@ -99,7 +99,7 @@ class DmsfWorkflowsController < ApplicationController
                 :text_email_finished_approved,
                 :text_email_to_see_history
               )
-              if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.present?
+              if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1' && recipients.present?
                 max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
                 to = recipients.collect(&:name).first(max_notifications).join(', ')
                 if to.present?
@@ -122,7 +122,7 @@ class DmsfWorkflowsController < ApplicationController
               :text_email_to_see_history,
               action.note
             )
-            if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.present?
+            if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1' && recipients.present?
               max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
               to = recipients.collect(&:name).first(max_notifications).join(', ')
               if to.present?
@@ -146,7 +146,7 @@ class DmsfWorkflowsController < ApplicationController
                 action.note,
                 action.dmsf_workflow_step_assignment.dmsf_workflow_step
               )
-              if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
+              if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
                 flash[:warning] = l(:warning_email_notifications, to: delegate.name)
               end
             end
@@ -186,7 +186,7 @@ class DmsfWorkflowsController < ApplicationController
                 :text_email_to_see_status
               )
             end
-            if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
+            if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1'
               recipients = assignments.collect(&:user)
               recipients << to if to
               recipients.uniq!

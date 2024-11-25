@@ -249,7 +249,7 @@ class DmsfWorkflow < ApplicationRecord
       nil,
       assignments.first&.dmsf_workflow_step
     )
-    return unless Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && controller && recipients.present?
+    return unless Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] == '1' && controller && recipients.present?
 
     max_recipients = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
     to = recipients.collect(&:name).first(max_recipients).join(', ')
