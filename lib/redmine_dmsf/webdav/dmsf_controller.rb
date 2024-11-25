@@ -33,7 +33,7 @@ module RedmineDmsf
       end
 
       def process
-        return super unless Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'] == 'Digest'
+        return super unless RedmineDmsf.dmsf_webdav_authentication == 'Digest'
 
         status = skip_authorization? || authenticate ? process_action || OK : Dav4rack::HttpStatus::Unauthorized
       rescue Dav4rack::HttpStatus::Status => e
@@ -52,7 +52,7 @@ module RedmineDmsf
       end
 
       def authenticate
-        return super unless Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'] == 'Digest'
+        return super unless RedmineDmsf.dmsf_webdav_authentication == 'Digest'
 
         auth_header = request.authorization.to_s
         scheme = auth_header.split(' ', 2).first&.downcase

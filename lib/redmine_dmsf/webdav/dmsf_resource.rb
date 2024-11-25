@@ -199,11 +199,11 @@ module RedmineDmsf
           end
           raise Locked if file.locked_for_user?
 
-          pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
+          pattern = RedmineDmsf.dmsf_webdav_disable_versioning
           # Files that are not versioned should be destroyed
           # Zero-sized files should be destroyed
           b = !file.last_revision || file.last_revision.size.zero?
-          destroy = (pattern.present? && basename.match(pattern)) || b
+          destroy = basename.match(pattern) || b
           if file.delete(commit: destroy)
             DmsfMailer.deliver_files_deleted project, [file]
             NoContent
@@ -551,8 +551,7 @@ module RedmineDmsf
         if exist? # We're over-writing something, so ultimately a new revision
           f = file
           # Disable versioning for file name patterns given in the plugin settings.
-          pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning']
-          if pattern.present? && basename.match(pattern)
+          if basename.match(RedmineDmsf.dmsf_webdav_disable_versioning)
             Rails.logger.info "Versioning disabled for #{basename}"
             reuse_revision = true
           end
@@ -611,8 +610,7 @@ module RedmineDmsf
                             end
 
         # Ignore 1b files sent for authentication
-        if Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'].present? &&
-           new_revision.size == 1
+        if RedmineDmsf.dmsf_webdav_ignore_1b_file_for_authentication? && new_revision.size == 1
           Rails.logger.warn "1b file '#{basename}' sent for authentication ignored"
           return NoContent
         end
@@ -797,9 +795,7 @@ module RedmineDmsf
 
       def ignore?
         # Ignore file name patterns given in the plugin settings
-        pattern = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore']
-        pattern = /^(\._|\.DS_Store$|Thumbs.db$)/ if pattern.blank?
-        if basename.match(pattern)
+        if basename.match(RedmineDmsf.dmsf_webdav_ignore)
           Rails.logger.info "#{basename} ignored"
           return true
         end

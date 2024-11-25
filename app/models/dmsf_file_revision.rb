@@ -325,7 +325,7 @@ class DmsfFileRevision < ApplicationRecord
     format = if member&.dmsf_title_format.present?
                member.dmsf_title_format
              else
-               Setting.plugin_redmine_dmsf['dmsf_global_title_format']
+               RedmineDmsf.dmsf_global_title_format
              end
     return name if format.blank?
 

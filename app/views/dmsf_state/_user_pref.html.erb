@@ -49,7 +49,7 @@
 
   <fieldset class="box tabular">
     <legend><%= l(:field_project) %> <%= l(:label_preferences) %></legend>
-    <% if Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] %>
+    <% if RedmineDmsf.dmsf_act_as_attachable? %>
       <p>
         <%= content_tag(:label, "#{l(:label_act_as_attachable)}:") %>
         <%= select_tag 'act_as_attachable',

@@ -141,7 +141,7 @@ begin
 
   # Indexing documents
   stem_langs.each do |lang|
-    filespath = Setting.plugin_redmine_dmsf['dmsf_storage_directory'] || File.join(REDMINE_ROOT, FILES)
+    filespath = RedmineDmsf.dmsf_storage_directory
     unless File.directory?(filespath)
       warn "'#{filespath}' doesn't exist."
       exit 1

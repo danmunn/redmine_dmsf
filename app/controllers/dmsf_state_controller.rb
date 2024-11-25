@@ -39,9 +39,7 @@ class DmsfStateController < ApplicationController
     else
       flash[:warning] = l(:user_is_not_project_member)
     end
-    if Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
-      @project.update dmsf_act_as_attachable: params[:act_as_attachable]
-    end
+    @project.update(dmsf_act_as_attachable: params[:act_as_attachable]) if RedmineDmsf.dmsf_act_as_attachable?
     @project.update default_dmsf_query_id: params[:default_dmsf_query]
     redirect_to settings_project_path(@project, tab: 'dmsf')
   end

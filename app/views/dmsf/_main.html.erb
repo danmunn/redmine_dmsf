@@ -80,12 +80,12 @@
 
 <%= context_menu %>
 
-<% if !@folder&.system && (@project || Setting.plugin_redmine_dmsf['dmsf_webdav'].present?) %>
+<% if !@folder&.system && (@project || RedmineDmsf.dmsf_webdav?) %>
     <% other_formats_links do |f| %>
       <% if @project %>
         <%= f.link_to 'CSV', url: { action: :show, id: @project, folder_id: @folder, encoding: Encoding::UTF_8 } %>
       <% end %>
-      <% if Setting.plugin_redmine_dmsf['dmsf_webdav'].present? %>
+      <% if RedmineDmsf.dmsf_webdav? %>
         <span>
           <%= link_to 'WebDAV', webdav_url(@project, @folder), class: 'webdav' %>
         </span>

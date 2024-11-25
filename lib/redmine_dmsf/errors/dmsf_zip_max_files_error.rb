@@ -28,7 +28,7 @@ module RedmineDmsf
         if message.present?
           super
         else
-          super(l(:error_max_files_exceeded, number: Setting.plugin_redmine_dmsf['dmsf_max_file_download']))
+          super(l(:error_max_files_exceeded, number: RedmineDmsf.dmsf_max_file_download))
         end
       end
     end

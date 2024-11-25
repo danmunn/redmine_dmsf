@@ -32,7 +32,7 @@ module RedmineDmsf
         # Check the settings cache for each request
         Setting.check_cache
         # Return 404 - NotFound if WebDAV is not enabled
-        raise NotFound unless Setting.plugin_redmine_dmsf['dmsf_webdav']
+        raise NotFound unless RedmineDmsf.dmsf_webdav?
 
         super
         rc = get_resource_class(path)

@@ -39,7 +39,7 @@ module RedmineDmsf
                    )
 
       def initialize(path, request, response, options)
-        raise NotFound if Setting.plugin_redmine_dmsf['dmsf_webdav'].blank?
+        raise NotFound unless RedmineDmsf.dmsf_webdav?
 
         @project = nil
         @public_path = "#{options[:root_uri_path]}#{path}"
@@ -162,7 +162,7 @@ module RedmineDmsf
         def get_project(scope, name, parent_project)
           prj = nil
           scope = scope.where(parent_id: parent_project.id) if parent_project
-          if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+          if RedmineDmsf.dmsf_webdav_use_project_names?
             if name =~ /^\[?.+ (\d+)\]?$/
               prj = scope.find_by(id: Regexp.last_match(1))
               # Check again whether it's really the project and not a folder with a number as a suffix

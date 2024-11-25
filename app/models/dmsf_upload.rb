@@ -56,7 +56,7 @@ class DmsfUpload
       @tempfile_path = ''
       @token = ''
       @digest = ''
-      if Setting.plugin_redmine_dmsf['empty_minor_version_by_default']
+      if RedmineDmsf.empty_minor_version_by_default?
         @major_version = 1
         @minor_version = nil
       else
@@ -92,7 +92,7 @@ class DmsfUpload
     if file.nil? || file.last_revision.nil?
       @title = DmsfFileRevision.filename_to_title(@name)
       @description = uploaded[:comment]
-      if Setting.plugin_redmine_dmsf['empty_minor_version_by_default']
+      if RedmineDmsf.empty_minor_version_by_default?
         @major_version = 1
         @minor_version = nil
       else

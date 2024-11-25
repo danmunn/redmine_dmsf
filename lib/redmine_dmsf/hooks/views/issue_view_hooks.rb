@@ -114,7 +114,7 @@ module RedmineDmsf
         def allowed_to_attach_documents(container)
           container.respond_to?(:saved_dmsf_attachments) && container.project &&
             User.current.allowed_to?(:file_manipulation, container.project) &&
-            Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
+            RedmineDmsf.dmsf_act_as_attachable? &&
             (container.project&.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
         end
 
@@ -128,7 +128,7 @@ module RedmineDmsf
           links = []
           if defined?(container.dmsf_files) &&
              User.current.allowed_to?(:view_dmsf_files, container.project) &&
-             Setting.plugin_redmine_dmsf['dmsf_act_as_attachable'] &&
+             RedmineDmsf.dmsf_act_as_attachable? &&
              container.project.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS
             container.dmsf_files.each do |dmsf_file|
               links << [dmsf_file, nil, dmsf_file.created_at] if dmsf_file.last_revision

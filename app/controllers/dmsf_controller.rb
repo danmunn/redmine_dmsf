@@ -83,7 +83,7 @@ class DmsfController < ApplicationController
     @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
     @query.dmsf_folder_id = @folder ? @folder.id : nil
     @query.deleted = false
-    @query.sub_projects |= Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'].present?
+    @query.sub_projects |= RedmineDmsf.dmsf_projects_as_subfolders?
     if @folder&.deleted? || (params[:folder_title].present? && !@folder)
       render_404
       return
@@ -501,7 +501,7 @@ class DmsfController < ApplicationController
     zip_entries(zip, selected_folders, selected_files)
     zipped_content = zip.finish
 
-    max_filesize = Setting.plugin_redmine_dmsf['dmsf_max_email_filesize'].to_f
+    max_filesize = RedmineDmsf.dmsf_max_email_filesize
     if max_filesize.positive? && File.size(zipped_content) > max_filesize * 1_048_576
       raise RedmineDmsf::Errors::DmsfEmailMaxFileSizeError
     end
@@ -527,9 +527,8 @@ class DmsfController < ApplicationController
       folders: selected_folders,
       files: selected_files,
       subject: "#{@project.name} #{l(:label_dmsf_file_plural).downcase}",
-      from: Setting.plugin_redmine_dmsf['dmsf_documents_email_from'].presence ||
-            "#{User.current.name} <#{User.current.mail}>",
-      reply_to: Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
+      from: RedmineDmsf.dmsf_documents_email_from,
+      reply_to: RedmineDmsf.dmsf_documents_email_reply_to
     }
     @back_url = params[:back_url]
     render action: 'email_entries'
@@ -583,7 +582,7 @@ class DmsfController < ApplicationController
 
       zip.add_dmsf_file file, member, file.dmsf_folder&.dmsf_path_str
     end
-    max_files = Setting.plugin_redmine_dmsf['dmsf_max_file_download'].to_i
+    max_files = RedmineDmsf.dmsf_max_file_download
     raise RedmineDmsf::Errors::DmsfZipMaxFilesError if max_files.positive? && zip.dmsf_files.length > max_files
 
     zip
@@ -647,8 +646,8 @@ class DmsfController < ApplicationController
     unless deleted_files.empty?
       begin
         recipients = DmsfMailer.deliver_files_deleted(@project, deleted_files)
-        if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.any?
-          max_receivers = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
+        if RedmineDmsf.dmsf_display_notified_recipients? && recipients.any?
+          max_receivers = RedmineDmsf.dmsf_max_notification_receivers_info
           to = recipients.collect { |user, _| user.name }.first(max_receivers).join(', ')
           if to.present?
             to << (recipients.count > max_receivers ? ',...' : '.')

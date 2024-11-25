@@ -19,7 +19,7 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% classes = 'hol' unless Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'] %>
+<% classes = 'hol' unless RedmineDmsf.dmsf_documents_email_links_only? %>
 <span id="public_url" class="<%= classes %>">
     <%= check_box_tag 'email[public_urls]', 1, false %> <%= l(:label_public_urls) %>
     <%= date_field_tag('email[expired_at]', '', value: (DateTime.current + 3.days).to_date, size: 10) +

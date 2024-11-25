@@ -83,7 +83,7 @@
                       method: :post, class: 'icon icon-email',
                       data: { cy: "icon__email--dmsf_file_#{dmsf_file.id}" }, disabled: !email_allowed %>
 </li>
-<% if Setting.plugin_redmine_dmsf['dmsf_webdav'].present? %>
+<% if RedmineDmsf.dmsf_webdav? %>
   <li>
     <% if dmsf_file.last_revision && dmsf_file.last_revision.protocol %>
       <% url = "#{dmsf_file.last_revision.protocol}:ofe|u|#{Setting.protocol.strip}://#{Setting.host_name.strip}/dmsf/webdav/#{Addressable::URI.escape(RedmineDmsf::Webdav::ProjectResource.create_project_name(dmsf_file.project))}/" %>

@@ -56,7 +56,7 @@
         <%= link_to 'Documents.zip', download_email_entries_path(id: @project, folder_id: @folder,
                                                                  path: @email_params[:zipped_content]) %>
         <%= l(:label_or) %>
-        <%= check_box_tag('email[links_only]', 1, Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'],
+        <%= check_box_tag('email[links_only]', 1, RedmineDmsf.dmsf_documents_email_links_only?,
               onchange: "$('#public_url').toggle($('#email_links_only').prop('checked'))")
         %>
         <%= l(:label_links_only) %>

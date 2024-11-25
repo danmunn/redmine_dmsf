@@ -34,7 +34,7 @@ module RedmineDmsf
       module ClassMethods
         def available_search_types
           # Removes the original Documents from searching (replaced with DMSF)
-          if Setting.plugin_redmine_dmsf['remove_original_documents_module']
+          if RedmineDmsf.remove_original_documents_module?
             super.reject { |t| t == 'documents' }
           else
             super

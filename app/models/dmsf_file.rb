@@ -101,13 +101,10 @@ class DmsfFile < ApplicationRecord
   end
 
   def self.storage_path
-    path = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].try(:strip)
-    if path.blank?
-      path = Pathname.new('files').join('dmsf').to_s
-    else
-      pn = Pathname.new(path)
-      return pn if pn.absolute?
-    end
+    path = RedmineDmsf.dmsf_storage_directory
+    pn = Pathname.new(path)
+    return pn if pn.absolute?
+
     Rails.root.join path
   end
 
@@ -120,7 +117,7 @@ class DmsfFile < ApplicationRecord
   end
 
   def approval_allowed_zero_minor
-    Setting.plugin_redmine_dmsf['only_approval_zero_minor_version'] ? last_revision.minor_version&.zero? : true
+    RedmineDmsf.only_approval_zero_minor_version? ? last_revision.minor_version&.zero? : true
   end
 
   def last_revision
@@ -369,16 +366,8 @@ class DmsfFile < ApplicationRecord
     if !options[:titles_only] && RedmineDmsf::Plugin.xapian_available?
       database = nil
       begin
-        unless Setting.plugin_redmine_dmsf['dmsf_stemming_lang']
-          raise StandardError, "'dmsf_stemming_lang' option is not set"
-        end
-
-        lang = Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].strip
-        unless Setting.plugin_redmine_dmsf['dmsf_index_database']
-          raise StandardError, "'dmsf_index_database' option is not set"
-        end
-
-        databasepath = File.join(Setting.plugin_redmine_dmsf['dmsf_index_database'].strip, lang)
+        lang = RedmineDmsf.dmsf_stemming_lang.strip
+        databasepath = File.join(RedmineDmsf.dmsf_index_database.strip, lang)
         database = Xapian::Database.new(databasepath)
       rescue StandardError => e
         Rails.logger.error "REDMINE_XAPIAN ERROR: Xapian database is not properly set, initiated or it's corrupted."
@@ -397,7 +386,7 @@ class DmsfFile < ApplicationRecord
         qp.stemmer = stemmer
         qp.database = database
 
-        case Setting.plugin_redmine_dmsf['dmsf_stemming_strategy'].strip
+        case RedmineDmsf.dmsf_stemming_strategy.strip
         when 'STEM_NONE'
           qp.stemming_strategy = Xapian::QueryParser::STEM_NONE
         when 'STEM_SOME'
@@ -413,7 +402,7 @@ class DmsfFile < ApplicationRecord
                         end
 
         flags = Xapian::QueryParser::FLAG_WILDCARD
-        flags |= Xapian::QueryParser::FLAG_CJK_NGRAM if Setting.plugin_redmine_dmsf['dmsf_enable_cjk_ngrams']
+        flags |= Xapian::QueryParser::FLAG_CJK_NGRAM if RedmineDmsf.dmsf_enable_cjk_ngrams?
 
         query = qp.parse_query(query_string, flags)
 

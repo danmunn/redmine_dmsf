@@ -55,7 +55,7 @@ def dmsf_init
               if: proc {
                 User.current.allowed_to?(:view_dmsf_folders, nil, global: true) &&
                   ActiveRecord::Base.connection.data_source_exists?('settings') &&
-                  Setting.plugin_redmine_dmsf['dmsf_global_menu_disabled'].blank?
+                  !RedmineDmsf.dmsf_global_menu_disabled?
               }
   end
 

@@ -80,9 +80,7 @@ class DmsfWorkflowsController < ApplicationController
         if @dmsf_workflow.try_finish revision, action, (params[:step_action].to_i / 10)
           if revision.dmsf_file
             begin
-              unless Setting.plugin_redmine_dmsf['dmsf_keep_documents_locked']
-                revision.dmsf_file.unlock!(force_file_unlock_allowed: true)
-              end
+              revision.dmsf_file.unlock!(force_file_unlock_allowed: true) unless RedmineDmsf.dmsf_keep_documents_locked?
             rescue RedmineDmsf::Errors::DmsfLockError => e
               flash[:info] = e.message
             end
@@ -99,8 +97,8 @@ class DmsfWorkflowsController < ApplicationController
                 :text_email_finished_approved,
                 :text_email_to_see_history
               )
-              if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.present?
-                max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
+              if RedmineDmsf.dmsf_display_notified_recipients? && recipients.present?
+                max_notifications = RedmineDmsf.dmsf_max_notification_receivers_info
                 to = recipients.collect(&:name).first(max_notifications).join(', ')
                 if to.present?
                   to << (recipients.count > max_notifications ? ',...' : '.')
@@ -122,8 +120,8 @@ class DmsfWorkflowsController < ApplicationController
               :text_email_to_see_history,
               action.note
             )
-            if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.present?
-              max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
+            if RedmineDmsf.dmsf_display_notified_recipients? && recipients.present?
+              max_notifications = RedmineDmsf.dmsf_max_notification_receivers_info
               to = recipients.collect(&:name).first(max_notifications).join(', ')
               if to.present?
                 to << (recipients.count > max_notifications ? ',...' : '.')
@@ -146,7 +144,7 @@ class DmsfWorkflowsController < ApplicationController
                 action.note,
                 action.dmsf_workflow_step_assignment.dmsf_workflow_step
               )
-              if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
+              if RedmineDmsf.dmsf_display_notified_recipients?
                 flash[:warning] = l(:warning_email_notifications, to: delegate.name)
               end
             end
@@ -186,13 +184,13 @@ class DmsfWorkflowsController < ApplicationController
                 :text_email_to_see_status
               )
             end
-            if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
+            if RedmineDmsf.dmsf_display_notified_recipients?
               recipients = assignments.collect(&:user)
               recipients << to if to
               recipients.uniq!
               recipients &= DmsfMailer.get_notify_users(@project, revision.dmsf_file, force_notification: true)
               unless recipients.empty?
-                max_notifications = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
+                max_notifications = RedmineDmsf.dmsf_max_notification_receivers_info
                 to = recipients.collect(&:name).first(max_notifications).join(', ')
                 if to.present?
                   to << (recipients.count > max_notifications ? ',...' : '.')

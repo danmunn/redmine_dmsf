@@ -28,7 +28,7 @@ module RedmineDmsf
         if message.present?
           super
         else
-          super(l(:error_max_email_filesize_exceeded, number: Setting.plugin_redmine_dmsf['dmsf_max_email_filesize']))
+          super(l(:error_max_email_filesize_exceeded, number: RedmineDmsf.dmsf_max_email_filesize))
         end
       end
     end

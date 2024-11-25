@@ -344,7 +344,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     with_settings plugin_redmine_dmsf: { 'dmsf_documents_email_from' => 'karel.picman@kontron.com' } do
       post "/projects/#{@project1.id}/dmsf/entries", params: { email_entries: true, ids: ["file-#{@file1.id}"] }
       assert_response :success
-      assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_from']
+      assert_select "input:match('value', ?)", RedmineDmsf.dmsf_documents_email_from
     end
   end
 
@@ -353,7 +353,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     with_settings plugin_redmine_dmsf: { 'dmsf_documents_email_reply_to' => 'karel.picman@kontron.com' } do
       post "/projects/#{@project1.id}/dmsf/entries", params: { email_entries: true, ids: ["file-#{@file1.id}"] }
       assert_response :success
-      assert_select "input:match('value', ?)", Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to']
+      assert_select "input:match('value', ?)", RedmineDmsf.dmsf_documents_email_reply_to
     end
   end
 

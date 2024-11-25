@@ -140,8 +140,8 @@ module DmsfUploadHelper
       # Notifications
       begin
         recipients = DmsfMailer.deliver_files_updated(project, files)
-        if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'] && recipients.any?
-          max_recipients = Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
+        if RedmineDmsf.dmsf_display_notified_recipients? && recipients.any?
+          max_recipients = RedmineDmsf.dmsf_max_notification_receivers_info
           to = recipients.collect { |user, _| user.name }.first(max_recipients).join(', ')
           if to.present?
             to << (recipients.count > max_recipients ? ',...' : '.')
