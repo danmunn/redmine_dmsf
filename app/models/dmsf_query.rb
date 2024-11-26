@@ -258,10 +258,9 @@ class DmsfQuery < Query
     return query if query&.visibility == VISIBILITY_PUBLIC
 
     # Global default
-    if (query_id = RedmineDmsf.dmsf_default_query).present?
-      query = find_by(id: query_id)
-      return query if query&.visibility == VISIBILITY_PUBLIC
-    end
+    query = find_by(id: RedmineDmsf.dmsf_default_query)
+    return query if query&.visibility == VISIBILITY_PUBLIC
+
     nil
   end
 
