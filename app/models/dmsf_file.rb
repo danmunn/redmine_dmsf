@@ -366,8 +366,8 @@ class DmsfFile < ApplicationRecord
     if !options[:titles_only] && RedmineDmsf::Plugin.xapian_available?
       database = nil
       begin
-        lang = RedmineDmsf.dmsf_stemming_lang.strip
-        databasepath = File.join(RedmineDmsf.dmsf_index_database.strip, lang)
+        lang = RedmineDmsf.dmsf_stemming_lang
+        databasepath = File.join(RedmineDmsf.dmsf_index_database, lang)
         database = Xapian::Database.new(databasepath)
       rescue StandardError => e
         Rails.logger.error "REDMINE_XAPIAN ERROR: Xapian database is not properly set, initiated or it's corrupted."
@@ -386,7 +386,7 @@ class DmsfFile < ApplicationRecord
         qp.stemmer = stemmer
         qp.database = database
 
-        case RedmineDmsf.dmsf_stemming_strategy.strip
+        case RedmineDmsf.dmsf_stemming_strategy
         when 'STEM_NONE'
           qp.stemming_strategy = Xapian::QueryParser::STEM_NONE
         when 'STEM_SOME'

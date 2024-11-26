@@ -31,19 +31,23 @@ module RedmineDmsf
     end
 
     def dmsf_storage_directory
-      Setting.plugin_redmine_dmsf['dmsf_storage_directory'].presence || 'files/dmsf'
+      value = Setting.plugin_redmine_dmsf['dmsf_storage_directory'].presence || 'files/dmsf'
+      value.strip
     end
 
     def dmsf_index_database
-      Setting.plugin_redmine_dmsf['dmsf_index_database'].presence || File.expand_path('dmsf_index', Rails.root)
+      value = Setting.plugin_redmine_dmsf['dmsf_index_database'].presence || File.expand_path('dmsf_index', Rails.root)
+      value.strip
     end
 
     def dmsf_stemming_lang
-      Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].presence || 'english'
+      value = Setting.plugin_redmine_dmsf['dmsf_stemming_lang'].presence || 'english'
+      value.strip
     end
 
     def dmsf_stemming_strategy
-      Setting.plugin_redmine_dmsf['dmsf_stemming_strategy'].presence || 'STEM_NONE'
+      value = Setting.plugin_redmine_dmsf['dmsf_stemming_strategy'].presence || 'STEM_NONE'
+      value.strip
     end
 
     def dmsf_webdav?
@@ -63,7 +67,8 @@ module RedmineDmsf
     end
 
     def dmsf_global_title_format
-      Setting.plugin_redmine_dmsf['dmsf_global_title_format'].presence || ''
+      value = Setting.plugin_redmine_dmsf['dmsf_global_title_format'].presence || ''
+      value.strip
     end
 
     def dmsf_columns
@@ -71,11 +76,13 @@ module RedmineDmsf
     end
 
     def dmsf_webdav_ignore
-      Setting.plugin_redmine_dmsf['dmsf_webdav_ignore'].presence || '^(\._|\.DS_Store$|Thumbs.db$)'
+      value = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore'].presence || '^(\._|\.DS_Store$|Thumbs.db$)'
+      value.strip
     end
 
     def dmsf_webdav_disable_versioning
-      Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'].presence || '^\~\$|\.tmp$'
+      value = Setting.plugin_redmine_dmsf['dmsf_webdav_disable_versioning'].presence || '^\~\$|\.tmp$'
+      value.strip
     end
 
     def dmsf_keep_documents_locked?
@@ -95,11 +102,14 @@ module RedmineDmsf
     end
 
     def dmsf_documents_email_from
-      Setting.plugin_redmine_dmsf['dmsf_documents_email_from'].presence || "#{User.current.name} <#{User.current.mail}>"
+      value = Setting.plugin_redmine_dmsf['dmsf_documents_email_from'].presence ||
+              "#{User.current.name} <#{User.current.mail}>"
+      value.strip
     end
 
     def dmsf_documents_email_reply_to
-      Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to'].presence || ''
+      value = Setting.plugin_redmine_dmsf['dmsf_documents_email_reply_to'].presence || ''
+      value.strip
     end
 
     def dmsf_documents_email_links_only?
@@ -151,11 +161,12 @@ module RedmineDmsf
     end
 
     def dmsf_max_notification_receivers_info
-      Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].positive?
+      Setting.plugin_redmine_dmsf['dmsf_max_notification_receivers_info'].to_i
     end
 
     def office_bin
-      Setting.plugin_redmine_dmsf['office_bin'].presence || ''
+      value = Setting.plugin_redmine_dmsf['office_bin'].presence || ''
+      value.strip
     end
 
     def dmsf_global_menu_disabled?
@@ -167,7 +178,8 @@ module RedmineDmsf
     end
 
     def dmsf_default_query
-      Setting.plugin_redmine_dmsf['dmsf_default_query'].presence || ''
+      value = Setting.plugin_redmine_dmsf['dmsf_default_query'].presence || ''
+      value.strip
     end
 
     def empty_minor_version_by_default?
@@ -187,7 +199,8 @@ module RedmineDmsf
     end
 
     def dmsf_webdav_authentication
-      Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'].presence || 'Basic'
+      value = Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'].presence || 'Basic'
+      value.strip
     end
   end
 end
