@@ -63,19 +63,13 @@ module RedmineDmsf
     end
 
     def dmsf_webdav?
-      if Setting.plugin_redmine_dmsf['dmsf_webdav'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['dmsf_webdav']
-      else
-        Setting.plugin_redmine_dmsf['dmsf_webdav'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['dmsf_webdav']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def dmsf_display_notified_recipients?
-      if Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
-      else
-        Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['dmsf_display_notified_recipients']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def dmsf_global_title_format
@@ -107,19 +101,13 @@ module RedmineDmsf
     end
 
     def dmsf_keep_documents_locked?
-      if Setting.plugin_redmine_dmsf['dmsf_keep_documents_locked'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['dmsf_keep_documents_locked']
-      else
-        Setting.plugin_redmine_dmsf['dmsf_keep_documents_locked'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['dmsf_keep_documents_locked']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def dmsf_act_as_attachable?
-      if Setting.plugin_redmine_dmsf['dmsf_act_as_attachable?'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['dmsf_act_as_attachable?']
-      else
-        Setting.plugin_redmine_dmsf['dmsf_act_as_attachable?'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable?']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def dmsf_documents_email_from
@@ -139,51 +127,33 @@ module RedmineDmsf
     end
 
     def dmsf_documents_email_links_only?
-      if Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only']
-      else
-        Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['dmsf_documents_email_links_only']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def dmsf_enable_cjk_ngrams?
-      if Setting.plugin_redmine_dmsf['dmsf_enable_cjk_ngrams'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['dmsf_enable_cjk_ngrams']
-      else
-        Setting.plugin_redmine_dmsf['dmsf_enable_cjk_ngrams'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['dmsf_enable_cjk_ngrams']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def dmsf_webdav_use_project_names?
-      if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-      else
-        Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def dmsf_webdav_ignore_1b_file_for_authentication?
-      if Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication']
-      else
-        Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['dmsf_webdav_ignore_1b_file_for_authentication']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def dmsf_projects_as_subfolders?
-      if Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders']
-      else
-        Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def only_approval_zero_minor_version?
-      if Setting.plugin_redmine_dmsf['only_approval_zero_minor_version'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['only_approval_zero_minor_version']
-      else
-        Setting.plugin_redmine_dmsf['only_approval_zero_minor_version'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['only_approval_zero_minor_version']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def dmsf_max_notification_receivers_info
@@ -199,11 +169,8 @@ module RedmineDmsf
     end
 
     def dmsf_global_menu_disabled?
-      if Setting.plugin_redmine_dmsf['dmsf_global_menu_disabled'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['dmsf_global_menu_disabled']
-      else
-        Setting.plugin_redmine_dmsf['dmsf_global_menu_disabled'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['dmsf_global_menu_disabled']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def dmsf_default_query
@@ -211,19 +178,13 @@ module RedmineDmsf
     end
 
     def empty_minor_version_by_default?
-      if Setting.plugin_redmine_dmsf['empty_minor_version_by_default'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['empty_minor_version_by_default']
-      else
-        Setting.plugin_redmine_dmsf['empty_minor_version_by_default'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['empty_minor_version_by_default']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def remove_original_documents_module?
-      if Setting.plugin_redmine_dmsf['remove_original_documents_module'].is_a?(TrueClass)
-        Setting.plugin_redmine_dmsf['remove_original_documents_module']
-      else
-        Setting.plugin_redmine_dmsf['remove_original_documents_module'].to_i.positive?
-      end
+      value = Setting.plugin_redmine_dmsf['remove_original_documents_module']
+      value.is_a?(TrueClass) || value.is_a?(FalseClass) ? value : value.to_i.positive?
     end
 
     def dmsf_webdav_authentication
