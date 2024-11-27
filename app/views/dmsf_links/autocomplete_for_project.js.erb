@@ -20,7 +20,6 @@
 
 var link = $('#dmsf_link_target_folder_id');
 
-link.html('<%= escape_javascript(
-  select_tag('dmsf_link[target_folder_id]',
-         folder_tree_options_for_select(DmsfFolder.directory_tree(params[:dmsf_link][:target_project_id])))) %>');
+link.empty().append('<%= escape_javascript(
+         folder_tree_options_for_select(DmsfFolder.directory_tree(params[:dmsf_link][:target_project_id]))) %>');
 link.change();

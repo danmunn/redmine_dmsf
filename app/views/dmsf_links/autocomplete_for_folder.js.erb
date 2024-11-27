@@ -18,7 +18,6 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-$('#dmsf_link_target_file_id').html('<%= escape_javascript(
-  select_tag('dmsf_link[target_file_id]',
+$('#dmsf_link_target_file_id').empty().append('<%= escape_javascript(
             options_for_select(DmsfFolder.file_list(files_for_select(params[:dmsf_link][:target_project_id],
-            params[:dmsf_link][:target_folder_id]))))) %>');
+            params[:dmsf_link][:target_folder_id])))) %>');

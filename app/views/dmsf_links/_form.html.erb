@@ -39,9 +39,9 @@
       <% unless @fast_links && (@type == 'link_to') %>
         <p>
           <% if @type == 'link_from' %>
-            <label for="dmsf_link[target_project_id]"><%= l(:label_source_project) %></label>
+            <label for="dmsf_link_target_project_id"><%= l(:label_source_project) %></label>
           <% else %>
-            <label for="dmsf_link[target_project_id]"><%= l(:label_target_project) %></label>
+            <label for="dmsf_link_target_project_id"><%= l(:label_target_project) %></label>
           <% end %>
           <%= select_tag 'dmsf_link[target_project_id]',
             project_tree_options_for_select(DmsfFile.allowed_target_projects_on_copy,
