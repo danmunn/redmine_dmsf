@@ -326,7 +326,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_approval_allowed_zero_minor_yes
-    with_settings plugin_redmine_dmsf: { 'only_approval_zero_minor_version' => true } do
+    with_settings plugin_redmine_dmsf: { 'only_approval_zero_minor_version' => '1' } do
       @file1.last_revision.minor_version = 0
       assert @file1.approval_allowed_zero_minor
       @file1.last_revision.minor_version = 1
@@ -335,7 +335,7 @@ class DmsfFileTest < RedmineDmsf::Test::UnitTest
   end
 
   def test_approval_allowed_zero_minor_no
-    with_settings plugin_redmine_dmsf: { 'only_approval_zero_minor_version' => nil } do
+    with_settings plugin_redmine_dmsf: { 'only_approval_zero_minor_version' => '0' } do
       @file1.last_revision.minor_version = 0
       assert @file1.approval_allowed_zero_minor
       @file1.last_revision.minor_version = 1
