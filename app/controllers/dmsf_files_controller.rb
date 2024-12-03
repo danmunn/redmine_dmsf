@@ -121,7 +121,7 @@ class DmsfFilesController < ApplicationController
       revision.title = params[:dmsf_file_revision][:title].scrub.strip
       revision.name = params[:dmsf_file_revision][:name].scrub.strip
       revision.description = params[:dmsf_file_revision][:description]&.scrub&.strip
-      revision.comment = params[:dmsf_file_revision][:comment].scrub.strip
+      revision.comment = params[:dmsf_file_revision][:comment]&.scrub&.strip
       revision.dmsf_file = @file
       last_revision = @file.last_revision
       revision.source_revision = last_revision
