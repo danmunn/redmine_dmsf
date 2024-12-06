@@ -166,7 +166,7 @@ class DmsfMailer < Mailer
         skip_no_self_notified = true
       end
       mail to: user,
-          subject:
+           subject:
             "[#{@project.name} - #{l(:field_label_dmsf_workflow)}] #{@workflow.name} #{l(subject_id)} #{step_name}"
     ensure
       @author.pref.no_self_notified = true if skip_no_self_notified
