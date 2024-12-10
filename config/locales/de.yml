@@ -387,7 +387,7 @@ de:
   text_dmsf_fast_links_info: Ermöglicht durch Eingabe der Ordner-ID auf einfache Art und Weise eine Verknüpfung 
     auf den Zielordner zu erstellen.
 
-  label_dmsf_permissions: Zugriff erlaubt für
+  label_dmsf_permissions: Zugriff ausschließlich erlaubt für
   label_inherited_permissions: Zugriff vererbt für
 
   button_edit_content: Dokument bearbeiten
