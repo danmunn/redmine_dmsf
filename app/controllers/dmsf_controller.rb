@@ -18,6 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+require "#{File.dirname(__FILE__)}/../../lib/redmine_dmsf/dmsf_zip"
+
 # DMSF controller
 class DmsfController < ApplicationController
   include RedmineDmsf::DmsfZip
@@ -751,7 +753,7 @@ class DmsfController < ApplicationController
 
   def query
     retrieve_default_query true
-    @query = if Redmine::Plugin.installed?('easy_extensions')
+    @query = if defined?(EasyExtensions)
                retrieve_query_without_easy_extensions DmsfQuery, true
              else
                retrieve_query DmsfQuery, true

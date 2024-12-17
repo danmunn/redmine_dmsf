@@ -104,7 +104,7 @@
   <% end %>
 <% end %>
 
-<% if Redmine::Plugin.installed?('easy_extensions') %>
+<% if defined?(EasyExtensions) %>
   <%= late_javascript_tag do %>
     $(function() {
       $("p.buttons").addClass("filter-buttons form-actions");

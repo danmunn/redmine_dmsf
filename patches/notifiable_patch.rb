@@ -20,22 +20,29 @@
 
 module RedmineDmsf
   module Patches
-    # Attachable
-    module AttachablePatch
-      ##################################################################################################################
-      # Overridden methods
+    # Notifiable
+    module NotifiablePatch
+      def self.prepended(base)
+        base.singleton_class.prepend(ClassMethods)
+      end
 
-      def has_attachments?
-        super || (defined?(dmsf_files) && dmsf_files.any?) || (defined?(dmsf_links) && dmsf_links.any?)
+      # Class methods
+      module ClassMethods
+        ################################################################################################################
+        # Overridden methods
+        #
+        def all
+          notifications = super
+          notifications << Redmine::Notifiable.new('dmsf_workflow_plural')
+          notifications << Redmine::Notifiable.new('dmsf_legacy_notifications')
+          notifications
+        end
       end
     end
   end
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?('easy_extensions')
-  EasyPatchManager.register_patch_to_be_first 'Redmine::Acts::Attachable::InstanceMethods',
-                                              'RedmineDmsf::Patches::AttachablePatch', prepend: true, first: true
-else
-  Redmine::Acts::Attachable.prepend RedmineDmsf::Patches::AttachablePatch
+unless defined?(EasyPatchManager) || RedmineDmsf::Plugin.an_obsolete_plugin_present?
+  Redmine::Notifiable.prepend RedmineDmsf::Patches::NotifiablePatch
 end

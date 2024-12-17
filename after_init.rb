@@ -39,7 +39,7 @@ def dmsf_init
               param: :id,
               html: { class: 'icon icon-dmsf' }
     # New menu extension
-    next if Redmine::Plugin.installed?('easy_extensions')
+    next if defined?(EasyExtensions)
 
     menu.push :dmsf_file, { controller: 'dmsf_upload', action: 'multi_upload' },
               caption: :label_dmsf_new_top_level_document, parent: :new_object
@@ -112,7 +112,7 @@ def dmsf_init
   Token.add_action :dmsf_webdav_digest, max_instances: 1, validity_time: nil
 end
 
-if Redmine::Plugin.installed?('easy_extensions')
+if defined?(EasyExtensions)
   Rails.application.config.after_initialize do
     dmsf_init
 
@@ -130,20 +130,26 @@ Rails.application.configure do
   Zip.unicode_names = true
 
   # DMS custom fields
-  CustomFieldsHelper::CUSTOM_FIELDS_TABS << { name: 'DmsfFileRevisionCustomField', partial: 'custom_fields/index',
-                                              label: :dmsf }
+  after_easy_init do
+    CustomFieldsHelper::CUSTOM_FIELDS_TABS << { name: 'DmsfFileRevisionCustomField', partial: 'custom_fields/index',
+                                                label: :dmsf }
+  end
 
   # Searchable modules
-  Redmine::Search.map do |search|
-    search.register :dmsf_files
-    search.register :dmsf_folders
+  after_easy_init do
+    Redmine::Search.map do |search|
+      search.register :dmsf_files
+      search.register :dmsf_folders
+    end
   end
 
   # Activities
-  Redmine::Activity.register :dmsf_file_revision_accesses, default: false
-  Redmine::Activity.register :dmsf_file_revisions
+  after_easy_init do
+    Redmine::Activity.register :dmsf_file_revision_accesses, default: false
+    Redmine::Activity.register :dmsf_file_revisions
+  end
 
-  if Redmine::Plugin.installed?('easy_extensions')
+  if defined?(EasyExtensions)
     require "#{File.dirname(__FILE__)}/lib/redmine_dmsf/webdav/custom_middleware"
     config.middleware.insert_before ActionDispatch::Cookies, RedmineDmsf::Webdav::CustomMiddleware
   end

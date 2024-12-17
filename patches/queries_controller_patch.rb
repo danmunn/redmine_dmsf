@@ -17,30 +17,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
+#
 module RedmineDmsf
   module Patches
-    # TODO: This is just a workaround to fix alias_method usage in RedmineUp's plugins, which is in conflict with
-    #   prepend and causes an infinite loop.
-    module NotifiableRuPatch
-      def self.included(base)
-        base.extend ClassMethods
-        base.class_eval do
-          unloadable
-          class << self
-            alias_method :all_without_resources_dmsf, :all
-            alias_method :all, :all_with_resources_dmsf
-          end
-        end
-      end
+    # Queries controller
+    module QueriesControllerPatch
+      ##################################################################################################################
+      # New methods
 
-      # Class methods
-      module ClassMethods
-        def all_with_resources_dmsf
-          notifications = all_without_resources_dmsf
-          notifications << Redmine::Notifiable.new('dmsf_workflow_plural')
-          notifications << Redmine::Notifiable.new('dmsf_legacy_notifications')
-          notifications
+      private
+
+      def redirect_to_dmsf_query(options)
+        if @project
+          redirect_to dmsf_folder_path(@project, options)
+        else
+          redirect_to home_path(options)
         end
       end
     end
@@ -48,6 +39,9 @@ module RedmineDmsf
 end
 
 # Apply the patch
-if defined?(EasyExtensions) || RedmineDmsf::Plugin.an_obsolete_plugin_present?
-  Redmine::Notifiable.include RedmineDmsf::Patches::NotifiableRuPatch
+if defined?(EasyPatchManager)
+  EasyPatchManager.register_controller_patch 'QueriesController', 'RedmineDmsf::Patches::QueriesControllerPatch',
+                                             prepend: true
+else
+  QueriesController.prepend RedmineDmsf::Patches::QueriesControllerPatch
 end

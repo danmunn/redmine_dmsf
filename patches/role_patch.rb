@@ -20,47 +20,30 @@
 
 module RedmineDmsf
   module Patches
-    # User preference
-    module UserPreferencePatch
+    # Role
+    module RolePatch
       ##################################################################################################################
       # New methods
 
-      UserPreference.safe_attributes 'dmsf_attachments_upload_choice'
-
-      def dmsf_attachments_upload_choice
-        self[:dmsf_attachments_upload_choice] || 'DMSF'
+      def self.included(base)
+        base.class_eval do
+          before_destroy :remove_dmsf_references, prepend: true
+        end
       end
 
-      def dmsf_attachments_upload_choice=(value)
-        self[:dmsf_attachments_upload_choice] = value
-      end
+      def remove_dmsf_references
+        return unless id
 
-      UserPreference.safe_attributes 'default_dmsf_query'
-
-      def default_dmsf_query
-        self[:default_dmsf_query] || nil
-      end
-
-      def default_dmsf_query=(value)
-        self[:default_dmsf_query] = value
-      end
-
-      UserPreference.safe_attributes 'receive_download_notification'
-
-      def receive_download_notification
-        self[:receive_download_notification] || '0'
-      end
-
-      def receive_download_notification=(value)
-        self[:receive_download_notification] = value
+        substitute = Role.anonymous
+        DmsfFolderPermission.where(object_id: id, object_type: 'Role').update_all object_id: substitute.id
       end
     end
   end
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?('easy_extensions')
-  EasyPatchManager.register_model_patch 'UserPreference', 'RedmineDmsf::Patches::UserPreferencePatch'
+if defined?(EasyPatchManager)
+  EasyPatchManager.register_model_patch 'Role', 'RedmineDmsf::Patches::RolePatch', prepend: true
 else
-  UserPreference.prepend RedmineDmsf::Patches::UserPreferencePatch
+  Role.prepend RedmineDmsf::Patches::RolePatch
 end

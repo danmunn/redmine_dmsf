@@ -17,31 +17,50 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#
+
 module RedmineDmsf
   module Patches
-    # Queries controller
-    module QueriesControllerPatch
+    # User preference
+    module UserPreferencePatch
       ##################################################################################################################
       # New methods
 
-      private
+      UserPreference.safe_attributes 'dmsf_attachments_upload_choice'
 
-      def redirect_to_dmsf_query(options)
-        if @project
-          redirect_to dmsf_folder_path(@project, options)
-        else
-          redirect_to home_path(options)
-        end
+      def dmsf_attachments_upload_choice
+        self[:dmsf_attachments_upload_choice] || 'DMSF'
+      end
+
+      def dmsf_attachments_upload_choice=(value)
+        self[:dmsf_attachments_upload_choice] = value
+      end
+
+      UserPreference.safe_attributes 'default_dmsf_query'
+
+      def default_dmsf_query
+        self[:default_dmsf_query] || nil
+      end
+
+      def default_dmsf_query=(value)
+        self[:default_dmsf_query] = value
+      end
+
+      UserPreference.safe_attributes 'receive_download_notification'
+
+      def receive_download_notification
+        self[:receive_download_notification] || '0'
+      end
+
+      def receive_download_notification=(value)
+        self[:receive_download_notification] = value
       end
     end
   end
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?('easy_extensions')
-  EasyPatchManager.register_controller_patch 'QueriesController', 'RedmineDmsf::Patches::QueriesControllerPatch',
-                                             prepend: true
+if defined?(EasyPatchManager)
+  EasyPatchManager.register_model_patch 'UserPreference', 'RedmineDmsf::Patches::UserPreferencePatch'
 else
-  QueriesController.prepend RedmineDmsf::Patches::QueriesControllerPatch
+  UserPreference.prepend RedmineDmsf::Patches::UserPreferencePatch
 end

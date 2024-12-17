@@ -2,7 +2,7 @@
 
 # Redmine plugin for Document Management System "Features"
 #
-# Karel Pičman <karel.picman@kontron.com>
+#  Vít Jonáš <vit.jonas@gmail.com>, Daniel Munn <dan.munn@munnster.co.uk>, Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,35 +20,34 @@
 
 module RedmineDmsf
   module Patches
-    # AccessControll patch
-    module AccessControlPatch
+    # Project helper
+    module ProjectsHelperPatch
       ##################################################################################################################
       # Overridden methods
-      def self.prepended(base)
-        class << base
-          prepend ClassMethods
-        end
-      end
 
-      # Class methods
-      module ClassMethods
-        def available_project_modules
-          # Removes the original Documents from project's modules (replaced with DMSF)
-          if RedmineDmsf.remove_original_documents_module?
-            super.reject { |m| m == :documents }
-          else
-            super
-          end
-        end
+      def project_settings_tabs
+        tabs = super
+        dmsf_tabs =
+          [
+            {
+              name: 'dmsf',
+              action: { controller: 'dmsf_state', action: 'user_pref_save' },
+              partial: 'dmsf_state/user_pref', label: :menu_dmsf
+            },
+            {
+              name: 'dmsf_workflow',
+              action: { controller: 'dmsf_workflows', action: 'index' },
+              partial: 'dmsf_workflows/main', label: :label_dmsf_workflow_plural
+            }
+          ]
+        tabs.concat(
+          dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project) }
+        )
+        tabs
       end
     end
   end
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?('easy_extensions')
-  EasyPatchManager.register_patch_to_be_first 'Redmine::Acts::Attachable::InstanceMethods',
-                                              'RedmineDmsf::Patches::AccessControlPatch', prepend: true, first: true
-else
-  Redmine::AccessControl.prepend RedmineDmsf::Patches::AccessControlPatch
-end
+ProjectsController.send(:helper, RedmineDmsf::Patches::ProjectsHelperPatch) unless defined?(EasyPatchManager)

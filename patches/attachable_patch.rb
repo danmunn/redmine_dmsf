@@ -20,30 +20,22 @@
 
 module RedmineDmsf
   module Patches
-    # Role
-    module RolePatch
+    # Attachable
+    module AttachablePatch
       ##################################################################################################################
-      # New methods
+      # Overridden methods
 
-      def self.included(base)
-        base.class_eval do
-          before_destroy :remove_dmsf_references, prepend: true
-        end
-      end
-
-      def remove_dmsf_references
-        return unless id
-
-        substitute = Role.anonymous
-        DmsfFolderPermission.where(object_id: id, object_type: 'Role').update_all object_id: substitute.id
+      def has_attachments?
+        super || (defined?(dmsf_files) && dmsf_files.any?) || (defined?(dmsf_links) && dmsf_links.any?)
       end
     end
   end
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?('easy_extensions')
-  EasyPatchManager.register_model_patch 'Role', 'RedmineDmsf::Patches::RolePatch', prepend: true
+if defined?(EasyPatchManager)
+  EasyPatchManager.register_patch_to_be_first 'Redmine::Acts::Attachable::InstanceMethods',
+                                              'RedmineDmsf::Patches::AttachablePatch', prepend: true, first: true
 else
-  Role.prepend RedmineDmsf::Patches::RolePatch
+  Redmine::Acts::Attachable.prepend RedmineDmsf::Patches::AttachablePatch
 end

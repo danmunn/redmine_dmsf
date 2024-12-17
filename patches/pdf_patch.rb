@@ -2,7 +2,7 @@
 
 # Redmine plugin for Document Management System "Features"
 #
-#  Vít Jonáš <vit.jonas@gmail.com>, Daniel Munn <dan.munn@munnster.co.uk>, Karel Pičman <karel.picman@kontron.com>
+# Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,39 +17,34 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
+# Redmine's PDF export patch to view DMS images
+
+require 'redmine/export/pdf'
 
 module RedmineDmsf
   module Patches
-    # Project helper
-    module ProjectsHelperPatch
+    # PDF
+    module PdfPatch
       ##################################################################################################################
       # Overridden methods
 
-      def project_settings_tabs
-        tabs = super
-        dmsf_tabs =
-          [
-            {
-              name: 'dmsf',
-              action: { controller: 'dmsf_state', action: 'user_pref_save' },
-              partial: 'dmsf_state/user_pref', label: :menu_dmsf
-            },
-            {
-              name: 'dmsf_workflow',
-              action: { controller: 'dmsf_workflows', action: 'index' },
-              partial: 'dmsf_workflows/main', label: :label_dmsf_workflow_plural
-            }
-          ]
-        tabs.concat(
-          dmsf_tabs.select { |dmsf_tab| User.current.allowed_to?(dmsf_tab[:action], @project) }
-        )
-        tabs
+      def get_image_filename(attrname)
+        if attrname =~ %r{/dmsf/files/(\d+)/}
+          file = DmsfFile.find_by(id: Regexp.last_match(1))
+          file&.last_revision ? file.last_revision.disk_file : nil
+        else
+          super
+        end
       end
     end
   end
 end
 
 # Apply the patch
-unless Redmine::Plugin.installed?('easy_extensions')
-  ProjectsController.send :helper, RedmineDmsf::Patches::ProjectsHelperPatch
+if defined?(EasyPatchManager)
+  EasyPatchManager.register_patch_to_be_first 'Redmine::Export::PDF::ITCPDF', 'RedmineDmsf::Patches::PdfPatch',
+                                              prepend: true, first: true
+else
+  Redmine::Export::PDF::ITCPDF.prepend RedmineDmsf::Patches::PdfPatch
 end

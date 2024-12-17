@@ -17,24 +17,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#
-# Redmine's PDF export patch to view DMS images
-
-require 'redmine/export/pdf'
 
 module RedmineDmsf
   module Patches
-    # PDF
-    module PdfPatch
+    # Search patch
+    module SearchPatch
       ##################################################################################################################
       # Overridden methods
+      def self.prepended(base)
+        base.singleton_class.prepend(ClassMethods)
+      end
 
-      def get_image_filename(attrname)
-        if attrname =~ %r{/dmsf/files/(\d+)/}
-          file = DmsfFile.find_by(id: Regexp.last_match(1))
-          file&.last_revision ? file.last_revision.disk_file : nil
-        else
-          super
+      # Class methods
+      module ClassMethods
+        def available_search_types
+          # Removes the original Documents from searching (replaced with DMSF)
+          if RedmineDmsf.remove_original_documents_module?
+            super.reject { |t| t == 'documents' }
+          else
+            super
+          end
         end
       end
     end
@@ -42,9 +44,9 @@ module RedmineDmsf
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?('easy_extensions')
-  EasyPatchManager.register_patch_to_be_first 'Redmine::Export::PDF::ITCPDF', 'RedmineDmsf::Patches::PdfPatch',
-                                              prepend: true, first: true
+if defined?(EasyPatchManager)
+  EasyPatchManager.register_patch_to_be_first 'Redmine::Acts::Attachable::InstanceMethods',
+                                              'RedmineDmsf::Patches::SearchPatch', prepend: true, first: true
 else
-  Redmine::Export::PDF::ITCPDF.prepend RedmineDmsf::Patches::PdfPatch
+  Redmine::Search.prepend RedmineDmsf::Patches::SearchPatch
 end

@@ -20,22 +20,20 @@
 
 module RedmineDmsf
   module Patches
-    # Search patch
-    module SearchPatch
+    # AccessControl patch
+    module AccessControlPatch
       ##################################################################################################################
       # Overridden methods
       def self.prepended(base)
-        class << base
-          prepend ClassMethods
-        end
+        base.singleton_class.prepend(ClassMethods)
       end
 
       # Class methods
       module ClassMethods
-        def available_search_types
-          # Removes the original Documents from searching (replaced with DMSF)
+        def available_project_modules
+          # Removes the original Documents from project's modules (replaced with DMSF)
           if RedmineDmsf.remove_original_documents_module?
-            super.reject { |t| t == 'documents' }
+            super.reject { |m| m == :documents }
           else
             super
           end
@@ -46,9 +44,9 @@ module RedmineDmsf
 end
 
 # Apply the patch
-if Redmine::Plugin.installed?('easy_extensions')
+if defined?(EasyPatchManager)
   EasyPatchManager.register_patch_to_be_first 'Redmine::Acts::Attachable::InstanceMethods',
-                                              'RedmineDmsf::Patches::SearchPatch', prepend: true, first: true
+                                              'RedmineDmsf::Patches::AccessControlPatch', prepend: true, first: true
 else
-  Redmine::Search.prepend RedmineDmsf::Patches::SearchPatch
+  Redmine::AccessControl.prepend RedmineDmsf::Patches::AccessControlPatch
 end

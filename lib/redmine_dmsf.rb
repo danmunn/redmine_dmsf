@@ -199,63 +199,69 @@ end
 
 # DMSF libraries
 
-# Validators
-require "#{File.dirname(__FILE__)}/../app/validators/dmsf_file_name_validator"
-require "#{File.dirname(__FILE__)}/../app/validators/dmsf_max_file_size_validator"
-require "#{File.dirname(__FILE__)}/../app/validators/dmsf_workflow_name_validator"
-require "#{File.dirname(__FILE__)}/../app/validators/dmsf_url_validator"
-require "#{File.dirname(__FILE__)}/../app/validators/dmsf_folder_parent_validator"
-
-# Plugin's patches
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/formatting_helper_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/projects_helper_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/project_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/user_preference_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/user_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/issue_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/role_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/queries_controller_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/pdf_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/access_control_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/search_patch"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/custom_field_patch"
-
-# A workaround for obsolete 'alias_method' usage in RedmineUp's plugins
-def require_notifiable
-  if defined?(EasyExtensions) || RedmineDmsf::Plugin.an_obsolete_plugin_present?
-    require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/notifiable_ru_patch"
+def after_easy_init(&block)
+  if defined?(EasyExtensions)
+    Rails.application.config.after_initialize(&block)
   else
-    require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/notifiable_patch"
+    yield
   end
 end
 
-if defined?(EasyExtensions)
-  Rails.application.config.to_prepare { require_notifiable }
-else
-  require_notifiable
+# Validators
+after_easy_init do
+  require "#{File.dirname(__FILE__)}/../app/validators/dmsf_file_name_validator"
+  require "#{File.dirname(__FILE__)}/../app/validators/dmsf_max_file_size_validator"
+  require "#{File.dirname(__FILE__)}/../app/validators/dmsf_workflow_name_validator"
+  require "#{File.dirname(__FILE__)}/../app/validators/dmsf_url_validator"
+  require "#{File.dirname(__FILE__)}/../app/validators/dmsf_folder_parent_validator"
 end
 
-if defined?(EasyExtensions)
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/easy_crm_case_patch"
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/attachable_patch"
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/patches/easy_crm_cases_controller_patch.rb"
+# Patches
+unless defined?(EasyPatchManager)
+  require "#{File.dirname(__FILE__)}/../patches/formatting_helper_patch"
+  require "#{File.dirname(__FILE__)}/../patches/projects_helper_patch"
+  require "#{File.dirname(__FILE__)}/../patches/project_patch"
+  require "#{File.dirname(__FILE__)}/../patches/user_preference_patch"
+  require "#{File.dirname(__FILE__)}/../patches/user_patch"
+  require "#{File.dirname(__FILE__)}/../patches/issue_patch"
+  require "#{File.dirname(__FILE__)}/../patches/role_patch"
+  require "#{File.dirname(__FILE__)}/../patches/queries_controller_patch"
+  require "#{File.dirname(__FILE__)}/../patches/pdf_patch"
+  require "#{File.dirname(__FILE__)}/../patches/access_control_patch"
+  require "#{File.dirname(__FILE__)}/../patches/search_patch"
+  require "#{File.dirname(__FILE__)}/../patches/custom_field_patch"
+  # A workaround for obsolete 'alias_method' usage in RedmineUp's plugins
+  if RedmineDmsf::Plugin.an_obsolete_plugin_present?
+    require "#{File.dirname(__FILE__)}/../patches/notifiable_ru_patch"
+  else
+    require "#{File.dirname(__FILE__)}/../patches/notifiable_patch"
+  end
+end
+
+# A workaround for obsolete 'alias_method' usage in RedmineUp's plugins
+after_easy_init do
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/plugin"
 end
 
 # Load up classes that make up our WebDAV solution ontop of Dav4rack
-require "#{File.dirname(__FILE__)}/dav4rack"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/custom_middleware"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/base_resource"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/dmsf_resource"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/index_resource"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/project_resource"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/resource_proxy"
+after_easy_init do
+  require "#{File.dirname(__FILE__)}/dav4rack"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/custom_middleware"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/base_resource"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/dmsf_resource"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/index_resource"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/project_resource"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/resource_proxy"
+end
 
 # Errors
-require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_access_error"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_email_max_file_size_error"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_file_not_found_error"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_lock_error"
-require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_zip_max_files_error"
+after_easy_init do
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_access_error"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_email_max_file_size_error"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_file_not_found_error"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_lock_error"
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_zip_max_files_error"
+end
 
 # Hooks
 def require_hooks
@@ -274,14 +280,18 @@ def require_hooks
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/helpers/project_helper_hooks"
 end
 
-if defined?(EasyExtensions)
-  Rails.application.config.to_prepare { require_hooks }
-else
+after_easy_init do
   require_hooks
 end
 
 # Macros
-require "#{File.dirname(__FILE__)}/redmine_dmsf/macros"
+after_easy_init do
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/macros"
+end
 
 # Field formats
-require "#{File.dirname(__FILE__)}/redmine_dmsf/field_formats/dmsf_file_revision_format"
+after_easy_init do
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/field_formats/dmsf_file_revision_format"
+end
+
+require "#{File.dirname(__FILE__)}/easy_page_module" unless defined?(EasyExtensions)

@@ -32,6 +32,7 @@ module RedmineDmsf
         easy_crm_cases.each do |easy_crm_case|
           # Attach DMS documents
           uploaded_files = params[:dmsf_attachments]
+          details = params[:committed_files]
           if uploaded_files
             system_folder = easy_crm_case.system_folder(create: true)
             uploaded_files.each do |key, uploaded_file|
