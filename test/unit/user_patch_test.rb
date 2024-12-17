@@ -28,23 +28,29 @@ class UserPatchTest < RedmineDmsf::Test::UnitTest
 
   def test_remove_dmsf_references
     id = @jsmith.id
+    ###
+    puts ">>> #{@jsmith.custom_values.all.size}"
+    @jsmith.custom_values.each do |custom_value|
+      assert custom_value
+      puts ">>> #{custom_value.id}"
+      puts ">>> #{custom_value.field_format}"
+    end
+    ###
     @jsmith.destroy
     assert_equal 0, DmsfFileRevisionAccess.where(user_id: id).all.size
     assert_equal 0, DmsfFileRevision.where(user_id: id).all.size
     assert_equal 0, DmsfFileRevision.where(dmsf_workflow_assigned_by_user_id: id).all.size
     assert_equal 0, DmsfFileRevision.where(dmsf_workflow_started_by_user_id: id).all.size
     assert_equal 0, DmsfFile.where(deleted_by_user_id: id).all.size
-    # TODO: Expected: 0, Actual: 1 in Easy extension
-    f = DmsfFolder.where(user_id: id).first
-    puts "#{f.id}, #{f.title}, #{f.user_id}, #{f.deleted}" if f
-    # assert_equal 0, DmsfFolder.where(user_id: id).all.size
+    assert_equal 0, DmsfFolder.where(user_id: id).all.size
     assert_equal 0, DmsfFolder.where(deleted_by_user_id: id).all.size
     assert_equal 0, DmsfLink.where(user_id: id).all.size
     assert_equal 0, DmsfLink.where(deleted_by_user_id: id).all.size
-    # assert_equal 0, DmsfLock.where(user_id: id).all.size
-    # assert_equal 0, DmsfWorkflowStepAction.where(author_id: id).all.size
-    # assert_equal 0, DmsfWorkflowStepAssignment.where(user_id: id).all.size
-    # assert_equal 0, DmsfWorkflowStep.where(user_id: id).all.size
-    # assert_equal 0, DmsfWorkflow.where(author_id: id).all.size
+    assert_equal 0, DmsfLock.where(user_id: id).all.size
+    assert_equal 0, DmsfWorkflowStepAction.where(author_id: id).all.size
+    assert_equal 0, DmsfWorkflowStepAssignment.where(user_id: id).all.size
+    assert_equal 0, DmsfWorkflowStep.where(user_id: id).all.size
+    assert_equal 0, DmsfWorkflow.where(author_id: id).all.size
+    assert_equal 0, DmsfFolderPermission.where(object_id: id, object_type: 'User').all.size
   end
 end
