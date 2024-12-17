@@ -22,7 +22,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 # Link tests
 class DmsfLinksTest < RedmineDmsf::Test::UnitTest
-  fixtures :dmsf_links, :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+  fixtures :dmsf_links, :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :custom_fields, :custom_values
 
   def test_create_folder_link
     folder_link = DmsfLink.new
