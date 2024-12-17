@@ -85,7 +85,7 @@ Naming/AccessorMethodName:
 
 Naming/PredicateName:
   Exclude:
-    - lib/redmine_dmsf/patches/attachable_patch.rb # Easy tests
+    - patches/attachable_patch.rb # Easy tests
 
 Style/HashSyntax:
   EnforcedShorthandSyntax: either
@@ -111,8 +111,8 @@ Rails/SkipsModelValidations:
   Exclude:
     - app/helpers/dmsf_upload_helper.rb # touch is Okay
     - app/models/dmsf_workflow.rb # update doesn't work here
-    - lib/redmine_dmsf/patches/user_patch.rb
-    - lib/redmine_dmsf/patches/role_patch.rb
+    - patches/user_patch.rb
+    - patches/role_patch.rb
     - db/migrate/20170526144701_dmsf_attachable.rb
     - db/migrate/20170421101901_dmsf_file_container_rollback.rb
     - db/migrate/20170118142001_dmsf_file_container.rb

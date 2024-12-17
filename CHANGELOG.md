@@ -1,8 +1,21 @@
 Changelog for Redmine DMSF
 ==========================
 
-3.2.5 *???-??-??*
+4.0.0 *2024-12-17*
 ------------------
+
+    Redmine 6
+
+* New: #1571 - Update de.yml
+* Bug: #1570 - Emails are not sent to the author if no_self_notified
+* Bug: #1568 - The "Link from" doesn't work after upgrading the browsers
+* Bug: #1567 - Fixes Column 'dmsf_mail_notification' cannot be null
+* Bug: #1566 - Approval workflow notifications
+* Bug: #1565 - Plugin settings "Display notified recipients" does not apply!
+* Bug: #1564 - Revision API issues
+* New: #1563 - Redmine 6
+* New: #1561 - Add a waring about max number of uploaded files exceeded
+* Bug: #1560 - Can't add more than one link to an issue
 
 3.2.4 *2024-10-24*
 ------------------

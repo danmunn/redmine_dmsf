@@ -24,7 +24,7 @@ Redmine::Plugin.register :redmine_dmsf do
   author_url 'https://github.com/danmunn/redmine_dmsf/graphs/contributors'
   author 'Vít Jonáš / Daniel Munn / Karel Pičman'
   description 'Document Management System Features'
-  version '4.0.0 devel'
+  version '4.0.0'
 
   requires_redmine version_or_higher: '6.0.0'
 
@@ -33,7 +33,7 @@ Redmine::Plugin.register :redmine_dmsf do
            else
              '0'
            end
-  use_project_names = Redmine::Plugin.installed?('easy_extensions') ? '1' : '0'
+  use_project_names = defined?(EasyExtensions) ? '1' : '0'
 
   settings partial: 'settings/dmsf_settings',
            default: {
@@ -69,4 +69,4 @@ Redmine::Plugin.register :redmine_dmsf do
            }
 end
 
-require_relative 'after_init' unless Redmine::Plugin.installed?('easy_extensions')
+require_relative 'after_init' unless defined?(EasyExtensions)
