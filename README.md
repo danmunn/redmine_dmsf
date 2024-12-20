@@ -216,7 +216,7 @@ instance is stopped.
 
    4.1 In production environment
 
-        bundle config set --local without 'development test`
+        bundle config set --local without 'development test'
         bundle install
 
    4.2 Without Xapian fulltext search (on Windows)
@@ -234,7 +234,7 @@ instance is stopped.
 
 7. The access rights must be set for web server, e.g.: 
 
-    `chown -R www-data:www-data plugins/redmine_dmsf`.
+    `chown -R www-data:www-data plugins/redmine_dmsf`
 
 8. Restart the web server, e.g.: 
 
