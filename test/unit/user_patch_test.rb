@@ -39,13 +39,13 @@ class UserPatchTest < RedmineDmsf::Test::UnitTest
     assert_equal 0, DmsfLink.where(user_id: id).all.size
     assert_equal 0, DmsfLink.where(deleted_by_user_id: id).all.size
     # TODO: Expected: 0, Actual: 1 in Easy extension
-    unless defined?(EasyExtensions)
-      assert_equal 0, DmsfLock.where(user_id: id).all.size
-      assert_equal 0, DmsfWorkflowStepAction.where(author_id: id).all.size
-      assert_equal 0, DmsfWorkflowStepAssignment.where(user_id: id).all.size
-      assert_equal 0, DmsfWorkflowStep.where(user_id: id).all.size
-      assert_equal 0, DmsfWorkflow.where(author_id: id).all.size
-      assert_equal 0, DmsfFolderPermission.where(object_id: id, object_type: 'User').all.size
-    end
+    return if defined?(EasyExtensions)
+
+    assert_equal 0, DmsfLock.where(user_id: id).all.size
+    assert_equal 0, DmsfWorkflowStepAction.where(author_id: id).all.size
+    assert_equal 0, DmsfWorkflowStepAssignment.where(user_id: id).all.size
+    assert_equal 0, DmsfWorkflowStep.where(user_id: id).all.size
+    assert_equal 0, DmsfWorkflow.where(author_id: id).all.size
+    assert_equal 0, DmsfFolderPermission.where(object_id: id, object_type: 'User').all.size
   end
 end
