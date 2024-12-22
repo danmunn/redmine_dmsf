@@ -120,6 +120,7 @@ jobs:
           bundle exec rake db:migrate
           bundle exec rake redmine:plugins:migrate
           bundle exec rake redmine:load_default_data
+          bundle exec rake assets:precompile
         env:
           REDMINE_LANG: en
       - name: Configure WebDAV
