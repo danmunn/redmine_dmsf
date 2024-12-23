@@ -159,5 +159,6 @@ end
 
 # Apply the patch
 if Redmine::Plugin.installed?('easy_crm')
-  EasyPatchManager.register_model_patch 'EasyCrmCase', 'RedmineDmsf::Patches::EasyCrmCasePatch'
+  EasyPatchManager.register_model_patch 'EasyCrmCase', 'RedmineDmsf::Patches::EasyCrmCasePatch',
+                                        if: -> { EasyPluginLoader.plugin_active? 'easy_crm_2_0' }
 end
