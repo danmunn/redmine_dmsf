@@ -303,7 +303,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_select 'a', text: @link1.title, count: 1
     assert_select 'a[href$=?]',
                   "/projects/#{@link1.target_project.identifier}/dmsf?folder_id=#{@link1.target_folder.id}",
-                  count: 2 # Two because of folder1 and folder1_link
+                  count: 4 # Two because of folder1 and folder1_link (2x - icon + link)
   end
 
   def test_folder_link_to_project
@@ -314,7 +314,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     get "/projects/#{@link1.project_id}/dmsf", params: { folder_id: @link1.dmsf_folder_id }
     assert_response :success
     assert_select 'a', text: @link1.title, count: 1
-    assert_select 'a[href$=?]', "/projects/#{@project2.identifier}/dmsf", count: 1
+    assert_select 'a[href$=?]', "/projects/#{@project2.identifier}/dmsf", count: 2 # (2x - icon + link)
   end
 
   def test_new_forbidden
