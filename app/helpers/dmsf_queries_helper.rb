@@ -128,7 +128,8 @@ module DmsfQueriesHelper
           tag += link_to(sprite_icon('fav', nil, icon_only: true, size: '12'),
                          watch_path(object_type: 'project', object_id: item.project.id),
                          title: l(:button_unwatch),
-                         method: 'delete')
+                         method: 'delete',
+                         class: 'icon icon-fav')
         end
         tag
       when 'folder'
@@ -159,7 +160,8 @@ module DmsfQueriesHelper
           tag += link_to(sprite_icon('fav', nil, icon_only: true, size: '12'),
                          watch_path(object_type: 'dmsf_folder', object_id: item.id),
                          title: l(:button_unwatch),
-                         method: 'delete')
+                         method: 'delete',
+                         class: 'icon icon-fav')
         end
         tag
       when 'folder-link'
@@ -201,7 +203,8 @@ module DmsfQueriesHelper
           tag += link_to(sprite_icon('fav', nil, icon_only: true, size: '12'),
                          watch_path(object_type: 'dmsf_file', object_id: item.id),
                          title: l(:button_unwatch),
-                         method: 'delete')
+                         method: 'delete',
+                         class: 'icon icon-fav')
         end
         tag
       when 'url-link'
