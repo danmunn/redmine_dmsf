@@ -28,6 +28,10 @@
 	min-width: 18px;
 }
 
+a.dmsf-label {
+    margin-left: 4px;
+}
+
 /* Query form */
 .query-columns > span { /* EasyExtension */
     display: inline-block;
