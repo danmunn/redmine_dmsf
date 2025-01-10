@@ -215,15 +215,27 @@ div[id*="revision_access_"] {
 .icon-dmsf-file-revision { background-image: url("../../../images/document.png"); }
 
 /* Links */
-.dmsf-gray { color: #AAA }
+.dmsf-gray,
+.dmsf-gray a,
+.dmsf-gray a:link,
+.dmsf-gray a:visited {
+    color: gray;
+}
 
-.dmsf-gray a, .dmsf-gray a:link, .dmsf-gray a:visited {
-    color: #484848;
+svg.dmsf-gray {
+    stroke: grey;
 }
 
 /* System folders */
-.dmsf-system {
-    color: #5C82AD
+.dmsf-system,
+.dmsf-system a,
+.dmsf-system a:link,
+.dmsf-system a:visited {
+    color: darkviolet;
+}
+
+svg.dmsf-system {
+    stroke: darkviolet;
 }
 
 /* Search results */

@@ -104,7 +104,8 @@ module DmsfQueriesHelper
       when 'project'
         tag = h("[#{value}]")
         tag = if item.project.module_enabled?(:dmsf)
-                link_to sprite_icon('folder', tag), dmsf_folder_path(id: item.project)
+                link_to(sprite_icon('folder', nil, icon_only: true), dmsf_folder_path(id: item.project)) +
+                  link_to(tag, dmsf_folder_path(id: item.project), class: 'dmsf-label')
               else
                 sprite_icon 'folder', tag
               end
@@ -136,7 +137,9 @@ module DmsfQueriesHelper
         if item&.deleted?
           tag = sprite_icon('folder', h(value))
         else
-          tag = link_to(sprite_icon('folder', nil, icon_only: true),
+          tag = link_to(sprite_icon('folder', nil,
+                                    icon_only: true,
+                                    css_class: value.start_with?('.') ? 'dmsf-system' : ''),
                         dmsf_folder_path(id: item.project, folder_id: item.id))
           tag += link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'dmsf-label')
           unless filter_any?
@@ -169,7 +172,7 @@ module DmsfQueriesHelper
           tag = sprite_icon('folder', h(value))
         else
           # For links, we use revision_id containing dmsf_folder.id in fact
-          tag = link_to(sprite_icon('folder', nil, icon_only: true),
+          tag = link_to(sprite_icon('folder', nil, icon_only: true, css_class: 'dmsf-gray'),
                         dmsf_folder_path(id: item.project, folder_id: item.revision_id))
           tag += link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.revision_id), class: 'dmsf-label')
           tag = content_tag('span', '', class: 'dmsf-expander') + tag unless filter_any?
@@ -191,7 +194,12 @@ module DmsfQueriesHelper
             options[:target] = '_blank'
             options[:rel] = 'noopener'
           end
-          tag = link_to(sprite_icon(icon_name, nil, icon_only: true), file_view_url, options)
+          tag = link_to(sprite_icon(icon_name,
+                                    nil,
+                                    icon_only: true,
+                                    css_class: item.type == 'file-link' ? 'dmsf-gray' : ''),
+                        file_view_url,
+                        options)
           tag += link_to(h(value), file_view_url, options)
           tag = content_tag('span', '', class: 'dmsf-expander') + tag unless filter_any?
         end
@@ -211,11 +219,11 @@ module DmsfQueriesHelper
         if item&.deleted?
           tag = sprite_icon('link', h(value))
         else
-          tag = link_to(sprite_icon('link', nil, icon_only: true),
+          tag = link_to(sprite_icon('link', nil, icon_only: true, css_class: 'dmsf-gray'),
                         item.filename,
                         target: '_blank',
                         rel: 'noopener')
-          tag += link_to(h(value), item.filename, target: '_blank', rel: 'noopener', class: 'dmsf-link')
+          tag += link_to(h(value), item.filename, target: '_blank', rel: 'noopener')
           tag = content_tag('span', '', class: 'dmsf-expander') + tag unless filter_any?
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:field_url))
