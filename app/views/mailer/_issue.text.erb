@@ -20,10 +20,20 @@
   # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 %>
 
-<% unless @dmsf_already_rendered %>
-  <% @dmsf_already_rendered = true # Prevent recursion %>
-  <%# Render the original view %>
-  <%= render partial: 'mailer/issue', locals: { issue: issue, issue_url: issue_url, user: user } %>
-  <%# DMSF extension %>
-  <%= render partial: 'hooks/redmine_dmsf/view_mailer_issue', locals: { issue: issue } %>
-<% end %>
+<%# The original Redmine code %>
+<%# TODO: Render the original template %>
+<%= "#{issue.tracker.name} ##{issue.id}: #{issue.subject}" %>
+<%= issue_url %>
+
+<%= render_email_issue_attributes(issue, user) %>
+----------------------------------------
+<%= issue.description %>
+
+<% if issue.attachments.any? -%>
+  ---<%= l(:label_attachment_plural).ljust(37, '-') %>
+  <% issue.attachments.each do |attachment| -%>
+    <%= attachment.filename %> (<%= number_to_human_size(attachment.filesize) %>)
+  <% end -%>
+<% end -%>
+<%# DMSF extension %>
+<%= render partial: 'hooks/redmine_dmsf/view_mailer_issue', locals: { issue: issue } %>
