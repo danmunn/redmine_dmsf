@@ -106,7 +106,7 @@ module RedmineDmsf
     end
 
     def dmsf_act_as_attachable?
-      value = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable?']
+      value = Setting.plugin_redmine_dmsf['dmsf_act_as_attachable']
       value.to_i.positive? || value == 'true'
     end
 
