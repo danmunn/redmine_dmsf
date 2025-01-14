@@ -84,7 +84,7 @@ class DmsfFileRevisionTest < RedmineDmsf::Test::UnitTest
     f.project_id = 1
     f.name = 'Testfile.txt'
     f.dmsf_folder = nil
-    f.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
+    f.notification = RedmineDmsf.dmsf_default_notifications?
     f.save
 
     # Create two new revisions, r1 and r2

@@ -57,8 +57,8 @@ module RedmineDmsf
         @role.add_permission! :file_delete
         Setting.plugin_redmine_dmsf['dmsf_webdav'] = '1'
         Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
-        Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = nil
-        Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = nil
+        Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names'] = '0'
+        Setting.plugin_redmine_dmsf['dmsf_projects_as_subfolders'] = '0'
         Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join('files', ['dmsf'])
         Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'] = 'Basic'
         FileUtils.cp_r File.join(File.expand_path('../fixtures/files', __FILE__), '.'), DmsfFile.storage_path

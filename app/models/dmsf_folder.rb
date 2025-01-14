@@ -149,7 +149,7 @@ class DmsfFolder < ApplicationRecord
   end
 
   def default_values
-    self.notification = true if Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present? && !system
+    self.notification = true if RedmineDmsf.dmsf_default_notifications? && !system
   end
 
   def locked_by

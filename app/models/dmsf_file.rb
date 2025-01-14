@@ -89,8 +89,7 @@ class DmsfFile < ApplicationRecord
   end
 
   def default_values
-    return unless Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present? &&
-                  (!dmsf_folder || !dmsf_folder.system)
+    return unless RedmineDmsf.dmsf_default_notifications? && (!dmsf_folder || !dmsf_folder.system)
 
     self.notification = true
   end
@@ -289,7 +288,7 @@ class DmsfFile < ApplicationRecord
       end
     end
     file.name = filename
-    file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
+    file.notification = RedmineDmsf.dmsf_default_notifications?
     if file.save && last_revision
       new_revision = last_revision.clone
       new_revision.dmsf_file = file

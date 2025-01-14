@@ -38,7 +38,7 @@ module RedmineDmsf
         rc = get_resource_class(path)
         @resource_c = rc.new(path, request, response, options)
         @resource_c.accessor = self if @resource_c
-        @read_only = Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'] == 'WEBDAV_READ_ONLY'
+        @read_only = RedmineDmsf.dmsf_webdav_strategy == 'WEBDAV_READ_ONLY'
       end
 
       def authenticate(username, password)

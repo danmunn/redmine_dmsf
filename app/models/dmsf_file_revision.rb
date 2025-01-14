@@ -400,7 +400,7 @@ class DmsfFileRevision < ApplicationRecord
       d.source_revision = source_revision
       d.save!
     end
-    return unless Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
+    return unless RedmineDmsf.physical_file_delete?
 
     dependencies = DmsfFileRevision.where(disk_filename: disk_filename).all.size
     FileUtils.rm_f(disk_file) if dependencies <= 1

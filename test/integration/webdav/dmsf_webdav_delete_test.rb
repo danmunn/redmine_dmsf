@@ -68,7 +68,8 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_delete_when_ro
-    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_strategy' => 'WEBDAV_READ_ONLY', 'dmsf_webdav' => '1' } do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_strategy' => 'WEBDAV_READ_ONLY', 'dmsf_webdav' => '1',
+                                         'dmsf_webdav_authentication' => 'Basic' } do
       delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @admin
       assert_response :bad_gateway # WebDAV is read only
     end
@@ -128,7 +129,10 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_folder_delete_by_user_with_project_names
-    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1',
+                                         'dmsf_webdav' => '1',
+                                         'dmsf_webdav_authentication' => 'Basic',
+                                         'dmsf_webdav_strategy' => 'WEBDAV_READ_WRITE' } do
       delete "/dmsf/webdav/#{@project1.identifier}/#{@folder6.title}", params: nil, headers: @jsmith
       assert_response :conflict
       p1name_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
@@ -154,7 +158,10 @@ class DmsfWebdavDeleteTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_file_delete_by_user_with_project_names
-    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1',
+                                         'dmsf_webdav' => '1',
+                                         'dmsf_webdav_authentication' => 'Basic',
+                                         'dmsf_webdav_strategy' => 'WEBDAV_READ_WRITE' } do
       delete "/dmsf/webdav/#{@project1.identifier}/#{@file1.name}", params: nil, headers: @jsmith
       assert_response :conflict
       p1name_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))

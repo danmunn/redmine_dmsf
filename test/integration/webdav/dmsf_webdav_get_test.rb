@@ -77,7 +77,9 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
     assert_response :success
     assert_not response.body.match(@project1.identifier).nil?,
                "Expected to find project #{@project1.identifier} in return data"
-    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1',
+                                         'dmsf_webdav' => '1',
+                                         'dmsf_webdav_authentication' => 'Basic' } do
       project1_uri = Addressable::URI.encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
       get '/dmsf/webdav', params: nil, headers: @admin
       assert_response :success
@@ -138,7 +140,9 @@ class DmsfWebdavGetTest < RedmineDmsf::Test::IntegrationTest
   def test_download_file_from_dmsf_enabled_project
     get "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
     assert_response :success
-    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1',
+                                         'dmsf_webdav' => '1',
+                                         'dmsf_webdav_authentication' => 'Basic' } do
       project1_uri = ERB::Util.url_encode(RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1))
       get "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
       assert_response :conflict

@@ -52,7 +52,9 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_propfind_depth1_on_root_for_admin_with_project_names
-    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1',
+                                         'dmsf_webdav' => '1',
+                                         'dmsf_webdav_authentication' => 'Basic' } do
       process :propfind, '/dmsf/webdav/', params: nil, headers: @admin.merge!({ HTTP_DEPTH: '1' })
       assert_response :multi_status
       assert response.body.include?('<d:href>http://www.example.com:80/dmsf/webdav/</d:href>')
@@ -102,7 +104,9 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_propfind_depth0_on_project1_for_admin_with_project_names
-    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1',
+                                         'dmsf_webdav' => '1',
+                                         'dmsf_webdav_authentication' => 'Basic' } do
       process :propfind,
               "/dmsf/webdav/#{@project1.identifier}",
               params: nil,
@@ -151,7 +155,9 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_propfind_depth1_on_project1_for_admin_with_project_names
-    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1',
+                                         'dmsf_webdav' => '1',
+                                         'dmsf_webdav_authentication' => 'Basic' } do
       process :propfind,
               "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin.merge!({ HTTP_DEPTH: '1' })
       assert_response :not_found
@@ -191,7 +197,9 @@ class DmsfWebdavPropfindTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_propfind_depth1_on_root_for_admin
-    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1',
+                                         'dmsf_webdav' => '1',
+                                         'dmsf_webdav_authentication' => 'Basic' } do
       project1_new_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
       project1_new_uri = ERB::Util.url_encode(project1_new_name)
       process :propfind, "/dmsf/webdav/#{project1_new_uri}", params: nil, headers: @admin.merge!({ HTTP_DEPTH: '1' })

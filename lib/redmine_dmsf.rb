@@ -62,9 +62,22 @@ module RedmineDmsf
       end
     end
 
+    def dmsf_webdav_strategy
+      if Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'].present?
+        Setting.plugin_redmine_dmsf['dmsf_webdav_strategy'].strip
+      else
+        'WEBDAV_READ_ONLY'
+      end
+    end
+
     def dmsf_webdav?
       value = Setting.plugin_redmine_dmsf['dmsf_webdav']
-      value.to_i.positive? || value == 'true'
+      webdav = value.to_i.positive? || value == 'true'
+      if webdav && defined?(EasyExtensions)
+        webdav = Redmine::Plugin.installed?('easy_hosting_services') &&
+                 EasyHostingServices::EasyMultiTenancy.activated?
+      end
+      webdav
     end
 
     def dmsf_display_notified_recipients?
@@ -182,6 +195,11 @@ module RedmineDmsf
       value.to_i.positive? || value == 'true'
     end
 
+    def physical_file_delete?
+      value = Setting.plugin_redmine_dmsf['dmsf_really_delete_files']
+      value.to_i.positive? || value == 'true'
+    end
+
     def remove_original_documents_module?
       value = Setting.plugin_redmine_dmsf['remove_original_documents_module']
       value.to_i.positive? || value == 'true'
@@ -191,8 +209,13 @@ module RedmineDmsf
       if Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'].present?
         Setting.plugin_redmine_dmsf['dmsf_webdav_authentication'].strip
       else
-        'Basic'
+        'Digest'
       end
+    end
+
+    def dmsf_default_notifications?
+      value = Setting.plugin_redmine_dmsf['dmsf_default_notifications']
+      value.to_i.positive? || value == 'true'
     end
   end
 end

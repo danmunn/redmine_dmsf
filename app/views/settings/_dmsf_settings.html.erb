@@ -34,38 +34,37 @@
 
 <p>
   <%= content_tag :label, l(:label_maximum_files_download) %>
-  <%= text_field_tag 'settings[dmsf_max_file_download]', @settings['dmsf_max_file_download'], size: 10 %>
+  <%= text_field_tag 'settings[dmsf_max_file_download]', RedmineDmsf.dmsf_max_file_download, size: 10 %>
   <em class="<%= klass %>">
-    <%= l(:note_maximum_number_of_files_downloaded) %> <%= l(:label_default) %>: 0
+    <%= l(:note_maximum_number_of_files_downloaded) %><br>
+    <%= l(:label_default) %>: 0
   </em>
 </p>
 
 <p>
   <%= content_tag :label, l(:label_dmsf_max_notification_receivers_info) %>
-  <% @settings['dmsf_max_notification_receivers_info'] ||= 10 %>
-  <%= text_field_tag 'settings[dmsf_max_notification_receivers_info]', @settings['dmsf_max_notification_receivers_info'], size: 10 %>
+  <%= text_field_tag 'settings[dmsf_max_notification_receivers_info]', RedmineDmsf.dmsf_max_notification_receivers_info,
+                     size: 10 %>
   <em class="<%= klass %>">
-    <%= l(:note_dmsf_max_notification_receivers_info) %> <%= l(:label_default) %>: 10
+    <%= l(:note_dmsf_max_notification_receivers_info) %><br>
+    <%= l(:label_default) %>: 10
   </em>
 </p>
 
 <p>
   <%= content_tag :label, l(:label_maximum_email_filesize) %>
-  <%= text_field_tag 'settings[dmsf_max_email_filesize]', @settings['dmsf_max_email_filesize'], size: 10 %>
+  <%= text_field_tag 'settings[dmsf_max_email_filesize]', RedmineDmsf.dmsf_max_email_filesize, size: 10 %>
   <em class="<%= klass %>">
-    <%= l(:note_maximum_email_filesize) %> <%= l(:label_default) %>: 0
+    <%= l(:note_maximum_email_filesize) %><br>
+    <%= l(:label_default) %>: 0
   </em>
 </p>
 
 <p>
   <%=  content_tag :label, l(:label_file_storage_directory) %>
-  <%
-    storage_dir = @settings['dmsf_storage_directory'].strip if @settings['dmsf_storage_directory'].present?
-    storage_dir = 'dmsf' if storage_dir.blank?
-  %>
-  <%= text_field_tag 'settings[dmsf_storage_directory]', storage_dir, size: 256 %>
+  <%= text_field_tag 'settings[dmsf_storage_directory]', RedmineDmsf.dmsf_storage_directory, size: 256 %>
   <em class="<%= klass %>">
-    <%= l(:label_default) %>: dmsf
+    <%= l(:label_default) %>: files/dmsf
   </em>
 </p>
 <% unless File.exist?(DmsfFile.storage_path) %>
@@ -76,7 +75,7 @@
   <% end %>
 <% end %>
 <% testfilename = DmsfFile.storage_path.join('test.test') %>
-<% if File.exist?(storage_dir) %>
+<% if File.exist?(RedmineDmsf.dmsf_storage_directory) %>
   <% begin %>
     <% File.open(testfilename, 'wb') {} %>
   <% rescue %>
@@ -88,20 +87,21 @@
 
 <p>
   <%= content_tag :label, l(:label_dmsf_office_bin) %>
-  <%= text_field_tag 'settings[office_bin]', @settings['office_bin'], size: 10 %>
+  <%= text_field_tag 'settings[office_bin]', RedmineDmsf.office_bin, size: 10 %>
   <% unless RedmineDmsf::Preview.office_available? %>
     <span class="icon icon-warning">
-      <small><%= l(:note_dmsf_office_bin_not_available, @settings['office_bin'] ||= 'libreoffice') %></small>
+      <small><%= l(:note_dmsf_office_bin_not_available, RedmineDmsf.office_bin ||= 'libreoffice') %></small>
     </span>
   <% end %>
   <em class="<%= klass %>">
-    <%= l(:note_dmsf_office_bin) %> <%= l(:label_default) %>: 'libreoffice'
+    <%= l(:note_dmsf_office_bin) %><br>
+    <%= l(:label_default) %>: 'libreoffice'
   </em>
 </p>
 
 <p>
   <%= content_tag :label, l(:label_physical_file_delete) %>
-  <%= check_box_tag 'settings[dmsf_really_delete_files]', true, @settings['dmsf_really_delete_files'] %>
+  <%= check_box_tag 'settings[dmsf_really_delete_files]', '1', RedmineDmsf.physical_file_delete? %>
   <em class="<%= klass %>">
     <%= l(:label_default)%>: <%= l(:general_text_No)%>
   </em>
@@ -111,9 +111,9 @@
   <%= content_tag :label, l(:label_default_notifications) %>
   <%= select_tag 'settings[dmsf_default_notifications]',
                  options_for_select([
-                                      [l(:select_option_deactivated), nil],
+                                      [l(:select_option_deactivated), '0'],
                                       [l(:select_option_activated), '1']],
-                                    selected: @settings['dmsf_default_notifications']) %>
+                                    selected: RedmineDmsf.dmsf_default_notifications? ? '1' : '0') %>
   <em class="<%= klass %>">
     <%= l(:label_default) %>: <%= l(:select_option_deactivated) %>
   </em>
@@ -123,17 +123,18 @@
   <%= content_tag :label, l(:label_display_notified_recipients) %>
   <%= select_tag 'settings[dmsf_display_notified_recipients]',
                  options_for_select([
-                                      [l(:select_option_deactivated), nil],
+                                      [l(:select_option_deactivated), '0'],
                                       [l(:select_option_activated), '1']],
-                                    selected: @settings['dmsf_display_notified_recipients']) %>
+                                    selected: RedmineDmsf.dmsf_display_notified_recipients? ? '1' : '0') %>
   <em class="<%= klass %>">
-    <%= l(:note_display_notified_recipients).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_deactivated) %>
+    <%= l(:note_display_notified_recipients) %><br>
+    <%= l(:label_default) %>: <%= l(:select_option_deactivated) %>
   </em>
 </p>
 
 <p>
   <%= content_tag :label, l(:label_title_format) %>
-  <%= text_field_tag 'settings[dmsf_global_title_format]', @settings['dmsf_global_title_format'], size: 10 %>
+  <%= text_field_tag 'settings[dmsf_global_title_format]', RedmineDmsf.dmsf_global_title_format, size: 10 %>
   <em class="<%= klass %>">
     <%= l(:text_title_format) %>
   </em>
@@ -141,7 +142,7 @@
 
 <p>
   <%= content_tag :label, l(:label_act_as_attachable) %>
-  <%= check_box_tag 'settings[dmsf_act_as_attachable]', true, @settings['dmsf_act_as_attachable'] %>
+  <%= check_box_tag 'settings[dmsf_act_as_attachable]', '1', RedmineDmsf.dmsf_act_as_attachable? %>
   <em class="<%= klass %>">
     <%= l(:note_dmsf_act_as_attachable) %><br>
     <%= l(:label_default) %>: <%= l(:general_text_No) %>
@@ -150,7 +151,7 @@
 
 <p>
   <%= content_tag :label, l(:label_dmsf_projects_as_subfolders) %>
-  <%= check_box_tag 'settings[dmsf_projects_as_subfolders]', true, @settings['dmsf_projects_as_subfolders'] %>
+  <%= check_box_tag 'settings[dmsf_projects_as_subfolders]', '1', RedmineDmsf.dmsf_projects_as_subfolders? %>
   <em class="<%= klass %>">
     <%= l(:note_dmsf_projects_as_subfolders) %><br>
     <%= l(:label_default) %>: <%= l(:general_text_No) %>
@@ -159,7 +160,7 @@
 
 <p>
   <%= content_tag :label, l(:label_dmsf_global_menu_disabled) %>
-  <%= check_box_tag 'settings[dmsf_global_menu_disabled]', true, @settings['dmsf_global_menu_disabled'] %>
+  <%= check_box_tag 'settings[dmsf_global_menu_disabled]', '1', RedmineDmsf.dmsf_global_menu_disabled? %>
   <em class="<%= klass %>">
     <%= l(:note_dmsf_global_menu_disabled) %><br>
     <%= l(:label_default) %>: <%= l(:general_text_No) %>
@@ -168,7 +169,7 @@
 
 <p>
   <%= content_tag :label, l(:label_empty_minor_version_by_default) %>
-  <%= check_box_tag 'settings[empty_minor_version_by_default]', false, @settings['empty_minor_version_by_default'] %>
+  <%= check_box_tag 'settings[empty_minor_version_by_default]', '1', RedmineDmsf.empty_minor_version_by_default? %>
   <em class="<%= klass %>">
     <%= l(:label_default) %>: <%= l(:general_text_No) %>
   </em>
@@ -176,7 +177,7 @@
 
 <p>
   <%= content_tag :label, l(:label_remove_original_documents_module) %>
-  <%= check_box_tag 'settings[remove_original_documents_module]', false, @settings['remove_original_documents_module'] %>
+  <%= check_box_tag 'settings[remove_original_documents_module]', '1', RedmineDmsf.remove_original_documents_module? %>
   <em class="<%= klass %>">
     <%= l(:label_default) %>: <%= l(:general_text_No) %>
   </em>
@@ -187,14 +188,14 @@
   <%= l(:label_dmsf_columns) %>
 </em>
 
-<%= render partial: 'settings/dmsf_columns', locals: { selected_columns: @settings['dmsf_columns'] } %>
+<%= render partial: 'settings/dmsf_columns', locals: { selected_columns: RedmineDmsf.dmsf_columns } %>
 
 <p>
   <%= content_tag :label, l(:label_default_query) %>
   <% options = [[l(:label_none), nil]] %>
   <% options.concat DmsfQuery.only_public.where(project_id: nil).pluck(:name, :id) %>
   <%= select_tag 'settings[dmsf_default_query]',
-                 options_for_select(options, selected: @settings['dmsf_default_query']) %>
+                 options_for_select(options, selected: RedmineDmsf.dmsf_default_query) %>
 </p>
 
 <hr>
@@ -204,7 +205,7 @@
 
 <p>
   <%= content_tag :label, l(:label_email_from_override) %>
-  <%= text_field_tag 'settings[dmsf_documents_email_from]', @settings['dmsf_documents_email_from'], size: 128 %>
+  <%= text_field_tag 'settings[dmsf_documents_email_from]', RedmineDmsf.dmsf_documents_email_from, size: 128 %>
   <em class="<%= klass %>">
     <%= l(:label_default) %>: <%= l(:text_email_from_override) %>
   </em>
@@ -212,7 +213,7 @@
 
 <p>
   <%= content_tag :label, l(:label_email_reply_to) %>
-  <%= text_field_tag 'settings[dmsf_documents_email_reply_to]', @settings['dmsf_documents_email_reply_to'], size: 128 %>
+  <%= text_field_tag 'settings[dmsf_documents_email_reply_to]', RedmineDmsf.dmsf_documents_email_reply_to, size: 128 %>
   <em class="<%= klass %>">
     <%= l(:label_default) %>: <%= "''" %>
   </em>
@@ -220,7 +221,7 @@
 
 <p>
   <%= content_tag :label, l(:label_links_only).capitalize %>
-  <%= check_box_tag 'settings[dmsf_documents_email_links_only]', true, @settings['dmsf_documents_email_links_only'] %>
+  <%= check_box_tag 'settings[dmsf_documents_email_links_only]', '1', RedmineDmsf.dmsf_documents_email_links_only? %>
   <em class="<%= klass %>">
     <%= l(:label_default) %>: <%= l(:general_text_No) %>
   </em>
@@ -233,7 +234,7 @@
 
 <p>
   <%= content_tag :label, l(:label_dmsf_keep_documents_locked) %>
-  <%= check_box_tag 'settings[dmsf_keep_documents_locked]', false, @settings['dmsf_keep_documents_locked'] %>
+  <%= check_box_tag 'settings[dmsf_keep_documents_locked]', '1', RedmineDmsf.dmsf_keep_documents_locked? %>
   <em class="<%= klass %>">
     <%= l(:note_dmsf_keep_documents_locked) %><br>
     <%= l(:label_default)%>: <%= l(:general_text_No)%>
@@ -242,7 +243,7 @@
 
 <p>
   <%= content_tag(:label, l(:only_approval_zero_minor_version)) %>
-  <%= check_box_tag 'settings[only_approval_zero_minor_version]', false, @settings['only_approval_zero_minor_version'], size: 50 %>
+  <%= check_box_tag 'settings[only_approval_zero_minor_version]', '1', RedmineDmsf.only_approval_zero_minor_version? %>
   <em class="<%= klass %>">
     <%= l(:only_approval_zero_minor_version) %><br> <%= l(:label_default) %>: <%= l(:general_text_No)%>
   </em>
@@ -255,36 +256,36 @@
 
 <p>
   <%= content_tag :label, l(:label_webdav) %>
-  <% webdav_disabled = Redmine::Plugin.installed?('easy_hosting_services') && EasyHostingServices::EasyMultiTenancy.activated? %>
+  <% disabled = defined?(EasyExtensions) && !(Redmine::Plugin.installed?('easy_hosting_services') &&
+    EasyHostingServices::EasyMultiTenancy.activated?) %>
   <%= select_tag 'settings[dmsf_webdav]',
                  options_for_select([
-                                      [l(:select_option_deactivated), nil],
+                                      [l(:select_option_deactivated), '0'],
                                       [l(:select_option_activated), '1']],
-                                    selected: webdav_disabled ? nil : @settings['dmsf_webdav']),
-                 disabled: webdav_disabled,
+                                    selected: RedmineDmsf.dmsf_webdav? ? '1' : '0'),
+                 disabled: disabled,
                  onchange: "$('#dmsf_webdav_block').toggle()" %>
   <em class="<%= klass %>">
-    <% if webdav_disabled %>
-      <% @settings['dmsf_webdav'] = nil %>
+    <% if disabled %>
+      <% @settings['dmsf_webdav'] = '0' %>
       <%= l(:note_webdav_disabled) %>
     <% else %>
-      <%= l(:note_webdav, protocol: Setting.protocol, domain: Setting.host_name).html_safe %>
-      <%= l(:label_default) %>: <%= l(:select_option_activated) %>
+      <%= l(:note_webdav, protocol: Setting.protocol, domain: Setting.host_name) %><br>
+      <%= l(:label_default) %>: <%= l(:select_option_deactivated) %>
     <% end %>
   </em>
 </p>
 
-<% visible_class = @settings['dmsf_webdav'].blank? ? 'dmsf-hidden' : '' %>
+<% visible_class = RedmineDmsf.dmsf_webdav? ? '' : 'dmsf-hidden' %>
 
 <div id="dmsf_webdav_block" class="<%= visible_class %>">
   <p>
     <%= content_tag :label, l(:label_webdav_authentication) %>
     <% auth_types = [%w[Basic Basic], %w[Digest Digest]] %>
-    <% @settings['dmsf_webdav_authentication'] = 'Basic' if @settings['dmsf_webdav_authentication'].blank? %>
     <%= select_tag 'settings[dmsf_webdav_authentication]',
-                   options_for_select(auth_types, @settings['dmsf_webdav_authentication']) %>
+                   options_for_select(auth_types, RedmineDmsf.dmsf_webdav_authentication) %>
     <em class="<%= klass %>">
-      <%= l(:note_webdav_authentication) %> <br>
+      <%= l(:note_webdav_authentication) %><br>
       <%= l(:label_default)%>: <%= auth_types[1][0] %>
     </em>
   </p>
@@ -294,44 +295,47 @@
                   options_for_select([
                                        [l(:select_option_webdav_readonly), 'WEBDAV_READ_ONLY'],
                                        [l(:select_option_webdav_readwrite), 'WEBDAV_READ_WRITE']],
-                                     selected: @settings['dmsf_webdav_strategy']),
-                  onchange: "$('#dmsf_webdav_ro_block').toggle()" %>
-    <br>
+                                     selected: RedmineDmsf.dmsf_webdav_strategy),
+                  onchange: "$('#dmsf_webdav_ro_block').toggle()" %><br>
     <em class="<%= klass %>">
-      <%= l(:note_webdav_strategy).html_safe %> <%= l(:label_default) %>: <%= l(:select_option_webdav_readonly) %>
+      <%= l(:note_webdav_strategy) %><br>
+      <%= l(:label_default) %>: <%= l(:select_option_webdav_readonly) %>
     </em>
   </p>
 
-  <% visible_class = (@settings['dmsf_webdav_strategy'] == 'WEBDAV_READ_ONLY') ? 'dmsf-hidden' : '' %>
+  <% visible_class = (RedmineDmsf.dmsf_webdav_strategy == 'WEBDAV_READ_ONLY') ? 'dmsf-hidden' : '' %>
 
   <div id="dmsf_webdav_ro_block" class="<%= visible_class %>">
     <p>
       <%= content_tag(:label, l(:label_webdav_ignore)) %>
-      <%= text_field_tag 'settings[dmsf_webdav_ignore]', @settings['dmsf_webdav_ignore'], size: 50 %>
+      <%= text_field_tag 'settings[dmsf_webdav_ignore]', RedmineDmsf.dmsf_webdav_ignore, size: 50 %>
       <em class="<%= klass %>">
         <%= l(:note_webdav_ignore) %> <%= l(:label_default) %>: ^(\._|\.DS_Store$|Thumbs.db$)
       </em>
     </p>
     <p>
       <%= content_tag(:label, l(:dmsf_webdav_ignore_1b_file_for_authentication)) %>
-      <%= check_box_tag 'settings[dmsf_webdav_ignore_1b_file_for_authentication]', true, @settings['dmsf_webdav_ignore_1b_file_for_authentication'], size: 50 %>
+      <%= check_box_tag 'settings[dmsf_webdav_ignore_1b_file_for_authentication]', '1',
+                        RedmineDmsf.dmsf_webdav_ignore_1b_file_for_authentication? %>
       <em class="<%= klass %>">
-        <%= l(:dmsf_webdav_ignore_1b_file_for_authentication_info) %> <%= l(:label_default) %>: <%= l(:general_text_Yes)%>
+        <%= l(:dmsf_webdav_ignore_1b_file_for_authentication_info) %><br>
+        <%= l(:label_default) %>: <%= l(:general_text_Yes) %>
       </em>
     </p>
     <p>
       <%= content_tag :label, l(:label_webdav_disable_versioning) %>
-      <%= text_field_tag 'settings[dmsf_webdav_disable_versioning]', @settings['dmsf_webdav_disable_versioning'], size: 50 %>
+      <%= text_field_tag 'settings[dmsf_webdav_disable_versioning]', RedmineDmsf.dmsf_webdav_disable_versioning,
+                         size: 50 %>
       <em class="<%= klass %>">
-        <%= l(:note_webdav_disable_versioning) %> <br>
+        <%= l(:note_webdav_disable_versioning) %><br>
         <%= l(:label_default) %>: ^\~\$|\.tmp$
       </em>
     </p>
     <p>
       <%= content_tag :label, l(:label_webdav_use_project_names) %>
-      <%= check_box_tag 'settings[dmsf_webdav_use_project_names]', true, @settings['dmsf_webdav_use_project_names'] %>
+      <%= check_box_tag 'settings[dmsf_webdav_use_project_names]', '1', RedmineDmsf.dmsf_webdav_use_project_names? %>
       <em class="<%= klass %>">
-        <%= l(:note_webdav_use_project_names) %> <br>
+        <%= l(:note_webdav_use_project_names) %><br>
         <%= l(:label_default)%>: <%= l(:general_text_No) %>
       </em>
     </p>
@@ -362,7 +366,7 @@
   <% if RedmineDmsf::Plugin.xapian_available? %>
     <p>
       <%= content_tag :label, l(:label_index_database) %>
-      <%= text_field_tag 'settings[dmsf_index_database]', @settings['dmsf_index_database'], size: 50 %>
+      <%= text_field_tag 'settings[dmsf_index_database]', RedmineDmsf.dmsf_index_database, size: 50 %>
       <em class="<%= klass %>">
         <%= l(:label_default) %>: <%= File.expand_path('dmsf_index', Rails.root) %>
       </em>
@@ -373,22 +377,23 @@
 
     <p>
       <%= content_tag :label, l(:label_stemming_language) %>
-      <%= select_tag 'settings[dmsf_stemming_lang]', options_for_select(stem_langs, @settings['dmsf_stemming_lang']) %>
+      <%= select_tag 'settings[dmsf_stemming_lang]', options_for_select(stem_langs, RedmineDmsf.dmsf_stemming_lang) %>
       <em class="<%= klass %>">
-        <%= l(:note_possible_values) %>: <%= stem_langs.join(', ') %>. <%= "#{l(:label_default)}: #{stem_langs[2]}" %>
+        <%= l(:note_possible_values) %>: <%= stem_langs.join(', ') %>.<br>
+        <%= "#{l(:label_default)}: #{stem_langs[2]}" %>
       </em>
     </p>
 
     <p>
       <%= content_tag :label, l(:label_stem_strategy) %>
       <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_NONE',
-                           @settings['dmsf_stemming_strategy'] == 'STEM_NONE', checked: true %> <%= l(:option_stem_none) %>
+                           RedmineDmsf.dmsf_stemming_strategy == 'STEM_NONE' %> <%= l(:option_stem_none) %>
       <br>
       <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_SOME',
-                           @settings['dmsf_stemming_strategy'] == 'STEM_SOME' %> <%= l(:option_stem_some) %>
+                           RedmineDmsf.dmsf_stemming_strategy == 'STEM_SOME' %> <%= l(:option_stem_some) %>
       <br>
       <%= radio_button_tag 'settings[dmsf_stemming_strategy]', 'STEM_ALL',
-                           @settings['dmsf_stemming_strategy'] == 'STEM_ALL' %> <%= l(:option_stem_all) %>
+                           RedmineDmsf.dmsf_stemming_strategy == 'STEM_ALL' %> <%= l(:option_stem_all) %>
       <br>
       <em class="<%= klass %>">
         <%= l(:text_stemming_info) %>
@@ -397,9 +402,10 @@
 
     <p>
       <%= content_tag :label, l(:label_enable_cjk_ngrams) %>
-      <%= check_box_tag 'settings[dmsf_enable_cjk_ngrams]', true, @settings['dmsf_enable_cjk_ngrams'] %>
+      <%= check_box_tag 'settings[dmsf_enable_cjk_ngrams]', '1', RedmineDmsf.dmsf_enable_cjk_ngrams? %>
       <em class="<%= klass %>">
-        <%= l(:text_enable_cjk_ngrams) %>
+        <%= l(:text_enable_cjk_ngrams) %><br>
+        <%= l(:label_default)%>: <%= l(:general_text_No) %>
       </em>
     </p>
     <% else %>

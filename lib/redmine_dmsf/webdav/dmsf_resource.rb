@@ -586,7 +586,7 @@ module RedmineDmsf
           f.project_id = project.id
           f.name = basename
           f.dmsf_folder = parent.folder
-          f.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
+          f.notification = RedmineDmsf.dmsf_default_notifications?
           new_revision = DmsfFileRevision.new
           new_revision.minor_version = 1
           new_revision.major_version = 0

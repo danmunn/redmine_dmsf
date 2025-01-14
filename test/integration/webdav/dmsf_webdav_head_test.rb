@@ -34,7 +34,9 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
     assert_response :success
     check_headers_exist
-    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1',
+                                         'dmsf_webdav' => '1',
+                                         'dmsf_webdav_authentication' => 'Basic' } do
       head "/dmsf/webdav/#{@project1.identifier}", params: nil, headers: @admin
       assert_response :not_found
       project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)
@@ -52,7 +54,9 @@ class DmsfWebdavHeadTest < RedmineDmsf::Test::IntegrationTest
     head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
     assert_response :success
     check_headers_exist
-    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1', 'dmsf_webdav' => '1' } do
+    with_settings plugin_redmine_dmsf: { 'dmsf_webdav_use_project_names' => '1',
+                                         'dmsf_webdav' => '1',
+                                         'dmsf_webdav_authentication' => 'Basic' } do
       head "/dmsf/webdav/#{@project1.identifier}/test.txt", params: nil, headers: @admin
       assert_response :conflict
       project1_name = RedmineDmsf::Webdav::ProjectResource.create_project_name(@project1)

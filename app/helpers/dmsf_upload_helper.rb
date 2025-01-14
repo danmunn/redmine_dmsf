@@ -45,7 +45,7 @@ module DmsfUploadHelper
           file.project_id = project.id
           file.name = name
           file.dmsf_folder = folder
-          file.notification = Setting.plugin_redmine_dmsf['dmsf_default_notifications'].present?
+          file.notification = RedmineDmsf.dmsf_default_notifications?
         end
         if file.locked_for_user?
           failed_uploads.push file
