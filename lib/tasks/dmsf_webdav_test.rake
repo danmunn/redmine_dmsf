@@ -33,7 +33,7 @@ namespace :redmine do
   task dmsf_webdav_test_on: :environment do
     prj = Project.new
     prj.identifier = 'dmsf_test_project'
-    prj.name = 'DMFS Test Project'
+    prj.name = 'DMSF Test Project'
     prj.description = 'A temporary project for Litmus tests'
     prj.enable_module! :dmsf
     Rails.logger.error(prj.errors.full_messages.to_sentence) unless prj.save
@@ -44,6 +44,7 @@ namespace :redmine do
     plugin_settings['dmsf_webdav'] = '1'
     plugin_settings['dmsf_webdav_strategy'] = 'WEBDAV_READ_WRITE'
     plugin_settings['dmsf_storage_directory'] = File.join('files', ['dmsf'])
+    plugin_settings['dmsf_webdav_authentication'] = 'Basic'
     Setting.plugin_redmine_dmsf = plugin_settings
   end
 
