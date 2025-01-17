@@ -1,8 +1,17 @@
 Changelog for Redmine DMSF
 ==========================
 
-4.0.1 *????-??-??*
+4.0.1 *2024-01-17*
 ------------------
+
+    Coloured icons
+
+* Bug: #1578 - Attached documents are not visible by issues
+* Bug: #1577 - Inconsistent default values in settings
+* Bug: #1576 - Issue notifications
+* New: #1575 - Coloured icons
+* Bug: #1574 - Missing default browser context menu
+* Bug: #1572 - RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=redmine_dmsf fails
 
 4.0.0 *2024-12-17*
 ------------------
