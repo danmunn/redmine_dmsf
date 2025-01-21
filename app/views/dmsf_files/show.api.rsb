@@ -34,6 +34,7 @@ api.dmsf_file do
         api.dmsf_workflow_assigned_at r.dmsf_workflow_assigned_at
         api.dmsf_workflow_started_by_user_id r.dmsf_workflow_started_by_user_id
         api.dmsf_workflow_started_at r.dmsf_workflow_started_at
+        api.dmsf_worklfow_state r.workflow_str(false)
         api.digest r.digest
         render_api_custom_values r.visible_custom_field_values, api
       end
