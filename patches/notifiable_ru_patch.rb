@@ -26,7 +26,6 @@ module RedmineDmsf
       def self.included(base)
         base.extend ClassMethods
         base.class_eval do
-          unloadable
           class << self
             alias_method :all_without_resources_dmsf, :all
             alias_method :all, :all_with_resources_dmsf
