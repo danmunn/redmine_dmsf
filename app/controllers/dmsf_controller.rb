@@ -183,11 +183,11 @@ class DmsfController < ApplicationController
       elsif params[:destroy_entries].present?
         delete_entries @selected_folders, @selected_files, @selected_links, true
         redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
-      elsif params[:move_entries].present?
-        move_entries @selected_folders, @selected_files, @selected_links
-        redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
       elsif params[:copy_entries].present?
         copy_entries @selected_folders, @selected_files, @selected_links
+        redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
+      elsif params[:move_entries].present?
+        move_entries @selected_folders, @selected_files, @selected_links
         redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
       else
         download_entries @selected_folders, @selected_files

@@ -28,6 +28,7 @@
     <%= hidden_field_tag 'back_url', @back_url %>
     <%= hidden_field_tag 'id', @project %>
     <%= hidden_field_tag 'copy_entries', true %>
+    <%= hidden_field_tag 'move_entries', true %>
     <div class="box tabular">
       <% unless @fast_links %>
         <p>
@@ -58,8 +59,7 @@
 
 <%= late_javascript_tag do %>
   $('#move_button').click(function(event) {
-    $('#copyForm').attr('action', "<%= entries_operations_dmsf_path(ids: @ids, move_entries: true) %>");
-    $('#copyForm').submit();
+    $('input#copy_entries').remove()
   });
   <% unless @fast_links %>
     $('#dmsf_entries_target_project_id').change(function () {
