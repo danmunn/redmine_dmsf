@@ -39,7 +39,6 @@ module RedmineDmsf
             )
           end
         end
-        # .to_app
       end
 
       def call(env)
@@ -47,7 +46,7 @@ module RedmineDmsf
           status, headers, body = @dav_app.call env
         rescue StandardError => e
           Rails.logger.error e.message
-          status = e
+          status = defined?(e.to_i) ? e : 500
           headers = {}
           body = ['']
         end
