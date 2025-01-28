@@ -20,6 +20,7 @@
 
 require "#{File.dirname(__FILE__)}/../../dav4rack"
 require "#{File.dirname(__FILE__)}/resource_proxy"
+require "#{File.dirname(__FILE__)}/dmsf_controller"
 
 module RedmineDmsf
   module Webdav
@@ -35,7 +36,7 @@ module RedmineDmsf
               root_uri_path: path,
               resource_class: RedmineDmsf::Webdav::ResourceProxy,
               allow_unauthenticated_options_on_root: true,
-              controller_class: DmsfController
+              controller_class: RedmineDmsf::Webdav::DmsfController
             )
           end
         end
