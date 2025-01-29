@@ -277,15 +277,6 @@ after_easy_init do
   require "#{File.dirname(__FILE__)}/redmine_dmsf/webdav/resource_proxy"
 end
 
-# Errors
-after_easy_init do
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_access_error"
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_email_max_file_size_error"
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_file_not_found_error"
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_lock_error"
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/errors/dmsf_zip_max_files_error"
-end
-
 # Hooks
 def require_hooks
   require "#{File.dirname(__FILE__)}/redmine_dmsf/hooks/controllers/account_controller_hooks"

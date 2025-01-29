@@ -2,7 +2,7 @@
 
 # Redmine plugin for Document Management System "Features"
 #
-# Vít Jonáš <vit.jonas@gmail.com>, Karel Pičman <karel.picman@kontron.com>
+# Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,11 +18,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-module RedmineDmsf
-  module Errors
-    # Access error
-    class DmsfAccessError < StandardError
-      # Nothing to do
+# Max file size error
+class DmsfEmailMaxFileSizeError < StandardError
+  include Redmine::I18n
+
+  def initialize(message = nil)
+    if message.present?
+      super
+    else
+      super(l(:error_max_email_filesize_exceeded, number: RedmineDmsf.dmsf_max_email_filesize))
     end
   end
 end

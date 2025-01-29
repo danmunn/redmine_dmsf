@@ -66,7 +66,7 @@ class DmsfFolderPermissionsController < ApplicationController
 
   def find_project
     @project = Project.visible.find_by_param(params[:project_id])
-  rescue RedmineDmsf::Errors::DmsfAccessError
+  rescue DmsfAccessError
     render_403
   rescue ActiveRecord::RecordNotFound
     render_404
@@ -74,7 +74,7 @@ class DmsfFolderPermissionsController < ApplicationController
 
   def find_folder
     @dmsf_folder = DmsfFolder.visible.find(params[:dmsf_folder_id])
-  rescue RedmineDmsf::Errors::DmsfAccessError
+  rescue DmsfAccessError
     render_403
   rescue ActiveRecord::RecordNotFound
     render_404

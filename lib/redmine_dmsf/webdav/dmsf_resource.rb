@@ -493,7 +493,7 @@ module RedmineDmsf
           l = entity.lock!(scope, type, 1.week.from_now, args[:owner])
           @response['Lock-Token'] = l.uuid
           [1.week.to_i, l.uuid]
-        rescue RedmineDmsf::Errors::DmsfLockError => exception
+        rescue DmsfLockError => exception
           e = Dav4rack::LockFailure.new(exception.message)
           e.add_failure @path, Conflict
           raise e

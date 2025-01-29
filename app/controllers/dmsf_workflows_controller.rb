@@ -81,7 +81,7 @@ class DmsfWorkflowsController < ApplicationController
           if revision.dmsf_file
             begin
               revision.dmsf_file.unlock!(force_file_unlock_allowed: true) unless RedmineDmsf.dmsf_keep_documents_locked?
-            rescue RedmineDmsf::Errors::DmsfLockError => e
+            rescue DmsfLockError => e
               flash[:info] = e.message
             end
           end
@@ -225,7 +225,7 @@ class DmsfWorkflowsController < ApplicationController
                 if file
                   begin
                     file.lock!
-                  rescue RedmineDmsf::Errors::DmsfLockError => e
+                  rescue DmsfLockError => e
                     Rails.logger.warn e.message
                   end
                   flash[:notice] = l(:notice_successful_update)

@@ -18,11 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-module RedmineDmsf
-  module Errors
-    # Parent error
-    class DmsfParentError < StandardError
-      # Nothing to do
-    end
-  end
+# Access error
+class DmsfAccessError < StandardError
+  # Nothing to do
 end

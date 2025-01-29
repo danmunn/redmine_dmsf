@@ -150,7 +150,7 @@ class DmsfUploadController < ApplicationController
 
   def find_folder
     @folder = DmsfFolder.visible.find(params[:folder_id]) if params.key?('folder_id')
-  rescue RedmineDmsf::Errors::DmsfAccessError
+  rescue DmsfAccessError
     render_403
   end
 end

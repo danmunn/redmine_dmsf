@@ -192,9 +192,9 @@ class DmsfController < ApplicationController
       else
         download_entries @selected_folders, @selected_files
       end
-    rescue RedmineDmsf::Errors::DmsfFileNotFoundError
+    rescue DmsfFileNotFoundError
       render_404
-    rescue RedmineDmsf::Errors::DmsfAccessError
+    rescue DmsfAccessError
       render_403
     rescue StandardError => e
       flash[:error] = e.message
@@ -497,16 +497,14 @@ class DmsfController < ApplicationController
   end
 
   def email_entries(selected_folders, selected_files)
-    raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:email_documents, @project)
+    raise DmsfAccessError unless User.current.allowed_to?(:email_documents, @project)
 
     zip = Zip.new
     zip_entries(zip, selected_folders, selected_files)
     zipped_content = zip.finish
 
     max_filesize = RedmineDmsf.dmsf_max_email_filesize
-    if max_filesize.positive? && File.size(zipped_content) > max_filesize * 1_048_576
-      raise RedmineDmsf::Errors::DmsfEmailMaxFileSizeError
-    end
+    raise DmsfEmailMaxFileSizeError if max_filesize.positive? && File.size(zipped_content) > max_filesize * 1_048_576
 
     zip.dmsf_files.each do |f|
       # Action
@@ -569,23 +567,22 @@ class DmsfController < ApplicationController
     member = Member.find_by(user_id: User.current.id, project_id: @project.id)
     selected_folders.each do |selected_folder_id|
       folder = DmsfFolder.visible.find_by(id: selected_folder_id)
-      raise RedmineDmsf::Errors::DmsfFileNotFoundError unless folder
+      raise DmsfFileNotFoundError unless folder
 
       zip.add_dmsf_folder folder, member, folder&.dmsf_folder&.dmsf_path_str
     end
     selected_files.each do |selected_file_id|
       file = DmsfFile.visible.find_by(id: selected_file_id)
-      unless file&.last_revision && File.exist?(file.last_revision&.disk_file)
-        raise RedmineDmsf::Errors::DmsfFileNotFoundError
-      end
+      raise DmsfFileNotFoundError unless file&.last_revision && File.exist?(file.last_revision&.disk_file)
+
       unless (file.project == @project) || User.current.allowed_to?(:view_dmsf_files, file.project)
-        raise RedmineDmsf::Errors::DmsfAccessError
+        raise DmsfAccessError
       end
 
       zip.add_dmsf_file file, member, file.dmsf_folder&.dmsf_path_str
     end
     max_files = RedmineDmsf.dmsf_max_file_download
-    raise RedmineDmsf::Errors::DmsfZipMaxFilesError if max_files.positive? && zip.dmsf_files.length > max_files
+    raise DmsfZipMaxFilesError if max_files.positive? && zip.dmsf_files.length > max_files
 
     zip
   end
@@ -595,19 +592,19 @@ class DmsfController < ApplicationController
     selected_folders.each do |id|
       folder = DmsfFolder.find_by(id: id)
 
-      raise RedmineDmsf::Errors::DmsfFileNotFoundError unless folder
+      raise DmsfFileNotFoundError unless folder
     end
     # Files
     selected_files.each do |id|
       file = DmsfFile.find_by(id: id)
-      raise RedmineDmsf::Errors::DmsfFileNotFoundError unless file
+      raise DmsfFileNotFoundError unless file
 
       flash[:error] = file.errors.full_messages.to_sentence unless file.restore
     end
     # Links
     selected_links.each do |id|
       link = DmsfLink.find_by(id: id)
-      raise RedmineDmsf::Errors::DmsfFileNotFoundError unless link
+      raise DmsfFileNotFoundError unless link
 
       flash[:error] = link.errors.full_messages.to_sentence unless link.restore
     end
@@ -616,20 +613,20 @@ class DmsfController < ApplicationController
   def delete_entries(selected_folders, selected_files, selected_links, commit)
     # Folders
     selected_folders.each do |id|
-      raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
+      raise DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
 
       folder = DmsfFolder.find_by(id: id)
       if folder
         raise StandardError, folder.errors.full_messages.to_sentence unless folder.delete(commit: commit)
       elsif !commit
-        raise RedmineDmsf::Errors::DmsfFileNotFoundError
+        raise DmsfFileNotFoundError
       end
     end
     # Files
     deleted_files = []
     not_deleted_files = []
     if selected_files.any?
-      raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:file_delete, @project)
+      raise DmsfAccessError unless User.current.allowed_to?(:file_delete, @project)
 
       selected_files.each do |id|
         file = DmsfFile.find_by(id: id)
@@ -640,7 +637,7 @@ class DmsfController < ApplicationController
             not_deleted_files << file
           end
         elsif !commit
-          raise RedmineDmsf::Errors::DmsfFileNotFoundError
+          raise DmsfFileNotFoundError
         end
       end
     end
@@ -665,7 +662,7 @@ class DmsfController < ApplicationController
     end
     # Links
     if selected_links.any?
-      raise RedmineDmsf::Errors::DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
+      raise DmsfAccessError unless User.current.allowed_to?(:folder_manipulation, @project)
 
       selected_links.each do |id|
         link = DmsfLink.find_by(id: id)
@@ -699,11 +696,10 @@ class DmsfController < ApplicationController
 
   def move_entries(selected_folders, selected_files, selected_links)
     # Permissions
-    if selected_folders.any? && !User.current.allowed_to?(:folder_manipulation, @project)
-      raise RedmineDmsf::Errors::DmsfAccessError
-    end
+    raise DmsfAccessError if selected_folders.any? && !User.current.allowed_to?(:folder_manipulation, @project)
+
     if (selected_folders.any? || selected_links.any?) && !User.current.allowed_to?(:file_manipulation, @project)
-      raise RedmineDmsf::Errors::DmsfAccessError
+      raise DmsfAccessError
     end
 
     # Folders
@@ -826,27 +822,27 @@ class DmsfController < ApplicationController
       links = DmsfLink.where(id: @selected_links).to_a
       (folders + files + links).each do |entry|
         if entry.dmsf_folder
-          raise RedmineDmsf::Errors::DmsfParentError if entry.dmsf_folder == @target_folder || entry == @target_folder
+          raise DmsfParentError if entry.dmsf_folder == @target_folder || entry == @target_folder
         elsif @target_folder.nil?
-          raise RedmineDmsf::Errors::DmsfParentError if entry.project == @target_project
+          raise DmsfParentError if entry.project == @target_project
         end
       end
       # Prevent recursion
       if params[:move_entries].present?
         folders.each do |entry|
-          raise RedmineDmsf::Errors::DmsfParentError if entry.any_child?(@target_folder)
+          raise DmsfParentError if entry.any_child?(@target_folder)
         end
       end
       # Check permissions
       if (@target_folder && (@target_folder.locked_for_user? ||
          !DmsfFolder.permissions?(@target_folder, allow_system: false))) ||
          !@target_project.allows_to?(:folder_manipulation)
-        raise RedmineDmsf::Errors::DmsfAccessError
+        raise DmsfAccessError
       end
-    rescue RedmineDmsf::Errors::DmsfParentError
+    rescue DmsfParentError
       flash[:error] = l(:error_target_folder_same)
       redirect_back_or_default dmsf_folder_path(id: @project, folder_id: @folder)
-    rescue RedmineDmsf::Errors::DmsfAccessError
+    rescue DmsfAccessError
       render_403
     end
   end

@@ -44,15 +44,15 @@ module RedmineDmsf
     def lock!(scope = :scope_exclusive, type = :type_write, expire = nil, owner = nil)
       # Raise a lock error if entity is locked, but its not at resource level
       existing = lock(tree: false)
-      raise RedmineDmsf::Errors::DmsfLockError, l(:error_resource_or_parent_locked) if locked? && existing.empty?
+      raise DmsfLockError, l(:error_resource_or_parent_locked) if locked? && existing.empty?
 
       unless existing.empty?
         if (existing[0].lock_scope == :scope_shared) && (scope == :scope_shared)
           # RFC states if an item is exclusively locked and another lock is attempted we reject
           # if the item is shared locked however, we can always add another lock to it
-          raise RedmineDmsf::Errors::DmsfLockError, l(:error_parent_locked) if dmsf_folder.locked?
+          raise DmsfLockError, l(:error_parent_locked) if dmsf_folder.locked?
         elsif scope == :scope_exclusive
-          raise RedmineDmsf::Errors::DmsfLockError, l(:error_lock_exclusively)
+          raise DmsfLockError, l(:error_lock_exclusively)
         end
       end
       l = DmsfLock.new
@@ -107,19 +107,19 @@ module RedmineDmsf
     end
 
     def unlock!(force_file_unlock_allowed: false, owner: nil)
-      raise RedmineDmsf::Errors::DmsfLockError, l(:warning_file_not_locked) unless locked?
+      raise DmsfLockError, l(:warning_file_not_locked) unless locked?
 
       existing = lock(tree: true)
       destroyed = false
       # If its empty its a folder that's locked (not root)
       if existing.empty? || (!dmsf_folder.nil? && dmsf_folder.locked?)
-        raise RedmineDmsf::Errors::DmsfLockError, l(:error_unlock_parent_locked)
+        raise DmsfLockError, l(:error_unlock_parent_locked)
       end
 
       # If entity is locked to you, you aren't the lock originator (or named in a shared lock) so deny action
       # Unless of course you have the rights to force an unlock
       if locked_for_user? && !User.current.allowed_to?(:force_file_unlock, project) && !force_file_unlock_allowed
-        raise RedmineDmsf::Errors::DmsfLockError, l(:error_only_user_that_locked_file_can_unlock_it)
+        raise DmsfLockError, l(:error_only_user_that_locked_file_can_unlock_it)
       end
 
       # Now we need to determine lock type and do the needful

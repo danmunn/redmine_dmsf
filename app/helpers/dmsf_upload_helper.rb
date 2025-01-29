@@ -130,7 +130,7 @@ module DmsfUploadHelper
           wf.notify_users project, new_revision, controller
           begin
             file.lock!
-          rescue RedmineDmsf::Errors::DmsfLockError => e
+          rescue DmsfLockError => e
             Rails.logger.warn e.message
           end
         else

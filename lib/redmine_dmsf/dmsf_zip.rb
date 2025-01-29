@@ -48,9 +48,7 @@ module RedmineDmsf
       end
 
       def add_dmsf_file(dmsf_file, member = nil, root_path = nil, path = nil)
-        unless dmsf_file&.last_revision && File.exist?(dmsf_file.last_revision.disk_file)
-          raise RedmineDmsf::Errors::DmsfFileNotFoundError
-        end
+        raise DmsfFileNotFoundError unless dmsf_file&.last_revision && File.exist?(dmsf_file.last_revision.disk_file)
 
         if path
           string_path = path
@@ -77,7 +75,7 @@ module RedmineDmsf
       def add_attachment(attachment, path)
         return if @files.include?(path)
 
-        raise RedmineDmsf::Errors::DmsfFileNotFoundError unless File.exist?(attachment.diskfile)
+        raise DmsfFileNotFoundError unless File.exist?(attachment.diskfile)
 
         zip_entry = ::Zip::Entry.new(@zip_file, path, nil, nil, nil, nil, nil, nil,
                                      ::Zip::DOSTime.at(attachment.created_on))
