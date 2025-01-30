@@ -178,4 +178,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test.log
-          path: log/test.log
+          path: /opt/redmine/log/test.log
