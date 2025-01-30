@@ -1,10 +1,17 @@
 Changelog for Redmine DMSF
 ==========================
 
-4.0.2 *????-??-??*
+4.0.2 *2025-01-30*
 ------------------
 
-4.0.1 *2024-01-17*
+    Moving folders fix
+    Coloured system sub-folders
+
+* Bug: #1585 - Move X Copy
+* Bug: #1580 - Can't upgrade plugin to 4.0.1 after upgrading redmine to 6.0.2
+* Bug: #1557 - Editing of locked folder
+
+4.0.1 *2025-01-17*
 ------------------
 
     Coloured icons

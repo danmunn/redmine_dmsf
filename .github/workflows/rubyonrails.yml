@@ -21,9 +21,9 @@
 name: "GitHub CI"
 on:
   push:
-    branches: ["devel"]
+    branches: ["master"]
   pull_request:
-    branches: ["devel"]
+    branches: ["master"]
 jobs:
   plugin_tests:
     strategy:
@@ -47,7 +47,7 @@ jobs:
             sql3: GRANT ALL PRIVILEGES ON test.* TO 'redmine'@'localhost';
             # SQL client command
             database_command: mysql -uroot -proot -e
-            # SQl service
+            # SQL service
             database_service: mysql
           - engine: postgresql
             # Database configuration for Redmine
