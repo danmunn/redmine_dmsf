@@ -139,7 +139,7 @@ module DmsfQueriesHelper
         else
           tag = link_to(sprite_icon('folder', nil,
                                     icon_only: true,
-                                    css_class: value.start_with?('.') ? 'dmsf-system' : ''),
+                                    css_class: item.system ? 'dmsf-system' : ''),
                         dmsf_folder_path(id: item.project, folder_id: item.id))
           tag += link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'dmsf-label')
           unless filter_any?

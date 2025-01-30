@@ -24,7 +24,6 @@
   <% options[:limit] = dmsf_pages.per_page %>
 <% end %>
 <% query.dmsf_nodes(options).each do |node| %>
-  <% system = node.title =~ /^\./ %>
   <% case node.type %>
   <% when 'project'%>
     <% id = "#{node.id}pspan" %>
@@ -38,13 +37,13 @@
       class="<%= cycle('odd', 'even') %>
     <%= node.css_classes(query.deleted) %> <%= params[:classes] %> <%= @idnt > 0 ? "idnt idnt-#{@idnt}" : nil %>">
     <td class="checkbox hide-when-print">
-      <%= check_box_tag('ids[]', "#{node.type}-#{node.id}", false, id: nil) unless system %>
+      <%= check_box_tag('ids[]', "#{node.type}-#{node.id}", false, id: nil) unless node.system %>
     </td>
     <% query.inline_columns.each do |column| %>
       <%= content_tag 'td', column_content(column, node), class: column.css_classes %>
     <% end %>
     <td class="buttons">
-      <% unless system %>
+      <% unless node.system %>
         <% if defined?(EasyExtensions) %>
           <%= link_to '', '#', title: l(:button_actions),
                       class: 'icon-only icon-actions js-contextmenu icon-more-horiz',
