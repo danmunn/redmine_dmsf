@@ -341,7 +341,7 @@ class DmsfQuery < Query
         projects.description AS description,
         '' AS comment,
         0 AS locked,
-        0 AS `system`,
+        0 AS "system",
         0 AS sort#{cf_columns}}).visible
     if dmsf_folder_id || deleted
       scope.none

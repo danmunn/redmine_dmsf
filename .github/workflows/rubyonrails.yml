@@ -173,3 +173,9 @@ jobs:
           if [[ "${{matrix.database_service}}" ]]; then
             sudo systemctl stop ${{matrix.engine}}
           fi
+      - name: Archive test.log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test.log
+          path: log/test.log
