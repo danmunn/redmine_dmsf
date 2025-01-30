@@ -382,8 +382,8 @@ class DmsfQuery < Query
         dmsf_folders.id AS customized_id,
         dmsf_folders.description AS description,
         '' AS comment,
-        (case when dmsf_locks.id IS NULL then 0 else 1 end) AS locked,
-        dmsf_folders.system AS "system",
+        (CASE WHEN dmsf_locks.id IS NULL THEN 0 ELSE 1 END) AS locked,
+        (CASE WHEN dmsf_folders.system THEN 1 ELSE 0 END) AS "system",
         1 AS sort#{cf_columns}})
                       .joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
                       .joins("LEFT JOIN dmsf_locks ON dmsf_folders.id = dmsf_locks.entity_id AND
@@ -428,7 +428,7 @@ class DmsfQuery < Query
         dmsf_folders.id AS customized_id,
         dmsf_folders.description AS description,
         '' AS comment,
-        (case when dmsf_locks.id IS NULL then 0 else 1 end) AS locked,
+        (CASE WHEN dmsf_locks.id IS NULL THEN 0 ELSE 1 END) AS locked,
         0 AS "system",
         1 AS sort#{cf_columns}})
                     .joins('LEFT JOIN dmsf_folders ON dmsf_links.target_id = dmsf_folders.id')
@@ -475,7 +475,7 @@ class DmsfQuery < Query
         dmsf_file_revisions.id AS customized_id,
         dmsf_file_revisions.description AS description,
         dmsf_file_revisions.comment AS comment,
-        (case when dmsf_locks.id IS NULL then 0 else 1 end) AS locked,
+        (CASE WHEN dmsf_locks.id IS NULL THEN 0 ELSE 1 END) AS locked,
         0 AS "system",
         2 AS sort#{cf_columns}})
                     .joins(:dmsf_file_revisions)
@@ -522,7 +522,7 @@ class DmsfQuery < Query
         dmsf_file_revisions.id AS customized_id,
         dmsf_file_revisions.description AS description,
         dmsf_file_revisions.comment AS comment,
-        (case when dmsf_locks.id IS NULL then 0 else 1 end) AS locked,
+        (CASE WHEN dmsf_locks.id IS NULL THEN 0 ELSE 1 END) AS locked,
         0 AS "system",
         2 AS sort#{cf_columns}})
                     .joins('JOIN dmsf_files ON dmsf_files.id = dmsf_links.target_id')
