@@ -383,7 +383,7 @@ class DmsfQuery < Query
         dmsf_folders.description AS description,
         '' AS comment,
         (CASE WHEN dmsf_locks.id IS NULL THEN 0 ELSE 1 END) AS locked,
-        (CASE WHEN dmsf_folders.system THEN 1 ELSE 0 END) AS "system",
+        (CASE WHEN (dmsf_folders.system = #{ActiveRecord::Base.connection.quoted_true}) THEN 1 ELSE 0 END) AS "system",
         1 AS sort#{cf_columns}})
                       .joins('LEFT JOIN users ON dmsf_folders.user_id = users.id')
                       .joins("LEFT JOIN dmsf_locks ON dmsf_folders.id = dmsf_locks.entity_id AND
