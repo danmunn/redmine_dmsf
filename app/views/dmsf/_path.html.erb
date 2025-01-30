@@ -29,6 +29,10 @@
         <%= link_to h(path_element.title), dmsf_folder_path(id: @project, folder_id: path_element) %>
       <% end %>
     <% end %>
+    <% if folder.locked? && !(filename || title) %>
+      <%= content_tag('span', sprite_icon('unlock', nil, icon_only: true, size: '12'),
+                      title: l(:title_locked_by_user, user: folder.locked_by)) %>
+    <% end %>
   <% else %>
     <% if @project %>
       <%= link_to l(:link_documents), dmsf_folder_path(id: @project) %>

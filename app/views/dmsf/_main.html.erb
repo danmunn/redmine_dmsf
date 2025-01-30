@@ -21,7 +21,7 @@
 <% html_title l(:dmsf) %>
 <% if @project %>
   <div class="contextual">
-    <% unless @locked_for_user || @system_folder %>
+    <% unless @locked || @system_folder %>
       <% if @file_manipulation_allowed %>
         <%= link_to sprite_icon('add', l(:label_document_new)),
                     multi_dmsf_upload_path(id: @project, folder_id: @folder), class: 'icon icon-add',
@@ -38,7 +38,7 @@
           system_folder: @system_folder,
           folder: @folder,
           project: @project,
-          locked_for_user: @locked_for_user,
+          locked: @locked,
           file_manipulation_allowed: @file_manipulation_allowed,
           trash_enabled: @trash_enabled,
           notifications: @notifications } %>
@@ -49,7 +49,7 @@
             system_folder: @system_folder,
             folder: @folder,
             project: @project,
-            locked_for_user: @locked_for_user,
+            locked: @locked,
             file_manipulation_allowed: @file_manipulation_allowed,
             trash_enabled: @trash_enabled,
             notifications: @notifications} %>

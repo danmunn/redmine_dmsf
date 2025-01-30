@@ -78,7 +78,7 @@ class DmsfController < ApplicationController
 
   def show
     @system_folder = @folder&.system
-    @locked_for_user = @folder&.locked_for_user?
+    @locked = @folder&.locked?
     @folder_manipulation_allowed = User.current.allowed_to?(:folder_manipulation, @project)
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @trash_enabled = @folder_manipulation_allowed && @file_manipulation_allowed

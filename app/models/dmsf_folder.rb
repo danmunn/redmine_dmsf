@@ -567,7 +567,7 @@ class DmsfFolder < ApplicationRecord
   def css_classes(trash)
     classes = []
     if trash
-      if title.match?(/^\./)
+      if system
         classes << 'dmsf-system'
       else
         classes << 'hascontextmenu'
@@ -581,7 +581,7 @@ class DmsfFolder < ApplicationRecord
       else
         classes << 'dmsf-child'
       end
-      if title.match?(/^\./)
+      if system
         classes << 'dmsf-system'
       else
         classes << 'hascontextmenu'
