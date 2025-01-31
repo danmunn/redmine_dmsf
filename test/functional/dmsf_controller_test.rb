@@ -24,6 +24,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class DmsfControllerTest < RedmineDmsf::Test::TestCase
   include Redmine::I18n
   include Rails.application.routes.url_helpers
+  include DmsfHelper
 
   fixtures :custom_fields, :custom_values, :dmsf_links, :dmsf_folder_permissions, :dmsf_locks,
            :dmsf_folders, :dmsf_files, :dmsf_file_revisions
@@ -376,6 +377,29 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     assert_redirected_to dmsf_folder_path(id: @project1)
   ensure
     zip_file.unlink
+  end
+
+  def test_download_email_entries
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    zip_file = Tempfile.new([RedmineDmsf::DmsfZip::FILE_PREFIX, '.zip'], Rails.root.join('tmp'))
+    entry = tmp_entry_identifier(zip_file.path)
+    get "/projects/#{@project1.identifier}/dmsf/entries/#{entry}/download_email_entries"
+    assert_response :success
+  end
+
+  def test_download_email_entries_not_found
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    get "/projects/#{@project1.identifier}/dmsf/entries/notfound/download_email_entries"
+    assert_response :not_found
+  end
+
+  def test_download_email_entries_forbidden
+    @role_manager.remove_permission! :view_dmsf_files
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    zip_file = Tempfile.new([RedmineDmsf::DmsfZip::FILE_PREFIX, '.zip'], Rails.root.join('tmp'))
+    entry = tmp_entry_identifier(zip_file.path)
+    get "/projects/#{@project1.identifier}/dmsf/entries/#{entry}/download_email_entries"
+    assert_response :forbidden
   end
 
   def test_add_email_forbidden

@@ -22,12 +22,14 @@ require 'zip'
 
 module RedmineDmsf
   module DmsfZip
+    FILE_PREFIX = 'dmsf_zip_'
+
     # ZIP
     class Zip
       attr_reader :dmsf_files
 
       def initialize
-        @temp_file = Tempfile.new(%w[dmsf_zip_ .zip], Rails.root.join('tmp'))
+        @temp_file = Tempfile.new([FILE_PREFIX, '.zip'], Rails.root.join('tmp'))
         @zip_file = ::Zip::OutputStream.open(@temp_file)
         @files = []
         @dmsf_files = []

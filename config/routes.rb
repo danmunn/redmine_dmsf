@@ -37,9 +37,9 @@ if Redmine::Plugin.installed? 'redmine_dmsf'
     post '/projects/:id/dmsf/entries', controller: 'dmsf', action: 'entries_operation', as: 'entries_operations_dmsf'
     post '/projects/:id/dmsf/entries/delete', controller: 'dmsf', action: 'delete_entries', as: 'delete_entries'
     post '/projects/:id/dmsf/entries/email', to: 'dmsf#entries_email', as: 'email_entries'
-    get '/projects/:id/dmsf/entries/download_email_entries', controller: 'dmsf',
-                                                             action: 'download_email_entries',
-                                                             as: 'download_email_entries'
+    get '/projects/:id/dmsf/entries/:entry/download_email_entries', controller: 'dmsf',
+                                                                    action: 'download_email_entries',
+                                                                    as: 'download_email_entries'
     get '/projects/:id/entries/copymove', to: 'dmsf#copymove', as: 'copymove_entries'
     get '/projects/:id/dmsf/lock', controller: 'dmsf', action: 'lock', as: 'lock_dmsf'
     get '/projects/:id/dmsf/unlock', controller: 'dmsf', action: 'unlock', as: 'unlock_dmsf'

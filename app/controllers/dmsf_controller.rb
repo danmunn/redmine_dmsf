@@ -130,14 +130,19 @@ class DmsfController < ApplicationController
   end
 
   def download_email_entries
-    # IE has got a tendency to cache files
-    expires_in 0.years, 'must-revalidate' => true
-    send_file(
-      params[:path],
-      filename: 'Documents.zip',
-      type: 'application/zip',
-      disposition: 'attachment'
-    )
+    file_path = helpers.email_entry_tmp_file_path(params[:entry])
+    if File.exist?(file_path)
+      # IE has got a tendency to cache files
+      expires_in 0.years, 'must-revalidate' => true
+      send_file(
+        file_path,
+        filename: 'Documents.zip',
+        type: 'application/zip',
+        disposition: 'attachment'
+      )
+    else
+      render_404
+    end
   rescue StandardError => e
     flash[:error] = e.message
   end
@@ -204,12 +209,14 @@ class DmsfController < ApplicationController
   end
 
   def entries_email
+    file_path = helpers.email_entry_tmp_file_path(params[:email][:zipped_content])
+    params[:email][:zipped_content] = file_path
     if params[:email][:to].strip.blank?
       flash[:error] = l(:error_email_to_must_be_entered)
     else
       DmsfMailer.deliver_send_documents @project, params[:email].permit!, User.current
-      if File.exist?(params[:email][:zipped_content])
-        File.delete(params[:email][:zipped_content])
+      if File.exist?(file_path)
+        File.delete(file_path)
       else
         flash[:error] = l(:header_minimum_filesize)
       end
@@ -523,7 +530,7 @@ class DmsfController < ApplicationController
     end
 
     @email_params = {
-      zipped_content: zipped_content,
+      zipped_content: helpers.tmp_entry_identifier(zipped_content),
       folders: selected_folders,
       files: selected_files,
       subject: "#{@project.name} #{l(:label_dmsf_file_plural).downcase}",
