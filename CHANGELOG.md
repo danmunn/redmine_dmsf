@@ -1,8 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-4.0.3 *????-??-??*
+4.0.3 *2025-01-31*
 ------------------
+
+    Security enhancement
+
+* Bug: #1370 - Where to report security issues?
 
 4.0.2 *2025-01-30*
 ------------------
