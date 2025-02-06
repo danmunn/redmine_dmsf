@@ -355,15 +355,7 @@
     </em>
   </p>
 <% else %>
-  <% begin %>
-    <% require 'xapian' %>
-    <% xapian_disabled = false %>
-  <% rescue LoadError => e %>
-    <p class="warning"><%= l(:warning_xapian_not_available) %></p>
-    <% Rails.logger.warn e.message %>
-    <% xapian_disabled = true %>
-  <% end %>
-  <% if RedmineDmsf::Plugin.xapian_available? %>
+  <% if RedmineDmsf::Plugin.lib_available?('xapian') %>
     <p>
       <%= content_tag :label, l(:label_index_database) %>
       <%= text_field_tag 'settings[dmsf_index_database]', RedmineDmsf.dmsf_index_database, size: 50 %>

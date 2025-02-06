@@ -42,4 +42,9 @@ class DmsfPluginTest < RedmineDmsf::Test::HelperTest
     assert RedmineDmsf::Plugin.an_obsolete_plugin_present?
     FileUtils.rm_rf path
   end
+
+  def test_lib_available?
+    assert RedmineDmsf::Plugin.lib_available?('zip')
+    assert_not RedmineDmsf::Plugin.lib_available?('not_existing_gem')
+  end
 end
