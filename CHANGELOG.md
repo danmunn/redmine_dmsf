@@ -1,8 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-4.0.4 *????-??-??*
+4.1.0 *2025-02-12*
 ------------------
+
+    Puma 6 compatibility
+
+* New: #1589 - Support for Puma web server
 
 4.0.3 *2025-01-31*
 ------------------
