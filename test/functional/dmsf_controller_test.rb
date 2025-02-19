@@ -703,7 +703,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     # Target project is not given
     post '/login', params: { username: 'jsmith', password: 'jsmith' }
     post "/projects/#{@project1.id}/dmsf/entries",
-         params: { ids: ["folder-link-#{@link1.id}"], ids: ["file-link-#{@link4.id}"], download_entries: true }
+         params: { ids: ["folder-link-#{@link1.id}", "file-link-#{@link4.id}"], download_entries: true }
     assert_response :success
   end
 end
