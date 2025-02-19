@@ -1,6 +1,6 @@
-# Redmine DMSF Plugin 4.1.1
+# Redmine DMSF Plugin 4.1.2 devel
 
-[![GitHub CI](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml/badge.svg?branch=master)](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml)
+[![GitHub CI](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml/badge.svg?branch=devel)](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml)
 [![Support Ukraine Badge](https://bit.ly/support-ukraine-now)](https://github.com/support-ukraine/support-ukraine)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
