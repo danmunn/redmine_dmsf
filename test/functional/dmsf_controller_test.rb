@@ -33,6 +33,7 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     super
     @link2 = DmsfLink.find 2
     @link1 = DmsfLink.find 1
+    @link4 = DmsfLink.find 4
     @custom_field = CustomField.find 21
     @custom_value = CustomValue.find 21
     default_url_options[:host] = 'www.example.com'
@@ -696,5 +697,14 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
     post '/dmsf/digest', params: { password: 'jsmith' }
     assert_response :redirect
     assert_redirected_to 'http://www.example.com/login?back_url=http%3A%2F%2Fwww.example.com%2Fdmsf%2Fdigest'
+  end
+
+  def test_entries_download
+    # Target project is not given
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    post "/projects/#{@project1.id}/dmsf/entries",
+         params: { ids: ["folder-link-#{@link1.id}"], ids: ["file-link-#{@link4.id}"], download_entries: true }
+    assert_response :redirect
+    assert_nil flash[:error]
   end
 end

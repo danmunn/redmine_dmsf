@@ -169,11 +169,11 @@ class DmsfController < ApplicationController
     end
 
     if @selected_dir_links.present? && (params[:email_entries].present? || params[:download_entries].present?)
-      @selected_folders = DmsfLink.where(id: selected_dir_links).pluck(:target_id) | @selected_folders
+      @selected_folders = DmsfLink.where(id: @selected_dir_links).pluck(:target_id) | @selected_folders
     end
 
     if @selected_file_links.present? && (params[:email_entries].present? || params[:download_entries].present?)
-      @selected_files = DmsfLink.where(id: selected_file_links).pluck(:target_id) | @selected_files
+      @selected_files = DmsfLink.where(id: @selected_file_links).pluck(:target_id) | @selected_files
     end
 
     begin
