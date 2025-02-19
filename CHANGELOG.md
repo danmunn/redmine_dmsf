@@ -1,8 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-4.1.1 *????-??-??*
+4.1.1 *2025-02-19*
 ------------------
+
+    Links download error fix
+
+* Bug: #1592 - Link entries download error
 
 4.1.0 *2025-02-12*
 ------------------
