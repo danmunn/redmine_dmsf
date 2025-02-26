@@ -67,6 +67,13 @@
                      options_for_select(options, selected: @project.default_dmsf_query_id) %>
       <em class="info"><%= l('text_allowed_queries_to_select') %></em>
     </p>
+    <p>
+      <%= content_tag :label, l(:label_dmsf_watermarks) %>
+      <%= check_box_tag 'dmsf_watermarks', '1', @project.dmsf_watermarks %>
+      <em class="info">
+        <%= l(:text_dmsf_watermarks_info) %>
+      </em>
+    </p>
   </fieldset>
 
   <div class="form-actions">

@@ -43,6 +43,7 @@ class DmsfStateController < ApplicationController
     end
     @project.update(dmsf_act_as_attachable: params[:act_as_attachable]) if RedmineDmsf.dmsf_act_as_attachable?
     @project.update default_dmsf_query_id: params[:default_dmsf_query]
+    @project.update dmsf_watermarks: params[:dmsf_watermarks]
     redirect_to settings_project_path(@project, tab: 'dmsf')
   end
 

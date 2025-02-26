@@ -527,6 +527,23 @@ class DmsfFile < ApplicationRecord
     end
   end
 
+  def watermarked
+    return '' unless pdf? || image?
+
+    target = File.join(DmsfFile.previews_storage_path, File.basename(last_revision&.disk_file.to_s))
+    begin
+      return RedmineDmsf::Watermark.generate_pdf(last_revision&.disk_file.to_s, target) if pdf?
+
+      return RedmineDmsf::Watermark.generate_image(last_revision&.disk_file.to_s, target)
+    rescue StandardError => e
+      Rails.logger.error do
+        %(An error occurred while generating watermark for #{last_revision&.disk_file} to #{target}\n
+          Exception was: #{e.message})
+      end
+      ''
+    end
+  end
+
   def text_preview(limit)
     result = +'No preview available'
     if text?

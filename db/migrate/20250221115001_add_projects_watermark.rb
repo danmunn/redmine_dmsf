@@ -2,7 +2,7 @@
 
 # Redmine plugin for Document Management System "Features"
 #
-#  Vít Jonáš <vit.jonas@gmail.com>, Daniel Munn <dan.munn@munnster.co.uk>, Karel Pičman <karel.picman@kontron.com>
+# Karel Pičman <karel.picman@kontron.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,27 +18,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-source 'https://rubygems.org' do
-  gem 'ox' # Dav4Rack
-  gem 'rake' unless Dir.exist?(File.expand_path('../../redmine_dashboard', __FILE__))
-  gem 'uuidtools'
-  gem 'zip-zip' unless Dir.exist?(File.expand_path('../../vault', __FILE__))
-  gem 'prawn'
-  gem 'combine_pdf'
-  gem 'rmagick'
-
-  # Redmine extensions
-  unless Dir.exist?(File.expand_path('../../easyproject', __FILE__))
-    gem 'active_record_union'
-    gem 'simple_enum'
-    group :xapian do
-      gem 'xapian-ruby'
-    end
-  end
-  unless %w[easyproject easy_gantt custom_tables]
-         .any? { |plugin| Dir.exist?(File.expand_path("../../#{plugin}", __FILE__)) }
-    group :test do
-      gem 'rails-controller-testing'
-    end
+# Rename DMSF digest token
+class AddProjectsWatermark < ActiveRecord::Migration[7.2]
+  def change
+    add_column :projects, :dmsf_watermarks, :boolean, default: false
   end
 end

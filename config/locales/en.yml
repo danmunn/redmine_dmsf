@@ -491,6 +491,9 @@ en:
   label_dmsf_commit: Commit
   label_dmsf_upload_commit: Upload and commit
 
+  label_dmsf_watermarks: Use watermarks
+  text_dmsf_watermarks_info: Embed each downloaded PDF or picture file with a watermark.
+
   easy_pages:
     modules:
       dmsf_locked_documents: My locked documents
