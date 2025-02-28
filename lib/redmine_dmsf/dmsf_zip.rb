@@ -65,8 +65,19 @@ module RedmineDmsf
         zip_entry = ::Zip::Entry.new(@zip_file, string_path, nil, nil, nil, nil, nil, nil,
                                      ::Zip::DOSTime.at(dmsf_file.last_revision.updated_at))
         @zip_file.put_next_entry zip_entry
-        File.open(dmsf_file.last_revision.disk_file, 'rb') do |f|
-          while (buffer = f.read(8192))
+
+        # Watermark
+        if dmsf_file.project.dmsf_watermarks
+          target = File.join(DmsfFile.previews_storage_path, File.basename(dmsf_file.last_revision.disk_file.to_s))
+          if dmsf_file.pdf?
+            watermarked =  RedmineDmsf::Watermark.generate_pdf(dmsf_file.last_revision.disk_file, target)
+          elsif dmsf_file.image?
+            watermarked =  RedmineDmsf::Watermark.generate_image(dmsf_file.last_revision.disk_file, target)
+          end
+        end
+
+        File.open(watermarked ? watermarked : dmsf_file.last_revision.disk_file, 'rb') do |f|
+          while (buffer = f.read(8_192))
             @zip_file.write buffer
           end
         end
@@ -83,7 +94,7 @@ module RedmineDmsf
                                      ::Zip::DOSTime.at(attachment.created_on))
         @zip_file.put_next_entry zip_entry
         File.open(attachment.diskfile, 'rb') do |f|
-          while (buffer = f.read(8192))
+          while (buffer = f.read(8_192))
             @zip_file.write buffer
           end
         end

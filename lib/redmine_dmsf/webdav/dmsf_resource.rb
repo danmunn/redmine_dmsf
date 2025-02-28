@@ -703,6 +703,16 @@ module RedmineDmsf
         raise NotFound unless disk_file && File.exist?(disk_file)
         raise Forbidden unless !parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder)
 
+        # Watermark
+        if file.project.dmsf_watermarks
+          target = File.join(DmsfFile.previews_storage_path, File.basename(disk_file.to_s))
+          if file.pdf?
+            watermarked =  RedmineDmsf::Watermark.generate_pdf(disk_file, target)
+          elsif file.image?
+            watermarked =  RedmineDmsf::Watermark.generate_image(disk_file, target)
+          end
+        end
+
         # If there is no range (start of ranged download, or direct download) then we log the
         # file access, so we can properly keep logged information
         if @request.env['HTTP_RANGE'].nil?
@@ -719,7 +729,7 @@ module RedmineDmsf
             Rails.logger.error "Could not send email notifications: #{e.message}"
           end
         end
-        File.new disk_file
+        File.new watermarked ? watermarked : disk_file
       end
 
       def reuse_version_for_locked_file(file)
