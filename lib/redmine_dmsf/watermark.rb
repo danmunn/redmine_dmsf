@@ -77,7 +77,6 @@ module RedmineDmsf
       water_mark = Magick::Draw.new
       water_mark.rotation = ANGLE
       water_mark.gravity = Magick::CenterGravity
-      water_mark.font_family = 'Helvetica'
       water_mark.font_weight = Magick::BoldWeight
       water_mark
     end
