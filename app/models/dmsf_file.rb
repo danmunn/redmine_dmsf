@@ -85,7 +85,13 @@ class DmsfFile < ApplicationRecord
   attr_writer :last_revision
 
   def self.previews_storage_path
-    Rails.root.join 'tmp/dmsf_previews'
+    path = Rails.root.join('tmp/dmsf_previews')
+    begin
+      FileUtils.mkdir_p path
+    rescue StandardError => e
+      Rails.logger.error e.message
+    end
+    path
   end
 
   def default_values

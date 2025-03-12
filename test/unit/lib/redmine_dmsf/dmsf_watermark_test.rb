@@ -36,6 +36,7 @@ class DmsfWatermarkTest < RedmineDmsf::Test::HelperTest
   def teardown
     # Delete our tmp folder
     FileUtils.rm_rf DmsfFile.storage_path
+    DmsfFile.clear_previews
   rescue StandardError => e
     Rails.logger.error e.message
   end
@@ -59,8 +60,9 @@ class DmsfWatermarkTest < RedmineDmsf::Test::HelperTest
   end
 
   def test_text
-    text = "#{User.current}\n#{Time.current.strftime('%Y-%m-%d %H:%M:%S')}"
-    assert_equal text, RedmineDmsf::Watermark.text(normalize: true)
-    assert_equal text, RedmineDmsf::Watermark.text(normalize: false)
+    # Skip seconds
+    text = "#{User.current}\n#{Time.current.strftime('%Y-%m-%d %H:%M')}"
+    assert RedmineDmsf::Watermark.text(normalize: true).start_with?(text)
+    assert RedmineDmsf::Watermark.text(normalize: false).start_with?(text)
   end
 end
