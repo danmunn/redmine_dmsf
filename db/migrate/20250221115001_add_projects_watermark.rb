@@ -21,6 +21,6 @@
 # Rename DMSF digest token
 class AddProjectsWatermark < ActiveRecord::Migration[7.2]
   def change
-    add_column :projects, :dmsf_watermarks, :boolean, null: false, default: false
+    add_column :projects, :dmsf_watermarks, :boolean, default: false
   end
 end

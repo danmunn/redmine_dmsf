@@ -126,6 +126,7 @@ Rails/ThreeStateBooleanColumn:
   Exclude:
     - db/migrate/04_dmsf_0_9_0.rb # Easy tests
     - db/migrate/20170217141601_add_dmsf_not_inheritable_to_custom_fields.rb # Easy tests
+    - db/migrate/20250221115001_add_projects_watermark.rb
 
 Rails/UniqueValidationWithoutIndex:
   Exclude:
