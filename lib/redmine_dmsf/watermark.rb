@@ -67,7 +67,7 @@ module RedmineDmsf
       pdf = Prawn::Document.new
       pdf.fill_color COLOR
       pdf.transparent(0.4) do
-        pdf.text text(true), align: :center, valign: :center, size: 36, rotate: -ANGLE
+        pdf.text text(normalize: true), align: :center, valign: :center, size: 36, rotate: -ANGLE
       end
       CombinePDF.parse(pdf.render).pages[0]
     end
