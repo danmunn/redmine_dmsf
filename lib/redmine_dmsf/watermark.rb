@@ -25,6 +25,9 @@ require 'rmagick'
 module RedmineDmsf
   # Watermark
   module Watermark
+    COLOR = '3c3c3c'
+    ANGLE = 45
+
     def self.generate_pdf(source, target)
       # Add the watermark
       watermark = watermark_pdf
@@ -42,7 +45,7 @@ module RedmineDmsf
       end
       water_mark = watermark_image
       water_mark.annotate(mark, 0, 0, 0, 0, text) do |options|
-        options.fill = "#3c3c3c"
+        options.fill = "##{COLOR}"
         options.pointsize = 120
       end
       image.composite! mark, Magick::NorthGravity, Magick::HardLightCompositeOp
@@ -50,10 +53,8 @@ module RedmineDmsf
       target
     end
 
-    private
-
-    def self.text(normalize = false)
-      text = +"#{User.current}\n#{User.current.today}"
+    def self.text(normalize: false)
+      text = "#{User.current}\n#{Time.current.strftime('%Y-%m-%d %H:%M:%S')}"
       if normalize
         text.unicode_normalize! :nfc
         text.encode! 'windows-1252', 'UTF-8', invalid: :replace, undef: :replace, replace: '?'
@@ -64,9 +65,9 @@ module RedmineDmsf
     def self.watermark_pdf
       # Generate a PDF watermark
       pdf = Prawn::Document.new
-      pdf.fill_color '3c3c3c'
+      pdf.fill_color COLOR
       pdf.transparent(0.4) do
-        pdf.text self.text(true), align: :center, valign: :center, size: 36, rotate: 315
+        pdf.text text(true), align: :center, valign: :center, size: 36, rotate: -ANGLE
       end
       CombinePDF.parse(pdf.render).pages[0]
     end
@@ -74,7 +75,7 @@ module RedmineDmsf
     def self.watermark_image
       # Generate an image watermark
       water_mark = Magick::Draw.new
-      water_mark.rotation = 45
+      water_mark.rotation = ANGLE
       water_mark.gravity = Magick::CenterGravity
       water_mark.font_family = 'Helvetica'
       water_mark.font_weight = Magick::BoldWeight

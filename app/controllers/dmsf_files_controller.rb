@@ -80,10 +80,8 @@ class DmsfFilesController < ApplicationController
     if !api_request? && pdf_preview.present? && (RedmineDmsf.office_bin.present? || params[:preview].present?)
       basename = File.basename(filename, '.*')
       target = File.join(DmsfFile.previews_storage_path, File.basename(@file.last_revision&.disk_file.to_s))
-      if @file.project.dmsf_watermarks
-        watermarked = RedmineDmsf::Watermark.generate_pdf(pdf_preview, target)
-      end
-      send_file watermarked.present? ? watermarked : pdf_preview,
+      watermarked = RedmineDmsf::Watermark.generate_pdf(pdf_preview, target) if @file.project.dmsf_watermarks
+      send_file watermarked.presence || pdf_preview,
                 filename: "#{basename}.pdf",
                 type: 'application/pdf',
                 disposition: 'inline'
@@ -96,7 +94,7 @@ class DmsfFilesController < ApplicationController
     else
       params[:disposition] = 'attachment' if params[:filename].present?
       watermarked = @file.project.dmsf_watermarks && @file.watermarked
-      send_file watermarked.present? ? watermarked : @revision.disk_file,
+      send_file watermarked.presence || @revision.disk_file,
                 filename: filename,
                 type: @revision.detect_content_type,
                 disposition: params[:disposition].presence || @revision.dmsf_file.disposition

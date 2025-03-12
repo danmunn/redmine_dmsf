@@ -534,7 +534,7 @@ class DmsfFile < ApplicationRecord
     begin
       return RedmineDmsf::Watermark.generate_pdf(last_revision&.disk_file.to_s, target) if pdf?
 
-      return RedmineDmsf::Watermark.generate_image(last_revision&.disk_file.to_s, target)
+      RedmineDmsf::Watermark.generate_image(last_revision&.disk_file.to_s, target)
     rescue StandardError => e
       Rails.logger.error do
         %(An error occurred while generating watermark for #{last_revision&.disk_file} to #{target}\n

@@ -87,6 +87,50 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     assert @response.body.starts_with?('%PDF')
   end
 
+  def test_view_watermark_pdf
+    # Without a watermark
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    @file8.project.dmsf_watermarks = false
+    assert @file8.project.save
+    get "/dmsf/files/#{@file8.id}/view", params: { id: @file8.id }
+    assert_response :success
+    assert_equal 'application/pdf', @response.media_type
+    assert @response.body.start_with?('%PDF')
+    size = @response.body.size
+
+    # With a watermark
+    @file8.project.dmsf_watermarks = true
+    assert @file8.project.save
+    get "/dmsf/files/#{@file8.id}/view", params: { id: @file8.id }
+    assert_response :success
+    assert_equal 'application/pdf', @response.media_type
+    assert @response.body.start_with?('%PDF')
+
+    assert_not_equal size, @response.body.size
+  end
+
+  def test_view_watermark_image
+    # Without a watermark
+    post '/login', params: { username: 'jsmith', password: 'jsmith' }
+    @file7.project.dmsf_watermarks = false
+    assert @file7.project.save
+    get "/dmsf/files/#{@file7.id}/view", params: { id: @file7.id }
+    assert_response :success
+    assert_equal 'image/gif', @response.media_type
+    assert @response.body.start_with?(/.IF89/)
+    size = @response.body.size
+
+    # With a watermark
+    @file7.project.dmsf_watermarks = true
+    assert @file7.project.save
+    get "/dmsf/files/#{@file7.id}/view", params: { id: @file7.id }
+    assert_response :success
+    assert_equal 'image/gif', @response.media_type
+    assert @response.body.start_with?(/.IF89/)
+
+    assert_not_equal size, @response.body.size
+  end
+
   def delete_forbidden
     # Missing permissions
     post '/login', params: { username: 'jsmith', password: 'jsmith' }

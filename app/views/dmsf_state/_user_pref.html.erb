@@ -69,7 +69,8 @@
     </p>
     <p>
       <%= content_tag :label, l(:label_dmsf_watermarks) %>
-      <%= check_box_tag 'dmsf_watermarks', '1', @project.dmsf_watermarks %>
+      <% checked = RedmineDmsf.dmsf_watermarks? || @project.dmsf_watermarks %>
+      <%= check_box_tag 'dmsf_watermarks', '1', checked, disabled: RedmineDmsf.dmsf_watermarks? %>
       <em class="info">
         <%= l(:text_dmsf_watermarks_info) %>
       </em>

@@ -76,7 +76,7 @@ module RedmineDmsf
           end
         end
 
-        File.open(watermarked ? watermarked : dmsf_file.last_revision.disk_file, 'rb') do |f|
+        File.open(watermarked || dmsf_file.last_revision.disk_file, 'rb') do |f|
           while (buffer = f.read(8_192))
             @zip_file.write buffer
           end

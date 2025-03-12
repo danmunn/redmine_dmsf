@@ -66,7 +66,8 @@ Redmine::Plugin.register :redmine_dmsf do
              'empty_minor_version_by_default' => '0',
              'remove_original_documents_module' => '0',
              'dmsf_webdav_authentication' => 'Digest',
-             'dmsf_really_delete_files' => '0'
+             'dmsf_really_delete_files' => '0',
+             'dmsf_watermarks' => '0'
            }
 end
 

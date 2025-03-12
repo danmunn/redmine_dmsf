@@ -729,7 +729,7 @@ module RedmineDmsf
             Rails.logger.error "Could not send email notifications: #{e.message}"
           end
         end
-        File.new watermarked ? watermarked : disk_file
+        File.new watermarked || disk_file
       end
 
       def reuse_version_for_locked_file(file)

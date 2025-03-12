@@ -19,13 +19,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 source 'https://rubygems.org' do
+  gem 'combine_pdf'
   gem 'ox' # Dav4Rack
+  gem 'prawn'
   gem 'rake' unless Dir.exist?(File.expand_path('../../redmine_dashboard', __FILE__))
+  gem 'rmagick'
   gem 'uuidtools'
   gem 'zip-zip' unless Dir.exist?(File.expand_path('../../vault', __FILE__))
-  gem 'prawn'
-  gem 'combine_pdf'
-  gem 'rmagick'
 
   # Redmine extensions
   unless Dir.exist?(File.expand_path('../../easyproject', __FILE__))

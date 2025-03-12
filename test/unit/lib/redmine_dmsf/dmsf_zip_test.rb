@@ -20,7 +20,7 @@
 
 require File.expand_path('../../../../test_helper', __FILE__)
 
-# Plugin tests
+# ZIP tests
 class DmsfZipTest < RedmineDmsf::Test::HelperTest
   fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions, :attachments
   def setup

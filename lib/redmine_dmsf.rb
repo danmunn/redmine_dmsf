@@ -217,6 +217,11 @@ module RedmineDmsf
       value = Setting.plugin_redmine_dmsf['dmsf_default_notifications']
       value.to_i.positive? || value == 'true'
     end
+
+    def dmsf_watermarks?
+      value = Setting.plugin_redmine_dmsf['dmsf_watermarks']
+      value.to_i.positive? || value == 'true'
+    end
   end
 end
 
