@@ -704,7 +704,7 @@ module RedmineDmsf
         raise Forbidden unless !parent.exist? || !parent.folder || DmsfFolder.permissions?(parent.folder)
 
         # Watermark
-        if file.project.dmsf_watermarks
+        if file.watermark?
           target = File.join(DmsfFile.previews_storage_path, File.basename(disk_file.to_s))
           if file.pdf?
             watermarked =  RedmineDmsf::Watermark.generate_pdf(disk_file, target)

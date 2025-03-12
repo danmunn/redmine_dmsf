@@ -550,6 +550,10 @@ class DmsfFile < ApplicationRecord
     end
   end
 
+  def watermark?
+    RedmineDmsf.dmsf_watermarks? || project.dmsf_watermarks
+  end
+
   def text_preview(limit)
     result = +'No preview available'
     if text?

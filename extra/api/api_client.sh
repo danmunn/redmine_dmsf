@@ -50,7 +50,7 @@ USER_API_KEY="${1}"
 # 5.2 Move document(s)/folder(s)
 #curl -v -H "Content-Type: application/xml" -X POST --data "@entries.xml" -H "X-Redmine-API-Key: ${USER_API_KEY}" "http://localhost:3000/projects/3342/dmsf/entries.xml?ids[]=file-254566&move_entries=true"
 # 5.3 Download document(x)/folders(s)
-#curl -v -H "Content-Type: application/octet-stream" -X POST --data "" -H "X-Redmine-API-Key: ${USER_API_KEY}" http://localhost:3000/projects/3342/dmsf/entries.xml?ids[]=file-254566
+#curl -v -H "Content-Type: application/octet-stream" -X POST --data "" -H "X-Redmine-API-Key: ${USER_API_KEY}" http://localhost:3000/projects/3342/dmsf/entries.xml?ids[]=file-254566 > entries.zip
 # 5.4 Delete document(x)/folder(s)
 #curl -v -H "Content-Type: application/xml" -X POST --data "" -H "X-Redmine-API-Key: ${USER_API_KEY}" "http://localhost:3000/projects/3342/dmsf/entries.xml?ids[]=file-254566&delete_entries=true"
 

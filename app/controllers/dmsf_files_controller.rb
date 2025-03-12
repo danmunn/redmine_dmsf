@@ -93,7 +93,7 @@ class DmsfFilesController < ApplicationController
     # Offer the file for download
     else
       params[:disposition] = 'attachment' if params[:filename].present?
-      watermarked = @file.project.dmsf_watermarks && @file.watermarked
+      watermarked = @file.watermark? && @file.watermarked
       send_file watermarked.presence || @revision.disk_file,
                 filename: filename,
                 type: @revision.detect_content_type,

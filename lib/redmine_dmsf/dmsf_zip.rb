@@ -67,7 +67,7 @@ module RedmineDmsf
         @zip_file.put_next_entry zip_entry
 
         # Watermark
-        if dmsf_file.project.dmsf_watermarks
+        if dmsf_file.watermark?
           target = File.join(DmsfFile.previews_storage_path, File.basename(dmsf_file.last_revision.disk_file.to_s))
           if dmsf_file.pdf?
             watermarked =  RedmineDmsf::Watermark.generate_pdf(dmsf_file.last_revision.disk_file, target)
