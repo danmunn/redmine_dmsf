@@ -67,20 +67,15 @@ module RedmineDmsf
         @zip_file.put_next_entry zip_entry
 
         # Watermark
-        if dmsf_file.watermark?
-          target = File.join(DmsfFile.previews_storage_path, File.basename(dmsf_file.last_revision.disk_file.to_s))
-          if dmsf_file.pdf?
-            watermarked =  RedmineDmsf::Watermark.generate_pdf(dmsf_file.last_revision.disk_file, target)
-          elsif dmsf_file.image?
-            watermarked =  RedmineDmsf::Watermark.generate_image(dmsf_file.last_revision.disk_file, target)
-          end
-        end
+        watermarked = dmsf_file.watermarked if dmsf_file.watermark?
 
         File.open(watermarked || dmsf_file.last_revision.disk_file, 'rb') do |f|
           while (buffer = f.read(8_192))
             @zip_file.write buffer
           end
         end
+
+        FileUtils.rm_f(watermarked) if watermarked && File.exist?(watermarked)
         @files << string_path
         @dmsf_files << dmsf_file
       end

@@ -20,12 +20,10 @@
 
 require 'prawn'
 require 'combine_pdf'
-require 'rmagick'
 
 module RedmineDmsf
   # Watermark
   module Watermark
-    COLOR = '3c3c3c'
     ANGLE = 45
 
     def self.generate_pdf(source, target)
@@ -38,18 +36,13 @@ module RedmineDmsf
     end
 
     def self.generate_image(source, target)
-      # Add the watermark
-      image = Magick::Image.read(source).first
-      mark = Magick::Image.new(image.columns, image.rows) do |options|
-        options.background_color = 'Transparent'
+      source_image = MiniMagick::Image.open(source)
+      img = watermark_img(source_image)
+      result = source_image.composite(img) do |c|
+        c.compose 'multiply'
       end
-      water_mark = watermark_image
-      water_mark.annotate(mark, 0, 0, 0, 0, text) do |options|
-        options.fill = "##{COLOR}"
-        options.pointsize = 120
-      end
-      image.composite! mark, Magick::NorthGravity, Magick::HardLightCompositeOp
-      image.write target
+      result.write target
+      img.destroy!
       target
     end
 
@@ -65,20 +58,32 @@ module RedmineDmsf
     def self.watermark_pdf
       # Generate a PDF watermark
       pdf = Prawn::Document.new
-      pdf.fill_color COLOR
+      pdf.fill_color '808080'
       pdf.transparent(0.4) do
         pdf.text text(normalize: true), align: :center, valign: :center, size: 36, rotate: -ANGLE
       end
       CombinePDF.parse(pdf.render).pages[0]
     end
 
-    def self.watermark_image
-      # Generate an image watermark
-      water_mark = Magick::Draw.new
-      water_mark.rotation = ANGLE
-      water_mark.gravity = Magick::CenterGravity
-      water_mark.font_weight = Magick::BoldWeight
-      water_mark
+    def self.watermark_img(source_image)
+      img = MiniMagick::Image.create('.png')
+      if Redmine::Configuration['imagemagick_convert_command'].present?
+        MiniMagick.cli_path = File.dirname(Redmine::Configuration['imagemagick_convert_command'])
+      end
+      MiniMagick.convert do |gc|
+        gc.size format('%<width>dx%<height>d', width: source_image.info(:width), height: source_image.info(:height))
+        gc.xc 'transparent'
+        # It is necessary to have gsfonts package installed or minimagick_font_path env specified
+        font_path = Redmine::Configuration['minimagick_font_path'].presence
+        gc.font font_path.presence || 'Helvetica'
+        gc.fill 'gray'
+        gc.strokewidth 1
+        gc.pointsize 120
+        gc.gravity 'center'
+        gc.draw format("rotate %<angle>d text %<x>d,%<y>d '%<text>s'", angle: ANGLE, x: 0, y: 0, text: text)
+        gc << img.path
+      end
+      img
     end
   end
 end

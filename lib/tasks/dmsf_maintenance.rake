@@ -22,13 +22,16 @@ desc <<~END_DESC
   DMSF maintenance task
     * Remove all files with no database record from the document directory
     * Remove all links project_id = -1 (added links to an issue which hasn't been created)
+    * Remove all DMS temporary files
     * Report all documents without a corresponding file in the file system (dry_run only)
 
   Available options:
-    *dry_run - No physical deletion but to list of all unused files only
+    * dry_run - No physical deletion but to list of all unused files only
+    * temporary_files_only - remove DMS temporary files only
 
   Example:
     rake redmine:dmsf_maintenance RAILS_ENV="production"
+    rake redmine:dmsf_maintenance temporary_files_only=1 RAILS_ENV="production"
     rake redmine:dmsf_maintenance dry_run=1 RAILS_ENV="production"
 END_DESC
 
@@ -37,11 +40,13 @@ namespace :redmine do
     m = DmsfMaintenance.new
     begin
       $stdout.puts "\n"
-      Dir.chdir DmsfFile.storage_path.to_s
-      $stdout.puts "Files...\n"
-      m.files
-      $stdout.puts "Documents...\n"
-      m.documents
+      unless m.temporary_files_only
+        Dir.chdir DmsfFile.storage_path.to_s
+        $stdout.puts "Files...\n"
+        m.files
+        $stdout.puts "Documents...\n"
+        m.documents
+      end
       if m.dry_run
         m.result
       else
@@ -57,10 +62,11 @@ end
 class DmsfMaintenance
   include ActionView::Helpers::NumberHelper
 
-  attr_accessor :dry_run
+  attr_accessor :dry_run, :temporary_files_only
 
   def initialize
     @dry_run = ENV.fetch('dry_run', nil)
+    @temporary_files_only = ENV.fetch('temporary_files_only', nil)
     @files_to_delete = []
     @documents_to_delete = []
   end
@@ -82,31 +88,39 @@ class DmsfMaintenance
   end
 
   def result
-    # Files
-    size = 0
-    @files_to_delete.each { |f| size += File.size(f) }
-    $stdout.puts "\n#{@files_to_delete.count} files haven't got a corresponding revision and can be deleted."
-    $stdout.puts "#{number_to_human_size(size)} can be released.\n\n"
-    # Links
-    size = DmsfLink.where(project_id: -1).count
-    $stdout.puts "#{size} links can be deleted.\n\n"
-    # Documents
-    $stdout.puts "#{@documents_to_delete.size} corrupted documents.\n\n"
+    unless @temporary_files_only
+      # Files
+      size = 0
+      @files_to_delete.each { |f| size += File.size(f) }
+      $stdout.puts "\n#{@files_to_delete.count} files haven't got a corresponding revision and can be deleted."
+      $stdout.puts "#{number_to_human_size(size)} can be released.\n\n"
+      # Links
+      size = DmsfLink.where(project_id: -1).count
+      $stdout.puts "#{size} links can be deleted.\n\n"
+      # Documents
+      $stdout.puts "#{@documents_to_delete.size} corrupted documents.\n\n"
+    end
+    # Temporary files
+    $stdout.puts "#{Dir.glob(File.join(DmsfFile.previews_storage_path, '**', '*')).count} temporary files.\n\n"
   end
 
   def clean
-    # Files
-    size = 0
-    @files_to_delete.each do |f|
-      size += File.size(f)
-      File.delete f
+    unless @temporary_files_only
+      # Files
+      size = 0
+      @files_to_delete.each do |f|
+        size += File.size(f)
+        File.delete f
+      end
+      $stdout.puts "\n#{@files_to_delete.count} files hadn't got a coresponding revision and have been be deleted."
+      $stdout.puts "#{number_to_human_size(size)} has been released\n\n"
+      # Links
+      size = DmsfLink.where(project_id: -1).count
+      DmsfLink.where(project_id: -1).delete_all
+      $stdout.puts "#{size} links have been deleted.\n\n"
     end
-    $stdout.puts "\n#{@files_to_delete.count} files hadn't got a coresponding revision and have been be deleted."
-    $stdout.puts "#{number_to_human_size(size)} has been released\n\n"
-    # Links
-    size = DmsfLink.where(project_id: -1).count
-    DmsfLink.where(project_id: -1).delete_all
-    $stdout.puts "#{size} links have been deleted.\n\n"
+    # Temporary files
+    FileUtils.rm_rf DmsfFile.previews_storage_path
   end
 
   private

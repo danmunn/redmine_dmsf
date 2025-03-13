@@ -46,6 +46,7 @@ class DmsfWatermarkTest < RedmineDmsf::Test::HelperTest
     watermarked = RedmineDmsf::Watermark.generate_image(@dmsf_file7.last_revision.disk_file, target)
     size_orig = File.size(@dmsf_file7.last_revision.disk_file)
     size_target = File.size(watermarked)
+    FileUtils.rm_f watermarked
     assert_not_equal 0, size_target
     assert_not_equal size_orig, size_target
   end
@@ -55,6 +56,7 @@ class DmsfWatermarkTest < RedmineDmsf::Test::HelperTest
     watermarked = RedmineDmsf::Watermark.generate_pdf(@dmsf_file8.last_revision.disk_file, target)
     size_orig = File.size(@dmsf_file8.last_revision.disk_file)
     size_target = File.size(watermarked)
+    FileUtils.rm_f watermarked
     assert_not_equal 0, size_target
     assert_not_equal size_orig, size_target
   end
