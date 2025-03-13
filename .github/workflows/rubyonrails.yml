@@ -82,7 +82,7 @@ jobs:
         # Install necessary packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y litmus libreoffice subversion libmagickwand-dev
+          sudo apt-get install -y litmus libreoffice subversion libmagickwand-dev imagemagick gsfonts
       - name: Clone Redmine
         # Get the latest stable Redmine
         run: svn export http://svn.redmine.org/redmine/branches/6.0-stable/ /opt/redmine
