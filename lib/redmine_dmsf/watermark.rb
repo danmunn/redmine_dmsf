@@ -36,6 +36,8 @@ module RedmineDmsf
     end
 
     def self.generate_image(source, target)
+      return target unless RedmineDmsf::Plugin.lib_available?('mini_magick')
+
       source_image = MiniMagick::Image.open(source)
       img = watermark_img(source_image)
       result = source_image.composite(img) do |c|

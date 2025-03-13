@@ -23,7 +23,6 @@ source 'https://rubygems.org' do
   gem 'ox' # Dav4Rack
   gem 'prawn'
   gem 'rake' unless Dir.exist?(File.expand_path('../../redmine_dashboard', __FILE__))
-  gem 'ruby-vips'
   gem 'uuidtools'
   gem 'zip-zip' unless Dir.exist?(File.expand_path('../../vault', __FILE__))
 
