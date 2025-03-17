@@ -144,6 +144,23 @@ The command must be runable by the web app's user. Test it in advance, e.g:
 sudo apt install libreoffice liblibreoffice-java
 ```            
 
+### Watermarks (optional)
+
+Watermarks in downloadad PDF documents and images can be enforced on project or global level.
+A simple watermark consists of the name of the current user and timestamp.
+The following additional packages are required to be present in the system.
+
+```
+sudo apt install imagemagick-6-common gsfonts
+```
+
+Or, use the following configuration options:
+
+```ruby
+Redmine::Configuration['imagemagick_convert_command'] = 'convert command path'
+Redmine::Configuration['minimagick_font_path'] = 'font path'
+```
+
 ## Usage
 
 DMSF is designed to act as project module, so it must be checked as an enabled module within the project settings.

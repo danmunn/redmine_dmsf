@@ -76,8 +76,7 @@ module RedmineDmsf
         gc.size format('%<width>dx%<height>d', width: source_image.info(:width), height: source_image.info(:height))
         gc.xc 'transparent'
         # It is necessary to have gsfonts package installed or minimagick_font_path env specified
-        font_path = Redmine::Configuration['minimagick_font_path'].presence
-        gc.font font_path.presence || 'Helvetica'
+        gc.font Redmine::Configuration['minimagick_font_path'].presence || 'Helvetica'
         gc.fill 'gray'
         gc.strokewidth 1
         gc.pointsize 120

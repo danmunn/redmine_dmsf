@@ -269,6 +269,7 @@ end
 
 # A workaround for obsolete 'alias_method' usage in RedmineUp's plugins
 after_easy_init do
+  require "#{File.dirname(__FILE__)}/redmine_dmsf/watermark"
   require "#{File.dirname(__FILE__)}/redmine_dmsf/plugin"
 end
 

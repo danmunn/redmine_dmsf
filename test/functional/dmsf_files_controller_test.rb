@@ -106,7 +106,8 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     assert_equal 'application/pdf', @response.media_type
     assert @response.body.start_with?('%PDF')
 
-    assert_not_equal size, @response.body.size
+    # convert utility is not present in standard Easy installation
+    assert_not_equal(size, @response.body.size) unless defined?(EasyExtensions)
   end
 
   def test_view_watermark_image
@@ -128,7 +129,8 @@ class DmsfFilesControllerTest < RedmineDmsf::Test::TestCase
     assert_equal 'image/gif', @response.media_type
     assert @response.body.start_with?(/.IF89/)
 
-    assert_not_equal size, @response.body.size
+    # convert utility is not present in standard Easy installation
+    assert_not_equal(size, @response.body.size) unless defined?(EasyExtensions)
   end
 
   def delete_forbidden

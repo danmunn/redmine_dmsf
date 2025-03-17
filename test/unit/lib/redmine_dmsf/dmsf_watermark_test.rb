@@ -43,6 +43,9 @@ class DmsfWatermarkTest < RedmineDmsf::Test::HelperTest
 
   def test_image
     watermarked = @dmsf_file7.watermarked
+    # convert utility is not present in standard Easy installation
+    return unless File.exist?(watermarked)
+
     size_orig = File.size(@dmsf_file7.last_revision.disk_file)
     size_target = File.size(watermarked)
     FileUtils.rm_f watermarked
@@ -52,6 +55,9 @@ class DmsfWatermarkTest < RedmineDmsf::Test::HelperTest
 
   def test_pdf
     watermarked = @dmsf_file8.watermarked
+    # convert utility is not present in standard Easy installation
+    return unless File.exist?(watermarked)
+
     size_orig = File.size(@dmsf_file8.last_revision.disk_file)
     size_target = File.size(watermarked)
     FileUtils.rm_f watermarked
