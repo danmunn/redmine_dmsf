@@ -118,7 +118,7 @@ class DmsfFolder < ApplicationRecord
     if folder&.system
       return false unless allow_system || User.current.allowed_to?(:display_system_folders, folder.project)
 
-      if %w[.Issues .CRM\ cases].exclude?(folder.title) &&
+      if ['.Issues', '.CRM cases'].exclude?(folder.title) &&
          !folder.issue&.visible?(User.current) &&
          !folder.easy_crm_case&.visible?(User.current)
         return false
