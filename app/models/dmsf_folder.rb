@@ -118,7 +118,7 @@ class DmsfFolder < ApplicationRecord
     if folder&.system
       return false unless allow_system || User.current.allowed_to?(:display_system_folders, folder.project)
 
-      if %(.Issues .CRM cases).exclude?(folder.title) &&
+      if %w[.Issues .CRM\ cases].exclude?(folder.title) &&
          !folder.issue&.visible?(User.current) &&
          !folder.easy_crm_case&.visible?(User.current)
         return false
@@ -487,16 +487,16 @@ class DmsfFolder < ApplicationRecord
   end
 
   def easy_crm_case
-    if easy_crm_case.nil? && system
+    if @easy_crm_case.nil? && system
       case_id = title.to_i
       begin
         ecc = 'EasyCrmCase'.constantize
       rescue NameError => _e
         ecc = nil
       end
-      easy_crm_case = EasyCrmCase.find_by(id: case_id) if ecc && case_id.positive?
+      @easy_crm_case = EasyCrmCase.find_by(id: case_id) if ecc && case_id.positive?
     end
-    easy_crm_case
+    @easy_crm_case
   end
 
   def update_from_params(params)
