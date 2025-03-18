@@ -117,7 +117,12 @@ class DmsfFolder < ApplicationRecord
     # System folder?
     if folder&.system
       return false unless allow_system || User.current.allowed_to?(:display_system_folders, folder.project)
-      return false if folder.title != '.Issues' && !folder.issue&.visible?(User.current)
+
+      if %(.Issues .CRM cases).exclude?(folder.title) &&
+         !folder.issue&.visible?(User.current) &&
+         !folder.easy_crm_case&.visible?(User.current)
+        return false
+      end
     end
     # Permissions to the folder?
     if folder.dmsf_folder_permissions.any?
@@ -479,6 +484,19 @@ class DmsfFolder < ApplicationRecord
       @issue = Issue.find_by(id: issue_id) if issue_id.positive?
     end
     @issue
+  end
+
+  def easy_crm_case
+    if easy_crm_case.nil? && system
+      case_id = title.to_i
+      begin
+        ecc = 'EasyCrmCase'.constantize
+      rescue NameError => _e
+        ecc = nil
+      end
+      easy_crm_case = EasyCrmCase.find_by(id: case_id) if ecc && case_id.positive?
+    end
+    easy_crm_case
   end
 
   def update_from_params(params)
