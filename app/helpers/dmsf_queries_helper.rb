@@ -240,7 +240,7 @@ module DmsfQueriesHelper
                 else
                   log_dmsf_workflow_path project_id: item.project_id, id: item.workflow_id, dmsf_link_id: item.id
                 end
-          text, names = DmsfWorkflow.workflow_info(item.workflow, item.workflow_id, item.revision_id)
+          text, names = DmsfWorkflow.workflow_info(item.workflow, item.workflow_id, item.customized_id)
           link_to h(text), url, remote: true, title: names
         else
           h(DmsfWorkflow.workflow_str(value.to_i))
