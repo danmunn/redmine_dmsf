@@ -71,4 +71,23 @@ class DmsfWatermarkTest < RedmineDmsf::Test::HelperTest
     assert RedmineDmsf::Watermark.text(normalize: true).start_with?(text)
     assert RedmineDmsf::Watermark.text(normalize: false).start_with?(text)
   end
+
+  def test_get_optimal_point_size
+    assert_equal 120, RedmineDmsf::Watermark.get_optimal_point_size(1400, 1300)
+    assert_equal 100, RedmineDmsf::Watermark.get_optimal_point_size(1400, 1000)
+    assert_equal 10, RedmineDmsf::Watermark.get_optimal_point_size(80, 1000)
+  end
+
+  def test_get_optimal_font_size
+    assert_equal 36, RedmineDmsf::Watermark.get_optimal_font_size(1682, 1682)
+    assert_equal 25, RedmineDmsf::Watermark.get_optimal_font_size(595, 842)
+    assert_equal 10, RedmineDmsf::Watermark.get_optimal_font_size(100, 100)
+  end
+
+  def test_get_min_pdf_page_size
+    pdf = Prawn::Document.new(page_size: [5950, 8420])
+    width, height = RedmineDmsf::Watermark.get_min_pdf_page_size(CombinePDF.parse(pdf.render))
+    assert_equal 5950, width
+    assert_equal 8420, height
+  end
 end

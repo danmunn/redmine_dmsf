@@ -24,12 +24,13 @@ require 'combine_pdf'
 module RedmineDmsf
   # Watermark
   module Watermark
-    ANGLE = 45
+    ANGLE = 30
 
     def self.generate_pdf(source, target)
       # Add the watermark
-      watermark = watermark_pdf
       pdf = CombinePDF.load source
+      width, height = get_min_pdf_page_size(pdf)
+      watermark = watermark_pdf(width, height)
       pdf.pages.each { |page| page << watermark }
       pdf.save target
       target
@@ -57,12 +58,16 @@ module RedmineDmsf
       text
     end
 
-    def self.watermark_pdf
+    def self.watermark_pdf(width, height)
       # Generate a PDF watermark
-      pdf = Prawn::Document.new
+      pdf = Prawn::Document.new(page_size: [width, height])
       pdf.fill_color '808080'
       pdf.transparent(0.4) do
-        pdf.text text(normalize: true), align: :center, valign: :center, size: 36, rotate: -ANGLE
+        pdf.text text(normalize: true),
+                 align: :center,
+                 valign: :top,
+                 size: get_optimal_font_size(width, height),
+                 rotate: -ANGLE
       end
       CombinePDF.parse(pdf.render).pages[0]
     end
@@ -73,18 +78,46 @@ module RedmineDmsf
         MiniMagick.cli_path = File.dirname(Redmine::Configuration['imagemagick_convert_command'])
       end
       MiniMagick.convert do |gc|
-        gc.size format('%<width>dx%<height>d', width: source_image.info(:width), height: source_image.info(:height))
+        width = source_image.info(:width)
+        height = source_image.info(:height)
+        gc.size format('%<width>dx%<height>d', width: width, height: height)
         gc.xc 'transparent'
         # It is necessary to have gsfonts package installed or minimagick_font_path env specified
         gc.font Redmine::Configuration['minimagick_font_path'].presence || 'Helvetica'
         gc.fill 'gray'
         gc.strokewidth 1
-        gc.pointsize 120
+        gc.pointsize get_optimal_point_size(width, height)
         gc.gravity 'center'
         gc.draw format("rotate %<angle>d text %<x>d,%<y>d '%<text>s'", angle: ANGLE, x: 0, y: 0, text: text)
         gc << img.path
       end
       img
+    end
+
+    def self.get_optimal_point_size(width, height)
+      pointsize = [width, height].min / 10
+      pointsize = 120 if pointsize > 120
+      pointsize = 10 if pointsize < 10
+
+      pointsize
+    end
+
+    def self.get_optimal_font_size(width, height)
+      fontsize = ([width, height].min / 842.0 * 36.0).to_i
+      fontsize = 36 if fontsize > 36
+      fontsize = 10 if fontsize < 10
+
+      fontsize
+    end
+
+    def self.get_min_pdf_page_size(pdf)
+      width = 5950 # A4
+      height = 8420
+      pdf.pages.each do |page|
+        width = [page.mediabox[2] - page.mediabox[0], width].min
+        height = [page.mediabox[3] - page.mediabox[1], height].min
+      end
+      [width.to_i, height.to_i]
     end
   end
 end
