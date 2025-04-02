@@ -1,10 +1,13 @@
 Changelog for Redmine DMSF
 ==========================
 
+4.1.3 *????-??-??*
+------------------
+
 4.1.2 *2025-04-02*
 ------------------
 
-    Wrong worflow text by linked documents
+    Wrong workflow text by linked documents
 
 4.1.1 *2025-02-19*
 ------------------

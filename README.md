@@ -1,6 +1,6 @@
-# Redmine DMSF Plugin 4.1.2
+# Redmine DMSF Plugin 4.1.3 devel
 
-[![GitHub CI](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml/badge.svg?branch=master)](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml)
+[![GitHub CI](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml/badge.svg?branch=devel)](https://github.com/danmunn/redmine_dmsf/actions/workflows/rubyonrails.yml)
 [![Support Ukraine Badge](https://bit.ly/support-ukraine-now)](https://github.com/support-ukraine/support-ukraine)
 
 Redmine DMSF is Document Management System Features plugin for Redmine issue tracking system; It is aimed to replace current Redmine's Documents module.
@@ -143,23 +143,6 @@ The command must be runable by the web app's user. Test it in advance, e.g:
 ```
 sudo apt install libreoffice liblibreoffice-java
 ```            
-
-### Watermarks (optional)
-
-Watermarks in downloadad PDF documents and images can be enforced on project or global level.
-A simple watermark consists of the name of the current user and timestamp.
-The following additional packages are required to be present in the system.
-
-```
-sudo apt install imagemagick-6-common gsfonts
-```
-
-Or, use the following configuration options:
-
-```ruby
-Redmine::Configuration['imagemagick_convert_command'] = 'convert command path'
-Redmine::Configuration['minimagick_font_path'] = 'font path'
-```
 
 ## Usage
 
