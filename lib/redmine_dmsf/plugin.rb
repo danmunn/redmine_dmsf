@@ -44,7 +44,7 @@ module RedmineDmsf
       require path
       true
     rescue LoadError => e
-      Rails.logger.info e.message
+      Rails.logger.debug e.message
       false
     end
   end
