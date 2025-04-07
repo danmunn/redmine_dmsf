@@ -28,7 +28,7 @@ module RedmineDmsf
 
     def self.generate_pdf(source, target)
       # Add the watermark
-      pdf = CombinePDF.load source
+      pdf = CombinePDF.load(source, allow_optional_content: true)
       width, height = get_min_pdf_page_size(pdf)
       watermark = watermark_pdf(width, height)
       pdf.pages.each { |page| page << watermark }
