@@ -72,7 +72,11 @@ class Dmsf144 < ActiveRecord::Migration[4.2]
       t.change :lock_scope_cd, :integer, null: false
       # Data cleanup
       t.rename :dmsf_file_id, :entity_id
-      t.remove :locked
+      # TODO: The column cannot be removed on SQL server due to NOT NULL constraint.
+      # The constraint's name is random and therefore cannot be easily removed.
+      if ActiveRecord::Base.connection.adapter_name.downcase != 'sqlserver'
+        t.remove :locked
+      end
     end
     rename_table :dmsf_file_locks, :dmsf_locks
     # Not sure if this is the right place to do this, as its file manipulation, not database (strictly)

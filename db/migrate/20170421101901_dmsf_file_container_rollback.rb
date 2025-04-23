@@ -66,7 +66,11 @@ class DmsfFileContainerRollback < ActiveRecord::Migration[4.2]
     # Make DB changes in dmsf_files
     change_table :dmsf_files, bulk: true do |t|
       t.remove_index %i[container_id container_type]
-      t.remove :container_type
+      # TODO: The column cannot be removed on SQL server due to NOT NULL constraint.
+      # The constraint's name is random and therefore cannot be easily removed.
+      if ActiveRecord::Base.connection.adapter_name.downcase != 'sqlserver'
+        t.remove :container_type
+      end
       t.rename :container_id, :project_id
       t.index :project_id
     end
