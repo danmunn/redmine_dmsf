@@ -300,7 +300,7 @@ In order to enable WebDAV module, it is necessary to put the following code into
 
 ```ruby
 # Redmine DMSF's WebDAV
-require File.dirname(__FILE__) + '/plugins/redmine_dmsf/lib/redmine_dmsf/webdav/custom_middleware'
+require Rails.root.join('plugins', 'redmine_dmsf', 'lib', 'redmine_dmsf', 'webdav', 'custom_middleware').to_s
 config.middleware.insert_before ActionDispatch::Cookies, RedmineDmsf::Webdav::CustomMiddleware
 ```
 
