@@ -1,8 +1,12 @@
 Changelog for Redmine DMSF
 ==========================
 
-4.1.3 *????-??-??*
+4.1.3 *2025-05-09*
 ------------------
+    
+    SQL server compatibility
+
+* Bug: #1595 - DMSF WebDAV Configuration Fails on Redmine 6.0.5
 
 4.1.2 *2025-04-02*
 ------------------
