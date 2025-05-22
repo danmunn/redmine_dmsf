@@ -488,6 +488,8 @@ es:
   text_dmsf_webdav_digest_reset: You are supposed to enter your password to generate a new DMS WebDAV digest.
   notice_webdav_digest_reset: Your DMS WebDAV digest was reset.
 
+  notice_search_in_subfolders: Searching in sub-folders is not recursive. For a recursive search go to the top level.
+
   label_dmsf_commit: Commit
   label_dmsf_upload_commit: Upload and commit
 

@@ -470,6 +470,8 @@ fa:
   label_dmsf_commit: Commit
   label_dmsf_upload_commit: Upload and commit
 
+  notice_search_in_subfolders: Searching in sub-folders is not recursive. For a recursive search go to the top level.
+
   easy_pages:
     modules:
       dmsf_locked_documents: اسناد قفل شده‌ی من

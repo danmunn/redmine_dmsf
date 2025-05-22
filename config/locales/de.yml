@@ -487,6 +487,9 @@ de:
   label_dmsf_commit: Commit
   label_dmsf_upload_commit: Hochladen und Commit
 
+  notice_search_in_subfolders: Die Suche in Unterordnern ist nicht rekursiv. Für eine rekursive Suche gehen Sie auf die 
+    oberste Ebene.
+
   easy_pages:
     modules:
       dmsf_locked_documents: Von mir gesperrte Dokumente
