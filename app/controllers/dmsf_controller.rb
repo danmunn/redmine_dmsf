@@ -95,7 +95,7 @@ class DmsfController < ApplicationController
         format.html do
           # Warn about searching in sub-folders
           if @folder && params['set_filter'].present? && params['f'].present?
-            flash[:warning] = l(:notice_search_in_subfolders)
+            flash.now[:warning] = l(:notice_search_in_subfolders)
           end
           @dmsf_count = @query.dmsf_count
           @dmsf_pages = Paginator.new @dmsf_count, per_page_option, params['page']
