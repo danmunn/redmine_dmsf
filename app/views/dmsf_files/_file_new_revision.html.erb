@@ -17,7 +17,7 @@
   # <https://www.gnu.org/licenses/>.
 %>
 
-<div class="box tabular">
+<div id="dmsf_new_revision" class="box tabular">
     <strong><%= l(:heading_new_revision) %>
       <a href="#" id="new_revision_form_content_toggle" data-cy="toggle__new_revision_from_content--dmsf">[+]</a>
     </strong>
@@ -77,8 +77,8 @@
           <%= f.submit l(:button_create), class: 'button-positive', data: { cy: "button__submit--file_dmsf"} %>
         </div>
       <% end %>
-    <% end %>   
-  </div>  
+    <% end %>
+  </div>
 </div>
 
 <%= wikitoolbar_for 'dmsf_file_revision_description' %>

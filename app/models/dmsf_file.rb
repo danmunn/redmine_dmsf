@@ -18,6 +18,7 @@
 # <https://www.gnu.org/licenses/>.
 
 require "#{File.dirname(__FILE__)}/../../lib/redmine_dmsf/lockable"
+require "#{File.dirname(__FILE__)}/../../lib/redmine_dmsf/plugin"
 require 'English'
 
 # File
@@ -569,15 +570,17 @@ class DmsfFile < ApplicationRecord
   end
 
   def assigned?(user)
-    if last_revision&.dmsf_workflow
-      last_revision.dmsf_workflow.next_assignments(last_revision.id).each do |assignment|
-        return true if assignment.user == user
-      end
+    return false unless last_revision&.dmsf_workflow
+
+    last_revision.dmsf_workflow.next_assignments(last_revision.id).each do |assignment|
+      return true if assignment.user == user
     end
     false
   end
 
   def custom_value(custom_field)
+    return nill unless last_revision
+
     last_revision.custom_field_values.each do |cv|
       return cv if cv.custom_field == custom_field
     end

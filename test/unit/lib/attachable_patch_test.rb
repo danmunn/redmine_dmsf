@@ -26,16 +26,16 @@ class AttachablePatchTest < RedmineDmsf::Test::UnitTest
   def setup
     super
     @issue1 = Issue.find 1
-    @issue2 = Issue.find 2
+    @issue5 = Issue.find 5
   end
 
   def test_has_attachmets
     if defined?(EasyExtensions)
       assert @issue1.has_attachments?
-      assert_not @issue2.has_attachments?
+      assert_not @issue5.has_attachments?
     else
       assert @issue1.dmsf_files.present?
-      assert @issue2.dmsf_files.blank?
+      assert @issue5.dmsf_files.blank?
     end
   end
 end

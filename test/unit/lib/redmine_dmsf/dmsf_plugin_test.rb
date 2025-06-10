@@ -18,6 +18,7 @@
 # <https://www.gnu.org/licenses/>.
 
 require File.expand_path('../../../../test_helper', __FILE__)
+require File.expand_path('../../../../../lib/redmine_dmsf/plugin', __FILE__)
 
 # Plugin tests
 class DmsfPluginTest < RedmineDmsf::Test::HelperTest
@@ -30,16 +31,20 @@ class DmsfPluginTest < RedmineDmsf::Test::HelperTest
   end
 
   def test_an_obsolete_plugin_present_no
+    return if defined?(EasyExtensions)
+
     # No such plugin is present
     assert_not RedmineDmsf::Plugin.an_obsolete_plugin_present?
   end
 
   def test_an_obsolete_plugin_present_yes
-    # Create a fake redmine_checklists plugin
-    path = Rails.root.join('plugins/redmine_resources')
-    FileUtils.mkdir_p path
+    unless defined?(EasyExtensions)
+      # Create a fake redmine_checklists plugin
+      path = Rails.root.join('plugins/redmine_resources')
+      FileUtils.mkdir_p path
+    end
     assert RedmineDmsf::Plugin.an_obsolete_plugin_present?
-    FileUtils.rm_rf path
+    FileUtils.rm_rf(path) unless defined?(EasyExtensions)
   end
 
   def test_lib_available?

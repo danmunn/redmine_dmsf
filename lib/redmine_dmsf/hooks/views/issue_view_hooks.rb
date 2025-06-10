@@ -215,7 +215,7 @@ module RedmineDmsf
           # Title, size
           html << '<td>'
           data = "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}"
-          icon_name = icon_for_mime_type(Redmine::MimeType.css_class_of(item.filename))
+          icon_name = icon_for_mime_type(Redmine::MimeType.css_class_of(dmsf_file.name))
           html << link_to(sprite_icon(icon_name, h(dmsf_file.title)),
                           file_view_url,
                           target: '_blank',

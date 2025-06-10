@@ -261,11 +261,6 @@ unless defined?(EasyPatchManager)
   end
 end
 
-# A workaround for obsolete 'alias_method' usage in RedmineUp's plugins
-after_easy_init do
-  require "#{File.dirname(__FILE__)}/redmine_dmsf/plugin"
-end
-
 # Load up classes that make up our WebDAV solution ontop of Dav4rack
 after_easy_init do
   require "#{File.dirname(__FILE__)}/dav4rack"

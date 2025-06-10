@@ -25,7 +25,7 @@ class DmsfUploadController < ApplicationController
   before_action :authorize, except: %i[upload delete_dmsf_attachment delete_dmsf_link_attachment]
   before_action :authorize_global, only: %i[upload delete_dmsf_attachment delete_dmsf_link_attachment]
   before_action :find_folder, except: %i[upload commit delete_dmsf_attachment delete_dmsf_link_attachment]
-  before_action :permissions, except: %i[upload commit delete_dmsf_attachment delete_dmsf_link_attachment]
+  before_action :permissions?, except: %i[upload commit delete_dmsf_attachment delete_dmsf_link_attachment]
 
   helper :custom_fields
   helper :dmsf_workflows
@@ -33,7 +33,7 @@ class DmsfUploadController < ApplicationController
 
   accept_api_auth :upload, :commit
 
-  def permissions
+  def permissions?
     render_403 unless DmsfFolder.permissions?(@folder)
     true
   end
@@ -107,7 +107,7 @@ class DmsfUploadController < ApplicationController
 
     @folder = DmsfFolder.visible.find_by(id: attachments[:folder_id]) if attachments[:folder_id].present?
     # standard file input uploads
-    uploaded_files = attachments.select { |key, _| key == 'uploaded_file' }
+    uploaded_files = attachments.slice('uploaded_file')
     uploaded_files.each_value do |uploaded_file|
       upload = DmsfUpload.create_from_uploaded_attachment(@project, @folder, uploaded_file)
       next unless upload

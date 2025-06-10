@@ -110,7 +110,7 @@ class DmsfLink < ApplicationRecord
     link.name = name
     link.external_url = external_url
     link.project_id = project.id
-    link.dmsf_folder_id = folder ? folder.id : nil
+    link.dmsf_folder_id = folder&.id
     link.user = User.current
     link.save!
     link

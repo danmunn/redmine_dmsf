@@ -21,22 +21,38 @@ require File.expand_path('../../../../test_helper', __FILE__)
 
 # Macros tests
 class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
-  include ApplicationHelper
-  include ActionView::Helpers
-  include ActionDispatch::Routing
-  include ERB::Util
-  include Rails.application.routes.url_helpers
-  include ActionView::Helpers::UrlHelper
-
   fixtures :dmsf_folders, :dmsf_files, :dmsf_file_revisions
+
+  # Mock view context for macros
+  class DmsfView
+    include ApplicationHelper
+    include ActionView::Helpers
+    include ActionDispatch::Routing
+    include ERB::Util
+    include Rails.application.routes.url_helpers
+  end
+
+  # Cache the view context to avoid creating it for each macro call
+  def dmsf_view_context
+    @dmsf_view_context ||= DmsfView.new
+  end
+
+  # Hack to bypass missing methods to mocked view context
+  def respond_to_missing?(name, include_private)
+    dmsf_view_context.respond_to?(name) || super
+  end
+
+  def method_missing(method_name, ...)
+    dmsf_view_context.send(method_name.to_s, ...)
+  end
 
   def setup
     super
     User.current = @jsmith
-    default_url_options[:host] = 'www.example.com'
+    Rails.application.routes.default_url_options[:host] = 'www.example.com'
     @file1 = DmsfFile.find_by(id: 1)
-    @file6 = DmsfFile.find_by(id: 6)  # video
-    @file7 = DmsfFile.find_by(id: 7)  # image
+    @file6 = DmsfFile.find_by(id: 6) # video
+    @file7 = DmsfFile.find_by(id: 7) # image
     @folder1 = DmsfFolder.find_by(id: 1)
   end
 
@@ -345,10 +361,12 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     text = textilizable("{{dmsftn(#{@file7.id} #{@file7.id})}}")
     url = static_dmsf_file_url(@file7, @file7.last_revision.name)
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 200)
-    link = link_to(img, url, target: '_blank',
-                             rel: 'noopener',
-                             title: h(@file7.last_revision.try(:tooltip)),
-                             'data-downloadurl': 'image/gif:test.gif:http://www.example.com/dmsf/files/7/test.gif')
+    link = link_to(img,
+                   url,
+                   target: '_blank',
+                   rel: 'noopener',
+                   title: h(@file7.last_revision.try(:tooltip)),
+                   'data-downloadurl': 'image/gif:test.gif:http://www.example.com/dmsf/files/7/test.gif')
     assert text.include?(link + link), text
   end
 
@@ -379,10 +397,12 @@ class DmsfMacrosTest < RedmineDmsf::Test::HelperTest
     height = '480'
     text = textilizable("{{dmsftn(#{@file7.id}, height=#{height})}}")
     img = image_tag(url, alt: @file7.name, title: @file7.title, width: 'auto', height: 480)
-    link = link_to(img, url, target: '_blank',
-                             rel: 'noopener',
-                             title: h(@file7.last_revision.try(:tooltip)),
-                             'data-downloadurl': 'image/gif:test.gif:http://www.example.com/dmsf/files/7/test.gif')
+    link = link_to(img,
+                   url,
+                   target: '_blank',
+                   rel: 'noopener',
+                   title: h(@file7.last_revision.try(:tooltip)),
+                   'data-downloadurl': 'image/gif:test.gif:http://www.example.com/dmsf/files/7/test.gif')
     assert text.include?(link), text
     width = '640'
     text = textilizable("{{dmsftn(#{@file7.id}, width=#{width})}}")

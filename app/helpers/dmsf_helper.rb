@@ -86,9 +86,7 @@ module DmsfHelper
   def email_entry_tmp_file_path(entry)
     sanitized_entry = DmsfHelper.sanitize_filename(entry)
     file_name = "#{RedmineDmsf::DmsfZip::FILE_PREFIX}#{sanitized_entry}.zip"
-    # rubocop:disable Rails/FilePath
-    File.join(Rails.root.to_s, 'tmp', file_name)
-    # rubocop:enable Rails/FilePath
+    Rails.root.join 'tmp', file_name
   end
 
   # Extracts the variable part of the temp file name to be used as identifier in the
@@ -96,6 +94,6 @@ module DmsfHelper
   def tmp_entry_identifier(zipped_content)
     path = Pathname.new(zipped_content)
     zipped_file = path.basename(path.extname).to_s
-    zipped_file.delete_prefix(RedmineDmsf::DmsfZip::FILE_PREFIX)
+    zipped_file.delete_prefix RedmineDmsf::DmsfZip::FILE_PREFIX
   end
 end

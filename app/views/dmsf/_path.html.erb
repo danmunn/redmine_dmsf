@@ -17,14 +17,14 @@
   # <https://www.gnu.org/licenses/>.
 %>
 
-<h2>
-  <% if folder %>    
+<h2 class="dmsf-header">
+  <% if folder %>
     <%= link_to l(:link_documents), dmsf_folder_path(id: @project) %>
     <% folder.dmsf_path.each do |path_element| %>
-      /    
+      /
       <% if filename.blank? && (path_element == folder.dmsf_path.last) %>
         <%= h(path_element.title) %>
-      <% else %>      
+      <% else %>
         <%= link_to h(path_element.title), dmsf_folder_path(id: @project, folder_id: path_element) %>
       <% end %>
     <% end %>

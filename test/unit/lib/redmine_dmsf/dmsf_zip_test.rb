@@ -18,6 +18,7 @@
 # <https://www.gnu.org/licenses/>.
 
 require File.expand_path('../../../../test_helper', __FILE__)
+require File.expand_path('../../../../../lib/redmine_dmsf/dmsf_zip', __FILE__)
 
 # Plugin tests
 class DmsfZipTest < RedmineDmsf::Test::HelperTest

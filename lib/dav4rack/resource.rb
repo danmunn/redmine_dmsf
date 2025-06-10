@@ -102,7 +102,7 @@ module Dav4rack
 
     # override to implement custom authentication
     # should return true for successful authentication, false otherwise
-    def authenticate(_username, _password)
+    def authenticate?(_username, _password)
       true
     end
 

@@ -25,7 +25,7 @@ class DmsfLinksController < ApplicationController
   before_action :find_link_project
   before_action :find_folder, only: [:destroy]
   before_action :authorize
-  before_action :permissions
+  before_action :permissions?
 
   protect_from_forgery except: :new
 
@@ -33,7 +33,7 @@ class DmsfLinksController < ApplicationController
 
   helper :dmsf
 
-  def permissions
+  def permissions?
     render_403 if @dmsf_link && !DmsfFolder.permissions?(@dmsf_link.dmsf_folder)
     true
   end

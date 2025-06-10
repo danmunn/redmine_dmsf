@@ -488,6 +488,8 @@ de:
 
   notice_search_in_subfolders: Die Suche in Unterordnern ist nicht rekursiv. Für eine rekursive Suche gehen Sie auf die 
     oberste Ebene.
+  warning_folder_unlockable: Der Ordner kann nicht entsperrt werden
+  redmine_dmsf: Redmine DMSF
 
   easy_pages:
     modules:

@@ -20,22 +20,28 @@
 module RedmineDmsf
   module Patches
     # AccessControl patch
-    module AccessControlPatch
+    # TODO: This is just a workaround to fix alias_method usage in Easy's plugins, which is in conflict with
+    #   prepend and causes an infinite loop.
+    module AccessControlEasyPatch
       ##################################################################################################################
       # Overridden methods
-      def self.prepended(base)
-        base.singleton_class.prepend(ClassMethods)
+      def self.included(base)
+        base.extend(ClassMethods)
+
+        base.class_eval do
+          class << self
+            alias_method_chain :available_project_modules, :easy
+          end
+        end
       end
 
       # Class methods
       module ClassMethods
-        def available_project_modules
+        def available_project_modules_with_easy
           # Removes the original Documents from project's modules (replaced with DMSF)
-          if RedmineDmsf.remove_original_documents_module?
-            super.reject { |m| m == :documents }
-          else
-            super
-          end
+          modules = available_project_modules_without_easy
+          modules.delete(:documents) if RedmineDmsf.remove_original_documents_module?
+          modules
         end
       end
     end
@@ -43,4 +49,6 @@ module RedmineDmsf
 end
 
 # Apply the patch
-Redmine::AccessControl.prepend RedmineDmsf::Patches::AccessControlPatch unless defined?(EasyPatchManager)
+if defined?(EasyPatchManager)
+  EasyPatchManager.register_other_patch 'Redmine::AccessControl', 'RedmineDmsf::Patches::AccessControlEasyPatch'
+end

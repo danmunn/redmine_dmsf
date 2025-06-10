@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License along with Redmine DMSF plugin. If not, see
 # <https://www.gnu.org/licenses/>.
 
+require "#{File.dirname(__FILE__)}/dmsf_digest"
+
 module RedmineDmsf
   module Webdav
     # DMSF controller
@@ -33,7 +35,7 @@ module RedmineDmsf
       def process
         return super unless RedmineDmsf.dmsf_webdav_authentication == 'Digest'
 
-        status = skip_authorization? || authenticate ? process_action || OK : Dav4rack::HttpStatus::Unauthorized
+        status = skip_authorization? || authenticate? ? process_action || OK : Dav4rack::HttpStatus::Unauthorized
       rescue Dav4rack::HttpStatus::Status => e
         status = e
       ensure
@@ -49,14 +51,14 @@ module RedmineDmsf
         end
       end
 
-      def authenticate
+      def authenticate?
         return super unless RedmineDmsf.dmsf_webdav_authentication == 'Digest'
 
         auth_header = request.authorization.to_s
         scheme = auth_header.split(' ', 2).first&.downcase
         if scheme == 'digest'
           Rails.logger.info 'Authentication: digest'
-          digest = Digest.new(request.authorization)
+          digest = DmsfDigest.new(request.authorization)
           params = digest.params
           username = params['username']
           response = params['response']
@@ -105,7 +107,7 @@ module RedmineDmsf
         raise Unauthorized if User.current.anonymous?
 
         Rails.logger.info "Current user: #{User.current}, User-Agent: #{request.user_agent}"
-        User.current
+        User.current && !User.current.anonymous?
       end
     end
   end

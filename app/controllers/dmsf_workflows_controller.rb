@@ -26,7 +26,7 @@ class DmsfWorkflowsController < ApplicationController
   before_action :find_model_object, except: %i[create new index assign assignment]
   before_action :find_project
   before_action :authorize_custom
-  before_action :permissions, only: %i[new_action assignment start]
+  before_action :permissions?, only: %i[new_action assignment start]
   before_action :approver_candidates, only: %i[remove_step show reorder_steps add_step]
   before_action :prevent_from_editing, only: %i[destroy remove_step update add_step update_step reorder_steps]
 
@@ -34,7 +34,7 @@ class DmsfWorkflowsController < ApplicationController
 
   helper :dmsf
 
-  def permissions
+  def permissions?
     revision = DmsfFileRevision.find_by(id: params[:dmsf_file_revision_id]) if params[:dmsf_file_revision_id].present?
     render_403 unless revision&.dmsf_file || DmsfFolder.permissions?(revision&.dmsf_file&.dmsf_folder)
     true
@@ -76,7 +76,7 @@ class DmsfWorkflowsController < ApplicationController
                        { dmsf_file_revision: revision, step_action: params[:step_action] })
     if (result.blank? || result.first) && action.save
       if revision
-        if @dmsf_workflow.try_finish revision, action, (params[:step_action].to_i / 10)
+        if @dmsf_workflow.try_finish? revision, action, (params[:step_action].to_i / 10)
           if revision.dmsf_file
             begin
               revision.dmsf_file.unlock!(force_file_unlock_allowed: true) unless RedmineDmsf.dmsf_keep_documents_locked?
@@ -413,8 +413,8 @@ class DmsfWorkflowsController < ApplicationController
     if request.put?
       if @assigned
         flash[:error] = l(:error_dmsf_workflow_assigned)
-      elsif !@dmsf_workflow.reorder_steps(params[:step].to_i, params[:dmsf_workflow][:position].to_i)
-        flash[:error] = l(:notice_cannot_renumber_steps)
+      else
+        @dmsf_workflow.reorder_steps params[:step].to_i, params[:dmsf_workflow][:position].to_i
       end
     end
     respond_to do |format|

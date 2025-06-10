@@ -31,7 +31,7 @@ module RedmineDmsf
       def get_image_filename(attrname)
         if attrname =~ %r{/dmsf/files/(\d+)/}
           file = DmsfFile.find_by(id: Regexp.last_match(1))
-          file&.last_revision ? file.last_revision.disk_file : nil
+          file&.last_revision&.disk_file
         else
           super
         end

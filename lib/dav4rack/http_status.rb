@@ -5,6 +5,11 @@ module Dav4rack
   module HttpStatus
     # Status
     class Status < StandardError
+      delegate :code, to: :class
+      delegate :reason_phrase, to: :class
+      delegate :status_line, to: :class
+      delegate :to_i, to: :class
+
       class << self
         attr_accessor :code, :reason_phrase
         alias to_i code
@@ -12,22 +17,6 @@ module Dav4rack
         def status_line
           "#{code} #{reason_phrase}"
         end
-      end
-
-      def code
-        self.class.code
-      end
-
-      def reason_phrase
-        self.class.reason_phrase
-      end
-
-      def status_line
-        self.class.status_line
-      end
-
-      def to_i
-        self.class.to_i
       end
     end
 

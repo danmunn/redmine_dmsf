@@ -21,7 +21,7 @@
 
 <div class="contextual">
   <% if @file_delete_allowed %>
-    <%= delete_link empty_trash_path(id: @project), {}, l(:label_empty_trash_bin) %>
+    <%= link_to sprite_icon('del', l(:label_empty_trash_bin)),  empty_trash_path(id: @project) %>
   <% end %>
 </div>
 

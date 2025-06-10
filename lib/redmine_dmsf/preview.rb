@@ -25,18 +25,17 @@ module RedmineDmsf
     extend Redmine::Utils::Shell
     include Redmine::I18n
 
-    OFFICE_BIN = (Setting.plugin_redmine_dmsf['office_bin'].presence || 'libreoffice').freeze
-
     def self.office_available?
       return @office_available if defined?(@office_available)
 
       begin
-        `#{shell_quote OFFICE_BIN} --version`
+        office_bin = RedmineDmsf.office_bin.presence || 'libreoffice'
+        `#{shell_quote office_bin} --version`
         @office_available = $CHILD_STATUS.success?
       rescue StandardError
         @office_available = false
       end
-      Rails.logger.warn l(:note_dmsf_office_bin_not_available, value: OFFICE_BIN, locale: :en) unless @office_available
+      Rails.logger.warn l(:note_dmsf_office_bin_not_available, value: office_bin, locale: :en) unless @office_available
       @office_available
     end
 
@@ -44,7 +43,8 @@ module RedmineDmsf
       return target if File.exist?(target)
 
       dir = File.dirname(target)
-      cmd = "#{shell_quote(OFFICE_BIN)} --convert-to pdf --headless --outdir #{shell_quote(dir)} #{shell_quote(source)}"
+      office_bin = RedmineDmsf.office_bin.presence || 'libreoffice'
+      cmd = "#{shell_quote(office_bin)} --convert-to pdf --headless --outdir #{shell_quote(dir)} #{shell_quote(source)}"
       if system(cmd)
         target
       else

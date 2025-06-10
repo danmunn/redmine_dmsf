@@ -2,7 +2,7 @@
 
 # Redmine plugin for Document Management System "Features"
 #
-# Karel Pičman <karel.picman@kontron.com>
+# Daniel Munn <dan.munn@munnster.co.uk>, Karel Pičman <karel.picman@kontron.com>
 #
 # This file is part of Redmine DMSF plugin.
 #
@@ -18,29 +18,33 @@
 # <https://www.gnu.org/licenses/>.
 
 module RedmineDmsf
-  module Patches
-    # AccessControl patch
-    module AccessControlPatch
-      ##################################################################################################################
-      # Overridden methods
-      def self.prepended(base)
-        base.singleton_class.prepend(ClassMethods)
+  module Webdav
+    # Replacement for Rack::Auth::Digest
+    class DmsfDigest
+      def initialize(authorization)
+        @authorization = authorization
       end
 
-      # Class methods
-      module ClassMethods
-        def available_project_modules
-          # Removes the original Documents from project's modules (replaced with DMSF)
-          if RedmineDmsf.remove_original_documents_module?
-            super.reject { |m| m == :documents }
-          else
-            super
-          end
+      def params
+        params = {}
+        parts = @authorization.split(' ', 2)
+        split_header_value(parts[1]).each do |param|
+          k, v = param.split('=', 2)
+          params[k] = dequote(v)
         end
+        params
+      end
+
+      private
+
+      def dequote(str)
+        ret = /\A"(.*)"\Z/ =~ str ? ::Regexp.last_match(1) : str.dup
+        ret.gsub(/\\(.)/, '\\1')
+      end
+
+      def split_header_value(str)
+        str.scan(/(\w+=(?:"[^"]+"|[^,]+))/n).pluck(0)
       end
     end
   end
 end
-
-# Apply the patch
-Redmine::AccessControl.prepend RedmineDmsf::Patches::AccessControlPatch unless defined?(EasyPatchManager)

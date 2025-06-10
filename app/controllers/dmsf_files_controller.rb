@@ -25,7 +25,7 @@ class DmsfFilesController < ApplicationController
   before_action :find_revision, only: %i[delete_revision obsolete_revision]
   before_action :find_folder, only: %i[delete create_revision]
   before_action :authorize
-  before_action :permissions
+  before_action :permissions?
 
   accept_api_auth :show, :view, :delete, :create_revision
 
@@ -38,7 +38,7 @@ class DmsfFilesController < ApplicationController
 
   include QueriesHelper
 
-  def permissions
+  def permissions?
     render_403 if @file && !DmsfFolder.permissions?(@file.dmsf_folder, allow_system: true, file: true)
     true
   end

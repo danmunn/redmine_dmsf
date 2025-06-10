@@ -24,11 +24,11 @@ class DmsfFolderPermissionsController < ApplicationController
                 if: -> { params[:dmsf_folder_id].present? }
   before_action :find_project
   before_action :authorize
-  before_action :permissions
+  before_action :permissions?
 
   helper :dmsf
 
-  def permissions
+  def permissions?
     render_403 unless DmsfFolder.permissions?(@dmsf_folder)
     true
   end

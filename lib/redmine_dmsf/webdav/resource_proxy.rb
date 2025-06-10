@@ -27,6 +27,27 @@ module RedmineDmsf
     class ResourceProxy < Dav4rack::Resource
       attr_reader :read_only
 
+      delegate :propstats, to: :@resource_c
+      delegate :set_property, to: :@resource_c
+      delegate :options, to: :@resource_c
+      delegate :lockdiscovery, to: :@resource_c
+      delegate :lockdiscovery_xml, to: :@resource_c
+      delegate :children, to: :@resource_c
+      delegate :collection?, to: :@resource_c
+      delegate :exist?, to: :@resource_c
+      delegate :creation_date, to: :@resource_c
+      delegate :last_modified, to: :@resource_c
+      delegate :etag, to: :@resource_c
+      delegate :content_type, to: :@resource_c
+      delegate :content_length, to: :@resource_c
+      delegate :get, to: :@resource_c
+      delegate :special_type, to: :@resource_c
+      delegate :name, to: :@resource_c
+      delegate :long_name, to: :@resource_c
+      delegate :get_property, to: :@resource_c
+      delegate :remove_property, to: :@resource_c
+      delegate :properties, to: :@resource_c
+
       def initialize(path, request, response, options)
         # Check the settings cache for each request
         Setting.check_cache
@@ -40,61 +61,13 @@ module RedmineDmsf
         @read_only = RedmineDmsf.dmsf_webdav_strategy == 'WEBDAV_READ_ONLY'
       end
 
-      def authenticate(username, password)
+      def authenticate?(username, password)
         User.current = User.try_to_login(username, password)
         User.current && !User.current.anonymous?
       end
 
-      def options(request, response)
-        @resource_c.options request, response
-      end
-
       def supports_locking?
         !@read_only
-      end
-
-      def lockdiscovery
-        @resource_c.lockdiscovery
-      end
-
-      def lockdiscovery_xml
-        @resource_c.lockdiscovery_xml
-      end
-
-      def children
-        @resource_c.children
-      end
-
-      def collection?
-        @resource_c.collection?
-      end
-
-      def exist?
-        @resource_c.exist?
-      end
-
-      def creation_date
-        @resource_c.creation_date
-      end
-
-      def last_modified
-        @resource_c.last_modified
-      end
-
-      def etag
-        @resource_c.etag
-      end
-
-      def content_type
-        @resource_c.content_type
-      end
-
-      def content_length
-        @resource_c.content_length
-      end
-
-      def get(request, response)
-        @resource_c.get request, response
       end
 
       def put(request)
@@ -127,10 +100,6 @@ module RedmineDmsf
         @resource_c.make_collection
       end
 
-      def special_type
-        @resource_c.special_type
-      end
-
       def lock(args)
         raise BadGateway if @read_only
 
@@ -147,36 +116,8 @@ module RedmineDmsf
         @resource_c.unlock token
       end
 
-      def name
-        @resource_c.name
-      end
-
-      def long_name
-        @resource_c.long_name
-      end
-
       def resource
         @resource_c
-      end
-
-      def get_property(element)
-        @resource_c.get_property element
-      end
-
-      def remove_property(element)
-        @resource_c.remove_property element
-      end
-
-      def properties
-        @resource_c.properties
-      end
-
-      def propstats(response, stats)
-        @resource_c.propstats response, stats
-      end
-
-      def set_property(element, value)
-        @resource_c.set_property element, value
       end
 
       # Adds the given xml namespace to namespaces and returns the prefix

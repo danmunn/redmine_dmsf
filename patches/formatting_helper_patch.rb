@@ -38,8 +38,9 @@ module RedmineDmsf
                          '..', '..', '..', 'assets', 'javascripts', 'lang', "dmsf_button-#{lang}.js")
         lang = 'en' unless File.exist?(path)
         content_for :header_tags do
-          javascript_include_tag("lang/dmsf_button-#{lang}", plugin: 'redmine_dmsf') +
-            javascript_include_tag('dmsf_button', plugin: 'redmine_dmsf') +
+          plugin = defined?(EasyExtensions) ? nil : :redmine_dmsf
+          javascript_include_tag("lang/dmsf_button-#{lang}", plugin: plugin) +
+            javascript_include_tag('dmsf_button', plugin: plugin) +
             javascript_tag("jsToolBar.prototype.dmsfList = #{@dmsf_macro_list.to_json};")
         end
       end

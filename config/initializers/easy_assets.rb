@@ -2,7 +2,7 @@
 
 # Redmine plugin for Document Management System "Features"
 #
-# Karel Pičman <karel.picman@kontron.com>
+# Vít Jonáš <vit.jonas@gmail.com>, Daniel Munn <dan.munn@munnster.co.uk>, Karel Pičman <karel.picman@kontron.com>
 #
 # This file is part of Redmine DMSF plugin.
 #
@@ -17,22 +17,9 @@
 # You should have received a copy of the GNU General Public License along with Redmine DMSF plugin. If not, see
 # <https://www.gnu.org/licenses/>.
 
-module RedmineDmsf
-  module Hooks
-    module Views
-      # Base view hooks
-      class BaseViewHooks < Redmine::Hook::ViewListener
-        def view_layouts_base_html_head(context = {})
-          unless /^(Dmsf|Projects|Issues|Queries|EasyCrmCases|MyController|SettingsController|WikiController)/.match?(
-            context[:controller].class.name
-          )
-            return
-          end
-
-          partial = "hooks/#{defined?(EasyExtensions) ? 'easy' : 'redmine'}_dmsf/view_layouts_base_html_head"
-          context[:controller].send :render_to_string, { partial: partial }
-        end
-      end
-    end
-  end
+Rails.application.configure do
+  asset_paths = EasyAssets.plugin_asset_paths('plugins/redmine_dmsf')
+  config.assets.paths.concat asset_paths
+  config.assets.precompile << 'easy_dmsf.js'
+  config.assets.precompile << 'easy_dmsf.css'
 end

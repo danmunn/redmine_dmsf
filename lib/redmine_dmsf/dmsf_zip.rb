@@ -27,6 +27,8 @@ module RedmineDmsf
     class Zip
       attr_reader :dmsf_files
 
+      delegate :close, to: :@zip_file
+
       def initialize
         @temp_file = Tempfile.new([FILE_PREFIX, '.zip'], Rails.root.join('tmp'))
         @zip_file = ::Zip::OutputStream.open(@temp_file)
@@ -42,10 +44,6 @@ module RedmineDmsf
       def finish
         @zip_file.close
         @temp_file.path
-      end
-
-      def close
-        @zip_file.close
       end
 
       def add_dmsf_file(dmsf_file, member = nil, root_path = nil, path = nil)

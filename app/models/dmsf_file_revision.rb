@@ -127,7 +127,7 @@ class DmsfFileRevision < ApplicationRecord
       errors.add :base, l(:error_file_is_locked)
       return false
     end
-    if !commit && (!force && (dmsf_file.dmsf_file_revisions.length <= 1))
+    if !commit && !force && (dmsf_file.dmsf_file_revisions.length <= 1)
       errors.add :base, l(:error_at_least_one_revision_must_be_present)
       return false
     end

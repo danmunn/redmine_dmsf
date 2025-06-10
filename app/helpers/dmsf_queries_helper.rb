@@ -32,15 +32,22 @@ module DmsfQueriesHelper
         file = DmsfFile.find_by(id: item.id)
         if file&.locked?
           return content_tag(:span, val) +
-                 content_tag('span', sprite_icon('unlock', nil, icon_only: true, size: '12'),
-                             title: l(:title_locked_by_user, user: file.locked_by))
+                 link_to(sprite_icon('unlock', nil, icon_only: true, size: '12'),
+                         unlock_dmsf_files_path(id: file,
+                                                back_url: dmsf_folder_path(id: file.project,
+                                                                           folder_id: file.dmsf_folder)),
+                         title: l(:title_locked_by_user, user: file.locked_by), class: 'icon icon-unlock')
         end
       when 'folder'
         folder = DmsfFolder.find_by(id: item.id)
         if folder&.locked?
           return content_tag(:span, val) +
-                 content_tag('span', sprite_icon('unlock', nil, icon_only: true, size: '12'),
-                             title: l(:title_locked_by_user, user: folder.locked_by))
+                 link_to(sprite_icon('unlock', nil, icon_only: true, size: '12'),
+                         unlock_dmsf_path(id: folder.project,
+                                          folder_id: folder.id,
+                                          back_url: dmsf_folder_path(id: folder.project,
+                                                                     folder_id: folder.dmsf_folder)),
+                         title: l(:title_locked_by_user, user: folder.locked_by), class: 'icon icon-unlock')
         end
       end
       content_tag(:span, val) + content_tag(:span, '', class: 'icon icon-none')

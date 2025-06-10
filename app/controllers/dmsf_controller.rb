@@ -30,7 +30,7 @@ class DmsfController < ApplicationController
                 except: %i[new create edit_root save_root add_email append_email autocomplete_for_user digest
                            reset_digest]
   before_action :find_parent, only: %i[new create delete]
-  before_action :permissions
+  before_action :permissions?
   # Also try to lookup folder by title if this is an API call
   before_action :find_folder_by_title, only: [:show]
   before_action :query, only: %i[expand_folder show trash empty_trash index]
@@ -50,7 +50,7 @@ class DmsfController < ApplicationController
   helper :context_menus
   helper :watchers
 
-  def permissions
+  def permissions?
     if !DmsfFolder.permissions?(@folder, allow_system: false)
       render_403
     elsif @folder && @project && (@folder.project != @project)
@@ -82,7 +82,7 @@ class DmsfController < ApplicationController
     @file_manipulation_allowed = User.current.allowed_to?(:file_manipulation, @project)
     @trash_enabled = @folder_manipulation_allowed && @file_manipulation_allowed
     @notifications = Setting.notified_events.include?('dmsf_legacy_notifications')
-    @query.dmsf_folder_id = @folder ? @folder.id : nil
+    @query.dmsf_folder_id = @folder&.id
     @query.deleted = false
     @query.sub_projects |= RedmineDmsf.dmsf_projects_as_subfolders?
     if @folder&.deleted? || (params[:folder_title].present? && !@folder)
@@ -363,7 +363,7 @@ class DmsfController < ApplicationController
 
   def lock
     if @folder.nil?
-      flash[:warning] = l(:warning_foler_unlockable)
+      flash[:warning] = l(:warning_folder_unlockable)
     elsif @folder.locked?
       flash[:warning] = l(:warning_folder_already_locked)
     else
@@ -375,7 +375,7 @@ class DmsfController < ApplicationController
 
   def unlock
     if @folder.nil?
-      flash[:warning] = l(:warning_foler_unlockable)
+      flash[:warning] = l(:warning_folder_unlockable)
     elsif !@folder.locked?
       flash[:warning] = l(:warning_folder_not_locked)
     elsif @folder.locks[0].user == User.current || User.current.allowed_to?(:force_file_unlock, @project)

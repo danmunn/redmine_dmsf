@@ -2,7 +2,7 @@
 
 # Redmine plugin for Document Management System "Features"
 #
-# Daniel Munn <dan.munn@munnster.co.uk>, Karel Pičman <karel.picman@kontron.com>
+# Vít Jonáš <vit.jonas@gmail.com>, Daniel Munn <dan.munn@munnster.co.uk>, Karel Pičman <karel.picman@kontron.com>
 #
 # This file is part of Redmine DMSF plugin.
 #
@@ -17,34 +17,8 @@
 # You should have received a copy of the GNU General Public License along with Redmine DMSF plugin. If not, see
 # <https://www.gnu.org/licenses/>.
 
-module RedmineDmsf
-  module Webdav
-    # Replacement for Rack::Auth::Digest
-    class Digest
-      def initialize(authorization)
-        @authorization = authorization
-      end
+require 'redmine_dmsf/webdav/custom_middleware'
 
-      def params
-        params = {}
-        parts = @authorization.split(' ', 2)
-        split_header_value(parts[1]).each do |param|
-          k, v = param.split('=', 2)
-          params[k] = dequote(v)
-        end
-        params
-      end
-
-      private
-
-      def dequote(str)
-        ret = /\A"(.*)"\Z/ =~ str ? ::Regexp.last_match(1) : str.dup
-        ret.gsub(/\\(.)/, '\\1')
-      end
-
-      def split_header_value(str)
-        str.scan(/(\w+=(?:"[^"]+"|[^,]+))/n).pluck(0)
-      end
-    end
-  end
+Rails.application.configure do
+  config.middleware.insert_before ActionDispatch::Cookies, RedmineDmsf::Webdav::CustomMiddleware
 end

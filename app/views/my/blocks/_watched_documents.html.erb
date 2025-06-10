@@ -80,8 +80,8 @@
               <%= link_to_project folder.project %>
             </td>
             <td class="title">
-              <%= link_to h(folder.title), dmsf_folder_path(id: folder.project, folder_id: folder),
-                          class: 'icon icon-folder' %>
+              <%= link_to sprite_icon('folder', h(folder.title)),
+                          dmsf_folder_path(id: folder.project, folder_id: folder), class: 'icon icon-folder' %>
              </td>
              <td class="title">
                <% if folder.dmsf_folder %>

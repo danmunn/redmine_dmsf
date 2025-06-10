@@ -6,7 +6,7 @@ Changelog for Redmine DMSF
 
 4.1.3 *2025-05-09*
 ------------------
-    
+
     SQL server compatibility
 
 * Bug: #1595 - DMSF WebDAV Configuration Fails on Redmine 6.0.5
@@ -85,7 +85,7 @@ Changelog for Redmine DMSF
 
 3.2.3 *2024-10-18*
 ------------------
- 
+
     Uploaded file size fix
 
 * Bug: 1556 - Wrong file size when uploading documents
@@ -135,7 +135,7 @@ Changelog for Redmine DMSF
     Several bugs fixed
 
 * Bug: #1533 - Mysql2::Error::TimeoutError
-* Bug: #1532 - Target folder and project are the same as current 
+* Bug: #1532 - Target folder and project are the same as current
 * Bug: #1531 - Fixing NoMethodError in DmsfFileRevisionFormat
 * New: #1529 - Maintenance/update german translation
 
@@ -144,7 +144,7 @@ Changelog for Redmine DMSF
 
     Maintenance release
 
-* Bug: #1528 - WebDAV / LDAP-User errors 
+* Bug: #1528 - WebDAV / LDAP-User errors
 
 3.1.6 *2024-06-04*
 ------------------
@@ -194,7 +194,7 @@ Changelog for Redmine DMSF
 IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.sh*.
 
 * Bug: #1490 - Latest plugin version on windows: problematic dependency 'xapian-ruby'
-* Bug: #1486 - Some context menu improvements 
+* Bug: #1486 - Some context menu improvements
 * Bug: #1485 - Renames locales/ua.yml
 * Bug: #1484 - Author should be kept when moving a folder type
 * Bug: #1483 - Setting.plugin_redmine_dmsf['dmsf_index_database']: undefined method 'strip' for nil:NilClass
@@ -204,7 +204,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 * Bug: #1473 - Edited documents cannot be unlocked
 * Bug: #1472 - Failed upgrade up to version 3.1.1 from version 3.0.12
 * New: #1248 - Make DMS document available as Type of a custom field
-* New: #1132 - Please provide a simple file operation menu 
+* New: #1132 - Please provide a simple file operation menu
 
 3.1.2 *2023-08-23*
 ------------------
@@ -218,7 +218,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 
     Bug fixing
 
-* Bug #1466 - Wrong number of arguments in dmsf links new 
+* Bug #1466 - Wrong number of arguments in dmsf links new
 
 3.1.0 *2023-08-10*
 ------------------
@@ -245,7 +245,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 * Bug: #1449 - Lost attachment on bulk edit
 * Bug: #1448 - Convert documents fails
 * New: #1445 - To support OCR feature
-* Bug: #1444 - Feature/add notification labels  
+* Bug: #1444 - Feature/add notification labels
 * New: #1443 - Updates german translations
 * Bug: #1439 - Error when opening Setting page
 * Bug: #1438 - Error while de-installing the plugin "Validation failed: Name contains invalid character(s)"
@@ -290,7 +290,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 * Bug: #1413 - Vim edit through webdav causes lose of all file versions besides last.
 * Bug: #1408 - Lost attachment 2
 * New: #513  - Email Notification when someone downloads a file
-* New: #239  - Easy Document link macro creation 
+* New: #239  - Easy Document link macro creation
 
 3.0.7 *2022-11-01*
 ------------------
@@ -398,7 +398,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 * New: #1348 - Custom Fields not shown on folder level
 * Bug: #1345 - Conflict with RedmineUP invoice plugin
 * New: #1227 - Check if a document contains a signature
-* New: #1203 - Suggest to add document preview 
+* New: #1203 - Suggest to add document preview
 
 3.0.0 *2022-04-28*
 -------------------
@@ -439,7 +439,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 * New: #1309 - Gitlab CI
 * Bug: #1306 - Mysql2::Error: Operand should contain 1 column(s)
 * Bug: #1304 - SQL error with postgresql on top menu
-* New: #1301 - REST API for documents movement 
+* New: #1301 - REST API for documents movement
 
 2.4.10 *2021-10-20*
 -------------------
@@ -460,7 +460,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 2.4.8 *2021-10-08*
 ------------------
 
-    REST API 
+    REST API
         Create a revision, updating custom fields
     Bug fixes
 
@@ -562,10 +562,10 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 2.4.3 *2020-06-12*
 ------------------
 
-    Redmine's look&feel 
+    Redmine's look&feel
     Implementation of folders movement between projects (WebDAV)
     Korean localization updated
-    
+
 
 * New: #1129 - New UI: Optimize Actions Menu
 * New: #1128 - New German translations
@@ -591,7 +591,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 
     Compatibility with Redmine 4.1
     Chinese localisation updated
-        
+
 * New: #1072 - Bug deprecation multiple gemfile sources
 * New: #1069 - Minor version is limited to 99 max - I recommend to change the limit to 999
 * New: #1068 - [travis] test redmine 4.1.0
@@ -618,17 +618,17 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
     Compatibility with Redmine 4.0.4
     Japanese localization updated
     Plupload & DataTables libraries upgraded
-     
+
 * Bug: #1033 - Bitnami Redmine 4.0.4
 * New: #1032 - Deprecate silverlight support?
-* New: #1023 - Project menu is not displayed in Redmine 4.0.3 
+* New: #1023 - Project menu is not displayed in Redmine 4.0.3
 * Bug: #1019 - Internal Erro 500 when enable "Act as attachable" and access Activity page
 * Bug: #1017 - Multiple zip files are filling the tmp folder
 * Bug: #1015 - WebDAV client error
 * Bug: #1013 - Approval workflow notifications are sent to locked users
 * Bug: #1010 - Installing Redmine in a sub URI
 * Bug: #1008 - Description field trunkates on blank line
-* Bug: #1004 - Wrong revision order after upgrading to DMSF 1.6.2 
+* Bug: #1004 - Wrong revision order after upgrading to DMSF 1.6.2
 * Bug: #1003 - Wrong file structure on migrate
 * Bug: #1002 - New folder with empty titlle => Error 500
 * Bug: #1001 - User Permission problem (can't choose user)
@@ -648,7 +648,7 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 
     Compatibility with Redmine 4.0
     Russian localization updated
-    
+
 * Bug: #976 - Can't link document to issue with column in subject
 * Bug: #969 - About the DMSF folder search logic
 * Bug: #966 - folder_manipulation permission
@@ -700,22 +700,22 @@ IMPORTANT: REST API for copying/moving has changed. Check *extra/api/api_client.
 
 1.6.1 *2018-04-03*
 ------------------
-        
+
     Javascript on pages is loaded asynchronously
-    Obsolete Dav4Rack gem replaced with an up to date fork by Planio (Consequently WebDAV caching has been removed, sorry...)        
-        Cloned from gem https://github.com/planio-gmbh/dav4rack.git    
+    Obsolete Dav4Rack gem replaced with an up to date fork by Planio (Consequently WebDAV caching has been removed, sorry...)
+        Cloned from gem https://github.com/planio-gmbh/dav4rack.git
     Project members can be chosen as recipients when sending documents by email
     Responsive view (optimized for mobile devices)
     Direct editing of document in MS Office
     Korean & Dutch localisation
     Move folder feature
     Document versions can contain letters
-    
+
 IMPORTANT
 
 1. `alias_method_chain` has been replaced with `prepend`. Not directly but using `RedmineExtensions::PatchManager`.
-   Consequently, there might occure conficts with plugins which overwrite the same methods.    
-    
+   Consequently, there might occure conficts with plugins which overwrite the same methods.
+
 * Bug: #839 - Webdav not working
 * New: #838 - Rake task for regenerating document's digests
 * Bug: #831 - ActionView::Template::Error, when i am creating issue from the list of all projects
@@ -751,23 +751,23 @@ IMPORTANT
 1.6.0 *2017-09-12*
 ------------------
 
-    Folder permissions    
+    Folder permissions
     Documents attachable to issues
     Hungarian localization
     Full-text search in *.eml and *.msg
 
 IMPORTANT
 
-1. Files in the filesystem are re-organized by a new system based on dates. So, documents are not stored in folders named 
-    by the project's identifier but by the data of uploading, e.g. 2017/09. It's the same system used by Redmine for 
+1. Files in the filesystem are re-organized by a new system based on dates. So, documents are not stored in folders named
+    by the project's identifier but by the data of uploading, e.g. 2017/09. It's the same system used by Redmine for
     attachments.
 2. DMS storage directory plugin option is related to the rails root directory.
 3. The plugin is independent of the gem xapian-full-alaveteli which has been replaced with ruby-xapian package. Therefore
     is recommended to uninstall xapian-full-alaveteli gem and install ruby-xapian package in order the full-text search
-    is working. 
-    
+    is working.
+
 * Bug: #758 - Error in template when retrieving details of a file in a subfolder
-* New: #755 - Ability to retrieve the MD5 value of a Document type 
+* New: #755 - Ability to retrieve the MD5 value of a Document type
 * Bug: #749 - REST API - List of documents in folder fails when using folder_title
 * Bug: #747 - Background icon repeating in admin panel (Redmine 3.4.2)
 * Bug: #746 - Thumbnail macro: size paramter not respected
@@ -799,7 +799,7 @@ IMPORTANT
 * Bug: #683 - Approval reminder problem
 * New: #667 - A better navigation in found results
 * New: #651 - Incomplete copy of a file to another project
-* Bug: #623 - Option "Navigate folders in a tree" seems not to be saved 
+* Bug: #623 - Option "Navigate folders in a tree" seems not to be saved
 * New: #543 - Feature Request: Document Location - Folder Structure
 * New: #170 - Document and Folder Access Control. This issue may be duplicated as I saw it on google code some time ago.
 * New: #48  - Linking Issues and DMSF Documents
@@ -807,9 +807,9 @@ IMPORTANT
 1.5.9 *2016-03-01*
 ------------------
 
-    WebDAV 
-        Documents editing in MS Office 
-        Support for rsync and cp commands 
+    WebDAV
+        Documents editing in MS Office
+        Support for rsync and cp commands
         Disable verioning for certain file names pattern by PUT request
         Ignoring certain file names pattern by PUT request
         Caching of PROPSTATS and PROPFIND requests
@@ -820,7 +820,7 @@ IMPORTANT
         Editing of approval workflow steps
         Approval workflow step name
     DMSF
-        Document export   
+        Document export
         Public URLs option in email entries
         Global title format for downloading
         New columns in the main DMSF view; columns are configurable from the plugin settings
@@ -849,7 +849,7 @@ IMPORTANT
 * Bug: #593 - Modern upload file type doesn't work
 * Bug: #592 - reset_column_information is missing in DB migration
 * Bug: #591 - rsync doesn't work for WebDAV mounted folder
-* Bug: #587 - Working with MS Office documents directly in mounted WebDAV share 
+* Bug: #587 - Working with MS Office documents directly in mounted WebDAV share
 * New: #584 - A lot of warnings in WebDAV unit tests
 * Bug: #582 - FATAL -- : ActionController::RoutingError (No route matches [GET] "/plugin_assets/redmine_dmsf/javascripts/jquery.dataTables/zh.json")
 * Bug: #581 - Webdav always shows the create date
@@ -858,7 +858,7 @@ IMPORTANT
 * New: #555 - Documents ID easy access
 * New: #551 - Default action for files viewing
 * New: #547 - Setting Title format should be global setting, but released as local setting
-* New: #499 - Add column "type/extension" in folder content view    
+* New: #499 - Add column "type/extension" in folder content view
 
 1.5.8 *2016-10-21*
 ------------------
@@ -867,10 +867,10 @@ IMPORTANT
     Tree view optimization for speed
     Wiki macros revision: dmsfd X dmsfdesc
     Support for deleting users
-        
+
 * Bug: #578 - A wrong title when uploading documents
 * Bug: #574 - Macro {{dmsfd(xx)}} produce blank value
-* Bug: #566 - HTML tags in the document description breaks UI 
+* Bug: #566 - HTML tags in the document description breaks UI
 * Bug: #565 - Error 500 when a link to another folder is in the folder/project
 * New: #562 - New step button text
 * Bug: #561 - Wrong path in the document's details form
@@ -880,7 +880,7 @@ IMPORTANT
 
 1.5.7 *2016-08-12*
 ------------------
-    
+
     SQLite compatibility
     Lock/Unlock feature for global approval workflows
     Document ID in the document's details
@@ -1010,7 +1010,7 @@ IMPORTANT
     External links
 
 * New: #307 - Filter mail receivers for approval workflow with file managing permission
-* New: #308 - Rails 4 
+* New: #308 - Rails 4
 * Bug: #321 - My open approvals
 * Bug: #322 - Approval workflow notifications
 * New: #325 - Approval workflow permission
@@ -1029,7 +1029,7 @@ IMPORTANT
 * New: #357 - Redmine 3.0.0 released! Compatibility with DMSF?
 * Bug: #361 - incompatible encoding regexp match (UTF-8 regexp with ASCII-8BIT string)
 * Bug: #366 - unable to properly uninstall under Redmine 3.0.1
-* Bug: #367 - Unable to create a folder 
+* Bug: #367 - Unable to create a folder
 * Bug: #368 - Cannot create a document workflow
 * Bug: #369 - Update document revision under Redmine 3.0.1
 * Bug: #371 - Unable to properly uninstall the plugin
@@ -1042,7 +1042,7 @@ IMPORTANT
     Standard Redmine's upload form with progress bar for files > 100 MB
     WebDAV library upgrade
 
-* New: #130 - redmine_dmsf: last update of the folders 
+* New: #130 - redmine_dmsf: last update of the folders
 * Bug: #131 - Wiki link shows filename for all users type
 * New: #136 - `File Manipulation` permissions
 * New: #218 - Feature request: Recycle bin
@@ -1050,12 +1050,12 @@ IMPORTANT
 * New: #238 - DMSF document update shows up in issue referred to in comment
 * New: #249 - Storage path for DMSF files ignores global storage path for attachments
 * New: #255 - Debian - Readme install procedure update
-* Bug: #258 - Jquery conflict with Redmine 
-* Bug: #267 - Custom fields tabs not work with last custom_fields_helper_patch.rb 
-* Bug: #269 - Workflow OR not working for second reviewer 
-* Bug: #270 - 500 Internal Server Error, redmine 2.5.1, MS SQL Server 2012, dmsf 1.4.8-master, dmsf_link.rb 
+* Bug: #258 - Jquery conflict with Redmine
+* Bug: #267 - Custom fields tabs not work with last custom_fields_helper_patch.rb
+* Bug: #269 - Workflow OR not working for second reviewer
+* Bug: #270 - 500 Internal Server Error, redmine 2.5.1, MS SQL Server 2012, dmsf 1.4.8-master, dmsf_link.rb
 * Bug: #275 - Typo in readme file type
-* Bug: #288 - ubuntu migrate failed 
+* Bug: #288 - ubuntu migrate failed
 * Bug: #290 - error installing plugin
 * Bug: #293 - Locking of inexistent files fails
 * Bug: #298 - The same approver in one approval step
@@ -1087,7 +1087,7 @@ IMPORTANT
 * New: #236 - Documents tagging
 * Bug: #240 - Internal server error, redmine 2.5.1-devel.13064, PostgreSQL, dmsf 1.4.8-devel
 * Bug: #242 - dsmf 1.4.8 minor ... "link form" tab
-* Bug: #246 - "File storage directory" does not default properly when setting is empty   
+* Bug: #246 - "File storage directory" does not default properly when setting is empty
 
 1.4.7: *2014-01-02*
 -------------------
@@ -1098,7 +1098,7 @@ IMPORTANT
     Code revision
 
 * New: #38  - A few questions about the plugin (possible improvements)
-* New: #49  - Make the 100 MB ajax upload limit an option 
+* New: #49  - Make the 100 MB ajax upload limit an option
 * Bug: #52  - Error : undefined method `size' for nil:NilClass
 * Bug: #90  - Missing redmine_dmsf / assets / javascripts / plupload / i18n /en.js file?
 * Bug: #94  - Files not deleted with project
@@ -1107,22 +1107,22 @@ IMPORTANT
 * Bug: #141 - Error 500 uploading file with DMSF custom fields
 * Bug: #159 - Broken links caused by plugin_asset_path implementation
 * New: #173 - Open approvals in My page
-* Bug: #174 - Workflow error when more than one approver 
+* Bug: #174 - Workflow error when more than one approver
 * Bug: #175 - Error 500 on performing search
 * Bug: #176 - 500 internal error when approving workflow - dmsf_workflows/4/new_action
-* Bug: #177 - 1.4.7-devel unable to upload files 
+* Bug: #177 - 1.4.7-devel unable to upload files
 * Bug: #178 - Error 500 cannot access Administration -> Custom Fields page
 * New: #179 - Workflow Log History in Detailed View
-* Bug: #187 - Approval workflow permissions 
+* Bug: #187 - Approval workflow permissions
 * New: #190 - Very slow in directories containing many files
-* Bug: #191 - Move/Copy gives undefined method for File:Class 
-* New: #193 - French translation 
-* Bug: #194 - Workflow name link in workflow log window 
-* Bug: #195 - Workflow log not displaying all the steps 
+* Bug: #191 - Move/Copy gives undefined method for File:Class
+* New: #193 - French translation
+* Bug: #194 - Workflow name link in workflow log window
+* Bug: #195 - Workflow log not displaying all the steps
 * New: #196 - Update French Language
 * Bug: #197 - Multi upload not loading the translation
 * New: #198 - When editing a workflow, only show current project's users
-* Bug: #199 - Small error in plugin_asset_path function 
+* Bug: #199 - Small error in plugin_asset_path function
 * New: #200 - Update the french translation for the multi upload module
 * Bug: #202 - unable to create Custom Field when DMSF plugin installed
 * Bug: #203 - Little typing error in french translation
@@ -1187,7 +1187,7 @@ IMPORTANT
 * New: Locks store a timestamp based UUID string enabling better interaction with webservices
 * Bug: #16 - unable to add new project when plugin enabled due to bug in UI
 * Bug: #17 - dav4rack not installable on some systems - it is now vendored
-* Bug: #18 - Warnings thrown due to space between function and parentheses 
+* Bug: #18 - Warnings thrown due to space between function and parentheses
 
 1.4.3: *2012-06-26*
 -------------------

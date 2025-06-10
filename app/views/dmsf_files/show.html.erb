@@ -60,9 +60,11 @@
   <%= render partial: 'file_new_revision' %>
 <% end %>
 
-<div class="dmsf-id-box">
-  <strong><%= label_tag '', l(:label_document) %></strong>
-  #<%= @file.id %>
+<div>
+  <div class="dmsf-id-box">
+    <strong><%= label_tag '', l(:label_document) %></strong>
+    #<%= @file.id %>
+  </div>
 </div>
 
 <h3><%= l(:heading_revisions) %></h3>
@@ -163,7 +165,6 @@
       </div>
     </div>
   </div>
-  <br>
 <% end %>
 <span class="pagination"><%= pagination_links_full @revision_pages, @revision_count %></span>
 

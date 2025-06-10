@@ -39,7 +39,10 @@
       <%= check_box_tag('ids[]', "#{node.type}-#{node.id}", false, id: nil) unless node.system %>
     </td>
     <% query.inline_columns.each do |column| %>
-      <%= content_tag 'td', column_content(column, node), class: column.css_classes %>
+      <% classes = column.css_classes.to_s.dup %>
+      <%  classes << ' dmsf-gray' if node.type.match?(/link$/) %>
+      <%  classes << ' dmsf-system' if node.system %>
+      <%= content_tag 'td', column_content(column, node), class: classes %>
     <% end %>
     <td class="buttons">
       <% unless node.system %>

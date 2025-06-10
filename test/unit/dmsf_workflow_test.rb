@@ -151,7 +151,7 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     wsa.author_id = @jsmith.id
     assert wsa.save
     # The workflow is finished
-    assert @wf1.try_finish(@revision1, @wfsac1, @jsmith.id)
+    assert @wf1.try_finish?(@revision1, @wfsac1, @jsmith.id)
     @revision1.reload
     assert_equal DmsfWorkflow::STATE_APPROVED, @revision1.workflow
   end
@@ -160,7 +160,7 @@ class DmsfWorkflowTest < RedmineDmsf::Test::UnitTest
     # The forkflow is waiting for an approval
     assert_equal DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, @revision1.workflow
     # The workflow is not finished
-    assert_not @wf1.try_finish(@revision1, @wfsac1, @jsmith.id)
+    assert_not @wf1.try_finish?(@revision1, @wfsac1, @jsmith.id)
     @revision1.reload
     assert_equal DmsfWorkflow::STATE_WAITING_FOR_APPROVAL, @revision1.workflow
   end

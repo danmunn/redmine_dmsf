@@ -488,6 +488,8 @@ es:
   notice_webdav_digest_reset: Your DMS WebDAV digest was reset.
 
   notice_search_in_subfolders: Searching in sub-folders is not recursive. For a recursive search go to the top level.
+  warning_folder_unlockable: The folder can't be unlocked
+  redmine_dmsf: Redmine DMSF
 
   label_dmsf_commit: Commit
   label_dmsf_upload_commit: Upload and commit

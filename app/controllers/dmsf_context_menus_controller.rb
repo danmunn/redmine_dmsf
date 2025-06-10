@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License along with Redmine DMSF plugin. If not, see
 # <https://www.gnu.org/licenses/>.
 
+require "#{File.dirname(__FILE__)}/../../lib/redmine_dmsf/preview"
+
 # Context menu controller
 class DmsfContextMenusController < ApplicationController
   helper :context_menus

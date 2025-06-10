@@ -491,6 +491,8 @@ sl:
   label_dmsf_upload_commit: Upload and commit
 
   notice_search_in_subfolders: Searching in sub-folders is not recursive. For a recursive search go to the top level.
+  warning_folder_unlockable: The folder can't be unlocked
+  redmine_dmsf: Redmine DMSF
 
   easy_pages:
     modules:

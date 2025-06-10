@@ -264,7 +264,7 @@ module RedmineDmsf
           raise Locked if file.locked_for_user?
 
           if dest.exist? && !dest.collection?
-            if dest.resource.file.last_revision.size.zero? || reuse_version_for_locked_file(dest.resource.file)
+            if dest.resource.file.last_revision.size.zero? || reuse_version_for_locked_file?(dest.resource.file)
               # Last revision in the destination has zero size so reuse that revision
               new_revision = dest.resource.file.last_revision
             else
@@ -390,7 +390,7 @@ module RedmineDmsf
         entity = file || folder
         return unless entity
 
-        refresh = args && (!args[:scope]) && (!args[:type])
+        refresh = args && !args[:scope] && !args[:type]
         args ||= {}
         args[:method] = @request.request_method.downcase
         http_if = request.get_header('HTTP_IF')
@@ -464,7 +464,7 @@ module RedmineDmsf
           # logically assume is that the lock is being refreshed (office loves
           # to do this for example, so we do a few checks, try to find the lock
           # and ultimately extend it, otherwise we return Conflict for any failure
-          refresh = args && (!args[:scope]) && (!args[:type]) # Perhaps a lock refresh
+          refresh = args && !args[:scope] && !args[:type] # Perhaps a lock refresh
           if refresh
             http_if = request.get_header('HTTP_IF')
             if http_if.blank?
@@ -554,7 +554,7 @@ module RedmineDmsf
             Rails.logger.info "Versioning disabled for #{basename}"
             reuse_revision = true
           end
-          reuse_revision = true if reuse_version_for_locked_file(file)
+          reuse_revision = true if reuse_version_for_locked_file?(file)
           last_revision = file.last_revision
           if last_revision.size.zero? || reuse_revision
             new_revision = last_revision
@@ -721,7 +721,7 @@ module RedmineDmsf
         File.new disk_file
       end
 
-      def reuse_version_for_locked_file(file)
+      def reuse_version_for_locked_file?(file)
         locks = file.lock
         locks.each do |lock|
           next if lock.expired?

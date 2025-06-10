@@ -66,6 +66,7 @@
                      options_for_select(options, selected: @project.default_dmsf_query_id) %>
       <em class="info"><%= l('text_allowed_queries_to_select') %></em>
     </p>
+    <%= call_hook(:view_dmsf_state_user_pref, { project: @project }) %>
   </fieldset>
 
   <div class="form-actions">

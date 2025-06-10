@@ -33,7 +33,7 @@ module Dav4rack
 
     # main entry point, called by the Handler
     def process
-      status = skip_authorization? || authenticate ? process_action || OK : HttpStatus::Unauthorized
+      status = skip_authorization? || authenticate? ? process_action || OK : HttpStatus::Unauthorized
     rescue HttpStatus::Status => e
       status = e
     ensure
@@ -335,7 +335,7 @@ module Dav4rack
     # Perform authentication
     #
     # implement your authentication by overriding Resource#authenticate
-    def authenticate
+    def authenticate?
       uname = nil
       password = nil
       if request.authorization?
@@ -345,7 +345,7 @@ module Dav4rack
           password = auth.credentials[1]
         end
       end
-      resource.authenticate uname, password
+      resource.authenticate? uname, password
     end
 
     def authentication_error_message

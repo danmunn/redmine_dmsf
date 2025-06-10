@@ -109,7 +109,6 @@ class DmsfWorkflow < ApplicationRecord
         end
       end
     end
-    true
   end
 
   def delegates(query, dmsf_workflow_step_assignment_id, dmsf_file_revision_id)
@@ -186,7 +185,7 @@ class DmsfWorkflow < ApplicationRecord
     end
   end
 
-  def try_finish(revision, action, user_id)
+  def try_finish?(revision, action, user_id)
     case action.action
     when DmsfWorkflowStepAction::ACTION_APPROVE
       assignments = next_assignments(revision.id)
@@ -216,7 +215,7 @@ class DmsfWorkflow < ApplicationRecord
   def copy_to(project, name = nil)
     new_wf = dup
     new_wf.name = name if name
-    new_wf.project_id = project ? project.id : nil
+    new_wf.project_id = project&.id
     new_wf.author = User.current
     if new_wf.save
       dmsf_workflow_steps.each do |step|

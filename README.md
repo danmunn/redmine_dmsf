@@ -9,10 +9,10 @@ Redmine DMSF now comes bundled with WebDAV functionality: if switched on within 
 
 WebDAV functionality is provided through Dav4Rack library.
 
-The development has been supported by [Kontron](https://www.kontron.com) and has been released as open source thanks to their generosity.  
+The development has been supported by [Kontron](https://www.kontron.com) and has been released as open source thanks to their generosity.
 Project home: <https://github.com/danmunn/redmine_dmsf>
 
-Redmine Document Management System "Features" plugin is distributed under GNU General Public License v2 (GPL).  
+Redmine Document Management System "Features" plugin is distributed under GNU General Public License v2 (GPL).
 Redmine is a flexible project management web application, released under the terms of the GNU General Public License v2 (GPL) at <https://www.redmine.org/>
 
 Further information about the GPL license can be found at
@@ -21,9 +21,9 @@ Further information about the GPL license can be found at
 ## Features
 
   * Directory structure
-  * Document versioning / revision history 
+  * Document versioning / revision history
   * Document locking
-  * Multi (drag/drop depending on browser) upload/download  
+  * Multi (drag/drop depending on browser) upload/download
   * Direct document or document link sending via email
   * Configurable document approval workflow
   * Document access auditing
@@ -31,7 +31,7 @@ Further information about the GPL license can be found at
   * Wiki macros for a quick content linking
   * Full read/write WebDAV functionality
   * Optional document content full-text search
-  * Documents and folders' symbolic links  
+  * Documents and folders' symbolic links
   * Trash bin
   * Documents attachable to issues
   * Office documents are displayed inline
@@ -41,7 +41,7 @@ Further information about the GPL license can be found at
   * Compatible with Redmine 6
 
 ## Dependencies
-  
+
   * Redmine 6.0 or higher
 
 ### Full-text search (optional)
@@ -66,9 +66,9 @@ See redmine_dmsf/extra/xapian_indexer.rb for help.
 
 #### Searching
 
-If you want to use fulltext search abilities, install xapian packages. In case of using of Bitnami 
+If you want to use fulltext search abilities, install xapian packages. In case of using of Bitnami
 stack or Ruby installed via RVM it might be necessary to install Xapian bindings from sources. See https://xapian.org
- for details. 
+ for details.
 
 To index some files with omega you may have to install some other packages like
 xpdf, antiword, ...
@@ -108,8 +108,8 @@ From Omega documentation:
    * MHTML (.mhtml, .mht) if perl with MIME::Tools is available
    * MIME email messages (.eml) and USENET articles if perl with MIME::Tools and HTML::Parser is available
    * vCard files (.vcf, .vcard) if perl with Text::vCard is available
-    
-You can use following commands to install some of the required indexing tools:    
+
+You can use following commands to install some of the required indexing tools:
 
 On Debian use:
 
@@ -142,7 +142,7 @@ The command must be runable by the web app's user. Test it in advance, e.g:
 
 ```
 sudo apt install libreoffice liblibreoffice-java
-```            
+```
 
 ## Usage
 
@@ -152,7 +152,7 @@ Search will now automatically search DMSF content when a Redmine search is perfo
 
 ## Linking DMSF object from Wiki entries (macros)
 
-You can link DMSF object from Wikis using a macro tag `{{ }}`. List of available macros with their description is 
+You can link DMSF object from Wikis using a macro tag `{{ }}`. List of available macros with their description is
 available from the wiki's toolbar.
 
 ## Hooks
@@ -163,7 +163,7 @@ E.g.
 
     class DmsfUploadControllerHooks < Redmine::Hook::Listener
 
-        def dmsf_upload_controller_after_commit(context={}) 
+        def dmsf_upload_controller_after_commit(context={})
             context[:controller].flash[:info] = 'Okay'
         end
 
@@ -189,28 +189,28 @@ parameters: *revision*, *step_action*
 
 **dmsf_files_controller_before_view**
 
-Allows a preview of the file by an external plugin. If the hook returns true, the file is not sent by DMSF. It is 
+Allows a preview of the file by an external plugin. If the hook returns true, the file is not sent by DMSF. It is
 expected that the file is sent by the hook.
 
 parameters: *file*
 
 ## Setup / Upgrade
 
-You can either clone the master branch or download the latest zipped version. Before installing ensure that the Redmine 
+You can either clone the master branch or download the latest zipped version. Before installing ensure that the Redmine
 instance is stopped.
 
     git clone git@github.com:danmunn/redmine_dmsf.git
-       
+
     wget https://github.com/danmunn/redmine_dmsf/archive/master.zip
 
 1. In case of upgrade **BACKUP YOUR DATABASE, ORIGINAL PLUGIN AND THE FOLDER WITH DOCUMENTS** first!!!
 2. Put redmine_dmsf plugin directory into plugins. The plugins sub-directory must be named just **redmine_dmsf**. In case
    of need rename _redmine_dmsf-x.y.z_ to *redmine_dmsf*.
-3. **Go to the redmine directory** 
+3. **Go to the redmine directory**
 
     `cd redmine`
 
-4. Install dependencies: 
+4. Install dependencies:
 
     `bundle install`
 
@@ -232,11 +232,11 @@ instance is stopped.
 
    `RAILS_ENV="production" bundle exec rake assets:precompile`
 
-7. The access rights must be set for web server, e.g.: 
+7. The access rights must be set for web server, e.g.:
 
     `chown -R www-data:www-data plugins/redmine_dmsf`
 
-8. Restart the web server, e.g.: 
+8. Restart the web server, e.g.:
 
     `systemctl restart apache2`
 
@@ -254,7 +254,7 @@ instance is stopped.
             * issues - Convert also files attached to issues
 
         Example:
-            
+
             rake redmine:dmsf_convert_documents project=test RAILS_ENV="production"
 
             (If you don't run the rake task as the web server user, don't forget to change the ownership of the imported files, e.g.
@@ -264,33 +264,33 @@ instance is stopped.
     II) To alert all users who are expected to do an approval in the current approval steps
 
         Example:
-            
-            rake redmine:dmsf_alert_approvals RAILS_ENV="production"   
-                        
+
+            rake redmine:dmsf_alert_approvals RAILS_ENV="production"
+
     III) To create missing checksums for all document revisions
-            
+
         Available options:
-        
-          * dry_run - test, no changes to the database          
+
+          * dry_run - test, no changes to the database
           * forceSHA256 - replace old MD5 with SHA256
-        
+
         Example:
-        
+
           bundle exec rake redmine:dmsf_create_digests RAILS_ENV="production"
           bundle exec rake redmine:dmsf_create_digests forceSHA256=1 RAILS_ENV="production"
           bundle exec rake redmine:dmsf_create_digests dry_run=1 RAILS_ENV="production"
-          
+
     IV) To maintain DMSF
-        
+
         * Remove all files with no database record from the document directory
         * Remove all links project_id = -1 (added links to an issue which hasn't been created)
-        
+
         Available options:
-        
+
           * dry_run - No physical deletion but to list of all unused files only
-        
+
         Example:
-        
+
           rake redmine:dmsf_maintenance RAILS_ENV="production"
           rake redmine:dmsf_maintenance dry_run=1 RAILS_ENV="production"
 
@@ -306,7 +306,7 @@ config.middleware.insert_before ActionDispatch::Cookies, RedmineDmsf::Webdav::Cu
 
 ### Installation in a sub-uri
 
-In order to documents and folders are available via WebDAV in case that the Redmine is configured to be run in a sub-uri 
+In order to documents and folders are available via WebDAV in case that the Redmine is configured to be run in a sub-uri
 it's necessary to add the following configuration option into your `config/additional_environment.rb`:
 
 ```ruby
@@ -325,7 +325,7 @@ After these steps re-start your instance of Redmine.
 
 ## Contributing
 
-If you've added something, why not share it. Fork the repository (github.com/danmunn/redmine_dmsf), 
+If you've added something, why not share it. Fork the repository (github.com/danmunn/redmine_dmsf),
 make the changes and send a pull request to the maintainers.
 
 Changes with tests, and full documentation are preferred.
