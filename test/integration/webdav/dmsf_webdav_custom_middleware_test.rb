@@ -44,9 +44,6 @@ class DmsfWebdavCustomMiddlewareTest < RedmineDmsf::Test::IntegrationTest
   end
 
   def test_webdav_not_enabled
-    # TODO: with_settings seems to be not working with Easy
-    return if defined?(EasyExtensions)
-
     with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => nil } do
       process :options, '/dmsf/webdav'
       assert_response :not_found

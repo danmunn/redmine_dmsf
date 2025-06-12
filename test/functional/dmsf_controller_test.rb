@@ -237,9 +237,6 @@ class DmsfControllerTest < RedmineDmsf::Test::TestCase
 
   def test_show_webdav_disabled
     post '/login', params: { username: 'jsmith', password: 'jsmith' }
-    # TODO: with_settings seems to be not working with Easy
-    return if defined?(EasyExtensions)
-
     with_settings plugin_redmine_dmsf: { 'dmsf_webdav' => nil } do
       get "/projects/#{@project1.id}/dmsf"
       assert_response :success

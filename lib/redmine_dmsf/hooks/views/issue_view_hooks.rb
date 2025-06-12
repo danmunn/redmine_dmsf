@@ -196,18 +196,18 @@ module RedmineDmsf
           end
         end
 
-        def attachment_rows(links, issue, controller)
+        def attachment_rows(links, container, controller)
           return unless links.any?
 
           html = "<tbody><tr><th colspan=\"4\">#{l(:label_dmsf_attachments)} (#{links.count})</th></tr>"
           links.each do |dmsf_file, link, _created_at|
-            html << attachment_row(dmsf_file, link, issue, controller)
+            html << attachment_row(dmsf_file, link, container, controller)
           end
           html << '</tbody>'
           html
         end
 
-        def attachment_row(dmsf_file, link, issue, controller)
+        def attachment_row(dmsf_file, link, container, controller)
           html = link ? +'<tr class="dmsf-gray">' : +'<tr>'
           # Checkbox
           html << '<td></td>'
@@ -273,13 +273,19 @@ module RedmineDmsf
                               title: l(:title_notifications_not_active_activate), class: 'icon icon-email-add'
                     end
             # Delete
-            if issue.attributes_editable? && ((link && User.current.allowed_to?(:file_manipulation,
-                                                                                dmsf_file.project)) || (!link &&
+            if container.attributes_editable? && ((link && User.current.allowed_to?(:file_manipulation,
+                                                                                    dmsf_file.project)) || (!link &&
               User.current.allowed_to?(:file_delete, dmsf_file.project)))
+              back_url = case container.class.name
+                         when 'Issue'
+                           issue_path container
+                         when 'EasyCrmCase'
+                           easy_crm_case_path container
+                         end
               url = if link
-                      dmsf_link_path link, commit: 'yes', back_url: issue_path(issue)
+                      dmsf_link_path link, commit: 'yes', back_url: back_url
                     else
-                      dmsf_file_path id: dmsf_file, commit: 'yes', back_url: issue_path(issue)
+                      dmsf_file_path id: dmsf_file, commit: 'yes', back_url: back_url
                     end
               html << delete_link(url)
             end

@@ -71,12 +71,7 @@ module RedmineDmsf
 
     def dmsf_webdav?
       value = Setting.plugin_redmine_dmsf['dmsf_webdav']
-      webdav = value.to_i.positive? || value == 'true'
-      if webdav && defined?(EasyExtensions)
-        webdav = Redmine::Plugin.installed?('easy_hosting_services') &&
-                 EasyHostingServices::EasyMultiTenancy.activated?
-      end
-      webdav
+      value.to_i.positive? || value == 'true'
     end
 
     def dmsf_display_notified_recipients?

@@ -628,9 +628,13 @@ class DmsfFile < ApplicationRecord
   def container
     return unless dmsf_folder&.system && dmsf_folder.title&.match(/(^\d+)/)
 
-    issue_id = Regexp.last_match(1)
-    parent = dmsf_folder.dmsf_folder
-    Regexp.last_match(1).constantize.visible.find_by(id: issue_id) if parent&.title&.match(/^\.(.+)s/)
+    id = Regexp.last_match(1).to_i
+    case dmsf_folder.dmsf_folder&.title
+    when '.CRM cases'
+      EasyCrmCase.visible.find_by id: id
+    when '.Issues'
+      Issue.visible.find_by id: id
+    end
   end
 
   if defined?(EasyExtensions)
