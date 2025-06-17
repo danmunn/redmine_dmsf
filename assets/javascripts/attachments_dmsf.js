@@ -130,8 +130,7 @@ function replaceVersion(detailsForm, attachmentId, name, version) {
             str = str.replace('<option value="' + version + '">' + version + '</option>', '<option selected="selected" value="' + version + '">' + version + '</option>');
         }
         else {
-            let c = String.fromCharCode(160); // &nbsp;
-            str = str.replace('<option value="">' + c + '</option>', '<option selected="selected" value="">' + c + '</option>');
+            str = str.replace('<option value=" ">' + ' ' + '</option>', '<option selected="selected" value="">' + ' ' + '</option>');
         }
         detailsForm = detailsForm.substring(0, index) + str;
     }
