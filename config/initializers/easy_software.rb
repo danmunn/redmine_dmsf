@@ -24,6 +24,11 @@ require "#{File.dirname(__FILE__)}/../../lib/redmine_dmsf"
 Rails.application.config.after_initialize do
   require 'redmine_dmsf/preview'
 
+  webdav = if Redmine::Plugin.installed?('easy_hosting_services') && EasyHostingServices::EasyMultiTenancy.activated?
+             '1'
+           else
+             '0'
+           end
   options = {
     'dmsf_max_file_download' => 0,
     'dmsf_max_email_filesize' => 0,
@@ -31,28 +36,28 @@ Rails.application.config.after_initialize do
     'dmsf_index_database' => File.expand_path('dmsf_index', Rails.root),
     'dmsf_stemming_lang' => 'english',
     'dmsf_stemming_strategy' => 'STEM_NONE',
-    'dmsf_webdav' => nil,
-    'dmsf_display_notified_recipients' => nil,
+    'dmsf_webdav' => webdav,
+    'dmsf_display_notified_recipients' => '0',
     'dmsf_global_title_format' => '',
     'dmsf_columns' => %w[title size modified version workflow author],
     'dmsf_webdav_ignore' => '^(\._|\.DS_Store$|Thumbs.db$)',
     'dmsf_webdav_disable_versioning' => '^\~\$|\.tmp$',
-    'dmsf_keep_documents_locked' => nil,
-    'dmsf_act_as_attachable' => nil,
+    'dmsf_keep_documents_locked' => '0',
+    'dmsf_act_as_attachable' => '0',
     'dmsf_documents_email_from' => '',
     'dmsf_documents_email_reply_to' => '',
-    'dmsf_documents_email_links_only' => nil,
-    'dmsf_enable_cjk_ngrams' => nil,
+    'dmsf_documents_email_links_only' => '0',
+    'dmsf_enable_cjk_ngrams' => '0',
     'dmsf_webdav_use_project_names' => '1',
     'dmsf_webdav_ignore_1b_file_for_authentication' => '1',
-    'dmsf_projects_as_subfolders' => nil,
+    'dmsf_projects_as_subfolders' => '0',
     'only_approval_zero_minor_version' => '0',
     'dmsf_max_notification_receivers_info' => 10,
     'office_bin' => 'libreoffice',
-    'dmsf_global_menu_disabled' => nil,
-    'dmsf_default_query' => nil,
-    'empty_minor_version_by_default' => nil,
-    'remove_original_documents_module' => nil,
+    'dmsf_global_menu_disabled' => '0',
+    'dmsf_default_query' => '0',
+    'empty_minor_version_by_default' => '0',
+    'remove_original_documents_module' => '0',
     'dmsf_webdav_authentication' => 'Digest',
     'dmsf_really_delete_files' => '0'
   }
