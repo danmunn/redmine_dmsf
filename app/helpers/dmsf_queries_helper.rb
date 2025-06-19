@@ -30,7 +30,7 @@ module DmsfQueriesHelper
       case item.type
       when 'file'
         file = DmsfFile.find_by(id: item.id)
-        if file&.locked?
+        if !item.deleted && file&.locked?
           return content_tag(:span, val) +
                  link_to(sprite_icon('unlock', nil, icon_only: true, size: '12'),
                          unlock_dmsf_files_path(id: file,
@@ -40,7 +40,7 @@ module DmsfQueriesHelper
         end
       when 'folder'
         folder = DmsfFolder.find_by(id: item.id)
-        if folder&.locked?
+        if !item.deleted && folder&.locked?
           return content_tag(:span, val) +
                  link_to(sprite_icon('unlock', nil, icon_only: true, size: '12'),
                          unlock_dmsf_path(id: folder.project,
@@ -110,7 +110,8 @@ module DmsfQueriesHelper
       when 'project'
         tag = h("[#{value}]")
         tag = if item.project.module_enabled?(:dmsf)
-                link_to(sprite_icon('folder', nil, icon_only: true), dmsf_folder_path(id: item.project)) +
+                link_to(sprite_icon('folder', nil, icon_only: true), dmsf_folder_path(id: item.project),
+                        class: 'icon icon-folder') +
                   link_to(tag, dmsf_folder_path(id: item.project), class: 'dmsf-label')
               else
                 sprite_icon 'folder', tag
@@ -130,7 +131,7 @@ module DmsfQueriesHelper
           ) + tag
           tag = content_tag('div', tag, class: 'row-control dmsf-row-control')
         end
-        tag += content_tag('div', item.filename, class: 'dmsf-filename', title: l(:title_filename_for_download))
+        tag += content_tag('div', item.filename, class: 'dmsf-filename')
         if item.project.watched_by?(User.current)
           tag += link_to(sprite_icon('fav', nil, icon_only: true, size: '12'),
                          watch_path(object_type: 'project', object_id: item.project.id),
@@ -141,12 +142,12 @@ module DmsfQueriesHelper
         tag
       when 'folder'
         if item&.deleted?
-          tag = sprite_icon('folder', h(value))
+          tag = content_tag(:span, sprite_icon('folder', h(value)), class: 'icon icon-folder')
         else
           tag = link_to(sprite_icon('folder', nil,
                                     icon_only: true,
                                     css_class: item.system ? 'dmsf-system' : ''),
-                        dmsf_folder_path(id: item.project, folder_id: item.id))
+                        dmsf_folder_path(id: item.project, folder_id: item.id), class: 'icon icon-folder')
           tag += link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.id), class: 'dmsf-label')
           unless filter_any?
             path = expand_folder_dmsf_path
@@ -175,19 +176,20 @@ module DmsfQueriesHelper
         tag
       when 'folder-link'
         if item&.deleted?
-          tag = sprite_icon('folder', h(value))
+          tag = content_tag(:span, sprite_icon('folder', h(value)), class: 'icon icon-folder')
         else
           # For links, we use revision_id containing dmsf_folder.id in fact
           tag = link_to(sprite_icon('folder', nil, icon_only: true, css_class: 'dmsf-gray'),
-                        dmsf_folder_path(id: item.project, folder_id: item.revision_id))
+                        dmsf_folder_path(id: item.project, folder_id: item.revision_id), class: 'icon icon-folder')
           tag += link_to(h(value), dmsf_folder_path(id: item.project, folder_id: item.revision_id), class: 'dmsf-label')
           tag = content_tag('span', '', class: 'dmsf-expander') + tag unless filter_any?
         end
         tag + content_tag('div', item.filename, class: 'dmsf-filename', title: l(:label_target_folder))
       when 'file', 'file-link'
         icon_name = icon_for_mime_type(Redmine::MimeType.css_class_of(item.filename))
+        icon_class = icon_class_for_mime_type(item.filename)
         if item&.deleted?
-          tag = sprite_icon(icon_name, h(value))
+          tag = content_tag(:span, sprite_icon(icon_name, h(value)), class: "icon #{icon_class}")
         else
           # For links, we use revision_id containing dmsf_file.id in fact
           file_view_url = url_for(
@@ -195,7 +197,8 @@ module DmsfQueriesHelper
           )
           content_type = Redmine::MimeType.of(item.filename)
           content_type = 'application/octet-stream' if content_type.blank?
-          options = { class: 'dmsf-label', 'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}" }
+          options = { class: "dmsf-label icon #{icon_class}",
+                      'data-downloadurl': "#{content_type}:#{h(value)}:#{file_view_url}" }
           unless previewable?(item.filename, content_type)
             options[:target] = '_blank'
             options[:rel] = 'noopener'
@@ -206,6 +209,7 @@ module DmsfQueriesHelper
                                     css_class: item.type == 'file-link' ? 'dmsf-gray' : ''),
                         file_view_url,
                         options)
+          options[:class] = 'dmsf-label'
           tag += link_to(h(value), file_view_url, options)
           tag = content_tag('span', '', class: 'dmsf-expander') + tag unless filter_any?
         end
@@ -223,12 +227,13 @@ module DmsfQueriesHelper
         tag
       when 'url-link'
         if item&.deleted?
-          tag = sprite_icon('link', h(value))
+          tag = content_tag(:span, sprite_icon('link', h(value)), class: 'icon icon-link')
         else
           tag = link_to(sprite_icon('link', nil, icon_only: true, css_class: 'dmsf-gray'),
                         item.filename,
                         target: '_blank',
-                        rel: 'noopener')
+                        rel: 'noopener',
+                        class: 'icon icon-link')
           tag += link_to(h(value), item.filename, target: '_blank', rel: 'noopener')
           tag = content_tag('span', '', class: 'dmsf-expander') + tag unless filter_any?
         end
@@ -305,6 +310,17 @@ module DmsfQueriesHelper
       true
     else
       Redmine::MimeType.is_type?('text', filename) || Redmine::SyntaxHighlighting.filename_supported?(filename)
+    end
+  end
+
+  def icon_class_for_mime_type(mime)
+    case Redmine::MimeType.of(mime)
+    when 'application/pdf'
+      'icon-pdf'
+    when 'text/plain'
+      'icon-txt'
+    else
+      'icon-file'
     end
   end
 end

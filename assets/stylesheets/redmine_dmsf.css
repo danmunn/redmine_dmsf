@@ -209,10 +209,12 @@ svg.dmsf-system {
 .dmsf-hidden { display: none; }
 .dmsf-tree:not(.dmsf-child) span.dmsf-expander { cursor: pointer; }
 .dmsf-tree.dmsf-expanded span.dmsf-expander {
+    background: url("../../../images/arrow_down.png") no-repeat 0 50%;
     padding-left: 16px;
 }
 .dmsf-tree.dmsf-child span.dmsf-expander { padding-left: 16px; }
 .dmsf-tree.dmsf-collapsed span.dmsf-expander {
+    background: url("../../../images/arrow_right.png") no-repeat 0 50%;
     padding-left: 16px;
 }
 .dmsf-tree.idnt-1 td.dmsf-title { padding-left: 1.5em; }

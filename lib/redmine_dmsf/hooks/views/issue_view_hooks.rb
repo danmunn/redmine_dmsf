@@ -22,6 +22,8 @@ module RedmineDmsf
     module Views
       # Issue view hooks
       class IssueViewHooks < Redmine::Hook::ViewListener
+        include DmsfQueriesHelper
+
         def view_issues_form_details_bottom(context = {})
           return if defined?(EasyExtensions)
 
@@ -216,14 +218,15 @@ module RedmineDmsf
           html << '<td>'
           data = "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}"
           icon_name = icon_for_mime_type(Redmine::MimeType.css_class_of(dmsf_file.name))
+          icon_class = icon_class_for_mime_type(dmsf_file.name)
           html << link_to(sprite_icon(icon_name, h(dmsf_file.title)),
                           file_view_url,
                           target: '_blank',
                           rel: 'noopener',
-                          class: 'icon icon-file',
+                          class: "icon #{icon_class}",
                           title: h(dmsf_file.last_revision.try(:tooltip)),
                           'data-downloadurl' => data)
-          html << "<span class=\"size\">(#{number_to_human_size(dmsf_file.last_revision.size)})</span>"
+          html << "<span class=\"size dmsf-size\">(#{number_to_human_size(dmsf_file.last_revision.size)})</span>"
           html << " - #{h(dmsf_file.description)}" if dmsf_file.description.present?
           html << '</td>'
           # Author, updated at
@@ -287,7 +290,7 @@ module RedmineDmsf
                     else
                       dmsf_file_path id: dmsf_file, commit: 'yes', back_url: back_url
                     end
-              html << delete_link(url)
+              html << delete_link(url, icon_only: true)
             end
           end
           # Approval workflow

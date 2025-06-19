@@ -26,7 +26,6 @@
     file_view_url,
     target: '_blank',
     rel: 'noopener',
-    class: 'icon icon-file',
     title: h(dmsf_file.last_revision.try(:tooltip)),
     'data-downloadurl' => "#{dmsf_file.last_revision.detect_content_type}:#{h(dmsf_file.name)}:#{file_view_url}" %>
 </td>
@@ -92,7 +91,7 @@
                else
                  dmsf_file_path(id: dmsf_file, commit: 'yes', back_url: issue_path(@issue))
                end %>
-      <%= delete_link url %>
+      <%= delete_link url, {}, '' %>
     <% end %>
     <% # Approval workflow %>
     <% wf = DmsfWorkflow.find_by(id: dmsf_file.last_revision.dmsf_workflow_id) if dmsf_file.last_revision.dmsf_workflow_id %>
