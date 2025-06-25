@@ -111,7 +111,8 @@ module RedmineDmsf
         private
 
         def allowed_to_attach_documents(container)
-          return false unless container.respond_to?(:saved_dmsf_attachments) && RedmineDmsf.dmsf_act_as_attachable?
+          return false unless container.respond_to?(:project) && container.respond_to?(:saved_dmsf_attachments) &&
+                              RedmineDmsf.dmsf_act_as_attachable?
 
           return false if container.project && (!User.current.allowed_to?(:file_manipulation, container.project) ||
             (container.project&.dmsf_act_as_attachable != Project::ATTACHABLE_DMS_AND_ATTACHMENTS))
@@ -120,9 +121,11 @@ module RedmineDmsf
         end
 
         def allowed_to_attach_attachments(container)
-          return true unless defined?(EasyExtensions) && container&.project
+          return true unless defined?(EasyExtensions)
 
-          !(allowed_to_attach_documents(container) && !container.project.module_enabled?(:documents))
+          return container.project.module_enabled?(:documents) if container.respond_to?(:project) && container.project
+
+          true
         end
 
         def get_links(container)
