@@ -499,7 +499,7 @@ class DmsfFile < ApplicationRecord
   end
 
   def thumbnailable?
-    image? && Redmine::Thumbnail.convert_available?
+    Redmine::Thumbnail.convert_available? && (image? || (pdf? && Redmine::Thumbnail.gs_available?))
   end
 
   def previewable?
@@ -592,8 +592,6 @@ class DmsfFile < ApplicationRecord
   end
 
   def thumbnail(options = {})
-    return unless image?
-
     size = options[:size].to_i
     if size.positive?
       # Limit the number of thumbnails per image
@@ -606,7 +604,7 @@ class DmsfFile < ApplicationRecord
     size = 100 unless size.positive?
     target = File.join(Attachment.thumbnails_storage_path, "#{id}_#{last_revision.digest}_#{size}.thumb")
     begin
-      Redmine::Thumbnail.generate last_revision.disk_file.to_s, target, size
+      Redmine::Thumbnail.generate last_revision.disk_file.to_s, target, size, pdf?
     rescue StandardError => e
       Rails.logger.error do
         %(An error occured while generating thumbnail for #{last_revision.disk_file} to #{target}\n

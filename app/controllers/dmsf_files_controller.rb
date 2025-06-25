@@ -334,17 +334,13 @@ class DmsfFilesController < ApplicationController
   end
 
   def thumbnail
-    if @file.image?
-      tbnail = @file.thumbnail(size: params[:size])
-      if tbnail
-        if stale?(etag: tbnail)
-          send_file tbnail,
-                    filename: filename_for_content_disposition(@file.last_revision.disk_file),
-                    type: @file.last_revision.detect_content_type,
-                    disposition: 'inline'
-        end
-      else
-        head :not_found
+    tbnail = @file.thumbnail(size: params[:size])
+    if tbnail
+      if stale?(etag: tbnail)
+        send_file tbnail,
+                  filename: filename_for_content_disposition(@file.last_revision.disk_file),
+                  type: @file.last_revision.detect_content_type,
+                  disposition: 'inline'
       end
     else
       head :not_found

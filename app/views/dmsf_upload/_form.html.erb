@@ -17,42 +17,53 @@
   # <https://www.gnu.org/licenses/>.
 %>
 
-<span id="dmsf_attachments_fields">
+<span class="dmsf-attachments-icons hidden">
+  <%= sprite_icon('del', icon_only: true, css_class: 'svg-del') %>
+  <%= sprite_icon('attachment', icon_only: true, size: 16, css_class: 'svg-attachment') %>
+  <%= sprite_icon('checked', icon_only: true, size: 16, css_class: 'svg-dmsf-assignment') %>
+  <%= sprite_icon('link', icon_only: true, size: 16, css_class: 'svg-dmsf-link') %>
+</span>
+<span id="dmsf_attachments_fields" class="attachments_fields">
   <% if defined?(container) && container && container.saved_dmsf_attachments.present? %>
     <% container.saved_dmsf_attachments.each_with_index do |attachment, i| %>
+      <% i += 1 %>
       <span id="dmsf_attachments_p<%= i %>" class="attachment">
-          <%= hidden_field_tag "dmsf_attachments[p#{i}][token]", "#{attachment.token}" %>
-          <%= text_field_tag("dmsf_attachments[p#{i}][filename]", attachment.filename, class: 'filename') %>
-          <%= text_field_tag("dmsf_attachments[p#{i}][description]", attachment.description, maxlength: 255,
-              placeholder: l(:label_optional_description), class: 'description') if description %>
-          <%= link_to '', dmsf_attachment_path(attachment, attachment_id: "p#{i}", format: 'js'),
-                method: 'delete', remote: true, class: 'remove-upload icon-only icon-del' %>
-          <% wf = container.saved_dmsf_attachments_wfs[attachment.id] %>
-          <% if wf %>
-          <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="icon-only icon-ok"></a>
-              <%= hidden_field_tag("dmsf_attachments_wfs[p#{i}]", wf.id) if wf %>
-          <% else %>
-              <%= link_to '',  assign_dmsf_workflow_path(id: container.project.id, project_id: container.project.id,
-                attachment_id: i + 1), title: l(:label_dmsf_wokflow_action_assign),
-                remote: true, class: 'modify-upload icon-only icon-ok' %>
-          <% end %>
+        <%= hidden_field_tag "dmsf_attachments[p#{i}][token]", "#{attachment.token}" %>
+        <%= sprite_icon('attachment', icon_only: true, size: 16, css_class: 'svg-attachment') %>
+        <%= text_field_tag("dmsf_attachments[p#{i}][filename]", attachment.filename,
+                           class: 'filename icon icon-attachment readonly') %>
+        <%= link_to sprite_icon('del', l(:button_delete), icon_only: true),
+                    dmsf_attachment_path(attachment, attachment_id: "p#{i}", format: 'js'),
+                    method: 'delete', remote: true, class: 'remove-upload icon-only icon-del' %>
+        <% wf = container.saved_dmsf_attachments_wfs[attachment.id] %>
+        <% if wf %>
+          <%= link_to sprite_icon('checked', l(:title_assigned), icon_only: true), '#', remote: true,
+                      class: 'modify-upload icon-only icon-ok' %>
+          <%= hidden_field_tag("dmsf_attachments_wfs[p#{i}]", wf.id) %>
+        <% else %>
+          <%= link_to sprite_icon('checked', l(:title_assignment), icon_only: true),
+                      assign_dmsf_workflow_path(id: container.project.id, project_id: container.project.id,
+                        attachment_id: i + 1), title: l(:label_dmsf_wokflow_action_assign),
+                      remote: true, class: 'modify-upload icon-only icon-ok' %>
+        <% end %>
       </span>
     <% end %>
   <% end %>
 </span>
 
-<span id="dmsf_links_attachments_fields">
-<% if defined?(container) && container && container.saved_dmsf_links.present? %>
-    <% container.saved_dmsf_links.each_with_index do |dmsf_link, index| %>
-        <span id="dmsf_links_attachments_<%= index %>" class="attachment">
-          <input name="dmsf_links[<%= index %>]" value="<%= dmsf_link.id %>" type="hidden">
-          <input type="text" class='filename readonly' value="<%= dmsf_link.name %>">
-           <%= link_to '', dmsf_link_attachment_path(dmsf_link, link_id: "#{index}", :format => 'js'),
-                      method: 'delete', remote: true, class: 'remove-upload icon-only icon-del' %>
+<span id="dmsf_links_attachments_fields" class="attachments_fields">
+  <% if defined?(container) && container && container.saved_dmsf_links.present? %>
+      <% container.saved_dmsf_links.each_with_index do |dmsf_link, index| %>
+          <span id="dmsf_links_attachments_<%= index %>" class="attachment">
+            <input name="dmsf_links[<%= index %>]" value="<%= dmsf_link.id %>" type="hidden">
+            <input type="text" class='filename readonly' value="<%= dmsf_link.name %>">
+            <%= link_to '', dmsf_link_attachment_path(dmsf_link, link_id: "#{index}", format: 'js'),
+                method: 'delete', remote: true, class: 'remove-upload icon-only icon-del' %>
             <% wf = container.saved_dmsf_links_wfs[dmsf_link.id] %>
             <% if wf %>
-            <a href="javascript:void(0);" title="<%= l(:title_assigned) %>" class="modify-upload icon-only icon-ok"></a>
-                <%= hidden_field_tag("dmsf_links_wfs[#{dmsf_link.id}]", wf.id) if wf %>
+              <%= link_to sprite_icon('checked', l(:title_assigned), icon_only: true), '#', remote: true,
+                          class: 'modify-upload icon-only icon-ok' %>
+                <%= hidden_field_tag("dmsf_links_wfs[#{dmsf_link.id}]", wf.id) %>
             <% else %>
               <%= render partial: 'dmsf_workflows/approval_workflow_button',
                  locals: { file: dmsf_link.target_file,
@@ -61,9 +72,9 @@
                                  ['project_id = ? OR project_id IS NULL', dmsf_link.target_file.project_id]).exists?,
                            project: dmsf_link.target_file.project, wf: wf, dmsf_link_id: dmsf_link.id } %>
             <% end %>
-        </span>
-    <% end %>
-<% end %>
+          </span>
+      <% end %>
+  <% end %>
 </span>
 
 <span class="dmsf_add_attachment add_attachment">
@@ -97,7 +108,6 @@
                        max_size: number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)),
                        max_concurrent_uploads: Redmine::Configuration['max_concurrent_ajax_uploads'].to_i,
                        upload_path: dmsf_uploads_path(format: 'js'),
-                       description_placeholder: l(:label_optional_description),
                        project: project.identifier,
                        awf: awf,
                        dmsf_file_details_form: controller.send(:render_to_string,

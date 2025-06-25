@@ -154,14 +154,14 @@ module RedmineDmsf
                                                          link_to: false } }
         end
 
-        def attach_documents_form(context, label: true, description: true)
+        def attach_documents_form(context, label: true)
           return unless context.is_a?(Hash) && context[:container]
 
           # Add Dmsf upload form
           container = context[:container]
           return unless allowed_to_attach_documents(container)
 
-          html = description ? +'<p' : +'<div'
+          html = +'<p'
           if User.current.pref.dmsf_attachments_upload_choice == 'Attachments' &&
              allowed_to_attach_attachments(container)
             html << ' style="display: none;"'
@@ -177,10 +177,9 @@ module RedmineDmsf
           html << context[:controller].send(:render_to_string, { partial: 'dmsf_upload/form',
                                                                  locals: { container: container,
                                                                            multiple: true,
-                                                                           description: description,
-                                                                           awf: false } })
+                                                                           awf: true } })
           html << '</span>'
-          html << (description ? '</p>' : '</div>')
+          html << '</p>'
           html
         end
 

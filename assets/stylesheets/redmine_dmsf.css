@@ -189,6 +189,10 @@ div[id*="revision_access_"] {
     color: gray;
 }
 
+.dmsf-gray svg {
+    stroke: grey;
+}
+
 svg.dmsf-gray {
     stroke: grey;
 }
@@ -286,7 +290,10 @@ span.fileover {
     width: 250px;
     color: #555;
     background-color: inherit;
-    padding-left: 18px;
+}
+
+.dmsf-plus-button {
+    vertical-align: middle;
 }
 
 #dmsf_attachments_fields div.ui-progressbar {
@@ -307,7 +314,11 @@ span.fileover {
     width: 250px;
     color: #555;
     background-color: inherit;
-    padding-left: 18px;
+}
+
+.attachments_fields .icon-link {
+    background-image: none;
+    padding-left: 0;
 }
 
 .dmfs-box-tabular {

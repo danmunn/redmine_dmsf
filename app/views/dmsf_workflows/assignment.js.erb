@@ -17,15 +17,13 @@
   # <https://www.gnu.org/licenses/>.
 %>
 
-let input;
-
 <% if @dmsf_link_id %>
-  input = $('input[value="<%= @dmsf_link_id %>"]');
+  var input = $('input[value="<%= @dmsf_link_id %>"]');
 <% else %>
-  input = $('input[name="dmsf_attachments[<%= @attachment_id %>][token]"]');
+  var input = $('input[name="dmsf_attachments[<%= @attachment_id %>][token]"]');
 <% end %>
 
-let span = input.parent();
+var span = input.parent();
 
 <% if @dmsf_link_id %>
   span.append(
@@ -35,7 +33,7 @@ let span = input.parent();
     "<input name='dmsf_attachments_wfs[<%= @attachment_id %>]' value='<%= @dmsf_workflow_id %>' type='hidden'>");
 <% end %>
 
-let a = span.children("a.icon-ok");
+var a = span.children("a.icon-ok");
 
-a.attr("href", "javascript:void(0);");
+a.attr("href", "#");
 a.attr("title", "<%= l(:title_assigned) %>");
