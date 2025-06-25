@@ -216,7 +216,7 @@ class DmsfWorkflowsController < ApplicationController
         revision = DmsfFileRevision.find_by(id: params[:dmsf_file_revision_id])
         begin
           if revision
-            @project = revision.dmsf_file.project unless @project
+            @project ||= revision.dmsf_file.project
             revision.set_workflow(params[:dmsf_workflow_id], params[:action])
             revision.assign_workflow(params[:dmsf_workflow_id])
             if request.post?

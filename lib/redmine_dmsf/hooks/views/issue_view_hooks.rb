@@ -66,9 +66,7 @@ module RedmineDmsf
             end
           end
           # Upload form
-          if allowed_to_attach_documents(container)
-            html << attach_documents_form(context, label: false)
-          end
+          html << attach_documents_form(context, label: false) if allowed_to_attach_documents(container)
           unless allowed_to_attach_attachments(container)
             html << context[:hook_caller].late_javascript_tag("$('.attachments-container:not(.dmsf-uploader)').hide();")
           end
@@ -122,7 +120,7 @@ module RedmineDmsf
         end
 
         def allowed_to_attach_attachments(container)
-          return true unless (defined?(EasyExtensions) && container&.project)
+          return true unless defined?(EasyExtensions) && container&.project
 
           !(allowed_to_attach_documents(container) && !container.project.module_enabled?(:documents))
         end
