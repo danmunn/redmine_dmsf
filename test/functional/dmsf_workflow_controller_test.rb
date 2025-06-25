@@ -359,7 +359,8 @@ class DmsfWorkflowsControllerTest < RedmineDmsf::Test::TestCase
            id: @wf1.id,
            dmsf_workflow_id: @wf1.id,
            dmsf_file_revision_id: @revision2.id,
-           action: 'assignment'
+           action: 'assignment',
+           project_id: @project1.id,
          }
     assert_response :redirect
   end
