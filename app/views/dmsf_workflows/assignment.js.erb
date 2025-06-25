@@ -33,7 +33,7 @@ var span = input.parent();
     "<input name='dmsf_attachments_wfs[<%= @attachment_id %>]' value='<%= @dmsf_workflow_id %>' type='hidden'>");
 <% end %>
 
-var a = span.children("a.icon-ok");
+var icon = span.children("a.icon-ok");
 
-a.attr("href", "#");
-a.attr("title", "<%= l(:title_assigned) %>");
+icon.attr("href", "#");
+icon.attr("title", "<%= l(:title_assigned) %>");

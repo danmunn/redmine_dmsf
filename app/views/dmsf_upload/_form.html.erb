@@ -34,16 +34,17 @@
                            class: 'filename icon icon-attachment readonly') %>
         <%= link_to sprite_icon('del', l(:button_delete), icon_only: true),
                     dmsf_attachment_path(attachment, attachment_id: "p#{i}", format: 'js'),
-                    method: 'delete', remote: true, class: 'remove-upload icon-only icon-del' %>
+                    method: 'delete', remote: true, title: l(:button_delete),
+                    class: 'remove-upload icon-only icon-del' %>
         <% wf = container.saved_dmsf_attachments_wfs[attachment.id] %>
         <% if wf %>
           <%= link_to sprite_icon('checked', l(:title_assigned), icon_only: true), '#', remote: true,
-                      class: 'modify-upload icon-only icon-ok' %>
+                      title: l(:title_assigned), class: 'modify-upload icon-only icon-ok' %>
           <%= hidden_field_tag("dmsf_attachments_wfs[p#{i}]", wf.id) %>
         <% else %>
           <%= link_to sprite_icon('checked', l(:title_assignment), icon_only: true),
-                      assign_dmsf_workflow_path(id: container.project.id, project_id: container.project.id,
-                        attachment_id: i + 1), title: l(:label_dmsf_wokflow_action_assign),
+                      assign_dmsf_workflow_path(id: i, project_id: container.project&.id,
+                        attachment_id: i), title: l(:label_dmsf_wokflow_action_assign),
                       remote: true, class: 'modify-upload icon-only icon-ok' %>
         <% end %>
       </span>
@@ -88,10 +89,12 @@
     end
     project_or_folder = folder ? folder : project
     files = []
-    project_or_folder.dmsf_files.visible.each do |dmsf_file|
-      rev = dmsf_file.last_revision
-      if rev
-        files << [dmsf_file.name, rev.major_version, rev.minor_version, rev.patch_version, dmsf_file.locked_for_user? ]
+    if project_or_folder
+      project_or_folder.dmsf_files.visible.each do |dmsf_file|
+        rev = dmsf_file.last_revision
+        if rev
+          files << [dmsf_file.name, rev.major_version, rev.minor_version, rev.patch_version, dmsf_file.locked_for_user? ]
+        end
       end
     end
   %>
@@ -108,7 +111,7 @@
                        max_size: number_to_human_size(Setting.attachment_max_size.to_i.kilobytes)),
                        max_concurrent_uploads: Redmine::Configuration['max_concurrent_ajax_uploads'].to_i,
                        upload_path: dmsf_uploads_path(format: 'js'),
-                       project: project.identifier,
+                       project: project&.identifier,
                        awf: awf,
                        dmsf_file_details_form: controller.send(:render_to_string,
                          { partial: 'dmsf_upload/upload_file',
@@ -123,7 +126,7 @@
 <% if defined?(container) && container %>
     <span class="dmsf-add-link">
         <%= link_to sprite_icon('add', l(:label_link_from)),
-                    new_dmsf_link_path(project_id: project.id, type: 'link_from', container: container.class.name),
+                    new_dmsf_link_path(project_id: project&.id, type: 'link_from', container: container.class.name),
                     title: l(:title_create_link), class: 'icon icon-add file_selector', remote: true %>
       </span>
 <% end %>

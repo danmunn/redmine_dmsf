@@ -23,6 +23,7 @@ module RedmineDmsf
       # Issue view hooks
       class IssueViewHooks < Redmine::Hook::ViewListener
         include DmsfQueriesHelper
+        include DmsfFilesHelper
 
         def view_issues_form_details_bottom(context = {})
           return if defined?(EasyExtensions)
@@ -34,10 +35,9 @@ module RedmineDmsf
         def view_attachments_form_top(context = {})
           html = +''
           container = context[:container]
-          description = defined?(EasyExtensions) && EasySetting.value('attachment_description')
           # Radio buttons
           if allowed_to_attach_documents(container) && allowed_to_attach_attachments(container)
-            html << (description ? '<p>' : '<div>')
+            html << '<p>'
             classes = +'inline'
             html << "<label class=\"#{classes}\">"
             onchange = %($(".attachments-container:not(.dmsf-uploader)").show();
@@ -58,7 +58,7 @@ module RedmineDmsf
                                      onchange: onchange)
             html << l(:label_dmsf_attachments)
             html << '</label>'
-            html << (description ? '</p>' : '</div>')
+            html << '</p>'
             if User.current.pref.dmsf_attachments_upload_choice == 'DMSF'
               html << context[:hook_caller].late_javascript_tag(
                 "$('.attachments-container:not(.dmsf-uploader)').hide();"
@@ -67,7 +67,7 @@ module RedmineDmsf
           end
           # Upload form
           if allowed_to_attach_documents(container)
-            html << attach_documents_form(context, label: false, description: description)
+            html << attach_documents_form(context, label: false)
           end
           unless allowed_to_attach_attachments(container)
             html << context[:hook_caller].late_javascript_tag("$('.attachments-container:not(.dmsf-uploader)').hide();")
@@ -113,14 +113,16 @@ module RedmineDmsf
         private
 
         def allowed_to_attach_documents(container)
-          container.respond_to?(:saved_dmsf_attachments) && container.project &&
-            User.current.allowed_to?(:file_manipulation, container.project) &&
-            RedmineDmsf.dmsf_act_as_attachable? &&
-            (container.project&.dmsf_act_as_attachable == Project::ATTACHABLE_DMS_AND_ATTACHMENTS)
+          return false unless container.respond_to?(:saved_dmsf_attachments) && RedmineDmsf.dmsf_act_as_attachable?
+
+          return false if container.project && (!User.current.allowed_to?(:file_manipulation, container.project) ||
+            (container.project&.dmsf_act_as_attachable != Project::ATTACHABLE_DMS_AND_ATTACHMENTS))
+
+          true
         end
 
         def allowed_to_attach_attachments(container)
-          return true unless defined?(EasyExtensions)
+          return true unless (defined?(EasyExtensions) && container&.project)
 
           !(allowed_to_attach_documents(container) && !container.project.module_enabled?(:documents))
         end
@@ -189,7 +191,7 @@ module RedmineDmsf
           return if links.blank?
 
           if defined?(EasyExtensions)
-            attachment_rows(links, container, controller)
+            attachment_rows links, container, controller
           else
             controller.send :render_to_string,
                             { partial: 'dmsf_files/links',
@@ -226,7 +228,10 @@ module RedmineDmsf
                           title: h(dmsf_file.last_revision.try(:tooltip)),
                           'data-downloadurl' => data)
           html << "<span class=\"size dmsf-size\">(#{number_to_human_size(dmsf_file.last_revision.size)})</span>"
-          html << " - #{h(dmsf_file.description)}" if dmsf_file.description.present?
+          if dmsf_file.description.present?
+            desc = clean_wiki_text(textilizable(dmsf_file.description))
+            html << " - #{h(desc)}"
+          end
           html << '</td>'
           # Author, updated at
           html << '<td>'

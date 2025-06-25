@@ -52,10 +52,7 @@ jsToolBar.prototype.dmsfMenu = function(fn){
     }
     else {
       $('<li></li>').html('<hr>').appendTo(menu);
-      const a = item.split(';');
-      let lang = a[0];
-      let help = a[1];
-      let macroItem = $('<div></div>').text(help);
+      let macroItem = $('<div></div>').text(item.split(';')[1]);
       $('<li></li>').html(macroItem).appendTo(menu).mousedown(function () {
         window.open('/dmsf/help/wiki_syntax','_blank', 'width=480,height=480');
       });

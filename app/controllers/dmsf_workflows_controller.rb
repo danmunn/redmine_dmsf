@@ -24,7 +24,7 @@ class DmsfWorkflowsController < ApplicationController
   self.main_menu = false
 
   before_action :find_model_object, except: %i[create new index assign assignment]
-  before_action :find_project
+  before_action :find_project, except: %i[assignment]
   before_action :authorize_custom
   before_action :permissions?, only: %i[new_action assignment start]
   before_action :approver_candidates, only: %i[remove_step show reorder_steps add_step]
@@ -216,6 +216,7 @@ class DmsfWorkflowsController < ApplicationController
         revision = DmsfFileRevision.find_by(id: params[:dmsf_file_revision_id])
         begin
           if revision
+            @project = revision.dmsf_file.project
             revision.set_workflow(params[:dmsf_workflow_id], params[:action])
             revision.assign_workflow(params[:dmsf_workflow_id])
             if request.post?
