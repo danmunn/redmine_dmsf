@@ -224,8 +224,8 @@ function dmsfAddFile(inputEl, file, eagerUpload) {
             detailsDiv.append(detailsForm);
             detailsDiv.hide();
             fileSpan.append(detailsArrow)
+            fileSpan.append(detailsDiv);
             attachments.append(fileSpan);
-            attachments.append(detailsDiv);
         } else {
             fileSpan.append(iconDel.click(dmsfRemoveFileLbl));
             attachments.append(fileSpan);
