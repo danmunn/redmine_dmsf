@@ -297,5 +297,3 @@ end
 after_easy_init do
   require "#{File.dirname(__FILE__)}/redmine_dmsf/field_formats/dmsf_file_revision_format"
 end
-
-require "#{File.dirname(__FILE__)}/easy_page_module" unless defined?(EasyExtensions)

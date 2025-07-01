@@ -496,14 +496,6 @@ uk:
   warning_folder_unlockable: The folder can't be unlocked
   redmine_dmsf: Redmine DMSF
 
-  easy_pages:
-    modules:
-      dmsf_locked_documents: Мої заблоковані документи
-      dmsf_open_approvals: Мої відкриті дозволи
-      dmsf_watched_documents: Мої переглянуті документи
-    module_category:
-      easy_dms: Легкий DMS
-
   activerecord:
     errors:
       messages:

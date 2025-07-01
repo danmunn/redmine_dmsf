@@ -20,9 +20,9 @@
 name: "GitHub CI"
 on:
   push:
-    branches: ["devel"]
+    branches: ["cleanup"]
   pull_request:
-    branches: ["devel"]
+    branches: ["cleanup"]
 jobs:
   plugin_tests:
     strategy:

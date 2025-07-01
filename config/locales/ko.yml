@@ -494,14 +494,6 @@ ko:
   warning_folder_unlockable: The folder can't be unlocked
   redmine_dmsf: Redmine DMSF
 
-  easy_pages:
-    modules:
-      dmsf_locked_documents: 내 잠긴 파일
-      dmsf_open_approvals: 내 열린 승인
-      dmsf_watched_documents: My watched documents
-    module_category:
-      easy_dms: DMS
-
   activerecord:
     errors:
       messages:

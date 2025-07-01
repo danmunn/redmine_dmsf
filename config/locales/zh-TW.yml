@@ -493,14 +493,6 @@ zh-TW:
   warning_folder_unlockable: The folder can't be unlocked
   redmine_dmsf: Redmine DMSF
 
-  easy_pages:
-    modules:
-      dmsf_locked_documents: My locked documents
-      dmsf_open_approvals: My open approvals
-      dmsf_watched_documents: My watched documents
-    module_category:
-      easy_dms: Easy DMS
-
   activerecord:
     errors:
       messages:

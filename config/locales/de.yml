@@ -491,14 +491,6 @@ de:
   warning_folder_unlockable: Der Ordner kann nicht entsperrt werden
   redmine_dmsf: Redmine DMSF
 
-  easy_pages:
-    modules:
-      dmsf_locked_documents: Von mir gesperrte Dokumente
-      dmsf_open_approvals: Offene Genehmigungen
-      dmsf_watched_documents: Meine beobachteten Dokumente
-    module_category:
-      easy_dms: Easy DMS
-
   activerecord:
     errors:
       messages:

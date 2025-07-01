@@ -473,14 +473,6 @@ fa:
   warning_folder_unlockable: The folder can't be unlocked
   redmine_dmsf: Redmine DMSF
 
-  easy_pages:
-    modules:
-      dmsf_locked_documents: اسناد قفل شده‌ی من
-      dmsf_open_approvals: تاییدهای باز من
-      dmsf_watched_documents: My watched documents
-    module_category:
-      easy_dms: مدیریت اسناد آسان
-
   activerecord:
     errors:
       messages:
